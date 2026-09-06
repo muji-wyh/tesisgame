@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ball</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="60" cy="61" r="39" fill="#f7d473"/>
+    <path d="M60 22 A39 39 0 0 1 94 80 Q84 59 60 61 Q71 39 60 22Z" fill="#ed9987"/>
+    <path d="M94 80 A39 39 0 0 1 26 80 Q48 75 60 61 Q75 81 94 80Z" fill="#8bcabb"/>
+    <path d="M26 80 A39 39 0 0 1 60 22 Q45 40 60 61 Q40 52 26 80Z" fill="#9ec9e0"/>
+    <circle cx="60" cy="61" r="7" fill="#fff3d8" stroke-width="2.5"/>
+    <path d="M33 49 Q35 41 42 37" stroke="#e6f5f7" stroke-width="5"/>
+  </g>
+</svg>

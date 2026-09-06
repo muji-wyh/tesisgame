@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Summer sun</title>
+  <circle cx="60" cy="60" r="55" fill="#fff4d8"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(0 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(45 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(90 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(135 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(180 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(225 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(270 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <line x1="60" y1="21" x2="60" y2="9" transform="rotate(315 60 56)" stroke="#e4a549" stroke-width="7"/>
+    <circle cx="60" cy="56" r="26" fill="#f9d470"/>
+    <path d="M44 47 Q48 39 56 38" stroke="#fff0b1" stroke-width="5"/>
+    
+    <circle cx="51" cy="53" r="3" fill="#765445" stroke="none"/>
+    <circle cx="69" cy="53" r="3" fill="#765445" stroke="none"/>
+    <path d="M54 63 Q60 69 66 63" fill="none"/>
+    <circle cx="30" cy="95" r="4" fill="#e9b866" stroke="none"/>
+    <circle cx="90" cy="95" r="4" fill="#e9b866" stroke="none"/>
+    <path d="M46 102 Q60 109 74 102" stroke="#e9b866" stroke-width="4"/>
+  </g>
+</svg>

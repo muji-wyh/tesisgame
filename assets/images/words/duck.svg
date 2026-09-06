@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">duck</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="101" rx="39" ry="6" fill="#d7e9e5" stroke="none"/>
+    <path d="M32 62 Q21 68 18 55 Q10 81 34 94 Q58 105 82 90 Q100 74 78 59 L61 57Z" fill="#f8d46f"/>
+    <path d="M58 68 Q62 61 59 50 Q54 28 73 24 Q93 20 95 40 Q97 56 81 63 L79 72" fill="#f8d46f"/>
+    <path d="M93 41 Q104 39 108 47 Q104 55 93 53Z" fill="#eaaa62" stroke-width="2.5"/>
+    <circle cx="82" cy="39" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="80" cy="50" r="4" fill="#efb58a" stroke="none"/>
+    <path d="M34 75 Q49 63 68 74 Q65 91 48 88 Q38 86 34 75Z" fill="#f4c15e" stroke-width="2.5"/>
+    <path d="M34 103H45 M77 103H88" stroke="#9ec8c8" stroke-width="2.5"/>
+  </g>
+</svg>

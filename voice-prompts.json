@@ -1,0 +1,18 @@
+{
+  "welcome": "Find three pairs. Some cards have no match. Tap a picture or a word!",
+  "correct": "Great match! Well done!",
+  "wrong": "Not quite. Let's try another one!",
+  "loss": "Good try! Let's play again!",
+  "spring-theme": "Welcome to spring!",
+  "summer-theme": "Welcome to summer!",
+  "autumn-theme": "Welcome to autumn!",
+  "winter-theme": "Welcome to winter!",
+  "spring-arrive": "You did it! Tap the spring chest for a surprise!",
+  "summer-arrive": "You did it! Tap the summer chest for a surprise!",
+  "autumn-arrive": "You did it! Tap the autumn chest for a surprise!",
+  "winter-arrive": "You did it! Tap the winter chest for a surprise!",
+  "spring-open": "A spring flower for you! Great job!",
+  "summer-open": "A summer sun for you! Great job!",
+  "autumn-open": "An autumn leaf for you! Great job!",
+  "winter-open": "A winter snowflake for you! Great job!"
+}

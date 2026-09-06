@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fish</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 38 Q55 23 69 41 M46 83 Q58 100 70 80" fill="#f0bc72"/>
+    <path d="M79 57 103 41 Q106 61 103 83 L79 68Z" fill="#efad72"/>
+    <path d="M91 57 101 51 M91 68 101 75" stroke="#cb8c5d" stroke-width="2.5"/>
+    <ellipse cx="53" cy="61" rx="34" ry="26" fill="#f5c47f"/>
+    <path d="M59 53 Q78 57 63 72 Q58 65 59 53Z" fill="#ec9b79" stroke-width="2.5"/>
+    <path d="M48 44 Q54 59 48 77" stroke="#cf975d" stroke-width="2.5"/>
+    <circle cx="35" cy="54" r="4" fill="#765445" stroke="none"/>
+    <circle cx="36" cy="53" r="1.3" fill="#fff8eb" stroke="none"/>
+    <path d="M21 65 Q28 71 33 65" stroke-width="2.5"/>
+    <circle cx="34" cy="67" r="4" fill="#efad8a" stroke="none"/>
+    <circle cx="92" cy="27" r="5" stroke="#9bc9d5" stroke-width="2.5"/>
+    <circle cx="103" cy="16" r="3" fill="#c7e6e6" stroke="none"/>
+  </g>
+</svg>

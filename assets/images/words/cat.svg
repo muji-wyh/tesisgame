@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cat</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="103" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M29 53 24 23 Q23 18 28 20 L44 33 Q60 28 76 33 L92 20 Q97 18 96 23 L91 53 Q100 84 79 95 Q60 104 41 95 Q20 84 29 53Z" fill="#efb36b"/>
+    <path d="M31 29 35 47 44 39Z M89 29 85 47 76 39Z" fill="#f4c2b3" stroke="none"/>
+    <path d="M52 34 54 44 M60 33 60 45 M68 34 66 44" stroke="#cd854a"/>
+    <ellipse cx="45" cy="78" rx="10" ry="7" fill="#f7d7b0" stroke="none"/>
+    <ellipse cx="75" cy="78" rx="10" ry="7" fill="#f7d7b0" stroke="none"/>
+    <circle cx="46" cy="63" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="74" cy="63" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M55 73 Q60 70 65 73 L60 78Z" fill="#db8e8c" stroke-width="2.5"/>
+    <path d="M60 78V81 Q54 87 50 81 M60 81 Q66 87 70 81" stroke-width="2.5"/>
+    <path d="M36 74 18 70 M36 81 17 83 M84 74 102 70 M84 81 103 83" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">apple</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="31" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M60 39 Q61 27 56 20" stroke-width="5"/>
+    <path d="M62 30 Q67 13 88 17 Q84 33 62 30Z" fill="#91bd7e"/>
+    <path d="M60 38 C43 26 24 38 26 58 C24 76 37 100 49 98 Q60 94 71 98 C84 100 97 76 95 58 C96 37 76 27 60 38Z" fill="#e97d72"/>
+    <path d="M40 45 Q33 51 34 62" stroke="#ffd0b7" stroke-width="6"/>
+    <ellipse cx="43" cy="75" rx="5" ry="3" fill="#f6ab95" stroke="none"/>
+    <ellipse cx="77" cy="75" rx="5" ry="3" fill="#f6ab95" stroke="none"/>
+    
+    <circle cx="49" cy="64" r="3" fill="#765445" stroke="none"/>
+    <circle cx="71" cy="64" r="3" fill="#765445" stroke="none"/>
+    <path d="M54 74 Q60 80 66 74" fill="none"/>
+  </g>
+</svg>

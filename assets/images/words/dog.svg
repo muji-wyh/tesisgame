@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">dog</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="35" ry="5" fill="#eadbc5" stroke="none"/>
+    <ellipse cx="29" cy="59" rx="15" ry="28" transform="rotate(16 29 59)" fill="#bf875e"/>
+    <ellipse cx="91" cy="59" rx="15" ry="28" transform="rotate(-16 91 59)" fill="#bf875e"/>
+    <path d="M30 51 Q30 28 60 28 Q90 28 90 51 L90 74 Q88 100 60 101 Q32 100 30 74Z" fill="#e9bc83"/>
+    <path d="M37 42 Q46 33 53 41 Q58 56 49 65 Q34 62 37 42Z" fill="#d49b67" stroke="none"/>
+    <circle cx="45" cy="61" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="75" cy="61" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="80" rx="23" ry="15" fill="#fff0d2" stroke="none"/>
+    <path d="M51 72 Q60 68 69 72 Q68 81 60 82 Q52 81 51 72Z" fill="#765445" stroke="none"/>
+    <path d="M60 81V85 Q55 90 50 86 M60 85 Q65 90 70 86" stroke-width="2.5"/>
+    <path d="M56 90 Q60 92 64 90 V94 Q60 100 56 94Z" fill="#e8a5a0" stroke-width="2"/>
+  </g>
+</svg>
