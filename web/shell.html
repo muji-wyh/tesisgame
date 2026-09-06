@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#edf8ec">
+  <title>Word Buddies</title>
+  $GODOT_HEAD_INCLUDE
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #edf8ec; }
+    body { font-family: system-ui, sans-serif; color: #35415e; overscroll-behavior: none; }
+    #safe-area {
+      position: fixed; inset: 0;
+      padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+        env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    }
+    #game { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: manipulation; }
+    #status {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 18px; padding: 24px; text-align: center; background: #edf8ec;
+    }
+    #status[hidden], #retry[hidden] { display: none; }
+    h1 { margin: 0; font-size: clamp(28px, 7vw, 52px); }
+    p { margin: 0; max-width: 34em; line-height: 1.5; }
+    progress { width: min(280px, 80%); height: 16px; accent-color: #438363; }
+    button { min-height: 48px; padding: 12px 24px; border: 2px solid #438363; border-radius: 14px;
+      background: white; color: #35415e; font: inherit; cursor: pointer; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+      clip-path: inset(50%); white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    <div id="game">
+      <canvas id="canvas" tabindex="0" aria-label="Word Buddies matching game" aria-describedby="help selection-status">
+        This game needs a browser with WebGL 2 support.
+      </canvas>
+      <p id="help" class="sr-only">Find three matching word and picture pairs. Two cards have no match.
+        Use touch, or Tab and Enter. The season menu also contains Reduce motion.</p>
+      <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
+      <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
+      <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
+      <div id="status" role="status" aria-live="polite">
+        <h1>Word Buddies</h1>
+        <p id="message">Loading your adventure...</p>
+        <progress id="progress" max="1"></progress>
+        <button id="retry" hidden>Try again</button>
+      </div>
+    </div>
+  </div>
+  <script src="$GODOT_URL"></script>
+  <script>
+    (() => {
+      'use strict';
+      const canvas = document.getElementById('canvas');
+      const container = document.getElementById('game');
+      const status = document.getElementById('status');
+      const message = document.getElementById('message');
+      const progress = document.getElementById('progress');
+      const retry = document.getElementById('retry');
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let failed = false;
+
+      function fail(reason) {
+        failed = true;
+        window.removeEventListener('unhandledrejection', onWasmFailure);
+        document.body.dataset.engineReady = 'false';
+        status.hidden = false;
+        message.textContent = reason;
+        progress.hidden = true;
+        retry.hidden = false;
+      }
+
+      function startupFailure(error) {
+        fail('The game could not start. ' + (error.message || String(error)));
+      }
+
+      function onWasmFailure(event) {
+        const reason = event.reason;
+        if (reason instanceof WebAssembly.CompileError || reason instanceof WebAssembly.LinkError ||
+            reason instanceof WebAssembly.RuntimeError) startupFailure(reason);
+      }
+
+      // This bridge only exposes host lifecycle events, never gameplay mutations.
+      window.wordBuddiesHost = Object.freeze({
+        ready() {
+          if (failed) return;
+          window.removeEventListener('unhandledrejection', onWasmFailure);
+          document.body.dataset.engineReady = 'true';
+          status.hidden = true;
+          canvas.focus({ preventScroll: true });
+        },
+        fail,
+        announce(text) {
+          document.getElementById('game-status').textContent = text;
+        },
+        selectionStatus(text) {
+          document.getElementById('selection-status').textContent = text;
+        },
+        audioStatus(text) {
+          document.getElementById('audio-status').textContent = text;
+        },
+        background(color) {
+          document.body.style.backgroundColor = color;
+          document.querySelector('meta[name="theme-color"]').content = color;
+        },
+        observe(onHidden, onMotion) {
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden) onHidden();
+          });
+          motion.addEventListener('change', (event) => onMotion(event.matches));
+          onMotion(motion.matches);
+          if (document.hidden) onHidden();
+        }
+      });
+
+      function resize() {
+        const bounds = container.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        const width = Math.max(1, Math.round(bounds.width * ratio));
+        const height = Math.max(1, Math.round(bounds.height * ratio));
+        if (canvas.width !== width) canvas.width = width;
+        if (canvas.height !== height) canvas.height = height;
+      }
+      new ResizeObserver(resize).observe(container);
+      window.addEventListener('resize', resize);
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+      resize();
+      retry.addEventListener('click', () => window.location.reload());
+
+      const config = $GODOT_CONFIG;
+      if (typeof Engine !== 'function') {
+        startupFailure(new Error('The engine could not be downloaded. Please try again.'));
+        return;
+      }
+      if (!window.AudioContext && !window.webkitAudioContext) {
+        config.args = [...(config.args || []), '--audio-driver', 'Dummy'];
+      }
+      const missing = Engine.getMissingFeatures({ threads: false });
+      if (missing.length) {
+        fail('This browser cannot run the game: ' + missing.join(', ') + '. Please use a browser with WebGL 2 support.');
+        return;
+      }
+      if (typeof OffscreenCanvas === 'undefined') {
+        // MSAA selects Emscripten's built-in shader presenter. Its framebuffer-blit
+        // presenter fails after the first frame in Windows WebKit.
+        const context = canvas.getContext('webgl2', {
+          alpha: false, antialias: true, depth: true, stencil: false, preserveDrawingBuffer: true
+        });
+        if (!context) {
+          startupFailure(new Error('A WebGL 2 drawing surface could not be created.'));
+          return;
+        }
+      }
+      const engine = new Engine({
+        ...config,
+        onExit(code) {
+          const detail = 'The engine exited with code ' + code + '. Please try again.';
+          if (document.body.dataset.engineReady === 'true') fail('The game stopped. ' + detail);
+          else startupFailure(new Error(detail));
+        }
+      });
+      // Godot 4.7's init wrapper does not forward all WASM promise rejections.
+      window.addEventListener('unhandledrejection', onWasmFailure);
+      Engine.load(config.executable, config.fileSizes[config.executable + '.wasm']).then(() => engine.startGame({
+        canvas,
+        onProgress(current, total) {
+          if (total > 0) progress.value = current / total;
+        }
+      })).catch(startupFailure);
+    })();
+  </script>
+</body>
+</html>

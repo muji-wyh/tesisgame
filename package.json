@@ -1,7 +1,8 @@
 {
   "name": "tesisgame",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Godot-powered English matching game delivered on the Web.",
+  "private": true,
   "homepage": "https://github.com/muji-wyh/tesisgame#readme",
   "bugs": {
     "url": "https://github.com/muji-wyh/tesisgame/issues"
@@ -13,10 +14,16 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
   "scripts": {
-    "test": "node --test",
-    "start": "http-server . -a 127.0.0.1 -p 4173 -c-1",
+    "postinstall": "node tools/prepare-godot.cjs",
+    "import": "node tools/prepare-godot.cjs && node tools/run-godot.cjs --headless --path . --import",
+    "pretest": "npm run import",
+    "test": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/run_tests.gd && node --test tests/assets.test.cjs tests/chest-assets.test.cjs tests/web-export.test.cjs",
+    "build:web": "node tools/build-web.cjs",
+    "prestart": "npm run build:web",
+    "start": "npm run serve:web",
+    "serve:web": "http-server build/web -a 127.0.0.1 -p 4173 -c-1",
+    "pretest:browser": "npm run build:web",
     "test:browser": "playwright test",
     "test:all": "npm test && npm run test:browser"
   },

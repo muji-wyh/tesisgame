@@ -3,10 +3,11 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { loadInline, loadWords, root } = require('./load-inline.cjs');
-
-const words = loadWords();
-const seasons = Array.from(loadInline('game-core').GameCore.SEASONS);
+const root = path.resolve(__dirname, '..');
+const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
+const seasons = ['spring', 'summer', 'autumn', 'winter'].map((id) => ({
+  id, symbol: `assets/images/rewards/${id}.svg`, bgm: `assets/audio/bgm/${id}.wav`
+}));
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedPrompts = {
   welcome: "Find three pairs. Some cards have no match. Tap a picture or a word!",
@@ -30,6 +31,14 @@ const sfxIds = [
   'select', 'correct', 'wrong', 'loss',
   ...seasons.flatMap(({ id }) => [`${id}-arrive`, `${id}-open`])
 ];
+
+function assetFiles(directory) {
+  const names = fs.readdirSync(directory);
+  for (const name of names.filter((entry) => entry.endsWith('.import'))) {
+    assert.ok(names.includes(name.slice(0, -7)), `Orphan Godot import metadata: ${name}`);
+  }
+  return names.filter((name) => !name.endsWith('.import')).sort();
+}
 
 function readSvg(relativePath) {
   const filename = path.join(root, relativePath);
@@ -139,7 +148,7 @@ test('the generated image directories contain exactly the thirteen named SVGs', 
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
-    assert.deepEqual(fs.readdirSync(fullPath).sort(), names.sort());
+    assert.deepEqual(assetFiles(fullPath), names.sort());
   }
 });
 
@@ -174,7 +183,7 @@ test('voice output contains exactly twenty-four finished WAV files', () => {
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
-  assert.deepEqual(fs.readdirSync(directory).sort(), expected.sort());
+  assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
 test('all four seasonal background tracks are PCM16 stereo WAVs', () => {
@@ -185,7 +194,7 @@ test('all four seasonal background tracks are PCM16 stereo WAVs', () => {
     assert.equal(wave.sampleRate, 44100, season.id);
   }
   assert.deepEqual(
-    fs.readdirSync(path.join(root, 'assets', 'audio', 'bgm')).sort(),
+    assetFiles(path.join(root, 'assets', 'audio', 'bgm')),
     seasons.map(({ id }) => `${id}.wav`).sort()
   );
 });
@@ -203,7 +212,7 @@ test('all twelve original effects have gentle, non-silent PCM samples and smooth
     assert.equal(wave.data.readInt16LE(wave.data.length - 2), 0, `SFX must end at zero: ${id}`);
   }
   assert.deepEqual(
-    fs.readdirSync(path.join(root, 'assets', 'audio', 'sfx')).sort(),
+    assetFiles(path.join(root, 'assets', 'audio', 'sfx')),
     sfxIds.map((id) => `${id}.wav`).sort()
   );
 });

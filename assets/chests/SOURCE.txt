@@ -1,0 +1,46 @@
+Modern 2D Animated Chests Pack_FREE Demo 1.0.2
+
+Selected PNG image resources copied byte-for-byte from the free demo.
+Unity behaviors were not imported. No Unity prefabs, animations, materials,
+scripts, particle systems or .meta files were copied or executed.
+
+Crystal geometry is the serialized rest pose in Chests/Crystal/PF_Chest_Crystal.prefab.
+All Transform ancestors are composed through m_Father fileID 0, including the
+prefab root. In this version, this retains the Animation 11 _ 03 scale (0.67, 0.67)
+and the chest scale (0.85, 1). These are not normalized away.
+Coordinates use 100 Godot pixels per Unity world unit, with y-down.
+The six matrix values are [x_axis.x, x_axis.y, y_axis.x, y_axis.y, origin.x, origin.y].
+Linear terms additionally use 100 / spritePixelsToUnits; origins always use 100.
+Draw each texture at (-width * pivot[0], -height * (1 - pivot[1])), then apply
+its matrix. Preserve flip_h, flip_v and ascending original sorting order.
+Pivots, PPU and GUIDs are read from the nine selected PNG .meta files.
+Only rest geometry is reconstructed; native animation, effects and rendering
+are the Godot integration's responsibility.
+
+Source-file caveat: 11 original PNGs contain trailing data after IEND:
+Royal closed/open, Energy open, and Crystal parts 01 through 08.
+Their trailing bytes are preserved byte-for-byte, without normalization.
+FFmpeg's stream reader reports an extra-image error for Royal closed.png;
+the image payloads of all 19 PNGs decode when bounded by IEND.
+Godot import and rendering are validated separately by the native project.
+
+Selected original relative paths -> imported image paths:
+Chests/Royal/Sprites/SPR_Royal_Close.png -> assets/chests/royal/closed.png
+Chests/Royal/Sprites/SPR_Royal_Open.png -> assets/chests/royal/open.png
+Chests/Energy/Sprites/SPR_Energy_Close.png -> assets/chests/energy/closed.png
+Chests/Energy/Sprites/SPR_Energy_Open.png -> assets/chests/energy/open.png
+Chests/Crystal/Sprites/SPR_chest.png -> assets/chests/crystal/base.png
+Chests/Crystal/Sprites/SPR_01.png -> assets/chests/crystal/part_01.png
+Chests/Crystal/Sprites/SPR_02.png -> assets/chests/crystal/part_02.png
+Chests/Crystal/Sprites/SPR_03.png -> assets/chests/crystal/part_03.png
+Chests/Crystal/Sprites/SPR_04.png -> assets/chests/crystal/part_04.png
+Chests/Crystal/Sprites/SPR_05.png -> assets/chests/crystal/part_05.png
+Chests/Crystal/Sprites/SPR_06.png -> assets/chests/crystal/part_06.png
+Chests/Crystal/Sprites/SPR_07.png -> assets/chests/crystal/part_07.png
+Chests/Crystal/Sprites/SPR_08.png -> assets/chests/crystal/part_08.png
+Particles/Textures/portal_glow.png -> assets/chests/particles/portal_glow.png
+Particles/Textures/ring.png -> assets/chests/particles/ring.png
+Particles/Textures/sparkle3.png -> assets/chests/particles/sparkle3.png
+Particles/Textures/lightray1.png -> assets/chests/particles/lightray1.png
+Particles/Textures/explosion_spike01.png -> assets/chests/particles/explosion_spike01.png
+Particles/Textures/magic_orb2.png -> assets/chests/particles/magic_orb2.png

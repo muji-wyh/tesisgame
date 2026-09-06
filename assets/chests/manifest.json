@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "source": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2",
+  "styles": {
+    "royal": {
+      "closed": "assets/chests/royal/closed.png",
+      "open": "assets/chests/royal/open.png"
+    },
+    "energy": {
+      "closed": "assets/chests/energy/closed.png",
+      "open": "assets/chests/energy/open.png"
+    },
+    "crystal": {
+      "parts": [
+        {
+          "name": "chest",
+          "texture": "assets/chests/crystal/base.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            0,
+            0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 0,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "02",
+          "texture": "assets/chests/crystal/part_02.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            -215.84050000000002,
+            97.82000000000001
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 1,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "04",
+          "texture": "assets/chests/crystal/part_04.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            -69.87765,
+            -198.722
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 2,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "05",
+          "texture": "assets/chests/crystal/part_05.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            98.5235,
+            -70.35000000000001
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 2,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "06",
+          "texture": "assets/chests/crystal/part_06.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            100.8015,
+            158.79000000000002
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 2,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "07",
+          "texture": "assets/chests/crystal/part_07.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            229.50850000000003,
+            64.99000000000001
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 2,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "08",
+          "texture": "assets/chests/crystal/part_08.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            189.07399999999998,
+            -127.3
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 2,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "03",
+          "texture": "assets/chests/crystal/part_03.png",
+          "transform": [
+            0.5695,
+            0,
+            0,
+            0.67,
+            -189.07399999999998,
+            -116.58000000000001
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 3,
+          "flip_h": false,
+          "flip_v": false
+        },
+        {
+          "name": "01",
+          "texture": "assets/chests/crystal/part_01.png",
+          "transform": [
+            0.47385817,
+            0,
+            0,
+            0.5574802000000001,
+            -79.1605,
+            12.06
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "order": 5,
+          "flip_h": false,
+          "flip_v": false
+        }
+      ]
+    }
+  },
+  "particles": {
+    "glow": "assets/chests/particles/portal_glow.png",
+    "ring": "assets/chests/particles/ring.png",
+    "spark": "assets/chests/particles/sparkle3.png",
+    "ray": "assets/chests/particles/lightray1.png",
+    "burst": "assets/chests/particles/explosion_spike01.png",
+    "orb": "assets/chests/particles/magic_orb2.png"
+  },
+  "files": [
+    {
+      "path": "assets/chests/royal/closed.png",
+      "source": "Chests/Royal/Sprites/SPR_Royal_Close.png",
+      "sha256": "5d56092692cfff431c49856c40237ae31285a8344b20ace4d375b901e201946d",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "assets/chests/royal/open.png",
+      "source": "Chests/Royal/Sprites/SPR_Royal_Open.png",
+      "sha256": "95c5d1710ba4d33dce489d7a782a4cd10ce6e7d6465f32c07afa55ccfb9631b3",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "assets/chests/energy/closed.png",
+      "source": "Chests/Energy/Sprites/SPR_Energy_Close.png",
+      "sha256": "fde353205c24986d7fdad4c72055b88b53eecc8987a6a407935b8b4933c2c1e8",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "assets/chests/energy/open.png",
+      "source": "Chests/Energy/Sprites/SPR_Energy_Open.png",
+      "sha256": "276af1f68e908556831be6d5a466c89f626834624828940f9a501f493070bc75",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "assets/chests/crystal/base.png",
+      "source": "Chests/Crystal/Sprites/SPR_chest.png",
+      "sha256": "6894ab71a9d0fe02b23ac534a298d66b56c5f64fe04cae457196b88ff77da0a7",
+      "width": 805,
+      "height": 609
+    },
+    {
+      "path": "assets/chests/crystal/part_01.png",
+      "source": "Chests/Crystal/Sprites/SPR_01.png",
+      "sha256": "5d12441d6349a1cd042e1aa93f9956d98ce7589e4c36f5f65ee2dfaea5fdf8f1",
+      "width": 329,
+      "height": 348
+    },
+    {
+      "path": "assets/chests/crystal/part_02.png",
+      "source": "Chests/Crystal/Sprites/SPR_02.png",
+      "sha256": "0232267cf3d21b4ce77e2fedd334b8021a990d296ad6e6bd2990deee613c36b6",
+      "width": 168,
+      "height": 231
+    },
+    {
+      "path": "assets/chests/crystal/part_03.png",
+      "source": "Chests/Crystal/Sprites/SPR_03.png",
+      "sha256": "70fe55547087fed10b02f852733a1472903b1f368a56b019df87d95f71442018",
+      "width": 245,
+      "height": 232
+    },
+    {
+      "path": "assets/chests/crystal/part_04.png",
+      "source": "Chests/Crystal/Sprites/SPR_04.png",
+      "sha256": "45801609bd5395141ecc88378cff5f383326a51daf36c6707a5b24e8bab65cc3",
+      "width": 246,
+      "height": 62
+    },
+    {
+      "path": "assets/chests/crystal/part_05.png",
+      "source": "Chests/Crystal/Sprites/SPR_05.png",
+      "sha256": "5c45b9f0b9f8fcca4759884dab671b15bf012bf41b0d1cb98cb3f387fb90fb73",
+      "width": 234,
+      "height": 236
+    },
+    {
+      "path": "assets/chests/crystal/part_06.png",
+      "source": "Chests/Crystal/Sprites/SPR_06.png",
+      "sha256": "fc1d3a2a7d3d55fdd6efa24dc0a20ec81eb6b2109fe4bcde319a59aa749c748e",
+      "width": 240,
+      "height": 224
+    },
+    {
+      "path": "assets/chests/crystal/part_07.png",
+      "source": "Chests/Crystal/Sprites/SPR_07.png",
+      "sha256": "fbbd9bfc3718ab901e6b9eba98220c82ff9355f26f2ed4d908bd795454d1d56e",
+      "width": 102,
+      "height": 208
+    },
+    {
+      "path": "assets/chests/crystal/part_08.png",
+      "source": "Chests/Crystal/Sprites/SPR_08.png",
+      "sha256": "555c4731eafc4432c1feefa250b5957c43075b0bfcfff4d1426a15a9abe31341",
+      "width": 256,
+      "height": 224
+    },
+    {
+      "path": "assets/chests/particles/portal_glow.png",
+      "source": "Particles/Textures/portal_glow.png",
+      "sha256": "bd68c67e5db6347f12237150c84d6e83055480b11a37906a0d140d3e2294a17c",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "path": "assets/chests/particles/ring.png",
+      "source": "Particles/Textures/ring.png",
+      "sha256": "0d1f60531d815b052d211ff8112e1e82d792555dbbc6d44d9ae957d93de805cd",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "path": "assets/chests/particles/sparkle3.png",
+      "source": "Particles/Textures/sparkle3.png",
+      "sha256": "74c2a40f4ad85def13006522a4c814eb39b4c8b3197b4ba1de15b8061ba61961",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "path": "assets/chests/particles/lightray1.png",
+      "source": "Particles/Textures/lightray1.png",
+      "sha256": "237ee4fe5300d09282786fba21de357fd7ae8e966c9d142d4f8232cf44313ff4",
+      "width": 1024,
+      "height": 256
+    },
+    {
+      "path": "assets/chests/particles/explosion_spike01.png",
+      "source": "Particles/Textures/explosion_spike01.png",
+      "sha256": "dee582d3f1a11adc9756a0ff2877c5862d26a64156dc7662c7b99697be54e913",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "assets/chests/particles/magic_orb2.png",
+      "source": "Particles/Textures/magic_orb2.png",
+      "sha256": "e092d8fb4ec7cf0fcc75d73463d4bcd0938daa637f067ac5fa20a519de615e3f",
+      "width": 512,
+      "height": 512
+    }
+  ]
+}

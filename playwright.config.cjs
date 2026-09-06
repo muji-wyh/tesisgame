@@ -8,8 +8,8 @@ if (!devices['iPhone 13'] || !devices['iPad Pro 11']) {
 module.exports = defineConfig({
   testDir: path.join(__dirname, 'tests', 'browser'),
   testMatch: '*.spec.cjs',
-  timeout: 30000,
-  expect: { timeout: 7000 },
+  timeout: 90000,
+  expect: { timeout: 10000 },
   workers: 1,
   retries: 0,
   forbidOnly: true,
@@ -20,7 +20,7 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure'
   },
   webServer: {
-    command: 'npm start',
+    command: 'npm run serve:web',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     timeout: 20000

@@ -1,0 +1,32 @@
+; Open this project in Godot 4.7 and export the Web preset.
+config_version=5
+
+[application]
+config/name="Word Buddies"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/images/rewards/spring.svg"
+
+[display]
+window/size/viewport_width=480
+window/size/viewport_height=480
+window/size/window_width_override=960
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_s3tc_bptc=true
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.94, 0.97, 0.95, 1)
+
+[input_devices]
+pointing/emulate_mouse_from_touch=true
+
+[importer_defaults]
+texture={
+"svg/scale": 3.0
+}
