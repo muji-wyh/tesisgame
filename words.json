@@ -1,0 +1,10 @@
+[
+  {"id":"cat","text":"cat","image":"assets/images/words/cat.svg","audio":"assets/audio/voice/word-cat.wav"},
+  {"id":"dog","text":"dog","image":"assets/images/words/dog.svg","audio":"assets/audio/voice/word-dog.wav"},
+  {"id":"sun","text":"sun","image":"assets/images/words/sun.svg","audio":"assets/audio/voice/word-sun.wav"},
+  {"id":"ball","text":"ball","image":"assets/images/words/ball.svg","audio":"assets/audio/voice/word-ball.wav"},
+  {"id":"car","text":"car","image":"assets/images/words/car.svg","audio":"assets/audio/voice/word-car.wav"},
+  {"id":"apple","text":"apple","image":"assets/images/words/apple.svg","audio":"assets/audio/voice/word-apple.wav"},
+  {"id":"fish","text":"fish","image":"assets/images/words/fish.svg","audio":"assets/audio/voice/word-fish.wav"},
+  {"id":"duck","text":"duck","image":"assets/images/words/duck.svg","audio":"assets/audio/voice/word-duck.wav"}
+]

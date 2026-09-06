@@ -1,0 +1,20 @@
+{
+  "name": "tesisgame",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/muji-wyh/tesisgame#readme",
+  "bugs": {
+    "url": "https://github.com/muji-wyh/tesisgame/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muji-wyh/tesisgame.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>Word Buddies</title>
+</head>
+<body>
+<main id="app" aria-label="Word Buddies"></main>
+<script id="game-core">
+(() => {
+  const SEASONS = Object.freeze([
+    { id: 'spring', name: 'Spring', prize: 'flower' },
+    { id: 'summer', name: 'Summer', prize: 'sun' },
+    { id: 'autumn', name: 'Autumn', prize: 'leaf' },
+    { id: 'winter', name: 'Winter', prize: 'snowflake' }
+  ].map((theme) => Object.freeze({
+    ...theme,
+    bgm: `assets/audio/bgm/${theme.id}.wav`,
+    symbol: `assets/images/rewards/${theme.id}.svg`
+  })));
+
+  function validateWords(input) {
+    if (!Array.isArray(input) || input.length < 3) {
+      throw new TypeError('At least three words are required.');
+    }
+    const ids = new Set();
+    const texts = new Set();
+    const images = new Set();
+    return Object.freeze(input.map((word) => {
+      if (!word || typeof word !== 'object' ||
+        ['id', 'text', 'image', 'audio'].some((key) => typeof word[key] !== 'string') ||
+        !/^[a-z][a-z0-9-]{1,19}$/.test(word.id) ||
+        !/^[a-z]{2,6}$/.test(word.text) ||
+        !/^assets\/images\/words\/[a-z0-9-]+\.(svg|png|webp)$/.test(word.image) ||
+        !/^assets\/audio\/voice\/[a-z0-9-]+\.wav$/.test(word.audio) ||
+        ids.has(word.id) || texts.has(word.text) || images.has(word.image)) {
+        throw new TypeError('Each word needs a unique ID, short English text, local image and voice URL.');
+      }
+      ids.add(word.id);
+      texts.add(word.text);
+      images.add(word.image);
+      return Object.freeze({ id: word.id, text: word.text, image: word.image, audio: word.audio });
+    }));
+  }
+
+  function randomIndex(length, rng) {
+    const value = rng();
+    if (!Number.isFinite(value) || value < 0 || value >= 1) {
+      throw new RangeError('Random value must be in [0, 1).');
+    }
+    return Math.floor(value * length);
+  }
+
+  function shuffle(input, rng = Math.random) {
+    const result = [...input];
+    for (let i = result.length - 1; i > 0; i -= 1) {
+      const j = randomIndex(i + 1, rng);
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  function chooseSeason(rng = Math.random) {
+    return SEASONS[randomIndex(SEASONS.length, rng)];
+  }
+
+  function createRound(input, rng = Math.random) {
+    const words = shuffle(validateWords(input), rng).slice(0, 3);
+    const cards = shuffle(words.flatMap((word) => ['word', 'image'].map((kind) => ({
+      id: `${word.id}:${kind}`, wordId: word.id, kind
+    }))), rng);
+    return {
+      phase: 'waiting', cards, selected: null, matched: [],
+      successes: 0, errors: 0, feedback: null, theme: chooseSeason(rng).id
+    };
+  }
+
+  function chooseCard(state, cardId) {
+    if (!['waiting', 'matching'].includes(state.phase)) return state;
+    const card = state.cards.find((item) => item.id === cardId);
+    if (!card) throw new RangeError(`Unknown card: ${cardId}`);
+    if (state.matched.includes(card.wordId)) return state;
+    if (state.selected === cardId) return { ...state, phase: 'waiting', selected: null };
+    const first = state.cards.find((item) => item.id === state.selected);
+    if (!first || first.kind === card.kind) {
+      return { ...state, phase: 'matching', selected: cardId };
+    }
+    const correct = first.wordId === card.wordId;
+    return {
+      ...state, phase: 'feedback', selected: null,
+      successes: state.successes + Number(correct),
+      errors: state.errors + Number(!correct),
+      matched: correct ? [...state.matched, card.wordId] : state.matched,
+      feedback: { correct, cardIds: [first.id, card.id] }
+    };
+  }
+
+  function finishFeedback(state) {
+    if (state.phase !== 'feedback') return state;
+    const phase = state.successes === 3 ? 'won' : state.errors === 3 ? 'lost' : 'waiting';
+    return { ...state, phase, selected: null, feedback: null };
+  }
+
+  function setTheme(state, id) {
+    if (!SEASONS.some((theme) => theme.id === id)) throw new RangeError(`Unknown theme: ${id}`);
+    return state.theme === id ? state : { ...state, theme: id };
+  }
+
+  globalThis.GameCore = Object.freeze({
+    SEASONS, validateWords, shuffle, chooseSeason, createRound, chooseCard, finishFeedback, setTheme
+  });
+})();
+</script>
+</body>
+</html>
