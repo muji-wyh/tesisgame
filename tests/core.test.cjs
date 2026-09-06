@@ -5,7 +5,9 @@ const { loadInline, loadWords } = require('.\\load-inline.cjs');
 const core = loadInline('game-core').GameCore;
 const words = loadWords();
 const round = () => core.createRound(words, () => 0.4);
-const ids = (state) => [...new Set(state.cards.map((card) => card.wordId))];
+const ids = (state) => state.cards.filter((card) => card.kind === 'word' &&
+  state.cards.some((other) => other.kind === 'image' && other.wordId === card.wordId))
+  .map((card) => card.wordId);
 
 function match(state, id, reverse = false) {
   const kinds = reverse ? ['image', 'word'] : ['word', 'image'];
@@ -20,7 +22,7 @@ function wrong(state) {
 test('validates vocabulary instead of substituting a built-in list', () => {
   assert.equal(core.validateWords(words).length, 8);
   const invalid = [
-    [], words.slice(0, 2), [...words, words[0]],
+    [], words.slice(0, 4), [...words, words[0]],
     [{ ...words[0], image: 'https://example.invalid/cat.svg' }, ...words.slice(1)],
     [{ ...words[0], text: '' }, ...words.slice(1)],
     [{ ...words[0], text: true }, ...words.slice(1)]
@@ -30,12 +32,16 @@ test('validates vocabulary instead of substituting a built-in list', () => {
   }
 });
 
-test('starts waiting with three complete unique pairs and does not mutate shuffle input', () => {
+test('starts with three complete pairs plus one unpaired word and image', () => {
   const state = round();
   assert.equal(state.phase, 'waiting');
-  assert.equal(state.cards.length, 6);
+  assert.equal(state.cards.length, 8);
   assert.equal(ids(state).length, 3);
-  assert.equal(new Set(state.cards.map((card) => card.id)).size, 6);
+  assert.equal(new Set(state.cards.map((card) => card.id)).size, 8);
+  assert.equal(new Set(state.cards.map((card) => card.wordId)).size, 5);
+  const distractors = state.cards.filter((card) => !ids(state).includes(card.wordId));
+  assert.equal(distractors.length, 2);
+  assert.deepEqual(Array.from(distractors, (card) => card.kind).sort(), ['image', 'word']);
   assert.equal(state.successes + state.errors, 0);
   for (const id of ids(state)) {
     assert.deepEqual(
@@ -48,6 +54,20 @@ test('starts waiting with three complete unique pairs and does not mutate shuffl
   assert.deepEqual(input, [1, 2, 3]);
   assert.throws(() => core.createRound(words, () => 1), { name: 'RangeError' });
   assert.throws(() => core.createRound(words, () => -0.1), { name: 'RangeError' });
+});
+
+test('distractors count as mistakes and never create an extra winning pair', () => {
+  const initial = round();
+  const decoy = initial.cards.find((card) => card.kind === 'word' && !ids(initial).includes(card.wordId));
+  assert.ok(decoy, 'The round needs an unpaired word distractor.');
+  const selected = core.chooseCard(initial, decoy.id);
+  const feedback = core.chooseCard(selected, `${ids(initial)[0]}:image`);
+  assert.equal(feedback.errors, 1);
+  assert.equal(feedback.successes, 0);
+  let state = core.finishFeedback(feedback);
+  for (const id of ids(initial)) state = core.finishFeedback(match(state, id));
+  assert.equal(state.phase, 'won');
+  assert.equal(state.successes, 3);
 });
 
 test('either kind starts; same-card cancels and same-kind reselects without an error', () => {

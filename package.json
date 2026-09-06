@@ -15,6 +15,13 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "start": "http-server . -a 127.0.0.1 -p 4173 -c-1",
+    "test:browser": "playwright test",
+    "test:all": "npm test && npm run test:browser"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "http-server": "14.1.1"
   }
 }

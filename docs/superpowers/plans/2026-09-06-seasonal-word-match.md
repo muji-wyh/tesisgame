@@ -6,13 +6,15 @@
 
 **Architecture:** 只有一个 HTML 页面入口 `index.html`，CSS 与游戏 JavaScript 内联；词库保存在 `words.json`，单词图片集中在 `assets\images\words`，BGM、生成的英文语音和原创音效作为本地文件加载。静态 HTTP 服务解决独立 JSON 与媒体的加载问题，不需要业务后端、框架或打包。纯状态机、界面控制与三通道声音控制器各自使用具名内联脚本，素材生成器只在开发阶段运行。
 
-**Tech Stack:** HTML5、CSS Grid、JavaScript、SVG、JSON、WAV、HTML Audio；Node.js 24、Windows PowerShell / System.Speech；测试使用 `node:test`、`node:vm`、Playwright；本地运行使用 `http-server`。
+**Tech Stack:** HTML5、CSS Grid、JavaScript、SVG、JSON、WAV、HTML Audio + Web Audio GainNode；Node.js 24、Windows PowerShell / System.Speech；测试使用 `node:test`、`node:vm`、Playwright；本地运行使用 `http-server`。
 
 ---
 
 ## 1. 最终规格与默认规则
 
 本计划合并用户 2026-09-06 的原始需求及全部追加要求。之前设想的“词库和所有素材内嵌、浏览器临时合成中文语音、双击 HTML 运行”不再采用。
+
+**执行中追加的最终要求：** 加入两张干扰卡，并把开箱升级为分阶段的高表现力特效。下文原始任务代码记录逐步搭建过程；这些新增要求的完成情况与最终源码位置列在文末“实现修订记录”，不要用早期基线片段覆盖最终实现。
 
 | 要求 | 明确实现 |
 |---|---|
@@ -21,7 +23,7 @@
 | 词库 | `words.json` 是唯一词条来源；初始包含 cat、dog、sun、ball、car、apple、fish、duck。禁止在 HTML 中复制一份备用词库。 |
 | 图片 | 模型原创 SVG，实际生成到同一个目录 `assets\images\words`；不使用外链图片或 Emoji 代替图片。 |
 | 初始游戏 | 词库和本局图片加载完毕后进入 `waiting`；成功 0、错误 0，没有自动播放或额外开始按钮。加载失败显示英文错误和 Retry，不静默改用固定词库。 |
-| 随机出题 | 无放回抽取三个词，生成三张文字卡和三张图片卡；六张卡随机排列在不重叠的网格中。 |
+| 随机出题 | 从至少五个词中抽取三组有效配对，再取两个不同额外词，分别只展示文字和图片作为干扰项；共八张卡，始终只有三组可完成配对。 |
 | 两次点击 | 第一次图片或文字均可，进入 `matching`；第二次点击异类卡片才判定匹配。点击同一张取消，点击同类另一张改选，均不计错。 |
 | 成功 | 加 1，保留两张卡的位置、标记并禁用，不允许重复得分。 |
 | 错误 | 加 1，短暂标记后恢复可选。使用温和鼓励，不用羞辱或惊吓反馈。 |
@@ -29,8 +31,8 @@
 | 终局 | 成功累计到 3 次获胜；错误累计到 3 次失败。不是两者合计 3，也不是连续 3。 |
 | 主题系统 | 每局开始等概率随机选择 Spring / Summer / Autumn / Winter；下拉选择器支持手动切换，改变页面配色、装饰与 BGM，不清空计数、选中项或已匹配卡片。 |
 | 成功界面 | 显示当前主题对应的一个宝箱，不在胜利时再随机抽取不一致的季节。开局随机主题已经提供随机宝箱来源。 |
-| 开箱 | `closed → opening → opened`；一次点击触发原创音效、动画、粒子、英文语音，1100ms 后显示奖励；重复点击无效。 |
-| 开箱与切换 | 开箱开始锁定本次奖励主题；1100ms 开箱期间短暂禁用主题选择，之后可继续换页面主题，但已打开的宝箱和奖品保持原主题，不产生额外奖励。 |
+| 开箱 | `closed → opening → opened`；一次点击触发蓄力、跃动开盖、光柱、放射光、双冲击波、72 个四季粒子与英文语音，1800ms 后弹出奖励徽章；重复点击无效。 |
+| 开箱与切换 | 开箱开始锁定本次奖励主题；1800ms 开箱期间短暂禁用主题选择，之后可继续换页面主题，但已打开的宝箱和奖品保持原主题，不产生额外奖励。 |
 | 失败界面 | 原创鼓励性小熊图片、原创失败音效、生成的英文鼓励语音和 Play again 按钮。 |
 | 重开与清理 | 重置计分、选中项、反馈、宝箱、粒子和回调；停止旧语音、音效和 BGM；保留静音选择。 |
 | 可访问性 | 原生按钮、键盘 Enter / Space、英文 aria 标签、清楚的焦点；尊重减少动态效果；不禁用浏览器缩放。 |
@@ -69,7 +71,7 @@
 
 | 文件 | 责任 |
 |---|---|
-| `index.html` | 唯一 HTML 页面；`game-core`、`game-app`、`game-audio`、`game-audio-wiring` 内联区块。 |
+| `index.html` | 唯一 HTML 页面；`game-core`、`game-effects`、`game-app`、`game-audio`、`game-audio-wiring` 内联区块。 |
 | `words.json` | 唯一词库，含 ID、英文文字、图片 URL 和单词读音 URL。 |
 | `voice-prompts.json` | 模型原创英文提示台词；不混入中文。 |
 | `tools\generate-images.cjs` | 生成 8 张单词图、4 张奖励图和 1 张失败图。 |
@@ -81,6 +83,7 @@
 | `assets\audio\bgm\*.wav` | 从上述四个确定路径复制的音乐。 |
 | `tests\load-inline.cjs` | 测试直接读取 HTML 中的真实脚本，禁止另写一份引擎供测试。 |
 | `tests\core.test.cjs`、`tests\assets.test.cjs`、`tests\audio.test.cjs` | 纯逻辑、资源与声音生命周期测试。 |
+| `tests\effects.test.cjs`、`tests\ui-contract.test.cjs` | 粒子上限、特效回收、减少动态效果、英文界面和响应式契约。 |
 | `tests\browser\game.spec.cjs` | HTTP 加载、真实点击、四季、视口、英文界面与降级流程。 |
 | `playwright.config.cjs`、`package.json`、`package-lock.json` | 静态服务和测试命令，不引入运行时框架。 |
 | `README.md` | 英文运行、资源生成与维护说明。 |
@@ -94,12 +97,13 @@
 3. `SetOutputToWaveFile` 支持指定 WAV 格式，`SetOutputToNull` 释放文件输出。Microsoft：`https://learn.microsoft.com/en-us/dotnet/api/system.speech.synthesis.speechsynthesizer.setoutputtowavefile`。
 4. `http-server` 的 `-a`、`-p` 和 `-c-1` 分别用于监听地址、端口和关闭缓存。官方仓库：`https://github.com/http-party/http-server`。
 5. 单元测试使用内置运行器，浏览器使用可重试状态断言。官方文档：`https://nodejs.org/docs/latest-v24.x/api/test.html`、`https://playwright.dev/docs/test-assertions`。
+6. iOS 不可靠地执行媒体元素的 `volume` 设置，因此三个媒体通道接入同一个懒加载 AudioContext，以 GainNode 控制音量和语音期间的 BGM 衰减。参考：`https://raw.githubusercontent.com/mdn/browser-compat-data/main/api/HTMLMediaElement.json`、`https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource`。
 
 ## Task 1: 独立词库与纯状态机
 
 **Files:** Create `words.json`、`index.html`、`tests\load-inline.cjs`、`tests\core.test.cjs`；修改 `package.json` 的 `scripts.test`。
 
-- [ ] **Step 1: 创建唯一词库。**
+- [x] **Step 1: 创建唯一词库。**
 
 `words.json`：
 
@@ -116,7 +120,7 @@
 ]
 ```
 
-- [ ] **Step 2: 创建加载器与失败测试。**
+- [x] **Step 2: 创建加载器与失败测试。**
 
 `tests\load-inline.cjs`：
 
@@ -260,13 +264,13 @@ test('theme changes preserve selection, feedback, scores and matched cards', () 
 });
 ```
 
-- [ ] **Step 3: 运行红灯。**
+- [x] **Step 3: 运行红灯。**
 
 Run: `node --test tests\core.test.cjs`
 
 Expected: FAIL，因为尚不存在 `index.html`；语法错误或缺少 Node 不是预期红灯。
 
-- [ ] **Step 4: 创建 HTML 基础与引擎。**
+- [x] **Step 4: 创建 HTML 基础与引擎。**
 
 `index.html` 初始完整内容：
 
@@ -357,7 +361,7 @@ Expected: FAIL，因为尚不存在 `index.html`；语法错误或缺少 Node �
 </html>
 ```
 
-- [ ] **Step 5: 运行绿灯并提交。**
+- [x] **Step 5: 运行绿灯并提交。**
 
 ```powershell
 npm pkg set "scripts.test=node --test"
@@ -710,12 +714,13 @@ npx playwright install chromium webkit
 npm pkg set "scripts.start=http-server . -a 127.0.0.1 -p 4173 -c-1" "scripts.test:browser=playwright test" "scripts.test:all=npm test && npm run test:browser"
 ```
 
-`.gitignore`：
+`.gitignore`：保留用户已有的 `.idea/` 忽略规则，追加以下内容：
 
 ```text
 node_modules
 playwright-report
 test-results
+*.tmp.wav
 ```
 
 `playwright.config.cjs`：
@@ -1237,6 +1242,14 @@ const themes = loadInline('game-core').GameCore.SEASONS;
 const audio = loadInline('game-audio').GameAudio;
 function fixture(rejectPlay = false) {
   const instances = [], statuses = [];
+  class Context {
+    constructor() { this.state = 'suspended'; this.currentTime = 0; this.destination = {}; }
+    resume() { this.state = 'running'; return Promise.resolve(); }
+    createGain() {
+      return { gain: { value: 1, setTargetAtTime(value) { this.value = value; } }, connect() {} };
+    }
+    createMediaElementSource() { return { connect() {} }; }
+  }
   class Media {
     constructor() { this.src = ''; this.paused = true; this.readyState = 4; this.currentTime = 0; this.error = null; this.events = {}; this.plays = 0; instances.push(this); }
     addEventListener(name, callback) { this.events[name] = callback; }
@@ -1248,7 +1261,7 @@ function fixture(rejectPlay = false) {
     pause() { this.paused = true; this.events.pause?.(); }
     load() { this.error = null; }
   }
-  const controller = audio.createController({ Audio: Media, console: { warn() {} } }, (message) => statuses.push(message), themes);
+  const controller = audio.createController({ Audio: Media, AudioContext: Context, console: { warn() {} } }, (message) => statuses.push(message), themes);
   return { controller, instances, statuses };
 }
 test('starts silent, then plays the selected word and current theme BGM', () => {
@@ -1331,63 +1344,92 @@ Expected: FAIL，报告 `Missing inline script: game-audio`。
 
 - [ ] **Step 3: 插入可管理生命周期的媒体控制器。**
 
-最多创建三个 `Audio` 对象；不用不断叠加播放器。每次播放带通道代次，重开 / 换音频后的旧 Promise 不得覆盖新状态。浏览器阻止播放时，显示短英文消息并用 Listen 重试。
+最多创建三个 `Audio` 对象，路由至同一个 AudioContext 的独立 GainNode；不用不断叠加播放器或依赖 iOS 忽略的媒体音量属性。每次播放带通道代次，重开 / 换音频后的旧 Promise 不得覆盖新状态。浏览器阻止播放时，显示短英文消息并用 Listen 重试。
 
 ```html
 <script id="game-audio">
 (() => {
   function createController(host, report, themes) {
     const channels = new Map();
-    const status = { voice: '', sfx: '', bgm: '' };
+    const status = { system: '', voice: '', sfx: '', bgm: '' };
     let currentTheme = null, musicEnabled = true, muted = false, hidden = false;
     let lastVoice = 'assets/audio/voice/welcome.wav', lastSfx = null;
+    let context = null, master = null, playbackVersion = 0;
     function notice(kind, message, error) {
       status[kind] = message; report(Object.values(status).find(Boolean) || '');
       if (error) host.console.warn(message, error);
     }
+    function ensureContext() {
+      if (!context) {
+        const Context = host.AudioContext || host.webkitAudioContext;
+        if (typeof Context !== 'function') { notice('system', 'Audio is not supported on this device.'); return false; }
+        context = new Context(); master = context.createGain();
+        master.gain.value = 0.8; master.connect(context.destination);
+      }
+      if (context.state === 'closed') { notice('system', 'Audio unavailable. Reload this page.'); return false; }
+      if (context.state === 'suspended' || context.state === 'interrupted') {
+        const version = playbackVersion;
+        context.resume().then(() => {
+          if (version === playbackVersion) notice('system', context.state === 'running' ? '' : 'Tap Listen to enable audio.');
+        }).catch((error) => {
+          if (version === playbackVersion) notice('system', 'Tap Listen to enable audio.', error);
+        });
+      } else notice('system', '');
+      return true;
+    }
     function duck() {
-      const bgm = channels.get('bgm')?.element, voice = channels.get('voice')?.element;
-      if (bgm) bgm.volume = voice && !voice.paused && !voice.error ? 0.05 : 0.15;
+      const bgm = channels.get('bgm'), voice = channels.get('voice');
+      if (bgm) bgm.gain.gain.setTargetAtTime(
+        voice?.active && !voice.element.paused && !voice.element.error ? 0.05 : 0.15,
+        context.currentTime, 0.03
+      );
     }
     function channel(kind) {
       if (channels.has(kind)) return channels.get(kind);
       if (typeof host.Audio !== 'function') { notice(kind, 'Audio is not supported on this device.'); return null; }
       const element = new host.Audio();
       element.preload = 'none'; element.loop = kind === 'bgm';
-      element.volume = kind === 'voice' ? 0.8 : kind === 'sfx' ? 0.3 : 0.15;
-      const entry = { element, source: '', token: 0 };
+      const input = context.createMediaElementSource(element), gain = context.createGain();
+      gain.gain.value = kind === 'voice' ? 0.8 : kind === 'sfx' ? 0.3 : 0.15;
+      input.connect(gain); gain.connect(master);
+      const entry = { element, input, gain, source: '', token: 0, active: false };
       element.addEventListener('error', () => {
-        if (entry.source && element.error && !muted && !hidden) {
+        if (entry.active && element.error && !muted && !hidden) {
           notice(kind, `${kind === 'bgm' ? 'Music' : kind === 'sfx' ? 'Sound' : 'Voice'} unavailable. Tap Listen.`, element.error);
         }
         duck();
       });
-      if (kind === 'voice') for (const event of ['playing', 'pause', 'ended']) element.addEventListener(event, duck);
+      element.addEventListener('ended', () => { entry.active = false; duck(); });
+      if (kind === 'voice') for (const event of ['playing', 'pause']) element.addEventListener(event, duck);
       channels.set(kind, entry); duck(); return entry;
     }
     function stop(kind) {
       const entry = channels.get(kind);
       if (!entry) return;
-      entry.token += 1; entry.element.pause();
+      entry.token += 1; entry.active = false; entry.element.pause();
       if (entry.element.readyState > 0) entry.element.currentTime = 0;
     }
-    function stopAll() { for (const kind of channels.keys()) stop(kind); }
+    function stopAll() { playbackVersion += 1; for (const kind of channels.keys()) stop(kind); }
     function play(kind, source) {
       if (!source || muted || hidden) return;
+      if (!ensureContext()) return;
       const entry = channel(kind);
       if (!entry) return;
       const element = entry.element;
-      if (kind === 'bgm' && entry.source === source && !element.paused) return;
+      if (kind === 'bgm' && entry.source === source && entry.active && !element.paused && !element.error) return;
       stop(kind);
       const token = entry.token;
       if (entry.source !== source) { entry.source = source; element.src = source; }
       else if (element.error) element.load();
+      entry.active = true;
       element.play().then(() => {
         if (token === entry.token) { notice(kind, ''); duck(); }
       }).catch((error) => {
         if (token !== entry.token) return;
+        entry.active = false;
         notice(kind, error.name === 'NotAllowedError' ? 'Tap Listen to enable audio.' :
           `${kind === 'bgm' ? 'Music' : kind === 'sfx' ? 'Sound' : 'Voice'} unavailable. Tap Listen.`, error);
+        duck();
       });
     }
     function setTheme(id) {
@@ -1574,6 +1616,11 @@ test('blocked media playback is visible and does not block matching', async ({ p
 test('UI reaches generated word audio, theme BGM and mute controls', async ({ page }) => {
   await page.addInitScript(() => {
     window.__audio = [];
+    window.AudioContext = class {
+      constructor() { this.state = 'running'; this.currentTime = 0; this.destination = {}; }
+      createGain() { return { gain: { value: 1, setTargetAtTime(value) { this.value = value; } }, connect() {} }; }
+      createMediaElementSource() { return { connect() {} }; }
+    };
     window.Audio = class {
       constructor() { this.src = ''; this.paused = true; this.readyState = 4; this.error = null; this.events = {}; }
       addEventListener(name, listener) { this.events[name] = listener; }
@@ -1727,3 +1774,31 @@ git commit -m "test: cover Apple device layouts and complete game lifecycle" -m 
 | 失败提示、重开、静音和错误恢复 | Task 3 失败素材、Task 4–6 生命周期与降级测试。 |
 
 用户已经要求“设计完成后将其实现出来”，因此计划自审完成后直接进入实现，不再询问是否执行。采用 `executing-plans` 在当前执行会话推进检查点，保持当前模型与 reasoning effort；若后续需要独立审阅，遵守同样的模型偏好。完成时说明真实交付与尚不能验证的真机限制，不把计划、模拟测试或仅存在的音频文件当作实际体验完成。
+
+## 实现修订记录
+
+最终交付以实际源文件及回归断言为准，以下修订覆盖早期步骤中六卡、24 粒子、1100ms 或直接设置媒体音量的基线。
+
+| 修订 | 最终设计和源码 |
+|---|---|
+| 干扰项 | `index.html` 的 `game-core`：词库最少五条；三组配对 + 一张额外文字 + 一张额外图片，两张干扰卡来自不同词且都无配对。成功阈值仍为三次。 |
+| 八卡布局 | `game-style`：竖屏两列四行，横屏与低高度四列两行；低高度同步降低字号。所有卡片和控制保持在视口内。 |
+| 分阶段开箱 | `game-effects` 的 `OPEN_MS = 1800`、`EFFECT_MS = 4800`；蓄力与弹盖后出现光柱、放射光、双环、72 粒子和 Wow 字样，再弹出奖励徽章。没有高频全屏闪烁。 |
+| 四季粒子 | 春季花瓣、夏季气泡、秋季落叶、冬季晶体；混合 12 张主题图案、36 个光点、24 片主题碎屑。轨迹、色板、旋转与重力方向各不相同。 |
+| 特效清理 | `GameEffects.play()` 返回清理函数；WeakMap 保证同一容器只有一组效果，旧回调不会删除新场景。重开、换主题、页面隐藏、减少动态效果均清理运动内容。 |
+| 点击稳定 | 漂浮动画只作用于宝箱内部图形，不移动按钮的命中区域；开箱后的重复点击仍被状态和 disabled 双重阻止。 |
+| iOS 音量 | 三个媒体播放器经一个懒加载 AudioContext 的 GainNode 混音；语音期间降低 BGM。上下文恢复失败有英文提示，旧错误不会污染下一局。 |
+| 音乐重试 | 相同 BGM 仅在无错误且正在播放时跳过重播；即使错误后的 `paused` 仍为 false，Listen 也会重新加载。 |
+| 英文引导 | `voice-prompts.json` 的 welcome 提醒寻找三组配对并存在无匹配卡片；已由本机英文语音生成器重新生成对应 WAV。 |
+| 工作区 | 在原目录的 `feat-seasonal-word-buddies` 分支实现；保留用户 `.idea/` 忽略规则，不新建未获请求的工作树，不自动推送。 |
+
+追加断言位于 `tests\core.test.cjs`、`tests\effects.test.cjs`、`tests\audio.test.cjs`、`tests\browser\game.spec.cjs`，覆盖干扰项不会形成第四组、无配对点击计错、特效只有一份、旧清理不误删新效果、设备旋转与主题切换不重置，以及 iOS 音量和错误重试回归。
+
+### 本地交付记录
+
+- 最终单元、资源、音频、特效和界面契约：37 项通过。
+- 最终浏览器回归：81 项通过，包含桌面 Chromium、iPhone / iPad WebKit 配置与横竖屏 / 分屏尺寸。
+- 四首 BGM 的源文件与项目副本 SHA256 一致；13 张 SVG、24 段英文语音和 12 段原创音效已实际生成。
+- 实际浏览器画面检查后，修正图片撑出网格、按钮命中区随动画移动，以及主题图案集中在单一方向的问题。
+- Windows WebKit 不提供 AudioContext；媒体拒绝播放测试明确注入音频图替身，另测无音频能力的提示。真机 Safari 声音、设备安全区与扬声器听感不冒充已验证，仍需设备确认。
+- 实现保留在功能分支，素材与界面按逻辑分组提交；未自动合并到 main 或推送远端。早期步骤中的各条提交命令由这些分组提交替代。
