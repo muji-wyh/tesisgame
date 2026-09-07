@@ -33,6 +33,35 @@ npm run serve:web
 
 For development in the editor, open `project.godot`. The maintained browser shell is `web\shell.html`; `build\web\index.html` is generated and should not be edited.
 
+## Azure deployment
+
+Production: `https://gentle-forest-02ff42900.3.azurestaticapps.net`
+
+Like FootisesGame3, this uses a manual Azure Static Web Apps deployment: app `tesisgame`,
+Free tier, resource group `rg-footises`, East Asia, in the **Visual Studio Enterprise
+Subscription**. The separate `footises-game` app is not changed.
+
+With Azure CLI signed in and the Static Web Apps CLI (`swa`) installed, deploy the existing
+`build\web` export from the repository root:
+
+```powershell
+$env:SWA_CLI_DEPLOYMENT_TOKEN = az staticwebapp secrets list `
+    --subscription "Visual Studio Enterprise Subscription" `
+    --name tesisgame --resource-group rg-footises `
+    --query "properties.apiKey" --output tsv
+if ($LASTEXITCODE -ne 0 -or !$env:SWA_CLI_DEPLOYMENT_TOKEN) { throw "Azure deployment token unavailable." }
+try {
+    swa deploy .\build\web --swa-config-location .\web --env production
+    if ($LASTEXITCODE -ne 0) { throw "Azure deployment failed." }
+} finally {
+    Remove-Item Env:\SWA_CLI_DEPLOYMENT_TOKEN
+}
+```
+
+`web\staticwebapp.config.json` supplies the engine MIME types and `Cache-Control: no-cache`
+for the export's unversioned filenames. The CLI includes this configuration without
+rebuilding the game. Run `npm run build:web` first only when you want to publish source changes.
+
 ## Embed in a website
 
 Upload the export together under a path such as `/games/word-buddies/`, then embed it:
