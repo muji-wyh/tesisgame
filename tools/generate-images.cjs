@@ -106,44 +106,54 @@ const wordArt = {
 const rewardArt = {
   spring: {
     title: 'Spring flower',
-    background: '#edf7e9',
+    background: '#edf8ec',
     shapes: `
-    <path d="M60 68V103" stroke="#699974" stroke-width="6"/>
-    <path d="M59 92 Q38 93 36 77 Q54 76 59 92Z M62 86 Q64 71 83 72 Q82 86 62 86Z" fill="#9cc894" stroke="#699974" stroke-width="2.5"/>
-    ${Array.from({ length: 6 }, (_, index) => `<ellipse cx="60" cy="28" rx="12" ry="16" transform="rotate(${index * 60} 60 49)" fill="#f2b6bd" stroke="#b98384" stroke-width="2.5"/>`).join('\n    ')}
-    <circle cx="60" cy="49" r="18" fill="#f7d87f"/>
-    ${smile(60, 45, 7)}`
+    <path d="M60 68V103" stroke="#438363" stroke-width="6"/>
+    <path d="M59 92 Q38 93 36 77 Q54 76 59 92Z M62 86 Q64 71 83 72 Q82 86 62 86Z" fill="#b9df9f" stroke="#438363" stroke-width="2.5"/>
+    ${Array.from({ length: 6 }, (_, index) => `<ellipse cx="60" cy="28" rx="12" ry="16" transform="rotate(${index * 60} 60 49)" fill="#8ecf6b" stroke="#438363" stroke-width="2.5"/>`).join('\n    ')}
+    <circle cx="60" cy="49" r="18" fill="#f2d66a" stroke="#438363" stroke-width="2.5"/>
+    <circle cx="53" cy="45" r="3" fill="#438363" stroke="none"/>
+    <circle cx="67" cy="45" r="3" fill="#438363" stroke="none"/>
+    <path d="M54 55 Q60 61 66 55" stroke="#438363" stroke-width="3" fill="none"/>`
   },
   summer: {
     title: 'Summer sun',
-    background: '#fff4d8',
+    background: '#ffe6e6',
     shapes: `
-    ${rays(56, 8, 35, 47, '#e4a549', 7)}
-    <circle cx="60" cy="56" r="26" fill="#f9d470"/>
-    <path d="M44 47 Q48 39 56 38" stroke="#fff0b1" stroke-width="5"/>
-    ${smile(60, 53, 9)}
-    <circle cx="30" cy="95" r="4" fill="#e9b866" stroke="none"/>
-    <circle cx="90" cy="95" r="4" fill="#e9b866" stroke="none"/>
-    <path d="M46 102 Q60 109 74 102" stroke="#e9b866" stroke-width="4"/>`
+    ${rays(56, 10, 34, 48, '#b53640', 6)}
+    <circle cx="60" cy="56" r="26" fill="#ff8f9d" stroke="#b53640" stroke-width="3"/>
+    <path d="M44 47 Q49 39 57 39" stroke="#ffd2d7" stroke-width="5"/>
+    <circle cx="51" cy="53" r="3" fill="#b53640" stroke="none"/>
+    <circle cx="69" cy="53" r="3" fill="#b53640" stroke="none"/>
+    <path d="M54 63 Q60 69 66 63" stroke="#b53640" stroke-width="3" fill="none"/>
+    <circle cx="30" cy="95" r="4" fill="#ffb6bf" stroke="none"/>
+    <circle cx="90" cy="95" r="4" fill="#ffb6bf" stroke="none"/>
+    <path d="M46 102 Q60 109 74 102" stroke="#ff8f9d" stroke-width="4"/>`
   },
   autumn: {
     title: 'Autumn maple leaf',
-    background: '#fff0de',
+    background: '#fff8cf',
     shapes: `
-    <path d="M60 86 57 106" stroke="#9d7454" stroke-width="5"/>
-    <path d="M60 15 71 39 86 31 81 53 101 49 92 66 104 72 75 83 63 94 57 94 45 83 16 72 28 66 19 49 39 53 34 31 49 39Z" fill="#eab078" stroke="#a87852"/>
-    <path d="M60 91V32 M60 69 43 51 M60 69 77 51 M60 82 34 71 M60 82 86 71" stroke="#bc8057" stroke-width="3"/>
-    <path d="M57 34V49" stroke="#f7d097" stroke-width="3"/>`
+    <path d="M60 86 57 106" stroke="#8f7400" stroke-width="5"/>
+    <path d="M60 15 71 39 86 31 81 53 101 49 92 66 104 72 75 83 63 94 57 94 45 83 16 72 28 66 19 49 39 53 34 31 49 39Z" fill="#ffd24d" stroke="#8f7400"/>
+    <path d="M60 91V32 M60 69 43 51 M60 69 77 51 M60 82 34 71 M60 82 86 71" stroke="#b79600" stroke-width="3"/>
+    <path d="M57 34V49" stroke="#fff1a8" stroke-width="3"/>`
   },
   winter: {
     title: 'Winter snowflake',
-    background: '#eff6f7',
+    background: '#ffffff',
     shapes: `
-    <g stroke="#80b6c9" stroke-width="5">
-      ${Array.from({ length: 6 }, (_, index) => `<path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(${index * 60} 60 60)"/>`).join('\n      ')}
+    <circle cx="60" cy="60" r="43" fill="#d8dee3" stroke="#606a73" stroke-width="4"/>
+    <g stroke="#606a73" stroke-width="6">
+      ${Array.from({ length: 6 }, (_, index) => `<path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(${index * 60} 60 60)"/>`).join('\n      ')}
     </g>
-    <circle cx="60" cy="60" r="14" fill="#d1e8ed" stroke="#80b6c9" stroke-width="3"/>
-    <g stroke-width="2">${smile(60, 55, 6)}</g>`
+    <g stroke="#ffffff" stroke-width="3">
+      ${Array.from({ length: 6 }, (_, index) => `<path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(${index * 60} 60 60)"/>`).join('\n      ')}
+    </g>
+    <circle cx="60" cy="60" r="12" fill="#ffffff" stroke="#606a73" stroke-width="3"/>
+    <circle cx="55" cy="56" r="2.5" fill="#606a73" stroke="none"/>
+    <circle cx="65" cy="56" r="2.5" fill="#606a73" stroke="none"/>
+    <path d="M54 64 Q60 69 66 64" stroke="#606a73" stroke-width="2.5" fill="none"/>`
   }
 };
 

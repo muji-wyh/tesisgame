@@ -51,3 +51,81 @@ test('the Godot command runner waits for the engine and propagates its real fail
     /exit 7/
   );
 });
+
+test('Web delivery compresses and fingerprints assets without mixing cached game versions', (t) => {
+  const filename = path.join(root, 'tools', 'package-web.cjs');
+  assert.ok(fs.existsSync(filename), 'The mobile Web export packager is missing');
+  const { packageWebExport } = require(filename);
+  const { brotliDecompressSync } = require('node:zlib');
+  const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'word-buddies-web-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const files = {
+    'index.js': Buffer.from('engine glue '.repeat(1024)),
+    'index.wasm': Buffer.from('engine bytecode '.repeat(8192)),
+    'index.audio.worklet.js': Buffer.from('audio worklet'),
+    'index.audio.position.worklet.js': Buffer.from('position worklet'),
+    'index.pck': Buffer.from('game data '.repeat(1024))
+  };
+  const audio = [{
+    source: 'res://assets/audio/voice/welcome.wav',
+    bytes: Buffer.from('RSRC optional audio '.repeat(1024))
+  }];
+  const writeExport = () => {
+    for (const [name, bytes] of Object.entries(files)) fs.writeFileSync(path.join(directory, name), bytes);
+    fs.writeFileSync(path.join(directory, 'index.html'),
+      `<script src="index.js"></script><script>const config = ${JSON.stringify({
+        executable: 'index', args: [], fileSizes: {
+          'index.wasm': files['index.wasm'].length,
+          'index.pck': files['index.pck'].length
+        }
+      })};</script>`);
+  };
+  const readConfig = () => JSON.parse(fs.readFileSync(path.join(directory, 'index.html'), 'utf8')
+    .match(/const config = (\{[^\r\n]*\});/)[1]);
+  writeExport();
+  fs.writeFileSync(path.join(directory, 'keep.txt'), 'unrelated file');
+  const initialBytes = packageWebExport(directory, audio);
+  const first = readConfig();
+  assert.match(first.executable, /^engine-[a-f0-9]{16}$/);
+  assert.match(first.mainPack, /^game-[a-f0-9]{16}\.pck$/);
+  for (const [name, bytes] of Object.entries(files)) {
+    const target = name.endsWith('.pck') ? first.mainPack : name.replace('index', first.executable);
+    assert.deepEqual(fs.readFileSync(path.join(directory, target)), bytes);
+    assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, `${target}.br`))), bytes);
+    assert.equal(fs.existsSync(path.join(directory, name)), false, 'Unversioned engine/data files must not be shipped');
+  }
+  assert.equal(first.fileSizes[`${first.executable}.wasm`], files['index.wasm'].length);
+  assert.equal(first.fileSizes[first.mainPack], files['index.pck'].length);
+  assert.ok(fs.readFileSync(path.join(directory, 'index.html'), 'utf8').includes(`src="${first.executable}.js"`));
+  assert.ok(fs.statSync(path.join(directory, `${first.executable}.wasm.br`)).size < files['index.wasm'].length / 4);
+  assert.ok(first.audioAssets, 'Optional audio needs an on-demand URL map');
+  const firstAudio = first.audioAssets[audio[0].source];
+  assert.match(firstAudio, /^audio-[a-f0-9]{16}\.sample$/);
+  assert.deepEqual(fs.readFileSync(path.join(directory, firstAudio)), audio[0].bytes);
+  assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, `${firstAudio}.br`))), audio[0].bytes);
+  assert.equal(first.fileSizes[firstAudio], undefined, 'Optional audio must not participate in startup preloading');
+  audio[0].bytes = Buffer.from('RSRC changed optional audio');
+  writeExport();
+  assert.equal(packageWebExport(directory, audio), initialBytes, 'Optional audio must not enlarge the startup payload');
+  const audioUpdate = readConfig();
+  assert.equal(audioUpdate.executable, first.executable);
+  assert.equal(audioUpdate.mainPack, first.mainPack, 'Optional audio updates must not invalidate the game pack');
+  assert.notEqual(audioUpdate.audioAssets[audio[0].source], firstAudio);
+  assert.equal(fs.existsSync(path.join(directory, firstAudio)), false);
+
+  files['index.pck'] = Buffer.from('updated game data');
+  writeExport();
+  packageWebExport(directory, audio);
+  const second = readConfig();
+  assert.equal(second.executable, first.executable, 'Game changes must reuse the cached engine');
+  assert.notEqual(second.mainPack, first.mainPack, 'New game content must use a new cache key');
+  assert.equal(fs.existsSync(path.join(directory, first.mainPack)), false, 'Obsolete generated packs must not accumulate');
+  assert.equal(fs.readFileSync(path.join(directory, 'keep.txt'), 'utf8'), 'unrelated file');
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'web', 'staticwebapp.config.json'), 'utf8'));
+  assert.equal(config.globalHeaders['Cache-Control'], 'no-cache', 'HTML must discover updated asset names');
+  assert.equal(config.globalHeaders.Vary, 'Accept-Encoding', 'Caches must distinguish compressed and identity responses');
+  for (const route of ['/engine-*', '/game-*', '/audio-*']) {
+    assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
+      'public, max-age=31536000, immutable');
+  }
+});

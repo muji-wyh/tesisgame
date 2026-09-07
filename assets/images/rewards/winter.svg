@@ -1,19 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
   <title id="title">Winter snowflake</title>
-  <circle cx="60" cy="60" r="55" fill="#eff6f7"/>
+  <circle cx="60" cy="60" r="55" fill="#ffffff"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <g stroke="#80b6c9" stroke-width="5">
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(0 60 60)"/>
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(60 60 60)"/>
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(120 60 60)"/>
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(180 60 60)"/>
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(240 60 60)"/>
-      <path d="M60 60V14 M60 31 49 22 M60 31 71 22 M60 46 49 37 M60 46 71 37" transform="rotate(300 60 60)"/>
+    <circle cx="60" cy="60" r="43" fill="#d8dee3" stroke="#606a73" stroke-width="4"/>
+    <g stroke="#606a73" stroke-width="6">
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(0 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(60 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(120 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(180 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(240 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(300 60 60)"/>
     </g>
-    <circle cx="60" cy="60" r="14" fill="#d1e8ed" stroke="#80b6c9" stroke-width="3"/>
-    <g stroke-width="2">
-    <circle cx="54" cy="55" r="3" fill="#765445" stroke="none"/>
-    <circle cx="66" cy="55" r="3" fill="#765445" stroke="none"/>
-    <path d="M54 65 Q60 71 66 65" fill="none"/></g>
+    <g stroke="#ffffff" stroke-width="3">
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(0 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(60 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(120 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(180 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(240 60 60)"/>
+      <path d="M60 60V18 M60 31 50 23 M60 31 70 23 M60 46 50 38 M60 46 70 38" transform="rotate(300 60 60)"/>
+    </g>
+    <circle cx="60" cy="60" r="12" fill="#ffffff" stroke="#606a73" stroke-width="3"/>
+    <circle cx="55" cy="56" r="2.5" fill="#606a73" stroke="none"/>
+    <circle cx="65" cy="56" r="2.5" fill="#606a73" stroke="none"/>
+    <path d="M54 64 Q60 69 66 64" stroke="#606a73" stroke-width="2.5" fill="none"/>
   </g>
 </svg>

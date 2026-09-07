@@ -83,7 +83,7 @@
             reason instanceof WebAssembly.RuntimeError) startupFailure(reason);
       }
 
-      // This bridge only exposes host lifecycle events, never gameplay mutations.
+      // Host lifecycle and read-only asset URLs, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ready() {
           if (failed) return;
@@ -101,6 +101,10 @@
         },
         audioStatus(text) {
           document.getElementById('audio-status').textContent = text;
+        },
+        audioAssets() {
+          return JSON.stringify(Object.fromEntries(Object.entries(config.audioAssets || {})
+            .map(([path, file]) => [path, new URL(file, document.baseURI).href])));
         },
         background(color) {
           document.body.style.backgroundColor = color;

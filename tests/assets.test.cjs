@@ -27,6 +27,12 @@ const expectedPrompts = {
   'autumn-open': 'An autumn leaf for you! Great job!',
   'winter-open': 'A winter snowflake for you! Great job!'
 };
+const expectedRewardColors = {
+  spring: ['#edf8ec', '#438363', '#8ecf6b'],
+  summer: ['#ffe6e6', '#b53640', '#ff8f9d'],
+  autumn: ['#fff8cf', '#8f7400', '#ffd24d'],
+  winter: ['#ffffff', '#606a73', '#d8dee3']
+};
 const sfxIds = [
   'select', 'correct', 'wrong', 'loss',
   ...seasons.flatMap(({ id }) => [`${id}-arrive`, `${id}-open`])
@@ -133,6 +139,15 @@ test('each season has its own original reward SVG', () => {
     digests.add(sha256(readSvg(season.symbol)));
   }
   assert.equal(digests.size, 4);
+});
+
+test('seasonal reward SVGs use the requested seasonal palette', () => {
+  for (const [season, colors] of Object.entries(expectedRewardColors)) {
+    const svg = readSvg(`assets/images/rewards/${season}.svg`).toLowerCase();
+    for (const color of colors) {
+      assert.match(svg, new RegExp(color), `${season} reward should include ${color}`);
+    }
+  }
 });
 
 test('the encouraging try-again scene is a standalone SVG', () => {

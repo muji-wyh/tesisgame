@@ -2,16 +2,16 @@ extends RefCounted
 
 const THEMES: Dictionary = {
 	"spring": {"name": "Spring", "background": Color("#edf8ec"), "accent": Color("#438363"),
-		"light": Color("#d2f3b2"), "spark": Color("#ff9fc9"), "tint": Color("#d9ffe2"),
+		"light": Color("#d7efc7"), "spark": Color("#75c66f"), "tint": Color("#dff6de"),
 		"chest": "royal", "prize": "A spring flower!"},
-	"summer": {"name": "Summer", "background": Color("#fff8df"), "accent": Color("#b66b27"),
-		"light": Color("#ffe171"), "spark": Color("#61d9ef"), "tint": Color.WHITE,
+	"summer": {"name": "Summer", "background": Color("#ffe6e6"), "accent": Color("#b53640"),
+		"light": Color("#ffc6cb"), "spark": Color("#ff8f9d"), "tint": Color("#ffe3e8"),
 		"chest": "energy", "prize": "A summer sun!"},
-	"autumn": {"name": "Autumn", "background": Color("#fff0e1"), "accent": Color("#b35b3b"),
-		"light": Color("#ffb358"), "spark": Color("#ffc86f"), "tint": Color("#ffe3b3"),
+	"autumn": {"name": "Autumn", "background": Color("#fff8cf"), "accent": Color("#8f7400"),
+		"light": Color("#ffe07a"), "spark": Color("#ffd24d"), "tint": Color("#fff0ad"),
 		"chest": "royal", "prize": "An autumn leaf!"},
-	"winter": {"name": "Winter", "background": Color("#eaf4ff"), "accent": Color("#487caa"),
-		"light": Color("#a4e8ff"), "spark": Color("#c4b5ff"), "tint": Color("#d8edff"),
+	"winter": {"name": "Winter", "background": Color.WHITE, "accent": Color("#606a73"),
+		"light": Color("#eef2f4"), "spark": Color("#d8dee3"), "tint": Color("#f5f7f8"),
 		"chest": "crystal", "prize": "A winter snowflake!"}
 }
 

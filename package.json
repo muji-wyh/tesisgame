@@ -22,7 +22,7 @@
     "build:web": "node tools/build-web.cjs",
     "prestart": "npm run build:web",
     "start": "npm run serve:web",
-    "serve:web": "http-server build/web -a 127.0.0.1 -p 4173 -c-1",
+    "serve:web": "http-server build/web -a 127.0.0.1 -p 4173 --brotli -c-1",
     "pretest:browser": "npm run build:web",
     "test:browser": "playwright test",
     "test:all": "npm test && npm run test:browser"

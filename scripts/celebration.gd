@@ -3,6 +3,7 @@ extends Control
 const LIFETIME: float = 4.8
 
 var _particles: Array[Dictionary] = []
+var _texture_paths: Dictionary = {}
 var _textures: Dictionary = {}
 var _palette: Dictionary = {}
 var _token: Texture2D
@@ -18,14 +19,17 @@ func _ready() -> void:
 
 
 func configure(manifest: Dictionary) -> void:
-	for key in manifest.particles:
-		_textures[key] = load("res://" + manifest.particles[key])
+	_texture_paths = manifest.particles.duplicate()
+	_textures.clear()
 
 
 func start(palette: Dictionary, reduced_motion: bool) -> void:
 	clear()
 	if reduced_motion:
 		return
+	if _textures.is_empty():
+		for key in _texture_paths:
+			_textures[key] = load("res://" + _texture_paths[key])
 	_palette = palette
 	_token = load(palette.symbol)
 	var rng := RandomNumberGenerator.new()

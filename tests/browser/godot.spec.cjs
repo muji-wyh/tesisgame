@@ -3,7 +3,10 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 
 test.beforeAll(() => {
-  expect(fs.existsSync(path.join(__dirname, '..', '..', 'build', 'web', 'index.wasm')),
+  const directory = path.join(__dirname, '..', '..', 'build', 'web');
+  const config = JSON.parse(fs.readFileSync(path.join(directory, 'index.html'), 'utf8')
+    .match(/const config = (\{[^\r\n]*\});/)[1]);
+  expect(fs.existsSync(path.join(directory, `${config.executable}.wasm`)),
     'Build the actual Godot Web export before running browser tests.').toBe(true);
 });
 
@@ -53,7 +56,7 @@ async function assertFits(scope) {
       windowWidth: innerWidth, windowHeight: innerHeight,
       scrollWidth: document.documentElement.scrollWidth,
       scrollHeight: document.documentElement.scrollHeight,
-      pixelsWide: canvas.width, pixelsHigh: canvas.height, ratio: devicePixelRatio
+      ratio: devicePixelRatio
     };
   });
   expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.windowWidth);
@@ -62,8 +65,13 @@ async function assertFits(scope) {
   expect(sizes.y).toBeGreaterThanOrEqual(0);
   expect(sizes.x + sizes.width).toBeLessThanOrEqual(sizes.windowWidth + 1);
   expect(sizes.y + sizes.height).toBeLessThanOrEqual(sizes.windowHeight + 1);
-  expect(Math.abs(sizes.pixelsWide - Math.round(sizes.width * sizes.ratio))).toBeLessThanOrEqual(1);
-  expect(Math.abs(sizes.pixelsHigh - Math.round(sizes.height * sizes.ratio))).toBeLessThanOrEqual(1);
+  await expect.poll(async () => {
+    const pixels = await scope.locator('#canvas').evaluate(canvas => ({ width: canvas.width, height: canvas.height }));
+    return Math.max(
+      Math.abs(pixels.width - Math.round(sizes.width * sizes.ratio)),
+      Math.abs(pixels.height - Math.round(sizes.height * sizes.ratio))
+    );
+  }).toBeLessThanOrEqual(1);
 }
 
 test('loads the real engine, WebAssembly and game pack without scrolling', async ({ page }) => {
@@ -110,8 +118,7 @@ test('orientation changes preserve selection and fit the resized canvas', async 
   expect(errors).toEqual([]);
 });
 
-test('Listen uses real browser audio or reports genuine missing audio support', async ({ page }) => {
-  const errors = watchErrors(page);
+async function observeAudio(page) {
   await page.addInitScript(() => {
     const NativeContext = window.AudioContext || window.webkitAudioContext;
     window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0 };
@@ -136,6 +143,43 @@ test('Listen uses real browser audio or reports genuine missing audio support', 
     if (window.AudioContext) window.AudioContext = WrappedContext;
     else window.webkitAudioContext = WrappedContext;
   });
+}
+
+async function holdOptionalAudio(page) {
+  const requests = [];
+  let release;
+  const pending = new Promise(resolve => { release = resolve; });
+  await page.route('**/audio-*.sample', async route => {
+    requests.push(route.request());
+    await pending;
+    await route.continue();
+  });
+  return {
+    requests, release,
+    async finish() {
+      release();
+      await Promise.all(requests.map(async request => {
+        const response = await request.response();
+        expect(response?.ok()).toBe(true);
+        await response.finished();
+      }));
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    }
+  };
+}
+
+async function chooseSeason(page, index) {
+  const metrics = await canvasMetrics(page);
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  await page.touchscreen.tap(metrics.x + metrics.width - 268 * scale, metrics.y + 48 * scale);
+  await page.keyboard.press('ArrowDown');
+  for (let item = 0; item < index; item++) await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+}
+
+test('Listen uses real browser audio or reports genuine missing audio support', async ({ page }) => {
+  const errors = watchErrors(page);
+  await observeAudio(page);
   await page.goto('/');
   await ready(page);
   const metrics = await canvasMetrics(page);
@@ -153,6 +197,157 @@ test('Listen uses real browser audio or reports genuine missing audio support', 
   }
   expect(errors).toEqual([]);
 });
+
+test('optional audio downloads never delay bundled words or card input', async ({ page }) => {
+  const errors = watchErrors(page);
+  const held = await holdOptionalAudio(page);
+  await observeAudio(page);
+  try {
+    await page.goto('/');
+    await ready(page);
+    expect(held.requests).toEqual([]);
+    test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
+    const metrics = await canvasMetrics(page);
+    const scale = Math.min(metrics.width, metrics.height) / 480;
+    const listen = { x: metrics.x + metrics.width - 57 * scale, y: metrics.y + 48 * scale };
+    await page.touchscreen.tap(listen.x, listen.y);
+    await expect.poll(() => held.requests.length).toBe(2);
+    await page.touchscreen.tap(listen.x, listen.y);
+    const point = firstCard(metrics);
+    const beforeWord = await page.evaluate(() => window.audioObservation.starts);
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(beforeWord + 2);
+    expect(new Set(held.requests.map(request => request.url())).size).toBe(2);
+    expect(held.requests).toHaveLength(2);
+    await expect(page.locator('#audio-status')).toBeEmpty();
+    const beforeRelease = await page.evaluate(() => window.audioObservation.starts);
+    await held.finish();
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(beforeRelease + 1);
+    expect(await page.evaluate(() => window.audioObservation.starts)).toBe(beforeRelease + 1);
+    await expect(page.locator('#audio-status')).toBeEmpty();
+    expect(errors).toEqual([]);
+  } finally {
+    held.release();
+    await page.unrouteAll({ behavior: 'wait' });
+  }
+});
+
+for (const action of ['mute', 'hide']) {
+  test(`${action} prevents pending audio from restarting until another gesture`, async ({ page }) => {
+    const errors = watchErrors(page);
+    const held = await holdOptionalAudio(page);
+    await observeAudio(page);
+    try {
+      await page.goto('/');
+      await ready(page);
+      test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
+      const metrics = await canvasMetrics(page);
+      const scale = Math.min(metrics.width, metrics.height) / 480;
+      await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
+      await expect.poll(() => held.requests.length).toBe(2);
+      const before = await page.evaluate(() => window.audioObservation.starts);
+      if (action === 'mute') {
+        await page.touchscreen.tap(metrics.x + metrics.width - 155 * scale, metrics.y + 48 * scale);
+      } else {
+        await page.evaluate(() => {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+      }
+      await held.finish();
+      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
+      if (action === 'mute') {
+        await page.touchscreen.tap(metrics.x + metrics.width - 155 * scale, metrics.y + 48 * scale);
+      } else {
+        await page.evaluate(() => {
+          delete document.hidden;
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+        expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
+      }
+      const point = firstCard(metrics);
+      await page.touchscreen.tap(point.x, point.y);
+      await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 3);
+      expect(held.requests).toHaveLength(2);
+      expect(errors).toEqual([]);
+    } finally {
+      held.release();
+      await page.unrouteAll({ behavior: 'wait' });
+    }
+  });
+}
+
+test('season colors preserve selection and discard obsolete pending music and prompts', async ({ page }) => {
+  const errors = watchErrors(page);
+  const held = await holdOptionalAudio(page);
+  await observeAudio(page);
+  try {
+    await page.goto('/');
+    await ready(page);
+    const point = firstCard(await canvasMetrics(page));
+    await page.touchscreen.tap(point.x, point.y);
+    const selected = await page.locator('#selection-status').textContent();
+    for (const [index, color] of ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff'].entries()) {
+      await chooseSeason(page, index);
+      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', color);
+      await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+      await expect(page.locator('#selection-status')).toHaveText(selected);
+    }
+    const before = await page.evaluate(() => window.audioObservation.starts);
+    await held.finish();
+    if (await page.evaluate(() => window.audioObservation.available)) {
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 2);
+      expect(new Set(held.requests.map(request => request.url())).size).toBe(8);
+      expect(held.requests).toHaveLength(8);
+    }
+    await assertFits(page);
+    expect(errors).toEqual([]);
+  } finally {
+    held.release();
+    await page.unrouteAll({ behavior: 'wait' });
+  }
+});
+
+for (const failure of ['unavailable', 'corrupt']) {
+  test(`${failure} optional audio leaves the round playable and can be retried`, async ({ page }) => {
+    let failing = true;
+    const requests = [];
+    await page.route('**/audio-*.sample', async route => {
+      requests.push(route.request());
+      if (failing) await route.fulfill({
+        status: failure === 'unavailable' ? 503 : 200,
+        body: failure === 'unavailable' ? 'Temporarily unavailable' : 'RSRC damaged audio',
+        headers: { 'Cache-Control': 'no-store' }
+      });
+      else await route.continue();
+    });
+    await observeAudio(page);
+    await page.goto('/');
+    await ready(page);
+    test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
+    const metrics = await canvasMetrics(page);
+    const scale = Math.min(metrics.width, metrics.height) / 480;
+    await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
+    await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
+    const before = await page.evaluate(() => window.audioObservation.starts);
+    const point = firstCard(metrics);
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(before + 2);
+    await Promise.all(requests.map(async request => (await request.response()).finished()));
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    failing = false;
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+    const retryStarts = await page.evaluate(() => window.audioObservation.starts);
+    await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(retryStarts);
+    await expect(page.locator('#audio-status')).toBeEmpty();
+    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+  });
+}
 
 test('motion preference changes do not restart the native round', async ({ page }) => {
   const errors = watchErrors(page);
@@ -213,10 +408,7 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
   expect(errors).toEqual([]);
 });
 
-test('completes matches and opens a one-shot reward using only real touch input', async ({ page }) => {
-  const errors = watchErrors(page);
-  await page.goto('/');
-  await ready(page);
+async function discoverCards(page) {
   const metrics = await canvasMetrics(page);
   const discovered = new Map();
   for (let index = 0; index < 8; index++) {
@@ -229,32 +421,82 @@ test('completes matches and opens a one-shot reward using only real touch input'
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toContainText('Find three pairs.');
   }
-  const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
-  for (let index = 0; index < pairs.length; index++) {
-    for (const card of [pairs[index].Word, pairs[index].Picture]) {
-      const point = cardPoint(metrics, card);
-      await page.touchscreen.tap(point.x, point.y);
+  return { metrics, discovered };
+}
+
+test('completes matches and opens a one-shot reward while optional audio is still downloading', async ({ page }) => {
+  const errors = watchErrors(page);
+  const held = await holdOptionalAudio(page);
+  await observeAudio(page);
+  try {
+    await page.goto('/');
+    await ready(page);
+    const { metrics, discovered } = await discoverCards(page);
+    const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
+    expect(pairs).toHaveLength(3);
+    for (let index = 0; index < pairs.length; index++) {
+      for (const card of [pairs[index].Word, pairs[index].Picture]) {
+        const point = cardPoint(metrics, card);
+        await page.touchscreen.tap(point.x, point.y);
+      }
+      await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find three pairs.');
     }
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find three pairs.');
+    const scale = Math.min(metrics.width, metrics.height) / 480;
+    const width = metrics.width / scale;
+    const height = metrics.height / scale;
+    const landscape = metrics.width >= metrics.height;
+    const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
+    const stageHeight = landscape ? height - 148 : Math.max(72, height - 328);
+    const chestPoint = {
+      x: metrics.x + (12 + stageWidth * 0.5) * scale,
+      y: metrics.y + (136 + stageHeight * 0.6) * scale
+    };
+    await page.touchscreen.tap(chestPoint.x, chestPoint.y);
+    await expect(page.locator('#game-status')).toContainText('Wow!');
+    const earned = await page.locator('#game-status').textContent();
+    await page.touchscreen.tap(chestPoint.x, chestPoint.y);
+    await expect(page.locator('#game-status')).toHaveText(earned);
+    const before = await page.evaluate(() => window.audioObservation.starts);
+    await held.finish();
+    if (await page.evaluate(() => window.audioObservation.available)) {
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 2);
+    }
+    await assertFits(page);
+    expect(errors).toEqual([]);
+  } finally {
+    held.release();
+    await page.unrouteAll({ behavior: 'wait' });
   }
-  const scale = Math.min(metrics.width, metrics.height) / 480;
-  const width = metrics.width / scale;
-  const height = metrics.height / scale;
-  const landscape = metrics.width >= metrics.height;
-  const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
-  const stageHeight = landscape ? height - 148 : Math.max(72, height - 328);
-  const chestPoint = {
-    x: metrics.x + (12 + stageWidth * 0.5) * scale,
-    y: metrics.y + (136 + stageHeight * 0.6) * scale
-  };
-  await page.touchscreen.tap(chestPoint.x, chestPoint.y);
-  await expect(page.locator('#game-status')).toContainText('Wow!');
-  const earned = await page.locator('#game-status').textContent();
-  await page.touchscreen.tap(chestPoint.x, chestPoint.y);
-  await expect(page.locator('#game-status')).toHaveText(earned);
-  await assertFits(page);
-  expect(errors).toEqual([]);
+});
+
+test('losing stops pending music and only plays the current loss prompt', async ({ page }) => {
+  const errors = watchErrors(page);
+  const held = await holdOptionalAudio(page);
+  await observeAudio(page);
+  try {
+    await page.goto('/');
+    await ready(page);
+    const { metrics, discovered } = await discoverCards(page);
+    const [word, card] = [...discovered].find(([, value]) => value.Word !== undefined);
+    const [, other] = [...discovered].find(([text, value]) => text !== word && value.Picture !== undefined);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      for (const index of [card.Word, other.Picture]) {
+        const point = cardPoint(metrics, index);
+        await page.touchscreen.tap(point.x, point.y);
+      }
+      await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find three pairs.');
+    }
+    const before = await page.evaluate(() => window.audioObservation.starts);
+    await held.finish();
+    if (await page.evaluate(() => window.audioObservation.available)) {
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
+    }
+    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+    expect(errors).toEqual([]);
+  } finally {
+    held.release();
+    await page.unrouteAll({ behavior: 'wait' });
+  }
 });
 
 test('a failed WebAssembly download shows an English error and retry control', async ({ page }) => {
@@ -266,7 +508,7 @@ test('a failed WebAssembly download shows an English error and retry control', a
 });
 
 test('a missing engine script shows an English startup error', async ({ page }) => {
-  await page.route('**/index.js', (route) => route.abort());
+  await page.route(/\/engine-[a-f0-9]{16}\.js$/, (route) => route.abort());
   await page.goto('/');
   await expect(page.locator('#message')).toContainText('The game could not start.', { timeout: 15000 });
   await expect(page.locator('#retry')).toBeVisible();

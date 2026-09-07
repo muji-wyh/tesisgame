@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
   <title id="title">Autumn maple leaf</title>
-  <circle cx="60" cy="60" r="55" fill="#fff0de"/>
+  <circle cx="60" cy="60" r="55" fill="#fff8cf"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M60 86 57 106" stroke="#9d7454" stroke-width="5"/>
-    <path d="M60 15 71 39 86 31 81 53 101 49 92 66 104 72 75 83 63 94 57 94 45 83 16 72 28 66 19 49 39 53 34 31 49 39Z" fill="#eab078" stroke="#a87852"/>
-    <path d="M60 91V32 M60 69 43 51 M60 69 77 51 M60 82 34 71 M60 82 86 71" stroke="#bc8057" stroke-width="3"/>
-    <path d="M57 34V49" stroke="#f7d097" stroke-width="3"/>
+    <path d="M60 86 57 106" stroke="#8f7400" stroke-width="5"/>
+    <path d="M60 15 71 39 86 31 81 53 101 49 92 66 104 72 75 83 63 94 57 94 45 83 16 72 28 66 19 49 39 53 34 31 49 39Z" fill="#ffd24d" stroke="#8f7400"/>
+    <path d="M60 91V32 M60 69 43 51 M60 69 77 51 M60 82 34 71 M60 82 86 71" stroke="#b79600" stroke-width="3"/>
+    <path d="M57 34V49" stroke="#fff1a8" stroke-width="3"/>
   </g>
 </svg>

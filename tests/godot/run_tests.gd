@@ -204,6 +204,45 @@ func _test_data(words: Array) -> void:
 	for season in ["spring", "summer", "autumn", "winter"]:
 		var theme: Dictionary = data_script.theme(season)
 		check(theme.id == season and theme.prize != "", "Each season has a named reward")
+	var expected_themes := {
+		"spring": {
+			"name": "Spring",
+			"background": Color("#edf8ec"),
+			"accent": Color("#438363"),
+			"light": Color("#d7efc7"),
+			"spark": Color("#75c66f"),
+			"tint": Color("#dff6de")
+		},
+		"summer": {
+			"name": "Summer",
+			"background": Color("#ffe6e6"),
+			"accent": Color("#b53640"),
+			"light": Color("#ffc6cb"),
+			"spark": Color("#ff8f9d"),
+			"tint": Color("#ffe3e8")
+		},
+		"autumn": {
+			"name": "Autumn",
+			"background": Color("#fff8cf"),
+			"accent": Color("#8f7400"),
+			"light": Color("#ffe07a"),
+			"spark": Color("#ffd24d"),
+			"tint": Color("#fff0ad")
+		},
+		"winter": {
+			"name": "Winter",
+			"background": Color.WHITE,
+			"accent": Color("#606a73"),
+			"light": Color("#eef2f4"),
+			"spark": Color("#d8dee3"),
+			"tint": Color("#f5f7f8")
+		}
+	}
+	for season in expected_themes.keys():
+		var theme: Dictionary = data_script.theme(season)
+		var expected: Dictionary = expected_themes[season]
+		for key in expected.keys():
+			check(theme.get(key) == expected[key], "%s %s matches the seasonal palette" % [season, key])
 	var data = data_script.new()
 	check(data.load_all(), "Runtime JSON and imported chest manifest load: " + data.error)
 	check(data.words == words, "Godot uses the unchanged shared vocabulary")
@@ -225,7 +264,14 @@ func _test_effects() -> void:
 	var data_script: GDScript = load("res://scripts/game_data.gd")
 	var effect_view = effect_script.new()
 	root.add_child(effect_view)
+	var data = data_script.new()
+	check(data.load_all(), "Celebration assets are valid")
+	effect_view.configure(data.chests)
+	check(effect_view._textures.is_empty(), "Celebration textures do not delay startup")
+	effect_view.start(data_script.theme("spring"), true)
+	check(effect_view._textures.is_empty(), "Reduced motion does not load unused particle textures")
 	effect_view.start(data_script.theme("spring"), false)
+	check(effect_view._textures.size() == data.chests.particles.size(), "The first celebration loads its textures")
 	check(effect_view.particle_count() == 72, "Native celebration has 72 particles")
 	for category in range(3):
 		var quadrants: Dictionary = {}
@@ -260,6 +306,10 @@ func _test_audio() -> void:
 	var notices: Array[String] = []
 	controller.status_changed.connect(func(message: String) -> void: notices.append(message))
 	check(not controller.active and not controller.music.playing, "Audio waits for interaction")
+	for season in ["spring", "summer", "autumn", "winter"]:
+		var track: AudioStreamWAV = load("res://assets/audio/bgm/" + season + ".wav")
+		check(track.mix_rate == 22050, "Mobile background music uses 22.05 kHz: " + season)
+		check(not track.stereo, "Mobile background music uses mono: " + season)
 	var original: AudioStreamWAV = load("res://assets/audio/bgm/spring.wav")
 	var original_loop: int = original.loop_mode
 	controller.interact("spring")
