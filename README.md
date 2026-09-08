@@ -35,9 +35,13 @@ The original SVG/PNG artwork is unchanged. This reduces the game-pack download w
 removing words, reducing the collection, or adding image requests during play.
 
 The maintained HTML shell includes an inline, dependency-free treasure toy: tap it, wiggle
-it sideways, or use Enter/Space to make stars while the game downloads. It works before the
-engine script arrives and needs no extra images, fonts, audio, or device-motion permission.
-Its finite effects respect reduced motion and stop when the page is hidden or loading ends.
+it sideways, use Enter/Space, or press Xbox A while the game downloads. The chest bounces,
+peeks open, and makes stars, hearts or bubbles; every five taps brings a little star party.
+Repeated taps do not show a browser highlight or select the caption, while keyboard focus
+and pinch zoom remain available. It works before the engine script arrives and needs no
+extra images, fonts, audio, or device-motion permission. Effects are capped at 12 particles,
+respect reduced motion, and stop when the page is hidden or loading ends. Controller
+polling runs only while a connected controller can use the loading toy.
 Sparkles are temporary loading-screen play, not saved collection rewards.
 
 Engine and game-pack requests start together. The progress bar tracks actual downloaded
@@ -102,7 +106,7 @@ Upload the export together under a path such as `/games/word-buddies/`, then emb
 <iframe
   src="/games/word-buddies/index.html"
   title="Word Buddies"
-  allow="autoplay; fullscreen"
+  allow="autoplay; fullscreen; gamepad"
   style="display:block;width:100%;height:100dvh;border:0">
 </iframe>
 ```
@@ -126,7 +130,45 @@ which gives a small arrival bounce. The reward is saved before this cosmetic ani
 opening the collection, replaying, or hiding the page cannot lose or duplicate it.
 Reduced motion keeps a static reveal instead of the flight.
 
-Each season has ten named reward variants with ten different generated illustrations. Opened rewards are stored locally and appear on the **My rewards** page; locked slots remain hidden until earned. The collection keeps touch and wheel scrolling without visible scrollbars. Reduced motion skips moving feedback and reveals the reward immediately after the required hold. **Play again** starts a new round. Audio starts with normal game interaction and stops on hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
+Each season has ten named reward variants with ten different generated illustrations.
+Opened rewards are stored locally and appear on the **My rewards** page; locked slots
+keep their artwork and names hidden. Tap an earned tile to open its larger, named seasonal
+preview. Taps alternate between a bounce, a twirl and a little hug, with Spring hearts,
+Summer stars, Autumn leaves or Winter snowflakes. Every five taps brings a bigger
+high-five party. The visible play count starts fresh when a preview opens and never grants
+another reward. These finite, native effects use at most twelve shapes and no new downloads;
+rapid taps replace the previous reaction instead of stacking animations.
+
+Collection swipes follow the finger one-to-one, then glide and slow naturally on release.
+A new touch stops the glide without opening the tile underneath. Scrolling stops at the
+edges and when leaving the collection; wheel and keyboard scrolling remain available
+without visible scrollbars. Controller navigation brings earned rewards back into view
+even after touch scrolling. Reduced motion keeps direct finger scrolling, disables the
+automatic glide, and gives static preview feedback, including the high-five message.
+A won reward is still revealed immediately after the required hold.
+
+**Play again** starts a new round. Audio starts with normal game interaction and stops on
+hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen
+uses the encouraging bear, a gentle effect and prerecorded English speech. Tap the bear
+or focus it and press Xbox A for a happy wiggle, little hearts and rotating encouragement.
+Bear play never restarts lost-round music or changes the result. Reduced motion keeps the
+encouragement without movement, and Play again remains the initial controller action.
+
+### Xbox controller
+
+| Control | Action |
+|---|---|
+| D-pad / left stick | Move focus between available controls. |
+| A | Activate the focused control; hold to open a won chest. |
+| B | Cancel the selected card, close a reward preview, or go back. |
+| LB / RB | Change the game season without restarting the round. |
+| Y / Menu | Open or close My rewards, not restart the game. |
+
+Choose **Play again** with A to start another round. Locked rewards and matched cards are
+skipped during navigation. Releasing A early or disconnecting cancels an incomplete chest
+charge; reconnecting retains the current round. A held on the loading toy must be released
+before selecting a native game control. If the browser keeps controller-only audio muted,
+tap or click the game once to enable sound.
 
 Particle textures load only for the first animated celebration, rather than delaying startup.
 Reduced-motion players do not load those unused textures.

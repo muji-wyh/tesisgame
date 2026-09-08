@@ -93,6 +93,78 @@ func step_reward_tween(app, seconds: float, message: String) -> void:
 		app._reward_tween.custom_step(seconds)
 
 
+func collection_scroll(app) -> ScrollContainer:
+	if has_property(app, "_collection_scroll"):
+		return app._collection_scroll as ScrollContainer
+	var scrolls: Array = app.collection_page.find_children("*", "ScrollContainer", true, false)
+	return scrolls[0] as ScrollContainer if not scrolls.is_empty() else null
+
+
+func reward_slot_button(app, id: String) -> Button:
+	if not app._reward_slots.has(id):
+		return null
+	var slot: Dictionary = app._reward_slots[id]
+	return slot.get("button") as Button
+
+
+func preview_visible(app) -> bool:
+	return has_property(app, "_preview_page") and app._preview_page != null and app._preview_page.visible
+
+
+func preview_tween_valid(app) -> bool:
+	return has_property(app, "_preview_tween") and app._preview_tween != null and app._preview_tween.is_valid()
+
+
+func preview_sparkle_visible(app) -> bool:
+	return has_property(app, "_preview_sparkle") and app._preview_sparkle != null and app._preview_sparkle.visible
+
+
+func local_mouse_event(source: Control, event: InputEventMouse, global_position: Vector2) -> InputEventMouse:
+	event.position = source.get_global_transform().affine_inverse() * global_position
+	return event
+
+
+func emit_scroll_press(source: Control, global_position: Vector2, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.pressed = pressed
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	source.gui_input.emit(local_mouse_event(source, event, global_position))
+
+
+func emit_scroll_motion(source: Control, global_position: Vector2, relative: Vector2) -> void:
+	var event := InputEventMouseMotion.new()
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT
+	event.relative = relative
+	source.gui_input.emit(local_mouse_event(source, event, global_position))
+
+
+func emit_scroll_wheel(source: Control, global_position: Vector2, button_index: int) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = button_index
+	event.pressed = true
+	source.gui_input.emit(local_mouse_event(source, event, global_position))
+
+
+func joy_button(button: int, pressed: bool = true) -> void:
+	var event := InputEventJoypadButton.new()
+	event.button_index = button
+	event.pressed = pressed
+	Input.parse_input_event(event)
+
+
+func joy_tap(button: int) -> void:
+	joy_button(button, true)
+	joy_button(button, false)
+
+
+func joy_axis(axis: int, value: float) -> void:
+	var event := InputEventJoypadMotion.new()
+	event.axis = axis
+	event.axis_value = value
+	Input.parse_input_event(event)
+
+
 func _test_rounds(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	var seen_themes: Dictionary = {}
@@ -416,6 +488,80 @@ func _test_audio() -> void:
 	await process_frame
 
 
+func _test_reward_preview_play(app) -> void:
+	check(has_property(app, "_preview_tap_count"), "Reward previews track cosmetic taps toward a high-five party")
+	if not has_property(app, "_preview_tap_count"):
+		return
+	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
+	var seasons := ["spring", "summer", "autumn", "winter"]
+	var shape_names := ["HEART", "STAR", "LEAF", "SNOWFLAKE"]
+	for season in seasons:
+		app.collected_rewards[season + "-1"] = true
+	app._refresh_collection()
+	app._show_collection()
+	var earned_rewards: Dictionary = app.collected_rewards.duplicate()
+	for index in range(seasons.size()):
+		var season: String = seasons[index]
+		app._open_reward_preview(season + "-1")
+		await process_frame
+		await process_frame
+		check(app._preview_tap_count == 0, "Opening a preview starts a fresh play count: " + season)
+		check(app._preview_sparkle.shape_kind == app._preview_sparkle.Shape[shape_names[index]],
+			"Preview shapes follow the earned season: " + season)
+		var node_count: int = app._preview_page.find_children("*", "", true, false).size()
+		var poses: Array[Vector2] = []
+		for tap in range(1, 7):
+			var previous: Tween = app._preview_tween
+			app._preview_play_button.pressed.emit()
+			check(app._preview_tap_count == tap, "Each deliberate preview tap counts once: " + season)
+			check(previous == null or not previous.is_valid(), "New play replaces the previous animation: " + season)
+			var party: bool = tap == 5
+			check(app._preview_sparkle.particle_count == (12 if party else 8),
+				"Seasonal play has eight shapes and the fifth tap has twelve: " + season)
+			check(app._preview_caption.text.contains("High five!") if party else app._preview_caption.text.ends_with("Tap %d" % tap),
+				"Visible reward feedback explains the tap or party: " + season)
+			check(app._status_announcement.contains(app._preview_caption.text),
+				"Preview play exposes the same feedback to assistive technology: " + season)
+			check(app._preview_page.find_children("*", "", true, false).size() == node_count,
+				"Rapid seasonal play does not accumulate particle nodes: " + season)
+			if preview_tween_valid(app):
+				app._preview_tween.pause()
+				app._preview_tween.custom_step(0.20)
+				if tap <= 3:
+					poses.append(app._preview_image.scale)
+		check(poses.size() == 3 and poses[0] != poses[1] and poses[1] != poses[2] and poses[0] != poses[2],
+			"The first three taps have distinct bounce, twirl, and hug poses: " + season)
+		app._layout()
+		check(not preview_tween_valid(app) and app._preview_image.scale == Vector2.ONE and not preview_sparkle_visible(app),
+			"Resizing cancels an active preview effect: " + season)
+		check(app._preview_tap_count == 6, "Cancelling an effect does not reset play progress: " + season)
+		app.set_reduced_motion(true)
+		for tap in range(7, 11):
+			app._preview_play_button.pressed.emit()
+		check(app._preview_tap_count == 10 and app._preview_caption.text.contains("High five!"),
+			"Reduced-motion players still get the fifth-tap party message: " + season)
+		check(not preview_tween_valid(app) and app._preview_image.scale == Vector2.ONE and not preview_sparkle_visible(app),
+			"Reduced-motion parties do not move or emit shapes: " + season)
+		check(app.collected_rewards == earned_rewards, "Preview play never grants or changes rewards: " + season)
+		app.set_reduced_motion(false)
+		app._hide_reward_preview()
+	if app.audio.available:
+		app._open_reward_preview("spring-1")
+		app.audio.set_muted(false)
+		app.audio.halt()
+		app._preview_play_button.pressed.emit()
+		check(app.audio.active and app.audio.effect.playing,
+			"A first direct preview interaction unlocks bundled sound")
+		app.audio.set_muted(true)
+		app._preview_play_button.pressed.emit()
+		check(not app.audio.active and not app.audio.effect.playing, "Preview play respects muted sound")
+		app.on_page_hidden()
+		check(not preview_visible(app) and not preview_tween_valid(app), "Hiding the page cancels preview play")
+	app.collected_rewards = saved_rewards
+	app._refresh_collection()
+	app._hide_collection()
+
+
 func _test_scene() -> void:
 	var path := "res://scenes/main.tscn"
 	check(FileAccess.file_exists(path), "The native main scene exists")
@@ -449,8 +595,7 @@ func _test_scene() -> void:
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
 		"The rewards collection has an in-game page")
-	var scrolls: Array = app.collection_page.find_children("*", "ScrollContainer", true, false)
-	var collection_scroll := scrolls[0] as ScrollContainer if not scrolls.is_empty() else null
+	var collection_scroll := collection_scroll(app)
 	check(collection_scroll != null, "The rewards collection scrolls in a native ScrollContainer")
 	if collection_scroll != null:
 		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
@@ -470,6 +615,8 @@ func _test_scene() -> void:
 		app._show_collection()
 		check(app._collection_back.has_focus() if has_property(app, "_collection_back") else false,
 			"Opening rewards moves keyboard focus to Back")
+		check(has_property(app, "_status_announcement") and app._status_announcement.begins_with("My rewards opened"),
+			"Opening rewards announces the collection modal state")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
 		if app.has_method("_hide_collection"):
@@ -478,6 +625,171 @@ func _test_scene() -> void:
 			app.collection_page.hide()
 		check(app.collection_button.focus_mode == Control.FOCUS_ALL,
 			"Closing rewards restores underlying keyboard focus")
+	app.collected_rewards.clear()
+	app.collected_rewards["spring-1"] = true
+	app._refresh_collection()
+	var inventory_before_label_check: Dictionary = app.collected_rewards.duplicate()
+	app._show_collection()
+	for id in app._reward_slots:
+		app.collected_rewards[id] = true
+	app._refresh_collection()
+	await process_frame
+	await process_frame
+	for id in app._reward_slots:
+		var slot: Dictionary = app._reward_slots[id]
+		check(Rect2(Vector2.ZERO, slot.button.size).encloses(slot.label.get_rect()),
+			"Reward name and number fit inside the tile: %s label=%s tile=%s" % [id, slot.label.get_rect(), slot.button.size])
+		check(slot.label.get_line_count() <= 2, "Reward captions use at most two lines: " + id)
+	app.collected_rewards = inventory_before_label_check
+	app._refresh_collection()
+	app._hide_collection()
+	var unlocked_slot := reward_slot_button(app, "spring-1")
+	var locked_slot := reward_slot_button(app, "spring-2")
+	check(unlocked_slot != null and not unlocked_slot.disabled and unlocked_slot.focus_mode == Control.FOCUS_ALL,
+		"Earned rewards are deliberate touch and focus targets")
+	check(locked_slot != null and locked_slot.disabled and locked_slot.focus_mode == Control.FOCUS_NONE,
+		"Locked rewards cannot be focused or activated")
+	if locked_slot != null:
+		locked_slot.pressed.emit()
+	check(not preview_visible(app), "Locked rewards do not open the reward preview")
+	if unlocked_slot != null:
+		unlocked_slot.grab_focus()
+		unlocked_slot.pressed.emit()
+	check(preview_visible(app), "Activating an earned reward opens a large native preview")
+	if preview_visible(app):
+		check(app._preview_image.texture == load("res://assets/images/rewards/spring-1.svg"),
+			"The preview shows the earned reward artwork")
+		check(app._preview_title.text == "Blossom #1",
+			"The preview names the earned reward without exposing locked items")
+		check(has_property(app, "_status_announcement") and app._status_announcement == "Blossom #1 reward preview opened. Press the reward to play, or Back to close.",
+			"Opening a reward preview announces its modal state")
+		check(app._preview_play_button.has_focus(), "Opening the preview focuses its primary play action")
+		var saved_rewards: Dictionary = app.collected_rewards.duplicate()
+		app._preview_play_button.pressed.emit()
+		check(app.collected_rewards == saved_rewards, "Playing with a reward preview does not mutate inventory")
+		check(has_property(app, "_status_announcement") and app._status_announcement == "Blossom #1. Boing! Tap 1",
+			"Playing with a reward preview announces the playful interaction")
+		check(preview_tween_valid(app), "Preview play starts one bounded native flourish")
+		app._preview_play_button.pressed.emit()
+		var current_preview_tween = app._preview_tween if has_property(app, "_preview_tween") else null
+		check(current_preview_tween != null and current_preview_tween.is_valid(), "Rapid preview taps replace earlier flourish cleanly")
+		if current_preview_tween != null:
+			current_preview_tween.pause()
+			current_preview_tween.custom_step(1.0)
+		check(app._preview_image.scale == Vector2.ONE and not preview_sparkle_visible(app),
+			"Preview flourish settles with no lingering scale or sparkle")
+		if app.has_method("_hide_reward_preview"):
+			app._hide_reward_preview()
+		check(not preview_visible(app) and unlocked_slot.has_focus(),
+			"Closing the preview restores focus to the reward slot")
+	app.set_reduced_motion(true)
+	if unlocked_slot != null:
+		unlocked_slot.pressed.emit()
+	if preview_visible(app):
+		app._preview_play_button.pressed.emit()
+	check((not has_property(app, "_preview_tween") or app._preview_tween == null) and (not has_property(app, "_preview_image") or app._preview_image.scale == Vector2.ONE),
+		"Reduced motion keeps preview play static")
+	if app.has_method("_hide_reward_preview"):
+		app._hide_reward_preview()
+	app.set_reduced_motion(false)
+	await _test_reward_preview_play(app)
+	if collection_scroll != null and unlocked_slot != null:
+		app._show_collection()
+		root.size = Vector2i(320, 320)
+		await process_frame
+		await process_frame
+		collection_scroll.scroll_vertical = 80
+		var start_scroll: int = collection_scroll.scroll_vertical
+		var point := unlocked_slot.get_global_rect().get_center()
+		emit_scroll_press(unlocked_slot, point, true)
+		emit_scroll_motion(unlocked_slot, point + Vector2(0, -43), Vector2(0, -43))
+		emit_scroll_motion(collection_scroll, point + Vector2(0, -43), Vector2(0, -43))
+		emit_scroll_press(unlocked_slot, point + Vector2(0, -43), false)
+		check(abs(collection_scroll.scroll_vertical - (start_scroll + 43)) <= 1,
+			"Collection touch drag scrolls exactly one logical pixel per finger pixel")
+		unlocked_slot.pressed.emit()
+		check(not preview_visible(app), "A vertical collection swipe never opens a reward on release")
+		collection_scroll.scroll_vertical = 15
+		emit_scroll_press(collection_scroll, point, true)
+		emit_scroll_motion(collection_scroll, point + Vector2(0, 1000), Vector2(0, 1000))
+		emit_scroll_press(collection_scroll, point + Vector2(0, 1000), false)
+		check(collection_scroll.scroll_vertical == 0, "Collection drag clamps at the top")
+		collection_scroll.scroll_vertical = 0
+		emit_scroll_press(collection_scroll, point, true)
+		emit_scroll_motion(collection_scroll, point + Vector2(0, -10000), Vector2(0, -10000))
+		emit_scroll_press(collection_scroll, point + Vector2(0, -10000), false)
+		var max_scroll: int = max(0, int(app._collection_grid.size.y - collection_scroll.size.y))
+		check(abs(collection_scroll.scroll_vertical - max_scroll) <= 1, "Collection drag clamps at the bottom")
+		var before_wheel: int = collection_scroll.scroll_vertical
+		emit_scroll_wheel(collection_scroll, point, MOUSE_BUTTON_WHEEL_UP)
+		check(collection_scroll.scroll_vertical < before_wheel, "Mouse wheel scrolling still works with hidden bars")
+		check(app.has_method("_advance_collection_inertia"), "The collection supports release momentum")
+		if app.has_method("_advance_collection_inertia"):
+			collection_scroll.scroll_vertical = 80
+			app._start_collection_drag(Vector2(100, 250), 0)
+			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
+			app._update_collection_drag(Vector2(100, 210))
+			var drag_velocity: Vector2 = app._collection_velocity
+			app._update_collection_drag(Vector2(100, 210))
+			check(app._collection_velocity == drag_velocity,
+				"Duplicated touch and emulated mouse positions do not amplify momentum")
+			app._end_collection_drag()
+			var released_scroll: int = collection_scroll.scroll_vertical
+			app._advance_collection_inertia(0.1)
+			check(collection_scroll.scroll_vertical > released_scroll,
+				"Releasing a moving finger continues scrolling in the same direction")
+			check(app._collection_velocity.length() < drag_velocity.length(),
+				"Collection momentum loses speed smoothly")
+			app._start_collection_drag(Vector2(100, 210), 0)
+			app._start_collection_drag(Vector2(100, 210), -2)
+			check(app._collection_velocity == Vector2.ZERO and app._collection_dragged,
+				"A new touch stops momentum and remains a stop gesture after mouse emulation")
+			app._end_collection_drag()
+			unlocked_slot.pressed.emit()
+			check(not preview_visible(app), "Tapping to stop momentum does not open a moving reward")
+			collection_scroll.scroll_vertical = max_scroll - 5
+			app._start_collection_drag(Vector2(100, 210), 0)
+			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
+			app._update_collection_drag(Vector2(100, 170))
+			app._end_collection_drag()
+			app._advance_collection_inertia(0.5)
+			check(collection_scroll.scroll_vertical == max_scroll and app._collection_velocity == Vector2.ZERO,
+				"Momentum stops at the collection boundary without overshoot")
+			collection_scroll.scroll_vertical = 80
+			app._start_collection_drag(Vector2(100, 250), 0)
+			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
+			app._update_collection_drag(Vector2(100, 210))
+			app._end_collection_drag()
+			app.set_reduced_motion(true)
+			var reduced_scroll: int = collection_scroll.scroll_vertical
+			app._advance_collection_inertia(0.5)
+			check(collection_scroll.scroll_vertical == reduced_scroll and app._collection_velocity == Vector2.ZERO,
+				"Reduced motion cancels automatic gliding without disabling finger scrolling")
+			app.set_reduced_motion(false)
+			check(app.collection_button.focus_mode == Control.FOCUS_NONE
+				and app.theme_buttons.all(func(button: Button) -> bool: return button.focus_mode == Control.FOCUS_NONE),
+				"Restyling after a motion change preserves the collection's keyboard focus boundary")
+			collection_scroll.scroll_vertical = max_scroll
+			await process_frame
+			await process_frame
+			app._collection_back.grab_focus()
+			app._move_focus(Vector2.DOWN)
+			await process_frame
+			await process_frame
+			check(unlocked_slot.has_focus(),
+				"Controller navigation reaches scrolled-off rewards: focus=%s candidates=%s" % [
+					root.gui_get_focus_owner().name,
+					app._focus_candidates().map(func(control: Control) -> String:
+						return "%s:%s" % [control.name, app._focus_center(control)])])
+			check(collection_scroll.get_global_rect().encloses(unlocked_slot.get_global_rect()),
+				"Switching from scrolled touch input brings the focused reward back into view")
+			app._start_collection_drag(Vector2(100, 250), 0)
+			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
+			app._update_collection_drag(Vector2(100, 210))
+			app._end_collection_drag()
+			app.on_page_hidden()
+			check(app._collection_velocity == Vector2.ZERO, "Hiding the page cancels collection momentum")
+		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Feedback lasts 700ms")
 	check(not (app._success is Label) and not (app._mistakes is Label),
@@ -512,7 +824,96 @@ func _test_scene() -> void:
 			var pixel_size: Vector2 = bounds.size * pixels_per_unit
 			check(pixel_size.x >= 47.9 and pixel_size.y >= 47.9,
 				"Touch target is at least 48px: " + control.name + " " + str(pixel_size))
+	var controller_first: String = app.model.cards[0].id
+	app.cards[controller_first].grab_focus()
+	joy_tap(JOY_BUTTON_A)
+	await process_frame
+	check(app.model.selected_id == controller_first, "Controller A activates the focused card")
+	joy_tap(JOY_BUTTON_B)
+	await process_frame
+	check(app.model.phase == "waiting" and app.model.selected_id == "", "Controller B cancels the current card selection")
+	var cards_before_controller: Array = app.model.cards.duplicate(true)
+	var focus_before_axis: Control = root.gui_get_focus_owner()
+	joy_axis(JOY_AXIS_LEFT_X, 0.25)
+	app._process(0.5)
+	await process_frame
+	check(root.gui_get_focus_owner() == focus_before_axis, "Left stick deadzone does not move focus")
+	joy_axis(JOY_AXIS_LEFT_X, 1.0)
+	await process_frame
+	var focus_after_axis: Control = root.gui_get_focus_owner()
+	check(focus_after_axis != null and focus_after_axis != focus_before_axis, "Left stick moves focus once past the deadzone")
+	app._process(0.05)
+	await process_frame
+	check(root.gui_get_focus_owner() == focus_after_axis, "Left stick repeat waits instead of jumping every frame")
+	joy_axis(JOY_AXIS_LEFT_X, 0.0)
+	await process_frame
+	app.cards[controller_first].grab_focus()
+	joy_button(JOY_BUTTON_DPAD_DOWN, true)
+	await process_frame
+	var dpad_first_focus: Control = root.gui_get_focus_owner()
+	app._process(0.4)
+	check(root.gui_get_focus_owner() != dpad_first_focus,
+		"Holding the D-pad repeats navigation after the initial delay")
+	joy_button(JOY_BUTTON_DPAD_DOWN, false)
+	await process_frame
+	var dpad_released_focus: Control = root.gui_get_focus_owner()
+	app._process(0.5)
+	check(root.gui_get_focus_owner() == dpad_released_focus,
+		"Releasing the D-pad stops repeated navigation")
+	var theme_before_controller: String = app.model.theme_id
+	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
+	await process_frame
+	check(app.model.theme_id != theme_before_controller and app.model.cards == cards_before_controller,
+		"Controller RB cycles season without restarting the round")
+	joy_tap(JOY_BUTTON_LEFT_SHOULDER)
+	await process_frame
+	check(app.model.theme_id == theme_before_controller and app.model.cards == cards_before_controller,
+		"Controller LB cycles season back without restarting the round")
+	joy_tap(JOY_BUTTON_Y)
+	await process_frame
+	check(app.collection_page.visible and app._collection_back.has_focus(),
+		"Controller Y opens My Rewards without restarting the round")
+	app.set_reduced_motion(true)
+	check(app._status_announcement.begins_with("My rewards opened"),
+		"Changing motion preference preserves the collection announcement")
+	app.set_reduced_motion(false)
+	joy_tap(JOY_BUTTON_B)
+	await process_frame
+	check(not app.collection_page.visible and app.model.cards == cards_before_controller,
+		"Controller B closes My Rewards and preserves the active round")
+	app._show_collection()
+	if unlocked_slot != null:
+		unlocked_slot.grab_focus()
+		joy_tap(JOY_BUTTON_A)
+		await process_frame
+		check(preview_visible(app), "Controller A opens an earned reward preview")
+		check(app._preview_play_button.has_focus(), "The reward preview focuses its primary play action")
+		joy_tap(JOY_BUTTON_A)
+		await process_frame
+		check(preview_tween_valid(app),
+			"Controller A plays with the focused preview")
+		app.set_reduced_motion(true)
+		check(app._status_announcement.ends_with("Boing! Tap 1"),
+			"Changing motion preference preserves the visible reward announcement")
+		check(app.collection_button.focus_mode == Control.FOCUS_NONE and unlocked_slot.focus_mode == Control.FOCUS_NONE,
+			"Restyling the open preview does not refocus controls behind either modal")
+		app.set_reduced_motion(false)
+		app._preview_close.grab_focus()
+		joy_tap(JOY_BUTTON_A)
+		await process_frame
+		check(not preview_visible(app) and unlocked_slot.has_focus(),
+			"Controller A activates Back when Back is focused in the preview")
+		check(app._status_announcement.begins_with("My rewards opened"),
+			"Closing a preview announces the restored collection")
+		joy_tap(JOY_BUTTON_A)
+		await process_frame
+		joy_tap(JOY_BUTTON_B)
+		await process_frame
+		check(not preview_visible(app) and unlocked_slot.has_focus(),
+			"Controller B closes the preview and restores reward focus")
+	app._hide_collection()
 	var first_pair: Array = pairs_for(app.model)[0]
+	app.cards[first_pair[1]].grab_focus()
 	app.cards[first_pair[0]].pressed.emit()
 	app.cards[first_pair[1]].pressed.emit()
 	check(app.cards[first_pair[0]].scale != Vector2.ONE and app.cards[first_pair[1]].scale != Vector2.ONE,
@@ -525,20 +926,51 @@ func _test_scene() -> void:
 	app.set_reduced_motion(true)
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Enabling reduced motion immediately stops active card animation")
+	joy_button(JOY_BUTTON_A, false)
+	await process_frame
 	app.set_reduced_motion(false)
 	app.feedback_timer.timeout.emit()
+	check(app.cards.values().has(root.gui_get_focus_owner()) and not root.gui_get_focus_owner().disabled,
+		"Finishing a match restores controller focus to an available card")
 	for pair in pairs_for(app.model).slice(1):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		check(app.feedback_timer.time_left > 0.0, "Button interaction starts feedback")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
+	await process_frame
+	await process_frame
+	check(app.chest_button.has_focus(), "Controller focus moves to the chest after winning")
 	for season in ["spring", "summer", "autumn", "winter"]:
 		app.choose_theme(season)
 		await process_frame
 		check(app.chest.theme_id == season, "Closed chest follows selected season")
 		check(app.chest.piece_count() == (9 if season == "winter" else 2), "Chest uses real imported artwork")
 	app.choose_theme("spring")
+	joy_axis(JOY_AXIS_LEFT_X, 1.0)
+	await process_frame
+	Input.joy_connection_changed.emit(0, false)
+	check(app._controller_last_direction == Vector2.ZERO and app._controller_stick == Vector2.ZERO,
+		"Disconnecting a controller stops held-stick navigation")
+	joy_axis(JOY_AXIS_LEFT_X, 0.0)
+	await process_frame
+	app.chest_button.grab_focus()
+	joy_button(JOY_BUTTON_A, true)
+	await process_frame
+	check(app._holding_chest and app._controller_holding_chest,
+		"The disconnected controller was actually charging the chest")
+	app._process(0.4)
+	Input.joy_connection_changed.emit(0, false)
+	check(not app._holding_chest and not app._controller_holding_chest,
+		"Disconnecting the controller cancels its incomplete chest charge")
+	joy_button(JOY_BUTTON_A, false)
+	joy_axis(JOY_AXIS_LEFT_X, 1.0)
+	await process_frame
+	app.on_page_hidden()
+	check(app._controller_last_direction == Vector2.ZERO and app._controller_stick == Vector2.ZERO,
+		"Hiding the page stops controller navigation until another input")
+	joy_axis(JOY_AXIS_LEFT_X, 0.0)
+	await process_frame
 	app.set_reduced_motion(true)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
@@ -569,13 +1001,20 @@ func _test_scene() -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	app.chest_button.button_down.emit()
+	app.chest_button.grab_focus()
+	joy_button(JOY_BUTTON_A, true)
+	await process_frame
 	if app.has_method("_process"):
 		app._process(1.21)
-	app.chest_button.button_up.emit()
+	joy_button(JOY_BUTTON_A, false)
+	await process_frame
 	check(app.model.chest_state == "opening", "Normal opening is staged, not immediate")
 	check(app.theme_buttons.all(func(button: Button) -> bool: return button.disabled) if has_property(app, "theme_buttons") else false,
 		"Opening disables theme selection")
+	var locked_theme: String = app.model.theme_id
+	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
+	await process_frame
+	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
 	check(app.effects.particle_count() == 72, "Opening emits exactly 72 seasonal particles")
 	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
 	var opened_reward_id: String = app.model.reward_id
@@ -735,8 +1174,66 @@ func _test_scene() -> void:
 		app.cards[wrong[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "lost" and app.failure_image.visible, "Failure displays the encouraging picture")
+	await process_frame
+	await process_frame
+	for result_control in [app._title, app._caption, app.replay_button]:
+		check(result_control.is_visible_in_tree() and root.get_visible_rect().encloses(result_control.get_global_rect()),
+			"Loss result controls stay inside the viewport: %s %s" % [result_control.name, result_control.get_global_rect()])
+	check(app.replay_button.has_focus(), "Controller focus moves to Play again after losing")
 	check(not app.audio.music.playing, "Loss stops background music")
+	check(app.has_method("_play_loss_bear") and has_property(app, "failure_button"),
+		"The loss-screen bear is an interactive target")
+	if app.has_method("_play_loss_bear") and has_property(app, "failure_button"):
+		var loss_cards: Array = app.model.cards.duplicate(true)
+		var loss_rewards: Dictionary = app.collected_rewards.duplicate()
+		check(app.failure_button.visible and not app.failure_button.disabled,
+			"The bear can be played with only on the loss screen")
+		check(not app.collection_page.visible and not app._preview_page.visible,
+			"The loss-screen interaction fixture is not covered by a modal")
+		app.failure_button.grab_focus()
+		check(app.failure_button.has_focus() and not app._controller_accept_needs_release,
+			"The bear has focus and controller accepts are armed before the tap")
+		joy_tap(JOY_BUTTON_A)
+		await process_frame
+		check(app._failure_tween != null and app._failure_tween.is_valid(),
+			"Controller A starts a gentle bear reaction")
+		check(app._status_announcement.contains("High five!"), "The bear gives an encouraging reaction")
+		var previous_loss_tween: Tween = app._failure_tween
+		for tap in range(5):
+			app.failure_button.pressed.emit()
+		check(previous_loss_tween != null and not previous_loss_tween.is_valid(),
+			"Rapid bear taps replace, rather than stack, animations")
+		check(app.model.phase == "lost" and app.model.mistakes == 3 and app.model.cards == loss_cards
+			and app.collected_rewards == loss_rewards, "Bear play never changes the result or grants rewards")
+		if app._failure_tween != null:
+			app._failure_tween.pause()
+			app._failure_tween.custom_step(1.0)
+		check(app._failure_tween == null and app.failure_image.scale == Vector2.ONE
+			and is_zero_approx(app.failure_image.rotation) and not app._failure_sparkle.visible,
+			"The finite bear reaction returns to its resting state")
+		app.set_reduced_motion(true)
+		check(app.failure_button.has_focus(), "Motion changes preserve the focused bear action")
+		app.failure_button.pressed.emit()
+		check(app._failure_tween == null and app.failure_image.scale == Vector2.ONE
+			and not app._failure_sparkle.visible, "Reduced motion keeps bear feedback static")
+		check(not app.audio.music.playing, "Playing with the bear never restarts lost-round music")
+		app.set_reduced_motion(false)
+		app._play_loss_bear()
+		app._show_collection()
+		check(app._failure_tween == null and not app._failure_sparkle.visible,
+			"Opening My Rewards cancels the bear's reaction")
+		app._hide_collection()
+		app._play_loss_bear()
+		app.on_page_hidden()
+		check(app._failure_tween == null and app.model.phase == "lost" and not app.audio.active,
+			"Hiding the page cancels bear play without changing the result")
+		app._play_loss_bear()
 	app.new_round(92)
+	if app.has_method("_play_loss_bear"):
+		check(not app.failure_button.visible and app._failure_tween == null,
+			"Replay removes loss-screen interaction and effects")
+		app._play_loss_bear()
+		check(app._failure_tween == null, "The bear cannot react outside the loss screen")
 	var first: String = app.model.cards[0].id
 	app.cards[first].pressed.emit()
 	var second: String = wrong_pair_for(app.model)[0]
@@ -746,4 +1243,32 @@ func _test_scene() -> void:
 	check(app.model.selected_id == first, "Hiding does not reset a selection")
 	app.cards[second].pressed.emit()
 	app.queue_free()
+	await process_frame
+	joy_button(JOY_BUTTON_A, true)
+	var held_app = packed.instantiate()
+	root.add_child(held_app)
+	await process_frame
+	await process_frame
+	held_app.audio.set_muted(true)
+	var held_first: String = held_app.model.cards[0].id
+	held_app.cards[held_first].grab_focus()
+	await process_frame
+	check(held_app.cards[held_first].has_focus(), "Startup hold regression focuses a native card")
+	check(Input.is_joy_button_pressed(0, JOY_BUTTON_A),
+		"Startup hold regression begins with controller A already down")
+	check(has_property(held_app, "_controller_accept_needs_release") and held_app._controller_accept_needs_release,
+		"Native controller accepts are gated until a startup A hold releases")
+	joy_button(JOY_BUTTON_A, true)
+	await process_frame
+	check(held_app.model.selected_id == "",
+		"A held on the loading toy cannot activate native focus before release")
+	joy_button(JOY_BUTTON_A, false)
+	await process_frame
+	joy_tap(JOY_BUTTON_A)
+	await process_frame
+	check(held_app.model.selected_id == held_first,
+		"Controller A activates normally after the startup hold is released")
+	held_app.audio.halt()
+	held_app.queue_free()
+	await process_frame
 	await process_frame

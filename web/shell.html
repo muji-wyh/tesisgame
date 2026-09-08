@@ -40,6 +40,7 @@
       --cp-panel-strong: rgba(255, 255, 255, 0.96);
       --cp-sheen: rgba(255, 255, 255, 0.55);
       --cp-highlight: rgba(177, 31, 75, 0.12);
+      --cp-tap-highlight: transparent;
     }
     html[data-theme="dark"] {
       color-scheme: dark;
@@ -91,16 +92,25 @@
     h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
     p { margin: 0; line-height: 1.5; }
     .loading-heading p { color: var(--cp-text-soft); }
-    #loading-play { grid-area: toy; }
+    #loading-play { grid-area: toy; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
+    #loading-play, #loading-play * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .toy-scene { position: relative; background: var(--cp-bg-elevated);
       border: 1px solid var(--cp-border); border-radius: 16px; }
     #loading-toy { display: block; width: 100%; height: 244px; border: 0; padding: 0;
-      border-radius: 16px; background: var(--cp-bg-elevated); touch-action: pinch-zoom; user-select: none; }
+      border-radius: 16px; background: var(--cp-bg-elevated); touch-action: pinch-zoom;
+      -webkit-appearance: none; appearance: none; }
+    #loading-toy:focus:not(:focus-visible) { outline: none; }
+    #loading-toy:active { background: var(--cp-bg-elevated); }
     #loading-toy svg { width: 100%; height: 100%; pointer-events: none; }
     #chest-art { transform-origin: 140px 185px; }
+    #chest-lid { transform-origin: 140px 118px; }
+    #loading-surprise { position: absolute; width: 76px; height: 76px; top: 25%;
+      left: calc(50% - 38px); opacity: 0; pointer-events: none; }
     #loading-sparks { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 16px; }
     .loading-spark { position: absolute; left: calc(50% - 8px); top: 48%; width: 16px; height: 16px;
       clip-path: polygon(50% 0%, 64% 32%, 100% 38%, 74% 62%, 82% 100%, 50% 82%, 18% 100%, 26% 62%, 0% 38%, 36% 32%); }
+    .loading-spark[data-shape="bubble"] { clip-path: none; border-radius: 50%; }
+    .loading-spark[data-shape="heart"] { clip-path: polygon(50% 100%, 0 38%, 0 14%, 15% 0, 35% 0, 50% 20%, 65% 0, 85% 0, 100% 14%, 100% 38%); }
     .play-caption { display: grid; gap: 4px; margin-top: 12px; }
     #loading-score { font-size: 20px; color: var(--cp-accent); font-variant-numeric: tabular-nums; }
     .play-caption span { font-size: 14px; color: var(--cp-text-soft); }
@@ -138,6 +148,7 @@
       h1 { font-size: 28px; }
       .loading-heading p, .play-caption span { font-size: 12px; }
       #loading-toy { height: 96px; }
+      #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
       .play-caption { margin-top: 4px; gap: 0; }
       #loading-score { font-size: 16px; }
     }
@@ -152,7 +163,9 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Find three matching word and picture pairs. Two cards have no match.
-        Use touch, or Tab and Enter. Four season buttons change the theme.
+        Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
+        A to choose or hold the chest, B to go back, LB and RB to change seasons, and Y or Menu for My rewards.
+        Four season buttons change the theme.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
@@ -175,8 +188,10 @@
                   <circle cx="201" cy="37" r="3" fill="var(--cp-accent)"/>
                   <ellipse cx="140" cy="206" rx="80" ry="7" fill="var(--cp-highlight)"/>
                   <g id="chest-art">
-                    <path d="M67 121V97q0-39 40-39h66q40 0 40 39v24Z" fill="var(--cp-warning)"/>
-                    <path d="M90 110V98q0-25 25-25h50q25 0 25 25v12Z" fill="var(--cp-accent)"/>
+                    <g id="chest-lid">
+                      <path d="M67 121V97q0-39 40-39h66q40 0 40 39v24Z" fill="var(--cp-warning)"/>
+                      <path d="M90 110V98q0-25 25-25h50q25 0 25 25v12Z" fill="var(--cp-accent)"/>
+                    </g>
                     <rect x="65" y="114" width="150" height="83" rx="14" fill="var(--cp-accent-hover)"/>
                     <rect x="75" y="121" width="130" height="64" rx="9" fill="var(--cp-accent)"/>
                     <path d="M67 121h146M90 118v77m100-77v77" fill="none" stroke="var(--cp-warning)" stroke-width="10"/>
@@ -189,6 +204,13 @@
                 </svg>
               </button>
               <div id="loading-sparks" aria-hidden="true"></div>
+              <svg id="loading-surprise" viewBox="0 0 100 100" aria-hidden="true">
+                <path d="m50 6 12 27 30 4-22 20 7 30-27-15-27 15 7-30L8 37l30-4Z"
+                  fill="var(--cp-warning)" stroke="var(--cp-accent)" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="41" cy="47" r="3" fill="var(--cp-accent)"/>
+                <circle cx="59" cy="47" r="3" fill="var(--cp-accent)"/>
+                <path d="M42 57q8 8 16 0" fill="none" stroke="var(--cp-accent)" stroke-width="3" stroke-linecap="round"/>
+              </svg>
             </div>
             <div class="play-caption">
               <strong id="loading-score" role="status">0 sparkles</strong>
@@ -220,15 +242,23 @@
       const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const toy = document.getElementById('loading-toy');
       const chestArt = document.getElementById('chest-art');
+      const chestLid = document.getElementById('chest-lid');
       const sparks = document.getElementById('loading-sparks');
+      const surprise = document.getElementById('loading-surprise');
       const score = document.getElementById('loading-score');
+      const hint = document.getElementById('loading-hint');
       const loadingPlay = document.getElementById('loading-play');
       const loadingNote = document.getElementById('loading-note');
       const percent = document.getElementById('loading-percent');
       const loadingEvents = new AbortController();
       const loadingListener = { signal: loadingEvents.signal };
       const sparkColors = ['var(--cp-accent)', 'var(--cp-warning)', 'var(--cp-success)'];
+      const reactions = ['Boing! Keep tapping!', 'Peekaboo! What a surprise!', 'Twinkle! You made magic!'];
+      const sparkShapes = ['star', 'heart', 'bubble'];
       let sparkleCount = 0;
+      let gamepadFrame = 0;
+      let gamepadPressed = false;
+      let gamepadBlocked = false;
       let gesture = null;
       let swipeHandled = false;
       let failed = false;
@@ -245,6 +275,7 @@
 
       function stopLoadingPlay() {
         window.clearTimeout(slowNotice);
+        stopLoadingGamepad();
         loadingEvents.abort();
         clearLoadingEffects();
         toy.disabled = true;
@@ -254,13 +285,36 @@
         if (loadingEvents.signal.aborted || document.hidden) return;
         sparkleCount++;
         score.textContent = sparkleCount + (sparkleCount === 1 ? ' sparkle' : ' sparkles');
+        const party = sparkleCount % 5 === 0;
+        const reaction = (sparkleCount - 1) % reactions.length;
+        hint.textContent = party ? 'High five! Star party!' : reactions[reaction];
         if (motion.matches) return;
-        chestArt.getAnimations().forEach(animation => animation.cancel());
+        chestArt.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+        score.getAnimations().forEach(animation => animation.cancel());
+        const direction = sparkleCount % 2 === 0 ? 1 : -1;
+        const duration = party ? 640 : 480;
         chestArt.animate([
-          { transform: 'rotate(0deg)' }, { transform: 'rotate(-7deg) scale(1.04)' },
-          { transform: 'rotate(6deg)' }, { transform: 'rotate(0deg)' }
-        ], { duration: 380, easing: 'ease-out' });
-        for (let i = 0; i < 6; i++) {
+          { transform: 'translateY(0) scale(1, 1)' },
+          { transform: 'translateY(5px) scale(1.1, 0.9)', offset: 0.18 },
+          { transform: `translateY(${party ? -14 : -8}px) rotate(${direction * (reaction + 4)}deg) scale(0.97, 1.07)`, offset: 0.5 },
+          { transform: 'translateY(0) rotate(0deg) scale(1, 1)' }
+        ], { duration, easing: 'ease-out' });
+        chestLid.animate([
+          { transform: 'translateY(0) rotate(0deg)' },
+          { transform: `translateY(${party || reaction === 1 ? -18 : -7}px) rotate(-8deg) scaleY(0.88)`, offset: 0.4 },
+          { transform: 'translateY(0) rotate(0deg) scaleY(1)' }
+        ], { duration, easing: 'ease-out' });
+        score.animate([{ transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 260 });
+        if (party) {
+          surprise.getAnimations().forEach(animation => animation.cancel());
+          surprise.animate([
+            { transform: 'translateY(12px) rotate(-15deg) scale(0.25)', opacity: 0 },
+            { transform: 'translateY(-25px) rotate(10deg) scale(1.15)', opacity: 1, offset: 0.45 },
+            { transform: 'translateY(-34px) rotate(0deg) scale(0.8)', opacity: 0 }
+          ], { duration: 850, easing: 'ease-out' });
+        }
+        const count = party ? 10 : 6;
+        for (let i = 0; i < count; i++) {
           if (sparks.childElementCount >= 12) {
             const oldest = sparks.firstElementChild;
             oldest.getAnimations().forEach(animation => animation.cancel());
@@ -268,18 +322,59 @@
           }
           const star = document.createElement('span');
           star.className = 'loading-spark';
+          star.dataset.shape = party ? sparkShapes[i % sparkShapes.length] : sparkShapes[reaction];
           star.style.background = sparkColors[(sparkleCount + i) % sparkColors.length];
           sparks.appendChild(star);
-          const x = (i - 2.5) * 32;
+          const x = (i - (count - 1) * 0.5) * (party ? 22 : 30);
           const animation = star.animate([
             { transform: 'translate(0, 0) scale(0.4)', opacity: 1 },
-            { transform: `translate(${x}px, ${-75 - (i % 3) * 24}px) rotate(${x}deg) scale(1)`, opacity: 1, offset: 0.65 },
+            { transform: `translate(${x}px, ${-75 - (i % 3) * 24}px) rotate(${x}deg) scale(${party ? 1.4 : 1})`, opacity: 1, offset: 0.65 },
             { transform: `translate(${x * 1.1}px, -40px) scale(0.3)`, opacity: 0 }
           ], { duration: 700, easing: 'ease-out' });
           animation.onfinish = animation.oncancel = () => star.remove();
         }
       }
 
+      function loadingGamepads() {
+        if (gamepadBlocked || typeof navigator.getGamepads !== 'function') return [];
+        try {
+          return Array.from(navigator.getGamepads()).filter(pad => pad && pad.connected && pad.mapping === 'standard');
+        } catch (error) {
+          if (error.name !== 'SecurityError') throw error;
+          gamepadBlocked = true;
+          console.warn('Gamepad access is blocked by this page. Touch and keyboard controls remain available.');
+          return [];
+        }
+      }
+
+      function stopLoadingGamepad() {
+        window.cancelAnimationFrame(gamepadFrame);
+        gamepadFrame = 0;
+        gamepadPressed = false;
+      }
+
+      function pollLoadingGamepad() {
+        gamepadFrame = 0;
+        if (loadingEvents.signal.aborted || document.hidden) return;
+        const pads = loadingGamepads();
+        if (!pads.length) { gamepadPressed = false; return; }
+        const pressed = pads.some(pad => pad.buttons[0]?.pressed);
+        if (pressed && !gamepadPressed) playWithTreasure();
+        gamepadPressed = pressed;
+        gamepadFrame = window.requestAnimationFrame(pollLoadingGamepad);
+      }
+
+      function startLoadingGamepad(ignoreHeld = false) {
+        if (gamepadFrame || loadingEvents.signal.aborted || document.hidden) return;
+        if (ignoreHeld) gamepadPressed = loadingGamepads().some(pad => pad.buttons[0]?.pressed);
+        pollLoadingGamepad();
+      }
+
+      window.addEventListener('gamepadconnected', () => startLoadingGamepad(), loadingListener);
+      window.addEventListener('gamepaddisconnected', () => {
+        stopLoadingGamepad();
+        startLoadingGamepad(true);
+      }, loadingListener);
       toy.addEventListener('click', event => {
         if (swipeHandled && event.detail !== 0) { swipeHandled = false; return; }
         playWithTreasure();
@@ -306,8 +401,14 @@
       toy.addEventListener('pointercancel', clearLoadingEffects, loadingListener);
       motion.addEventListener('change', clearLoadingEffects, loadingListener);
       document.addEventListener('visibilitychange', () => {
-        if (document.hidden) clearLoadingEffects();
+        if (document.hidden) {
+          clearLoadingEffects();
+          stopLoadingGamepad();
+        } else {
+          startLoadingGamepad(true);
+        }
       }, loadingListener);
+      startLoadingGamepad();
 
       function fail(reason) {
         failed = true;
@@ -338,7 +439,7 @@
             reason instanceof WebAssembly.RuntimeError || downloadFailed) startupFailure(reason);
       }
 
-      // Host lifecycle and read-only asset URLs, never gameplay mutations.
+      // Host lifecycle, controller state and asset URLs, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ready() {
           if (failed) return;
@@ -348,6 +449,9 @@
           status.hidden = true;
           canvas.inert = false;
           canvas.focus({ preventScroll: true });
+        },
+        controllerAcceptHeld() {
+          return loadingGamepads().some(pad => pad.buttons[0]?.pressed);
         },
         fail,
         announce(text) {

@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
+const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -98,6 +99,65 @@ test('real touch input selects and cancels a native Godot card', async ({ page }
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await page.touchscreen.tap(point.x, point.y);
   await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  expect(errors).toEqual([]);
+});
+
+test('Xbox navigation, seasons and collection controls preserve the current round', async ({ page }) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.goto('/');
+  await ready(page);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  const selected = await page.locator('#selection-status').textContent();
+  const background = await page.locator('meta[name="theme-color"]').getAttribute('content');
+  await pressGamepad(page, 4);
+  await expect(page.locator('meta[name="theme-color"]')).not.toHaveAttribute('content', background);
+  await expect(page.locator('#selection-status')).toHaveText(selected);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await pressGamepad(page, 5);
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards');
+  await pressGamepad(page, 9);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await expect(page.locator('#selection-status')).toHaveText(selected);
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards');
+  await pressGamepad(page, 1);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await pressGamepad(page, 1);
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await pressGamepad(page, 15);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await expect(page.locator('#selection-status')).not.toHaveText(selected);
+  await pressGamepad(page, 1);
+  await page.evaluate(() => window.gamepadFixture.disconnect());
+  const point = firstCard(await canvasMetrics(page));
+  await page.touchscreen.tap(point.x, point.y);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await page.touchscreen.tap(point.x, point.y);
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  expect(errors).toEqual([]);
+});
+
+test('holding Xbox A across startup does not select an unseen native card', async ({ page }) => {
+  const errors = watchErrors(page);
+  await installGamepad(page, { connected: true, heldButtons: [0] });
+  await page.goto('/');
+  await ready(page);
+  await page.waitForTimeout(200);
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await page.evaluate(() => window.gamepadFixture.button(0, false));
+  await page.waitForTimeout(120);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   expect(errors).toEqual([]);
 });
 
@@ -418,6 +478,150 @@ async function holdChestUntilOpen(page, point) {
   }
 }
 
+async function winWithTouch(page) {
+  const { metrics, discovered } = await discoverCards(page);
+  const pairs = [...discovered.values()].filter(pair => pair.Word !== undefined && pair.Picture !== undefined);
+  expect(pairs).toHaveLength(3);
+  for (let index = 0; index < pairs.length; index++) {
+    for (const card of [pairs[index].Word, pairs[index].Picture]) {
+      const point = cardPoint(metrics, card);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find three pairs.');
+  }
+  return metrics;
+}
+
+async function holdControllerChest(page) {
+  await page.evaluate(() => window.gamepadFixture.button(0, true));
+  try {
+    await expect(page.locator('#game-status')).toContainText('Wow!');
+  } finally {
+    await page.evaluate(() => window.gamepadFixture.button(0, false));
+    // Let the engine sample the release before another simulated A press.
+    await page.waitForTimeout(120);
+  }
+}
+
+test('Xbox chest charging cancels on disconnect and works again after reconnect', async ({ page }) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.goto('/');
+  await ready(page);
+  await winWithTouch(page);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold the chest to open it!');
+  await page.evaluate(() => window.gamepadFixture.button(0, true));
+  await page.waitForTimeout(120);
+  await page.evaluate(() => window.gamepadFixture.disconnect());
+  await page.waitForTimeout(1700);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold the chest to open it!');
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await holdControllerChest(page);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  expect(errors).toEqual([]);
+});
+
+test('earned rewards respond to deliberate touch and stay closed after a swipe', async ({ page, browserName }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  await chooseSeason(page, 0);
+  await winWithTouch(page);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await holdControllerChest(page);
+  const earned = (await page.locator('#game-status').textContent()).replace(/^Wow!\s*/, '');
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned');
+  await page.screenshot({ path: testInfo.outputPath('reward-collection.png'), scale: 'css' });
+  let rewardPoint;
+  for (let index = 0; index < 10; index++) {
+    const point = {
+      x: (56 + (index % 5) * 84) * 390 / 480,
+      y: (162 + Math.floor(index / 5) * 120) * 390 / 480
+    };
+    await page.touchscreen.tap(point.x, point.y);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    if ((await page.locator('#game-status').textContent()).includes('reward preview opened')) {
+      rewardPoint = point;
+      break;
+    }
+  }
+  expect(rewardPoint, 'The earned Spring reward opens from an actual tap; locked slots stay closed.').toBeDefined();
+  await expect(page.locator('#game-status')).toContainText(earned);
+  await page.screenshot({ path: testInfo.outputPath('reward-preview.png'), scale: 'css' });
+  await page.touchscreen.tap(195, 340);
+  await expect(page.locator('#game-status')).toContainText('Boing! Tap 1');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned');
+  if (browserName === 'chromium') {
+    const client = await page.context().newCDPSession(page);
+    try {
+      await client.send('Input.dispatchTouchEvent', {
+        type: 'touchStart', touchPoints: [{ id: 1, x: rewardPoint.x, y: rewardPoint.y }]
+      });
+      await client.send('Input.dispatchTouchEvent', {
+        type: 'touchMove', touchPoints: [{ id: 1, x: rewardPoint.x, y: rewardPoint.y - 32 }]
+      });
+      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned');
+      rewardPoint.y -= 32;
+    } finally {
+      await client.detach();
+    }
+  }
+  await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
+  await expect(page.locator('#game-status')).toContainText('reward preview opened');
+  await pressGamepad(page, 12);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned');
+  await pressGamepad(page, 1);
+  await expect(page.locator('#game-status')).toContainText('Wow!');
+  expect(errors).toEqual([]);
+});
+
+for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter'].entries()) {
+  test(`${name} preview play varies reactions and celebrates five taps without extra rewards`, async ({ page }, testInfo) => {
+    const errors = watchErrors(page);
+    await installGamepad(page);
+    await page.setViewportSize({ width: 390, height: 650 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await ready(page);
+    await chooseSeason(page, season);
+    await winWithTouch(page);
+    await page.evaluate(() => window.gamepadFixture.connect());
+    await holdControllerChest(page);
+    await pressGamepad(page, 3);
+    await pressGamepad(page, 13);
+    await pressGamepad(page, 0);
+    await expect(page.locator('#game-status')).toContainText('reward preview opened');
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const reactions = ['Boing! Tap 1', 'Wheee! Tap 2', 'Big hug! Tap 3', 'Boing! Tap 4', `High five! ${name} party!`];
+    for (const [index, reaction] of reactions.entries()) {
+      if (index === 2) await pressGamepad(page, 0);
+      else await page.touchscreen.tap(195, 340);
+      await expect(page.locator('#game-status')).toContainText(reaction);
+    }
+    await page.waitForTimeout(220);
+    await page.screenshot({ path: testInfo.outputPath(`reward-party-${name.toLowerCase()}.png`), scale: 'css' });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await pressGamepad(page, 0);
+    await expect(page.locator('#game-status')).toContainText('Big hug! Tap 6');
+    const still = await page.screenshot({ scale: 'css' });
+    await page.waitForTimeout(250);
+    expect((await page.screenshot({ scale: 'css' })).equals(still), 'Reduced-motion play stays visually still.').toBe(true);
+    await pressGamepad(page, 1);
+    await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned');
+    expect(errors).toEqual([]);
+  });
+}
+
 test('completes matches and opens a one-shot reward while optional audio is still downloading', async ({ page }) => {
   const errors = watchErrors(page);
   const held = await holdOptionalAudio(page);
@@ -498,6 +702,82 @@ test('dragging the reward chest cancels hold-open without losing pointer control
   expect(errors).toEqual([]);
 });
 
+async function loseWithTouch(page) {
+  const { metrics, discovered } = await discoverCards(page);
+  const [word, card] = [...discovered].find(([, value]) => value.Word !== undefined);
+  const [, other] = [...discovered].find(([text, value]) => text !== word && value.Picture !== undefined);
+  for (let attempt = 0; attempt < 3; attempt++) {
+    for (const index of [card.Word, other.Picture]) {
+      const point = cardPoint(metrics, index);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find three pairs.');
+  }
+  return metrics;
+}
+
+for (const outcome of ['win', 'loss']) {
+  test(`${outcome} screen visibly renders Play again below the artwork on a phone`, async ({ page }, testInfo) => {
+    const errors = watchErrors(page);
+    await page.setViewportSize({ width: 390, height: 650 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await ready(page);
+    await chooseSeason(page, 1);
+    if (outcome === 'win') await winWithTouch(page);
+    else await loseWithTouch(page);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const metrics = await canvasMetrics(page);
+    const scale = Math.min(metrics.width, metrics.height) / 480;
+    const replay = { x: metrics.x + metrics.width * 0.23, y: metrics.y + metrics.height - 48 * scale };
+    const screenshot = await page.screenshot({ path: testInfo.outputPath(`result-${outcome}.png`), scale: 'css' });
+    const pixel = await page.evaluate(async ({ encoded, point }) => {
+      const image = new Image();
+      image.src = 'data:image/png;base64,' + encoded;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
+      return [...context.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data].slice(0, 3);
+    }, { encoded: screenshot.toString('base64'), point: replay });
+    expect(pixel, 'The actual white replay button must render, not just accept invisible input.').toEqual([255, 255, 255]);
+    await page.touchscreen.tap(replay.x, replay.y);
+    await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+    expect(errors).toEqual([]);
+  });
+}
+
+test('the loss-screen bear responds to touch and Xbox without restarting the round', async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.goto('/');
+  await ready(page);
+  const metrics = await loseWithTouch(page);
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const stageHeight = metrics.height / scale - 364;
+  const bear = { x: metrics.x + metrics.width / 2, y: metrics.y + (172 + stageHeight * 0.5) * scale };
+  await page.touchscreen.tap(bear.x, bear.y);
+  await expect(page.locator('#game-status')).toContainText('Good try! High five!');
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('Good try! A big bear hug');
+  await page.screenshot({ path: testInfo.outputPath('loss-screen-play.png'), scale: 'css' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('Good try! You kept trying');
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 earned');
+  await pressGamepad(page, 1);
+  await expect(page.locator('#game-status')).toContainText('Good try!');
+  await pressGamepad(page, 13);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  expect(errors).toEqual([]);
+});
+
 test('losing stops pending music and only plays the current loss prompt', async ({ page }) => {
   const errors = watchErrors(page);
   const held = await holdOptionalAudio(page);
@@ -505,16 +785,7 @@ test('losing stops pending music and only plays the current loss prompt', async 
   try {
     await page.goto('/');
     await ready(page);
-    const { metrics, discovered } = await discoverCards(page);
-    const [word, card] = [...discovered].find(([, value]) => value.Word !== undefined);
-    const [, other] = [...discovered].find(([text, value]) => text !== word && value.Picture !== undefined);
-    for (let attempt = 0; attempt < 3; attempt++) {
-      for (const index of [card.Word, other.Picture]) {
-        const point = cardPoint(metrics, index);
-        await page.touchscreen.tap(point.x, point.y);
-      }
-      await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find three pairs.');
-    }
+    await loseWithTouch(page);
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
