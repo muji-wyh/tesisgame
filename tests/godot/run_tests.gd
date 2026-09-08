@@ -15,6 +15,13 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
+func has_property(value: Object, property_name: String) -> bool:
+	for property in value.get_property_list():
+		if property.name == property_name:
+			return true
+	return false
+
+
 func _run() -> void:
 	var path := "res://scripts/game_model.gd"
 	check(FileAccess.file_exists(path), "The Godot game model exists")
@@ -135,16 +142,23 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 	check(model.phase == "won" and model.successes == 3, "Three successes win")
 	check(model.select(model.cards[0].id) == "ignored", "Winning locks the board")
 	check(model.set_theme("spring"), "A closed chest follows theme selection")
-	check(model.begin_open(), "The winning chest can open")
+	check(has_property(model, "reward_id"), "The model stores the selected reward variant")
+	if has_property(model, "reward_id"):
+		check(not model.begin_open(""), "Opening requires a reward variant")
+		check(model.begin_open("spring-1"), "The winning chest can open")
+		check(model.reward_id == "spring-1", "Opening captures the selected reward variant")
+	else:
+		check(false, "The winning chest can open with a reward variant")
 	check(model.chest_state == "opening" and model.reward_theme == "spring", "Opening captures its theme")
-	check(not model.begin_open(), "Repeated opening is rejected")
+	check(not model.begin_open("spring-2") if has_property(model, "reward_id") else false, "Repeated opening is rejected")
 	check(not model.set_theme("summer"), "Theme changes are locked during opening")
 	check(model.finish_open(), "Opening completes once")
 	check(not model.finish_open(), "Opening completion is one-shot")
 	check(model.set_theme("winter"), "Theme can change after opening")
 	check(model.reward_theme == "spring" and model.chest_state == "opened", "Earned reward is immutable")
 	model.reset(words, 27)
-	check(model.reward_theme == "" and model.chest_state == "closed", "Replay clears earned reward")
+	check(model.reward_theme == "" and model.chest_state == "closed" and (model.reward_id == "" if has_property(model, "reward_id") else false),
+		"Replay clears earned reward")
 	check(not model.finish_open(), "A stale opening cannot reward the new round")
 	var wrong: Array = wrong_pair_for(model)
 	for count in range(3):
@@ -204,6 +218,17 @@ func _test_data(words: Array) -> void:
 	for season in ["spring", "summer", "autumn", "winter"]:
 		var theme: Dictionary = data_script.theme(season)
 		check(theme.id == season and theme.prize != "", "Each season has a named reward")
+		check(data_script.has_method("rewards") and data_script.has_method("reward"),
+			"Seasonal reward lookup helpers exist")
+		if data_script.has_method("rewards") and data_script.has_method("reward"):
+			var rewards: Array = data_script.rewards(season)
+			var reward_ids: Dictionary = {}
+			for reward in rewards:
+				reward_ids[reward.id] = true
+				check(reward.theme == season and reward.symbol == theme.symbol, "Reward variants keep their season identity")
+			check(rewards.size() == 10 and reward_ids.size() == 10, "Each season has ten unique reward variants")
+	check(data_script.reward("missing").is_empty() if data_script.has_method("reward") else false,
+		"Unknown reward variants are rejected")
 	var expected_themes := {
 		"spring": {
 			"name": "Spring",
@@ -328,6 +353,7 @@ func _test_audio() -> void:
 	check(not controller.music.playing, "An unavailable new theme does not leave the old music playing")
 	controller.interact("summer")
 	check(controller.music.playing, "Audio can retry after a missing resource")
+	check(notices[-1].is_empty(), "A successful retry clears the earlier audio error")
 	controller.set_muted(true)
 	check(not controller.active and not controller.music.playing and not controller.effect.playing and not controller.voice.playing,
 		"Muting stops all channels")
@@ -362,8 +388,31 @@ func _test_scene() -> void:
 		return
 	app.audio.set_muted(true)
 	check(app.cards.size() == 8, "The scene creates eight native card buttons")
+	check(app.find_child("Mute", true, false) == null and app.find_child("Listen", true, false) == null,
+		"Mute and Listen controls are removed")
+	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 4,
+		"All four themes are directly available")
+	check(has_property(app, "collection_button") and app.collection_button != null,
+		"The rewards collection is directly available")
+	check(has_property(app, "collection_page") and app.collection_page != null,
+		"The rewards collection has an in-game page")
+	check(app._reward_slots.size() == 40, "The rewards page contains all forty seasonal rewards")
+	if app.has_method("_show_collection"):
+		app.collection_button.grab_focus()
+		app._show_collection()
+		check(app._collection_back.has_focus() if has_property(app, "_collection_back") else false,
+			"Opening rewards moves keyboard focus to Back")
+		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
+			"Opening rewards removes underlying controls from keyboard focus")
+		if app.has_method("_hide_collection"):
+			app._hide_collection()
+		else:
+			app.collection_page.hide()
+		check(app.collection_button.focus_mode == Control.FOCUS_ALL,
+			"Closing rewards restores underlying keyboard focus")
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Feedback lasts 700ms")
+	check(app._success.text == "" and app._mistakes.text == "", "Empty counters show no text or icons")
 	var dimensions: Array[Vector2i] = [
 		Vector2i(320, 320), Vector2i(375, 667), Vector2i(390, 844),
 		Vector2i(430, 932), Vector2i(844, 390), Vector2i(768, 1024),
@@ -382,14 +431,28 @@ func _test_scene() -> void:
 		check(app.grid.columns == (4 if dimensions_value.x >= dimensions_value.y else 2),
 			"Grid chooses orientation: " + str(dimensions_value))
 		var controls: Array = app.cards.values()
-		controls.append_array([app.theme_menu, app.mute_button, app.listen_button])
+		if has_property(app, "theme_buttons"):
+			controls.append_array(app.theme_buttons)
+		if has_property(app, "collection_button"):
+			controls.append(app.collection_button)
 		for control in controls:
 			var bounds: Rect2 = control.get_global_rect()
 			check(viewport.grow(0.5).encloses(bounds), "Control fits " + str(dimensions_value) + ": " + control.name)
 			var pixel_size: Vector2 = bounds.size * pixels_per_unit
 			check(pixel_size.x >= 47.9 and pixel_size.y >= 47.9,
 				"Touch target is at least 48px: " + control.name + " " + str(pixel_size))
-	for pair in pairs_for(app.model):
+	var first_pair: Array = pairs_for(app.model)[0]
+	app.cards[first_pair[0]].pressed.emit()
+	app.cards[first_pair[1]].pressed.emit()
+	check(app.cards[first_pair[0]].scale != Vector2.ONE and app.cards[first_pair[1]].scale != Vector2.ONE,
+		"Matching cards immediately start a lively bounce")
+	check(app._success.text == "\u25cf", "A match is represented by one icon")
+	app.set_reduced_motion(true)
+	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
+		"Enabling reduced motion immediately stops active card animation")
+	app.set_reduced_motion(false)
+	app.feedback_timer.timeout.emit()
+	for pair in pairs_for(app.model).slice(1):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		check(app.feedback_timer.time_left > 0.0, "Button interaction starts feedback")
@@ -402,10 +465,21 @@ func _test_scene() -> void:
 		check(app.chest.piece_count() == (9 if season == "winter" else 2), "Chest uses real imported artwork")
 	app.choose_theme("spring")
 	app.set_reduced_motion(true)
-	app.chest_button.pressed.emit()
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(0.5)
+	app.chest_button.button_up.emit()
+	check(app.model.chest_state == "closed", "A short chest press does not open it")
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(1.21)
+	app.chest_button.button_up.emit()
 	await process_frame
-	check(app.model.chest_state == "opened", "Reduced motion reveals the reward immediately")
+	check(app.model.chest_state == "opened", "A completed hold reveals the reduced-motion reward")
 	check(app.effects.particle_count() == 0, "Reduced motion has no moving particles")
+	check(not app.model.reward_id.is_empty(), "Opening selects a seasonal reward variant")
+	check(app.collected_rewards.has(app.model.reward_id) if has_property(app, "collected_rewards") else false,
+		"Opened rewards are recorded in the collection")
 	app.choose_theme("winter")
 	check(app.model.reward_theme == "spring" and app.chest.theme_id == "spring", "Earned chest remains spring")
 	check(app.reward_image.visible, "Opening displays the reward medallion")
@@ -418,9 +492,13 @@ func _test_scene() -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	app.chest_button.pressed.emit()
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(1.21)
+	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "opening", "Normal opening is staged, not immediate")
-	check(app.theme_menu.disabled, "Opening disables theme selection")
+	check(app.theme_buttons.all(func(button: Button) -> bool: return button.disabled) if has_property(app, "theme_buttons") else false,
+		"Opening disables theme selection")
 	check(app.effects.particle_count() == 72, "Opening emits exactly 72 seasonal particles")
 	await create_timer(1.95).timeout
 	check(app.model.chest_state == "opened", "The native animation completes the reward")
@@ -429,7 +507,23 @@ func _test_scene() -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	app.chest_button.pressed.emit()
+	if app.has_method("_drag_chest"):
+		app._drag_chest(Vector2(10000, 10000))
+		root.size = Vector2i(844, 390)
+		await process_frame
+		await process_frame
+		var chest_rect := Rect2(
+			app.chest._art.position + app.chest._bounds.position * app.chest._art.scale,
+			app.chest._bounds.size * app.chest._art.scale
+		)
+		check(Rect2(Vector2.ZERO, app.chest.size).grow(0.5).encloses(chest_rect),
+			"Chest dragging stays inside its canvas after resizing")
+	else:
+		check(false, "The chest can be dragged inside its canvas")
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(1.21)
+	app.chest_button.button_up.emit()
 	app.on_page_hidden()
 	check(app.model.chest_state == "opened", "Hiding finalizes an already-earned opening once")
 	check(app.effects.particle_count() == 0, "Hiding during opening clears particles")
@@ -437,7 +531,14 @@ func _test_scene() -> void:
 	check(app._reward_tween == null or not app._reward_tween.is_running(), "Hiding cancels the reveal tween too")
 	app.new_round(91)
 	var wrong: Array = wrong_pair_for(app.model)
-	for count in range(3):
+	var wrong_start: Vector2 = app.cards[wrong[0]].position
+	app.cards[wrong[0]].pressed.emit()
+	app.cards[wrong[1]].pressed.emit()
+	check(app.cards[wrong[0]].rotation != 0.0 or app.cards[wrong[0]].position != wrong_start,
+		"Wrong cards immediately start a playful shake")
+	check(app._mistakes.text == "\u00d7", "A mistake is represented by one icon")
+	app.feedback_timer.timeout.emit()
+	for count in range(2):
 		app.cards[wrong[0]].pressed.emit()
 		app.cards[wrong[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()

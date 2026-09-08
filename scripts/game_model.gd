@@ -14,6 +14,7 @@ var phase: String = "waiting"
 var theme_id: String = "spring"
 var chest_state: String = "closed"
 var reward_theme: String = ""
+var reward_id: String = ""
 var error: String = ""
 var last_correct: bool = false
 
@@ -45,6 +46,7 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	phase = "waiting"
 	chest_state = "closed"
 	reward_theme = ""
+	reward_id = ""
 	error = ""
 	last_correct = false
 	changed.emit()
@@ -128,11 +130,13 @@ func set_theme(id: String) -> bool:
 	return true
 
 
-func begin_open() -> bool:
-	if phase != "won" or chest_state != "closed":
+func begin_open(id: Variant = null) -> bool:
+	var selected_id: String = theme_id + "-1" if id == null else str(id)
+	if phase != "won" or chest_state != "closed" or selected_id.is_empty():
 		return false
 	chest_state = "opening"
 	reward_theme = theme_id
+	reward_id = selected_id
 	changed.emit()
 	return true
 

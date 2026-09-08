@@ -14,6 +14,8 @@ var _elapsed: float = 0.0
 var _idle_time: float = 0.0
 var _tint: Color = Color.WHITE
 var _style: String = ""
+var drag_offset: Vector2 = Vector2.ZERO
+var hold_progress: float = 0.0
 
 
 func _ready() -> void:
@@ -84,14 +86,30 @@ func _fit() -> void:
 	var margin: float = 0.77 if _style == "crystal" else 0.96
 	var fit: float = minf(size.x * margin / _bounds.size.x, size.y * 0.78 / _bounds.size.y)
 	var bob: float = 0.0 if reduced_motion else sin(_idle_time * 2.0) * 4.0
+	var shake_offset := Vector2.ZERO
+	if not reduced_motion and hold_progress > 0.0:
+		var strength: float = size.x * 0.025 * hold_progress * hold_progress
+		shake_offset = Vector2(sin(_idle_time * lerpf(18.0, 72.0, hold_progress)), cos(_idle_time * 61.0)) * strength
 	var pulse: Vector2 = Vector2.ONE
 	if mode == "opening" and not reduced_motion:
 		var charge: float = clampf(_elapsed / 0.42, 0.0, 1.0)
 		var shake: float = sin(_elapsed * 65.0) * (1.0 - charge) * 0.035
 		pulse = Vector2(1.0 + shake, 1.0 - shake)
 		bob -= sin(clampf(_elapsed / OPEN_SECONDS, 0.0, 1.0) * PI) * size.y * 0.07
+	drag_offset = _clamp_drag_offset(drag_offset, fit, bob)
 	_art.scale = Vector2.ONE * fit * pulse
-	_art.position = Vector2(size.x * 0.5, size.y * 0.59 + bob) - _bounds.get_center() * _art.scale
+	_art.position = Vector2(size.x * 0.5, size.y * 0.59 + bob) - _bounds.get_center() * _art.scale + drag_offset + shake_offset
+
+
+func _clamp_drag_offset(value: Vector2, fit: float, bob: float) -> Vector2:
+	var dimensions: Vector2 = _bounds.size * fit
+	var center := Vector2(size.x * 0.5, size.y * 0.59 + bob)
+	var minimum := dimensions * 0.5 - center
+	var maximum := size - dimensions * 0.5 - center
+	return Vector2(
+		clampf(value.x, minimum.x, maximum.x) if minimum.x <= maximum.x else 0.0,
+		clampf(value.y, minimum.y, maximum.y) if minimum.y <= maximum.y else 0.0
+	)
 
 
 func _apply_pose(progress: float) -> void:
@@ -118,6 +136,7 @@ func start_open(reduce: bool) -> void:
 	if mode != "closed":
 		return
 	reduced_motion = reduce
+	hold_progress = 0.0
 	mode = "opening"
 	_elapsed = 0.0
 	if reduced_motion:
@@ -138,7 +157,19 @@ func clear() -> void:
 	mode = "closed"
 	_elapsed = 0.0
 	theme_id = ""
+	hold_progress = 0.0
+	drag_offset = Vector2.ZERO
 	_apply_pose(0.0)
+
+
+func set_hold_progress(value: float) -> void:
+	hold_progress = clampf(value, 0.0, 1.0)
+	_fit()
+
+
+func set_drag_offset(value: Vector2) -> void:
+	drag_offset = value
+	_fit()
 
 
 func piece_count() -> int:
