@@ -24,7 +24,6 @@ var collection_page: Panel
 var collected_rewards: Dictionary = {}
 var replay_button: Button
 var chest_button: Button
-var hold_bar: ProgressBar
 var reward_image: TextureRect
 var failure_image: TextureRect
 var reduced_motion: bool = false
@@ -168,18 +167,6 @@ func _build_controls() -> void:
 	chest_button.button_down.connect(_start_chest_hold)
 	chest_button.button_up.connect(_end_chest_hold)
 	chest_button.gui_input.connect(_chest_input)
-	hold_bar = ProgressBar.new()
-	hold_bar.min_value = 0.0
-	hold_bar.max_value = 1.0
-	hold_bar.show_percentage = false
-	hold_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hold_bar.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	hold_bar.offset_left = 24
-	hold_bar.offset_top = -22
-	hold_bar.offset_right = -24
-	hold_bar.offset_bottom = -10
-	hold_bar.hide()
-	_stage.add_child(hold_bar)
 	_medallion = Panel.new()
 	_medallion.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_medallion)
@@ -281,7 +268,6 @@ func _build_collection() -> void:
 			picture.custom_minimum_size = Vector2(72, 72)
 			picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			picture.texture = load(reward.symbol)
 			slot.add_child(picture)
 			var label := Style.label("", 14)
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -296,7 +282,10 @@ func _refresh_collection() -> void:
 	for id in _reward_slots:
 		var slot: Dictionary = _reward_slots[id]
 		var unlocked: bool = collected_rewards.has(id)
-		slot.picture.modulate = Color.WHITE if unlocked else Color(0.35, 0.35, 0.35, 0.25)
+		if unlocked and slot.picture.texture == null:
+			slot.picture.texture = load(slot.reward.symbol)
+		elif not unlocked:
+			slot.picture.texture = null
 		slot.label.text = ("%s\n#%d" % [slot.reward.name, slot.reward.number]) if unlocked else "?"
 
 
@@ -393,7 +382,7 @@ func _refresh() -> void:
 		_caption.text = reward.get("name", reward_palette.prize) if model.chest_state == "opened" else "Hold the chest to open it!"
 		if model.chest_state == "opening":
 			_caption.text = "Here comes your surprise!"
-		reward_image.texture = load(reward_palette.symbol)
+		reward_image.texture = load(reward.get("symbol", reward_palette.symbol))
 		_reward_number.text = "#%d" % int(reward.get("number", 0)) if model.chest_state == "opened" else ""
 		_medallion.add_theme_stylebox_override("panel", Style.box(Color.WHITE, reward_palette.light, 64, 5))
 	elif model.phase == "lost":
@@ -597,8 +586,6 @@ func _start_chest_hold() -> void:
 	_holding_chest = true
 	_hold_elapsed = 0.0
 	_drag_distance = 0.0
-	hold_bar.value = 0.0
-	hold_bar.show()
 	set_process(true)
 
 
@@ -610,9 +597,6 @@ func _end_chest_hold() -> void:
 func _cancel_chest_hold() -> void:
 	_holding_chest = false
 	_hold_elapsed = 0.0
-	if hold_bar != null:
-		hold_bar.hide()
-		hold_bar.value = 0.0
 	if chest != null:
 		chest.set_hold_progress(0.0)
 
@@ -622,11 +606,9 @@ func _process(delta: float) -> void:
 		return
 	_hold_elapsed += delta
 	var progress: float = clampf(_hold_elapsed / HOLD_SECONDS, 0.0, 1.0)
-	hold_bar.value = progress
 	chest.set_hold_progress(progress)
 	if progress >= 1.0:
 		_holding_chest = false
-		hold_bar.hide()
 		chest.set_hold_progress(0.0)
 		_open_chest()
 

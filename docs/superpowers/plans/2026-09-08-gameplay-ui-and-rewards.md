@@ -12,7 +12,7 @@
 
 - Do not add dependencies or a second scene framework.
 - Keep reduced-motion support.
-- Reuse the four existing seasonal reward SVG files for ten named variants per theme.
+- Generate one distinct SVG for each of the forty named reward variants.
 - Store collected reward IDs in `user://rewards.cfg`.
 - A chest opens only after a stationary 1.2-second hold.
 
@@ -81,11 +81,11 @@ For correct feedback, set both card pivots and scales to `0.82`, then tween to `
 
 - [ ] **Step 5: Add chest drag and hold**
 
-Track `button_down`, `button_up`, and `gui_input`. Cancel charging after 10 units of movement, clamp drag offset to 30% of the stage dimensions, update a textless progress bar, and call `_open_chest()` only after 1.2 seconds. Pass charge progress and drag offset into `chest_view.gd`.
+Track `button_down`, `button_up`, and `gui_input`. Cancel charging after 10 units of movement, clamp the artwork inside the stage, and call `_open_chest()` only after 1.2 seconds. Pass charge progress and drag offset into `chest_view.gd`; the increasing shake is the only progress feedback.
 
 - [ ] **Step 6: Add collection overlay**
 
-Load collected IDs from `user://rewards.cfg`, save the newly opened reward once, and render forty slots in a ScrollContainer. Each slot shows the seasonal icon, reward name/number when collected, or `?` when locked. Back hides the overlay without resetting gameplay.
+Load collected IDs from `user://rewards.cfg`, save the newly opened reward once, and render forty slots in a ScrollContainer. Each slot uses that reward's distinct SVG and shows its name/number when collected, or `?` when locked. Back hides the overlay without resetting gameplay.
 
 - [ ] **Step 7: Update browser chest interaction**
 

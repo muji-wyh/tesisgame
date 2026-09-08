@@ -225,7 +225,8 @@ func _test_data(words: Array) -> void:
 			var reward_ids: Dictionary = {}
 			for reward in rewards:
 				reward_ids[reward.id] = true
-				check(reward.theme == season and reward.symbol == theme.symbol, "Reward variants keep their season identity")
+				check(reward.theme == season and reward.symbol == "res://assets/images/rewards/" + reward.id + ".svg",
+					"Every reward variant has its own SVG")
 			check(rewards.size() == 10 and reward_ids.size() == 10, "Each season has ten unique reward variants")
 	check(data_script.reward("missing").is_empty() if data_script.has_method("reward") else false,
 		"Unknown reward variants are rejected")
@@ -397,6 +398,14 @@ func _test_scene() -> void:
 	check(has_property(app, "collection_page") and app.collection_page != null,
 		"The rewards collection has an in-game page")
 	check(app._reward_slots.size() == 40, "The rewards page contains all forty seasonal rewards")
+	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
+		"Chest charging uses shake feedback without a progress bar")
+	for id in app._reward_slots:
+		var slot: Dictionary = app._reward_slots[id]
+		if app.collected_rewards.has(id):
+			check(slot.picture.texture != null, "Unlocked rewards load their individual artwork")
+		else:
+			check(slot.picture.texture == null, "Locked rewards do not reveal or eagerly load their artwork")
 	if app.has_method("_show_collection"):
 		app.collection_button.grab_focus()
 		app._show_collection()

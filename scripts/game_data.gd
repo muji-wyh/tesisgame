@@ -45,7 +45,7 @@ static func rewards(theme_id: String) -> Array:
 			"theme": theme_id,
 			"name": REWARD_NAMES[theme_id][index],
 			"number": index + 1,
-			"symbol": palette.symbol
+			"symbol": "res://assets/images/rewards/%s-%d.svg" % [theme_id, index + 1]
 		})
 	return result
 

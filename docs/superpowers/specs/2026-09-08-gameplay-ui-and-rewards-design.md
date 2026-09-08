@@ -20,7 +20,7 @@ Simplify the game chrome, make feedback more playful, and turn the seasonal ches
 ## Rewards
 
 - Each season defines ten named reward variants, for forty total.
-- Variants reuse the existing seasonal SVG as the visual identity and add a distinct name and number. No new artwork dependency is required.
+- Every variant has its own generated SVG. The existing image generator produces forty deterministic collectible badges without a new artwork dependency.
 - A win selects one variant from the current season when chest charging begins.
 - Opening records the reward in `user://rewards.cfg`. Duplicate rewards remain collected once.
 - The collection page shows all forty slots and clearly distinguishes locked and collected variants.
@@ -28,7 +28,7 @@ Simplify the game chrome, make feedback more playful, and turn the seasonal ches
 ## Chest interaction
 
 - Pointer or touch movement drags the chest artwork inside its stage, clamped so it remains visible.
-- A stationary press charges for 1.2 seconds. Shaking increases with charge progress.
+- A stationary press charges for 1.2 seconds. Shaking increases with charge progress; no progress bar is shown.
 - Releasing early cancels the charge. Moving far enough to drag also cancels the charge.
 - Completing the hold starts the existing 1.8-second themed opening and celebration.
 - Keyboard activation remains available through a focused button and uses the same charge path.
