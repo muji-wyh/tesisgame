@@ -15,6 +15,7 @@ var remote_audio: Dictionary = {}
 var _loading: Dictionary = {}
 var _playback_requests: Dictionary = {}
 var _music_pending: bool = false
+var _music_error: bool = false
 
 
 func _ready() -> void:
@@ -52,7 +53,7 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 	if not play_music:
 		stop_music()
 		return
-	if current_theme == theme_id and (music.playing or _music_pending):
+	if current_theme == theme_id and (music.playing or _music_pending) and not _music_error:
 		return
 	current_theme = theme_id
 	_music_pending = true
@@ -86,10 +87,13 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 	if stream == null:
 		if player == music:
 			current_theme = ""
-		status_changed.emit("Sound could not load. You can keep playing. Tap Listen to try again.")
+			_music_error = true
+		status_changed.emit("Sound could not load. You can keep playing. Tap a card to try again.")
 		return
 	player.stream = stream
 	if player == music:
+		_music_error = false
+		status_changed.emit("")
 		music.volume_db = linear_to_db(0.04 if voice.playing else 0.12)
 	player.play()
 	if player == voice:
@@ -102,7 +106,9 @@ func _stream(path: String, loop: bool = false) -> AudioStream:
 	if _loading.has(path):
 		while _loading.has(path):
 			await _stream_loaded
-		return cache.get(path)
+		if cache.has(path):
+			return cache[path]
+		return await _stream(path, loop)
 	_loading[path] = true
 	var resource: Resource
 	if remote_audio.has(path):

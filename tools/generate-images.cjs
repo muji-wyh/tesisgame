@@ -161,6 +161,60 @@ const rewardArt = {
   }
 };
 
+const collectibleColors = {
+  spring: ['#438363', '#8ecf6b', '#f2d66a'],
+  summer: ['#b53640', '#ff8f9d', '#ffd36a'],
+  autumn: ['#8f7400', '#ffd24d', '#d98a4e'],
+  winter: ['#606a73', '#d8dee3', '#9bc9d5']
+};
+
+function starPoints(points, outer, inner, rotation = -90) {
+  return Array.from({ length: points * 2 }, (_, index) => {
+    const angle = (rotation + index * 180 / points) * Math.PI / 180;
+    const radius = index % 2 ? inner : outer;
+    return `${60 + Math.cos(angle) * radius},${60 + Math.sin(angle) * radius}`;
+  }).join(' ');
+}
+
+function collectibleShapes(season, index) {
+  const [dark, bright, highlight] = collectibleColors[season];
+  const marker = Array.from({ length: { spring: 5, summer: 8, autumn: 6, winter: 4 }[season] }, (_, item) =>
+    `<circle cx="60" cy="16" r="${2 + index % 3}" transform="rotate(${item * 360 / ({ spring: 5, summer: 8, autumn: 6, winter: 4 }[season])} 60 60)" fill="${highlight}" stroke="none"/>`
+  ).join('\n    ');
+  const motifs = [
+    `${Array.from({ length: 6 }, (_, item) => `<ellipse cx="60" cy="37" rx="11" ry="18" transform="rotate(${item * 60} 60 60)" fill="${bright}"/>`).join('\n    ')}
+    <circle cx="60" cy="60" r="16" fill="${highlight}"/>`,
+    `<path d="M60 94 C38 78 24 65 28 47 C31 32 50 30 60 44 C70 30 89 32 92 47 C96 65 82 78 60 94Z" fill="${bright}"/>
+    <path d="M44 48 Q50 39 57 44" stroke="${highlight}" stroke-width="5"/>`,
+    `<polygon points="${starPoints(7, 40, 19, -90 + index * 3)}" fill="${bright}"/>
+    <circle cx="60" cy="60" r="10" fill="${highlight}"/>`,
+    `<polygon points="60,19 94,55 60,101 26,55" fill="${bright}"/>
+    <path d="M60 19 60 101 M26 55H94 M60 19 26 55 60 70 94 55Z" stroke="${highlight}" stroke-width="4"/>`,
+    `<path d="M78 25 A39 39 0 1 0 94 82 A31 31 0 1 1 78 25Z" fill="${bright}"/>
+    <circle cx="79" cy="45" r="5" fill="${highlight}"/>`,
+    `<path d="M25 86 31 39 49 55 60 27 71 55 89 39 95 86Z" fill="${bright}"/>
+    <path d="M31 72H89" stroke="${highlight}" stroke-width="6"/>`,
+    `<ellipse cx="42" cy="49" rx="18" ry="27" transform="rotate(-28 42 49)" fill="${bright}"/>
+    <ellipse cx="78" cy="49" rx="18" ry="27" transform="rotate(28 78 49)" fill="${bright}"/>
+    <ellipse cx="46" cy="78" rx="14" ry="20" transform="rotate(28 46 78)" fill="${highlight}"/>
+    <ellipse cx="74" cy="78" rx="14" ry="20" transform="rotate(-28 74 78)" fill="${highlight}"/>
+    <path d="M60 43V91 M58 43 49 31 M62 43 71 31" stroke="${dark}" stroke-width="4"/>`,
+    `<path d="M60 101V57" stroke="${dark}" stroke-width="7"/>
+    <path d="M58 73 Q31 70 29 45 Q54 43 60 65Z M62 62 Q66 35 93 34 Q92 59 62 68Z" fill="${bright}"/>
+    <circle cx="60" cy="94" r="8" fill="${highlight}"/>`,
+    `<ellipse cx="60" cy="60" rx="42" ry="19" transform="rotate(${index * 11} 60 60)" stroke="${bright}" stroke-width="7"/>
+    <ellipse cx="60" cy="60" rx="19" ry="42" transform="rotate(${index * -7} 60 60)" stroke="${highlight}" stroke-width="5"/>
+    <circle cx="60" cy="60" r="16" fill="${bright}"/>`,
+    `<path d="M60 18 94 32 88 76 Q82 94 60 104 Q38 94 32 76 L26 32Z" fill="${bright}"/>
+    <polygon points="${starPoints(5 + index % 3, 23, 11, -90)}" fill="${highlight}"/>`
+  ];
+  return `${marker}
+    <circle cx="60" cy="60" r="${48 - index % 4}" fill="none" stroke="${dark}" stroke-width="3"/>
+    <g fill="none" stroke="${dark}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      ${motifs[index - 1]}
+    </g>`;
+}
+
 const bearArt = `
     <ellipse cx="60" cy="108" rx="35" ry="5" fill="#eadbc5" stroke="none"/>
     <path d="M34 106 Q30 89 44 84 H76 Q90 89 86 106Z" fill="#9ac9bb"/>
@@ -212,6 +266,12 @@ function generateImages() {
   }
   for (const [season, art] of Object.entries(rewardArt)) {
     outputs.push([`assets/images/rewards/${season}.svg`, makeSvg(art.title, art.shapes, art.background)]);
+    for (let index = 1; index <= 10; index++) {
+      outputs.push([
+        `assets/images/rewards/${season}-${index}.svg`,
+        makeSvg(`${art.title} collectible ${index}`, collectibleShapes(season, index), art.background)
+      ]);
+    }
   }
   outputs.push(['assets/images/scenes/try-again.svg', makeSvg('A friendly bear waving encouragement', bearArt)]);
 

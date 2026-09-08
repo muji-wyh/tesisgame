@@ -94,17 +94,17 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
-Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Both counters accumulate independently.
+Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Matches and mistakes appear as green and red icons in the top-left instead of text counters. Correct pairs bounce; incorrect pairs shake.
 
-Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. The season menu changes the appearance and music without resetting progress; it also contains **Reduce motion**. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
+Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. Four always-visible seasonal buttons change the appearance and music without resetting progress. The compact **FX** button toggles reduced motion. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **100 short, concrete English words** for parent-guided play
 with young children. Each round still uses only five different words on eight cards, rather
 than showing the whole pool at once. Tap a picture or word to hear its pronunciation.
 
-The winning chest follows the selected theme. Opening it captures that reward's theme and starts a 1.8-second charge-and-reveal sequence with imported chest artwork, native light layers, two expanding rings, 72 seasonal particles and a reward medallion. Themes have different particle trajectories, palettes, music, effects and English speech. Theme switching is disabled during opening. Later theme changes do not alter the earned reward or grant another one.
+The winning chest follows the selected theme and can be dragged inside its panel. Hold it for 1.2 seconds to charge it: the shake intensifies without displaying a progress bar, then the existing 1.8-second reveal starts with imported chest artwork, native light layers, two expanding rings, 72 seasonal particles and a reward medallion. Releasing early or dragging cancels the charge. Themes have different particle trajectories, palettes, music, effects and English speech. Theme switching is disabled during opening. Later theme changes do not alter the earned reward or grant another one.
 
-Reduced motion reveals the reward immediately without moving effects. **Mute**, **Listen** and **Play again** control audio and replay. Audio waits for interaction and stops on hiding, muting, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
+Each season has ten named reward variants with ten different generated illustrations. Opened rewards are stored locally and appear on the **Rewards** page; locked slots remain hidden until earned. Reduced motion skips moving feedback and reveals the reward immediately after the required hold. **Play again** starts a new round. Audio starts with normal game interaction and stops on hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
 
 Particle textures load only for the first animated celebration, rather than delaying startup.
 Reduced-motion players do not load those unused textures.
@@ -114,7 +114,7 @@ word pronunciation, scoring and chest opening never wait for them. Native HTTP r
 in-flight downloads, use a 15-second timeout and 4 MB limit, and check resource signatures and
 content hashes before loading. Decoded sounds are cached for the session; the browser caches
 their immutable URLs between visits. Temporary resource files are removed after loading.
-Old requests cannot restart muted/hidden music, play the previous theme or replace a newer
+Old requests cannot restart hidden music, play the previous theme or replace a newer
 word. Failed downloads show a non-blocking notice and can be retried with another interaction.
 Editor/native play continues to use local audio.
 
@@ -204,7 +204,7 @@ npm run test:all
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, imported chest files and Web-export contracts. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, loading errors and iframe embedding.
 
-The Windows Playwright WebKit runtime exposes WebGL 2 but not AudioContext or OffscreenCanvas. In that environment the real Godot Dummy audio driver is selected, and Listen reports the missing capability. An ordinary multisampled canvas selects Emscripten's built-in shader presentation path, avoiding that runtime's repeated framebuffer-blit error. No fake WebAudio or WebGL APIs are substituted. Chromium exercises real browser audio APIs.
+The Windows Playwright WebKit runtime exposes WebGL 2 but not AudioContext or OffscreenCanvas. In that environment the real Godot Dummy audio driver is selected and the host reports the missing capability. An ordinary multisampled canvas selects Emscripten's built-in shader presentation path, avoiding that runtime's repeated framebuffer-blit error. No fake WebAudio or WebGL APIs are substituted. Chromium exercises real browser audio APIs.
 
 Real iPhone/iPad testing remains important for physical audio playback, browser-bar changes, safe areas, split view and background/foreground behavior.
 

@@ -8,6 +8,9 @@ const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))
 const seasons = ['spring', 'summer', 'autumn', 'winter'].map((id) => ({
   id, symbol: `assets/images/rewards/${id}.svg`, bgm: `assets/audio/bgm/${id}.wav`
 }));
+const rewardSymbols = seasons.flatMap(({ id }) =>
+  Array.from({ length: 10 }, (_, index) => `assets/images/rewards/${id}-${index + 1}.svg`)
+);
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedPrompts = {
   welcome: "Find three pairs. Some cards have no match. Tap a picture or a word!",
@@ -149,6 +152,14 @@ test('each season has its own original reward SVG', () => {
   assert.equal(digests.size, 4);
 });
 
+test('all forty collectible rewards have distinct SVG artwork', () => {
+  const digests = new Set(rewardSymbols.map((symbol) =>
+    sha256(readSvg(symbol).replace(/<title\b[^>]*>.*?<\/title>/gs, ''))
+  ));
+  assert.equal(rewardSymbols.length, 40);
+  assert.equal(digests.size, 40);
+});
+
 test('seasonal reward SVGs use the requested seasonal palette', () => {
   for (const [season, colors] of Object.entries(expectedRewardColors)) {
     const svg = readSvg(`assets/images/rewards/${season}.svg`).toLowerCase();
@@ -162,10 +173,10 @@ test('the encouraging try-again scene is a standalone SVG', () => {
   readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
 });
 
-test('the generated image directories contain exactly the 105 named SVGs', () => {
+test('the generated image directories contain exactly the 145 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
-    ['rewards', seasons.map(({ id }) => `${id}.svg`)],
+    ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]],
     ['scenes', ['try-again.svg']]
   ];
   for (const [directory, names] of expected) {

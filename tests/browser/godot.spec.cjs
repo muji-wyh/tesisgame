@@ -39,10 +39,10 @@ function cardPoint(metrics, index) {
   const columns = metrics.width >= metrics.height ? 4 : 2;
   const rows = 8 / columns;
   const cellWidth = (width - 24 - (columns - 1) * 10) / columns;
-  const cellHeight = (height - 196 - (rows - 1) * 10) / rows;
+  const cellHeight = (height - 184 - (rows - 1) * 10) / rows;
   return {
     x: metrics.x + (12 + (index % columns) * (cellWidth + 10) + cellWidth / 2) * scale,
-    y: metrics.y + (136 + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
+    y: metrics.y + (172 + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
   };
 }
 
@@ -171,20 +171,20 @@ async function holdOptionalAudio(page) {
 async function chooseSeason(page, index) {
   const metrics = await canvasMetrics(page);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  await page.touchscreen.tap(metrics.x + metrics.width - 268 * scale, metrics.y + 48 * scale);
-  await page.keyboard.press('ArrowDown');
-  for (let item = 0; item < index; item++) await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('Enter');
+  const buttonWidth = (metrics.width / scale - 48) / 4;
+  await page.touchscreen.tap(
+    metrics.x + (12 + index * (buttonWidth + 8) + buttonWidth / 2) * scale,
+    metrics.y + 128 * scale
+  );
 }
 
-test('Listen uses real browser audio or reports genuine missing audio support', async ({ page }) => {
+test('the first card interaction uses real browser audio or reports genuine missing audio support', async ({ page }) => {
   const errors = watchErrors(page);
   await observeAudio(page);
   await page.goto('/');
   await ready(page);
-  const metrics = await canvasMetrics(page);
-  const scale = Math.min(metrics.width, metrics.height) / 480;
-  await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
+  const point = firstCard(await canvasMetrics(page));
+  await page.touchscreen.tap(point.x, point.y);
   const available = await page.evaluate(() => window.audioObservation.available);
   if (available) {
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(0);
@@ -208,18 +208,13 @@ test('optional audio downloads never delay bundled words or card input', async (
     expect(held.requests).toEqual([]);
     test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
     const metrics = await canvasMetrics(page);
-    const scale = Math.min(metrics.width, metrics.height) / 480;
-    const listen = { x: metrics.x + metrics.width - 57 * scale, y: metrics.y + 48 * scale };
-    await page.touchscreen.tap(listen.x, listen.y);
-    await expect.poll(() => held.requests.length).toBe(2);
-    await page.touchscreen.tap(listen.x, listen.y);
     const point = firstCard(metrics);
     const beforeWord = await page.evaluate(() => window.audioObservation.starts);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toHaveText('Now find its match!');
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(beforeWord + 2);
-    expect(new Set(held.requests.map(request => request.url())).size).toBe(2);
-    expect(held.requests).toHaveLength(2);
+    expect(new Set(held.requests.map(request => request.url())).size).toBe(1);
+    expect(held.requests).toHaveLength(1);
     await expect(page.locator('#audio-status')).toBeEmpty();
     const beforeRelease = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
@@ -233,8 +228,7 @@ test('optional audio downloads never delay bundled words or card input', async (
   }
 });
 
-for (const action of ['mute', 'hide']) {
-  test(`${action} prevents pending audio from restarting until another gesture`, async ({ page }) => {
+test('hiding prevents pending audio from restarting until another gesture', async ({ page }) => {
     const errors = watchErrors(page);
     const held = await holdOptionalAudio(page);
     await observeAudio(page);
@@ -243,41 +237,31 @@ for (const action of ['mute', 'hide']) {
       await ready(page);
       test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
       const metrics = await canvasMetrics(page);
-      const scale = Math.min(metrics.width, metrics.height) / 480;
-      await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
-      await expect.poll(() => held.requests.length).toBe(2);
-      const before = await page.evaluate(() => window.audioObservation.starts);
-      if (action === 'mute') {
-        await page.touchscreen.tap(metrics.x + metrics.width - 155 * scale, metrics.y + 48 * scale);
-      } else {
-        await page.evaluate(() => {
-          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-          document.dispatchEvent(new Event('visibilitychange'));
-        });
-      }
-      await held.finish();
-      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
-      if (action === 'mute') {
-        await page.touchscreen.tap(metrics.x + metrics.width - 155 * scale, metrics.y + 48 * scale);
-      } else {
-        await page.evaluate(() => {
-          delete document.hidden;
-          document.dispatchEvent(new Event('visibilitychange'));
-        });
-        expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
-      }
       const point = firstCard(metrics);
       await page.touchscreen.tap(point.x, point.y);
-      await expect(page.locator('#game-status')).toHaveText('Now find its match!');
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 3);
-      expect(held.requests).toHaveLength(2);
+      await expect.poll(() => held.requests.length).toBe(1);
+      const before = await page.evaluate(() => window.audioObservation.starts);
+      await page.evaluate(() => {
+        Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+        document.dispatchEvent(new Event('visibilitychange'));
+      });
+      await held.finish();
+      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
+      await page.evaluate(() => {
+        delete document.hidden;
+        document.dispatchEvent(new Event('visibilitychange'));
+      });
+      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
+      await page.touchscreen.tap(point.x, point.y);
+      await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
+      expect(held.requests).toHaveLength(1);
       expect(errors).toEqual([]);
     } finally {
       held.release();
       await page.unrouteAll({ behavior: 'wait' });
     }
-  });
-}
+});
 
 test('season colors preserve selection and discard obsolete pending music and prompts', async ({ page }) => {
   const errors = watchErrors(page);
@@ -328,22 +312,21 @@ for (const failure of ['unavailable', 'corrupt']) {
     await ready(page);
     test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
     const metrics = await canvasMetrics(page);
-    const scale = Math.min(metrics.width, metrics.height) / 480;
-    await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
-    await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
-    const before = await page.evaluate(() => window.audioObservation.starts);
     const point = firstCard(metrics);
     await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toHaveText('Now find its match!');
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(before + 2);
+    await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
+    await expect(page.locator('#audio-status')).not.toContainText('Listen');
+    const before = await page.evaluate(() => window.audioObservation.starts);
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+    expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
     await Promise.all(requests.map(async request => (await request.response()).finished()));
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     failing = false;
-    await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find three pairs.');
     const retryStarts = await page.evaluate(() => window.audioObservation.starts);
-    await page.touchscreen.tap(metrics.x + metrics.width - 57 * scale, metrics.y + 48 * scale);
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(retryStarts);
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(retryStarts + 2);
     await expect(page.locator('#audio-status')).toBeEmpty();
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
   });
@@ -446,15 +429,20 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     const height = metrics.height / scale;
     const landscape = metrics.width >= metrics.height;
     const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
-    const stageHeight = landscape ? height - 148 : Math.max(72, height - 328);
+    const stageHeight = landscape ? height - 184 : Math.max(72, height - 364);
     const chestPoint = {
       x: metrics.x + (12 + stageWidth * 0.5) * scale,
-      y: metrics.y + (136 + stageHeight * 0.6) * scale
+      y: metrics.y + (172 + stageHeight * 0.6) * scale
     };
-    await page.touchscreen.tap(chestPoint.x, chestPoint.y);
+    await page.mouse.move(chestPoint.x, chestPoint.y);
+    await page.mouse.down();
+    await page.waitForTimeout(1300);
+    await page.mouse.up();
     await expect(page.locator('#game-status')).toContainText('Wow!');
     const earned = await page.locator('#game-status').textContent();
-    await page.touchscreen.tap(chestPoint.x, chestPoint.y);
+    await page.mouse.down();
+    await page.waitForTimeout(1300);
+    await page.mouse.up();
     await expect(page.locator('#game-status')).toHaveText(earned);
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();

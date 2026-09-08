@@ -14,6 +14,12 @@ const THEMES: Dictionary = {
 		"light": Color("#eef2f4"), "spark": Color("#d8dee3"), "tint": Color("#f5f7f8"),
 		"chest": "crystal", "prize": "A winter snowflake!"}
 }
+const REWARD_NAMES: Dictionary = {
+	"spring": ["Blossom", "Ladybug", "Bee", "Tulip", "Rainbow", "Bunny", "Sprout", "Butterfly", "Nest", "Dewdrop"],
+	"summer": ["Sunbeam", "Seashell", "Lemon", "Kite", "Sandcastle", "Watermelon", "Sunglasses", "Starfish", "Surfboard", "Firefly"],
+	"autumn": ["Maple Leaf", "Acorn", "Pumpkin", "Mushroom", "Apple", "Scarf", "Pinecone", "Lantern", "Squirrel", "Harvest Moon"],
+	"winter": ["Snowflake", "Mitten", "Snowman", "Ice Crystal", "Sled", "Penguin", "Cocoa", "Polar Bear", "Bell", "Northern Star"]
+}
 
 var words: Array = []
 var chests: Dictionary = {}
@@ -26,6 +32,30 @@ static func theme(id: String) -> Dictionary:
 	result.id = id
 	result.symbol = "res://assets/images/rewards/" + id + ".svg"
 	return result
+
+
+static func rewards(theme_id: String) -> Array:
+	var result: Array = []
+	if not REWARD_NAMES.has(theme_id):
+		return result
+	var palette: Dictionary = theme(theme_id)
+	for index in range(REWARD_NAMES[theme_id].size()):
+		result.append({
+			"id": "%s-%d" % [theme_id, index + 1],
+			"theme": theme_id,
+			"name": REWARD_NAMES[theme_id][index],
+			"number": index + 1,
+			"symbol": "res://assets/images/rewards/%s-%d.svg" % [theme_id, index + 1]
+		})
+	return result
+
+
+static func reward(id: String) -> Dictionary:
+	for theme_id in REWARD_NAMES:
+		for value in rewards(theme_id):
+			if value.id == id:
+				return value
+	return {}
 
 
 static func validate_words(value: Variant) -> String:
