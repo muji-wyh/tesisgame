@@ -213,7 +213,7 @@ test('optional audio downloads never delay bundled words or card input', async (
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toHaveText('Now find its match!');
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(beforeWord + 2);
-    expect(new Set(held.requests.map(request => request.url())).size).toBe(1);
+    await expect.poll(() => new Set(held.requests.map(request => request.url())).size).toBe(1);
     expect(held.requests).toHaveLength(1);
     await expect(page.locator('#audio-status')).toBeEmpty();
     const beforeRelease = await page.evaluate(() => window.audioObservation.starts);
@@ -407,6 +407,17 @@ async function discoverCards(page) {
   return { metrics, discovered };
 }
 
+async function holdChestUntilOpen(page, point) {
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.down();
+  try {
+    // Keep holding through slow rendered frames instead of releasing on the runner's clock.
+    await expect(page.locator('#game-status')).toContainText('Wow!');
+  } finally {
+    await page.mouse.up();
+  }
+}
+
 test('completes matches and opens a one-shot reward while optional audio is still downloading', async ({ page }) => {
   const errors = watchErrors(page);
   const held = await holdOptionalAudio(page);
@@ -434,11 +445,7 @@ test('completes matches and opens a one-shot reward while optional audio is stil
       x: metrics.x + (12 + stageWidth * 0.5) * scale,
       y: metrics.y + (172 + stageHeight * 0.6) * scale
     };
-    await page.mouse.move(chestPoint.x, chestPoint.y);
-    await page.mouse.down();
-    await page.waitForTimeout(1300);
-    await page.mouse.up();
-    await expect(page.locator('#game-status')).toContainText('Wow!');
+    await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
     await page.mouse.down();
     await page.waitForTimeout(1300);
@@ -455,6 +462,40 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     held.release();
     await page.unrouteAll({ behavior: 'wait' });
   }
+});
+
+test('dragging the reward chest cancels hold-open without losing pointer control', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/');
+  await ready(page);
+  const { metrics, discovered } = await discoverCards(page);
+  const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
+  expect(pairs).toHaveLength(3);
+  for (let index = 0; index < pairs.length; index++) {
+    for (const card of [pairs[index].Word, pairs[index].Picture]) {
+      const point = cardPoint(metrics, card);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find three pairs.');
+  }
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const width = metrics.width / scale;
+  const height = metrics.height / scale;
+  const landscape = metrics.width >= metrics.height;
+  const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
+  const stageHeight = landscape ? height - 184 : Math.max(72, height - 364);
+  const chestPoint = {
+    x: metrics.x + (12 + stageWidth * 0.5) * scale,
+    y: metrics.y + (172 + stageHeight * 0.6) * scale
+  };
+  await page.mouse.move(chestPoint.x, chestPoint.y);
+  await page.mouse.down();
+  await page.mouse.move(chestPoint.x + 28, chestPoint.y + 12, { steps: 4 });
+  await page.waitForTimeout(1300);
+  await page.mouse.up();
+  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await holdChestUntilOpen(page, chestPoint);
+  expect(errors).toEqual([]);
 });
 
 test('losing stops pending music and only plays the current loss prompt', async ({ page }) => {

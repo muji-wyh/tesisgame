@@ -3,13 +3,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#edf8ec">
+  <meta name="theme-color" content="">
   <title>Word Buddies</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
   $GODOT_HEAD_INCLUDE
   <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
     * { box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #edf8ec; }
-    body { font-family: system-ui, sans-serif; color: #35415e; overscroll-behavior: none; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--cp-bg); }
+    body { font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--cp-text); overscroll-behavior: none; }
     #safe-area {
       position: fixed; inset: 0;
       padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
@@ -18,15 +79,68 @@
     #game { position: relative; width: 100%; height: 100%; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: manipulation; }
     #status {
-      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 18px; padding: 24px; text-align: center; background: #edf8ec;
+      position: absolute; inset: 0; display: grid; place-items: center;
+      padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
     }
-    #status[hidden], #retry[hidden] { display: none; }
-    h1 { margin: 0; font-size: clamp(28px, 7vw, 52px); }
-    p { margin: 0; max-width: 34em; line-height: 1.5; }
-    progress { width: min(280px, 80%); height: 16px; accent-color: #438363; }
-    button { min-height: 48px; padding: 12px 24px; border: 2px solid #438363; border-radius: 14px;
-      background: white; color: #35415e; font: inherit; cursor: pointer; }
+    [hidden] { display: none !important; }
+    .loader-layout { display: grid; grid-template-areas: "heading" "toy" "download";
+      gap: 24px; width: min(100%, 380px); }
+    .loading-heading { grid-area: heading; }
+    .loading-heading small { display: block; color: var(--cp-accent); font-size: 12px;
+      font-weight: 700; letter-spacing: 0.18em; margin-bottom: 8px; }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
+    p { margin: 0; line-height: 1.5; }
+    .loading-heading p { color: var(--cp-text-soft); }
+    #loading-play { grid-area: toy; }
+    .toy-scene { position: relative; background: var(--cp-bg-elevated);
+      border: 1px solid var(--cp-border); border-radius: 16px; }
+    #loading-toy { display: block; width: 100%; height: 244px; border: 0; padding: 0;
+      border-radius: 16px; background: var(--cp-bg-elevated); touch-action: pinch-zoom; user-select: none; }
+    #loading-toy svg { width: 100%; height: 100%; pointer-events: none; }
+    #chest-art { transform-origin: 140px 185px; }
+    #loading-sparks { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 16px; }
+    .loading-spark { position: absolute; left: calc(50% - 8px); top: 48%; width: 16px; height: 16px;
+      clip-path: polygon(50% 0%, 64% 32%, 100% 38%, 74% 62%, 82% 100%, 50% 82%, 18% 100%, 26% 62%, 0% 38%, 36% 32%); }
+    .play-caption { display: grid; gap: 4px; margin-top: 12px; }
+    #loading-score { font-size: 20px; color: var(--cp-accent); font-variant-numeric: tabular-nums; }
+    .play-caption span { font-size: 14px; color: var(--cp-text-soft); }
+    .loading-download { grid-area: download; display: grid; gap: 12px; }
+    .loading-line { display: flex; justify-content: space-between; gap: 12px;
+      font-size: 14px; text-align: left; color: var(--cp-text-soft); }
+    #loading-percent { font-variant-numeric: tabular-nums; color: var(--cp-accent); }
+    progress { appearance: none; width: 100%; height: 12px; border: 0; border-radius: 0.625rem;
+      overflow: hidden; background: var(--cp-border); color: var(--cp-accent); accent-color: var(--cp-accent); }
+    progress::-webkit-progress-bar { background: var(--cp-border); }
+    progress::-webkit-progress-value { background: var(--cp-accent); border-radius: 0.625rem; }
+    progress::-moz-progress-bar { background: var(--cp-accent); border-radius: 0.625rem; }
+    #loading-note { font-size: 12px; color: var(--cp-text-soft); }
+    button { min-height: 48px; padding: 12px 24px; border: 0; border-radius: 0.625rem;
+      background: var(--cp-accent); color: var(--cp-accent-fg); font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
+    #retry:hover { background: var(--cp-accent-hover); }
+    #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
+      grid-template-columns: 1fr; max-width: 440px; }
+    @media (max-height: 650px) {
+      #status { padding: 16px; }
+      .loader-layout { gap: 12px; }
+      .loading-heading small { display: none; }
+      h1 { font-size: 32px; margin-bottom: 4px; }
+      #loading-toy { height: 180px; }
+    }
+    @media (max-height: 500px) and (min-width: 501px) {
+      .loader-layout { width: min(100%, 720px); grid-template-columns: 1fr 1fr;
+        grid-template-areas: "heading toy" "download toy"; gap: 20px 32px; align-items: center; }
+      #loading-toy { height: 204px; }
+    }
+    @media (max-height: 420px) and (max-width: 500px) {
+      #status { padding: 12px; }
+      .loader-layout, .loading-download { gap: 4px; }
+      h1 { font-size: 28px; }
+      .loading-heading p, .play-caption span { font-size: 12px; }
+      #loading-toy { height: 96px; }
+      .play-caption { margin-top: 4px; gap: 0; }
+      #loading-score { font-size: 16px; }
+    }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
       clip-path: inset(50%); white-space: nowrap; }
   </style>
@@ -34,23 +148,66 @@
 <body>
   <div id="safe-area">
     <div id="game">
-      <canvas id="canvas" tabindex="0" aria-label="Word Buddies matching game" aria-describedby="help selection-status">
+      <canvas id="canvas" tabindex="0" inert aria-label="Word Buddies matching game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Find three matching word and picture pairs. Two cards have no match.
-        Use touch, or Tab and Enter. The season menu also contains Reduce motion.</p>
+        Use touch, or Tab and Enter. Four season buttons change the theme.
+        Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
-      <div id="status" role="status" aria-live="polite">
-        <h1>Word Buddies</h1>
-        <p id="message">Loading your adventure...</p>
-        <progress id="progress" max="1"></progress>
-        <button id="retry" hidden>Try again</button>
+      <div id="status" role="region" aria-labelledby="loading-title">
+        <div class="loader-layout">
+          <header class="loading-heading">
+            <small>PLAY A LITTLE. LEARN A LOT.</small>
+            <h1 id="loading-title">Word Buddies</h1>
+            <p>Let's wake up the treasure!</p>
+          </header>
+          <div id="loading-play">
+            <div class="toy-scene">
+              <button id="loading-toy" type="button" aria-label="Tap or wiggle the treasure chest" aria-describedby="loading-hint">
+                <svg viewBox="0 0 280 244" aria-hidden="true">
+                  <circle cx="140" cy="119" r="89" fill="var(--cp-accent-soft)"/>
+                  <path d="M41 75q22-28 29-8Q66 86 41 75M219 172q24-10 23 11-18 10-23-11" fill="var(--cp-success)"/>
+                  <path d="m224 54 5 12 13 5-13 5-5 13-5-13-13-5 13-5Z" fill="var(--cp-warning)"/>
+                  <circle cx="57" cy="170" r="5" fill="var(--cp-accent)"/>
+                  <circle cx="201" cy="37" r="3" fill="var(--cp-accent)"/>
+                  <ellipse cx="140" cy="206" rx="80" ry="7" fill="var(--cp-highlight)"/>
+                  <g id="chest-art">
+                    <path d="M67 121V97q0-39 40-39h66q40 0 40 39v24Z" fill="var(--cp-warning)"/>
+                    <path d="M90 110V98q0-25 25-25h50q25 0 25 25v12Z" fill="var(--cp-accent)"/>
+                    <rect x="65" y="114" width="150" height="83" rx="14" fill="var(--cp-accent-hover)"/>
+                    <rect x="75" y="121" width="130" height="64" rx="9" fill="var(--cp-accent)"/>
+                    <path d="M67 121h146M90 118v77m100-77v77" fill="none" stroke="var(--cp-warning)" stroke-width="10"/>
+                    <rect x="123" y="109" width="34" height="39" rx="10" fill="var(--cp-warning)"/>
+                    <path d="m140 116 3 7 8 1-6 6 1 8-6-4-6 4 1-8-6-6 8-1Z" fill="var(--cp-accent-fg)"/>
+                    <circle cx="119" cy="163" r="4" fill="var(--cp-accent-fg)"/>
+                    <circle cx="161" cy="163" r="4" fill="var(--cp-accent-fg)"/>
+                    <path d="M133 173q7 7 14 0" fill="none" stroke="var(--cp-accent-fg)" stroke-width="3" stroke-linecap="round"/>
+                  </g>
+                </svg>
+              </button>
+              <div id="loading-sparks" aria-hidden="true"></div>
+            </div>
+            <div class="play-caption">
+              <strong id="loading-score" role="status">0 sparkles</strong>
+              <span id="loading-hint">Tap or wiggle the chest to make stars!</span>
+            </div>
+          </div>
+          <div class="loading-download">
+            <div class="loading-line">
+              <p id="message" role="status">Getting the game ready...</p>
+              <strong id="loading-percent" aria-hidden="true"></strong>
+            </div>
+            <progress id="progress" max="1" aria-label="Game download"></progress>
+            <p id="loading-note" hidden>The first visit takes longer. Your browser can reuse the downloads next time.</p>
+            <button id="retry" type="button" hidden>Try again</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <script src="$GODOT_URL"></script>
   <script>
     (() => {
       'use strict';
@@ -61,35 +218,135 @@
       const progress = document.getElementById('progress');
       const retry = document.getElementById('retry');
       const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const toy = document.getElementById('loading-toy');
+      const chestArt = document.getElementById('chest-art');
+      const sparks = document.getElementById('loading-sparks');
+      const score = document.getElementById('loading-score');
+      const loadingPlay = document.getElementById('loading-play');
+      const loadingNote = document.getElementById('loading-note');
+      const percent = document.getElementById('loading-percent');
+      const loadingEvents = new AbortController();
+      const loadingListener = { signal: loadingEvents.signal };
+      const sparkColors = ['var(--cp-accent)', 'var(--cp-warning)', 'var(--cp-success)'];
+      let sparkleCount = 0;
+      let gesture = null;
+      let swipeHandled = false;
       let failed = false;
+      const slowNotice = window.setTimeout(() => { loadingNote.hidden = false; }, 16000);
+      document.querySelector('meta[name="theme-color"]').content =
+        getComputedStyle(document.body).getPropertyValue('--cp-bg').trim();
+
+      function clearLoadingEffects() {
+        loadingPlay.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+        sparks.replaceChildren();
+        chestArt.style.transform = '';
+        gesture = null;
+      }
+
+      function stopLoadingPlay() {
+        window.clearTimeout(slowNotice);
+        loadingEvents.abort();
+        clearLoadingEffects();
+        toy.disabled = true;
+      }
+
+      function playWithTreasure() {
+        if (loadingEvents.signal.aborted || document.hidden) return;
+        sparkleCount++;
+        score.textContent = sparkleCount + (sparkleCount === 1 ? ' sparkle' : ' sparkles');
+        if (motion.matches) return;
+        chestArt.getAnimations().forEach(animation => animation.cancel());
+        chestArt.animate([
+          { transform: 'rotate(0deg)' }, { transform: 'rotate(-7deg) scale(1.04)' },
+          { transform: 'rotate(6deg)' }, { transform: 'rotate(0deg)' }
+        ], { duration: 380, easing: 'ease-out' });
+        for (let i = 0; i < 6; i++) {
+          if (sparks.childElementCount >= 12) {
+            const oldest = sparks.firstElementChild;
+            oldest.getAnimations().forEach(animation => animation.cancel());
+            oldest.remove();
+          }
+          const star = document.createElement('span');
+          star.className = 'loading-spark';
+          star.style.background = sparkColors[(sparkleCount + i) % sparkColors.length];
+          sparks.appendChild(star);
+          const x = (i - 2.5) * 32;
+          const animation = star.animate([
+            { transform: 'translate(0, 0) scale(0.4)', opacity: 1 },
+            { transform: `translate(${x}px, ${-75 - (i % 3) * 24}px) rotate(${x}deg) scale(1)`, opacity: 1, offset: 0.65 },
+            { transform: `translate(${x * 1.1}px, -40px) scale(0.3)`, opacity: 0 }
+          ], { duration: 700, easing: 'ease-out' });
+          animation.onfinish = animation.oncancel = () => star.remove();
+        }
+      }
+
+      toy.addEventListener('click', event => {
+        if (swipeHandled && event.detail !== 0) { swipeHandled = false; return; }
+        playWithTreasure();
+      }, loadingListener);
+      toy.addEventListener('pointerdown', event => {
+        if (!event.isPrimary || event.button !== 0) return;
+        swipeHandled = false;
+        gesture = { id: event.pointerId, x: event.clientX, distance: 0 };
+        toy.setPointerCapture(event.pointerId);
+      }, loadingListener);
+      toy.addEventListener('pointermove', event => {
+        if (!gesture || event.pointerId !== gesture.id) return;
+        const offset = event.clientX - gesture.x;
+        gesture.distance = Math.max(gesture.distance, Math.abs(offset));
+        if (!motion.matches) chestArt.style.transform = `rotate(${Math.max(-9, Math.min(9, offset / 4))}deg)`;
+      }, loadingListener);
+      toy.addEventListener('pointerup', event => {
+        if (!gesture || event.pointerId !== gesture.id) return;
+        const wiggled = gesture.distance >= 18;
+        gesture = null;
+        chestArt.style.transform = '';
+        if (wiggled) { swipeHandled = true; playWithTreasure(); }
+      }, loadingListener);
+      toy.addEventListener('pointercancel', clearLoadingEffects, loadingListener);
+      motion.addEventListener('change', clearLoadingEffects, loadingListener);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) clearLoadingEffects();
+      }, loadingListener);
 
       function fail(reason) {
         failed = true;
-        window.removeEventListener('unhandledrejection', onWasmFailure);
+        stopLoadingPlay();
+        window.removeEventListener('unhandledrejection', onEngineFailure);
         document.body.dataset.engineReady = 'false';
+        canvas.inert = true;
         status.hidden = false;
+        status.dataset.state = 'error';
+        loadingPlay.hidden = true;
+        loadingNote.hidden = true;
+        percent.hidden = true;
         message.textContent = reason;
         progress.hidden = true;
         retry.hidden = false;
+        retry.focus({ preventScroll: true });
       }
 
       function startupFailure(error) {
         fail('The game could not start. ' + (error.message || String(error)));
       }
 
-      function onWasmFailure(event) {
+      function onEngineFailure(event) {
         const reason = event.reason;
+        // A streamed download can fail after Engine.load has already received its headers.
+        const downloadFailed = reason instanceof TypeError && /network|fetch|load failed|terminated/i.test(reason.message);
         if (reason instanceof WebAssembly.CompileError || reason instanceof WebAssembly.LinkError ||
-            reason instanceof WebAssembly.RuntimeError) startupFailure(reason);
+            reason instanceof WebAssembly.RuntimeError || downloadFailed) startupFailure(reason);
       }
 
       // Host lifecycle and read-only asset URLs, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ready() {
           if (failed) return;
-          window.removeEventListener('unhandledrejection', onWasmFailure);
+          stopLoadingPlay();
+          window.removeEventListener('unhandledrejection', onEngineFailure);
           document.body.dataset.engineReady = 'true';
           status.hidden = true;
+          canvas.inert = false;
           canvas.focus({ preventScroll: true });
         },
         fail,
@@ -135,46 +392,58 @@
       retry.addEventListener('click', () => window.location.reload());
 
       const config = $GODOT_CONFIG;
-      if (typeof Engine !== 'function') {
-        startupFailure(new Error('The engine could not be downloaded. Please try again.'));
-        return;
-      }
-      if (!window.AudioContext && !window.webkitAudioContext) {
-        config.args = [...(config.args || []), '--audio-driver', 'Dummy'];
-      }
-      const missing = Engine.getMissingFeatures({ threads: false });
-      if (missing.length) {
-        fail('This browser cannot run the game: ' + missing.join(', ') + '. Please use a browser with WebGL 2 support.');
-        return;
-      }
-      if (typeof OffscreenCanvas === 'undefined') {
-        // MSAA selects Emscripten's built-in shader presenter. Its framebuffer-blit
-        // presenter fails after the first frame in Windows WebKit.
-        const context = canvas.getContext('webgl2', {
-          alpha: false, antialias: true, depth: true, stencil: false, preserveDrawingBuffer: true
-        });
-        if (!context) {
-          startupFailure(new Error('A WebGL 2 drawing surface could not be created.'));
+      function startEngine() {
+        if (typeof Engine !== 'function') {
+          startupFailure(new Error('The engine could not be downloaded. Please try again.'));
           return;
         }
+        if (!window.AudioContext && !window.webkitAudioContext) {
+          config.args = [...(config.args || []), '--audio-driver', 'Dummy'];
+        }
+        const missing = Engine.getMissingFeatures({ threads: false });
+        if (missing.length) {
+          fail('This browser cannot run the game: ' + missing.join(', ') + '. Please use a browser with WebGL 2 support.');
+          return;
+        }
+        if (typeof OffscreenCanvas === 'undefined') {
+          // MSAA selects Emscripten's built-in shader presenter. Its framebuffer-blit
+          // presenter fails after the first frame in Windows WebKit.
+          const context = canvas.getContext('webgl2', {
+            alpha: false, antialias: true, depth: true, stencil: false, preserveDrawingBuffer: true
+          });
+          if (!context) {
+            startupFailure(new Error('A WebGL 2 drawing surface could not be created.'));
+            return;
+          }
+        }
+        const engine = new Engine({
+          ...config,
+          onExit(code) {
+            const detail = 'The engine exited with code ' + code + '. Please try again.';
+            if (document.body.dataset.engineReady === 'true') fail('The game stopped. ' + detail);
+            else startupFailure(new Error(detail));
+          }
+        });
+        // Godot 4.7's init wrapper does not forward all WASM promise rejections.
+        window.addEventListener('unhandledrejection', onEngineFailure);
+        // Observe the shared load promise for failures without delaying the pack's first request.
+        Promise.all([
+          Engine.load(config.executable, config.fileSizes[config.executable + '.wasm']),
+          engine.startGame({
+            canvas,
+            onProgress(current, total) {
+              if (failed || status.hidden || total <= 0) return;
+              const fraction = Math.max(0, Math.min(1, current / total));
+              progress.value = fraction;
+              percent.textContent = Math.floor(fraction * 100) + '%';
+              message.textContent = fraction === 1 ? 'Opening your word world...' : 'Downloading the game...';
+            }
+          })
+        ]).catch(startupFailure);
       }
-      const engine = new Engine({
-        ...config,
-        onExit(code) {
-          const detail = 'The engine exited with code ' + code + '. Please try again.';
-          if (document.body.dataset.engineReady === 'true') fail('The game stopped. ' + detail);
-          else startupFailure(new Error(detail));
-        }
-      });
-      // Godot 4.7's init wrapper does not forward all WASM promise rejections.
-      window.addEventListener('unhandledrejection', onWasmFailure);
-      Engine.load(config.executable, config.fileSizes[config.executable + '.wasm']).then(() => engine.startGame({
-        canvas,
-        onProgress(current, total) {
-          if (total > 0) progress.value = current / total;
-        }
-      })).catch(startupFailure);
+      document.addEventListener('DOMContentLoaded', startEngine, { once: true });
     })();
   </script>
+  <script src="$GODOT_URL" defer></script>
 </body>
 </html>

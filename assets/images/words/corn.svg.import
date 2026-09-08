@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/corn.svg-64c2a2b221680fb2269f2f3a53c472b3.cte
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.85
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

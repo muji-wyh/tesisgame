@@ -10,6 +10,70 @@ const Effects = preload("res://scripts/celebration.gd")
 const HOLD_SECONDS: float = 1.2
 const REWARD_SAVE: String = "user://rewards.cfg"
 
+class ProgressBadges:
+	extends Control
+
+	const SUCCESS := 0
+	const RETRY := 1
+
+	var filled_count: int = 0
+	var total_count: int = 3
+	var badge_kind: int = SUCCESS
+
+	func _init(kind: int = SUCCESS) -> void:
+		badge_kind = kind
+		custom_minimum_size = Vector2(88, 38)
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func set_filled_count(value: int, total: int = 3) -> void:
+		total_count = maxi(1, total)
+		filled_count = clampi(value, 0, total_count)
+		queue_redraw()
+
+	func _draw() -> void:
+		if total_count <= 0:
+			return
+		var gap: float = 5.0
+		var radius: float = clampf(minf(size.y * 0.31, (size.x - gap * float(total_count - 1)) / float(total_count) * 0.5), 7.0, 13.0)
+		var total_width: float = radius * 2.0 * total_count + gap * float(total_count - 1)
+		var x: float = maxf(radius, (size.x - total_width) * 0.5 + radius)
+		for index in range(total_count):
+			var center := Vector2(x + float(index) * (radius * 2.0 + gap), size.y * 0.5)
+			var filled := index < filled_count
+			if badge_kind == SUCCESS:
+				_draw_success_badge(center, radius, filled)
+			else:
+				_draw_retry_badge(center, radius, filled)
+
+	func _draw_success_badge(center: Vector2, radius: float, filled: bool) -> void:
+		if filled:
+			Style.draw_match_badge(self, center, radius)
+			return
+		draw_circle(center, radius, Color("#e8f5dc"))
+		draw_arc(center, radius, 0.0, TAU, 28, Color("#9fcf8f"), 2.0, true)
+		draw_circle(center, radius * 0.34, Color("#f8fff2"))
+
+	func _draw_retry_badge(center: Vector2, radius: float, filled: bool) -> void:
+		var fill := Style.WRONG if filled else Color("#ffe9df")
+		var stroke := Style.WRONG.darkened(0.12) if filled else Color("#eba58f")
+		var diamond := PackedVector2Array([
+			center + Vector2(0.0, -radius),
+			center + Vector2(radius, 0.0),
+			center + Vector2(0.0, radius),
+			center + Vector2(-radius, 0.0)
+		])
+		draw_colored_polygon(diamond, fill)
+		var outline := PackedVector2Array([
+			diamond[0], diamond[1], diamond[2], diamond[3], diamond[0]
+		])
+		draw_polyline(outline, stroke, 2.0, true)
+		if not filled:
+			draw_circle(center, radius * 0.20, Color("#fff8f3"))
+			return
+		draw_circle(center + Vector2(-radius * 0.32, -radius * 0.22), radius * 0.10, Color.WHITE)
+		draw_circle(center + Vector2(radius * 0.32, -radius * 0.22), radius * 0.10, Color.WHITE)
+		draw_arc(center + Vector2(0.0, -radius * 0.05), radius * 0.42, PI * 0.18, PI * 0.82, 14, Color.WHITE, maxf(2.0, radius * 0.17), true)
+
 var model := Model.new()
 var data := Data.new()
 var cards: Dictionary = {}
@@ -28,8 +92,8 @@ var reward_image: TextureRect
 var failure_image: TextureRect
 var reduced_motion: bool = false
 var _background: ColorRect
-var _success: Label
-var _mistakes: Label
+var _success: ProgressBadges
+var _mistakes: ProgressBadges
 var _message: Label
 var _outcome: Control
 var _stage: Panel
@@ -38,20 +102,27 @@ var _title: Label
 var _caption: Label
 var _medallion: Panel
 var _reward_number: Label
-var _motion_button: Button
+var _reward_flight_image: TextureRect
 var _collection_grid: VBoxContainer
 var _collection_back: Button
+var _collection_rows: Array[GridContainer] = []
 var _reward_slots: Dictionary = {}
 var _collection_focus_modes: Dictionary = {}
 var _focus_before_collection: Control
 var _last_phase: String = ""
 var _rebuilding: bool = false
 var _reward_tween: Tween
+var _reward_transfer_active: bool = false
+var _reward_delivered_to_collection: bool = false
 var _feedback_tweens: Array[Tween] = []
 var _feedback_origins: Dictionary = {}
 var _holding_chest: bool = false
 var _hold_elapsed: float = 0.0
 var _drag_distance: float = 0.0
+var _dragging_chest: bool = false
+var _drag_has_anchor: bool = false
+var _drag_anchor_position: Vector2 = Vector2.ZERO
+var _drag_anchor_offset: Vector2 = Vector2.ZERO
 var _host: JavaScriptObject
 var _hidden_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
@@ -92,27 +163,19 @@ func _build_controls() -> void:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
 	column.add_child(header)
-	_success = Style.label("", 28)
+	_success = ProgressBadges.new(ProgressBadges.SUCCESS)
+	_success.name = "MatchProgress"
 	_success.tooltip_text = "0 matches"
 	_success.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_success.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_success.add_theme_color_override("font_color", Style.GOOD)
 	header.add_child(_success)
-	_mistakes = Style.label("", 30)
+	_mistakes = ProgressBadges.new(ProgressBadges.RETRY)
+	_mistakes.name = "RetryProgress"
 	_mistakes.tooltip_text = "0 mistakes"
 	_mistakes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_mistakes.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_mistakes.add_theme_color_override("font_color", Style.WRONG)
 	header.add_child(_mistakes)
-	_motion_button = Button.new()
-	_motion_button.name = "Motion"
-	_motion_button.text = "FX"
-	_motion_button.tooltip_text = "Reduce motion"
-	_motion_button.toggle_mode = true
-	_motion_button.pressed.connect(func() -> void: set_reduced_motion(_motion_button.button_pressed))
-	header.add_child(_motion_button)
 	collection_button = Button.new()
 	collection_button.name = "Rewards"
+	_set_accessibility_name(collection_button, "My rewards")
 	collection_button.icon = load(Data.theme("spring").symbol)
 	collection_button.expand_icon = true
 	collection_button.tooltip_text = "View collected rewards"
@@ -125,9 +188,10 @@ func _build_controls() -> void:
 		var button := Button.new()
 		var palette: Dictionary = Data.theme(id)
 		button.name = palette.name
+		_set_accessibility_name(button, palette.name)
 		button.icon = load(palette.symbol)
 		button.expand_icon = true
-		button.tooltip_text = "Switch to " + palette.name
+		button.tooltip_text = ""
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(choose_theme.bind(id))
@@ -158,6 +222,7 @@ func _build_controls() -> void:
 	chest_button = Button.new()
 	chest_button.text = ""
 	chest_button.tooltip_text = "Open the treasure chest"
+	_set_accessibility_name(chest_button, "Open the treasure chest")
 	chest_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	for style_name in ["normal", "hover", "pressed", "disabled"]:
 		chest_button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
@@ -245,6 +310,8 @@ func _build_collection_shell() -> void:
 	header.add_child(_collection_back)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	column.add_child(scroll)
 	_collection_grid = VBoxContainer.new()
 	_collection_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -256,11 +323,14 @@ func _build_collection() -> void:
 	for child in _collection_grid.get_children():
 		child.queue_free()
 	_reward_slots.clear()
+	_collection_rows.clear()
 	for theme_id in Model.THEMES:
 		_collection_grid.add_child(Style.label(Data.theme(theme_id).name, 26))
 		var row := GridContainer.new()
 		row.columns = 5
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_collection_grid.add_child(row)
+		_collection_rows.append(row)
 		for reward in Data.rewards(theme_id):
 			var slot := VBoxContainer.new()
 			slot.custom_minimum_size = Vector2(80, 104)
@@ -276,6 +346,7 @@ func _build_collection() -> void:
 			row.add_child(slot)
 			_reward_slots[reward.id] = {"picture": picture, "label": label, "reward": reward}
 	_refresh_collection()
+	_layout_collection()
 
 
 func _refresh_collection() -> void:
@@ -299,17 +370,24 @@ func _picture(parent: Node) -> TextureRect:
 	return picture
 
 
+func _set_accessibility_name(control: Control, label: String) -> void:
+	for property in control.get_property_list():
+		if property.name == "accessibility_name":
+			control.set("accessibility_name", label)
+			return
+
+
 func new_round(seed_value: int = -1) -> void:
 	_rebuilding = true
 	feedback_timer.stop()
 	effects.clear()
 	chest.clear()
 	_cancel_chest_hold()
+	_finish_chest_drag()
 	audio.halt()
-	if _reward_tween != null:
-		_reward_tween.kill()
+	_cancel_reward_delivery(false)
+	_reward_delivered_to_collection = false
 	_stop_feedback_animations()
-	_medallion.scale = Vector2.ONE
 	_last_phase = ""
 	if not model.reset(data.words, seed_value):
 		_rebuilding = false
@@ -341,14 +419,12 @@ func _refresh() -> void:
 		button.button_pressed = Model.THEMES[index] == model.theme_id
 		button.disabled = model.chest_state == "opening"
 		Style.button(button, palette.accent)
-	Style.button(_motion_button, palette.accent)
-	_motion_button.button_pressed = reduced_motion
 	Style.button(collection_button, palette.accent)
 	collection_button.icon = load(palette.symbol)
 	Style.button(replay_button, palette.accent)
-	_success.text = "\u25cf".repeat(model.successes)
+	_success.set_filled_count(model.successes)
 	_success.tooltip_text = "%d matches" % model.successes
-	_mistakes.text = "\u00d7".repeat(model.mistakes)
+	_mistakes.set_filled_count(model.mistakes)
 	_mistakes.tooltip_text = "%d mistakes" % model.mistakes
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
 	grid.visible = playing
@@ -368,7 +444,7 @@ func _refresh() -> void:
 	chest.visible = won
 	chest_button.visible = won
 	failure_image.visible = model.phase == "lost"
-	_medallion.visible = won and model.chest_state == "opened"
+	_medallion.visible = won and model.chest_state == "opened" and not _reward_transfer_active and not _reward_delivered_to_collection
 	reward_image.visible = _medallion.visible
 	chest_button.disabled = model.chest_state != "closed"
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.accent.darkened(0.67), palette.accent.lightened(0.35), 26, 2))
@@ -411,7 +487,17 @@ func _layout() -> void:
 	if grid == null:
 		return
 	grid.columns = 4 if size.x >= size.y else 2
+	_layout_collection()
 	_layout_result()
+
+
+func _layout_collection() -> void:
+	if _collection_rows.is_empty():
+		return
+	var usable_width: float = maxf(0.0, size.x - 32.0)
+	var columns: int = clampi(floori((usable_width + 4.0) / 84.0), 2, 5)
+	for row in _collection_rows:
+		row.columns = columns
 
 
 func _layout_result() -> void:
@@ -466,9 +552,7 @@ func set_reduced_motion(value: bool) -> void:
 	if value:
 		_stop_feedback_animations()
 		effects.clear()
-		if _reward_tween != null:
-			_reward_tween.kill()
-		_medallion.scale = Vector2.ONE
+		_cancel_reward_delivery(true)
 		chest.finish_immediately()
 	if not data.words.is_empty():
 		_refresh()
@@ -478,6 +562,7 @@ func _open_chest() -> void:
 	var rewards: Array = Data.rewards(model.theme_id)
 	if rewards.is_empty() or not model.begin_open(rewards.pick_random().id):
 		return
+	_reward_delivered_to_collection = false
 	audio.interact(model.reward_theme)
 	audio.cue(model.reward_theme + "-open")
 	effects.start(Data.theme(model.reward_theme), reduced_motion)
@@ -487,12 +572,94 @@ func _open_chest() -> void:
 func _on_chest_opened() -> void:
 	if not model.finish_open():
 		return
+	var reward_id := model.reward_id
 	_record_reward(model.reward_id)
 	audio.cue("", model.reward_theme + "-open")
-	if not reduced_motion:
-		_medallion.scale = Vector2.ONE * 0.2
-		_reward_tween = create_tween()
-		_reward_tween.tween_property(_medallion, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	if not collected_rewards.has(reward_id) or reduced_motion or collection_page.visible:
+		_cancel_reward_delivery(true)
+		return
+	_start_reward_delivery(reward_id)
+
+
+func _start_reward_delivery(reward_id: String) -> void:
+	_cancel_reward_delivery(true)
+	_medallion.scale = Vector2.ONE * 0.2
+	collection_button.pivot_offset = collection_button.size * 0.5
+	_reward_tween = create_tween()
+	_reward_tween.tween_property(_medallion, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_reward_tween.tween_interval(0.15)
+	_reward_tween.tween_callback(_show_reward_flight.bind(reward_id))
+	_reward_tween.tween_method(_place_reward_flight, 0.0, 1.0, 0.65).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_reward_tween.tween_callback(func() -> void:
+		_place_reward_flight(1.0)
+		collection_button.scale = Vector2.ONE * 1.12
+	)
+	_reward_tween.tween_interval(0.08)
+	_reward_tween.tween_property(collection_button, "scale", Vector2.ONE, 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_reward_tween.tween_callback(_finish_reward_delivery)
+
+
+func _show_reward_flight(reward_id: String) -> void:
+	var reward: Dictionary = Data.reward(reward_id)
+	if reward.is_empty():
+		return
+	if _reward_flight_image == null or not is_instance_valid(_reward_flight_image):
+		_reward_flight_image = TextureRect.new()
+		_reward_flight_image.name = "RewardFlight"
+		_reward_flight_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_reward_flight_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_reward_flight_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		_reward_flight_image.z_index = collection_page.z_index - 5
+		add_child(_reward_flight_image)
+	_reward_transfer_active = true
+	_reward_flight_image.texture = load(reward.symbol)
+	_reward_flight_image.visible = true
+	_medallion.visible = false
+	reward_image.visible = false
+	_place_reward_flight(0.0)
+
+
+func _place_reward_flight(progress: float) -> void:
+	if _reward_flight_image == null or not is_instance_valid(_reward_flight_image) or not _reward_flight_image.visible:
+		return
+	var start_rect: Rect2 = reward_image.get_global_rect()
+	var start_center: Vector2 = start_rect.get_center()
+	var target_center: Vector2 = collection_button.get_global_rect().get_center()
+	var eased: float = smoothstep(0.0, 1.0, clampf(progress, 0.0, 1.0))
+	var arc: float = clampf(start_center.distance_to(target_center) * 0.18, 26.0, 82.0)
+	var center: Vector2 = start_center.lerp(target_center, eased) + Vector2(0.0, -sin(eased * PI) * arc)
+	var end_edge: float = clampf(minf(collection_button.get_global_rect().size.x, collection_button.get_global_rect().size.y) * 0.48, 30.0, 46.0)
+	var flight_size: Vector2 = start_rect.size.lerp(Vector2.ONE * end_edge, eased)
+	_reward_flight_image.size = flight_size
+	_reward_flight_image.position = get_global_transform().affine_inverse() * center - flight_size * 0.5
+
+
+func _finish_reward_delivery() -> void:
+	if _reward_flight_image != null and is_instance_valid(_reward_flight_image):
+		_reward_flight_image.queue_free()
+	_reward_flight_image = null
+	_reward_transfer_active = false
+	_reward_delivered_to_collection = true
+	collection_button.scale = Vector2.ONE
+	_reward_tween = null
+
+
+func _cancel_reward_delivery(show_static_reveal: bool = true) -> void:
+	var had_motion := _reward_tween != null or _reward_transfer_active or (_reward_flight_image != null and is_instance_valid(_reward_flight_image))
+	if _reward_tween != null:
+		_reward_tween.kill()
+	_reward_tween = null
+	if _reward_flight_image != null and is_instance_valid(_reward_flight_image):
+		_reward_flight_image.queue_free()
+	_reward_flight_image = null
+	_reward_transfer_active = false
+	collection_button.scale = Vector2.ONE
+	collection_button.pivot_offset = collection_button.size * 0.5
+	_medallion.scale = Vector2.ONE
+	if show_static_reveal and model.phase == "won" and model.chest_state == "opened" and (had_motion or not _reward_delivered_to_collection):
+		_reward_delivered_to_collection = false
+		_medallion.visible = true
+		reward_image.visible = true
 
 
 func _replay() -> void:
@@ -503,12 +670,11 @@ func _replay() -> void:
 
 func on_page_hidden() -> void:
 	_cancel_chest_hold()
+	_finish_chest_drag()
 	audio.halt()
 	chest.finish_immediately()
 	effects.clear()
-	if _reward_tween != null:
-		_reward_tween.kill()
-	_medallion.scale = Vector2.ONE
+	_cancel_reward_delivery(true)
 
 
 func _notification(what: int) -> void:
@@ -586,12 +752,15 @@ func _start_chest_hold() -> void:
 	_holding_chest = true
 	_hold_elapsed = 0.0
 	_drag_distance = 0.0
+	_dragging_chest = true
+	_drag_has_anchor = false
 	set_process(true)
 
 
 func _end_chest_hold() -> void:
 	if _holding_chest:
 		_cancel_chest_hold()
+	_finish_chest_drag()
 
 
 func _cancel_chest_hold() -> void:
@@ -599,6 +768,13 @@ func _cancel_chest_hold() -> void:
 	_hold_elapsed = 0.0
 	if chest != null:
 		chest.set_hold_progress(0.0)
+
+
+func _finish_chest_drag() -> void:
+	_dragging_chest = false
+	_drag_has_anchor = false
+	_drag_anchor_position = Vector2.ZERO
+	_drag_anchor_offset = Vector2.ZERO
 
 
 func _process(delta: float) -> void:
@@ -614,17 +790,43 @@ func _process(delta: float) -> void:
 
 
 func _chest_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_start_chest_hold()
+		else:
+			_end_chest_hold()
+		return
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_start_chest_hold()
+		else:
+			_end_chest_hold()
+		return
+	if not _dragging_chest:
+		return
 	var relative := Vector2.ZERO
-	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	var position := Vector2.ZERO
+	if event is InputEventMouseMotion:
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) == 0 and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			return
 		relative = event.relative
+		position = event.position
 	elif event is InputEventScreenDrag:
 		relative = event.relative
-	if relative == Vector2.ZERO:
+		position = event.position
+	else:
 		return
-	_drag_distance += relative.length()
+	if relative == Vector2.ZERO and (not _drag_has_anchor or position == _drag_anchor_position):
+		return
+	if not _drag_has_anchor:
+		_drag_anchor_position = position - relative
+		_drag_anchor_offset = chest.drag_offset
+		_drag_has_anchor = true
+	var displacement: Vector2 = position - _drag_anchor_position
+	_drag_distance = maxf(_drag_distance, displacement.length())
 	if _drag_distance > 10.0:
 		_cancel_chest_hold()
-	_drag_chest(relative)
+	chest.set_drag_offset(_drag_anchor_offset + displacement)
 
 
 func _drag_chest(delta: Vector2) -> void:
@@ -632,6 +834,9 @@ func _drag_chest(delta: Vector2) -> void:
 
 
 func _show_collection() -> void:
+	_cancel_chest_hold()
+	_finish_chest_drag()
+	_cancel_reward_delivery(true)
 	_refresh_collection()
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	_collection_focus_modes.clear()

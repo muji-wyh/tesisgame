@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/bed.svg-cb912f5da36056279572a546c2dc4154.ctex
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.85
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

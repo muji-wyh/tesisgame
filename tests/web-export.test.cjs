@@ -52,6 +52,14 @@ test('the Godot command runner waits for the engine and propagates its real fail
   );
 });
 
+test('accessible help describes the current controls rather than the removed motion menu', () => {
+  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
+  const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+  assert.ok(help, 'The canvas needs accessible gameplay instructions.');
+  assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button/i);
+  assert.match(help, /device.*reduced-motion/i);
+});
+
 test('Web delivery compresses and fingerprints assets without mixing cached game versions', (t) => {
   const filename = path.join(root, 'tools', 'package-web.cjs');
   assert.ok(fs.existsSync(filename), 'The mobile Web export packager is missing');

@@ -30,6 +30,20 @@ without mixing old and new game versions, and game-only changes reuse the same e
 HTML revalidates so returning players discover updates. Each build removes obsolete generated
 asset names without deleting unrelated files in the output directory.
 
+Chest and illustration textures use 85%-quality WebP imports at their existing resolution.
+The original SVG/PNG artwork is unchanged. This reduces the game-pack download without
+removing words, reducing the collection, or adding image requests during play.
+
+The maintained HTML shell includes an inline, dependency-free treasure toy: tap it, wiggle
+it sideways, or use Enter/Space to make stars while the game downloads. It works before the
+engine script arrives and needs no extra images, fonts, audio, or device-motion permission.
+Its finite effects respect reduced motion and stop when the page is hidden or loading ends.
+Sparkles are temporary loading-screen play, not saved collection rewards.
+
+Engine and game-pack requests start together. The progress bar tracks actual downloaded
+bytes; completion of the download is distinguished from the engine being ready. Failed
+downloads, including interrupted response bodies, show an English error and a retry button.
+
 Word pronunciations and immediate sound effects stay in the startup **PCK alongside WASM**.
 The four background tracks and sixteen other spoken prompts are separate, content-hashed
 Godot `.sample` resources. Their URLs are embedded in HTML, so no extra startup manifest
@@ -50,32 +64,35 @@ For development in the editor, open `project.godot`. The maintained browser shel
 
 Production: `https://gentle-forest-02ff42900.3.azurestaticapps.net`
 
-Like FootisesGame3, this uses a manual Azure Static Web Apps deployment: app `tesisgame`,
-Free tier, resource group `rg-footises`, East Asia, in the **Visual Studio Enterprise
-Subscription**. The separate `footises-game` app is not changed.
+This uses a manual Azure Static Web Apps deployment: app `tesisgame`, Free tier,
+resource group `rg-footises`, East Asia, in the **Visual Studio Enterprise
+Subscription**.
 
-With Azure CLI signed in and the Static Web Apps CLI (`swa`) installed, deploy the existing
-`build\web` export from the repository root:
+With Azure CLI signed in and the Static Web Apps CLI (`swa`) installed, build and publish:
 
 ```powershell
-$env:SWA_CLI_DEPLOYMENT_TOKEN = az staticwebapp secrets list `
-    --subscription "Visual Studio Enterprise Subscription" `
-    --name tesisgame --resource-group rg-footises `
-    --query "properties.apiKey" --output tsv
-if ($LASTEXITCODE -ne 0 -or !$env:SWA_CLI_DEPLOYMENT_TOKEN) { throw "Azure deployment token unavailable." }
-try {
-    swa deploy .\build\web --swa-config-location .\web --env production
-    if ($LASTEXITCODE -ne 0) { throw "Azure deployment failed." }
-} finally {
-    Remove-Item Env:\SWA_CLI_DEPLOYMENT_TOKEN
-}
+npm run deploy
+```
+
+This runs `tools\deploy-web.ps1` with Windows PowerShell 5.1 or newer. The script
+builds the Web export, explicitly selects the personal subscription
+`2909b61b-7489-445e-9039-2fd51429745b` without changing your Azure CLI default,
+confirms the production hostname, and keeps the deployment token in the process
+environment only. Build, authentication, and deployment failures stop the command;
+the previous token environment and working directory are restored afterward.
+It does not commit or push Git changes.
+
+To publish an export you have already built:
+
+```powershell
+npm run deploy -- -SkipBuild
 ```
 
 `web\staticwebapp.config.json` supplies engine MIME types, immutable caching for hashed assets,
 and `Cache-Control: no-cache` for HTML and other unversioned files. `Vary: Accept-Encoding`
 keeps compressed and uncompressed responses distinct in caches. The build copies this
-configuration into the export; the deployment command also explicitly selects the source
-configuration. Run `npm run build:web` before publishing source or import-setting changes.
+configuration into the export; the deployment script also explicitly selects the source
+configuration. Omit `-SkipBuild` after changing source files or import settings.
 
 ## Embed in a website
 
@@ -94,9 +111,9 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
-Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Matches and mistakes appear as green and red icons in the top-left instead of text counters. Correct pairs bounce; incorrect pairs shake.
+Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left instead of plain text counters. Correct pairs bounce; incorrect pairs shake.
 
-Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. Four always-visible seasonal buttons change the appearance and music without resetting progress. The compact **FX** button toggles reduced motion. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
+Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. Four always-visible seasonal buttons change the appearance and music without resetting progress or showing a redundant switch-season tooltip. Motion follows the device or browser's reduced-motion preference; there is no extra FX control. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **100 short, concrete English words** for parent-guided play
 with young children. Each round still uses only five different words on eight cards, rather
@@ -104,7 +121,12 @@ than showing the whole pool at once. Tap a picture or word to hear its pronuncia
 
 The winning chest follows the selected theme and can be dragged inside its panel. Hold it for 1.2 seconds to charge it: the shake intensifies without displaying a progress bar, then the existing 1.8-second reveal starts with imported chest artwork, native light layers, two expanding rings, 72 seasonal particles and a reward medallion. Releasing early or dragging cancels the charge. Themes have different particle trajectories, palettes, music, effects and English speech. Theme switching is disabled during opening. Later theme changes do not alter the earned reward or grant another one.
 
-Each season has ten named reward variants with ten different generated illustrations. Opened rewards are stored locally and appear on the **Rewards** page; locked slots remain hidden until earned. Reduced motion skips moving feedback and reveals the reward immediately after the required hold. **Play again** starts a new round. Audio starts with normal game interaction and stops on hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
+After the reveal, the earned medallion pops up and flies into the **My rewards** entry,
+which gives a small arrival bounce. The reward is saved before this cosmetic animation;
+opening the collection, replaying, or hiding the page cannot lose or duplicate it.
+Reduced motion keeps a static reveal instead of the flight.
+
+Each season has ten named reward variants with ten different generated illustrations. Opened rewards are stored locally and appear on the **My rewards** page; locked slots remain hidden until earned. The collection keeps touch and wheel scrolling without visible scrollbars. Reduced motion skips moving feedback and reveals the reward immediately after the required hold. **Play again** starts a new round. Audio starts with normal game interaction and stops on hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
 
 Particle textures load only for the first animated celebration, rather than delaying startup.
 Reduced-motion players do not load those unused textures.
@@ -129,7 +151,7 @@ Editor/native play continues to use local audio.
 | `image` | Unique local picture under `assets/images/words/`. |
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 
-The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech is generated locally using **Microsoft Zira Desktop (en-US)**; players do not need that voice installed. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
+The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate the source recordings; ordinary builds and gameplay do not call a speech service or need speech credentials. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
 
 The collection keeps words to 2-6 lowercase letters and covers familiar picture-book topics:
 
@@ -152,10 +174,42 @@ external images or text labels.
 ```powershell
 node tools\generate-images.cjs
 node tools\generate-sfx.cjs
-powershell.exe -NoProfile -File .\tools\generate-voices.ps1
 ```
 
 Edit `voice-prompts.json` to change the spoken prompts. New optional prompt IDs must also be covered by the Web preset's exclusions; the build rejects optional audio accidentally left in the PCK. When adding a word, add its image-generation definition, JSON entry and pronunciation recording. Run `npm run build:web` afterward: the vocabulary, word pronunciations and immediate effects are packaged into Godot's PCK, while optional music and prompts are published beside it. There is no second runtime word list.
+
+### Regenerate natural speech
+
+Voice regeneration and its conversion tests additionally require **FFmpeg** on PATH.
+`tools\generate-voices.cjs` uses Jenny's `friendly` style at degree `1.15`, with an 8% slower
+speaking rate. A short leading pause keeps card pronunciation responsive. FFmpeg removes
+excess final silence while retaining a gentle 160 ms tail, quiet word endings, and pauses
+within sentences. It converts the service's 24 kHz output to the existing **22.05 kHz,
+PCM16 mono** asset format, preserving the mobile audio import settings.
+
+The personal Azure Speech resource is `tesisgame-speech`, **F0**, in `rg-footises`, East Asia.
+The generator spaces requests for that tier, checks that the selected neural style is
+available, and keeps existing recordings until the complete batch has been generated and
+validated. It fails explicitly rather than silently reverting to a desktop voice.
+
+```powershell
+$env:SPEECH_REGION = "eastasia"
+$env:SPEECH_KEY = az cognitiveservices account keys list `
+    --subscription "Visual Studio Enterprise Subscription" `
+    --name tesisgame-speech --resource-group rg-footises `
+    --query key1 --output tsv
+if ($LASTEXITCODE -ne 0 -or !$env:SPEECH_KEY) { throw "Speech credentials unavailable." }
+try {
+    node tools\generate-voices.cjs
+    if ($LASTEXITCODE -ne 0) { throw "Voice generation failed." }
+} finally {
+    Remove-Item Env:\SPEECH_KEY
+    Remove-Item Env:\SPEECH_REGION
+}
+```
+
+The existing `tools\generate-voices.ps1` command forwards to the same generator.
+Keep keys in the process environment, never in source files or the Web export.
 
 ## Chest artwork
 
@@ -171,10 +225,10 @@ Selected artwork is imported from the user-provided **Modern 2D Animated Chests 
 The importer copies 19 PNGs byte-for-byte, records SHA256 and source paths, and converts the Crystal prefab's rest transforms, pivots, flips and ordering into `assets\chests\manifest.json`. Unity scripts, materials, prefabs and animation clips are **not** executed or shipped; motion is recreated natively in Godot.
 
 ```powershell
-node tools\import-chests.cjs "C:\uworks\tesisgameu\Assets\Modern 2D Animated Chests Pack_FREE Demo"
+node tools\import-chests.cjs "D:\uwork\AssetsSource\Modern 2D Animated Chests Pack_FREE Demo"
 ```
 
-The supplied source directory is read-only to this workflow. `assets\chests\SOURCE.txt` records provenance. The free demo has three designs, not four independently authored seasonal chest models.
+The supplied source directory is read-only to this workflow. `assets\chests\SOURCE.txt` records provenance. The free demo has three designs, not four independently authored seasonal chest models. Its other `Demo\Sprites` images are locked, watermarked full-version previews, not additional animated chest assets. They are not imported or stripped of their overlays.
 
 ## Background music and third-party assets
 
@@ -202,7 +256,7 @@ npm run test:browser
 npm run test:all
 ```
 
-The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, imported chest files and Web-export contracts. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, loading errors and iframe embedding.
+The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and flight, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 
 The Windows Playwright WebKit runtime exposes WebGL 2 but not AudioContext or OffscreenCanvas. In that environment the real Godot Dummy audio driver is selected and the host reports the missing capability. An ordinary multisampled canvas selects Emscripten's built-in shader presentation path, avoiding that runtime's repeated framebuffer-blit error. No fake WebAudio or WebGL APIs are substituted. Chromium exercises real browser audio APIs.
 

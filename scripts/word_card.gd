@@ -2,10 +2,17 @@ extends Button
 
 const Style = preload("res://scripts/ui_style.gd")
 
+class MatchMark:
+	extends Control
+
+	func _draw() -> void:
+		Style.draw_match_badge(self, size * 0.5, minf(size.x, size.y) * 0.44)
+
+
 var card_data: Dictionary = {}
 var picture: TextureRect
 var word_label: Label
-var match_mark: Label
+var match_mark: Control
 var accent: Color = Style.GOOD
 
 
@@ -36,14 +43,14 @@ func setup(value: Dictionary) -> void:
 	word_label.visible = value.kind == "word"
 	add_child(word_label)
 	word_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	match_mark = Style.label("\u2713", 28)
-	match_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	match_mark.add_theme_color_override("font_color", Style.GOOD)
+	match_mark = MatchMark.new()
+	match_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(match_mark)
-	match_mark.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	match_mark.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	match_mark.offset_left = -36
 	match_mark.offset_right = -8
-	match_mark.offset_top = 3
-	match_mark.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	match_mark.offset_top = 8
+	match_mark.offset_bottom = 36
 	match_mark.hide()
 	resized.connect(_fit_text)
 	_fit_text()

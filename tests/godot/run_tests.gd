@@ -65,6 +65,34 @@ func wrong_pair_for(model) -> Array:
 	return []
 
 
+func win_round(app) -> void:
+	for pair in pairs_for(app.model):
+		app.cards[pair[0]].pressed.emit()
+		app.cards[pair[1]].pressed.emit()
+		app.feedback_timer.timeout.emit()
+
+
+func visible_reward_flight(app) -> TextureRect:
+	if not has_property(app, "_reward_flight_image"):
+		return null
+	var flight = app._reward_flight_image
+	if flight != null and is_instance_valid(flight) and flight.visible:
+		return flight as TextureRect
+	return null
+
+
+func check_no_reward_flight(app, message: String) -> void:
+	check(has_property(app, "_reward_flight_image"), "The reward flight overlay exists")
+	check(visible_reward_flight(app) == null, message)
+
+
+func step_reward_tween(app, seconds: float, message: String) -> void:
+	check(app._reward_tween != null and app._reward_tween.is_valid(), message)
+	if app._reward_tween != null:
+		app._reward_tween.pause()
+		app._reward_tween.custom_step(seconds)
+
+
 func _test_rounds(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	var seen_themes: Dictionary = {}
@@ -297,6 +325,10 @@ func _test_controls() -> void:
 	var card = load("res://scripts/word_card.gd").new()
 	card.setup({"id": "apple:image", "kind": "image", "word": words[5]})
 	check(card.tooltip_text == "Picture: apple", "Picture descriptions do not assume a singular countable noun")
+	check(not (card.match_mark is Label), "Matched cards use native badge artwork, not missing-font checkmark glyphs")
+	check(not card.match_mark.visible, "Unmatched cards do not display a success badge")
+	card.refresh(load("res://scripts/game_data.gd").theme("spring"), false, true, false, false)
+	check(card.match_mark.visible, "A matched card displays the success badge")
 	card.free()
 
 
@@ -406,12 +438,24 @@ func _test_scene() -> void:
 	check(app.cards.size() == 8, "The scene creates eight native card buttons")
 	check(app.find_child("Mute", true, false) == null and app.find_child("Listen", true, false) == null,
 		"Mute and Listen controls are removed")
+	check(app.find_child("Motion", true, false) == null,
+		"The FX motion button is removed while OS/browser reduced-motion remains supported")
 	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 4,
 		"All four themes are directly available")
+	if has_property(app, "theme_buttons"):
+		check(app.theme_buttons.all(func(button: Button) -> bool: return button.tooltip_text.is_empty()),
+			"Season buttons do not show redundant hover/tap tooltip popups")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
 		"The rewards collection has an in-game page")
+	var scrolls: Array = app.collection_page.find_children("*", "ScrollContainer", true, false)
+	var collection_scroll := scrolls[0] as ScrollContainer if not scrolls.is_empty() else null
+	check(collection_scroll != null, "The rewards collection scrolls in a native ScrollContainer")
+	if collection_scroll != null:
+		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
+			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER,
+			"Rewards scrollbars are hidden without disabling touch or wheel scrolling")
 	check(app._reward_slots.size() == 40, "The rewards page contains all forty seasonal rewards")
 	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
@@ -436,7 +480,10 @@ func _test_scene() -> void:
 			"Closing rewards restores underlying keyboard focus")
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Feedback lasts 700ms")
-	check(app._success.text == "" and app._mistakes.text == "", "Empty counters show no text or icons")
+	check(not (app._success is Label) and not (app._mistakes is Label),
+		"Progress is drawn with friendly native badges instead of text characters")
+	check(app._success.has_method("set_filled_count") and app._mistakes.has_method("set_filled_count"),
+		"Progress indicators expose filled token counts")
 	var dimensions: Array[Vector2i] = [
 		Vector2i(320, 320), Vector2i(375, 667), Vector2i(390, 844),
 		Vector2i(430, 932), Vector2i(844, 390), Vector2i(768, 1024),
@@ -470,7 +517,11 @@ func _test_scene() -> void:
 	app.cards[first_pair[1]].pressed.emit()
 	check(app.cards[first_pair[0]].scale != Vector2.ONE and app.cards[first_pair[1]].scale != Vector2.ONE,
 		"Matching cards immediately start a lively bounce")
-	check(app._success.text == "\u25cf", "A match is represented by one icon")
+	if app._success.has_method("set_filled_count"):
+		check(app._success.filled_count == 1 and app._success.total_count == 3,
+			"A match fills exactly one friendly success badge")
+	else:
+		check(false, "A match fills exactly one friendly success badge")
 	app.set_reduced_motion(true)
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Enabling reduced motion immediately stops active card animation")
@@ -504,6 +555,8 @@ func _test_scene() -> void:
 	check(not app.model.reward_id.is_empty(), "Opening selects a seasonal reward variant")
 	check(app.collected_rewards.has(app.model.reward_id) if has_property(app, "collected_rewards") else false,
 		"Opened rewards are recorded in the collection")
+	check_no_reward_flight(app, "Reduced motion skips the moving reward flight")
+	check(app.collection_button.scale == Vector2.ONE, "Reduced motion does not bounce the rewards button")
 	app.choose_theme("winter")
 	check(app.model.reward_theme == "spring" and app.chest.theme_id == "spring", "Earned chest remains spring")
 	check(app.reward_image.visible, "Opening displays the reward medallion")
@@ -524,9 +577,59 @@ func _test_scene() -> void:
 	check(app.theme_buttons.all(func(button: Button) -> bool: return button.disabled) if has_property(app, "theme_buttons") else false,
 		"Opening disables theme selection")
 	check(app.effects.particle_count() == 72, "Opening emits exactly 72 seasonal particles")
-	await create_timer(1.95).timeout
+	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
+	var opened_reward_id: String = app.model.reward_id
+	var reward_count_before: int = app.collected_rewards.size()
+	var was_collected: bool = app.collected_rewards.has(opened_reward_id)
+	app.chest.finish_immediately()
 	check(app.model.chest_state == "opened", "The native animation completes the reward")
+	check(app.collected_rewards.has(opened_reward_id), "The opened reward is recorded before visual delivery")
+	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
+		"The reward collection changes exactly once when opening finishes")
+	check(visible_reward_flight(app) == null, "The flight copy waits for the reveal pop and pause")
+	step_reward_tween(app, 0.71, "The reward tween starts the flight after the pop and pause")
+	var flight := visible_reward_flight(app)
+	check(flight != null, "A visible reward copy appears for the flight")
+	if flight != null:
+		var data_script: GDScript = load("res://scripts/game_data.gd")
+		var reward: Dictionary = data_script.reward(opened_reward_id)
+		check(flight.get_parent() == app and flight.z_index < app.collection_page.z_index,
+			"The reward flight is a root overlay below the collection page")
+		check(flight.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+			"The reward flight copy never steals input")
+		check(flight.texture == load(reward.symbol),
+			"The reward flight uses the locked earned reward texture")
+		var start_size: Vector2 = flight.size
+		step_reward_tween(app, 0.32, "The reward tween advances along the flight path")
+		root.size = Vector2i(390, 844)
+		app.choose_theme("winter")
+		var manual_tween: Tween = app._reward_tween
+		var manual_elapsed := manual_tween.get_total_elapsed_time()
+		await process_frame
+		await process_frame
+		check(is_equal_approx(manual_tween.get_total_elapsed_time(), manual_elapsed),
+			"Manual reward timing is unaffected by SceneTree frame delays")
+		check(flight.texture == load(reward.symbol),
+			"Changing season during flight does not swap the earned reward artwork")
+		step_reward_tween(app, 0.33, "The reward tween reaches the current rewards button center")
+		var target_center: Vector2 = app.collection_button.get_global_rect().get_center()
+		check(flight.get_global_rect().get_center().distance_to(target_center) <= 1.0,
+			"The reward flight lands on the actual current My Rewards button center")
+		check(flight.size.x < start_size.x and flight.size.y < start_size.y,
+			"The reward shrinks into the collection button during flight")
+		check(app.collection_button.scale != Vector2.ONE,
+			"The rewards button visibly bounces on arrival")
+		if app._reward_tween != null:
+			app._reward_tween.custom_step(1.0)
+		await process_frame
+		check(app.collection_button.scale == Vector2.ONE,
+			"The rewards button settles back to normal scale")
+		check(visible_reward_flight(app) == null,
+			"The flight copy is removed after arrival")
+	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
+		"The flight animation does not duplicate the collection entry")
 	app.new_round(90)
+	check_no_reward_flight(app, "Starting a new round leaves no reward flight behind")
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
@@ -544,6 +647,42 @@ func _test_scene() -> void:
 			"Chest dragging stays inside its canvas after resizing")
 	else:
 		check(false, "The chest can be dragged inside its canvas")
+	if app.has_method("_chest_input"):
+		root.size = Vector2i(960, 540)
+		await process_frame
+		await process_frame
+		app.chest.set_drag_offset(Vector2.ZERO)
+		app.chest_button.button_down.emit()
+		var press := InputEventMouseButton.new()
+		press.button_index = MOUSE_BUTTON_LEFT
+		press.pressed = true
+		Input.parse_input_event(press)
+		var mouse_motion := InputEventMouseMotion.new()
+		mouse_motion.position = Vector2(160, 90)
+		mouse_motion.relative = Vector2(5.0, 0.0)
+		mouse_motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+		app._chest_input(mouse_motion)
+		var emulated_touch := InputEventScreenDrag.new()
+		emulated_touch.index = 0
+		emulated_touch.position = mouse_motion.position
+		emulated_touch.relative = mouse_motion.relative
+		app._chest_input(emulated_touch)
+		check(app.chest.drag_offset.distance_to(Vector2(5.0, 0.0)) < 0.01,
+			"Duplicated touch/emulated mouse drag tracks the pointer exactly once")
+		var release := InputEventMouseButton.new()
+		release.button_index = MOUSE_BUTTON_LEFT
+		release.pressed = false
+		Input.parse_input_event(release)
+		app.chest_button.button_up.emit()
+		var released_drag := InputEventScreenDrag.new()
+		released_drag.index = 0
+		released_drag.position = Vector2(220, 120)
+		released_drag.relative = Vector2(5.0, 0.0)
+		app._chest_input(released_drag)
+		check(app.chest.drag_offset.distance_to(Vector2(5.0, 0.0)) < 0.01,
+			"Chest drag stops on early release instead of following stale touch events")
+	else:
+		check(false, "The chest receives native drag input")
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._process(1.21)
@@ -551,16 +690,45 @@ func _test_scene() -> void:
 	app.on_page_hidden()
 	check(app.model.chest_state == "opened", "Hiding finalizes an already-earned opening once")
 	check(app.effects.particle_count() == 0, "Hiding during opening clears particles")
+	check_no_reward_flight(app, "Hiding cancels a reward flight started by finish_immediately")
 	check(app._medallion.scale == Vector2.ONE, "Hiding does not leave a queued reward-pop animation")
 	check(app._reward_tween == null or not app._reward_tween.is_running(), "Hiding cancels the reveal tween too")
 	app.new_round(91)
+	win_round(app)
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(1.21)
+	app.chest_button.button_up.emit()
+	app.chest.finish_immediately()
+	step_reward_tween(app, 0.71, "The reward tween can be cancelled by opening the collection")
+	check(visible_reward_flight(app) != null, "The reward flight is visible before collection opens")
+	app._show_collection()
+	check_no_reward_flight(app, "Opening My Rewards cancels the active reward flight")
+	check(app.collection_button.scale == Vector2.ONE, "Opening My Rewards resets the target bounce scale")
+	app._hide_collection()
+	app.new_round(91)
+	win_round(app)
+	app.chest_button.button_down.emit()
+	if app.has_method("_process"):
+		app._process(1.21)
+	app.chest_button.button_up.emit()
+	app.chest.finish_immediately()
+	step_reward_tween(app, 0.71, "The reward tween can be cancelled by replay")
+	check(visible_reward_flight(app) != null, "The reward flight is visible before replay")
+	app._replay()
+	check_no_reward_flight(app, "Replay cancels the active reward flight")
+	check(app.collection_button.scale == Vector2.ONE, "Replay resets the target bounce scale")
 	var wrong: Array = wrong_pair_for(app.model)
 	var wrong_start: Vector2 = app.cards[wrong[0]].position
 	app.cards[wrong[0]].pressed.emit()
 	app.cards[wrong[1]].pressed.emit()
 	check(app.cards[wrong[0]].rotation != 0.0 or app.cards[wrong[0]].position != wrong_start,
 		"Wrong cards immediately start a playful shake")
-	check(app._mistakes.text == "\u00d7", "A mistake is represented by one icon")
+	if app._mistakes.has_method("set_filled_count"):
+		check(app._mistakes.filled_count == 1 and app._mistakes.total_count == 3,
+			"A mismatch fills exactly one gentle retry badge")
+	else:
+		check(false, "A mismatch fills exactly one gentle retry badge")
 	app.feedback_timer.timeout.emit()
 	for count in range(2):
 		app.cards[wrong[0]].pressed.emit()

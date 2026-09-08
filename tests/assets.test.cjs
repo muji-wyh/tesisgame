@@ -49,6 +49,20 @@ function assetFiles(directory) {
   return names.filter((name) => !name.endsWith('.import')).sort();
 }
 
+test('mobile textures use high-quality WebP without reducing their source resolution', () => {
+  const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
+    recursive: true
+  }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
+  assert.equal(imports.length, 164);
+  for (const filename of imports) {
+    const metadata = fs.readFileSync(filename, 'utf8');
+    assert.match(metadata, /^compress\/mode=1$/m, filename);
+    assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
+    assert.match(metadata, /^process\/size_limit=0$/m, filename);
+    assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
+  }
+});
+
 function readSvg(relativePath) {
   const filename = path.join(root, relativePath);
   assert.ok(fs.existsSync(filename), `Missing SVG: ${relativePath}`);
