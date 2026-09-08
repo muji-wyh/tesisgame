@@ -61,6 +61,7 @@ func wrong_pair_for(model) -> Array:
 func _test_rounds(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	var seen_themes: Dictionary = {}
+	var seen_words: Dictionary = {}
 	for seed_value in range(80):
 		check(model.reset(words, seed_value), "A valid vocabulary starts a round")
 		check(model.cards.size() == 8, "There are eight cards")
@@ -69,6 +70,7 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		var counts: Dictionary = {}
 		var kinds: Dictionary = {"word": 0, "image": 0}
 		for card in model.cards:
+			seen_words[card.word.id] = true
 			ids[card.id] = true
 			counts[card.word.id] = counts.get(card.word.id, 0) + 1
 			kinds[card.kind] += 1
@@ -80,6 +82,13 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		check(model.successes == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
 	check(seen_themes.size() == 4, "New rounds can choose each season")
+	for seed_value in range(80, 1000):
+		if seen_words.size() == words.size():
+			break
+		model.reset(words, seed_value)
+		for card in model.cards:
+			seen_words[card.word.id] = true
+	check(seen_words.size() == words.size(), "All 100 words can appear across seeded rounds")
 	model.reset(words, 17)
 	var deck: Array = model.cards.duplicate(true)
 	var season: String = model.theme_id
@@ -173,6 +182,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 
 
 func _test_data(words: Array) -> void:
+	check(words.size() == 100, "The game includes 100 short picture words")
 	var path := "res://scripts/game_data.gd"
 	check(FileAccess.file_exists(path), "The native data loader exists")
 	if not FileAccess.file_exists(path):
@@ -257,6 +267,11 @@ func _test_controls() -> void:
 	check(menu.focus_mode == Control.FOCUS_ALL, "The season menu is keyboard reachable")
 	check(menu.get_theme_color("font_disabled_color") == styles.INK, "Disabled theme text remains readable")
 	menu.free()
+	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	var card = load("res://scripts/word_card.gd").new()
+	card.setup({"id": "apple:image", "kind": "image", "word": words[5]})
+	check(card.tooltip_text == "Picture: apple", "Picture descriptions do not assume a singular countable noun")
+	card.free()
 
 
 func _test_effects() -> void:

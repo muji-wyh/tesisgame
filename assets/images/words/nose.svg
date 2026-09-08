@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">nose</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="24" ry="3.5" fill="#eadbc5" stroke="none"/>
+    <path d="M54 21 C53 41 50 59 43 73 Q36 84 46 91 Q54 97 61 89 Q68 98 78 92 Q89 85 80 76 Q71 66 68 24 Q64 16 54 21Z" fill="#efbd9d"/>
+    <path d="M54 79 Q48 77 46 84 M68 85 Q74 78 80 82" stroke="#bd806f" stroke-width="2.5"/>
+    <path d="M55 33 Q52 52 49 63" stroke="#ffddc5" stroke-width="5"/>
+    <path d="M54 91 Q61 95 69 91" stroke="#d99a82" stroke-width="2"/>
+  </g>
+</svg>

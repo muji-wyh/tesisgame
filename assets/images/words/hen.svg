@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">hen</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="58" cy="104" rx="42" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M35 65 Q20 57 13 42 Q29 42 42 53 Q30 33 34 22 Q48 35 50 51 Q48 28 57 20 Q66 39 61 57Z" fill="#d98560"/>
+    <path d="M30 72 Q31 51 52 45 Q73 39 87 55 Q101 73 88 91 Q77 104 52 99 Q29 94 30 72Z" fill="#f0b66f"/>
+    <path d="M70 52 Q65 35 77 27 Q93 20 101 34 Q108 47 99 59 Q93 67 83 65Z" fill="#f3c27b"/>
+    <circle cx="80" cy="25" r="7" fill="#e67d73"/>
+    <circle cx="90" cy="23" r="8" fill="#e67d73"/>
+    <circle cx="98" cy="29" r="7" fill="#e67d73"/>
+    <path d="M99 42 110 48 99 54Z" fill="#e99a55"/>
+    <circle cx="88" cy="41" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="89" cy="40" r="1.2" fill="#fff8eb" stroke="none"/>
+    <path d="M53 62 Q70 58 78 72 Q71 89 51 85 Q40 76 53 62Z" fill="#e79c5f"/>
+    <path d="M55 67 Q63 72 69 79" stroke="#f5cf8e" stroke-width="3"/>
+    <path d="M52 97 49 105 M72 98 75 105 M44 106H53 M71 106H80" stroke-width="2.5"/>
+  </g>
+</svg>

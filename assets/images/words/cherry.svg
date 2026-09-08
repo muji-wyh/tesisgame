@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cherry</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="33" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M43 60 Q48 38 61 24 M79 64 Q74 39 61 24" stroke="#6f9c65" stroke-width="4"/>
+    <path d="M61 25 Q74 13 89 20 Q80 33 62 31Z" fill="#89b976"/>
+    <circle cx="42" cy="79" r="21" fill="#e87370"/>
+    <circle cx="79" cy="83" r="20" fill="#df6868"/>
+    <path d="M29 70 Q34 62 42 61" stroke="#ffc0ad" stroke-width="5"/>
+    <path d="M67 73 Q72 66 80 65" stroke="#ffb4a5" stroke-width="5"/>
+    <circle cx="35" cy="90" r="3" fill="#c85157" stroke="none"/>
+    <circle cx="85" cy="94" r="3" fill="#bd4c54" stroke="none"/>
+  </g>
+</svg>

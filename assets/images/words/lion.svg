@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">lion</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="38" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="60" cy="56" r="43" fill="#df9e4f"/>
+    <circle cx="60" cy="20" r="11" fill="#e2a453"/>
+    <circle cx="84" cy="25" r="12" fill="#e2a453"/>
+    <circle cx="99" cy="45" r="11" fill="#e2a453"/>
+    <circle cx="99" cy="70" r="11" fill="#e2a453"/>
+    <circle cx="82" cy="91" r="13" fill="#e2a453"/>
+    <circle cx="38" cy="91" r="13" fill="#e2a453"/>
+    <circle cx="21" cy="70" r="11" fill="#e2a453"/>
+    <circle cx="21" cy="45" r="11" fill="#e2a453"/>
+    <circle cx="36" cy="25" r="12" fill="#e2a453"/>
+    <circle cx="41" cy="41" r="10" fill="#edbd71"/>
+    <circle cx="79" cy="41" r="10" fill="#edbd71"/>
+    <path d="M34 53 Q35 31 60 29 Q85 31 86 53 L85 75 Q82 99 60 102 Q38 99 35 75Z" fill="#efbd6e"/>
+    <circle cx="48" cy="60" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="72" cy="60" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="80" rx="18" ry="14" fill="#f7dfb0" stroke="none"/>
+    <path d="M53 72 Q60 68 67 72 Q66 80 60 81 Q54 80 53 72Z" fill="#765445" stroke="none"/>
+    <path d="M60 81V85 M52 85 Q60 94 68 85" stroke-width="2.5"/>
+    <path d="M37 48 Q43 41 50 43 M83 48 Q77 41 70 43" stroke="#b7773e" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">train</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="48" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M18 49 H49 V85 H18Z" fill="#8fc3d2"/>
+    <rect x="25" y="36" width="21" height="19" rx="3" fill="#cde8eb"/>
+    <path d="M45 55 H84 Q96 55 99 68 V84 H45Z" fill="#ef9a82"/>
+    <circle cx="83" cy="68" r="13" fill="#f5c870" stroke-width="2.5"/>
+    <path d="M74 55 Q75 43 84 43 Q93 43 94 57" fill="#f5c870"/>
+    <path d="M78 43V29H92V43Z" fill="#8fc3d2"/>
+    <path d="M73 29H97" stroke-width="5"/>
+    <path d="M99 76 110 84 99 88Z" fill="#f3c76b"/>
+    <circle cx="31" cy="88" r="11" fill="#696a69"/>
+    <circle cx="59" cy="88" r="11" fill="#696a69"/>
+    <circle cx="88" cy="88" r="11" fill="#696a69"/>
+    <circle cx="31" cy="88" r="4" fill="#f8ead5" stroke="none"/>
+    <circle cx="59" cy="88" r="4" fill="#f8ead5" stroke="none"/>
+    <circle cx="88" cy="88" r="4" fill="#f8ead5" stroke="none"/>
+    <path d="M20 49V39H49" stroke-width="3"/>
+  </g>
+</svg>

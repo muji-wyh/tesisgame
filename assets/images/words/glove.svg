@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">glove</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="62" cy="107" rx="28" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M43 103 Q37 89 37 75 L31 40 Q29 33 35 31 Q41 29 43 36 L46 57 43 29 Q42 22 48 20 Q54 19 55 27 V54 22 Q55 15 61 15 Q67 15 67 22 V54 31 Q67 24 73 24 Q79 24 79 31 V63 L87 55 Q93 49 98 54 Q103 60 96 67 L80 78 V87 Q80 97 76 103Z" fill="#f1a6b4"/>
+    <path d="M42 91 H79 L77 105 H44Z" fill="#f5cd73" stroke-width="2.5"/>
+    <path d="M49 94V102 M58 94V103 M68 94V103" stroke="#d7a74b" stroke-width="2.5"/>
+    <path d="M87 60 Q91 61 93 65" stroke="#f8d2d8" stroke-width="3"/>
+  </g>
+</svg>

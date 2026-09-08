@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">goat</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M43 37 Q25 30 29 13 Q42 19 49 35Z M77 37 Q95 30 91 13 Q78 19 71 35Z" fill="#e9d6ab"/>
+    <path d="M42 35 Q27 17 36 10 Q50 21 50 38Z M78 35 Q93 17 84 10 Q70 21 70 38Z" fill="#d7b981"/>
+    <ellipse cx="32" cy="50" rx="14" ry="8" transform="rotate(18 32 50)" fill="#d9ba91"/>
+    <ellipse cx="88" cy="50" rx="14" ry="8" transform="rotate(-18 88 50)" fill="#d9ba91"/>
+    <path d="M39 39 Q60 25 81 39 L79 75 Q77 94 60 99 Q43 94 41 75Z" fill="#ead2ad"/>
+    <path d="M48 94 60 110 72 94Z" fill="#f0dfc3"/>
+    <path d="M51 35 Q60 27 69 35 L65 50 60 44 55 50Z" fill="#c89f70" stroke="none"/>
+    <circle cx="49" cy="62" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="71" cy="62" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="80" rx="15" ry="11" fill="#f2dfc2" stroke="none"/>
+    <ellipse cx="54" cy="79" rx="2.5" ry="2" fill="#8e6557" stroke="none"/>
+    <ellipse cx="66" cy="79" rx="2.5" ry="2" fill="#8e6557" stroke="none"/>
+    <path d="M54 87 Q60 92 66 87" stroke-width="2.5"/>
+  </g>
+</svg>

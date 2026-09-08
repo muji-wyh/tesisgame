@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tiger</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M31 47 25 21 Q24 17 29 20 L46 34 M89 47 95 21 Q96 17 91 20 L74 34" fill="#eea45b"/>
+    <path d="M29 50 Q30 28 60 27 Q90 28 91 50 L91 73 Q89 100 60 102 Q31 100 29 73Z" fill="#efa75d"/>
+    <path d="M34 30 45 48 49 32Z M54 28 60 49 66 28Z M71 32 75 49 86 30Z" fill="#765445" stroke="none"/>
+    <path d="M30 57 47 61 32 68Z M90 57 73 61 88 68Z M32 75 48 75 36 84Z M88 75 72 75 84 84Z" fill="#765445" stroke="none"/>
+    <circle cx="46" cy="61" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="74" cy="61" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="49" cy="81" rx="13" ry="11" fill="#fff0d1" stroke="none"/>
+    <ellipse cx="71" cy="81" rx="13" ry="11" fill="#fff0d1" stroke="none"/>
+    <path d="M54 73 Q60 69 66 73 Q65 81 60 82 Q55 81 54 73Z" fill="#9b6460"/>
+    <path d="M60 82V86 M52 87 Q60 95 68 87" stroke-width="2.5"/>
+    <path d="M40 80 18 76 M40 87 17 90 M80 80 102 76 M80 87 103 90" stroke-width="2.5"/>
+  </g>
+</svg>

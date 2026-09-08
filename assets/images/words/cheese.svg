@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cheese</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="106" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M18 68 85 34 103 62 39 86Z" fill="#f7d66c"/>
+    <path d="M39 86 103 62 V90 L39 105Z" fill="#eebd58"/>
+    <path d="M18 68 39 86 V105 L18 89Z" fill="#f5ca61"/>
+    <ellipse cx="72" cy="55" rx="8" ry="6" transform="rotate(-18 72 55)" fill="#e5ad4f" stroke-width="2.5"/>
+    <circle cx="39" cy="67" r="6" fill="#e5ad4f" stroke-width="2.5"/>
+    <ellipse cx="73" cy="82" rx="8" ry="6" fill="#dca24a" stroke-width="2.5"/>
+    <circle cx="91" cy="72" r="5" fill="#dca24a" stroke-width="2.5"/>
+    <circle cx="31" cy="88" r="5" fill="#dfa94d" stroke-width="2.5"/>
+    <path d="M25 67 77 41" stroke="#fff0a5" stroke-width="4"/>
+  </g>
+</svg>

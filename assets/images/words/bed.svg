@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bed</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="48" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M16 32 Q16 24 24 24 H30 Q36 24 36 32 V96 H16Z" fill="#9dc8b9"/>
+    <path d="M36 54 H96 Q105 54 105 64 V89 H36Z" fill="#f3c96f"/>
+    <path d="M37 55 Q55 45 68 57 V70 H37Z" fill="#fff2da" stroke-width="2.5"/>
+    <path d="M66 57 H104 V83 Q86 75 66 79Z" fill="#ef9db0" stroke-width="2.5"/>
+    <path d="M36 83H105V96H36Z" fill="#8fc4d2"/>
+    <path d="M21 96V105 M99 96V105" stroke-width="5"/>
+    <path d="M22 35H31 M22 45H31" stroke="#c8e2d6" stroke-width="3"/>
+  </g>
+</svg>

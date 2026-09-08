@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sheep</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="39" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M24 86 Q13 80 17 68 Q9 56 22 49 Q20 35 35 35 Q40 22 53 29 Q63 18 72 30 Q88 25 90 40 Q104 41 100 56 Q112 65 102 76 Q106 90 91 93 Q82 104 70 98 Q58 108 48 99 Q33 105 28 93Z" fill="#f8f2df"/>
+    <ellipse cx="35" cy="59" rx="13" ry="8" transform="rotate(18 35 59)" fill="#b59a83"/>
+    <ellipse cx="85" cy="59" rx="13" ry="8" transform="rotate(-18 85 59)" fill="#b59a83"/>
+    <path d="M42 52 Q46 38 60 38 Q74 38 78 52 L76 80 Q72 95 60 97 Q48 95 44 80Z" fill="#b49a83"/>
+    <circle cx="49" cy="42" r="8" fill="#fff9eb"/>
+    <circle cx="60" cy="39" r="9" fill="#fff9eb"/>
+    <circle cx="71" cy="42" r="8" fill="#fff9eb"/>
+    <circle cx="51" cy="65" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="69" cy="65" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="82" rx="10" ry="8" fill="#dcc5ab" stroke="none"/>
+    <path d="M56 80 Q60 77 64 80 L60 84Z" fill="#765445" stroke="none"/>
+    <path d="M60 84V87 M54 88 Q60 93 66 88" stroke-width="2.5"/>
+    <path d="M33 94V104 M87 94V104" stroke-width="5"/>
+  </g>
+</svg>

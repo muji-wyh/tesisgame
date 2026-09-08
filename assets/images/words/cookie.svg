@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cookie</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
+    <circle cx="60" cy="61" r="39" fill="#e4b878"/>
+    <circle cx="44" cy="43" r="5" fill="#8f6048" stroke="none"/>
+    <circle cx="68" cy="35" r="4.5" fill="#8f6048" stroke="none"/>
+    <circle cx="81" cy="55" r="5" fill="#8f6048" stroke="none"/>
+    <circle cx="53" cy="62" r="4" fill="#8f6048" stroke="none"/>
+    <circle cx="35" cy="70" r="4.5" fill="#8f6048" stroke="none"/>
+    <circle cx="70" cy="78" r="5" fill="#8f6048" stroke="none"/>
+    <circle cx="84" cy="84" r="3.5" fill="#8f6048" stroke="none"/>
+    <circle cx="48" cy="89" r="3.5" fill="#8f6048" stroke="none"/>
+    <path d="M32 51 Q36 42 43 37" stroke="#f6d69f" stroke-width="5"/>
+    <path d="M91 42 Q96 49 97 57 M24 77 Q27 86 34 92" stroke="#c68f59" stroke-width="2.5"/>
+  </g>
+</svg>

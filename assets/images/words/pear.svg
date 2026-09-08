@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pear</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 34 C51 34 51 45 47 53 C43 61 31 64 29 78 C26 95 40 104 59 105 C78 106 93 96 91 78 C89 64 77 60 73 52 C69 44 69 34 60 34Z" fill="#acd27f"/>
+    <path d="M60 35 Q59 25 64 17" stroke-width="4.5"/>
+    <path d="M63 26 Q73 14 88 20 Q80 32 63 30Z" fill="#78ad72"/>
+    <path d="M41 73 Q43 60 52 54" stroke="#e2f2b3" stroke-width="5"/>
+    <path d="M48 96 Q59 100 70 96" stroke="#8fba6c" stroke-width="2.5"/>
+  </g>
+</svg>

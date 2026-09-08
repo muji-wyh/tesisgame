@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">eye</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 61 Q33 31 60 31 Q87 31 106 61 Q87 91 60 91 Q33 91 14 61Z" fill="#fffefd"/>
+    <circle cx="60" cy="61" r="20" fill="#91cbd5"/>
+    <circle cx="60" cy="61" r="10" fill="#765445"/>
+    <circle cx="54" cy="54" r="5" fill="#ffffff" stroke="none"/>
+    <circle cx="65" cy="66" r="2.5" fill="#ffffff" stroke="none"/>
+    <path d="M27 42 22 34 M39 35 36 25 M52 31 51 21 M68 31 69 21 M81 35 85 25 M93 43 99 35" stroke-width="3"/>
+    <path d="M20 61 Q39 48 60 48 Q81 48 100 61" stroke="#b08169" stroke-width="2.5"/>
+  </g>
+</svg>

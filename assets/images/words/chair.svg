@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">chair</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="32" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M35 20 H82 V64 H35Z" fill="#9fcaba"/>
+    <path d="M42 28H75V55H42Z" fill="#c8e5da" stroke-width="2.5"/>
+    <path d="M29 61 H89 V77 Q60 84 29 77Z" fill="#f2c66e"/>
+    <path d="M36 77 31 105 M82 77 88 105" stroke-width="6"/>
+    <path d="M36 92H85" stroke="#b78761" stroke-width="4"/>
+    <path d="M35 20 31 80 M82 20 87 80" stroke-width="4"/>
+  </g>
+</svg>

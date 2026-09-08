@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">hand</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="109" rx="28" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M46 106 Q35 97 34 81 L22 69 Q18 64 22 59 Q26 55 31 59 L43 69 L42 36 Q42 29 48 29 Q54 29 54 36 L55 58 L56 24 Q56 17 62 17 Q68 17 68 24 V57 L72 29 Q73 22 79 23 Q85 24 84 31 L81 60 L88 39 Q90 32 96 34 Q102 36 99 43 L93 72 Q91 94 78 106 Q61 113 46 106Z" fill="#efbd9d"/>
+    <path d="M43 69 Q48 73 52 79 M55 58 V76 M68 57 66 75 M81 60 76 77" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M46 88 Q60 80 76 88 M54 96 Q62 91 69 96" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M25 62 34 70" stroke="#ffd9c1" stroke-width="3"/>
+  </g>
+</svg>

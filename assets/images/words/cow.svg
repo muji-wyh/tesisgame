@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cow</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M39 31 Q27 30 25 17 Q38 18 45 30Z M81 31 Q93 30 95 17 Q82 18 75 30Z" fill="#f4d99b"/>
+    <ellipse cx="27" cy="43" rx="14" ry="9" transform="rotate(16 27 43)" fill="#e9b98d"/>
+    <ellipse cx="93" cy="43" rx="14" ry="9" transform="rotate(-16 93 43)" fill="#e9b98d"/>
+    <path d="M31 43 Q31 26 60 25 Q89 26 89 43 L91 71 Q92 97 60 101 Q28 97 29 71Z" fill="#fff7e5"/>
+    <path d="M34 39 Q43 27 55 31 Q61 44 51 57 Q37 58 34 39Z" fill="#5f5753" stroke="none"/>
+    <path d="M72 28 Q87 31 89 46 L90 58 Q78 62 72 52 Q67 40 72 28Z" fill="#5f5753" stroke="none"/>
+    <circle cx="45" cy="57" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="75" cy="57" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="82" rx="25" ry="16" fill="#efc0ad"/>
+    <ellipse cx="50" cy="80" rx="3.5" ry="2.5" fill="#a86e68" stroke="none"/>
+    <ellipse cx="70" cy="80" rx="3.5" ry="2.5" fill="#a86e68" stroke="none"/>
+    <path d="M52 90 Q60 96 68 90" stroke-width="2.5"/>
+  </g>
+</svg>

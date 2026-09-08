@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cake</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="39" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M29 47 Q60 31 91 47 L87 96 H33Z" fill="#f1c37d"/>
+    <path d="M31 72 H89 L88 82 H32Z" fill="#f8e4af" stroke-width="2.5"/>
+    <path d="M28 48 Q60 30 92 48 L91 60 Q85 54 79 61 Q73 68 67 59 Q60 50 53 60 Q46 69 40 60 Q34 54 30 62Z" fill="#f3a6a4"/>
+    <rect x="56" y="20" width="8" height="20" rx="2" fill="#9bcbd0" stroke-width="2.5"/>
+    <path d="M60 20 Q52 13 60 9 Q68 14 60 20Z" fill="#f2bd55" stroke-width="2.5"/>
+    <path d="M37 88 Q60 94 83 88" stroke="#d99b65" stroke-width="2.5"/>
+    <path d="M39 45 Q50 39 58 38" stroke="#ffd8d0" stroke-width="4"/>
+  </g>
+</svg>

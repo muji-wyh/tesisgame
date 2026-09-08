@@ -98,6 +98,10 @@ Find three matching word/picture pairs among **eight cards**. One extra word and
 
 Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. The season menu changes the appearance and music without resetting progress; it also contains **Reduce motion**. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
+The vocabulary pool contains **100 short, concrete English words** for parent-guided play
+with young children. Each round still uses only five different words on eight cards, rather
+than showing the whole pool at once. Tap a picture or word to hear its pronunciation.
+
 The winning chest follows the selected theme. Opening it captures that reward's theme and starts a 1.8-second charge-and-reveal sequence with imported chest artwork, native light layers, two expanding rings, 72 seasonal particles and a reward medallion. Themes have different particle trajectories, palettes, music, effects and English speech. Theme switching is disabled during opening. Later theme changes do not alter the earned reward or grant another one.
 
 Reduced motion reveals the reward immediately without moving effects. **Mute**, **Listen** and **Play again** control audio and replay. Audio waits for interaction and stops on hiding, muting, loss or reset; returning from a hidden page does not force autoplay. The loss screen uses the encouraging bear, a gentle effect and prerecorded English speech.
@@ -125,7 +129,25 @@ Editor/native play continues to use local audio.
 | `image` | Unique local picture under `assets/images/words/`. |
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 
-The eight word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech is generated locally using **Microsoft Zira Desktop (en-US)**; players do not need that voice installed.
+The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech is generated locally using **Microsoft Zira Desktop (en-US)**; players do not need that voice installed. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
+
+The collection keeps words to 2-6 lowercase letters and covers familiar picture-book topics:
+
+| Topic | Words |
+|---|---:|
+| Animals | 24 |
+| Food and drinks | 20 |
+| Body parts | 10 |
+| Clothes | 8 |
+| Nature | 9 |
+| Vehicles | 7 |
+| Toys and books | 6 |
+| Home objects | 8 |
+| Everyday items | 8 |
+
+Original word-art definitions are maintained in `tools\generate-images.cjs` and the small
+topic modules under `tools\word-art`. The generated SVGs use simple shapes without fonts,
+external images or text labels.
 
 ```powershell
 node tools\generate-images.cjs

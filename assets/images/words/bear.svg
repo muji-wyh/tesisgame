@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bear</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="32" cy="37" r="16" fill="#bd8965"/>
+    <circle cx="88" cy="37" r="16" fill="#bd8965"/>
+    <circle cx="32" cy="37" r="8" fill="#e3b38d" stroke="none"/>
+    <circle cx="88" cy="37" r="8" fill="#e3b38d" stroke="none"/>
+    <ellipse cx="60" cy="66" rx="36" ry="35" fill="#c99670"/>
+    <path d="M32 96 Q37 84 49 86 H71 Q83 84 88 96 L86 105 H34Z" fill="#8ebfac"/>
+    <circle cx="47" cy="59" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="73" cy="59" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="77" rx="19" ry="15" fill="#f4dfc1" stroke="none"/>
+    <path d="M53 70 Q60 66 67 70 Q66 78 60 79 Q54 78 53 70Z" fill="#765445" stroke="none"/>
+    <path d="M60 79V83 M52 83 Q60 92 68 83" stroke-width="2.5"/>
+    <ellipse cx="39" cy="70" rx="5" ry="3" fill="#dda699" stroke="none"/>
+    <ellipse cx="81" cy="70" rx="5" ry="3" fill="#dda699" stroke="none"/>
+  </g>
+</svg>

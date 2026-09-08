@@ -17,8 +17,12 @@ function rays(y, count, inner, outer, color, width) {
   ).join('\n    ');
 }
 
-// Every shape is authored here; no downloaded art, fonts, or embedded images.
+// Original vector art only; no downloaded art, fonts, or embedded images.
 const wordArt = {
+  ...require(path.join(__dirname, 'word-art', 'animals.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'nature.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'food-body.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'everyday.cjs')),
   cat: `
     <ellipse cx="60" cy="103" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
     <path d="M29 53 24 23 Q23 18 28 20 L44 33 Q60 28 76 33 L92 20 Q97 18 96 23 L91 53 Q100 84 79 95 Q60 104 41 95 Q20 84 29 53Z" fill="#efb36b"/>
@@ -193,7 +197,7 @@ function makeSvg(title, shapes, background = '#fff8eb') {
 function generateImages() {
   const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
   if (!Array.isArray(words) || words.length !== Object.keys(wordArt).length) {
-    throw new Error('words.json must describe all eight supported word illustrations.');
+    throw new Error('words.json must describe every supported word illustration exactly once.');
   }
   const seen = new Set();
   const outputs = [];

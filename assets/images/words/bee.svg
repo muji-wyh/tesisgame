@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bee</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <ellipse cx="43" cy="44" rx="19" ry="13" transform="rotate(28 43 44)" fill="#cce5e5"/>
+    <ellipse cx="66" cy="39" rx="19" ry="13" transform="rotate(-24 66 39)" fill="#cce5e5"/>
+    <ellipse cx="58" cy="67" rx="33" ry="23" fill="#f5cf61"/>
+    <line x1="47" y1="46" x2="47" y2="87" stroke="#765445" stroke-width="8"/>
+    <line x1="66" y1="44" x2="66" y2="89" stroke="#765445" stroke-width="8"/>
+    <ellipse cx="58" cy="67" rx="33" ry="23" fill="none"/>
+    <circle cx="87" cy="61" r="14" fill="#e7ad55"/>
+    <path d="M83 47 Q80 34 72 30 M91 48 Q96 36 104 35" stroke-width="2.5"/>
+    <circle cx="84" cy="59" r="3" fill="#765445" stroke="none"/>
+    <circle cx="94" cy="59" r="3" fill="#765445" stroke="none"/>
+    <path d="M84 68 Q89 73 94 68" stroke-width="2.5"/>
+    <path d="M25 67 14 62 23 76Z" fill="#d99b52"/>
+  </g>
+</svg>

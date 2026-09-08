@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">head</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="25" cy="62" r="10" fill="#efbd9d"/>
+    <circle cx="95" cy="62" r="10" fill="#efbd9d"/>
+    <ellipse cx="60" cy="62" rx="35" ry="43" fill="#efbd9d"/>
+    <path d="M27 51 Q25 23 48 17 Q60 10 75 17 Q96 23 94 51 Q86 39 78 33 Q74 45 63 34 Q56 44 46 33 Q39 44 27 51Z" fill="#8b654f"/>
+    <path d="M36 49 Q41 37 49 32" stroke="#b88968" stroke-width="4"/>
+    <circle cx="46" cy="60" r="4" fill="#765445" stroke="none"/>
+    <circle cx="74" cy="60" r="4" fill="#765445" stroke="none"/>
+    <circle cx="44.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
+    <circle cx="72.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
+    <path d="M57 68 Q60 72 64 68" stroke="#bd806f" stroke-width="2.5"/>
+    <path d="M49 80 Q60 90 71 80" stroke="#b66f6e" stroke-width="3"/>
+    <ellipse cx="38" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
+    <ellipse cx="82" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
+    <path d="M47 103 Q60 108 73 103" stroke="#d99a82" stroke-width="2.5"/>
+  </g>
+</svg>

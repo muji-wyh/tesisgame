@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">corn</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M42 37 Q60 19 78 37 L78 74 Q77 93 60 100 Q43 93 42 74Z" fill="#f4d36a"/>
+    <path d="M42 53 Q27 59 25 96 Q43 92 56 82 L48 60Z" fill="#8fbe76"/>
+    <path d="M78 53 Q93 59 95 96 Q77 92 64 82 L72 60Z" fill="#7daf70"/>
+    <path d="M60 28V94 M49 33 Q54 61 52 89 M71 33 Q66 61 68 89" stroke="#d5a94d" stroke-width="2"/>
+    <path d="M43 47 Q60 52 77 47 M42 60 Q60 66 78 60 M43 73 Q60 80 77 73 M47 86 Q60 91 73 86" stroke="#d5a94d" stroke-width="2"/>
+    <path d="M30 85 Q40 76 49 69 M90 85 Q80 76 71 69" stroke="#6f9f69" stroke-width="2.5"/>
+    <path d="M49 39 Q55 31 62 29" stroke="#fff0a2" stroke-width="4"/>
+  </g>
+</svg>

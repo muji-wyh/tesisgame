@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">milk</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="28" ry="4" fill="#eadbc5" stroke="none"/>
+    <rect x="47" y="16" width="26" height="12" rx="3" fill="#9dcbd2"/>
+    <path d="M49 28 H71 V38 Q78 44 79 54 V100 Q79 106 73 106 H47 Q41 106 41 100 V54 Q42 44 49 38Z" fill="#fffefd"/>
+    <path d="M42 57 Q60 61 78 57 V100 Q78 105 72 105 H48 Q42 105 42 100Z" fill="#f7fbfa" stroke="none"/>
+    <path d="M48 39 H72 M42 58 Q60 62 78 58" stroke="#b9d9dc" stroke-width="2.5"/>
+    <path d="M50 47 Q54 42 60 41" stroke="#ffffff" stroke-width="4"/>
+    <path d="M51 78 Q60 68 69 78 Q66 88 60 91 Q54 88 51 78Z" fill="#dceff0" stroke-width="2.5"/>
+  </g>
+</svg>

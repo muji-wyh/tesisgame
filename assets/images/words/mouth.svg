@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mouth</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 61 Q35 45 49 48 Q58 39 68 48 Q84 45 102 61 Q86 85 60 87 Q34 85 18 61Z" fill="#ed9c9d"/>
+    <path d="M20 61 Q40 66 60 63 Q80 66 100 61 Q80 73 60 74 Q40 73 20 61Z" fill="#d9767d" stroke-width="2.5"/>
+    <path d="M37 80 Q60 90 83 80" stroke="#f7b8b4" stroke-width="3"/>
+    <path d="M39 52 Q47 48 53 50" stroke="#ffd0ca" stroke-width="4"/>
+  </g>
+</svg>

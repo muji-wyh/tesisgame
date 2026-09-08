@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">book</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="101" rx="45" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M13 31 Q35 24 59 37 V94 Q37 82 13 89Z" fill="#f5d37b"/>
+    <path d="M107 31 Q85 24 61 37 V94 Q83 82 107 89Z" fill="#9fceda"/>
+    <path d="M60 37V95" stroke-width="3"/>
+    <path d="M23 44 Q38 39 51 46 M22 56 Q38 51 51 58 M21 69 Q36 64 50 71" stroke="#c99d48" stroke-width="2.5"/>
+    <path d="M69 46 Q83 39 98 44 M69 58 Q83 51 99 56 M70 71 Q84 64 100 69" stroke="#72a9ba" stroke-width="2.5"/>
+    <path d="M17 89 Q39 84 59 96 M103 89 Q81 84 61 96" stroke="#ef9b86" stroke-width="3"/>
+  </g>
+</svg>

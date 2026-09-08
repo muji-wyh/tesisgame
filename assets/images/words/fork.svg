@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fork</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="57" cy="108" rx="24" ry="3.5" fill="#eadbc5" stroke="none"/>
+    <g fill="#cad9dd">
+      <rect x="34" y="14" width="9" height="38" rx="4"/>
+      <rect x="46" y="14" width="9" height="38" rx="4"/>
+      <rect x="58" y="14" width="9" height="38" rx="4"/>
+      <rect x="70" y="14" width="9" height="38" rx="4"/>
+      <path d="M34 43 H79 Q78 58 63 63 V101 Q63 108 56 108 Q49 108 49 101 V63 Q35 58 34 43Z"/>
+    </g>
+    <path d="M40 48 Q45 57 56 58 Q68 57 73 48" stroke="#eef5f5" stroke-width="3"/>
+    <path d="M54 69V99" stroke="#eef5f5" stroke-width="3"/>
+  </g>
+</svg>

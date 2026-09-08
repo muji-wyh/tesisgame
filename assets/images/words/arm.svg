@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">arm</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="38" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M34 42 Q43 44 51 54 L63 68 Q68 74 73 67 L80 54 Q74 48 76 40 Q78 32 85 28 Q92 24 98 29 Q105 35 101 43 Q98 50 92 52 L84 76 Q80 89 66 91 Q53 92 44 81 L27 59Z" fill="#efbd9d"/>
+    <path d="M17 28 Q30 17 45 24 L51 45 Q39 49 28 61 L16 49Z" fill="#94c8d0"/>
+    <path d="M78 42 Q84 45 92 42 M84 34 Q90 37 97 35 M62 72 Q67 78 75 75" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M35 47 Q43 51 48 58" stroke="#ffd9c1" stroke-width="4"/>
+  </g>
+</svg>

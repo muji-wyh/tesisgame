@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tree</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="43" ry="6" fill="#dce4c9" stroke="none"/>
+    <path d="M52 68 Q52 85 44 103 H76 Q68 84 69 66Z" fill="#b77d55"/>
+    <path d="M59 89V54 M58 76 42 61 M63 72 79 55" stroke="#8f634a" stroke-width="5"/>
+    <circle cx="39" cy="54" r="23" fill="#8fc37c"/>
+    <circle cx="63" cy="39" r="27" fill="#98ca82"/>
+    <circle cx="84" cy="57" r="22" fill="#86bb75"/>
+    <circle cx="59" cy="66" r="27" fill="#91c47c"/>
+    <path d="M31 45 Q39 34 49 37 M57 27 Q67 20 76 28 M76 51 Q85 43 92 49" stroke="#c2dea0" stroke-width="5"/>
+    <circle cx="38" cy="58" r="4" fill="#e8ba72" stroke="none"/>
+    <circle cx="76" cy="38" r="4" fill="#e8ba72" stroke="none"/>
+    <circle cx="82" cy="67" r="4" fill="#e8ba72" stroke="none"/>
+    <path d="M34 104 Q60 98 86 104" stroke="#8cac70" stroke-width="3"/>
+  </g>
+</svg>

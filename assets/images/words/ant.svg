@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ant</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="102" rx="43" ry="5" fill="#eadbc5" stroke="none"/>
+    <ellipse cx="31" cy="66" rx="20" ry="17" fill="#a9604e"/>
+    <circle cx="61" cy="64" r="15" fill="#b66d55"/>
+    <circle cx="88" cy="60" r="16" fill="#c27b5f"/>
+    <path d="M84 45 Q81 30 70 24 M94 45 Q102 32 109 32" stroke-width="2.5"/>
+    <circle cx="85" cy="57" r="3" fill="#765445" stroke="none"/>
+    <circle cx="95" cy="57" r="3" fill="#765445" stroke="none"/>
+    <path d="M85 66 Q90 71 95 66" stroke-width="2.5"/>
+    <path d="M52 72 38 91 27 94 M60 77 56 98 45 101 M69 73 82 92 93 94" stroke-width="3"/>
+    <path d="M51 57 37 39 25 37 M61 49 59 29 49 23 M70 56 84 41 95 42" stroke-width="3"/>
+    <ellipse cx="31" cy="66" rx="9" ry="7" fill="#c77b60" stroke="none"/>
+  </g>
+</svg>

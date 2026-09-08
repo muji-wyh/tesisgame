@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">leaf</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="35" ry="5" fill="#dce4c9" stroke="none"/>
+    <path d="M18 72 Q21 28 72 17 Q101 11 104 15 Q107 52 83 78 Q60 103 25 88Z" fill="#94c681"/>
+    <path d="M25 89 Q59 68 93 29" stroke="#5f966c" stroke-width="5"/>
+    <path d="M49 74 42 47 M61 64 72 35 M39 81 25 67 M72 53 93 52 M82 41 98 36" stroke="#6fa576" stroke-width="3"/>
+    <path d="M34 53 Q43 35 61 29" stroke="#c4dfa5" stroke-width="5"/>
+    <path d="M25 89 Q19 97 16 105" stroke="#765445" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">orange</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <circle cx="60" cy="64" r="36" fill="#f2a451"/>
+    <path d="M58 29 Q57 21 62 17" stroke-width="4"/>
+    <path d="M61 24 Q71 13 86 19 Q79 31 62 29Z" fill="#8fbd79"/>
+    <path d="M36 49 Q42 38 52 35" stroke="#ffd292" stroke-width="5"/>
+    <circle cx="79" cy="51" r="2" fill="#d98243" stroke="none"/>
+    <circle cx="86" cy="66" r="1.8" fill="#d98243" stroke="none"/>
+    <circle cx="72" cy="84" r="1.8" fill="#d98243" stroke="none"/>
+    <circle cx="43" cy="83" r="1.7" fill="#d98243" stroke="none"/>
+    <path d="M55 97 Q60 93 65 97" stroke="#d98243" stroke-width="2.5"/>
+  </g>
+</svg>

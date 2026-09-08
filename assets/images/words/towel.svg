@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">towel</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="35" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M25 24 Q60 17 95 24 V35 Q60 29 25 35Z" fill="#b98562"/>
+    <path d="M33 30 Q60 34 87 30 V98 Q61 105 33 98Z" fill="#9fcfda"/>
+    <path d="M33 48 Q60 55 87 48 V65 Q60 72 33 65Z" fill="#cce8ed" stroke-width="2.5"/>
+    <path d="M33 98 34 107 M41 100 42 108 M50 101 50 109 M60 102V110 M70 101 70 109 M79 100 78 108 M87 98 86 107" stroke-width="2.5"/>
+    <path d="M42 36V46 M78 35V46" stroke="#eaf6f5" stroke-width="3"/>
+  </g>
+</svg>

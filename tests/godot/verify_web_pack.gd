@@ -9,6 +9,10 @@ func _initialize() -> void:
 		quit(1)
 		return
 	for word in words:
+		var picture: Texture2D = load("res://" + word.image)
+		if picture == null or picture.get_width() <= 0 or picture.get_height() <= 0:
+			printerr("Word picture is missing from the startup pack: " + word.image)
+			failures += 1
 		var stream: AudioStream = load("res://" + word.audio)
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)

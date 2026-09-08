@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">foot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="66" cy="109" rx="34" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M68 31 Q57 35 52 48 Q48 60 42 72 Q35 85 40 98 Q44 109 58 107 Q72 105 75 91 Q77 80 89 73 Q96 69 95 57 Q93 40 68 31Z" fill="#efbd9d"/>
+    <circle cx="72" cy="27" r="11" fill="#efbd9d" stroke-width="2.5"/>
+    <circle cx="88" cy="31" r="8.5" fill="#efbd9d" stroke-width="2.5"/>
+    <circle cx="98" cy="41" r="7" fill="#efbd9d" stroke-width="2.5"/>
+    <circle cx="103" cy="53" r="6" fill="#efbd9d" stroke-width="2.5"/>
+    <circle cx="103" cy="65" r="5" fill="#efbd9d" stroke-width="2.5"/>
+    <path d="M52 72 Q63 78 75 73 M46 91 Q54 99 64 95" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M58 47 Q61 38 69 35" stroke="#ffd9c1" stroke-width="4"/>
+  </g>
+</svg>

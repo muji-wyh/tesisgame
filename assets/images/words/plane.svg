@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">plane</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="30" ry="3.5" fill="#eadbc5" stroke="none"/>
+    <path d="M60 12 Q66 13 67 24 L69 47 104 62 Q109 65 105 70 L69 64 68 91 82 100 V106 L60 101 38 106 V100 L52 91 51 64 15 70 Q11 65 16 62 L51 47 53 24 Q54 13 60 12Z" fill="#9dcfe0"/>
+    <path d="M51 47 20 63 51 58 M69 47 100 63 69 58" fill="#cbe7ed" stroke-width="2.5"/>
+    <path d="M52 91 42 99 59 96 60 101 61 96 78 99 68 91" fill="#ef9f89" stroke-width="2.5"/>
+    <circle cx="60" cy="28" r="3" fill="#fff4dc" stroke="none"/>
+    <circle cx="60" cy="39" r="3" fill="#fff4dc" stroke="none"/>
+    <path d="M57 17 Q60 13 63 17" stroke="#eaf7f7" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tomato</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 42 C46 32 27 39 25 60 C22 82 39 100 60 101 C81 101 98 82 95 60 C93 39 74 32 60 42Z" fill="#e97870"/>
+    <path d="M60 42 Q47 37 40 50 Q53 47 60 54 Q67 47 81 50 Q73 38 60 42Z" fill="#79ad6f" stroke-width="2.5"/>
+    <path d="M60 42 60 26 M57 29 Q62 22 68 25" stroke="#6d9f69" stroke-width="4"/>
+    <path d="M36 56 Q39 47 48 43" stroke="#ffc0ae" stroke-width="5"/>
+    <path d="M42 91 Q60 98 78 91" stroke="#cd5c5a" stroke-width="2.5"/>
+  </g>
+</svg>

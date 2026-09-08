@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">drum</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M31 47 Q60 37 89 47 V91 Q60 104 31 91Z" fill="#ef9a82"/>
+    <ellipse cx="60" cy="47" rx="29" ry="11" fill="#f5d37b"/>
+    <path d="M31 61 Q60 73 89 61 M31 78 Q60 90 89 78" stroke="#f8c2b3" stroke-width="3"/>
+    <path d="M37 57 48 96 M83 57 72 96" stroke="#8fc6b7" stroke-width="4"/>
+    <path d="M24 21 69 51 M96 21 51 51" stroke="#b98261" stroke-width="4"/>
+    <circle cx="22" cy="20" r="6" fill="#f2c46e"/>
+    <circle cx="98" cy="20" r="6" fill="#f2c46e"/>
+  </g>
+</svg>

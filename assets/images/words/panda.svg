@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">panda</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="32" cy="38" r="17" fill="#5d5956"/>
+    <circle cx="88" cy="38" r="17" fill="#5d5956"/>
+    <path d="M31 55 Q31 29 60 27 Q89 29 89 55 L89 75 Q86 101 60 103 Q34 101 31 75Z" fill="#fff8e8"/>
+    <ellipse cx="46" cy="61" rx="11" ry="15" transform="rotate(25 46 61)" fill="#5d5956" stroke="none"/>
+    <ellipse cx="74" cy="61" rx="11" ry="15" transform="rotate(-25 74 61)" fill="#5d5956" stroke="none"/>
+    <circle cx="47" cy="60" r="3.5" fill="#fff8eb" stroke="none"/>
+    <circle cx="73" cy="60" r="3.5" fill="#fff8eb" stroke="none"/>
+    <circle cx="47" cy="60" r="1.7" fill="#765445" stroke="none"/>
+    <circle cx="73" cy="60" r="1.7" fill="#765445" stroke="none"/>
+    <ellipse cx="60" cy="82" rx="17" ry="13" fill="#f6e5ca" stroke="none"/>
+    <path d="M53 74 Q60 70 67 74 Q66 82 60 83 Q54 82 53 74Z" fill="#5d5956" stroke="none"/>
+    <path d="M60 83V87 M53 88 Q60 94 67 88" stroke-width="2.5"/>
+    <path d="M34 92 Q25 99 31 107 M86 92 Q95 99 89 107" stroke="#5d5956" stroke-width="9"/>
+  </g>
+</svg>

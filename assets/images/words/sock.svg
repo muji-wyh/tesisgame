@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sock</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="59" cy="105" rx="36" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M39 19 H77 L74 62 Q74 69 82 75 L97 85 Q101 89 98 96 Q94 103 82 103 H43 Q27 102 23 92 Q20 83 31 76 L43 68Z" fill="#a8d1c6"/>
+    <path d="M39 19H77L76 35Q58 41 38 34Z" fill="#f3c96f" stroke-width="2.5"/>
+    <path d="M43 68 Q57 65 68 75 Q60 87 43 88 Q32 87 27 81" fill="#f1a38f" stroke-width="2.5"/>
+    <path d="M79 75 97 85 Q102 90 98 96 Q94 103 82 103 H68 Q72 86 79 75Z" fill="#f7c1b2" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ear</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="65" cy="106" rx="27" ry="3.5" fill="#eadbc5" stroke="none"/>
+    <path d="M68 17 C91 17 102 35 99 58 C96 81 81 99 63 104 C47 109 36 99 39 85 C41 77 49 74 48 65 C46 55 41 47 45 35 C49 23 57 17 68 17Z" fill="#efbd9d"/>
+    <path d="M69 32 Q86 32 86 49 Q85 61 75 67 Q68 71 69 81 Q69 91 59 93 Q49 94 49 85 Q49 78 57 73 Q62 69 59 61 Q54 48 60 39 Q63 33 69 32Z" fill="#f8d7bd" stroke-width="2.5"/>
+    <path d="M66 45 Q76 41 77 50 Q78 57 69 61 Q62 65 63 74" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M51 35 Q56 26 65 24" stroke="#ffd9c1" stroke-width="4"/>
+  </g>
+</svg>

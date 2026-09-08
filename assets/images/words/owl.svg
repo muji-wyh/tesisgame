@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">owl</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="37" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M29 49 29 22 46 35 Q60 29 74 35 L91 22 91 49 Q99 61 94 82 Q88 103 60 105 Q32 103 26 82 Q21 61 29 49Z" fill="#b98667"/>
+    <path d="M29 69 Q17 74 26 96 Q34 103 43 88Z M91 69 Q103 74 94 96 Q86 103 77 88Z" fill="#9c705b"/>
+    <circle cx="45" cy="60" r="18" fill="#f2d99d"/>
+    <circle cx="75" cy="60" r="18" fill="#f2d99d"/>
+    <circle cx="45" cy="60" r="9" fill="#fff7df" stroke="none"/>
+    <circle cx="75" cy="60" r="9" fill="#fff7df" stroke="none"/>
+    <circle cx="45" cy="60" r="4" fill="#765445" stroke="none"/>
+    <circle cx="75" cy="60" r="4" fill="#765445" stroke="none"/>
+    <path d="M52 72 60 80 68 72Z" fill="#e8a753"/>
+    <path d="M42 84 Q60 96 78 84" stroke="#d3a176" stroke-width="3"/>
+    <path d="M48 103 45 109 M55 104 54 110 M65 104 66 110 M72 103 75 109" stroke-width="2.5"/>
+  </g>
+</svg>

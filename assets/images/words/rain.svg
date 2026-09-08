@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rain</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 49 Q15 47 17 36 Q18 25 30 25 Q34 12 48 18 Q60 8 71 20 Q86 18 91 31 Q102 31 104 42 Q105 51 95 52Z" fill="#d8eaec"/>
+    <path d="M35 30 Q41 21 50 23" stroke="#f8ffff" stroke-width="4"/>
+    <path d="M29 57 Q19 71 19 78 Q19 88 29 88 Q39 88 39 78 Q39 71 29 57Z" fill="#76b9db"/>
+    <path d="M56 50 Q44 68 44 78 Q44 91 56 91 Q68 91 68 78 Q68 68 56 50Z" fill="#65abd2"/>
+    <path d="M84 57 Q74 72 74 80 Q74 91 84 91 Q94 91 94 80 Q94 72 84 57Z" fill="#76b9db"/>
+    <path d="M45 91 Q39 100 39 105 Q39 110 45 110 Q51 110 51 105 Q51 100 45 91Z" fill="#9acde2" stroke-width="2.5"/>
+    <path d="M72 91 Q66 100 66 105 Q66 110 72 110 Q78 110 78 105 Q78 100 72 91Z" fill="#9acde2" stroke-width="2.5"/>
+  </g>
+</svg>

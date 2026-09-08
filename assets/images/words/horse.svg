@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">horse</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M38 38 34 17 Q34 12 39 17 L51 31Z M82 38 86 17 Q86 12 81 17 L69 31Z" fill="#d49a68"/>
+    <path d="M37 40 Q23 48 27 69 Q29 90 43 102 L49 75Z" fill="#a96f4f"/>
+    <path d="M43 31 Q60 22 77 31 Q85 44 82 62 L77 88 Q74 103 60 106 Q46 103 43 88 L38 62 Q35 44 43 31Z" fill="#dca573"/>
+    <path d="M45 31 Q55 20 71 28 Q64 36 59 48 Q52 39 45 31Z" fill="#9f674a"/>
+    <path d="M42 45 Q33 51 39 62 M40 56 Q30 65 39 75 M42 69 Q32 79 44 88" stroke="#9f674a" stroke-width="5"/>
+    <circle cx="49" cy="60" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="71" cy="60" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M43 82 Q60 75 77 82 L75 94 Q70 104 60 106 Q50 104 45 94Z" fill="#edc49a" stroke="none"/>
+    <ellipse cx="51" cy="89" rx="3" ry="2.5" fill="#93645b" stroke="none"/>
+    <ellipse cx="69" cy="89" rx="3" ry="2.5" fill="#93645b" stroke="none"/>
+    <path d="M54 98 Q60 102 66 98" stroke-width="2.5"/>
+  </g>
+</svg>

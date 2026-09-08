@@ -118,15 +118,23 @@ function assertVoice(relativePath) {
   assert.equal(wave.sampleRate, 22050, relativePath);
   assert.equal(wave.channels, 1, relativePath);
   assert.ok(pcmStats(wave.data).energy > 0, `Silent pronunciation: ${relativePath}`);
+  return wave;
 }
 
-test('all eight vocabulary images are distinct SVGs in one directory', () => {
-  assert.equal(words.length, 8);
+test('all 100 short vocabulary words have distinct illustrations in one directory', () => {
+  assert.equal(words.length, 100);
+  assert.equal(new Set(words.map(word => word.id)).size, 100);
+  assert.equal(new Set(words.map(word => word.text)).size, 100);
+  for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
+    assert.ok(words.some(word => word.id === original && word.text === original));
+  }
   const digests = new Set();
   for (const word of words) {
+    assert.match(word.text, /^[a-z]{2,6}$/);
+    assert.equal(word.id, word.text);
     assert.equal(path.dirname(path.normalize(word.image)), path.join('assets', 'images', 'words'));
     assert.equal(path.basename(word.image), `${word.id}.svg`);
-    digests.add(sha256(readSvg(word.image)));
+    digests.add(sha256(readSvg(word.image).replace(/<title\b[^>]*>[\s\S]*?<\/title>/g, '')));
   }
   assert.equal(digests.size, words.length);
 });
@@ -154,7 +162,7 @@ test('the encouraging try-again scene is a standalone SVG', () => {
   readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
 });
 
-test('the generated image directories contain exactly the thirteen named SVGs', () => {
+test('the generated image directories contain exactly the 105 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
     ['rewards', seasons.map(({ id }) => `${id}.svg`)],
@@ -185,13 +193,15 @@ test('all sixteen English prompts have nonempty prerecorded mono voice WAVs', ()
 });
 
 test('every vocabulary entry has its own prerecorded English pronunciation', () => {
+  const recordings = new Set();
   for (const word of words) {
     assert.equal(word.audio, `assets/audio/voice/word-${word.id}.wav`);
-    assertVoice(word.audio);
+    recordings.add(sha256(assertVoice(word.audio).data));
   }
+  assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice output contains exactly twenty-four finished WAV files', () => {
+test('voice output contains exactly 100 word recordings and sixteen prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [

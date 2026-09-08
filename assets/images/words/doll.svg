@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">doll</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <circle cx="60" cy="33" r="20" fill="#f2c59d"/>
+    <path d="M41 34 Q38 13 60 12 Q82 13 79 34 Q72 22 60 24 Q48 22 41 34Z" fill="#b98264"/>
+    <path d="M42 29 Q34 34 39 46 M78 29 Q86 34 81 46" stroke="#b98264" stroke-width="6"/>
+    <circle cx="53" cy="34" r="2.5" fill="#765445" stroke="none"/>
+    <circle cx="67" cy="34" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M54 42 Q60 47 66 42" stroke-width="2.5"/>
+    <path d="M48 52 H72 L86 87 Q73 94 60 91 Q47 94 34 87Z" fill="#ef9fb0"/>
+    <path d="M48 54 Q60 63 72 54" fill="#fff0d4" stroke-width="2.5"/>
+    <path d="M39 64 24 78 M81 64 96 78" stroke="#f2c59d" stroke-width="8"/>
+    <circle cx="22" cy="80" r="5" fill="#f2c59d"/>
+    <circle cx="98" cy="80" r="5" fill="#f2c59d"/>
+    <path d="M47 90 43 105 M73 90 77 105" stroke="#f2c59d" stroke-width="9"/>
+    <path d="M36 105H48 M72 105H84" stroke="#8fc5b6" stroke-width="6"/>
+  </g>
+</svg>

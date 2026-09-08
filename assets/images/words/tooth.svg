@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tooth</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="29" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M33 23 Q42 15 52 23 Q60 15 68 23 Q79 15 88 25 Q97 35 90 50 Q84 62 82 88 Q80 105 71 105 Q63 105 60 88 Q57 105 49 105 Q39 105 37 89 Q35 64 28 50 Q21 35 33 23Z" fill="#fffefd"/>
+    <path d="M39 31 Q44 25 50 29" stroke="#dff1ef" stroke-width="6"/>
+    <path d="M44 51 Q60 58 77 50" stroke="#e4efed" stroke-width="2.5"/>
+    <path d="M49 74 Q53 82 55 94 M71 74 Q67 82 65 94" stroke="#d9e8e6" stroke-width="2.5"/>
+    <circle cx="79" cy="37" r="3" fill="#ffffff" stroke="none"/>
+  </g>
+</svg>

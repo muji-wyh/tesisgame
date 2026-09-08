@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mouse</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="31" cy="45" r="20" fill="#b8a6a0"/>
+    <circle cx="89" cy="45" r="20" fill="#b8a6a0"/>
+    <circle cx="31" cy="45" r="11" fill="#e7b8b2" stroke="none"/>
+    <circle cx="89" cy="45" r="11" fill="#e7b8b2" stroke="none"/>
+    <path d="M33 62 Q35 37 60 36 Q85 37 87 62 Q91 87 60 101 Q29 87 33 62Z" fill="#c8bab4"/>
+    <circle cx="47" cy="64" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="73" cy="64" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M53 79 Q60 75 67 79 Q65 86 60 87 Q55 86 53 79Z" fill="#d98f92"/>
+    <path d="M60 87V90 Q55 95 51 90 M60 90 Q65 95 69 90" stroke-width="2.5"/>
+    <path d="M44 81 18 75 M43 87 15 88 M76 81 102 75 M77 87 105 88" stroke-width="2.5"/>
+    <ellipse cx="41" cy="77" rx="5" ry="3" fill="#e4a6a2" stroke="none"/>
+    <ellipse cx="79" cy="77" rx="5" ry="3" fill="#e4a6a2" stroke="none"/>
+  </g>
+</svg>

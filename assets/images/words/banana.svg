@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">banana</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="36" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M21 44 C29 66 43 81 60 85 C78 89 91 78 100 56 C104 65 102 76 96 86 C85 104 63 108 44 99 C26 90 14 71 16 54 Q17 47 21 44Z" fill="#f6d35f"/>
+    <path d="M25 49 C34 69 47 79 62 80 C77 82 89 72 98 57" stroke="#dca83d" stroke-width="2.5"/>
+    <path d="M18 49 Q14 44 18 39 Q22 36 28 42 L25 49Z" fill="#ad7d4f" stroke-width="2.5"/>
+    <path d="M98 59 Q103 52 106 56 L106 63 Q103 68 99 66Z" fill="#ad7d4f" stroke-width="2.5"/>
+    <path d="M30 58 Q38 73 50 78" stroke="#fff0a4" stroke-width="4"/>
+  </g>
+</svg>

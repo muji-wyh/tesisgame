@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">moon</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M75 16 A43 43 0 1 0 96 91 Q73 96 57 80 Q37 60 47 35 Q56 20 75 16Z" fill="#f5d574"/>
+    <circle cx="50" cy="42" r="5" fill="#e5bd60" stroke="none"/>
+    <circle cx="40" cy="65" r="7" fill="#e5bd60" stroke="none"/>
+    <circle cx="57" cy="83" r="4" fill="#e5bd60" stroke="none"/>
+    <path d="M52 52 Q58 48 64 52" stroke="#b6874d" stroke-width="2.5"/>
+    <path d="M49 67 Q55 72 61 67" stroke="#b6874d" stroke-width="2.5"/>
+  </g>
+</svg>

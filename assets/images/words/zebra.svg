@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">zebra</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M37 39 33 18 Q33 13 39 18 L50 32Z M83 39 87 18 Q87 13 81 18 L70 32Z" fill="#fff9e9"/>
+    <path d="M38 37 29 42 35 49 27 55 36 62 29 69 40 76 35 85 49 89 52 43Z" fill="#5d5956"/>
+    <path d="M42 31 Q60 22 78 31 Q84 44 82 62 L78 88 Q74 103 60 106 Q46 103 42 88 L38 62 Q36 44 42 31Z" fill="#fff9e9"/>
+    <path d="M44 33 58 45 48 51 39 43Z M76 33 62 45 72 51 81 43Z" fill="#5d5956" stroke="none"/>
+    <path d="M39 57 55 62 42 69Z M81 57 65 62 78 69Z M43 75 57 78 46 86Z M77 75 63 78 74 86Z" fill="#5d5956" stroke="none"/>
+    <circle cx="49" cy="59" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="71" cy="59" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M43 84 Q60 77 77 84 L75 95 Q70 104 60 106 Q50 104 45 95Z" fill="#ddd0bc" stroke="none"/>
+    <ellipse cx="52" cy="90" rx="2.7" ry="2.2" fill="#765445" stroke="none"/>
+    <ellipse cx="68" cy="90" rx="2.7" ry="2.2" fill="#765445" stroke="none"/>
+    <path d="M54 98 Q60 102 66 98" stroke-width="2.5"/>
+  </g>
+</svg>

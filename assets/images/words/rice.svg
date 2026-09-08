@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rice</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="39" ry="3.5" fill="#eadbc5" stroke="none"/>
+    <path d="M27 72 Q30 45 46 38 Q60 30 75 39 Q90 47 93 72Z" fill="#fffdf3"/>
+    <ellipse cx="43" cy="53" rx="6" ry="2.5" transform="rotate(-28 43 53)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="58" cy="43" rx="6" ry="2.5" transform="rotate(12 58 43)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="73" cy="50" rx="6" ry="2.5" transform="rotate(30 73 50)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="36" cy="64" rx="6" ry="2.5" transform="rotate(18 36 64)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="52" cy="59" rx="6" ry="2.5" transform="rotate(-12 52 59)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="67" cy="62" rx="6" ry="2.5" transform="rotate(20 67 62)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="84" cy="63" rx="6" ry="2.5" transform="rotate(-22 84 63)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="46" cy="72" rx="6" ry="2.5" transform="rotate(25 46 72)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="61" cy="72" rx="6" ry="2.5" transform="rotate(-20 61 72)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <ellipse cx="76" cy="72" rx="6" ry="2.5" transform="rotate(10 76 72)" fill="#ffffff" stroke="#ccb9a4" stroke-width="1.5"/>
+    <path d="M20 70 Q60 82 100 70 Q96 102 60 106 Q24 102 20 70Z" fill="#9ecbd1"/>
+    <path d="M22 72 Q60 84 98 72" stroke="#effafa" stroke-width="3"/>
+    <path d="M35 94 Q60 102 85 94" stroke="#76afb9" stroke-width="2.5"/>
+  </g>
+</svg>

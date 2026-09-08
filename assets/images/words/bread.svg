@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bread</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="105" rx="40" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M45 35 Q48 20 64 20 H77 Q99 22 101 43 V92 H45Z" fill="#d99f63"/>
+    <path d="M51 40 Q54 29 66 28 H77 Q92 29 94 44 V84 H51Z" fill="#f6d69a" stroke-width="2.5"/>
+    <path d="M22 45 Q23 29 42 26 Q61 27 68 42 V95 H22Z" fill="#d99f63"/>
+    <path d="M29 47 Q30 36 43 34 Q56 35 61 45 V88 H29Z" fill="#fff0c7" stroke-width="2.5"/>
+    <path d="M73 34 Q82 38 85 47 M74 53 Q84 57 87 66 M74 72 Q83 76 86 84" stroke="#c48953" stroke-width="3"/>
+    <path d="M34 45 Q40 39 48 39" stroke="#ffffff" stroke-width="4"/>
+  </g>
+</svg>

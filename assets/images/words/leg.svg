@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">leg</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="65" cy="110" rx="40" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M40 36 Q55 38 69 49 Q81 57 78 68 Q76 77 67 79 Q58 82 52 72 L34 51Z" fill="#efbd9d"/>
+    <path d="M66 74 Q62 85 60 98 L81 98 Q91 98 98 105 Q92 110 81 110 H56 Q48 109 48 102 L50 82 Q51 73 58 68Z" fill="#efbd9d"/>
+    <path d="M25 19 H62 L66 39 Q54 45 39 44 L28 51Z" fill="#91bdcb"/>
+    <path d="M59 97 H81 Q93 98 99 105 Q93 111 81 110 H56 Q51 109 50 104Z" fill="#8eafd0"/>
+    <path d="M59 72 Q65 68 73 69 M53 85 Q59 88 64 86" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M43 43 Q53 46 61 52" stroke="#ffd9c1" stroke-width="4"/>
+  </g>
+</svg>

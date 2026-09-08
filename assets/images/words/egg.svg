@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">egg</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="103" rx="39" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M31 38 C42 27 51 34 60 30 C72 25 78 35 83 43 C89 51 101 53 103 64 C106 78 95 87 82 88 C71 89 66 98 54 97 C43 96 39 88 28 87 C15 85 12 72 18 61 C22 53 23 46 31 38Z" fill="#fffdf5"/>
+    <circle cx="61" cy="64" r="21" fill="#f5c956"/>
+    <path d="M49 57 Q54 48 63 47" stroke="#ffe99a" stroke-width="5"/>
+    <path d="M79 83 Q88 80 94 73" stroke="#e9ded0" stroke-width="2.5"/>
+  </g>
+</svg>

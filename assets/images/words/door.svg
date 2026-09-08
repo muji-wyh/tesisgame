@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">door</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="108" rx="39" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M28 15 H94 V106 H28Z" fill="#9ccaba"/>
+    <path d="M37 24H85V97H37Z" fill="#f2c779"/>
+    <rect x="44" y="31" width="34" height="24" rx="3" fill="#f7d992" stroke-width="2.5"/>
+    <rect x="44" y="65" width="34" height="24" rx="3" fill="#f7d992" stroke-width="2.5"/>
+    <circle cx="75" cy="61" r="5" fill="#ef9b83"/>
+    <circle cx="75" cy="61" r="1.5" fill="#fff6df" stroke="none"/>
+    <path d="M28 106H100" stroke="#b78662" stroke-width="5"/>
+  </g>
+</svg>

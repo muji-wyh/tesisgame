@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">peas</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="101" rx="40" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M16 68 Q35 39 93 43 Q104 44 104 55 Q102 77 80 87 Q49 97 23 81 Q17 76 16 68Z" fill="#86bd73"/>
+    <path d="M23 68 Q42 48 91 50 Q96 51 95 58 Q90 76 76 80 Q49 89 27 76Z" fill="#dceba1" stroke-width="2.5"/>
+    <circle cx="34" cy="68" r="9" fill="#93c86e" stroke-width="2.5"/>
+    <circle cx="49" cy="64" r="9.5" fill="#86bf65" stroke-width="2.5"/>
+    <circle cx="64" cy="63" r="9.5" fill="#94cb6e" stroke-width="2.5"/>
+    <circle cx="79" cy="62" r="9" fill="#84ba64" stroke-width="2.5"/>
+    <circle cx="92" cy="58" r="8" fill="#98cd74" stroke-width="2.5"/>
+    <path d="M17 68 Q12 59 17 53 Q24 57 25 65Z" fill="#78ad6b"/>
+    <path d="M30 62 Q34 58 38 59" stroke="#c9e894" stroke-width="3"/>
+  </g>
+</svg>

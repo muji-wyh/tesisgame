@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">shoe</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="61" cy="104" rx="45" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M22 78 Q28 68 40 65 L47 44 Q49 37 58 38 L75 43 Q80 59 91 68 L103 75 Q108 79 106 88 Q104 96 92 97 H27 Q15 96 15 87 Q15 81 22 78Z" fill="#ef9b84"/>
+    <path d="M48 45 Q58 51 75 43 L78 54 Q62 62 43 57Z" fill="#f8c2b3" stroke-width="2.5"/>
+    <path d="M51 57 72 64 M47 64 69 71" stroke="#fff3dd" stroke-width="4"/>
+    <path d="M16 86 Q54 92 105 83 V91 Q101 98 91 98 H27 Q16 98 16 90Z" fill="#8abeb2"/>
+    <path d="M27 87 Q24 78 33 72" stroke="#d97f70" stroke-width="3"/>
+  </g>
+</svg>

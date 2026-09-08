@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">truck</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="103" rx="48" ry="5" fill="#eadbc5" stroke="none"/>
+    <rect x="12" y="34" width="59" height="52" rx="5" fill="#9ccdb9"/>
+    <path d="M71 53 H89 Q94 53 98 61 L106 73 V87 H71Z" fill="#ef9b82"/>
+    <path d="M79 59H89Q92 59 95 65L99 72H79Z" fill="#d4ecee" stroke-width="2.5"/>
+    <path d="M18 43H64 M22 52H61" stroke="#c8e7d8" stroke-width="4"/>
+    <rect x="15" y="76" width="91" height="13" rx="4" fill="#f3c76e"/>
+    <circle cx="34" cy="89" r="12" fill="#686867"/>
+    <circle cx="87" cy="89" r="12" fill="#686867"/>
+    <circle cx="34" cy="89" r="4.5" fill="#f7ead6" stroke="none"/>
+    <circle cx="87" cy="89" r="4.5" fill="#f7ead6" stroke="none"/>
+    <circle cx="102" cy="78" r="3.5" fill="#fff0a6" stroke="none"/>
+  </g>
+</svg>

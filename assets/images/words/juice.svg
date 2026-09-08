@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">juice</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="57" cy="107" rx="32" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M27 29 H85 L80 101 Q79 106 73 106 H39 Q33 106 32 101Z" fill="#fff5df"/>
+    <path d="M31 45 Q56 40 82 45 L78 99 Q78 102 73 102 H39 Q35 102 35 99Z" fill="#f1a34e" stroke="none"/>
+    <path d="M31 45 Q56 40 82 45" stroke="#da7f3e" stroke-width="2.5"/>
+    <circle cx="88" cy="35" r="16" fill="#f5b45d" stroke-width="2.5"/>
+    <path d="M88 19 V51 M74 35 H102 M77 25 99 45 M99 25 77 45" stroke="#fff0ba" stroke-width="2"/>
+    <path d="M82 20 Q91 12 100 17 Q94 24 84 24Z" fill="#8fba72" stroke-width="2.5"/>
+    <path d="M39 54 Q45 49 52 49" stroke="#ffd692" stroke-width="4"/>
+  </g>
+</svg>

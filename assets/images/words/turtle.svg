@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">turtle</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="59" cy="101" rx="46" ry="6" fill="#dce8cf" stroke="none"/>
+    <path d="M24 69 10 61 19 78Z" fill="#82b88a"/>
+    <ellipse cx="37" cy="89" rx="13" ry="8" transform="rotate(-18 37 89)" fill="#82b88a"/>
+    <ellipse cx="73" cy="89" rx="13" ry="8" transform="rotate(18 73 89)" fill="#82b88a"/>
+    <ellipse cx="94" cy="64" rx="16" ry="14" fill="#8bc394"/>
+    <circle cx="99" cy="60" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M101 69 Q106 73 110 68" stroke-width="2.5"/>
+    <ellipse cx="55" cy="62" rx="36" ry="28" fill="#a9cb78"/>
+    <ellipse cx="55" cy="62" rx="27" ry="20" fill="#c9d98a"/>
+    <path d="M55 42 46 53 50 67 63 70 70 58 64 45Z" fill="#b2c875"/>
+    <path d="M46 53 31 51 M50 67 33 77 M63 70 72 82 M70 58 82 52 M55 42 54 34" stroke="#88a568" stroke-width="2.5"/>
+    <path d="M29 60 Q43 62 55 42 Q64 61 81 62 Q64 67 63 70 Q48 74 29 60Z" fill="none" stroke="#88a568" stroke-width="2.5"/>
+  </g>
+</svg>

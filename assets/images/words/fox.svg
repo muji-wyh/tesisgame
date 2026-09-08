@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fox</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <path d="M31 53 25 18 Q24 13 30 17 L50 34 M89 53 95 18 Q96 13 90 17 L70 34" fill="#e88954"/>
+    <path d="M31 49 Q34 27 60 27 Q86 27 89 49 L91 69 Q88 93 60 104 Q32 93 29 69Z" fill="#ec9257"/>
+    <path d="M31 25 35 48 48 37Z M89 25 85 48 72 37Z" fill="#6e5149" stroke="none"/>
+    <path d="M30 62 Q38 55 51 64 L60 81 Q69 64 82 55 Q89 61 90 70 Q86 92 60 104 Q34 92 30 70Z" fill="#fff2d9" stroke="none"/>
+    <circle cx="46" cy="58" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="74" cy="58" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M53 80 Q60 75 67 80 Q66 87 60 89 Q54 87 53 80Z" fill="#6e5149"/>
+    <path d="M60 89V92 M53 93 Q60 98 67 93" stroke-width="2.5"/>
+    <path d="M38 80 18 76 M39 86 17 90 M82 80 102 76 M81 86 103 90" stroke-width="2.5"/>
+  </g>
+</svg>
