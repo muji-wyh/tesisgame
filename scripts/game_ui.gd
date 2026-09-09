@@ -9,6 +9,7 @@ const Chest = preload("res://scripts/chest_view.gd")
 const Effects = preload("res://scripts/celebration.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const MedalProgress = preload("res://scripts/medal_progress.gd")
+const Mascot = preload("res://scripts/duck_mascot.gd")
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
@@ -23,6 +24,7 @@ class ProgressBadges:
 	var filled_count: int = 0
 	var total_count: int = 3
 	var badge_kind: int = SUCCESS
+	var mascot_inset: float = 0.0
 
 	func _init(kind: int = SUCCESS) -> void:
 		badge_kind = kind
@@ -34,13 +36,19 @@ class ProgressBadges:
 		filled_count = clampi(value, 0, total_count)
 		queue_redraw()
 
+	func set_mascot_inset(value: float) -> void:
+		if not is_equal_approx(mascot_inset, value):
+			mascot_inset = value
+			queue_redraw()
+
 	func _draw() -> void:
 		if total_count <= 0:
 			return
 		var gap: float = 5.0
-		var radius: float = clampf(minf(size.y * 0.31, (size.x - gap * float(total_count - 1)) / float(total_count) * 0.5), 7.0, 13.0)
+		var available: float = size.x - mascot_inset
+		var radius: float = clampf(minf(size.y * 0.31, (available - gap * float(total_count - 1)) / float(total_count) * 0.5), 5.0, 13.0)
 		var total_width: float = radius * 2.0 * total_count + gap * float(total_count - 1)
-		var x: float = maxf(radius, (size.x - total_width) * 0.5 + radius)
+		var x: float = mascot_inset + maxf(radius, (available - total_width) * 0.5 + radius)
 		for index in range(total_count):
 			var center := Vector2(x + float(index) * (radius * 2.0 + gap), size.y * 0.5)
 			var filled := index < filled_count
@@ -155,6 +163,9 @@ class RewardSparkle:
 var model := Model.new()
 var data := Data.new()
 var medal_progress := MedalProgress.new()
+var duck: Mascot
+var _collection_duck_slot: Control
+var _preview_duck_slot: Control
 var cards: Dictionary = {}
 var grid: GridContainer
 var feedback_timer: Timer
@@ -461,6 +472,12 @@ func _build_controls() -> void:
 	feedback_timer.timeout.connect(_resolve_feedback)
 	add_child(feedback_timer)
 	_build_reward_preview_shell()
+	duck = Mascot.new()
+	duck.z_index = 80
+	duck.pressed.connect(_play_duck)
+	duck.hide()
+	add_child(duck)
+	_set_accessibility_name(duck, "Pip the duck. Press to say hello.")
 	_outcome.hide()
 
 
@@ -479,6 +496,10 @@ func _build_collection_shell() -> void:
 	margins.add_child(column)
 	var header := HBoxContainer.new()
 	column.add_child(header)
+	_collection_duck_slot = Control.new()
+	_collection_duck_slot.custom_minimum_size = Vector2(72, 72)
+	_collection_duck_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(_collection_duck_slot)
 	var title := Style.label("My rewards", 32)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
@@ -516,6 +537,10 @@ func _build_reward_preview_shell() -> void:
 	margins.add_child(column)
 	var header := HBoxContainer.new()
 	column.add_child(header)
+	_preview_duck_slot = Control.new()
+	_preview_duck_slot.custom_minimum_size = Vector2(72, 72)
+	_preview_duck_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(_preview_duck_slot)
 	_preview_title = Style.label("", 30)
 	_preview_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_preview_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -552,6 +577,7 @@ func _build_reward_preview_shell() -> void:
 	_preview_play_button.pressed.connect(_play_reward_preview)
 	stage.add_child(_preview_play_button)
 	_preview_play_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_preview_play_button.focus_neighbor_top = _preview_close.get_path()
 	_preview_caption = Style.label("Tap the reward to play!", 20)
 	_preview_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(_preview_caption)
@@ -696,13 +722,15 @@ func _open_reward_preview(id: String) -> void:
 	_preview_focus_modes.clear()
 	for node in find_children("*", "Button", true, false):
 		var button := node as Button
-		if not _preview_page.is_ancestor_of(button):
+		if button != duck and not _preview_page.is_ancestor_of(button):
 			_preview_focus_modes[button] = button.focus_mode
 			button.focus_mode = Control.FOCUS_NONE
 	_preview_close.focus_mode = Control.FOCUS_ALL
 	_preview_play_button.focus_mode = Control.FOCUS_ALL
 	_preview_page.show()
 	_preview_play_button.grab_focus()
+	_update_duck()
+	duck.react("happy")
 	var progress_note: String = "Piece %d of 3. " % _piece_count(id) if _piece_count(id) < 3 else ""
 	_announce_status("%s reward preview opened. %sPress the reward to play, or Back to close." % [_preview_title.text, progress_note])
 
@@ -731,6 +759,7 @@ func _play_reward_preview() -> void:
 		return
 	_cancel_preview_flourish()
 	_preview_tap_count += 1
+	duck.react("happy")
 	var reaction: int = (_preview_tap_count - 1) % PREVIEW_REACTIONS.size()
 	var party: bool = _preview_tap_count % 5 == 0
 	var reward: Dictionary = Data.reward(_preview_reward_id)
@@ -966,6 +995,7 @@ func new_round(seed_value: int = -1) -> void:
 		_announce_status("Your piece is waiting to be saved. Choose Retry saving.")
 		return
 	_stop_voice()
+	duck.settle()
 	_rebuilding = true
 	_cancel_fragment_delivery()
 	_pending_fragment.clear()
@@ -1017,6 +1047,7 @@ func _refresh() -> void:
 		button.disabled = model.chest_state == "opening" or _save_error
 		Style.button(button, palette.accent)
 	Style.button(collection_button, palette.accent)
+	Style.button(_collection_back, palette.accent)
 	Style.button(hint_button, palette.accent)
 	Style.button(_voice_button, palette.accent)
 	_voice_button.disabled = _host == null or not bool(_host.speechAvailable())
@@ -1121,11 +1152,13 @@ func _refresh() -> void:
 	if _last_phase != model.phase:
 		_last_phase = model.phase
 		if won:
+			duck.react("happy")
 			audio.cue(model.theme_id + "-arrive")
 			if _controller_mode and not collection_page.visible and not _preview_page.visible:
 				chest_button.focus_mode = Control.FOCUS_ALL
 				_default_focus().grab_focus()
 		elif model.phase == "lost":
+			duck.react("curious")
 			audio.stop_music()
 			audio.cue("loss", "loss")
 			if _controller_mode and not collection_page.visible and not _preview_page.visible:
@@ -1152,6 +1185,7 @@ func _refresh() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = Control.FOCUS_NONE
 	_layout_result()
+	_update_duck()
 	_refresh_controller_focus()
 
 
@@ -1181,6 +1215,7 @@ func _layout() -> void:
 	_layout_collection()
 	_layout_result()
 	_sync_voice_bounds()
+	_update_duck()
 
 
 func _layout_collection() -> void:
@@ -1217,6 +1252,7 @@ func _layout_result() -> void:
 func _request_hint() -> void:
 	if collection_page.visible or _preview_page.visible or not model.request_hint():
 		return
+	duck.react("happy")
 	if not _voice_mode:
 		audio.interact(model.theme_id)
 		audio.cue("select")
@@ -1230,6 +1266,7 @@ func _select_card(id: String) -> void:
 		audio.interact(model.theme_id, model.phase != "lost")
 	var result: String = model.select(id)
 	if result in ["selected", "reselected"] and not _voice_mode:
+		duck.react("curious")
 		audio.cue("select")
 		audio.say("res://" + model.card_by_id(id).word.audio)
 	elif result in ["correct", "wrong"]:
@@ -1250,6 +1287,7 @@ func choose_theme(id: String) -> void:
 	if _save_error or not model.set_theme(id):
 		return
 	_preferred_theme = id
+	duck.react("happy")
 	effects.clear()
 	if not _voice_mode:
 		audio.interact(model.theme_id, model.phase != "lost")
@@ -1258,6 +1296,8 @@ func choose_theme(id: String) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	if duck != null:
+		duck.set_reduced_motion(value)
 	chest.reduced_motion = value
 	if value:
 		chest.stop_reaction()
@@ -1311,6 +1351,7 @@ func _commit_fragment() -> void:
 	_save_error = false
 	_refresh_collection()
 	_refresh()
+	duck.react("happy")
 	if _pending_fragment.is_empty() or reduced_motion or collection_page.visible:
 		return
 	_start_fragment_delivery()
@@ -1464,6 +1505,7 @@ func _replay() -> void:
 	new_round()
 	if _save_error:
 		return
+	duck.react("happy")
 	audio.interact(model.theme_id)
 	audio.cue("", "welcome")
 
@@ -1477,6 +1519,7 @@ func on_page_hidden() -> void:
 	_finish_chest_drag()
 	_end_collection_drag(false)
 	audio.halt()
+	duck.settle()
 	chest.finish_immediately()
 	chest.stop_reaction()
 	effects.clear()
@@ -1650,6 +1693,13 @@ func _move_focus(direction: Vector2) -> void:
 	if not candidates.has(current):
 		candidates[0].grab_focus()
 		return
+	var side: int = SIDE_LEFT if direction == Vector2.LEFT else SIDE_RIGHT if direction == Vector2.RIGHT else SIDE_TOP if direction == Vector2.UP else SIDE_BOTTOM
+	var neighbor_path: NodePath = current.get_focus_neighbor(side)
+	if not neighbor_path.is_empty():
+		var neighbor := current.get_node_or_null(neighbor_path) as Control
+		if candidates.has(neighbor):
+			neighbor.grab_focus()
+			return
 	var current_center: Vector2 = _focus_center(current)
 	var best: Control = null
 	var best_score := INF
@@ -1857,6 +1907,7 @@ func _stop_voice() -> void:
 
 func _animate_feedback(ids: Array[String], correct: bool) -> void:
 	_stop_feedback_animations()
+	duck.react("happy" if correct else "curious")
 	if reduced_motion:
 		return
 	for id in ids:
@@ -1943,6 +1994,7 @@ func _finish_chest_drag() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_duck()
 	_advance_collection_inertia(delta)
 	if _holding_chest:
 		_hold_elapsed += delta
@@ -2018,11 +2070,13 @@ func _show_collection() -> void:
 	_collection_focus_modes.clear()
 	for node in find_children("*", "Button", true, false):
 		var button := node as Button
-		if not collection_page.is_ancestor_of(button) and not _preview_page.is_ancestor_of(button):
+		if button != duck and not collection_page.is_ancestor_of(button) and not _preview_page.is_ancestor_of(button):
 			_collection_focus_modes[button] = button.focus_mode
 			button.focus_mode = Control.FOCUS_NONE
 	collection_page.show()
 	_collection_back.grab_focus()
+	_update_duck()
+	duck.react("happy")
 	_announce_collection_state()
 
 
@@ -2057,3 +2111,45 @@ func _load_collected_rewards() -> void:
 	_progress_ready = medal_progress.load_progress()
 	_save_error = not _progress_ready
 	_sync_collected_rewards()
+
+
+func _update_duck() -> void:
+	if duck == null or audio == null:
+		return
+	var in_preview: bool = _preview_page.visible
+	var in_collection: bool = collection_page.visible
+	var visible_here: bool = in_preview or in_collection or not _voice_mode
+	duck.set_reduced_motion(reduced_motion)
+	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
+	var in_header: bool = not in_preview and not in_collection
+	_success.set_mascot_inset(54.0 if visible_here and in_header else 0.0)
+	if not visible_here:
+		duck.hide()
+		return
+	var slot: Control = _preview_duck_slot if in_preview else _collection_duck_slot if in_collection else _success
+	var rect: Rect2 = slot.get_global_rect()
+	if rect.position == Vector2.ZERO or rect.size.y < 72:
+		duck.hide()
+		return
+	duck.compact = in_header
+	duck.position = get_global_transform().affine_inverse() * rect.position
+	duck.size = Vector2(maxf(72, rect.size.x), maxf(72, rect.size.y))
+	duck.show()
+	var accent: Color = _preview_sparkle.accent if in_preview else Data.THEMES[model.theme_id].accent
+	if duck.accent != accent:
+		duck.accent = accent
+		duck.queue_redraw()
+
+
+func _play_duck() -> void:
+	duck.react("happy")
+	if _voice_mode:
+		return
+	audio.interact(model.theme_id, model.phase != "lost")
+	audio.cue("select")
+	for word in data.words:
+		if word.id == "duck":
+			audio.say("res://" + word.audio)
+			_announce_status("Pip says: duck!")
+			return
+	_announce_status("Pip waves hello!")

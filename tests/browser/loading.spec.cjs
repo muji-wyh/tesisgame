@@ -2,13 +2,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
+const { inlineMascot } = require('../../tools/prepare-godot.cjs');
 
 const root = path.resolve(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'build', 'web', 'index.html'), 'utf8')
   .match(/const config = (\{[^\r\n]*\});/)[1]);
 
 async function useMaintainedShell(page) {
-  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8')
+  const shell = inlineMascot(fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8'))
     .replace('$GODOT_HEAD_INCLUDE', '')
     .replace('$GODOT_URL', `${config.executable}.js`)
     .replace('$GODOT_CONFIG', JSON.stringify(config));
@@ -127,6 +128,27 @@ test('loading chest taps have no browser highlight but keyboard focus stays visi
     await expect(toy).toHaveCSS('outline-style', 'solid');
     await expect(toy).toHaveCSS('outline-width', '3px');
     await expect(toy).toHaveCSS('touch-action', 'pinch-zoom');
+  });
+});
+
+test('Pip is an inline loading companion with bounded, motion-safe reactions', async ({ page }) => {
+  const imageRequests = [];
+  page.on('request', request => {
+    if (/pip\.svg|PIP_MASCOT_URI/.test(request.url())) imageRequests.push(request.url());
+  });
+  await whileEngineScriptIsPending(page, async () => {
+    const duck = page.getByRole('button', { name: 'Play with Pip the duck' });
+    await expect(duck).toBeVisible();
+    expect(await duck.locator('.duck-sprite').evaluate(element =>
+      getComputedStyle(element).backgroundImage.startsWith('url("data:image/svg+xml;base64,')
+    )).toBe(true);
+    for (let tap = 0; tap < 8; tap++) await duck.click();
+    await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
+    expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(1);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await duck.click();
+    expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+    expect(imageRequests).toEqual([]);
   });
 });
 

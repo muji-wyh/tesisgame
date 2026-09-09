@@ -41,6 +41,7 @@
       --cp-sheen: rgba(255, 255, 255, 0.55);
       --cp-highlight: rgba(177, 31, 75, 0.12);
       --cp-tap-highlight: transparent;
+      --pip-art: url("$PIP_MASCOT_URI");
     }
     html[data-theme="dark"] {
       color-scheme: dark;
@@ -102,6 +103,13 @@
     #loading-toy:focus:not(:focus-visible) { outline: none; }
     #loading-toy:active { background: var(--cp-bg-elevated); }
     #loading-toy svg { width: 100%; height: 100%; pointer-events: none; }
+    .duck-sprite { display: block; width: 100%; height: 100%; aspect-ratio: 1;
+      background-image: var(--pip-art); background-size: 400% 100%; background-position: 0% 0%; }
+    #loading-duck { position: absolute; right: 6px; bottom: 4px; width: 64px; height: 64px;
+      min-height: 48px; padding: 0; border-radius: 18px; background: transparent; }
+    #loading-duck:focus-visible { outline-offset: 0; }
+    #loading-duck .duck-sprite { animation: pip-blink 4600ms steps(1) infinite; }
+    @keyframes pip-blink { 0%, 95%, 100% { background-position: 0% 0%; } 96%, 99% { background-position: 66.6667% 0%; } }
     #chest-art { transform-origin: 140px 185px; }
     #chest-lid { transform-origin: 140px 118px; }
     #loading-surprise { position: absolute; width: 76px; height: 76px; top: 25%;
@@ -136,7 +144,9 @@
       background: linear-gradient(110deg, var(--voice-light, #d7efc7), #fff 70%); color: #35415e; }
     #speech-buddy { align-self: center; width: 100%; max-height: 100%;
       transform-origin: 50% 70%; transition: transform 160ms ease-out; }
-    #speech-buddy svg { display: block; width: 100%; max-height: 56px; }
+    #speech-buddy .duck-sprite { height: auto; }
+    #speech-panel[data-state="listening"] .duck-sprite { animation: pip-blink 4600ms steps(1) infinite; }
+    #speech-panel[data-heard="true"] .duck-sprite { animation: none; background-position: 100% 0%; }
     .speech-bubble { align-self: center; min-width: 0; max-height: 100%; padding: 2px 7px;
       border-radius: 13px 13px 13px 3px; background: #ffffffba;
       transition: background-color 160ms ease-out; overflow: hidden; }
@@ -164,6 +174,8 @@
     @media (prefers-reduced-motion: reduce) {
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
       #speech-panel .speech-bubble { background: #ffffffba !important; }
+      .duck-sprite { animation: none !important; }
+      #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0%; }
     }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
@@ -209,6 +221,7 @@
         Browser speech may process audio remotely; the game saves no voice or transcripts.
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
+        Pip the duck is your guide. His beak moves with the game's spoken words. Press him to say hello.
         Four season buttons change the theme and keep your choice for replays. New rounds prefer fresh words.
         My rewards shows six medals per season, with three pieces per medal.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
@@ -217,15 +230,7 @@
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <circle cx="32" cy="28" r="25" fill="var(--voice-light, #d7efc7)"/>
-            <g stroke="var(--voice-accent, #438363)" stroke-width="3" stroke-linecap="round" fill="none">
-              <rect x="20" y="7" width="24" height="34" rx="12" fill="#fff"/>
-              <path d="M13 28v3a19 19 0 0 0 38 0v-3M32 50v8M24 58h16"/>
-              <path d="M27 29q5 6 10 0"/>
-            </g>
-            <g fill="var(--voice-accent, #438363)"><circle cx="27" cy="22" r="2"/><circle cx="37" cy="22" r="2"/></g>
-          </svg>
+          <span class="duck-sprite"></span>
         </div>
         <div class="speech-bubble">
           <div class="speech-heading">
@@ -269,6 +274,7 @@
                   </g>
                 </svg>
               </button>
+              <button id="loading-duck" type="button" aria-label="Play with Pip the duck"><span class="duck-sprite" aria-hidden="true"></span></button>
               <div id="loading-sparks" aria-hidden="true"></div>
               <svg id="loading-surprise" viewBox="0 0 100 100" aria-hidden="true">
                 <path d="m50 6 12 27 30 4-22 20 7 30-27-15-27 15 7-30L8 37l30-4Z"
@@ -317,6 +323,8 @@
       const loadingPlay = document.getElementById('loading-play');
       const loadingNote = document.getElementById('loading-note');
       const percent = document.getElementById('loading-percent');
+      const loadingDuck = document.getElementById('loading-duck');
+      const duckSprite = loadingDuck.querySelector('.duck-sprite');
       const downloadStatus = document.getElementById('download-status');
       const loadingEvents = new AbortController();
       const loadingListener = { signal: loadingEvents.signal };
@@ -416,6 +424,7 @@
         loadingPlay.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         sparks.replaceChildren();
         chestArt.style.transform = '';
+        duckSprite.style.backgroundPosition = '';
         gesture = null;
       }
 
@@ -425,7 +434,24 @@
         loadingEvents.abort();
         clearLoadingEffects();
         toy.disabled = true;
+        loadingDuck.disabled = true;
       }
+
+      function playWithDuck() {
+        if (loadingEvents.signal.aborted || document.hidden) return;
+        duckSprite.getAnimations().forEach(animation => animation.cancel());
+        if (motion.matches) {
+          duckSprite.style.backgroundPosition = '100% 0%';
+          return;
+        }
+        duckSprite.animate([
+          { transform: 'rotate(0deg) translateY(0)', backgroundPosition: '100% 0%' },
+          { transform: 'rotate(-9deg) translateY(-7px)', backgroundPosition: '100% 0%', offset: 0.35 },
+          { transform: 'rotate(7deg) translateY(-3px)', backgroundPosition: '100% 0%', offset: 0.7 },
+          { transform: 'rotate(0deg) translateY(0)', backgroundPosition: '100% 0%' }
+        ], { duration: 550, easing: 'ease-out' });
+      }
+      loadingDuck.addEventListener('click', playWithDuck, loadingListener);
 
       function playWithTreasure() {
         if (loadingEvents.signal.aborted || document.hidden) return;
@@ -434,6 +460,7 @@
         const party = sparkleCount % 5 === 0;
         const reaction = (sparkleCount - 1) % reactions.length;
         hint.textContent = party ? 'High five! Star party!' : reactions[reaction];
+        playWithDuck();
         if (motion.matches) return;
         chestArt.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         score.getAnimations().forEach(animation => animation.cancel());
@@ -584,7 +611,7 @@
             enabled ? text : '';
           const state = !enabled ? 'off' : stopFailed || !active ? 'error' : listening ? 'listening' : 'starting';
           panel.setAttribute('data-state', state);
-          statusText.textContent = state === 'listening' ? "I'm listening!" :
+          statusText.textContent = state === 'listening' ? 'Pip is listening!' :
             state === 'starting' ? 'Opening my ears...' : message;
           notice.textContent = privacy;
           // JavaScriptBridge collects positional arguments into the GDScript callback Array.

@@ -41,6 +41,21 @@ const sfxIds = [
   ...seasons.flatMap(({ id }) => [`${id}-arrive`, `${id}-open`])
 ];
 
+test('the duck mascot has four original reusable poses and is embedded for the web loader', () => {
+  const filename = path.join(root, 'assets', 'images', 'mascots', 'pip.svg');
+  assert.ok(fs.existsSync(filename), 'The original Pip sprite sheet is missing');
+  const svg = fs.readFileSync(filename, 'utf8');
+  assert.match(svg, /viewBox="0 0 480 120"/);
+  for (const pose of ['idle', 'speaking', 'blink', 'wave']) {
+    assert.match(svg, new RegExp(`id="pip-${pose}"`));
+  }
+  assert.doesNotMatch(svg, /<(?:script|image|foreignObject|use|text)\b|\b(?:href|src|on[a-z]+)\s*=/i);
+  const { inlineMascot } = require('../tools/prepare-godot.cjs');
+  assert.equal(typeof inlineMascot, 'function');
+  const embedded = inlineMascot('url("$PIP_MASCOT_URI")');
+  assert.equal(embedded, `url("data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}")`);
+});
+
 function assetFiles(directory) {
   const names = fs.readdirSync(directory);
   for (const name of names.filter((entry) => entry.endsWith('.import'))) {
@@ -53,7 +68,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 164);
+  assert.equal(imports.length, 165);
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);

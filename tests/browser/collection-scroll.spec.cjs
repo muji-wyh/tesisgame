@@ -106,13 +106,20 @@ test.describe('collection release momentum', () => {
         type: 'touchStart', touchPoints: [{ id: 1, x: 190, y: 470 }]
       });
       touching = true;
-      for (const displacement of [20, 40, 60, 80]) {
+      for (const displacement of [20, 40, 60]) {
         await page.waitForTimeout(40);
         await client.send('Input.dispatchTouchEvent', {
           type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 470 - displacement }]
         });
       }
-      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await page.waitForTimeout(40);
+      // Queue the final move and release together; an IPC round trip can look like a stationary hold.
+      await Promise.all([
+        client.send('Input.dispatchTouchEvent', {
+          type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 390 }]
+        }),
+        client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+      ]);
       touching = false;
     }
     try {

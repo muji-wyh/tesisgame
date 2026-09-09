@@ -6,6 +6,8 @@ Notable changes to Word Buddies, grouped by date with the newest changes first.
 
 ### Added
 
+- Pip, an original animated duck mascot shared across all pages, with greetings,
+  blinks, contextual reactions, and beak movement synchronized to actual spoken audio.
 - Optional English voice play with a single Voice start/stop button, live
   transcription, and matching of complete board words from final speech results.
   Voice play stops on victory, exit, replay, page hiding, or opening a collection.
@@ -39,6 +41,8 @@ Notable changes to Word Buddies, grouped by date with the newest changes first.
 
 ### Fixed
 
+- Kept the duck out of the initial unlaid-out viewport, avoiding phantom tooltips
+  and preserving one-press keyboard cancellation.
 - Keyboard navigation through unavailable or used controls.
 - Focus restoration after collection and preview state changes.
 - Text contrast on pressed buttons and card layout on short screens in voice mode.

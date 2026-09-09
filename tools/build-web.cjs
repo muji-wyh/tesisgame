@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { runGodot } = require('./run-godot.cjs');
-const { prepare } = require('./prepare-godot.cjs');
+const { prepare, inlineMascot } = require('./prepare-godot.cjs');
 const { packageWebExport, collectOptionalAudio } = require('./package-web.cjs');
 
 const root = path.resolve(__dirname, '..');
@@ -16,6 +16,8 @@ for (const filename of ['index.html', 'index.js', 'index.wasm', 'index.pck']) {
   }
 }
 const output = path.join(root, 'build', 'web');
+const htmlPath = path.join(output, 'index.html');
+fs.writeFileSync(htmlPath, inlineMascot(fs.readFileSync(htmlPath, 'utf8')));
 const verification = runGodot([
   '--headless', '--path', output, '--main-pack', path.join(output, 'index.pck'),
   '--script', path.join(root, 'tests', 'godot', 'verify_web_pack.gd'), '--',

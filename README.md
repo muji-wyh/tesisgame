@@ -121,6 +121,18 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
+**Pip the duck** is the game's round, wide-eyed companion. He appears on the
+loading screen, board, results, collection, reward previews, and voice panel.
+Tap him for a little greeting; he also reacts to selections, matches, hints,
+season changes, and rewards. These reactions never change scoring or saved progress.
+
+Pip's beak follows the actual pronunciation/prompt player, including delayed
+audio downloads and page transitions, rather than merely reacting to a button
+press. Background music and sound effects do not make him talk. During microphone
+play he listens instead. Reduced motion uses static speaking/greeting poses.
+The same original four-pose SVG supplies both Godot and the inline HTML mascot,
+so the loading companion needs no additional image request.
+
 Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left instead of plain text counters. Correct pairs bounce; incorrect pairs shake.
 
 Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
@@ -198,7 +210,7 @@ encouragement without movement, and Play again remains the initial controller ac
 
 On a supported browser, click **Voice** to start listening immediately; click
 **Voice** again to stop. There is no separate Listen button. The panel shows the
-recognized text live in a seasonal speech bubble, with a microphone buddy and
+recognized text live in a seasonal speech bubble, with Pip and
 animated listening bars. The buddy reacts as words arrive; these are status
 animations, not a measurement of microphone volume. Reduced motion keeps them
 static. Only final
@@ -266,6 +278,11 @@ Editor/native play continues to use local audio.
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 
 The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate these source recordings; playback and ordinary builds need no speech credentials. Optional microphone recognition is a separate browser-provided service. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
+
+Pip's original sprite sheet is maintained directly in
+`assets\images\mascots\pip.svg`. Its four frames are idle, speaking, blinking,
+and waving. The build embeds this same sheet in the web shell as a data URI;
+native `duck_mascot.gd` uses texture regions from its Godot import.
 
 The collection keeps words to 2-6 lowercase letters and covers familiar picture-book topics:
 

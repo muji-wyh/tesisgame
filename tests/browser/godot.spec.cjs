@@ -397,6 +397,7 @@ test('motion preference changes do not restart the native round', async ({ page 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const point = firstCard(await canvasMetrics(page));
   await page.touchscreen.tap(point.x, point.y);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
@@ -505,6 +506,79 @@ async function holdControllerChest(page) {
   await expect(page.locator('#game-status')).not.toContainText('Tap to place!');
 }
 
+test('Pip follows the board, chest, collection, preview and loss pages without extra rewards', async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  const bounds = await canvasMetrics(page);
+  const scale = 390 / 480;
+  const greet = async (x, y) => {
+    await page.touchscreen.tap(bounds.x + x * scale, bounds.y + y * scale);
+    await expect(page.locator('#game-status')).toHaveText('Pip says: duck!');
+  };
+  await greet(40, 40);
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await page.screenshot({ path: testInfo.outputPath('pip-board.png'), scale: 'css' });
+  await chooseSeason(page, 0);
+  await winWithTouch(page);
+  await greet(40, 40);
+  await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
+  const stageHeight = bounds.height / scale - 364;
+  await holdChestUntilOpen(page, {
+    x: bounds.x + bounds.width * 0.5,
+    y: bounds.y + (172 + stageHeight * 0.5) * scale
+  });
+  await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
+  await expect(page.locator('#game-status')).toContainText('0 of 24 medals complete');
+  await greet(52, 52);
+  await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
+  await page.touchscreen.tap(bounds.x + (16 + 440 / 6) * scale, bounds.y + 190 * scale);
+  await expect(page.locator('#game-status')).toContainText('Blossom #1 reward preview opened');
+  await greet(58, 58);
+  await page.screenshot({ path: testInfo.outputPath('pip-preview.png'), scale: 'css' });
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('0 of 24 medals complete');
+  await page.keyboard.press('Escape');
+  await page.reload();
+  await ready(page);
+  await loseWithTouch(page);
+  await greet(40, 40);
+  await page.screenshot({ path: testInfo.outputPath('pip-loss.png'), scale: 'css' });
+  await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
+  await expect(page.locator('#game-status')).toContainText('0 of 24 medals complete');
+  expect(errors).toEqual([]);
+});
+
+test('Pip speaks with actual prompt playback, not pending downloads or music', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  test.skip(!await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext)),
+    'This WebKit runtime has no audio output.');
+  const bounds = await canvasMetrics(page);
+  const scale = Math.min(bounds.width, bounds.height) / 480;
+  const beak = { x: bounds.x + 28 * scale, y: bounds.y + 36 * scale, width: 32 * scale, height: 15 * scale };
+  const resting = await page.screenshot({ clip: beak, scale: 'css' });
+  const held = await holdOptionalAudio(page);
+  try {
+    const color = await page.locator('meta[name="theme-color"]').getAttribute('content');
+    await chooseSeason(page, ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff'].indexOf(color));
+    const waiting = await page.screenshot({ clip: beak, scale: 'css' });
+    await page.waitForTimeout(300);
+    expect((await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(true);
+    await held.finish();
+    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(false);
+    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(resting)).toBe(true);
+    expect(errors).toEqual([]);
+  } finally {
+    held.release();
+    await page.unrouteAll({ behavior: 'wait' });
+  }
+});
+
 test('one hint per round is shared by touch and Xbox', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
@@ -579,6 +653,7 @@ test('keyboard hints focus a suggested card ready for Enter', async ({ page }) =
   const word = (await page.locator('#game-status').textContent()).match(/^Hint: match the ([a-z]+) cards\.$/)[1];
   await page.keyboard.press('Enter');
   await expect(page.locator('#selection-status')).toHaveText(new RegExp(`^(Word|Picture): ${word}$`));
+  await expect(page.locator('#canvas')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('#game-status')).toContainText('Find three pairs.');
