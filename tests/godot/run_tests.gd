@@ -35,7 +35,10 @@ func _run() -> void:
 		return
 	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	_test_rounds(model_script, words)
+	_test_fresh_rounds(model_script, words)
 	_test_matching(model_script, words)
+	_test_hints_and_streaks(model_script, words)
+	_test_practice(model_script, words)
 	_test_results(model_script, words)
 	_test_data(words)
 	_test_controls()
@@ -204,6 +207,29 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 	check(not model.reset(words.slice(0, 4), 1), "Fewer than five words cannot start a round")
 
 
+func _test_fresh_rounds(model_script: GDScript, words: Array) -> void:
+	var model = model_script.new()
+	var vocabulary: Array = words.slice(0, 10)
+	model.reset(vocabulary, 17)
+	for round_index in range(6):
+		var previous: Array = model.cards.map(func(card: Dictionary) -> String: return card.word.id)
+		model.reset(vocabulary)
+		check(model.cards.all(func(card: Dictionary) -> bool: return not previous.has(card.word.id)),
+			"Unseeded replay prefers five words absent from the previous board")
+		check(pairs_for(model).size() == 3 and model.cards.size() == 8,
+			"Fresh boards retain three complete pairs and eight cards")
+	for count in range(5, 10):
+		model.reset(words.slice(0, count))
+		model.reset(words.slice(0, count))
+		check(model.cards.size() == 8 and pairs_for(model).size() == 3,
+			"Small vocabularies fall back to a full valid board")
+	model.reset(words, 17)
+	var expected: Array = model.cards.duplicate(true)
+	model.reset(words)
+	model.reset(words, 17)
+	check(model.cards == expected, "Explicit seeds ignore previous-board exclusions")
+
+
 func _test_matching(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	model.reset(words, 6)
@@ -239,6 +265,130 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	model.resolve_feedback()
 	check(model.matched_ids.size() == 2, "Both matched cards are retained as matched")
 	check(model.select(pair[0]) == "ignored", "Matched cards cannot score twice")
+
+
+func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
+	var model = model_script.new()
+	check(model.has_method("request_hint") and has_property(model, "hint_ids") and has_property(model, "streak"),
+		"The model supports helpful hints and consecutive matches")
+	if not model.has_method("request_hint") or not has_property(model, "streak"):
+		return
+	model.reset(words, 6)
+	var deck: Array = model.cards.duplicate(true)
+	var pairs: Array = pairs_for(model)
+	model.select(pairs[1][1])
+	check(model.request_hint() and model.hint_ids.has(pairs[1][0]) and model.hint_ids.has(pairs[1][1]),
+		"A hint prefers the selected card's real partner")
+	check(model.selected_id == pairs[1][1] and model.successes == 0 and model.mistakes == 0,
+		"Hints preserve a useful selection without scoring or penalizing")
+	model.request_hint()
+	check(model.cards == deck and model.streak == 0, "Repeated hints never shuffle or score the board")
+	model.set_theme("winter")
+	check(model.hint_ids.size() == 2, "Changing seasons preserves the hint")
+	model.select(pairs[1][0])
+	check(model.hint_ids.is_empty() and model.streak == 1, "Matching clears the hint and starts a streak")
+	check(not model.request_hint(), "Hints cannot interrupt feedback")
+	model.resolve_feedback()
+	check(model.select(pairs[1][0]) == "ignored" and model.streak == 1, "Matched cards cannot inflate a streak")
+	for card in model.cards:
+		if not pairs.any(func(pair: Array) -> bool: return pair.has(card.id)):
+			model.select(card.id)
+			check(model.request_hint() and not model.hint_ids.has(card.id),
+				"A distractor hint finds a complete unmatched pair instead")
+			check(model.selected_id == "" and model.phase == "waiting",
+				"A distractor selection is cleared so following the hint cannot cause a mistake")
+			break
+	var hint: Array = model.hint_ids.duplicate()
+	check(hint.size() == 2 and not hint.any(func(id: String) -> bool: return model.matched_ids.has(id)),
+		"Hints never recommend already matched cards")
+	model.select(hint[0])
+	check(model.hint_ids.size() == 2, "The hint stays visible while choosing its first card")
+	model.select(hint[0])
+	check(model.hint_ids.is_empty(), "Cancelling selection clears its hint")
+	model.select(pairs[0][0])
+	model.select(pairs[0][1])
+	check(model.streak == 2, "Consecutive matches build a streak without a timer")
+	model.resolve_feedback()
+	model.select(pairs[2][0])
+	model.select(pairs[2][1])
+	model.resolve_feedback()
+	check(model.streak == 3 and model.phase == "won" and not model.request_hint(),
+		"A three-match streak wins normally and closes hint input")
+	model.reset(words, 6)
+	check(model.streak == 0 and model.hint_ids.is_empty(), "Replay clears streaks and hints")
+	model.select(pairs[0][0])
+	model.select(pairs[0][1])
+	model.resolve_feedback()
+	var remaining: Array = pairs.slice(1)
+	model.select(remaining[0][0])
+	model.select(remaining[1][1])
+	check(model.streak == 0 and model.successes == 1 and model.mistakes == 1,
+		"A mistake resets only the streak, never earned matches")
+	model.resolve_feedback()
+	for count in range(2):
+		model.select(remaining[0][0])
+		model.select(remaining[1][1])
+		model.resolve_feedback()
+	check(model.phase == "lost" and not model.request_hint(), "Hints cannot revive a lost round")
+
+
+func _test_practice(model_script: GDScript, words: Array) -> void:
+	var model = model_script.new()
+	check(model.has_method("set_practice") and has_property(model, "practice_mode"),
+		"The model exposes an explicit Practice mode")
+	if not model.has_method("set_practice"):
+		return
+	model.reset(words, 6)
+	check(not model.practice_mode, "New players start with the existing Challenge rules")
+	var pairs: Array = pairs_for(model)
+	model.select(pairs[0][0])
+	model.select(pairs[0][1])
+	model.resolve_feedback()
+	var wrong: Array = [pairs[1][0], pairs[2][1]]
+	model.select(wrong[0])
+	model.select(wrong[1])
+	model.resolve_feedback()
+	model.select(pairs[1][0])
+	model.request_hint()
+	var deck: Array = model.cards.duplicate(true)
+	var hints: Array = model.hint_ids.duplicate()
+	check(model.set_practice(true), "Practice can be chosen during a selection")
+	check(model.practice_mode and model.mistakes == 0 and model.successes == 1
+		and model.cards == deck and model.hint_ids == hints and model.selected_id == pairs[1][0],
+		"Changing mode preserves cards, matches, hints and selection but resets the mistake allowance")
+	model.select(model.selected_id)
+	for attempt in range(5):
+		model.select(wrong[0])
+		check(model.select(wrong[1]) == "wrong", "Practice still gives honest mismatch feedback")
+		check(not model.set_practice(false), "Mode changes cannot interrupt feedback")
+		model.resolve_feedback()
+		check(model.phase == "waiting" and model.mistakes == 0 and model.successes == 1,
+			"Practice allows repeated mistakes without losing progress or granting matches")
+	check(not model.begin_open(), "Practice mistakes never grant a chest")
+	check(model.set_practice(false) and not model.practice_mode,
+		"Returning to Challenge is explicit")
+	for attempt in range(3):
+		model.select(wrong[0])
+		model.select(wrong[1])
+		model.resolve_feedback()
+	check(model.phase == "lost" and model.mistakes == 3, "Challenge still loses after three mistakes")
+	check(not model.set_practice(false), "Choosing Challenge cannot revive a lost board")
+	check(model.set_practice(true) and model.phase == "waiting"
+		and model.successes == 1 and model.cards == deck,
+		"Practice resumes a lost board without discarding its earned match")
+	for pair in pairs.slice(1):
+		model.select(pair[0])
+		model.select(pair[1])
+		model.resolve_feedback()
+	check(model.phase == "won" and model.successes == 3, "Practice requires all three real matches to win")
+	check(not model.set_practice(false), "Mode changes cannot alter a won round")
+	check(model.begin_open() and not model.set_practice(false),
+		"Mode changes cannot disturb a locked chest opening")
+	model.finish_open()
+	check(not model.set_practice(false), "An opened reward remains immutable")
+	model.reset(words, 6)
+	check(model.practice_mode and model.mistakes == 0 and model.successes == 0,
+		"Replay remembers Practice for this session while resetting the board")
 
 
 func _test_results(model_script: GDScript, words: Array) -> void:
@@ -562,6 +712,173 @@ func _test_reward_preview_play(app) -> void:
 	app._hide_collection()
 
 
+func _test_play_improvements(app) -> void:
+	check(has_property(app, "hint_button") and has_property(app, "_match_caption"),
+		"The board has a reachable hint and visible match encouragement")
+	if has_property(app, "hint_button") and app.model.has_method("request_hint"):
+		app.new_round(6)
+		app.hint_button.grab_focus()
+		app.hint_button.pressed.emit()
+		var hinted: Array = app.model.hint_ids.duplicate()
+		check(hinted.size() == 2 and app._status_announcement.begins_with("Hint:"),
+			"The native Hint button announces a real pair")
+		check(not app._controller_mode and app.cards[hinted[0]].has_focus(),
+			"A keyboard hint focuses its first playable card without requiring a controller")
+		app.cards[hinted[0]].pressed.emit()
+		app.hint_button.grab_focus()
+		app.hint_button.pressed.emit()
+		check(app.cards[hinted[1]].has_focus() and app.model.selected_id == hinted[0],
+			"A keyboard hint focuses the partner without cancelling the selected card")
+		app.cards[hinted[0]].pressed.emit()
+		app.hint_button.pressed.emit()
+		for id in hinted:
+			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
+				"Hinted cards have a star marker, not just a different color")
+		check(app._match_caption.text == "Follow stars" and app._match_caption.is_visible_in_tree(),
+			"The hint is visible on the board without moving its cards")
+		app._show_collection()
+		var previous_hint: Array = hinted.duplicate()
+		joy_tap(JOY_BUTTON_X)
+		await process_frame
+		check(app.model.hint_ids == previous_hint and app._status_announcement.begins_with("My rewards"),
+			"Xbox X cannot trigger hints behind a modal")
+		app._hide_collection()
+		for pair in pairs_for(app.model).slice(0, 2):
+			app.cards[pair[0]].pressed.emit()
+			app.cards[pair[1]].pressed.emit()
+			check(app.hint_button.disabled, "Hints are disabled during match feedback")
+			var sparkle: Control = app.cards[pair[0]].get_node_or_null("MatchSparkle")
+			check(sparkle != null and sparkle.particle_count <= 6,
+				"Each correct card gets a small, bounded star celebration")
+			app.feedback_timer.timeout.emit()
+		check(app._match_caption.text == "2 in a row!", "Consecutive matches get visible encouragement")
+		app.hint_button.grab_focus()
+		joy_tap(JOY_BUTTON_X)
+		await process_frame
+		check(app.model.hint_ids.size() == 2 and app.cards[app.model.hint_ids[0]].has_focus(),
+			"Xbox X offers a hint and focuses its first playable card")
+		app.set_reduced_motion(true)
+		var last_pair: Array = pairs_for(app.model)[2]
+		app.cards[last_pair[0]].pressed.emit()
+		app.cards[last_pair[1]].pressed.emit()
+		check(app.cards[last_pair[0]].get_node_or_null("MatchSparkle") == null,
+			"Reduced motion keeps the match encouragement without particles")
+		check(app._match_caption.text == "3 in a row!", "Reduced-motion players still see the streak")
+		app.feedback_timer.timeout.emit()
+		check(not app.hint_button.visible, "Finished rounds hide the hint action")
+		app.set_reduced_motion(false)
+		app.new_round(6)
+		var first: Array = pairs_for(app.model)[0]
+		app.cards[first[0]].pressed.emit()
+		app.cards[first[1]].pressed.emit()
+		app.on_page_hidden()
+		check(app._feedback_tweens.is_empty() and app.cards[first[0]].scale == Vector2.ONE,
+			"Hiding the page stops transient match effects without losing progress")
+		app.feedback_timer.timeout.emit()
+		check(app.model.successes == 1, "Cancelling cosmetic feedback preserves the earned match")
+	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
+	var data_script: GDScript = load("res://scripts/game_data.gd")
+	for season in ["spring", "summer", "autumn", "winter"]:
+		app.collected_rewards.clear()
+		var rewards: Array = data_script.rewards(season)
+		for reward in rewards.slice(0, 9):
+			app.collected_rewards[reward.id] = true
+		app.new_round(6)
+		win_round(app)
+		app.choose_theme(season)
+		seed(1)
+		app._open_chest()
+		check(app.model.reward_id == rewards[9].id,
+			"A chest chooses the last missing reward before any duplicate: " + season)
+		var locked_reward: String = app.model.reward_id
+		app._open_chest()
+		check(app.model.reward_id == locked_reward, "Repeated opening cannot reroll the reward")
+		app.new_round(6)
+		app.collected_rewards[rewards[9].id] = true
+		win_round(app)
+		app.choose_theme(season)
+		app._open_chest()
+		check(not data_script.reward(app.model.reward_id).is_empty() and app.model.reward_theme == season,
+			"Completing a seasonal collection does not prevent future chest opening")
+	app.new_round(6)
+	app.collected_rewards = saved_rewards
+	app._refresh_collection()
+
+
+func _test_practice_and_goals(app) -> void:
+	check(has_property(app, "practice_button") and has_property(app, "_collection_headings")
+		and has_property(app, "_preferred_theme"), "Practice and seasonal goals are wired into the existing scene")
+	if not has_property(app, "practice_button") or not has_property(app, "_collection_headings"):
+		return
+	app.new_round(6)
+	var deck: Array = app.model.cards.duplicate(true)
+	var selected: String = app.model.cards[0].id
+	app.cards[selected].pressed.emit()
+	app.practice_button.grab_focus()
+	joy_tap(JOY_BUTTON_A)
+	await process_frame
+	check(app.model.practice_mode and app.practice_button.button_pressed and not app._mistakes.visible,
+		"Controller A enables Practice and removes penalty badges")
+	check(app.practice_button.text == "No limit" and app._status_announcement.contains("Practice"),
+		"Practice explains its unlimited attempts visually and accessibly")
+	check(app.model.selected_id == selected, "Mode switching preserves the keyboard player's selected card")
+	app.cards[selected].pressed.emit()
+	app._show_collection()
+	check(app.practice_button.focus_mode == Control.FOCUS_NONE, "The mode control respects modal focus")
+	app.practice_button.pressed.emit()
+	check(app.model.practice_mode and app.model.cards == deck, "A modal blocks hidden mode activation")
+	app._hide_collection()
+	var wrong: Array = wrong_pair_for(app.model)
+	for attempt in range(5):
+		app.cards[wrong[0]].pressed.emit()
+		app.cards[wrong[1]].pressed.emit()
+		check(app.practice_button.disabled, "Feedback temporarily disables the mode control")
+		app.feedback_timer.timeout.emit()
+	check(app.model.phase == "waiting" and app.model.cards == deck and not app.failure_image.visible,
+		"The Practice UI keeps the same board after five mismatches")
+	app.practice_button.pressed.emit()
+	check(not app.model.practice_mode and app._mistakes.visible and app.model.cards == deck,
+		"The mode control restores Challenge without replacing the board")
+	for attempt in range(3):
+		app.cards[wrong[0]].pressed.emit()
+		app.cards[wrong[1]].pressed.emit()
+		app.feedback_timer.timeout.emit()
+	app.practice_button.pressed.emit()
+	check(app.model.practice_mode and app.model.phase == "waiting" and app.grid.visible
+		and not app.failure_image.visible and app.model.cards == deck,
+		"The loss screen can continue as Practice through the same control")
+	win_round(app)
+	check(app.practice_button.disabled and app.model.phase == "won",
+		"Practice cannot change an earned result")
+	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
+	var data_script: GDScript = load("res://scripts/game_data.gd")
+	app.collected_rewards.clear()
+	app._refresh_collection()
+	check(app._collection_headings.spring.text == "Spring 0/10", "Empty collections show their seasonal goal")
+	for reward in data_script.rewards("spring").slice(0, 3):
+		app.collected_rewards[reward.id] = true
+	app._refresh_collection()
+	check(app._collection_headings.spring.text == "Spring 3/10"
+		and app._collection_headings.summer.text == "Summer 0/10",
+		"Collection goals count earned variants separately by season")
+	for reward in data_script.rewards("spring"):
+		app.collected_rewards[reward.id] = true
+	app._refresh_collection()
+	check(app._collection_headings.spring.text == "Spring complete! 10/10",
+		"A completed season has a distinct, derived completion message")
+	app.new_round(6)
+	var seeded_theme: String = app.model.theme_id
+	app.choose_theme("summer")
+	app._replay()
+	check(app.model.theme_id == "summer" and app.model.practice_mode,
+		"Replay retains both a manually chosen season and the session's Practice mode")
+	app.new_round(6)
+	check(app.model.theme_id == seeded_theme, "An explicit seed is not overridden by season preference")
+	app.model.set_practice(false)
+	app.collected_rewards = saved_rewards
+	app._refresh_collection()
+
+
 func _test_scene() -> void:
 	var path := "res://scenes/main.tscn"
 	check(FileAccess.file_exists(path), "The native main scene exists")
@@ -581,6 +898,8 @@ func _test_scene() -> void:
 		await process_frame
 		return
 	app.audio.set_muted(true)
+	await _test_play_improvements(app)
+	await _test_practice_and_goals(app)
 	check(app.cards.size() == 8, "The scene creates eight native card buttons")
 	check(app.find_child("Mute", true, false) == null and app.find_child("Listen", true, false) == null,
 		"Mute and Listen controls are removed")
@@ -818,6 +1137,10 @@ func _test_scene() -> void:
 			controls.append_array(app.theme_buttons)
 		if has_property(app, "collection_button"):
 			controls.append(app.collection_button)
+		if has_property(app, "hint_button"):
+			controls.append(app.hint_button)
+		if has_property(app, "practice_button"):
+			controls.append(app.practice_button)
 		for control in controls:
 			var bounds: Rect2 = control.get_global_rect()
 			check(viewport.grow(0.5).encloses(bounds), "Control fits " + str(dimensions_value) + ": " + control.name)

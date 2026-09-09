@@ -7,9 +7,12 @@ const THEMES: Array[String] = ["spring", "summer", "autumn", "winter"]
 var cards: Array[Dictionary] = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
+var hint_ids: Array[String] = []
 var selected_id: String = ""
 var successes: int = 0
 var mistakes: int = 0
+var streak: int = 0
+var practice_mode: bool = false
 var phase: String = "waiting"
 var theme_id: String = "spring"
 var chest_state: String = "closed"
@@ -30,6 +33,12 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 		rng.seed = seed_value
 	var pool: Array = words.duplicate(true)
 	_shuffle(pool, rng)
+	if seed_value < 0 and not cards.is_empty():
+		# ponytail: only the previous board; a learner profile needs separate evidence and design.
+		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
+		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous.has(word.id))
+		if fresh.size() >= 5:
+			pool = fresh
 	cards.clear()
 	for index in range(3):
 		_add_card(pool[index], "word")
@@ -40,9 +49,11 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
 	matched_ids.clear()
 	feedback_ids.clear()
+	hint_ids.clear()
 	selected_id = ""
 	successes = 0
 	mistakes = 0
+	streak = 0
 	phase = "waiting"
 	chest_state = "closed"
 	reward_theme = ""
@@ -72,15 +83,40 @@ func card_by_id(id: String) -> Dictionary:
 	return {}
 
 
+func request_hint() -> bool:
+	if not phase in ["waiting", "matching"]:
+		return false
+	# ponytail: eight-card boards; scan for partners instead of maintaining a pair index.
+	var candidates: Array[Dictionary] = cards.duplicate()
+	if not selected_id.is_empty():
+		candidates.push_front(card_by_id(selected_id))
+	for card in candidates:
+		if matched_ids.has(card.id):
+			continue
+		var partner_id: String = card.word.id + (":image" if card.kind == "word" else ":word")
+		if card_by_id(partner_id).is_empty():
+			continue
+		hint_ids.assign([card.id, partner_id])
+		if not selected_id.is_empty() and not hint_ids.has(selected_id):
+			selected_id = ""
+			phase = "waiting"
+		changed.emit()
+		return true
+	return false
+
+
 func select(id: String) -> String:
 	if not phase in ["waiting", "matching"] or matched_ids.has(id):
 		return "ignored"
 	var card: Dictionary = card_by_id(id)
 	if card.is_empty():
 		return "ignored"
+	if not hint_ids.has(id):
+		hint_ids.clear()
 	var result := "selected"
 	if selected_id == id:
 		selected_id = ""
+		hint_ids.clear()
 		phase = "waiting"
 		result = "cancelled"
 	elif selected_id.is_empty():
@@ -92,16 +128,20 @@ func select(id: String) -> String:
 			selected_id = id
 			result = "reselected"
 		else:
+			hint_ids.clear()
 			last_correct = previous.word.id == card.word.id
 			feedback_ids.assign([selected_id, id])
 			selected_id = ""
 			phase = "feedback"
 			if last_correct:
 				successes += 1
+				streak += 1
 				matched_ids.append_array(feedback_ids)
 				result = "correct"
 			else:
-				mistakes += 1
+				if not practice_mode:
+					mistakes += 1
+				streak = 0
 				result = "wrong"
 	changed.emit()
 	return result
@@ -114,11 +154,23 @@ func resolve_feedback() -> void:
 	selected_id = ""
 	if successes >= 3:
 		phase = "won"
-	elif mistakes >= 3:
+	elif mistakes >= 3 and not practice_mode:
 		phase = "lost"
 	else:
 		phase = "waiting"
 	changed.emit()
+
+
+func set_practice(enabled: bool) -> bool:
+	if not phase in ["waiting", "matching", "lost"] or (phase == "lost" and not enabled):
+		return false
+	if practice_mode != enabled:
+		practice_mode = enabled
+		mistakes = 0
+		if phase == "lost":
+			phase = "waiting"
+		changed.emit()
+	return true
 
 
 func set_theme(id: String) -> bool:

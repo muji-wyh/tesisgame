@@ -160,6 +160,8 @@ var audio: Audio
 var chest: Chest
 var effects: Effects
 var theme_buttons: Array[Button] = []
+var practice_button: Button
+var hint_button: Button
 var collection_button: Button
 var collection_page: Panel
 var collected_rewards: Dictionary = {}
@@ -172,6 +174,8 @@ var reduced_motion: bool = false
 var _background: ColorRect
 var _success: ProgressBadges
 var _mistakes: ProgressBadges
+var _practice_caption: Label
+var _match_caption: Label
 var _message: Label
 var _outcome: Control
 var _stage: Panel
@@ -185,6 +189,7 @@ var _collection_scroll: ScrollContainer
 var _collection_grid: VBoxContainer
 var _collection_back: Button
 var _collection_rows: Array[GridContainer] = []
+var _collection_headings: Dictionary = {}
 var _reward_slots: Dictionary = {}
 var _collection_focus_modes: Dictionary = {}
 var _focus_before_collection: Control
@@ -209,6 +214,7 @@ var _reward_tween: Tween
 var _reward_transfer_active: bool = false
 var _reward_delivered_to_collection: bool = false
 var _feedback_tweens: Array[Tween] = []
+var _feedback_sparkles: Array[Control] = []
 var _feedback_origins: Dictionary = {}
 var _holding_chest: bool = false
 var _hold_elapsed: float = 0.0
@@ -234,6 +240,7 @@ var _controller_repeat_elapsed: float = 0.0
 var _controller_holding_chest: bool = false
 var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
+var _preferred_theme: String = ""
 var _host: JavaScriptObject
 var _hidden_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
@@ -281,11 +288,34 @@ func _build_controls() -> void:
 	_success.tooltip_text = "0 matches"
 	_success.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_success)
+	_match_caption = Style.label("Find 3 pairs", 14)
+	_match_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_success.add_child(_match_caption)
+	_match_caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	_match_caption.offset_top = -20
+	practice_button = Button.new()
+	practice_button.name = "Practice"
+	practice_button.toggle_mode = true
+	practice_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	practice_button.pressed.connect(_toggle_practice)
+	header.add_child(practice_button)
 	_mistakes = ProgressBadges.new(ProgressBadges.RETRY)
 	_mistakes.name = "RetryProgress"
 	_mistakes.tooltip_text = "0 mistakes"
-	_mistakes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(_mistakes)
+	practice_button.add_child(_mistakes)
+	_mistakes.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_practice_caption = Style.label("Challenge", 14)
+	_practice_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	practice_button.add_child(_practice_caption)
+	_practice_caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	_practice_caption.offset_top = -20
+	hint_button = Button.new()
+	hint_button.name = "Hint"
+	hint_button.text = "Hint"
+	hint_button.tooltip_text = "Show a matching pair (Xbox X)"
+	_set_accessibility_name(hint_button, "Hint: show a matching pair")
+	hint_button.pressed.connect(_request_hint)
+	header.add_child(hint_button)
 	collection_button = Button.new()
 	collection_button.name = "Rewards"
 	_set_accessibility_name(collection_button, "My rewards")
@@ -516,8 +546,11 @@ func _build_collection() -> void:
 		child.queue_free()
 	_reward_slots.clear()
 	_collection_rows.clear()
+	_collection_headings.clear()
 	for theme_id in Model.THEMES:
-		_collection_grid.add_child(Style.label(Data.theme(theme_id).name, 26))
+		var heading := Style.label("", 26)
+		_collection_headings[theme_id] = heading
+		_collection_grid.add_child(heading)
 		var row := GridContainer.new()
 		row.columns = 5
 		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -582,6 +615,11 @@ func _refresh_collection() -> void:
 		button.add_theme_stylebox_override("disabled", Style.box(Color("#edf0f1"), Color("#d8dde1"), 16, 2))
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 16, 4))
 		slot.label.text = ("%s #%d" % [slot.reward.name, slot.reward.number]) if unlocked else "?"
+	for theme_id in _collection_headings:
+		var rewards: Array = Data.rewards(theme_id)
+		var count: int = rewards.filter(func(reward: Dictionary) -> bool: return collected_rewards.has(reward.id)).size()
+		_collection_headings[theme_id].text = "%s%s %d/%d" % [
+			Data.theme(theme_id).name, " complete!" if count == rewards.size() else "", count, rewards.size()]
 
 
 func _open_reward_preview(id: String) -> void:
@@ -895,6 +933,8 @@ func new_round(seed_value: int = -1) -> void:
 		_rebuilding = false
 		_show_error(model.error)
 		return
+	if seed_value < 0 and not _preferred_theme.is_empty():
+		model.set_theme(_preferred_theme)
 	for button in cards.values():
 		grid.remove_child(button)
 		button.queue_free()
@@ -922,6 +962,16 @@ func _refresh() -> void:
 		button.disabled = model.chest_state == "opening"
 		Style.button(button, palette.accent)
 	Style.button(collection_button, palette.accent)
+	Style.button(hint_button, palette.accent)
+	Style.button(practice_button, palette.accent, 88)
+	practice_button.add_theme_font_size_override("font_size", 18)
+	practice_button.button_pressed = model.practice_mode
+	practice_button.disabled = model.phase in ["feedback", "won"]
+	practice_button.text = "No limit" if model.practice_mode else ""
+	practice_button.tooltip_text = "Switch to Challenge: three tries." if model.practice_mode else "Switch to Practice: keep your matches and try freely."
+	_set_accessibility_name(practice_button, ("Practice. " if model.practice_mode else "Challenge. ") + practice_button.tooltip_text)
+	_practice_caption.text = "Practice" if model.practice_mode else "Challenge"
+	_mistakes.visible = not model.practice_mode
 	collection_button.icon = load(palette.symbol)
 	Style.button(replay_button, palette.accent)
 	_success.set_filled_count(model.successes)
@@ -929,19 +979,30 @@ func _refresh() -> void:
 	_mistakes.set_filled_count(model.mistakes)
 	_mistakes.tooltip_text = "%d mistakes" % model.mistakes
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
+	hint_button.visible = playing
+	hint_button.disabled = not model.phase in ["waiting", "matching"]
+	_match_caption.text = "Nice match!" if model.streak == 1 else "Find 3 pairs"
+	if model.streak > 1:
+		_match_caption.text = "%d in a row!" % model.streak
+	if not model.hint_ids.is_empty():
+		_match_caption.text = "Follow stars"
 	grid.visible = playing
 	_message.hide()
 	_outcome.visible = not playing
 	for id in cards:
 		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
 			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
-			model.phase != "waiting" and model.phase != "matching")
-	if model.phase == "matching":
+			model.phase != "waiting" and model.phase != "matching", model.hint_ids.has(id))
+	if not model.hint_ids.is_empty():
+		_message.text = "Hint: match the %s cards." % model.card_by_id(model.hint_ids[0]).word.text
+	elif model.phase == "matching":
 		_message.text = "Now find its match!"
 	elif model.phase == "feedback":
 		_message.text = "Great match!" if model.last_correct else "Not quite. Try another one!"
+		if model.streak > 1:
+			_message.text += " %d in a row!" % model.streak
 	else:
-		_message.text = "Find three pairs. Two cards have no match!"
+		_message.text = "Find three pairs. Practice mode: keep trying, with no limit!" if model.practice_mode else "Find three pairs. Two cards have no match!"
 	var won: bool = model.phase == "won"
 	chest.visible = won
 	chest_button.visible = won
@@ -968,7 +1029,7 @@ func _refresh() -> void:
 		_medallion.add_theme_stylebox_override("panel", Style.box(Color.WHITE, reward_palette.light, 64, 5))
 	elif model.phase == "lost":
 		_title.text = "Good try!"
-		_caption.text = "Tap the bear for a happy wiggle!"
+		_caption.text = "Try Practice, or tap the bear!"
 		_stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, palette.accent.lightened(0.7), 26))
 	if _last_phase != model.phase:
 		_last_phase = model.phase
@@ -1020,6 +1081,7 @@ func _refresh_controller_focus() -> void:
 func _layout() -> void:
 	if grid == null:
 		return
+	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_preview_flourish()
 	_end_collection_drag(false)
@@ -1058,6 +1120,25 @@ func _layout_result() -> void:
 	_medallion.position = Vector2((_stage.size.x - diameter) * 0.5, _stage.size.y * 0.2 - diameter * 0.5)
 
 
+func _toggle_practice() -> void:
+	if collection_page.visible or _preview_page.visible or not model.set_practice(not model.practice_mode):
+		return
+	_cancel_loss_play()
+	audio.interact(model.theme_id)
+	audio.cue("select")
+	_announce_status(("Practice mode: no limit. " if model.practice_mode else "Challenge mode: three tries. ") + _message.text)
+
+
+func _request_hint() -> void:
+	if collection_page.visible or _preview_page.visible or not model.request_hint():
+		return
+	audio.interact(model.theme_id)
+	audio.cue("select")
+	audio.say("res://" + model.card_by_id(model.hint_ids[0]).word.audio)
+	var next_id: String = model.hint_ids[1] if model.selected_id == model.hint_ids[0] else model.hint_ids[0]
+	cards[next_id].grab_focus()
+
+
 func _select_card(id: String) -> void:
 	audio.interact(model.theme_id, model.phase != "lost")
 	var result: String = model.select(id)
@@ -1072,12 +1153,14 @@ func _select_card(id: String) -> void:
 
 func _resolve_feedback() -> void:
 	feedback_timer.stop()
+	_stop_feedback_animations()
 	model.resolve_feedback()
 
 
 func choose_theme(id: String) -> void:
 	if not model.set_theme(id):
 		return
+	_preferred_theme = id
 	effects.clear()
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.cue("", model.theme_id + "-theme")
@@ -1100,6 +1183,9 @@ func set_reduced_motion(value: bool) -> void:
 
 func _open_chest() -> void:
 	var rewards: Array = Data.rewards(model.theme_id)
+	var unearned: Array = rewards.filter(func(reward: Dictionary) -> bool: return not collected_rewards.has(reward.id))
+	if not unearned.is_empty():
+		rewards = unearned
 	if rewards.is_empty() or not model.begin_open(rewards.pick_random().id):
 		return
 	_reward_delivered_to_collection = false
@@ -1210,6 +1296,7 @@ func _replay() -> void:
 
 func on_page_hidden() -> void:
 	_stop_controller_actions()
+	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
 	_finish_chest_drag()
@@ -1244,6 +1331,9 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		elif event.pressed and event.button_index == JOY_BUTTON_B:
 			_controller_back()
+			get_viewport().set_input_as_handled()
+		elif event.pressed and event.button_index == JOY_BUTTON_X:
+			_request_hint()
 			get_viewport().set_input_as_handled()
 		elif event.pressed and event.button_index in [JOY_BUTTON_Y, JOY_BUTTON_START]:
 			_toggle_collection()
@@ -1478,6 +1568,8 @@ func _show_error(message: String) -> void:
 	grid.hide()
 	for button in theme_buttons:
 		button.disabled = true
+	hint_button.disabled = true
+	practice_button.disabled = true
 	_message.text = message
 	_message.show()
 	_message.add_theme_color_override("font_color", Style.WRONG)
@@ -1499,6 +1591,7 @@ func _connect_browser() -> void:
 
 
 func _animate_feedback(ids: Array[String], correct: bool) -> void:
+	_stop_feedback_animations()
 	if reduced_motion:
 		return
 	for id in ids:
@@ -1508,9 +1601,20 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 		var tween := create_tween()
 		_feedback_tweens.append(tween)
 		if correct:
+			var sparkle := RewardSparkle.new()
+			sparkle.name = "MatchSparkle"
+			sparkle.accent = Data.theme(model.theme_id).accent
+			sparkle.shape_kind = RewardSparkle.Shape.STAR
+			sparkle.particle_count = 2 + model.streak
+			sparkle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			card.add_child(sparkle)
+			sparkle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			_feedback_sparkles.append(sparkle)
 			card.scale = Vector2.ONE * 0.82
 			tween.tween_property(card, "scale", Vector2.ONE * 1.08, 0.14).set_trans(Tween.TRANS_BACK)
 			tween.tween_property(card, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK)
+			tween.parallel().tween_method(sparkle.set_progress, 0.0, 1.0, 0.45)
+			tween.finished.connect(sparkle.queue_free)
 		else:
 			var start: Vector2 = card.position
 			card.position = start + Vector2(-6, 0)
@@ -1525,6 +1629,11 @@ func _stop_feedback_animations() -> void:
 	for tween in _feedback_tweens:
 		tween.kill()
 	_feedback_tweens.clear()
+	for sparkle in _feedback_sparkles:
+		if is_instance_valid(sparkle):
+			sparkle.hide()
+			sparkle.queue_free()
+	_feedback_sparkles.clear()
 	for id in _feedback_origins:
 		if cards.has(id) and is_instance_valid(cards[id]):
 			cards[id].position = _feedback_origins[id]
@@ -1626,6 +1735,7 @@ func _drag_chest(delta: Vector2) -> void:
 
 
 func _show_collection() -> void:
+	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
 	_finish_chest_drag()
@@ -1667,7 +1777,8 @@ func _hide_reward_preview_if_open() -> void:
 
 
 func _announce_collection_state() -> void:
-	_announce_status("My rewards opened. %d earned rewards. Use Back to return." % collected_rewards.size())
+	_announce_status("My rewards opened. %d earned rewards. %s. Use Back to return." % [
+		collected_rewards.size(), _collection_headings[model.theme_id].text])
 
 
 func _load_collected_rewards() -> void:

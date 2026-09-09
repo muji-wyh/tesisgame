@@ -117,7 +117,25 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left instead of plain text counters. Correct pairs bounce; incorrect pairs shake.
 
-Each round starts with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme. Four always-visible seasonal buttons change the appearance and music without resetting progress or showing a redundant switch-season tooltip. Motion follows the device or browser's reduced-motion preference; there is no extra FX control. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
+**Challenge** is the default. Tap its badge area to switch to **Practice** with
+unlimited tries. Practice keeps the same board and earned matches, and can even
+continue a lost round. Returning to Challenge gives a fresh three-mistake allowance.
+Mode changes preserve a selected card and its hints, but cannot interrupt feedback
+or change a won round. Both modes require three real matches for one chest.
+The mode carries into Play again for this session; reloading starts in Challenge.
+
+Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
+and star badges, and its word is spoken. Hints follow your selected card when it has a
+partner; otherwise they point to a complete pair. There is no penalty or limit, and you
+still tap both cards to make the match. Hints move focus to the next suggested card,
+so keyboard and controller players can continue with **Enter** or **A**.
+
+Correct matches now make small star bursts. Consecutive matches grow the celebration
+and show **2 in a row!** or **3 in a row!** beside the match badges, without a countdown.
+Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
+keeps the encouragement and hint stars without moving particles.
+
+Rounds start with a random **Spring (green)**, **Summer (red)**, **Autumn (yellow)** or **Winter (white)** theme until you choose one. Your chosen season then stays for ordinary replays in this session, so you can work toward its collection. Four always-visible seasonal buttons change the appearance and music without resetting progress or showing a redundant switch-season tooltip. Motion follows the device or browser's reduced-motion preference; there is no extra FX control. Buttons, celebration colors and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **100 short, concrete English words** for parent-guided play
 with young children. Each round still uses only five different words on eight cards, rather
@@ -131,6 +149,10 @@ opening the collection, replaying, or hiding the page cannot lose or duplicate i
 Reduced motion keeps a static reveal instead of the flight.
 
 Each season has ten named reward variants with ten different generated illustrations.
+Chests choose an uncollected reward from the current season while any remain; duplicates
+appear only after that season's collection is complete. Each win still grants one reward.
+Each collection heading shows its goal, such as **Spring 3/10**, and celebrates completion
+at ten. These counts come from the existing saved rewards, not a separate progress counter.
 Opened rewards are stored locally and appear on the **My rewards** page; locked slots
 keep their artwork and names hidden. Tap an earned tile to open its larger, named seasonal
 preview. Taps alternate between a bounce, a twirl and a little hug, with Spring hearts,
@@ -147,7 +169,9 @@ even after touch scrolling. Reduced motion keeps direct finger scrolling, disabl
 automatic glide, and gives static preview feedback, including the high-five message.
 A won reward is still revealed immediately after the required hold.
 
-**Play again** starts a new round. Audio starts with normal game interaction and stops on
+**Play again** starts a fresh round, avoiding the previous board's words when at least
+five unused words are available. Small vocabularies still produce a complete board;
+explicit seeds remain reproducible. Audio starts with normal game interaction and stops on
 hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen
 uses the encouraging bear, a gentle effect and prerecorded English speech. Tap the bear
 or focus it and press Xbox A for a happy wiggle, little hearts and rotating encouragement.
@@ -161,6 +185,7 @@ encouragement without movement, and Play again remains the initial controller ac
 | D-pad / left stick | Move focus between available controls. |
 | A | Activate the focused control; hold to open a won chest. |
 | B | Cancel the selected card, close a reward preview, or go back. |
+| X | Show a no-penalty hint and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |
 | Y / Menu | Open or close My rewards, not restart the game. |
 
@@ -299,6 +324,10 @@ npm run test:all
 ```
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and flight, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
+
+The [enjoyable-play plan](docs/superpowers/plans/2026-09-09-enjoyable-play.md)
+records the market research, design choices, acceptance criteria, and release process
+for Practice, fresh rounds, seasonal goals, and the preceding hint/reward improvements.
 
 The Windows Playwright WebKit runtime exposes WebGL 2 but not AudioContext or OffscreenCanvas. In that environment the real Godot Dummy audio driver is selected and the host reports the missing capability. An ordinary multisampled canvas selects Emscripten's built-in shader presentation path, avoiding that runtime's repeated framebuffer-blit error. No fake WebAudio or WebGL APIs are substituted. Chromium exercises real browser audio APIs.
 

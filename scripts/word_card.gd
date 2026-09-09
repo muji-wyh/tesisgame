@@ -5,14 +5,26 @@ const Style = preload("res://scripts/ui_style.gd")
 class MatchMark:
 	extends Control
 
+	var hinted: bool = false
+
 	func _draw() -> void:
-		Style.draw_match_badge(self, size * 0.5, minf(size.x, size.y) * 0.44)
+		var center := size * 0.5
+		var radius := minf(size.x, size.y) * 0.44
+		if not hinted:
+			Style.draw_match_badge(self, center, radius)
+			return
+		var star := PackedVector2Array()
+		for index in range(10):
+			star.append(center + Vector2.UP.rotated(PI * float(index) / 5.0) * radius * (1.0 if index % 2 == 0 else 0.45))
+		draw_colored_polygon(star, Color("#ffd24d"))
+		star.append(star[0])
+		draw_polyline(star, Style.INK, 2.0, true)
 
 
 var card_data: Dictionary = {}
 var picture: TextureRect
 var word_label: Label
-var match_mark: Control
+var match_mark: MatchMark
 var accent: Color = Style.GOOD
 
 
@@ -56,7 +68,7 @@ func setup(value: Dictionary) -> void:
 	_fit_text()
 
 
-func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool) -> void:
+func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
 	accent = palette.accent
 	var fill: Color = Color.WHITE
 	var border: Color = accent.lightened(0.68)
@@ -69,6 +81,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	elif wrong:
 		fill = Color("#ffe8e2")
 		border = Style.WRONG
+	elif hinted:
+		fill = Color("#fff8cf")
+		border = Color("#8f7400")
 	var normal: StyleBoxFlat = Style.box(fill, border, 20, 3)
 	normal.shadow_color = Color(0.15, 0.22, 0.3, 0.1)
 	normal.shadow_size = 4
@@ -79,7 +94,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	add_theme_stylebox_override("pressed", Style.box(accent.lightened(0.8), accent, 20, 3))
 	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, accent, 20, 4))
 	disabled = matched or locked
-	match_mark.visible = matched
+	match_mark.hinted = hinted and not matched
+	match_mark.visible = matched or hinted
+	match_mark.queue_redraw()
 	picture.modulate.a = 0.4 if matched else 1.0
 	word_label.modulate.a = 0.4 if matched else 1.0
 

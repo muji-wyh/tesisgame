@@ -118,10 +118,10 @@ test.describe('collection release momentum', () => {
     try {
       const before = await page.screenshot({ scale: 'css' });
       await flick();
-      const released = await page.screenshot({ scale: 'css' });
       await page.waitForTimeout(100);
       const gliding = await page.screenshot({ scale: 'css' });
-      const releaseShift = (await contentShift(page, before, released)).pixels;
+      // The finger ends at 80px; a screenshot after release already includes gliding.
+      const releaseShift = 80;
       const glideShift = (await contentShift(page, before, gliding)).pixels;
       expect(glideShift).toBeGreaterThan(releaseShift + 3);
       await page.waitForTimeout(100);

@@ -478,8 +478,8 @@ async function holdChestUntilOpen(page, point) {
   }
 }
 
-async function winWithTouch(page) {
-  const { metrics, discovered } = await discoverCards(page);
+async function winWithTouch(page, board) {
+  const { metrics, discovered } = board ?? await discoverCards(page);
   const pairs = [...discovered.values()].filter(pair => pair.Word !== undefined && pair.Picture !== undefined);
   expect(pairs).toHaveLength(3);
   for (let index = 0; index < pairs.length; index++) {
@@ -502,6 +502,161 @@ async function holdControllerChest(page) {
     await page.waitForTimeout(120);
   }
 }
+
+test('touch and Xbox hints guide real matches and celebrate a streak', async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.goto('/');
+  await ready(page);
+  const { metrics, discovered } = await discoverCards(page);
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const hintPoint = { x: metrics.x + metrics.width - 128 * scale, y: metrics.y + 48 * scale };
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const firstHint = await page.locator('#game-status').textContent();
+  const word = firstHint.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  const pair = discovered.get(word);
+  expect(pair.Word).toBeDefined();
+  expect(pair.Picture).toBeDefined();
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(firstHint);
+  await page.screenshot({ path: testInfo.outputPath('hint-stars.png'), scale: 'css' });
+  for (const index of [pair.Word, pair.Picture]) {
+    const point = cardPoint(metrics, index);
+    await page.touchscreen.tap(point.x, point.y);
+  }
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 2);
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  await expect(page.locator('#game-status')).not.toHaveText(firstHint);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
+  await pressGamepad(page, 2);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toHaveText('Great match! 2 in a row!');
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await page.screenshot({ path: testInfo.outputPath('match-streak.png'), scale: 'css' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await pressGamepad(page, 2);
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const still = await page.screenshot({ scale: 'css' });
+  await page.waitForTimeout(250);
+  expect((await page.screenshot({ scale: 'css' })).equals(still), 'Reduced-motion hints stay visually still.').toBe(true);
+  await pressGamepad(page, 0);
+  await pressGamepad(page, 2);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await pressGamepad(page, 2);
+  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await assertFits(page);
+  expect(errors).toEqual([]);
+});
+
+test('keyboard hints focus a suggested card ready for Enter', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/');
+  await ready(page);
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const word = (await page.locator('#game-status').textContent()).match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#selection-status')).toHaveText(new RegExp(`^(Word|Picture): ${word}$`));
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  expect(errors).toEqual([]);
+});
+
+test('Practice allows retries and can rescue the same Challenge board', async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toContainText('Practice mode');
+  const board = await discoverCards(page);
+  const { metrics, discovered } = board;
+  const [word, card] = [...discovered].find(([, value]) => value.Word !== undefined);
+  const [, other] = [...discovered].find(([text, value]) => text !== word && value.Picture !== undefined);
+  for (let attempt = 0; attempt < 5; attempt++) {
+    for (const index of [card.Word, other.Picture]) {
+      const point = cardPoint(metrics, index);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await expect(page.locator('#game-status')).toContainText('Practice mode');
+  }
+  await page.screenshot({ path: testInfo.outputPath('practice-no-limit.png'), scale: 'css' });
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const modePoint = { x: metrics.x + metrics.width * 0.75 - 124 * scale, y: metrics.y + 48 * scale };
+  await page.touchscreen.tap(modePoint.x, modePoint.y);
+  await expect(page.locator('#game-status')).toContainText('Challenge mode: three tries.');
+  for (let attempt = 0; attempt < 3; attempt++) {
+    for (const index of [card.Word, other.Picture]) {
+      const point = cardPoint(metrics, index);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find three pairs.');
+  }
+  await page.touchscreen.tap(modePoint.x, modePoint.y);
+  await expect(page.locator('#game-status')).toContainText('Practice mode');
+  expect([...(await discoverCards(page)).discovered]).toEqual([...discovered]);
+  await winWithTouch(page, board);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await holdControllerChest(page);
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 earned rewards.');
+  await pressGamepad(page, 1);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status')).toContainText('Practice mode');
+  await assertFits(page);
+  expect(errors).toEqual([]);
+});
+
+test('fresh replays preserve season goals and saved rewards', async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await chooseSeason(page, 0);
+  const background = await page.locator('meta[name="theme-color"]').getAttribute('content');
+  const earned = new Set();
+  let previousWords = [];
+  for (let round = 0; round < 2; round++) {
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
+    const board = await discoverCards(page);
+    const words = [...board.discovered.keys()];
+    expect(words.filter(word => previousWords.includes(word))).toEqual([]);
+    previousWords = words;
+    await winWithTouch(page, board);
+    await holdControllerChest(page);
+    earned.add(await page.locator('#game-status').textContent());
+    await pressGamepad(page, 3);
+    await expect(page.locator('#game-status')).toContainText(`My rewards opened. ${round + 1} earned rewards.`);
+    await expect(page.locator('#game-status')).toContainText(`Spring ${round + 1}/10`);
+    await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
+    await pressGamepad(page, 1);
+    if (round === 0) {
+      await pressGamepad(page, 0);
+      await ready(page);
+    }
+  }
+  expect(earned.size).toBe(2);
+  await page.reload();
+  await ready(page);
+  await chooseSeason(page, 0);
+  await page.evaluate(() => window.gamepadFixture.connect());
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 2 earned rewards. Spring 2/10');
+  expect(errors).toEqual([]);
+});
 
 test('Xbox chest charging cancels on disconnect and works again after reconnect', async ({ page }) => {
   const errors = watchErrors(page);
