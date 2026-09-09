@@ -41,7 +41,7 @@ function fixture({ api = 'standard', secure = true } = {}) {
     return value;
   }
   const elements = Object.fromEntries(
-    ['game', 'canvas', 'speech-panel', 'speech-button', 'speech-transcript', 'speech-notice']
+    ['game', 'canvas', 'speech-panel', 'speech-status', 'speech-transcript', 'speech-notice']
       .map(id => [id, element()])
   );
   elements['speech-panel'].hidden = true;
@@ -111,13 +111,44 @@ function fixture({ api = 'standard', secure = true } = {}) {
     get starts() { return starts; }, get aborts() { return aborts; },
     get pendingTimers() { return timers.size; },
     get latest() { return instances.at(-1); },
-    get button() { return elements['speech-button']; },
+    get status() { return elements['speech-status']; },
     get panel() { return elements['speech-panel']; },
     get transcript() { return elements['speech-transcript']; },
     get notice() { return elements['speech-notice']; },
-    listen() { host.speechMode(true); this.button.click(); advance(); }
+    listen() { host.speechMode(true); advance(); }
   };
 }
+
+test('Voice activation starts recognition immediately without a second control', () => {
+  const f = fixture();
+  f.host.speechMode(true);
+  assert.equal(f.starts, 1);
+  f.host.speechMode(true);
+  assert.equal(f.starts, 1, 'An already active mode never starts a duplicate recognizer');
+  f.host.speechMode(false);
+  assert.equal(f.panel.hidden, true);
+  assert.equal(f.aborts, 1);
+});
+
+test('the recognition panel contains no separate Listen or Stop button', () => {
+  assert.doesNotMatch(shell, /id="speech-button"/);
+  assert.match(shell, /id="speech-buddy"[^>]*aria-hidden="true"/);
+  assert.match(shell, /id="speech-status"/);
+});
+
+test('recognition activity drives one bounded visual reaction and stops cleanly', () => {
+  const f = fixture();
+  f.listen();
+  assert.equal(f.panel.attributes['data-state'], 'listening');
+  for (let index = 0; index < 10; index++) f.latest.result([[`word ${index}`, false]]);
+  assert.equal(f.panel.attributes['data-heard'], 'true');
+  assert.equal(f.pendingTimers, 1, 'Rapid words replace the reaction timer rather than stacking timers');
+  f.host.stopSpeech();
+  f.advance(1000);
+  assert.equal(f.panel.attributes['data-state'], 'off');
+  assert.equal(f.panel.attributes['data-heard'], 'false');
+  assert.equal(f.pendingTimers, 0);
+});
 
 test('a failed microphone shutdown stays visible and blocks another recording', () => {
   const f = fixture();
@@ -126,9 +157,9 @@ test('a failed microphone shutdown stays visible and blocks another recording', 
   f.latest.stop = () => { throw new Error('stop failed'); };
   f.host.stopSpeech();
   assert.equal(f.panel.hidden, false);
-  assert.equal(f.button.disabled, true);
-  assert.match(f.notice.textContent, /close this tab/i);
-  f.button.click();
+  assert.equal(f.panel.attributes['data-state'], 'error');
+  assert.match(f.status.textContent, /close this tab/i);
+  f.host.speechMode(true);
   assert.equal(f.starts, 1);
   f.latest.result([['doll', true]]);
   assert.equal(f.results.length, 0);
@@ -147,11 +178,11 @@ test('microphone cleanup falls back to stop without starting another recognizer'
 });
 
 test('the accessible panel is hidden and the exact speech API joins the existing host', () => {
-  for (const id of ['speech-panel', 'speech-button', 'speech-transcript', 'speech-notice']) {
+  for (const id of ['speech-panel', 'speech-status', 'speech-transcript', 'speech-notice']) {
     assert.match(shell, new RegExp(`id="${id}"`));
   }
   assert.match(shell, /id="speech-panel"[^>]*hidden/);
-  assert.match(shell, /id="speech-button"[^>]*aria-describedby="speech-notice"/);
+  assert.match(shell, /id="speech-panel"[^>]*aria-describedby="speech-notice"/);
   assert.match(shell, /\.\.\.speechHost/);
   const f = fixture();
   for (const method of ['speechAvailable', 'observeSpeech', 'speechMode', 'stopSpeech', 'speechBounds']) {
@@ -169,50 +200,44 @@ test('standard and prefixed recognition require a secure context', () => {
     const f = fixture(options);
     assert.equal(f.host.speechAvailable(), false);
     f.host.speechMode(true);
-    assert.equal(f.button.disabled, true);
-    assert.match(f.notice.textContent, /unavailable|HTTPS|secure/i);
-    f.button.click();
+    assert.equal(f.panel.attributes['data-state'], 'error');
+    assert.match(f.status.textContent, /unavailable|HTTPS|secure/i);
     assert.equal(f.starts, 0);
   }
 });
 
-test('voice mode shows privacy before an explicit English listening gesture', () => {
+test('Voice starts English listening synchronously with a visible privacy notice', () => {
   const f = fixture();
   f.host.speechMode(true);
   assert.equal(f.panel.hidden, false);
-  assert.equal(f.button.textContent, 'Listen');
   assert.match(f.notice.textContent, /browser.*remotely/i);
   assert.match(f.notice.textContent, /(?:save|store)s? no voice or transcripts/i);
-  assert.equal(f.starts, 0);
-  f.button.click();
-  assert.equal(f.starts, 1, 'start is called synchronously from the click');
+  assert.equal(f.starts, 1, 'start is called synchronously from Voice activation');
   assert.equal(f.latest.lang, 'en-US');
   assert.equal(f.latest.interimResults, true);
   assert.equal(f.latest.continuous, true);
   f.advance();
-  assert.equal(f.button.textContent, 'Stop');
+  assert.equal(f.panel.attributes['data-state'], 'listening');
   assert.deepEqual(f.states.at(-1).slice(0, 2), [true, true]);
 });
 
-test('opening voice mode focuses Listen without scrolling or starting the microphone', () => {
+test('Voice activation does not steal canvas focus or duplicate microphone requests', () => {
   const f = fixture();
   f.host.speechMode(true);
-  assert.equal(f.document.activeElement, f.button);
-  assert.deepEqual(f.button.focusCalls.map(options => options.preventScroll), [true]);
-  assert.equal(f.starts, 0);
+  assert.equal(f.document.activeElement, f.elements.canvas);
+  assert.equal(f.elements.canvas.focusCalls.length, 0);
+  assert.equal(f.starts, 1);
   f.host.speechMode(true);
-  assert.equal(f.button.focusCalls.length, 1, 'An already enabled mode does not steal focus again');
-  f.button.click();
-  assert.equal(f.starts, 1, 'Listening still requires a separate activation');
+  assert.equal(f.elements.canvas.focusCalls.length, 0);
+  assert.equal(f.starts, 1, 'An already enabled mode does not start a second recognizer');
 });
 
 test('every explicit voice exit restores canvas focus once without scrolling', () => {
-  for (const exit of ['stopSpeech', 'speechMode', 'button', 'Escape']) {
+  for (const exit of ['stopSpeech', 'speechMode', 'Escape']) {
     const f = fixture();
     f.listen();
     if (exit === 'stopSpeech') f.host.stopSpeech();
     if (exit === 'speechMode') f.host.speechMode(false);
-    if (exit === 'button') f.button.click();
     if (exit === 'Escape') f.panel.dispatch('keydown', { key: 'Escape', stopPropagation() {} });
     assert.equal(f.panel.hidden, true);
     assert.equal(f.document.activeElement, f.elements.canvas, exit);
@@ -222,12 +247,12 @@ test('every explicit voice exit restores canvas focus once without scrolling', (
   }
 });
 
-test('a synchronous native rejection of voice mode never focuses the hidden Listen button', () => {
+test('a synchronous native rejection of voice mode never starts the microphone', () => {
   const f = fixture();
   f.host.observeSpeech(() => {}, enabled => { if (enabled) f.host.stopSpeech(); });
   f.host.speechMode(true);
   assert.equal(f.panel.hidden, true);
-  assert.equal(f.button.focusCalls.length, 0);
+  assert.equal(f.document.activeElement, f.elements.canvas);
   assert.equal(f.starts, 0);
 });
 
@@ -252,15 +277,17 @@ test('utterance endings restart once after a delay while Stop exits the entire m
   const f = fixture();
   f.listen();
   const old = f.latest;
+  old.result([['one word', false]]);
   old.end();
   old.end();
   assert.equal(f.starts, 1, 'onend cannot restart synchronously');
-  assert.equal(f.button.textContent, 'Stop');
+  assert.equal(f.panel.attributes['data-state'], 'starting');
+  assert.equal(f.panel.attributes['data-heard'], 'false');
   f.advance(1500);
   assert.equal(f.starts, 2, 'duplicate onend schedules only one restart');
   old.result([['stale doll', true]]);
-  assert.deepEqual(f.results, []);
-  f.button.click();
+  assert.deepEqual(f.results, [['one word', false]]);
+  f.host.speechMode(false);
   assert.equal(f.panel.hidden, true);
   assert.equal(f.transcript.textContent, '');
   assert.equal(f.aborts, 1);
@@ -272,7 +299,6 @@ test('utterance endings restart once after a delay while Stop exits the entire m
 test('stopping during start or a pending restart releases the mic and rejects late results', () => {
   const f = fixture();
   f.host.speechMode(true);
-  f.button.click();
   const old = f.latest;
   f.host.stopSpeech();
   old.result([['doll', true]]);
@@ -340,10 +366,10 @@ for (const code of ['not-allowed', 'service-not-allowed', 'no-speech', 'audio-ca
     f.listen();
     const old = f.latest;
     old.error(code);
-    const error = f.notice.textContent;
+    const error = f.status.textContent;
     assert.match(error, code.includes('allowed') ? /permission|denied|blocked/i :
       code === 'no-speech' ? /no speech/i : code === 'audio-capture' ? /microphone/i : /network/i);
-    assert.equal(f.button.textContent, 'Listen');
+    assert.equal(f.panel.attributes['data-state'], 'error');
     assert.equal(f.panel.hidden, false, 'The error remains visible with manual play available');
     assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
     f.advance(5000);
@@ -351,7 +377,7 @@ for (const code of ['not-allowed', 'service-not-allowed', 'no-speech', 'audio-ca
     assert.equal(f.starts, 1);
     assert.equal(f.aborts, 1);
     assert.deepEqual(f.results, []);
-    assert.equal(f.notice.textContent, error);
+    assert.equal(f.status.textContent, error);
   });
 }
 
@@ -366,9 +392,10 @@ test('an error preserves the native voice slot until an explicit retry or mode e
   assert.equal(f.panel.hidden, false);
   assert.deepEqual(f.panel.style, bounds);
   assert.equal(f.starts, 1);
-  f.button.click();
+  f.host.speechMode(false);
+  f.host.speechMode(true);
   f.advance();
-  assert.equal(f.starts, 2, 'Only another Listen gesture retries after denial');
+  assert.equal(f.starts, 2, 'Only another Voice off/on activation retries after denial');
   assert.deepEqual(f.states.at(-1).slice(0, 2), [true, true]);
   f.latest.error('network');
   f.host.speechMode(false);
@@ -400,7 +427,6 @@ test('visibility and pagehide stop speech; showing the page never starts it agai
   const hidden = fixture();
   hidden.document.hidden = true;
   hidden.host.speechMode(true);
-  hidden.button.click();
   assert.equal(hidden.starts, 0);
   assert.equal(hidden.panel.hidden, true);
   assert.equal(hidden.elements.canvas.focusCalls.length, 0);
@@ -417,7 +443,7 @@ test('synchronous start errors release the recognizer and require a new gesture'
     throw Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' });
   };
   f.listen();
-  assert.match(f.notice.textContent, /permission|denied/i);
+  assert.match(f.status.textContent, /permission|denied/i);
   assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
   assert.equal(f.aborts, 1);
   f.advance(5000);

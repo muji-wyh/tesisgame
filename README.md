@@ -46,9 +46,13 @@ respect reduced motion, and stop when the page is hidden or loading ends. Contro
 polling runs only while a connected controller can use the loading toy.
 Sparkles are temporary loading-screen play, not saved collection rewards.
 
-Engine and game-pack requests start together. The progress bar tracks actual downloaded
-bytes; completion of the download is distinguished from the engine being ready. Failed
-downloads, including interrupted response bodies, show an English error and a retry button.
+Engine and game-pack requests start together. A labeled **Startup estimate** moves
+quickly to **35%**, pauses briefly, advances to **75%**, pauses again, and reaches
+**95%**. The final few percent follow remaining game-data loading; **100% is shown
+only when the native game is ready**. Fast or cached starts do not wait for the
+staged animation. A separate Game data line shows the real loaded byte counts.
+Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
+downloads stop progress and show an English error with a retry button.
 
 Word pronunciations and immediate sound effects stay in the startup **PCK alongside WASM**.
 The four background tracks and sixteen other spoken prompts are separate, content-hashed
@@ -192,8 +196,12 @@ encouragement without movement, and Play again remains the initial controller ac
 
 ### Voice play
 
-On a supported browser, choose **Voice**, then click the visible **Listen** button
-to enable the microphone. The panel shows the recognized text live. Only final
+On a supported browser, click **Voice** to start listening immediately; click
+**Voice** again to stop. There is no separate Listen button. The panel shows the
+recognized text live in a seasonal speech bubble, with a microphone buddy and
+animated listening bars. The buddy reacts as words arrive; these are status
+animations, not a measurement of microphone volume. Reduced motion keeps them
+static. Only final
 recognized words count, because interim text can change as recognition settles.
 For example, **"I see a doll"** matches the doll word and picture if both are still
 available on the board.
@@ -203,7 +211,7 @@ Matching is case-insensitive and uses whole English words: `doll` does not match
 or cost a mistake. A sentence containing several available words is resolved
 through the same match-feedback sequence, once per pair.
 
-Click **Stop** or turn Voice off to exit. Winning, losing, replaying, opening a
+Click **Voice** again to exit. Winning, losing, replaying, opening a
 collection/preview, or hiding the page also stops listening. Game music and spoken
 prompts are quiet while voice mode is enabled so the game cannot match its own
 audio. Touch matching remains available.
@@ -212,8 +220,9 @@ Voice play uses the browser's standard or prefixed `SpeechRecognition` API with
 `en-US`; it needs browser support, a secure page, and microphone permission.
 **Your browser's speech provider may process the audio remotely. This game does
 not record or save microphone audio or transcripts.** The microphone starts only
-from the Listen button. Permission and service errors are visible and never
-trigger an automatic permission-retry loop. Use the cards when speech is unavailable.
+from an explicit Voice activation, never on page load. Permission and service
+errors are visible and never trigger an automatic permission-retry loop.
+Turn Voice off and on to retry, or use the cards when speech is unavailable.
 An embedding site must also allow `microphone` in its iframe permissions.
 
 ### Xbox controller

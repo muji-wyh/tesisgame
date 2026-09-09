@@ -33,6 +33,83 @@ async function whileEngineScriptIsPending(page, action) {
   }
 }
 
+async function progressShell(page) {
+  await useMaintainedShell(page);
+  await page.route(/\/engine-[a-f0-9]{16}\.js$/, route => route.fulfill({
+    contentType: 'application/javascript',
+    body: `window.Engine = class {
+      static getMissingFeatures() { return []; }
+      static load() { return Promise.resolve(); }
+      startGame({ onProgress }) { window.reportDownload = onProgress; return Promise.resolve(); }
+    };`
+  }));
+  await page.goto('/loader-test');
+}
+
+test('startup estimate pauses at 35 and 75 before 95, then follows real remaining data', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page);
+  await expect(page.locator('#message')).toContainText('estimate');
+  await page.evaluate(() => window.reportDownload(2 * 1048576, 10 * 1048576));
+  for (const [milliseconds, percentage] of [[350, '35%'], [200, '35%'], [450, '75%'], [200, '75%'], [400, '95%']]) {
+    await page.clock.runFor(milliseconds);
+    await expect(page.locator('#loading-percent')).toHaveText(percentage);
+  }
+  await expect(page.locator('#download-status')).toContainText('2.0 / 10.0 MB');
+  await page.evaluate(() => window.reportDownload(6 * 1048576, 10 * 1048576));
+  await expect(page.locator('#loading-percent')).toHaveText('97%');
+  await page.evaluate(() => window.reportDownload(10 * 1048576, 10 * 1048576));
+  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await page.clock.runFor(5000);
+  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
+  await page.evaluate(() => window.wordBuddiesHost.ready());
+  await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await expect(page.locator('#status')).toBeHidden();
+});
+
+test('fast readiness bypasses staged delays and failed startup never finishes the estimate', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page);
+  await page.evaluate(() => window.wordBuddiesHost.ready());
+  await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await expect(page.locator('#status')).toBeHidden();
+  await page.reload();
+  await page.clock.runFor(1700);
+  await expect(page.locator('#loading-percent')).toHaveText('95%');
+  await page.evaluate(() => window.wordBuddiesHost.fail('The game could not start.'));
+  await page.clock.runFor(5000);
+  await page.evaluate(() => window.reportDownload(100, 100));
+  await expect(page.locator('#loading-percent')).toHaveText('95%');
+  await expect(page.locator('#retry')).toBeVisible();
+  await expect(page.locator('#download-status')).toBeHidden();
+});
+
+test('hidden startup pauses pacing and reduced motion uses milestone steps', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await progressShell(page);
+  await page.clock.runFor(200);
+  await expect(page.locator('#loading-percent')).toHaveText('0%');
+  await page.clock.runFor(150);
+  await expect(page.locator('#loading-percent')).toHaveText('35%');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.clock.runFor(5000);
+  await expect(page.locator('#loading-percent')).toHaveText('35%');
+  await page.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.clock.runFor(1300);
+  await expect(page.locator('#loading-percent')).toHaveText('95%');
+});
+
 test('loading chest taps have no browser highlight but keyboard focus stays visible', async ({ page }) => {
   await whileEngineScriptIsPending(page, async toy => {
     // Desktop WebKit builds do not implement the mobile tap-highlight property.
@@ -213,7 +290,7 @@ test('the loading toy works before the engine script arrives and fits small scre
     await toy.focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
-    await expect(page.locator('#progress')).not.toHaveAttribute('value');
+    await expect(page.locator('#progress')).toHaveAttribute('value');
     for (const viewport of [{ width: 390, height: 844 }, { width: 844, height: 390 }, { width: 320, height: 320 }]) {
       await page.setViewportSize(viewport);
       const bounds = await toy.boundingBox();

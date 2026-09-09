@@ -9,6 +9,7 @@ async function installRecognition(page, api = 'standard') {
         if (this.running) throw new DOMException('Already started', 'InvalidStateError');
         this.running = true;
         fixture.starts++;
+        this.activationAtStart = navigator.userActivation?.isActive ?? null;
         this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
         queueMicrotask(() => this.callbacks.start?.());
       }
@@ -100,51 +101,83 @@ async function discoverBoard(page) {
   return { pairs, bounds };
 }
 
-async function enableVoice(page) {
+async function toggleVoice(page) {
   const bounds = await metrics(page);
   const scale = Math.min(bounds.width, bounds.height) / 480;
   await page.touchscreen.tap(bounds.x + bounds.width - 208 * scale, bounds.y + 48 * scale);
+}
+
+async function listen(page) {
+  await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeVisible();
-  await expect(page.locator('#speech-button')).toHaveText('Listen');
-  await expect(page.locator('#speech-button')).toBeFocused();
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+  await expect(page.locator('#speech-button')).toHaveCount(0);
   await expect(page.locator('#speech-notice')).toContainText(/browser.*remotely/i);
   await expect(page.locator('#speech-notice')).toContainText(/(?:save|store)s? no voice or transcripts/i);
 }
 
-async function listen(page) {
-  await enableVoice(page);
-  await page.locator('#speech-button').click();
-  await expect(page.locator('#speech-button')).toHaveText('Stop');
-}
-
-test('voice needs a separate Listen gesture and fits the reserved space at 320px', async ({ page }, testInfo) => {
+test('Voice starts immediately and the single toggle fits the reserved space at 320px', async ({ page, browserName }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page);
   expect(await page.evaluate(() => window.wordBuddiesHost.speechAvailable())).toBe(true);
-  await enableVoice(page);
-  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
+  await listen(page);
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   const panel = await page.locator('#speech-panel').boundingBox();
-  const button = await page.locator('#speech-button').boundingBox();
+  const buddy = await page.locator('#speech-buddy').boundingBox();
   const notice = await page.locator('#speech-notice').boundingBox();
   expect(panel.height).toBeGreaterThanOrEqual(73);
   expect(panel.height).toBeLessThanOrEqual(77);
-  expect(button.height).toBeGreaterThanOrEqual(48);
   expect(panel.x).toBeGreaterThanOrEqual(0);
   expect(panel.x + panel.width).toBeLessThanOrEqual(320);
-  expect(button.y + button.height).toBeLessThanOrEqual(panel.y + panel.height);
+  expect(buddy.y + buddy.height).toBeLessThanOrEqual(panel.y + panel.height);
   expect(notice.y + notice.height).toBeLessThanOrEqual(panel.y + panel.height + 1);
   await page.screenshot({ path: testInfo.outputPath('voice-panel-320.png'), scale: 'css' });
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#speech-button')).toHaveText('Stop');
   expect(await page.evaluate(() => {
     const { starts, instances } = window.speechFixture;
     const current = instances.at(-1);
     return [starts, current.lang, current.interimResults, current.continuous];
   })).toEqual([1, 'en-US', true, true]);
+  if (browserName === 'chromium') {
+    expect(await page.evaluate(() => window.speechFixture.instances[0].activationAtStart)).toBe(true);
+  }
   await page.keyboard.press('Space');
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expect(page.locator('#canvas')).toBeFocused();
   await expect(page.locator('#selection-status')).toBeEmpty();
+  await expect(page.locator('#game-status')).toContainText('Voice off.');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(2);
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
+test('the listening buddy reacts to words and reduced motion stops its animations', async ({ page }, testInfo) => {
+  const errors = await openGame(page);
+  await listen(page);
+  await expect.poll(() => page.locator('#speech-meter').evaluate(element =>
+    element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length
+  )).toBe(5);
+  await page.evaluate(() => window.speechFixture.emit('I see a doll', false));
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'true');
+  await expect(page.locator('#speech-transcript')).toHaveText('I see a doll');
+  await page.screenshot({ path: testInfo.outputPath('voice-listening.png'), scale: 'css' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => page.locator('#speech-panel').evaluate(element =>
+    element.getAnimations({ subtree: true }).length
+  )).toBe(0);
+  await page.evaluate(() => window.speechFixture.emit('I see a little doll', false));
+  await expect(page.locator('#speech-buddy')).toHaveCSS('transform', 'none');
+  const still = await page.screenshot({ scale: 'css' });
+  await page.waitForTimeout(400);
+  expect((await page.screenshot({ scale: 'css' })).equals(still)).toBe(true);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toBeHidden();
+  await expect.poll(() => page.locator('#speech-panel').evaluate(element =>
+    element.getAnimations({ subtree: true }).length
+  )).toBe(0);
   expect(errors).toEqual([]);
 });
 
@@ -181,12 +214,12 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   expect(errors).toEqual([]);
 });
 
-test('Stop clears the panel and stale results cannot score or interfere with a newer session', async ({ page }) => {
+test('Voice off clears the panel and stale results cannot interfere with a newer session', async ({ page }) => {
   const errors = await openGame(page);
   const { pairs } = await discoverBoard(page);
   await listen(page);
   await page.evaluate(() => window.speechFixture.emit('unfinished words', false));
-  await page.locator('#speech-button').click();
+  await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expect(page.locator('#speech-transcript')).toBeEmpty();
   const stopped = await page.locator('#game-status').textContent();
@@ -206,7 +239,7 @@ test('Stop clears the panel and stale results cannot score or interfere with a n
   }, pairs.map(([word]) => word));
   await page.waitForTimeout(900);
   await expect(page.locator('#speech-panel')).toBeVisible();
-  await expect(page.locator('#speech-button')).toHaveText('Stop');
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
   await expect(page.locator('#speech-transcript')).toBeEmpty();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(2);
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word}`), pairs[0][0]);
@@ -219,10 +252,10 @@ test('an utterance end resumes listening without asking for another mode toggle'
   await listen(page);
   await page.evaluate(() => window.speechFixture.end());
   await expect.poll(() => page.evaluate(() => window.speechFixture.starts)).toBe(2);
-  await expect(page.locator('#speech-button')).toHaveText('Stop');
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
   await page.evaluate(() => window.speechFixture.emit('some live words', false));
   await expect(page.locator('#speech-transcript')).toHaveText('some live words');
-  await page.locator('#speech-button').click();
+  await toggleVoice(page);
   await page.waitForTimeout(900);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(2);
   await expect(page.locator('#speech-panel')).toBeHidden();
@@ -233,8 +266,8 @@ test('permission denial stays visible and never retries automatically', async ({
   const errors = await openGame(page);
   await listen(page);
   await page.evaluate(() => window.speechFixture.error('not-allowed'));
-  await expect(page.locator('#speech-notice')).toContainText(/permission|denied|blocked/i);
-  await expect(page.locator('#speech-button')).toHaveText('Listen');
+  await expect(page.locator('#speech-status')).toContainText(/permission|denied|blocked/i);
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'error');
   await page.waitForTimeout(1600);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   expect(await page.evaluate(() => window.speechFixture.aborts)).toBeGreaterThanOrEqual(1);

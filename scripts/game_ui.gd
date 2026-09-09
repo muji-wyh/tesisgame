@@ -1021,7 +1021,7 @@ func _refresh() -> void:
 	Style.button(_voice_button, palette.accent)
 	_voice_button.disabled = _host == null or not bool(_host.speechAvailable())
 	_voice_button.focus_mode = Control.FOCUS_NONE if _voice_button.disabled else Control.FOCUS_ALL
-	_voice_button.tooltip_text = "Turn voice play off" if _voice_mode else "Voice play: speak matching words"
+	_voice_button.tooltip_text = "Voice on: click to stop" if _voice_mode else "Voice: click to listen. Browser speech may process audio remotely."
 	if _voice_button.disabled:
 		_voice_button.tooltip_text = "Voice input is unavailable in this browser. You can still tap cards."
 	_set_accessibility_name(_voice_button, _voice_button.tooltip_text)
@@ -1132,7 +1132,7 @@ func _refresh() -> void:
 				replay_button.focus_mode = Control.FOCUS_ALL
 				replay_button.grab_focus()
 	if _host != null:
-		_host.background("#" + palette.background.to_html(false))
+		_host.background("#" + palette.background.to_html(false), "#" + palette.accent.to_html(false), "#" + palette.light.to_html(false))
 	if _save_error:
 		_message.text = "Reward progress: " + medal_progress.error
 		_message.show()
@@ -1783,11 +1783,6 @@ func _toggle_voice() -> void:
 		_voice_space.show()
 		_layout()
 		audio.halt()
-		_show_voice_controls.call_deferred()
-
-
-func _show_voice_controls() -> void:
-	if _voice_mode and _host != null:
 		_sync_voice_bounds()
 		_host.speechMode(true)
 
@@ -1819,6 +1814,8 @@ func _on_voice_state(arguments: Array) -> void:
 		_speech_queue.clear()
 	if model.phase in ["waiting", "matching", "feedback"] and not str(arguments[2]).is_empty():
 		_announce_status(str(arguments[2]))
+	elif layout_changed and not enabled and model.phase in ["waiting", "matching", "feedback"]:
+		_announce_status("Voice off. " + _message.text)
 	_sync_voice_bounds()
 
 
@@ -1854,6 +1851,8 @@ func _stop_voice() -> void:
 		_layout()
 	if was_enabled and _host != null:
 		_host.stopSpeech()
+	if was_enabled and not _voice_mode and model.phase in ["waiting", "matching", "feedback"]:
+		_announce_status("Voice off. " + _message.text)
 
 
 func _animate_feedback(ids: Array[String], correct: bool) -> void:

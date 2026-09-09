@@ -13,8 +13,8 @@ Playwright suite, and the existing Azure Static Web Apps deployment script.
 
 **Follow-up scope:** The chest-reveal plan supersedes the original whole-reward
 storage constraints with three-piece medals and a safe save migration. The user
-also requested optional browser voice matching; its microphone Listen button is
-distinct from the previously removed word-playback Listen control.
+also requested optional browser voice matching. Voice now directly starts and
+stops the microphone; no separate Listen control is needed.
 
 ## Research and design decision
 
