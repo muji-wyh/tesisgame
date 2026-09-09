@@ -76,10 +76,10 @@ function cardPoint(bounds, index) {
   const columns = bounds.width >= bounds.height ? 4 : 2;
   const rows = 8 / columns;
   const cellWidth = (bounds.width / scale - 24 - (columns - 1) * 10) / columns;
-  const cellHeight = (bounds.height / scale - 184 - (rows - 1) * 10) / rows;
+  const cellHeight = (bounds.height / scale - 300 - (rows - 1) * 10) / rows;
   return {
     x: bounds.x + (12 + (index % columns) * (cellWidth + 10) + cellWidth / 2) * scale,
-    y: bounds.y + (172 + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
+    y: bounds.y + (288 + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
   };
 }
 

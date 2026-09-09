@@ -9,6 +9,23 @@ var _files: Array[String] = []
 var _directories: Array[String] = []
 
 
+class BrowserStorage extends RefCounted:
+	var text: Variant = null
+	var readable: bool = true
+	var writable: bool = true
+	var save_calls: int = 0
+
+	func medalProgress() -> Variant:
+		return text if readable else false
+
+	func saveMedalProgress(config_text: String) -> bool:
+		save_calls += 1
+		if not writable:
+			return false
+		text = config_text
+		return true
+
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -51,6 +68,7 @@ func _run() -> void:
 				_test_locked_replacement()
 				_test_interrupted_replacement()
 				_test_migration_write_retries()
+				_test_browser_storage()
 				_cleanup()
 	print("Medal progress: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -133,13 +151,14 @@ func _reject_claim(fixture: Dictionary, fragment: Dictionary, message: String) -
 
 func _test_data() -> void:
 	var total: int = 0
-	for theme_id in ["spring", "summer", "autumn", "winter"]:
+	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
 		var rewards: Array = _data.rewards(theme_id)
 		var medals: Array = _data.medals(theme_id)
-		check(rewards.size() == 10, theme_id + " keeps all ten old reward definitions")
+		var expected_rewards: int = 6 if theme_id in ["ocean", "space"] else 10
+		check(rewards.size() == expected_rewards, theme_id + " has the expected active and archived reward definitions")
 		check(medals.size() == 6, theme_id + " has exactly six active medals")
 		total += medals.size()
-		for index in range(10):
+		for index in range(expected_rewards):
 			var id := "%s-%d" % [theme_id, index + 1]
 			var reward: Dictionary = _data.reward(id)
 			check(not reward.is_empty(), "Old artwork and metadata remain available for " + id)
@@ -149,7 +168,7 @@ func _test_data() -> void:
 					check(medals[index] == reward, "Medal order uses stable reward IDs: " + id)
 			else:
 				check(_data.medal(id).is_empty(), "Archived reward is not active: " + id)
-	check(total == 24, "There are exactly 24 active medals")
+	check(total == 36, "There are exactly 36 active medals")
 	check(_data.medals("invalid").is_empty(), "An unknown season has no active medals")
 	for id in ["", "spring-0", "spring-11", "invalid-1"]:
 		check(_data.medal(id).is_empty(), "Invalid medal metadata is empty: " + id)
@@ -228,7 +247,7 @@ func _test_seasons() -> void:
 	check(progress.next_fragment("spring").is_empty(), "A full season has no seventh award")
 	check(progress.error.is_empty(), "A full season is normal, not an error")
 	check(progress.count_for("spring-7") == 0 and not progress.counts.has("spring-7"), "No active seventh medal is created")
-	for theme_id in ["summer", "autumn", "winter"]:
+	for theme_id in ["summer", "autumn", "winter", "ocean", "space"]:
 		var fragment: Dictionary = progress.next_fragment(theme_id)
 		check(fragment == _fragment(theme_id + "-1", 0), theme_id + " starts independently")
 		check(progress.claim(fragment), theme_id + " receives its own fragment")
@@ -236,7 +255,7 @@ func _test_seasons() -> void:
 		check(progress.completed_count("spring") == 6, "Changing seasons preserves completed spring medals")
 	check(progress.claim(progress.next_fragment("summer")), "The second summer fragment saves")
 	check(progress.claim(progress.next_fragment("summer")), "The third summer fragment saves")
-	check(progress.completed_count() == 7, "Completed counts span all four active seasons")
+	check(progress.completed_count() == 7, "Completed counts span all six active themes")
 	check(progress.count_for("autumn-1") == 1 and progress.count_for("winter-1") == 1, "Partial seasons remain independent")
 	check(progress.completed_count("unknown") == 0, "An unknown completion filter has no medals")
 
@@ -545,6 +564,113 @@ func _test_interrupted_replacement() -> void:
 	check(not blocked.progress.load_progress(), "An unreadable previous-save path is not a fresh player")
 	check(not blocked.progress.error.is_empty(), "An unreadable recovery path has a useful error")
 	check(not FileAccess.file_exists(blocked.save), "A failed recovery never migrates over the interrupted save")
+
+
+func _browser_text(version: Variant, saved_counts: Variant) -> String:
+	var config := ConfigFile.new()
+	config.set_value("medals", "version", version)
+	config.set_value("medals", "counts", saved_counts)
+	return config.encode_to_text()
+
+
+func _test_browser_storage() -> void:
+	var fixture := _fixture("browser_durable")
+	var storage := BrowserStorage.new()
+	var progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+	if not _load_ok(progress, "A fresh browser player saves through the host"):
+		return
+	check(not FileAccess.file_exists(fixture.save), "Browser initialization needs no filesystem save")
+	check(progress.claim(_fragment("spring-1", 0)), "A browser claim persists before reporting success")
+	check(not FileAccess.file_exists(fixture.save), "Browser claims need no filesystem save")
+	_make_directory(fixture.save + ".previous")
+	_write_text(fixture.save, "[medals\n")
+	var reloaded = _progress_script.new(fixture.save, fixture.legacy, storage)
+	var calls := storage.save_calls
+	check(_load_ok(reloaded, "Browser progress reloads despite obsolete corrupt filesystem progress"), "The browser text is authoritative")
+	check(reloaded.count_for("spring-1") == 1, "Immediate reload reads the saved browser piece")
+	check(storage.save_calls == calls, "Reading browser progress does not rewrite it")
+	check(reloaded.claim(_fragment("spring-1", 0)) and storage.save_calls == calls, "A duplicate browser claim remains idempotent without another save")
+	_test_browser_migration()
+	_test_browser_invalid()
+	_test_browser_failures()
+
+
+func _test_browser_migration() -> void:
+	var fixture := _fixture("browser_file_migration")
+	_write_save(fixture.save, 1, {"spring-1": 1})
+	_write_legacy(fixture.legacy, ["spring-1", "spring-7"])
+	var original := FileAccess.get_file_as_string(fixture.save)
+	var original_legacy := FileAccess.get_file_as_string(fixture.legacy)
+	var storage := BrowserStorage.new()
+	var progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+	if _load_ok(progress, "A missing browser save migrates existing filesystem progress"):
+		check(progress.count_for("spring-1") == 1, "Browser migration preserves partials without reapplying old active rewards")
+		check(progress.legacy_rewards == {"spring-7": true}, "Browser migration retains archived rewards")
+		check(storage.save_calls == 1 and storage.text is String, "Existing filesystem progress is durably migrated before load succeeds")
+		check(progress.claim(_fragment("spring-1", 1)), "A migrated browser player can earn another piece")
+		check(FileAccess.get_file_as_string(fixture.save) == original, "Browser claims leave the old filesystem save unchanged")
+		check(FileAccess.get_file_as_string(fixture.legacy) == original_legacy, "Browser migration leaves legacy rewards unchanged")
+		var reloaded = _progress_script.new(fixture.save, fixture.legacy, storage)
+		check(_load_ok(reloaded, "Migrated browser progress reloads"), "Migrated browser reload succeeds")
+		check(reloaded.count_for("spring-1") == 2, "The current browser count takes precedence over the old file")
+	fixture = _fixture("browser_legacy_migration")
+	_write_legacy(fixture.legacy, ["spring-2", "spring-7"])
+	storage = BrowserStorage.new()
+	progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+	if _load_ok(progress, "Legacy-only rewards migrate directly into browser storage"):
+		check(progress.count_for("spring-2") == 3 and progress.legacy_rewards == {"spring-7": true}, "Legacy browser migration preserves complete medals and archives")
+		check(not FileAccess.file_exists(fixture.save) and storage.text is String, "Legacy browser migration needs no filesystem roundtrip")
+
+
+func _test_browser_invalid() -> void:
+	var invalid: Array = [false, 1, "", "[medals\n", _browser_text(2, {}), _browser_text(1.0, {}), _browser_text(1, []), _browser_text(1, {"spring-1": 1.0}), _browser_text(1, {"spring-1": 4}), _browser_text(1, {"spring-7": 1})]
+	for index in range(invalid.size()):
+		var fixture := _fixture("browser_invalid_%d" % index)
+		_write_save(fixture.save, 1, {"spring-1": 2})
+		var original := FileAccess.get_file_as_string(fixture.save)
+		var storage := BrowserStorage.new()
+		storage.text = invalid[index]
+		var progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+		check(not _load_corrupt(progress), "Invalid or unreadable browser progress blocks filesystem fallback: %d" % index)
+		check(not progress.error.is_empty() and progress.counts.is_empty(), "Invalid browser data is not partially exposed")
+		check(not progress.claim(_fragment("spring-1", 0)), "A failed browser load cannot be overwritten by a claim")
+		check(storage.text == invalid[index] and storage.save_calls == 0, "Invalid browser data is preserved without a write")
+		check(FileAccess.get_file_as_string(fixture.save) == original, "Invalid browser data does not change the earlier file")
+
+
+func _test_browser_failures() -> void:
+	var fixture := _fixture("browser_write_failure")
+	var storage := BrowserStorage.new()
+	storage.text = _browser_text(1, {"spring-1": 1})
+	var progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+	if _load_ok(progress, "Browser retry fixture loads"):
+		var original: String = storage.text
+		storage.writable = false
+		check(not progress.claim(_fragment("spring-1", 1)), "A blocked browser write rejects the captured award")
+		check(not progress.error.is_empty() and progress.count_for("spring-1") == 1, "A blocked browser write preserves counts and reports the error")
+		check(storage.text == original, "A blocked browser write preserves the previous durable text")
+		storage.writable = true
+		check(progress.claim(_fragment("spring-1", 1)), "The exact browser award can be retried when storage recovers")
+		check(progress.count_for("spring-1") == 2, "The recovered browser write adds exactly one piece")
+		original = storage.text
+		storage.readable = false
+		check(not progress.load_progress() and progress.count_for("spring-1") == 2, "A blocked browser reload preserves previous memory")
+		check(not progress.claim(_fragment("spring-1", 2)) and storage.text == original, "A blocked browser reload disables claims without overwriting storage")
+		storage.readable = true
+		check(_load_ok(progress, "A repaired browser read can be retried"), "Claims can resume after storage recovers")
+	fixture = _fixture("browser_migration_failure")
+	_write_legacy(fixture.legacy, ["spring-1", "spring-7"])
+	var original_legacy := FileAccess.get_file_as_string(fixture.legacy)
+	storage = BrowserStorage.new()
+	storage.writable = false
+	progress = _progress_script.new(fixture.save, fixture.legacy, storage)
+	check(not progress.load_progress(), "A failed browser migration is not reported as a successful load")
+	check(progress.counts.is_empty() and progress.legacy_rewards.is_empty(), "Failed browser migration does not expose unsaved rewards")
+	check(storage.text == null and not FileAccess.file_exists(fixture.save), "Failed browser migration does not leave partial progress")
+	check(FileAccess.get_file_as_string(fixture.legacy) == original_legacy, "Failed browser migration preserves the original legacy rewards")
+	storage.writable = true
+	check(_load_ok(progress, "Browser migration retries after storage recovers"), "The same browser migration succeeds after recovery")
+	check(progress.count_for("spring-1") == 3 and progress.legacy_rewards == {"spring-7": true}, "Recovered browser migration preserves old earned rewards")
 
 
 func _cleanup() -> void:

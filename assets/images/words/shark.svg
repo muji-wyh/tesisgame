@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">shark</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 47 59 20 68 46" fill="#8eaebe"/>
+    <path d="M16 64 Q40 33 79 53 L105 33 100 62 107 83 79 73 Q43 91 16 64Z" fill="#9abcca"/>
+    <path d="M19 66 Q45 68 79 67 Q59 88 27 76Z" fill="#e2ecec" stroke="none"/>
+    <path d="M56 70 72 91 70 73" fill="#7f9eaf"/>
+    <path d="M22 68 39 68 35 74 30 68 27 73Z" fill="#fff7e6" stroke-width="2"/>
+    <circle cx="30" cy="56" r="3" fill="#765445" stroke="none"/>
+    <path d="M48 54 44 63 M56 55 52 64 M64 56 60 65" stroke-width="2.5"/>
+    <path d="M20 101H45 M79 98H101" stroke="#a5d8df"/>
+  </g>
+</svg>

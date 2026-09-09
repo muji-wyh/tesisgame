@@ -21,11 +21,54 @@ class MatchMark:
 		draw_polyline(star, Style.INK, 2.0, true)
 
 
+class FeedbackOverlay:
+	extends Control
+
+	var kind: String = ""
+	var progress: float = 0.0
+	var accent: Color = Style.GOOD
+
+	func _draw() -> void:
+		if kind.is_empty():
+			return
+		var center := size * 0.5
+		var edge := minf(size.x, size.y)
+		var fade := 1.0 - progress
+		var tint := Color(Style.GOOD if kind == "matched" else Style.WRONG if kind == "wrong" else accent, fade)
+		if kind == "selected":
+			var radius := edge * lerpf(0.29, 0.46, progress)
+			draw_arc(center, radius, 0.0, TAU, 40, Color(tint, fade * 0.65), lerpf(4.0, 1.0, progress), true)
+			for index in range(4):
+				draw_circle(center + Vector2.UP.rotated(index * PI * 0.5) * radius, edge * 0.022 * fade, tint)
+		elif kind == "matched":
+			for index in range(8):
+				var direction := Vector2.UP.rotated(float(index) * TAU / 8.0)
+				var point := center + direction * edge * lerpf(0.23, 0.44, progress)
+				var radius := maxf(1.0, edge * 0.035 * fade)
+				draw_line(point - Vector2(radius, 0), point + Vector2(radius, 0), tint, 2.0, true)
+				draw_line(point - Vector2(0, radius), point + Vector2(0, radius), tint, 2.0, true)
+		else:
+			var sway := sin(progress * TAU * 2.0) * edge * 0.025 * fade
+			for index in range(3):
+				var point := center + Vector2((index - 1) * edge * 0.1 + sway, edge * 0.36)
+				draw_circle(point, edge * 0.022, tint)
+
+
 var card_data: Dictionary = {}
 var picture: TextureRect
 var word_label: Label
 var match_mark: MatchMark
 var accent: Color = Style.GOOD
+var reduced_motion: bool = false
+var _feedback: FeedbackOverlay
+var _feedback_state: String = ""
+var _feedback_kind: String = ""
+var _feedback_left: float = 0.0
+var _feedback_duration: float = 0.0
+
+
+func _ready() -> void:
+	set_process(_feedback_left > 0.0 and not reduced_motion)
 
 
 func setup(value: Dictionary) -> void:
@@ -64,12 +107,33 @@ func setup(value: Dictionary) -> void:
 	match_mark.offset_top = 8
 	match_mark.offset_bottom = 36
 	match_mark.hide()
+	_feedback = FeedbackOverlay.new()
+	_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_feedback)
+	_feedback.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_feedback.hide()
+	visibility_changed.connect(_visibility_changed)
 	resized.connect(_fit_text)
+	set_process(false)
 	_fit_text()
 
 
 func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
 	accent = palette.accent
+	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
+	if state != _feedback_state:
+		_feedback_state = state
+		_stop_feedback()
+		if not state.is_empty() and not reduced_motion:
+			_feedback_kind = state
+			_feedback_duration = 0.6 if state == "matched" else 0.4
+			_feedback_left = _feedback_duration
+			_feedback.kind = state
+			_feedback.progress = 0.0
+			_feedback.show()
+			_feedback.queue_redraw()
+			set_process(true)
+	_feedback.accent = accent
 	var fill: Color = Color.WHITE
 	var border: Color = accent.lightened(0.68)
 	if selected:
@@ -99,6 +163,42 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.4 if matched else 1.0
 	word_label.modulate.a = 0.4 if matched else 1.0
+
+
+func set_reduced_motion(value: bool) -> void:
+	reduced_motion = value
+	if value:
+		_stop_feedback()
+
+
+func clear_feedback() -> void:
+	_feedback_state = ""
+	_stop_feedback()
+
+
+func _stop_feedback() -> void:
+	_feedback_kind = ""
+	_feedback_left = 0.0
+	set_process(false)
+	if _feedback != null:
+		_feedback.kind = ""
+		_feedback.hide()
+
+
+func _visibility_changed() -> void:
+	if not is_visible_in_tree():
+		_stop_feedback()
+
+
+func _process(delta: float) -> void:
+	if _feedback_left <= 0.0:
+		return
+	_feedback_left = maxf(0.0, _feedback_left - delta)
+	if is_zero_approx(_feedback_left):
+		_stop_feedback()
+	else:
+		_feedback.progress = 1.0 - _feedback_left / _feedback_duration
+		_feedback.queue_redraw()
 
 
 func _fit_text() -> void:

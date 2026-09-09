@@ -10,16 +10,22 @@ var error: String = ""
 var _save_path: String
 var _legacy_path: String
 var _loaded: bool = false
+var _browser_storage: Object
 
 
-func _init(save_path: String = "user://medals.cfg", legacy_path: String = "user://rewards.cfg") -> void:
+func _init(save_path: String = "user://medals.cfg", legacy_path: String = "user://rewards.cfg", browser_storage: Object = null) -> void:
 	_save_path = save_path
 	_legacy_path = legacy_path
+	_browser_storage = browser_storage
+	if _browser_storage == null and OS.has_feature("web"):
+		_browser_storage = JavaScriptBridge.get_interface("wordBuddiesHost")
 
 
 func load_progress() -> bool:
 	error = ""
 	_loaded = false
+	if OS.has_feature("web") and _browser_storage == null:
+		return _fail("Browser medal storage is unavailable.")
 	var save := ProjectSettings.globalize_path(_save_path).simplify_path()
 	var legacy := ProjectSettings.globalize_path(_legacy_path).simplify_path()
 	if OS.get_name() == "Windows":
@@ -27,12 +33,21 @@ func load_progress() -> bool:
 		legacy = legacy.to_lower()
 	if _save_path.is_empty() or _legacy_path.is_empty() or legacy in [save, save + ".pending", save + ".previous"]:
 		return _fail("Medal progress and legacy rewards need separate, nonempty save paths.")
-	if not _restore_previous():
-		return false
 	var config := ConfigFile.new()
-	var status := _read_config(config, _save_path, "medal progress")
-	if not error.is_empty():
-		return false
+	var browser_text: Variant = _browser_storage.medalProgress() if _browser_storage != null else null
+	var status: int
+	if browser_text != null:
+		if not browser_text is String:
+			return _fail("Could not read browser medal progress. Browser storage may be unavailable.")
+		status = config.parse(browser_text)
+		if status != OK:
+			return _fail("Could not load browser medal progress: %s." % error_string(status))
+	else:
+		if not _restore_previous():
+			return false
+		status = _read_config(config, _save_path, "medal progress")
+		if not error.is_empty():
+			return false
 	var migrating: bool = status == ERR_FILE_NOT_FOUND
 	var next_counts: Dictionary = {}
 	if not migrating:
@@ -52,7 +67,7 @@ func load_progress() -> bool:
 			archives[id] = true
 		elif migrating:
 			next_counts[id] = Data.PIECES_PER_MEDAL
-	if migrating and not _persist(next_counts):
+	if (migrating or (_browser_storage != null and browser_text == null)) and not _persist(next_counts):
 		return false
 	counts = next_counts
 	legacy_rewards = archives
@@ -170,11 +185,15 @@ func _validate_counts(value: Variant) -> bool:
 
 
 func _persist(next_counts: Dictionary) -> bool:
-	if not _restore_previous():
-		return false
 	var config := ConfigFile.new()
 	config.set_value("medals", "version", SAVE_VERSION)
 	config.set_value("medals", "counts", next_counts)
+	if _browser_storage != null:
+		if not bool(_browser_storage.saveMedalProgress(config.encode_to_text())):
+			return _fail("Could not save browser medal progress. Browser storage may be unavailable or full.")
+		return true
+	if not _restore_previous():
+		return false
 	var staged := _save_path + ".pending"
 	var file := FileAccess.open(staged, FileAccess.WRITE)
 	if file == null:

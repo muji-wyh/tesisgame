@@ -37,6 +37,7 @@ static func button(control: Button, accent: Color, minimum_width: float = 72.0) 
 	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	control.add_theme_font_size_override("font_size", 20)
 	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_focus_color", INK)
 	control.add_theme_color_override("font_hover_color", INK)
 	control.add_theme_color_override("font_pressed_color", INK)
 	control.add_theme_color_override("font_hover_pressed_color", INK)

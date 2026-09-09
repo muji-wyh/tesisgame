@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Space rocket</title>
+  <circle cx="60" cy="60" r="55" fill="#eeeafa"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="45" fill="#d7ccef" stroke="#69569b" stroke-width="3"/>
+    <g transform="translate(12 9) scale(.8)">
+    <path d="M48 85 Q42 103 53 108 L60 99 68 110 Q80 99 71 85" fill="#efb660"/>
+    <path d="M55 87 Q50 102 60 105 Q70 98 66 87" fill="#f8df84" stroke="none"/>
+    <path d="M42 60 Q23 69 26 95 L45 83 M78 60 Q97 69 94 95 L75 83" fill="#db9dac"/>
+    <path d="M42 83 Q30 40 60 10 Q90 40 78 83Z" fill="#dde6ea"/>
+    <path d="M44 31 Q50 19 60 10 Q70 19 76 31Z" fill="#db9dac"/>
+    <path d="M42 76H78V87H42Z" fill="#b6a3cf"/>
+    <circle cx="60" cy="52" r="13" fill="#9dcbdc"/>
+    <path d="M55 47 61 43" stroke="#e8f4ef" stroke-width="4"/>
+    <path d="M15 32V40 M11 36H19 M102 47V55 M98 51H106" stroke="#dbc883" stroke-width="2.5"/></g>
+    <path d="M21 32V42 M16 37H26 M99 71V81 M94 76H104" stroke="#69569b" stroke-width="3"/>
+  </g>
+</svg>

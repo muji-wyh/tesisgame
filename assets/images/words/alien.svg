@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">alien</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 91 Q38 75 47 72 H73 Q82 75 80 91 L96 102 85 109 69 97 H51 L35 109 24 102Z" fill="#b0cdb5"/>
+    <path d="M38 37 30 22 M82 37 90 22" stroke="#80aa91" stroke-width="5"/>
+    <circle cx="28" cy="18" r="7" fill="#d4dda2"/><circle cx="92" cy="18" r="7" fill="#d4dda2"/>
+    <path d="M24 50 Q24 29 60 27 Q96 29 96 50 Q95 68 71 80 Q60 86 49 80 Q25 68 24 50Z" fill="#b7d59c"/>
+    <ellipse cx="43" cy="52" rx="9" ry="12" transform="rotate(-25 43 52)" fill="#6b7988"/>
+    <ellipse cx="77" cy="52" rx="9" ry="12" transform="rotate(25 77 52)" fill="#6b7988"/>
+    <circle cx="42" cy="49" r="3" fill="#f6efd8" stroke="none"/><circle cx="78" cy="49" r="3" fill="#f6efd8" stroke="none"/>
+    <path d="M54 69 Q60 74 66 69" stroke-width="2.5"/>
+  </g>
+</svg>

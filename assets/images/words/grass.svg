@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">grass</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="44" ry="5" fill="#e1d6b9" stroke="none"/>
+    <path d="M22 101 Q22 62 13 42 Q38 57 43 86 Q32 44 39 19 Q58 48 57 88 Q61 41 79 13 Q80 54 68 88 Q84 50 107 40 Q92 68 91 101Z" fill="#a5c789"/>
+    <path d="M34 101 Q36 79 30 65 M51 102 Q50 66 45 45 M63 102 Q68 60 74 40 M77 102 Q84 77 95 58" stroke="#719666" stroke-width="3"/>
+  </g>
+</svg>

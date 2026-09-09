@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">seal</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="62" cy="103" rx="43" ry="5" fill="#d1e7e7" stroke="none"/>
+    <path d="M31 87 Q43 69 51 51 Q57 31 77 35 Q100 40 94 65 L89 83 Q99 78 109 87 L97 99 72 98 Q35 105 22 97 L12 80 26 86Z" fill="#b3c5cc"/>
+    <path d="M53 76 Q54 98 73 96 L67 82" fill="#95afb9"/>
+    <ellipse cx="74" cy="63" rx="17" ry="13" fill="#e0e7e8" stroke="none"/>
+    <circle cx="65" cy="51" r="3" fill="#765445" stroke="none"/><circle cx="87" cy="52" r="3" fill="#765445" stroke="none"/>
+    <path d="M70 61 79 61 75 66Z" fill="#765445" stroke="none"/>
+    <path d="M75 66 Q69 73 65 67 M75 66 Q80 73 85 67 M62 62 49 59 M62 68 48 70 M87 62 102 60 M87 68 102 72" stroke-width="2"/>
+  </g>
+</svg>

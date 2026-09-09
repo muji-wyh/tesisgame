@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Ocean wave collectible 5</title>
+  <circle cx="60" cy="60" r="55" fill="#e4f6fb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#69cbd6" stroke="#216d89" stroke-width="3"/>
+    <circle cx="60" cy="60" r="43" fill="#e4f6fb" stroke="#f0cf93" stroke-width="3"/>
+    <g transform="translate(17 17) scale(.72)">
+    <path d="M45 53 24 72 45 72 M75 53 96 72 75 72" fill="#d0b1d2"/>
+    <path d="M44 75 Q38 102 23 99 Q13 96 21 86 M51 76 Q43 111 40 103 M60 77V109 M69 76 Q77 111 80 103 M76 75 Q82 102 97 99 Q107 96 99 86" stroke="#b78dbd" stroke-width="6"/>
+    <path d="M43 74 Q39 36 60 13 Q81 36 77 74Z" fill="#d8b9dc"/>
+    <path d="M51 42 Q52 32 59 26" stroke="#f1d9ed" stroke-width="4"/>
+    <circle cx="50" cy="62" r="5" fill="#fff2dc"/><circle cx="70" cy="62" r="5" fill="#fff2dc"/>
+    <circle cx="50" cy="62" r="2" fill="#765445" stroke="none"/><circle cx="70" cy="62" r="2" fill="#765445" stroke="none"/></g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="#f0cf93" stroke="#216d89" stroke-width="2.5"/>
+  </g>
+</svg>

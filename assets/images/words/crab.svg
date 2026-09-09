@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">crab</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M35 71 19 65 11 71 M34 81 18 84 10 95 M42 90 30 100 21 99 M85 71 101 65 109 71 M86 81 102 84 110 95 M78 90 90 100 99 99" stroke="#d98066" stroke-width="6"/>
+    <path d="M36 66 24 53 M84 66 96 53" stroke="#e88e74" stroke-width="7"/>
+    <path d="M26 56 Q5 49 15 25 L23 39 33 24 Q42 47 26 56Z M94 56 Q115 49 105 25 L97 39 87 24 Q78 47 94 56Z" fill="#ee9a7f"/>
+    <ellipse cx="60" cy="76" rx="31" ry="23" fill="#efaa88"/>
+    <path d="M48 58 45 44 M72 58 75 44" stroke-width="5"/>
+    <circle cx="45" cy="43" r="6" fill="#fff1d5"/><circle cx="75" cy="43" r="6" fill="#fff1d5"/>
+    <circle cx="45" cy="43" r="2.5" fill="#765445" stroke="none"/><circle cx="75" cy="43" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M51 78 Q60 88 69 78"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">piano</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 87V106 M95 87V106" stroke-width="7"/>
+    <rect x="16" y="24" width="88" height="69" rx="7" fill="#937f8a"/>
+    <rect x="23" y="32" width="74" height="32" rx="3" fill="#bca7af" stroke-width="2.5"/>
+    <path d="M48 38H73V59H48Z" fill="#efdfc8" stroke-width="2"/>
+    <rect x="20" y="68" width="80" height="19" rx="2" fill="#fff1d9" stroke-width="2.5"/>
+    <path d="M30 68V87 M40 68V87 M50 68V87 M60 68V87 M70 68V87 M80 68V87 M90 68V87" stroke-width="1.5"/>
+    <path d="M28 69V78 M38 69V78 M58 69V78 M68 69V78 M78 69V78" stroke="#665764" stroke-width="5"/>
+    <path d="M57 52V43L66 41V50" stroke="#927d70" stroke-width="1.5"/>
+    <ellipse cx="54" cy="53" rx="3" ry="2" fill="#927d70" stroke="none"/><ellipse cx="63" cy="51" rx="3" ry="2" fill="#927d70" stroke="none"/>
+  </g>
+</svg>

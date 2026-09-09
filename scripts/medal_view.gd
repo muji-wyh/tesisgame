@@ -4,6 +4,7 @@ var texture: Texture2D
 var pieces: int = 0
 var fragment_index: int = -1
 var accent: Color = Color("#438363")
+var show_missing: bool = false
 
 
 func _init() -> void:
@@ -31,6 +32,8 @@ func _draw() -> void:
 	if texture != null and pieces == 3 and fragment_index < 0:
 		draw_texture_rect(texture, image_rect, false)
 		return
+	if show_missing and texture != null and fragment_index < 0:
+		draw_texture_rect(texture, image_rect, false, Color(1, 1, 1, 0.3))
 	for index in range(3):
 		if fragment_index >= 0 and index != fragment_index:
 			continue

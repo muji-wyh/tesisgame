@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">coral</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="39" ry="6" fill="#e5d2b8" stroke="none"/>
+    <path d="M53 103V75 Q29 73 25 60 L24 46 12 37 14 29 32 39 33 23 43 23 43 58 54 62 55 25 49 17 54 10 65 18 65 43 76 32 76 15 86 15 86 34 101 27 106 35 86 47 66 62 66 78 83 69 91 51 101 55 94 78 67 91 69 103Z" fill="#eb9e94"/>
+    <path d="M59 97V70 M31 44 34 60 M81 47 72 53 M86 77 74 83" stroke="#fbc9b9" stroke-width="3"/>
+    <circle cx="27" cy="96" r="5" fill="#a4cab5" stroke="none"/><circle cx="92" cy="97" r="4" fill="#a4cab5" stroke="none"/>
+  </g>
+</svg>

@@ -1,6 +1,36 @@
 extends RefCounted
 
 const PIECES_PER_MEDAL: int = 3
+const ADVENTURES: Array[Dictionary] = [
+	{"id": "animal-friends", "name": "Animal friends", "words": [
+		"cat", "dog", "fish", "duck", "cow", "pig", "hen", "sheep", "horse", "goat", "rabbit", "mouse",
+		"bear", "lion", "tiger", "monkey", "panda", "zebra", "fox", "owl", "frog", "turtle", "bee", "ant"]},
+	{"id": "picnic-time", "name": "Picnic time", "words": [
+		"apple", "banana", "orange", "pear", "grape", "cherry", "melon", "carrot", "tomato", "corn", "peas",
+		"egg", "bread", "cake", "cookie", "cheese", "milk", "water", "juice", "rice"]},
+	{"id": "great-outdoors", "name": "Great outdoors", "words": [
+		"sun", "moon", "star", "cloud", "rain", "snow", "tree", "leaf", "flower"]},
+	{"id": "dress-up", "name": "Dress up", "words": [
+		"hat", "coat", "shirt", "dress", "sock", "shoe", "glove", "scarf",
+		"boot", "skirt", "pants", "vest", "tie", "ring", "watch", "crown"]},
+	{"id": "on-the-move", "name": "On the move", "words": [
+		"car", "bus", "train", "truck", "plane", "boat", "bike"]},
+	{"id": "play-time", "name": "Play time", "words": [
+		"ball", "book", "doll", "kite", "drum", "block"]},
+	{"id": "at-home", "name": "At home", "words": [
+		"bed", "chair", "table", "door", "lamp", "clock", "key", "phone", "cup", "bowl", "plate", "spoon",
+		"fork", "soap", "brush", "towel"]},
+	{"id": "head-to-toe", "name": "Head to toe", "words": [
+		"eye", "ear", "nose", "mouth", "hand", "foot", "arm", "leg", "head", "tooth"]},
+	{"id": "ocean-discovery", "name": "Ocean discovery", "words": [
+		"whale", "shark", "crab", "seal", "shell", "coral", "squid", "clam"]},
+	{"id": "space-trip", "name": "Space trip", "words": [
+		"earth", "rocket", "planet", "comet", "meteor", "alien", "rover", "galaxy"]},
+	{"id": "garden-trail", "name": "Garden trail", "words": [
+		"seed", "root", "grass", "rose", "berry", "acorn", "pebble", "pond"]},
+	{"id": "music-makers", "name": "Music makers", "words": [
+		"piano", "flute", "violin", "guitar", "bell", "harp", "horn", "tuba"]}
+]
 const THEMES: Dictionary = {
 	"spring": {"name": "Spring", "background": Color("#edf8ec"), "accent": Color("#438363"),
 		"light": Color("#d7efc7"), "spark": Color("#75c66f"), "tint": Color("#dff6de"),
@@ -13,13 +43,21 @@ const THEMES: Dictionary = {
 		"chest": "royal", "prize": "An autumn leaf!"},
 	"winter": {"name": "Winter", "background": Color.WHITE, "accent": Color("#606a73"),
 		"light": Color("#eef2f4"), "spark": Color("#d8dee3"), "tint": Color("#f5f7f8"),
-		"chest": "crystal", "prize": "A winter snowflake!"}
+		"chest": "crystal", "prize": "A winter snowflake!"},
+	"ocean": {"name": "Ocean", "background": Color("#e4f6fb"), "accent": Color("#216d89"),
+		"light": Color("#b8e6ed"), "spark": Color("#69cbd6"), "tint": Color("#d6f4f4"),
+		"chest": "crystal", "prize": "An ocean treasure!"},
+	"space": {"name": "Space", "background": Color("#eeeafa"), "accent": Color("#69569b"),
+		"light": Color("#d7ccef"), "spark": Color("#bba3eb"), "tint": Color("#eee3ff"),
+		"chest": "energy", "prize": "A space treasure!"}
 }
 const REWARD_NAMES: Dictionary = {
 	"spring": ["Blossom", "Ladybug", "Bee", "Tulip", "Rainbow", "Bunny", "Sprout", "Butterfly", "Nest", "Dewdrop"],
 	"summer": ["Sunbeam", "Seashell", "Lemon", "Kite", "Sandcastle", "Watermelon", "Sunglasses", "Starfish", "Surfboard", "Firefly"],
 	"autumn": ["Maple Leaf", "Acorn", "Pumpkin", "Mushroom", "Apple", "Scarf", "Pinecone", "Lantern", "Squirrel", "Harvest Moon"],
-	"winter": ["Snowflake", "Mitten", "Snowman", "Ice Crystal", "Sled", "Penguin", "Cocoa", "Polar Bear", "Bell", "Northern Star"]
+	"winter": ["Snowflake", "Mitten", "Snowman", "Ice Crystal", "Sled", "Penguin", "Cocoa", "Polar Bear", "Bell", "Northern Star"],
+	"ocean": ["Whale", "Seashell", "Crab", "Coral", "Squid", "Pearl"],
+	"space": ["Rocket", "Ringed Planet", "Comet", "Moon Rover", "Galaxy", "Earth"]
 }
 
 var words: Array = []

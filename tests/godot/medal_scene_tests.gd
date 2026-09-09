@@ -42,7 +42,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
-	check(app._reward_slots.size() == 24, "A new player sees six active medals per theme")
+	check(app._reward_slots.size() == 36, "A new player sees six active medals per theme")
 	check(app.medal_progress.count_for("spring-1") == 0, "A new player's first medal is empty")
 	app.new_round(6)
 	app.choose_theme("spring")
@@ -220,7 +220,7 @@ func _run() -> void:
 	root.add_child(archive_app)
 	await process_frame
 	await process_frame
-	check(archive_app._reward_slots.size() == 25 and archive_app._reward_slots.has("spring-7")
+	check(archive_app._reward_slots.size() == 37 and archive_app._reward_slots.has("spring-7")
 		and archive_app.medal_progress.completed_count() == 0,
 		"Earlier rewards stay visible without becoming extra active medals")
 	archive_app._show_collection()

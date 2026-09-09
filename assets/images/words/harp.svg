@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">harp</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 18 Q50 30 81 19 L94 25 Q79 47 64 74 Q49 99 26 102 L19 92 Q38 74 35 47Z" fill="#e3bd78"/>
+    <path d="M36 36 Q62 39 82 29 Q62 64 39 88 Q46 60 36 36Z" fill="#fff8eb" stroke-width="2.5"/>
+    <path d="M44 39V78 M54 39V67 M64 36V54 M74 32V41" stroke="#c8a078" stroke-width="2"/>
+    <path d="M91 24 96 103H87L82 38 M20 103H103V110H20Z" fill="#c8a076"/>
+    <circle cx="91" cy="24" r="8" fill="#f2d899"/>
+    <path d="M26 24 Q36 53 29 78" stroke="#f6dc9b" stroke-width="4"/>
+  </g>
+</svg>

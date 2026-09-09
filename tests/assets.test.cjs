@@ -5,11 +5,11 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
-const seasons = ['spring', 'summer', 'autumn', 'winter'].map((id) => ({
+const seasons = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].map((id) => ({
   id, symbol: `assets/images/rewards/${id}.svg`, bgm: `assets/audio/bgm/${id}.wav`
 }));
 const rewardSymbols = seasons.flatMap(({ id }) =>
-  Array.from({ length: 10 }, (_, index) => `assets/images/rewards/${id}-${index + 1}.svg`)
+  Array.from({ length: ['ocean', 'space'].includes(id) ? 6 : 10 }, (_, index) => `assets/images/rewards/${id}-${index + 1}.svg`)
 );
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedPrompts = {
@@ -28,13 +28,21 @@ const expectedPrompts = {
   'spring-open': 'A spring flower for you! Great job!',
   'summer-open': 'A summer sun for you! Great job!',
   'autumn-open': 'An autumn leaf for you! Great job!',
-  'winter-open': 'A winter snowflake for you! Great job!'
+  'winter-open': 'A winter snowflake for you! Great job!',
+  'ocean-theme': 'Welcome to the ocean!',
+  'ocean-arrive': 'You did it! Tap the ocean chest for a surprise!',
+  'ocean-open': 'An ocean treasure for you! Great job!',
+  'space-theme': 'Welcome to space!',
+  'space-arrive': 'You did it! Tap the space chest for a surprise!',
+  'space-open': 'A space treasure for you! Great job!'
 };
 const expectedRewardColors = {
   spring: ['#edf8ec', '#438363', '#8ecf6b'],
   summer: ['#ffe6e6', '#b53640', '#ff8f9d'],
   autumn: ['#fff8cf', '#8f7400', '#ffd24d'],
-  winter: ['#ffffff', '#606a73', '#d8dee3']
+  winter: ['#ffffff', '#606a73', '#d8dee3'],
+  ocean: ['#e4f6fb', '#216d89', '#69cbd6'],
+  space: ['#eeeafa', '#69569b', '#d7ccef']
 };
 const sfxIds = [
   'select', 'correct', 'wrong', 'loss',
@@ -68,7 +76,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 165);
+  assert.equal(imports.length, 219);
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -153,10 +161,10 @@ function assertVoice(relativePath) {
   return wave;
 }
 
-test('all 100 short vocabulary words have distinct illustrations in one directory', () => {
-  assert.equal(words.length, 100);
-  assert.equal(new Set(words.map(word => word.id)).size, 100);
-  assert.equal(new Set(words.map(word => word.text)).size, 100);
+test('all 140 short vocabulary words have distinct illustrations in one directory', () => {
+  assert.equal(words.length, 140);
+  assert.equal(new Set(words.map(word => word.id)).size, 140);
+  assert.equal(new Set(words.map(word => word.text)).size, 140);
   for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
     assert.ok(words.some(word => word.id === original && word.text === original));
   }
@@ -172,21 +180,21 @@ test('all 100 short vocabulary words have distinct illustrations in one director
 });
 
 test('each season has its own original reward SVG', () => {
-  assert.deepEqual(seasons.map(({ id }) => id), ['spring', 'summer', 'autumn', 'winter']);
+  assert.deepEqual(seasons.map(({ id }) => id), ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space']);
   const digests = new Set();
   for (const season of seasons) {
     assert.equal(season.symbol, `assets/images/rewards/${season.id}.svg`);
     digests.add(sha256(readSvg(season.symbol)));
   }
-  assert.equal(digests.size, 4);
+  assert.equal(digests.size, 6);
 });
 
-test('all forty collectible rewards have distinct SVG artwork', () => {
+test('all fifty-two collectible rewards have distinct SVG artwork', () => {
   const digests = new Set(rewardSymbols.map((symbol) =>
     sha256(readSvg(symbol).replace(/<title\b[^>]*>.*?<\/title>/gs, ''))
   ));
-  assert.equal(rewardSymbols.length, 40);
-  assert.equal(digests.size, 40);
+  assert.equal(rewardSymbols.length, 52);
+  assert.equal(digests.size, 52);
 });
 
 test('seasonal reward SVGs use the requested seasonal palette', () => {
@@ -202,7 +210,7 @@ test('the encouraging try-again scene is a standalone SVG', () => {
   readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
 });
 
-test('the generated image directories contain exactly the 145 named SVGs', () => {
+test('the generated image directories contain exactly the 199 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]],
@@ -215,7 +223,7 @@ test('the generated image directories contain exactly the 145 named SVGs', () =>
   }
 });
 
-test('voice prompts contain exactly the sixteen specified English messages', () => {
+test('voice prompts contain exactly the twenty-two specified English messages', () => {
   const filename = path.join(root, 'voice-prompts.json');
   assert.ok(fs.existsSync(filename), 'Missing voice-prompts.json');
   const prompts = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -226,7 +234,7 @@ test('voice prompts contain exactly the sixteen specified English messages', () 
   }
 });
 
-test('all sixteen English prompts have nonempty prerecorded mono voice WAVs', () => {
+test('all twenty-two English prompts have nonempty prerecorded mono voice WAVs', () => {
   for (const id of Object.keys(expectedPrompts)) {
     assertVoice(path.join('assets', 'audio', 'voice', `${id}.wav`));
   }
@@ -241,7 +249,7 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice output contains exactly 100 word recordings and sixteen prompts', () => {
+test('voice output contains exactly 140 word recordings and twenty-two prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
@@ -251,20 +259,24 @@ test('voice output contains exactly 100 word recordings and sixteen prompts', ()
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
-test('all four seasonal background tracks are PCM16 stereo WAVs', () => {
+test('all six themed background tracks are distinct, audible PCM16 stereo WAVs', () => {
+  const hashes = new Set();
   for (const season of seasons) {
     assert.equal(season.bgm, `assets/audio/bgm/${season.id}.wav`);
     const wave = readWave(season.bgm);
     assert.equal(wave.channels, 2, season.id);
     assert.equal(wave.sampleRate, 44100, season.id);
+    assert.ok(pcmStats(wave.data).energy > 0, `Silent soundtrack: ${season.id}`);
+    hashes.add(sha256(wave.data));
   }
+  assert.equal(hashes.size, 6);
   assert.deepEqual(
     assetFiles(path.join(root, 'assets', 'audio', 'bgm')),
     seasons.map(({ id }) => `${id}.wav`).sort()
   );
 });
 
-test('all twelve original effects have gentle, non-silent PCM samples and smooth endpoints', () => {
+test('all sixteen original effects have gentle, non-silent PCM samples and smooth endpoints', () => {
   for (const id of sfxIds) {
     const wave = readWave(path.join('assets', 'audio', 'sfx', `${id}.wav`));
     assert.equal(wave.sampleRate, 22050, id);
@@ -282,7 +294,7 @@ test('all twelve original effects have gentle, non-silent PCM samples and smooth
   );
 });
 
-test('the four seasonal chest openings have different SHA256 values and last one to two seconds', () => {
+test('the six themed chest openings have different SHA256 values and last one to two seconds', () => {
   const hashes = new Set();
   for (const { id } of seasons) {
     const wave = readWave(path.join('assets', 'audio', 'sfx', `${id}-open.wav`));
@@ -290,7 +302,7 @@ test('the four seasonal chest openings have different SHA256 values and last one
     const seconds = wave.data.length / wave.blockAlign / wave.sampleRate;
     assert.ok(seconds >= 1 && seconds <= 2, `${id} opening duration: ${seconds}`);
   }
-  assert.equal(hashes.size, 4);
+  assert.equal(hashes.size, 6);
 });
 
 test('the SFX generator exactly reproduces its named files and rejects excessive float peaks', () => {

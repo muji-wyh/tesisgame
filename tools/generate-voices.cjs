@@ -12,7 +12,7 @@ const PROFILE = Object.freeze({
 });
 const PROMPT_IDS = [
   'welcome', 'correct', 'wrong', 'loss',
-  ...['spring', 'summer', 'autumn', 'winter'].flatMap(season =>
+  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].flatMap(season =>
     [`${season}-theme`, `${season}-arrive`, `${season}-open`])
 ];
 
@@ -29,7 +29,7 @@ function messagesFor(root) {
   if (!prompts || Array.isArray(prompts) || typeof prompts !== 'object' ||
       Object.keys(prompts).length !== PROMPT_IDS.length ||
       PROMPT_IDS.some(id => !Object.hasOwn(prompts, id))) {
-    throw new Error('voice-prompts.json must contain exactly the sixteen required prompt IDs.');
+    throw new Error(`voice-prompts.json must contain exactly the ${PROMPT_IDS.length} required prompt IDs.`);
   }
   if (!Array.isArray(words) || words.length === 0) {
     throw new Error('words.json must contain a nonempty vocabulary array.');
@@ -133,6 +133,7 @@ async function generateVoices({
   root = path.resolve(__dirname, '..'),
   key = process.env.SPEECH_KEY,
   region = process.env.SPEECH_REGION,
+  onlyMissing = false,
   fetchImpl = fetch,
   wait = sleep
 } = {}) {
@@ -140,7 +141,7 @@ async function generateVoices({
   if (typeof region !== 'string' || !/^[a-z0-9]+$/.test(region)) {
     throw new Error('Set SPEECH_REGION to an Azure Speech region such as eastasia.');
   }
-  const messages = messagesFor(root);
+  let messages = messagesFor(root);
   const output = path.join(root, 'assets', 'audio', 'voice');
   for (const { id } of messages) {
     const destination = path.join(output, `${id}.wav`);
@@ -151,6 +152,8 @@ async function generateVoices({
       throw new Error(`Unexplained pending voice output exists for ${id}; inspect it before regenerating.`);
     }
   }
+  if (onlyMissing) messages = messages.filter(({ id }) => !fs.existsSync(path.join(output, `${id}.wav`)));
+  if (messages.length === 0) return 0;
   ffmpeg(['-version']);
   const base = `https://${region}.tts.speech.microsoft.com/cognitiveservices`;
   const headers = { 'Ocp-Apim-Subscription-Key': key, 'User-Agent': 'WordBuddies-VoiceGenerator' };
@@ -198,7 +201,7 @@ async function generateVoices({
 }
 
 if (require.main === module) {
-  generateVoices().then(count => {
+  generateVoices({ onlyMissing: process.argv.includes('--missing') }).then(count => {
     console.log(`Generated ${count} English recordings with ${PROFILE.voice}, ${PROFILE.style} style (${PROFILE.rate}, 22050 Hz PCM16 mono).`);
   }).catch(error => {
     console.error(error.message);

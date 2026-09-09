@@ -2,7 +2,8 @@ extends RefCounted
 
 signal changed
 
-const THEMES: Array[String] = ["spring", "summer", "autumn", "winter"]
+const Data = preload("res://scripts/game_data.gd")
+const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space"]
 
 var cards: Array[Dictionary] = []
 var matched_ids: Array[String] = []
@@ -15,6 +16,8 @@ var mistakes: int = 0
 var streak: int = 0
 var phase: String = "waiting"
 var theme_id: String = "spring"
+var adventure_id: String = ""
+var adventure_name: String = "Word explorers"
 var chest_state: String = "closed"
 var reward_theme: String = ""
 var reward_id: String = ""
@@ -39,6 +42,20 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous.has(word.id))
 		if fresh.size() >= 5:
 			pool = fresh
+	var adventures: Array[Dictionary] = []
+	for adventure in Data.ADVENTURES:
+		var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
+		if related.size() >= 5:
+			adventures.append(adventure)
+	if seed_value < 0 and adventures.size() > 1:
+		adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
+	adventure_id = ""
+	adventure_name = "Word explorers"
+	if not adventures.is_empty():
+		var adventure: Dictionary = adventures[rng.randi_range(0, adventures.size() - 1)]
+		adventure_id = adventure.id
+		adventure_name = adventure.name
+		pool = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
 	cards.clear()
 	for index in range(3):
 		_add_card(pool[index], "word")

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">horn</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 31 49 45 Q70 40 82 56 Q99 83 76 100 Q50 116 29 97 Q8 76 28 55 Q37 47 45 49" stroke="#d5a862" stroke-width="12"/>
+    <path d="M34 36 35 47 51 45 45 31Z" fill="#f1cc79"/>
+    <path d="M24 29 40 16 50 24 47 41Z" fill="#edc16f"/>
+    <ellipse cx="37" cy="23" rx="13" ry="6" transform="rotate(-30 37 23)" fill="#bb905c" stroke-width="2.5"/>
+    <path d="M38 72 Q52 57 70 72 Q86 89 60 94 Q40 94 38 79 M47 57V81 M57 55V81 M67 60V83" stroke="#eac878" stroke-width="6"/>
+    <path d="M44 55H51 M54 53H61 M64 58H71" stroke="#ad895f" stroke-width="3"/>
+    <path d="M82 72 101 59 108 59" stroke="#d1a560" stroke-width="6"/>
+  </g>
+</svg>

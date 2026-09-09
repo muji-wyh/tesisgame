@@ -211,7 +211,11 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Word Buddies matching game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Find three matching word and picture pairs. Two cards have no match.
+      <p id="help" class="sr-only">Choose Match, Sky words, or Listen to start a game.
+        Match: find three matching word and picture pairs. Two cards have no match.
+        Sky words: a picture flies down; choose its word from two buttons.
+        Listen: press Hear, then choose one of two pictures. You can hear the word again.
+        Sky words and Listen need five correct choices. There is no time limit.
         Three mistakes end the round. Each round allows one hint, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
         A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for My rewards.
@@ -221,9 +225,13 @@
         Browser speech may process audio remotely; the game saves no voice or transcripts.
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
-        Pip the duck is your guide. His beak moves with the game's spoken words. Press him to say hello.
-        Four season buttons change the theme and keep your choice for replays. New rounds prefer fresh words.
-        My rewards shows six medals per season, with three pieces per medal.
+        Pip the duck is your guide. His beak moves with the game's spoken words. Press him for a dance, snack, or bubbles.
+        Six theme buttons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Replays keep your choice. New rounds prefer fresh words.
+        Each round explores a topic such as Animal friends or Picnic time. Play again changes the adventure.
+        After a round, Words you found lets you replay the pronunciation of each matched word.
+        The My rewards button previews your next medal and shows how many of its three pieces you have.
+        My rewards shows six medals per theme, with three pieces per medal. Every winning mode earns one piece.
+        Pip's playroom has Dance, Snack, and Bubbles buttons. Open an earned medal and choose Display with Pip to save a favorite.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
@@ -846,6 +854,22 @@
         },
         controllerAcceptHeld() {
           return loadingGamepads().some(pad => pad.buttons[0]?.pressed);
+        },
+        favoriteReward() {
+          try { return localStorage.getItem('wordBuddies.favoriteReward') || ''; }
+          catch { return ''; }
+        },
+        saveFavoriteReward(id) {
+          try { localStorage.setItem('wordBuddies.favoriteReward', id); return true; }
+          catch { return false; }
+        },
+        medalProgress() {
+          try { return localStorage.getItem('wordBuddies.medalProgress'); }
+          catch { return false; }
+        },
+        saveMedalProgress(text) {
+          try { localStorage.setItem('wordBuddies.medalProgress', text); return true; }
+          catch { return false; }
         },
         fail,
         announce(text) {

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pond</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 71 Q9 48 32 42 Q58 29 79 40 Q112 43 107 71 Q114 96 74 101 Q27 109 14 87Z" fill="#a4d4dc"/>
+    <path d="M26 61 Q59 47 94 59 M23 78 Q51 91 76 82 M74 95 95 84" stroke="#d6edef" stroke-width="3"/>
+    <path d="M86 47V20 M97 50V28 M86 35 76 27 M97 41 106 31" stroke="#84a776" stroke-width="4"/>
+    <rect x="82" y="12" width="8" height="18" rx="4" fill="#b89773" stroke-width="2"/>
+    <rect x="93" y="18" width="8" height="17" rx="4" fill="#b89773" stroke-width="2"/>
+    <path d="M38 72 Q20 60 40 52 Q58 48 66 60 L48 62 60 70 Q48 78 38 72Z" fill="#acd18e" stroke="#7b9e70" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">vest</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 20 52 18 60 36 69 18 81 20 Q75 42 101 52 L93 103H27L19 52Q46 43 40 20Z" fill="#d7b587"/>
+    <path d="M52 18 60 36 47 53 37 24 M69 18 60 36 73 53 85 24" fill="#edcda3" stroke-width="2.5"/>
+    <path d="M60 36V103 M33 75H51V88H33Z M69 75H87V88H69Z" stroke-width="2.5"/>
+    <circle cx="64" cy="58" r="2" fill="#8e6c52" stroke="none"/><circle cx="64" cy="72" r="2" fill="#8e6c52" stroke="none"/><circle cx="64" cy="94" r="2" fill="#8e6c52" stroke="none"/>
+  </g>
+</svg>

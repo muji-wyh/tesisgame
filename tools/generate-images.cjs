@@ -23,6 +23,8 @@ const wordArt = {
   ...require(path.join(__dirname, 'word-art', 'nature.cjs')),
   ...require(path.join(__dirname, 'word-art', 'food-body.cjs')),
   ...require(path.join(__dirname, 'word-art', 'everyday.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'ocean-space.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'garden-music-clothes.cjs')),
   cat: `
     <ellipse cx="60" cy="103" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
     <path d="M29 53 24 23 Q23 18 28 20 L44 33 Q60 28 76 33 L92 20 Q97 18 96 23 L91 53 Q100 84 79 95 Q60 104 41 95 Q20 84 29 53Z" fill="#efb36b"/>
@@ -158,6 +160,23 @@ const rewardArt = {
     <circle cx="55" cy="56" r="2.5" fill="#606a73" stroke="none"/>
     <circle cx="65" cy="56" r="2.5" fill="#606a73" stroke="none"/>
     <path d="M54 64 Q60 69 66 64" stroke="#606a73" stroke-width="2.5" fill="none"/>`
+  },
+  ocean: {
+    title: 'Ocean wave',
+    background: '#e4f6fb',
+    shapes: `
+    <path d="M17 83 Q35 78 42 54 Q52 19 78 28 Q98 34 95 55 Q86 41 73 48 Q58 58 73 72 Q86 84 104 75 L99 98H22Z" fill="#69cbd6" stroke="#216d89"/>
+    <path d="M45 50 Q55 28 77 31 Q94 35 92 47 Q79 37 68 47 Q57 58 66 70" stroke="#eefbfd" stroke-width="6"/>
+    <path d="M27 86 Q45 79 56 83 Q73 95 93 84" stroke="#216d89" stroke-width="3"/>
+    <circle cx="24" cy="36" r="5" fill="#b8e6ed" stroke="#216d89" stroke-width="2"/>
+    <circle cx="34" cy="21" r="3" fill="#b8e6ed" stroke="none"/>`
+  },
+  space: {
+    title: 'Space rocket',
+    background: '#eeeafa',
+    shapes: `<circle cx="60" cy="60" r="45" fill="#d7ccef" stroke="#69569b" stroke-width="3"/>
+    <g transform="translate(12 9) scale(.8)">${wordArt.rocket}</g>
+    <path d="M21 32V42 M16 37H26 M99 71V81 M94 76H104" stroke="#69569b" stroke-width="3"/>`
   }
 };
 
@@ -165,7 +184,9 @@ const collectibleColors = {
   spring: ['#438363', '#8ecf6b', '#f2d66a'],
   summer: ['#b53640', '#ff8f9d', '#ffd36a'],
   autumn: ['#8f7400', '#ffd24d', '#d98a4e'],
-  winter: ['#606a73', '#d8dee3', '#9bc9d5']
+  winter: ['#606a73', '#d8dee3', '#9bc9d5'],
+  ocean: ['#216d89', '#69cbd6', '#f0cf93'],
+  space: ['#69569b', '#bba3eb', '#f2d492']
 };
 
 function starPoints(points, outer, inner, rotation = -90) {
@@ -178,6 +199,16 @@ function starPoints(points, outer, inner, rotation = -90) {
 
 function collectibleShapes(season, index) {
   const [dark, bright, highlight] = collectibleColors[season];
+  const newMedals = {
+    ocean: ['whale', 'shell', 'crab', 'coral', 'squid', 'clam'],
+    space: ['rocket', 'planet', 'comet', 'rover', 'galaxy', 'earth']
+  };
+  if (newMedals[season]) {
+    return `<circle cx="60" cy="60" r="49" fill="${bright}" stroke="${dark}" stroke-width="3"/>
+    <circle cx="60" cy="60" r="43" fill="${rewardArt[season].background}" stroke="${highlight}" stroke-width="3"/>
+    <g transform="translate(17 17) scale(.72)">${wordArt[newMedals[season][index - 1]]}</g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="${highlight}" stroke="${dark}" stroke-width="2.5"/>`;
+  }
   const marker = Array.from({ length: { spring: 5, summer: 8, autumn: 6, winter: 4 }[season] }, (_, item) =>
     `<circle cx="60" cy="16" r="${2 + index % 3}" transform="rotate(${item * 360 / ({ spring: 5, summer: 8, autumn: 6, winter: 4 }[season])} 60 60)" fill="${highlight}" stroke="none"/>`
   ).join('\n    ');
@@ -266,7 +297,8 @@ function generateImages() {
   }
   for (const [season, art] of Object.entries(rewardArt)) {
     outputs.push([`assets/images/rewards/${season}.svg`, makeSvg(art.title, art.shapes, art.background)]);
-    for (let index = 1; index <= 10; index++) {
+    const medalCount = ['ocean', 'space'].includes(season) ? 6 : 10;
+    for (let index = 1; index <= medalCount; index++) {
       outputs.push([
         `assets/images/rewards/${season}-${index}.svg`,
         makeSvg(`${art.title} collectible ${index}`, collectibleShapes(season, index), art.background)

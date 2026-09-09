@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">shell</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M49 94 40 105 H80 L71 94" fill="#eab292"/>
+    <path d="M60 94 Q41 91 18 66 Q8 48 22 42 Q14 26 34 25 Q36 10 51 19 Q60 7 69 19 Q84 10 87 26 Q107 26 100 43 Q114 52 102 68 Q80 91 60 94Z" fill="#f2c0a3"/>
+    <path d="M60 91 27 46 M60 91 40 30 M60 91 54 25 M60 91 68 26 M60 91 83 32 M60 91 96 48" stroke="#c48c74" stroke-width="2.5"/>
+    <path d="M23 58 Q29 70 37 74" stroke="#ffe2bd" stroke-width="5"/>
+  </g>
+</svg>

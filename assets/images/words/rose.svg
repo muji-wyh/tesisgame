@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rose</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 66V108 M60 90 Q32 91 30 73 Q52 72 60 90 M61 99 Q81 95 88 79 Q67 77 61 99" fill="#9ac28d" stroke="#73986c"/>
+    <path d="M58 72 Q30 67 25 45 Q21 26 40 23 Q47 10 65 17 Q83 13 91 29 Q106 41 91 59 Q83 74 58 72Z" fill="#dc92a6"/>
+    <path d="M35 32 Q57 22 72 41 Q70 25 87 31 M32 45 Q46 62 66 54 Q86 56 88 40 M45 23 Q45 38 62 43 M34 59 Q45 50 53 44 M79 65 Q65 59 66 48" stroke="#ae6c86" stroke-width="2.5"/>
+    <path d="M51 35 Q64 28 70 40 Q71 51 61 54 Q51 52 53 43 Q56 38 62 42" stroke="#9c6680" stroke-width="2.5"/>
+  </g>
+</svg>

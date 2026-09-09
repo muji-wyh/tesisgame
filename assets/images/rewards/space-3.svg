@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Space rocket collectible 3</title>
+  <circle cx="60" cy="60" r="55" fill="#eeeafa"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#bba3eb" stroke="#69569b" stroke-width="3"/>
+    <circle cx="60" cy="60" r="43" fill="#eeeafa" stroke="#f2d492" stroke-width="3"/>
+    <g transform="translate(17 17) scale(.72)">
+    <path d="M27 85 40 50 102 16 82 55 108 45 63 90Z" fill="#b4d4e3"/>
+    <path d="M35 83 91 30 66 70 88 60 55 91Z" fill="#e2f0ed" stroke="none"/>
+    <path d="M53 62 78 38 M63 83 94 64" stroke="#76b3ca" stroke-width="3"/>
+    <circle cx="35" cy="86" r="20" fill="#f3d183"/>
+    <circle cx="30" cy="80" r="5" fill="#fbe7b1" stroke="none"/>
+    <path d="M21 34V44 M16 39H26 M101 89V97 M97 93H105" stroke="#c4abd6" stroke-width="2.5"/></g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="#f2d492" stroke="#69569b" stroke-width="2.5"/>
+  </g>
+</svg>

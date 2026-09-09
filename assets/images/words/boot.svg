@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">boot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 16H72L68 65 Q74 77 94 77 Q109 78 107 94 L103 103H20V88L27 78Z" fill="#c79371"/>
+    <path d="M29 16H74V31H29Z" fill="#dec19b"/>
+    <path d="M22 94H107V106H20Z" fill="#887566"/>
+    <path d="M65 72 78 78 M61 79 71 84 M38 41 37 67" stroke="#ead0ab" stroke-width="4"/>
+    <path d="M27 86 42 86 42 94" stroke="#9c6f58" stroke-width="2.5"/>
+  </g>
+</svg>

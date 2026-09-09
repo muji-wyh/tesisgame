@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pebble</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="102" rx="43" ry="6" fill="#e1d4bc" stroke="none"/>
+    <path d="M19 74 Q18 54 41 41 Q65 22 83 40 Q108 57 103 81 Q98 99 62 99 Q25 99 19 74Z" fill="#afb8bb"/>
+    <path d="M35 54 Q53 37 66 39" stroke="#d7dddb" stroke-width="6"/>
+    <path d="M28 78 Q48 96 86 84" stroke="#98a3a8" stroke-width="4"/>
+    <path d="M82 48 87 55 M51 83 57 82 M76 68 79 70" stroke="#7d909a" stroke-width="2.5"/>
+  </g>
+</svg>

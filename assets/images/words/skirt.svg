@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">skirt</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 25H82L103 95 Q61 110 17 95Z" fill="#c4add8"/>
+    <path d="M38 25H82L84 39H36Z" fill="#ac93c5"/>
+    <path d="M45 40 33 96 M56 40 52 101 M67 40 73 101 M77 40 91 96" stroke="#9c81b6" stroke-width="2.5"/>
+    <path d="M24 84 Q60 95 97 84" stroke="#e3d3ec" stroke-width="5"/>
+    <circle cx="75" cy="32" r="2" fill="#f6e9bc" stroke="none"/>
+  </g>
+</svg>

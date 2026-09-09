@@ -6,6 +6,15 @@ Notable changes to Word Buddies, grouped by date with the newest changes first.
 
 ### Added
 
+- Ocean and Space worlds, twelve new medals, and forty new illustrated/pronounced words
+  for a total of 140 words across twelve rotating adventures.
+- Sky words and Listen modes: five untimed picture/word choices share the three-mistake
+  limit and one-piece chest reward flow with the original matching game.
+- Pip's playroom with dancing, snacks, and bubbles, plus a saved favorite medal display.
+- Browser medal progress and favorites save immediately, including across quick reloads.
+- Card selection ripples, match sparks, falling-picture arrivals, and reduced-motion alternatives.
+- A next-medal preview on My rewards, and a replayable picture-and-word shelf after
+  each round that celebrates matches even when the round ends with mistakes.
 - Pip, an original animated duck mascot shared across all pages, with greetings,
   blinks, contextual reactions, and beak movement synchronized to actual spoken audio.
 - Optional English voice play with a single Voice start/stop button, live

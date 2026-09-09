@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">acorn</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34 54 H89 Q91 82 62 108 Q30 91 28 60Z" fill="#cd9b68"/>
+    <path d="M42 67 Q42 86 58 97" stroke="#e9c291" stroke-width="5"/>
+    <path d="M54 29 Q52 17 64 12 L71 18 Q62 20 63 29" fill="#a77c59"/>
+    <path d="M22 54 Q23 26 58 26 Q94 24 98 54 L91 64 Q58 56 28 65Z" fill="#ab8465"/>
+    <path d="M31 42 43 31 M33 57 60 29 M52 57 77 33 M72 58 90 41 M38 33 64 58 M56 29 85 57 M75 33 94 51 M27 48 39 59" stroke="#8c6a54" stroke-width="2"/>
+  </g>
+</svg>

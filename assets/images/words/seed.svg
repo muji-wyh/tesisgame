@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">seed</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M37 41 Q67 9 83 29 Q106 58 77 89 Q51 115 31 90 Q13 68 37 41Z" fill="#b58b69"/>
+    <path d="M78 30 Q45 52 35 89" stroke="#e6bd8c" stroke-width="5"/>
+    <path d="M65 30 Q79 24 84 39" stroke="#d3ab81" stroke-width="4"/>
+    <path d="M52 97 Q72 103 84 88" stroke="#ead9bf" stroke-width="3"/>
+    <ellipse cx="64" cy="108" rx="34" ry="4" fill="#e4d5bc" stroke="none"/>
+  </g>
+</svg>

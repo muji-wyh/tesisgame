@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pants</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 16H90L95 105H67L60 57 51 105H23Z" fill="#8fb2cb"/>
+    <path d="M30 16H91V30H30Z" fill="#799cb8"/>
+    <path d="M33 32 Q37 48 48 47 M87 32 Q84 48 73 47 M60 30V55 M29 95H52 M67 95H94" stroke="#c2d5e0" stroke-width="3"/>
+    <path d="M41 18V28 M78 18V28" stroke="#567b98" stroke-width="3"/>
+    <circle cx="61" cy="23" r="2.5" fill="#e7cc92" stroke="none"/>
+  </g>
+</svg>

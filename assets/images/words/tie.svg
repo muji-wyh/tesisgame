@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tie</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 13H80L72 37H48Z" fill="#c38dac"/>
+    <path d="M49 37H71L82 89 60 110 38 89Z" fill="#d39fba"/>
+    <path d="M45 59 72 43 M41 79 77 57 M43 95 80 73" stroke="#f2ced6" stroke-width="7"/>
+    <path d="M50 20H68 M53 41 47 85" stroke="#e4bace" stroke-width="3"/>
+  </g>
+</svg>

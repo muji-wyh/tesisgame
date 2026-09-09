@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Ocean wave collectible 1</title>
+  <circle cx="60" cy="60" r="55" fill="#e4f6fb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#69cbd6" stroke="#216d89" stroke-width="3"/>
+    <circle cx="60" cy="60" r="43" fill="#e4f6fb" stroke="#f0cf93" stroke-width="3"/>
+    <g transform="translate(17 17) scale(.72)">
+    <path d="M18 69 Q12 39 43 38 Q71 36 78 62 Q91 65 97 47 L110 48 Q109 67 98 78 Q81 98 51 93 Q23 90 18 69Z" fill="#85bfda"/>
+    <path d="M19 72 Q34 84 58 82 Q80 80 91 73 Q73 100 45 91 Q24 85 19 72Z" fill="#d1eaf1" stroke="none"/>
+    <path d="M66 69 Q85 81 67 89 Q56 82 58 72" fill="#69aacb"/>
+    <circle cx="33" cy="57" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M19 68 Q28 75 37 69 M50 32V22 Q44 13 40 24 M50 22 Q55 12 61 22"/>
+    <path d="M22 103H44 M70 103H98" stroke="#a5d8df"/></g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="#f0cf93" stroke="#216d89" stroke-width="2.5"/>
+  </g>
+</svg>

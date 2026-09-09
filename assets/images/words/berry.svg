@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">berry</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M35 35 Q60 23 86 35 Q104 48 88 76 Q72 106 60 109 Q48 106 31 77 Q15 49 35 35Z" fill="#e99196"/>
+    <path d="M60 35 Q59 21 67 12 M60 33 38 19 42 38 23 41 45 49 59 38 75 49 98 41 77 37 81 20Z" fill="#9ec28a" stroke="#79986b" stroke-width="3"/>
+    <g fill="#f9d999" stroke="none">
+      <ellipse cx="38" cy="56" rx="2" ry="4"/><ellipse cx="57" cy="56" rx="2" ry="4"/><ellipse cx="79" cy="56" rx="2" ry="4"/>
+      <ellipse cx="44" cy="74" rx="2" ry="4"/><ellipse cx="65" cy="76" rx="2" ry="4"/><ellipse cx="82" cy="71" rx="2" ry="4"/>
+      <ellipse cx="57" cy="94" rx="2" ry="4"/><ellipse cx="73" cy="91" rx="2" ry="4"/>
+    </g>
+    <path d="M30 49 Q27 58 33 67" stroke="#fac3b5" stroke-width="4"/>
+  </g>
+</svg>

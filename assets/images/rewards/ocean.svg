@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Ocean wave</title>
+  <circle cx="60" cy="60" r="55" fill="#e4f6fb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 83 Q35 78 42 54 Q52 19 78 28 Q98 34 95 55 Q86 41 73 48 Q58 58 73 72 Q86 84 104 75 L99 98H22Z" fill="#69cbd6" stroke="#216d89"/>
+    <path d="M45 50 Q55 28 77 31 Q94 35 92 47 Q79 37 68 47 Q57 58 66 70" stroke="#eefbfd" stroke-width="6"/>
+    <path d="M27 86 Q45 79 56 83 Q73 95 93 84" stroke="#216d89" stroke-width="3"/>
+    <circle cx="24" cy="36" r="5" fill="#b8e6ed" stroke="#216d89" stroke-width="2"/>
+    <circle cx="34" cy="21" r="3" fill="#b8e6ed" stroke="none"/>
+  </g>
+</svg>

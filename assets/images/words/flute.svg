@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">flute</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(39 60 60)">
+      <rect x="53" y="10" width="14" height="100" rx="6" fill="#c5d6db"/>
+      <rect x="48" y="18" width="24" height="14" rx="5" fill="#dce7e5" stroke-width="2.5"/>
+      <ellipse cx="60" cy="25" rx="5" ry="3" fill="#8b9ca4" stroke-width="2"/>
+      <path d="M55 39H65 M55 95H65 M53 105H67" stroke="#8fa8b3" stroke-width="2"/>
+      <circle cx="65" cy="45" r="4" fill="#ecf0e9" stroke-width="2"/><circle cx="65" cy="58" r="4" fill="#ecf0e9" stroke-width="2"/>
+      <circle cx="65" cy="71" r="4" fill="#ecf0e9" stroke-width="2"/><circle cx="65" cy="84" r="4" fill="#ecf0e9" stroke-width="2"/>
+    </g>
+    <path d="M20 28V17L29 14V25" stroke="#c4a3c5" stroke-width="2.5"/>
+    <ellipse cx="17" cy="29" rx="4" ry="3" fill="#c4a3c5" stroke="none"/><ellipse cx="26" cy="26" rx="4" ry="3" fill="#c4a3c5" stroke="none"/>
+  </g>
+</svg>

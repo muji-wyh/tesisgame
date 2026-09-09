@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">planet</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="61" rx="51" ry="16" transform="rotate(-24 60 61)" fill="#e4c586"/>
+    <circle cx="60" cy="57" r="32" fill="#d2add7"/>
+    <path d="M31 47 Q55 52 82 36 M30 63 Q60 66 90 50 M36 77 Q65 80 90 64" stroke="#b58dbf" stroke-width="5"/>
+    <path d="M15 79 Q28 95 70 77 Q110 60 106 42 L111 47 Q115 65 73 84 Q32 102 16 89Z" fill="#edcf8f"/>
+    <path d="M20 86 Q40 96 72 82" stroke="#fae9b6" stroke-width="2.5"/>
+    <circle cx="21" cy="25" r="3" fill="#dfca8f" stroke="none"/><circle cx="99" cy="96" r="4" fill="#bca3da" stroke="none"/>
+  </g>
+</svg>

@@ -55,6 +55,18 @@ const themes = {
     voice: { timbre: 'winter', gain: 0.14, attack: 0.015, release: 0.38, decay: 2.4 },
     arrive: { step: 0.17, noteDuration: 0.54 },
     open: { step: 0.18, noteDuration: 0.61 }
+  },
+  ocean: {
+    frequencies: [440, 554.37, 659.25, 880],
+    voice: { timbre: 'spring', gain: 0.12, attack: 0.04, release: 0.28, decay: 0.65 },
+    arrive: { step: 0.18, noteDuration: 0.40 },
+    open: { step: 0.19, noteDuration: 0.45 }
+  },
+  space: {
+    frequencies: [587.33, 880, 1174.66, 1479.98],
+    voice: { timbre: 'winter', gain: 0.12, attack: 0.025, release: 0.31, decay: 1.4 },
+    arrive: { step: 0.15, noteDuration: 0.43 },
+    open: { step: 0.18, noteDuration: 0.53 }
   }
 };
 

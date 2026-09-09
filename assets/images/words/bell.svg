@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bell</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="22" r="9" fill="#d6a65e"/>
+    <path d="M33 72 Q38 61 37 45 Q38 27 60 27 Q82 27 83 45 Q82 61 87 72 L99 84 Q102 94 60 96 Q18 94 21 84Z" fill="#efc979"/>
+    <ellipse cx="60" cy="89" rx="39" ry="8" fill="#c79b63"/>
+    <circle cx="60" cy="97" r="9" fill="#e6b368"/>
+    <path d="M47 40 Q42 49 43 59" stroke="#fbe3a9" stroke-width="5"/>
+    <path d="M20 47 14 41 M17 61H9 M100 47 106 41 M103 61H111" stroke="#c8b7d6" stroke-width="3"/>
+  </g>
+</svg>

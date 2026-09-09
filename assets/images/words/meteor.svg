@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">meteor</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M27 73 19 23 41 38 47 10 65 36 88 20 91 70Z" fill="#efa776"/>
+    <path d="M36 68 30 38 47 52 53 30 67 56 78 39 80 74Z" fill="#f4d081" stroke="none"/>
+    <path d="M25 75 36 59 58 55 81 66 91 86 80 105 55 110 33 99 22 85Z" fill="#ad9588"/>
+    <path d="M34 69 47 61 55 69 48 79 34 78Z M65 87 73 77 84 88 76 99 67 99Z" fill="#8f7a74" stroke-width="2.5"/>
+    <circle cx="45" cy="96" r="5" fill="#d0b39a" stroke="none"/>
+    <path d="M9 51 13 68 M104 43 108 59" stroke="#e5b479" stroke-width="3"/>
+  </g>
+</svg>

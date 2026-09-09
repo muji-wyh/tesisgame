@@ -69,10 +69,10 @@ test('the voice profile uses warm neural speech with clear, gently paced words',
   assert.throws(() => speechMarkup('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 100 words and sixteen prompts from the maintained lists', () => {
+test('voice generation derives exactly 140 words and twenty-two prompts from the maintained lists', () => {
   const messages = generator().messagesFor(root);
-  assert.equal(messages.length, 116);
-  assert.equal(new Set(messages.map(message => message.id)).size, 116);
+  assert.equal(messages.length, 162);
+  assert.equal(new Set(messages.map(message => message.id)).size, 162);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
@@ -83,7 +83,7 @@ test('voice generation rejects incomplete prompts and unexpected output paths', 
   const { directory } = fixture(t);
   const { messagesFor } = generator();
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, extra: 'Hello!' }));
-  assert.throws(() => messagesFor(directory), /sixteen/);
+  assert.throws(() => messagesFor(directory), /required prompt IDs/);
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
   fs.writeFileSync(path.join(directory, 'words.json'),
     JSON.stringify([{ ...words[0], audio: '../outside.wav' }]));
@@ -155,9 +155,9 @@ test('the complete neural batch is resampled to mobile PCM and published only af
       return new Response(wave(24000, 0.8), { headers: { 'Content-Type': 'audio/wav' } });
     }
   });
-  assert.equal(count, 17);
-  assert.equal(posts, 17);
-  assert.equal(waits.length, 17);
+  assert.equal(count, Object.keys(prompts).length + 1);
+  assert.equal(posts, count);
+  assert.equal(waits.length, count);
   assert.ok(waits.every(milliseconds => milliseconds >= 3200), 'Requests stay below the F0 rate limit.');
   for (const filename of fs.readdirSync(output)) {
     const audio = fs.readFileSync(path.join(output, filename));
@@ -199,4 +199,31 @@ test('an unavailable friendly neural style is an explicit error before synthesis
     root: directory, key: 'test-key', region: 'eastasia',
     fetchImpl: async () => Response.json([{ ...supportedVoice[0], StyleList: [] }])
   }), /friendly/);
+});
+
+test('missing-only synthesis preserves existing recordings and requests only absent words', async (t) => {
+  const { directory, output, original } = fixture(t);
+  const destination = path.join(output, 'word-cat.wav');
+  fs.unlinkSync(destination);
+  const posted = [];
+  const count = await generator().generateVoices({
+    root: directory, key: 'test-key', region: 'eastasia', onlyMissing: true,
+    wait: async () => {},
+    fetchImpl: async (url, options) => {
+      if (url.endsWith('/voices/list')) return Response.json(supportedVoice);
+      posted.push(options.body);
+      return new Response(wave());
+    }
+  });
+  assert.equal(count, 1);
+  assert.equal(posted.length, 1);
+  assert.match(posted[0], /<s>cat\.<\/s>/);
+  generator().assertWave(fs.readFileSync(destination), 22050);
+  for (const id of Object.keys(prompts)) {
+    assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original);
+  }
+  assert.equal(await generator().generateVoices({
+    root: directory, key: 'test-key', region: 'eastasia', onlyMissing: true,
+    fetchImpl: () => assert.fail('A complete catalog makes no speech requests.')
+  }), 0);
 });

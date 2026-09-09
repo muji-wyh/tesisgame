@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ring</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="74" rx="30" ry="31" fill="#eac572"/>
+    <ellipse cx="60" cy="74" rx="20" ry="21" fill="#fff8eb"/>
+    <path d="M35 28 46 15H74L85 28 60 54Z" fill="#a9d9df"/>
+    <path d="M35 28H85 M46 15 52 28 60 54 68 28 74 15 M52 28 60 15 68 28" stroke="#739ba9" stroke-width="2"/>
+    <path d="M23 27V39 M17 33H29 M98 49V59 M93 54H103" stroke="#d5b873" stroke-width="2.5"/>
+    <path d="M40 68 Q36 78 42 85" stroke="#fff0b3" stroke-width="4"/>
+  </g>
+</svg>
