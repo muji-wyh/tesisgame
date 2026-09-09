@@ -23,7 +23,7 @@ func configure(manifest: Dictionary) -> void:
 	_textures.clear()
 
 
-func start(palette: Dictionary, reduced_motion: bool) -> void:
+func start(palette: Dictionary, reduced_motion: bool, small: bool = false) -> void:
 	clear()
 	if reduced_motion:
 		return
@@ -35,7 +35,7 @@ func start(palette: Dictionary, reduced_motion: bool) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	for category in range(3):
-		var count: int = [12, 36, 24][category]
+		var count: int = [4, 12, 8][category] if small else [12, 36, 24][category]
 		for index in range(count):
 			var angle: float = TAU * float(index) / float(count) + rng.randf_range(-0.05, 0.05)
 			_particles.append({

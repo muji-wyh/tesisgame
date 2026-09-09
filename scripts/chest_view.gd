@@ -16,11 +16,17 @@ var _tint: Color = Color.WHITE
 var _style: String = ""
 var drag_offset: Vector2 = Vector2.ZERO
 var hold_progress: float = 0.0
+var _tap_remaining: float = 0.0
+var _glint := Node2D.new()
+var _glint_color: Color = Color.WHITE
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_art)
+	add_child(_glint)
+	_glint.hide()
+	_glint.draw.connect(_draw_glint)
 	resized.connect(_fit)
 	visibility_changed.connect(_visibility_changed)
 	_visibility_changed()
@@ -32,6 +38,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	theme_id = palette.id
 	_style = palette.chest
 	_tint = palette.tint
+	_glint_color = palette.light
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
@@ -99,6 +106,33 @@ func _fit() -> void:
 	drag_offset = _clamp_drag_offset(drag_offset, fit, bob)
 	_art.scale = Vector2.ONE * fit * pulse
 	_art.position = Vector2(size.x * 0.5, size.y * 0.59 + bob) - _bounds.get_center() * _art.scale + drag_offset + shake_offset
+	_art.rotation = 0.0 if reduced_motion else sin(_tap_remaining * 24.0) * 0.04 * (_tap_remaining / 0.35)
+	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0)
+	_glint.queue_redraw()
+
+
+func _draw_glint() -> void:
+	var center: Vector2 = _art.position + _bounds.get_center() * _art.scale
+	center.y -= _bounds.size.y * _art.scale.y * 0.08
+	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
+	var radius: float = minf(size.x, size.y) * 0.07
+	for layer in range(3):
+		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
+	_glint.draw_line(center - Vector2(radius, 0), center + Vector2(radius, 0), Color(_glint_color, power), 3.0, true)
+	_glint.draw_line(center - Vector2(0, radius * 0.6), center + Vector2(0, radius * 0.6), Color(Color.WHITE, power), 2.0, true)
+
+
+func play_tap() -> void:
+	if reduced_motion or mode != "closed":
+		return
+	_tap_remaining = 0.35
+	_fit()
+
+
+func stop_reaction() -> void:
+	_tap_remaining = 0.0
+	_art.rotation = 0.0
+	_glint.hide()
 
 
 func _clamp_drag_offset(value: Vector2, fit: float, bob: float) -> Vector2:
@@ -136,6 +170,7 @@ func start_open(reduce: bool) -> void:
 	if mode != "closed":
 		return
 	reduced_motion = reduce
+	stop_reaction()
 	hold_progress = 0.0
 	mode = "opening"
 	_elapsed = 0.0
@@ -154,6 +189,7 @@ func finish_immediately() -> void:
 
 
 func clear() -> void:
+	stop_reaction()
 	mode = "closed"
 	_elapsed = 0.0
 	theme_id = ""
@@ -177,11 +213,14 @@ func piece_count() -> int:
 
 
 func _visibility_changed() -> void:
+	if not is_visible_in_tree():
+		stop_reaction()
 	set_process(is_visible_in_tree())
 
 
 func _process(delta: float) -> void:
 	_idle_time += delta
+	_tap_remaining = maxf(0.0, _tap_remaining - delta)
 	if mode == "opening":
 		_elapsed += delta
 		var progress: float = smoothstep(0.3, 1.15, _elapsed)

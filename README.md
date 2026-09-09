@@ -2,7 +2,9 @@
 
 A **Godot game delivered on the Web** for early English learners. Gameplay, cards, audio, chest animation and celebrations run in GDScript. The HTML shell hosts the exported engine and integrates browser sizing, accessibility announcements, lifecycle events and read-only asset URLs.
 
-Players need a browser, not a Godot installation. The game is a static website with no backend, cloud speech service or external image service.
+Players need a browser, not a Godot installation. The game is a static website
+with no game backend or external image service. Optional voice play uses the
+browser's speech-recognition provider.
 
 ## Run and build
 
@@ -106,7 +108,7 @@ Upload the export together under a path such as `/games/word-buddies/`, then emb
 <iframe
   src="/games/word-buddies/index.html"
   title="Word Buddies"
-  allow="autoplay; fullscreen; gamepad"
+  allow="autoplay; fullscreen; gamepad; microphone"
   style="display:block;width:100%;height:100dvh;border:0">
 </iframe>
 ```
@@ -117,16 +119,11 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left instead of plain text counters. Correct pairs bounce; incorrect pairs shake.
 
-**Challenge** is the default. Tap its badge area to switch to **Practice** with
-unlimited tries. Practice keeps the same board and earned matches, and can even
-continue a lost round. Returning to Challenge gives a fresh three-mistake allowance.
-Mode changes preserve a selected card and its hints, but cannot interrupt feedback
-or change a won round. Both modes require three real matches for one chest.
-The mode carries into Play again for this session; reloading starts in Challenge.
-
 Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
 and star badges, and its word is spoken. Hints follow your selected card when it has a
-partner; otherwise they point to a complete pair. There is no penalty or limit, and you
+partner; otherwise they point to a complete pair. Each round has **one hint**, with no
+score penalty. The button becomes **Used** afterward; only a new round restores it.
+Cancelling selection, completing a match, or changing seasons does not refill it. You
 still tap both cards to make the match. Hints move focus to the next suggested card,
 so keyboard and controller players can continue with **Enter** or **A**.
 
@@ -141,21 +138,36 @@ The vocabulary pool contains **100 short, concrete English words** for parent-gu
 with young children. Each round still uses only five different words on eight cards, rather
 than showing the whole pool at once. Tap a picture or word to hear its pronunciation.
 
-The winning chest follows the selected theme and can be dragged inside its panel. Hold it for 1.2 seconds to charge it: the shake intensifies without displaying a progress bar, then the existing 1.8-second reveal starts with imported chest artwork, native light layers, two expanding rings, 72 seasonal particles and a reward medallion. Releasing early or dragging cancels the charge. Themes have different particle trajectories, palettes, music, effects and English speech. Theme switching is disabled during opening. Later theme changes do not alter the earned reward or grant another one.
+The winning chest follows the selected theme and can be dragged inside its panel.
+A short tap gives a little wiggle and glint. Hold it for **1.2 seconds** to charge it:
+the shake and latch glow build without a progress bar, followed by the existing
+**1.8-second opening**. Releasing early or dragging cancels charging. Changing seasons
+cannot reroll an opening or alter an earned fragment.
 
-After the reveal, the earned medallion pops up and flies into the **My rewards** entry,
-which gives a small arrival bounce. The reward is saved before this cosmetic animation;
-opening the collection, replaying, or hiding the page cannot lose or duplicate it.
-Reduced motion keeps a static reveal instead of the flight.
+Each win earns **one fragment**. **Three fragments complete a medal**, and each
+season has **six medals**. The next piece always advances the first unfinished
+medal in that season; there are no duplicate fragments or rare missing pieces.
+An ordinary reveal uses 24 seasonal particles and snaps the new piece into the
+visible partial medal. Tap the chest panel or press A/Enter to place it sooner.
+Finishing a medal triggers the larger 72-particle celebration and a flight into
+**My rewards**. A complete season can still celebrate future wins without
+inventing more medals or resetting the collection.
 
-Each season has ten named reward variants with ten different generated illustrations.
-Chests choose an uncollected reward from the current season while any remain; duplicates
-appear only after that season's collection is complete. Each win still grants one reward.
-Each collection heading shows its goal, such as **Spring 3/10**, and celebrates completion
-at ten. These counts come from the existing saved rewards, not a separate progress counter.
-Opened rewards are stored locally and appear on the **My rewards** page; locked slots
-keep their artwork and names hidden. Tap an earned tile to open its larger, named seasonal
-preview. Taps alternate between a bounce, a twirl and a little hug, with Spring hearts,
+Fragments are saved before their assembly animation. Hiding the page or replaying
+during opening finishes the earned claim once, then settles its visuals.
+Reduced motion shows the saved piece immediately after the hold.
+If saving fails, **Retry saving** retries the same piece instead of rerolling,
+pretending it was saved, or silently discarding it.
+
+Collection headings show completed medals, such as **Spring 2/6**. Tiles show
+empty, partial (**1/3**, **2/3**), or complete medals. Earlier whole rewards are
+preserved: existing rewards 1-6 become complete medals; earned rewards 7-10 remain
+available under **Earlier rewards**. New versioned progress uses `user://medals.cfg`;
+the old `user://rewards.cfg` is left unchanged. Corrupt or unsupported saves show
+an error rather than being reset.
+
+Tap an earned tile to open its larger seasonal preview; partial medals reveal
+only their earned pieces. Taps alternate between a bounce, a twirl and a little hug, with Spring hearts,
 Summer stars, Autumn leaves or Winter snowflakes. Every five taps brings a bigger
 high-five party. The visible play count starts fresh when a preview opens and never grants
 another reward. These finite, native effects use at most twelve shapes and no new downloads;
@@ -178,14 +190,40 @@ or focus it and press Xbox A for a happy wiggle, little hearts and rotating enco
 Bear play never restarts lost-round music or changes the result. Reduced motion keeps the
 encouragement without movement, and Play again remains the initial controller action.
 
+### Voice play
+
+On a supported browser, choose **Voice**, then click the visible **Listen** button
+to enable the microphone. The panel shows the recognized text live. Only final
+recognized words count, because interim text can change as recognition settles.
+For example, **"I see a doll"** matches the doll word and picture if both are still
+available on the board.
+
+Matching is case-insensitive and uses whole English words: `doll` does not match
+`dollars`. Distractors, unrelated speech, and already matched words do not score
+or cost a mistake. A sentence containing several available words is resolved
+through the same match-feedback sequence, once per pair.
+
+Click **Stop** or turn Voice off to exit. Winning, losing, replaying, opening a
+collection/preview, or hiding the page also stops listening. Game music and spoken
+prompts are quiet while voice mode is enabled so the game cannot match its own
+audio. Touch matching remains available.
+
+Voice play uses the browser's standard or prefixed `SpeechRecognition` API with
+`en-US`; it needs browser support, a secure page, and microphone permission.
+**Your browser's speech provider may process the audio remotely. This game does
+not record or save microphone audio or transcripts.** The microphone starts only
+from the Listen button. Permission and service errors are visible and never
+trigger an automatic permission-retry loop. Use the cards when speech is unavailable.
+An embedding site must also allow `microphone` in its iframe permissions.
+
 ### Xbox controller
 
 | Control | Action |
 |---|---|
 | D-pad / left stick | Move focus between available controls. |
-| A | Activate the focused control; hold to open a won chest. |
-| B | Cancel the selected card, close a reward preview, or go back. |
-| X | Show a no-penalty hint and focus a card in the suggested pair. |
+| A | Activate the focused control; hold to open a chest or tap to place its piece. |
+| B | Cancel the selected card, exit voice play, close a reward preview, or go back. |
+| X | Use the round's one hint and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |
 | Y / Menu | Open or close My rewards, not restart the game. |
 
@@ -218,7 +256,7 @@ Editor/native play continues to use local audio.
 | `image` | Unique local picture under `assets/images/words/`. |
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 
-The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate the source recordings; ordinary builds and gameplay do not call a speech service or need speech credentials. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
+The 100 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate these source recordings; playback and ordinary builds need no speech credentials. Optional microphone recognition is a separate browser-provided service. All 100 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
 
 The collection keeps words to 2-6 lowercase letters and covers familiar picture-book topics:
 
@@ -327,11 +365,17 @@ The native suite exercises actual GDScript state transitions, distractors, indep
 
 The [enjoyable-play plan](docs/superpowers/plans/2026-09-09-enjoyable-play.md)
 records the market research, design choices, acceptance criteria, and release process
-for Practice, fresh rounds, seasonal goals, and the preceding hint/reward improvements.
+for round limits, fresh rounds, seasonal goals, and the preceding hint/reward improvements.
+The [chest reveal plan](docs/superpowers/plans/2026-09-09-chest-reveal.md) describes
+the fragment assembly, six-medal collections, migration, and reward lifecycle.
 
 The Windows Playwright WebKit runtime exposes WebGL 2 but not AudioContext or OffscreenCanvas. In that environment the real Godot Dummy audio driver is selected and the host reports the missing capability. An ordinary multisampled canvas selects Emscripten's built-in shader presentation path, avoiding that runtime's repeated framebuffer-blit error. No fake WebAudio or WebGL APIs are substituted. Chromium exercises real browser audio APIs.
 
 Real iPhone/iPad testing remains important for physical audio playback, browser-bar changes, safe areas, split view and background/foreground behavior.
+
+Speech automation supplies recognition events instead of opening a physical
+microphone. It covers live text, whole-word scoring, permissions, cancellation,
+and stale callbacks, not the browser provider's acoustic recognition accuracy.
 
 To render reference screenshots from the native development scene:
 

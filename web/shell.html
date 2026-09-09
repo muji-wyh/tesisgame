@@ -128,6 +128,19 @@
       background: var(--cp-accent); color: var(--cp-accent-fg); font: inherit; cursor: pointer; }
     button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
     #retry:hover { background: var(--cp-accent-hover); }
+    #speech-panel { position: absolute; z-index: 1; display: grid; min-width: 0;
+      grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(48px, 1fr) auto;
+      column-gap: 8px; padding: 0 6px; overflow: hidden; border: 1px solid var(--cp-border);
+      border-radius: 10px; background: var(--cp-panel-strong); color: var(--cp-text); }
+    #speech-button { align-self: center; min-height: 48px; padding: 6px 12px;
+      font-size: 14px; font-weight: 700; }
+    #speech-button:focus-visible { outline-offset: 1px; }
+    #speech-button:disabled { background: var(--cp-border); color: var(--cp-text-muted); cursor: default; }
+    #speech-transcript { align-self: center; min-width: 0; max-height: 48px; overflow: auto;
+      overflow-wrap: anywhere; font-size: clamp(12px, 3vw, 16px); line-height: 1.2; }
+    #speech-transcript:empty::before { content: 'Say a word, like “I see a doll”.'; color: var(--cp-text-soft); }
+    #speech-notice { grid-column: 1 / -1; max-height: 2.4em; overflow: auto;
+      font-size: clamp(9px, 2.8vw, 12px); line-height: 1.1; color: var(--cp-text-soft); }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
     @media (max-height: 650px) {
@@ -163,17 +176,25 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Find three matching word and picture pairs. Two cards have no match.
-        Challenge allows three mistakes. Activate the Challenge badge area to switch to Practice with unlimited tries,
-        or to continue a lost board. Changing modes keeps your matches and resets the mistake allowance.
+        Three mistakes end the round. Each round allows one hint, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
         A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for My rewards.
         Hint marks a matching pair with stars and speaks its word, without a penalty.
+        The hint button shows Used afterward. Only a new round restores the hint.
+        Where supported, Voice opens a listening panel. Read its privacy notice, then press Listen
+        and say an English word or a sentence such as “I see a doll”. Press Stop to leave voice mode.
+        Live words appear as you speak; only completed speech can match cards. You can still tap cards.
         Four season buttons change the theme and keep your choice for replays. New rounds prefer fresh words.
         My rewards shows each season's progress out of ten.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
+      <section id="speech-panel" hidden aria-label="Voice play">
+        <button id="speech-button" type="button" aria-describedby="speech-notice" aria-pressed="false">Listen</button>
+        <p id="speech-transcript" role="status" aria-label="Live transcript" aria-live="polite" aria-atomic="true"></p>
+        <p id="speech-notice">Browser speech may process audio remotely. Game stores no voice or transcripts.</p>
+      </section>
       <div id="status" role="region" aria-labelledby="loading-title">
         <div class="loader-layout">
           <header class="loading-heading">
@@ -414,8 +435,212 @@
       }, loadingListener);
       startLoadingGamepad();
 
+      function createSpeechHost() {
+        const panel = document.getElementById('speech-panel');
+        const button = document.getElementById('speech-button');
+        const transcript = document.getElementById('speech-transcript');
+        const notice = document.getElementById('speech-notice');
+        const privacy = 'Browser speech may process audio remotely. Game stores no voice or transcripts.';
+        let onResult = null;
+        let onState = null;
+        let enabled = false;
+        let active = false;
+        let listening = false;
+        let message = '';
+        let generation = 0;
+        let recognition = null;
+        let restartTimer = 0;
+        let stopFailed = false;
+
+        function speechAvailable() {
+          return window.isSecureContext === true &&
+            typeof (window.SpeechRecognition || window.webkitSpeechRecognition) === 'function';
+        }
+
+        function report(text = '') {
+          message = stopFailed ? 'Microphone could not be stopped. Close this tab to stop voice input.' :
+            enabled ? text : '';
+          button.textContent = active ? 'Stop' : 'Listen';
+          button.disabled = stopFailed || (!active && !speechAvailable());
+          button.setAttribute('aria-pressed', String(active));
+          notice.textContent = (message ? message + ' ' : '') + privacy;
+          // JavaScriptBridge collects positional arguments into the GDScript callback Array.
+          onState?.(enabled, listening, message);
+        }
+
+        function release() {
+          // Invalidate first: abort can itself deliver already queued browser events.
+          generation++;
+          active = false;
+          listening = false;
+          window.clearTimeout(restartTimer);
+          restartTimer = 0;
+          const previous = recognition;
+          recognition = null;
+          stopFailed = false;
+          if (!previous) return true;
+          previous.onstart = previous.onresult = previous.onerror = previous.onend = null;
+          try { previous.abort(); } catch (abortError) {
+            if (abortError.name !== 'InvalidStateError') {
+              try { previous.stop(); } catch (stopError) {
+                if (stopError.name !== 'InvalidStateError') {
+                  recognition = previous;
+                  stopFailed = true;
+                  return false;
+                }
+              }
+            }
+          }
+          return true;
+        }
+
+        function closeSpeech(restoreFocus) {
+          const wasEnabled = enabled;
+          if (!release()) {
+            enabled = true;
+            panel.hidden = false;
+            transcript.textContent = '';
+            report();
+            return;
+          }
+          enabled = false;
+          panel.hidden = true;
+          transcript.textContent = '';
+          report();
+          if (restoreFocus && wasEnabled) focusGame();
+        }
+
+        function stopSpeech() {
+          closeSpeech(true);
+        }
+
+        function speechMode(value) {
+          if (!value || document.hidden) { stopSpeech(); return; }
+          if (enabled) return;
+          enabled = true;
+          panel.hidden = false;
+          transcript.textContent = '';
+          report(speechAvailable() ? 'Press Listen, then say an English word.' :
+            'Voice is unavailable here. Use a supported browser on HTTPS, or tap cards.');
+          if (enabled && !document.hidden) button.focus({ preventScroll: true });
+        }
+
+        function failedRecognition(code) {
+          const errors = {
+            'not-allowed': 'Microphone permission was denied. Allow it in browser settings, or tap cards.',
+            'service-not-allowed': 'Browser speech permission is blocked. You can still tap cards.',
+            'no-speech': 'No speech heard. Press Listen to try again, or tap cards.',
+            'audio-capture': 'The microphone is unavailable. Check it, or tap cards.',
+            network: 'Speech network error. Press Listen to retry, or tap cards.',
+            'language-not-supported': 'English speech is unavailable in this browser. You can still tap cards.'
+          };
+          release();
+          transcript.textContent = '';
+          report(errors[code] || 'Listening stopped. Press Listen to retry, or tap cards.');
+        }
+
+        function startRecognition(token) {
+          if (token !== generation || !enabled || !active || document.hidden) return;
+          let current;
+          try {
+            const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            current = new Recognition();
+            recognition = current;
+            current.lang = 'en-US';
+            current.interimResults = true;
+            current.continuous = true;
+            let lastFinal = -1;
+            const valid = () => token === generation && recognition === current &&
+              enabled && active && !document.hidden;
+            current.onstart = () => {
+              if (!valid()) return;
+              listening = true;
+              report('Listening. Say an English word.');
+            };
+            current.onresult = event => {
+              if (!valid() || !listening) return;
+              for (let index = event.resultIndex; index < event.results.length; index++) {
+                if (!valid()) break;
+                const result = event.results[index];
+                const isFinal = result.isFinal === true;
+                if (isFinal && index <= lastFinal) continue;
+                const text = result[0].transcript.trim();
+                transcript.textContent = text;
+                if (isFinal) lastFinal = index;
+                if (text) onResult?.(text, isFinal);
+              }
+            };
+            current.onerror = event => {
+              if (valid()) failedRecognition(event.error);
+            };
+            current.onend = () => {
+              if (!valid()) return;
+              recognition = null;
+              current.onstart = current.onresult = current.onerror = current.onend = null;
+              listening = false;
+              report('Listening paused. Continuing...');
+              if (token !== generation || !enabled || !active || document.hidden) return;
+              restartTimer = window.setTimeout(() => {
+                restartTimer = 0;
+                startRecognition(token);
+              }, 400);
+            };
+            current.start();
+          } catch (error) {
+            if (token !== generation || !enabled || !active) return;
+            failedRecognition(['NotAllowedError', 'SecurityError'].includes(error.name) ? 'not-allowed' :
+              error.name === 'NotFoundError' ? 'audio-capture' : '');
+          }
+        }
+
+        function focusGame() {
+          if (!document.hidden) document.getElementById('canvas').focus({ preventScroll: true });
+        }
+
+        button.addEventListener('click', () => {
+          if (active) { stopSpeech(); return; }
+          if (!enabled || document.hidden || !speechAvailable()) return;
+          active = true;
+          transcript.textContent = '';
+          const token = ++generation;
+          report('Starting microphone...');
+          startRecognition(token);
+        });
+        panel.addEventListener('keydown', event => {
+          event.stopPropagation();
+          if (event.key === 'Escape') stopSpeech();
+        });
+        for (const type of ['keyup', 'pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'touchstart', 'touchend']) {
+          panel.addEventListener(type, event => event.stopPropagation());
+        }
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) closeSpeech(false);
+        });
+        window.addEventListener('pagehide', () => closeSpeech(false));
+
+        return {
+          speechAvailable, speechMode, stopSpeech,
+          observeSpeech(resultCallback, stateCallback) {
+            onResult = resultCallback;
+            onState = stateCallback;
+            report(message);
+          },
+          speechBounds(x, y, width, height) {
+            const clamp = value => Math.max(0, Math.min(1, Number(value) || 0));
+            const left = clamp(x);
+            const top = clamp(y);
+            panel.style.left = left * 100 + '%';
+            panel.style.top = top * 100 + '%';
+            panel.style.width = Math.min(clamp(width), 1 - left) * 100 + '%';
+            panel.style.height = Math.min(clamp(height), 1 - top) * 100 + '%';
+          }
+        };
+      }
+      const speechHost = createSpeechHost();
+
       function fail(reason) {
         failed = true;
+        speechHost.stopSpeech();
         stopLoadingPlay();
         window.removeEventListener('unhandledrejection', onEngineFailure);
         document.body.dataset.engineReady = 'false';
@@ -445,6 +670,7 @@
 
       // Host lifecycle, controller state and asset URLs, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
+        ...speechHost,
         ready() {
           if (failed) return;
           stopLoadingPlay();

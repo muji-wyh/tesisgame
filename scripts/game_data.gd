@@ -1,5 +1,6 @@
 extends RefCounted
 
+const PIECES_PER_MEDAL: int = 3
 const THEMES: Dictionary = {
 	"spring": {"name": "Spring", "background": Color("#edf8ec"), "accent": Color("#438363"),
 		"light": Color("#d7efc7"), "spark": Color("#75c66f"), "tint": Color("#dff6de"),
@@ -56,6 +57,15 @@ static func reward(id: String) -> Dictionary:
 			if value.id == id:
 				return value
 	return {}
+
+
+static func medals(theme_id: String) -> Array:
+	return rewards(theme_id).slice(0, 6)
+
+
+static func medal(id: String) -> Dictionary:
+	var result: Dictionary = reward(id)
+	return result if not result.is_empty() and result.number <= 6 else {}
 
 
 static func validate_words(value: Variant) -> String:

@@ -44,10 +44,13 @@ async function installGamepad(page, { connected = false, heldButtons = [] } = {}
 }
 
 async function pressGamepad(page, index) {
-  await page.evaluate(index => window.gamepadFixture.button(index, true), index);
-  await page.waitForTimeout(120);
-  await page.evaluate(index => window.gamepadFixture.button(index, false), index);
-  await page.waitForTimeout(120);
+  // Keep browser/runner round trips from turning a tap into a repeating D-pad hold.
+  await page.evaluate(async index => {
+    window.gamepadFixture.button(index, true);
+    await new Promise(resolve => setTimeout(resolve, 120));
+    window.gamepadFixture.button(index, false);
+    await new Promise(resolve => setTimeout(resolve, 120));
+  }, index);
 }
 
 module.exports = { installGamepad, pressGamepad };

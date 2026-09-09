@@ -8,11 +8,11 @@ var cards: Array[Dictionary] = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
+var hint_used: bool = false
 var selected_id: String = ""
 var successes: int = 0
 var mistakes: int = 0
 var streak: int = 0
-var practice_mode: bool = false
 var phase: String = "waiting"
 var theme_id: String = "spring"
 var chest_state: String = "closed"
@@ -50,6 +50,7 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
+	hint_used = false
 	selected_id = ""
 	successes = 0
 	mistakes = 0
@@ -83,8 +84,48 @@ func card_by_id(id: String) -> Dictionary:
 	return {}
 
 
-func request_hint() -> bool:
+func spoken_matches(transcript: String) -> Array[String]:
+	var matches: Array[String] = []
+	if phase in ["won", "lost"]:
+		return matches
+	var tokens := RegEx.new()
+	tokens.compile("\\b[a-z]+\\b")
+	for token in tokens.search_all(transcript.to_lower()):
+		for card in cards:
+			if card.kind != "word" or card.word.text != token.get_string():
+				continue
+			var word_id: String = card.word.id
+			if not matches.has(word_id) and not _spoken_pair(word_id).is_empty():
+				matches.append(word_id)
+	return matches
+
+
+func match_spoken_word(word_id: String) -> String:
 	if not phase in ["waiting", "matching"]:
+		return "ignored"
+	var pair: Array[String] = _spoken_pair(word_id)
+	if pair.is_empty():
+		return "ignored"
+	selected_id = ""
+	phase = "waiting"
+	select(pair[0])
+	return select(pair[1])
+
+
+func _spoken_pair(word_id: String) -> Array[String]:
+	var word_card: Dictionary = card_by_id(word_id + ":word")
+	var image_card: Dictionary = card_by_id(word_id + ":image")
+	if word_card.is_empty() or image_card.is_empty():
+		return []
+	if word_card.kind != "word" or image_card.kind != "image":
+		return []
+	if matched_ids.has(word_card.id) or matched_ids.has(image_card.id):
+		return []
+	return [word_card.id, image_card.id]
+
+
+func request_hint() -> bool:
+	if hint_used or not phase in ["waiting", "matching"]:
 		return false
 	# ponytail: eight-card boards; scan for partners instead of maintaining a pair index.
 	var candidates: Array[Dictionary] = cards.duplicate()
@@ -97,6 +138,7 @@ func request_hint() -> bool:
 		if card_by_id(partner_id).is_empty():
 			continue
 		hint_ids.assign([card.id, partner_id])
+		hint_used = true
 		if not selected_id.is_empty() and not hint_ids.has(selected_id):
 			selected_id = ""
 			phase = "waiting"
@@ -139,8 +181,7 @@ func select(id: String) -> String:
 				matched_ids.append_array(feedback_ids)
 				result = "correct"
 			else:
-				if not practice_mode:
-					mistakes += 1
+				mistakes += 1
 				streak = 0
 				result = "wrong"
 	changed.emit()
@@ -154,23 +195,11 @@ func resolve_feedback() -> void:
 	selected_id = ""
 	if successes >= 3:
 		phase = "won"
-	elif mistakes >= 3 and not practice_mode:
+	elif mistakes >= 3:
 		phase = "lost"
 	else:
 		phase = "waiting"
 	changed.emit()
-
-
-func set_practice(enabled: bool) -> bool:
-	if not phase in ["waiting", "matching", "lost"] or (phase == "lost" and not enabled):
-		return false
-	if practice_mode != enabled:
-		practice_mode = enabled
-		mistakes = 0
-		if phase == "lost":
-			phase = "waiting"
-		changed.emit()
-	return true
 
 
 func set_theme(id: String) -> bool:

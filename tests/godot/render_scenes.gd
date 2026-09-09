@@ -18,8 +18,11 @@ func _capture(name: String) -> void:
 
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT))
+	var save_directory := OUTPUT + "/.render-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	DirAccess.make_dir_recursive_absolute(save_directory)
 	root.size = Vector2i(960, 720)
 	var app = load("res://scenes/main.tscn").instantiate()
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(save_directory + "/medals.cfg", save_directory + "/legacy.cfg")
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -47,12 +50,18 @@ func _run() -> void:
 		app.choose_theme(season)
 		await create_timer(0.2).timeout
 		await _capture(season + "-closed")
-		app.chest_button.pressed.emit()
+		app.chest_button.button_down.emit()
+		app._process(1.21)
+		app.chest_button.button_up.emit()
 		await create_timer(0.72).timeout
 		await _capture(season + "-burst")
-		await create_timer(1.3).timeout
+		await create_timer(2.0).timeout
 		await _capture(season + "-reward")
-	print("Rendered the actual Godot board and all four seasonal rewards.")
+	print("Rendered the actual Godot board and all four seasonal fragment reveals.")
 	app.queue_free()
 	await process_frame
+	var saves := DirAccess.open(save_directory)
+	for filename in saves.get_files():
+		DirAccess.remove_absolute(save_directory + "/" + filename)
+	DirAccess.remove_absolute(save_directory)
 	quit()

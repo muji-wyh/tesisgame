@@ -7,9 +7,10 @@ const Card = preload("res://scripts/word_card.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Effects = preload("res://scripts/celebration.gd")
+const Medal = preload("res://scripts/medal_view.gd")
+const MedalProgress = preload("res://scripts/medal_progress.gd")
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
-const REWARD_SAVE: String = "user://rewards.cfg"
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 const PREVIEW_REACTIONS := ["Boing!", "Wheee!", "Big hug!"]
 
@@ -153,6 +154,7 @@ class RewardSparkle:
 
 var model := Model.new()
 var data := Data.new()
+var medal_progress := MedalProgress.new()
 var cards: Dictionary = {}
 var grid: GridContainer
 var feedback_timer: Timer
@@ -160,21 +162,24 @@ var audio: Audio
 var chest: Chest
 var effects: Effects
 var theme_buttons: Array[Button] = []
-var practice_button: Button
 var hint_button: Button
+var _voice_button: Button
+var _voice_space: Control
+var _voice_mode: bool = false
+var _voice_listening: bool = false
+var _speech_queue: Array[String] = []
 var collection_button: Button
 var collection_page: Panel
 var collected_rewards: Dictionary = {}
 var replay_button: Button
 var chest_button: Button
-var reward_image: TextureRect
+var reward_image: Medal
 var failure_image: TextureRect
 var failure_button: Button
 var reduced_motion: bool = false
 var _background: ColorRect
 var _success: ProgressBadges
 var _mistakes: ProgressBadges
-var _practice_caption: Label
 var _match_caption: Label
 var _message: Label
 var _outcome: Control
@@ -185,6 +190,12 @@ var _caption: Label
 var _medallion: Panel
 var _reward_number: Label
 var _reward_flight_image: TextureRect
+var _fragment_image: Medal
+var _fragment_tween: Tween
+var _fragment_active: bool = false
+var _pending_fragment: Dictionary = {}
+var _progress_ready: bool = false
+var _save_error: bool = false
 var _collection_scroll: ScrollContainer
 var _collection_grid: VBoxContainer
 var _collection_back: Button
@@ -194,7 +205,7 @@ var _reward_slots: Dictionary = {}
 var _collection_focus_modes: Dictionary = {}
 var _focus_before_collection: Control
 var _preview_page: Panel
-var _preview_image: TextureRect
+var _preview_image: Medal
 var _preview_title: Label
 var _preview_caption: Label
 var _preview_close: Button
@@ -244,6 +255,8 @@ var _preferred_theme: String = ""
 var _host: JavaScriptObject
 var _hidden_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
+var _speech_result_callback: JavaScriptObject
+var _speech_state_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -293,27 +306,22 @@ func _build_controls() -> void:
 	_success.add_child(_match_caption)
 	_match_caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	_match_caption.offset_top = -20
-	practice_button = Button.new()
-	practice_button.name = "Practice"
-	practice_button.toggle_mode = true
-	practice_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	practice_button.pressed.connect(_toggle_practice)
-	header.add_child(practice_button)
 	_mistakes = ProgressBadges.new(ProgressBadges.RETRY)
 	_mistakes.name = "RetryProgress"
 	_mistakes.tooltip_text = "0 mistakes"
-	practice_button.add_child(_mistakes)
-	_mistakes.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_practice_caption = Style.label("Challenge", 14)
-	_practice_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	practice_button.add_child(_practice_caption)
-	_practice_caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	_practice_caption.offset_top = -20
+	_mistakes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(_mistakes)
+	_voice_button = Button.new()
+	_voice_button.name = "Voice"
+	_voice_button.text = "Voice"
+	_voice_button.toggle_mode = true
+	_voice_button.pressed.connect(_toggle_voice)
+	header.add_child(_voice_button)
 	hint_button = Button.new()
 	hint_button.name = "Hint"
 	hint_button.text = "Hint"
-	hint_button.tooltip_text = "Show a matching pair (Xbox X)"
-	_set_accessibility_name(hint_button, "Hint: show a matching pair")
+	hint_button.tooltip_text = "One hint per round (Xbox X)"
+	_set_accessibility_name(hint_button, "Hint: one per round")
 	hint_button.pressed.connect(_request_hint)
 	header.add_child(hint_button)
 	collection_button = Button.new()
@@ -340,6 +348,13 @@ func _build_controls() -> void:
 		button.pressed.connect(choose_theme.bind(id))
 		seasons.add_child(button)
 		theme_buttons.append(button)
+	_voice_space = Control.new()
+	_voice_space.name = "SpeechPanelSpace"
+	_voice_space.custom_minimum_size = Vector2(0, 112)
+	_voice_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_voice_space.item_rect_changed.connect(_sync_voice_bounds)
+	_voice_space.hide()
+	column.add_child(_voice_space)
 	grid = GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -375,15 +390,16 @@ func _build_controls() -> void:
 	chest_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest_button.button_down.connect(_start_chest_hold)
 	chest_button.button_up.connect(_end_chest_hold)
+	chest_button.pressed.connect(_finish_fragment_delivery)
 	chest_button.gui_input.connect(_chest_input)
 	_medallion = Panel.new()
 	_medallion.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_medallion)
-	reward_image = _picture(_medallion)
+	reward_image = _medal_picture(_medallion)
 	reward_image.offset_left = 8
 	reward_image.offset_top = 8
 	reward_image.offset_right = -8
-	reward_image.offset_bottom = -8
+	reward_image.offset_bottom = -24
 	_reward_number = Style.label("", 18)
 	_reward_number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_reward_number.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
@@ -421,7 +437,7 @@ func _build_controls() -> void:
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_title)
-	_caption = Style.label("Hold the chest to open it!", 22)
+	_caption = Style.label("Hold to find a piece!", 22)
 	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_caption.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -513,7 +529,7 @@ func _build_reward_preview_shell() -> void:
 	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, Color("#d7efc7"), 28, 4))
 	column.add_child(stage)
-	_preview_image = _picture(stage)
+	_preview_image = _medal_picture(stage)
 	_preview_image.offset_left = 34
 	_preview_image.offset_top = 22
 	_preview_image.offset_right = -34
@@ -543,6 +559,7 @@ func _build_reward_preview_shell() -> void:
 
 func _build_collection() -> void:
 	for child in _collection_grid.get_children():
+		_collection_grid.remove_child(child)
 		child.queue_free()
 	_reward_slots.clear()
 	_collection_rows.clear()
@@ -551,62 +568,77 @@ func _build_collection() -> void:
 		var heading := Style.label("", 26)
 		_collection_headings[theme_id] = heading
 		_collection_grid.add_child(heading)
-		var row := GridContainer.new()
-		row.columns = 5
-		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_collection_grid.add_child(row)
-		_collection_rows.append(row)
-		for reward in Data.rewards(theme_id):
-			var slot := Button.new()
-			slot.name = reward.id
-			slot.custom_minimum_size = Vector2(80, 116)
-			slot.clip_contents = true
-			slot.pressed.connect(_open_reward_preview.bind(reward.id))
-			slot.gui_input.connect(_collection_scroll_input.bind(slot))
-			slot.focus_entered.connect(_ensure_collection_focus_visible.bind(slot))
-			for style_name in ["normal", "hover", "pressed", "disabled"]:
-				slot.add_theme_stylebox_override(style_name, Style.box(Color.WHITE, Color("#d8dde1"), 16, 2))
-			var picture := TextureRect.new()
-			picture.custom_minimum_size = Vector2(64, 64)
-			picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			slot.add_child(picture)
-			picture.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-			picture.offset_left = 4
-			picture.offset_top = 4
-			picture.offset_right = -4
-			picture.offset_bottom = 68
-			var label := Style.label("", 14)
-			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			slot.add_child(label)
-			label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-			label.offset_left = 3
-			label.offset_right = -3
-			label.offset_top = -48
-			label.offset_bottom = -4
-			row.add_child(slot)
-			_reward_slots[reward.id] = {"button": slot, "picture": picture, "label": label, "reward": reward}
+		_add_reward_row(Data.medals(theme_id))
+		var earlier: Array = Data.rewards(theme_id).filter(
+			func(reward: Dictionary) -> bool: return medal_progress.legacy_rewards.has(reward.id))
+		if not earlier.is_empty():
+			_collection_grid.add_child(Style.label("Earlier rewards", 20))
+			_add_reward_row(earlier)
 	_refresh_collection()
 	_layout_collection()
 
 
+func _add_reward_row(rewards: Array) -> void:
+	var row := GridContainer.new()
+	row.columns = 3
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_collection_grid.add_child(row)
+	_collection_rows.append(row)
+	for reward in rewards:
+		var slot := Button.new()
+		slot.name = reward.id
+		slot.custom_minimum_size = Vector2(80, 116)
+		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slot.clip_contents = true
+		slot.pressed.connect(_open_reward_preview.bind(reward.id))
+		slot.gui_input.connect(_collection_scroll_input.bind(slot))
+		slot.focus_entered.connect(_ensure_collection_focus_visible.bind(slot))
+		for style_name in ["normal", "hover", "pressed", "disabled"]:
+			slot.add_theme_stylebox_override(style_name, Style.box(Color.WHITE, Color("#d8dde1"), 16, 2))
+		var picture := _medal_picture(slot)
+		picture.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+		picture.offset_left = 4
+		picture.offset_top = 4
+		picture.offset_right = -4
+		picture.offset_bottom = 68
+		var label := Style.label("", 14)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		slot.add_child(label)
+		label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		label.offset_left = 3
+		label.offset_right = -3
+		label.offset_top = -48
+		label.offset_bottom = -4
+		row.add_child(slot)
+		_reward_slots[reward.id] = {"button": slot, "picture": picture, "label": label, "reward": reward}
+
+
+func _sync_collected_rewards() -> void:
+	collected_rewards = medal_progress.legacy_rewards.duplicate()
+	for id in medal_progress.counts:
+		if medal_progress.count_for(id) > 0:
+			collected_rewards[id] = true
+
+
+func _piece_count(id: String) -> int:
+	return 3 if medal_progress.legacy_rewards.has(id) else medal_progress.count_for(id)
+
+
 func _refresh_collection() -> void:
+	_sync_collected_rewards()
 	for id in _reward_slots:
 		var slot: Dictionary = _reward_slots[id]
-		var unlocked: bool = collected_rewards.has(id)
-		if unlocked and slot.picture.texture == null:
-			slot.picture.texture = load(slot.reward.symbol)
-		elif not unlocked:
-			slot.picture.texture = null
+		var pieces: int = _piece_count(id)
+		var unlocked: bool = _progress_ready and pieces > 0
+		var palette: Dictionary = Data.theme(slot.reward.theme)
+		slot.picture.configure(load(slot.reward.symbol) if unlocked else null, pieces, palette.accent)
 		var button: Button = slot.button
 		button.disabled = not unlocked
 		button.focus_mode = Control.FOCUS_ALL if unlocked else Control.FOCUS_NONE
-		button.tooltip_text = slot.reward.name if unlocked else "Locked reward"
-		var palette: Dictionary = Data.theme(slot.reward.theme)
+		button.tooltip_text = ("%s: %d of 3 pieces" % [slot.reward.name, pieces]) if unlocked else "Locked medal"
+		_set_accessibility_name(button, button.tooltip_text)
 		var fill := Color.WHITE if unlocked else Color("#edf0f1")
 		var border: Color = palette.accent.lightened(0.55) if unlocked else Color("#d8dde1")
 		button.add_theme_stylebox_override("normal", Style.box(fill, border, 16, 2))
@@ -614,12 +646,14 @@ func _refresh_collection() -> void:
 		button.add_theme_stylebox_override("pressed", Style.box(palette.light.lightened(0.3), palette.accent, 16, 3))
 		button.add_theme_stylebox_override("disabled", Style.box(Color("#edf0f1"), Color("#d8dde1"), 16, 2))
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 16, 4))
-		slot.label.text = ("%s #%d" % [slot.reward.name, slot.reward.number]) if unlocked else "?"
+		slot.label.text = ("%s\n%s" % [slot.reward.name, "Complete" if pieces == 3 else "%d/3" % pieces]) if unlocked else "?"
 	for theme_id in _collection_headings:
-		var rewards: Array = Data.rewards(theme_id)
-		var count: int = rewards.filter(func(reward: Dictionary) -> bool: return collected_rewards.has(reward.id)).size()
+		var rewards: Array = Data.medals(theme_id)
+		var count: int = medal_progress.completed_count(theme_id)
 		_collection_headings[theme_id].text = "%s%s %d/%d" % [
 			Data.theme(theme_id).name, " complete!" if count == rewards.size() else "", count, rewards.size()]
+		if not _progress_ready:
+			_collection_headings[theme_id].text = Data.theme(theme_id).name + " --/6"
 
 
 func _open_reward_preview(id: String) -> void:
@@ -631,6 +665,7 @@ func _open_reward_preview(id: String) -> void:
 	var reward: Dictionary = Data.reward(id)
 	if reward.is_empty():
 		return
+	_stop_voice()
 	_end_collection_drag(false)
 	_cancel_preview_flourish()
 	_preview_reward_id = id
@@ -638,7 +673,9 @@ func _open_reward_preview(id: String) -> void:
 	_focus_before_preview = get_viewport().gui_get_focus_owner()
 	_preview_title.text = "%s #%d" % [reward.name, int(reward.number)]
 	_preview_caption.text = "Tap to play. Five taps make a party!"
-	_preview_image.texture = load(reward.symbol)
+	_preview_image.configure(load(reward.symbol), _piece_count(id), Data.theme(reward.theme).accent)
+	if _piece_count(id) < 3:
+		_preview_caption.text = "%d of 3 pieces. Tap to play!" % _piece_count(id)
 	_preview_image.scale = Vector2.ONE
 	_preview_image.rotation = 0.0
 	var palette: Dictionary = Data.theme(reward.theme)
@@ -666,7 +703,8 @@ func _open_reward_preview(id: String) -> void:
 	_preview_play_button.focus_mode = Control.FOCUS_ALL
 	_preview_page.show()
 	_preview_play_button.grab_focus()
-	_announce_status("%s reward preview opened. Press the reward to play, or Back to close." % _preview_title.text)
+	var progress_note: String = "Piece %d of 3. " % _piece_count(id) if _piece_count(id) < 3 else ""
+	_announce_status("%s reward preview opened. %sPress the reward to play, or Back to close." % [_preview_title.text, progress_note])
 
 
 func _hide_reward_preview() -> void:
@@ -677,6 +715,7 @@ func _hide_reward_preview() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _preview_focus_modes[control]
 	_preview_focus_modes.clear()
+	_refresh_collection()
 	if is_instance_valid(_focus_before_preview) and _focus_before_preview.visible and not _focus_before_preview.disabled:
 		_focus_before_preview.grab_focus()
 	elif collection_page.visible:
@@ -906,6 +945,13 @@ func _picture(parent: Node) -> TextureRect:
 	return picture
 
 
+func _medal_picture(parent: Node) -> Medal:
+	var picture := Medal.new()
+	parent.add_child(picture)
+	picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return picture
+
+
 func _set_accessibility_name(control: Control, label: String) -> void:
 	for property in control.get_property_list():
 		if property.name == "accessibility_name":
@@ -914,7 +960,16 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1) -> void:
+	if model.chest_state == "opening":
+		chest.finish_immediately()
+	if _save_error and not _pending_fragment.is_empty():
+		_announce_status("Your piece is waiting to be saved. Choose Retry saving.")
+		return
+	_stop_voice()
 	_rebuilding = true
+	_cancel_fragment_delivery()
+	_pending_fragment.clear()
+	_save_error = not _progress_ready
 	feedback_timer.stop()
 	effects.clear()
 	chest.clear()
@@ -959,28 +1014,35 @@ func _refresh() -> void:
 	for index in range(theme_buttons.size()):
 		var button: Button = theme_buttons[index]
 		button.button_pressed = Model.THEMES[index] == model.theme_id
-		button.disabled = model.chest_state == "opening"
+		button.disabled = model.chest_state == "opening" or _save_error
 		Style.button(button, palette.accent)
 	Style.button(collection_button, palette.accent)
 	Style.button(hint_button, palette.accent)
-	Style.button(practice_button, palette.accent, 88)
-	practice_button.add_theme_font_size_override("font_size", 18)
-	practice_button.button_pressed = model.practice_mode
-	practice_button.disabled = model.phase in ["feedback", "won"]
-	practice_button.text = "No limit" if model.practice_mode else ""
-	practice_button.tooltip_text = "Switch to Challenge: three tries." if model.practice_mode else "Switch to Practice: keep your matches and try freely."
-	_set_accessibility_name(practice_button, ("Practice. " if model.practice_mode else "Challenge. ") + practice_button.tooltip_text)
-	_practice_caption.text = "Practice" if model.practice_mode else "Challenge"
-	_mistakes.visible = not model.practice_mode
+	Style.button(_voice_button, palette.accent)
+	_voice_button.disabled = _host == null or not bool(_host.speechAvailable())
+	_voice_button.focus_mode = Control.FOCUS_NONE if _voice_button.disabled else Control.FOCUS_ALL
+	_voice_button.tooltip_text = "Turn voice play off" if _voice_mode else "Voice play: speak matching words"
+	if _voice_button.disabled:
+		_voice_button.tooltip_text = "Voice input is unavailable in this browser. You can still tap cards."
+	_set_accessibility_name(_voice_button, _voice_button.tooltip_text)
+	_voice_button.button_pressed = _voice_mode
 	collection_button.icon = load(palette.symbol)
 	Style.button(replay_button, palette.accent)
+	replay_button.text = "Retry saving" if _save_error else "Play again"
 	_success.set_filled_count(model.successes)
 	_success.tooltip_text = "%d matches" % model.successes
 	_mistakes.set_filled_count(model.mistakes)
 	_mistakes.tooltip_text = "%d mistakes" % model.mistakes
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
+	if not playing and _voice_mode:
+		_stop_voice()
+	_voice_button.visible = playing
 	hint_button.visible = playing
-	hint_button.disabled = not model.phase in ["waiting", "matching"]
+	hint_button.disabled = model.hint_used or not model.phase in ["waiting", "matching"]
+	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
+	hint_button.text = "Used" if model.hint_used else "Hint"
+	hint_button.tooltip_text = "Hint used. Start a new round for another hint." if model.hint_used else "One hint per round (Xbox X)"
+	_set_accessibility_name(hint_button, hint_button.tooltip_text)
 	_match_caption.text = "Nice match!" if model.streak == 1 else "Find 3 pairs"
 	if model.streak > 1:
 		_match_caption.text = "%d in a row!" % model.streak
@@ -1002,7 +1064,7 @@ func _refresh() -> void:
 		if model.streak > 1:
 			_message.text += " %d in a row!" % model.streak
 	else:
-		_message.text = "Find three pairs. Practice mode: keep trying, with no limit!" if model.practice_mode else "Find three pairs. Two cards have no match!"
+		_message.text = "Find three pairs. Two cards have no match!"
 	var won: bool = model.phase == "won"
 	chest.visible = won
 	chest_button.visible = won
@@ -1010,34 +1072,59 @@ func _refresh() -> void:
 	failure_button.visible = model.phase == "lost"
 	failure_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 26, 3))
 	_failure_sparkle.accent = palette.accent
-	_medallion.visible = won and model.chest_state == "opened" and not _reward_transfer_active and not _reward_delivered_to_collection
+	_medallion.visible = won and not _reward_transfer_active and not _reward_delivered_to_collection
 	reward_image.visible = _medallion.visible
-	chest_button.disabled = model.chest_state != "closed"
+	chest_button.disabled = (model.chest_state != "closed" and not _fragment_active) or _save_error
+	chest_button.tooltip_text = "Place the piece" if _fragment_active else "Hold to open the treasure chest"
+	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.accent.darkened(0.67), palette.accent.lightened(0.35), 26, 2))
 	if won:
 		var reward_id: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		var reward_palette: Dictionary = Data.theme(reward_id)
 		chest.reduced_motion = reduced_motion
 		chest.configure_skin(reward_palette, data.chests)
-		_title.text = "Wow!" if model.chest_state == "opened" else "You did it!"
 		var reward: Dictionary = Data.reward(model.reward_id)
-		_caption.text = reward.get("name", reward_palette.prize) if model.chest_state == "opened" else "Hold the chest to open it!"
+		if reward.is_empty():
+			var next: Dictionary = medal_progress.next_fragment(reward_id) if _progress_ready else {}
+			reward = Data.reward(next.medal_id) if not next.is_empty() else Data.medals(reward_id).back()
+		var pieces: int = medal_progress.count_for(reward.id)
+		var displayed_pieces: int = int(_pending_fragment.before) if _fragment_active else pieces
+		_title.text = "You did it!"
+		_caption.text = "Hold to find a piece!" if medal_progress.completed_count(reward_id) < 6 else "Hold for a celebration!"
 		if model.chest_state == "opening":
 			_caption.text = "Here comes your surprise!"
-		reward_image.texture = load(reward.get("symbol", reward_palette.symbol))
-		_reward_number.text = "#%d" % int(reward.get("number", 0)) if model.chest_state == "opened" else ""
+		elif model.chest_state == "opened":
+			if _pending_fragment.is_empty():
+				_title.text = "All six collected!"
+				_caption.text = reward_palette.name + " collection"
+			elif pieces < int(_pending_fragment.after):
+				_title.text = "Saving your piece"
+				_caption.text = "Please wait."
+			elif pieces == 3 and not _fragment_active:
+				_title.text = "Medal complete!"
+				_caption.text = "%s\n%s %d of 6 medals" % [reward.name, reward_palette.name, medal_progress.completed_count(reward_id)]
+			else:
+				_title.text = "A new piece!"
+				_caption.text = "%s\nPiece %d of 3" % [reward.name, pieces]
+				if _fragment_active:
+					_caption.text += "\nTap to place!"
+		reward_image.configure(load(reward.symbol) if displayed_pieces > 0 else null, displayed_pieces, reward_palette.accent)
+		_reward_number.text = "%d/3" % displayed_pieces
 		_medallion.add_theme_stylebox_override("panel", Style.box(Color.WHITE, reward_palette.light, 64, 5))
+		if _save_error:
+			_title.text = "Keep your piece"
+			_caption.text = "Saving failed.\nChoose Retry saving."
 	elif model.phase == "lost":
 		_title.text = "Good try!"
-		_caption.text = "Try Practice, or tap the bear!"
+		_caption.text = "Tap the bear for a happy wiggle!"
 		_stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, palette.accent.lightened(0.7), 26))
 	if _last_phase != model.phase:
 		_last_phase = model.phase
 		if won:
-			audio.cue(model.theme_id + "-arrive", model.theme_id + "-arrive")
+			audio.cue(model.theme_id + "-arrive")
 			if _controller_mode and not collection_page.visible and not _preview_page.visible:
 				chest_button.focus_mode = Control.FOCUS_ALL
-				chest_button.grab_focus()
+				_default_focus().grab_focus()
 		elif model.phase == "lost":
 			audio.stop_music()
 			audio.cue("loss", "loss")
@@ -1046,6 +1133,9 @@ func _refresh() -> void:
 				replay_button.grab_focus()
 	if _host != null:
 		_host.background("#" + palette.background.to_html(false))
+	if _save_error:
+		_message.text = "Reward progress: " + medal_progress.error
+		_message.show()
 	if not _preview_page.visible:
 		if collection_page.visible:
 			_announce_collection_state()
@@ -1068,7 +1158,7 @@ func _refresh() -> void:
 func _refresh_controller_focus() -> void:
 	if not _controller_mode or collection_page.visible or _preview_page.visible:
 		return
-	if model.phase == "won" and model.chest_state == "closed":
+	if model.phase == "won" and model.chest_state == "closed" and not _save_error:
 		chest_button.focus_mode = Control.FOCUS_ALL
 		chest_button.grab_focus()
 	elif model.phase == "lost" and not _valid_focus(get_viewport().gui_get_focus_owner()):
@@ -1085,16 +1175,19 @@ func _layout() -> void:
 	_cancel_loss_play()
 	_cancel_preview_flourish()
 	_end_collection_drag(false)
-	grid.columns = 4 if size.x >= size.y else 2
+	var reserved_height: float = grid.get_parent().get_combined_minimum_size().y - grid.get_combined_minimum_size().y
+	var board_height: float = size.y - 24.0 - reserved_height
+	grid.columns = 4 if size.x >= size.y or board_height < 318.0 else 2
 	_layout_collection()
 	_layout_result()
+	_sync_voice_bounds()
 
 
 func _layout_collection() -> void:
 	if _collection_rows.is_empty():
 		return
 	var usable_width: float = maxf(0.0, size.x - 32.0)
-	var columns: int = clampi(floori((usable_width + 4.0) / 84.0), 2, 5)
+	var columns: int = 6 if usable_width >= 500.0 else 3
 	for row in _collection_rows:
 		row.columns = columns
 
@@ -1110,44 +1203,39 @@ func _layout_result() -> void:
 		_result_text.position = Vector2(stage_width + 16.0, 0)
 		_result_text.size = Vector2(maxf(0.0, dimensions.x - stage_width - 16.0), dimensions.y)
 	else:
+		var text_height: float = maxf(170.0, _result_text.get_combined_minimum_size().y)
 		_stage.position = Vector2.ZERO
-		_stage.size = Vector2(dimensions.x, maxf(72.0, dimensions.y - 180.0))
+		_stage.size = Vector2(dimensions.x, maxf(72.0, dimensions.y - text_height - 10.0))
 		_result_text.position = Vector2(0, _stage.size.y + 10.0)
-		_result_text.size = Vector2(dimensions.x, 170.0)
+		_result_text.size = Vector2(dimensions.x, text_height)
 	var diameter: float = clampf(minf(_stage.size.x, _stage.size.y) * 0.3, 64.0, 128.0)
 	_medallion.size = Vector2.ONE * diameter
 	_medallion.pivot_offset = _medallion.size * 0.5
-	_medallion.position = Vector2((_stage.size.x - diameter) * 0.5, _stage.size.y * 0.2 - diameter * 0.5)
-
-
-func _toggle_practice() -> void:
-	if collection_page.visible or _preview_page.visible or not model.set_practice(not model.practice_mode):
-		return
-	_cancel_loss_play()
-	audio.interact(model.theme_id)
-	audio.cue("select")
-	_announce_status(("Practice mode: no limit. " if model.practice_mode else "Challenge mode: three tries. ") + _message.text)
+	_medallion.position = Vector2(maxf(4, _stage.size.x - diameter - 12), maxf(4, _stage.size.y - diameter - 12))
 
 
 func _request_hint() -> void:
 	if collection_page.visible or _preview_page.visible or not model.request_hint():
 		return
-	audio.interact(model.theme_id)
-	audio.cue("select")
-	audio.say("res://" + model.card_by_id(model.hint_ids[0]).word.audio)
+	if not _voice_mode:
+		audio.interact(model.theme_id)
+		audio.cue("select")
+		audio.say("res://" + model.card_by_id(model.hint_ids[0]).word.audio)
 	var next_id: String = model.hint_ids[1] if model.selected_id == model.hint_ids[0] else model.hint_ids[0]
 	cards[next_id].grab_focus()
 
 
 func _select_card(id: String) -> void:
-	audio.interact(model.theme_id, model.phase != "lost")
+	if not _voice_mode:
+		audio.interact(model.theme_id, model.phase != "lost")
 	var result: String = model.select(id)
-	if result in ["selected", "reselected"]:
+	if result in ["selected", "reselected"] and not _voice_mode:
 		audio.cue("select")
 		audio.say("res://" + model.card_by_id(id).word.audio)
 	elif result in ["correct", "wrong"]:
 		_animate_feedback(model.feedback_ids, result == "correct")
-		audio.cue(result, result)
+		if not _voice_mode:
+			audio.cue(result, result)
 		feedback_timer.start()
 
 
@@ -1155,25 +1243,29 @@ func _resolve_feedback() -> void:
 	feedback_timer.stop()
 	_stop_feedback_animations()
 	model.resolve_feedback()
+	_consume_spoken_word()
 
 
 func choose_theme(id: String) -> void:
-	if not model.set_theme(id):
+	if _save_error or not model.set_theme(id):
 		return
 	_preferred_theme = id
 	effects.clear()
-	audio.interact(model.theme_id, model.phase != "lost")
-	audio.cue("", model.theme_id + "-theme")
+	if not _voice_mode:
+		audio.interact(model.theme_id, model.phase != "lost")
+		audio.cue("", model.theme_id + "-theme")
 
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	chest.reduced_motion = value
 	if value:
+		chest.stop_reaction()
 		_cancel_collection_inertia()
 		_stop_feedback_animations()
 		effects.clear()
 		_cancel_reward_delivery(true)
+		_cancel_fragment_delivery()
 		_cancel_preview_flourish()
 		_cancel_loss_play()
 		chest.finish_immediately()
@@ -1182,29 +1274,99 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func _open_chest() -> void:
-	var rewards: Array = Data.rewards(model.theme_id)
-	var unearned: Array = rewards.filter(func(reward: Dictionary) -> bool: return not collected_rewards.has(reward.id))
-	if not unearned.is_empty():
-		rewards = unearned
-	if rewards.is_empty() or not model.begin_open(rewards.pick_random().id):
+	if model.phase != "won" or model.chest_state != "closed":
+		return
+	if not _progress_ready:
+		_progress_ready = medal_progress.load_progress()
+		if not _progress_ready:
+			_save_error = true
+			_refresh()
+			return
+	_pending_fragment = medal_progress.next_fragment(model.theme_id)
+	if not medal_progress.error.is_empty():
+		_save_error = true
+		_refresh()
+		return
+	var id: String = _pending_fragment.medal_id if not _pending_fragment.is_empty() else Data.medals(model.theme_id).back().id
+	if not model.begin_open(id):
 		return
 	_reward_delivered_to_collection = false
 	audio.interact(model.reward_theme)
 	audio.cue(model.reward_theme + "-open")
-	effects.start(Data.theme(model.reward_theme), reduced_motion)
+	effects.start(Data.theme(model.reward_theme), reduced_motion, not _pending_fragment.is_empty())
 	chest.start_open(reduced_motion)
 
 
 func _on_chest_opened() -> void:
 	if not model.finish_open():
 		return
-	var reward_id := model.reward_id
-	_record_reward(model.reward_id)
-	audio.cue("", model.reward_theme + "-open")
-	if not collected_rewards.has(reward_id) or reduced_motion or collection_page.visible:
-		_cancel_reward_delivery(true)
+	_commit_fragment()
+
+
+func _commit_fragment() -> void:
+	if not _pending_fragment.is_empty() and not medal_progress.claim(_pending_fragment):
+		_save_error = true
+		_refresh()
 		return
-	_start_reward_delivery(reward_id)
+	_save_error = false
+	_refresh_collection()
+	_refresh()
+	if _pending_fragment.is_empty() or reduced_motion or collection_page.visible:
+		return
+	_start_fragment_delivery()
+
+
+func _start_fragment_delivery() -> void:
+	_cancel_fragment_delivery()
+	_fragment_active = true
+	_fragment_image = Medal.new()
+	_fragment_image.name = "MedalFragment"
+	_fragment_image.z_index = collection_page.z_index - 5
+	var reward: Dictionary = Data.reward(_pending_fragment.medal_id)
+	_fragment_image.configure(load(reward.symbol), int(_pending_fragment.after), Data.theme(reward.theme).accent, int(_pending_fragment.after) - 1)
+	add_child(_fragment_image)
+	_refresh()
+	_place_fragment(0.0)
+	_fragment_tween = create_tween()
+	_fragment_tween.tween_interval(0.35)
+	_fragment_tween.tween_method(_place_fragment, 0.0, 1.0, 0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_fragment_tween.tween_callback(_finish_fragment_delivery)
+	if _controller_mode:
+		chest_button.grab_focus()
+
+
+func _place_fragment(progress: float) -> void:
+	if not is_instance_valid(_fragment_image):
+		return
+	var stage_rect: Rect2 = _stage.get_global_rect()
+	var start: Vector2 = stage_rect.get_center()
+	var target: Vector2 = reward_image.get_global_rect().get_center()
+	var edge: float = clampf(minf(stage_rect.size.x, stage_rect.size.y) * 0.45, 32.0, 144.0)
+	var target_edge: float = minf(reward_image.size.x, reward_image.size.y)
+	_fragment_image.size = Vector2.ONE * lerpf(edge, target_edge, progress)
+	var center: Vector2 = start.lerp(target, progress) + Vector2(0, -sin(progress * PI) * minf(32.0, stage_rect.size.y * 0.1))
+	_fragment_image.position = get_global_transform().affine_inverse() * center - _fragment_image.size * 0.5
+
+
+func _finish_fragment_delivery(celebrate: bool = true) -> void:
+	if not _fragment_active:
+		return
+	_fragment_active = false
+	if _fragment_tween != null:
+		_fragment_tween.kill()
+	_fragment_tween = null
+	if is_instance_valid(_fragment_image):
+		_fragment_image.hide()
+		_fragment_image.queue_free()
+	_fragment_image = null
+	_refresh()
+	if celebrate and bool(_pending_fragment.completed) and not reduced_motion and not collection_page.visible:
+		effects.start(Data.theme(model.reward_theme), false)
+		_start_reward_delivery(model.reward_id)
+
+
+func _cancel_fragment_delivery() -> void:
+	_finish_fragment_delivery(false)
 
 
 func _start_reward_delivery(reward_id: String) -> void:
@@ -1212,10 +1374,10 @@ func _start_reward_delivery(reward_id: String) -> void:
 	_medallion.scale = Vector2.ONE * 0.2
 	collection_button.pivot_offset = collection_button.size * 0.5
 	_reward_tween = create_tween()
-	_reward_tween.tween_property(_medallion, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_reward_tween.tween_interval(0.15)
+	_reward_tween.tween_property(_medallion, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_reward_tween.tween_interval(0.2)
 	_reward_tween.tween_callback(_show_reward_flight.bind(reward_id))
-	_reward_tween.tween_method(_place_reward_flight, 0.0, 1.0, 0.65).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_reward_tween.tween_method(_place_reward_flight, 0.0, 1.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_reward_tween.tween_callback(func() -> void:
 		_place_reward_flight(1.0)
 		collection_button.scale = Vector2.ONE * 1.12
@@ -1289,12 +1451,25 @@ func _cancel_reward_delivery(show_static_reveal: bool = true) -> void:
 
 
 func _replay() -> void:
+	if _save_error:
+		if not _progress_ready:
+			_progress_ready = medal_progress.load_progress()
+			_save_error = not _progress_ready
+			if _progress_ready:
+				_build_collection()
+			_refresh()
+		else:
+			_commit_fragment()
+		return
 	new_round()
+	if _save_error:
+		return
 	audio.interact(model.theme_id)
 	audio.cue("", "welcome")
 
 
 func on_page_hidden() -> void:
+	_stop_voice()
 	_stop_controller_actions()
 	_stop_feedback_animations()
 	_cancel_loss_play()
@@ -1303,7 +1478,9 @@ func on_page_hidden() -> void:
 	_end_collection_drag(false)
 	audio.halt()
 	chest.finish_immediately()
+	chest.stop_reaction()
 	effects.clear()
+	_cancel_fragment_delivery()
 	_cancel_reward_delivery(true)
 	_hide_reward_preview_if_open()
 
@@ -1382,7 +1559,8 @@ func _stop_controller_actions() -> void:
 	_controller_repeat_elapsed = 0.0
 	if _controller_holding_chest:
 		_controller_holding_chest = false
-		_end_chest_hold()
+		_cancel_chest_hold()
+		_finish_chest_drag()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 
 
@@ -1421,6 +1599,8 @@ func _controller_back() -> void:
 		_hide_reward_preview()
 	elif collection_page.visible:
 		_hide_collection()
+	elif _voice_mode:
+		_stop_voice()
 	elif model.phase == "matching" and not model.selected_id.is_empty():
 		model.select(model.selected_id)
 
@@ -1435,7 +1615,7 @@ func _toggle_collection() -> void:
 
 
 func _cycle_theme(step: int) -> void:
-	if model.chest_state == "opening":
+	if model.chest_state == "opening" or _save_error:
 		return
 	var index: int = Model.THEMES.find(model.theme_id)
 	if index < 0:
@@ -1522,7 +1702,7 @@ func _default_focus() -> Control:
 		var reward := _first_collection_reward()
 		return reward if reward != null else _collection_back
 	if model.phase == "won":
-		return chest_button if model.chest_state == "closed" else replay_button
+		return chest_button if (model.chest_state == "closed" or _fragment_active) and not _save_error else replay_button
 	if model.phase == "lost":
 		return replay_button
 	for id in cards:
@@ -1569,7 +1749,7 @@ func _show_error(message: String) -> void:
 	for button in theme_buttons:
 		button.disabled = true
 	hint_button.disabled = true
-	practice_button.disabled = true
+	_voice_button.disabled = true
 	_message.text = message
 	_message.show()
 	_message.add_theme_color_override("font_color", Style.WRONG)
@@ -1588,6 +1768,92 @@ func _connect_browser() -> void:
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void: set_reduced_motion(bool(arguments[0])))
 	_host.observe(_hidden_callback, _motion_callback)
+	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
+	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
+	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
+
+
+func _toggle_voice() -> void:
+	if collection_page.visible or _preview_page.visible:
+		return
+	if _voice_mode:
+		_stop_voice()
+	elif _host != null and bool(_host.speechAvailable()) and model.phase in ["waiting", "matching", "feedback"]:
+		_voice_mode = true
+		_voice_space.show()
+		_layout()
+		audio.halt()
+		_show_voice_controls.call_deferred()
+
+
+func _show_voice_controls() -> void:
+	if _voice_mode and _host != null:
+		_sync_voice_bounds()
+		_host.speechMode(true)
+
+
+func _sync_voice_bounds() -> void:
+	if _host == null or not _voice_mode or _voice_space == null:
+		return
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var bounds: Rect2 = _voice_space.get_global_rect()
+	_host.speechBounds(bounds.position.x / viewport_size.x, bounds.position.y / viewport_size.y,
+		bounds.size.x / viewport_size.x, bounds.size.y / viewport_size.y)
+
+
+func _on_voice_state(arguments: Array) -> void:
+	var enabled: bool = bool(arguments[0])
+	if enabled and model.phase in ["won", "lost"]:
+		_stop_voice()
+		return
+	var layout_changed: bool = _voice_mode != enabled
+	_voice_mode = enabled
+	_voice_listening = enabled and bool(arguments[1])
+	_voice_button.button_pressed = enabled
+	_voice_space.visible = enabled
+	if layout_changed:
+		_layout()
+	if enabled:
+		audio.halt()
+	else:
+		_speech_queue.clear()
+	if model.phase in ["waiting", "matching", "feedback"] and not str(arguments[2]).is_empty():
+		_announce_status(str(arguments[2]))
+	_sync_voice_bounds()
+
+
+func _on_voice_result(arguments: Array) -> void:
+	if not _voice_mode or not _voice_listening or not bool(arguments[1]):
+		return
+	for id in model.spoken_matches(str(arguments[0])):
+		if not _speech_queue.has(id):
+			_speech_queue.append(id)
+	_consume_spoken_word()
+
+
+func _consume_spoken_word() -> void:
+	if not _voice_mode or not model.phase in ["waiting", "matching"]:
+		return
+	while not _speech_queue.is_empty():
+		if model.match_spoken_word(_speech_queue.pop_front()) == "correct":
+			_animate_feedback(model.feedback_ids, true)
+			feedback_timer.start()
+			return
+
+
+func _stop_voice() -> void:
+	var was_enabled: bool = _voice_mode
+	_voice_mode = false
+	_voice_listening = false
+	_speech_queue.clear()
+	if _voice_space != null:
+		_voice_space.hide()
+	if _voice_button != null:
+		_voice_button.button_pressed = false
+	if was_enabled:
+		_layout()
+	if was_enabled and _host != null:
+		_host.stopSpeech()
 
 
 func _animate_feedback(ids: Array[String], correct: bool) -> void:
@@ -1655,7 +1921,11 @@ func _start_chest_hold() -> void:
 
 func _end_chest_hold() -> void:
 	if _holding_chest:
+		var playful_tap: bool = _hold_elapsed < HOLD_SECONDS and _drag_distance <= 10.0
 		_cancel_chest_hold()
+		if playful_tap:
+			chest.play_tap()
+			audio.cue("select")
 	_finish_chest_drag()
 
 
@@ -1735,6 +2005,8 @@ func _drag_chest(delta: Vector2) -> void:
 
 
 func _show_collection() -> void:
+	_stop_voice()
+	_cancel_fragment_delivery()
 	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
@@ -1764,10 +2036,11 @@ func _hide_collection() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
 	_collection_focus_modes.clear()
-	if is_instance_valid(_focus_before_collection) and _focus_before_collection.visible:
+	_refresh()
+	if _valid_focus(_focus_before_collection):
 		_focus_before_collection.grab_focus()
 	else:
-		collection_button.grab_focus()
+		_default_focus().grab_focus()
 	_announce_status(_message.text if model.phase in ["waiting", "matching", "feedback"] else _title.text + " " + _caption.text)
 
 
@@ -1777,29 +2050,11 @@ func _hide_reward_preview_if_open() -> void:
 
 
 func _announce_collection_state() -> void:
-	_announce_status("My rewards opened. %d earned rewards. %s. Use Back to return." % [
-		collected_rewards.size(), _collection_headings[model.theme_id].text])
+	_announce_status("My rewards opened. %d of 24 medals complete. %s. %d earlier rewards. Use Back to return." % [
+		medal_progress.completed_count(), _collection_headings[model.theme_id].text, medal_progress.legacy_rewards.size()])
 
 
 func _load_collected_rewards() -> void:
-	var config := ConfigFile.new()
-	if config.load(REWARD_SAVE) != OK:
-		return
-	for id in config.get_value("rewards", "ids", PackedStringArray()):
-		if not Data.reward(str(id)).is_empty():
-			collected_rewards[str(id)] = true
-
-
-func _record_reward(id: String) -> void:
-	if id.is_empty() or collected_rewards.has(id):
-		return
-	var ids: Array = collected_rewards.keys()
-	ids.append(id)
-	var config := ConfigFile.new()
-	config.set_value("rewards", "ids", PackedStringArray(ids))
-	if config.save(REWARD_SAVE) != OK:
-		_message.text = "Rewards could not be saved."
-		_message.show()
-		return
-	collected_rewards[id] = true
-	_refresh_collection()
+	_progress_ready = medal_progress.load_progress()
+	_save_error = not _progress_ready
+	_sync_collected_rewards()

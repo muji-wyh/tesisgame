@@ -38,7 +38,6 @@ func _run() -> void:
 	_test_fresh_rounds(model_script, words)
 	_test_matching(model_script, words)
 	_test_hints_and_streaks(model_script, words)
-	_test_practice(model_script, words)
 	_test_results(model_script, words)
 	_test_data(words)
 	_test_controls()
@@ -73,6 +72,26 @@ func win_round(app) -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
+
+
+func set_completed_rewards(app, rewards: Dictionary) -> void:
+	app.medal_progress.counts.clear()
+	app.medal_progress.legacy_rewards.clear()
+	var data_script = load("res://scripts/game_data.gd")
+	for id in rewards:
+		if not data_script.medal(id).is_empty():
+			app.medal_progress.counts[id] = 3
+		else:
+			app.medal_progress.legacy_rewards[id] = true
+	app._refresh_collection()
+
+
+func prepare_completion(app) -> void:
+	var fragment: Dictionary = app.medal_progress.next_fragment(app.model.theme_id)
+	check(not fragment.is_empty(), "The completion fixture has a medal left to finish")
+	if not fragment.is_empty():
+		app.medal_progress.counts[fragment.medal_id] = 2
+		app._refresh_collection()
 
 
 func visible_reward_flight(app) -> TextureRect:
@@ -281,15 +300,32 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		"A hint prefers the selected card's real partner")
 	check(model.selected_id == pairs[1][1] and model.successes == 0 and model.mistakes == 0,
 		"Hints preserve a useful selection without scoring or penalizing")
-	model.request_hint()
+	check(not model.request_hint(), "Each round allows only one successful hint request")
 	check(model.cards == deck and model.streak == 0, "Repeated hints never shuffle or score the board")
 	model.set_theme("winter")
 	check(model.hint_ids.size() == 2, "Changing seasons preserves the hint")
+	check(not model.request_hint(), "Changing seasons cannot refill the hint")
 	model.select(pairs[1][0])
 	check(model.hint_ids.is_empty() and model.streak == 1, "Matching clears the hint and starts a streak")
 	check(not model.request_hint(), "Hints cannot interrupt feedback")
 	model.resolve_feedback()
 	check(model.select(pairs[1][0]) == "ignored" and model.streak == 1, "Matched cards cannot inflate a streak")
+	check(not model.request_hint(), "Completing a hinted match does not grant another hint")
+	model.select(pairs[0][0])
+	model.select(pairs[0][1])
+	check(model.streak == 2, "Consecutive matches build a streak without a timer")
+	model.resolve_feedback()
+	model.select(pairs[2][0])
+	model.select(pairs[2][1])
+	model.resolve_feedback()
+	check(model.streak == 3 and model.phase == "won" and not model.request_hint(),
+		"A three-match streak wins normally and closes hint input")
+	model.reset(words, 6)
+	check(model.streak == 0 and model.hint_ids.is_empty(), "Replay clears streaks and hints")
+	model.select(pairs[0][0])
+	model.select(pairs[0][1])
+	check(not model.request_hint(), "A rejected request during feedback does not spend the new hint")
+	model.resolve_feedback()
 	for card in model.cards:
 		if not pairs.any(func(pair: Array) -> bool: return pair.has(card.id)):
 			model.select(card.id)
@@ -305,20 +341,9 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	check(model.hint_ids.size() == 2, "The hint stays visible while choosing its first card")
 	model.select(hint[0])
 	check(model.hint_ids.is_empty(), "Cancelling selection clears its hint")
-	model.select(pairs[0][0])
-	model.select(pairs[0][1])
-	check(model.streak == 2, "Consecutive matches build a streak without a timer")
-	model.resolve_feedback()
-	model.select(pairs[2][0])
-	model.select(pairs[2][1])
-	model.resolve_feedback()
-	check(model.streak == 3 and model.phase == "won" and not model.request_hint(),
-		"A three-match streak wins normally and closes hint input")
-	model.reset(words, 6)
-	check(model.streak == 0 and model.hint_ids.is_empty(), "Replay clears streaks and hints")
-	model.select(pairs[0][0])
-	model.select(pairs[0][1])
-	model.resolve_feedback()
+	check(not model.request_hint(), "Cancelling a hint's highlight does not refund the hint")
+	check(not model.reset(words.slice(0, 4)) and not model.request_hint(),
+		"A failed reset cannot refill the current round's hint")
 	var remaining: Array = pairs.slice(1)
 	model.select(remaining[0][0])
 	model.select(remaining[1][1])
@@ -330,69 +355,14 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		model.select(remaining[1][1])
 		model.resolve_feedback()
 	check(model.phase == "lost" and not model.request_hint(), "Hints cannot revive a lost round")
-
-
-func _test_practice(model_script: GDScript, words: Array) -> void:
-	var model = model_script.new()
-	check(model.has_method("set_practice") and has_property(model, "practice_mode"),
-		"The model exposes an explicit Practice mode")
-	if not model.has_method("set_practice"):
-		return
 	model.reset(words, 6)
-	check(not model.practice_mode, "New players start with the existing Challenge rules")
-	var pairs: Array = pairs_for(model)
-	model.select(pairs[0][0])
-	model.select(pairs[0][1])
-	model.resolve_feedback()
-	var wrong: Array = [pairs[1][0], pairs[2][1]]
-	model.select(wrong[0])
-	model.select(wrong[1])
-	model.resolve_feedback()
-	model.select(pairs[1][0])
-	model.request_hint()
-	var deck: Array = model.cards.duplicate(true)
-	var hints: Array = model.hint_ids.duplicate()
-	check(model.set_practice(true), "Practice can be chosen during a selection")
-	check(model.practice_mode and model.mistakes == 0 and model.successes == 1
-		and model.cards == deck and model.hint_ids == hints and model.selected_id == pairs[1][0],
-		"Changing mode preserves cards, matches, hints and selection but resets the mistake allowance")
-	model.select(model.selected_id)
-	for attempt in range(5):
-		model.select(wrong[0])
-		check(model.select(wrong[1]) == "wrong", "Practice still gives honest mismatch feedback")
-		check(not model.set_practice(false), "Mode changes cannot interrupt feedback")
-		model.resolve_feedback()
-		check(model.phase == "waiting" and model.mistakes == 0 and model.successes == 1,
-			"Practice allows repeated mistakes without losing progress or granting matches")
-	check(not model.begin_open(), "Practice mistakes never grant a chest")
-	check(model.set_practice(false) and not model.practice_mode,
-		"Returning to Challenge is explicit")
-	for attempt in range(3):
-		model.select(wrong[0])
-		model.select(wrong[1])
-		model.resolve_feedback()
-	check(model.phase == "lost" and model.mistakes == 3, "Challenge still loses after three mistakes")
-	check(not model.set_practice(false), "Choosing Challenge cannot revive a lost board")
-	check(model.set_practice(true) and model.phase == "waiting"
-		and model.successes == 1 and model.cards == deck,
-		"Practice resumes a lost board without discarding its earned match")
-	for pair in pairs.slice(1):
-		model.select(pair[0])
-		model.select(pair[1])
-		model.resolve_feedback()
-	check(model.phase == "won" and model.successes == 3, "Practice requires all three real matches to win")
-	check(not model.set_practice(false), "Mode changes cannot alter a won round")
-	check(model.begin_open() and not model.set_practice(false),
-		"Mode changes cannot disturb a locked chest opening")
-	model.finish_open()
-	check(not model.set_practice(false), "An opened reward remains immutable")
-	model.reset(words, 6)
-	check(model.practice_mode and model.mistakes == 0 and model.successes == 0,
-		"Replay remembers Practice for this session while resetting the board")
+	check(model.request_hint(), "Starting a new round restores exactly one hint")
 
 
 func _test_results(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
+	check(not model.has_method("set_practice") and not has_property(model, "practice_mode"),
+		"There is no unlimited-attempt mode or method to bypass the loss threshold")
 	model.reset(words, 27)
 	for pair in pairs_for(model):
 		model.select(pair[0])
@@ -542,6 +512,8 @@ func _test_controls() -> void:
 	styles.button(menu, Color("#438363"), 120)
 	check(menu.focus_mode == Control.FOCUS_ALL, "The season menu is keyboard reachable")
 	check(menu.get_theme_color("font_disabled_color") == styles.INK, "Disabled theme text remains readable")
+	check(menu.get_theme_color("font_hover_pressed_color") == styles.INK,
+		"Pressed and hovered text buttons retain contrast on their pale backgrounds")
 	menu.free()
 	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	var card = load("res://scripts/word_card.gd").new()
@@ -645,9 +617,10 @@ func _test_reward_preview_play(app) -> void:
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
 	var seasons := ["spring", "summer", "autumn", "winter"]
 	var shape_names := ["HEART", "STAR", "LEAF", "SNOWFLAKE"]
+	var preview_rewards: Dictionary = saved_rewards.duplicate()
 	for season in seasons:
-		app.collected_rewards[season + "-1"] = true
-	app._refresh_collection()
+		preview_rewards[season + "-1"] = true
+	set_completed_rewards(app, preview_rewards)
 	app._show_collection()
 	var earned_rewards: Dictionary = app.collected_rewards.duplicate()
 	for index in range(seasons.size()):
@@ -707,8 +680,7 @@ func _test_reward_preview_play(app) -> void:
 		check(not app.audio.active and not app.audio.effect.playing, "Preview play respects muted sound")
 		app.on_page_hidden()
 		check(not preview_visible(app) and not preview_tween_valid(app), "Hiding the page cancels preview play")
-	app.collected_rewards = saved_rewards
-	app._refresh_collection()
+	set_completed_rewards(app, saved_rewards)
 	app._hide_collection()
 
 
@@ -724,13 +696,14 @@ func _test_play_improvements(app) -> void:
 			"The native Hint button announces a real pair")
 		check(not app._controller_mode and app.cards[hinted[0]].has_focus(),
 			"A keyboard hint focuses its first playable card without requiring a controller")
+		check(app.hint_button.disabled and app.hint_button.text == "Used",
+			"A spent hint is disabled and clearly labeled")
+		check(app.hint_button.focus_mode == Control.FOCUS_NONE,
+			"Keyboard navigation skips an already used hint")
 		app.cards[hinted[0]].pressed.emit()
-		app.hint_button.grab_focus()
 		app.hint_button.pressed.emit()
-		check(app.cards[hinted[1]].has_focus() and app.model.selected_id == hinted[0],
-			"A keyboard hint focuses the partner without cancelling the selected card")
-		app.cards[hinted[0]].pressed.emit()
-		app.hint_button.pressed.emit()
+		check(app.cards[hinted[0]].has_focus() and app.model.selected_id == hinted[0],
+			"Repeated hint signals cannot move focus or cancel the selected card")
 		for id in hinted:
 			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
 				"Hinted cards have a star marker, not just a different color")
@@ -743,6 +716,11 @@ func _test_play_improvements(app) -> void:
 		check(app.model.hint_ids == previous_hint and app._status_announcement.begins_with("My rewards"),
 			"Xbox X cannot trigger hints behind a modal")
 		app._hide_collection()
+		app.on_page_hidden()
+		app.choose_theme("winter")
+		check(app.hint_button.disabled and not app.model.request_hint(),
+			"Collection, page hiding and season changes do not refill the hint")
+		app.cards[hinted[0]].pressed.emit()
 		for pair in pairs_for(app.model).slice(0, 2):
 			app.cards[pair[0]].pressed.emit()
 			app.cards[pair[1]].pressed.emit()
@@ -752,11 +730,10 @@ func _test_play_improvements(app) -> void:
 				"Each correct card gets a small, bounded star celebration")
 			app.feedback_timer.timeout.emit()
 		check(app._match_caption.text == "2 in a row!", "Consecutive matches get visible encouragement")
-		app.hint_button.grab_focus()
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
-		check(app.model.hint_ids.size() == 2 and app.cards[app.model.hint_ids[0]].has_focus(),
-			"Xbox X offers a hint and focuses its first playable card")
+		check(app.model.hint_ids.is_empty() and app.hint_button.disabled,
+			"Xbox X shares the hint already spent through the button")
 		app.set_reduced_motion(true)
 		var last_pair: Array = pairs_for(app.model)[2]
 		app.cards[last_pair[0]].pressed.emit()
@@ -768,8 +745,13 @@ func _test_play_improvements(app) -> void:
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
+		check(not app.hint_button.disabled and app.hint_button.text == "Hint",
+			"A new round restores the hint control")
 		var first: Array = pairs_for(app.model)[0]
 		app.cards[first[0]].pressed.emit()
+		app.hint_button.pressed.emit()
+		check(app.cards[first[1]].has_focus() and app.model.selected_id == first[0],
+			"The round's first hint focuses the partner of an already selected card")
 		app.cards[first[1]].pressed.emit()
 		app.on_page_hidden()
 		check(app._feedback_tweens.is_empty() and app.cards[first[0]].scale == Vector2.ONE,
@@ -779,104 +761,56 @@ func _test_play_improvements(app) -> void:
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
 	var data_script: GDScript = load("res://scripts/game_data.gd")
 	for season in ["spring", "summer", "autumn", "winter"]:
-		app.collected_rewards.clear()
-		var rewards: Array = data_script.rewards(season)
-		for reward in rewards.slice(0, 9):
-			app.collected_rewards[reward.id] = true
 		app.new_round(6)
+		var rewards: Array = data_script.medals(season)
+		var completed: Dictionary = {}
+		for reward in rewards.slice(0, 5):
+			completed[reward.id] = true
+		set_completed_rewards(app, completed)
 		win_round(app)
 		app.choose_theme(season)
-		seed(1)
 		app._open_chest()
-		check(app.model.reward_id == rewards[9].id,
-			"A chest chooses the last missing reward before any duplicate: " + season)
+		check(app.model.reward_id == rewards[5].id,
+			"A chest chooses the last unfinished medal before any duplicate: " + season)
 		var locked_reward: String = app.model.reward_id
 		app._open_chest()
 		check(app.model.reward_id == locked_reward, "Repeated opening cannot reroll the reward")
 		app.new_round(6)
-		app.collected_rewards[rewards[9].id] = true
+		app.medal_progress.counts[rewards[5].id] = 3
 		win_round(app)
 		app.choose_theme(season)
 		app._open_chest()
 		check(not data_script.reward(app.model.reward_id).is_empty() and app.model.reward_theme == season,
 			"Completing a seasonal collection does not prevent future chest opening")
 	app.new_round(6)
-	app.collected_rewards = saved_rewards
-	app._refresh_collection()
+	set_completed_rewards(app, saved_rewards)
 
 
-func _test_practice_and_goals(app) -> void:
-	check(has_property(app, "practice_button") and has_property(app, "_collection_headings")
-		and has_property(app, "_preferred_theme"), "Practice and seasonal goals are wired into the existing scene")
-	if not has_property(app, "practice_button") or not has_property(app, "_collection_headings"):
-		return
-	app.new_round(6)
-	var deck: Array = app.model.cards.duplicate(true)
-	var selected: String = app.model.cards[0].id
-	app.cards[selected].pressed.emit()
-	app.practice_button.grab_focus()
-	joy_tap(JOY_BUTTON_A)
-	await process_frame
-	check(app.model.practice_mode and app.practice_button.button_pressed and not app._mistakes.visible,
-		"Controller A enables Practice and removes penalty badges")
-	check(app.practice_button.text == "No limit" and app._status_announcement.contains("Practice"),
-		"Practice explains its unlimited attempts visually and accessibly")
-	check(app.model.selected_id == selected, "Mode switching preserves the keyboard player's selected card")
-	app.cards[selected].pressed.emit()
-	app._show_collection()
-	check(app.practice_button.focus_mode == Control.FOCUS_NONE, "The mode control respects modal focus")
-	app.practice_button.pressed.emit()
-	check(app.model.practice_mode and app.model.cards == deck, "A modal blocks hidden mode activation")
-	app._hide_collection()
-	var wrong: Array = wrong_pair_for(app.model)
-	for attempt in range(5):
-		app.cards[wrong[0]].pressed.emit()
-		app.cards[wrong[1]].pressed.emit()
-		check(app.practice_button.disabled, "Feedback temporarily disables the mode control")
-		app.feedback_timer.timeout.emit()
-	check(app.model.phase == "waiting" and app.model.cards == deck and not app.failure_image.visible,
-		"The Practice UI keeps the same board after five mismatches")
-	app.practice_button.pressed.emit()
-	check(not app.model.practice_mode and app._mistakes.visible and app.model.cards == deck,
-		"The mode control restores Challenge without replacing the board")
-	for attempt in range(3):
-		app.cards[wrong[0]].pressed.emit()
-		app.cards[wrong[1]].pressed.emit()
-		app.feedback_timer.timeout.emit()
-	app.practice_button.pressed.emit()
-	check(app.model.practice_mode and app.model.phase == "waiting" and app.grid.visible
-		and not app.failure_image.visible and app.model.cards == deck,
-		"The loss screen can continue as Practice through the same control")
-	win_round(app)
-	check(app.practice_button.disabled and app.model.phase == "won",
-		"Practice cannot change an earned result")
+func _test_season_goals(app) -> void:
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
 	var data_script: GDScript = load("res://scripts/game_data.gd")
-	app.collected_rewards.clear()
-	app._refresh_collection()
-	check(app._collection_headings.spring.text == "Spring 0/10", "Empty collections show their seasonal goal")
-	for reward in data_script.rewards("spring").slice(0, 3):
-		app.collected_rewards[reward.id] = true
-	app._refresh_collection()
-	check(app._collection_headings.spring.text == "Spring 3/10"
-		and app._collection_headings.summer.text == "Summer 0/10",
+	set_completed_rewards(app, {})
+	check(app._collection_headings.spring.text == "Spring 0/6", "Empty collections show their seasonal goal")
+	var completed: Dictionary = {}
+	for reward in data_script.medals("spring").slice(0, 3):
+		completed[reward.id] = true
+	set_completed_rewards(app, completed)
+	check(app._collection_headings.spring.text == "Spring 3/6"
+		and app._collection_headings.summer.text == "Summer 0/6",
 		"Collection goals count earned variants separately by season")
-	for reward in data_script.rewards("spring"):
-		app.collected_rewards[reward.id] = true
-	app._refresh_collection()
-	check(app._collection_headings.spring.text == "Spring complete! 10/10",
+	for reward in data_script.medals("spring"):
+		completed[reward.id] = true
+	set_completed_rewards(app, completed)
+	check(app._collection_headings.spring.text == "Spring complete! 6/6",
 		"A completed season has a distinct, derived completion message")
 	app.new_round(6)
 	var seeded_theme: String = app.model.theme_id
 	app.choose_theme("summer")
 	app._replay()
-	check(app.model.theme_id == "summer" and app.model.practice_mode,
-		"Replay retains both a manually chosen season and the session's Practice mode")
+	check(app.model.theme_id == "summer", "Replay retains a manually chosen season")
 	app.new_round(6)
 	check(app.model.theme_id == seeded_theme, "An explicit seed is not overridden by season preference")
-	app.model.set_practice(false)
-	app.collected_rewards = saved_rewards
-	app._refresh_collection()
+	set_completed_rewards(app, saved_rewards)
 
 
 func _test_scene() -> void:
@@ -888,7 +822,11 @@ func _test_scene() -> void:
 	check(packed != null, "The main scene loads")
 	if packed == null:
 		return
+	var directory := "user://game-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Scene reward saves use an isolated directory")
+	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = packed.instantiate()
+	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -899,7 +837,11 @@ func _test_scene() -> void:
 		return
 	app.audio.set_muted(true)
 	await _test_play_improvements(app)
-	await _test_practice_and_goals(app)
+	_test_season_goals(app)
+	check(app.find_child("Practice", true, false) == null and app._mistakes.get_parent() is HBoxContainer,
+		"Mistake badges are passive counters, not an unlimited-attempt toggle")
+	check(app._voice_button.disabled and app._voice_button.focus_mode == Control.FOCUS_NONE,
+		"Keyboard navigation skips Voice when recognition is unavailable")
 	check(app.cards.size() == 8, "The scene creates eight native card buttons")
 	check(app.find_child("Mute", true, false) == null and app.find_child("Listen", true, false) == null,
 		"Mute and Listen controls are removed")
@@ -920,7 +862,7 @@ func _test_scene() -> void:
 		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER,
 			"Rewards scrollbars are hidden without disabling touch or wheel scrolling")
-	check(app._reward_slots.size() == 40, "The rewards page contains all forty seasonal rewards")
+	check(app._reward_slots.size() == 24, "The rewards page contains six medals in each of four seasons")
 	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	for id in app._reward_slots:
@@ -944,14 +886,13 @@ func _test_scene() -> void:
 			app.collection_page.hide()
 		check(app.collection_button.focus_mode == Control.FOCUS_ALL,
 			"Closing rewards restores underlying keyboard focus")
-	app.collected_rewards.clear()
-	app.collected_rewards["spring-1"] = true
-	app._refresh_collection()
+	set_completed_rewards(app, {"spring-1": true})
 	var inventory_before_label_check: Dictionary = app.collected_rewards.duplicate()
 	app._show_collection()
+	var all_rewards: Dictionary = {}
 	for id in app._reward_slots:
-		app.collected_rewards[id] = true
-	app._refresh_collection()
+		all_rewards[id] = true
+	set_completed_rewards(app, all_rewards)
 	await process_frame
 	await process_frame
 	for id in app._reward_slots:
@@ -959,8 +900,7 @@ func _test_scene() -> void:
 		check(Rect2(Vector2.ZERO, slot.button.size).encloses(slot.label.get_rect()),
 			"Reward name and number fit inside the tile: %s label=%s tile=%s" % [id, slot.label.get_rect(), slot.button.size])
 		check(slot.label.get_line_count() <= 2, "Reward captions use at most two lines: " + id)
-	app.collected_rewards = inventory_before_label_check
-	app._refresh_collection()
+	set_completed_rewards(app, inventory_before_label_check)
 	app._hide_collection()
 	var unlocked_slot := reward_slot_button(app, "spring-1")
 	var locked_slot := reward_slot_button(app, "spring-2")
@@ -1139,8 +1079,6 @@ func _test_scene() -> void:
 			controls.append(app.collection_button)
 		if has_property(app, "hint_button"):
 			controls.append(app.hint_button)
-		if has_property(app, "practice_button"):
-			controls.append(app.practice_button)
 		for control in controls:
 			var bounds: Rect2 = control.get_global_rect()
 			check(viewport.grow(0.5).encloses(bounds), "Control fits " + str(dimensions_value) + ": " + control.name)
@@ -1324,6 +1262,7 @@ func _test_scene() -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
+	prepare_completion(app)
 	app.chest_button.grab_focus()
 	joy_button(JOY_BUTTON_A, true)
 	await process_frame
@@ -1338,18 +1277,19 @@ func _test_scene() -> void:
 	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
 	await process_frame
 	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
-	check(app.effects.particle_count() == 72, "Opening emits exactly 72 seasonal particles")
+	check(app.effects.particle_count() == 24, "Opening first reveals the earned fragment with 24 particles")
 	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
 	var opened_reward_id: String = app.model.reward_id
 	var reward_count_before: int = app.collected_rewards.size()
 	var was_collected: bool = app.collected_rewards.has(opened_reward_id)
 	app.chest.finish_immediately()
+	app._finish_fragment_delivery()
 	check(app.model.chest_state == "opened", "The native animation completes the reward")
 	check(app.collected_rewards.has(opened_reward_id), "The opened reward is recorded before visual delivery")
 	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
 		"The reward collection changes exactly once when opening finishes")
 	check(visible_reward_flight(app) == null, "The flight copy waits for the reveal pop and pause")
-	step_reward_tween(app, 0.71, "The reward tween starts the flight after the pop and pause")
+	step_reward_tween(app, 0.56, "The reward tween starts the flight after the pop and pause")
 	var flight := visible_reward_flight(app)
 	check(flight != null, "A visible reward copy appears for the flight")
 	if flight != null:
@@ -1362,7 +1302,7 @@ func _test_scene() -> void:
 		check(flight.texture == load(reward.symbol),
 			"The reward flight uses the locked earned reward texture")
 		var start_size: Vector2 = flight.size
-		step_reward_tween(app, 0.32, "The reward tween advances along the flight path")
+		step_reward_tween(app, 0.19, "The reward tween advances along the flight path")
 		root.size = Vector2i(390, 844)
 		app.choose_theme("winter")
 		var manual_tween: Tween = app._reward_tween
@@ -1373,7 +1313,7 @@ func _test_scene() -> void:
 			"Manual reward timing is unaffected by SceneTree frame delays")
 		check(flight.texture == load(reward.symbol),
 			"Changing season during flight does not swap the earned reward artwork")
-		step_reward_tween(app, 0.33, "The reward tween reaches the current rewards button center")
+		step_reward_tween(app, 0.201, "The reward tween reaches the current rewards button center")
 		var target_center: Vector2 = app.collection_button.get_global_rect().get_center()
 		check(flight.get_global_rect().get_center().distance_to(target_center) <= 1.0,
 			"The reward flight lands on the actual current My Rewards button center")
@@ -1457,12 +1397,14 @@ func _test_scene() -> void:
 	check(app._reward_tween == null or not app._reward_tween.is_running(), "Hiding cancels the reveal tween too")
 	app.new_round(91)
 	win_round(app)
+	prepare_completion(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._process(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
-	step_reward_tween(app, 0.71, "The reward tween can be cancelled by opening the collection")
+	app._finish_fragment_delivery()
+	step_reward_tween(app, 0.56, "The reward tween can be cancelled by opening the collection")
 	check(visible_reward_flight(app) != null, "The reward flight is visible before collection opens")
 	app._show_collection()
 	check_no_reward_flight(app, "Opening My Rewards cancels the active reward flight")
@@ -1470,12 +1412,14 @@ func _test_scene() -> void:
 	app._hide_collection()
 	app.new_round(91)
 	win_round(app)
+	prepare_completion(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._process(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
-	step_reward_tween(app, 0.71, "The reward tween can be cancelled by replay")
+	app._finish_fragment_delivery()
+	step_reward_tween(app, 0.56, "The reward tween can be cancelled by replay")
 	check(visible_reward_flight(app) != null, "The reward flight is visible before replay")
 	app._replay()
 	check_no_reward_flight(app, "Replay cancels the active reward flight")
@@ -1569,6 +1513,7 @@ func _test_scene() -> void:
 	await process_frame
 	joy_button(JOY_BUTTON_A, true)
 	var held_app = packed.instantiate()
+	held_app.medal_progress = progress_script.new(directory + "/held.cfg", directory + "/legacy.cfg")
 	root.add_child(held_app)
 	await process_frame
 	await process_frame
@@ -1595,3 +1540,7 @@ func _test_scene() -> void:
 	held_app.queue_free()
 	await process_frame
 	await process_frame
+	var files := DirAccess.open(directory)
+	for filename in files.get_files():
+		DirAccess.remove_absolute(directory + "/" + filename)
+	DirAccess.remove_absolute(directory)
