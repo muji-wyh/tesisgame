@@ -2,12 +2,11 @@
   <title id="title">leg</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <ellipse cx="65" cy="110" rx="40" ry="3" fill="#eadbc5" stroke="none"/>
-    <path d="M40 36 Q55 38 69 49 Q81 57 78 68 Q76 77 67 79 Q58 82 52 72 L34 51Z" fill="#efbd9d"/>
-    <path d="M66 74 Q62 85 60 98 L81 98 Q91 98 98 105 Q92 110 81 110 H56 Q48 109 48 102 L50 82 Q51 73 58 68Z" fill="#efbd9d"/>
-    <path d="M25 19 H62 L66 39 Q54 45 39 44 L28 51Z" fill="#91bdcb"/>
-    <path d="M59 97 H81 Q93 98 99 105 Q93 111 81 110 H56 Q51 109 50 104Z" fill="#8eafd0"/>
-    <path d="M59 72 Q65 68 73 69 M53 85 Q59 88 64 86" stroke="#d99a82" stroke-width="2.5"/>
-    <path d="M43 43 Q53 46 61 52" stroke="#ffd9c1" stroke-width="4"/>
+    <ellipse cx="64" cy="111" rx="34" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M38 29 H71 L67 55 Q64 66 63 75 L60 93 Q70 98 83 99 Q94 102 90 107 Q78 111 64 108 L46 107 Q39 104 43 95 L45 73 Q45 66 41 59Z" fill="#efbd9d"/>
+    <path d="M34 12 H76 L73 34 Q54 39 35 33Z" fill="#8cbacf"/>
+    <path d="M39 28 Q54 32 72 28" stroke="#d7ebef" stroke-width="3"/>
+    <path d="M46 44 49 55 M49 72 49 90" stroke="#ffddc4" stroke-width="4"/>
+    <path d="M47 63 Q54 59 61 63 M59 94 Q56 99 59 102 M77 101 77 106 M83 102 82 107" stroke="#c98d78" stroke-width="2.5"/>
   </g>
 </svg>

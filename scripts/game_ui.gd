@@ -11,7 +11,10 @@ const Medal = preload("res://scripts/medal_view.gd")
 const MedalProgress = preload("res://scripts/medal_progress.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChoiceGame = preload("res://scripts/choice_game.gd")
-const MODES := {"match": "Match", "sky": "Sky words", "listen": "Listen"}
+const WordLesson = preload("res://scripts/word_lesson.gd")
+const PlayroomState = preload("res://scripts/playroom_state.gd")
+const PlayroomView = preload("res://scripts/playroom_view.gd")
+const MODES := {"learn": "Learn", "match": "Match", "sky": "Sky", "listen": "Listen"}
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
@@ -179,10 +182,21 @@ var hint_button: Button
 var _voice_button: Button
 var _voice_space: Control
 var _voice_mode: bool = false
-var _mode_id: String = "match"
+var _mode_id: String = "learn"
+var _listen_word_failed: bool = false
 var _mode_row: HBoxContainer
 var _mode_buttons: Array[Button] = []
 var _choice: ChoiceGame
+var _lesson: WordLesson
+var _match_feedback: WordLesson
+var _feedback_key: String = ""
+var _new_adventure_button: Button
+var _gift_label: Label
+var _try_gift_button: Button
+var _unlocked_gift: Dictionary = {}
+var playroom_state := PlayroomState.new()
+var _playroom_ready: bool = false
+var _room: PlayroomView
 var _voice_listening: bool = false
 var _speech_queue: Array[String] = []
 var collection_button: Button
@@ -401,7 +415,7 @@ func _build_controls() -> void:
 		button.text = MODES[id]
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_set_accessibility_name(button, "Start a new " + str(MODES[id]) + " round")
+		_set_accessibility_name(button, str(MODES[id]) + ": practise these same five words")
 		button.pressed.connect(choose_mode.bind(id))
 		_mode_row.add_child(button)
 		_mode_buttons.append(button)
@@ -411,6 +425,10 @@ func _build_controls() -> void:
 	_adventure_label.clip_text = true
 	_adventure_label.custom_minimum_size.y = 28
 	column.add_child(_adventure_label)
+	_gift_label = Style.label("", 14)
+	_gift_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_gift_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(_gift_label)
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
 	_voice_space.custom_minimum_size = Vector2(0, 112)
@@ -423,7 +441,24 @@ func _build_controls() -> void:
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
+	grid.resized.connect(_fit_grid)
 	column.add_child(grid)
+	_lesson = WordLesson.new()
+	_lesson.name = "LearnWords"
+	_lesson.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_lesson.hear_requested.connect(_lesson_hear)
+	_lesson.word_changed.connect(func(word: Dictionary) -> void:
+		if _mode_id == "learn" and not _rebuilding:
+			_announce_status("Learn: " + str(word.text) + ". Look, read, and press Hear."))
+	_lesson.finished.connect(func() -> void: choose_mode("match"))
+	column.add_child(_lesson)
+	_match_feedback = WordLesson.new()
+	_match_feedback.name = "MatchCorrection"
+	_match_feedback.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_match_feedback.hear_requested.connect(_lesson_hear)
+	_match_feedback.finished.connect(_continue_match)
+	_match_feedback.hide()
+	column.add_child(_match_feedback)
 	_choice = ChoiceGame.new()
 	_choice.name = "ChoiceGame"
 	_choice.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -432,8 +467,15 @@ func _build_controls() -> void:
 	_choice.round_finished.connect(_choice_finished)
 	_choice.hear_requested.connect(_choice_hear)
 	_choice.prompt_ready.connect(func() -> void:
+		_listen_word_failed = false
+		_choice.set_audio_available(audio.available and not audio.muted)
 		if not _rebuilding:
-			_refresh_controller_focus())
+			_refresh_controller_focus()
+			if not collection_page.visible and not _preview_page.visible:
+				var prompt: String = _choice.status_label.text
+				if _mode_id == "listen" and not _choice.audio_available:
+					prompt += " " + str(_choice.current_target.text) + "."
+				_announce_status(prompt))
 	_choice.hide()
 	column.add_child(_choice)
 	_outcome = Control.new()
@@ -517,7 +559,7 @@ func _build_controls() -> void:
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_caption.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_caption)
-	_found_words_heading = Style.label("Words you found · tap to hear", 14)
+	_found_words_heading = Style.label("Practise these words · tap to hear", 14)
 	_found_words_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_found_words_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_result_text.add_child(_found_words_heading)
@@ -530,11 +572,27 @@ func _build_controls() -> void:
 	_found_words_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	_result_text.add_child(_found_words_scroll)
 	_found_words_scroll.add_child(_found_words)
+	var result_actions := HBoxContainer.new()
+	result_actions.add_theme_constant_override("separation", 8)
+	_result_text.add_child(result_actions)
 	replay_button = Button.new()
-	replay_button.text = "Play again"
+	replay_button.text = "Repeat lesson"
+	replay_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	replay_button.pressed.connect(_replay)
-	_result_text.add_child(replay_button)
-	_message = Style.label("", 20)
+	result_actions.add_child(replay_button)
+	_new_adventure_button = Button.new()
+	_new_adventure_button.name = "NewAdventure"
+	_new_adventure_button.text = "New adventure"
+	_new_adventure_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_new_adventure_button.pressed.connect(func() -> void: new_round())
+	result_actions.add_child(_new_adventure_button)
+	_try_gift_button = Button.new()
+	_try_gift_button.text = "Try it with Pip"
+	_try_gift_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_try_gift_button.pressed.connect(_try_unlocked_gift)
+	_try_gift_button.hide()
+	result_actions.add_child(_try_gift_button)
+	_message = Style.label("", 16)
 	_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_message.hide()
@@ -543,6 +601,7 @@ func _build_controls() -> void:
 	audio = Audio.new()
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
+	audio.word_failed.connect(_word_audio_failed)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
 	feedback_timer.wait_time = 0.7
@@ -696,45 +755,72 @@ func _build_collection() -> void:
 
 func _build_playroom() -> void:
 	_playroom_buttons.clear()
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", Style.box(Color.WHITE, Color("#d7efc7"), 24, 2))
-	_collection_grid.add_child(panel)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 8)
-	panel.add_child(column)
-	var heading := Style.label("Pip's playroom", 24)
-	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(heading)
-	column.add_child(_collection_duck_slot)
-	for child in _collection_duck_slot.get_children():
-		_collection_duck_slot.remove_child(child)
-		child.queue_free()
-	_playroom_medal = _medal_picture(_collection_duck_slot)
-	_playroom_medal.show_missing = true
-	_playroom_medal.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
-	_playroom_medal.offset_left = -90
-	_playroom_medal.offset_right = -18
-	_playroom_medal.offset_top = -36
-	_playroom_medal.offset_bottom = 36
-	_playroom_caption = Style.label("Pick a trick. Play with Pip!", 18)
-	_playroom_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_playroom_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(_playroom_caption)
-	var actions := HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 8)
-	column.add_child(actions)
-	for entry in [["dance", "Dance"], ["snack", "Snack"], ["bubbles", "Bubbles"]]:
-		var button := Button.new()
-		button.name = "Trick_" + entry[0]
-		button.text = entry[1]
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Style.button(button, Style.GOOD)
-		button.pressed.connect(_play_duck_trick.bind(entry[0]))
-		button.gui_input.connect(_collection_scroll_input.bind(button))
-		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
-		actions.add_child(button)
-		_playroom_buttons.append(button)
+	_collection_duck_slot.queue_free()
+	_room = PlayroomView.new()
+	_room.name = "PipsRoom"
+	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _preview_page.visible and not _collection_dragged
+	_collection_grid.add_child(_room)
+	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+	_collection_duck_slot = _room.duck_slot
+	_playroom_caption = _room.caption
+	_playroom_medal = _room.favorite_medal
+	_room.item_selected.connect(_select_room_item)
+	_room.word_requested.connect(_room_word)
+	_room.toy_played.connect(_room_toy)
+	for control in _room.controls():
+		control.gui_input.connect(_collection_scroll_input.bind(control))
+		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
+		if control is Button:
+			_playroom_buttons.append(control)
 	_refresh_favorite_reward()
+
+
+func _select_room_item(id: String) -> void:
+	if not collection_page.visible or _preview_page.visible or _collection_dragged:
+		return
+	if not _ensure_playroom_loaded() or not playroom_state.select_item(id, medal_progress.counts):
+		_playroom_caption.text = "Your room could not be saved. Tap the item to retry."
+	else:
+		_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+		_refresh_favorite_reward()
+	_announce_status(_playroom_caption.text)
+
+
+func _ensure_playroom_loaded() -> bool:
+	if not _playroom_ready:
+		_playroom_ready = playroom_state.load_state(_favorite_reward_id)
+		if _playroom_ready:
+			_favorite_reward_id = playroom_state.favorite_id
+	return _playroom_ready
+
+
+func _room_word(id: String) -> void:
+	if not collection_page.visible or _preview_page.visible or _collection_dragged:
+		return
+	for word in data.words:
+		if word.id == id:
+			audio.interact(model.theme_id, model.phase != "lost")
+			audio.say("res://" + word.audio)
+			return
+
+
+func _room_toy(kind: String) -> void:
+	if not collection_page.visible or _preview_page.visible or _collection_dragged:
+		return
+	if kind == "offer":
+		duck.react("happy")
+	else:
+		duck.perform_trick("bubbles" if kind in ["water", "open"] else "dance")
+	_announce_status(_playroom_caption.text)
+
+
+func _try_unlocked_gift() -> void:
+	if _unlocked_gift.is_empty() or _save_error:
+		return
+	_show_collection()
+	_select_room_item(_unlocked_gift.id)
+	_collection_scroll.scroll_vertical = 0
+	_room.action_button.grab_focus()
 
 
 func _play_duck_trick(kind: String) -> void:
@@ -753,6 +839,12 @@ func _load_favorite_reward() -> void:
 		value = config.get_value("playroom", "favorite", "")
 	if value is String and collected_rewards.has(value) and not Data.reward(value).is_empty():
 		_favorite_reward_id = value
+	playroom_state = PlayroomState.new(playroom_save_path.get_basename() + "-v2.cfg", _host)
+	_playroom_ready = false
+	_ensure_playroom_loaded()
+	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+	if not _playroom_ready:
+		_playroom_caption.text = "Room choices could not load. Tap an owned item to retry."
 
 
 func _refresh_favorite_reward() -> void:
@@ -766,11 +858,7 @@ func _refresh_favorite_reward() -> void:
 func _wear_preview_reward() -> void:
 	if not _preview_page.visible or not collected_rewards.has(_preview_reward_id):
 		return
-	var config := ConfigFile.new()
-	config.set_value("playroom", "favorite", _preview_reward_id)
-	# Browser preferences commit immediately; the engine filesystem sync is asynchronous.
-	var saved: bool = bool(_host.saveFavoriteReward(_preview_reward_id)) if _host != null else config.save(playroom_save_path) == OK
-	if not saved:
+	if not _ensure_playroom_loaded() or not playroom_state.set_favorite(_preview_reward_id):
 		_preview_caption.text = "Your display could not be saved. Try again."
 		_announce_status(_preview_caption.text)
 		return
@@ -858,6 +946,11 @@ func _refresh_collection() -> void:
 			Data.theme(theme_id).name, " complete!" if count == rewards.size() else "", count, rewards.size()]
 		if not _progress_ready:
 			_collection_headings[theme_id].text = Data.theme(theme_id).name + " --/6"
+	if _room != null:
+		_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+		_refresh_favorite_reward()
+		if not _playroom_ready:
+			_playroom_caption.text = "Room choices could not load. Tap an owned item to retry."
 
 
 func _open_reward_preview(id: String) -> void:
@@ -1169,7 +1262,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1) -> void:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false) -> void:
 	if model.chest_state == "opening":
 		chest.finish_immediately()
 	if _save_error and not _pending_fragment.is_empty():
@@ -1181,6 +1274,8 @@ func new_round(seed_value: int = -1) -> void:
 	_rebuilding = true
 	_cancel_fragment_delivery()
 	_pending_fragment.clear()
+	_unlocked_gift.clear()
+	_feedback_key = ""
 	_save_error = not _progress_ready
 	feedback_timer.stop()
 	effects.clear()
@@ -1199,11 +1294,11 @@ func new_round(seed_value: int = -1) -> void:
 	for button in _found_words.get_children():
 		_found_words.remove_child(button)
 		button.queue_free()
-	if not model.reset(data.words, seed_value):
+	if not model.reset(data.words, seed_value, repeat_lesson):
 		_rebuilding = false
 		_show_error(model.error)
 		return
-	if seed_value < 0 and not _preferred_theme.is_empty():
+	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
 		model.set_theme(_preferred_theme)
 	for button in cards.values():
 		grid.remove_child(button)
@@ -1216,14 +1311,12 @@ func new_round(seed_value: int = -1) -> void:
 		button.pressed.connect(_select_card.bind(card_data.id))
 		grid.add_child(button)
 		cards[card_data.id] = button
-	if _mode_id != "match":
-		var pool: Array = data.words
-		for adventure in Data.ADVENTURES:
-			if adventure.id == model.adventure_id:
-				pool = data.words.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-				break
+	_lesson.show_words(model.lesson_words, model.adventure_name)
+	_lesson.set_audio_available(audio.available and not audio.muted)
+	if _mode_id in ["sky", "listen"]:
 		_choice.set_reduced_motion(reduced_motion)
-		_choice.start_round(pool, _mode_id, Data.theme(model.theme_id), seed_value)
+		_choice.set_audio_available(audio.available and not audio.muted)
+		_choice.start_round(model.lesson_words, _mode_id, Data.theme(model.theme_id), seed_value)
 	_rebuilding = false
 	_refresh()
 	_layout()
@@ -1236,25 +1329,26 @@ func choose_mode(id: String) -> void:
 		_refresh()
 		return
 	_mode_id = id
-	new_round()
-	audio.interact(model.theme_id)
-	audio.cue("select")
+	new_round(-1, true)
 	_default_focus().grab_focus()
 
 
 func _choice_answer(word: Dictionary, correct: bool) -> void:
-	if _mode_id == "match" or collection_page.visible:
+	if not _mode_id in ["sky", "listen"] or collection_page.visible:
 		return
 	audio.interact(model.theme_id)
 	audio.cue("correct" if correct else "wrong")
-	if correct:
-		audio.say("res://" + word.audio)
+	var target: Dictionary = _choice.current_target
+	audio.say("res://" + target.audio)
+	if not correct and not model.missed_word_ids.has(target.id):
+		model.missed_word_ids.append(target.id)
 	duck.react("happy" if correct else "curious")
-	_announce_status("Yes! %s. %d of 5 found." % [word.text, _choice.successes] if correct else "Try the other choice. You can do it!")
+	_announce_status("Yes! %s. Press Continue." % target.text if correct else "This picture is %s. Look, listen, then Continue." % target.text)
+	_refresh_controller_focus()
 
 
 func _choice_progress(successes: int, mistakes: int) -> void:
-	if _mode_id == "match":
+	if not _mode_id in ["sky", "listen"]:
 		return
 	model.successes = successes
 	model.mistakes = mistakes
@@ -1265,22 +1359,25 @@ func _choice_progress(successes: int, mistakes: int) -> void:
 
 
 func _choice_hear(word: Dictionary) -> void:
-	if _mode_id == "match" or collection_page.visible or _preview_page.visible:
+	if not _mode_id in ["sky", "listen"] or collection_page.visible or _preview_page.visible:
 		return
+	if _choice.status == "feedback":
+		_lesson_hear(word)
+		return
+	_listen_word_failed = false
 	audio.interact(model.theme_id)
-	audio.say("res://" + word.audio)
+	_choice.set_audio_available(audio.available and not audio.muted)
 	duck.react("curious")
-	_announce_status("Listen, then choose a picture. Press Hear to listen again.")
+	if _choice.audio_available:
+		_announce_status("Listen, then choose a picture. Press Hear to listen again.")
+	else:
+		_announce_status("No sound. Choose the picture. " + str(word.text) + ".")
+	audio.say("res://" + word.audio)
 
 
-func _choice_finished(won: bool, found_words: Array) -> void:
-	if _mode_id == "match":
+func _choice_finished(won: bool, _found: Array) -> void:
+	if not _mode_id in ["sky", "listen"]:
 		return
-	model.cards.clear()
-	model.matched_ids.clear()
-	for word in found_words:
-		model.cards.append({"id": word.id + ":word", "kind": "word", "word": word})
-		model.matched_ids.append(word.id + ":word")
 	model.phase = "won" if won else "lost"
 	_refresh()
 	_layout()
@@ -1305,6 +1402,8 @@ func _refresh() -> void:
 		if button.button_pressed:
 			button.add_theme_stylebox_override("normal", Style.box(palette.light, palette.accent, 16, 3))
 	_choice.set_palette(palette)
+	_lesson.set_palette(palette)
+	_match_feedback.set_palette(palette)
 	Style.button(collection_button, palette.accent)
 	Style.button(_collection_back, palette.accent)
 	Style.button(hint_button, palette.accent)
@@ -1318,7 +1417,14 @@ func _refresh() -> void:
 	_voice_button.button_pressed = _voice_mode
 	_refresh_goal(palette)
 	Style.button(replay_button, palette.accent)
-	replay_button.text = "Retry saving" if _save_error else "Play again"
+	Style.button(_new_adventure_button, palette.accent)
+	Style.button(_try_gift_button, palette.accent)
+	for button in [replay_button, _new_adventure_button, _try_gift_button]:
+		button.add_theme_font_size_override("font_size", 16)
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	replay_button.text = "Retry saving" if _save_error else "Repeat lesson"
+	_new_adventure_button.visible = not _save_error
+	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
 	_success.set_filled_count(model.successes, 3 if _mode_id == "match" else 5)
 	_success.tooltip_text = "%d matches" % model.successes
 	_mistakes.set_filled_count(model.mistakes)
@@ -1327,6 +1433,7 @@ func _refresh() -> void:
 	_adventure_label.text = model.adventure_name
 	_adventure_label.add_theme_color_override("font_color", palette.accent)
 	_adventure_label.visible = playing and not _voice_mode and _mode_id == "match"
+	_gift_label.visible = playing and not _voice_mode and size.y >= 520
 	_mode_row.visible = playing and not _voice_mode
 	_refresh_found_words(playing, palette.accent)
 	if not playing and _voice_mode:
@@ -1343,11 +1450,21 @@ func _refresh() -> void:
 		_match_caption.text = "%d in a row!" % model.streak
 	if not model.hint_ids.is_empty():
 		_match_caption.text = "Follow stars"
-	grid.visible = playing and _mode_id == "match"
-	_choice.visible = playing and _mode_id != "match"
-	if _mode_id != "match":
+	var correcting: bool = playing and _mode_id == "match" and model.phase == "feedback"
+	grid.visible = playing and _mode_id == "match" and not correcting
+	_lesson.visible = playing and _mode_id == "learn"
+	_match_feedback.visible = correcting
+	if correcting:
+		_show_match_feedback()
+	else:
+		_feedback_key = ""
+	_choice.visible = playing and _mode_id in ["sky", "listen"]
+	if _mode_id in ["sky", "listen"]:
 		_match_caption.text = "%d of 5 found" % model.successes
-	_message.hide()
+	elif _mode_id == "learn":
+		_match_caption.text = "Look · listen · play"
+	_mistakes.visible = _mode_id != "learn"
+	_message.visible = playing and _mode_id == "match" and not correcting and not _voice_mode
 	_outcome.visible = not playing
 	for id in cards:
 		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
@@ -1362,9 +1479,13 @@ func _refresh() -> void:
 		if model.streak > 1:
 			_message.text += " %d in a row!" % model.streak
 	else:
-		_message.text = "Find three pairs. Two cards have no match! " + model.adventure_name + "."
-	if playing and _mode_id != "match":
+		_message.text = "Find 3 word–picture pairs. Two cards have no match."
+	if playing and _mode_id in ["sky", "listen"]:
 		_message.text = "Sky words. Choose the word that matches the picture. Find five!" if _mode_id == "sky" else "Listen. Press Hear, then choose the matching picture. Find five!"
+		if _mode_id == "listen" and not _choice.audio_available:
+			_message.text = "Listen. No sound. Choose the picture for " + str(_choice.current_target.text) + "."
+	elif playing and _mode_id == "learn":
+		_message.text = "Learn five words. Look at the picture, read the word, and press Hear."
 	var won: bool = model.phase == "won"
 	chest.visible = won
 	chest_button.visible = won
@@ -1414,9 +1535,12 @@ func _refresh() -> void:
 		if _save_error:
 			_title.text = "Keep your piece"
 			_caption.text = "Saving failed.\nChoose Retry saving."
+		elif not _unlocked_gift.is_empty() and not _fragment_active:
+			_title.text = "A gift for Pip!"
+			_caption.text = str(_unlocked_gift.name) + " unlocked!"
 	elif model.phase == "lost":
 		_title.text = "Good try!"
-		_caption.text = "Tap the bear for a happy wiggle!"
+		_caption.text = "Tap the bear to play!"
 		_stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, palette.accent.lightened(0.7), 26))
 	if _last_phase != model.phase:
 		_last_phase = model.phase
@@ -1473,35 +1597,37 @@ func _refresh_goal(palette: Dictionary) -> void:
 	collection_button.tooltip_text = "%s complete! View my rewards." % palette.name if complete else "Next: %s. %d of 3 pieces. View my rewards." % [goal.name, pieces]
 	_set_accessibility_name(collection_button, collection_button.tooltip_text)
 	_goal_label.add_theme_color_override("font_color", palette.accent)
+	var gift: Dictionary = playroom_state.next_gift(medal_progress.counts, model.theme_id) if playroom_state != null else {}
+	_gift_label.text = "Next gift: %s · %d pieces to go" % [gift.name, gift.remaining_pieces] if not gift.is_empty() else palette.name + " room gifts collected!"
+	_gift_label.add_theme_color_override("font_color", palette.accent)
 
 
 func _refresh_found_words(playing: bool, accent: Color) -> void:
-	var show_words: bool = not playing and not model.matched_ids.is_empty()
+	var show_words: bool = not playing and not model.lesson_words.is_empty()
 	_found_words.visible = show_words
 	_found_words_heading.visible = show_words
 	_found_words_scroll.visible = show_words
 	if not show_words or collection_page.visible or _preview_page.visible:
 		return
+	_found_words_heading.text = "Review · missed words first" if not model.missed_word_ids.is_empty() else "Words practised · tap to hear"
 	if _found_words.get_child_count() == 0:
-		for card in model.cards:
-			if card.kind != "word" or not model.matched_ids.has(card.id):
-				continue
+		for word in model.review_words():
 			var button := Button.new()
-			button.name = "Found_" + card.word.id
-			button.set_meta("word_id", card.word.id)
+			button.name = "Found_" + word.id
+			button.set_meta("word_id", word.id)
 			button.size_flags_horizontal = Control.SIZE_FILL
-			button.tooltip_text = "Hear %s again" % card.word.text
+			button.tooltip_text = "Hear %s again" % word.text
 			_set_accessibility_name(button, button.tooltip_text)
-			button.pressed.connect(_replay_found_word.bind(card.word.id))
+			button.pressed.connect(_replay_found_word.bind(word.id))
 			button.focus_entered.connect(func() -> void: _found_words_scroll.ensure_control_visible(button))
 			_found_words.add_child(button)
 			var picture := _picture(button)
-			picture.texture = load("res://" + card.word.image)
+			picture.texture = load("res://" + word.image)
 			picture.offset_left = 8
 			picture.offset_top = 6
 			picture.offset_right = -8
 			picture.offset_bottom = -26
-			var label := Style.label(card.word.text, 16)
+			var label := Style.label(word.text, 16)
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.clip_text = true
 			button.add_child(label)
@@ -1515,13 +1641,57 @@ func _refresh_found_words(playing: bool, accent: Color) -> void:
 func _replay_found_word(word_id: String) -> void:
 	if collection_page.visible or _preview_page.visible or not model.phase in ["won", "lost"]:
 		return
-	var card: Dictionary = model.card_by_id(word_id + ":word")
-	if card.is_empty() or not model.matched_ids.has(card.id):
+	for word in model.lesson_words:
+		if word.id == word_id:
+			_lesson_hear(word)
+			return
+
+
+func _lesson_hear(word: Dictionary) -> void:
+	if collection_page.visible or _preview_page.visible or _voice_mode:
 		return
 	audio.interact(model.theme_id, model.phase != "lost")
-	audio.say("res://" + card.word.audio)
-	duck.react("happy")
-	_announce_status("You found %s!" % card.word.text)
+	audio.say("res://" + word.audio)
+	duck.react("curious")
+	_announce_status(str(word.text) + ". Look at the picture and say the word.")
+
+
+func _show_match_feedback() -> void:
+	var key := ",".join(model.feedback_ids)
+	if key == _feedback_key:
+		return
+	_feedback_key = key
+	var associations: Array = []
+	var word_card: Dictionary = {}
+	var image_card: Dictionary = {}
+	for id in model.feedback_ids:
+		var card: Dictionary = model.card_by_id(id)
+		if card.kind == "word":
+			word_card = card
+		else:
+			image_card = card
+	if word_card.is_empty() or image_card.is_empty():
+		return
+	associations.append(word_card.word)
+	var heading: String = "Yes! The word and picture match."
+	if not model.last_correct:
+		associations.append(image_card.word)
+		heading = "%s and %s are different." % [word_card.word.text, image_card.word.text]
+		if model.card_by_id(word_card.word.id + ":image").is_empty():
+			heading = "No picture partner: %s." % word_card.word.text
+		elif model.card_by_id(image_card.word.id + ":word").is_empty():
+			heading = "No word partner: %s." % image_card.word.text
+	_match_feedback.show_words(associations, heading, "Continue")
+	_match_feedback.set_audio_available(audio.available and not audio.muted and not _voice_mode)
+	if not collection_page.visible:
+		_match_feedback.action_button.grab_focus()
+
+
+func _continue_match() -> void:
+	if collection_page.visible or _preview_page.visible or _mode_id != "match":
+		return
+	_resolve_feedback()
+	_default_focus().grab_focus()
 
 
 func _refresh_controller_focus() -> void:
@@ -1533,7 +1703,7 @@ func _refresh_controller_focus() -> void:
 	elif model.phase == "lost" and not _valid_focus(get_viewport().gui_get_focus_owner()):
 		replay_button.focus_mode = Control.FOCUS_ALL
 		replay_button.grab_focus()
-	elif model.phase != "feedback" and not _valid_focus(get_viewport().gui_get_focus_owner()):
+	elif not _valid_focus(get_viewport().gui_get_focus_owner()):
 		_default_focus().grab_focus()
 
 
@@ -1542,17 +1712,24 @@ func _layout() -> void:
 		return
 	_adventure_label.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode and _mode_id == "match"
 	_mode_row.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode
+	_gift_label.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode and size.y >= 520
+	_message.visible = _save_error or (_mode_id == "match" and model.phase in ["waiting", "matching"] and not _voice_mode)
 	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_preview_flourish()
 	_end_collection_drag(false)
-	var reserved_height: float = grid.get_parent().get_combined_minimum_size().y - grid.get_combined_minimum_size().y
-	var board_height: float = size.y - 24.0 - reserved_height
-	grid.columns = 4 if size.x >= size.y or board_height < 318.0 else 2
+	_fit_grid.call_deferred()
 	_layout_collection()
 	_layout_result()
 	_sync_voice_bounds()
 	_update_duck()
+
+
+func _fit_grid() -> void:
+	if grid == null or not grid.is_visible_in_tree():
+		return
+	# Use the allocated playfield after container layout, not a previous mode's cached minimum.
+	grid.columns = 4 if size.x >= size.y or grid.size.y < 318.0 else 2
 
 
 func _layout_collection() -> void:
@@ -1618,7 +1795,8 @@ func _select_card(id: String) -> void:
 		_animate_feedback(model.feedback_ids, result == "correct")
 		if not _voice_mode:
 			audio.cue(result, result)
-		feedback_timer.start()
+		if _voice_mode:
+			feedback_timer.start()
 
 
 func _resolve_feedback() -> void:
@@ -1642,6 +1820,8 @@ func choose_theme(id: String) -> void:
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	_choice.set_reduced_motion(value)
+	_lesson.set_reduced_motion(value)
+	_match_feedback.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
 	if duck != null:
@@ -1692,11 +1872,16 @@ func _on_chest_opened() -> void:
 
 
 func _commit_fragment() -> void:
+	var before: Dictionary = medal_progress.counts.duplicate()
 	if not _pending_fragment.is_empty() and not medal_progress.claim(_pending_fragment):
 		_save_error = true
 		_refresh()
 		return
 	_save_error = false
+	for item in playroom_state.catalog():
+		if not playroom_state.owned(item, before) and playroom_state.owned(item, medal_progress.counts):
+			_unlocked_gift = item
+			break
 	_refresh_collection()
 	_refresh()
 	duck.react("happy")
@@ -1850,7 +2035,7 @@ func _replay() -> void:
 		else:
 			_commit_fragment()
 		return
-	new_round()
+	new_round(-1, true)
 	if _save_error:
 		return
 	duck.react("happy")
@@ -2105,7 +2290,12 @@ func _default_focus() -> Control:
 		return chest_button if (model.chest_state == "closed" or _fragment_active) and not _save_error else replay_button
 	if model.phase == "lost":
 		return replay_button
-	if _mode_id != "match":
+	if _mode_id == "learn":
+		var lesson_controls: Array[Control] = _lesson.controls()
+		return lesson_controls[0] if not lesson_controls.is_empty() else collection_button
+	if _mode_id == "match" and model.phase == "feedback":
+		return _match_feedback.action_button
+	if _mode_id in ["sky", "listen"]:
 		var choices: Array[Control] = _choice.controls()
 		# Keep the feedback lock on the answer area; A must never select another mode.
 		return choices[0] if not choices.is_empty() else _choice.answer_buttons[0]
@@ -2138,8 +2328,19 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 
 
 func _audio_status(message: String) -> void:
+	var can_hear: bool = audio.available and not audio.muted
+	_choice.set_audio_available(can_hear and not _listen_word_failed)
+	_lesson.set_audio_available(can_hear)
+	_match_feedback.set_audio_available(can_hear and not _voice_mode)
 	if _host != null:
 		_host.audioStatus(message)
+
+
+func _word_audio_failed() -> void:
+	if _mode_id == "listen" and _choice.status == "asking":
+		_listen_word_failed = true
+		_choice.set_audio_available(false)
+		_announce_status("No sound. Choose the picture. " + str(_choice.current_target.text) + ".")
 
 
 func _announce_status(message: String) -> void:
@@ -2413,6 +2614,8 @@ func _drag_chest(delta: Vector2) -> void:
 func _show_collection() -> void:
 	_stop_voice()
 	_choice.pause(true)
+	_lesson.pause(true)
+	_match_feedback.pause(true)
 	_cancel_fragment_delivery()
 	_stop_feedback_animations()
 	_cancel_loss_play()
@@ -2444,6 +2647,8 @@ func _hide_collection() -> void:
 	collection_page.hide()
 	duck.clear_trick()
 	_choice.pause(false)
+	_lesson.pause(false)
+	_match_feedback.pause(false)
 	for control in _collection_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
@@ -2462,7 +2667,7 @@ func _hide_reward_preview_if_open() -> void:
 
 
 func _announce_collection_state() -> void:
-	_announce_status("My rewards opened. %d of %d medals complete. %s. Pip's playroom: Dance, Snack, Bubbles. %d earlier rewards. Use Back to return." % [
+	_announce_status("My rewards opened. %d of %d medals complete. %s. Choose toys and places for Pip. %d earlier rewards. Use Back to return." % [
 		medal_progress.completed_count(), Model.THEMES.size() * 6, _collection_headings[model.theme_id].text, medal_progress.legacy_rewards.size()])
 
 

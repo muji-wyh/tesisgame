@@ -226,12 +226,15 @@
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
         Pip the duck is your guide. His beak moves with the game's spoken words. Press him for a dance, snack, or bubbles.
-        Six theme buttons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Replays keep your choice. New rounds prefer fresh words.
-        Each round explores a topic such as Animal friends or Picnic time. Play again changes the adventure.
-        After a round, Words you found lets you replay the pronunciation of each matched word.
+        Start in Learn: see a large picture with its written word and press Hear. Previous and Next explore five words.
+        Learn, Match, Sky, and Listen practise the same five words. Continue confirms each answer's correct picture and word.
+        Listen shows the written target if sound is unavailable. After a round, review all five words, with missed words first.
+        Six theme buttons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Repeat lesson keeps the words; New adventure chooses new ones.
         The My rewards button previews your next medal and shows how many of its three pieces you have.
         My rewards shows six medals per theme, with three pieces per medal. Every winning mode earns one piece.
-        Pip's playroom has Dance, Snack, and Bubbles buttons. Open an earned medal and choose Display with Pip to save a favorite.
+        Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy, and its third unlocks a place.
+        Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, or launch a rocket. Each toy says its word. Locked gifts show how many pieces you need.
+        Open an earned medal and choose Display with Pip to save a favorite alongside your room choices.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
@@ -859,8 +862,12 @@
           try { return localStorage.getItem('wordBuddies.favoriteReward') || ''; }
           catch { return ''; }
         },
-        saveFavoriteReward(id) {
-          try { localStorage.setItem('wordBuddies.favoriteReward', id); return true; }
+        playroomState() {
+          try { return localStorage.getItem('wordBuddies.playroom'); }
+          catch { return false; }
+        },
+        savePlayroomState(text) {
+          try { localStorage.setItem('wordBuddies.playroom', text); return true; }
           catch { return false; }
         },
         medalProgress() {

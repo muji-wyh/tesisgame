@@ -6,6 +6,8 @@ const Data = preload("res://scripts/game_data.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space"]
 
 var cards: Array[Dictionary] = []
+var lesson_words: Array = []
+var missed_word_ids: Array[String] = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
@@ -25,7 +27,12 @@ var error: String = ""
 var last_correct: bool = false
 
 
-func reset(words: Array, seed_value: int = -1) -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false) -> bool:
+	var saved_adventure := adventure_id
+	var saved_name := adventure_name
+	var saved_theme := theme_id
+	if repeat_lesson and lesson_words.size() == 5:
+		words = lesson_words
 	if words.size() < 5:
 		error = "At least five words are needed to play."
 		return false
@@ -56,6 +63,20 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 		adventure_id = adventure.id
 		adventure_name = adventure.name
 		pool = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
+	if repeat_lesson and lesson_words.size() == 5:
+		pool = lesson_words.duplicate()
+		adventure_id = saved_adventure
+		adventure_name = saved_name
+	else:
+		var distinct: Array = []
+		for word in pool:
+			if not distinct.any(func(other: Dictionary) -> bool: return Data.confusable_words(word.id, other.id)):
+				distinct.append(word)
+		if distinct.size() < 5:
+			error = "This lesson needs five clearly different words."
+			return false
+		lesson_words = distinct.slice(0, 5)
+		pool = lesson_words
 	cards.clear()
 	for index in range(3):
 		_add_card(pool[index], "word")
@@ -64,6 +85,9 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	_add_card(pool[4], "image")
 	_shuffle(cards, rng)
 	theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
+	if repeat_lesson:
+		theme_id = saved_theme
+	missed_word_ids.clear()
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
@@ -200,9 +224,24 @@ func select(id: String) -> String:
 			else:
 				mistakes += 1
 				streak = 0
+				for word_id in [previous.word.id, card.word.id]:
+					if not missed_word_ids.has(word_id):
+						missed_word_ids.append(word_id)
 				result = "wrong"
 	changed.emit()
 	return result
+
+
+func review_words() -> Array:
+	var review: Array = []
+	for id in missed_word_ids:
+		for word in lesson_words:
+			if word.id == id:
+				review.append(word)
+	for word in lesson_words:
+		if not missed_word_ids.has(word.id):
+			review.append(word)
+	return review
 
 
 func resolve_feedback() -> void:

@@ -2,6 +2,21 @@
 
 Notable changes to Word Buddies, grouped by date with the newest changes first.
 
+## 2026-09-10
+
+- Added Learn with close picture/word associations and pronunciation, sharing the
+  same five-word lesson across Match, Sky, and Listen.
+- Added self-paced correct-answer feedback, visible Match instructions, missed-first
+  review of all five words, Repeat lesson, and New adventure.
+- Excluded ambiguous label pairs from distractors and added a visible Listen fallback
+  for unavailable sound. Improved twelve unclear original illustrations.
+- Added playable toys and room backdrops unlocked by medal progress, locked gift
+  previews, named gift goals, and a Try it with Pip reward action.
+- Consolidated room selections and favorite into one immediately saved record with
+  legacy migration and retryable failures; existing medal saves remain unchanged.
+- Added a validated offline Unity CLI art-import pipeline with original-art fallbacks.
+  New Asset Store package acquisition and actual import remain pending.
+
 ## 2026-09-09
 
 ### Added

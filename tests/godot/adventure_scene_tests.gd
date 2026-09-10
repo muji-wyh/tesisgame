@@ -31,6 +31,8 @@ func _run() -> void:
 	var directory := "user://adventure-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "The adventure fixture has isolated storage")
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app.playroom_save_path = directory + "/playroom.cfg"
+	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -60,7 +62,7 @@ func _run() -> void:
 		"Winning replaces the adventure heading with the result")
 	check(app._default_focus() == app.chest_button and app.chest_button.has_focus(),
 		"The chest remains the primary controller action after winning")
-	_check_shelf(app, words)
+	_check_shelf(app)
 	_check_replay(app)
 	app._show_collection()
 	for button in _buttons(app):
@@ -93,7 +95,7 @@ func _run() -> void:
 		root.size = dimensions
 		await process_frame
 		await process_frame
-		_check_result_bounds(app)
+		await _check_result_bounds(app)
 	app.new_round(17)
 	check(app._adventure_label.text == adventure and app._adventure_label.is_visible_in_tree(),
 		"The same seed restores the same visible adventure")
@@ -122,20 +124,21 @@ func _run() -> void:
 		_lose(app)
 		check(app.model.phase == "lost" and app.model.successes == 1,
 			"A round can end with one learned word and three mistakes")
-		_check_shelf(app, [words[0]])
+		_check_shelf(app)
 		check(app._default_focus() == app.replay_button and app.replay_button.has_focus(),
 			"Replay stays the primary controller action after losing")
 		_check_replay(app)
 		root.size = Vector2i(320, 320)
 		await process_frame
 		await process_frame
-		_check_result_bounds(app)
+		await _check_result_bounds(app)
 	app.audio.set_muted(true)
 	app.new_round(20)
 	_lose(app)
 	check(app.model.phase == "lost" and app.model.successes == 0
-		and not app._found_words.is_visible_in_tree() and app._found_words.get_child_count() == 0,
-		"A loss without matches does not invent word rewards")
+		and app._found_words.is_visible_in_tree() and app._found_words.get_child_count() == 5,
+		"A loss without matches still offers all five words for learning without awarding successes")
+	_check_shelf(app)
 	app.new_round(21)
 	words = _pairs(app)
 	app._on_voice_state([true, true, "Listening"])
@@ -143,7 +146,7 @@ func _run() -> void:
 		app._on_voice_result(["I see " + words[0].text, true])
 		app.feedback_timer.timeout.emit()
 		_lose(app)
-		_check_shelf(app, [words[0]])
+		_check_shelf(app)
 		check(not app._voice_mode, "Voice-earned words use the same result shelf and exit listening")
 	app.new_round(22)
 	words = _pairs(app)
@@ -152,15 +155,17 @@ func _run() -> void:
 	app.cards[words[2].id + ":word"].pressed.emit()
 	app.cards[words[2].id + ":image"].pressed.emit()
 	app._show_collection()
-	app.feedback_timer.timeout.emit()
-	check(app.model.phase == "won" and app.collection_page.visible,
-		"A final match can finish beneath the collection")
+	app._continue_match()
+	check(app.model.phase == "feedback" and app.collection_page.visible,
+		"Opening the collection preserves the final correction until it is explicitly continued")
 	for button in _buttons(app):
-		check(not app._focus_candidates().has(button), "Late result words cannot escape the active modal")
+		check(not app._focus_candidates().has(button), "Result words cannot escape the active modal")
 	app._hide_collection()
-	_check_shelf(app, words)
+	app._match_feedback.action_button.pressed.emit()
+	check(app.model.phase == "won", "The final correction can complete after closing the collection")
+	_check_shelf(app)
 	for button in _buttons(app):
-		check(app._focus_candidates().has(button), "Late result words become reachable after closing the collection")
+		check(app._focus_candidates().has(button), "Result words become reachable after closing the collection")
 	app.on_page_hidden()
 	await create_timer(0.1).timeout
 	app.queue_free()
@@ -184,7 +189,7 @@ func _pairs(app) -> Array[Dictionary]:
 func _match(app, word: Dictionary) -> void:
 	app.cards[word.id + ":word"].pressed.emit()
 	app.cards[word.id + ":image"].pressed.emit()
-	app.feedback_timer.timeout.emit()
+	app._match_feedback.action_button.pressed.emit()
 
 
 func _lose(app) -> void:
@@ -198,7 +203,7 @@ func _lose(app) -> void:
 	for attempt in range(3):
 		app.cards[wrong[0]].pressed.emit()
 		app.cards[wrong[1]].pressed.emit()
-		app.feedback_timer.timeout.emit()
+		app._continue_match()
 
 
 func _buttons(app) -> Array[Button]:
@@ -209,16 +214,18 @@ func _buttons(app) -> Array[Button]:
 	return buttons
 
 
-func _check_shelf(app, expected: Array) -> void:
+func _check_shelf(app) -> void:
+	var expected: Array = app.model.review_words()
 	var buttons: Array[Button] = _buttons(app)
-	check(app._found_words.is_visible_in_tree() and buttons.size() == expected.size(),
-		"Results show exactly one button per unique matched word")
+	check(app._found_words.is_visible_in_tree() and buttons.size() == 5 and expected.size() == 5,
+		"Results show one learning action for each of the five lesson words")
 	var seen: Array[String] = []
 	for button in buttons:
 		var id := str(button.get_meta("word_id", ""))
 		var matching: Array = expected.filter(func(word: Dictionary) -> bool: return word.id == id)
 		check(not id.is_empty() and not seen.has(id) and matching.size() == 1,
-			"Word replay excludes duplicate, unmatched, and distractor words")
+			"Word review includes each lesson word once")
+		check(id == expected[seen.size()].id, "Review actions follow the model's missed-first order")
 		seen.append(id)
 		if matching.size() != 1:
 			continue
@@ -247,9 +254,10 @@ func _check_replay(app) -> void:
 	app.audio.halt()
 	app.audio.set_muted(false)
 	for button in _buttons(app):
-		var word: Dictionary = app.model.card_by_id(str(button.get_meta("word_id", "")) + ":word").get("word", {})
-		if word.is_empty():
+		var matching: Array = app.model.lesson_words.filter(func(word: Dictionary): return word.id == button.get_meta("word_id", ""))
+		if matching.is_empty():
 			continue
+		var word: Dictionary = matching[0]
 		app.duck.settle()
 		for tap in range(8):
 			button.pressed.emit()
@@ -266,17 +274,20 @@ func _check_result_bounds(app) -> void:
 	var viewport: Rect2 = root.get_visible_rect().grow(0.5)
 	var buttons: Array[Button] = _buttons(app)
 	for button in buttons:
+		app._found_words_scroll.ensure_control_visible(button)
+		await process_frame
 		check(button.size.x >= 72 and button.size.y >= 72,
-			"Found words retain 72px logical touch targets")
-		check(viewport.encloses(button.get_global_rect()),
-			"Found-word actions fit the viewport: %s at %s" % [root.size, button.get_global_rect()])
+			"Review words retain 72px logical touch targets")
+		check(viewport.encloses(button.get_global_rect())
+			and app._found_words_scroll.get_global_rect().grow(0.5).encloses(button.get_global_rect()),
+			"Scrolling can fully reveal each review action: %s at %s" % [root.size, button.get_global_rect()])
 		check(not button.get_global_rect().intersects(app.replay_button.get_global_rect())
 			and not button.get_global_rect().intersects(app._stage.get_global_rect()),
 			"Found-word actions do not overlap the chest or replay button")
 	for index in range(1, buttons.size()):
 		check(not buttons[index - 1].get_global_rect().intersects(buttons[index].get_global_rect()),
 			"Adjacent found words retain separate touch targets")
-	for control in [app.replay_button, app._title, app._caption]:
+	for control in [app.replay_button, app._new_adventure_button, app._title, app._caption]:
 		var children: Array = app._result_text.get_children().filter(
 			func(child: Control) -> bool: return child.is_visible_in_tree()).map(
 			func(child: Control) -> String:

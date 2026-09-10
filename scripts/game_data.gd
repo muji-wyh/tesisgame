@@ -65,6 +65,16 @@ var chests: Dictionary = {}
 var error: String = ""
 
 
+static func confusable_words(first: String, second: String) -> bool:
+	if first == second:
+		return true
+	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"],
+		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
+		if first in pair and second in pair:
+			return true
+	return false
+
+
 static func theme(id: String) -> Dictionary:
 	assert(THEMES.has(id), "Unknown season: " + id)
 	var result: Dictionary = THEMES[id].duplicate(true)
@@ -157,6 +167,9 @@ func load_all() -> bool:
 		if not ResourceLoader.exists("res://" + word.image):
 			error = "Could not load the picture for " + word.text + ". Please rebuild the game."
 			return false
+		var imported_image: String = "assets/imported-unity/" + word.id + ".png"
+		if ResourceLoader.exists("res://" + imported_image):
+			word.image = imported_image
 	value = _read_json("res://assets/chests/manifest.json")
 	if not error.is_empty():
 		return false

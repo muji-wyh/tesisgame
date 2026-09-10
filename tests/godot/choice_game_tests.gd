@@ -27,6 +27,13 @@ func _run() -> void:
 		return
 	var game = load("res://scripts/choice_game.gd").new()
 	root.add_child(game)
+	check(game.has_method("continue_feedback") and game.has_method("set_audio_available"),
+		"Choice games provide explicit continuation and a visible audio fallback")
+	if failures:
+		game.queue_free()
+		await process_frame
+		quit(1)
+		return
 	game.size = Vector2(456, 200)
 	game.answer_chosen.connect(func(word: Dictionary, correct: bool): answers.append([word.id, correct]))
 	game.round_finished.connect(func(won: bool, words: Array): endings.append([won, words]))
@@ -61,15 +68,25 @@ func _run() -> void:
 		check(game.status == "feedback" and game.mistakes == 1 and game.successes == 0,
 			"A wrong answer locks repeated attempts during feedback")
 		check(answers.size() == before_answers + 1 and not answers.back()[1], "One attempt emits exactly one incorrect answer")
-		check(game.controls().is_empty(), "Feedback excludes disabled answer controls from navigation")
+		check(game.controls().size() == 2 and game.feedback_view.visible
+			and game.feedback_view.current_word.id == first.id
+			and game.feedback_view.word_label.text == first.text
+			and game.feedback_view.picture.texture.resource_path == "res://" + first.image,
+			"Wrong feedback teaches the correct picture and written word with Hear and Continue")
+		if "--screenshots" in OS.get_cmdline_user_args():
+			await _capture(game, mode + "-correction")
+		await create_timer(0.8).timeout
+		check(game.status == "feedback" and game.current_target == first,
+			"Correction remains visible until the learner explicitly continues")
 		game.pause(true)
-		game.feedback_timer.timeout.emit()
+		game.continue_feedback()
+		game.feedback_view.action_button.pressed.emit()
 		check(game.status == "feedback" and game.current_target == first, "A modal pause prevents delayed feedback progression")
 		game.set_palette(load("res://scripts/game_data.gd").theme("winter"))
 		check(game.status == "feedback" and game.current_target == first and game.mistakes == 1,
 			"Season palette changes preserve a paused question and progress")
 		game.pause(false)
-		game.feedback_timer.timeout.emit()
+		game.continue_feedback()
 		check(game.current_target == first and game.choices == choices and game.status == "asking",
 			"A mistake retries the same target and answer positions")
 		check(ready_prompts == before_prompts + 1, "Re-enabled choices notify the host to restore controller focus")
@@ -89,20 +106,22 @@ func _run() -> void:
 			game.answer_buttons[right].pressed.emit()
 			game.answer_buttons[right].pressed.emit()
 			check(game.successes == index + 1 and game.mistakes == 1, "A repeated correct tap awards one success")
-			game.feedback_timer.timeout.emit()
+			check(game.feedback_view.current_word == game.current_target and game.feedback_view.word_label.visible
+				and game.feedback_view.picture.visible, "A successful answer reinforces that exact picture-word association")
+			game.feedback_view.action_button.pressed.emit()
 		check(game.status == "won" and endings.size() == before_endings + 1 and endings.back()[0],
 			"Five correct answers finish with exactly one win")
 		check(game.found_words.size() == 5 and endings.back()[1].size() == 5 and progress.back() == [5, 1],
 			"Winning reports the five earned words and final progress")
-		game.feedback_timer.timeout.emit()
+		game.continue_feedback()
 		game.answer_buttons[0].pressed.emit()
 		check(endings.size() == before_endings + 1 and game.successes == 5, "Completed rounds ignore delayed callbacks and taps")
 		game.start_round(words, mode, palette, 17)
 		game.answer_buttons[_answer_index(game, true)].pressed.emit()
-		game.feedback_timer.timeout.emit()
+		game.continue_feedback()
 		for attempt in range(3):
 			game.answer_buttons[_answer_index(game, false)].pressed.emit()
-			game.feedback_timer.timeout.emit()
+			game.continue_feedback()
 		check(game.status == "lost" and game.mistakes == 3 and game.successes == 1 and not endings.back()[0],
 			"Three mistakes end the round after retaining earlier success")
 		check(game.found_words.size() == 1 and endings.back()[1].size() == 1,
@@ -124,11 +143,49 @@ func _run() -> void:
 		game.answer_buttons[_answer_index(game, true)].pressed.emit()
 		before_endings = endings.size()
 		game.stop()
-		game.feedback_timer.timeout.emit()
+		game.continue_feedback()
 		game.answer_buttons[0].pressed.emit()
 		game.hear_button.pressed.emit()
 		check(game.status == "stopped" and game.controls().is_empty() and endings.size() == before_endings,
 			"Stopping cancels pending feedback and input without delivering a result")
+	game.start_round(words, "listen", palette, 17)
+	var fallback_target: Dictionary = game.current_target.duplicate()
+	game.set_audio_available(false)
+	if "--screenshots" in OS.get_cmdline_user_args():
+		await _capture(game, "listen-no-sound")
+	check(game.target_word_label.visible and game.target_word_label.text == fallback_target.text
+		and not game.controls().has(game.hear_button) and game.controls().size() == 2,
+		"A silent Listen question visibly names its target and retains answerable picture choices")
+	var heard_before: int = heard.size()
+	game.hear_button.pressed.emit()
+	check(heard.size() == heard_before, "Missing audio cannot trigger a dead Hear action")
+	game.set_audio_available(true)
+	check(not game.target_word_label.visible and game.hear_button.visible and game.current_target == fallback_target,
+		"Recovered audio restores listening without changing the question")
+	game.answer_buttons[_answer_index(game, false)].pressed.emit()
+	game.set_audio_available(false)
+	check(game.feedback_view.word_label.text == fallback_target.text and game.controls().size() == 1,
+		"A playback failure during correction keeps the right answer visible and Continue usable")
+	game.set_audio_available(true)
+	var semantic_words: Array = words.filter(func(word: Dictionary):
+		return word.id in ["earth", "planet", "comet", "meteor", "rocket"])
+	var data = load("res://scripts/game_data.gd")
+	for seed_value in range(30):
+		game.start_round(semantic_words, "sky", palette, seed_value)
+		for question in range(5):
+			check(not data.confusable_words(game.choices[0].id, game.choices[1].id),
+				"Semantic alternatives never demand an arbitrary choice between overlapping labels")
+			game.answer_buttons[_answer_index(game, true)].pressed.emit()
+			game.continue_feedback()
+	var indistinguishable: Array = []
+	for index in range(5):
+		var word: Dictionary = words[0].duplicate()
+		word.id = "same-name-%d" % index
+		indistinguishable.append(word)
+	game.start_round(indistinguishable, "sky", palette, 1)
+	check(game.status == "unavailable" and game.controls().is_empty()
+		and game.status_label.text.contains("different"),
+		"An ambiguous custom pool shows an explanation instead of a misleading choice")
 	game.start_round(words.slice(0, 4), "sky", palette, 1)
 	check(game.status == "unavailable" and game.controls().is_empty(), "Too little vocabulary cannot start an unwinnable round")
 	game.start_round([words[0], words[0], words[0], words[0], words[0]], "sky", palette, 1)

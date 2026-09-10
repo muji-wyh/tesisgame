@@ -38,6 +38,8 @@ func _run() -> void:
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "The isolated medal fixture directory exists")
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/old.cfg")
+	app._mode_id = "match"
+	app.playroom_save_path = directory + "/playroom.cfg"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -217,6 +219,7 @@ func _run() -> void:
 	check(legacy.save(directory + "/legacy.cfg") == OK, "An old-reward archive fixture is saved")
 	var archive_app = load("res://scenes/main.tscn").instantiate()
 	archive_app.medal_progress = progress_script.new(directory + "/archive.cfg", directory + "/legacy.cfg")
+	archive_app.playroom_save_path = directory + "/archive-playroom.cfg"
 	root.add_child(archive_app)
 	await process_frame
 	await process_frame

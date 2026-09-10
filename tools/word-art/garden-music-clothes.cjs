@@ -20,14 +20,15 @@ module.exports = {
     <path d="M35 32 Q57 22 72 41 Q70 25 87 31 M32 45 Q46 62 66 54 Q86 56 88 40 M45 23 Q45 38 62 43 M34 59 Q45 50 53 44 M79 65 Q65 59 66 48" stroke="#ae6c86" stroke-width="2.5"/>
     <path d="M51 35 Q64 28 70 40 Q71 51 61 54 Q51 52 53 43 Q56 38 62 42" stroke="#9c6680" stroke-width="2.5"/>`,
   berry: `
-    <path d="M35 35 Q60 23 86 35 Q104 48 88 76 Q72 106 60 109 Q48 106 31 77 Q15 49 35 35Z" fill="#e99196"/>
-    <path d="M60 35 Q59 21 67 12 M60 33 38 19 42 38 23 41 45 49 59 38 75 49 98 41 77 37 81 20Z" fill="#9ec28a" stroke="#79986b" stroke-width="3"/>
-    <g fill="#f9d999" stroke="none">
-      <ellipse cx="38" cy="56" rx="2" ry="4"/><ellipse cx="57" cy="56" rx="2" ry="4"/><ellipse cx="79" cy="56" rx="2" ry="4"/>
-      <ellipse cx="44" cy="74" rx="2" ry="4"/><ellipse cx="65" cy="76" rx="2" ry="4"/><ellipse cx="82" cy="71" rx="2" ry="4"/>
-      <ellipse cx="57" cy="94" rx="2" ry="4"/><ellipse cx="73" cy="91" rx="2" ry="4"/>
+    <ellipse cx="60" cy="107" rx="30" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 35 Q59 20 65 13 M59 32 39 21 43 39 27 39 43 49 60 41 77 49 93 39 76 38 80 22Z" fill="#8fb873" stroke="#6a9560" stroke-width="3"/>
+    <g fill="#d96c80" stroke="#a64e66" stroke-width="2.5">
+      <circle cx="43" cy="49" r="12"/><circle cx="60" cy="47" r="12"/><circle cx="77" cy="49" r="12"/>
+      <circle cx="35" cy="64" r="12"/><circle cx="52" cy="63" r="12"/><circle cx="69" cy="63" r="12"/><circle cx="85" cy="64" r="11"/>
+      <circle cx="42" cy="81" r="12"/><circle cx="60" cy="80" r="12"/><circle cx="78" cy="80" r="12"/>
+      <circle cx="52" cy="96" r="11"/><circle cx="69" cy="95" r="11"/>
     </g>
-    <path d="M30 49 Q27 58 33 67" stroke="#fac3b5" stroke-width="4"/>`,
+    <path d="M38 44 43 42 M29 60 33 57 M46 77 50 75" stroke="#f7bac3" stroke-width="4"/>`,
   acorn: `
     <path d="M34 54 H89 Q91 82 62 108 Q30 91 28 60Z" fill="#cd9b68"/>
     <path d="M42 67 Q42 86 58 97" stroke="#e9c291" stroke-width="5"/>

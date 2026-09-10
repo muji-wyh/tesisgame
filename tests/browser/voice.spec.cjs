@@ -58,7 +58,12 @@ async function openGame(page, api = 'standard') {
   await page.goto('/');
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
-  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  const bounds = await metrics(page);
+  const scale = Math.min(bounds.width, bounds.height) / 480;
+  const modeWidth = (bounds.width / scale - 48) / 4;
+  await page.touchscreen.tap(bounds.x + (20 + modeWidth * 1.5) * scale, bounds.y + 208 * scale);
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   return errors;
@@ -73,13 +78,16 @@ async function metrics(page) {
 
 function cardPoint(bounds, index) {
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const columns = bounds.width >= bounds.height ? 4 : 2;
+  const height = bounds.height / scale;
+  const top = height >= 520 ? 319 : 288;
+  const gridHeight = height - top - 43;
+  const columns = bounds.width >= bounds.height || gridHeight < 318 ? 4 : 2;
   const rows = 8 / columns;
   const cellWidth = (bounds.width / scale - 24 - (columns - 1) * 10) / columns;
-  const cellHeight = (bounds.height / scale - 300 - (rows - 1) * 10) / rows;
+  const cellHeight = (gridHeight - (rows - 1) * 10) / rows;
   return {
     x: bounds.x + (12 + (index % columns) * (cellWidth + 10) + cellWidth / 2) * scale,
-    y: bounds.y + (288 + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
+    y: bounds.y + (top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
   };
 }
 
@@ -94,7 +102,7 @@ async function discoverBoard(page) {
     if (!cards.has(word)) cards.set(word, {});
     cards.get(word)[kind] = index;
     await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   }
   const pairs = [...cards].filter(([, card]) => card.Word !== undefined && card.Picture !== undefined);
   expect(pairs).toHaveLength(3);
@@ -159,10 +167,15 @@ test('the listening buddy reacts to words and reduced motion stops its animation
   await expect.poll(() => page.locator('#speech-meter').evaluate(element =>
     element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length
   )).toBe(5);
-  await page.evaluate(() => window.speechFixture.emit('I see a doll', false));
-  await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'true');
+  // Read the short 280 ms reaction in the same browser task that delivers speech.
+  // A cross-process assertion can arrive after it has ended on a busy WebKit runner.
+  expect(await page.evaluate(() => {
+    window.speechFixture.emit('I see a doll', false);
+    return document.getElementById('speech-panel').getAttribute('data-heard');
+  })).toBe('true');
   await expect(page.locator('#speech-transcript')).toHaveText('I see a doll');
   await page.screenshot({ path: testInfo.outputPath('voice-listening.png'), scale: 'css' });
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect.poll(() => page.locator('#speech-panel').evaluate(element =>
     element.getAnimations({ subtree: true }).length
@@ -193,10 +206,10 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await expect(page.locator('#game-status')).toHaveText(waiting);
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word.toUpperCase()}!`, true), first);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await page.evaluate(word => window.speechFixture.emit(`${word} ${word}`, true), first);
   await page.waitForTimeout(900);
-  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await page.evaluate(words => window.speechFixture.emit(`A ${words[0]}, ${words[0]} and ${words[1]}!`),
     pairs.slice(1).map(([word]) => word));
   await expect(page.locator('#game-status')).toContainText('You did it!');
@@ -288,7 +301,8 @@ test('missing recognition leaves ordinary manual matching available', async ({ p
     await page.touchscreen.tap(point.x, point.y);
   }
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find three pairs.');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(errors).toEqual([]);

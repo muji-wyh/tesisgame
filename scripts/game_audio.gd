@@ -1,6 +1,7 @@
 extends Node
 
 signal status_changed(message: String)
+signal word_failed
 signal _stream_loaded(path: String)
 
 var music: AudioStreamPlayer
@@ -89,6 +90,8 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 			current_theme = ""
 			_music_error = true
 		status_changed.emit("Sound could not load. You can keep playing. Tap a card to try again.")
+		if player == voice and path.get_file().begins_with("word-"):
+			word_failed.emit()
 		return
 	player.stream = stream
 	if player == music:

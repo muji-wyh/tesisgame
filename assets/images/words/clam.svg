@@ -2,12 +2,13 @@
   <title id="title">clam</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M22 72 Q7 53 21 39 Q25 23 41 29 Q60 12 77 28 Q97 20 102 42 Q115 59 98 75Z" fill="#c6b7dd"/>
-    <path d="M29 45 44 65 M44 35 52 61 M61 30V58 M78 36 69 61 M93 47 78 66" stroke="#a08abc" stroke-width="2.5"/>
-    <ellipse cx="60" cy="77" rx="42" ry="20" fill="#ebcbdf"/>
-    <ellipse cx="60" cy="77" rx="34" ry="13" fill="#b391b5" stroke-width="2.5"/>
-    <circle cx="60" cy="72" r="14" fill="#fff0d4"/>
-    <circle cx="55" cy="67" r="4" fill="#fffaf0" stroke="none"/>
-    <path d="M18 77 Q30 111 60 106 Q92 110 102 77 Q91 94 60 94 Q29 94 18 77Z" fill="#dac3df"/>
+    <path d="M23 68 Q10 46 25 35 Q34 20 47 28 Q62 17 76 29 Q93 24 100 41 Q112 56 96 71Z" fill="#c7b2d9"/>
+    <path d="M28 42 45 64 M44 33 53 60 M61 29V59 M78 35 69 62 M94 46 80 66" stroke="#9f83b8" stroke-width="2.5"/>
+    <ellipse cx="60" cy="77" rx="42" ry="20" fill="#f0d4d9"/>
+    <ellipse cx="60" cy="76" rx="32" ry="12" fill="#b18ca8" stroke-width="2.5"/>
+    <path d="M37 79 Q35 62 51 62 Q61 53 72 64 Q85 66 81 79 Q63 88 37 79Z" fill="#f6ddbb" stroke="#c79587" stroke-width="2.5"/>
+    <path d="M43 75 Q57 64 74 73" stroke="#fff0d4" stroke-width="3"/>
+    <path d="M18 77 Q27 105 60 107 Q94 103 102 77 Q88 94 60 94 Q32 94 18 77Z" fill="#dac0dc"/>
+    <path d="M34 98 39 94 M49 105 51 97 M65 106 64 98 M82 100 77 95" stroke="#af8eaf" stroke-width="2"/>
   </g>
 </svg>

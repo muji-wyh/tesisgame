@@ -34,10 +34,13 @@ module.exports = {
     <path d="M70 61 79 61 75 66Z" fill="#765445" stroke="none"/>
     <path d="M75 66 Q69 73 65 67 M75 66 Q80 73 85 67 M62 62 49 59 M62 68 48 70 M87 62 102 60 M87 68 102 72" stroke-width="2"/>`,
   shell: `
-    <path d="M49 94 40 105 H80 L71 94" fill="#eab292"/>
-    <path d="M60 94 Q41 91 18 66 Q8 48 22 42 Q14 26 34 25 Q36 10 51 19 Q60 7 69 19 Q84 10 87 26 Q107 26 100 43 Q114 52 102 68 Q80 91 60 94Z" fill="#f2c0a3"/>
-    <path d="M60 91 27 46 M60 91 40 30 M60 91 54 25 M60 91 68 26 M60 91 83 32 M60 91 96 48" stroke="#c48c74" stroke-width="2.5"/>
-    <path d="M23 58 Q29 70 37 74" stroke="#ffe2bd" stroke-width="5"/>`,
+    <ellipse cx="59" cy="107" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M74 91 Q54 108 33 94 Q10 78 18 49 Q27 20 57 19 Q86 18 99 46 Q111 77 90 101 L68 100Z" fill="#f3caa5"/>
+    <path d="M73 84 Q49 94 35 78 Q22 61 37 44 Q50 29 69 39 Q85 49 75 66 Q65 80 53 69 Q45 60 54 53 Q62 48 66 55" stroke="#c68b69" stroke-width="4"/>
+    <path d="M85 57 Q100 68 91 94 L73 100 Q66 82 75 67Z" fill="#eaa49b"/>
+    <path d="M84 69 Q93 82 84 94" stroke="#bc7e77" stroke-width="3"/>
+    <path d="M28 40 36 47 M39 26 44 38 M57 21 57 33 M77 27 72 39 M21 63 32 62 M29 85 37 78" stroke="#dca47d" stroke-width="2.5"/>
+    <path d="M29 36 Q36 28 45 26" stroke="#ffead0" stroke-width="4"/>`,
   coral: `
     <ellipse cx="60" cy="104" rx="39" ry="6" fill="#e5d2b8" stroke="none"/>
     <path d="M53 103V75 Q29 73 25 60 L24 46 12 37 14 29 32 39 33 23 43 23 43 58 54 62 55 25 49 17 54 10 65 18 65 43 76 32 76 15 86 15 86 34 101 27 106 35 86 47 66 62 66 78 83 69 91 51 101 55 94 78 67 91 69 103Z" fill="#eb9e94"/>
@@ -51,13 +54,14 @@ module.exports = {
     <circle cx="50" cy="62" r="5" fill="#fff2dc"/><circle cx="70" cy="62" r="5" fill="#fff2dc"/>
     <circle cx="50" cy="62" r="2" fill="#765445" stroke="none"/><circle cx="70" cy="62" r="2" fill="#765445" stroke="none"/>`,
   clam: `
-    <path d="M22 72 Q7 53 21 39 Q25 23 41 29 Q60 12 77 28 Q97 20 102 42 Q115 59 98 75Z" fill="#c6b7dd"/>
-    <path d="M29 45 44 65 M44 35 52 61 M61 30V58 M78 36 69 61 M93 47 78 66" stroke="#a08abc" stroke-width="2.5"/>
-    <ellipse cx="60" cy="77" rx="42" ry="20" fill="#ebcbdf"/>
-    <ellipse cx="60" cy="77" rx="34" ry="13" fill="#b391b5" stroke-width="2.5"/>
-    <circle cx="60" cy="72" r="14" fill="#fff0d4"/>
-    <circle cx="55" cy="67" r="4" fill="#fffaf0" stroke="none"/>
-    <path d="M18 77 Q30 111 60 106 Q92 110 102 77 Q91 94 60 94 Q29 94 18 77Z" fill="#dac3df"/>`,
+    <path d="M23 68 Q10 46 25 35 Q34 20 47 28 Q62 17 76 29 Q93 24 100 41 Q112 56 96 71Z" fill="#c7b2d9"/>
+    <path d="M28 42 45 64 M44 33 53 60 M61 29V59 M78 35 69 62 M94 46 80 66" stroke="#9f83b8" stroke-width="2.5"/>
+    <ellipse cx="60" cy="77" rx="42" ry="20" fill="#f0d4d9"/>
+    <ellipse cx="60" cy="76" rx="32" ry="12" fill="#b18ca8" stroke-width="2.5"/>
+    <path d="M37 79 Q35 62 51 62 Q61 53 72 64 Q85 66 81 79 Q63 88 37 79Z" fill="#f6ddbb" stroke="#c79587" stroke-width="2.5"/>
+    <path d="M43 75 Q57 64 74 73" stroke="#fff0d4" stroke-width="3"/>
+    <path d="M18 77 Q27 105 60 107 Q94 103 102 77 Q88 94 60 94 Q32 94 18 77Z" fill="#dac0dc"/>
+    <path d="M34 98 39 94 M49 105 51 97 M65 106 64 98 M82 100 77 95" stroke="#af8eaf" stroke-width="2"/>`,
   earth: `
     <circle cx="60" cy="60" r="43" fill="#8dc8e0"/>
     <path d="M30 30 43 24 50 33 46 43 56 51 51 60 42 58 35 67 28 57 20 54 18 46Z M47 65 61 62 72 73 66 86 57 98 52 82 43 76Z M77 22 93 35 97 48 85 51 80 64 71 58 66 47 72 39 68 29Z M85 75 97 79 91 93 80 92 76 83Z" fill="#a9cd8f" stroke-width="2.5"/>
@@ -81,19 +85,22 @@ module.exports = {
     <path d="M20 86 Q40 96 72 82" stroke="#fae9b6" stroke-width="2.5"/>
     <circle cx="21" cy="25" r="3" fill="#dfca8f" stroke="none"/><circle cx="99" cy="96" r="4" fill="#bca3da" stroke="none"/>`,
   comet: `
-    <path d="M27 85 40 50 102 16 82 55 108 45 63 90Z" fill="#b4d4e3"/>
-    <path d="M35 83 91 30 66 70 88 60 55 91Z" fill="#e2f0ed" stroke="none"/>
-    <path d="M53 62 78 38 M63 83 94 64" stroke="#76b3ca" stroke-width="3"/>
-    <circle cx="35" cy="86" r="20" fill="#f3d183"/>
-    <circle cx="30" cy="80" r="5" fill="#fbe7b1" stroke="none"/>
-    <path d="M21 34V44 M16 39H26 M101 89V97 M97 93H105" stroke="#c4abd6" stroke-width="2.5"/>`,
+    <path d="M29 72 Q44 32 104 13 Q83 45 49 79Z" fill="#abd6e8" stroke="#6c9ab7"/>
+    <path d="M35 85 Q63 54 111 48 Q79 78 46 92Z" fill="#d6eaf1" stroke="#89b6c9" stroke-width="2.5"/>
+    <path d="M43 69 Q65 43 92 29 M51 84 Q75 66 95 61" stroke="#f0faff" stroke-width="4"/>
+    <circle cx="32" cy="83" r="21" fill="#cfe9ee" stroke="#6c9ab7"/>
+    <circle cx="29" cy="84" r="10" fill="#8eb9c8" stroke="#6c9ab7" stroke-width="2.5"/>
+    <path d="M23 76 26 73 M25 87 30 91" stroke="#f8ffff" stroke-width="3"/>
+    <path d="M19 29V41 M13 35H25 M94 93V101 M90 97H98" stroke="#b19acb" stroke-width="2.5"/>`,
   meteor: `
-    <path d="M27 73 19 23 41 38 47 10 65 36 88 20 91 70Z" fill="#efa776"/>
-    <path d="M36 68 30 38 47 52 53 30 67 56 78 39 80 74Z" fill="#f4d081" stroke="none"/>
-    <path d="M25 75 36 59 58 55 81 66 91 86 80 105 55 110 33 99 22 85Z" fill="#ad9588"/>
-    <path d="M34 69 47 61 55 69 48 79 34 78Z M65 87 73 77 84 88 76 99 67 99Z" fill="#8f7a74" stroke-width="2.5"/>
-    <circle cx="45" cy="96" r="5" fill="#d0b39a" stroke="none"/>
-    <path d="M9 51 13 68 M104 43 108 59" stroke="#e5b479" stroke-width="3"/>`,
+    <path d="M14 98 Q62 82 109 101" stroke="#bddde5" stroke-width="7"/>
+    <path d="M13 108 Q61 91 109 111" stroke="#e0edf0" stroke-width="4"/>
+    <path d="M36 68 Q55 23 102 11 L89 36 109 27 Q85 59 55 87Z" fill="#e99663" stroke="#ba7350"/>
+    <path d="M44 70 84 30 71 53 92 43 56 80Z" fill="#f9d477" stroke="none"/>
+    <circle cx="37" cy="77" r="23" fill="#f4ba65" stroke="#ba7350"/>
+    <path d="M24 73 31 62 43 64 52 77 45 89 29 87Z" fill="#a88b7b"/>
+    <path d="M31 69 36 67 M40 80 43 82" stroke="#dcc2a4" stroke-width="3"/>
+    <path d="M23 47 32 38 M60 96 74 83" stroke="#e9aa6e" stroke-width="3"/>`,
   alien: `
     <path d="M40 91 Q38 75 47 72 H73 Q82 75 80 91 L96 102 85 109 69 97 H51 L35 109 24 102Z" fill="#b0cdb5"/>
     <path d="M38 37 30 22 M82 37 90 22" stroke="#80aa91" stroke-width="5"/>

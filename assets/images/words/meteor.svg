@@ -2,11 +2,13 @@
   <title id="title">meteor</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M27 73 19 23 41 38 47 10 65 36 88 20 91 70Z" fill="#efa776"/>
-    <path d="M36 68 30 38 47 52 53 30 67 56 78 39 80 74Z" fill="#f4d081" stroke="none"/>
-    <path d="M25 75 36 59 58 55 81 66 91 86 80 105 55 110 33 99 22 85Z" fill="#ad9588"/>
-    <path d="M34 69 47 61 55 69 48 79 34 78Z M65 87 73 77 84 88 76 99 67 99Z" fill="#8f7a74" stroke-width="2.5"/>
-    <circle cx="45" cy="96" r="5" fill="#d0b39a" stroke="none"/>
-    <path d="M9 51 13 68 M104 43 108 59" stroke="#e5b479" stroke-width="3"/>
+    <path d="M14 98 Q62 82 109 101" stroke="#bddde5" stroke-width="7"/>
+    <path d="M13 108 Q61 91 109 111" stroke="#e0edf0" stroke-width="4"/>
+    <path d="M36 68 Q55 23 102 11 L89 36 109 27 Q85 59 55 87Z" fill="#e99663" stroke="#ba7350"/>
+    <path d="M44 70 84 30 71 53 92 43 56 80Z" fill="#f9d477" stroke="none"/>
+    <circle cx="37" cy="77" r="23" fill="#f4ba65" stroke="#ba7350"/>
+    <path d="M24 73 31 62 43 64 52 77 45 89 29 87Z" fill="#a88b7b"/>
+    <path d="M31 69 36 67 M40 80 43 82" stroke="#dcc2a4" stroke-width="3"/>
+    <path d="M23 47 32 38 M60 96 74 83" stroke="#e9aa6e" stroke-width="3"/>
   </g>
 </svg>

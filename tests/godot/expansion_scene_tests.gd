@@ -23,6 +23,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -44,8 +45,8 @@ func _run() -> void:
 	for button in app._choice.answer_buttons:
 		button.pressed.emit()
 	check(app.model.successes == 0 and app.model.mistakes == 0 and app._choice.current_target == target, "Covered choice controls cannot answer under Rewards")
-	app._play_duck_trick("bubbles")
-	check(app._playroom_caption.text.to_lower().contains("bubble"), "The reward room gives visible duck activity feedback")
+	app._room.action_button.pressed.emit()
+	check(app._playroom_caption.text.to_lower().contains("ball"), "The room toy action gives visible play feedback")
 	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
 	await process_frame
 	await process_frame
@@ -77,13 +78,13 @@ func _run() -> void:
 	app._hide_collection()
 	app._controller_accept()
 	check(app._mode_id == "sky" and app._choice.successes == 1, "Closing Rewards during feedback cannot turn A into a mode change")
-	app._choice.feedback_timer.timeout.emit()
+	app._choice.continue_feedback()
 	check(app._choice.answer_buttons.has(root.gui_get_focus_owner()), "The next prompt restores choice focus after a modal")
 	for answer in range(4):
 		var correct_index: int = app._choice.choices.find(app._choice.current_target)
 		check(correct_index >= 0, "Every flying picture has a matching word choice")
 		app._choice.answer_buttons[correct_index].pressed.emit()
-		app._choice.feedback_timer.timeout.emit()
+		app._choice.continue_feedback()
 	check(app.model.phase == "won" and app.model.successes == 5, "Five choice answers enter the shared win screen")
 	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
 	app._open_chest()
@@ -97,16 +98,19 @@ func _run() -> void:
 	app._wear_preview_reward()
 	check(app._favorite_reward_id == "ocean-1", "An earned medal can be displayed with Pip")
 	var saved := ConfigFile.new()
-	check(saved.load(app.playroom_save_path) == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The favorite survives reload")
+	check(saved.load(app.playroom_save_path.get_basename() + "-v2.cfg") == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The favorite survives reload")
 	app._hide_collection()
+	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._replay()
-	check(app._mode_id == "sky" and app.model.phase == "waiting" and app._choice.successes == 0, "Replay preserves the chosen mode with fresh progress")
+	check(app._mode_id == "sky" and app.model.phase == "waiting" and app._choice.successes == 0
+		and app.model.lesson_words == lesson, "Repeat lesson preserves the mode and words with fresh progress")
+	app.audio.set_muted(false)
 	app.choose_mode("listen")
 	check(app._choice.hear_button.is_visible_in_tree(), "Listening mode offers an explicit replayable Hear control")
 	for attempt in range(3):
 		var wrong_index: int = 1 - app._choice.choices.find(app._choice.current_target)
 		app._choice.answer_buttons[wrong_index].pressed.emit()
-		app._choice.feedback_timer.timeout.emit()
+		app._choice.continue_feedback()
 	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect choices enter the shared encouragement screen")
 	app.choose_mode("match")
 	check(app.grid.visible and app.model.cards.size() == 8 and not app._choice.visible, "Switching back restores the original eight-card game")
@@ -123,6 +127,8 @@ func _run() -> void:
 			if mode != "match":
 				for button in app._choice.answer_buttons:
 					check(app.get_global_rect().encloses(button.get_global_rect()), "Choice buttons fit " + str(dimensions))
+	app.on_page_hidden()
+	await create_timer(0.1).timeout
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

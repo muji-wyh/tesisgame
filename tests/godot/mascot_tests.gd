@@ -53,6 +53,13 @@ func _run() -> void:
 		var directory := "user://duck-test-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 		DirAccess.make_dir_recursive_absolute(directory)
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+		app.playroom_save_path = directory + "/playroom.cfg"
+		app._mode_id = "match"
+		# Godot consumes Escape to dismiss a hovered tooltip before scene input.
+		# Keep this keyboard fixture independent of the inherited pointer position.
+		var pointer := InputEventMouseMotion.new()
+		pointer.position = Vector2(-100, -100)
+		Input.parse_input_event(pointer)
 		root.add_child(app)
 		await process_frame
 		await process_frame

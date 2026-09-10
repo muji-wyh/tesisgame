@@ -2,12 +2,16 @@
   <title id="title">milk</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <ellipse cx="60" cy="107" rx="28" ry="4" fill="#eadbc5" stroke="none"/>
-    <rect x="47" y="16" width="26" height="12" rx="3" fill="#9dcbd2"/>
-    <path d="M49 28 H71 V38 Q78 44 79 54 V100 Q79 106 73 106 H47 Q41 106 41 100 V54 Q42 44 49 38Z" fill="#fffefd"/>
-    <path d="M42 57 Q60 61 78 57 V100 Q78 105 72 105 H48 Q42 105 42 100Z" fill="#f7fbfa" stroke="none"/>
-    <path d="M48 39 H72 M42 58 Q60 62 78 58" stroke="#b9d9dc" stroke-width="2.5"/>
-    <path d="M50 47 Q54 42 60 41" stroke="#ffffff" stroke-width="4"/>
-    <path d="M51 78 Q60 68 69 78 Q66 88 60 91 Q54 88 51 78Z" fill="#dceff0" stroke-width="2.5"/>
+    <ellipse cx="61" cy="108" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M51 32 61 16 H88 L99 32 V102 H51Z" fill="#ffffff" stroke="#6d91a5"/>
+    <path d="M51 32 H86 L99 32 V102 H86 V32 L77 16" fill="#c3dfed" stroke="#6d91a5"/>
+    <path d="M61 15 H88 V21 H61Z" fill="#72afd0" stroke="#6d91a5" stroke-width="2.5"/>
+    <path d="M52 39 H85 V53 H52Z M52 88 H85 V101 H52Z" fill="#72afd0" stroke="none"/>
+    <path d="M58 62 Q62 55 67 61 L70 70 Q65 79 59 74Z M79 75 Q73 73 71 81 Q75 88 82 82Z" fill="#6d7279" stroke="none"/>
+    <path d="M20 59 H55 L51 100 Q38 109 24 100Z" fill="#fafdff" stroke="#83adbe"/>
+    <path d="M23 69 H52 L49 98 Q38 104 26 98Z" fill="#ffffff" stroke="none"/>
+    <ellipse cx="37.5" cy="59" rx="17.5" ry="5" fill="#e1f1f6" stroke="#83adbe" stroke-width="2.5"/>
+    <ellipse cx="37.5" cy="69" rx="14" ry="3" fill="#ffffff" stroke="#b6d5e0" stroke-width="1.5"/>
+    <path d="M28 76 30 95" stroke="#d9edf5" stroke-width="3"/>
   </g>
 </svg>

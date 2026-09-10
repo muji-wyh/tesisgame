@@ -7,14 +7,15 @@ module.exports = {
     <path d="M43 41 Q53 33 64 36" stroke="#fff0b8" stroke-width="5"/>`,
 
   coat: `
-    <ellipse cx="60" cy="106" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
-    <path d="M42 30 29 36 14 68 28 76 37 57 34 100 Q47 105 60 101 Q73 105 86 100 L83 57 92 76 106 68 91 36 78 30 68 25 H52Z" fill="#9dc9df"/>
-    <path d="M52 26 43 36 56 48 60 35 64 48 77 36 68 26 Q60 33 52 26Z" fill="#e8f3f4" stroke-width="2.5"/>
-    <path d="M60 36V101" stroke="#6f9fb8" stroke-width="3"/>
-    <circle cx="66" cy="56" r="3.5" fill="#ef9b86" stroke="none"/>
-    <circle cx="66" cy="70" r="3.5" fill="#ef9b86" stroke="none"/>
-    <circle cx="66" cy="84" r="3.5" fill="#ef9b86" stroke="none"/>
-    <path d="M40 70H51V82H39 M69 70H80L81 82H69" fill="#cbe2ea" stroke-width="2.5"/>`,
+    <ellipse cx="60" cy="110" rx="36" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M39 36 Q33 10 60 9 Q87 10 81 36 L74 47 H46Z" fill="#e0a452"/>
+    <path d="M46 31 Q43 18 60 17 Q77 18 74 31 L68 40 H52Z" fill="#fff0cf" stroke-width="2.5"/>
+    <path d="M39 32 26 40 13 86 27 91 38 64 32 105 Q60 112 88 105 L82 64 93 91 107 86 94 40 81 32 69 41 H51Z" fill="#df9864"/>
+    <path d="M40 32 51 38 60 45 69 38 80 32 75 48 60 53 45 48Z" fill="#ffebc8" stroke-width="2.5"/>
+    <path d="M60 49V107 M14 80 29 85 M91 85 106 80" stroke="#a96649" stroke-width="3"/>
+    <path d="M52 59H67 M52 72H67 M52 85H67" stroke="#765445" stroke-width="3"/>
+    <path d="M65 56V62 M65 69V75 M65 82V88" stroke="#fff0ce" stroke-width="4"/>
+    <path d="M39 82H49V94H37 M71 82H81L83 94H71" fill="#efba86" stroke-width="2.5"/>`,
 
   shirt: `
     <ellipse cx="60" cy="103" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
@@ -306,11 +307,10 @@ module.exports = {
     <circle cx="23" cy="57" r="3" fill="#8fc5b5" stroke="none"/>`,
 
   spoon: `
-    <ellipse cx="60" cy="108" rx="24" ry="3.5" fill="#eadbc5" stroke="none"/>
-    <ellipse cx="44" cy="34" rx="17" ry="23" fill="#cad9dd"/>
-    <path d="M39 55 Q42 61 48 56 L76 101 Q80 108 87 104 Q94 100 90 94 L56 52Z" fill="#cad9dd"/>
-    <ellipse cx="44" cy="33" rx="9" ry="14" fill="#e9f1f1" stroke="none"/>
-    <path d="M78 94 Q84 91 89 96" stroke="#eef5f5" stroke-width="3"/>`,
+    <ellipse cx="60" cy="110" rx="22" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M60 10 C40 10 36 41 50 51 Q58 56 57 66 L54 101 Q54 108 60 108 Q66 108 66 101 L63 66 Q62 56 70 51 C84 41 80 10 60 10Z" fill="#c4d3dc" stroke="#657b89" stroke-width="3"/>
+    <path d="M64 16 Q78 27 71 42 Q66 51 56 50 Q65 42 66 31Z" fill="#8ca4b3" stroke="none"/>
+    <path d="M48 30 Q49 20 56 17 M58 70 57 100" stroke="#f8fdff" stroke-width="3.5"/>`,
 
   fork: `
     <ellipse cx="57" cy="108" rx="24" ry="3.5" fill="#eadbc5" stroke="none"/>
@@ -352,10 +352,13 @@ module.exports = {
     <path d="M57 72Q61 77 65 72 M57 91H64" stroke="#f8c9bb" stroke-width="3"/>`,
 
   towel: `
-    <ellipse cx="60" cy="108" rx="35" ry="4" fill="#eadbc5" stroke="none"/>
-    <path d="M25 24 Q60 17 95 24 V35 Q60 29 25 35Z" fill="#b98562"/>
-    <path d="M33 30 Q60 34 87 30 V98 Q61 105 33 98Z" fill="#9fcfda"/>
-    <path d="M33 48 Q60 55 87 48 V65 Q60 72 33 65Z" fill="#cce8ed" stroke-width="2.5"/>
-    <path d="M33 98 34 107 M41 100 42 108 M50 101 50 109 M60 102V110 M70 101 70 109 M79 100 78 108 M87 98 86 107" stroke-width="2.5"/>
-    <path d="M42 36V46 M78 35V46" stroke="#eaf6f5" stroke-width="3"/>`
+    <ellipse cx="61" cy="108" rx="36" ry="4" fill="#eadbc5" stroke="none"/>
+    <circle cx="17" cy="28" r="6" fill="#c8d5da" stroke="#7b8f99"/>
+    <circle cx="103" cy="28" r="6" fill="#c8d5da" stroke="#7b8f99"/>
+    <path d="M17 28 H103" stroke="#7b8f99" stroke-width="7"/>
+    <path d="M17 26 H103" stroke="#e8f1f4" stroke-width="2"/>
+    <path d="M33 24 H89 V94 H33Z" fill="#70b4c8"/>
+    <path d="M29 30 Q29 21 38 21 H78 Q85 21 85 30 V102 H29Z" fill="#a6d9e3"/>
+    <path d="M38 22 Q45 24 43 35 M33 87 H81 M33 94 H81" stroke="#69afc3" stroke-width="3"/>
+    <path d="M36 42V75 M48 48V63 M72 37V76" stroke="#dff4f5" stroke-width="3"/>`
 };

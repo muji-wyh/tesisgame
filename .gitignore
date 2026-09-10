@@ -7,3 +7,7 @@ test-results
 .godot/
 build/*
 !build/.gdignore
+# Licensed Unity Store textures are shipped only inside the compiled game.
+assets/imported-unity/
+*.unitypackage
+__pycache__/

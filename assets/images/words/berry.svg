@@ -2,13 +2,14 @@
   <title id="title">berry</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M35 35 Q60 23 86 35 Q104 48 88 76 Q72 106 60 109 Q48 106 31 77 Q15 49 35 35Z" fill="#e99196"/>
-    <path d="M60 35 Q59 21 67 12 M60 33 38 19 42 38 23 41 45 49 59 38 75 49 98 41 77 37 81 20Z" fill="#9ec28a" stroke="#79986b" stroke-width="3"/>
-    <g fill="#f9d999" stroke="none">
-      <ellipse cx="38" cy="56" rx="2" ry="4"/><ellipse cx="57" cy="56" rx="2" ry="4"/><ellipse cx="79" cy="56" rx="2" ry="4"/>
-      <ellipse cx="44" cy="74" rx="2" ry="4"/><ellipse cx="65" cy="76" rx="2" ry="4"/><ellipse cx="82" cy="71" rx="2" ry="4"/>
-      <ellipse cx="57" cy="94" rx="2" ry="4"/><ellipse cx="73" cy="91" rx="2" ry="4"/>
+    <ellipse cx="60" cy="107" rx="30" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 35 Q59 20 65 13 M59 32 39 21 43 39 27 39 43 49 60 41 77 49 93 39 76 38 80 22Z" fill="#8fb873" stroke="#6a9560" stroke-width="3"/>
+    <g fill="#d96c80" stroke="#a64e66" stroke-width="2.5">
+      <circle cx="43" cy="49" r="12"/><circle cx="60" cy="47" r="12"/><circle cx="77" cy="49" r="12"/>
+      <circle cx="35" cy="64" r="12"/><circle cx="52" cy="63" r="12"/><circle cx="69" cy="63" r="12"/><circle cx="85" cy="64" r="11"/>
+      <circle cx="42" cy="81" r="12"/><circle cx="60" cy="80" r="12"/><circle cx="78" cy="80" r="12"/>
+      <circle cx="52" cy="96" r="11"/><circle cx="69" cy="95" r="11"/>
     </g>
-    <path d="M30 49 Q27 58 33 67" stroke="#fac3b5" stroke-width="4"/>
+    <path d="M38 44 43 42 M29 60 33 57 M46 77 50 75" stroke="#f7bac3" stroke-width="4"/>
   </g>
 </svg>

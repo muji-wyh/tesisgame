@@ -7,20 +7,17 @@ signal hear_requested(word: Dictionary)
 signal prompt_ready
 
 const Style = preload("res://scripts/ui_style.gd")
+const Data = preload("res://scripts/game_data.gd")
+const Lesson = preload("res://scripts/word_lesson.gd")
 
 class PlayScene:
 	extends Control
 
 	var accent: Color = Color("#438363")
 	var sky: bool = true
-	var feedback: String = ""
 	var arrival: float = 1.0:
 		set(value):
 			arrival = value
-			queue_redraw()
-	var burst: float = 0.0:
-		set(value):
-			burst = value
 			queue_redraw()
 
 	func _draw() -> void:
@@ -47,21 +44,6 @@ class PlayScene:
 					var height: float = 7.0 + float(bar % 2) * 7.0
 					var x: float = wave.x + float(bar - 1) * 8
 					draw_line(Vector2(x, wave.y - height), Vector2(x, wave.y + height), accent.lightened(0.4), 4, true)
-		if feedback == "correct":
-			for index in range(8):
-				var angle: float = TAU * float(index) / 8.0 - PI * 0.5
-				var spread: float = 0.85 + sin(burst * PI * 0.5) * 0.15
-				var point: Vector2 = center + Vector2(cos(angle) * minf(size.x * 0.42, 185), sin(angle) * size.y * 0.36) * spread
-				var star := PackedVector2Array()
-				for corner in range(10):
-					star.append(point + Vector2.UP.rotated(float(corner) * PI / 5.0) * (8.0 if corner % 2 == 0 else 3.6))
-				draw_colored_polygon(star, Color("#f6b93d"))
-				star.append(star[0])
-				draw_polyline(star, accent, 1.2, true)
-		elif feedback == "wrong":
-			for side in [-1, 1]:
-				var point := Vector2(center.x + float(side) * minf(size.x * 0.39, 180), size.y * 0.77)
-				draw_arc(point, 10, 0, PI, 12, accent.lightened(0.15), 2.5, true)
 
 var mode_id: String = "sky"
 var current_target: Dictionary = {}
@@ -71,18 +53,19 @@ var status: String = "stopped"
 var successes: int = 0
 var mistakes: int = 0
 var reduced_motion: bool = false
+var audio_available: bool = true
 var suspended: bool = false
 var answer_buttons: Array[Button] = []
 var hear_button: Button
-var feedback_timer: Timer
+var feedback_view
 var status_label: Label
+var target_word_label: Label
 var target_picture: TextureRect
 
 var _words: Array[Dictionary] = []
 var _palette: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _last_correct: bool = false
-var _selected_index: int = -1
 var _stage: Control
 var _landing: Panel
 var _art: PlayScene
@@ -96,9 +79,9 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	if feedback_timer != null:
+	if _stage != null:
 		return
-	custom_minimum_size = Vector2(216, 180)
+	custom_minimum_size = Vector2(216, 200)
 	clip_contents = true
 	status_label = Style.label("", 18)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -126,6 +109,10 @@ func _build() -> void:
 	_name_control(hear_button, hear_button.tooltip_text)
 	hear_button.pressed.connect(_hear)
 	_stage.add_child(hear_button)
+	target_word_label = Style.label("", 36)
+	target_word_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	target_word_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_stage.add_child(target_word_label)
 	for index in range(2):
 		var button := Button.new()
 		button.name = "Answer%d" % (index + 1)
@@ -134,11 +121,11 @@ func _build() -> void:
 		button.pressed.connect(_choose.bind(index))
 		add_child(button)
 		answer_buttons.append(button)
-	feedback_timer = Timer.new()
-	feedback_timer.one_shot = true
-	feedback_timer.wait_time = 0.65
-	feedback_timer.timeout.connect(_finish_feedback)
-	add_child(feedback_timer)
+	feedback_view = Lesson.new()
+	add_child(feedback_view)
+	feedback_view.finished.connect(continue_feedback)
+	feedback_view.hear_requested.connect(_hear_feedback)
+	feedback_view.hide()
 	resized.connect(_layout)
 	_layout()
 
@@ -152,7 +139,6 @@ func start_round(words: Array, selected_mode: String, palette: Dictionary, seed_
 	found_words.clear()
 	successes = 0
 	mistakes = 0
-	_selected_index = -1
 	_words.clear()
 	var seen: Dictionary = {}
 	for word in words:
@@ -162,8 +148,7 @@ func start_round(words: Array, selected_mode: String, palette: Dictionary, seed_
 	set_palette(palette)
 	progress_changed.emit(0, 0)
 	if _words.size() < 5 or not mode_id in ["sky", "listen"]:
-		status = "unavailable"
-		status_label.text = "Five different words are needed to play."
+		_unavailable()
 		return
 	if seed_value < 0:
 		_rng.randomize()
@@ -184,15 +169,24 @@ func set_palette(palette: Dictionary) -> void:
 	_landing.add_theme_stylebox_override("panel", Style.box(Color.WHITE, _palette.accent.lightened(0.45), 22, 3))
 	_art.accent = _palette.accent
 	_art.queue_redraw()
-	var color: Color = (Style.GOOD if _last_correct else Style.WRONG) if status == "feedback" else _palette.accent
-	status_label.add_theme_color_override("font_color", color)
-	if status == "feedback" and _selected_index >= 0:
-		answer_buttons[_selected_index].add_theme_stylebox_override("disabled", Style.box(color.lightened(0.86), color, 16, 3))
+	status_label.add_theme_color_override("font_color", _palette.accent)
+	target_word_label.add_theme_color_override("font_color", _palette.accent)
+	feedback_view.set_palette(palette)
 	_apply_enabled()
+
+
+func set_audio_available(value: bool) -> void:
+	_build()
+	audio_available = value
+	feedback_view.set_audio_available(value)
+	if status == "asking":
+		_show_question()
 
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	if feedback_view != null:
+		feedback_view.set_reduced_motion(value)
 	if value:
 		_arrival_generation += 1
 		_stop_motion()
@@ -201,8 +195,8 @@ func set_reduced_motion(value: bool) -> void:
 
 func pause(value: bool) -> void:
 	suspended = value
-	if feedback_timer != null:
-		feedback_timer.paused = value
+	if feedback_view != null:
+		feedback_view.pause(value)
 	if _motion != null and _motion.is_valid():
 		if value:
 			_motion.pause()
@@ -215,18 +209,21 @@ func stop() -> void:
 	_arrival_generation += 1
 	status = "stopped"
 	suspended = false
-	if feedback_timer != null:
-		feedback_timer.stop()
-		feedback_timer.paused = false
+	if feedback_view != null:
+		feedback_view.hide()
 	_stop_motion()
 	_apply_enabled()
 
 
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
-	if status != "asking" or suspended or not is_visible_in_tree():
+	if suspended or not is_visible_in_tree():
 		return result
-	if mode_id == "listen":
+	if status == "feedback":
+		return feedback_view.controls()
+	if status != "asking":
+		return result
+	if mode_id == "listen" and audio_available:
 		result.append(hear_button)
 	result.append_array(answer_buttons)
 	return result
@@ -243,17 +240,15 @@ func _shuffle(items: Array) -> void:
 func _present_target() -> void:
 	_arrival_generation += 1
 	current_target = _words[successes]
-	var alternatives: Array = _words.filter(func(word: Dictionary) -> bool: return word.id != current_target.id)
+	var alternatives: Array = _words.filter(func(word: Dictionary) -> bool:
+		return not Data.confusable_words(word.id, current_target.id) and word.text != current_target.text)
+	if alternatives.is_empty():
+		_unavailable()
+		return
 	choices.assign([current_target, alternatives[_rng.randi_range(0, alternatives.size() - 1)]])
 	_shuffle(choices)
 	status = "asking"
 	_art.sky = mode_id == "sky"
-	_art.feedback = ""
-	status_label.text = "Which word belongs to this picture?" if mode_id == "sky" else "Listen, then choose the picture."
-	status_label.add_theme_color_override("font_color", _palette.accent)
-	_landing.visible = mode_id == "sky"
-	target_picture.visible = mode_id == "sky"
-	hear_button.visible = mode_id == "listen"
 	target_picture.texture = load("res://" + current_target.image)
 	for index in range(2):
 		var button: Button = answer_buttons[index]
@@ -262,11 +257,32 @@ func _present_target() -> void:
 		button.tooltip_text = ("Choose " if mode_id == "sky" else "Picture: ") + choices[index].text
 		_name_control(button, button.tooltip_text)
 		button.remove_theme_stylebox_override("disabled")
-	_apply_enabled()
-	_layout()
+	_show_question()
 	if mode_id == "sky" and not reduced_motion and not suspended:
 		_arrive_after_layout.call_deferred(_arrival_generation)
 	prompt_ready.emit()
+
+
+func _unavailable() -> void:
+	status = "unavailable"
+	choices.clear()
+	status_label.text = "Choose five different words to play."
+	_apply_enabled()
+	_layout()
+
+
+func _show_question() -> void:
+	status_label.text = "Choose the matching word." if mode_id == "sky" else "Listen and choose a picture."
+	if mode_id == "listen" and not audio_available:
+		status_label.text = "No sound. Choose the picture."
+	status_label.add_theme_color_override("font_color", _palette.accent)
+	_landing.visible = mode_id == "sky"
+	target_picture.visible = mode_id == "sky"
+	hear_button.visible = mode_id == "listen" and audio_available
+	target_word_label.visible = mode_id == "listen" and not audio_available
+	target_word_label.text = current_target.text
+	_apply_enabled()
+	_layout()
 
 
 func _arrive_after_layout(generation: int) -> void:
@@ -286,46 +302,27 @@ func _arrive_after_layout(generation: int) -> void:
 
 
 func _choose(index: int) -> void:
-	if status != "asking" or suspended or index < 0 or index >= choices.size():
+	if status != "asking" or suspended or not is_visible_in_tree() or index < 0 or index >= choices.size():
 		return
 	_last_correct = choices[index].id == current_target.id
-	_selected_index = index
 	status = "feedback"
 	if _last_correct:
 		successes += 1
 		found_words.append(current_target)
-		status_label.text = "Yes! That's the %s!" % current_target.text
 	else:
 		mistakes += 1
-		status_label.text = "Try again. Take another look!" if mode_id == "sky" else "Try again. Listen once more!"
-	var color: Color = Style.GOOD if _last_correct else Style.WRONG
-	status_label.add_theme_color_override("font_color", color)
-	_apply_enabled()
-	answer_buttons[index].add_theme_stylebox_override("disabled", Style.box(color.lightened(0.86), color, 16, 3))
 	_stop_motion()
-	_art.feedback = "correct" if _last_correct else "wrong"
-	_art.queue_redraw()
-	if _last_correct and not reduced_motion:
-		_motion = create_tween().set_parallel(true)
-		_motion.tween_property(answer_buttons[index], "scale", Vector2.ONE * 1.025, 0.12)
-		_motion.tween_property(_art, "burst", 1.0, 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		_motion.chain().tween_property(answer_buttons[index], "scale", Vector2.ONE, 0.15)
-	elif not reduced_motion:
-		var actor: Control = target_picture if mode_id == "sky" else hear_button
-		var origin: Vector2 = actor.position
-		_motion = create_tween()
-		_motion.tween_property(actor, "position", origin + Vector2(-5, 0), 0.09)
-		_motion.tween_property(actor, "position", origin + Vector2(5, 0), 0.09)
-		_motion.tween_property(actor, "position", origin, 0.09)
-	feedback_timer.start()
+	feedback_view.show_words([current_target], "Yes! You found it." if _last_correct else "Let's learn this word.", "Continue")
+	feedback_view.set_audio_available(audio_available)
+	_apply_enabled()
+	_layout()
 	progress_changed.emit(successes, mistakes)
 	answer_chosen.emit(choices[index], _last_correct)
 
 
-func _finish_feedback() -> void:
-	if status != "feedback" or suspended:
+func continue_feedback() -> void:
+	if status != "feedback" or suspended or not is_visible_in_tree():
 		return
-	feedback_timer.stop()
 	_stop_motion()
 	if successes >= 5 or mistakes >= 3:
 		status = "won" if successes >= 5 else "lost"
@@ -335,23 +332,32 @@ func _finish_feedback() -> void:
 		_present_target()
 	else:
 		status = "asking"
-		_art.feedback = ""
-		_art.queue_redraw()
-		_apply_enabled()
+		_show_question()
 		prompt_ready.emit()
 
 
 func _hear() -> void:
-	if status == "asking" and mode_id == "listen" and not suspended:
+	if status == "asking" and mode_id == "listen" and audio_available and not suspended and is_visible_in_tree():
 		hear_requested.emit(current_target)
+
+
+func _hear_feedback(word: Dictionary) -> void:
+	if status == "feedback" and audio_available and not suspended and is_visible_in_tree():
+		hear_requested.emit(word)
 
 
 func _apply_enabled() -> void:
 	var enabled: bool = status == "asking" and not suspended
 	for button in answer_buttons:
+		button.visible = status == "asking"
 		button.disabled = not enabled
 	if hear_button != null:
-		hear_button.disabled = not enabled
+		hear_button.disabled = not enabled or not audio_available
+	if _stage != null:
+		_stage.visible = status == "asking"
+		status_label.visible = status in ["asking", "unavailable"]
+	if feedback_view != null:
+		feedback_view.visible = status == "feedback"
 
 
 func _stop_motion() -> void:
@@ -365,7 +371,6 @@ func _stop_motion() -> void:
 		target_picture.position = _picture_position
 	if _art != null:
 		_art.arrival = 1.0
-		_art.burst = 0.0
 	if hear_button != null and _stage != null:
 		hear_button.position = (_stage.size - hear_button.size) * 0.5
 
@@ -375,7 +380,15 @@ func _layout() -> void:
 		return
 	_stop_motion()
 	status_label.position = Vector2.ZERO
-	status_label.size = Vector2(size.x, 24)
+	status_label.size = Vector2(size.x, size.y if status == "unavailable" else 24.0)
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if status == "unavailable" else TextServer.AUTOWRAP_OFF
+	var font: Font = status_label.get_theme_font("font")
+	var font_size: int = 18
+	while font_size > 14 and font.get_string_size(status_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > size.x:
+		font_size -= 1
+	status_label.add_theme_font_size_override("font_size", font_size)
+	feedback_view.position = Vector2.ZERO
+	feedback_view.size = size
 	var answer_height: float = clampf((size.y - 36.0) * 0.38, 72.0, 140.0)
 	_stage.position = Vector2(0, 28)
 	_stage.size = Vector2(size.x, maxf(72, size.y - 36.0 - answer_height))
@@ -390,6 +403,8 @@ func _layout() -> void:
 	target_picture.pivot_offset = target_picture.size * 0.5
 	hear_button.size = Vector2(minf(size.x, 300), maxf(72, minf(_stage.size.y, 120)))
 	hear_button.position = (_stage.size - hear_button.size) * 0.5
+	target_word_label.position = Vector2.ZERO
+	target_word_label.size = _stage.size
 	var width: float = (size.x - 10.0) * 0.5
 	for index in range(2):
 		answer_buttons[index].position = Vector2(float(index) * (width + 10), size.y - answer_height)

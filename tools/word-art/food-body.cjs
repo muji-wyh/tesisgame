@@ -162,13 +162,17 @@ module.exports = {
     <path d="M25 67 77 41" stroke="#fff0a5" stroke-width="4"/>`,
 
   milk: `
-    <ellipse cx="60" cy="107" rx="28" ry="4" fill="#eadbc5" stroke="none"/>
-    <rect x="47" y="16" width="26" height="12" rx="3" fill="#9dcbd2"/>
-    <path d="M49 28 H71 V38 Q78 44 79 54 V100 Q79 106 73 106 H47 Q41 106 41 100 V54 Q42 44 49 38Z" fill="#fffefd"/>
-    <path d="M42 57 Q60 61 78 57 V100 Q78 105 72 105 H48 Q42 105 42 100Z" fill="#f7fbfa" stroke="none"/>
-    <path d="M48 39 H72 M42 58 Q60 62 78 58" stroke="#b9d9dc" stroke-width="2.5"/>
-    <path d="M50 47 Q54 42 60 41" stroke="#ffffff" stroke-width="4"/>
-    <path d="M51 78 Q60 68 69 78 Q66 88 60 91 Q54 88 51 78Z" fill="#dceff0" stroke-width="2.5"/>`,
+    <ellipse cx="61" cy="108" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M51 32 61 16 H88 L99 32 V102 H51Z" fill="#ffffff" stroke="#6d91a5"/>
+    <path d="M51 32 H86 L99 32 V102 H86 V32 L77 16" fill="#c3dfed" stroke="#6d91a5"/>
+    <path d="M61 15 H88 V21 H61Z" fill="#72afd0" stroke="#6d91a5" stroke-width="2.5"/>
+    <path d="M52 39 H85 V53 H52Z M52 88 H85 V101 H52Z" fill="#72afd0" stroke="none"/>
+    <path d="M58 62 Q62 55 67 61 L70 70 Q65 79 59 74Z M79 75 Q73 73 71 81 Q75 88 82 82Z" fill="#6d7279" stroke="none"/>
+    <path d="M20 59 H55 L51 100 Q38 109 24 100Z" fill="#fafdff" stroke="#83adbe"/>
+    <path d="M23 69 H52 L49 98 Q38 104 26 98Z" fill="#ffffff" stroke="none"/>
+    <ellipse cx="37.5" cy="59" rx="17.5" ry="5" fill="#e1f1f6" stroke="#83adbe" stroke-width="2.5"/>
+    <ellipse cx="37.5" cy="69" rx="14" ry="3" fill="#ffffff" stroke="#b6d5e0" stroke-width="1.5"/>
+    <path d="M28 76 30 95" stroke="#d9edf5" stroke-width="3"/>`,
 
   water: `
     <ellipse cx="60" cy="107" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
@@ -255,36 +259,34 @@ module.exports = {
     <path d="M58 47 Q61 38 69 35" stroke="#ffd9c1" stroke-width="4"/>`,
 
   arm: `
-    <ellipse cx="61" cy="104" rx="38" ry="4" fill="#eadbc5" stroke="none"/>
-    <path d="M34 42 Q43 44 51 54 L63 68 Q68 74 73 67 L80 54 Q74 48 76 40 Q78 32 85 28 Q92 24 98 29 Q105 35 101 43 Q98 50 92 52 L84 76 Q80 89 66 91 Q53 92 44 81 L27 59Z" fill="#efbd9d"/>
-    <path d="M17 28 Q30 17 45 24 L51 45 Q39 49 28 61 L16 49Z" fill="#94c8d0"/>
-    <path d="M78 42 Q84 45 92 42 M84 34 Q90 37 97 35 M62 72 Q67 78 75 75" stroke="#d99a82" stroke-width="2.5"/>
-    <path d="M35 47 Q43 51 48 58" stroke="#ffd9c1" stroke-width="4"/>`,
+    <ellipse cx="62" cy="105" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M20 24 H39 L48 46 31 57 15 44Z" fill="#9bc9d8"/>
+    <path d="M31 49 46 41 61 73 Q64 80 70 73 L87 48 99 58 82 89 Q74 102 63 100 Q50 99 44 85Z" fill="#efbd9d"/>
+    <path d="M86 52 80 40 Q78 34 82 33 Q85 33 90 42 L91 21 Q91 16 95 17 Q98 17 97 23 L97 36 100 18 Q101 14 104 16 Q107 17 105 23 L103 38 108 27 Q110 23 113 25 Q116 27 112 33 L108 46 Q105 54 99 58Z" fill="#efbd9d" stroke-width="2.5"/>
+    <path d="M47 57 59 83 M83 69 74 82" stroke="#ffddc4" stroke-width="4"/>
+    <path d="M57 88 Q64 92 71 88 M91 48 101 46" stroke="#cb9079" stroke-width="2.5"/>`,
 
   leg: `
-    <ellipse cx="65" cy="110" rx="40" ry="3" fill="#eadbc5" stroke="none"/>
-    <path d="M40 36 Q55 38 69 49 Q81 57 78 68 Q76 77 67 79 Q58 82 52 72 L34 51Z" fill="#efbd9d"/>
-    <path d="M66 74 Q62 85 60 98 L81 98 Q91 98 98 105 Q92 110 81 110 H56 Q48 109 48 102 L50 82 Q51 73 58 68Z" fill="#efbd9d"/>
-    <path d="M25 19 H62 L66 39 Q54 45 39 44 L28 51Z" fill="#91bdcb"/>
-    <path d="M59 97 H81 Q93 98 99 105 Q93 111 81 110 H56 Q51 109 50 104Z" fill="#8eafd0"/>
-    <path d="M59 72 Q65 68 73 69 M53 85 Q59 88 64 86" stroke="#d99a82" stroke-width="2.5"/>
-    <path d="M43 43 Q53 46 61 52" stroke="#ffd9c1" stroke-width="4"/>`,
+    <ellipse cx="64" cy="111" rx="34" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M38 29 H71 L67 55 Q64 66 63 75 L60 93 Q70 98 83 99 Q94 102 90 107 Q78 111 64 108 L46 107 Q39 104 43 95 L45 73 Q45 66 41 59Z" fill="#efbd9d"/>
+    <path d="M34 12 H76 L73 34 Q54 39 35 33Z" fill="#8cbacf"/>
+    <path d="M39 28 Q54 32 72 28" stroke="#d7ebef" stroke-width="3"/>
+    <path d="M46 44 49 55 M49 72 49 90" stroke="#ffddc4" stroke-width="4"/>
+    <path d="M47 63 Q54 59 61 63 M59 94 Q56 99 59 102 M77 101 77 106 M83 102 82 107" stroke="#c98d78" stroke-width="2.5"/>`,
 
   head: `
-    <circle cx="25" cy="62" r="10" fill="#efbd9d"/>
-    <circle cx="95" cy="62" r="10" fill="#efbd9d"/>
-    <ellipse cx="60" cy="62" rx="35" ry="43" fill="#efbd9d"/>
-    <path d="M27 51 Q25 23 48 17 Q60 10 75 17 Q96 23 94 51 Q86 39 78 33 Q74 45 63 34 Q56 44 46 33 Q39 44 27 51Z" fill="#8b654f"/>
-    <path d="M36 49 Q41 37 49 32" stroke="#b88968" stroke-width="4"/>
-    <circle cx="46" cy="60" r="4" fill="#765445" stroke="none"/>
-    <circle cx="74" cy="60" r="4" fill="#765445" stroke="none"/>
-    <circle cx="44.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
-    <circle cx="72.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
-    <path d="M57 68 Q60 72 64 68" stroke="#bd806f" stroke-width="2.5"/>
-    <path d="M49 80 Q60 90 71 80" stroke="#b66f6e" stroke-width="3"/>
-    <ellipse cx="38" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
-    <ellipse cx="82" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
-    <path d="M47 103 Q60 108 73 103" stroke="#d99a82" stroke-width="2.5"/>`,
+    <path d="M24 110 Q28 96 47 94 H73 Q92 96 96 110Z" fill="#dce9e9" stroke="#b4c9cd" stroke-width="2.5"/>
+    <path d="M49 83 V95 Q60 105 71 95 V83" fill="#efbd9d"/>
+    <ellipse cx="29" cy="54" rx="8" ry="11" fill="#efbd9d"/>
+    <ellipse cx="91" cy="54" rx="8" ry="11" fill="#efbd9d"/>
+    <path d="M29 43 Q29 12 60 12 Q91 12 91 43 V59 Q89 88 60 92 Q31 88 29 59Z" fill="#efbd9d"/>
+    <path d="M29 46 Q25 23 42 14 Q64 1 82 17 Q96 26 91 45 Q83 36 77 28 Q70 38 62 29 Q54 40 44 30 Q38 40 29 46Z" fill="#8b654f"/>
+    <path d="M36 32 Q42 21 53 19" stroke="#b88968" stroke-width="4"/>
+    <circle cx="47" cy="52" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="73" cy="52" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M57 61 Q60 65 64 61 M49 73 Q60 83 71 73" stroke="#b66f6e" stroke-width="2.5"/>
+    <ellipse cx="39" cy="65" rx="5" ry="3" fill="#e99f92" stroke="none"/>
+    <ellipse cx="81" cy="65" rx="5" ry="3" fill="#e99f92" stroke="none"/>`,
 
   tooth: `
     <ellipse cx="60" cy="108" rx="29" ry="3" fill="#eadbc5" stroke="none"/>

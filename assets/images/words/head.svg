@@ -2,19 +2,17 @@
   <title id="title">head</title>
   <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="25" cy="62" r="10" fill="#efbd9d"/>
-    <circle cx="95" cy="62" r="10" fill="#efbd9d"/>
-    <ellipse cx="60" cy="62" rx="35" ry="43" fill="#efbd9d"/>
-    <path d="M27 51 Q25 23 48 17 Q60 10 75 17 Q96 23 94 51 Q86 39 78 33 Q74 45 63 34 Q56 44 46 33 Q39 44 27 51Z" fill="#8b654f"/>
-    <path d="M36 49 Q41 37 49 32" stroke="#b88968" stroke-width="4"/>
-    <circle cx="46" cy="60" r="4" fill="#765445" stroke="none"/>
-    <circle cx="74" cy="60" r="4" fill="#765445" stroke="none"/>
-    <circle cx="44.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
-    <circle cx="72.5" cy="58.5" r="1.2" fill="#ffffff" stroke="none"/>
-    <path d="M57 68 Q60 72 64 68" stroke="#bd806f" stroke-width="2.5"/>
-    <path d="M49 80 Q60 90 71 80" stroke="#b66f6e" stroke-width="3"/>
-    <ellipse cx="38" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
-    <ellipse cx="82" cy="74" rx="6" ry="3" fill="#e99f92" stroke="none"/>
-    <path d="M47 103 Q60 108 73 103" stroke="#d99a82" stroke-width="2.5"/>
+    <path d="M24 110 Q28 96 47 94 H73 Q92 96 96 110Z" fill="#dce9e9" stroke="#b4c9cd" stroke-width="2.5"/>
+    <path d="M49 83 V95 Q60 105 71 95 V83" fill="#efbd9d"/>
+    <ellipse cx="29" cy="54" rx="8" ry="11" fill="#efbd9d"/>
+    <ellipse cx="91" cy="54" rx="8" ry="11" fill="#efbd9d"/>
+    <path d="M29 43 Q29 12 60 12 Q91 12 91 43 V59 Q89 88 60 92 Q31 88 29 59Z" fill="#efbd9d"/>
+    <path d="M29 46 Q25 23 42 14 Q64 1 82 17 Q96 26 91 45 Q83 36 77 28 Q70 38 62 29 Q54 40 44 30 Q38 40 29 46Z" fill="#8b654f"/>
+    <path d="M36 32 Q42 21 53 19" stroke="#b88968" stroke-width="4"/>
+    <circle cx="47" cy="52" r="3.5" fill="#765445" stroke="none"/>
+    <circle cx="73" cy="52" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M57 61 Q60 65 64 61 M49 73 Q60 83 71 73" stroke="#b66f6e" stroke-width="2.5"/>
+    <ellipse cx="39" cy="65" rx="5" ry="3" fill="#e99f92" stroke="none"/>
+    <ellipse cx="81" cy="65" rx="5" ry="3" fill="#e99f92" stroke="none"/>
   </g>
 </svg>

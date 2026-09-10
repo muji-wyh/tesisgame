@@ -4,10 +4,13 @@
   <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#69cbd6" stroke="#216d89" stroke-width="3"/>
     <circle cx="60" cy="60" r="43" fill="#e4f6fb" stroke="#f0cf93" stroke-width="3"/>
     <g transform="translate(17 17) scale(.72)">
-    <path d="M49 94 40 105 H80 L71 94" fill="#eab292"/>
-    <path d="M60 94 Q41 91 18 66 Q8 48 22 42 Q14 26 34 25 Q36 10 51 19 Q60 7 69 19 Q84 10 87 26 Q107 26 100 43 Q114 52 102 68 Q80 91 60 94Z" fill="#f2c0a3"/>
-    <path d="M60 91 27 46 M60 91 40 30 M60 91 54 25 M60 91 68 26 M60 91 83 32 M60 91 96 48" stroke="#c48c74" stroke-width="2.5"/>
-    <path d="M23 58 Q29 70 37 74" stroke="#ffe2bd" stroke-width="5"/></g>
+    <ellipse cx="59" cy="107" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M74 91 Q54 108 33 94 Q10 78 18 49 Q27 20 57 19 Q86 18 99 46 Q111 77 90 101 L68 100Z" fill="#f3caa5"/>
+    <path d="M73 84 Q49 94 35 78 Q22 61 37 44 Q50 29 69 39 Q85 49 75 66 Q65 80 53 69 Q45 60 54 53 Q62 48 66 55" stroke="#c68b69" stroke-width="4"/>
+    <path d="M85 57 Q100 68 91 94 L73 100 Q66 82 75 67Z" fill="#eaa49b"/>
+    <path d="M84 69 Q93 82 84 94" stroke="#bc7e77" stroke-width="3"/>
+    <path d="M28 40 36 47 M39 26 44 38 M57 21 57 33 M77 27 72 39 M21 63 32 62 M29 85 37 78" stroke="#dca47d" stroke-width="2.5"/>
+    <path d="M29 36 Q36 28 45 26" stroke="#ffead0" stroke-width="4"/></g>
     <path d="M42 101 48 116 60 110 72 116 78 101" fill="#f0cf93" stroke="#216d89" stroke-width="2.5"/>
   </g>
 </svg>

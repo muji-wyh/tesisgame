@@ -844,6 +844,8 @@ func _test_scene() -> void:
 	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = packed.instantiate()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app.playroom_save_path = directory + "/playroom.cfg"
+	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -1049,13 +1051,13 @@ func _test_scene() -> void:
 			await process_frame
 			await process_frame
 			app._collection_back.grab_focus()
-			# The playroom actions form a new focus row above the medals.
-			app._move_focus(Vector2.DOWN)
-			await process_frame
-			await process_frame
-			app._move_focus(Vector2.DOWN)
-			await process_frame
-			await process_frame
+			# Navigate through the room's objects and selectors to the first earned medal.
+			for step in range(20):
+				if unlocked_slot.has_focus():
+					break
+				app._move_focus(Vector2.DOWN)
+				await process_frame
+				await process_frame
 			check(unlocked_slot.has_focus(),
 				"Controller navigation reaches scrolled-off rewards: focus=%s candidates=%s" % [
 					root.gui_get_focus_owner().name,
@@ -1071,7 +1073,7 @@ func _test_scene() -> void:
 			check(app._collection_velocity == Vector2.ZERO, "Hiding the page cancels collection momentum")
 		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
-	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Feedback lasts 700ms")
+	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Voice feedback advances after 700ms")
 	check(not (app._success is Label) and not (app._mistakes is Label),
 		"Progress is drawn with friendly native badges instead of text characters")
 	check(app._success.has_method("set_filled_count") and app._mistakes.has_method("set_filled_count"),
@@ -1091,8 +1093,8 @@ func _test_scene() -> void:
 		var viewport: Rect2 = root.get_visible_rect()
 		var pixels_per_unit: Vector2 = Vector2(dimensions_value) / viewport.size
 		check(app.model.cards == round_cards, "Resizing does not create a new round")
-		check(app.grid.columns == (4 if dimensions_value.x >= dimensions_value.y else 2),
-			"Grid chooses orientation: " + str(dimensions_value))
+		check(app.grid.columns in [2, 4] and (dimensions_value.x < dimensions_value.y or app.grid.columns == 4),
+			"Grid adapts to the visible instructions and available playfield: " + str(dimensions_value))
 		var controls: Array = app.cards.values()
 		if has_property(app, "theme_buttons"):
 			controls.append_array(app.theme_buttons)
@@ -1217,7 +1219,7 @@ func _test_scene() -> void:
 	for pair in pairs_for(app.model).slice(1):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
-		check(app.feedback_timer.time_left > 0.0, "Button interaction starts feedback")
+		check(app.feedback_timer.is_stopped() and app._match_feedback.visible, "Button interaction waits for visible feedback confirmation")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
 	await process_frame
@@ -1535,6 +1537,8 @@ func _test_scene() -> void:
 	joy_button(JOY_BUTTON_A, true)
 	var held_app = packed.instantiate()
 	held_app.medal_progress = progress_script.new(directory + "/held.cfg", directory + "/legacy.cfg")
+	held_app.playroom_save_path = directory + "/held-playroom.cfg"
+	held_app._mode_id = "match"
 	root.add_child(held_app)
 	await process_frame
 	await process_frame
