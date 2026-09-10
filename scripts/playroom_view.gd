@@ -94,6 +94,7 @@ var item_buttons: Dictionary = {}
 var category_buttons: Dictionary = {}
 var goal_label: Label
 var interaction_allowed: Callable
+var word_sticker_button: Button
 
 var _state: RefCounted
 var _counts: Dictionary = {}
@@ -113,6 +114,8 @@ var _base_toy_position: Vector2
 var _action: String = ""
 var _action_progress: float = 0.0
 var _preview_locked: bool = false
+var _word_sticker: Dictionary = {}
+var _sticker_audio_available: bool = true
 
 
 func _ready() -> void:
@@ -158,6 +161,17 @@ func _build() -> void:
 	_toy_label = Style.label("ball", 21)
 	_toy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_room.add_child(_toy_label)
+	word_sticker_button = Button.new()
+	word_sticker_button.name = "RoomWordSticker"
+	Style.button(word_sticker_button, Style.GOOD)
+	word_sticker_button.custom_minimum_size = Vector2(44, 88)
+	word_sticker_button.expand_icon = true
+	word_sticker_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	word_sticker_button.add_theme_constant_override("icon_max_width", 68)
+	word_sticker_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	word_sticker_button.pressed.connect(_hear_word_sticker)
+	word_sticker_button.hide()
+	add_child(word_sticker_button)
 	caption = Style.label("Choose a toy, then play with Pip!", 18)
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caption.custom_minimum_size.y = 50
@@ -262,6 +276,24 @@ func _art(item: Dictionary) -> Texture2D:
 
 func _can_interact() -> bool:
 	return is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
+
+
+func set_word_sticker(word: Dictionary, audio_available: bool = true) -> void:
+	_build()
+	_word_sticker = word if word.has_all(["id", "text", "image", "audio"]) else {}
+	_sticker_audio_available = audio_available
+	word_sticker_button.visible = not _word_sticker.is_empty()
+	word_sticker_button.disabled = _word_sticker.is_empty() or not audio_available
+	word_sticker_button.focus_mode = Control.FOCUS_NONE if word_sticker_button.disabled else Control.FOCUS_ALL
+	word_sticker_button.text = str(_word_sticker.get("text", ""))
+	word_sticker_button.icon = null if _word_sticker.is_empty() else load("res://" + str(_word_sticker.image))
+	word_sticker_button.tooltip_text = ("Hear " if audio_available else "No sound. ") + word_sticker_button.text
+	_name_control(word_sticker_button, word_sticker_button.tooltip_text)
+
+
+func _hear_word_sticker() -> void:
+	if _can_interact() and _sticker_audio_available and not _word_sticker.is_empty():
+		word_requested.emit(_word_sticker.id)
 
 
 func _name_control(control: Control, text: String) -> void:
@@ -455,7 +487,7 @@ func _visibility_changed() -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button] + category_buttons.values() + item_buttons.values():
+	for button in [toy_button, action_button, word_sticker_button] + category_buttons.values() + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result

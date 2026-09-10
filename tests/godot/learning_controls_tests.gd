@@ -105,8 +105,9 @@ func _run() -> void:
 	check(completions == 1, "A double activation starts the chosen action only once")
 	lesson.show_words([words[0]], "This is the cat", "Continue")
 	check(not lesson.previous_button.visible and not lesson.next_button.visible
-		and lesson.action_button.text == "Continue" and lesson.controls().size() == 2,
-		"A one-word correction offers only Hear and Continue")
+		and lesson.action_button.text == "Continue" and lesson.controls().size() == 3
+		and lesson.controls().has(lesson.picture_button),
+		"A one-word correction offers its pronounceable picture, Hear and Continue")
 	for dimensions in [Vector2(240, 200), Vector2(456, 200), Vector2(960, 240)]:
 		lesson.size = dimensions
 		await process_frame

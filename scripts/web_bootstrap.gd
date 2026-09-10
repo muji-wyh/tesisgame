@@ -6,7 +6,7 @@ const SCRIPTS := [
 	"game_data", "ui_style", "game_model", "word_card", "game_audio",
 	"chest_view", "celebration", "medal_view", "medal_progress", "duck_mascot",
 	"word_lesson", "choice_game", "memory_game_model", "memory_garden",
-	"playroom_state", "playroom_view", "adventure_book", "game_ui"
+	"playroom_state", "playroom_view", "adventure_book", "word_sticker_book", "game_ui"
 ]
 
 

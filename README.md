@@ -47,8 +47,8 @@ polling runs only while a connected controller can use the loading toy.
 Sparkles are temporary loading-screen play, not saved collection rewards.
 
 Engine and game-pack requests start together. A labeled **Startup estimate** moves
-quickly to **35%**, pauses briefly, advances to **75%**, pauses again, and reaches
-**95%**. The final few percent follow remaining game-data loading; **100% is shown
+through **20%**, **50%**, **80%**, and **98%** as startup advances.
+The last stage includes engine initialization; **100% is shown
 only when the native game is ready**. Fast or cached starts do not wait for the
 staged animation. A separate Game data line shows the real loaded byte counts.
 Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
@@ -126,7 +126,7 @@ loading screen, board, results, collection, reward previews, and voice panel.
 Tap him to cycle through a dance, a crunchy carrot snack, and a bubble party; he also reacts to selections, matches, hints,
 season changes, and rewards. These reactions never change scoring or saved progress.
 
-Start in **Learn**: a large picture appears beside its written word. Press **Hear**,
+Start in **Learn**: a large picture appears beside its written word. Tap the picture or press **Hear**,
 then use **Previous** and **Next** to explore all five words. Learn never awards points.
 Switch between **Learn**, **Match**, **Sky**, **Listen**, and **Memory** to practise the same lesson.
 Match keeps the eight-card,
@@ -171,6 +171,16 @@ Open an earned medal and choose **Display with Pip** to save it as the playroom'
 Toy, backdrop, and favorite save together immediately in browser storage, or in
 `user://playroom-v2.cfg` in native builds. The earlier favorite is migrated, and medal
 progress remains unchanged. Failed reads/writes show a retryable notice.
+
+**Words** in My rewards collects the exact words found through correct Match,
+spoken Match, Sky, Listen, and Memory answers. Browse twelve topics, tap a collected
+picture to hear its word, and choose **Display with Pip** to put it in his room.
+Learn, Memory Study, incorrect answers, and unmatched cards do not grant stickers.
+Repeated discoveries keep one sticker per word. The collection and displayed word
+share the existing playroom save; failed writes remain pending in the current
+session with **Retry** in Words. Only the current topic's collected art loads when
+Words opens. Stickers record discoveries, not vocabulary mastery.
+
 Card selections ripple, successful matches sparkle, and choice answers celebrate. Effects
 are bounded and respect reduced motion; the same controls work with touch, keyboard, and Xbox.
 

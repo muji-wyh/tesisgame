@@ -11,6 +11,7 @@ var heading_label: Label
 var progress_label: Label
 var word_label: Label
 var picture: TextureRect
+var picture_button: Button
 var hear_button: Button
 var previous_button: Button
 var next_button: Button
@@ -22,7 +23,7 @@ var _words: Array[Dictionary] = []
 var _index: int = 0
 var _paused: bool = false
 var _completed: bool = false
-var _card: Panel
+var _card: Button
 var _palette: Dictionary = {"accent": Style.GOOD}
 
 
@@ -40,8 +41,9 @@ func _build() -> void:
 	progress_label = Style.label("", 18)
 	progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	add_child(progress_label)
-	_card = Panel.new()
-	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_card = Button.new()
+	picture_button = _card
+	_card.pressed.connect(_hear)
 	add_child(_card)
 	picture = TextureRect.new()
 	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -97,7 +99,9 @@ func set_palette(palette: Dictionary) -> void:
 	_build()
 	_palette = palette
 	var accent: Color = palette.get("accent", Style.GOOD)
-	_card.add_theme_stylebox_override("panel", Style.box(Color.WHITE, accent.lightened(0.45), 22, 3))
+	Style.button(_card, accent, 44)
+	for style_name in ["normal", "disabled"]:
+		_card.add_theme_stylebox_override(style_name, Style.box(Color.WHITE, accent.lightened(0.45), 22, 3))
 	heading_label.add_theme_color_override("font_color", accent)
 	for button in [hear_button, previous_button, next_button, action_button]:
 		Style.button(button, accent)
@@ -126,7 +130,7 @@ func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	if not is_visible_in_tree() or _paused or _completed or current_word.is_empty():
 		return result
-	for button in [hear_button, previous_button, next_button, action_button]:
+	for button in [picture_button, hear_button, previous_button, next_button, action_button]:
 		if button.visible and not button.disabled:
 			result.append(button)
 	return result
@@ -140,6 +144,7 @@ func _present_word() -> void:
 	word_label.visible = picture.visible
 	progress_label.text = "%d of %d" % [_index + 1, _words.size()] if not _words.is_empty() else ""
 	_name_control(hear_button, "Hear " + word_label.text)
+	_name_control(picture_button, word_label.text)
 	_refresh_controls()
 	_layout()
 	if not current_word.is_empty():
@@ -151,6 +156,8 @@ func _refresh_controls() -> void:
 		return
 	var enabled: bool = not _paused and not _completed and not current_word.is_empty()
 	hear_button.disabled = not enabled or not audio_available
+	picture_button.disabled = hear_button.disabled
+	picture_button.focus_mode = Control.FOCUS_NONE if picture_button.disabled else Control.FOCUS_ALL
 	action_button.disabled = not enabled
 	previous_button.visible = _words.size() > 1
 	next_button.visible = _words.size() > 1

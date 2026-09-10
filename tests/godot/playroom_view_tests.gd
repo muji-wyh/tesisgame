@@ -142,7 +142,7 @@ func _run() -> void:
 	check(view.is_processing(), "Normal toy actions run a bounded animation")
 	view.hide()
 	check(not view.is_processing(), "Closing the room stops animation immediately")
-	check(view.controls().size() == state.catalog().size() + 4, "A hidden room still exposes every button for host focus and scrolling wiring")
+	check(view.controls().size() == state.catalog().size() + 5 and view.controls().has(view.word_sticker_button), "A hidden room exposes every button, including its word sticker, for host focus and scrolling wiring")
 	view.show()
 	view.configure(state, counts, data.theme("spring"), true)
 	await process_frame

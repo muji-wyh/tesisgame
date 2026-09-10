@@ -17,11 +17,18 @@ and 15 sounds (10.5 MB, version 1.0, September 8, 2020), usable in commercial an
 noncommercial projects. It is a candidate for decorative game props; a listing
 alone does not establish that a sprite clearly illustrates any vocabulary word.
 
-**Acquisition is pending as of September 10, 2026.** No package from either listing
+**Acquisition is pending as of September 11, 2026.** No package from either listing
 has been downloaded, no real Unity artwork import has completed, and no licensed
 PNG override has been shipped. The installed Unity CLI and Editor are available
 for import, but the CLI has no Asset Store download command. Acquisition still
 requires Unity's authorized Asset Store or Package Manager workflow.
+
+On September 11, Windows Computer Use reached the Food Icons Pack listing in
+stable Chrome and selected Add to My Assets. Unity redirected to its sign-in page;
+that Chrome session is not signed in. Authentication was left for the user. The
+separate in-app browser connector returned `Codex auth token is unavailable`.
+Neither result was an automatic safety rejection. Acquisition and CLI import
+remain unverified until the authorized signed-in session or package is available.
 
 The mapping intentionally starts with no selected images, version, or package
 hash. A store listing is not proof of a download or import. Fill those fields from

@@ -15,6 +15,7 @@ const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const WordLesson = preload("res://scripts/word_lesson.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
+const WordStickerBook = preload("res://scripts/word_sticker_book.gd")
 const AdventureBook = preload("res://scripts/adventure_book.gd")
 const MODES := {"learn": "Learn", "match": "Match", "sky": "Sky", "listen": "Listen", "memory": "Memory"}
 const HOLD_SECONDS: float = 1.2
@@ -204,6 +205,10 @@ var _try_gift_button: Button
 var _unlocked_gift: Dictionary = {}
 var playroom_state := PlayroomState.new()
 var _playroom_ready: bool = false
+var _word_book: WordStickerBook
+var _pending_sticker_ids: Array[String] = []
+var _pending_display_word_id: String = ""
+var _sticker_notice: String = ""
 var _room: PlayroomView
 var _voice_listening: bool = false
 var _speech_queue: Array[String] = []
@@ -708,7 +713,7 @@ func _build_collection_shell() -> void:
 	_collection_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_collection_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	header.add_child(_collection_title)
-	for entry in [["room", "Pip's room"], ["medals", "Medals"]]:
+	for entry in [["room", "Pip's room"], ["words", "Words"], ["medals", "Medals"]]:
 		var button := Button.new()
 		button.name = "Rewards_" + entry[0]
 		button.text = entry[1]
@@ -836,7 +841,108 @@ func _build_collection() -> void:
 	for control in _adventure_book.controls():
 		control.gui_input.connect(_collection_scroll_input.bind(control))
 		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
+	_word_book = WordStickerBook.new()
+	_word_book.hide()
+	_word_book.interaction_allowed = _can_use_word_book
+	_collection_grid.add_child(_word_book)
+	_word_book.hear_requested.connect(_hear_word_sticker)
+	_word_book.selection_changed.connect(_select_word_sticker)
+	_word_book.display_requested.connect(_display_word_sticker)
+	_word_book.retry_requested.connect(_retry_word_stickers)
+	_word_book.controls_changed.connect(_wire_word_book_controls)
 	_apply_collection_section()
+
+
+func _can_use_word_book() -> bool:
+	return collection_page.visible and _collection_section == "words" and not _adventures_open and not _preview_page.visible and not _collection_dragged
+
+
+func _wire_word_book_controls() -> void:
+	for control in _word_book.controls():
+		var scroll_callback := _collection_scroll_input.bind(control)
+		if not control.gui_input.is_connected(scroll_callback):
+			control.gui_input.connect(scroll_callback)
+		var focus_callback := _ensure_collection_focus_visible.bind(control)
+		if not control.focus_entered.is_connected(focus_callback):
+			control.focus_entered.connect(focus_callback)
+	if _can_use_word_book():
+		audio.stop_voice()
+		_announce_status("Words. %s. Topic %d of 12. %d stickers collected." % [Data.ADVENTURES[_word_book.topic_index].name, _word_book.topic_index + 1, playroom_state.collected_word_ids.size()])
+
+
+func _select_word_sticker(word: Dictionary) -> void:
+	if not _can_use_word_book():
+		return
+	var action: Button = _word_book.hear_button if _word_book.display_button.disabled else _word_book.display_button
+	if _valid_focus(action):
+		action.grab_focus()
+	_announce_status(str(word.text) + ". Collected word sticker. Choose Hear or Display with Pip.")
+
+
+func _word_by_id(id: String) -> Dictionary:
+	for word in data.words:
+		if word.id == id:
+			return word
+	return {}
+
+
+func _refresh_word_stickers() -> void:
+	if _word_book != null and _word_book.is_visible_in_tree():
+		_word_book.setup(data.words, playroom_state.collected_word_ids, playroom_state.displayed_word_id,
+			Data.theme(model.theme_id), not _playroom_ready or not _pending_sticker_ids.is_empty() or not _pending_display_word_id.is_empty())
+		_word_book.set_audio_available(audio.available and not audio.muted)
+	if _room != null:
+		_room.set_word_sticker(_word_by_id(playroom_state.displayed_word_id), audio.available and not audio.muted)
+
+
+func _collect_word_stickers(words: Array) -> void:
+	_sticker_notice = ""
+	var fresh: Array[String] = []
+	for word in words:
+		var id: String = str(word.get("id", ""))
+		if not _word_by_id(id).is_empty() and not playroom_state.collected_word_ids.has(id):
+			if not _pending_sticker_ids.has(id):
+				_pending_sticker_ids.append(id)
+			fresh.append(id)
+	if _pending_sticker_ids.is_empty():
+		return
+	if not _ensure_playroom_loaded() or not playroom_state.collect_words(_pending_sticker_ids):
+		_sticker_notice = "Sticker waiting. Retry in Words."
+		return
+	_pending_sticker_ids.clear()
+	if not fresh.is_empty():
+		_sticker_notice = "New sticker: %s!" % _word_by_id(fresh[0]).text
+	_refresh_word_stickers()
+
+
+func _hear_word_sticker(word: Dictionary) -> void:
+	if not _can_use_word_book() or not playroom_state.collected_word_ids.has(str(word.get("id", ""))):
+		return
+	_room_word(word.id)
+	_announce_status(str(word.text) + ". Collected word sticker.")
+
+
+func _display_word_sticker(id: String) -> void:
+	if not _can_use_word_book() or not playroom_state.collected_word_ids.has(id):
+		return
+	_pending_display_word_id = id
+	_retry_word_stickers()
+
+
+func _retry_word_stickers() -> void:
+	if not _can_use_word_book():
+		return
+	var saved := _ensure_playroom_loaded()
+	if saved and not _pending_sticker_ids.is_empty():
+		saved = playroom_state.collect_words(_pending_sticker_ids)
+		if saved:
+			_pending_sticker_ids.clear()
+	if saved and not _pending_display_word_id.is_empty():
+		saved = playroom_state.display_word(_pending_display_word_id)
+		if saved:
+			_pending_display_word_id = ""
+	_refresh_word_stickers()
+	_announce_status("Word stickers saved. Choose Pip's room to see your display." if saved else "Word stickers could not save. Choose Retry in Words.")
 
 
 func _build_playroom() -> void:
@@ -1057,6 +1163,7 @@ func _refresh_collection(show_medals: bool = false) -> void:
 		_refresh_favorite_reward()
 		if not _playroom_ready:
 			_playroom_caption.text = "Room choices could not load. Tap an owned item to retry."
+	_refresh_word_stickers()
 
 
 func _open_reward_preview(id: String) -> void:
@@ -1390,6 +1497,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_cancel_fragment_delivery()
 	_pending_fragment.clear()
 	_unlocked_gift.clear()
+	_sticker_notice = ""
 	_feedback_key = ""
 	_save_error = not _progress_ready
 	feedback_timer.stop()
@@ -1462,6 +1570,11 @@ func _choice_answer(word: Dictionary, correct: bool) -> void:
 	audio.cue("correct" if correct else "wrong")
 	var target: Dictionary = _choice.current_target
 	audio.say("res://" + target.audio)
+	_sticker_notice = ""
+	if correct:
+		_collect_word_stickers([target])
+		if not _sticker_notice.is_empty():
+			_choice.feedback_view.heading_label.text = _sticker_notice
 	if not correct and not model.missed_word_ids.has(target.id):
 		model.missed_word_ids.append(target.id)
 	duck.react("happy" if correct else "curious")
@@ -1522,11 +1635,16 @@ func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
 	_sync_memory_selection()
 
 
-func _memory_answer(_words: Array, correct: bool) -> void:
+func _memory_answer(words: Array, correct: bool) -> void:
 	if _mode_id != "memory" or collection_page.visible or _preview_page.visible:
 		return
 	audio.cue("correct" if correct else "wrong")
 	duck.react("happy" if correct else "curious")
+	_sticker_notice = ""
+	if correct:
+		_collect_word_stickers(words)
+		if not _sticker_notice.is_empty():
+			_memory.feedback_view.heading_label.text = _sticker_notice
 
 
 func _memory_progress(successes: int, _attempts: int) -> void:
@@ -1604,7 +1722,7 @@ func _refresh() -> void:
 	for id in _collection_tabs:
 		var button: Button = _collection_tabs[id]
 		Style.button(button, palette.accent)
-		button.add_theme_font_size_override("font_size", 18)
+		button.add_theme_font_size_override("font_size", 16)
 		button.button_pressed = id == _collection_section
 	Style.button(hint_button, palette.accent)
 	Style.button(_explore_button, palette.accent, 100)
@@ -2031,6 +2149,11 @@ func _select_card(id: String) -> void:
 		audio.cue("select")
 		audio.say("res://" + model.card_by_id(id).word.audio)
 	elif result in ["correct", "wrong"]:
+		_sticker_notice = ""
+		if result == "correct":
+			_collect_word_stickers([model.card_by_id(id).word])
+			if not _sticker_notice.is_empty():
+				_match_feedback.heading_label.text = _sticker_notice
 		_animate_feedback(model.feedback_ids, result == "correct")
 		if not _voice_mode:
 			audio.cue(result, result)
@@ -2511,7 +2634,7 @@ func _focus_center(control: Control) -> Vector2:
 	if collection_page.visible and not _preview_page.visible:
 		# Navigate the collection's content, not its temporarily scrolled screen positions.
 		center = _collection_grid.get_global_transform().affine_inverse() * center
-		if control == _collection_back:
+		if control == _collection_back or _collection_tabs.values().has(control):
 			center.y = -1.0
 	return center
 
@@ -2596,6 +2719,10 @@ func _audio_status(message: String) -> void:
 	_memory.set_audio_available(can_hear)
 	_lesson.set_audio_available(can_hear)
 	_match_feedback.set_audio_available(can_hear and not _voice_mode)
+	if _word_book != null:
+		_word_book.set_audio_available(can_hear)
+	if _room != null:
+		_room.set_word_sticker(_word_by_id(playroom_state.displayed_word_id), can_hear)
 	if _host != null:
 		_host.audioStatus(message)
 
@@ -2705,7 +2832,9 @@ func _consume_spoken_word() -> void:
 	if not _voice_mode or not model.phase in ["waiting", "matching"]:
 		return
 	while not _speech_queue.is_empty():
-		if model.match_spoken_word(_speech_queue.pop_front()) == "correct":
+		var id: String = _speech_queue.pop_front()
+		if model.match_spoken_word(id) == "correct":
+			_collect_word_stickers([_word_by_id(id)])
 			_animate_feedback(model.feedback_ids, true)
 			feedback_timer.start()
 			return
@@ -2955,6 +3084,7 @@ func _show_collection(as_adventures: bool = false) -> void:
 			_collection_focus_modes[button] = button.focus_mode
 			button.focus_mode = Control.FOCUS_NONE
 	collection_page.show()
+	_refresh_word_stickers()
 	_memory.pause(true)
 	_collection_back.grab_focus()
 	_update_duck()
@@ -2968,7 +3098,16 @@ func _apply_collection_section() -> void:
 		_collection_tabs[id].visible = not _adventures_open
 		_collection_tabs[id].set_pressed_no_signal(id == _collection_section)
 	for child in _collection_grid.get_children():
-		child.visible = child == _adventure_book if _adventures_open else (child != _adventure_book and (child == _room) == (_collection_section == "room"))
+		if _adventures_open:
+			child.visible = child == _adventure_book
+		elif child == _adventure_book:
+			child.hide()
+		elif child == _room:
+			child.visible = _collection_section == "room"
+		elif child == _word_book:
+			child.visible = _collection_section == "words"
+		else:
+			child.visible = _collection_section == "medals"
 
 
 func _show_reward_section(section: String) -> void:
@@ -2993,13 +3132,13 @@ func _hide_collection() -> void:
 	collection_page.hide()
 	_adventures_open = false
 	duck.clear_trick()
-	_choice.pause(false)
-	_lesson.pause(false)
-	_match_feedback.pause(false)
 	for control in _collection_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
 	_collection_focus_modes.clear()
+	_choice.pause(false)
+	_lesson.pause(false)
+	_match_feedback.pause(false)
 	_memory.pause(false)
 	_refresh()
 	if _valid_focus(_focus_before_collection):
@@ -3018,6 +3157,9 @@ func _announce_collection_state() -> void:
 	if _adventures_open:
 		_announce_status("Pip's adventures. %d of 12 places visited. Choose a picture to learn five words, or Surprise me. Back returns to your lesson.%s" % [
 			playroom_state.recent_topic_ids.size(), " This visit could not be remembered. Choose Retry." if _journey_save_failed else ""])
+		return
+	if _collection_section == "words":
+		_announce_status("Words. %d of %d stickers collected. Find matching words in a game to collect them. Choose a collected picture to hear it or display it with Pip." % [playroom_state.collected_word_ids.size(), data.words.size()])
 		return
 	var guidance := "Pip's room. Choose toys and places for Pip. Choose Medals to see your pieces."
 	if _collection_section == "medals":
@@ -3040,7 +3182,7 @@ func _update_duck() -> void:
 	if in_collection and _adventures_open:
 		duck.hide()
 		return
-	if in_collection and not in_preview and _collection_section == "medals":
+	if in_collection and not in_preview and _collection_section != "room":
 		duck.hide()
 		return
 	var visible_here: bool = in_preview or in_collection or not _voice_mode

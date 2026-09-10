@@ -68,7 +68,7 @@ func _run() -> void:
 		check(game.status == "feedback" and game.mistakes == 1 and game.successes == 0,
 			"A wrong answer locks repeated attempts during feedback")
 		check(answers.size() == before_answers + 1 and not answers.back()[1], "One attempt emits exactly one incorrect answer")
-		check(game.controls().size() == 2 and game.feedback_view.visible
+		check(game.controls().size() == 3 and game.feedback_view.visible
 			and game.feedback_view.current_word.id == first.id
 			and game.feedback_view.word_label.text == first.text
 			and game.feedback_view.picture.texture.resource_path == "res://" + first.image,

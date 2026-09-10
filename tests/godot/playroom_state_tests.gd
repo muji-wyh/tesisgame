@@ -57,6 +57,12 @@ func _run() -> void:
 					_test_journey_memory()
 					_test_invalid_journey()
 					_test_journey_failures()
+				var stickers_ready: bool = _script.new().has_method("collect_words") and _script.new().has_method("display_word")
+				check(stickers_ready, "PlayroomState exposes sticker collection and display")
+				if stickers_ready:
+					_test_sticker_memory()
+					_test_invalid_stickers()
+					_test_sticker_failures()
 				_cleanup()
 	print("Playroom state: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -415,6 +421,155 @@ func _test_journey_failures() -> void:
 	var writes := storage.writes
 	check(not _corrupt_load(reloaded) and not reloaded.remember_visit(topics[0]) and storage.writes == writes, "Invalid browser journey data fails closed without falling back or writing")
 	check(storage.text == _journey_text(["unknown"], "space"), "Invalid browser journey bytes are preserved")
+
+
+func _collect(state, ids: Array) -> bool:
+	var words: Array[String] = []
+	words.assign(ids)
+	return state.collect_words(words)
+
+
+func _sticker_text(words: Variant, displayed: Variant) -> String:
+	var config := ConfigFile.new()
+	config.parse(_journey_text(["animal-friends"], "ocean"))
+	config.set_value("stickers", "word_ids", words)
+	config.set_value("stickers", "display_word_id", displayed)
+	return config.encode_to_text()
+
+
+func _test_sticker_memory() -> void:
+	var fixture := _fixture("sticker_memory")
+	var state = fixture.state
+	check(not _collect(state, ["cat"]) and not state.display_word(""), "Sticker writes require a successful load")
+	var original := _journey_text(["animal-friends"], "ocean")
+	_write(fixture.path, original)
+	if not _load(state):
+		return
+	check(state.collected_word_ids.is_empty() and state.displayed_word_id.is_empty(), "An old room and journey record starts with no collected or displayed stickers")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading a pre-sticker save preserves its original bytes")
+	check(not state.display_word("cat") and not _collect(state, ["dog", "unknown"]), "Uncollected displays and partly invalid collection batches are rejected")
+	check(state.collected_word_ids.is_empty() and FileAccess.get_file_as_string(fixture.path) == original, "Rejected sticker changes do not partially collect a batch")
+	check(_collect(state, ["cat", "dog", "cat"]) and state.collected_word_ids == ["cat", "dog"], "A collection batch appends each valid discovery once in discovery order")
+	check(state.display_word("cat") and state.displayed_word_id == "cat", "A collected word can be displayed")
+	var counts := {"winter-1": 3, "winter-3": 3}
+	var before := counts.duplicate(true)
+	check(state.select_item("toy-winter", counts) and state.select_item("backdrop-winter", counts), "Toy and room changes coexist with stickers")
+	check(state.set_favorite("winter-10") and state.remember_visit("music-makers") and state.prefer_theme("space"), "Favorite and journey changes coexist with stickers")
+	check(_collect(state, ["bell", "cat"]) and state.collected_word_ids == ["cat", "dog", "bell"], "Later discoveries preserve prior sticker order and display")
+	var reloaded = _script.new(fixture.path)
+	if _load(reloaded):
+		check(reloaded.collected_word_ids == ["cat", "dog", "bell"] and reloaded.displayed_word_id == "cat", "All existing room and journey operations preserve sticker collection and display through reload")
+		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10", "Sticker writes preserve toy, backdrop and favorite")
+		check(reloaded.recent_topic_ids == ["music-makers", "animal-friends"] and reloaded.preferred_theme_id == "space", "Sticker writes preserve journey history and preferred world")
+	check(counts == before, "Collecting and displaying words never changes medal counts")
+	_directory(fixture.path + ".pending")
+	check(_collect(state, []) and _collect(state, ["bell", "cat", "bell"]) and state.display_word("cat"), "Empty and repeated sticker operations succeed without a storage write")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known sticker write blocker")
+	check(state.display_word("") and state.displayed_word_id.is_empty() and state.collected_word_ids == ["cat", "dog", "bell"], "Clearing the displayed word retains the collection")
+	var ids: Array[String] = []
+	for topic in load("res://scripts/game_data.gd").ADVENTURES:
+		for id in topic.words:
+			check(not ids.has(id), "Adventure vocabulary gives each sticker one canonical ID")
+			ids.append(id)
+	check(ids.size() == 140 and state.collect_words(ids), "All 140 vocabulary words can be collected")
+	ids.clear()
+	check(state.collected_word_ids.size() == 140, "Collection storage does not retain the caller's mutable input array")
+	reloaded = _script.new(fixture.path)
+	if _load(reloaded):
+		check(reloaded.collected_word_ids.size() == 140 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
+	var persisted := ConfigFile.new()
+	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Sticker persistence retains playroom save version one")
+
+
+func _test_invalid_stickers() -> void:
+	var oversized: Array = []
+	oversized.resize(141)
+	oversized.fill("cat")
+	var invalid: Array[String] = []
+	for words in [null, false, "cat", {}, ["cat", "cat"], ["unknown"], ["Cat"], [1], ["cat", null], oversized]:
+		invalid.append(_sticker_text(words, ""))
+	for displayed in [null, false, 1, [], "unknown", "dog"]:
+		invalid.append(_sticker_text(["cat"], displayed))
+	for missing in ["word_ids", "display_word_id"]:
+		var config := ConfigFile.new()
+		config.parse(_sticker_text([], ""))
+		config.erase_section_key("stickers", missing)
+		invalid.append(config.encode_to_text())
+	for index in range(invalid.size()):
+		var fixture := _fixture("sticker_invalid_%d" % index)
+		var state = fixture.state
+		_write(fixture.path, _sticker_text(["cat"], "cat"))
+		if not _load(state):
+			continue
+		_write(fixture.path, invalid[index])
+		check(not _corrupt_load(state) and not state.error.is_empty(), "Malformed present sticker sections fail explicitly")
+		check(state.collected_word_ids == ["cat"] and state.displayed_word_id == "cat" and state.recent_topic_ids == ["animal-friends"] and state.toy_id == "toy-spring", "A failed sticker reload preserves the last confirmed collection and room")
+		check(not _collect(state, ["dog"]) and not state.display_word("") and not state.select_item("toy-ball", {}) and not state.set_favorite("") and not state.remember_visit("music-makers") and not state.prefer_theme("winter"), "Invalid sticker data prevents every API from overwriting the record")
+		check(FileAccess.get_file_as_string(fixture.path) == invalid[index], "Malformed sticker bytes remain unchanged")
+
+
+func _test_sticker_failures() -> void:
+	var fixture := _fixture("sticker_native_failure")
+	var state = fixture.state
+	_write(fixture.path, _sticker_text(["cat", "dog"], "cat"))
+	if not _load(state):
+		return
+	var original := FileAccess.get_file_as_string(fixture.path)
+	_directory(fixture.path + ".pending")
+	check(not _collect(state, ["bell"]) and not state.display_word("dog"), "Failed native staging rejects collection and display changes")
+	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and FileAccess.get_file_as_string(fixture.path) == original, "Failed native sticker writes preserve confirmed memory and durable bytes")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove native sticker staging blocker")
+	check(_collect(state, ["bell"]) and state.display_word("dog"), "The same sticker changes can retry without reloading after storage recovers")
+	original = FileAccess.get_file_as_string(fixture.path)
+	if OS.get_name() == "Windows":
+		var locked := FileAccess.open(fixture.path, FileAccess.READ)
+		check(locked != null, "Hold only this fixture's sticker record open")
+		if locked != null:
+			check(not _collect(state, ["apple"]) and not state.display_word("bell"), "A native replacement lock rejects both sticker operations")
+			check(state.collected_word_ids == ["cat", "dog", "bell"] and state.displayed_word_id == "dog" and FileAccess.get_file_as_string(fixture.path) == original, "Failed replacement cannot remove stickers or expose unsaved display changes")
+			locked.close()
+	var interrupted := _fixture("sticker_interrupted")
+	_write(interrupted.path + ".previous", original)
+	_write(interrupted.path + ".pending", _sticker_text(["apple"], "apple"))
+	if _load(interrupted.state):
+		check(interrupted.state.collected_word_ids == ["cat", "dog", "bell"] and interrupted.state.displayed_word_id == "dog", "Interrupted replacement restores the committed stickers rather than the staged collection")
+	var storage := BrowserStorage.new()
+	storage.text = _journey_text(["animal-friends"], "ocean")
+	var browser := _fixture("sticker_browser", storage)
+	state = browser.state
+	if not _load(state):
+		return
+	check(state.collected_word_ids.is_empty() and state.displayed_word_id.is_empty() and storage.writes == 0, "Old browser records acquire empty sticker defaults without a migration write")
+	check(_collect(state, ["cat", "dog"]) and state.display_word("cat"), "Browser sticker changes save synchronously through the existing host")
+	var writes := storage.writes
+	check(_collect(state, ["dog", "cat"]) and state.display_word("cat") and storage.writes == writes, "Repeated browser stickers do not write or reorder the saved collection")
+	original = storage.text
+	storage.writable = false
+	check(not _collect(state, ["bell", "cat"]) and not state.display_word("dog"), "Browser write failures reject sticker changes")
+	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and storage.text == original, "Failed browser saves retain confirmed sticker IDs, display and bytes")
+	storage.writable = true
+	check(_collect(state, ["bell", "cat"]) and state.display_word("dog"), "A pending browser batch retries once without duplicating its existing word")
+	var reloaded = _script.new(browser.path, storage)
+	if _load(reloaded):
+		check(reloaded.collected_word_ids == ["cat", "dog", "bell"] and reloaded.displayed_word_id == "dog", "Immediate browser reload retains saved stickers")
+	original = storage.text
+	storage.readable = false
+	check(not reloaded.load_state() and reloaded.collected_word_ids == ["cat", "dog", "bell"], "Failed browser reads retain confirmed sticker memory")
+	check(not _collect(reloaded, ["apple"]) and not reloaded.display_word("") and storage.text == original, "A failed read blocks sticker writes until a successful reload")
+	storage.readable = true
+	check(_load(reloaded) and _collect(reloaded, ["apple"]), "Sticker writes recover after a readable record is loaded")
+	storage.text = _sticker_text(["cat"], "dog")
+	writes = storage.writes
+	check(not _corrupt_load(reloaded) and not _collect(reloaded, ["bell"]) and storage.writes == writes and storage.text == _sticker_text(["cat"], "dog"), "Malformed browser stickers cannot fall back to or overwrite another store")
+	var migration_storage := BrowserStorage.new()
+	var migration := _fixture("sticker_browser_migration", migration_storage)
+	_write(migration.path, _sticker_text(["cat"], "cat"))
+	original = FileAccess.get_file_as_string(migration.path)
+	migration_storage.writable = false
+	check(not migration.state.load_state() and migration.state.collected_word_ids.is_empty() and migration_storage.text == null, "A failed browser migration does not expose unsaved source stickers")
+	migration_storage.writable = true
+	if _load(migration.state):
+		check(migration.state.collected_word_ids == ["cat"] and migration.state.displayed_word_id == "cat" and FileAccess.get_file_as_string(migration.path) == original, "Browser migration preserves the native sticker section and original file")
 
 
 func _cleanup() -> void:
