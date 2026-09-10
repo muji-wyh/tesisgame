@@ -55,7 +55,8 @@ function messagesFor(root) {
 
 function speechMarkup(text) {
   englishText(text);
-  const sentence = /[.!?]$/.test(text) ? text : `${text}.`;
+  // Preserve the catalog's audited natural phrase when regenerating this clip.
+  const sentence = text === 'kite' ? 'A kite.' : /[.!?]$/.test(text) ? text : `${text}.`;
   return `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US">
   <voice name="${PROFILE.voice}">
     <mstts:silence type="Leading-exact" value="60ms"/>

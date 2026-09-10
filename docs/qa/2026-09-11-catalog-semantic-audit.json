@@ -1,0 +1,1508 @@
+{
+  "date": "2026-09-11",
+  "baseline_revision": "0017bcf9cde0fae29e7928555d0d8292591c6018",
+  "catalog": "words.json",
+  "count": 140,
+  "paths": {
+    "image": "assets/images/words/<id>.svg",
+    "voice": "assets/audio/voice/word-<id>.wav"
+  },
+  "hashes": "Image SHA256 normalizes CRLF to LF; audio SHA256 identifies the exact binary WAV bytes used for recognition.",
+  "visual_method": "Every actual SVG rendered on a labeled topic contact sheet and visually inspected. Two ambiguous subjects were revised, then inspected at 320px and 64px by two reviewers. Unchanged images were compared to the baseline with line endings normalized.",
+  "audio_method": "Independent offline Whisper base.en recognition of actual WAV speech; no initial prompt, no expected-word grammar, no text context; English transcription on CPU. Each batch emitted exactly ten nonempty noun segments, matched to input ordinal. Recognition timestamps are approximate and are retained alongside exact input boundaries.",
+  "audio_preprocessing": "Original mono PCM16 WAV speech, resampled from 22050 to 16000 Hz with Python stdlib audioop; grouped in source order, 10 nouns per batch, separated by 600 ms zero PCM; no spoken labels or text hints added.",
+  "audio_provenance": {
+    "repository": "https://github.com/ggml-org/whisper.cpp",
+    "release_tag": "b4938",
+    "cli_reported_version": "1.9.3",
+    "release_url": "https://github.com/ggml-org/whisper.cpp/releases/tag/b4938",
+    "binary_url": "https://github.com/ggml-org/whisper.cpp/releases/download/b4938/whisper-bin-x64.zip",
+    "binary_archive_sha256": "c2a4b60edb11f7e11a9191ffb50929535527d4d91c9903dbe3e554583bbbc63d",
+    "cli_sha256": "800a0fd754afa75e109c7248286ad735670fb6b23d92ca5d12604647ef638a65",
+    "model": "base.en",
+    "model_url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/80da2d8bfee42b0e836fc3a9890373e5defc00a6/ggml-base.en.bin",
+    "model_sha256": "a03779c86df3323075f5e796cb2ce5029f00ec8869eee3fdfb897afe36c6d002",
+    "model_sha256_verified_against": "Hugging Face ggerganov/whisper.cpp repository LFS oid",
+    "model_size_bytes": 147964211,
+    "batch_arguments": [
+      "--language",
+      "en",
+      "--no-gpu",
+      "--threads",
+      "4",
+      "--max-context",
+      "0",
+      "--max-len",
+      "1",
+      "--split-on-word",
+      "--output-json-full"
+    ],
+    "original_individual_arguments": [
+      "--language",
+      "en",
+      "--no-gpu",
+      "--threads",
+      "4",
+      "--max-context",
+      "0",
+      "--output-json-full"
+    ]
+  },
+  "revised_recording": {
+    "id": "kite",
+    "original_sha256": "2e3448be2b51eab67dac28fe3b408924b6ac5366fe8124ca607fcb2389c616ae",
+    "final_sha256": "f5df8d178072ec11aa01b6ef385d6a99c1aeef9a05b963975bb3f1256fa73fad",
+    "method": "Natural short picture-naming phrase A kite.; same Jenny friendly -8% profile. speechMarkup('kite') now preserves this utterance. No IPA, spelling, repetition, changed voice, or changed style in final candidate.",
+    "waveform": {
+      "sample_rate_hz": 22050,
+      "channels": 1,
+      "bits_per_sample": 16,
+      "encoding": "PCM signed 16-bit little endian",
+      "frames": 22029,
+      "duration_seconds": 0.9990476190476191,
+      "bytes": 44102
+    },
+    "profile": {
+      "voice": "en-US-JennyNeural",
+      "style": "friendly",
+      "styleDegree": "1.15",
+      "rate": "-8%",
+      "format": "riff-24khz-16bit-mono-pcm"
+    },
+    "final_direct_checks": {
+      "input": "assets/audio/voice/word-kite.wav",
+      "input_sha256": "f5df8d178072ec11aa01b6ef385d6a99c1aeef9a05b963975bb3f1256fa73fad",
+      "whisper_text": [
+        "A kite"
+      ],
+      "whisper_noun_supported": true,
+      "exact_single_word_transcript": false,
+      "exact_phrase_transcript": true,
+      "sapi_text": "But tight",
+      "sapi_confidence": 0.024066098034381866,
+      "sapi_noun_supported": false,
+      "artifacts": [
+        "build/semantic-audit/whisper-kite-final-source.json",
+        "build/semantic-audit/sapi-kite-final-source.json"
+      ]
+    },
+    "batch_transcript": [
+      "doll,",
+      "a",
+      "kite,",
+      "drum,",
+      "block,",
+      "bed,",
+      "chair,",
+      "table,",
+      "door,",
+      "lamp,",
+      "clock."
+    ],
+    "batch_mapping": "Original batch09 source order. Article and noun occupy adjacent tokens a + kite for the second catalog entry; no positional one-token-per-noun assumption is made."
+  },
+  "audio_limits": "Automatic acoustic recognition supports the labels but is not human listening or a pronunciation study. SAPI alone matched only 37 of the 140 originals and was not used to declare other recordings incorrect. Sun/son cannot be distinguished by their sound. Kite was clarified after both recognizers produced tight; this does not establish that the original recording was definitely wrong.",
+  "scope_limit": "Original catalog only. Actual Unity acquisition, CLI import and deployed imported-art verification remain pending.",
+  "words": [
+    {
+      "id": "cat",
+      "topic": "animal-friends",
+      "image_sha256_lf": "b24849a84b9ce8c7349ee3e44c7b1bb57152cf57b414e7915864dccbf9370d9a",
+      "visible_referent": "Orange cat face with pointed ears, whiskers and muzzle.",
+      "voice_sha256": "b3b88ea04c1ff49a3156403943fddd629944e83f096f04d43e72563fcbc56c44",
+      "whisper_transcript": "cat,",
+      "sapi_transcript": "Can't",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "dog",
+      "topic": "animal-friends",
+      "image_sha256_lf": "79700fb6705d012d78cdc2c28dc291c9557e9714c77072a9693ab71e59670847",
+      "visible_referent": "Brown dog face with floppy ears, a broad muzzle and tongue.",
+      "voice_sha256": "70b94a1f5acebbb449f84ceec3f992d0c66be3d109db59ca459b1f184bfb9176",
+      "whisper_transcript": "dog,",
+      "sapi_transcript": "Dog",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "sun",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "b52cb9ec280d29086c7006be1a5e5e52661da1c313b59b6b0a341c9fc79288bc",
+      "visible_referent": "Yellow circular sun with radiating short rays.",
+      "voice_sha256": "3e9069f28efff6e1575309535883c351231486cc8cad547b79bf4e11223a2dd0",
+      "whisper_transcript": "son,",
+      "sapi_transcript": "Send",
+      "audio_result": "Homophone son; acoustically the same English pronunciation."
+    },
+    {
+      "id": "ball",
+      "topic": "play-time",
+      "image_sha256_lf": "1aa71177ab569af384648afdde68bb436e266dcbb8dfe920db02e7ec3c920470",
+      "visible_referent": "Round multicolored beach-ball-like ball with curved panels and highlight.",
+      "voice_sha256": "005cd71a4c8262350cc12dfb1e0d2261bf97463a546ceaae2ab1ed7f8c33911b",
+      "whisper_transcript": "ball,",
+      "sapi_transcript": "Paul",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "car",
+      "topic": "on-the-move",
+      "image_sha256_lf": "2e2945a2cef7bc53275a80ac435f29b378befc3f25b160422096795c949d38b7",
+      "visible_referent": "Small side-view passenger car with windows and two visible wheels.",
+      "voice_sha256": "c099c96a9c21cf0a24b41b5336230280fc1ffed8c04a42edfcef92d19176f609",
+      "whisper_transcript": "car,",
+      "sapi_transcript": "Car",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "apple",
+      "topic": "picnic-time",
+      "image_sha256_lf": "fc323eadd4e1849c998e2a83be471c263462620e24074519b144dcab9f627f58",
+      "visible_referent": "Red apple with its familiar indented fruit shape, stalk and leaf.",
+      "voice_sha256": "1d0a5bcac9608a9cf89d9d9c0fa3e3a468dd3b09e69beb8249c05817838448f6",
+      "whisper_transcript": "apple,",
+      "sapi_transcript": "Apple",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "fish",
+      "topic": "animal-friends",
+      "image_sha256_lf": "0729981e28f6a6c4531cd76e94e14467411ab6013ac702091c2a17bac79878b5",
+      "visible_referent": "Side view of a fish with fins, tail and bubbles.",
+      "voice_sha256": "7c441a20a171a34ea1ff07f212bb6a4512c1dc305d2f24584498dde6b5cdc3ea",
+      "whisper_transcript": "fish,",
+      "sapi_transcript": "First",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "duck",
+      "topic": "animal-friends",
+      "image_sha256_lf": "3e5296716c437fe446bf9d7c00f7a2ecbb10c398931e7cabd4e673ee92f67ea8",
+      "visible_referent": "Yellow duck in profile, with a flat bill, wing and low body on water.",
+      "voice_sha256": "cc5b2fc66a0f8ff9a5e906c81b6eed35e61c15a339d65d81dd9015acf5897fb1",
+      "whisper_transcript": "duck,",
+      "sapi_transcript": "That",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cow",
+      "topic": "animal-friends",
+      "image_sha256_lf": "dd72c884bfdb4a0fa18d1e169c211b25a01cbaedef23d1bcfc0d3f0cf9600753",
+      "visible_referent": "Cow face with black patches, side ears and broad pink nostrilled muzzle.",
+      "voice_sha256": "0abbdf92b318bc6a462d931775dc1c745f639f02f694c1de7bd1d42eb83b39d5",
+      "whisper_transcript": "cow,",
+      "sapi_transcript": "Tell",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "pig",
+      "topic": "animal-friends",
+      "image_sha256_lf": "ff221ae2acd29c880b3e9ce0c84bd4138526fd6e23e1d7c88a108dab66fe64a1",
+      "visible_referent": "Pink pig face with triangular ears and a round nostrilled snout.",
+      "voice_sha256": "6c38d68ca6b80ce1183f3716dbde748669b34a348df292e3bda092a7eb5996bc",
+      "whisper_transcript": "pig.",
+      "sapi_transcript": "Tamed",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "hen",
+      "topic": "animal-friends",
+      "image_sha256_lf": "fbad9d1cd31fb2afca3f2f0900896c8f229943cf551656bf8c680a4ba0ac5154",
+      "visible_referent": "A combed chicken standing in profile, with a beak, wing, feet and prominent upright tail feathers.",
+      "voice_sha256": "f35a47e09a1c8b928823f12a53f7320807adba6e743673e497ab02a02fdb99fd",
+      "whisper_transcript": "hen,",
+      "sapi_transcript": "10",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "sheep",
+      "topic": "animal-friends",
+      "image_sha256_lf": "a3998f0347d69007421be7de760ee4f0beb1987b6cd6cfe584e1a2b0eb45ce9c",
+      "visible_referent": "Sheep with a fluffy white fleece around a brown face and short legs.",
+      "voice_sha256": "b2cb98417fb26b080cc9ff73e276d387091d271da36b865fda82c5735fd5e3dd",
+      "whisper_transcript": "sheep,",
+      "sapi_transcript": "Deceit",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "horse",
+      "topic": "animal-friends",
+      "image_sha256_lf": "d6cc098af8442ed92351762a87e448760ea858c993c62f0038db5fae4a8b04a7",
+      "visible_referent": "Brown horse head with long muzzle, upright ears and a dark mane.",
+      "voice_sha256": "243e8428bfec05b729358379ffeea91ab711c705a3f4d17f17cb7aca58186e37",
+      "whisper_transcript": "horse,",
+      "sapi_transcript": "Horse",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "goat",
+      "topic": "animal-friends",
+      "image_sha256_lf": "cb32c57d8453e90d4ce4de63fea1554170669ef3b999ccff4c628a874ecc062a",
+      "visible_referent": "Goat-like long face with upright curved horns, side ears and a pointed beard.",
+      "voice_sha256": "5f4b88e0672b63145b988ecfafade3ee7afc4b99198c035d4a004cb5a83a7b7a",
+      "whisper_transcript": "goat,",
+      "sapi_transcript": "Don't",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rabbit",
+      "topic": "animal-friends",
+      "image_sha256_lf": "e49a965d67f06ea409189263aa1708b4a286e76b3432230b0ebf7ed643a29735",
+      "visible_referent": "Rabbit face and front paws, with two long upright ears and small muzzle.",
+      "voice_sha256": "4aafd1173f64eb0e58237aa3dd3cec1824cc578cc52ffa0a717ba27480c51f73",
+      "whisper_transcript": "rabbit,",
+      "sapi_transcript": "Brad that",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "mouse",
+      "topic": "animal-friends",
+      "image_sha256_lf": "aa023f9d14741658c504772e50e17479bcc2b177a32b47ece2f514b65fda9e56",
+      "visible_referent": "Mouse face with large round ears, small pink nose and long whiskers.",
+      "voice_sha256": "b58e1a287da93633d57deba04cfe139a1903fa7e7914f5e59abfb628974be022",
+      "whisper_transcript": "mouse,",
+      "sapi_transcript": "But Nellis",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bear",
+      "topic": "animal-friends",
+      "image_sha256_lf": "5dc2b1b5470724742c67bd1376fbffa738525048bc4637d39d5255ce202c4a38",
+      "visible_referent": "Brown bear character with round ears and a broad light muzzle.",
+      "voice_sha256": "b70a4ae55a031281eb520a08a275f0691410aff3f6645659f18059ed00df9681",
+      "whisper_transcript": "bear,",
+      "sapi_transcript": "There",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "lion",
+      "topic": "animal-friends",
+      "image_sha256_lf": "7d35e0074db87b71df5922a5e317d7d329e59da65a99d7e5c4c36ba0e0326e5a",
+      "visible_referent": "Lion face surrounded by a round golden mane.",
+      "voice_sha256": "3feb5912df2394c1220e4fa79af03ef4fe5058b4fa972451d81d53562dd77198",
+      "whisper_transcript": "lion,",
+      "sapi_transcript": "Bly and",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tiger",
+      "topic": "animal-friends",
+      "image_sha256_lf": "1f0e79f6051d4f50e2fdd46bc683a53e0130886317f8eef338f10f18c1b60846",
+      "visible_referent": "Orange tiger face with dark stripes, pointed ears and whiskers.",
+      "voice_sha256": "0aec0072148847f1e9c66288e3d7b058ebe250150ebff5518a788ba389026ccf",
+      "whisper_transcript": "tiger,",
+      "sapi_transcript": "Tiger",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "monkey",
+      "topic": "animal-friends",
+      "image_sha256_lf": "aac486e42d2b20d49520318a8cb739168d7b24720d2d15c68534f5f85df59067",
+      "visible_referent": "Monkey face with round side ears and a pale heart-shaped facial area.",
+      "voice_sha256": "beb762d71899c421638ba36abd0652ad30d46b229e37916a93694d4994942078",
+      "whisper_transcript": "monkey.",
+      "sapi_transcript": "The monkey",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "panda",
+      "topic": "animal-friends",
+      "image_sha256_lf": "bf0b58f35e57d876e53da5ee376d663fdaef6faceb82f2d1a9b5fc2903b3f50d",
+      "visible_referent": "Black-and-white panda face and shoulders, with black ears and eye patches.",
+      "voice_sha256": "933f3f8e1962b7d659a909de15ef24c5d68a45de46970e39205749b542767df8",
+      "whisper_transcript": "panda,",
+      "sapi_transcript": "Tend to",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "zebra",
+      "topic": "animal-friends",
+      "image_sha256_lf": "049f4e320dc54cb64e57ebc7f9bd1613f4fc36dbf5c1960abc19990bf3b17f7f",
+      "visible_referent": "Long equine face with black-and-white stripes, upright ears and short mane.",
+      "voice_sha256": "2cb0b56cf740af1d66055c1ffef4c1defad0bc808849ce3b5322f35538653525",
+      "whisper_transcript": "zebra,",
+      "sapi_transcript": "Zebra",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "fox",
+      "topic": "animal-friends",
+      "image_sha256_lf": "2ce7656e1f5377b4149cfdc2825902366b08845dbe06566851894b3abe3b4861",
+      "visible_referent": "Orange fox face with pointed ears and large pale pointed cheek/muzzle shapes.",
+      "voice_sha256": "7c39e6bb5976b42ee537d68f4f44d6656e5f06ccd246e569cb77393d18ea76da",
+      "whisper_transcript": "fox,",
+      "sapi_transcript": "Fox",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "owl",
+      "topic": "animal-friends",
+      "image_sha256_lf": "25e4e0eb210dae5793936935697b604b1584a74ae00e8e1aa2dc9bee55cd6bd4",
+      "visible_referent": "Owl with very large forward-facing eyes, ear tufts, small beak, wings and feet.",
+      "voice_sha256": "b1e662001d5f98505336af0e12c944581330a17930a171f48182899368e14058",
+      "whisper_transcript": "owl,",
+      "sapi_transcript": "L",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "frog",
+      "topic": "animal-friends",
+      "image_sha256_lf": "bfede580d3ac7c75d0c73953bc614411a2745fd603a4ea23c700b9f3313252b5",
+      "visible_referent": "Green frog face/body with two raised eye bulges and small splayed front limbs.",
+      "voice_sha256": "fd3b4f88b15345be656a0ae9761323956c0a0df4b4209926a896deaae2f1ec82",
+      "whisper_transcript": "frog,",
+      "sapi_transcript": "Frond",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "turtle",
+      "topic": "animal-friends",
+      "image_sha256_lf": "181c3336ba3a3ccb90de90272755a3a22ad624ec36ea40630ad8d24c959fbf61",
+      "visible_referent": "Turtle in side/top view with a large segmented shell, protruding head and four short feet.",
+      "voice_sha256": "d125e172d45aafb9263f616073077488838d8e55ab6f271f143aa21dc19dd60b",
+      "whisper_transcript": "turtle,",
+      "sapi_transcript": "Turtle",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bee",
+      "topic": "animal-friends",
+      "image_sha256_lf": "ed40bc912f51158a645d2c0ae060a54bb400b65c6f5e590711897aa55635cb00",
+      "visible_referent": "Yellow-and-dark striped flying bee with two pale wings, antennae and a pointed rear.",
+      "voice_sha256": "aabdeaae7dcb0f358b2afa83fdcbdc4c91ed7a26a06da5d446e9ea792f94ea89",
+      "whisper_transcript": "bee,",
+      "sapi_transcript": "B",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "ant",
+      "topic": "animal-friends",
+      "image_sha256_lf": "6fc298fd528b173e2df8744598cc0e03f0ee5d2d7a6be69fb76d96ba1fc3ac1b",
+      "visible_referent": "Ant with three linked body sections, six legs and two antennae.",
+      "voice_sha256": "2c99982b1e7579721181c65bd98412cf85ca349b854b3ac6a36b861d27cfd313",
+      "whisper_transcript": "ant,",
+      "sapi_transcript": "And",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "banana",
+      "topic": "picnic-time",
+      "image_sha256_lf": "2d594584575b541811ad546d81b4964931678d8a9c09a2e36646a5f0a61856fe",
+      "visible_referent": "Curved yellow banana with brown ends.",
+      "voice_sha256": "21811d23a54ba38cde4e6d7f6e708c442b36191cada56f34a394331f3bf6ac7c",
+      "whisper_transcript": "banana,",
+      "sapi_transcript": "I'm an a",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "orange",
+      "topic": "picnic-time",
+      "image_sha256_lf": "3832b2c0fe85dcbd65709538f985fbbe5c6377635184029bdec83f0db71db766",
+      "visible_referent": "Round orange-colored citrus fruit with small peel dots, stalk and leaf.",
+      "voice_sha256": "3edf2c6331aa7a0bdda843a676ffa53d814b234800583f369ce823eb4b94622c",
+      "whisper_transcript": "orange.",
+      "sapi_transcript": "All orange",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "pear",
+      "topic": "picnic-time",
+      "image_sha256_lf": "6f19df9944a970bdfee47bc676febb425df4b83dfbea67afcf8b06ad9b042c41",
+      "visible_referent": "Green pear with a narrow neck, broad bottom, stalk and leaf.",
+      "voice_sha256": "dd094d8715389f8113261ac1f74e44fb0db955f4517dac6c14a5db8089e610b3",
+      "whisper_transcript": "pear,",
+      "sapi_transcript": "Here",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "grape",
+      "topic": "picnic-time",
+      "image_sha256_lf": "dcff649f7f72f6479109ec1b2997a248a1de29d5ad54eac89a404ecd1a818c0d",
+      "visible_referent": "A bunch of round purple grapes under a leaf and stalk.",
+      "voice_sha256": "c1b202237b99600320c301fb4d5dfba87de5df9b19b6e70928662a0feca94b09",
+      "whisper_transcript": "grape,",
+      "sapi_transcript": "Grade",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cherry",
+      "topic": "picnic-time",
+      "image_sha256_lf": "251d0f694e4070030eaa91cd8f2d6e8d3dfc958ad36f87d8bd9ff2377b54295a",
+      "visible_referent": "Two red cherries joined by curved stems and a leaf.",
+      "voice_sha256": "f6eb0f09927750ce4baa503e453ca0dc66fce0875e2b8346df01fa04d0f4c419",
+      "whisper_transcript": "cherry,",
+      "sapi_transcript": "Terry",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "melon",
+      "topic": "picnic-time",
+      "image_sha256_lf": "0ac80f3ad51e5e53cad32465b8a2e643be53dc81adf176e654f223c8a748e657",
+      "visible_referent": "Triangular watermelon slice with pink flesh, dark seeds and green rind.",
+      "voice_sha256": "da33454e7df3e5888d78456187278c8edfd30bf6dd81f163af329bc57c8b91d1",
+      "whisper_transcript": "melon,",
+      "sapi_transcript": "Banal and",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "carrot",
+      "topic": "picnic-time",
+      "image_sha256_lf": "3aa21060b9f743bd0f2217e6ede5f775530bb60a1c4d9e37b6b383a9c9e16698",
+      "visible_referent": "Tapered orange carrot root with green leafy top and short surface lines.",
+      "voice_sha256": "d5b1b6e3810e7b778148509e362eadc1a3d80f4e63465f4225f5eba96fe60cf0",
+      "whisper_transcript": "carrot,",
+      "sapi_transcript": "^",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tomato",
+      "topic": "picnic-time",
+      "image_sha256_lf": "59ecd4cbdae9a6f49b9320d29c7b8e7f9e01b793663da09aafa0535e05161747",
+      "visible_referent": "Round red tomato with a green star-like calyx and stem.",
+      "voice_sha256": "5928f71d943b1ba7c8f6a3af09b0c08d3b1645b11cf8bbc9cfe13b5d242f11a0",
+      "whisper_transcript": "tomato,",
+      "sapi_transcript": "Tomato",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "corn",
+      "topic": "picnic-time",
+      "image_sha256_lf": "0f3f2e3e00fa948d9a44039ee9f23de1c58554a7818cf3b7f7e338df1666eeb5",
+      "visible_referent": "Yellow corn cob with rows of kernels and peeled-back green husks.",
+      "voice_sha256": "b508d7fd7d8ee7ee9b9eb04bad5542c107e48c9614da4c4baa661b163825be70",
+      "whisper_transcript": "corn,",
+      "sapi_transcript": "Corn",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "peas",
+      "topic": "picnic-time",
+      "image_sha256_lf": "aea902219ef190bf04a5e275be75a7cdf19e5083052562deb56e1681a57af103",
+      "visible_referent": "Open green pea pod containing several round peas.",
+      "voice_sha256": "d971342d60b4ae5d8d4e2813bada3d35bc1276c3abfda48aa8f2e43737b51479",
+      "whisper_transcript": "peas,",
+      "sapi_transcript": "He's",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "egg",
+      "topic": "picnic-time",
+      "image_sha256_lf": "11ab2c391dffc4514cbaada8da0844317aab65ddd9c681709f6b243d482b6403",
+      "visible_referent": "Fried egg with a white outer area and round yellow yolk.",
+      "voice_sha256": "5e11fbdf8ea2e65f237eb1b6b1bea2a669e0ea0051f6f03f683603b2a1e9db77",
+      "whisper_transcript": "egg,",
+      "sapi_transcript": "But",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bread",
+      "topic": "picnic-time",
+      "image_sha256_lf": "aea2c8e4781d1c6e5609787bfe9444186c7fa1078b7605f49b154ba37afb56aa",
+      "visible_referent": "Two slices of bread, with brown crusts and pale interiors.",
+      "voice_sha256": "0bfbe9e136043c61eb3f3af7d5e5bf489c3bd2f777380e89b01c152bd5123d0f",
+      "whisper_transcript": "bread.",
+      "sapi_transcript": "Brand",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cake",
+      "topic": "picnic-time",
+      "image_sha256_lf": "ebd73588f2fff01df83db5fbc704322a0f0bc35fa815e4f6876487ea0789cddf",
+      "visible_referent": "Small pink-frosted cake with visible horizontal layers and a lit candle.",
+      "voice_sha256": "c0a02bb703587de075a604c9e675d9b36584747387c1796990437186c25f6bd2",
+      "whisper_transcript": "cake,",
+      "sapi_transcript": "Tate",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cookie",
+      "topic": "picnic-time",
+      "image_sha256_lf": "4608a28daa66cd14fd07ee36ad583bb2d91a8fec7c9249d23fa67393ac5d3cea",
+      "visible_referent": "Round cookie with scattered brown chocolate-chip-like spots.",
+      "voice_sha256": "790d83dda564ced48b60db103c8c02a0749a8910d351ca5d8333578312dcd517",
+      "whisper_transcript": "cookie,",
+      "sapi_transcript": "Turkey",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cheese",
+      "topic": "picnic-time",
+      "image_sha256_lf": "c1cbeb5083558eadae103f697070d0996f5709af3f33d5a0eb6427a0bba63383",
+      "visible_referent": "Wedge of yellow cheese with round holes.",
+      "voice_sha256": "a77e4412b4e91d56368f70cdfeb70fc3d08f93f5346386b5c5aaeb26b1b19865",
+      "whisper_transcript": "cheese,",
+      "sapi_transcript": "T's",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "milk",
+      "topic": "picnic-time",
+      "image_sha256_lf": "3702623a37ed0586fe74641d009867d2800790226f37967c2ba765c8fee32962",
+      "visible_referent": "Milk carton with cow-like patches beside a glass of white milk.",
+      "voice_sha256": "613f6ae21d25caef6f087f5c0edcc4098f143f92babb15207212bb9b4e9e517a",
+      "whisper_transcript": "milk,",
+      "sapi_transcript": "The elk",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "water",
+      "topic": "picnic-time",
+      "image_sha256_lf": "3a3ab56f7045101387d405a07c5dc0bce62d68f5143c276f8ae2043861c924d1",
+      "visible_referent": "Clear drinking glass containing pale blue liquid and bubbles.",
+      "voice_sha256": "45894a0cc60744fc97f0358ba070d0c44fc2a2241e8c1c2a94c36247c1733e70",
+      "whisper_transcript": "water,",
+      "sapi_transcript": "Blotter",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "juice",
+      "topic": "picnic-time",
+      "image_sha256_lf": "5b25002d3bf186bc28de4a6883a9261d3d115a6d8d2811f6cbc6c010b942b2d4",
+      "visible_referent": "Glass of orange-colored juice with a citrus slice on its rim.",
+      "voice_sha256": "070c1de86714bdb77f264ef86c9259a89491f2b0a3c4d4e71a1e3afe9df4742d",
+      "whisper_transcript": "juice,",
+      "sapi_transcript": "To use",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rice",
+      "topic": "picnic-time",
+      "image_sha256_lf": "47ca6fd8734a9ef1a5ebd8433757b4c469c89bfffd52303f00e3fede75ff1602",
+      "visible_referent": "Bowl heaped with white rice, with many individually outlined oval grains.",
+      "voice_sha256": "194334bbe5917ed525f94d1b3feddf2f0c53a5d01c60c3bc5d0617e51694c48d",
+      "whisper_transcript": "rice,",
+      "sapi_transcript": "Rais",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "eye",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "1418a0a340ec070a895d8c8d01076805722156c38fe33ab0b821568e3f14b1dd",
+      "visible_referent": "Open human eye with eyelashes, iris and pupil.",
+      "voice_sha256": "5d3474971de012b1e67ee355c3809d55330eb24e1397f61affefdfed4a6b8567",
+      "whisper_transcript": "eye,",
+      "sapi_transcript": null,
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "ear",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "cf6ff2d5740a663cafb34c18d75a3b0cbaf5dc5140f21153a50aa0c7cb75ad39",
+      "visible_referent": "Outer human ear with visible inner folds.",
+      "voice_sha256": "072eb3de35bfc19e78725f10104d5d858be35f43b127e0d9f0dde0a068e14852",
+      "whisper_transcript": "ear,",
+      "sapi_transcript": "Dear",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "nose",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "d633fcd5dd1d88c7729b82e2b0d3707877255c2bcc6356d020981ce5579f9703",
+      "visible_referent": "Front view of a human nose with two nostrils.",
+      "voice_sha256": "1000d454dfbdc6800f655c182c165a8c8eb8c20d7ca21c0a0344d1048102ebf8",
+      "whisper_transcript": "nose.",
+      "sapi_transcript": "The nose",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "mouth",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "2972ebedf562901956b810b5a00c279a7fca7d59b1b5b6ed36aa87e440c3c625",
+      "visible_referent": "Closed mouth represented by upper and lower lips.",
+      "voice_sha256": "9486c6556a4efda9e385bbbc3bb945c8c77f04859ef8c568f78b87e80a0f0d86",
+      "whisper_transcript": "mouth,",
+      "sapi_transcript": "The elf",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "hand",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "7d7930e1fce32d0aefa783c53ddd766ae4dbaf4cf933c0caf0bd4213d8b4b33a",
+      "visible_referent": "Open palm with a thumb and four fingers.",
+      "voice_sha256": "c88ca51de2cc122674dc8abb30c35d5400834534f266ffe741300c75d801ec2b",
+      "whisper_transcript": "hand,",
+      "sapi_transcript": "Canned",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "foot",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "9fd01a9e9ca04ff9dc7d6008a98a7b3ac6f4f5702caf0d9d0e020d37e21d4599",
+      "visible_referent": "Sole of a bare foot with five toes and a heel.",
+      "voice_sha256": "81de41a6d3271a76624c17b8c12905e8966faf0fb8df2e2aa287269fedfeb552",
+      "whisper_transcript": "foot,",
+      "sapi_transcript": "Flat",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "arm",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "decd49d6788981a64840d37e907ac3ccea102eeb12e7fdf0246d8e06fab5f2a4",
+      "visible_referent": "Bent bare arm showing the elbow, forearm and open hand.",
+      "voice_sha256": "e940d51521f6da051e1986a0c357c8771cde505d721bbb3a399c07ff99965902",
+      "whisper_transcript": "arm,",
+      "sapi_transcript": "Armed",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "leg",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "07220a6e3493d71f0c97af1317260979a8d13c1fabe7f713702ceec89e3ae7df",
+      "visible_referent": "Single bare leg descending from a short trouser cuff to a foot and toes.",
+      "voice_sha256": "9af3455945744d09c31eb458c56d9e96fad2e076b746f7a2aa4c6ca8e92b83d0",
+      "whisper_transcript": "leg,",
+      "sapi_transcript": "Blank",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "head",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "d352b6a5594ee025252c9d569c8bba9de69991c4936f0583495ccf22f7c58c64",
+      "visible_referent": "Complete human head with hair, face and ears above a faint neck-and-shoulders context.",
+      "voice_sha256": "2ecf4924914e9a52664ec68b29d25147c0d298915e7ed454a8606f1d0093c8c2",
+      "whisper_transcript": "head,",
+      "sapi_transcript": "Ted",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tooth",
+      "topic": "head-to-toe",
+      "image_sha256_lf": "57f45f264469b559e711319d1ca202772625a71f07e9a4324320f768d12d05af",
+      "visible_referent": "Single white molar-like tooth with crown and two roots.",
+      "voice_sha256": "fec31db8b5d988972a780d65aacd61bb59272449006932ad32fc43f0f66d6e85",
+      "whisper_transcript": "tooth,",
+      "sapi_transcript": "10 of",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "hat",
+      "topic": "dress-up",
+      "image_sha256_lf": "1ccfca2fd22506c132092d2ed3ee44b138ac062f28c646fedd774be42089e080",
+      "visible_referent": "Yellow brimmed hat with a rounded crown and contrasting band.",
+      "voice_sha256": "53637f2cd30ee3f25825e45a5fac822c0e46cdd21e0f09312eea846f07384948",
+      "whisper_transcript": "hat,",
+      "sapi_transcript": "Hat",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "coat",
+      "topic": "dress-up",
+      "image_sha256_lf": "aa47a5a609de526bd5d5561abd3e56cfb0e37999e69339f8ae348ef070bc5f45",
+      "visible_referent": "Long-sleeved brown hooded coat with toggles, front opening and pockets.",
+      "voice_sha256": "83c88543f07357d7aa5bd11ef26563388fd2a8d6659ba3152a8b11a6b9e7213b",
+      "whisper_transcript": "coat,",
+      "sapi_transcript": "Told to",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "shirt",
+      "topic": "dress-up",
+      "image_sha256_lf": "99839d578657fc241e129c84532e54a3b58c9ae6a5a56408bc4acc2e80eaeb1e",
+      "visible_referent": "Green short-sleeved T-shirt with round neckline.",
+      "voice_sha256": "d28f96badd6a0ed6fe64abf3c702ebbc9d42ae577216a484fac975d80d3b3395",
+      "whisper_transcript": "shirt.",
+      "sapi_transcript": "Gerd to",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "dress",
+      "topic": "dress-up",
+      "image_sha256_lf": "129829db1d57d4bdeeb8697ea3d92fcc6ead7f47d0d65a7f8243601c35e28122",
+      "visible_referent": "Pink sleeveless dress, with narrow upper body and flared lower skirt.",
+      "voice_sha256": "0acc8354d049987cd92266dec042834d18209f1b986923ea036f00db7311d3a1",
+      "whisper_transcript": "dress,",
+      "sapi_transcript": "Dress",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "sock",
+      "topic": "dress-up",
+      "image_sha256_lf": "1107eceb744ce585e4ba812967a82a91af4d354feaa2c1d1e983af80a7e2c621",
+      "visible_referent": "Single long fabric sock with a cuff, heel and toe patches.",
+      "voice_sha256": "f1e97bc84c77018317ac16bfa8caeedd453721cfb6d4bd40cf0ad70427436402",
+      "whisper_transcript": "sock,",
+      "sapi_transcript": "Socket",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "shoe",
+      "topic": "dress-up",
+      "image_sha256_lf": "b1bf72f698964582e192fd7d624afd10e4fb0112680ddc9a08fff983eb3e9f3d",
+      "visible_referent": "Pink ankle-high lace-up shoe with a contrasting flat sole.",
+      "voice_sha256": "9e96a24af63e20f11d10ffe5b13ba5cc199514595136643aa16aa4646b9f37c7",
+      "whisper_transcript": "shoe,",
+      "sapi_transcript": "She O",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "glove",
+      "topic": "dress-up",
+      "image_sha256_lf": "deaa4f30639fd184ac7fad4183b8e54180bd823572e79cf90fc3fb62bf72c39d",
+      "visible_referent": "Pink five-finger glove with a yellow ribbed wrist cuff.",
+      "voice_sha256": "935e8a72499ce7a26d0bffbc8c2b5992bdf9ae7a48353c8f965c5c01dba400ab",
+      "whisper_transcript": "glove,",
+      "sapi_transcript": "The love",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "scarf",
+      "topic": "dress-up",
+      "image_sha256_lf": "c14e63857fd949d95cc4d6c2350b0aabc6f59ab9e5baf13e412c667c3942a76f",
+      "visible_referent": "Looped scarf with a thick horizontal neck loop and two fringed hanging ends.",
+      "voice_sha256": "e6c91d0c91742440ec8c7f342a4b276b9dc2ed3cb6f2b44f751da07c0ea230ab",
+      "whisper_transcript": "scarf,",
+      "sapi_transcript": "Scarf",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "moon",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "2c1e8d33a27845c906aa045e9c655ab571225a4be5bb217e2d6ad26af35edd1d",
+      "visible_referent": "Yellow crescent moon with small crater-like circles.",
+      "voice_sha256": "cba491ebb5fcda2165bbabcdd70586910a36f8aa5e9c24089b863ac78339243b",
+      "whisper_transcript": "moon,",
+      "sapi_transcript": "The only",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "star",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "47a6adb68a25723af0683c2b5542113ec41628e1e604b0a03ea4603763085f81",
+      "visible_referent": "Yellow five-pointed star.",
+      "voice_sha256": "49bbc8d8cbf3ad7f45c8a24d23a50406c7c856d3eb1649efce96fc1de748aaca",
+      "whisper_transcript": "star,",
+      "sapi_transcript": "Star",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cloud",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "b4872bed0ad744bbbd374bfb85b57248e0d008a80530cb50f5e087995fe1ed54",
+      "visible_referent": "Pale blue rounded cloud with a flat lower edge.",
+      "voice_sha256": "da4d369f42d109ec2a4e751fc42fb11975217f1aaefb6ddfb5cb8116e27d2816",
+      "whisper_transcript": "cloud,",
+      "sapi_transcript": "Cloud",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rain",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "2c484ff330d19cf583fa4fb1836ae0e07a53e184884e6c70802b427e8ea751c2",
+      "visible_referent": "Cloud with several blue water drops falling underneath.",
+      "voice_sha256": "85a69cc1c8ad61a7a9210d984e512c96dc01c3983ba16fed6fb072500674e049",
+      "whisper_transcript": "rain,",
+      "sapi_transcript": "Drain",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "snow",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "bafd0e1ae53454388f365af31f9c13d57109767ed482cbeb8eeb9e635a36e6ed",
+      "visible_referent": "Large pale blue six-armed snowflake.",
+      "voice_sha256": "2a882fcda50dee351632955b99afd77ebdaa6cd9a771b774fc674fc8a864f01f",
+      "whisper_transcript": "snow",
+      "sapi_transcript": "So now",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tree",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "2ce123ee4644577a65331ff413289742a4d73ef58dee3a418e4ac6ed10d3fdaf",
+      "visible_referent": "Green round-canopied tree with a visible brown trunk and ground beneath it.",
+      "voice_sha256": "c7dc814134fa76cfb35b22507821e8963cad0bb856d6abd82a42d969fa84edd6",
+      "whisper_transcript": "tree,",
+      "sapi_transcript": "Three",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "leaf",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "3a2ceafadb91c5d16d08b55b1dae8886ed4f6048a8d8f213596a6c0356e966c2",
+      "visible_referent": "Single green pointed leaf with central stalk and branching veins.",
+      "voice_sha256": "5bf30265bf7ef82fd14dcbbf009fbf333087ecfe7f1d3acc677273a1a519ccb1",
+      "whisper_transcript": "leaf,",
+      "sapi_transcript": "The leaf",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "flower",
+      "topic": "great-outdoors",
+      "image_sha256_lf": "937aa1ece3ebe2a88f91ffd5be72086aa500a7b75bcaeecb8b50243390a80b33",
+      "visible_referent": "Pink-petalled flower with a yellow center, green stalk and leaves.",
+      "voice_sha256": "15d2ce4223990020fedc44dfa5b624f80107e14f84bbbc832ccacefb1d69c5b3",
+      "whisper_transcript": "flower,",
+      "sapi_transcript": "Flower",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bus",
+      "topic": "on-the-move",
+      "image_sha256_lf": "eb8ffff2e7459f3f62ccbbf6df540271d7e6784941a8a8a4bceabfb38a866216",
+      "visible_referent": "Large passenger bus with several windows, front door and two visible wheels.",
+      "voice_sha256": "3f3eed6b61936e5e37c5b578bd8d4bce139436914299c8cac70eb2dacb0e6a46",
+      "whisper_transcript": "bus,",
+      "sapi_transcript": "Thus",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "train",
+      "topic": "on-the-move",
+      "image_sha256_lf": "640aac2ff536a5c1d8de8d26528d5604460d745ad2f0c6565bc26beaa0496bad",
+      "visible_referent": "Steam locomotive with chimney, front boiler, cab and three visible wheels.",
+      "voice_sha256": "b78903755e804afa8bb79428a6a578b3a854b011e9f31aaee941767c2f01d346",
+      "whisper_transcript": "train,",
+      "sapi_transcript": "Trained",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "truck",
+      "topic": "on-the-move",
+      "image_sha256_lf": "f4016b45a5dabbccc1c19232d1829edd5033f72f7a37a8f6e08dae5f1c6851bc",
+      "visible_referent": "Delivery truck with a separate driver cab and a large rectangular cargo body.",
+      "voice_sha256": "362209a69d0814a9c6a627f7279c6ac643ed5cef3e6c3e8ee6c0fcf952cee257",
+      "whisper_transcript": "truck,",
+      "sapi_transcript": "Track",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "plane",
+      "topic": "on-the-move",
+      "image_sha256_lf": "4691ad363ef88df7215ce769f0e83e760127a7f4ba348ab86807514102ab1d07",
+      "visible_referent": "Aircraft viewed from above, with fuselage, two broad wings and tailplane.",
+      "voice_sha256": "b6e03766110a0db00f13833baa552b67da9b5a441bb084ac0dbbf2f7f26a4982",
+      "whisper_transcript": "plane,",
+      "sapi_transcript": "Plain",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "boat",
+      "topic": "on-the-move",
+      "image_sha256_lf": "4b60cad9c2a4939237c6fadfdb250009b40141a2920d06fa656c7feb7c7dd3e4",
+      "visible_referent": "Small sailboat with hull, mast, two triangular sails and water underneath.",
+      "voice_sha256": "28c872d07ce4348af0c8608f96387370da35e53d628a416bc5a1a0c2580bc481",
+      "whisper_transcript": "boat,",
+      "sapi_transcript": "Don't",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bike",
+      "topic": "on-the-move",
+      "image_sha256_lf": "8e4056eeeffead3572275e864ef102c1cd8efd3eb8c2cdc4b48a9cd65f64c23e",
+      "visible_referent": "Bicycle with two large wheels, triangular frame, seat, handlebars and pedals.",
+      "voice_sha256": "e71d071430f401404330f8a52396b3f37a99b16a0b6a8d46f9c55693d7c71dfd",
+      "whisper_transcript": "bike,",
+      "sapi_transcript": "The night",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "book",
+      "topic": "play-time",
+      "image_sha256_lf": "3fbd788cd4c03e8c9301a6680816bdd89182c10843d844df2ddbe5782eb935c4",
+      "visible_referent": "Open book showing two pages, a central fold and short text-like lines.",
+      "voice_sha256": "2867fba38e118dd051c2a2d0fdf97793809a0f871220e9aa51d0f5893f078965",
+      "whisper_transcript": "book.",
+      "sapi_transcript": "But",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "doll",
+      "topic": "play-time",
+      "image_sha256_lf": "18710d7361bcb5aed93380ade4fa0321d16d4f9cb00f59a4dabde41822eba440",
+      "visible_referent": "Soft rag doll with yarn pigtails, round four-hole button eyes, a smiling face, rounded cloth hands, limb seams and a visibly stitched mint fabric patch on the pink dress.",
+      "voice_sha256": "1d8a0fe1b69b814f6cb77c4ab5329577f72bfbbcc8c3d831de34f0c48b5a20e4",
+      "whisper_transcript": "doll,",
+      "sapi_transcript": "Dahl",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "kite",
+      "topic": "play-time",
+      "image_sha256_lf": "eb859d4a074de07518aa784d9117b8e9fb9852e81f858dce721d4515a5e5c80d",
+      "visible_referent": "Diamond-shaped kite with contrasting triangular panels and a short decorated tail.",
+      "voice_sha256": "f5df8d178072ec11aa01b6ef385d6a99c1aeef9a05b963975bb3f1256fa73fad",
+      "whisper_transcript": "A kite",
+      "sapi_transcript": "But tight",
+      "audio_result": "Whisper supports the noun in A kite; SAPI disagrees with low confidence. This is not a one-word exact transcript."
+    },
+    {
+      "id": "drum",
+      "topic": "play-time",
+      "image_sha256_lf": "7a39f132e68dde8917372ca326dc8712465e6f226de2e8139393bb69fc509e85",
+      "visible_referent": "Cylindrical drum with drumhead, side lacing and two crossed drumsticks.",
+      "voice_sha256": "a334339855d759e6305f0c19aeab37d3cac60f18b2d555be0ddd80990496fa29",
+      "whisper_transcript": "drum,",
+      "sapi_transcript": "Drum",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "block",
+      "topic": "play-time",
+      "image_sha256_lf": "553935489c1ef63d704b3361dfddf3b892f2defbc73578eda7a907518db127ad",
+      "visible_referent": "Single solid cube/toy block showing three differently colored faces.",
+      "voice_sha256": "2e0f760587f95732cb26cff14191045efd124590ba5169e87dde08374cc38da7",
+      "whisper_transcript": "block,",
+      "sapi_transcript": "A lot",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bed",
+      "topic": "at-home",
+      "image_sha256_lf": "04cd33a9d2e58855e39b8cd83c2a74b16880b30cc542fe969827b9a5dc061351",
+      "visible_referent": "Side view of a bed frame with a mattress, pillow and pink blanket.",
+      "voice_sha256": "546bad3f86cabfd7b65279e84bedf72b30b3f72e463aacdc5892338ad99deba4",
+      "whisper_transcript": "bed,",
+      "sapi_transcript": "Dad",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "chair",
+      "topic": "at-home",
+      "image_sha256_lf": "086cb4cb51888d65a713bea2e565567f287c6ad4910afd9f66a0d5f0d8edc67d",
+      "visible_referent": "Chair with a tall rectangular back, yellow seat and legs.",
+      "voice_sha256": "fb4290cbd1a1b25d1c271de3a129c309a1f9368c8a74b033e0fd5854370c83b0",
+      "whisper_transcript": "chair,",
+      "sapi_transcript": "To year",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "table",
+      "topic": "at-home",
+      "image_sha256_lf": "7462f1361f9c35934d0f58f55f1bcf0a4ebb554def93bc236ade5c78f692f4ee",
+      "visible_referent": "Rectangular tabletop supported by four legs.",
+      "voice_sha256": "0dd18721801294bb45c6f21ea581a82c96e6c045a67e8524210b5329a6cdb45c",
+      "whisper_transcript": "table,",
+      "sapi_transcript": "Table",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "door",
+      "topic": "at-home",
+      "image_sha256_lf": "7d8476a45b133e7057d543087de86c6fb536bce638f46d262a58365447613c16",
+      "visible_referent": "Framed two-panel door with a round knob on the right.",
+      "voice_sha256": "afce7f1e2816c31b59e20faf066cbb508c56055d290ae44c337cb831cd7c7d6f",
+      "whisper_transcript": "door,",
+      "sapi_transcript": "To war",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "lamp",
+      "topic": "at-home",
+      "image_sha256_lf": "6e36d2d4ebd918cc1f9bb93af85fe5727e5edfddc98ab0aec7546fa716cf048c",
+      "visible_referent": "Table lamp with a broad shade, narrow stem and oval base.",
+      "voice_sha256": "f341cbf7a4fdfd565d45f9b4d88437a08731367a35303ff7f02f04470ea68107",
+      "whisper_transcript": "lamp,",
+      "sapi_transcript": "The lamp",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "clock",
+      "topic": "at-home",
+      "image_sha256_lf": "82a03499a615b56853822e087e1e67cb0e5e596bc86801ae7d6ef56034f04f22",
+      "visible_referent": "Round analog clock face with hands and hour marks.",
+      "voice_sha256": "278d595cfb78fd61bd3409a7e09aca856839d318306929b3d397927365f4af74",
+      "whisper_transcript": "clock.",
+      "sapi_transcript": "Plot",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "key",
+      "topic": "at-home",
+      "image_sha256_lf": "6959a7a775ce4fe801d817d6b6058b7a76d1f4869fb156d4ab504af04f944668",
+      "visible_referent": "Single key with a round bow, shaft and teeth.",
+      "voice_sha256": "a29e6c46d9e689d04c6ea8c5548db712adcedf4cea7e72c7218c53eb2e0f5996",
+      "whisper_transcript": "key,",
+      "sapi_transcript": "T",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "phone",
+      "topic": "at-home",
+      "image_sha256_lf": "80b65556959574a1e25c40a5881631b2231d450b7e2ccb35ec7a8dc1fa934365",
+      "visible_referent": "Smartphone with a screen, app-like circles and lower round button.",
+      "voice_sha256": "fea0d0b00b0526fcdb602e7ee0f426feb6eea6d10236d881388fa302425a1f96",
+      "whisper_transcript": "phone,",
+      "sapi_transcript": "Phone",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "cup",
+      "topic": "at-home",
+      "image_sha256_lf": "975da4b26c84fa0afc6e7a9bd692509d919e575fddfcab711b81f6bf67956520",
+      "visible_referent": "Handled drinking mug with an open liquid-filled top.",
+      "voice_sha256": "fd657baff54b863813649897f4d6165805cf027dadcd58cb3cabaa35639e7044",
+      "whisper_transcript": "cup,",
+      "sapi_transcript": "Contact",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bowl",
+      "topic": "at-home",
+      "image_sha256_lf": "90138e4c9a003613faf28763e41bbb90a55b0066ab120376662d9543b4c2d940",
+      "visible_referent": "Deep blue eating bowl with an open oval rim.",
+      "voice_sha256": "afecf0e92456adeb295e0bc312d0ee5f22e5c642c6943561a4efa2dc7a5d339a",
+      "whisper_transcript": "bowl,",
+      "sapi_transcript": "Paul",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "plate",
+      "topic": "at-home",
+      "image_sha256_lf": "53150bbba6abf162d412721ae7c7683e7ca501334d05a5a6578dba4ac5504192",
+      "visible_referent": "Round shallow plate viewed face-on with a decorative rim.",
+      "voice_sha256": "56abe19450afeac8c81eec4cd0bb1f09e8e0aace4d796796d45a8f421a07f30a",
+      "whisper_transcript": "plate,",
+      "sapi_transcript": "Plate",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "spoon",
+      "topic": "at-home",
+      "image_sha256_lf": "0aa649d701576ac41746c58cbcd33b852f413488eda8f706d8c96fed3528f972",
+      "visible_referent": "Metal spoon with a visibly shaded concave bowl and narrow handle.",
+      "voice_sha256": "d21153a7951b6bf5a5c0e40a48a874cb591ca0558b9d46af4cf7723f58f70e5b",
+      "whisper_transcript": "spoon,",
+      "sapi_transcript": "Spoon",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "fork",
+      "topic": "at-home",
+      "image_sha256_lf": "ffa62af9ce7fdaad996ad913bcb4578ef1ce2e6b442eee364d7ab4eb30432fab",
+      "visible_referent": "Four-tined eating fork with a handle.",
+      "voice_sha256": "9aae470621a95636f39c8a283225b2dda5b8abecb59e2c25fa189b10ee1afa21",
+      "whisper_transcript": "fork,",
+      "sapi_transcript": "Fork",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "soap",
+      "topic": "at-home",
+      "image_sha256_lf": "1d065783683c8b72eb0249023c764c94f78acf5207f3d215de922603cdf3ea58",
+      "visible_referent": "Purple bar of soap with bubbles above it.",
+      "voice_sha256": "1127d92f50f8544e6232e17be43331ae1059eee95960f6e30688c8a8f03f4a72",
+      "whisper_transcript": "soap,",
+      "sapi_transcript": "Sell to",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "brush",
+      "topic": "at-home",
+      "image_sha256_lf": "306a206b89d7aa93b27e5b9eb3e65e0a496495033b4f72993474eb8af7f3bbb5",
+      "visible_referent": "Bristled hairbrush in an angled side/three-quarter view, with a long coral handle, shallow oval cushion and three dense rows of projecting round-tipped brown bristles.",
+      "voice_sha256": "5715bc321a336c53aebf8d42968fd8814519c2d8d8e97100dcae2eae33949a33",
+      "whisper_transcript": "brush,",
+      "sapi_transcript": "Brush",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "towel",
+      "topic": "at-home",
+      "image_sha256_lf": "af39a21e55f27bf9a81663aaa6ed5371a2baf1efb65510c62576d62cd5fa8651",
+      "visible_referent": "Blue cloth folded over a wall-mounted rail, with a striped lower hem.",
+      "voice_sha256": "d8883728223c43ee4e35a0c14ff3bd0abff35a7ecca0a06f8d6b925587da2191",
+      "whisper_transcript": "towel.",
+      "sapi_transcript": "Tell",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "whale",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "bf9c22b8a3bff8e7ce896a5551d4b77d4c1befb6f0b89e5eb902cab9668ff7d7",
+      "visible_referent": "Blue whale with a flipper, raised tail and water spout.",
+      "voice_sha256": "20e904c800bf1e3ac5590d34460212a8b20f912a39f779ba9d3d79a840a77858",
+      "whisper_transcript": "Whale,",
+      "sapi_transcript": "The whale",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "shark",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "a18ca3c4dc71fd4c71c64cfe2da0fad51d5a1e079f862c6bef09f485b9a9f996",
+      "visible_referent": "Shark with triangular fins, gill slits and pointed teeth.",
+      "voice_sha256": "979d2d1ec3195730d8ca9d4c04affe4f53728fec290d78cca998f4a5ce43cbd9",
+      "whisper_transcript": "shark,",
+      "sapi_transcript": "Shark",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "crab",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "39019737bcee5b552eb516fe1595113d6cb998f98cb2d41333357aafa5b34d5e",
+      "visible_referent": "Crab with two large claws, eye stalks and multiple sideways legs.",
+      "voice_sha256": "22b267522d6a5767a54900b74bad0a9e6132ac04f8b094a66a3ae5faeb85e3f9",
+      "whisper_transcript": "crab,",
+      "sapi_transcript": "Crab",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "seal",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "9d9aa6a022da77b0959f1bb32c7afa10e09272cd8d6c60ede54dbdf0bd9bb368",
+      "visible_referent": "Gray seal-like marine mammal with whiskers, front flippers and tapered rear flippers.",
+      "voice_sha256": "0b3e3d006d72d59f8e484f1aeec287cfd259ea8a173a29cf541058968a9ad3c3",
+      "whisper_transcript": "seal,",
+      "sapi_transcript": "CL",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "shell",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "28c5b0875ff057342e1b2e25d9ad37a64eb46ee886072e6305a935e48076ce02",
+      "visible_referent": "Empty spiral seashell with a visible opening and no protruding animal.",
+      "voice_sha256": "62bd668905ce677b7a2916378c1de8cb7fb4ed119d0d4e365b7e038667ab0a38",
+      "whisper_transcript": "shell,",
+      "sapi_transcript": "Shall",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "coral",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "412b22fa908d4dbc4734514b9e7b0441502fb6a8761753af5dee8ad0fb3296e2",
+      "visible_referent": "Pink branching coral form rising from the ground among small stones.",
+      "voice_sha256": "04b1094b770396155332661c955e122ad37d7067df2383032070715bb0b49ef9",
+      "whisper_transcript": "coral,",
+      "sapi_transcript": "Coral",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "squid",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "779446a530faf972f17c08120c1ff41af44ba310bb2010d8ae368cfeb9651666",
+      "visible_referent": "Squid with a long pointed mantle, lateral fins, eyes and dangling arms.",
+      "voice_sha256": "172faa203800354df9bd5a58dd0d05889daad775fec002cd9002b5537279d543",
+      "whisper_transcript": "squid,",
+      "sapi_transcript": "Disk lead",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "clam",
+      "topic": "ocean-discovery",
+      "image_sha256_lf": "539040efe12145aea1dc51f332c983292d11c5f5aa42836ce7c80b3118c0c768",
+      "visible_referent": "Open hinged ridged bivalve containing a fleshy body.",
+      "voice_sha256": "9711c902108e4500cd794448f5f4aa53e467978f8ee595a60d8cc7114122060b",
+      "whisper_transcript": "clam,",
+      "sapi_transcript": "Clam",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "earth",
+      "topic": "space-trip",
+      "image_sha256_lf": "ce85f03bd412bf8f750d5ebb4887a02dfbafbfbec6b8bd9568b06ede86ccf82b",
+      "visible_referent": "Blue globe with green continent shapes.",
+      "voice_sha256": "a056f458ad593b03c163189913caae0810dab7642d5b6b8c731bc1fba884f62c",
+      "whisper_transcript": "earth,",
+      "sapi_transcript": "Birth",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rocket",
+      "topic": "space-trip",
+      "image_sha256_lf": "de84c298aaa9b836043b4376cca7f42dd1225af324acdc22fef7de0109d92bb1",
+      "visible_referent": "Rocket with a pointed nose, round window, side fins and exhaust flames.",
+      "voice_sha256": "50f6f4b937689170e71401616308789b68cd31178b1d3030e1f0a8b90ad1465b",
+      "whisper_transcript": "rocket.",
+      "sapi_transcript": "Brock get",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "planet",
+      "topic": "space-trip",
+      "image_sha256_lf": "1bf5f8ef6e470cdab05de4f44f82ec0295d5e266fb1db65e6ddaaf84444f330a",
+      "visible_referent": "Purple striped spherical planet with a broad ring.",
+      "voice_sha256": "9be140fb670203636ac5e8fc6f284c5b5676eeb64dfe46ace1c510476af79633",
+      "whisper_transcript": "planet,",
+      "sapi_transcript": "Planet",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "comet",
+      "topic": "space-trip",
+      "image_sha256_lf": "4d0953aa3b902b0ecee2dc0e78685f19ea8ae27635abd0c6cf9f3478aa653406",
+      "visible_referent": "Blue icy-looking nucleus followed by two long pale blue tails.",
+      "voice_sha256": "f1ec9fe7c17295c58b841392b3320ff20c06c596c55d7284a1297c868c472c1a",
+      "whisper_transcript": "comet,",
+      "sapi_transcript": "Comment",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "meteor",
+      "topic": "space-trip",
+      "image_sha256_lf": "0d132ffe3cb581177105a3ef14600f77c44f896e788a91e0cdf25c02e7f4e334",
+      "visible_referent": "Brown rocky body with a bright orange flame streak approaching curved blue atmospheric lines.",
+      "voice_sha256": "f484943347313b5a665549f773f99c8604e33bb6c59c30ab5798dfab1f54b11c",
+      "whisper_transcript": "meteor,",
+      "sapi_transcript": "The needy are",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "alien",
+      "topic": "space-trip",
+      "image_sha256_lf": "0cd7f0d8b73fe004c029dc55980b5a191e522bedd446bcb84ccc0daf9144b921",
+      "visible_referent": "Imaginary green humanoid with two antennae, oversized eyes and shoulders.",
+      "voice_sha256": "8be0344486575c298c1764ac381f04cddae55ab58da9b4418547153d47f9c28d",
+      "whisper_transcript": "alien,",
+      "sapi_transcript": "Daily end",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rover",
+      "topic": "space-trip",
+      "image_sha256_lf": "e45660129da23b045e4eafc0b411ae366fe2094be697e2c7719597a3947a4a12",
+      "visible_referent": "Wheeled exploration vehicle with a boxy body, camera mast and antenna.",
+      "voice_sha256": "8710106e04fa276237830de81e52ef9484e3a176e6591a90b1e2e1eff80d6813",
+      "whisper_transcript": "rover,",
+      "sapi_transcript": "Parole for",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "galaxy",
+      "topic": "space-trip",
+      "image_sha256_lf": "79cde8c168a0ae08b0c473c7c8c771a653a4359856f26f6646c81ad54881e24b",
+      "visible_referent": "Stylized spiral galaxy with a bright central nucleus, curved purple arms and surrounding stars.",
+      "voice_sha256": "6bf695fe2a92e96711e929bb50467e26afb41faf1a6bc73090e40688963b12c4",
+      "whisper_transcript": "galaxy,",
+      "sapi_transcript": "Galaxy",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "seed",
+      "topic": "garden-trail",
+      "image_sha256_lf": "2f7ae95fcdb2e83c9988dbb7694db2f33715742c3db1956d344cf24ed2c8f8a5",
+      "visible_referent": "Single brown oval seed-like kernel with a pale seam.",
+      "voice_sha256": "b382033ba1751083ef9faf93cf54f1b5889315df86c39ffdc6f1496d1f87c281",
+      "whisper_transcript": "seed,",
+      "sapi_transcript": "Seed",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "root",
+      "topic": "garden-trail",
+      "image_sha256_lf": "46a6d0f2f4048d1e72ce42576a3a95b418ecb3e1e8c91cedc03a147fb9b03e68",
+      "visible_referent": "Branching brown roots shown below a ground line, with a two-leaf sprout above it.",
+      "voice_sha256": "5db9ee7a62c636b167f8bed308f1210ba438c83449dba69b14675456093d477f",
+      "whisper_transcript": "root,",
+      "sapi_transcript": "The route",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "grass",
+      "topic": "garden-trail",
+      "image_sha256_lf": "466a9a0f6cde08430ceedd4783ca5676bb9a3b8707a86eede718d19e2d492cbe",
+      "visible_referent": "Cluster of upright pointed green grass blades.",
+      "voice_sha256": "83855ffffa74c80a8ca2e44db803ab6716202c05d860146be1d627f09de2d310",
+      "whisper_transcript": "grass,",
+      "sapi_transcript": "Brass",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "rose",
+      "topic": "garden-trail",
+      "image_sha256_lf": "2eca61dacd30c55f786c5065b1d6fef6f69a04334d40a895cc4f7c7e297a99db",
+      "visible_referent": "Pink rose bloom with layered curling petals, stem and leaves.",
+      "voice_sha256": "c72f25523d6e93021d5b7fe73a22082293cb4cd500f5eb1d41cdf7525f0485df",
+      "whisper_transcript": "rose.",
+      "sapi_transcript": "The rose",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "berry",
+      "topic": "garden-trail",
+      "image_sha256_lf": "471618acc4ca4b63e6a6c4e4847dd4457c2c9730ffeef8ec945e0e01731e743a",
+      "visible_referent": "Single raspberry-like aggregate fruit with clustered rounded segments and a green calyx.",
+      "voice_sha256": "37255e912a9dcdf36c32ea2c9e8a63b046b1032d60eb359c91e9970d437bd565",
+      "whisper_transcript": "berry,",
+      "sapi_transcript": "Terry",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "acorn",
+      "topic": "garden-trail",
+      "image_sha256_lf": "4e3c689332615bc650a9d4b0b3df05b4d7fbe5f12f39a71304ccbca333df5623",
+      "visible_referent": "Acorn with a crosshatched cap, short stem and pointed nut.",
+      "voice_sha256": "009adb1d7179ff9c6f15e92f63829d73a069e839575faaa2279fbb4a08eadb23",
+      "whisper_transcript": "acorn,",
+      "sapi_transcript": "But corn",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "pebble",
+      "topic": "garden-trail",
+      "image_sha256_lf": "35d782c61c7af2ac8ecf664b7b027e687a722adb90d255e4e9028cef551ddaf7",
+      "visible_referent": "Single smooth rounded gray stone with a few surface marks.",
+      "voice_sha256": "1ccd2efae87a4a3927a7fbda9801c3fe2dc4fdf9f7ebdcf2fc0d37c7b0a43f41",
+      "whisper_transcript": "pebble,",
+      "sapi_transcript": "Pebble",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "pond",
+      "topic": "garden-trail",
+      "image_sha256_lf": "717b307d23469317fa74fd79d5989f6d1537616d0ec72db4fb86167eba89471a",
+      "visible_referent": "Small blue body of water with a lily pad and cattail plants at its edge.",
+      "voice_sha256": "211e566b6000ccbedc7296063054f03920c0dae1cf5b5843bd2245460c8d116b",
+      "whisper_transcript": "pond,",
+      "sapi_transcript": "Pond",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "piano",
+      "topic": "music-makers",
+      "image_sha256_lf": "9b8239080b0b14e6137d18dd5d263f74716321b3a8027c1afd4f9b29a1f1601b",
+      "visible_referent": "Small upright piano with black and white keys, rectangular body and legs.",
+      "voice_sha256": "f5b4e6af2bc70ff037dc237261a009dc3834f9059f635f56f054a446fef70f5c",
+      "whisper_transcript": "piano,",
+      "sapi_transcript": "Thien L",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "flute",
+      "topic": "music-makers",
+      "image_sha256_lf": "2a8422a4b04355afa359ccf7e3ad6174f5ad513730cf708ca8179ca72bf0dcbf",
+      "visible_referent": "Silver tube with a side embouchure plate near its closed upper end and a row of finger holes.",
+      "voice_sha256": "c8edc4137434ac7ce78fa92e7797d8388db18805e5b0c555e04ff06c6b76a638",
+      "whisper_transcript": "flute,",
+      "sapi_transcript": "Flute",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "violin",
+      "topic": "music-makers",
+      "image_sha256_lf": "88218cc15d3d867453319d5b4e3325c13a83a5805333e5009031600a9bcd6a8f",
+      "visible_referent": "Small waisted bowed string instrument with a neck, strings, sound holes and bow beside it.",
+      "voice_sha256": "fb004a4e2ab28c685d694e35a337d2983afc1e9d04cece05ecb36935df0b7ef9",
+      "whisper_transcript": "violin,",
+      "sapi_transcript": "By Ellen",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "guitar",
+      "topic": "music-makers",
+      "image_sha256_lf": "7a155622c4abef9ff4a89f2a700a29c7d455118e5d7ae677ef4326cb8caa2e32",
+      "visible_referent": "Waisted string instrument with a circular sound hole, long fretted neck and tuning head.",
+      "voice_sha256": "ab576df305ad8ed6e79bea857f91bc349bdf1c68306733341546dfacb8d2543b",
+      "whisper_transcript": "guitar,",
+      "sapi_transcript": "But our",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "bell",
+      "topic": "music-makers",
+      "image_sha256_lf": "8653327be7348d3694ee34f2651f284117d861309e3bf523522f4c4fa3e18e93",
+      "visible_referent": "Flared hanging bell with a visible clapper and top loop.",
+      "voice_sha256": "84c595176335cdb22cea50573bad93733e377d8dfe8522ac075b9bc713fde253",
+      "whisper_transcript": "bell,",
+      "sapi_transcript": "Bell",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "harp",
+      "topic": "music-makers",
+      "image_sha256_lf": "15c3314512ffbdd360ef55182d9c0e2791e7c645403b32b53a45d72d4f7428d5",
+      "visible_referent": "Harp with a curved neck, tall pillar and multiple strings inside its frame.",
+      "voice_sha256": "151a1aa5da7a50b59f0995433a9d3899d84ff847662903624d65b255adbc250c",
+      "whisper_transcript": "harp,",
+      "sapi_transcript": "Heart that",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "horn",
+      "topic": "music-makers",
+      "image_sha256_lf": "afe45183cec2cbfd4412de099b7720966be3b683ea72bfb20b6f35499cdaf7d7",
+      "visible_referent": "Coiled brass horn with a flared bell, valve-like center and mouthpipe.",
+      "voice_sha256": "202e0dcb1e6e8fc25ca4ee7a2d4b4924c1f240ba0c4937a9c2d19073b84ab732",
+      "whisper_transcript": "horn,",
+      "sapi_transcript": "Horn",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tuba",
+      "topic": "music-makers",
+      "image_sha256_lf": "8dbe89591693611e7d76aee077b677c1e47fdcfec11f405106225a963ace5e77",
+      "visible_referent": "Large upright brass instrument with a broad upward-facing bell, looping tube and valves.",
+      "voice_sha256": "a252933cfc3c57ccb28160684be40160c683ceae3e377727358871bc255af44f",
+      "whisper_transcript": "tuba,",
+      "sapi_transcript": "~",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "boot",
+      "topic": "dress-up",
+      "image_sha256_lf": "7df3ba3ea2982a6869b4f671ab4e7fe814eaf42efea6da1db0b5ca5fe2e69f4a",
+      "visible_referent": "Brown tall-shaft boot with cuff, toe, heel and thick sole.",
+      "voice_sha256": "b31befc71f9c842499ab5c300577428509de5c62cef74b4fb1fd3e96051b701b",
+      "whisper_transcript": "boot,",
+      "sapi_transcript": "Don't",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "skirt",
+      "topic": "dress-up",
+      "image_sha256_lf": "61392a8126fd7e9cf45df3dd32207b704b7b90e1a4e8a7495b57005aca2b2df3",
+      "visible_referent": "Purple pleated skirt with a waistband and flared hem.",
+      "voice_sha256": "8a7beae3c0c111f7756cdd80aa99e2558f7da10cdd80a469084cbc81826601dd",
+      "whisper_transcript": "skirt,",
+      "sapi_transcript": "Skirts",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "pants",
+      "topic": "dress-up",
+      "image_sha256_lf": "cd85ae445bf744a36d8432abf6b04e85444e765792b08c94a57d5d4990e6e558",
+      "visible_referent": "Blue trousers/jeans with waistband, pockets, two separate legs and cuffs.",
+      "voice_sha256": "0641e665565d2ba19b82d34379575dc5d1a91f1d750b629ef8054d13beb9ab9f",
+      "whisper_transcript": "pants,",
+      "sapi_transcript": "Pants",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "vest",
+      "topic": "dress-up",
+      "image_sha256_lf": "899756f8bd0d819ceb4ba18ec00f32cdb5720fb134ee33f3d0b5b74dfda3bc76",
+      "visible_referent": "Tan sleeveless buttoned vest with collar and front pockets.",
+      "voice_sha256": "8a5207deefe85e035d5b369159316eb29fdf4d1481d88bf6929c4bb36c7ea8de",
+      "whisper_transcript": "vest,",
+      "sapi_transcript": "The best at",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "tie",
+      "topic": "dress-up",
+      "image_sha256_lf": "7c4e7b3c57559d47267e3436701120741afe1087e714a2851e756e77491fb37a",
+      "visible_referent": "Long striped necktie with a broad knot and pointed bottom.",
+      "voice_sha256": "202003cdc763e1d88961c7f29a941ecb16f95d2b0a778995396a6b139666f2d5",
+      "whisper_transcript": "tie,",
+      "sapi_transcript": "Thai",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "ring",
+      "topic": "dress-up",
+      "image_sha256_lf": "ad5bea91f7d285cfb911c6b9d0ac00601705a9907046b8d408dacbc8f393b0dd",
+      "visible_referent": "Gold finger ring with a large blue faceted gemstone.",
+      "voice_sha256": "24aad7c80a738e5beda4dc2132b294300ca93654ff6ad4277124b7a8d1645a8d",
+      "whisper_transcript": "ring,",
+      "sapi_transcript": "Drain",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "watch",
+      "topic": "dress-up",
+      "image_sha256_lf": "aa67bcfdacef4bc1a12095866f7f33f6a36b044ea37c368f7d60d10413da50a7",
+      "visible_referent": "Round analog wristwatch with hands, hour marks, side crown and strap.",
+      "voice_sha256": "2e9e8182eb501d19c34f68aa7d1bf5ec0bcfed83ba884f4f0d0603022e8f1553",
+      "whisper_transcript": "watch,",
+      "sapi_transcript": "The lights",
+      "audio_result": "Independent ASR supports the written noun."
+    },
+    {
+      "id": "crown",
+      "topic": "dress-up",
+      "image_sha256_lf": "3dd115970a8bb1fb72b2cb396760cc637f2ffcb5bdd06f2a862f465b9466c170",
+      "visible_referent": "Golden pointed crown with round finials and colored gemstones.",
+      "voice_sha256": "6a95fa1be1237035d96289e590febeff6f3602b91035d7b171f9ff6fd608918f",
+      "whisper_transcript": "crown.",
+      "sapi_transcript": "Crown",
+      "audio_result": "Independent ASR supports the written noun."
+    }
+  ]
+}

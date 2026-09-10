@@ -10,11 +10,15 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-10-learning-playroom-design.md`
 
-**Current status:** Learning, semantic artwork, and Pip's room are implemented and deployed.
-Native and browser verification and the final web export have passed. Unity Store research and the CLI
-import tool are ready, but actual package acquisition/import remains pending:
-Computer Use was stopped by the user's Escape input, and permission to resume is
-awaiting a reply. The game improvements are live; the Unity asset requirement remains open.
+**Current status:** Learning, targeted semantic artwork repairs, and Pip's room are
+implemented and deployed. Native and browser verification and the final web export
+have passed. The full original-catalog semantic audit is tracked in
+`2026-09-11-catalog-semantic-audit.md`. Unity Store research and the CLI import tool
+are ready, but actual package acquisition/import remains pending. On September 11,
+Windows Computer Use retried Food Icons Pack acquisition in stable Chrome and was
+redirected to Unity sign-in; that session requires the user's authentication. The
+separate in-app connector reports missing Codex auth token. Neither retry was an
+automatic safety rejection. See `docs/assets/unity-art.md` for current evidence.
 
 ## Global constraints
 
@@ -55,7 +59,8 @@ awaiting a reply. The game improvements are live; the Unity asset requirement re
 - [ ] Inspect archive paths and art; select exact vocabulary/reward uses and record source hashes.
 - [ ] Import the art-only package with the installed Unity CLI into `build/unity-asset-staging`, verify imported results and produce only needed Godot textures.
 - [x] Repair the original ambiguous objects through the existing art generators; render a contact sheet and inspect it.
-- [ ] Verify the final catalog's labels, images and audio refer to the same concrete objects, including originals used without the licensed pack.
+- [x] Review all 140 original pictures against their labels and independently transcribe their actual recordings. The September 11 catalog audit records each referent, file hash and acoustic result, including the sun/son homophone and the clarified "A kite." phrase. This is visual inspection plus machine recognition, not human listening.
+- [ ] Repeat semantic verification for the final catalog after actual Unity artwork is imported, including its deployed appearance and preserved pronunciation.
 
 ## Task 4: Main UI, lesson continuity and save bridge
 

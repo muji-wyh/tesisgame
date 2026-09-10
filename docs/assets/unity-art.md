@@ -132,3 +132,10 @@ The two astronomical drawings and the shell/clam pair are still teaching
 illustrations, not mutually exclusive definitions. The quiz excludes overlapping
 word pairs. A contact sheet was rendered for comparison in
 `build/visuals/semantic-art-before.png` and `semantic-art-after.png`.
+
+The September 11 [full original-catalog audit](../qa/2026-09-11-catalog-semantic-audit.md)
+reviewed all 140 illustrations and independently transcribed the actual word WAVs.
+It additionally clarified doll (visible rag-doll construction) and brush
+(projecting bristles), and records the acoustic evidence and limits for the new
+"A kite." recording. This original-only review does not complete the pending
+Unity acquisition, CLI import or final deployed imported-art verification.
