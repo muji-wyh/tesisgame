@@ -20,7 +20,7 @@ implemented and deployed; this audit does not introduce another game mode.
   the corresponding artwork and inspect it at learning and card sizes.
 - [x] Record per-word evidence and the limits of this original-only audit; update
   the stale acquisition status in the accepted learning plan.
-- [ ] Run appropriate existing checks. If shipped assets change, export once,
+- [x] Run appropriate existing checks. If shipped assets change, export once,
   inspect the affected game screens, review the diff, commit, merge, push and
   deploy the tested build. Verify the deployed pack.
 
@@ -40,3 +40,9 @@ tight. A same-voice replacement says "A kite." and passes direct-file and batch
 Whisper checks; SAPI still disagrees at low confidence. The per-word QA record
 preserves this limitation and does not claim human listening or recognition
 consensus. See `docs/qa/2026-09-11-catalog-semantic-audit.md` and its JSON companion.
+
+**Released:** `21b6dfc` is merged/pushed to main and deployed. Full native/Node
+checks, nine exported-browser regressions, six targeted local Learn flows and six
+production Learn flows passed. Local/tested/production HTML and pack hashes match.
+The overall learning/Unity goal remains open because real Unity acquisition,
+CLI import and deployed imported artwork still require the signed-in session.

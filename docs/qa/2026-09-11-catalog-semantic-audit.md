@@ -72,7 +72,23 @@ Tested export at port 4181:
 - Pack: `game-c23c4b847597f895.pck`
 - Pack SHA256: `c23c4b847597f895616556d4b0b0577b40b39cb7678bcfd357831acc5a1883f6`
 
-Deployment verification will be recorded after the tested export is published.
+Implementation commit `21b6dfc` was merged to main and pushed. Deployment through
+`npm run deploy -- -SkipBuild` succeeded at
+https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+`node build/verify-ui-release.cjs <origin>` confirmed the same HTML and pack hashes
+at tested port 4181, local preview port 4173 and production. The tested export was
+copied to the main checkout's preview with HTML entry files last.
+
+Production inspection again reached doll, brush and kite through real Explore,
+lesson navigation and Hear controls at both viewports: **six successful flows**,
+no page or console errors. The deployed doll and brush screenshots were inspected
+and show the revised subjects. Evidence is in
+`build/catalog-production-inspection.log` and
+`build/semantic-audit/production/`. Deployment output is in
+`build/catalog-deploy.log`. The unrelated main-checkout
+`%ALLUSERSPROFILE%/` directory was preserved. A documentation-only follow-up records
+these release results; it does not change the tested game pack.
 
 Ignored detailed evidence is in `build/semantic-audit/`: original topic sheets,
 two before/after comparisons, independent revised renders, raw ASR results,
