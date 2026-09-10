@@ -22,13 +22,18 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
+	app.medal_progress.counts["winter-6"] = 3
+	app._refresh_collection()
+	check(app._reward_slots["winter-6"].picture.texture == null, "Hidden medals do not load their artwork during startup refresh")
 	app._show_collection()
+	check(app._reward_slots["winter-6"].picture.texture == null, "Opening Pip's room keeps medal artwork deferred")
 	check(app._room.is_visible_in_tree(), "Rewards starts with Pip's room")
 	check(app._collection_rows.all(func(row) -> bool: return not row.is_visible_in_tree()), "Medals do not share the room's long toy list")
 	check(app.has_method("_show_reward_section"), "Rewards has a direct route between the room and medals")
 	if app.has_method("_show_reward_section"):
 		app._show_reward_section("medals")
 		await process_frame
+		check(app._reward_slots["winter-6"].picture.texture != null, "Opening Medals loads earned medal artwork")
 		check(not app._room.is_visible_in_tree(), "Medals hides the room's toy controls")
 		check(app._collection_rows.all(func(row) -> bool: return row.is_visible_in_tree()), "The Medals route exposes every theme")
 		root.size = Vector2i(480, 600)

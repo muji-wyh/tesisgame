@@ -31,6 +31,7 @@ func _run() -> void:
 	if script == null or not script.can_instantiate():
 		_finish()
 		return
+	await _check_hidden_artwork(script)
 	var view = script.new()
 	root.add_child(view)
 	view.size = Vector2(288, 1600)
@@ -125,6 +126,37 @@ func _run() -> void:
 	view.queue_free()
 	await process_frame
 	_finish()
+
+
+func _check_hidden_artwork(script: Script) -> void:
+	var collection := Control.new()
+	collection.hide()
+	root.add_child(collection)
+	var book = script.new()
+	var original_controls: Array = book.controls()
+	collection.add_child(book)
+	book.setup("animal-friends", [], "space-trip", Color("#438363"))
+	await process_frame
+	var pictures: Array = book.find_children("*", "TextureRect", true, false)
+	check(original_controls.size() == 14 and book.controls() == original_controls, "Hidden startup builds stable adventure controls for host wiring")
+	check(pictures.size() == 24, "Hidden startup builds all adventure picture placeholders")
+	check(pictures.all(func(picture: TextureRect) -> bool: return picture.texture == null), "A hidden collection does not load adventure artwork during startup")
+	book.hide()
+	collection.show()
+	check(pictures.all(func(picture: TextureRect) -> bool: return picture.texture == null), "Opening another collection section does not load hidden adventure artwork")
+	book.show()
+	for topic in Data.ADVENTURES:
+		for index in range(2):
+			var picture: TextureRect = book.buttons[topic.id].get_node("Picture" + str(index + 1))
+			check(picture.texture != null and topic.words.has(picture.texture.resource_path.get_file().get_basename()), "Showing " + topic.name + " loads preview art from that topic")
+	var textures: Array = pictures.map(func(picture: TextureRect) -> Texture2D: return picture.texture)
+	collection.hide()
+	book.setup("space-trip", [], "", Color("#69569b"))
+	collection.show()
+	check(pictures.map(func(picture: TextureRect) -> Texture2D: return picture.texture) == textures, "Reopening a book retains its loaded textures")
+	check(book.controls() == original_controls, "Loading adventure artwork preserves existing control nodes")
+	collection.queue_free()
+	await process_frame
 
 
 func _finish() -> void:

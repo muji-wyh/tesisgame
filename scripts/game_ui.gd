@@ -317,15 +317,24 @@ var _speech_state_callback: JavaScriptObject
 
 
 func _ready() -> void:
+	var initial_process_mode := process_mode
+	if OS.has_feature("web"):
+		process_mode = Node.PROCESS_MODE_DISABLED
+		await get_tree().process_frame
+		await get_tree().process_frame
 	theme = Theme.new()
 	theme.default_font_size = 24
 	_build_controls()
+	if OS.has_feature("web"):
+		await get_tree().process_frame
 	if not data.load_all():
 		_show_error(data.error)
 		return
 	effects.configure(data.chests)
 	_load_collected_rewards()
 	_build_collection()
+	if OS.has_feature("web"):
+		await get_tree().process_frame
 	model.changed.connect(_refresh)
 	resized.connect(_layout)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
@@ -337,6 +346,8 @@ func _ready() -> void:
 	new_round()
 	if _host != null:
 		get_tree().paused = true
+	process_mode = initial_process_mode
+	if _host != null:
 		_loading_finished_callback = JavaScriptBridge.create_callback(_on_loading_finished)
 		_host.ready(_loading_finished_callback)
 
@@ -816,11 +827,11 @@ func _build_collection() -> void:
 	_layout_collection()
 	_adventure_book = AdventureBook.new()
 	_adventure_book.name = "AdventureBook"
+	_adventure_book.hide()
 	_collection_grid.add_child(_adventure_book)
 	_adventure_book.adventure_selected.connect(_choose_adventure)
 	_adventure_book.surprise_requested.connect(func() -> void: _choose_adventure(""))
 	_adventure_book.retry_requested.connect(_retry_journey)
-	_adventure_book.hide()
 	for control in _adventure_book.controls():
 		control.gui_input.connect(_collection_scroll_input.bind(control))
 		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
@@ -1008,14 +1019,18 @@ func _piece_count(id: String) -> int:
 	return 3 if medal_progress.legacy_rewards.has(id) else medal_progress.count_for(id)
 
 
-func _refresh_collection() -> void:
+func _refresh_collection(show_medals: bool = false) -> void:
 	_sync_collected_rewards()
+	var load_art := show_medals or (collection_page.visible and not _adventures_open and _collection_section == "medals")
 	for id in _reward_slots:
 		var slot: Dictionary = _reward_slots[id]
 		var pieces: int = _piece_count(id)
 		var unlocked: bool = _progress_ready and pieces > 0
 		var palette: Dictionary = Data.theme(slot.reward.theme)
-		slot.picture.configure(load(slot.reward.symbol) if unlocked else null, pieces, palette.accent)
+		var texture: Texture2D = slot.picture.texture if unlocked else null
+		if unlocked and load_art and texture == null:
+			texture = load(slot.reward.symbol)
+		slot.picture.configure(texture, pieces, palette.accent)
 		var button: Button = slot.button
 		button.disabled = not unlocked
 		button.focus_mode = Control.FOCUS_ALL if unlocked else Control.FOCUS_NONE
@@ -2922,7 +2937,7 @@ func _show_collection(as_adventures: bool = false) -> void:
 	_end_collection_drag(false)
 	_collection_dragged = false
 	_refresh_favorite_reward()
-	_refresh_collection()
+	_refresh_collection(not as_adventures and _collection_section == "medals")
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	_collection_focus_modes.clear()
 	for node in find_children("*", "Button", true, false):
@@ -2955,6 +2970,7 @@ func _show_reward_section(section: String) -> void:
 	_end_collection_drag(false)
 	_collection_dragged = false
 	_apply_collection_section()
+	_refresh_collection()
 	_collection_scroll.scroll_vertical = 0
 	_update_duck()
 	_announce_collection_state()

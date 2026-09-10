@@ -4,6 +4,7 @@ config_version=5
 [application]
 config/name="Word Buddies"
 run/main_scene="res://scenes/main.tscn"
+run/main_scene.web="res://scenes/web_bootstrap.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/images/rewards/spring.svg"
 

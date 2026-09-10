@@ -370,6 +370,7 @@
         let lastFrame = 0;
         let pauseUntil = 0;
         let finish = null;
+        let preparingRuntime = false;
         const milestones = [0.2, 0.5, 0.8, 0.98, 1];
 
         function cancelFrame() {
@@ -414,8 +415,17 @@
         }
 
         return {
+          async prepareRuntime() {
+            this.update(1, 1);
+            preparingRuntime = true;
+            // Finish painting the download milestones before synchronous engine setup.
+            do { await new Promise(window.requestAnimationFrame); }
+            while (active && displayed < 0.98);
+            await new Promise(window.requestAnimationFrame);
+            if (!active) throw new Error('Startup was cancelled.');
+          },
           update(current, total) {
-            if (!active || finish || !Number.isFinite(current) || current < 0) return;
+            if (!active || finish || preparingRuntime || !Number.isFinite(current) || current < 0) return;
             const known = Number.isFinite(total) && total > 0 && current <= total;
             const starting = known && current === total;
             message.textContent = 'Loading game...';
@@ -999,6 +1009,13 @@
             else startupFailure(new Error(detail));
           }
         });
+        if (typeof engine.start === 'function') {
+          const startRuntime = engine.start.bind(engine);
+          engine.start = async (...args) => {
+            await startupProgress.prepareRuntime();
+            return startRuntime(...args);
+          };
+        }
         // Godot 4.7's init wrapper does not forward all WASM promise rejections.
         window.addEventListener('unhandledrejection', onEngineFailure);
         // Observe the shared load promise for failures without delaying the pack's first request.

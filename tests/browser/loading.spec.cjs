@@ -8,6 +8,54 @@ const root = path.resolve(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'build', 'web', 'index.html'), 'utf8')
   .match(/const config = (\{[^\r\n]*\});/)[1]);
 
+for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at CPU ${cpu}x`, async ({ page, browserName }, testInfo) => {
+  test.skip(browserName !== 'chromium', 'CPU throttling requires Chromium CDP');
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    window.startupTasks = [];
+    new PerformanceObserver(list => {
+      if (document.body?.dataset.engineReady !== 'true') {
+        startupTasks.push(...list.getEntries().map(entry => ({
+          duration: entry.duration, percent: document.getElementById('loading-percent').textContent
+        })));
+      }
+    }).observe({ type: 'longtask', buffered: true });
+  });
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
+  await page.goto('/', { waitUntil: 'commit' });
+  const toy = page.locator('#loading-toy');
+  await expect(toy).toBeVisible();
+  const box = await toy.boundingBox();
+  let ready = false;
+  const completion = page.waitForFunction(() => document.body.dataset.engineReady === 'true')
+    .then(() => { ready = true; });
+  const delays = [];
+  while (!ready) {
+    const start = Date.now();
+    for (const type of ['mousePressed', 'mouseReleased']) await cdp.send('Input.dispatchMouseEvent', {
+      type, x: box.x + box.width / 2, y: box.y + box.height / 2, button: 'left', clickCount: 1
+    });
+    delays.push(Date.now() - start);
+    await new Promise(resolve => setTimeout(resolve, 80));
+  }
+  await completion;
+  const tasks = await page.evaluate(() => window.startupTasks);
+  await testInfo.attach('startup-responsiveness.json', {
+    body: JSON.stringify({ tasks, delays }), contentType: 'application/json'
+  });
+  await page.screenshot({ path: testInfo.outputPath('ready-after-responsive-loading.png'), scale: 'css' });
+  expect(errors).toEqual([]);
+  // Godot's core setup is synchronous; bound it separately from the now-yielding game setup.
+  expect(Math.max(...tasks.map(task => task.duration)), 'Bound engine setup even on a slower CPU')
+    .toBeLessThan(cpu === 1 ? 750 : 2000);
+  expect(tasks.filter(task => task.duration > 750 && task.percent !== '98%'), 'Long setup runs only at the final preparation stage').toEqual([]);
+  expect(Math.max(...delays), 'Real loading chest clicks receive bounded feedback')
+    .toBeLessThan(cpu === 1 ? 1000 : 2000);
+  await expect(page.locator('#loading-score')).not.toHaveText('0 sparkles');
+});
+
 async function useMaintainedShell(page) {
   const shell = inlineMascot(fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8'))
     .replace('$GODOT_HEAD_INCLUDE', '')
@@ -46,6 +94,44 @@ async function progressShell(page, engineScript = `window.Engine = class {
   }));
   await page.goto('/loader-test');
 }
+
+test('runtime initialization waits until the staged 98 percent has been painted', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page, `window.Engine = class {
+    static getMissingFeatures() { return []; }
+    static load() { return Promise.resolve(); }
+    startGame({ onProgress }) { onProgress(1, 1); return this.start(); }
+    start() {
+      window.runtimeStartedAt = document.getElementById('loading-percent').textContent;
+      window.wordBuddiesHost.ready();
+      return Promise.resolve();
+    }
+  };`);
+  expect(await page.evaluate(() => window.runtimeStartedAt)).toBeUndefined();
+  await page.clock.runFor(600);
+  expect(await page.evaluate(() => window.runtimeStartedAt)).toBeUndefined();
+  await page.clock.runFor(1000);
+  expect(await page.evaluate(() => window.runtimeStartedAt)).toBe('98%');
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+});
+
+test('late download totals cannot reset final runtime preparation', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page, `window.Engine = class {
+    static getMissingFeatures() { return []; }
+    static load() { return Promise.resolve(); }
+    startGame({ onProgress }) {
+      const starting = this.start();
+      requestAnimationFrame(() => onProgress(1, 0));
+      return starting;
+    }
+    start() { window.wordBuddiesHost.ready(); return Promise.resolve(); }
+  };`);
+  await page.clock.runFor(2000);
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 1000 });
+});
 
 for (const stage of ['features', 'constructor', 'load', 'start']) {
   test(`synchronous engine ${stage} failure leaves an actionable retry`, async ({ page }, testInfo) => {

@@ -34,6 +34,18 @@ var _suggestions: Dictionary = {}
 
 func _ready() -> void:
 	_build()
+	visibility_changed.connect(_load_visible_artwork)
+	_load_visible_artwork()
+
+
+func _load_visible_artwork() -> void:
+	if not is_visible_in_tree():
+		return
+	for id in buttons:
+		for index in range(2):
+			var picture: TextureRect = buttons[id].get_node("Picture" + str(index + 1))
+			if picture.texture == null:
+				picture.texture = load("res://assets/images/words/%s.svg" % PICTURES[id][index])
 
 
 func _build() -> void:
@@ -91,7 +103,6 @@ func _build_card(topic: Dictionary) -> void:
 	for index in range(2):
 		var picture := TextureRect.new()
 		picture.name = "Picture" + str(index + 1)
-		picture.texture = load("res://assets/images/words/%s.svg" % PICTURES[topic.id][index])
 		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE

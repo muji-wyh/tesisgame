@@ -887,7 +887,7 @@ func _test_scene() -> void:
 	for id in app._reward_slots:
 		var slot: Dictionary = app._reward_slots[id]
 		if app.collected_rewards.has(id):
-			check(slot.picture.texture != null, "Unlocked rewards load their individual artwork")
+			check(slot.picture.texture == null, "Hidden earned medals do not eagerly load their artwork")
 		else:
 			check(slot.picture.texture == null, "Locked rewards do not reveal or eagerly load their artwork")
 	if app.has_method("_show_collection"):
@@ -909,6 +909,13 @@ func _test_scene() -> void:
 	var inventory_before_label_check: Dictionary = app.collected_rewards.duplicate()
 	app._show_collection()
 	app._show_reward_section("medals")
+	for id in app._reward_slots:
+		var slot: Dictionary = app._reward_slots[id]
+		if app.collected_rewards.has(id):
+			check(slot.picture.texture != null and slot.picture.texture.resource_path == slot.reward.symbol,
+				"Visible unlocked rewards load their individual artwork")
+		else:
+			check(slot.picture.texture == null, "Visible locked medals keep their artwork hidden")
 	var all_rewards: Dictionary = {}
 	for id in app._reward_slots:
 		all_rewards[id] = true
