@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { brotliCompressSync, constants } = require('node:zlib');
+const { patchWebEngine } = require('./patch-web-engine.cjs');
 
 function collectOptionalAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
@@ -33,6 +34,8 @@ function packageWebExport(directory, optionalAudio = []) {
   const engine = suffixes.map(suffix => ({
     suffix, bytes: fs.readFileSync(path.join(directory, `index.${suffix}`))
   }));
+  const script = engine.find(file => file.suffix === 'js');
+  script.bytes = Buffer.from(patchWebEngine(script.bytes.toString('utf8')));
   const digest = createHash('sha256');
   for (const file of engine) digest.update(file.suffix).update(file.bytes);
   const executable = `engine-${digest.digest('hex').slice(0, 16)}`;
