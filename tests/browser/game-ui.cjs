@@ -15,7 +15,7 @@ async function tap(page, x, y) {
 
 async function chooseMode(page, index) {
   const bounds = await metrics(page);
-  const width = (bounds.width - 48) / 4;
+  const width = (bounds.width - 56) / 5;
   await tap(page, 12 + index * (width + 8) + width / 2, 208);
 }
 

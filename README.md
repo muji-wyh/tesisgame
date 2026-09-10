@@ -128,7 +128,7 @@ season changes, and rewards. These reactions never change scoring or saved progr
 
 Start in **Learn**: a large picture appears beside its written word. Press **Hear**,
 then use **Previous** and **Next** to explore all five words. Learn never awards points.
-Switch between **Learn**, **Match**, **Sky**, and **Listen** to practise the same lesson.
+Switch between **Learn**, **Match**, **Sky**, **Listen**, and **Memory** to practise the same lesson.
 Match keeps the eight-card,
 three-pair puzzle. Sky words brings a picture down to two word choices; Listen offers a
 Hear button and two pictures. Both choice games need five correct answers before three
@@ -136,6 +136,13 @@ mistakes, with no timer or speed penalty. Each winning mode earns one ordinary m
 Every answer shows its correct picture, word, and Hear button until **Continue**.
 Wrong Match attempts explain the two different words or an unpaired card.
 Voice play retains timed feedback so a spoken sentence can finish its queued matches.
+**Memory** plants a garden by finding five hidden word-picture pairs among ten cards.
+Card backs show their kind and position. Flip a word and its picture; matched pairs stay
+visible, and each pair grows a flower. **Study** reveals the same board without scoring;
+**Return to play** hides unmatched cards while retaining their positions and completed pairs.
+Wrong pairs show both correct associations until **Continue**. There is no timer or
+three-mistake loss, and exploratory misses do not enter the missed-word list. Completing
+all five pairs opens the normal chest for one saved medal piece. Repeat reshuffles the board.
 Listen exposes the written target if sound is unavailable. Semantically overlapping
 labels such as shell/clam and earth/planet never compete as right/wrong options.
 **Repeat lesson** keeps the words, mode, and chosen world. **Explore** in Learn and
