@@ -2,11 +2,14 @@
 
 ## User-visible behavior
 
-The loader now reports received game-data bytes against a reliable total. Before a
+The loader reports received game-data bytes against a reliable total. Before a
 total is available, and when received bytes exceed an unreliable total, the progress
 bar is indeterminate. Elapsed time no longer advances a fabricated percentage.
-When all bytes arrive, the label changes to `Starting game...` and the percentage is
-cleared. Only the game's `ready()` callback reports 100% and hands input to the canvas.
+At the user's request, the overall loading bar caps the download stage at 98%.
+When all bytes arrive, it remains filled at 99%, with `Loading game...` and
+`Getting ready to play...` visible throughout initialization. Only the game's
+`ready()` callback reports 100% and hands input to the canvas. This supersedes
+the empty, indeterminate startup bar recorded in the earlier measurements below.
 
 After 16 seconds, a stalled startup offers `Try again` without moving focus away from
 the loading toy. Synchronous engine failures, empty promise rejections and lost
@@ -109,3 +112,32 @@ Local diagnostic evidence (ignored build artifacts):
 The iPhone and iPad entries are Playwright WebKit device profiles running on Windows,
 not tests on physical Apple hardware. These startup checks do not supersede the
 separate WebKit resize/compositor limitations documented in the Memory Garden report.
+
+## Requested 98% / 99% loading hold
+
+The user requested a filled progress bar while the engine prepares the game. The
+download stage now stops at 98%; received-all-bytes changes the value to 99% and
+keeps the loading label visible. This is overall startup progress, not a claim
+that byte reception alone completes the game. Only the ready callback reaches
+100%. Unknown totals and error recovery retain their existing behavior.
+
+Two browser regressions failed before the change: the 98% cap was missing, and
+real-engine initialization cleared the progress value. The updated loading
+matrix passed 81 checks across Chromium and iPhone/iPad WebKit profiles; it
+includes a 30-second hold, clickable treasure, visible retry and readiness.
+Ten Node export checks passed. Phone screenshots were inspected. Evidence is in
+`build/qa-progress-hold-red` and `build/qa-progress-hold-final`.
+
+A fresh local profile measured download completion at 235.7 ms, a browser paint
+at 236.34 ms, then synchronous engine startup from 245.3 to 1128.4 ms. The loading
+state was already painted before initialization. No extra frame delay or engine
+change was needed to keep 99% visible in that run. This does not establish the
+cause of the user's longer wait or reduce the engine's initialization time.
+Timing evidence is in `build/qa-startup-phase/report.json`.
+
+`npm run build:web` passed. The exported-page initialization hold also passed
+on all three browser profiles (`build/qa-progress-hold-export`), followed by
+normal game readiness. HTML SHA256 is
+`061a9f1ccbba7a56a4ccca160c6c7b3f7830d29066bea4edcbf145ccb0bfaabb`;
+the game pack remains `game-b419d5752e4de9b2.pck` and the engine remains
+`engine-27986f74840ebada`.

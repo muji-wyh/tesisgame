@@ -138,7 +138,7 @@ test('graphics context loss gives a visible recovery action and stops game input
   await expect(page.locator('#canvas')).toBeFocused();
 });
 
-test('download progress follows bytes and waits for readiness before reporting completion', async ({ page }, testInfo) => {
+test('loading caps downloads at 98 percent and holds 99 percent until the game is ready', async ({ page }, testInfo) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
@@ -152,17 +152,46 @@ test('download progress follows bytes and waits for readiness before reporting c
   await page.evaluate(() => window.reportDownload(6 * 1048576, 10 * 1048576));
   await expect(page.locator('#loading-percent')).toHaveText('60%');
   await page.screenshot({ path: testInfo.outputPath('real-download-60-percent.png'), scale: 'css' });
+  await page.evaluate(() => window.reportDownload(99, 100));
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.98');
   await page.evaluate(() => window.reportDownload(10 * 1048576, 10 * 1048576));
-  await expect(page.locator('#message')).toContainText('Starting');
-  await expect(page.locator('#progress')).not.toHaveAttribute('value');
-  await expect(page.locator('#loading-percent')).toBeEmpty();
-  await page.clock.runFor(5000);
-  await expect(page.locator('#message')).toContainText('Starting');
+  await expect(page.locator('#message')).toHaveText('Loading game...');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
+  await expect(page.locator('#progress')).toHaveAttribute('aria-label', 'Game loading progress');
+  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#download-status')).toHaveText('Getting ready to play...');
+  await page.clock.runFor(30000);
+  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
   await expect(page.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
-  await page.screenshot({ path: testInfo.outputPath('download-finished-starting.png'), scale: 'css' });
+  await page.getByRole('button', { name: 'Tap or wiggle the treasure chest' }).click();
+  await expect(page.locator('#loading-score')).toHaveText('1 sparkle');
+  await page.screenshot({ path: testInfo.outputPath('preparing-game-99-percent.png'), scale: 'css' });
   await page.evaluate(() => window.wordBuddiesHost.ready());
   await expect(page.locator('#loading-percent')).toHaveText('100%');
   await expect(page.locator('#status')).toBeHidden();
+});
+
+test('a real engine waiting to initialize keeps 99 percent visible and can finish loading', async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    const instantiate = WebAssembly.instantiate;
+    const held = new Promise(resolve => { window.finishInitialization = resolve; });
+    WebAssembly.instantiateStreaming = async (response, imports) => {
+      const bytes = await (await response).arrayBuffer();
+      await held;
+      return instantiate(bytes, imports);
+    };
+  });
+  await page.goto('/');
+  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
+  await expect(page.locator('#message')).toHaveText('Loading game...');
+  await page.screenshot({ path: testInfo.outputPath('real-engine-preparing-99-percent.png'), scale: 'css' });
+  await page.evaluate(() => window.finishInitialization());
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await expect(page.locator('#status')).toBeHidden();
+  await expect(page.locator('#loading-percent')).toHaveText('100%');
 });
 
 test('cached startup can become ready immediately and failed startup never finishes progress', async ({ page }) => {

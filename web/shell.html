@@ -369,16 +369,16 @@
             if (!active || !Number.isFinite(current) || current < 0) return;
             const known = Number.isFinite(total) && total > 0 && current <= total;
             const starting = known && current === total;
-            message.textContent = starting ? 'Starting game...' : 'Downloading game...';
-            progress.setAttribute('aria-label', starting ? 'Starting game' : 'Game download progress');
-            if (known && !starting) {
-              progress.value = current / total;
-              percent.textContent = Math.floor(current / total * 100) + '%';
+            message.textContent = 'Loading game...';
+            if (known) {
+              // Reserve completion for the ready callback; downloading is only one startup phase.
+              progress.value = starting ? 0.99 : Math.min(0.98, current / total);
+              percent.textContent = Math.floor(progress.value * 100) + '%';
             } else {
               progress.removeAttribute('value');
               percent.textContent = '';
             }
-            downloadStatus.textContent = starting ? 'Download complete. Opening the game...' : known ?
+            downloadStatus.textContent = starting ? 'Getting ready to play...' : known ?
               `Game data: ${(current / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB` :
               `Game data: ${(current / 1048576).toFixed(1)} MB received`;
           },
