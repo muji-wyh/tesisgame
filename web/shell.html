@@ -364,6 +364,32 @@
 
       function createStartupProgress() {
         let active = true;
+        let displayed = 0;
+        let target = 0;
+        let frame = 0;
+        let lastFrame = 0;
+
+        function cancelFrame() {
+          window.cancelAnimationFrame(frame);
+          frame = 0;
+        }
+
+        function paint() {
+          progress.value = displayed;
+          percent.textContent = Math.floor(displayed * 100) + '%';
+        }
+
+        function advance(now) {
+          frame = 0;
+          // Follow received progress at up to 45 percentage points per second.
+          // A busy or hidden tab must not catch up in one large jump.
+          displayed = motion.matches ? target :
+            Math.min(target, displayed + Math.max(0, Math.min(now - lastFrame, 50)) * 0.00045);
+          lastFrame = now;
+          paint();
+          if (displayed < target) frame = window.requestAnimationFrame(advance);
+        }
+
         return {
           update(current, total) {
             if (!active || !Number.isFinite(current) || current < 0) return;
@@ -372,9 +398,19 @@
             message.textContent = 'Loading game...';
             if (known) {
               // Reserve completion for the ready callback; downloading is only one startup phase.
-              progress.value = starting ? 0.99 : Math.min(0.98, current / total);
-              percent.textContent = Math.floor(progress.value * 100) + '%';
+              target = starting ? 0.99 : Math.min(0.98, current / total);
+              if (motion.matches || target < displayed) {
+                cancelFrame();
+                displayed = target;
+              }
+              paint();
+              if (!frame && displayed < target) {
+                lastFrame = performance.now();
+                frame = window.requestAnimationFrame(advance);
+              }
             } else {
+              cancelFrame();
+              displayed = target = 0;
               progress.removeAttribute('value');
               percent.textContent = '';
             }
@@ -385,12 +421,13 @@
           complete() {
             if (!active) return;
             active = false;
+            cancelFrame();
             progress.value = 1;
             percent.textContent = '100%';
             message.textContent = 'Ready to play!';
             downloadStatus.textContent = 'Ready to play!';
           },
-          stop() { active = false; }
+          stop() { active = false; cancelFrame(); }
         };
       }
       const startupProgress = createStartupProgress();

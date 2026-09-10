@@ -141,3 +141,33 @@ normal game readiness. HTML SHA256 is
 `061a9f1ccbba7a56a4ccca160c6c7b3f7830d29066bea4edcbf145ccb0bfaabb`;
 the game pack remains `game-b419d5752e4de9b2.pck` and the engine remains
 `engine-27986f74840ebada`.
+
+## Smooth progress after a fast or cached download
+
+The displayed value now follows the received-byte target at up to 45 percentage
+points per second, instead of jumping directly to 98% / 99%. The numeric label
+and native progress bar use the same value. Each animation frame accounts for at
+most 50 ms, so returning from a suspended or busy page cannot produce one large
+catch-up jump. Reduced motion applies the target directly. Unknown totals cancel
+the animation and stay indeterminate; errors also cancel it. The ready callback
+still enters the game immediately, even halfway through the transition.
+
+The cached-download regression failed against the previous shell: the first
+displayed value was 0.99. Its replacement checks intermediate values, bounded
+resume, the 99% hold and readiness. Existing cases now also exercise readiness,
+failure and unknown-total cancellation during a pending animation. No engine
+initialization or gameplay behavior changed.
+
+The initial focused checks passed 12/12. One subsequent test invocation overlapped
+export packaging and read its temporary `index` executable before fingerprinting;
+the engine stub did not install. Final verification runs against the completed
+export. The exported startup controller was compared with the maintained shell.
+Evidence lives in `build/qa-smooth-progress-red`, `build/qa-smooth-progress-focused`
+and `build/qa-smooth-progress-matrix`.
+
+Final validation passed **84/84 browser cases** across desktop Chromium and the
+iPhone/iPad WebKit profiles, including actual exported-engine readiness, plus
+**17/17 Node export/deployment checks**. The Web export passed with 140 word
+pronunciations and 56 optional paths checked. The intermediate phone screenshot
+shows the bar and label together at 44%. Final HTML SHA256:
+`353512c1ee199f832a2ce57b8cc63988cb8b51b8aea96408ad9dea58a6934493`.
