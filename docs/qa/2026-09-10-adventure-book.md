@@ -28,4 +28,10 @@ The optional journey section saves unique known destinations, most recent first,
 - SHA256: `71522da7333b637e862c6241c8f37214c4c08251e8efc0af3fdcb24302d5dd32`.
 - Independent review found and verified the recovered-world preference fix; no remaining release blocker was reported.
 
+## Production
+
+Implementation commit `51c121a` was fast-forwarded into `main` and pushed to origin. `npm run deploy -- -SkipBuild` successfully deployed the tested export to https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+The production HTML references the pack above, and its downloaded SHA256 exactly matches the local tested pack. A fresh production Chromium session passed book opening, explicit Animal friends selection and saved visit, Learn pronunciation, Match selection/cancel, Sky feedback/Continue, Listen, and the room toy action and save. No browser errors were observed.
+
 This release uses the existing original word illustrations. The earlier real Unity Store package download and CLI import remains incomplete and separately documented in `docs/assets/unity-art.md`; this work did not resume the stopped native Computer Use operation.
