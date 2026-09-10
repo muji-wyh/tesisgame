@@ -1,0 +1,111 @@
+# Loading and startup verification
+
+## User-visible behavior
+
+The loader now reports received game-data bytes against a reliable total. Before a
+total is available, and when received bytes exceed an unreliable total, the progress
+bar is indeterminate. Elapsed time no longer advances a fabricated percentage.
+When all bytes arrive, the label changes to `Starting game...` and the percentage is
+cleared. Only the game's `ready()` callback reports 100% and hands input to the canvas.
+
+After 16 seconds, a stalled startup offers `Try again` without moving focus away from
+the loading toy. Synchronous engine failures, empty promise rejections and lost
+graphics contexts show the existing retry screen. The first failure remains visible.
+Graphics loss stops input and requests engine shutdown; retry reloads the game.
+
+Lost pointer capture cancels chest dragging. Every direct tap on Pip produces a
+visible text response, including with reduced motion, without awarding chest sparkles
+or overwriting chest reactions when the chest itself animates Pip.
+
+## Real Brotli transfer and progress measurement
+
+A cold-cache Chromium run used the actual Godot export served from port 4181 with
+Brotli enabled, 1,000,000 bytes/second download throughput (8 Mbps), and 40 ms latency.
+Only the page's progress callback was instrumented; the real engine, Fetch responses,
+WASM and game pack were used. Resource Timing supplied decoded body sizes, response
+headers supplied encoded lengths, and the exported configuration supplied file sizes.
+
+| Resource | Brotli content length | Browser decoded size | Configured file size |
+| --- | ---: | ---: | ---: |
+| `engine-2f56418648ba0140.wasm` | 7,094,628 | 39,513,091 | 39,513,091 |
+| `game-b5b797de781821de.pck` | 3,744,455 | 4,535,920 | 4,535,920 |
+
+Both responses were HTTP 200 with `Content-Encoding: br`. The 657 actual progress
+callbacks consistently used a total of 44,049,011 decoded bytes; none exceeded it.
+The last callback at 11,446.5 ms reported exactly 44,049,011 / 44,049,011 and the UI
+showed `Starting game...` without a percentage. Host readiness arrived at 13,200.3 ms.
+This verifies that Godot's received-byte count and the export's configured totals use
+the same decoded units, even though the network transfer is compressed.
+
+The measurement used the first unified export of this change. Later Pip feedback
+and native UI fixes do not alter the progress code or binary byte accounting. The
+final export regenerates its file-size configuration; its different pack hash is
+recorded in the UI flow release report.
+
+## Actual input and remaining initialization pause
+
+The same run sent real Chromium mouse input to the chest approximately every 100 ms.
+All 105 clicks received during download incremented the visible sparkle count, reaching
+`105 sparkles`. Their maximum input-command round trip was 33 ms. The next input
+straddled the transition into the game, after the loader relinquished its controls.
+
+The PerformanceObserver long-task trace recorded a **1,746 ms synchronous main-thread
+task** starting at 11,454.3 ms, immediately after download. The maximum mouse-command
+round trip across that startup boundary was 1,924 ms. No uncaught page errors occurred.
+These are measurements on this Windows test host, not guarantees for other devices.
+
+The UI now distinguishes downloading from starting accurately. It does **not** make
+Godot initialization free of pauses. The HTML toy cannot process input while the same
+main thread is synchronously initializing the engine; this patch makes no claim of
+continuous responsiveness during that interval and does not redesign the runtime.
+
+## Regression checks
+
+The loading suite covers pointer, keyboard and controller input; script and WASM delays;
+download interruption; synchronous startup errors; unknown, known and cached progress;
+reduced motion; focus; 320-pixel square layouts; and actual graphics loss followed by
+retry and successful engine readiness.
+
+New defect regressions failed before their fixes: eight startup/input cases, two byte
+progress cases, and the repeated reduced-motion Pip response case. The initial focused
+Chromium fixes passed 11/11 cases. The final Pip/slow-loading selection passed 9/9
+across desktop Chromium, iPhone WebKit and iPad WebKit.
+
+One initial WebKit test fixture held the deferred engine script indefinitely while
+requesting a screenshot. Its behavioral assertions passed, but Playwright waited for
+`document.fonts.ready` during capture and timed out. The stalled-download fixture now
+loads the script and holds the engine-data promises instead. It preserves the 17-second,
+retry, focus, interaction and layout assertions; all three device profiles passed.
+
+The final loading matrix passed **78/78 cases in 2.1 minutes**: 26 each on desktop
+Chromium, iPhone WebKit and iPad WebKit, with no retries and no skipped tests. All
+three actual graphics-loss cases clicked `Try again`, reloaded successfully, hid the
+loading overlay and restored canvas focus. Final screenshots of 60% download,
+download-complete startup, the 320-pixel stalled layout and graphics recovery were
+inspected without clipped controls or overlapping text.
+
+## Commands and evidence
+
+The shared server on port 4181 serves `build/web` with Brotli; the existing user preview
+on port 4173 is preserved. The local `build/qa-ui.config.cjs` inherits the repository's
+Playwright configuration, changes its base URL to 4181, and disables auto-starting a
+second server.
+
+```powershell
+npx playwright test -c build/qa-ui.config.cjs tests/browser/loading.spec.cjs --output=build/qa-loader-matrix-final
+node build/startup-progress-probe.cjs
+```
+
+Local diagnostic evidence (ignored build artifacts):
+
+- `build/qa-real-startup/report.json`: all progress callbacks, encoded/decoded resource
+  timings, input commands, handled clicks and long tasks.
+- `build/startup-progress-probe.cjs`: the actual-engine measurement harness.
+- `build/qa-loader-matrix-final`: progress, startup failure, stalled layout and graphics
+  recovery screenshots from the final browser matrix.
+- `build/qa-loader-red`, `build/qa-loader-progress-red`, `build/qa-pip-repeat-red`:
+  failure evidence before implementation.
+
+The iPhone and iPad entries are Playwright WebKit device profiles running on Windows,
+not tests on physical Apple hardware. These startup checks do not supersede the
+separate WebKit resize/compositor limitations documented in the Memory Garden report.

@@ -197,6 +197,7 @@
       h1 { font-size: 28px; }
       .loading-heading p, .play-caption span { font-size: 12px; }
       #loading-toy { height: 96px; }
+      #status[data-state="slow"] #loading-toy { height: 48px; }
       #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
       .play-caption { margin-top: 4px; gap: 0; }
       #loading-score { font-size: 16px; }
@@ -300,17 +301,17 @@
             </div>
             <div class="play-caption">
               <strong id="loading-score" role="status">0 sparkles</strong>
-              <span id="loading-hint">Tap or wiggle the chest to make stars!</span>
+              <span id="loading-hint" aria-live="polite">Tap or wiggle the chest to make stars!</span>
             </div>
           </div>
           <div class="loading-download">
             <div class="loading-line">
-              <p id="message" role="status">Startup estimate</p>
-              <strong id="loading-percent" aria-hidden="true">0%</strong>
+              <p id="message" role="status">Loading game...</p>
+              <strong id="loading-percent" aria-hidden="true"></strong>
             </div>
-            <progress id="progress" value="0" max="1" aria-label="Estimated game startup progress"></progress>
+            <progress id="progress" max="1" aria-label="Game loading progress"></progress>
             <p id="download-status">Waiting for game data...</p>
-            <p id="loading-note" hidden>First visit? Downloads can take a little longer.</p>
+            <p id="loading-note" hidden>Still loading. You can wait or retry.</p>
             <button id="retry" type="button" hidden>Try again</button>
           </div>
         </div>
@@ -352,84 +353,44 @@
       let gesture = null;
       let swipeHandled = false;
       let failed = false;
-      const slowNotice = window.setTimeout(() => { loadingNote.hidden = false; }, 16000);
+      let engine = null;
+      const slowNotice = window.setTimeout(() => {
+        loadingNote.hidden = false;
+        retry.hidden = false;
+        status.dataset.state = 'slow';
+      }, 16000);
       document.querySelector('meta[name="theme-color"]').content =
         getComputedStyle(document.body).getPropertyValue('--cp-bg').trim();
 
       function createStartupProgress() {
         let active = true;
-        let elapsed = 0;
-        let lastTime = performance.now();
-        let frame = 0;
-        let downloaded = 0;
-        let baseline = null;
-        let displayed = 0;
-        const clamp = value => Math.max(0, Math.min(1, value));
-        const ease = (from, to, amount) => from + (to - from) * (1 - (1 - clamp(amount)) ** 3);
-
-        function display(value) {
-          displayed = Math.max(displayed, value);
-          progress.value = displayed / 100;
-          percent.textContent = Math.round(displayed) + '%';
-        }
-
-        function render() {
-          let value;
-          if (motion.matches) {
-            value = elapsed < 300 ? 0 : elapsed < 900 ? 35 : elapsed < 1500 ? 75 : 95;
-          } else {
-            value = elapsed < 300 ? ease(0, 35, elapsed / 300) :
-              elapsed < 600 ? 35 : elapsed < 900 ? ease(35, 75, (elapsed - 600) / 300) :
-              elapsed < 1200 ? 75 : ease(75, 95, (elapsed - 1200) / 300);
-          }
-          if (elapsed >= 1500) {
-            if (baseline === null) baseline = downloaded;
-            if (baseline < 1) value = 95 + 4 * clamp((downloaded - baseline) / (1 - baseline));
-          }
-          display(Math.min(99, value));
-        }
-
-        function tick(time) {
-          frame = 0;
-          if (!active || document.hidden) return;
-          elapsed += Math.max(0, time - lastTime);
-          lastTime = time;
-          render();
-          if (elapsed < 1500) frame = requestAnimationFrame(tick);
-        }
-
-        function visibilityChanged() {
-          cancelAnimationFrame(frame);
-          frame = 0;
-          if (active && !document.hidden && elapsed < 1500) {
-            lastTime = performance.now();
-            frame = requestAnimationFrame(tick);
-          }
-        }
-
-        function stop() {
-          active = false;
-          cancelAnimationFrame(frame);
-          frame = 0;
-          document.removeEventListener('visibilitychange', visibilityChanged);
-        }
-
-        document.addEventListener('visibilitychange', visibilityChanged);
-        if (!document.hidden) frame = requestAnimationFrame(tick);
         return {
           update(current, total) {
-            if (!active || !Number.isFinite(current) || !Number.isFinite(total) || total <= 0) return;
-            downloaded = clamp(current / total);
-            downloadStatus.textContent = `Game data: ${(Math.max(0, current) / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB`;
-            if (elapsed >= 1500) render();
+            if (!active || !Number.isFinite(current) || current < 0) return;
+            const known = Number.isFinite(total) && total > 0 && current <= total;
+            const starting = known && current === total;
+            message.textContent = starting ? 'Starting game...' : 'Downloading game...';
+            progress.setAttribute('aria-label', starting ? 'Starting game' : 'Game download progress');
+            if (known && !starting) {
+              progress.value = current / total;
+              percent.textContent = Math.floor(current / total * 100) + '%';
+            } else {
+              progress.removeAttribute('value');
+              percent.textContent = '';
+            }
+            downloadStatus.textContent = starting ? 'Download complete. Opening the game...' : known ?
+              `Game data: ${(current / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB` :
+              `Game data: ${(current / 1048576).toFixed(1)} MB received`;
           },
           complete() {
             if (!active) return;
-            stop();
-            display(100);
+            active = false;
+            progress.value = 1;
+            percent.textContent = '100%';
+            message.textContent = 'Ready to play!';
             downloadStatus.textContent = 'Ready to play!';
           },
-          stop
+          stop() { active = false; }
         };
       }
       const startupProgress = createStartupProgress();
@@ -465,7 +426,11 @@
           { transform: 'rotate(0deg) translateY(0)', backgroundPosition: '100% 0%' }
         ], { duration: 550, easing: 'ease-out' });
       }
-      loadingDuck.addEventListener('click', playWithDuck, loadingListener);
+      loadingDuck.addEventListener('click', () => {
+        if (loadingEvents.signal.aborted || document.hidden) return;
+        hint.textContent = hint.textContent === 'Pip says hello!' ? 'Pip is happy to see you!' : 'Pip says hello!';
+        playWithDuck();
+      }, loadingListener);
 
       function playWithTreasure() {
         if (loadingEvents.signal.aborted || document.hidden) return;
@@ -586,6 +551,9 @@
         if (wiggled) { swipeHandled = true; playWithTreasure(); }
       }, loadingListener);
       toy.addEventListener('pointercancel', clearLoadingEffects, loadingListener);
+      toy.addEventListener('lostpointercapture', event => {
+        if (gesture?.id === event.pointerId) clearLoadingEffects();
+      }, loadingListener);
       motion.addEventListener('change', clearLoadingEffects, loadingListener);
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
@@ -814,6 +782,7 @@
       const speechHost = createSpeechHost();
 
       function fail(reason) {
+        if (failed) return;
         failed = true;
         startupProgress.stop();
         speechHost.stopSpeech();
@@ -834,7 +803,8 @@
       }
 
       function startupFailure(error) {
-        fail('The game could not start. ' + (error.message || String(error)));
+        const detail = error?.message || (error == null ? 'Please try again.' : String(error));
+        fail('The game could not start. ' + detail);
       }
 
       function onEngineFailure(event) {
@@ -924,6 +894,14 @@
       if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
       resize();
       retry.addEventListener('click', () => window.location.reload());
+      canvas.addEventListener('webglcontextlost', event => {
+        // Godot 4.7's handler only opens a blocking reload alert; it cannot recover
+        // this renderer. Use the existing accessible failure screen and stop input.
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        fail('The graphics stopped. Try again to reload the game. Your saved rewards are kept.');
+        engine?.requestQuit();
+      });
 
       const config = $GODOT_CONFIG;
       function startEngine() {
@@ -950,7 +928,7 @@
             return;
           }
         }
-        const engine = new Engine({
+        engine = new Engine({
           ...config,
           onExit(code) {
             const detail = 'The engine exited with code ' + code + '. Please try again.';
@@ -971,7 +949,10 @@
           })
         ]).catch(startupFailure);
       }
-      document.addEventListener('DOMContentLoaded', startEngine, { once: true });
+      document.addEventListener('DOMContentLoaded', () => {
+        try { startEngine(); }
+        catch (error) { startupFailure(error); }
+      }, { once: true });
     })();
   </script>
   <script src="$GODOT_URL" defer></script>

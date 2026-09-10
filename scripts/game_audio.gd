@@ -194,6 +194,11 @@ func stop_music() -> void:
 	_stop(music)
 
 
+func stop_voice() -> void:
+	if voice != null:
+		_stop(voice)
+
+
 func halt() -> void:
 	active = false
 	if music != null:

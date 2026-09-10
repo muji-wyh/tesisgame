@@ -93,8 +93,11 @@ func _run() -> void:
 		app._show_collection()
 		await process_frame
 		app._update_duck()
-		check(app.duck.visible and app.duck.speaking and app.duck.get_global_rect().intersects(app._collection_duck_slot.get_global_rect()),
-			"The collection duck keeps speaking through the page transition")
+		check(app.duck.visible and not app.duck.speaking and app.duck.get_global_rect().intersects(app._collection_duck_slot.get_global_rect()),
+			"The collection duck stops speaking about the covered game picture")
+		app.duck.pressed.emit()
+		app._update_duck()
+		check(app.audio.voice.playing and app.duck.speaking, "Pip can greet again in the collection")
 		app.medal_progress.counts["spring-1"] = 1
 		app._refresh_collection()
 		app._open_reward_preview("spring-1")

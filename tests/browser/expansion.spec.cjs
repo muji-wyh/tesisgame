@@ -42,9 +42,13 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await page.waitForTimeout(300);
   expect((await page.screenshot({ scale: 'css' })).equals(still)).toBe(true);
   await tap(page, 360, 660);
+  await expect(page.locator('#game-status')).toContainText('Complete Blossom');
   await rendered(page);
   const locked = await page.screenshot({ path: testInfo.outputPath('room-locked-toy-phone.png'), scale: 'css' });
   expect(locked.equals(still), 'A locked gift shows its artwork and exact requirement.').toBe(false);
+  await tap(page, 240, 502);
+  await expect(page.locator('#game-status')).toContainText('ball');
+  expect(await roomRecord(page)).toBe(saved);
   await tap(page, 240, 502);
   expect(await roomRecord(page)).toBe(saved);
   await expect(page.locator('#game-status')).toHaveText('The ball rolls to Pip!');
@@ -52,6 +56,9 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await tap(page, 360, 660);
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('room-locked-backdrop-phone.png'), scale: 'css' });
+  await expect(page.locator('#game-status')).toContainText('Complete Bee');
+  await tap(page, 240, 502);
+  await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Learn five words.');

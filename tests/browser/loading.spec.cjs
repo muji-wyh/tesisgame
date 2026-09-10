@@ -34,43 +34,138 @@ async function whileEngineScriptIsPending(page, action) {
   }
 }
 
-async function progressShell(page) {
+async function progressShell(page, engineScript = `window.Engine = class {
+  static getMissingFeatures() { return []; }
+  static load() { return Promise.resolve(); }
+  startGame({ onProgress }) { window.reportDownload = onProgress; return Promise.resolve(); }
+};`) {
   await useMaintainedShell(page);
   await page.route(/\/engine-[a-f0-9]{16}\.js$/, route => route.fulfill({
     contentType: 'application/javascript',
-    body: `window.Engine = class {
-      static getMissingFeatures() { return []; }
-      static load() { return Promise.resolve(); }
-      startGame({ onProgress }) { window.reportDownload = onProgress; return Promise.resolve(); }
-    };`
+    body: engineScript
   }));
   await page.goto('/loader-test');
 }
 
-test('startup estimate pauses at 35 and 75 before 95, then follows real remaining data', async ({ page }) => {
+for (const stage of ['features', 'constructor', 'load', 'start']) {
+  test(`synchronous engine ${stage} failure leaves an actionable retry`, async ({ page }, testInfo) => {
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await progressShell(page, `window.Engine = class {
+      static getMissingFeatures() { ${stage === 'features' ? "throw new Error('Feature check failed.');" : 'return [];'} }
+      constructor() { ${stage === 'constructor' ? "throw new Error('Engine setup failed.');" : ''} }
+      static load() { ${stage === 'load' ? "throw new Error('Download setup failed.');" : 'return Promise.resolve();'} }
+      startGame() { ${stage === 'start' ? "throw new Error('Game setup failed.');" : 'return Promise.resolve();'} }
+    };`);
+    await expect(page.locator('#message')).toContainText('The game could not start.', { timeout: 3000 });
+    await expect(page.locator('#retry')).toBeFocused();
+    await expect(page.locator('#loading-play')).toBeHidden();
+    await expect(page.locator('#canvas')).toHaveAttribute('inert');
+    expect(errors).toEqual([]);
+    if (stage === 'constructor') await page.screenshot({ path: testInfo.outputPath('startup-failure-retry.png'), scale: 'css' });
+  });
+}
+
+test('an empty startup rejection still gives a clear failure and preserves its first cause', async ({ page }) => {
+  await progressShell(page, `window.Engine = class {
+    static getMissingFeatures() { return []; }
+    static load() { return Promise.reject(null); }
+    startGame() { return Promise.resolve(); }
+  };`);
+  await expect(page.locator('#message')).toContainText('The game could not start.', { timeout: 3000 });
+  await expect(page.locator('#retry')).toBeFocused();
+  const first = await page.locator('#message').textContent();
+  await page.evaluate(() => window.wordBuddiesHost.fail('A later shutdown message.'));
+  await expect(page.locator('#message')).toHaveText(first);
+  await page.evaluate(() => window.wordBuddiesHost.ready());
+  await expect(page.locator('#status')).toBeVisible();
+});
+
+test('a stalled download offers retry without stealing focus or stopping the loading toy', async ({ page }, testInfo) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page, `window.Engine = class {
+    static getMissingFeatures() { return []; }
+    static load() { return new Promise(() => {}); }
+    startGame() { return new Promise(() => {}); }
+  };`);
+  await page.setViewportSize({ width: 320, height: 320 });
+  const toy = page.getByRole('button', { name: 'Tap or wiggle the treasure chest' });
+  await toy.focus();
+  await page.clock.runFor(17000);
+  await expect(page.locator('#retry')).toBeVisible({ timeout: 3000 });
+  await expect(page.locator('#loading-note')).toContainText('retry');
+  await expect(toy).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#loading-score')).toHaveText('1 sparkle');
+  expect(await page.locator('#status').evaluate(el => el.scrollHeight <= el.clientHeight)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('stalled-download-320.png'), scale: 'css' });
+});
+
+test('losing pointer capture cancels the loading chest drag', async ({ page }) => {
+  await whileEngineScriptIsPending(page, async toy => {
+    const bounds = await toy.boundingBox();
+    const x = bounds.x + bounds.width / 2;
+    const y = bounds.y + bounds.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + 32, y);
+    expect(await page.locator('#chest-art').evaluate(el => el.style.transform)).not.toBe('');
+    await toy.evaluate(el => el.releasePointerCapture(1));
+    await page.mouse.move(x + 48, y);
+    await expect.poll(() => page.locator('#chest-art').evaluate(el => el.style.transform)).toBe('');
+    await page.mouse.up();
+  });
+});
+
+test('graphics context loss gives a visible recovery action and stops game input', async ({ page }, testInfo) => {
+  const dialogs = [];
+  page.on('dialog', async dialog => { dialogs.push(dialog.message()); await dialog.dismiss(); });
+  await useMaintainedShell(page);
+  await page.goto('/loader-test');
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await page.evaluate(() => document.getElementById('canvas').getContext('webgl2')
+    .getExtension('WEBGL_lose_context').loseContext());
+  await expect(page.locator('#message')).toContainText('graphics', { timeout: 3000 });
+  await expect(page.locator('#retry')).toBeFocused();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'false');
+  expect(dialogs).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('graphics-lost-retry.png'), scale: 'css' });
+  await page.getByRole('button', { name: 'Try again', exact: true }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await expect(page.locator('#status')).toBeHidden();
+  await expect(page.locator('#canvas')).toBeFocused();
+});
+
+test('download progress follows bytes and waits for readiness before reporting completion', async ({ page }, testInfo) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
-  await expect(page.locator('#message')).toContainText('estimate');
+  await expect(page.locator('#progress')).not.toHaveAttribute('value');
+  await expect(page.locator('#message')).toContainText('Loading');
   await page.evaluate(() => window.reportDownload(2 * 1048576, 10 * 1048576));
-  for (const [milliseconds, percentage] of [[350, '35%'], [200, '35%'], [450, '75%'], [200, '75%'], [400, '95%']]) {
-    await page.clock.runFor(milliseconds);
-    await expect(page.locator('#loading-percent')).toHaveText(percentage);
-  }
+  await expect(page.locator('#loading-percent')).toHaveText('20%');
+  await page.clock.runFor(5000);
+  await expect(page.locator('#loading-percent')).toHaveText('20%');
   await expect(page.locator('#download-status')).toContainText('2.0 / 10.0 MB');
   await page.evaluate(() => window.reportDownload(6 * 1048576, 10 * 1048576));
-  await expect(page.locator('#loading-percent')).toHaveText('97%');
+  await expect(page.locator('#loading-percent')).toHaveText('60%');
+  await page.screenshot({ path: testInfo.outputPath('real-download-60-percent.png'), scale: 'css' });
   await page.evaluate(() => window.reportDownload(10 * 1048576, 10 * 1048576));
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#message')).toContainText('Starting');
+  await expect(page.locator('#progress')).not.toHaveAttribute('value');
+  await expect(page.locator('#loading-percent')).toBeEmpty();
   await page.clock.runFor(5000);
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#message')).toContainText('Starting');
   await expect(page.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
+  await page.screenshot({ path: testInfo.outputPath('download-finished-starting.png'), scale: 'css' });
   await page.evaluate(() => window.wordBuddiesHost.ready());
   await expect(page.locator('#loading-percent')).toHaveText('100%');
   await expect(page.locator('#status')).toBeHidden();
 });
 
-test('fast readiness bypasses staged delays and failed startup never finishes the estimate', async ({ page }) => {
+test('cached startup can become ready immediately and failed startup never finishes progress', async ({ page }) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
@@ -78,37 +173,45 @@ test('fast readiness bypasses staged delays and failed startup never finishes th
   await expect(page.locator('#loading-percent')).toHaveText('100%');
   await expect(page.locator('#status')).toBeHidden();
   await page.reload();
-  await page.clock.runFor(1700);
-  await expect(page.locator('#loading-percent')).toHaveText('95%');
+  await page.evaluate(() => window.reportDownload(25, 100));
+  await expect(page.locator('#loading-percent')).toHaveText('25%');
   await page.evaluate(() => window.wordBuddiesHost.fail('The game could not start.'));
   await page.clock.runFor(5000);
   await page.evaluate(() => window.reportDownload(100, 100));
-  await expect(page.locator('#loading-percent')).toHaveText('95%');
+  await expect(page.locator('#loading-percent')).toHaveText('25%');
   await expect(page.locator('#retry')).toBeVisible();
   await expect(page.locator('#download-status')).toBeHidden();
 });
 
-test('hidden startup pauses pacing and reduced motion uses milestone steps', async ({ page }) => {
+test('unknown totals stay indeterminate and time or visibility never invents progress', async ({ page }) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await progressShell(page);
-  await page.clock.runFor(200);
-  await expect(page.locator('#loading-percent')).toHaveText('0%');
-  await page.clock.runFor(150);
-  await expect(page.locator('#loading-percent')).toHaveText('35%');
+  await page.evaluate(() => window.reportDownload(1048576, 0));
+  await page.clock.runFor(2000);
+  await expect(page.locator('#loading-percent')).toBeEmpty();
+  await expect(page.locator('#progress')).not.toHaveAttribute('value');
+  await expect(page.locator('#download-status')).toContainText('1.0 MB');
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));
   });
   await page.clock.runFor(5000);
-  await expect(page.locator('#loading-percent')).toHaveText('35%');
+  await expect(page.locator('#loading-percent')).toBeEmpty();
   await page.evaluate(() => {
     delete document.hidden;
     document.dispatchEvent(new Event('visibilitychange'));
   });
   await page.clock.runFor(1300);
-  await expect(page.locator('#loading-percent')).toHaveText('95%');
+  await expect(page.locator('#loading-percent')).toBeEmpty();
+  await page.evaluate(() => window.reportDownload(2, 10));
+  await expect(page.locator('#loading-percent')).toHaveText('20%');
+  await page.evaluate(() => window.reportDownload(1, 10));
+  await expect(page.locator('#loading-percent')).toHaveText('10%');
+  await page.evaluate(() => window.reportDownload(11, 10));
+  await expect(page.locator('#progress')).not.toHaveAttribute('value');
+  await expect(page.locator('#loading-percent')).toBeEmpty();
 });
 
 test('loading chest taps have no browser highlight but keyboard focus stays visible', async ({ page }) => {
@@ -149,6 +252,26 @@ test('Pip is an inline loading companion with bounded, motion-safe reactions', a
     await duck.click();
     expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
     expect(imageRequests).toEqual([]);
+  });
+});
+
+test('every Pip tap gives visible feedback with reduced motion without awarding chest sparkles', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await whileEngineScriptIsPending(page, async toy => {
+    const duck = page.getByRole('button', { name: 'Play with Pip the duck' });
+    const hint = page.locator('#loading-hint');
+    let previous = await hint.textContent();
+    for (let tap = 0; tap < 4; tap++) {
+      await duck.click();
+      await expect(hint).not.toHaveText(previous, { timeout: 1000 });
+      previous = await hint.textContent();
+      await expect(hint).toContainText('Pip');
+      await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
+      expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+    }
+    await toy.click();
+    await expect(hint).toContainText('Boing!');
+    await expect(page.locator('#loading-score')).toHaveText('1 sparkle');
   });
 });
 
@@ -312,7 +435,7 @@ test('the loading toy works before the engine script arrives and fits small scre
     await toy.focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
-    await expect(page.locator('#progress')).toHaveAttribute('value');
+    await expect(page.locator('#progress')).not.toHaveAttribute('value');
     for (const viewport of [{ width: 390, height: 844 }, { width: 844, height: 390 }, { width: 320, height: 320 }]) {
       await page.setViewportSize(viewport);
       const bounds = await toy.boundingBox();

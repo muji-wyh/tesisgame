@@ -38,6 +38,18 @@ async function canvasMetrics(scope) {
   });
 }
 
+async function openMedals(page, focusLast = false) {
+  const bounds = await logicalMetrics(page);
+  await tap(page, 20 + (bounds.width - 112) * 0.75, 52);
+  await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
+  if (focusLast) {
+    // Medals -> room tab -> last earned medal; locked medals cannot take focus.
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+  }
+  await rendered(page);
+}
+
 function cardPoint(metrics, index) {
   const scale = Math.min(metrics.width, metrics.height) / 480;
   const point = boardPoint({ width: metrics.width / scale, height: metrics.height / scale }, index);
@@ -631,8 +643,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
   await greet(101, 303);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
-  await page.keyboard.press('Shift+Tab');
-  await page.keyboard.press('Shift+Tab');
+  await openMedals(page, true);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Blossom #1 reward preview opened');
   await greet(58, 58);
@@ -845,8 +856,7 @@ test('repeated lessons assemble three fragments into a medal and preserve progre
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 of 36 medals complete. Spring 1/6');
-  // Reverse traversal from Back scrolls the last earned medal into view.
-  await page.keyboard.press('Shift+Tab');
+  await openMedals(page, true);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Ladybug #2 reward preview opened');
   await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
@@ -888,12 +898,12 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   const earned = (await page.locator('#game-status').textContent()).split('\n')[0].replace(/^A new piece!\s*/, '');
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await openMedals(page);
   await page.screenshot({ path: testInfo.outputPath('reward-collection.png'), scale: 'css' });
-  await page.keyboard.press('Shift+Tab');
   await rendered(page);
   const rewardBounds = await logicalMetrics(page);
   const rewardPoint = { x: rewardBounds.x + 88 * rewardBounds.scale,
-    y: rewardBounds.y + (rewardBounds.height - 72) * rewardBounds.scale };
+    y: rewardBounds.y + 188 * rewardBounds.scale };
   await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
   await expect(page.locator('#game-status')).toContainText('reward preview opened');
   await expect(page.locator('#game-status')).toContainText(earned);
@@ -941,8 +951,7 @@ for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter', 'Ocean', '
     await page.evaluate(() => window.gamepadFixture.connect());
     await holdControllerChest(page);
     await pressGamepad(page, 3);
-    // Reverse traversal reaches the only earned medal after all room items.
-    await page.keyboard.press('Shift+Tab');
+    await openMedals(page, true);
     await pressGamepad(page, 0);
     await expect(page.locator('#game-status')).toContainText('reward preview opened');
     await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -1003,7 +1012,9 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 2);
+      // Only the current background music resumes. Continue canceled the pending
+      // correct-answer voice, which must not replay over the earned reward.
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
     }
     await assertFits(page);
     expect(errors).toEqual([]);

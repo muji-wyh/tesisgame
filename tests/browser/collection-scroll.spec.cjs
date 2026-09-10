@@ -1,4 +1,14 @@
 const { test, expect } = require('@playwright/test');
+const { metrics, tap } = require('./game-ui.cjs');
+
+async function openMedals(page) {
+  await page.touchscreen.tap(342, 26);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  const bounds = await metrics(page);
+  await tap(page, 20 + (bounds.width - 112) * 0.75, 52);
+  await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
+  await rendered(page);
+}
 
 async function contentShift(page, before, after) {
   return page.evaluate(async ({ before, after }) => {
@@ -55,9 +65,8 @@ for (const ratio of [1, 2, 3]) {
       page.on('pageerror', error => errors.push(error.message));
       await page.goto('/');
       await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-      await page.touchscreen.tap(342, 26);
-      await rendered(page);
-      const before = await page.screenshot({ scale: 'css' });
+      await openMedals(page);
+      const before = await page.screenshot({ path: testInfo.outputPath('medals-before-drag.png'), scale: 'css' });
       const client = await page.context().newCDPSession(page);
       const measurements = [];
       try {
@@ -69,7 +78,9 @@ for (const ratio of [1, 2, 3]) {
             type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 470 - displacement }]
           });
           await rendered(page);
-          const after = await page.screenshot({ scale: 'css' });
+          const after = await page.screenshot({
+            path: testInfo.outputPath(`medals-drag-${measurements.length + 1}-${displacement}.png`), scale: 'css'
+          });
           const measured = await contentShift(page, before, after);
           measurements.push({ finger: displacement, content: measured.pixels, error: measured.error });
           expect(Math.abs(measured.pixels - displacement), JSON.stringify(measurements)).toBeLessThanOrEqual(2);
@@ -97,8 +108,7 @@ test.describe('collection release momentum', () => {
     test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
     await page.goto('/');
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-    await page.touchscreen.tap(342, 26);
-    await rendered(page);
+    await openMedals(page);
     const client = await page.context().newCDPSession(page);
     let touching = false;
     async function flick() {

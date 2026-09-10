@@ -51,9 +51,13 @@ func _run() -> void:
 	var words: Array[String] = []
 	var actions: Array[String] = []
 	var selections: Array[String] = []
+	var previews: Array[String] = []
 	view.word_requested.connect(func(id: String) -> void: words.append(id))
 	view.toy_played.connect(func(kind: String) -> void: actions.append(kind))
 	view.item_selected.connect(func(id: String) -> void: selections.append(id))
+	check(view.has_signal("item_previewed"), "The room announces locked previews and return to the host")
+	if view.has_signal("item_previewed"):
+		view.item_previewed.connect(func(message: String) -> void: previews.append(message))
 	view.interaction_allowed = func() -> bool: return false
 	var caption_before: String = view.caption.text
 	view.action_button.pressed.emit()
@@ -69,15 +73,32 @@ func _run() -> void:
 	view.item_buttons["toy-spring"].pressed.emit()
 	check(selections.is_empty(), "A locked preview cannot equip an item")
 	check(view.caption.text.contains("Blossom") and view.caption.text.contains("0/3"), "A locked toy names its exact medal requirement and current count")
-	check(view.action_button.disabled, "Previewing a locked toy never makes it playable")
+	check(not view.action_button.disabled and view.action_button.text == "Back to my room", "A locked preview offers an actionable return to the selected room")
+	check(view.toy_button.disabled and view.toy_button.focus_mode == Control.FOCUS_NONE, "The locked toy stays unplayable and cannot steal return focus")
+	check(previews.size() == 1 and previews[0] == view.caption.text, "Opening a locked toy announces its visible requirement")
 	view.toy_button.pressed.emit()
 	check(words.size() == 1 and actions.size() == 1, "Locked object activation cannot pronounce or play the earned action")
+	caption_before = view.caption.text
+	view.interaction_allowed = func() -> bool: return false
+	view.action_button.pressed.emit()
+	check(view.caption.text == caption_before and previews.size() == 1, "A covered preview rejects synthetic return input")
+	view.interaction_allowed = Callable()
+	view.hide()
+	view.action_button.pressed.emit()
+	check(view.caption.text == caption_before, "A hidden preview rejects synthetic return input")
+	view.show()
+	view.action_button.pressed.emit()
+	check(view.action_button.text == "Roll the ball" and not view.toy_button.disabled and view.toy_button.focus_mode == Control.FOCUS_ALL, "Back to my room restores the selected toy and its normal controls")
+	check(previews.size() == 2 and previews.back() == view.caption.text, "Closing the preview announces the restored room")
+	check(words.size() == 1 and actions.size() == 1 and selections.is_empty() and state.toy_id == "toy-ball", "Preview return never equips, plays or persists the locked toy")
 	view.category_buttons["backdrop"].pressed.emit()
 	view.item_buttons["backdrop-spring"].pressed.emit()
 	check(view.caption.text.contains("Bee") and view.caption.text.contains("9"), "A later locked backdrop includes earlier incomplete medals in its requirement")
 	check(view.controls().has(view.item_buttons["backdrop-spring"]), "Locked previews remain reachable with keyboard and controller")
 	check(view.controls().has(view.item_buttons["toy-spring"]) and not view.item_buttons["toy-spring"].visible, "Hidden category controls remain available for one-time host wiring")
-	check(view.controls().has(view.action_button) and view.action_button.disabled, "A disabled preview action remains available for one-time host wiring")
+	check(view.controls().has(view.action_button) and not view.action_button.disabled, "The preview return remains available for host focus wiring")
+	view.action_button.pressed.emit()
+	check(view._room_title.text == "Pip's home" and view.action_button.text == "Roll the ball", "Returning from a locked backdrop restores the chosen room and toy")
 	for theme_id in data.THEMES:
 		for medal in data.medals(theme_id):
 			counts[medal.id] = 3

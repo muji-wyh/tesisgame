@@ -908,6 +908,7 @@ func _test_scene() -> void:
 	set_completed_rewards(app, {"spring-1": true})
 	var inventory_before_label_check: Dictionary = app.collected_rewards.duplicate()
 	app._show_collection()
+	app._show_reward_section("medals")
 	var all_rewards: Dictionary = {}
 	for id in app._reward_slots:
 		all_rewards[id] = true

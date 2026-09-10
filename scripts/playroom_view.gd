@@ -1,6 +1,7 @@
 extends VBoxContainer
 
 signal item_selected(id: String)
+signal item_previewed(message: String)
 signal word_requested(word_id: String)
 signal toy_played(kind: String)
 
@@ -164,7 +165,7 @@ func _build() -> void:
 	action_button = Button.new()
 	action_button.name = "RoomToyAction"
 	Style.button(action_button, Style.GOOD)
-	action_button.pressed.connect(_play_toy)
+	action_button.pressed.connect(_activate_action)
 	add_child(action_button)
 	var categories := HBoxContainer.new()
 	categories.add_theme_constant_override("separation", 8)
@@ -327,9 +328,10 @@ func _refresh_room() -> void:
 	toy_button.tooltip_text = ACTIONS[_toy.action]
 	_name_control(toy_button, toy_button.tooltip_text)
 	_toy_label.text = _toy.word_id
-	action_button.disabled = _preview_locked
+	action_button.disabled = false
 	toy_button.disabled = _preview_locked
-	action_button.text = "Earn this " + preview.slot if _preview_locked else ACTIONS[_toy.action]
+	toy_button.focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
+	action_button.text = "Back to my room" if _preview_locked else ACTIONS[_toy.action]
 	if _preview_locked:
 		caption.text = preview.name + ". " + _requirement(preview)
 	elif _action.is_empty():
@@ -362,6 +364,19 @@ func _choose_item(id: String) -> void:
 		_action = ""
 		set_process(false)
 		_refresh_room()
+		item_previewed.emit(caption.text)
+
+
+func _activate_action() -> void:
+	if not _can_interact():
+		return
+	if _preview_locked:
+		_preview_id = ""
+		_action = ""
+		_refresh_room()
+		item_previewed.emit(caption.text)
+	else:
+		_play_toy()
 
 
 func _play_toy() -> void:
