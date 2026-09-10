@@ -90,6 +90,19 @@ and show the revised subjects. Evidence is in
 `%ALLUSERSPROFILE%/` directory was preserved. A documentation-only follow-up records
 these release results; it does not change the tested game pack.
 
+A follow-up checked an apparent missing-caption issue in the screenshot preview.
+The stored PNGs do contain all four Learn footer captions. Nine phone screenshots
+were cropped into a contact sheet and visually checked; each Hear text region
+contains 71 dark pixels and each Play Match region contains 168. All six paired
+production captures (immediate and 500ms later, at both viewports) are byte-identical.
+The previously suspected brush image retains SHA256
+`fba919e724e5ed978d478b2ed884e5f9f99240c0de319c479b9228becbaac68e`.
+Independent source review found no text-clearing, transparency or overlay path for
+these buttons. The original preview interpretation is unsupported by the image
+files, so no speculative game change was made. Evidence is in
+`build/semantic-audit/button-caption-check.json`, `button-caption-contact.png` and
+`production-settle/`.
+
 Ignored detailed evidence is in `build/semantic-audit/`: original topic sheets,
 two before/after comparisons, independent revised renders, raw ASR results,
 model provenance, candidate/source recording hashes and the final direct-file
@@ -103,7 +116,8 @@ are in `build/semantic-audit/game/`.
 
 This review covers original artwork. No Food Icons Pack package has been acquired,
 imported through Unity CLI or shipped. Stable Chrome reached Unity sign-in; the
-user's authentication remains pending. The in-app connector separately reports a
+user's authentication remains pending; a read-only Computer Use recheck still
+showed the Unity Sign in page. The in-app connector separately reports a
 missing Codex auth token. This was not an automatic safety rejection. The actual
 Unity acquisition/import/deployed-art requirement remains open in the learning
 plan and [Unity provenance record](../assets/unity-art.md).
