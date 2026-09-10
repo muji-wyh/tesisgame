@@ -171,3 +171,32 @@ iPhone/iPad WebKit profiles, including actual exported-engine readiness, plus
 pronunciations and 56 optional paths checked. The intermediate phone screenshot
 shows the bar and label together at 44%. Final HTML SHA256:
 `353512c1ee199f832a2ce57b8cc63988cb8b51b8aea96408ad9dea58a6934493`.
+
+## Requested 20 / 50 / 80 / 98 percent rhythm
+
+This follow-up supersedes the constant-speed presentation above. Progress now
+moves quickly between 20%, 50%, 80% and 98%, with a 140 ms rest at each milestone.
+It still follows received data and holds at 98% until the real ready callback.
+Early readiness finishes the remaining milestones, shows 100% briefly, then
+reveals the game. Reduced motion uses discrete steps. Unknown totals, failures
+and repeated ready callbacks preserve the appropriate loading state.
+
+The Godot scene tree stays paused during the final presentation. Its retained
+JavaScript callback resets controller state and resumes the tree at reveal.
+Before this fix, the real-browser regression showed that pressing Y while the
+loader covered the initialized game opened My rewards behind it. The corrected
+case verifies that Y is ignored during loading and works after reveal. A throwing
+reveal callback now shows retry instead of stranding the 100% screen; that
+regression also failed before the catch was added.
+
+Evidence: `build/qa-milestones-red`, `build/qa-milestones-reveal-red` and
+`build/qa-milestones-final`. Screenshots cover 50%, 98% and the visible 100% state.
+The exported progress and reveal controllers match the maintained shell. HTML
+SHA256 is `93d90c049fbf6c2d0b2d8da322e1c66614332fa7bbaaddc6024c8da7fe867ad1`;
+the game pack is `game-1d03eb0a735f61aa.pck`.
+
+Final verification passed **96/96 browser cases** across Chromium and iPhone/iPad
+WebKit profiles, **105 native Godot UI assertions**, and **17 Node export/deploy
+checks**. The Web build verified 140 pronunciations and 56 optional paths without
+failures. Both native browser input suppression during loading and restored
+controller input after reveal passed on all three browser profiles.

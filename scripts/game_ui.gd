@@ -309,6 +309,7 @@ var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
 var _preferred_theme: String = ""
 var _host: JavaScriptObject
+var _loading_finished_callback: JavaScriptObject
 var _hidden_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
@@ -335,7 +336,14 @@ func _ready() -> void:
 	_refresh_favorite_reward()
 	new_round()
 	if _host != null:
-		_host.ready()
+		get_tree().paused = true
+		_loading_finished_callback = JavaScriptBridge.create_callback(_on_loading_finished)
+		_host.ready(_loading_finished_callback)
+
+
+func _on_loading_finished(_args: Array) -> void:
+	_stop_controller_actions()
+	get_tree().paused = false
 
 
 func _build_controls() -> void:

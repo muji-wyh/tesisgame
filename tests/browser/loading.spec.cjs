@@ -138,34 +138,56 @@ test('graphics context loss gives a visible recovery action and stops game input
   await expect(page.locator('#canvas')).toBeFocused();
 });
 
-test('a cached download advances smoothly instead of jumping to 99 percent', async ({ page }, testInfo) => {
+test('a cached download pauses at 20, 50, 80 and 98 percent before completing and revealing the game', async ({ page }, testInfo) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
   const value = () => page.locator('#progress').evaluate(element => element.value);
   await page.evaluate(() => window.reportDownload(100, 100));
   expect(await value()).toBeLessThan(0.1);
-  await page.clock.runFor(500);
-  const first = await value();
-  expect(first).toBeGreaterThan(0.05);
-  expect(first).toBeLessThan(0.5);
-  await page.clock.runFor(500);
-  const second = await value();
-  expect(second).toBeGreaterThan(first);
-  expect(second).toBeLessThan(0.9);
-  await expect(page.locator('#loading-percent')).toHaveText(Math.floor(second * 100) + '%');
-  await page.screenshot({ path: testInfo.outputPath('smooth-cached-progress.png'), scale: 'css' });
-  // A suspended or busy page must not catch up with one large jump on its next frame.
-  await page.clock.fastForward(15000);
-  expect(await value()).toBeLessThan(second + 0.1);
+  for (const [elapsed, label] of [[128, '20%'], [240, '50%'], [240, '80%'], [176, '98%']]) {
+    await page.clock.runFor(elapsed);
+    await expect(page.locator('#loading-percent')).toHaveText(label);
+    await page.clock.runFor(48);
+    await expect(page.locator('#loading-percent')).toHaveText(label);
+    if (label === '50%') await page.screenshot({ path: testInfo.outputPath('milestone-50-percent.png'), scale: 'css' });
+  }
+  await page.screenshot({ path: testInfo.outputPath('milestone-98-percent.png'), scale: 'css' });
   await page.clock.runFor(3000);
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
   await expect(page.locator('#status')).toBeVisible();
   await page.evaluate(() => window.wordBuddiesHost.ready());
+  await page.clock.runFor(32);
+  await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await expect(page.locator('#status')).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('completion-before-reveal.png'), scale: 'css' });
+  await page.clock.runFor(200);
   await expect(page.locator('#status')).toBeHidden();
 });
 
-test('loading caps downloads at 98 percent and holds 99 percent until the game is ready', async ({ page }, testInfo) => {
+test('game input stays paused while the ready game is still covered by the loading screen', async ({ page }) => {
+  await installGamepad(page, { connected: true });
+  await page.addInitScript(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const host = window.wordBuddiesHost;
+      window.wordBuddiesHost = { ...host, ready(onReveal) {
+        window.finishLoadingPresentation = () => host.ready(onReveal);
+      } };
+    });
+  });
+  await page.goto('/');
+  await page.waitForFunction(() => typeof window.finishLoadingPresentation === 'function');
+  await expect(page.locator('#status')).toBeVisible();
+  const initial = await page.locator('#game-status').textContent();
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toHaveText(initial);
+  await page.evaluate(() => window.finishLoadingPresentation());
+  await expect(page.locator('#status')).toBeHidden();
+  await pressGamepad(page, 3);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+});
+
+test('loading holds 98 percent until the game is ready', async ({ page }, testInfo) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
@@ -186,23 +208,24 @@ test('loading caps downloads at 98 percent and holds 99 percent until the game i
   await page.evaluate(() => window.reportDownload(10 * 1048576, 10 * 1048576));
   await page.clock.runFor(500);
   await expect(page.locator('#message')).toHaveText('Loading game...');
-  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.98');
   await expect(page.locator('#progress')).toHaveAttribute('aria-label', 'Game loading progress');
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
   await expect(page.locator('#download-status')).toHaveText('Getting ready to play...');
   await page.clock.runFor(30000);
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
-  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.98');
   await expect(page.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
   await page.getByRole('button', { name: 'Tap or wiggle the treasure chest' }).click();
   await expect(page.locator('#loading-score')).toHaveText('1 sparkle');
-  await page.screenshot({ path: testInfo.outputPath('preparing-game-99-percent.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('preparing-game-98-percent.png'), scale: 'css' });
   await page.evaluate(() => window.wordBuddiesHost.ready());
+  await page.clock.runFor(500);
   await expect(page.locator('#loading-percent')).toHaveText('100%');
   await expect(page.locator('#status')).toBeHidden();
 });
 
-test('a real engine waiting to initialize keeps 99 percent visible and can finish loading', async ({ page }, testInfo) => {
+test('a real engine waiting to initialize keeps 98 percent visible and can finish loading', async ({ page }, testInfo) => {
   await page.addInitScript(() => {
     const instantiate = WebAssembly.instantiate;
     const held = new Promise(resolve => { window.finishInitialization = resolve; });
@@ -213,23 +236,35 @@ test('a real engine waiting to initialize keeps 99 percent visible and can finis
     };
   });
   await page.goto('/');
-  await expect(page.locator('#loading-percent')).toHaveText('99%');
-  await expect(page.locator('#progress')).toHaveAttribute('value', '0.99');
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
+  await expect(page.locator('#progress')).toHaveAttribute('value', '0.98');
   await expect(page.locator('#message')).toHaveText('Loading game...');
-  await page.screenshot({ path: testInfo.outputPath('real-engine-preparing-99-percent.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('real-engine-preparing-98-percent.png'), scale: 'css' });
   await page.evaluate(() => window.finishInitialization());
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
   await expect(page.locator('#loading-percent')).toHaveText('100%');
 });
 
-test('cached startup can become ready immediately and failed startup never finishes progress', async ({ page }) => {
+test('early readiness completes the milestones and failed startup never finishes progress', async ({ page }) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page);
+  await page.evaluate(() => {
+    window.loadingValues = [];
+    const bar = document.getElementById('progress');
+    new MutationObserver(() => window.loadingValues.push(bar.value))
+      .observe(bar, { attributes: true, attributeFilter: ['value'] });
+  });
   await page.evaluate(() => window.reportDownload(100, 100));
   await page.clock.runFor(100);
   await page.evaluate(() => window.wordBuddiesHost.ready());
+  await expect(page.locator('#status')).toBeVisible();
+  await page.evaluate(() => window.wordBuddiesHost.ready());
+  await page.clock.runFor(2000);
+  expect(await page.evaluate(() => [...new Set(window.loadingValues)]
+    .filter(value => [0.2, 0.5, 0.8, 0.98, 1].includes(value))))
+    .toEqual([0.2, 0.5, 0.8, 0.98, 1]);
   await expect(page.locator('#loading-percent')).toHaveText('100%');
   await expect(page.locator('#status')).toBeHidden();
   await page.clock.runFor(5000);
@@ -271,6 +306,7 @@ test('unknown totals stay indeterminate and time or visibility never invents pro
   await page.clock.runFor(1300);
   await expect(page.locator('#loading-percent')).toBeEmpty();
   await page.evaluate(() => window.reportDownload(2, 10));
+  await page.clock.runFor(32);
   await expect(page.locator('#loading-percent')).toHaveText('20%');
   await page.evaluate(() => window.reportDownload(1, 10));
   await expect(page.locator('#loading-percent')).toHaveText('10%');
@@ -323,6 +359,36 @@ test('Pip is an inline loading companion with bounded, motion-safe reactions', a
     expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
     expect(imageRequests).toEqual([]);
   });
+});
+
+for (const elapsed of [400, 1080]) {
+  test(`failure during completion at ${elapsed}ms cancels the pending game reveal`, async ({ page }) => {
+    await page.clock.install();
+    await page.clock.pauseAt(new Date());
+    await progressShell(page);
+    await page.evaluate(() => window.wordBuddiesHost.ready());
+    await page.clock.runFor(elapsed);
+    await expect(page.locator('#status')).toBeVisible();
+    if (elapsed === 1080) await expect(page.locator('#loading-percent')).toHaveText('100%');
+    await page.evaluate(() => window.wordBuddiesHost.fail('The game could not start.'));
+    await page.clock.runFor(5000);
+    await expect(page.locator('#status')).toBeVisible();
+    await expect(page.locator('#canvas')).toHaveAttribute('inert');
+    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'false');
+    await expect(page.locator('#retry')).toBeVisible();
+  });
+}
+
+test('a reveal callback error shows retry instead of leaving the completed loader stuck', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page);
+  await page.evaluate(() => window.wordBuddiesHost.ready(() => { throw new Error('Game resume failed.'); }));
+  await page.clock.runFor(2000);
+  await expect(page.locator('#message')).toContainText('Game resume failed.');
+  await expect(page.locator('#status')).toBeVisible();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+  await expect(page.locator('#retry')).toBeVisible();
 });
 
 test('every Pip tap gives visible feedback with reduced motion without awarding chest sparkles', async ({ page }) => {
