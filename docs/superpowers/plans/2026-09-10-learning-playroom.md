@@ -10,11 +10,11 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-10-learning-playroom-design.md`
 
-**Current status:** Learning, semantic artwork, and Pip's room are implemented.
+**Current status:** Learning, semantic artwork, and Pip's room are implemented and deployed.
 Native and browser verification and the final web export have passed. Unity Store research and the CLI
 import tool are ready, but actual package acquisition/import remains pending:
 Computer Use was stopped by the user's Escape input, and permission to resume is
-awaiting a reply. The game improvements can be released independently.
+awaiting a reply. The game improvements are live; the Unity asset requirement remains open.
 
 ## Global constraints
 
@@ -71,15 +71,17 @@ awaiting a reply. The game improvements can be released independently.
 ## Task 5: Release
 
 - [x] Review source diff and imported asset provenance; verify no secrets or restricted source package are staged.
-- [ ] Commit the working change, integrate into main and push.
-- [ ] Deploy the tested current `build/web` through `npm run deploy -- -SkipBuild`.
-- [ ] Verify the production game pack SHA256, actual Learn and quiz flows, imported artwork and room interactions.
+- [x] Commit the working change, integrate into main and push.
+- [x] Deploy the tested current `build/web` through `npm run deploy -- -SkipBuild`.
+- [x] Verify the production game pack SHA256, actual Learn and quiz flows, and room interactions.
+- [ ] Verify actual Unity-imported artwork in the deployed game after acquisition resumes.
 - [ ] Mark the goal complete only after every explicit user requirement is verified.
 
 ## Verification evidence
 
 See [the QA record](../../qa/2026-09-10-learning-playroom.md): 5,475 Godot checks,
 89 Node passes with one unavailable-source skip, and 225 browser passes with 18
-environment-specific skips. The final export and local release smoke passed;
-production verification follows deployment. Real Unity acquisition/import and its
-deployed visual verification remain open.
+environment-specific skips. Feature commit `3c0c712` is merged/pushed to main.
+The final export, local release smoke, deployment, production pack SHA256 and live
+Learn/quiz/room smoke all passed. Real Unity acquisition/import and its deployed
+visual verification remain open.

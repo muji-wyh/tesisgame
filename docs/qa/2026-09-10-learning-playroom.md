@@ -61,7 +61,16 @@ The served pack matches the local file:
 - Pack: `game-9610359c806410fe.pck`
 - SHA256: `9610359c806410fe8b7f17531bfa8861894532a0e70cb65128769f551a05cef5`
 
-Production deployment and live verification are pending.
+Feature commit `3c0c712` was fast-forward merged into `main` and pushed to origin.
+`npm run deploy -- -SkipBuild` successfully published this tested export to
+[the production game](https://gentle-forest-02ff42900.3.azurestaticapps.net/).
+
+Production verification passed against that URL: the served HTML names the same
+pack and the downloaded pack's SHA256 matches the value above. A fresh Chromium
+390 × 650 session passed Learn pronunciation, Match selection/cancel, Sky
+feedback/Continue, Listen, and the starter room interaction/save, with no browser
+errors. Local evidence is in `build/learning-production-release-check.log` and
+`build/visuals/release-learn.png` / `release-room.png`.
 
 The Unity acquisition step remains pending after the user stopped Computer Use.
 No newly downloaded Unity package, actual CLI import, or licensed PNG override is
