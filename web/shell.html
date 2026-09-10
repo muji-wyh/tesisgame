@@ -944,10 +944,13 @@
           container.style.setProperty('--voice-accent', accent);
           container.style.setProperty('--voice-light', light);
         },
-        observe(onHidden, onMotion) {
+        observe(onHidden, onMotion, onVisible) {
           document.addEventListener('visibilitychange', () => {
             if (document.hidden) onHidden();
+            else onVisible();
           });
+          window.addEventListener('pagehide', () => onHidden());
+          window.addEventListener('pageshow', () => { if (!document.hidden) onVisible(); });
           motion.addEventListener('change', (event) => onMotion(event.matches));
           onMotion(motion.matches);
           if (document.hidden) onHidden();

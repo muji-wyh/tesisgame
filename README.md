@@ -178,6 +178,11 @@ Pip's beak follows the actual pronunciation/prompt player, including delayed
 audio downloads and page transitions, rather than merely reacting to a button
 press. Background music and sound effects do not make him talk. During microphone
 play he listens instead. Reduced motion uses static speaking/greeting poses.
+While you learn, Pip occasionally looks around, stretches his wings, preens,
+waves, or makes two small hops. Each gesture lasts under two seconds, with
+6–10 quiet seconds between them. Speech and player reactions take priority;
+idle gestures make no sound and do not change progress. They stop in background
+tabs and with reduced motion. Pip's touch target stays in place.
 The same original four-pose SVG supplies both Godot and the inline HTML mascot,
 so the loading companion needs no additional image request.
 

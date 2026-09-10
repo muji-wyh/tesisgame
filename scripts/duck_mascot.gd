@@ -1,7 +1,10 @@
 extends Button
 
 const SHEET = preload("res://assets/images/mascots/pip.svg")
+const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
 const Style = preload("res://scripts/ui_style.gd")
+const IDLE_ACTIONS := ["look", "stretch", "wave", "preen", "hop"]
+const IDLE_SECONDS: float = 1.8
 const TRICK_SECONDS: float = 1.8
 const TRICK_CAPTIONS := {
 	"dance": "Pip's happy dance!", "snack": "Crunch! A carrot for Pip!", "bubbles": "Pop! Bubble party!"
@@ -18,9 +21,16 @@ var _idle_time: float = 0.0
 var _speech_time: float = 0.0
 var _trick: String = ""
 var _trick_left: float = 0.0
+var _idle_action: String = ""
+var _idle_left: float = 0.0
+var _idle_wait: float = 3.5
+var _idle_index: int = 0
+var _idle_paused: bool = false
+var _idle_rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	_idle_rng.randomize()
 	name = "Pip"
 	custom_minimum_size = Vector2(72, 72)
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -40,6 +50,7 @@ func set_speaking(value: bool) -> void:
 		return
 	speaking = value
 	_speech_time = 0.0
+	_reset_idle()
 	_update_pose()
 
 
@@ -47,6 +58,7 @@ func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
 	reduced_motion = value
+	_reset_idle()
 	if value:
 		reaction_left = 0.0
 		_trick_left = 0.0
@@ -57,6 +69,7 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func react(kind: String = "happy") -> void:
+	_reset_idle()
 	_reaction = kind
 	reaction_left = 0.0 if reduced_motion else 0.65
 	if reduced_motion:
@@ -67,6 +80,7 @@ func react(kind: String = "happy") -> void:
 
 
 func settle() -> void:
+	_reset_idle()
 	reaction_left = 0.0
 	_reaction = ""
 	_idle_time = 0.0
@@ -78,6 +92,7 @@ func settle() -> void:
 func perform_trick(kind: String) -> String:
 	if not TRICK_CAPTIONS.has(kind):
 		return ""
+	_reset_idle()
 	_trick = kind
 	_trick_left = 0.0 if reduced_motion else TRICK_SECONDS
 	reaction_left = 0.0
@@ -92,10 +107,45 @@ func clear_trick() -> void:
 
 
 func _visibility_changed() -> void:
-	set_process(is_visible_in_tree() and not reduced_motion)
+	set_process(is_visible_in_tree() and not reduced_motion and not _idle_paused)
 	if not is_visible_in_tree():
+		_reset_idle()
 		reaction_left = 0.0
 		clear_trick()
+
+
+func set_idle_paused(value: bool) -> void:
+	if _idle_paused == value:
+		return
+	_idle_paused = value
+	_reset_idle()
+	_visibility_changed()
+	_update_pose()
+
+
+func _reset_idle() -> void:
+	_idle_action = ""
+	_idle_left = 0.0
+	_idle_wait = _idle_rng.randf_range(6.0, 10.0)
+
+
+func _advance_idle(delta: float) -> void:
+	# A resumed tab or a long engine frame must not catch up missed gestures.
+	if delta > 0.5:
+		_reset_idle()
+		return
+	if speaking or reaction_left > 0.0 or not _trick.is_empty():
+		return
+	if not _idle_action.is_empty():
+		_idle_left = maxf(0.0, _idle_left - delta)
+		if is_zero_approx(_idle_left):
+			_reset_idle()
+		return
+	_idle_wait -= delta
+	if _idle_wait <= 0.0:
+		_idle_action = IDLE_ACTIONS[_idle_index % IDLE_ACTIONS.size()]
+		_idle_index += 1
+		_idle_left = IDLE_SECONDS
 
 
 func _update_pose() -> void:
@@ -106,13 +156,15 @@ func _update_pose() -> void:
 		pose = 3 if _trick == "dance" else 1
 	elif reaction_left > 0.0 and _reaction == "happy":
 		pose = 3
+	elif _idle_action == "wave" or _idle_action == "hop":
+		pose = 3 if sin((1.0 - _idle_left / IDLE_SECONDS) * TAU * 2.0) > 0.0 else 0
 	elif not reduced_motion and fmod(_idle_time, 4.6) > 4.42:
 		pose = 2
 	queue_redraw()
 
 
 func _process(delta: float) -> void:
-	if reduced_motion:
+	if reduced_motion or _idle_paused or not is_visible_in_tree():
 		return
 	_idle_time += delta
 	_speech_time += delta
@@ -121,6 +173,7 @@ func _process(delta: float) -> void:
 		_trick_left = maxf(0.0, _trick_left - delta)
 		if is_zero_approx(_trick_left):
 			_trick = ""
+	_advance_idle(delta)
 	_update_pose()
 
 
@@ -131,16 +184,41 @@ func _draw() -> void:
 	var turn: float = (-0.07 if _reaction == "curious" else 0.07) * wave
 	var trick_progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
 	var bounce: float = -wave * edge * 0.07
+	var stretch := Vector2(1 + wave * 0.04, 1 - wave * 0.03)
+	var sheet: Texture2D = SHEET
+	var frame: int = pose
+	if not _idle_action.is_empty():
+		var progress: float = 1.0 - _idle_left / IDLE_SECONDS
+		var envelope: float = sin(progress * PI)
+		match _idle_action:
+			"look":
+				sheet = IDLE_SHEET
+				frame = 0 if progress < 0.5 else 1
+				turn = sin(progress * TAU) * 0.09
+			"stretch":
+				sheet = IDLE_SHEET
+				frame = 2
+				stretch = Vector2(1.0 - envelope * 0.05, 1.0 + envelope * 0.06)
+			"preen":
+				sheet = IDLE_SHEET
+				frame = 3
+				turn = envelope * 0.09 + sin(progress * TAU * 2.0) * 0.025
+			"wave":
+				turn = sin(progress * TAU * 2.0) * 0.08
+			"hop":
+				var lift: float = absf(sin(progress * TAU))
+				bounce = -lift * edge * 0.07
+				stretch = Vector2(1.0 - lift * 0.025, 1.0 + lift * 0.035)
 	if _trick == "dance" and not reduced_motion:
 		turn += sin(trick_progress * TAU * 3.0) * 0.13
 		bounce -= absf(sin(trick_progress * TAU * 3.0)) * edge * 0.055
 	elif _trick == "snack" and not reduced_motion:
 		turn += sin(trick_progress * TAU * 2.0) * 0.045
 	var center := origin + Vector2(edge * 0.5, edge * 0.75)
-	draw_set_transform(center + Vector2(0, bounce), turn, Vector2(1 + wave * 0.04, 1 - wave * 0.03))
-	var source_edge: float = SHEET.get_height()
-	draw_texture_rect_region(SHEET, Rect2(origin - center, Vector2.ONE * edge),
-		Rect2(Vector2(float(pose) * source_edge, 0), Vector2.ONE * source_edge))
+	draw_set_transform(center + Vector2(0, bounce), turn, stretch)
+	var source_edge: float = sheet.get_height()
+	draw_texture_rect_region(sheet, Rect2(origin - center, Vector2.ONE * edge),
+		Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
 	draw_set_transform(Vector2.ZERO)
 	if not _trick.is_empty():
 		_draw_trick(origin, edge, trick_progress)

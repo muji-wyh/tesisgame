@@ -311,6 +311,7 @@ var _preferred_theme: String = ""
 var _host: JavaScriptObject
 var _loading_finished_callback: JavaScriptObject
 var _hidden_callback: JavaScriptObject
+var _visible_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
@@ -2292,6 +2293,7 @@ func on_page_hidden() -> void:
 	_end_collection_drag(false)
 	audio.halt()
 	duck.settle()
+	duck.set_idle_paused(true)
 	_choice.set_reduced_motion(true)
 	_choice.set_reduced_motion(reduced_motion)
 	_memory.set_reduced_motion(true)
@@ -2304,9 +2306,15 @@ func on_page_hidden() -> void:
 	_hide_reward_preview_if_open()
 
 
+func on_page_visible() -> void:
+	duck.set_idle_paused(false)
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_PAUSED and audio != null:
 		on_page_hidden()
+	elif what == NOTIFICATION_APPLICATION_RESUMED and duck != null:
+		on_page_visible()
 
 
 func _input(event: InputEvent) -> void:
@@ -2627,8 +2635,9 @@ func _connect_browser() -> void:
 	if _host == null:
 		return
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
+	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void: set_reduced_motion(bool(arguments[0])))
-	_host.observe(_hidden_callback, _motion_callback)
+	_host.observe(_hidden_callback, _motion_callback, _visible_callback)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)

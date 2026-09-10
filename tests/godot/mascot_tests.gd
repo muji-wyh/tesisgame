@@ -26,6 +26,7 @@ func _run() -> void:
 	root.add_child(duck)
 	duck.size = Vector2(72, 72)
 	check(duck.pose == 0, "Pip starts with an innocent resting expression")
+	_check_idle_actions(duck)
 	duck.set_speaking(true)
 	check(duck.pose == 1, "Actual speech opens Pip's beak immediately")
 	duck._process(0.15)
@@ -110,6 +111,11 @@ func _run() -> void:
 		check(app._preview_close.has_focus(), "Up from reward play still reaches Back before the optional mascot")
 		app.on_page_hidden()
 		check(not app.duck.speaking, "Hiding the page silences Pip along with the audio")
+		if app.duck.has_method("set_idle_paused"):
+			check(not app.duck.is_processing(), "Background pages stop Pip's idle animation loop")
+			app.on_page_visible()
+			check(app.duck.is_processing() and not app.audio.active,
+				"Returning resumes quiet mascot activity without restarting audio")
 		app._hide_collection()
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
@@ -137,3 +143,51 @@ func _run() -> void:
 		app.free()
 	print("Mascot: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_idle_actions(duck: Button) -> void:
+	check(duck.has_method("set_idle_paused"), "Pip supports autonomous gestures and explicit page suspension")
+	if not duck.has_method("set_idle_paused"):
+		return
+	var original_rect: Rect2 = duck.get_rect()
+	var gestures: Array[String] = []
+	for step in range(750):
+		duck._process(0.1)
+		var action: String = duck._idle_action
+		if not action.is_empty() and (gestures.is_empty() or gestures.back() != action):
+			gestures.append(action)
+	check(gestures.size() >= 5 and ["look", "stretch", "wave", "preen", "hop"].all(
+		func(action: String) -> bool: return gestures.has(action)), "Quiet play gets five distinct, occasional gestures without clicks")
+	check(duck.get_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
+		"Autonomous motion never moves or scales the button hit target")
+	duck.set_speaking(true)
+	check(duck._idle_action.is_empty(), "Pronunciation immediately interrupts idle gestures")
+	for step in range(200):
+		duck._process(0.1)
+	check(duck._idle_action.is_empty(), "Pip never starts an idle gesture over sustained speech")
+	duck.set_speaking(false)
+	duck.react("happy")
+	check(duck._idle_action.is_empty() and duck.pose == 3, "Player feedback takes priority over autonomous animation")
+	duck.perform_trick("snack")
+	duck._process(0.3)
+	check(duck._idle_action.is_empty() and duck._trick == "snack", "An explicit trick stays in charge")
+	duck.settle()
+	duck._process(0.2)
+	check(duck._idle_action.is_empty(), "Reset leaves a quiet interval before the next autonomous action")
+	duck._process(60.0)
+	check(duck._idle_action.is_empty(), "A stalled frame cannot replay missed idle actions")
+	duck.set_idle_paused(true)
+	for step in range(200):
+		duck._process(0.1)
+	check(duck._idle_action.is_empty() and not duck.is_processing(), "Page suspension stops both action and animation processing")
+	duck.set_idle_paused(false)
+	check(duck.is_processing(), "Returning to a visible page resumes the idle scheduler")
+	duck.hide()
+	check(duck._idle_action.is_empty() and not duck.is_processing(), "A hidden mascot has no idle work")
+	duck.show()
+	duck.set_reduced_motion(true)
+	for step in range(200):
+		duck._process(0.1)
+	check(duck._idle_action.is_empty() and not duck.is_processing(), "Reduced motion suppresses all autonomous gestures")
+	duck.set_reduced_motion(false)
+	duck.settle()

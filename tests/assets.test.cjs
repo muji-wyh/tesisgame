@@ -62,6 +62,12 @@ test('the duck mascot has four original reusable poses and is embedded for the w
   assert.equal(typeof inlineMascot, 'function');
   const embedded = inlineMascot('url("$PIP_MASCOT_URI")');
   assert.equal(embedded, `url("data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}")`);
+  const idle = fs.readFileSync(path.join(root, 'assets/images/mascots/pip-idle-actions.svg'), 'utf8');
+  assert.match(idle, /viewBox="0 0 480 120"/);
+  for (const pose of ['look-left', 'look-right', 'stretch', 'preen']) {
+    assert.match(idle, new RegExp(`id="pip-${pose}"`));
+  }
+  assert.doesNotMatch(idle, /<(?:script|image|foreignObject|use|text)\b|\b(?:href|src|on[a-z]+)\s*=/i);
 });
 
 function assetFiles(directory) {
@@ -76,7 +82,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 219);
+  assert.equal(imports.length, 220);
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
