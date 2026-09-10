@@ -46,7 +46,21 @@ self-paced feedback, unavailable audio, a full Memory win, denied reward storage
 failed victory save retry, and final/interim speech behavior. Evidence is in
 `build/word-stickers-browser-final.log` and `build/qa-word-stickers/`.
 
-Production verification follows deployment.
+Implementation commit: `ebffd2e` (merged to main and pushed). Deployment through
+`npm run deploy -- -SkipBuild` succeeded at
+https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+`node build/verify-ui-release.cjs <origin>` verified matching HTML and pack hashes
+for the tested port 4181, local preview port 4173 and production. The tested export
+was copied to the local preview with `index.html` last.
+
+Production Chromium smoke: **2 passed**, through actual picture pronunciation,
+Match collection, reload persistence, 320px album keyboard controls, displaying a
+word with Pip and topic navigation. Logs/screenshots are in
+`build/word-stickers-production-smoke.log` and `build/qa-word-stickers-production/`.
+Both checkouts retain the tested gameplay source; the release-note follow-up only
+records this evidence. The unrelated main-checkout `%ALLUSERSPROFILE%/` directory
+was preserved.
 
 ## Outstanding external requirement and limits
 

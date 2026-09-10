@@ -12,7 +12,7 @@ Use “Collected”, never “Mastered”. Match (including speech input) grants
 - [x] Add a Words album with topic navigation, collected counts, picture/word cards, Hear and Display with Pip. Locked words stay available through normal Learn. Add a displayed word card in Pip's room and make Learn pictures clickable without moving their hit targets.
 - [x] Integrate correct-answer paths for Match, spoken Match, Sky, Listen and Memory. Keep failed writes pending for an explicit retry and report them accurately. Preserve modal, controller, audio and reward guards.
 - [x] Verify native suites, exported-browser gameplay and persistence, narrow layouts, reduced motion, keyboard, audio failure and existing chest/modal flows. Inspect rendered screenshots.
-- [ ] Independent review, commit, merge main, push and deploy; synchronize local preview and verify production runtime plus release hashes.
+- [x] Independent review, commit, merge main, push and deploy; synchronize local preview and verify production runtime plus release hashes.
 
 ## Separate outstanding asset requirement
 
