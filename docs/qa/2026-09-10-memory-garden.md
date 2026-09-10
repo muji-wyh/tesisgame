@@ -85,4 +85,17 @@ profiles, not physical iPhone/iPad tests; the real-device caveats in README stil
   reimport pass. A separate import retry and the complete final build then exited zero.
   No failing export was deployed.
 
-Production verification pending.
+Production verification completed on 2026-09-10:
+
+- Feature commit: `025263544d39b32bea7fb12aedf789b12260abb0`, fast-forwarded into
+  `main` and pushed to `origin/main`.
+- `npm run deploy -- -SkipBuild` successfully deployed the tested export to
+  [the production game](https://gentle-forest-02ff42900.3.azurestaticapps.net/).
+- Production HTML references the pack above. Downloading that production pack and
+  comparing SHA256 verified byte-for-byte identity with the tested local artifact.
+- All three Memory browser cases passed against production in desktop Chromium:
+  discovery/Study/correction/modal preservation, five-pair victory with exactly one
+  saved fragment and replay, and keyboard/Xbox/small-layout input. No console errors
+  were recorded. The run completed in 1.7 minutes.
+- No game source or exported asset changed after the verified build; this final
+  record and plan completion are documentation only and excluded from the export.
