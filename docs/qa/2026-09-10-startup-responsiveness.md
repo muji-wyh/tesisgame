@@ -4,6 +4,10 @@ The reported symptom was an online pause around 50% with an unresponsive loading
 chest; the user confirmed local and online were compared on the same device and
 browser. Earlier progress-animation fixes did not remove synchronous startup work.
 
+The user subsequently corrected that comparison: Canary stalls while ordinary
+Chrome does not. The installed-channel investigation and compiled-cache repair
+are recorded in [the Canary startup report](2026-09-10-canary-startup.md).
+
 ## Reproduction and diagnosis
 
 - A real Chromium engine run reproduced a 5,083 ms main-thread task with 4x CPU

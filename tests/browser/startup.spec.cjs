@@ -1,5 +1,22 @@
 const { test, expect } = require('@playwright/test');
 
+test('streaming WASM keeps its fetched response so the browser can cache compiled code', async ({ page }) => {
+  await page.addInitScript(() => {
+    const instantiate = WebAssembly.instantiateStreaming;
+    WebAssembly.instantiateStreaming = async (source, imports) => {
+      const response = await source;
+      window.wasmResponse = { url: response.url, type: response.type, contentType: response.headers.get('content-type') };
+      return instantiate.call(WebAssembly, response, imports);
+    };
+  });
+  await page.goto('/');
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  const response = await page.evaluate(() => window.wasmResponse);
+  expect(response.url).toMatch(/\/engine-[a-f0-9]{16}\.wasm$/);
+  expect(response.type).toBe('basic');
+  expect(response.contentType).toBe('application/wasm');
+});
+
 for (const scenario of ['streaming Error', 'streaming RangeError', 'fallback RangeError']) {
   test(`a real engine ${scenario} rejection exposes recovery instead of waiting forever`, async ({ page }, testInfo) => {
     const detail = 'Engine allocation failed during startup.';

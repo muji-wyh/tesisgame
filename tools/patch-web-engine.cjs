@@ -2,6 +2,57 @@
 // upgrade must be reviewed, not silently packaged with disconnected startup promises.
 const patches = [
   {
+    name: "preserve fetched response while tracking download progress",
+    before: `	function getTrackedResponse(response, load_status) {
+		function onloadprogress(reader, controller) {
+			return reader.read().then(function (result) {
+				if (load_status.done) {
+					return Promise.resolve();
+				}
+				if (result.value) {
+					controller.enqueue(result.value);
+					load_status.loaded += result.value.length;
+				}
+				if (!result.done) {
+					return onloadprogress(reader, controller);
+				}
+				load_status.done = true;
+				return Promise.resolve();
+			});
+		}
+		const reader = response.body.getReader();
+		return new Response(new ReadableStream({
+			start: function (controller) {
+				onloadprogress(reader, controller).then(function () {
+					controller.close();
+				});
+			},
+		}), { headers: response.headers });
+	}
+`,
+    after: `	function getTrackedResponse(response, load_status) {
+		// Keep the fetched response's browser WASM cache metadata intact.
+		const reader = response.clone().body.getReader();
+		async function track() {
+			try {
+				while (true) {
+					const result = await reader.read();
+					if (result.value) load_status.loaded += result.value.length;
+					if (result.done) break;
+				}
+			} catch {
+				// The original response consumer reports the same network failure.
+			} finally {
+				load_status.done = true;
+				reader.releaseLock();
+			}
+		}
+		track();
+		return response;
+	}
+`
+  },
+  {
     name: "WASM callback rejection bridge",
     before: `if(Module["instantiateWasm"]){return new Promise((resolve,reject)=>{Module["instantiateWasm"](info,(inst,mod)=>{resolve(receiveInstance(inst,mod))})})}`,
     after: `if(Module["instantiateWasm"]){return new Promise((resolve,reject)=>{Promise.resolve(Module["instantiateWasm"](info,(inst,mod)=>{resolve(receiveInstance(inst,mod))})).catch(reject)})}`
@@ -67,7 +118,10 @@ const patches = [
 					// Make sure to test that when refactoring.
 					return new Promise(function (resolve, reject) {
 						promise.then(function (response) {
-							const cloned = new Response(response.clone().body, { 'headers': [['content-type', 'application/wasm']] });
+							let cloned = response.clone();
+							if ((cloned.headers.get('content-type') || '').trim().toLowerCase() !== 'application/wasm') {
+								cloned = new Response(cloned.body, { 'headers': [['content-type', 'application/wasm']] });
+							}
 							Godot(me.config.getModuleConfig(loadPath, cloned)).then(function (module) {
 								const paths = me.config.persistentPaths;
 								module['initFS'](paths).then(function (err) {

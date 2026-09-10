@@ -156,7 +156,7 @@ function startupHarness(overrides = {}) {
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   const runtime = { initFS: async () => undefined };
   const sandbox = {
-    Promise, Error, Response: class { constructor(body) { this.body = body; } },
+    Promise, Error, Response, ReadableStream,
     loadPath: 'index', Engine: { unload() {} },
     receiveInstance: instance => instance,
     Godot: async () => runtime,
@@ -164,8 +164,75 @@ function startupHarness(overrides = {}) {
     ...overrides
   };
   require('node:vm').runInNewContext(patchWebEngine(startupFixture), sandbox);
-  return { sandbox, runtime, response: Promise.resolve({ clone: () => ({ body: [] }) }) };
+  return { sandbox, runtime, response: Promise.resolve(new Response(new Uint8Array(0))) };
 }
+
+async function trackedDownloadFinished(status) {
+  const deadline = Date.now() + 1000;
+  while (!status.done && Date.now() < deadline) await new Promise(setImmediate);
+  assert.equal(status.done, true, 'Download monitoring must finish instead of leaving progress pending');
+}
+
+test('WASM progress preserves the fetched response and its native clone through engine initialization', async () => {
+  const { sandbox } = startupHarness();
+  let controller;
+  const response = new Response(new ReadableStream({ start(value) { controller = value; } }), {
+    headers: { 'content-type': 'application/wasm' }
+  });
+  const status = { loaded: 0, done: false };
+  const tracked = sandbox.getTrackedResponse(response, status);
+  assert.equal(tracked, response, 'Replacing a fetched Response discards browser WASM cache metadata');
+  assert.equal(response.bodyUsed, false, 'Progress must read a clone, leaving the original body available');
+  const clone = response.clone();
+  response.clone = () => clone;
+  let moduleSource;
+  sandbox.me.config.getModuleConfig = (_, source) => { moduleSource = source; return {}; };
+  await sandbox.doInit(Promise.resolve(tracked));
+  assert.equal(moduleSource, clone, 'Correct WASM MIME must retain the native clone instead of synthesizing a Response');
+  const bytes = moduleSource.arrayBuffer();
+  controller.enqueue(new Uint8Array([0, 97, 115, 109]));
+  controller.enqueue(new Uint8Array([1, 0, 0, 0]));
+  controller.close();
+  assert.deepEqual(new Uint8Array(await bytes), new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]));
+  await trackedDownloadFinished(status);
+  assert.equal(status.loaded, 8);
+});
+
+test('missing or incorrect WASM MIME retains the compatibility response and exact bytes', async () => {
+  for (const contentType of [undefined, 'application/octet-stream']) {
+    const { sandbox } = startupHarness();
+    const response = new Response(new Uint8Array([0, 97, 115, 109]), {
+      headers: contentType ? { 'content-type': contentType } : {}
+    });
+    const clone = response.clone();
+    response.clone = () => clone;
+    let moduleSource;
+    sandbox.me.config.getModuleConfig = (_, source) => { moduleSource = source; return {}; };
+    await sandbox.doInit(Promise.resolve(response));
+    assert.notEqual(moduleSource, clone);
+    assert.equal(moduleSource.headers.get('content-type'), 'application/wasm');
+    assert.deepEqual(new Uint8Array(await moduleSource.arrayBuffer()), new Uint8Array([0, 97, 115, 109]));
+  }
+});
+
+test('a progress-reader failure leaves the original download rejection observable and stops monitoring', async () => {
+  const { sandbox, runtime } = startupHarness();
+  const failure = new TypeError('Network body failed');
+  let controller;
+  const response = new Response(new ReadableStream({ start(value) { controller = value; } }), {
+    headers: { 'content-type': 'application/wasm' }
+  });
+  const status = { loaded: 0, done: false };
+  const tracked = sandbox.getTrackedResponse(response, status);
+  sandbox.me.config.getModuleConfig = (_, source) => source;
+  sandbox.Godot = async source => { await source.arrayBuffer(); return runtime; };
+  const starting = sandbox.doInit(Promise.resolve(tracked));
+  controller.error(failure);
+  await rejectsWith(starting, failure);
+  assert.equal(sandbox.me.rtenv, null);
+  await trackedDownloadFinished(status);
+  assert.equal(status.loaded, 0);
+});
 
 async function rejectsWith(promise, expected) {
   let timer;
@@ -183,7 +250,7 @@ test('the generated startup patch rejects missing, duplicate, and changed templa
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   assert.throws(() => patchWebEngine('unrecognized engine'), /Godot Web startup patch/);
   assert.throws(() => patchWebEngine(startupFixture.repeat(2)), /Godot Web startup patch/);
-  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)']) {
+  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)']) {
     assert.ok(startupFixture.includes(marker));
     assert.throws(() => patchWebEngine(startupFixture.replace(marker, `${marker} changed`)), /Godot Web startup patch/);
   }
@@ -291,6 +358,33 @@ test('normal IDB connections remain cached and access denial keeps its original 
 
 // Kept independently from the patch strings so template drift cannot silently pass.
 const startupFixture = String.raw`// Snapshot of the relevant unmodified Godot 4.7.1 release-template code.
+	function getTrackedResponse(response, load_status) {
+		function onloadprogress(reader, controller) {
+			return reader.read().then(function (result) {
+				if (load_status.done) {
+					return Promise.resolve();
+				}
+				if (result.value) {
+					controller.enqueue(result.value);
+					load_status.loaded += result.value.length;
+				}
+				if (!result.done) {
+					return onloadprogress(reader, controller);
+				}
+				load_status.done = true;
+				return Promise.resolve();
+			});
+		}
+		const reader = response.body.getReader();
+		return new Response(new ReadableStream({
+			start: function (controller) {
+				onloadprogress(reader, controller).then(function () {
+					controller.close();
+				});
+			},
+		}), { headers: response.headers });
+	}
+
 function createWasm() {
   const info = {};
   if(Module["instantiateWasm"]){return new Promise((resolve,reject)=>{Module["instantiateWasm"](info,(inst,mod)=>{resolve(receiveInstance(inst,mod))})})}
