@@ -27,12 +27,24 @@ var error: String = ""
 var last_correct: bool = false
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false) -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "") -> bool:
+	var requested_adventure: Dictionary = {}
+	if not requested_adventure_id.is_empty():
+		for adventure in Data.ADVENTURES:
+			if adventure.id == requested_adventure_id:
+				requested_adventure = adventure
+				break
+		if requested_adventure.is_empty():
+			error = "Please choose an available adventure."
+			return false
 	var saved_adventure := adventure_id
 	var saved_name := adventure_name
 	var saved_theme := theme_id
-	if repeat_lesson and lesson_words.size() == 5:
+	var repeating: bool = repeat_lesson and lesson_words.size() == 5
+	if repeating:
 		words = lesson_words
+	elif not requested_adventure.is_empty():
+		words = words.filter(func(word: Dictionary) -> bool: return requested_adventure.words.has(word.id))
 	if words.size() < 5:
 		error = "At least five words are needed to play."
 		return false
@@ -47,36 +59,35 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false) -> b
 		# ponytail: only the previous board; a learner profile needs separate evidence and design.
 		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
 		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous.has(word.id))
-		if fresh.size() >= 5:
+		if fresh.size() >= 5 and (requested_adventure.is_empty() or _distinct_words(fresh).size() >= 5):
 			pool = fresh
-	var adventures: Array[Dictionary] = []
-	for adventure in Data.ADVENTURES:
-		var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-		if related.size() >= 5:
-			adventures.append(adventure)
-	if seed_value < 0 and adventures.size() > 1:
-		adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
-	adventure_id = ""
-	adventure_name = "Word explorers"
-	if not adventures.is_empty():
-		var adventure: Dictionary = adventures[rng.randi_range(0, adventures.size() - 1)]
-		adventure_id = adventure.id
-		adventure_name = adventure.name
-		pool = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-	if repeat_lesson and lesson_words.size() == 5:
+	var next_adventure: Dictionary = requested_adventure
+	if requested_adventure.is_empty() or repeating:
+		var adventures: Array[Dictionary] = []
+		for adventure in Data.ADVENTURES:
+			var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
+			if related.size() >= 5:
+				adventures.append(adventure)
+		if seed_value < 0 and adventures.size() > 1:
+			adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
+		next_adventure = {} if adventures.is_empty() else adventures[rng.randi_range(0, adventures.size() - 1)]
+	var next_adventure_id: String = next_adventure.get("id", "")
+	var next_adventure_name: String = next_adventure.get("name", "Word explorers")
+	if not next_adventure.is_empty():
+		pool = pool.filter(func(word: Dictionary) -> bool: return next_adventure.words.has(word.id))
+	if repeating:
 		pool = lesson_words.duplicate()
-		adventure_id = saved_adventure
-		adventure_name = saved_name
+		next_adventure_id = saved_adventure
+		next_adventure_name = saved_name
 	else:
-		var distinct: Array = []
-		for word in pool:
-			if not distinct.any(func(other: Dictionary) -> bool: return Data.confusable_words(word.id, other.id)):
-				distinct.append(word)
+		var distinct: Array = _distinct_words(pool)
 		if distinct.size() < 5:
 			error = "This lesson needs five clearly different words."
 			return false
 		lesson_words = distinct.slice(0, 5)
 		pool = lesson_words
+	adventure_id = next_adventure_id
+	adventure_name = next_adventure_name
 	cards.clear()
 	for index in range(3):
 		_add_card(pool[index], "word")
@@ -104,6 +115,14 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false) -> b
 	last_correct = false
 	changed.emit()
 	return true
+
+
+func _distinct_words(words: Array) -> Array:
+	var distinct: Array = []
+	for word in words:
+		if not distinct.any(func(other: Dictionary) -> bool: return Data.confusable_words(word.id, other.id)):
+			distinct.append(word)
+	return distinct
 
 
 func _add_card(word: Dictionary, kind: String) -> void:

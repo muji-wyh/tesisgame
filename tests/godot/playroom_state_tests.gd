@@ -51,6 +51,12 @@ func _run() -> void:
 				_test_invalid_records()
 				_test_native_failures()
 				_test_browser_storage()
+				var journey_ready: bool = _script.new().has_method("remember_visit") and _script.new().has_method("prefer_theme") and _script.new().has_method("suggested_adventure")
+				check(journey_ready, "PlayroomState exposes journey memory and suggestions")
+				if journey_ready:
+					_test_journey_memory()
+					_test_invalid_journey()
+					_test_journey_failures()
 				_cleanup()
 	print("Playroom state: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -285,6 +291,130 @@ func _test_browser_storage() -> void:
 	check(failed_storage.text == null and not FileAccess.file_exists(failed.path), "Failed browser migration leaves both stores unmodified")
 	failed_storage.writable = true
 	check(_load(failed.state, "spring-7") and failed.state.favorite_id == "spring-7", "The same browser migration succeeds after storage recovers")
+
+
+func _topic_ids() -> Array[String]:
+	var result: Array[String] = []
+	for topic in load("res://scripts/game_data.gd").ADVENTURES:
+		result.append(topic.id)
+	return result
+
+
+func _journey_text(recent: Variant, preferred: Variant) -> String:
+	var config := ConfigFile.new()
+	config.parse(_text(1, "toy-spring", "backdrop-home", "spring-7"))
+	config.set_value("journey", "recent_topic_ids", recent)
+	config.set_value("journey", "preferred_theme_id", preferred)
+	return config.encode_to_text()
+
+
+func _test_journey_memory() -> void:
+	var topics := _topic_ids()
+	var fixture := _fixture("journey_memory")
+	var state = fixture.state
+	check(not state.remember_visit(topics[0]) and not state.prefer_theme("spring"), "Journey writes require a successful load")
+	var original := _text(1, "toy-spring", "backdrop-home", "spring-7")
+	_write(fixture.path, original)
+	if not _load(state):
+		return
+	check(state.recent_topic_ids.is_empty() and state.preferred_theme_id.is_empty(), "An old record without journey fields migrates to empty history and no preferred theme")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading an old record does not rewrite its bytes")
+	check(state.suggested_adventure() == topics[0], "A new journey suggests the first catalog topic")
+	check(not state.remember_visit("unknown") and not state.prefer_theme("unknown"), "Unknown topics and themes are rejected")
+	check(FileAccess.get_file_as_string(fixture.path) == original and state.recent_topic_ids.is_empty(), "Rejected journey changes preserve the old record and memory")
+	check(state.remember_visit(topics[0]) and state.remember_visit(topics[2]), "Known topics are remembered")
+	check(state.recent_topic_ids == [topics[2], topics[0]], "History is most recent first")
+	check(state.suggested_adventure() == topics[1], "Suggestions use the first unvisited topic in catalog order")
+	check(state.remember_visit(topics[0]) and state.recent_topic_ids == [topics[0], topics[2]], "Revisiting moves a topic to the front without duplicates")
+	check(state.prefer_theme("ocean"), "A known preferred theme can be stored")
+	var counts := {"spring-1": 3, "winter-3": 3}
+	var before := counts.duplicate(true)
+	check(state.select_item("backdrop-winter", counts) and state.set_favorite("winter-10"), "Room changes can be interleaved with journey memory")
+	check(state.remember_visit(topics[1]) and state.select_item("toy-ball", counts), "Later journey and room changes both save")
+	var reloaded = _script.new(fixture.path)
+	if _load(reloaded):
+		check(reloaded.recent_topic_ids == [topics[1], topics[0], topics[2]] and reloaded.preferred_theme_id == "ocean", "Room and favorite writes preserve every journey field")
+		check(reloaded.toy_id == "toy-ball" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10", "Journey writes preserve every room field")
+	check(counts == before, "Journey and customization never mutate medal counts")
+	for id in topics:
+		check(state.remember_visit(id), "Every known topic can be visited")
+	check(state.recent_topic_ids.size() == mini(12, topics.size()) and state.suggested_adventure() == topics[0], "A complete journey suggests its least recently visited topic and stays within twelve entries")
+	check(state.remember_visit(topics[0]) and state.suggested_adventure() == topics[1], "Revisiting updates the least-recent suggestion")
+	check(state.prefer_theme("") and state.preferred_theme_id.is_empty(), "The preferred theme can be cleared")
+	_directory(fixture.path + ".pending")
+	check(state.remember_visit(topics[0]) and state.prefer_theme(""), "Remembering the latest topic or same preference is idempotent without a write")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known journey write blocker")
+	var persisted := ConfigFile.new()
+	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Journey fields keep the existing playroom save version")
+
+
+func _test_invalid_journey() -> void:
+	var topics := _topic_ids()
+	var oversized: Array = topics.duplicate()
+	while oversized.size() <= 12:
+		oversized.append(topics[0])
+	var invalid: Array[String] = []
+	for recent in [null, false, topics[0], {}, [topics[0], topics[0]], ["unknown"], [1], [topics[0], null], oversized]:
+		invalid.append(_journey_text(recent, "spring"))
+	for preferred in [null, false, 1, [], "unknown"]:
+		invalid.append(_journey_text([topics[0]], preferred))
+	for missing in ["recent_topic_ids", "preferred_theme_id"]:
+		var config := ConfigFile.new()
+		config.parse(_journey_text([], ""))
+		config.erase_section_key("journey", missing)
+		invalid.append(config.encode_to_text())
+	for index in range(invalid.size()):
+		var fixture := _fixture("journey_invalid_%d" % index)
+		var state = fixture.state
+		_write(fixture.path, _journey_text([topics[0]], "ocean"))
+		if not _load(state):
+			continue
+		_write(fixture.path, invalid[index])
+		check(not _corrupt_load(state), "Invalid present journey fields fail closed")
+		check(state.recent_topic_ids == [topics[0]] and state.preferred_theme_id == "ocean" and state.toy_id == "toy-spring", "A failed journey reload preserves the last confirmed memory and room")
+		check(not state.remember_visit(topics[1]) and not state.prefer_theme("winter") and not state.select_item("toy-ball", {}) and not state.set_favorite(""), "Invalid journey data blocks all record writes")
+		check(FileAccess.get_file_as_string(fixture.path) == invalid[index], "Invalid journey bytes remain unchanged")
+
+
+func _test_journey_failures() -> void:
+	var topics := _topic_ids()
+	var fixture := _fixture("journey_native_failure")
+	var state = fixture.state
+	if not _load(state, "spring-7"):
+		return
+	check(state.remember_visit(topics[0]) and state.prefer_theme("ocean"), "Prepare confirmed native journey state")
+	var original := FileAccess.get_file_as_string(fixture.path)
+	_directory(fixture.path + ".pending")
+	check(not state.remember_visit(topics[1]) and not state.prefer_theme("winter"), "Native staging failures reject journey changes")
+	check(state.recent_topic_ids == [topics[0]] and state.preferred_theme_id == "ocean" and state.toy_id == "toy-ball" and state.favorite_id == "spring-7", "Failed native journey writes preserve confirmed journey and room memory")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Failed native journey writes preserve durable bytes")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove native journey blocker")
+	check(_load(state) and state.remember_visit(topics[1]) and state.prefer_theme("winter"), "Journey writes retry after a successful reload")
+	var storage := BrowserStorage.new()
+	storage.text = _text(1, "toy-spring", "backdrop-home", "spring-7")
+	var browser := _fixture("journey_browser", storage)
+	state = browser.state
+	if not _load(state):
+		return
+	check(state.recent_topic_ids.is_empty() and state.preferred_theme_id.is_empty() and storage.writes == 0, "Old browser records migrate optional journey fields without a write")
+	check(state.remember_visit(topics[2]) and state.prefer_theme("space"), "Journey changes use the existing synchronous browser record")
+	original = storage.text
+	storage.writable = false
+	check(not state.remember_visit(topics[3]) and not state.prefer_theme("autumn"), "Browser write failures reject journey changes")
+	check(state.recent_topic_ids == [topics[2]] and state.preferred_theme_id == "space" and state.toy_id == "toy-spring" and state.favorite_id == "spring-7" and storage.text == original, "Browser write failure preserves journey, room, favorite, and saved bytes")
+	storage.readable = false
+	check(not state.load_state() and state.recent_topic_ids == [topics[2]], "Browser read failure preserves confirmed journey memory")
+	storage.writable = true
+	check(not state.remember_visit(topics[3]) and not state.prefer_theme("autumn") and storage.text == original, "An unsuccessful read blocks journey writes even after writes become available")
+	storage.readable = true
+	check(_load(state) and state.remember_visit(topics[3]) and state.set_favorite("winter-10"), "Browser journey and favorite writes recover through reload")
+	var reloaded = _script.new(browser.path, storage)
+	if _load(reloaded):
+		check(reloaded.recent_topic_ids == [topics[3], topics[2]] and reloaded.preferred_theme_id == "space" and reloaded.favorite_id == "winter-10", "Browser reload retains interleaved history and favorite changes")
+	storage.text = _journey_text(["unknown"], "space")
+	var writes := storage.writes
+	check(not _corrupt_load(reloaded) and not reloaded.remember_visit(topics[0]) and storage.writes == writes, "Invalid browser journey data fails closed without falling back or writing")
+	check(storage.text == _journey_text(["unknown"], "space"), "Invalid browser journey bytes are preserved")
 
 
 func _cleanup() -> void:

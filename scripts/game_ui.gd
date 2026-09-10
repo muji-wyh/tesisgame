@@ -14,6 +14,7 @@ const ChoiceGame = preload("res://scripts/choice_game.gd")
 const WordLesson = preload("res://scripts/word_lesson.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
+const AdventureBook = preload("res://scripts/adventure_book.gd")
 const MODES := {"learn": "Learn", "match": "Match", "sky": "Sky", "listen": "Listen"}
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
@@ -191,6 +192,11 @@ var _lesson: WordLesson
 var _match_feedback: WordLesson
 var _feedback_key: String = ""
 var _new_adventure_button: Button
+var _explore_button: Button
+var _adventure_book: AdventureBook
+var _adventures_open: bool = false
+var _journey_save_failed: bool = false
+var _pending_visit_id: String = ""
 var _gift_label: Label
 var _try_gift_button: Button
 var _unlocked_gift: Dictionary = {}
@@ -236,6 +242,7 @@ var _save_error: bool = false
 var _collection_scroll: ScrollContainer
 var _collection_grid: VBoxContainer
 var _collection_back: Button
+var _collection_title: Label
 var _collection_rows: Array[GridContainer] = []
 var _collection_headings: Dictionary = {}
 var _reward_slots: Dictionary = {}
@@ -370,6 +377,12 @@ func _build_controls() -> void:
 	_set_accessibility_name(hint_button, "Hint: one per round")
 	hint_button.pressed.connect(_request_hint)
 	header.add_child(hint_button)
+	_explore_button = Button.new()
+	_explore_button.name = "Explore"
+	_explore_button.text = "Explore"
+	_set_accessibility_name(_explore_button, "Choose an adventure")
+	_explore_button.pressed.connect(_show_adventures)
+	header.add_child(_explore_button)
 	collection_button = Button.new()
 	collection_button.name = "Rewards"
 	_set_accessibility_name(collection_button, "My rewards")
@@ -584,7 +597,7 @@ func _build_controls() -> void:
 	_new_adventure_button.name = "NewAdventure"
 	_new_adventure_button.text = "New adventure"
 	_new_adventure_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_new_adventure_button.pressed.connect(func() -> void: new_round())
+	_new_adventure_button.pressed.connect(_show_adventures)
 	result_actions.add_child(_new_adventure_button)
 	_try_gift_button = Button.new()
 	_try_gift_button.text = "Try it with Pip"
@@ -639,9 +652,10 @@ func _build_collection_shell() -> void:
 	_collection_duck_slot = Control.new()
 	_collection_duck_slot.custom_minimum_size = Vector2(160, 160)
 	_collection_duck_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var title := Style.label("My rewards", 32)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(title)
+	_collection_title = Style.label("My rewards", 32)
+	_collection_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_collection_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	header.add_child(_collection_title)
 	_collection_back = Button.new()
 	_collection_back.text = "Back"
 	_collection_back.pressed.connect(_hide_collection)
@@ -751,6 +765,16 @@ func _build_collection() -> void:
 			_add_reward_row(earlier)
 	_refresh_collection()
 	_layout_collection()
+	_adventure_book = AdventureBook.new()
+	_adventure_book.name = "AdventureBook"
+	_collection_grid.add_child(_adventure_book)
+	_adventure_book.adventure_selected.connect(_choose_adventure)
+	_adventure_book.surprise_requested.connect(func() -> void: _choose_adventure(""))
+	_adventure_book.retry_requested.connect(_retry_journey)
+	_adventure_book.hide()
+	for control in _adventure_book.controls():
+		control.gui_input.connect(_collection_scroll_input.bind(control))
+		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
 
 
 func _build_playroom() -> void:
@@ -791,6 +815,8 @@ func _ensure_playroom_loaded() -> bool:
 		_playroom_ready = playroom_state.load_state(_favorite_reward_id)
 		if _playroom_ready:
 			_favorite_reward_id = playroom_state.favorite_id
+			if _preferred_theme.is_empty():
+				_preferred_theme = playroom_state.preferred_theme_id
 	return _playroom_ready
 
 
@@ -1262,7 +1288,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1, repeat_lesson: bool = false) -> void:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "") -> void:
 	if model.chest_state == "opening":
 		chest.finish_immediately()
 	if _save_error and not _pending_fragment.is_empty():
@@ -1294,7 +1320,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false) -> void:
 	for button in _found_words.get_children():
 		_found_words.remove_child(button)
 		button.queue_free()
-	if not model.reset(data.words, seed_value, repeat_lesson):
+	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id):
 		_rebuilding = false
 		_show_error(model.error)
 		return
@@ -1320,6 +1346,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false) -> void:
 	_rebuilding = false
 	_refresh()
 	_layout()
+	if _mode_id == "learn":
+		_pending_visit_id = model.adventure_id
+		_save_journey()
 
 
 func choose_mode(id: String) -> void:
@@ -1407,6 +1436,9 @@ func _refresh() -> void:
 	Style.button(collection_button, palette.accent)
 	Style.button(_collection_back, palette.accent)
 	Style.button(hint_button, palette.accent)
+	Style.button(_explore_button, palette.accent, 100)
+	_explore_button.visible = _mode_id == "learn" and model.phase in ["waiting", "matching", "feedback"]
+	_explore_button.disabled = model.chest_state == "opening" or _save_error
 	Style.button(_voice_button, palette.accent)
 	_voice_button.disabled = _host == null or not bool(_host.speechAvailable())
 	_voice_button.focus_mode = Control.FOCUS_NONE if _voice_button.disabled else Control.FOCUS_ALL
@@ -1807,9 +1839,10 @@ func _resolve_feedback() -> void:
 
 
 func choose_theme(id: String) -> void:
-	if _save_error or not model.set_theme(id):
+	if collection_page.visible or _preview_page.visible or _save_error or not model.set_theme(id):
 		return
 	_preferred_theme = id
+	_save_journey()
 	duck.react("happy")
 	effects.clear()
 	if not _voice_mode:
@@ -2284,6 +2317,8 @@ func _default_focus() -> Control:
 	if _preview_page.visible:
 		return _preview_play_button
 	if collection_page.visible:
+		if _adventures_open:
+			return _adventure_book.surprise_button
 		var reward := _first_collection_reward()
 		return reward if reward != null else _collection_back
 	if model.phase == "won":
@@ -2611,7 +2646,57 @@ func _drag_chest(delta: Vector2) -> void:
 	chest.set_drag_offset(chest.drag_offset + delta)
 
 
-func _show_collection() -> void:
+func _show_adventures() -> void:
+	if collection_page.visible or _preview_page.visible or model.chest_state == "opening" or _save_error:
+		return
+	_show_collection(true)
+
+
+func _choose_adventure(id: String) -> void:
+	if not collection_page.visible or not _adventures_open or _collection_dragged or _save_error or model.chest_state == "opening":
+		return
+	if not id.is_empty() and not Data.ADVENTURES.any(func(entry: Dictionary) -> bool: return entry.id == id):
+		return
+	_hide_collection()
+	_mode_id = "learn"
+	new_round(-1, false, id)
+	_default_focus().grab_focus()
+	_announce_status(model.adventure_name + ". Learn five words. Look at the picture, read the word, and press Hear.")
+
+
+func _save_journey() -> void:
+	_journey_save_failed = not _ensure_playroom_loaded()
+	if not _journey_save_failed and not _preferred_theme.is_empty():
+		_journey_save_failed = not playroom_state.prefer_theme(_preferred_theme)
+	if not _journey_save_failed and not _pending_visit_id.is_empty():
+		_journey_save_failed = not playroom_state.remember_visit(_pending_visit_id)
+		if not _journey_save_failed:
+			_pending_visit_id = ""
+	if _adventures_open:
+		_refresh_adventure_book()
+
+
+func _retry_journey() -> void:
+	if not collection_page.visible or not _adventures_open or _collection_dragged:
+		return
+	_save_journey()
+	_adventure_book.surprise_button.grab_focus()
+	_announce_collection_state()
+
+
+func _refresh_adventure_book() -> void:
+	_adventure_book.setup(model.adventure_id, playroom_state.recent_topic_ids,
+		playroom_state.suggested_adventure(), Data.theme(model.theme_id).accent, _journey_save_failed)
+
+
+func _show_collection(as_adventures: bool = false) -> void:
+	_adventures_open = as_adventures
+	_collection_title.text = "Pip's adventures" if as_adventures else "My rewards"
+	for child in _collection_grid.get_children():
+		child.visible = (child == _adventure_book) == as_adventures
+	if as_adventures:
+		_refresh_adventure_book()
+	_collection_scroll.scroll_vertical = 0
 	_stop_voice()
 	_choice.pause(true)
 	_lesson.pause(true)
@@ -2645,6 +2730,7 @@ func _hide_collection() -> void:
 	_end_collection_drag(false)
 	_collection_dragged = false
 	collection_page.hide()
+	_adventures_open = false
 	duck.clear_trick()
 	_choice.pause(false)
 	_lesson.pause(false)
@@ -2667,6 +2753,10 @@ func _hide_reward_preview_if_open() -> void:
 
 
 func _announce_collection_state() -> void:
+	if _adventures_open:
+		_announce_status("Pip's adventures. %d of 12 places visited. Choose a picture to learn five words, or Surprise me. Back returns to your lesson.%s" % [
+			playroom_state.recent_topic_ids.size(), " This visit could not be remembered. Choose Retry." if _journey_save_failed else ""])
+		return
 	_announce_status("My rewards opened. %d of %d medals complete. %s. Choose toys and places for Pip. %d earlier rewards. Use Back to return." % [
 		medal_progress.completed_count(), Model.THEMES.size() * 6, _collection_headings[model.theme_id].text, medal_progress.legacy_rewards.size()])
 
@@ -2682,6 +2772,9 @@ func _update_duck() -> void:
 		return
 	var in_preview: bool = _preview_page.visible
 	var in_collection: bool = collection_page.visible
+	if in_collection and _adventures_open:
+		duck.hide()
+		return
 	var visible_here: bool = in_preview or in_collection or not _voice_mode
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)

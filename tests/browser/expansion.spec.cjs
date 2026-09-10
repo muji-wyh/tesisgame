@@ -77,7 +77,8 @@ test('earned toy, backdrop, and migrated favorite persist through immediate relo
   await page.reload();
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await openRoom(page);
-  expect(await roomRecord(page)).toBe(saved);
+  // A new startup lesson can add a visit; the selected room must stay identical.
+  expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
   await tap(page, 240, 502);
   await expect(page.locator('#game-status')).toHaveText('The flower blooms for Pip!');
   await page.waitForTimeout(1600);

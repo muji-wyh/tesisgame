@@ -138,7 +138,15 @@ Wrong Match attempts explain the two different words or an unpaired card.
 Voice play retains timed feedback so a spoken sentence can finish its queued matches.
 Listen exposes the written target if sound is unavailable. Semantically overlapping
 labels such as shell/clam and earth/planet never compete as right/wrong options.
-**Repeat lesson** keeps the words, mode, and chosen world; **New adventure** chooses new words.
+**Repeat lesson** keeps the words, mode, and chosen world. **Explore** in Learn and
+**New adventure** on results open **Pip's adventures**: choose any of twelve illustrated
+destinations or **Surprise me** to start a new five-word lesson in Learn. **Back** returns
+to the current attempt and card. Revisiting a place samples fresh words when enough fit.
+
+The book remembers places visited and suggests an unvisited destination, then the least
+recently visited. **Visited** means a lesson was opened, not that its words are mastered.
+All topics are available immediately. Visits and the chosen reward world share the existing
+room-choice save; a failed write keeps play available and offers **Retry** in the book.
 The result shelf reviews all five words, with missed words first, and replays their speech.
 
 The six worlds include **Ocean** and **Space**, with 36 active medals in total.
@@ -171,7 +179,8 @@ Find three matching word/picture pairs among **eight cards**. One extra word and
 Each round is a small **word adventure**: Animal friends, Picnic time, Great outdoors,
 Dress up, On the move, Play time, At home, Head to toe, Ocean discovery, Space trip,
 Garden trail, or Music makers. All five words on the matching board
-belong to its topic. New adventure chooses a different available adventure and fresh words.
+belong to its topic. The adventure book lets the player choose a topic; Surprise me chooses
+a different available adventure and fresh words.
 Custom word lists with too few related words use a mixed Word explorers board; seeded
 rounds remain reproducible. Changing the season keeps the current adventure.
 
@@ -200,7 +209,7 @@ and show **2 in a row!** or **3 in a row!** beside the match badges, without a c
 Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
 keeps the encouragement and hint stars without moving particles.
 
-Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world stays for ordinary replays in this session. Six theme buttons change the appearance and music without resetting progress. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
+Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world is remembered across lessons and reloads. Six theme buttons change the appearance and music without resetting progress. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **140 short, concrete English words** for parent-guided play
 with young children. Matching rounds use five different words on eight cards; choice modes

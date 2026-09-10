@@ -14,6 +14,8 @@ const WORLD_TOYS: Array[Dictionary] = [
 var toy_id: String = "toy-ball"
 var backdrop_id: String = "backdrop-home"
 var favorite_id: String = ""
+var recent_topic_ids: Array[String] = []
+var preferred_theme_id: String = ""
 var error: String = ""
 
 var _save_path: String
@@ -107,6 +109,8 @@ func load_state(legacy_favorite: String = "") -> bool:
 	var next_toy: String = "toy-ball"
 	var next_backdrop: String = "backdrop-home"
 	var next_favorite: String = legacy_favorite
+	var next_recent: Array[String] = []
+	var next_preferred: String = ""
 	if status != ERR_FILE_NOT_FOUND:
 		var version: Variant = config.get_value("playroom", "version", null)
 		if typeof(version) != TYPE_INT or version != SAVE_VERSION:
@@ -125,11 +129,25 @@ func load_state(legacy_favorite: String = "") -> bool:
 		next_favorite = saved_favorite
 	if not next_favorite.is_empty() and Data.reward(next_favorite).is_empty():
 		return _fail("The playroom favorite needs a known reward ID.")
-	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite):
+	if config.has_section("journey"):
+		var saved_recent: Variant = config.get_value("journey", "recent_topic_ids", null)
+		var saved_preferred: Variant = config.get_value("journey", "preferred_theme_id", null)
+		if not saved_recent is Array or saved_recent.size() > 12:
+			return _fail("Journey history needs an array of at most twelve known topic IDs.")
+		for id in saved_recent:
+			if not id is String or not _known_topic(id) or next_recent.has(id):
+				return _fail("Journey history needs unique known topic IDs, most recent first.")
+			next_recent.append(id)
+		if not saved_preferred is String or (not saved_preferred.is_empty() and not Data.THEMES.has(saved_preferred)):
+			return _fail("The preferred theme needs a known theme ID or an empty string.")
+		next_preferred = saved_preferred
+	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite, next_recent, next_preferred):
 		return false
 	toy_id = next_toy
 	backdrop_id = next_backdrop
 	favorite_id = next_favorite
+	recent_topic_ids = next_recent
+	preferred_theme_id = next_preferred
 	_loaded = true
 	return true
 
@@ -147,7 +165,7 @@ func select_item(id: String, counts: Dictionary) -> bool:
 	var next_backdrop: String = id if selected.slot == "backdrop" else backdrop_id
 	if next_toy == toy_id and next_backdrop == backdrop_id:
 		return true
-	if not _persist(next_toy, next_backdrop, favorite_id):
+	if not _persist(next_toy, next_backdrop, favorite_id, recent_topic_ids, preferred_theme_id):
 		return false
 	toy_id = next_toy
 	backdrop_id = next_backdrop
@@ -162,18 +180,67 @@ func set_favorite(id: String) -> bool:
 		return _fail("Choose a known reward for Pip's favorite.")
 	if favorite_id == id:
 		return true
-	if not _persist(toy_id, backdrop_id, id):
+	if not _persist(toy_id, backdrop_id, id, recent_topic_ids, preferred_theme_id):
 		return false
 	favorite_id = id
 	return true
 
 
-func _persist(next_toy: String, next_backdrop: String, next_favorite: String) -> bool:
+static func _known_topic(id: String) -> bool:
+	for topic in Data.ADVENTURES:
+		if topic.id == id:
+			return true
+	return false
+
+
+func remember_visit(id: String) -> bool:
+	error = ""
+	if not _loaded:
+		return _fail("Load playroom choices successfully before remembering a visit.")
+	if not _known_topic(id):
+		return _fail("Choose a known adventure topic to remember.")
+	if not recent_topic_ids.is_empty() and recent_topic_ids.front() == id:
+		return true
+	var next_recent: Array[String] = recent_topic_ids.duplicate()
+	next_recent.erase(id)
+	next_recent.push_front(id)
+	if next_recent.size() > 12:
+		next_recent.pop_back()
+	if not _persist(toy_id, backdrop_id, favorite_id, next_recent, preferred_theme_id):
+		return false
+	recent_topic_ids = next_recent
+	return true
+
+
+func prefer_theme(id: String) -> bool:
+	error = ""
+	if not _loaded:
+		return _fail("Load playroom choices successfully before remembering a theme.")
+	if not id.is_empty() and not Data.THEMES.has(id):
+		return _fail("Choose a known theme or clear the preference.")
+	if preferred_theme_id == id:
+		return true
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, id):
+		return false
+	preferred_theme_id = id
+	return true
+
+
+func suggested_adventure() -> String:
+	for topic in Data.ADVENTURES:
+		if not recent_topic_ids.has(topic.id):
+			return topic.id
+	return recent_topic_ids.back() if not recent_topic_ids.is_empty() else ""
+
+
+func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String) -> bool:
 	var config := ConfigFile.new()
 	config.set_value("playroom", "version", SAVE_VERSION)
 	config.set_value("playroom", "toy", next_toy)
 	config.set_value("playroom", "backdrop", next_backdrop)
 	config.set_value("playroom", "favorite", next_favorite)
+	config.set_value("journey", "recent_topic_ids", next_recent)
+	config.set_value("journey", "preferred_theme_id", next_preferred)
 	if _browser_storage != null:
 		if not bool(_browser_storage.savePlayroomState(config.encode_to_text())):
 			return _fail("Could not save browser playroom choices. Browser storage may be unavailable or full.")

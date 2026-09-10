@@ -94,6 +94,10 @@ func _run() -> void:
 	check(not app._choice.audio_available, "A later optional music success cannot erase an actual word failure")
 	app._choice_hear(app._choice.current_target)
 	check(app._choice.audio_available, "Retrying a bundled word restores the listening question")
+	var stopped_playbacks: Array[WeakRef] = []
+	for player in [app.audio.music, app.audio.voice]:
+		if player.has_stream_playback():
+			stopped_playbacks.append(weakref(player.get_stream_playback()))
 	app.audio.set_muted(true)
 	app._audio_status("")
 	check(app._lesson.hear_button.disabled and not app._choice.audio_available, "Muted audio consistently exposes the silent learning fallback")
@@ -101,6 +105,11 @@ func _run() -> void:
 	check(app.model.lesson_words != lesson, "New adventure selects fresh words")
 	app.queue_free()
 	await process_frame
+	# The Dummy mixer reclaims stopped playback asynchronously; wait for actual release.
+	var deadline: int = Time.get_ticks_msec() + 2000
+	while stopped_playbacks.any(func(playback: WeakRef) -> bool: return playback.get_ref() != null) and Time.get_ticks_msec() < deadline:
+		await create_timer(0.01).timeout
+	check(stopped_playbacks.all(func(playback: WeakRef) -> bool: return playback.get_ref() == null), "Stopped lesson audio releases its playback resources before process teardown")
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)

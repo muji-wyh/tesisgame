@@ -30,6 +30,11 @@ func _run() -> void:
 		_test_replays(model, words)
 		_test_small_vocabularies(model, words)
 		_test_freshness_before_adventures(model, words)
+		_test_seeded_compatibility(model, words)
+		_test_requested_adventures(model, adventures, words)
+		_test_rejected_request(model, words)
+		_test_requested_revisits(model, words)
+		_test_requested_repeat(model, words)
 	print("Word adventures: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -110,6 +115,114 @@ func _test_freshness_before_adventures(model, words: Array) -> void:
 	check(model.adventure_id.is_empty(), "Freshness wins when its remaining words cannot form a themed adventure")
 	check(model.cards.all(func(card: Dictionary) -> bool: return fresh_ids.has(card.word.id)), "Themed replay cannot reintroduce excluded previous-board words")
 	_check_board(model)
+
+
+func _test_seeded_compatibility(model, words: Array) -> void:
+	# Recorded before adding explicit selection: the optional argument must not change existing seeded rounds.
+	for fixture in [
+		{"seed": 0, "topic": "at-home", "theme": "winter", "lesson": ["chair", "fork", "table", "door", "soap"],
+			"cards": ["soap:image", "fork:word", "table:word", "chair:word", "chair:image", "door:word", "fork:image", "table:image"]},
+		{"seed": 23, "topic": "at-home", "theme": "ocean", "lesson": ["lamp", "plate", "table", "fork", "chair"],
+			"cards": ["table:word", "chair:image", "plate:image", "table:image", "lamp:word", "lamp:image", "fork:word", "plate:word"]},
+		{"seed": 101, "topic": "ocean-discovery", "theme": "winter", "lesson": ["squid", "crab", "clam", "coral", "seal"],
+			"cards": ["clam:image", "seal:image", "crab:image", "squid:image", "clam:word", "squid:word", "crab:word", "coral:word"]}
+	]:
+		check(model.reset(words, fixture.seed, false, ""), "An empty request preserves ordinary seeded selection")
+		check(model.adventure_id == fixture.topic and model.theme_id == fixture.theme, "Existing seeds retain their topic and theme")
+		check(model.lesson_words.map(func(word: Dictionary) -> String: return word.id) == fixture.lesson, "Existing seeds retain their five ordered words")
+		check(model.cards.map(func(card: Dictionary) -> String: return card.id) == fixture.cards, "Existing seeds retain their exact card arrangement")
+
+
+func _test_requested_adventures(model, adventures: Array, words: Array) -> void:
+	for adventure in adventures:
+		for seed_value in range(16):
+			check(model.reset(words, seed_value, false, adventure.id), "Every selected adventure starts across seeds: " + adventure.id)
+			check(model.adventure_id == adventure.id and model.adventure_name == adventure.name, "The selected topic retains its identity")
+			check(model.lesson_words.all(func(word: Dictionary) -> bool: return adventure.words.has(word.id)), "Every lesson word belongs to the selected topic")
+			_check_board(model)
+			_check_safe_lesson(model)
+		var board: Array = model.cards.duplicate(true)
+		var lesson: Array = model.lesson_words.duplicate(true)
+		var theme: String = model.theme_id
+		model.reset(words, 4)
+		check(model.reset(words, 15, false, adventure.id), "A seeded selected topic restarts")
+		check(model.cards == board and model.lesson_words == lesson and model.theme_id == theme,
+			"Explicit seeded topic selection ignores the previous board")
+
+
+func _test_rejected_request(model, words: Array) -> void:
+	model.reset(words, 11)
+	model.set_theme("winter")
+	model.request_hint()
+	model.select(model.hint_ids[0])
+	var before: Dictionary = _round_snapshot(model)
+	var changes: Array = [0]
+	var count_changes: Callable = func() -> void: changes[0] += 1
+	model.changed.connect(count_changes)
+	check(not model.reset(words, -1, false, "missing-topic"), "An unknown requested topic is rejected")
+	check(_round_snapshot(model) == before and changes[0] == 0, "Rejected topic IDs preserve the entire attempt and emit no round change")
+	check(not model.error.is_empty(), "A rejected topic explains why it could not start")
+	check(not model.reset(words, -1, true, "missing-topic"), "An unknown topic is also rejected during repeat")
+	check(_round_snapshot(model) == before and changes[0] == 0, "Rejected repeat IDs preserve the existing lesson")
+	var insufficient: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["cat", "dog", "fish", "duck", "apple"])
+	check(not model.reset(insufficient, -1, false, "animal-friends"), "A selected topic with fewer than five available words is rejected")
+	check(_round_snapshot(model) == before and changes[0] == 0, "An undersized selected topic cannot consume the old attempt")
+	var unsafe: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["earth", "planet", "comet", "meteor", "galaxy"])
+	check(not model.reset(unsafe, -1, false, "space-trip"), "Five entries with overlapping labels cannot form a lesson")
+	check(_round_snapshot(model) == before and changes[0] == 0, "An unsafe selected topic preserves the previous topic and board")
+	model.changed.disconnect(count_changes)
+
+
+func _test_requested_revisits(model, words: Array) -> void:
+	model.reset(words, 17, false, "animal-friends")
+	for visit in range(8):
+		var previous: Array = model.lesson_words.map(func(word: Dictionary) -> String: return word.id)
+		check(model.reset(words, -1, false, "animal-friends"), "A large selected topic can be revisited")
+		check(model.adventure_id == "animal-friends" and model.lesson_words.all(func(word: Dictionary) -> bool: return not previous.has(word.id)),
+			"Revisits keep the requested topic and use fresh words when five safe choices remain")
+		_check_safe_lesson(model)
+	model.reset(words, 17, false, "play-time")
+	check(model.reset(words, -1, false, "play-time") and model.adventure_id == "play-time", "A six-word topic remains playable when a revisit must overlap")
+	_check_safe_lesson(model)
+	var mixed: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["rocket", "alien", "rover", "cat", "dog"])
+	model.reset(mixed, 3)
+	check(model.reset(words, -1, false, "space-trip"), "A revisit falls back when five fresh entries contain fewer than five safe words")
+	check(model.adventure_id == "space-trip", "Safe-pool fallback keeps the requested topic")
+	_check_safe_lesson(model)
+
+
+func _test_requested_repeat(model, words: Array) -> void:
+	model.reset(words, 29, false, "space-trip")
+	model.set_theme("ocean")
+	var lesson: Array = model.lesson_words.duplicate(true)
+	for requested in ["", "space-trip", "animal-friends"]:
+		check(model.reset(words, -1, true, requested), "A repeat can retain an existing explicitly chosen lesson")
+		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean",
+			"Repeat preserves all five ordered words, topic and world even when another valid topic is requested")
+		_check_board(model)
+
+
+func _round_snapshot(model) -> Dictionary:
+	var snapshot: Dictionary = {}
+	for property in ["cards", "lesson_words", "missed_word_ids", "matched_ids", "feedback_ids", "hint_ids", "hint_used",
+		"selected_id", "successes", "mistakes", "streak", "phase", "theme_id", "adventure_id", "adventure_name",
+		"chest_state", "reward_theme", "reward_id", "last_correct"]:
+		snapshot[property] = model.get(property)
+	return snapshot.duplicate(true)
+
+
+func _check_safe_lesson(model) -> void:
+	var ids: Array = model.lesson_words.map(func(word: Dictionary) -> String: return word.id)
+	check(ids.size() == 5, "Each lesson has exactly five words")
+	var safe: bool = true
+	for index in range(ids.size()):
+		for other in range(index + 1, ids.size()):
+			if ids[index] == ids[other]:
+				safe = false
+	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"], ["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
+		if ids.has(pair[0]) and ids.has(pair[1]):
+			safe = false
+	check(safe, "Lesson words are unique and do not contain confusable alternatives")
 
 
 func _check_board(model) -> void:

@@ -586,6 +586,11 @@ test('new adventures rotate and all five review words replay without opening or 
   await holdChestUntilOpen(page, { x: metrics.x + 48 * scale, y: metrics.y + 208 * scale });
   await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
   await resultTap(page, 'newAdventure');
+  await expect(page.locator('#game-status')).toContainText("Pip's adventures.");
+  // Back has focus on entry; the next control is Surprise me.
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toContainText('Learn five words.');
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];

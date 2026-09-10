@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
-const shell = fs.readFileSync('web/shell.html', 'utf8');
+const shell = fs.readFileSync('web/shell.html', 'utf8').replace(/\r\n/g, '\n');
 function bridge(storage) {
   const block = shell.match(/        playroomState\(\) \{[\s\S]*?\n        \},\n        savePlayroomState\(text\) \{[\s\S]*?\n        \}/)?.[0];
   assert.ok(block, 'The host exposes a synchronous consolidated playroom record');
