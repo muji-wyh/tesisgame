@@ -960,6 +960,7 @@ func _build_playroom() -> void:
 	_room.item_previewed.connect(_room_previewed)
 	_room.word_requested.connect(_room_word)
 	_room.toy_played.connect(_room_toy)
+	_room.goal_requested.connect(_start_gift_adventure)
 	for control in _room.controls():
 		control.gui_input.connect(_collection_scroll_input.bind(control))
 		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
@@ -974,8 +975,9 @@ func _room_previewed(message: String) -> void:
 	audio.stop_voice()
 	_end_collection_drag(false)
 	_collection_scroll.scroll_vertical = 0
-	_room.action_button.grab_focus()
-	_ensure_collection_focus_visible.call_deferred(_room.action_button)
+	var action: Button = _room.goal_button if _room._preview_locked else _room.action_button
+	action.grab_focus()
+	_ensure_collection_focus_visible.call_deferred(action)
 	_announce_status(message)
 
 
@@ -1029,6 +1031,7 @@ func _try_unlocked_gift() -> void:
 	_select_room_item(_unlocked_gift.id)
 	_collection_scroll.scroll_vertical = 0
 	_room.action_button.grab_focus()
+	_ensure_collection_focus_visible.call_deferred(_room.action_button)
 
 
 func _play_duck_trick(kind: String) -> void:
@@ -1479,7 +1482,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "") -> bool:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
 	if model.phase == "won" and model.chest_state == "closed":
 		_open_chest()
 	if model.chest_state == "opening":
@@ -1517,7 +1520,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	for button in _found_words.get_children():
 		_found_words.remove_child(button)
 		button.queue_free()
-	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id):
+	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id, required_word_id):
 		_rebuilding = false
 		_show_error(model.error)
 		return false
@@ -1935,6 +1938,14 @@ func _refresh_goal(palette: Dictionary) -> void:
 	_goal_label.add_theme_color_override("font_color", palette.accent)
 	var gift: Dictionary = playroom_state.next_gift(medal_progress.counts, model.theme_id) if playroom_state != null else {}
 	_gift_label.text = "Next gift: %s · %d pieces to go" % [gift.name, gift.remaining_pieces] if not gift.is_empty() else palette.name + " room gifts collected!"
+	var chosen: Dictionary = playroom_state.selected_goal(medal_progress.counts) if playroom_state != null else {}
+	if not chosen.is_empty():
+		if chosen.remaining_pieces == 0:
+			_gift_label.text = "%s is ready! Visit Pip's room." % chosen.name
+		elif chosen.theme != model.theme_id:
+			_gift_label.text = "%s · %d pieces in %s" % [chosen.name, chosen.remaining_pieces, Data.theme(chosen.theme).name]
+		else:
+			_gift_label.text = "Your goal: %s · %d %s to go" % [chosen.name, chosen.remaining_pieces, "piece" if chosen.remaining_pieces == 1 else "pieces"]
 	_gift_label.add_theme_color_override("font_color", palette.accent)
 
 
@@ -2417,6 +2428,7 @@ func on_page_hidden() -> void:
 	audio.halt()
 	duck.settle()
 	duck.set_idle_paused(true)
+	_room.settle()
 	_choice.set_reduced_motion(true)
 	_choice.set_reduced_motion(reduced_motion)
 	_memory.set_reduced_motion(true)
@@ -3015,6 +3027,42 @@ func _show_adventures() -> void:
 	if collection_page.visible or _preview_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_show_collection(true)
+
+
+func _start_gift_adventure(id: String) -> void:
+	if not collection_page.visible or _collection_section != "room" or _adventures_open or _preview_page.visible or _collection_dragged:
+		return
+	var gift: Dictionary = playroom_state.item(id)
+	if gift.is_empty() or str(gift.theme).is_empty():
+		return
+	if playroom_state.owned(gift, medal_progress.counts):
+		_select_room_item(id)
+		_collection_scroll.scroll_vertical = 0
+		_room.action_button.grab_focus()
+		_ensure_collection_focus_visible.call_deferred(_room.action_button)
+		return
+	if not _progress_ready or (_save_error and not _pending_fragment.is_empty()):
+		_room.caption.text = "Your piece is waiting. Use Back, then Retry saving before a new adventure."
+		_room.goal_label.text = _room.caption.text
+		_announce_status(_room.caption.text)
+		return
+	if model.chest_state == "opening" or (model.phase == "won" and model.chest_state != "opened"):
+		_room.caption.text = "Your chest is waiting! Use Back and open it before a new adventure."
+		_room.goal_label.text = _room.caption.text
+		_announce_status(_room.caption.text)
+		return
+	if not _ensure_playroom_loaded() or not playroom_state.set_goal(id, medal_progress.counts):
+		_room.caption.text = "Your gift goal could not be saved. Press the gift button to retry."
+		_room.goal_label.text = _room.caption.text
+		_announce_status(_room.caption.text)
+		return
+	var topics := {"spring": "great-outdoors", "summer": "play-time", "autumn": "picnic-time", "winter": "music-makers", "ocean": "ocean-discovery", "space": "space-trip"}
+	_preferred_theme = gift.theme
+	_hide_collection()
+	if not new_round(-1, false, topics[gift.theme], "learn", gift.word_id if gift.slot == "toy" else ""):
+		return
+	_default_focus().grab_focus()
+	_announce_status("%s. Learn five words. Help Pip get %s. Win games in %s and open their chests." % [model.adventure_name, gift.name, Data.theme(gift.theme).name])
 
 
 func _choose_adventure(id: String) -> void:

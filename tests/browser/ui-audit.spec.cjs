@@ -37,6 +37,12 @@ async function rewards(page) {
   await expect(page.locator('#game-status')).toContainText('My rewards opened.');
 }
 
+async function leavePreview(page) {
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+}
+
 async function rewardSection(page, section) {
   const b = await metrics(page);
   await tap(page, 16 + (b.width - 104) * (section === 'medals' ? 0.75 : 0.25), 52);
@@ -170,14 +176,14 @@ for (const size of SIZES) {
       await shot('14-room-category');
     } else {
       await tap(page, b.width - 84, 322);
-      await expect(page.locator('#game-status')).toHaveText('The ball rolls to Pip!');
+      await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
       await shot('13-room-toy-action');
       await scrollToEnd(page, browserName, size);
       await shot('14-room-controls-scrolled');
       await tap(page, b.width / 6, b.height - 90);
       await expect(page.locator('#game-status')).toContainText('Complete Rocket');
       await shot('14b-room-locked-from-bottom');
-      await tap(page, b.width / 2, b.height - 52);
+      await leavePreview(page);
       await expect(page.locator('#game-status')).toContainText('ball');
       await shot('14c-room-locked-return');
     }
@@ -208,16 +214,16 @@ test('locked room previews provide a usable return and Medals has its own entry'
   await tap(page, 360, 660);
   await shot('locked-toy-before-return');
   await expect.soft(page.locator('#game-status')).toContainText('Complete Blossom', { timeout: 1500 });
-  await page.keyboard.press('Enter');
+  await leavePreview(page);
   await shot('locked-toy-after-return');
   await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
   await tap(page, 240, 502);
-  await expect.soft(page.locator('#game-status')).toHaveText('The ball rolls to Pip!', { timeout: 1500 });
+  await expect.soft(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!', { timeout: 1500 });
   await tap(page, 360, 588);
   await tap(page, 360, 660);
   await shot('locked-backdrop-before-return');
   await expect.soft(page.locator('#game-status')).toContainText('Complete Bee', { timeout: 1500 });
-  await tap(page, 240, 502);
+  await leavePreview(page);
   await shot('locked-backdrop-after-return');
   await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
   expect.soft(await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'))).toBe(saved);

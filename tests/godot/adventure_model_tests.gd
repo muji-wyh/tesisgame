@@ -35,6 +35,13 @@ func _run() -> void:
 		_test_rejected_request(model, words)
 		_test_requested_revisits(model, words)
 		_test_requested_repeat(model, words)
+		var reset_methods: Array = model.get_method_list().filter(func(method: Dictionary) -> bool: return method.name == "reset")
+		var required_ready: bool = reset_methods.size() == 1 and reset_methods[0].args.size() == 5
+		check(required_ready, "A new adventure lesson can require its gift's noun")
+		if required_ready:
+			_test_required_words(model, words)
+			_test_required_rejections(model, words)
+			_test_required_repeats(model, words)
 	print("Word adventures: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -199,6 +206,61 @@ func _test_requested_repeat(model, words: Array) -> void:
 		check(model.reset(words, -1, true, requested), "A repeat can retain an existing explicitly chosen lesson")
 		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean",
 			"Repeat preserves all five ordered words, topic and world even when another valid topic is requested")
+		_check_board(model)
+
+
+func _test_required_words(model, words: Array) -> void:
+	var original := words.duplicate(true)
+	for pair in [["great-outdoors", "flower"], ["play-time", "ball"], ["picnic-time", "apple"], ["music-makers", "bell"], ["ocean-discovery", "shell"], ["space-trip", "rocket"]]:
+		for seed_value in range(16):
+			check(model.reset(words, seed_value, false, pair[0], pair[1]), "Every gift can start a related lesson across seeds: " + pair[1])
+			check(model.adventure_id == pair[0] and model.lesson_words.any(func(word: Dictionary) -> bool: return word.id == pair[1]), "A gift's required noun belongs to its selected lesson")
+			_check_safe_lesson(model)
+			_check_board(model)
+		var lesson: Array = model.lesson_words.duplicate(true)
+		var board: Array = model.cards.duplicate(true)
+		var theme: String = model.theme_id
+		model.reset(words, 2)
+		check(model.reset(words, 15, false, pair[0], pair[1]) and model.lesson_words == lesson and model.cards == board and model.theme_id == theme, "Required-word lessons remain reproducible with an explicit seed")
+		for visit in range(8):
+			check(model.reset(words, -1, false, pair[0], pair[1]), "A required-word topic remains playable on repeated unseeded visits")
+			check(model.lesson_words.any(func(word: Dictionary) -> bool: return word.id == pair[1]), "Freshness cannot discard the required noun from the previous lesson")
+			_check_safe_lesson(model)
+	var previous_ids := ["apple", "banana", "orange", "pear", "grape"]
+	var previous_words: Array = words.filter(func(word: Dictionary) -> bool: return previous_ids.has(word.id))
+	model.reset(previous_words, 3, false, "picnic-time", "apple")
+	check(model.reset(words, -1, false, "picnic-time", "apple"), "A large topic can refresh its other four words while retaining its goal noun")
+	check(model.lesson_words.all(func(word: Dictionary) -> bool: return word.id == "apple" or not previous_ids.has(word.id)), "Required-word revisits use four fresh companions when available")
+	check(words == original, "Required-word selection never changes the supplied vocabulary")
+
+
+func _test_required_rejections(model, words: Array) -> void:
+	model.reset(words, 11)
+	model.set_theme("winter")
+	model.request_hint()
+	model.select(model.hint_ids[0])
+	var before: Dictionary = _round_snapshot(model)
+	var changes: Array = [0]
+	var count_changes: Callable = func() -> void: changes[0] += 1
+	model.changed.connect(count_changes)
+	for pair in [["ocean-discovery", "unknown"], ["garden-trail", "flower"], ["", "shell"]]:
+		check(not model.reset(words, -1, false, pair[0], pair[1]), "An unknown or unrelated required word cannot start an adventure")
+		check(_round_snapshot(model) == before and changes[0] == 0 and not model.error.is_empty(), "Rejected required words preserve the whole round and emit no change")
+	var missing: Array = words.filter(func(word: Dictionary) -> bool: return word.id != "shell")
+	check(not model.reset(missing, -1, false, "ocean-discovery", "shell"), "A known required noun missing from the supplied vocabulary is rejected")
+	var unsafe: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["shell", "clam", "whale", "crab", "seal"])
+	check(not model.reset(unsafe, -1, false, "ocean-discovery", "shell"), "A required noun cannot force a five-word lesson with its confusable alternative")
+	check(_round_snapshot(model) == before and changes[0] == 0, "Missing or unsafe required-word pools preserve the active attempt")
+	model.changed.disconnect(count_changes)
+
+
+func _test_required_repeats(model, words: Array) -> void:
+	model.reset(words, 29, false, "space-trip", "rocket")
+	model.set_theme("ocean")
+	var lesson: Array = model.lesson_words.duplicate(true)
+	for pair in [["space-trip", "rocket"], ["ocean-discovery", "shell"]]:
+		check(model.reset(words, -1, true, pair[0], pair[1]), "Repeating an existing lesson retains its required-word lesson")
+		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean", "Repeat preserves all five ordered words and the world even with another valid required request")
 		_check_board(model)
 
 

@@ -27,7 +27,7 @@ var error: String = ""
 var last_correct: bool = false
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "") -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "") -> bool:
 	var requested_adventure: Dictionary = {}
 	if not requested_adventure_id.is_empty():
 		for adventure in Data.ADVENTURES:
@@ -36,6 +36,18 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 				break
 		if requested_adventure.is_empty():
 			error = "Please choose an available adventure."
+			return false
+	var required_word: Dictionary = {}
+	if not required_word_id.is_empty():
+		if requested_adventure.is_empty() or not requested_adventure.words.has(required_word_id):
+			error = "Choose a gift word from the requested adventure."
+			return false
+		for word in words:
+			if word.id == required_word_id:
+				required_word = word
+				break
+		if required_word.is_empty():
+			error = "The gift word is unavailable in this vocabulary."
 			return false
 	var saved_adventure := adventure_id
 	var saved_name := adventure_name
@@ -55,10 +67,13 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		rng.seed = seed_value
 	var pool: Array = words.duplicate(true)
 	_shuffle(pool, rng)
+	if not required_word.is_empty() and not repeating:
+		pool.erase(required_word)
+		pool.push_front(required_word.duplicate(true))
 	if seed_value < 0 and not cards.is_empty():
 		# ponytail: only the previous board; a learner profile needs separate evidence and design.
 		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
-		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous.has(word.id))
+		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id or not previous.has(word.id))
 		if fresh.size() >= 5 and (requested_adventure.is_empty() or _distinct_words(fresh).size() >= 5):
 			pool = fresh
 	var next_adventure: Dictionary = requested_adventure

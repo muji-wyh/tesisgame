@@ -164,8 +164,19 @@ the existing local art pipeline, and every word has its own spoken recording.
 Open **My rewards** to visit **Pip's playroom**. A ball is playable immediately.
 Each world's first completed medal unlocks its toy, and its third unlocks a backdrop.
 Mix owned toys and rooms, or preview a locked gift and its exact requirement.
+Choose **Help Pip get this** on a locked gift to save it as your goal and start a
+related five-word adventure in its reward world. The lesson includes the desired
+toy's word. The usual Learn, Match, Sky, Listen and Memory modes keep those same
+five words; only normal wins and opened chests earn pieces. The goal caption shows
+the chosen gift and remaining pieces, including its world if you switch away.
+Pip's room lets you continue the goal or use it once earned, including after reload.
+An unopened or unsaved chest must be collected before starting a gift adventure.
 Water a flower, roll a ball, offer an apple, ring a bell, listen to a shell, or launch
-a rocket with Pip; each toy pronounces its noun. The next gift shows its name and
+a rocket with Pip. Each toy now has three steps you control, such as rolling,
+returning and catching the ball or readying, igniting and launching the rocket.
+Every step shows and pronounces its noun; a finished sequence offers replay.
+Toy play is temporary and never grants extra medals or stickers. Reduced motion
+shows each stage's static result. The next gift shows its name and
 remaining pieces. Newly unlocked gifts offer **Try it with Pip** after the reward saves.
 Open an earned medal and choose **Display with Pip** to save it as the playroom's favorite.
 Toy, backdrop, and favorite save together immediately in browser storage, or in
@@ -215,8 +226,11 @@ Free Unity Asset Store artwork is evaluated with the offline [Unity import pipel
 Downloaded licensed packages and selected overrides stay out of this public repository;
 the original SVG illustrations remain usable fallbacks. The tool validates paths,
 selects PNGs, invokes Unity CLI, and verifies byte hashes before copying textures
-into Godot. New package acquisition and real import are still pending; this release
-uses the original word illustrations. See the provenance record for current status.
+into Godot. Food Icons Pack 1.0 was acquired through Unity's official workflow;
+19 selected images were imported with the installed Unity CLI, verified as
+transparent Sprites and deployed. Builds with these verified local overrides use
+the selected PNGs; clean checkouts retain the original SVG fallbacks. See the
+provenance record for selection, hashes and release evidence.
 
 Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
 and star badges, and its word is spoken. Hints follow your selected card when it has a

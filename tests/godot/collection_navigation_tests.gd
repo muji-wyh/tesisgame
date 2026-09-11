@@ -73,14 +73,23 @@ func _run() -> void:
 		app._room.item_buttons["toy-space"].pressed.emit()
 		await process_frame
 		await process_frame
-		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()), "The locked preview's return button is visible on landscape screens")
+		check(root.gui_get_focus_owner() == app._room.goal_button, "A locked preview focuses the actionable gift goal")
+		check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
+		app._room.action_button.grab_focus()
+		await process_frame
+		await process_frame
+		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()), "The locked preview's return remains reachable on landscape screens")
 		app._room.action_button.pressed.emit()
 		app._show_reward_section("medals")
 		app._hide_collection()
+		check(app.playroom_state.set_goal("toy-spring", app.medal_progress.counts), "An unfinished gift can be selected before its final piece")
 		app.medal_progress.counts["spring-1"] = 3
 		app._unlocked_gift = load("res://scripts/playroom_state.gd").item("toy-spring")
 		app._try_unlocked_gift()
+		await process_frame
+		await process_frame
 		check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip opens the gift in the room after visiting Medals")
+		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()), "Try gift keeps the toy action visible after the completed-goal layout settles")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

@@ -63,6 +63,12 @@ func _run() -> void:
 					_test_sticker_memory()
 					_test_invalid_stickers()
 					_test_sticker_failures()
+				var goals_ready: bool = _script.new().has_method("set_goal") and _script.new().has_method("selected_goal")
+				check(goals_ready, "PlayroomState exposes saved gift selection and derived goal progress")
+				if goals_ready:
+					_test_selected_goal()
+					_test_invalid_goal()
+					_test_goal_failures()
 				_cleanup()
 	print("Playroom state: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -570,6 +576,114 @@ func _test_sticker_failures() -> void:
 	migration_storage.writable = true
 	if _load(migration.state):
 		check(migration.state.collected_word_ids == ["cat"] and migration.state.displayed_word_id == "cat" and FileAccess.get_file_as_string(migration.path) == original, "Browser migration preserves the native sticker section and original file")
+
+
+func _goal_text(id: Variant) -> String:
+	var config := ConfigFile.new()
+	config.parse(_sticker_text(["cat"], "cat"))
+	config.set_value("journey", "goal_item_id", id)
+	return config.encode_to_text()
+
+
+func _test_selected_goal() -> void:
+	var fixture := _fixture("selected_goal")
+	var state = fixture.state
+	check(not state.set_goal("toy-ocean", {}), "Goal selection requires a successful load")
+	var original := _sticker_text(["cat"], "cat")
+	_write(fixture.path, original)
+	if not _load(state):
+		return
+	check(state.goal_item_id.is_empty() and state.selected_goal({}).is_empty(), "Existing room, journey and sticker saves default to no selected goal")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading an old goal-free record preserves its bytes")
+	for id in ["", "unknown", "toy-ball", "backdrop-home", "toy-spring"]:
+		check(not state.set_goal(id, {"spring-1": 3}), "Only known locked gifts can be selected as a goal: " + id)
+	check(state.goal_item_id.is_empty() and FileAccess.get_file_as_string(fixture.path) == original, "Rejected goals do not change confirmed preferences or saved bytes")
+	var counts := {"ocean-1": 3, "ocean-2": 1, "ocean-3": 1}
+	var before := counts.duplicate(true)
+	check(state.set_goal("backdrop-ocean", counts), "An unowned backdrop can be selected as the gift goal")
+	check(state.goal_item_id == "backdrop-ocean" and state.preferred_theme_id == "ocean", "Selecting a goal also saves its world")
+	var goal: Dictionary = state.selected_goal(counts)
+	check(goal.id == "backdrop-ocean" and goal.remaining_pieces == 4, "A selected backdrop counts exactly the missing pieces of its first three medals")
+	check(state.selected_goal({}).remaining_pieces == 9 and state.selected_goal({"ocean-1": 3, "ocean-2": 3, "ocean-3": 2}).remaining_pieces == 1, "Selected goals derive empty and last-piece progress directly from medal counts")
+	check(state.selected_goal({"ocean-3": 3}).remaining_pieces == 0, "An owned sparse legacy backdrop is complete even when earlier medals are absent")
+	check(not state.set_goal("backdrop-ocean", {"ocean-3": 3}) and state.goal_item_id == "backdrop-ocean", "An earned goal cannot be selected again but remains available for playing")
+	check(counts == before, "Goal selection and progress reads never change medal counts")
+	goal.name = "Changed by caller"
+	check(state.selected_goal(counts).name != goal.name, "Goal metadata cannot mutate the catalog")
+	check(state.select_item("toy-winter", {"winter-1": 3}) and state.select_item("backdrop-winter", {"winter-3": 3}) and state.set_favorite("winter-10"), "Room writes coexist with a selected goal")
+	check(state.remember_visit("music-makers") and state.prefer_theme("space") and _collect(state, ["bell"]) and state.display_word("bell"), "Journey and sticker writes coexist with a selected goal")
+	var reloaded = _script.new(fixture.path)
+	if _load(reloaded):
+		check(reloaded.goal_item_id == "backdrop-ocean" and reloaded.selected_goal(counts).remaining_pieces == 4, "Every room, journey and sticker write preserves the selected goal across reload")
+		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10" and reloaded.preferred_theme_id == "space", "The saved goal preserves independent room and world choices")
+		check(reloaded.collected_word_ids == ["cat", "bell"] and reloaded.displayed_word_id == "bell" and reloaded.recent_topic_ids == ["music-makers", "animal-friends"], "The saved goal preserves stickers and adventure history")
+	check(state.set_goal("backdrop-ocean", counts) and state.preferred_theme_id == "ocean", "Resuming the same locked goal restores its world after another preference")
+	_directory(fixture.path + ".pending")
+	check(state.set_goal("backdrop-ocean", counts), "Repeating a goal with the same world is idempotent without a storage write")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known goal write blocker")
+	check(state.set_goal("toy-space", {}) and state.selected_goal({"space-1": 2}).remaining_pieces == 1, "A new toy goal replaces the old goal and reports its remaining piece")
+	check(state.selected_goal({"space-1": 3}).remaining_pieces == 0, "A completed toy remains the selected goal with zero pieces remaining")
+
+
+func _test_invalid_goal() -> void:
+	for invalid in [false, 1, [], {}, "unknown", "space-1", "toy-ball", "backdrop-home"]:
+		var storage := BrowserStorage.new()
+		storage.text = _goal_text("toy-ocean")
+		var fixture := _fixture("invalid_goal_%d" % _files.size(), storage)
+		var state = fixture.state
+		if not _load(state):
+			continue
+		storage.text = _goal_text(invalid)
+		var original: String = storage.text
+		check(not _corrupt_load(state) and not state.error.is_empty(), "Present invalid goal values are rejected")
+		check(state.goal_item_id == "toy-ocean" and state.preferred_theme_id == "ocean" and state.toy_id == "toy-spring" and state.collected_word_ids == ["cat"], "A failed goal reload preserves the last confirmed goal, room, world and stickers")
+		check(not state.set_goal("toy-space", {}) and not state.select_item("toy-ball", {}) and not state.set_favorite("") and not state.prefer_theme("winter") and not state.remember_visit("music-makers") and not _collect(state, ["bell"]) and not state.display_word(""), "An invalid goal blocks all record writes")
+		check(storage.text == original and storage.writes == 0, "Invalid goal bytes remain untouched")
+	var empty := _fixture("empty_goal")
+	_write(empty.path, _goal_text(""))
+	if _load(empty.state):
+		check(empty.state.goal_item_id.is_empty() and empty.state.selected_goal({}).is_empty(), "An explicitly empty saved goal is valid")
+
+
+func _test_goal_failures() -> void:
+	var fixture := _fixture("goal_native_failure")
+	var state = fixture.state
+	_write(fixture.path, _goal_text("toy-ocean"))
+	if not _load(state):
+		return
+	var original := FileAccess.get_file_as_string(fixture.path)
+	_directory(fixture.path + ".pending")
+	check(not state.set_goal("toy-space", {}), "A native staging failure rejects a goal and its world together")
+	check(state.goal_item_id == "toy-ocean" and state.preferred_theme_id == "ocean" and state.toy_id == "toy-spring" and state.recent_topic_ids == ["animal-friends"] and state.displayed_word_id == "cat", "Failed native goal saves preserve all confirmed memory")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Failed native goal saves preserve committed bytes")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the native goal staging blocker")
+	check(state.set_goal("toy-space", {}), "A failed goal retries after native storage recovers")
+	var storage := BrowserStorage.new()
+	storage.text = _sticker_text(["cat"], "cat")
+	var browser := _fixture("goal_browser", storage)
+	state = browser.state
+	if not _load(state):
+		return
+	check(state.goal_item_id.is_empty() and storage.writes == 0, "An old browser save gets the empty goal default without a migration write")
+	check(state.set_goal("toy-space", {}) and storage.writes == 1, "The browser saves the selected goal and preferred world in one write")
+	check(state.set_goal("toy-space", {}) and storage.writes == 1, "An unchanged browser goal does not write again")
+	original = storage.text
+	storage.writable = false
+	check(not state.set_goal("toy-winter", {}) and state.goal_item_id == "toy-space" and state.preferred_theme_id == "space" and storage.text == original, "A failed browser save cannot expose either half of a new goal and world")
+	storage.writable = true
+	check(state.set_goal("toy-winter", {}), "A failed browser goal can retry")
+	var reloaded = _script.new(browser.path, storage)
+	if _load(reloaded):
+		check(reloaded.goal_item_id == "toy-winter" and reloaded.preferred_theme_id == "winter" and reloaded.displayed_word_id == "cat", "Browser reload restores the goal and preserves its stickers")
+	var migration_storage := BrowserStorage.new()
+	var migration := _fixture("goal_browser_migration", migration_storage)
+	_write(migration.path, _goal_text("toy-ocean"))
+	original = FileAccess.get_file_as_string(migration.path)
+	migration_storage.writable = false
+	check(not migration.state.load_state() and migration.state.goal_item_id.is_empty() and migration.state.preferred_theme_id.is_empty(), "Failed browser migration exposes neither the native goal nor its preferred world")
+	migration_storage.writable = true
+	if _load(migration.state):
+		check(migration.state.goal_item_id == "toy-ocean" and migration.state.preferred_theme_id == "ocean" and FileAccess.get_file_as_string(migration.path) == original, "Native-to-browser migration preserves the saved goal and original file")
 
 
 func _cleanup() -> void:

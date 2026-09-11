@@ -16,6 +16,7 @@ var backdrop_id: String = "backdrop-home"
 var favorite_id: String = ""
 var recent_topic_ids: Array[String] = []
 var preferred_theme_id: String = ""
+var goal_item_id: String = ""
 var collected_word_ids: Array[String] = []
 var displayed_word_id: String = ""
 var error: String = ""
@@ -69,16 +70,23 @@ static func next_gift(counts: Dictionary, theme_id: String = "") -> Dictionary:
 	for entry in catalog():
 		if (not theme_id.is_empty() and entry.theme != theme_id) or owned(entry, counts):
 			continue
-		var remaining: int = 0
-		for medal in Data.medals(entry.theme):
-			var required: int = entry.required_pieces if medal.id == entry.medal_id else Data.PIECES_PER_MEDAL
-			remaining += maxi(0, required - _pieces(counts, medal.id))
-			if medal.id == entry.medal_id:
-				break
+		var remaining: int = _remaining_pieces(entry, counts)
 		if result.is_empty() or remaining < result.remaining_pieces:
 			result = entry
 			result.remaining_pieces = remaining
 	return result
+
+
+static func _remaining_pieces(entry: Dictionary, counts: Dictionary) -> int:
+	if owned(entry, counts):
+		return 0
+	var remaining: int = 0
+	for medal in Data.medals(entry.theme):
+		var required: int = entry.required_pieces if medal.id == entry.medal_id else Data.PIECES_PER_MEDAL
+		remaining += maxi(0, required - _pieces(counts, medal.id))
+		if medal.id == entry.medal_id:
+			break
+	return remaining
 
 
 static func _pieces(counts: Dictionary, id: String) -> int:
@@ -113,6 +121,7 @@ func load_state(legacy_favorite: String = "") -> bool:
 	var next_favorite: String = legacy_favorite
 	var next_recent: Array[String] = []
 	var next_preferred: String = ""
+	var next_goal: String = ""
 	var next_collected: Array[String] = []
 	var next_displayed: String = ""
 	if status != ERR_FILE_NOT_FOUND:
@@ -136,6 +145,7 @@ func load_state(legacy_favorite: String = "") -> bool:
 	if config.has_section("journey"):
 		var saved_recent: Variant = config.get_value("journey", "recent_topic_ids", null)
 		var saved_preferred: Variant = config.get_value("journey", "preferred_theme_id", null)
+		var saved_goal: Variant = config.get_value("journey", "goal_item_id", "")
 		if not saved_recent is Array or saved_recent.size() > 12:
 			return _fail("Journey history needs an array of at most twelve known topic IDs.")
 		for id in saved_recent:
@@ -145,6 +155,9 @@ func load_state(legacy_favorite: String = "") -> bool:
 		if not saved_preferred is String or (not saved_preferred.is_empty() and not Data.THEMES.has(saved_preferred)):
 			return _fail("The preferred theme needs a known theme ID or an empty string.")
 		next_preferred = saved_preferred
+		if not saved_goal is String or (not saved_goal.is_empty() and item(saved_goal).get("theme", "").is_empty()):
+			return _fail("The gift goal needs a known world gift ID or an empty string.")
+		next_goal = saved_goal
 	if config.has_section("stickers"):
 		var saved_words: Variant = config.get_value("stickers", "word_ids", null)
 		var saved_display: Variant = config.get_value("stickers", "display_word_id", null)
@@ -157,17 +170,41 @@ func load_state(legacy_favorite: String = "") -> bool:
 		if not saved_display is String or (not saved_display.is_empty() and not next_collected.has(saved_display)):
 			return _fail("The displayed sticker must be collected or empty.")
 		next_displayed = saved_display
-	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite, next_recent, next_preferred, next_collected, next_displayed):
+	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite, next_recent, next_preferred, next_collected, next_displayed, next_goal):
 		return false
 	toy_id = next_toy
 	backdrop_id = next_backdrop
 	favorite_id = next_favorite
 	recent_topic_ids = next_recent
 	preferred_theme_id = next_preferred
+	goal_item_id = next_goal
 	collected_word_ids = next_collected
 	displayed_word_id = next_displayed
 	_loaded = true
 	return true
+
+
+func set_goal(id: String, counts: Dictionary) -> bool:
+	error = ""
+	if not _loaded:
+		return _fail("Load playroom choices successfully before choosing a gift goal.")
+	var selected := item(id)
+	if selected.is_empty() or owned(selected, counts):
+		return _fail("Choose a known gift that still needs medal pieces.")
+	if goal_item_id == id and preferred_theme_id == selected.theme:
+		return true
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, selected.theme, collected_word_ids, displayed_word_id, id):
+		return false
+	goal_item_id = id
+	preferred_theme_id = selected.theme
+	return true
+
+
+func selected_goal(counts: Dictionary) -> Dictionary:
+	var selected := item(goal_item_id)
+	if not selected.is_empty():
+		selected.remaining_pieces = _remaining_pieces(selected, counts)
+	return selected
 
 
 func select_item(id: String, counts: Dictionary) -> bool:
@@ -183,7 +220,7 @@ func select_item(id: String, counts: Dictionary) -> bool:
 	var next_backdrop: String = id if selected.slot == "backdrop" else backdrop_id
 	if next_toy == toy_id and next_backdrop == backdrop_id:
 		return true
-	if not _persist(next_toy, next_backdrop, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id):
+	if not _persist(next_toy, next_backdrop, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id, goal_item_id):
 		return false
 	toy_id = next_toy
 	backdrop_id = next_backdrop
@@ -198,7 +235,7 @@ func set_favorite(id: String) -> bool:
 		return _fail("Choose a known reward for Pip's favorite.")
 	if favorite_id == id:
 		return true
-	if not _persist(toy_id, backdrop_id, id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id):
+	if not _persist(toy_id, backdrop_id, id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id, goal_item_id):
 		return false
 	favorite_id = id
 	return true
@@ -216,7 +253,7 @@ func collect_words(ids: Array[String]) -> bool:
 			next_collected.append(id)
 	if next_collected == collected_word_ids:
 		return true
-	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, next_collected, displayed_word_id):
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, next_collected, displayed_word_id, goal_item_id):
 		return false
 	collected_word_ids = next_collected
 	return true
@@ -230,7 +267,7 @@ func display_word(id: String) -> bool:
 		return _fail("Collect a word before displaying its sticker.")
 	if displayed_word_id == id:
 		return true
-	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, id):
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, id, goal_item_id):
 		return false
 	displayed_word_id = id
 	return true
@@ -263,7 +300,7 @@ func remember_visit(id: String) -> bool:
 	next_recent.push_front(id)
 	if next_recent.size() > 12:
 		next_recent.pop_back()
-	if not _persist(toy_id, backdrop_id, favorite_id, next_recent, preferred_theme_id, collected_word_ids, displayed_word_id):
+	if not _persist(toy_id, backdrop_id, favorite_id, next_recent, preferred_theme_id, collected_word_ids, displayed_word_id, goal_item_id):
 		return false
 	recent_topic_ids = next_recent
 	return true
@@ -277,7 +314,7 @@ func prefer_theme(id: String) -> bool:
 		return _fail("Choose a known theme or clear the preference.")
 	if preferred_theme_id == id:
 		return true
-	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, id, collected_word_ids, displayed_word_id):
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, id, collected_word_ids, displayed_word_id, goal_item_id):
 		return false
 	preferred_theme_id = id
 	return true
@@ -290,7 +327,7 @@ func suggested_adventure() -> String:
 	return recent_topic_ids.back() if not recent_topic_ids.is_empty() else ""
 
 
-func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String, next_collected: Array[String], next_displayed: String) -> bool:
+func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String, next_collected: Array[String], next_displayed: String, next_goal: String) -> bool:
 	var config := ConfigFile.new()
 	config.set_value("playroom", "version", SAVE_VERSION)
 	config.set_value("playroom", "toy", next_toy)
@@ -298,6 +335,7 @@ func _persist(next_toy: String, next_backdrop: String, next_favorite: String, ne
 	config.set_value("playroom", "favorite", next_favorite)
 	config.set_value("journey", "recent_topic_ids", next_recent)
 	config.set_value("journey", "preferred_theme_id", next_preferred)
+	config.set_value("journey", "goal_item_id", next_goal)
 	config.set_value("stickers", "word_ids", next_collected)
 	config.set_value("stickers", "display_word_id", next_displayed)
 	if _browser_storage != null:

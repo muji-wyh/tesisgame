@@ -4,19 +4,35 @@ signal item_selected(id: String)
 signal item_previewed(message: String)
 signal word_requested(word_id: String)
 signal toy_played(kind: String)
+signal goal_requested(id: String)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
-const ACTIONS := {"water": "Water the flower", "roll": "Roll the ball", "offer": "Offer the apple", "ring": "Ring the bell", "open": "Listen to the shell", "launch": "Launch the rocket"}
-const OUTCOMES := {"water": "The flower blooms for Pip!", "roll": "The ball rolls to Pip!", "offer": "An apple for Pip. Yum!", "ring": "The bell rings. Ding, ding!", "open": "Pip listens to the shell. Whoosh!", "launch": "The rocket takes off. Whoosh!"}
+const ACTIONS := {
+	"water": ["Water the flower", "Grow the flower", "Bloom the flower"],
+	"roll": ["Roll the ball", "Return the ball", "Catch the ball"],
+	"offer": ["Offer the apple", "Nibble the apple", "Finish the apple"],
+	"ring": ["Ring the bell", "Answer the bell", "Chime the bell"],
+	"open": ["Lift the shell", "Listen to the shell", "Hear the waves"],
+	"launch": ["Ready the rocket", "Ignite the rocket", "Launch the rocket"]
+}
+const OUTCOMES := {
+	"water": ["A drink for the flower!", "The flower grows taller!", "The flower blooms for Pip!"],
+	"roll": ["The ball rolls to Pip!", "Pip rolls the ball back!", "Pip catches the ball. Hooray!"],
+	"offer": ["An apple for Pip!", "Pip nibbles the apple. Crunch!", "Pip finishes the apple. Just the core!"],
+	"ring": ["The bell rings. Ding!", "Pip answers the bell. Ding, ding!", "The bell and Pip make a happy chime!"],
+	"open": ["Pip lifts the shell!", "Pip listens to the shell. Shh!", "The shell sounds like ocean waves. Whoosh!"],
+	"launch": ["The rocket is ready on its launch pad!", "The rocket glows. Ready to go!", "The rocket takes off. Whoosh!"]
+}
 
 class RoomScene extends Control:
 	var theme_id: String = "home"
 	var palette: Dictionary = {}
 	var action: String = ""
 	var action_progress: float = 0.0
+	var stage: int = 0
 	var toy_center: Vector2
 
 	func _draw() -> void:
@@ -62,34 +78,75 @@ class RoomScene extends Control:
 			return
 		var point := toy_center
 		if action == "water":
-			for index in range(3):
-				draw_line(point + Vector2(-22 + index * 19, -66), point + Vector2(-25 + index * 19, -55), Color("#58a9c9"), 3, true)
+			if stage == 1:
+				for index in range(3):
+					draw_line(point + Vector2(-22 + index * 19, -61), point + Vector2(-25 + index * 19, -50), Color("#58a9c9"), 4, true)
+			elif stage == 2:
+				for side in [-1, 1]:
+					draw_line(point + Vector2(side * 43, 28), point + Vector2(side * 43, -21), accent, 3, true)
+					draw_line(point + Vector2(side * 43, -21), point + Vector2(side * 43 - 7, -10), accent, 3, true)
+					draw_line(point + Vector2(side * 43, -21), point + Vector2(side * 43 + 7, -10), accent, 3, true)
+			else:
+				for index in range(8):
+					var ray := Vector2.from_angle(index * TAU / 8)
+					draw_line(point + ray * 49, point + ray * 57, Color("#e8af39"), 4, true)
 		elif action == "ring":
 			for side in [-1, 1]:
-				for index in range(2):
-					draw_arc(point + Vector2(side * 20, 0), 26 + index * 9, -0.8 if side == 1 else PI - 0.8, 0.8 if side == 1 else PI + 0.8, 12, accent, 2, true)
+				for index in range(stage):
+					draw_arc(point + Vector2(side * 14, 0), 25 + index * 7, -0.8 if side == 1 else PI - 0.8, 0.8 if side == 1 else PI + 0.8, 12, accent, 2, true)
+			if stage >= 2:
+				for index in range(stage - 1):
+					var note := Vector2(70 + index * 42, 48 + index * 14)
+					draw_circle(note, 5, accent)
+					draw_line(note + Vector2(4, 0), note + Vector2(4, -16), accent, 3, true)
 		elif action == "open":
-			for row in range(3):
+			for row in range(stage):
 				var wave := PackedVector2Array()
-				for index in range(12):
-					wave.append(point + Vector2(-64 + index * 3, -18 + row * 14 + sin(index * 0.8) * 3))
+				for index in range(22 if stage == 3 else 12):
+					wave.append(point + Vector2(-69 + index * (6 if stage == 3 else 3), 32 + row * 8 + sin(index * 0.8) * 3))
 				draw_polyline(wave, Color("#58a9c9"), 2, true)
 		elif action == "launch":
-			for index in range(3):
-				var start := point + Vector2((index - 1) * 12, 40)
-				draw_line(start, start + Vector2(0, 12 + index % 2 * 13), Color("#efb14f"), 4, true)
+			draw_line(Vector2(size.x - 120, floor_y), Vector2(size.x - 12, floor_y), accent, 6, true)
+			if stage >= 2:
+				for index in range(3):
+					var start := point + Vector2((index - 1) * 12, 37)
+					draw_line(start, start + Vector2(0, (9 + index % 2 * 10) * (stage - 1)), Color("#efb14f"), 5, true)
 		elif action == "offer":
-			for index in range(3):
-				draw_circle(point + Vector2(-12 + index * 11, 28 + index % 2 * 7), 2.5, Color("#d49854"))
+			if stage >= 2:
+				for index in range(stage + 1):
+					draw_circle(point + Vector2(-16 + index * 11, 35 + index % 2 * 7), 3, Color("#d49854"))
+			if stage == 3 and action_progress >= 0.8:
+				var core := PackedVector2Array([point + Vector2(-19, -26), point + Vector2(19, -26), point + Vector2(7, 0), point + Vector2(19, 25), point + Vector2(-19, 25), point + Vector2(-7, 0)])
+				draw_colored_polygon(core, Color("#fff1c5"))
+				draw_polyline(PackedVector2Array([core[1], core[2], core[3]]), Color("#ba8854"), 2, true)
+				draw_polyline(PackedVector2Array([core[4], core[5], core[0]]), Color("#ba8854"), 2, true)
+				draw_line(point + Vector2(-19, -26), point + Vector2(19, -26), Color("#d45f4e"), 5, true)
+				draw_line(point + Vector2(-19, 25), point + Vector2(19, 25), Color("#d45f4e"), 5, true)
+				draw_line(point + Vector2(0, -27), point + Vector2(3, -36), Color("#83572f"), 4, true)
+				draw_circle(point, 3, Color("#83572f"))
 		elif action == "roll":
-			for index in range(3):
-				draw_line(point + Vector2(36 + index * 9, -7 + index * 7), point + Vector2(44 + index * 9, -7 + index * 7), accent.lightened(0.3), 2, true)
+			if stage == 3:
+				draw_arc(point, 48, 0.1, PI - 0.1, 24, accent, 4, true)
+			else:
+				for index in range(3):
+					var side := 1 if stage == 1 else -1
+					draw_line(point + Vector2(side * (36 + index * 5), -7 + index * 7), point + Vector2(side * (44 + index * 5), -7 + index * 7), accent.lightened(0.3), 3, true)
+
+class ToyMarks extends Control:
+	var nibbled: bool = false
+	var background: Color
+
+	func _draw() -> void:
+		if nibbled:
+			for offset in [Vector2(26, -10), Vector2(29, 3), Vector2(25, 13)]:
+				draw_circle(size * 0.5 + offset, 10, background)
 
 var duck_slot: Control
 var caption: Label
 var favorite_medal: Medal
 var toy_button: Button
 var action_button: Button
+var goal_button: Button
 var item_buttons: Dictionary = {}
 var category_buttons: Dictionary = {}
 var goal_label: Label
@@ -113,6 +170,10 @@ var _item_labels: Dictionary = {}
 var _base_toy_position: Vector2
 var _action: String = ""
 var _action_progress: float = 0.0
+var _stage: int = 0
+var _toy_art: Texture2D
+var _toy_marks: ToyMarks
+var _goal_id: String = ""
 var _preview_locked: bool = false
 var _word_sticker: Dictionary = {}
 var _sticker_audio_available: bool = true
@@ -132,6 +193,11 @@ func _build() -> void:
 	goal_label = Style.label("", 17)
 	goal_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(goal_label)
+	goal_button = Button.new()
+	goal_button.name = "RoomGiftGoal"
+	Style.button(goal_button, Style.GOOD)
+	goal_button.pressed.connect(_request_goal)
+	add_child(goal_button)
 	_room = RoomScene.new()
 	_room.custom_minimum_size = Vector2(0, 224)
 	_room.clip_contents = true
@@ -158,6 +224,10 @@ func _build() -> void:
 	toy_button.add_theme_constant_override("icon_max_width", 84)
 	toy_button.pressed.connect(_play_toy)
 	_room.add_child(toy_button)
+	_toy_marks = ToyMarks.new()
+	_toy_marks.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	toy_button.add_child(_toy_marks)
+	_toy_marks.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_toy_label = Style.label("ball", 21)
 	_toy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_room.add_child(_toy_label)
@@ -214,18 +284,13 @@ func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: b
 	_last_backdrop = state.backdrop_id
 	if changed:
 		_preview_id = ""
-		_action = ""
-		set_process(false)
+		_reset_sequence()
 	if item_buttons.is_empty():
 		_build_items()
 	_refresh_items()
 	_refresh_room()
 	if reduced_motion and not _action.is_empty():
-		_action_progress = 1.0
-		set_process(false)
-		_apply_action()
-	var gift: Dictionary = _state.next_gift(_counts, palette.get("id", ""))
-	goal_label.text = "Every gift in this world is yours. Mix and play!" if gift.is_empty() else "Next gift: %s · %d more %s" % [gift.name, gift.remaining_pieces, "piece" if gift.remaining_pieces == 1 else "pieces"]
+		settle()
 
 
 func _build_items() -> void:
@@ -350,25 +415,60 @@ func _refresh_room() -> void:
 		else:
 			backdrop = preview
 	if _toy.id != previous_toy:
-		_action = ""
-		set_process(false)
+		_reset_sequence()
 	_room.theme_id = backdrop.theme if backdrop.id != "backdrop-home" else "home"
 	_room.palette = Data.theme(backdrop.theme) if Data.THEMES.has(backdrop.theme) else _palette
 	_room_title.text = ("Preview: " if _preview_locked and preview.slot == "backdrop" else "") + str(backdrop.name)
-	toy_button.icon = _art(_toy)
+	_toy_art = _art(_toy)
+	toy_button.icon = _toy_art
 	toy_button.self_modulate = SUMMER_BALL_TINT if _toy.id == "toy-summer" else Color.WHITE
-	toy_button.tooltip_text = ACTIONS[_toy.action]
-	_name_control(toy_button, toy_button.tooltip_text)
 	_toy_label.text = _toy.word_id
 	action_button.disabled = false
 	toy_button.disabled = _preview_locked
 	toy_button.focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
-	action_button.text = "Back to my room" if _preview_locked else ACTIONS[_toy.action]
+	_refresh_action_control()
 	if _preview_locked:
 		caption.text = preview.name + ". " + _requirement(preview)
 	elif _action.is_empty():
-		caption.text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action]]
+		caption.text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action][0]]
+	_refresh_goal()
 	_layout_room()
+
+
+func _refresh_goal() -> void:
+	var gift: Dictionary = _item(_preview_id) if _preview_locked else _state.selected_goal(_counts)
+	_goal_id = str(gift.get("id", ""))
+	goal_button.visible = not gift.is_empty()
+	goal_button.disabled = gift.is_empty()
+	goal_button.focus_mode = Control.FOCUS_NONE if gift.is_empty() else Control.FOCUS_ALL
+	if gift.is_empty():
+		gift = _state.next_gift(_counts, _palette.get("id", ""))
+		goal_label.text = "Every gift in this world is yours. Mix and play!" if gift.is_empty() else "Next gift: %s · %d more %s" % [gift.name, gift.remaining_pieces, "piece" if gift.remaining_pieces == 1 else "pieces"]
+		return
+	var remaining: int = gift.remaining_pieces if gift.has("remaining_pieces") else _remaining(gift)
+	goal_label.text = "%s · %s · %s" % [gift.name, Data.theme(gift.theme).name, "Ready to play!" if remaining == 0 else "%d more %s" % [remaining, "piece" if remaining == 1 else "pieces"]]
+	goal_button.text = "Help Pip get this" if _preview_locked else "Play with this gift" if remaining == 0 else "Continue adventure"
+	goal_button.tooltip_text = goal_button.text + ". " + goal_label.text
+	_name_control(goal_button, goal_button.tooltip_text)
+
+
+func _request_goal() -> void:
+	if _can_interact() and goal_button.visible and not _goal_id.is_empty():
+		goal_requested.emit(_goal_id)
+
+
+func _reset_sequence() -> void:
+	_action = ""
+	_stage = 0
+	_action_progress = 0.0
+	set_process(false)
+
+
+func _refresh_action_control() -> void:
+	action_button.text = "Back to my room" if _preview_locked else "Play again" if _stage == 3 else ACTIONS[_toy.action][_stage]
+	toy_button.tooltip_text = "Play with the " + str(_toy.word_id) + " again" if _stage == 3 else str(ACTIONS[_toy.action][_stage])
+	_name_control(toy_button, toy_button.tooltip_text)
+	_name_control(action_button, action_button.text)
 
 
 func _show_category(id: String) -> void:
@@ -376,8 +476,7 @@ func _show_category(id: String) -> void:
 		return
 	_category = id
 	_preview_id = ""
-	_action = ""
-	set_process(false)
+	_reset_sequence()
 	_refresh_items()
 	_refresh_room()
 
@@ -393,8 +492,7 @@ func _choose_item(id: String) -> void:
 		item_selected.emit(id)
 	else:
 		_preview_id = id
-		_action = ""
-		set_process(false)
+		_reset_sequence()
 		_refresh_room()
 		item_previewed.emit(caption.text)
 
@@ -404,7 +502,7 @@ func _activate_action() -> void:
 		return
 	if _preview_locked:
 		_preview_id = ""
-		_action = ""
+		_reset_sequence()
 		_refresh_room()
 		item_previewed.emit(caption.text)
 	else:
@@ -414,9 +512,15 @@ func _activate_action() -> void:
 func _play_toy() -> void:
 	if _preview_locked or _toy.is_empty() or not _can_interact():
 		return
+	if _stage == 3:
+		_reset_sequence()
+		_refresh_room()
+		return
 	_action = _toy.action
+	_stage += 1
 	_action_progress = 1.0 if _reduced_motion else 0.0
-	caption.text = OUTCOMES[_action]
+	caption.text = "%d/3 · %s" % [_stage, OUTCOMES[_action][_stage - 1]]
+	_refresh_action_control()
 	_apply_action()
 	set_process(not _reduced_motion)
 	word_requested.emit(_toy.word_id)
@@ -446,25 +550,44 @@ func _apply_action() -> void:
 	toy_button.position = _base_toy_position
 	toy_button.scale = Vector2.ONE
 	toy_button.rotation = 0
+	toy_button.icon = _toy_art
+	_toy_marks.nibbled = _action == "offer" and _stage == 2
+	_toy_marks.background = _room.palette.get("background", Color("#edf8ec"))
+	_toy_marks.queue_redraw()
 	var progress := smoothstep(0.0, 1.0, _action_progress)
+	var previous := maxi(0, _stage - 1)
+	var offsets: Array[Vector2] = [Vector2.ZERO]
+	var rotations: Array[float] = [0.0, 0.0, 0.0, 0.0]
 	if _action == "water":
-		toy_button.scale = Vector2.ONE * (1.0 + progress * 0.12)
+		offsets.append_array([Vector2(0, 8), Vector2(0, -4), Vector2(0, -10)])
+		var scales := [1.0, 0.9, 1.05, 1.15]
+		toy_button.scale = Vector2.ONE * lerpf(scales[previous], scales[_stage], progress)
 	elif _action == "roll":
-		toy_button.position.x -= progress * minf(80, _room.size.x * 0.25)
-		toy_button.rotation = -TAU * progress
+		var travel := minf(58, _room.size.x * 0.2)
+		offsets.append_array([Vector2(-travel, 0), Vector2(0, -14), Vector2(-travel * 0.7, -28)])
+		rotations = [0.0, -TAU, 0.0, -PI * 0.25]
 	elif _action == "offer":
-		toy_button.position += Vector2(-minf(100, _room.size.x * 0.32), -8) * progress
-		toy_button.scale = Vector2.ONE * (1.0 - progress * 0.3)
+		offsets.append_array([Vector2(-42, -8), Vector2(-50, -18), Vector2(-44, 0)])
+		rotations = [0.0, -0.1, 0.15, 0.0]
+		if _stage == 3 and progress >= 0.8:
+			toy_button.icon = null
 	elif _action == "ring":
-		toy_button.rotation = -0.16 if _reduced_motion or progress == 1 else sin(progress * TAU * 3) * 0.2
+		offsets.append_array([Vector2.ZERO, Vector2(-8, -4), Vector2(0, -13)])
+		rotations = [0.0, -0.2, 0.2, 0.0]
 	elif _action == "open":
-		toy_button.rotation = -progress * 0.18
-		toy_button.position.x -= progress * 18
+		offsets.append_array([Vector2(-6, -20), Vector2(-44, -26), Vector2(-38, -10)])
+		rotations = [0.0, -0.12, -0.28, 0.1]
 	elif _action == "launch":
-		toy_button.position.y -= progress * 54
+		offsets.append_array([Vector2(0, 4), Vector2(0, -6), Vector2(-16, -54)])
+	if offsets.size() == 4:
+		toy_button.position += offsets[previous].lerp(offsets[_stage], progress)
+		toy_button.rotation = lerpf(rotations[previous], rotations[_stage], progress)
+		if _action == "ring" and not _reduced_motion:
+			toy_button.rotation += sin(progress * TAU * 3) * 0.16 * sin(progress * PI)
 	_toy_label.position.x = toy_button.position.x + toy_button.size.x * 0.5 - _toy_label.size.x * 0.5
 	_room.action = _action
 	_room.action_progress = progress
+	_room.stage = _stage
 	_room.toy_center = toy_button.position + toy_button.size * 0.5
 	_room.queue_redraw()
 
@@ -478,16 +601,25 @@ func _process(delta: float) -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
-		set_process(false)
-		if not _action.is_empty():
-			_action_progress = 1.0
-			_apply_action()
+		settle()
+
+
+func settle() -> void:
+	set_process(false)
+	if not _action.is_empty():
+		_action_progress = 1.0
+		_apply_action()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		settle()
 
 
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button, word_sticker_button] + category_buttons.values() + item_buttons.values():
+	for button in [toy_button, action_button, goal_button, word_sticker_button] + category_buttons.values() + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result

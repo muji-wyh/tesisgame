@@ -15,6 +15,13 @@ async function openRoom(page) {
   await rendered(page);
 }
 
+async function leavePreview(page) {
+  // The gift goal starts focused; Pip and Back follow it while the toy is locked.
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+}
+
 async function seedGifts(page, { favorite = '' } = {}) {
   const counts = {};
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space']) {
@@ -34,7 +41,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   const saved = await roomRecord(page);
   expect(saved).toContain('toy="toy-ball"');
   await tap(page, 240, 502);
-  await expect(page.locator('#game-status')).toHaveText('The ball rolls to Pip!');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   // Pip's speech marker clears when the pronunciation finishes.
   await page.waitForTimeout(1600);
   await rendered(page);
@@ -46,18 +53,18 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await rendered(page);
   const locked = await page.screenshot({ path: testInfo.outputPath('room-locked-toy-phone.png'), scale: 'css' });
   expect(locked.equals(still), 'A locked gift shows its artwork and exact requirement.').toBe(false);
-  await tap(page, 240, 502);
+  await leavePreview(page);
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
   await tap(page, 240, 502);
   expect(await roomRecord(page)).toBe(saved);
-  await expect(page.locator('#game-status')).toHaveText('The ball rolls to Pip!');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   await tap(page, 360, 588);
   await tap(page, 360, 660);
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('room-locked-backdrop-phone.png'), scale: 'css' });
   await expect(page.locator('#game-status')).toContainText('Complete Bee');
-  await tap(page, 240, 502);
+  await leavePreview(page);
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
   await page.keyboard.press('Escape');
@@ -87,7 +94,11 @@ test('earned toy, backdrop, and migrated favorite persist through immediate relo
   // A new startup lesson can add a visit; the selected room must stay identical.
   expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
   await tap(page, 240, 502);
-  await expect(page.locator('#game-status')).toHaveText('The flower blooms for Pip!');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
+  await tap(page, 240, 502);
+  await expect(page.locator('#game-status')).toHaveText('2/3 · The flower grows taller!');
+  await tap(page, 240, 502);
+  await expect(page.locator('#game-status')).toHaveText('3/3 · The flower blooms for Pip!');
   await page.waitForTimeout(1600);
   await page.screenshot({ path: testInfo.outputPath('room-saved-flower-phone.png'), scale: 'css' });
   expect(await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY)).toBe(medals);
@@ -166,11 +177,11 @@ test('earned seasonal toys keep their visible noun and distinct outcome', async 
   await seedGifts(page);
   const errors = await openGame(page);
   const medals = await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
-  for (const [theme, outcome] of [
-    ['summer', 'The ball rolls to Pip!'],
-    ['autumn', 'An apple for Pip. Yum!'],
-    ['ocean', 'Pip listens to the shell. Whoosh!'],
-    ['space', 'The rocket takes off. Whoosh!']
+  for (const [theme, stages] of [
+    ['summer', ['The ball rolls to Pip!', 'Pip rolls the ball back!', 'Pip catches the ball. Hooray!']],
+    ['autumn', ['An apple for Pip!', 'Pip nibbles the apple. Crunch!', 'Pip finishes the apple. Just the core!']],
+    ['ocean', ['Pip lifts the shell!', 'Pip listens to the shell. Shh!', 'The shell sounds like ocean waves. Whoosh!']],
+    ['space', ['The rocket is ready on its launch pad!', 'The rocket glows. Ready to go!', 'The rocket takes off. Whoosh!']]
   ]) {
     await page.evaluate(({ key, theme }) => {
       localStorage.setItem(key, `[playroom]\nversion=1\ntoy="toy-${theme}"\nbackdrop="backdrop-${theme}"\nfavorite=""\n`);
@@ -178,8 +189,11 @@ test('earned seasonal toys keep their visible noun and distinct outcome', async 
     await page.reload();
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
     await openRoom(page);
-    await tap(page, 240, 502);
-    await expect(page.locator('#game-status')).toHaveText(outcome);
+    for (const [index, caption] of stages.entries()) {
+      await tap(page, 240, 502);
+      await expect(page.locator('#game-status')).toHaveText(`${index + 1}/3 · ${caption}`);
+      await page.screenshot({ path: testInfo.outputPath(`room-${theme}-stage-${index + 1}.png`), scale: 'css' });
+    }
     await page.waitForTimeout(1600);
     await page.screenshot({ path: testInfo.outputPath(`room-${theme}-outcome.png`), scale: 'css' });
   }
@@ -192,7 +206,7 @@ test('the room keeps readable gift previews and usable controls on a tablet', as
   const errors = await openGame(page);
   await openRoom(page);
   await tap(page, 240, 502);
-  await expect(page.locator('#game-status')).toHaveText('The ball rolls to Pip!');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   await tap(page, 360, 660);
   await page.waitForTimeout(1600);
   await page.screenshot({ path: testInfo.outputPath('room-locked-toy-tablet.png'), scale: 'css' });
