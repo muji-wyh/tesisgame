@@ -52,3 +52,23 @@ fallback. Replay preserved progress, answer artwork and the feedback card in
 pixel comparisons. Phone screenshots were inspected independently and show
 the enabled `Hear again` button in its original location. Evidence:
 `build/listen-replay/green-report.json` and `green-results/`.
+
+## Delivery
+
+Gameplay commit `c7a4dd2` was fast-forwarded into `main` and pushed to
+`origin/main`. The local preview at <http://127.0.0.1:4173/> was updated from
+71 staged files whose hashes matched the tested export. HTTP verification
+confirmed the same HTML and PCK hashes recorded above. The previous preview
+is retained at `D:/uwork/tesisgame/build/web-before-listen-1f8f7df`.
+
+`npm run deploy -- -SkipBuild` successfully deployed the frozen export to
+<https://gentle-forest-02ff42900.3.azurestaticapps.net/>. The production HTML
+and PCK were fetched and matched both SHA256 values above. Deployment log:
+`build/listen-replay-deploy.log`.
+
+The same three browser cases then passed against production in 51.8 seconds,
+with zero failures, skips or flaky cases. The production mobile screenshot
+also confirms the enabled replay button and unchanged feedback layout.
+Reports and screenshots: `build/listen-replay/production-report.json` and
+`production-results/`. This delivery record is a documentation-only follow-up;
+the tested export was not rebuilt or redeployed for it.
