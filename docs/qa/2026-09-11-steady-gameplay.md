@@ -127,6 +127,31 @@ separate from composed page validation. Original page screenshots and raw PNGs
 are retained together under `build/memory-resize-compare-results/`, with context,
 frame and draw-call records in each case's `states.json`.
 
+## Delivery
+
+Gameplay commit `2fd3a9007b41221a8109d516ec3e9abaf0cbd01b` was fast-forwarded
+to `main` and pushed to `origin/main`. `npm run deploy -- -SkipBuild` completed
+successfully against the configured Azure production target, deploying the
+frozen export without rebuilding it. Log: `build/steady-gameplay-deploy.log`.
+
+HTTP verification at
+`https://gentle-forest-02ff42900.3.azurestaticapps.net/` confirmed that both HTML
+and PCK SHA256 hashes exactly match the frozen export listed above.
+
+The local preview at `http://127.0.0.1:4173/` was updated using the same **71
+files**, each SHA256-compared before activation. Its HTTP HTML and pack hashes
+also match production. The previous preview remains at
+`D:/uwork/tesisgame/build/web-before-steady-6c1c21a` for diagnosis.
+
+Production smoke tests passed **10/10 in 135.8 seconds**: all five modes on
+desktop Chromium and iPhone WebKit, with zero failures, skips or flaky results.
+They use the final `steady-flow.spec.cjs` pixel assertions, so stable patches
+must belong to a visible rendered game. The tests complete Match and its chest,
+complete all five Memory pairs, exercise correct/wrong choice feedback and
+retry, and page Learn forward/backward. All recorded JS and console error lists
+were empty. Production report: `build/production-steady-report.json`; screenshots:
+`build/production-steady-results/`.
+
 ## Limits
 
 The separate Chrome Canary first uncached WASM compilation delay is not fixed by
