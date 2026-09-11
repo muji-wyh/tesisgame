@@ -21,8 +21,11 @@ describe the user's signed-in embedded session. The embedded connector lacked
 Codex authentication, while native sidebar interaction successfully claimed the
 pack under the user's authorization. The installed Unity CLI imported all 19
 selected textures successfully, and their copied source hashes were verified.
-Final deployed imported-art verification remains pending. See
-`docs/assets/unity-art.md` for package hashes, selection rationale and current evidence.
+Release `08ffef6` is merged into main, pushed and deployed. The production
+HTML/PCK hashes match the tested export, and all 19 imported words passed
+Learn/Hear checks at phone and desktop sizes. See
+`docs/qa/2026-09-11-unity-food-art.md` for final release evidence and the separate
+Canary first-compilation limitation.
 
 ## Global constraints
 
@@ -61,10 +64,10 @@ Final deployed imported-art verification remains pending. See
 
 - [x] Acquire Food Icons Pack 1.0 through official Editor Package Manager My Assets after the authorized account and agreement steps; record the downloaded package hash.
 - [x] Inspect all 100 actual PNGs and archive paths; select 19 vocabulary images, compare their 64px readability with the original artwork, and record exact source hashes in the mapping. Retain original milk, water, root, berry and shell teaching images.
-- [x] Import the art-only package with the installed Unity CLI into `build/unity-asset-staging`, verify imported results and produce only needed Godot textures. Run `20260911-121747-ccf31c62` exited 0; its manifest records 19 verified PNGs, independently checked against their source hashes.
+- [x] Import the art-only package with the installed Unity CLI into `build/unity-asset-staging`, verify imported results and produce only needed Godot textures. Final run `20260911-122407-933036cc` exited 0 without texture version warnings; its manifest records 19 verified PNGs, independently checked against their source hashes, and all 19 loaded as transparent 256px Sprites.
 - [x] Repair the original ambiguous objects through the existing art generators; render a contact sheet and inspect it.
 - [x] Review all 140 original pictures against their labels and independently transcribe their actual recordings. The September 11 catalog audit records each referent, file hash and acoustic result, including the sun/son homophone and the clarified "A kite." phrase. This is visual inspection plus machine recognition, not human listening.
-- [ ] Repeat semantic verification for the final catalog after actual Unity artwork is imported, including its deployed appearance and preserved pronunciation.
+- [x] Repeat semantic verification after actual Unity artwork is imported: inspect the 19 replacements in deployed Learn/Match/quiz views at phone and desktop sizes, verify all 140 original SVG/WAV hashes still match the catalog audit, and exercise Hear for all imported words. This preserves the earlier pronunciation evidence; it is not a new human-listening audit.
 
 ## Task 4: Main UI, lesson continuity and save bridge
 
@@ -83,8 +86,8 @@ Final deployed imported-art verification remains pending. See
 - [x] Commit the working change, integrate into main and push.
 - [x] Deploy the tested current `build/web` through `npm run deploy -- -SkipBuild`.
 - [x] Verify the production game pack SHA256, actual Learn and quiz flows, and room interactions.
-- [ ] Verify actual Unity-imported artwork in the deployed game after the verified CLI import and web build.
-- [ ] Mark the goal complete only after every explicit user requirement is verified.
+- [x] Verify actual Unity-imported artwork in the deployed game after the verified CLI import and web build.
+- [x] Complete the learning, rewards and Unity-art release after verified deployment; record the separate Canary first-compilation limitation without claiming it fixed.
 
 ## Verification evidence
 
@@ -98,6 +101,15 @@ uses `unity run ... -- -nographics -importPackage <art> -logFile <log>`; the CLI
 manages batch mode and exit, and rejected explicit `-batchmode`/`-quit` flags.
 The wrapper writes the staging project's package manifest and version file as
 ASCII to avoid the BOM emitted by Windows PowerShell UTF8. Successful run
-`build/unity-art-import/20260911-121747-ccf31c62` and
+`build/unity-art-import/20260911-122407-933036cc` and
 `assets/imported-unity/manifest.json` establish the 19-image import. The imported
-artwork's final build and deployed visual verification remain open.
+artwork's final build and deployed verification are complete in release `08ffef6`:
+25 native suites passed 12,564 checks/assertions, Node passed 100 checks with one
+pre-existing external-source skip, and the browser learning suite passed 12/12.
+The final PCK contains all 19 mapped textures and 140 original SVG fallbacks.
+Production passed 38/38 imported-word Learn/Hear observations and Match/quiz
+feedback at both viewport sizes, with zero browser errors. Production and the
+main local preview serve the tested pack `game-c02cf44c9c64440f.pck`, SHA256
+`c02cf44c9c64440f47abf40b5a069988d0d1a40d97fb0113d94850ab467fe2f9`.
+See [Unity art release QA](../../qa/2026-09-11-unity-food-art.md) for the live URL,
+HTML hash, screenshot evidence and validation limits.

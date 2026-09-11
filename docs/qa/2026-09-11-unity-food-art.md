@@ -61,8 +61,24 @@ HTML SHA256: `7ffd8356473ac999f9eab8bb378add14c8df421b15978f24842bc9bf6c934c24`.
 
 ## Release status and limits
 
-The tested build is ready for the authorized main merge and deployment.
-Production artifact hashes and actual imported-art flows remain to be checked.
+Feature commit `08ffef6694be77976187b16db3f2117e87158514` was fast-forwarded into
+`main`, pushed to origin and deployed with `npm run deploy -- -SkipBuild` on
+September 11, 2026. The tested export is live at
+[Word Buddies](https://gentle-forest-02ff42900.3.azurestaticapps.net/).
+
+HTTP downloads of the production HTML and PCK reproduce both SHA256 values
+above. The production game passed **38/38** imported-word Learn/Hear observations
+across 390 × 844 and 1366 × 768 viewports, plus Match and imported-word quiz
+feedback on both sizes; there were no browser errors. Final production contact
+sheets show all 19 pictures with their correct labels and no clipping. Hear
+checks establish button/status behavior; unchanged WAV hashes preserve the
+earlier pronunciation evidence rather than constituting a new listening audit.
+
+The main worktree now also contains the 19 verified, ignored PNG overrides and
+the same 71-file tested export. Its restarted preview at
+`http://127.0.0.1:4173/` serves matching HTML and PCK hashes. Evidence is recorded
+in `build/unity-food-review/production/evidence.json` and
+`build/unity-food-review/release-verification/artifact-hashes.json`.
 
 A clean checkout without the ignored licensed overrides uses the original art;
 building this art release requires the verified local import. Browser device

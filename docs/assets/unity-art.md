@@ -21,9 +21,12 @@ and 15 sounds (10.5 MB, version 1.0, September 8, 2020), usable in commercial an
 noncommercial projects. It is a candidate for decorative game props; a listing
 alone does not establish that a sprite clearly illustrates any vocabulary word.
 
-**Acquisition, source-art review and verified CLI import are complete; final
-deployed use remains pending verification.** Free2DMegaPack was not downloaded or
-integrated in this task.
+**Acquisition, source-art review, verified CLI import and deployed use are
+complete.** Release `08ffef6` is merged into main, pushed and deployed; production
+HTML/PCK hashes match the tested export, and all 19 imported words passed actual
+Learn/Hear checks at phone and desktop sizes. See
+[release QA](../qa/2026-09-11-unity-food-art.md) for evidence and limits.
+Free2DMegaPack was not downloaded or integrated in this task.
 The installed Unity CLI handles offline import, not Asset Store download.
 
 An earlier Computer Use attempt opened the listing in external **Chrome Canary**
