@@ -3,10 +3,106 @@
     "title": "Food Icons Pack",
     "publisher": "Angelina Avgustova",
     "url": "https://assetstore.unity.com/packages/2d/gui/icons/food-icons-pack-70018",
-    "version": null,
-    "sha256": null,
+    "version": "1.0",
+    "sha256": "ba54f508dc982fec10d64adbdd980dcc2f5b767cda77cb50440215e110d76bc5",
     "license": "Standard Unity Asset Store EULA",
     "license_url": "https://unity.com/legal/as-terms"
   },
-  "images": []
+  "images": [
+    {
+      "word": "apple",
+      "source": "Assets/Food icons Pack/PNG/apple .png",
+      "sha256": "0b95dd4f11f50eadd073bda1b5167301d79d623fd9555ca604967c41a1e62dde"
+    },
+    {
+      "word": "banana",
+      "source": "Assets/Food icons Pack/PNG/bananas.png",
+      "sha256": "e82154673c06e44815d32878e2e9497c122152423b993e21254d1fa835795c4a"
+    },
+    {
+      "word": "orange",
+      "source": "Assets/Food icons Pack/PNG/orange.png",
+      "sha256": "8a738abb137bb1763951135de4ce04eb5459bb9ac9a7545f23e7a282694f73b4"
+    },
+    {
+      "word": "pear",
+      "source": "Assets/Food icons Pack/PNG/pear.png",
+      "sha256": "0415df1e669888d6321014ae4053bd686142e8bb50eb74a29bf89bdcd90557a1"
+    },
+    {
+      "word": "grape",
+      "source": "Assets/Food icons Pack/PNG/grapes.png",
+      "sha256": "54cd8a927f666bf8f6b6282131b12fcb84f12f75a19e0b94d38257ece088dc18"
+    },
+    {
+      "word": "cherry",
+      "source": "Assets/Food icons Pack/PNG/cherry.png",
+      "sha256": "e991aa72e7a74000a8ccf39a219c316216830c918fc85a36500a6f16b0dff321"
+    },
+    {
+      "word": "melon",
+      "source": "Assets/Food icons Pack/PNG/melone.png",
+      "sha256": "5ee9d07f19527d9e5c7bfec977affd31b5b4b16c3cebf6f4d034dd38a0db8409"
+    },
+    {
+      "word": "carrot",
+      "source": "Assets/Food icons Pack/PNG/carrot.png",
+      "sha256": "cbef98eeaef7c9792487183ea354147360f51807d94cb69ae245cb5daa030b0b"
+    },
+    {
+      "word": "tomato",
+      "source": "Assets/Food icons Pack/PNG/tomato.png",
+      "sha256": "9dfb3245e7be55426c60593aef771b1fceba86d19974fd9dd3e0488daf5518a7"
+    },
+    {
+      "word": "corn",
+      "source": "Assets/Food icons Pack/PNG/corn.png",
+      "sha256": "6efe8009e4158ff3e4a104667cd087f4f0e5b405bc84d8923ebc4efb80ea6427"
+    },
+    {
+      "word": "peas",
+      "source": "Assets/Food icons Pack/PNG/peas.png",
+      "sha256": "0ea5fbf0c7ce593eb279c3740bd33656445564715ed3be13fd2c99b88c553fd1"
+    },
+    {
+      "word": "egg",
+      "source": "Assets/Food icons Pack/PNG/eggs.png",
+      "sha256": "01d501409e67757f1ce3c199daf07c3b99e4a25257e4323bb51bed9e7811385e"
+    },
+    {
+      "word": "bread",
+      "source": "Assets/Food icons Pack/PNG/bread2.png",
+      "sha256": "b2a61307513f05608853f2fc3691fae752a037479249cad216bad160b2dae05d"
+    },
+    {
+      "word": "cake",
+      "source": "Assets/Food icons Pack/PNG/cake3.png",
+      "sha256": "4229683812989977c0b6df53581135b285bf5b2647b2d2808770f48c7cfeebef"
+    },
+    {
+      "word": "cookie",
+      "source": "Assets/Food icons Pack/PNG/cookies.png",
+      "sha256": "1fffdf062f24e9c474ed4edad36bf480d75dca2ef4e1de039af3fcdf5edbab3a"
+    },
+    {
+      "word": "cheese",
+      "source": "Assets/Food icons Pack/PNG/cheese.png",
+      "sha256": "8a510f3fb8a9c8d9aec912d309af45a69190523821e125b08c0315c7f5e1b06e"
+    },
+    {
+      "word": "acorn",
+      "source": "Assets/Food icons Pack/PNG/acorn.png",
+      "sha256": "72f6d200228134881cdc4bb5a86218742ff3b614f00c54ff1cb24d8d960e6d6f"
+    },
+    {
+      "word": "fish",
+      "source": "Assets/Food icons Pack/PNG/fish2.png",
+      "sha256": "b7c408131cbb550aa544b9c8f8a5f608b657160ab05a333af034aba0562e1e73"
+    },
+    {
+      "word": "squid",
+      "source": "Assets/Food icons Pack/PNG/squid.png",
+      "sha256": "93a433737ddaf6e67c00debb275e3eae28ad756a2669a894e3d9cba149904f3d"
+    }
+  ]
 }

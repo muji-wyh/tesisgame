@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$Package,
-    [string]$Mapping = (Join-Path $PSScriptRoot '..\docs\assets\unity-food-icons.mapping.json'),
+    [string]$Mapping,
     [switch]$InspectOnly,
     [string]$Python = 'python',
     [string]$UnityCli = (Join-Path $env:USERPROFILE '.local\bin\unity.exe'),
@@ -9,6 +9,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+if (!$Mapping) { $Mapping = Join-Path $repoRoot 'docs\assets\unity-food-icons.mapping.json' }
 $helper = Join-Path $PSScriptRoot 'unity-art-package.py'
 $packagePath = (Resolve-Path -LiteralPath $Package).Path
 
@@ -28,11 +29,11 @@ if ($LASTEXITCODE -ne 0) { throw 'Unity artwork selection failed; no Editor was 
 $prepared = ($preparedJson -join "`n") | ConvertFrom-Json
 $staging = Join-Path $repoRoot "build\unity-asset-staging\$runId"
 New-Item -ItemType Directory -Path (Join-Path $staging 'Assets'), (Join-Path $staging 'Packages'), (Join-Path $staging 'ProjectSettings') -Force | Out-Null
-Set-Content -LiteralPath (Join-Path $staging 'Packages\manifest.json') -Value '{"dependencies":{}}' -Encoding UTF8
+Set-Content -LiteralPath (Join-Path $staging 'Packages\manifest.json') -Value '{"dependencies":{}}' -Encoding ascii
 $editorVersion = Split-Path (Split-Path (Split-Path $EditorPath -Parent) -Parent) -Leaf
-Set-Content -LiteralPath (Join-Path $staging 'ProjectSettings\ProjectVersion.txt') -Value "m_EditorVersion: $editorVersion" -Encoding UTF8
+Set-Content -LiteralPath (Join-Path $staging 'ProjectSettings\ProjectVersion.txt') -Value "m_EditorVersion: $editorVersion" -Encoding ascii
 $editorLog = Join-Path $runDirectory 'unity-import.log'
-$editorArguments = @('run', $staging, '--editor-path', $EditorPath, '--timeout', '300', '--', '-batchmode', '-nographics', '-quit', '-importPackage', $prepared.art_package, '-logFile', $editorLog)
+$editorArguments = @('run', $staging, '--editor-path', $EditorPath, '--timeout', '300', '--', '-nographics', '-importPackage', $prepared.art_package, '-logFile', $editorLog)
 Write-Output "Importing selected PNGs with Unity CLI into $staging"
 & $UnityCli @editorArguments
 $editorExit = $LASTEXITCODE

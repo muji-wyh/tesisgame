@@ -45,6 +45,18 @@ with tarfile.open(sys.argv[1], 'w:gz') as archive:
   return { dir, packagePath, mapping, mappingPath };
 }
 
+test('Windows PowerShell can inspect a package without an explicit mapping', { skip: process.platform !== 'win32' }, t => {
+  const f = fixture(t);
+  const inspected = spawnSync('powershell.exe', [
+    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(root, 'tools/import-unity-art.ps1'),
+    '-Package', f.packagePath, '-InspectOnly', '-Python', python
+  ], { encoding: 'utf8', cwd: root, windowsHide: true, timeout: 30000 });
+  assert.equal(inspected.status, 0, inspected.stderr);
+  const inventory = JSON.parse(inspected.stdout);
+  assert.deepEqual(inventory.images.map(image => image.source), ['Assets/Food/Apple.png']);
+  assert.equal(inventory.package_sha256, hash(fs.readFileSync(f.packagePath)));
+});
+
 test('Unity art inventory and preparation retain selected PNGs without third-party code or metadata', t => {
   const f = fixture(t);
   const inspected = run(['inspect', f.packagePath]);
@@ -64,7 +76,8 @@ with tarfile.open(sys.argv[1]) as archive:
   const members = JSON.parse(listed.stdout);
   assert.equal(Object.keys(members).length, 2);
   assert.equal(members[`${'a'.repeat(32)}/pathname`], 'Assets/WordBuddiesImport/apple.png');
-  assert.match(members[`${'a'.repeat(32)}/asset.meta`], /TextureImporter:/);
+  assert.match(members[`${'a'.repeat(32)}/asset.meta`],
+    /TextureImporter:\n  serializedVersion: 13\n  textureType: 8\n  spriteMode: 1\n  alphaIsTransparency: 1\n/);
   assert.doesNotMatch(JSON.stringify(members), /DoNotRun|untrusted metadata/);
 });
 
@@ -84,6 +97,32 @@ test('Unity art import refuses package/path/hash and vocabulary mismatches befor
     const result = run(['prepare', f.packagePath, f.mappingPath, output, root]);
     assert.notEqual(result.status, 0);
     assert.equal(fs.existsSync(output), false, 'Invalid input must not create an art package');
+  }
+});
+
+test('legacy Unity pathnames accept an optional GUID line without changing the asset path', t => {
+  const f = fixture(t, `Assets/Food/Apple.png\n${'c'.repeat(32)}`);
+  const inspected = run(['inspect', f.packagePath]);
+  assert.equal(inspected.status, 0, inspected.stderr);
+  const inventory = JSON.parse(inspected.stdout);
+  assert.deepEqual(inventory.images.map(image => image.source), ['Assets/Food/Apple.png']);
+  f.mapping.images[0].source = 'Assets/Food/Apple.png';
+  fs.writeFileSync(f.mappingPath, JSON.stringify(f.mapping));
+  const prepared = run(['prepare', f.packagePath, f.mappingPath, path.join(f.dir, 'prepared'), root]);
+  assert.equal(prepared.status, 0, prepared.stderr);
+  assert.equal(JSON.parse(prepared.stdout).images[0].source, 'Assets/Food/Apple.png');
+});
+
+test('legacy Unity pathnames reject malformed suffixes and keep traversal protection', t => {
+  for (const pathname of [
+    'Assets/Food/Apple.png\nnot-a-guid',
+    `Assets/Food/Apple.png\n${'c'.repeat(32)}\nextra`,
+    `Assets/../escape.png\n${'c'.repeat(32)}`
+  ]) {
+    const f = fixture(t, pathname);
+    const inspected = run(['inspect', f.packagePath]);
+    assert.notEqual(inspected.status, 0, pathname);
+    assert.match(inspected.stderr, /pathname|unsafe.*path/i);
   }
 });
 

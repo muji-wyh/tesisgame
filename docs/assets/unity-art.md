@@ -5,11 +5,15 @@ art; no Unity runtime or third-party scripts are added to the game.
 
 ## Source and current status
 
-Candidate: [Food Icons Pack by Angelina Avgustova](https://assetstore.unity.com/packages/2d/gui/icons/food-icons-pack-70018),
+Acquired: [Food Icons Pack by Angelina Avgustova](https://assetstore.unity.com/packages/2d/gui/icons/food-icons-pack-70018),
 free under the [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms).
-The store describes 100 transparent 256px food PNGs (41.3 MB, version 1.0,
-September 13, 2016). Actual downloaded artwork must be checked before deciding
-which nouns it can illustrate.
+Version 1.0 was downloaded on September 11, 2026 through the official Unity
+Editor Package Manager **My Assets** workflow. The downloaded package is
+43,257,555 bytes; archive inspection confirmed 100 PNGs, each 256 × 256 pixels.
+Its SHA256 is
+`ba54f508dc982fec10d64adbdd980dcc2f5b767cda77cb50440215e110d76bc5`.
+The inspected package version, source paths and selected image hashes are recorded
+in [the mapping](unity-food-icons.mapping.json).
 
 Also researched: [Free2DMegaPack by Brackeys](https://assetstore.unity.com/packages/2d/free-2d-mega-pack-177430),
 free under the Standard Unity Asset Store EULA. Its listing describes 230+ sprites
@@ -17,28 +21,50 @@ and 15 sounds (10.5 MB, version 1.0, September 8, 2020), usable in commercial an
 noncommercial projects. It is a candidate for decorative game props; a listing
 alone does not establish that a sprite clearly illustrates any vocabulary word.
 
-**Acquisition is pending as of September 11, 2026.** No package from either listing
-has been downloaded, no real Unity artwork import has completed, and no licensed
-PNG override has been shipped. The installed Unity CLI and Editor are available
-for import, but the CLI has no Asset Store download command. Acquisition still
-requires Unity's authorized Asset Store or Package Manager workflow.
+**Acquisition, source-art review and verified CLI import are complete; final
+deployed use remains pending verification.** Free2DMegaPack was not downloaded or
+integrated in this task.
+The installed Unity CLI handles offline import, not Asset Store download.
 
-On September 11, Windows Computer Use reached the Food Icons Pack listing in
-stable Chrome and selected Add to My Assets. Unity redirected to its sign-in page;
-that Chrome session is not signed in. Authentication was left for the user. The
-separate in-app browser connector returned `Codex auth token is unavailable`.
-Neither result was an automatic safety rejection. Acquisition and CLI import
-remain unverified until the authorized signed-in session or package is available.
-
-The mapping intentionally starts with no selected images, version, or package
-hash. A store listing is not proof of a download or import. Fill those fields from
-the downloaded package and its inventory before running an import.
+An earlier Computer Use attempt opened the listing in external **Chrome Canary**
+and reached Unity sign-in. That did not establish the login state of the user's
+separately signed-in embedded browser. The embedded browser connector returned
+`Codex auth token is unavailable`, an app authentication failure rather than an
+automatic safety rejection or evidence of a signed-out Unity account. Native
+sidebar interaction subsequently claimed Food Icons Pack under the user's
+explicit authorization, and Editor Package Manager downloaded the package.
 
 The source package, isolated Unity project, generated import evidence and PNG
 overrides are ignored by Git. They are not distributed as a public asset library.
-After acquisition, selected textures are to ship inside the compiled game; the
-repository retains its original SVG fallback for every word. Obtain the asset through the publisher's
-authorized Unity Store workflow and use it subject to its license.
+Selected licensed textures ship inside the compiled game after verified import;
+the repository retains its original SVG fallback for every word. Obtain the
+asset through the publisher's authorized Unity Store workflow and use it subject
+to its license. A clean checkout without the ignored overrides uses the original
+art; publishing imported art requires the verified local files at build time.
+
+## Teaching selection
+
+All 100 actual PNGs were visually inspected in four contact sheets. The selected
+19 pictures were also compared with the original SVGs at 64px card size:
+apple, banana, orange, pear, grape, cherry, melon, carrot, tomato, corn, peas, egg,
+bread, cake, cookie, cheese, acorn, fish and squid. No new vocabulary was added.
+
+The choices use recognizable fruit and vegetable silhouettes, visible orange and
+melon interiors, intact egg shells, a bread loaf (`bread2.png`), a complete cake
+(`cake3.png`), cookies, cheese and an acorn. `fish2.png` shows an intact fish;
+`squid.png` has a long mantle and distinct tentacles. The source filenames and
+hashes in the mapping preserve the publisher's exact names, including
+`apple .png`, `bananas.png`, `grapes.png`, `melone.png`, `eggs.png` and `cookies.png`.
+
+The original milk and water images remain because they show their contents more
+clearly than the pack's jug and bottle. The original root diagram, single
+raspberry and empty spiral shell remain: the pack's special root shape, berry
+cluster and bivalve shell would weaken the current teaching cues or the
+shell/clam distinction. Review evidence is under `build/unity-food-review/`:
+`inventory.json`, `contact-1.png` through `contact-4.png`, and
+`independent-64px-comparison.png` (source SVGs beside crops of the rendered PNG
+sheets). The final local game also passed 38 Learn/Hear observations across
+phone and desktop sizes, with Match and quiz feedback visually reviewed.
 
 ## Inspect, map and import
 
@@ -55,9 +81,11 @@ Inspection reads the archive without extracting its paths. It rejects traversal,
 links, duplicate entries and oversized assets. Its JSON output includes each
 PNG's exact source path, dimensions and SHA256 and the complete package SHA256.
 
-Edit `docs/assets/unity-food-icons.mapping.json`. Copy the package SHA256, record
-the acquired version, and add only images whose actual picture clearly matches
-the given vocabulary word. One source image may represent only one noun.
+The checked-in `docs/assets/unity-food-icons.mapping.json` records the acquired
+version, package SHA256 and 19 reviewed source images. For a future package or
+mapping revision, record its inspection hashes and select only actual pictures
+that clearly match their vocabulary words. One source image may represent only
+one noun.
 
 ```json
 {
@@ -81,10 +109,16 @@ the installed CLI with these Editor flags:
 
 ```text
 unity run <staging> --editor-path <editor> --timeout 300 --
-  -batchmode -nographics -quit -importPackage <selected-art.unitypackage>
+  -nographics -importPackage <selected-art.unitypackage>
   -logFile <unity-import.log>
 ```
 
+The CLI manages batch mode and process exit. Do not pass `-batchmode` or `-quit`
+after `--`: the installed CLI rejects both as reserved flags. Those rejections
+were verified before correcting the wrapper; they are not successful imports.
+The wrapper writes the minimal `Packages/manifest.json` and
+`ProjectSettings/ProjectVersion.txt` as ASCII. Windows PowerShell's UTF8 encoding
+adds a BOM, which caused the earlier staging-project parse failure.
 Do not add `-noUpm`: Unity does not support it together with `-importPackage`.
 After successful exit, every imported PNG must match its selected source hash
 and have Unity texture metadata. Only then are the PNGs copied to
@@ -110,6 +144,20 @@ Run `node --test tests/unity-art.test.cjs` for archive/mapping safety checks, th
 the normal Godot import and web build. Inspect the actual art in Learn and quiz
 views. Verify the exported and deployed game contains and displays selected
 overrides before calling the Unity integration complete.
+
+The real September 11 import succeeded in
+`build/unity-art-import/20260911-122407-933036cc/`. Its `unity-command.json` records
+CLI exit code **0**, and `unity-import.log` ends with successful batch-mode exit.
+The art-only package SHA256 is
+`890302ad3f046404564106a8ca7b2125304411c098eded299e8b9b7a25478758`.
+`assets/imported-unity/manifest.json` records **19 verified imported images** and
+the matching isolated staging project. An independent check of the 19 copied
+PNGs reproduced every selected source hash. Generated TextureImporter metadata
+uses the installed Editor's serialized version 13; the final import has no
+version warnings. A separate Editor check loaded all 19 assets as transparent,
+single 256px Sprites, with zero failures (`sprite-validation.json`). The final
+Godot pack selected all 19 PNG overrides and retained all 140 SVG fallbacks.
+See [release QA](../qa/2026-09-11-unity-food-art.md) for tests and deployment status.
 
 ## Original semantic artwork
 
@@ -137,5 +185,6 @@ The September 11 [full original-catalog audit](../qa/2026-09-11-catalog-semantic
 reviewed all 140 illustrations and independently transcribed the actual word WAVs.
 It additionally clarified doll (visible rag-doll construction) and brush
 (projecting bristles), and records the acoustic evidence and limits for the new
-"A kite." recording. This original-only review does not complete the pending
-Unity acquisition, CLI import or final deployed imported-art verification.
+"A kite." recording. The separate import evidence above establishes the real
+Unity CLI import; the original-only audit does not establish final deployed
+imported-art appearance or pronunciation.

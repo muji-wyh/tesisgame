@@ -52,7 +52,10 @@ def read_package(filename):
             if "pathname" not in files:
                 continue
             require(files["pathname"].size <= 4096, "Asset pathname exceeds limit")
-            source = archive.extractfile(files["pathname"]).read().decode("utf-8-sig").strip()
+            pathname = archive.extractfile(files["pathname"]).read().decode("utf-8-sig").splitlines()
+            require(len(pathname) in (1, 2) and (len(pathname) == 1 or
+                    re.fullmatch(r"[a-fA-F0-9]{32}", pathname[1])), "Malformed Unity asset pathname")
+            source = pathname[0].strip()
             safe_path(source)
             require(source.startswith("Assets/"), f"Unsafe asset path outside Assets: {source}")
             require(source.casefold() not in paths, f"Duplicate asset path: {source}")
@@ -105,7 +108,7 @@ def prepare(filename, mapping_path, output, root):
             asset = assets[image["source"]]
             # Fresh built-in texture metadata excludes third-party import settings and references.
             metadata = (f"fileFormatVersion: 2\nguid: {asset['guid']}\nTextureImporter:\n"
-                        "  textureType: 8\n  spriteMode: 1\n  alphaIsTransparency: 1\n")
+                        "  serializedVersion: 13\n  textureType: 8\n  spriteMode: 1\n  alphaIsTransparency: 1\n")
             for name, data in {"asset": asset["data"], "asset.meta": metadata.encode(),
                                "pathname": f"Assets/WordBuddiesImport/{image['word']}.png".encode()}.items():
                 member = tarfile.TarInfo(f"{asset['guid']}/{name}")

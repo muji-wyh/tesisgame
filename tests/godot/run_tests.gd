@@ -516,9 +516,18 @@ func _test_data(words: Array) -> void:
 		var expected: Dictionary = expected_themes[season]
 		for key in expected.keys():
 			check(theme.get(key) == expected[key], "%s %s matches the seasonal palette" % [season, key])
+	var source_json: String = FileAccess.get_file_as_string("res://words.json")
+	var expected_words: Array = words.duplicate(true)
+	for word in expected_words:
+		var imported_image: String = "assets/imported-unity/" + word.id + ".png"
+		if ResourceLoader.exists("res://" + imported_image):
+			word.image = imported_image
 	var data = data_script.new()
 	check(data.load_all(), "Runtime JSON and imported chest manifest load: " + data.error)
-	check(data.words == words, "Godot uses the unchanged shared vocabulary")
+	check(data.words == expected_words,
+		"Godot preserves every vocabulary field and selects only each word's available image override")
+	check(FileAccess.get_file_as_string("res://words.json") == source_json,
+		"Runtime image overrides never rewrite the original words.json")
 	if not data.chests.is_empty():
 		check(data.chests.styles.crystal.parts.size() == 9, "Crystal has all nine assembled pieces")
 
