@@ -55,10 +55,9 @@ func _run() -> void:
 		check(game.status == "asking" and game.successes == 0 and game.mistakes == 0, "A new %s round resets its state" % mode)
 		check(game.controls().size() == (3 if mode == "listen" else 2), "Only the %s mode's active buttons enter navigation" % mode)
 		if mode == "listen":
-			var count: int = heard.size()
-			game.hear_button.pressed.emit()
-			check(heard.size() == count + 1 and heard.back() == first.id, "Hear requests the current target without changing scores")
-			check(game.successes == 0 and game.mistakes == 0, "Pronunciation has no scoring side effects")
+			_check_main_replay(game, "Asking")
+		else:
+			_check_blocked_replay(game, "Sky asking")
 		var before_answers: int = answers.size()
 		var before_prompts: int = ready_prompts
 		var wrong: int = _answer_index(game, false)
@@ -67,7 +66,7 @@ func _run() -> void:
 		check(game.status == "feedback" and game.mistakes == 1 and game.successes == 0,
 			"A wrong answer opens feedback and records one attempt")
 		check(answers.size() == before_answers + 1 and not answers.back()[1], "One attempt emits exactly one incorrect answer")
-		check(game.controls().size() == 4 and game.feedback_view.visible
+		check(game.controls().size() == (5 if mode == "listen" else 4) and game.feedback_view.visible
 			and game.feedback_view.current_word.id == first.id
 			and game.feedback_view.word_label.text == first.text
 			and game.feedback_view.picture.texture.resource_path == "res://" + first.image,
@@ -75,6 +74,11 @@ func _run() -> void:
 		check(game._stage.visible and game.answer_buttons.all(func(button: Button) -> bool: return button.visible and not button.disabled), "Answer feedback keeps the question and both answer cards visible and usable")
 		check(_question_rects(game) == question_rects, "Entering feedback does not move the target or answers")
 		check(not game.feedback_view.get_global_rect().intersects(game._stage.get_global_rect()) and game.answer_buttons.all(func(button: Button) -> bool: return not game.feedback_view.get_global_rect().intersects(button.get_global_rect())), "Compact feedback does not cover the question or answer cards")
+		if mode == "listen":
+			_check_main_replay(game, "Wrong feedback")
+			_check_feedback_replay_guards(game)
+		else:
+			_check_blocked_replay(game, "Sky feedback")
 		if "--screenshots" in OS.get_cmdline_user_args():
 			await _capture(game, mode + "-correction")
 		await create_timer(0.8).timeout
@@ -112,6 +116,8 @@ func _run() -> void:
 			check(game.feedback_view.current_word == game.current_target and game.feedback_view.word_label.visible
 				and game.feedback_view.picture.visible, "A successful answer reinforces that exact picture-word association")
 			check(_question_rects(game) == question_rects and game._stage.visible and game.answer_buttons[right].visible, "Correct answers, including the final one, preserve the visible question geometry")
+			if mode == "listen" and index in [0, 4]:
+				_check_main_replay(game, "Final win feedback" if index == 4 else "Correct feedback")
 			game.feedback_view.action_button.pressed.emit()
 		check(game.status == "won" and endings.size() == before_endings + 1 and endings.back()[0],
 			"Five correct answers finish with exactly one win")
@@ -120,16 +126,20 @@ func _run() -> void:
 		game.continue_feedback()
 		game.answer_buttons[0].pressed.emit()
 		check(endings.size() == before_endings + 1 and game.successes == 5, "Completed rounds ignore delayed callbacks and taps")
+		_check_blocked_replay(game, mode + " completed win")
 		game.start_round(words, mode, palette, 17)
 		game.answer_buttons[_answer_index(game, true)].pressed.emit()
 		game.continue_feedback()
 		for attempt in range(3):
 			game.answer_buttons[_answer_index(game, false)].pressed.emit()
+			if mode == "listen" and attempt == 2:
+				_check_main_replay(game, "Final loss feedback")
 			game.continue_feedback()
 		check(game.status == "lost" and game.mistakes == 3 and game.successes == 1 and not endings.back()[0],
 			"Three mistakes end the round after retaining earlier success")
 		check(game.found_words.size() == 1 and endings.back()[1].size() == 1,
 			"A loss reports only the successfully learned word")
+		_check_blocked_replay(game, mode + " completed loss")
 		game.start_round(words, mode, palette, 17)
 		game.set_reduced_motion(true)
 		for dimensions in [Vector2(456, 200), Vector2(960, 360), Vector2(240, 200)]:
@@ -157,6 +167,7 @@ func _run() -> void:
 		game.answer_buttons[_answer_index(game, true)].pressed.emit()
 		before_endings = endings.size()
 		game.stop()
+		_check_blocked_replay(game, mode + " stopped")
 		game.continue_feedback()
 		game.answer_buttons[0].pressed.emit()
 		game.hear_button.pressed.emit()
@@ -271,9 +282,9 @@ func _check_feedback_answers(game, words: Array, palette: Dictionary, mode: Stri
 	game.answer_buttons[wrong].pressed.emit()
 	check(game.feedback_view.action_button.has_focus(), "%s grading a wrong answer moves actual keyboard/controller focus to Continue" % mode)
 	var controls: Array = game.controls()
-	check(controls.size() == 4 and controls[0] == game.feedback_view.action_button
+	check(controls.size() == (5 if mode == "listen" else 4) and controls[0] == game.feedback_view.action_button
 		and controls.has(game.feedback_view.picture_button)
-		and controls.slice(2) == game.answer_buttons,
+		and controls.slice(controls.size() - 2) == game.answer_buttons,
 		"%s feedback keeps Continue first and both visible answers reachable by keyboard/controller" % mode)
 	check(game.answer_buttons.all(func(button: Button) -> bool: return button.visible and not button.disabled),
 		"%s feedback answers accept pointer input" % mode)
@@ -388,6 +399,58 @@ func _check_feedback_answers(game, words: Array, palette: Dictionary, mode: Stri
 func _choice_state(game) -> Array:
 	return [game.status, game.current_target.duplicate(true), game.choices.duplicate(true), game.successes, game.mistakes,
 		game.found_words.duplicate(true), answers.size(), endings.size(), progress.size(), ready_prompts]
+
+
+func _check_main_replay(game, label: String) -> void:
+	var before: Array = _choice_state(game)
+	var rects: Array = _question_rects(game)
+	var feedback: Array = [game.feedback_view.visible, game.feedback_view.current_word.duplicate(true), game.feedback_view.heading_label.text]
+	var count: int = heard.size()
+	check(game.hear_button.visible and not game.hear_button.disabled and game.controls().has(game.hear_button),
+		label + " exposes the large Hear button to pointer and keyboard navigation")
+	if game.status == "feedback":
+		check(game.controls()[0] == game.feedback_view.action_button and game.feedback_view.action_button.has_focus(),
+			label + " still defaults to Continue after grading")
+	game.hear_button.grab_focus()
+	check(game.hear_button.has_focus(), label + " permits keyboard focus on the large Hear button")
+	game.hear_button.pressed.emit()
+	game.hear_button.pressed.emit()
+	check(heard.size() == count + 2 and heard.slice(count) == [game.current_target.id, game.current_target.id],
+		label + " replays the same current target on every large Hear press")
+	check(_choice_state(game) == before and _question_rects(game) == rects
+		and [game.feedback_view.visible, game.feedback_view.current_word, game.feedback_view.heading_label.text] == feedback,
+		label + " replay leaves scores, question, feedback and geometry unchanged")
+
+
+func _check_blocked_replay(game, label: String) -> void:
+	var before: Array = _choice_state(game)
+	var count: int = heard.size()
+	game.hear_button.pressed.emit()
+	check(heard.size() == count and _choice_state(game) == before and not game.controls().has(game.hear_button),
+		label + " cannot replay or navigate to the large Hear button")
+
+
+func _check_feedback_replay_guards(game) -> void:
+	game.pause(true)
+	check(game.hear_button.disabled, "Paused Listen feedback disables its large Hear button")
+	_check_blocked_replay(game, "Paused Listen feedback")
+	game.pause(false)
+	game.hide()
+	_check_blocked_replay(game, "Hidden Listen feedback")
+	game.show()
+	game.set_audio_available(false)
+	check(game.target_word_label.visible and game.target_word_label.text == game.current_target.text
+		and not game.hear_button.visible and game.hear_button.disabled and game.feedback_view.visible,
+		"Losing audio during feedback replaces large Hear with the same written target")
+	_check_blocked_replay(game, "Silent Listen feedback")
+	game.set_audio_available(true)
+	check(game.hear_button.visible and not game.hear_button.disabled and not game.target_word_label.visible
+		and game.controls().has(game.hear_button) and game.feedback_view.visible,
+		"Recovering audio during feedback restores large Hear without leaving the correction")
+	var count: int = heard.size()
+	game.hear_button.pressed.emit()
+	check(heard.size() == count + 1 and heard.back() == game.current_target.id,
+		"Recovered feedback replays its current target immediately")
 
 
 func _question_rects(game) -> Array:

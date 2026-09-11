@@ -185,7 +185,7 @@ func set_audio_available(value: bool) -> void:
 		return
 	audio_available = value
 	feedback_view.set_audio_available(value)
-	if status == "asking":
+	if status in ["asking", "feedback"]:
 		_show_question()
 
 
@@ -229,7 +229,7 @@ func controls() -> Array[Control]:
 		result.append_array(feedback_view.controls())
 	elif status != "asking":
 		return result
-	elif mode_id == "listen" and audio_available:
+	if mode_id == "listen" and audio_available:
 		result.append(hear_button)
 	result.append_array(answer_buttons)
 	return result
@@ -354,7 +354,7 @@ func continue_feedback() -> void:
 
 
 func _hear() -> void:
-	if status == "asking" and mode_id == "listen" and audio_available and not suspended and is_visible_in_tree():
+	if status in ["asking", "feedback"] and mode_id == "listen" and audio_available and not suspended and is_visible_in_tree():
 		hear_requested.emit(current_target)
 
 
@@ -384,7 +384,9 @@ func _apply_enabled() -> void:
 		button.add_theme_stylebox_override("hover", Style.box(fill, border, 16, 4) if status == "feedback" else Style.box(accent.lightened(0.92), accent))
 		button.add_theme_stylebox_override("pressed", Style.box(fill.darkened(0.04), border, 16, 3) if status == "feedback" else Style.box(accent.lightened(0.8), accent, 16, 3))
 	if hear_button != null:
-		hear_button.disabled = status != "asking" or suspended or not audio_available
+		hear_button.disabled = not enabled or mode_id != "listen" or not audio_available
+		hear_button.text = "Hear again" if status == "feedback" else "Hear the word"
+		_name_control(hear_button, hear_button.text)
 	if _stage != null:
 		_stage.visible = status in ["asking", "feedback"]
 		status_label.visible = status in ["asking", "feedback", "unavailable"]

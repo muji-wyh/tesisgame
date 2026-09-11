@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, choicePoint } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, choicePoint,
+  choiceTargetPoint, resultPoint, visibleColorCount } = require('./game-ui.cjs');
 
 const learningStatus = /^Learn: ([a-z]+)\. Look, read, and press Hear\.$/;
 const choiceFeedback = /^(?:Yes! ([a-z]+)\.|This picture is ([a-z]+)\.) (?:Tap an answer or Continue (?:for the next word|to finish)|Tap an answer to try again, or Continue)\.$/;
@@ -162,6 +163,71 @@ test('Sky feedback waits for Continue and then returns to the picture question',
   const nextTarget = await answerChoice(page, 1);
   expect(nextTarget).toMatch(/^[a-z]+$/);
   expect(target).toMatch(/^[a-z]+$/);
+  expect(errors).toEqual([]);
+});
+
+test('Listen replays the same word from its main Hear button during answer feedback', async ({ page }, testInfo) => {
+  const errors = await openGame(page);
+  test.skip(!await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext)),
+    'This WebKit runtime has no audio output.');
+  await chooseMode(page, 3);
+  const b = await metrics(page), hear = choiceTargetPoint(b);
+  const answers = [choicePoint(b, 0), choicePoint(b, 1)];
+  const review = lessonPoint(b, 'hear', { multiple: false });
+  const clips = [
+    { x: 66, y: 32, width: b.width - 154, height: 32 },
+    { x: 12, y: answers[0].y - 28, width: (answers[1].x - answers[0].x) * 2 - 10, height: 56 },
+    { x: review.x - 28, y: review.y - 58, width: 192, height: 84 }
+  ].map(clip => ({ x: b.x + clip.x * b.scale, y: b.y + clip.y * b.scale,
+    width: clip.width * b.scale, height: clip.height * b.scale }));
+  const stableState = async () => {
+    await page.mouse.move(0, 0);
+    await rendered(page);
+    const images = [];
+    for (const clip of clips) images.push(await page.screenshot({ clip, scale: 'css' }));
+    return images;
+  };
+  const replay = async (word, name) => {
+    const before = await stableState();
+    await page.screenshot({ path: testInfo.outputPath(`${name}-before.png`), scale: 'css' });
+    await tap(page, hear.x, hear.y);
+    await expect(page.locator('#game-status'), 'The large Hear button must replay the current feedback word.').toHaveText(`${word}. Look at the picture and say the word.`);
+    const after = await stableState();
+    expect(after.map((png, index) => png.equals(before[index])), 'Replaying cannot change progress, answer pictures, or word feedback.').toEqual([true, true, true]);
+    const png = await page.screenshot({ path: testInfo.outputPath(`${name}-replayed.png`), scale: 'css' });
+    expect(await visibleColorCount(page, png)).toBeGreaterThan(20);
+  };
+  let successes = 0, corrected = false;
+  // Use public answer feedback to discover a wrong choice, without private game state.
+  for (let attempt = 0; attempt < 15 && !corrected; attempt++) {
+    const word = await answerChoice(page);
+    const wrong = (await page.locator('#game-status').textContent()).startsWith('This picture is');
+    await replay(word, `listen-${attempt}-${wrong ? 'wrong' : 'correct'}`);
+    if (wrong) {
+      expect(await answerChoice(page, 1)).toBe(word);
+      await expect(page.locator('#game-status')).toHaveText(/^Yes! /);
+      await replay(word, `listen-${attempt}-corrected`);
+      corrected = true;
+    }
+    successes++;
+    const progress = (await stableState())[0];
+    await tap(page, answers[0].x, answers[0].y);
+    if (successes === 5) {
+      await expect(page.locator('#game-status')).toContainText('You did it!');
+      const repeat = resultPoint(b, 'repeat');
+      await tap(page, repeat.x, repeat.y);
+      successes = 0;
+    }
+    await expect(page.locator('#game-status')).toHaveText(/^(Listen\.|Listen and choose a picture\.)/);
+    if (successes) {
+      expect((await stableState())[0].equals(progress), 'Advancing after replay cannot grade the next question.').toBe(true);
+      await tap(page, hear.x, hear.y);
+      await expect(page.locator('#game-status')).toHaveText('Listen, then choose a picture. Press Hear to listen again.');
+    }
+    await rendered(page);
+    await page.screenshot({ path: testInfo.outputPath(`listen-${attempt}-next-question.png`), scale: 'css' });
+  }
+  expect(corrected, 'Both wrong-feedback replay and direct correction must be exercised.').toBe(true);
   expect(errors).toEqual([]);
 });
 

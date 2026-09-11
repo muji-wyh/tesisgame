@@ -43,20 +43,28 @@ func _run() -> void:
 	check(not app.audio.voice.playing, "Continue stops correction speech when returning to the board")
 	for mode in ["sky", "listen"]:
 		app.choose_mode(mode)
+		if mode == "listen":
+			_check_large_listen_replay(app, "Asking")
 		var correct: int = 0 if app._choice.choices[0].id == app._choice.current_target.id else 1
 		var target: Dictionary = app._choice.current_target
 		app._choice._choose(1 - correct)
+		if mode == "listen":
+			_check_large_listen_replay(app, "Wrong feedback")
 		app._choice.answer_buttons[correct].pressed.emit()
 		check(app._choice.successes == 1 and app._choice.mistakes == 1
 			and app.audio.voice.playing and app.audio.voice.stream == load("res://" + target.audio),
 			mode + " first-tap correction scores once and pronounces the same visible target")
 		check(root.gui_get_focus_owner() == app._choice.feedback_view.action_button,
 			mode + " correction leaves keyboard Continue available without another accidental answer")
+		if mode == "listen":
+			_check_large_listen_replay(app, "Correct feedback")
 		app._choice.continue_feedback()
 		check(not app.audio.voice.playing, mode + " Continue stops feedback speech before the next question")
 		for answer in range(4):
 			correct = 0 if app._choice.choices[0].id == app._choice.current_target.id else 1
 			app._choice._choose(correct)
+			if mode == "listen" and answer == 3:
+				_check_large_listen_replay(app, "Final win feedback")
 			app._choice.feedback_view.hear_button.pressed.emit()
 			if answer in [0, 3]:
 				app._choice.answer_buttons[correct].pressed.emit()
@@ -139,3 +147,14 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("UI audio flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_large_listen_replay(app, label: String) -> void:
+	var game = app._choice
+	var before: Array = [game.current_target.duplicate(true), game.choices.duplicate(true), game.status, game.successes, game.mistakes, app.model.phase]
+	app.audio.stop_voice()
+	game.hear_button.pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + game.current_target.audio),
+		label + " large Hear restarts the actual stream for the displayed Listen word")
+	check([game.current_target, game.choices, game.status, game.successes, game.mistakes, app.model.phase] == before,
+		label + " large Hear playback leaves both host and choice progress unchanged")
