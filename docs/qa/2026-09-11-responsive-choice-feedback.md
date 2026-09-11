@@ -65,3 +65,26 @@ cases passed against the same build. Both reports and their screenshots/traces
 are preserved in `build/responsive-choice/green-report.json`,
 `green-results/`, `green-corrected-report.json` and `green-corrected-results/`.
 No product change or rebuild was needed after the initial browser run.
+
+## Delivery
+
+Gameplay commit `c6e97a9` was fast-forwarded into `main` and pushed to
+`origin/main`. `npm run deploy -- -SkipBuild` deployed the tested frozen export
+successfully to <https://gentle-forest-02ff42900.3.azurestaticapps.net/>.
+Deployment log: `build/responsive-choice-deploy.log`.
+
+An HTTP verification after deployment confirmed that both the production HTML
+and PCK have the exact SHA256 values recorded above. The local preview at
+<http://127.0.0.1:4173/> was also updated and verified through HTTP. All 71
+staged files matched the tested export before activation; the previous local
+build is retained at `D:/uwork/tesisgame/build/web-before-choice-24ce685`.
+
+After the production hash check, all **four production browser cases passed**
+in 75.1 seconds: Sky and Listen on desktop Chromium and iPhone WebKit, with
+zero failures, skips or flaky cases. Each case checked direct correction,
+Continue, answer-driven advance without scoring, terminal interaction and
+fixed layout; browser error checks were empty. Production phone screenshots
+were also inspected independently. Evidence is in
+`build/responsive-choice/production-report.json` and `production-results/`.
+The delivery record is a documentation-only follow-up; the tested and deployed
+export remains unchanged.
