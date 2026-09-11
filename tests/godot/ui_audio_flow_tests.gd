@@ -97,6 +97,14 @@ func _run() -> void:
 				break
 		app._on_voice_result([word, true])
 		check(app.model.phase == "feedback" and not app.feedback_timer.is_stopped(), "Voice feedback initially has its automatic timer")
+		var next_id: String = ""
+		for id in app.cards:
+			if not app.model.matched_ids.has(id):
+				next_id = id
+				break
+		app.cards[next_id].pressed.emit()
+		check(app.cards[next_id].disabled and app.model.phase == "feedback" and app.model.successes == 1,
+			"Card input cannot skip automatic voice feedback")
 		match exit_path:
 			"stop": app._stop_voice()
 			"speech_end": app._on_voice_state([false, false, "Stopped"])
@@ -107,8 +115,10 @@ func _run() -> void:
 		check(app.model.phase == "feedback", exit_path + " preserves the correction until an explicit Continue")
 		if app.collection_page.visible:
 			app._hide_collection()
-		app._continue_match()
-		check(app.model.phase == "waiting", "The preserved correction is still answerable")
+		check(not app.cards[next_id].disabled, exit_path + " immediately restores card input without another refresh")
+		app.cards[next_id].pressed.emit()
+		check(app.model.phase == "matching" and app.model.selected_id == next_id,
+			"The first tap after voice ends continues and selects the tapped card")
 	app.audio.halt()
 	app.queue_free()
 	await process_frame

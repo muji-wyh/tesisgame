@@ -1807,10 +1807,7 @@ func _refresh() -> void:
 	_mistakes.visible = not _mode_id in ["learn", "memory"]
 	_message.visible = playing and _mode_id == "match" and not correcting and not _voice_mode
 	_outcome.visible = not playing
-	for id in cards:
-		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
-			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
-			model.phase != "waiting" and model.phase != "matching", model.hint_ids.has(id))
+	_refresh_match_cards()
 	if not model.hint_ids.is_empty():
 		_message.text = "Hint: match the %s cards." % model.card_by_id(model.hint_ids[0]).word.text
 	elif model.phase == "matching":
@@ -2015,6 +2012,15 @@ func _lesson_hear(word: Dictionary) -> void:
 	_announce_status(str(word.text) + ". Look at the picture and say the word.")
 
 
+func _refresh_match_cards() -> void:
+	var palette: Dictionary = Data.theme(model.theme_id)
+	var locked: bool = not model.phase in ["waiting", "matching"] and not (_mode_id == "match" and model.phase == "feedback" and not _voice_mode)
+	for id in cards:
+		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
+			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
+			locked, model.hint_ids.has(id))
+
+
 func _show_match_feedback() -> void:
 	var key := ",".join(model.feedback_ids)
 	if key == _feedback_key:
@@ -2047,7 +2053,7 @@ func _show_match_feedback() -> void:
 
 
 func _continue_match() -> void:
-	if collection_page.visible or _preview_page.visible or _mode_id != "match":
+	if collection_page.visible or _preview_page.visible or _mode_id != "match" or model.phase != "feedback":
 		return
 	audio.stop_voice()
 	_resolve_feedback()
@@ -2189,6 +2195,17 @@ func _request_hint() -> void:
 
 func _select_card(id: String) -> void:
 	if _mode_id != "match" or collection_page.visible or _preview_page.visible:
+		return
+	if not cards.has(id) or model.card_by_id(id).is_empty() or model.matched_ids.has(id):
+		return
+	if model.phase == "feedback":
+		if _voice_mode:
+			return
+		# The same tap acknowledges feedback and starts the next pair in place.
+		_continue_match()
+		if model.phase in ["waiting", "matching"]:
+			cards[id].grab_focus()
+	if not model.phase in ["waiting", "matching"]:
 		return
 	if not _voice_mode:
 		audio.interact(model.theme_id, model.phase != "lost")
@@ -2828,6 +2845,7 @@ func _toggle_voice() -> void:
 	elif _host != null and bool(_host.speechAvailable()) and model.phase in ["waiting", "matching", "feedback"]:
 		_voice_mode = true
 		_voice_space.show()
+		_refresh_match_cards()
 		_layout()
 		audio.halt()
 		_sync_voice_bounds()
@@ -2855,6 +2873,7 @@ func _on_voice_state(arguments: Array) -> void:
 	_voice_button.button_pressed = enabled
 	_voice_space.visible = enabled
 	if layout_changed:
+		_refresh_match_cards()
 		_layout()
 	if enabled:
 		audio.halt()
@@ -2904,6 +2923,7 @@ func _stop_voice() -> void:
 	if _voice_button != null:
 		_voice_button.button_pressed = false
 	if was_enabled:
+		_refresh_match_cards()
 		_layout()
 	if was_enabled and _host != null:
 		_host.stopSpeech()

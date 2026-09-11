@@ -208,3 +208,71 @@ test('Learn keeps its controls in place while replacing only the association', a
   expect(await geometry(page)).toEqual(beforeGeometry);
   expect(errors).toEqual([]);
 });
+
+test('Match accepts the next card on the first tap during nonfinal feedback', async ({ page }, testInfo) => {
+  const errors = await openGame(page);
+  await chooseMode(page, 1);
+  const beforeGeometry = await geometry(page), b = await metrics(page), cards = [];
+  for (let index = 0; index < 8; index++) {
+    const point = boardPoint(b, index);
+    await click(page, point);
+    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
+    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
+    cards.push({ kind, word, point });
+    await click(page, point);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+  }
+  const pairs = cards.filter(card => card.kind === 'Word').map(word =>
+    [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
+  ).filter(([, picture]) => picture);
+  expect(pairs).toHaveLength(3);
+  // Capture only the visible success/retry badges, excluding Pip and caption changes.
+  const progress = () => patch(page, { x: 66 + (b.width - 314) / 2, y: 48 }, b.width - 314, 32);
+  const continuePoint = feedbackPoint(b, 'action', 'match');
+  await click(page, pairs[0][0].point);
+  await click(page, pairs[1][1].point);
+  await expect(page.locator('#game-status')).toContainText('Not quite.');
+  const afterWrong = await progress();
+  await shot(page, testInfo, 'responsive-match-wrong');
+
+  // No Continue and no second tap: a third card must dismiss feedback and be selected.
+  await click(page, pairs[2][0].point);
+  await expect(page.locator('#selection-status'), 'The first tap during feedback selects this visible word.').toHaveText(`Word: ${pairs[2][0].word}`);
+  await expect(page.locator('#game-status')).toContainText('Now find its match!');
+  expect((await progress()).equals(afterWrong), 'Leaving feedback by selecting a card cannot change either score.').toBe(true);
+  await shot(page, testInfo, 'responsive-match-selected-from-wrong');
+  // Focus follows that card too; keyboard input must not activate the hidden Continue.
+  await page.keyboard.press('Space');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[2][0].word}`);
+  expect((await progress()).equals(afterWrong)).toBe(true);
+  await click(page, pairs[2][1].point);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  const afterCorrect = await progress();
+  expect(afterCorrect.equals(afterWrong), 'An actual correct answer changes the success badges.').toBe(false);
+  await shot(page, testInfo, 'responsive-match-correct');
+
+  await click(page, pairs[2][0].point);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await click(page, pairs[0][0].point);
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0].word}`);
+  expect((await progress()).equals(afterCorrect), 'Selecting the next card after a correct answer cannot count another pair.').toBe(true);
+  await shot(page, testInfo, 'responsive-match-selected-from-correct');
+  await click(page, pairs[0][1].point);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await click(page, continuePoint);
+  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await click(page, pairs[1][0].point);
+  await click(page, pairs[1][1].point);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+
+  const distractor = cards.find(card => !pairs.some(pair => pair.includes(card)));
+  await click(page, distractor.point);
+  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#selection-status'), 'The final feedback tap opens the result without starting another selection.').toBeEmpty();
+  await shot(page, testInfo, 'responsive-match-won');
+  expect(await geometry(page), 'All card taps reuse their original coordinates without a layout or page transition.').toEqual(beforeGeometry);
+  expect(errors).toEqual([]);
+});
