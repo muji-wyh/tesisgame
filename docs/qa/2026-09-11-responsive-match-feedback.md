@@ -62,3 +62,24 @@ Reports: `build/responsive-match/green-report.json` (voice passes and initial
 crop diagnostic) and `build/responsive-match/touch-final-report.json` (final
 desktop/iPhone passes). Final images are under
 `build/responsive-match/touch-final-results/`.
+
+## Delivery
+
+Gameplay commit `6b759cd` was fast-forwarded to `main` and pushed to
+`origin/main`. `npm run deploy -- -SkipBuild` successfully deployed the frozen
+export to `https://gentle-forest-02ff42900.3.azurestaticapps.net/` without
+rebuilding. Log: `build/responsive-match-deploy.log`.
+
+HTTP verification confirmed that production HTML and PCK hashes exactly match
+the tested export above. The local preview at `http://127.0.0.1:4173/` was
+updated with the same **71 files**, each SHA256-compared before activation;
+its HTTP hashes also match. The previous local export was retained at
+`D:/uwork/tesisgame/build/web-before-responsive-a65e600`.
+
+Production smoke tests passed **2/2 in 30.0 seconds** on desktop Chromium and
+iPhone WebKit, with zero failures, retries or skips. Both runs exercised the
+first tap during wrong/correct feedback, keyboard focus, score protection,
+retained Continue and the final result on the deployed site. Page/console error
+lists were empty; production screenshots were also visually checked.
+Report: `build/responsive-match/production-report.json`; screenshots:
+`build/responsive-match/production-results/`.
