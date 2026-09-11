@@ -36,13 +36,16 @@ class CardBack:
 		_layout()
 
 	func _layout() -> void:
-		kind_label.position = Vector2(4, size.y * 0.5 - 12)
+		kind_label.add_theme_font_size_override("font_size", 12 if size.x < 72 else 16)
+		kind_label.position = Vector2(4, 2 if size.y < 64 else size.y * 0.5 - 12)
 		kind_label.size = Vector2(maxf(0, size.x - 8), 22)
-		number_label.position = Vector2(4, size.y * 0.5 + 9)
+		number_label.position = Vector2(4, size.y - 18 if size.y < 64 else size.y * 0.5 + 9)
 		number_label.size = Vector2(maxf(0, size.x - 8), 18)
 		queue_redraw()
 
 	func _draw() -> void:
+		if size.y < 64:
+			return
 		var seed := Vector2(size.x * 0.5, size.y * 0.25)
 		draw_line(seed + Vector2(0, 3), seed + Vector2(0, -6), accent, 2.0, true)
 		draw_colored_polygon(PackedVector2Array([seed, seed + Vector2(-7, -2), seed + Vector2(-8, -7), seed + Vector2(-2, -6)]), accent.lightened(0.15))
@@ -82,6 +85,7 @@ var _paused: bool = false
 var _board: Control
 var _flowers: FlowerProgress
 var _flower_count: Label
+var _review_hint: Label
 
 
 func _ready() -> void:
@@ -115,10 +119,17 @@ func _build() -> void:
 	feedback_view = Lesson.new()
 	feedback_view.name = "MemoryFeedback"
 	add_child(feedback_view)
+	feedback_view.set_compact(true)
 	feedback_view.finished.connect(continue_feedback)
 	feedback_view.hear_requested.connect(_hear_feedback)
 	feedback_view.word_changed.connect(_feedback_word_changed)
 	feedback_view.hide()
+	_review_hint = Style.label("Find a pair, then look and listen.", 16)
+	_review_hint.name = "MemoryReviewHint"
+	_review_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_review_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_review_hint.add_theme_color_override("font_color", Style.MUTED)
+	add_child(_review_hint)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	set_palette(_palette)
@@ -141,6 +152,7 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 		for index in range(memory.cards.size()):
 			var button = WordCard.new()
 			button.setup(memory.cards[index])
+			button.custom_minimum_size = Vector2(44, 44)
 			button.name = "MemoryCard%d" % (index + 1)
 			button.focus_mode = Control.FOCUS_ALL
 			button.set_reduced_motion(reduced_motion)
@@ -246,7 +258,7 @@ func _choose(index: int) -> void:
 	if result == "ignored":
 		return
 	if result in ["correct", "wrong"]:
-		feedback_view.show_words(memory.feedback_words, "A new flower!" if memory.last_correct else "Let's learn these words.", "Continue")
+		feedback_view.show_words(memory.feedback_words, "New flower!" if memory.last_correct else "Compare", "Continue")
 		feedback_view.set_audio_available(audio_available)
 	_refresh()
 	if result != "cancelled":
@@ -287,16 +299,18 @@ func _refresh() -> void:
 	if _board == null:
 		return
 	var playing: bool = memory.phase in ["waiting", "matching"] and not card_buttons.is_empty()
-	_board.visible = playing or memory.phase == "won"
-	study_button.visible = playing
+	var reviewing: bool = memory.phase == "feedback"
+	_board.visible = playing or reviewing or memory.phase == "won"
+	study_button.visible = playing or reviewing
 	study_button.disabled = not playing or _paused
 	study_button.text = "Return to play" if memory.studying else "Study"
 	study_button.tooltip_text = "Hide unmatched cards and play" if memory.studying else "Study all five word and picture pairs"
 	_name_control(study_button, study_button.text + ". " + study_button.tooltip_text)
 	feedback_view.visible = memory.phase == "feedback"
 	feedback_view.pause(_paused or not is_visible_in_tree() or memory.phase != "feedback")
-	status_label.visible = playing or memory.phase == "won" or not memory.error.is_empty()
-	_flowers.visible = playing or memory.phase == "won"
+	_review_hint.visible = playing
+	status_label.visible = playing or reviewing or memory.phase == "won" or not memory.error.is_empty()
+	_flowers.visible = playing or reviewing or memory.phase == "won"
 	_flower_count.visible = _flowers.visible
 	_flowers.count = memory.matched_word_ids.size()
 	_flowers.queue_redraw()
@@ -323,10 +337,10 @@ func _refresh() -> void:
 		var revealed: bool = memory.is_revealed(index)
 		var selected: bool = memory.selected_indices.has(index)
 		button.word_label.text = card.word.text if revealed else ""
-		button.refresh(_palette, selected and not matched, matched, selected and memory.phase == "feedback" and not memory.last_correct, not playing or _paused or memory.studying)
+		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not playing or _paused or memory.studying)
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
-		button.picture.visible = revealed and (matched or card.kind == "image")
-		button.word_label.visible = revealed and (matched or card.kind == "word")
+		button.picture.visible = revealed and card.kind == "image"
+		button.word_label.visible = revealed and card.kind == "word"
 		button.picture.modulate.a = 1.0
 		button.word_label.modulate.a = 1.0
 		var back: CardBack = button.get_node("CardBack")
@@ -344,14 +358,28 @@ func _refresh() -> void:
 func _layout() -> void:
 	if _board == null:
 		return
-	var wide: bool = (size.x >= 420 and size.x >= size.y * 1.3) or (size.x >= 392 and size.y < 460)
-	var columns: int = 5 if wide else 2
-	var rows: int = 2 if wide else 5
+	# Reserve review space before play, so neither an answer nor Continue moves cards.
+	var review_height: float = 104 if size.x >= 392 else 176
+	var side_review: bool = size.x >= 368 and size.y < review_height + 208
+	_board.position = Vector2.ZERO
+	_board.size = Vector2(size.x - 168, size.y) if side_review else Vector2(size.x, size.y - review_height - 8)
+	feedback_view.position = Vector2(_board.size.x + 8, 0) if side_review else Vector2(0, _board.size.y + 8)
+	feedback_view.custom_minimum_size = Vector2(160, 176 if side_review else review_height)
+	feedback_view.size = Vector2(160, size.y) if side_review else Vector2(size.x, review_height)
+	_review_hint.position = feedback_view.position + Vector2(8, 0)
+	_review_hint.size = feedback_view.size - Vector2(16, 0)
+	var width: float = _board.size.x
+	var height: float = _board.size.y
+	var wide: bool = side_review or (width >= 420 and width >= height * 1.3) or (width >= 392 and height < 460)
+	var columns: int = mini(4 if side_review and width < 368 else 5, int((width + 8) / 52)) if wide else 2
+	var rows: int = ceili(10.0 / columns)
 	var header: float = 44 if wide else 64
-	var study_width: float = 132 if wide else clampf(size.x * 0.4, 132, 176)
-	study_button.position = Vector2(size.x - study_width, 0)
+	var study_width: float = 108 if width < 300 and wide else 132 if wide else clampf(width * 0.4, 132, 176)
+	study_button.custom_minimum_size = Vector2(study_width, header)
+	study_button.add_theme_font_size_override("font_size", 12 if study_width < 132 else 16)
+	study_button.position = Vector2(width - study_width, 0)
 	study_button.size = Vector2(study_width, header)
-	var label_width: float = maxf(0, study_button.position.x - 8) if study_button.visible else size.x
+	var label_width: float = maxf(0, study_button.position.x - 8)
 	status_label.position = Vector2.ZERO
 	status_label.size = Vector2(label_width, 24 if wide else 32)
 	var font: Font = status_label.get_theme_font("font")
@@ -363,16 +391,10 @@ func _layout() -> void:
 	_flowers.size = Vector2(110, 22)
 	_flower_count.position = Vector2(112, header - 22)
 	_flower_count.size = Vector2(maxf(0, label_width - 112), 22)
-	_board.position = Vector2.ZERO
-	_board.size = size
-	var card_size := Vector2((size.x - 8 * (columns - 1)) / columns, (size.y - header - 4 - 8 * (rows - 1)) / rows)
+	var card_size := Vector2((width - 8 * (columns - 1)) / columns, (height - header - 4 - 8 * (rows - 1)) / rows)
 	for index in range(card_buttons.size()):
 		card_buttons[index].position = Vector2((index % columns) * (card_size.x + 8), header + 4 + (index / columns) * (card_size.y + 8))
 		card_buttons[index].size = card_size
-	feedback_view.position = Vector2.ZERO
-	# Remove the previous portrait minimum before WordLesson measures its new shape.
-	feedback_view.custom_minimum_size.y = 200
-	feedback_view.size = size
 
 
 func _name_control(control: Control, label: String) -> void:

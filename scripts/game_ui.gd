@@ -193,6 +193,8 @@ var _choice: ChoiceGame
 var _memory: MemoryGarden
 var _lesson: WordLesson
 var _match_feedback: WordLesson
+var _match_playfield: Control
+var _content_margins: MarginContainer
 var _feedback_key: String = ""
 var _new_adventure_button: Button
 var _explore_button: Button
@@ -287,7 +289,6 @@ var _reward_transfer_active: bool = false
 var _reward_delivered_to_collection: bool = false
 var _feedback_tweens: Array[Tween] = []
 var _feedback_sparkles: Array[Control] = []
-var _feedback_origins: Dictionary = {}
 var _holding_chest: bool = false
 var _hold_elapsed: float = 0.0
 var _drag_distance: float = 0.0
@@ -369,6 +370,8 @@ func _build_controls() -> void:
 	add_child(_background)
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margins := MarginContainer.new()
+	_content_margins = margins
+	margins.minimum_size_changed.connect(_fit_content.call_deferred)
 	add_child(margins)
 	margins.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for edge in ["left", "top", "right", "bottom"]:
@@ -471,7 +474,7 @@ func _build_controls() -> void:
 	column.add_child(_adventure_label)
 	_gift_label = Style.label("", 14)
 	_gift_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_gift_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_gift_label.clip_text = true
 	column.add_child(_gift_label)
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
@@ -480,13 +483,17 @@ func _build_controls() -> void:
 	_voice_space.item_rect_changed.connect(_sync_voice_bounds)
 	_voice_space.hide()
 	column.add_child(_voice_space)
+	_match_playfield = Control.new()
+	_match_playfield.name = "MatchPlayfield"
+	_match_playfield.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_match_playfield.resized.connect(_fit_grid)
+	column.add_child(_match_playfield)
 	grid = GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
-	grid.resized.connect(_fit_grid)
-	column.add_child(grid)
+	_match_playfield.add_child(grid)
 	_lesson = WordLesson.new()
 	_lesson.name = "LearnWords"
 	_lesson.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -499,12 +506,12 @@ func _build_controls() -> void:
 	column.add_child(_lesson)
 	_match_feedback = WordLesson.new()
 	_match_feedback.name = "MatchCorrection"
-	_match_feedback.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_match_feedback.set_compact(true)
 	_match_feedback.hear_requested.connect(_lesson_hear)
 	_match_feedback.word_changed.connect(_association_changed)
 	_match_feedback.finished.connect(_continue_match)
 	_match_feedback.hide()
-	column.add_child(_match_feedback)
+	_match_playfield.add_child(_match_feedback)
 	_choice = ChoiceGame.new()
 	_choice.name = "ChoiceGame"
 	_choice.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -656,7 +663,7 @@ func _build_controls() -> void:
 	_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_message.hide()
-	column.add_child(_message)
+	_match_playfield.add_child(_message)
 	_storage_retry_button = Button.new()
 	_storage_retry_button.name = "RetryRewards"
 	_storage_retry_button.text = "Retry rewards"
@@ -1577,7 +1584,7 @@ func _choice_answer(word: Dictionary, correct: bool) -> void:
 	if correct:
 		_collect_word_stickers([target])
 		if not _sticker_notice.is_empty():
-			_choice.feedback_view.heading_label.text = _sticker_notice
+			_choice.feedback_view.set_heading(_sticker_notice)
 	if not correct and not model.missed_word_ids.has(target.id):
 		model.missed_word_ids.append(target.id)
 	duck.react("happy" if correct else "curious")
@@ -1647,7 +1654,7 @@ func _memory_answer(words: Array, correct: bool) -> void:
 	if correct:
 		_collect_word_stickers(words)
 		if not _sticker_notice.is_empty():
-			_memory.feedback_view.heading_label.text = _sticker_notice
+			_memory.feedback_view.set_heading(_sticker_notice)
 
 
 func _memory_progress(successes: int, _attempts: int) -> void:
@@ -1781,7 +1788,8 @@ func _refresh() -> void:
 	if not model.hint_ids.is_empty():
 		_match_caption.text = "Follow stars"
 	var correcting: bool = playing and _mode_id == "match" and model.phase == "feedback"
-	grid.visible = playing and _mode_id == "match" and not correcting
+	_match_playfield.visible = playing and _mode_id == "match"
+	grid.visible = playing and _mode_id == "match"
 	_lesson.visible = playing and _mode_id == "learn"
 	_match_feedback.visible = correcting
 	if correcting:
@@ -2024,14 +2032,14 @@ func _show_match_feedback() -> void:
 	if word_card.is_empty() or image_card.is_empty():
 		return
 	associations.append(word_card.word)
-	var heading: String = "Yes! The word and picture match."
+	var heading: String = "Good match!"
 	if not model.last_correct:
 		associations.append(image_card.word)
-		heading = "%s and %s are different." % [word_card.word.text, image_card.word.text]
+		heading = "Try again"
 		if model.card_by_id(word_card.word.id + ":image").is_empty():
-			heading = "No picture partner: %s." % word_card.word.text
+			heading = "No picture"
 		elif model.card_by_id(image_card.word.id + ":word").is_empty():
-			heading = "No word partner: %s." % image_card.word.text
+			heading = "No word"
 	_match_feedback.show_words(associations, heading, "Continue")
 	_match_feedback.set_audio_available(audio.available and not audio.muted and not _voice_mode)
 	if not collection_page.visible:
@@ -2076,13 +2084,43 @@ func _layout() -> void:
 	_layout_result()
 	_sync_voice_bounds()
 	_update_duck()
+	_fit_content.call_deferred()
+
+
+func _fit_content() -> void:
+	# Containers grow to transient child minima, but do not shrink back with anchors alone.
+	if _content_margins != null:
+		_content_margins.size = size
 
 
 func _fit_grid() -> void:
 	if grid == null or not grid.is_visible_in_tree():
 		return
-	# Use the allocated playfield after container layout, not a previous mode's cached minimum.
-	grid.columns = 4 if size.x >= size.y or grid.size.y < 318.0 else 2
+	# Reserve the same review area throughout an attempt; only its contents change.
+	var area: Vector2 = _match_playfield.size
+	var side: bool = area.x >= 420 and area.y < 360
+	var tight: bool = side and area.x < 500
+	var gap: float = 8 if tight else 12
+	var review: Rect2
+	var board_size: Vector2
+	if side:
+		var width: float = clampf(area.x * 0.28, 160, 240)
+		board_size = Vector2(area.x - width - gap, area.y)
+		review = Rect2(Vector2(board_size.x + gap, 0), Vector2(width, area.y))
+	else:
+		var height: float = 104 if area.x >= 392 else 176
+		board_size = Vector2(area.x, area.y - height - 12)
+		review = Rect2(Vector2(0, board_size.y + 12), Vector2(area.x, height))
+	for card in cards.values():
+		card.custom_minimum_size = Vector2(72, 72)
+	grid.add_theme_constant_override("h_separation", 0 if tight else 10)
+	grid.columns = 4 if side or board_size.y < 318 else 2
+	grid.position = Vector2.ZERO
+	grid.size = board_size
+	_match_feedback.position = review.position
+	_match_feedback.size = review.size
+	_message.position = review.position
+	_message.size = review.size
 
 
 func _fit_mode_buttons() -> void:
@@ -2164,7 +2202,7 @@ func _select_card(id: String) -> void:
 		if result == "correct":
 			_collect_word_stickers([model.card_by_id(id).word])
 			if not _sticker_notice.is_empty():
-				_match_feedback.heading_label.text = _sticker_notice
+				_match_feedback.set_heading(_sticker_notice)
 		_animate_feedback(model.feedback_ids, result == "correct")
 		if not _voice_mode:
 			audio.cue(result, result)
@@ -2880,11 +2918,9 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 		return
 	for id in ids:
 		var card: Button = cards[id]
-		_feedback_origins[id] = card.position
-		card.pivot_offset = card.size * 0.5
-		var tween := create_tween()
-		_feedback_tweens.append(tween)
 		if correct:
+			var tween := create_tween()
+			_feedback_tweens.append(tween)
 			var sparkle := RewardSparkle.new()
 			sparkle.name = "MatchSparkle"
 			sparkle.accent = Data.theme(model.theme_id).accent
@@ -2894,19 +2930,8 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 			card.add_child(sparkle)
 			sparkle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 			_feedback_sparkles.append(sparkle)
-			card.scale = Vector2.ONE * 0.82
-			tween.tween_property(card, "scale", Vector2.ONE * 1.08, 0.14).set_trans(Tween.TRANS_BACK)
-			tween.tween_property(card, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK)
-			tween.parallel().tween_method(sparkle.set_progress, 0.0, 1.0, 0.45)
+			tween.tween_method(sparkle.set_progress, 0.0, 1.0, 0.45)
 			tween.finished.connect(sparkle.queue_free)
-		else:
-			var start: Vector2 = card.position
-			card.position = start + Vector2(-6, 0)
-			card.rotation = -0.045
-			tween.tween_property(card, "position", start + Vector2(7, 0), 0.08)
-			tween.parallel().tween_property(card, "rotation", 0.045, 0.08)
-			tween.tween_property(card, "position", start, 0.12)
-			tween.parallel().tween_property(card, "rotation", 0.0, 0.12)
 
 
 func _stop_feedback_animations() -> void:
@@ -2918,12 +2943,6 @@ func _stop_feedback_animations() -> void:
 			sparkle.hide()
 			sparkle.queue_free()
 	_feedback_sparkles.clear()
-	for id in _feedback_origins:
-		if cards.has(id) and is_instance_valid(cards[id]):
-			cards[id].position = _feedback_origins[id]
-			cards[id].scale = Vector2.ONE
-			cards[id].rotation = 0.0
-	_feedback_origins.clear()
 
 
 func _start_chest_hold() -> void:
@@ -3103,6 +3122,7 @@ func _refresh_adventure_book() -> void:
 
 
 func _show_collection(as_adventures: bool = false) -> void:
+	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	audio.stop_voice()
 	_adventures_open = as_adventures
 	_collection_title.text = "Pip's adventures" if as_adventures else "My rewards"
@@ -3124,7 +3144,6 @@ func _show_collection(as_adventures: bool = false) -> void:
 	_collection_dragged = false
 	_refresh_favorite_reward()
 	_refresh_collection(not as_adventures and _collection_section == "medals")
-	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	_collection_focus_modes.clear()
 	for node in find_children("*", "Button", true, false):
 		var button := node as Button

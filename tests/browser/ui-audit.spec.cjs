@@ -1,31 +1,19 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, memoryPoint, studyPoint, choicePoint, visibleColorCount } = require('./game-ui.cjs');
 
 // Exploratory release audit: interact through the rendered game and its public announcements.
 const SIZES = [{ width: 390, height: 844 }, { width: 320, height: 568 }, { width: 844, height: 390 }];
 
-function memoryGeometry(b) {
-  const top = 252 + (b.height >= 520 ? 28 : 0);
-  const width = b.width - 24, height = b.height - top - 12;
-  const wide = (width >= 420 && width >= height * 1.3) || (width >= 392 && height < 460);
-  const columns = wide ? 5 : 2, rows = 10 / columns, header = wide ? 44 : 64;
-  return { top, width, height, columns, header, study: wide ? 132 : Math.max(132, Math.min(width * 0.4, 176)),
-    cellWidth: (width - (columns - 1) * 8) / columns,
-    cellHeight: (height - header - 4 - (rows - 1) * 8) / rows };
-}
-
 async function memoryCard(page, index) {
-  const g = memoryGeometry(await metrics(page));
-  await tap(page, 12 + index % g.columns * (g.cellWidth + 8) + g.cellWidth / 2,
-    g.top + g.header + 4 + Math.floor(index / g.columns) * (g.cellHeight + 8) + g.cellHeight / 2);
+  const point = memoryPoint(await metrics(page), index);
+  await tap(page, point.x, point.y);
 }
 
 async function study(page) {
-  const g = memoryGeometry(await metrics(page));
-  await tap(page, 12 + g.width - g.study / 2, g.top + g.header / 2);
+  const point = studyPoint(await metrics(page));
+  await tap(page, point.x, point.y);
 }
-
 async function lesson(page, control, options) {
   const point = lessonPoint(await metrics(page), control, options);
   await tap(page, point.x, point.y);
@@ -72,22 +60,7 @@ async function capture(page, testInfo, name, evidence) {
   await rendered(page);
   const path = testInfo.outputPath(`${name}.png`);
   const png = await page.screenshot({ path, scale: 'css' });
-  const visibleColors = await page.evaluate(async base64 => {
-    const image = new Image();
-    image.src = 'data:image/png;base64,' + base64;
-    await image.decode();
-    const canvas = document.createElement('canvas');
-    canvas.width = image.width; canvas.height = image.height;
-    const context = canvas.getContext('2d');
-    context.drawImage(image, 0, 0);
-    const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
-    const colors = new Set();
-    for (let y = 4; y < canvas.height; y += 8) for (let x = 4; x < canvas.width; x += 8) {
-      const i = (y * canvas.width + x) * 4;
-      colors.add(`${data[i] >> 4},${data[i + 1] >> 4},${data[i + 2] >> 4}`);
-    }
-    return colors.size;
-  }, png.toString('base64'));
+  const visibleColors = await visibleColorCount(page, png);
   const entry = { name, path, visibleColors, status: await page.locator('#game-status').textContent(),
     selection: await page.locator('#selection-status').textContent(), metrics: await metrics(page) };
   evidence.push(entry);
@@ -137,7 +110,8 @@ for (const size of SIZES) {
       await expect(page.locator('#game-status')).toContainText(mode === 2 ? 'Sky words.' : 'Listen.');
       await shot(`08-${name}-entry`);
       const b = await metrics(page);
-      await tap(page, b.width / 4, b.height - 48);
+      const answer = choicePoint(b, 0);
+      await tap(page, answer.x, answer.y);
       await expect(page.locator('#game-status')).toContainText('Continue');
       await shot(`09-${name}-feedback`);
       await rewards(page);

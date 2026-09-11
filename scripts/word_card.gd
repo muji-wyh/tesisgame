@@ -60,7 +60,6 @@ var word_label: Label
 var match_mark: MatchMark
 var accent: Color = Style.GOOD
 var reduced_motion: bool = false
-var _matched: bool = false
 var _feedback: FeedbackOverlay
 var _feedback_state: String = ""
 var _feedback_kind: String = ""
@@ -120,14 +119,8 @@ func setup(value: Dictionary) -> void:
 
 func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
 	accent = palette.accent
-	_matched = matched
-	picture.visible = matched or card_data.kind == "image"
-	word_label.visible = matched or card_data.kind == "word"
-	picture.offset_bottom = -28 if matched else -10
-	word_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE if matched else Control.PRESET_FULL_RECT)
-	if matched:
-		word_label.offset_top = -28
-		word_label.offset_bottom = -3
+	picture.visible = card_data.kind == "image"
+	word_label.visible = card_data.kind == "word"
 	_fit_text()
 	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
 	if state != _feedback_state:
@@ -215,8 +208,15 @@ func _fit_text() -> void:
 		return
 	var font: Font = word_label.get_theme_font("font")
 	var font_size: int = clampi(int(minf(size.x * 0.36, size.y * 0.52)), 20, 64)
-	if _matched:
-		font_size = 18
-	while font_size > 16 and font.get_string_size(word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > size.x - 18:
+	var minimum_font: int = 12 if size.x < 72 else 16
+	var available_width: float = word_label.size.x if size.x < 72 else size.x - 18
+	while font_size > minimum_font and font.get_string_size(word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available_width:
 		font_size -= 1
 	word_label.add_theme_font_size_override("font_size", font_size)
+	# Short Memory cards need a smaller corner mark to leave the word readable.
+	if match_mark != null:
+		var short_card: bool = size.y < 64
+		match_mark.offset_left = -18 if short_card else -36
+		match_mark.offset_right = -4 if short_card else -8
+		match_mark.offset_top = 0 if short_card else 8
+		match_mark.offset_bottom = 14 if short_card else 36

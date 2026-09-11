@@ -66,6 +66,7 @@ var _words: Array[Dictionary] = []
 var _palette: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _last_correct: bool = false
+var _last_choice: int = -1
 var _stage: Control
 var _landing: Panel
 var _art: PlayScene
@@ -110,6 +111,7 @@ func _build() -> void:
 	hear_button.pressed.connect(_hear)
 	_stage.add_child(hear_button)
 	target_word_label = Style.label("", 36)
+	target_word_label.clip_text = true
 	target_word_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target_word_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_stage.add_child(target_word_label)
@@ -117,12 +119,14 @@ func _build() -> void:
 		var button := Button.new()
 		button.name = "Answer%d" % (index + 1)
 		button.expand_icon = true
+		button.clip_text = true
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.pressed.connect(_choose.bind(index))
 		add_child(button)
 		answer_buttons.append(button)
 	feedback_view = Lesson.new()
 	add_child(feedback_view)
+	feedback_view.set_compact(true)
 	feedback_view.finished.connect(continue_feedback)
 	feedback_view.hear_requested.connect(_hear_feedback)
 	feedback_view.hide()
@@ -177,6 +181,8 @@ func set_palette(palette: Dictionary) -> void:
 
 func set_audio_available(value: bool) -> void:
 	_build()
+	if audio_available == value:
+		return
 	audio_available = value
 	feedback_view.set_audio_available(value)
 	if status == "asking":
@@ -258,7 +264,7 @@ func _present_target() -> void:
 		_name_control(button, button.tooltip_text)
 		button.remove_theme_stylebox_override("disabled")
 	_show_question()
-	if mode_id == "sky" and not reduced_motion and not suspended:
+	if mode_id == "sky" and successes == 0 and not reduced_motion and not suspended:
 		_arrive_after_layout.call_deferred(_arrival_generation)
 	prompt_ready.emit()
 
@@ -292,19 +298,20 @@ func _arrive_after_layout(generation: int) -> void:
 	if generation != _arrival_generation or status != "asking" or mode_id != "sky" or reduced_motion or suspended or not is_visible_in_tree():
 		return
 	_stop_motion()
-	target_picture.position.y -= minf(150, _stage.size.y)
-	target_picture.rotation = -0.16
+	target_picture.position.y -= 12
+	target_picture.rotation = -0.025
 	_art.arrival = 0.0
 	_motion = create_tween().set_parallel(true)
-	_motion.tween_property(target_picture, "position", _picture_position, 0.9).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_motion.tween_property(target_picture, "rotation", 0.0, 0.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	_motion.tween_property(_art, "arrival", 1.0, 0.9)
+	_motion.tween_property(target_picture, "position", _picture_position, 0.24).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_motion.tween_property(target_picture, "rotation", 0.0, 0.24).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_motion.tween_property(_art, "arrival", 1.0, 0.24)
 
 
 func _choose(index: int) -> void:
 	if status != "asking" or suspended or not is_visible_in_tree() or index < 0 or index >= choices.size():
 		return
 	_last_correct = choices[index].id == current_target.id
+	_last_choice = index
 	status = "feedback"
 	if _last_correct:
 		successes += 1
@@ -312,7 +319,7 @@ func _choose(index: int) -> void:
 	else:
 		mistakes += 1
 	_stop_motion()
-	feedback_view.show_words([current_target], "Yes! You found it." if _last_correct else "Let's learn this word.", "Continue")
+	feedback_view.show_words([current_target], "Found it!" if _last_correct else "Try again", "Continue")
 	feedback_view.set_audio_available(audio_available)
 	_apply_enabled()
 	_layout()
@@ -348,14 +355,25 @@ func _hear_feedback(word: Dictionary) -> void:
 
 func _apply_enabled() -> void:
 	var enabled: bool = status == "asking" and not suspended
-	for button in answer_buttons:
-		button.visible = status == "asking"
+	for index in range(answer_buttons.size()):
+		var button: Button = answer_buttons[index]
+		button.visible = status in ["asking", "feedback"]
 		button.disabled = not enabled
+		var border: Color = Color("#d8dde1")
+		var fill: Color = Color("#edf0f1")
+		if status == "feedback" and index < choices.size():
+			if choices[index].id == current_target.id:
+				border = Style.GOOD
+				fill = Style.GOOD.lightened(0.9)
+			elif index == _last_choice:
+				border = Style.WRONG
+				fill = Style.WRONG.lightened(0.9)
+		button.add_theme_stylebox_override("disabled", Style.box(fill, border, 16, 3 if status == "feedback" else 2))
 	if hear_button != null:
 		hear_button.disabled = not enabled or not audio_available
 	if _stage != null:
-		_stage.visible = status == "asking"
-		status_label.visible = status in ["asking", "unavailable"]
+		_stage.visible = status in ["asking", "feedback"]
+		status_label.visible = status in ["asking", "feedback", "unavailable"]
 	if feedback_view != null:
 		feedback_view.visible = status == "feedback"
 
@@ -379,37 +397,57 @@ func _layout() -> void:
 	if _stage == null:
 		return
 	_stop_motion()
+	custom_minimum_size = Vector2(216, 200 if size.x >= 392 else 384)
+	var side_feedback: bool = size.x >= 392 and size.y < 312
+	var feedback_height: float = 104 if size.x >= 392 else 176
+	var board_size := Vector2(size.x, size.y - feedback_height - 8)
+	if side_feedback:
+		var feedback_width: float = clampf(size.x * 0.36, 160, 240)
+		board_size = Vector2(size.x - feedback_width - 8, size.y)
+		feedback_view.position = Vector2(board_size.x + 8, (size.y - 176) * 0.5)
+		feedback_view.size = Vector2(feedback_width, 176)
+	else:
+		feedback_view.position = Vector2(0, board_size.y + 8)
+		feedback_view.size = Vector2(size.x, feedback_height)
 	status_label.position = Vector2.ZERO
-	status_label.size = Vector2(size.x, size.y if status == "unavailable" else 24.0)
+	status_label.size = Vector2(board_size.x, board_size.y if status == "unavailable" else 24.0)
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if status == "unavailable" else TextServer.AUTOWRAP_OFF
 	var font: Font = status_label.get_theme_font("font")
 	var font_size: int = 18
-	while font_size > 14 and font.get_string_size(status_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > size.x:
+	while font_size > 14 and font.get_string_size(status_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > board_size.x:
 		font_size -= 1
 	status_label.add_theme_font_size_override("font_size", font_size)
-	feedback_view.position = Vector2.ZERO
-	feedback_view.size = size
-	var answer_height: float = clampf((size.y - 36.0) * 0.38, 72.0, 140.0)
+	var answer_height: float = clampf((board_size.y - 36.0) * 0.38, 72.0, 140.0)
 	_stage.position = Vector2(0, 28)
-	_stage.size = Vector2(size.x, maxf(72, size.y - 36.0 - answer_height))
+	_stage.size = Vector2(board_size.x, maxf(72, board_size.y - 36.0 - answer_height))
 	_art.size = _stage.size
 	_art.queue_redraw()
-	var card_size := Vector2(minf(size.x * 0.65, 240), minf(_stage.size.y, 240))
+	var card_size := Vector2(minf(board_size.x * 0.65, 240), minf(_stage.size.y, 240))
 	_landing.position = (_stage.size - card_size) * 0.5
 	_landing.size = card_size
 	_picture_position = _landing.position + Vector2(8, 8)
 	target_picture.position = _picture_position
 	target_picture.size = card_size - Vector2(16, 16)
 	target_picture.pivot_offset = target_picture.size * 0.5
-	hear_button.size = Vector2(minf(size.x, 300), maxf(72, minf(_stage.size.y, 120)))
+	hear_button.size = Vector2(minf(board_size.x, 300), maxf(72, minf(_stage.size.y, 120)))
 	hear_button.position = (_stage.size - hear_button.size) * 0.5
 	target_word_label.position = Vector2.ZERO
 	target_word_label.size = _stage.size
-	var width: float = (size.x - 10.0) * 0.5
+	font = target_word_label.get_theme_font("font")
+	font_size = 36
+	while font_size > 14 and font.get_string_size(target_word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > board_size.x - 16:
+		font_size -= 1
+	target_word_label.add_theme_font_size_override("font_size", font_size)
+	var width: float = (board_size.x - 10.0) * 0.5
 	for index in range(2):
-		answer_buttons[index].position = Vector2(float(index) * (width + 10), size.y - answer_height)
+		answer_buttons[index].position = Vector2(float(index) * (width + 10), board_size.y - answer_height)
 		answer_buttons[index].size = Vector2(width, answer_height)
 		answer_buttons[index].pivot_offset = answer_buttons[index].size * 0.5
+		font = answer_buttons[index].get_theme_font("font")
+		font_size = 28
+		while font_size > 14 and font.get_string_size(answer_buttons[index].text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > width - 20:
+			font_size -= 1
+		answer_buttons[index].add_theme_font_size_override("font_size", font_size)
 
 
 func _name_control(control: Control, label: String) -> void:

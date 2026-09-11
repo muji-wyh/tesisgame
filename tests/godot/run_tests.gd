@@ -1217,8 +1217,8 @@ func _test_scene() -> void:
 	app.cards[first_pair[1]].grab_focus()
 	app.cards[first_pair[0]].pressed.emit()
 	app.cards[first_pair[1]].pressed.emit()
-	check(app.cards[first_pair[0]].scale != Vector2.ONE and app.cards[first_pair[1]].scale != Vector2.ONE,
-		"Matching cards immediately start a lively bounce")
+	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
+		"Matching cards keep their scale while local badges celebrate the answer")
 	if app._success.has_method("set_filled_count"):
 		check(app._success.filled_count == 1 and app._success.total_count == 3,
 			"A match fills exactly one friendly success badge")
@@ -1468,8 +1468,8 @@ func _test_scene() -> void:
 	var wrong_start: Vector2 = app.cards[wrong[0]].position
 	app.cards[wrong[0]].pressed.emit()
 	app.cards[wrong[1]].pressed.emit()
-	check(app.cards[wrong[0]].rotation != 0.0 or app.cards[wrong[0]].position != wrong_start,
-		"Wrong cards immediately start a playful shake")
+	check(app.cards[wrong[0]].rotation == 0.0 and app.cards[wrong[0]].position == wrong_start,
+		"Wrong cards keep their position and use color feedback instead of shaking")
 	if app._mistakes.has_method("set_filled_count"):
 		check(app._mistakes.filled_count == 1 and app._mistakes.total_count == 3,
 			"A mismatch fills exactly one gentle retry badge")

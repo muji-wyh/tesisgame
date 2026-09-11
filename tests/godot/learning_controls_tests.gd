@@ -34,6 +34,18 @@ func _run() -> void:
 	lesson.set_palette(data.theme("spring"))
 	lesson.show_words(words, "Meet these words")
 	await process_frame
+	var initial_rects: Array = _lesson_rects(lesson)
+	lesson.next_button.grab_focus()
+	for index in range(1, words.size()):
+		lesson.next_button.pressed.emit()
+		check(_lesson_rects(lesson) == initial_rects, "Learn keeps its picture and control positions while changing words")
+	check(root.gui_get_focus_owner() == lesson.action_button, "Reaching the last Learn word moves actual focus from disabled Next to Play Match")
+	lesson.previous_button.grab_focus()
+	for index in range(words.size() - 1):
+		lesson.previous_button.pressed.emit()
+	check(root.gui_get_focus_owner() == lesson.next_button, "Reaching the first Learn word moves actual focus from disabled Previous to Next")
+	changed_words.clear()
+	lesson.show_words(words, "Meet these words")
 	check(lesson.current_word.id == words[0].id and lesson.word_label.text == words[0].text,
 		"The first written word belongs to the presented lesson item")
 	check(lesson.picture.texture.resource_path == "res://" + words[0].image and lesson.picture.visible,
@@ -130,7 +142,84 @@ func _run() -> void:
 			"Overlapping names cannot become contradictory answer alternatives")
 	check(not data.confusable_words("cat", "dog") and not data.confusable_words("rocket", "earth"),
 		"Visually distinct vocabulary remains available as useful alternatives")
+	check(lesson.has_method("set_compact"), "Word associations support a fixed compact feedback region")
+	if lesson.has_method("set_compact"):
+		_test_compact(lesson, words)
 	lesson.queue_free()
 	await process_frame
 	print("Learning controls: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _lesson_rects(lesson) -> Array:
+	return [lesson._card.get_rect(), lesson.picture.get_rect(), lesson.word_label.get_rect(), lesson.hear_button.get_rect(),
+		lesson.previous_button.get_rect(), lesson.next_button.get_rect(), lesson.action_button.get_rect()]
+
+
+func _test_compact(lesson, words: Array) -> void:
+	lesson.set_compact(true)
+	lesson.set_audio_available(true)
+	for dimensions in [Vector2(160, 176), Vector2(240, 176), Vector2(392, 104), Vector2(456, 104)]:
+		lesson.size = dimensions
+		lesson.show_words([words[0]], "A clear answer", "Continue")
+		lesson._layout()
+		var one_word_rects := _lesson_rects(lesson)
+		var minimum: Vector2 = lesson.custom_minimum_size
+		check(minimum.x <= 160 and minimum.y == dimensions.y, "Compact feedback fits its fixed wide or narrow height")
+		check(lesson.size == dimensions, "Compact feedback releases the previous width's taller minimum when changing regions")
+		check(not lesson.hear_button.visible and lesson.picture_button.tooltip_text.contains("Hear") and lesson.hear_hint_label.text == "Tap to hear", "The compact association visibly explains its picture Hear action without a duplicate Hear button")
+		check(lesson.controls() == [lesson.action_button, lesson.picture_button], "One-word feedback prioritizes Continue and its pronounceable picture")
+		for title in ["Try again", "Found it!", "New flower!", "New sticker: helicopter!"]:
+			lesson.set_heading(title)
+			check(lesson.heading_label.text == title and lesson.heading_label.size.x == lesson.size.x,
+				"A one-word feedback heading uses its full width and retains the complete notice")
+			_check_heading_fits(lesson)
+			check(_lesson_rects(lesson) == one_word_rects, "Updating a feedback heading does not move its picture or controls")
+		lesson.show_words(words.slice(0, 2), "Compare", "Continue")
+		check(_lesson_rects(lesson) == one_word_rects and lesson.custom_minimum_size == minimum, "One-word and two-word feedback keep identical geometry and minimum size")
+		for title in ["Try again", "No picture", "No word", "Compare"]:
+			lesson.set_heading(title)
+			_check_heading_fits(lesson)
+			check(not lesson.heading_label.get_rect().intersects(lesson.progress_label.get_rect()), "A two-word heading leaves the progress counter readable")
+		lesson.set_palette(load("res://scripts/game_data.gd").theme("winter"))
+		check(_lesson_rects(lesson) == one_word_rects, "Changing the theme preserves compact navigation slots and all control positions")
+		var action_font: Font = lesson.action_button.get_theme_font("font")
+		var action_font_size: int = lesson.action_button.get_theme_font_size("font_size")
+		var action_text_width: float = action_font.get_string_size(lesson.action_button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, action_font_size).x
+		var action_content_width: float = lesson.action_button.size.x - lesson.action_button.get_theme_stylebox("normal").get_minimum_size().x
+		check(action_text_width <= action_content_width, "The complete Continue label fits inside the actual button padding at %s: %s px text in %s px at font %d" % [dimensions, action_text_width, action_content_width, action_font_size])
+		var compact_controls: Array[Control] = lesson.controls()
+		for control in compact_controls:
+			check(control.size.x >= 44 and control.size.y >= 44 and lesson.get_global_rect().grow(0.1).encloses(control.get_global_rect()), "Every compact action fits its region with at least a 44px touch target")
+		for first in range(compact_controls.size()):
+			for second in range(first + 1, compact_controls.size()):
+				check(not compact_controls[first].get_global_rect().intersects(compact_controls[second].get_global_rect()), "Compact feedback touch targets do not overlap")
+		var before_heard := heard.size()
+		lesson.picture_button.pressed.emit()
+		check(heard.size() == before_heard + 1 and heard.back() == words[0].id, "Compact picture pronunciation uses the visible word")
+		lesson.next_button.pressed.emit()
+		check(lesson.current_word == words[1] and _lesson_rects(lesson) == one_word_rects, "Compact Next changes the word without moving feedback controls")
+		lesson.previous_button.pressed.emit()
+		check(lesson.current_word == words[0], "Compact Previous keeps both correction words reviewable")
+		lesson.set_audio_available(false)
+		check(lesson.picture_button.disabled and lesson.hear_hint_label.text == "No sound" and not lesson.controls().has(lesson.picture_button) and lesson.controls().has(lesson.action_button), "Silent compact feedback retains its written answer and Continue")
+		lesson.set_audio_available(true)
+		lesson.pause(true)
+		var current: Dictionary = lesson.current_word
+		lesson.next_button.pressed.emit()
+		lesson.picture_button.pressed.emit()
+		check(lesson.controls().is_empty() and lesson.current_word == current and heard.size() == before_heard + 1, "Paused compact feedback blocks both navigation and audio")
+		lesson.pause(false)
+	lesson.set_compact(false)
+	lesson.size = Vector2(456, 744)
+	lesson.show_words(words, "Full Learn")
+	check(lesson.hear_button.visible and lesson.previous_button.text == "Previous" and lesson.next_button.text == "Next", "Leaving compact mode restores the complete Learn controls")
+	check(lesson.heading_label.get_theme_font_size("font_size") == 18, "Full Learn restores its original heading size")
+
+
+func _check_heading_fits(lesson) -> void:
+	var font: Font = lesson.heading_label.get_theme_font("font")
+	var font_size: int = lesson.heading_label.get_theme_font_size("font_size")
+	var text_width: float = font.get_string_size(lesson.heading_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	check(text_width <= lesson.heading_label.size.x and font_size >= 12,
+		"The complete compact heading fits at %s: %s needs %s px in %s px" % [lesson.size, lesson.heading_label.text, text_width, lesson.heading_label.size.x])

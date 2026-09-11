@@ -62,17 +62,21 @@ func _run() -> void:
 		var before_answers: int = answers.size()
 		var before_prompts: int = ready_prompts
 		var wrong: int = _answer_index(game, false)
+		var question_rects: Array = _question_rects(game)
 		game.answer_buttons[wrong].pressed.emit()
 		for tap in range(6):
 			game.answer_buttons[wrong].pressed.emit()
 		check(game.status == "feedback" and game.mistakes == 1 and game.successes == 0,
 			"A wrong answer locks repeated attempts during feedback")
 		check(answers.size() == before_answers + 1 and not answers.back()[1], "One attempt emits exactly one incorrect answer")
-		check(game.controls().size() == 3 and game.feedback_view.visible
+		check(game.controls().size() == 2 and game.feedback_view.visible
 			and game.feedback_view.current_word.id == first.id
 			and game.feedback_view.word_label.text == first.text
 			and game.feedback_view.picture.texture.resource_path == "res://" + first.image,
 			"Wrong feedback teaches the correct picture and written word with Hear and Continue")
+		check(game._stage.visible and game.answer_buttons.all(func(button: Button) -> bool: return button.visible and button.disabled), "Answer feedback keeps the question and both answer cards visible while locking another attempt")
+		check(_question_rects(game) == question_rects, "Entering feedback does not move the target or answers")
+		check(not game.feedback_view.get_global_rect().intersects(game._stage.get_global_rect()) and game.answer_buttons.all(func(button: Button) -> bool: return not game.feedback_view.get_global_rect().intersects(button.get_global_rect())), "Compact feedback does not cover the question or answer cards")
 		if "--screenshots" in OS.get_cmdline_user_args():
 			await _capture(game, mode + "-correction")
 		await create_timer(0.8).timeout
@@ -89,6 +93,7 @@ func _run() -> void:
 		game.continue_feedback()
 		check(game.current_target == first and game.choices == choices and game.status == "asking",
 			"A mistake retries the same target and answer positions")
+		check(_question_rects(game) == question_rects, "Retrying a mistake restores input without moving the board")
 		check(ready_prompts == before_prompts + 1, "Re-enabled choices notify the host to restore controller focus")
 		game.pause(true)
 		before_answers = answers.size()
@@ -103,11 +108,13 @@ func _run() -> void:
 			check(game.choices.size() == 2 and game.choices[0].id != game.choices[1].id
 				and _answer_index(game, true) >= 0, "Each prompt offers one correct word and a different alternative")
 			var right: int = _answer_index(game, true)
+			question_rects = _question_rects(game)
 			game.answer_buttons[right].pressed.emit()
 			game.answer_buttons[right].pressed.emit()
 			check(game.successes == index + 1 and game.mistakes == 1, "A repeated correct tap awards one success")
 			check(game.feedback_view.current_word == game.current_target and game.feedback_view.word_label.visible
 				and game.feedback_view.picture.visible, "A successful answer reinforces that exact picture-word association")
+			check(_question_rects(game) == question_rects and game._stage.visible and game.answer_buttons[right].visible, "Correct answers, including the final one, preserve the visible question geometry")
 			game.feedback_view.action_button.pressed.emit()
 		check(game.status == "won" and endings.size() == before_endings + 1 and endings.back()[0],
 			"Five correct answers finish with exactly one win")
@@ -129,6 +136,7 @@ func _run() -> void:
 		game.start_round(words, mode, palette, 17)
 		game.set_reduced_motion(true)
 		for dimensions in [Vector2(456, 200), Vector2(960, 360), Vector2(240, 200)]:
+			game.start_round(words, mode, palette, 17)
 			game.size = dimensions
 			await process_frame
 			await process_frame
@@ -137,6 +145,15 @@ func _run() -> void:
 				check(game.get_global_rect().grow(0.1).encloses(control.get_global_rect()), "Choice controls fit their assigned play area")
 			check(not game.answer_buttons[0].get_global_rect().intersects(game.answer_buttons[1].get_global_rect()),
 				"Answer touch targets remain separate")
+			var asking_rects: Array = _question_rects(game)
+			game.answer_buttons[_answer_index(game, false)].pressed.emit()
+			check(_question_rects(game) == asking_rects and game._stage.visible,
+				"Responsive feedback retains the exact question layout at " + str(dimensions))
+			check(not game.feedback_view.get_global_rect().intersects(game._stage.get_global_rect()) and game.answer_buttons.all(func(button: Button) -> bool: return not game.feedback_view.get_global_rect().intersects(button.get_global_rect())),
+				"Responsive feedback stays beside or below the complete question at " + str(dimensions))
+			for control in game.controls():
+				check(game.get_global_rect().grow(0.1).encloses(control.get_global_rect()), "Responsive feedback actions stay inside the game")
+			game.continue_feedback()
 		check(game.status == "asking" and game.successes == 0, "Reduced motion and resizing leave the question unchanged")
 		game.set_reduced_motion(false)
 		game.start_round(words, mode, palette, 42)
@@ -206,6 +223,14 @@ func _run() -> void:
 	check(entering._motion != null and entering._motion.is_running()
 		and entering.target_picture.position.y < entering._picture_position.y,
 		"The first picture still arrives after a newly shown container finishes layout")
+	var initial_motion = entering._motion
+	entering.set_audio_available(entering.audio_available)
+	check(entering._motion == initial_motion and entering._motion.is_running(), "An unchanged audio status cannot interrupt a visible Sky arrival")
+	entering.answer_buttons[_answer_index(entering, true)].pressed.emit()
+	entering.continue_feedback()
+	await process_frame
+	await process_frame
+	check(entering._motion == null and entering.target_picture.position == entering._picture_position, "Later Sky questions replace the picture in place without another entrance animation")
 	entering.start_round(words, "sky", palette, 32)
 	entering.stop()
 	await process_frame
@@ -228,6 +253,11 @@ func _run() -> void:
 	await process_frame
 	print("Choice modes: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _question_rects(game) -> Array:
+	return [game._stage.get_rect(), game.target_picture.get_rect(), game.answer_buttons[0].get_rect(),
+		game.answer_buttons[1].get_rect(), game.feedback_view.get_rect(), game.custom_minimum_size]
 
 
 func _answer_index(game, correct: bool) -> int:

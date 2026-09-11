@@ -104,7 +104,16 @@ func _test_card(card) -> void:
 	check(is_zero_approx(card.get("_feedback_left")), "A neutral feedback lock clears selection effects")
 	for state in ["matched", "wrong"]:
 		card.refresh(palette, false, false, false, false)
+		var picture_rect: Rect2 = card.picture.get_rect()
+		var word_rect: Rect2 = card.word_label.get_rect()
+		var word_size: int = card.word_label.get_theme_font_size("font_size")
+		var front: Array = [card.picture.visible, card.word_label.visible]
 		card.refresh(palette, false, state == "matched", state == "wrong", true)
+		check(card.picture.get_rect() == picture_rect and card.word_label.get_rect() == word_rect
+			and card.word_label.get_theme_font_size("font_size") == word_size,
+			"Answer feedback keeps the picture and word in their original positions and sizes")
+		check([card.picture.visible, card.word_label.visible] == front,
+			"A matched card retains its original face; the review supplies the complete association")
 		check(card.get("_feedback_kind") == state and card.get("_feedback_left") > 0.0,
 			"A new match or mistake gets its distinct bounded feedback")
 		card._process(0.1)

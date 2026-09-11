@@ -1,39 +1,21 @@
+const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, resultPoint } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, memoryPoint, studyPoint, resultPoint, visibleColorCount } = require('./game-ui.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 const REVEAL = /^Memory card (\d+)\. (Word|Picture): ([a-z]+)\.$/;
 const READY = 'Find a pair.';
 
-function gardenLayout(bounds) {
-  const top = 252 + (bounds.height >= 520 ? 28 : 0);
-  const width = bounds.width - 24;
-  const height = bounds.height - top - 12;
-  const wide = (width >= 420 && width >= height * 1.3) || (width >= 392 && height < 460);
-  const columns = wide ? 5 : 2;
-  const rows = 10 / columns;
-  const gap = 8;
-  const header = wide ? 44 : 64;
-  const gridTop = header + 4;
-  return { top, width, height, columns, gap, gridTop, header,
-    studyWidth: wide ? 132 : Math.max(132, Math.min(width * 0.4, 176)),
-    cardWidth: (width - (columns - 1) * gap) / columns,
-    cardHeight: (height - gridTop - (rows - 1) * gap) / rows };
-}
-
 async function cardTap(page, index) {
-  const layout = gardenLayout(await metrics(page));
-  await tap(page,
-    12 + index % layout.columns * (layout.cardWidth + layout.gap) + layout.cardWidth / 2,
-    layout.top + layout.gridTop + Math.floor(index / layout.columns) * (layout.cardHeight + layout.gap) + layout.cardHeight / 2);
+  const point = memoryPoint(await metrics(page), index);
+  await tap(page, point.x, point.y);
 }
 
 async function studyTap(page) {
-  const layout = gardenLayout(await metrics(page));
-  await tap(page, 12 + layout.width - layout.studyWidth / 2, layout.top + layout.header / 2);
+  const point = studyPoint(await metrics(page));
+  await tap(page, point.x, point.y);
 }
-
 async function reveal(page, index) {
   await cardTap(page, index);
   await expect(page.locator('#selection-status')).toHaveText(REVEAL);
@@ -78,10 +60,28 @@ async function medalRecord(page) {
   return page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
 }
 
-async function screenshot(page, testInfo, name) {
+async function screenshot(page, testInfo, name, { verifyRendering = false, afterResize = false } = {}) {
   await page.mouse.move(0, 0);
   await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath(`${name}.png`), scale: 'css' });
+  const png = await page.screenshot({ path: testInfo.outputPath(`${name}.png`), scale: 'css' });
+  if (!verifyRendering) return;
+  const raw = await page.locator('#canvas').evaluate(canvas => canvas.toDataURL('image/png').split(',')[1]);
+  const canvasPng = Buffer.from(raw, 'base64');
+  fs.writeFileSync(testInfo.outputPath(`${name}-canvas.png`), canvasPng);
+  const pageColors = await visibleColorCount(page, png);
+  const canvasColors = await visibleColorCount(page, canvasPng);
+  await testInfo.attach(`${name}-rendering`, {
+    body: JSON.stringify({ pageColors, canvasColors }), contentType: 'application/json'
+  });
+  expect(canvasColors, `${name}: the game must still draw after resize.`).toBeGreaterThan(20);
+  if (afterResize && pageColors === 1 && process.platform === 'win32' && testInfo.project.use.browserName === 'webkit') {
+    // Old and current exports both draw a complete canvas while Windows WebKit's page
+    // capture is blank after resize. Preserve both: this does not prove screen presentation.
+    testInfo.annotations.push({ type: 'rendering-limitation',
+      description: `${name}: existing Windows WebKit presentation/capture limitation; page PNG is blank while raw canvas renders. Both PNGs are retained.` });
+  } else {
+    expect(pageColors, `${name}: the page screenshot must show the rendered game.`).toBeGreaterThan(20);
+  }
 }
 
 test('Memory discoveries survive mistakes, Study, theme changes and My rewards', async ({ page }, testInfo) => {
@@ -140,6 +140,9 @@ test('Memory discoveries survive mistakes, Study, theme changes and My rewards',
 });
 
 test('five Memory pairs earn one saved piece and Repeat retains the lesson', async ({ page }, testInfo) => {
+  // This victory/claim/replay tour flips both ten-card boards through real input.
+  // Windows WebKit traces kept responding but exceeded 90s in multi-project runs.
+  test.setTimeout(120000);
   const errors = await openGame(page);
   await chooseTheme(page, 0);
   await chooseMode(page, 4);
@@ -204,6 +207,7 @@ test('five Memory pairs earn one saved piece and Repeat retains the lesson', asy
 });
 
 test('Memory cards and Study work by keyboard and remain usable on small layouts', async ({ page }, testInfo) => {
+  const capture = (name, afterResize = false) => screenshot(page, testInfo, name, { verifyRendering: true, afterResize });
   await page.setViewportSize({ width: 320, height: 640 });
   await installGamepad(page);
   const errors = await openGame(page);
@@ -221,11 +225,11 @@ test('Memory cards and Study work by keyboard and remain usable on small layouts
   await expect(page.locator('#selection-status')).toHaveText(/^Memory card 2\. (Word|Picture): [a-z]+\.$/);
   await page.keyboard.press('Enter');
   await expect(page.locator('#selection-status')).toBeEmpty();
-  await screenshot(page, testInfo, 'memory-320-portrait-keyboard');
+  await capture('memory-320-portrait-keyboard');
 
   await studyTap(page);
   await expect(page.locator('#game-status')).toContainText('Study the garden.');
-  await screenshot(page, testInfo, 'memory-320-portrait-study');
+  await capture('memory-320-portrait-study');
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText(READY);
   let last;
@@ -236,7 +240,7 @@ test('Memory cards and Study work by keyboard and remain usable on small layouts
     await cancelCard(page, 0);
     last = await reveal(page, 9);
     await cancelCard(page, 9);
-    await screenshot(page, testInfo, `memory-${size.width}-${size.height}-all-cards`);
+    await capture(`memory-${size.width}-${size.height}-all-cards`, true);
   }
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
@@ -244,6 +248,6 @@ test('Memory cards and Study work by keyboard and remain usable on small layouts
   await pressGamepad(page, 1);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('#game-status')).toContainText(READY);
-  await screenshot(page, testInfo, 'memory-xbox-cancelled-card');
+  await capture('memory-xbox-cancelled-card', true);
   expect(errors).toEqual([]);
 });

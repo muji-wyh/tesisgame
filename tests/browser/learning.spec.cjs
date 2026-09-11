@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, choicePoint } = require('./game-ui.cjs');
 
 const learningStatus = /^Learn: ([a-z]+)\. Look, read, and press Hear\.$/;
 const choiceFeedback = /^(?:Yes! ([a-z]+)\. Press Continue\.|This picture is ([a-z]+)\. Look, listen, then Continue\.)$/;
@@ -73,8 +73,8 @@ async function scanBoard(page) {
 }
 
 async function answerChoice(page, index = 0) {
-  const bounds = await metrics(page);
-  await tap(page, bounds.width * (index ? 0.75 : 0.25), bounds.height - 48);
+  const point = choicePoint(await metrics(page), index);
+  await tap(page, point.x, point.y);
   await rendered(page);
   await expect(page.locator('#game-status')).toHaveText(choiceFeedback);
   const result = (await page.locator('#game-status').textContent()).match(choiceFeedback);

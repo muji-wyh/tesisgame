@@ -56,10 +56,13 @@ func _run() -> void:
 	check(view.controls().size() == 11 and view.controls().has(view.study_button), "Keyboard navigation includes ten cards and Study")
 	check(not view.feedback_view.visible, "Teaching feedback is initially hidden")
 	var positions: Array = _positions(view)
+	var study_bounds: Rect2 = view.study_button.get_rect()
+	var flower_bounds: Rect2 = view._flowers.get_rect()
+	var feedback_bounds: Rect2 = view.feedback_view.get_rect()
 	var nodes: Array = view.card_buttons.duplicate()
 	var order: Array = view.memory.cards.duplicate(true)
 	_check_concealed(view)
-	_check_layout(view, 5)
+	_check_layout(view, 4)
 	var word_index: int = _index(view, words[0].id, "word")
 	var other_word: int = _index(view, words[1].id, "word")
 	var picture_index: int = _index(view, words[0].id, "image")
@@ -68,6 +71,7 @@ func _run() -> void:
 	check(view.memory.selected_indices == [word_index] and view.memory.attempts == 0, "A first reveal does not spend an attempt")
 	check(revealed.size() == 1 and revealed[0] == [view.memory.cards[word_index].word, "word", word_index], "The view announces exactly the revealed card")
 	check(view.status_label.text == "Word: " + words[0].text, "Revealed words are named in status")
+	check(_positions(view) == positions and view.card_buttons == nodes, "The first reveal keeps every card node and target in place")
 	view.card_buttons[other_word].pressed.emit()
 	check(view.memory.selected_indices == [other_word] and view.memory.attempts == 0, "A same-kind choice replaces the unfinished selection for free")
 	check(not view.card_buttons[word_index].word_label.visible, "The replaced word conceals again")
@@ -103,11 +107,16 @@ func _run() -> void:
 	check(view.feedback_view.visible and view.feedback_view.current_word == words[0], "Mismatch teaches the first real association")
 	check(view.feedback_view.word_label.text == words[0].text and view.feedback_view.picture.texture.resource_path == "res://" + words[0].image, "Teaching pairs the actual text with its own picture")
 	check(view.feedback_view.action_button.text == "Continue", "Feedback waits for an explicit Continue")
-	check(not view.study_button.visible and not view.card_buttons[0].is_visible_in_tree(), "Feedback takes over the full playfield")
+	check(view.study_button.visible and view.study_button.disabled and view._flowers.visible, "Feedback keeps Study and the flower count in place while locking answers")
+	check(view.card_buttons.all(func(card: Button) -> bool: return card.is_visible_in_tree()), "Every remembered card remains visible during a mismatch")
+	check(_positions(view) == positions and view.card_buttons == nodes and view.study_button.get_rect() == study_bounds and view._flowers.get_rect() == flower_bounds, "Mismatch feedback preserves board and header geometry")
+	check(view.feedback_view.get_rect() == feedback_bounds, "The correction area is reserved before the first answer")
+	_check_feedback_layout(view)
 	var count_before: int = prompts.size()
 	view.feedback_view.next_button.pressed.emit()
 	check(view.feedback_view.current_word == words[1] and view.feedback_view.word_label.text == words[1].text, "Next teaches the other selected association")
 	check(prompts.size() > count_before, "Feedback navigation refreshes available host controls")
+	check(_positions(view) == positions and view.feedback_view.get_rect() == feedback_bounds, "Reviewing the second word leaves the board and feedback targets fixed")
 	view.feedback_view.previous_button.pressed.emit()
 	check(view.feedback_view.current_word == words[0], "Previous returns to the first association")
 	view.card_buttons[picture_index].pressed.emit()
@@ -142,6 +151,9 @@ func _run() -> void:
 		view.continue_feedback()
 	check(view.memory.mistakes == 4 and view.memory.phase == "waiting" and endings.is_empty(), "Memory exploration has no three-mistake loss")
 	view.card_buttons[word_index].pressed.emit()
+	var original_word_bounds: Rect2 = view.card_buttons[word_index].word_label.get_rect()
+	var original_word_font: int = view.card_buttons[word_index].word_label.get_theme_font_size("font_size")
+	var original_picture_bounds: Rect2 = view.card_buttons[picture_index].picture.get_rect()
 	view.pause(true)
 	view.card_buttons[picture_index].pressed.emit()
 	view.study_button.pressed.emit()
@@ -155,12 +167,17 @@ func _run() -> void:
 	view.show()
 	view.card_buttons[picture_index].pressed.emit()
 	check(view.memory.matched_word_ids == [words[0].id] and view.memory.phase == "feedback", "A correct pair plants one flower before Continue")
+	check(view.card_buttons.all(func(card: Button) -> bool: return card.is_visible_in_tree()) and _positions(view) == positions, "Correct feedback keeps the planted pair and all remembered positions visible")
+	check(view.feedback_view.get_rect() == feedback_bounds, "Correct and incorrect answers use the same reserved feedback region")
 	check(answers.back() == [[words[0]], true] and progress.back() == [1, 5], "Correct submission reports one association and flowers/attempts")
 	check(not view.feedback_view.next_button.visible, "Correct feedback teaches its single association")
+	check(view.feedback_view.word_label.text == words[0].text and view.feedback_view.picture.texture.resource_path == "res://" + words[0].image, "The reserved review pairs the planted noun with its picture")
+	check(view.card_buttons[word_index].word_label.get_rect() == original_word_bounds and view.card_buttons[word_index].word_label.get_theme_font_size("font_size") == original_word_font, "Planting preserves the original word face position and font")
+	check(view.card_buttons[picture_index].picture.get_rect() == original_picture_bounds, "Planting preserves the original picture face position")
 	view.continue_feedback()
 	for index in [word_index, picture_index]:
 		var card = view.card_buttons[index]
-		check(card.picture.visible and card.word_label.visible and card.disabled, "A planted card keeps both picture and word visible")
+		check(card.picture.visible == (index == picture_index) and card.word_label.visible == (index == word_index) and card.disabled, "A planted pair keeps each original face visible in its original card")
 		check(card.focus_mode == Control.FOCUS_NONE, "Planted cards cannot take focus from playable controls")
 		check(card.picture.modulate.a == 1.0 and card.word_label.modulate.a == 1.0, "Planted associations remain readable")
 		card.pressed.emit()
@@ -173,7 +190,7 @@ func _run() -> void:
 	for dimensions in [Vector2(456, 200), Vector2(456, 600), Vector2(288, 600), Vector2(960, 320), Vector2(456, 456), Vector2(400, 400), Vector2(456, 460), Vector2(456, 200)]:
 		view.size = dimensions
 		await _settle()
-		var columns: int = 5 if (dimensions.x >= 420 and dimensions.x >= dimensions.y * 1.3) or (dimensions.x >= 392 and dimensions.y < 460) else 2
+		var columns: int = 2 if dimensions in [Vector2(456, 600), Vector2(288, 600)] else 4 if dimensions == Vector2(456, 200) else 5
 		_check_layout(view, columns)
 		check(view.memory.cards == order and view.card_buttons == nodes and view.memory.attempts == 5, "Resizing preserves the same board and progress")
 		view.study_button.pressed.emit()
@@ -203,9 +220,7 @@ func _run() -> void:
 	for dimensions in [Vector2(456, 600), Vector2(456, 200), Vector2(288, 600), Vector2(456, 200)]:
 		view.size = dimensions
 		await _settle()
-		check(view.feedback_view.size == view.size and view.feedback_view.position == Vector2.ZERO, "Feedback fills exactly the assigned area after a resize")
-		for control in [view.feedback_view.hear_button, view.feedback_view.previous_button, view.feedback_view.next_button, view.feedback_view.action_button, view.feedback_view.picture, view.feedback_view.word_label]:
-			check(view.get_global_rect().grow(0.5).encloses(control.get_global_rect()), "Teaching art, text and controls stay inside the resized playfield")
+		_check_feedback_layout(view)
 		check(view.memory.attempts == 1 and view.memory.phase == "feedback", "Resizing feedback preserves the pending attempt")
 	view.stop()
 	view.feedback_view.action_button.pressed.emit()
@@ -236,6 +251,8 @@ func _run() -> void:
 	view.start_round([], Data.theme("spring"), 3)
 	check(view.controls().is_empty() and view.card_buttons.is_empty(), "An invalid lesson leaves no playable stale board")
 	check(not view.status_label.text.is_empty(), "Invalid content has a visible explanation")
+	await _check_motion_stability(view, words)
+	await _check_catalog_text(view)
 	view.queue_free()
 	await process_frame
 	_finish()
@@ -288,7 +305,7 @@ func _check_layout(view, columns: int) -> void:
 		check(control.focus_mode == expected_focus, "Only active Memory buttons are eligible for keyboard focus")
 	for index in range(view.card_buttons.size()):
 		var card = view.card_buttons[index]
-		check(card.size.x >= 72 and card.size.y >= 72, "Cards retain at least 72-pixel targets")
+		check(card.size.x >= 44 and card.size.y >= 44, "Cards retain usable targets alongside the fixed review area")
 		for other in range(index):
 			check(not card.get_rect().intersects(view.card_buttons[other].get_rect()), "Stationary cards never overlap")
 		for decoration in card.find_children("*", "Control", true, false):
@@ -297,11 +314,65 @@ func _check_layout(view, columns: int) -> void:
 		check(view.study_button.size.y >= 64, "Phone Study remains a practical scaled touch target")
 
 
+func _check_feedback_layout(view) -> void:
+	var bounds: Rect2 = view.get_global_rect().grow(0.5)
+	check(bounds.encloses(view.feedback_view.get_global_rect()), "Compact feedback stays inside its assigned playfield: %s in %s" % [view.feedback_view.get_global_rect(), bounds])
+	for card in view.card_buttons:
+		check(not card.get_global_rect().intersects(view.feedback_view.get_global_rect()), "Compact feedback never covers a remembered card")
+	for control in view.feedback_view.controls():
+		check(bounds.encloses(control.get_global_rect()), "Every visible feedback target fits the playfield: %s %s in %s" % [control.name, control.get_global_rect(), bounds])
+		check(control.size.x >= 44 and control.size.y >= 44, "Review controls keep practical touch targets")
+	for control in [view.feedback_view.picture, view.feedback_view.word_label]:
+		check(bounds.encloses(control.get_global_rect()), "The reviewed picture and word remain visible beside the board")
+
+
+func _check_motion_stability(view, words: Array) -> void:
+	root.content_scale_size = Vector2i(800, 800)
+	root.size = Vector2i(800, 800)
+	for dimensions in [Vector2(456, 200), Vector2(456, 480), Vector2(288, 600)]:
+		view.size = dimensions
+		view.set_reduced_motion(false)
+		view.start_round(words, Data.theme("spring"), 71)
+		await _settle()
+		var positions := _positions(view)
+		var nodes: Array = view.card_buttons.duplicate()
+		var first := _index(view, words[0].id, "word")
+		var partner := _index(view, words[0].id, "image")
+		await _tap_control(view.card_buttons[first])
+		check(_positions(view) == positions and view.card_buttons == nodes, "An actual pointer reveal keeps all animated card targets stationary")
+		await _tap_control(view.card_buttons[partner])
+		check(view.memory.phase == "feedback" and view.card_buttons[first].is_visible_in_tree(), "A pointer match shows feedback without hiding its pair")
+		await _settle()
+		check(_positions(view) == positions and view.card_buttons[first].scale == Vector2.ONE, "Normal motion leaves card positions and scale unchanged")
+		_check_feedback_layout(view)
+		await _tap_control(view.feedback_view.action_button)
+		check(view.memory.phase == "waiting" and _positions(view) == positions and view.card_buttons == nodes, "Touch Continue returns to the same stationary board")
+
+
 func _settle() -> void:
 	await process_frame
 	await process_frame
 
 
+func _check_catalog_text(view) -> void:
+	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	for dimensions in [Vector2(456, 200), Vector2(456, 216), Vector2(400, 200), Vector2(456, 480), Vector2(288, 600)]:
+		view.size = dimensions
+		for start in range(0, catalog.size(), 5):
+			view.start_round(catalog.slice(start, start + 5), Data.theme("spring"), 71)
+			await _settle()
+			var positions := _positions(view)
+			view.study_button.pressed.emit()
+			for card in view.card_buttons:
+				check(card.size.x >= 44 and card.size.y >= 44, "Catalog cards keep usable touch targets at " + str(dimensions))
+				if card.card_data.kind != "word":
+					continue
+				var label: Label = card.word_label
+				var font_size: int = label.get_theme_font_size("font_size")
+				var width: float = label.get_theme_font("font").get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+				check(font_size >= 12 and width <= label.size.x, "The full catalog word %s fits its actual Memory card at %s: %s px text in %s px" % [label.text, dimensions, width, label.size.x])
+				check(label.get_theme_font("font").get_height(font_size) <= label.size.y, "The complete word height fits the Memory card")
+			check(_positions(view) == positions, "Showing catalog words never changes Memory card geometry")
 func _tap_control(control: Control) -> void:
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()

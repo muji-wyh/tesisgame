@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { boardPoint } = require('./game-ui.cjs');
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
@@ -78,19 +79,9 @@ async function metrics(page) {
 
 function cardPoint(bounds, index) {
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const height = bounds.height / scale;
-  const top = height >= 520 ? 319 : 288;
-  const gridHeight = height - top - 43;
-  const columns = bounds.width >= bounds.height || gridHeight < 318 ? 4 : 2;
-  const rows = 8 / columns;
-  const cellWidth = (bounds.width / scale - 24 - (columns - 1) * 10) / columns;
-  const cellHeight = (gridHeight - (rows - 1) * 10) / rows;
-  return {
-    x: bounds.x + (12 + (index % columns) * (cellWidth + 10) + cellWidth / 2) * scale,
-    y: bounds.y + (top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2) * scale
-  };
+  const point = boardPoint({ width: bounds.width / scale, height: bounds.height / scale }, index);
+  return { x: bounds.x + point.x * scale, y: bounds.y + point.y * scale };
 }
-
 async function discoverBoard(page) {
   const bounds = await metrics(page);
   const cards = new Map();
