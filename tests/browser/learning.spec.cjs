@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, choicePoint } = require('./game-ui.cjs');
 
 const learningStatus = /^Learn: ([a-z]+)\. Look, read, and press Hear\.$/;
-const choiceFeedback = /^(?:Yes! ([a-z]+)\. Press Continue\.|This picture is ([a-z]+)\. Look, listen, then Continue\.)$/;
+const choiceFeedback = /^(?:Yes! ([a-z]+)\.|This picture is ([a-z]+)\.) (?:Tap an answer or Continue (?:for the next word|to finish)|Tap an answer to try again, or Continue)\.$/;
 const initialWrittenPrompt = /^Listen\. No sound\. Choose the picture for ([a-z]+)\.$/;
 
 async function lessonTap(page, control, options) {

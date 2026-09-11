@@ -226,10 +226,10 @@ func controls() -> Array[Control]:
 	if suspended or not is_visible_in_tree():
 		return result
 	if status == "feedback":
-		return feedback_view.controls()
-	if status != "asking":
+		result.append_array(feedback_view.controls())
+	elif status != "asking":
 		return result
-	if mode_id == "listen" and audio_available:
+	elif mode_id == "listen" and audio_available:
 		result.append(hear_button)
 	result.append_array(answer_buttons)
 	return result
@@ -308,7 +308,15 @@ func _arrive_after_layout(generation: int) -> void:
 
 
 func _choose(index: int) -> void:
-	if status != "asking" or suspended or not is_visible_in_tree() or index < 0 or index >= choices.size():
+	if suspended or not is_visible_in_tree() or index < 0 or index >= choices.size():
+		return
+	if status == "feedback":
+		var retry: bool = not _last_correct and mistakes < 3 and successes < 5
+		continue_feedback()
+		# Only a wrong answer keeps this same question and these visible choices.
+		if not retry:
+			return
+	if status != "asking":
 		return
 	_last_correct = choices[index].id == current_target.id
 	_last_choice = index
@@ -325,6 +333,8 @@ func _choose(index: int) -> void:
 	_layout()
 	progress_changed.emit(successes, mistakes)
 	answer_chosen.emit(choices[index], _last_correct)
+	if status == "feedback" and not suspended and is_visible_in_tree():
+		feedback_view.action_button.grab_focus()
 
 
 func continue_feedback() -> void:
@@ -354,7 +364,8 @@ func _hear_feedback(word: Dictionary) -> void:
 
 
 func _apply_enabled() -> void:
-	var enabled: bool = status == "asking" and not suspended
+	var enabled: bool = status in ["asking", "feedback"] and not suspended
+	var accent: Color = _palette.get("accent", Style.GOOD)
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
 		button.visible = status in ["asking", "feedback"]
@@ -369,8 +380,11 @@ func _apply_enabled() -> void:
 				border = Style.WRONG
 				fill = Style.WRONG.lightened(0.9)
 		button.add_theme_stylebox_override("disabled", Style.box(fill, border, 16, 3 if status == "feedback" else 2))
+		button.add_theme_stylebox_override("normal", Style.box(fill, border, 16, 3) if status == "feedback" else Style.box(Color.WHITE, accent.lightened(0.6)))
+		button.add_theme_stylebox_override("hover", Style.box(fill, border, 16, 4) if status == "feedback" else Style.box(accent.lightened(0.92), accent))
+		button.add_theme_stylebox_override("pressed", Style.box(fill.darkened(0.04), border, 16, 3) if status == "feedback" else Style.box(accent.lightened(0.8), accent, 16, 3))
 	if hear_button != null:
-		hear_button.disabled = not enabled or not audio_available
+		hear_button.disabled = status != "asking" or suspended or not audio_available
 	if _stage != null:
 		_stage.visible = status in ["asking", "feedback"]
 		status_label.visible = status in ["asking", "feedback", "unavailable"]

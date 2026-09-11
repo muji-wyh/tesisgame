@@ -157,33 +157,55 @@ test(`${name} keeps the question visible and retry locations stable (${motion})`
   const targetPoint = choiceTargetPoint(b);
   // Only the first Sky entrance animates. Wait beyond that deliberate entrance.
   if (motion === 'no-preference' && mode === 2) await page.waitForTimeout(1000);
-  const outcomes = new Set();
-  let answer = 0;
-  for (let attempt = 0; attempt < 12 && outcomes.size < 2; attempt++) {
+  const asking = mode === 2 ? /^(Sky words\.|Choose the matching word\.)/ : /^(Listen\.|No sound\. Choose the picture\.)/;
+  const progress = () => patch(page, { x: 66 + (b.width - 154) / 2, y: 48 }, b.width - 154, 32);
+  const paths = new Set();
+  let successes = 0, mistakes = 0;
+  // Learn which answer is correct through ordinary feedback, never private scene state.
+  for (let attempt = 0; attempt < 18 && paths.size < 4; attempt++) {
     const target = await patch(page, targetPoint, 120, 72);
     await shot(page, testInfo, `${name}-${attempt}-before`);
-    await click(page, answerPoints[answer]);
-    await expect(page.locator('#game-status')).toContainText('Continue');
+    await click(page, answerPoints[0]);
+    await expect(page.locator('#game-status')).toHaveText(/^(Yes!|This picture is) /);
     const feedback = await page.locator('#game-status').textContent();
     const correct = feedback.startsWith('Yes!');
-    outcomes.add(correct ? 'correct' : 'wrong');
+    if (correct) successes++; else mistakes++;
     await shot(page, testInfo, `${name}-${attempt}-${correct ? 'correct' : 'wrong'}`);
     expect((await patch(page, targetPoint, 120, 72)).equals(target), 'Answer feedback must keep the same question artwork or written target at its original position.').toBe(true);
-    await click(page, answerPoints[1 - answer]);
-    await expect(page.locator('#game-status')).toHaveText(feedback);
-    await click(page, continuePoint);
-    const status = await page.locator('#game-status').textContent();
-    if (/You did it!|Try again/.test(status)) {
-      await click(page, resultPoint(b, 'repeat'));
-      await expect(page.locator('#game-status')).toContainText(mode === 2 ? 'Sky words.' : 'Listen.');
-      if (motion === 'no-preference' && mode === 2) await page.waitForTimeout(1000);
-    } else if (!correct) {
-      expect((await patch(page, targetPoint, 120, 72)).equals(target), 'A wrong answer retries the same target in place.').toBe(true);
+    if (!correct && mistakes < 3) {
+      const word = feedback.match(/^This picture is ([a-z]+)\./)[1];
+      await click(page, answerPoints[1]);
+      await expect(page.locator('#game-status'), 'A first tap on the correct visible answer must immediately grade the same question.').toHaveText(new RegExp(`^Yes! ${word}\\.`));
+      successes++;
+      paths.add('retry');
+      expect((await patch(page, targetPoint, 120, 72)).equals(target), 'Retrying directly from wrong feedback must keep the same target and coordinates.').toBe(true);
+      await shot(page, testInfo, `${name}-${attempt}-corrected-directly`);
     }
-    // On a retry the other original answer location is correct.
-    answer = correct ? 0 : 1 - answer;
+    if (successes === 5 || mistakes === 3) {
+      // A lucky all-correct round can precede the first wrong answer; keep exploring
+      // until both feedback paths are exercised through ordinary player input.
+      await click(page, paths.has('retry') ? answerPoints[0] : continuePoint);
+      await expect(page.locator('#game-status')).toContainText(successes === 5 ? 'You did it!' : 'Good try!');
+      await expect(page.locator('#selection-status')).toBeEmpty();
+      if (paths.has('retry')) paths.add('terminal');
+      await shot(page, testInfo, `${name}-${attempt}-result`);
+      if (paths.size === 4) break;
+      await click(page, resultPoint(b, 'repeat'));
+      await expect(page.locator('#game-status')).toHaveText(asking);
+      successes = 0; mistakes = 0;
+      if (motion === 'no-preference' && mode === 2) await page.waitForTimeout(1000);
+      continue;
+    }
+    const scored = await progress();
+    const useContinue = !paths.has('retry') || !paths.has('continue');
+    await click(page, useContinue ? continuePoint : answerPoints[1]);
+    await expect(page.locator('#game-status'), 'Correct feedback must advance to a question without answering it blindly.').toHaveText(asking);
+    expect((await progress()).equals(scored), 'Advancing from correct feedback cannot change successes or mistakes.').toBe(true);
+    expect((await patch(page, targetPoint, 120, 72)).equals(target), 'A correct answer advances to the next lesson word.').toBe(false);
+    paths.add(useContinue ? 'continue' : 'advance');
+    await shot(page, testInfo, `${name}-${attempt}-next-question`);
   }
-  expect([...outcomes].sort()).toEqual(['correct', 'wrong']);
+  expect([...paths].sort()).toEqual(['advance', 'continue', 'retry', 'terminal']);
   expect(await geometry(page)).toEqual(beforeGeometry);
   expect(errors).toEqual([]);
 });

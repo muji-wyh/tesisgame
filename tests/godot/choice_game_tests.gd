@@ -64,17 +64,15 @@ func _run() -> void:
 		var wrong: int = _answer_index(game, false)
 		var question_rects: Array = _question_rects(game)
 		game.answer_buttons[wrong].pressed.emit()
-		for tap in range(6):
-			game.answer_buttons[wrong].pressed.emit()
 		check(game.status == "feedback" and game.mistakes == 1 and game.successes == 0,
-			"A wrong answer locks repeated attempts during feedback")
+			"A wrong answer opens feedback and records one attempt")
 		check(answers.size() == before_answers + 1 and not answers.back()[1], "One attempt emits exactly one incorrect answer")
-		check(game.controls().size() == 2 and game.feedback_view.visible
+		check(game.controls().size() == 4 and game.feedback_view.visible
 			and game.feedback_view.current_word.id == first.id
 			and game.feedback_view.word_label.text == first.text
 			and game.feedback_view.picture.texture.resource_path == "res://" + first.image,
-			"Wrong feedback teaches the correct picture and written word with Hear and Continue")
-		check(game._stage.visible and game.answer_buttons.all(func(button: Button) -> bool: return button.visible and button.disabled), "Answer feedback keeps the question and both answer cards visible while locking another attempt")
+			"Wrong feedback teaches the correct picture and word with Hear, Continue and reachable answers")
+		check(game._stage.visible and game.answer_buttons.all(func(button: Button) -> bool: return button.visible and not button.disabled), "Answer feedback keeps the question and both answer cards visible and usable")
 		check(_question_rects(game) == question_rects, "Entering feedback does not move the target or answers")
 		check(not game.feedback_view.get_global_rect().intersects(game._stage.get_global_rect()) and game.answer_buttons.all(func(button: Button) -> bool: return not game.feedback_view.get_global_rect().intersects(button.get_global_rect())), "Compact feedback does not cover the question or answer cards")
 		if "--screenshots" in OS.get_cmdline_user_args():
@@ -110,8 +108,7 @@ func _run() -> void:
 			var right: int = _answer_index(game, true)
 			question_rects = _question_rects(game)
 			game.answer_buttons[right].pressed.emit()
-			game.answer_buttons[right].pressed.emit()
-			check(game.successes == index + 1 and game.mistakes == 1, "A repeated correct tap awards one success")
+			check(game.successes == index + 1 and game.mistakes == 1, "A correct answer awards one success before Continue")
 			check(game.feedback_view.current_word == game.current_target and game.feedback_view.word_label.visible
 				and game.feedback_view.picture.visible, "A successful answer reinforces that exact picture-word association")
 			check(_question_rects(game) == question_rects and game._stage.visible and game.answer_buttons[right].visible, "Correct answers, including the final one, preserve the visible question geometry")
@@ -165,6 +162,7 @@ func _run() -> void:
 		game.hear_button.pressed.emit()
 		check(game.status == "stopped" and game.controls().is_empty() and endings.size() == before_endings,
 			"Stopping cancels pending feedback and input without delivering a result")
+		_check_feedback_answers(game, words, palette, mode)
 	game.start_round(words, "listen", palette, 17)
 	var fallback_target: Dictionary = game.current_target.duplicate()
 	game.set_audio_available(false)
@@ -181,8 +179,8 @@ func _run() -> void:
 		"Recovered audio restores listening without changing the question")
 	game.answer_buttons[_answer_index(game, false)].pressed.emit()
 	game.set_audio_available(false)
-	check(game.feedback_view.word_label.text == fallback_target.text and game.controls().size() == 1,
-		"A playback failure during correction keeps the right answer visible and Continue usable")
+	check(game.feedback_view.word_label.text == fallback_target.text and game.controls().size() == 3,
+		"A playback failure during correction keeps the right answer visible, Continue and both answers usable")
 	game.set_audio_available(true)
 	var semantic_words: Array = words.filter(func(word: Dictionary):
 		return word.id in ["earth", "planet", "comet", "meteor", "rocket"])
@@ -253,6 +251,143 @@ func _run() -> void:
 	await process_frame
 	print("Choice modes: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_feedback_answers(game, words: Array, palette: Dictionary, mode: String) -> void:
+	game.set_reduced_motion(true)
+	game.start_round(words, mode, palette, 71)
+	var first: Dictionary = game.current_target.duplicate(true)
+	var choices: Array = game.choices.duplicate(true)
+	var right: int = _answer_index(game, true)
+	var wrong: int = _answer_index(game, false)
+	var rects: Array = _question_rects(game)
+	var before_answers: int = answers.size()
+	var before_progress: int = progress.size()
+	var asking: Array = _choice_state(game)
+	game._choose(-1)
+	game._choose(game.choices.size())
+	check(_choice_state(game) == asking, "%s invalid indices cannot score an unanswered question" % mode)
+	game.answer_buttons[wrong].grab_focus()
+	game.answer_buttons[wrong].pressed.emit()
+	check(game.feedback_view.action_button.has_focus(), "%s grading a wrong answer moves actual keyboard/controller focus to Continue" % mode)
+	var controls: Array = game.controls()
+	check(controls.size() == 4 and controls[0] == game.feedback_view.action_button
+		and controls.has(game.feedback_view.picture_button)
+		and controls.slice(2) == game.answer_buttons,
+		"%s feedback keeps Continue first and both visible answers reachable by keyboard/controller" % mode)
+	check(game.answer_buttons.all(func(button: Button) -> bool: return button.visible and not button.disabled),
+		"%s feedback answers accept pointer input" % mode)
+	var style = load("res://scripts/ui_style.gd")
+	for state in ["normal", "hover", "pressed"]:
+		check(game.answer_buttons[right].get_theme_stylebox(state).border_color == style.GOOD
+			and game.answer_buttons[wrong].get_theme_stylebox(state).border_color == style.WRONG,
+			"%s usable feedback retains correct/wrong colors in %s" % [mode, state])
+	var frozen: Array = _choice_state(game)
+	game._choose(-1)
+	game._choose(game.choices.size())
+	check(_choice_state(game) == frozen, "%s invalid answer indices cannot dismiss or score feedback" % mode)
+	for guard in ["paused", "hidden"]:
+		if guard == "paused":
+			game.pause(true)
+		else:
+			game.hide()
+		game.answer_buttons[right].pressed.emit()
+		game.answer_buttons[wrong].pressed.emit()
+		game.continue_feedback()
+		check(_choice_state(game) == frozen and game.controls().is_empty(),
+			"%s %s feedback blocks answer taps and continuation without altering the question" % [mode, guard])
+		if guard == "paused":
+			game.pause(false)
+		else:
+			game.show()
+	check(_question_rects(game) == rects, "%s showing or resuming feedback preserves the question geometry" % mode)
+	game.answer_buttons[right].grab_focus()
+	game.answer_buttons[right].pressed.emit()
+	check(game.status == "feedback" and game.current_target == first and game.choices == choices
+		and game.successes == 1 and game.mistakes == 1,
+		"%s tapping the visible correct answer during wrong feedback grades the same question immediately" % mode)
+	check(answers.size() == before_answers + 2 and progress.size() == before_progress + 2 and answers.back() == [first.id, true]
+		and game.found_words == [first] and progress.back() == [1, 1],
+		"%s correction tap awards exactly one success and emits exactly one answer/progress update" % mode)
+	check(game.feedback_view.action_button.has_focus(), "%s grading a correction returns actual focus to Continue" % mode)
+	check(_question_rects(game) == rects and game._stage.visible and game.feedback_view.visible,
+		"%s correction tap keeps the original target, answers and feedback in place" % mode)
+
+	# Either old answer is an explicit next-question action after correct feedback.
+	for advance_index in range(2):
+		game.start_round(words, mode, palette, 17)
+		first = game.current_target.duplicate(true)
+		rects = _question_rects(game)
+		game.answer_buttons[_answer_index(game, true)].pressed.emit()
+		before_answers = answers.size()
+		before_progress = progress.size()
+		game.answer_buttons[advance_index].pressed.emit()
+		check(game.status == "asking" and game.current_target.id != first.id and game.successes == 1 and game.mistakes == 0,
+			"%s old answer %d advances correct feedback to the next unanswered question" % [mode, advance_index])
+		check(answers.size() == before_answers and progress.size() == before_progress and game.found_words == [first],
+			"%s old answer %d cannot blindly score the newly presented question" % [mode, advance_index])
+		check(_question_rects(game) == rects and not game.feedback_view.visible,
+			"%s advancing with an old answer retains the question geometry" % mode)
+
+	game.start_round(words, mode, palette, 17)
+	first = game.current_target.duplicate(true)
+	choices = game.choices.duplicate(true)
+	wrong = _answer_index(game, false)
+	before_answers = answers.size()
+	var before_endings: int = endings.size()
+	for attempt in range(3):
+		game.answer_buttons[wrong].pressed.emit()
+		check(game.status == "feedback" and game.current_target == first and game.choices == choices
+			and game.mistakes == attempt + 1 and game.successes == 0 and answers.size() == before_answers + attempt + 1,
+			"%s another wrong feedback tap records only another attempt on the same question" % mode)
+	check(endings.size() == before_endings, "%s final loss feedback waits for an explicit action" % mode)
+	before_progress = progress.size()
+	frozen = _choice_state(game)
+	game._choose(-1)
+	check(_choice_state(game) == frozen, "%s invalid input cannot leave terminal feedback" % mode)
+	game.answer_buttons[_answer_index(game, true)].pressed.emit()
+	check(game.status == "lost" and game.successes == 0 and game.mistakes == 3
+		and answers.size() == before_answers + 3 and progress.size() == before_progress
+		and endings.size() == before_endings + 1 and not endings.back()[0],
+		"%s tapping even the correct answer after the last mistake only opens the loss result" % mode)
+	frozen = _choice_state(game)
+	game.answer_buttons[0].pressed.emit()
+	game.continue_feedback()
+	check(_choice_state(game) == frozen, "%s a completed loss cannot score or finish again" % mode)
+
+	game.start_round(words, mode, palette, 17)
+	for index in range(5):
+		game.answer_buttons[_answer_index(game, true)].pressed.emit()
+		if index < 4:
+			game.continue_feedback()
+	before_answers = answers.size()
+	before_progress = progress.size()
+	before_endings = endings.size()
+	check(game.status == "feedback" and game.successes == 5, "%s final success still presents its association feedback" % mode)
+	game.answer_buttons[0].pressed.emit()
+	check(game.status == "won" and game.successes == 5 and game.mistakes == 0
+		and answers.size() == before_answers and progress.size() == before_progress
+		and endings.size() == before_endings + 1 and endings.back()[0],
+		"%s tapping an answer after final success opens the win result without another score" % mode)
+	frozen = _choice_state(game)
+	game.answer_buttons[1].pressed.emit()
+	game.continue_feedback()
+	check(_choice_state(game) == frozen, "%s a completed win cannot score or finish again" % mode)
+
+	game.start_round(words, mode, palette, 17)
+	game.answer_buttons[_answer_index(game, false)].pressed.emit()
+	game.stop()
+	frozen = _choice_state(game)
+	game.answer_buttons[0].pressed.emit()
+	game.answer_buttons[1].pressed.emit()
+	game.continue_feedback()
+	check(_choice_state(game) == frozen and game.controls().is_empty(), "%s stopped feedback blocks all stale answer actions" % mode)
+	game.set_reduced_motion(false)
+
+
+func _choice_state(game) -> Array:
+	return [game.status, game.current_target.duplicate(true), game.choices.duplicate(true), game.successes, game.mistakes,
+		game.found_words.duplicate(true), answers.size(), endings.size(), progress.size(), ready_prompts]
 
 
 func _question_rects(game) -> Array:

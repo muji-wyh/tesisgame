@@ -44,16 +44,27 @@ func _run() -> void:
 	for mode in ["sky", "listen"]:
 		app.choose_mode(mode)
 		var correct: int = 0 if app._choice.choices[0].id == app._choice.current_target.id else 1
-		app._choice._choose(correct)
-		check(app.audio.voice.playing, mode + " feedback pronounces the displayed word")
+		var target: Dictionary = app._choice.current_target
+		app._choice._choose(1 - correct)
+		app._choice.answer_buttons[correct].pressed.emit()
+		check(app._choice.successes == 1 and app._choice.mistakes == 1
+			and app.audio.voice.playing and app.audio.voice.stream == load("res://" + target.audio),
+			mode + " first-tap correction scores once and pronounces the same visible target")
+		check(root.gui_get_focus_owner() == app._choice.feedback_view.action_button,
+			mode + " correction leaves keyboard Continue available without another accidental answer")
 		app._choice.continue_feedback()
 		check(not app.audio.voice.playing, mode + " Continue stops feedback speech before the next question")
 		for answer in range(4):
 			correct = 0 if app._choice.choices[0].id == app._choice.current_target.id else 1
 			app._choice._choose(correct)
 			app._choice.feedback_view.hear_button.pressed.emit()
-			app._choice.feedback_view.action_button.pressed.emit()
-		check(app.model.phase == "won" and not app.audio.voice.playing, mode + " final Continue stops the word when its picture leaves the screen")
+			if answer in [0, 3]:
+				app._choice.answer_buttons[correct].pressed.emit()
+			else:
+				app._choice.feedback_view.action_button.pressed.emit()
+			check(not app.audio.voice.playing and app._choice.successes == answer + 2,
+				mode + " advancing by an answer or Continue stops the old word without scoring the new prompt")
+		check(app.model.phase == "won" and not app.audio.voice.playing, mode + " final answer tap stops pronunciation when entering the result")
 	app.choose_mode("memory")
 	var memory = app._memory
 	var a: int = 0

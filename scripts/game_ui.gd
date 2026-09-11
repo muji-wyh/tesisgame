@@ -1594,7 +1594,10 @@ func _choice_answer(word: Dictionary, correct: bool) -> void:
 
 func _choice_feedback_status() -> String:
 	var word: String = str(_choice.current_target.get("text", ""))
-	return "Yes! %s. Press Continue." % word if _choice._last_correct else "This picture is %s. Look, listen, then Continue." % word
+	var feedback: String = "Yes! %s." % word if _choice._last_correct else "This picture is %s." % word
+	if _choice.successes >= 5 or _choice.mistakes >= 3:
+		return feedback + " Tap an answer or Continue to finish."
+	return feedback + (" Tap an answer or Continue for the next word." if _choice._last_correct else " Tap an answer to try again, or Continue.")
 
 
 func _choice_progress(successes: int, mistakes: int) -> void:
