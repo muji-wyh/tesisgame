@@ -5,10 +5,12 @@ signal item_previewed(message: String)
 signal word_requested(word_id: String)
 signal toy_played(kind: String)
 signal goal_requested(id: String)
+signal pip_interaction(kind: String, message: String)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Medal = preload("res://scripts/medal_view.gd")
+const Playground = preload("res://scripts/pip_playground.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
 const ACTIONS := {
 	"water": ["Water the flower", "Grow the flower", "Bloom the flower"],
@@ -39,7 +41,7 @@ class RoomScene extends Control:
 		var accent: Color = palette.get("accent", Color("#438363"))
 		var background: Color = palette.get("background", Color("#edf8ec"))
 		draw_style_box(preload("res://scripts/ui_style.gd").box(background, accent.lightened(0.6), 24, 2), Rect2(Vector2.ZERO, size))
-		var floor_y := size.y * 0.78
+		var floor_y := size.y * 0.57
 		draw_line(Vector2(12, floor_y), Vector2(size.x - 12, floor_y), accent.lightened(0.6), 2, true)
 		if theme_id == "space":
 			for index in range(14):
@@ -152,6 +154,8 @@ var category_buttons: Dictionary = {}
 var goal_label: Label
 var interaction_allowed: Callable
 var word_sticker_button: Button
+var playground: Playground
+var pip_buttons: Array[Button] = []
 
 var _state: RefCounted
 var _counts: Dictionary = {}
@@ -167,7 +171,6 @@ var _room_title: Label
 var _toy_label: Label
 var _item_grid: GridContainer
 var _item_labels: Dictionary = {}
-var _base_toy_position: Vector2
 var _action: String = ""
 var _action_progress: float = 0.0
 var _stage: int = 0
@@ -199,7 +202,7 @@ func _build() -> void:
 	goal_button.pressed.connect(_request_goal)
 	add_child(goal_button)
 	_room = RoomScene.new()
-	_room.custom_minimum_size = Vector2(0, 224)
+	_room.custom_minimum_size = Vector2(0, 304)
 	_room.clip_contents = true
 	_room.resized.connect(_layout_room)
 	add_child(_room)
@@ -217,6 +220,7 @@ func _build() -> void:
 	toy_button = Button.new()
 	toy_button.name = "PlayRoomToy"
 	Style.button(toy_button, Style.GOOD)
+	toy_button.custom_minimum_size = Vector2(64, 64)
 	for style_name in ["normal", "disabled"]:
 		toy_button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 	toy_button.expand_icon = true
@@ -231,6 +235,32 @@ func _build() -> void:
 	_toy_label = Style.label("ball", 21)
 	_toy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_room.add_child(_toy_label)
+	playground = Playground.new()
+	playground.name = "PipPlayground"
+	_room.add_child(playground)
+	playground.setup(duck_slot, toy_button, _toy_label)
+	playground.interaction_allowed = _can_interact
+	playground.interaction_started.connect(_direct_play_started)
+	playground.interaction.connect(_direct_play_feedback)
+	playground.toy_tapped.connect(_play_toy)
+	var gesture_hint := Style.label("Stroke Pip · Drag a toy · Tap the floor", 15)
+	gesture_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	add_child(gesture_hint)
+	var pip_actions := HBoxContainer.new()
+	pip_actions.add_theme_constant_override("separation", 6)
+	add_child(pip_actions)
+	for entry in [["Pet", playground.pet], ["Poke", playground.poke], ["Toss", playground.toss_to_pip], ["Call", playground.call_pip]]:
+		var button := Button.new()
+		button.name = "Pip" + entry[0]
+		button.text = entry[0]
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		Style.button(button, Style.GOOD)
+		button.custom_minimum_size = Vector2(52, 48)
+		button.add_theme_font_size_override("font_size", 18)
+		button.pressed.connect(entry[1])
+		_name_control(button, entry[0] + (" the toy to Pip" if entry[0] == "Toss" else " Pip"))
+		pip_actions.add_child(button)
+		pip_buttons.append(button)
 	word_sticker_button = Button.new()
 	word_sticker_button.name = "RoomWordSticker"
 	Style.button(word_sticker_button, Style.GOOD)
@@ -426,10 +456,13 @@ func _refresh_room() -> void:
 	action_button.disabled = false
 	toy_button.disabled = _preview_locked
 	toy_button.focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
+	playground.configure(_toy.word_id, _preview_locked, _reduced_motion, _room.palette.get("accent", Style.GOOD))
+	pip_buttons[2].disabled = _preview_locked
+	pip_buttons[2].focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
 	_refresh_action_control()
 	if _preview_locked:
 		caption.text = preview.name + ". " + _requirement(preview)
-	elif _action.is_empty():
+	elif _action.is_empty() and playground.interaction_kind.is_empty():
 		caption.text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action][0]]
 	_refresh_goal()
 	_layout_room()
@@ -458,6 +491,7 @@ func _request_goal() -> void:
 
 
 func _reset_sequence() -> void:
+	if playground != null: playground.cancel()
 	_action = ""
 	_stage = 0
 	_action_progress = 0.0
@@ -467,6 +501,7 @@ func _reset_sequence() -> void:
 func _refresh_action_control() -> void:
 	action_button.text = "Back to my room" if _preview_locked else "Play again" if _stage == 3 else ACTIONS[_toy.action][_stage]
 	toy_button.tooltip_text = "Play with the " + str(_toy.word_id) + " again" if _stage == 3 else str(ACTIONS[_toy.action][_stage])
+	toy_button.tooltip_text = "Drag to toss the %s. Tap: %s" % [_toy.word_id, toy_button.tooltip_text]
 	_name_control(toy_button, toy_button.tooltip_text)
 	_name_control(action_button, action_button.text)
 
@@ -512,6 +547,7 @@ func _activate_action() -> void:
 func _play_toy() -> void:
 	if _preview_locked or _toy.is_empty() or not _can_interact():
 		return
+	playground.cancel()
 	if _stage == 3:
 		_reset_sequence()
 		_refresh_room()
@@ -531,23 +567,18 @@ func _layout_room() -> void:
 	if _room == null or toy_button == null:
 		return
 	var width := maxf(240, _room.size.x)
-	var edge := clampf(width * 0.28, 72, 96)
-	duck_slot.position = Vector2(10, 48)
-	duck_slot.size = Vector2(minf(150, width * 0.49), 156)
-	favorite_medal.position = Vector2(duck_slot.size.x - 24, 160)
+	if playground == null: return
+	playground.layout_room(Vector2(width, _room.size.y))
+	favorite_medal.position = Vector2(16, 46)
 	favorite_medal.size = Vector2(48, 48)
 	_room_title.position = Vector2(14, 9)
 	_room_title.size = Vector2(width - 28, 28)
-	toy_button.size = Vector2.ONE * edge
-	toy_button.pivot_offset = toy_button.size * 0.5
-	_base_toy_position = Vector2(width - edge - 17, 102)
-	_toy_label.position = Vector2(_base_toy_position.x - 8, 198)
-	_toy_label.size = Vector2(edge + 16, 24)
 	_apply_action()
 
 
 func _apply_action() -> void:
-	toy_button.position = _base_toy_position
+	if playground != null and playground.toy_phase != "idle": return
+	toy_button.position = playground._toy_home - toy_button.size * 0.5
 	toy_button.scale = Vector2.ONE
 	toy_button.rotation = 0
 	toy_button.icon = _toy_art
@@ -580,11 +611,13 @@ func _apply_action() -> void:
 	elif _action == "launch":
 		offsets.append_array([Vector2(0, 4), Vector2(0, -6), Vector2(-16, -54)])
 	if offsets.size() == 4:
-		toy_button.position += offsets[previous].lerp(offsets[_stage], progress)
+		var offset := offsets[previous].lerp(offsets[_stage], progress)
+		if playground._toy_home.x < _room.size.x * 0.5: offset.x *= -1
+		toy_button.position += offset
 		toy_button.rotation = lerpf(rotations[previous], rotations[_stage], progress)
 		if _action == "ring" and not _reduced_motion:
 			toy_button.rotation += sin(progress * TAU * 3) * 0.16 * sin(progress * PI)
-	_toy_label.position.x = toy_button.position.x + toy_button.size.x * 0.5 - _toy_label.size.x * 0.5
+	playground._place_toy(toy_button.position + toy_button.size * 0.5)
 	_room.action = _action
 	_room.action_progress = progress
 	_room.stage = _stage
@@ -606,6 +639,7 @@ func _visibility_changed() -> void:
 
 func settle() -> void:
 	set_process(false)
+	if playground != null: playground.cancel()
 	if not _action.is_empty():
 		_action_progress = 1.0
 		_apply_action()
@@ -619,7 +653,29 @@ func _notification(what: int) -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button, goal_button, word_sticker_button] + category_buttons.values() + item_buttons.values():
+	for button in [toy_button, action_button, goal_button, word_sticker_button] + pip_buttons + category_buttons.values() + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result
+
+
+func _direct_play_started() -> void:
+	_action = ""
+	_stage = 0
+	_action_progress = 0
+	set_process(false)
+	_apply_action()
+	_refresh_action_control()
+
+
+func _direct_play_feedback(kind: String, message: String) -> void:
+	caption.text = message
+	if kind == "throw": word_requested.emit(_toy.word_id)
+	pip_interaction.emit(kind, message)
+
+
+func set_reduced_motion(value: bool) -> void:
+	_reduced_motion = value
+	if playground != null:
+		playground.configure(playground.toy_word, playground.toy_locked, value, playground.accent)
+	if value: settle()

@@ -43,7 +43,8 @@ async function openMedals(page, focusLast = false) {
   await tap(page, 20 + (bounds.width - 112) * 0.75, 52);
   await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
   if (focusLast) {
-    // Medals -> room tab -> last earned medal; locked medals cannot take focus.
+    // Medals -> Words -> room tab -> last earned medal; locked medals cannot take focus.
+    await page.keyboard.press('Shift+Tab');
     await page.keyboard.press('Shift+Tab');
     await page.keyboard.press('Shift+Tab');
   }
@@ -622,10 +623,10 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await ready(page);
   const bounds = await canvasMetrics(page);
   const scale = 390 / 480;
-  const greet = async (x, y) => {
+  const greet = async (x, y, inRoom = false) => {
     await rendered(page);
     await page.touchscreen.tap(bounds.x + x * scale, bounds.y + y * scale);
-    await expect(page.locator('#game-status')).toContainText('Pip says: duck!');
+    await expect(page.locator('#game-status')).toContainText(inRoom ? 'Quack! You tickled Pip!' : 'Pip says: duck!');
   };
   await greet(40, 40);
   await expect(page.locator('#selection-status')).toBeEmpty();
@@ -641,7 +642,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   });
   await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
   await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
-  await greet(101, 303);
+  await greet(104, 388, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   await openMedals(page, true);
   await page.keyboard.press('Enter');

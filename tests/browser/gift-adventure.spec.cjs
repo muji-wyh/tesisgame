@@ -50,9 +50,9 @@ async function tabs(page, count, backwards = false) {
 }
 
 async function previewLockedApple(page, hasGoal = false) {
-  // Back starts focused. Follow the visible room controls through Pip, the toy,
-  // its action, categories and gift cards; focus scrolls the apple into view.
-  await tabs(page, hasGoal ? 10 : 9);
+  // Back starts focused. Pip, toy, four Pip actions, the toy action, categories
+  // and gift cards follow; focus scrolls the apple into view before activation.
+  await tabs(page, hasGoal ? 14 : 13);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Autumn apple. Complete');
   await expect(page.locator('#game-status')).toContainText('1 more piece');
@@ -140,9 +140,9 @@ async function playAppleStages(page, testInfo, prefix, firstTouch = false) {
   for (let index = 0; index < APPLE_STAGES.length; index++) {
     if (index === 0 && firstTouch) {
       const bounds = await metrics(page);
-      // The action sits beneath the room at 584 logical pixels; on a shorter
+      // The action sits beneath the expanded room at 754 logical pixels; on a shorter
       // view, focusing it scrolls its bottom edge above the 16px page margin.
-      await tap(page, bounds.width / 2, Math.min(584, bounds.height - 52));
+      await tap(page, bounds.width / 2, Math.min(754, bounds.height - 52));
     } else {
       await page.keyboard.press('Enter');
     }

@@ -967,6 +967,10 @@ func _build_playroom() -> void:
 	_room.item_previewed.connect(_room_previewed)
 	_room.word_requested.connect(_room_word)
 	_room.toy_played.connect(_room_toy)
+	_room.pip_interaction.connect(_room_pip_interaction)
+	_room.playground.interaction_started.connect(func() -> void:
+		_end_collection_drag(false)
+		_collection_dragged = false)
 	_room.goal_requested.connect(_start_gift_adventure)
 	for control in _room.controls():
 		control.gui_input.connect(_collection_scroll_input.bind(control))
@@ -1028,6 +1032,13 @@ func _room_toy(kind: String) -> void:
 	else:
 		duck.perform_trick("bubbles" if kind in ["water", "open"] else "dance")
 	_announce_status(_playroom_caption.text)
+
+
+func _room_pip_interaction(kind: String, message: String) -> void:
+	if kind in ["poke", "pet", "catch", "fetch"]:
+		audio.interact(model.theme_id, model.phase != "lost")
+		audio.cue("select")
+	_announce_status(message)
 
 
 func _try_unlocked_gift() -> void:
@@ -1227,6 +1238,7 @@ func _open_reward_preview(id: String) -> void:
 	_preview_close.focus_mode = Control.FOCUS_ALL
 	_preview_play_button.focus_mode = Control.FOCUS_ALL
 	_preview_page.show()
+	_room.settle()
 	_preview_play_button.grab_focus()
 	_update_duck()
 	duck.react("happy")
@@ -2259,6 +2271,8 @@ func set_reduced_motion(value: bool) -> void:
 		card.set_reduced_motion(value)
 	if duck != null:
 		duck.set_reduced_motion(value)
+	if _room != null:
+		_room.set_reduced_motion(value)
 	chest.reduced_motion = value
 	if value:
 		chest.stop_reaction()
@@ -2487,6 +2501,7 @@ func on_page_hidden() -> void:
 	duck.settle()
 	duck.set_idle_paused(true)
 	_room.settle()
+	_room.playground.pause(true)
 	_choice.set_reduced_motion(true)
 	_choice.set_reduced_motion(reduced_motion)
 	_memory.set_reduced_motion(true)
@@ -2501,6 +2516,7 @@ func on_page_hidden() -> void:
 
 func on_page_visible() -> void:
 	duck.set_idle_paused(false)
+	_room.playground.pause(false)
 
 
 func _notification(what: int) -> void:
@@ -2781,6 +2797,10 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 	if _collection_scroll != null and collection_page.visible and not _collection_dragging:
 		_cancel_collection_inertia()
 		_collection_scroll.ensure_control_visible(control)
+		# Goal text and room controls can resize after the initial focus request.
+		await get_tree().process_frame
+		if is_instance_valid(control) and get_viewport().gui_get_focus_owner() == control and collection_page.visible and not _collection_dragging:
+			_collection_scroll.ensure_control_visible(control)
 
 
 func _audio_status(message: String) -> void:
@@ -3289,12 +3309,16 @@ func _update_duck() -> void:
 		return
 	var parent: Control = _collection_duck_slot if in_collection and not in_preview else self
 	if duck.get_parent() != parent:
+		duck.clear_room_interaction()
 		duck.reparent(parent)
+	if in_collection and not in_preview:
+		_room.playground.set_duck(duck)
 	var rect: Rect2 = slot.get_global_rect()
 	if rect.position == Vector2.ZERO or rect.size.y < 72:
 		duck.hide()
 		return
 	duck.compact = in_header
+	duck.tooltip_text = "" if in_collection and not in_preview else "Pip the duck. Press for a hello!"
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
 	duck.size = Vector2(maxf(72, rect.size.x), maxf(72, rect.size.y))
 	duck.show()
@@ -3307,11 +3331,12 @@ func _update_duck() -> void:
 func _play_duck() -> void:
 	if collection_page.visible and not _preview_page.visible and _collection_dragged:
 		return
+	if collection_page.visible and not _preview_page.visible:
+		_room.playground.poke()
+		return
 	var tricks := ["dance", "snack", "bubbles"]
 	var caption: String = duck.perform_trick(tricks[_duck_trick_index % tricks.size()])
 	_duck_trick_index += 1
-	if collection_page.visible and not _preview_page.visible:
-		_playroom_caption.text = caption
 	if _voice_mode:
 		return
 	audio.interact(model.theme_id, model.phase != "lost")

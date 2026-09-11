@@ -15,10 +15,31 @@ async function openRoom(page) {
   await rendered(page);
 }
 
+async function roomControl(page, name) {
+  const bounds = await metrics(page);
+  // The room tab gives a stable focus origin. Focus scrolls a lower control into
+  // view before the real touch, including on the original short phone viewport.
+  await tap(page, 60, 52);
+  await rendered(page);
+  const order = { action: 10, rooms: 12, spring: 14 };
+  for (let index = 0; index < order[name]; index++) {
+    await page.keyboard.press('Tab');
+    // Let focus scrolling update canvas geometry before advancing again.
+    await rendered(page);
+  }
+  const center = { action: 672, rooms: 756, spring: 874 }[name];
+  return { x: name === 'action' ? bounds.width / 2 : bounds.width * 0.75,
+    y: Math.min(center, bounds.height - (name === 'spring' ? 90 : 52)) };
+}
+
+async function tapRoomControl(page, name) {
+  const point = await roomControl(page, name);
+  await tap(page, point.x, point.y);
+}
+
 async function leavePreview(page) {
-  // The gift goal starts focused; Pip and Back follow it while the toy is locked.
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  // Help starts focused; Pip, Pet, Poke and Call precede Back. Locked Toss skips focus.
+  for (let index = 0; index < 5; index++) await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
 }
 
@@ -40,7 +61,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await openRoom(page);
   const saved = await roomRecord(page);
   expect(saved).toContain('toy="toy-ball"');
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   // Pip's speech marker clears when the pronunciation finishes.
   await page.waitForTimeout(1600);
@@ -48,7 +69,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   const still = await page.screenshot({ path: testInfo.outputPath('room-starter-phone.png'), scale: 'css' });
   await page.waitForTimeout(300);
   expect((await page.screenshot({ scale: 'css' })).equals(still)).toBe(true);
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Complete Blossom');
   await rendered(page);
   const locked = await page.screenshot({ path: testInfo.outputPath('room-locked-toy-phone.png'), scale: 'css' });
@@ -56,11 +77,11 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await leavePreview(page);
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   expect(await roomRecord(page)).toBe(saved);
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
-  await tap(page, 360, 588);
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'rooms');
+  await tapRoomControl(page, 'spring');
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('room-locked-backdrop-phone.png'), scale: 'css' });
   await expect(page.locator('#game-status')).toContainText('Complete Bee');
@@ -80,11 +101,11 @@ test('earned toy, backdrop, and migrated favorite persist through immediate relo
   await openRoom(page);
   await expect(page.locator('#game-status')).toContainText('18 of 36 medals complete.');
   expect(await roomRecord(page)).toContain('favorite="spring-1"');
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Water the flower');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
-  await tap(page, 360, 588);
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'rooms');
+  await tapRoomControl(page, 'spring');
   const saved = await roomRecord(page);
   expect(saved).toContain('backdrop="backdrop-spring"');
   expect(saved).toContain('favorite="spring-1"');
@@ -93,11 +114,11 @@ test('earned toy, backdrop, and migrated favorite persist through immediate relo
   await openRoom(page);
   // A new startup lesson can add a visit; the selected room must stay identical.
   expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('2/3 · The flower grows taller!');
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('3/3 · The flower blooms for Pip!');
   await page.waitForTimeout(1600);
   await page.screenshot({ path: testInfo.outputPath('room-saved-flower-phone.png'), scale: 'css' });
@@ -119,12 +140,12 @@ test('a failed room write preserves the selected toy and succeeds on retry', asy
     };
     window.restorePlayroomSave = () => { Storage.prototype.setItem = save; };
   });
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Your room could not be saved.');
   expect(await roomRecord(page)).toBe(original);
   await page.screenshot({ path: testInfo.outputPath('room-save-retry.png'), scale: 'css' });
   await page.evaluate(() => window.restorePlayroomSave());
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Water the flower');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   expect(errors).toEqual([]);
@@ -144,10 +165,10 @@ test('a failed initial room read recovers after storage becomes available', asyn
   const errors = await openGame(page);
   await openRoom(page);
   await page.screenshot({ path: testInfo.outputPath('room-load-retry.png'), scale: 'css' });
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Your room could not be saved.');
   await page.evaluate(() => { window.blockRoomRead = false; });
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Water the flower');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   expect(errors).toEqual([]);
@@ -160,13 +181,14 @@ test('dragging an owned gift scrolls without equipping it on release', async ({ 
   await openRoom(page);
   const saved = await roomRecord(page);
   const bounds = await metrics(page);
-  await page.mouse.move(bounds.x + 360 * bounds.scale, bounds.y + 660 * bounds.scale);
+  const gift = await roomControl(page, 'spring');
+  await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + gift.y * bounds.scale);
   await page.mouse.down();
-  await page.mouse.move(bounds.x + 360 * bounds.scale, bounds.y + 550 * bounds.scale, { steps: 8 });
+  await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + (gift.y - 110) * bounds.scale, { steps: 8 });
   await page.mouse.up();
   expect(await roomRecord(page)).toBe(saved);
   await page.screenshot({ path: testInfo.outputPath('room-gift-drag.png'), scale: 'css' });
-  await tap(page, 360, 550);
+  await tap(page, gift.x, gift.y - 110);
   await expect(page.locator('#game-status')).toContainText('Water the flower');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   expect(errors).toEqual([]);
@@ -190,7 +212,7 @@ test('earned seasonal toys keep their visible noun and distinct outcome', async 
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
     await openRoom(page);
     for (const [index, caption] of stages.entries()) {
-      await tap(page, 240, 502);
+      await tapRoomControl(page, 'action');
       await expect(page.locator('#game-status')).toHaveText(`${index + 1}/3 · ${caption}`);
       await page.screenshot({ path: testInfo.outputPath(`room-${theme}-stage-${index + 1}.png`), scale: 'css' });
     }
@@ -205,9 +227,9 @@ test('the room keeps readable gift previews and usable controls on a tablet', as
   await page.setViewportSize({ width: 834, height: 1194 });
   const errors = await openGame(page);
   await openRoom(page);
-  await tap(page, 240, 502);
+  await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
-  await tap(page, 360, 660);
+  await tapRoomControl(page, 'spring');
   await page.waitForTimeout(1600);
   await page.screenshot({ path: testInfo.outputPath('room-locked-toy-tablet.png'), scale: 'css' });
   expect(await roomRecord(page)).toContain('toy="toy-ball"');

@@ -27,6 +27,7 @@ func _run() -> void:
 	duck.size = Vector2(72, 72)
 	check(duck.pose == 0, "Pip starts with an innocent resting expression")
 	_check_idle_actions(duck)
+	_check_room_actions(duck)
 	duck.set_speaking(true)
 	check(duck.pose == 1, "Actual speech opens Pip's beak immediately")
 	duck._process(0.15)
@@ -72,6 +73,7 @@ func _run() -> void:
 		check(app.model.cards == cards and app.model.successes == 0 and not app.model.hint_used,
 			"Playing with Pip never changes game progress")
 		check(app.audio.voice.playing, "Pip's greeting uses the bundled duck pronunciation")
+		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The game-header greeting still performs its original first trick")
 		app.audio.halt()
 		app.audio.interact(app.model.theme_id, false)
 		app.audio.cue("select")
@@ -98,7 +100,9 @@ func _run() -> void:
 			"The collection duck stops speaking about the covered game picture")
 		app.duck.pressed.emit()
 		app._update_duck()
-		check(app.audio.voice.playing and app.duck.speaking, "Pip can greet again in the collection")
+		check(app._room.playground.interaction_kind == "poke" and app.duck._room_reaction == "poke"
+			and app.duck.pose == 1 and app.duck._trick.is_empty() and not app.duck.speaking,
+			"The room duck gives a visible surprised poke response without starting a header trick")
 		app.medal_progress.counts["spring-1"] = 1
 		app._refresh_collection()
 		app._open_reward_preview("spring-1")
@@ -190,4 +194,80 @@ func _check_idle_actions(duck: Button) -> void:
 		duck._process(0.1)
 	check(duck._idle_action.is_empty() and not duck.is_processing(), "Reduced motion suppresses all autonomous gestures")
 	duck.set_reduced_motion(false)
+	duck.settle()
+
+
+func _check_room_actions(duck: Button) -> void:
+	var methods := ["set_room_motion", "react_in_room", "clear_room_interaction"]
+	for method in methods:
+		check(duck.has_method(method), "Pip supports the room interaction API: " + method)
+	if not methods.all(func(method: String) -> bool: return duck.has_method(method)):
+		return
+	var original_rect: Rect2 = duck.get_rect()
+	duck.set_room_motion("walk", -1.0)
+	duck._process(0.2)
+	var walking_step: float = duck._room_step
+	check(walking_step > 0.0 and duck._room_direction < 0.0, "Walking advances visible footsteps in the requested direction")
+	duck.clear_room_interaction()
+	duck.set_room_motion("run", 1.0)
+	duck._process(0.2)
+	check(duck._room_step > walking_step and duck._room_direction > 0.0, "Running has a faster step cadence and can turn right")
+	var running_step: float = duck._room_step
+	duck.set_room_motion("run", -1.0)
+	check(duck._room_step == running_step and duck._room_direction < 0.0, "Repeated movement updates keep the current stride while turning")
+	duck.set_room_motion("unknown")
+	check(duck._room_motion == "run", "Unknown motion cannot interrupt a valid room movement")
+	for step in range(150):
+		duck._process(0.1)
+	check(duck._idle_action.is_empty() and duck._room_motion == "run", "Room locomotion keeps autonomous gestures out of the way")
+	duck.set_room_motion("")
+	check(duck._room_motion.is_empty(), "Stopping the room path stops the walking pose")
+	for kind in ["pet", "poke", "catch"]:
+		duck.set_room_motion("walk")
+		duck.react_in_room(kind)
+		var expected_pose: int = 2 if kind == "pet" else 1 if kind == "poke" else 3
+		check(duck.pose == expected_pose and duck._room_reaction == kind, kind + " immediately has its own readable expression")
+		check(duck._room_motion.is_empty() and duck._idle_action.is_empty(), kind + " takes priority over walking and idle gestures")
+		duck._process(0.1)
+		check(duck._room_reaction == kind and duck.pose == expected_pose, kind + " stays visible long enough to understand")
+		for press in range(20):
+			duck.react_in_room(kind)
+		for step in range(30):
+			duck._process(0.1)
+		check(duck._room_reaction.is_empty() and duck._idle_action.is_empty(), kind + " repeated input replaces one short reaction and then rests")
+	duck.react_in_room("pet")
+	duck.react_in_room("unknown")
+	check(duck._room_reaction == "pet", "Unknown reactions leave the current readable feedback intact")
+	duck.set_reduced_motion(true)
+	for kind in ["pet", "poke", "catch"]:
+		duck.react_in_room(kind)
+		var expected_pose: int = 2 if kind == "pet" else 1 if kind == "poke" else 3
+		for step in range(20):
+			duck._process(0.1)
+		check(duck.pose == expected_pose and duck._room_reaction == kind and not duck.is_processing(), kind + " reduced motion keeps a distinct static response without an animation loop")
+	duck.clear_room_interaction()
+	check(duck.pose == 0 and duck._room_motion.is_empty() and duck._room_reaction.is_empty(), "Leaving a reduced-motion room restores the plain header mascot")
+	duck.react_in_room("pet")
+	duck.set_reduced_motion(false)
+	check(duck._room_reaction.is_empty(), "Turning animation back on cannot leave a timeless reduced-motion reaction blocking idle")
+	for cleanup in ["clear", "settle", "hidden", "paused"]:
+		duck.set_room_motion("run")
+		duck.react_in_room("catch")
+		match cleanup:
+			"clear": duck.clear_room_interaction()
+			"settle": duck.settle()
+			"hidden": duck.hide()
+			"paused": duck.set_idle_paused(true)
+		check(duck._room_motion.is_empty() and duck._room_reaction.is_empty(), cleanup + " clears room activity before returning to the header")
+		if cleanup in ["hidden", "paused"]:
+			duck.set_room_motion("run")
+			duck.react_in_room("poke")
+			check(duck._room_motion.is_empty() and duck._room_reaction.is_empty(), cleanup + " rejects late room input until the mascot is active again")
+		if cleanup == "hidden": duck.show()
+		if cleanup == "paused": duck.set_idle_paused(false)
+		duck._process(0.1)
+		check(duck.pose == 0 and duck._idle_action.is_empty(), cleanup + " resumes quietly without replaying the room response")
+	check(duck.get_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation), "Room drawing never moves, rotates or scales the actual mascot hit target")
+	duck.react("happy")
+	check(duck.pose == 3 and duck.reaction_left > 0.0, "The ordinary game greeting still works after all room interactions")
 	duck.settle()

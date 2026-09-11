@@ -55,21 +55,12 @@ func _run() -> void:
 	await process_frame
 	check(app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()), "Keyboard focus scrolls Pip into view")
 	var scroll_before: int = app._collection_scroll.scroll_vertical
-	var touch := InputEventScreenTouch.new()
-	touch.index = 0
-	touch.pressed = true
-	touch.position = Vector2(80, 100)
-	app.duck.gui_input.emit(touch)
-	var drag := InputEventScreenDrag.new()
-	drag.index = 0
-	drag.position = Vector2(80, 50)
-	drag.relative = Vector2(0, -50)
-	app.duck.gui_input.emit(drag)
-	app._end_collection_drag(false)
-	check(app._collection_scroll.scroll_vertical > scroll_before, "Swiping over Pip scrolls the reward room")
 	var trick_before: int = app._duck_trick_index
-	app.duck.pressed.emit()
-	check(app._duck_trick_index == trick_before, "A swipe release does not also trigger a Pip trick")
+	await _stroke_duck(app.duck)
+	check(app._collection_scroll.scroll_vertical == scroll_before, "Stroking Pip belongs to the playground and does not scroll the reward room")
+	var has_playground: bool = app._room.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "playground")
+	check(has_playground and app._room.playground.interaction_kind == "pet", "A real stroke gives Pip a petting reaction")
+	check(app._duck_trick_index == trick_before, "Finishing a petting stroke does not also trigger the old Pip trick")
 	app._hide_collection()
 	app._controller_mode = true
 	app._choice.answer_buttons[0].grab_focus()
@@ -136,3 +127,25 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Expansion scene: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _stroke_duck(duck: Control) -> void:
+	var start: Vector2 = duck.get_global_rect().get_center() - Vector2(20, 0)
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = start if pressed else start + Vector2(44, 0)
+		event.global_position = event.position
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		event.pressed = pressed
+		root.push_input(event, true)
+		await process_frame
+		if pressed:
+			for step in range(1, 5):
+				var motion := InputEventMouseMotion.new()
+				motion.position = start + Vector2(step * 11, 0)
+				motion.global_position = motion.position
+				motion.relative = Vector2(11, 0)
+				motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+				root.push_input(motion, true)
+				await process_frame

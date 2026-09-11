@@ -87,6 +87,7 @@ func _run() -> void:
 	view.goal_button.pressed.emit()
 	check(goals == ["toy-spring"] and state.toy_id == "toy-ball", "The gift request identifies the preview without equipping it")
 	check(view.toy_button.disabled and view.toy_button.focus_mode == Control.FOCUS_NONE, "The locked toy stays unplayable and cannot steal return focus")
+	check(view.pip_buttons[2].disabled and view.pip_buttons[2].focus_mode == Control.FOCUS_NONE, "Locked preview Toss cannot take keyboard focus from its return action")
 	check(previews.size() == 1 and previews[0] == view.caption.text, "Opening a locked toy announces its visible requirement")
 	view.toy_button.pressed.emit()
 	check(words.size() == 1 and actions.size() == 1, "Locked object activation cannot pronounce or play the earned action")
@@ -105,6 +106,7 @@ func _run() -> void:
 	view.show()
 	view.action_button.pressed.emit()
 	check(view.action_button.text == "Roll the ball" and not view.toy_button.disabled and view.toy_button.focus_mode == Control.FOCUS_ALL, "Back to my room restores the selected toy and its normal controls")
+	check(view.pip_buttons.all(func(button: Button) -> bool: return not button.disabled and button.focus_mode == Control.FOCUS_ALL), "Back to my room restores all four Pip shortcut actions and their keyboard focus")
 	check(previews.size() == 2 and previews.back() == view.caption.text, "Closing the preview announces the restored room")
 	check(words.size() == 1 and actions.size() == 1 and selections.is_empty() and state.toy_id == "toy-ball", "Preview return never equips, plays or persists the locked toy")
 	view.category_buttons["backdrop"].pressed.emit()
@@ -202,7 +204,7 @@ func _run() -> void:
 	view.action_button.pressed.emit()
 	view.hide()
 	check(not view.is_processing(), "Closing the room stops animation immediately")
-	check(view.controls().size() == state.catalog().size() + 6 and view.controls().has(view.word_sticker_button), "A hidden room exposes every button, including its word sticker and goal, for host focus and scrolling wiring")
+	check(view.controls().size() == state.catalog().size() + 10 and view.controls().has(view.word_sticker_button) and view.pip_buttons.size() == 4 and view.pip_buttons.all(func(button: Button) -> bool: return view.controls().has(button)), "A hidden room exposes the four Pip shortcuts, word sticker, goal and existing controls for host focus and scrolling wiring")
 	view.show()
 	view.configure(state, counts, data.theme("spring"), true)
 	await process_frame
@@ -210,7 +212,10 @@ func _run() -> void:
 	for control in view.controls():
 		if not control.is_visible_in_tree():
 			continue
-		check(control.size.x >= 64 and control.size.y >= 64, "Room controls retain generous touch targets")
+		if view.pip_buttons.has(control):
+			check(control.size.x >= 44 and control.size.y >= 44, "Pip shortcut buttons retain at least 44 by 44 touch targets")
+		else:
+			check(control.size.x >= 64 and control.size.y >= 64, "Existing room controls retain their generous 64 by 64 touch targets")
 		check(control.get_global_rect().position.x >= view.global_position.x - 1 and control.get_global_rect().end.x <= view.global_position.x + view.size.x + 1, "Room controls fit a narrow phone column")
 	view.queue_free()
 	await process_frame
