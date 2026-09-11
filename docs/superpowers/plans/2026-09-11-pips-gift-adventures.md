@@ -68,6 +68,6 @@ caption. Owned goals equip through `_select_room_item`; ordinary claims stay int
 
 - [x] Review diffs and run relevant native/Node/browser checks; resolve findings.
 - [x] Build with the verified 19-image Unity overrides and check the real PCK.
-- [ ] Commit, merge main, push and deploy the tested export.
-- [ ] Verify production HTML/PCK hashes and actual goal/lesson/toy behavior; sync
+- [x] Commit, merge main, push and deploy the tested export.
+- [x] Verify production HTML/PCK hashes and actual goal/lesson/toy behavior; sync
   main's local preview and record QA evidence with the known browser limitations.

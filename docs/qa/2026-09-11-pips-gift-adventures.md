@@ -49,7 +49,26 @@ steps and replay, with distinct still results when reduced motion is enabled.
 - Reviewed browser stage pictures include flower, ball, apple, shell and rocket;
   all six toys, including bell, also have native stage/motion screenshot coverage.
 
-Production verification is pending deployment of this tested export.
+## Production release
+
+Feature commit `fb2c7587b9c87ead93756c3cb03a2b402fdc46c1` was fast-forwarded
+into `main`, pushed to origin and deployed with `npm run deploy -- -SkipBuild`
+on September 11, 2026. The release is live at
+[Word Buddies](https://gentle-forest-02ff42900.3.azurestaticapps.net/).
+
+HTTP downloads of the production HTML and PCK reproduce both hashes below.
+The production main gift loop passed **2/2**, desktop Chromium and iPhone WebKit:
+actual Help click, five-word lesson containing apple, ordinary Match/chest claim
+adding exactly one piece, Try gift, three toy stages, replay and immediate reload.
+Both runs recorded zero browser/page errors. Screenshots confirm visible controls
+and the restored gift after reload. Evidence is under
+`build/gift-adventures/production-results/` and `production-hashes.json`.
+
+Main's preview at `http://127.0.0.1:4173/` serves the same tested export. All
+**71 files** were compared byte-for-byte, and its HTTP HTML/PCK hashes match too
+(`main-preview-hashes.json`). Main's 19 ignored Unity PNGs plus manifest also
+match the verified worktree. The previous preview was retained in
+`build/web-before-gift-adventures-fb2c758/`.
 
 ## Tested artifact
 
