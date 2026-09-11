@@ -195,13 +195,14 @@ func controls() -> Array[Control]:
 	if _paused or not is_visible_in_tree():
 		return result
 	if memory.phase == "feedback":
-		return feedback_view.controls()
-	if not memory.phase in ["waiting", "matching"] or card_buttons.is_empty():
+		result.append_array(feedback_view.controls())
+	elif not memory.phase in ["waiting", "matching"] or card_buttons.is_empty():
 		return result
 	for button in card_buttons:
 		if not button.disabled:
 			result.append(button)
-	result.append(study_button)
+	if not study_button.disabled:
+		result.append(study_button)
 	return result
 
 
@@ -252,7 +253,15 @@ func continue_feedback() -> void:
 
 
 func _choose(index: int) -> void:
-	if not _can_play() or memory.studying:
+	if _paused or not is_visible_in_tree() or memory.studying or index < 0 or index >= memory.cards.size():
+		return
+	if memory.matched_word_ids.has(memory.cards[index].word.id):
+		return
+	if memory.phase == "feedback":
+		continue_feedback()
+		if _can_play():
+			card_buttons[index].grab_focus()
+	if not _can_play():
 		return
 	var result: String = memory.select(index)
 	if result == "ignored":
@@ -271,6 +280,10 @@ func _choose(index: int) -> void:
 
 
 func _toggle_study() -> void:
+	if _paused or not is_visible_in_tree():
+		return
+	if memory.phase == "feedback" and memory.matched_word_ids.size() < 5:
+		continue_feedback()
 	if _can_play() and memory.set_study(not memory.studying):
 		_refresh()
 		prompt_ready.emit()
@@ -302,7 +315,8 @@ func _refresh() -> void:
 	var reviewing: bool = memory.phase == "feedback"
 	_board.visible = playing or reviewing or memory.phase == "won"
 	study_button.visible = playing or reviewing
-	study_button.disabled = not playing or _paused
+	study_button.disabled = _paused or not (playing or (reviewing and memory.matched_word_ids.size() < 5))
+	study_button.focus_mode = Control.FOCUS_NONE if study_button.disabled else Control.FOCUS_ALL
 	study_button.text = "Return to play" if memory.studying else "Study"
 	study_button.tooltip_text = "Hide unmatched cards and play" if memory.studying else "Study all five word and picture pairs"
 	_name_control(study_button, study_button.text + ". " + study_button.tooltip_text)
@@ -337,7 +351,7 @@ func _refresh() -> void:
 		var revealed: bool = memory.is_revealed(index)
 		var selected: bool = memory.selected_indices.has(index)
 		button.word_label.text = card.word.text if revealed else ""
-		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not playing or _paused or memory.studying)
+		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not (playing or reviewing) or _paused or memory.studying)
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.picture.visible = revealed and card.kind == "image"
 		button.word_label.visible = revealed and card.kind == "word"

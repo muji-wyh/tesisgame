@@ -105,6 +105,26 @@ func _run() -> void:
 			if board[index].word.id == word.id:
 				view.card_buttons[index].pressed.emit()
 		check(app.model.phase != "won", "A correct pair waits for explicit Continue before any win")
+		check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A judged pair defaults actual keyboard focus to Continue")
+		if view.memory.matched_word_ids.size() == 5:
+			view.study_button.pressed.emit()
+			view._choose(-1)
+			for button in view.card_buttons:
+				button.pressed.emit()
+			check(view.memory.phase == "feedback" and view.study_button.disabled and not view.memory.studying and app.model.phase != "won", "The fifth pair still requires Continue before showing the result")
+			check(view.memory.attempts == 9 and view.memory.matched_word_ids.size() == 5 and app.medal_progress.counts.is_empty(), "Final blocked shortcuts cannot change score or claim rewards")
+			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "Rejected final input retains actual Continue focus")
+			await _tap_control(view.card_buttons[0])
+			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A real tap on a planted final card retains Continue focus")
+			await _tap_control(view.study_button)
+			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A real tap on disabled final Study retains Continue focus")
+			for pressed in [true, false]:
+				var event := InputEventKey.new()
+				event.keycode = KEY_ENTER
+				event.pressed = pressed
+				root.push_input(event, true)
+				await process_frame
+			check(app.model.phase == "won" and view.memory.phase == "won", "Enter still completes the final feedback after tapping disabled controls")
 		view.feedback_view.action_button.pressed.emit()
 	check(app.model.phase == "won" and app.model.successes == 5, "Five completed pairs enter the ordinary victory screen")
 	check(not view.visible and app._found_words.get_child_count() == 5, "The result reviews all five practised words")
@@ -127,6 +147,7 @@ func _run() -> void:
 	for mode in ["match", "sky", "listen"]:
 		app.choose_mode(mode)
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "Existing " + mode + " mode remains reachable with the same lesson")
+	await _check_feedback_shortcut_focus(app)
 	await _check_host_layout(app)
 	if "--screenshots" in OS.get_cmdline_user_args():
 		await _capture_scenes(app)
@@ -137,6 +158,59 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Memory scene: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_feedback_shortcut_focus(app) -> void:
+	for correct in [false, true]:
+		for action in ["card", "study"]:
+			app.choose_mode("learn")
+			app.choose_mode("memory")
+			await process_frame
+			await process_frame
+			var view = app._memory
+			var first := -1
+			var second := -1
+			var target := -1
+			for index in range(view.memory.cards.size()):
+				if view.memory.cards[index].kind == "word":
+					first = index
+					break
+			for index in range(view.memory.cards.size()):
+				var card: Dictionary = view.memory.cards[index]
+				if card.kind == "image" and (card.word.id == view.memory.cards[first].word.id) == correct:
+					second = index
+				if index > 0 and card.kind == "word" and card.word.id != view.memory.cards[first].word.id:
+					target = index
+			view.card_buttons[first].pressed.emit()
+			view.card_buttons[second].pressed.emit()
+			var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), app.model.successes, app.medal_progress.counts.duplicate(true)]
+			var board: Array = view.memory.cards.duplicate(true)
+			var positions: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
+			check(root.gui_get_focus_owner() == view.feedback_view.action_button and app._default_focus() == view.feedback_view.action_button, "Wrong and correct feedback both start with actual Continue focus")
+			var control: Button = view.study_button if action == "study" else view.card_buttons[target]
+			await _tap_control(control)
+			check(root.gui_get_focus_owner() == control, "The first " + action + " tap moves actual host focus away from hidden Continue to the tapped control")
+			check(not view.feedback_view.visible, "The first " + action + " tap dismisses nonfinal feedback")
+			if action == "card":
+				check(view.memory.phase == "matching" and view.memory.selected_indices == [target], "The host keeps only the first tapped new card selected")
+			else:
+				check(view.memory.studying and view.memory.selected_indices.is_empty() and app._default_focus() == view.study_button, "The host enters Study and defaults to Return on the first tap")
+				await _tap_control(view.study_button)
+				check(not view.memory.studying and view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button, "Return restores play and retains actual Study button focus")
+			check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, app.model.successes, app.medal_progress.counts] == score, "First-tap feedback shortcuts preserve host score and rewards")
+			check(view.memory.cards == board and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == positions, "First-tap feedback shortcuts keep the host board stationary")
+
+
+func _tap_control(control: Control) -> void:
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = control.get_global_rect().get_center()
+		event.global_position = event.position
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		event.pressed = pressed
+		root.push_input(event, true)
+		await process_frame
 
 
 func _check_host_layout(app) -> void:

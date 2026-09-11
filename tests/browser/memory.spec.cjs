@@ -139,6 +139,105 @@ test('Memory discoveries survive mistakes, Study, theme changes and My rewards',
   expect(errors).toEqual([]);
 });
 
+test('Memory accepts cards and Study directly from feedback without moving the board', async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'AudioContext', { configurable: true, value: undefined });
+    Object.defineProperty(window, 'webkitAudioContext', { configurable: true, value: undefined });
+  });
+  const errors = await openGame(page);
+  await chooseMode(page, 4);
+  const bounds = await metrics(page), saved = await medalRecord(page);
+  const board = await discoverBoard(page);
+  const pairs = board.filter(card => card.kind === 'Word').map(card => pairFor(board, card.word));
+  const hit = async index => {
+    const point = memoryPoint(bounds, index);
+    await tap(page, point.x, point.y);
+  };
+  const select = async index => {
+    await hit(index);
+    await expect(page.locator('#selection-status')).toHaveText(`Memory card ${index + 1}. ${board[index].kind}: ${board[index].word}.`);
+  };
+  const progress = (pairs, attempts) => expect(page.locator('#game-status')).toContainText(`Memory. ${pairs} of 5 pairs grown. ${attempts} attempts.`);
+  const capture = name => screenshot(page, testInfo, name, { verifyRendering: true });
+  const study = async (found, attempts, name) => {
+    const point = studyPoint(bounds);
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#game-status')).toContainText('Study the garden.');
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    await progress(found, attempts);
+    await capture(name);
+    await hit(pairs[0][0]);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#game-status')).toContainText(READY);
+    await progress(found, attempts);
+  };
+
+  await select(pairs[0][0]);
+  await hit(pairs[1][1]);
+  await expect(page.locator('#game-status')).toContainText('learn these words');
+  await progress(0, 1);
+  await capture('memory-wrong-feedback');
+  // The first tap may reuse either comparison card, with focus following that card.
+  await select(pairs[0][0]);
+  await progress(0, 1);
+  await page.keyboard.press('Space');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#selection-status')).toHaveText(`Memory card ${pairs[0][0] + 1}. Word: ${board[pairs[0][0]].word}.`);
+  await progress(0, 1);
+  await capture('memory-original-card-selected');
+  await hit(pairs[1][1]);
+  await progress(0, 2);
+  await study(0, 2, 'memory-study-from-wrong');
+
+  await select(pairs[0][0]);
+  await hit(pairs[1][1]);
+  await progress(0, 3);
+  await select(pairs[2][0]);
+  await progress(0, 3);
+  await capture('memory-third-card-selected');
+  await hit(pairs[2][1]);
+  await expect(page.locator('#game-status')).toContainText('A new flower!');
+  await progress(1, 4);
+  const correctFeedback = await page.locator('#game-status').textContent();
+  const correctSelection = await page.locator('#selection-status').textContent();
+  await hit(pairs[2][0]);
+  await expect(page.locator('#game-status')).toHaveText(correctFeedback);
+  await expect(page.locator('#selection-status')).toHaveText(correctSelection);
+  await study(1, 4, 'memory-study-from-correct');
+  const remaining = pairs.filter((_, index) => index !== 2);
+  // Return keeps every unmatched card at its original saved input coordinate.
+  for (const index of remaining.flat()) {
+    await select(index);
+    await hit(index);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    await progress(1, 4);
+  }
+  for (const [index, pair] of remaining.entries()) {
+    await select(pair[0]);
+    await progress(index + 1, index + 4);
+    if (index === 1) await capture('memory-next-card-from-correct');
+    await hit(pair[1]);
+    await expect(page.locator('#game-status')).toContainText('A new flower!');
+    await progress(index + 2, index + 5);
+  }
+  const finalFeedback = await page.locator('#game-status').textContent();
+  const finalSelection = await page.locator('#selection-status').textContent();
+  await hit(remaining.at(-1)[0]);
+  const studyButton = studyPoint(bounds);
+  await tap(page, studyButton.x, studyButton.y);
+  await expect(page.locator('#game-status')).toHaveText(finalFeedback);
+  await expect(page.locator('#selection-status')).toHaveText(finalSelection);
+  expect(await medalRecord(page), 'Card input cannot claim the final reward.').toBe(saved);
+  await capture('memory-final-feedback');
+  await continueFeedback(page, true);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
+  await capture('memory-final-continue');
+  expect(await metrics(page)).toEqual(bounds);
+  expect(errors).toEqual([]);
+});
+
 test('five Memory pairs earn one saved piece and Repeat retains the lesson', async ({ page }, testInfo) => {
   // This victory/claim/replay tour flips both ten-card boards through real input.
   // Windows WebKit traces kept responding but exceeded 90s in multi-project runs.

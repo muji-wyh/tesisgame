@@ -106,8 +106,8 @@ func _run() -> void:
 	check(answers.size() == 1 and answers[0] == [[words[0], words[1]], false], "Mismatch reports the two real associations in selection order")
 	check(view.feedback_view.visible and view.feedback_view.current_word == words[0], "Mismatch teaches the first real association")
 	check(view.feedback_view.word_label.text == words[0].text and view.feedback_view.picture.texture.resource_path == "res://" + words[0].image, "Teaching pairs the actual text with its own picture")
-	check(view.feedback_view.action_button.text == "Continue", "Feedback waits for an explicit Continue")
-	check(view.study_button.visible and view.study_button.disabled and view._flowers.visible, "Feedback keeps Study and the flower count in place while locking answers")
+	check(view.feedback_view.action_button.text == "Continue", "Feedback retains its explicit Continue action")
+	check(view.study_button.visible and not view.study_button.disabled and view._flowers.visible, "Nonfinal feedback keeps Study available beside the flower count")
 	check(view.card_buttons.all(func(card: Button) -> bool: return card.is_visible_in_tree()), "Every remembered card remains visible during a mismatch")
 	check(_positions(view) == positions and view.card_buttons == nodes and view.study_button.get_rect() == study_bounds and view._flowers.get_rect() == flower_bounds, "Mismatch feedback preserves board and header geometry")
 	check(view.feedback_view.get_rect() == feedback_bounds, "The correction area is reserved before the first answer")
@@ -119,9 +119,6 @@ func _run() -> void:
 	check(_positions(view) == positions and view.feedback_view.get_rect() == feedback_bounds, "Reviewing the second word leaves the board and feedback targets fixed")
 	view.feedback_view.previous_button.pressed.emit()
 	check(view.feedback_view.current_word == words[0], "Previous returns to the first association")
-	view.card_buttons[picture_index].pressed.emit()
-	view.study_button.pressed.emit()
-	check(view.memory.attempts == 1 and not view.memory.studying, "Feedback rejects synthetic card and Study input")
 	view.set_audio_available(false)
 	view.feedback_view.hear_button.pressed.emit()
 	check(heard.is_empty() and view.feedback_view.hear_button.disabled, "Unavailable audio rejects synthetic Hear input")
@@ -200,6 +197,13 @@ func _run() -> void:
 		view.card_buttons[_index(view, word.id, "image")].pressed.emit()
 		view.card_buttons[_index(view, word.id, "word")].pressed.emit()
 		check(endings.is_empty() and view.memory.phase == "feedback", "Every planted pair waits for Continue, including the fifth")
+		if view.memory.matched_word_ids.size() == 5:
+			view.study_button.pressed.emit()
+			view._choose(-1)
+			for button in view.card_buttons:
+				button.pressed.emit()
+			check(view.study_button.disabled and not view.memory.studying and view.memory.phase == "feedback" and endings.is_empty(), "Final feedback rejects Study and card shortcuts until Continue")
+			check(view.memory.attempts == 9 and progress.back() == [5, 9], "Rejected final shortcuts cannot change attempts or flowers")
 		view.feedback_view.action_button.pressed.emit()
 	check(view.memory.phase == "won" and endings.size() == 1 and endings[0][0], "The fifth Continue wins exactly once")
 	check(endings[0][1].size() == 5 and progress.back() == [5, 9], "Victory returns all five words and actual attempt count")
@@ -251,6 +255,7 @@ func _run() -> void:
 	view.start_round([], Data.theme("spring"), 3)
 	check(view.controls().is_empty() and view.card_buttons.is_empty(), "An invalid lesson leaves no playable stale board")
 	check(not view.status_label.text.is_empty(), "Invalid content has a visible explanation")
+	await _check_feedback_shortcuts(view, words)
 	await _check_motion_stability(view, words)
 	await _check_catalog_text(view)
 	view.queue_free()
@@ -270,6 +275,54 @@ func _positions(view) -> Array:
 	for button in view.card_buttons:
 		result.append(button.get_rect())
 	return result
+
+
+func _check_feedback_shortcuts(view, words: Array) -> void:
+	view.size = Vector2(456, 200)
+	for action in ["wrong-word", "wrong-image", "wrong-third", "correct-third", "wrong-study", "correct-study"]:
+		view.start_round(words, Data.theme("spring"), 71)
+		await _settle()
+		var first := _index(view, words[0].id, "word")
+		var second := _index(view, words[0 if action.begins_with("correct") else 1].id, "image")
+		var target := first if action == "wrong-word" else second if action == "wrong-image" else _index(view, words[2].id, "word")
+		view.card_buttons[first].pressed.emit()
+		view.card_buttons[second].pressed.emit()
+		var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), answers.size(), progress.size(), endings.size()]
+		var order: Array = view.memory.cards.duplicate(true)
+		var positions := _positions(view)
+		var reveal_count := revealed.size()
+		view._choose(-1)
+		view._choose(view.memory.cards.size())
+		if action.begins_with("correct"):
+			view.card_buttons[first].pressed.emit()
+			view.card_buttons[second].pressed.emit()
+		check(view.memory.phase == "feedback" and revealed.size() == reveal_count, action + " invalid or planted card input cannot dismiss feedback")
+		for blocked in ["paused", "hidden"]:
+			if blocked == "paused": view.pause(true)
+			else: view.hide()
+			view.card_buttons[target].pressed.emit()
+			view.study_button.pressed.emit()
+			check(view.memory.phase == "feedback" and not view.memory.studying and revealed.size() == reveal_count, action + " " + blocked + " feedback rejects synthetic card and Study input")
+			if blocked == "paused": view.pause(false)
+			else: view.show()
+		view.feedback_view.action_button.grab_focus()
+		if action.ends_with("study"):
+			check(view.controls().has(view.study_button) and not view.study_button.disabled, action + " exposes Study during feedback")
+			await _tap_control(view.study_button)
+			check(view.memory.studying and view.memory.phase == "waiting" and not view.feedback_view.visible and view.memory.selected_indices.is_empty(), action + " first tap enters Study directly")
+			check(root.gui_get_focus_owner() == view.study_button and view.controls() == [view.study_button], action + " first tap leaves actual keyboard focus on Return")
+			view.card_buttons[target].pressed.emit()
+			check(revealed.size() == reveal_count and view.memory.selected_indices.is_empty(), action + " studied cards reject synthetic selection")
+			await _tap_control(view.study_button)
+			check(not view.memory.studying and view.memory.phase == "waiting", action + " Return restores the same playable board")
+		else:
+			check(view.controls().has(view.card_buttons[target]) and not view.card_buttons[target].disabled, action + " exposes the next selectable card during feedback")
+			await _tap_control(view.card_buttons[target])
+			check(view.memory.phase == "matching" and view.memory.selected_indices == [target] and not view.feedback_view.visible, action + " first tap continues and selects exactly the tapped card")
+			check(revealed.size() == reveal_count + 1 and revealed.back()[2] == target, action + " emits exactly one new reveal for the tapped card")
+			check(root.gui_get_focus_owner() == view.card_buttons[target], action + " first tap retains actual focus on the new card")
+		check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, answers.size(), progress.size(), endings.size()] == score, action + " shortcut preserves score and emits no answer, progress or reward")
+		check(view.memory.cards == order and _positions(view) == positions, action + " shortcut preserves board order and every card position")
 
 
 func _check_concealed(view) -> void:

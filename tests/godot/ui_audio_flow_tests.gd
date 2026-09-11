@@ -90,6 +90,39 @@ func _run() -> void:
 	memory.feedback_view.hear_button.pressed.emit()
 	memory.continue_feedback()
 	check(not app.audio.voice.playing, "Memory Continue stops speech before hiding unmatched pictures")
+	memory.card_buttons[a].pressed.emit()
+	memory.card_buttons[b].pressed.emit()
+	var next_card := -1
+	for index in range(memory.memory.cards.size()):
+		if memory.memory.cards[index].word.id != memory.memory.cards[a].word.id and memory.memory.cards[index].word.id != memory.memory.cards[b].word.id:
+			next_card = index
+			break
+	var attempts: int = memory.memory.attempts
+	memory.feedback_view.hear_button.pressed.emit()
+	check(app.audio.voice.playing, "Old Memory correction speech is active before the shortcut")
+	memory.card_buttons[next_card].pressed.emit()
+	check(memory.memory.phase == "matching" and memory.memory.selected_indices == [next_card] and memory.memory.attempts == attempts and not memory.feedback_view.visible,
+		"Memory first-tap shortcut selects exactly the new card without another attempt")
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + memory.memory.cards[next_card].word.audio),
+		"Memory first-tap shortcut replaces old feedback speech with the tapped card's actual word")
+	app.choose_mode("learn")
+	app.choose_mode("memory")
+	memory = app._memory
+	a = 0
+	for index in range(1, memory.memory.cards.size()):
+		if memory.memory.cards[index].kind != memory.memory.cards[a].kind and memory.memory.cards[index].word.id != memory.memory.cards[a].word.id:
+			b = index
+			break
+	memory.card_buttons[a].pressed.emit()
+	memory.card_buttons[b].pressed.emit()
+	memory.feedback_view.hear_button.pressed.emit()
+	check(app.audio.voice.playing, "Old Memory correction speech is active before Study")
+	memory.study_button.pressed.emit()
+	check(memory.memory.studying and not memory.feedback_view.visible and not app.audio.voice.playing and memory.memory.attempts == 1,
+		"First-tap Study stops feedback speech and preserves the existing attempt")
+	memory.study_button.pressed.emit()
+	check(not memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing and memory.memory.attempts == 1,
+		"Returning from shortcut Study stays silent and preserves progress")
 	app.choose_mode("learn")
 	app._lesson.hear_button.pressed.emit()
 	app._show_collection()
