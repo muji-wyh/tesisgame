@@ -95,3 +95,25 @@ Reports and screenshots: `build/memory-feedback/green-report.json` and
 `green-results/`. Independent screenshot review confirmed the selected
 card's focus, enabled Study, final Continue's retained focus, and the phone
 victory screen without clipping.
+
+## Delivery
+
+Gameplay commit `a28c97f` was fast-forwarded into `main` and pushed to
+`origin/main`. The local preview at <http://127.0.0.1:4173/> was activated
+from the verified 71-file final stage. HTTP verification confirmed the same
+HTML and PCK hashes recorded above. The previous preview is retained at
+`D:/uwork/tesisgame/build/web-before-memory-8106acc9`.
+
+`npm run deploy -- -SkipBuild` successfully deployed the frozen export to
+<https://gentle-forest-02ff42900.3.azurestaticapps.net/>. Production HTML and
+PCK were fetched and matched both SHA256 values above. Deployment log:
+`build/memory-feedback-deploy.log`.
+
+The same two browser cases passed against production in 67.8 seconds, with
+zero failures, skips or flaky cases and no browser errors. They completed
+five pairs in eight attempts and reached the reward screen through final
+Continue. Desktop and phone screenshots were reviewed, including final
+Continue retaining focus after disabled Study was tapped. Evidence:
+`build/memory-feedback/production-report.json` and `production-results/`.
+This delivery record is a documentation-only follow-up; the frozen export
+was not rebuilt or redeployed for it.
