@@ -75,3 +75,32 @@ real taps; they wait for rendering between Tab presses instead of using
 stale geometry. The Medals focus path includes the existing Words tab.
 Original storage, locked-preview, three-stage play and gesture assertions
 remain in place. The final run verifies those behaviors on both browsers.
+
+## Release
+
+Implementation commit `913c619` was fast-forwarded to `main` and pushed to
+`origin/main`. `npm run deploy -- -SkipBuild` completed successfully against
+the configured Azure Static Web App using the exact tested export.
+
+`node build/verify-ui-release.cjs` fetched both production and local preview
+over HTTP and confirmed their HTML and pack SHA256 values match those above:
+
+- Production: https://gentle-forest-02ff42900.3.azurestaticapps.net/
+- Local preview: http://127.0.0.1:4173/
+
+The previous local preview is preserved at
+`D:/uwork/tesisgame/build/web-before-pip-8106acc9`.
+All older preview backups and the unrelated untracked directory were retained.
+
+The focused production browser run passed **8/8** in 69.1 seconds, with
+four cases per browser and no failures, retries, flaky cases or skips.
+It used `PLAYGROUND_BASE_URL` set to the production URL and
+`npx playwright test --config build/pip-playground/playwright.live.cjs`.
+Report: `build/pip-playground/live-report.json`; screenshots:
+`build/pip-playground/live-results/`.
+
+Production checks cover petting/poking, held and thrown balls, walking/running,
+leaving during a gesture, catalog drag ownership, reduced-motion keyboard
+shortcuts, unchanged saves and selection, visible canvas output, and no
+page errors. Inspected live screenshots confirm the affection reaction,
+held/caught ball, movement and separate resting positions at 320px.
