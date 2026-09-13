@@ -26,9 +26,9 @@ async function rewards(page) {
 }
 
 async function leavePreview(page) {
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
+  const b = await metrics(page);
+  await tap(page, b.width / 2, b.height - 24);
+  await rendered(page);
 }
 
 async function rewardSection(page, section) {
@@ -144,22 +144,14 @@ for (const size of SIZES) {
     await rewards(page);
     const b = await metrics(page);
     if (b.height > 550) {
-      await tap(page, b.width / 2, 502);
+      await tap(page, b.width / 2, 752);
       await shot('13-room-toy-action');
-      await tap(page, b.width * 0.75, 588);
+      await tap(page, b.width * 0.75, 834);
       await shot('14-room-category');
     } else {
-      await tap(page, b.width - 84, 322);
-      await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
-      await shot('13-room-toy-action');
+      await shot('13-room-top');
       await scrollToEnd(page, browserName, size);
       await shot('14-room-controls-scrolled');
-      await tap(page, b.width / 6, b.height - 90);
-      await expect(page.locator('#game-status')).toContainText('Complete Rocket');
-      await shot('14b-room-locked-from-bottom');
-      await leavePreview(page);
-      await expect(page.locator('#game-status')).toContainText('ball');
-      await shot('14c-room-locked-return');
     }
     await rewardSection(page, 'medals');
     await shot('15-medals-section');
@@ -177,7 +169,7 @@ for (const size of SIZES) {
   });
 }
 
-test('locked room previews provide a usable return and Medals has its own entry', async ({ page }, testInfo) => {
+test('locked room previews provide a usable return and Medals has its own entry', async ({ page, browserName }, testInfo) => {
   test.setTimeout(90000);
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page);
@@ -185,16 +177,19 @@ test('locked room previews provide a usable return and Medals has its own entry'
   const shot = name => capture(page, testInfo, name, evidence);
   await rewards(page);
   const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'));
-  await tap(page, 360, 660);
+  await tap(page, 240, 752);
+  await expect.soft(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!', { timeout: 1500 });
+  await scrollToEnd(page, browserName, { width: 320, height: 568 });
+  await tap(page, 357, 294);
   await shot('locked-toy-before-return');
   await expect.soft(page.locator('#game-status')).toContainText('Complete Blossom', { timeout: 1500 });
   await leavePreview(page);
   await shot('locked-toy-after-return');
   await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
-  await tap(page, 240, 502);
-  await expect.soft(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!', { timeout: 1500 });
-  await tap(page, 360, 588);
-  await tap(page, 360, 660);
+  await scrollToEnd(page, browserName, { width: 320, height: 568 });
+  await tap(page, 357, 200);
+  await scrollToEnd(page, browserName, { width: 320, height: 568 });
+  await tap(page, 357, 294);
   await shot('locked-backdrop-before-return');
   await expect.soft(page.locator('#game-status')).toContainText('Complete Bee', { timeout: 1500 });
   await leavePreview(page);

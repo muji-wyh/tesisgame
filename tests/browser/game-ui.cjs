@@ -1,4 +1,5 @@
 const { expect } = require('@playwright/test');
+const THEME_COLORS = ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff', '#e4f6fb', '#eeeafa'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -15,14 +16,19 @@ async function tap(page, x, y) {
 
 async function chooseMode(page, index) {
   const bounds = await metrics(page);
-  const width = (bounds.width - 56) / 5;
-  await tap(page, 12 + index * (width + 8) + width / 2, 208);
+  const width = (bounds.width - 40) / 5;
+  await tap(page, 8 + index * (width + 6) + width / 2, 122);
 }
 
 async function chooseTheme(page, index) {
   const bounds = await metrics(page);
-  const width = (bounds.width - 44) / 6;
-  await tap(page, 12 + index * (width + 4) + width / 2, 128);
+  await tap(page, bounds.width - 44, 44);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  const width = (bounds.width - 52) / 6;
+  await tap(page, 16 + index * (width + 4) + width / 2, 130);
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
+  await page.keyboard.press('Escape');
+  await rendered(page);
 }
 
 async function rendered(page) {
@@ -60,8 +66,8 @@ async function openGame(page, { reducedMotion = 'reduce' } = {}) {
 }
 
 function boardPoint(bounds, index) {
-  const top = bounds.height >= 520 ? 319 : 288;
-  const areaWidth = bounds.width - 24, areaHeight = bounds.height - top - 12;
+  const top = 198;
+  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
   const side = areaWidth >= 420 && areaHeight < 360;
   const tight = side && areaWidth < 500, gap = tight ? 8 : 12, spacing = tight ? 0 : 10;
   const gridWidth = side ? areaWidth - Math.max(160, Math.min(areaWidth * 0.28, 240)) - gap : areaWidth;
@@ -70,15 +76,15 @@ function boardPoint(bounds, index) {
   const rows = 8 / columns;
   const width = (gridWidth - (columns - 1) * spacing) / columns;
   const cellHeight = (height - (rows - 1) * 10) / rows;
-  return { x: 12 + (index % columns) * (width + spacing) + width / 2,
+  return { x: 8 + (index % columns) * (width + spacing) + width / 2,
     y: top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2 };
 }
 
 function lessonPoint(bounds, key, { match = false, multiple = true } = {}) {
   if (match || !multiple) return feedbackPoint(bounds, key, match ? 'match' : 'choice');
-  const top = 252 + (bounds.height >= 520 ? 28 : 0) + (match ? 36 : 0);
-  const width = bounds.width - 24;
-  const height = bounds.height - top - 12;
+  const top = 164;
+  const width = bounds.width - 16;
+  const height = bounds.height - top - 8;
   const buttonHeight = multiple ? 152 : 72;
   let x, y, buttonWidth;
   if (width >= 420 && width >= height * 1.3) {
@@ -94,13 +100,13 @@ function lessonPoint(bounds, key, { match = false, multiple = true } = {}) {
     x = (width - contentWidth) / 2;
     y = 32 + Math.max(0, (height - 32 - cardHeight - 8 - buttonHeight) / 2) + cardHeight + 8;
   }
-  return { x: 12 + x + (['next', 'action'].includes(key) ? buttonWidth + 8 : 0) + buttonWidth / 2,
+  return { x: 8 + x + (['next', 'action'].includes(key) ? buttonWidth + 8 : 0) + buttonWidth / 2,
     y: top + y + (['previous', 'next'].includes(key) ? 80 : 0) + 36 };
 }
 
 function memoryLayout(bounds) {
-  const top = 252 + (bounds.height >= 520 ? 28 : 0);
-  const areaWidth = bounds.width - 24, areaHeight = bounds.height - top - 12;
+  const top = 164;
+  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
   const reviewHeight = areaWidth >= 392 ? 104 : 176;
   const side = areaWidth >= 368 && areaHeight < reviewHeight + 208;
   const width = side ? areaWidth - 168 : areaWidth;
@@ -112,24 +118,24 @@ function memoryLayout(bounds) {
     studyWidth: width < 300 && wide ? 108 : wide ? 132 : Math.max(132, Math.min(width * 0.4, 176)),
     cardWidth: (width - (columns - 1) * 8) / columns,
     cardHeight: (height - header - 4 - (rows - 1) * 8) / rows,
-    review: side ? { x: 12 + width + 8, y: top, width: 160 } : { x: 12, y: top + height + 8, width }
+    review: side ? { x: 8 + width + 8, y: top, width: 160 } : { x: 8, y: top + height + 8, width }
   };
 }
 
 function memoryPoint(bounds, index) {
   const g = memoryLayout(bounds);
-  return { x: 12 + index % g.columns * (g.cardWidth + 8) + g.cardWidth / 2,
+  return { x: 8 + index % g.columns * (g.cardWidth + 8) + g.cardWidth / 2,
     y: g.top + g.header + 4 + Math.floor(index / g.columns) * (g.cardHeight + 8) + g.cardHeight / 2 };
 }
 
 function studyPoint(bounds) {
   const g = memoryLayout(bounds);
-  return { x: 12 + g.width - g.studyWidth / 2, y: g.top + g.header / 2 };
+  return { x: 8 + g.width - g.studyWidth / 2, y: g.top + g.header / 2 };
 }
 
 function choiceLayout(bounds) {
-  const top = 252 + (bounds.height >= 520 ? 28 : 0);
-  const areaWidth = bounds.width - 24, areaHeight = bounds.height - top - 12;
+  const top = 164;
+  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
   const side = areaWidth >= 392 && areaHeight < 312;
   const reviewWidth = Math.max(160, Math.min(areaWidth * 0.36, 240));
   const reviewHeight = areaWidth >= 392 ? 104 : 176;
@@ -138,31 +144,31 @@ function choiceLayout(bounds) {
   const answerHeight = Math.max(72, Math.min((height - 36) * 0.38, 140));
   return { top, width, height, answerHeight,
     stageHeight: Math.max(72, height - 36 - answerHeight),
-    review: side ? { x: 12 + width + 8, y: top + (areaHeight - 176) / 2, width: reviewWidth }
-      : { x: 12, y: top + height + 8, width }
+    review: side ? { x: 8 + width + 8, y: top + (areaHeight - 176) / 2, width: reviewWidth }
+      : { x: 8, y: top + height + 8, width }
   };
 }
 
 function choicePoint(bounds, index) {
   const g = choiceLayout(bounds), width = (g.width - 10) / 2;
-  return { x: 12 + index * (width + 10) + width / 2, y: g.top + g.height - g.answerHeight / 2 };
+  return { x: 8 + index * (width + 10) + width / 2, y: g.top + g.height - g.answerHeight / 2 };
 }
 
 function choiceTargetPoint(bounds) {
   const g = choiceLayout(bounds);
-  return { x: 12 + g.width / 2, y: g.top + 28 + g.stageHeight / 2 };
+  return { x: 8 + g.width / 2, y: g.top + 28 + g.stageHeight / 2 };
 }
 
 function feedbackPoint(bounds, key, mode = 'choice') {
   let review;
   if (mode === 'memory') review = memoryLayout(bounds).review;
   else if (mode === 'match') {
-    const top = bounds.height >= 520 ? 319 : 288;
-    const width = bounds.width - 24, height = bounds.height - top - 12;
+    const top = 198;
+    const width = bounds.width - 16, height = bounds.height - top - 8;
     const side = width >= 420 && height < 360;
     const reviewWidth = Math.max(160, Math.min(width * 0.28, 240));
-    review = side ? { x: bounds.width - 12 - reviewWidth, y: top, width: reviewWidth }
-      : { x: 12, y: bounds.height - 12 - (width >= 392 ? 104 : 176), width };
+    review = side ? { x: bounds.width - 8 - reviewWidth, y: top, width: reviewWidth }
+      : { x: 8, y: bounds.height - 8 - (width >= 392 ? 104 : 176), width };
   } else {
     review = choiceLayout(bounds).review;
   }
@@ -177,8 +183,8 @@ function feedbackPoint(bounds, key, mode = 'choice') {
 
 function resultPoint(bounds, key) {
   const landscape = bounds.width >= bounds.height || bounds.height < 560;
-  const textWidth = landscape ? Math.max(232, (bounds.width - 40) * 0.39) : bounds.width - 24;
-  const left = bounds.width - 12 - textWidth;
+  const textWidth = landscape ? Math.max(232, (bounds.width - 32) * 0.39) : bounds.width - 16;
+  const left = bounds.width - 8 - textWidth;
   if (key === 'chest') return { x: 48, y: 208 };
   if (key === 'review') return { x: left + 36, y: bounds.height - (bounds.height < 524 ? 132 : 138) };
   return { x: left + textWidth * (key === 'newAdventure' ? 0.75 : 0.25), y: bounds.height - 48 };

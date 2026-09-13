@@ -28,14 +28,14 @@ async function section(page, id) {
 
 async function pictureTap(page) {
   const b = await metrics(page);
-  const top = 252 + (b.height >= 520 ? 28 : 0);
-  const width = b.width - 24, height = b.height - top - 12;
+  const top = 164;
+  const width = b.width - 16, height = b.height - top - 8;
   const wide = width >= 420 && width >= height * 1.3;
   let x, y;
   if (wide) {
     const content = Math.min(width, 900);
     const cardWidth = Math.floor((content - 12) * 0.48);
-    x = 12 + (width - content) / 2 + cardWidth / 2;
+    x = 8 + (width - content) / 2 + cardWidth / 2;
     y = top + 32 + (height - 32) / 2;
   } else {
     const cardHeight = Math.max(88, Math.min(height - 192, 420));
@@ -98,7 +98,7 @@ test('word album displays a saved sticker with Pip and keeps topic navigation us
   await page.screenshot({ path: testInfo.outputPath('words-320.png'), scale: 'css' });
   const canHear = await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext));
   // Starting at the Words tab, traverse the visible native controls to Display.
-  for (let i = 0; i < (canHear ? 6 : 5); i++) await page.keyboard.press('Tab');
+  for (let i = 0; i < (canHear ? 12 : 11); i++) await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await expect.poll(async () => (await record(page)).displayed).toBe('cat');
   await section(page, 'room');
@@ -109,8 +109,8 @@ test('word album displays a saved sticker with Pip and keeps topic navigation us
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   expect((await record(page)).displayed).toBe('cat');
   await openWords(page);
-  // Header->Medals->Back->Previous->Next. Enter turns the actual topic.
-  for (let i = 0; i < 4; i++) await page.keyboard.press('Tab');
+  // Header->Medals->Back->world choices->Previous->Next. Enter turns the actual topic.
+  for (let i = 0; i < 10; i++) await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Picnic time. Topic 2 of 12.');
   await page.screenshot({ path: testInfo.outputPath('picnic-word-stickers.png'), scale: 'css' });

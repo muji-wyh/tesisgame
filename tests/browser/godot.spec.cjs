@@ -346,7 +346,8 @@ test('season colors preserve selection and discard obsolete pending music and pr
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 2);
+      // Opening My rewards cancels the stale selected-word prompt; only the final world's music may start.
+      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
       expect(new Set(held.requests.map(request => request.url())).size).toBe(12);
       expect(held.requests).toHaveLength(12);
     }
@@ -635,14 +636,14 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await winWithTouch(page);
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
-  const stageHeight = bounds.height / scale - 364;
+  const stageHeight = bounds.height / scale - 278;
   await holdChestUntilOpen(page, {
     x: bounds.x + bounds.width * 0.5,
-    y: bounds.y + (172 + stageHeight * 0.5) * scale
+    y: bounds.y + (86 + stageHeight * 0.5) * scale
   });
   await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
   await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
-  await greet(104, 388, true);
+  await greet(104, 466, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   await openMedals(page, true);
   await page.keyboard.press('Enter');
@@ -664,6 +665,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
 
 test('Pip speaks with actual prompt playback, not pending downloads or music', async ({ page }) => {
   const errors = watchErrors(page);
+  await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
@@ -675,8 +677,8 @@ test('Pip speaks with actual prompt playback, not pending downloads or music', a
   const resting = await page.screenshot({ clip: beak, scale: 'css' });
   const held = await holdOptionalAudio(page);
   try {
-    const color = await page.locator('meta[name="theme-color"]').getAttribute('content');
-    await chooseSeason(page, ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff', '#e4f6fb', '#eeeafa'].indexOf(color));
+    await page.evaluate(() => window.gamepadFixture.connect());
+    for (let index = 0; index < 6; index++) await pressGamepad(page, 5);
     const waiting = await page.screenshot({ clip: beak, scale: 'css' });
     await page.waitForTimeout(300);
     expect((await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(true);
@@ -745,7 +747,7 @@ test('one hint per round is shared by touch and Xbox', async ({ page }, testInfo
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
   // Pip's static speech indicator can change when the hint recording ends.
-  const boardClip = { x: metrics.x, y: metrics.y + 288 * scale, width: metrics.width, height: metrics.height - 288 * scale };
+  const boardClip = { x: metrics.x, y: metrics.y + 198 * scale, width: metrics.width, height: metrics.height - 198 * scale };
   const still = await page.screenshot({ clip: boardClip, scale: 'css' });
   await page.waitForTimeout(250);
   expect((await page.screenshot({ clip: boardClip, scale: 'css' })).equals(still), 'Reduced-motion hints stay visually still.').toBe(true);
@@ -762,7 +764,6 @@ test('keyboard hints focus a suggested card ready for Enter', async ({ page }) =
   await page.goto('/');
   await ready(page);
   await chooseSeason(page, 0);
-  await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
@@ -904,7 +905,7 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   await rendered(page);
   const rewardBounds = await logicalMetrics(page);
   const rewardPoint = { x: rewardBounds.x + 88 * rewardBounds.scale,
-    y: rewardBounds.y + 188 * rewardBounds.scale };
+    y: rewardBounds.y + 266 * rewardBounds.scale };
   await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
   await expect(page.locator('#game-status')).toContainText('reward preview opened');
   await expect(page.locator('#game-status')).toContainText(earned);
@@ -998,11 +999,11 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     const width = metrics.width / scale;
     const height = metrics.height / scale;
     const landscape = metrics.width >= metrics.height;
-    const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
-    const stageHeight = landscape ? height - 184 : Math.max(72, height - 364);
+    const stageWidth = landscape ? (width - 32) * 0.61 : width - 16;
+    const stageHeight = landscape ? height - 94 : Math.max(72, height - 278);
     const chestPoint = {
-      x: metrics.x + (12 + stageWidth * 0.5) * scale,
-      y: metrics.y + (172 + stageHeight * 0.6) * scale
+      x: metrics.x + (8 + stageWidth * 0.5) * scale,
+      y: metrics.y + (86 + stageHeight * 0.6) * scale
     };
     await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
@@ -1044,11 +1045,11 @@ test('dragging the reward chest cancels hold-open without losing pointer control
   const width = metrics.width / scale;
   const height = metrics.height / scale;
   const landscape = metrics.width >= metrics.height;
-  const stageWidth = landscape ? (width - 40) * 0.61 : width - 24;
-  const stageHeight = landscape ? height - 184 : Math.max(72, height - 364);
+  const stageWidth = landscape ? (width - 32) * 0.61 : width - 16;
+  const stageHeight = landscape ? height - 94 : Math.max(72, height - 278);
   const chestPoint = {
-    x: metrics.x + (12 + stageWidth * 0.5) * scale,
-    y: metrics.y + (172 + stageHeight * 0.6) * scale
+    x: metrics.x + (8 + stageWidth * 0.5) * scale,
+    y: metrics.y + (86 + stageHeight * 0.6) * scale
   };
   await page.mouse.move(chestPoint.x, chestPoint.y);
   await page.mouse.down();
@@ -1117,8 +1118,8 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await ready(page);
   const metrics = await loseWithTouch(page);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const stageHeight = metrics.height / scale - 364;
-  const bear = { x: metrics.x + metrics.width / 2, y: metrics.y + (172 + stageHeight * 0.5) * scale };
+  const stageHeight = metrics.height / scale - 278;
+  const bear = { x: metrics.x + metrics.width / 2, y: metrics.y + (86 + stageHeight * 0.5) * scale };
   await page.touchscreen.tap(bear.x, bear.y);
   await expect(page.locator('#game-status')).toContainText('Good try! High five!');
   await page.evaluate(() => window.gamepadFixture.connect());

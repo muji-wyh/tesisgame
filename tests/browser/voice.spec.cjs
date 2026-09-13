@@ -62,8 +62,8 @@ async function openGame(page, api = 'standard') {
   await expect(page.locator('#game-status')).toContainText('Learn five words.');
   const bounds = await metrics(page);
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const modeWidth = (bounds.width / scale - 56) / 5;
-  await page.touchscreen.tap(bounds.x + (20 + modeWidth * 1.5) * scale, bounds.y + 208 * scale);
+  const modeWidth = (bounds.width / scale - 40) / 5;
+  await page.touchscreen.tap(bounds.x + (14 + modeWidth * 1.5) * scale, bounds.y + 122 * scale);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);

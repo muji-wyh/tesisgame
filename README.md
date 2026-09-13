@@ -245,7 +245,7 @@ and show **2 in a row!** or **3 in a row!** beside the match badges, without a c
 Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
 keeps the encouragement and hint stars without moving particles.
 
-Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world is remembered across lessons and reloads. Six theme buttons change the appearance and music without resetting progress. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
+Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world is remembered across lessons and reloads. Open **My rewards** to choose a world without resetting progress; keeping those six choices off the play screen leaves more room for the current activity. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **140 short, concrete English words** for parent-guided play
 with young children. Matching rounds use five different words on eight cards; choice modes

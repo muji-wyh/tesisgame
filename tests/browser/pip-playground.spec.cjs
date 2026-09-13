@@ -8,7 +8,7 @@ const PET = ['Pip leans into your hand. Lovely!', 'Soft strokes. Pip feels loved
 function playground(bounds) {
   // The room has no saved gift goal or displayed sticker in these fresh profiles.
   // Verified against the exported 390px room; all input uses its public canvas scale.
-  const x = 16, y = 172, width = bounds.width - 32, height = 304;
+  const x = 16, y = 252, width = bounds.width - 32, height = 304;
   const foot = { x: x + 88, y: y + height - 32 };
   return {
     x, y, width, height, foot,
@@ -140,18 +140,6 @@ async function visibleChange(page, bounds, rect, before, testInfo, name, minimum
   });
 }
 
-async function visibleBall(page, bounds, rect, original) {
-  const clip = screenClip(bounds, rect);
-  // Fractional canvas scaling can shift opposite-side crops by one CSS pixel.
-  // Compare the entire original patch inside a padded capture; never trim its edges.
-  const padded = { x: clip.x - 1, y: clip.y - 1, width: clip.width + 2, height: clip.height + 2 };
-  await expect.poll(async () => changedFraction(page, original,
-    await page.screenshot({ clip: padded, scale: 'css' }), 1), {
-    timeout: 4000, intervals: [100],
-    message: 'The complete ball remains visible in its own resting place, away from Pip.'
-  }).toBeLessThan(0.08);
-}
-
 async function screenshot(page, testInfo, name) {
   await rendered(page);
   const full = await page.screenshot({ path: testInfo.outputPath(`${name}.png`), scale: 'css' });
@@ -225,12 +213,14 @@ test('a dragged ball visibly travels to Pip and empty ground makes Pip walk and 
     // These patches contain the destination floor, not captions or button focus rings.
     const arrival = { x: destination.x - 24, y: destination.y - 76, width: 48, height: 58 };
     const empty = await patch(page, bounds, arrival);
+    const leftToy = { ...toyRect, x: room.x + 66 - 28 };
+    const emptyLeft = name === 'run' ? await patch(page, bounds, leftToy) : null;
     await tap(page, destination.x, destination.y);
     await expect(page.locator('#game-status')).toHaveText(message);
     await visibleChange(page, bounds, arrival, empty, testInfo, `pip-${name}-arrival`, 0.18);
     if (name === 'run') {
       // Arrival must finish and move the resting ball out from under Pip before capture.
-      await visibleBall(page, bounds, { ...toyRect, x: room.x + 66 - 28 }, ball);
+      await visibleChange(page, bounds, leftToy, emptyLeft, testInfo, 'ball-moves-away-from-pip', 0.08);
     }
     await screenshot(page, testInfo, `pip-${name}`);
     expect((await patch(page, bounds, room.anchor)).equals(anchor), 'Ground input cannot scroll the room').toBe(true);
@@ -303,12 +293,14 @@ test('narrow reduced-motion play keeps Pet Poke Toss and Call reachable by keybo
   const original = await patch(page, bounds, room.body);
   const arrival = { x: room.x + room.width - 98, y: room.y + room.height - 112, width: 60, height: 68 };
   const beforeArrival = await patch(page, bounds, arrival);
+  const leftToy = { ...toyRect, x: room.x + 66 - 28 };
+  const emptyLeft = await patch(page, bounds, leftToy);
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText('Come here, Pip! Tap the floor to choose where Pip goes.');
   await visibleChange(page, bounds, room.body, original, testInfo, 'pip-reduced-motion-departs', 0.15);
   await visibleChange(page, bounds, arrival, beforeArrival, testInfo, 'pip-reduced-motion-arrives', 0.18);
-  await visibleBall(page, bounds, { ...toyRect, x: room.x + 66 - 28 }, ball);
+  await visibleChange(page, bounds, leftToy, emptyLeft, testInfo, 'ball-moves-away-from-pip-reduced', 0.08);
   await screenshot(page, testInfo, 'pip-narrow-keyboard-call');
   const settled = await patch(page, bounds, room);
   await page.waitForTimeout(350);

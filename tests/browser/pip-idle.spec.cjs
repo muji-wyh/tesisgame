@@ -12,7 +12,7 @@ async function clips(page) {
   return {
     // Below the eyes: the existing blink alone must not satisfy this test.
     body: rect(14, 42, 52, 22),
-    lesson: rect(0, 280, bounds.width, bounds.height - 280)
+    lesson: rect(0, 164, bounds.width, bounds.height - 164)
   };
 }
 

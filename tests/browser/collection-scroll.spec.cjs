@@ -37,7 +37,7 @@ async function contentShift(page, before, after) {
     // Compare actual rendered headings and reward rows, excluding the fixed header.
     for (let shift = 0; shift <= 180; shift++) {
       let error = 0;
-      for (let y = 100; y < original.length - 190; y++) {
+      for (let y = 170; y < original.length - 190; y++) {
         error += Math.abs(original[y + shift] - moved[y]);
       }
       if (error < best.error) best = { pixels: shift, error };

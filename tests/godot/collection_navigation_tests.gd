@@ -86,10 +86,13 @@ func _run() -> void:
 		app.medal_progress.counts["spring-1"] = 3
 		app._unlocked_gift = load("res://scripts/playroom_state.gd").item("toy-spring")
 		app._try_unlocked_gift()
-		await process_frame
-		await process_frame
+		for frame in range(5):
+			await process_frame
 		check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip opens the gift in the room after visiting Medals")
-		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()), "Try gift keeps the toy action visible after the completed-goal layout settles")
+		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()),
+			"Try gift keeps the toy action visible after the completed-goal layout settles: viewport=%s action=%s scroll=%d/%d" % [
+				app._collection_scroll.get_global_rect(), app._room.action_button.get_global_rect(),
+				app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

@@ -876,10 +876,28 @@ func _test_scene() -> void:
 	check(app.find_child("Motion", true, false) == null,
 		"The FX motion button is removed while OS/browser reduced-motion remains supported")
 	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 6,
-		"All six themes are directly available")
+		"All six themes remain available")
 	if has_property(app, "theme_buttons"):
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.tooltip_text.is_empty()),
 			"Season buttons do not show redundant hover/tap tooltip popups")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return app._theme_row.is_ancestor_of(button))
+			and not app._theme_row.is_visible_in_tree(),
+			"Season choices live in My rewards instead of competing with the playfield")
+	var theme_style_id: int = app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id()
+	var lesson_style_id: int = app._lesson.hear_button.get_theme_stylebox("normal").get_instance_id()
+	app._refresh()
+	check(app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id() == theme_style_id
+		and app._lesson.hear_button.get_theme_stylebox("normal").get_instance_id() == lesson_style_id,
+		"Ordinary gameplay refreshes reuse unchanged theme styles")
+	app.choose_mode("learn")
+	check(app._success.total_count == 0 and not app._gift_label.visible,
+		"Learn removes score and gift chrome that compete with the word")
+	app.choose_mode("memory")
+	check(app._success.total_count == 0,
+		"Memory uses its flower progress without a duplicate header score")
+	app.choose_mode("match")
+	check(app._success.total_count == 3,
+		"Match retains its three-pair progress")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
@@ -908,6 +926,12 @@ func _test_scene() -> void:
 			"Opening rewards announces the collection modal state")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
+		check(app._theme_row.is_visible_in_tree(), "My rewards exposes the six world choices")
+		var original_theme: String = app.model.theme_id
+		app.choose_theme("ocean")
+		check(app._room._palette.id == "ocean",
+			"Choosing a world inside My rewards refreshes the visible room immediately")
+		app.choose_theme(original_theme)
 		if app.has_method("_hide_collection"):
 			app._hide_collection()
 		else:
@@ -1062,8 +1086,8 @@ func _test_scene() -> void:
 				"Reduced motion cancels automatic gliding without disabling finger scrolling")
 			app.set_reduced_motion(false)
 			check(app.collection_button.focus_mode == Control.FOCUS_NONE
-				and app.theme_buttons.all(func(button: Button) -> bool: return button.focus_mode == Control.FOCUS_NONE),
-				"Restyling after a motion change preserves the collection's keyboard focus boundary")
+				and app.theme_buttons.all(func(button: Button) -> bool: return button.focus_mode == Control.FOCUS_ALL),
+				"Restyling after a motion change keeps modal theme controls active and underlying controls blocked")
 			collection_scroll.scroll_vertical = max_scroll
 			await process_frame
 			await process_frame
@@ -1114,7 +1138,7 @@ func _test_scene() -> void:
 			"Grid adapts to the visible instructions and available playfield: " + str(dimensions_value))
 		var controls: Array = app.cards.values()
 		if has_property(app, "theme_buttons"):
-			controls.append_array(app.theme_buttons)
+			controls.append_array(app.theme_buttons.filter(func(button: Button) -> bool: return button.is_visible_in_tree()))
 		if has_property(app, "collection_button"):
 			controls.append(app.collection_button)
 		if has_property(app, "hint_button"):

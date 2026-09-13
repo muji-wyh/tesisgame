@@ -21,13 +21,13 @@ async function roomControl(page, name) {
   // view before the real touch, including on the original short phone viewport.
   await tap(page, 60, 52);
   await rendered(page);
-  const order = { action: 10, rooms: 12, spring: 14 };
+  const order = { action: 16, rooms: 18, spring: 20 };
   for (let index = 0; index < order[name]; index++) {
     await page.keyboard.press('Tab');
     // Let focus scrolling update canvas geometry before advancing again.
     await rendered(page);
   }
-  const center = { action: 672, rooms: 756, spring: 874 }[name];
+  const center = { action: 752, rooms: 834, spring: 954 }[name];
   return { x: name === 'action' ? bounds.width / 2 : bounds.width * 0.75,
     y: Math.min(center, bounds.height - (name === 'spring' ? 90 : 52)) };
 }

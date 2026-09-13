@@ -50,9 +50,9 @@ async function tabs(page, count, backwards = false) {
 }
 
 async function previewLockedApple(page, hasGoal = false) {
-  // Back starts focused. Pip, toy, four Pip actions, the toy action, categories
-  // and gift cards follow; focus scrolls the apple into view before activation.
-  await tabs(page, hasGoal ? 14 : 13);
+  // Back starts focused. Six world choices now precede the room controls.
+  // Focus still scrolls the apple into view before activation.
+  await tabs(page, hasGoal ? 20 : 19);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Autumn apple. Complete');
   await expect(page.locator('#game-status')).toContainText('1 more piece');
@@ -127,8 +127,8 @@ async function claimChest(page) {
 async function tryGift(page) {
   const bounds = await metrics(page);
   const landscape = bounds.width >= bounds.height || bounds.height < 560;
-  const textWidth = landscape ? Math.max(232, (bounds.width - 40) * 0.39) : bounds.width - 24;
-  const left = bounds.width - 12 - textWidth;
+  const textWidth = landscape ? Math.max(232, (bounds.width - 32) * 0.39) : bounds.width - 16;
+  const left = bounds.width - 8 - textWidth;
   // The earned gift adds a third action after Repeat lesson and New adventure.
   await tap(page, left + textWidth * 5 / 6, bounds.height - 48);
   await expect(page.locator('#game-status')).toContainText('Offer the apple');
@@ -140,9 +140,9 @@ async function playAppleStages(page, testInfo, prefix, firstTouch = false) {
   for (let index = 0; index < APPLE_STAGES.length; index++) {
     if (index === 0 && firstTouch) {
       const bounds = await metrics(page);
-      // The action sits beneath the expanded room at 754 logical pixels; on a shorter
+      // The action sits beneath the expanded room at 832 logical pixels; on a shorter
       // view, focusing it scrolls its bottom edge above the 16px page margin.
-      await tap(page, bounds.width / 2, Math.min(754, bounds.height - 52));
+      await tap(page, bounds.width / 2, Math.min(832, bounds.height - 52));
     } else {
       await page.keyboard.press('Enter');
     }
@@ -165,7 +165,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   await page.screenshot({ path: testInfo.outputPath('gift-locked-apple.png'), scale: 'css' });
   // Hit the visible Help action in the canvas: keyboard activation alone can
   // pass even when a focused button has incorrectly scrolled off screen.
-  await tap(page, (await metrics(page)).width / 2, 208);
+  await tap(page, (await metrics(page)).width / 2, 286);
   await expect(page.locator('#game-status')).toContainText('Picnic time. Learn five words. Help Pip get Autumn apple.');
   const goalSave = await record(page);
   expect(goalSave).toContain('goal_item_id="toy-autumn"');
@@ -196,7 +196,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   }
   await openRoom(page);
   // A saved completed goal is the first room action after Back.
-  await tabs(page, 1);
+  await tabs(page, 7);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText(APPLE_STAGES[0]);
@@ -217,7 +217,7 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   const bounds = await metrics(page);
   // Crop only the message above Help, excluding Pip and the focus outline.
   // An error announced only off screen would leave this visible area unchanged.
-  const goalClip = { x: bounds.x + 16 * bounds.scale, y: bounds.y + 136 * bounds.scale,
+  const goalClip = { x: bounds.x + 16 * bounds.scale, y: bounds.y + 214 * bounds.scale,
     width: (bounds.width - 32) * bounds.scale, height: 34 * bounds.scale };
   const beforeMessage = await page.screenshot({ path: testInfo.outputPath('gift-goal-message-before.png'), clip: goalClip, scale: 'css' });
   await page.evaluate(() => {
@@ -243,8 +243,8 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   await expect(page.locator('#game-status')).toHaveText(`Learn: ${previousWords[4]}. Look, read, and press Hear.`);
   await page.evaluate(() => window.restoreGiftGoalSave());
   await openRoom(page);
-  // The locked preview remains selected, so its Help action follows Back.
-  await tabs(page, 1);
+  // The locked preview remains selected; world choices precede its Help action.
+  await tabs(page, 7);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Picnic time. Learn five words. Help Pip get Autumn apple.');
   expect(await record(page)).toContain('goal_item_id="toy-autumn"');
@@ -264,7 +264,7 @@ test('a completed saved goal stays keyboard reachable at 320px and toy replay gr
   const stickers = stickerIds(await record(page));
   expect(await record(page)).toContain('toy="toy-ball"');
   await openRoom(page);
-  await tabs(page, 1);
+  await tabs(page, 7);
   await page.screenshot({ path: testInfo.outputPath('gift-completed-goal-320.png'), scale: 'css' });
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Offer the apple');
@@ -275,7 +275,7 @@ test('a completed saved goal stays keyboard reachable at 320px and toy replay gr
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Learn five words.');
   await openRoom(page);
-  await tabs(page, 1);
+  await tabs(page, 7);
   await page.keyboard.press('Enter');
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('gift-completed-goal-320-return.png'), scale: 'css' });
