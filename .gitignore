@@ -11,3 +11,5 @@ build/*
 assets/imported-unity/
 *.unitypackage
 __pycache__/
+
+.env
