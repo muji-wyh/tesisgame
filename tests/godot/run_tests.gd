@@ -288,48 +288,66 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 
 func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
-	check(model.has_method("request_hint") and has_property(model, "hint_ids") and has_property(model, "streak"),
-		"The model supports helpful hints and consecutive matches")
-	if not model.has_method("request_hint") or not has_property(model, "streak"):
+	check(model.has_method("request_hint") and has_property(model, "hint_ids")
+		and has_property(model, "hints_remaining") and has_property(model, "streak"),
+		"The model supports three helpful hints and consecutive matches")
+	if not model.has_method("request_hint") or not has_property(model, "hints_remaining") or not has_property(model, "streak"):
 		return
 	model.reset(words, 6)
 	var deck: Array = model.cards.duplicate(true)
 	var pairs: Array = pairs_for(model)
+	check(model.hints_remaining == 3, "A new round starts with three hints")
 	model.select(pairs[1][1])
 	check(model.request_hint() and model.hint_ids.has(pairs[1][0]) and model.hint_ids.has(pairs[1][1]),
 		"A hint prefers the selected card's real partner")
-	check(model.selected_id == pairs[1][1] and model.successes == 0 and model.mistakes == 0,
+	check(model.hints_remaining == 2 and model.selected_id == pairs[1][1] and model.successes == 0 and model.mistakes == 0,
 		"Hints preserve a useful selection without scoring or penalizing")
-	check(not model.request_hint(), "Each round allows only one successful hint request")
+	check(not model.request_hint() and model.hints_remaining == 2,
+		"An active hint cannot spend another allowance")
 	check(model.cards == deck and model.streak == 0, "Repeated hints never shuffle or score the board")
 	model.set_theme("winter")
-	check(model.hint_ids.size() == 2, "Changing seasons preserves the hint")
-	check(not model.request_hint(), "Changing seasons cannot refill the hint")
+	check(model.hint_ids.size() == 2 and model.hints_remaining == 2,
+		"Changing seasons preserves the active hint and remaining allowance")
 	model.select(pairs[1][0])
 	check(model.hint_ids.is_empty() and model.streak == 1, "Matching clears the hint and starts a streak")
-	check(not model.request_hint(), "Hints cannot interrupt feedback")
+	check(not model.request_hint() and model.hints_remaining == 2,
+		"Hints cannot interrupt feedback or spend an allowance")
 	model.resolve_feedback()
 	check(model.select(pairs[1][0]) == "ignored" and model.streak == 1, "Matched cards cannot inflate a streak")
-	check(not model.request_hint(), "Completing a hinted match does not grant another hint")
-	model.select(pairs[0][0])
-	model.select(pairs[0][1])
-	check(model.streak == 2, "Consecutive matches build a streak without a timer")
-	model.resolve_feedback()
-	model.select(pairs[2][0])
-	model.select(pairs[2][1])
-	model.resolve_feedback()
+	check(model.request_hint() and model.hints_remaining == 1,
+		"Completing a hinted match leaves the second hint available")
+	var second_hint: Array = model.hint_ids.duplicate()
+	check(not model.request_hint() and model.hints_remaining == 1,
+		"Repeated input cannot spend the active second hint")
+	model.select(second_hint[0])
+	model.select(second_hint[0])
+	check(model.hint_ids.is_empty() and model.hints_remaining == 1,
+		"Cancelling clears the highlight without refunding the second hint")
+	check(model.request_hint() and model.hints_remaining == 0, "The third hint is available")
+	var third_hint: Array = model.hint_ids.duplicate()
+	check(not model.request_hint() and model.hints_remaining == 0, "A fourth hint is rejected")
+	model.select(third_hint[0])
+	model.select(third_hint[0])
+	for pair in pairs:
+		if model.matched_ids.has(pair[0]):
+			continue
+		model.select(pair[0])
+		model.select(pair[1])
+		model.resolve_feedback()
 	check(model.streak == 3 and model.phase == "won" and not model.request_hint(),
 		"A three-match streak wins normally and closes hint input")
 	model.reset(words, 6)
-	check(model.streak == 0 and model.hint_ids.is_empty(), "Replay clears streaks and hints")
+	check(model.streak == 0 and model.hint_ids.is_empty() and model.hints_remaining == 3,
+		"Replay clears streaks and restores all three hints")
 	model.select(pairs[0][0])
 	model.select(pairs[0][1])
-	check(not model.request_hint(), "A rejected request during feedback does not spend the new hint")
+	check(not model.request_hint() and model.hints_remaining == 3,
+		"A rejected request during feedback does not spend a hint")
 	model.resolve_feedback()
 	for card in model.cards:
 		if not pairs.any(func(pair: Array) -> bool: return pair.has(card.id)):
 			model.select(card.id)
-			check(model.request_hint() and not model.hint_ids.has(card.id),
+			check(model.request_hint() and model.hints_remaining == 2 and not model.hint_ids.has(card.id),
 				"A distractor hint finds a complete unmatched pair instead")
 			check(model.selected_id == "" and model.phase == "waiting",
 				"A distractor selection is cleared so following the hint cannot cause a mistake")
@@ -341,9 +359,13 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	check(model.hint_ids.size() == 2, "The hint stays visible while choosing its first card")
 	model.select(hint[0])
 	check(model.hint_ids.is_empty(), "Cancelling selection clears its hint")
-	check(not model.request_hint(), "Cancelling a hint's highlight does not refund the hint")
-	check(not model.reset(words.slice(0, 4)) and not model.request_hint(),
-		"A failed reset cannot refill the current round's hint")
+	check(model.hints_remaining == 2, "Cancelling a hint's highlight does not refund it")
+	check(not model.reset(words.slice(0, 4)) and model.hints_remaining == 2,
+		"A failed reset cannot refill the current round's hints")
+	check(model.request_hint() and model.hints_remaining == 1,
+		"The remaining allowance stays usable after a rejected reset")
+	model.select(model.hint_ids[0])
+	model.select(model.hint_ids[0])
 	var remaining: Array = pairs.slice(1)
 	model.select(remaining[0][0])
 	model.select(remaining[1][1])
@@ -354,9 +376,11 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		model.select(remaining[0][0])
 		model.select(remaining[1][1])
 		model.resolve_feedback()
-	check(model.phase == "lost" and not model.request_hint(), "Hints cannot revive a lost round")
+	check(model.phase == "lost" and model.hints_remaining == 1 and not model.request_hint(),
+		"Hints cannot revive a lost round or spend the remaining allowance")
 	model.reset(words, 6)
-	check(model.request_hint(), "Starting a new round restores exactly one hint")
+	check(model.hints_remaining == 3 and model.request_hint() and model.hints_remaining == 2,
+		"Starting a new round restores all three hints")
 
 
 func _test_results(model_script: GDScript, words: Array) -> void:
@@ -715,6 +739,8 @@ func _test_play_improvements(app) -> void:
 		"The board has a reachable hint and visible match encouragement")
 	if has_property(app, "hint_button") and app.model.has_method("request_hint"):
 		app.new_round(6)
+		check(app.hint_button.text == "Hint 3" and not app.hint_button.disabled,
+			"A new Match round shows all three hints")
 		app.hint_button.grab_focus()
 		app.hint_button.pressed.emit()
 		var hinted: Array = app.model.hint_ids.duplicate()
@@ -722,14 +748,15 @@ func _test_play_improvements(app) -> void:
 			"The native Hint button announces a real pair")
 		check(not app._controller_mode and app.cards[hinted[0]].has_focus(),
 			"A keyboard hint focuses its first playable card without requiring a controller")
-		check(app.hint_button.disabled and app.hint_button.text == "Used",
-			"A spent hint is disabled and clearly labeled")
+		check(app.model.hints_remaining == 2 and app.hint_button.disabled and app.hint_button.text == "Hint 2",
+			"An active first hint shows two remaining and blocks duplicate spending")
 		check(app.hint_button.focus_mode == Control.FOCUS_NONE,
-			"Keyboard navigation skips an already used hint")
+			"Keyboard navigation skips a hint while its stars are active")
 		app.cards[hinted[0]].pressed.emit()
 		app.hint_button.pressed.emit()
-		check(app.cards[hinted[0]].has_focus() and app.model.selected_id == hinted[0],
-			"Repeated hint signals cannot move focus or cancel the selected card")
+		check(app.cards[hinted[0]].has_focus() and app.model.selected_id == hinted[0]
+			and app.model.hints_remaining == 2,
+			"Repeated hint signals cannot move focus, cancel the card, or spend another hint")
 		for id in hinted:
 			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
 				"Hinted cards have a star marker, not just a different color")
@@ -739,15 +766,37 @@ func _test_play_improvements(app) -> void:
 		var previous_hint: Array = hinted.duplicate()
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
-		check(app.model.hint_ids == previous_hint and app._status_announcement.begins_with("My rewards"),
+		check(app.model.hint_ids == previous_hint and app.model.hints_remaining == 2
+			and app._status_announcement.begins_with("My rewards"),
 			"Xbox X cannot trigger hints behind a modal")
 		app._hide_collection()
 		app.on_page_hidden()
 		app.choose_theme("winter")
-		check(app.hint_button.disabled and not app.model.request_hint(),
-			"Collection, page hiding and season changes do not refill the hint")
+		check(app.hint_button.disabled and app.model.hints_remaining == 2 and not app.model.request_hint(),
+			"Page hiding and season changes preserve the active hint and allowance")
 		app.cards[hinted[0]].pressed.emit()
-		for pair in pairs_for(app.model).slice(0, 2):
+		app.cards[hinted[0]].pressed.emit()
+		check(app.model.hint_ids.is_empty() and not app.hint_button.disabled and app.hint_button.text == "Hint 2",
+			"Clearing the stars makes the second hint available")
+		app.hint_button.pressed.emit()
+		var second_hint: Array = app.model.hint_ids.duplicate()
+		check(app.model.hints_remaining == 1 and app.hint_button.text == "Hint 1",
+			"The second successful request leaves one hint")
+		app.cards[second_hint[0]].pressed.emit()
+		app.cards[second_hint[0]].pressed.emit()
+		app._controller_mode = true
+		joy_tap(JOY_BUTTON_X)
+		await process_frame
+		var third_hint: Array = app.model.hint_ids.duplicate()
+		check(app.model.hints_remaining == 0 and app.hint_button.text == "Used" and app.hint_button.disabled,
+			"Xbox X consumes the shared third hint and disables the button")
+		app.cards[third_hint[0]].pressed.emit()
+		app.cards[third_hint[1]].pressed.emit()
+		check(app.hint_button.disabled, "Hints are disabled during match feedback")
+		app.feedback_timer.timeout.emit()
+		for pair in pairs_for(app.model):
+			if app.model.matched_ids.has(pair[0]):
+				continue
 			app.cards[pair[0]].pressed.emit()
 			app.cards[pair[1]].pressed.emit()
 			check(app.hint_button.disabled, "Hints are disabled during match feedback")
@@ -755,24 +804,19 @@ func _test_play_improvements(app) -> void:
 			check(sparkle != null and sparkle.particle_count <= 6,
 				"Each correct card gets a small, bounded star celebration")
 			app.feedback_timer.timeout.emit()
-		check(app._match_caption.text == "2 in a row!", "Consecutive matches get visible encouragement")
+		check(app._match_caption.text == "3 in a row!", "Consecutive matches get visible encouragement")
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
-		check(app.model.hint_ids.is_empty() and app.hint_button.disabled,
-			"Xbox X shares the hint already spent through the button")
+		check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 0 and app.hint_button.disabled,
+			"Xbox X cannot exceed the three shared hints")
 		app.set_reduced_motion(true)
-		var last_pair: Array = pairs_for(app.model)[2]
-		app.cards[last_pair[0]].pressed.emit()
-		app.cards[last_pair[1]].pressed.emit()
-		check(app.cards[last_pair[0]].get_node_or_null("MatchSparkle") == null,
-			"Reduced motion keeps the match encouragement without particles")
-		check(app._match_caption.text == "3 in a row!", "Reduced-motion players still see the streak")
-		app.feedback_timer.timeout.emit()
+		check(app._match_caption.text == "3 in a row!", "Reduced-motion players still see the completed streak")
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
-		check(not app.hint_button.disabled and app.hint_button.text == "Hint",
-			"A new round restores the hint control")
+		check(not app.hint_button.disabled and app.hint_button.text == "Hint 3"
+			and app.model.hints_remaining == 3,
+			"A new round restores all three hints")
 		var first: Array = pairs_for(app.model)[0]
 		app.cards[first[0]].pressed.emit()
 		app.hint_button.pressed.emit()

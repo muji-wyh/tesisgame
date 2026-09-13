@@ -53,8 +53,8 @@ func _run() -> void:
 	var words: Array[Dictionary] = _pairs(app)
 	check(words.size() == 3, "The scene starts with three matchable words")
 	app._request_hint()
-	check(app.model.hint_used and app.model.hint_ids.size() == 2,
-		"The adventure keeps the existing one-hint path")
+	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2,
+		"The adventure spends the first of three hints")
 	app._controller_mode = true
 	for word in words:
 		_match(app, word)
@@ -100,7 +100,7 @@ func _run() -> void:
 	check(app._adventure_label.text == adventure and app._adventure_label.is_visible_in_tree(),
 		"The same seed restores the same visible adventure")
 	check(app._found_words.get_child_count() == 0 and not app._found_words.is_visible_in_tree()
-		and not app.model.hint_used, "Reset removes old word actions and renews the hint")
+		and app.model.hints_remaining == 3, "Reset removes old word actions and renews all three hints")
 	app.medal_progress.counts["spring-1"] = 3
 	app.choose_theme("spring")
 	check(app._goal_label.text.contains("0/3") and app._goal_medal.pieces == 0
@@ -242,7 +242,7 @@ func _check_shelf(app) -> void:
 
 func _state(app) -> Dictionary:
 	return {"successes": app.model.successes, "mistakes": app.model.mistakes,
-		"phase": app.model.phase, "streak": app.model.streak, "hint": app.model.hint_used,
+		"phase": app.model.phase, "streak": app.model.streak, "hints": app.model.hints_remaining,
 		"chest": app.model.chest_state, "reward": app.model.reward_id,
 		"matched": app.model.matched_ids.duplicate(), "pending": app._pending_fragment.duplicate(true),
 		"medals": app.medal_progress.counts.duplicate(), "collected": app.collected_rewards.duplicate()}

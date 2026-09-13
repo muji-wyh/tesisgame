@@ -83,9 +83,10 @@ func _test_adventures(model, adventures: Array, words: Array) -> void:
 	check(model.cards == deck and model.adventure_id == adventure_id and model.theme_id == theme_id, "Seeded adventures ignore prior boards and reproduce the same round")
 	model.set_theme("winter")
 	check(model.adventure_id == adventure_id and model.cards == deck, "Changing the visual season keeps the word adventure")
-	check(model.request_hint(), "An adventure permits its one hint")
+	check(model.request_hint() and model.hints_remaining == 2, "An adventure permits the first of three hints")
 	check(not model.reset(words.slice(0, 4)), "Too few words cannot restart an adventure")
-	check(model.cards == deck and model.adventure_id == adventure_id and model.hint_used, "A rejected reset preserves the current adventure and spent hint")
+	check(model.cards == deck and model.adventure_id == adventure_id and model.hints_remaining == 2,
+		"A rejected reset preserves the current adventure and remaining hints")
 
 
 func _test_replays(model, words: Array) -> void:
@@ -266,7 +267,7 @@ func _test_required_repeats(model, words: Array) -> void:
 
 func _round_snapshot(model) -> Dictionary:
 	var snapshot: Dictionary = {}
-	for property in ["cards", "lesson_words", "missed_word_ids", "matched_ids", "feedback_ids", "hint_ids", "hint_used",
+	for property in ["cards", "lesson_words", "missed_word_ids", "matched_ids", "feedback_ids", "hint_ids", "hints_remaining",
 		"selected_id", "successes", "mistakes", "streak", "phase", "theme_id", "adventure_id", "adventure_name",
 		"chest_state", "reward_theme", "reward_id", "last_correct"]:
 		snapshot[property] = model.get(property)

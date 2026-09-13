@@ -234,9 +234,10 @@ provenance record for selection, hashes and release evidence.
 
 Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
 and star badges, and its word is spoken. Hints follow your selected card when it has a
-partner; otherwise they point to a complete pair. Each round has **one hint**, with no
-score penalty. The button becomes **Used** afterward; only a new round restores it.
-Cancelling selection, completing a match, or changing seasons does not refill it. You
+partner; otherwise they point to a complete pair. Each round has **three hints**, with no
+score penalty. The button shows how many remain and becomes **Used** afterward; only a new
+round restores all three.
+Cancelling selection, completing a match, or changing seasons does not refill them. You
 still tap both cards to make the match. Hints move focus to the next suggested card,
 so keyboard and controller players can continue with **Enter** or **A**.
 
@@ -345,7 +346,7 @@ An embedding site must also allow `microphone` in its iframe permissions.
 | D-pad / left stick | Move focus between available controls. |
 | A | Activate the focused control; hold to open a chest or tap to place its piece. |
 | B | Cancel the selected card, exit voice play, close a reward preview, or go back. |
-| X | Use the round's one hint and focus a card in the suggested pair. |
+| X | Use one of the round's three hints and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |
 | Y / Menu | Open or close My rewards, not restart the game. |
 

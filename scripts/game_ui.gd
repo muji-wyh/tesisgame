@@ -408,9 +408,9 @@ func _build_controls() -> void:
 	header.add_child(_voice_button)
 	hint_button = Button.new()
 	hint_button.name = "Hint"
-	hint_button.text = "Hint"
-	hint_button.tooltip_text = "One hint per round (Xbox X)"
-	_set_accessibility_name(hint_button, "Hint: one per round")
+	hint_button.text = "Hint 3"
+	hint_button.tooltip_text = "Three hints per round (Xbox X)"
+	_set_accessibility_name(hint_button, "Hint: three per round")
 	hint_button.pressed.connect(_request_hint)
 	header.add_child(hint_button)
 	_explore_button = Button.new()
@@ -1809,11 +1809,18 @@ func _refresh() -> void:
 	if not playing and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = playing and _mode_id == "match"
+	var hint_active: bool = not model.hint_ids.is_empty()
 	hint_button.visible = playing and _mode_id == "match"
-	hint_button.disabled = model.hint_used or not model.phase in ["waiting", "matching"]
+	hint_button.disabled = model.hints_remaining <= 0 or hint_active or not model.phase in ["waiting", "matching"]
 	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
-	hint_button.text = "Used" if model.hint_used else "Hint"
-	hint_button.tooltip_text = "Hint used. Start a new round for another hint." if model.hint_used else "One hint per round (Xbox X)"
+	hint_button.text = "Used" if model.hints_remaining <= 0 else "Hint %d" % model.hints_remaining
+	hint_button.tooltip_text = (
+		"No hints left. Start a new round for three more."
+		if model.hints_remaining <= 0
+		else "Hint active. Follow the stars before using another."
+		if hint_active
+		else "%d hints left (Xbox X)" % model.hints_remaining
+	)
 	_set_accessibility_name(hint_button, hint_button.tooltip_text)
 	_match_caption.text = ""
 	if _mode_id == "match":

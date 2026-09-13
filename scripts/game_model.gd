@@ -4,6 +4,7 @@ signal changed
 
 const Data = preload("res://scripts/game_data.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space"]
+const MAX_HINTS: int = 3
 
 var cards: Array[Dictionary] = []
 var lesson_words: Array = []
@@ -11,7 +12,7 @@ var missed_word_ids: Array[String] = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
-var hint_used: bool = false
+var hints_remaining: int = MAX_HINTS
 var selected_id: String = ""
 var successes: int = 0
 var mistakes: int = 0
@@ -117,7 +118,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
-	hint_used = false
+	hints_remaining = MAX_HINTS
 	selected_id = ""
 	successes = 0
 	mistakes = 0
@@ -200,7 +201,7 @@ func _spoken_pair(word_id: String) -> Array[String]:
 
 
 func request_hint() -> bool:
-	if hint_used or not phase in ["waiting", "matching"]:
+	if hints_remaining <= 0 or not hint_ids.is_empty() or not phase in ["waiting", "matching"]:
 		return false
 	# ponytail: eight-card boards; scan for partners instead of maintaining a pair index.
 	var candidates: Array[Dictionary] = cards.duplicate()
@@ -213,7 +214,7 @@ func request_hint() -> bool:
 		if card_by_id(partner_id).is_empty():
 			continue
 		hint_ids.assign([card.id, partner_id])
-		hint_used = true
+		hints_remaining -= 1
 		if not selected_id.is_empty() and not hint_ids.has(selected_id):
 			selected_id = ""
 			phase = "waiting"

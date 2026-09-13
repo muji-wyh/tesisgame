@@ -70,7 +70,7 @@ func _run() -> void:
 		check(app.duck.visible and not app.duck.speaking, "The board duck is idle without spoken audio")
 		var cards: Array = app.model.cards.duplicate(true)
 		app.duck.pressed.emit()
-		check(app.model.cards == cards and app.model.successes == 0 and not app.model.hint_used,
+		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
 			"Playing with Pip never changes game progress")
 		check(app.audio.voice.playing, "Pip's greeting uses the bundled duck pronunciation")
 		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The game-header greeting still performs its original first trick")

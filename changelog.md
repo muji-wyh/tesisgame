@@ -2,6 +2,12 @@
 
 Notable changes to Word Buddies, grouped by date with the newest changes first.
 
+## 2026-09-14
+
+- Increased Match to three hints per round. The Hint button shows the remaining
+  count, all input methods share the allowance, and active or invalid requests
+  spend nothing.
+
 ## 2026-09-10
 
 - Added Learn with close picture/word associations and pronunciation, sharing the

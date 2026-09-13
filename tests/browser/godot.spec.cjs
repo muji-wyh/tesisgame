@@ -692,7 +692,7 @@ test('Pip speaks with actual prompt playback, not pending downloads or music', a
   }
 });
 
-test('one hint per round is shared by touch and Xbox', async ({ page }, testInfo) => {
+test('three hints per round are shared by touch and Xbox', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.goto('/');
@@ -702,15 +702,17 @@ test('one hint per round is shared by touch and Xbox', async ({ page }, testInfo
   const hintPoint = { x: metrics.x + metrics.width - 128 * scale, y: metrics.y + 48 * scale };
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const used = new Set();
   const firstHint = await page.locator('#game-status').textContent();
-  const word = firstHint.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
-  const pair = discovered.get(word);
-  expect(pair.Word).toBeDefined();
-  expect(pair.Picture).toBeDefined();
+  const firstWord = firstHint.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  const firstPair = discovered.get(firstWord);
+  used.add(firstWord);
+  expect(firstPair.Word).toBeDefined();
+  expect(firstPair.Picture).toBeDefined();
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
   await page.screenshot({ path: testInfo.outputPath('hint-stars.png'), scale: 'css' });
-  for (const index of [pair.Word, pair.Picture]) {
+  for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
   }
@@ -718,27 +720,36 @@ test('one hint per round is shared by touch and Xbox', async ({ page }, testInfo
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 2);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await chooseSeason(page, 1);
-  await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened');
-  await pressGamepad(page, 1);
-  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const secondHint = await page.locator('#game-status').textContent();
+  const secondWord = secondHint.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  const secondPair = discovered.get(secondWord);
+  used.add(secondWord);
   await pressGamepad(page, 2);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await page.screenshot({ path: testInfo.outputPath('hint-used.png'), scale: 'css' });
-  const remaining = [...discovered.values()].filter(value => value !== pair && value.Word !== undefined && value.Picture !== undefined);
-  for (const [index, cards] of remaining.entries()) {
-    for (const card of [cards.Word, cards.Picture]) {
-      const point = cardPoint(metrics, card);
-      await page.touchscreen.tap(point.x, point.y);
-    }
-    if (index === 0) await expect(page.locator('#game-status')).toHaveText('Great match! 2 in a row!');
-    await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === 0 ? 'Find 3 word–picture pairs.' : 'You did it!');
+  await expect(page.locator('#game-status')).toHaveText(secondHint);
+  for (const index of [secondPair.Word, secondPair.Picture]) {
+    const point = cardPoint(metrics, index);
+    await page.touchscreen.tap(point.x, point.y);
   }
+  await continueMatch(page);
+  await chooseSeason(page, 1);
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const thirdHint = await page.locator('#game-status').textContent();
+  const thirdWord = thirdHint.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  const thirdPair = discovered.get(thirdWord);
+  used.add(thirdWord);
+  expect(used.size).toBe(3);
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(thirdHint);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.screenshot({ path: testInfo.outputPath('hint-used.png'), scale: 'css' });
+  for (const index of [thirdPair.Word, thirdPair.Picture]) {
+    const point = cardPoint(metrics, index);
+    await page.touchscreen.tap(point.x, point.y);
+  }
+  await continueMatch(page);
+  await expect(page.locator('#game-status')).toContainText('You did it!');
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toContainText('You did it!');
   await holdControllerChest(page);
