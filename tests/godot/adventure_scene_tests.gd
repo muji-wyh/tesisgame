@@ -189,7 +189,7 @@ func _pairs(app) -> Array[Dictionary]:
 func _match(app, word: Dictionary) -> void:
 	app.cards[word.id + ":word"].pressed.emit()
 	app.cards[word.id + ":image"].pressed.emit()
-	app._match_feedback.action_button.pressed.emit()
+	app._continue_match()
 
 
 func _lose(app) -> void:

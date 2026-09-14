@@ -75,7 +75,7 @@ func _win(app) -> void:
 			if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
 				app.cards[card.id].pressed.emit()
 				app.cards[card.word.id + ":image"].pressed.emit()
-				app._match_feedback.action_button.pressed.emit()
+				app._continue_match()
 	check(app.model.phase == "won" and app.model.chest_state == "closed", "A completed %s round has an unopened reward" % app._mode_id)
 
 func _total(app) -> int:

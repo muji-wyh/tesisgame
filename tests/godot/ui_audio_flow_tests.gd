@@ -34,13 +34,14 @@ func _run() -> void:
 	var other: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "image" and card.word.id != first.word.id)[0]
 	app._select_card(first.id)
 	app._select_card(other.id)
-	app._match_feedback.hear_button.pressed.emit()
-	check(app.audio.voice.playing, "Match correction can pronounce its first association")
-	app._match_feedback.next_button.pressed.emit()
-	check(not app.audio.voice.playing, "Changing a correction association stops the old word")
-	app._match_feedback.hear_button.pressed.emit()
-	app._match_feedback.action_button.pressed.emit()
-	check(not app.audio.voice.playing, "Continue stops correction speech when returning to the board")
+	app._match_feedback.word_buttons[0].pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + first.word.audio),
+		"Match correction directly pronounces its first visible association")
+	app._match_feedback.word_buttons[1].pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + other.word.audio),
+		"The second visible association replaces the previous pronunciation without paging")
+	app._controller_back()
+	check(not app.audio.voice.playing, "Back stops correction speech when returning to the board")
 	for mode in ["sky", "listen"]:
 		app.choose_mode(mode)
 		if mode == "listen":

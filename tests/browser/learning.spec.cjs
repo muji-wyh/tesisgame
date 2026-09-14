@@ -98,7 +98,7 @@ async function expectSelfPaced(page, testInfo, name) {
   // Exceeds the previous automatic 0.7 s feedback interval.
   await page.waitForTimeout(1200);
   const after = await feedbackImage(page);
-  expect(after.equals(before), 'The word and picture remain visible until the learner presses Continue.').toBe(true);
+  expect(after.equals(before), 'The word and picture remain visible until the next player action.').toBe(true);
   return before;
 }
 
@@ -126,7 +126,7 @@ test('Learn shows five associations and the lesson survives Match, Sky and Liste
   expect(errors).toEqual([]);
 });
 
-test('Match keeps wrong and correct word–picture feedback open until Continue', async ({ page }, testInfo) => {
+test('Match shows both corrections directly and continues with the next card', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseMode(page, 1);
   const cards = await scanBoard(page);
@@ -136,17 +136,38 @@ test('Match keeps wrong and correct word–picture feedback open until Continue'
   await expect(page.locator('#game-status')).toContainText('Not quite.');
   await expectSelfPaced(page, testInfo, 'match-wrong-associations');
   await expectFeedbackHear(page, pairs[0][0], { multiple: true, match: true });
-  await lessonTap(page, 'next', { multiple: true, match: true });
-  await expectFeedbackHear(page, pairs[1][0], { multiple: true, match: true });
-  await page.screenshot({ path: testInfo.outputPath('match-second-association.png'), scale: 'css' });
-  await lessonTap(page, 'action', { multiple: true, match: true });
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  const canHear = await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext));
+  const previous = await page.locator('#game-status').textContent();
+  await lessonTap(page, 'hearSecond', { multiple: true, match: true });
+  await expect(page.locator('#game-status')).toHaveText(
+    canHear ? `${pairs[1][0]}. Look at the picture and say the word.` : previous);
+  await page.screenshot({ path: testInfo.outputPath('match-both-associations.png'), scale: 'css' });
   await tap(page, ...await cardPoint(page, pairs[0][1].Word));
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0]}`);
   await tap(page, ...await cardPoint(page, pairs[0][1].Picture));
   await expect(page.locator('#game-status')).toContainText('Great match!');
   await expectSelfPaced(page, testInfo, 'match-correct-association');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  // Reproduce the pictured state: two found pairs, then a word with an unpaired picture.
+  await tap(page, ...await cardPoint(page, pairs[1][1].Word));
+  await tap(page, ...await cardPoint(page, pairs[1][1].Picture));
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  const [orphan, orphanCard] = [...cards.entries()].find(([, card]) => card.Word === undefined);
+  await tap(page, ...await cardPoint(page, pairs[2][1].Word));
+  await tap(page, ...await cardPoint(page, orphanCard.Picture));
+  await expect(page.locator('#game-status')).toContainText('Not quite.');
+  await expectFeedbackHear(page, pairs[2][0], { multiple: true, match: true });
+  const beforeOrphanHear = await page.locator('#game-status').textContent();
+  await lessonTap(page, 'hearSecond', { multiple: true, match: true });
+  await expect(page.locator('#game-status')).toHaveText(
+    canHear ? `${orphan}. Look at the picture and say the word.` : beforeOrphanHear);
+  await page.mouse.move(0, 0);
+  await page.screenshot({ path: testInfo.outputPath('match-unpaired-picture.png'), scale: 'css' });
+  await tap(page, ...await cardPoint(page, pairs[2][1].Word));
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[2][0]}`);
   expect(errors).toEqual([]);
 });
 

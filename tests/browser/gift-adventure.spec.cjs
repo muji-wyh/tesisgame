@@ -105,8 +105,7 @@ async function winMatch(page) {
       await tap(page, point.x, point.y);
     }
     await expect(page.locator('#game-status')).toContainText('Great match!');
-    const point = lessonPoint(bounds, 'action', { match: true, multiple: false });
-    await tap(page, point.x, point.y);
+    await page.keyboard.press('Escape');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
 }

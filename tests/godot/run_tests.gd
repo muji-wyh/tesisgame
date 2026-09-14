@@ -1304,7 +1304,7 @@ func _test_scene() -> void:
 	for pair in pairs_for(app.model).slice(1):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
-		check(app.feedback_timer.is_stopped() and app._match_feedback.visible, "Button interaction waits for visible feedback confirmation")
+		check(app.feedback_timer.is_stopped() and app._match_feedback.visible, "Match feedback stays visible until the next player action")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
 	await process_frame

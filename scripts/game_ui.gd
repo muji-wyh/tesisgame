@@ -13,6 +13,7 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChoiceGame = preload("res://scripts/choice_game.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const WordLesson = preload("res://scripts/word_lesson.gd")
+const MatchFeedback = preload("res://scripts/match_feedback.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const WordStickerBook = preload("res://scripts/word_sticker_book.gd")
@@ -193,7 +194,7 @@ var _mode_buttons: Array[Button] = []
 var _choice: ChoiceGame
 var _memory: MemoryGarden
 var _lesson: WordLesson
-var _match_feedback: WordLesson
+var _match_feedback: MatchFeedback
 var _match_playfield: Control
 var _content_margins: MarginContainer
 var _feedback_key: String = ""
@@ -492,14 +493,12 @@ func _build_controls() -> void:
 			_announce_status("Learn: " + str(word.text) + ". Look, read, and press Hear."))
 	_lesson.finished.connect(func() -> void: choose_mode("match"))
 	column.add_child(_lesson)
-	_match_feedback = WordLesson.new()
+	_match_feedback = MatchFeedback.new()
 	_match_feedback.name = "MatchCorrection"
-	_match_feedback.set_compact(true)
+	_match_playfield.add_child(_match_feedback)
 	_match_feedback.hear_requested.connect(_lesson_hear)
-	_match_feedback.word_changed.connect(_association_changed)
 	_match_feedback.finished.connect(_continue_match)
 	_match_feedback.hide()
-	_match_playfield.add_child(_match_feedback)
 	_choice = ChoiceGame.new()
 	_choice.name = "ChoiceGame"
 	_choice.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1809,19 +1808,7 @@ func _refresh() -> void:
 	if not playing and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = playing and _mode_id == "match"
-	var hint_active: bool = not model.hint_ids.is_empty()
-	hint_button.visible = playing and _mode_id == "match"
-	hint_button.disabled = model.hints_remaining <= 0 or hint_active or not model.phase in ["waiting", "matching"]
-	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
-	hint_button.text = "Used" if model.hints_remaining <= 0 else "Hint %d" % model.hints_remaining
-	hint_button.tooltip_text = (
-		"No hints left. Start a new round for three more."
-		if model.hints_remaining <= 0
-		else "Hint active. Follow the stars before using another."
-		if hint_active
-		else "%d hints left (Xbox X)" % model.hints_remaining
-	)
-	_set_accessibility_name(hint_button, hint_button.tooltip_text)
+	_refresh_hint()
 	_match_caption.text = ""
 	if _mode_id == "match":
 		_match_caption.text = "Nice match!" if model.streak == 1 else "Find 3 pairs"
@@ -2084,10 +2071,12 @@ func _show_match_feedback() -> void:
 			heading = "No picture"
 		elif model.card_by_id(image_card.word.id + ":word").is_empty():
 			heading = "No word"
-	_match_feedback.show_words(associations, heading, "Continue")
+	var action_text: String = "See reward" if model.successes >= 3 else "See result" if model.mistakes >= 3 else ""
+	audio.stop_voice()
+	_match_feedback.show_words(associations, heading, action_text)
 	_match_feedback.set_audio_available(audio.available and not audio.muted and not _voice_mode)
-	if not collection_page.visible:
-		_match_feedback.action_button.grab_focus()
+	if not collection_page.visible and not _voice_mode:
+		_default_focus().grab_focus()
 
 
 func _continue_match() -> void:
@@ -2114,6 +2103,7 @@ func _refresh_controller_focus() -> void:
 func _layout() -> void:
 	if grid == null:
 		return
+	_refresh_hint()
 	_fit_mode_buttons()
 	_adventure_label.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode and _mode_id == "match"
 	_mode_row.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode
@@ -2219,8 +2209,40 @@ func _layout_result() -> void:
 	_medallion.position = Vector2(maxf(4, _stage.size.x - diameter - 12), maxf(4, _stage.size.y - diameter - 12))
 
 
+func _can_request_hint() -> bool:
+	if collection_page.visible or _preview_page.visible:
+		return false
+	if _mode_id != "match" or model.hints_remaining <= 0 or not model.hint_ids.is_empty() or not model.error.is_empty():
+		return false
+	if model.phase == "feedback":
+		return not _voice_mode and model.successes < 3 and model.mistakes < 3
+	return model.phase in ["waiting", "matching"]
+
+
+func _refresh_hint() -> void:
+	hint_button.visible = _mode_id == "match" and model.phase in ["waiting", "matching", "feedback"]
+	hint_button.disabled = not _can_request_hint()
+	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
+	hint_button.text = "Used" if model.hints_remaining <= 0 else "Hint %d" % model.hints_remaining
+	if model.hints_remaining <= 0:
+		hint_button.tooltip_text = "No hints left. Start a new round for three more."
+	elif model.successes >= 3 or model.mistakes >= 3:
+		hint_button.tooltip_text = "Round finished. View your result."
+	elif _voice_mode and model.phase == "feedback":
+		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
+	elif not model.hint_ids.is_empty():
+		hint_button.tooltip_text = "Hint active. Follow the stars before using another."
+	else:
+		hint_button.tooltip_text = "%d %s left (Xbox X)" % [model.hints_remaining, "hint" if model.hints_remaining == 1 else "hints"]
+	_set_accessibility_name(hint_button, hint_button.tooltip_text)
+
+
 func _request_hint() -> void:
-	if _mode_id != "match" or collection_page.visible or _preview_page.visible or not model.request_hint():
+	if not _can_request_hint():
+		return
+	if model.phase == "feedback":
+		_continue_match()
+	if not model.request_hint():
 		return
 	duck.react("happy")
 	if not _voice_mode:
@@ -2292,7 +2314,6 @@ func set_reduced_motion(value: bool) -> void:
 	_choice.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_lesson.set_reduced_motion(value)
-	_match_feedback.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
 	if duck != null:
@@ -2663,6 +2684,8 @@ func _controller_back() -> void:
 		_hide_collection()
 	elif _voice_mode:
 		_stop_voice()
+	elif _mode_id == "match" and model.phase == "feedback":
+		_continue_match()
 	elif _mode_id == "memory":
 		if _memory.memory.studying:
 			_memory.study_button.pressed.emit()
@@ -2786,7 +2809,7 @@ func _default_focus() -> Control:
 	if _mode_id == "learn":
 		var lesson_controls: Array[Control] = _lesson.controls()
 		return lesson_controls[0] if not lesson_controls.is_empty() else collection_button
-	if _mode_id == "match" and model.phase == "feedback":
+	if _mode_id == "match" and model.phase == "feedback" and _match_feedback.action_button.visible:
 		return _match_feedback.action_button
 	if _mode_id in ["sky", "listen"]:
 		var choices: Array[Control] = _choice.controls()
@@ -2800,7 +2823,7 @@ func _default_focus() -> Control:
 		var memory_controls: Array[Control] = _memory.controls()
 		return memory_controls[0] if not memory_controls.is_empty() else collection_button
 	for id in cards:
-		if _valid_focus(cards[id]):
+		if not model.matched_ids.has(id) and _valid_focus(cards[id]):
 			return cards[id]
 	return collection_button
 

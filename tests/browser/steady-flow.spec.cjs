@@ -65,9 +65,8 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
   await expect(page.locator('#game-status')).toContainText('Not quite.');
   await shot(page, testInfo, 'match-wrong');
   expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback must leave the untouched card visible at the same position.').toBe(true);
-  const continuePoint = lessonPoint(b, 'action', { match: true, multiple: true });
-  const continueButton = await patch(page, continuePoint);
-  await click(page, continuePoint);
+  const resultAction = lessonPoint(b, 'action', { match: true });
+  await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word');
   for (const [index, pair] of pairs.entries()) {
     await click(page, pair[0].point);
@@ -77,10 +76,9 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
     if (index === 0) {
       await shot(page, testInfo, 'match-correct');
       expect((await patch(page, untouched.point)).equals(still), 'Correct feedback must keep the rest of the board visible.').toBe(true);
-      expect((await patch(page, continuePoint)).equals(continueButton), 'Continue must not move when the correction changes from two words to one.').toBe(true);
     }
-    // The same Continue location serves one-word and two-word corrections.
-    await click(page, continuePoint);
+    if (index === 2) await click(page, resultAction);
+    else await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
   }
   const chest = resultPoint(b, 'chest');
@@ -250,7 +248,6 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   expect(pairs).toHaveLength(3);
   // Capture only the visible success/retry badges, excluding Pip and caption changes.
   const progress = () => patch(page, { x: 66 + (b.width - 314) / 2, y: 48 }, b.width - 314, 32);
-  const continuePoint = feedbackPoint(b, 'action', 'match');
   await click(page, pairs[0][0].point);
   await click(page, pairs[1][1].point);
   await expect(page.locator('#game-status')).toContainText('Not quite.');
@@ -284,7 +281,7 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   await shot(page, testInfo, 'responsive-match-selected-from-correct');
   await click(page, pairs[0][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await click(page, continuePoint);
+  await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word');
   await click(page, pairs[1][0].point);
   await click(page, pairs[1][1].point);

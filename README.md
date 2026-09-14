@@ -133,8 +133,11 @@ Match keeps the eight-card,
 three-pair puzzle. Sky words brings a picture down to two word choices; Listen offers a
 Hear button and two pictures. Both choice games need five correct answers before three
 mistakes, with no timer or speed penalty. Each winning mode earns one ordinary medal piece.
-Every answer shows its correct picture, word, and Hear button until **Continue**.
-Wrong Match attempts explain the two different words or an unpaired card.
+Match shows correct picture-word associations together, with no feedback pages.
+Tap either association to hear it; select the next card to keep playing, or use
+**Escape** / Xbox **B** to dismiss feedback. Only the final answer offers **See reward**
+or **See result**. Wrong attempts still explain both words or an unpaired card.
+The other answer modes retain their self-paced **Continue** action.
 Voice play retains timed feedback so a spoken sentence can finish its queued matches.
 **Memory** plants a garden by finding five hidden word-picture pairs among ten cards.
 Card backs show their kind and position. Flip a word and its picture; matched pairs stay
@@ -237,6 +240,8 @@ and star badges, and its word is spoken. Hints follow your selected card when it
 partner; otherwise they point to a complete pair. Each round has **three hints**, with no
 score penalty. The button shows how many remain and becomes **Used** afterward; only a new
 round restores all three.
+Hint works directly from a correct or wrong answer's feedback while the round is
+still playable; it dismisses that feedback and highlights the next unmatched pair.
 Cancelling selection, completing a match, or changing seasons does not refill them. You
 still tap both cards to make the match. Hints move focus to the next suggested card,
 so keyboard and controller players can continue with **Enter** or **A**.

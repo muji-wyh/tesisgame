@@ -169,6 +169,10 @@ function feedbackPoint(bounds, key, mode = 'choice') {
     const reviewWidth = Math.max(160, Math.min(width * 0.28, 240));
     review = side ? { x: bounds.width - 8 - reviewWidth, y: top, width: reviewWidth }
       : { x: 8, y: bounds.height - 8 - (width >= 392 ? 104 : 176), width };
+    const wide = review.width >= 392;
+    if (key === 'action') return { x: review.x + review.width / 2, y: review.y + (wide ? 68 : 60) };
+    return { x: review.x + (wide ? review.width * (key === 'hearSecond' ? 0.75 : 0.25) : review.width / 2),
+      y: review.y + (wide ? 68 : key === 'hearSecond' ? 140 : 60) };
   } else {
     review = choiceLayout(bounds).review;
   }

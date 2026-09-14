@@ -497,8 +497,8 @@ async function discoverCards(page) {
 
 async function continueMatch(page, correct = true) {
   await expect(page.locator('#game-status')).toContainText(correct ? 'Great match!' : 'Not quite.');
-  const point = lessonPoint(await logicalMetrics(page), 'action', { match: true, multiple: !correct });
-  await tap(page, point.x, point.y);
+  await page.mouse.move(0, 0);
+  await page.keyboard.press('Escape');
 }
 
 async function resultTap(page, key) {
@@ -769,6 +769,51 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await assertFits(page);
   expect(errors).toEqual([]);
 });
+
+for (const correct of [true, false]) {
+test(`Hint remains available after ${correct ? 'correct' : 'wrong'} feedback`, async ({ page }, testInfo) => {
+  const errors = watchErrors(page);
+  await installGamepad(page);
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await ready(page);
+  const { metrics, discovered } = await discoverCards(page);
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const hintPoint = { x: metrics.x + metrics.width - 128 * scale, y: metrics.y + 48 * scale };
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const word = (await page.locator('#game-status').textContent()).match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  const pair = discovered.get(word);
+  const picture = correct ? pair.Picture : [...discovered].find(([id, card]) => id !== word && card.Picture !== undefined)[1].Picture;
+  for (const index of [pair.Word, picture]) {
+    const point = cardPoint(metrics, index);
+    await page.touchscreen.tap(point.x, point.y);
+  }
+  await expect(page.locator('#game-status')).toContainText(correct ? 'Great match!' : 'Not quite.');
+  await page.mouse.move(0, 0);
+  await page.screenshot({ path: testInfo.outputPath('feedback-hint-2.png'), scale: 'css' });
+  const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')]);
+  if (correct) {
+    await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  } else {
+    await page.evaluate(() => window.gamepadFixture.connect());
+    await pressGamepad(page, 2);
+  }
+  await expect(page.locator('#game-status'), 'Hint must work directly from feedback without Escape or an extra card tap')
+    .toHaveText(/^Hint: match the [a-z]+ cards\.$/);
+  const hinted = await page.locator('#game-status').textContent();
+  if (correct) expect(hinted).not.toBe(`Hint: match the ${word} cards.`);
+  await page.touchscreen.tap(hintPoint.x, hintPoint.y);
+  await expect(page.locator('#game-status')).toHaveText(hinted);
+  expect(await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')])).toEqual(saved);
+  await page.screenshot({ path: testInfo.outputPath('next-hint-1.png'), scale: 'css' });
+  await page.keyboard.press('Enter');
+  const nextWord = hinted.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
+  await expect(page.locator('#selection-status')).toHaveText(new RegExp(`^(Word|Picture): ${nextWord}$`));
+  expect(errors).toEqual([]);
+});
+}
 
 test('keyboard hints focus a suggested card ready for Enter', async ({ page }) => {
   const errors = watchErrors(page);
