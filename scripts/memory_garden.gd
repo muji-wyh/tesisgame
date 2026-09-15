@@ -4,13 +4,13 @@ signal card_revealed(word: Dictionary, kind: String, index: int)
 signal answer_chosen(words: Array, correct: bool)
 signal progress_changed(successes: int, attempts: int)
 signal round_finished(won: bool, found_words: Array)
-signal hear_requested(word: Dictionary)
 signal prompt_ready
 
 const Style = preload("res://scripts/ui_style.gd")
 const Memory = preload("res://scripts/memory_game_model.gd")
 const WordCard = preload("res://scripts/word_card.gd")
-const Lesson = preload("res://scripts/word_lesson.gd")
+const IconButton = preload("res://scripts/icon_button.gd")
+const FEEDBACK_SECONDS: float = 0.7
 
 
 class CardBack:
@@ -52,40 +52,18 @@ class CardBack:
 		draw_colored_polygon(PackedVector2Array([seed + Vector2(0, -3), seed + Vector2(1, -9), seed + Vector2(7, -10), seed + Vector2(6, -5)]), accent)
 
 
-class FlowerProgress:
-	extends Control
-
-	var count: int = 0
-	var accent: Color = Style.GOOD
-
-	func _draw() -> void:
-		for index in range(5):
-			var center := Vector2(9 + index * 22, 8)
-			var planted: bool = index < count
-			var color: Color = accent if planted else accent.lightened(0.65)
-			draw_line(center + Vector2(0, 2), center + Vector2(0, 12), color, 2, true)
-			if planted:
-				draw_line(center + Vector2(0, 9), center + Vector2(5, 6), color, 2, true)
-			for petal in range(5):
-				var point: Vector2 = center + Vector2.UP.rotated(float(petal) * TAU / 5) * 4
-				draw_circle(point, 2.8, color, planted, -1.0 if planted else 1.0, true)
-			draw_circle(center, 2.4, Color("#ffd24d") if planted else Color.WHITE)
-
-
 var memory = Memory.new()
 var card_buttons: Array[Button] = []
-var study_button: Button
-var feedback_view
+var study_button: IconButton
 var status_label: Label
-var audio_available: bool = true
 var reduced_motion: bool = false
 
 var _palette: Dictionary = {"accent": Style.GOOD}
 var _paused: bool = false
 var _board: Control
-var _flowers: FlowerProgress
-var _flower_count: Label
-var _review_hint: Label
+var _feedback_timer: Timer
+var _peek_touch: int = -1
+var _mouse_peek: bool = false
 
 
 func _ready() -> void:
@@ -95,7 +73,7 @@ func _ready() -> void:
 func _build() -> void:
 	if _board != null:
 		return
-	custom_minimum_size = Vector2(216, 200)
+	custom_minimum_size = Vector2(216, 144)
 	_board = Control.new()
 	_board.name = "GardenCards"
 	_board.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -103,33 +81,26 @@ func _build() -> void:
 	status_label = Style.label("", 16)
 	status_label.name = "MemoryStatus"
 	status_label.clip_text = true
+	status_label.hide()
 	add_child(status_label)
-	_flowers = FlowerProgress.new()
-	_flowers.name = "FlowerProgress"
-	_flowers.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_flowers)
-	_flower_count = Style.label("0 / 5", 13)
-	_flower_count.name = "FlowerCount"
-	add_child(_flower_count)
-	study_button = Button.new()
+	study_button = IconButton.new()
 	study_button.name = "StudyGarden"
-	study_button.text = "Study"
-	study_button.pressed.connect(_toggle_study)
+	study_button.symbol = IconButton.Symbol.EYE
+	study_button.tooltip_text = "Hold to reveal all cards. Release to hide them."
+	_name_control(study_button, study_button.tooltip_text)
+	study_button.button_down.connect(begin_peek)
+	study_button.button_up.connect(end_peek)
+	study_button.gui_input.connect(_study_input)
+	study_button.focus_exited.connect(end_peek)
+	study_button.mouse_exited.connect(_study_mouse_exited)
+	study_button.tree_entered.connect(_layout)
 	add_child(study_button)
-	feedback_view = Lesson.new()
-	feedback_view.name = "MemoryFeedback"
-	add_child(feedback_view)
-	feedback_view.set_compact(true)
-	feedback_view.finished.connect(continue_feedback)
-	feedback_view.hear_requested.connect(_hear_feedback)
-	feedback_view.word_changed.connect(_feedback_word_changed)
-	feedback_view.hide()
-	_review_hint = Style.label("Find a pair, then look and listen.", 16)
-	_review_hint.name = "MemoryReviewHint"
-	_review_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_review_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_review_hint.add_theme_color_override("font_color", Style.MUTED)
-	add_child(_review_hint)
+	_feedback_timer = Timer.new()
+	_feedback_timer.name = "MemoryFeedbackTimer"
+	_feedback_timer.one_shot = true
+	_feedback_timer.wait_time = FEEDBACK_SECONDS
+	_feedback_timer.timeout.connect(continue_feedback)
+	add_child(_feedback_timer)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	set_palette(_palette)
@@ -139,6 +110,9 @@ func _build() -> void:
 func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> void:
 	_build()
 	memory.stop()
+	_feedback_timer.stop()
+	_peek_touch = -1
+	_mouse_peek = false
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
 		button.pressed.disconnect(_choose.bind(index))
@@ -160,12 +134,11 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 			_board.add_child(button)
 			var back := CardBack.new()
 			back.setup(memory.cards[index].kind, index)
-			button.add_child(back)
-			back.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			button.set_back(back)
+			button.set_face_up(false, false)
 			card_buttons.append(button)
 	else:
 		memory.stop()
-	feedback_view.hide()
 	set_palette(palette)
 	_refresh()
 	_layout()
@@ -177,12 +150,18 @@ func pause(value: bool) -> void:
 	if _paused == value:
 		return
 	_paused = value
+	if value:
+		end_peek()
 	_refresh()
 	prompt_ready.emit()
 
 
 func stop() -> void:
 	memory.stop()
+	if _feedback_timer != null:
+		_feedback_timer.stop()
+	_peek_touch = -1
+	_mouse_peek = false
 	_paused = false
 	for button in card_buttons:
 		button.clear_feedback()
@@ -194,14 +173,12 @@ func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	if _paused or not is_visible_in_tree():
 		return result
-	if memory.phase == "feedback":
-		result.append_array(feedback_view.controls())
-	elif not memory.phase in ["waiting", "matching"] or card_buttons.is_empty():
+	if not memory.phase in ["waiting", "matching", "feedback"] or card_buttons.is_empty():
 		return result
 	for button in card_buttons:
 		if not button.disabled:
 			result.append(button)
-	if not study_button.disabled:
+	if is_instance_valid(study_button) and study_button.is_visible_in_tree() and not study_button.disabled:
 		result.append(study_button)
 	return result
 
@@ -209,36 +186,20 @@ func controls() -> Array[Control]:
 func set_palette(palette: Dictionary) -> void:
 	_build()
 	_palette = palette
-	Style.button(study_button, palette.accent)
-	study_button.add_theme_font_size_override("font_size", 16)
-	study_button.custom_minimum_size = Vector2(132, 44)
-	_flowers.accent = palette.accent
-	feedback_view.set_palette(palette)
 	_refresh()
 	_layout()
-
-
-func set_audio_available(value: bool) -> void:
-	_build()
-	if audio_available == value:
-		return
-	audio_available = value
-	feedback_view.set_audio_available(value)
-	if memory.phase == "feedback":
-		prompt_ready.emit()
 
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	for button in card_buttons:
-		button.set_reduced_motion(value)
-	if feedback_view != null:
-		feedback_view.set_reduced_motion(value)
+		button.set_reduced_motion(value or _paused or not is_visible_in_tree())
 
 
 func continue_feedback() -> void:
 	if _paused or not is_visible_in_tree() or memory.phase != "feedback":
 		return
+	_feedback_timer.stop()
 	var result: String = memory.continue_feedback()
 	_refresh()
 	prompt_ready.emit()
@@ -267,8 +228,7 @@ func _choose(index: int) -> void:
 	if result == "ignored":
 		return
 	if result in ["correct", "wrong"]:
-		feedback_view.show_words(memory.feedback_words, "New flower!" if memory.last_correct else "Compare", "Continue")
-		feedback_view.set_audio_available(audio_available)
+		_feedback_timer.start()
 	_refresh()
 	if result != "cancelled":
 		var card: Dictionary = memory.cards[index]
@@ -279,12 +239,23 @@ func _choose(index: int) -> void:
 	prompt_ready.emit()
 
 
-func _toggle_study() -> void:
-	if _paused or not is_visible_in_tree():
+func begin_peek() -> void:
+	if _paused or not is_visible_in_tree() or not is_instance_valid(study_button):
 		return
 	if memory.phase == "feedback" and memory.matched_word_ids.size() < 5:
 		continue_feedback()
-	if _can_play() and memory.set_study(not memory.studying):
+	if _can_play() and memory.set_study(true):
+		study_button.grab_focus()
+		_refresh()
+		prompt_ready.emit()
+
+
+func end_peek() -> void:
+	_peek_touch = -1
+	_mouse_peek = false
+	if memory.set_study(false):
+		if is_instance_valid(study_button):
+			study_button.set_pressed_no_signal(false)
 		_refresh()
 		prompt_ready.emit()
 
@@ -293,51 +264,93 @@ func _can_play() -> bool:
 	return not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
 
 
-func _hear_feedback(word: Dictionary) -> void:
-	if memory.phase == "feedback" and audio_available and not _paused and is_visible_in_tree():
-		hear_requested.emit(word)
+func _study_input(event: InputEvent) -> void:
+	if not is_instance_valid(study_button):
+		return
+	if event is InputEventKey and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+		study_button.accept_event()
+		if not event.pressed:
+			end_peek()
+		elif not event.echo:
+			begin_peek()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		_mouse_peek = event.pressed and not event.canceled
 
 
-func _feedback_word_changed(_word: Dictionary) -> void:
-	if memory.phase == "feedback":
-		prompt_ready.emit()
+func _study_mouse_exited() -> void:
+	if _mouse_peek:
+		end_peek()
+
+
+func _input(event: InputEvent) -> void:
+	if _board == null or _paused or not is_visible_in_tree():
+		return
+	if not is_instance_valid(study_button):
+		end_peek()
+		return
+	if event is InputEventKey and not event.pressed and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER] and memory.studying:
+		end_peek()
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		var inside: bool = study_button.get_global_rect().has_point(event.position)
+		if _peek_touch >= 0:
+			get_viewport().set_input_as_handled()
+			if event.index == _peek_touch and (not inside or (event is InputEventScreenTouch and (event.canceled or not event.pressed))):
+				end_peek()
+		elif inside and not study_button.disabled and event is InputEventScreenTouch and event.pressed and not event.canceled:
+			get_viewport().set_input_as_handled()
+			begin_peek()
+			if memory.studying:
+				_peek_touch = event.index
+		return
+	if event is InputEventMouseButton or event is InputEventMouseMotion:
+		if event.device == InputEvent.DEVICE_ID_EMULATION and (_peek_touch >= 0 or study_button.get_global_rect().has_point(event.position)):
+			get_viewport().set_input_as_handled()
+			return
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and (not event.pressed or event.canceled):
+			end_peek()
+		elif event is InputEventMouseMotion and _mouse_peek and (not study_button.get_global_rect().has_point(event.position) or (event.button_mask & MOUSE_BUTTON_MASK_LEFT) == 0):
+			end_peek()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		end_peek()
+		for button in card_buttons:
+			button.set_reduced_motion(true)
+			button.set_reduced_motion(reduced_motion)
 
 
 func _visibility_changed() -> void:
+	if not is_visible_in_tree():
+		end_peek()
 	_refresh()
 	prompt_ready.emit()
 
 
 func _refresh() -> void:
-	if _board == null:
+	if not is_instance_valid(_board):
 		return
 	var playing: bool = memory.phase in ["waiting", "matching"] and not card_buttons.is_empty()
 	var reviewing: bool = memory.phase == "feedback"
+	var suspended: bool = _paused or not is_visible_in_tree()
+	_feedback_timer.paused = suspended
 	_board.visible = playing or reviewing or memory.phase == "won"
-	study_button.visible = playing or reviewing
-	study_button.disabled = _paused or not (playing or (reviewing and memory.matched_word_ids.size() < 5))
-	study_button.focus_mode = Control.FOCUS_NONE if study_button.disabled else Control.FOCUS_ALL
-	study_button.text = "Return to play" if memory.studying else "Study"
-	study_button.tooltip_text = "Hide unmatched cards and play" if memory.studying else "Study all five word and picture pairs"
-	_name_control(study_button, study_button.text + ". " + study_button.tooltip_text)
-	feedback_view.visible = memory.phase == "feedback"
-	feedback_view.pause(_paused or not is_visible_in_tree() or memory.phase != "feedback")
-	_review_hint.visible = playing
-	status_label.visible = playing or reviewing or memory.phase == "won" or not memory.error.is_empty()
-	_flowers.visible = playing or reviewing or memory.phase == "won"
-	_flower_count.visible = _flowers.visible
-	_flowers.count = memory.matched_word_ids.size()
-	_flowers.queue_redraw()
-	_flower_count.text = "%d / 5" % _flowers.count
-	_name_control(_flower_count, "%d of 5 flowers planted" % _flowers.count)
+	if is_instance_valid(study_button):
+		study_button.visible = (playing or reviewing) and is_visible_in_tree()
+		study_button.disabled = suspended or not (playing or (reviewing and memory.matched_word_ids.size() < 5))
+		study_button.focus_mode = Control.FOCUS_NONE if study_button.disabled else Control.FOCUS_ALL
+		study_button.engaged = memory.studying
+	status_label.hide()
 	if not memory.error.is_empty():
 		status_label.text = memory.error
 	elif memory.phase == "feedback":
-		status_label.text = "A new flower!" if memory.last_correct else "Let's learn these words."
+		status_label.text = "A new flower!" if memory.last_correct else "Try another pair."
 	elif memory.phase == "won":
 		status_label.text = "Garden complete!"
 	elif memory.studying:
-		status_label.text = "Study the garden."
+		status_label.text = "Release to hide."
 	elif not memory.selected_indices.is_empty():
 		var first: Dictionary = memory.cards[memory.selected_indices[0]]
 		status_label.text = ("Word: " if first.kind == "word" else "Picture: ") + first.word.text
@@ -350,64 +363,46 @@ func _refresh() -> void:
 		var matched: bool = memory.matched_word_ids.has(card.word.id)
 		var revealed: bool = memory.is_revealed(index)
 		var selected: bool = memory.selected_indices.has(index)
-		button.word_label.text = card.word.text if revealed else ""
-		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not (playing or reviewing) or _paused or memory.studying)
+		button.set_reduced_motion(reduced_motion or suspended)
+		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not (playing or reviewing) or suspended or memory.studying)
+		button.set_face_up(revealed, not suspended and (playing or reviewing))
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
-		button.picture.visible = revealed and card.kind == "image"
-		button.word_label.visible = revealed and card.kind == "word"
 		button.picture.modulate.a = 1.0
 		button.word_label.modulate.a = 1.0
-		var back: CardBack = button.get_node("CardBack")
-		back.visible = not revealed
+		var back: CardBack = button.find_child("CardBack", true, false)
 		back.accent = _palette.accent
 		back.queue_redraw()
 		var label: String = ("Word" if card.kind == "word" else "Picture") + " %d" % (index + 1)
 		if revealed:
-			label += ": " + card.word.text + (". Planted." if matched else "")
+			label += ": " + card.word.text
+		if matched:
+			label += ". Planted."
 		button.tooltip_text = label
 		_name_control(button, label)
 	_layout()
 
 
 func _layout() -> void:
-	if _board == null:
+	if not is_instance_valid(_board):
 		return
-	# Reserve review space before play, so neither an answer nor Continue moves cards.
-	var review_height: float = 104 if size.x >= 392 else 176
-	var side_review: bool = size.x >= 368 and size.y < review_height + 208
-	_board.position = Vector2.ZERO
-	_board.size = Vector2(size.x - 168, size.y) if side_review else Vector2(size.x, size.y - review_height - 8)
-	feedback_view.position = Vector2(_board.size.x + 8, 0) if side_review else Vector2(0, _board.size.y + 8)
-	feedback_view.custom_minimum_size = Vector2(160, 176 if side_review else review_height)
-	feedback_view.size = Vector2(160, size.y) if side_review else Vector2(size.x, review_height)
-	_review_hint.position = feedback_view.position + Vector2(8, 0)
-	_review_hint.size = feedback_view.size - Vector2(16, 0)
-	var width: float = _board.size.x
-	var height: float = _board.size.y
-	var wide: bool = side_review or (width >= 420 and width >= height * 1.3) or (width >= 392 and height < 460)
-	var columns: int = mini(4 if side_review and width < 368 else 5, int((width + 8) / 52)) if wide else 2
-	var rows: int = ceili(10.0 / columns)
-	var header: float = 44 if wide else 64
-	var study_width: float = 108 if width < 300 and wide else 132 if wide else clampf(width * 0.4, 132, 176)
-	study_button.custom_minimum_size = Vector2(study_width, header)
-	study_button.add_theme_font_size_override("font_size", 12 if study_width < 132 else 16)
-	study_button.position = Vector2(width - study_width, 0)
-	study_button.size = Vector2(study_width, header)
-	var label_width: float = maxf(0, study_button.position.x - 8)
-	status_label.position = Vector2.ZERO
-	status_label.size = Vector2(label_width, 24 if wide else 32)
-	var font: Font = status_label.get_theme_font("font")
-	var font_size: int = 16
-	while font_size > 14 and font.get_string_size(status_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > label_width:
-		font_size -= 1
-	status_label.add_theme_font_size_override("font_size", font_size)
-	_flowers.position = Vector2(0, header - 22)
-	_flowers.size = Vector2(110, 22)
-	_flower_count.position = Vector2(112, header - 22)
-	_flower_count.size = Vector2(maxf(0, label_width - 112), 22)
-	var card_size := Vector2((width - 8 * (columns - 1)) / columns, (height - header - 4 - 8 * (rows - 1)) / rows)
+	var ui_scale: float = Style.ui_scale(self)
+	var gap: float = ceilf(8 / ui_scale)
+	var target: float = ceilf(44 / ui_scale)
+	var header: float = 0.0
+	if is_instance_valid(study_button) and study_button.get_parent() == self:
+		Style.square_icon_button(study_button, _palette.accent)
+		study_button.position = Vector2(size.x - target, 0)
+		study_button.size = Vector2.ONE * target
+		header = target
+	_board.position = Vector2(0, header)
+	_board.size = Vector2(size.x, maxf(0, size.y - _board.position.y))
+	var columns: int = 2 if size.x < size.y else 5
+	var rows: int = 10 / columns
+	var card_size := Vector2((_board.size.x - gap * (columns - 1)) / columns, (_board.size.y - gap * (rows - 1)) / rows)
 	for index in range(card_buttons.size()):
-		card_buttons[index].position = Vector2((index % columns) * (card_size.x + 8), header + 4 + (index / columns) * (card_size.y + 8))
+		var row: int = index / columns
+		card_buttons[index].custom_minimum_size = Vector2.ONE * maxf(0, minf(target, minf(card_size.x, card_size.y)))
+		card_buttons[index].position = Vector2((index % columns) * (card_size.x + gap), row * (card_size.y + gap))
 		card_buttons[index].size = card_size
 
 

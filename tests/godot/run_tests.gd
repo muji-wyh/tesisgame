@@ -234,7 +234,7 @@ func _test_fresh_rounds(model_script: GDScript, words: Array) -> void:
 		var previous: Array = model.cards.map(func(card: Dictionary) -> String: return card.word.id)
 		model.reset(vocabulary)
 		check(model.cards.all(func(card: Dictionary) -> bool: return not previous.has(card.word.id)),
-			"Unseeded replay prefers five words absent from the previous board")
+			"An unseeded model reset prefers five words absent from the previous board")
 		check(pairs_for(model).size() == 3 and model.cards.size() == 8,
 			"Fresh boards retain three complete pairs and eight cards")
 	for count in range(5, 10):
@@ -338,7 +338,7 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		"A three-match streak wins normally and closes hint input")
 	model.reset(words, 6)
 	check(model.streak == 0 and model.hint_ids.is_empty() and model.hints_remaining == 3,
-		"Replay clears streaks and restores all three hints")
+		"A new model round clears streaks and restores all three hints")
 	model.select(pairs[0][0])
 	model.select(pairs[0][1])
 	check(not model.request_hint() and model.hints_remaining == 3,
@@ -411,7 +411,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 	check(model.reward_theme == "spring" and model.chest_state == "opened", "Earned reward is immutable")
 	model.reset(words, 27)
 	check(model.reward_theme == "" and model.chest_state == "closed" and (model.reward_id == "" if has_property(model, "reward_id") else false),
-		"Replay clears earned reward")
+		"A new model round clears the previous earned reward")
 	check(not model.finish_open(), "A stale opening cannot reward the new round")
 	var wrong: Array = wrong_pair_for(model)
 	for count in range(3):
@@ -735,11 +735,11 @@ func _test_reward_preview_play(app) -> void:
 
 
 func _test_play_improvements(app) -> void:
-	check(has_property(app, "hint_button") and has_property(app, "_match_caption"),
-		"The board has a reachable hint and visible match encouragement")
+	check(has_property(app, "hint_button") and has_property(app, "_success") and not has_property(app, "_match_caption"),
+		"The board has a reachable hint and compact progress without a redundant caption")
 	if has_property(app, "hint_button") and app.model.has_method("request_hint"):
 		app.new_round(6)
-		check(app.hint_button.text == "Hint 3" and not app.hint_button.disabled,
+		check(app.hint_button.text.is_empty() and app.hint_button.count == 3 and not app.hint_button.disabled,
 			"A new Match round shows all three hints")
 		app.hint_button.grab_focus()
 		app.hint_button.pressed.emit()
@@ -748,7 +748,7 @@ func _test_play_improvements(app) -> void:
 			"The native Hint button announces a real pair")
 		check(not app._controller_mode and app.cards[hinted[0]].has_focus(),
 			"A keyboard hint focuses its first playable card without requiring a controller")
-		check(app.model.hints_remaining == 2 and app.hint_button.disabled and app.hint_button.text == "Hint 2",
+		check(app.model.hints_remaining == 2 and app.hint_button.disabled and app.hint_button.count == 2,
 			"An active first hint shows two remaining and blocks duplicate spending")
 		check(app.hint_button.focus_mode == Control.FOCUS_NONE,
 			"Keyboard navigation skips a hint while its stars are active")
@@ -760,8 +760,9 @@ func _test_play_improvements(app) -> void:
 		for id in hinted:
 			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
 				"Hinted cards have a star marker, not just a different color")
-		check(app._match_caption.text == "Follow stars" and app._match_caption.is_visible_in_tree(),
-			"The hint is visible on the board without moving its cards")
+		check(app._success.is_visible_in_tree() and app._success.filled_count == 0
+			and app._success.get_parent() == app._header_duck_slot,
+			"A hint keeps ordinary progress beside Pip without adding an instruction row")
 		app._show_collection()
 		var previous_hint: Array = hinted.duplicate()
 		joy_tap(JOY_BUTTON_X)
@@ -774,13 +775,14 @@ func _test_play_improvements(app) -> void:
 		app.choose_theme("winter")
 		check(app.hint_button.disabled and app.model.hints_remaining == 2 and not app.model.request_hint(),
 			"Page hiding and season changes preserve the active hint and allowance")
+		app.on_page_visible()
 		app.cards[hinted[0]].pressed.emit()
 		app.cards[hinted[0]].pressed.emit()
-		check(app.model.hint_ids.is_empty() and not app.hint_button.disabled and app.hint_button.text == "Hint 2",
+		check(app.model.hint_ids.is_empty() and not app.hint_button.disabled and app.hint_button.count == 2,
 			"Clearing the stars makes the second hint available")
 		app.hint_button.pressed.emit()
 		var second_hint: Array = app.model.hint_ids.duplicate()
-		check(app.model.hints_remaining == 1 and app.hint_button.text == "Hint 1",
+		check(app.model.hints_remaining == 1 and app.hint_button.count == 1,
 			"The second successful request leaves one hint")
 		app.cards[second_hint[0]].pressed.emit()
 		app.cards[second_hint[0]].pressed.emit()
@@ -788,33 +790,38 @@ func _test_play_improvements(app) -> void:
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		var third_hint: Array = app.model.hint_ids.duplicate()
-		check(app.model.hints_remaining == 0 and app.hint_button.text == "Used" and app.hint_button.disabled,
+		check(app.model.hints_remaining == 0 and app.hint_button.count == 0 and app.hint_button.disabled
+			and app.hint_button.tooltip_text.begins_with("No hints left"),
 			"Xbox X consumes the shared third hint and disables the button")
 		app.cards[third_hint[0]].pressed.emit()
 		app.cards[third_hint[1]].pressed.emit()
-		check(app.hint_button.disabled, "Hints are disabled during match feedback")
+		check(app.hint_button.disabled, "The exhausted hint stays disabled during match feedback")
 		app.feedback_timer.timeout.emit()
 		for pair in pairs_for(app.model):
 			if app.model.matched_ids.has(pair[0]):
 				continue
 			app.cards[pair[0]].pressed.emit()
 			app.cards[pair[1]].pressed.emit()
-			check(app.hint_button.disabled, "Hints are disabled during match feedback")
+			check(app.hint_button.disabled, "The exhausted hint stays disabled during match feedback")
 			var sparkle: Control = app.cards[pair[0]].get_node_or_null("MatchSparkle")
 			check(sparkle != null and sparkle.particle_count <= 6,
 				"Each correct card gets a small, bounded star celebration")
+			var expected_feedback: String = "%d in a row!" % app.model.streak if app.model.streak > 1 else "Great match!"
+			check(app._status_announcement.contains(expected_feedback),
+				"Correct feedback retains its accessible match or streak encouragement: streak=%d phase=%s announcement=%s message=%s save_error=%s" % [
+					app.model.streak, app.model.phase, app._status_announcement, app._message.text, app._save_error])
 			app.feedback_timer.timeout.emit()
-		check(app._match_caption.text == "3 in a row!", "Consecutive matches get visible encouragement")
+		check(app.model.streak == 3 and app._success.filled_count == 3, "Consecutive matches retain their streak and exact progress")
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 0 and app.hint_button.disabled,
 			"Xbox X cannot exceed the three shared hints")
 		app.set_reduced_motion(true)
-		check(app._match_caption.text == "3 in a row!", "Reduced-motion players still see the completed streak")
+		check(app.model.streak == 3 and app._success.filled_count == 3, "Reduced motion preserves the completed streak and progress")
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
-		check(not app.hint_button.disabled and app.hint_button.text == "Hint 3"
+		check(not app.hint_button.disabled and app.hint_button.count == 3
 			and app.model.hints_remaining == 3,
 			"A new round restores all three hints")
 		var first: Array = pairs_for(app.model)[0]
@@ -826,6 +833,8 @@ func _test_play_improvements(app) -> void:
 		app.on_page_hidden()
 		check(app._feedback_tweens.is_empty() and app.cards[first[0]].scale == Vector2.ONE,
 			"Hiding the page stops transient match effects without losing progress")
+		check(app.feedback_timer.paused, "Hiding the page pauses the pending automatic match transition")
+		app.on_page_visible()
 		app.feedback_timer.timeout.emit()
 		check(app.model.successes == 1, "Cancelling cosmetic feedback preserves the earned match")
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
@@ -876,8 +885,8 @@ func _test_season_goals(app) -> void:
 	app.new_round(6)
 	var seeded_theme: String = app.model.theme_id
 	app.choose_theme("summer")
-	app._replay()
-	check(app.model.theme_id == "summer", "Replay retains a manually chosen season")
+	app.new_round(-1, true)
+	check(app.model.theme_id == "summer", "A same-lesson internal fixture reset retains the chosen season")
 	app.new_round(6)
 	check(app.model.theme_id == seeded_theme, "An explicit seed is not overridden by season preference")
 	set_completed_rewards(app, saved_rewards)
@@ -910,7 +919,7 @@ func _test_scene() -> void:
 	app.audio.set_muted(true)
 	await _test_play_improvements(app)
 	_test_season_goals(app)
-	check(app.find_child("Practice", true, false) == null and app._mistakes.get_parent() is HBoxContainer,
+	check(app.find_child("Practice", true, false) == null and app._mistakes.get_parent() == app._header_duck_slot,
 		"Mistake badges are passive counters, not an unlimited-attempt toggle")
 	check(app._voice_button.disabled and app._voice_button.focus_mode == Control.FOCUS_NONE,
 		"Keyboard navigation skips Voice when recognition is unavailable")
@@ -922,23 +931,25 @@ func _test_scene() -> void:
 	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 6,
 		"All six themes remain available")
 	if has_property(app, "theme_buttons"):
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.tooltip_text.is_empty()),
-			"Season buttons do not show redundant hover/tap tooltip popups")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return app._theme_row.is_ancestor_of(button))
-			and not app._theme_row.is_visible_in_tree(),
-			"Season choices live in My rewards instead of competing with the playfield")
+		check(app.theme_buttons.all(func(button: Button) -> bool:
+			return button.text.is_empty() and button.tooltip_text == button.name and button.get("accessibility_name") == button.name),
+			"Icon-only world choices retain their exact names in tooltips and accessibility")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return app._world_choices.is_ancestor_of(button))
+			and not app._world_choices.is_visible_in_tree(),
+			"World choices live in More instead of competing with the playfield")
 	var theme_style_id: int = app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id()
-	var lesson_style_id: int = app._lesson.hear_button.get_theme_stylebox("normal").get_instance_id()
+	var lesson_style_id: int = app._lesson.picture_button.get_theme_stylebox("normal").get_instance_id()
 	app._refresh()
 	check(app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id() == theme_style_id
-		and app._lesson.hear_button.get_theme_stylebox("normal").get_instance_id() == lesson_style_id,
+		and app._lesson.picture_button.get_theme_stylebox("normal").get_instance_id() == lesson_style_id,
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
 	app.choose_mode("learn")
-	check(app._success.total_count == 0 and not app._gift_label.visible,
+	check(app._success.total_count == 0 and not app._gift_label.is_visible_in_tree(),
 		"Learn removes score and gift chrome that compete with the word")
 	app.choose_mode("memory")
-	check(app._success.total_count == 0,
-		"Memory uses its flower progress without a duplicate header score")
+	check(app._success.total_count == 5 and app._mistakes.total_count == 0
+		and app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree(),
+		"Memory groups five-pair progress and an unbounded mistake count beside Pip")
 	app.choose_mode("match")
 	check(app._success.total_count == 3,
 		"Match retains its three-pair progress")
@@ -970,7 +981,9 @@ func _test_scene() -> void:
 			"Opening rewards announces the collection modal state")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
-		check(app._theme_row.is_visible_in_tree(), "My rewards exposes the six world choices")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
+			"Opening More exposes all six persistent world choices")
+		app._show_reward_section("room")
 		var original_theme: String = app.model.theme_id
 		app.choose_theme("ocean")
 		check(app._room._palette.id == "ocean",
@@ -1130,8 +1143,10 @@ func _test_scene() -> void:
 				"Reduced motion cancels automatic gliding without disabling finger scrolling")
 			app.set_reduced_motion(false)
 			check(app.collection_button.focus_mode == Control.FOCUS_NONE
-				and app.theme_buttons.all(func(button: Button) -> bool: return button.focus_mode == Control.FOCUS_ALL),
-				"Restyling after a motion change keeps modal theme controls active and underlying controls blocked")
+				and app._focus_candidates().all(func(control: Control) -> bool: return app.collection_page.is_ancestor_of(control)),
+				"Restyling after a motion change preserves the collection's keyboard focus boundary")
+			check(app.theme_buttons.all(func(button: Button) -> bool: return app._valid_focus(button)),
+				"The World strip stays keyboard-accessible inside the open collection")
 			collection_scroll.scroll_vertical = max_scroll
 			await process_frame
 			await process_frame
@@ -1158,7 +1173,7 @@ func _test_scene() -> void:
 			check(app._collection_velocity == Vector2.ZERO, "Hiding the page cancels collection momentum")
 		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
-	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Voice feedback advances after 700ms")
+	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")
 	check(not (app._success is Label) and not (app._mistakes is Label),
 		"Progress is drawn with friendly native badges instead of text characters")
 	check(app._success.has_method("set_filled_count") and app._mistakes.has_method("set_filled_count"),
@@ -1191,8 +1206,9 @@ func _test_scene() -> void:
 			var bounds: Rect2 = control.get_global_rect()
 			check(viewport.grow(0.5).encloses(bounds), "Control fits " + str(dimensions_value) + ": " + control.name)
 			var pixel_size: Vector2 = bounds.size * pixels_per_unit
-			check(pixel_size.x >= 47.9 and pixel_size.y >= 47.9,
-				"Touch target is at least 48px: " + control.name + " " + str(pixel_size))
+			var minimum_pixels: float = 44.0 if control in [app.collection_button, app.hint_button] else 48.0
+			check(pixel_size.x >= minimum_pixels - 0.1 and pixel_size.y >= minimum_pixels - 0.1,
+				"Touch target is at least %dpx: %s %s" % [minimum_pixels, control.name, pixel_size])
 	var controller_first: String = app.model.cards[0].id
 	app.cards[controller_first].grab_focus()
 	joy_tap(JOY_BUTTON_A)
@@ -1304,7 +1320,8 @@ func _test_scene() -> void:
 	for pair in pairs_for(app.model).slice(1):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
-		check(app.feedback_timer.is_stopped() and app._match_feedback.visible, "Match feedback stays visible until the next player action")
+		check(not app.feedback_timer.is_stopped() and app.model.phase == "feedback"
+			and not app._message.is_visible_in_tree(), "Match feedback stays on the board until its automatic transition")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
 	await process_frame
@@ -1362,9 +1379,9 @@ func _test_scene() -> void:
 	check(app.model.reward_theme == "spring" and app.chest.theme_id == "spring", "Earned chest remains spring")
 	check(app.reward_image.visible, "Opening displays the reward medallion")
 	app.new_round(81)
-	check(app.audio.muted, "Replay preserves mute")
-	check(app.model.chest_state == "closed" and app.effects.particle_count() == 0, "Replay clears reward/effects")
-	check(app.feedback_timer.is_stopped(), "Replay cancels feedback timer")
+	check(app.audio.muted, "An internal fixture reset preserves mute")
+	check(app.model.chest_state == "closed" and app.effects.particle_count() == 0, "An internal fixture reset clears reward/effects")
+	check(app.feedback_timer.is_stopped(), "An internal fixture reset cancels the feedback timer")
 	app.set_reduced_motion(false)
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
@@ -1417,14 +1434,23 @@ func _test_scene() -> void:
 		var manual_elapsed := manual_tween.get_total_elapsed_time()
 		await process_frame
 		await process_frame
+		var settled_target: Rect2 = app.collection_button.get_global_rect()
+		var target_stayed_settled := true
+		for frame in range(4):
+			await process_frame
+			target_stayed_settled = target_stayed_settled and app.collection_button.get_global_rect().is_equal_approx(settled_target)
+		check(target_stayed_settled, "The resized reward target remains settled across four additional paused-tween frames")
 		check(is_equal_approx(manual_tween.get_total_elapsed_time(), manual_elapsed),
 			"Manual reward timing is unaffected by SceneTree frame delays")
 		check(flight.texture == load(reward.symbol),
 			"Changing season during flight does not swap the earned reward artwork")
+		var center_before_bounce: Vector2 = app.collection_button.get_global_rect().get_center()
 		step_reward_tween(app, 0.201, "The reward tween reaches the current rewards button center")
 		var target_center: Vector2 = app.collection_button.get_global_rect().get_center()
 		check(flight.get_global_rect().get_center().distance_to(target_center) <= 1.0,
-			"The reward flight lands on the actual current My Rewards button center")
+			"The reward flight lands on the actual current My Rewards button center: flight=%s target=%s before_bounce=%s button_size=%s pivot=%s scale=%s" % [
+				flight.get_global_rect().get_center(), target_center, center_before_bounce, app.collection_button.size,
+				app.collection_button.pivot_offset, app.collection_button.scale])
 		check(flight.size.x < start_size.x and flight.size.y < start_size.y,
 			"The reward shrinks into the collection button during flight")
 		check(app.collection_button.scale != Vector2.ONE,
@@ -1527,11 +1553,17 @@ func _test_scene() -> void:
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
 	app._finish_fragment_delivery()
-	step_reward_tween(app, 0.56, "The reward tween can be cancelled by replay")
-	check(visible_reward_flight(app) != null, "The reward flight is visible before replay")
-	app._replay()
-	check_no_reward_flight(app, "Replay cancels the active reward flight")
-	check(app.collection_button.scale == Vector2.ONE, "Replay resets the target bounce scale")
+	step_reward_tween(app, 0.56, "The reward tween can be cancelled by New adventure")
+	check(visible_reward_flight(app) != null, "The reward flight is visible before New adventure")
+	var lesson_before_adventure: Array = app.model.lesson_words.duplicate(true)
+	var saved_before_adventure: Dictionary = app.medal_progress.counts.duplicate()
+	app._new_adventure_button.pressed.emit()
+	check_no_reward_flight(app, "New adventure cancels the active reward flight")
+	check(app.collection_button.scale == Vector2.ONE, "New adventure resets the target bounce scale")
+	check(app._mode_id == "learn" and app.model.lesson_words != lesson_before_adventure
+		and app.medal_progress.counts == saved_before_adventure,
+		"The visible result action starts fresh Learn words without duplicating the delivered reward")
+	app.choose_mode("match")
 	var wrong: Array = wrong_pair_for(app.model)
 	var wrong_start: Vector2 = app.cards[wrong[0]].position
 	app.cards[wrong[0]].pressed.emit()
@@ -1551,10 +1583,10 @@ func _test_scene() -> void:
 	check(app.model.phase == "lost" and app.failure_image.visible, "Failure displays the encouraging picture")
 	await process_frame
 	await process_frame
-	for result_control in [app._title, app._caption, app.replay_button]:
+	for result_control in [app._title, app._caption, app._new_adventure_button]:
 		check(result_control.is_visible_in_tree() and root.get_visible_rect().encloses(result_control.get_global_rect()),
 			"Loss result controls stay inside the viewport: %s %s" % [result_control.name, result_control.get_global_rect()])
-	check(app.replay_button.has_focus(), "Controller focus moves to Play again after losing")
+	check(app._new_adventure_button.has_focus(), "Controller focus moves to New adventure after losing")
 	check(not app.audio.music.playing, "Loss stops background music")
 	check(app.has_method("_play_loss_bear") and has_property(app, "failure_button"),
 		"The loss-screen bear is an interactive target")
@@ -1606,7 +1638,7 @@ func _test_scene() -> void:
 	app.new_round(92)
 	if app.has_method("_play_loss_bear"):
 		check(not app.failure_button.visible and app._failure_tween == null,
-			"Replay removes loss-screen interaction and effects")
+			"A new fixture round removes loss-screen interaction and effects")
 		app._play_loss_bear()
 		check(app._failure_tween == null, "The bear cannot react outside the loss screen")
 	var first: String = app.model.cards[0].id

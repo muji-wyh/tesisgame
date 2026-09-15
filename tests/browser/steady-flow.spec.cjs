@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint,
-  memoryPoint, feedbackPoint, choicePoint, choiceTargetPoint, resultPoint, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint, learnCardRect, swipeLearn,
+  memoryMetrics, memoryPoint, resultPoint, progressRegion, visibleColorCount } = require('./game-ui.cjs');
 
 async function click(page, point) {
   await tap(page, point.x, point.y);
@@ -15,13 +15,18 @@ async function geometry(page) {
 }
 
 async function patch(page, point, width = 48, height = 28) {
-  const b = await metrics(page);
+  const bounds = await metrics(page);
   await page.mouse.move(0, 0);
   await rendered(page);
   return page.screenshot({ scale: 'css', clip: {
-    x: b.x + (point.x - width / 2) * b.scale, y: b.y + (point.y - height / 2) * b.scale,
-    width: width * b.scale, height: height * b.scale
+    x: bounds.x + (point.x - width / 2) * bounds.scale, y: bounds.y + (point.y - height / 2) * bounds.scale,
+    width: width * bounds.scale, height: height * bounds.scale
   } });
+}
+
+async function progressPatch(page, bounds) {
+  const region = progressRegion(bounds);
+  return patch(page, { x: region.x + region.width / 2, y: region.y + region.height / 2 }, region.width, region.height);
 }
 
 async function shot(page, testInfo, name) {
@@ -35,15 +40,10 @@ async function start(page, reducedMotion) {
   return openGame(page, { reducedMotion });
 }
 
-for (const motion of ['reduce', 'no-preference']) {
-test(`Match keeps its board through answers and the chest (${motion})`, async ({ page }, testInfo) => {
-  const errors = await start(page, motion);
-  await chooseMode(page, 1);
-  const beforeGeometry = await geometry(page);
-  const b = await metrics(page), cards = [];
-  // Discover identities with actual taps, then reuse those exact locations.
+async function matchCards(page, bounds) {
+  const cards = [];
   for (let index = 0; index < 8; index++) {
-    const point = boardPoint(b, index);
+    const point = boardPoint(bounds, index);
     await click(page, point);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
     const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
@@ -55,8 +55,16 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
     [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
   ).filter(([, picture]) => picture);
   expect(pairs).toHaveLength(3);
-  const [word] = pairs[0];
-  const wrong = pairs[1][1];
+  return { cards, pairs };
+}
+
+for (const motion of ['reduce', 'no-preference']) {
+test(`Match keeps its board through automatic answers and the chest (${motion})`, async ({ page }, testInfo) => {
+  const errors = await start(page, motion);
+  await chooseMode(page, 'match');
+  const beforeGeometry = await geometry(page), bounds = await metrics(page);
+  const { cards, pairs } = await matchCards(page, bounds);
+  const [word] = pairs[0], wrong = pairs[1][1];
   const untouched = cards.find(card => card.kind === 'Word' && card.index !== word.index);
   const still = await patch(page, untouched.point);
   await shot(page, testInfo, 'match-before');
@@ -64,9 +72,7 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
   await click(page, wrong.point);
   await expect(page.locator('#game-status')).toContainText('Not quite.');
   await shot(page, testInfo, 'match-wrong');
-  expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback must leave the untouched card visible at the same position.').toBe(true);
-  const resultAction = lessonPoint(b, 'action', { match: true });
-  await page.keyboard.press('Escape');
+  expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback leaves the untouched card at the same position.').toBe(true);
   await expect(page.locator('#game-status')).toContainText('Find 3 word');
   for (const [index, pair] of pairs.entries()) {
     await click(page, pair[0].point);
@@ -75,14 +81,12 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
     await expect(page.locator('#game-status')).toContainText('Great match!');
     if (index === 0) {
       await shot(page, testInfo, 'match-correct');
-      expect((await patch(page, untouched.point)).equals(still), 'Correct feedback must keep the rest of the board visible.').toBe(true);
+      expect((await patch(page, untouched.point)).equals(still), 'A correct answer cannot move the rest of the board.').toBe(true);
     }
-    if (index === 2) await click(page, resultAction);
-    else await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
   }
-  const chest = resultPoint(b, 'chest');
-  await page.mouse.move(b.x + chest.x * b.scale, b.y + chest.y * b.scale);
+  const chest = resultPoint(bounds, 'chest');
+  await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
   try { await expect(page.locator('#game-status')).toContainText(/Piece 1 of 3|A new piece!/); }
   finally { await page.mouse.up(); }
@@ -91,13 +95,12 @@ test(`Match keeps its board through answers and the chest (${motion})`, async ({
   expect(errors).toEqual([]);
 });
 
-test(`Memory keeps remembered positions through corrections and a full garden (${motion})`, async ({ page }, testInfo) => {
+test(`Memory keeps remembered positions through automatic corrections and a full garden (${motion})`, async ({ page }, testInfo) => {
   const errors = await start(page, motion);
-  await chooseMode(page, 4);
-  const beforeGeometry = await geometry(page);
-  const b = await metrics(page), cards = [];
+  await chooseMode(page, 'memory');
+  const beforeGeometry = await geometry(page), bounds = await memoryMetrics(page), cards = [];
   for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(b, index);
+    const point = memoryPoint(bounds, index);
     await click(page, point);
     await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
     const [, number, kind, word] = (await page.locator('#selection-status').textContent()).match(/^Memory card (\d+)\. (Word|Picture): ([a-z]+)\.$/);
@@ -115,12 +118,9 @@ test(`Memory keeps remembered positions through corrections and a full garden ($
   await shot(page, testInfo, 'memory-before');
   await click(page, word.point);
   await click(page, wrong.point);
-  await expect(page.locator('#game-status')).toContainText('learn these words');
+  await expect(page.locator('#game-status')).toContainText('Try another pair.');
   await shot(page, testInfo, 'memory-wrong');
   expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback cannot remove or move hidden cards.').toBe(true);
-  const continuePoint = feedbackPoint(b, 'action', 'memory');
-  const continueButton = await patch(page, continuePoint);
-  await click(page, continuePoint);
   await expect(page.locator('#game-status')).toContainText('Find a pair.');
   for (const [index, pair] of pairs.entries()) {
     await click(page, pair[0].point);
@@ -129,100 +129,29 @@ test(`Memory keeps remembered positions through corrections and a full garden ($
     await expect(page.locator('#game-status')).toContainText('A new flower!');
     if (index === 0) {
       await shot(page, testInfo, 'memory-correct');
-      expect((await patch(page, untouched.point)).equals(still), 'Growing a flower must leave all other remembered positions unchanged.').toBe(true);
-      expect((await patch(page, continuePoint)).equals(continueButton), 'Continue remains visually fixed after either pair outcome.').toBe(true);
+      expect((await patch(page, untouched.point)).equals(still), 'Growing a flower leaves every other remembered position unchanged.').toBe(true);
     }
-    await click(page, continuePoint);
     await expect(page.locator('#game-status')).toContainText(index === 4 ? 'You did it!' : 'Find a pair.');
   }
   await shot(page, testInfo, 'memory-complete');
   expect(await geometry(page)).toEqual(beforeGeometry);
   expect(errors).toEqual([]);
 });
-
-for (const [mode, name] of [[2, 'Sky'], [3, 'Listen']]) {
-test(`${name} keeps the question visible and retry locations stable (${motion})`, async ({ page }, testInfo) => {
-  // Exercise the written Listen target too; separate learning tests cover sound.
-  await page.addInitScript(() => {
-    Object.defineProperty(window, 'AudioContext', { configurable: true, value: undefined });
-    Object.defineProperty(window, 'webkitAudioContext', { configurable: true, value: undefined });
-  });
-  const errors = await start(page, motion);
-  await chooseMode(page, mode);
-  const beforeGeometry = await geometry(page), b = await metrics(page);
-  const answerPoints = [choicePoint(b, 0), choicePoint(b, 1)];
-  const continuePoint = feedbackPoint(b, 'action');
-  const targetPoint = choiceTargetPoint(b);
-  // Only the first Sky entrance animates. Wait beyond that deliberate entrance.
-  if (motion === 'no-preference' && mode === 2) await page.waitForTimeout(1000);
-  const asking = mode === 2 ? /^(Sky words\.|Choose the matching word\.)/ : /^(Listen\.|No sound\. Choose the picture\.)/;
-  const progress = () => patch(page, { x: 66 + (b.width - 154) / 2, y: 48 }, b.width - 154, 32);
-  const paths = new Set();
-  let successes = 0, mistakes = 0;
-  // Learn which answer is correct through ordinary feedback, never private scene state.
-  for (let attempt = 0; attempt < 18 && paths.size < 4; attempt++) {
-    const target = await patch(page, targetPoint, 120, 72);
-    await shot(page, testInfo, `${name}-${attempt}-before`);
-    await click(page, answerPoints[0]);
-    await expect(page.locator('#game-status')).toHaveText(/^(Yes!|This picture is) /);
-    const feedback = await page.locator('#game-status').textContent();
-    const correct = feedback.startsWith('Yes!');
-    if (correct) successes++; else mistakes++;
-    await shot(page, testInfo, `${name}-${attempt}-${correct ? 'correct' : 'wrong'}`);
-    expect((await patch(page, targetPoint, 120, 72)).equals(target), 'Answer feedback must keep the same question artwork or written target at its original position.').toBe(true);
-    if (!correct && mistakes < 3) {
-      const word = feedback.match(/^This picture is ([a-z]+)\./)[1];
-      await click(page, answerPoints[1]);
-      await expect(page.locator('#game-status'), 'A first tap on the correct visible answer must immediately grade the same question.').toHaveText(new RegExp(`^Yes! ${word}\\.`));
-      successes++;
-      paths.add('retry');
-      expect((await patch(page, targetPoint, 120, 72)).equals(target), 'Retrying directly from wrong feedback must keep the same target and coordinates.').toBe(true);
-      await shot(page, testInfo, `${name}-${attempt}-corrected-directly`);
-    }
-    if (successes === 5 || mistakes === 3) {
-      // A lucky all-correct round can precede the first wrong answer; keep exploring
-      // until both feedback paths are exercised through ordinary player input.
-      await click(page, paths.has('retry') ? answerPoints[0] : continuePoint);
-      await expect(page.locator('#game-status')).toContainText(successes === 5 ? 'You did it!' : 'Good try!');
-      await expect(page.locator('#selection-status')).toBeEmpty();
-      if (paths.has('retry')) paths.add('terminal');
-      await shot(page, testInfo, `${name}-${attempt}-result`);
-      if (paths.size === 4) break;
-      await click(page, resultPoint(b, 'repeat'));
-      await expect(page.locator('#game-status')).toHaveText(asking);
-      successes = 0; mistakes = 0;
-      if (motion === 'no-preference' && mode === 2) await page.waitForTimeout(1000);
-      continue;
-    }
-    const scored = await progress();
-    const useContinue = !paths.has('retry') || !paths.has('continue');
-    await click(page, useContinue ? continuePoint : answerPoints[1]);
-    await expect(page.locator('#game-status'), 'Correct feedback must advance to a question without answering it blindly.').toHaveText(asking);
-    expect((await progress()).equals(scored), 'Advancing from correct feedback cannot change successes or mistakes.').toBe(true);
-    expect((await patch(page, targetPoint, 120, 72)).equals(target), 'A correct answer advances to the next lesson word.').toBe(false);
-    paths.add(useContinue ? 'continue' : 'advance');
-    await shot(page, testInfo, `${name}-${attempt}-next-question`);
-  }
-  expect([...paths].sort()).toEqual(['advance', 'continue', 'retry', 'terminal']);
-  expect(await geometry(page)).toEqual(beforeGeometry);
-  expect(errors).toEqual([]);
-});
-}
 }
 
-test('Learn keeps its controls in place while replacing only the association', async ({ page }, testInfo) => {
+test('Learn returns to the same card frame after swipes settle', async ({ page }, testInfo) => {
   const errors = await openGame(page);
-  const beforeGeometry = await geometry(page), b = await metrics(page);
-  const next = lessonPoint(b, 'next'), previous = lessonPoint(b, 'previous');
-  await click(page, next);
+  const beforeGeometry = await geometry(page), bounds = await metrics(page);
+  const card = learnCardRect(bounds), edge = { x: card.x + 4, y: card.y + card.height / 2 };
+  await swipeLearn(page, 'next');
   await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\./);
   const second = await page.locator('#game-status').textContent();
-  const control = await patch(page, next);
+  const frame = await patch(page, edge, 8, 48);
   await shot(page, testInfo, 'learn-second');
-  await click(page, next);
+  await swipeLearn(page, 'next');
   await expect(page.locator('#game-status')).not.toHaveText(second);
-  expect((await patch(page, next)).equals(control), 'Next remains at the same position between ordinary lesson cards.').toBe(true);
-  await click(page, previous);
+  expect((await patch(page, edge, 8, 48)).equals(frame), 'After a swipe settles, the card returns to the same frame.').toBe(true);
+  await swipeLearn(page, 'previous');
   await expect(page.locator('#game-status')).toHaveText(second);
   await shot(page, testInfo, 'learn-returned');
   expect(await geometry(page)).toEqual(beforeGeometry);
@@ -231,36 +160,20 @@ test('Learn keeps its controls in place while replacing only the association', a
 
 test('Match accepts the next card on the first tap during nonfinal feedback', async ({ page }, testInfo) => {
   const errors = await openGame(page);
-  await chooseMode(page, 1);
-  const beforeGeometry = await geometry(page), b = await metrics(page), cards = [];
-  for (let index = 0; index < 8; index++) {
-    const point = boardPoint(b, index);
-    await click(page, point);
-    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
-    cards.push({ kind, word, point });
-    await click(page, point);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
-  const pairs = cards.filter(card => card.kind === 'Word').map(word =>
-    [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
-  ).filter(([, picture]) => picture);
-  expect(pairs).toHaveLength(3);
-  // Capture only the visible success/retry badges, excluding Pip and caption changes.
-  const progress = () => patch(page, { x: 66 + (b.width - 314) / 2, y: 48 }, b.width - 314, 32);
+  await chooseMode(page, 'match');
+  const beforeGeometry = await geometry(page), bounds = await metrics(page);
+  const { cards, pairs } = await matchCards(page, bounds);
+  const progress = () => progressPatch(page, bounds);
   await click(page, pairs[0][0].point);
   await click(page, pairs[1][1].point);
   await expect(page.locator('#game-status')).toContainText('Not quite.');
   const afterWrong = await progress();
   await shot(page, testInfo, 'responsive-match-wrong');
-
-  // No Continue and no second tap: a third card must dismiss feedback and be selected.
   await click(page, pairs[2][0].point);
-  await expect(page.locator('#selection-status'), 'The first tap during feedback selects this visible word.').toHaveText(`Word: ${pairs[2][0].word}`);
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[2][0].word}`);
   await expect(page.locator('#game-status')).toContainText('Now find its match!');
-  expect((await progress()).equals(afterWrong), 'Leaving feedback by selecting a card cannot change either score.').toBe(true);
+  expect((await progress()).equals(afterWrong), 'Selecting a card to leave feedback cannot change either score.').toBe(true);
   await shot(page, testInfo, 'responsive-match-selected-from-wrong');
-  // Focus follows that card too; keyboard input must not activate the hidden Continue.
   await page.keyboard.press('Space');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.keyboard.press('Enter');
@@ -271,13 +184,13 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   const afterCorrect = await progress();
   expect(afterCorrect.equals(afterWrong), 'An actual correct answer changes the success badges.').toBe(false);
   await shot(page, testInfo, 'responsive-match-correct');
-
   await click(page, pairs[2][0].point);
-  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await expect(page.locator('#game-status')).toHaveText(`${pairs[2][0].word}. Look at the picture and say the word.`);
   await expect(page.locator('#selection-status')).toBeEmpty();
+  expect((await progress()).equals(afterCorrect), 'Replaying a matched card cannot count another pair.').toBe(true);
   await click(page, pairs[0][0].point);
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0].word}`);
-  expect((await progress()).equals(afterCorrect), 'Selecting the next card after a correct answer cannot count another pair.').toBe(true);
+  expect((await progress()).equals(afterCorrect)).toBe(true);
   await shot(page, testInfo, 'responsive-match-selected-from-correct');
   await click(page, pairs[0][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
@@ -286,12 +199,11 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   await click(page, pairs[1][0].point);
   await click(page, pairs[1][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-
   const distractor = cards.find(card => !pairs.some(pair => pair.includes(card)));
   await click(page, distractor.point);
   await expect(page.locator('#game-status')).toContainText('You did it!');
-  await expect(page.locator('#selection-status'), 'The final feedback tap opens the result without starting another selection.').toBeEmpty();
+  await expect(page.locator('#selection-status')).toBeEmpty();
   await shot(page, testInfo, 'responsive-match-won');
-  expect(await geometry(page), 'All card taps reuse their original coordinates without a layout or page transition.').toEqual(beforeGeometry);
+  expect(await geometry(page), 'The full round reuses its original card coordinates without a layout transition.').toEqual(beforeGeometry);
   expect(errors).toEqual([]);
 });

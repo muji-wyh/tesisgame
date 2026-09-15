@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, openRewards, collectionBounds, uiScale, visibleColorCount } = require('./game-ui.cjs');
 
 const SAVES = ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'];
 const POKE = 'Quack! You tickled Pip!';
@@ -8,7 +8,7 @@ const PET = ['Pip leans into your hand. Lovely!', 'Soft strokes. Pip feels loved
 function playground(bounds) {
   // The room has no saved gift goal or displayed sticker in these fresh profiles.
   // Verified against the exported 390px room; all input uses its public canvas scale.
-  const x = 16, y = 252, width = bounds.width - 32, height = 304;
+  const { x, top: y, width, gap } = collectionBounds(bounds), height = 304;
   const foot = { x: x + 88, y: y + height - 32 };
   return {
     x, y, width, height, foot,
@@ -16,7 +16,7 @@ function playground(bounds) {
     body: { x: foot.x - 30, y: foot.y - 88, width: 60, height: 68 },
     toy: { x: x + width - 66, y: y + height - 74 },
     anchor: { x: x + 8, y: y + 4, width: width - 16, height: 32 },
-    shortcut: index => ({ x: x + width * (index + 0.5) / 4, y: y + height + 64 })
+    shortcut: index => ({ x: x + width * (index + 0.5) / 4, y: y + height + gap + 22 / uiScale(bounds) })
   };
 }
 
@@ -43,9 +43,7 @@ async function savedState(page) {
 
 async function openRoom(page) {
   const bounds = await metrics(page);
-  await tap(page, bounds.width - 48, 48);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
-  await rendered(page);
+  await openRewards(page);
   return bounds;
 }
 

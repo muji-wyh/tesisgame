@@ -6,10 +6,12 @@ signal word_requested(word_id: String)
 signal toy_played(kind: String)
 signal goal_requested(id: String)
 signal pip_interaction(kind: String, message: String)
+signal background_input(event: InputEvent, source: Control)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Medal = preload("res://scripts/medal_view.gd")
+const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
 const ACTIONS := {
@@ -148,12 +150,10 @@ var caption: Label
 var favorite_medal: Medal
 var toy_button: Button
 var action_button: Button
-var goal_button: Button
+var goal_button: Icons
 var item_buttons: Dictionary = {}
-var category_buttons: Dictionary = {}
 var goal_label: Label
 var interaction_allowed: Callable
-var word_sticker_button: Button
 var playground: Playground
 var pip_buttons: Array[Button] = []
 
@@ -161,7 +161,6 @@ var _state: RefCounted
 var _counts: Dictionary = {}
 var _palette: Dictionary = {}
 var _reduced_motion: bool = false
-var _category: String = "toy"
 var _preview_id: String = ""
 var _last_toy: String = ""
 var _last_backdrop: String = ""
@@ -178,8 +177,6 @@ var _toy_art: Texture2D
 var _toy_marks: ToyMarks
 var _goal_id: String = ""
 var _preview_locked: bool = false
-var _word_sticker: Dictionary = {}
-var _sticker_audio_available: bool = true
 
 
 func _ready() -> void:
@@ -191,20 +188,23 @@ func _build() -> void:
 		return
 	name = "PipsRoom"
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_theme_constant_override("separation", 10)
-	add_child(Style.label("Pip's room", 26))
+	add_theme_constant_override("separation", 12)
 	goal_label = Style.label("", 17)
-	goal_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	add_child(goal_label)
-	goal_button = Button.new()
+	goal_label.clip_text = true
+	goal_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	goal_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	goal_label.hide()
+	goal_button = Icons.new()
+	goal_button.symbol = Icons.Symbol.NEXT
 	goal_button.name = "RoomGiftGoal"
-	Style.button(goal_button, Style.GOOD)
+	Style.square_icon_button(goal_button, Style.GOOD)
 	goal_button.pressed.connect(_request_goal)
-	add_child(goal_button)
+	goal_button.hide()
 	_room = RoomScene.new()
 	_room.custom_minimum_size = Vector2(0, 304)
 	_room.clip_contents = true
 	_room.resized.connect(_layout_room)
+	_room.gui_input.connect(func(event: InputEvent) -> void: background_input.emit(event, _room))
 	add_child(_room)
 	_room_title = Style.label("Pip's home", 18)
 	_room.add_child(_room_title)
@@ -243,9 +243,6 @@ func _build() -> void:
 	playground.interaction_started.connect(_direct_play_started)
 	playground.interaction.connect(_direct_play_feedback)
 	playground.toy_tapped.connect(_play_toy)
-	var gesture_hint := Style.label("Stroke Pip · Drag a toy · Tap the floor", 15)
-	gesture_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	add_child(gesture_hint)
 	var pip_actions := HBoxContainer.new()
 	pip_actions.add_theme_constant_override("separation", 6)
 	add_child(pip_actions)
@@ -254,51 +251,30 @@ func _build() -> void:
 		button.name = "Pip" + entry[0]
 		button.text = entry[0]
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Style.button(button, Style.GOOD)
-		button.custom_minimum_size = Vector2(52, 48)
+		Style.quiet_button(button, Style.GOOD)
+		button.custom_minimum_size = Vector2(66, 66)
 		button.add_theme_font_size_override("font_size", 18)
 		button.pressed.connect(entry[1])
 		_name_control(button, entry[0] + (" the toy to Pip" if entry[0] == "Toss" else " Pip"))
 		pip_actions.add_child(button)
 		pip_buttons.append(button)
-	word_sticker_button = Button.new()
-	word_sticker_button.name = "RoomWordSticker"
-	Style.button(word_sticker_button, Style.GOOD)
-	word_sticker_button.custom_minimum_size = Vector2(44, 88)
-	word_sticker_button.expand_icon = true
-	word_sticker_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	word_sticker_button.add_theme_constant_override("icon_max_width", 68)
-	word_sticker_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	word_sticker_button.pressed.connect(_hear_word_sticker)
-	word_sticker_button.hide()
-	add_child(word_sticker_button)
 	caption = Style.label("Choose a toy, then play with Pip!", 18)
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caption.custom_minimum_size.y = 50
 	add_child(caption)
 	action_button = Button.new()
 	action_button.name = "RoomToyAction"
-	Style.button(action_button, Style.GOOD)
+	Style.primary_button(action_button, Style.GOOD)
 	action_button.pressed.connect(_activate_action)
 	add_child(action_button)
-	var categories := HBoxContainer.new()
-	categories.add_theme_constant_override("separation", 8)
-	add_child(categories)
-	for entry in [["toy", "Toys"], ["backdrop", "Rooms"]]:
-		var button := Button.new()
-		button.name = "RoomCategory_" + entry[0]
-		button.text = entry[1]
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Style.button(button, Style.GOOD)
-		button.pressed.connect(_show_category.bind(entry[0]))
-		categories.add_child(button)
-		category_buttons[entry[0]] = button
+	add_child(goal_label)
+	add_child(goal_button)
 	_item_grid = GridContainer.new()
 	_item_grid.columns = 2
 	_item_grid.add_theme_constant_override("h_separation", 8)
 	_item_grid.add_theme_constant_override("v_separation", 8)
 	add_child(_item_grid)
-	resized.connect(func() -> void: _item_grid.columns = 3 if size.x >= 520 else 2)
+	resized.connect(_fit_controls)
 	visibility_changed.connect(_visibility_changed)
 	set_process(false)
 
@@ -317,14 +293,63 @@ func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: b
 		_reset_sequence()
 	if item_buttons.is_empty():
 		_build_items()
+	Style.primary_button(action_button, palette.accent)
+	Style.square_icon_button(goal_button, palette.accent)
+	for button in pip_buttons:
+		Style.quiet_button(button, palette.accent)
+		button.custom_minimum_size = Vector2(66, 66)
+		button.add_theme_font_size_override("font_size", 18)
 	_refresh_items()
 	_refresh_room()
+	_fit_controls()
 	if reduced_motion and not _action.is_empty():
 		settle()
 
 
+func _fit_controls() -> void:
+	if _room == null:
+		return
+	var scale: float = Style.ui_scale(self)
+	var gap: int = ceili(8 / scale)
+	add_theme_constant_override("separation", gap)
+	_item_grid.columns = 3 if size.x * scale >= 720 else 2
+	_item_grid.add_theme_constant_override("h_separation", gap)
+	_item_grid.add_theme_constant_override("v_separation", gap)
+	for button in [action_button, goal_button] + pip_buttons:
+		button.custom_minimum_size = Vector2(44, 44) / scale
+		button.add_theme_font_size_override("font_size", ceili(14 / scale))
+	caption.custom_minimum_size.y = 36 / scale
+	caption.add_theme_font_size_override("font_size", ceili(14 / scale))
+	goal_label.add_theme_font_size_override("font_size", ceili(12 / scale))
+	# The default logical line gap grows with canvas scaling and overflows three-line cards.
+	goal_label.add_theme_constant_override("line_spacing", 0)
+	if goal_button.visible:
+		goal_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		goal_button.offset_left = -52 / scale
+		goal_button.offset_right = -8 / scale
+		goal_button.offset_top = 8 / scale
+		goal_button.offset_bottom = 52 / scale
+		goal_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		goal_label.offset_left = 6 / scale
+		goal_label.offset_right = -6 / scale
+		goal_label.offset_top = 66 / scale
+		goal_label.offset_bottom = -8 / scale
+	for id in item_buttons:
+		var button: Button = item_buttons[id]
+		button.custom_minimum_size = Vector2(44, 128) / scale
+		var picture: TextureRect = button.get_child(0)
+		picture.offset_top = 8 / scale
+		picture.offset_bottom = 64 / scale
+		picture.offset_left = 12 / scale
+		picture.offset_right = (-60 if goal_button.visible and goal_button.get_parent() == button else -12) / scale
+		_item_labels[id].add_theme_font_size_override("font_size", ceili(12 / scale))
+		_item_labels[id].add_theme_constant_override("line_spacing", 0)
+		_item_labels[id].offset_top = 66 / scale
+		_item_labels[id].offset_bottom = -8 / scale
+
+
 func _build_items() -> void:
-	for item in _state.catalog():
+	for item in _state.toys():
 		var button := Button.new()
 		button.name = "RoomItem_" + item.id
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -373,24 +398,6 @@ func _can_interact() -> bool:
 	return is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 
-func set_word_sticker(word: Dictionary, audio_available: bool = true) -> void:
-	_build()
-	_word_sticker = word if word.has_all(["id", "text", "image", "audio"]) else {}
-	_sticker_audio_available = audio_available
-	word_sticker_button.visible = not _word_sticker.is_empty()
-	word_sticker_button.disabled = _word_sticker.is_empty() or not audio_available
-	word_sticker_button.focus_mode = Control.FOCUS_NONE if word_sticker_button.disabled else Control.FOCUS_ALL
-	word_sticker_button.text = str(_word_sticker.get("text", ""))
-	word_sticker_button.icon = null if _word_sticker.is_empty() else load("res://" + str(_word_sticker.image))
-	word_sticker_button.tooltip_text = ("Hear " if audio_available else "No sound. ") + word_sticker_button.text
-	_name_control(word_sticker_button, word_sticker_button.tooltip_text)
-
-
-func _hear_word_sticker() -> void:
-	if _can_interact() and _sticker_audio_available and not _word_sticker.is_empty():
-		word_requested.emit(_word_sticker.id)
-
-
 func _name_control(control: Control, text: String) -> void:
 	for property in control.get_property_list():
 		if property.name == "accessibility_name":
@@ -415,18 +422,18 @@ func _requirement(item: Dictionary) -> String:
 
 
 func _refresh_items() -> void:
-	for item in _state.catalog():
+	for item in _state.toys():
 		var button: Button = item_buttons[item.id]
-		button.visible = item.slot == _category
 		var earned: bool = _state.owned(item, _counts)
-		var selected: bool = item.id == (_state.toy_id if item.slot == "toy" else _state.backdrop_id)
+		var selected: bool = item.id == _state.toy_id
+		var previewed: bool = item.id == _preview_id and not earned
 		var detail: String = "Using" if selected and earned else "Choose" if earned else "Complete %s · %d/3" % [Data.reward(item.medal_id).name, _counts.get(item.medal_id, 0)]
 		_item_labels[item.id].text = item.name + "\n" + detail
 		button.tooltip_text = item.name + ". " + (detail if earned else _requirement(item))
 		_name_control(button, button.tooltip_text)
-		button.add_theme_stylebox_override("normal", Style.box(_palette.get("light", Color.WHITE) if selected and earned else Color.WHITE, _palette.get("accent", Style.GOOD) if selected and earned else Color("#cbd5d8"), 16, 3 if selected and earned else 2))
-	for id in category_buttons:
-		category_buttons[id].add_theme_stylebox_override("normal", Style.box(_palette.get("light", Color.WHITE) if id == _category else Color.WHITE, _palette.get("accent", Style.GOOD)))
+		button.add_theme_stylebox_override("normal", Style.box(
+			_palette.get("light", Color.WHITE) if selected and earned else _palette.get("light", Color.WHITE).lightened(0.5) if previewed else Color.WHITE,
+			_palette.get("accent", Style.GOOD) if (selected and earned) or previewed else Color("#cbd5d8"), 16, 3 if selected and earned else 2))
 
 
 func _refresh_room() -> void:
@@ -438,17 +445,14 @@ func _refresh_room() -> void:
 	if backdrop.is_empty() or not _state.owned(backdrop, _counts):
 		backdrop = _item("backdrop-home")
 	var preview := _item(_preview_id)
-	_preview_locked = not preview.is_empty() and not _state.owned(preview, _counts)
-	if not preview.is_empty():
-		if preview.slot == "toy":
-			_toy = preview
-		else:
-			backdrop = preview
+	_preview_locked = not preview.is_empty() and preview.slot == "toy" and not _state.owned(preview, _counts)
+	if not preview.is_empty() and preview.slot == "toy":
+		_toy = preview
 	if _toy.id != previous_toy:
 		_reset_sequence()
 	_room.theme_id = backdrop.theme if backdrop.id != "backdrop-home" else "home"
 	_room.palette = Data.theme(backdrop.theme) if Data.THEMES.has(backdrop.theme) else _palette
-	_room_title.text = ("Preview: " if _preview_locked and preview.slot == "backdrop" else "") + str(backdrop.name)
+	_room_title.text = str(backdrop.name)
 	_toy_art = _art(_toy)
 	toy_button.icon = _toy_art
 	toy_button.self_modulate = SUMMER_BALL_TINT if _toy.id == "toy-summer" else Color.WHITE
@@ -461,7 +465,7 @@ func _refresh_room() -> void:
 	pip_buttons[2].focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
 	_refresh_action_control()
 	if _preview_locked:
-		caption.text = preview.name + ". " + _requirement(preview)
+		caption.text = "Preview: %s." % _toy.word_id
 	elif _action.is_empty() and playground.interaction_kind.is_empty():
 		caption.text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action][0]]
 	_refresh_goal()
@@ -469,20 +473,48 @@ func _refresh_room() -> void:
 
 
 func _refresh_goal() -> void:
+	Style.square_icon_button(goal_button, _palette.get("accent", Style.GOOD))
+	for label in _item_labels.values():
+		label.show()
 	var gift: Dictionary = _item(_preview_id) if _preview_locked else _state.selected_goal(_counts)
+	if gift.get("slot", "") != "toy":
+		gift = {}
 	_goal_id = str(gift.get("id", ""))
 	goal_button.visible = not gift.is_empty()
+	goal_label.visible = not gift.is_empty()
 	goal_button.disabled = gift.is_empty()
 	goal_button.focus_mode = Control.FOCUS_NONE if gift.is_empty() else Control.FOCUS_ALL
 	if gift.is_empty():
-		gift = _state.next_gift(_counts, _palette.get("id", ""))
-		goal_label.text = "Every gift in this world is yours. Mix and play!" if gift.is_empty() else "Next gift: %s · %d more %s" % [gift.name, gift.remaining_pieces, "piece" if gift.remaining_pieces == 1 else "pieces"]
+		goal_label.text = ""
+		_fit_controls()
 		return
 	var remaining: int = gift.remaining_pieces if gift.has("remaining_pieces") else _remaining(gift)
-	goal_label.text = "%s · %s · %s" % [gift.name, Data.theme(gift.theme).name, "Ready to play!" if remaining == 0 else "%d more %s" % [remaining, "piece" if remaining == 1 else "pieces"]]
-	goal_button.text = "Help Pip get this" if _preview_locked else "Play with this gift" if remaining == 0 else "Continue adventure"
-	goal_button.tooltip_text = goal_button.text + ". " + goal_label.text
+	var action: String = "Use toy" if remaining == 0 else "Continue adventure" if _state.goal_item_id == gift.id else "Start adventure"
+	var progress: String = "Ready to play!" if remaining == 0 else "%d/3 · %d more %s" % [_counts.get(gift.medal_id, 0), remaining, "piece" if remaining == 1 else "pieces"]
+	goal_label.text = "%s\n%s\n%s" % [gift.name, progress, action]
+	goal_button.tooltip_text = "%s. %s. %s" % [action, gift.name, _requirement(gift)]
 	_name_control(goal_button, goal_button.tooltip_text)
+	var card: Button = item_buttons[gift.id]
+	for control in [goal_label, goal_button]:
+		if control.get_parent() != card:
+			control.reparent(card)
+	_item_labels[gift.id].hide()
+	_fit_controls()
+
+
+func show_item_error(id: String, summary: String, details: String) -> void:
+	if not item_buttons.has(id):
+		return
+	var card: Button = item_buttons[id]
+	var label: Label = goal_label if goal_label.visible and goal_label.get_parent() == card else _item_labels[id]
+	label.text = _item(id).name + "\n" + summary
+	card.tooltip_text = details
+	card.add_theme_stylebox_override("normal", Style.box(Style.WRONG.lightened(0.94), Style.WRONG, 16, 2))
+	_name_control(card, _item(id).name + ". " + details)
+	if goal_button.visible and goal_button.get_parent() == card:
+		goal_button.tooltip_text = details
+		goal_button.add_theme_stylebox_override("normal", Style.box(Style.WRONG.lightened(0.9), Style.WRONG, ceili(4 / Style.ui_scale(self)), 1))
+		_name_control(goal_button, _item(id).name + ". " + details)
 
 
 func _request_goal() -> void:
@@ -506,18 +538,8 @@ func _refresh_action_control() -> void:
 	_name_control(action_button, action_button.text)
 
 
-func _show_category(id: String) -> void:
-	if not _can_interact():
-		return
-	_category = id
-	_preview_id = ""
-	_reset_sequence()
-	_refresh_items()
-	_refresh_room()
-
-
 func _choose_item(id: String) -> void:
-	if not _can_interact():
+	if not _can_interact() or not item_buttons.has(id):
 		return
 	var item := _item(id)
 	if item.is_empty():
@@ -528,8 +550,9 @@ func _choose_item(id: String) -> void:
 	else:
 		_preview_id = id
 		_reset_sequence()
+		_refresh_items()
 		_refresh_room()
-		item_previewed.emit(caption.text)
+		item_previewed.emit(item.name + ". " + _requirement(item))
 
 
 func _activate_action() -> void:
@@ -538,6 +561,7 @@ func _activate_action() -> void:
 	if _preview_locked:
 		_preview_id = ""
 		_reset_sequence()
+		_refresh_items()
 		_refresh_room()
 		item_previewed.emit(caption.text)
 	else:
@@ -653,7 +677,7 @@ func _notification(what: int) -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button, goal_button, word_sticker_button] + pip_buttons + category_buttons.values() + item_buttons.values():
+	for button in [toy_button, action_button, goal_button] + pip_buttons + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result

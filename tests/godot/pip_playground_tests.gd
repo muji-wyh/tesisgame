@@ -269,7 +269,7 @@ func _check_interruption(app, playground) -> void:
 	playground.toss_to_pip()
 	check(interactions.size() == before and not playground.flight_active and playground.motion_kind.is_empty(), "A hidden playground rejects synthetic interaction actions")
 	await _settle()
-	check(app.duck.get_parent() == app and root.get_visible_rect().encloses(app.duck.get_global_rect()), "Leaving Rewards restores the shared Pip to the game header")
+	check(app.duck.get_parent() == app._header_duck_art_slot and root.get_visible_rect().encloses(app.duck.get_global_rect()), "Leaving Rewards restores the shared Pip to the art slot beside its game counters")
 	app._show_collection()
 	await _show_stage(app)
 	playground.toss_to_pip()

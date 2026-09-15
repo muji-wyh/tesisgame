@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, boardPoint, lessonPoint, resultPoint } = require('./game-ui.cjs');
+const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, boardPoint,
+  resultPoint, headerPoint } = require('./game-ui.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 
@@ -31,15 +32,16 @@ async function winMatch(page) {
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
-  const pairs = [...cards.values()].filter(pair => pair.Word !== undefined && pair.Picture !== undefined);
+  const pairs = [...cards.entries()].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
   expect(pairs).toHaveLength(3);
-  for (const pair of pairs) {
-    for (const index of [pair.Word, pair.Picture]) {
-      const point = boardPoint(bounds, index);
-      await tap(page, point.x, point.y);
-    }
+  for (const [index, [word, pair]] of pairs.entries()) {
+    const written = boardPoint(bounds, pair.Word), pictured = boardPoint(bounds, pair.Picture);
+    await tap(page, written.x, written.y);
+    await expect(page.locator('#selection-status')).toHaveText(`Word: ${word}`);
+    await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
+    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
 }
@@ -62,19 +64,19 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   await expect(page.locator('#game-status')).toContainText('Rewards are unavailable.');
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-learn.png'), scale: 'css' });
 
-  const play = lessonPoint(await metrics(page), 'action');
-  await tap(page, play.x, play.y);
+  await chooseMode(page, 'match');
   const card = boardPoint(await metrics(page), 0);
   await tap(page, card.x, card.y);
   await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-  await chooseMode(page, 4);
+  await chooseMode(page, 'memory');
   await page.keyboard.press('Enter');
   await expect(page.locator('#selection-status')).toHaveText(/^Memory card 1\. (Word|Picture): [a-z]+\.$/);
   const selected = await page.locator('#selection-status').textContent();
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-memory.png'), scale: 'css' });
   await page.evaluate(() => window.restoreRewardRead());
   // Retry uses the left progress slot while storage is unavailable.
-  await tap(page, 48, 48);
+  const retry = headerPoint(await metrics(page), 'retry');
+  await tap(page, retry.x, retry.y);
   await expect(page.locator('#game-status')).toContainText('Memory.');
   await expect(page.locator('#game-status')).not.toContainText('Rewards are unavailable.');
   expect(await medalRecord(page)).toContain('[medals]');
@@ -83,28 +85,23 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   expect(errors).toEqual([]);
 });
 
-test('Repeat and New adventure preserve unopened victory pieces across reload', async ({ page }, testInfo) => {
+test('New adventure preserves unopened victory pieces across reload', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 0);
-  await chooseMode(page, 1);
+  await chooseMode(page, 'match');
   await winMatch(page);
   expect(await pieceCount(page)).toBe(0);
-  await resultTap(page, 'repeat');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await resultTap(page, 'newAdventure');
+  await expect(page.locator('#game-status')).toContainText('Learn five words.');
   expect(await pieceCount(page)).toBe(1);
+  await chooseMode(page, 'match');
   await winMatch(page);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText("Pip's adventures.");
-  const bounds = await metrics(page);
-  const width = bounds.width - 32;
-  const columns = width >= 840 ? 4 : width >= 560 ? 3 : 2;
-  const cardWidth = (width - (columns - 1) * 8) / columns;
-  await tap(page, 16 + cardWidth / 2, 345);
-  await expect(page.locator('#game-status')).toContainText('Animal friends. Learn five words.');
+  await expect(page.locator('#game-status')).toHaveText('Learn five words. Swipe left or right; tap the picture to hear.');
   expect(await pieceCount(page)).toBe(2);
   await page.reload();
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
   await page.screenshot({ path: testInfo.outputPath('unopened-pieces-restored.png'), scale: 'css' });
   expect(errors).toEqual([]);
@@ -113,7 +110,7 @@ test('Repeat and New adventure preserve unopened victory pieces across reload', 
 test('a failed victory save stays retryable and cannot lose or duplicate its piece', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 0);
-  await chooseMode(page, 1);
+  await chooseMode(page, 'match');
   await winMatch(page);
   const before = await medalRecord(page);
   await page.evaluate(() => {
@@ -124,11 +121,11 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
     };
     window.restoreRewardSave = () => { Storage.prototype.setItem = save; };
   });
-  await resultTap(page, 'repeat');
+  await resultTap(page, 'newAdventure');
   await expect(page.locator('#game-status')).toContainText('Choose Retry saving.');
   expect(await medalRecord(page)).toBe(before);
-  // The same visible action becomes Retry saving and stays reachable by touch.
-  await resultTap(page, 'repeat');
+  // A separate retry action replaces navigation until the reward is safe.
+  await resultTap(page, 'retry');
   await expect(page.locator('#game-status')).toContainText('Keep your piece');
   expect(await medalRecord(page)).toBe(before);
   await page.screenshot({ path: testInfo.outputPath('victory-save-failed.png'), scale: 'css' });
@@ -137,7 +134,7 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
   await expect(page.locator('#game-status')).toContainText('A new piece!');
   expect(await pieceCount(page)).toBe(1);
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Learn five words.');
   expect(await pieceCount(page)).toBe(1);
   await page.screenshot({ path: testInfo.outputPath('victory-save-recovered.png'), scale: 'css' });
   expect(errors).toEqual([]);

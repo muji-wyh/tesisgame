@@ -2,7 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, rendered, boardPoint, lessonPoint, resultPoint } = require('./game-ui.cjs');
+const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards,
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, lessonPoint, swipeLearn, resultPoint } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -26,7 +27,7 @@ async function ready(scope, match = true) {
   await expect(scope.locator('#status')).toBeHidden();
   await expect(scope.locator('#game-status')).toContainText(/Learn five words\.|Find 3 word–picture pairs\./);
   if (!match) return;
-  if ((await scope.locator('#game-status').textContent()).includes('Learn five words.')) await chooseMode(scope, 1);
+  if ((await scope.locator('#game-status').textContent()).includes('Learn five words.')) await chooseMode(scope, 'match');
   await expect(scope.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await rendered(scope);
 }
@@ -39,12 +40,10 @@ async function canvasMetrics(scope) {
 }
 
 async function openMedals(page, focusLast = false) {
-  const bounds = await logicalMetrics(page);
-  await tap(page, 20 + (bounds.width - 112) * 0.75, 52);
+  await chooseRewardSection(page, 'medals');
   await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
   if (focusLast) {
-    // Medals -> Words -> room tab -> last earned medal; locked medals cannot take focus.
-    await page.keyboard.press('Shift+Tab');
+    // Medals -> Pip -> last earned medal; locked medals cannot take focus.
     await page.keyboard.press('Shift+Tab');
     await page.keyboard.press('Shift+Tab');
   }
@@ -53,11 +52,27 @@ async function openMedals(page, focusLast = false) {
 
 function cardPoint(metrics, index) {
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const point = boardPoint({ width: metrics.width / scale, height: metrics.height / scale }, index);
+  const point = boardPoint({ width: metrics.width / scale, height: metrics.height / scale, scale }, index);
+  return { x: metrics.x + point.x * scale, y: metrics.y + point.y * scale };
+}
+
+function resultScreenPoint(metrics, key = 'chest') {
+  const scale = Math.min(metrics.width, metrics.height) / 480;
+  const point = resultPoint({ width: metrics.width / scale, height: metrics.height / scale, scale }, key);
   return { x: metrics.x + point.x * scale, y: metrics.y + point.y * scale };
 }
 
 const firstCard = (metrics) => cardPoint(metrics, 0);
+
+async function hintImage(page) {
+  const bounds = await logicalMetrics(page), icon = headerIconRect(bounds, 'hint');
+  await page.mouse.move(0, 0);
+  await rendered(page);
+  return page.screenshot({ scale: 'css', clip: {
+    x: bounds.x + icon.x * bounds.scale, y: bounds.y + icon.y * bounds.scale,
+    width: icon.width * bounds.scale, height: icon.height * bounds.scale
+  } });
+}
 
 async function assertFits(scope) {
   const sizes = await scope.locator('#canvas').evaluate((canvas) => {
@@ -187,33 +202,6 @@ test('orientation changes preserve selection and fit the resized canvas', async 
   }
   expect(errors).toEqual([]);
 });
-
-async function observeAudio(page) {
-  await page.addInitScript(() => {
-    const NativeContext = window.AudioContext || window.webkitAudioContext;
-    window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0 };
-    if (!NativeContext) return;
-    const WrappedContext = new Proxy(NativeContext, {
-      construct(Target, args) {
-        const context = Reflect.construct(Target, args);
-        window.audioObservation.contexts.push(context);
-        const createSource = context.createBufferSource.bind(context);
-        context.createBufferSource = () => {
-          const source = createSource();
-          const start = source.start.bind(source);
-          source.start = (...values) => {
-            window.audioObservation.starts += 1;
-            return start(...values);
-          };
-          return source;
-        };
-        return context;
-      }
-    });
-    if (window.AudioContext) window.AudioContext = WrappedContext;
-    else window.webkitAudioContext = WrappedContext;
-  });
-}
 
 async function holdOptionalAudio(page) {
   const requests = [];
@@ -380,22 +368,21 @@ for (const failure of ['unavailable', 'corrupt']) {
     if (checkLearnHear) {
       await rendered(page);
       const bounds = await logicalMetrics(page);
-      const hear = lessonPoint(bounds, 'hear');
-      const next = lessonPoint(bounds, 'next');
+      const hear = lessonPoint(bounds, 'picture');
       const initialStarts = await page.evaluate(() => window.audioObservation.starts);
       await tap(page, hear.x, hear.y);
       await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
       const firstWord = (await page.locator('#game-status').textContent()).split('.')[0];
-      await tap(page, next.x, next.y);
-      await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\. Look, read, and press Hear\.$/);
+      await swipeLearn(page, 'next');
+      await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\. Swipe to explore\. Tap the picture to hear\.$/);
       const nextWord = (await page.locator('#game-status').textContent()).match(/^Learn: ([a-z]+)\./)[1];
       expect(nextWord).not.toBe(firstWord);
       const beforeHear = await page.evaluate(() => window.audioObservation.starts);
       await tap(page, hear.x, hear.y);
       await expect(page.locator('#game-status')).toHaveText(`${nextWord}. Look at the picture and say the word.`);
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(beforeHear);
-      await chooseMode(page, 1);
+      await chooseMode(page, 'match');
       await ready(page);
     }
     const metrics = await canvasMetrics(page);
@@ -449,7 +436,7 @@ test('the exported game runs inside a normal website iframe', async ({ page }) =
   await page.locator('iframe').evaluate((element) => { element.style.height = '80%'; });
   await expect.poll(async () => (await canvasMetrics(frame)).height).toBeLessThan(page.viewportSize().height);
   await assertFits(frame);
-  await expect(frame.locator('#game-status')).toContainText('Learn five words.');
+  await expect(frame.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -576,7 +563,6 @@ test('new adventures rotate and all five review words replay without opening or 
   await page.screenshot({ path: testInfo.outputPath('found-word-shelf.png'), scale: 'css' });
 
   const { metrics } = board;
-  const scale = Math.min(metrics.width, metrics.height) / 480;
   const reviewed = [];
   await resultTap(page, 'review');
   for (let index = 0; index < 5; index++) {
@@ -597,14 +583,10 @@ test('new adventures rotate and all five review words replay without opening or 
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
   // Back restores the found-word focus; deliberately press inside the chest stage.
-  await holdChestUntilOpen(page, { x: metrics.x + 48 * scale, y: metrics.y + 208 * scale });
+  await holdChestUntilOpen(page, resultScreenPoint(metrics));
   await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText("Pip's adventures.");
-  // Back has focus on entry; the next control is Surprise me.
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toHaveText('Learn five words. Swipe left or right; tap the picture to hear.');
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];
@@ -636,14 +618,10 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await winWithTouch(page);
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
-  const stageHeight = bounds.height / scale - 278;
-  await holdChestUntilOpen(page, {
-    x: bounds.x + bounds.width * 0.5,
-    y: bounds.y + (86 + stageHeight * 0.5) * scale
-  });
-  await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
+  await holdChestUntilOpen(page, resultScreenPoint(bounds));
+  await openRewards(page);
   await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
-  await greet(104, 466, true);
+  await greet(104, 308, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   await openMedals(page, true);
   await page.keyboard.press('Enter');
@@ -658,7 +636,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await loseWithTouch(page);
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-loss.png'), scale: 'css' });
-  await page.touchscreen.tap(bounds.x + bounds.width - 48 * scale, bounds.y + 48 * scale);
+  await openRewards(page);
   await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
   expect(errors).toEqual([]);
 });
@@ -673,7 +651,9 @@ test('Pip speaks with actual prompt playback, not pending downloads or music', a
     'This WebKit runtime has no audio output.');
   const bounds = await canvasMetrics(page);
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const beak = { x: bounds.x + 28 * scale, y: bounds.y + 36 * scale, width: 32 * scale, height: 15 * scale };
+  const pip = pipHeaderRect(await logicalMetrics(page)), unit = pip.width / 54;
+  const beak = { x: bounds.x + (pip.x + 16 * unit) * scale, y: bounds.y + (pip.y + 26 * unit) * scale,
+    width: 32 * unit * scale, height: 15 * unit * scale };
   const resting = await page.screenshot({ clip: beak, scale: 'css' });
   const held = await holdOptionalAudio(page);
   try {
@@ -699,7 +679,8 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await ready(page);
   const { metrics, discovered } = await discoverCards(page);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const hintPoint = { x: metrics.x + metrics.width - 128 * scale, y: metrics.y + 48 * scale };
+  const hint = headerPoint(await logicalMetrics(page), 'hint');
+  const hintPoint = { x: metrics.x + hint.x * scale, y: metrics.y + hint.y * scale };
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
   const used = new Set();
@@ -711,6 +692,7 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   expect(firstPair.Picture).toBeDefined();
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
+  const twoLeft = await hintImage(page);
   await page.screenshot({ path: testInfo.outputPath('hint-stars.png'), scale: 'css' });
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
@@ -727,12 +709,15 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   used.add(secondWord);
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toHaveText(secondHint);
+  const oneLeft = await hintImage(page);
+  expect(oneLeft.equals(twoLeft), 'The native digit badge changes from two remaining hints to one.').toBe(false);
   for (const index of [secondPair.Word, secondPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
   }
   await continueMatch(page);
   await chooseSeason(page, 1);
+  const beforeLastHint = await hintImage(page);
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
   const thirdHint = await page.locator('#game-status').textContent();
@@ -742,6 +727,7 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   expect(used.size).toBe(3);
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(thirdHint);
+  expect((await hintImage(page)).equals(beforeLastHint), 'The last hint visibly changes the native badge to zero.').toBe(false);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.screenshot({ path: testInfo.outputPath('hint-used.png'), scale: 'css' });
   for (const index of [thirdPair.Word, thirdPair.Picture]) {
@@ -758,7 +744,8 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
   // Pip's static speech indicator can change when the hint recording ends.
-  const boardClip = { x: metrics.x, y: metrics.y + 198 * scale, width: metrics.width, height: metrics.height - 198 * scale };
+  const top = contentBounds(await logicalMetrics(page)).top * scale;
+  const boardClip = { x: metrics.x, y: metrics.y + top, width: metrics.width, height: metrics.height - top };
   const still = await page.screenshot({ clip: boardClip, scale: 'css' });
   await page.waitForTimeout(250);
   expect((await page.screenshot({ clip: boardClip, scale: 'css' })).equals(still), 'Reduced-motion hints stay visually still.').toBe(true);
@@ -780,7 +767,8 @@ test(`Hint remains available after ${correct ? 'correct' : 'wrong'} feedback`, a
   await ready(page);
   const { metrics, discovered } = await discoverCards(page);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const hintPoint = { x: metrics.x + metrics.width - 128 * scale, y: metrics.y + 48 * scale };
+  const hint = headerPoint(await logicalMetrics(page), 'hint');
+  const hintPoint = { x: metrics.x + hint.x * scale, y: metrics.y + hint.y * scale };
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
   const word = (await page.locator('#game-status').textContent()).match(/^Hint: match the ([a-z]+) cards\.$/)[1];
@@ -791,8 +779,6 @@ test(`Hint remains available after ${correct ? 'correct' : 'wrong'} feedback`, a
     await page.touchscreen.tap(point.x, point.y);
   }
   await expect(page.locator('#game-status')).toContainText(correct ? 'Great match!' : 'Not quite.');
-  await page.mouse.move(0, 0);
-  await page.screenshot({ path: testInfo.outputPath('feedback-hint-2.png'), scale: 'css' });
   const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')]);
   if (correct) {
     await page.touchscreen.tap(hintPoint.x, hintPoint.y);
@@ -848,7 +834,9 @@ test('three mistakes end a round and the counter cannot reset the limits', async
   const [word, card] = [...discovered].find(([, value]) => value.Word !== undefined);
   const [, other] = [...discovered].find(([text, value]) => text !== word && value.Picture !== undefined);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const counterPoint = { x: metrics.x + metrics.width * 0.75 - 184 * scale, y: metrics.y + 48 * scale };
+  const progress = progressRegion(await logicalMetrics(page));
+  const counterPoint = { x: metrics.x + (progress.x + progress.width * 0.75) * scale,
+    y: metrics.y + (progress.y + progress.height / 2) * scale };
   for (let attempt = 0; attempt < 3; attempt++) {
     await page.touchscreen.tap(counterPoint.x, counterPoint.y);
     for (const index of [card.Word, other.Picture]) {
@@ -858,7 +846,7 @@ test('three mistakes end a round and the counter cannot reset the limits', async
     await continueMatch(page, false);
     await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find 3 word–picture pairs.');
   }
-  // Hiding Voice and Hint on the result screen expands both passive counters.
+  // Results replace the counters with a passive topic title, never a reset control.
   const resultCounterPoint = { x: metrics.x + metrics.width * 0.75 - 64 * scale, y: counterPoint.y };
   await page.touchscreen.tap(resultCounterPoint.x, resultCounterPoint.y);
   await pressGamepad(page, 2);
@@ -873,7 +861,7 @@ test('three mistakes end a round and the counter cannot reset the limits', async
   expect(errors).toEqual([]);
 });
 
-test('repeated lessons assemble three fragments into a medal and preserve progress', async ({ page }, testInfo) => {
+test('fresh adventures assemble three fragments into a medal and preserve progress', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -887,7 +875,7 @@ test('repeated lessons assemble three fragments into a medal and preserve progre
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
     const board = await discoverCards(page);
     const words = [...board.discovered.keys()];
-    if (previousWords.length) expect([...words].sort()).toEqual([...previousWords].sort());
+    if (previousWords.length) expect([...words].sort()).not.toEqual([...previousWords].sort());
     previousWords = words;
     await winWithTouch(page, board);
     await holdControllerChest(page);
@@ -960,8 +948,9 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   await page.screenshot({ path: testInfo.outputPath('reward-collection.png'), scale: 'css' });
   await rendered(page);
   const rewardBounds = await logicalMetrics(page);
-  const rewardPoint = { x: rewardBounds.x + 88 * rewardBounds.scale,
-    y: rewardBounds.y + 266 * rewardBounds.scale };
+  const firstReward = firstMedalPoint(rewardBounds);
+  const rewardPoint = { x: rewardBounds.x + firstReward.x * rewardBounds.scale,
+    y: rewardBounds.y + firstReward.y * rewardBounds.scale };
   await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
   await expect(page.locator('#game-status')).toContainText('reward preview opened');
   await expect(page.locator('#game-status')).toContainText(earned);
@@ -1051,16 +1040,7 @@ test('completes matches and opens a one-shot reward while optional audio is stil
       await continueMatch(page);
       await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word–picture pairs.');
     }
-    const scale = Math.min(metrics.width, metrics.height) / 480;
-    const width = metrics.width / scale;
-    const height = metrics.height / scale;
-    const landscape = metrics.width >= metrics.height;
-    const stageWidth = landscape ? (width - 32) * 0.61 : width - 16;
-    const stageHeight = landscape ? height - 94 : Math.max(72, height - 278);
-    const chestPoint = {
-      x: metrics.x + (8 + stageWidth * 0.5) * scale,
-      y: metrics.y + (86 + stageHeight * 0.6) * scale
-    };
+    const chestPoint = resultScreenPoint(metrics);
     await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
     await page.mouse.down();
@@ -1070,7 +1050,7 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
-      // Only the current background music resumes. Continue canceled the pending
+      // Only the current background music resumes. Dismissing feedback canceled the pending
       // correct-answer voice, which must not replay over the earned reward.
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
     }
@@ -1097,16 +1077,7 @@ test('dragging the reward chest cancels hold-open without losing pointer control
     await continueMatch(page);
     await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word–picture pairs.');
   }
-  const scale = Math.min(metrics.width, metrics.height) / 480;
-  const width = metrics.width / scale;
-  const height = metrics.height / scale;
-  const landscape = metrics.width >= metrics.height;
-  const stageWidth = landscape ? (width - 32) * 0.61 : width - 16;
-  const stageHeight = landscape ? height - 94 : Math.max(72, height - 278);
-  const chestPoint = {
-    x: metrics.x + (8 + stageWidth * 0.5) * scale,
-    y: metrics.y + (86 + stageHeight * 0.6) * scale
-  };
+  const chestPoint = resultScreenPoint(metrics);
   await page.mouse.move(chestPoint.x, chestPoint.y);
   await page.mouse.down();
   await page.mouse.move(chestPoint.x + 28, chestPoint.y + 12, { steps: 4 });
@@ -1133,7 +1104,7 @@ async function loseWithTouch(page) {
 }
 
 for (const outcome of ['win', 'loss']) {
-  test(`${outcome} screen visibly renders Repeat lesson below the artwork on a phone`, async ({ page }, testInfo) => {
+  test(`${outcome} screen visibly renders New adventure below the artwork on a phone`, async ({ page }, testInfo) => {
     const errors = watchErrors(page);
     await page.setViewportSize({ width: 390, height: 650 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1145,8 +1116,8 @@ for (const outcome of ['win', 'loss']) {
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const metrics = await canvasMetrics(page);
     const scale = Math.min(metrics.width, metrics.height) / 480;
-    const action = resultPoint(await logicalMetrics(page), 'repeat');
-    const replay = { x: metrics.x + action.x * scale, y: metrics.y + action.y * scale };
+    const action = resultPoint(await logicalMetrics(page), 'newAdventure');
+    const next = { x: metrics.x + action.x * scale, y: metrics.y + action.y * scale };
     const screenshot = await page.screenshot({ path: testInfo.outputPath(`result-${outcome}.png`), scale: 'css' });
     const pixel = await page.evaluate(async ({ encoded, point }) => {
       const image = new Image();
@@ -1158,10 +1129,10 @@ for (const outcome of ['win', 'loss']) {
       const context = canvas.getContext('2d');
       context.drawImage(image, 0, 0);
       return [...context.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data].slice(0, 3);
-    }, { encoded: screenshot.toString('base64'), point: { x: replay.x, y: replay.y - 24 * scale } });
-    expect(pixel, 'The actual white replay button must render, not just accept invisible input.').toEqual([255, 255, 255]);
-    await page.touchscreen.tap(replay.x, replay.y);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+    }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 24 * scale } });
+    expect(pixel, 'The softly tinted New adventure button must render, not just accept invisible input.').toEqual([243, 223, 224]);
+    await page.touchscreen.tap(next.x, next.y);
+    await expect(page.locator('#game-status')).toContainText('Learn five words.');
     expect(errors).toEqual([]);
   });
 }
@@ -1174,8 +1145,8 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await ready(page);
   const metrics = await loseWithTouch(page);
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const stageHeight = metrics.height / scale - 278;
-  const bear = { x: metrics.x + metrics.width / 2, y: metrics.y + (86 + stageHeight * 0.5) * scale };
+  const stageHeight = metrics.height / scale - 284;
+  const bear = { x: metrics.x + metrics.width / 2, y: metrics.y + (92 + stageHeight * 0.5) * scale };
   await page.touchscreen.tap(bear.x, bear.y);
   await expect(page.locator('#game-status')).toContainText('Good try! High five!');
   await page.evaluate(() => window.gamepadFixture.connect());
@@ -1192,8 +1163,8 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 13);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
-  await resultTap(page, 'repeat');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await resultTap(page, 'newAdventure');
+  await expect(page.locator('#game-status')).toContainText('Learn five words.');
   expect(errors).toEqual([]);
 });
 

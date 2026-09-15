@@ -88,20 +88,16 @@
     .loader-layout { display: grid; grid-template-areas: "heading" "toy" "download";
       gap: 24px; width: min(100%, 380px); }
     .loading-heading { grid-area: heading; }
-    .loading-heading small { display: block; color: var(--cp-accent); font-size: 12px;
-      font-weight: 700; letter-spacing: 0.18em; margin-bottom: 8px; }
     h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
     p { margin: 0; line-height: 1.5; }
-    .loading-heading p { color: var(--cp-text-soft); }
     #loading-play { grid-area: toy; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
     #loading-play, #loading-play * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-    .toy-scene { position: relative; background: var(--cp-bg-elevated);
-      border: 1px solid var(--cp-border); border-radius: 16px; }
+    .toy-scene { position: relative; }
     #loading-toy { display: block; width: 100%; height: 244px; border: 0; padding: 0;
-      border-radius: 16px; background: var(--cp-bg-elevated); touch-action: pinch-zoom;
+      border-radius: 16px; background: var(--cp-bg); touch-action: pinch-zoom;
       -webkit-appearance: none; appearance: none; }
     #loading-toy:focus:not(:focus-visible) { outline: none; }
-    #loading-toy:active { background: var(--cp-bg-elevated); }
+    #loading-toy:active { background: var(--cp-bg); }
     #loading-toy svg { width: 100%; height: 100%; pointer-events: none; }
     .duck-sprite { display: block; width: 100%; height: 100%; aspect-ratio: 1;
       background-image: var(--pip-art); background-size: 400% 100%; background-position: 0% 0%; }
@@ -119,14 +115,13 @@
       clip-path: polygon(50% 0%, 64% 32%, 100% 38%, 74% 62%, 82% 100%, 50% 82%, 18% 100%, 26% 62%, 0% 38%, 36% 32%); }
     .loading-spark[data-shape="bubble"] { clip-path: none; border-radius: 50%; }
     .loading-spark[data-shape="heart"] { clip-path: polygon(50% 100%, 0 38%, 0 14%, 15% 0, 35% 0, 50% 20%, 65% 0, 85% 0, 100% 14%, 100% 38%); }
-    .play-caption { display: grid; gap: 4px; margin-top: 12px; }
-    #loading-score { font-size: 20px; color: var(--cp-accent); font-variant-numeric: tabular-nums; }
+    .play-caption { margin-top: 8px; }
     .play-caption span { font-size: 14px; color: var(--cp-text-soft); }
-    .loading-download { grid-area: download; display: grid; gap: 12px; }
+    .loading-download { grid-area: download; display: grid; gap: 8px; }
     .loading-line { display: flex; justify-content: space-between; gap: 12px;
       font-size: 14px; text-align: left; color: var(--cp-text-soft); }
     #loading-percent { font-variant-numeric: tabular-nums; color: var(--cp-accent); }
-    progress { appearance: none; width: 100%; height: 12px; border: 0; border-radius: 0.625rem;
+    progress { appearance: none; width: 100%; height: 6px; border: 0; border-radius: 0.625rem;
       overflow: hidden; background: var(--cp-border); color: var(--cp-accent); accent-color: var(--cp-accent); }
     progress::-webkit-progress-bar { background: var(--cp-border); }
     progress::-webkit-progress-value { background: var(--cp-accent); border-radius: 0.625rem; }
@@ -138,51 +133,66 @@
     button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
     #retry:hover { background: var(--cp-accent-hover); }
     #speech-panel { position: absolute; z-index: 1; display: grid; min-width: 0;
-      grid-template-columns: clamp(38px, 8vw, 62px) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto;
-      gap: 2px 9px; padding: 4px 8px; overflow: hidden;
-      border: 2px solid var(--voice-accent, #438363); border-radius: 20px 20px 20px 7px;
-      background: linear-gradient(110deg, var(--voice-light, #d7efc7), #fff 70%); color: #35415e; }
-    #speech-buddy { align-self: center; width: 100%; max-height: 100%;
+      grid-template-columns: 80px minmax(0, 1fr); grid-template-rows: auto auto; align-content: center;
+      gap: 4px 8px; padding: 6px 8px; overflow: hidden;
+      border: 1px solid var(--cp-border); border-radius: 16px;
+      background: var(--cp-surface); color: var(--cp-text); }
+    #speech-buddy { position: relative; grid-row: 1 / 3; align-self: center; width: 80px; height: 80px;
       transform-origin: 50% 70%; transition: transform 160ms ease-out; }
+    .speech-score { position: absolute; bottom: -4px; left: 0; width: 80px; display: flex;
+      justify-content: space-evenly; padding: 2px 0; border-radius: 8px; background: var(--cp-surface-soft);
+      color: var(--cp-text); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .speech-score span::before { content: ''; display: inline-block; width: 5px; height: 5px;
+      margin-right: 3px; border-radius: 50%; background: var(--cp-success); }
+    #speech-mistakes::before { background: var(--cp-danger); }
     #speech-buddy .duck-sprite { height: auto; }
     #speech-panel[data-state="listening"] .duck-sprite { animation: pip-blink 4600ms steps(1) infinite; }
-    #speech-panel[data-heard="true"] .duck-sprite { animation: none; background-position: 100% 0%; }
-    .speech-bubble { align-self: center; min-width: 0; max-height: 100%; padding: 2px 7px;
-      border-radius: 13px 13px 13px 3px; background: #ffffffba;
+    #speech-panel[data-state="listening"][data-heard="false"] #speech-buddy { animation: pip-listen 2800ms ease-in-out infinite; }
+    #speech-panel[data-heard="true"] .duck-sprite { animation: none; }
+    #speech-panel[data-heard="true"][data-reaction="nod"] .duck-sprite { background-position: 66.6667% 0%; }
+    #speech-panel[data-heard="true"][data-reaction="wave"] .duck-sprite { background-position: 100% 0%; }
+    #speech-panel[data-heard="true"][data-reaction="tilt"] .duck-sprite { background-position: 0% 0%; }
+    #speech-panel[data-heard="true"][data-reaction="nod"] #speech-buddy { animation: pip-nod 280ms ease-out; }
+    #speech-panel[data-heard="true"][data-reaction="wave"] #speech-buddy { animation: pip-wave 280ms ease-out; }
+    #speech-panel[data-heard="true"][data-reaction="tilt"] #speech-buddy { animation: pip-tilt 280ms ease-out; }
+    .speech-bubble { grid-column: 2; align-self: center; min-width: 0; max-height: 100%; padding: 2px 4px;
+      border-radius: 10px; background: none;
       transition: background-color 160ms ease-out; overflow: hidden; }
     .speech-heading { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-    #speech-status { min-width: 0; color: var(--voice-accent, #438363);
-      font-size: clamp(10px, 1.2vw, 14px); font-weight: 750; line-height: 1.15; }
+    #speech-status { min-width: 0; color: var(--cp-text-muted);
+      font-size: clamp(12px, 1.2vw, 14px); font-weight: 750; line-height: 1.15; }
     #speech-meter { display: flex; align-items: center; justify-content: center; flex: 0 0 30px; gap: 3px; height: 14px; }
-    #speech-meter i { width: 3px; height: 13px; border-radius: 3px; background: var(--voice-accent, #438363);
+    #speech-meter i { width: 3px; height: 13px; border-radius: 3px; background: var(--cp-accent);
       transform: scaleY(0.3); }
     #speech-transcript { min-width: 0; max-height: 2.3em; overflow: auto; overflow-wrap: anywhere;
-      font-size: clamp(13px, 2vw, 20px); font-weight: 600; line-height: 1.15; }
-    #speech-transcript:empty::before { content: 'Say “I see a doll”'; font-weight: 400; color: #65708a; }
-    #speech-notice { grid-column: 1 / -1; max-height: 2.3em; overflow: auto;
-      font-size: clamp(8px, 0.9vw, 11px); line-height: 1.1; color: #65708a; }
+      font-size: clamp(15px, 2vw, 20px); font-weight: 600; line-height: 1.15; }
+    #speech-transcript:empty::before { content: 'Say “I see a doll”'; font-weight: 400; color: var(--cp-text-muted); }
+    #speech-notice { grid-column: 2; max-height: 3.3em; overflow: auto;
+      font-size: clamp(10px, 0.9vw, 11px); line-height: 1.1; color: var(--cp-text-muted); }
     #speech-panel[data-state="listening"] #speech-meter i { animation: speech-wave 900ms ease-in-out infinite alternate; }
     #speech-meter i:nth-child(2) { animation-delay: -180ms; }
     #speech-meter i:nth-child(3) { animation-delay: -420ms; }
     #speech-meter i:nth-child(4) { animation-delay: -260ms; }
     #speech-meter i:nth-child(5) { animation-delay: -600ms; }
-    #speech-panel[data-heard="true"] #speech-buddy { transform: rotate(-6deg) scale(1.07); }
-    #speech-panel[data-heard="true"] .speech-bubble { background: #fff; }
-    #speech-panel[data-state="error"] #speech-status { color: #a74337; }
+    #speech-panel[data-heard="true"] .speech-bubble { background: var(--cp-surface-soft); }
+    #speech-panel[data-state="error"] #speech-status { color: var(--cp-danger); }
     #speech-panel[data-state="error"] #speech-transcript { display: none; }
     @keyframes speech-wave { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+    @keyframes pip-listen { 0%, 100% { transform: rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
+    @keyframes pip-nod { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(5px) rotate(3deg); } }
+    @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
+    @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
     @media (prefers-reduced-motion: reduce) {
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
-      #speech-panel .speech-bubble { background: #ffffffba !important; }
+      #speech-panel .speech-bubble { background: none !important; }
       .duck-sprite { animation: none !important; }
-      #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0%; }
+      #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0% !important; }
     }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
     @media (max-height: 650px) {
       #status { padding: 16px; }
       .loader-layout { gap: 12px; }
-      .loading-heading small { display: none; }
       h1 { font-size: 32px; margin-bottom: 4px; }
       #loading-toy { height: 180px; }
     }
@@ -195,12 +205,11 @@
       #status { padding: 12px; }
       .loader-layout, .loading-download { gap: 4px; }
       h1 { font-size: 28px; }
-      .loading-heading p, .play-caption span { font-size: 12px; }
+      .play-caption span { font-size: 12px; }
       #loading-toy { height: 96px; }
       #status[data-state="slow"] #loading-toy { height: 48px; }
       #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
-      .play-caption { margin-top: 4px; gap: 0; }
-      #loading-score { font-size: 16px; }
+      .play-caption { margin-top: 4px; }
     }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
       clip-path: inset(50%); white-space: nowrap; }
@@ -212,35 +221,37 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Word Buddies matching game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Choose Match, Sky words, or Listen to start a game.
+      <p id="help" class="sr-only">Choose Match, Learn, or Memory.
         Match: find three matching word and picture pairs. Two cards have no match.
-        Sky words: a picture flies down; choose its word from two buttons.
-        Listen: press Hear, then choose one of two pictures. You can hear the word again.
-        Sky words and Listen need five correct choices. There is no time limit.
-        Three mistakes end the round. Each round allows three hints, shared by touch, keyboard, and controller.
+        Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
-        A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for My rewards.
+        A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for More.
         Hint marks a matching pair with stars and speaks its word, without a penalty.
-        The hint button shows how many remain, then Used. Only a new round restores all three hints.
-        Where supported, press Voice to start listening immediately and press Voice again to stop.
+        The lightbulb icon shows how many hints remain. Only a new round restores all three hints.
+        Where supported, press the microphone icon to start listening immediately and press it again to stop.
         Browser speech may process audio remotely; the game saves no voice or transcripts.
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
         Pip the duck is your guide. His beak moves with the game's spoken words. Press him for a dance, snack, or bubbles.
-        Start in Learn: see a large picture with its written word and press Hear. Previous and Next explore five words.
-        Learn, Match, Sky, Listen, and Memory practise the same five words.
-        Match shows both correct picture-word associations together; tap either to hear it, then choose the next card to continue.
-        Escape or Xbox B dismisses Match feedback. Only the final answer has a See reward or See result button.
-        Sky, Listen and Memory keep their self-paced Continue action.
-        Memory has ten hidden cards: pair each word with its picture to grow five flowers. Study reveals the same board without scoring; Return to play hides unmatched cards. There is no timer or limit on attempts.
-        Listen shows the written target if sound is unavailable. After a round, review all five words, with missed words first.
-        Explore and New adventure open Pip's adventure book. Choose any of twelve illustrated topics or Surprise me to start a five-word lesson.
-        Visited means a lesson was opened, not that its words are mastered. Back returns to the current lesson. Repeat lesson keeps the exact five words.
-        My rewards offers Spring, Summer, Autumn, Winter, Ocean, and Space theme choices. Your chosen theme is remembered as you explore vocabulary topics.
-        The My rewards button previews your next medal and shows how many of its three pieces you have.
-        My rewards shows six medals per theme, with three pieces per medal. Every winning mode earns one piece.
-        Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy, and its third unlocks a place.
-        Choose Help Pip get this on a locked gift to start a related lesson and follow its progress.
+        The game opens in Match. Choose Learn to swipe left for the next word or right for the previous word. Tap it to hear.
+        The slide follows your finger; release to change words or let it settle back. Reduced motion skips animated settling.
+        With the display focused, Left/Right or the Xbox D-pad/left stick changes words; Enter, Space, or Xbox A plays the word.
+        Learn has no bottom buttons. The 1/5 counter sits inside the slide. The first and last words stay in place. Choose a mode tab above to play.
+        Learn, Match, and Memory practise the same five words.
+        Match feedback stays on the board and clears automatically. Tap any card, including a completed pair, to hear its word again.
+        Memory has ten hidden cards: pair each word with its picture to grow five flowers.
+        Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
+        Hold Space, Enter, or Xbox A on the eye for the same peek. Memory has no countdown or limit on attempts.
+        After a round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
+        New adventure on the result screen starts a fresh five-word Learn lesson directly. Retry saving appears only if a reward could not be saved.
+        More opens Pip's room and Medals. The arrow icon returns to the game.
+        Six larger world icons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Choosing one keeps this page open and preserves your game.
+        Your next medal and gift progress are in Medals. Your chosen world is remembered as you explore vocabulary topics.
+        Medals shows six medals per theme, with three pieces per medal. Every winning mode earns one piece.
+        Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy.
+        Drag blank canvas areas or locked toys to scroll. A floor tap calls Pip; duck and unlocked-toy gestures still play.
+        A locked toy's card shows its progress and an arrow to start or continue a related lesson.
+        Choosing a toy card keeps your scroll position. Keyboard focus reveals the full card and its action.
         Toys have three steps you control, with a new result at each step and replay at the end.
         Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, or launch a rocket. Each toy says its word. Locked gifts show how many pieces you need.
         Open an earned medal and choose Display with Pip to save a favorite alongside your room choices.
@@ -251,6 +262,7 @@
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
+          <div class="speech-score"><span id="speech-successes">0/3</span><span id="speech-mistakes">0/3</span></div>
         </div>
         <div class="speech-bubble">
           <div class="speech-heading">
@@ -264,9 +276,7 @@
       <div id="status" role="region" aria-labelledby="loading-title">
         <div class="loader-layout">
           <header class="loading-heading">
-            <small>PLAY A LITTLE. LEARN A LOT.</small>
             <h1 id="loading-title">Word Buddies</h1>
-            <p>Let's wake up the treasure!</p>
           </header>
           <div id="loading-play">
             <div class="toy-scene">
@@ -305,7 +315,7 @@
               </svg>
             </div>
             <div class="play-caption">
-              <strong id="loading-score" role="status">0 sparkles</strong>
+              <span id="loading-score" class="sr-only" role="status">0 sparkles</span>
               <span id="loading-hint" aria-live="polite">Tap or wiggle the chest to make stars!</span>
             </div>
           </div>
@@ -653,6 +663,7 @@
         let recognition = null;
         let restartTimer = 0;
         let heardTimer = 0;
+        let heardReaction = 0;
         let stopFailed = false;
 
         function speechAvailable() {
@@ -681,6 +692,7 @@
           window.clearTimeout(heardTimer);
           restartTimer = 0;
           heardTimer = 0;
+          heardReaction = 0;
           panel.setAttribute('data-heard', 'false');
           const previous = recognition;
           recognition = null;
@@ -781,6 +793,8 @@
                 transcript.scrollTop = transcript.scrollHeight;
                 if (isFinal) lastFinal = index;
                 if (text) {
+                  panel.setAttribute('data-reaction', ['nod', 'wave', 'tilt'][heardReaction]);
+                  heardReaction = (heardReaction + 1) % 3;
                   panel.setAttribute('data-heard', 'true');
                   window.clearTimeout(heardTimer);
                   heardTimer = window.setTimeout(() => {
@@ -949,7 +963,15 @@
           container.style.setProperty('--voice-accent', accent);
           container.style.setProperty('--voice-light', light);
         },
-        observe(onHidden, onMotion, onVisible) {
+        roundProgress(successes, mistakes) {
+          document.getElementById('speech-successes').textContent = `${successes}/3`;
+          document.getElementById('speech-mistakes').textContent = `${mistakes}/3`;
+        },
+        observe(onHidden, onMotion, onVisible, onInputCanceled) {
+          // Godot Web translates touchcancel into an ordinary release.
+          for (const type of ['touchcancel', 'pointercancel']) {
+            canvas.addEventListener(type, () => onInputCanceled(), { capture: true });
+          }
           document.addEventListener('visibilitychange', () => {
             if (document.hidden) onHidden();
             else onVisible();

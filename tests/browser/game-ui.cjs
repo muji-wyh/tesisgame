@@ -1,5 +1,6 @@
 const { expect } = require('@playwright/test');
 const THEME_COLORS = ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff', '#e4f6fb', '#eeeafa'];
+const MODES = ['match', 'learn', 'memory'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -14,25 +15,283 @@ async function tap(page, x, y) {
   await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
 }
 
-async function chooseMode(page, index) {
-  const bounds = await metrics(page);
-  const width = (bounds.width - 40) / 5;
-  await tap(page, 8 + index * (width + 6) + width / 2, 122);
+function learnCardRect(bounds) {
+  const content = contentBounds(bounds);
+  return { x: content.x, y: content.top, width: content.width, height: bounds.height - content.top - content.padding };
+}
+
+async function swipeLearn(page, direction, { input = 'mouse' } = {}) {
+  if (!['next', 'previous'].includes(direction)) throw new Error(`Unknown Learn direction: ${direction}`);
+  if (!['mouse', 'touch'].includes(input)) throw new Error(`Unknown Learn input: ${input}`);
+  const bounds = await metrics(page), card = learnCardRect(bounds);
+  const point = fraction => ({ x: bounds.x + (card.x + card.width * fraction) * bounds.scale,
+    y: bounds.y + (card.y + card.height / 2) * bounds.scale });
+  const start = point(direction === 'next' ? 0.75 : 0.25);
+  const end = point(direction === 'next' ? 0.25 : 0.75);
+  if (input === 'touch') {
+    const client = await page.context().newCDPSession(page);
+    let pressed = false;
+    try {
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
+      pressed = true;
+      await rendered(page);
+      for (let step = 1; step <= 6; step++) {
+        await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{
+          id: 1, x: start.x + (end.x - start.x) * step / 6, y: start.y
+        }] });
+        await rendered(page);
+      }
+    } finally {
+      if (pressed) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await client.detach();
+    }
+  } else {
+    await page.mouse.move(start.x, start.y);
+    await page.mouse.down();
+    try {
+      await rendered(page);
+      await page.mouse.move(end.x, end.y, { steps: 6 });
+      await rendered(page);
+    } finally {
+      await page.mouse.up();
+    }
+  }
+  await rendered(page);
+}
+
+function uiScale(bounds) {
+  if (!Number.isFinite(bounds.scale) || bounds.scale <= 0) throw new Error('Logical canvas bounds must include their CSS scale.');
+  return Math.max(2 / 3, bounds.scale);
+}
+
+function modeHeight(bounds) {
+  return Math.ceil(44 / uiScale(bounds));
+}
+
+function modeRect(bounds, name, currentMode = 'learn') {
+  const index = MODES.indexOf(name);
+  if (index < 0) throw new Error(`Unknown mode: ${name}. Use learn, match or memory.`);
+  if (!MODES.includes(currentMode)) throw new Error(`Unknown current mode: ${currentMode}.`);
+  const content = contentBounds(bounds);
+  const scale = uiScale(bounds), width = Math.ceil(80 / scale), gap = Math.round(6 / scale);
+  let rowX = content.x, rowWidth = content.width, y = content.padding + content.header + content.gap;
+  if (content.inlineModes) {
+    const pipWidth = Math.ceil((currentMode === 'learn' ? 52 : 132) / scale);
+    const icons = { learn: 1, match: 3, memory: 2 }[currentMode];
+    const toolbarWidth = icons * Math.ceil(44 / scale) + (icons - 1) * content.gap;
+    rowX += pipWidth + content.gap;
+    rowWidth -= pipWidth + toolbarWidth + content.gap * 2;
+    y = content.padding + (content.header - modeHeight(bounds)) / 2;
+  }
+  const left = rowX + (rowWidth - MODES.length * width - (MODES.length - 1) * gap) / 2;
+  return { x: left + index * (width + gap), y, width, height: modeHeight(bounds) };
+}
+
+async function chooseMode(page, name) {
+  const bounds = await metrics(page), modes = MODES.map(current => modeRect(bounds, name, current));
+  // The shared interior stays clickable as the Pip and toolbar widths recenter the row.
+  const left = Math.max(...modes.map(mode => mode.x));
+  const right = Math.min(...modes.map(mode => mode.x + mode.width));
+  if (right <= left) throw new Error(`No shared hit area for mode ${name}.`);
+  await tap(page, (left + right) / 2, modes[0].y + modes[0].height / 2);
+  await rendered(page);
 }
 
 async function chooseTheme(page, index) {
-  const bounds = await metrics(page);
-  await tap(page, bounds.width - 44, 44);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
-  const width = (bounds.width - 52) / 6;
-  await tap(page, 16 + index * (width + 4) + width / 2, 130);
+  if (!Number.isInteger(index) || index < 0 || index > 5) throw new Error(`Unknown world index: ${index}`);
+  const more = headerPoint(await metrics(page));
+  await tap(page, more.x, more.y);
+  const world = worldIconRect(await metrics(page), index);
+  await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  const back = collectionHeaderRect(await metrics(page), 'back');
+  await tap(page, back.x + back.width / 2, back.y + back.height / 2);
+  await expect(page.locator('#game-status')).not.toContainText('My rewards opened.');
+  await rendered(page);
+}
+
+function contentBounds(bounds) {
+  const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
+  const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
+  const inlineModes = bounds.width * scale >= 600;
+  const top = padding + header + gap + (inlineModes ? 0 : gap + modeHeight(bounds));
+  return { x, width, top, padding, gap, header, inlineModes };
+}
+
+function collectionBounds(bounds) {
+  const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale);
+  const usableWidth = Math.min(bounds.width - padding * 2, 960 / scale);
+  const x = Math.max(padding, Math.round((bounds.width - 960 / scale) / 2)), width = bounds.width - x * 2;
+  const worldSide = Math.ceil(52 / scale), worldGap = Math.round(6 / scale);
+  const inlineWorlds = usableWidth * scale >= 640;
+  const worldColumns = usableWidth >= worldSide * 6 + worldGap * 5 ? 6 : 3;
+  const worldRowGap = Math.round(4 / scale);
+  const rows = 6 / worldColumns, worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
+  const headerHeight = Math.ceil((inlineWorlds ? 52 : 44) / scale);
+  const top = padding + headerHeight + gap + (inlineWorlds ? 0 : worldHeight + gap);
+  return { x, width, top, padding, gap, inlineWorlds, headerHeight, worldSide, worldGap, worldRowGap, worldColumns, worldHeight };
+}
+
+function collectionHeaderRect(bounds, section) {
+  const { x, width, padding, gap, headerHeight } = collectionBounds(bounds), scale = uiScale(bounds);
+  const height = Math.ceil(44 / scale);
+  const y = padding + (headerHeight - height) / 2;
+  if (section === 'back') return { x: x + width - height, y, width: height, height };
+  const tab = ['room', 'medals'].indexOf(section);
+  if (tab < 0) throw new Error(`Unknown reward section: ${section}`);
+  const tabWidth = Math.min(80 / scale, (width - 44 / scale - gap * 3) / 2);
+  return { x: x + tab * (tabWidth + gap), y, width: tabWidth, height };
+}
+
+function worldIconRect(bounds, index) {
+  if (!Number.isInteger(index) || index < 0 || index > 5) throw new Error(`Unknown world index: ${index}`);
+  const { x, width, padding, gap, inlineWorlds, headerHeight, worldSide: side,
+    worldGap: spacing, worldRowGap, worldColumns: columns, worldHeight } = collectionBounds(bounds);
+  let rowX = x, rowWidth = width, y = padding + headerHeight + gap;
+  if (inlineWorlds) {
+    const tab = collectionHeaderRect(bounds, 'room'), back = collectionHeaderRect(bounds, 'back');
+    rowX += 2 * (tab.width + gap);
+    rowWidth -= tab.width * 2 + back.width + gap * 3;
+    y = padding + (headerHeight - worldHeight) / 2;
+  }
+  const left = rowX + (rowWidth - side * columns - spacing * (columns - 1)) / 2;
+  return { x: left + index % columns * (side + spacing),
+    y: y + Math.floor(index / columns) * (side + worldRowGap), width: side, height: side };
+}
+
+function firstMedalPoint(bounds) {
+  const { x, width, top, gap } = collectionBounds(bounds), scale = uiScale(bounds);
+  const shelfPadding = Math.ceil(16 / scale), shelfGap = Math.ceil(12 / scale);
+  const columns = (width - shelfPadding * 2) * scale >= 780 ? 6 : 3;
+  const cell = (width - shelfPadding * 2 - shelfGap * (columns - 1)) / columns;
+  const spacing = Math.ceil(20 / scale);
+  const guideHeight = Math.ceil(64 / scale) + gap * 2;
+  return { x: x + shelfPadding + cell / 2, y: top + guideHeight + spacing + shelfPadding + 36 / scale + shelfGap + 64 / scale };
+}
+
+function headerIconRect(bounds, key = 'rewards') {
+  const { x, width, padding, header, gap } = contentBounds(bounds);
+  const index = { rewards: 0, hint: 1, voice: 2, eye: 1 }[key];
+  if (index === undefined) throw new Error(`Unknown header icon: ${key}`);
+  const side = Math.ceil(44 / uiScale(bounds));
+  return { x: x + width - side - index * (side + gap), y: padding + (header - side) / 2, width: side, height: side };
+}
+
+function headerPoint(bounds, key = 'rewards') {
+  const content = contentBounds(bounds), scale = uiScale(bounds);
+  if (['pip', 'retry'].includes(key)) return { x: content.x + (key === 'pip' ? 26 : 48) / scale, y: content.padding + content.header / 2 };
+  const rect = headerIconRect(bounds, key);
+  return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+}
+
+function pipHeaderRect(bounds) {
+  const content = contentBounds(bounds), scale = uiScale(bounds);
+  return { x: content.x, y: content.padding + 2 / scale, width: 52 / scale, height: 52 / scale };
+}
+
+function progressRegion(bounds, mode = 'match') {
+  if (!['match', 'memory'].includes(mode)) throw new Error('Only Match and Memory have header score badges.');
+  const { x, padding } = contentBounds(bounds), scale = uiScale(bounds);
+  return { x: x + 60 / scale, y: padding + 5 / scale, width: 70 / scale, height: 46 / scale };
+}
+
+async function openRewards(page) {
+  const point = headerPoint(await metrics(page));
+  await tap(page, point.x, point.y);
+  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  await rendered(page);
+}
+
+async function chooseRewardSection(page, section) {
+  const tab = collectionHeaderRect(await metrics(page), section);
+  if (section === 'back') throw new Error('Back closes the collection; it is not a reward section.');
+  await tap(page, tab.x + tab.width / 2, tab.y + tab.height / 2);
+  await expect(page.locator('#game-status')).toContainText({
+    room: 'Choose toys for Pip.', medals: 'Medals.'
+  }[section]);
+  await rendered(page);
+}
+
+function roomPoint(bounds, name, { item = '' } = {}) {
+  const { x, width, top, padding, gap } = collectionBounds(bounds), scale = uiScale(bounds);
+  if (name === 'pip') return { x: x + 88, y: top + 216 };
+  if (name === 'toy') return { x: x + width - 66, y: top + 230 };
+  const shortcut = ['pet', 'poke', 'toss', 'call'].indexOf(name);
+  if (shortcut >= 0) return { x: x + width * (shortcut + 0.5) / 4, y: top + 304 + gap + 22 / scale };
+  const columns = width * scale >= 720 ? 3 : 2;
+  const index = ['ball', 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].indexOf(name);
+  const cell = (width - (columns - 1) * gap) / columns;
+  if (name === 'goal') {
+    if (!item) throw new Error('The inline goal control needs its toy card name.');
+    const card = roomPoint(bounds, item);
+    return { x: card.x + cell / 2 - 30 / scale, y: card.y - 34 / scale };
+  }
+  const action = top + 304 + gap * 3 + 102 / scale;
+  const firstItem = action + gap + 86 / scale;
+  const center = index >= 0 ? firstItem + Math.floor(index / columns) * (128 / scale + gap) : { action }[name];
+  if (!Number.isFinite(center)) throw new Error(`Unknown room control: ${name}`);
+  return {
+    x: index >= 0 ? x + index % columns * (cell + gap) + cell / 2 : x + width / 2,
+    y: Math.min(center, bounds.height - padding - (index >= 0 ? 64 : 22) / scale)
+  };
+}
+
+async function roomControl(page, name, { locked = false, item = '' } = {}) {
+  const bounds = await metrics(page);
+  const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom') || '');
+  const selected = saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '';
+  const active = locked ? item : selected;
+  await chooseRewardSection(page, 'room');
+  const controls = ['pip', ...(locked ? [] : ['toy']), 'pet', 'poke', ...(locked ? [] : ['toss']), 'call',
+    'action'];
+  for (const toy of ['ball', 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space']) {
+    controls.push(toy);
+    if (toy === active) controls.push('goal');
+  }
+  if (!controls.includes(name)) throw new Error(`Unavailable room control: ${name}`);
+  // Two tabs lead to Back, six direct world icons, then the room controls.
+  for (let index = 0; index < 9 + controls.indexOf(name); index++) {
+    await page.keyboard.press('Tab');
+    await rendered(page);
+  }
+  return roomPoint(bounds, name, { item: active });
+}
+
+async function leaveRoomPreview(page) {
+  await roomControl(page, 'action', { locked: true });
+  await page.keyboard.press('Enter');
   await rendered(page);
 }
 
 async function rendered(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
+async function observeAudio(page) {
+  await page.addInitScript(() => {
+    const NativeContext = window.AudioContext || window.webkitAudioContext;
+    window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0 };
+    if (!NativeContext) return;
+    const WrappedContext = new Proxy(NativeContext, {
+      construct(Target, args) {
+        const context = Reflect.construct(Target, args);
+        window.audioObservation.contexts.push(context);
+        const createSource = context.createBufferSource.bind(context);
+        context.createBufferSource = () => {
+          const source = createSource(), start = source.start.bind(source);
+          source.start = (...values) => {
+            window.audioObservation.starts++;
+            return start(...values);
+          };
+          return source;
+        };
+        return context;
+      }
+    });
+    if (window.AudioContext) window.AudioContext = WrappedContext;
+    else window.webkitAudioContext = WrappedContext;
+  });
 }
 
 async function visibleColorCount(page, png) {
@@ -54,145 +313,102 @@ async function visibleColorCount(page, png) {
   }, png.toString('base64'));
 }
 
-async function openGame(page, { reducedMotion = 'reduce' } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'learn' } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#status')).toBeHidden();
+  await rendered(page);
+  // Shared word-discovery fixtures explicitly enter Learn after checking the real startup mode.
+  if (mode !== 'match') await chooseMode(page, mode);
   return errors;
 }
 
-function boardPoint(bounds, index) {
-  const top = 198;
-  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
-  const side = areaWidth >= 420 && areaHeight < 360;
-  const tight = side && areaWidth < 500, gap = tight ? 8 : 12, spacing = tight ? 0 : 10;
-  const gridWidth = side ? areaWidth - Math.max(160, Math.min(areaWidth * 0.28, 240)) - gap : areaWidth;
-  const height = side ? areaHeight : areaHeight - (areaWidth >= 392 ? 104 : 176) - 12;
-  const columns = side || height < 318 ? 4 : 2;
+function boardPoint(bounds, index, { top: overrideTop } = {}) {
+  const { top: normalTop, x, width: areaWidth } = contentBounds(bounds);
+  const top = overrideTop === undefined ? normalTop : overrideTop;
+  if (!Number.isFinite(top) || top < 0 || top >= bounds.height) throw new Error('Invalid Match playfield top.');
+  const areaHeight = bounds.height - top - contentBounds(bounds).padding;
+  const columns = areaWidth >= areaHeight || areaHeight < 318 ? 4 : 2;
   const rows = 8 / columns;
-  const width = (gridWidth - (columns - 1) * spacing) / columns;
-  const cellHeight = (height - (rows - 1) * 10) / rows;
-  return { x: 8 + (index % columns) * (width + spacing) + width / 2,
+  const width = (areaWidth - (columns - 1) * 10) / columns;
+  const cellHeight = (areaHeight - (rows - 1) * 10) / rows;
+  return { x: x + (index % columns) * (width + 10) + width / 2,
     y: top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2 };
 }
 
-function lessonPoint(bounds, key, { match = false, multiple = true } = {}) {
-  if (match || !multiple) return feedbackPoint(bounds, key, match ? 'match' : 'choice');
-  const top = 164;
-  const width = bounds.width - 16;
-  const height = bounds.height - top - 8;
-  const buttonHeight = multiple ? 152 : 72;
-  let x, y, buttonWidth;
-  if (width >= 420 && width >= height * 1.3) {
-    const contentWidth = Math.min(width, 900);
-    const pictureWidth = Math.floor((contentWidth - 12) * 0.48);
-    buttonWidth = (contentWidth - pictureWidth - 20) / 2;
-    x = (width - contentWidth) / 2 + pictureWidth + 12;
-    y = 32 + Math.max(0, (height - 32 - buttonHeight) / 2);
-  } else {
-    const contentWidth = Math.min(width, 480);
-    const cardHeight = Math.max(88, Math.min(height - 40 - buttonHeight, 420));
-    buttonWidth = (contentWidth - 8) / 2;
-    x = (width - contentWidth) / 2;
-    y = 32 + Math.max(0, (height - 32 - cardHeight - 8 - buttonHeight) / 2) + cardHeight + 8;
-  }
-  return { x: 8 + x + (['next', 'action'].includes(key) ? buttonWidth + 8 : 0) + buttonWidth / 2,
-    y: top + y + (['previous', 'next'].includes(key) ? 80 : 0) + 36 };
+function lessonPoint(bounds, key, options) {
+  if (options !== undefined) throw new Error('WordLesson is Learn-only; feedback has no footer controls.');
+  if (key !== 'picture') throw new Error(`Learn has no ${key} button. Use swipeLearn or the top mode tabs.`);
+  const card = learnCardRect(bounds);
+  return { x: card.x + card.width / 2, y: card.y + card.height / 2 };
+}
+
+async function memoryMetrics(page) {
+  return metrics(page);
 }
 
 function memoryLayout(bounds) {
-  const top = 164;
-  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
-  const reviewHeight = areaWidth >= 392 ? 104 : 176;
-  const side = areaWidth >= 368 && areaHeight < reviewHeight + 208;
-  const width = side ? areaWidth - 168 : areaWidth;
-  const height = side ? areaHeight : areaHeight - reviewHeight - 8;
-  const wide = side || (width >= 420 && width >= height * 1.3) || (width >= 392 && height < 460);
-  const columns = wide ? Math.min(side && width < 368 ? 4 : 5, Math.floor((width + 8) / 52)) : 2;
-  const rows = Math.ceil(10 / columns), header = wide ? 44 : 64;
-  return { top, width, height, columns, header,
-    studyWidth: width < 300 && wide ? 108 : wide ? 132 : Math.max(132, Math.min(width * 0.4, 176)),
-    cardWidth: (width - (columns - 1) * 8) / columns,
-    cardHeight: (height - header - 4 - (rows - 1) * 8) / rows,
-    review: side ? { x: 8 + width + 8, y: top, width: 160 } : { x: 8, y: top + height + 8, width }
-  };
+  const { top, x, width, padding } = contentBounds(bounds), scale = uiScale(bounds);
+  const gap = Math.ceil(8 / scale), height = bounds.height - top - padding;
+  const columns = width < height ? 2 : 5, rows = 10 / columns;
+  return { top, x, width, height, boardTop: top, gap, columns,
+    cardWidth: (width - gap * (columns - 1)) / columns,
+    cardHeight: (height - gap * (rows - 1)) / rows, eye: headerIconRect(bounds, 'eye') };
+}
+
+function memoryCardRect(bounds, index) {
+  const layout = memoryLayout(bounds), row = Math.floor(index / layout.columns);
+  const count = Math.min(layout.columns, 10 - row * layout.columns);
+  const inset = (layout.width - count * layout.cardWidth - (count - 1) * layout.gap) / 2;
+  return { x: layout.x + inset + index % layout.columns * (layout.cardWidth + layout.gap),
+    y: layout.boardTop + row * (layout.cardHeight + layout.gap), width: layout.cardWidth, height: layout.cardHeight };
 }
 
 function memoryPoint(bounds, index) {
-  const g = memoryLayout(bounds);
-  return { x: 8 + index % g.columns * (g.cardWidth + 8) + g.cardWidth / 2,
-    y: g.top + g.header + 4 + Math.floor(index / g.columns) * (g.cardHeight + 8) + g.cardHeight / 2 };
+  const rect = memoryCardRect(bounds, index);
+  return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }
 
-function studyPoint(bounds) {
-  const g = memoryLayout(bounds);
-  return { x: 8 + g.width - g.studyWidth / 2, y: g.top + g.header / 2 };
+function peekPoint(bounds) {
+  const rect = memoryLayout(bounds).eye;
+  return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }
 
-function choiceLayout(bounds) {
-  const top = 164;
-  const areaWidth = bounds.width - 16, areaHeight = bounds.height - top - 8;
-  const side = areaWidth >= 392 && areaHeight < 312;
-  const reviewWidth = Math.max(160, Math.min(areaWidth * 0.36, 240));
-  const reviewHeight = areaWidth >= 392 ? 104 : 176;
-  const width = side ? areaWidth - reviewWidth - 8 : areaWidth;
-  const height = side ? areaHeight : areaHeight - reviewHeight - 8;
-  const answerHeight = Math.max(72, Math.min((height - 36) * 0.38, 140));
-  return { top, width, height, answerHeight,
-    stageHeight: Math.max(72, height - 36 - answerHeight),
-    review: side ? { x: 8 + width + 8, y: top + (areaHeight - 176) / 2, width: reviewWidth }
-      : { x: 8, y: top + height + 8, width }
-  };
-}
-
-function choicePoint(bounds, index) {
-  const g = choiceLayout(bounds), width = (g.width - 10) / 2;
-  return { x: 8 + index * (width + 10) + width / 2, y: g.top + g.height - g.answerHeight / 2 };
-}
-
-function choiceTargetPoint(bounds) {
-  const g = choiceLayout(bounds);
-  return { x: 8 + g.width / 2, y: g.top + 28 + g.stageHeight / 2 };
-}
-
-function feedbackPoint(bounds, key, mode = 'choice') {
-  let review;
-  if (mode === 'memory') review = memoryLayout(bounds).review;
-  else if (mode === 'match') {
-    const top = 198;
-    const width = bounds.width - 16, height = bounds.height - top - 8;
-    const side = width >= 420 && height < 360;
-    const reviewWidth = Math.max(160, Math.min(width * 0.28, 240));
-    review = side ? { x: bounds.width - 8 - reviewWidth, y: top, width: reviewWidth }
-      : { x: 8, y: bounds.height - 8 - (width >= 392 ? 104 : 176), width };
-    const wide = review.width >= 392;
-    if (key === 'action') return { x: review.x + review.width / 2, y: review.y + (wide ? 68 : 60) };
-    return { x: review.x + (wide ? review.width * (key === 'hearSecond' ? 0.75 : 0.25) : review.width / 2),
-      y: review.y + (wide ? 68 : key === 'hearSecond' ? 140 : 60) };
-  } else {
-    review = choiceLayout(bounds).review;
+async function withMemoryPeek(page, held) {
+  const bounds = await memoryMetrics(page), point = peekPoint(bounds);
+  await page.mouse.move(bounds.x + point.x * bounds.scale, bounds.y + point.y * bounds.scale);
+  await page.mouse.down();
+  try {
+    await rendered(page);
+    await expect(page.locator('#game-status')).toContainText('Release to hide.');
+    await held(bounds);
+  } finally {
+    await page.mouse.up();
   }
-  const wide = review.width >= 392, gap = review.width >= 176 ? 8 : 0;
-  const actionWidth = wide ? 88 : review.width - 88 - gap * 2;
-  const controlsWidth = 88 + actionWidth + gap * 2;
-  const origin = wide ? review.width - controlsWidth : 0;
-  if (key === 'hear') return { x: review.x + 32, y: review.y + (wide ? 68 : 60) };
-  const x = key === 'previous' ? 22 : key === 'next' ? 44 + actionWidth + gap * 2 + 22 : 44 + gap + actionWidth / 2;
-  return { x: review.x + origin + x, y: review.y + (wide ? 68 : 140) };
+  await rendered(page);
 }
 
-function resultPoint(bounds, key) {
+function resultPoint(bounds, key, { gift = false } = {}) {
+  if (!['chest', 'review', 'gift', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
+  const content = contentBounds(bounds);
+  const scale = uiScale(bounds), actionHeight = Math.ceil(48 / scale), actionGap = Math.ceil(8 / scale);
   const landscape = bounds.width >= bounds.height || bounds.height < 560;
-  const textWidth = landscape ? Math.max(232, (bounds.width - 32) * 0.39) : bounds.width - 16;
-  const left = bounds.width - 8 - textWidth;
-  if (key === 'chest') return { x: 48, y: 208 };
-  if (key === 'review') return { x: left + 36, y: bounds.height - (bounds.height < 524 ? 132 : 138) };
-  return { x: left + textWidth * (key === 'newAdventure' ? 0.75 : 0.25), y: bounds.height - 48 };
+  const textWidth = landscape ? Math.max(232, (content.width - 16) * 0.39) : content.width;
+  const left = content.x + content.width - textWidth;
+  const top = content.padding + content.header + content.gap;
+  const extra = gift ? actionHeight + actionGap : 0;
+  if (key === 'chest') return { x: content.x + 36, y: top + 116 };
+  if (key === 'gift') return { x: content.x + content.width / 2, y: bounds.height - content.padding - actionHeight / 2 };
+  if (key === 'review') return { x: left + 36, y: bounds.height - content.padding - actionHeight - 44 - actionGap - extra };
+  return { x: content.x + content.width / 2,
+    y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { metrics, tap, chooseMode, chooseTheme, rendered, openGame, boardPoint, lessonPoint,
-  memoryPoint, studyPoint, choicePoint, choiceTargetPoint, feedbackPoint, resultPoint, visibleColorCount };
+module.exports = { metrics, tap, learnCardRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, openGame, boardPoint, lessonPoint,
+  memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

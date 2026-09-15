@@ -60,6 +60,11 @@ var word_label: Label
 var match_mark: MatchMark
 var accent: Color = Style.GOOD
 var reduced_motion: bool = false
+var face_up: bool = true
+var _face: Control
+var _back: Control
+var _shown_face_up: bool = true
+var _flip: Tween
 var _feedback: FeedbackOverlay
 var _feedback_state: String = ""
 var _feedback_kind: String = ""
@@ -79,11 +84,16 @@ func setup(value: Dictionary) -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	custom_minimum_size = Vector2(72, 72)
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_face = Control.new()
+	_face.name = "CardFace"
+	_face.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_face)
+	_face.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	picture = TextureRect.new()
 	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(picture)
+	_face.add_child(picture)
 	picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	picture.offset_left = 12
 	picture.offset_top = 10
@@ -95,7 +105,7 @@ func setup(value: Dictionary) -> void:
 	word_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	word_label.clip_text = true
 	word_label.visible = value.kind == "word"
-	add_child(word_label)
+	_face.add_child(word_label)
 	word_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	match_mark = MatchMark.new()
 	match_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -113,15 +123,14 @@ func setup(value: Dictionary) -> void:
 	_feedback.hide()
 	visibility_changed.connect(_visibility_changed)
 	resized.connect(_fit_text)
+	_face.resized.connect(_resize_face)
 	set_process(false)
-	_fit_text()
+	_resize_face()
 
 
 func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
 	accent = palette.accent
-	picture.visible = card_data.kind == "image"
-	word_label.visible = card_data.kind == "word"
-	_fit_text()
+	_show_face(_shown_face_up)
 	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
 	if state != _feedback_state:
 		_feedback_state = state
@@ -150,10 +159,10 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	elif hinted:
 		fill = Color("#fff8cf")
 		border = Color("#8f7400")
-	var normal: StyleBoxFlat = Style.box(fill, border, 20, 3)
-	normal.shadow_color = Color(0.15, 0.22, 0.3, 0.1)
-	normal.shadow_size = 4
-	normal.shadow_offset = Vector2(0, 3)
+	var normal: StyleBoxFlat = Style.box(fill, border, 20, 2 if selected or matched or wrong or hinted else 1)
+	normal.shadow_color = Color(0.15, 0.22, 0.3, 0.05)
+	normal.shadow_size = 2
+	normal.shadow_offset = Vector2(0, 2)
 	add_theme_stylebox_override("normal", normal)
 	add_theme_stylebox_override("disabled", normal)
 	add_theme_stylebox_override("hover", Style.box(fill, accent, 20, 3))
@@ -171,11 +180,61 @@ func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if value:
 		_stop_feedback()
+		_settle_flip()
+
+
+func set_back(back: Control) -> void:
+	_back = back
+	_face.add_child(back)
+	back.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_show_face(_shown_face_up)
+
+
+func set_face_up(value: bool, animate: bool = true) -> void:
+	var changed: bool = face_up != value
+	face_up = value
+	if not animate or reduced_motion or not is_visible_in_tree():
+		_settle_flip()
+		return
+	if not changed:
+		return
+	if _flip != null:
+		_flip.kill()
+	_flip = create_tween()
+	if _shown_face_up != value:
+		_flip.tween_property(_face, "scale:x", 0.0, 0.1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		_flip.tween_callback(_show_face.bind(value))
+	_flip.tween_property(_face, "scale:x", 1.0, 0.1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+func _show_face(value: bool) -> void:
+	_shown_face_up = value
+	picture.visible = value and card_data.kind == "image"
+	word_label.visible = value and card_data.kind == "word"
+	word_label.text = card_data.word.text if value else ""
+	if _back != null:
+		_back.visible = not value
+	_fit_text()
+
+
+func _settle_flip() -> void:
+	if _flip != null:
+		_flip.kill()
+		_flip = null
+	if _face != null:
+		_face.scale = Vector2.ONE
+		_show_face(face_up)
+
+
+func _resize_face() -> void:
+	_face.pivot_offset = _face.size * 0.5
+	_settle_flip()
 
 
 func clear_feedback() -> void:
 	_feedback_state = ""
 	_stop_feedback()
+	_settle_flip()
 
 
 func _stop_feedback() -> void:
@@ -190,6 +249,7 @@ func _stop_feedback() -> void:
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		_stop_feedback()
+		_settle_flip()
 
 
 func _process(delta: float) -> void:

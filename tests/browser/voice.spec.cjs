@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint } = require('./game-ui.cjs');
+const { boardPoint, chooseMode, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
@@ -59,11 +59,6 @@ async function openGame(page, api = 'standard') {
   await page.goto('/');
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
-  const bounds = await metrics(page);
-  const scale = Math.min(bounds.width, bounds.height) / 480;
-  const modeWidth = (bounds.width / scale - 40) / 5;
-  await page.touchscreen.tap(bounds.x + (14 + modeWidth * 1.5) * scale, bounds.y + 122 * scale);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
@@ -79,7 +74,7 @@ async function metrics(page) {
 
 function cardPoint(bounds, index) {
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const point = boardPoint({ width: bounds.width / scale, height: bounds.height / scale }, index);
+  const point = boardPoint({ width: bounds.width / scale, height: bounds.height / scale, scale }, index);
   return { x: bounds.x + point.x * scale, y: bounds.y + point.y * scale };
 }
 async function discoverBoard(page) {
@@ -100,10 +95,11 @@ async function discoverBoard(page) {
   return { pairs, bounds };
 }
 
-async function toggleVoice(page) {
-  const bounds = await metrics(page);
-  const scale = Math.min(bounds.width, bounds.height) / 480;
-  await page.touchscreen.tap(bounds.x + bounds.width - 208 * scale, bounds.y + 48 * scale);
+async function toggleVoice(page, edge = false) {
+  await rendered(page);
+  const bounds = await logicalMetrics(page), point = headerPoint(bounds, 'voice');
+  if (edge) point.x = headerIconRect(bounds, 'voice').x + 1 / bounds.scale;
+  await tap(page, point.x, point.y);
 }
 
 async function listen(page) {
@@ -113,10 +109,12 @@ async function listen(page) {
   await expect(page.locator('#speech-button')).toHaveCount(0);
   await expect(page.locator('#speech-notice')).toContainText(/browser.*remotely/i);
   await expect(page.locator('#speech-notice')).toContainText(/(?:save|store)s? no voice or transcripts/i);
+  await rendered(page);
 }
 
-test('Voice starts immediately and the single toggle fits the reserved space at 320px', async ({ page, browserName }, testInfo) => {
-  await page.setViewportSize({ width: 320, height: 568 });
+for (const viewport of [{ width: 320, height: 568 }, { width: 1366, height: 768 }]) {
+test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewport.width}px`, async ({ page, browserName }, testInfo) => {
+  await page.setViewportSize(viewport);
   const errors = await openGame(page);
   expect(await page.evaluate(() => window.wordBuddiesHost.speechAvailable())).toBe(true);
   await listen(page);
@@ -124,13 +122,38 @@ test('Voice starts immediately and the single toggle fits the reserved space at 
   const panel = await page.locator('#speech-panel').boundingBox();
   const buddy = await page.locator('#speech-buddy').boundingBox();
   const notice = await page.locator('#speech-notice').boundingBox();
-  expect(panel.height).toBeGreaterThanOrEqual(73);
-  expect(panel.height).toBeLessThanOrEqual(77);
+  const bounds = await logicalMetrics(page);
+  const expectedHeight = Math.ceil(112 / uiScale(bounds)) * bounds.scale;
+  expect(Math.abs(panel.height - expectedHeight)).toBeLessThanOrEqual(1);
+  expect(panel.height).toBeGreaterThanOrEqual(111);
+  expect(panel.height).toBeLessThanOrEqual(114);
   expect(panel.x).toBeGreaterThanOrEqual(0);
-  expect(panel.x + panel.width).toBeLessThanOrEqual(320);
+  expect(panel.x + panel.width).toBeLessThanOrEqual(viewport.width);
+  await expect(page.locator('#speech-buddy')).toHaveCSS('width', '80px');
+  await expect(page.locator('#speech-buddy')).toHaveCSS('height', '80px');
+  expect(buddy.y).toBeGreaterThanOrEqual(panel.y);
   expect(buddy.y + buddy.height).toBeLessThanOrEqual(panel.y + panel.height);
+  expect(notice.x).toBeGreaterThan(buddy.x + buddy.width);
   expect(notice.y + notice.height).toBeLessThanOrEqual(panel.y + panel.height + 1);
-  await page.screenshot({ path: testInfo.outputPath('voice-panel-320.png'), scale: 'css' });
+  await page.evaluate(() => window.speechFixture.emit('I see a friendly little duck beside a bright red rocket and a cheerful turtle', false));
+  const layout = await page.locator('#speech-panel').evaluate(element => {
+    const panel = element.getBoundingClientRect();
+    const text = document.getElementById('speech-transcript'), notice = document.getElementById('speech-notice');
+    const transcript = text.getBoundingClientRect(), privacy = notice.getBoundingClientRect();
+    return { panelBottom: panel.bottom, transcriptBottom: transcript.bottom, privacyBottom: privacy.bottom,
+      transcriptFont: parseFloat(getComputedStyle(text).fontSize), privacyFont: parseFloat(getComputedStyle(notice).fontSize),
+      privacyLines: notice.clientHeight / parseFloat(getComputedStyle(notice).lineHeight),
+      privacyFits: notice.scrollHeight <= notice.clientHeight + 1 };
+  });
+  expect(layout.transcriptBottom).toBeLessThanOrEqual(layout.panelBottom + 1);
+  expect(layout.privacyBottom).toBeLessThanOrEqual(layout.panelBottom + 1);
+  expect(layout.transcriptFont).toBeGreaterThanOrEqual(15);
+  expect(layout.transcriptFont).toBeLessThanOrEqual(20);
+  expect(layout.privacyFont).toBeGreaterThanOrEqual(10);
+  expect(layout.privacyFont).toBeLessThanOrEqual(11);
+  expect(layout.privacyLines).toBeLessThanOrEqual(3.2);
+  expect(layout.privacyFits, 'The complete privacy notice stays visible beside the larger buddy.').toBe(true);
+  await page.screenshot({ path: testInfo.outputPath(`voice-panel-${viewport.width}.png`), scale: 'css' });
   expect(await page.evaluate(() => {
     const { starts, instances } = window.speechFixture;
     const current = instances.at(-1);
@@ -147,24 +170,38 @@ test('Voice starts immediately and the single toggle fits the reserved space at 
   await page.keyboard.press('Enter');
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(2);
-  await toggleVoice(page);
+  await toggleVoice(page, true);
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(errors).toEqual([]);
 });
+}
 
-test('the listening buddy reacts to words and reduced motion stops its animations', async ({ page }, testInfo) => {
+test('the listening buddy cycles nod, wave and tilt without a speaking pose', async ({ page }, testInfo) => {
   const errors = await openGame(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await listen(page);
   await expect.poll(() => page.locator('#speech-meter').evaluate(element =>
     element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length
   )).toBe(5);
-  // Read the short 280 ms reaction in the same browser task that delivers speech.
-  // A cross-process assertion can arrive after it has ended on a busy WebKit runner.
-  expect(await page.evaluate(() => {
-    window.speechFixture.emit('I see a doll', false);
-    return document.getElementById('speech-panel').getAttribute('data-heard');
-  })).toBe('true');
-  await expect(page.locator('#speech-transcript')).toHaveText('I see a doll');
+  await expect(page.locator('#speech-buddy')).toHaveCSS('animation-name', 'pip-listen');
+  for (const [index, reaction] of ['nod', 'wave', 'tilt'].entries()) {
+    const observed = await page.evaluate(({ index, reaction }) => {
+      window.speechFixture.emit(`I see word number ${index + 1}`, false);
+      const panel = document.getElementById('speech-panel'), buddy = document.getElementById('speech-buddy');
+      const sprite = buddy.querySelector('.duck-sprite');
+      return { heard: panel.getAttribute('data-heard'), reaction: panel.getAttribute('data-reaction'),
+        animation: getComputedStyle(buddy).animationName, duration: parseFloat(getComputedStyle(buddy).animationDuration) * 1000,
+        spriteX: parseFloat(getComputedStyle(sprite).backgroundPositionX), spriteAnimation: getComputedStyle(sprite).animationName };
+    }, { index, reaction });
+    expect(observed.heard).toBe('true');
+    expect(observed.reaction).toBe(reaction);
+    expect(observed.animation).toBe(`pip-${reaction}`);
+    expect(observed.duration).toBe(280);
+    expect(observed.spriteX).toBeCloseTo([66.6667, 100, 0][index], 1);
+    expect(observed.spriteAnimation).toBe('none');
+    await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false', { timeout: 1000 });
+    await expect(page.locator('#speech-buddy')).toHaveCSS('animation-name', 'pip-listen');
+  }
   await page.screenshot({ path: testInfo.outputPath('voice-listening.png'), scale: 'css' });
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -173,9 +210,13 @@ test('the listening buddy reacts to words and reduced motion stops its animation
   )).toBe(0);
   await page.evaluate(() => window.speechFixture.emit('I see a little doll', false));
   await expect(page.locator('#speech-buddy')).toHaveCSS('transform', 'none');
-  const still = await page.screenshot({ scale: 'css' });
+  await expect(page.locator('#speech-buddy .duck-sprite')).toHaveCSS('background-position-x', '0%');
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
+  await rendered(page);
+  const still = await page.screenshot({ path: testInfo.outputPath('voice-reduced-before.png'), scale: 'css' });
   await page.waitForTimeout(400);
-  expect((await page.screenshot({ scale: 'css' })).equals(still)).toBe(true);
+  const later = await page.screenshot({ path: testInfo.outputPath('voice-reduced-after.png'), scale: 'css' });
+  expect(later.equals(still), 'Reduced-motion voice presentation stays still.').toBe(true);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeHidden();
@@ -215,6 +256,89 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await page.waitForTimeout(800);
   await expect(page.locator('#game-status')).toHaveText(won);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+  expect(errors).toEqual([]);
+});
+
+test('turning Voice off during feedback resumes the automatic Match timer', async ({ page }) => {
+  const errors = await openGame(page);
+  const { pairs } = await discoverBoard(page);
+  await listen(page);
+  await page.evaluate(word => window.speechFixture.emit(word), pairs[0][0]);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toBeHidden();
+  await expect(page.locator('#game-status')).toContainText('Voice off.');
+  await expect(page.locator('#game-status'), 'No deleted Continue control is required after leaving Voice.').toContainText('Find 3 word', { timeout: 2500 });
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  expect(errors).toEqual([]);
+});
+
+test('matched cards stay quiet and cannot rescore while Voice is listening', async ({ page }) => {
+  await observeAudio(page);
+  const errors = await openGame(page);
+  const { pairs } = await discoverBoard(page);
+  await listen(page);
+  const [word, pair] = pairs[0];
+  await page.evaluate(word => window.speechFixture.emit(word), word);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')]);
+  const starts = await page.evaluate(() => window.audioObservation.starts);
+  const bounds = await logicalMetrics(page), panel = await page.locator('#speech-panel').boundingBox();
+  const top = (panel.y + panel.height - bounds.y) / bounds.scale + contentBounds(bounds).gap;
+  const matched = boardPoint(bounds, pair.Word, { top });
+  for (let repeat = 0; repeat < 3; repeat++) {
+    await tap(page, matched.x, matched.y);
+    await rendered(page);
+    await expect(page.locator('#game-status')).toContainText('Find 3 word');
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+    expect(await page.evaluate(() => window.audioObservation.starts)).toBe(starts);
+    expect(await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')])).toEqual(saved);
+  }
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
+test('Voice Pip displays the real round progress supplied by the native game', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  const errors = await openGame(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await page.evaluate(() => typeof window.wordBuddiesHost.roundProgress)).toBe('function');
+  const { pairs, bounds } = await discoverBoard(page);
+  const word = cardPoint(bounds, pairs[0][1].Word), wrong = cardPoint(bounds, pairs[1][1].Picture);
+  await page.touchscreen.tap(word.x, word.y);
+  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0]}`);
+  await page.touchscreen.tap(wrong.x, wrong.y);
+  await expect(page.locator('#game-status')).toContainText('Not quite.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await listen(page);
+  await expect(page.locator('#speech-successes')).toHaveText('0/3');
+  await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
+  await expect(page.locator('#speech-successes')).toBeVisible();
+  await expect(page.locator('#speech-mistakes')).toBeVisible();
+  const buddy = await page.locator('#speech-buddy').boundingBox();
+  const panel = await page.locator('#speech-panel').boundingBox();
+  for (const selector of ['#speech-successes', '#speech-mistakes']) {
+    const count = await page.locator(selector).boundingBox();
+    expect(count.x).toBeGreaterThanOrEqual(buddy.x);
+    expect(count.x + count.width).toBeLessThanOrEqual(buddy.x + buddy.width + 1);
+    expect(count.y).toBeGreaterThanOrEqual(panel.y);
+    expect(count.y + count.height).toBeLessThanOrEqual(panel.y + panel.height);
+  }
+  const before = await page.locator('.speech-score').screenshot({ scale: 'css' });
+  await page.evaluate(word => window.speechFixture.emit(word), pairs[0][0]);
+  await expect(page.locator('#game-status')).toContainText('Great match!');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
+  await expect(page.locator('#speech-successes')).toHaveText('1/3');
+  await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
+  await rendered(page);
+  const after = await page.locator('.speech-score').screenshot({ scale: 'css' });
+  expect(after.equals(before), 'The visible Pip cluster must reflect a real score change, not only a host callback.').toBe(false);
+  await page.screenshot({ path: testInfo.outputPath('voice-native-progress.png'), scale: 'css' });
+  await toggleVoice(page);
   expect(errors).toEqual([]);
 });
 
@@ -272,6 +396,9 @@ test('permission denial stays visible and never retries automatically', async ({
   await page.evaluate(() => window.speechFixture.error('not-allowed'));
   await expect(page.locator('#speech-status')).toContainText(/permission|denied|blocked/i);
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'error');
+  await expect.poll(() => page.locator('#speech-panel').evaluate(element =>
+    element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length
+  )).toBe(0);
   await page.waitForTimeout(1600);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   expect(await page.evaluate(() => window.speechFixture.aborts)).toBeGreaterThanOrEqual(1);
@@ -292,8 +419,9 @@ test('missing recognition leaves ordinary manual matching available', async ({ p
     await page.touchscreen.tap(point.x, point.y);
   }
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await page.keyboard.press('Enter');
+  await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#selection-status')).toBeEmpty();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(errors).toEqual([]);

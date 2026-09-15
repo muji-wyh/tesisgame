@@ -5,6 +5,15 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 
+test('the web bootstrap references only existing script dependencies', () => {
+  const source = fs.readFileSync(path.join(root, 'scripts', 'web_bootstrap.gd'), 'utf8');
+  const dependencies = source.match(/const SCRIPTS := \[([\s\S]*?)\]/)?.[1];
+  assert.ok(dependencies, 'The startup dependency list must be present');
+  for (const [, name] of dependencies.matchAll(/"([a-z_]+)"/g)) {
+    assert.ok(fs.existsSync(path.join(root, 'scripts', `${name}.gd`)), `Missing startup dependency: ${name}`);
+  }
+});
+
 test('the delivery preset exports a single-threaded Godot Web game with JSON data', () => {
   const filename = path.join(root, 'export_presets.cfg');
   assert.ok(fs.existsSync(filename), 'The Web export preset is missing');

@@ -34,17 +34,17 @@ func _run() -> void:
 	app._voice_mode = true
 	app._toggle_voice()
 	check(root.gui_get_focus_owner() == app._voice_button, "Toggling Voice retains keyboard focus after layout changes")
-	app.choose_mode("sky")
-	check(app._mode_id == "sky" and app._choice.is_visible_in_tree() and not app.grid.visible, "Sky mode replaces the matching board")
-	check(not app.hint_button.visible and not app._voice_button.visible, "Choice modes show their own controls")
-	check(app._choice.answer_buttons[0].get_theme_color("font_focus_color") == Color("#35415e"), "Focused word choices retain dark readable text")
+	app.choose_mode("learn")
+	check(app._mode_id == "learn" and app._lesson.is_visible_in_tree() and not app.grid.visible, "Learn replaces the matching board")
+	check(not app.hint_button.visible and not app._voice_button.visible, "Learn hides Match-only controls")
+	check(app._lesson.word_label.get_theme_color("font_color") == Color("#35415e"), "The learned word retains dark readable text")
 	app.choose_theme("ocean")
-	check(app.model.theme_id == "ocean", "New themes are selectable during a choice round")
+	check(app.model.theme_id == "ocean", "All worlds remain selectable while learning")
 	app._show_collection()
-	var target: Dictionary = app._choice.current_target
-	for button in app._choice.answer_buttons:
-		button.pressed.emit()
-	check(app.model.successes == 0 and app.model.mistakes == 0 and app._choice.current_target == target, "Covered choice controls cannot answer under Rewards")
+	var target: Dictionary = app._lesson.current_word.duplicate()
+	app._lesson.picture_button.pressed.emit()
+	app._lesson._move(1)
+	check(app.model.successes == 0 and app.model.mistakes == 0 and app._lesson.current_word == target, "Covered learning controls cannot change the lesson under More")
 	app._room.action_button.pressed.emit()
 	check(app._playroom_caption.text.to_lower().contains("ball"), "The room toy action gives visible play feedback")
 	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
@@ -63,27 +63,35 @@ func _run() -> void:
 	check(app._duck_trick_index == trick_before, "Finishing a petting stroke does not also trigger the old Pip trick")
 	app._hide_collection()
 	app._controller_mode = true
-	app._choice.answer_buttons[0].grab_focus()
-	app._choice.answer_buttons[app._choice.choices.find(app._choice.current_target)].pressed.emit()
+	app.choose_mode("match")
+	var pairs: Array[String] = []
+	for card in app.model.cards:
+		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
+			pairs.append(card.word.id)
+	check(pairs.size() == 3, "The shared lesson supplies exactly three playable Match pairs")
+	app.cards[pairs[0] + ":word"].grab_focus()
+	app.cards[pairs[0] + ":word"].pressed.emit()
+	app.cards[pairs[0] + ":image"].pressed.emit()
 	app._show_collection()
 	app._hide_collection()
 	app._controller_accept()
-	check(app._mode_id == "sky" and app._choice.successes == 1, "Closing Rewards during feedback cannot turn A into a mode change")
-	app._choice.continue_feedback()
-	check(app._choice.answer_buttons.has(root.gui_get_focus_owner()), "The next prompt restores choice focus after a modal")
-	for answer in range(4):
-		var correct_index: int = app._choice.choices.find(app._choice.current_target)
-		check(correct_index >= 0, "Every flying picture has a matching word choice")
-		app._choice.answer_buttons[correct_index].pressed.emit()
-		app._choice.continue_feedback()
-	check(app.model.phase == "won" and app.model.successes == 5, "Five choice answers enter the shared win screen")
+	check(app._mode_id == "match" and app.model.successes == 1, "Closing More during feedback cannot turn A into a mode change or a duplicate score")
+	app._continue_match()
+	check(app.cards.values().has(root.gui_get_focus_owner())
+		and not app.model.matched_ids.has(root.gui_get_focus_owner().card_data.id),
+		"The next prompt restores unmatched-card focus after a modal")
+	for word_id in pairs.slice(1):
+		app.cards[word_id + ":word"].pressed.emit()
+		app.cards[word_id + ":image"].pressed.emit()
+		app._continue_match()
+	check(app.model.phase == "won" and app.model.successes == 3, "Three Match pairs enter the shared win screen")
 	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
 	app._open_chest()
 	app.chest.finish_immediately()
 	app._finish_fragment_delivery()
-	check(app.medal_progress.count_for("ocean-1") == 1, "A choice win earns one ordinary medal piece")
+	check(app.medal_progress.count_for("ocean-1") == 1, "A Match win earns one ordinary medal piece")
 	app._open_chest()
-	check(app.medal_progress.count_for("ocean-1") == 1, "A choice reward cannot be collected twice")
+	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")
 	app._show_collection()
 	app._open_reward_preview("ocean-1")
 	app._wear_preview_reward()
@@ -92,32 +100,41 @@ func _run() -> void:
 	check(saved.load(app.playroom_save_path.get_basename() + "-v2.cfg") == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The favorite survives reload")
 	app._hide_collection()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
-	app._replay()
-	check(app._mode_id == "sky" and app.model.phase == "waiting" and app._choice.successes == 0
-		and app.model.lesson_words == lesson, "Repeat lesson preserves the mode and words with fresh progress")
-	app.audio.set_muted(false)
-	app.choose_mode("listen")
-	check(app._choice.hear_button.is_visible_in_tree(), "Listening mode offers an explicit replayable Hear control")
-	for attempt in range(3):
-		var wrong_index: int = 1 - app._choice.choices.find(app._choice.current_target)
-		app._choice.answer_buttons[wrong_index].pressed.emit()
-		app._choice.continue_feedback()
-	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect choices enter the shared encouragement screen")
+	app._new_adventure_button.pressed.emit()
+	check(app._mode_id == "learn" and app.model.phase == "waiting" and app.model.successes == 0
+		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
+		"New adventure starts fresh Learn words with a normal new attempt")
+	check(app.model.theme_id == "ocean" and app._favorite_reward_id == "ocean-1"
+		and app.medal_progress.count_for("ocean-1") == 1,
+		"A fresh adventure preserves the selected world, favorite, and earned piece")
 	app.choose_mode("match")
-	check(app.grid.visible and app.model.cards.size() == 8 and not app._choice.visible, "Switching back restores the original eight-card game")
+	app.audio.set_muted(false)
+	var wrong: Array = []
+	for card in app.model.cards:
+		if wrong.is_empty() or (card.kind != wrong[0].kind and card.word.id != wrong[0].word.id):
+			wrong.append(card)
+		if wrong.size() == 2:
+			break
+	for attempt in range(3):
+		app.cards[wrong[0].id].pressed.emit()
+		app.cards[wrong[1].id].pressed.emit()
+		app._continue_match()
+	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect pairs enter the shared encouragement screen")
+	app.choose_mode("match")
+	check(app.grid.visible and app.model.cards.size() == 8 and not app._lesson.visible and not app._memory.visible,
+		"Returning from loss restores the original eight-card game")
 	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 		root.size = dimensions
 		await process_frame
 		await process_frame
-		for mode in ["match", "sky", "listen"]:
+		for mode in ["learn", "match", "memory"]:
 			app.choose_mode(mode)
 			await process_frame
 			await process_frame
 			for button in app._mode_buttons:
 				check(app.get_global_rect().encloses(button.get_global_rect()), "Mode buttons fit " + str(dimensions))
-			if mode != "match":
-				for button in app._choice.answer_buttons:
-					check(app.get_global_rect().encloses(button.get_global_rect()), "Choice buttons fit " + str(dimensions))
+			var view: Control = app._lesson if mode == "learn" else app.grid if mode == "match" else app._memory
+			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), mode + " fits " + str(dimensions))
 	app.on_page_hidden()
 	await create_timer(0.1).timeout
 	app.queue_free()

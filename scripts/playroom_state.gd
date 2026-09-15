@@ -58,6 +58,10 @@ static func item(id: String) -> Dictionary:
 	return {}
 
 
+static func toys() -> Array[Dictionary]:
+	return catalog().filter(func(entry: Dictionary) -> bool: return entry.slot == "toy")
+
+
 static func owned(entry: Dictionary, counts: Dictionary) -> bool:
 	if not entry.get("id") is String:
 		return false
@@ -67,7 +71,7 @@ static func owned(entry: Dictionary, counts: Dictionary) -> bool:
 
 static func next_gift(counts: Dictionary, theme_id: String = "") -> Dictionary:
 	var result: Dictionary = {}
-	for entry in catalog():
+	for entry in toys():
 		if (not theme_id.is_empty() and entry.theme != theme_id) or owned(entry, counts):
 			continue
 		var remaining: int = _remaining_pieces(entry, counts)

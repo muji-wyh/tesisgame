@@ -94,9 +94,9 @@ func _test_replays(model, words: Array) -> void:
 	for round_index in range(24):
 		var previous_ids: Array = model.cards.map(func(card: Dictionary) -> String: return card.word.id)
 		var previous_adventure: String = model.adventure_id
-		check(model.reset(words), "Ordinary replay starts another adventure")
-		check(not model.adventure_id.is_empty() and model.adventure_id != previous_adventure, "Full-vocabulary replays visit a different adventure")
-		check(model.cards.all(func(card: Dictionary) -> bool: return not previous_ids.has(card.word.id)), "Adventure replay never repeats a previous-board word when five fresh words exist")
+		check(model.reset(words), "An unseeded model reset starts another adventure")
+		check(not model.adventure_id.is_empty() and model.adventure_id != previous_adventure, "Full-vocabulary resets visit a different adventure")
+		check(model.cards.all(func(card: Dictionary) -> bool: return not previous_ids.has(card.word.id)), "A fresh model reset excludes previous-board words when five new words exist")
 		_check_board(model)
 
 
@@ -121,7 +121,7 @@ func _test_freshness_before_adventures(model, words: Array) -> void:
 	model.reset(animals, 11)
 	check(model.reset(mixed), "Fresh mixed words can replace a themed board")
 	check(model.adventure_id.is_empty(), "Freshness wins when its remaining words cannot form a themed adventure")
-	check(model.cards.all(func(card: Dictionary) -> bool: return fresh_ids.has(card.word.id)), "Themed replay cannot reintroduce excluded previous-board words")
+	check(model.cards.all(func(card: Dictionary) -> bool: return fresh_ids.has(card.word.id)), "A themed model reset cannot reintroduce excluded previous-board words")
 	_check_board(model)
 
 
@@ -204,9 +204,9 @@ func _test_requested_repeat(model, words: Array) -> void:
 	model.set_theme("ocean")
 	var lesson: Array = model.lesson_words.duplicate(true)
 	for requested in ["", "space-trip", "animal-friends"]:
-		check(model.reset(words, -1, true, requested), "A repeat can retain an existing explicitly chosen lesson")
+		check(model.reset(words, -1, true, requested), "A same-lesson model reset retains an existing explicitly chosen lesson")
 		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean",
-			"Repeat preserves all five ordered words, topic and world even when another valid topic is requested")
+			"A same-lesson mode-switch reset preserves all five ordered words, topic and world even when another valid topic is requested")
 		_check_board(model)
 
 
@@ -260,8 +260,8 @@ func _test_required_repeats(model, words: Array) -> void:
 	model.set_theme("ocean")
 	var lesson: Array = model.lesson_words.duplicate(true)
 	for pair in [["space-trip", "rocket"], ["ocean-discovery", "shell"]]:
-		check(model.reset(words, -1, true, pair[0], pair[1]), "Repeating an existing lesson retains its required-word lesson")
-		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean", "Repeat preserves all five ordered words and the world even with another valid required request")
+		check(model.reset(words, -1, true, pair[0], pair[1]), "A same-lesson model reset retains its required-word lesson")
+		check(model.lesson_words == lesson and model.adventure_id == "space-trip" and model.adventure_name == "Space trip" and model.theme_id == "ocean", "A same-lesson mode-switch reset preserves all five ordered words and the world even with another valid required request")
 		_check_board(model)
 
 

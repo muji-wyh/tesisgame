@@ -113,7 +113,7 @@ func _test_card(card) -> void:
 			and card.word_label.get_theme_font_size("font_size") == word_size,
 			"Answer feedback keeps the picture and word in their original positions and sizes")
 		check([card.picture.visible, card.word_label.visible] == front,
-			"A matched card retains its original face; the review supplies the complete association")
+			"Answer feedback retains the original card face while its board-local marks show the result")
 		check(card.get("_feedback_kind") == state and card.get("_feedback_left") > 0.0,
 			"A new match or mistake gets its distinct bounded feedback")
 		card._process(0.1)

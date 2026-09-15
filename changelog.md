@@ -2,11 +2,82 @@
 
 Notable changes to Word Buddies, grouped by date with the newest changes first.
 
+## 2026-09-15
+
+- Simplified the Medals page with quieter tile surfaces, clearer spacing,
+  less repeated status text, and compact legacy-reward chips. All current and
+  earlier rewards retain their artwork, progress, and preview actions.
+- Fixed goal and retry text overflowing toy cards at desktop/fractional scales,
+  keeping all three lines readable inside the same fixed-size cards.
+- Moved toy goal progress, actions, and retry messages onto the relevant card.
+  Removed the standalone Help Pip get this row and stopped pointer selection
+  from jumping the page, while keeping keyboard/controller focus scrolling.
+- Enlarged theme targets and artwork, fixed overly large inner padding, and
+  moved theme choices into the top header where space allows.
+- Theme changes keep the current Rewards page and scroll position open, with
+  visible retry guidance if the preference cannot be saved.
+- Removed the result word-strip scrollbar and added direct mouse/touch dragging,
+  preserving tap-to-hear, keyboard/controller access, and gesture cancellation.
+
 ## 2026-09-14
 
+- Flattened world selection into six direct icons in More, without another tab
+  or page. Pip and Medals remain the two reward sections.
+- Fixed scrolling from blank playroom canvas and locked-toy areas while preserving
+  floor taps, petting, toy gestures, and cancellation.
+- Reordered the mode tabs to Match, Learn, Memory and made Match the startup mode.
+- Removed Repeat lesson. Results offer New adventure, a conditional save retry,
+  and newly earned toy actions, with compact, consistent styling.
+- Removed the Rooms/backdrop chooser and room-gift entry points while preserving
+  saved backgrounds, toys, medals, and Worlds.
+- Made Medals a world-colored treasure collection with original mystery eggs,
+  Pip's next-treasure guide, and bounded artwork reactions. Progress, earned
+  artwork, legacy rewards, and preview actions remain intact.
+- Reduced upper whitespace with a single header row on wider screens and a
+  higher picture-and-word position in tall Learn cards.
+- Standardized page spacing and toolbar alignment, grouped game counts with Pip,
+  and moved Learn's `1/5` counter inside the slide. Learn cards no longer change
+  appearance on pointer selection.
+- Simplified Rewards to Pip and Medals with direct world choices and icon-based Back controls,
+  uniform medal tiles, and clearer world choices. Removed the Words album and
+  display while retaining existing saved word fields.
+- Made Memory rows regular and removed redundant on-screen instructions.
+- Simplified play to Learn, Match, and Memory; removed Sky and Listen, redundant
+  topic headings, and the Match/Memory footer panels.
+- Added compact square toolbar icons and smaller natural-width mode tabs.
+- Completed Match cards can be tapped to hear their words again without rescoring.
+  Correct/wrong feedback now continues automatically on the board.
+- Replaced Memory's Study toggle with a hold-to-peek eye and card-flip animations.
+  Release hides faces without clearing completed pairs.
+- Enlarged the voice companion and added bounded nod, wave, and tilt reactions
+  inside a more compact transcript panel.
+- Added finger-following Learn slides, adjacent-word previews, edge resistance,
+  and short settling animations; reduced motion keeps direct dragging without
+  animated settling. On-card guidance replaces the floating tooltip that could
+  obscure a held slide.
+- Reduced mode-tab size while retaining usable touch targets, and removed the
+  in-game Word Buddies heading and Explore picker. New adventure starts a fresh
+  lesson directly; saved-choice failures retain a header retry.
+- Removed Learn's bottom buttons. Swipe the display left/right to explore words,
+  tap it to hear, and use the top mode tabs to play. Mouse dragging, keyboard, and
+  controller navigation remain available, including when sound is unavailable.
 - Increased Match to three hints per round. The Hint button shows the remaining
   count, all input methods share the allowance, and active or invalid requests
   spend nothing.
+
+## 2026-09-11
+
+- Reworked the shared layout around gameplay: one compact header, quieter mode
+  navigation, lighter surfaces, and more room for the cards.
+- Moved the six world choices and next-reward goals into **More > Worlds** without
+  changing the current round, selection, or one-hint allowance.
+- Gave Pip his own header space; removed the non-scoring Learn counter and
+  duplicate Memory progress. Results no longer repeat gameplay counters.
+- Brought the playable room and sticker grids forward, removed repeated headings
+  and uncollected sticker placeholders, hid unusable empty-album actions, and
+  grouped phone lesson actions into one row.
+- Simplified loading and speech-panel styling while retaining loading accuracy,
+  input feedback, microphone notices, and reduced-motion support.
 
 ## 2026-09-10
 

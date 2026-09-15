@@ -26,6 +26,8 @@ var _pointer := -1
 var _gesture := ""
 var _press := Vector2.ZERO
 var _last := Vector2.ZERO
+var _last_screen := Vector2.ZERO
+var _floor_tap_allowed := true
 var _travel := 0.0
 var _flight_start := Vector2.ZERO
 var _flight_end := Vector2.ZERO
@@ -275,8 +277,9 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventScreenTouch:
 			if event.canceled:
 				if pointer == _pointer:
+					var owned: bool = _gesture != "floor"
 					cancel()
-					get_viewport().set_input_as_handled()
+					if owned: get_viewport().set_input_as_handled()
 				return
 			pressed = event.pressed
 			released = not pressed
@@ -289,23 +292,27 @@ func _input(event: InputEvent) -> void:
 		var on_toy := _toy.get_global_rect().has_point(point)
 		var on_duck := _slot.get_global_rect().has_point(point)
 		if on_toy and _toy.z_index > 0: on_duck = false
-		get_viewport().set_input_as_handled()
-		if on_toy and not on_duck and toy_locked: return
+		_floor_tap_allowed = not (on_toy and not on_duck and toy_locked)
+		if not _floor_tap_allowed: on_toy = false
+		if on_toy or on_duck: get_viewport().set_input_as_handled()
 		if on_toy and not on_duck:
 			if toy_phase != "idle" or not motion_kind.is_empty(): cancel()
-		else:
+		elif on_duck:
 			_begin_action()
 		_pointer = pointer
 		# Pip draws above the toy; the visible front object owns overlapping hits.
 		_gesture = "duck" if on_duck else "toy" if on_toy else "floor"
 		_press = local
 		_last = local
+		_last_screen = point
 		_travel = 0
 	elif pointer == _pointer:
-		get_viewport().set_input_as_handled()
+		if _gesture != "floor": get_viewport().set_input_as_handled()
 		if moving:
-			_travel += local.distance_to(_last)
+			# Floor scrolling moves this canvas; measure that gesture in viewport coordinates.
+			_travel += point.distance_to(_last_screen) if _gesture == "floor" else local.distance_to(_last)
 			_last = local
+			_last_screen = point
 			if _gesture == "toy" and _travel > 8:
 				if toy_phase != "drag": interaction_started.emit()
 				toy_phase = "drag"
@@ -326,7 +333,8 @@ func _input(event: InputEvent) -> void:
 			elif gesture == "toy":
 				if _travel > 8: _launch(_clamp_toy(local), local + (local - _press) * 0.35)
 				else: toy_tapped.emit()
-			elif _travel < 12:
+			elif _travel < 12 and _floor_tap_allowed:
+				_begin_action()
 				_move_to(local)
 				_report(motion_kind if not motion_kind.is_empty() else "walk", "Pip %s over!" % ("runs" if motion_kind == "run" else "walks"))
 

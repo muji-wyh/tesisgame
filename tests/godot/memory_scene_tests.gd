@@ -15,11 +15,11 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	if not app.get_property_list().any(func(p: Dictionary) -> bool: return p.name == "_memory"):
-		check(false, "Main scene offers the fifth Memory mode")
+		check(false, "Main scene offers Memory")
 		app.free()
 		quit(1)
 		return
-	var directory := "user://memory-scene-%d" % OS.get_process_id()
+	var directory := "res://build/memory-scene-%d" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(directory)
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
@@ -35,9 +35,20 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var view = app._memory
-	check(view.is_visible_in_tree() and app._mode_buttons.size() == 5, "The Memory tab opens a playable fifth mode")
+	check(view.memory.cards.size() == 10, "The integrated Root starts a complete Memory round")
+	if view.memory.cards.size() != 10:
+		await _finish(app, directory)
+		return
+	check(view.is_visible_in_tree() and app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "learn", "memory"],
+		"Memory is one of exactly three playable modes")
+	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
+		"Root owns the eye while Memory cards fill their entire assigned view")
+	check(not view.status_label.visible and view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
+		"The Memory scene leaves visible progress to Root's Pip cluster")
 	check(app.model.lesson_words == lesson and app.model.theme_id == "spring", "Memory retains the lesson and selected world")
-	check(not app._mistakes.visible and not app.grid.visible and not app._choice.visible, "Memory hides the three-mistake HUD and other boards")
+	check(not app.grid.visible and not app._lesson.visible, "Memory hides the other mode boards")
+	check(app._success.visible and app._mistakes.visible and app._success.get_parent() == app._header_duck_slot
+		and app._mistakes.get_parent() == app._header_duck_slot, "Memory progress appears only in Root's shared Pip cluster")
 	check(app._status_announcement.contains("Memory") and app._status_announcement.contains("0 of 5"), "Memory announces its own goal and progress")
 	var board: Array = view.memory.cards.duplicate(true)
 	var target_rects: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
@@ -59,19 +70,36 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	app.choose_theme("ocean")
 	check(view.memory.selected_indices == [0] and view.memory.cards == board, "Page hiding, motion and palette changes preserve the board")
+	check(view.controls().is_empty(), "Page hiding suspends native Memory input")
+	app.on_page_visible()
+	check(not app.audio.voice.playing, "Returning to the page never resumes pronunciation automatically")
 	view.card_buttons[0].grab_focus()
 	app._show_collection()
 	view.card_buttons[1].pressed.emit()
-	view.study_button.pressed.emit()
+	view.study_button.button_down.emit()
 	app.choose_mode("match")
 	check(view.memory.selected_indices == [0] and not view.memory.studying and app._mode_id == "memory", "Covered controls cannot mutate the attempt")
 	app._hide_collection()
 	check(root.gui_get_focus_owner() == view.card_buttons[0], "Closing rewards restores the selected card's keyboard focus")
-	view.study_button.pressed.emit()
-	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Study clears unfinished selections")
-	check(app._default_focus() == view.study_button, "Return to play is the default Study control")
+	view.study_button.button_down.emit()
+	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Holding the eye clears unfinished selections")
+	check(app._default_focus() == view.study_button, "The held eye remains the default Memory control")
 	app._controller_back()
-	check(not view.memory.studying, "Xbox B or Escape returns from Study without resetting the board")
+	check(not view.memory.studying, "Xbox B or Escape releases the eye without resetting the board")
+	view.study_button.grab_focus()
+	await _joy_accept(true)
+	check(view.memory.studying, "Native Xbox A down begins a held reveal")
+	await _joy_accept(false)
+	check(not view.memory.studying and _all_hidden(view), "Native Xbox A up conceals all ten fronts")
+	await _joy_accept(true)
+	app._on_joy_connection_changed(0, false)
+	check(not view.memory.studying, "Controller disconnect cancels a held reveal")
+	await _joy_accept(false)
+	view.begin_peek()
+	app.on_page_hidden()
+	check(not view.memory.studying and view.controls().is_empty(), "A hidden page cancels the eye and suspends play")
+	app.on_page_visible()
+	check(_all_hidden(view) and not app.audio.voice.playing, "Returning to the page restores concealed play without audio")
 	var word_index := -1
 	var image_index := -1
 	for index in range(board.size()):
@@ -90,42 +118,41 @@ func _run() -> void:
 		check(view.card_buttons.all(func(card: Button) -> bool: return card.is_visible_in_tree()), "The real scene keeps every remembered card visible during feedback")
 		check(view.get_global_rect() == field_rect and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == target_rects, "Feedback does not resize or move the host board")
 		check(app.model.phase != "lost" and app.model.missed_word_ids.is_empty(), "Memory exploration never marks vocabulary missed or ends the game")
-		check(app._default_focus() == view.feedback_view.action_button, "Explicit Continue is the feedback focus")
+		check(view.controls().has(app._default_focus()), "Feedback focus stays on an available board control")
 		app._show_collection()
 		view.continue_feedback()
 		check(view.memory.phase == "feedback", "Covered feedback cannot continue")
 		app._hide_collection()
-		view.feedback_view.action_button.pressed.emit()
+		view.continue_feedback()
 		await process_frame
 		await process_frame
 		check(view.get_global_rect() == field_rect and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == target_rects, "Continue retains the original host card targets")
-	check(view.memory.attempts == 4 and app.model.mistakes == 0, "Memory counts attempts independently of three-strike modes")
+	check(view.memory.attempts == 4 and view.memory.mistakes == 4 and app.model.mistakes == view.memory.mistakes and app.model.phase != "lost",
+		"Root mirrors Memory mistakes for Pip without imposing a three-strike loss")
 	for word in lesson:
 		for index in range(board.size()):
 			if board[index].word.id == word.id:
 				view.card_buttons[index].pressed.emit()
-		check(app.model.phase != "won", "A correct pair waits for explicit Continue before any win")
-		check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A judged pair defaults actual keyboard focus to Continue")
+		check(app.model.phase != "won", "A correct pair displays bounded feedback before the final result")
 		if view.memory.matched_word_ids.size() == 5:
-			view.study_button.pressed.emit()
+			view.begin_peek()
 			view._choose(-1)
 			for button in view.card_buttons:
 				button.pressed.emit()
-			check(view.memory.phase == "feedback" and view.study_button.disabled and not view.memory.studying and app.model.phase != "won", "The fifth pair still requires Continue before showing the result")
+			check(view.memory.phase == "feedback" and view.study_button.disabled and not view.memory.studying and app.model.phase != "won",
+				"The fifth pair finishes its feedback automatically, without a held-eye delay")
 			check(view.memory.attempts == 9 and view.memory.matched_word_ids.size() == 5 and app.medal_progress.counts.is_empty(), "Final blocked shortcuts cannot change score or claim rewards")
-			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "Rejected final input retains actual Continue focus")
+			var final_focus: Control = root.gui_get_focus_owner()
+			check(app._valid_focus(final_focus) and view.controls().is_empty(), "Final feedback leaves focus on a valid host control, not a removed footer")
 			await _tap_control(view.card_buttons[0])
-			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A real tap on a planted final card retains Continue focus")
+			check(root.gui_get_focus_owner() == final_focus, "A planted final card cannot steal host focus")
 			await _tap_control(view.study_button)
-			check(root.gui_get_focus_owner() == view.feedback_view.action_button, "A real tap on disabled final Study retains Continue focus")
-			for pressed in [true, false]:
-				var event := InputEventKey.new()
-				event.keycode = KEY_ENTER
-				event.pressed = pressed
-				root.push_input(event, true)
-				await process_frame
-			check(app.model.phase == "won" and view.memory.phase == "won", "Enter still completes the final feedback after tapping disabled controls")
-		view.feedback_view.action_button.pressed.emit()
+			check(root.gui_get_focus_owner() == final_focus, "A disabled final eye cannot steal host focus")
+			await create_timer(0.8).timeout
+			check(app.model.phase == "won" and view.memory.phase == "won", "Final feedback automatically completes in the real scene")
+		else:
+			check(view.controls().has(root.gui_get_focus_owner()), "A judged nonfinal pair keeps actual focus on playable cards")
+			view.continue_feedback()
 	check(app.model.phase == "won" and app.model.successes == 5, "Five completed pairs enter the ordinary victory screen")
 	check(not view.visible and app._found_words.get_child_count() == 5, "The result reviews all five practised words")
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
@@ -138,19 +165,24 @@ func _run() -> void:
 	check(app.medal_progress.count_for("ocean-1") == 1, "Duplicate completion and chest callbacks cannot award extra pieces")
 	var reloaded = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(reloaded.load_progress() and reloaded.count_for("ocean-1") == 1, "Memory rewards survive storage reload")
-	app._replay()
-	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean", "Repeat preserves mode, lesson and world")
-	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "Repeat clears the prior attempt")
+	check(app.new_round(-1, true), "A same-lesson internal reset prepares another Memory fixture")
+	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
+		"The internal Memory fixture reset preserves its mode, lesson, and world")
+	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")
 	app.choose_mode("learn")
 	view.round_finished.emit(true, lesson)
 	check(app.model.phase != "won" and view.memory.phase == "stopped", "Leaving Memory blocks stale completion")
-	for mode in ["match", "sky", "listen"]:
+	for mode in ["match", "memory", "learn"]:
 		app.choose_mode(mode)
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "Existing " + mode + " mode remains reachable with the same lesson")
 	await _check_feedback_shortcut_focus(app)
 	await _check_host_layout(app)
 	if "--screenshots" in OS.get_cmdline_user_args():
 		await _capture_scenes(app)
+	await _finish(app, directory)
+
+
+func _finish(app, directory: String) -> void:
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
@@ -186,47 +218,75 @@ func _check_feedback_shortcut_focus(app) -> void:
 			var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), app.model.successes, app.medal_progress.counts.duplicate(true)]
 			var board: Array = view.memory.cards.duplicate(true)
 			var positions: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
-			check(root.gui_get_focus_owner() == view.feedback_view.action_button and app._default_focus() == view.feedback_view.action_button, "Wrong and correct feedback both start with actual Continue focus")
+			check(view.controls().has(root.gui_get_focus_owner()) and view.controls().has(app._default_focus()), "Wrong and correct feedback keep focus on the board")
 			var control: Button = view.study_button if action == "study" else view.card_buttons[target]
-			await _tap_control(control)
-			check(root.gui_get_focus_owner() == control, "The first " + action + " tap moves actual host focus away from hidden Continue to the tapped control")
-			check(not view.feedback_view.visible, "The first " + action + " tap dismisses nonfinal feedback")
+			await _mouse_control(control, true)
+			if action == "card":
+				await _mouse_control(control, false)
+			check(root.gui_get_focus_owner() == control, "The first " + action + " input moves actual host focus to its target")
+			check(view.memory.phase != "feedback", "The first " + action + " input resolves nonfinal feedback")
 			if action == "card":
 				check(view.memory.phase == "matching" and view.memory.selected_indices == [target], "The host keeps only the first tapped new card selected")
 			else:
-				check(view.memory.studying and view.memory.selected_indices.is_empty() and app._default_focus() == view.study_button, "The host enters Study and defaults to Return on the first tap")
-				await _tap_control(view.study_button)
-				check(not view.memory.studying and view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button, "Return restores play and retains actual Study button focus")
+				check(view.memory.studying and view.memory.selected_indices.is_empty() and app._default_focus() == view.study_button, "The host begins a peek on eye down")
+				await _mouse_control(view.study_button, false)
+				check(not view.memory.studying and view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button,
+					"Eye up restores concealed play and retains eye focus")
 			check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, app.model.successes, app.medal_progress.counts] == score, "First-tap feedback shortcuts preserve host score and rewards")
 			check(view.memory.cards == board and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == positions, "First-tap feedback shortcuts keep the host board stationary")
 
 
 func _tap_control(control: Control) -> void:
 	for pressed in [true, false]:
-		var event := InputEventMouseButton.new()
-		event.position = control.get_global_rect().get_center()
-		event.global_position = event.position
-		event.button_index = MOUSE_BUTTON_LEFT
-		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
-		event.pressed = pressed
-		root.push_input(event, true)
-		await process_frame
+		await _mouse_control(control, pressed)
+
+
+func _mouse_control(control: Control, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.position = control.get_global_rect().get_center()
+	event.global_position = event.position
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	event.pressed = pressed
+	root.push_input(event, true)
+	await process_frame
+
+
+func _joy_accept(pressed: bool) -> void:
+	var event := InputEventJoypadButton.new()
+	event.button_index = JOY_BUTTON_A
+	event.pressed = pressed
+	root.push_input(event, true)
+	await process_frame
+
+
+func _all_hidden(view) -> bool:
+	return range(10).all(func(index: int) -> bool: return not view.memory.is_revealed(index))
 
 
 func _check_host_layout(app) -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(480, 480)]:
 		root.size = dimensions
-		app.choose_mode("listen")
+		app.choose_mode("learn")
 		app.choose_mode("memory")
 		for frame in range(4):
 			await process_frame
 		var view = app._memory
 		var bounds: Rect2 = root.get_visible_rect().grow(0.5)
 		check(bounds.encloses(view.get_global_rect()), "Mode changes and resizing keep the Memory playfield on screen at " + str(dimensions))
-		check(bounds.encloses(view.feedback_view.get_global_rect()), "The reserved review stays on screen after changing modes at " + str(dimensions))
-		for card in view.card_buttons:
+		check(is_equal_approx(view._board.position.y + view._board.size.y, view.size.y),
+			"The Memory board reaches the bottom of its real host view without a footer")
+		check(view._board.position == Vector2.ZERO, "Root's toolbar eye reserves no Memory header")
+		var columns: int = 2 if view.size.x < view.size.y else 5
+		var rows: int = 10 / columns
+		var gap: float = ceilf(8 / load("res://scripts/ui_style.gd").ui_scale(view))
+		var cell := Vector2((view.size.x - gap * (columns - 1)) / columns, (view.size.y - gap * (rows - 1)) / rows)
+		for index in range(view.card_buttons.size()):
+			var card: Button = view.card_buttons[index]
 			check(bounds.encloses(card.get_global_rect()), "Every Memory target fits the real host after resizing")
+			check(card.position.is_equal_approx(Vector2((index % columns) * (cell.x + gap), (index / columns) * (cell.y + gap)))
+				and card.size.is_equal_approx(cell), "Every real-scene row is complete and uniformly sized")
 
 
 func _capture_scenes(app) -> void:
@@ -259,15 +319,20 @@ func _capture_scenes(app) -> void:
 		view.card_buttons[first].pressed.emit()
 		await _save_capture(prefix + "reveal")
 		view.card_buttons[wrong].pressed.emit()
-		await _save_capture(prefix + "wrong-1")
-		view.feedback_view.next_button.pressed.emit()
-		await _save_capture(prefix + "wrong-2")
+		await _save_capture(prefix + "wrong")
 		view.continue_feedback()
+		view.begin_peek()
+		await create_timer(0.25).timeout
+		await _save_capture(prefix + "peek")
+		view.end_peek()
+		await create_timer(0.25).timeout
+		await _save_capture(prefix + "concealed")
 		view.card_buttons[first].pressed.emit()
 		view.card_buttons[partner].pressed.emit()
 		await _save_capture(prefix + "correct")
 		view.continue_feedback()
-		await _save_capture(prefix + "continue")
+		await create_timer(0.25).timeout
+		await _save_capture(prefix + "planted")
 
 
 func _save_capture(filename: String) -> void:

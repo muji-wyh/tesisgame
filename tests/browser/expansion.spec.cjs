@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, openRewards: openRoom, roomControl,
+  leaveRoomPreview: leavePreview } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -8,39 +9,9 @@ async function roomRecord(page) {
   return page.evaluate(key => localStorage.getItem(key), ROOM_KEY);
 }
 
-async function openRoom(page) {
-  const bounds = await metrics(page);
-  await tap(page, bounds.width - 48, 48);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
-  await rendered(page);
-}
-
-async function roomControl(page, name) {
-  const bounds = await metrics(page);
-  // The room tab gives a stable focus origin. Focus scrolls a lower control into
-  // view before the real touch, including on the original short phone viewport.
-  await tap(page, 60, 52);
-  await rendered(page);
-  const order = { action: 16, rooms: 18, spring: 20 };
-  for (let index = 0; index < order[name]; index++) {
-    await page.keyboard.press('Tab');
-    // Let focus scrolling update canvas geometry before advancing again.
-    await rendered(page);
-  }
-  const center = { action: 752, rooms: 834, spring: 954 }[name];
-  return { x: name === 'action' ? bounds.width / 2 : bounds.width * 0.75,
-    y: Math.min(center, bounds.height - (name === 'spring' ? 90 : 52)) };
-}
-
 async function tapRoomControl(page, name) {
   const point = await roomControl(page, name);
   await tap(page, point.x, point.y);
-}
-
-async function leavePreview(page) {
-  // Help starts focused; Pip, Pet, Poke and Call precede Back. Locked Toss skips focus.
-  for (let index = 0; index < 5; index++) await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
 }
 
 async function seedGifts(page, { favorite = '' } = {}) {
@@ -80,11 +51,10 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await tapRoomControl(page, 'action');
   expect(await roomRecord(page)).toBe(saved);
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
-  await tapRoomControl(page, 'rooms');
-  await tapRoomControl(page, 'spring');
+  await tapRoomControl(page, 'space');
   await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath('room-locked-backdrop-phone.png'), scale: 'css' });
-  await expect(page.locator('#game-status')).toContainText('Complete Bee');
+  await page.screenshot({ path: testInfo.outputPath('room-locked-rocket-phone.png'), scale: 'css' });
+  await expect(page.locator('#game-status')).toContainText('Complete Rocket');
   await leavePreview(page);
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
@@ -93,26 +63,33 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   expect(errors).toEqual([]);
 });
 
-test('earned toy, backdrop, and migrated favorite persist through immediate reload', async ({ page }, testInfo) => {
+test('toys and migrated favorites preserve a legacy backdrop through reload', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 650 });
   await seedGifts(page, { favorite: 'spring-1' });
   const errors = await openGame(page);
   const medals = await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
+  expect(await roomRecord(page)).toContain('favorite="spring-1"');
+  await page.evaluate(key => {
+    const saved = localStorage.getItem(key);
+    if (!saved?.includes('backdrop="backdrop-home"')) throw new Error('The legacy-background fixture requires the initial home backdrop.');
+    localStorage.setItem(key, saved.replace('backdrop="backdrop-home"', 'backdrop="backdrop-spring"'));
+  }, ROOM_KEY);
+  await page.reload();
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await openRoom(page);
   await expect(page.locator('#game-status')).toContainText('18 of 36 medals complete.');
   expect(await roomRecord(page)).toContain('favorite="spring-1"');
   await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Water the flower');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
-  await tapRoomControl(page, 'rooms');
-  await tapRoomControl(page, 'spring');
   const saved = await roomRecord(page);
   expect(saved).toContain('backdrop="backdrop-spring"');
   expect(saved).toContain('favorite="spring-1"');
   await page.reload();
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await openRoom(page);
-  // A new startup lesson can add a visit; the selected room must stay identical.
+  // The removed chooser must not erase an existing background or migrated favorite.
   expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
   await tapRoomControl(page, 'action');
   await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');

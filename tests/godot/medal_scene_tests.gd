@@ -123,15 +123,21 @@ func _run() -> void:
 	DirAccess.make_dir_absolute(blocked_path)
 	app.medal_progress = failing_progress
 	app._open_chest()
-	check(app._save_error and app.replay_button.text == "Retry saving"
-		and not app._fragment_active, "A failed save offers retry instead of pretending to collect a fragment")
+	check(app._save_error and app._result_retry_button.text == "Retry saving"
+		and app._result_retry_button.is_visible_in_tree() and not app._new_adventure_button.is_visible_in_tree()
+		and not app._fragment_active, "A failed save offers only Retry saving instead of pretending to collect a fragment")
 	var pending: Dictionary = app._pending_fragment.duplicate()
+	var lesson_before_retry: Array = app.model.lesson_words.duplicate(true)
 	app.medal_progress = progress_script.new(directory + "/retry.cfg", directory + "/old.cfg")
 	check(app.medal_progress.load_progress(), "The retry fixture can store progress")
-	app._replay()
+	app._result_retry_button.pressed.emit()
 	check(not app._save_error and app.model.phase == "won"
+		and app.model.lesson_words == lesson_before_retry and app.medal_progress.count_for(pending.medal_id) == pending.after,
+		"Retry saving commits the same captured piece without changing the lesson or result")
+	app._retry_reward_save()
+	check(app.model.phase == "won" and app.model.lesson_words == lesson_before_retry
 		and app.medal_progress.count_for(pending.medal_id) == pending.after,
-		"Retry saving commits the same captured piece without rerolling or replaying")
+		"A stale successful retry cannot restart the lesson or award another piece")
 	DirAccess.remove_absolute(blocked_path)
 	app.new_round(11)
 	for index in range(1, 7):

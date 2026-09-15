@@ -136,6 +136,25 @@ test('the recognition panel contains no separate Listen or Stop button', () => {
   assert.match(shell, /id="speech-status"/);
 });
 
+test('incoming words cycle three bounded duck reactions without restarting recognition', () => {
+  const f = fixture();
+  f.listen();
+  const reactions = [];
+  for (const word of ['doll', 'cat', 'ball']) {
+    f.latest.result([[`I see a ${word}`, false]]);
+    reactions.push(f.panel.attributes['data-reaction']);
+    assert.equal(f.panel.attributes['data-heard'], 'true');
+  }
+  assert.deepEqual(reactions, ['nod', 'wave', 'tilt']);
+  assert.equal(f.starts, 1);
+  assert.equal(f.pendingTimers, 1, 'Only the latest reaction timer remains');
+  f.advance(300);
+  assert.equal(f.panel.attributes['data-heard'], 'false');
+  f.host.stopSpeech();
+  f.advance();
+  assert.equal(f.panel.attributes['data-state'], 'off');
+});
+
 test('recognition activity drives one bounded visual reaction and stops cleanly', () => {
   const f = fixture();
   f.listen();

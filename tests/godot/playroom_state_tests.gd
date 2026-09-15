@@ -125,6 +125,12 @@ func _test_catalog() -> void:
 	var state = _script.new()
 	var entries: Array = state.catalog()
 	check(entries.size() == 14, "The catalog contains two starters and twelve world gifts")
+	var toys: Array = state.toys()
+	check(toys.size() == 7 and toys.all(func(entry: Dictionary) -> bool: return entry.slot == "toy")
+		and toys.any(func(entry: Dictionary) -> bool: return entry.id == "toy-ball"),
+		"The active toy catalog contains only the starter ball and six world toys")
+	check(toys == entries.filter(func(entry: Dictionary) -> bool: return entry.slot == "toy"),
+		"Filtering active toys preserves canonical metadata while retaining legacy backdrops in the compatibility catalog")
 	var ids: Dictionary = {}
 	for entry in entries:
 		check(entry.has_all(["id", "slot", "theme", "name", "word_id", "action", "art", "medal_id", "required_pieces"]), "Catalog entries provide room and goal metadata")
@@ -149,6 +155,8 @@ func _test_catalog() -> void:
 	check(not state.owned({"id": "toy-spring", "required_pieces": 0, "medal_id": ""}, {}), "Ownership uses canonical catalog requirements")
 	entries[0].name = "Changed by a caller"
 	check(state.item("toy-ball").name != "Changed by a caller", "Returned catalog entries do not mutate future catalog lookups")
+	toys[0].name = "Changed toy"
+	check(state.toys()[0].name == "Ball", "Returned toy entries cannot mutate later active catalog lookups")
 
 
 func _test_selection_and_reload() -> void:
@@ -187,19 +195,18 @@ func _test_goals() -> void:
 	gift = state.next_gift({"spring-1": 2}, "spring")
 	check(gift.id == "toy-spring" and gift.remaining_pieces == 1, "A partial first medal has one piece left for its toy")
 	gift = state.next_gift({"spring-1": 3, "spring-2": 1, "spring-3": 1}, "spring")
-	check(gift.id == "backdrop-spring" and gift.remaining_pieces == 4, "Backdrop goals include deficits in preceding medals")
+	check(gift.is_empty(), "Completing a world's toy never starts advertising its unearned backdrop")
 	gift = state.next_gift({"spring-1": 1, "spring-3": 3}, "spring")
 	check(gift.id == "toy-spring" and gift.remaining_pieces == 2, "An already earned sparse backdrop is skipped")
 	gift = state.next_gift({"spring-1": 3, "ocean-1": 2})
 	check(gift.id == "toy-ocean" and gift.remaining_pieces == 1, "The nearest unfinished gift can belong to another world")
-	check(state.next_gift({"spring-1": 3, "spring-3": 3}, "spring").is_empty(), "A world with all catalog gifts has no further gift")
+	check(state.next_gift({"spring-1": 3}, "spring").is_empty(), "A world with its toy earned has no further active gift")
 	check(state.next_gift({}, "unknown").is_empty(), "Unknown world filters produce no gift")
 	var complete: Dictionary = {}
 	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
 		complete[theme_id + "-1"] = 3
-		complete[theme_id + "-3"] = 3
 	var before := complete.duplicate(true)
-	check(state.next_gift(complete).is_empty() and complete == before, "Fully earned catalog goals never mutate progress or invent another reward")
+	check(state.next_gift(complete).is_empty() and complete == before, "Earning every toy leaves no active gift even when all legacy backdrops are still locked")
 
 
 func _test_invalid_records() -> void:
@@ -600,13 +607,13 @@ func _test_selected_goal() -> void:
 	check(state.goal_item_id.is_empty() and FileAccess.get_file_as_string(fixture.path) == original, "Rejected goals do not change confirmed preferences or saved bytes")
 	var counts := {"ocean-1": 3, "ocean-2": 1, "ocean-3": 1}
 	var before := counts.duplicate(true)
-	check(state.set_goal("backdrop-ocean", counts), "An unowned backdrop can be selected as the gift goal")
-	check(state.goal_item_id == "backdrop-ocean" and state.preferred_theme_id == "ocean", "Selecting a goal also saves its world")
+	check(state.set_goal("backdrop-ocean", counts), "The compatibility API can seed a previously selected backdrop goal")
+	check(state.goal_item_id == "backdrop-ocean" and state.preferred_theme_id == "ocean", "A legacy goal record retains its associated world")
 	var goal: Dictionary = state.selected_goal(counts)
-	check(goal.id == "backdrop-ocean" and goal.remaining_pieces == 4, "A selected backdrop counts exactly the missing pieces of its first three medals")
+	check(goal.id == "backdrop-ocean" and goal.remaining_pieces == 4, "Reading legacy selected-goal data preserves its original three-medal progress")
 	check(state.selected_goal({}).remaining_pieces == 9 and state.selected_goal({"ocean-1": 3, "ocean-2": 3, "ocean-3": 2}).remaining_pieces == 1, "Selected goals derive empty and last-piece progress directly from medal counts")
 	check(state.selected_goal({"ocean-3": 3}).remaining_pieces == 0, "An owned sparse legacy backdrop is complete even when earlier medals are absent")
-	check(not state.set_goal("backdrop-ocean", {"ocean-3": 3}) and state.goal_item_id == "backdrop-ocean", "An earned goal cannot be selected again but remains available for playing")
+	check(not state.set_goal("backdrop-ocean", {"ocean-3": 3}) and state.goal_item_id == "backdrop-ocean", "An earned legacy goal cannot be selected again but remains preserved as saved data")
 	check(counts == before, "Goal selection and progress reads never change medal counts")
 	goal.name = "Changed by caller"
 	check(state.selected_goal(counts).name != goal.name, "Goal metadata cannot mutate the catalog")
@@ -617,7 +624,7 @@ func _test_selected_goal() -> void:
 		check(reloaded.goal_item_id == "backdrop-ocean" and reloaded.selected_goal(counts).remaining_pieces == 4, "Every room, journey and sticker write preserves the selected goal across reload")
 		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10" and reloaded.preferred_theme_id == "space", "The saved goal preserves independent room and world choices")
 		check(reloaded.collected_word_ids == ["cat", "bell"] and reloaded.displayed_word_id == "bell" and reloaded.recent_topic_ids == ["music-makers", "animal-friends"], "The saved goal preserves stickers and adventure history")
-	check(state.set_goal("backdrop-ocean", counts) and state.preferred_theme_id == "ocean", "Resuming the same locked goal restores its world after another preference")
+	check(state.set_goal("backdrop-ocean", counts) and state.preferred_theme_id == "ocean", "The compatibility API preserves a legacy goal's world without requiring a visible Rooms route")
 	_directory(fixture.path + ".pending")
 	check(state.set_goal("backdrop-ocean", counts), "Repeating a goal with the same world is idempotent without a storage write")
 	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known goal write blocker")

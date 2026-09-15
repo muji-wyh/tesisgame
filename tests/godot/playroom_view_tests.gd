@@ -51,7 +51,9 @@ func _run() -> void:
 	check(view.toy_button.icon != null and not view.action_button.disabled, "The starter ball is visible and immediately playable")
 	var starter_tint: Color = view.toy_button.self_modulate
 	check(view.action_button.text.to_lower().contains("ball"), "The action names its familiar noun")
-	check(view.item_buttons.size() == state.catalog().size(), "Every room item has a visible catalog control")
+	check(view.item_buttons.size() == 7 and view.item_buttons.size() == state.toys().size()
+		and view.item_buttons.keys().all(func(id: String) -> bool: return state.item(id).slot == "toy"),
+		"Pip exposes exactly the starter ball and six world toys, with no hidden backdrop buttons")
 	var original_controls: Array = view.item_buttons.values()
 	view.configure(state, counts, data.theme("ocean"), true)
 	check(view.item_buttons.values() == original_controls, "Reconfiguration preserves controls used by focus and scrolling")
@@ -71,24 +73,26 @@ func _run() -> void:
 	var caption_before: String = view.caption.text
 	view.action_button.pressed.emit()
 	view.toy_button.pressed.emit()
-	view.category_buttons["backdrop"].pressed.emit()
 	view.item_buttons["toy-spring"].pressed.emit()
 	check(words.is_empty() and actions.is_empty() and selections.is_empty(), "The parent guard rejects swipe releases and covered-room input before emitting signals")
-	check(view.caption.text == caption_before and view.item_buttons["toy-spring"].visible, "Blocked room input cannot change its caption, preview, or category")
+	check(view.caption.text == caption_before and view.item_buttons["toy-spring"].visible, "Blocked room input cannot change its caption, preview, or toy list")
 	view.interaction_allowed = Callable()
 	view.action_button.pressed.emit()
 	check(words == ["ball"] and actions == ["roll"], "Playing the starter requests the noun and the roll reaction once")
 	check(view.caption.text.to_lower().contains("ball"), "The toy leaves a visible named outcome")
 	view.item_buttons["toy-spring"].pressed.emit()
 	check(selections.is_empty(), "A locked preview cannot equip an item")
-	check(view.caption.text.contains("Blossom") and view.caption.text.contains("0/3"), "A locked toy names its exact medal requirement and current count")
+	check(view.goal_button.tooltip_text.contains("Blossom") and view.goal_label.text.contains("0/3"), "A locked card names its exact medal requirement and current count")
 	check(not view.action_button.disabled and view.action_button.text == "Back to my room", "A locked preview offers an actionable return to the selected room")
-	check(view.goal_button.visible and view.goal_button.text == "Help Pip get this", "A locked preview offers a concrete gift adventure alongside Back")
+	check(view.goal_button.visible and view.goal_button.text.is_empty()
+		and view.goal_button.get_parent() == view.item_buttons["toy-spring"]
+		and view.goal_button.tooltip_text.begins_with("Start adventure"), "A locked card contains its own adventure action")
 	view.goal_button.pressed.emit()
 	check(goals == ["toy-spring"] and state.toy_id == "toy-ball", "The gift request identifies the preview without equipping it")
 	check(view.toy_button.disabled and view.toy_button.focus_mode == Control.FOCUS_NONE, "The locked toy stays unplayable and cannot steal return focus")
 	check(view.pip_buttons[2].disabled and view.pip_buttons[2].focus_mode == Control.FOCUS_NONE, "Locked preview Toss cannot take keyboard focus from its return action")
-	check(previews.size() == 1 and previews[0] == view.caption.text, "Opening a locked toy announces its visible requirement")
+	check(previews.size() == 1 and previews[0] == view.item_buttons["toy-spring"].tooltip_text,
+		"Opening a locked toy announces the requirement shown on its card")
 	view.toy_button.pressed.emit()
 	check(words.size() == 1 and actions.size() == 1, "Locked object activation cannot pronounce or play the earned action")
 	caption_before = view.caption.text
@@ -109,17 +113,33 @@ func _run() -> void:
 	check(view.pip_buttons.all(func(button: Button) -> bool: return not button.disabled and button.focus_mode == Control.FOCUS_ALL), "Back to my room restores all four Pip shortcut actions and their keyboard focus")
 	check(previews.size() == 2 and previews.back() == view.caption.text, "Closing the preview announces the restored room")
 	check(words.size() == 1 and actions.size() == 1 and selections.is_empty() and state.toy_id == "toy-ball", "Preview return never equips, plays or persists the locked toy")
-	view.category_buttons["backdrop"].pressed.emit()
-	view.item_buttons["backdrop-spring"].pressed.emit()
-	check(view.caption.text.contains("Bee") and view.caption.text.contains("9"), "A later locked backdrop includes earlier incomplete medals in its requirement")
-	check(view.controls().has(view.item_buttons["backdrop-spring"]), "Locked previews remain reachable with keyboard and controller")
-	check(view.controls().has(view.item_buttons["toy-spring"]) and not view.item_buttons["toy-spring"].visible, "Hidden category controls remain available for one-time host wiring")
-	check(view.controls().has(view.action_button) and not view.action_button.disabled, "The preview return remains available for host focus wiring")
-	view.action_button.pressed.emit()
-	check(view._room_title.text == "Pip's home" and view.action_button.text == "Roll the ball", "Returning from a locked backdrop restores the chosen room and toy")
+	caption_before = view.caption.text
+	var previews_before: int = previews.size()
+	view._choose_item("backdrop-spring")
+	check(not view.has_method("_show_category")
+		and not view.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["category_buttons", "_category"]),
+		"The Rooms category and its switching API are removed, not merely hidden")
+	check(view.caption.text == caption_before and previews.size() == previews_before and selections.is_empty(),
+		"A legacy backdrop ID cannot open a hidden preview or equipment route")
+	check(view.controls().has(view.item_buttons["toy-spring"]) and view.item_buttons.values().all(func(button: Button) -> bool: return button.visible),
+		"All seven toy choices remain available for host focus and scrolling")
+	check(view.controls().has(view.action_button) and not view.action_button.disabled, "Toy play remains available for host focus wiring")
+	state.backdrop_id = "backdrop-spring"
+	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
+	check(view._room.theme_id == "spring" and state.backdrop_id == "backdrop-spring",
+		"An already saved backdrop still renders without a Rooms chooser")
+	state.goal_item_id = "backdrop-ocean"
+	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
+	check(state.selected_goal({}).id == "backdrop-ocean" and not view.goal_button.visible
+		and not view.goal_label.text.contains(state.item("backdrop-ocean").name),
+		"An old backdrop goal remains saved data but is not advertised or resumed in Pip")
+	var requests_before: int = goals.size()
+	view.goal_button.pressed.emit()
+	check(goals.size() == requests_before and state.goal_item_id == "backdrop-ocean",
+		"A hidden old-goal control cannot start a backdrop adventure or erase its saved value")
 	state.goal_item_id = "toy-spring"
-	view.configure(state, {"spring-1": 1}, data.theme("ocean"), true)
-	check(view.goal_button.visible and view.goal_button.text == "Continue adventure", "A saved locked goal can resume its adventure")
+	view.configure(state, {"spring-1": 1, "spring-3": 3}, data.theme("ocean"), true)
+	check(view.goal_button.visible and view.goal_button.tooltip_text.begins_with("Continue adventure"), "A saved locked goal can resume its adventure")
 	check(view.goal_label.text.contains("Spring flower") and view.goal_label.text.contains("2") and view.goal_label.text.contains("Spring"), "The selected goal retains its gift, world and exact remaining pieces across worlds")
 	view.goal_button.pressed.emit()
 	check(goals.back() == "toy-spring", "Continue requests the saved goal instead of the currently viewed world")
@@ -153,9 +173,15 @@ func _run() -> void:
 			check(not view.caption.text.contains("pearl") and not view.caption.text.contains("opens"), "The spiral shell does not teach a hinged clam's behavior")
 		var position: Vector2 = view.toy_button.position
 		var rotation: float = view.toy_button.rotation
+		var room_size: Vector2 = view._room.size
+		var pose_offset: Vector2 = position + view.toy_button.size * 0.5 - view.playground._toy_home
 		await process_frame
 		await process_frame
-		check(view.toy_button.position == position and view.toy_button.rotation == rotation and not view.is_processing(), "Reduced-motion " + theme_id + " play leaves a stable visible outcome")
+		check(view.toy_button.position + view.toy_button.size * 0.5 - view.playground._toy_home == pose_offset
+			and view.toy_button.rotation == rotation and not view.is_processing(),
+			"Reduced-motion %s play keeps its exact room-relative pose through caption reflow: position=%s -> %s rotation=%s -> %s room=%s -> %s processing=%s" % [
+				theme_id, position, view.toy_button.position, rotation, view.toy_button.rotation,
+				room_size, view._room.size, view.is_processing()])
 		_check_room_text(view, theme_id + " first stage")
 		var first_caption: String = view.caption.text
 		view.action_button.pressed.emit()
@@ -179,10 +205,9 @@ func _run() -> void:
 		check(view.action_button.text == initial_action and view.toy_button.icon != null and not view.is_processing(), "Replay restores the " + theme_id + " toy and first action")
 		check(actions.size() == before_replay, "Replay resets without granting an extra toy reaction")
 	check(counts == original_counts, "Room interactions never alter medal progress")
-	check(view.goal_button.text == "Play with this gift" and view.goal_label.text.contains("Spring flower"), "A completed saved goal stays available for later use")
+	check(view.goal_button.tooltip_text.begins_with("Use toy") and view.goal_label.text.contains("Spring flower"), "A completed saved goal stays available for later use")
 	view.goal_button.pressed.emit()
 	check(goals.back() == "toy-spring" and state.toy_id == "toy-space", "A completed goal requests the host's persisted equipment path")
-	view.category_buttons["toy"].pressed.emit()
 	view.item_buttons["toy-autumn"].pressed.emit()
 	check(selections == ["toy-autumn"], "An owned selector asks the parent to persist the choice")
 	check(state.toy_id == "toy-space", "The view does not report an uncommitted selection as saved")
@@ -204,7 +229,10 @@ func _run() -> void:
 	view.action_button.pressed.emit()
 	view.hide()
 	check(not view.is_processing(), "Closing the room stops animation immediately")
-	check(view.controls().size() == state.catalog().size() + 10 and view.controls().has(view.word_sticker_button) and view.pip_buttons.size() == 4 and view.pip_buttons.all(func(button: Button) -> bool: return view.controls().has(button)), "A hidden room exposes the four Pip shortcuts, word sticker, goal and existing controls for host focus and scrolling wiring")
+	check(view.controls().size() == state.toys().size() + 7 and view.controls().has(view.goal_button)
+		and view.controls().has(view.toy_button) and view.controls().has(view.action_button)
+		and view.pip_buttons.size() == 4 and view.pip_buttons.all(func(button: Button) -> bool: return view.controls().has(button)),
+		"A hidden room exposes every remaining Pip, goal and toy control for host focus and scrolling wiring")
 	view.show()
 	view.configure(state, counts, data.theme("spring"), true)
 	await process_frame
@@ -285,15 +313,13 @@ func _capture() -> void:
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://build/visuals/playroom-goal-ready.png")
-	state.goal_item_id = "backdrop-ocean"
-	counts.erase("ocean-2")
-	counts.erase("ocean-3")
+	state.goal_item_id = "toy-ocean"
+	counts["ocean-1"] = 1
 	view.configure(state, counts, data.theme("space"), true)
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://build/visuals/playroom-goal-resume.png")
-	view.category_buttons["backdrop"].pressed.emit()
-	view.item_buttons["backdrop-ocean"].pressed.emit()
+	view.item_buttons["toy-ocean"].pressed.emit()
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://build/visuals/playroom-locked.png")

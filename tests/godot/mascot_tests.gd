@@ -118,8 +118,14 @@ func _run() -> void:
 		if app.duck.has_method("set_idle_paused"):
 			check(not app.duck.is_processing(), "Background pages stop Pip's idle animation loop")
 			app.on_page_visible()
+			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._medals_duck_slot
+				and not app.duck.speaking and not app.audio.active,
+				"Returning to Medals restores its guide without restarting audio")
+			app._show_reward_section("room")
+			await process_frame
+			await process_frame
 			check(app.duck.is_processing() and not app.audio.active,
-				"Returning resumes quiet mascot activity without restarting audio")
+				"Returning to the visible room resumes quiet mascot activity without restarting audio")
 		app._hide_collection()
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
@@ -134,7 +140,9 @@ func _run() -> void:
 			await process_frame
 			app._update_duck()
 			check(root.get_visible_rect().encloses(app.duck.get_global_rect()), "The duck fits the supported viewport")
-			check(app.duck.size.x >= 72 and app.duck.size.y >= 72, "The duck retains an accessible touch target")
+			var css_size: Vector2 = app.duck.size * app.Style.ui_scale(app)
+			check(css_size.is_equal_approx(Vector2(52, 52)) and css_size.x >= 44,
+				"Pip's compact header art retains its 52 CSS-pixel accessible touch target")
 		# Headless frames can finish before the audio thread consumes its stop queue.
 		await create_timer(0.1).timeout
 		app.queue_free()

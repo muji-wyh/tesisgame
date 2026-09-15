@@ -82,6 +82,16 @@ async function whileEngineScriptIsPending(page, action) {
   }
 }
 
+test('loading keeps one visible progress readout and no extra slogan', async ({ page }) => {
+  await progressShell(page);
+  await expect(page.locator('.loading-heading small')).toHaveCount(0);
+  const score = await page.locator('#loading-score').boundingBox();
+  expect(score.width).toBeLessThanOrEqual(1);
+  await page.evaluate(() => window.reportDownload(50, 100));
+  await expect(page.locator('#loading-percent')).toHaveText(/\d+%/);
+  await expect(page.locator('#loading-hint')).toBeVisible();
+});
+
 async function progressShell(page, engineScript = `window.Engine = class {
   static getMissingFeatures() { return []; }
   static load() { return Promise.resolve(); }
@@ -717,7 +727,7 @@ test('wiggling the loading toy stays bounded and reduced motion stops all effect
   try {
     await page.goto('/loader-test?scoutTheme=dark');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    for (const selector of ['.loading-heading p', '#loading-hint', '#message', '#loading-note']) {
+    for (const selector of ['#loading-title', '#loading-hint', '#message', '#loading-note']) {
       const contrast = await page.locator(selector).evaluate(element => {
         function luminance(color) {
           const channels = color.match(/[\d.]+/g).slice(0, 3).map(value => {

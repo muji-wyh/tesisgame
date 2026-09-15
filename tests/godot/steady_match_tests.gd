@@ -30,26 +30,29 @@ func check_board(app, before: Dictionary, stage: String) -> void:
 		check(card.scale == Vector2.ONE and is_zero_approx(card.rotation), stage + ": no card bounce or shake")
 		check(app.get_global_rect().grow(1).encloses(card.get_global_rect()), stage + ": card stays inside screen")
 		check(card.size.x >= 44 and card.size.y >= 44, stage + ": usable card target")
-	if app._match_feedback.is_visible_in_tree():
-		for control in app._match_feedback.controls():
-			check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), stage + ": feedback %s fits %s inside %s" % [control.name, control.get_global_rect(), app.get_global_rect()])
-			check(not app.grid.get_global_rect().intersects(control.get_global_rect()), stage + ": feedback leaves board clear")
+	check(app.grid.get_rect().is_equal_approx(Rect2(Vector2.ZERO, app._match_playfield.size)),
+		stage + ": the board fills its entire playfield without a feedback reserve")
+	check(not app._message.is_visible_in_tree(), stage + ": no feedback footer takes space from the cards")
 
-func check_summary(app, words: Array) -> void:
-	var review: Control = app._match_feedback
-	var buttons: Array = review.find_children("*", "Button", true, false).filter(
-		func(button: Button) -> bool: return button.is_visible_in_tree())
-	check(buttons.size() == words.size(), "Match shows only the current picture-word associations, not navigation")
-	check(not app._match_feedback.action_button.visible, "Ordinary Match feedback has no Continue button")
-	for word in words:
-		check(buttons.any(func(button: Button) -> bool:
-			return button.icon != null and button.icon.resource_path == "res://" + word.image and button.text.begins_with(word.text + "\n")),
-			"Both correction associations are visible without paging: " + word.text)
-	for button in buttons:
-		check(not button.text in ["Continue", "‹", "›"], "Match has no pager or ordinary confirmation")
-		check(review.get_global_rect().grow(1).encloses(button.get_global_rect()),
-			"Match summary fits the reserved area")
-		check(button.size.x >= 72 and button.size.y >= 72, "Summary pronunciation keeps touch-sized targets")
+func check_feedback(app, ids: Array, correct: bool) -> void:
+	check(app.model.phase == "feedback" and app.model.feedback_ids == ids and app.model.last_correct == correct,
+		"Feedback belongs to exactly the two chosen board cards")
+	check(not app.feedback_timer.is_stopped(), "A judged pair always schedules automatic progress")
+	for id in ids:
+		var card: Button = app.cards[id]
+		var data: Dictionary = app.model.card_by_id(id)
+		check(card.get_theme_stylebox("normal").border_color == (app.Style.GOOD if correct else app.Style.WRONG),
+			"The board card itself marks the correct or incorrect answer: " + id)
+		check(card.picture.texture.resource_path == "res://" + data.word.image and card.word_label.text == data.word.text,
+			"Feedback preserves the card's original word and picture")
+		if correct:
+			check(card.match_mark.visible and not card.match_mark.hinted and not card.disabled
+				and card.picture.modulate.a == 1.0 and card.word_label.modulate.a == 1.0,
+				"Completed cards remain fully readable and enabled for pronunciation replay")
+	check(not app._message.is_visible_in_tree()
+		and app.find_children("*", "Button", true, false).all(func(button: Button) -> bool:
+			return not button.is_visible_in_tree() or not button.text in ["Continue", "See reward", "See result"]),
+		"Neither ordinary nor terminal feedback adds a separate result action")
 	check(app.cards.values().has(root.gui_get_focus_owner()), "Feedback keeps keyboard/controller focus on the board")
 
 func _run() -> void:
@@ -62,6 +65,7 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.choose_mode("match")
+	app._controller_mode = true
 	await check_feedback_hints(app)
 	for dimensions in [Vector2i(480, 480), Vector2i(854, 480), Vector2i(480, 720), Vector2i(480, 1038)]:
 		root.size = dimensions
@@ -85,16 +89,14 @@ func _run() -> void:
 		check_board(app, before, "wrong feedback immediately")
 		await settle()
 		check_board(app, before, "wrong feedback settled")
-		check_summary(app, [app.model.card_by_id(first).word, app.model.card_by_id(pairs[1] + ":image").word])
-		app._match_feedback.action_button.pressed.emit()
-		check(app.model.phase == "feedback", "An obsolete hidden Continue cannot dismiss Match feedback")
+		check_feedback(app, [first, pairs[1] + ":image"], false)
 		app.cards[first].pressed.emit()
 		check(app.model.selected_id == first, "The next card replaces wrong feedback on its first tap")
 		app.cards[pairs[0] + ":image"].pressed.emit()
 		check_board(app, before, "correct feedback immediately")
 		await settle()
 		check_board(app, before, "correct feedback settled")
-		check_summary(app, [app.model.card_by_id(first).word])
+		check_feedback(app, [first, pairs[0] + ":image"], true)
 		app._controller_back()
 		check(app.model.phase == "waiting", "Back dismisses feedback without selecting or scoring a card")
 		await settle()
@@ -113,7 +115,8 @@ func _run() -> void:
 		app.cards[next].pressed.emit()
 		check(app.model.phase == "matching" and app.model.selected_id == next, "The first tap after a mistake selects that exact card")
 		check(app.model.mistakes == 2 and app.model.successes == 1, "Continuing by card does not score another attempt")
-		check(not app._match_feedback.visible and root.gui_get_focus_owner() == app.cards[next], "The tapped card owns visible selection and keyboard focus")
+		check(app.model.feedback_ids.is_empty() and root.gui_get_focus_owner() == app.cards[next],
+			"The tapped card clears old feedback and owns visible selection and keyboard focus")
 		app._continue_match()
 		check(app.model.selected_id == next and root.gui_get_focus_owner() == app.cards[next], "A stale Continue cannot steal the new selection or focus")
 		await settle()
@@ -123,25 +126,31 @@ func _run() -> void:
 		app.cards[pairs[1] + ":word"].pressed.emit()
 		app.cards[pairs[1] + ":image"].pressed.emit()
 		app.cards[pairs[1] + ":word"].pressed.emit()
-		check(app.model.phase == "feedback" and app.cards[pairs[1] + ":word"].disabled, "Completed cards cannot dismiss feedback or score twice")
+		check(app.model.phase == "feedback" and not app.cards[pairs[1] + ":word"].disabled
+			and app.model.successes == 2 and app.model.selected_id.is_empty(),
+			"Replaying a completed card cannot dismiss feedback, select it, or score twice")
 		app.cards[next].pressed.emit()
 		check(app.model.selected_id == next and app.model.successes == 2, "Correct feedback also accepts the first tap on another card")
 		app.cards[pairs[2] + ":image"].pressed.emit()
 		check(app.model.phase == "feedback" and app.model.successes == 3, "The final pair scores exactly once")
-		check(app._match_feedback.action_button.is_visible_in_tree()
-			and app._match_feedback.action_button.text == "See reward", "Only the final pair offers a single reward action")
-		check(root.gui_get_focus_owner() == app._match_feedback.action_button, "Final feedback focuses the reward action")
+		check_feedback(app, [next, pairs[2] + ":image"], true)
 		var final_hints: int = app.model.hints_remaining
 		app._request_hint()
 		check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_remaining == final_hints,
-			"Hint cannot bypass the final reward action or spend unused allowance")
+			"Hint cannot bypass the terminal feedback timer or spend unused allowance")
 		var orphan: String = ""
 		for id in app.cards:
 			if not app.model.matched_ids.has(id):
 				orphan = id
 				break
-		app.cards[orphan].pressed.emit()
-		check(app.model.phase == "won" and app.model.selected_id.is_empty(), "A card tap after the final pair advances only to the result")
+		if dimensions == Vector2i(480, 480):
+			app.cards[orphan].pressed.emit()
+			check(app.model.phase == "won" and app.model.selected_id.is_empty(),
+				"A card tap after the final pair advances only to the result")
+		else:
+			await create_timer(0.8).timeout
+			check(app.model.phase == "won" and app.model.selected_id.is_empty(),
+				"The final pair automatically enters the result without another button")
 		check(root.gui_get_focus_owner() == app.chest_button, "The winning result keeps chest focus")
 		app.cards[orphan].pressed.emit()
 		app._continue_match()
@@ -158,11 +167,12 @@ func _run() -> void:
 		app.cards[wrong[1].id].pressed.emit()
 		if attempt < 2:
 			app._continue_match()
-	check(app._match_feedback.action_button.is_visible_in_tree()
-		and app._match_feedback.action_button.text == "See result", "The third mistake offers one result action")
-	app._match_feedback.action_button.pressed.emit()
-	check(app.model.phase == "lost" and app.model.selected_id.is_empty() and app.model.mistakes == 3, "A tap after the third mistake advances to loss without another attempt")
-	check(root.gui_get_focus_owner() == app.replay_button, "The losing result keeps replay focus")
+	check(app.model.phase == "feedback" and not app.feedback_timer.is_stopped(),
+		"The third mistake retains its brief on-board feedback")
+	await create_timer(0.8).timeout
+	check(app.model.phase == "lost" and app.model.selected_id.is_empty() and app.model.mistakes == 3,
+		"The third mistake automatically advances to loss without another attempt")
+	check(root.gui_get_focus_owner() == app._new_adventure_button, "The losing result focuses New adventure")
 	app.new_round(21, true)
 	await settle()
 	var before_orphan: Dictionary = board_state(app)
@@ -178,24 +188,27 @@ func _run() -> void:
 		app.cards[orphan.id].pressed.emit()
 		app.cards[paired.id].pressed.emit()
 		await settle()
-		check(app._match_feedback.heading_label.text == ("No picture" if kind == "word" else "No word"),
-			"The pictured unpaired-card correction still explains the missing partner")
-		check_summary(app, [orphan.word, paired.word])
+		check(app.model.missed_word_ids.has(orphan.word.id) and app.model.missed_word_ids.has(paired.word.id),
+			"Both words in an unpaired-card mistake remain in missed-first result review")
+		check_feedback(app, [orphan.id, paired.id], false)
 		check_board(app, before_orphan, "Unpaired " + kind)
-		var saved_words: Array = app._match_feedback.word_buttons.map(func(button: Button) -> String: return button.text)
+		var feedback_ids: Array = app.model.feedback_ids.duplicate()
 		app._show_collection()
-		check(app._match_feedback.controls().is_empty(), "Covered summaries cannot pronounce either word")
+		check(app.feedback_timer.paused and app._focus_candidates().all(func(control: Control) -> bool:
+			return not app.cards.values().has(control)), "More pauses feedback and removes the covered board from navigation")
+		app.cards[orphan.id].pressed.emit()
+		check(app.model.feedback_ids == feedback_ids, "Covered cards cannot clear either incorrect mark")
 		app._hide_collection()
-		check(app._match_feedback.word_buttons.map(func(button: Button) -> String: return button.text) == saved_words,
-			"Returning from rewards preserves both visible correction words")
+		check(app.model.feedback_ids == feedback_ids and not app.feedback_timer.paused,
+			"Returning from More preserves the marked cards and resumes automatic progress")
 		app._controller_back()
-	for mode in ["learn", "sky", "listen", "memory", "match"]:
+	for mode in ["learn", "memory", "match"]:
 		root.size = Vector2i(480, 900)
 		app.choose_mode(mode)
 		await settle()
 		root.size = Vector2i(480, 480)
 		await settle()
-		var view: Control = app._lesson if mode == "learn" else app._choice if mode in ["sky", "listen"] else app._memory if mode == "memory" else app.grid
+		var view: Control = app._lesson if mode == "learn" else app._memory if mode == "memory" else app.grid
 		check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), mode + " returns to the smaller viewport without stale container height: " + str(view.get_global_rect()))
 	app.queue_free()
 	await process_frame
@@ -223,8 +236,9 @@ func check_feedback_hints(app) -> void:
 		app.cards[other].pressed.emit()
 		check(app.model.phase == "feedback" and app.model.hints_remaining == 2,
 			"The reported screen is feedback with two hints left")
-		check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL,
-			"Both correct and wrong nonfinal feedback keep Hint 2 available")
+		check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL
+			and app.hint_button.count == 2,
+			"Both correct and wrong nonfinal feedback keep two hints available")
 		var successes: int = app.model.successes
 		var mistakes: int = app.model.mistakes
 		app._show_collection()
@@ -240,7 +254,7 @@ func check_feedback_hints(app) -> void:
 			"One Hint press acknowledges feedback and highlights a remaining pair")
 		check(app.model.successes == successes and app.model.mistakes == mistakes,
 			"Hint never scores an extra match or mistake")
-		check(not app._match_feedback.visible and app.model.hint_ids.all(
+		check(app.model.feedback_ids.is_empty() and app.model.hint_ids.all(
 			func(id: String) -> bool: return not app.model.matched_ids.has(id)),
 			"Hint replaces feedback with stars on unmatched cards only")
 		app._request_hint()

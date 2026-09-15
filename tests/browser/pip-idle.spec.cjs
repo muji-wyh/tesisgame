@@ -1,18 +1,20 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, contentBounds, headerPoint, pipHeaderRect } = require('./game-ui.cjs');
 
 test.use({ viewport: { width: 390, height: 844 } });
 
 async function clips(page) {
   const bounds = await metrics(page);
+  const content = contentBounds(bounds);
+  const pip = pipHeaderRect(bounds), unit = pip.width / 54;
   const rect = (x, y, width, height) => ({
     x: bounds.x + x * bounds.scale, y: bounds.y + y * bounds.scale,
     width: width * bounds.scale, height: height * bounds.scale
   });
   return {
     // Below the eyes: the existing blink alone must not satisfy this test.
-    body: rect(14, 42, 52, 22),
-    lesson: rect(0, 164, bounds.width, bounds.height - 164)
+    body: rect(pip.x + 2 * unit, pip.y + 32 * unit, 52 * unit, 22 * unit),
+    lesson: rect(content.x, content.top, content.width, bounds.height - content.top)
   };
 }
 
@@ -96,7 +98,8 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
   expect(await gameState(page)).toEqual(state);
   expect((await capture(page, area.lesson)).equals(lesson), 'Idle gestures preserve the displayed word, picture and lesson controls.').toBe(true);
 
-  await tap(page, 38, 46);
+  const pip = headerPoint(await metrics(page), 'pip');
+  await tap(page, pip.x, pip.y);
   await expect(page.locator('#game-status')).toContainText("Pip says: duck! Pip's happy dance!", { timeout: 2000 });
   expect((await gameState(page)).saves).toEqual(state.saves);
   expect((await capture(page, area.lesson)).equals(lesson), 'Clicking Pip does not advance the lesson.').toBe(true);

@@ -60,20 +60,24 @@ func _run() -> void:
 		check(app._room.visible and app._collection_scroll.scroll_vertical == 0, "Returning to the room starts at its scene")
 		check(not app._valid_focus(app._reward_slots["spring-1"].button), "Hidden medals cannot take keyboard or controller focus")
 		app._hide_collection()
-		app._show_adventures()
-		check(app._collection_title.visible and app._collection_tabs.values().all(func(button) -> bool: return not button.visible), "Adventure navigation has its own title and no reward tabs")
-		app._hide_collection()
 		app._show_collection()
-		check(app._room.visible and not app._adventure_book.visible, "Leaving Adventures restores the reward section correctly")
+		check(app._room.visible and app._collection_tabs.values().all(func(button) -> bool: return button.visible),
+			"More retains its direct reward sections without an adventure picker")
 		root.size = Vector2i(960, 480)
 		await process_frame
 		await process_frame
-		app._room.action_button.grab_focus()
-		app._collection_scroll.ensure_control_visible(app._room.item_buttons["toy-space"])
-		app._room.item_buttons["toy-space"].pressed.emit()
+		var card: Button = app._room.item_buttons["toy-space"]
+		card.grab_focus()
+		app._collection_scroll.ensure_control_visible(card)
+		var position: int = app._collection_scroll.scroll_vertical
+		card.pressed.emit()
 		await process_frame
 		await process_frame
-		check(root.gui_get_focus_owner() == app._room.goal_button, "A locked preview focuses the actionable gift goal")
+		check(root.gui_get_focus_owner() == card and app._collection_scroll.scroll_vertical == position,
+			"A locked preview keeps the current card focus and scroll position")
+		app._room.goal_button.grab_focus()
+		await process_frame
+		await process_frame
 		check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
 		app._room.action_button.grab_focus()
 		await process_frame

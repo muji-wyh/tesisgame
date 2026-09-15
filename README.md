@@ -121,64 +121,105 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
+The game uses compact square icon actions and three small mode tabs, leaving the cards as the
+main focus. Pip and the success/mistake indicators form one compact status cluster;
+Learn has no score counter. Memory's marked pairs retain their progress. Card positions stay fixed
+through feedback. Main actions have filled buttons; secondary navigation stays quiet.
+On wider screens the mode tabs share the header row. Tall Learn cards keep the
+illustration and word near the top instead of leaving a large empty upper area.
+
+**More** opens **Pip** and **Medals**, with an icon to return. Six larger world
+icons share the top header on wider screens and wrap below it on small screens.
+Choosing one keeps the current page and scroll position open while changing the
+look and sound, without resetting the game, selection, or hints. An unsaved change
+shows an in-page retry notice. Medal and gift goals live here rather than above the cards.
+Results keep the chest or bear, word review, and the next action without game-mode
+controls. Learn has no bottom buttons: its display is the navigation and pronunciation
+surface, with a compact `1/5` counter in the card's upper-right corner. Slides use the
+same appearance during tapping and dragging; keyboard/controller focus remains visible.
+
 **Pip the duck** is the game's round, wide-eyed companion. He appears on the
 loading screen, board, results, collection, reward previews, and voice panel.
 Tap him to cycle through a dance, a crunchy carrot snack, and a bubble party; he also reacts to selections, matches, hints,
 season changes, and rewards. These reactions never change scoring or saved progress.
 
-Start in **Learn**: a large picture appears beside its written word. Tap the picture or press **Hear**,
-then use **Previous** and **Next** to explore all five words. Learn never awards points.
-Switch between **Learn**, **Match**, **Sky**, **Listen**, and **Memory** to practise the same lesson.
-Match keeps the eight-card,
-three-pair puzzle. Sky words brings a picture down to two word choices; Listen offers a
-Hear button and two pictures. Both choice games need five correct answers before three
-mistakes, with no timer or speed penalty. Each winning mode earns one ordinary medal piece.
-Match shows correct picture-word associations together, with no feedback pages.
-Tap either association to hear it; select the next card to keep playing, or use
-**Escape** / Xbox **B** to dismiss feedback. Only the final answer offers **See reward**
-or **See result**. Wrong attempts still explain both words or an unpaired card.
-The other answer modes retain their self-paced **Continue** action.
-Voice play retains timed feedback so a spoken sentence can finish its queued matches.
+Start in **Match**, with its tab selected and the matching board ready.
+Choose **Learn** for a large picture with its written word. Swipe left for
+the next word or right for the previous word; mouse dragging works too. Tap the
+display to hear the word. With the display focused, use **Left/Right** or the Xbox
+D-pad/left stick to browse, and **Enter**, **Space**, or Xbox **A** to hear it.
+The card follows the drag and reveals the neighboring word, then settles into
+place on release. Edges resist dragging beyond the lesson. Reduced motion keeps
+direct finger tracking but removes the settling animation.
+The first and last words do not wrap or start a game automatically. Swipes never
+play audio, and navigation still works when sound is unavailable. Learn never awards points.
+The tabs are ordered **Match**, **Learn**, **Memory**; entry and reload select Match.
+Switch between them to practise the same lesson.
+Sky and Listen have been removed. Match keeps the eight-card, three-pair puzzle.
+Correct and wrong feedback stays on the cards and clears automatically after a short
+pause; there is no footer or extra confirmation step. Selecting the next unmatched
+card continues immediately. Tap any card, including a completed pair, to hear its
+word again without changing the score. Each winning round earns one ordinary medal piece.
 **Memory** plants a garden by finding five hidden word-picture pairs among ten cards.
-Card backs show their kind and position. Flip a word and its picture; matched pairs stay
-visible, and each pair grows a flower. **Study** reveals the same board without scoring;
-**Return to play** hides unmatched cards while retaining their positions and completed pairs.
-Wrong pairs show both correct associations until **Continue**. There is no timer or
-three-mistake loss, and exploratory misses do not enter the missed-word list. Completing
-all five pairs opens the normal chest for one saved medal piece. Repeat reshuffles the board.
-Listen exposes the written target if sound is unavailable. Semantically overlapping
-labels such as shell/clam and earth/planet never compete as right/wrong options.
-**Repeat lesson** keeps the words, mode, and chosen world. **Explore** in Learn and
-**New adventure** on results open **Pip's adventures**: choose any of twelve illustrated
-destinations or **Surprise me** to start a new five-word lesson in Learn. **Back** returns
-to the current attempt and card. Revisiting a place samples fresh words when enough fit.
+Card backs show their kind and position. **Hold the eye icon** to flip every card
+face up; release it to flip the faces back. Matched pairs remain marked and progress
+is never reset by peeking. Keyboard players can hold Space or Enter; Xbox players
+can hold A on the eye. Feedback stays on the board and clears automatically,
+without a bottom panel. There is no countdown or three-mistake loss, and exploratory
+misses do not enter the missed-word list. Completing
+all five pairs opens the normal chest for one saved medal piece.
+**New adventure** is the normal result action; **Repeat lesson** has been removed.
+**Retry saving** appears only if reward storage needs recovery, without restarting play.
+**New adventure** on
+results starts a fresh five-word Learn lesson directly. The manual Explore
+picker has been removed. Existing room choices, world preferences, and journey
+metadata are preserved; a failed write keeps play available and offers
+**Retry saving** in the header without resetting the current word.
+The result shelf reviews all five words, with missed words first. Swipe or drag
+horizontally to reveal them without a scrollbar; a stationary tap replays a word.
+Keyboard and controller focus still scroll the final word into view. Drags,
+cancelled gestures, and multiple touches never trigger pronunciation or rewards.
+Result actions stay compact and centered rather than stretching across the page.
+Save retries and newly unlocked toy actions use the same styling.
 
-The book remembers places visited and suggests an unvisited destination, then the least
-recently visited. **Visited** means a lesson was opened, not that its words are mastered.
-All topics are available immediately. Visits and the chosen reward world share the existing
-room-choice save; a failed write keeps play available and offers **Retry** in the book.
-The result shelf reviews all five words, with missed words first, and replays their speech.
+**Medals** groups rewards on world-colored treasure shelves. Empty slots are
+original duck-faced mystery eggs; collected pieces retain their actual artwork
+and counts. Quieter surfaces and wider spacing keep the medals distinct, without
+repeating "Complete" or "Surprise!" under every item. Earlier rewards use compact,
+named chips rather than a second full-size grid. Pip joins the next-treasure guide,
+and medal artwork gives a small
+wiggle on hover or keyboard focus without moving its input target. Reduced
+motion and hidden views stop these reactions. These effects never award pieces.
 
 The six worlds include **Ocean** and **Space**, with 36 active medals in total.
 The 140-word vocabulary spans 12 adventures, including ocean discovery, space trips,
 garden trails, and music makers. Pictures are original SVG illustrations generated by
 the existing local art pipeline, and every word has its own spoken recording.
 
-Open **My rewards** to visit **Pip's playroom**. A ball is playable immediately.
-Each world's first completed medal unlocks its toy, and its third unlocks a backdrop.
-Mix owned toys and rooms, or preview a locked gift and its exact requirement.
-Choose **Help Pip get this** on a locked gift to save it as your goal and start a
+Open **More > Pip** to visit **Pip's playroom**. A ball is playable immediately.
+Each world's first completed medal unlocks its toy.
+Choose an owned toy, or preview a locked toy and its exact requirement.
+The Rooms/backdrop chooser has been removed. Existing saved backgrounds remain
+intact and continue to render; they are not advertised as new gifts or goals.
+Drag blank areas of the room canvas, including locked toy previews, to scroll.
+A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
+retain their play interactions.
+Choose a locked toy to preview it without moving the page. Its card shows the
+remaining pieces and an inline arrow to start or continue its adventure; there
+is no separate **Help Pip get this** row. The arrow saves the goal and starts a
 related five-word adventure in its reward world. The lesson includes the desired
-toy's word. The usual Learn, Match, Sky, Listen and Memory modes keep those same
+toy's word. Learn, Match, and Memory keep those same
 five words; only normal wins and opened chests earn pieces. The goal caption shows
 the chosen gift and remaining pieces, including its world if you switch away.
-Pip's room lets you continue the goal or use it once earned, including after reload.
+The same card lets you continue the goal or use its toy once earned, including after reload.
+Save failures appear on the affected card. Pointer selection keeps scroll and card
+positions stable; keyboard/controller focus still reveals the full card and its action.
 An unopened or unsaved chest must be collected before starting a gift adventure.
 Water a flower, roll a ball, offer an apple, ring a bell, listen to a shell, or launch
 a rocket with Pip. Each toy now has three steps you control, such as rolling,
 returning and catching the ball or readying, igniting and launching the rocket.
 Every step shows and pronounces its noun; a finished sequence offers replay.
-Toy play is temporary and never grants extra medals or stickers. Reduced motion
+Toy play is temporary and never grants extra medals. Reduced motion
 shows each stage's static result. The next gift shows its name and
 remaining pieces. Newly unlocked gifts offer **Try it with Pip** after the reward saves.
 Open an earned medal and choose **Display with Pip** to save it as the playroom's favorite.
@@ -186,16 +227,12 @@ Toy, backdrop, and favorite save together immediately in browser storage, or in
 `user://playroom-v2.cfg` in native builds. The earlier favorite is migrated, and medal
 progress remains unchanged. Failed reads/writes show a retryable notice.
 
-**Words** in My rewards collects the exact words found through correct Match,
-spoken Match, Sky, Listen, and Memory answers. Browse twelve topics, tap a collected
-picture to hear its word, and choose **Display with Pip** to put it in his room.
-Learn, Memory Study, incorrect answers, and unmatched cards do not grant stickers.
-Repeated discoveries keep one sticker per word. The collection and displayed word
-share the existing playroom save; failed writes remain pending in the current
-session with **Retry** in Words. Only the current topic's collected art loads when
-Words opens. Stickers record discoveries, not vocabulary mastery.
+The Words album and word-sticker display have been removed. Existing saved word
+fields remain intact for compatibility, but games no longer collect new stickers.
+Medals uses uniform tiles grouped by world, with the next medal goal alongside the
+collection. The compact world icons keep their full tooltip and accessibility names.
 
-Card selections ripple, successful matches sparkle, and choice answers celebrate. Effects
+Card selections ripple and successful matches sparkle. Effects
 are bounded and respect reduced motion; the same controls work with touch, keyboard, and Xbox.
 
 Pip's beak follows the actual pronunciation/prompt player, including delayed
@@ -210,17 +247,16 @@ tabs and with reduced motion. Pip's touch target stays in place.
 The same original four-pose SVG supplies both Godot and the inline HTML mascot,
 so the loading companion needs no additional image request.
 
-Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left instead of plain text counters. Correct pairs bounce; incorrect pairs shake.
+Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left. Matched cards stay available for pronunciation, not for scoring again.
 
 Each round is a small **word adventure**: Animal friends, Picnic time, Great outdoors,
 Dress up, On the move, Play time, At home, Head to toe, Ocean discovery, Space trip,
 Garden trail, or Music makers. All five words on the matching board
-belong to its topic. The adventure book lets the player choose a topic; Surprise me chooses
-a different available adventure and fresh words.
+belong to its topic. New adventure chooses a different available topic and fresh words.
 Custom word lists with too few related words use a mixed Word explorers board; seeded
 rounds remain reproducible. Changing the season keeps the current adventure.
 
-The **My rewards** button previews your next medal and its piece count. After a round,
+**More > Medals** previews your next medal and its piece count. After a round,
 the review shelf shows all five words, even if the round ended with mistakes.
 Tap a word's picture, or focus it and press Enter/Xbox A, to hear it again and make Pip
 react. These word buttons never spend a hint or grant another reward.
@@ -235,10 +271,10 @@ transparent Sprites and deployed. Builds with these verified local overrides use
 the selected PNGs; clean checkouts retain the original SVG fallbacks. See the
 provenance record for selection, hashes and release evidence.
 
-Use **Hint** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
+Use the **lightbulb icon** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
 and star badges, and its word is spoken. Hints follow your selected card when it has a
 partner; otherwise they point to a complete pair. Each round has **three hints**, with no
-score penalty. The button shows how many remain and becomes **Used** afterward; only a new
+score penalty. The icon's small badge shows how many remain, including zero; only a new
 round restores all three.
 Hint works directly from a correct or wrong answer's feedback while the round is
 still playable; it dismisses that feedback and highlights the next unmatched pair.
@@ -251,11 +287,11 @@ and show **2 in a row!** or **3 in a row!** beside the match badges, without a c
 Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
 keeps the encouragement and hint stars without moving particles.
 
-Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world is remembered across lessons and reloads. Open **My rewards** to choose a world without resetting progress; keeping those six choices off the play screen leaves more room for the current activity. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
+Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**, or **Space** theme until you choose one. Your chosen world is remembered across lessons and reloads. The six direct world icons in **More** change the appearance and music without resetting progress; Xbox LB/RB remain shortcuts during play. Motion follows the device or browser's reduced-motion preference. Buttons, celebration colors, and reward icons follow the same palette; Winter keeps dark outlines for readability.
 
 The vocabulary pool contains **140 short, concrete English words** for parent-guided play
-with young children. Matching rounds use five different words on eight cards; choice modes
-introduce one prompt at a time. Tap a matching card to hear its pronunciation.
+with young children. Matching rounds use five different words on eight cards;
+Memory uses those five words on ten cards. Tap a matching card to hear its pronunciation.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short tap gives a little wiggle and glint. Hold it for **1.2 seconds** to charge it:
@@ -269,7 +305,7 @@ medal in that season; there are no duplicate fragments or rare missing pieces.
 An ordinary reveal uses 24 seasonal particles and snaps the new piece into the
 visible partial medal. Tap the chest panel or press A/Enter to place it sooner.
 Finishing a medal triggers the larger 72-particle celebration and a flight into
-**My rewards**. A complete season can still celebrate future wins without
+the collection under **More**. A complete season can still celebrate future wins without
 inventing more medals or resetting the collection.
 
 Fragments are saved before their assembly animation. Hiding the page or replaying
@@ -315,10 +351,10 @@ encouragement without movement, and Play again remains the initial controller ac
 
 ### Voice play
 
-On a supported browser, click **Voice** to start listening immediately; click
-**Voice** again to stop. There is no separate Listen button. The panel shows the
-recognized text live in a seasonal speech bubble, with Pip and
-animated listening bars. The buddy reacts as words arrive; these are status
+On a supported browser, click the **microphone icon** to start listening immediately;
+click it again to stop. The compact panel shows the recognized text live, with a
+larger Pip and animated listening bars. Pip sways while listening and nods, waves,
+or tilts as words arrive; these are status
 animations, not a measurement of microphone volume. Reduced motion keeps them
 static. Only final
 recognized words count, because interim text can change as recognition settles.
@@ -349,14 +385,15 @@ An embedding site must also allow `microphone` in its iframe permissions.
 | Control | Action |
 |---|---|
 | D-pad / left stick | Move focus between available controls. |
-| A | Activate the focused control; hold to open a chest or tap to place its piece. |
+| A | Activate the focused control; hold the eye to peek, hold a chest to open it, or tap to place its piece. |
 | B | Cancel the selected card, exit voice play, close a reward preview, or go back. |
 | X | Use one of the round's three hints and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |
-| Y / Menu | Open or close My rewards, not restart the game. |
+| Y / Menu | Open or close More (Pip, Medals, and direct world choices), not restart the game. |
 
-Choose **Play again** with A to start another round. Locked rewards and matched cards are
-skipped during navigation. Releasing A early or disconnecting cancels an incomplete chest
+Choose **Play again** with A to start another round. Locked rewards are skipped during
+navigation; completed Match cards remain available to hear again. Releasing A or
+disconnecting also releases a held Memory eye. Releasing A early cancels an incomplete chest
 charge; reconnecting retains the current round. A held on the loading toy must be released
 before selecting a native game control. If the browser keeps controller-only audio muted,
 tap or click the game once to enable sound.

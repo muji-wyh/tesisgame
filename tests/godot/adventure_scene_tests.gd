@@ -20,7 +20,7 @@ func _run() -> void:
 	var properties: Array = app.get_property_list().map(
 		func(property: Dictionary) -> String: return property.name)
 	var integrated := true
-	for property in ["_found_words", "_adventure_label", "_goal_label", "_goal_medal"]:
+	for property in ["_found_words", "_goal_label", "_goal_medal"]:
 		check(properties.has(property), "The adventure scene provides " + property)
 		integrated = integrated and properties.has(property)
 	if not integrated:
@@ -42,14 +42,25 @@ func _run() -> void:
 	app.choose_theme("spring")
 	var adventure: Variant = app.model.get("adventure_name")
 	check(adventure is String and not str(adventure).is_empty()
-		and app._adventure_label.text == adventure and app._adventure_label.is_visible_in_tree(),
-		"The board names the seeded adventure selected by the model")
+		and app.grid.is_visible_in_tree(),
+		"The board retains its adventure without adding a redundant instruction")
+	check(not properties.has("_adventure_label"),
+		"The redundant adventure topic label is removed rather than hidden")
+	check(not properties.has("_match_caption"), "Match has no separate Find 3 pairs caption")
 	check(not app._found_words.is_visible_in_tree() and app._found_words.get_child_count() == 0,
 		"An unplayed board has no earned word buttons")
 	check(app._goal_label.text.contains("0/3") and app._goal_medal.pieces == 0
 		and app._goal_medal.texture != null
 		and app._goal_medal.texture.resource_path == "res://assets/images/rewards/spring-1.svg",
-		"The rewards button previews the first medal's three-piece goal")
+		"Medals previews the first medal's three-piece goal")
+	app._show_collection()
+	app._show_reward_section("room")
+	check(not app._goal_label.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
+		"Pip keeps world choices available without repeating the next medal goal")
+	app._show_reward_section("medals")
+	check(app._goal_label.is_visible_in_tree() and app._goal_medal.is_visible_in_tree(),
+		"The next goal is visible with the medal collection")
+	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)
 	check(words.size() == 3, "The scene starts with three matchable words")
 	app._request_hint()
@@ -58,8 +69,8 @@ func _run() -> void:
 	app._controller_mode = true
 	for word in words:
 		_match(app, word)
-	check(app.model.phase == "won" and not app._adventure_label.is_visible_in_tree(),
-		"Winning replaces the adventure heading with the result")
+	check(app.model.phase == "won" and app._outcome.is_visible_in_tree() and not app._success.is_visible_in_tree(),
+		"Winning replaces gameplay counters with the result")
 	check(app._default_focus() == app.chest_button and app.chest_button.has_focus(),
 		"The chest remains the primary controller action after winning")
 	_check_shelf(app)
@@ -88,7 +99,7 @@ func _run() -> void:
 	app._finish_fragment_delivery()
 	check(app.medal_progress.count_for("spring-1") == 1 and app._goal_label.text.contains("1/3")
 		and app._goal_medal.pieces == 1,
-		"Collecting a fragment immediately updates the visible next goal")
+		"Collecting a fragment immediately updates the next goal in Medals")
 	_check_replay(app)
 	app.audio.set_muted(true)
 	for dimensions in [Vector2i(320, 320), Vector2i(320, 321), Vector2i(390, 844), Vector2i(844, 390)]:
@@ -97,8 +108,8 @@ func _run() -> void:
 		await process_frame
 		await _check_result_bounds(app)
 	app.new_round(17)
-	check(app._adventure_label.text == adventure and app._adventure_label.is_visible_in_tree(),
-		"The same seed restores the same visible adventure")
+	check(app.model.adventure_name == adventure and app.grid.is_visible_in_tree(),
+		"The same seed restores the same adventure and playable board")
 	check(app._found_words.get_child_count() == 0 and not app._found_words.is_visible_in_tree()
 		and app.model.hints_remaining == 3, "Reset removes old word actions and renews all three hints")
 	app.medal_progress.counts["spring-1"] = 3
@@ -111,7 +122,7 @@ func _run() -> void:
 	app.choose_theme("winter")
 	check(app.collection_button.tooltip_text.contains("Snowflake") and app._goal_label.text.contains("0/3"),
 		"Changing season updates the reward goal without changing the adventure")
-	check(app._adventure_label.text == adventure, "Season selection preserves the current adventure topic")
+	check(app.model.adventure_name == adventure, "Season selection preserves the current adventure topic")
 	for index in range(1, 7):
 		app.medal_progress.counts["winter-%d" % index] = 3
 	app._refresh()
@@ -125,8 +136,8 @@ func _run() -> void:
 		check(app.model.phase == "lost" and app.model.successes == 1,
 			"A round can end with one learned word and three mistakes")
 		_check_shelf(app)
-		check(app._default_focus() == app.replay_button and app.replay_button.has_focus(),
-			"Replay stays the primary controller action after losing")
+		check(app._default_focus() == app._new_adventure_button and app._new_adventure_button.has_focus(),
+			"New adventure is the primary controller action after losing")
 		_check_replay(app)
 		root.size = Vector2i(320, 320)
 		await process_frame
@@ -156,13 +167,14 @@ func _run() -> void:
 	app.cards[words[2].id + ":image"].pressed.emit()
 	app._show_collection()
 	app._continue_match()
-	check(app.model.phase == "feedback" and app.collection_page.visible,
-		"Opening the collection preserves the final correction until it is explicitly continued")
+	await create_timer(0.8).timeout
+	check(app.model.phase == "feedback" and app.collection_page.visible and app.feedback_timer.paused,
+		"Opening the collection pauses the final answer's automatic transition")
 	for button in _buttons(app):
 		check(not app._focus_candidates().has(button), "Result words cannot escape the active modal")
 	app._hide_collection()
-	app._match_feedback.action_button.pressed.emit()
-	check(app.model.phase == "won", "The final correction can complete after closing the collection")
+	await create_timer(0.8).timeout
+	check(app.model.phase == "won", "The final answer automatically completes after closing the collection")
 	_check_shelf(app)
 	for button in _buttons(app):
 		check(app._focus_candidates().has(button), "Result words become reachable after closing the collection")
@@ -233,7 +245,7 @@ func _check_shelf(app) -> void:
 		var labels: Array = button.find_children("*", "Label", true, false)
 		var pictures: Array = button.find_children("*", "TextureRect", true, false)
 		check(labels.any(func(label: Label) -> bool: return label.text == word.text)
-			and button.tooltip_text == "Hear " + word.text + " again",
+			and button.get("accessibility_name") == "Hear " + word.text + " again",
 			"Word replay displays and announces the vocabulary's actual English text")
 		check(pictures.any(func(picture: TextureRect) -> bool:
 			return picture.texture != null and picture.texture.resource_path == "res://" + word.image),
@@ -273,6 +285,7 @@ func _check_replay(app) -> void:
 func _check_result_bounds(app) -> void:
 	var viewport: Rect2 = root.get_visible_rect().grow(0.5)
 	var buttons: Array[Button] = _buttons(app)
+	var result_action: Button = app._result_retry_button if app._save_error else app._new_adventure_button
 	for button in buttons:
 		app._found_words_scroll.ensure_control_visible(button)
 		await process_frame
@@ -281,13 +294,13 @@ func _check_result_bounds(app) -> void:
 		check(viewport.encloses(button.get_global_rect())
 			and app._found_words_scroll.get_global_rect().grow(0.5).encloses(button.get_global_rect()),
 			"Scrolling can fully reveal each review action: %s at %s" % [root.size, button.get_global_rect()])
-		check(not button.get_global_rect().intersects(app.replay_button.get_global_rect())
+		check(not button.get_global_rect().intersects(result_action.get_global_rect())
 			and not button.get_global_rect().intersects(app._stage.get_global_rect()),
-			"Found-word actions do not overlap the chest or replay button")
+			"Found-word actions do not overlap the chest or active result action")
 	for index in range(1, buttons.size()):
 		check(not buttons[index - 1].get_global_rect().intersects(buttons[index].get_global_rect()),
 			"Adjacent found words retain separate touch targets")
-	for control in [app.replay_button, app._new_adventure_button, app._title, app._caption]:
+	for control in [result_action, app._title, app._caption]:
 		var children: Array = app._result_text.get_children().filter(
 			func(child: Control) -> bool: return child.is_visible_in_tree()).map(
 			func(child: Control) -> String:
