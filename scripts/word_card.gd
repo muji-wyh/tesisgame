@@ -1,6 +1,7 @@
 extends Button
 
 const Style = preload("res://scripts/ui_style.gd")
+const WordPlay = preload("res://scripts/word_play.gd")
 
 class MatchMark:
 	extends Control
@@ -70,6 +71,7 @@ var _feedback_state: String = ""
 var _feedback_kind: String = ""
 var _feedback_left: float = 0.0
 var _feedback_duration: float = 0.0
+var _word_play := WordPlay.new()
 
 
 func _ready() -> void:
@@ -129,6 +131,7 @@ func setup(value: Dictionary) -> void:
 
 
 func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
+	stop_word_play()
 	accent = palette.accent
 	_show_face(_shown_face_up)
 	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
@@ -179,6 +182,7 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if value:
+		stop_word_play()
 		_stop_feedback()
 		_settle_flip()
 
@@ -192,6 +196,8 @@ func set_back(back: Control) -> void:
 
 func set_face_up(value: bool, animate: bool = true) -> void:
 	var changed: bool = face_up != value
+	if changed:
+		stop_word_play()
 	face_up = value
 	if not animate or reduced_motion or not is_visible_in_tree():
 		_settle_flip()
@@ -227,11 +233,13 @@ func _settle_flip() -> void:
 
 
 func _resize_face() -> void:
+	stop_word_play()
 	_face.pivot_offset = _face.size * 0.5
 	_settle_flip()
 
 
 func clear_feedback() -> void:
+	stop_word_play()
 	_feedback_state = ""
 	_stop_feedback()
 	_settle_flip()
@@ -248,8 +256,22 @@ func _stop_feedback() -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
+		stop_word_play()
 		_stop_feedback()
 		_settle_flip()
+
+
+func play_word() -> void:
+	if face_up and _shown_face_up and card_data.get("kind", "") == "image":
+		_word_play.play(picture, card_data.word.id, reduced_motion)
+
+
+func stop_word_play() -> void:
+	_word_play.stop()
+
+
+func _exit_tree() -> void:
+	stop_word_play()
 
 
 func _process(delta: float) -> void:

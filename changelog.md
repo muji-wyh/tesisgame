@@ -4,6 +4,11 @@ Notable changes to Word Buddies, grouped by date with the newest changes first.
 
 ## 2026-09-15
 
+- Added short, word-specific picture play for ball, bell, rocket, fish, boat, and
+  flower in Learn and completed Match pairs. Reuses current artwork; no new
+  modes, assets, or reward rules. Motion cancels on navigation and respects
+  reduced-motion and silent-play settings.
+- Correct Match now reinforces the actual spoken noun instead of generic praise.
 - Simplified the Medals page with quieter tile surfaces, clearer spacing,
   less repeated status text, and compact legacy-reward chips. All current and
   earlier rewards retain their artwork, progress, and preview actions.

@@ -4,6 +4,7 @@ signal hear_requested(word: Dictionary)
 signal word_changed(word: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
+const WordPlay = preload("res://scripts/word_play.gd")
 
 var current_word: Dictionary = {}
 var progress_label: Label
@@ -26,6 +27,7 @@ var _card_home: Vector2
 var _slide_preview: Button
 var _slide_tween: Tween
 var _keyboard_focus: bool = false
+var _word_play := WordPlay.new()
 
 
 func _ready() -> void:
@@ -156,7 +158,10 @@ func _can_interact() -> bool:
 
 
 func _hear() -> void:
-	if _can_interact() and audio_available:
+	if not _can_interact():
+		return
+	_word_play.play(picture, current_word.id, reduced_motion)
+	if audio_available:
 		hear_requested.emit(current_word)
 
 
@@ -214,6 +219,7 @@ func _fit_word_label(label: Label) -> void:
 
 
 func cancel_swipe() -> void:
+	_word_play.stop()
 	_pointer = -1
 	_travel = 0.0
 	if _slide_tween != null:
@@ -295,6 +301,10 @@ func _settle_slide(preview_target: float) -> void:
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
 		cancel_swipe()
+
+
+func _exit_tree() -> void:
+	_word_play.stop()
 
 
 func _update_focus_style() -> void:

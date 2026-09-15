@@ -20,6 +20,17 @@ function learnCardRect(bounds) {
   return { x: content.x, y: content.top, width: content.width, height: bounds.height - content.top - content.padding };
 }
 
+function learnArtRect(bounds) {
+  const card = learnCardRect(bounds), scale = uiScale(bounds);
+  const wide = card.width >= 420 && card.width >= card.height * 1.3;
+  const edge = Math.min(360 / scale, wide ? card.width / 2 - 24 / scale : card.width - 24 / scale,
+    card.height - (wide ? 48 : 100) / scale);
+  const top = wide ? (card.height - edge) / 2
+    : Math.max(12 / scale, Math.min(64 / scale, (card.height - edge - 64 / scale) * 0.25));
+  return { x: card.x + (wide ? (card.width / 2 - edge) / 2 : (card.width - edge) / 2),
+    y: card.y + top, width: edge, height: edge };
+}
+
 async function swipeLearn(page, direction, { input = 'mouse' } = {}) {
   if (!['next', 'previous'].includes(direction)) throw new Error(`Unknown Learn direction: ${direction}`);
   if (!['mouse', 'touch'].includes(input)) throw new Error(`Unknown Learn input: ${input}`);
@@ -409,6 +420,6 @@ function resultPoint(bounds, key, { gift = false } = {}) {
     y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { metrics, tap, learnCardRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, openGame, boardPoint, lessonPoint,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

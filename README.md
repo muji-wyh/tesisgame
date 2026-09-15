@@ -151,6 +151,12 @@ D-pad/left stick to browse, and **Enter**, **Space**, or Xbox **A** to hear it.
 The card follows the drag and reveals the neighboring word, then settles into
 place on release. Edges resist dragging beyond the lesson. Reduced motion keeps
 direct finger tracking but removes the settling animation.
+Six pictures also have short, noun-specific play reactions: the ball hops, bell
+swings, rocket lifts, fish swims, boat rocks, and flower grows. Tap or use the
+existing keyboard/controller activation to replay them. The written word and
+input target stay still; new input cancels old motion, and nothing is queued.
+These reactions also work without sound. Reduced motion keeps the original
+static picture and normal pronunciation instead.
 The first and last words do not wrap or start a game automatically. Swipes never
 play audio, and navigation still works when sound is unavailable. Learn never awards points.
 The tabs are ordered **Match**, **Learn**, **Memory**; entry and reload select Match.
@@ -160,6 +166,11 @@ Correct and wrong feedback stays on the cards and clears automatically after a s
 pause; there is no footer or extra confirmation step. Selecting the next unmatched
 card continues immediately. Tap any card, including a completed pair, to hear its
 word again without changing the score. Each winning round earns one ordinary medal piece.
+Correct Match feedback repeats the matched noun rather than a generic praise
+clip. Completing or replaying either half of one of the six playful pairs also
+reacts on its picture partner, with no extra score or reward. Microphone mode
+continues to suppress game audio. Memory retains its existing noun speech and
+card flips without a competing picture animation.
 **Memory** plants a garden by finding five hidden word-picture pairs among ten cards.
 Card backs show their kind and position. **Hold the eye icon** to flip every card
 face up; release it to flip the faces back. Matched pairs remain marked and progress

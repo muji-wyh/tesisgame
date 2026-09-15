@@ -2213,7 +2213,9 @@ func _select_card(id: String) -> void:
 		return
 	if model.matched_ids.has(id):
 		if model.phase in ["waiting", "matching", "feedback"]:
-			_lesson_hear(model.card_by_id(id).word)
+			var word: Dictionary = model.card_by_id(id).word
+			_lesson_hear(word)
+			cards[word.id + ":image"].play_word()
 		return
 	if model.phase == "feedback":
 		if _voice_mode:
@@ -2234,7 +2236,9 @@ func _select_card(id: String) -> void:
 	elif result in ["correct", "wrong"]:
 		_animate_feedback(model.feedback_ids, result == "correct")
 		if not _voice_mode:
-			audio.cue(result, result)
+			audio.cue(result, "wrong" if result == "wrong" else "")
+			if result == "correct":
+				audio.say("res://" + model.card_by_id(id).word.audio)
 		feedback_timer.start()
 
 
@@ -2972,6 +2976,9 @@ func _stop_voice() -> void:
 func _animate_feedback(ids: Array[String], correct: bool) -> void:
 	_stop_feedback_animations()
 	duck.react("happy" if correct else "curious")
+	if correct:
+		for id in ids:
+			cards[id].play_word()
 	if reduced_motion:
 		return
 	for id in ids:
@@ -2993,6 +3000,8 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 
 
 func _stop_feedback_animations() -> void:
+	for card in cards.values():
+		card.stop_word_play()
 	for tween in _feedback_tweens:
 		tween.kill()
 	_feedback_tweens.clear()

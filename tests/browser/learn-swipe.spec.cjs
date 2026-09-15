@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, learnCardRect, lessonPoint, swipeLearn,
+const { metrics, tap, rendered, openGame, learnCardRect, learnArtRect: artRect, lessonPoint, swipeLearn,
   uiScale, modeHeight, modeRect, contentBounds, headerIconRect, chooseMode, boardPoint, visibleColorCount } = require('./game-ui.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
@@ -116,18 +116,6 @@ function wordPatch(bounds, width = 128) {
     : { x: card.x + 8 / scale, y: picture.y + picture.height + 4 / scale, width: card.width - 16 / scale };
   width = Math.min(width / scale, label.width - 8 / scale);
   return { x: label.x + (label.width - width) / 2, y: label.y + 2 / scale, width, height: 48 / scale };
-}
-
-function artRect(bounds) {
-  const card = learnCardRect(bounds), scale = uiScale(bounds);
-  const wide = card.width >= 420 && card.width >= card.height * 1.3;
-  const edge = Math.min(360 / scale, wide ? card.width / 2 - 24 / scale : card.width - 24 / scale,
-    card.height - (wide ? 48 : 100) / scale);
-  const top = wide ? (card.height - edge) / 2
-    : Math.max(12 / scale, Math.min(64 / scale, (card.height - edge - 64 / scale) * 0.25));
-  return { x: card.x + (wide ? (card.width / 2 - edge) / 2 : (card.width - edge) / 2),
-    y: card.y + top,
-    width: edge, height: edge };
 }
 
 function screenClip(bounds, rect, padding = 0) {
