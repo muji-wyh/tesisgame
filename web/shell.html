@@ -185,57 +185,88 @@
     #speech-panel[data-pop-stop-failed="true"] #speech-meter,
     #speech-panel[data-pop-stop-failed="true"] #speech-notice { display: none; }
     #pop-aura { position: fixed; inset: 0; z-index: 100; pointer-events: none;
-      --aura-spread: clamp(24px, 4.5vmin, 42px); overflow: hidden;
+      --aura-spread: clamp(58px, 14vmin, 104px); overflow: hidden;
       opacity: 0; visibility: hidden; }
     #pop-aura[data-listening="true"] { opacity: 1; visibility: visible; }
-    /* One continuous falloff joins the bright screen edge to its inward glow.
-       Only narrow color strips move; the fade stays pinned to the viewport. */
+    /* Broad color fades inward from a soft, rounded luminous edge. The four
+       corner arcs use the same falloff; only small light blooms drift. */
     #pop-aura .pop-aura-edge { position: absolute; pointer-events: none;
-      -webkit-mask-image: linear-gradient(var(--aura-inward), #fff 0px, #fff 1px,
-        rgba(255,255,255,.6) 3px, rgba(255,255,255,.2) 8px,
-        rgba(255,255,255,.03) 18px, transparent 100%);
-      mask-image: linear-gradient(var(--aura-inward), #fff 0px, #fff 1px,
-        rgba(255,255,255,.6) 3px, rgba(255,255,255,.2) 8px,
-        rgba(255,255,255,.03) 18px, transparent 100%);
+      background: linear-gradient(var(--aura-inward), rgba(255,248,241,.62),
+        rgba(247,238,255,.22) 6%, transparent 22%), var(--aura-colors);
+      -webkit-mask-image: linear-gradient(var(--aura-inward), #fff,
+        rgba(255,255,255,.88) 3%, rgba(255,255,255,.69) 12%,
+        rgba(255,255,255,.45) 30%, rgba(255,255,255,.22) 55%,
+        rgba(255,255,255,.065) 78%, transparent);
+      mask-image: linear-gradient(var(--aura-inward), #fff,
+        rgba(255,255,255,.88) 3%, rgba(255,255,255,.69) 12%,
+        rgba(255,255,255,.45) 30%, rgba(255,255,255,.22) 55%,
+        rgba(255,255,255,.065) 78%, transparent);
       -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
       -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
-    #pop-aura .pop-aura-edge::before { content: ''; position: absolute;
-      background: linear-gradient(var(--aura-inward), rgba(230,244,255,.32), transparent 2px),
-        var(--aura-bloom), var(--aura-colors); opacity: .94;
+    #pop-aura .pop-aura-edge::before { content: ''; position: absolute; inset: 0;
+      background: var(--aura-bloom); opacity: .3;
       animation: var(--aura-drift) var(--aura-period) cubic-bezier(.45,0,.25,1) infinite alternate;
       animation-delay: var(--aura-delay); animation-play-state: paused; }
     #pop-aura .pop-aura-edge--top, #pop-aura .pop-aura-edge--bottom {
-      left: 0; right: 0; height: var(--aura-spread); --aura-drift: pop-aura-horizontal; }
-    #pop-aura .pop-aura-edge--top::before, #pop-aura .pop-aura-edge--bottom::before { inset: 0 -25%; }
+      left: var(--aura-spread); right: var(--aura-spread); height: var(--aura-spread);
+      --aura-drift: pop-aura-horizontal; }
     #pop-aura .pop-aura-edge--left, #pop-aura .pop-aura-edge--right {
-      top: 0; bottom: 0; width: var(--aura-spread); --aura-drift: pop-aura-vertical; }
-    #pop-aura .pop-aura-edge--left::before, #pop-aura .pop-aura-edge--right::before { inset: -25% 0; }
+      top: var(--aura-spread); bottom: var(--aura-spread); width: var(--aura-spread);
+      --aura-drift: pop-aura-vertical; }
     #pop-aura .pop-aura-edge--top { top: 0; --aura-inward: to bottom;
       --aura-period: 8.6s; --aura-delay: -3.4s;
-      --aura-bloom: radial-gradient(ellipse 15% 130% at 42% 0%, rgba(218,239,255,.68), transparent 80%);
-      --aura-colors: linear-gradient(90deg, #52dfff 4%, #409cff 22%, #8972ff 43%, #e2a4ff 57%, #fa72bc 72%, #ffb08c 86%, #e991ff); }
+      --aura-bloom: radial-gradient(ellipse 24% 160% at 50% 0%, #fff1e9, transparent 80%);
+      --aura-colors: linear-gradient(90deg, #ffba96, #f5a4b3 38%, #ee99d0 72%, #ef91d8); }
     #pop-aura .pop-aura-edge--right { right: 0; --aura-inward: to left;
       --aura-period: 10.2s; --aura-delay: -6.1s;
-      --aura-bloom: radial-gradient(ellipse 130% 14% at 100% 62%, rgba(250,206,239,.6), transparent 80%);
-      --aura-colors: linear-gradient(180deg, #b28bff 6%, #f495dd 26%, #ff94a7 43%, #d877ee 58%, #697bff 77%, #50c9ff); }
+      --aura-bloom: radial-gradient(ellipse 160% 24% at 100% 50%, #ffd5ee, transparent 80%);
+      --aura-colors: linear-gradient(180deg, #ef91d8, #ef7eb5 24%, #ca8ce7 51%, #95acff 80%, #70cdff); }
     #pop-aura .pop-aura-edge--bottom { bottom: 0; --aura-inward: to top;
       --aura-period: 9.4s; --aura-delay: -1.8s;
-      --aura-bloom: radial-gradient(ellipse 16% 130% at 30% 100%, rgba(255,213,195,.3), transparent 80%);
-      --aura-colors: linear-gradient(90deg, #ffbf8e 4%, #ffaaa3 20%, #ef83c2 39%, #b481ff 57%, #808bff 77%, #a38dff); }
+      --aura-bloom: radial-gradient(ellipse 24% 160% at 50% 100%, #d8e7ff, transparent 80%);
+      --aura-colors: linear-gradient(90deg, #b58fff, #9a95ff 36%, #75b7ff 72%, #70cdff); }
     #pop-aura .pop-aura-edge--left { left: 0; --aura-inward: to right;
       --aura-period: 11.3s; --aura-delay: -4.8s;
-      --aura-bloom: radial-gradient(ellipse 130% 15% at 0% 38%, rgba(174,221,255,.32), transparent 80%);
-      --aura-colors: linear-gradient(180deg, #54dcff 5%, #498fff 25%, #8671f4 43%, #dc79c7 62%, #ff8c91 80%, #ffbd76); }
+      --aura-bloom: radial-gradient(ellipse 160% 24% at 0% 50%, #d5e8ff, transparent 80%);
+      --aura-colors: linear-gradient(180deg, #ffba96, #bdadf5 20%, #83a5ff 42%, #989cff 70%, #b58fff); }
+    #pop-aura .pop-aura-corner { position: absolute; width: var(--aura-spread);
+      height: var(--aura-spread); pointer-events: none;
+      --aura-corner-strength: linear-gradient(#fff, #fff);
+      background: radial-gradient(circle var(--aura-spread) at var(--aura-center),
+        transparent 78%, rgba(247,238,255,.22) 94%, rgba(255,248,241,.62)), var(--aura-color);
+      -webkit-mask-image: var(--aura-corner-strength), radial-gradient(circle var(--aura-spread) at var(--aura-center),
+        transparent, rgba(255,255,255,.065) 22%, rgba(255,255,255,.22) 45%,
+        rgba(255,255,255,.45) 70%, rgba(255,255,255,.69) 88%,
+        rgba(255,255,255,.88) 97%, #fff 100%, transparent calc(100% + 1px));
+      mask-image: var(--aura-corner-strength), radial-gradient(circle var(--aura-spread) at var(--aura-center),
+        transparent, rgba(255,255,255,.065) 22%, rgba(255,255,255,.22) 45%,
+        rgba(255,255,255,.45) 70%, rgba(255,255,255,.69) 88%,
+        rgba(255,255,255,.88) 97%, #fff 100%, transparent calc(100% + 1px));
+      -webkit-mask-composite: source-in; mask-composite: intersect; }
+    /* Soften the diagonal arc over the header icons, retaining full strength
+       where each corner joins a straight edge. Both masks stay static. */
+    #pop-aura .pop-aura-corner--top-left { top: 0; left: 0;
+      --aura-corner-strength: conic-gradient(from 270deg at 100% 100%, #fff,
+        rgba(255,255,255,.36) 45deg, #fff 90deg);
+      --aura-center: 100% 100%; --aura-color: #ffba96; }
+    #pop-aura .pop-aura-corner--top-right { top: 0; right: 0;
+      --aura-corner-strength: conic-gradient(at 0% 100%, #fff,
+        rgba(255,255,255,.36) 45deg, #fff 90deg);
+      --aura-center: 0% 100%; --aura-color: #ef91d8; }
+    #pop-aura .pop-aura-corner--bottom-right { bottom: 0; right: 0;
+      --aura-center: 0% 0%; --aura-color: #70cdff; }
+    #pop-aura .pop-aura-corner--bottom-left { bottom: 0; left: 0;
+      --aura-center: 100% 0%; --aura-color: #b58fff; }
     #pop-aura[data-listening="true"] .pop-aura-edge::before { animation-play-state: running; }
     @keyframes pop-aura-horizontal {
-      0% { transform: translateX(-7%); opacity: .86; }
-      42% { transform: translateX(2%); opacity: 1; }
-      100% { transform: translateX(7%); opacity: .92; }
+      0% { transform: translateX(-9%); opacity: .2; }
+      42% { transform: translateX(2%); opacity: .44; }
+      100% { transform: translateX(9%); opacity: .28; }
     }
     @keyframes pop-aura-vertical {
-      0% { transform: translateY(7%); opacity: .94; }
-      58% { transform: translateY(-3%); opacity: .84; }
-      100% { transform: translateY(-7%); opacity: 1; }
+      0% { transform: translateY(9%); opacity: .3; }
+      58% { transform: translateY(-3%); opacity: .2; }
+      100% { transform: translateY(-9%); opacity: .44; }
     }
     @keyframes speech-wave { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
     @keyframes pip-listen { 0%, 100% { transform: rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
@@ -243,7 +274,7 @@
     @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
     @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
     @media (prefers-reduced-motion: reduce) {
-      #pop-aura .pop-aura-edge::before { animation: none; transform: none; opacity: .94; }
+      #pop-aura .pop-aura-edge::before { animation: none; transform: none; opacity: .3; }
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
       #speech-panel .speech-bubble { background: none !important; }
       .duck-sprite { animation: none !important; }
@@ -405,6 +436,10 @@
     <span class="pop-aura-edge pop-aura-edge--right"></span>
     <span class="pop-aura-edge pop-aura-edge--bottom"></span>
     <span class="pop-aura-edge pop-aura-edge--left"></span>
+    <span class="pop-aura-corner pop-aura-corner--top-left"></span>
+    <span class="pop-aura-corner pop-aura-corner--top-right"></span>
+    <span class="pop-aura-corner pop-aura-corner--bottom-right"></span>
+    <span class="pop-aura-corner pop-aura-corner--bottom-left"></span>
   </div>
   <script>
     (() => {

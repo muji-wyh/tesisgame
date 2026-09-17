@@ -501,6 +501,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await page.screenshot({ path: info.outputPath('arena.png') });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expectStillAura(page);
+    await expectListeningAura(page);
     await rendered(page);
     const reduced = await state(page), bounds = await metrics(page);
     expect(reduced.targets.length).toBeGreaterThan(0);
@@ -509,6 +510,8 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await page.screenshot({ path: info.outputPath('reduced-motion-hit.png') });
     await chooseMode(page, 'memory');
     await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
+    await expect(page.locator('#pop-aura')).toHaveCSS('opacity', '0');
+    await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
     expect(errors).toEqual([]);
   });
 }

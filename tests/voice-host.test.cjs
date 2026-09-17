@@ -942,21 +942,22 @@ test('Pop snapshots expose full live speech and result state without repeating i
 });
 
 test('the Pop glow covers the viewport edges, ignores input and respects reduced motion', () => {
-  assert.match(shell, /#pop-aura\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0;[^}]*pointer-events:\s*none;/);
-  const auraCSS = shell.slice(shell.indexOf('    #pop-aura {'), shell.indexOf('    @keyframes speech-wave'));
-  assert.doesNotMatch(auraCSS, /filter:|backdrop-filter:|rotate\(|mask-composite:/,
-    'Narrow edge strips need neither a full-screen blur nor a rotating masked rectangle');
-  assert.match(auraCSS, /-webkit-mask-image:\s*linear-gradient/);
-  assert.match(auraCSS, /\s+mask-image:\s*linear-gradient/);
-  assert.match(auraCSS, /opacity:\s*0;\s*visibility:\s*hidden/);
-  assert.match(auraCSS, /animation-play-state:\s*paused/);
-  assert.match(auraCSS, /#pop-aura\[data-listening="true"\] \.pop-aura-edge::before\s*\{\s*animation-play-state:\s*running/);
-  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura \.pop-aura-edge::before\s*\{\s*animation:\s*none;/);
-  for (const edge of ['top', 'right', 'bottom', 'left']) {
-    assert.match(shell, new RegExp('<span class="pop-aura-edge pop-aura-edge--' + edge + '"></span>'));
-  }
-  assert.ok(shell.indexOf('<div id="pop-aura"') < shell.indexOf('function createSpeechHost()'), 'The aura exists before its host captures the element');
-  assert.match(shell, /id="pop-aura"[^>]*aria-hidden="true"/);
+  const baseRule = shell.match(/#pop-aura\s*\{([^}]*)\}/)?.[1];
+  assert.ok(baseRule, 'The viewport overlay has a base style');
+  for (const declaration of [/position:\s*fixed;/, /inset:\s*0;/, /pointer-events:\s*none;/,
+    /opacity:\s*0;/, /visibility:\s*hidden;/]) assert.match(baseRule, declaration);
+  const activeRule = shell.match(/#pop-aura\[data-listening="true"\]\s*\{([^}]*)\}/)?.[1];
+  assert.ok(activeRule, 'Actual listening reveals the overlay');
+  assert.match(activeRule, /opacity:\s*1;/);
+  assert.match(activeRule, /visibility:\s*visible;/);
+  assert.match(shell, /#pop-aura[^{}]*\{[^}]*animation-play-state:\s*paused;/);
+  assert.match(shell, /#pop-aura\[data-listening="true"\][^{}]*\{[^}]*animation-play-state:\s*running;/);
+  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura[^{}]*\{[^}]*animation:\s*none;/);
+  const auraElement = shell.match(/<[^>]*\bid="pop-aura"[^>]*>/)?.[0];
+  assert.ok(auraElement, 'The decorative aura is present in the document');
+  assert.ok(shell.indexOf(auraElement) < shell.indexOf('function createSpeechHost()'), 'The aura exists before its host captures the element');
+  assert.match(auraElement, /\baria-hidden="true"/);
+  assert.match(auraElement, /\bdata-listening="false"/);
   assert.match(shell, /id="pop-status"[^>]*role="status"/);
   assert.match(shell, /Winning Match or Memory earns one piece/);
 });
