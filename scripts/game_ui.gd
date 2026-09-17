@@ -322,6 +322,7 @@ var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _pop_result_callback: JavaScriptObject
+var _pop_summary_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -490,6 +491,7 @@ func _build_controls() -> void:
 	_pop.hit.connect(_pop_hit)
 	_pop.round_finished.connect(_pop_finished)
 	_pop.hear_requested.connect(_pop_hear)
+	_pop.report_requested.connect(_pop_report)
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
@@ -1654,19 +1656,29 @@ func _pop_hear(word: Dictionary) -> void:
 		return
 	if _host != null:
 		_host.stopPopSummary()
+	_pop.set_report_speaking(false)
 	audio.interact(model.theme_id, false)
 	audio.say("res://" + word.audio)
 
 
-func _pop_finished(result: Dictionary) -> void:
+func _pop_finished(_result: Dictionary) -> void:
 	if not _stop_pop_listening():
 		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
 		return
-	var report: String = "Pip here! You popped %d words in 30 seconds. %d different words, and a best combo of %d! %d points. " % [result.hits, result.unique_words, result.best_combo, result.score]
-	report += "Tap a word to practise with me, or let's play again!" if result.hits > 0 else "Let's practise a word together, then try another round!"
-	_announce_status(report)
+	_pop_report(_pop.report_text())
+
+
+func _pop_report(text: String) -> void:
+	if _mode_id != "pop" or _pop.game.phase != "finished" or _pop_speech_active or collection_page.visible or _preview_page.visible:
+		return
+	audio.halt()
+	_announce_status("Pip says: " + text)
 	if _host != null:
-		_host.speakPopSummary(report)
+		_host.stopPopSummary()
+		if not bool(_host.speakPopSummary(text)):
+			_pop.report_voice_unavailable()
+	else:
+		_pop.report_voice_unavailable()
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -3177,6 +3189,9 @@ func _connect_browser() -> void:
 		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible and not _preview_page.visible:
 			_pop.receive_transcript(str(arguments[0])))
 	_host.observePopSpeech(_pop_result_callback)
+	_pop_summary_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
+		_pop.set_report_speaking(bool(arguments[0])))
+	_host.observePopSummary(_pop_summary_callback)
 
 
 func _toggle_voice() -> void:
@@ -3235,6 +3250,10 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
+	if _mode_id == "pop":
+		if not collection_page.visible and not _preview_page.visible:
+			_pop.show_transcript(str(arguments[0]), bool(arguments[1]))
+		return
 	if _mode_id != "match":
 		return
 	if not _voice_mode or not _voice_listening or not bool(arguments[1]):

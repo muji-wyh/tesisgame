@@ -5,6 +5,7 @@ signal exit_requested
 signal hit(word: Dictionary)
 signal round_finished(summary: Dictionary)
 signal hear_requested(word: Dictionary)
+signal report_requested(text: String)
 signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
@@ -29,6 +30,9 @@ var time_label: Label
 var score_label: Label
 var hits_label: Label
 var prompt_label: Label
+var transcript_label: Label
+var report_button: Button
+var next_report_button: Button
 
 var _words: Array = []
 var _palette: Dictionary = {}
@@ -49,6 +53,11 @@ var _geometry_publish_pending: bool = false
 var _last_target_ids: String = ""
 var _last_hit: String = ""
 var _last_hit_left: float = 0.0
+var _transcript: String = ""
+var _transcript_final: bool = false
+var _report_step: int = 0
+var _report_feedback: String = ""
+var _report_pages: Array[Dictionary] = []
 var _bursts: Array[Dictionary] = []
 var _draw_targets: Array[Dictionary] = []
 var _arena: Rect2
@@ -70,11 +79,12 @@ var _results: ScrollContainer
 var _result_body: VBoxContainer
 var _result_heading: Label
 var _pip_caption: Label
+var _report_kicker: Label
+var _report_actions: HBoxContainer
 var _stats: GridContainer
 var _result_actions: HBoxContainer
 var _review_grids: Array[GridContainer] = []
 var _review_buttons: Array[Button] = []
-var _perimeter_points := PackedVector2Array()
 
 
 func _ready() -> void:
@@ -105,8 +115,14 @@ func _build() -> void:
 	hits_label.name = "Hits"
 	prompt_label = _label("Say what you see", 20)
 	prompt_label.name = "Prompt"
+	transcript_label = _label("", 17)
+	transcript_label.name = "LiveTranscript"
+	transcript_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	transcript_label.max_lines_visible = 2
+	transcript_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	transcript_label.hide()
 	_live_caption = _label("LISTENING", 10, CYAN)
-	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, _live_caption]:
+	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, transcript_label, _live_caption]:
 		_hud.add_child(item)
 	_gate = ScrollContainer.new()
 	_gate.name = "MicrophoneGate"
@@ -140,7 +156,7 @@ func _build() -> void:
 	_results = ScrollContainer.new()
 	_results.name = "PopResults"
 	_results.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_results.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_results.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_results.follow_focus = true
 	add_child(_results)
 	_result_body = VBoxContainer.new()
@@ -175,6 +191,11 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	_last_target_ids = ""
 	_last_hit = ""
 	_last_hit_left = 0.0
+	_clear_transcript()
+	set_report_speaking(false)
+	_report_step = 0
+	_report_feedback = ""
+	_report_pages.clear()
 	_bursts.clear()
 	_draw_targets.clear()
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
@@ -204,6 +225,8 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	if _finished_sent:
 		_listening = false
 		_listening_tick_usec = -1
+		if not _stopped:
+			_message = report_text()
 		_publish(true)
 		return
 	if listening:
@@ -220,6 +243,7 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_hud.show()
 	else:
 		_listening_tick_usec = -1
+		_clear_transcript()
 		var transient: bool = enabled and _pending_message(message)
 		_pending = transient
 		_pending_left = 10.0 if transient else 0.0
@@ -237,6 +261,37 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_refresh_targets()
 	_publish(true)
 	queue_redraw()
+
+
+func show_transcript(text: String, is_final: bool) -> void:
+	# Full browser hypotheses are presentation only. Scoring keeps its separate,
+	# deduplicated word callback, so updating an interim sentence cannot score twice.
+	if not _listening or game.phase != "running" or not is_visible_in_tree():
+		return
+	_sync_game_clock()
+	if game.phase != "running":
+		return
+	_transcript = text.strip_edges().replace("\n", " ").replace("\r", " ").right(2000)
+	_transcript_final = is_final
+	transcript_label.text = _transcript
+	_update_transcript_window()
+	_update_hud()
+	_publish(true)
+
+
+func _clear_transcript() -> void:
+	_transcript = ""
+	_transcript_final = false
+	if transcript_label != null:
+		transcript_label.text = ""
+		transcript_label.hide()
+		prompt_label.show()
+
+
+func _update_transcript_window() -> void:
+	transcript_label.lines_skipped = 0
+	# Keep the newest words in view during a long, continuously revised sentence.
+	transcript_label.lines_skipped = maxi(0, transcript_label.get_line_count() - 2)
 
 
 func receive_transcript(text: String) -> void:
@@ -275,6 +330,7 @@ func pause() -> void:
 		return
 	_listening = false
 	_listening_tick_usec = -1
+	_clear_transcript()
 	_pending = false
 	_reconnecting = false
 	if game.phase == "running":
@@ -293,6 +349,8 @@ func pause() -> void:
 
 
 func stop() -> void:
+	_clear_transcript()
+	set_report_speaking(false)
 	_listening = false
 	_listening_tick_usec = -1
 	_enabled = false
@@ -330,6 +388,8 @@ func controls() -> Array[Control]:
 	elif _results != null and _results.visible:
 		if pip != null and is_instance_valid(pip):
 			result.append(pip)
+		result.append(report_button)
+		result.append(next_report_button)
 		result.append(replay_button)
 		result.append(back_button)
 		for button in _review_buttons:
@@ -366,7 +426,12 @@ func snapshot() -> Dictionary:
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
-		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled}
+		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
+		"transcript": _transcript, "transcript_final": _transcript_final,
+		"report": report_text() if game.phase == "finished" and not _stopped else "", "report_step": _report_step,
+		"results_scroll": _results.scroll_vertical,
+		"results_scroll_max": maxf(0.0, _results.get_v_scroll_bar().max_value - _results.get_v_scroll_bar().page),
+		"results_scrollbar_visible": _results.get_v_scroll_bar().is_visible_in_tree()}
 
 
 func _publish(force: bool = false) -> void:
@@ -447,6 +512,7 @@ func _advance_game(elapsed_seconds: float) -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
+		set_report_speaking(false)
 		if game.phase == "running":
 			pause()
 		_listening_tick_usec = -1
@@ -463,7 +529,11 @@ func _update_hud() -> void:
 	time_label.add_theme_color_override("font_color", PINK if game.remaining <= 5.0 else WHITE)
 	score_label.text = str(game.score)
 	hits_label.text = "%d %s" % [game.hits, "hit" if game.hits == 1 else "hits"]
+	transcript_label.visible = not _transcript.is_empty()
+	prompt_label.visible = _transcript.is_empty()
 	_live_caption.text = "RECONNECTING · TIMER PAUSED" if _reconnecting else _last_hit if _last_hit_left > 0.0 else "LISTENING · SPEAK TO POP"
+	if not _transcript.is_empty() and _last_hit_left <= 0.0 and not _reconnecting:
+		_live_caption.text = "HEARD YOU · KEEP GOING" if _transcript_final else "HEARING YOU…"
 	if game.phase == "running" and game.targets.is_empty() and game.remaining < 3.0:
 		_live_caption.text = "NICE POPPING · ROUND ENDING"
 	_live_caption.add_theme_color_override("font_color", PINK if _last_hit_left > 0.0 else CYAN)
@@ -487,9 +557,18 @@ func _layout() -> void:
 	_place_label(_score_caption, Rect2(size.x - edge - side, 43 / scale, side, 16 / scale), 9)
 	_place_label(_mode_caption, Rect2(edge + side, 15 / scale, width - side * 2, 16 / scale), 10)
 	_place_label(hits_label, Rect2(edge + side, 31 / scale, width - side * 2, 26 / scale), 17)
-	_place_label(prompt_label, Rect2(edge, 67 / scale, width, 27 / scale), 20)
-	_place_label(_live_caption, Rect2(edge, 96 / scale, width, 17 / scale), 10)
-	var top: float = (121.0 if not short else 113.0) / scale
+	var speech_top: float = (59.0 if short else 65.0) / scale
+	var speech_height: float = (36.0 if short else 44.0) / scale
+	_place_label(prompt_label, Rect2(edge, speech_top, width, speech_height), 17 if short else 20)
+	_place_label(transcript_label, Rect2(edge, speech_top, width, speech_height), 14 if short else 17)
+	# Font ascent/descent and line spacing can exceed the nominal font size.
+	# Reserve two actual lines instead of clipping the second at some UI scales.
+	speech_height = maxf(speech_height, 2.0 * transcript_label.get_line_height() + transcript_label.get_theme_constant("line_spacing"))
+	transcript_label.size.y = speech_height
+	prompt_label.size.y = speech_height
+	_update_transcript_window()
+	_place_label(_live_caption, Rect2(edge, speech_top + speech_height, width, 17 / scale), 10)
+	var top: float = speech_top + speech_height + 25.0 / scale
 	_arena = Rect2(edge, top, width, maxf(64.0 / scale, size.y - top - 18.0 / scale))
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
 	var gate_top: float = maxf(18.0 / scale, (size.y - 290.0 / scale) * 0.5)
@@ -512,12 +591,23 @@ func _layout() -> void:
 	var result_width: float = minf(width - 8.0 / scale, 760.0 / scale)
 	_results.position = Vector2((size.x - result_width) * 0.5, edge)
 	_results.size = Vector2(result_width, maxf(0.0, size.y - edge * 2.0))
-	_result_body.add_theme_constant_override("separation", ceili(16.0 / scale))
+	_result_body.add_theme_constant_override("separation", ceili(8.0 / scale))
+	if _report_actions != null and is_instance_valid(_report_actions):
+		_report_actions.add_theme_constant_override("separation", ceili(8.0 / scale))
+		_style_action(report_button)
+		_style_action(next_report_button)
+		for button in [report_button, next_report_button]:
+			button.custom_minimum_size.y = 44.0 / scale
 	if _stats != null and is_instance_valid(_stats):
 		_stats.columns = 4 if result_width * scale >= 480.0 else 2
 		_stats.add_theme_constant_override("h_separation", ceili(8.0 / scale))
 		_stats.add_theme_constant_override("v_separation", ceili(8.0 / scale))
 	if _result_actions != null and is_instance_valid(_result_actions):
+		# Keep the main actions above the statistics on compact screens: longer
+		# coaching sentences must not push Replay and Back across the scroll edge.
+		var action_index: int = 2 if size.y * scale < 460.0 else 3
+		if _result_actions.get_index() != action_index:
+			_result_body.move_child(_result_actions, action_index)
 		_result_actions.add_theme_constant_override("separation", ceili(10.0 / scale))
 		_style_action(replay_button, true)
 		_style_action(back_button)
@@ -527,9 +617,6 @@ func _layout() -> void:
 		grid.add_theme_constant_override("v_separation", ceili(8.0 / scale))
 	for button in _review_buttons:
 		button.custom_minimum_size = Vector2(0.0, 66.0 / scale)
-	_perimeter_points.clear()
-	for index in range(121):
-		_perimeter_points.append(_perimeter_point(float(index) / 120.0, 3.0 / scale, 18.0 / scale))
 	_refresh_targets()
 	queue_redraw()
 	_queue_geometry_publish()
@@ -609,7 +696,6 @@ func _draw() -> void:
 			_draw_capsule(target, scale)
 		for burst in _bursts:
 			_draw_burst(burst, scale)
-	_draw_perimeter(scale)
 
 
 func _draw_atmosphere(scale: float) -> void:
@@ -692,58 +778,11 @@ func _draw_burst(burst: Dictionary, scale: float) -> void:
 	draw_string(font, center + Vector2(-text_width * 0.5, -36.0 / scale - progress * 34.0 / scale), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
 
 
-func _draw_perimeter(scale: float) -> void:
-	if not _listening or game.phase != "running":
-		return
-	var count: int = _perimeter_points.size() - 1
-	if count <= 0:
-		return
-	var core := PackedColorArray()
-	var middle := PackedColorArray()
-	var halo := PackedColorArray()
-	for index in range(count + 1):
-		var t: float = float(index) / float(count)
-		var phase: float = fposmod(t * 3.0 - (0.0 if reduced_motion else _clock * 0.24), 3.0)
-		var color: Color = NEON[int(phase) % NEON.size()].lerp(NEON[(int(phase) + 1) % NEON.size()], fposmod(phase, 1.0))
-		var intensity: float = 0.72 if reduced_motion else 0.35 + 0.65 * pow(0.5 + 0.5 * cos(t * TAU * 3.0 - _clock * 2.2), 3.0)
-		core.append(Color(color, intensity))
-		middle.append(Color(color, intensity * 0.20))
-		halo.append(Color(color, intensity * 0.09))
-	if not reduced_motion:
-		draw_polyline_colors(_perimeter_points, halo, 14.0 / scale, true)
-		draw_polyline_colors(_perimeter_points, middle, 7.0 / scale, true)
-	draw_polyline_colors(_perimeter_points, core, 2.2 / scale, true)
-
-
-func _perimeter_point(t: float, inset: float, radius: float) -> Vector2:
-	var rect := Rect2(Vector2.ONE * inset, size - Vector2.ONE * inset * 2.0)
-	var r: float = minf(radius, minf(rect.size.x, rect.size.y) * 0.5)
-	var horizontal: float = maxf(0.0, rect.size.x - r * 2.0)
-	var vertical: float = maxf(0.0, rect.size.y - r * 2.0)
-	var arc: float = PI * r * 0.5
-	var distance: float = fposmod(t, 1.0) * (horizontal * 2.0 + vertical * 2.0 + arc * 4.0)
-	var lengths: Array[float] = [horizontal, arc, vertical, arc, horizontal, arc, vertical, arc]
-	for segment in range(8):
-		if distance <= lengths[segment] or segment == 7:
-			var f: float = distance / maxf(0.001, lengths[segment])
-			match segment:
-				0: return Vector2(rect.position.x + r + horizontal * f, rect.position.y)
-				1: return Vector2(rect.end.x - r, rect.position.y + r) + Vector2.from_angle(-PI * 0.5 + f * PI * 0.5) * r
-				2: return Vector2(rect.end.x, rect.position.y + r + vertical * f)
-				3: return Vector2(rect.end.x - r, rect.end.y - r) + Vector2.from_angle(f * PI * 0.5) * r
-				4: return Vector2(rect.end.x - r - horizontal * f, rect.end.y)
-				5: return Vector2(rect.position.x + r, rect.end.y - r) + Vector2.from_angle(PI * 0.5 + f * PI * 0.5) * r
-				6: return Vector2(rect.position.x, rect.end.y - r - vertical * f)
-				7: return Vector2(rect.position.x + r, rect.position.y + r) + Vector2.from_angle(PI + f * PI * 0.5) * r
-			distance = 0.0
-		distance -= lengths[segment]
-	return Vector2.ZERO
-
-
 func _finish() -> void:
 	_finished_sent = true
 	_listening = false
 	_listening_tick_usec = -1
+	_clear_transcript()
 	_message = "Round complete. Tap a word to hear it, or play again."
 	_draw_targets.clear()
 	_bursts.clear()
@@ -764,40 +803,61 @@ func _build_results(summary: Dictionary) -> void:
 	_review_grids.clear()
 	_review_buttons.clear()
 	var scale: float = Style.ui_scale(self)
+	_report_pages = _make_report(summary)
+	_report_step = 0
 	var hero := HBoxContainer.new()
-	hero.add_theme_constant_override("separation", ceili(14.0 / scale))
+	hero.add_theme_constant_override("separation", ceili(10.0 / scale))
 	_result_body.add_child(hero)
 	pip = Duck.new()
-	pip.custom_minimum_size = Vector2.ONE * 82.0 / scale
-	pip.set_meta("pop_edge", 82.0)
+	pip.custom_minimum_size = Vector2.ONE * 72.0 / scale
+	pip.set_meta("pop_edge", 72.0)
 	pip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	pip.tooltip_text = "High five Pip!"
 	pip.set_reduced_motion(reduced_motion)
 	hero.add_child(pip)
+	pip.tooltip_text = "High five Pip and hear your report!"
 	pip.pressed.connect(_high_five)
+	var bubble := PanelContainer.new()
+	bubble.mouse_filter = Control.MOUSE_FILTER_PASS
+	bubble.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var bubble_style: StyleBoxFlat = Style.box(Color("#edf6ff"), Color("#a8c6f2"), ceili(16.0 / scale), 1)
+	bubble_style.set_content_margin_all(10.0 / scale)
+	bubble.add_theme_stylebox_override("panel", bubble_style)
+	hero.add_child(bubble)
 	var headline := VBoxContainer.new()
 	headline.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	headline.add_theme_constant_override("separation", ceili(5.0 / scale))
-	hero.add_child(headline)
-	var kicker: Label = _label("ROUND COMPLETE", 10, CYAN)
-	kicker.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	headline.add_child(kicker)
-	_result_heading = _label("You made them pop!" if int(summary.get("hits", 0)) > 0 else "Let's try again!", 24)
+	bubble.add_child(headline)
+	_report_kicker = _label("PIP'S REPORT · 1 / 3", 10, Color("#46658c"))
+	_report_kicker.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_report_kicker.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	headline.add_child(_report_kicker)
+	_result_heading = _label("", 20, Style.INK)
 	_result_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_result_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	headline.add_child(_result_heading)
-	_pip_caption = _label("Pip says: High five! Tap me!" if int(summary.get("hits", 0)) > 0 else "Pip says: See a word, then say it clearly. You've got this!", 13, SOFT)
+	_pip_caption = _label("", 14, Style.INK)
 	_pip_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_pip_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	headline.add_child(_pip_caption)
+	_report_actions = HBoxContainer.new()
+	_result_body.add_child(_report_actions)
+	report_button = _action("Hear Pip")
+	report_button.name = "HearPip"
+	report_button.pressed.connect(_hear_report)
+	next_report_button = _action("My highlights")
+	next_report_button.name = "NextReport"
+	next_report_button.pressed.connect(_next_report)
+	_report_actions.add_child(report_button)
+	_report_actions.add_child(next_report_button)
 	_stats = GridContainer.new()
 	_stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_result_body.add_child(_stats)
 	for item in [["HITS", int(summary.get("hits", 0)), CYAN], ["WORDS", int(summary.get("unique_words", 0)), VIOLET], ["BEST COMBO", int(summary.get("best_combo", 0)), PINK], ["SCORE", int(summary.get("score", 0)), CYAN]]:
 		var panel := PanelContainer.new()
+		panel.mouse_filter = Control.MOUSE_FILTER_PASS
 		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		panel.custom_minimum_size = Vector2(0, 70.0 / scale)
-		panel.set_meta("pop_min_height", 70.0)
+		panel.custom_minimum_size = Vector2(0, 54.0 / scale)
+		panel.set_meta("pop_min_height", 54.0)
 		panel.add_theme_stylebox_override("panel", Style.box(SURFACE, Color("#304164"), ceili(13.0 / scale), 1))
 		_stats.add_child(panel)
 		var stack := VBoxContainer.new()
@@ -821,6 +881,15 @@ func _build_results(summary: Dictionary) -> void:
 		var empty: Label = _label("Say a word while its picture is on screen.\nPip is ready for another round with you.", 14, SOFT)
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_result_body.add_child(empty)
+	var bottom_space := Control.new()
+	bottom_space.custom_minimum_size.y = 8.0 / scale
+	bottom_space.set_meta("pop_min_height", 8.0)
+	bottom_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_result_body.add_child(bottom_space)
+	for control in [pip, report_button, next_report_button, replay_button, back_button]:
+		control.focus_entered.connect(func() -> void: _ensure_result_control(control))
+	_show_report(0)
+	pip.perform_trick("flutter")
 	_layout()
 
 
@@ -877,16 +946,109 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 			if pip != null and is_instance_valid(pip):
 				pip.react("happy")
 			hear_requested.emit(word))
-		button.focus_entered.connect(func() -> void: _results.ensure_control_visible(button))
+		button.focus_entered.connect(func() -> void: _ensure_result_control(button))
+
+
+func _ensure_result_control(control: Control) -> void:
+	# Godot's built-in focus scrolling checks scrollbar visibility. Our scrollbars
+	# are intentionally hidden, so reveal focused actions using container bounds.
+	var local_rect: Rect2 = _results.get_global_transform().affine_inverse() * control.get_global_rect()
+	if local_rect.position.y < 0.0:
+		_results.scroll_vertical += floori(local_rect.position.y)
+	elif local_rect.end.y > _results.size.y:
+		_results.scroll_vertical += ceili(local_rect.end.y - _results.size.y)
+
+
+func _make_report(summary: Dictionary) -> Array[Dictionary]:
+	var count: int = int(summary.get("hits", 0))
+	var unique: int = int(summary.get("unique_words", 0))
+	var combo: int = int(summary.get("best_combo", 0))
+	var earned: int = int(summary.get("score", 0))
+	var hits: Array = summary.get("hit_words", [])
+	var missed: Array = summary.get("missed_words", [])
+	var opening: String = "You popped %d %s in 30 seconds and earned %d points!" % [count, "word" if count == 1 else "words", earned]
+	if count == 0:
+		opening += " I'll help you practise."
+	var names: PackedStringArray = []
+	for word in hits.slice(0, 2):
+		names.append(str(word.get("text", "")))
+	var highlights: String = "You said %s! %d different %s, with a best combo of %d." % [" and ".join(names), unique, "word" if unique == 1 else "words", combo]
+	if hits.is_empty():
+		highlights = "No words popped yet. Watch one picture, then say its name while it is on screen."
+	var practice: String = "Watch a picture, say its word, and we'll pop it together. Ready to try?"
+	if not missed.is_empty():
+		practice = "Let's practise “%s”. Tap its picture below to listen, then say it in your next round!" % str(missed[0].get("text", ""))
+	elif not hits.is_empty():
+		practice = "Say “%s” with me again! Tap its picture below to listen. Next time, try a combo of %d." % [str(hits[0].get("text", "")), combo + 1]
+	return [{"title": "Your round", "text": opening}, {"title": "Your highlights", "text": highlights},
+		{"title": "Let's practise", "text": practice}]
+
+
+func report_text() -> String:
+	if _pip_caption != null and is_instance_valid(_pip_caption):
+		return _report_feedback + _pip_caption.text
+	return ""
+
+
+func _show_report(step: int) -> void:
+	if _report_pages.is_empty():
+		return
+	_report_step = posmod(step, _report_pages.size())
+	_report_feedback = ""
+	_result_heading.text = str(_report_pages[_report_step].title)
+	_pip_caption.text = str(_report_pages[_report_step].text)
+	_report_kicker.text = "PIP'S REPORT · %d / 3" % (_report_step + 1)
+	next_report_button.text = ["My highlights", "Coach me", "My round"][_report_step]
+	_message = _pip_caption.text
+	_results.scroll_vertical = 0
+	_layout()
+	_publish(true)
+
+
+func _next_report() -> void:
+	if game.phase != "finished" or not is_visible_in_tree():
+		return
+	set_report_speaking(false)
+	_show_report(_report_step + 1)
+	pip.react("curious" if _report_step == 2 else "happy")
+	_hear_report()
+
+
+func _hear_report() -> void:
+	if game.phase == "finished" and is_visible_in_tree():
+		pip.react("happy")
+		report_requested.emit(report_text())
+
+
+func report_voice_unavailable() -> void:
+	set_report_speaking(false)
+	_report_kicker.text = "PIP SAYS · READ ALONG"
+	report_button.text = "Read with Pip"
+	_queue_geometry_publish()
+
+
+func set_report_speaking(value: bool) -> void:
+	if pip == null or not is_instance_valid(pip):
+		return
+	var speaking_now: bool = value and game.phase == "finished" and is_visible_in_tree() and not _stopped
+	pip.set_speaking(speaking_now)
+	if _report_kicker != null and is_instance_valid(_report_kicker):
+		_report_kicker.text = ("PIP IS SPEAKING" if speaking_now else "PIP'S REPORT") + " · %d / 3" % (_report_step + 1)
+	if report_button != null and is_instance_valid(report_button):
+		report_button.text = "Hear again" if speaking_now else "Hear Pip"
+	_queue_geometry_publish()
 
 
 func _high_five() -> void:
-	if pip == null or not is_instance_valid(pip):
+	if pip == null or not is_instance_valid(pip) or game.phase != "finished":
 		return
 	pip.perform_trick("high-five")
-	_pip_caption.text = "High five! %d hits, %d words. Ready for another round?" % [game.hits, int(game.summary().get("unique_words", 0))]
-	_message = _pip_caption.text
+	_report_feedback = "High five! "
+	_result_heading.text = "High five!"
+	_message = report_text()
+	_layout()
 	_publish(true)
+	_hear_report()
 
 
 func _replay() -> void:

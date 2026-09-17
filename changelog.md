@@ -4,6 +4,14 @@ Notable changes to Pip and Words (formerly Word Buddies), grouped by date with t
 
 ## 2026-09-17
 
+- Made Pip's Voice Pop results a three-part spoken and readable report with real
+  achievements, named words, coaching, repeatable narration and high-five feedback.
+- Added live full-sentence speech captions, including interim recognition; text
+  clears on pause, completion and exit without affecting scoring.
+- Replaced the double neon frame with flowing screen-edge light inspired by
+  Apple's Siri, with a bright core, soft inward falloff and reduced-motion support.
+- Hid the result scrollbar while retaining touch/wheel scrolling and keyboard
+  focus reveal, including the last review word on compact screens.
 - Added Voice Pop: microphone permission on entry, a 30-second spoken-word arcade
   round, colorful screen-edge light, parabolic picture-and-word targets, combos,
   and immediate slash/shard/shockwave hit feedback.

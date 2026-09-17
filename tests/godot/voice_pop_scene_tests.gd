@@ -16,6 +16,29 @@ func settle() -> void:
 	for frame in range(8):
 		await process_frame
 
+func check_result_actions(view, dimensions: Vector2i, context: String) -> void:
+	check(view._results.scroll_vertical == 0, "%s stays at scroll zero at %s" % [context, dimensions])
+	var viewport_rect: Rect2 = view._results.get_global_rect()
+	for button in [view.replay_button, view.back_button]:
+		check(button.is_visible_in_tree() and viewport_rect.encloses(button.get_global_rect()),
+			"%s keeps %s fully visible at %s: viewport=%s button=%s" % [
+				context, button.name, dimensions, viewport_rect, button.get_global_rect()])
+
+func check_compact_reports(view, dimensions: Vector2i, fixture: String) -> void:
+	view._show_report(0)
+	for report_step in range(3):
+		await settle()
+		var context: String = "%s report page %d" % [fixture, report_step + 1]
+		check(int(view.snapshot().report_step) == report_step, context + " is the requested page")
+		check_result_actions(view, dimensions, context)
+		view.pip.pressed.emit()
+		await settle()
+		check_result_actions(view, dimensions, context + " after high five")
+		if report_step < 2:
+			view.next_report_button.pressed.emit()
+	view._show_report(0)
+	await settle()
+
 func _run() -> void:
 	var directory: String = "user://voice-pop-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -28,6 +51,7 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup preserves Match without activating speech")
 	var modes: Array[String] = ["match", "learn", "memory", "pop"]
+	var saw_scrollable_results: bool = false
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(679, 900), Vector2i(680, 900), Vector2i(844, 390), Vector2i(1366, 768)]:
 		root.size = dimensions
 		await settle()
@@ -52,10 +76,19 @@ func _run() -> void:
 		check(not app.hint_button.visible and not app._voice_button.visible and not app._memory.study_button.visible,
 			"Other modes' actions do not intrude into Voice Pop")
 		check(view.game.phase == "ready" and view.game.remaining == 30.0, "Waiting for microphone does not consume time")
+		view.show_transcript("This arrived before listening", false)
+		check(not view.transcript_label.is_visible_in_tree() and str(view.snapshot().transcript).is_empty(),
+			"Permission waiting cannot display a transcript from an inactive recognizer")
 		view._process(2.0)
 		check(view.game.remaining == 30.0 and view.game.targets.is_empty(), "Permission waiting never starts target motion")
 		app._on_voice_state([true, true, "Listening. Say an English word."])
 		check(view.game.phase == "running" and view.game.targets.size() == 1, "A live microphone starts the actual arcade round")
+		view.show_transcript("I am still thinking", false)
+		check(view.transcript_label.is_visible_in_tree() and view.transcript_label.text.contains("I am still thinking"),
+			"The HUD displays a whole unmatched interim sentence at " + str(dimensions))
+		check(view.game.hits == 0 and not bool(view.snapshot().transcript_final), "Displaying an interim sentence does not award a hit")
+		check(view.get_global_rect().grow(1).encloses(view.transcript_label.get_global_rect()),
+			"The live transcript fits inside the playfield at " + str(dimensions))
 		view._advance_game(1.5)
 		var before_catchup: float = view.game.remaining
 		var catchup_started: int = Time.get_ticks_usec()
@@ -70,10 +103,39 @@ func _run() -> void:
 			"Low frame rates cannot stretch the round by repeatedly consuming clamped engine deltas")
 		var before: int = view.game.hits
 		var word: Dictionary = view.game.targets[0].word.duplicate(true)
+		var sentence: String = "I think it is a " + str(word.text)
+		view.show_transcript(sentence, false)
+		check(view.transcript_label.text.contains(sentence) and str(view.snapshot().transcript) == sentence and view.game.hits == before,
+			"A complete hypothesis remains visible independently of target scoring")
 		view.receive_transcript(word.text)
 		check(view.game.hits == before + 1 and view.game.hit_words[0].id == word.id, "A spoken visible word produces an exact hit")
 		check(view.game.targets.all(func(target: Dictionary) -> bool: return target.word.id != word.id), "A popped target is removed immediately")
+		check(view.transcript_label.text.contains(sentence), "Hit feedback does not replace the full sentence with the popped noun")
+		var revised: String = "I think it is the " + str(word.text) + ", please"
+		view.show_transcript(revised, false)
+		check(view.transcript_label.text.contains(revised) and not bool(view.snapshot().transcript_final), "Interim revisions replace the displayed hypothesis immediately")
+		view.show_transcript(revised, true)
+		check(view.transcript_label.text.contains(revised) and bool(view.snapshot().transcript_final) and view.game.hits == before + 1,
+			"A final hypothesis updates the HUD state without scoring the noun a second time")
+		var long_sentence: String = "I am trying to speak clearly and I would like you to hear the whole sentence before I finish"
+		view.show_transcript(long_sentence, false)
+		check(view.transcript_label.text.contains(long_sentence) and str(view.snapshot().transcript) == long_sentence,
+			"Long hypotheses retain every recognized word instead of keeping only a matched noun")
+		var transcript_lines: int = view.transcript_label.get_line_count()
+		check(view.transcript_label.get_visible_line_count() == mini(2, transcript_lines)
+			and view.transcript_label.lines_skipped == maxi(0, transcript_lines - 2),
+			"The live HUD shows the latest two full lines, or the whole shorter sentence: viewport=%s total=%d visible=%d skipped=%d" % [
+				dimensions, transcript_lines, view.transcript_label.get_visible_line_count(), view.transcript_label.lines_skipped])
+		check(view.get_global_rect().grow(1).encloses(view.transcript_label.get_global_rect()),
+			"A long live sentence stays inside the HUD at " + str(dimensions))
+		view.show_transcript("earlier words ".repeat(170) + "newest cat", false)
+		check(view.transcript_label.text.length() <= 2000 and view.transcript_label.text.ends_with("newest cat")
+			and str(view.snapshot().transcript).ends_with("newest cat"),
+			"The bounded speech buffer retains new words after a very long hypothesis")
 		app._on_voice_state([true, false, "Speech network error. Tap Retry."])
+		check(not view.transcript_label.is_visible_in_tree() and str(view.snapshot().transcript).is_empty(), "Pausing clears the live transcript")
+		view.show_transcript("This is a stale paused hypothesis", false)
+		check(str(view.snapshot().transcript).is_empty(), "A late hypothesis cannot repopulate the paused HUD")
 		var remaining: float = view.game.remaining
 		check(view._listening_tick_usec == -1, "Speech failure clears the active listening clock baseline")
 		view._listening_tick_usec = 0
@@ -112,6 +174,67 @@ func _run() -> void:
 		check(Rect2(Vector2.ZERO, app.size).grow(1).encloses(view.get_global_rect()), "The result view fits at " + str(dimensions))
 		var snapshot: Dictionary = view.snapshot()
 		check(snapshot.phase == "finished", "Accessible state reflects the visible results")
+		check(str(snapshot.transcript).is_empty() and not view.transcript_label.is_visible_in_tree(), "Results clear the completed round's transcript")
+		view.show_transcript("This is a stale finished hypothesis", true)
+		check(str(view.snapshot().transcript).is_empty(), "Late hypotheses cannot revive a completed round's transcript")
+		var initial_report: String = str(snapshot.report)
+		check(int(snapshot.report_step) == 0 and initial_report == view._pip_caption.text and initial_report.contains("30"),
+			"Pip starts with a visible report of the actual 30-second round")
+		check(initial_report.contains(str(result.hits)) and initial_report.contains(str(result.score)),
+			"Pip's opening report includes the actual hits and score")
+		var report_requests: Array[String] = []
+		var on_report: Callable = func(text: String) -> void: report_requests.append(text)
+		view.report_requested.connect(on_report)
+		view.report_button.pressed.emit()
+		check(report_requests.size() == 1 and report_requests.back() == initial_report, "Hear Pip replays the current report")
+		view.next_report_button.pressed.emit()
+		var highlights: String = str(view.snapshot().report)
+		check(int(view.snapshot().report_step) == 1 and highlights.to_lower().contains(str(word.text).to_lower()),
+			"My highlights names a word the player actually popped")
+		check(highlights.contains(str(result.unique_words)) and highlights.contains(str(result.best_combo)),
+			"The highlights report uses the actual distinct words and best combo")
+		check(report_requests.size() == 2 and report_requests.back() == highlights, "Changing report page also speaks that page")
+		view.next_report_button.pressed.emit()
+		var coaching: String = str(view.snapshot().report)
+		var practice_words: Array = result.missed_words if not result.missed_words.is_empty() else result.hit_words
+		check(int(view.snapshot().report_step) == 2 and practice_words.any(func(item: Dictionary) -> bool:
+			return coaching.to_lower().contains(str(item.text).to_lower())), "Coach me suggests an actual word from this round")
+		check(coaching != initial_report and coaching != highlights and report_requests.back() == coaching,
+			"Coaching provides and speaks a distinct, concrete next step")
+		view.next_report_button.pressed.emit()
+		check(int(view.snapshot().report_step) == 0 and str(view.snapshot().report) == initial_report,
+			"The three report pages cycle back to the original round summary")
+		view.pip.pressed.emit()
+		check(str(view.snapshot().report).contains("High five") and str(view.snapshot().report).contains(initial_report),
+			"Pip's high five adds a reaction while keeping the actual report")
+		check(report_requests.back() == str(view.snapshot().report), "The high five speaks its visible feedback")
+		check(view.game.summary() == result, "Report browsing and Pip interaction leave the round result unchanged")
+		view.set_report_speaking(true)
+		check(view.pip.speaking, "Pip's mouth starts only when report speech starts")
+		view.set_report_speaking(false)
+		check(not view.pip.speaking, "Pip's mouth stops when report speech ends or is cancelled")
+		view.report_requested.disconnect(on_report)
+		if dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
+			await check_compact_reports(view, dimensions, "One-hit round")
+		await settle()
+		check(not bool(view.snapshot().results_scrollbar_visible) and not view._results.get_v_scroll_bar().is_visible_in_tree(),
+			"Results never paint a scrollbar at " + str(dimensions))
+		if float(view.snapshot().results_scroll_max) > 1.0:
+			saw_scrollable_results = true
+			view._results.scroll_vertical = mini(100, int(view.snapshot().results_scroll_max))
+			await settle()
+			check(view._results.scroll_vertical > 0 and float(view.snapshot().results_scroll) > 0,
+				"Hiding the result scrollbar preserves actual scrolling")
+			var last_review: Control = view._review_buttons.back()
+			last_review.grab_focus()
+			await settle()
+			check(view._results.get_global_rect().grow(1).encloses(last_review.get_global_rect()),
+				"Keyboard focus reveals the final review word without a visible scrollbar: viewport=%s scroll_rect=%s button=%s button_rect=%s scroll=%s scroll_max=%s scroll_page=%s focus=%s" % [
+					dimensions, view._results.get_global_rect(), last_review.name, last_review.get_global_rect(),
+					view._results.scroll_vertical, view._results.get_v_scroll_bar().max_value,
+					view._results.get_v_scroll_bar().page, root.gui_get_focus_owner()])
+			view._results.scroll_vertical = 0
+			await settle()
 		var interactive_pip: bool = false
 		for control in view.controls():
 			if control.is_visible_in_tree() and control.name.to_lower().contains("pip"):
@@ -120,11 +243,36 @@ func _run() -> void:
 		check(not view.default_focus() is Label, "Results provide a usable action for keyboard focus")
 		app.choose_mode("match")
 		check(not view.is_visible_in_tree(), "Leaving results returns to the existing game")
+		view.set_report_speaking(true)
+		check(not view.pip.speaking, "A late report speech callback cannot animate Pip after leaving results")
 		view.set_process(true)
+	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
 	app.playroom_state.age_band_id = "4-6"
 	app.choose_mode("pop")
 	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_level(word) == 1),
 		"Voice Pop uses only the selected age group's vocabulary")
+	app._pop.set_process(false)
+	app._on_voice_state([true, true, "Listening."])
+	app._pop._advance_game(31.0)
+	await settle()
+	var empty_round: Dictionary = app._pop.game.summary()
+	var empty_report: String = str(app._pop.snapshot().report)
+	check(empty_round.hits == 0 and empty_round.score == 0 and empty_round.hit_words.is_empty(),
+		"The no-hit report fixture completes an actual round without invented results")
+	check(empty_report.contains("0 words") and empty_report.contains("0 points") and empty_report.contains("30"),
+		"Pip accurately reports zero hits and zero points")
+	check(empty_report.to_lower().contains("practise"), "A no-hit round gives encouraging help")
+	app._pop.next_report_button.pressed.emit()
+	check(str(app._pop.snapshot().report).contains("No words popped"), "Empty highlights do not invent a successful word")
+	app._pop.next_report_button.pressed.emit()
+	check(not empty_round.missed_words.is_empty() and str(app._pop.snapshot().report).contains(str(empty_round.missed_words[0].text)),
+		"A no-hit round still offers a specific missed word to practise")
+	check(app._pop.game.summary() == empty_round, "Pip's no-hit coaching leaves the recorded result unchanged")
+	for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
+		root.size = dimensions
+		await settle()
+		await check_compact_reports(app._pop, dimensions, "Zero-hit round")
+	check(app._pop.game.summary() == empty_round, "Compact report pages and every-page high fives preserve the zero-hit result")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

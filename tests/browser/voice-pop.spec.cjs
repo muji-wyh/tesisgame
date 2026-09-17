@@ -3,7 +3,7 @@ const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeA
 
 async function installSpeech(page, { automatic = true, available = true } = {}) {
   await page.addInitScript(({ automatic, available }) => {
-    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], cancelled: 0, automatic };
+    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], utterances: [], cancelled: 0, automatic };
     class Recognition {
       constructor() { this.results = []; fixture.instances.push(this); }
       start() {
@@ -39,7 +39,11 @@ async function installSpeech(page, { automatic = true, available = true } = {}) 
     Object.defineProperty(window, 'webkitSpeechRecognition', { configurable: true, value: undefined });
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(text) { this.text = text; } } });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
-      speak(utterance) { fixture.spoken.push(utterance.text); }, cancel() { fixture.cancelled++; }
+      speak(utterance) {
+        fixture.spoken.push(utterance.text);
+        fixture.utterances.push(utterance);
+        queueMicrotask(() => utterance.onstart?.());
+      }, cancel() { fixture.cancelled++; }
     } });
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => { throw new Error('Test must not capture a physical microphone'); };
   }, { automatic, available });
@@ -62,6 +66,10 @@ async function state(page) {
   return page.locator('#pop-status').evaluate(element => ({
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining),
     hits: Number(element.dataset.hits), score: Number(element.dataset.score),
+    bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
+    transcriptFinal: element.dataset.transcriptFinal === 'true', report: element.dataset.report || '',
+    reportStep: Number(element.dataset.reportStep), resultsScroll: Number(element.dataset.resultsScroll),
+    resultsScrollMax: Number(element.dataset.resultsScrollMax), resultsScrollbarVisible: element.dataset.resultsScrollbarVisible === 'true',
     targets: JSON.parse(element.dataset.targets || '[]'), controls: JSON.parse(element.dataset.controls || '[]'),
     message: element.textContent
   }));
@@ -74,7 +82,7 @@ async function visibleAction(page, pattern) {
     const bounds = await metrics(page), current = await state(page);
     button = current.controls.find(control => !control.disabled && control.width > 1 && control.height > 1 &&
       control.x >= -1 && control.y >= -1 && control.x + control.width <= bounds.width + 1 &&
-      control.y + control.height <= bounds.height + 1 && pattern.test(control.text + ' ' + control.name));
+      control.y + control.height <= bounds.height + 1 && pattern.test(control.name + ' ' + control.text));
     const geometry = button ? JSON.stringify([button.name, button.x, button.y, button.width, button.height]) : '';
     const settled = geometry !== '' && geometry === previous;
     previous = geometry;
@@ -89,11 +97,101 @@ async function action(page, pattern) {
   await rendered(page);
 }
 
+async function scrollResults(page, delta) {
+  const before = await state(page);
+  const bounds = await metrics(page), content = contentBounds(bounds);
+  const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
+  const top = bounds.y + content.top * bounds.scale + 30;
+  const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 30;
+  if (page.context().browser().browserType().name() === 'chromium') {
+    await page.mouse.move(x, (top + bottom) / 2);
+    await page.mouse.wheel(0, delta);
+  } else {
+    // Mobile WebKit has no wheel API; dispatch a complete touch gesture to the canvas.
+    // Its mouse API does not produce the touch input consumed by ScrollContainer.
+    const distance = Math.min(Math.abs(delta), bottom - top);
+    const swipes = Math.abs(delta) >= 10000 ? 8 : 1;
+    for (let swipe = 0; swipe < swipes; swipe++) {
+      const current = await state(page);
+      if (delta < 0 ? current.resultsScroll === 0 : current.resultsScroll >= current.resultsScrollMax) break;
+      const start = delta < 0 ? top : bottom;
+      const end = start - Math.sign(delta) * distance;
+      const dispatch = (type, y) => page.evaluate(({ type, x, y }) => {
+        const canvas = document.querySelector('#canvas');
+        const touch = typeof document.createTouch === 'function'
+          ? document.createTouch(window, canvas, 1, x + scrollX, y + scrollY, x, y)
+          : new Touch({ identifier: 1, target: canvas, clientX: x, clientY: y,
+          pageX: x + scrollX, pageY: y + scrollY, screenX: x, screenY: y,
+          radiusX: 1, radiusY: 1, rotationAngle: 0, force: type === 'touchend' ? 0 : 1 });
+        // This WebKit build requires TouchList values; modern engines accept arrays.
+        const list = items => typeof document.createTouchList === 'function' ? document.createTouchList(...items) : items;
+        const touches = list(type === 'touchend' ? [] : [touch]);
+        canvas.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
+          touches, targetTouches: touches, changedTouches: list([touch]) }));
+      }, { type, x, y });
+      await dispatch('touchstart', start);
+      try {
+        await rendered(page);
+        for (let step = 1; step <= 8; step++) {
+          await dispatch('touchmove', start + (end - start) * step / 8);
+          await rendered(page);
+        }
+      } finally {
+        await dispatch('touchend', end);
+      }
+      await rendered(page);
+    }
+  }
+  await rendered(page);
+  if (delta < 0 && before.resultsScroll > 0) {
+    await expect.poll(async () => (await state(page)).resultsScroll).toBeLessThan(before.resultsScroll);
+  } else if (delta > 0 && before.resultsScroll < before.resultsScrollMax) {
+    await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(before.resultsScroll);
+  }
+}
+
+async function resultAction(page, pattern) {
+  await scrollResults(page, -10000);
+  await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
+  for (let attempt = 0; attempt < 8; attempt++) {
+    if ((await state(page)).controls.some(control => !control.disabled && pattern.test(control.name + ' ' + control.text))) {
+      await action(page, pattern);
+      return;
+    }
+    await scrollResults(page, 180);
+  }
+  throw new Error(`No reachable result action matching ${pattern}`);
+}
+
 async function expectGestureStart(page, browserName) {
   if (browserName === 'chromium') {
     expect(await page.evaluate(() => window.__popSpeech.instances.at(-1).activationAtStart),
       'The Godot entry or retry gesture must still be active at SpeechRecognition.start').toBe(true);
   }
+}
+
+async function expectListeningAura(page) {
+  const aura = page.locator('#pop-aura');
+  await expect(aura).toHaveAttribute('data-listening', 'true');
+  await expect(aura).toHaveCSS('opacity', '1');
+  await expect(aura).toHaveCSS('pointer-events', 'none');
+  const bounds = await aura.boundingBox(), viewport = page.viewportSize();
+  expect(bounds, 'The listening glow follows the full viewport perimeter').toEqual({
+    x: 0, y: 0, width: viewport.width, height: viewport.height
+  });
+  expect(await aura.evaluate(element => {
+    const points = [[1, 1], [innerWidth - 2, 1], [1, innerHeight - 2], [innerWidth - 2, innerHeight - 2],
+      [innerWidth / 2, 1], [innerWidth / 2, innerHeight - 2], [1, innerHeight / 2], [innerWidth - 2, innerHeight / 2]];
+    return points.every(([x, y]) => !element.contains(document.elementFromPoint(x, y)));
+  }), 'The decorative edge never steals input from the game').toBe(true);
+}
+
+async function expectStillAura(page) {
+  await expect.poll(() => page.locator('#pop-aura').evaluate(element => {
+    const layers = [element, ...element.querySelectorAll('*')];
+    return layers.every(layer => [null, '::before', '::after'].every(pseudo =>
+      getComputedStyle(layer, pseudo).animationName.split(',').every(name => name.trim() === 'none')));
+  }), { message: 'Reduced motion stops every listening-glow layer' }).toBe(true);
 }
 
 function expectTargetInsidePlayfield(target, bounds) {
@@ -113,6 +211,41 @@ async function popOne(page, { interim = false } = {}) {
   await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 1);
   return word;
 }
+
+test('the live HUD shows and revises the whole interim sentence while scoring only the spoken target', async ({ page }, info) => {
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const first = 'I am still thinking';
+  const before = await state(page);
+  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), first);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', first);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript-final', 'false');
+  expect((await state(page)).hits).toBe(before.hits);
+  await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
+  const word = (await state(page)).targets[0].text;
+  const sentence = `I think it is a ${word}`;
+  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), sentence);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', sentence);
+  await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 1);
+  const revised = `I think it is the ${word}, please`;
+  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), revised);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', revised);
+  expect((await state(page)).hits).toBe(before.hits + 1);
+  await page.screenshot({ path: info.outputPath('live-interim-sentence.png') });
+  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, true), revised);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', revised);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript-final', 'true');
+  expect((await state(page)).hits).toBe(before.hits + 1);
+  await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('network'));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', '');
+  await page.evaluate(() => window.__popSpeech.instances[0].emit('a late stale sentence', false));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', '');
+  await chooseMode(page, 'match');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', '');
+  expect(errors).toEqual([]);
+});
 
 test('Voice Pop requests permission on entry, waits, recovers from denial, and releases on mode exit', async ({ page, browserName }, info) => {
   const errors = await open(page, { automatic: false });
@@ -175,26 +308,69 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
   await page.waitForTimeout(300);
   expect((await state(page)).hits).toBe(hits);
-  await popOne(page);
+  const secondWord = await popOne(page);
   const after = await state(page);
   expect(after.score).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
   expect(Date.now() - start).toBeGreaterThanOrEqual(29000);
   expect((await state(page)).remaining).toBe(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
-  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toMatch(/Pip here.*30 seconds/);
-  await visibleAction(page, /play again|replay|another round/i);
-  await visibleAction(page, /pip|high.?five/i);
+  const round = await state(page);
+  expect(round.reportStep).toBe(0);
+  expect(round.report).toContain('30');
+  expect(round.report).toMatch(new RegExp(`\\b${round.hits}\\b`));
+  expect(round.report).toMatch(new RegExp(`\\b${round.score}\\b`));
+  expect(round.resultsScrollbarVisible).toBe(false);
+  expect(round.transcript).toBe('');
+  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toBe(round.report);
   await page.screenshot({ path: info.outputPath('pip-round-report.png') });
+  const spokenBeforeReplay = await page.evaluate(() => window.__popSpeech.spoken.length);
+  await resultAction(page, /HearPip/);
+  await expect.poll(() => page.evaluate(() => window.__popSpeech.spoken.length)).toBe(spokenBeforeReplay + 1);
+  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toBe(round.report);
+  await expect.poll(async () => (await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear again');
+  await page.evaluate(() => window.__popSpeech.utterances.at(-1).onend?.());
+  await expect.poll(async () => (await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear Pip');
+  expect((await state(page)).report).toBe(round.report);
+  await resultAction(page, /NextReport/);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '1');
+  const highlights = await state(page);
+  expect(highlights.report.toLowerCase()).toContain(word.toLowerCase());
+  expect(highlights.report.toLowerCase()).toContain(secondWord.toLowerCase());
+  expect(highlights.report).toMatch(new RegExp(`\\b${round.bestCombo}\\b`));
+  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toBe(highlights.report);
+  await resultAction(page, /NextReport/);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '2');
+  const coaching = await state(page);
+  expect(coaching.report).not.toBe(round.report);
+  expect(coaching.report).not.toBe(highlights.report);
+  expect(coaching.report).toMatch(/say|practi[cs]e|try|next/i);
+  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toBe(coaching.report);
+  await resultAction(page, /NextReport/);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '0');
+  expect((await state(page)).report).toBe(round.report);
   const beforeInteraction = (await state(page)).message;
-  await action(page, /pip|high.?five/i);
-  await expect(page.locator('#pop-status')).toContainText(/High five! \d+ hits, \d+ words\. Ready for another round\?/);
+  await resultAction(page, /^Pip(?:\s|$)|high.?five/i);
+  await expect(page.locator('#pop-status')).toContainText(/High five/i);
   expect((await state(page)).message).not.toBe(beforeInteraction);
+  expect((await state(page)).report).toContain(round.report);
+  expect(await page.evaluate(() => window.__popSpeech.spoken.at(-1))).toBe((await state(page)).report);
   await page.screenshot({ path: info.outputPath('pip-high-five.png') });
   const finished = await state(page);
+  expect(finished.hits).toBe(round.hits);
+  expect(finished.score).toBe(round.score);
+  expect(finished.bestCombo).toBe(round.bestCombo);
+  if (finished.resultsScrollMax > 0) {
+    await scrollResults(page, -10000);
+    await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
+    await scrollResults(page, 300);
+    await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(0);
+    expect((await state(page)).resultsScrollbarVisible).toBe(false);
+    await page.screenshot({ path: info.outputPath('results-scroll-without-bar.png') });
+  }
   const audioStarts = await page.evaluate(() => window.audioObservation.starts);
   const cancelled = await page.evaluate(() => window.__popSpeech.cancelled);
-  await action(page, /Hear_/);
+  await resultAction(page, /Hear_/);
   await expect.poll(() => page.evaluate(() => window.__popSpeech.cancelled)).toBe(cancelled + 1);
   if (await page.evaluate(() => window.audioObservation.available)) {
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(audioStarts);
@@ -203,7 +379,7 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   expect((await state(page)).score).toBe(finished.score);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished');
-  await action(page, /play again|replay|another round/i);
+  await resultAction(page, /play again|replay|another round/i);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
@@ -314,6 +490,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await page.setViewportSize(viewport);
     const errors = await open(page);
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+    await expectListeningAura(page);
     await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
     const firstTarget = (await state(page)).targets[0];
     // Follow the first throw into the middle of its flight; new throws may be crossing the arena edge.
@@ -323,7 +500,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     expectTargetInsidePlayfield(midFlight, await metrics(page));
     await page.screenshot({ path: info.outputPath('arena.png') });
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect.poll(() => page.locator('#pop-aura').evaluate(element => getComputedStyle(element, '::before').animationName)).toBe('none');
+    await expectStillAura(page);
     await rendered(page);
     const reduced = await state(page), bounds = await metrics(page);
     expect(reduced.targets.length).toBeGreaterThan(0);

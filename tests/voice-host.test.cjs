@@ -823,6 +823,59 @@ test('summary unavailability, blocked synthesis and late completion remain safe'
   assert.equal(f.host.speakPopSummary('Background summary'), false);
 });
 
+test('Pip summary speaking follows real utterance events and ignores late callbacks after replacement or stop', () => {
+  const f = fixture({ synthesis: true });
+  const speaking = [];
+  f.host.observePopSummary(value => {
+    assert.equal(typeof value, 'boolean', 'Speaking state crosses the bridge as a positional boolean');
+    speaking.push(value);
+  });
+  assert.deepEqual(speaking, [false]);
+  assert.equal(f.host.speakPopSummary('First report'), true);
+  const first = f.spoken[0];
+  const old = { start: first.onstart, end: first.onend, error: first.onerror };
+  assert.deepEqual(speaking, [false], 'Queuing speech does not invent a talking animation');
+  first.onstart();
+  first.onstart();
+  assert.deepEqual(speaking, [false, true], 'Repeated browser starts do not restart the beak state');
+  assert.equal(f.host.speakPopSummary('Second report'), true);
+  const second = f.spoken[1];
+  assert.deepEqual(speaking, [false, true, false]);
+  second.onstart();
+  old.start(); old.end(); old.error();
+  assert.deepEqual(speaking, [false, true, false, true], 'Old events cannot stop or revive another report');
+  const late = { start: second.onstart, end: second.onend, error: second.onerror };
+  f.host.stopPopSummary();
+  late.start(); late.end(); late.error();
+  assert.deepEqual(speaking, [false, true, false, true, false]);
+  assert.equal(second.onstart, null);
+  f.host.stopPopSummary();
+  assert.equal(f.summaryCancels, 2, 'Each owned utterance is cancelled once');
+});
+
+test('summary completion, synthesis error and background all settle Pip without fabricating a restart', () => {
+  for (const exit of ['end', 'error', 'visibilitychange', 'pagehide']) {
+    const f = fixture({ synthesis: true });
+    const speaking = [];
+    f.host.observePopSummary(value => speaking.push(value));
+    f.host.speakPopSummary('Readable report');
+    const utterance = f.spoken[0], lateStart = utterance.onstart;
+    utterance.onstart();
+    if (exit === 'end') utterance.onend();
+    else if (exit === 'error') utterance.onerror();
+    else if (exit === 'visibilitychange') { f.document.hidden = true; f.document.dispatch(exit); }
+    else f.window.dispatch(exit);
+    lateStart();
+    assert.deepEqual(speaking, [false, true, false], exit);
+  }
+  const f = fixture({ synthesis: true });
+  const speaking = [];
+  f.host.observePopSummary(value => speaking.push(value));
+  f.window.speechSynthesis.speak = () => { throw new Error('Audio blocked'); };
+  assert.equal(f.host.speakPopSummary('Readable report'), false);
+  assert.deepEqual(speaking, [false]);
+});
+
 test('Pop status projects actual target and control geometry without introducing a game mutation API', () => {
   const f = fixture();
   let writes = 0;
@@ -855,10 +908,53 @@ test('Pop status projects actual target and control geometry without introducing
   assert.equal(f.starts, 0, 'Publishing the UI snapshot cannot start speech or mutate gameplay');
 });
 
+test('Pop snapshots expose full live speech and result state without repeating interim text in the live region', () => {
+  const f = fixture();
+  let writes = 0, readable = '';
+  Object.defineProperty(f.popStatus, 'textContent', {
+    get() { return readable; }, set(value) { readable = value; writes++; }
+  });
+  const state = { phase: 'running', remaining: 24, transcript: 'I see a ca', transcript_final: false,
+    report: 'You popped four words.', report_step: 2, results_scroll: 14.5, results_scroll_max: 96,
+    results_scrollbar_visible: false };
+  f.host.popStatus(JSON.stringify(state));
+  assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
+  assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
+  assert.equal(f.popStatus.attributes['data-report'], 'You popped four words.');
+  assert.equal(f.popStatus.attributes['data-report-step'], '2');
+  assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
+  assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
+  assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
+  f.host.popStatus(JSON.stringify({ ...state, transcript: 'I see a cat', transcript_final: true,
+    report_step: 3, results_scroll: 38, results_scrollbar_visible: true }));
+  assert.equal(f.popStatus.attributes['data-transcript'], 'I see a cat');
+  assert.equal(f.popStatus.attributes['data-transcript-final'], 'true');
+  assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'true');
+  assert.equal(writes, 1, 'Transcription revisions and scrolling cannot interrupt the game announcement');
+  assert.doesNotMatch(readable, /I see|four words/);
+  f.host.popStatus(JSON.stringify({ phase: 'idle' }));
+  assert.equal(f.popStatus.attributes['data-transcript'], '');
+  assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
+  assert.equal(f.popStatus.attributes['data-report'], '');
+  assert.equal(f.popStatus.attributes['data-report-step'], '0');
+  assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
+  assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
+});
+
 test('the Pop glow covers the viewport edges, ignores input and respects reduced motion', () => {
   assert.match(shell, /#pop-aura\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0;[^}]*pointer-events:\s*none;/);
-  assert.match(shell, /mask-composite:\s*exclude/);
-  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura::before, #pop-aura::after\s*\{\s*animation:\s*none;/);
+  const auraCSS = shell.slice(shell.indexOf('    #pop-aura {'), shell.indexOf('    @keyframes speech-wave'));
+  assert.doesNotMatch(auraCSS, /filter:|backdrop-filter:|rotate\(|mask-composite:/,
+    'Narrow edge strips need neither a full-screen blur nor a rotating masked rectangle');
+  assert.match(auraCSS, /-webkit-mask-image:\s*linear-gradient/);
+  assert.match(auraCSS, /\s+mask-image:\s*linear-gradient/);
+  assert.match(auraCSS, /opacity:\s*0;\s*visibility:\s*hidden/);
+  assert.match(auraCSS, /animation-play-state:\s*paused/);
+  assert.match(auraCSS, /#pop-aura\[data-listening="true"\] \.pop-aura-edge::before\s*\{\s*animation-play-state:\s*running/);
+  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura \.pop-aura-edge::before\s*\{\s*animation:\s*none;/);
+  for (const edge of ['top', 'right', 'bottom', 'left']) {
+    assert.match(shell, new RegExp('<span class="pop-aura-edge pop-aura-edge--' + edge + '"></span>'));
+  }
   assert.ok(shell.indexOf('<div id="pop-aura"') < shell.indexOf('function createSpeechHost()'), 'The aura exists before its host captures the element');
   assert.match(shell, /id="pop-aura"[^>]*aria-hidden="true"/);
   assert.match(shell, /id="pop-status"[^>]*role="status"/);

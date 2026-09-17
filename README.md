@@ -165,17 +165,24 @@ The tabs are ordered **Match**, **Learn**, **Memory**, **Voice Pop**; entry and 
 ### Voice Pop
 
 Choose Voice Pop to request speech permission. The 30-second clock starts only when
-the microphone is listening. A moving cyan, violet, and pink glow traces the screen
-edges, while illustrated word capsules fly up in gentle arcs. Say the English name
+the microphone is listening. Soft blue, violet, pink and warm light flows along the
+screen edges and fades inward, while illustrated word capsules fly up in gentle arcs. Say the English name
 of a visible object to pop it with a slash, shards, and a shockwave. Words always
 appear with their matching pictures and follow the age level chosen in More.
+The HUD shows recognized speech as it changes, including interim speech and words
+that do not score. Long sentences keep their newest two lines in view. Pausing,
+finishing or leaving clears that text.
 
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
 points). Dropped objects end the combo; there is no losing screen. Pip reports the
-actual hits, different words, score, and best combo after 30 seconds. Tap Pip for
-a high-five, review a word's recorded pronunciation, or play another round.
-The optional browser voice reads Pip's dynamic report; word pronunciation uses
-the existing recorded audio.
+actual results in a speech bubble after 30 seconds. His three report pages cover
+your round, the words and combos you achieved, and a specific word to practise.
+Choose My highlights / Coach me to continue, Hear Pip to replay his current
+report, or tap Pip for a high-five. His beak follows actual summary playback.
+Review any word's recorded pronunciation or play another round. The result view
+scrolls by touch, wheel and keyboard focus without showing a scrollbar.
+The optional browser voice reads the same text shown in Pip's speech bubble;
+word pronunciation uses the existing recorded audio.
 
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume
