@@ -24,7 +24,20 @@ gameplay, speech, asset or JavaScript changes are required.
   320x568 and 844x390 layouts, input, reduced motion and hiding on mode exit.
 - [x] Desktop exported screenshots confirm rounder corners, a wider glow and
   readable controls, cards and captions, including compact portrait/landscape.
-- [ ] Commit, main integration, deployment and production verification.
+- [x] Six exported iPhone/iPad screenshots reviewed individually. Pip and menu
+  remain legible at 320px and native iPad portrait; no hard seams or obscured
+  captions. The existing rectangular arena corners remain visible outside the
+  large bottom arcs; this does not obstruct content or input.
+- [x] Committed as `c38010d`, fast-forward merged into main and pushed.
+- [x] Promoted all 71 tested export files after SHA256 comparison, preserving
+  the previous local export for rollback.
+- [x] Deployed the exact tested output with `npm run deploy -- -SkipBuild`.
+  Fresh production HTML, PCK, engine JavaScript and WebAssembly SHA256 values
+  match the tested export, with correct MIME types and Brotli responses.
+- [x] All three focused production Chromium cases pass in 25.6 seconds,
+  covering live captions, compact portrait/landscape input, reduced motion and
+  hiding on exit. Production portrait and desktop screenshots visually match
+  the accepted local export.
 
 Evidence: ignored `build/voice-pop-qa/rounder-glow/` contains the probe, previous
 release comparison and new screenshots. `rounder-glow-host.log` contains host
@@ -46,3 +59,14 @@ the previous release. Only the HTML changes.
 | `game-9651e6515167d63f.pck` | `9651e6515167d63fce4ca9e7b5d85ec432c6ca08d1c54fa70e7ecb55d49a456d` |
 | `engine-c8ca3724771088b0.js` | `13ce7253b63b49b659e9eee7fbdcec1d9b4e3d5c8bd1b5460c4065bd0ea68b31` |
 | `engine-c8ca3724771088b0.wasm` | `35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277` |
+
+Production: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=c38010d
+
+Deployed on 2026-09-18 (Asia/Shanghai). Production byte verification at
+2026-09-17T16:57:39Z is recorded in
+`build/voice-pop-qa/rounder-glow-production-manifest.json` and
+`rounder-glow-production-hashes.log`. `rounder-glow-tested-manifest.json`
+records all 71 promoted files and the preserved previous export;
+`rounder-glow-deploy.log` records successful deployment. Production browser
+results and screenshots are in `rounder-glow-production.log`,
+`rounder-glow-production-tests.json` and `rounder-glow-production/`.
