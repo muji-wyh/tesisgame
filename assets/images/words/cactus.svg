@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cactus</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="35" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M49 87V64H36Q20 64 20 47V36Q20 29 28 29Q36 29 36 36V48H49V26Q49 15 60 15Q71 15 71 26V59H84V43Q84 36 92 36Q100 36 100 43V58Q100 75 83 75H71V87Z" fill="#91bd7e"/>
+    <path d="M60 26V84 M28 37V47Q28 56 40 56 M92 44V58Q92 67 80 67" stroke="#699a65" stroke-width="2.5"/>
+    <path d="M54 36 49 33 M67 48 72 45 M54 65 49 68 M36 50 40 46 M88 52 84 50" stroke="#765445" stroke-width="1.5"/>
+    <path d="M36 87H84L78 106H42Z" fill="#d99d69"/>
+    <rect x="33" y="83" width="54" height="9" rx="3" fill="#e7bb94" stroke-width="2.5"/>
+  </g>
+</svg>

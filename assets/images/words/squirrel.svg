@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">squirrel</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="39" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M65 92 Q97 99 102 71 Q114 39 94 22 Q78 8 67 21 Q54 39 76 48 Q91 51 86 66 Q83 76 70 71Z" fill="#c79371"/>
+    <path d="M82 29 Q100 36 97 58 Q96 78 82 84" stroke="#edcda3" stroke-width="5"/>
+    <path d="M39 58 Q32 80 40 96 L29 104 H67 Q81 99 76 87 L68 61Z" fill="#d8a67d"/>
+    <path d="M44 67 Q62 63 66 81 Q66 95 50 93Z" fill="#f3d4af" stroke="none"/>
+    <path d="M30 38 29 18 Q35 12 44 31 L57 21 Q66 15 65 38 Q77 54 63 62 Q44 72 29 59 L18 55 Q13 48 23 45Z" fill="#d8a67d"/>
+    <path d="M35 24 40 34 M60 27 57 38" stroke="#efbd9d" stroke-width="3"/>
+    <circle cx="39" cy="45" r="3" fill="#765445" stroke="none"/>
+    <circle cx="18" cy="49" r="3" fill="#765445" stroke="none"/>
+    <path d="M26 56 Q31 61 36 56 M45 72 34 80 M61 69 54 77" stroke-width="2.5"/>
+    <path d="M30 82 Q30 99 41 101 Q52 93 50 82Z" fill="#b58b69" stroke-width="2.5"/>
+    <path d="M27 82 Q28 70 40 71 Q53 71 53 82Z" fill="#93785d" stroke-width="2.5"/>
+    <path d="M40 72V67" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -51,6 +51,12 @@ func _run() -> void:
 				_test_invalid_records()
 				_test_native_failures()
 				_test_browser_storage()
+				var ages_ready: bool = _script.new().has_method("set_age_band")
+				check(ages_ready, "PlayroomState exposes a saved age preference")
+				if ages_ready:
+					_test_age_memory()
+					_test_invalid_age()
+					_test_age_failures()
 				var journey_ready: bool = _script.new().has_method("remember_visit") and _script.new().has_method("prefer_theme") and _script.new().has_method("suggested_adventure")
 				check(journey_ready, "PlayroomState exposes journey memory and suggestions")
 				if journey_ready:
@@ -484,19 +490,19 @@ func _test_sticker_memory() -> void:
 		for id in topic.words:
 			check(not ids.has(id), "Adventure vocabulary gives each sticker one canonical ID")
 			ids.append(id)
-	check(ids.size() == 140 and state.collect_words(ids), "All 140 vocabulary words can be collected")
+	check(ids.size() == 200 and state.collect_words(ids), "All 200 vocabulary words can be collected")
 	ids.clear()
-	check(state.collected_word_ids.size() == 140, "Collection storage does not retain the caller's mutable input array")
+	check(state.collected_word_ids.size() == 200, "Collection storage does not retain the caller's mutable input array")
 	reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids.size() == 140 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
+		check(reloaded.collected_word_ids.size() == 200 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
 	var persisted := ConfigFile.new()
 	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Sticker persistence retains playroom save version one")
 
 
 func _test_invalid_stickers() -> void:
 	var oversized: Array = []
-	oversized.resize(141)
+	oversized.resize(201)
 	oversized.fill("cat")
 	var invalid: Array[String] = []
 	for words in [null, false, "cat", {}, ["cat", "cat"], ["unknown"], ["Cat"], [1], ["cat", null], oversized]:
@@ -583,6 +589,136 @@ func _test_sticker_failures() -> void:
 	migration_storage.writable = true
 	if _load(migration.state):
 		check(migration.state.collected_word_ids == ["cat"] and migration.state.displayed_word_id == "cat" and FileAccess.get_file_as_string(migration.path) == original, "Browser migration preserves the native sticker section and original file")
+
+
+func _age_text(id: Variant) -> String:
+	var config := ConfigFile.new()
+	config.parse(_text())
+	config.set_value("learning", "age_band", id)
+	return config.encode_to_text()
+
+
+func _test_age_memory() -> void:
+	var fixture := _fixture("age_memory")
+	var state = fixture.state
+	check(not state.set_age_band("4-6"), "Age selection requires a successful load")
+	var original := _text()
+	_write(fixture.path, original)
+	if not _load(state):
+		return
+	check(state.age_band_id == "all" and FileAccess.get_file_as_string(fixture.path) == original,
+		"An older save defaults to all words without rewriting the record")
+	for id in ["", "unknown", "7-10"]:
+		check(not state.set_age_band(id) and not state.error.is_empty() and state.age_band_id == "all",
+			"Unknown age choices fail explicitly without changing the preference")
+	for id in ["4-6", "7-9", "10-plus", "all"]:
+		check(state.set_age_band(id), "Every offered age level can be saved")
+		var reloaded = _script.new(fixture.path)
+		check(_load(reloaded) and reloaded.age_band_id == id, "The chosen age survives immediate native reload")
+	check(state.set_age_band("7-9"), "Set the age before interleaved preference writes")
+	var counts := {"winter-1": 3, "winter-3": 3}
+	var before := counts.duplicate(true)
+	check(state.select_item("toy-winter", counts) and state.select_item("backdrop-winter", counts)
+		and state.set_favorite("winter-10") and state.remember_visit("music-makers")
+		and state.prefer_theme("space") and _collect(state, ["sunflower"])
+		and state.display_word("sunflower") and state.set_goal("toy-ocean", counts),
+		"All existing preference setters remain available with an age level")
+	var reloaded = _script.new(fixture.path)
+	if _load(reloaded):
+		check(reloaded.age_band_id == "7-9" and reloaded.toy_id == "toy-winter"
+			and reloaded.favorite_id == "winter-10" and reloaded.displayed_word_id == "sunflower"
+			and reloaded.goal_item_id == "toy-ocean" and counts == before,
+			"Interleaved saves preserve age, earned items, stickers and medal counts")
+	_directory(fixture.path + ".pending")
+	check(state.set_age_band("7-9"), "Repeating a confirmed age needs no write")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the age idempotency blocker")
+	var fresh := _fixture("age_fresh")
+	check(_load(fresh.state) and fresh.state.age_band_id == "all", "New players retain the all-words default")
+	var config := ConfigFile.new()
+	config.parse(_text())
+	config.set_value("learning", "future_option", true)
+	var missing := _fixture("age_missing_key")
+	_write(missing.path, config.encode_to_text())
+	check(_load(missing.state) and missing.state.age_band_id == "all", "A missing optional age key defaults to all words")
+	_write(missing.path, _age_text(null))
+	check(_load(missing.state) and missing.state.age_band_id == "all", "ConfigFile's null-key deletion retains the missing-age default")
+
+
+func _test_invalid_age() -> void:
+	var invalid: Array = [false, 7, 7.0, [], {}, "", "unknown", "4"]
+	for index in range(invalid.size()):
+		var fixture := _fixture("age_invalid_%d" % index)
+		var state = fixture.state
+		_write(fixture.path, _age_text("7-9"))
+		if not _load(state):
+			continue
+		var original := _age_text(invalid[index])
+		_write(fixture.path, original)
+		check(not _corrupt_load(state) and not state.error.is_empty() and state.age_band_id == "7-9",
+			"Malformed supplied age values fail while preserving the confirmed preference")
+		check(not state.set_age_band("all") and not state.select_item("toy-ball", {})
+			and FileAccess.get_file_as_string(fixture.path) == original,
+			"An invalid age record cannot be overwritten through later setters")
+	var storage := BrowserStorage.new()
+	storage.text = _age_text("10-plus")
+	var browser := _fixture("age_invalid_browser", storage)
+	if not _load(browser.state):
+		return
+	storage.text = _age_text("unknown")
+	var writes := storage.writes
+	check(not browser.state.load_state() and not browser.state.set_age_band("all")
+		and storage.writes == writes and browser.state.age_band_id == "10-plus",
+		"Malformed browser age data fails closed without overwriting saved choices")
+
+
+func _test_age_failures() -> void:
+	var fixture := _fixture("age_native_failure")
+	var state = fixture.state
+	if not _load(state):
+		return
+	var original := FileAccess.get_file_as_string(fixture.path)
+	_directory(fixture.path + ".pending")
+	check(not state.set_age_band("4-6") and not state.error.is_empty() and state.age_band_id == "all"
+		and FileAccess.get_file_as_string(fixture.path) == original,
+		"A failed native age write preserves the visible choice and original bytes")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the native age write blocker")
+	check(state.set_age_band("4-6") and state.age_band_id == "4-6", "Age selection retries after native storage recovers")
+	var storage := BrowserStorage.new()
+	storage.text = _text()
+	var browser := _fixture("age_browser_failure", storage)
+	state = browser.state
+	if not _load(state):
+		return
+	check(state.age_band_id == "all" and storage.writes == 0, "Legacy browser age defaults require no write")
+	check(state.set_age_band("7-9"), "An age selection saves synchronously to browser storage")
+	var writes := storage.writes
+	check(state.set_age_band("7-9") and storage.writes == writes, "Repeated browser age choices are idempotent")
+	original = storage.text
+	storage.writable = false
+	check(not state.set_age_band("10-plus") and not state.error.is_empty() and state.age_band_id == "7-9"
+		and storage.text == original, "A failed browser write never exposes an unsaved age")
+	storage.writable = true
+	check(state.set_age_band("10-plus"), "The same browser age selection can retry")
+	var reloaded = _script.new(browser.path, storage)
+	check(_load(reloaded) and reloaded.age_band_id == "10-plus", "Browser reload retains the retried age")
+	storage.readable = false
+	check(not reloaded.load_state() and not reloaded.set_age_band("all") and reloaded.age_band_id == "10-plus",
+		"A failed read preserves age but blocks writes until a successful reload")
+	storage.readable = true
+	check(_load(reloaded) and reloaded.set_age_band("all"), "Age choices recover after storage can be read again")
+	var migration_storage := BrowserStorage.new()
+	var migration := _fixture("age_browser_migration", migration_storage)
+	original = _age_text("10-plus")
+	_write(migration.path, original)
+	migration_storage.writable = false
+	check(not migration.state.load_state() and migration.state.age_band_id == "all"
+		and migration_storage.text == null, "Failed migration cannot expose an unpersisted age")
+	migration_storage.writable = true
+	check(_load(migration.state) and migration.state.age_band_id == "10-plus"
+		and FileAccess.get_file_as_string(migration.path) == original,
+		"Migration preserves the parsed native age and original native bytes")
+	var migrated = _script.new(migration.path, migration_storage)
+	check(_load(migrated) and migrated.age_band_id == "10-plus", "The migrated browser record contains the parsed age, not the default")
 
 
 func _goal_text(id: Variant) -> String:

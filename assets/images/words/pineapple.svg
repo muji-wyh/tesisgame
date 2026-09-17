@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pineapple</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M47 44 28 25 Q45 24 53 36 L44 10 Q58 18 61 33 L69 9 Q77 22 69 36 L90 21 Q89 37 74 47Z" fill="#91bd7e"/>
+    <path d="M51 40 41 30 M60 40 58 25 M68 41 78 30" stroke="#699a65" stroke-width="2.5"/>
+    <path d="M60 40 Q84 37 89 61 L87 84 Q84 105 60 106 Q36 105 33 84 L31 61 Q36 37 60 40Z" fill="#f4d36a"/>
+    <path d="M34 54 80 99 M44 44 87 85 M62 41 89 67 M32 72 65 105 M40 95 82 50 M32 80 68 42 M34 59 46 44 M55 105 87 74" stroke="#d5a94d" stroke-width="2"/>
+    <path d="M44 62 47 66 50 62 M57 76 60 80 63 76 M70 62 73 66 76 62 M44 88 47 92 50 88 M70 88 73 92 76 88" stroke="#b78e5b" stroke-width="1.8"/>
+    <path d="M39 54 Q43 46 51 45" stroke="#fff0a2" stroke-width="4"/>
+  </g>
+</svg>

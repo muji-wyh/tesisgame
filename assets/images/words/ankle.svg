@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ankle</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 13H73L68 35H38Z" fill="#9ec9e0"/>
+    <path d="M40 34H67L62 75Q61 83 70 88L94 97Q101 101 96 107H58Q39 106 41 92L44 73Z" fill="#efbd9d"/>
+    <path d="M49 43 51 65 M51 84Q58 79 61 86 M59 94Q57 101 64 101 M87 99V105 M92 100V106" stroke="#c98d78" stroke-width="2.5"/>
+    <circle cx="56" cy="84" r="13" fill="none" stroke="#e9ad45" stroke-width="3"/>
+    <path d="M91 84H75 m6 -6 -6 6 6 6" fill="none" stroke="#dca83d" stroke-width="3"/>
+  </g>
+</svg>

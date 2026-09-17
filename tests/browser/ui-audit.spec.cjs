@@ -216,7 +216,7 @@ test('More has Pip and Medals with direct world choices and preserved game state
   await rewards(page);
   const world = worldIconRect(await metrics(page), 5);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#eeeafa');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f1edfb');
   await expect(page.locator('#game-status')).toContainText('Medals.');
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   expect(errors).toEqual([]);

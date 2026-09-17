@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">marble</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="51" cy="102" rx="36" ry="5" fill="#eadbc5" stroke="none"/>
+    <circle cx="51" cy="60" r="35" fill="#d3edf0"/>
+    <path d="M29 38 Q73 29 61 60 Q48 79 73 87 Q49 94 37 80 Q27 68 44 55 Q54 45 29 38Z" fill="#85bfda" stroke="none"/>
+    <path d="M29 38 Q64 44 48 59 Q35 75 51 89 Q29 79 34 65 Q43 52 29 38Z" fill="#91bd7e" stroke="none"/>
+    <path d="M46 40 Q65 44 57 57 Q44 70 57 82" stroke="#ef9a84" stroke-width="5"/>
+    <path d="M25 49 Q29 37 40 33" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="27" cy="60" r="3" fill="#ffffff" stroke="none"/>
+    <circle cx="93" cy="93" r="14" fill="#d3edf0" stroke-width="2.5"/>
+    <path d="M87 82 Q102 91 88 102" stroke="#b999bd" stroke-width="5"/>
+    <circle cx="88" cy="87" r="3" fill="#ffffff" stroke="none"/>
+  </g>
+</svg>

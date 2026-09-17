@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mirror</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 80V100 M42 103Q60 96 78 103V107H42Z" fill="#d5a862" stroke-width="4"/>
+    <ellipse cx="60" cy="48" rx="32" ry="38" fill="#edc779"/>
+    <ellipse cx="60" cy="48" rx="25" ry="31" fill="#c5d6db" stroke="#a77c59" stroke-width="2.5"/>
+    <path d="M45 42 60 27 M43 60 70 33 M59 69 75 53" stroke="#eef9fb" stroke-width="5"/>
+    <path d="M35 40Q36 23 48 17" stroke="#fff0b3" stroke-width="3"/>
+  </g>
+</svg>

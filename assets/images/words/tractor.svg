@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tractor</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="46" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M30 34H62V71H28Z" fill="#91bd7e"/>
+    <path d="M35 39H55V64H35Z" fill="#d3edf0" stroke-width="2.5"/>
+    <path d="M27 31H65" stroke="#699a65" stroke-width="6"/>
+    <path d="M61 57H93Q100 57 101 67V86H51V71Z" fill="#91bd7e"/>
+    <path d="M81 57V37H89" stroke="#6d6866" stroke-width="6"/>
+    <path d="M14 76 Q33 51 53 76" fill="#acd18e" stroke-width="3"/>
+    <path d="M76 65V76 M83 65V76 M90 65V76" stroke="#699a65" stroke-width="2.5"/>
+    <circle cx="34" cy="86" r="22" fill="#6d6866"/><circle cx="92" cy="94" r="13" fill="#6d6866"/>
+    <circle cx="34" cy="86" r="12" fill="#edc779"/><circle cx="92" cy="94" r="6" fill="#edc779"/>
+    <path d="M34 67V72 M15 86H20 M34 100V105 M48 86H53 M21 73 25 77 M44 96 48 100 M21 100 25 96 M44 77 48 73" stroke="#a29c91" stroke-width="2.5"/>
+  </g>
+</svg>

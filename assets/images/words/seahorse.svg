@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">seahorse</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 53 31 50 36 64 31 75 50 70Z" fill="#efb660" stroke-width="2.5"/>
+    <path d="M52 43 45 31 53 20 51 12 62 17Q76 14 82 29L100 34 97 44 78 41Q62 45 68 58Q85 77 68 89Q56 95 57 102Q62 111 71 103Q76 96 68 96Q62 98 66 101Q59 98 63 91Q76 86 82 98Q85 113 66 115Q42 114 43 99Q43 91 52 86Q61 81 50 72Q39 60 52 43Z" fill="#efc979"/>
+    <path d="M60 51 66 52 M57 60H70 M57 70H74 M60 80H70 M36 56 47 62 M37 69 47 66" stroke="#d5a862" stroke-width="2.5"/>
+    <circle cx="70" cy="29" r="3" fill="#765445" stroke="none"/>
+    <path d="M96 37 97 38" stroke-width="2"/>
+  </g>
+</svg>

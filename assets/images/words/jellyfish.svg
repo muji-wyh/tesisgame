@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">jellyfish</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M35 61Q28 77 39 88Q48 98 34 109 M49 62Q40 83 52 104 M60 62Q69 80 60 94Q56 102 62 110 M72 62Q83 82 71 104 M85 61Q93 78 81 88Q73 99 88 108" stroke="#b78dbd" stroke-width="4"/>
+    <path d="M22 57Q22 17 60 16Q98 17 98 57Q92 67 84 59Q76 70 68 61Q60 72 52 61Q44 70 36 59Q28 67 22 57Z" fill="#d8b9dc"/>
+    <path d="M33 40Q39 26 52 25" stroke="#f1d9ed" stroke-width="5"/>
+    <path d="M42 55Q44 32 59 21 M78 55Q76 32 61 21" stroke="#b78dbd" stroke-width="2"/>
+    <circle cx="48" cy="47" r="2.5" fill="#765445" stroke="none"/><circle cx="72" cy="47" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M56 54Q60 58 64 54" stroke-width="2"/>
+  </g>
+</svg>

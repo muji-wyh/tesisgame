@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">submarine</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M61 45V28Q61 21 68 21H79V30H70V45Z" fill="#efc979"/>
+    <rect x="76" y="18" width="8" height="15" rx="3" fill="#b3c5cc" stroke-width="2.5"/>
+    <path d="M18 66H9 M10 53V80" stroke="#a77c59" stroke-width="5"/>
+    <path d="M14 49 35 57V77L14 84Z" fill="#efb660"/>
+    <rect x="22" y="42" width="85" height="49" rx="24" fill="#efc979"/>
+    <path d="M42 82H87" stroke="#d5a862" stroke-width="3"/>
+    <circle cx="43" cy="65" r="10" fill="#9ec9e0"/><circle cx="68" cy="65" r="10" fill="#9ec9e0"/><circle cx="92" cy="65" r="8" fill="#9ec9e0"/>
+    <path d="M39 62 43 58 M64 62 68 58 M89 62 92 60" stroke="#e8f4ef" stroke-width="3"/>
+    <circle cx="99" cy="27" r="5" stroke="#9bc9d5" stroke-width="2.5"/>
+    <circle cx="109" cy="15" r="3" fill="#c7e6e6" stroke="none"/>
+    <path d="M27 103H49 M79 103H100" stroke="#a5d8df" stroke-width="2.5"/>
+  </g>
+</svg>

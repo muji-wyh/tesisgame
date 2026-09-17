@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">scooter</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="62" cy="108" rx="43" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M34 89H72L88 72 87 27" stroke="#6c9ab7" stroke-width="7"/>
+    <path d="M74 26H100" stroke-width="6"/>
+    <path d="M77 26H84 M94 26H101" stroke="#ef9a84" stroke-width="7"/>
+    <path d="M89 60 97 94" stroke="#9ec9e0" stroke-width="6"/>
+    <path d="M22 87H64L70 94H22Z" fill="#ef9a84" stroke-width="2.5"/>
+    <circle cx="27" cy="98" r="10" fill="#6d6866"/><circle cx="97" cy="98" r="10" fill="#6d6866"/>
+    <circle cx="27" cy="98" r="4" fill="#f8ead3" stroke="none"/><circle cx="97" cy="98" r="4" fill="#f8ead3" stroke="none"/>
+    <path d="M81 37H89" stroke="#d3edf0" stroke-width="3"/>
+  </g>
+</svg>

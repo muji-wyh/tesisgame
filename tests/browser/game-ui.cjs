@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test');
-const THEME_COLORS = ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff', '#e4f6fb', '#eeeafa'];
+const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb'];
 const MODES = ['match', 'learn', 'memory'];
 
 async function metrics(page) {
@@ -140,8 +140,21 @@ function collectionBounds(bounds) {
   const worldRowGap = Math.round(4 / scale);
   const rows = 6 / worldColumns, worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
   const headerHeight = Math.ceil((inlineWorlds ? 52 : 44) / scale);
-  const top = padding + headerHeight + gap + (inlineWorlds ? 0 : worldHeight + gap);
-  return { x, width, top, padding, gap, inlineWorlds, headerHeight, worldSide, worldGap, worldRowGap, worldColumns, worldHeight };
+  const ageTop = padding + headerHeight + gap + (inlineWorlds ? 0 : worldHeight + gap);
+  const ageHeight = Math.ceil(48 / scale) + Math.round(4 / scale) + Math.ceil(20 / scale);
+  const pinAge = bounds.height - padding - ageTop - ageHeight - gap >= Math.ceil(128 / scale);
+  const top = ageTop + ageHeight + (pinAge ? gap : Math.ceil(20 / scale));
+  return { x, width, top, padding, gap, inlineWorlds, headerHeight, worldSide, worldGap, worldRowGap, worldColumns, worldHeight, ageTop, ageHeight, pinAge };
+}
+
+function ageButtonRect(bounds, id) {
+  const index = ['all', '4-6', '7-9', '10-plus'].indexOf(id);
+  if (index < 0) throw new Error(`Unknown age level: ${id}`);
+  const { x, width, ageTop } = collectionBounds(bounds), scale = uiScale(bounds);
+  const labelWidth = Math.ceil(30 / scale), buttonWidth = Math.ceil(52 / scale), gap = Math.round(6 / scale);
+  const rowWidth = labelWidth + 4 * (buttonWidth + gap);
+  return { x: x + (width - rowWidth) / 2 + labelWidth + gap + index * (buttonWidth + gap),
+    y: ageTop, width: buttonWidth, height: Math.ceil(48 / scale) };
 }
 
 function collectionHeaderRect(bounds, section) {
@@ -261,8 +274,8 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
     if (toy === active) controls.push('goal');
   }
   if (!controls.includes(name)) throw new Error(`Unavailable room control: ${name}`);
-  // Two tabs lead to Back, six direct world icons, then the room controls.
-  for (let index = 0; index < 9 + controls.indexOf(name); index++) {
+  // Two tabs lead to Back, six world icons, four age choices, then the room controls.
+  for (let index = 0; index < 13 + controls.indexOf(name); index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
@@ -420,6 +433,6 @@ function resultPoint(bounds, key, { gift = false } = {}) {
     y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, openGame, boardPoint, lessonPoint,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

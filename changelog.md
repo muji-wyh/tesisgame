@@ -1,6 +1,22 @@
 # Changelog
 
-Notable changes to Word Buddies, grouped by date with the newest changes first.
+Notable changes to Pip and Words (formerly Word Buddies), grouped by date with the newest changes first.
+
+## Unreleased
+
+- Redesigned Memory backs with themed picture/letter graphics and compact
+  position labels; added playful tap sparkles and a prominent voice button.
+- Added Pip high-five, peekaboo and flutter interactions, plus gated visual
+  invitations after inactivity that never start speech or change progress.
+- Separated Match into a picture column on the left and word column on the right,
+  or a picture row above a word row, retaining shuffled order and round progress.
+- Expanded to 200 illustrated, prerecorded words with saved age-guided
+  vocabulary choices for ages 4-6, 7-9, 10+, or all words.
+- Refreshed all six UI palettes and Pip's toy cards; Using, Preview, and Goal
+  now have distinct presentation without changing ownership or progress.
+- Added bounded card-content press reactions while preserving input targets,
+  Memory flips, noun-specific play, and reduced-motion behavior.
+- Renamed visible branding to Pip and Words while retaining save identifiers.
 
 ## 2026-09-15
 

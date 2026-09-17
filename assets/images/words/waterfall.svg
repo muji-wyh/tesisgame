@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">waterfall</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 33 40 20H80L101 36 99 91H20Z" fill="#a29c91"/>
+    <path d="M19 32 28 23 42 23 47 18 80 20 94 28 102 39 79 38 40 38Z" fill="#91bd7e" stroke-width="2.5"/>
+    <path d="M21 49 36 45 31 63 21 65 M81 49 97 56 M86 59 79 72 98 77 M24 77 37 72" stroke="#c8b7a0" stroke-width="3"/>
+    <ellipse cx="60" cy="96" rx="46" ry="13" fill="#9fdbe5" stroke="#83adbe" stroke-width="2.5"/>
+    <path d="M43 31 Q60 27 77 31 L79 72 Q78 84 90 94 Q62 109 31 95 Q44 83 41 70Z" fill="#9fdbe5" stroke="#83adbe" stroke-width="2.5"/>
+    <path d="M49 38V72 Q49 87 42 93 M60 35V84 M70 41V71 Q69 85 76 91" stroke="#e8f4ef" stroke-width="4"/>
+    <path d="M29 96 Q34 87 43 94 Q49 84 57 95 Q66 86 72 95 Q80 89 87 98 M24 102H41 M80 104H96" stroke="#eef9fb" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">elbow</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 27 35 20 50 51 38 61Z" fill="#9ec9e0"/>
+    <path d="M39 52 48 47 60 72 76 52 81 37Q81 31 86 33L88 43 92 29Q95 25 99 29L96 46 103 41Q109 41 105 48L92 62 70 90Q58 103 49 89Z" fill="#efbd9d"/>
+    <path d="M52 80Q57 87 63 81 M74 64 68 73 M88 49 94 51" stroke="#c98d78" stroke-width="2.5"/>
+    <circle cx="58" cy="83" r="15" fill="none" stroke="#e9ad45" stroke-width="3"/>
+    <path d="M95 83H79 m6 -6 -6 6 6 6" fill="none" stroke="#dca83d" stroke-width="3"/>
+  </g>
+</svg>

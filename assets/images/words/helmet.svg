@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">helmet</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="32" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M30 64 49 94 Q57 104 67 96 L87 66 M49 64 52 94 M74 62 65 96" stroke="#8b8e9d" stroke-width="5"/>
+    <rect x="52" y="93" width="13" height="9" rx="3" fill="#d4dce1" stroke-width="2"/>
+    <path d="M19 64 Q16 25 55 21 Q92 14 103 52 L106 65 94 71 20 71Z" fill="#85bfda"/>
+    <path d="M20 64 Q55 72 98 56 L106 65 94 73 23 75Z" fill="#6c9ab7" stroke-width="2.5"/>
+    <path d="M36 33 Q44 28 49 30 L44 46 34 47Z M60 27 69 28 70 43 59 45Z M80 32 88 38 92 49 82 49Z" fill="#6d7988" stroke-width="2"/>
+    <path d="M27 49 26 55" stroke="#d3edf0" stroke-width="4"/>
+  </g>
+</svg>

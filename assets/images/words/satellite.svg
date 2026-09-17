@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">satellite</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 64H90" stroke="#a2b9c3" stroke-width="6"/>
+    <path d="M10 46 37 40 41 79 14 85Z M79 40 106 46 110 85 83 79Z" fill="#85bfda"/>
+    <path d="M18 44 22 83 M27 42 31 81 M12 59 38 53 M13 72 40 66 M88 42 92 81 M97 44 101 83 M80 53 108 59 M82 66 109 72" stroke="#d3edf0" stroke-width="2"/>
+    <path d="M47 44 60 38 73 44 73 82 60 89 47 82Z" fill="#edc779"/>
+    <path d="M47 44 60 50 73 44 M60 50V89" stroke="#a77c59" stroke-width="2"/>
+    <path d="M60 39V27" stroke="#8b8e9d" stroke-width="3"/>
+    <path d="M43 15Q60 42 79 19Z" fill="#d3edf0" stroke-width="2.5"/>
+    <path d="M60 26 62 11" stroke-width="2.5"/>
+    <circle cx="62" cy="10" r="3" fill="#ef9a84" stroke="none"/>
+    <path d="M29 99V107 M25 103H33 M92 20V28 M88 24H96" stroke="#d5b873" stroke-width="2.5"/>
+  </g>
+</svg>

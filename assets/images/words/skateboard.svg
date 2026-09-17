@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">skateboard</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="59" cy="104" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M35 76 31 92 M86 62 83 80" stroke="#8b8e9d" stroke-width="5"/>
+    <circle cx="30" cy="94" r="9" fill="#efc979"/><circle cx="82" cy="82" r="9" fill="#efc979"/>
+    <circle cx="42" cy="92" r="7" fill="#d5a862"/><circle cx="94" cy="79" r="7" fill="#d5a862"/>
+    <path d="M13 72Q13 62 24 59L88 42Q102 37 108 45Q113 54 99 59L35 80Q18 85 13 72Z" fill="#b999bd"/>
+    <path d="M13 72Q19 79 33 74L100 53Q108 50 108 45V53Q106 58 98 62L35 83Q18 88 13 77Z" fill="#927d99" stroke-width="2.5"/>
+    <path d="M37 58 46 70 M75 48 84 59" stroke="#dfc6df" stroke-width="7"/>
+    <circle cx="27" cy="66" r="1.8" fill="#765445" stroke="none"/><circle cx="31" cy="72" r="1.8" fill="#765445" stroke="none"/>
+    <circle cx="93" cy="48" r="1.8" fill="#765445" stroke="none"/><circle cx="96" cy="54" r="1.8" fill="#765445" stroke="none"/>
+  </g>
+</svg>

@@ -397,8 +397,9 @@ test('Memory flips face content while its card hitboxes stay fixed', async ({ pa
   const rect = memoryCardRect(bounds, index);
   const clip = { x: Math.round(bounds.x + (rect.x + 8) * bounds.scale), y: Math.round(bounds.y + (rect.y + 8) * bounds.scale),
     width: Math.round((rect.width - 16) * bounds.scale), height: Math.round((rect.height - 16) * bounds.scale) };
-  const edge = { x: bounds.x + (rect.x + 1) * bounds.scale, y: bounds.y + (rect.y + rect.height / 2 - 12) * bounds.scale,
-    width: 2 * bounds.scale, height: 24 * bounds.scale };
+  // The colored back starts 2 CSS pixels inside the button; sample only its fixed outer border.
+  const edge = { x: Math.floor(bounds.x + rect.x * bounds.scale), y: bounds.y + (rect.y + rect.height / 2 - 12) * bounds.scale,
+    width: 1, height: 24 * bounds.scale };
   await page.mouse.move(0, 0);
   await rendered(page);
   const fixedEdge = await page.screenshot({ clip: edge, scale: 'css' });
@@ -445,7 +446,9 @@ test('Memory flips face content while its card hitboxes stay fixed', async ({ pa
     await testInfo.attach('visible-flip-widths', { body: JSON.stringify({ before, widths }), contentType: 'application/json' });
     expect(widths.length).toBeGreaterThan(3);
     expect(new Set(widths).size, 'A flip has intermediate content widths, not an instantaneous face swap.').toBeGreaterThan(2);
-    expect(Math.min(...widths), 'Face content visibly compresses before the new side expands.').toBeLessThan(Math.min(before, widths.at(-1)) * 0.8);
+    const narrowest = Math.min(...widths);
+    expect(narrowest, 'The colored back visibly compresses before changing faces.').toBeLessThan(before * 0.8);
+    expect(widths.at(-1), 'The revealed artwork expands again after the narrowest frame.').toBeGreaterThan(narrowest);
     expect((await page.screenshot({ clip: edge, scale: 'css' })).equals(fixedEdge), 'Only CardFace transforms; the button edge does not move.').toBe(true);
     await screenshot(page, testInfo, 'memory-flipped-faces-held', { held: true, verifyRendering: true });
   });

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">blanket</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 32H95L103 92Q65 103 19 92L25 43Z" fill="#db9dac"/>
+    <path d="M23 32Q26 24 35 24H90Q99 26 95 37L94 45H31Q20 43 23 32Z" fill="#f0d4d9"/>
+    <path d="M33 31H90" stroke="#db9dac" stroke-width="3"/>
+    <path d="M38 45 35 94 M59 45V97 M80 45 85 95 M24 60H98 M22 80H101" stroke="#f3d4af" stroke-width="6"/>
+    <path d="M44 45 42 94 M65 45 66 97 M86 45 91 94 M24 66H99 M21 86H102" stroke="#b0788f" stroke-width="2"/>
+    <path d="M22 96 21 103 M32 98 31 106 M43 99 43 107 M54 100V108 M65 100V108 M76 99 77 107 M87 98 89 105 M98 96 100 103" stroke="#db9dac" stroke-width="3"/>
+  </g>
+</svg>

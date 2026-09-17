@@ -1,7 +1,9 @@
 .idea/
 node_modules
 playwright-report
+.playwright-mcp/
 test-results
+/%ALLUSERSPROFILE%/
 *.tmp.wav
 *.generating.wav
 .godot/

@@ -827,7 +827,7 @@ test(`Learn has three centered modes, a square More icon and no topic or footer 
   await rendered(page);
   const png = await page.screenshot({ path: testInfo.outputPath('learn-full-card.png'), scale: 'css' });
   expect(await visibleColorCount(page, png)).toBeGreaterThan(20);
-  await expect(page).toHaveTitle(/Word Buddies/);
+  await expect(page).toHaveTitle(/Pip and Words/);
   const content = contentBounds(bounds), mode = modeRect(bounds, 'learn');
   const more = headerIconRect(bounds);
   const scale = uiScale(bounds), picture = artRect(bounds);

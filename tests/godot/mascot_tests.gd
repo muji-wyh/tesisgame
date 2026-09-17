@@ -68,6 +68,7 @@ func _run() -> void:
 		app.audio.halt()
 		app._update_duck()
 		check(app.duck.visible and not app.duck.speaking, "The board duck is idle without spoken audio")
+		_check_quiet_side_effects(app, directory)
 		var cards: Array = app.model.cards.duplicate(true)
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
@@ -158,18 +159,20 @@ func _run() -> void:
 
 
 func _check_idle_actions(duck: Button) -> void:
-	check(duck.has_method("set_idle_paused"), "Pip supports autonomous gestures and explicit page suspension")
-	if not duck.has_method("set_idle_paused"):
+	check(duck.has_method("set_idle_paused") and duck.has_method("set_proactive_allowed"),
+		"Pip supports separately allowed autonomous gestures and page suspension")
+	if not duck.has_method("set_idle_paused") or not duck.has_method("set_proactive_allowed"):
 		return
+	duck.set_proactive_allowed(true)
 	var original_rect: Rect2 = duck.get_rect()
 	var gestures: Array[String] = []
-	for step in range(750):
+	for step in range(1500):
 		duck._process(0.1)
 		var action: String = duck._idle_action
 		if not action.is_empty() and (gestures.is_empty() or gestures.back() != action):
 			gestures.append(action)
-	check(gestures.size() >= 5 and ["look", "stretch", "wave", "preen", "hop"].all(
-		func(action: String) -> bool: return gestures.has(action)), "Quiet play gets five distinct, occasional gestures without clicks")
+	check(gestures.size() >= 7 and ["look", "stretch", "wave", "preen", "hop", "high-five", "peekaboo"].all(
+		func(action: String) -> bool: return gestures.has(action)), "Allowed quiet play keeps the old gestures and adds well-spaced invitations")
 	check(duck.get_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
 		"Autonomous motion never moves or scales the button hit target")
 	duck.set_speaking(true)
@@ -279,3 +282,66 @@ func _check_room_actions(duck: Button) -> void:
 	duck.react("happy")
 	check(duck.pose == 3 and duck.reaction_left > 0.0, "The ordinary game greeting still works after all room interactions")
 	duck.settle()
+
+
+func _check_quiet_side_effects(app, directory: String) -> void:
+	if not app.duck.has_method("set_proactive_allowed") or not app.duck.has_method("note_activity"):
+		return
+	var allowed_before: bool = app.duck._proactive_allowed
+	var state_before: Array = _quiet_state(app)
+	var labels: Array = app.find_children("*", "Label", true, false)
+	var text_before: Array = labels.map(func(label: Label) -> String: return label.text)
+	var players: Array = app.find_children("*", "AudioStreamPlayer", true, false)
+	var audio_before: Array = players.map(func(player: AudioStreamPlayer) -> Array: return [player.playing, player.stream])
+	var files_before := _saved_files(directory)
+	var events: Array[String] = []
+	var record_press := func() -> void: events.append("pressed")
+	var record_room := func(_kind: String, _message: String) -> void: events.append("interaction")
+	var record_start := func() -> void: events.append("interaction_started")
+	var record_toy := func() -> void: events.append("toy_tapped")
+	app.duck.pressed.connect(record_press)
+	var playground = app._room.playground
+	playground.interaction.connect(record_room)
+	playground.interaction_started.connect(record_start)
+	playground.toy_tapped.connect(record_toy)
+	app.duck.settle()
+	app.duck.set_proactive_allowed(true)
+	app.duck.note_activity()
+	var invitations := 0
+	var previous := ""
+	for step in range(1000):
+		app.duck._process(0.1)
+		if not app.duck._idle_action.is_empty() and previous.is_empty():
+			invitations += 1
+		previous = app.duck._idle_action
+	check(invitations >= 5, "The integrated mascot actually performs repeated quiet invitations")
+	check(_quiet_state(app) == state_before and _saved_files(directory) == files_before,
+		"Quiet invitations never alter progress, hints, toy stages, user choices or saved files")
+	check(events.is_empty() and labels.map(func(label: Label) -> String: return label.text) == text_before,
+		"Quiet invitations emit no action, room message, status caption or toy activation")
+	check(not app.audio.active and not app.duck.speaking
+		and players.map(func(player: AudioStreamPlayer) -> Array: return [player.playing, player.stream]) == audio_before,
+		"Quiet invitations never start audio, speech or a pronunciation")
+	app.duck.pressed.disconnect(record_press)
+	playground.interaction.disconnect(record_room)
+	playground.interaction_started.disconnect(record_start)
+	playground.toy_tapped.disconnect(record_toy)
+	app.duck.note_activity()
+	app.duck.set_proactive_allowed(allowed_before)
+
+
+func _quiet_state(app) -> Array:
+	var room = app._room
+	var state = app.playroom_state
+	return [app.model.cards.duplicate(true), app.model.phase, app.model.successes, app.model.mistakes,
+		app.model.hints_remaining, app.medal_progress.counts.duplicate(true),
+		state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id,
+		state.collected_word_ids.duplicate(), state.displayed_word_id, state.recent_topic_ids.duplicate(),
+		room._stage, room.playground.duck_position, room.playground.toy_phase]
+
+
+func _saved_files(directory: String) -> Dictionary:
+	var files: Dictionary = {}
+	for filename in DirAccess.get_files_at(directory):
+		files[filename] = FileAccess.get_file_as_bytes(directory + "/" + filename)
+	return files

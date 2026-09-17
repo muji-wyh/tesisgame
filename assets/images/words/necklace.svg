@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">necklace</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 18 Q31 12 26 43 Q25 74 54 88 M60 18 Q89 12 94 43 Q95 74 66 88" stroke="#d5a862" stroke-width="5"/>
+    <path d="M60 18 Q31 12 26 43 Q25 74 54 88 M60 18 Q89 12 94 43 Q95 74 66 88" stroke="#fff0b3" stroke-width="2" stroke-dasharray="3 7"/>
+    <rect x="53" y="14" width="14" height="7" rx="3" fill="#edc779" stroke-width="2"/>
+    <circle cx="60" cy="84" r="6" fill="#edc779" stroke-width="2.5"/>
+    <path d="M60 87 75 96 60 111 45 96Z" fill="#a9d9df"/>
+    <path d="M45 96H75 M60 87 54 96 60 111 66 96Z" stroke="#739ba9" stroke-width="2"/>
+    <path d="M20 68V76 M16 72H24 M98 82V92 M93 87H103" stroke="#d5b873" stroke-width="2.5"/>
+  </g>
+</svg>

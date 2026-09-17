@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bracelet</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 50 Q51 54 79 44 L106 51V81L80 86 Q48 77 15 82Z" fill="#f3d4af" stroke="#c8a078" stroke-width="2.5"/>
+    <ellipse cx="61" cy="65" rx="20" ry="30" fill="none" stroke="#d5a862" stroke-width="4"/>
+    <circle cx="81.00" cy="65.00" r="7" fill="#a9d9df" stroke-width="2.5"/>
+    <circle cx="77.18" cy="82.63" r="7" fill="#db9dac" stroke-width="2.5"/>
+    <circle cx="67.18" cy="93.53" r="7" fill="#efc979" stroke-width="2.5"/>
+    <circle cx="54.82" cy="93.53" r="7" fill="#b999bd" stroke-width="2.5"/>
+    <circle cx="44.82" cy="82.63" r="7" fill="#91bd7e" stroke-width="2.5"/>
+    <circle cx="41.00" cy="65.00" r="7" fill="#a9d9df" stroke-width="2.5"/>
+    <circle cx="44.82" cy="47.37" r="7" fill="#db9dac" stroke-width="2.5"/>
+    <circle cx="54.82" cy="36.47" r="7" fill="#efc979" stroke-width="2.5"/>
+    <circle cx="67.18" cy="36.47" r="7" fill="#b999bd" stroke-width="2.5"/>
+    <circle cx="77.18" cy="47.37" r="7" fill="#91bd7e" stroke-width="2.5"/>
+    <path d="M35 33V43 M30 38H40" stroke="#d5b873" stroke-width="2.5"/>
+  </g>
+</svg>

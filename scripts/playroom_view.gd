@@ -13,6 +13,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
+const ToyCard = preload("res://scripts/toy_card.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
 const ACTIONS := {
 	"water": ["Water the flower", "Grow the flower", "Bloom the flower"],
@@ -44,6 +45,10 @@ class RoomScene extends Control:
 		var background: Color = palette.get("background", Color("#edf8ec"))
 		draw_style_box(preload("res://scripts/ui_style.gd").box(background, accent.lightened(0.6), 24, 2), Rect2(Vector2.ZERO, size))
 		var floor_y := size.y * 0.57
+		var wall := Style.box(palette.get("light", background).lightened(0.4), Color.TRANSPARENT, 22, 0)
+		wall.corner_radius_bottom_left = 0
+		wall.corner_radius_bottom_right = 0
+		draw_style_box(wall, Rect2(Vector2(2, 2), Vector2(maxf(0, size.x - 4), maxf(0, floor_y - 2))))
 		draw_line(Vector2(12, floor_y), Vector2(size.x - 12, floor_y), accent.lightened(0.6), 2, true)
 		if theme_id == "space":
 			for index in range(14):
@@ -323,63 +328,19 @@ func _fit_controls() -> void:
 	goal_label.add_theme_font_size_override("font_size", ceili(12 / scale))
 	# The default logical line gap grows with canvas scaling and overflows three-line cards.
 	goal_label.add_theme_constant_override("line_spacing", 0)
-	if goal_button.visible:
-		goal_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-		goal_button.offset_left = -52 / scale
-		goal_button.offset_right = -8 / scale
-		goal_button.offset_top = 8 / scale
-		goal_button.offset_bottom = 52 / scale
-		goal_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		goal_label.offset_left = 6 / scale
-		goal_label.offset_right = -6 / scale
-		goal_label.offset_top = 66 / scale
-		goal_label.offset_bottom = -8 / scale
-	for id in item_buttons:
-		var button: Button = item_buttons[id]
-		button.custom_minimum_size = Vector2(44, 128) / scale
-		var picture: TextureRect = button.get_child(0)
-		picture.offset_top = 8 / scale
-		picture.offset_bottom = 64 / scale
-		picture.offset_left = 12 / scale
-		picture.offset_right = (-60 if goal_button.visible and goal_button.get_parent() == button else -12) / scale
-		_item_labels[id].add_theme_font_size_override("font_size", ceili(12 / scale))
-		_item_labels[id].add_theme_constant_override("line_spacing", 0)
-		_item_labels[id].offset_top = 66 / scale
-		_item_labels[id].offset_bottom = -8 / scale
+	for button in item_buttons.values():
+		button._layout()
 
 
 func _build_items() -> void:
 	for item in _state.toys():
-		var button := Button.new()
-		button.name = "RoomItem_" + item.id
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Style.button(button, Style.GOOD)
-		button.custom_minimum_size = Vector2(116, 148)
+		var button := ToyCard.new()
+		button.setup(item, _art(item))
+		button.picture.self_modulate = SUMMER_BALL_TINT if item.id == "toy-summer" else Color.WHITE
 		button.pressed.connect(_choose_item.bind(item.id))
-		var picture := TextureRect.new()
-		picture.texture = _art(item)
-		picture.self_modulate = SUMMER_BALL_TINT if item.id == "toy-summer" else Color.WHITE
-		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button.add_child(picture)
-		picture.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-		picture.offset_top = 6
-		picture.offset_left = 12
-		picture.offset_right = -12
-		picture.offset_bottom = 68
-		var label := Style.label("", 15)
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.add_child(label)
-		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		label.offset_left = 6
-		label.offset_right = -6
-		label.offset_top = 70
-		label.offset_bottom = -6
 		_item_grid.add_child(button)
 		item_buttons[item.id] = button
-		_item_labels[item.id] = label
+		_item_labels[item.id] = button.detail_label
 
 
 func _item(id: String) -> Dictionary:
@@ -427,13 +388,10 @@ func _refresh_items() -> void:
 		var earned: bool = _state.owned(item, _counts)
 		var selected: bool = item.id == _state.toy_id
 		var previewed: bool = item.id == _preview_id and not earned
-		var detail: String = "Using" if selected and earned else "Choose" if earned else "Complete %s · %d/3" % [Data.reward(item.medal_id).name, _counts.get(item.medal_id, 0)]
-		_item_labels[item.id].text = item.name + "\n" + detail
-		button.tooltip_text = item.name + ". " + (detail if earned else _requirement(item))
+		var detail: String = "Using" if selected and earned else "Choose" if earned else "%d/3 pieces" % _counts.get(item.medal_id, 0)
+		button.tooltip_text = ("Preview only. " if previewed else "") + item.name + ". " + (detail if earned else _requirement(item))
 		_name_control(button, button.tooltip_text)
-		button.add_theme_stylebox_override("normal", Style.box(
-			_palette.get("light", Color.WHITE) if selected and earned else _palette.get("light", Color.WHITE).lightened(0.5) if previewed else Color.WHITE,
-			_palette.get("accent", Style.GOOD) if (selected and earned) or previewed else Color("#cbd5d8"), 16, 3 if selected and earned else 2))
+		button.present(Data.theme(item.theme) if not item.theme.is_empty() else _palette, selected and earned, detail)
 
 
 func _refresh_room() -> void:
@@ -474,8 +432,8 @@ func _refresh_room() -> void:
 
 func _refresh_goal() -> void:
 	Style.square_icon_button(goal_button, _palette.get("accent", Style.GOOD))
-	for label in _item_labels.values():
-		label.show()
+	for card in item_buttons.values():
+		card.clear_goal()
 	var gift: Dictionary = _item(_preview_id) if _preview_locked else _state.selected_goal(_counts)
 	if gift.get("slot", "") != "toy":
 		gift = {}
@@ -491,14 +449,14 @@ func _refresh_goal() -> void:
 	var remaining: int = gift.remaining_pieces if gift.has("remaining_pieces") else _remaining(gift)
 	var action: String = "Use toy" if remaining == 0 else "Continue adventure" if _state.goal_item_id == gift.id else "Start adventure"
 	var progress: String = "Ready to play!" if remaining == 0 else "%d/3 · %d more %s" % [_counts.get(gift.medal_id, 0), remaining, "piece" if remaining == 1 else "pieces"]
-	goal_label.text = "%s\n%s\n%s" % [gift.name, progress, action]
+	var using: bool = remaining == 0 and _state.toy_id == gift.id
+	var context: String = "Preview" if _preview_locked else "Goal"
+	var short_action: String = "Use toy" if remaining == 0 else "Continue" if _state.goal_item_id == gift.id else "Start"
+	goal_label.text = "%s\n%s" % [gift.name, progress] if using else "%s\n%s\n%s · %s" % [gift.name, progress, context, short_action]
 	goal_button.tooltip_text = "%s. %s. %s" % [action, gift.name, _requirement(gift)]
 	_name_control(goal_button, goal_button.tooltip_text)
 	var card: Button = item_buttons[gift.id]
-	for control in [goal_label, goal_button]:
-		if control.get_parent() != card:
-			control.reparent(card)
-	_item_labels[gift.id].hide()
+	card.show_goal(goal_label, goal_button)
 	_fit_controls()
 
 
@@ -507,7 +465,8 @@ func show_item_error(id: String, summary: String, details: String) -> void:
 		return
 	var card: Button = item_buttons[id]
 	var label: Label = goal_label if goal_label.visible and goal_label.get_parent() == card else _item_labels[id]
-	label.text = _item(id).name + "\n" + summary
+	label.text = _item(id).name + "\n" + summary if label == goal_label else summary
+	card.show_error(summary)
 	card.tooltip_text = details
 	card.add_theme_stylebox_override("normal", Style.box(Style.WRONG.lightened(0.94), Style.WRONG, 16, 2))
 	_name_control(card, _item(id).name + ". " + details)
@@ -552,7 +511,8 @@ func _choose_item(id: String) -> void:
 		_reset_sequence()
 		_refresh_items()
 		_refresh_room()
-		item_previewed.emit(item.name + ". " + _requirement(item))
+		item_previewed.emit("Preview only. " + item.name + ". " + _requirement(item))
+	item_buttons[id].play_press(_reduced_motion)
 
 
 func _activate_action() -> void:
@@ -663,6 +623,8 @@ func _visibility_changed() -> void:
 
 func settle() -> void:
 	set_process(false)
+	for button in item_buttons.values():
+		button.stop_press()
 	if playground != null: playground.cancel()
 	if not _action.is_empty():
 		_action_progress = 1.0

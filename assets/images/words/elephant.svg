@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">elephant</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M86 59 Q102 62 101 81 M100 77 105 85" stroke="#95afb9" stroke-width="4"/>
+    <path d="M29 53 Q33 34 65 36 Q93 38 94 64 V97 Q93 103 81 101 L78 80 H63 L61 100 H48 L47 79 H37Z" fill="#b3c5cc"/>
+    <path d="M41 77V100 H29V79" fill="#a2b9c3"/>
+    <path d="M51 35 Q30 21 18 41 Q10 57 19 71 V87 Q18 94 12 88 Q8 92 12 98 Q29 110 32 90 L33 70 Q47 69 52 54Z" fill="#b3c5cc"/>
+    <path d="M40 35 Q64 27 66 54 Q64 80 45 71 Q37 67 40 35Z" fill="#c7d5d9"/>
+    <path d="M48 41 Q60 42 58 59" stroke="#e0e7e8" stroke-width="4"/>
+    <circle cx="25" cy="49" r="3" fill="#765445" stroke="none"/>
+    <path d="M24 65 Q27 69 32 66 M17 80H24 M15 89H23 M32 97V101 M37 97V101 M52 97V101 M85 97V101" stroke-width="2"/>
+    <path d="M31 68 Q39 67 40 60 Q41 76 32 76Z" fill="#fff1d9" stroke-width="2"/>
+  </g>
+</svg>

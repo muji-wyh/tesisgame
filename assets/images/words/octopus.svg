@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">octopus</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 63 Q29 72 18 62 Q11 57 17 52 M42 72 Q27 88 16 79 M46 79 Q33 102 25 94 M54 82 Q48 107 42 103 M66 82 Q72 107 78 103 M74 79 Q87 102 95 94 M78 72 Q93 88 104 79 M77 63 Q91 72 102 62 Q109 57 103 52" stroke="#765445" stroke-width="12"/>
+    <path d="M43 63 Q29 72 18 62 Q11 57 17 52 M42 72 Q27 88 16 79 M46 79 Q33 102 25 94 M54 82 Q48 107 42 103 M66 82 Q72 107 78 103 M74 79 Q87 102 95 94 M78 72 Q93 88 104 79 M77 63 Q91 72 102 62 Q109 57 103 52" stroke="#d8b9dc" stroke-width="7"/>
+    <path d="M34 52Q31 22 60 20Q89 22 86 52L80 73Q60 87 40 73Z" fill="#d8b9dc"/>
+    <circle cx="48" cy="51" r="3.5" fill="#765445" stroke="none"/><circle cx="72" cy="51" r="3.5" fill="#765445" stroke="none"/>
+    <path d="M54 63Q60 70 66 63" stroke-width="2.5"/>
+    <path d="M43 38Q47 28 57 28" stroke="#f1d9ed" stroke-width="4"/>
+    <g fill="#f1d9ed" stroke="none">
+      <circle cx="25" cy="64" r="2"/><circle cx="24" cy="82" r="2"/><circle cx="32" cy="94" r="2"/><circle cx="47" cy="99" r="2"/>
+      <circle cx="73" cy="99" r="2"/><circle cx="88" cy="94" r="2"/><circle cx="96" cy="82" r="2"/><circle cx="95" cy="64" r="2"/>
+    </g>
+  </g>
+</svg>

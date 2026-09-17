@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">astronaut</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="30" y="46" width="60" height="35" rx="8" fill="#b3c5cc" stroke-width="2.5"/>
+    <path d="M40 59 23 82 14 75 27 55Q32 49 40 53 M80 59 97 82 106 75 93 55Q88 49 80 53" fill="#fff7e6"/>
+    <path d="M40 52H80L83 86 78 105H64V89H56V105H42L37 86Z" fill="#fff7e6"/>
+    <path d="M39 98H56V109H36V103Z M64 98H81L84 103V109H64Z" fill="#b3c5cc" stroke-width="2.5"/>
+    <path d="M19 69 28 75 M92 75 101 69 M39 83H81" stroke="#ef9a84" stroke-width="4"/>
+    <circle cx="60" cy="34" r="26" fill="#fff7e6"/>
+    <rect x="40" y="18" width="40" height="31" rx="14" fill="#6c9ab7" stroke-width="2.5"/>
+    <path d="M47 29Q49 23 58 23" stroke="#d3edf0" stroke-width="4"/>
+    <rect x="48" y="63" width="24" height="15" rx="3" fill="#9ec9e0" stroke-width="2"/>
+    <circle cx="54" cy="70" r="2" fill="#e97870" stroke="none"/><path d="M61 69H67 M61 73H67" stroke="#fff7e6" stroke-width="2"/>
+  </g>
+</svg>

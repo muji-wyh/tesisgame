@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">asteroid</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M29 34 52 21 77 29 96 51 91 78 70 102 43 96 20 76 18 53Z" fill="#b58b69"/>
+    <path d="M79 34 89 55 81 80 62 96 70 102 91 78 96 51Z" fill="#93785d" stroke="none"/>
+    <ellipse cx="40" cy="49" rx="13" ry="10" transform="rotate(-27 40 49)" fill="#a77c59" stroke-width="2.5"/>
+    <path d="M29 49Q35 37 47 44" stroke="#e9c291" stroke-width="3"/>
+    <ellipse cx="70" cy="65" rx="12" ry="15" transform="rotate(25 70 65)" fill="#a77c59" stroke-width="2.5"/>
+    <path d="M65 54Q74 48 80 59" stroke="#e9c291" stroke-width="3"/>
+    <circle cx="45" cy="80" r="6" fill="#a77c59" stroke-width="2.5"/>
+    <path d="M63 35 66 37 M30 67 33 68 M56 93 59 94" stroke="#e9c291" stroke-width="3"/>
+    <path d="M94 13 102 9 110 16 107 25 97 23Z M10 94 17 90 23 98 18 106 9 103Z" fill="#c8a078" stroke-width="2.5"/>
+  </g>
+</svg>

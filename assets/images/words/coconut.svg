@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">coconut</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <circle cx="72" cy="52" r="32" fill="#b58b69"/>
+    <path d="M61 24 Q44 40 48 60 M88 30 95 43 M82 74 91 65 M69 22 73 27 M99 54 94 61" stroke="#93785d" stroke-width="2.5"/>
+    <circle cx="77" cy="42" r="3" fill="#765445" stroke="none"/><circle cx="87" cy="44" r="3" fill="#765445" stroke="none"/><circle cx="81" cy="52" r="3" fill="#765445" stroke="none"/>
+    <path d="M15 68 Q46 44 78 68 Q78 99 48 103 Q17 99 15 68Z" fill="#ab8465"/>
+    <ellipse cx="47" cy="68" rx="32" ry="21" fill="#fff7e6"/>
+    <ellipse cx="47" cy="68" rx="20" ry="12" fill="#e7d8b8" stroke="#c8b7a0" stroke-width="2"/>
+    <path d="M24 87 31 94 M39 96 40 100 M64 88 60 95 M26 61 Q36 52 48 53" stroke="#e9c291" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">spaceship</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 82 31 98 M82 82 89 98" stroke="#8b8e9d" stroke-width="4"/>
+    <path d="M24 100H37 M83 100H96" stroke="#8b8e9d" stroke-width="5"/>
+    <path d="M33 60Q30 24 60 23Q90 24 87 60Z" fill="#a9d9df"/>
+    <path d="M43 43Q46 31 58 31" stroke="#eef9fb" stroke-width="5"/>
+    <ellipse cx="60" cy="68" rx="45" ry="18" fill="#b999bd"/>
+    <path d="M15 68Q60 90 105 68" stroke="#927d99" stroke-width="3"/>
+    <ellipse cx="60" cy="61" rx="45" ry="12" fill="#c7b2d9"/>
+    <circle cx="31" cy="62" r="4" fill="#f8d86d" stroke-width="2"/><circle cx="60" cy="66" r="4" fill="#f8d86d" stroke-width="2"/><circle cx="89" cy="62" r="4" fill="#f8d86d" stroke-width="2"/>
+    <path d="M17 30V38 M13 34H21 M102 22V32 M97 27H107" stroke="#d5b873" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rainbow</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 78 A43 43 0 0 1 103 78" stroke="#e97870" stroke-width="9"/>
+    <path d="M25 78 A35 35 0 0 1 95 78" stroke="#ee9c54" stroke-width="8"/>
+    <path d="M32 78 A28 28 0 0 1 88 78" stroke="#f4d36a" stroke-width="7"/>
+    <path d="M38 78 A22 22 0 0 1 82 78" stroke="#91bd7e" stroke-width="6"/>
+    <path d="M44 78 A16 16 0 0 1 76 78" stroke="#85bfda" stroke-width="6"/>
+    <path d="M50 78 A10 10 0 0 1 70 78" stroke="#b999bd" stroke-width="6"/>
+    <path d="M15 89 Q7 87 12 78 Q15 74 21 77 Q21 62 33 65 Q43 66 42 77 Q54 73 55 85 Q56 94 43 94 H23Z M76 94 Q63 95 64 85 Q65 75 77 78 Q76 64 89 66 Q100 64 100 77 Q110 75 111 85 Q113 94 101 94Z" fill="#fffdf5" stroke="#b4c9cd" stroke-width="2.5"/>
+  </g>
+</svg>

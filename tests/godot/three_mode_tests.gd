@@ -41,7 +41,7 @@ func _run() -> void:
 		return button.size.x >= 44 and button.size.x <= 96 and button.size.y >= 44 and button.size.y <= 48),
 		"Mode tabs have compact natural widths and accessible heights")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
-		return not label.is_visible_in_tree() or not label.text in ["Word Buddies", app.model.adventure_name]),
+		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", app.model.adventure_name]),
 		"The play screen has no redundant brand or topic headings")
 	app.choose_mode("match")
 	await settle()

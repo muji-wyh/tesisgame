@@ -17,39 +17,110 @@ class CardBack:
 	extends Control
 
 	var accent: Color = Style.GOOD
+	var fill_color: Color = Color.WHITE
+	var ink_color: Color = Style.INK
 	var kind_label: Label
 	var number_label: Label
+	var symbol_label: Label
+	var _kind: String = ""
+	var _light: Color = Color.WHITE
+	var _spark: Color = Style.GOOD
+	var _symbol_rect := Rect2()
 
 	func setup(kind: String, index: int) -> void:
 		name = "CardBack"
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
-		kind_label = Style.label("Word" if kind == "word" else "Picture", 16)
+		_kind = kind
+		kind_label = Style.label("Word" if kind == "word" else "Picture", 13)
 		kind_label.name = "CardKind"
-		kind_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		kind_label.clip_text = true
 		add_child(kind_label)
-		number_label = Style.label(str(index + 1), 13)
+		number_label = Style.label(str(index + 1), 11)
 		number_label.name = "CardPosition"
 		number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		number_label.add_theme_color_override("font_color", Style.MUTED)
 		add_child(number_label)
+		symbol_label = Style.label("Aa" if kind == "word" else "", 40)
+		symbol_label.name = "CardSymbol"
+		symbol_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		symbol_label.clip_text = true
+		add_child(symbol_label)
 		resized.connect(_layout)
+		set_palette({"accent": Style.GOOD})
+
+	func set_palette(palette: Dictionary) -> void:
+		accent = palette.get("accent", Style.GOOD)
+		_light = palette.get("light", accent.lightened(0.72))
+		_spark = palette.get("spark", accent.lightened(0.35))
+		fill_color = accent if _kind == "image" else _light.lerp(Color.WHITE, 0.3)
+		ink_color = Color.WHITE if _kind == "image" else accent.darkened(0.12)
+		for label in [kind_label, number_label, symbol_label]:
+			if label.get_theme_color("font_color") != ink_color:
+				label.add_theme_color_override("font_color", ink_color)
 		_layout()
 
 	func _layout() -> void:
-		kind_label.add_theme_font_size_override("font_size", 12 if size.x < 72 else 16)
-		kind_label.position = Vector2(4, 2 if size.y < 64 else size.y * 0.5 - 12)
-		kind_label.size = Vector2(maxf(0, size.x - 8), 22)
-		number_label.position = Vector2(4, size.y - 18 if size.y < 64 else size.y * 0.5 + 9)
-		number_label.size = Vector2(maxf(0, size.x - 8), 18)
+		if size.x <= 0 or size.y <= 0:
+			return
+		var scale: float = Style.ui_scale(self)
+		var compact: bool = size.y * scale < 64
+		var narrow: bool = size.x * scale < 100
+		kind_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if narrow or compact else HORIZONTAL_ALIGNMENT_LEFT
+		var caption_width: float = maxf(0, size.x - (8 if narrow or compact else 42) / scale)
+		var caption_font: Font = kind_label.get_theme_font("font")
+		var caption_size: int = ceili(13 / scale)
+		while caption_size > ceili(10 / scale) and caption_font.get_string_size(kind_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, caption_size).x > caption_width:
+			caption_size -= 1
+		if kind_label.get_theme_font_size("font_size") != caption_size:
+			kind_label.add_theme_font_size_override("font_size", caption_size)
+		kind_label.position = Vector2((4 if narrow or compact else 10) / scale, 2 / scale if compact else size.y - 30 / scale)
+		kind_label.set_deferred("size", Vector2(caption_width, 22 / scale))
+		if number_label.get_theme_font_size("font_size") != ceili(11 / scale):
+			number_label.add_theme_font_size_override("font_size", ceili(11 / scale))
+		number_label.position = Vector2(8 / scale if narrow else size.x - 28 / scale, size.y - 20 / scale if compact else 8 / scale if narrow else size.y - 29 / scale)
+		number_label.set_deferred("size", Vector2(20, 18 if compact else 22) / scale)
+		var top: float = (30 if narrow else 8) / scale
+		var height: float = maxf(0, kind_label.position.y - 6 / scale - top)
+		var side: float = 0 if compact else maxf(0, minf(96 / scale, minf(size.x * 0.64, height)))
+		_symbol_rect = Rect2(Vector2((size.x - side) * 0.5, top + (height - side) * 0.5), Vector2.ONE * side)
+		symbol_label.visible = _kind == "word" and side >= 16 / scale
+		var symbol_size: int = maxi(1, floori(side * 0.7))
+		var font: Font = symbol_label.get_theme_font("font")
+		while symbol_size > 1 and (font.get_height(symbol_size) > side or font.get_string_size("Aa", HORIZONTAL_ALIGNMENT_LEFT, -1, symbol_size).x > side):
+			symbol_size -= 1
+		if symbol_label.get_theme_font_size("font_size") != symbol_size:
+			symbol_label.add_theme_font_size_override("font_size", symbol_size)
+		symbol_label.position = _symbol_rect.position
+		symbol_label.set_deferred("size", _symbol_rect.size)
 		queue_redraw()
 
 	func _draw() -> void:
-		if size.y < 64:
+		var scale: float = Style.ui_scale(self)
+		var surface := Rect2(Vector2.ONE * (2 / scale), size - Vector2.ONE * (4 / scale))
+		if surface.size.x <= 0 or surface.size.y <= 0:
 			return
-		var seed := Vector2(size.x * 0.5, size.y * 0.25)
-		draw_line(seed + Vector2(0, 3), seed + Vector2(0, -6), accent, 2.0, true)
-		draw_colored_polygon(PackedVector2Array([seed, seed + Vector2(-7, -2), seed + Vector2(-8, -7), seed + Vector2(-2, -6)]), accent.lightened(0.15))
-		draw_colored_polygon(PackedVector2Array([seed + Vector2(0, -3), seed + Vector2(1, -9), seed + Vector2(7, -10), seed + Vector2(6, -5)]), accent)
+		draw_style_box(Style.box(fill_color, Color.TRANSPARENT, ceili(12 / scale), 0), surface)
+		draw_style_box(Style.box(Color.TRANSPARENT, Color(ink_color, 0.14), ceili(8 / scale), 1), surface.grow(-5 / scale))
+		for fraction in [Vector2(0.16, 0.26), Vector2(0.8, 0.4), Vector2(0.26, 0.76)]:
+			draw_circle(size * fraction, 2.4 / scale, Color(ink_color, 0.12))
+		draw_circle(number_label.get_rect().get_center(), 10 / scale,
+			fill_color.darkened(0.12) if _kind == "image" else Color.WHITE)
+		var side: float = _symbol_rect.size.x
+		if side < 16 / scale:
+			return
+		var center := _symbol_rect.get_center()
+		if _kind == "word":
+			draw_circle(center, side * 0.54, Color(1, 1, 1, 0.55))
+			draw_arc(center, side * 0.54, 0, TAU, 48, Color(accent, 0.13), 1 / scale, true)
+			return
+		var frame := Rect2(center - Vector2(side * 0.43, side * 0.34), Vector2(side * 0.86, side * 0.68))
+		draw_style_box(Style.box(Color.WHITE, Color.TRANSPARENT, maxi(1, roundi(side * 0.07)), 0), frame)
+		var image := frame.grow(-side * 0.06)
+		draw_style_box(Style.box(_light, Color.TRANSPARENT, maxi(1, roundi(side * 0.035)), 0), image)
+		draw_circle(image.position + image.size * Vector2(0.74, 0.28), side * 0.07, Color("#ffe7a0"))
+		draw_colored_polygon(PackedVector2Array([image.position + Vector2(0, image.size.y),
+			image.position + image.size * Vector2(0.3, 0.35), image.position + image.size * Vector2(0.73, 1)]), _spark)
+		draw_colored_polygon(PackedVector2Array([image.position + image.size * Vector2(0.38, 1),
+			image.position + image.size * Vector2(0.7, 0.49), image.end]), accent.lightened(0.18))
 
 
 var memory = Memory.new()
@@ -227,6 +298,7 @@ func _choose(index: int) -> void:
 	var result: String = memory.select(index)
 	if result == "ignored":
 		return
+	card_buttons[index].play_press()
 	if result in ["correct", "wrong"]:
 		_feedback_timer.start()
 	_refresh()
@@ -370,8 +442,7 @@ func _refresh() -> void:
 		button.picture.modulate.a = 1.0
 		button.word_label.modulate.a = 1.0
 		var back: CardBack = button.find_child("CardBack", true, false)
-		back.accent = _palette.accent
-		back.queue_redraw()
+		back.set_palette(_palette)
 		var label: String = ("Word" if card.kind == "word" else "Picture") + " %d" % (index + 1)
 		if revealed:
 			label += ": " + card.word.text

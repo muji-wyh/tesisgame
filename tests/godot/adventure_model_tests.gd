@@ -36,7 +36,7 @@ func _run() -> void:
 		_test_requested_revisits(model, words)
 		_test_requested_repeat(model, words)
 		var reset_methods: Array = model.get_method_list().filter(func(method: Dictionary) -> bool: return method.name == "reset")
-		var required_ready: bool = reset_methods.size() == 1 and reset_methods[0].args.size() == 5
+		var required_ready: bool = reset_methods.size() == 1 and reset_methods[0].args.size() == 6
 		check(required_ready, "A new adventure lesson can require its gift's noun")
 		if required_ready:
 			_test_required_words(model, words)
@@ -47,7 +47,7 @@ func _run() -> void:
 
 
 func _test_catalog(adventures: Array, words: Array) -> void:
-	check(words.size() == 140 and adventures.size() == 12, "The expanded catalog contains 140 words in twelve adventures")
+	check(words.size() == 200 and adventures.size() == 12, "The expanded catalog contains 200 words in twelve adventures")
 	var all_ids: Array = words.map(func(word: Dictionary) -> String: return word.id)
 	var included: Dictionary = {}
 	var adventure_ids: Dictionary = {}
@@ -126,7 +126,8 @@ func _test_freshness_before_adventures(model, words: Array) -> void:
 
 
 func _test_seeded_compatibility(model, words: Array) -> void:
-	# Recorded before adding explicit selection: the optional argument must not change existing seeded rounds.
+	# These fixtures use the original 140-word corpus; adding optional age selection must preserve its seeds.
+	var original_words: Array = words.slice(0, 140)
 	for fixture in [
 		{"seed": 0, "topic": "at-home", "theme": "winter", "lesson": ["chair", "fork", "table", "door", "soap"],
 			"cards": ["soap:image", "fork:word", "table:word", "chair:word", "chair:image", "door:word", "fork:image", "table:image"]},
@@ -135,7 +136,7 @@ func _test_seeded_compatibility(model, words: Array) -> void:
 		{"seed": 101, "topic": "ocean-discovery", "theme": "winter", "lesson": ["squid", "crab", "clam", "coral", "seal"],
 			"cards": ["clam:image", "seal:image", "crab:image", "squid:image", "clam:word", "squid:word", "crab:word", "coral:word"]}
 	]:
-		check(model.reset(words, fixture.seed, false, ""), "An empty request preserves ordinary seeded selection")
+		check(model.reset(original_words, fixture.seed, false, ""), "An empty request preserves ordinary seeded selection")
 		check(model.adventure_id == fixture.topic and model.theme_id == fixture.theme, "Existing seeds retain their topic and theme")
 		check(model.lesson_words.map(func(word: Dictionary) -> String: return word.id) == fixture.lesson, "Existing seeds retain their five ordered words")
 		check(model.cards.map(func(card: Dictionary) -> String: return card.id) == fixture.cards, "Existing seeds retain their exact card arrangement")
@@ -189,8 +190,9 @@ func _test_requested_revisits(model, words: Array) -> void:
 		check(model.adventure_id == "animal-friends" and model.lesson_words.all(func(word: Dictionary) -> bool: return not previous.has(word.id)),
 			"Revisits keep the requested topic and use fresh words when five safe choices remain")
 		_check_safe_lesson(model)
-	model.reset(words, 17, false, "play-time")
-	check(model.reset(words, -1, false, "play-time") and model.adventure_id == "play-time", "A six-word topic remains playable when a revisit must overlap")
+	var original_play: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["ball", "book", "doll", "kite", "drum", "block"])
+	model.reset(original_play, 17, false, "play-time")
+	check(model.reset(original_play, -1, false, "play-time") and model.adventure_id == "play-time", "A six-word topic remains playable when a revisit must overlap")
 	_check_safe_lesson(model)
 	var mixed: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["rocket", "alien", "rover", "cat", "dog"])
 	model.reset(mixed, 3)

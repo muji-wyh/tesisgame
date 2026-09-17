@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sunglasses</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 53 23 31 40 37 M105 53 97 31 80 37" stroke="#9b7058" stroke-width="5"/>
+    <path d="M17 49 Q34 42 51 50 L48 76 Q32 88 18 76 L12 54Z M69 50 Q86 42 103 49 L108 54 102 76 Q88 88 72 76Z" fill="#6d7988" stroke-width="5"/>
+    <path d="M50 54 Q60 49 70 54 M12 53H18 M102 53H108" stroke-width="5"/>
+    <path d="M24 58 34 53 M24 68 42 56 M80 59 89 54 M81 69 98 57" stroke="#b9cbd7" stroke-width="3"/>
+  </g>
+</svg>

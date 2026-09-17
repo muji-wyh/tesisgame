@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">lake</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 53 36 27 51 45 70 22 103 53Z" fill="#b3c5cc" stroke-width="2.5"/>
+    <path d="M28 37 36 27 43 37 37 35Z M60 35 70 22 81 37 70 33Z" fill="#fff7e6" stroke="none"/>
+    <path d="M14 55 Q40 45 65 51 Q90 43 107 57 L108 89 Q61 113 12 90Z" fill="#acd18e" stroke="none"/>
+    <path d="M15 67 Q28 52 60 56 Q95 54 106 70 Q113 86 88 96 Q57 106 28 94 Q8 86 15 67Z" fill="#9ec9e0" stroke="#83adbe" stroke-width="2.5"/>
+    <path d="M29 68 Q56 60 90 67 M22 81H43 M74 80H99 M39 91H77" stroke="#d6edef" stroke-width="3"/>
+    <path d="M53 73H73L68 79H59Z" fill="#d99d69" stroke-width="2"/>
+    <path d="M63 72V60L71 71H63Z" fill="#fff1d9" stroke-width="2"/>
+  </g>
+</svg>

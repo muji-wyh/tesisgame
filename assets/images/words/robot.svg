@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">robot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 91V104H32 M76 91V104H88" stroke="#8b8e9d" stroke-width="8"/>
+    <path d="M35 68H23V85 M85 68H97V85" stroke="#8b8e9d" stroke-width="7"/>
+    <path d="M18 93V86Q23 80 28 86V93 M92 93V86Q97 80 102 86V93" stroke="#a2b9c3" stroke-width="4"/>
+    <rect x="34" y="57" width="52" height="37" rx="8" fill="#b3c5cc"/>
+    <rect x="27" y="23" width="66" height="38" rx="10" fill="#9ec9e0"/>
+    <path d="M60 23V14" stroke-width="3"/>
+    <circle cx="60" cy="11" r="5" fill="#ef9a84" stroke-width="2.5"/>
+    <rect x="19" y="34" width="8" height="15" rx="3" fill="#edc779" stroke-width="2"/>
+    <rect x="93" y="34" width="8" height="15" rx="3" fill="#edc779" stroke-width="2"/>
+    <circle cx="44" cy="39" r="5" fill="#fff7e6"/><circle cx="76" cy="39" r="5" fill="#fff7e6"/>
+    <circle cx="44" cy="39" r="2" fill="#765445" stroke="none"/><circle cx="76" cy="39" r="2" fill="#765445" stroke="none"/>
+    <path d="M47 50Q60 58 73 50" stroke-width="2.5"/>
+    <rect x="43" y="68" width="23" height="16" rx="3" fill="#fff1d9" stroke-width="2"/>
+    <path d="M47 77H51L54 72 57 81 60 77H63" stroke="#91bd7e" stroke-width="2"/>
+    <circle cx="75" cy="72" r="3" fill="#ef9a84" stroke="none"/><circle cx="75" cy="82" r="3" fill="#efc979" stroke="none"/>
+  </g>
+</svg>

@@ -34,7 +34,7 @@ func _run() -> void:
 		"Explore is removed rather than hidden behind another entry")
 	check(app.find_child("AdventureBook", true, false) == null, "The removed picker creates no hidden page")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
-		return not label.is_visible_in_tree() or not label.text in ["Word Buddies", "Play time", "Find 3 pairs"]),
+		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
 	check(app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "learn", "memory"],
 		"The centered mode switch contains exactly the three remaining games")
@@ -129,7 +129,8 @@ func _run() -> void:
 		app._show_collection()
 	app._show_reward_section("room")
 	await settle()
-	check(app._room._room.get_global_rect().position.y <= 124, "Pip's room opens on its playable scene, not repeated headings and goals")
+	check(app._room._room.get_global_rect().position.y - app._collection_scroll.global_position.y <= 8,
+		"Pip's playable scene starts immediately below the persistent More controls, without repeated headings or goals")
 	check(not app._room.goal_label.is_visible_in_tree() and not app._room.goal_button.is_visible_in_tree(),
 		"Unselected gifts do not create a standalone status or action row")
 	check(app._collection_tabs.keys() == ["room", "medals"]

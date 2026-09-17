@@ -201,8 +201,8 @@ func _run() -> void:
 	app.new_round(6)
 	await process_frame
 	await process_frame
-	var first_id: String = app.model.cards[0].id
-	var second_id: String = app.model.cards[1].id
+	var first_id: String = app.grid.get_child(0).card_data.id
+	var second_id: String = app.grid.get_child(1).card_data.id
 	app._controller_mode = true
 	app.cards[first_id].grab_focus()
 	app._controller_accept()

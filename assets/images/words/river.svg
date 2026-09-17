@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">river</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 53 Q26 36 44 44 L59 34 77 45 Q98 39 108 53 V93 Q61 119 13 95Z" fill="#acd18e" stroke="none"/>
+    <path d="M56 41 Q85 49 65 59 Q42 69 55 78 Q74 88 99 103 Q79 112 53 108 Q39 91 25 84 Q12 67 40 57 Q68 50 50 43Z" fill="#9fdbe5" stroke="#83adbe" stroke-width="2.5"/>
+    <path d="M38 70 Q29 77 48 85 M61 93 78 102 M56 50 Q65 53 49 59" stroke="#e8f4ef" stroke-width="3"/>
+    <path d="M17 43 29 26 41 43Z M79 37 90 20 103 38Z" fill="#8fbd79" stroke-width="2.5"/>
+    <path d="M29 43V53 M90 38V47" stroke="#a77c59" stroke-width="3"/>
+  </g>
+</svg>

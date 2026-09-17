@@ -37,7 +37,7 @@ function messagesFor(root) {
   const messages = Object.entries(prompts).map(([id, text]) => ({ id, text }));
   for (const word of words) {
     if (!word || typeof word.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(word.id) ||
-        typeof word.text !== 'string' || !/^[a-z]{2,6}$/.test(word.text)) {
+        typeof word.text !== 'string' || !/^[a-z]{2,10}$/.test(word.text)) {
       throw new Error('Vocabulary entries need a lowercase ID and a short English word.');
     }
     const id = `word-${word.id}`;

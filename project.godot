@@ -2,6 +2,7 @@
 config_version=5
 
 [application]
+; Keep the internal name stable for existing user:// saves; the window uses GAME_NAME.
 config/name="Word Buddies"
 run/main_scene="res://scenes/main.tscn"
 run/main_scene.web="res://scenes/web_bootstrap.tscn"
@@ -29,5 +30,7 @@ pointing/emulate_mouse_from_touch=true
 
 [importer_defaults]
 texture={
+"compress/mode": 1,
+"compress/lossy_quality": 0.85,
 "svg/scale": 3.0
 }

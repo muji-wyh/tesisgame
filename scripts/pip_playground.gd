@@ -4,6 +4,10 @@ signal interaction(kind: String, message: String)
 signal interaction_started
 signal toy_tapped
 
+const POKE_REACTIONS := ["poke", "high-five", "peekaboo", "flutter"]
+const POKE_CAPTIONS := ["Quack! You tickled Pip!", "High five! Pip taps your hand!",
+	"Peekaboo! Pip sees you!", "Flutter! Pip flaps hello!"]
+
 var duck_position := Vector2.ZERO
 var target_position := Vector2.ZERO
 var motion_kind := ""
@@ -36,6 +40,7 @@ var _duration := 0.7
 var _initialized := false
 var _paused := false
 var _pet_count := 0
+var _poke_index := 0
 
 
 func _ready() -> void:
@@ -126,6 +131,11 @@ func _react(kind: String) -> void:
 		_duck.react_in_room(kind)
 
 
+func _note_activity() -> void:
+	if is_instance_valid(_duck):
+		_duck.note_activity()
+
+
 func _report(kind: String, message: String) -> void:
 	interaction_kind = kind
 	interaction.emit(kind, message)
@@ -147,8 +157,9 @@ func pet() -> void:
 func poke() -> void:
 	if not _allowed(): return
 	_begin_action()
-	_react("poke")
-	_report("poke", "Quack! You tickled Pip!")
+	_react(POKE_REACTIONS[_poke_index])
+	_report("poke", POKE_CAPTIONS[_poke_index])
+	_poke_index = (_poke_index + 1) % POKE_REACTIONS.size()
 
 
 func call_pip() -> void:
@@ -170,7 +181,7 @@ func _move_to(point: Vector2) -> void:
 		if toy_phase == "idle" and _clear_toy_space(): _place_toy(_toy_home)
 	if is_instance_valid(_duck):
 		_duck.set_room_motion(motion_kind, signf(target_position.x - duck_position.x))
-	set_process(not motion_kind.is_empty() or toy_phase != "idle")
+	set_process(_pointer != -1 or not motion_kind.is_empty() or toy_phase != "idle")
 	queue_redraw()
 
 
@@ -215,7 +226,7 @@ func _rest_toy() -> void:
 	_toy.scale = Vector2.ONE
 	_clear_toy_space()
 	_place_toy(_toy_home)
-	set_process(not motion_kind.is_empty())
+	set_process(_pointer != -1 or not motion_kind.is_empty())
 	queue_redraw()
 
 
@@ -225,6 +236,7 @@ func cancel() -> void:
 	motion_kind = ""
 	interaction_kind = ""
 	target_position = duck_position
+	_note_activity()
 	if _toy != null: _rest_toy()
 	if is_instance_valid(_duck): _duck.clear_room_interaction()
 	set_process(false)
@@ -306,6 +318,8 @@ func _input(event: InputEvent) -> void:
 		_last = local
 		_last_screen = point
 		_travel = 0
+		_note_activity()
+		set_process(true)
 	elif pointer == _pointer:
 		if _gesture != "floor": get_viewport().set_input_as_handled()
 		if moving:
@@ -343,6 +357,9 @@ func _process(delta: float) -> void:
 	if not _allowed():
 		cancel()
 		return
+	if _pointer != -1 or not motion_kind.is_empty() or toy_phase != "idle":
+		# A held gesture or flying toy stays active without fresh pointer events.
+		_note_activity()
 	if not motion_kind.is_empty():
 		duck_position = duck_position.move_toward(target_position, delta * (230 if motion_kind == "run" else 110))
 		_place_duck()
@@ -378,7 +395,7 @@ func _process(delta: float) -> void:
 		var progress := minf(1, _elapsed / 0.55)
 		_place_toy(_flight_start.lerp(_toy_home, progress) - Vector2(0, sin(progress * PI) * 22))
 		if progress >= 1: _rest_toy()
-	if motion_kind.is_empty() and toy_phase == "idle": set_process(false)
+	if _pointer == -1 and motion_kind.is_empty() and toy_phase == "idle": set_process(false)
 	queue_redraw()
 
 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pillow</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="103" rx="42" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M18 31Q40 39 60 32Q81 38 102 30Q95 55 103 91Q80 85 60 93Q40 86 17 93Q25 64 18 31Z" fill="#d3edf0"/>
+    <path d="M26 40Q42 45 60 40Q80 44 94 39Q88 61 95 83Q78 78 60 85Q42 79 26 84Q32 62 26 40Z" stroke="#9ec9e0" stroke-width="2"/>
+    <path d="M18 31 32 47 M102 30 87 47 M17 93 33 78 M103 91 88 77" stroke="#83adbe" stroke-width="2.5"/>
+    <path d="M39 48Q50 44 60 46" stroke="#ffffff" stroke-width="4"/>
+  </g>
+</svg>

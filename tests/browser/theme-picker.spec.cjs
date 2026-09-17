@@ -8,7 +8,7 @@ test('larger themes stay on the current page and retry saving in place', async (
   await tap(page, first.x, first.y);
   const selection = await page.locator('#selection-status').textContent();
   await openRewards(page);
-  for (const [section, index, color] of [['room', 4, '#e4f6fb'], ['medals', 1, '#ffe6e6']]) {
+  for (const [section, index, color] of [['room', 4, '#e7f8fa'], ['medals', 1, '#fff4df']]) {
     await chooseRewardSection(page, section);
     const bounds = await metrics(page), rect = worldIconRect(bounds, index);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(52);

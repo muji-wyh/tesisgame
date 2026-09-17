@@ -22,6 +22,13 @@ const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 const PREVIEW_REACTIONS := ["Boing!", "Wheee!", "Big hug!"]
 
+class InputActivityObserver extends Node:
+	signal observed(event: InputEvent)
+
+	func _input(event: InputEvent) -> void:
+		observed.emit(event)
+
+
 class ProgressBadges:
 	extends Control
 
@@ -153,6 +160,12 @@ var _preview_header: HBoxContainer
 var _world_choices: VBoxContainer
 var _world_grid: GridContainer
 var _world_save_notice: Label
+var _age_choices: VBoxContainer
+var _age_row: HBoxContainer
+var _age_label: Label
+var _age_buttons: Dictionary = {}
+var _age_notice: Label
+var _age_save_failed: bool = false
 var _next_goal: PanelContainer
 var _goal_row: HBoxContainer
 var _medals_duck_slot: Control
@@ -168,6 +181,8 @@ var effects: Effects
 var theme_buttons: Array[Button] = []
 var hint_button: Icons
 var _voice_button: Icons
+var _voice_style_accent := Color.TRANSPARENT
+var _voice_style_scale: float = -1.0
 var _voice_space: Control
 var _voice_mode: bool = false
 var _mode_id: String = "match"
@@ -283,6 +298,7 @@ var _collection_last_scroll: Vector2 = Vector2.ZERO
 var _collection_last_sample_usec: int = 0
 var _controller_mode: bool = false
 var _pointer_focus_active: bool = false
+var _proactive_touches: Dictionary = {}
 var _controller_stick: Vector2 = Vector2.ZERO
 var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
@@ -305,6 +321,7 @@ var _speech_state_callback: JavaScriptObject
 
 
 func _ready() -> void:
+	get_window().title = Data.GAME_NAME
 	var initial_process_mode := process_mode
 	if OS.has_feature("web"):
 		process_mode = Node.PROCESS_MODE_DISABLED
@@ -404,7 +421,7 @@ func _build_controls() -> void:
 	collection_button = Icons.new()
 	collection_button.name = "Rewards"
 	collection_button.symbol = Icons.Symbol.MORE
-	_set_accessibility_name(collection_button, "More: Pip's room, medals and worlds")
+	_set_accessibility_name(collection_button, "More: Pip's room, medals, worlds and age levels")
 	collection_button.pressed.connect(_show_collection)
 	_toolbar.add_child(collection_button)
 	_mode_row = HBoxContainer.new()
@@ -617,6 +634,11 @@ func _build_controls() -> void:
 	add_child(duck)
 	_set_accessibility_name(duck, "Pip the duck. Press to say hello.")
 	_outcome.hide()
+	# Input is dispatched child-first; observe it before interactive descendants consume it.
+	var observer := InputActivityObserver.new()
+	observer.name = "InputActivity"
+	observer.observed.connect(_observe_activity)
+	add_child(observer)
 
 
 func _build_collection_shell() -> void:
@@ -659,6 +681,7 @@ func _build_collection_shell() -> void:
 	_set_accessibility_name(_collection_back, "Back to game")
 	_collection_back.pressed.connect(_hide_collection)
 	header.add_child(_collection_back)
+	_build_age_choices()
 	_collection_scroll = ScrollContainer.new()
 	_collection_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_collection_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
@@ -669,6 +692,54 @@ func _build_collection_shell() -> void:
 	_collection_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_collection_scroll.add_child(_collection_grid)
 	collection_page.hide()
+
+
+func _build_age_choices() -> void:
+	_age_choices = VBoxContainer.new()
+	_age_choices.name = "AgeChoices"
+	_collection_column.add_child(_age_choices)
+	_age_row = HBoxContainer.new()
+	_age_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_age_choices.add_child(_age_row)
+	_age_label = Style.label("Age", 14)
+	_age_label.tooltip_text = "A vocabulary guide. Choose the level that feels right."
+	_age_row.add_child(_age_label)
+	for band in Data.age_bands():
+		var button := Button.new()
+		button.name = "Age_" + band.id.replace("-", "_")
+		button.text = band.label
+		button.toggle_mode = true
+		button.tooltip_text = band.name + ". Suggested vocabulary for your next lesson."
+		_set_accessibility_name(button, band.name)
+		button.pressed.connect(_choose_age_band.bind(band.id))
+		button.gui_input.connect(_collection_scroll_input.bind(button))
+		button.focus_entered.connect(func() -> void:
+			if _age_choices.get_parent() == _collection_grid:
+				_ensure_collection_focus_visible(button))
+		_age_row.add_child(button)
+		_age_buttons[band.id] = button
+	_age_notice = Style.label("Next lesson: All words", 13)
+	_age_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_age_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_age_choices.add_child(_age_notice)
+
+
+func _choose_age_band(id: String) -> void:
+	if not collection_page.visible or _preview_page.visible or _collection_dragged:
+		_refresh_age_choices()
+		return
+	_cancel_collection_inertia()
+	_age_save_failed = not _ensure_playroom_loaded() or not playroom_state.set_age_band(id)
+	_refresh_age_choices()
+	_announce_status(_age_notice.text)
+
+
+func _refresh_age_choices() -> void:
+	for id in _age_buttons:
+		_age_buttons[id].set_pressed_no_signal(id == playroom_state.age_band_id)
+	_age_notice.text = "Not saved. Tap an age to retry." if _age_save_failed else "Next lesson: " + Data.age_band(playroom_state.age_band_id).name
+	_age_notice.tooltip_text = playroom_state.error if _age_save_failed else "Age ranges are a guide, not a restriction."
+	_age_notice.add_theme_color_override("font_color", Style.WRONG.darkened(0.15) if _age_save_failed else Style.MUTED)
 
 
 func _build_reward_preview_shell() -> void:
@@ -748,6 +819,9 @@ func _build_reward_preview_shell() -> void:
 func _build_collection() -> void:
 	if duck != null and duck.get_parent() != self:
 		duck.reparent(self)
+	if _age_choices.get_parent() == _collection_grid:
+		_age_choices.reparent(_collection_column)
+		_collection_column.move_child(_age_choices, _collection_scroll.get_index())
 	if is_instance_valid(_world_choices):
 		_world_choices.get_parent().remove_child(_world_choices)
 		_world_choices.queue_free()
@@ -1469,7 +1543,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	for button in _found_words.get_children():
 		_found_words.remove_child(button)
 		button.queue_free()
-	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id, required_word_id):
+	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id, required_word_id, playroom_state.age_band_id):
 		_rebuilding = false
 		_show_error(model.error)
 		return false
@@ -1611,7 +1685,7 @@ func _refresh() -> void:
 	if theme_changed:
 		_memory.set_palette(palette)
 		_lesson.set_palette(palette)
-		for button in [collection_button, hint_button, _voice_button]:
+		for button in [collection_button, hint_button]:
 			Style.square_icon_button(button, palette.accent)
 		Style.square_icon_button(_collection_back, palette.accent)
 		Style.button(_storage_retry_button, palette.accent)
@@ -1625,6 +1699,8 @@ func _refresh() -> void:
 		_voice_button.tooltip_text = "Voice input is unavailable in this browser. You can still tap cards."
 	_set_accessibility_name(_voice_button, _voice_button.tooltip_text)
 	_voice_button.button_pressed = _voice_mode
+	_voice_button.engaged = _voice_listening
+	_style_voice_button()
 	_refresh_goal(palette)
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
@@ -1642,6 +1718,7 @@ func _refresh() -> void:
 	_storage_retry_button.visible = (_save_error or _journey_save_failed) and playing
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
+	_refresh_age_choices()
 	_success.visible = playing and _mode_id != "learn" and not _storage_retry_button.visible
 	_mode_row.visible = playing and not _voice_mode
 	_refresh_found_words(playing, palette.accent)
@@ -1830,6 +1907,7 @@ func _refresh_found_words(playing: bool, accent: Color) -> void:
 			picture.offset_right = -8
 			picture.offset_bottom = -26
 			var label := Style.label(word.text, 16)
+			label.name = "ReviewWord"
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.clip_text = true
 			button.add_child(label)
@@ -1837,7 +1915,10 @@ func _refresh_found_words(playing: bool, accent: Color) -> void:
 			label.offset_top = -26
 			label.offset_bottom = -4
 	for button in _found_words.get_children():
-		Style.button(button, accent)
+		var label: Label = button.get_node("ReviewWord")
+		var font: Font = label.get_theme_font("font")
+		var text_width: float = font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size")).x
+		Style.button(button, accent, maxf(72, ceilf(text_width + 16)))
 
 
 func _replay_found_word(word_id: String) -> void:
@@ -1929,7 +2010,7 @@ func _fit_content() -> void:
 
 
 func _fit_grid() -> void:
-	if grid == null or not grid.is_visible_in_tree():
+	if grid == null or _rebuilding or cards.is_empty() or not grid.is_visible_in_tree():
 		return
 	var area: Vector2 = _match_playfield.size
 	for card in cards.values():
@@ -1938,6 +2019,16 @@ func _fit_grid() -> void:
 	grid.columns = 4 if area.x >= area.y or area.y < 318 else 2
 	grid.position = Vector2.ZERO
 	grid.size = area
+	var pictures: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "image")
+	var words: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "word")
+	var display_order: Array = pictures + words
+	if grid.columns == 2:
+		display_order = [pictures[0], words[0], pictures[1], words[1],
+			pictures[2], words[2], pictures[3], words[3]]
+	for index in range(display_order.size()):
+		var button: Button = cards[display_order[index].id]
+		if grid.get_child(index) != button:
+			grid.move_child(button, index)
 
 
 func _fit_mode_buttons() -> void:
@@ -1974,12 +2065,40 @@ func _fit_mode_buttons() -> void:
 			box.content_margin_left = 4
 			box.content_margin_right = 4
 		button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
-	for button in [collection_button, hint_button, _voice_button, _memory.study_button]:
+	for button in [collection_button, hint_button, _memory.study_button]:
 		Style.square_icon_button(button, _active_palette.get("accent", Style.GOOD))
+	_style_voice_button()
 	_storage_retry_button.custom_minimum_size = Vector2(96, 44) / css_scale
 	_storage_retry_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_storage_retry_button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
 	_voice_space.custom_minimum_size.y = ceilf(112 / css_scale)
+
+
+func _style_voice_button() -> void:
+	if _voice_button == null:
+		return
+	var accent: Color = _active_palette.get("accent", Style.GOOD)
+	var scale: float = Style.ui_scale(self)
+	if accent == _voice_style_accent and is_equal_approx(scale, _voice_style_scale):
+		return
+	_voice_style_accent = accent
+	_voice_style_scale = scale
+	Style.square_icon_button(_voice_button, accent)
+	var radius: int = ceili(10 / scale)
+	var normal := Style.box(accent, accent, radius, 0)
+	normal.shadow_color = Color(accent, 0.18)
+	normal.shadow_size = ceili(2 / scale)
+	normal.shadow_offset = Vector2(0, 1 / scale)
+	_voice_button.add_theme_stylebox_override("normal", normal)
+	_voice_button.add_theme_stylebox_override("hover", Style.box(accent.darkened(0.06), accent, radius, 0))
+	_voice_button.add_theme_stylebox_override("pressed", Style.box(accent.darkened(0.18), accent, radius, 0))
+	_voice_button.add_theme_stylebox_override("hover_pressed", Style.box(accent.darkened(0.12), accent, radius, 0))
+	_voice_button.add_theme_stylebox_override("disabled", Style.box(Color("#e9eef2"), Color("#c7d1dc"), radius, 1))
+	_voice_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, radius, maxi(2, roundi(2 / scale))))
+	for state in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+		_voice_button.add_theme_color_override(state, Color.WHITE)
+	_voice_button.add_theme_color_override("font_disabled_color", Style.MUTED)
+	_voice_button.queue_redraw()
 
 
 func _layout_collection() -> void:
@@ -1999,6 +2118,17 @@ func _layout_collection() -> void:
 	_collection_column.add_theme_constant_override("separation", gap)
 	_collection_header.add_theme_constant_override("separation", gap)
 	_collection_grid.add_theme_constant_override("separation", ceili(20 / scale))
+	_age_choices.add_theme_constant_override("separation", roundi(4 / scale))
+	_age_row.add_theme_constant_override("separation", roundi(6 / scale))
+	_age_label.add_theme_font_size_override("font_size", ceili(14 / scale))
+	_age_label.custom_minimum_size.x = ceilf(30 / scale)
+	_age_notice.add_theme_font_size_override("font_size", ceili(13 / scale))
+	_age_notice.custom_minimum_size.y = ceilf(20 / scale)
+	for button in _age_buttons.values():
+		var focus: int = button.focus_mode
+		Style.action_button(button, _active_palette.get("accent", Style.GOOD))
+		button.focus_mode = focus
+		button.custom_minimum_size.x = ceilf(52 / scale)
 	var tab_width: float = minf(80 / scale, (usable_width - 44 / scale - gap * 3) / 2)
 	for button in _collection_tabs.values():
 		button.custom_minimum_size = Vector2(tab_width, ceilf(44 / scale))
@@ -2099,6 +2229,21 @@ func _layout_collection() -> void:
 				var surface: StyleBox = button.get_theme_stylebox(state)
 				for edge in ["left", "right", "top", "bottom"]:
 					surface.set("content_margin_" + edge, 6 / scale)
+		var fixed_height: float = padding * 2 + _collection_header.custom_minimum_size.y + gap
+		if not inline_worlds:
+			var world_rows: int = 6 / _world_grid.columns
+			fixed_height += world_rows * side + (world_rows - 1) * roundi(4 / scale) + gap
+		if _world_save_notice.visible:
+			fixed_height += _world_save_notice.get_combined_minimum_size().y
+		var age_height: float = ceilf(48 / scale) + roundi(4 / scale) + ceilf(20 / scale)
+		var pin_age: bool = size.y - fixed_height - age_height - gap >= ceilf(128 / scale)
+		var age_parent: Node = _collection_column if pin_age else _collection_grid
+		if _age_choices.get_parent() != age_parent:
+			var focused: Control = get_viewport().gui_get_focus_owner()
+			_age_choices.reparent(age_parent)
+			age_parent.move_child(_age_choices, _collection_scroll.get_index() if pin_age else 0)
+			if is_instance_valid(focused) and _age_choices.is_ancestor_of(focused):
+				focused.grab_focus()
 		_goal_row.add_theme_constant_override("separation", gap)
 		var palette: Dictionary = Data.theme(model.theme_id)
 		var surface := Style.box(palette.light.lightened(0.55), palette.accent.lightened(0.68), ceili(16 / scale), 1)
@@ -2213,6 +2358,7 @@ func _select_card(id: String) -> void:
 		return
 	if model.matched_ids.has(id):
 		if model.phase in ["waiting", "matching", "feedback"]:
+			cards[id].play_press()
 			var word: Dictionary = model.card_by_id(id).word
 			_lesson_hear(word)
 			cards[word.id + ":image"].play_word()
@@ -2240,6 +2386,8 @@ func _select_card(id: String) -> void:
 			if result == "correct":
 				audio.say("res://" + model.card_by_id(id).word.audio)
 		feedback_timer.start()
+	if result != "ignored":
+		cards[id].play_press()
 
 
 func _resolve_feedback() -> void:
@@ -2492,6 +2640,7 @@ func _retry_reward_save() -> void:
 
 func on_page_hidden() -> void:
 	_pointer_focus_active = false
+	_proactive_touches.clear()
 	_lesson.cancel_swipe()
 	_found_words_scroll.cancel_drag()
 	_stop_voice()
@@ -2532,13 +2681,32 @@ func _notification(what: int) -> void:
 		on_page_visible()
 
 
-func _input(event: InputEvent) -> void:
+func _observe_activity(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed and not event.canceled:
+			_proactive_touches[event.index] = true
+		else:
+			_proactive_touches.erase(event.index)
+	var meaningful: bool = false
+	if event is InputEventMouseButton or event is InputEventKey or event is InputEventJoypadButton:
+		meaningful = event.is_pressed() and not event.is_echo()
+	elif event is InputEventScreenTouch or event is InputEventScreenDrag:
+		meaningful = true
+	elif event is InputEventMouseMotion:
+		meaningful = event.button_mask != 0 and event.relative != Vector2.ZERO
+	elif event is InputEventJoypadMotion:
+		meaningful = absf(event.axis_value) > 0.3
+	if meaningful and duck != null:
+		duck.note_activity()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_pointer_focus_active = event.pressed
+		_pointer_focus_active = event.pressed and not event.canceled
 	elif event is InputEventScreenTouch:
-		_pointer_focus_active = event.pressed
+		_pointer_focus_active = event.pressed and not event.canceled
 	elif event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		_pointer_focus_active = false
+
+
+func _input(event: InputEvent) -> void:
 	# Handle mapped controller events before GUI defaults can activate or move focus.
 	if event is InputEventJoypadButton:
 		if event.pressed:
@@ -2750,7 +2918,9 @@ func _focus_center(control: Control) -> Vector2:
 		# Navigate the collection's content, not its temporarily scrolled screen positions.
 		center = _collection_grid.get_global_transform().affine_inverse() * center
 		if control == _collection_back or _collection_tabs.values().has(control) or theme_buttons.has(control):
-			center.y = -1.0
+			center.y = -104.0 / Style.ui_scale(self)
+		elif _age_buttons.values().has(control) and _age_choices.get_parent() != _collection_grid:
+			center.y = -32.0 / Style.ui_scale(self)
 	return center
 
 
@@ -2792,9 +2962,10 @@ func _default_focus() -> Control:
 			return _memory.study_button
 		var memory_controls: Array[Control] = _memory.controls()
 		return memory_controls[0] if not memory_controls.is_empty() else collection_button
-	for id in cards:
-		if not model.matched_ids.has(id) and _valid_focus(cards[id]):
-			return cards[id]
+	for kind in ["image", "word"]:
+		for card in model.cards:
+			if card.kind == kind and not model.matched_ids.has(card.id) and _valid_focus(cards[card.id]):
+				return cards[card.id]
 	return collection_button
 
 
@@ -2871,6 +3042,9 @@ func _connect_browser() -> void:
 	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void: set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void:
+		_proactive_touches.clear()
+		_pointer_focus_active = false
+		duck.note_activity()
 		_lesson.cancel_swipe()
 		_found_words_scroll.cancel_drag()
 		_memory.end_peek()
@@ -2916,6 +3090,7 @@ func _on_voice_state(arguments: Array) -> void:
 	_voice_mode = enabled
 	_voice_listening = enabled and bool(arguments[1])
 	_voice_button.button_pressed = enabled
+	_voice_button.engaged = _voice_listening
 	_voice_space.visible = enabled
 	if layout_changed:
 		_refresh_match_cards()
@@ -2964,6 +3139,7 @@ func _stop_voice() -> void:
 		_voice_space.hide()
 	if _voice_button != null:
 		_voice_button.button_pressed = false
+		_voice_button.engaged = false
 	if was_enabled:
 		_refresh_match_cards()
 		_layout()
@@ -3002,6 +3178,7 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 func _stop_feedback_animations() -> void:
 	for card in cards.values():
 		card.stop_word_play()
+		card.stop_press()
 	for tween in _feedback_tweens:
 		tween.kill()
 	_feedback_tweens.clear()
@@ -3207,7 +3384,9 @@ func _apply_collection_section() -> void:
 	for id in _collection_tabs:
 		_collection_tabs[id].set_pressed_no_signal(id == _collection_section)
 	for child in _collection_grid.get_children():
-		if child == _room:
+		if child == _age_choices:
+			child.show()
+		elif child == _room:
 			child.visible = _collection_section == "room"
 		else:
 			child.visible = _collection_section == "medals"
@@ -3262,6 +3441,7 @@ func _announce_collection_state() -> void:
 		medal_progress.completed_count(), Model.THEMES.size() * 6, _collection_headings[model.theme_id].text, guidance, medal_progress.legacy_rewards.size()]
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."
+	message += " " + _age_notice.text
 	_announce_status(message)
 
 
@@ -3280,6 +3460,13 @@ func _update_duck() -> void:
 	var visible_here: bool = in_preview or in_collection or not _voice_mode
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
+	var normal_view: bool = not in_preview and (not in_collection or _collection_section == "room")
+	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
+	var quiet_phase: bool = in_collection or active_phase in ["waiting", "matching"]
+	duck.set_proactive_allowed(visible_here and normal_view and quiet_phase and not _voice_mode
+		and not duck.speaking and not _pointer_focus_active and _proactive_touches.is_empty()
+		and not _collection_dragging and _controller_last_direction == Vector2.ZERO
+		and not _memory.memory.studying and not Input.is_anything_pressed())
 	if not visible_here:
 		duck.hide()
 		return
@@ -3287,6 +3474,7 @@ func _update_duck() -> void:
 	if in_collection and not in_preview and _collection_section == "medals":
 		slot = _medals_duck_slot
 	if not slot.is_visible_in_tree():
+		duck.set_proactive_allowed(false)
 		duck.hide()
 		return
 	var parent: Control = slot
@@ -3317,7 +3505,7 @@ func _play_duck() -> void:
 	if collection_page.visible and not _preview_page.visible and _collection_section == "room":
 		_room.playground.poke()
 		return
-	var tricks := ["dance", "snack", "bubbles"]
+	var tricks := ["dance", "snack", "bubbles", "high-five", "peekaboo", "flutter"]
 	var caption: String = duck.perform_trick(tricks[_duck_trick_index % tricks.size()])
 	_duck_trick_index += 1
 	if _voice_mode:

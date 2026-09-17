@@ -19,6 +19,7 @@ var preferred_theme_id: String = ""
 var goal_item_id: String = ""
 var collected_word_ids: Array[String] = []
 var displayed_word_id: String = ""
+var age_band_id: String = "all"
 var error: String = ""
 
 var _save_path: String
@@ -128,6 +129,7 @@ func load_state(legacy_favorite: String = "") -> bool:
 	var next_goal: String = ""
 	var next_collected: Array[String] = []
 	var next_displayed: String = ""
+	var next_age_band: String = "all"
 	if status != ERR_FILE_NOT_FOUND:
 		var version: Variant = config.get_value("playroom", "version", null)
 		if typeof(version) != TYPE_INT or version != SAVE_VERSION:
@@ -165,8 +167,8 @@ func load_state(legacy_favorite: String = "") -> bool:
 	if config.has_section("stickers"):
 		var saved_words: Variant = config.get_value("stickers", "word_ids", null)
 		var saved_display: Variant = config.get_value("stickers", "display_word_id", null)
-		if not saved_words is Array or saved_words.size() > 140:
-			return _fail("The sticker collection needs an array of at most 140 known word IDs.")
+		if not saved_words is Array:
+			return _fail("The sticker collection needs an array of known word IDs.")
 		for id in saved_words:
 			if not id is String or not _known_word(id) or next_collected.has(id):
 				return _fail("The sticker collection needs unique known word IDs.")
@@ -174,7 +176,12 @@ func load_state(legacy_favorite: String = "") -> bool:
 		if not saved_display is String or (not saved_display.is_empty() and not next_collected.has(saved_display)):
 			return _fail("The displayed sticker must be collected or empty.")
 		next_displayed = saved_display
-	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite, next_recent, next_preferred, next_collected, next_displayed, next_goal):
+	if config.has_section("learning"):
+		var saved_age_band: Variant = config.get_value("learning", "age_band", "all")
+		if not saved_age_band is String or Data.age_band(saved_age_band).is_empty():
+			return _fail("The learning age level must be all, 4-6, 7-9 or 10-plus.")
+		next_age_band = saved_age_band
+	if (status == ERR_FILE_NOT_FOUND or (_browser_storage != null and browser_text == null)) and not _persist(next_toy, next_backdrop, next_favorite, next_recent, next_preferred, next_collected, next_displayed, next_goal, next_age_band):
 		return false
 	toy_id = next_toy
 	backdrop_id = next_backdrop
@@ -184,7 +191,22 @@ func load_state(legacy_favorite: String = "") -> bool:
 	goal_item_id = next_goal
 	collected_word_ids = next_collected
 	displayed_word_id = next_displayed
+	age_band_id = next_age_band
 	_loaded = true
+	return true
+
+
+func set_age_band(id: String) -> bool:
+	error = ""
+	if not _loaded:
+		return _fail("Load playroom choices successfully before choosing an age level.")
+	if Data.age_band(id).is_empty():
+		return _fail("Choose an available age level.")
+	if age_band_id == id:
+		return true
+	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id, goal_item_id, id):
+		return false
+	age_band_id = id
 	return true
 
 
@@ -331,7 +353,7 @@ func suggested_adventure() -> String:
 	return recent_topic_ids.back() if not recent_topic_ids.is_empty() else ""
 
 
-func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String, next_collected: Array[String], next_displayed: String, next_goal: String) -> bool:
+func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String, next_collected: Array[String], next_displayed: String, next_goal: String, next_age_band: String = "") -> bool:
 	var config := ConfigFile.new()
 	config.set_value("playroom", "version", SAVE_VERSION)
 	config.set_value("playroom", "toy", next_toy)
@@ -342,6 +364,7 @@ func _persist(next_toy: String, next_backdrop: String, next_favorite: String, ne
 	config.set_value("journey", "goal_item_id", next_goal)
 	config.set_value("stickers", "word_ids", next_collected)
 	config.set_value("stickers", "display_word_id", next_displayed)
+	config.set_value("learning", "age_band", age_band_id if next_age_band.is_empty() else next_age_band)
 	if _browser_storage != null:
 		if not bool(_browser_storage.savePlayroomState(config.encode_to_text())):
 			return _fail("Could not save browser playroom choices. Browser storage may be unavailable or full.")

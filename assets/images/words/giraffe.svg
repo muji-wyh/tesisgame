@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">giraffe</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="62" cy="108" rx="34" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M78 65 Q95 63 94 81 M94 78 98 86" stroke-width="3"/>
+    <path d="M45 51 46 28 63 26 64 62 Q86 56 89 75 L85 104 H77 L76 85 H59 L57 104 H49 L48 83 H40 L37 103 H29 L33 72Z" fill="#efc979"/>
+    <path d="M46 31 37 24 39 19 49 23 M62 25 73 18 78 23 67 33" fill="#efc979" stroke-width="2.5"/>
+    <path d="M52 21 50 11 M62 21 63 11" stroke-width="3"/>
+    <circle cx="50" cy="10" r="3" fill="#a77c59" stroke="none"/><circle cx="63" cy="10" r="3" fill="#a77c59" stroke="none"/>
+    <path d="M44 30 Q40 18 55 18 Q69 19 68 31 L72 36 Q68 46 55 42 L45 39Z" fill="#f3d899"/>
+    <ellipse cx="61" cy="38" rx="12" ry="6" fill="#e3bd78" stroke-width="2"/>
+    <circle cx="51" cy="29" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M63 38H64 M57 50 61 50 60 57 54 57Z M46 65 51 62 56 68 51 74 45 71Z M64 70 71 66 75 72 72 79 65 77Z M79 64 84 68 82 73 77 70Z" fill="#bd875e" stroke="none"/>
+    <path d="M31 99H38 M49 100H57 M78 100H85" stroke="#a77c59" stroke-width="3"/>
+  </g>
+</svg>

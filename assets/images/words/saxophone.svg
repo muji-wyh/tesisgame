@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">saxophone</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M41 22Q60 12 65 31L49 81Q47 91 60 94Q73 96 76 81L80 62" stroke="#a77c59" stroke-width="16"/>
+    <path d="M41 22Q60 12 65 31L49 81Q47 91 60 94Q73 96 76 81L80 62" stroke="#edc779" stroke-width="11"/>
+    <path d="M70 71Q75 57 71 40L103 50Q90 60 87 75Z" fill="#edc779"/>
+    <ellipse cx="87" cy="45" rx="17" ry="8" transform="rotate(17 87 45)" fill="#d5a862" stroke-width="2.5"/>
+    <ellipse cx="87" cy="45" rx="11" ry="4" transform="rotate(17 87 45)" fill="#a77c59" stroke="none"/>
+    <path d="M29 20 44 16 46 24 31 28Z" fill="#6d6866" stroke-width="2.5"/>
+    <path d="M55 40 45 74" stroke="#a77c59" stroke-width="2"/>
+    <circle cx="54" cy="42" r="4" fill="#f3d899" stroke-width="2"/><circle cx="50" cy="54" r="4" fill="#f3d899" stroke-width="2"/><circle cx="46" cy="66" r="4" fill="#f3d899" stroke-width="2"/>
+    <path d="M53 87Q56 91 62 91" stroke="#fff0b3" stroke-width="3"/>
+  </g>
+</svg>

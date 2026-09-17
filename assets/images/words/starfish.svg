@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">starfish</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 14Q65 11 68 20L76 43 102 43Q111 43 105 51L85 69 94 96Q96 106 86 101L60 85 34 101Q24 106 26 96L35 69 15 51Q9 43 18 43H44L52 20Q55 11 60 14Z" fill="#efb660"/>
+    <path d="M60 32V60 M29 51 60 60 91 51 M60 60 40 89 M60 60 80 89" stroke="#d5a862" stroke-width="2"/>
+    <g fill="#fff0b3" stroke="none">
+      <circle cx="60" cy="26" r="2.5"/><circle cx="60" cy="39" r="2.5"/><circle cx="60" cy="51" r="2.5"/>
+      <circle cx="32" cy="51" r="2.5"/><circle cx="45" cy="55" r="2.5"/><circle cx="76" cy="55" r="2.5"/><circle cx="89" cy="51" r="2.5"/>
+      <circle cx="40" cy="88" r="2.5"/><circle cx="48" cy="76" r="2.5"/><circle cx="72" cy="76" r="2.5"/><circle cx="80" cy="88" r="2.5"/>
+    </g>
+    <circle cx="60" cy="64" r="7" fill="#f4d36a" stroke-width="2"/>
+  </g>
+</svg>

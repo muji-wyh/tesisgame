@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseMode, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
+const { boardPoint, chooseMode, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
@@ -111,6 +111,40 @@ async function listen(page) {
   await expect(page.locator('#speech-notice')).toContainText(/(?:save|store)s? no voice or transcripts/i);
   await rendered(page);
 }
+
+test('Voice is a prominent primary action without automatic recording', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const errors = await openGame(page);
+  await chooseTheme(page, 4);
+  await page.mouse.move(0, 0);
+  await rendered(page);
+  const bounds = await logicalMetrics(page), rect = headerIconRect(bounds, 'voice');
+  const clip = { x: bounds.x + rect.x * bounds.scale, y: bounds.y + rect.y * bounds.scale,
+    width: rect.width * bounds.scale, height: rect.height * bounds.scale };
+  const available = await page.screenshot({ path: testInfo.outputPath('voice-primary-ready.png'), clip, scale: 'css' });
+  const fraction = await page.evaluate(async encoded => {
+    const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
+    const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+    const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let filled = 0;
+    for (let index = 0; index < pixels.length; index += 4) {
+      if (Math.abs(pixels[index] - 0x13) + Math.abs(pixels[index + 1] - 0x75) + Math.abs(pixels[index + 2] - 0x8b) < 40) filled++;
+    }
+    return filled / (pixels.length / 4);
+  }, available.toString('base64'));
+  expect(fraction, 'The microphone has a filled theme surface, not a faint outline-only icon.').toBeGreaterThan(0.5);
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
+  await listen(page);
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+  const active = await page.screenshot({ path: testInfo.outputPath('voice-primary-listening.png'), clip, scale: 'css' });
+  expect(active.equals(available)).toBe(false);
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toBeHidden();
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+  expect(errors).toEqual([]);
+});
 
 for (const viewport of [{ width: 320, height: 568 }, { width: 1366, height: 768 }]) {
 test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewport.width}px`, async ({ page, browserName }, testInfo) => {

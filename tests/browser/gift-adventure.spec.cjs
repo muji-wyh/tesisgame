@@ -5,7 +5,7 @@ const { metrics, tap, chooseMode, rendered, openGame, boardPoint, swipeLearn,
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 const learningStatus = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
-const PICNIC = 'apple banana orange pear grape cherry melon carrot tomato corn peas egg bread cake cookie cheese milk water juice rice'.split(' ');
+const PICNIC = 'apple banana orange pear grape cherry melon carrot tomato corn peas egg bread cake cookie cheese milk water juice rice pumpkin coconut pineapple watermelon strawberry'.split(' ');
 const APPLE_STAGES = [
   '1/3 · An apple for Pip!',
   '2/3 · Pip nibbles the apple. Crunch!',

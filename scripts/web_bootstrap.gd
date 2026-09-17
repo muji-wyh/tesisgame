@@ -3,10 +3,10 @@ extends Node
 # Load dependencies before their users so each script compiles in its own frame.
 # Retain them until the main scene owns the preloads; the resource cache is weak.
 const SCRIPTS := [
-	"game_data", "ui_style", "icon_button", "game_model", "word_play", "word_card", "game_audio",
+	"game_data", "ui_style", "icon_button", "game_model", "word_play", "card_motion", "word_card", "game_audio",
 	"chest_view", "celebration", "medal_view", "medal_progress", "duck_mascot",
 	"word_lesson", "review_scroll", "memory_game_model", "memory_garden",
-	"playroom_state", "playroom_view", "game_ui"
+	"playroom_state", "toy_card", "playroom_view", "game_ui"
 ]
 
 

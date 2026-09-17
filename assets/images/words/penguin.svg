@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">penguin</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="34" ry="4" fill="#d1e7e7" stroke="none"/>
+    <path d="M38 99 26 106 53 107 54 99 M67 99 67 107 94 106 82 99" fill="#efb660"/>
+    <path d="M34 51 Q14 61 20 89 Q30 86 39 72 M86 51 Q106 61 100 89 Q90 86 81 72" fill="#6d7988"/>
+    <path d="M30 67 Q26 20 60 18 Q94 20 90 67 Q100 101 60 103 Q20 101 30 67Z" fill="#6d7988"/>
+    <path d="M39 41 Q48 32 60 46 Q72 32 81 41 Q85 55 78 64 Q97 94 60 96 Q23 94 42 64 Q35 55 39 41Z" fill="#fff7e6" stroke="none"/>
+    <circle cx="46" cy="48" r="3" fill="#765445" stroke="none"/><circle cx="74" cy="48" r="3" fill="#765445" stroke="none"/>
+    <path d="M51 59 60 54 69 59 60 67Z" fill="#f0bc72" stroke-width="2.5"/>
+    <ellipse cx="39" cy="60" rx="5" ry="3" fill="#f4c2b3" stroke="none"/><ellipse cx="81" cy="60" rx="5" ry="3" fill="#f4c2b3" stroke="none"/>
+  </g>
+</svg>

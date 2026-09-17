@@ -29,7 +29,12 @@ func check_text(app, id: String, state: String) -> void:
 		"%s %s at scale %.3f: text=%s card=%s minimum=%s font=%d line-gap=%d" % [
 			id, state, scale, label.get_global_rect(), card.get_global_rect(), label.get_minimum_size(),
 			label.get_theme_font_size("font_size"), label.get_theme_constant("line_spacing")])
-	check(label.get_line_count() == 3 and label.get_theme_font_size("font_size") * scale >= 12,
+	var title: Label = card.title_label
+	var title_lines: int = title.get_line_count() if title.is_visible_in_tree() else 0
+	if title_lines:
+		check(inner.encloses(title.get_global_rect()) and title.get_global_rect().end.y <= label.global_position.y,
+			"The separate title remains inside the card without overlapping its retry details")
+	check(label.get_line_count() + title_lines == 3 and label.get_theme_font_size("font_size") * scale >= 12,
 		"The complete three-line state stays readable instead of being clipped or shrunk away")
 	check(absf(card.size.y * scale - 128) <= 1, "Fitting text does not change the fixed card height")
 

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sofa</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="43" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M28 94V105 M92 94V105" stroke="#a77c59" stroke-width="7"/>
+    <rect x="24" y="31" width="72" height="58" rx="13" fill="#b999bd"/>
+    <path d="M60 38V72" stroke="#927d99" stroke-width="2.5"/>
+    <rect x="21" y="68" width="78" height="30" rx="7" fill="#b999bd"/>
+    <rect x="29" y="66" width="31" height="18" rx="6" fill="#dfc6df" stroke-width="2.5"/>
+    <rect x="60" y="66" width="31" height="18" rx="6" fill="#dfc6df" stroke-width="2.5"/>
+    <path d="M12 68Q12 57 23 57Q34 57 34 68V93H21Q12 93 12 84Z M86 68Q86 57 97 57Q108 57 108 68V84Q108 93 99 93H86Z" fill="#c7b2d9"/>
+    <path d="M35 40H49 M71 40H85" stroke="#ecd8e8" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">kangaroo</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="44" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M48 77 Q27 96 12 95 Q20 108 54 96" fill="#c79371"/>
+    <path d="M58 49 Q40 66 46 86 Q48 96 65 96 L58 103 H91 Q100 96 85 94 L74 83 76 62Z" fill="#d8a67d"/>
+    <path d="M56 62 Q71 60 73 80 Q62 91 54 78Z" fill="#f3d4af" stroke-width="2.5"/>
+    <path d="M53 75 Q60 68 70 75 Q69 87 61 87 Q54 84 53 75Z" fill="#e7bb94" stroke-width="2.5"/>
+    <path d="M65 49 67 36 Q65 28 70 25 L67 11 Q71 5 75 13 L81 29 88 12 Q94 8 94 16 L89 35 101 39 Q106 45 99 49 L87 49 78 62Z" fill="#d8a67d"/>
+    <path d="M74 15 79 30 M90 18 85 33" stroke="#efbd9d" stroke-width="3"/>
+    <circle cx="84" cy="39" r="2.5" fill="#765445" stroke="none"/>
+    <circle cx="101" cy="42" r="3" fill="#765445" stroke="none"/>
+    <path d="M85 48 Q89 52 95 48 M73 61 88 67 92 64 M61 92 72 94" stroke-width="2.5"/>
+  </g>
+</svg>

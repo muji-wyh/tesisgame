@@ -5,6 +5,8 @@ signal word_changed(word: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
 const WordPlay = preload("res://scripts/word_play.gd")
+const CardMotion = preload("res://scripts/card_motion.gd")
+const WordCard = preload("res://scripts/word_card.gd")
 
 var current_word: Dictionary = {}
 var progress_label: Label
@@ -28,6 +30,10 @@ var _slide_preview: Button
 var _slide_tween: Tween
 var _keyboard_focus: bool = false
 var _word_play := WordPlay.new()
+var _picture_press := CardMotion.new()
+var _word_press := CardMotion.new()
+var _tap_effect: WordCard.FeedbackOverlay
+var _tap_tween: Tween
 
 
 func _ready() -> void:
@@ -65,6 +71,11 @@ func _build() -> void:
 	hear_hint_label.hide()
 	_card.add_child(hear_hint_label)
 	_card.add_child(progress_label)
+	_tap_effect = WordCard.FeedbackOverlay.new()
+	_tap_effect.name = "TapSparkles"
+	_tap_effect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_tap_effect.hide()
+	_card.add_child(_tap_effect)
 	resized.connect(_layout)
 	visibility_changed.connect(cancel_swipe)
 	set_palette(_palette)
@@ -160,7 +171,26 @@ func _can_interact() -> bool:
 func _hear() -> void:
 	if not _can_interact():
 		return
+	_picture_press.stop()
 	_word_play.play(picture, current_word.id, reduced_motion)
+	if not WordPlay.WORDS.has(current_word.id):
+		_picture_press.play(picture, reduced_motion)
+	_word_press.play(word_label, reduced_motion)
+	_stop_tap_effect()
+	if not reduced_motion:
+		_tap_effect.position = picture.position
+		_tap_effect.size = picture.size
+		_tap_effect.accent = _palette.get("accent", Style.GOOD)
+		_tap_effect.spark = _palette.get("spark", Style.GOOD.lightened(0.3))
+		_tap_effect.kind = "tap"
+		_tap_effect.progress = 0.0
+		_tap_effect.show()
+		_tap_effect.queue_redraw()
+		_tap_tween = create_tween()
+		_tap_tween.tween_method(func(value: float) -> void:
+			_tap_effect.progress = value
+			_tap_effect.queue_redraw(), 0.0, 1.0, 0.45)
+		_tap_tween.tween_callback(_stop_tap_effect)
 	if audio_available:
 		hear_requested.emit(current_word)
 
@@ -213,13 +243,17 @@ func _fit_word_label(label: Label) -> void:
 	var font: Font = label.get_theme_font("font")
 	var scale: float = Style.ui_scale(self)
 	var font_size: int = ceili(40 / scale)
-	while font_size > ceili(16 / scale) and font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > label.size.x:
+	var available_width: float = maxf(0, label.size.x - 8 / scale)
+	while font_size > ceili(16 / scale) and font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available_width:
 		font_size -= 1
 	label.add_theme_font_size_override("font_size", font_size)
 
 
 func cancel_swipe() -> void:
 	_word_play.stop()
+	_picture_press.stop()
+	_word_press.stop()
+	_stop_tap_effect()
 	_pointer = -1
 	_travel = 0.0
 	if _slide_tween != null:
@@ -229,6 +263,15 @@ func cancel_swipe() -> void:
 		_card.position = _card_home
 	if _slide_preview != null:
 		_slide_preview.hide()
+
+
+func _stop_tap_effect() -> void:
+	if _tap_tween != null:
+		_tap_tween.kill()
+	_tap_tween = null
+	if _tap_effect != null:
+		_tap_effect.kind = ""
+		_tap_effect.hide()
 
 
 func _in_display(point: Vector2) -> bool:

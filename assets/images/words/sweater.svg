@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sweater</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M41 24 50 20 Q60 29 70 20 L79 24 103 50 99 98 84 97 82 69 84 103H36L38 69 36 97 21 98 17 50Z" fill="#b999bd"/>
+    <path d="M50 20 Q50 39 60 39 Q70 39 70 20 M36 92H84 M20 87 37 86 M83 86 100 87" stroke="#927d99" stroke-width="3"/>
+    <path d="M41 97V102 M49 96V102 M57 96V102 M65 96V102 M73 96V102 M81 96V102 M26 90V97 M32 89V96 M88 89V96 M94 90V97" stroke="#dfc6df" stroke-width="2"/>
+    <path d="M43 49 47 53 51 49 M56 49 60 53 64 49 M69 49 73 53 77 49 M43 64 47 68 51 64 M56 64 60 68 64 64 M69 64 73 68 77 64 M43 79 47 83 51 79 M56 79 60 83 64 79 M69 79 73 83 77 79" stroke="#dfc6df" stroke-width="2.5"/>
+    <path d="M39 32 27 48" stroke="#ecd8e8" stroke-width="4"/>
+  </g>
+</svg>

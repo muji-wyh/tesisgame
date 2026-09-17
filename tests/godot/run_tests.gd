@@ -217,7 +217,7 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		model.reset(words, seed_value)
 		for card in model.cards:
 			seen_words[card.word.id] = true
-	check(seen_words.size() == words.size(), "All 140 words can appear across seeded rounds")
+	check(seen_words.size() == words.size(), "All 200 words can appear across seeded rounds")
 	model.reset(words, 17)
 	var deck: Array = model.cards.duplicate(true)
 	var season: String = model.theme_id
@@ -440,7 +440,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 
 
 func _test_data(words: Array) -> void:
-	check(words.size() == 140, "The game includes 140 short picture words")
+	check(words.size() == 200, "The game includes 200 age-graded picture words")
 	var path := "res://scripts/game_data.gd"
 	check(FileAccess.file_exists(path), "The native data loader exists")
 	if not FileAccess.file_exists(path):
@@ -488,51 +488,51 @@ func _test_data(words: Array) -> void:
 	var expected_themes := {
 		"spring": {
 			"name": "Spring",
-			"background": Color("#edf8ec"),
-			"accent": Color("#438363"),
-			"light": Color("#d7efc7"),
-			"spark": Color("#75c66f"),
-			"tint": Color("#dff6de")
+			"background": Color("#effbef"),
+			"accent": Color("#237a57"),
+			"light": Color("#bfe9c5"),
+			"spark": Color("#ffa8bb"),
+			"tint": Color("#eefbd6")
 		},
 		"summer": {
 			"name": "Summer",
-			"background": Color("#ffe6e6"),
-			"accent": Color("#b53640"),
-			"light": Color("#ffc6cb"),
-			"spark": Color("#ff8f9d"),
-			"tint": Color("#ffe3e8")
+			"background": Color("#fff4df"),
+			"accent": Color("#b94545"),
+			"light": Color("#ffd192"),
+			"spark": Color("#21afbc"),
+			"tint": Color("#fff0cd")
 		},
 		"autumn": {
 			"name": "Autumn",
-			"background": Color("#fff8cf"),
-			"accent": Color("#8f7400"),
-			"light": Color("#ffe07a"),
-			"spark": Color("#ffd24d"),
-			"tint": Color("#fff0ad")
+			"background": Color("#fff2e5"),
+			"accent": Color("#995323"),
+			"light": Color("#ffd19b"),
+			"spark": Color("#b46386"),
+			"tint": Color("#ffe6c5")
 		},
 		"winter": {
 			"name": "Winter",
-			"background": Color.WHITE,
-			"accent": Color("#606a73"),
-			"light": Color("#eef2f4"),
-			"spark": Color("#d8dee3"),
-			"tint": Color("#f5f7f8")
+			"background": Color("#eef5ff"),
+			"accent": Color("#456791"),
+			"light": Color("#c9dcf5"),
+			"spark": Color("#aa97d4"),
+			"tint": Color("#e6edff")
 		},
 		"ocean": {
 			"name": "Ocean",
-			"background": Color("#e4f6fb"),
-			"accent": Color("#216d89"),
-			"light": Color("#b8e6ed"),
-			"spark": Color("#69cbd6"),
-			"tint": Color("#d6f4f4")
+			"background": Color("#e7f8fa"),
+			"accent": Color("#13758b"),
+			"light": Color("#afdee6"),
+			"spark": Color("#ffad87"),
+			"tint": Color("#e1f4ef")
 		},
 		"space": {
 			"name": "Space",
-			"background": Color("#eeeafa"),
-			"accent": Color("#69569b"),
-			"light": Color("#d7ccef"),
-			"spark": Color("#bba3eb"),
-			"tint": Color("#eee3ff")
+			"background": Color("#f1edfb"),
+			"accent": Color("#694a99"),
+			"light": Color("#d6c8f0"),
+			"spark": Color("#efb451"),
+			"tint": Color("#eae3ff")
 		}
 	}
 	for season in expected_themes.keys():
@@ -793,8 +793,10 @@ func _test_play_improvements(app) -> void:
 		check(app.model.hints_remaining == 0 and app.hint_button.count == 0 and app.hint_button.disabled
 			and app.hint_button.tooltip_text.begins_with("No hints left"),
 			"Xbox X consumes the shared third hint and disables the button")
-		app.cards[third_hint[0]].pressed.emit()
+		if app.model.selected_id != third_hint[0]:
+			app.cards[third_hint[0]].pressed.emit()
 		app.cards[third_hint[1]].pressed.emit()
+		check(app.model.successes == 1, "Completing a hint uses an already selected card instead of cancelling it")
 		check(app.hint_button.disabled, "The exhausted hint stays disabled during match feedback")
 		app.feedback_timer.timeout.emit()
 		for pair in pairs_for(app.model):

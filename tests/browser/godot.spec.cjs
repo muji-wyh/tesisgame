@@ -325,7 +325,7 @@ test('season colors preserve selection and discard obsolete pending music and pr
     const point = firstCard(await canvasMetrics(page));
     await page.touchscreen.tap(point.x, point.y);
     const selected = await page.locator('#selection-status').textContent();
-    for (const [index, color] of ['#edf8ec', '#ffe6e6', '#fff8cf', '#ffffff', '#e4f6fb', '#eeeafa'].entries()) {
+    for (const [index, color] of ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb'].entries()) {
       await chooseSeason(page, index);
       await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', color);
       await expect(page.locator('#game-status')).toHaveText('Now find its match!');
@@ -427,7 +427,7 @@ test('the exported game runs inside a normal website iframe', async ({ page }) =
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>html,body{margin:0;width:100%;height:100%;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0}</style>' +
-      '</head><body><iframe title="Word Buddies" src="/" allow="autoplay; fullscreen"></iframe></body></html>'
+      '</head><body><iframe title="Pip and Words" src="/" allow="autoplay; fullscreen"></iframe></body></html>'
   }));
   await page.goto('/embed-test.html');
   const frame = page.frameLocator('iframe');
@@ -454,7 +454,7 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>body{margin:0}section{height:150vh}iframe{display:block;width:100%;height:700px;border:0}</style>' +
-      '</head><body><section>Content above the game</section><iframe title="Word Buddies" src="/" allow="autoplay"></iframe></body></html>'
+      '</head><body><section>Content above the game</section><iframe title="Pip and Words" src="/" allow="autoplay"></iframe></body></html>'
   }));
   await page.goto('/below-fold.html');
   const frame = page.frameLocator('iframe');

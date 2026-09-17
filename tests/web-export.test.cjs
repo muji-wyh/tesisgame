@@ -5,6 +5,17 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 
+test('Pip and Words branding keeps the existing internal save identity', () => {
+  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
+  assert.match(shell, /<title>Pip and Words<\/title>/);
+  assert.match(shell, /id="loading-title">Pip and Words<\/h1>/);
+  assert.match(shell, /aria-label="Pip and Words word game"/);
+  const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
+  assert.match(project, /^config\/name="Word Buddies"$/m);
+  assert.match(shell, /wordBuddies\.medalProgress/);
+  assert.match(shell, /wordBuddies\.playroom/);
+});
+
 test('the web bootstrap references only existing script dependencies', () => {
   const source = fs.readFileSync(path.join(root, 'scripts', 'web_bootstrap.gd'), 'utf8');
   const dependencies = source.match(/const SCRIPTS := \[([\s\S]*?)\]/)?.[1];

@@ -19,9 +19,9 @@ var count: int = -1:
 
 func _draw() -> void:
 	var center := size * 0.5
-	var unit: float = minf(size.x, size.y) * 0.24
+	var unit: float = minf(size.x, size.y) * (0.27 if symbol == Symbol.VOICE else 0.24)
 	var stroke: float = maxf(1, unit * 0.17)
-	var ink: Color = Style.MUTED if disabled else Style.INK
+	var ink: Color = get_theme_color("font_disabled_color" if disabled else "font_pressed_color" if button_pressed else "font_color")
 	match symbol:
 		Symbol.BACK:
 			draw_polyline(PackedVector2Array([
@@ -46,6 +46,10 @@ func _draw() -> void:
 			draw_arc(center + Vector2(0, unit * 0.1), unit * 0.7, 0, PI, 16, ink, stroke, true)
 			draw_line(center + Vector2(0, unit * 0.8), center + Vector2(0, unit * 1.1), ink, stroke, true)
 			draw_line(center + Vector2(-unit * 0.4, unit * 1.1), center + Vector2(unit * 0.4, unit * 1.1), ink, stroke, true)
+			if engaged:
+				for side in [-1, 1]:
+					var angle: float = 0 if side == 1 else PI
+					draw_arc(center - Vector2(0, unit * 0.1), unit * 1.1, angle - 0.46, angle + 0.46, 12, ink, stroke, true)
 		Symbol.HINT:
 			draw_circle(center - Vector2(0, unit * 0.25), unit * 0.65, ink, false, stroke, true)
 			for line in [0.5, 0.8]:

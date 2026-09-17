@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, contentBounds, headerPoint, pipHeaderRect } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, contentBounds, headerPoint, pipHeaderRect,
+  memoryPoint, peekPoint } = require('./game-ui.cjs');
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -64,7 +65,7 @@ async function expectGesture(page, clip, resting, testInfo, name) {
     change = await changedPixels(page, resting, frame);
     if (change > 0.05) gesture = frame;
     return change;
-  }, { timeout: 12500, intervals: [150], message: 'Pip visibly moves its body or wings without a player action.' }).toBeGreaterThan(0.05);
+  }, { timeout: 19000, intervals: [150], message: 'Pip visibly moves its body or wings without a player action.' }).toBeGreaterThan(0.05);
   await testInfo.attach(name, { body: gesture, contentType: 'image/png' });
   await testInfo.attach(`${name}-changed-pixels`, { body: `${(change * 100).toFixed(1)}%`, contentType: 'text/plain' });
 }
@@ -72,7 +73,7 @@ async function expectGesture(page, clip, resting, testInfo, name) {
 async function expectStill(page, clip) {
   await rendered(page);
   const resting = await capture(page, clip);
-  const deadline = Date.now() + 10500;
+  const deadline = Date.now() + 17500;
   // Sample the whole longest idle interval, so an intervening gesture cannot hide
   // between two identical screenshots taken before and after it.
   while (Date.now() < deadline) {
@@ -109,6 +110,51 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
   await page.waitForTimeout(1800);
   await expectStill(page, area.body);
   await page.screenshot({ path: testInfo.outputPath('pip-reduced-motion.png'), scale: 'css' });
+  expect(errors).toEqual([]);
+});
+
+test('Pip offers six direct reactions without changing the lesson or saved progress', async ({ page }, testInfo) => {
+  const errors = await openGame(page);
+  const original = await gameState(page);
+  const pip = headerPoint(await metrics(page), 'pip');
+  const captions = ["Pip's happy dance!", 'Crunch! A carrot for Pip!', 'Pop! Bubble party!',
+    'High five, friend!', 'Peekaboo! Here is Pip!', 'Flutter, flutter! Hello!'];
+  for (const [index, caption] of captions.entries()) {
+    await tap(page, pip.x, pip.y);
+    await expect(page.locator('#game-status')).toContainText(caption);
+    expect((await gameState(page)).saves).toEqual(original.saves);
+    if (index >= 3) await page.screenshot({ path: testInfo.outputPath(`pip-new-reaction-${index}.png`), scale: 'css' });
+  }
+  expect(errors).toEqual([]);
+});
+
+test('Pip resumes after multi-touch Peek ends or is canceled', async ({ page, browserName }, testInfo) => {
+  test.skip(browserName !== 'chromium', 'Trusted multi-touch uses Chromium CDP.');
+  const errors = await openGame(page, { mode: 'memory', reducedMotion: 'no-preference' });
+  const bounds = await metrics(page), card = memoryPoint(bounds, 0), eye = peekPoint(bounds);
+  const point = (id, value) => ({ id, x: bounds.x + value.x * bounds.scale, y: bounds.y + value.y * bounds.scale });
+  const first = point(1, card), second = point(2, eye);
+  const state = await gameState(page);
+  const client = await page.context().newCDPSession(page);
+  let touching = false;
+  try {
+    for (const ending of ['touchEnd', 'touchCancel']) {
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [first] });
+      touching = true;
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [first, second] });
+      await expect(page.locator('#game-status')).toContainText('Release to hide.');
+      await client.send('Input.dispatchTouchEvent', { type: ending, touchPoints: [] });
+      touching = false;
+      await expect(page.locator('#game-status')).toContainText('Find a pair.');
+      await rendered(page);
+      const area = await clips(page), resting = await capture(page, area.body);
+      await expectGesture(page, area.body, resting, testInfo, `pip-after-multitouch-${ending}`);
+      expect(await gameState(page)).toEqual(state);
+    }
+  } finally {
+    if (touching) await client.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+    await client.detach();
+  }
   expect(errors).toEqual([]);
 });
 

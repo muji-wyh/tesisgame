@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pinecone</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="109" rx="31" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M60 103 61 113" stroke="#a77c59" stroke-width="4"/>
+    <path d="M60 14Q84 25 88 53Q100 80 80 98Q60 115 40 98Q20 80 32 53Q36 25 60 14Z" fill="#b58b69"/>
+    <path d="M49 24Q60 42 71 24 M41 37Q49 54 60 38Q71 54 79 37 M34 52Q43 69 51 52Q60 69 69 52Q77 69 86 52 M31 68Q40 85 49 68Q60 85 71 68Q80 85 89 68 M36 84Q47 100 60 84Q73 100 84 84 M48 99Q60 110 72 99" stroke="#765445" stroke-width="2.5"/>
+    <path d="M54 25 60 30 M45 41 49 46 M37 55 42 61 M34 72 39 78 M42 88 47 92" stroke="#e9c291" stroke-width="3"/>
+  </g>
+</svg>

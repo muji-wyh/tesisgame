@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pumpkin</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="40" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M56 37 53 22 Q53 16 63 16 L69 21 65 37" fill="#91bd7e"/>
+    <path d="M65 30 Q80 17 91 25 Q96 34 87 35 Q80 35 85 29" stroke="#78ad72" stroke-width="2.5"/>
+    <path d="M60 37 Q42 27 28 40 Q10 41 15 70 Q17 100 38 98 Q59 109 81 98 Q103 99 106 70 Q111 42 91 40 Q77 27 60 37Z" fill="#ee9c54"/>
+    <ellipse cx="60" cy="69" rx="21" ry="34" fill="#f2ad60"/>
+    <path d="M37 39 Q18 65 36 96 M83 39 Q102 65 84 96 M61 40 Q50 57 53 87" stroke="#d98248" stroke-width="2.5"/>
+    <path d="M45 44 Q36 58 37 70" stroke="#ffd292" stroke-width="4"/>
+  </g>
+</svg>

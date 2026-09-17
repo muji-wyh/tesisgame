@@ -1,54 +1,72 @@
 extends RefCounted
 
+const GAME_NAME: String = "Pip and Words"
 const PIECES_PER_MEDAL: int = 3
+const AGE_BANDS: Array[Dictionary] = [
+	{"id": "all", "name": "All words", "label": "All", "max_level": 3},
+	{"id": "4-6", "name": "Ages 4-6", "label": "4-6", "max_level": 1},
+	{"id": "7-9", "name": "Ages 7-9", "label": "7-9", "max_level": 2},
+	{"id": "10-plus", "name": "Ages 10+", "label": "10+", "max_level": 3}
+]
 const ADVENTURES: Array[Dictionary] = [
 	{"id": "animal-friends", "name": "Animal friends", "words": [
 		"cat", "dog", "fish", "duck", "cow", "pig", "hen", "sheep", "horse", "goat", "rabbit", "mouse",
-		"bear", "lion", "tiger", "monkey", "panda", "zebra", "fox", "owl", "frog", "turtle", "bee", "ant"]},
+		"bear", "lion", "tiger", "monkey", "panda", "zebra", "fox", "owl", "frog", "turtle", "bee", "ant",
+		"elephant", "giraffe", "kangaroo", "penguin", "squirrel"]},
 	{"id": "picnic-time", "name": "Picnic time", "words": [
 		"apple", "banana", "orange", "pear", "grape", "cherry", "melon", "carrot", "tomato", "corn", "peas",
-		"egg", "bread", "cake", "cookie", "cheese", "milk", "water", "juice", "rice"]},
+		"egg", "bread", "cake", "cookie", "cheese", "milk", "water", "juice", "rice",
+		"pumpkin", "coconut", "pineapple", "watermelon", "strawberry"]},
 	{"id": "great-outdoors", "name": "Great outdoors", "words": [
-		"sun", "moon", "star", "cloud", "rain", "snow", "tree", "leaf", "flower"]},
+		"sun", "moon", "star", "cloud", "rain", "snow", "tree", "leaf", "flower",
+		"river", "lake", "mountain", "rainbow", "waterfall"]},
 	{"id": "dress-up", "name": "Dress up", "words": [
 		"hat", "coat", "shirt", "dress", "sock", "shoe", "glove", "scarf",
-		"boot", "skirt", "pants", "vest", "tie", "ring", "watch", "crown"]},
+		"boot", "skirt", "pants", "vest", "tie", "ring", "watch", "crown",
+		"helmet", "sweater", "necklace", "bracelet", "sunglasses"]},
 	{"id": "on-the-move", "name": "On the move", "words": [
-		"car", "bus", "train", "truck", "plane", "boat", "bike"]},
+		"car", "bus", "train", "truck", "plane", "boat", "bike",
+		"scooter", "tractor", "ambulance", "helicopter", "submarine"]},
 	{"id": "play-time", "name": "Play time", "words": [
-		"ball", "book", "doll", "kite", "drum", "block"]},
+		"ball", "book", "doll", "kite", "drum", "block",
+		"robot", "puzzle", "marble", "balloon", "skateboard"]},
 	{"id": "at-home", "name": "At home", "words": [
 		"bed", "chair", "table", "door", "lamp", "clock", "key", "phone", "cup", "bowl", "plate", "spoon",
-		"fork", "soap", "brush", "towel"]},
+		"fork", "soap", "brush", "towel", "window", "mirror", "pillow", "blanket", "sofa"]},
 	{"id": "head-to-toe", "name": "Head to toe", "words": [
-		"eye", "ear", "nose", "mouth", "hand", "foot", "arm", "leg", "head", "tooth"]},
+		"eye", "ear", "nose", "mouth", "hand", "foot", "arm", "leg", "head", "tooth",
+		"finger", "thumb", "elbow", "knee", "ankle"]},
 	{"id": "ocean-discovery", "name": "Ocean discovery", "words": [
-		"whale", "shark", "crab", "seal", "shell", "coral", "squid", "clam"]},
+		"whale", "shark", "crab", "seal", "shell", "coral", "squid", "clam",
+		"dolphin", "octopus", "jellyfish", "seahorse", "starfish"]},
 	{"id": "space-trip", "name": "Space trip", "words": [
-		"earth", "rocket", "planet", "comet", "meteor", "alien", "rover", "galaxy"]},
+		"earth", "rocket", "planet", "comet", "meteor", "alien", "rover", "galaxy",
+		"astronaut", "satellite", "telescope", "spaceship", "asteroid"]},
 	{"id": "garden-trail", "name": "Garden trail", "words": [
-		"seed", "root", "grass", "rose", "berry", "acorn", "pebble", "pond"]},
+		"seed", "root", "grass", "rose", "berry", "acorn", "pebble", "pond",
+		"mushroom", "cactus", "bamboo", "pinecone", "sunflower"]},
 	{"id": "music-makers", "name": "Music makers", "words": [
-		"piano", "flute", "violin", "guitar", "bell", "harp", "horn", "tuba"]}
+		"piano", "flute", "violin", "guitar", "bell", "harp", "horn", "tuba",
+		"trumpet", "saxophone", "xylophone", "cymbal", "microphone"]}
 ]
 const THEMES: Dictionary = {
-	"spring": {"name": "Spring", "background": Color("#edf8ec"), "accent": Color("#438363"),
-		"light": Color("#d7efc7"), "spark": Color("#75c66f"), "tint": Color("#dff6de"),
+	"spring": {"name": "Spring", "background": Color("#effbef"), "accent": Color("#237a57"),
+		"light": Color("#bfe9c5"), "spark": Color("#ffa8bb"), "tint": Color("#eefbd6"),
 		"chest": "royal", "prize": "A spring flower!"},
-	"summer": {"name": "Summer", "background": Color("#ffe6e6"), "accent": Color("#b53640"),
-		"light": Color("#ffc6cb"), "spark": Color("#ff8f9d"), "tint": Color("#ffe3e8"),
+	"summer": {"name": "Summer", "background": Color("#fff4df"), "accent": Color("#b94545"),
+		"light": Color("#ffd192"), "spark": Color("#21afbc"), "tint": Color("#fff0cd"),
 		"chest": "energy", "prize": "A summer sun!"},
-	"autumn": {"name": "Autumn", "background": Color("#fff8cf"), "accent": Color("#8f7400"),
-		"light": Color("#ffe07a"), "spark": Color("#ffd24d"), "tint": Color("#fff0ad"),
+	"autumn": {"name": "Autumn", "background": Color("#fff2e5"), "accent": Color("#995323"),
+		"light": Color("#ffd19b"), "spark": Color("#b46386"), "tint": Color("#ffe6c5"),
 		"chest": "royal", "prize": "An autumn leaf!"},
-	"winter": {"name": "Winter", "background": Color.WHITE, "accent": Color("#606a73"),
-		"light": Color("#eef2f4"), "spark": Color("#d8dee3"), "tint": Color("#f5f7f8"),
+	"winter": {"name": "Winter", "background": Color("#eef5ff"), "accent": Color("#456791"),
+		"light": Color("#c9dcf5"), "spark": Color("#aa97d4"), "tint": Color("#e6edff"),
 		"chest": "crystal", "prize": "A winter snowflake!"},
-	"ocean": {"name": "Ocean", "background": Color("#e4f6fb"), "accent": Color("#216d89"),
-		"light": Color("#b8e6ed"), "spark": Color("#69cbd6"), "tint": Color("#d6f4f4"),
+	"ocean": {"name": "Ocean", "background": Color("#e7f8fa"), "accent": Color("#13758b"),
+		"light": Color("#afdee6"), "spark": Color("#ffad87"), "tint": Color("#e1f4ef"),
 		"chest": "crystal", "prize": "An ocean treasure!"},
-	"space": {"name": "Space", "background": Color("#eeeafa"), "accent": Color("#69569b"),
-		"light": Color("#d7ccef"), "spark": Color("#bba3eb"), "tint": Color("#eee3ff"),
+	"space": {"name": "Space", "background": Color("#f1edfb"), "accent": Color("#694a99"),
+		"light": Color("#d6c8f0"), "spark": Color("#efb451"), "tint": Color("#eae3ff"),
 		"chest": "energy", "prize": "A space treasure!"}
 }
 const REWARD_NAMES: Dictionary = {
@@ -65,11 +83,33 @@ var chests: Dictionary = {}
 var error: String = ""
 
 
+static func age_bands() -> Array[Dictionary]:
+	return AGE_BANDS.duplicate(true)
+
+
+static func age_band(id: String) -> Dictionary:
+	for band in AGE_BANDS:
+		if band.id == id:
+			return band.duplicate(true)
+	return {}
+
+
+static func word_level(word: Dictionary) -> int:
+	match word.get("level", "basic"):
+		"basic": return 1
+		"growing": return 2
+		"advanced": return 3
+	return 0
+
+
 static func confusable_words(first: String, second: String) -> bool:
 	if first == second:
 		return true
 	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"],
-		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
+		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"],
+		["rocket", "spaceship"], ["asteroid", "meteor"], ["asteroid", "comet"],
+		["flower", "sunflower"], ["rose", "sunflower"], ["melon", "watermelon"],
+		["berry", "strawberry"]]:
 		if first in pair and second in pair:
 			return true
 	return false
@@ -125,7 +165,7 @@ static func validate_words(value: Variant) -> String:
 	var id_pattern := RegEx.new()
 	var text_pattern := RegEx.new()
 	id_pattern.compile("^[a-z][a-z0-9-]*$")
-	text_pattern.compile("^[a-z]{2,6}$")
+	text_pattern.compile("^[a-z]{2,10}$")
 	for entry in value:
 		if not entry is Dictionary:
 			return "Each word must have an id, text, image and audio."
@@ -133,7 +173,9 @@ static func validate_words(value: Variant) -> String:
 			if not entry.has(key) or not entry[key] is String:
 				return "Each word must have an id, text, image and audio."
 		if id_pattern.search(entry.id) == null or text_pattern.search(entry.text) == null:
-			return "Use a unique word ID and a lowercase English word with 2 to 6 letters."
+			return "Use a unique word ID and a lowercase English word with 2 to 10 letters."
+		if word_level(entry) == 0:
+			return "Word levels must be basic, growing or advanced."
 		if ids.has(entry.id) or texts.has(entry.text) or images.has(entry.image):
 			return "Word IDs, words and pictures must be unique."
 		if not _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"]):

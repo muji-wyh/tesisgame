@@ -1,7 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
@@ -36,7 +35,9 @@ function wave(rate = 24000, tailSeconds = 0) {
 }
 
 function fixture(t) {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'word-buddies-voice-test-'));
+  const build = path.join(root, 'build');
+  fs.mkdirSync(build, { recursive: true });
+  const directory = fs.mkdtempSync(path.join(build, 'word-buddies-voice-test-'));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
   fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([words[0]]));
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
@@ -66,16 +67,40 @@ test('the voice profile uses warm neural speech with clear, gently paced words',
   assert.match(ssml, /type="Leading-exact" value="60ms"/);
   assert.match(ssml, /type="Tailing-exact" value="100ms"/);
   assert.match(speechMarkup("Let's play again!"), /Let(?:'|&apos;)s play again!/);
+  assert.match(speechMarkup('kite'), /<s>A kite\.<\/s>/);
   assert.throws(() => speechMarkup('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 140 words and twenty-two prompts from the maintained lists', () => {
+test('voice generation derives exactly 200 words and twenty-two prompts from the maintained lists', () => {
   const messages = generator().messagesFor(root);
-  assert.equal(messages.length, 162);
-  assert.equal(new Set(messages.map(message => message.id)).size, 162);
+  assert.equal(messages.length, 222);
+  assert.equal(new Set(messages.map(message => message.id)).size, 222);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
+  }
+});
+
+test('voice generation accepts lowercase words through ten letters without requiring level metadata', (t) => {
+  const { directory } = fixture(t);
+  const vocabulary = ['ox', 'sweater', 'elephant', 'pineapple', 'microphone'].map(text => ({
+    id: text, text, audio: `assets/audio/voice/word-${text}.wav`
+  }));
+  fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify(vocabulary));
+  const messages = generator().messagesFor(directory);
+  assert.equal(messages.length, Object.keys(prompts).length + vocabulary.length);
+  assert.deepEqual(messages.slice(Object.keys(prompts).length), vocabulary.map(({ id, text }) => ({
+    id: `word-${id}`, text
+  })));
+});
+
+test('voice generation rejects words outside the two-to-ten lowercase ASCII letter bounds', (t) => {
+  const { directory } = fixture(t);
+  for (const text of ['', 'a', 'watermelons', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
+    fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([{
+      id: 'invalid', text, audio: 'assets/audio/voice/word-invalid.wav'
+    }]));
+    assert.throws(() => generator().messagesFor(directory), /short English word/, JSON.stringify(text));
   }
 });
 

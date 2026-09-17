@@ -82,7 +82,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 220);
+  assert.equal(imports.length, 280);
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -91,6 +91,19 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
   }
 });
+
+function assertSvgGeometry(svg, label) {
+  for (const [, data] of svg.matchAll(/<path\b[^>]*\bd="([^"]*)"/g)) {
+    assert.match(data, /^[MmZzLlHhVvCcSsQqTtAaEe0-9.,+\s-]+$/, `Invalid path coordinates: ${label}`);
+  }
+  for (const [, value] of svg.matchAll(/\b(?:cx|cy|r|rx|ry|x|y|x1|x2|y1|y2|width|height)="([^"]*)"/g)) {
+    assert.match(value, /^-?(?:\d+(?:\.\d*)?|\.\d+)$/, `Invalid shape coordinates: ${label}`);
+  }
+  for (const [, transform] of svg.matchAll(/\btransform="([^"]*)"/g)) {
+    assert.match(transform.replace(/\b(?:matrix|translate|scale|rotate|skewX|skewY)\b/g, ''),
+      /^[0-9.,+\s()-]+$/, `Invalid transform coordinates: ${label}`);
+  }
+}
 
 function readSvg(relativePath) {
   const filename = path.join(root, relativePath);
@@ -103,6 +116,7 @@ function readSvg(relativePath) {
   assert.doesNotMatch(svg, /<\s*\/?\s*(?:[\w-]+:)?(?:text|script|image|foreignObject|iframe|use|a|style|animate\w*|set)\b/i);
   assert.doesNotMatch(svg, /\b(?:href|src|on[a-z]+)\s*=|\burl\s*\(|@import|<!\s*(?:DOCTYPE|ENTITY)/i);
   assert.doesNotMatch(svg.replace('http://www.w3.org/2000/svg', ''), /https?:|data:/i);
+  assertSvgGeometry(svg, relativePath);
   return svg;
 }
 
@@ -167,22 +181,43 @@ function assertVoice(relativePath) {
   return wave;
 }
 
-test('all 140 short vocabulary words have distinct illustrations in one directory', () => {
-  assert.equal(words.length, 140);
-  assert.equal(new Set(words.map(word => word.id)).size, 140);
-  assert.equal(new Set(words.map(word => word.text)).size, 140);
+test('all 200 leveled vocabulary words have distinct illustrations in one directory', () => {
+  assert.equal(words.length, 200);
+  assert.equal(new Set(words.map(word => word.id)).size, 200);
+  assert.equal(new Set(words.map(word => word.text)).size, 200);
   for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
     assert.ok(words.some(word => word.id === original && word.text === original));
   }
   const digests = new Set();
   for (const word of words) {
-    assert.match(word.text, /^[a-z]{2,6}$/);
+    assert.match(word.text, /^[a-z]{2,10}$/);
+    assert.ok(['basic', 'growing', 'advanced'].includes(word.level), `${word.id} needs an explicit level`);
     assert.equal(word.id, word.text);
     assert.equal(path.dirname(path.normalize(word.image)), path.join('assets', 'images', 'words'));
     assert.equal(path.basename(word.image), `${word.id}.svg`);
     digests.add(sha256(readSvg(word.image).replace(/<title\b[^>]*>[\s\S]*?<\/title>/g, '')));
   }
   assert.equal(digests.size, words.length);
+});
+
+test('the sixty-word age expansion has its own reproducible original art module', () => {
+  const filename = path.join(root, 'tools', 'word-art', 'age-expansion.cjs');
+  assert.ok(fs.existsSync(filename), 'The original age-expansion art module is missing');
+  const art = require(filename);
+  const expansion = words.slice(140);
+  assert.equal(expansion.length, 60);
+  assert.deepEqual(Object.keys(art).sort(), expansion.map(word => word.id).sort());
+  for (const word of expansion) assertSvgGeometry(art[word.id], word.id);
+  for (const word of expansion) {
+    assert.ok(readSvg(word.image).includes(art[word.id]), `${word.id} must match its original art definition`);
+  }
+});
+
+test('regenerating unchanged SVGs leaves existing media bytes untouched', (t) => {
+  t.mock.method(fs, 'writeFileSync', filename => {
+    assert.fail(`Unchanged SVG must not be rewritten: ${path.relative(root, filename)}`);
+  });
+  require('../tools/generate-images.cjs').generateImages();
 });
 
 test('each season has its own original reward SVG', () => {
@@ -216,12 +251,13 @@ test('the encouraging try-again scene is a standalone SVG', () => {
   readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
 });
 
-test('the generated image directories contain exactly the 199 named SVGs', () => {
+test('the generated image directories contain exactly the 259 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]],
     ['scenes', ['try-again.svg']]
   ];
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 259);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
@@ -255,13 +291,14 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice output contains exactly 140 word recordings and twenty-two prompts', () => {
+test('voice output contains exactly 200 word recordings and twenty-two prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
+  assert.equal(expected.length, 222);
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 

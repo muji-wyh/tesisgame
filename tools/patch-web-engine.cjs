@@ -156,7 +156,7 @@ const patches = [
     callback(error,result);
   }
   req.onblocked=()=>{
-    var error=new Error("Close other Word Buddies game tabs, then try again to open your saved progress.");
+    var error=new Error("Close other Pip and Words game tabs, then try again to open your saved progress.");
     error.name="StorageBlockedError";
     finish(error);
   };

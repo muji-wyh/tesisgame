@@ -21,6 +21,7 @@ var phase: String = "waiting"
 var theme_id: String = "spring"
 var adventure_id: String = ""
 var adventure_name: String = "Word explorers"
+var age_band_id: String = "all"
 var chest_state: String = "closed"
 var reward_theme: String = ""
 var reward_id: String = ""
@@ -28,7 +29,18 @@ var error: String = ""
 var last_correct: bool = false
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "") -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "all") -> bool:
+	var band: Dictionary = Data.age_band(requested_age_band_id)
+	if band.is_empty():
+		error = "Please choose an available age level."
+		return false
+	var repeating: bool = repeat_lesson and lesson_words.size() == 5
+	if not repeating:
+		for word in words:
+			if not word is Dictionary or Data.word_level(word) == 0:
+				error = "Word levels must be basic, growing or advanced."
+				return false
+		words = words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= band.max_level)
 	var requested_adventure: Dictionary = {}
 	if not requested_adventure_id.is_empty():
 		for adventure in Data.ADVENTURES:
@@ -53,7 +65,6 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	var saved_adventure := adventure_id
 	var saved_name := adventure_name
 	var saved_theme := theme_id
-	var repeating: bool = repeat_lesson and lesson_words.size() == 5
 	if repeating:
 		words = lesson_words
 	elif not requested_adventure.is_empty():
@@ -68,10 +79,15 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		rng.seed = seed_value
 	var pool: Array = words.duplicate(true)
 	_shuffle(pool, rng)
+	if not repeating and requested_age_band_id != "all":
+		var prioritized: Array = []
+		for level in range(band.max_level, 0, -1):
+			prioritized.append_array(pool.filter(func(word: Dictionary) -> bool: return Data.word_level(word) == level))
+		pool = prioritized
 	if not required_word.is_empty() and not repeating:
 		pool.erase(required_word)
 		pool.push_front(required_word.duplicate(true))
-	if seed_value < 0 and not cards.is_empty():
+	if not repeating and seed_value < 0 and not cards.is_empty():
 		# ponytail: only the previous board; a learner profile needs separate evidence and design.
 		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
 		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id or not previous.has(word.id))
@@ -82,7 +98,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		var adventures: Array[Dictionary] = []
 		for adventure in Data.ADVENTURES:
 			var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-			if related.size() >= 5:
+			if _distinct_words(related).size() >= 5:
 				adventures.append(adventure)
 		if seed_value < 0 and adventures.size() > 1:
 			adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
@@ -101,6 +117,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 			error = "This lesson needs five clearly different words."
 			return false
 		lesson_words = distinct.slice(0, 5)
+		age_band_id = requested_age_band_id
 		pool = lesson_words
 	adventure_id = next_adventure_id
 	adventure_name = next_adventure_name

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">microphone</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 94Q17 102 31 109Q41 115 51 109" stroke="#8b8e9d" stroke-width="3"/>
+    <path d="M31 96 22 89 52 47 70 59Z" fill="#927d99"/>
+    <path d="M27 81 39 90 M51 53 66 63" stroke="#c7b2d9" stroke-width="4"/>
+    <circle cx="74" cy="35" r="25" fill="#b3c5cc"/>
+    <path d="M61 16 96 41 M53 26 89 52 M52 40 75 57 M75 15 54 44 M87 21 65 54 M95 31 79 54" stroke="#8fa8b3" stroke-width="2"/>
+    <path d="M63 20Q70 15 77 17" stroke="#eef9fb" stroke-width="4"/>
+    <path d="M40 70 45 63" stroke="#fff7e6" stroke-width="3"/>
+  </g>
+</svg>

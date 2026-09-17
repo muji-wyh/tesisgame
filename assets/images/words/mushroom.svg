@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mushroom</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M49 50H71L74 88Q80 106 60 107Q40 106 46 88Z" fill="#fff1d9"/>
+    <path d="M54 73 51 94" stroke="#e7d8b8" stroke-width="3"/>
+    <path d="M13 60Q25 15 60 15Q95 15 107 60Q108 69 90 72H30Q12 69 13 60Z" fill="#ef9a84"/>
+    <ellipse cx="60" cy="66" rx="43" ry="9" fill="#f3d4af" stroke-width="2.5"/>
+    <path d="M31 65 47 68 M44 61 53 67 M60 59V67 M76 61 67 67 M89 65 73 68" stroke="#c8a078" stroke-width="1.8"/>
+    <ellipse cx="37" cy="42" rx="10" ry="8" transform="rotate(-30 37 42)" fill="#fff1d9" stroke="none"/>
+    <circle cx="61" cy="28" r="8" fill="#fff1d9" stroke="none"/>
+    <ellipse cx="84" cy="43" rx="10" ry="8" transform="rotate(30 84 43)" fill="#fff1d9" stroke="none"/>
+    <circle cx="61" cy="50" r="5" fill="#fff1d9" stroke="none"/>
+  </g>
+</svg>

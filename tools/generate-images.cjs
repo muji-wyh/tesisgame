@@ -25,6 +25,7 @@ const wordArt = {
   ...require(path.join(__dirname, 'word-art', 'everyday.cjs')),
   ...require(path.join(__dirname, 'word-art', 'ocean-space.cjs')),
   ...require(path.join(__dirname, 'word-art', 'garden-music-clothes.cjs')),
+  ...require(path.join(__dirname, 'word-art', 'age-expansion.cjs')),
   cat: `
     <ellipse cx="60" cy="103" rx="34" ry="5" fill="#eadbc5" stroke="none"/>
     <path d="M29 53 24 23 Q23 18 28 20 L44 33 Q60 28 76 33 L92 20 Q97 18 96 23 L91 53 Q100 84 79 95 Q60 104 41 95 Q20 84 29 53Z" fill="#efb36b"/>
@@ -309,6 +310,8 @@ function generateImages() {
 
   for (const [relativePath, svg] of outputs) {
     const filename = path.join(root, relativePath);
+    // Preserve unchanged bytes, including checkout-specific line endings.
+    if (fs.existsSync(filename) && fs.readFileSync(filename, 'utf8').replace(/\r\n/g, '\n') === svg) continue;
     fs.mkdirSync(path.dirname(filename), { recursive: true });
     fs.writeFileSync(filename, svg, 'utf8');
   }

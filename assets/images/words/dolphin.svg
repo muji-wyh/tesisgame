@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">dolphin</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M53 39Q58 23 72 21Q66 33 72 45" fill="#85bfda"/>
+    <path d="M21 54Q27 37 42 36Q73 29 86 63L97 69Q98 58 109 55L105 74 112 87Q99 90 92 79L80 74Q61 78 43 64L18 66Q9 64 13 59Z" fill="#85bfda"/>
+    <path d="M20 63Q45 62 59 70Q69 74 80 74" stroke="#d1eaf1" stroke-width="5"/>
+    <path d="M50 61Q66 68 64 88Q51 83 48 69Z" fill="#69aacb" stroke-width="2.5"/>
+    <circle cx="32" cy="51" r="3" fill="#765445" stroke="none"/>
+    <path d="M18 61Q26 67 34 61 M24 97Q39 93 53 98 M75 101H96" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -72,8 +72,9 @@ func _run() -> void:
 		"The shared strip has no retained World heading or tagline fields")
 	var css_scale: float = app.Style.ui_scale(app)
 	check(is_equal_approx(app._world_choices.global_position.y * css_scale, 12)
-		and is_equal_approx(app._collection_scroll.global_position.y * css_scale, 72),
-		"The enlarged World strip shares the header and brings the content upward")
+		and is_equal_approx(app._age_choices.global_position.y * css_scale, 72)
+		and app._collection_scroll.global_position.y == app._age_choices.get_global_rect().end.y + ceili(8 / css_scale),
+		"The World strip shares the header, followed directly by age controls and scrolling content")
 	check(app._world_grid.columns == 6 and app._world_grid.get_theme_constant("h_separation") == roundi(6 / css_scale),
 		"Six World icons form one row with six CSS-pixel gaps")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")

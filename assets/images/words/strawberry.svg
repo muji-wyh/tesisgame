@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">strawberry</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="27" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M60 36 Q81 23 96 42 Q110 61 83 89 Q69 106 60 108 Q51 106 37 89 Q10 61 24 42 Q39 23 60 36Z" fill="#e97870"/>
+    <path d="M60 35 42 21 44 36 25 35 40 47 53 41 60 52 67 41 80 47 95 35 76 36 78 21Z" fill="#91bd7e" stroke-width="2.5"/>
+    <path d="M60 35 Q55 22 63 13" stroke="#699a65" stroke-width="4"/>
+    <path d="M33 52 35 58 M48 58 50 64 M68 57 67 63 M86 52 84 58 M40 73 43 78" stroke="#f8e4af" stroke-width="3"/>
+    <path d="M59 71 59 77 M77 72 74 78 M51 88 54 93 M68 87 65 93" stroke="#f8e4af" stroke-width="3"/>
+    <path d="M31 44 Q25 50 27 57" stroke="#ffc0ae" stroke-width="4"/>
+  </g>
+</svg>

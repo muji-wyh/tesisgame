@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">trumpet</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 52H73" stroke="#d5a862" stroke-width="10"/>
+    <path d="M32 54V75Q32 86 44 86H66Q76 86 76 75V60" stroke="#d5a862" stroke-width="8"/>
+    <path d="M32 54V75Q32 86 44 86H66Q76 86 76 75V60" stroke="#f3d899" stroke-width="3"/>
+    <path d="M71 47Q88 40 100 31V81Q88 68 71 63Z" fill="#edc779"/>
+    <ellipse cx="100" cy="56" rx="8" ry="25" fill="#d5a862" stroke-width="2.5"/>
+    <ellipse cx="101" cy="56" rx="4" ry="18" fill="#a77c59" stroke="none"/>
+    <path d="M41 42V74 M52 42V74 M63 42V74" stroke="#edc779" stroke-width="5"/>
+    <path d="M37 41H45 M48 41H56 M59 41H67 M12 46V58" stroke="#a77c59" stroke-width="3"/>
+    <path d="M11 51H20" stroke="#d5a862" stroke-width="5"/>
+    <path d="M18 22V32 M13 27H23" stroke="#b999bd" stroke-width="2.5"/>
+  </g>
+</svg>

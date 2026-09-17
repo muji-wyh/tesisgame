@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">telescope</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 71 35 108 M60 71 85 108 M60 71V108" stroke="#8b8e9d" stroke-width="4"/>
+    <circle cx="60" cy="70" r="6" fill="#edc779" stroke-width="2.5"/>
+    <path d="M28 61 80 26 93 47 41 82Z" fill="#9ec9e0"/>
+    <path d="M74 30 83 24 97 45 88 51Z" fill="#b3c5cc" stroke-width="2.5"/>
+    <ellipse cx="90" cy="34" rx="7" ry="14" transform="rotate(-34 90 34)" fill="#6c9ab7" stroke-width="2.5"/>
+    <path d="M87 27 92 32" stroke="#d3edf0" stroke-width="3"/>
+    <path d="M20 69 30 62 39 77 29 84Z" fill="#b3c5cc" stroke-width="2.5"/>
+    <path d="M17 73 25 86" stroke="#6d7988" stroke-width="5"/>
+    <path d="M42 58 66 42" stroke="#d3edf0" stroke-width="4"/>
+    <path d="M24 23V33 M19 28H29" stroke="#d5b873" stroke-width="2.5"/>
+  </g>
+</svg>
