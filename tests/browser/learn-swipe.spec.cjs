@@ -572,8 +572,10 @@ test('Learn cancels in-flight swipes on resize, page lifecycle and More', async 
   expect(await savedState(page)).toEqual(saved);
   await page.screenshot({ path: testInfo.outputPath('learn-after-canceled-input.png'), scale: 'css' });
   await drag(async () => {
-    // Picture -> Pip -> More -> Learn -> Match; a visible preview never takes focus.
-    for (let index = 0; index < 4; index++) await page.keyboard.press('Tab');
+    // Picture -> Pip -> Match when inline; the stacked header inserts More before Match.
+    // The dragged preview remains outside the keyboard focus order.
+    const tabsToMatch = contentBounds(await metrics(page)).inlineModes ? 2 : 3;
+    for (let index = 0; index < tabsToMatch; index++) await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await expect(page.locator('#game-status')).toContainText('Find 3 word');
   });
@@ -631,9 +633,19 @@ test('Learn silent pictures support swipes, keyboard, D-pad and stick with no hi
   const picture = lessonPoint(await metrics(page), 'picture');
   await tap(page, picture.x, picture.y);
   expect(await savedState(page)).toEqual(saved);
+  const navigationBounds = await metrics(page), card = learnCardRect(navigationBounds);
+  const pictureCenterX = card.x + card.width / 2;
+  const tabCenters = ['match', 'learn', 'memory', 'pop'].map(name => {
+    const tab = modeRect(navigationBounds, name);
+    return tab.x + tab.width / 2;
+  });
+  const nearestTab = tabCenters.reduce((nearest, center, index) =>
+    Math.abs(center - pictureCenterX) < Math.abs(tabCenters[nearest] - pictureCenterX) ? index : nearest, 0);
   await pressGamepad(page, 12);
+  // Up reaches a middle tab in the four-mode row; Left walks back to its first tab, Match.
+  for (let index = 0; index < nearestTab; index++) await pressGamepad(page, 14);
   await pressGamepad(page, 0);
-  await expect(page.locator('#game-status'), 'Up from the centered picture reaches the top Match mode tab.').toContainText('Find 3 word');
+  await expect(page.locator('#game-status'), 'D-pad Up and Left reach Match from the picture through the visible mode row.').toContainText('Find 3 word');
   expect(await audioStarts(page)).toBe(0);
   await page.screenshot({ path: testInfo.outputPath('learn-silent-header-navigation.png'), scale: 'css' });
   expect(errors).toEqual([]);
@@ -816,7 +828,7 @@ test('Learn accepts a new press while the prior card is settling', async ({ page
 
 for (const viewport of [
   { width: 320, height: 568 }, { width: 390, height: 844 },
-  { width: 599, height: 900 }, { width: 600, height: 900 },
+  { width: 679, height: 900 }, { width: 680, height: 900 },
   { width: 768, height: 1024 }, { width: 1366, height: 768 }
 ]) {
 test(`Learn has four centered modes, a square More icon and no topic or footer at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
@@ -831,9 +843,9 @@ test(`Learn has four centered modes, a square More icon and no topic or footer a
   const content = contentBounds(bounds), mode = modeRect(bounds, 'learn');
   const more = headerIconRect(bounds);
   const scale = uiScale(bounds), picture = artRect(bounds);
-  const lastMode = modeRect(bounds, 'memory');
+  const firstMode = modeRect(bounds, 'match'), lastMode = modeRect(bounds, 'pop');
   const header = content.inlineModes ? [
-    { x: content.x + 60 / scale, width: mode.x - content.x - 64 / scale },
+    { x: content.x + 60 / scale, width: firstMode.x - content.x - 64 / scale },
     { x: lastMode.x + lastMode.width + 4 / scale, width: more.x - lastMode.x - lastMode.width - 8 / scale }
   ] : [{ x: content.x + 60 / scale, width: content.width - 60 / scale - content.gap - more.width }];
   const headerClips = header.map(rect => screenClip(bounds, { ...rect, y: content.padding, height: content.header }));
@@ -931,7 +943,8 @@ test(`Learn has four centered modes, a square More icon and no topic or footer a
   await expect(page.locator('#game-status')).toHaveText(INTRO);
   const picturePoint = lessonPoint(bounds, 'picture');
   await tap(page, picturePoint.x, picturePoint.y);
-  for (let index = 0; index < 6; index++) {
+  // Pip, More, four mode tabs and the picture form one complete keyboard cycle.
+  for (let index = 0; index < 7; index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }

@@ -56,7 +56,18 @@ func _run() -> void:
 		check(view.game.remaining == 30.0 and view.game.targets.is_empty(), "Permission waiting never starts target motion")
 		app._on_voice_state([true, true, "Listening. Say an English word."])
 		check(view.game.phase == "running" and view.game.targets.size() == 1, "A live microphone starts the actual arcade round")
-		view._process(1.5)
+		view._advance_game(1.5)
+		var before_catchup: float = view.game.remaining
+		var catchup_started: int = Time.get_ticks_usec()
+		var missed_frame_usec: int = mini(250000, catchup_started / 2)
+		view._listening_tick_usec = catchup_started - missed_frame_usec
+		view._process(0.000001)
+		var caught_up: float = before_catchup - view.game.remaining
+		var catchup_limit: float = float(Time.get_ticks_usec() - catchup_started + missed_frame_usec) / 1000000.0
+		check(caught_up >= float(missed_frame_usec) / 1000000.0 - 0.00001 and caught_up <= catchup_limit + 0.00001,
+			"A tiny engine delta still consumes the full monotonic interval after a missed frame")
+		check(caught_up > 0.000001 and view._listening_tick_usec >= catchup_started,
+			"Low frame rates cannot stretch the round by repeatedly consuming clamped engine deltas")
 		var before: int = view.game.hits
 		var word: Dictionary = view.game.targets[0].word.duplicate(true)
 		view.receive_transcript(word.text)
@@ -64,22 +75,35 @@ func _run() -> void:
 		check(view.game.targets.all(func(target: Dictionary) -> bool: return target.word.id != word.id), "A popped target is removed immediately")
 		app._on_voice_state([true, false, "Speech network error. Tap Retry."])
 		var remaining: float = view.game.remaining
+		check(view._listening_tick_usec == -1, "Speech failure clears the active listening clock baseline")
+		view._listening_tick_usec = 0
 		view._process(3.0)
 		check(view.game.phase == "paused" and view.game.remaining == remaining, "Speech failure pauses both targets and the clock")
+		view._listening_tick_usec = 0
+		var resumed_at: int = Time.get_ticks_usec()
 		app._on_voice_state([true, true, "Listening."])
 		check(view.game.phase == "running" and view.game.remaining == remaining and view.game.hits == before + 1,
 			"Speech recovery resumes the same round")
+		check(view._listening_tick_usec >= resumed_at, "Resuming replaces the stale baseline from before the pause")
+		view._process(0.000001)
+		var resume_limit: float = float(Time.get_ticks_usec() - resumed_at) / 1000000.0
+		check(remaining - view.game.remaining >= 0.0 and remaining - view.game.remaining <= resume_limit + 0.00001,
+			"The first resumed frame excludes all time spent paused")
 		app._show_collection()
 		check(view.game.phase == "paused", "More pauses Voice Pop")
+		remaining = view.game.remaining
 		app._hide_collection()
-		check(view.game.phase == "paused", "Returning from More waits for an explicit Resume")
+		check(view.game.phase == "paused" and view.game.remaining == remaining, "Returning from More waits for an explicit Resume without consuming time")
 		app._on_voice_state([true, true, "Listening."])
 		app.on_page_hidden()
+		remaining = view.game.remaining
+		check(view._listening_tick_usec == -1, "Hiding the page clears the active listening clock baseline")
+		view._listening_tick_usec = 0
 		view._process(3.0)
 		check(view.game.phase == "paused" and view.game.remaining == remaining, "Hidden pages preserve the remaining round")
 		app.on_page_visible()
 		app._on_voice_state([true, true, "Listening."])
-		view._process(31.0)
+		view._advance_game(31.0)
 		await settle()
 		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at the 30-second deadline")
 		var result: Dictionary = view.game.summary()

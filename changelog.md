@@ -10,6 +10,8 @@ Notable changes to Pip and Words (formerly Word Buddies), grouped by date with t
 - Added an interactive Pip round report with actual achievements, word audio
   review, optional spoken summary, and replay. Speech interruption pauses the
   round; leaving the mode releases the microphone and cancels summary speech.
+- Voice Pop uses real elapsed time for its 30-second round even when rendering
+  slows down, and excludes time spent waiting for permission or paused.
 - Kept all four mode tabs in stable positions across games, with responsive
   wrapping and keyboard focus preserved when the header changes rows.
 - Fixed long reward preview titles, preview action sizing, and controller

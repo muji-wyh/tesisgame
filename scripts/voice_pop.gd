@@ -36,6 +36,7 @@ var _seed: int = -1
 var _textures: Dictionary = {}
 var _enabled: bool = false
 var _listening: bool = false
+var _listening_tick_usec: int = -1
 var _message: String = "Allow microphone access to start."
 var _finished_sent: bool = false
 var _stopped: bool = true
@@ -165,6 +166,7 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	game.configure(_words, seed_value)
 	_enabled = false
 	_listening = false
+	_listening_tick_usec = -1
 	_finished_sent = false
 	_stopped = false
 	_pending = false
@@ -193,10 +195,15 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 
 func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_build()
+	var was_running: bool = _listening and game.phase == "running"
+	if was_running and not listening:
+		_sync_game_clock()
 	_enabled = enabled
 	_listening = listening
 	_message = message
 	if _finished_sent:
+		_listening = false
+		_listening_tick_usec = -1
 		_publish(true)
 		return
 	if listening:
@@ -206,10 +213,13 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 			game.start()
 		elif game.phase == "paused":
 			game.resume()
+		if not was_running or _listening_tick_usec < 0:
+			_listening_tick_usec = Time.get_ticks_usec()
 		_gate.hide()
 		_results.hide()
 		_hud.show()
 	else:
+		_listening_tick_usec = -1
 		var transient: bool = enabled and _pending_message(message)
 		_pending = transient
 		_pending_left = 10.0 if transient else 0.0
@@ -231,6 +241,9 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 
 func receive_transcript(text: String) -> void:
 	if not _listening or game.phase != "running" or not is_visible_in_tree():
+		return
+	_sync_game_clock()
+	if game.phase != "running":
 		return
 	_refresh_targets()
 	var struck: Array = game.hit_transcript(text)
@@ -255,8 +268,13 @@ func receive_transcript(text: String) -> void:
 
 func pause() -> void:
 	if _finished_sent:
+		_listening_tick_usec = -1
+		return
+	_sync_game_clock()
+	if _finished_sent:
 		return
 	_listening = false
+	_listening_tick_usec = -1
 	_pending = false
 	_reconnecting = false
 	if game.phase == "running":
@@ -276,6 +294,7 @@ func pause() -> void:
 
 func stop() -> void:
 	_listening = false
+	_listening_tick_usec = -1
 	_enabled = false
 	_finished_sent = true
 	_stopped = true
@@ -379,6 +398,7 @@ func _publish_settled_geometry() -> void:
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
+		_listening_tick_usec = -1
 		return
 	if not reduced_motion:
 		_clock += delta
@@ -386,10 +406,7 @@ func _process(delta: float) -> void:
 		_pending_left = maxf(0.0, _pending_left - delta)
 		if _pending_left <= 0.0:
 			set_listening(_enabled, false, "Still waiting for the microphone. Check the browser prompt, or retry.")
-	if _listening and game.phase == "running":
-		game.advance(delta)
-		if game.phase == "finished" and not _finished_sent:
-			_finish()
+	_sync_game_clock()
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
 	for index in range(_bursts.size() - 1, -1, -1):
 		_bursts[index].age = float(_bursts[index].age) + delta
@@ -401,10 +418,38 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
+func _sync_game_clock() -> void:
+	if not _listening or game.phase != "running":
+		_listening_tick_usec = -1
+		return
+	var now: int = Time.get_ticks_usec()
+	if _listening_tick_usec < 0:
+		_listening_tick_usec = now
+		return
+	var elapsed: float = maxf(0.0, float(now - _listening_tick_usec) / 1000000.0)
+	_listening_tick_usec = now
+	_advance_game(elapsed)
+
+
+func _advance_game(elapsed_seconds: float) -> void:
+	# Keep simulation directly tickable in scene tests. Production supplies real
+	# monotonic time because Godot can clamp frame delta under slow Web rendering.
+	if not _listening or game.phase != "running":
+		return
+	game.advance(elapsed_seconds)
+	if game.phase == "finished" and not _finished_sent:
+		_finish()
+	_refresh_targets()
+	_update_hud()
+	_publish()
+	queue_redraw()
+
+
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		if game.phase == "running":
 			pause()
+		_listening_tick_usec = -1
 		set_process(false)
 	else:
 		set_process(true)
@@ -698,6 +743,7 @@ func _perimeter_point(t: float, inset: float, radius: float) -> Vector2:
 func _finish() -> void:
 	_finished_sent = true
 	_listening = false
+	_listening_tick_usec = -1
 	_message = "Round complete. Tap a word to hear it, or play again."
 	_draw_targets.clear()
 	_bursts.clear()
