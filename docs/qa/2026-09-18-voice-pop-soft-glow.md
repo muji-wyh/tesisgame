@@ -41,7 +41,17 @@ speech behavior, Pip reports and result scrolling are unchanged.
 - [x] All 12 exported-game cases passed again after the final corner correction
   (1.7 minutes, no failures or skips). The native iPad portrait screenshot
   confirms Pip's face and the menu lines remain clear under the softened arc.
-- [ ] Production deployment, byte verification and focused smoke checks.
+- [x] Reviewed all 18 final integrated screenshots: six desktop, six iPhone and
+  six iPad. The two upper corners remain continuous, with no remaining icon,
+  caption or button obstruction.
+- [x] Runtime commit `5f820e4` merged into main and pushed. Promoted all 71 files
+  after comparing their SHA256 values, preserving the previous local export.
+  Deployed the verified output with `npm run deploy -- -SkipBuild`.
+- [x] Fresh production HTML, PCK, engine JavaScript and WebAssembly SHA256 values
+  match the tested export. All four responses use Brotli and correct MIME types.
+- [x] All four focused production Chromium cases passed in 34.4 seconds, with
+  no failed or skipped cases: live captions, permission recovery, compact
+  portrait/landscape input, reduced-motion light and hiding on mode exit.
 
 Isolated reference comparisons are retained under the ignored
 `build/voice-pop-qa/soft-glow/` directory: `baseline-report.json`,
@@ -69,3 +79,14 @@ the previous release; the HTML contains the new CSS and decorative elements.
 | `game-9651e6515167d63f.pck` | `9651e6515167d63fce4ca9e7b5d85ec432c6ca08d1c54fa70e7ecb55d49a456d` |
 | `engine-c8ca3724771088b0.js` | `13ce7253b63b49b659e9eee7fbdcec1d9b4e3d5c8bd1b5460c4065bd0ea68b31` |
 | `engine-c8ca3724771088b0.wasm` | `35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277` |
+
+Production: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=5f820e4
+
+Deployed on 2026-09-18 (Asia/Shanghai). Production byte verification at
+2026-09-17T16:38:38Z is recorded in
+`build/voice-pop-qa/soft-glow-production-manifest.json` and
+`soft-glow-production-hashes.log`. `soft-glow-tested-manifest.json` records all
+71 promoted files and the preserved previous export;
+`soft-glow-deploy.log` records successful deployment.
+The production browser results and screenshots are in `soft-glow-production.log`,
+`soft-glow-production-tests.json` and `soft-glow-production/`.
