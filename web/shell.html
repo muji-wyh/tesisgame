@@ -185,22 +185,25 @@
     #speech-panel[data-pop-stop-failed="true"] #speech-meter,
     #speech-panel[data-pop-stop-failed="true"] #speech-notice { display: none; }
     #pop-aura { position: fixed; inset: 0; z-index: 100; pointer-events: none;
-      --aura-spread: clamp(58px, 14vmin, 104px); overflow: hidden;
+      --aura-spread: clamp(78px, 19vmin, 140px);
+      --aura-radius: calc(var(--aura-spread) * 1.5); overflow: hidden;
       opacity: 0; visibility: hidden; }
     #pop-aura[data-listening="true"] { opacity: 1; visibility: visible; }
-    /* Broad color fades inward from a soft, rounded luminous edge. The four
-       corner arcs use the same falloff; only small light blooms drift. */
+    /* A larger corner radius leaves a rounded inner opening as well as a
+       rounded perimeter. The light peaks just inside the softly feathered rim. */
     #pop-aura .pop-aura-edge { position: absolute; pointer-events: none;
-      background: linear-gradient(var(--aura-inward), rgba(255,248,241,.62),
-        rgba(247,238,255,.22) 6%, transparent 22%), var(--aura-colors);
-      -webkit-mask-image: linear-gradient(var(--aura-inward), #fff,
-        rgba(255,255,255,.88) 3%, rgba(255,255,255,.69) 12%,
-        rgba(255,255,255,.45) 30%, rgba(255,255,255,.22) 55%,
-        rgba(255,255,255,.065) 78%, transparent);
-      mask-image: linear-gradient(var(--aura-inward), #fff,
-        rgba(255,255,255,.88) 3%, rgba(255,255,255,.69) 12%,
-        rgba(255,255,255,.45) 30%, rgba(255,255,255,.22) 55%,
-        rgba(255,255,255,.065) 78%, transparent);
+      background: linear-gradient(var(--aura-inward), rgba(255,248,241,.38),
+        rgba(247,238,255,.16) 8%, transparent 28%), var(--aura-colors);
+      -webkit-mask-image: linear-gradient(var(--aura-inward), rgba(255,255,255,.45),
+        rgba(255,255,255,.65) 2.5%, rgba(255,255,255,.7) 6%,
+        rgba(255,255,255,.61) 16%, rgba(255,255,255,.46) 34%,
+        rgba(255,255,255,.25) 57%, rgba(255,255,255,.09) 78%,
+        rgba(255,255,255,.02) 92%, transparent);
+      mask-image: linear-gradient(var(--aura-inward), rgba(255,255,255,.45),
+        rgba(255,255,255,.65) 2.5%, rgba(255,255,255,.7) 6%,
+        rgba(255,255,255,.61) 16%, rgba(255,255,255,.46) 34%,
+        rgba(255,255,255,.25) 57%, rgba(255,255,255,.09) 78%,
+        rgba(255,255,255,.02) 92%, transparent);
       -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
       -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
     #pop-aura .pop-aura-edge::before { content: ''; position: absolute; inset: 0;
@@ -208,10 +211,10 @@
       animation: var(--aura-drift) var(--aura-period) cubic-bezier(.45,0,.25,1) infinite alternate;
       animation-delay: var(--aura-delay); animation-play-state: paused; }
     #pop-aura .pop-aura-edge--top, #pop-aura .pop-aura-edge--bottom {
-      left: var(--aura-spread); right: var(--aura-spread); height: var(--aura-spread);
+      left: var(--aura-radius); right: var(--aura-radius); height: var(--aura-spread);
       --aura-drift: pop-aura-horizontal; }
     #pop-aura .pop-aura-edge--left, #pop-aura .pop-aura-edge--right {
-      top: var(--aura-spread); bottom: var(--aura-spread); width: var(--aura-spread);
+      top: var(--aura-radius); bottom: var(--aura-radius); width: var(--aura-spread);
       --aura-drift: pop-aura-vertical; }
     #pop-aura .pop-aura-edge--top { top: 0; --aura-inward: to bottom;
       --aura-period: 8.6s; --aura-delay: -3.4s;
@@ -229,29 +232,40 @@
       --aura-period: 11.3s; --aura-delay: -4.8s;
       --aura-bloom: radial-gradient(ellipse 160% 24% at 0% 50%, #d5e8ff, transparent 80%);
       --aura-colors: linear-gradient(180deg, #ffba96, #bdadf5 20%, #83a5ff 42%, #989cff 70%, #b58fff); }
-    #pop-aura .pop-aura-corner { position: absolute; width: var(--aura-spread);
-      height: var(--aura-spread); pointer-events: none;
+    #pop-aura .pop-aura-corner { position: absolute; width: var(--aura-radius);
+      height: var(--aura-radius); pointer-events: none;
       --aura-corner-strength: linear-gradient(#fff, #fff);
-      background: radial-gradient(circle var(--aura-spread) at var(--aura-center),
-        transparent 78%, rgba(247,238,255,.22) 94%, rgba(255,248,241,.62)), var(--aura-color);
-      -webkit-mask-image: var(--aura-corner-strength), radial-gradient(circle var(--aura-spread) at var(--aura-center),
-        transparent, rgba(255,255,255,.065) 22%, rgba(255,255,255,.22) 45%,
-        rgba(255,255,255,.45) 70%, rgba(255,255,255,.69) 88%,
-        rgba(255,255,255,.88) 97%, #fff 100%, transparent calc(100% + 1px));
-      mask-image: var(--aura-corner-strength), radial-gradient(circle var(--aura-spread) at var(--aura-center),
-        transparent, rgba(255,255,255,.065) 22%, rgba(255,255,255,.22) 45%,
-        rgba(255,255,255,.45) 70%, rgba(255,255,255,.69) 88%,
-        rgba(255,255,255,.88) 97%, #fff 100%, transparent calc(100% + 1px));
+      background: radial-gradient(circle var(--aura-radius) at var(--aura-center),
+        transparent calc(100% - var(--aura-spread) * .28),
+        rgba(247,238,255,.16) calc(100% - var(--aura-spread) * .08), rgba(255,248,241,.38)), var(--aura-color);
+      --aura-round-falloff: radial-gradient(circle var(--aura-radius) at var(--aura-center),
+        transparent calc(100% - var(--aura-spread)),
+        rgba(255,255,255,.02) calc(100% - var(--aura-spread) * .92),
+        rgba(255,255,255,.09) calc(100% - var(--aura-spread) * .78),
+        rgba(255,255,255,.25) calc(100% - var(--aura-spread) * .57),
+        rgba(255,255,255,.46) calc(100% - var(--aura-spread) * .34),
+        rgba(255,255,255,.61) calc(100% - var(--aura-spread) * .16),
+        rgba(255,255,255,.7) calc(100% - var(--aura-spread) * .06),
+        rgba(255,255,255,.65) calc(100% - var(--aura-spread) * .025),
+        rgba(255,255,255,.45) 100%, transparent calc(100% + 8px));
+      -webkit-mask-image: var(--aura-corner-strength), var(--aura-round-falloff);
+      mask-image: var(--aura-corner-strength), var(--aura-round-falloff);
       -webkit-mask-composite: source-in; mask-composite: intersect; }
     /* Soften the diagonal arc over the header icons, retaining full strength
        where each corner joins a straight edge. Both masks stay static. */
     #pop-aura .pop-aura-corner--top-left { top: 0; left: 0;
       --aura-corner-strength: conic-gradient(from 270deg at 100% 100%, #fff,
-        rgba(255,255,255,.36) 45deg, #fff 90deg);
+        rgba(255,255,255,.93) 12deg, rgba(255,255,255,.75) 24deg,
+        rgba(255,255,255,.57) 36deg, rgba(255,255,255,.5) 45deg,
+        rgba(255,255,255,.57) 54deg, rgba(255,255,255,.75) 66deg,
+        rgba(255,255,255,.93) 78deg, #fff 90deg);
       --aura-center: 100% 100%; --aura-color: #ffba96; }
     #pop-aura .pop-aura-corner--top-right { top: 0; right: 0;
       --aura-corner-strength: conic-gradient(at 0% 100%, #fff,
-        rgba(255,255,255,.36) 45deg, #fff 90deg);
+        rgba(255,255,255,.93) 12deg, rgba(255,255,255,.75) 24deg,
+        rgba(255,255,255,.57) 36deg, rgba(255,255,255,.5) 45deg,
+        rgba(255,255,255,.57) 54deg, rgba(255,255,255,.75) 66deg,
+        rgba(255,255,255,.93) 78deg, #fff 90deg);
       --aura-center: 0% 100%; --aura-color: #ef91d8; }
     #pop-aura .pop-aura-corner--bottom-right { bottom: 0; right: 0;
       --aura-center: 0% 0%; --aura-color: #70cdff; }
