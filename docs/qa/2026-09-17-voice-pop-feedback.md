@@ -61,7 +61,14 @@ only as ignored research artifacts, not shipped in the game.
   down: starting in the report bubble, its surrounding gap, the statistics
   panel or its gap changes scroll from zero; downward swipes return to zero.
   This distinguishes touch scrolling from automatic keyboard-focus reveal.
-- [ ] Commit, main merge/push, production deployment and verification.
+- [x] Runtime commit `587d7e1` merged into main and pushed. Deployed the exact
+  tested export with `npm run deploy -- -SkipBuild`; all 71 copied files were
+  hash-verified before promotion. Previous local build remains backed up.
+- [x] Production HTML, PCK, JavaScript and WebAssembly SHA256 values match the
+  tested export. All four responses use Brotli with the expected content types.
+- [x] Final production browser regression: all 10 desktop Chromium cases passed
+  against the live Azure address in 2.4 minutes, with no failed or skipped cases.
+  Production screenshots confirm the report, live captions and screen-edge glow.
 
 Evidence is under ignored `build/voice-pop-qa/`: `feedback-final-native.log`,
 `feedback-final-build.log`, `feedback-final-regression-tests.json`,
@@ -75,7 +82,7 @@ Speech tests use supplied recognition events and never capture a physical
 microphone. They verify the shipping host and game flow, not the provider's
 real-world transcription accuracy.
 
-## Release candidate
+## Released artifact
 
 The final export is 13.24 MB compressed at startup, with 28 optional audio
 resources. Pack validation found all 200 word pronunciations and checked all 56
@@ -87,3 +94,11 @@ optional resource paths without failures. The engine version is unchanged.
 | `game-9651e6515167d63f.pck` | `9651e6515167d63fce4ca9e7b5d85ec432c6ca08d1c54fa70e7ecb55d49a456d` |
 | `engine-c8ca3724771088b0.js` | `13ce7253b63b49b659e9eee7fbdcec1d9b4e3d5c8bd1b5460c4065bd0ea68b31` |
 | `engine-c8ca3724771088b0.wasm` | `35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277` |
+
+Production: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=587d7e1
+
+Deployment completed on 2026-09-18 (Asia/Shanghai). Hash verification at
+2026-09-17T16:08:15Z is recorded in `feedback-production-manifest.json` and
+`feedback-production-hashes.log`; `feedback-deploy.log` records deployment.
+The final browser evidence is `feedback-production.log`,
+`feedback-production-tests.json` and the screenshots under `feedback-production/`.
