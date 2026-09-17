@@ -22,7 +22,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
-	root.size = Vector2i(599, 900)
+	root.size = Vector2i(679, 900)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -30,7 +30,7 @@ func _run() -> void:
 	var mode_button: Button = app._mode_buttons[1]
 	mode_button.grab_focus()
 	var original_cards: Array = app.model.cards.duplicate(true)
-	for dimensions in [Vector2i(600, 900), Vector2i(599, 900), Vector2i(1366, 900), Vector2i(320, 568)]:
+	for dimensions in [Vector2i(680, 900), Vector2i(679, 900), Vector2i(1366, 900), Vector2i(320, 568)]:
 		root.size = dimensions
 		await settle()
 		check(root.gui_get_focus_owner() == mode_button, "Focused mode survives header reflow at " + str(dimensions))

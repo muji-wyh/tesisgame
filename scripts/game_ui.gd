@@ -13,10 +13,11 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const WordLesson = preload("res://scripts/word_lesson.gd")
+const VoicePop = preload("res://scripts/voice_pop.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
-const MODES := {"match": "Match", "learn": "Learn", "memory": "Memory"}
+const MODES := {"match": "Match", "learn": "Learn", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
@@ -190,6 +191,8 @@ var _mode_row: HBoxContainer
 var _mode_buttons: Array[Button] = []
 var _memory: MemoryGarden
 var _lesson: WordLesson
+var _pop: VoicePop
+var _pop_speech_active: bool = false
 var _match_playfield: Control
 var _content_margins: MarginContainer
 var _new_adventure_button: Button
@@ -318,6 +321,7 @@ var _motion_callback: JavaScriptObject
 var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
+var _pop_result_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -435,7 +439,7 @@ func _build_controls() -> void:
 		button.clip_text = true
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		_set_accessibility_name(button, str(MODES[id]) + ": practise these same five words")
+		_set_accessibility_name(button, "Voice Pop: say the flying words in 30 seconds. Requests microphone access." if id == "pop" else str(MODES[id]) + ": practise these same five words")
 		button.pressed.connect(choose_mode.bind(id))
 		_mode_row.add_child(button)
 		_mode_buttons.append(button)
@@ -478,6 +482,17 @@ func _build_controls() -> void:
 	column.add_child(_memory)
 	_memory.study_button.reparent(_toolbar)
 	_toolbar.move_child(_memory.study_button, 0)
+	_pop = VoicePop.new()
+	_pop.name = "VoicePop"
+	_pop.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_pop.request_listening.connect(_start_pop_listening)
+	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
+	_pop.hit.connect(_pop_hit)
+	_pop.round_finished.connect(_pop_finished)
+	_pop.hear_requested.connect(_pop_hear)
+	_pop.status_changed.connect(_pop_status_changed)
+	_pop.hide()
+	column.add_child(_pop)
 	_outcome = Control.new()
 	_outcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_outcome.resized.connect(_layout_result)
@@ -770,6 +785,7 @@ func _build_reward_preview_shell() -> void:
 	_preview_title = Style.label("", 30)
 	_preview_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_preview_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_preview_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	header.add_child(_preview_title)
 	_preview_close = Icons.new()
 	_preview_close.symbol = Icons.Symbol.BACK
@@ -1229,6 +1245,9 @@ func _open_reward_preview(id: String) -> void:
 	preview_stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, palette.light, 24, 1))
 	Style.square_icon_button(_preview_close, palette.accent)
 	Style.primary_button(_preview_wear_button, palette.accent)
+	var preview_scale: float = Style.ui_scale(self)
+	_preview_wear_button.custom_minimum_size.y = ceilf(44 / preview_scale)
+	_preview_wear_button.add_theme_font_size_override("font_size", ceili(14 / preview_scale))
 	_preview_wear_button.text = "Displayed with Pip" if _favorite_reward_id == id else "Display with Pip"
 	_preview_play_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 28, 4))
 	_preview_focus_modes.clear()
@@ -1516,6 +1535,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_announce_status("Your piece is waiting to be saved. Choose Retry saving.")
 		return false
 	_stop_voice()
+	if not _stop_pop_listening():
+		return false
+	_pop.stop()
 	_rebuilding = true
 	if not next_mode.is_empty():
 		_mode_id = next_mode
@@ -1565,6 +1587,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _mode_id == "memory":
 		_memory.set_reduced_motion(reduced_motion)
 		_memory.start_round(model.lesson_words, Data.theme(model.theme_id), seed_value)
+	if _mode_id == "pop":
+		_configure_pop(seed_value)
 	_rebuilding = false
 	_refresh()
 	_layout()
@@ -1582,6 +1606,72 @@ func choose_mode(id: String) -> void:
 		return
 	if new_round(-1, true, "", id):
 		_default_focus().grab_focus()
+		if id == "pop":
+			_start_pop_listening()
+
+
+func _configure_pop(seed_value: int = -1) -> void:
+	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
+	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
+	_pop.configure(pool, Data.theme(model.theme_id), reduced_motion, seed_value)
+
+
+func _start_pop_listening() -> void:
+	if _mode_id != "pop" or collection_page.visible or _preview_page.visible:
+		return
+	audio.halt()
+	if not _stop_pop_listening():
+		return
+	if _pop.game.phase == "finished":
+		_configure_pop()
+	if _host == null:
+		_pop.set_listening(true, false, "Voice Pop needs a browser with speech recognition. Open the Web game in Chrome or Safari.")
+		return
+	_pop_speech_active = true
+	_host.speechMode(true, "pop")
+
+
+func _stop_pop_listening() -> bool:
+	var was_active: bool = _pop_speech_active
+	_pop_speech_active = false
+	if _host != null:
+		if was_active and not bool(_host.stopSpeech()):
+			_pop_speech_active = true
+			return false
+		_host.stopPopSummary()
+	return true
+
+
+func _pop_hit(_word: Dictionary) -> void:
+	if _mode_id != "pop":
+		return
+	audio.interact(model.theme_id, false)
+	audio.cue("correct")
+
+
+func _pop_hear(word: Dictionary) -> void:
+	if _mode_id != "pop" or _pop.game.phase != "finished" or _pop_speech_active:
+		return
+	if _host != null:
+		_host.stopPopSummary()
+	audio.interact(model.theme_id, false)
+	audio.say("res://" + word.audio)
+
+
+func _pop_finished(result: Dictionary) -> void:
+	if not _stop_pop_listening():
+		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
+		return
+	var report: String = "Pip here! You popped %d words in 30 seconds. %d different words, and a best combo of %d! %d points. " % [result.hits, result.unique_words, result.best_combo, result.score]
+	report += "Tap a word to practise with me, or let's play again!" if result.hits > 0 else "Let's practise a word together, then try another round!"
+	_announce_status(report)
+	if _host != null:
+		_host.speakPopSummary(report)
+
+
+func _pop_status_changed(snapshot: Dictionary) -> void:
+	if _mode_id == "pop" and _host != null:
+		_host.popStatus(JSON.stringify(snapshot))
 
 
 func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
@@ -1719,7 +1809,7 @@ func _refresh() -> void:
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
 	_refresh_age_choices()
-	_success.visible = playing and _mode_id != "learn" and not _storage_retry_button.visible
+	_success.visible = playing and _mode_id in ["match", "memory"] and not _storage_retry_button.visible
 	_mode_row.visible = playing and not _voice_mode
 	_refresh_found_words(playing, palette.accent)
 	if not playing and _voice_mode:
@@ -1730,6 +1820,7 @@ func _refresh() -> void:
 	grid.visible = playing and _mode_id == "match"
 	_lesson.visible = playing and _mode_id == "learn"
 	_memory.visible = playing and _mode_id == "memory"
+	_pop.visible = playing and _mode_id == "pop"
 	_mistakes.visible = _success.visible
 	_message.hide()
 	_outcome.visible = not playing
@@ -1748,6 +1839,8 @@ func _refresh() -> void:
 		_message.text = "Learn five words. Swipe left or right; tap the picture to hear."
 	elif playing and _mode_id == "memory":
 		_message.text = _memory_status()
+	elif playing and _mode_id == "pop":
+		_message.text = "Voice Pop. Say the flying words. 30 seconds."
 	var won: bool = model.phase == "won"
 	chest.visible = won
 	chest_button.visible = won
@@ -2033,11 +2126,15 @@ func _fit_grid() -> void:
 
 func _fit_mode_buttons() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	var inline_modes: bool = size.x * css_scale >= 600
+	var inline_modes: bool = size.x * css_scale >= 680
 	var mode_parent: Node = _header if inline_modes else _main_column
 	if _mode_row.get_parent() != mode_parent:
+		var focused: Control = get_viewport().gui_get_focus_owner()
+		var restore_focus: bool = focused != null and _mode_row.is_ancestor_of(focused)
 		_mode_row.reparent(mode_parent)
 		mode_parent.move_child(_mode_row, _header_duck_slot.get_index() + 1 if inline_modes else 1)
+		if restore_focus:
+			focused.grab_focus()
 	_mode_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_mode_row.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_header_spacer.visible = not inline_modes or not _mode_row.visible
@@ -2046,8 +2143,9 @@ func _fit_mode_buttons() -> void:
 	_header.add_theme_constant_override("separation", gap)
 	_header.custom_minimum_size.y = ceilf(56 / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
-	var with_counts: bool = _mode_id != "learn" and model.phase in ["waiting", "matching", "feedback"]
-	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts else 52) / css_scale), ceilf(56 / css_scale))
+	_toolbar.custom_minimum_size.x = 3 * ceilf(44 / css_scale) + 2 * gap if inline_modes else 0.0
+	var with_counts: bool = _mode_id in ["match", "memory"] and model.phase in ["waiting", "matching", "feedback"]
+	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts or inline_modes else 52) / css_scale), ceilf(56 / css_scale))
 	_header_duck_art_slot.position = Vector2(0, 2 / css_scale)
 	_header_duck_art_slot.size = Vector2.ONE * (52 / css_scale)
 	_success.position = Vector2(60, 5) / css_scale
@@ -2057,14 +2155,26 @@ func _fit_mode_buttons() -> void:
 		counter.queue_redraw()
 	_header_duck_slot.add_theme_stylebox_override("panel", Style.box(
 		Color(1, 1, 1, 0.75) if with_counts else Color.TRANSPARENT, Color.TRANSPARENT, ceili(12 / css_scale), 0))
-	_mode_row.add_theme_constant_override("separation", roundi(6 / css_scale))
+	var tab_gap: int = roundi(4 / css_scale)
+	_mode_row.add_theme_constant_override("separation", tab_gap)
+	var tab_width: float = minf(ceilf(80 / css_scale), floorf((size.x - 2 * ceilf(12 / css_scale) - 3 * tab_gap) / 4))
+	var tab_font_size: int = ceili(14 / css_scale)
+	var tab_font: Font = _mode_buttons[0].get_theme_font("font")
+	# Keep all four labels fully readable at the same size, including Voice Pop.
+	while tab_font_size > ceili(11 / css_scale):
+		var longest: float = 0.0
+		for mode_label in MODES.values():
+			longest = maxf(longest, tab_font.get_string_size(str(mode_label), HORIZONTAL_ALIGNMENT_LEFT, -1, tab_font_size).x)
+		if longest <= tab_width - 8.0:
+			break
+		tab_font_size -= 1
 	for button in _mode_buttons:
-		button.custom_minimum_size = Vector2(ceilf(80 / css_scale), ceilf(44 / css_scale))
+		button.custom_minimum_size = Vector2(tab_width, ceilf(44 / css_scale))
 		for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 			var box: StyleBox = button.get_theme_stylebox(state)
 			box.content_margin_left = 4
 			box.content_margin_right = 4
-		button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
+		button.add_theme_font_size_override("font_size", tab_font_size)
 	for button in [collection_button, hint_button, _memory.study_button]:
 		Style.square_icon_button(button, _active_palette.get("accent", Style.GOOD))
 	_style_voice_button()
@@ -2407,13 +2517,14 @@ func choose_theme(id: String) -> void:
 		_announce_collection_state()
 	duck.react("happy")
 	effects.clear()
-	if not _voice_mode:
+	if not _voice_mode and not _pop_speech_active:
 		audio.interact(model.theme_id, model.phase != "lost")
 		audio.cue("", model.theme_id + "-theme")
 
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	_pop.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_lesson.set_reduced_motion(value)
 	for card in cards.values():
@@ -2639,6 +2750,9 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	if _mode_id == "pop":
+		_pop.pause()
+	_stop_pop_listening()
 	_pointer_focus_active = false
 	_proactive_touches.clear()
 	_lesson.cancel_swipe()
@@ -2828,6 +2942,8 @@ func _controller_back() -> void:
 		_hide_collection()
 	elif _voice_mode:
 		_stop_voice()
+	elif _mode_id == "pop":
+		choose_mode("match")
 	elif _mode_id == "match" and model.phase == "feedback":
 		_continue_match()
 	elif _mode_id == "memory":
@@ -2917,10 +3033,9 @@ func _focus_center(control: Control) -> Vector2:
 	if collection_page.visible and not _preview_page.visible:
 		# Navigate the collection's content, not its temporarily scrolled screen positions.
 		center = _collection_grid.get_global_transform().affine_inverse() * center
-		if control == _collection_back or _collection_tabs.values().has(control) or theme_buttons.has(control):
-			center.y = -104.0 / Style.ui_scale(self)
-		elif _age_buttons.values().has(control) and _age_choices.get_parent() != _collection_grid:
-			center.y = -32.0 / Style.ui_scale(self)
+		if not _collection_grid.is_ancestor_of(control):
+			# Pinned controls keep their real rows when the collection scrolls.
+			center -= Vector2(_collection_scroll.scroll_horizontal, _collection_scroll.scroll_vertical)
 	return center
 
 
@@ -2957,6 +3072,9 @@ func _default_focus() -> Control:
 	if _mode_id == "learn":
 		var lesson_controls: Array[Control] = _lesson.controls()
 		return lesson_controls[0] if not lesson_controls.is_empty() else collection_button
+	if _mode_id == "pop":
+		var pop_focus: Control = _pop.default_focus()
+		return pop_focus if _valid_focus(pop_focus) else collection_button
 	if _mode_id == "memory":
 		if _memory.memory.studying:
 			return _memory.study_button
@@ -3016,6 +3134,7 @@ func _announce_status(message: String) -> void:
 func _show_error(message: String) -> void:
 	_lesson.hide()
 	_memory.hide()
+	_pop.hide()
 	_outcome.hide()
 	_match_playfield.show()
 	grid.hide()
@@ -3054,6 +3173,10 @@ func _connect_browser() -> void:
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
+	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
+		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible and not _preview_page.visible:
+			_pop.receive_transcript(str(arguments[0])))
+	_host.observePopSpeech(_pop_result_callback)
 
 
 func _toggle_voice() -> void:
@@ -3082,6 +3205,9 @@ func _sync_voice_bounds() -> void:
 
 
 func _on_voice_state(arguments: Array) -> void:
+	if _mode_id == "pop":
+		_pop.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
+		return
 	var enabled: bool = bool(arguments[0])
 	if enabled and model.phase in ["won", "lost"]:
 		_stop_voice()
@@ -3109,6 +3235,8 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
+	if _mode_id != "match":
+		return
 	if not _voice_mode or not _voice_listening or not bool(arguments[1]):
 		return
 	for id in model.spoken_matches(str(arguments[0])):
@@ -3349,6 +3477,10 @@ func _retry_storage() -> void:
 
 
 func _show_collection() -> void:
+	if _mode_id == "pop":
+		_pop.pause()
+	if not _stop_pop_listening():
+		return
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	audio.stop_voice()
 	_apply_collection_section()
@@ -3508,8 +3640,10 @@ func _play_duck() -> void:
 	var tricks := ["dance", "snack", "bubbles", "high-five", "peekaboo", "flutter"]
 	var caption: String = duck.perform_trick(tricks[_duck_trick_index % tricks.size()])
 	_duck_trick_index += 1
-	if _voice_mode:
+	if _voice_mode or _pop_speech_active:
 		return
+	if _mode_id == "pop" and _host != null:
+		_host.stopPopSummary()
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.cue("select")
 	for word in data.words:

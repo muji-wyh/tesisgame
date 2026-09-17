@@ -177,12 +177,36 @@
     #speech-panel[data-heard="true"] .speech-bubble { background: var(--cp-surface-soft); }
     #speech-panel[data-state="error"] #speech-status { color: var(--cp-danger); }
     #speech-panel[data-state="error"] #speech-transcript { display: none; }
+    #speech-panel[data-pop-stop-failed="true"] { position: fixed; z-index: 110;
+      inset: 12px 12px auto !important; width: auto !important; height: auto !important;
+      grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; padding: 12px; }
+    #speech-panel[data-pop-stop-failed="true"] .speech-bubble { grid-column: 1; }
+    #speech-panel[data-pop-stop-failed="true"] #speech-buddy,
+    #speech-panel[data-pop-stop-failed="true"] #speech-meter,
+    #speech-panel[data-pop-stop-failed="true"] #speech-notice { display: none; }
+    #pop-aura { position: fixed; inset: 0; z-index: 100; pointer-events: none;
+      opacity: 0; transition: opacity 180ms ease-out; }
+    #pop-aura[data-listening="true"] { opacity: 1; }
+    #pop-aura::before, #pop-aura::after { content: ''; position: absolute; inset: 0;
+      border-radius: 16px; padding: 3px;
+      background: linear-gradient(115deg, #35e6f5, #7e67ff, #ff70bf, #5ae5ef, #ab75ff);
+      background-size: 250% 250%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      animation: pop-edge-colors 7s ease-in-out infinite alternate;
+      animation-play-state: paused; }
+    #pop-aura::after { padding: 8px; opacity: 0.55; filter: blur(5px); }
+    #pop-aura[data-listening="true"]::before, #pop-aura[data-listening="true"]::after { animation-play-state: running; }
+    @keyframes pop-edge-colors { from { background-position: 0% 25%; } to { background-position: 100% 75%; } }
     @keyframes speech-wave { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
     @keyframes pip-listen { 0%, 100% { transform: rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
     @keyframes pip-nod { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(5px) rotate(3deg); } }
     @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
     @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
     @media (prefers-reduced-motion: reduce) {
+      #pop-aura { transition: none; }
+      #pop-aura::before, #pop-aura::after { animation: none; }
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
       #speech-panel .speech-bubble { background: none !important; }
       .duck-sprite { animation: none !important; }
@@ -221,7 +245,7 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Pip and Words word game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Choose Match, Learn, or Memory.
+      <p id="help" class="sr-only">Choose Match, Learn, Memory, or Voice Pop.
         Match: find three matching word and picture pairs. Two cards have no match.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -242,12 +266,16 @@
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
         Hold Space, Enter, or Xbox A on the eye for the same peek. Memory has no countdown or limit on attempts.
+        Voice Pop asks for microphone access when opened. Say the words you see to pop them during a 30-second round.
+        The timer starts when the microphone is listening. The colored screen edges glow while listening.
+        Say different displayed words for a combo. Voice Pop has its own score and a spoken or readable round summary.
+        If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh five-word Learn lesson directly. Retry saving appears only if a reward could not be saved.
         More opens Pip's room and Medals. The arrow icon returns to the game.
         Six larger world icons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Choosing one keeps this page open and preserves your game.
         Your next medal and gift progress are in Medals. Your chosen world is remembered as you explore vocabulary topics.
-        Medals shows six medals per theme, with three pieces per medal. Every winning mode earns one piece.
+        Medals shows six medals per theme, with three pieces per medal. Winning Match or Memory earns one piece.
         Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy.
         Drag blank canvas areas or locked toys to scroll. A floor tap calls Pip; duck and unlocked-toy gestures still play.
         A locked toy's card shows its progress and an arrow to start or continue a related lesson.
@@ -259,6 +287,8 @@
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
+      <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
+        data-phase="idle" data-remaining="30" data-hits="0" data-score="0" data-best-combo="0" data-targets="[]" data-controls="[]"></p>
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
@@ -333,6 +363,7 @@
       </div>
     </div>
   </div>
+  <div id="pop-aura" aria-hidden="true" data-listening="false"></div>
   <script>
     (() => {
       'use strict';
@@ -649,11 +680,14 @@
 
       function createSpeechHost() {
         const panel = document.getElementById('speech-panel');
+        const aura = document.getElementById('pop-aura');
+        const popStatusText = document.getElementById('pop-status');
         const statusText = document.getElementById('speech-status');
         const transcript = document.getElementById('speech-transcript');
         const notice = document.getElementById('speech-notice');
         const privacy = 'Browser speech may process audio remotely. Game stores no voice or transcripts.';
         let onResult = null;
+        let onPopResult = null;
         let onState = null;
         let enabled = false;
         let active = false;
@@ -665,6 +699,11 @@
         let heardTimer = 0;
         let heardReaction = 0;
         let stopFailed = false;
+        let presentation = 'match';
+        let silentRestarts = 0;
+        let summaryUtterance = null;
+        const popAliases = new Map();
+        const maxSilentRestarts = 2;
 
         function speechAvailable() {
           return window.isSecureContext === true &&
@@ -679,6 +718,9 @@
           statusText.textContent = state === 'listening' ? 'Pip is listening!' :
             state === 'starting' ? 'Opening my ears...' : message;
           notice.textContent = privacy;
+          panel.setAttribute('data-pop-stop-failed', String(presentation === 'pop' && stopFailed));
+          panel.hidden = !enabled || (presentation === 'pop' && !stopFailed);
+          aura?.setAttribute('data-listening', String(presentation === 'pop' && enabled && active && listening && !document.hidden));
           // JavaScriptBridge collects positional arguments into the GDScript callback Array.
           onState?.(enabled, listening, message);
         }
@@ -694,6 +736,7 @@
           heardTimer = 0;
           heardReaction = 0;
           panel.setAttribute('data-heard', 'false');
+          aura?.setAttribute('data-listening', 'false');
           const previous = recognition;
           recognition = null;
           stopFailed = false;
@@ -714,38 +757,53 @@
         }
 
         function closeSpeech(restoreFocus) {
+          stopPopSummary();
           const wasEnabled = enabled;
           if (!release()) {
             enabled = true;
-            panel.hidden = false;
             transcript.textContent = '';
             report();
-            return;
+            return false;
           }
           enabled = false;
           panel.hidden = true;
           transcript.textContent = '';
+          presentation = 'match';
+          silentRestarts = 0;
+          popAliases.clear();
           report();
           if (restoreFocus && wasEnabled) focusGame();
+          return true;
         }
 
         function stopSpeech() {
-          closeSpeech(true);
+          return closeSpeech(true);
         }
 
-        function speechMode(value) {
+        function speechMode(value, nextPresentation = 'match') {
+          stopPopSummary();
           if (!value || document.hidden) { stopSpeech(); return; }
-          if (enabled) return;
+          nextPresentation = nextPresentation === 'pop' ? 'pop' : 'match';
+          if (enabled) {
+            if (presentation === nextPresentation || !closeSpeech(false)) return;
+          }
+          presentation = nextPresentation;
+          silentRestarts = 0;
           enabled = true;
-          panel.hidden = false;
           transcript.textContent = '';
           if (!speechAvailable()) {
-            report('Voice is unavailable here. Use a supported browser on HTTPS, or tap cards.');
+            report(presentation === 'pop'
+              ? 'Voice is unavailable here. Open this game in a supported browser on HTTPS, or choose another mode.'
+              : 'Voice is unavailable here. Use a supported browser on HTTPS, or tap cards.');
+            return;
+          }
+          if (window.navigator?.onLine === false) {
+            failedRecognition('offline');
             return;
           }
           active = true;
           const token = ++generation;
-          report('Starting microphone...');
+          report(presentation === 'pop' ? 'Allow microphone access if your browser asks. The round starts when listening.' : 'Starting microphone...');
           startRecognition(token);
         }
 
@@ -758,9 +816,40 @@
             network: 'Speech network error. Turn Voice off and on to retry, or tap cards.',
             'language-not-supported': 'English speech is unavailable in this browser. You can still tap cards.'
           };
+          const popErrors = {
+            'not-allowed': 'Microphone permission was denied. Allow it in browser settings, then tap Retry.',
+            'service-not-allowed': 'Browser speech permission is blocked. Allow speech access, then tap Retry, or choose another mode.',
+            'no-speech': 'No speech heard. Tap Retry to listen again, or choose another mode.',
+            'audio-capture': 'No microphone is available. Connect or enable one, then tap Retry.',
+            network: 'Speech network error. Check your internet connection, then tap Retry.',
+            offline: 'You are offline. Connect to the internet, then tap Retry.',
+            'language-not-supported': 'English speech is unavailable in this browser. Choose another mode or a supported browser.'
+          };
           release();
           transcript.textContent = '';
-          report(errors[code] || 'Listening stopped. Turn Voice off and on to retry, or tap cards.');
+          report(presentation === 'pop'
+            ? popErrors[code] || 'Listening stopped. Tap Retry to listen again, or choose another mode.'
+            : errors[code] || (code === 'offline' ? 'You are offline. Connect and turn Voice off and on to retry, or tap cards.'
+              : 'Listening stopped. Turn Voice off and on to retry, or tap cards.'));
+        }
+
+        function scheduleRestart(token) {
+          if (token !== generation || !enabled || !active || document.hidden) return;
+          window.clearTimeout(restartTimer);
+          restartTimer = window.setTimeout(() => {
+            restartTimer = 0;
+            startRecognition(token);
+          }, 400);
+        }
+
+        function retryPopSilence() {
+          if (silentRestarts >= maxSilentRestarts) { failedRecognition('no-speech'); return; }
+          silentRestarts++;
+          if (!release()) { report(); return; }
+          active = true;
+          const token = generation;
+          report('Listening paused. Say a word when listening resumes.');
+          scheduleRestart(token);
         }
 
         function startRecognition(token) {
@@ -774,6 +863,8 @@
             current.interimResults = true;
             current.continuous = true;
             let lastFinal = -1;
+            let heardSpeech = false;
+            const popResults = new Map();
             const valid = () => token === generation && recognition === current &&
               enabled && active && !document.hidden;
             current.onstart = () => {
@@ -787,12 +878,15 @@
                 if (!valid()) break;
                 const result = event.results[index];
                 const isFinal = result.isFinal === true;
+                const popResultCurrent = index > lastFinal;
                 if (isFinal && index <= lastFinal) continue;
                 const text = result[0].transcript.trim();
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
                 if (isFinal) lastFinal = index;
                 if (text) {
+                  heardSpeech = true;
+                  silentRestarts = 0;
                   panel.setAttribute('data-reaction', ['nod', 'wave', 'tilt'][heardReaction]);
                   heardReaction = (heardReaction + 1) % 3;
                   panel.setAttribute('data-heard', 'true');
@@ -801,34 +895,119 @@
                     heardTimer = 0;
                     if (valid()) panel.setAttribute('data-heard', 'false');
                   }, 280);
-                  onResult?.(text, isFinal);
+                  if (presentation === 'pop' && popResultCurrent) {
+                    const words = text.match(/[\p{L}\p{N}_]+(?:['’][\p{L}\p{N}_]+)*/gu) || [];
+                    const progress = popResults.get(index) || { emitted: new Set(), final: false };
+                    popResults.set(index, progress);
+                    if (!progress.final) {
+                      // Revised interim text may complete a partial word. Deliver newly recognized
+                      // words, but never replay the same word within this browser result index.
+                      for (const word of words) {
+                        if (!valid()) break;
+                        const key = word.toLowerCase().replaceAll('’', "'");
+                        const forms = popAliases.get(key) || [key];
+                        const repeated = forms.some(form => progress.emitted.has(form));
+                        progress.emitted.add(key);
+                        if (repeated) continue;
+                        onPopResult?.(word);
+                      }
+                    }
+                    progress.final ||= isFinal;
+                  }
+                  if (valid()) onResult?.(text, isFinal);
                 }
               }
             };
             current.onerror = event => {
-              if (valid()) failedRecognition(event.error);
+              if (!valid()) return;
+              if (presentation === 'pop' && event.error === 'no-speech') retryPopSilence();
+              else failedRecognition(event.error);
             };
             current.onend = () => {
               if (!valid()) return;
               recognition = null;
               current.onstart = current.onresult = current.onerror = current.onend = null;
+              if (presentation === 'pop' && !heardSpeech) { retryPopSilence(); return; }
               listening = false;
               window.clearTimeout(heardTimer);
               heardTimer = 0;
               panel.setAttribute('data-heard', 'false');
               report('Listening paused. Continuing...');
-              if (token !== generation || !enabled || !active || document.hidden) return;
-              restartTimer = window.setTimeout(() => {
-                restartTimer = 0;
-                startRecognition(token);
-              }, 400);
+              scheduleRestart(token);
             };
             current.start();
           } catch (error) {
             if (token !== generation || !enabled || !active) return;
             failedRecognition(['NotAllowedError', 'SecurityError'].includes(error.name) ? 'not-allowed' :
-              error.name === 'NotFoundError' ? 'audio-capture' : '');
+              ['NotFoundError', 'NotReadableError'].includes(error.name) ? 'audio-capture' :
+              error.name === 'NetworkError' ? 'network' : '');
           }
+        }
+
+        function stopPopSummary() {
+          if (!summaryUtterance) return;
+          const previous = summaryUtterance;
+          summaryUtterance = null;
+          previous.onend = previous.onerror = null;
+          try { window.speechSynthesis?.cancel(); } catch { /* The readable summary remains available. */ }
+        }
+
+        function speakPopSummary(text) {
+          if (!closeSpeech(false) || enabled || active || recognition || document.hidden) return false;
+          const synthesis = window.speechSynthesis;
+          const Utterance = window.SpeechSynthesisUtterance;
+          if (!synthesis || typeof Utterance !== 'function' || typeof text !== 'string' || !text.trim()) return false;
+          try {
+            const utterance = new Utterance(text.trim());
+            utterance.lang = 'en-US';
+            utterance.rate = 0.95;
+            utterance.onend = utterance.onerror = () => {
+              if (summaryUtterance === utterance) summaryUtterance = null;
+            };
+            summaryUtterance = utterance;
+            synthesis.speak(utterance);
+            return true;
+          } catch {
+            stopPopSummary();
+            return false;
+          }
+        }
+
+        function popStatus(json) {
+          let state;
+          try { state = JSON.parse(json); } catch { return false; }
+          if (!state || typeof state !== 'object' || Array.isArray(state) || !popStatusText) return false;
+          const number = value => Number.isFinite(Number(value)) ? Math.max(0, Number(value)) : 0;
+          const coordinate = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+          const phase = typeof state.phase === 'string' ? state.phase : 'idle';
+          const remaining = Math.ceil(number(state.remaining));
+          const hits = Math.floor(number(state.hits)), score = Math.floor(number(state.score));
+          const combo = Math.floor(number(state.best_combo));
+          // The model supplies accepted noun forms; the host never guesses a singular
+          // from a partial hypothesis, possessive, or arbitrary recognized suffix.
+          for (const target of Array.isArray(state.targets) ? state.targets : []) {
+            if (!target || typeof target.text !== 'string') continue;
+            const forms = [...new Set([target.text, ...(Array.isArray(target.forms) ? target.forms : [])]
+              .filter(form => typeof form === 'string' && /^[a-z]+$/i.test(form)).map(form => form.toLowerCase()))];
+            for (const form of forms) popAliases.set(form, forms);
+          }
+          const targets = (Array.isArray(state.targets) ? state.targets : []).filter(target => target && typeof target.text === 'string')
+            .map(target => ({ uid: typeof target.uid === 'number' || typeof target.uid === 'string' ? target.uid : '',
+              text: target.text, x: coordinate(target.x), y: coordinate(target.y),
+              width: number(target.width), height: number(target.height) }));
+          const controls = (Array.isArray(state.controls) ? state.controls : []).filter(control => control && typeof control.name === 'string')
+            .map(control => ({ name: control.name, text: typeof control.text === 'string' ? control.text : '',
+              x: coordinate(control.x), y: coordinate(control.y), width: number(control.width), height: number(control.height),
+              disabled: control.disabled === true }));
+          for (const [name, value] of Object.entries({ phase, remaining, hits, score, 'best-combo': combo,
+            targets: JSON.stringify(targets), controls: JSON.stringify(controls) })) {
+            popStatusText.setAttribute('data-' + name, String(value));
+          }
+          const message = typeof state.message === 'string' ? state.message : '';
+          const readable = phase === 'idle' ? '' : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${combo}.` +
+            (targets.length ? ' Words: ' + targets.map(target => target.text).join(', ') + '.' : '');
+          if (popStatusText.textContent !== readable) popStatusText.textContent = readable;
+          return true;
         }
 
         function focusGame() {
@@ -846,9 +1025,11 @@
           if (document.hidden) closeSpeech(false);
         });
         window.addEventListener('pagehide', () => closeSpeech(false));
+        window.addEventListener('offline', () => { if (enabled) failedRecognition('offline'); });
 
         return {
-          speechAvailable, speechMode, stopSpeech,
+          speechAvailable, speechMode, stopSpeech, speakPopSummary, stopPopSummary, popStatus,
+          observePopSpeech(callback) { onPopResult = typeof callback === 'function' ? callback : null; },
           observeSpeech(resultCallback, stateCallback) {
             onResult = resultCallback;
             onState = stateCallback;

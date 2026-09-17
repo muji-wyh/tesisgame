@@ -14,7 +14,7 @@ function speechEvent(entries, resultIndex = 0) {
   return { resultIndex, results };
 }
 
-function fixture({ api = 'standard', secure = true } = {}) {
+function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false } = {}) {
   const block = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?\n      \}/)?.[0];
   assert.ok(block, 'The maintained shell needs its isolated inline speech host');
   const handlers = new WeakMap();
@@ -41,7 +41,7 @@ function fixture({ api = 'standard', secure = true } = {}) {
     return value;
   }
   const elements = Object.fromEntries(
-    ['game', 'canvas', 'speech-panel', 'speech-status', 'speech-transcript', 'speech-notice']
+    ['game', 'canvas', 'speech-panel', 'speech-status', 'speech-transcript', 'speech-notice', 'pop-aura', 'pop-status']
       .map(id => [id, element()])
   );
   elements['speech-panel'].hidden = true;
@@ -55,6 +55,7 @@ function fixture({ api = 'standard', secure = true } = {}) {
   let nextTimer = 1;
   const window = Object.assign(element(), {
     isSecureContext: secure,
+    navigator: { onLine: online },
     setTimeout(callback, delay) {
       const id = nextTimer++;
       timers.set(id, { at: now + delay, callback });
@@ -82,7 +83,7 @@ function fixture({ api = 'standard', secure = true } = {}) {
     start() {
       starts++;
       this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
-      window.setTimeout(() => this.callbacks.start?.(), 0);
+      if (autoStart) window.setTimeout(() => this.callbacks.start?.(), 0);
     }
     abort() {
       aborts++;
@@ -94,9 +95,23 @@ function fixture({ api = 'standard', secure = true } = {}) {
   }
   if (api === 'standard') window.SpeechRecognition = Recognition;
   if (api === 'prefixed') window.webkitSpeechRecognition = Recognition;
+  const spoken = [];
+  let summaryCancels = 0;
+  if (synthesis) {
+    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
+    window.speechSynthesis = {
+      speak(utterance) { spoken.push(utterance); },
+      cancel() { summaryCancels++; }
+    };
+  }
   const host = vm.runInNewContext(`(${block})()`, { window, document });
   const states = [];
   const results = [];
+  const popWords = [];
+  host.observePopSpeech(word => {
+    assert.equal(typeof word, 'string', 'Pop emits one lexical word as a positional bridge argument');
+    popWords.push(word);
+  });
   host.observeSpeech((...values) => {
     assert.deepEqual(values.map(value => typeof value), ['string', 'boolean'],
       'Speech results use positional arguments so the Godot bridge receives a flat Array');
@@ -107,15 +122,18 @@ function fixture({ api = 'standard', secure = true } = {}) {
     states.push(values);
   });
   return {
-    host, document, window, elements, instances, states, results, advance,
+    host, document, window, elements, instances, states, results, popWords, advance, spoken,
     get starts() { return starts; }, get aborts() { return aborts; },
     get pendingTimers() { return timers.size; },
+    get summaryCancels() { return summaryCancels; },
     get latest() { return instances.at(-1); },
     get status() { return elements['speech-status']; },
     get panel() { return elements['speech-panel']; },
     get transcript() { return elements['speech-transcript']; },
     get notice() { return elements['speech-notice']; },
-    listen() { host.speechMode(true); advance(); }
+    get aura() { return elements['pop-aura']; },
+    get popStatus() { return elements['pop-status']; },
+    listen(presentation) { host.speechMode(true, presentation); advance(); }
   };
 }
 
@@ -485,4 +503,364 @@ test('normalized bounds stay inside the native rectangle and keys do not reach t
     f.panel.dispatch(type, { key: 'Enter', stopPropagation() { stopped++; } });
   }
   assert.equal(stopped, 2);
+});
+
+test('Pop requests permission immediately but waits for actual listening before lighting the screen', () => {
+  const f = fixture({ autoStart: false });
+  f.host.speechMode(true, 'pop');
+  assert.equal(f.starts, 1);
+  assert.equal(f.panel.hidden, true);
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+  assert.match(f.states.at(-1)[2], /microphone access.*round starts when listening/i);
+  f.latest.result([['cat', false]]);
+  f.advance(45000);
+  assert.equal(f.starts, 1, 'Pending browser permission neither times out a game nor starts another request');
+  assert.deepEqual(f.popWords, []);
+  assert.equal(f.states.some(([, listening]) => listening), false);
+  f.latest.callbacks.start();
+  assert.deepEqual(f.states.at(-1).slice(0, 2), [true, true]);
+  assert.equal(f.aura.attributes['data-listening'], 'true');
+  assert.equal(f.panel.hidden, true);
+  f.host.stopSpeech();
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+});
+
+test('Pop interim words score once through repeated, shortened and revised finals', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['Cat', false]]);
+  assert.deepEqual(f.popWords, ['Cat'], 'Interim speech is delivered immediately');
+  f.latest.result([['Cat', false]]);
+  f.latest.result([['the cat', false]]);
+  assert.deepEqual(f.popWords, ['Cat', 'the'], 'An inserted prefix cannot replay a consumed target word');
+  f.latest.result([['the cat dog', false]]);
+  f.latest.result([['cat', false]]);
+  f.latest.result([['the cat dog', true]]);
+  f.latest.result([['the cat dog', true]]);
+  f.latest.result([['the cat dog sun', false]]);
+  assert.deepEqual(f.popWords, ['Cat', 'the', 'dog'], 'Completed result indexes reject late interim revisions too');
+  assert.ok(f.results.some(([text, final]) => text === 'the cat dog' && final), 'The original full-transcript callback stays intact');
+  f.latest.result([['the cat dog', true], ['cat', false]], 1);
+  f.latest.result([['the cat dog', true], ['cat', true]], 1);
+  assert.deepEqual(f.popWords, ['Cat', 'the', 'dog', 'cat'], 'A new utterance may legitimately repeat a word');
+});
+
+test('Pop delivers newly completed interim words and preserves full nonmatching lexical tokens', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['ca', false]]);
+  f.latest.result([['cat', false]]);
+  f.latest.result([['cat cat2 _cat caté cat\'s 2cat cat_dog', true]]);
+  assert.deepEqual(f.popWords, ['ca', 'cat', 'cat2', '_cat', 'caté', "cat's", '2cat', 'cat_dog']);
+  assert.equal(f.popWords.filter(word => word === 'cat').length, 1, 'Completing an interim prefix scores cat once');
+  f.latest.result([['cat', true], ['DOGS', true]], 1);
+  assert.equal(f.popWords.at(-1), 'DOGS', 'The model receives original case and handles canonical word matching');
+});
+
+test('only Pop emits the lexical callback and switching presentation releases the previous recognizer', () => {
+  const f = fixture();
+  f.listen();
+  const match = f.latest;
+  match.result([['cat', false]]);
+  assert.deepEqual(f.popWords, []);
+  f.host.speechMode(true, 'pop');
+  f.advance();
+  assert.equal(f.aborts, 1);
+  assert.equal(f.starts, 2);
+  assert.equal(f.panel.hidden, true);
+  match.result([['old dog', true]]);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+  f.host.stopSpeech();
+  f.listen();
+  assert.equal(f.panel.hidden, false, 'An ordinary activation after Pop uses Match presentation again');
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  f.latest.result([['sun', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+  assert.deepEqual(f.results.at(-1), ['sun', true]);
+});
+
+test('model-provided noun aliases prevent revised plurals from replaying a target without swallowing partial words', () => {
+  const f = fixture();
+  f.listen('pop');
+  const targets = [
+    { uid: 1, text: 'cat', forms: ['cat', 'cats'] },
+    { uid: 2, text: 'mouse', forms: ['mouse', 'mice'] },
+    { uid: 3, text: 'bus', forms: ['bus', 'buses'] }
+  ];
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets }));
+  f.latest.result([['ca', false]]);
+  f.latest.result([['cat mouse buses', false]]);
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.latest.result([['cats mice bus', true]]);
+  assert.deepEqual(f.popWords, ['ca', 'cat', 'mouse', 'buses']);
+  assert.equal(f.popStatus.attributes['data-targets'], '[]', 'Only currently displayed target geometry is exposed');
+  f.latest.result([['cats mice bus', true], ['cats', true]], 1);
+  assert.deepEqual(f.popWords, ['ca', 'cat', 'mouse', 'buses', 'cats'], 'New utterances may repeat any accepted noun form');
+});
+
+test('noun metadata arriving after an interim still recognizes already-consumed aliases', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['mice', false]]);
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ text: 'mouse', forms: ['mouse', 'mice'] }] }));
+  f.latest.result([['mouse', true]]);
+  assert.deepEqual(f.popWords, ['mice']);
+});
+
+test('a Pop hit that ends the round rejects remaining words and all stale browser callbacks', () => {
+  const f = fixture();
+  const delivered = [];
+  f.host.observePopSpeech(word => { delivered.push(word); f.host.stopSpeech(); });
+  f.listen('pop');
+  const old = f.latest;
+  old.result([['cat dog ball', false], ['sun', true]]);
+  assert.deepEqual(delivered, ['cat']);
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  assert.equal(f.panel.hidden, true);
+  old.callbacks.start();
+  old.error('network');
+  old.result([['cat dog ball', true]]);
+  f.advance(5000);
+  assert.deepEqual(delivered, ['cat']);
+  assert.deepEqual(f.states.at(-1), [false, false, '']);
+  assert.equal(f.starts, 1);
+});
+
+for (const code of ['not-allowed', 'service-not-allowed', 'audio-capture', 'network', 'language-not-supported']) {
+  test(`Pop ${code} turns off its glow, hides the old panel and requires explicit recovery`, () => {
+    const f = fixture();
+    f.listen('pop');
+    const old = f.latest;
+    old.error(code);
+    assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+    assert.match(f.states.at(-1)[2], /retry|supported browser/i);
+    assert.equal(f.panel.hidden, true);
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    f.advance(5000);
+    assert.equal(f.starts, 1);
+    f.host.speechMode(false);
+    f.listen('pop');
+    assert.equal(f.starts, 2);
+    assert.equal(f.aura.attributes['data-listening'], 'true');
+    old.result([['stale cat', true]]);
+    f.latest.result([['dog', true]]);
+    assert.deepEqual(f.popWords, ['dog']);
+  });
+}
+
+test('unsupported or offline Pop never pretends to be listening and reports actionable state', () => {
+  for (const options of [{ api: 'missing' }, { secure: false }, { online: false }]) {
+    const f = fixture(options);
+    f.listen('pop');
+    assert.equal(f.starts, 0);
+    assert.equal(f.panel.hidden, true);
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+    assert.match(f.states.at(-1)[2], /HTTPS|supported browser|offline/i);
+  }
+  const f = fixture();
+  f.listen('pop');
+  f.window.navigator.onLine = false;
+  f.window.dispatch('offline');
+  assert.equal(f.aborts, 1);
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  assert.match(f.states.at(-1)[2], /offline.*retry/i);
+  f.window.navigator.onLine = true;
+  f.host.stopSpeech();
+  f.listen('pop');
+  assert.equal(f.starts, 2);
+});
+
+test('Pop silence retries twice quietly, then stops rather than looping microphone requests', () => {
+  for (const event of ['error', 'end']) {
+    const f = fixture();
+    f.listen('pop');
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (event === 'error') f.latest.error('no-speech');
+      else f.latest.end();
+      assert.equal(f.aura.attributes['data-listening'], 'false');
+      assert.equal(f.panel.hidden, true);
+      f.advance(1000);
+      assert.equal(f.starts, Math.min(attempt + 2, 3));
+    }
+    assert.match(f.states.at(-1)[2], /no speech.*retry/i);
+    assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+    f.advance(30000);
+    assert.equal(f.starts, 3);
+    assert.equal(f.pendingTimers, 0);
+  }
+});
+
+test('hearing new speech resets the Pop silence budget and natural endings permit repeated new utterances', () => {
+  const f = fixture();
+  f.listen('pop');
+  for (let session = 0; session < 5; session++) {
+    f.latest.error('no-speech');
+    f.advance(400);
+    f.latest.result([['cat', false]]);
+    f.latest.result([['cat', true]]);
+    const old = f.latest;
+    old.end();
+    old.end();
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    f.advance(400);
+    old.result([['old dog', true]]);
+  }
+  assert.deepEqual(f.popWords, ['cat', 'cat', 'cat', 'cat', 'cat']);
+  assert.equal(f.starts, 11);
+  assert.equal(f.aura.attributes['data-listening'], 'true');
+});
+
+test('Pop background and pending-permission exits abort safely and never resume without a gesture', () => {
+  for (const event of ['visibilitychange', 'pagehide']) {
+    const f = fixture({ autoStart: false });
+    f.host.speechMode(true, 'pop');
+    const old = f.latest;
+    if (event === 'visibilitychange') {
+      f.document.hidden = true;
+      f.document.dispatch(event);
+    } else f.window.dispatch(event);
+    old.callbacks.start();
+    old.result([['cat', true]]);
+    f.document.hidden = false;
+    f.document.dispatch('visibilitychange');
+    f.advance(5000);
+    assert.equal(f.aborts, 1);
+    assert.equal(f.starts, 1);
+    assert.equal(f.panel.hidden, true);
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    assert.deepEqual(f.popWords, []);
+    assert.deepEqual(f.states.at(-1), [false, false, '']);
+    assert.equal(f.elements.canvas.focusCalls.length, 0);
+  }
+});
+
+test('a failed Pop shutdown keeps a visible stop warning through summary and retry attempts', () => {
+  const f = fixture({ synthesis: true });
+  f.listen('pop');
+  f.host.speechBounds(0, 0, 0, 0);
+  f.latest.abort = f.latest.stop = () => { throw new Error('device failure'); };
+  assert.equal(f.host.stopSpeech(), false);
+  assert.equal(f.panel.hidden, false);
+  assert.equal(f.panel.attributes['data-pop-stop-failed'], 'true');
+  assert.equal(f.panel.attributes['data-state'], 'error');
+  assert.equal(f.status.textContent, 'Microphone could not be stopped. Close this tab to stop voice input.');
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  assert.match(f.states.at(-1)[2], /close this tab/i);
+  assert.equal(f.host.speakPopSummary('Three pops!'), false);
+  assert.equal(f.spoken.length, 0);
+  assert.equal(f.panel.hidden, false, 'A finished round cannot cover the microphone stop failure');
+  assert.equal(f.panel.attributes['data-pop-stop-failed'], 'true');
+  assert.match(f.status.textContent, /close this tab/i);
+  f.host.speechMode(true, 'pop');
+  assert.equal(f.starts, 1);
+  assert.equal(f.panel.hidden, false);
+  f.latest.abort = () => {};
+  assert.equal(f.host.stopSpeech(), true);
+  assert.equal(f.panel.hidden, true);
+  assert.equal(f.panel.attributes['data-pop-stop-failed'], 'false');
+});
+
+test('Pop stop failure has viewport CSS bounds that override a stale Match speech rectangle', () => {
+  const rule = shell.match(/#speech-panel\[data-pop-stop-failed="true"\] \{([^}]+)\}/)?.[1];
+  assert.ok(rule);
+  assert.match(rule, /position:\s*fixed/);
+  assert.match(rule, /inset:\s*12px 12px auto\s*!important/);
+  assert.match(rule, /width:\s*auto\s*!important/);
+  assert.match(rule, /height:\s*auto\s*!important/);
+  for (const code of ['not-allowed', 'audio-capture', 'network', 'language-not-supported']) {
+    const f = fixture();
+    f.listen('pop');
+    f.latest.error(code);
+    assert.equal(f.panel.hidden, true, code + ' stays in the native Pop view');
+    assert.equal(f.panel.attributes['data-pop-stop-failed'], 'false');
+  }
+});
+
+test('Pop summary releases recognition before synthesis and exit, retry or background cancels it', () => {
+  for (const exit of ['stopPopSummary', 'stopSpeech', 'retry', 'visibilitychange', 'pagehide']) {
+    const f = fixture({ synthesis: true });
+    f.listen('pop');
+    const old = f.latest;
+    f.window.speechSynthesis.speak = utterance => {
+      assert.equal(f.aborts, 1, 'Microphone cleanup precedes any summary speech');
+      assert.deepEqual(f.states.at(-1), [false, false, '']);
+      f.spoken.push(utterance);
+    };
+    assert.equal(f.host.speakPopSummary('You popped 12 words!'), true);
+    assert.equal(f.spoken[0].text, 'You popped 12 words!');
+    assert.equal(f.spoken[0].lang, 'en-US');
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    old.result([['summary echo', true]]);
+    assert.deepEqual(f.popWords, []);
+    if (exit === 'retry') f.host.speechMode(true, 'pop');
+    else if (exit === 'visibilitychange') { f.document.hidden = true; f.document.dispatch(exit); }
+    else if (exit === 'pagehide') f.window.dispatch(exit);
+    else f.host[exit]();
+    assert.equal(f.summaryCancels, 1, exit);
+    f.host.stopPopSummary();
+    assert.equal(f.summaryCancels, 1, 'Repeated cleanup does not cancel unrelated future audio');
+  }
+});
+
+test('summary unavailability, blocked synthesis and late completion remain safe', () => {
+  const unsupported = fixture();
+  unsupported.listen('pop');
+  assert.equal(unsupported.host.speakPopSummary('Three words!'), false);
+  assert.equal(unsupported.aborts, 1);
+  const f = fixture({ synthesis: true });
+  assert.equal(f.host.speakPopSummary('First round'), true);
+  const firstEnd = f.spoken[0].onend;
+  assert.equal(f.host.speakPopSummary('Next round'), true);
+  firstEnd();
+  f.host.stopPopSummary();
+  assert.equal(f.summaryCancels, 2, 'A stale completion cannot lose ownership of the current utterance');
+  f.window.speechSynthesis.speak = () => { throw new Error('Audio unavailable'); };
+  assert.equal(f.host.speakPopSummary('Readable summary'), false);
+  f.document.hidden = true;
+  assert.equal(f.host.speakPopSummary('Background summary'), false);
+});
+
+test('Pop status projects actual target and control geometry without introducing a game mutation API', () => {
+  const f = fixture();
+  let writes = 0;
+  let readable = '';
+  Object.defineProperty(f.popStatus, 'textContent', {
+    get() { return readable; }, set(value) { readable = value; writes++; }
+  });
+  const payload = { phase: 'playing', remaining: 19.3, hits: 4, score: 90, best_combo: 3,
+    targets: [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, secret: 'discard' }],
+    controls: [{ name: 'EndPop', text: 'Finish', x: 300, y: 15, width: 52, height: 44, disabled: false, action: 'discard' }],
+    message: 'Nice pop!' };
+  assert.equal(f.host.popStatus(JSON.stringify(payload)), true);
+  assert.equal(f.popStatus.attributes['data-phase'], 'playing');
+  assert.equal(f.popStatus.attributes['data-remaining'], '20');
+  assert.equal(f.popStatus.attributes['data-hits'], '4');
+  assert.equal(f.popStatus.attributes['data-score'], '90');
+  assert.equal(f.popStatus.attributes['data-best-combo'], '3');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']), [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77 }]);
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-controls']), [{ name: 'EndPop', text: 'Finish', x: 300, y: 15, width: 52, height: 44, disabled: false }]);
+  assert.match(readable, /Nice pop!.*4 hits.*Score 90.*Words: cat/);
+  f.host.popStatus(JSON.stringify(payload));
+  assert.equal(writes, 1, 'Repeated snapshots do not repeat the same live-region announcement');
+  assert.equal(f.host.popStatus('invalid JSON'), false);
+  assert.equal(f.host.popStatus('null'), false);
+  assert.equal(f.host.popStatus('[]'), false);
+  f.host.popStatus(JSON.stringify({ phase: 'idle' }));
+  assert.equal(readable, '');
+  assert.equal(f.popStatus.attributes['data-targets'], '[]');
+  assert.equal(f.popStatus.attributes['data-controls'], '[]');
+  assert.equal(f.starts, 0, 'Publishing the UI snapshot cannot start speech or mutate gameplay');
+});
+
+test('the Pop glow covers the viewport edges, ignores input and respects reduced motion', () => {
+  assert.match(shell, /#pop-aura\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0;[^}]*pointer-events:\s*none;/);
+  assert.match(shell, /mask-composite:\s*exclude/);
+  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura::before, #pop-aura::after\s*\{\s*animation:\s*none;/);
+  assert.ok(shell.indexOf('<div id="pop-aura"') < shell.indexOf('function createSpeechHost()'), 'The aura exists before its host captures the element');
+  assert.match(shell, /id="pop-aura"[^>]*aria-hidden="true"/);
+  assert.match(shell, /id="pop-status"[^>]*role="status"/);
+  assert.match(shell, /Winning Match or Memory earns one piece/);
 });

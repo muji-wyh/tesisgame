@@ -30,8 +30,8 @@ func _run() -> void:
 	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
-	check(app.MODES.keys() == ["match", "learn", "memory"], "The modes are ordered Match, Learn, Memory")
-	check(app._mode_buttons.size() == 3, "Removed modes create no hidden mode controls")
+	check(app.MODES.keys() == ["match", "learn", "memory", "pop"], "The original modes stay ordered before the new Voice Pop mode")
+	check(app._mode_buttons.size() == 4, "Each of the four modes has one visible tab")
 	check(FileAccess.file_exists("res://scripts/icon_button.gd"), "Toolbar and peek controls share drawn icons")
 	for button in [app.collection_button, app.hint_button, app._voice_button]:
 		check(button.text.is_empty(), "The top-right actions use icons rather than text")

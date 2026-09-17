@@ -36,8 +36,8 @@ func _run() -> void:
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
-	check(app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "learn", "memory"],
-		"The centered mode switch contains exactly the three remaining games")
+	check(app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "learn", "memory", "pop"],
+		"The centered mode switch includes the new Voice Pop game")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
 		root.size = dimensions
 		app.size = dimensions
@@ -46,7 +46,7 @@ func _run() -> void:
 			await settle()
 			var view: Control = app._lesson if mode == "learn" else app._match_playfield if mode == "match" else app._memory
 			var css_scale: float = app.Style.ui_scale(app)
-			var inline_modes: bool = dimensions.x * css_scale >= 600
+			var inline_modes: bool = dimensions.x * css_scale >= 680
 			var play_top: int = 76 if inline_modes else 128
 			check(absf(view.get_global_rect().position.y * css_scale - play_top) <= 2,
 				"%s %s: the responsive header leaves play at %d CSS pixels: %s" % [dimensions, mode, play_top, view.get_global_rect()])

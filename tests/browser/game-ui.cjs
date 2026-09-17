@@ -1,6 +1,6 @@
 const { expect } = require('@playwright/test');
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb'];
-const MODES = ['match', 'learn', 'memory'];
+const MODES = ['match', 'learn', 'memory', 'pop'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -84,12 +84,12 @@ function modeRect(bounds, name, currentMode = 'learn') {
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use learn, match or memory.`);
   if (!MODES.includes(currentMode)) throw new Error(`Unknown current mode: ${currentMode}.`);
   const content = contentBounds(bounds);
-  const scale = uiScale(bounds), width = Math.ceil(80 / scale), gap = Math.round(6 / scale);
+  const scale = uiScale(bounds), gap = Math.round(4 / scale);
+  const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - 3 * gap) / 4));
   let rowX = content.x, rowWidth = content.width, y = content.padding + content.header + content.gap;
   if (content.inlineModes) {
-    const pipWidth = Math.ceil((currentMode === 'learn' ? 52 : 132) / scale);
-    const icons = { learn: 1, match: 3, memory: 2 }[currentMode];
-    const toolbarWidth = icons * Math.ceil(44 / scale) + (icons - 1) * content.gap;
+    const pipWidth = Math.ceil(132 / scale);
+    const toolbarWidth = 3 * Math.ceil(44 / scale) + 2 * content.gap;
     rowX += pipWidth + content.gap;
     rowWidth -= pipWidth + toolbarWidth + content.gap * 2;
     y = content.padding + (content.header - modeHeight(bounds)) / 2;
@@ -125,7 +125,7 @@ async function chooseTheme(page, index) {
 function contentBounds(bounds) {
   const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
   const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
-  const inlineModes = bounds.width * scale >= 600;
+  const inlineModes = bounds.width * scale >= 680;
   const top = padding + header + gap + (inlineModes ? 0 : gap + modeHeight(bounds));
   return { x, width, top, padding, gap, header, inlineModes };
 }

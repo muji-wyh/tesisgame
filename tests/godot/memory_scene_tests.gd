@@ -39,7 +39,7 @@ func _run() -> void:
 	if view.memory.cards.size() != 10:
 		await _finish(app, directory)
 		return
-	check(view.is_visible_in_tree() and app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "learn", "memory"],
+	check(view.is_visible_in_tree() and app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "learn", "memory", "pop"],
 		"Memory is one of exactly three playable modes")
 	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
 		"Root owns the eye while Memory cards fill their entire assigned view")

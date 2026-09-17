@@ -32,14 +32,14 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	check(app.MODES.keys() == ["match", "learn", "memory"],
-		"Mode tabs are ordered Match, Learn, Memory")
+	check(app.MODES.keys() == ["match", "learn", "memory", "pop"],
+		"The original mode tabs precede Voice Pop")
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._lesson.is_visible_in_tree(),
 		"Entering the game opens the Match board")
 	check(app.find_child("Mode_match", true, false).button_pressed and not app.find_child("Mode_learn", true, false).button_pressed
 		and app.cards.size() == 8 and app.model.hints_remaining == 3 and not app._voice_mode,
 		"Match starts selected with a ready board, three hints, and no microphone")
-	check(app._mode_buttons.map(func(button: Button) -> String: return button.text) == ["Match", "Learn", "Memory"],
+	check(app._mode_buttons.map(func(button: Button) -> String: return button.text) == ["Match", "Learn", "Memory", "Voice Pop"],
 		"The actual controls follow the requested tab order")
 	app.model.phase = "lost"
 	app._refresh()

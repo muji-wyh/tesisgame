@@ -2,8 +2,18 @@
 
 Notable changes to Pip and Words (formerly Word Buddies), grouped by date with the newest changes first.
 
-## Unreleased
+## 2026-09-17
 
+- Added Voice Pop: microphone permission on entry, a 30-second spoken-word arcade
+  round, colorful screen-edge light, parabolic picture-and-word targets, combos,
+  and immediate slash/shard/shockwave hit feedback.
+- Added an interactive Pip round report with actual achievements, word audio
+  review, optional spoken summary, and replay. Speech interruption pauses the
+  round; leaving the mode releases the microphone and cancels summary speech.
+- Kept all four mode tabs in stable positions across games, with responsive
+  wrapping and keyboard focus preserved when the header changes rows.
+- Fixed long reward preview titles, preview action sizing, and controller
+  navigation between both rows of world choices.
 - Redesigned Memory backs with themed picture/letter graphics and compact
   position labels; added playful tap sparkles and a prominent voice button.
 - Added Pip high-five, peekaboo and flutter interactions, plus gated visual

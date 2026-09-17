@@ -819,7 +819,7 @@ for (const viewport of [
   { width: 599, height: 900 }, { width: 600, height: 900 },
   { width: 768, height: 1024 }, { width: 1366, height: 768 }
 ]) {
-test(`Learn has three centered modes, a square More icon and no topic or footer at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+test(`Learn has four centered modes, a square More icon and no topic or footer at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
   await page.setViewportSize(viewport);
   const { errors, saved, first } = await begin(page);
   const bounds = await metrics(page), card = learnCardRect(bounds);
@@ -886,7 +886,7 @@ test(`Learn has three centered modes, a square More icon and no topic or footer 
   expect(visual.pixels, 'The white picture surface must extend to the bottom, not stop above a footer.').toEqual([[255, 255, 255], [255, 255, 255]]);
   expect(visual.headerColors, 'Header space outside Pip, the responsive mode row and More has no brand or Explore control.').toEqual(headerClips.map(() => 1));
   expect(visual.topicColors, 'Only the in-card counter remains, not Play time or another topic heading.').toBe(1);
-  expect(content.inlineModes).toBe(viewport.width >= 600);
+  expect(content.inlineModes).toBe(viewport.width >= 680);
   expect(Math.abs(card.y * bounds.scale - (content.inlineModes ? 76 : 128))).toBeLessThanOrEqual(4);
   const portrait = card.width < 420 || card.width < card.height * 1.3;
   if (portrait) {
@@ -905,7 +905,7 @@ test(`Learn has three centered modes, a square More icon and no topic or footer 
   expect(Math.abs(visual.modeHeight - expectedModeHeight), 'The rendered selected tab has the compact adaptive height.').toBeLessThanOrEqual(2);
   expect(visual.modeHeight, 'Rasterized touch targets retain the 44 CSS-pixel minimum within one antialiasing pixel.').toBeGreaterThanOrEqual(43);
   expect(visual.modeHeight).toBeLessThan(content.header * bounds.scale - 2);
-  expect(Math.abs(visual.modeWidth - mode.width * bounds.scale), 'Tabs use natural 80 CSS-pixel widths, centered as a three-mode group.').toBeLessThanOrEqual(2);
+  expect(Math.abs(visual.modeWidth - mode.width * bounds.scale), 'Tabs use natural 80 CSS-pixel widths, centered as a four-mode group.').toBeLessThanOrEqual(2);
   expect(visual.moreBands, 'The More control renders three native icon lines rather than a text button.').toBe(3);
   expect(more.width).toBe(more.height);
   expect(more.width * bounds.scale).toBeGreaterThanOrEqual(44);

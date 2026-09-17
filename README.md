@@ -121,7 +121,7 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
-The game uses compact square icon actions and three small mode tabs, leaving the cards as the
+The game uses compact square icon actions and four small mode tabs, leaving the cards as the
 main focus. Pip and the success/mistake indicators form one compact status cluster;
 Learn has no score counter. Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
@@ -160,7 +160,30 @@ These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
 The first and last words do not wrap or start a game automatically. Swipes never
 play audio, and navigation still works when sound is unavailable. Learn never awards points.
-The tabs are ordered **Match**, **Learn**, **Memory**; entry and reload select Match.
+The tabs are ordered **Match**, **Learn**, **Memory**, **Voice Pop**; entry and reload select Match.
+
+### Voice Pop
+
+Choose Voice Pop to request speech permission. The 30-second clock starts only when
+the microphone is listening. A moving cyan, violet, and pink glow traces the screen
+edges, while illustrated word capsules fly up in gentle arcs. Say the English name
+of a visible object to pop it with a slash, shards, and a shockwave. Words always
+appear with their matching pictures and follow the age level chosen in More.
+
+Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
+points). Dropped objects end the combo; there is no losing screen. Pip reports the
+actual hits, different words, score, and best combo after 30 seconds. Tap Pip for
+a high-five, review a word's recorded pronunciation, or play another round.
+The optional browser voice reads Pip's dynamic report; word pronunciation uses
+the existing recorded audio.
+
+Microphone denial, missing hardware, or speech-service errors show a retry action.
+More, backgrounding, and recognition interruptions pause the current round; Resume
+continues it without resetting the score. Leaving the mode or finishing stops
+recognition. Browser speech can process audio remotely; the game does not save
+recordings or transcripts. A secure browser with SpeechRecognition support is
+required; unsupported browsers show an explanation and a way back to Match.
+Reduced motion keeps a static edge glow and simpler hit feedback.
 Switch between them to practise the same lesson.
 Sky and Listen have been removed. Match keeps the eight-card, three-pair puzzle.
 Correct and wrong feedback stays on the cards and clears automatically after a short
