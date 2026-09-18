@@ -36,7 +36,12 @@ and stopping listening hides the whole overlay immediately.
   in 28.6 seconds, including reduced motion and hiding on mode exit.
 - [x] Production export succeeds: 13.24 MB compressed startup, 28 optional
   audio assets; 200 pronunciations and 56 optional resource paths verified.
-- [ ] Commit, main integration, deployment and production verification.
+- [x] Runtime commit `78ffde8` fast-forwarded to `main`, pushed and deployed.
+  The exact tested candidate was promoted with all 71 files hash-verified.
+  Production HTML, PCK, engine JavaScript and WebAssembly match the local
+  release byte for byte. All three production Chromium cases pass in 27.0
+  seconds: live captions, compact portrait and compact landscape, including
+  reduced motion and hiding on mode exit. Production screenshot review passes.
 
 Evidence is retained under ignored `build/voice-pop-qa/rhythmic-glow/`
 and the `rhythmic-glow-*` logs. Speech recognition uses fixtures in browser
@@ -47,6 +52,15 @@ Final temporal evidence under `runs/`:
 - `20260918T043042218Z-isolated`: eight pixel and input cases.
 - `20260918T043125943Z-game`: three native Chromium sequences.
 - `20260918T043233716Z-game`: two native WebKit sequences.
+
+Production acceptance logs and manifests under `build/voice-pop-qa/`:
+
+- `rhythmic-glow-deploy.log`
+- `rhythmic-glow-tested-manifest.json`
+- `rhythmic-glow-production-manifest.json`
+- `rhythmic-glow-production-tests.json`
+
+Live release: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=78ffde8
 
 The PCK, engine JavaScript and WebAssembly match the previous release byte for
 byte. The final CSS-only pixel alignment was applied to a fresh copy of the
