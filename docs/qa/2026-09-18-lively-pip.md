@@ -50,3 +50,17 @@ Browser evidence is in ignored `build/voice-pop-qa/lively-pip-*`.
   or adjacent-control obstruction remained. Room status and console stayed clean.
 - Web export: 200 startup pronunciations and 158 optional paths passed pack
   validation; compressed startup is 13.28 MB with 79 on-demand audio assets.
+
+## Production acceptance
+
+Runtime commit `4694734` was fast-forwarded to `main`, pushed and deployed using
+the exact tested export (`npm run deploy -- -SkipBuild`). Production HTML,
+JavaScript, WASM and game pack matched local SHA-256 hashes. The deployed pack
+is `game-f27c565eeddbda2d.pck`.
+
+Both production Chromium checks passed: real-time multi-step idle dancing with
+unchanged lesson/saves and reduced-motion behavior, plus all six deliberate
+reactions. The original production screenshot was also reviewed. Hash evidence
+is in `build/voice-pop-qa/lively-pip-production-manifest.json`.
+
+Live version: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=4694734
