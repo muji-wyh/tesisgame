@@ -295,11 +295,29 @@ async function rendered(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 }
 
-async function observeAudio(page) {
-  await page.addInitScript(() => {
+async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '' } = {}) {
+  await page.addInitScript(({ fingerprintBuffers, phaseSelector }) => {
     const NativeContext = window.AudioContext || window.webkitAudioContext;
     window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0, playbacks: [] };
     if (!NativeContext) return;
+    const fingerprints = new WeakMap();
+    function fingerprint(buffer) {
+      if (!fingerprintBuffers || buffer.duration > 1) return undefined;
+      if (fingerprints.has(buffer)) return fingerprints.get(buffer);
+      // Equal-length clips still need content identity: six fruit slices last 270 ms.
+      let hash = 2166136261, peak = 0;
+      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+        const samples = buffer.getChannelData(channel);
+        const bits = new Uint32Array(samples.buffer, samples.byteOffset, samples.length);
+        for (let index = 0; index < samples.length; index++) {
+          hash = Math.imul(hash ^ bits[index], 16777619) >>> 0;
+          peak = Math.max(peak, Math.abs(samples[index]));
+        }
+      }
+      const result = { fingerprint: `${buffer.sampleRate}:${buffer.numberOfChannels}:${buffer.length}:${hash.toString(16)}`, peak };
+      fingerprints.set(buffer, result);
+      return result;
+    }
     const WrappedContext = new Proxy(NativeContext, {
       construct(Target, args) {
         const context = Reflect.construct(Target, args);
@@ -308,9 +326,14 @@ async function observeAudio(page) {
         context.createBufferSource = () => {
           const source = createSource(), start = source.start.bind(source);
           source.start = (...values) => {
+            const result = start(...values);
             window.audioObservation.starts++;
-            if (source.buffer) window.audioObservation.playbacks.push({ duration: source.buffer.duration });
-            return start(...values);
+            if (source.buffer) window.audioObservation.playbacks.push({ duration: source.buffer.duration,
+              sampleRate: source.buffer.sampleRate, channels: source.buffer.numberOfChannels,
+              loop: source.loop, contextState: context.state, playbackRate: source.playbackRate.value,
+              phase: phaseSelector ? document.querySelector(phaseSelector)?.dataset.phase || '' : '',
+              ...fingerprint(source.buffer) });
+            return result;
           };
           return source;
         };
@@ -319,7 +342,7 @@ async function observeAudio(page) {
     });
     if (window.AudioContext) window.AudioContext = WrappedContext;
     else window.webkitAudioContext = WrappedContext;
-  });
+  }, { fingerprintBuffers, phaseSelector });
 }
 
 async function visibleColorCount(page, png) {

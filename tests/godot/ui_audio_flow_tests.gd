@@ -229,6 +229,7 @@ func _run() -> void:
 			"Stopping Voice also permits the immediate next-card shortcut before its timer expires")
 	await _check_pop_hit_audio(app)
 	app.audio.halt()
+	_check_pop_slice_choices()
 	app.queue_free()
 	await process_frame
 	await create_timer(0.2).timeout
@@ -246,26 +247,32 @@ func _check_pop_hit_audio(app) -> void:
 	app._on_voice_state([true, true, "Listening. Say an English word."])
 	var effect: AudioStreamPlayer = app.audio.effect
 	var channel_count: int = app.audio.get_child_count()
-	var sound_path := "res://assets/imported-audio/pop-slice.wav"
-	if not ResourceLoader.exists(sound_path):
-		sound_path = "res://assets/audio/sfx/select.wav"
-	var expected_stream: AudioStream = load(sound_path)
-	check(expected_stream != null and expected_stream.get_length() > 0.0 and expected_stream.get_length() < 0.4,
-		"Voice Pop's imported slice or clean-checkout fallback is a short playable sound")
-	check(_pop_hit_visible_word(app, 3.0) and effect.playing and effect.stream == expected_stream,
-		"A real spoken target plays the imported slice when present, otherwise the select fallback")
+	var expected_paths: Array[String] = app.audio._pop_slice_paths.duplicate()
+	if expected_paths.is_empty():
+		expected_paths.append(_slice_fallback())
+	check(_pop_hit_visible_word(app, 3.0) and effect.playing and effect.stream != null
+		and expected_paths.has(effect.stream.resource_path),
+		"A real spoken target plays one available fruit slice, or the clean-checkout fallback")
+	var first_stream: AudioStream = effect.stream
 	check(not app.audio.music.playing and not app.audio.voice.playing and not app.audio.narration.playing,
 		"Popping a target plays only its effect, without BGM or word/report speech")
-	check(_pop_hit_visible_word(app) and effect.playing and effect.stream == expected_stream
+	check(_pop_hit_visible_word(app) and effect.playing and effect.stream != null
+		and expected_paths.has(effect.stream.resource_path)
+		and (expected_paths.size() < 2 or effect.stream != first_stream)
 		and app.audio.effect == effect and app.audio.get_child_count() == channel_count,
-		"Consecutive target hits reuse the existing effect player without accumulating audio nodes")
+		"Consecutive real targets play different available slices through the same effect player")
+	var last_path: String = app.audio._last_pop_slice_path
+	var random_state: int = app.audio._pop_slice_rng.state
 	app.audio.set_muted(true)
 	check(not effect.playing and not app.audio.active, "Muting immediately stops an active Voice Pop slice")
-	check(_pop_hit_visible_word(app, 1.8) and not effect.playing and not app.audio.active,
-		"A muted spoken hit still scores without restarting its slice sound")
+	check(_pop_hit_visible_word(app, 1.8) and not effect.playing and not app.audio.active
+		and app.audio._last_pop_slice_path == last_path and app.audio._pop_slice_rng.state == random_state,
+		"A muted spoken hit still scores without playing or consuming a random slice")
 	app.audio.set_muted(false)
-	check(_pop_hit_visible_word(app, 2.2) and effect.playing and effect.stream == expected_stream,
-		"The next unmuted spoken hit can play the same short slice again")
+	check(_pop_hit_visible_word(app, 2.2) and effect.playing and effect.stream != null
+		and expected_paths.has(effect.stream.resource_path)
+		and (expected_paths.size() < 2 or effect.stream.resource_path != last_path),
+		"The next unmuted spoken hit resumes the pool without repeating the last audible slice")
 	app.choose_mode("learn")
 	check(not effect.playing, "Leaving Voice Pop stops its active hit sound")
 	app.choose_mode("pop")
@@ -281,6 +288,114 @@ func _check_pop_hit_audio(app) -> void:
 	check(not effect.playing and not app.audio.active and not _pop_hit_visible_word(app)
 		and app._pop.game.hits == hits_before_hide,
 		"Returning to the page cannot replay an old slice or accept words before listening resumes")
+
+
+func _slice_fallback() -> String:
+	var previous := "res://assets/imported-audio/pop-slice.wav"
+	return previous if ResourceLoader.exists(previous) else "res://assets/audio/sfx/select.wav"
+
+
+func _draw_slice_sequence(audio, count: int, seed_value: int) -> Array[String]:
+	audio._pop_slice_rng.seed = seed_value
+	audio._last_pop_slice_path = ""
+	var paths: Array[String] = []
+	var all_played := true
+	for draw in range(count):
+		audio.cue("pop-slice")
+		all_played = all_played and audio.effect.playing and audio.effect.stream != null
+		paths.append(audio.effect.stream.resource_path if audio.effect.stream != null else "")
+	check(all_played, "Every seeded cue starts an actual AudioStream on the existing effect player")
+	return paths
+
+
+func _check_pop_slice_choices() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/assets/voice-pop-random-slices.json"))
+	var available_paths: Array[String] = []
+	var declared_paths: Array[String] = []
+	for asset in manifest.assets:
+		var path: String = "res://" + str(asset.destination)
+		declared_paths.append(path)
+		if ResourceLoader.exists(path):
+			available_paths.append(path)
+			var stream: AudioStreamWAV = load(path)
+			check(stream != null and stream.mix_rate == int(asset.sampleRate) and stream.stereo
+				and absf(stream.get_length() - float(asset.seconds)) <= 1.0 / float(asset.sampleRate),
+				"The playable " + str(asset.id) + " slice preserves the source duration, stereo and sample rate")
+	check(declared_paths.size() == 8 and audio.POP_SLICE_PATHS == declared_paths,
+		"The runtime declares exactly the eight fruit slices from the source manifest")
+	check(audio._pop_slice_paths == available_paths,
+		"Startup selects only existing imported slice resources, including a checkout without private audio")
+	# Exercise the same selector in a clean checkout using eight real tracked clips.
+	# The scene assertions above independently verify the actual imported pool.
+	var pool: Array[String] = available_paths.duplicate()
+	if pool.size() < 2:
+		pool.clear()
+		for name in ["select", "correct", "wrong", "loss", "spring-arrive", "summer-arrive", "autumn-arrive", "winter-arrive"]:
+			pool.append("res://assets/audio/sfx/" + name + ".wav")
+	audio._pop_slice_paths = pool.duplicate()
+	audio.interact("spring", false)
+	var effect: AudioStreamPlayer = audio.effect
+	var channels: int = audio.get_child_count()
+	var sequence := _draw_slice_sequence(audio, 1024, 19092026)
+	var histogram: Dictionary = {}
+	var transitions: Dictionary = {}
+	var consecutive_differ := true
+	for index in range(sequence.size()):
+		var path: String = sequence[index]
+		histogram[path] = int(histogram.get(path, 0)) + 1
+		if index > 0:
+			consecutive_differ = consecutive_differ and path != sequence[index - 1]
+			transitions[sequence[index - 1] + "|" + path] = true
+	check(consecutive_differ and sequence.all(func(path: String) -> bool: return pool.has(path)),
+		"A fixed-seed 1024-hit run never repeats its previous clip or selects outside the available pool")
+	check(histogram.size() == pool.size() and transitions.size() == pool.size() * (pool.size() - 1),
+		"The seeded sample reaches every available clip and every allowed next-clip transition")
+	var expected_frequency: float = float(sequence.size()) / pool.size()
+	check(histogram.values().all(func(count: int) -> bool:
+		return count >= expected_frequency * 0.5 and count <= expected_frequency * 1.5),
+		"The deterministic sample distributes choices across the pool without a dominant clip")
+	check(_draw_slice_sequence(audio, 32, 19092026) == sequence.slice(0, 32)
+		and _draw_slice_sequence(audio, 32, 27102026) != sequence.slice(0, 32),
+		"A saved random seed reproduces the sound sequence, while another seed changes it")
+	seed(73191)
+	var expected_global_random := randi()
+	seed(73191)
+	audio.cue("pop-slice")
+	check(randi() == expected_global_random, "Sound selection does not consume the global vocabulary/reward random generator")
+	var last: String = audio._last_pop_slice_path
+	var state_before: int = audio._pop_slice_rng.state
+	audio.set_muted(true)
+	for request in range(4):
+		audio.interact("spring", false)
+		audio.cue("pop-slice")
+	check(not effect.playing and audio._pop_slice_rng.state == state_before and audio._last_pop_slice_path == last,
+		"Muted cues do not draw or advance the anti-repeat history")
+	audio.set_muted(false)
+	audio.halt()
+	audio.cue("pop-slice")
+	check(not effect.playing and audio._pop_slice_rng.state == state_before and audio._last_pop_slice_path == last,
+		"An inactive controller cannot play or consume its next random choice")
+	audio.interact("spring", false)
+	audio._pop_slice_paths.assign([pool[0]])
+	var single := _draw_slice_sequence(audio, 4, 17)
+	check(single == [pool[0], pool[0], pool[0], pool[0]], "A partial installation containing one slice can repeat its only playable resource")
+	audio._pop_slice_paths.assign([pool[0], pool[1]])
+	var pair := _draw_slice_sequence(audio, 12, 17)
+	check(pair.all(func(path: String) -> bool: return path in [pool[0], pool[1]])
+		and range(1, pair.size()).all(func(index: int) -> bool: return pair[index] != pair[index - 1]),
+		"A two-slice installation alternates without choosing any missing fruit")
+	audio._pop_slice_paths.clear()
+	state_before = audio._pop_slice_rng.state
+	audio.cue("pop-slice")
+	check(effect.playing and effect.stream == load(_slice_fallback()) and audio._pop_slice_rng.state == state_before,
+		"An empty pool uses the earlier slice or tracked select fallback without drawing a missing file")
+	check(audio.effect == effect and audio.get_child_count() == channels
+		and not audio.music.playing and not audio.voice.playing and not audio.narration.playing,
+		"All pool sizes and repeated draws reuse four channels without music, prompts or extra nodes")
+	audio.halt()
+	audio.free()
 
 
 func _pop_hit_visible_word(app, elapsed: float = 0.0) -> bool:

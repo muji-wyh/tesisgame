@@ -1,6 +1,16 @@
 extends Node
 
 const POP_SLICE_PATH := "res://assets/imported-audio/pop-slice.wav"
+const POP_SLICE_PATHS := [
+	"res://assets/imported-audio/pop-slices/apple.wav",
+	"res://assets/imported-audio/pop-slices/orange.wav",
+	"res://assets/imported-audio/pop-slices/watermelon.wav",
+	"res://assets/imported-audio/pop-slices/pineapple.wav",
+	"res://assets/imported-audio/pop-slices/banana.wav",
+	"res://assets/imported-audio/pop-slices/strawberry.wav",
+	"res://assets/imported-audio/pop-slices/peach.wav",
+	"res://assets/imported-audio/pop-slices/coconut.wav",
+]
 
 signal status_changed(message: String)
 signal word_failed
@@ -25,9 +35,16 @@ var _music_error: bool = false
 var _narration_generation: int = 0
 var _narration_streams: Array[AudioStream] = []
 var _narration_index: int = 0
+var _pop_slice_paths: Array[String] = []
+var _pop_slice_rng := RandomNumberGenerator.new()
+var _last_pop_slice_path: String = ""
 
 
 func _ready() -> void:
+	_pop_slice_rng.randomize()
+	for path in POP_SLICE_PATHS:
+		if ResourceLoader.exists(path):
+			_pop_slice_paths.append(path)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -77,12 +94,22 @@ func cue(effect_id: String = "", voice_id: String = "") -> void:
 	if not effect_id.is_empty():
 		var path: String = "res://assets/audio/sfx/" + effect_id + ".wav"
 		if effect_id == "pop-slice":
-			# Licensed local audio is bundled for immediate feedback. A clean
-			# checkout keeps a short original click without the external pack.
-			path = POP_SLICE_PATH if ResourceLoader.exists(POP_SLICE_PATH) else "res://assets/audio/sfx/select.wav"
+			path = _next_pop_slice()
 		_play(effect, path)
 	if not voice_id.is_empty():
 		say("res://assets/audio/voice/" + voice_id + ".wav")
+
+
+func _next_pop_slice() -> String:
+	# Use a separate generator so sound choices never change the vocabulary or rewards.
+	var choices: Array[String] = _pop_slice_paths.duplicate()
+	if choices.size() > 1:
+		choices.erase(_last_pop_slice_path)
+	if choices.is_empty():
+		# External source audio stays private; clean checkouts can still play.
+		return POP_SLICE_PATH if ResourceLoader.exists(POP_SLICE_PATH) else "res://assets/audio/sfx/select.wav"
+	_last_pop_slice_path = choices[_pop_slice_rng.randi_range(0, choices.size() - 1)]
+	return _last_pop_slice_path
 
 
 func say(path: String) -> void:

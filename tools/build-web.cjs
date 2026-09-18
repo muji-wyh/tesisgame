@@ -22,6 +22,7 @@ const verification = runGodot([
   '--headless', '--path', output, '--main-pack', path.join(output, 'index.pck'),
   '--script', path.join(root, 'tests', 'godot', 'verify_web_pack.gd'), '--',
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slice.wav')) ? ['--require-pop-slice'] : []),
+  ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slices')) ? ['--require-pop-slices'] : []),
   ...audio.flatMap(file => [file.source, file.imported])
 ]);
 process.stdout.write(verification.stdout);

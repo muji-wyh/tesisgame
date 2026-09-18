@@ -1,0 +1,95 @@
+{
+  "pack": "FruitSlice_Arcade_05",
+  "sourceDirectory": "D:/uwork/AssetsSource/AIGenSFX/FruitSlice_Arcade_05/wav",
+  "note": "User-provided finished mixes copied unchanged. Raw WAVs and Godot imports stay Git-ignored; the Web game bundles all eight.",
+  "assets": [
+    {
+      "id": "apple",
+      "source": "apple/apple_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/apple.wav",
+      "sha256": "3ce14ef168297972858807f33933f1e45a1ba5f197d88c5b02fadda2482d040a",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.1
+    },
+    {
+      "id": "orange",
+      "source": "orange/orange_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/orange.wav",
+      "sha256": "3fabcbb6b56bd6e744170db8c01221fe4b4b60803f94e58bc04411bb80b881fc",
+      "seconds": 0.3073958333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.1
+    },
+    {
+      "id": "watermelon",
+      "source": "watermelon/watermelon_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/watermelon.wav",
+      "sha256": "a2819ea75ab8fa5984ad1ce807e4ab7209e4130a6c01a4ed54b457699afb2a4a",
+      "seconds": 0.3688958333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.282
+    },
+    {
+      "id": "pineapple",
+      "source": "pineapple/pineapple_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/pineapple.wav",
+      "sha256": "5312f4b43dafc8cabc8754ea993b50f5d6ea5becd62ba23c24e43f7714088258",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.1
+    },
+    {
+      "id": "banana",
+      "source": "banana/banana_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/banana.wav",
+      "sha256": "fd3933f850f892f7565acf54e708d2960eac3aa147f06f13bebd32de9ae68edb",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.98
+    },
+    {
+      "id": "strawberry",
+      "source": "strawberry/strawberry_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/strawberry.wav",
+      "sha256": "bd8aedbf7411262fb40d8cfe09c0468e9c21b8e22ed85eb5d52bef1ccfb90ce4",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.287
+    },
+    {
+      "id": "peach",
+      "source": "peach/peach_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/peach.wav",
+      "sha256": "dd3a00119cce6d5546ff5751785e5e2b3781427503cd4578d885562e5ccb2e2f",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -4.815
+    },
+    {
+      "id": "coconut",
+      "source": "coconut/coconut_slice_02.wav",
+      "destination": "assets/imported-audio/pop-slices/coconut.wav",
+      "sha256": "71ade732241e813aa0b103dcec35c2b94c9c417056b1d9784c5462913751f539",
+      "seconds": 0.27,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitDepth": 24,
+      "peakDbfs": -3.1
+    }
+  ]
+}

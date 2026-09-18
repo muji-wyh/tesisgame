@@ -1,5 +1,37 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
 const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame } = require('./game-ui.cjs');
+const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
+const assetPath = relative => path.resolve(__dirname, '../..', relative);
+const expectedSlices = sliceAssets.filter(asset => fs.existsSync(assetPath(asset.destination)));
+if (!expectedSlices.length) {
+  // A clean source checkout uses one tracked sound; private imports are optional.
+  const destination = fs.existsSync(assetPath('assets/imported-audio/pop-slice.wav'))
+    ? 'assets/imported-audio/pop-slice.wav' : 'assets/audio/sfx/select.wav';
+  const bytes = fs.readFileSync(assetPath(destination));
+  let format, dataBytes;
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const chunk = bytes.toString('ascii', offset, offset + 4), size = bytes.readUInt32LE(offset + 4);
+    if (chunk === 'fmt ') format = bytes.subarray(offset + 8, offset + 8 + size);
+    if (chunk === 'data') dataBytes = size;
+    offset += 8 + size + (size % 2);
+  }
+  if (!format || !dataBytes) throw new Error(`Invalid fallback WAV: ${destination}`);
+  expectedSlices.push({ destination, seconds: dataBytes / format.readUInt32LE(8), channels: format.readUInt16LE(2) });
+}
+
+function expectHitSlice(sound) {
+  // Godot may resample to the output rate, so allow one output sample of rounding.
+  const possibleSources = expectedSlices.filter(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
+  expect(possibleSources.length, `Played ${sound.duration}s must match the imported pool or this checkout's fallback`).toBeGreaterThan(0);
+  expect(possibleSources.some(asset => asset.channels === sound.channels)).toBe(true);
+  expect(sound.loop, 'A slice is a single hit, never a music loop').toBe(false);
+  expect(sound.playbackRate).toBe(1);
+  expect(sound.contextState, 'The real WebAudio context must be running at playback').toBe('running');
+  expect(sound.fingerprint).toBeTruthy();
+  expect(sound.peak, 'The selected slice has audible PCM samples').toBeGreaterThan(0.05);
+}
 
 async function installSpeech(page, { automatic = true, available = true } = {}) {
   await page.addInitScript(({ automatic, available }) => {
@@ -311,7 +343,7 @@ test('leaving while permission is pending rejects a late grant and every callbac
 });
 
 test('a spoken interim word pops its exact target once, gives hit feedback and produces Pip report after 30 seconds', async ({ page, browserName }, info) => {
-  await observeAudio(page);
+  await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(audioAvailable, 'Chromium must exercise real recorded audio').toBe(true);
@@ -320,23 +352,37 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   const start = Date.now();
   await page.waitForTimeout(1700);
   await page.screenshot({ path: info.outputPath('flying-words.png') });
-  const shortHitSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(
-    sound => sound.duration >= 0.06 && sound.duration < 0.25).length);
-  const soundsBeforeHit = await shortHitSounds();
+  const runningSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
+  const runningSoundCount = async () => (await runningSounds()).length;
+  expect(await runningSounds(), 'Listening starts quietly, with no prompt or background music').toEqual([]);
   const word = await popOne(page, { interim: true });
-  if (audioAvailable) await expect.poll(shortHitSounds, { message: 'A hit immediately plays the short slice effect.' }).toBe(soundsBeforeHit + 1);
+  if (audioAvailable) {
+    await expect.poll(runningSoundCount, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
+    expectHitSlice((await runningSounds())[0]);
+  }
   await page.screenshot({ path: info.outputPath('hit-burst.png') });
   const hits = (await state(page)).hits;
   await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
   await page.waitForTimeout(300);
   expect((await state(page)).hits).toBe(hits);
-  if (audioAvailable) expect(await shortHitSounds(), 'Finalizing the same recognition cannot replay the slice.').toBe(soundsBeforeHit + 1);
+  if (audioAvailable) expect(await runningSoundCount(), 'Finalizing the same recognition cannot replay the slice.').toBe(1);
   const secondWord = await popOne(page);
-  if (audioAvailable) await expect.poll(shortHitSounds).toBe(soundsBeforeHit + 2);
-  await info.attach('hit-audio-durations.json', { body: JSON.stringify(await page.evaluate(() => window.audioObservation.playbacks)), contentType: 'application/json' });
+  if (audioAvailable) {
+    await expect.poll(runningSoundCount).toBe(2);
+    const slices = await runningSounds();
+    slices.forEach(expectHitSlice);
+    if (expectedSlices.length > 1) {
+      expect(slices[1].fingerprint, 'Consecutive spoken hits play different PCM audio, including equal-duration fruit variants').not.toBe(slices[0].fingerprint);
+    } else {
+      expect(slices[1].fingerprint, 'A checkout with one hit sound can reuse its only clip').toBe(slices[0].fingerprint);
+    }
+  }
   const after = await state(page);
   expect(after.score).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
+  expect(await runningSoundCount(), 'The entire listening round contains only its two hit sounds, with no prompts or BGM').toBe(audioAvailable ? 2 : 0);
+  expect(await page.evaluate(() => window.__popSpeech.spoken), 'Listening never triggers system speech prompts').toEqual([]);
+  await info.attach('hit-audio-durations.json', { body: JSON.stringify({ expectedSources: expectedSlices, playbacks: await runningSounds() }), contentType: 'application/json' });
   expect(Date.now() - start).toBeGreaterThanOrEqual(29000);
   expect((await state(page)).remaining).toBe(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');

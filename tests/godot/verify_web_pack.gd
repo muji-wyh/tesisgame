@@ -18,6 +18,15 @@ func _initialize() -> void:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
 			failures += 1
 	var excluded := OS.get_cmdline_user_args()
+	if excluded.has("--require-pop-slices"):
+		excluded.remove_at(excluded.find("--require-pop-slices"))
+		var paths: Array = load("res://scripts/game_audio.gd").POP_SLICE_PATHS
+		for path in paths:
+			var slice: AudioStream = load(path) if ResourceLoader.exists(path) else null
+			if slice == null or slice.get_length() < 0.25 or slice.get_length() > 0.42:
+				printerr("A random Voice Pop slice is missing or invalid in the startup pack: " + path)
+				failures += 1
+		print("Voice Pop: %d random slice sounds checked in the startup pack." % paths.size())
 	if excluded.has("--require-pop-slice"):
 		excluded.remove_at(excluded.find("--require-pop-slice"))
 		var path := "res://assets/imported-audio/pop-slice.wav"
