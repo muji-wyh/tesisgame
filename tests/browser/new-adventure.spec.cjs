@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseTheme, chooseMode, rendered, openGame, swipeLearn,
+const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, swipeLearn,
   headerPoint, boardPoint, resultPoint, openRewards, chooseRewardSection, collectionHeaderRect } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -205,8 +205,7 @@ test('main-header Retry saving preserves lesson position, world and existing col
   await expect(page.locator('#game-status')).toHaveText(wordStatus(words[2]));
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#status')).toBeHidden();
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', world);
   const restored = await record(page);

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards,
+const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, lessonPoint, swipeLearn, resultPoint } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
@@ -23,7 +23,8 @@ function watchErrors(page) {
 }
 
 async function ready(scope, match = true) {
-  await expect(scope.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  // This helper also checks new rounds after entry; only a fresh page needs the gate.
+  if (await scope.locator('body').getAttribute('data-engine-ready') !== 'true') await enterGame(scope);
   await expect(scope.locator('#status')).toBeHidden();
   await expect(scope.locator('#game-status')).toContainText(/Learn five words\.|Find 3 word–picture pairs\./);
   if (!match) return;
@@ -458,11 +459,19 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
   }));
   await page.goto('/below-fold.html');
   const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
+  await expect(frame.locator('#enter-game')).toBeEnabled();
+  await expect(frame.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  // Scroll the host's iframe explicitly; a fixed child button cannot scroll its parent page.
+  await page.locator('iframe').scrollIntoViewIfNeeded();
+  const scrollBeforeEntry = await page.evaluate(() => window.scrollY);
+  expect(scrollBeforeEntry).toBeGreaterThan(0);
   await ready(frame, false);
   const focusRequests = await frame.locator('#canvas').evaluate(() => window.canvasFocusRequests);
   expect(focusRequests.length).toBeGreaterThan(0);
   expect(focusRequests.every(Boolean)).toBe(true);
-  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollBeforeEntry);
   expect(errors).toEqual([]);
 });
 

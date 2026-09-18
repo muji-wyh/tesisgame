@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { enterGame } = require('./game-ui.cjs');
 
 test('streaming WASM keeps its fetched response so the browser can cache compiled code', async ({ page }) => {
   await page.addInitScript(() => {
@@ -10,7 +11,7 @@ test('streaming WASM keeps its fetched response so the browser can cache compile
     };
   });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   const response = await page.evaluate(() => window.wasmResponse);
   expect(response.url).toMatch(/\/engine-[a-f0-9]{16}\.wasm$/);
   expect(response.type).toBe('basic');
@@ -98,8 +99,7 @@ test('a blocked saved-data upgrade explains recovery and starts after the other 
   await page.screenshot({ path: testInfo.outputPath('storage-blocked-recovery.png'), scale: 'css' });
   await owner.close();
   await page.getByRole('button', { name: 'Try again', exact: true }).click();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#status')).toBeHidden();
+  await enterGame(page);
   await expect(page.locator('#canvas')).toBeFocused();
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toMatch(/"spring-1":\s*2/);
   await page.screenshot({ path: testInfo.outputPath('storage-recovered-game.png'), scale: 'css' });
@@ -115,7 +115,6 @@ test('a browser without IndexedDB can still play and retain browser rewards', as
     localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"spring-1": 2}\n');
   });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#status')).toBeHidden();
+  await enterGame(page);
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toMatch(/"spring-1":\s*2/);
 });

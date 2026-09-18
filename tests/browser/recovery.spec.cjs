@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, boardPoint,
+const { metrics, tap, chooseMode, chooseTheme, rendered, enterGame, openGame, boardPoint,
   resultPoint, headerPoint } = require('./game-ui.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -60,7 +60,7 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Rewards are unavailable.');
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-learn.png'), scale: 'css' });
 
@@ -100,7 +100,7 @@ test('New adventure preserves unopened victory pieces across reload', async ({ p
   await expect(page.locator('#game-status')).toHaveText('Learn five words. Swipe left or right; tap the picture to hear.');
   expect(await pieceCount(page)).toBe(2);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
   await page.screenshot({ path: testInfo.outputPath('unopened-pieces-restored.png'), scale: 'css' });

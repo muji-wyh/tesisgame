@@ -341,15 +341,25 @@ async function visibleColorCount(page, png) {
   }, png.toString('base64'));
 }
 
+async function enterGame(scope) {
+  await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
+  const enter = scope.locator('#enter-game');
+  await expect(enter).toBeVisible();
+  await expect(enter).toBeEnabled();
+  await expect(scope.locator('body')).not.toHaveAttribute('data-engine-ready', 'true');
+  await enter.click();
+  await expect(scope.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+  await expect(scope.locator('#status')).toBeHidden();
+}
+
 async function openGame(page, { reducedMotion = 'reduce', mode = 'learn' } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await expect(page.locator('#status')).toBeHidden();
   await rendered(page);
   // Shared word-discovery fixtures explicitly enter Learn after checking the real startup mode.
   if (mode !== 'match') await chooseMode(page, mode);
@@ -438,5 +448,5 @@ function resultPoint(bounds, key, { gift = false } = {}) {
 }
 
 module.exports = { THEME_IDS, THEME_COLORS, metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
-  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, openGame, boardPoint, lessonPoint,
+  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, lessonPoint,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

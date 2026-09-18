@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, uiScale, modeRect, collectionBounds, firstMedalPoint,
-  openGame, openRewards, chooseRewardSection, rendered } = require('./game-ui.cjs');
+  enterGame, openGame, openRewards, chooseRewardSection, rendered } = require('./game-ui.cjs');
 
 test('mode positions are Match, Learn, Memory with Match selected on entry and reload', async ({ page }, testInfo) => {
   const errors = await openGame(page, { mode: 'match' });
@@ -16,7 +16,7 @@ test('mode positions are Match, Learn, Memory with Match selected on entry and r
     current = name;
   }
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(status).toContainText('Find 3 word');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('#speech-panel')).toBeHidden();

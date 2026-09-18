@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, openRewards: openRoom, roomControl,
+const { metrics, tap, rendered, enterGame, openGame, openRewards: openRoom, roomControl,
   leaveRoomPreview: leavePreview } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -75,7 +75,7 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
     localStorage.setItem(key, saved.replace('backdrop="backdrop-home"', 'backdrop="backdrop-spring"'));
   }, ROOM_KEY);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await openRoom(page);
   await expect(page.locator('#game-status')).toContainText('18 of 48 medals complete.');
@@ -87,7 +87,7 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
   expect(saved).toContain('backdrop="backdrop-spring"');
   expect(saved).toContain('favorite="spring-1"');
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await openRoom(page);
   // The removed chooser must not erase an existing background or migrated favorite.
   expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
@@ -186,7 +186,7 @@ test('earned seasonal toys keep their visible noun and distinct outcome', async 
       localStorage.setItem(key, `[playroom]\nversion=1\ntoy="toy-${theme}"\nbackdrop="backdrop-${theme}"\nfavorite=""\n`);
     }, { key: ROOM_KEY, theme });
     await page.reload();
-    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+    await enterGame(page);
     await openRoom(page);
     for (const [index, caption] of stages.entries()) {
       await tapRoomControl(page, 'action');

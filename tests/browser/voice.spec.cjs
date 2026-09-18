@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseMode, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
+const { boardPoint, chooseMode, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
@@ -57,8 +57,8 @@ async function openGame(page, api = 'standard') {
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await installRecognition(page, api);
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#status')).toBeHidden();
+  expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);

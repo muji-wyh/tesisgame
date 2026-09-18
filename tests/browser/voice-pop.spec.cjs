@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio } = require('./game-ui.cjs');
+const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame } = require('./game-ui.cjs');
 
 async function installSpeech(page, { automatic = true, available = true } = {}) {
   await page.addInitScript(({ automatic, available }) => {
@@ -55,8 +55,8 @@ async function open(page, options) {
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (/SCRIPT ERROR|Parse Error/.test(message.text())) errors.push(message.text()); });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
-  await expect(page.locator('#status')).toBeHidden();
+  expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
+  await enterGame(page);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
   await chooseMode(page, 'pop');
   return errors;

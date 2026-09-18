@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
-const { openGame, openRewards, metrics, tap, rendered, ageButtonRect, collectionHeaderRect,
+const { enterGame, openGame, openRewards, metrics, tap, rendered, ageButtonRect, collectionHeaderRect,
   boardPoint, chooseMode, swipeLearn, memoryPoint, roomControl, withMemoryPeek } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -99,7 +99,7 @@ test('age choices preserve the current lesson in all modes and apply after reloa
   for (const word of originalWords) expect(remembered.filter(value => value === word)).toHaveLength(2);
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(rewards);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word');
   const nextWords = (await matchCards(page)).map(card => card.split(': ')[1]);
   expect(nextWords.every(word => vocabulary.get(word).level === 'basic')).toBe(true);

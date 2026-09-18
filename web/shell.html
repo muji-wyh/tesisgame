@@ -142,7 +142,9 @@
     button { min-height: 48px; padding: 12px 24px; border: 0; border-radius: 0.625rem;
       background: var(--cp-accent); color: var(--cp-accent-fg); font: inherit; cursor: pointer; }
     button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
-    #retry:hover { background: var(--cp-accent-hover); }
+    #retry:hover, #enter-game:hover:not(:disabled) { background: var(--cp-accent-hover); }
+    #enter-game { min-height: 52px; font-weight: 750; }
+    #enter-game:disabled { background: var(--cp-border); color: var(--cp-text-soft); cursor: default; }
     #speech-panel { position: absolute; z-index: 1; display: grid; min-width: 0;
       grid-template-columns: 80px minmax(0, 1fr); grid-template-rows: auto auto; align-content: center;
       gap: 4px 8px; padding: 6px 8px; overflow: hidden;
@@ -355,10 +357,11 @@
       .loader-layout, .loading-download { gap: 4px; }
       h1 { font-size: 28px; }
       .play-caption span { font-size: 12px; }
-      #loading-toy { height: 96px; }
-      #loading-duck { height: 96px; }
+      #loading-toy { height: 64px; }
+      #loading-duck { height: 64px; }
       #status[data-state="slow"] #loading-toy { height: 48px; }
       #status[data-state="slow"] #loading-duck { height: 64px; }
+      #status[data-state="slow"] #enter-game { display: none; }
       #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
       .play-caption { margin-top: 4px; }
     }
@@ -511,6 +514,7 @@
             </div>
             <progress id="progress" max="1" aria-label="Game loading progress"></progress>
             <p id="download-status">Waiting for game data...</p>
+            <button id="enter-game" type="button" disabled>Enter game<span id="enter-game-controller" hidden> · Start</span></button>
             <p id="loading-note" hidden>Still loading. You can wait or retry.</p>
             <button id="retry" type="button" hidden>Try again</button>
           </div>
@@ -537,6 +541,8 @@
       const message = document.getElementById('message');
       const progress = document.getElementById('progress');
       const retry = document.getElementById('retry');
+      const enterButton = document.getElementById('enter-game');
+      const enterController = document.getElementById('enter-game-controller');
       const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const toy = document.getElementById('loading-toy');
       const chestArt = document.getElementById('chest-art');
@@ -577,10 +583,15 @@
       let sparkleCount = 0;
       let gamepadFrame = 0;
       let gamepadPressed = false;
+      let gamepadStartPressed = false;
+      let enterOnStartRelease = false;
       let gamepadBlocked = false;
       let gesture = null;
       let swipeHandled = false;
       let failed = false;
+      let readyReceived = false;
+      let entered = false;
+      let revealGame = null;
       let engine = null;
       const slowNotice = window.setTimeout(() => {
         loadingNote.hidden = false;
@@ -611,7 +622,7 @@
           percent.textContent = Math.floor(displayed * 100) + '%';
           if (displayed === 1) {
             message.textContent = 'Ready to play!';
-            downloadStatus.textContent = 'Ready to play!';
+            downloadStatus.textContent = 'Keep dancing, or enter the game.';
           }
         }
 
@@ -961,22 +972,35 @@
         window.cancelAnimationFrame(gamepadFrame);
         gamepadFrame = 0;
         gamepadPressed = false;
+        gamepadStartPressed = false;
+        enterOnStartRelease = false;
       }
 
       function pollLoadingGamepad() {
         gamepadFrame = 0;
         if (loadingEvents.signal.aborted || document.hidden) return;
         const pads = loadingGamepads();
-        if (!pads.length) { gamepadPressed = false; return; }
+        enterController.hidden = !pads.length;
+        if (!pads.length) { stopLoadingGamepad(); return; }
         const pressed = pads.some(pad => pad.buttons[0]?.pressed);
         if (pressed && !gamepadPressed) playWithTreasure();
         gamepadPressed = pressed;
+        const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
+        if (startPressed && !gamepadStartPressed) enterOnStartRelease = !enterButton.disabled;
+        // Enter on release so the same Start press cannot open My Rewards in Godot.
+        if (!startPressed && gamepadStartPressed && enterOnStartRelease) { enterGame(); return; }
+        gamepadStartPressed = startPressed;
         gamepadFrame = window.requestAnimationFrame(pollLoadingGamepad);
       }
 
       function startLoadingGamepad(ignoreHeld = false) {
         if (gamepadFrame || loadingEvents.signal.aborted || document.hidden) return;
-        if (ignoreHeld) gamepadPressed = loadingGamepads().some(pad => pad.buttons[0]?.pressed);
+        if (ignoreHeld) {
+          const pads = loadingGamepads();
+          gamepadPressed = pads.some(pad => pad.buttons[0]?.pressed);
+          gamepadStartPressed = pads.some(pad => pad.buttons[9]?.pressed);
+          enterOnStartRelease = false;
+        }
         pollLoadingGamepad();
       }
 
@@ -1378,6 +1402,9 @@
       function fail(reason) {
         if (failed) return;
         failed = true;
+        revealGame = null;
+        enterButton.disabled = true;
+        enterButton.hidden = true;
         startupProgress.stop();
         speechHost.stopSpeech();
         stopLoadingPlay();
@@ -1409,23 +1436,38 @@
             reason instanceof WebAssembly.RuntimeError || downloadFailed) startupFailure(reason);
       }
 
+      function enterGame() {
+        if (failed || entered || enterButton.disabled || document.hidden) return;
+        entered = true;
+        enterButton.disabled = true;
+        const onReveal = revealGame;
+        revealGame = null;
+        try { onReveal?.(); }
+        catch (error) { startupFailure(error); return; }
+        if (failed) return;
+        stopLoadingPlay();
+        window.removeEventListener('unhandledrejection', onEngineFailure);
+        document.body.dataset.engineReady = 'true';
+        status.hidden = true;
+        canvas.inert = false;
+        canvas.focus({ preventScroll: true });
+      }
+      enterButton.addEventListener('click', enterGame, loadingListener);
+
       // Host lifecycle, controller state and asset URLs, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ...speechHost,
         ready(onReveal) {
-          if (failed) return;
+          if (failed || readyReceived) return;
+          readyReceived = true;
+          revealGame = onReveal;
           window.clearTimeout(slowNotice);
           loadingNote.hidden = true;
           retry.hidden = true;
           startupProgress.complete(() => {
-            try { onReveal?.(); }
-            catch (error) { startupFailure(error); return; }
-            stopLoadingPlay();
-            window.removeEventListener('unhandledrejection', onEngineFailure);
-            document.body.dataset.engineReady = 'true';
-            status.hidden = true;
-            canvas.inert = false;
-            canvas.focus({ preventScroll: true });
+            if (failed) return;
+            status.dataset.state = 'ready';
+            enterButton.disabled = false;
           });
         },
         controllerAcceptHeld() {

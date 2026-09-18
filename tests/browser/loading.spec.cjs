@@ -8,6 +8,11 @@ const root = path.resolve(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'build', 'web', 'index.html'), 'utf8')
   .match(/const config = (\{[^\r\n]*\});/)[1]);
 
+async function enterGame(page) {
+  await expect(page.locator('#enter-game')).toBeEnabled({ timeout: 60000 });
+  await page.locator('#enter-game').click();
+}
+
 for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at CPU ${cpu}x`, async ({ page, browserName }, testInfo) => {
   test.skip(browserName !== 'chromium', 'CPU throttling requires Chromium CDP');
   const errors = [];
@@ -17,8 +22,8 @@ for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at C
     window.startupProgressWrites = [{ at: 0, percent: '' }];
     window.startupReadyAt = Infinity;
     new MutationObserver(() => {
-      if (document.body?.dataset.engineReady === 'true' && startupReadyAt === Infinity) startupReadyAt = performance.now();
-    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-engine-ready'] });
+      if (document.getElementById('status')?.dataset.state === 'ready' && startupReadyAt === Infinity) startupReadyAt = performance.now();
+    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-state'] });
     const textContent = Object.getOwnPropertyDescriptor(Node.prototype, 'textContent');
     Object.defineProperty(Node.prototype, 'textContent', {
       ...textContent,
@@ -44,7 +49,7 @@ for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at C
   await expect(toy).toBeVisible();
   const box = await toy.boundingBox();
   let ready = false;
-  const completion = page.waitForFunction(() => document.body.dataset.engineReady === 'true')
+  const completion = page.waitForFunction(() => document.getElementById('status').dataset.state === 'ready')
     .then(() => { ready = true; });
   const delays = [];
   while (!ready) {
@@ -72,6 +77,8 @@ for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at C
   expect(Math.max(...delays), 'Real loading chest clicks receive bounded feedback')
     .toBeLessThan(cpu === 1 ? 1000 : 2000);
   await expect(page.locator('#loading-score')).not.toHaveText('0 sparkles');
+  await enterGame(page);
+  await expect(page.locator('#status')).toBeHidden();
 });
 
 async function useMaintainedShell(page) {
@@ -314,7 +321,7 @@ test('loading Pip dances five distinct poses from touch, keyboard and controller
   await testInfo.attach('loading-dance-real-clock.json', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
 });
 
-test('loading music uses a real quiet audio clock and closes on mute, hide and immediate game readiness', async ({ page }, testInfo) => {
+test('loading music uses a real quiet audio clock and stays on until explicit game entry', async ({ page }, testInfo) => {
   await observeLoadingAudio(page);
   await progressShell(page);
   const music = page.getByRole('button', { name: 'Loading music', exact: true });
@@ -331,6 +338,7 @@ test('loading music uses a real quiet audio clock and closes on mute, hide and i
     await page.evaluate(() => window.reportDownload(100, 100));
     await expect(page.locator('#loading-percent')).toHaveText('98%');
     await page.evaluate(() => window.wordBuddiesHost.ready());
+    await enterGame(page);
     await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
     expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
     await testInfo.attach('loading-music-capability.json', {
@@ -375,15 +383,20 @@ test('loading music uses a real quiet audio clock and closes on mute, hide and i
   await expect(music).toHaveAttribute('aria-pressed', 'true');
   await page.evaluate(() => window.reportDownload(100, 100));
   await expect(page.locator('#loading-percent')).toHaveText('98%');
-  const readyAt = await page.evaluate(() => {
+  await page.evaluate(() => {
     for (let index = 0; index < 30; index++) document.getElementById('loading-toy').click();
-    const at = performance.now();
     window.wordBuddiesHost.ready();
-    return at;
   });
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await page.waitForTimeout(1000);
+  await expect(page.locator('#status')).toBeVisible();
+  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.at(-1).state)).toBe('running');
+  const readyAt = await page.evaluate(() => performance.now());
+  await enterGame(page);
   await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
   const elapsed = await page.evaluate(at => performance.now() - at, readyAt);
-  expect(elapsed, 'A queued dance must not delay the ready game').toBeLessThan(700);
+  expect(elapsed, 'A queued dance must not delay explicit game entry').toBeLessThan(700);
   await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
   await testInfo.attach('loading-music-real-clock.json', {
@@ -427,6 +440,7 @@ test('runtime initialization waits until the staged 98 percent has been painted'
   expect(await page.evaluate(() => window.runtimeStartedAt)).toBeUndefined();
   await page.clock.runFor(1000);
   expect(await page.evaluate(() => window.runtimeStartedAt)).toBe('98%');
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
 });
 
@@ -444,6 +458,7 @@ test('late download totals cannot reset final runtime preparation', async ({ pag
     start() { window.wordBuddiesHost.ready(); return Promise.resolve(); }
   };`);
   await page.clock.runFor(2000);
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 1000 });
 });
 
@@ -523,6 +538,7 @@ test('graphics context loss gives a visible recovery action and stops game input
   page.on('dialog', async dialog => { dialogs.push(dialog.message()); await dialog.dismiss(); });
   await useMaintainedShell(page);
   await page.goto('/loader-test');
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await page.evaluate(() => document.getElementById('canvas').getContext('webgl2')
     .getExtension('WEBGL_lose_context').loseContext());
@@ -533,6 +549,7 @@ test('graphics context loss gives a visible recovery action and stops game input
   expect(dialogs).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('graphics-lost-retry.png'), scale: 'css' });
   await page.getByRole('button', { name: 'Try again', exact: true }).click();
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
   await expect(page.locator('#canvas')).toBeFocused();
@@ -562,10 +579,11 @@ test('a cached download pauses at 20, 50, 80 and 98 percent before completing an
   await expect(page.locator('#status')).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('completion-before-reveal.png'), scale: 'css' });
   await page.clock.runFor(200);
+  await enterGame(page);
   await expect(page.locator('#status')).toBeHidden();
 });
 
-test('game input stays paused while the ready game is still covered by the loading screen', async ({ page }) => {
+test('game input stays paused while the ready game is still covered by the loading screen', async ({ page }, testInfo) => {
   await installGamepad(page, { connected: true });
   await page.addInitScript(() => {
     document.addEventListener('DOMContentLoaded', () => {
@@ -582,9 +600,112 @@ test('game input stays paused while the ready game is still covered by the loadi
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toHaveText(initial);
   await page.evaluate(() => window.finishLoadingPresentation());
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await page.locator('#loading-toy').click();
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await pressGamepad(page, 3);
+  await page.waitForTimeout(1200);
+  await expect(page.locator('#status')).toBeVisible();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+  await expect(page.locator('#game-status')).toHaveText(initial);
+  await page.screenshot({ path: testInfo.outputPath('real-ready-playground.png'), scale: 'css' });
+  await pressGamepad(page, 9);
   await expect(page.locator('#status')).toBeHidden();
+  await expect(page.locator('#game-status')).toHaveText(initial);
+  await page.screenshot({ path: testInfo.outputPath('real-entered-game.png'), scale: 'css' });
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+});
+
+for (const input of ['touch', 'keyboard', 'mouse']) test(`ready loading playground waits for deliberate ${input} entry`, async ({ page }, testInfo) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await progressShell(page);
+  const button = page.getByRole('button', { name: 'Enter game', exact: true });
+  await expect(button).toBeDisabled();
+  await button.dispatchEvent('click');
+  await expect(page.locator('#status')).toBeVisible();
+  await page.locator('#loading-toy').focus();
+  await page.keyboard.down('Enter');
+  await page.evaluate(() => {
+    window.reveals = 0;
+    wordBuddiesHost.ready(() => { window.reveals++; });
+    wordBuddiesHost.ready(() => { throw new Error('Duplicate readiness replaced the callback'); });
+  });
+  await page.clock.runFor(2000);
+  await expect(button).toBeEnabled();
+  await expect(page.locator('#loading-toy')).toBeFocused();
+  await page.keyboard.up('Enter');
+  await page.locator('#loading-toy').tap();
+  await page.locator('#loading-duck').tap();
+  await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
+  await page.clock.runFor(60000);
+  await expect(page.locator('#status')).toHaveAttribute('data-state', 'ready');
+  await expect(page.locator('#status')).toBeVisible();
+  await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await expect(page.locator('#retry')).toBeHidden();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+  expect(await page.evaluate(() => window.reveals)).toBe(0);
+  if (input === 'touch') {
+    for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 },
+      { width: 844, height: 390 }, { width: 320, height: 568 }, { width: 320, height: 320 }]) {
+      await page.setViewportSize(viewport);
+      const bounds = await button.boundingBox();
+      expect(bounds.height).toBeGreaterThanOrEqual(48);
+      expect(bounds.y).toBeGreaterThanOrEqual(0);
+      expect(bounds.y + bounds.height).toBeLessThanOrEqual(viewport.height);
+      expect(await page.locator('#status').evaluate(element => element.scrollHeight <= element.clientHeight)).toBe(true);
+      await page.screenshot({ path: testInfo.outputPath(`ready-to-enter-${viewport.width}x${viewport.height}.png`), scale: 'css' });
+    }
+    await button.tap();
+  } else if (input === 'keyboard') {
+    await page.locator('#loading-music').focus();
+    await page.keyboard.press('Tab');
+    await expect(button).toBeFocused();
+    await page.keyboard.press('Enter');
+  } else await button.click();
+  await expect(page.locator('#status')).toBeHidden();
+  await expect(page.locator('#canvas')).toBeFocused();
+  await expect(page.locator('#canvas')).not.toHaveAttribute('inert');
+  await expect(page.locator('#loading-toy')).toBeDisabled();
+  await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
+  await page.evaluate(() => { document.getElementById('enter-game').dispatchEvent(new Event('click')); wordBuddiesHost.ready(); });
+  expect(await page.evaluate(() => window.reveals)).toBe(1);
+});
+
+test('a controller Start held before readiness cannot enter on release', async ({ page }) => {
+  await installGamepad(page, { connected: true, heldButtons: [9] });
+  await progressShell(page);
+  await page.evaluate(() => wordBuddiesHost.ready());
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await page.evaluate(() => gamepadFixture.button(9, false));
+  await page.waitForTimeout(120);
+  await expect(page.locator('#status')).toBeVisible();
+  await pressGamepad(page, 0);
+  await expect(page.locator('#loading-score')).toHaveText('1 sparkle');
+  await expect(page.locator('#status')).toBeVisible();
+  await pressGamepad(page, 9);
+  await expect(page.locator('#status')).toBeHidden();
+});
+
+test('an engine failure while waiting for entry removes entry and keeps Retry actionable', async ({ page }) => {
+  await progressShell(page);
+  await page.evaluate(() => { window.reveals = 0; wordBuddiesHost.ready(() => { window.reveals++; }); });
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await page.evaluate(() => window.dispatchEvent(new PromiseRejectionEvent('unhandledrejection', {
+    promise: Promise.resolve(), reason: new WebAssembly.RuntimeError('Runtime stopped while waiting')
+  })));
+  await expect(page.locator('#message')).toContainText('Runtime stopped while waiting');
+  await expect(page.locator('#enter-game')).toBeHidden();
+  await expect(page.locator('#retry')).toBeFocused();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+  await page.evaluate(() => document.getElementById('enter-game').dispatchEvent(new Event('click')));
+  expect(await page.evaluate(() => window.reveals)).toBe(0);
 });
 
 test('loading holds 98 percent until the game is ready', async ({ page }, testInfo) => {
@@ -622,6 +743,7 @@ test('loading holds 98 percent until the game is ready', async ({ page }, testIn
   await page.evaluate(() => window.wordBuddiesHost.ready());
   await page.clock.runFor(500);
   await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await enterGame(page);
   await expect(page.locator('#status')).toBeHidden();
 });
 
@@ -641,6 +763,7 @@ test('a real engine waiting to initialize keeps 98 percent visible and can finis
   await expect(page.locator('#message')).toHaveText('Loading game...');
   await page.screenshot({ path: testInfo.outputPath('real-engine-preparing-98-percent.png'), scale: 'css' });
   await page.evaluate(() => window.finishInitialization());
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
   await expect(page.locator('#loading-percent')).toHaveText('100%');
@@ -666,6 +789,7 @@ test('early readiness completes the milestones and failed startup never finishes
     .filter(value => [0.2, 0.5, 0.8, 0.98, 1].includes(value))))
     .toEqual([0.2, 0.5, 0.8, 0.98, 1]);
   await expect(page.locator('#loading-percent')).toHaveText('100%');
+  await enterGame(page);
   await expect(page.locator('#status')).toBeHidden();
   await page.clock.runFor(5000);
   await expect(page.locator('#loading-percent')).toHaveText('100%');
@@ -785,6 +909,7 @@ test('a reveal callback error shows retry instead of leaving the completed loade
   await progressShell(page);
   await page.evaluate(() => window.wordBuddiesHost.ready(() => { throw new Error('Game resume failed.'); }));
   await page.clock.runFor(2000);
+  await enterGame(page);
   await expect(page.locator('#message')).toContainText('Game resume failed.');
   await expect(page.locator('#status')).toBeVisible();
   await expect(page.locator('#canvas')).toHaveAttribute('inert');
@@ -815,7 +940,7 @@ test('every Pip tap gives visible feedback with reduced motion without awarding 
 test('repeated clicks around the loading chest do not select its caption', async ({ page }) => {
   await whileEngineScriptIsPending(page, async toy => {
     await toy.dblclick();
-    await page.locator('#loading-score').dblclick();
+    await page.locator('#loading-hint').dblclick();
     expect(await page.evaluate(() => String(window.getSelection()))).toBe('');
     await expect(page.locator('#loading-play')).toHaveCSS('-webkit-user-select', 'none');
   });
@@ -986,6 +1111,7 @@ test('the loading toy works before the engine script arrives and fits small scre
   } finally {
     release();
   }
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#status')).toBeHidden();
   await expect(page.locator('#loading-toy')).toBeDisabled();
@@ -1016,6 +1142,7 @@ test('the game pack starts while the first WASM response is still pending', asyn
   } finally {
     release();
   }
+  await enterGame(page);
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   expect(wasm).toBe(1);
   expect(packs).toBe(1);

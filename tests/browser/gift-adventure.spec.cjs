@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, swipeLearn,
+const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint, swipeLearn,
   resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomControl } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -166,7 +166,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   expect(await pieceCount(page)).toBe(3);
   expect(stickerIds(await record(page))).toEqual(earnedStickers);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   for (const field of ['goal_item_id="toy-autumn"', 'preferred_theme_id="autumn"', 'toy="toy-autumn"']) {
     expect(await record(page)).toContain(field);

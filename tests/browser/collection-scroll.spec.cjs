@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, chooseRewardSection } = require('./game-ui.cjs');
+const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, chooseRewardSection, enterGame } = require('./game-ui.cjs');
 
 async function openMedals(page) {
   await openRewards(page);
@@ -62,7 +62,7 @@ for (const ratio of [1, 2, 3]) {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto('/');
-      await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+      await enterGame(page);
       await openMedals(page);
       const before = await page.screenshot({ path: testInfo.outputPath('medals-before-drag.png'), scale: 'css' });
       const client = await page.context().newCDPSession(page);
@@ -98,7 +98,7 @@ for (const ratio of [1, 2, 3]) {
       test(`room ${locked ? 'locked toy' : 'empty canvas'} drag scrolls instead of moving Pip`, async ({ page, browserName }, testInfo) => {
         test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
         await page.goto('/');
-        await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+        await enterGame(page);
         await openRewards(page);
         await chooseRewardSection(page, 'room');
         if (locked) {
@@ -149,7 +149,7 @@ test('mouse dragging the room background scrolls without calling Pip', async ({ 
   await page.setViewportSize({ width: 390, height: 650 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   await openRewards(page);
   await chooseRewardSection(page, 'room');
   const bounds = await metrics(page), collection = collectionBounds(bounds);
@@ -179,7 +179,7 @@ for (const input of ['mouse', 'touch']) {
       localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"space-1":2}\n');
     });
     await page.goto('/');
-    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+    await enterGame(page);
     await openRewards(page);
     await roomControl(page, 'space');
     const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
@@ -220,7 +220,7 @@ test.describe('collection release momentum', () => {
   test('a released swipe glides, slows down, and stops at the next touch', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
     await page.goto('/');
-    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+    await enterGame(page);
     await openMedals(page);
     const client = await page.context().newCDPSession(page);
     let touching = false;

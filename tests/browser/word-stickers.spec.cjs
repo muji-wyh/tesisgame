@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, lessonPoint, swipeLearn,
+const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint, lessonPoint, swipeLearn,
   openRewards, chooseTheme, chooseRewardSection: section } = require('./game-ui.cjs');
 
 const KEY = 'wordBuddies.playroom';
@@ -56,7 +56,7 @@ test('picture taps pronounce and Match no longer creates runtime word stickers',
   await section(page, 'medals');
   expect((await record(page)).ids).toEqual([]);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   expect((await record(page)).ids).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -78,7 +78,7 @@ test('saved word sticker records survive More, world choices and reload', async 
   await chooseTheme(page, 5);
   expect(await record(page)).toEqual(saved);
   await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
+  await enterGame(page);
   expect((await record(page)).displayed).toBe('cat');
   await openRewards(page);
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-restored-320.png'), scale: 'css' });
