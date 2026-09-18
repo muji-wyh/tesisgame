@@ -144,9 +144,13 @@ func _run() -> void:
 		"Matched cards retain the existing planted state and completion mark")
 	view.size = Vector2(296, 200)
 	await settle()
-	back = view.card_buttons[0].find_child("CardBack", true, false)
-	check(not back.number_label.get_global_rect().intersects(view.card_buttons[0].match_mark.get_global_rect()),
-		"A planted card's corner mark does not cover its stable position number")
+	for index in [0, partner]:
+		var card = view.card_buttons[index]
+		back = card.find_child("CardBack", true, false)
+		check(not back.is_visible_in_tree() and (card.picture.is_visible_in_tree() or card.word_label.is_visible_in_tree()),
+			"A planted card keeps its true front visible after resizing")
+		check(card.match_mark.is_visible_in_tree() and card.get_global_rect().encloses(card.match_mark.get_global_rect()),
+			"A planted card keeps its completion mark inside the smaller card")
 	view.queue_free()
 	await process_frame
 	print("Memory back design: %d checks, %d failures" % [checks, failures])

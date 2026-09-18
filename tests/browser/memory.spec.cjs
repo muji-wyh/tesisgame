@@ -155,8 +155,9 @@ test('Memory discoveries survive automatic mistakes, held peek, worlds and More'
   expect(errors).toEqual([]);
 });
 
-test('held Memory eye reveals all ten faces and release hides matched faces without losing progress', async ({ page }, testInfo) => {
-  const { errors, bounds } = await beginMemory(page);
+for (const reducedMotion of ['reduce', 'no-preference']) {
+test(`Memory matched faces stay visible after feedback, Peek and More (${reducedMotion})`, async ({ page }, testInfo) => {
+  const { errors, bounds } = await beginMemory(page, { reducedMotion });
   const saved = await medalRecord(page), board = await discoverBoard(page);
   const words = board.filter(card => card.kind === 'Word').map(card => card.word);
   const matched = words.slice(0, 2).flatMap(word => pairFor(board, word));
@@ -170,28 +171,50 @@ test('held Memory eye reveals all ten faces and release hides matched faces with
   await progress(page, 2, 2);
   const grownCounters = await counterSnapshot(page, bounds);
   expect(grownCounters.equals(emptyCounters), 'The numeric progress beside Pip reflects earned Memory matches.').toBe(false);
-  const backs = await screenshot(page, testInfo, 'memory-two-pairs-face-down');
+  const matchedFaces = await screenshot(page, testInfo, 'memory-two-pairs-face-up', { verifyRendering: true });
   await withMemoryPeek(page, async () => {
     await progress(page, 2, 2);
     expect((await counterSnapshot(page, bounds)).equals(grownCounters), 'Holding the eye cannot reset the visible progress cluster.').toBe(true);
     await expect(page.locator('#selection-status')).toBeEmpty();
+    await page.waitForTimeout(300);
     const fronts = await screenshot(page, testInfo, 'memory-all-ten-held', { held: true });
-    const changes = await cardChanges(page, bounds, backs, fronts);
-    expect(changes.every(value => value > 0.005), 'Every face, including both matched pairs, is revealed only while held.').toBe(true);
+    const changes = await cardChanges(page, bounds, matchedFaces, fronts);
+    for (let index = 0; index < 10; index++) {
+      if (matched.includes(index)) {
+        expect(changes[index], `Matched card ${index + 1} already shows its face before Peek.`).toBe(0);
+      } else {
+        expect(changes[index], `Unmatched card ${index + 1} reveals its face during Peek.`).toBeGreaterThan(0.005);
+      }
+    }
   });
   await expect(page.locator('#game-status')).toContainText(READY);
   await progress(page, 2, 2);
   expect((await counterSnapshot(page, bounds)).equals(grownCounters)).toBe(true);
-  const released = await screenshot(page, testInfo, 'memory-all-faces-hidden-after-release');
-  expect(await cardChanges(page, bounds, backs, released), 'Matched green markers remain, but all ten faces return to their backs.').toEqual(Array(10).fill(0));
+  await page.waitForTimeout(300);
+  const released = await screenshot(page, testInfo, 'memory-matched-faces-after-release');
+  expect(await cardChanges(page, bounds, matchedFaces, released), 'Releasing Peek hides only unmatched faces.').toEqual(Array(10).fill(0));
   for (const index of matched) {
     await cardTap(page, index);
     await expect(page.locator('#selection-status')).toBeEmpty();
     await progress(page, 2, 2);
   }
+  const remaining = words.slice(2).map(word => pairFor(board, word));
+  await reveal(page, remaining[0][0]);
+  await cardTap(page, remaining[1][1]);
+  await waitFeedback(page, false);
+  await page.waitForTimeout(300);
+  const afterMistake = await screenshot(page, testInfo, 'memory-matched-faces-after-mistake');
+  expect(await cardChanges(page, bounds, matchedFaces, afterMistake), 'A later mistake hides only the incorrect pair.').toEqual(Array(10).fill(0));
+  await openRewards(page);
+  await page.keyboard.press('Escape');
+  await progress(page, 2, 3);
+  await page.waitForTimeout(300);
+  const afterMore = await screenshot(page, testInfo, 'memory-matched-faces-after-more', { verifyRendering: true });
+  expect(await cardChanges(page, bounds, matchedFaces, afterMore), 'Returning from More preserves the matched faces and all other backs.').toEqual(Array(10).fill(0));
   expect(await medalRecord(page)).toBe(saved);
   expect(errors).toEqual([]);
 });
+}
 
 test('Memory accepts the next card and held eye directly from automatic feedback', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page);

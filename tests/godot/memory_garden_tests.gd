@@ -60,7 +60,7 @@ func _run() -> void:
 	check(view.controls().size() == 11 and view.controls().has(view.study_button), "Keyboard navigation includes ten cards and the eye")
 	check(view.study_button.text.is_empty() and view.study_button.symbol == view.study_button.Symbol.EYE,
 		"The sole reveal control is a drawn eye without toggle text")
-	check(view.study_button.tooltip_text == "Hold to reveal all cards. Release to hide them.", "The eye explains both hold and release")
+	check(view.study_button.tooltip_text == "Hold to reveal all cards. Release to hide unmatched cards.", "The eye explains that release only hides unmatched cards")
 	check(view.find_child("MemoryFeedback", true, false) == null and view.find_child("MemoryReviewHint", true, false) == null,
 		"No correction footer or reserved hint area exists")
 	check(view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
@@ -69,7 +69,7 @@ func _run() -> void:
 	var eye_bounds: Rect2 = view.study_button.get_rect()
 	var nodes: Array = view.card_buttons.duplicate()
 	var order: Array = view.memory.cards.duplicate(true)
-	_check_concealed(view)
+	_check_resting_faces(view)
 	_check_layout(view)
 	var first := _index(view, words[0].id, "word")
 	var other := _index(view, words[1].id, "word")
@@ -105,7 +105,7 @@ func _run() -> void:
 	check(not view.memory.studying and view.memory.selected_indices.is_empty(), "A stale release after resuming is harmless")
 	check(_positions(view) == positions and view.card_buttons == nodes and view.memory.cards == order,
 		"Selection, hold, pause and palette changes preserve every card target and identity")
-	_check_concealed(view)
+	_check_resting_faces(view)
 	view.card_buttons[first].pressed.emit()
 	view.card_buttons[wrong].pressed.emit()
 	check(view.memory.phase == "feedback" and view.memory.attempts == 1, "A mismatch submits exactly one attempt")
@@ -131,7 +131,7 @@ func _run() -> void:
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "waiting" and endings.is_empty(), "Visible feedback continues automatically without a footer")
 	check(_positions(view) == positions and view.memory.cards == order, "Automatic feedback never shuffles or moves cards")
-	_check_concealed(view)
+	_check_resting_faces(view)
 	for attempt in range(3):
 		view.card_buttons[first].pressed.emit()
 		view.card_buttons[wrong].pressed.emit()
@@ -161,17 +161,18 @@ func _run() -> void:
 	view.continue_feedback()
 	for index in [first, partner]:
 		var card = view.card_buttons[index]
-		check(not card.picture.visible and not card.word_label.visible and card.disabled and card.match_mark.visible,
-			"Planted fronts hide after feedback but keep their match badge")
+		check(card.picture.visible == (card.card_data.kind == "image")
+			and card.word_label.visible == (card.card_data.kind == "word") and card.disabled and card.match_mark.visible,
+			"Planted words and pictures stay face up after feedback with their match badge")
 		check(card.focus_mode == Control.FOCUS_NONE, "Planted cards leave playable focus navigation")
 		card.pressed.emit()
 	check(view.memory.attempts == 5 and view.controls().size() == 9, "Planted cards cannot score again")
 	view.begin_peek()
 	check(view.memory.is_revealed(first) and view.memory.is_revealed(partner), "A new hold also reveals planted fronts")
 	view.end_peek()
-	check(not view.memory.is_revealed(first) and not view.memory.is_revealed(partner) and view.memory.matched_word_ids == [words[0].id],
-		"Releasing hides planted faces without losing progress")
-	_check_concealed(view)
+	check(view.memory.is_revealed(first) and view.memory.is_revealed(partner) and view.memory.matched_word_ids == [words[0].id],
+		"Releasing a peek keeps both planted faces visible with their progress")
+	_check_resting_faces(view)
 	for dimensions in [Vector2(456, 200), Vector2(456, 600), Vector2(288, 600), Vector2(960, 320), Vector2(456, 456), Vector2(400, 400)]:
 		view.size = dimensions
 		await _settle()
@@ -199,7 +200,7 @@ func _run() -> void:
 	view.study_button.button_down.emit()
 	view.study_button.button_up.emit()
 	check(endings.size() == 1 and view.controls().is_empty(), "Delayed input cannot win twice")
-	_check_concealed(view)
+	_check_resting_faces(view)
 	var stale: Button = view.card_buttons[0]
 	var reveal_count := revealed.size()
 	view.start_round(words, Data.theme("spring"), 71)
@@ -229,6 +230,7 @@ func _run() -> void:
 	view.start_round([], Data.theme("spring"), 3)
 	check(view.card_buttons.is_empty() and view.controls().is_empty() and not view.status_label.text.is_empty(), "Invalid content explains the error and leaves no stale playable board")
 	await _check_feedback_shortcuts(view, words)
+	await _check_matched_fronts(view, words)
 	await _check_catalog_text(view)
 	view.queue_free()
 	await process_frame
@@ -295,26 +297,78 @@ func _check_feedback_shortcuts(view, words: Array) -> void:
 		check(view.memory.phase == ("waiting" if action.ends_with("peek") else "matching"), action + ": the cancelled timer cannot affect the next selection")
 
 
-func _check_concealed(view) -> void:
+func _check_matched_fronts(view, words: Array) -> void:
+	view.set_reduced_motion(false)
+	view.start_round(words, Data.theme("spring"), 83)
+	await _settle()
+	var positions := _positions(view)
+	var order: Array = view.memory.cards.duplicate(true)
+	view.card_buttons[_index(view, words[0].id, "word")].pressed.emit()
+	view.card_buttons[_index(view, words[0].id, "image")].pressed.emit()
+	await create_timer(1.0).timeout
+	check(view.memory.phase == "waiting" and view.memory.matched_word_ids == [words[0].id],
+		"Animated correct feedback automatically settles with one planted pair")
+	_check_resting_faces(view)
+	view.card_buttons[_index(view, words[1].id, "word")].pressed.emit()
+	view.card_buttons[_index(view, words[2].id, "image")].pressed.emit()
+	await create_timer(1.0).timeout
+	check(view.memory.phase == "waiting" and view.memory.attempts == 2 and view.memory.mistakes == 1,
+		"A later wrong pair finishes its automatic feedback")
+	_check_resting_faces(view)
+	view.begin_peek()
+	await create_timer(0.25).timeout
 	for index in range(view.card_buttons.size()):
-		if view.memory.is_revealed(index):
-			continue
+		var card = view.card_buttons[index]
+		check(view.memory.is_revealed(index) and (card.picture.visible or card.word_label.visible),
+			"An animated peek reveals the complete partially planted board")
+	view.end_peek()
+	await create_timer(0.25).timeout
+	_check_resting_faces(view)
+	view.begin_peek()
+	await create_timer(0.25).timeout
+	view.pause(true)
+	check(not view.memory.studying and view.controls().is_empty(), "Pausing cancels a peek on a partially planted board")
+	_check_resting_faces(view)
+	view.pause(false)
+	view.end_peek()
+	await create_timer(0.25).timeout
+	_check_resting_faces(view)
+	check(view.memory.phase == "waiting" and view.memory.matched_word_ids == [words[0].id]
+		and view.memory.attempts == 2 and view.memory.mistakes == 1 and view.memory.selected_indices.is_empty(),
+		"Peek release and pause recovery preserve only the earned pair and its score")
+	check(view.memory.cards == order and _positions(view) == positions, "Persistent matched fronts preserve every remembered position")
+	view.set_reduced_motion(true)
+
+
+func _check_resting_faces(view) -> void:
+	for index in range(view.card_buttons.size()):
 		var card = view.card_buttons[index]
 		var kind: String = "Word" if view.memory.cards[index].kind == "word" else "Picture"
 		var planted: bool = view.memory.matched_word_ids.has(view.memory.cards[index].word.id)
-		var label: String = "%s %d" % [kind, index + 1] + (". Planted." if planted else "")
-		check(card.tooltip_text == label and card.name == "MemoryCard%d" % (index + 1), "Concealed labels reveal only kind, position and matched progress")
-		check(not card.picture.visible and not card.word_label.visible and card.word_label.text.is_empty(), "Hidden fronts expose no noun text or picture")
+		var label: String = "%s %d" % [kind, index + 1]
 		var back: Control = card.find_child("CardBack", true, false)
-		check(back != null and back.visible, "Every concealed card shows a back")
-		if back != null:
-			var text := ""
-			for child in back.find_children("*", "Label", true, false):
-				text += child.text + " "
-			check(kind in text and str(index + 1) in text, "Backs keep their kind and stable position number")
+		check(view.memory.is_revealed(index) == planted and card.face_up == planted,
+			"A resting board keeps exactly its planted cards face up")
+		if planted:
+			label += ": " + view.memory.cards[index].word.text + ". Planted."
+			check(card.picture.visible == (kind == "Picture") and card.word_label.visible == (kind == "Word")
+				and card.word_label.text == view.memory.cards[index].word.text,
+				"Each planted card displays its original picture or word front")
+			check(back != null and not back.visible and card.disabled and card.match_mark.visible,
+				"Planted cards hide their backs, keep their badges and reject further selection")
+		else:
+			check(not card.picture.visible and not card.word_label.visible and card.word_label.text.is_empty(), "Hidden fronts expose no noun text or picture")
+			check(back != null and back.visible, "Every unmatched resting card shows a back")
+			if back != null:
+				var text := ""
+				for child in back.find_children("*", "Label", true, false):
+					text += child.text + " "
+				check(kind in text and str(index + 1) in text, "Backs keep their kind and stable position number")
+		check(card.tooltip_text == label and card.name == "MemoryCard%d" % (index + 1),
+			"Resting card labels name only visible fronts and preserve kind and position")
 		for property in card.get_property_list():
 			if property.name == "accessibility_name":
-				check(card.get("accessibility_name") == label, "Hidden accessibility names do not leak the word")
+				check(card.get("accessibility_name") == label, "Accessibility names follow the same revealed and concealed card state")
 
 
 func _check_layout(view) -> void:

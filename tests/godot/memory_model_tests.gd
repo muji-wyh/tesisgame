@@ -26,6 +26,7 @@ func _run() -> void:
 	_test_layout(model)
 	_test_selections(model)
 	_test_feedback_and_completion(model)
+	_test_matched_visibility(model)
 	_test_study_and_stop(model)
 	_test_rejected_resets(model)
 	print("Memory model: %d assertions, %d failures" % [checks, failures])
@@ -148,16 +149,33 @@ func _test_feedback_and_completion(model) -> void:
 			"A repeated submitted card cannot award the same pair twice")
 		var result: String = model.continue_feedback()
 		check(result == ("won" if matched.size() == 5 else "ready"), "Only resolving final feedback reports the win")
-		for found in matched:
-			check(not model.is_revealed(_index(model, found, "word"))
-				and not model.is_revealed(_index(model, found, "image")), "Planted faces hide after feedback without losing their matched IDs")
+		for index in range(model.cards.size()):
+			check(model.is_revealed(index) == matched.has(model.cards[index].word.id),
+				"After correct feedback only planted pairs remain face up, including every card at completion")
 		check(model.matched_word_ids == matched and model.attempts == 7 + matched.size(),
-			"Hiding matched faces leaves all scored progress intact")
+			"Keeping planted faces visible leaves all scored progress intact")
 		check(model.select(_index(model, id, "word")) == "ignored", "Completed pairs cannot be selected again")
 	check(model.phase == "won" and model.cards == board, "All five fixed pairs complete the garden despite seven mistakes")
 	var won: Dictionary = _snapshot(model)
 	check(model.continue_feedback() == "ignored" and model.select(0) == "ignored"
 		and not model.set_study(true) and _snapshot(model) == won, "Won rounds reject delayed input and duplicate victory")
+
+
+func _test_matched_visibility(model) -> void:
+	model.reset(_words(), 31)
+	_pair(model, "cat")
+	model.continue_feedback()
+	var board: Array = model.cards.duplicate(true)
+	model.select(_index(model, "dog", "word"))
+	check(model.select(_index(model, "sun", "image")) == "wrong", "An unmatched pair can fail after an earlier success")
+	check(model.is_revealed(_index(model, "cat", "word")) and model.is_revealed(_index(model, "cat", "image")),
+		"A later mismatch keeps the previously planted word and picture visible during feedback")
+	check(model.continue_feedback() == "ready", "A later mismatch returns the partial garden to play")
+	for index in range(model.cards.size()):
+		check(model.is_revealed(index) == (model.cards[index].word.id == "cat"),
+			"Wrong feedback hides its failed pair and untouched cards while the planted pair stays face up")
+	check(model.matched_word_ids == ["cat"] and model.attempts == 2 and model.mistakes == 1 and model.cards == board,
+		"Later wrong feedback preserves the planted pair, score and fixed positions")
 
 
 func _test_study_and_stop(model) -> void:
@@ -178,7 +196,8 @@ func _test_study_and_stop(model) -> void:
 		and model.mistakes == 0 and model.matched_word_ids == ["cat"] and model.cards == board,
 		"Releasing a peek retains progress and positions without scoring")
 	for index in range(10):
-		check(not model.is_revealed(index), "Releasing a peek hides all ten faces, including planted pairs")
+		check(model.is_revealed(index) == (model.cards[index].word.id == "cat"),
+			"Releasing a peek keeps planted faces visible and hides every unmatched card")
 	check(not model.set_study(false), "Repeated peek release is a no-op")
 	check(model.matched_word_ids == ["cat"] and model.attempts == 1,
 		"Repeated releases preserve the matched pair and attempt count")

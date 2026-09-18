@@ -111,7 +111,7 @@ func set_study(value: bool) -> bool:
 func is_revealed(index: int) -> bool:
 	if index < 0 or index >= cards.size():
 		return false
-	return studying or selected_indices.has(index)
+	return studying or selected_indices.has(index) or matched_word_ids.has(cards[index].word.id)
 
 
 func stop() -> void:

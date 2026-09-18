@@ -157,7 +157,7 @@ func _build() -> void:
 	study_button = IconButton.new()
 	study_button.name = "StudyGarden"
 	study_button.symbol = IconButton.Symbol.EYE
-	study_button.tooltip_text = "Hold to reveal all cards. Release to hide them."
+	study_button.tooltip_text = "Hold to reveal all cards. Release to hide unmatched cards."
 	_name_control(study_button, study_button.tooltip_text)
 	study_button.button_down.connect(begin_peek)
 	study_button.button_up.connect(end_peek)

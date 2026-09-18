@@ -217,8 +217,9 @@ Card backs are themed illustrated tiles: large **Aa** lettering for words,
 and a drawn photo icon for pictures, with smaller kind captions and corner
 numbers. Their colors depend only on the theme and kind, never on the hidden
 word or its matching partner. **Hold the eye icon** to flip every card
-face up; release it to flip the faces back. Matched pairs remain marked and progress
-is never reset by peeking. Keyboard players can hold Space or Enter; Xbox players
+face up; release it to hide only unmatched cards. Correct pairs keep their word and
+picture face up with a green checkmark for the rest of the round. Peeking never resets
+progress. Keyboard players can hold Space or Enter; Xbox players
 can hold A on the eye. Feedback stays on the board and clears automatically,
 without a bottom panel. There is no countdown or three-mistake loss, and exploratory
 misses do not enter the missed-word list. Completing
