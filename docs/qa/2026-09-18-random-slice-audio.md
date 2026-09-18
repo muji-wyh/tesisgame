@@ -35,7 +35,26 @@ Windows WebKit does not expose AudioContext, so that run checks the unavailable
 audio path and gameplay/report behavior. Actual browser sound playback was
 measured in Chromium. Speech fixtures do not open a real microphone.
 
-Local evidence: `build/voice-pop-qa/random-slices-local*`.
+The final desktop rerun also passed after making browser expectations honor
+the existing clean-checkout fallback. Its two 270 ms clips have different PCM
+fingerprints, verifying variation even when both sounds have equal duration.
+
+Local evidence: `build/voice-pop-qa/random-slices-local*` and
+`build/voice-pop-qa/random-slices-final-local*`.
+
+## Production acceptance
+
+Runtime commit `5027968` was fast-forwarded to main, pushed and deployed to the
+existing Azure Static Web App. All four startup files (HTML, JavaScript, WASM
+and game pack) match the tested export byte for byte; see
+`2026-09-18-random-slice-production.json`.
+
+A fresh production Chromium round passed: two real hit sounds with different
+PCM fingerprints, exact source durations, no repeated sound from finalizing a
+recognition, correct score and working Pip report. The test required the full
+eight-sound pool. Playback metadata is retained in
+`2026-09-18-random-slice-playback.json`; complete browser evidence is under
+`build/voice-pop-qa/random-slices-production*`.
 
 ## Reproduction
 
