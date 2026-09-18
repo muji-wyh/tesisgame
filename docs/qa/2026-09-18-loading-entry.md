@@ -47,6 +47,20 @@ Speech tests use fixtures and do not open a real microphone.
 
 Evidence: `build/voice-pop-qa/loading-enter-*`.
 
+## Production acceptance
+
+Runtime commit `4222cd8` was fast-forwarded to main, pushed and deployed to the
+existing Azure Static Web App. All four startup files (HTML, JavaScript, WASM,
+game pack) match the tested build byte for byte; see
+`2026-09-18-loading-entry-production.json`.
+
+Two fresh production Chromium cases passed: the ready playground stays visible
+and interactive while native game input remains paused, including a tab
+visibility round-trip and deliberate controller entry; explicit entry followed
+by real touch selects and cancels a game card successfully.
+
+![Production loading playground ready for manual entry](2026-09-18-loading-entry.png)
+
 ## Reproduction
 
 ```powershell
