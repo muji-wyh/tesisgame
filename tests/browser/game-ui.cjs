@@ -295,7 +295,7 @@ async function rendered(page) {
 async function observeAudio(page) {
   await page.addInitScript(() => {
     const NativeContext = window.AudioContext || window.webkitAudioContext;
-    window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0 };
+    window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0, playbacks: [] };
     if (!NativeContext) return;
     const WrappedContext = new Proxy(NativeContext, {
       construct(Target, args) {
@@ -306,6 +306,7 @@ async function observeAudio(page) {
           const source = createSource(), start = source.start.bind(source);
           source.start = (...values) => {
             window.audioObservation.starts++;
+            if (source.buffer) window.audioObservation.playbacks.push({ duration: source.buffer.duration });
             return start(...values);
           };
           return source;

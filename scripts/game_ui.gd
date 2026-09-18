@@ -1648,7 +1648,7 @@ func _pop_hit(_word: Dictionary) -> void:
 	if _mode_id != "pop":
 		return
 	audio.interact(model.theme_id, false)
-	audio.cue("correct")
+	audio.cue("pop-slice")
 
 
 func _pop_hear(word: Dictionary) -> void:

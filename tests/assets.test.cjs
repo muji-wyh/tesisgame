@@ -82,7 +82,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 280);
+  assert.equal(imports.length, 281); // Includes Pip's separate dance-parts atlas.
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);

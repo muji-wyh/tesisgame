@@ -622,6 +622,11 @@ The supplied source directory is read-only to this workflow. `assets\chests\SOUR
 
 ## Background music and third-party assets
 
+Voice Pop uses the short `Cut2.wav` effect from the same local music pack.
+Import it with `node tools/import-pop-sfx.cjs "D:/uwork/AssetsSource"` before
+building. The selected file remains ignored by Git and ships inside the game
+pack; see [source and playback details](docs/assets/voice-pop-sfx.md).
+
 Four tracks were copied from the user-provided **Casual Game Music Pack 1.4**:
 
 | Season | Source track | Local file |

@@ -1,0 +1,11 @@
+{
+  "pack": "Casual Game Music Pack 1.4",
+  "source": "Casual Game Music Pack 1.4/Sound Effects/Cut2.wav",
+  "sha256": "006889db9940258ae7fe273faf5f281b63a224db6836508180db2ef5f6972241",
+  "destination": "assets/imported-audio/pop-slice.wav",
+  "seconds": 0.09693877551020408,
+  "sampleRate": 44100,
+  "channels": 2,
+  "frames": 4275,
+  "licenseNote": "User-provided local asset. The source Unity metadata identifies licenseType Store. Provider terms apply; raw audio and its Godot import remain ignored by Git."
+}

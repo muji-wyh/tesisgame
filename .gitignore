@@ -11,6 +11,8 @@ build/*
 !build/.gdignore
 # Licensed Unity Store textures are shipped only inside the compiled game.
 assets/imported-unity/
+# User-provided audio ships in the game pack, not as public source assets.
+assets/imported-audio/
 *.unitypackage
 __pycache__/
 

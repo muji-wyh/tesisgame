@@ -1,5 +1,7 @@
 extends Node
 
+const POP_SLICE_PATH := "res://assets/imported-audio/pop-slice.wav"
+
 signal status_changed(message: String)
 signal word_failed
 signal narration_state_changed(state: String)
@@ -73,7 +75,12 @@ func cue(effect_id: String = "", voice_id: String = "") -> void:
 	if muted or not active:
 		return
 	if not effect_id.is_empty():
-		_play(effect, "res://assets/audio/sfx/" + effect_id + ".wav")
+		var path: String = "res://assets/audio/sfx/" + effect_id + ".wav"
+		if effect_id == "pop-slice":
+			# Licensed local audio is bundled for immediate feedback. A clean
+			# checkout keeps a short original click without the external pack.
+			path = POP_SLICE_PATH if ResourceLoader.exists(POP_SLICE_PATH) else "res://assets/audio/sfx/select.wav"
+		_play(effect, path)
 	if not voice_id.is_empty():
 		say("res://assets/audio/voice/" + voice_id + ".wav")
 

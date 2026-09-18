@@ -320,13 +320,20 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   const start = Date.now();
   await page.waitForTimeout(1700);
   await page.screenshot({ path: info.outputPath('flying-words.png') });
+  const shortHitSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(
+    sound => sound.duration >= 0.06 && sound.duration < 0.25).length);
+  const soundsBeforeHit = await shortHitSounds();
   const word = await popOne(page, { interim: true });
+  if (audioAvailable) await expect.poll(shortHitSounds, { message: 'A hit immediately plays the short slice effect.' }).toBe(soundsBeforeHit + 1);
   await page.screenshot({ path: info.outputPath('hit-burst.png') });
   const hits = (await state(page)).hits;
   await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
   await page.waitForTimeout(300);
   expect((await state(page)).hits).toBe(hits);
+  if (audioAvailable) expect(await shortHitSounds(), 'Finalizing the same recognition cannot replay the slice.').toBe(soundsBeforeHit + 1);
   const secondWord = await popOne(page);
+  if (audioAvailable) await expect.poll(shortHitSounds).toBe(soundsBeforeHit + 2);
+  await info.attach('hit-audio-durations.json', { body: JSON.stringify(await page.evaluate(() => window.audioObservation.playbacks)), contentType: 'application/json' });
   const after = await state(page);
   expect(after.score).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });

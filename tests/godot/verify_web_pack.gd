@@ -18,6 +18,15 @@ func _initialize() -> void:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
 			failures += 1
 	var excluded := OS.get_cmdline_user_args()
+	if excluded.has("--require-pop-slice"):
+		excluded.remove_at(excluded.find("--require-pop-slice"))
+		var path := "res://assets/imported-audio/pop-slice.wav"
+		var effect: AudioStream = load(path) if ResourceLoader.exists(path) else null
+		if effect == null or effect.get_length() < 0.06 or effect.get_length() > 0.15:
+			printerr("The imported Voice Pop slice sound is missing or invalid in the startup pack.")
+			failures += 1
+		else:
+			print("Voice Pop slice sound is bundled for immediate playback.")
 	if excluded.is_empty():
 		printerr("Pass the optional audio resource paths to verify their exclusion.")
 		failures += 1

@@ -227,6 +227,7 @@ func _run() -> void:
 		check(app.model.phase == "matching" and app.model.selected_id == next_id
 			and app.model.successes == 1 and app.feedback_timer.is_stopped(),
 			"Stopping Voice also permits the immediate next-card shortcut before its timer expires")
+	await _check_pop_hit_audio(app)
 	app.audio.halt()
 	app.queue_free()
 	await process_frame
@@ -236,6 +237,61 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("UI audio flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_pop_hit_audio(app) -> void:
+	app.choose_mode("pop")
+	app.audio.set_muted(false)
+	await process_frame
+	app._on_voice_state([true, true, "Listening. Say an English word."])
+	var effect: AudioStreamPlayer = app.audio.effect
+	var channel_count: int = app.audio.get_child_count()
+	var sound_path := "res://assets/imported-audio/pop-slice.wav"
+	if not ResourceLoader.exists(sound_path):
+		sound_path = "res://assets/audio/sfx/select.wav"
+	var expected_stream: AudioStream = load(sound_path)
+	check(expected_stream != null and expected_stream.get_length() > 0.0 and expected_stream.get_length() < 0.4,
+		"Voice Pop's imported slice or clean-checkout fallback is a short playable sound")
+	check(_pop_hit_visible_word(app, 3.0) and effect.playing and effect.stream == expected_stream,
+		"A real spoken target plays the imported slice when present, otherwise the select fallback")
+	check(not app.audio.music.playing and not app.audio.voice.playing and not app.audio.narration.playing,
+		"Popping a target plays only its effect, without BGM or word/report speech")
+	check(_pop_hit_visible_word(app) and effect.playing and effect.stream == expected_stream
+		and app.audio.effect == effect and app.audio.get_child_count() == channel_count,
+		"Consecutive target hits reuse the existing effect player without accumulating audio nodes")
+	app.audio.set_muted(true)
+	check(not effect.playing and not app.audio.active, "Muting immediately stops an active Voice Pop slice")
+	check(_pop_hit_visible_word(app, 1.8) and not effect.playing and not app.audio.active,
+		"A muted spoken hit still scores without restarting its slice sound")
+	app.audio.set_muted(false)
+	check(_pop_hit_visible_word(app, 2.2) and effect.playing and effect.stream == expected_stream,
+		"The next unmuted spoken hit can play the same short slice again")
+	app.choose_mode("learn")
+	check(not effect.playing, "Leaving Voice Pop stops its active hit sound")
+	app.choose_mode("pop")
+	await process_frame
+	app._on_voice_state([true, true, "Listening. Say an English word."])
+	check(_pop_hit_visible_word(app, 3.0) and effect.playing, "A new Pop round can start a fresh hit sound")
+	var hits_before_hide: int = app._pop.game.hits
+	app.on_page_hidden()
+	check(not effect.playing and not app.audio.active and not _pop_hit_visible_word(app)
+		and app._pop.game.hits == hits_before_hide,
+		"Backgrounding stops the slice and ignores a late word for a remaining target")
+	app.on_page_visible()
+	check(not effect.playing and not app.audio.active and not _pop_hit_visible_word(app)
+		and app._pop.game.hits == hits_before_hide,
+		"Returning to the page cannot replay an old slice or accept words before listening resumes")
+
+
+func _pop_hit_visible_word(app, elapsed: float = 0.0) -> bool:
+	var view = app._pop
+	if elapsed > 0.0:
+		view._advance_game(elapsed)
+	if not view.is_visible_in_tree() or view.game.targets.is_empty():
+		return false
+	var hits_before: int = view.game.hits
+	view.receive_transcript(str(view.game.targets[0].word.text))
+	return view.game.hits == hits_before + 1
 
 
 func _match_progress(app) -> Array:
