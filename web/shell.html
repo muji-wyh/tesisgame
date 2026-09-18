@@ -185,12 +185,12 @@
     #speech-panel[data-pop-stop-failed="true"] #speech-meter,
     #speech-panel[data-pop-stop-failed="true"] #speech-notice { display: none; }
     #pop-aura { position: fixed; inset: 0; z-index: 100; pointer-events: none;
-      --aura-spread: clamp(78px, 19vmin, 140px);
-      --aura-radius: calc(var(--aura-spread) * 1.5); overflow: hidden;
+      --aura-spread: clamp(20px, 3.5vmin, 36px);
+      --aura-radius: clamp(30px, 5.25vmin, 54px); overflow: hidden;
       opacity: 0; visibility: hidden; }
     #pop-aura[data-listening="true"] { opacity: 1; visibility: visible; }
-    /* A larger corner radius leaves a rounded inner opening as well as a
-       rounded perimeter. The light peaks just inside the softly feathered rim. */
+    /* Keep the listening light close to the viewport rim. Compact rounded
+       corners and a short inward fade leave the playfield unobscured. */
     #pop-aura .pop-aura-edge { position: absolute; pointer-events: none;
       background: linear-gradient(var(--aura-inward), rgba(255,248,241,.38),
         rgba(247,238,255,.16) 8%, transparent 28%), var(--aura-colors);
