@@ -188,9 +188,16 @@
       --aura-spread: clamp(20px, 3.5vmin, 36px);
       --aura-radius: clamp(30px, 5.25vmin, 54px); overflow: hidden;
       opacity: 0; visibility: hidden; }
+    /* Keep adjacent masked tiles on the same pixel boundary in WebKit. */
+    @supports (width: round(nearest, 1px, 1px)) {
+      #pop-aura { --aura-radius: round(nearest, clamp(30px, 5.25vmin, 54px), 1px); }
+    }
     #pop-aura[data-listening="true"] { opacity: 1; visibility: visible; }
     /* Keep the listening light close to the viewport rim. Compact rounded
        corners and a short inward fade leave the playfield unobscured. */
+    #pop-aura .pop-aura-edge, #pop-aura .pop-aura-corner {
+      animation: pop-aura-breathe 2.6s ease-in-out infinite;
+      animation-delay: -.65s; animation-play-state: paused; }
     #pop-aura .pop-aura-edge { position: absolute; pointer-events: none;
       background: linear-gradient(var(--aura-inward), rgba(255,248,241,.38),
         rgba(247,238,255,.16) 8%, transparent 28%), var(--aura-colors);
@@ -206,31 +213,41 @@
         rgba(255,255,255,.02) 92%, transparent);
       -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
       -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
-    #pop-aura .pop-aura-edge::before { content: ''; position: absolute; inset: 0;
-      background: var(--aura-bloom); opacity: .3;
-      animation: var(--aura-drift) var(--aura-period) cubic-bezier(.45,0,.25,1) infinite alternate;
+    /* The stationary mask fades the travelling highlight before the corner
+       joins, so its changing color cannot end in a hard rectangular seam. */
+    #pop-aura .pop-aura-flow { position: absolute; inset: 0; pointer-events: none;
+      -webkit-mask-image: linear-gradient(var(--aura-along), transparent, #fff 14%, #fff 86%, transparent);
+      mask-image: linear-gradient(var(--aura-along), transparent, #fff 14%, #fff 86%, transparent); }
+    #pop-aura .pop-aura-flow::before { content: ''; position: absolute; inset: 0;
+      background: var(--aura-bloom); opacity: .85;
+      animation: var(--aura-drift) 3.2s linear infinite;
+      animation-direction: var(--aura-direction, normal);
       animation-delay: var(--aura-delay); animation-play-state: paused; }
     #pop-aura .pop-aura-edge--top, #pop-aura .pop-aura-edge--bottom {
       left: var(--aura-radius); right: var(--aura-radius); height: var(--aura-spread);
-      --aura-drift: pop-aura-horizontal; }
+      --aura-drift: pop-aura-horizontal; --aura-along: to right; }
     #pop-aura .pop-aura-edge--left, #pop-aura .pop-aura-edge--right {
       top: var(--aura-radius); bottom: var(--aura-radius); width: var(--aura-spread);
-      --aura-drift: pop-aura-vertical; }
+      --aura-drift: pop-aura-vertical; --aura-along: to bottom; }
     #pop-aura .pop-aura-edge--top { top: 0; --aura-inward: to bottom;
-      --aura-period: 8.6s; --aura-delay: -3.4s;
-      --aura-bloom: radial-gradient(ellipse 24% 160% at 50% 0%, #fff1e9, transparent 80%);
+      --aura-delay: 0s;
+      --aura-bloom: radial-gradient(ellipse 27% 160% at 50% 0%, #fff8ff,
+        #ff65cb 38%, rgba(146,101,255,.65) 60%, transparent 82%);
       --aura-colors: linear-gradient(90deg, #ffba96, #f5a4b3 38%, #ee99d0 72%, #ef91d8); }
     #pop-aura .pop-aura-edge--right { right: 0; --aura-inward: to left;
-      --aura-period: 10.2s; --aura-delay: -6.1s;
-      --aura-bloom: radial-gradient(ellipse 160% 24% at 100% 50%, #ffd5ee, transparent 80%);
+      --aura-delay: -.8s;
+      --aura-bloom: radial-gradient(ellipse 160% 27% at 100% 50%, #fff4ff,
+        #ab7bff 38%, rgba(93,194,255,.65) 60%, transparent 82%);
       --aura-colors: linear-gradient(180deg, #ef91d8, #ef7eb5 24%, #ca8ce7 51%, #95acff 80%, #70cdff); }
     #pop-aura .pop-aura-edge--bottom { bottom: 0; --aura-inward: to top;
-      --aura-period: 9.4s; --aura-delay: -1.8s;
-      --aura-bloom: radial-gradient(ellipse 24% 160% at 50% 100%, #d8e7ff, transparent 80%);
+      --aura-delay: -1.6s; --aura-direction: reverse;
+      --aura-bloom: radial-gradient(ellipse 27% 160% at 50% 100%, #ecffff,
+        #50cfff 38%, rgba(131,106,255,.65) 60%, transparent 82%);
       --aura-colors: linear-gradient(90deg, #b58fff, #9a95ff 36%, #75b7ff 72%, #70cdff); }
     #pop-aura .pop-aura-edge--left { left: 0; --aura-inward: to right;
-      --aura-period: 11.3s; --aura-delay: -4.8s;
-      --aura-bloom: radial-gradient(ellipse 160% 24% at 0% 50%, #d5e8ff, transparent 80%);
+      --aura-delay: -2.4s; --aura-direction: reverse;
+      --aura-bloom: radial-gradient(ellipse 160% 27% at 0% 50%, #fff6ed,
+        #aa85ff 38%, rgba(255,113,193,.65) 60%, transparent 82%);
       --aura-colors: linear-gradient(180deg, #ffba96, #bdadf5 20%, #83a5ff 42%, #989cff 70%, #b58fff); }
     #pop-aura .pop-aura-corner { position: absolute; width: var(--aura-radius);
       height: var(--aura-radius); pointer-events: none;
@@ -271,16 +288,28 @@
       --aura-center: 0% 0%; --aura-color: #70cdff; }
     #pop-aura .pop-aura-corner--bottom-left { bottom: 0; left: 0;
       --aura-center: 100% 0%; --aura-color: #b58fff; }
-    #pop-aura[data-listening="true"] .pop-aura-edge::before { animation-play-state: running; }
+    #pop-aura[data-listening="true"] .pop-aura-edge,
+    #pop-aura[data-listening="true"] .pop-aura-corner,
+    #pop-aura[data-listening="true"] .pop-aura-flow::before { animation-play-state: running; }
+    /* One shared breath keeps the corner joins steady. Only narrow masked
+       highlight strips move; the light never grows further into the game. */
+    @keyframes pop-aura-breathe {
+      0%, 100% { opacity: .42; }
+      48% { opacity: 1; }
+    }
     @keyframes pop-aura-horizontal {
-      0% { transform: translateX(-9%); opacity: .2; }
-      42% { transform: translateX(2%); opacity: .44; }
-      100% { transform: translateX(9%); opacity: .28; }
+      0% { transform: translateX(-55%); opacity: 0; }
+      18% { opacity: .9; }
+      50% { opacity: 1; }
+      82% { opacity: .9; }
+      100% { transform: translateX(55%); opacity: 0; }
     }
     @keyframes pop-aura-vertical {
-      0% { transform: translateY(9%); opacity: .3; }
-      58% { transform: translateY(-3%); opacity: .2; }
-      100% { transform: translateY(-9%); opacity: .44; }
+      0% { transform: translateY(-55%); opacity: 0; }
+      18% { opacity: .9; }
+      50% { opacity: 1; }
+      82% { opacity: .9; }
+      100% { transform: translateY(55%); opacity: 0; }
     }
     @keyframes speech-wave { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
     @keyframes pip-listen { 0%, 100% { transform: rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
@@ -288,7 +317,8 @@
     @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
     @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
     @media (prefers-reduced-motion: reduce) {
-      #pop-aura .pop-aura-edge::before { animation: none; transform: none; opacity: .3; }
+      #pop-aura .pop-aura-edge, #pop-aura .pop-aura-corner { animation: none; opacity: 1; }
+      #pop-aura .pop-aura-flow::before { animation: none; transform: none; opacity: .3; }
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
       #speech-panel .speech-bubble { background: none !important; }
       .duck-sprite { animation: none !important; }
@@ -446,10 +476,10 @@
     </div>
   </div>
   <div id="pop-aura" aria-hidden="true" data-listening="false">
-    <span class="pop-aura-edge pop-aura-edge--top"></span>
-    <span class="pop-aura-edge pop-aura-edge--right"></span>
-    <span class="pop-aura-edge pop-aura-edge--bottom"></span>
-    <span class="pop-aura-edge pop-aura-edge--left"></span>
+    <span class="pop-aura-edge pop-aura-edge--top"><span class="pop-aura-flow"></span></span>
+    <span class="pop-aura-edge pop-aura-edge--right"><span class="pop-aura-flow"></span></span>
+    <span class="pop-aura-edge pop-aura-edge--bottom"><span class="pop-aura-flow"></span></span>
+    <span class="pop-aura-edge pop-aura-edge--left"><span class="pop-aura-flow"></span></span>
     <span class="pop-aura-corner pop-aura-corner--top-left"></span>
     <span class="pop-aura-corner pop-aura-corner--top-right"></span>
     <span class="pop-aura-corner pop-aura-corner--bottom-right"></span>
