@@ -32,3 +32,16 @@ AudioBuffer exactly once, followed by the existing natural report, replay and
 review interactions. The actual hit screenshot was checked. Evidence is under
 ignored `build/voice-pop-qa/pop-slice-local*`. Web startup remains 13.28 MB with
 79 on-demand audio assets; the slice requires no separate request.
+
+## Production acceptance
+
+Runtime commit `d70f3fc` was merged to `main`, pushed and deployed with
+`npm run deploy -- -SkipBuild`. Production HTML, engine JavaScript/WASM and
+`game-97c2d5c613dd6073.pck` matched the tested export's SHA-256 hashes.
+
+The complete production Chromium round passed. Both hit buffers measured
+0.0969375 seconds, matching the selected source after browser resampling; the
+same final recognition did not replay a hit. Results narration and review
+continued to work. Evidence is under `build/voice-pop-qa/pop-slice-production*`.
+
+Live version: https://gentle-forest-02ff42900.3.azurestaticapps.net/?v=d70f3fc
