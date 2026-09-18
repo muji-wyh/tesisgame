@@ -749,7 +749,7 @@ test('a failed Pop shutdown keeps a visible stop warning through summary and ret
   assert.equal(f.status.textContent, 'Microphone could not be stopped. Close this tab to stop voice input.');
   assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.match(f.states.at(-1)[2], /close this tab/i);
-  assert.equal(f.host.speakPopSummary('Three pops!'), false);
+  assert.equal(f.host.stopSpeech(), false, 'Summary cannot proceed until native microphone shutdown succeeds');
   assert.equal(f.spoken.length, 0);
   assert.equal(f.panel.hidden, false, 'A finished round cannot cover the microphone stop failure');
   assert.equal(f.panel.attributes['data-pop-stop-failed'], 'true');
@@ -777,103 +777,6 @@ test('Pop stop failure has viewport CSS bounds that override a stale Match speec
     assert.equal(f.panel.hidden, true, code + ' stays in the native Pop view');
     assert.equal(f.panel.attributes['data-pop-stop-failed'], 'false');
   }
-});
-
-test('Pop summary releases recognition before synthesis and exit, retry or background cancels it', () => {
-  for (const exit of ['stopPopSummary', 'stopSpeech', 'retry', 'visibilitychange', 'pagehide']) {
-    const f = fixture({ synthesis: true });
-    f.listen('pop');
-    const old = f.latest;
-    f.window.speechSynthesis.speak = utterance => {
-      assert.equal(f.aborts, 1, 'Microphone cleanup precedes any summary speech');
-      assert.deepEqual(f.states.at(-1), [false, false, '']);
-      f.spoken.push(utterance);
-    };
-    assert.equal(f.host.speakPopSummary('You popped 12 words!'), true);
-    assert.equal(f.spoken[0].text, 'You popped 12 words!');
-    assert.equal(f.spoken[0].lang, 'en-US');
-    assert.equal(f.aura.attributes['data-listening'], 'false');
-    old.result([['summary echo', true]]);
-    assert.deepEqual(f.popWords, []);
-    if (exit === 'retry') f.host.speechMode(true, 'pop');
-    else if (exit === 'visibilitychange') { f.document.hidden = true; f.document.dispatch(exit); }
-    else if (exit === 'pagehide') f.window.dispatch(exit);
-    else f.host[exit]();
-    assert.equal(f.summaryCancels, 1, exit);
-    f.host.stopPopSummary();
-    assert.equal(f.summaryCancels, 1, 'Repeated cleanup does not cancel unrelated future audio');
-  }
-});
-
-test('summary unavailability, blocked synthesis and late completion remain safe', () => {
-  const unsupported = fixture();
-  unsupported.listen('pop');
-  assert.equal(unsupported.host.speakPopSummary('Three words!'), false);
-  assert.equal(unsupported.aborts, 1);
-  const f = fixture({ synthesis: true });
-  assert.equal(f.host.speakPopSummary('First round'), true);
-  const firstEnd = f.spoken[0].onend;
-  assert.equal(f.host.speakPopSummary('Next round'), true);
-  firstEnd();
-  f.host.stopPopSummary();
-  assert.equal(f.summaryCancels, 2, 'A stale completion cannot lose ownership of the current utterance');
-  f.window.speechSynthesis.speak = () => { throw new Error('Audio unavailable'); };
-  assert.equal(f.host.speakPopSummary('Readable summary'), false);
-  f.document.hidden = true;
-  assert.equal(f.host.speakPopSummary('Background summary'), false);
-});
-
-test('Pip summary speaking follows real utterance events and ignores late callbacks after replacement or stop', () => {
-  const f = fixture({ synthesis: true });
-  const speaking = [];
-  f.host.observePopSummary(value => {
-    assert.equal(typeof value, 'boolean', 'Speaking state crosses the bridge as a positional boolean');
-    speaking.push(value);
-  });
-  assert.deepEqual(speaking, [false]);
-  assert.equal(f.host.speakPopSummary('First report'), true);
-  const first = f.spoken[0];
-  const old = { start: first.onstart, end: first.onend, error: first.onerror };
-  assert.deepEqual(speaking, [false], 'Queuing speech does not invent a talking animation');
-  first.onstart();
-  first.onstart();
-  assert.deepEqual(speaking, [false, true], 'Repeated browser starts do not restart the beak state');
-  assert.equal(f.host.speakPopSummary('Second report'), true);
-  const second = f.spoken[1];
-  assert.deepEqual(speaking, [false, true, false]);
-  second.onstart();
-  old.start(); old.end(); old.error();
-  assert.deepEqual(speaking, [false, true, false, true], 'Old events cannot stop or revive another report');
-  const late = { start: second.onstart, end: second.onend, error: second.onerror };
-  f.host.stopPopSummary();
-  late.start(); late.end(); late.error();
-  assert.deepEqual(speaking, [false, true, false, true, false]);
-  assert.equal(second.onstart, null);
-  f.host.stopPopSummary();
-  assert.equal(f.summaryCancels, 2, 'Each owned utterance is cancelled once');
-});
-
-test('summary completion, synthesis error and background all settle Pip without fabricating a restart', () => {
-  for (const exit of ['end', 'error', 'visibilitychange', 'pagehide']) {
-    const f = fixture({ synthesis: true });
-    const speaking = [];
-    f.host.observePopSummary(value => speaking.push(value));
-    f.host.speakPopSummary('Readable report');
-    const utterance = f.spoken[0], lateStart = utterance.onstart;
-    utterance.onstart();
-    if (exit === 'end') utterance.onend();
-    else if (exit === 'error') utterance.onerror();
-    else if (exit === 'visibilitychange') { f.document.hidden = true; f.document.dispatch(exit); }
-    else f.window.dispatch(exit);
-    lateStart();
-    assert.deepEqual(speaking, [false, true, false], exit);
-  }
-  const f = fixture({ synthesis: true });
-  const speaking = [];
-  f.host.observePopSummary(value => speaking.push(value));
-  f.window.speechSynthesis.speak = () => { throw new Error('Audio blocked'); };
-  assert.equal(f.host.speakPopSummary('Readable report'), false);
-  assert.deepEqual(speaking, [false]);
 });
 
 test('Pop status projects actual target and control geometry without introducing a game mutation API', () => {
@@ -916,12 +819,18 @@ test('Pop snapshots expose full live speech and result state without repeating i
   });
   const state = { phase: 'running', remaining: 24, transcript: 'I see a ca', transcript_final: false,
     report: 'You popped four words.', report_step: 2, results_scroll: 14.5, results_scroll_max: 96,
-    results_scrollbar_visible: false };
+    results_scrollbar_visible: false, report_speaking: true, report_loading: false,
+    report_audio: ['res://assets/audio/pop/round-4.wav', 'res://assets/audio/voice/word-cat.wav',
+      'https://untrusted.invalid/audio.wav', 'res://assets/audio/pop/../../private.wav'] };
   f.host.popStatus(JSON.stringify(state));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
   assert.equal(f.popStatus.attributes['data-report'], 'You popped four words.');
   assert.equal(f.popStatus.attributes['data-report-step'], '2');
+  assert.equal(f.popStatus.attributes['data-report-speaking'], 'true');
+  assert.equal(f.popStatus.attributes['data-report-loading'], 'false');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-report-audio']),
+    ['res://assets/audio/pop/round-4.wav', 'res://assets/audio/voice/word-cat.wav']);
   assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
   assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
@@ -937,6 +846,9 @@ test('Pop snapshots expose full live speech and result state without repeating i
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
   assert.equal(f.popStatus.attributes['data-report'], '');
   assert.equal(f.popStatus.attributes['data-report-step'], '0');
+  assert.equal(f.popStatus.attributes['data-report-speaking'], 'false');
+  assert.equal(f.popStatus.attributes['data-report-loading'], 'false');
+  assert.equal(f.popStatus.attributes['data-report-audio'], '[]');
   assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
 });

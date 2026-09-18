@@ -59,8 +59,8 @@ test('the export shell hosts the engine and fits a safe-area container without d
   assert.match(shell, /Dummy/);
   assert.doesNotMatch(shell, /user-scalable\s*=\s*no|maximum-scale\s*=\s*1/);
   assert.doesNotMatch(shell, /GameCore|selectCard|createRound/);
-  // Vocabulary pronunciation stays prerecorded; dynamic Pip round reports use browser TTS.
-  assert.match(shell, /function speakPopSummary\(text\)/);
+  // Vocabulary and Pip reports both use prerecorded neural speech in Godot.
+  assert.doesNotMatch(shell, /speechSynthesis|SpeechSynthesisUtterance|speakPopSummary/);
 });
 
 test('the Godot command runner waits for the engine and propagates its real failure status', () => {

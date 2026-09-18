@@ -2,11 +2,14 @@ extends Node
 
 signal status_changed(message: String)
 signal word_failed
+signal narration_state_changed(state: String)
 signal _stream_loaded(path: String)
 
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
+var narration: AudioStreamPlayer
+var narration_state: String = "idle"
 var muted: bool = false
 var active: bool = false
 var current_theme: String = ""
@@ -17,6 +20,9 @@ var _loading: Dictionary = {}
 var _playback_requests: Dictionary = {}
 var _music_pending: bool = false
 var _music_error: bool = false
+var _narration_generation: int = 0
+var _narration_streams: Array[AudioStream] = []
+var _narration_index: int = 0
 
 
 func _ready() -> void:
@@ -24,6 +30,8 @@ func _ready() -> void:
 	effect = _player(0.24)
 	voice = _player(0.64)
 	voice.finished.connect(_voice_finished)
+	narration = _player(0.64)
+	narration.finished.connect(_narration_finished)
 	if OS.has_feature("web"):
 		available = bool(JavaScriptBridge.eval("Boolean(window.AudioContext || window.webkitAudioContext)"))
 		var host: JavaScriptObject = JavaScriptBridge.get_interface("wordBuddiesHost")
@@ -71,9 +79,68 @@ func cue(effect_id: String = "", voice_id: String = "") -> void:
 
 
 func say(path: String) -> void:
+	stop_narration()
 	if muted or not active:
 		return
 	_play(voice, path)
+
+
+func narrate(paths: Array[String]) -> void:
+	stop_voice()
+	if muted or not active or not available or paths.is_empty():
+		_set_narration_state("unavailable")
+		return
+	var generation: int = _narration_generation
+	_set_narration_state("loading")
+	var loaded: Array[AudioStream] = []
+	# Prepare the whole page before speaking. A missing word or closing sentence
+	# must not leave Pip delivering only the first half of a report.
+	for path in paths:
+		var stream: AudioStream = await _stream(path)
+		if generation != _narration_generation or not is_inside_tree() or not active or muted or not available:
+			return
+		if stream == null:
+			_set_narration_state("unavailable")
+			status_changed.emit("Pip's voice could not load. Read along or tap Try Pip again.")
+			return
+		loaded.append(stream)
+	_narration_streams = loaded
+	_narration_index = 0
+	_play_narration_clip()
+
+
+func stop_narration() -> void:
+	_narration_generation += 1
+	_narration_streams.clear()
+	_narration_index = 0
+	if narration != null:
+		narration.stop()
+		narration.stream = null
+	_set_narration_state("idle")
+	_update_music_gain()
+
+
+func _play_narration_clip() -> void:
+	if muted or not active or not available or _narration_index >= _narration_streams.size():
+		stop_narration()
+		return
+	narration.stream = _narration_streams[_narration_index]
+	narration.play()
+	_set_narration_state("speaking")
+	_update_music_gain()
+
+
+func _narration_finished() -> void:
+	if narration_state != "speaking" or _narration_streams.is_empty():
+		return
+	_narration_index += 1
+	_play_narration_clip()
+
+
+func _set_narration_state(state: String) -> void:
+	if narration_state != state:
+		narration_state = state
+		narration_state_changed.emit(state)
 
 
 func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
@@ -97,10 +164,10 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 	if player == music:
 		_music_error = false
 		status_changed.emit("")
-		music.volume_db = linear_to_db(0.04 if voice.playing else 0.12)
+		_update_music_gain()
 	player.play()
 	if player == voice:
-		music.volume_db = linear_to_db(0.04)
+		_update_music_gain()
 
 
 func _stream(path: String, loop: bool = false) -> AudioStream:
@@ -111,7 +178,9 @@ func _stream(path: String, loop: bool = false) -> AudioStream:
 			await _stream_loaded
 		if cache.has(path):
 			return cache[path]
-		return await _stream(path, loop)
+		# Every waiter shares this attempt's result. A cancelled request must not
+		# turn a failed shared download into another serialized retry.
+		return null
 	_loading[path] = true
 	var resource: Resource
 	if remote_audio.has(path):
@@ -177,14 +246,22 @@ func _stop(player: AudioStreamPlayer) -> void:
 
 
 func _voice_finished() -> void:
-	if not voice.playing:
-		music.volume_db = linear_to_db(0.12)
+	_update_music_gain()
+
+
+func _update_music_gain() -> void:
+	if music != null:
+		var speaking: bool = (voice != null and voice.playing) or (narration != null and narration.playing)
+		music.volume_db = linear_to_db(0.04 if speaking else 0.12)
 
 
 func set_muted(value: bool) -> void:
+	var was_narrating: bool = narration_state in ["loading", "speaking"]
 	muted = value
 	if muted:
 		halt()
+		if was_narrating:
+			_set_narration_state("unavailable")
 	status_changed.emit("")
 
 
@@ -195,14 +272,20 @@ func stop_music() -> void:
 
 
 func stop_voice() -> void:
+	stop_narration()
 	if voice != null:
 		_stop(voice)
 
 
 func halt() -> void:
 	active = false
+	stop_narration()
 	if music != null:
 		stop_music()
 		_stop(effect)
 		_stop(voice)
 		music.volume_db = linear_to_db(0.12)
+
+
+func _exit_tree() -> void:
+	halt()

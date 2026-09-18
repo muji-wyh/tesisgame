@@ -6,9 +6,11 @@ const { patchWebEngine } = require('./patch-web-engine.cjs');
 
 function collectOptionalAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
+  const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   const sources = [
     ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].map(id => `assets/audio/bgm/${id}.wav`),
-    ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`)
+    ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
+    ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`)
   ];
   return sources.map(source => {
     const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');

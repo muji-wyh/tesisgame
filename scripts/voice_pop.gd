@@ -58,6 +58,8 @@ var _transcript_final: bool = false
 var _report_step: int = 0
 var _report_feedback: String = ""
 var _report_pages: Array[Dictionary] = []
+var _report_prompts: Dictionary = {}
+var _report_audio_state: String = "idle"
 var _bursts: Array[Dictionary] = []
 var _draw_targets: Array[Dictionary] = []
 var _arena: Rect2
@@ -429,6 +431,8 @@ func snapshot() -> Dictionary:
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
 		"transcript": _transcript, "transcript_final": _transcript_final,
 		"report": report_text() if game.phase == "finished" and not _stopped else "", "report_step": _report_step,
+		"report_speaking": _report_audio_state == "speaking", "report_loading": _report_audio_state == "loading",
+		"report_audio": report_audio(),
 		"results_scroll": _results.scroll_vertical,
 		"results_scroll_max": maxf(0.0, _results.get_v_scroll_bar().max_value - _results.get_v_scroll_bar().page),
 		"results_scrollbar_visible": _results.get_v_scroll_bar().is_visible_in_tree()}
@@ -960,28 +964,66 @@ func _ensure_result_control(control: Control) -> void:
 
 
 func _make_report(summary: Dictionary) -> Array[Dictionary]:
+	if _report_prompts.is_empty():
+		var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://pop-voice-prompts.json"))
+		if manifest is Dictionary:
+			_report_prompts = manifest
 	var count: int = int(summary.get("hits", 0))
-	var unique: int = int(summary.get("unique_words", 0))
 	var combo: int = int(summary.get("best_combo", 0))
-	var earned: int = int(summary.get("score", 0))
 	var hits: Array = summary.get("hit_words", [])
 	var missed: Array = summary.get("missed_words", [])
-	var opening: String = "You popped %d %s in 30 seconds and earned %d points!" % [count, "word" if count == 1 else "words", earned]
-	if count == 0:
-		opening += " I'll help you practise."
-	var names: PackedStringArray = []
+	var opening_id: String = "round-%d" % count if count >= 0 and count <= 20 else "round-fallback"
+	var opening: String = _prompt_text(opening_id)
+	if count > 20:
+		# The exact number stays visible; the generic recorded encouragement is
+		# explicitly identified instead of substituting a wrong recorded number.
+		opening = "%d words in 30 seconds.\nPip says: %s" % [count, opening]
+	var opening_audio: Array[String] = [_prompt_path(opening_id)]
+	var highlights_id: String = "no-highlights" if hits.is_empty() else ("highlights-one" if hits.size() == 1 else "highlights-two")
+	var highlights: String = _prompt_text(highlights_id)
+	var highlights_audio: Array[String] = [_prompt_path(highlights_id)]
 	for word in hits.slice(0, 2):
-		names.append(str(word.get("text", "")))
-	var highlights: String = "You said %s! %d different %s, with a best combo of %d." % [" and ".join(names), unique, "word" if unique == 1 else "words", combo]
-	if hits.is_empty():
-		highlights = "No words popped yet. Watch one picture, then say its name while it is on screen."
-	var practice: String = "Watch a picture, say its word, and we'll pop it together. Ready to try?"
+		highlights += " " + str(word.get("text", "")) + "."
+		highlights_audio.append(_word_audio(word))
+	if not hits.is_empty() and combo >= 1 and combo <= 20:
+		var combo_id: String = "combo-%d" % combo
+		highlights += " " + _prompt_text(combo_id)
+		highlights_audio.append(_prompt_path(combo_id))
+	var practice: String = _prompt_text("ready")
+	var practice_audio: Array[String] = [_prompt_path("ready")]
 	if not missed.is_empty():
-		practice = "Let's practise “%s”. Tap its picture below to listen, then say it in your next round!" % str(missed[0].get("text", ""))
+		practice = "%s %s. %s" % [_prompt_text("practice"), str(missed[0].get("text", "")), _prompt_text("practice-next")]
+		practice_audio = [_prompt_path("practice"), _word_audio(missed[0]), _prompt_path("practice-next")]
 	elif not hits.is_empty():
-		practice = "Say “%s” with me again! Tap its picture below to listen. Next time, try a combo of %d." % [str(hits[0].get("text", "")), combo + 1]
-	return [{"title": "Your round", "text": opening}, {"title": "Your highlights", "text": highlights},
-		{"title": "Let's practise", "text": practice}]
+		practice = "%s %s. %s" % [_prompt_text("repeat"), str(hits[0].get("text", "")), _prompt_text("repeat-next")]
+		practice_audio = [_prompt_path("repeat"), _word_audio(hits[0]), _prompt_path("repeat-next")]
+	return [{"title": "Your round", "text": opening, "audio": opening_audio},
+		{"title": "Your highlights", "text": highlights, "audio": highlights_audio},
+		{"title": "Let's practise", "text": practice, "audio": practice_audio}]
+
+
+func _prompt_text(id: String) -> String:
+	return str(_report_prompts.get(id, ""))
+
+
+func _prompt_path(id: String) -> String:
+	return "res://assets/audio/pop/" + id + ".wav"
+
+
+func _word_audio(word: Dictionary) -> String:
+	var path: String = str(word.get("audio", ""))
+	return path if path.begins_with("res://") else "res://" + path
+
+
+func report_audio() -> Array[String]:
+	var paths: Array[String] = []
+	if game.phase != "finished" or _stopped or _report_pages.is_empty():
+		return paths
+	if not _report_feedback.is_empty():
+		paths.append(_prompt_path("high-five"))
+	for path in _report_pages[_report_step].get("audio", []):
+		paths.append(str(path))
+	return paths
 
 
 func report_text() -> String:
@@ -995,6 +1037,8 @@ func _show_report(step: int) -> void:
 		return
 	_report_step = posmod(step, _report_pages.size())
 	_report_feedback = ""
+	_report_audio_state = "idle"
+	set_report_audio_state("idle")
 	_result_heading.text = str(_report_pages[_report_step].title)
 	_pip_caption.text = str(_report_pages[_report_step].text)
 	_report_kicker.text = "PIP'S REPORT · %d / 3" % (_report_step + 1)
@@ -1021,21 +1065,33 @@ func _hear_report() -> void:
 
 
 func report_voice_unavailable() -> void:
-	set_report_speaking(false)
-	_report_kicker.text = "PIP SAYS · READ ALONG"
-	report_button.text = "Read with Pip"
-	_queue_geometry_publish()
+	set_report_audio_state("unavailable")
 
 
 func set_report_speaking(value: bool) -> void:
-	if pip == null or not is_instance_valid(pip):
+	set_report_audio_state("speaking" if value else "idle")
+
+
+func set_report_audio_state(state: String) -> void:
+	var visible_report: bool = game.phase == "finished" and is_visible_in_tree() and not _stopped
+	if not visible_report:
+		state = "idle"
+	# A routine cancellation after a failed request must not immediately erase
+	# Read along. A new page or a fresh loading request clears the failure.
+	if state == "idle" and _report_audio_state == "unavailable" and visible_report:
 		return
-	var speaking_now: bool = value and game.phase == "finished" and is_visible_in_tree() and not _stopped
-	pip.set_speaking(speaking_now)
+	_report_audio_state = state
+	if pip != null and is_instance_valid(pip):
+		pip.set_speaking(state == "speaking")
 	if _report_kicker != null and is_instance_valid(_report_kicker):
-		_report_kicker.text = ("PIP IS SPEAKING" if speaking_now else "PIP'S REPORT") + " · %d / 3" % (_report_step + 1)
+		var caption: String = "PIP'S REPORT"
+		if state == "speaking":
+			caption = "PIP IS SPEAKING"
+		elif state == "loading":
+			caption = "PIP IS LOADING"
+		_report_kicker.text = "PIP SAYS · READ ALONG" if state == "unavailable" else caption + " · %d / 3" % (_report_step + 1)
 	if report_button != null and is_instance_valid(report_button):
-		report_button.text = "Hear again" if speaking_now else "Hear Pip"
+		report_button.text = {"speaking": "Hear again", "loading": "Loading...", "unavailable": "Try Pip again"}.get(state, "Hear Pip")
 	_queue_geometry_publish()
 
 
@@ -1043,8 +1099,8 @@ func _high_five() -> void:
 	if pip == null or not is_instance_valid(pip) or game.phase != "finished":
 		return
 	pip.perform_trick("high-five")
-	_report_feedback = "High five! "
-	_result_heading.text = "High five!"
+	_report_feedback = _prompt_text("high-five") + " "
+	_result_heading.text = _prompt_text("high-five")
 	_message = report_text()
 	_layout()
 	_publish(true)

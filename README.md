@@ -39,9 +39,14 @@ removing words, reducing the collection, or adding image requests during play.
 The maintained HTML shell includes an inline, dependency-free treasure toy: tap it, wiggle
 it sideways, use Enter/Space, or press Xbox A while the game downloads. The chest bounces,
 peeks open, and makes stars, hearts or bubbles; every five taps brings a little star party.
+Chest taps also lead Pip through a dance: left wing, right wing, then alternating
+hip swings. Quick taps form a short, bounded sequence. A quiet original tune is
+synthesized locally after the first interaction; its sound control can mute it.
+Music stops when loading ends or the page hides, and returning never starts it
+without another interaction. Reduced motion keeps clear pose feedback.
 Repeated taps do not show a browser highlight or select the caption, while keyboard focus
 and pinch zoom remain available. It works before the engine script arrives and needs no
-extra images, fonts, audio, or device-motion permission. Effects are capped at 12 particles,
+extra image, font or audio downloads, or device-motion permission. Effects are capped at 12 particles,
 respect reduced motion, and stop when the page is hidden or loading ends. Controller
 polling runs only while a connected controller can use the loading toy.
 Sparkles are temporary loading-screen play, not saved collection rewards.
@@ -182,8 +187,12 @@ Choose My highlights / Coach me to continue, Hear Pip to replay his current
 report, or tap Pip for a high-five. His beak follows actual summary playback.
 Review any word's recorded pronunciation or play another round. The result view
 scrolls by touch, wheel and keyboard focus without showing a scrollbar.
-The optional browser voice reads the same text shown in Pip's speech bubble;
-word pronunciation uses the existing recorded audio.
+Pip uses prerecorded Jenny Neural speech with the same friendly delivery as the
+word recordings. Whole sentences report the actual hit count and best combo;
+the review and coaching pages include words from the completed round. The four
+result tiles retain the exact hits, distinct words, combo and score. New report
+clips download only when needed, without adding to the startup pack. Playback
+does not depend on an installed browser TTS voice or runtime speech credentials.
 
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume

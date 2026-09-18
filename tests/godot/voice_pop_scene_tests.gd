@@ -180,8 +180,12 @@ func _run() -> void:
 		var initial_report: String = str(snapshot.report)
 		check(int(snapshot.report_step) == 0 and initial_report == view._pip_caption.text and initial_report.contains("30"),
 			"Pip starts with a visible report of the actual 30-second round")
-		check(initial_report.contains(str(result.hits)) and initial_report.contains(str(result.score)),
-			"Pip's opening report includes the actual hits and score")
+		check(initial_report.contains(str(result.hits)) and not initial_report.contains("points")
+			and view.report_audio() == ["res://assets/audio/pop/round-%d.wav" % int(result.hits)],
+			"Pip uses the complete recorded hit-count sentence without assembling score fragments")
+		check(view._stats.get_child(3).get_child(0).get_child(0).text == str(result.score)
+			and view._stats.get_child(1).get_child(0).get_child(0).text == str(result.unique_words),
+			"Exact score and distinct words remain visible in their result tiles")
 		var report_requests: Array[String] = []
 		var on_report: Callable = func(text: String) -> void: report_requests.append(text)
 		view.report_requested.connect(on_report)
@@ -191,8 +195,10 @@ func _run() -> void:
 		var highlights: String = str(view.snapshot().report)
 		check(int(view.snapshot().report_step) == 1 and highlights.to_lower().contains(str(word.text).to_lower()),
 			"My highlights names a word the player actually popped")
-		check(highlights.contains(str(result.unique_words)) and highlights.contains(str(result.best_combo)),
-			"The highlights report uses the actual distinct words and best combo")
+		check(highlights.contains("Your best combo was %d" % int(result.best_combo))
+			and view.report_audio().has("res://" + str(word.audio))
+			and view.report_audio().back() == "res://assets/audio/pop/combo-%d.wav" % int(result.best_combo),
+			"Highlights play the actual word and the complete recorded combo sentence")
 		check(report_requests.size() == 2 and report_requests.back() == highlights, "Changing report page also speaks that page")
 		view.next_report_button.pressed.emit()
 		var coaching: String = str(view.snapshot().report)
@@ -208,11 +214,17 @@ func _run() -> void:
 		check(str(view.snapshot().report).contains("High five") and str(view.snapshot().report).contains(initial_report),
 			"Pip's high five adds a reaction while keeping the actual report")
 		check(report_requests.back() == str(view.snapshot().report), "The high five speaks its visible feedback")
+		check(view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
+			"A high five prepends its matching recorded clip")
 		check(view.game.summary() == result, "Report browsing and Pip interaction leave the round result unchanged")
 		view.set_report_speaking(true)
-		check(view.pip.speaking, "Pip's mouth starts only when report speech starts")
+		check(view.pip.speaking and bool(view.snapshot().report_speaking), "Pip's mouth starts only when report speech starts")
 		view.set_report_speaking(false)
-		check(not view.pip.speaking, "Pip's mouth stops when report speech ends or is cancelled")
+		check(not view.pip.speaking and not bool(view.snapshot().report_speaking), "Pip's mouth stops when report speech ends or is cancelled")
+		view.set_report_audio_state("loading")
+		check(bool(view.snapshot().report_loading) and not view.pip.speaking,
+			"Loading never pretends that Pip has started speaking")
+		view.set_report_audio_state("idle")
 		view.report_requested.disconnect(on_report)
 		if dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
 			await check_compact_reports(view, dimensions, "One-hit round")
@@ -242,7 +254,9 @@ func _run() -> void:
 		check(interactive_pip, "Pip is an actual interactive result control")
 		check(not view.default_focus() is Label, "Results provide a usable action for keyboard focus")
 		app.choose_mode("match")
-		check(not view.is_visible_in_tree(), "Leaving results returns to the existing game")
+		check(not view.is_visible_in_tree() and not bool(view.snapshot().report_speaking)
+			and not bool(view.snapshot().report_loading) and view.report_audio().is_empty(),
+			"Leaving results clears report playback state and the exposed audio list")
 		view.set_report_speaking(true)
 		check(not view.pip.speaking, "A late report speech callback cannot animate Pip after leaving results")
 		view.set_process(true)
@@ -259,8 +273,9 @@ func _run() -> void:
 	var empty_report: String = str(app._pop.snapshot().report)
 	check(empty_round.hits == 0 and empty_round.score == 0 and empty_round.hit_words.is_empty(),
 		"The no-hit report fixture completes an actual round without invented results")
-	check(empty_report.contains("0 words") and empty_report.contains("0 points") and empty_report.contains("30"),
-		"Pip accurately reports zero hits and zero points")
+	check(empty_report.contains("0 words") and empty_report.contains("30") and not empty_report.contains("points")
+		and app._pop.report_audio() == ["res://assets/audio/pop/round-0.wav"],
+		"Pip accurately reports a zero-hit round using its complete encouraging recording")
 	check(empty_report.to_lower().contains("practise"), "A no-hit round gives encouraging help")
 	app._pop.next_report_button.pressed.emit()
 	check(str(app._pop.snapshot().report).contains("No words popped"), "Empty highlights do not invent a successful word")
@@ -273,6 +288,21 @@ func _run() -> void:
 		await settle()
 		await check_compact_reports(app._pop, dimensions, "Zero-hit round")
 	check(app._pop.game.summary() == empty_round, "Compact report pages and every-page high fives preserve the zero-hit result")
+	var long_words: Array = app.data.words.duplicate()
+	long_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.text).length() > str(b.text).length())
+	for count in [20, 21]:
+		var long_report: Dictionary = empty_round.duplicate(true)
+		long_report.hits = count
+		long_report.best_combo = count
+		long_report.unique_words = 2
+		long_report.score = 200
+		long_report.hit_words = long_words.slice(0, 2)
+		long_report.missed_words = long_words.slice(2, 3)
+		app._pop._build_results(long_report)
+		for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
+			root.size = dimensions
+			await settle()
+			await check_compact_reports(app._pop, dimensions, "Two long words, %d hits" % count)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

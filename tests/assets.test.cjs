@@ -209,7 +209,8 @@ test('the sixty-word age expansion has its own reproducible original art module'
   assert.deepEqual(Object.keys(art).sort(), expansion.map(word => word.id).sort());
   for (const word of expansion) assertSvgGeometry(art[word.id], word.id);
   for (const word of expansion) {
-    assert.ok(readSvg(word.image).includes(art[word.id]), `${word.id} must match its original art definition`);
+    assert.ok(readSvg(word.image).replace(/\r\n/g, '\n').includes(art[word.id].replace(/\r\n/g, '\n')),
+      `${word.id} must match its original art definition`);
   }
 });
 

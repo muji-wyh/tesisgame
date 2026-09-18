@@ -14,12 +14,27 @@ for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at C
   page.on('pageerror', error => errors.push(error.message));
   await page.addInitScript(() => {
     window.startupTasks = [];
-    new PerformanceObserver(list => {
-      if (document.body?.dataset.engineReady !== 'true') {
-        startupTasks.push(...list.getEntries().map(entry => ({
-          duration: entry.duration, percent: document.getElementById('loading-percent').textContent
-        })));
+    window.startupProgressWrites = [{ at: 0, percent: '' }];
+    window.startupReadyAt = Infinity;
+    new MutationObserver(() => {
+      if (document.body?.dataset.engineReady === 'true' && startupReadyAt === Infinity) startupReadyAt = performance.now();
+    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-engine-ready'] });
+    const textContent = Object.getOwnPropertyDescriptor(Node.prototype, 'textContent');
+    Object.defineProperty(Node.prototype, 'textContent', {
+      ...textContent,
+      set(value) {
+        if (this.id === 'loading-percent') startupProgressWrites.push({ at: performance.now(), percent: String(value) });
+        textContent.set.call(this, value);
       }
+    });
+    new PerformanceObserver(list => {
+      startupTasks.push(...list.getEntries().map(entry => ({
+          start: entry.startTime, duration: entry.duration,
+          // Observer delivery may be delayed across several engine frames.
+          // Attribute each task to the progress actually displayed at its start.
+          percent: startupProgressWrites.findLast(write => write.at <= entry.startTime)?.percent || '',
+          deliveredPercent: document.getElementById('loading-percent').textContent
+      })));
     }).observe({ type: 'longtask', buffered: true });
   });
   const cdp = await page.context().newCDPSession(page);
@@ -34,18 +49,21 @@ for (const cpu of [1, 4]) test(`the real engine bounds loading chest delays at C
   const delays = [];
   while (!ready) {
     const start = Date.now();
-    for (const type of ['mousePressed', 'mouseReleased']) await cdp.send('Input.dispatchMouseEvent', {
+    // Queue a complete quick tap in protocol order before waiting for either
+    // acknowledgement. Waiting between down/up would add two separate stalls.
+    await Promise.all(['mousePressed', 'mouseReleased'].map(type => cdp.send('Input.dispatchMouseEvent', {
       type, x: box.x + box.width / 2, y: box.y + box.height / 2, button: 'left', clickCount: 1
-    });
+    })));
     delays.push(Date.now() - start);
     await new Promise(resolve => setTimeout(resolve, 80));
   }
   await completion;
-  const tasks = await page.evaluate(() => window.startupTasks);
-  await testInfo.attach('startup-responsiveness.json', {
-    body: JSON.stringify({ tasks, delays }), contentType: 'application/json'
-  });
   await page.screenshot({ path: testInfo.outputPath('ready-after-responsive-loading.png'), scale: 'css' });
+  const tasks = await page.evaluate(() => window.startupTasks.filter(task => task.start < window.startupReadyAt));
+  const progressWrites = await page.evaluate(() => window.startupProgressWrites);
+  await testInfo.attach('startup-responsiveness.json', {
+    body: JSON.stringify({ tasks, delays, progressWrites }), contentType: 'application/json'
+  });
   expect(errors).toEqual([]);
   // Godot's core setup is synchronous; bound it separately from the now-yielding game setup.
   expect(Math.max(...tasks.map(task => task.duration)), 'Bound engine setup even on a slower CPU')
@@ -104,6 +122,267 @@ async function progressShell(page, engineScript = `window.Engine = class {
   }));
   await page.goto('/loader-test');
 }
+
+async function observeLoadingAudio(page) {
+  await page.addInitScript(() => {
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    window.loadingAudioProbe = { supported: typeof Audio === 'function', contexts: [], analysers: [], notes: [] };
+    if (!Audio) return;
+    window.AudioContext = new Proxy(Audio, {
+      construct(Type, args) {
+        const context = Reflect.construct(Type, args);
+        const analyser = context.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.connect(context.destination);
+        loadingAudioProbe.contexts.push(context);
+        loadingAudioProbe.analysers.push(analyser);
+        const createGain = context.createGain.bind(context);
+        context.createGain = () => {
+          const gain = createGain();
+          const connect = gain.connect.bind(gain);
+          gain.connect = (destination, ...channels) => connect(destination === context.destination ? analyser : destination, ...channels);
+          return gain;
+        };
+        const createOscillator = context.createOscillator.bind(context);
+        context.createOscillator = () => {
+          const oscillator = createOscillator();
+          const start = oscillator.start.bind(oscillator);
+          oscillator.start = time => {
+            loadingAudioProbe.notes.push({ pitch: oscillator.frequency.value, time, type: oscillator.type });
+            return start(time);
+          };
+          return oscillator;
+        };
+        return context;
+      }
+    });
+  });
+}
+
+test('loading Pip dances five distinct poses from touch, keyboard and controller with a bounded tap queue', async ({ page }, testInfo) => {
+  await installGamepad(page);
+  await page.setViewportSize({ width: 320, height: 568 });
+  await progressShell(page);
+  await page.evaluate(() => {
+    window.loadingDanceFrames = [];
+    const duck = document.getElementById('loading-duck');
+    new MutationObserver(() => loadingDanceFrames.push({ pose: duck.dataset.pose, at: performance.now() }))
+      .observe(duck, { attributes: true, attributeFilter: ['data-pose'] });
+    window.loadingMotionFrames = [];
+    window.recordLoadingMotion = true;
+    function sample() {
+      if (!window.recordLoadingMotion) return;
+      loadingMotionFrames.push({
+        pose: duck.dataset.pose, at: performance.now(),
+        parts: Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'].map(part => {
+          const matrix = new DOMMatrix(getComputedStyle(document.getElementById('loading-pip-' + part)).transform);
+          return [part, { angle: Math.atan2(matrix.b, matrix.a) * 180 / Math.PI, x: matrix.e, y: matrix.f }];
+        }))
+      });
+      requestAnimationFrame(sample);
+    }
+    requestAnimationFrame(sample);
+    window.gamepadFixture.connect();
+  });
+  const toy = page.locator('#loading-toy');
+  const duck = page.locator('#loading-duck');
+  const poses = ['left-wing', 'right-wing', 'hip-left', 'hip-right', 'hip-left'];
+  const frames = [];
+  await page.screenshot({ path: testInfo.outputPath('loading-pip-00-idle.png'), scale: 'css' });
+  for (let index = 0; index < poses.length; index++) {
+    const firstFrame = await page.evaluate(() => loadingMotionFrames.length);
+    if (index === 1 || index === 4) {
+      await toy.focus();
+      await page.keyboard.press(index === 1 ? 'Enter' : 'Space');
+    } else if (index === 2) {
+      await page.evaluate(() => window.gamepadFixture.button(0, true));
+    } else await toy.tap();
+    await page.waitForFunction(({ firstFrame, pose }) => loadingMotionFrames.slice(firstFrame).some(frame => {
+      if (frame.pose !== pose) return false;
+      if (pose === 'left-wing') return frame.parts['left-wing'].angle > 80;
+      if (pose === 'right-wing') return frame.parts['right-wing'].angle < -80;
+      return Math.abs(frame.parts.body.x) > 6;
+    }), { firstFrame, pose: poses[index] });
+    if (index === 2) await page.evaluate(() => window.gamepadFixture.button(0, false));
+    await page.screenshot({ path: testInfo.outputPath(`loading-pip-0${index + 1}-${poses[index]}.png`), scale: 'css' });
+    await expect(duck).toHaveAttribute('data-pose', 'idle');
+    const visibleFrames = await page.evaluate(({ firstFrame, pose }) => loadingMotionFrames.slice(firstFrame)
+      .filter(frame => frame.pose === pose), { firstFrame, pose: poses[index] });
+    const strength = frame => index < 2 ? Math.abs(frame.parts[poses[index]].angle) : Math.abs(frame.parts.body.x);
+    const frame = visibleFrames.reduce((peak, candidate) => strength(candidate) > strength(peak) ? candidate : peak);
+    expect(frame.pose).toBe(poses[index]);
+    if (index === 0) expect(frame.parts['left-wing'].angle).toBeGreaterThan(80);
+    if (index === 1) expect(frame.parts['right-wing'].angle).toBeLessThan(-80);
+    if (index >= 2) expect(Math.sign(frame.parts.body.x)).toBe(index === 3 ? 1 : -1);
+    expect(frame.parts.head.angle * frame.parts.body.angle).toBeLessThan(0);
+    frames.push(frame);
+  }
+  await page.evaluate(() => { window.recordLoadingMotion = false; });
+  expect((await page.evaluate(() => loadingDanceFrames.filter(frame => frame.pose !== 'idle').map(frame => frame.pose))))
+    .toEqual(poses);
+  await page.evaluate(() => {
+    window.rapidDanceFrames = [];
+    window.recordRapidDance = true;
+    function sample() {
+      if (!window.recordRapidDance) return;
+      const matrix = name => new DOMMatrix(getComputedStyle(document.getElementById('loading-pip-' + name)).transform);
+      const left = matrix('left-wing'), right = matrix('right-wing'), body = matrix('body');
+      rapidDanceFrames.push({ at: performance.now(), pose: document.getElementById('loading-duck').dataset.pose,
+        left: Math.atan2(left.b, left.a) * 180 / Math.PI,
+        right: Math.atan2(right.b, right.a) * 180 / Math.PI, hip: body.e });
+      requestAnimationFrame(sample);
+    }
+    requestAnimationFrame(sample);
+  });
+  const tapBounds = await toy.boundingBox();
+  const rapidStarted = await page.evaluate(() => performance.now());
+  const continuousPictures = (async () => {
+    for (let frame = 0; frame < 14; frame++) {
+      await page.screenshot({ path: testInfo.outputPath(`loading-rapid-${String(frame).padStart(2, '0')}.png`), scale: 'css' });
+      await page.waitForTimeout(65);
+    }
+  })();
+  for (let index = 0; index < 5; index++) await page.touchscreen.tap(
+    tapBounds.x + tapBounds.width / 2, tapBounds.y + tapBounds.height / 2);
+  const tapTime = await page.evaluate(start => performance.now() - start, rapidStarted);
+  await continuousPictures;
+  expect(tapTime, 'Five real taps fit inside the requested 480 ms burst').toBeLessThan(480);
+  await expect(duck).toHaveAttribute('data-pose', 'idle');
+  const rapid = await page.evaluate(() => { window.recordRapidDance = false; return rapidDanceFrames; });
+  const groups = [];
+  for (const frame of rapid.filter(frame => frame.pose !== 'idle')) {
+    if (groups.at(-1)?.pose !== frame.pose) groups.push({ pose: frame.pose, frames: [] });
+    groups.at(-1).frames.push(frame);
+  }
+  expect(groups.map(group => group.pose)).toEqual(poses);
+  expect(Math.max(...groups[0].frames.map(frame => frame.left))).toBeGreaterThan(90);
+  expect(Math.min(...groups[1].frames.map(frame => frame.right))).toBeLessThan(-90);
+  expect(Math.min(...groups[2].frames.map(frame => frame.hip))).toBeLessThan(-6);
+  expect(Math.max(...groups[3].frames.map(frame => frame.hip))).toBeGreaterThan(6);
+  expect(Math.min(...groups[4].frames.map(frame => frame.hip))).toBeLessThan(-6);
+  await testInfo.attach('loading-five-tap-480ms.json', {
+    body: JSON.stringify({ tapTime, frames: rapid }, null, 2), contentType: 'application/json'
+  });
+  const started = await page.evaluate(() => {
+    const start = performance.now();
+    for (let index = 0; index < 40; index++) document.getElementById('loading-toy').click();
+    return start;
+  });
+  expect(Number(await duck.getAttribute('data-queued'))).toBeLessThanOrEqual(5);
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(6);
+  await expect(duck).toHaveAttribute('data-pose', 'idle', { timeout: 1800 });
+  expect(await page.evaluate(start => performance.now() - start, started)).toBeLessThan(1800);
+  await expect(duck).toHaveAttribute('data-queued', '0');
+  for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }, { width: 320, height: 320 }, { width: 1366, height: 768 }]) {
+    await page.setViewportSize(viewport);
+    for (const selector of ['#loading-toy', '#loading-duck', '#loading-music', '#progress']) {
+      const box = await page.locator(selector).boundingBox();
+      expect(box.x, selector).toBeGreaterThanOrEqual(0);
+      expect(box.y, selector).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width, selector).toBeLessThanOrEqual(viewport.width);
+      expect(box.y + box.height, selector).toBeLessThanOrEqual(viewport.height);
+      if (selector === '#loading-music') expect(box.height).toBeGreaterThanOrEqual(44);
+    }
+    expect(await page.locator('#status').evaluate(element => element.scrollHeight <= element.clientHeight)).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`loading-dance-layout-${viewport.width}x${viewport.height}.png`), scale: 'css' });
+  }
+  await testInfo.attach('loading-dance-real-clock.json', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+});
+
+test('loading music uses a real quiet audio clock and closes on mute, hide and immediate game readiness', async ({ page }, testInfo) => {
+  await observeLoadingAudio(page);
+  await progressShell(page);
+  const music = page.getByRole('button', { name: 'Loading music', exact: true });
+  const toy = page.locator('#loading-toy');
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await toy.dispatchEvent('click');
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await toy.click();
+  if (!await page.evaluate(() => loadingAudioProbe.supported)) {
+    await expect(music).toHaveAttribute('data-audio-state', 'unavailable');
+    await expect(music).toHaveAttribute('aria-pressed', 'false');
+    await expect(music).toHaveText('♪ No music');
+    await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
+    await page.evaluate(() => window.reportDownload(100, 100));
+    await expect(page.locator('#loading-percent')).toHaveText('98%');
+    await page.evaluate(() => window.wordBuddiesHost.ready());
+    await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
+    expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+    await testInfo.attach('loading-music-capability.json', {
+      body: JSON.stringify({ audioContext: false, verified: 'Explicit unavailable feedback; dance and game readiness remain usable.' }),
+      contentType: 'application/json'
+    });
+    return;
+  }
+  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.evaluate(() => {
+    const samples = new Float32Array(256);
+    loadingAudioProbe.analysers.at(-1).getFloatTimeDomainData(samples);
+    return Math.max(...samples.map(Math.abs));
+  })).toBeGreaterThan(.001);
+  const firstTime = await page.evaluate(() => loadingAudioProbe.contexts[0].currentTime);
+  await page.waitForTimeout(260);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts[0].currentTime)).toBeGreaterThan(firstTime + .12);
+  expect(await page.evaluate(() => new Set(loadingAudioProbe.notes.map(note => note.pitch)).size)).toBeGreaterThan(1);
+  await music.focus();
+  await page.keyboard.press('Enter');
+  await expect(music).toHaveAttribute('aria-pressed', 'false');
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts[0].state)).toBe('closed');
+  const stopped = await page.evaluate(() => loadingAudioProbe.notes.length);
+  await toy.click();
+  await page.waitForTimeout(180);
+  expect(await page.evaluate(() => loadingAudioProbe.notes.length)).toBe(stopped);
+  await music.focus();
+  await page.keyboard.press('Space');
+  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
+  await expect(page.locator('#loading-duck')).toHaveAttribute('data-pose', 'idle');
+  await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
+  const hiddenCount = await page.evaluate(() => loadingAudioProbe.contexts.length);
+  await page.waitForTimeout(180);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(hiddenCount);
+  await expect(music).toHaveAttribute('aria-pressed', 'false');
+  await toy.click();
+  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await page.evaluate(() => window.reportDownload(100, 100));
+  await expect(page.locator('#loading-percent')).toHaveText('98%');
+  const readyAt = await page.evaluate(() => {
+    for (let index = 0; index < 30; index++) document.getElementById('loading-toy').click();
+    const at = performance.now();
+    window.wordBuddiesHost.ready();
+    return at;
+  });
+  await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
+  const elapsed = await page.evaluate(at => performance.now() - at, readyAt);
+  expect(elapsed, 'A queued dance must not delay the ready game').toBeLessThan(700);
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
+  await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
+  await testInfo.attach('loading-music-real-clock.json', {
+    body: JSON.stringify(await page.evaluate(elapsed => ({
+      elapsed, contexts: loadingAudioProbe.contexts.map(context => ({ state: context.state, time: context.currentTime })),
+      notes: loadingAudioProbe.notes
+    }), elapsed), null, 2), contentType: 'application/json'
+  });
+});
+
+for (const ending of ['failure', 'pagehide']) test(`loading dance and music stop on ${ending}`, async ({ page }) => {
+  await observeLoadingAudio(page);
+  await progressShell(page);
+  await page.locator('#loading-toy').click();
+  const supported = await page.evaluate(() => loadingAudioProbe.supported);
+  await expect(page.locator('#loading-music')).toHaveAttribute('data-audio-state', supported ? 'running' : 'unavailable');
+  await page.evaluate(ending => {
+    if (ending === 'failure') window.wordBuddiesHost.fail('The game could not start. Please retry.');
+    else window.dispatchEvent(new Event('pagehide'));
+  }, ending);
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
+  await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
+  expect(await page.locator('#loading-play').evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+});
 
 test('runtime initialization waits until the staged 98 percent has been painted', async ({ page }) => {
   await page.clock.install();
@@ -442,14 +721,14 @@ test('Pip is an inline loading companion with bounded, motion-safe reactions', a
     if (/pip\.svg|PIP_MASCOT_URI/.test(request.url())) imageRequests.push(request.url());
   });
   await whileEngineScriptIsPending(page, async () => {
-    const duck = page.getByRole('button', { name: 'Play with Pip the duck' });
+    const duck = page.getByRole('button', { name: 'Dance with Pip the duck' });
     await expect(duck).toBeVisible();
-    expect(await duck.locator('.duck-sprite').evaluate(element =>
-      getComputedStyle(element).backgroundImage.startsWith('url("data:image/svg+xml;base64,')
-    )).toBe(true);
+    await expect(duck.locator('svg')).toHaveCount(1);
+    await expect(duck.locator('[id^="loading-pip-"]')).toHaveCount(6);
     for (let tap = 0; tap < 8; tap++) await duck.click();
     await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
-    expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(1);
+    expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(6);
+    expect(Number(await duck.getAttribute('data-queued'))).toBeLessThanOrEqual(5);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await duck.click();
     expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
@@ -490,11 +769,12 @@ test('a reveal callback error shows retry instead of leaving the completed loade
 test('every Pip tap gives visible feedback with reduced motion without awarding chest sparkles', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await whileEngineScriptIsPending(page, async toy => {
-    const duck = page.getByRole('button', { name: 'Play with Pip the duck' });
+    const duck = page.getByRole('button', { name: 'Dance with Pip the duck' });
     const hint = page.locator('#loading-hint');
     let previous = await hint.textContent();
     for (let tap = 0; tap < 4; tap++) {
       await duck.click();
+      await expect(duck).toHaveAttribute('data-pose', ['left-wing', 'right-wing', 'hip-left', 'hip-right'][tap]);
       await expect(hint).not.toHaveText(previous, { timeout: 1000 });
       previous = await hint.textContent();
       await expect(hint).toContainText('Pip');

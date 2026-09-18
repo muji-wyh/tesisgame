@@ -322,7 +322,6 @@ var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _pop_result_callback: JavaScriptObject
-var _pop_summary_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -634,6 +633,7 @@ func _build_controls() -> void:
 	audio = Audio.new()
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
+	audio.narration_state_changed.connect(_pop_narration_state)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
 	feedback_timer.wait_time = 0.7
@@ -1634,13 +1634,13 @@ func _start_pop_listening() -> void:
 
 
 func _stop_pop_listening() -> bool:
+	audio.stop_narration()
 	var was_active: bool = _pop_speech_active
 	_pop_speech_active = false
 	if _host != null:
 		if was_active and not bool(_host.stopSpeech()):
 			_pop_speech_active = true
 			return false
-		_host.stopPopSummary()
 	return true
 
 
@@ -1652,10 +1652,11 @@ func _pop_hit(_word: Dictionary) -> void:
 
 
 func _pop_hear(word: Dictionary) -> void:
-	if _mode_id != "pop" or _pop.game.phase != "finished" or _pop_speech_active:
+	if _mode_id != "pop" or _pop.game.phase != "finished" or collection_page.visible or _preview_page.visible:
 		return
-	if _host != null:
-		_host.stopPopSummary()
+	if not _stop_pop_listening():
+		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
+		return
 	_pop.set_report_speaking(false)
 	audio.interact(model.theme_id, false)
 	audio.say("res://" + word.audio)
@@ -1669,16 +1670,20 @@ func _pop_finished(_result: Dictionary) -> void:
 
 
 func _pop_report(text: String) -> void:
-	if _mode_id != "pop" or _pop.game.phase != "finished" or _pop_speech_active or collection_page.visible or _preview_page.visible:
+	if _mode_id != "pop" or _pop.game.phase != "finished" or collection_page.visible or _preview_page.visible:
+		return
+	if not _stop_pop_listening():
+		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
 		return
 	audio.halt()
 	_announce_status("Pip says: " + text)
-	if _host != null:
-		_host.stopPopSummary()
-		if not bool(_host.speakPopSummary(text)):
-			_pop.report_voice_unavailable()
-	else:
-		_pop.report_voice_unavailable()
+	audio.interact(model.theme_id, false)
+	audio.narrate(_pop.report_audio())
+
+
+func _pop_narration_state(state: String) -> void:
+	if _pop != null:
+		_pop.set_report_audio_state(state)
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -3133,6 +3138,8 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 func _audio_status(message: String) -> void:
 	var can_hear: bool = audio.available and not audio.muted
 	_lesson.set_audio_available(can_hear)
+	if not can_hear and _mode_id == "pop" and _pop.game.phase == "finished":
+		_pop.report_voice_unavailable()
 	if _host != null:
 		_host.audioStatus(message)
 
@@ -3189,9 +3196,6 @@ func _connect_browser() -> void:
 		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible and not _preview_page.visible:
 			_pop.receive_transcript(str(arguments[0])))
 	_host.observePopSpeech(_pop_result_callback)
-	_pop_summary_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		_pop.set_report_speaking(bool(arguments[0])))
-	_host.observePopSummary(_pop_summary_callback)
 
 
 func _toggle_voice() -> void:
@@ -3661,8 +3665,8 @@ func _play_duck() -> void:
 	_duck_trick_index += 1
 	if _voice_mode or _pop_speech_active:
 		return
-	if _mode_id == "pop" and _host != null:
-		_host.stopPopSummary()
+	if _mode_id == "pop":
+		audio.stop_narration()
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.cue("select")
 	for word in data.words:
