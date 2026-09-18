@@ -21,7 +21,7 @@ feedback must not delay entry into the game or compromise progress reporting.
 - [x] Loading dance input sequence, bounded rapid taps and audio cleanup.
 - [x] Visual review of poses at desktop, phone and compact landscape sizes.
 - [x] Production export and startup-pack exclusions.
-- [ ] Main integration, deployment and production verification.
+- [x] Main integration, deployment and production verification.
 
 Speech-recognition fixtures avoid using a physical microphone. Narration plays
 the actual shipped recordings in browser checks. Evidence is kept under ignored
@@ -84,3 +84,17 @@ Chromium; no claim of real iPhone audio validation is made.
   the release is even sent. All existing time limits remain unchanged.
   Evidence: `natural-pip-startup-timing-tests.json`,
   `natural-pip-startup-final-tests.json` and retained traces.
+
+## Production acceptance
+
+Runtime commit `0ccc6eb` was fast-forwarded to `main`, pushed to origin and
+deployed to `https://gentle-forest-02ff42900.3.azurestaticapps.net/` using the
+exact tested export (`deploy -- -SkipBuild`). All 55 checked files matched
+local SHA-256 values: HTML, engine JS/WASM, the game pack and all 51 report
+recordings. Evidence: `natural-pip-production-manifest.json`.
+
+Production Chromium passed both real loading/chest interaction and a complete
+Voice Pop report round, including actual prerecorded audio, report navigation,
+high-five, replay, word review and leaving the mode. No browser TTS calls or
+game script errors were observed. Evidence: `natural-pip-production-tests.json`
+and original screenshots under `natural-pip-production/`.
