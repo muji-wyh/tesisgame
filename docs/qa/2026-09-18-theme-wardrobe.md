@@ -67,6 +67,18 @@ Evidence is under `build/pip-outfits` and `build/voice-pop-qa/wardrobe-*`.
 Windows WebKit cannot verify audible output because its AudioContext is absent;
 audio claims come from the desktop/native and asset checks.
 
+## Production acceptance
+
+Runtime commit `6f5a382` was committed, fast-forwarded to main, pushed and deployed
+to the existing Azure Static Web App. Production HTML, JavaScript, WASM, game
+pack and all eight new optional audio resources matched the tested export byte
+for byte. Hashes are recorded in `2026-09-18-theme-wardrobe-production.json`.
+
+Three fresh production Chromium scenarios passed: small-screen Jungle/Candy
+selection and saved reload, the complete 4–6 Jungle gift unlock/play/reload flow,
+and Memory's persistent matched faces through Peek, a mistake and More.
+Production browser evidence is under `build/voice-pop-qa/wardrobe-production`.
+
 ## Reproduction
 
 ```powershell
