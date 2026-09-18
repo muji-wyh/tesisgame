@@ -27,6 +27,8 @@ func _run() -> void:
 	duck.size = Vector2(72, 72)
 	check(duck.pose == 0, "Pip starts with an innocent resting expression")
 	_check_idle_actions(duck)
+	if DisplayServer.get_name() != "headless":
+		await _check_drawn_idle_dances(duck)
 	_check_room_actions(duck)
 	duck.set_speaking(true)
 	check(duck.pose == 1, "Actual speech opens Pip's beak immediately")
@@ -165,16 +167,22 @@ func _check_idle_actions(duck: Button) -> void:
 		return
 	duck.set_proactive_allowed(true)
 	var original_rect: Rect2 = duck.get_rect()
+	var children: int = duck.get_child_count()
+	var stable_bounds := true
 	var gestures: Array[String] = []
-	for step in range(1500):
+	for step in range(1800):
 		duck._process(0.1)
+		stable_bounds = stable_bounds and duck.get_rect() == original_rect and duck.scale == Vector2.ONE \
+			and is_zero_approx(duck.rotation) and duck.get_child_count() == children
 		var action: String = duck._idle_action
 		if not action.is_empty() and (gestures.is_empty() or gestures.back() != action):
 			gestures.append(action)
-	check(gestures.size() >= 7 and ["look", "stretch", "wave", "preen", "hop", "high-five", "peekaboo"].all(
-		func(action: String) -> bool: return gestures.has(action)), "Allowed quiet play keeps the old gestures and adds well-spaced invitations")
-	check(duck.get_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
-		"Autonomous motion never moves or scales the button hit target")
+		if gestures.size() == 14:
+			break
+	check(gestures.size() == 14 and ["look", "stretch", "wave", "preen", "hop", "high-five", "peekaboo",
+		"dance-wave", "dance-sway", "dance-hop"].all(func(action: String) -> bool: return gestures.has(action)),
+		"Fourteen quiet invitations cover the three dances and every existing small gesture")
+	check(stable_bounds, "Autonomous motion preserves the button hit target and creates no effect or audio nodes")
 	duck.set_speaking(true)
 	check(duck._idle_action.is_empty(), "Pronunciation immediately interrupts idle gestures")
 	for step in range(200):
@@ -206,6 +214,118 @@ func _check_idle_actions(duck: Button) -> void:
 	check(duck._idle_action.is_empty() and not duck.is_processing(), "Reduced motion suppresses all autonomous gestures")
 	duck.set_reduced_motion(false)
 	duck.settle()
+
+
+func _capture_dance(viewport: SubViewport, duck: Button) -> Image:
+	duck.set_process(false)
+	await process_frame
+	await RenderingServer.frame_post_draw
+	return viewport.get_texture().get_image()
+
+
+func _major_pixel_difference_ratio(reference: Image, candidate: Image) -> float:
+	if reference.is_empty() or candidate.is_empty() or reference.get_size() != candidate.get_size():
+		return 1.0
+	var reference_rgba: Image = reference.duplicate()
+	var candidate_rgba: Image = candidate.duplicate()
+	reference_rgba.convert(Image.FORMAT_RGBA8)
+	candidate_rgba.convert(Image.FORMAT_RGBA8)
+	var reference_bytes: PackedByteArray = reference_rgba.get_data()
+	var candidate_bytes: PackedByteArray = candidate_rgba.get_data()
+	var changed_pixels := 0
+	for offset in range(0, reference_bytes.size(), 4):
+		for channel in range(4):
+			if absi(int(reference_bytes[offset + channel]) - int(candidate_bytes[offset + channel])) > 60:
+				changed_pixels += 1
+				break
+	return float(changed_pixels) / (reference_bytes.size() / 4.0)
+
+
+func _check_drawn_idle_dances(duck: Button) -> void:
+	var evidence_directory := ProjectSettings.globalize_path("res://build/lively-pip-native")
+	check(DirAccess.make_dir_recursive_absolute(evidence_directory) == OK, "Native dance evidence directory is available")
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(168, 168)
+	viewport.transparent_bg = true
+	viewport.disable_3d = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	var original_position: Vector2 = duck.position
+	var original_size: Vector2 = duck.size
+	var original_processing: bool = duck.is_processing()
+	var original_filter: int = duck.mouse_filter
+	duck.reparent(viewport)
+	duck.position = Vector2(28, 28)
+	duck.size = Vector2(112, 112)
+	duck.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	duck.settle()
+	duck.set_proactive_allowed(true)
+	var resting_image: Image = await _capture_dance(viewport, duck)
+	check(resting_image.save_png(evidence_directory + "/idle.png") == OK, "The original resting mascot is saved for visual comparison")
+	var resting: PackedByteArray = resting_image.get_data()
+	var original_rect: Rect2 = duck.get_rect()
+	var seen: Array[String] = []
+	for invitation in range(14):
+		duck.note_activity()
+		for step in range(200):
+			duck._process(0.05)
+			if not duck._idle_action.is_empty():
+				break
+		var kind: String = duck._idle_action
+		if not kind.begins_with("dance-") or seen.has(kind):
+			continue
+		seen.append(kind)
+		# The first real rendered frame must retain Pip's complete resting shape.
+		# Tolerate small layering/filtering differences, but reject atlas crop/scale errors.
+		var starting_image: Image = await _capture_dance(viewport, duck)
+		var changed_ratio := _major_pixel_difference_ratio(resting_image, starting_image)
+		check(changed_ratio < 0.08,
+			"%s begins with Pip's complete resting proportions (%.2f%% major pixel differences)" % [kind, changed_ratio * 100.0])
+		check(starting_image.save_png(evidence_directory + "/%s-0000ms.png" % kind) == OK,
+			kind + " saves its initial complete silhouette for visual review")
+		var frames: Array[PackedByteArray] = []
+		var lower_frames: Array[PackedByteArray] = []
+		var elapsed := 0.0
+		var bounds_stable := true
+		for at in [0.25, 0.8, 1.3, 1.9, 2.5]:
+			while elapsed + 0.001 < at:
+				duck._process(0.05)
+				elapsed += 0.05
+			var image: Image = await _capture_dance(viewport, duck)
+			check(image.save_png(evidence_directory + "/%s-%04dms.png" % [kind, roundi(at * 1000.0)]) == OK,
+				kind + " saves its actual rendered frame for independent visual review")
+			var pixels: PackedByteArray = image.get_data()
+			var lower: PackedByteArray = image.get_region(Rect2i(28, 92, 112, 48)).get_data()
+			if not frames.has(pixels):
+				frames.append(pixels)
+			if not lower_frames.has(lower):
+				lower_frames.append(lower)
+			bounds_stable = bounds_stable and duck.get_rect() == original_rect \
+				and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation)
+		check(frames.size() >= 3 and not frames.has(resting), kind + " renders several distinct moving poses throughout its phrase")
+		check(lower_frames.size() >= 3, kind + " visibly moves wings, body or feet rather than only blinking")
+		check(bounds_stable, kind + " keeps the input bounds fixed throughout actual rendered motion")
+		duck.note_activity()
+		check((await _capture_dance(viewport, duck)).get_data() == resting,
+			"Meaningful activity removes every " + kind + " layer from the rendered mascot")
+		if seen.size() == 3:
+			break
+	check(seen.size() == 3, "Actual rendered frames cover all three scheduled dances")
+	duck.set_reduced_motion(true)
+	var still: PackedByteArray = (await _capture_dance(viewport, duck)).get_data()
+	for step in range(240):
+		duck._process(0.05)
+	check((await _capture_dance(viewport, duck)).get_data() == still and duck._idle_action.is_empty(),
+		"Reduced motion keeps the actual mascot pixels still beyond the next invitation interval")
+	duck.set_reduced_motion(false)
+	duck.settle()
+	duck.reparent(root)
+	duck.position = original_position
+	duck.size = original_size
+	duck.mouse_filter = original_filter
+	duck.set_process(original_processing)
+	viewport.queue_free()
+	await process_frame
 
 
 func _check_room_actions(duck: Button) -> void:
@@ -308,13 +428,16 @@ func _check_quiet_side_effects(app, directory: String) -> void:
 	app.duck.set_proactive_allowed(true)
 	app.duck.note_activity()
 	var invitations := 0
+	var dances: Array[String] = []
 	var previous := ""
 	for step in range(1000):
 		app.duck._process(0.1)
 		if not app.duck._idle_action.is_empty() and previous.is_empty():
 			invitations += 1
+			if app.duck._idle_action.begins_with("dance-") and not dances.has(app.duck._idle_action):
+				dances.append(app.duck._idle_action)
 		previous = app.duck._idle_action
-	check(invitations >= 5, "The integrated mascot actually performs repeated quiet invitations")
+	check(invitations >= 5 and dances.size() == 3, "The integrated mascot actually performs all three dances among its quiet invitations")
 	check(_quiet_state(app) == state_before and _saved_files(directory) == files_before,
 		"Quiet invitations never alter progress, hints, toy stages, user choices or saved files")
 	check(events.is_empty() and labels.map(func(label: Label) -> String: return label.text) == text_before,

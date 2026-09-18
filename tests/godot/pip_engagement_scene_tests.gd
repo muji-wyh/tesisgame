@@ -54,7 +54,8 @@ func _run() -> void:
 	check(app.duck._proactive_allowed, "Normal play explicitly enables Pip's quiet invitations")
 	var original: Array = [app.model.cards.duplicate(true), app.model.hints_remaining,
 		app.model.successes, app.model.mistakes, app._status_announcement, app.playroom_state.toy_id]
-	check(observe_idle(app, 18), "Pip offers a visible invitation after genuine inactivity")
+	check(not observe_idle(app, 5.5) and observe_idle(app, 3.6)
+		and app.duck._idle_action == "dance-wave", "Pip's first quiet invitation is a dance within 6–9 seconds")
 	check([app.model.cards, app.model.hints_remaining, app.model.successes, app.model.mistakes,
 		app._status_announcement, app.playroom_state.toy_id] == original and not app.audio.voice.playing,
 		"Invitations never change the game, choices, status or audio")
@@ -64,14 +65,14 @@ func _run() -> void:
 	key.keycode = KEY_A
 	key.pressed = true
 	root.push_input(key, true)
-	check(app.duck._idle_action.is_empty() and not observe_idle(app, 11.5),
+	check(app.duck._idle_action.is_empty() and not observe_idle(app, 5.5),
 		"Meaningful keyboard activity preempts an invitation and gives a fresh quiet interval")
 	touch(app, 0, true)
 	touch(app, 1, true)
 	touch(app, 0, false)
 	check(not observe_idle(app, 20), "A second held finger keeps Pip quiet after the first finger lifts")
 	touch(app, 1, false)
-	check(not observe_idle(app, 11.5) and observe_idle(app, 6), "Releasing the final pointer starts a new invitation interval")
+	check(not observe_idle(app, 5.5) and observe_idle(app, 4), "Releasing the final pointer starts a new invitation interval")
 	for phase in ["feedback", "won", "lost"]:
 		app.model.phase = phase
 		check(not observe_idle(app, 20), "Pip does not interrupt " + phase + " with an unsolicited invitation")
@@ -88,6 +89,7 @@ func _run() -> void:
 	check(not observe_idle(app, 20) and not app.duck.visible, "Voice input never competes with proactive Pip")
 	app._voice_mode = false
 	app._update_duck()
+	_test_pop_and_audio_gates(app)
 	app._duck_trick_index = 3
 	app._play_duck()
 	check(app.duck._trick == "high-five", "Header Pip's tap cycle includes a new high five")
@@ -101,13 +103,15 @@ func _run() -> void:
 	check(not observe_idle(app, 20), "Medal browsing stays quiet")
 	app._show_reward_section("room")
 	app.duck.settle()
-	check(observe_idle(app, 18), "Pip can invite play in the room without moving its objects")
+	check(observe_idle(app, 9.5), "Pip can invite play in the room without moving its objects")
 	app._preview_page.show()
 	check(not observe_idle(app, 20), "A reward preview blocks unrelated invitations")
 	app._preview_page.hide()
 	app.on_page_hidden()
 	check(not observe_idle(app, 20), "Page lifecycle keeps the separate idle pause effective")
 	app.on_page_visible()
+	check(not observe_idle(app, 5.5) and observe_idle(app, 4),
+		"Returning to the page starts a fresh quiet interval before Pip dances again")
 	app.set_reduced_motion(true)
 	check(not observe_idle(app, 20), "Reduced motion suppresses unsolicited visual movement")
 	await _test_consumed_touches(app)
@@ -118,6 +122,64 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Pip engagement UI: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _test_pop_and_audio_gates(app) -> void:
+	for state in ["loading", "speaking"]:
+		app.duck._idle_action = "dance-wave"
+		app.duck._idle_left = 2.0
+		app.audio._set_narration_state(state)
+		app._update_duck()
+		check(app.duck._idle_action.is_empty() and not observe_idle(app, 12),
+			"Narration " + state + " interrupts a dance and prevents another invitation")
+		app.audio.stop_narration()
+		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
+			"Stopping narration " + state + " starts a fresh quiet interval")
+	var silence := AudioStreamWAV.new()
+	silence.format = AudioStreamWAV.FORMAT_16_BITS
+	silence.mix_rate = 22050
+	silence.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	silence.loop_end = 2205
+	var samples := PackedByteArray()
+	samples.resize(4410)
+	samples.fill(0)
+	silence.data = samples
+	for player in [app.audio.voice, app.audio.narration]:
+		player.stream = silence
+		player.play()
+		check(player.playing and not observe_idle(app, 12),
+			"A playing voice or narrator blocks invitations independently of the speaking pose")
+		player.stop()
+		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
+			"Finished playback restarts the quiet interval")
+	app.audio.halt()
+	app._mode_id = "pop"
+	app._configure_pop(7)
+	app.duck.settle()
+	check(observe_idle(app, 9.5), "Voice Pop's ready page permits a quiet invitation")
+	app._pop_speech_active = true
+	check(not observe_idle(app, 12), "An outstanding browser microphone request blocks invitations")
+	app._pop_speech_active = false
+	app._pop.set_listening(true, false, "Starting microphone...")
+	check(app._pop._pending and not observe_idle(app, 12), "Opening the microphone keeps Pip quiet before listening starts")
+	app._pop.set_listening(true, true, "Listening...")
+	check(app._pop.game.phase == "running" and not observe_idle(app, 12), "Live Voice Pop listening keeps Pip quiet")
+	app._pop.set_listening(true, false, "Listening paused. Continuing...")
+	check(app._pop._reconnecting and not observe_idle(app, 12), "Automatic microphone reconnection keeps Pip quiet")
+	app._pop.set_listening(true, true, "Listening...")
+	check(app._pop.game.phase == "running" and not observe_idle(app, 12), "Resumed listening still blocks invitations")
+	app._pop.pause()
+	check(app._pop.game.phase == "paused" and not observe_idle(app, 5.5) and observe_idle(app, 4),
+		"A paused Voice Pop round permits invitations only after a new quiet interval")
+	app._pop._listening = true
+	check(not observe_idle(app, 12), "A late listening flag still blocks invitations in a paused round")
+	app._pop._listening = false
+	for phase in ["running", "finished"]:
+		app._pop.game.phase = phase
+		check(not observe_idle(app, 12), "Voice Pop's own " + phase + " phase overrides the idle Match model")
+	app._pop.stop()
+	app._mode_id = "match"
+	app._update_duck()
 
 
 func viewport_touch(index: int, point: Vector2, pressed: bool, canceled: bool = false) -> void:
@@ -147,5 +209,5 @@ func _test_consumed_touches(app) -> void:
 		check(not app._memory.memory.studying and app._proactive_touches.is_empty()
 			and not app._pointer_focus_active,
 			"Consumed touch releases/cancels clear every tracked pointer through real viewport dispatch")
-		check(not observe_idle(app, 11.5) and observe_idle(app, 6),
+		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
 			"Pip resumes only after a fresh quiet interval once both fingers lift")

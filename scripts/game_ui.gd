@@ -3617,9 +3617,17 @@ func _update_duck() -> void:
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
 	var normal_view: bool = not in_preview and (not in_collection or _collection_section == "room")
 	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
-	var quiet_phase: bool = in_collection or active_phase in ["waiting", "matching"]
+	if _mode_id == "pop":
+		active_phase = _pop.game.phase
+	var quiet_phase: bool = in_collection or active_phase in ["waiting", "matching"] \
+		or (_mode_id == "pop" and active_phase in ["ready", "paused"])
+	var microphone_busy: bool = _pop_speech_active or (_mode_id == "pop"
+		and (_pop._listening or _pop._pending or _pop._reconnecting))
+	var voice_busy: bool = audio.voice.playing or audio.narration.playing \
+		or audio.narration_state in ["loading", "speaking"]
 	duck.set_proactive_allowed(visible_here and normal_view and quiet_phase and not _voice_mode
-		and not duck.speaking and not _pointer_focus_active and _proactive_touches.is_empty()
+		and not microphone_busy and not voice_busy and not duck.speaking
+		and not _pointer_focus_active and _proactive_touches.is_empty()
 		and not _collection_dragging and _controller_last_direction == Vector2.ZERO
 		and not _memory.memory.studying and not Input.is_anything_pressed())
 	if not visible_here:

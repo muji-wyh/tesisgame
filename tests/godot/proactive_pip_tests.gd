@@ -1,6 +1,11 @@
 extends SceneTree
 
 const REACTIONS := ["high-five", "peekaboo", "flutter"]
+const DANCES := ["dance-wave", "dance-sway", "dance-hop"]
+const IDLE_SEQUENCE := [
+	"dance-wave", "wave", "dance-sway", "high-five", "dance-hop", "peekaboo",
+	"dance-wave", "look", "dance-sway", "stretch", "dance-hop", "preen", "dance-wave", "hop"
+]
 
 var checks := 0
 var failures := 0
@@ -125,18 +130,30 @@ func _wait_for_invitation(duck) -> float:
 
 
 func _finish_invitation(duck) -> float:
-	for step in range(60):
+	var original_rect: Rect2 = duck.get_global_rect()
+	var children: int = duck.get_child_count()
+	var stable_bounds := true
+	for step in range(80):
 		duck._process(0.05)
+		stable_bounds = stable_bounds and duck.get_global_rect() == original_rect
+		stable_bounds = stable_bounds and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation)
+		stable_bounds = stable_bounds and duck.get_child_count() == children
 		if duck._idle_action.is_empty():
+			check(stable_bounds, "Every invitation frame preserves input bounds and creates no effect/audio nodes")
 			return (step + 1) * 0.05
 	return -1.0
+
+
+func _is_quiet_interval(seconds: float) -> bool:
+	# Allow one 50 ms observation step at the upper boundary.
+	return seconds >= 6.0 and seconds <= 9.05
 
 
 func _start_invitation(duck) -> void:
 	duck.settle()
 	duck.set_proactive_allowed(true)
 	duck.note_activity()
-	check(_wait_for_invitation(duck) >= 12.0, "A fresh invitation waits for genuine inactivity")
+	check(_is_quiet_interval(_wait_for_invitation(duck)), "A fresh invitation waits six to nine quiet seconds")
 
 
 func _check_idle_timing(duck) -> void:
@@ -156,28 +173,34 @@ func _check_idle_timing(duck) -> void:
 		duck.set_idle_paused(false)
 		duck.set_speaking(false)
 		duck.set_reduced_motion(false)
-	check(wait_before >= 12.0 and is_equal_approx(wait_after, wait_before - 2.0)
+	check(wait_before >= 6.0 and wait_before <= 9.0 and is_equal_approx(wait_after, wait_before - 2.0)
 		and is_equal_approx(duck._idle_wait, wait_after),
 		"Unchanged frame-by-frame setters do not restart or advance the idle interval")
 	duck.note_activity()
 	var gestures: Array[String] = []
-	for invitation in range(7):
+	for invitation in range(14):
 		var waited := _wait_for_invitation(duck)
-		check(waited >= 12.0 and waited <= 20.0,
-			"Invitation %d requires at least twelve quiet seconds, including after the previous one ends" % invitation)
+		check(_is_quiet_interval(waited),
+			"Invitation %d starts after six to nine quiet seconds, including after the previous one ends" % invitation)
 		if waited < 0.0:
 			break
-		gestures.append(duck._idle_action)
+		var kind: String = duck._idle_action
+		gestures.append(kind)
 		check(duck._trick.is_empty() and duck._room_reaction.is_empty()
 			and is_zero_approx(duck.reaction_left) and not duck.speaking,
 			"An invitation stays separate from intentional feedback and speaking")
 		var duration := _finish_invitation(duck)
-		check(duration > 0.0 and duration <= 2.5 and duck._idle_wait >= 12.0,
-			"An invitation settles after one short gesture, then starts a fresh cooldown")
-	check(gestures.slice(0, 3) == ["wave", "high-five", "peekaboo"],
-		"The quiet cycle offers a wave, a high five and a peek rather than constant bouncing")
-	check(["look", "stretch", "preen", "hop"].all(func(kind: String) -> bool: return gestures.has(kind)),
-		"The extended quiet cycle retains Pip's existing idle repertoire")
+		var expected_seconds := 3.2 if kind in DANCES else 1.8
+		check(absf(duration - expected_seconds) <= 0.051
+			and duck._idle_wait >= 6.0 and duck._idle_wait <= 9.0,
+			kind + " completes its bounded routine, then starts a fresh six to nine second cooldown")
+	check(gestures == IDLE_SEQUENCE,
+		"Fourteen invitations lead with a dance and alternate all three dances with the seven familiar gestures")
+	check(["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"].all(
+		func(kind: String) -> bool: return gestures.has(kind)),
+		"The extended quiet cycle retains Pip's complete existing idle repertoire")
+	check(DANCES.all(func(kind: String) -> bool: return gestures.has(kind)),
+		"The quiet cycle performs the wave, sway and hop dance routines")
 	check(events.is_empty() and duck.get_child_count() == children,
 		"Idle activity emits no activation and creates no audio, speech or effect nodes")
 	check(duck.get_global_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
@@ -185,7 +208,7 @@ func _check_idle_timing(duck) -> void:
 	duck.pressed.disconnect(record_press)
 	duck.note_activity()
 	duck._process(60.0)
-	check(duck._idle_action.is_empty() and _wait_for_invitation(duck) >= 12.0,
+	check(duck._idle_action.is_empty() and _is_quiet_interval(_wait_for_invitation(duck)),
 		"A delayed engine frame cannot catch up or immediately replay missed invitations")
 	duck.note_activity()
 
@@ -194,8 +217,9 @@ func _check_activity_preemption(duck) -> void:
 	_start_invitation(duck)
 	duck.note_activity()
 	check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left) and duck.pose == 0
-		and duck._idle_wait >= 12.0, "Meaningful activity immediately cancels and settles an invitation")
-	check(_wait_for_invitation(duck) >= 12.0, "Activity restarts a full quiet interval")
+		and duck._idle_wait >= 6.0 and duck._idle_wait <= 9.0,
+		"Meaningful activity immediately cancels and settles an invitation")
+	check(_is_quiet_interval(_wait_for_invitation(duck)), "Activity restarts a full quiet interval")
 	duck.perform_trick("snack")
 	var remaining: float = duck._trick_left
 	duck.note_activity()
@@ -247,7 +271,7 @@ func _check_idle_suppression(duck) -> void:
 			"speaking": duck.set_speaking(false)
 			"reduced": duck.set_reduced_motion(false)
 			"walking": duck.clear_room_interaction()
-		check(_wait_for_invitation(duck) >= 12.0, reason + " resumes with a fresh quiet interval")
+		check(_is_quiet_interval(_wait_for_invitation(duck)), reason + " resumes with a fresh quiet interval")
 	_start_invitation(duck)
 	duck.react("happy")
 	check(duck._idle_action.is_empty() and duck.pose == 3 and duck.reaction_left > 0.0,
@@ -303,17 +327,29 @@ func _check_drawn_invitations(duck) -> void:
 	duck.settle()
 	var resting: PackedByteArray = await _capture(duck)
 	var seen: Array[String] = []
-	for invitation in range(7):
+	for invitation in range(14):
 		_start_invitation(duck)
 		var kind: String = duck._idle_action
-		duck._process(0.31)
+		duck._process(0.25)
 		var pixels: PackedByteArray = await _capture(duck)
-		if kind in ["wave", "high-five", "peekaboo"]:
-			seen.append(kind)
-			check(pixels != resting, kind + " invitation uses real sprite/overlay artwork")
+		if kind in ["wave", "high-five", "peekaboo"] or kind in DANCES:
+			if not seen.has(kind):
+				seen.append(kind)
+			check(not pixels.is_empty() and pixels != resting,
+				kind + " invitation uses real sprite/overlay artwork")
+		if kind in DANCES:
+			var frames: Array[PackedByteArray] = [pixels]
+			for span in [0.55, 0.5, 0.6, 0.6]:
+				_advance(duck, span)
+				var next_frame: PackedByteArray = await _capture(duck)
+				check(duck._idle_action == kind and not next_frame.is_empty()
+					and next_frame != resting and not frames.has(next_frame),
+					kind + " visibly changes throughout its multi-step dance, including beyond a short greeting")
+				frames.append(next_frame)
 		duck.note_activity()
 		check(await _capture(duck) == resting, "Activity removes all unsolicited " + kind + " pixels immediately")
-	check(seen.size() == 3, "Rendered validation covers all three invitation illustrations")
+	check(seen.size() == 6 and DANCES.all(func(kind: String) -> bool: return seen.has(kind)),
+		"Rendered validation covers all three legacy greeting illustrations and all three native dances")
 	duck.set_proactive_allowed(false)
 
 
@@ -478,7 +514,7 @@ func _check_held_room_gestures(duck, playground, slot: Control, toy: Button) -> 
 		playground.cancel()
 		check(not playground.is_processing() and playground._pointer == -1,
 			"Releasing/canceling the " + held + " removes the temporary gesture processing")
-		check(_wait_for_invitation(duck) >= 12.0, "After the " + held + " gesture Pip resumes only after a new quiet interval")
+		check(_is_quiet_interval(_wait_for_invitation(duck)), "After the " + held + " gesture Pip resumes only after a new quiet interval")
 	playground.cancel()
 	duck.note_activity()
 	var waiting: float = duck._idle_wait

@@ -13,6 +13,7 @@ async function clips(page) {
     width: width * bounds.scale, height: height * bounds.scale
   });
   return {
+    pip: rect(pip.x, pip.y - 3 * unit, 56 * unit, 60 * unit),
     // Below the eyes: the existing blink alone must not satisfy this test.
     body: rect(pip.x + 2 * unit, pip.y + 32 * unit, 52 * unit, 22 * unit),
     lesson: rect(content.x, content.top, content.width, bounds.height - content.top)
@@ -95,6 +96,20 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await expectGesture(page, area.body, resting, testInfo, 'pip-autonomous-body-gesture');
+  const danceFrames = [await capture(page, area.body)];
+  // Watch a real idle routine evolve, rather than accepting one changed pose.
+  for (let index = 0; index < 5; index++) {
+    await page.waitForTimeout(220);
+    danceFrames.push(await capture(page, area.body));
+    await testInfo.attach(`pip-dance-step-${index + 1}`, {
+      body: await capture(page, area.pip), contentType: 'image/png'
+    });
+  }
+  let movingSteps = 0;
+  for (let index = 1; index < danceFrames.length; index++) {
+    if (await changedPixels(page, danceFrames[index - 1], danceFrames[index]) > 0.025) movingSteps++;
+  }
+  expect(movingSteps, 'Pip changes its wings and body through multiple dance steps.').toBeGreaterThanOrEqual(3);
   await page.screenshot({ path: testInfo.outputPath('pip-autonomous-learn.png'), scale: 'css' });
   expect(await gameState(page)).toEqual(state);
   expect((await capture(page, area.lesson)).equals(lesson), 'Idle gestures preserve the displayed word, picture and lesson controls.').toBe(true);

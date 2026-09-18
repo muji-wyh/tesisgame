@@ -2,10 +2,13 @@ extends Button
 
 const SHEET = preload("res://assets/images/mascots/pip.svg")
 const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
+const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
 const Style = preload("res://scripts/ui_style.gd")
 const IDLE_ACTIONS := ["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"]
+const IDLE_DANCES := ["dance-wave", "dance-sway", "dance-hop"]
 const IDLE_SECONDS: float = 1.8
-const PROACTIVE_IDLE_SECONDS: float = 12.0
+const DANCE_SECONDS: float = 3.2
+const PROACTIVE_IDLE_SECONDS: float = 6.0
 const TRICK_SECONDS: float = 1.8
 const ROOM_REACTION_SECONDS: float = 1.1
 const SOCIAL_TRICKS := ["high-five", "peekaboo", "flutter"]
@@ -206,7 +209,11 @@ func set_proactive_allowed(value: bool) -> void:
 func _reset_idle() -> void:
 	_idle_action = ""
 	_idle_left = 0.0
-	_idle_wait = _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 4.0)
+	_idle_wait = _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 3.0)
+
+
+func _idle_duration() -> float:
+	return DANCE_SECONDS if _idle_action in IDLE_DANCES else IDLE_SECONDS
 
 
 func _advance_idle(delta: float) -> void:
@@ -223,9 +230,11 @@ func _advance_idle(delta: float) -> void:
 		return
 	_idle_wait -= delta
 	if _idle_wait <= 0.0:
-		_idle_action = IDLE_ACTIONS[_idle_index % IDLE_ACTIONS.size()]
+		# Lead with a dance, then alternate full routines with smaller greetings.
+		var cycle: int = int(_idle_index / 2)
+		_idle_action = IDLE_DANCES[cycle % IDLE_DANCES.size()] if _idle_index % 2 == 0 else IDLE_ACTIONS[cycle % IDLE_ACTIONS.size()]
 		_idle_index += 1
-		_idle_left = IDLE_SECONDS
+		_idle_left = _idle_duration()
 
 
 func _update_pose() -> void:
@@ -292,7 +301,7 @@ func _draw() -> void:
 	var social_action: String = _trick
 	var social_progress: float = trick_progress
 	if not _idle_action.is_empty():
-		var progress: float = 1.0 - _idle_left / IDLE_SECONDS
+		var progress: float = 1.0 - _idle_left / _idle_duration()
 		var envelope: float = sin(progress * PI)
 		if _idle_action in ["high-five", "peekaboo"]:
 			social_action = _idle_action
@@ -367,12 +376,18 @@ func _draw() -> void:
 				if not speaking:
 					sheet = IDLE_SHEET
 					frame = 2
-	var center := origin + Vector2(edge * 0.5, edge * 0.75)
-	draw_set_transform(center + Vector2(0, bounce), turn, stretch)
-	var source_edge: float = sheet.get_height()
-	draw_texture_rect_region(sheet, Rect2(origin - center, Vector2.ONE * edge),
-		Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
-	draw_set_transform(Vector2.ZERO)
+	var dancing: bool = not reduced_motion and not speaking and (_idle_action in IDLE_DANCES or _trick == "dance")
+	if dancing:
+		var routine: String = _idle_action if _idle_action in IDLE_DANCES else "dance-wave"
+		var progress: float = 1.0 - _idle_left / DANCE_SECONDS if _idle_action in IDLE_DANCES else trick_progress
+		_draw_dance(origin, edge, routine, progress)
+	else:
+		var center := origin + Vector2(edge * 0.5, edge * 0.75)
+		draw_set_transform(center + Vector2(0, bounce), turn, stretch)
+		var source_edge: float = sheet.get_height()
+		draw_texture_rect_region(sheet, Rect2(origin - center, Vector2.ONE * edge),
+			Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
+		draw_set_transform(Vector2.ZERO)
 	_draw_room_effects(origin, edge)
 	if not _trick.is_empty():
 		_draw_trick(origin, edge, trick_progress)
@@ -382,6 +397,57 @@ func _draw() -> void:
 		for index in range(2):
 			draw_arc(origin + Vector2(edge * 0.8, edge * 0.55), edge * (0.08 + index * 0.06),
 				-0.75, 0.75, 12, accent, 1.6, true)
+
+
+func _draw_dance(origin: Vector2, edge: float, routine: String, progress: float) -> void:
+	# Art moves within the original button; the hit area never follows a limb.
+	var envelope: float = smoothstep(0.0, 0.12, progress) * (1.0 - smoothstep(0.88, 1.0, progress))
+	var beat: float = sin(progress * TAU * 2.0)
+	var left: float = maxf(0.0, beat) * envelope
+	var right: float = maxf(0.0, -beat) * envelope
+	var hips := Vector2(beat * 3.0, -absf(beat) * 2.0) * envelope
+	var tilt: float = beat * 0.045 * envelope
+	var head_tilt: float = -tilt * 0.7
+	var left_wing: float = left * 1.9
+	var right_wing: float = -right * 1.9
+	var left_step: float = right * 3.0
+	var right_step: float = left * 3.0
+	if routine == "dance-sway":
+		hips = Vector2(beat * 8.0, -absf(beat) * 1.5) * envelope
+		tilt = -beat * 0.09 * envelope
+		head_tilt = beat * 0.08 * envelope
+		left_wing = (0.55 + left * 0.5) * envelope
+		right_wing = -(0.55 + right * 0.5) * envelope
+		left_step = left * 4.0
+		right_step = right * 4.0
+	elif routine == "dance-hop":
+		var hop: float = absf(sin(progress * PI * 3.0)) * envelope
+		hips = Vector2(0, -hop * 6.0)
+		tilt = beat * 0.035 * envelope
+		head_tilt = -tilt
+		left_wing = hop * 1.65
+		right_wing = -left_wing
+		left_step = hop * 2.0
+		right_step = left_step
+	# Ease the small inset in and out, leaving breathing room for raised wings.
+	var unit: float = edge / 120.0 * (1.0 - 0.035 * envelope)
+	var base := origin + Vector2(edge - unit * 120.0, edge - unit * 120.0) * 0.5
+	draw_set_transform(base + Vector2(61, 112) * unit, 0.0, Vector2(39, 5) * unit)
+	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14))
+	_draw_dance_part(4, base, unit, Vector2(40, 103), Vector2(hips.x * 0.3, hips.y - left_step), left * 0.16)
+	_draw_dance_part(5, base, unit, Vector2(80, 103), Vector2(hips.x * 0.3, hips.y - right_step), -right * 0.16)
+	_draw_dance_part(0, base, unit, Vector2(61, 98), hips, tilt)
+	_draw_dance_part(1, base, unit, Vector2(61, 72), Vector2(hips.x * 0.5, hips.y), head_tilt)
+	_draw_dance_part(2, base, unit, Vector2(33, 78), hips, left_wing + tilt)
+	_draw_dance_part(3, base, unit, Vector2(88, 78), hips, right_wing + tilt)
+	draw_set_transform(Vector2.ZERO)
+
+
+func _draw_dance_part(index: int, origin: Vector2, unit: float, joint: Vector2, offset: Vector2, angle: float) -> void:
+	draw_set_transform(origin + (joint + offset) * unit, angle, Vector2.ONE * unit)
+	var source_edge: float = DANCE_SHEET.get_height()
+	draw_texture_rect_region(DANCE_SHEET, Rect2(-joint, Vector2(120, 120)),
+		Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
 
 
 func _draw_room_effects(origin: Vector2, edge: float) -> void:
