@@ -111,7 +111,7 @@ func _run() -> void:
 	app.medal_progress.counts["spring-1"] = 3
 	app.medal_progress.counts["spring-3"] = 3
 	app._show_collection()
-	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 6
+	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 8
 		and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
 		"Removing Words and Rooms preserves Pip, Medals, and every World choice")
 	app._show_reward_section("room")

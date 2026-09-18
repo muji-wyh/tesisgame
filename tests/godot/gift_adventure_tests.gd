@@ -49,7 +49,8 @@ func _exercise(app, directory: String) -> void:
 	var entries := [
 		["spring", "great-outdoors", "flower"], ["summer", "play-time", "ball"],
 		["autumn", "picnic-time", "apple"], ["winter", "music-makers", "bell"],
-		["ocean", "ocean-discovery", "shell"], ["space", "space-trip", "rocket"]]
+		["ocean", "ocean-discovery", "shell"], ["space", "space-trip", "rocket"],
+		["jungle", "animal-friends", "monkey"], ["candy", "picnic-time", "cake"]]
 	var original_counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	var before_words: Array = app.model.lesson_words.duplicate(true)
 	app._start_gift_adventure("toy-space")
@@ -70,7 +71,7 @@ func _exercise(app, directory: String) -> void:
 			check(app.model.lesson_words == lesson, "Gift words remain identical in " + mode)
 	check(app.medal_progress.counts == original_counts and app.playroom_state.toy_id == "toy-ball", "Selecting goals and learning never grant or equip locked gifts")
 	app.choose_theme("spring")
-	check(app._gift_label.text.contains("Space"), "Playing another world still identifies where the goal is earned")
+	check(app._gift_label.text.contains("Candy"), "Playing another world still identifies where the goal is earned")
 	app._show_collection()
 	app._collection_dragged = true
 	var original_goal: String = app.playroom_state.goal_item_id

@@ -579,7 +579,7 @@ test('new adventures rotate and all five review words replay without opening or 
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(`${reviewed[4]}. Look at the picture and say the word.`);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
   // Back restores the found-word focus; deliberately press inside the chest stage.
@@ -620,7 +620,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
+  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
   await greet(104, 308, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   await openMedals(page, true);
@@ -629,7 +629,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await greet(58, 58);
   await page.screenshot({ path: testInfo.outputPath('pip-preview.png'), scale: 'css' });
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
+  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
   await page.keyboard.press('Escape');
   await page.reload();
   await ready(page);
@@ -637,7 +637,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-loss.png'), scale: 'css' });
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('0 of 36 medals complete');
+  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
   expect(errors).toEqual([]);
 });
 
@@ -658,7 +658,7 @@ test('Pip speaks with actual prompt playback, not pending downloads or music', a
   const held = await holdOptionalAudio(page);
   try {
     await page.evaluate(() => window.gamepadFixture.connect());
-    for (let index = 0; index < 6; index++) await pressGamepad(page, 5);
+    for (let index = 0; index < 8; index++) await pressGamepad(page, 5);
     const waiting = await page.screenshot({ clip: beak, scale: 'css' });
     await page.waitForTimeout(300);
     expect((await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(true);
@@ -887,7 +887,7 @@ test('fresh adventures assemble three fragments into a medal and preserve progre
     }
     await pressGamepad(page, 3);
     const completed = Math.floor((round + 1) / 3);
-    await expect(page.locator('#game-status')).toContainText(`My rewards opened. ${completed} of 36 medals complete.`);
+    await expect(page.locator('#game-status')).toContainText(`My rewards opened. ${completed} of 48 medals complete.`);
     await expect(page.locator('#game-status')).toContainText(`Spring ${completed}/6`);
     await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
     await pressGamepad(page, 1);
@@ -901,7 +901,7 @@ test('fresh adventures assemble three fragments into a medal and preserve progre
   await chooseSeason(page, 0);
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 of 36 medals complete. Spring 1/6');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 of 48 medals complete. Spring 1/6');
   await openMedals(page, true);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Ladybug #2 reward preview opened');
@@ -943,7 +943,7 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   await holdControllerChest(page);
   const earned = (await page.locator('#game-status').textContent()).split('\n')[0].replace(/^A new piece!\s*/, '');
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
   await openMedals(page);
   await page.screenshot({ path: testInfo.outputPath('reward-collection.png'), scale: 'css' });
   await rendered(page);
@@ -958,7 +958,7 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   await page.touchscreen.tap(195, 340);
   await expect(page.locator('#game-status')).toContainText('Boing! Tap 1');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
   if (browserName === 'chromium') {
     const client = await page.context().newCDPSession(page);
     try {
@@ -969,7 +969,7 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
         type: 'touchMove', touchPoints: [{ id: 1, x: rewardPoint.x, y: rewardPoint.y - 32 }]
       });
       await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+      await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
       rewardPoint.y -= 32;
     } finally {
       await client.detach();
@@ -979,13 +979,13 @@ test('earned rewards respond to deliberate touch and stay closed after a swipe',
   await expect(page.locator('#game-status')).toContainText('reward preview opened');
   await pressGamepad(page, 12);
   await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toContainText('A new piece!');
   expect(errors).toEqual([]);
 });
 
-for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter', 'Ocean', 'Space'].entries()) {
+for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter', 'Ocean', 'Space', 'Jungle', 'Candy'].entries()) {
   test(`${name} preview play varies reactions and celebrates five taps without extra rewards`, async ({ page }, testInfo) => {
     const errors = watchErrors(page);
     await installGamepad(page);
@@ -1017,7 +1017,7 @@ for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter', 'Ocean', '
     await page.waitForTimeout(250);
     expect((await page.screenshot({ scale: 'css' })).equals(still), 'Reduced-motion play stays visually still.').toBe(true);
     await pressGamepad(page, 1);
-    await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+    await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
     expect(errors).toEqual([]);
   });
 }
@@ -1157,7 +1157,7 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Good try! You kept trying');
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toContainText('Good try!');
   await pressGamepad(page, 13);

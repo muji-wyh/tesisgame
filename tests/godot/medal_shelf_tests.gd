@@ -42,7 +42,7 @@ func _run() -> void:
 	app._show_collection()
 	app._show_reward_section("medals")
 	await settle()
-	check(app._reward_slots.size() == 37, "All active medals and the earned legacy reward remain available")
+	check(app._reward_slots.size() == 49, "All active medals and the earned legacy reward remain available")
 	check(app._reward_slots["spring-1"].label.text.ends_with("\n1/3"), "Partial medals retain their meaningful piece count")
 	check(app._reward_slots["spring-2"].label.text == app._reward_slots["spring-2"].reward.name,
 		"Completed medals do not repeat Complete under every name")

@@ -1,0 +1,190 @@
+{
+  "date": "2026-09-18",
+  "themes": [
+    "jungle",
+    "candy"
+  ],
+  "voiceProvider": "Microsoft Azure Speech",
+  "voiceProfile": {
+    "voice": "en-US-JennyNeural",
+    "style": "friendly",
+    "styleDegree": "1.15",
+    "rate": "-8%",
+    "format": "riff-24khz-16bit-mono-pcm"
+  },
+  "sourceAudioFormat": "WAV PCM16; voice/SFX 22050 Hz mono, BGM 44100 Hz stereo",
+  "musicAndSfx": "Original scores and additive synthesis authored for Word Buddies; no third-party recordings.",
+  "generators": [
+    "tools/generate-voices.cjs",
+    "tools/generate-world-bgm.cjs",
+    "tools/generate-sfx.cjs"
+  ],
+  "preservation": {
+    "existingWavFilesComparedBySha256": 295,
+    "existingWavFilesUnchanged": 295
+  },
+  "files": [
+    {
+      "path": "assets/audio/bgm/jungle.wav",
+      "kind": "bgm",
+      "bytes": 3048236,
+      "sha256": "9ffc6258a6f05c8cc961f9a0f797ff1ed6e696e4853f11f7ab2573ed349ba9bc",
+      "sampleRate": 44100,
+      "channels": 2,
+      "bits": 16,
+      "durationSeconds": 17.28,
+      "peakDbfs": -24.19,
+      "rmsDbfs": -36.01
+    },
+    {
+      "path": "assets/audio/sfx/jungle-arrive.wav",
+      "kind": "sfx",
+      "bytes": 37530,
+      "sha256": "de737a4ca09df63b752e856b7da6a96bc7a9493b41d62a846650108f17da3ae7",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 0.85,
+      "peakDbfs": -15.8,
+      "rmsDbfs": -25.71
+    },
+    {
+      "path": "assets/audio/sfx/jungle-open.wav",
+      "kind": "sfx",
+      "bytes": 63990,
+      "sha256": "aed17473e4c57626b9db2c16ea5025e6f471a8e20af8fb646170c6a35441200d",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 1.45,
+      "peakDbfs": -14.92,
+      "rmsDbfs": -24.52
+    },
+    {
+      "path": "assets/audio/voice/jungle-theme.wav",
+      "kind": "voice",
+      "bytes": 69542,
+      "sha256": "12bb89f8af3fa3949295c3dcda4181e0f2069d825631b6c28baa8e4055950944",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 1.5759,
+      "peakDbfs": -5.78,
+      "rmsDbfs": -20.18,
+      "text": "Welcome to the jungle!",
+      "recognizedText": "Welcome to the jungle.",
+      "recognitionResult": "Exact words; punctuation ignored."
+    },
+    {
+      "path": "assets/audio/voice/jungle-arrive.wav",
+      "kind": "voice",
+      "bytes": 194876,
+      "sha256": "7a1047733eacaffb4a107f380a9c2853fcdbceaf94ff28eff19c6d9fe1d7f47d",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 4.418,
+      "peakDbfs": -5.15,
+      "rmsDbfs": -21.5,
+      "text": "You did it! Tap the jungle chest for a surprise!",
+      "recognizedText": "You did it.Tap the jungle chest for a surprise.",
+      "recognitionResult": "Exact words; punctuation ignored."
+    },
+    {
+      "path": "assets/audio/voice/jungle-open.wav",
+      "kind": "voice",
+      "bytes": 166244,
+      "sha256": "920045f6c2ece2c1f5d8181a0caa6dd2b50ecf078e558e8eceb251c1c5eeb62d",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 3.7687,
+      "peakDbfs": -3.83,
+      "rmsDbfs": -20.46,
+      "text": "A jungle treasure for you! Great job!",
+      "recognizedText": "A jungle treasure for you.Great job.",
+      "recognitionResult": "Exact words; punctuation ignored."
+    },
+    {
+      "path": "assets/audio/bgm/candy.wav",
+      "kind": "bgm",
+      "bytes": 3161140,
+      "sha256": "ec87034d7f45243439986ec35147db2e86d02cca91cc16a92f3d763dfa7a9589",
+      "sampleRate": 44100,
+      "channels": 2,
+      "bits": 16,
+      "durationSeconds": 17.92,
+      "peakDbfs": -24.37,
+      "rmsDbfs": -35.99
+    },
+    {
+      "path": "assets/audio/sfx/candy-arrive.wav",
+      "kind": "sfx",
+      "bytes": 38412,
+      "sha256": "f75c6437187649b337a9ee3cc0696ebe5e493662b8fa7104cf949b82beaf6fda",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 0.87,
+      "peakDbfs": -16.29,
+      "rmsDbfs": -26.77
+    },
+    {
+      "path": "assets/audio/sfx/candy-open.wav",
+      "kind": "sfx",
+      "bytes": 65754,
+      "sha256": "a05a9fe042df9f60425e35a3e6f6ebcd87205b50120a0bbaad7873d29a5ee72d",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 1.49,
+      "peakDbfs": -15.33,
+      "rmsDbfs": -25.51
+    },
+    {
+      "path": "assets/audio/voice/candy-theme.wav",
+      "kind": "voice",
+      "bytes": 78928,
+      "sha256": "6079c232558b2e17c7d67892f76e2bb7af37f63595fa94b8197628f5f49ae008",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 1.7888,
+      "peakDbfs": -6.82,
+      "rmsDbfs": -20.22,
+      "text": "Welcome to candy land!",
+      "recognizedText": "Welcome to Candyland.",
+      "recognitionResult": "Candyland is the recognizer spelling of the spoken candy land; the spoken phrase matches."
+    },
+    {
+      "path": "assets/audio/voice/candy-arrive.wav",
+      "kind": "voice",
+      "bytes": 194832,
+      "sha256": "df047ace300341ed52ca623afc53f284c68b4c89b76f83952cccd82376a029de",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 4.417,
+      "peakDbfs": -5.26,
+      "rmsDbfs": -21.56,
+      "text": "You did it! Tap the candy chest for a surprise!",
+      "recognizedText": "You did it.Tap the candy chest for a surprise.",
+      "recognitionResult": "Exact words; punctuation ignored."
+    },
+    {
+      "path": "assets/audio/voice/candy-open.wav",
+      "kind": "voice",
+      "bytes": 167442,
+      "sha256": "67c33621d7ae803766562699da68ef1c8297585417c9f81beb2f08bdf35c78a3",
+      "sampleRate": 22050,
+      "channels": 1,
+      "bits": 16,
+      "durationSeconds": 3.7959,
+      "peakDbfs": -3.88,
+      "rmsDbfs": -20.71,
+      "text": "A candy treasure for you! Great job!",
+      "recognizedText": "A candy treasure for you.Great job.",
+      "recognitionResult": "Exact words; punctuation ignored."
+    }
+  ]
+}

@@ -210,7 +210,7 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		check(model.phase == "waiting", "Rounds start waiting")
 		check(model.successes == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
-	check(seen_themes.size() == 6, "New rounds can choose each theme")
+	check(seen_themes.size() == 8, "New rounds can choose each theme")
 	for seed_value in range(80, 1000):
 		if seen_words.size() == words.size():
 			break
@@ -469,7 +469,7 @@ func _test_data(words: Array) -> void:
 		duplicate = words.duplicate(true)
 		duplicate[0].image = bad_path
 		check(data_script.validate_words(duplicate) != "", "External/traversal image paths are rejected")
-	for season in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		var theme: Dictionary = data_script.theme(season)
 		check(theme.id == season and theme.prize != "", "Each season has a named reward")
 		check(data_script.has_method("rewards") and data_script.has_method("reward"),
@@ -481,7 +481,7 @@ func _test_data(words: Array) -> void:
 				reward_ids[reward.id] = true
 				check(reward.theme == season and reward.symbol == "res://assets/images/rewards/" + reward.id + ".svg",
 					"Every reward variant has its own SVG")
-			var expected_count: int = 6 if season in ["ocean", "space"] else 10
+			var expected_count: int = 10 if season in ["spring", "summer", "autumn", "winter"] else 6
 			check(rewards.size() == expected_count and reward_ids.size() == expected_count, "Each theme has unique active and archived rewards")
 	check(data_script.reward("missing").is_empty() if data_script.has_method("reward") else false,
 		"Unknown reward variants are rejected")
@@ -604,7 +604,7 @@ func _test_effects() -> void:
 	if effect_view.has_method("_particle_position"):
 		var positions: Array[Vector2] = []
 		var sample := {"kind": 0, "angle": 0.6, "distance": 0.8}
-		for season in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+		for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 			effect_view.start(data_script.theme(season), false)
 			var position: Vector2 = effect_view._particle_position(sample, 1.0, Vector2.ZERO, 200.0)
 			check(not positions.has(position), "Each season has a different particle trajectory")
@@ -623,7 +623,7 @@ func _test_audio() -> void:
 	var notices: Array[String] = []
 	controller.status_changed.connect(func(message: String) -> void: notices.append(message))
 	check(not controller.active and not controller.music.playing, "Audio waits for interaction")
-	for season in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		var track: AudioStreamWAV = load("res://assets/audio/bgm/" + season + ".wav")
 		check(track.mix_rate == 22050, "Mobile background music uses 22.05 kHz: " + season)
 		check(not track.stereo, "Mobile background music uses mono: " + season)
@@ -665,8 +665,8 @@ func _test_reward_preview_play(app) -> void:
 	if not has_property(app, "_preview_tap_count"):
 		return
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
-	var seasons := ["spring", "summer", "autumn", "winter", "ocean", "space"]
-	var shape_names := ["HEART", "STAR", "LEAF", "SNOWFLAKE", "CIRCLE", "STAR"]
+	var seasons := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
+	var shape_names := ["HEART", "STAR", "LEAF", "SNOWFLAKE", "CIRCLE", "STAR", "LEAF", "HEART"]
 	var preview_rewards: Dictionary = saved_rewards.duplicate()
 	for season in seasons:
 		preview_rewards[season + "-1"] = true
@@ -841,7 +841,7 @@ func _test_play_improvements(app) -> void:
 		check(app.model.successes == 1, "Cancelling cosmetic feedback preserves the earned match")
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
 	var data_script: GDScript = load("res://scripts/game_data.gd")
-	for season in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		app.new_round(6)
 		var rewards: Array = data_script.medals(season)
 		var completed: Dictionary = {}
@@ -930,8 +930,8 @@ func _test_scene() -> void:
 		"Mute and Listen controls are removed")
 	check(app.find_child("Motion", true, false) == null,
 		"The FX motion button is removed while OS/browser reduced-motion remains supported")
-	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 6,
-		"All six themes remain available")
+	check(has_property(app, "theme_buttons") and app.theme_buttons.size() == 8,
+		"All eight themes remain available")
 	if has_property(app, "theme_buttons"):
 		check(app.theme_buttons.all(func(button: Button) -> bool:
 			return button.text.is_empty() and button.tooltip_text == button.name and button.get("accessibility_name") == button.name),
@@ -965,7 +965,7 @@ func _test_scene() -> void:
 		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER,
 			"Rewards scrollbars are hidden without disabling touch or wheel scrolling")
-	check(app._reward_slots.size() == 36, "The rewards page contains six medals in each of six themes")
+	check(app._reward_slots.size() == 48, "The rewards page contains six medals in each of eight themes")
 	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	for id in app._reward_slots:
@@ -984,7 +984,7 @@ func _test_scene() -> void:
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"Opening More exposes all six persistent world choices")
+			"Opening More exposes all eight persistent world choices")
 		app._show_reward_section("room")
 		var original_theme: String = app.model.theme_id
 		app.choose_theme("ocean")
@@ -1329,11 +1329,11 @@ func _test_scene() -> void:
 	await process_frame
 	await process_frame
 	check(app.chest_button.has_focus(), "Controller focus moves to the chest after winning")
-	for season in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		app.choose_theme(season)
 		await process_frame
 		check(app.chest.theme_id == season, "Closed chest follows selected season")
-		check(app.chest.piece_count() == (9 if season in ["winter", "ocean"] else 2), "Chest uses real imported artwork")
+		check(app.chest.piece_count() == (9 if season in ["winter", "ocean", "candy"] else 2), "Chest uses real imported artwork")
 	app.choose_theme("spring")
 	joy_axis(JOY_AXIS_LEFT_X, 1.0)
 	await process_frame

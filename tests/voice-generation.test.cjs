@@ -71,14 +71,38 @@ test('the voice profile uses warm neural speech with clear, gently paced words',
   assert.throws(() => speechMarkup('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 200 words and twenty-two prompts from the maintained lists', () => {
+test('voice generation derives exactly 200 words and twenty-eight prompts from the maintained lists', () => {
   const messages = generator().messagesFor(root);
-  assert.equal(messages.length, 222);
-  assert.equal(new Set(messages.map(message => message.id)).size, 222);
+  assert.equal(messages.length, 228);
+  assert.equal(new Set(messages.map(message => message.id)).size, 228);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
   }
+});
+
+test('adding jungle and candy generates only their six missing prompts and preserves existing recordings', async (t) => {
+  const { directory, output, original } = fixture(t);
+  const added = ['jungle', 'candy'].flatMap(id => [`${id}-theme`, `${id}-arrive`, `${id}-open`]);
+  for (const id of added) fs.unlinkSync(path.join(output, `${id}.wav`));
+  const retained = fs.readdirSync(output);
+  const requested = [];
+  const { generateVoices, speechMarkup, assertWave } = generator();
+  const count = await generateVoices({
+    root: directory, key: 'test-key', region: 'eastasia', onlyMissing: true,
+    wait: async () => {},
+    fetchImpl: async (url, options) => {
+      if (url.endsWith('/voices/list')) return Response.json(supportedVoice);
+      requested.push(options.body);
+      for (const id of added) assert.ok(!fs.existsSync(path.join(output, `${id}.wav`)),
+        'New prompts are published only when the whole missing batch succeeds.');
+      return new Response(wave());
+    }
+  });
+  assert.equal(count, 6);
+  assert.deepEqual(requested, added.map(id => speechMarkup(prompts[id])));
+  for (const id of added) assertWave(fs.readFileSync(path.join(output, `${id}.wav`)), 22050);
+  for (const filename of retained) assert.deepEqual(fs.readFileSync(path.join(output, filename)), original);
 });
 
 test('voice generation accepts lowercase words through ten letters without requiring level metadata', (t) => {

@@ -95,6 +95,12 @@ func _particle_position(particle: Dictionary, age: float, center: Vector2, unit:
 			position.y -= age * unit * 0.055
 		"space":
 			position = center + direction.rotated(age * 0.35) * distance * 1.08
+		"jungle":
+			position.x += sin(age * 2.8 + float(particle.angle) * 2.0) * unit * 0.055 * travel
+			position.y += age * age * unit * 0.035
+		"candy":
+			position = center + direction.rotated(sin(age * 2.0) * 0.18) * distance
+			position.y += age * age * unit * 0.045 - absf(sin(age * 3.0)) * unit * 0.045
 	return position
 
 
@@ -111,7 +117,7 @@ func _draw() -> void:
 	_texture("glow", center, Vector2.ONE * unit * (0.8 + burst), Color(light, fade * 0.7 * charge))
 	_texture("ray", center - Vector2(0, size.y * 0.18), Vector2(unit * 0.8, size.y * 1.2),
 		Color(light, fade * burst * 0.45))
-	var ray_count: int = {"spring": 10, "summer": 12, "autumn": 8, "winter": 6, "ocean": 8, "space": 12}[_palette.id]
+	var ray_count: int = {"spring": 10, "summer": 12, "autumn": 8, "winter": 6, "ocean": 8, "space": 12, "jungle": 9, "candy": 10}[_palette.id]
 	var ray_speed: float = 0.3 if _palette.id == "summer" else -0.12
 	for ray in range(ray_count):
 		var angle: float = TAU * float(ray) / float(ray_count) + _elapsed * ray_speed

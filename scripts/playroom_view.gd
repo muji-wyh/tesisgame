@@ -21,7 +21,9 @@ const ACTIONS := {
 	"offer": ["Offer the apple", "Nibble the apple", "Finish the apple"],
 	"ring": ["Ring the bell", "Answer the bell", "Chime the bell"],
 	"open": ["Lift the shell", "Listen to the shell", "Hear the waves"],
-	"launch": ["Ready the rocket", "Ignite the rocket", "Launch the rocket"]
+	"launch": ["Ready the rocket", "Ignite the rocket", "Launch the rocket"],
+	"swing": ["Swing the monkey", "Wave to the monkey", "High-five the monkey"],
+	"decorate": ["Set the cake", "Frost the cake", "Sprinkle the cake"]
 }
 const OUTCOMES := {
 	"water": ["A drink for the flower!", "The flower grows taller!", "The flower blooms for Pip!"],
@@ -29,7 +31,9 @@ const OUTCOMES := {
 	"offer": ["An apple for Pip!", "Pip nibbles the apple. Crunch!", "Pip finishes the apple. Just the core!"],
 	"ring": ["The bell rings. Ding!", "Pip answers the bell. Ding, ding!", "The bell and Pip make a happy chime!"],
 	"open": ["Pip lifts the shell!", "Pip listens to the shell. Shh!", "The shell sounds like ocean waves. Whoosh!"],
-	"launch": ["The rocket is ready on its launch pad!", "The rocket glows. Ready to go!", "The rocket takes off. Whoosh!"]
+	"launch": ["The rocket is ready on its launch pad!", "The rocket glows. Ready to go!", "The rocket takes off. Whoosh!"],
+	"swing": ["The monkey swings through the jungle!", "The monkey waves to Pip!", "Pip and the monkey share a high five!"],
+	"decorate": ["A cake for Pip's party!", "A swirl of frosting on the cake!", "Sprinkles on the cake. Ready to celebrate!"]
 }
 
 class RoomScene extends Control:
@@ -78,6 +82,25 @@ class RoomScene extends Control:
 				var point := Vector2(24 + index * maxf(24, (size.x - 48) / 5), floor_y + 21)
 				draw_line(point, point - Vector2(0, 15), accent.lightened(0.35), 2, true)
 				draw_circle(point - Vector2(0, 17), 5, Color("#edb5bd") if index % 2 == 0 else Color("#f0d077"))
+		elif theme_id == "jungle":
+			for index in range(5):
+				var point := Vector2(25 + index * maxf(30, (size.x - 50) / 4), 39 + index % 2 * 12)
+				var vine := PackedVector2Array([point, point + Vector2(-4, 28), point + Vector2(3, 56 + index % 3 * 12)])
+				draw_polyline(vine, Color("#87b16b"), 3, true)
+				for side in [-1, 1]:
+					var leaf := PackedVector2Array([point + Vector2(0, 20), point + Vector2(side * 9, 6), point + Vector2(side * 23, 4), point + Vector2(side * 20, 21), point + Vector2(side * 9, 27)])
+					draw_colored_polygon(leaf, Color("#9fc77b") if index % 2 == 0 else Color("#b9d893"))
+					draw_line(point + Vector2(0, 20), point + Vector2(side * 19, 9), Color("#679951"), 1.5, true)
+		elif theme_id == "candy":
+			for index in range(3):
+				var point := Vector2(size.x * (0.16 + index * 0.34), 62 + index % 2 * 22)
+				draw_line(point, point + Vector2(0, 61), Color("#dab4c7"), 5, true)
+				draw_circle(point, 20, Color("#f1accd") if index != 1 else Color("#a6dbc9"))
+				draw_arc(point, 14, -PI * 0.5, PI, 22, Color("#fff5fa"), 4, true)
+				draw_arc(point, 7, PI * 0.5, TAU, 16, Color("#fff5fa"), 4, true)
+			for index in range(8):
+				var point := Vector2(20 + fmod(index * 61.0, maxf(20, size.x - 40)), 43 + index % 3 * 35)
+				draw_line(point, point + Vector2(5, -3), Color("#e6bf77"), 3, true)
 		else:
 			var window := Rect2(Vector2(size.x * 0.67 - 32, 38), Vector2(64, 58))
 			draw_style_box(preload("res://scripts/ui_style.gd").box(accent.lightened(0.88), accent.lightened(0.5), 10, 3), window)
@@ -140,15 +163,41 @@ class RoomScene extends Control:
 				for index in range(3):
 					var side := 1 if stage == 1 else -1
 					draw_line(point + Vector2(side * (36 + index * 5), -7 + index * 7), point + Vector2(side * (44 + index * 5), -7 + index * 7), accent.lightened(0.3), 3, true)
+		elif action == "swing":
+			if stage == 1:
+				draw_line(point - Vector2(0, 26), Vector2(point.x - 15, 37), Color("#77a65a"), 3, true)
+			elif stage == 2:
+				for index in range(2):
+					draw_arc(point + Vector2(21, -20), 12 + index * 7, -1.0, 0.3, 12, Color("#dfa842"), 2, true)
+			else:
+				for index in range(5):
+					var ray := Vector2.from_angle(-PI * 0.8 + index * PI * 0.4)
+					draw_line(point + ray * 39, point + ray * 46, Color("#dfa842"), 3, true)
+		elif action == "decorate":
+			draw_arc(point + Vector2(0, 25), 32, 0, PI, 24, Color("#a1cfc6"), 4, true)
+			if stage == 3:
+				for index in range(6):
+					var ray := Vector2.from_angle(-PI + index * PI / 5)
+					draw_line(point + ray * 37, point + ray * 43, Color("#de88b2") if index % 2 == 0 else Color("#6db9a4"), 3, true)
 
 class ToyMarks extends Control:
 	var nibbled: bool = false
+	var cake_stage: int = 0
 	var background: Color
 
 	func _draw() -> void:
 		if nibbled:
 			for offset in [Vector2(26, -10), Vector2(29, 3), Vector2(25, 13)]:
 				draw_circle(size * 0.5 + offset, 10, background)
+		if cake_stage >= 2:
+			var frosting := PackedVector2Array()
+			for index in range(17):
+				frosting.append(size * 0.5 + Vector2(-18 + index * 2.25, -4 + sin(index * PI / 4) * 2))
+			draw_polyline(frosting, Color("#fff5e9"), 5, true)
+		if cake_stage == 3:
+			for index in range(5):
+				var point := size * 0.5 + Vector2(-14 + index * 7, -6 + index % 2 * 3)
+				draw_line(point, point + Vector2(2, 2), Color("#de88b2") if index % 2 == 0 else Color("#6db9a4"), 2, true)
 
 var duck_slot: Control
 var caption: Label
@@ -567,6 +616,7 @@ func _apply_action() -> void:
 	toy_button.rotation = 0
 	toy_button.icon = _toy_art
 	_toy_marks.nibbled = _action == "offer" and _stage == 2
+	_toy_marks.cake_stage = _stage if _action == "decorate" else 0
 	_toy_marks.background = _room.palette.get("background", Color("#edf8ec"))
 	_toy_marks.queue_redraw()
 	var progress := smoothstep(0.0, 1.0, _action_progress)
@@ -594,6 +644,13 @@ func _apply_action() -> void:
 		rotations = [0.0, -0.12, -0.28, 0.1]
 	elif _action == "launch":
 		offsets.append_array([Vector2(0, 4), Vector2(0, -6), Vector2(-16, -54)])
+	elif _action == "swing":
+		offsets.append_array([Vector2(-30, -28), Vector2(10, -16), Vector2(-26, -22)])
+		rotations = [0.0, -0.3, 0.24, -0.08]
+	elif _action == "decorate":
+		offsets.append_array([Vector2(-10, 0), Vector2(-10, -4), Vector2(-10, -8)])
+		var scales := [1.0, 1.0, 1.04, 1.08]
+		toy_button.scale = Vector2.ONE * lerpf(scales[previous], scales[_stage], progress)
 	if offsets.size() == 4:
 		var offset := offsets[previous].lerp(offsets[_stage], progress)
 		if playground._toy_home.x < _room.size.x * 0.5: offset.x *= -1

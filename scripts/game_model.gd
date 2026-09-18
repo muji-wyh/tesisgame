@@ -3,7 +3,7 @@ extends RefCounted
 signal changed
 
 const Data = preload("res://scripts/game_data.gd")
-const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space"]
+const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MAX_HINTS: int = 3
 
 var cards: Array[Dictionary] = []
@@ -40,7 +40,9 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 			if not word is Dictionary or Data.word_level(word) == 0:
 				error = "Word levels must be basic, growing or advanced."
 				return false
-		words = words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= band.max_level)
+		# Gift lessons keep their requested noun; every other word stays within the age band.
+		words = words.filter(func(word: Dictionary) -> bool:
+			return Data.word_level(word) <= band.max_level or (not required_word_id.is_empty() and word.id == required_word_id))
 	var requested_adventure: Dictionary = {}
 	if not requested_adventure_id.is_empty():
 		for adventure in Data.ADVENTURES:

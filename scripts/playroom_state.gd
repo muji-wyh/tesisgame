@@ -8,7 +8,9 @@ const WORLD_TOYS: Array[Dictionary] = [
 	{"theme": "autumn", "word": "apple", "action": "offer", "name": "Autumn apple"},
 	{"theme": "winter", "word": "bell", "action": "ring", "name": "Winter bell"},
 	{"theme": "ocean", "word": "shell", "action": "open", "name": "Ocean shell"},
-	{"theme": "space", "word": "rocket", "action": "launch", "name": "Space rocket"}
+	{"theme": "space", "word": "rocket", "action": "launch", "name": "Space rocket"},
+	{"theme": "jungle", "word": "monkey", "action": "swing", "name": "Jungle monkey"},
+	{"theme": "candy", "word": "cake", "action": "decorate", "name": "Candy cake"}
 ]
 
 var toy_id: String = "toy-ball"

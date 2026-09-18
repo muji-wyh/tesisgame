@@ -34,7 +34,7 @@ test('spacious medal shelves retain mixed progress and compact earlier rewards',
   const errors = await openGame(page, { mode: 'match' });
   await openRewards(page);
   await chooseRewardSection(page, 'medals');
-  await expect(page.locator('#game-status')).toContainText('4 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('4 of 48 medals complete.');
   await expect(page.locator('#game-status')).toContainText('1 earlier rewards.');
   const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.mouse.move(0, 0);

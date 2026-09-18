@@ -1236,7 +1236,8 @@ func _open_reward_preview(id: String) -> void:
 	_preview_sparkle.shape_kind = {
 		"spring": RewardSparkle.Shape.HEART, "summer": RewardSparkle.Shape.STAR,
 		"autumn": RewardSparkle.Shape.LEAF, "winter": RewardSparkle.Shape.SNOWFLAKE,
-		"ocean": RewardSparkle.Shape.CIRCLE, "space": RewardSparkle.Shape.STAR
+		"ocean": RewardSparkle.Shape.CIRCLE, "space": RewardSparkle.Shape.STAR,
+		"jungle": RewardSparkle.Shape.LEAF, "candy": RewardSparkle.Shape.HEART
 	}[reward.theme]
 	_preview_sparkle.particle_count = 8
 	_preview_sparkle.set_progress(0.0)
@@ -1931,7 +1932,7 @@ func _refresh() -> void:
 				action.focus_mode = Control.FOCUS_ALL
 				action.grab_focus()
 	if _host != null:
-		_host.background("#" + palette.background.to_html(false), "#" + palette.accent.to_html(false), "#" + palette.light.to_html(false))
+		_host.background("#" + palette.background.to_html(false), "#" + palette.accent.to_html(false), "#" + palette.light.to_html(false), model.theme_id)
 		_host.roundProgress(model.successes, model.mistakes)
 	if _save_error:
 		_message.text = "Rewards are unavailable. You can keep practising." if playing else "Reward progress: " + medal_progress.error
@@ -2326,7 +2327,10 @@ func _layout_collection() -> void:
 			slot.label.offset_bottom = -4 / scale
 			slot.label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	if is_instance_valid(_world_grid):
-		var inline_worlds: bool = usable_width * scale >= 640
+		var side: int = ceili(52 / scale)
+		var spacing: int = roundi(6 / scale)
+		var world_width: float = side * theme_buttons.size() + spacing * (theme_buttons.size() - 1)
+		var inline_worlds: bool = usable_width >= world_width + tab_width * 2 + ceilf(44 / scale) + gap * 3
 		var parent: Node = _collection_header if inline_worlds else _collection_column
 		if _world_choices.get_parent() != parent:
 			var focused: Control = get_viewport().gui_get_focus_owner()
@@ -2338,9 +2342,7 @@ func _layout_collection() -> void:
 		_world_choices.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		_collection_header_spacer.visible = not inline_worlds
 		_collection_header.custom_minimum_size.y = ceilf((52 if inline_worlds else 44) / scale)
-		var side: int = ceili(52 / scale)
-		var spacing: int = roundi(6 / scale)
-		_world_grid.columns = 6 if usable_width >= side * 6 + spacing * 5 else 3
+		_world_grid.columns = theme_buttons.size() if usable_width >= world_width else maxi(1, mini(4, int((usable_width + spacing) / (side + spacing))))
 		_world_grid.add_theme_constant_override("h_separation", spacing)
 		_world_grid.add_theme_constant_override("v_separation", roundi(4 / scale))
 		_world_save_notice.add_theme_font_size_override("font_size", ceili(13 / scale))
@@ -2358,7 +2360,7 @@ func _layout_collection() -> void:
 					surface.set("content_margin_" + edge, 6 / scale)
 		var fixed_height: float = padding * 2 + _collection_header.custom_minimum_size.y + gap
 		if not inline_worlds:
-			var world_rows: int = 6 / _world_grid.columns
+			var world_rows: int = ceili(float(theme_buttons.size()) / _world_grid.columns)
 			fixed_height += world_rows * side + (world_rows - 1) * roundi(4 / scale) + gap
 		if _world_save_notice.visible:
 			fixed_height += _world_save_notice.get_combined_minimum_size().y
@@ -3468,7 +3470,7 @@ func _start_gift_adventure(id: String) -> void:
 		_room.show_item_error(id, "Not saved\nTap arrow to retry", message)
 		_announce_status(message)
 		return
-	var topics := {"spring": "great-outdoors", "summer": "play-time", "autumn": "picnic-time", "winter": "music-makers", "ocean": "ocean-discovery", "space": "space-trip"}
+	var topics := {"spring": "great-outdoors", "summer": "play-time", "autumn": "picnic-time", "winter": "music-makers", "ocean": "ocean-discovery", "space": "space-trip", "jungle": "animal-friends", "candy": "picnic-time"}
 	_preferred_theme = gift.theme
 	_hide_collection()
 	if not new_round(-1, false, topics[gift.theme], "learn", gift.word_id):
@@ -3613,6 +3615,8 @@ func _update_duck() -> void:
 	var in_preview: bool = _preview_page.visible
 	var in_collection: bool = collection_page.visible
 	var visible_here: bool = in_preview or in_collection or not _voice_mode
+	var outfit_theme: String = str(Data.reward(_preview_reward_id).get("theme", model.theme_id)) if in_preview else model.theme_id
+	duck.set_outfit_theme(outfit_theme)
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
 	var normal_view: bool = not in_preview and (not in_collection or _collection_section == "room")

@@ -1,5 +1,6 @@
 const { expect } = require('@playwright/test');
-const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb'];
+const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
 const MODES = ['match', 'learn', 'memory', 'pop'];
 
 async function metrics(page) {
@@ -109,7 +110,7 @@ async function chooseMode(page, name) {
 }
 
 async function chooseTheme(page, index) {
-  if (!Number.isInteger(index) || index < 0 || index > 5) throw new Error(`Unknown world index: ${index}`);
+  if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
   const world = worldIconRect(await metrics(page), index);
@@ -135,10 +136,12 @@ function collectionBounds(bounds) {
   const usableWidth = Math.min(bounds.width - padding * 2, 960 / scale);
   const x = Math.max(padding, Math.round((bounds.width - 960 / scale) / 2)), width = bounds.width - x * 2;
   const worldSide = Math.ceil(52 / scale), worldGap = Math.round(6 / scale);
-  const inlineWorlds = usableWidth * scale >= 640;
-  const worldColumns = usableWidth >= worldSide * 6 + worldGap * 5 ? 6 : 3;
+  const worldWidth = worldSide * THEME_IDS.length + worldGap * (THEME_IDS.length - 1);
+  const tabWidth = Math.min(80 / scale, (usableWidth - 44 / scale - gap * 3) / 2);
+  const inlineWorlds = usableWidth >= worldWidth + tabWidth * 2 + Math.ceil(44 / scale) + gap * 3;
+  const worldColumns = usableWidth >= worldWidth ? THEME_IDS.length : Math.max(1, Math.min(4, Math.floor((usableWidth + worldGap) / (worldSide + worldGap))));
   const worldRowGap = Math.round(4 / scale);
-  const rows = 6 / worldColumns, worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
+  const rows = Math.ceil(THEME_IDS.length / worldColumns), worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
   const headerHeight = Math.ceil((inlineWorlds ? 52 : 44) / scale);
   const ageTop = padding + headerHeight + gap + (inlineWorlds ? 0 : worldHeight + gap);
   const ageHeight = Math.ceil(48 / scale) + Math.round(4 / scale) + Math.ceil(20 / scale);
@@ -169,7 +172,7 @@ function collectionHeaderRect(bounds, section) {
 }
 
 function worldIconRect(bounds, index) {
-  if (!Number.isInteger(index) || index < 0 || index > 5) throw new Error(`Unknown world index: ${index}`);
+  if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
   const { x, width, padding, gap, inlineWorlds, headerHeight, worldSide: side,
     worldGap: spacing, worldRowGap, worldColumns: columns, worldHeight } = collectionBounds(bounds);
   let rowX = x, rowWidth = width, y = padding + headerHeight + gap;
@@ -244,7 +247,7 @@ function roomPoint(bounds, name, { item = '' } = {}) {
   const shortcut = ['pet', 'poke', 'toss', 'call'].indexOf(name);
   if (shortcut >= 0) return { x: x + width * (shortcut + 0.5) / 4, y: top + 304 + gap + 22 / scale };
   const columns = width * scale >= 720 ? 3 : 2;
-  const index = ['ball', 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].indexOf(name);
+  const index = ['ball', ...THEME_IDS].indexOf(name);
   const cell = (width - (columns - 1) * gap) / columns;
   if (name === 'goal') {
     if (!item) throw new Error('The inline goal control needs its toy card name.');
@@ -269,13 +272,13 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   await chooseRewardSection(page, 'room');
   const controls = ['pip', ...(locked ? [] : ['toy']), 'pet', 'poke', ...(locked ? [] : ['toss']), 'call',
     'action'];
-  for (const toy of ['ball', 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space']) {
+  for (const toy of ['ball', ...THEME_IDS]) {
     controls.push(toy);
     if (toy === active) controls.push('goal');
   }
   if (!controls.includes(name)) throw new Error(`Unavailable room control: ${name}`);
-  // Two tabs lead to Back, six world icons, four age choices, then the room controls.
-  for (let index = 0; index < 13 + controls.indexOf(name); index++) {
+  // Two tabs lead to Back, the world icons, four age choices, then the room controls.
+  for (let index = 0; index < 7 + THEME_IDS.length + controls.indexOf(name); index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
@@ -434,6 +437,6 @@ function resultPoint(bounds, key, { gift = false } = {}) {
     y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_IDS, THEME_COLORS, metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, openGame, boardPoint, lessonPoint,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

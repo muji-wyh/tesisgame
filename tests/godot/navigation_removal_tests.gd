@@ -71,7 +71,7 @@ func _run() -> void:
 	app._show_collection()
 	app._show_reward_section("room")
 	await settle()
-	check(app._room.item_buttons.size() == 7 and app._room.item_buttons.keys().all(
+	check(app._room.item_buttons.size() == 9 and app._room.item_buttons.keys().all(
 		func(id: String) -> bool: return id.begins_with("toy-")), "Rewards offers toys, not hidden backdrop choices")
 	check(app.find_child("RoomCategory_backdrop", true, false) == null and not app._room.has_method("_show_category"),
 		"The Rooms category and its switching route are removed")
@@ -96,7 +96,7 @@ func _run() -> void:
 	for width in [320, 768]:
 		root.size = Vector2i(width, 1024)
 		await settle()
-		check(app._world_grid.columns == (3 if width == 320 else 6), "Theme choices adapt without shrinking their targets")
+		check(app._world_grid.columns == (4 if width == 320 else 8), "Theme choices adapt without shrinking their targets")
 		for index in range(app.theme_buttons.size()):
 			var button: Button = app.theme_buttons[index]
 			var scale: float = app.Style.ui_scale(app)

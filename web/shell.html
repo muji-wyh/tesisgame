@@ -400,7 +400,7 @@
         After a round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh five-word Learn lesson directly. Retry saving appears only if a reward could not be saved.
         More opens Pip's room and Medals. The arrow icon returns to the game.
-        Six larger world icons offer Spring, Summer, Autumn, Winter, Ocean, and Space. Choosing one keeps this page open and preserves your game.
+        Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
         Your next medal and gift progress are in Medals. Your chosen world is remembered as you explore vocabulary topics.
         Medals shows six medals per theme, with three pieces per medal. Winning Match or Memory earns one piece.
         Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy.
@@ -408,7 +408,7 @@
         A locked toy's card shows its progress and an arrow to start or continue a related lesson.
         Choosing a toy card keeps your scroll position. Keyboard focus reveals the full card and its action.
         Toys have three steps you control, with a new result at each step and replay at the end.
-        Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, or launch a rocket. Each toy says its word. Locked gifts show how many pieces you need.
+        Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, launch a rocket, swing a monkey, or decorate a cake. Each toy says its word. Locked gifts show how many pieces you need.
         Open an earned medal and choose Display with Pip to save a favorite alongside your room choices.
         Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
@@ -552,6 +552,22 @@
       const musicButton = document.getElementById('loading-music');
       const danceParts = Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']
         .map(part => [part, document.getElementById('loading-pip-' + part)]));
+      const pipWardrobe = $PIP_WARDROBE_JSON;
+      function setPipTheme(requested) {
+        const theme = Object.hasOwn(pipWardrobe, requested) ? requested : 'spring';
+        if (document.documentElement.dataset.pipTheme === theme) return;
+        const outfit = pipWardrobe[theme];
+        document.documentElement.dataset.pipTheme = theme;
+        document.documentElement.style.setProperty('--pip-art', `url("${outfit.sprite}")`);
+        loadingDuck.dataset.theme = theme;
+        for (const [part, element] of Object.entries(danceParts)) element.innerHTML = outfit.parts[part];
+      }
+      let savedPipTheme = 'spring';
+      try {
+        savedPipTheme = (localStorage.getItem('wordBuddies.playroom') || '')
+          .match(/(?:^|\n)preferred_theme_id="([a-z]+)"/)?.[1] || 'spring';
+      } catch {}
+      setPipTheme(savedPipTheme);
       const downloadStatus = document.getElementById('download-status');
       const loadingEvents = new AbortController();
       const loadingListener = { signal: loadingEvents.signal };
@@ -1449,11 +1465,12 @@
           return JSON.stringify(Object.fromEntries(Object.entries(config.audioAssets || {})
             .map(([path, file]) => [path, new URL(file, document.baseURI).href])));
         },
-        background(color, accent = '#438363', light = '#d7efc7') {
+        background(color, accent = '#438363', light = '#d7efc7', theme = 'spring') {
           document.body.style.backgroundColor = color;
           document.querySelector('meta[name="theme-color"]').content = color;
           container.style.setProperty('--voice-accent', accent);
           container.style.setProperty('--voice-light', light);
+          setPipTheme(theme);
         },
         roundProgress(successes, mistakes) {
           document.getElementById('speech-successes').textContent = `${successes}/3`;

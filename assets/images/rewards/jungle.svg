@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Jungle world</title>
+  <circle cx="60" cy="60" r="55" fill="#edf7df"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+
+  <path d="M23 85 Q6 57 17 27 Q43 43 36 71Z" fill="#9ac56b" stroke="#39744b"/>
+  <path d="M94 85 Q113 57 101 27 Q77 43 84 71Z" fill="#75b677" stroke="#39744b"/>
+  <path d="M24 76 20 42 M26 60 15 51 M28 67 36 55 M94 76 99 42 M95 60 105 51 M93 67 85 55" stroke="#548b4f" stroke-width="2.5"/>
+  <path d="M32 64 Q30 30 56 27 Q82 24 88 64Z" fill="#e7c180" stroke="#795b36"/>
+  <path d="M37 55 Q60 64 84 55 L88 68 Q60 78 31 67Z" fill="#b18c53" stroke="#795b36" stroke-width="2.5"/>
+  <path d="M21 67 Q58 80 96 67 Q109 73 94 83 Q63 97 28 84 Q10 77 21 67Z" fill="#f3d79e" stroke="#795b36"/>
+  <path d="M46 37 Q59 31 69 35" stroke="#fff0c5" stroke-width="5"/>
+  <rect x="59" y="59" width="12" height="11" rx="2" fill="#efc461" stroke="#795b36" stroke-width="2.5"/>
+  <path d="M64 61V68" stroke="#795b36" stroke-width="2"/>
+  </g>
+</svg>

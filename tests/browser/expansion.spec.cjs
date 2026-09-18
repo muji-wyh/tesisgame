@@ -78,7 +78,7 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
   await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true', { timeout: 60000 });
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await openRoom(page);
-  await expect(page.locator('#game-status')).toContainText('18 of 36 medals complete.');
+  await expect(page.locator('#game-status')).toContainText('18 of 48 medals complete.');
   expect(await roomRecord(page)).toContain('favorite="spring-1"');
   await tapRoomControl(page, 'spring');
   await expect(page.locator('#game-status')).toContainText('Water the flower');

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Candy world</title>
+  <circle cx="60" cy="60" r="55" fill="#fff0f7"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 105V54 H40V103 M80 103V54 H102V105" fill="#f5c8da"/>
+  <path d="M15 55 29 28 43 55Z M77 55 91 28 105 55Z" fill="#9bd7c2"/>
+  <path d="M38 103V39 H82V103Z" fill="#f2b1cf"/>
+  <path d="M33 41 60 12 87 41Z" fill="#d696c2"/>
+  <path d="M43 30 71 30 M20 46H38 M82 46H100" stroke="#fff0cf" stroke-width="5"/>
+  <path d="M51 104V84 a9 9 0 0 1 18 0 V104" fill="#aa6d93"/>
+  <path d="M23 69H35 M23 82H35 M85 69H97 M85 82H97" stroke="#fff4e5" stroke-width="5"/>
+  <rect x="52" y="48" width="16" height="20" rx="8" fill="#a5dece" stroke-width="2.5"/>
+  <path d="M60 50V66 M54 58H66" stroke="#fff5e5" stroke-width="2.5"/>
+  <path d="M14 105H106" stroke="#95704f" stroke-width="4"/>
+  <circle cx="29" cy="27" r="4" fill="#e7b95f" stroke-width="2"/>
+  <circle cx="91" cy="27" r="4" fill="#e7b95f" stroke-width="2"/>
+  <circle cx="60" cy="11" r="4" fill="#e7b95f" stroke-width="2"/>
+  </g>
+</svg>

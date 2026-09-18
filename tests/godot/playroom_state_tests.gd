@@ -130,11 +130,11 @@ func _corrupt_load(state) -> bool:
 func _test_catalog() -> void:
 	var state = _script.new()
 	var entries: Array = state.catalog()
-	check(entries.size() == 14, "The catalog contains two starters and twelve world gifts")
+	check(entries.size() == 18, "The catalog contains two starters and sixteen world gifts")
 	var toys: Array = state.toys()
-	check(toys.size() == 7 and toys.all(func(entry: Dictionary) -> bool: return entry.slot == "toy")
+	check(toys.size() == 9 and toys.all(func(entry: Dictionary) -> bool: return entry.slot == "toy")
 		and toys.any(func(entry: Dictionary) -> bool: return entry.id == "toy-ball"),
-		"The active toy catalog contains only the starter ball and six world toys")
+		"The active toy catalog contains only the starter ball and eight world toys")
 	check(toys == entries.filter(func(entry: Dictionary) -> bool: return entry.slot == "toy"),
 		"Filtering active toys preserves canonical metadata while retaining legacy backdrops in the compatibility catalog")
 	var ids: Dictionary = {}
@@ -147,7 +147,7 @@ func _test_catalog() -> void:
 	check(state.owned(state.item("backdrop-home"), {}), "Starter room needs no progress")
 	check(state.item("unknown").is_empty() and not state.owned({}, {}), "Unknown catalog items never unlock")
 	check(state.item("toy-ball").word_id == "ball" and state.item("toy-ball").action == "roll", "The starter ball teaches its matching noun and action")
-	for row in [["spring", "flower", "water"], ["summer", "ball", "roll"], ["autumn", "apple", "offer"], ["winter", "bell", "ring"], ["ocean", "shell", "open"], ["space", "rocket", "launch"]]:
+	for row in [["spring", "flower", "water"], ["summer", "ball", "roll"], ["autumn", "apple", "offer"], ["winter", "bell", "ring"], ["ocean", "shell", "open"], ["space", "rocket", "launch"], ["jungle", "monkey", "swing"], ["candy", "cake", "decorate"]]:
 		var toy: Dictionary = state.item("toy-" + row[0])
 		var backdrop: Dictionary = state.item("backdrop-" + row[0])
 		check(toy.slot == "toy" and toy.word_id == row[1] and toy.action == row[2], "Each world toy has the matching teaching interaction: " + row[0])
@@ -209,7 +209,7 @@ func _test_goals() -> void:
 	check(state.next_gift({"spring-1": 3}, "spring").is_empty(), "A world with its toy earned has no further active gift")
 	check(state.next_gift({}, "unknown").is_empty(), "Unknown world filters produce no gift")
 	var complete: Dictionary = {}
-	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		complete[theme_id + "-1"] = 3
 	var before := complete.duplicate(true)
 	check(state.next_gift(complete).is_empty() and complete == before, "Earning every toy leaves no active gift even when all legacy backdrops are still locked")

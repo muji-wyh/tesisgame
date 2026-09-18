@@ -134,8 +134,8 @@ func _run() -> void:
 	if retry != null:
 		await _tap_control(retry)
 	check(app._progress_ready and not app._save_error, "The visible retry reloads reward progress after storage recovers")
-	check(app.theme_buttons.size() == 6 and app.theme_buttons.all(func(button: Button) -> bool: return is_instance_valid(button)),
-		"Rebuilding recovered rewards replaces rather than duplicates the six world choices")
+	check(app.theme_buttons.size() == 8 and app.theme_buttons.all(func(button: Button) -> bool: return is_instance_valid(button)),
+		"Rebuilding recovered rewards replaces rather than duplicates the eight world choices")
 	check(app._mode_id == "memory" and app._memory.memory.selected_indices == selection, "Retry preserves the active Memory attempt")
 	app.queue_free()
 	await process_frame

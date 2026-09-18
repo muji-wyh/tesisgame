@@ -65,7 +65,7 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 6
+	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 8
 		and app._world_choices.get_parent() == app._collection_header,
 		"Rewards keeps Pip and Medals tabs plus a persistent World strip")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
@@ -75,8 +75,8 @@ func _run() -> void:
 		and is_equal_approx(app._age_choices.global_position.y * css_scale, 72)
 		and app._collection_scroll.global_position.y == app._age_choices.get_global_rect().end.y + ceili(8 / css_scale),
 		"The World strip shares the header, followed directly by age controls and scrolling content")
-	check(app._world_grid.columns == 6 and app._world_grid.get_theme_constant("h_separation") == roundi(6 / css_scale),
-		"Six World icons form one row with six CSS-pixel gaps")
+	check(app._world_grid.columns == 8 and app._world_grid.get_theme_constant("h_separation") == roundi(6 / css_scale),
+		"Eight World icons form one row with six CSS-pixel gaps")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")
 	check(app._collection_back.text.is_empty() and is_equal_approx(app._collection_back.size.x, app._collection_back.size.y),
 		"Rewards has a square Back icon")

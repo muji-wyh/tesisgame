@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, chooseTheme, metrics, memoryPoint, tap, rendered, withMemoryPeek,
+const { THEME_IDS, openGame, chooseTheme, metrics, memoryPoint, tap, rendered, withMemoryPeek,
   visibleColorCount } = require('./game-ui.cjs');
 
 async function discover(page) {
@@ -19,7 +19,7 @@ test('illustrated Memory backs retain their identities through themes and Peek',
   test.setTimeout(150000);
   const errors = await openGame(page, { mode: 'memory' });
   const original = await discover(page);
-  for (const [index, theme] of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].entries()) {
+  for (const [index, theme] of THEME_IDS.entries()) {
     await chooseTheme(page, index);
     await page.mouse.move(0, 0);
     await rendered(page);

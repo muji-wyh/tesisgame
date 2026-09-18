@@ -151,10 +151,10 @@ func _reject_claim(fixture: Dictionary, fragment: Dictionary, message: String) -
 
 func _test_data() -> void:
 	var total: int = 0
-	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space"]:
+	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		var rewards: Array = _data.rewards(theme_id)
 		var medals: Array = _data.medals(theme_id)
-		var expected_rewards: int = 6 if theme_id in ["ocean", "space"] else 10
+		var expected_rewards: int = 10 if theme_id in ["spring", "summer", "autumn", "winter"] else 6
 		check(rewards.size() == expected_rewards, theme_id + " has the expected active and archived reward definitions")
 		check(medals.size() == 6, theme_id + " has exactly six active medals")
 		total += medals.size()
@@ -168,7 +168,7 @@ func _test_data() -> void:
 					check(medals[index] == reward, "Medal order uses stable reward IDs: " + id)
 			else:
 				check(_data.medal(id).is_empty(), "Archived reward is not active: " + id)
-	check(total == 36, "There are exactly 36 active medals")
+	check(total == 48, "There are exactly 48 active medals across eight worlds")
 	check(_data.medals("invalid").is_empty(), "An unknown season has no active medals")
 	for id in ["", "spring-0", "spring-11", "invalid-1"]:
 		check(_data.medal(id).is_empty(), "Invalid medal metadata is empty: " + id)
@@ -247,7 +247,7 @@ func _test_seasons() -> void:
 	check(progress.next_fragment("spring").is_empty(), "A full season has no seventh award")
 	check(progress.error.is_empty(), "A full season is normal, not an error")
 	check(progress.count_for("spring-7") == 0 and not progress.counts.has("spring-7"), "No active seventh medal is created")
-	for theme_id in ["summer", "autumn", "winter", "ocean", "space"]:
+	for theme_id in ["summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		var fragment: Dictionary = progress.next_fragment(theme_id)
 		check(fragment == _fragment(theme_id + "-1", 0), theme_id + " starts independently")
 		check(progress.claim(fragment), theme_id + " receives its own fragment")
@@ -255,7 +255,7 @@ func _test_seasons() -> void:
 		check(progress.completed_count("spring") == 6, "Changing seasons preserves completed spring medals")
 	check(progress.claim(progress.next_fragment("summer")), "The second summer fragment saves")
 	check(progress.claim(progress.next_fragment("summer")), "The third summer fragment saves")
-	check(progress.completed_count() == 7, "Completed counts span all six active themes")
+	check(progress.completed_count() == 7, "Completed counts span all eight active themes")
 	check(progress.count_for("autumn-1") == 1 and progress.count_for("winter-1") == 1, "Partial seasons remain independent")
 	check(progress.completed_count("unknown") == 0, "An unknown completion filter has no medals")
 

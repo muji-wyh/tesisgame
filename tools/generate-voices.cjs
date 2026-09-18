@@ -12,7 +12,7 @@ const PROFILE = Object.freeze({
 });
 const PROMPT_IDS = [
   'welcome', 'correct', 'wrong', 'loss',
-  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].flatMap(season =>
+  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].flatMap(season =>
     [`${season}-theme`, `${season}-arrive`, `${season}-open`])
 ];
 

@@ -110,9 +110,9 @@ func _run() -> void:
 			app._show_collection()
 		app._show_reward_section(section)
 		await settle()
-		check(app.theme_buttons.size() == 6 and app._collection_header.is_ancestor_of(app._world_choices),
+		check(app.theme_buttons.size() == 8 and app._collection_header.is_ancestor_of(app._world_choices),
 			"Wide world choices share the More header from " + section)
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All six worlds remain selectable")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All eight worlds remain selectable")
 		var world_id: String = "ocean" if app.model.theme_id != "ocean" else "space"
 		app._world_grid.get_node(app.Data.theme(world_id).name).pressed.emit()
 		await settle()
@@ -162,7 +162,7 @@ func _run() -> void:
 		app._show_reward_section("room")
 		await settle()
 		check(not app._next_goal.is_visible_in_tree(), "Pip does not repeat the next medal goal")
-		check(app._world_grid.columns == 6, "All six World choices fit one persistent icon row")
+		check(app._world_grid.columns == (4 if dimensions.x == 480 else 8), "World choices use two complete rows on phones and one on wide screens")
 		check(app._world_grid.get_theme_constant("h_separation") == roundi(6 / scale),
 			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")
 		for index in range(app.theme_buttons.size()):

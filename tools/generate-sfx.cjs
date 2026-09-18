@@ -67,6 +67,18 @@ const themes = {
     voice: { timbre: 'winter', gain: 0.12, attack: 0.025, release: 0.31, decay: 1.4 },
     arrive: { step: 0.15, noteDuration: 0.43 },
     open: { step: 0.18, noteDuration: 0.53 }
+  },
+  jungle: {
+    frequencies: [392, 523.25, 587.33, 783.99],
+    voice: { timbre: 'jungle', gain: 0.14, attack: 0.012, release: 0.20, decay: 1.2 },
+    arrive: { step: 0.16, noteDuration: 0.30 },
+    open: { step: 0.17, noteDuration: 0.36 }
+  },
+  candy: {
+    frequencies: [659.25, 830.61, 987.77, 1318.51],
+    voice: { timbre: 'candy', gain: 0.12, attack: 0.012, release: 0.26, decay: 1.5 },
+    arrive: { step: 0.14, noteDuration: 0.38 },
+    open: { step: 0.16, noteDuration: 0.46 }
   }
 };
 
@@ -95,6 +107,15 @@ function tone(note, time) {
         Math.sin(phase) + 0.09 * Math.sin(3 * phase) * Math.exp(-4 * time) +
         0.04 * Math.sin(4 * phase) * Math.exp(-6 * time)
       ) / 1.13;
+    case 'jungle':
+      // A rounded wooden-key attack, with the higher partial fading quickly.
+      return (Math.sin(phase) + 0.22 * Math.sin(4 * phase) * Math.exp(-18 * time)) / 1.22;
+    case 'candy':
+      // Soft toy-piano overtones, kept quieter than the clear fundamental.
+      return (
+        Math.sin(phase) + 0.16 * Math.sin(2 * phase) * Math.exp(-7 * time) +
+        0.07 * Math.sin(5 * phase) * Math.exp(-12 * time)
+      ) / 1.23;
     default:
       throw new Error(`Unknown SFX timbre: ${note.timbre}`);
   }
@@ -153,14 +174,24 @@ function makeWave(sound) {
   return wave;
 }
 
-if (require.main === module) {
-  const outputDirectory = path.join(__dirname, '..', 'assets', 'audio', 'sfx');
-  const outputs = Object.entries(sounds).map(([id, sound]) => [id, makeWave(sound)]);
+function generateSfx({ root = path.resolve(__dirname, '..'), onlyMissing = false } = {}) {
+  const outputDirectory = path.join(root, 'assets', 'audio', 'sfx');
+  const outputs = Object.entries(sounds)
+    .filter(([id]) => !onlyMissing || !fs.existsSync(path.join(outputDirectory, `${id}.wav`)))
+    .map(([id, sound]) => [id, makeWave(sound)]);
   fs.mkdirSync(outputDirectory, { recursive: true });
   for (const [id, wave] of outputs) {
-    fs.writeFileSync(path.join(outputDirectory, `${id}.wav`), wave);
+    const destination = path.join(outputDirectory, `${id}.wav`);
+    if (!fs.existsSync(destination) || !fs.readFileSync(destination).equals(wave)) {
+      fs.writeFileSync(destination, wave);
+    }
   }
-  console.log(`Generated ${outputs.length} original SFX WAVs (22050 Hz, PCM16 mono).`);
+  return outputs.length;
 }
 
-module.exports = { sounds, makeWave };
+if (require.main === module) {
+  const count = generateSfx({ onlyMissing: process.argv.includes('--missing') });
+  console.log(`Generated ${count} original SFX WAVs (22050 Hz, PCM16 mono).`);
+}
+
+module.exports = { sounds, makeWave, generateSfx };

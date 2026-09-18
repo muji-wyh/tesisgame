@@ -42,7 +42,7 @@ test('larger themes stay on the current page and retry saving in place', async (
   await page.setViewportSize({ width: 320, height: 568 });
   await rendered(page);
   const bounds = await metrics(page);
-  for (let index = 0; index < 6; index++) {
+  for (let index = 0; index < 8; index++) {
     rect = worldIconRect(bounds, index);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(52);
     expect((rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(320);

@@ -306,6 +306,7 @@ function generateImages() {
       ]);
     }
   }
+  outputs.push(...require('./reward-art/jungle-candy.cjs').createRewardImages());
   outputs.push(['assets/images/scenes/try-again.svg', makeSvg('A friendly bear waving encouragement', bearArt)]);
 
   for (const [relativePath, svg] of outputs) {

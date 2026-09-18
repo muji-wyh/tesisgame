@@ -80,7 +80,7 @@ func _run() -> void:
 	check(app._medals_duck_slot.get_global_rect().encloses(app.duck.get_global_rect()),
 		"Pip fits the guide slot without covering its text or neighboring artwork")
 	var shelves: Variant = app.get("_collection_shelves")
-	check(shelves is Array and shelves.size() == 6,
+	check(shelves is Array and shelves.size() == 8,
 		"Each world has its own treasure shelf")
 	for slot in app._reward_slots.values():
 		check(slot.picture.get("mystery_egg") == true and slot.picture.texture == null

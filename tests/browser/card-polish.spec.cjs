@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { openGame, openRewards, metrics, rendered, roomControl, collectionBounds,
+const { THEME_IDS, openGame, openRewards, metrics, rendered, roomControl, collectionBounds,
   uiScale, worldIconRect, tap, visibleColorCount, chooseRewardSection } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -18,9 +18,9 @@ test('an equipped starter keeps its Using badge clear of failed-load retry text'
   const errors = await openGame(page, { mode: 'match' });
   await openRewards(page);
   await chooseRewardSection(page, 'room');
-  // Known fresh fixture: 13 header choices, then seven room controls before Ball.
+  // Known fresh fixture: 15 header choices, then seven room controls before Ball.
   // Do not read the deliberately blocked store just to navigate this fixture.
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < 22; index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
@@ -131,7 +131,7 @@ test('Pip and Words distinguishes the equipped toy from a preview and animates w
   await rendered(page);
   expect((await page.screenshot({ clip: strip, scale: 'css' })).equals(still),
     'Reduced motion keeps a repeatedly previewed card visually still.').toBe(true);
-  for (const [index, name] of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space'].entries()) {
+  for (const [index, name] of THEME_IDS.entries()) {
     const rect = worldIconRect(await metrics(page), index);
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await rendered(page);

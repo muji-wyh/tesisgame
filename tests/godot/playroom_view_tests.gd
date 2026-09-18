@@ -51,9 +51,9 @@ func _run() -> void:
 	check(view.toy_button.icon != null and not view.action_button.disabled, "The starter ball is visible and immediately playable")
 	var starter_tint: Color = view.toy_button.self_modulate
 	check(view.action_button.text.to_lower().contains("ball"), "The action names its familiar noun")
-	check(view.item_buttons.size() == 7 and view.item_buttons.size() == state.toys().size()
+	check(view.item_buttons.size() == 9 and view.item_buttons.size() == state.toys().size()
 		and view.item_buttons.keys().all(func(id: String) -> bool: return state.item(id).slot == "toy"),
-		"Pip exposes exactly the starter ball and six world toys, with no hidden backdrop buttons")
+		"Pip exposes exactly the starter ball and eight world toys, with no hidden backdrop buttons")
 	var original_controls: Array = view.item_buttons.values()
 	view.configure(state, counts, data.theme("ocean"), true)
 	check(view.item_buttons.values() == original_controls, "Reconfiguration preserves controls used by focus and scrolling")
@@ -122,7 +122,7 @@ func _run() -> void:
 	check(view.caption.text == caption_before and previews.size() == previews_before and selections.is_empty(),
 		"A legacy backdrop ID cannot open a hidden preview or equipment route")
 	check(view.controls().has(view.item_buttons["toy-spring"]) and view.item_buttons.values().all(func(button: Button) -> bool: return button.visible),
-		"All seven toy choices remain available for host focus and scrolling")
+		"All nine toy choices remain available for host focus and scrolling")
 	check(view.controls().has(view.action_button) and not view.action_button.disabled, "Toy play remains available for host focus wiring")
 	state.backdrop_id = "backdrop-spring"
 	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
@@ -147,8 +147,8 @@ func _run() -> void:
 		for medal in data.medals(theme_id):
 			counts[medal.id] = 3
 	var original_counts := counts.duplicate()
-	var expected := {"spring": ["flower", "water"], "summer": ["ball", "roll"], "autumn": ["apple", "offer"], "winter": ["bell", "ring"], "ocean": ["shell", "open"], "space": ["rocket", "launch"]}
-	var next_actions := {"spring": ["Grow the flower", "Bloom the flower"], "summer": ["Return the ball", "Catch the ball"], "autumn": ["Nibble the apple", "Finish the apple"], "winter": ["Answer the bell", "Chime the bell"], "ocean": ["Listen to the shell", "Hear the waves"], "space": ["Ignite the rocket", "Launch the rocket"]}
+	var expected := {"spring": ["flower", "water"], "summer": ["ball", "roll"], "autumn": ["apple", "offer"], "winter": ["bell", "ring"], "ocean": ["shell", "open"], "space": ["rocket", "launch"], "jungle": ["monkey", "swing"], "candy": ["cake", "decorate"]}
+	var next_actions := {"spring": ["Grow the flower", "Bloom the flower"], "summer": ["Return the ball", "Catch the ball"], "autumn": ["Nibble the apple", "Finish the apple"], "winter": ["Answer the bell", "Chime the bell"], "ocean": ["Listen to the shell", "Hear the waves"], "space": ["Ignite the rocket", "Launch the rocket"], "jungle": ["Wave to the monkey", "High-five the monkey"], "candy": ["Frost the cake", "Sprinkle the cake"]}
 	for theme_id in expected:
 		state.toy_id = "toy-" + theme_id
 		state.backdrop_id = "backdrop-" + theme_id
@@ -207,10 +207,10 @@ func _run() -> void:
 	check(counts == original_counts, "Room interactions never alter medal progress")
 	check(view.goal_button.tooltip_text.begins_with("Use toy") and view.goal_label.text.contains("Spring flower"), "A completed saved goal stays available for later use")
 	view.goal_button.pressed.emit()
-	check(goals.back() == "toy-spring" and state.toy_id == "toy-space", "A completed goal requests the host's persisted equipment path")
+	check(goals.back() == "toy-spring" and state.toy_id == "toy-candy", "A completed goal requests the host's persisted equipment path")
 	view.item_buttons["toy-autumn"].pressed.emit()
 	check(selections == ["toy-autumn"], "An owned selector asks the parent to persist the choice")
-	check(state.toy_id == "toy-space", "The view does not report an uncommitted selection as saved")
+	check(state.toy_id == "toy-candy", "The view does not report an uncommitted selection as saved")
 	state.toy_id = "toy-spring"
 	view.configure(state, {}, data.theme("spring"), true)
 	check(view.action_button.text.to_lower().contains("ball"), "A saved item without earned ownership renders the starter fallback")
@@ -337,5 +337,5 @@ func _capture() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://build/visuals/playroom-narrow-apple-stage-%d.png" % (stage + 1))
 		_check_room_text(view, "captured narrow apple stage %d" % (stage + 1))
-	print("Captured all six toy sequences and three gift-goal states.")
+	print("Captured all eight toy sequences and three gift-goal states.")
 	_finish()

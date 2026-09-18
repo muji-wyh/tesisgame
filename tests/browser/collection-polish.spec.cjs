@@ -32,7 +32,7 @@ test('playful Medals keeps Pip interactive and earned progress intact', async ({
   await openRewards(page);
   await chooseRewardSection(page, 'medals');
   const status = page.locator('#game-status');
-  await expect(status).toContainText('1 of 36 medals complete.');
+  await expect(status).toContainText('1 of 48 medals complete.');
   const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.mouse.move(0, 0);
   await rendered(page);

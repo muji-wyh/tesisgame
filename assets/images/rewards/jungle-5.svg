@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Jungle: Bamboo</title>
+  <circle cx="60" cy="60" r="55" fill="#edf7df"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#9ac56b" stroke="#39744b" stroke-width="3"/>
+    <circle cx="60" cy="60" r="42" fill="#edf7df" stroke="#ebbe68" stroke-width="2.5"/>
+    <path d="M15 42 Q7 61 17 78 M105 42 Q113 61 103 78" stroke="#39744b" stroke-width="3"/>
+    <path d="M13 52 8 44 M13 63 7 59 M15 73 9 73 M107 52 112 44 M107 63 113 59 M105 73 111 73" stroke="#39744b" stroke-width="3"/>
+    <g transform="translate(18 16) scale(.7)">
+    <path d="M31 107 35 19H47L43 107Z M55 107 56 11H69L68 107Z M80 107 76 31H88L94 107Z" fill="#91bd7e"/>
+    <path d="M35 36H46 M33 61H45 M32 86H44 M56 31H69 M55 58H69 M55 85H69 M77 54H90 M79 80H92" stroke="#699a65" stroke-width="3"/>
+    <path d="M37 62 22 40 M64 51 93 23 M86 80 103 60" stroke="#699a65" stroke-width="2.5"/>
+    <path d="M28 48Q11 49 10 32Q23 32 28 48Z M31 52Q25 31 34 24Q43 38 31 52Z M79 37Q73 18 84 11Q89 25 79 37Z M81 37Q94 21 107 26Q100 40 81 37Z M97 69Q91 53 102 45Q108 57 97 69Z M97 72Q104 59 113 63Q111 76 97 72Z" fill="#78ad72" stroke-width="2"/>
+    <path d="M40 23V30 M62 16V24 M82 35 83 47 M20 108H101" stroke="#dceba1" stroke-width="3"/></g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="#ebbe68" stroke="#39744b" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -67,7 +67,13 @@ const THEMES: Dictionary = {
 		"chest": "crystal", "prize": "An ocean treasure!"},
 	"space": {"name": "Space", "background": Color("#f1edfb"), "accent": Color("#694a99"),
 		"light": Color("#d6c8f0"), "spark": Color("#efb451"), "tint": Color("#eae3ff"),
-		"chest": "energy", "prize": "A space treasure!"}
+		"chest": "energy", "prize": "A space treasure!"},
+	"jungle": {"name": "Jungle", "background": Color("#f0f8e7"), "accent": Color("#2d7048"),
+		"light": Color("#c8e3a4"), "spark": Color("#ebbe68"), "tint": Color("#e8f2cd"),
+		"chest": "royal", "prize": "A jungle discovery!"},
+	"candy": {"name": "Candy", "background": Color("#fff0f7"), "accent": Color("#a53d73"),
+		"light": Color("#f5c9e0"), "spark": Color("#69bea9"), "tint": Color("#fce5f0"),
+		"chest": "crystal", "prize": "A candy surprise!"}
 }
 const REWARD_NAMES: Dictionary = {
 	"spring": ["Blossom", "Ladybug", "Bee", "Tulip", "Rainbow", "Bunny", "Sprout", "Butterfly", "Nest", "Dewdrop"],
@@ -75,7 +81,9 @@ const REWARD_NAMES: Dictionary = {
 	"autumn": ["Maple Leaf", "Acorn", "Pumpkin", "Mushroom", "Apple", "Scarf", "Pinecone", "Lantern", "Squirrel", "Harvest Moon"],
 	"winter": ["Snowflake", "Mitten", "Snowman", "Ice Crystal", "Sled", "Penguin", "Cocoa", "Polar Bear", "Bell", "Northern Star"],
 	"ocean": ["Whale", "Seashell", "Crab", "Coral", "Squid", "Pearl"],
-	"space": ["Rocket", "Ringed Planet", "Comet", "Moon Rover", "Galaxy", "Earth"]
+	"space": ["Rocket", "Ringed Planet", "Comet", "Moon Rover", "Galaxy", "Earth"],
+	"jungle": ["Monkey", "Tree Frog", "Tiger", "Elephant", "Bamboo", "Waterfall"],
+	"candy": ["Party Cake", "Cookie", "Lollipop", "Wrapped Candy", "Ice Cream", "Candy Castle"]
 }
 
 var words: Array = []

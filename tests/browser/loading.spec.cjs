@@ -100,6 +100,31 @@ async function whileEngineScriptIsPending(page, action) {
   }
 }
 
+for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the saved ${theme} outfit while dancing`, async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(theme => {
+    localStorage.setItem('wordBuddies.playroom', `[playroom]\npreferred_theme_id="${theme}"\n`);
+  }, theme);
+  // Let the document finish loading for WebKit screenshots. The engine fixture
+  // never reports ready, so Pip stays on the real maintained loading surface.
+  await progressShell(page);
+  const toy = page.locator('#loading-toy'), duck = page.locator('#loading-duck');
+  await expect(duck).toHaveAttribute('data-theme', theme);
+  const costume = await duck.locator('svg').innerHTML();
+  const still = await duck.screenshot({ path: testInfo.outputPath(`loading-${theme}-resting.png`) });
+  for (const pose of ['left-wing', 'right-wing', 'hip-left']) {
+    await toy.tap();
+    await expect(duck).toHaveAttribute('data-pose', pose);
+    await page.waitForTimeout(140);
+    const moving = await duck.screenshot({ path: testInfo.outputPath(`loading-${theme}-${pose}.png`) });
+    expect(moving.equals(still), 'Dressed Pip must visibly respond to every chest tap.').toBe(false);
+    await expect(duck).toHaveAttribute('data-theme', theme);
+    expect(await duck.locator('svg').innerHTML(), 'Dancing transforms the existing dressed limbs.').toBe(costume);
+    await expect(duck).toHaveAttribute('data-pose', 'idle');
+  }
+  await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-full.png`), scale: 'css' });
+});
+
 test('loading keeps one visible progress readout and no extra slogan', async ({ page }) => {
   await progressShell(page);
   await expect(page.locator('.loading-heading small')).toHaveCount(0);

@@ -3,6 +3,7 @@ extends Button
 const SHEET = preload("res://assets/images/mascots/pip.svg")
 const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
+const Outfits = preload("res://scripts/pip_outfits.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const IDLE_ACTIONS := ["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"]
 const IDLE_DANCES := ["dance-wave", "dance-sway", "dance-hop"]
@@ -23,6 +24,10 @@ var compact: bool = false
 var pose: int = 0
 var reaction_left: float = 0.0
 var accent: Color = Style.GOOD
+var theme_id: String = "spring"
+var _outfit_sheet: Texture2D
+var _outfit_idle_sheet: Texture2D
+var _outfit_dance_sheet: Texture2D
 var _reaction: String = ""
 var _idle_time: float = 0.0
 var _speech_time: float = 0.0
@@ -44,6 +49,7 @@ var _room_reaction_left: float = 0.0
 
 func _ready() -> void:
 	_idle_rng.randomize()
+	set_outfit_theme(theme_id)
 	name = "Pip"
 	custom_minimum_size = Vector2(72, 72)
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -56,6 +62,19 @@ func _ready() -> void:
 	visibility_changed.connect(_visibility_changed)
 	resized.connect(queue_redraw)
 	_visibility_changed()
+
+
+func set_outfit_theme(value: String) -> void:
+	var chosen := Outfits.normalize_theme(value)
+	if theme_id == chosen and _outfit_sheet != null:
+		return
+	var sheets: Array[Texture2D] = Outfits.load_sheets(chosen)
+	theme_id = chosen
+	_outfit_sheet = sheets[0]
+	_outfit_idle_sheet = sheets[1]
+	_outfit_dance_sheet = sheets[2]
+	# A wardrobe change is visual only: preserve speech, gestures and quiet timing.
+	queue_redraw()
 
 
 func set_speaking(value: bool) -> void:
@@ -384,8 +403,11 @@ func _draw() -> void:
 	else:
 		var center := origin + Vector2(edge * 0.5, edge * 0.75)
 		draw_set_transform(center + Vector2(0, bounce), turn, stretch)
-		var source_edge: float = sheet.get_height()
-		draw_texture_rect_region(sheet, Rect2(origin - center, Vector2.ONE * edge),
+		var outfit: Texture2D = _outfit_idle_sheet if sheet == IDLE_SHEET else _outfit_sheet
+		if outfit == null:
+			outfit = sheet
+		var source_edge: float = outfit.get_height()
+		draw_texture_rect_region(outfit, Rect2(origin - center, Vector2.ONE * edge),
 			Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
 		draw_set_transform(Vector2.ZERO)
 	_draw_room_effects(origin, edge)
@@ -445,8 +467,9 @@ func _draw_dance(origin: Vector2, edge: float, routine: String, progress: float)
 
 func _draw_dance_part(index: int, origin: Vector2, unit: float, joint: Vector2, offset: Vector2, angle: float) -> void:
 	draw_set_transform(origin + (joint + offset) * unit, angle, Vector2.ONE * unit)
-	var source_edge: float = DANCE_SHEET.get_height()
-	draw_texture_rect_region(DANCE_SHEET, Rect2(-joint, Vector2(120, 120)),
+	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
+	var source_edge: float = outfit.get_height()
+	draw_texture_rect_region(outfit, Rect2(-joint, Vector2(120, 120)),
 		Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
 
 

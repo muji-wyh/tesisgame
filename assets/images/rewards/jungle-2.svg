@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">Jungle: Tree Frog</title>
+  <circle cx="60" cy="60" r="55" fill="#edf7df"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="49" fill="#9ac56b" stroke="#39744b" stroke-width="3"/>
+    <circle cx="60" cy="60" r="42" fill="#edf7df" stroke="#ebbe68" stroke-width="2.5"/>
+    <path d="M15 42 Q7 61 17 78 M105 42 Q113 61 103 78" stroke="#39744b" stroke-width="3"/>
+    <path d="M13 52 8 44 M13 63 7 59 M15 73 9 73 M107 52 112 44 M107 63 113 59 M105 73 111 73" stroke="#39744b" stroke-width="3"/>
+    <g transform="translate(18 16) scale(.7)"><path d="M19 88 Q15 55 47 46 Q80 45 105 18 Q103 90 65 103 Q34 109 19 88Z" fill="#c1dfa0" stroke="#79a665" stroke-width="2"/><g transform="translate(4 -3) scale(.94)">
+    <ellipse cx="60" cy="105" rx="40" ry="5" fill="#dce8cf" stroke="none"/>
+    <ellipse cx="38" cy="42" rx="17" ry="18" fill="#8fc984"/>
+    <ellipse cx="82" cy="42" rx="17" ry="18" fill="#8fc984"/>
+    <circle cx="38" cy="41" r="9" fill="#fff7df" stroke="none"/>
+    <circle cx="82" cy="41" r="9" fill="#fff7df" stroke="none"/>
+    <circle cx="38" cy="42" r="4" fill="#765445" stroke="none"/>
+    <circle cx="82" cy="42" r="4" fill="#765445" stroke="none"/>
+    <path d="M27 57 Q31 39 60 38 Q89 39 93 57 L92 77 Q89 96 60 100 Q31 96 28 77Z" fill="#91cc85"/>
+    <ellipse cx="60" cy="77" rx="27" ry="17" fill="#b9dda2" stroke="none"/>
+    <ellipse cx="36" cy="72" rx="6" ry="4" fill="#e8a7a1" stroke="none"/>
+    <ellipse cx="84" cy="72" rx="6" ry="4" fill="#e8a7a1" stroke="none"/>
+    <path d="M40 76 Q60 92 80 76" stroke-width="3"/>
+    <path d="M34 94 20 104 38 103 M86 94 100 104 82 103" fill="#91cc85"/>
+    <circle cx="60" cy="62" r="2.5" fill="#6da96f" stroke="none"/></g></g>
+    <path d="M42 101 48 116 60 110 72 116 78 101" fill="#ebbe68" stroke="#39744b" stroke-width="2.5"/>
+  </g>
+</svg>

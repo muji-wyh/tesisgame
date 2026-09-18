@@ -33,3 +33,10 @@ Desktop and phone screenshots were visually reviewed.
 Local evidence: `build/voice-pop-qa/memory-faces-before*` and
 `build/voice-pop-qa/memory-faces-local*`. Tested game pack:
 `game-71a5c6d0a586e5c5.pck`.
+
+## Production acceptance
+
+Runtime commit `9db0049` was merged to main, pushed and deployed. Production
+HTML, JavaScript, WASM and the PCK matched the tested build byte for byte.
+Both desktop Chromium regressions (normal and reduced motion) passed against
+production. Evidence: `build/voice-pop-qa/memory-faces-production*`.

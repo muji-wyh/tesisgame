@@ -126,12 +126,12 @@ func _test_freshness_before_adventures(model, words: Array) -> void:
 
 
 func _test_seeded_compatibility(model, words: Array) -> void:
-	# These fixtures use the original 140-word corpus; adding optional age selection must preserve its seeds.
+	# Preserve the original 140-word lesson/card seeds; theme draws use the current eight-world catalog.
 	var original_words: Array = words.slice(0, 140)
 	for fixture in [
-		{"seed": 0, "topic": "at-home", "theme": "winter", "lesson": ["chair", "fork", "table", "door", "soap"],
+		{"seed": 0, "topic": "at-home", "theme": "summer", "lesson": ["chair", "fork", "table", "door", "soap"],
 			"cards": ["soap:image", "fork:word", "table:word", "chair:word", "chair:image", "door:word", "fork:image", "table:image"]},
-		{"seed": 23, "topic": "at-home", "theme": "ocean", "lesson": ["lamp", "plate", "table", "fork", "chair"],
+		{"seed": 23, "topic": "at-home", "theme": "spring", "lesson": ["lamp", "plate", "table", "fork", "chair"],
 			"cards": ["table:word", "chair:image", "plate:image", "table:image", "lamp:word", "lamp:image", "fork:word", "plate:word"]},
 		{"seed": 101, "topic": "ocean-discovery", "theme": "winter", "lesson": ["squid", "crab", "clam", "coral", "seal"],
 			"cards": ["clam:image", "seal:image", "crab:image", "squid:image", "clam:word", "squid:word", "crab:word", "coral:word"]}
