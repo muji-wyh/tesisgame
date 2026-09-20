@@ -64,3 +64,16 @@ These checks use emulated device profiles, not physical iPhone/iPad hardware.
 
 Evidence: `build/remove-learn-native*.log` and
 `build/voice-pop-qa/remove-learn-*`.
+
+## Production
+
+Runtime commit `e75c581` was fast-forwarded into `main`, pushed to `origin/main`
+and deployed to `https://gentle-forest-02ff42900.3.azurestaticapps.net/`.
+All four startup files fetched from production match the tested local export
+byte for byte (SHA-256), including `game-bafa475766ebbcaa.pck`. Hashes are retained
+in `2026-09-20-remove-learn-production-manifest.json`.
+
+Two fresh production Chromium checks passed: all three mode targets at compact
+and desktop widths with Match restored on reload, and a completed Match round
+followed by a new adventure entering Match directly. Production screenshots
+were reviewed, including the three tabs at 320 pixels wide.
