@@ -54,6 +54,7 @@ func _run() -> void:
 	check(view.item_buttons.size() == 9 and view.item_buttons.size() == state.toys().size()
 		and view.item_buttons.keys().all(func(id: String) -> bool: return state.item(id).slot == "toy"),
 		"Pip exposes exactly the starter ball and eight world toys, with no hidden backdrop buttons")
+	_check_toy_partition(view, state, counts, "starter room")
 	var original_controls: Array = view.item_buttons.values()
 	view.configure(state, counts, data.theme("ocean"), true)
 	check(view.item_buttons.values() == original_controls, "Reconfiguration preserves controls used by focus and scrolling")
@@ -145,10 +146,30 @@ func _run() -> void:
 	check(view.goal_label.text.contains("Spring flower") and view.goal_label.text.contains("2") and view.goal_label.text.contains("Spring"), "The selected goal retains its gift, world and exact remaining pieces across worlds")
 	view.goal_button.pressed.emit()
 	check(goals.back() == "toy-spring", "Continue requests the saved goal instead of the currently viewed world")
+	var unlocking_card: Button = view.item_buttons["toy-spring"]
+	unlocking_card.pressed.emit()
+	check(view._preview_locked, "The pending gift is previewed before its final piece arrives")
+	var unlocked_counts := {"spring-1": 3, "spring-3": 3}
+	view.configure(state, unlocked_counts, data.theme("ocean"), true)
+	await process_frame
+	await process_frame
+	check(view.item_buttons["toy-spring"] == unlocking_card and unlocking_card.get_parent() == view.owned_grid
+		and view.item_buttons.values() == original_controls,
+		"Unlocking moves the existing card into Pip's home without replacing host-wired controls")
+	check(view._preview_id.is_empty() and not view._preview_locked and view._toy.id == state.toy_id
+		and selections.is_empty(), "Unlocking clears the preview without silently changing the selected toy")
+	_check_toy_partition(view, state, unlocked_counts, "newly unlocked room")
 	for theme_id in data.THEMES:
 		for medal in data.medals(theme_id):
 			counts[medal.id] = 3
 	var original_counts := counts.duplicate()
+	view.configure(state, counts, data.theme("ocean"), true)
+	await process_frame
+	await process_frame
+	_check_toy_partition(view, state, counts, "fully earned room")
+	check(view.owned_grid.get_child_count() == 9 and not view._item_grid.visible
+		and is_equal_approx(view.get_combined_minimum_size().y, view._room.get_combined_minimum_size().y),
+		"All nine toys fit inside the home without an empty catalog row below it")
 	var expected := {"spring": ["flower", "water"], "summer": ["ball", "roll"], "autumn": ["apple", "offer"], "winter": ["bell", "ring"], "ocean": ["shell", "open"], "space": ["rocket", "launch"], "jungle": ["monkey", "swing"], "candy": ["cake", "decorate"]}
 	var next_actions := {"spring": ["Grow the flower", "Bloom the flower"], "summer": ["Return the ball", "Catch the ball"], "autumn": ["Nibble the apple", "Finish the apple"], "winter": ["Answer the bell", "Chime the bell"], "ocean": ["Listen to the shell", "Hear the waves"], "space": ["Ignite the rocket", "Launch the rocket"], "jungle": ["Wave to the monkey", "High-five the monkey"], "candy": ["Frost the cake", "Sprinkle the cake"]}
 	for theme_id in expected:
@@ -207,9 +228,11 @@ func _run() -> void:
 		check(view.toy_button.tooltip_text == initial_action and view.toy_button.icon != null and not view.is_processing(), "Replay restores the " + theme_id + " toy and first action")
 		check(actions.size() == before_replay, "Replay resets without granting an extra toy reaction")
 	check(counts == original_counts, "Room interactions never alter medal progress")
-	check(view.goal_button.tooltip_text.begins_with("Use toy") and view.goal_label.text.contains("Spring flower"), "A completed saved goal stays available for later use")
+	check(not view.goal_button.visible and not view.goal_label.visible and state.goal_item_id == "toy-spring",
+		"A completed goal remains saved while its owned card replaces the adventure action")
+	requests_before = goals.size()
 	view.goal_button.pressed.emit()
-	check(goals.back() == "toy-spring" and state.toy_id == "toy-candy", "A completed goal requests the host's persisted equipment path")
+	check(goals.size() == requests_before and state.toy_id == "toy-candy", "A hidden completed-goal action cannot start another adventure or equip a toy")
 	view.item_buttons["toy-autumn"].pressed.emit()
 	check(selections == ["toy-autumn"], "An owned selector asks the parent to persist the choice")
 	check(state.toy_id == "toy-candy", "The view does not report an uncommitted selection as saved")
@@ -256,11 +279,34 @@ func _finish() -> void:
 
 func _check_room_text(view, context: String) -> void:
 	var room_bounds: Rect2 = view._room.get_global_rect()
-	check(absf(view._item_grid.global_position.y - room_bounds.end.y - view.get_theme_constant("separation")) <= 1,
-		"The " + context + " catalog follows the room without a blank caption or action row")
+	check(absf(view._item_grid.global_position.y - room_bounds.end.y - view.get_theme_constant("separation")) <= 1
+		if view._item_grid.visible else is_equal_approx(view.get_combined_minimum_size().y, view._room.get_combined_minimum_size().y),
+		"The " + context + " locked catalog follows the home only while unearned toys remain")
 	check(not view._toy_label.text.is_empty() and view.feedback_text.to_lower().contains(view._toy_label.text.to_lower()),
 		"The " + context + " visible toy noun retains its feedback association")
-	check(room_bounds.grow(1).encloses(view._toy_label.get_global_rect()), "The " + context + " toy noun stays inside the room")
+	check(view.playground.get_global_rect().grow(1).encloses(view._toy_label.get_global_rect()), "The " + context + " toy noun stays inside the active stage")
+
+
+func _check_toy_partition(view, state, counts: Dictionary, context: String) -> void:
+	var owned: Array = view.owned_grid.get_children()
+	var locked: Array = view._item_grid.get_children()
+	check(owned.size() + locked.size() == state.toys().size()
+		and owned.all(func(card: Node) -> bool: return not locked.has(card)),
+		"The " + context + " shows each toy in exactly one ownership group")
+	for item in state.toys():
+		var card: Button = view.item_buttons[item.id]
+		var earned: bool = state.owned(item, counts)
+		check((owned.has(card) if earned else locked.has(card)) and card.in_room == earned
+			and card.is_visible_in_tree() and card.focus_mode == Control.FOCUS_ALL,
+			"The " + context + " keeps " + item.id + " visible and focusable in its ownership group")
+	var stage_bounds: Rect2 = view.playground.get_global_rect()
+	var shelf_bounds: Rect2 = view.owned_grid.get_global_rect()
+	check(view.owned_grid.get_parent() == view._room and is_equal_approx(stage_bounds.size.y, 304)
+		and stage_bounds.end.y < shelf_bounds.position.y
+		and view._room.get_global_rect().grow(1).encloses(shelf_bounds),
+		"The " + context + " contains its display below the fixed stage without overlapping direct play")
+	check(owned.all(func(card: Control) -> bool: return shelf_bounds.grow(1).encloses(card.get_global_rect())),
+		"The " + context + " includes the last owned card inside the room's scrollable bounds")
 
 
 func _capture() -> void:

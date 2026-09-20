@@ -35,7 +35,7 @@ func _run() -> void:
 	for index in range(Data.THEMES.size()):
 		var palette: Dictionary = Data.theme(Data.THEMES.keys()[index])
 		check(palette.background == Color(backgrounds[index]), "Each theme has its own refreshed background")
-		check(contrast(Color.WHITE, palette.accent) >= 4.5, "Primary actions and Using badges keep readable white text")
+		check(contrast(Color.WHITE, palette.accent) >= 4.5, "Primary actions keep readable white text")
 		check(contrast(load("res://scripts/ui_style.gd").INK, palette.background) >= 4.5, "The new background retains readable text")
 	check(FileAccess.file_exists("res://scripts/card_motion.gd"), "A shared bounded card press reaction exists")
 	check(FileAccess.file_exists("res://scripts/toy_card.gd"), "Pip's toy cards have a focused presentation component")
@@ -85,9 +85,10 @@ func _run() -> void:
 	await settle()
 	check(app.playroom_state.toy_id == "toy-spring" and app.medal_progress.counts == before,
 		"Previewing a shell cannot equip it or change earned pieces")
-	check(flower.badge.text == "Using" and flower.badge.is_visible_in_tree() and room.goal_label.text.contains("Preview")
-		and room.item_buttons.values().filter(func(button: Button) -> bool: return button.badge.text == "Using").size() == 1,
-		"Exactly one Using badge is distinct from the current Preview")
+	check(flower._using and not flower.badge.is_visible_in_tree() and flower.tooltip_text.contains("Using")
+		and room.goal_label.text.contains("Preview")
+		and room.item_buttons.values().filter(func(button: Button) -> bool: return button._using).size() == 1,
+		"Exactly one owned toy retains its selection marker and accessible Using state during a locked Preview")
 	check(shell.get_theme_stylebox("normal").bg_color == ordinary
 		and shell.get_theme_stylebox("normal").get_border_width(SIDE_LEFT) == 1,
 		"A preview keeps a neutral surface rather than another selected card fill")
@@ -99,14 +100,17 @@ func _run() -> void:
 		"Reduced motion immediately settles the toy-card reaction")
 	check(app.playroom_state.set_goal("toy-ocean", app.medal_progress.counts), "The fixture can keep a gift goal")
 	flower.pressed.emit()
-	check(room.goal_label.text.contains("Goal") and flower.badge.text == "Using", "Returning from preview distinguishes the gift Goal from the equipped toy")
+	check(room.goal_label.text.contains("Goal") and flower._using, "Returning from preview distinguishes the gift Goal from the equipped toy")
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768)]:
 		root.size = dimensions
 		await settle()
 		var scale: float = app.Style.ui_scale(app)
-		for button in room.item_buttons.values():
-			check(absf(button.size.y * scale - 128) <= 1 and button.size.x * scale >= 44,
-				"Polished toy cards retain uniform 128px height and usable targets")
+		for id in room.item_buttons:
+			var button = room.item_buttons[id]
+			var owned: bool = app.playroom_state.owned(app.playroom_state.item(id), app.medal_progress.counts)
+			var height: int = 108 if owned else 128
+			check(button.in_room == owned and absf(button.size.y * scale - height) <= 1 and button.size.x * scale >= 44,
+				"Owned toys use compact 108px cards while locked toys retain 128px cards and usable targets")
 			for label in [button.title_label, button.detail_label, button.badge]:
 				if label.is_visible_in_tree():
 					check(button.get_global_rect().grow(1).encloses(label.get_global_rect()),
@@ -160,9 +164,10 @@ func _test_retry_layout(app) -> void:
 		var card = app._room.item_buttons["toy-ball"]
 		card.pressed.emit()
 		await settle()
-		check(not app._playroom_ready and card.detail_label.text.contains("Tap again to retry"),
-			"A real failed-load selection exposes the starter toy's retry instructions")
-		_check_retry_regions(card, card.detail_label, null, app.Style.ui_scale(app))
+		check(not app._playroom_ready and card.get_parent() == app._room.owned_grid and card.in_room
+			and card.detail_label.is_visible_in_tree() and card.detail_label.text.contains("Tap again to retry"),
+			"A real failed-load selection exposes retry instructions on the starter toy inside Pip's room")
+		_check_retry_regions(card, card.detail_label, app.Style.ui_scale(app))
 	app.playroom_state = confirmed
 	app._playroom_ready = true
 	confirmed.goal_item_id = "toy-spring"
@@ -171,25 +176,24 @@ func _test_retry_layout(app) -> void:
 		root.size = dimensions
 		await settle()
 		var card = app._room.item_buttons["toy-spring"]
-		app._room.show_item_error("toy-spring", "Not saved\nTap arrow to retry", "Fixture save failure.")
+		app._room.show_item_error("toy-spring", "Not saved\nTap again to retry", "Fixture save failure.")
 		await settle()
-		_check_retry_regions(card, app._room.goal_label, app._room.goal_button, app.Style.ui_scale(app))
+		check(card.get_parent() == app._room.owned_grid and card.detail_label.is_visible_in_tree()
+			and not app._room.goal_label.is_visible_in_tree() and not app._room.goal_button.is_visible_in_tree(),
+			"An earned goal retries through its owned card without a gift-goal label or arrow")
+		_check_retry_regions(card, card.detail_label, app.Style.ui_scale(app))
 
 
-func _check_retry_regions(card, label: Label, action: Control, scale: float) -> void:
-	var badge: Rect2 = card.badge.get_global_rect()
-	check(card.badge.is_visible_in_tree() and card.badge.text == "Using",
-		"The equipped toy remains identifiable while saving needs recovery")
-	check(not badge.intersects(label.get_global_rect()),
-		"The Using badge never covers retry instructions: badge=%s text=%s" % [badge, label.get_global_rect()])
-	check(card.get_global_rect().grow(-4 / scale).encloses(label.get_global_rect())
-		and card.get_global_rect().encloses(badge) and absf(card.size.y * scale - 128) <= 1,
-		"The full retry state fits inside the unchanged card")
+func _check_retry_regions(card, label: Label, scale: float) -> void:
+	check(card._using and not card.badge.is_visible_in_tree(),
+		"The owned toy retains its selection marker without a text badge during save recovery")
+	check(label.is_visible_in_tree() and label.get_visible_line_count() == label.get_line_count(),
+		"The owned toy shows every line of its retry instructions")
+	check(card.get_global_rect().encloses(label.get_global_rect())
+		and card.in_room and absf(card.size.y * scale - 108) <= 1,
+		"The full retry state fits inside the compact owned card")
 	if card.picture.is_visible_in_tree():
-		check(not card.picture.get_global_rect().intersects(badge), "Retry layout keeps the badge clear of the illustration")
-	if action != null:
-		check(not action.get_global_rect().intersects(badge) and action.size.x * scale >= 44,
-			"The inline retry action retains its unobstructed target")
+		check(not card.picture.get_global_rect().intersects(label.get_global_rect()), "Retry instructions stay clear of the toy illustration")
 
 
 func _test_motion() -> void:

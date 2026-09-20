@@ -1,11 +1,11 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const { THEME_IDS, openGame, openRewards, metrics, rendered, roomControl, collectionBounds,
-  uiScale, worldIconRect, tap, visibleColorCount, chooseRewardSection } = require('./game-ui.cjs');
+  uiScale, worldIconRect, tap, visibleColorCount } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 
-test('an equipped starter keeps its Using badge clear of failed-load retry text', async ({ page }, testInfo) => {
+test('an equipped starter in Pip\'s home keeps failed-load retry text readable', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await page.addInitScript(() => {
     const read = Storage.prototype.getItem;
@@ -15,15 +15,11 @@ test('an equipped starter keeps its Using badge clear of failed-load retry text'
       return read.call(this, key);
     };
   });
-  const errors = await openGame(page, { mode: 'match' });
+  const errors = await openGame(page, {
+    mode: 'match', expectedStatus: 'Room choices could not be remembered. You can keep practising. Choose Retry saving.'
+  });
   await openRewards(page);
-  await chooseRewardSection(page, 'room');
-  // Known fresh fixture: 15 header choices, then seven room controls before Ball.
-  // Do not read the deliberately blocked store just to navigate this fixture.
-  for (let index = 0; index < 22; index++) {
-    await page.keyboard.press('Tab');
-    await rendered(page);
-  }
+  await roomControl(page, 'ball');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Your room could not be saved.');
   await rendered(page);

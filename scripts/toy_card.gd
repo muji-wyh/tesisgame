@@ -7,6 +7,7 @@ var picture: TextureRect
 var title_label: Label
 var detail_label: Label
 var badge: Label
+var in_room: bool = false
 var _press_motion := Motion.new()
 var _palette: Dictionary = {}
 var _using: bool = false
@@ -55,8 +56,11 @@ func present(palette: Dictionary, using: bool, detail: String) -> void:
 	var scale: float = Style.ui_scale(self)
 	var fill: Color = Color.WHITE.lerp(light, 0.18 if using else 0.04)
 	var edge: Color = accent if using else accent.lightened(0.72)
+	if in_room:
+		fill = Color(accent, 0.07) if using else Color.TRANSPARENT
+		edge = Color(accent, 0.38) if using else Color.TRANSPARENT
 	var normal := Style.box(fill, edge, ceili(16 / scale), maxi(1, roundi((2 if using else 1) / scale)))
-	normal.shadow_color = Color(accent, 0.10)
+	normal.shadow_color = Color.TRANSPARENT if in_room else Color(accent, 0.10)
 	normal.shadow_size = ceili(3 / scale)
 	normal.shadow_offset = Vector2(0, 2 / scale)
 	add_theme_stylebox_override("normal", normal)
@@ -108,6 +112,10 @@ func _layout() -> void:
 		return
 	stop_press()
 	var scale: float = Style.ui_scale(self)
+	if in_room:
+		_layout_in_room(scale)
+		return
+	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var wide: bool = size.x * scale >= 240
 	custom_minimum_size = Vector2(44, 128) / scale
 	title_label.add_theme_font_size_override("font_size", ceili((12 if _showing_error and not wide else 14) / scale))
@@ -153,11 +161,41 @@ func _layout() -> void:
 	queue_redraw()
 
 
+func _layout_in_room(scale: float) -> void:
+	custom_minimum_size = Vector2(44, 108) / scale
+	badge.hide()
+	picture.show()
+	var art_size: float = (40 if _showing_error else 52) / scale
+	picture.position = Vector2((size.x - art_size) * 0.5, 8 / scale)
+	picture.size = Vector2.ONE * art_size
+	title_label.visible = not _showing_error
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.add_theme_font_size_override("font_size", ceili(12 / scale))
+	title_label.position = Vector2(4 / scale, 70 / scale)
+	title_label.size = Vector2(maxf(0, size.x - 8 / scale), 34 / scale)
+	detail_label.visible = _showing_error
+	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail_label.add_theme_font_size_override("font_size", ceili(11 / scale))
+	detail_label.position = Vector2(4 / scale, 56 / scale)
+	detail_label.size = Vector2(maxf(0, size.x - 8 / scale), 48 / scale)
+	queue_redraw()
+
+
 func _draw() -> void:
 	if picture == null or not picture.visible or _palette.is_empty():
 		return
 	var center := picture.get_rect().get_center()
 	var radius: float = picture.size.x * 0.53
+	if in_room:
+		draw_set_transform(Vector2(center.x, picture.position.y + picture.size.y), 0, Vector2(1, 0.2))
+		draw_circle(Vector2.ZERO, radius * 0.85, Color(_palette.accent, 0.14))
+		draw_set_transform(Vector2.ZERO)
+		if _using:
+			var unit: float = 1 / Style.ui_scale(self)
+			var tick := Vector2(size.x - 15 * unit, 12 * unit)
+			draw_polyline(PackedVector2Array([tick + Vector2(-4, 0) * unit, tick + Vector2(-1, 3) * unit, tick + Vector2(5, -4) * unit]), _palette.accent, 2 * unit, true)
+		return
 	draw_circle(center, radius, _palette.light.lightened(0.35))
 	var spark: Color = _palette.spark
 	draw_circle(center + Vector2(radius * 0.84, -radius * 0.64), radius * 0.13, spark)

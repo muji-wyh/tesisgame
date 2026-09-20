@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openRewards, roomControl, roomPoint, metrics, collectionBounds,
+const { openGame, openRewards, roomControl, roomPoint, roomState, metrics, collectionBounds,
   uiScale, tap, rendered } = require('./game-ui.cjs');
 
 test.use({
@@ -9,15 +9,15 @@ test.use({
   reducedMotion: 'reduce'
 });
 
-async function checkBelowBell(page, testInfo, name) {
-  await page.mouse.move(500, 650);
-  await page.mouse.down();
-  await page.mouse.move(500, 300, { steps: 8 });
-  await page.mouse.up();
-  await rendered(page);
+async function checkBelowBell(page, testInfo, name, fromGoal = false) {
+  // Reveal the next locked row without refreshing away an in-place retry message.
+  for (let index = 0; index < (fromGoal ? 2 : 3); index++) {
+    await page.keyboard.press('Tab');
+    await rendered(page);
+  }
   const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
   const cell = (collection.width - collection.gap * 2) / 3;
-  const lastRow = roomPoint(bounds, 'space');
+  const lastRow = roomPoint(bounds, 'space', { owned: (await roomState(page)).owned });
   const bottom = bounds.y + (lastRow.y - 64 / scale - collection.gap) * bounds.scale;
   const left = bounds.x + (collection.x + cell + collection.gap) * bounds.scale;
   const clip = { x: left + 20, y: bottom + 2, width: cell * bounds.scale - 40, height: 13 };
@@ -65,7 +65,7 @@ test('inline goal and retry text stay inside the bell card at desktop scaling', 
   await roomControl(page, 'goal', { locked: true, item: 'winter' });
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('could not be saved');
-  await checkBelowBell(page, testInfo, 'bell-retry-contained');
+  await checkBelowBell(page, testInfo, 'bell-retry-contained', true);
   await page.evaluate(() => window.restoreGoalTextSave());
   expect(errors).toEqual([]);
 });

@@ -31,7 +31,7 @@ func _run() -> void:
 	app._show_collection()
 	await _show_stage(app)
 	var room = app._room
-	var stage: Control = room._room
+	var stage: Control = room.playground
 	var before_position: Vector2 = room.duck_slot.position
 	var floor_point: Vector2 = stage.get_global_rect().end - Vector2(28, 12)
 	await _tap(floor_point)
@@ -87,7 +87,7 @@ func _check_duck_gestures(app, playground) -> void:
 func _check_legacy_toy_sequences(app, playground) -> void:
 	await _show_stage(app)
 	var room = app._room
-	var scene: Control = room._room
+	var scene: Control = room.playground
 	var toy: Control = room.toy_button
 	await _tap(playground.get_global_transform() * Vector2(12, playground.size.y - 12))
 	await _advance(playground, 4.0)
@@ -220,7 +220,18 @@ func _check_locked_toy(app, playground) -> void:
 	await _drag(center, center - Vector2(70, 20))
 	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "Neither the internal toss method nor a real drag can throw a locked toy")
 	check(app.playroom_state.toy_id == "toy-ball", "Playing with a locked preview cannot equip it")
-	app._room.item_buttons[app.playroom_state.toy_id].pressed.emit()
+	var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
+	app._collection_scroll.ensure_control_visible(owned_card)
+	await _settle()
+	if app._collection_velocity.length_squared() >= 100.0:
+		# The preceding locked-toy drag scrolls; its first stop tap must not select.
+		await _tap(owned_card.get_global_rect().get_center(), "touch")
+		check(app._room._preview_locked and app._collection_velocity == Vector2.ZERO,
+			"A touch stops the gliding toy list without accidentally choosing a toy")
+	await _tap(owned_card.get_global_rect().get_center(), "touch")
+	check(not app._room._preview_locked and app._room._toy.id == app.playroom_state.toy_id
+		and interactions.size() == before and playground.motion_kind.is_empty(),
+		"Touching an owned display card exits the preview without also calling Pip or starting toy motion")
 	await _show_stage(app)
 	playground.toss_to_pip()
 	check(playground.flight_active, "Returning from a locked preview immediately restores the owned ball")
@@ -297,9 +308,11 @@ func _check_interruption(app, playground) -> void:
 
 
 func _check_room_bounds(app, label: String) -> void:
-	var bounds: Rect2 = app._room._room.get_global_rect().grow(1.0)
+	var bounds: Rect2 = app._room.playground.get_global_rect().grow(1.0)
 	check(bounds.encloses(app.duck.get_global_rect()), label + " keeps Pip inside the room")
 	check(bounds.encloses(app._room.toy_button.get_global_rect()), label + " keeps the resting toy inside the room")
+	check(not app._room.owned_grid.get_global_rect().intersects(bounds.grow(-1.0)),
+		label + " keeps the owned display outside the active gesture area")
 
 
 func _hit_context(app, playground, point: Vector2) -> String:

@@ -3561,6 +3561,7 @@ func _hide_reward_preview_if_open() -> void:
 
 func _announce_collection_state() -> void:
 	var guidance := "Pip's room. Choose toys for Pip. Choose Medals to see your pieces."
+	guidance += " %d toys in Pip's home. %d toys to unlock below. Choose a toy in the room to play." % [_room.owned_grid.get_child_count(), _room._item_grid.get_child_count()]
 	if _collection_section == "medals":
 		guidance = "Medals. Win a game and open its chest to collect a piece. Three pieces complete a medal. Choose Pip's room to use your gifts."
 	var message: String = "My rewards opened. %d of %d medals complete. %s. %s %d earlier rewards. Choose a world from the icons above, or use Back to return." % [

@@ -110,8 +110,7 @@ for (const size of SIZES) {
     } else {
       await scrollToEnd(page, browserName, size);
       await shot('14-room-controls-scrolled');
-      const collection = collectionBounds(b);
-      await tap(page, collection.x + collection.width / 6, b.height - 90);
+      await roomTap(page, 'space');
       await expect(page.locator('#game-status')).toContainText('Complete Rocket');
       await shot('14b-room-locked-from-bottom');
       await leavePreview(page);

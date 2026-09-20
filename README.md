@@ -281,21 +281,22 @@ worlds are added; the new shelves begin empty in an existing save.
 
 Open **More > Pip** to visit **Pip's playroom**. A ball is playable immediately.
 Each world's first completed medal unlocks its toy, making nine toys including
-the starter ball.
-Choose an owned toy, or preview a locked toy and its exact requirement.
-Toy cards use their own world colors, larger illustrations and a wider
-side-by-side layout when space permits. **Using** marks only the equipped toy;
-**Preview** and **Goal** are separate descriptions, not additional selections.
+the starter ball. Every earned toy appears on the shelves inside **Pip's home**.
+Choose a toy there to play; a small check marks the equipped toy. Only toys you
+have not earned remain in the cards below the room, with their exact requirements.
+Newly earned toys move into the home automatically, and the lower list disappears
+when all nine are owned. Locked cards use their own world colors, larger
+illustrations and a wider side-by-side layout when space permits.
 Previewing a locked gift keeps the equipped toy and all earned pieces intact.
 The Rooms/backdrop chooser has been removed. Existing saved backgrounds remain
 intact and continue to render; they are not advertised as new gifts or goals.
 Drag blank areas of the room canvas, including locked toy previews, to scroll.
 A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
 retain their play interactions. Pet Pip directly, tap Pip to poke, or drag a toy
-to toss it. The toy catalog sits directly below the room, with no separate
+to toss it. The locked toy cards sit directly below the room, with no separate
 shortcut buttons, step caption or toy action button. Tap the toy itself to
 advance its three play steps and replay; keyboard and controller activation
-work on the toy too. To leave a locked preview, choose an owned toy card.
+work on the toy too. To leave a locked preview, choose a toy inside Pip's home.
 Choose a locked toy to preview it without moving the page. Its card shows the
 remaining pieces and an inline arrow to start or continue its adventure; there
 is no separate **Help Pip get this** row. The arrow saves the goal and starts a
@@ -303,8 +304,9 @@ related five-word adventure in its reward world. The lesson includes the desired
 toy's word. Match and Memory keep those same
 five words; only normal wins and opened chests earn pieces. The goal caption shows
 the chosen gift and remaining pieces, including its world if you switch away.
-The same card lets you continue the goal or use its toy once earned, including after reload.
-Save failures appear on the affected card. Pointer selection keeps scroll and card
+The locked card lets you continue the goal. Once earned, select the toy in the
+home, including after reload; completed gifts have no extra **Use toy** arrow.
+Save failures appear beside the affected toy and can be retried there. Pointer selection keeps scroll and card
 positions stable; keyboard/controller focus still reveals the full card and its action.
 An unopened or unsaved chest must be collected before starting a gift adventure.
 An explicitly chosen gift lesson always includes its toy's noun, even when that

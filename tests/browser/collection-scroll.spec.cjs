@@ -183,9 +183,8 @@ for (const input of ['mouse', 'touch']) {
     await page.goto('/');
     await enterGame(page);
     await openRewards(page);
-    await roomControl(page, 'space');
+    const card = await roomControl(page, 'space');
     const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
-    const card = roomPoint(bounds, 'space');
     const point = { x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale };
     const previousY = point.y - (128 / scale + collection.gap) * bounds.scale;
     await page.mouse.move(point.x, previousY);
@@ -195,7 +194,8 @@ for (const input of ['mouse', 'touch']) {
     await rendered(page);
     point.y += 30;
     const cell = (collection.width - collection.gap) / 2;
-    const clip = { x: bounds.x + (collection.x + cell + collection.gap + 4 / scale) * bounds.scale,
+    const untouchedX = card.x > collection.x + collection.width / 2 ? collection.x : collection.x + cell + collection.gap;
+    const clip = { x: bounds.x + (untouchedX + 4 / scale) * bounds.scale,
       y: bounds.y + collection.top * bounds.scale,
       width: (cell - 8 / scale) * bounds.scale,
       height: (bounds.height - collection.top - collection.padding) * bounds.scale };

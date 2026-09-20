@@ -78,7 +78,7 @@ async function foregroundDifference(page, first, second, firstColor, secondColor
 
 test('all eight theme choices give Pip different visible outfits in the header and room', async ({ page }, testInfo) => {
   test.setTimeout(150000);
-  // This tall phone frame keeps the complete room and its nine toy cards in one
+  // This tall phone frame keeps the room and the remaining locked toy cards in one
   // visual artifact, without replacing the game's internal scrolling behavior.
   await page.setViewportSize({ width: 390, height: 1560 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });

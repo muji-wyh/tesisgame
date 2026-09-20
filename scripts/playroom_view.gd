@@ -15,6 +15,7 @@ const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
 const ToyCard = preload("res://scripts/toy_card.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
+const STAGE_HEIGHT := 304.0
 const ACTIONS := {
 	"water": ["Water the flower", "Grow the flower", "Bloom the flower"],
 	"roll": ["Roll the ball", "Return the ball", "Catch the ball"],
@@ -43,12 +44,14 @@ class RoomScene extends Control:
 	var action_progress: float = 0.0
 	var stage: int = 0
 	var toy_center: Vector2
+	var stage_height: float = 304.0
+	var shelves: Array[Rect2] = []
 
 	func _draw() -> void:
 		var accent: Color = palette.get("accent", Color("#438363"))
 		var background: Color = palette.get("background", Color("#edf8ec"))
 		draw_style_box(preload("res://scripts/ui_style.gd").box(background, accent.lightened(0.6), 24, 2), Rect2(Vector2.ZERO, size))
-		var floor_y := size.y * 0.57
+		var floor_y := stage_height * 0.57
 		var wall := Style.box(palette.get("light", background).lightened(0.4), Color.TRANSPARENT, 22, 0)
 		wall.corner_radius_bottom_left = 0
 		wall.corner_radius_bottom_right = 0
@@ -106,6 +109,8 @@ class RoomScene extends Control:
 			draw_style_box(preload("res://scripts/ui_style.gd").box(accent.lightened(0.88), accent.lightened(0.5), 10, 3), window)
 			draw_line(Vector2(window.get_center().x, window.position.y + 2), Vector2(window.get_center().x, window.end.y - 2), accent.lightened(0.5), 3, true)
 			draw_line(Vector2(window.position.x + 2, window.get_center().y), Vector2(window.end.x - 2, window.get_center().y), accent.lightened(0.5), 3, true)
+		for shelf in shelves:
+			draw_style_box(Style.box(accent.lightened(0.76), accent.lightened(0.58), 3, 1), shelf)
 		if action.is_empty():
 			return
 		var point := toy_center
@@ -205,6 +210,7 @@ var favorite_medal: Medal
 var toy_button: Button
 var goal_button: Icons
 var item_buttons: Dictionary = {}
+var owned_grid: GridContainer
 var goal_label: Label
 var interaction_allowed: Callable
 var playground: Playground
@@ -295,9 +301,14 @@ func _build() -> void:
 	playground.interaction_started.connect(_direct_play_started)
 	playground.interaction.connect(_direct_play_feedback)
 	playground.toy_tapped.connect(_play_toy)
+	owned_grid = GridContainer.new()
+	owned_grid.name = "OwnedToys"
+	owned_grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_room.add_child(owned_grid)
 	add_child(goal_label)
 	add_child(goal_button)
 	_item_grid = GridContainer.new()
+	_item_grid.name = "LockedToys"
 	_item_grid.columns = 2
 	_item_grid.add_theme_constant_override("h_separation", 8)
 	_item_grid.add_theme_constant_override("v_separation", 8)
@@ -316,7 +327,7 @@ func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: b
 	_reduced_motion = reduced_motion
 	_last_toy = state.toy_id
 	_last_backdrop = state.backdrop_id
-	if changed:
+	if changed or (not _preview_id.is_empty() and _state.owned(_item(_preview_id), _counts)):
 		_preview_id = ""
 		_reset_sequence()
 	if item_buttons.is_empty():
@@ -345,6 +356,27 @@ func _fit_controls() -> void:
 	goal_label.add_theme_constant_override("line_spacing", 0)
 	for button in item_buttons.values():
 		button._layout()
+	_layout_owned_toys()
+
+
+func _layout_owned_toys() -> void:
+	if owned_grid == null: return
+	var scale: float = Style.ui_scale(self)
+	var width: float = maxf(240, size.x)
+	var gap: float = 8 / scale
+	owned_grid.columns = mini(maxi(1, owned_grid.get_child_count()), clampi(floori((width * scale - 24 + 8) / 104), 2, 6))
+	owned_grid.add_theme_constant_override("h_separation", ceili(gap))
+	owned_grid.add_theme_constant_override("v_separation", ceili(gap))
+	var rows: int = ceili(float(owned_grid.get_child_count()) / owned_grid.columns)
+	var height: float = rows * 108 / scale + maxi(0, rows - 1) * ceili(gap)
+	var shelf_width: float = minf(width - 24 / scale, (owned_grid.columns * 104 - 8) / scale)
+	owned_grid.position = Vector2((width - shelf_width) * 0.5, STAGE_HEIGHT + gap)
+	owned_grid.size = Vector2(maxf(0, shelf_width), height)
+	_room.custom_minimum_size.y = STAGE_HEIGHT + gap + height + 12 / scale
+	_room.shelves.clear()
+	for row in range(rows):
+		_room.shelves.append(Rect2(Vector2(owned_grid.position.x, owned_grid.position.y + row * (108 / scale + ceili(gap)) + 62 / scale), Vector2(shelf_width, 5 / scale)))
+	_room.queue_redraw()
 
 
 func _build_items() -> void:
@@ -398,15 +430,25 @@ func _requirement(item: Dictionary) -> String:
 
 
 func _refresh_items() -> void:
+	var owned_index := 0
+	var locked_index := 0
 	for item in _state.toys():
 		var button: Button = item_buttons[item.id]
 		var earned: bool = _state.owned(item, _counts)
+		var destination: GridContainer = owned_grid if earned else _item_grid
+		if button.get_parent() != destination:
+			button.reparent(destination, false)
+		destination.move_child(button, owned_index if earned else locked_index)
+		if earned: owned_index += 1
+		else: locked_index += 1
+		button.in_room = earned
 		var selected: bool = item.id == _state.toy_id
 		var previewed: bool = item.id == _preview_id and not earned
 		var detail: String = "Using" if selected and earned else "Choose" if earned else "%d/3 pieces" % _counts.get(item.medal_id, 0)
 		button.tooltip_text = ("Preview only. " if previewed else "") + item.name + ". " + (detail if earned else _requirement(item))
 		_name_control(button, button.tooltip_text)
 		button.present(Data.theme(item.theme) if not item.theme.is_empty() else _palette, selected and earned, detail)
+	_item_grid.visible = locked_index > 0
 
 
 func _refresh_room() -> void:
@@ -447,7 +489,7 @@ func _refresh_goal() -> void:
 	for card in item_buttons.values():
 		card.clear_goal()
 	var gift: Dictionary = _item(_preview_id) if _preview_locked else _state.selected_goal(_counts)
-	if gift.get("slot", "") != "toy":
+	if gift.get("slot", "") != "toy" or _state.owned(gift, _counts):
 		gift = {}
 	_goal_id = str(gift.get("id", ""))
 	goal_button.visible = not gift.is_empty()
@@ -549,7 +591,7 @@ func _layout_room() -> void:
 		return
 	var width := maxf(240, _room.size.x)
 	if playground == null: return
-	playground.layout_room(Vector2(width, _room.size.y))
+	playground.layout_room(Vector2(width, STAGE_HEIGHT))
 	favorite_medal.position = Vector2(16, 46)
 	favorite_medal.size = Vector2(48, 48)
 	_room_title.position = Vector2(14, 9)

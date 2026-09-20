@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, enterGame, openGame, boardPoint, matchWords, discoverMatchCards,
-  resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomControl } = require('./game-ui.cjs');
+  resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomState, roomControl } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -156,7 +156,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
     expect(await record(page)).toContain(field);
   }
   await openRoom(page);
-  await roomControl(page, 'goal', { goal: true });
+  await roomControl(page, 'autumn');
   await page.keyboard.press('Enter');
   await roomControl(page, 'toy');
   await page.keyboard.press('Enter');
@@ -181,7 +181,7 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   const bounds = await metrics(page);
   await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   const collection = collectionBounds(bounds);
-  const card = roomPoint(bounds, 'autumn'), scale = Math.max(2 / 3, bounds.scale);
+  const card = roomPoint(bounds, 'autumn', { owned: (await roomState(page)).owned }), scale = Math.max(2 / 3, bounds.scale);
   const columns = collection.width * scale >= 720 ? 3 : 2;
   const cell = (collection.width - collection.gap * (columns - 1)) / columns;
   const goalClip = { x: bounds.x + (card.x - cell / 2 + 6 / scale) * bounds.scale,
@@ -222,7 +222,7 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   expect(errors).toEqual([]);
 });
 
-test('a completed saved goal stays keyboard reachable at 320px and toy replay grants no rewards', async ({ page }, testInfo) => {
+test('an earned saved goal stays keyboard reachable in Pip\'s home at 320px and replay grants no rewards', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seedAppleGift(page, { pieces: 3, goal: 'toy-autumn', world: 'autumn' });
   const errors = await openGame(page);
@@ -230,7 +230,7 @@ test('a completed saved goal stays keyboard reachable at 320px and toy replay gr
   const stickers = stickerIds(await record(page));
   expect(await record(page)).toContain('toy="toy-ball"');
   await openRoom(page);
-  await roomControl(page, 'goal', { goal: true });
+  await roomControl(page, 'autumn');
   await page.screenshot({ path: testInfo.outputPath('gift-completed-goal-320.png'), scale: 'css' });
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Offer the apple');
@@ -241,7 +241,7 @@ test('a completed saved goal stays keyboard reachable at 320px and toy replay gr
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await openRoom(page);
-  await roomControl(page, 'goal', { goal: true });
+  await roomControl(page, 'autumn');
   await page.keyboard.press('Enter');
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('gift-completed-goal-320-return.png'), scale: 'css' });

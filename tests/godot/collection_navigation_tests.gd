@@ -98,6 +98,7 @@ func _run() -> void:
 			"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d/%d" % [
 				app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
 				app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
+	await _check_owned_display_navigation(app)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
@@ -105,3 +106,38 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Collection navigation: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_owned_display_navigation(app) -> void:
+	var original_cards: Dictionary = app._room.item_buttons.duplicate()
+	for theme_id in app.Data.THEMES:
+		for medal in app.Data.medals(theme_id):
+			app.medal_progress.counts[medal.id] = 3
+	app._refresh_collection()
+	var earned: Dictionary = app.medal_progress.counts.duplicate()
+	var stickers: Array = app.playroom_state.collected_word_ids.duplicate()
+	for dimensions in [Vector2i(320, 568), Vector2i(390, 844)]:
+		root.size = dimensions
+		for frame in range(6):
+			await process_frame
+		check(app._room.owned_grid.get_child_count() == 9 and not app._room._item_grid.visible
+			and app._room.item_buttons.keys().all(func(id: String) -> bool: return app._room.item_buttons[id] == original_cards[id]),
+			"The fully earned home retains all nine controls and removes the empty locked catalog at " + str(dimensions))
+		for item in app.playroom_state.toys():
+			var card: Button = app._room.item_buttons[item.id]
+			card.grab_focus()
+			for frame in range(5):
+				await process_frame
+			check(card.has_focus() and app._focus_candidates().has(card)
+				and app._collection_scroll.get_global_rect().grow(1).encloses(card.get_global_rect())
+				and app._room._room.get_global_rect().grow(1).encloses(card.get_global_rect()),
+				"Keyboard focus reaches the whole " + item.id + " display card at " + str(dimensions))
+			check(card.title_label.is_visible_in_tree() and card.title_label.text == item.name
+				and card.title_label.get_visible_line_count() == card.title_label.get_line_count(),
+				"The owned " + item.id + " retains its readable full name at " + str(dimensions))
+			app._controller_accept()
+			check(app.playroom_state.toy_id == item.id and app._room._toy.id == item.id
+				and not app._room._preview_locked,
+				"Controller selection equips " + item.id + " from the owned display")
+	check(app.medal_progress.counts == earned and app.playroom_state.collected_word_ids == stickers,
+		"Selecting every displayed toy preserves earned pieces and collected words")

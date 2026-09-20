@@ -185,42 +185,74 @@ async function chooseRewardSection(page, section) {
   await rendered(page);
 }
 
-function roomPoint(bounds, name, { item = '' } = {}) {
+function roomLayout(bounds, owned = ['ball']) {
+  const { x, width, top, padding, gap } = collectionBounds(bounds), scale = uiScale(bounds);
+  const toys = ['ball', ...THEME_IDS];
+  owned = toys.filter(toy => toy === 'ball' || owned.includes(toy));
+  const locked = toys.filter(toy => !owned.includes(toy));
+  const ownedColumns = Math.min(owned.length, Math.max(2, Math.min(6, Math.floor((width * scale - 24 + 8) / 104))));
+  const ownedRows = Math.ceil(owned.length / ownedColumns);
+  const shelfWidth = Math.min(width - 24 / scale, (ownedColumns * 104 - 8) / scale);
+  const homeHeight = 304 + (8 + ownedRows * 108 + 12) / scale + (ownedRows - 1) * Math.ceil(8 / scale);
+  return { x, width, top, padding, gap, scale, owned, locked, ownedColumns, shelfWidth, homeHeight };
+}
+
+async function roomState(page) {
+  const records = await page.evaluate(() => {
+    const read = key => {
+      try { return localStorage.getItem(key) || ''; }
+      catch (error) {
+        if (error.name !== 'SecurityError') throw error;
+        return '';
+      }
+    };
+    return { saved: read('wordBuddies.playroom'), medals: read('wordBuddies.medalProgress') };
+  });
+  const counts = Object.fromEntries([...records.medals.matchAll(/"([a-z]+-\d+)"\s*:\s*(\d+)/g)]
+    .map(([, id, count]) => [id, Number(count)]));
+  return { ...records,
+    owned: ['ball', ...THEME_IDS.filter(theme => counts[`${theme}-1`] >= 3)],
+    selected: records.saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '',
+    equipped: records.saved.match(/^toy="toy-([^"]+)"/m)?.[1] || 'ball'
+  };
+}
+
+function roomPoint(bounds, name, { item = '', owned = ['ball'] } = {}) {
   const { x, width, top, padding, gap } = collectionBounds(bounds), scale = uiScale(bounds);
   if (name === 'pip') return { x: x + 88, y: top + 216 };
   if (name === 'toy') return { x: x + width - 66, y: top + 230 };
-  const columns = width * scale >= 720 ? 3 : 2;
-  const index = ['ball', ...THEME_IDS].indexOf(name);
-  const cell = (width - (columns - 1) * gap) / columns;
+  const layout = roomLayout(bounds, owned);
   if (name === 'goal') {
     if (!item) throw new Error('The inline goal control needs its toy card name.');
-    const card = roomPoint(bounds, item);
-    return { x: card.x + cell / 2 - 30 / scale, y: card.y - 34 / scale };
+    if (layout.owned.includes(item)) throw new Error('Earned toys are selected directly in Pip\'s home.');
+    const card = roomPoint(bounds, item, { owned });
+    return { x: card.x + card.width / 2 - 30 / scale, y: card.y - 34 / scale };
   }
+  const inHome = layout.owned.includes(name);
+  const index = (inHome ? layout.owned : layout.locked).indexOf(name);
   if (index < 0) throw new Error(`Unknown room control: ${name}`);
-  const firstItem = top + 304 + gap + 64 / scale;
-  const center = firstItem + Math.floor(index / columns) * (128 / scale + gap);
+  const columns = inHome ? layout.ownedColumns : width * scale >= 720 ? 3 : 2;
+  const cardGap = inHome ? Math.ceil(8 / scale) : gap;
+  const rowX = inHome ? x + (width - layout.shelfWidth) / 2 : x;
+  const rowWidth = inHome ? layout.shelfWidth : width;
+  const cell = (rowWidth - (columns - 1) * cardGap) / columns;
+  const height = (inHome ? 108 : 128) / scale;
+  const firstItem = top + (inHome ? 304 + 8 / scale : layout.homeHeight + gap) + height / 2;
+  const center = firstItem + Math.floor(index / columns) * (height + cardGap);
   return {
-    x: x + index % columns * (cell + gap) + cell / 2,
-    y: Math.min(center, bounds.height - padding - 64 / scale)
+    x: rowX + index % columns * (cell + cardGap) + cell / 2,
+    y: Math.min(center, bounds.height - padding - height / 2),
+    width: cell, height, inHome
   };
 }
 
 async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const bounds = await metrics(page);
-  const saved = await page.evaluate(() => {
-    // Storage-recovery fixtures use the game's default room until reading succeeds.
-    try { return localStorage.getItem('wordBuddies.playroom') || ''; }
-    catch (error) {
-      if (error.name !== 'SecurityError') throw error;
-      return '';
-    }
-  });
-  const selected = saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '';
-  const active = locked ? item : selected;
+  const state = await roomState(page), layout = roomLayout(bounds, state.owned);
+  const active = locked ? item : state.selected;
   await chooseRewardSection(page, 'room');
-  const controls = ['pip', ...(locked ? [] : ['toy'])];
-  for (const toy of ['ball', ...THEME_IDS]) {
+  const controls = ['pip', ...(locked ? [] : ['toy']), ...layout.owned];
+  for (const toy of layout.locked) {
     controls.push(toy);
     if (toy === active) controls.push('goal');
   }
@@ -230,12 +262,11 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
-  return roomPoint(bounds, name, { item: active });
+  return roomPoint(bounds, name, { item: active, owned: layout.owned });
 }
 
 async function leaveRoomPreview(page, { item = '' } = {}) {
-  const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom') || '');
-  const equipped = saved.match(/^toy="toy-([^"]+)"/m)?.[1] || 'ball';
+  const { equipped } = await roomState(page);
   await roomControl(page, equipped, { locked: true, item });
   await page.keyboard.press('Enter');
   await rendered(page);
@@ -450,5 +481,5 @@ function resultPoint(bounds, key, { gift = false } = {}) {
 }
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
-  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
+  progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

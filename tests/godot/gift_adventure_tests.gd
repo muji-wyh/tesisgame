@@ -128,7 +128,9 @@ func _exercise(app, directory: String) -> void:
 	var reloaded = load("res://scripts/playroom_state.gd").new(directory + "/reload.cfg", storage)
 	check(reloaded.load_state() and reloaded.goal_item_id == "toy-autumn" and reloaded.toy_id == "toy-autumn", "Immediate reload keeps the completed goal and toy")
 	app._room.configure(reloaded, earned, load("res://scripts/game_data.gd").theme("autumn"), true)
-	check(app._room.goal_button.is_visible_in_tree(), "A completed saved goal remains playable after reload")
+	check(not app._room.goal_button.is_visible_in_tree() and not app._room.goal_label.is_visible_in_tree()
+		and app._room.item_buttons["toy-autumn"].get_parent() == app._room.owned_grid
+		and not app._room.toy_button.disabled, "A completed saved goal stays playable in the room without a gift-goal arrow after reload")
 	app._room.configure(reloaded, earned, load("res://scripts/game_data.gd").theme("autumn"), false)
 	app._room.toy_button.pressed.emit()
 	check(app._room.is_processing(), "Animated toy action starts during visible play")
@@ -210,6 +212,7 @@ func _win_match_and_open(app) -> void:
 func _test_completed_goal_use(app, directory: String, storage: BrowserStorage, goal_id: String, starter_id: String) -> void:
 	var gift: Dictionary = app.playroom_state.item(goal_id)
 	check(gift.slot == "toy", "Completed gift actions are scoped to toys")
+	var owned_card = app._room.item_buttons[goal_id]
 	app._room.item_buttons[starter_id].pressed.emit()
 	var previous_toy: String = app.playroom_state.toy_id
 	var previous_backdrop: String = app.playroom_state.backdrop_id
@@ -219,27 +222,31 @@ func _test_completed_goal_use(app, directory: String, storage: BrowserStorage, g
 	app.playroom_state = reloaded
 	app._playroom_ready = true
 	app._refresh_collection()
-	check(app._room.goal_button.is_visible_in_tree() and app._room.goal_button.tooltip_text.begins_with("Use toy"), "The reloaded completed goal has a real use button")
+	check(app._room.item_buttons[goal_id] == owned_card and owned_card.get_parent() == app._room.owned_grid
+		and owned_card.is_visible_in_tree() and not owned_card.disabled
+		and not app._room.goal_button.is_visible_in_tree() and not app._room.goal_label.is_visible_in_tree(),
+		"The reloaded completed goal uses its existing owned card without a gift-goal label or arrow")
 	var saved_bytes: String = storage.text
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	var stickers: Array = reloaded.collected_word_ids.duplicate()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	var room_theme: String = app._room._room.theme_id
 	storage.writable = false
-	app._room.goal_button.pressed.emit()
+	owned_card.pressed.emit()
 	check(reloaded.toy_id == previous_toy and reloaded.backdrop_id == previous_backdrop and storage.text == saved_bytes, "Failed completed-goal equipment saves preserve both room choices and committed bytes")
 	check(app.collection_page.visible and app._room._toy.id == previous_toy and app._room._room.theme_id == room_theme
 		and _card_message(app, goal_id).contains("Not saved"), "Failed completed-goal use keeps the prior visible room and explains the save failure on its card")
-	check(app._room.goal_button.is_visible_in_tree() and not app._room.goal_button.disabled, "The failed completed-goal use can retry through the same button")
+	check(owned_card.is_visible_in_tree() and not owned_card.disabled and not app._room.goal_button.is_visible_in_tree(),
+		"The failed completed-goal use can retry through the same owned card")
 	storage.writable = true
-	app._room.goal_button.pressed.emit()
+	owned_card.pressed.emit()
 	check(reloaded.toy_id == goal_id and reloaded.backdrop_id == previous_backdrop,
-		"Retrying the completed toy-goal button preserves the existing backdrop")
+		"Retrying the completed toy's owned card preserves the existing backdrop")
 	check(app._room._toy.id == reloaded.toy_id and app._room._room.theme_id == ("home" if reloaded.backdrop_id == "backdrop-home" else reloaded.item(reloaded.backdrop_id).theme), "Successful retry updates the actual room to the equipped gift")
-	app._room.goal_button.pressed.emit()
+	owned_card.pressed.emit()
 	check(app.medal_progress.counts == counts and reloaded.collected_word_ids == stickers and app.model.lesson_words == lesson and reloaded.goal_item_id == goal_id, "Repeated completed-goal use preserves the lesson and cannot duplicate rewards or stickers")
 	var confirmed = load("res://scripts/playroom_state.gd").new(directory + "/confirmed-" + goal_id + ".cfg", storage)
-	check(confirmed.load_state() and confirmed.toy_id == reloaded.toy_id and confirmed.backdrop_id == reloaded.backdrop_id and confirmed.goal_item_id == goal_id, "The equipment chosen through the completed-goal button survives another reload")
+	check(confirmed.load_state() and confirmed.toy_id == reloaded.toy_id and confirmed.backdrop_id == reloaded.backdrop_id and confirmed.goal_item_id == goal_id, "The equipment chosen through its owned card survives another reload")
 
 
 func _card_message(app, id: String) -> String:
