@@ -98,12 +98,12 @@ async function tryGift(page) {
 }
 
 async function playAppleStages(page, testInfo, prefix, firstTouch = false) {
-  await roomControl(page, 'action');
+  await roomControl(page, 'toy');
   for (let index = 0; index < APPLE_STAGES.length; index++) {
     if (index === 0 && firstTouch) {
       const bounds = await metrics(page);
-      const action = roomPoint(bounds, 'action', { goal: true });
-      await tap(page, action.x, action.y);
+      const toy = roomPoint(bounds, 'toy');
+      await tap(page, toy.x, toy.y);
     } else {
       await page.keyboard.press('Enter');
     }
@@ -158,7 +158,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   await openRoom(page);
   await roomControl(page, 'goal', { goal: true });
   await page.keyboard.press('Enter');
-  await roomControl(page, 'action');
+  await roomControl(page, 'toy');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText(APPLE_STAGES[0]);
   expect(await pieceCount(page)).toBe(3);

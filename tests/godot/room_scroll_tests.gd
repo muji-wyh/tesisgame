@@ -72,12 +72,12 @@ func _run() -> void:
 			app._room.playground.cancel()
 			await settle()
 			var point: Vector2 = app._room.toy_button.get_global_rect().get_center() if locked else scene.global_position + Vector2(scene.size.x * 0.5, 90)
-			var caption: String = app._room.caption.text
+			var feedback: String = app._room.feedback_text
 			check(not app.duck.get_global_rect().has_point(point), "The scroll starts outside Pip")
 			if locked:
 				await pointer(point, true, touch)
 				await pointer(point, false, touch)
-				check(app._room.caption.text == caption and app._room.playground.motion_kind.is_empty(),
+				check(app._room.feedback_text == feedback and app._room.playground.motion_kind.is_empty(),
 					"An inactive toy tap stays inactive while its area supports scrolling")
 			await pointer(point, true, touch)
 			for step in range(1, 5):
@@ -85,10 +85,10 @@ func _run() -> void:
 			await pointer(point - Vector2(0, 64), false, touch)
 			check(absi(app._collection_scroll.scroll_vertical - 64) <= 2,
 				"Background and locked toys track scrolling: touch=%s locked=%s actual=%d" % [touch, locked, app._collection_scroll.scroll_vertical])
-			check(app._room.caption.text == caption and app._room.playground.motion_kind.is_empty(),
+			check(app._room.feedback_text == feedback and app._room.playground.motion_kind.is_empty(),
 				"A scroll does not also call Pip or play the toy")
 			if locked:
-				app._room._activate_action()
+				app._room.item_buttons[app.playroom_state.toy_id].pressed.emit()
 			else:
 				app._room.playground.cancel()
 			await settle()
@@ -97,7 +97,7 @@ func _run() -> void:
 	var floor: Vector2 = scene.global_position + Vector2(scene.size.x * 0.5, 90)
 	await pointer(floor, true, false)
 	await pointer(floor, false, false)
-	check(app._room.caption.text.contains("over!") and app._collection_scroll.scroll_vertical == 0,
+	check(app._room.feedback_text.contains("over!") and app._collection_scroll.scroll_vertical == 0,
 		"A stationary floor tap still calls Pip without scrolling")
 	app._room.playground.cancel()
 	var wheel := InputEventMouseButton.new()

@@ -197,23 +197,29 @@ function roomPoint(bounds, name, { item = '' } = {}) {
     const card = roomPoint(bounds, item);
     return { x: card.x + cell / 2 - 30 / scale, y: card.y - 34 / scale };
   }
-  const action = top + 304 + gap * 2 + 58 / scale;
-  const firstItem = action + gap + 86 / scale;
-  const center = index >= 0 ? firstItem + Math.floor(index / columns) * (128 / scale + gap) : { action }[name];
-  if (!Number.isFinite(center)) throw new Error(`Unknown room control: ${name}`);
+  if (index < 0) throw new Error(`Unknown room control: ${name}`);
+  const firstItem = top + 304 + gap + 64 / scale;
+  const center = firstItem + Math.floor(index / columns) * (128 / scale + gap);
   return {
-    x: index >= 0 ? x + index % columns * (cell + gap) + cell / 2 : x + width / 2,
-    y: Math.min(center, bounds.height - padding - (index >= 0 ? 64 : 22) / scale)
+    x: x + index % columns * (cell + gap) + cell / 2,
+    y: Math.min(center, bounds.height - padding - 64 / scale)
   };
 }
 
 async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const bounds = await metrics(page);
-  const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom') || '');
+  const saved = await page.evaluate(() => {
+    // Storage-recovery fixtures use the game's default room until reading succeeds.
+    try { return localStorage.getItem('wordBuddies.playroom') || ''; }
+    catch (error) {
+      if (error.name !== 'SecurityError') throw error;
+      return '';
+    }
+  });
   const selected = saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '';
   const active = locked ? item : selected;
   await chooseRewardSection(page, 'room');
-  const controls = ['pip', ...(locked ? [] : ['toy']), 'action'];
+  const controls = ['pip', ...(locked ? [] : ['toy'])];
   for (const toy of ['ball', ...THEME_IDS]) {
     controls.push(toy);
     if (toy === active) controls.push('goal');
@@ -227,9 +233,28 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   return roomPoint(bounds, name, { item: active });
 }
 
-async function leaveRoomPreview(page) {
-  await roomControl(page, 'action', { locked: true });
+async function leaveRoomPreview(page, { item = '' } = {}) {
+  const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom') || '');
+  const equipped = saved.match(/^toy="toy-([^"]+)"/m)?.[1] || 'ball';
+  await roomControl(page, equipped, { locked: true, item });
   await page.keyboard.press('Enter');
+  await rendered(page);
+  const bounds = await metrics(page), collection = collectionBounds(bounds);
+  const x = bounds.x + (collection.x + collection.width / 2) * bounds.scale;
+  const top = bounds.y + Math.min(collection.top + 20, bounds.height - collection.padding - 80) * bounds.scale;
+  await page.mouse.move(x, top);
+  if (page.context().browser().browserType().name() !== 'webkit') {
+    await page.mouse.wheel(0, -2600);
+  } else {
+    // Mobile WebKit has no wheel API; dragging the list keeps the toy feedback intact.
+    for (let swipe = 0; swipe < 4; swipe++) {
+      await page.mouse.move(x, top);
+      await page.mouse.down();
+      await page.mouse.move(x, bounds.y + (bounds.height - collection.padding - 20) * bounds.scale, { steps: 8 });
+      await page.mouse.up();
+      await rendered(page);
+    }
+  }
   await rendered(page);
 }
 
@@ -317,14 +342,14 @@ async function enterGame(scope) {
   await expect(scope.locator('#status')).toBeHidden();
 }
 
-async function openGame(page, { reducedMotion = 'reduce', mode = 'match' } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 3 word–picture pairs.' } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText(expectedStatus);
   await rendered(page);
   if (mode !== 'match') await chooseMode(page, mode);
   return errors;

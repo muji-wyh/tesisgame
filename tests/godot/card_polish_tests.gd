@@ -98,7 +98,7 @@ func _run() -> void:
 	check(shell._press_motion._tween == null and shell.picture.scale == Vector2.ONE,
 		"Reduced motion immediately settles the toy-card reaction")
 	check(app.playroom_state.set_goal("toy-ocean", app.medal_progress.counts), "The fixture can keep a gift goal")
-	room.action_button.pressed.emit()
+	flower.pressed.emit()
 	check(room.goal_label.text.contains("Goal") and flower.badge.text == "Using", "Returning from preview distinguishes the gift Goal from the equipped toy")
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768)]:
 		root.size = dimensions

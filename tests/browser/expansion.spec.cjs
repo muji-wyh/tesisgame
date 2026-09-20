@@ -14,6 +14,12 @@ async function tapRoomControl(page, name) {
   await tap(page, point.x, point.y);
 }
 
+async function playRoomToy(page) {
+  await roomControl(page, 'toy');
+  // Each stage moves the toy; keyboard focus follows the actual control.
+  await page.keyboard.press('Enter');
+}
+
 async function seedGifts(page, { favorite = '' } = {}) {
   const counts = {};
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space']) {
@@ -32,7 +38,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await openRoom(page);
   const saved = await roomRecord(page);
   expect(saved).toContain('toy="toy-ball"');
-  await tapRoomControl(page, 'action');
+  await playRoomToy(page);
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   // Pip's speech marker clears when the pronunciation finishes.
   await page.waitForTimeout(1600);
@@ -48,7 +54,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await leavePreview(page);
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
-  await tapRoomControl(page, 'action');
+  await playRoomToy(page);
   expect(await roomRecord(page)).toBe(saved);
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   await tapRoomControl(page, 'space');
@@ -91,11 +97,11 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
   await openRoom(page);
   // The removed chooser must not erase an existing background or migrated favorite.
   expect((await roomRecord(page)).split('[journey]')[0]).toBe(saved.split('[journey]')[0]);
-  await tapRoomControl(page, 'action');
+  await playRoomToy(page);
   await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
-  await tapRoomControl(page, 'action');
+  await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText('2/3 · The flower grows taller!');
-  await tapRoomControl(page, 'action');
+  await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText('3/3 · The flower blooms for Pip!');
   await page.waitForTimeout(1600);
   await page.screenshot({ path: testInfo.outputPath('room-saved-flower-phone.png'), scale: 'css' });
@@ -139,7 +145,9 @@ test('a failed initial room read recovers after storage becomes available', asyn
       return read.call(this, key);
     };
   });
-  const errors = await openGame(page);
+  const errors = await openGame(page, {
+    expectedStatus: 'Room choices could not be remembered. You can keep practising. Choose Retry saving.'
+  });
   await openRoom(page);
   await page.screenshot({ path: testInfo.outputPath('room-load-retry.png'), scale: 'css' });
   await tapRoomControl(page, 'spring');
@@ -188,8 +196,9 @@ test('earned seasonal toys keep their visible noun and distinct outcome', async 
     await page.reload();
     await enterGame(page);
     await openRoom(page);
+    await roomControl(page, 'toy');
     for (const [index, caption] of stages.entries()) {
-      await tapRoomControl(page, 'action');
+      await page.keyboard.press('Enter');
       await expect(page.locator('#game-status')).toHaveText(`${index + 1}/3 · ${caption}`);
       await page.screenshot({ path: testInfo.outputPath(`room-${theme}-stage-${index + 1}.png`), scale: 'css' });
     }
@@ -204,7 +213,7 @@ test('the room keeps readable gift previews and usable controls on a tablet', as
   await page.setViewportSize({ width: 834, height: 1194 });
   const errors = await openGame(page);
   await openRoom(page);
-  await tapRoomControl(page, 'action');
+  await playRoomToy(page);
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   await tapRoomControl(page, 'spring');
   await page.waitForTimeout(1600);

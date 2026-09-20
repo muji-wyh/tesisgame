@@ -261,7 +261,7 @@ for (const gift of [
     await tap(page, useGift.x, useGift.y);
     await expect(page.locator('#game-status')).toContainText(gift.firstAction);
     expect(await record(page)).toContain(`toy="toy-${gift.world}"`);
-    await roomControl(page, 'action');
+    await roomControl(page, 'toy');
     for (const [index, outcome] of gift.outcomes.entries()) {
       await page.keyboard.press('Enter');
       await expect(page.locator('#game-status')).toHaveText(outcome);

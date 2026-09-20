@@ -259,7 +259,6 @@ var _preview_caption: Label
 var _preview_close: Icons
 var _preview_play_button: Button
 var _preview_wear_button: Button
-var _playroom_caption: Label
 var _playroom_medal: Medal
 var _playroom_buttons: Array[Button] = []
 var _favorite_reward_id: String = ""
@@ -956,7 +955,6 @@ func _build_playroom() -> void:
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_collection_duck_slot = _room.duck_slot
-	_playroom_caption = _room.caption
 	_playroom_medal = _room.favorite_medal
 	_room.item_selected.connect(_select_room_item)
 	_room.item_previewed.connect(_room_previewed)
@@ -997,7 +995,7 @@ func _select_room_item(id: String) -> bool:
 	audio.stop_voice()
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_refresh_favorite_reward()
-	_announce_status(_playroom_caption.text)
+	_announce_status(_room.feedback_text)
 	return true
 
 
@@ -1028,7 +1026,7 @@ func _room_toy(kind: String) -> void:
 		duck.react("happy")
 	else:
 		duck.perform_trick("bubbles" if kind in ["water", "open"] else "dance")
-	_announce_status(_playroom_caption.text)
+	_announce_status(_room.feedback_text)
 
 
 func _room_pip_interaction(kind: String, message: String) -> void:
@@ -1048,20 +1046,20 @@ func _try_unlocked_gift() -> void:
 		_ensure_collection_focus_visible.call_deferred(_room.item_buttons[_unlocked_gift.id])
 		return
 	_collection_scroll.scroll_vertical = 0
-	_room.action_button.grab_focus()
+	_room.toy_button.grab_focus()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if collection_page.visible and _room.action_button.has_focus():
-		_collection_scroll.ensure_control_visible(_room.action_button)
+	if collection_page.visible and _room.toy_button.has_focus():
+		_collection_scroll.ensure_control_visible(_room.toy_button)
 
 
 func _play_duck_trick(kind: String) -> void:
 	if not collection_page.visible or _preview_page.visible or _collection_dragged:
 		return
-	_playroom_caption.text = duck.perform_trick(kind)
+	_room.feedback_text = duck.perform_trick(kind)
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.cue("select")
-	_announce_status(_playroom_caption.text)
+	_announce_status(_room.feedback_text)
 
 
 func _load_favorite_reward() -> void:
@@ -1076,7 +1074,8 @@ func _load_favorite_reward() -> void:
 	_ensure_playroom_loaded()
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	if not _playroom_ready:
-		_playroom_caption.text = "Room choices could not load. Tap an owned item to retry."
+		_room.feedback_text = "Room choices could not load. Tap an owned item to retry."
+		_room.show_item_error(playroom_state.toy_id, "Could not load\nTap to retry", _room.feedback_text)
 
 
 func _refresh_favorite_reward() -> void:
@@ -1192,7 +1191,8 @@ func _refresh_collection(show_medals: bool = false) -> void:
 		_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 		_refresh_favorite_reward()
 		if not _playroom_ready:
-			_playroom_caption.text = "Room choices could not load. Tap an owned item to retry."
+			_room.feedback_text = "Room choices could not load. Tap an owned item to retry."
+			_room.show_item_error(playroom_state.toy_id, "Could not load\nTap to retry", _room.feedback_text)
 	_layout_collection()
 
 

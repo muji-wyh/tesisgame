@@ -281,14 +281,13 @@ test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText('2/3 · Pip rolls the ball back!');
   await page.keyboard.press('Space');
   await expect(page.locator('#game-status')).toHaveText('3/3 · Pip catches the ball. Hooray!');
   await screenshot(page, testInfo, 'pip-narrow-keyboard-toy-action');
   await page.keyboard.press('Enter');
-  // Restore the room's top after keyboard focus has kept the main action visible.
+  // Restore the room's top after keyboard focus has followed the moving toy.
   await chooseRewardSection(page, 'room');
   const original = await patch(page, bounds, room.body);
   const arrival = { x: room.x + room.width - 98, y: room.y + room.height - 112, width: 60, height: 68 };

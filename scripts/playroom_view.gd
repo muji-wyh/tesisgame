@@ -200,10 +200,9 @@ class ToyMarks extends Control:
 				draw_line(point, point + Vector2(2, 2), Color("#de88b2") if index % 2 == 0 else Color("#6db9a4"), 2, true)
 
 var duck_slot: Control
-var caption: Label
+var feedback_text: String = "Choose a toy, then play with Pip!"
 var favorite_medal: Medal
 var toy_button: Button
-var action_button: Button
 var goal_button: Icons
 var item_buttons: Dictionary = {}
 var goal_label: Label
@@ -296,15 +295,6 @@ func _build() -> void:
 	playground.interaction_started.connect(_direct_play_started)
 	playground.interaction.connect(_direct_play_feedback)
 	playground.toy_tapped.connect(_play_toy)
-	caption = Style.label("Choose a toy, then play with Pip!", 18)
-	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	caption.custom_minimum_size.y = 50
-	add_child(caption)
-	action_button = Button.new()
-	action_button.name = "RoomToyAction"
-	Style.primary_button(action_button, Style.GOOD)
-	action_button.pressed.connect(_activate_action)
-	add_child(action_button)
 	add_child(goal_label)
 	add_child(goal_button)
 	_item_grid = GridContainer.new()
@@ -331,7 +321,6 @@ func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: b
 		_reset_sequence()
 	if item_buttons.is_empty():
 		_build_items()
-	Style.primary_button(action_button, palette.accent)
 	Style.square_icon_button(goal_button, palette.accent)
 	_refresh_items()
 	_refresh_room()
@@ -349,11 +338,8 @@ func _fit_controls() -> void:
 	_item_grid.columns = 3 if size.x * scale >= 720 else 2
 	_item_grid.add_theme_constant_override("h_separation", gap)
 	_item_grid.add_theme_constant_override("v_separation", gap)
-	for button in [action_button, goal_button]:
-		button.custom_minimum_size = Vector2(44, 44) / scale
-		button.add_theme_font_size_override("font_size", ceili(14 / scale))
-	caption.custom_minimum_size.y = 36 / scale
-	caption.add_theme_font_size_override("font_size", ceili(14 / scale))
+	goal_button.custom_minimum_size = Vector2(44, 44) / scale
+	goal_button.add_theme_font_size_override("font_size", ceili(14 / scale))
 	goal_label.add_theme_font_size_override("font_size", ceili(12 / scale))
 	# The default logical line gap grows with canvas scaling and overflows three-line cards.
 	goal_label.add_theme_constant_override("line_spacing", 0)
@@ -444,15 +430,14 @@ func _refresh_room() -> void:
 	toy_button.icon = _toy_art
 	toy_button.self_modulate = SUMMER_BALL_TINT if _toy.id == "toy-summer" else Color.WHITE
 	_toy_label.text = _toy.word_id
-	action_button.disabled = false
 	toy_button.disabled = _preview_locked
 	toy_button.focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
 	playground.configure(_toy.word_id, _preview_locked, _reduced_motion, _room.palette.get("accent", Style.GOOD))
-	_refresh_action_control()
+	_refresh_toy_control()
 	if _preview_locked:
-		caption.text = "Preview: %s." % _toy.word_id
+		feedback_text = "Preview: %s." % _toy.word_id
 	elif _action.is_empty() and playground.interaction_kind.is_empty():
-		caption.text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action][0]]
+		feedback_text = "%s %s for Pip. %s!" % ["An" if _toy.word_id == "apple" else "A", _toy.word_id, ACTIONS[_toy.action][0]]
 	_refresh_goal()
 	_layout_room()
 
@@ -516,12 +501,10 @@ func _reset_sequence() -> void:
 	set_process(false)
 
 
-func _refresh_action_control() -> void:
-	action_button.text = "Back to my room" if _preview_locked else "Play again" if _stage == 3 else ACTIONS[_toy.action][_stage]
+func _refresh_toy_control() -> void:
 	toy_button.tooltip_text = "Play with the " + str(_toy.word_id) + " again" if _stage == 3 else str(ACTIONS[_toy.action][_stage])
 	toy_button.tooltip_text = "Drag to toss the %s. Tap: %s" % [_toy.word_id, toy_button.tooltip_text]
 	_name_control(toy_button, toy_button.tooltip_text)
-	_name_control(action_button, action_button.text)
 
 
 func _choose_item(id: String) -> void:
@@ -542,19 +525,6 @@ func _choose_item(id: String) -> void:
 	item_buttons[id].play_press(_reduced_motion)
 
 
-func _activate_action() -> void:
-	if not _can_interact():
-		return
-	if _preview_locked:
-		_preview_id = ""
-		_reset_sequence()
-		_refresh_items()
-		_refresh_room()
-		item_previewed.emit(caption.text)
-	else:
-		_play_toy()
-
-
 func _play_toy() -> void:
 	if _preview_locked or _toy.is_empty() or not _can_interact():
 		return
@@ -566,8 +536,8 @@ func _play_toy() -> void:
 	_action = _toy.action
 	_stage += 1
 	_action_progress = 1.0 if _reduced_motion else 0.0
-	caption.text = "%d/3 · %s" % [_stage, OUTCOMES[_action][_stage - 1]]
-	_refresh_action_control()
+	feedback_text = "%d/3 · %s" % [_stage, OUTCOMES[_action][_stage - 1]]
+	_refresh_toy_control()
 	_apply_action()
 	set_process(not _reduced_motion)
 	word_requested.emit(_toy.word_id)
@@ -674,7 +644,7 @@ func _notification(what: int) -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button, goal_button] + item_buttons.values():
+	for button in [toy_button, goal_button] + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result
@@ -686,11 +656,11 @@ func _direct_play_started() -> void:
 	_action_progress = 0
 	set_process(false)
 	_apply_action()
-	_refresh_action_control()
+	_refresh_toy_control()
 
 
 func _direct_play_feedback(kind: String, message: String) -> void:
-	caption.text = message
+	feedback_text = message
 	if kind == "throw": word_requested.emit(_toy.word_id)
 	pip_interaction.emit(kind, message)
 

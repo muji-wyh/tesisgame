@@ -292,8 +292,10 @@ intact and continue to render; they are not advertised as new gifts or goals.
 Drag blank areas of the room canvas, including locked toy previews, to scroll.
 A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
 retain their play interactions. Pet Pip directly, tap Pip to poke, or drag a toy
-to toss it. The separate Pet/Poke/Toss/Call button row is removed; toy feedback
-and the main toy action sit directly below the room.
+to toss it. The toy catalog sits directly below the room, with no separate
+shortcut buttons, step caption or toy action button. Tap the toy itself to
+advance its three play steps and replay; keyboard and controller activation
+work on the toy too. To leave a locked preview, choose an owned toy card.
 Choose a locked toy to preview it without moving the page. Its card shows the
 remaining pieces and an inline arrow to start or continue its adventure; there
 is no separate **Help Pip get this** row. The arrow saves the goal and starts a
@@ -313,7 +315,8 @@ a rocket, swing with the jungle monkey or decorate the candy cake with Pip.
 Each toy has three steps you control, such as rolling, returning and catching
 the ball or readying, igniting and launching the rocket. The monkey swings,
 waves and gives a high five; the cake is set down, frosted and covered in sprinkles.
-Every step shows and pronounces its noun; a finished sequence offers replay.
+Every step shows and pronounces its noun; tap the toy after the last step to reset
+for another round. Step feedback remains available to assistive technology.
 Toy play is temporary and never grants extra medals. Reduced motion
 shows each stage's static result. The next gift shows its name and
 remaining pieces. Newly unlocked gifts offer **Try it with Pip** after the reward saves.

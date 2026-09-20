@@ -74,13 +74,13 @@ func _check_duck_gestures(app, playground) -> void:
 		var hit_context := _hit_context(app, playground, point)
 		await _tap(point, method)
 		check(playground.interaction_kind == "poke" and interactions.slice(before) == ["poke"], method + " light tap pokes Pip exactly once: kind=%s events=%s; %s" % [playground.interaction_kind, interactions.slice(before), hit_context])
-		var poke_caption: String = app._room.caption.text
+		var poke_feedback: String = app._room.feedback_text
 		before = interactions.size()
 		var center: Vector2 = app.duck.get_global_rect().get_center()
 		hit_context = _hit_context(app, playground, center - Vector2(22, 0))
 		await _drag(center - Vector2(22, 0), center + Vector2(26, 0), method)
 		check(playground.interaction_kind == "pet" and interactions.slice(before) == ["pet"], method + " stroke pets Pip once without a release poke or duplicate emulated-mouse action: kind=%s events=%s; %s" % [playground.interaction_kind, interactions.slice(before), hit_context])
-		check(app._room.caption.text != poke_caption, method + " stroking and poking give distinguishable visible feedback")
+		check(app._room.feedback_text != poke_feedback, method + " stroking and poking give distinguishable accessibility feedback")
 		check(app._collection_scroll.scroll_vertical == scroll_before and not app._collection_dragging, method + " Pip gestures belong to the playground without scrolling the reward list")
 
 
@@ -107,10 +107,11 @@ func _check_legacy_toy_sequences(app, playground) -> void:
 		previous = expected
 	check(_render_rect(toy, scene).get_center().distance_to(home) < 1.0, "The fourth toy click restores the current left home")
 	for expected in [1, 2, 3]:
-		app._collection_scroll.ensure_control_visible(room.action_button)
+		toy.grab_focus()
+		app._collection_scroll.ensure_control_visible(toy)
 		await _settle()
-		await _tap(room.action_button.get_global_rect().get_center())
-		check(room._stage == expected, "The real action button advances the ball sequence to stage %d" % expected)
+		app._controller_accept()
+		check(room._stage == expected, "Controller activation of the focused toy advances the ball sequence to stage %d" % expected)
 		var stayed_on_left := true
 		var stayed_inside := true
 		for step in range(20):
@@ -122,9 +123,9 @@ func _check_legacy_toy_sequences(app, playground) -> void:
 		check(stayed_inside, "Ball stage %d keeps its actual rotated render rectangle and word label inside the room" % expected)
 		var final_center := _render_rect(toy, scene).get_center()
 		check(absf(final_center.x - home.x) < 1.0 if expected == 2 else final_center.x > home.x + 10.0, "Ball stage %d visibly returns home or travels toward Pip on the right" % expected)
-	await _tap(room.action_button.get_global_rect().get_center())
+	app._controller_accept()
 	await _settle()
-	check(room._stage == 0 and _render_rect(toy, scene).get_center().distance_to(home) < 1.0, "Play again resets the legacy action at the current left home")
+	check(room._stage == 0 and _render_rect(toy, scene).get_center().distance_to(home) < 1.0, "Activating the toy again resets the sequence at the current left home")
 	await _show_stage(app)
 
 
@@ -171,13 +172,13 @@ func _check_throwing(app, playground) -> void:
 	var outcomes: Array = interactions.slice(before)
 	check(outcomes.has("catch") or outcomes.has("fetch"), "Pip catches the thrown ball or runs over to retrieve it")
 	check(not playground.flight_active and playground.toy_phase == "idle", "A completed throw returns the ball to a reusable resting state")
-	check(app._room.caption.text.contains("ball"), "The throw outcome keeps the visible ball-word association")
+	check(app._room.feedback_text.contains("ball"), "The throw outcome keeps the ball-word association in accessibility feedback")
 	_check_room_bounds(app, "mouse throw")
 	before = interactions.size()
 	playground.toss_to_pip()
 	check(playground.flight_active, "The internal toss_to_pip method launches a real ball")
 	await _advance(playground, 8.0)
-	check(interactions.slice(before).count("catch") == 1 and app._room.caption.text.contains("Pip caught the ball!"), "An internally aimed toss reaches Pip and reports one actual catch")
+	check(interactions.slice(before).count("catch") == 1 and app._room.feedback_text.contains("Pip caught the ball!"), "An internally aimed toss reaches Pip and reports one actual catch")
 	check(playground.toy_phase == "idle", "Pip returns an aimed toss to the resting toy")
 	before = interactions.size()
 	toy_center = app._room.toy_button.get_global_rect().get_center()
@@ -186,7 +187,7 @@ func _check_throwing(app, playground) -> void:
 	await _drag(toy_center, away, "touch")
 	check(playground.flight_active and interactions.slice(before).count("throw") == 1, "A touch throw launches once despite mouse emulation")
 	await _advance(playground, 8.0)
-	check(interactions.slice(before).has("fetch") and app._room.caption.text.contains("Pip fetched the ball!"), "A ball thrown away from Pip is chased and fetched")
+	check(interactions.slice(before).has("fetch") and app._room.feedback_text.contains("Pip fetched the ball!"), "A ball thrown away from Pip is chased and fetched")
 	check(playground.toy_phase == "idle" and not playground.flight_active, "The fetched ball returns and can be thrown again")
 	_check_room_bounds(app, "touch fetch")
 
@@ -204,7 +205,7 @@ func _check_fetch_at_floor_edge(app, playground) -> void:
 	await _advance(playground, 8.0)
 	check(playground.duck_position.distance_to(edge_position) < 0.5 and playground.target_position.distance_to(edge_position) < 0.5, "The upper-edge throw exercises a fetch whose clamped target is already Pip's current position")
 	check(interactions.slice(before).count("chase") == 1 and interactions.slice(before).count("fetch") == 1, "An already-reached fetch target still produces one completed retrieval")
-	check(playground.toy_phase == "idle" and not playground.flight_active and not playground.is_processing() and app._room.caption.text.contains("Pip fetched the ball!"), "A zero-distance fetch returns the ball instead of leaving it stuck in the chase state")
+	check(playground.toy_phase == "idle" and not playground.flight_active and not playground.is_processing() and app._room.feedback_text.contains("Pip fetched the ball!"), "A zero-distance fetch returns the ball instead of leaving it stuck in the chase state")
 	_check_room_bounds(app, "upper-edge fetch")
 
 
@@ -219,7 +220,7 @@ func _check_locked_toy(app, playground) -> void:
 	await _drag(center, center - Vector2(70, 20))
 	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "Neither the internal toss method nor a real drag can throw a locked toy")
 	check(app.playroom_state.toy_id == "toy-ball", "Playing with a locked preview cannot equip it")
-	app._room.action_button.pressed.emit()
+	app._room.item_buttons[app.playroom_state.toy_id].pressed.emit()
 	await _show_stage(app)
 	playground.toss_to_pip()
 	check(playground.flight_active, "Returning from a locked preview immediately restores the owned ball")

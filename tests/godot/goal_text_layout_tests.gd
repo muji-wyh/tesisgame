@@ -67,7 +67,7 @@ func _run() -> void:
 			app._room.show_item_error(id, "Not saved\nTap arrow to retry", "The toy goal could not be saved. Try again.")
 			await settle()
 			check_text(app, id, "save error")
-			app._room._activate_action()
+			app._room.item_buttons[app.playroom_state.toy_id].pressed.emit()
 			app._room.show_item_error(id, "Not saved\nTap again to retry", "The toy selection could not be saved. Try again.")
 			await settle()
 			check_text(app, id, "selection save error")

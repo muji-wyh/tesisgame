@@ -52,8 +52,8 @@ func _run() -> void:
 	app._memory.study_button.button_down.emit()
 	check(app.model.successes == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
-	app._room.action_button.pressed.emit()
-	check(app._playroom_caption.text.to_lower().contains("ball"), "The room toy action gives visible play feedback")
+	app._room.toy_button.pressed.emit()
+	check(app._room.feedback_text.to_lower().contains("ball"), "The room toy action gives named accessibility feedback")
 	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
 	await process_frame
 	await process_frame

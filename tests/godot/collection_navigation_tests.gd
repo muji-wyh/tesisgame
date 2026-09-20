@@ -79,11 +79,12 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
-		app._room.action_button.grab_focus()
+		var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
+		owned_card.grab_focus()
 		await process_frame
 		await process_frame
-		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()), "The locked preview's return remains reachable on landscape screens")
-		app._room.action_button.pressed.emit()
+		check(root.gui_get_focus_owner() == owned_card and app._collection_scroll.get_global_rect().encloses(owned_card.get_global_rect()), "An owned toy card stays reachable for leaving a locked preview on landscape screens")
+		owned_card.pressed.emit()
 		app._show_reward_section("medals")
 		app._hide_collection()
 		check(app.playroom_state.set_goal("toy-spring", app.medal_progress.counts), "An unfinished gift can be selected before its final piece")
@@ -93,9 +94,9 @@ func _run() -> void:
 		for frame in range(5):
 			await process_frame
 		check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip opens the gift in the room after visiting Medals")
-		check(app._collection_scroll.get_global_rect().encloses(app._room.action_button.get_global_rect()),
-			"Try gift keeps the toy action visible after the completed-goal layout settles: viewport=%s action=%s scroll=%d/%d" % [
-				app._collection_scroll.get_global_rect(), app._room.action_button.get_global_rect(),
+		check(root.gui_get_focus_owner() == app._room.toy_button and app._collection_scroll.get_global_rect().encloses(app._room.toy_button.get_global_rect()),
+			"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d/%d" % [
+				app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
 				app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
 	app.queue_free()
 	await process_frame

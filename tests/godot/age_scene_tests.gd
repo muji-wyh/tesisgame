@@ -133,7 +133,7 @@ func _run() -> void:
 			"The selected-level notice is not clipped")
 		var order: Array = app._focus_candidates()
 		check(order.find(app._collection_back) < order.find(app._age_buttons["all"])
-			and app._focus_center(app._age_buttons["all"]).y < app._focus_center(app._room.action_button).y,
+			and app._focus_center(app._age_buttons["all"]).y < app._focus_center(app._room.toy_button).y,
 			"Age controls follow the header and precede scrolling content in focus order")
 		app._age_buttons["all"].grab_focus()
 		app._move_focus(Vector2.RIGHT)

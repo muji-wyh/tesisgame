@@ -170,11 +170,11 @@ func _run() -> void:
 	app.medal_progress.counts["spring-1"] = 3
 	app._refresh_collection()
 	app._select_room_item("toy-ball")
-	app._room.action_button.pressed.emit()
+	app._room.toy_button.pressed.emit()
 	check(app.audio.voice.playing, "The current room toy pronounces its word")
 	app._room.item_buttons["toy-spring"].pressed.emit()
 	check(app._room._toy.word_id == "flower" and not app.audio.voice.playing, "Choosing an owned toy stops the word for the replaced toy")
-	app._room.action_button.pressed.emit()
+	app._room.toy_button.pressed.emit()
 	check(app.audio.voice.playing, "The replacement toy can pronounce its word")
 	app._hide_collection()
 	check(not app.audio.voice.playing, "Leaving the room stops the hidden toy's word")
