@@ -89,7 +89,7 @@ function collectionBounds(bounds) {
   const rows = Math.ceil(THEME_IDS.length / worldColumns), worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
   const headerHeight = Math.ceil((inlineWorlds ? 52 : 44) / scale);
   const ageTop = padding + headerHeight + gap + (inlineWorlds ? 0 : worldHeight + gap);
-  const ageHeight = Math.ceil(48 / scale) + Math.round(4 / scale) + Math.ceil(20 / scale);
+  const ageHeight = Math.ceil(48 / scale);
   const pinAge = bounds.height - padding - ageTop - ageHeight - gap >= Math.ceil(128 / scale);
   const top = ageTop + ageHeight + (pinAge ? gap : Math.ceil(20 / scale));
   return { x, width, top, padding, gap, inlineWorlds, headerHeight, worldSide, worldGap, worldRowGap, worldColumns, worldHeight, ageTop, ageHeight, pinAge };

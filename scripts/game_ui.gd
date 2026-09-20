@@ -723,9 +723,11 @@ func _build_age_choices() -> void:
 				_ensure_collection_focus_visible(button))
 		_age_row.add_child(button)
 		_age_buttons[band.id] = button
-	_age_notice = Style.label("Next lesson: All words", 13)
+	_age_notice = Style.label("", 13)
 	_age_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_age_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_age_notice.add_theme_color_override("font_color", Style.WRONG.darkened(0.15))
+	_age_notice.hide()
 	_age_choices.add_child(_age_notice)
 
 
@@ -736,15 +738,18 @@ func _choose_age_band(id: String) -> void:
 	_cancel_collection_inertia()
 	_age_save_failed = not _ensure_playroom_loaded() or not playroom_state.set_age_band(id)
 	_refresh_age_choices()
-	_announce_status(_age_notice.text)
+	_announce_status(_age_notice.text if _age_save_failed else "Next lesson: " + Data.age_band(playroom_state.age_band_id).name)
 
 
 func _refresh_age_choices() -> void:
 	for id in _age_buttons:
 		_age_buttons[id].set_pressed_no_signal(id == playroom_state.age_band_id)
-	_age_notice.text = "Not saved. Tap an age to retry." if _age_save_failed else "Next lesson: " + Data.age_band(playroom_state.age_band_id).name
-	_age_notice.tooltip_text = playroom_state.error if _age_save_failed else "Age ranges are a guide, not a restriction."
-	_age_notice.add_theme_color_override("font_color", Style.WRONG.darkened(0.15) if _age_save_failed else Style.MUTED)
+	var notice_changed: bool = _age_notice.visible != _age_save_failed
+	_age_notice.text = "Not saved. Tap an age to retry." if _age_save_failed else ""
+	_age_notice.tooltip_text = playroom_state.error if _age_save_failed else ""
+	_age_notice.visible = _age_save_failed
+	if notice_changed:
+		_layout_collection.call_deferred()
 
 
 func _build_reward_preview_shell() -> void:
@@ -2346,7 +2351,7 @@ func _layout_collection() -> void:
 			fixed_height += world_rows * side + (world_rows - 1) * roundi(4 / scale) + gap
 		if _world_save_notice.visible:
 			fixed_height += _world_save_notice.get_combined_minimum_size().y
-		var age_height: float = ceilf(48 / scale) + roundi(4 / scale) + ceilf(20 / scale)
+		var age_height: float = _age_choices.get_combined_minimum_size().y
 		var pin_age: bool = size.y - fixed_height - age_height - gap >= ceilf(128 / scale)
 		var age_parent: Node = _collection_column if pin_age else _collection_grid
 		if _age_choices.get_parent() != age_parent:
@@ -3585,7 +3590,8 @@ func _announce_collection_state() -> void:
 		medal_progress.completed_count(), Model.THEMES.size() * 6, _collection_headings[model.theme_id].text, guidance, medal_progress.legacy_rewards.size()]
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."
-	message += " " + _age_notice.text
+	if _age_save_failed:
+		message += " " + _age_notice.text
 	_announce_status(message)
 
 

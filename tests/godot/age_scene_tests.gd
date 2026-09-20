@@ -64,10 +64,10 @@ func _run() -> void:
 			and [app.model.selected_id, app.model.hints_remaining, app.model.phase,
 				app.model.successes, app.model.mistakes, app.model.streak] == progress,
 			"Age selection preserves the exact active round, selection and hints")
-		check(app._age_notice.text.begins_with("Next lesson:") and app._age_notice.is_visible_in_tree()
+		check(app._age_notice.text.is_empty() and not app._age_notice.is_visible_in_tree()
 			and app._age_buttons.values().filter(func(choice: Button) -> bool: return choice.button_pressed).size() == 1
 			and app.medal_progress.counts == counts,
-			"One age is selected, next-lesson timing is visible, and rewards are untouched")
+			"One age is selected without a redundant hint, and rewards are untouched")
 	app._collection_dragged = true
 	app._age_buttons["10-plus"].pressed.emit()
 	check(app.playroom_state.age_band_id == "4-6", "A dragged gesture cannot change age")
@@ -109,9 +109,9 @@ func _run() -> void:
 	app._age_buttons["10-plus"].pressed.emit()
 	await settle()
 	check(app.playroom_state.age_band_id == "10-plus" and app._age_buttons["10-plus"].button_pressed
-		and app._age_notice.text == "Next lesson: Ages 10+"
+		and app._age_notice.text.is_empty() and not app._age_notice.is_visible_in_tree()
 		and app.model.age_band_id == "4-6" and app.collection_page.visible,
-		"The same choice retries saving without changing the active lesson")
+		"A successful retry removes the error without changing the active lesson")
 	var reloaded = app.PlayroomState.new(saved_path)
 	check(reloaded.load_state() and reloaded.age_band_id == "10-plus", "The UI choice survives a storage reload")
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768)]:
@@ -129,8 +129,9 @@ func _run() -> void:
 		check(app._age_choices.get_global_rect().end.y <= app._collection_scroll.global_position.y
 			and app._collection_scroll.size.y * scale >= 160,
 			"Compact age controls leave a usable, separate scrolling content area")
-		check(app.get_global_rect().encloses(app._age_notice.get_global_rect()),
-			"The selected-level notice is not clipped")
+		check(not app._age_notice.is_visible_in_tree()
+			and is_equal_approx(app._age_choices.size.y, app._age_row.size.y),
+			"The hidden notice leaves no reserved height or gap below the age buttons")
 		var order: Array = app._focus_candidates()
 		check(order.find(app._collection_back) < order.find(app._age_buttons["all"])
 			and app._focus_center(app._age_buttons["all"]).y < app._focus_center(app._room.toy_button).y,
