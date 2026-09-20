@@ -43,3 +43,22 @@ Evidence: `build/voice-pop-qa/loading-pip-autodance-desktop` and
 Timing and real-entry cases run the exported Godot engine. Controlled lifecycle
 cases use the maintained HTML shell with an engine fixture. No physical
 microphone was used.
+
+## Production
+
+Runtime commit `47513ea` was merged into `main`, pushed and deployed to
+`https://gentle-forest-02ff42900.3.azurestaticapps.net/`. All four startup files
+match the tested export by SHA-256; see
+`2026-09-20-loading-pip-autodance-production-manifest.json`.
+
+A fresh Chromium visit to the actual production export reached ready in
+6,864 ms, with Pip dancing and music still off. Three trusted clicks covered
+jump, shy and bonk, started music and each returned to the dance. Clicking
+**Enter game** stopped all loading animations and music and opened a rendered
+Match board. No JavaScript errors were reported. Production screenshots for
+all three reactions and the entered game were inspected.
+
+Production evidence: `build/voice-pop-qa/loading-pip-autodance-production`.
+These checks used actual deployed HTML, JavaScript, WASM and PCK without an
+engine fixture. Reaction animations were paused at their midpoint for still
+screenshots, then resumed to verify completion.
