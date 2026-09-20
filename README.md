@@ -291,7 +291,9 @@ The Rooms/backdrop chooser has been removed. Existing saved backgrounds remain
 intact and continue to render; they are not advertised as new gifts or goals.
 Drag blank areas of the room canvas, including locked toy previews, to scroll.
 A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
-retain their play interactions.
+retain their play interactions. Pet Pip directly, tap Pip to poke, or drag a toy
+to toss it. The separate Pet/Poke/Toss/Call button row is removed; toy feedback
+and the main toy action sit directly below the room.
 Choose a locked toy to preview it without moving the page. Its card shows the
 remaining pieces and an inline arrow to start or continue its adventure; there
 is no separate **Help Pip get this** row. The arrow saves the goal and starts a

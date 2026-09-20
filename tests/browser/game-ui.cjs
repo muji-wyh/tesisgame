@@ -189,8 +189,6 @@ function roomPoint(bounds, name, { item = '' } = {}) {
   const { x, width, top, padding, gap } = collectionBounds(bounds), scale = uiScale(bounds);
   if (name === 'pip') return { x: x + 88, y: top + 216 };
   if (name === 'toy') return { x: x + width - 66, y: top + 230 };
-  const shortcut = ['pet', 'poke', 'toss', 'call'].indexOf(name);
-  if (shortcut >= 0) return { x: x + width * (shortcut + 0.5) / 4, y: top + 304 + gap + 22 / scale };
   const columns = width * scale >= 720 ? 3 : 2;
   const index = ['ball', ...THEME_IDS].indexOf(name);
   const cell = (width - (columns - 1) * gap) / columns;
@@ -199,7 +197,7 @@ function roomPoint(bounds, name, { item = '' } = {}) {
     const card = roomPoint(bounds, item);
     return { x: card.x + cell / 2 - 30 / scale, y: card.y - 34 / scale };
   }
-  const action = top + 304 + gap * 3 + 102 / scale;
+  const action = top + 304 + gap * 2 + 58 / scale;
   const firstItem = action + gap + 86 / scale;
   const center = index >= 0 ? firstItem + Math.floor(index / columns) * (128 / scale + gap) : { action }[name];
   if (!Number.isFinite(center)) throw new Error(`Unknown room control: ${name}`);
@@ -215,8 +213,7 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const selected = saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '';
   const active = locked ? item : selected;
   await chooseRewardSection(page, 'room');
-  const controls = ['pip', ...(locked ? [] : ['toy']), 'pet', 'poke', ...(locked ? [] : ['toss']), 'call',
-    'action'];
+  const controls = ['pip', ...(locked ? [] : ['toy']), 'action'];
   for (const toy of ['ball', ...THEME_IDS]) {
     controls.push(toy);
     if (toy === active) controls.push('goal');

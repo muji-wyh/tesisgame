@@ -1,22 +1,21 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, openRewards, collectionBounds, uiScale, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomControl, chooseRewardSection, visibleColorCount } = require('./game-ui.cjs');
 
 const SAVES = ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'];
-const POKE = 'Quack! You tickled Pip!';
+const POKES = ['Quack! You tickled Pip!', 'High five! Pip taps your hand!', 'Peekaboo! Pip sees you!'];
 const PET = ['Pip leans into your hand. Lovely!', 'Soft strokes. Pip feels loved!'];
 
 function playground(bounds) {
   // The room has no saved gift goal or displayed sticker in these fresh profiles.
   // Verified against the exported 390px room; all input uses its public canvas scale.
-  const { x, top: y, width, gap } = collectionBounds(bounds), height = 304;
+  const { x, top: y, width } = collectionBounds(bounds), height = 304;
   const foot = { x: x + 88, y: y + height - 32 };
   return {
     x, y, width, height, foot,
     pip: { x: foot.x, y: foot.y - 56 },
     body: { x: foot.x - 30, y: foot.y - 88, width: 60, height: 68 },
     toy: { x: x + width - 66, y: y + height - 74 },
-    anchor: { x: x + 8, y: y + 4, width: width - 16, height: 32 },
-    shortcut: index => ({ x: x + width * (index + 0.5) / 4, y: y + height + gap + 22 / uiScale(bounds) })
+    anchor: { x: x + 8, y: y + 4, width: width - 16, height: 32 }
   };
 }
 
@@ -151,7 +150,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   const anchor = await patch(page, bounds, room.anchor);
   const before = await patch(page, bounds, room.body);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
   await visibleChange(page, bounds, room.body, before, testInfo, 'pip-poke-body');
   await screenshot(page, testInfo, 'pip-poke');
 
@@ -164,7 +163,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   ]) {
     if (name === 'touch') {
       await tap(page, room.pip.x, room.pip.y);
-      await expect(page.locator('#game-status')).toHaveText(POKE);
+      await expect(page.locator('#game-status')).toHaveText(POKES[1]);
     }
     const resting = await patch(page, bounds, room.body);
     await drag(page, bounds, strokes);
@@ -177,7 +176,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   }
   // A release must leave the next independent tap usable, with no stuck drag owner.
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText(POKES[browserName === 'chromium' ? 2 : 1]);
   expect(await savedState(page)).toEqual(saved);
   expect(errors).toEqual([]);
 });
@@ -241,18 +240,20 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   }
   await openRoom(page);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
   await screenshot(page, testInfo, 'pip-after-interrupted-stroke');
 
-  const toss = room.shortcut(2);
-  await tap(page, toss.x, toss.y);
+  await mouseDrag(page, bounds, [room.toy,
+    { x: room.toy.x - 65, y: room.toy.y - 30 }, room.pip
+  ]);
+  await expect(page.locator('#game-status')).toHaveText('Here comes the ball, Pip!');
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toHaveText(lesson);
   await page.waitForTimeout(250);
   await expect(page.locator('#game-status')).toHaveText(lesson);
   await openRoom(page);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText(POKES[1]);
 
   const list = { x: 24, y: bounds.height - 180, width: bounds.width - 48, height: 140 };
   const before = await patch(page, bounds, list);
@@ -262,44 +263,44 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   ]);
   await visibleChange(page, bounds, list, before, testInfo, 'gift-list-scroll', 0.15);
   await screenshot(page, testInfo, 'gift-list-after-drag');
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText(POKES[1]);
   expect(await savedState(page)).toEqual(saved);
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toHaveText(lesson);
   expect(errors).toEqual([]);
 });
 
-test('narrow reduced-motion play keeps Pet Poke Toss and Call reachable by keyboard', async ({ page }, testInfo) => {
+test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard', async ({ page }, testInfo) => {
   const { errors, lesson, bounds, room, saved } = await begin(page, { width: 320, height: 568, reducedMotion: 'reduce' });
   const toyRect = { x: room.toy.x - 28, y: room.toy.y - 28, width: 56, height: 56 };
-  const ball = await patch(page, bounds, toyRect);
-  const poke = room.shortcut(1);
-  await tap(page, poke.x, poke.y);
-  await expect(page.locator('#game-status')).toHaveText(POKE);
-  await screenshot(page, testInfo, 'pip-narrow-shortcuts');
+  await roomControl(page, 'pip');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
+  await screenshot(page, testInfo, 'pip-narrow-keyboard-pip');
 
-  await page.keyboard.press('Shift+Tab');
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText(PET[0]);
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText(POKE);
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText(/^Pip (caught|fetched) the ball!/);
-  await screenshot(page, testInfo, 'pip-narrow-keyboard-toss');
+  await expect(page.locator('#game-status')).toHaveText('2/3 · Pip rolls the ball back!');
+  await page.keyboard.press('Space');
+  await expect(page.locator('#game-status')).toHaveText('3/3 · Pip catches the ball. Hooray!');
+  await screenshot(page, testInfo, 'pip-narrow-keyboard-toy-action');
+  await page.keyboard.press('Enter');
+  // Restore the room's top after keyboard focus has kept the main action visible.
+  await chooseRewardSection(page, 'room');
   const original = await patch(page, bounds, room.body);
   const arrival = { x: room.x + room.width - 98, y: room.y + room.height - 112, width: 60, height: 68 };
   const beforeArrival = await patch(page, bounds, arrival);
   const leftToy = { ...toyRect, x: room.x + 66 - 28 };
   const emptyLeft = await patch(page, bounds, leftToy);
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText('Come here, Pip! Tap the floor to choose where Pip goes.');
+  await tap(page, room.x + room.width - 68, room.y + room.height - 24);
+  await expect(page.locator('#game-status')).toHaveText('Pip walks over!');
   await visibleChange(page, bounds, room.body, original, testInfo, 'pip-reduced-motion-departs', 0.15);
   await visibleChange(page, bounds, arrival, beforeArrival, testInfo, 'pip-reduced-motion-arrives', 0.18);
   await visibleChange(page, bounds, leftToy, emptyLeft, testInfo, 'ball-moves-away-from-pip-reduced', 0.08);
-  await screenshot(page, testInfo, 'pip-narrow-keyboard-call');
+  await screenshot(page, testInfo, 'pip-narrow-floor-tap');
   const settled = await patch(page, bounds, room);
   await page.waitForTimeout(350);
   expect((await patch(page, bounds, room)).equals(settled), 'Reduced motion leaves the completed room action still').toBe(true);

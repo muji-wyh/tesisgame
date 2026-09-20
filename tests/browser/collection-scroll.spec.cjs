@@ -9,7 +9,9 @@ async function openMedals(page) {
 }
 
 async function contentShift(page, before, after) {
-  return page.evaluate(async ({ before, after }) => {
+  const bounds = await metrics(page), collection = collectionBounds(bounds);
+  const contentTop = Math.ceil(bounds.y + collection.top * bounds.scale);
+  return page.evaluate(async ({ before, after, contentTop }) => {
     async function rows(encoded) {
       const image = new Image();
       image.src = 'data:image/png;base64,' + encoded;
@@ -32,16 +34,16 @@ async function contentShift(page, before, after) {
     const original = await rows(before);
     const moved = await rows(after);
     let best = { pixels: 0, error: Infinity };
-    // Compare actual rendered headings and reward rows, excluding the fixed header.
+    // Start below the fixed world and age controls in the current canvas layout.
     for (let shift = 0; shift <= 180; shift++) {
       let error = 0;
-      for (let y = 170; y < original.length - 190; y++) {
+      for (let y = contentTop; y < original.length - 190; y++) {
         error += Math.abs(original[y + shift] - moved[y]);
       }
       if (error < best.error) best = { pixels: shift, error };
     }
     return best;
-  }, { before: before.toString('base64'), after: after.toString('base64') });
+  }, { before: before.toString('base64'), after: after.toString('base64'), contentTop });
 }
 
 async function rendered(page) {

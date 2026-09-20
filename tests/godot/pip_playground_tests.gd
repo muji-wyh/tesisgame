@@ -153,9 +153,9 @@ func _check_floor_movement(app, playground) -> void:
 		check(playground.duck_position.distance_to(target) < 1.0 and playground.motion_kind.is_empty(), "Pip reaches the " + distance + " target and stops without drifting")
 		_check_room_bounds(app, distance + " movement")
 	playground.call_pip()
-	check(not playground.motion_kind.is_empty(), "The accessible Call Pip action starts a real movement")
+	check(not playground.motion_kind.is_empty(), "The internal call_pip method starts a real movement")
 	await _advance(playground, 4.0)
-	_check_room_bounds(app, "Call Pip")
+	_check_room_bounds(app, "internal call movement")
 
 
 func _check_throwing(app, playground) -> void:
@@ -175,9 +175,9 @@ func _check_throwing(app, playground) -> void:
 	_check_room_bounds(app, "mouse throw")
 	before = interactions.size()
 	playground.toss_to_pip()
-	check(playground.flight_active, "The accessible Toss action also launches a real ball")
+	check(playground.flight_active, "The internal toss_to_pip method launches a real ball")
 	await _advance(playground, 8.0)
-	check(interactions.slice(before).count("catch") == 1 and app._room.caption.text.contains("Pip caught the ball!"), "An aimed accessible toss reaches Pip and reports one actual catch")
+	check(interactions.slice(before).count("catch") == 1 and app._room.caption.text.contains("Pip caught the ball!"), "An internally aimed toss reaches Pip and reports one actual catch")
 	check(playground.toy_phase == "idle", "Pip returns an aimed toss to the resting toy")
 	before = interactions.size()
 	toy_center = app._room.toy_button.get_global_rect().get_center()
@@ -217,7 +217,7 @@ func _check_locked_toy(app, playground) -> void:
 	playground.toss_to_pip()
 	var center: Vector2 = app._room.toy_button.get_global_rect().get_center()
 	await _drag(center, center - Vector2(70, 20))
-	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "Neither the accessible action nor a real drag can throw a locked toy")
+	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "Neither the internal toss method nor a real drag can throw a locked toy")
 	check(app.playroom_state.toy_id == "toy-ball", "Playing with a locked preview cannot equip it")
 	app._room.action_button.pressed.emit()
 	await _show_stage(app)

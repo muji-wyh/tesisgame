@@ -209,7 +209,6 @@ var item_buttons: Dictionary = {}
 var goal_label: Label
 var interaction_allowed: Callable
 var playground: Playground
-var pip_buttons: Array[Button] = []
 
 var _state: RefCounted
 var _counts: Dictionary = {}
@@ -297,21 +296,6 @@ func _build() -> void:
 	playground.interaction_started.connect(_direct_play_started)
 	playground.interaction.connect(_direct_play_feedback)
 	playground.toy_tapped.connect(_play_toy)
-	var pip_actions := HBoxContainer.new()
-	pip_actions.add_theme_constant_override("separation", 6)
-	add_child(pip_actions)
-	for entry in [["Pet", playground.pet], ["Poke", playground.poke], ["Toss", playground.toss_to_pip], ["Call", playground.call_pip]]:
-		var button := Button.new()
-		button.name = "Pip" + entry[0]
-		button.text = entry[0]
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Style.quiet_button(button, Style.GOOD)
-		button.custom_minimum_size = Vector2(66, 66)
-		button.add_theme_font_size_override("font_size", 18)
-		button.pressed.connect(entry[1])
-		_name_control(button, entry[0] + (" the toy to Pip" if entry[0] == "Toss" else " Pip"))
-		pip_actions.add_child(button)
-		pip_buttons.append(button)
 	caption = Style.label("Choose a toy, then play with Pip!", 18)
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caption.custom_minimum_size.y = 50
@@ -349,10 +333,6 @@ func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: b
 		_build_items()
 	Style.primary_button(action_button, palette.accent)
 	Style.square_icon_button(goal_button, palette.accent)
-	for button in pip_buttons:
-		Style.quiet_button(button, palette.accent)
-		button.custom_minimum_size = Vector2(66, 66)
-		button.add_theme_font_size_override("font_size", 18)
 	_refresh_items()
 	_refresh_room()
 	_fit_controls()
@@ -369,7 +349,7 @@ func _fit_controls() -> void:
 	_item_grid.columns = 3 if size.x * scale >= 720 else 2
 	_item_grid.add_theme_constant_override("h_separation", gap)
 	_item_grid.add_theme_constant_override("v_separation", gap)
-	for button in [action_button, goal_button] + pip_buttons:
+	for button in [action_button, goal_button]:
 		button.custom_minimum_size = Vector2(44, 44) / scale
 		button.add_theme_font_size_override("font_size", ceili(14 / scale))
 	caption.custom_minimum_size.y = 36 / scale
@@ -468,8 +448,6 @@ func _refresh_room() -> void:
 	toy_button.disabled = _preview_locked
 	toy_button.focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
 	playground.configure(_toy.word_id, _preview_locked, _reduced_motion, _room.palette.get("accent", Style.GOOD))
-	pip_buttons[2].disabled = _preview_locked
-	pip_buttons[2].focus_mode = Control.FOCUS_NONE if _preview_locked else Control.FOCUS_ALL
 	_refresh_action_control()
 	if _preview_locked:
 		caption.text = "Preview: %s." % _toy.word_id
@@ -696,7 +674,7 @@ func _notification(what: int) -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	# The host wires focus and scrolling once, including currently hidden choices.
-	for button in [toy_button, action_button, goal_button] + pip_buttons + item_buttons.values():
+	for button in [toy_button, action_button, goal_button] + item_buttons.values():
 		if button != null:
 			result.append(button)
 	return result
