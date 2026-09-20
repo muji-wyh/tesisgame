@@ -198,17 +198,12 @@
     #speech-panel[data-pop-stop-failed="true"] #speech-meter,
     #speech-panel[data-pop-stop-failed="true"] #speech-notice { display: none; }
     #pop-aura { position: fixed; inset: 0; z-index: 100; pointer-events: none;
-      --aura-spread: clamp(20px, 3.5vmin, 36px);
-      --aura-radius: clamp(30px, 5.25vmin, 54px); overflow: hidden;
+      --aura-spread: clamp(20px, 3.5vmin, 36px); overflow: hidden;
       opacity: 0; visibility: hidden; }
-    /* Keep adjacent masked tiles on the same pixel boundary in WebKit. */
-    @supports (width: round(nearest, 1px, 1px)) {
-      #pop-aura { --aura-radius: round(nearest, clamp(30px, 5.25vmin, 54px), 1px); }
-    }
     #pop-aura[data-listening="true"] { opacity: 1; visibility: visible; }
-    /* Keep the listening light close to the viewport rim. Compact rounded
-       corners and a short inward fade leave the playfield unobscured. */
-    #pop-aura .pop-aura-edge, #pop-aura .pop-aura-corner {
+    /* Full-length strips meet at square viewport corners. A short inward
+       fade keeps the listening light close to the rim. */
+    #pop-aura .pop-aura-edge {
       animation: pop-aura-breathe 2.6s ease-in-out infinite;
       animation-delay: -.65s; animation-play-state: paused; }
     #pop-aura .pop-aura-edge { position: absolute; pointer-events: none;
@@ -237,10 +232,10 @@
       animation-direction: var(--aura-direction, normal);
       animation-delay: var(--aura-delay); animation-play-state: paused; }
     #pop-aura .pop-aura-edge--top, #pop-aura .pop-aura-edge--bottom {
-      left: var(--aura-radius); right: var(--aura-radius); height: var(--aura-spread);
+      left: 0; right: 0; height: var(--aura-spread);
       --aura-drift: pop-aura-horizontal; --aura-along: to right; }
     #pop-aura .pop-aura-edge--left, #pop-aura .pop-aura-edge--right {
-      top: var(--aura-radius); bottom: var(--aura-radius); width: var(--aura-spread);
+      top: 0; bottom: 0; width: var(--aura-spread);
       --aura-drift: pop-aura-vertical; --aura-along: to bottom; }
     #pop-aura .pop-aura-edge--top { top: 0; --aura-inward: to bottom;
       --aura-delay: 0s;
@@ -262,47 +257,7 @@
       --aura-bloom: radial-gradient(ellipse 160% 27% at 0% 50%, #fff6ed,
         #aa85ff 38%, rgba(255,113,193,.65) 60%, transparent 82%);
       --aura-colors: linear-gradient(180deg, #ffba96, #bdadf5 20%, #83a5ff 42%, #989cff 70%, #b58fff); }
-    #pop-aura .pop-aura-corner { position: absolute; width: var(--aura-radius);
-      height: var(--aura-radius); pointer-events: none;
-      --aura-corner-strength: linear-gradient(#fff, #fff);
-      background: radial-gradient(circle var(--aura-radius) at var(--aura-center),
-        transparent calc(100% - var(--aura-spread) * .28),
-        rgba(247,238,255,.16) calc(100% - var(--aura-spread) * .08), rgba(255,248,241,.38)), var(--aura-color);
-      --aura-round-falloff: radial-gradient(circle var(--aura-radius) at var(--aura-center),
-        transparent calc(100% - var(--aura-spread)),
-        rgba(255,255,255,.02) calc(100% - var(--aura-spread) * .92),
-        rgba(255,255,255,.09) calc(100% - var(--aura-spread) * .78),
-        rgba(255,255,255,.25) calc(100% - var(--aura-spread) * .57),
-        rgba(255,255,255,.46) calc(100% - var(--aura-spread) * .34),
-        rgba(255,255,255,.61) calc(100% - var(--aura-spread) * .16),
-        rgba(255,255,255,.7) calc(100% - var(--aura-spread) * .06),
-        rgba(255,255,255,.65) calc(100% - var(--aura-spread) * .025),
-        rgba(255,255,255,.45) 100%, transparent calc(100% + 8px));
-      -webkit-mask-image: var(--aura-corner-strength), var(--aura-round-falloff);
-      mask-image: var(--aura-corner-strength), var(--aura-round-falloff);
-      -webkit-mask-composite: source-in; mask-composite: intersect; }
-    /* Soften the diagonal arc over the header icons, retaining full strength
-       where each corner joins a straight edge. Both masks stay static. */
-    #pop-aura .pop-aura-corner--top-left { top: 0; left: 0;
-      --aura-corner-strength: conic-gradient(from 270deg at 100% 100%, #fff,
-        rgba(255,255,255,.93) 12deg, rgba(255,255,255,.75) 24deg,
-        rgba(255,255,255,.57) 36deg, rgba(255,255,255,.5) 45deg,
-        rgba(255,255,255,.57) 54deg, rgba(255,255,255,.75) 66deg,
-        rgba(255,255,255,.93) 78deg, #fff 90deg);
-      --aura-center: 100% 100%; --aura-color: #ffba96; }
-    #pop-aura .pop-aura-corner--top-right { top: 0; right: 0;
-      --aura-corner-strength: conic-gradient(at 0% 100%, #fff,
-        rgba(255,255,255,.93) 12deg, rgba(255,255,255,.75) 24deg,
-        rgba(255,255,255,.57) 36deg, rgba(255,255,255,.5) 45deg,
-        rgba(255,255,255,.57) 54deg, rgba(255,255,255,.75) 66deg,
-        rgba(255,255,255,.93) 78deg, #fff 90deg);
-      --aura-center: 0% 100%; --aura-color: #ef91d8; }
-    #pop-aura .pop-aura-corner--bottom-right { bottom: 0; right: 0;
-      --aura-center: 0% 0%; --aura-color: #70cdff; }
-    #pop-aura .pop-aura-corner--bottom-left { bottom: 0; left: 0;
-      --aura-center: 100% 0%; --aura-color: #b58fff; }
     #pop-aura[data-listening="true"] .pop-aura-edge,
-    #pop-aura[data-listening="true"] .pop-aura-corner,
     #pop-aura[data-listening="true"] .pop-aura-flow::before { animation-play-state: running; }
     /* One shared breath keeps the corner joins steady. Only narrow masked
        highlight strips move; the light never grows further into the game. */
@@ -330,7 +285,7 @@
     @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
     @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
     @media (prefers-reduced-motion: reduce) {
-      #pop-aura .pop-aura-edge, #pop-aura .pop-aura-corner { animation: none; opacity: 1; }
+      #pop-aura .pop-aura-edge { animation: none; opacity: 1; }
       #pop-aura .pop-aura-flow::before { animation: none; transform: none; opacity: .3; }
       #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
       #speech-panel .speech-bubble { background: none !important; }
@@ -524,10 +479,6 @@
     <span class="pop-aura-edge pop-aura-edge--right"><span class="pop-aura-flow"></span></span>
     <span class="pop-aura-edge pop-aura-edge--bottom"><span class="pop-aura-flow"></span></span>
     <span class="pop-aura-edge pop-aura-edge--left"><span class="pop-aura-flow"></span></span>
-    <span class="pop-aura-corner pop-aura-corner--top-left"></span>
-    <span class="pop-aura-corner pop-aura-corner--top-right"></span>
-    <span class="pop-aura-corner pop-aura-corner--bottom-right"></span>
-    <span class="pop-aura-corner pop-aura-corner--bottom-left"></span>
   </div>
   <script>
     (() => {

@@ -180,9 +180,9 @@ The tabs are ordered **Match**, **Memory**, **Voice Pop**; entry and reload sele
 ### Voice Pop
 
 Choose Voice Pop to request speech permission. The 30-second clock starts only when
-the microphone is listening. Broad peach/pink and blue/violet light follows the
-rounded screen edges and diffuses softly inward, while illustrated word capsules
-fly up in gentle arcs. Say the English name
+the microphone is listening. A narrow peach/pink and blue/violet glow follows the
+screen edges, meets at right-angle corners and diffuses softly inward.
+Illustrated word capsules fly up in gentle arcs. Say the English name
 of a visible object to pop it with a slash, shards, and a shockwave. Words always
 appear with their matching pictures and follow the age level chosen in More.
 The HUD shows recognized speech as it changes, including interim speech and words
