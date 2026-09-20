@@ -72,3 +72,25 @@ The rebuilt export then passed all **9** Chromium acceptance cases at 390x844,
 Real screenshots under `build/voice-pop-qa/owned-toys-home-final-local/` confirm
 the complete `Jungle monkey` name on the tablet and `Autumn apple` on desktop,
 with room boundaries, selection and locked cards below still intact.
+
+## Production acceptance
+
+Runtime commit `2028b59` (including the main ownership change `0ce3bf8`) was
+merged into `main`, pushed to GitHub and deployed to
+https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+All four startup files fetched from production match the tested local export
+by SHA-256. The exact file sizes and hashes are recorded in
+`2026-09-20-owned-toys-home-production-manifest.json`.
+
+The final production run passed all **9 / 9** acceptance cases, with zero
+browser errors: 390x844, 768x1024 and 1366x768, each with 1/8, 3/6 and 9/0
+owned/locked partitions. Actual touch selection, locked preview return and
+failed-save retry preserve the earned medal counts. The tablet complete-home
+and desktop locked-preview screenshots were checked again after deployment;
+wrapped names are now complete and the lower catalog contains only locked toys.
+
+Final production screenshots and per-case reports:
+`build/voice-pop-qa/owned-toys-home-final-production/`.
+The fixture saves are isolated browser profiles; no existing player saves were
+changed by acceptance testing.
