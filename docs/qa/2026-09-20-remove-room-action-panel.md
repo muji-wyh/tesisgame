@@ -40,3 +40,15 @@ Browser evidence: `build/voice-pop-qa/remove-room-action-panel-browser`,
 `build/voice-pop-qa/remove-room-action-panel-recheck` and
 `build/voice-pop-qa/remove-room-action-panel-recovery`.
 Screenshot evidence: `build/voice-pop-qa/remove-room-action-panel-local`.
+
+## Production
+
+Runtime commit `2382857` was merged into `main`, pushed and deployed. All four
+startup files match the tested export by SHA-256; see
+`2026-09-20-remove-room-action-panel-production-manifest.json`.
+
+The actual production game passed the same apple steps, replay, locked preview
+and owned-card return at all three viewports. Production screenshots were
+inspected again: the removed panel leaves no empty space. No page or console
+errors occurred, and medal ownership was unchanged. Evidence:
+`build/voice-pop-qa/remove-room-action-panel-production`.
