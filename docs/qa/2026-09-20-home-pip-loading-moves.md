@@ -83,3 +83,28 @@ not physical-device tests.
 
 Evidence is under `build/voice-pop-qa/home-pip-loading-moves/` and
 `build/voice-pop-qa/home-pip-loading-moves-acceptance/`.
+
+## Production acceptance
+
+Runtime commit `feaec9c` was merged into `main`, pushed to GitHub, and deployed
+to https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+All four production startup files match the tested export by SHA-256. The
+verification manifest is `2026-09-20-home-pip-loading-moves-production-manifest.json`.
+
+Production acceptance passed **9 cases** across the same three browser profiles:
+automatic dancing, the three tap responses and rapid replacement; leaving and
+returning during gestures; and first-tap/keyboard play with earned floor toys.
+All cases preserve saved progress and report no browser errors.
+
+The first iPad dance check sampled similar points of the repeating sway at
+equal intervals. It now requires four distinct rendered poses over a complete
+routine while checking the initial start separately. The six toy/navigation
+cases passed in the first production run, and the final three Home cases all
+passed with that stronger cycle-aware visual check. This was a test-only
+adjustment; the verified deployed game files did not change.
+
+Reviewed production screenshots of the desktop jump, phone head scratch and
+tablet bonk. Evidence is under
+`build/voice-pop-qa/home-pip-loading-moves-production/` and
+`build/voice-pop-qa/home-pip-loading-moves-production-final/`.

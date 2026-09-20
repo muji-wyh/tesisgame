@@ -174,17 +174,17 @@ test('Home dances promptly and shuffled loading reactions replace each other wit
   const motion = { x: room.foot.x - 56, y: room.foot.y - 116, width: 112, height: 120 };
   const resting = await patch(page, bounds, motion);
   await visibleChange(page, bounds, motion, resting, testInfo, 'pip-home-autodance-body', 0.035);
-  let previousFrame = await patch(page, bounds, motion);
-  const changes = [];
-  for (let index = 0; index < 3; index++) {
-    await page.waitForTimeout(180);
-    const frame = await patch(page, bounds, motion);
-    changes.push(await changedFraction(page, previousFrame, frame));
-    previousFrame = frame;
-  }
-  expect(changes.filter(change => change > 0.01).length,
-    'The automatic dance must keep moving, not merely switch to a different still pose.').toBeGreaterThanOrEqual(2);
   expect(Date.now() - roomOpenedAt, 'Home dances before the former six-second idle delay.').toBeLessThan(5500);
+  const danceFrames = [await patch(page, bounds, motion)];
+  // Equal sampling intervals can land on matching points of the hip sway.
+  // Observe several distinct poses over one complete routine instead.
+  await expect.poll(async () => {
+    const frame = await patch(page, bounds, motion);
+    const differences = await Promise.all(danceFrames.map(previous => changedFraction(page, previous, frame)));
+    if (differences.every(change => change > 0.01)) danceFrames.push(frame);
+    return danceFrames.length;
+  }, { timeout: 6000, intervals: [120, 230, 310],
+    message: 'The automatic dance must keep moving through distinct poses.' }).toBeGreaterThanOrEqual(4);
   await expect(status).toHaveText(roomCaption);
   await screenshot(page, testInfo, 'pip-home-autodance');
 
