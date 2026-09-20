@@ -79,6 +79,21 @@ Follow-up evidence is under `build/voice-pop-qa/floor-toys-error-polish/`.
 
 ## Production acceptance
 
-**Pending:** runtime commit, merge/push, deployment, production startup-file hash
-comparison, and real production interaction/screenshot checks. No production
-pass is claimed in this draft.
+Runtime commit `d064487` was merged into `main`, pushed to GitHub and deployed
+to https://gentle-forest-02ff42900.3.azurestaticapps.net/.
+
+All four production startup files match the final tested export by SHA-256.
+Sizes and hashes are recorded in
+`2026-09-20-floor-toys-production-manifest.json`.
+
+Real production Chromium acceptance passed **9 / 9** cases with zero browser
+errors: 390x844, 768x1024 and 1366x768, each with starter (1 owned / 8 locked),
+partial (3 / 6) and complete (9 / 0) ownership. Each partial case also verifies
+first-tap play, keyboard continuation, locked-preview return, failed-save
+recovery, and mouse/touch dragging of an inactive toy into a completed throw.
+All cases preserve the player's earned medal data.
+
+Production screenshots of the complete phone/tablet floor, the desktop partial
+home, and a phone apple throw were inspected. Evidence and per-case reports
+are under `build/voice-pop-qa/floor-toys-production/`. Test saves exist only in
+isolated browser contexts and do not modify an existing player's browser save.

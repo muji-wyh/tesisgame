@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-09-20T09:39:38.967Z",
+  "origin": "https://gentle-forest-02ff42900.3.azurestaticapps.net",
+  "files": [
+    {
+      "name": "index.html",
+      "bytes": 258994,
+      "sha256": "c39fb33203e18815ef3007b9a156ba36e6bb562470ff62c54b04427354cd60fa",
+      "match": true
+    },
+    {
+      "name": "game-2cc43de22a8e5f80.pck",
+      "bytes": 9164680,
+      "sha256": "2cc43de22a8e5f80ae54f43ea285b64112f3b0f4f9d997d815b235498f120f08",
+      "match": true
+    },
+    {
+      "name": "engine-c8ca3724771088b0.js",
+      "bytes": 280470,
+      "sha256": "13ce7253b63b49b659e9eee7fbdcec1d9b4e3d5c8bd1b5460c4065bd0ea68b31",
+      "match": true
+    },
+    {
+      "name": "engine-c8ca3724771088b0.wasm",
+      "bytes": 39513091,
+      "sha256": "35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277",
+      "match": true
+    }
+  ]
+}
