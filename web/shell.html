@@ -112,6 +112,9 @@
     #loading-pip-right-wing { transform-origin: 88px 78px; }
     #loading-pip-left-foot { transform-origin: 40px 103px; }
     #loading-pip-right-foot { transform-origin: 80px 103px; }
+    #loading-duck .pip-shy-cheeks, #loading-duck .pip-bonk-stars { opacity: 0; }
+    #loading-duck[data-pose="shy"] .pip-shy-cheeks { opacity: .8; }
+    #loading-duck[data-pose="bonk"] .pip-bonk-stars { opacity: 1; }
     #loading-music { min-height: 44px; padding: 4px 9px; font-size: 12px;
       color: var(--cp-text); background: var(--cp-surface-soft); border: 1px solid var(--cp-border); }
     #loading-music[aria-pressed="true"] { color: var(--cp-accent); border-color: var(--cp-accent); }
@@ -416,8 +419,8 @@
                   </g>
                 </svg>
               </button>
-              <button id="loading-duck" type="button" aria-label="Dance with Pip the duck" data-pose="idle" data-queued="0">
-                <svg viewBox="-14 -12 148 140" aria-hidden="true">
+              <button id="loading-duck" type="button" aria-label="Dance with Pip the duck" aria-describedby="loading-hint" data-activity="idle" data-pose="idle" data-queued="0">
+                <svg viewBox="-14 -40 148 168" aria-hidden="true">
                   <g stroke="#785D3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <ellipse cx="61" cy="114" rx="39" ry="5" fill="#65708A" opacity=".14" stroke="none"/>
                     <g id="loading-pip-left-foot"><path d="M39 99Q24 104 24 110Q34 116 50 109L51 98" fill="#F3AE65"/></g>
@@ -455,7 +458,7 @@
             </div>
             <div class="play-caption">
               <span id="loading-score" class="sr-only" role="status">0 sparkles</span>
-              <span id="loading-hint" aria-live="polite">Tap the chest. Let's dance!</span>
+              <span id="loading-hint" aria-live="polite">Tap Pip for a surprise!</span>
               <button id="loading-music" type="button" aria-label="Loading music" aria-pressed="false" data-audio-state="off">♪ Music off</button>
             </div>
           </div>
@@ -515,6 +518,9 @@
         document.documentElement.style.setProperty('--pip-art', `url("${outfit.sprite}")`);
         loadingDuck.dataset.theme = theme;
         for (const [part, element] of Object.entries(danceParts)) element.innerHTML = outfit.parts[part];
+        danceParts.head.insertAdjacentHTML('beforeend',
+          '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="31" cy="62" rx="8" ry="5"/><ellipse cx="91" cy="59" rx="8" ry="5"/></g>' +
+          '<g class="pip-bonk-stars" fill="#FFD979" stroke="#B88535" stroke-width="1.5"><path d="m10 20 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/><path d="m109 12 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/></g>');
       }
       let savedPipTheme = 'spring';
       try {
@@ -751,16 +757,20 @@
         return { start, stop };
       }
       const loadingMusic = createLoadingMusic();
-      const danceSequence = ['left-wing', 'right-wing', 'hip-left', 'hip-right', 'hip-left'];
-      let danceStep = 0;
-      let danceQueue = [];
-      let dancing = false;
+      const danceSequence = ['left-wing', 'right-wing', 'hip-left', 'hip-right', 'left-wing', 'right-wing', 'hip-right', 'hip-left'];
       let danceGeneration = 0;
+      let loadingPageSuspended = false;
+      let reactionBag = [];
+      let previousReaction = '';
+      const pipReactionLabels = {
+        jump: 'Boing! Pip jumps for you!',
+        shy: 'Aww! Pip feels shy!',
+        bonk: 'Boop! Pip bounces right back!'
+      };
 
       function clearLoadingDance() {
         danceGeneration++;
-        danceQueue = [];
-        dancing = false;
+        loadingDuck.dataset.activity = 'idle';
         loadingDuck.dataset.pose = 'idle';
         loadingDuck.dataset.queued = '0';
         for (const part of Object.values(danceParts)) {
@@ -769,59 +779,108 @@
         }
       }
 
-      function dancePose(name, reduced) {
+      function dancePose(name) {
         const left = name === 'left-wing';
         const right = name === 'right-wing';
         const direction = name === 'hip-right' || right ? 1 : -1;
         const hip = !left && !right;
         return {
-          body: `translate(${hip ? direction * (reduced ? 3 : 8) : 0}px, ${reduced ? 0 : -2}px) rotate(${hip ? direction * (reduced ? 3 : 9) : direction * 3}deg)`,
-          head: `translate(${hip ? -direction * 2 : 0}px, ${reduced ? 0 : -3}px) rotate(${-direction * (reduced ? 2 : 5)}deg)`,
+          body: `translate(${hip ? direction * 8 : 0}px, -2px) rotate(${hip ? direction * 9 : direction * 3}deg)`,
+          head: `translate(${hip ? -direction * 2 : 0}px, -3px) rotate(${-direction * 5}deg)`,
           'left-wing': `rotate(${left ? 108 : hip ? 18 - direction * 12 : 8}deg)`,
           'right-wing': `rotate(${right ? -108 : hip ? -18 - direction * 12 : -8}deg)`,
-          'left-foot': `translateY(${direction < 0 ? reduced ? -1 : -4 : 0}px) rotate(${direction < 0 ? -10 : 0}deg)`,
-          'right-foot': `translateY(${direction > 0 ? reduced ? -1 : -4 : 0}px) rotate(${direction > 0 ? 10 : 0}deg)`
+          'left-foot': `translateY(${direction < 0 ? -4 : 0}px) rotate(${direction < 0 ? -10 : 0}deg)`,
+          'right-foot': `translateY(${direction > 0 ? -4 : 0}px) rotate(${direction > 0 ? 10 : 0}deg)`
         };
       }
 
-      function nextLoadingDance() {
-        if (loadingEvents.signal.aborted || document.hidden) { clearLoadingDance(); return; }
-        const step = danceQueue.shift();
-        loadingDuck.dataset.queued = String(danceQueue.length);
-        if (!step) { dancing = false; loadingDuck.dataset.pose = 'idle'; return; }
-        dancing = true;
-        loadingDuck.dataset.pose = step;
-        const poses = dancePose(step, false);
-        const duration = danceQueue.length ? 210 : 300;
-        const generation = danceGeneration;
+      function canPlayLoadingDance() {
+        return !loadingEvents.signal.aborted && !document.hidden && !loadingPageSuspended;
+      }
+
+      function startLoadingDance() {
+        if (!canPlayLoadingDance() || motion.matches || loadingDuck.dataset.activity === 'dancing') return;
+        clearLoadingDance();
+        loadingDuck.dataset.activity = 'dancing';
+        loadingDuck.dataset.pose = 'dance';
+        // One compositor-driven loop per limb keeps dancing through engine startup
+        // without queuing timers or trying to catch up after a busy frame.
+        const poses = danceSequence.map(step => dancePose(step));
         for (const [name, part] of Object.entries(danceParts)) {
-          const animation = part.animate([
-            { transform: 'translate(0, 0) rotate(0deg)', easing: 'cubic-bezier(.22,.7,.32,1)' },
-            { transform: poses[name], offset: .2 },
-            { transform: poses[name], offset: .76, easing: 'cubic-bezier(.4,0,.6,1)' },
-            { transform: 'translate(0, 0) rotate(0deg)' }
-          ], { duration });
-          if (name === 'body') animation.onfinish = () => {
-            if (generation === danceGeneration) nextLoadingDance();
-          };
+          const frames = [...poses, poses[0]].map((pose, index) => ({
+            transform: pose[name], offset: index / poses.length, easing: 'ease-in-out'
+          }));
+          part.animate(frames, { duration: 3520, iterations: Infinity });
         }
       }
 
-      function playWithDuck(gestureAllowed = false) {
-        if (loadingEvents.signal.aborted || document.hidden) return;
+      function nextPipReaction() {
+        if (!reactionBag.length) {
+          reactionBag = Object.keys(pipReactionLabels);
+          for (let i = reactionBag.length - 1; i > 0; i--) {
+            const other = Math.floor(Math.random() * (i + 1));
+            [reactionBag[i], reactionBag[other]] = [reactionBag[other], reactionBag[i]];
+          }
+          if (reactionBag[0] === previousReaction) [reactionBag[0], reactionBag[1]] = [reactionBag[1], reactionBag[0]];
+        }
+        previousReaction = reactionBag.shift();
+        return previousReaction;
+      }
+
+      function pipReaction(name) {
+        const neutral = {};
+        const crouch = { body: 'translateY(4px) scale(1.08, .91)', head: 'translateY(5px)',
+          'left-wing': 'rotate(-12deg)', 'right-wing': 'rotate(12deg)' };
+        const jump = { body: 'translateY(-22px) rotate(-3deg)', head: 'translateY(-22px) rotate(4deg)',
+          'left-wing': 'translateY(-22px) rotate(88deg)', 'right-wing': 'translateY(-22px) rotate(-88deg)',
+          'left-foot': 'translateY(-20px) rotate(-15deg)', 'right-foot': 'translateY(-20px) rotate(15deg)' };
+        const shy = { body: 'translateX(3px) rotate(3deg)', head: 'translate(2px, 3px) rotate(9deg)',
+          'left-wing': 'translateX(3px) rotate(24deg)', 'right-wing': 'translate(-6px, -36px) rotate(-135deg)',
+          'left-foot': 'rotate(-5deg)', 'right-foot': 'rotate(-6deg)' };
+        const scratch = { ...shy, head: 'translate(2px, 4px) rotate(7deg)',
+          'right-wing': 'translate(-2px, -33px) rotate(-128deg)' };
+        const bonk = { body: 'translate(7px, 4px) rotate(10deg)', head: 'translate(8px, 7px) rotate(15deg)',
+          'left-wing': 'translate(5px, 3px) rotate(62deg)', 'right-wing': 'translate(5px, 3px) rotate(-70deg)',
+          'left-foot': 'rotate(-9deg)', 'right-foot': 'rotate(12deg)' };
+        const rebound = { body: 'translate(-5px, -3px) rotate(-8deg)', head: 'translate(-6px, -5px) rotate(-12deg)',
+          'left-wing': 'rotate(34deg)', 'right-wing': 'rotate(-40deg)',
+          'left-foot': 'rotate(7deg)', 'right-foot': 'rotate(-8deg)' };
+        if (name === 'jump') return { duration: 850, still: { ...jump,
+          body: 'translateY(-3px)', head: 'translateY(-3px)',
+          'left-wing': 'rotate(70deg)', 'right-wing': 'rotate(-70deg)',
+          'left-foot': 'rotate(-10deg)', 'right-foot': 'rotate(10deg)' },
+          beats: [[0, neutral], [.16, crouch], [.38, jump], [.60, jump], [.82, crouch], [1, neutral]] };
+        if (name === 'shy') return { duration: 1150, still: shy,
+          beats: [[0, neutral], [.20, shy], [.36, scratch], [.52, shy], [.68, scratch], [.84, shy], [1, neutral]] };
+        return { duration: 850, still: { ...bonk, body: 'rotate(6deg)', head: 'rotate(8deg)' },
+          beats: [[0, neutral], [.16, bonk], [.36, rebound], [.60, { ...bonk, head: 'rotate(4deg)' }], [.82, neutral], [1, neutral]] };
+      }
+
+      function playWithDuck(gestureAllowed = false, describe = true) {
+        if (!canPlayLoadingDance()) return;
         loadingMusic.start(gestureAllowed);
-        const step = danceSequence[danceStep++ % danceSequence.length];
+        const name = nextPipReaction(), reaction = pipReaction(name);
+        // A new poke takes over immediately. Cancelled reactions cannot restart
+        // an old dance, and quick taps never leave an animation backlog.
+        clearLoadingDance();
+        loadingDuck.dataset.activity = 'reacting';
+        loadingDuck.dataset.pose = name;
+        if (describe) hint.textContent = pipReactionLabels[name];
         if (motion.matches) {
-          clearLoadingDance();
-          loadingDuck.dataset.pose = step;
-          for (const [name, transform] of Object.entries(dancePose(step, true))) danceParts[name].style.transform = transform;
+          for (const [part, transform] of Object.entries(reaction.still)) danceParts[part].style.transform = transform;
           return;
         }
-        // Keep the latest short phrase of movement, never seconds of stale taps.
-        if (danceQueue.length === 5) danceQueue.shift();
-        danceQueue.push(step);
-        loadingDuck.dataset.queued = String(danceQueue.length);
-        if (!dancing) nextLoadingDance();
+        const generation = danceGeneration;
+        for (const [partName, part] of Object.entries(danceParts)) {
+          const animation = part.animate(reaction.beats.map(([offset, pose]) => ({
+            offset, transform: pose[partName] || 'translate(0, 0) rotate(0deg)', easing: 'ease-in-out'
+          })), { duration: reaction.duration });
+          if (partName === 'body') animation.onfinish = () => {
+            if (generation !== danceGeneration) return;
+            clearLoadingDance();
+            startLoadingDance();
+          };
+        }
       }
 
       function clearLoadingEffects() {
@@ -844,19 +903,17 @@
       }
 
       loadingDuck.addEventListener('click', event => {
-        if (loadingEvents.signal.aborted || document.hidden) return;
-        hint.textContent = hint.textContent === 'Pip says hello!' ? 'Pip is happy to see you!' : 'Pip says hello!';
         playWithDuck(event.isTrusted);
       }, loadingListener);
 
       function playWithTreasure(gestureAllowed = false) {
-        if (loadingEvents.signal.aborted || document.hidden) return;
+        if (!canPlayLoadingDance()) return;
         sparkleCount++;
         score.textContent = sparkleCount + (sparkleCount === 1 ? ' sparkle' : ' sparkles');
         const party = sparkleCount % 5 === 0;
         const reaction = (sparkleCount - 1) % reactions.length;
         hint.textContent = party ? 'High five! Star party!' : reactions[reaction];
-        playWithDuck(gestureAllowed);
+        playWithDuck(gestureAllowed, false);
         if (motion.matches) return;
         chestArt.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         score.getAnimations().forEach(animation => animation.cancel());
@@ -926,7 +983,7 @@
 
       function pollLoadingGamepad() {
         gamepadFrame = 0;
-        if (loadingEvents.signal.aborted || document.hidden) return;
+        if (!canPlayLoadingDance()) return;
         const pads = loadingGamepads();
         enterController.hidden = !pads.length;
         if (!pads.length) { stopLoadingGamepad(); return; }
@@ -942,7 +999,7 @@
       }
 
       function startLoadingGamepad(ignoreHeld = false) {
-        if (gamepadFrame || loadingEvents.signal.aborted || document.hidden) return;
+        if (gamepadFrame || !canPlayLoadingDance()) return;
         if (ignoreHeld) {
           const pads = loadingGamepads();
           gamepadPressed = pads.some(pad => pad.buttons[0]?.pressed);
@@ -980,25 +1037,38 @@
         chestArt.style.transform = '';
         if (wiggled) { swipeHandled = true; playWithTreasure(event.isTrusted); }
       }, loadingListener);
-      toy.addEventListener('pointercancel', clearLoadingEffects, loadingListener);
+      function resetLoadingEffects() {
+        clearLoadingEffects();
+        startLoadingDance();
+      }
+      toy.addEventListener('pointercancel', resetLoadingEffects, loadingListener);
       toy.addEventListener('lostpointercapture', event => {
-        if (gesture?.id === event.pointerId) clearLoadingEffects();
+        if (gesture?.id === event.pointerId) resetLoadingEffects();
       }, loadingListener);
-      motion.addEventListener('change', clearLoadingEffects, loadingListener);
+      motion.addEventListener('change', resetLoadingEffects, loadingListener);
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           clearLoadingEffects();
           stopLoadingGamepad();
           loadingMusic.stop();
         } else {
+          startLoadingDance();
           startLoadingGamepad(true);
         }
       }, loadingListener);
       window.addEventListener('pagehide', () => {
+        loadingPageSuspended = true;
         clearLoadingEffects();
         stopLoadingGamepad();
         loadingMusic.stop();
       }, loadingListener);
+      window.addEventListener('pageshow', () => {
+        if (!loadingPageSuspended) return;
+        loadingPageSuspended = false;
+        startLoadingDance();
+        startLoadingGamepad(true);
+      }, loadingListener);
+      startLoadingDance();
       startLoadingGamepad();
 
       function createSpeechHost() {

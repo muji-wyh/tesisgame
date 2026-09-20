@@ -7,6 +7,45 @@ const { inlineMascot } = require('../../tools/prepare-godot.cjs');
 const root = path.resolve(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'build', 'web', 'index.html'), 'utf8')
   .match(/const config = (\{[^\r\n]*\});/)[1]);
+const PIP_PARTS = ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'];
+const PIP_REACTIONS = ['bonk', 'jump', 'shy'];
+
+async function expectAutomaticDance(page) {
+  const duck = page.locator('#loading-duck');
+  await expect(duck).toHaveAttribute('data-activity', 'dancing');
+  await expect(duck).toHaveAttribute('data-pose', 'dance');
+  await expect(duck).toHaveAttribute('data-queued', '0');
+  await expect.poll(() => duck.evaluate(element => {
+    const animations = element.getAnimations({ subtree: true });
+    return animations.length === 6 && animations.every(animation =>
+      animation.playState === 'running' && animation.effect.getTiming().iterations === Infinity);
+  }), { message: 'All six parts dance continuously without another interaction.' }).toBe(true);
+}
+
+async function samplePipMotion(page, duration) {
+  return page.evaluate(({ parts, duration }) => new Promise(resolve => {
+    const started = performance.now(), frames = [];
+    function sample() {
+      const duck = document.getElementById('loading-duck');
+      frames.push({ at: performance.now() - started, activity: duck.dataset.activity, pose: duck.dataset.pose,
+        parts: Object.fromEntries(parts.map(part => {
+          const matrix = new DOMMatrix(getComputedStyle(document.getElementById('loading-pip-' + part)).transform);
+          return [part, { angle: Math.atan2(matrix.b, matrix.a) * 180 / Math.PI, x: matrix.e, y: matrix.f }];
+        })) });
+      if (performance.now() - started >= duration) resolve(frames);
+      else requestAnimationFrame(sample);
+    }
+    requestAnimationFrame(sample);
+  }), { parts: PIP_PARTS, duration });
+}
+
+async function reactionPose(page) {
+  const duck = page.locator('#loading-duck');
+  await expect(duck).toHaveAttribute('data-activity', 'reacting');
+  await expect(duck).toHaveAttribute('data-pose', /^(jump|shy|bonk)$/);
+  await expect(duck).toHaveAttribute('data-queued', '0');
+  return duck.getAttribute('data-pose');
+}
 
 async function enterGame(page) {
   await expect(page.locator('#enter-game')).toBeEnabled({ timeout: 60000 });
@@ -117,18 +156,23 @@ for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the saved ${the
   await progressShell(page);
   const toy = page.locator('#loading-toy'), duck = page.locator('#loading-duck');
   await expect(duck).toHaveAttribute('data-theme', theme);
-  const costume = await duck.locator('svg').innerHTML();
-  const still = await duck.screenshot({ path: testInfo.outputPath(`loading-${theme}-resting.png`) });
-  for (const pose of ['left-wing', 'right-wing', 'hip-left']) {
+  await expectAutomaticDance(page);
+  const costume = await duck.locator('[id^="loading-pip-"]').evaluateAll(parts => parts.map(part => part.innerHTML));
+  await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-automatic-dance.png`), scale: 'css' });
+  const reactions = [];
+  for (let index = 0; index < 3; index++) {
     await toy.tap();
-    await expect(duck).toHaveAttribute('data-pose', pose);
-    await page.waitForTimeout(140);
-    const moving = await duck.screenshot({ path: testInfo.outputPath(`loading-${theme}-${pose}.png`) });
-    expect(moving.equals(still), 'Dressed Pip must visibly respond to every chest tap.').toBe(false);
+    const pose = await reactionPose(page);
+    reactions.push(pose);
+    const frames = await samplePipMotion(page, 160);
+    expect(frames.some(frame => frame.pose === pose)).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-${pose}.png`), scale: 'css' });
     await expect(duck).toHaveAttribute('data-theme', theme);
-    expect(await duck.locator('svg').innerHTML(), 'Dancing transforms the existing dressed limbs.').toBe(costume);
-    await expect(duck).toHaveAttribute('data-pose', 'idle');
+    expect(await duck.locator('[id^="loading-pip-"]').evaluateAll(parts => parts.map(part => part.innerHTML)),
+      'Dancing and reactions preserve the saved costume.').toEqual(costume);
+    await expectAutomaticDance(page);
   }
+  expect(reactions.sort()).toEqual(PIP_REACTIONS);
   await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-full.png`), scale: 'css' });
 });
 
@@ -191,120 +235,181 @@ async function observeLoadingAudio(page) {
   });
 }
 
-test('loading Pip dances five distinct poses from touch, keyboard and controller with a bounded tap queue', async ({ page }, testInfo) => {
-  await installGamepad(page);
+test('loading Pip dances automatically without input or music and keeps dancing until entry', async ({ page }, testInfo) => {
+  await observeLoadingAudio(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await progressShell(page);
+  await expectAutomaticDance(page);
+  const duck = page.locator('#loading-duck');
+  const loopDuration = await duck.evaluate(element => {
+    window.initialLoadingDance = element.getAnimations({ subtree: true });
+    return Math.max(...initialLoadingDance.map(animation => Number(animation.effect.getTiming().duration)));
+  });
+  expect(Number.isFinite(loopDuration) && loopDuration > 0).toBe(true);
+  const frames = await samplePipMotion(page, loopDuration + 120);
+  expect(frames.every(frame => frame.activity === 'dancing' && frame.pose === 'dance')).toBe(true);
+  for (const part of PIP_PARTS) {
+    const positions = frames.map(frame => frame.parts[part]);
+    const change = Math.max(...['angle', 'x', 'y'].map(axis =>
+      Math.max(...positions.map(position => position[axis])) - Math.min(...positions.map(position => position[axis]))));
+    expect(change, `${part} moves through a real animation cycle without a click.`).toBeGreaterThan(1);
+  }
+  expect(await duck.evaluate(element => {
+    const current = element.getAnimations({ subtree: true });
+    return current.length === initialLoadingDance.length && current.every(animation => initialLoadingDance.includes(animation));
+  }), 'The same infinite animations survive a whole dance cycle.').toBe(true);
+  await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await page.screenshot({ path: testInfo.outputPath('loading-automatic-dance.png'), scale: 'css' });
+  await page.evaluate(() => wordBuddiesHost.ready());
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await expectAutomaticDance(page);
+  const readyFrames = await samplePipMotion(page, 300);
+  expect(readyFrames.every(frame => frame.activity === 'dancing')).toBe(true);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await page.screenshot({ path: testInfo.outputPath('loading-ready-still-dancing.png'), scale: 'css' });
+  await page.evaluate(() => {
+    document.getElementById('enter-game').addEventListener('click', () => {
+      window.pipActivityAtEntry = document.getElementById('loading-duck').dataset.activity;
+    }, { capture: true, once: true });
+  });
+  await duck.tap();
+  await reactionPose(page);
+  const reactionDuration = await duck.evaluate(element => Math.max(...element.getAnimations({ subtree: true })
+    .map(animation => Number(animation.effect.getTiming().duration))));
+  expect(Number.isFinite(reactionDuration) && reactionDuration > 0).toBe(true);
+  await enterGame(page);
+  expect(await page.evaluate(() => window.pipActivityAtEntry)).toBe('reacting');
+  await expect(page.locator('#status')).toBeHidden();
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.waitForTimeout(reactionDuration + 120);
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  expect(await page.locator('#loading-play').evaluate(element => element.getAnimations({ subtree: true }).length),
+    'A reaction completion callback cannot restart loading effects after entry.').toBe(0);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
+  await testInfo.attach('loading-automatic-motion.json', { body: JSON.stringify({ loopDuration, frames, readyFrames }), contentType: 'application/json' });
+});
+
+test('Pip and chest touch, keyboard and controller taps play all three reactions and return to dancing', async ({ page }, testInfo) => {
+  await installGamepad(page, { connected: true });
   await page.setViewportSize({ width: 320, height: 568 });
   await progressShell(page);
-  await page.evaluate(() => {
-    window.loadingDanceFrames = [];
-    const duck = document.getElementById('loading-duck');
-    new MutationObserver(() => loadingDanceFrames.push({ pose: duck.dataset.pose, at: performance.now() }))
-      .observe(duck, { attributes: true, attributeFilter: ['data-pose'] });
-    window.loadingMotionFrames = [];
-    window.recordLoadingMotion = true;
-    function sample() {
-      if (!window.recordLoadingMotion) return;
-      loadingMotionFrames.push({
-        pose: duck.dataset.pose, at: performance.now(),
-        parts: Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'].map(part => {
-          const matrix = new DOMMatrix(getComputedStyle(document.getElementById('loading-pip-' + part)).transform);
-          return [part, { angle: Math.atan2(matrix.b, matrix.a) * 180 / Math.PI, x: matrix.e, y: matrix.f }];
-        }))
-      });
-      requestAnimationFrame(sample);
-    }
-    requestAnimationFrame(sample);
-    window.gamepadFixture.connect();
-  });
+  await expectAutomaticDance(page);
+  const duck = page.getByRole('button', { name: 'Dance with Pip the duck' });
   const toy = page.locator('#loading-toy');
+  const inputs = [
+    { name: 'pip-touch', activate: () => duck.tap() },
+    { name: 'chest-touch', activate: () => toy.tap() },
+    { name: 'pip-enter', activate: async () => { await duck.focus(); await page.keyboard.press('Enter'); } },
+    { name: 'chest-space', activate: async () => { await toy.focus(); await page.keyboard.press('Space'); } },
+    { name: 'controller-a', activate: () => pressGamepad(page, 0) },
+    { name: 'pip-space', activate: async () => { await duck.focus(); await page.keyboard.press('Space'); } }
+  ];
+  const reactions = [], evidence = [];
+  for (const input of inputs) {
+    await input.activate();
+    const pose = await reactionPose(page);
+    if (reactions.length) expect(pose).not.toBe(reactions.at(-1));
+    reactions.push(pose);
+    const remaining = await duck.evaluate(element => Math.max(0, ...element.getAnimations({ subtree: true })
+      .map(animation => Number(animation.effect.getTiming().duration) - Number(animation.currentTime))));
+    const sampling = samplePipMotion(page, remaining + 80);
+    await page.screenshot({ path: testInfo.outputPath(`loading-${input.name}-${pose}.png`), scale: 'css' });
+    const frames = await sampling;
+    const active = frames.filter(frame => frame.activity === 'reacting' && frame.pose === pose);
+    expect(active.length, `${input.name} visibly interrupts the dance.`).toBeGreaterThan(1);
+    const positions = new Set(active.map(frame => JSON.stringify(frame.parts)));
+    expect(positions.size, `${pose} changes the rendered limbs instead of only its data attribute.`).toBeGreaterThan(1);
+    evidence.push({ input: input.name, pose, frames });
+    await expectAutomaticDance(page);
+  }
+  expect([...reactions.slice(0, 3)].sort()).toEqual(PIP_REACTIONS);
+  expect([...reactions.slice(3, 6)].sort()).toEqual(PIP_REACTIONS);
+  await expect(page.locator('#loading-score')).toHaveText('3 sparkles');
+  await testInfo.attach('loading-random-reactions.json', { body: JSON.stringify(evidence), contentType: 'application/json' });
+});
+
+test('rapid loading taps replace the active reaction without a backlog and recover to dancing', async ({ page }, testInfo) => {
+  await progressShell(page);
+  await expectAutomaticDance(page);
   const duck = page.locator('#loading-duck');
-  const poses = ['left-wing', 'right-wing', 'hip-left', 'hip-right', 'hip-left'];
-  const frames = [];
-  await page.screenshot({ path: testInfo.outputPath('loading-pip-00-idle.png'), scale: 'css' });
-  for (let index = 0; index < poses.length; index++) {
-    const firstFrame = await page.evaluate(() => loadingMotionFrames.length);
-    if (index === 1 || index === 4) {
-      await toy.focus();
-      await page.keyboard.press(index === 1 ? 'Enter' : 'Space');
-    } else if (index === 2) {
-      await page.evaluate(() => window.gamepadFixture.button(0, true));
-    } else await toy.tap();
-    await page.waitForFunction(({ firstFrame, pose }) => loadingMotionFrames.slice(firstFrame).some(frame => {
-      if (frame.pose !== pose) return false;
-      if (pose === 'left-wing') return frame.parts['left-wing'].angle > 80;
-      if (pose === 'right-wing') return frame.parts['right-wing'].angle < -80;
-      return Math.abs(frame.parts.body.x) > 6;
-    }), { firstFrame, pose: poses[index] });
-    if (index === 2) await page.evaluate(() => window.gamepadFixture.button(0, false));
-    await page.screenshot({ path: testInfo.outputPath(`loading-pip-0${index + 1}-${poses[index]}.png`), scale: 'css' });
-    await expect(duck).toHaveAttribute('data-pose', 'idle');
-    const visibleFrames = await page.evaluate(({ firstFrame, pose }) => loadingMotionFrames.slice(firstFrame)
-      .filter(frame => frame.pose === pose), { firstFrame, pose: poses[index] });
-    const strength = frame => index < 2 ? Math.abs(frame.parts[poses[index]].angle) : Math.abs(frame.parts.body.x);
-    const frame = visibleFrames.reduce((peak, candidate) => strength(candidate) > strength(peak) ? candidate : peak);
-    expect(frame.pose).toBe(poses[index]);
-    if (index === 0) expect(frame.parts['left-wing'].angle).toBeGreaterThan(80);
-    if (index === 1) expect(frame.parts['right-wing'].angle).toBeLessThan(-80);
-    if (index >= 2) expect(Math.sign(frame.parts.body.x)).toBe(index === 3 ? 1 : -1);
-    expect(frame.parts.head.angle * frame.parts.body.angle).toBeLessThan(0);
-    frames.push(frame);
-  }
-  await page.evaluate(() => { window.recordLoadingMotion = false; });
-  expect((await page.evaluate(() => loadingDanceFrames.filter(frame => frame.pose !== 'idle').map(frame => frame.pose))))
-    .toEqual(poses);
-  await page.evaluate(() => {
-    window.rapidDanceFrames = [];
-    window.recordRapidDance = true;
-    function sample() {
-      if (!window.recordRapidDance) return;
-      const matrix = name => new DOMMatrix(getComputedStyle(document.getElementById('loading-pip-' + name)).transform);
-      const left = matrix('left-wing'), right = matrix('right-wing'), body = matrix('body');
-      rapidDanceFrames.push({ at: performance.now(), pose: document.getElementById('loading-duck').dataset.pose,
-        left: Math.atan2(left.b, left.a) * 180 / Math.PI,
-        right: Math.atan2(right.b, right.a) * 180 / Math.PI, hip: body.e });
-      requestAnimationFrame(sample);
+  await duck.tap();
+  await reactionPose(page);
+  const burst = await page.evaluate(() => {
+    const duck = document.getElementById('loading-duck'), toy = document.getElementById('loading-toy');
+    const records = [];
+    for (let index = 0; index < 40; index++) {
+      const previous = duck.getAnimations({ subtree: true });
+      (index % 2 ? toy : duck).click();
+      const current = duck.getAnimations({ subtree: true });
+      records.push({ pose: duck.dataset.pose, activity: duck.dataset.activity, queued: duck.dataset.queued,
+        count: current.length, replaced: previous.every(animation => !current.includes(animation) && animation.playState === 'idle') });
     }
-    requestAnimationFrame(sample);
+    return records;
   });
-  const tapBounds = await toy.boundingBox();
-  const rapidStarted = await page.evaluate(() => performance.now());
-  const continuousPictures = (async () => {
-    for (let frame = 0; frame < 14; frame++) {
-      await page.screenshot({ path: testInfo.outputPath(`loading-rapid-${String(frame).padStart(2, '0')}.png`), scale: 'css' });
-      await page.waitForTimeout(65);
-    }
-  })();
-  for (let index = 0; index < 5; index++) await page.touchscreen.tap(
-    tapBounds.x + tapBounds.width / 2, tapBounds.y + tapBounds.height / 2);
-  const tapTime = await page.evaluate(start => performance.now() - start, rapidStarted);
-  await continuousPictures;
-  expect(tapTime, 'Five real taps fit inside the requested 480 ms burst').toBeLessThan(480);
-  await expect(duck).toHaveAttribute('data-pose', 'idle');
-  const rapid = await page.evaluate(() => { window.recordRapidDance = false; return rapidDanceFrames; });
-  const groups = [];
-  for (const frame of rapid.filter(frame => frame.pose !== 'idle')) {
-    if (groups.at(-1)?.pose !== frame.pose) groups.push({ pose: frame.pose, frames: [] });
-    groups.at(-1).frames.push(frame);
+  for (const [index, frame] of burst.entries()) {
+    expect(PIP_REACTIONS).toContain(frame.pose);
+    expect(frame.activity).toBe('reacting');
+    expect(frame.queued).toBe('0');
+    expect(frame.count).toBeGreaterThan(0);
+    expect(frame.count).toBeLessThanOrEqual(6);
+    expect(frame.replaced, `Tap ${index + 1} cancels the previous reaction immediately.`).toBe(true);
+    if (index) expect(frame.pose).not.toBe(burst[index - 1].pose);
   }
-  expect(groups.map(group => group.pose)).toEqual(poses);
-  expect(Math.max(...groups[0].frames.map(frame => frame.left))).toBeGreaterThan(90);
-  expect(Math.min(...groups[1].frames.map(frame => frame.right))).toBeLessThan(-90);
-  expect(Math.min(...groups[2].frames.map(frame => frame.hip))).toBeLessThan(-6);
-  expect(Math.max(...groups[3].frames.map(frame => frame.hip))).toBeGreaterThan(6);
-  expect(Math.min(...groups[4].frames.map(frame => frame.hip))).toBeLessThan(-6);
-  await testInfo.attach('loading-five-tap-480ms.json', {
-    body: JSON.stringify({ tapTime, frames: rapid }, null, 2), contentType: 'application/json'
-  });
-  const started = await page.evaluate(() => {
-    const start = performance.now();
-    for (let index = 0; index < 40; index++) document.getElementById('loading-toy').click();
-    return start;
-  });
-  expect(Number(await duck.getAttribute('data-queued'))).toBeLessThanOrEqual(5);
-  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(6);
-  await expect(duck).toHaveAttribute('data-pose', 'idle', { timeout: 1800 });
-  expect(await page.evaluate(start => performance.now() - start, started)).toBeLessThan(1800);
+  await expectAutomaticDance(page);
+  const recovered = await samplePipMotion(page, 400);
+  expect(recovered.every(frame => frame.activity === 'dancing' && frame.pose === 'dance'),
+    'An old completion callback must not resurrect a replaced reaction.').toBe(true);
   await expect(duck).toHaveAttribute('data-queued', '0');
+  await page.screenshot({ path: testInfo.outputPath('loading-rapid-taps-recovered.png'), scale: 'css' });
+  await testInfo.attach('loading-reaction-preemption.json', { body: JSON.stringify({ burst, recovered }), contentType: 'application/json' });
+});
+
+test('loading dance stops while hidden and reduced motion can change without losing interaction', async ({ page }, testInfo) => {
+  await observeLoadingAudio(page);
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await expectAutomaticDance(page);
+  await duck.dispatchEvent('click');
+  await reactionPose(page);
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  await expect(duck).toHaveAttribute('data-pose', 'idle');
+  await expect(duck).toHaveAttribute('data-queued', '0');
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.waitForTimeout(800);
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expectAutomaticDance(page);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  await expect(duck).toHaveAttribute('data-pose', 'idle');
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  const still = await samplePipMotion(page, 250);
+  expect(new Set(still.map(frame => JSON.stringify(frame.parts))).size).toBe(1);
+  await duck.dispatchEvent('click');
+  const pose = await reactionPose(page);
+  const reaction = await samplePipMotion(page, 180);
+  expect(reaction.every(frame => frame.pose === pose)).toBe(true);
+  expect(new Set(reaction.map(frame => JSON.stringify(frame.parts))).size).toBe(1);
+  expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.screenshot({ path: testInfo.outputPath('loading-reduced-static-reaction.png'), scale: 'css' });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expectAutomaticDance(page);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await page.screenshot({ path: testInfo.outputPath('loading-restored-automatic-dance.png'), scale: 'css' });
+});
+
+test('the automatic loading dance and its controls fit compact and desktop screens', async ({ page }, testInfo) => {
+  await progressShell(page);
+  await expectAutomaticDance(page);
   for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }, { width: 320, height: 320 }, { width: 1366, height: 768 }]) {
     await page.setViewportSize(viewport);
     for (const selector of ['#loading-toy', '#loading-duck', '#loading-music', '#progress']) {
@@ -316,9 +421,9 @@ test('loading Pip dances five distinct poses from touch, keyboard and controller
       if (selector === '#loading-music') expect(box.height).toBeGreaterThanOrEqual(44);
     }
     expect(await page.locator('#status').evaluate(element => element.scrollHeight <= element.clientHeight)).toBe(true);
+    await expectAutomaticDance(page);
     await page.screenshot({ path: testInfo.outputPath(`loading-dance-layout-${viewport.width}x${viewport.height}.png`), scale: 'css' });
   }
-  await testInfo.attach('loading-dance-real-clock.json', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
 });
 
 test('loading music uses a real quiet audio clock and stays on until explicit game entry', async ({ page }, testInfo) => {
@@ -375,6 +480,7 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
   await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   await expect(page.locator('#loading-duck')).toHaveAttribute('data-pose', 'idle');
   await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
+  await expectAutomaticDance(page);
   const hiddenCount = await page.evaluate(() => loadingAudioProbe.contexts.length);
   await page.waitForTimeout(180);
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(hiddenCount);
@@ -390,15 +496,17 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
   await expect(page.locator('#enter-game')).toBeEnabled();
   await page.waitForTimeout(1000);
   await expect(page.locator('#status')).toBeVisible();
+  await expectAutomaticDance(page);
   await expect(music).toHaveAttribute('aria-pressed', 'true');
   expect(await page.evaluate(() => loadingAudioProbe.contexts.at(-1).state)).toBe('running');
   const readyAt = await page.evaluate(() => performance.now());
   await enterGame(page);
   await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
   const elapsed = await page.evaluate(at => performance.now() - at, readyAt);
-  expect(elapsed, 'A queued dance must not delay explicit game entry').toBeLessThan(700);
+  expect(elapsed, 'The automatic dance and latest reaction must not delay explicit game entry').toBeLessThan(700);
   await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
+  expect(await page.locator('#loading-play').evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
   await testInfo.attach('loading-music-real-clock.json', {
     body: JSON.stringify(await page.evaluate(elapsed => ({
       elapsed, contexts: loadingAudioProbe.contexts.map(context => ({ state: context.state, time: context.currentTime })),
@@ -413,13 +521,36 @@ for (const ending of ['failure', 'pagehide']) test(`loading dance and music stop
   await page.locator('#loading-toy').click();
   const supported = await page.evaluate(() => loadingAudioProbe.supported);
   await expect(page.locator('#loading-music')).toHaveAttribute('data-audio-state', supported ? 'running' : 'unavailable');
+  if (ending === 'pagehide') {
+    await page.locator('#loading-duck').dispatchEvent('click');
+    await reactionPose(page);
+    const initialPageShow = await page.locator('#loading-duck').evaluate(element => {
+      const before = element.getAnimations({ subtree: true }), pose = element.dataset.pose;
+      // A pageshow without a preceding pagehide must preserve the current reaction.
+      window.dispatchEvent(new Event('pageshow'));
+      const after = element.getAnimations({ subtree: true });
+      return { activity: element.dataset.activity, samePose: element.dataset.pose === pose,
+        sameAnimations: before.length === 6 && after.length === before.length && before.every(animation => after.includes(animation)) };
+    });
+    expect(initialPageShow).toEqual({ activity: 'reacting', samePose: true, sameAnimations: true });
+  }
   await page.evaluate(ending => {
     if (ending === 'failure') window.wordBuddiesHost.fail('The game could not start. Please retry.');
     else window.dispatchEvent(new Event('pagehide'));
   }, ending);
   await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   await expect(page.locator('#loading-duck')).toHaveAttribute('data-queued', '0');
+  await expect(page.locator('#loading-duck')).toHaveAttribute('data-activity', 'idle');
   expect(await page.locator('#loading-play').evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  if (ending === 'pagehide') {
+    const contextCount = await page.evaluate(() => loadingAudioProbe.contexts.length);
+    await page.evaluate(() => window.dispatchEvent(new Event('pageshow')));
+    await expectAutomaticDance(page);
+    await page.waitForTimeout(180);
+    await expect(page.locator('#loading-music')).toHaveAttribute('aria-pressed', 'false');
+    expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(contextCount);
+    expect(await page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
+  }
 });
 
 test('runtime initialization waits until the staged 98 percent has been painted', async ({ page }) => {
@@ -877,7 +1008,7 @@ test('Pip is an inline loading companion with bounded, motion-safe reactions', a
     for (let tap = 0; tap < 8; tap++) await duck.click();
     await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
     expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBeLessThanOrEqual(6);
-    expect(Number(await duck.getAttribute('data-queued'))).toBeLessThanOrEqual(5);
+    await expect(duck).toHaveAttribute('data-queued', '0');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await duck.click();
     expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
@@ -921,16 +1052,29 @@ test('every Pip tap gives visible feedback with reduced motion without awarding 
   await whileEngineScriptIsPending(page, async toy => {
     const duck = page.getByRole('button', { name: 'Dance with Pip the duck' });
     const hint = page.locator('#loading-hint');
+    await expect(duck).toHaveAttribute('data-activity', 'idle');
     let previous = await hint.textContent();
-    for (let tap = 0; tap < 4; tap++) {
+    let previousParts;
+    const reactions = [];
+    for (let tap = 0; tap < 6; tap++) {
       await duck.click();
-      await expect(duck).toHaveAttribute('data-pose', ['left-wing', 'right-wing', 'hip-left', 'hip-right'][tap]);
+      const pose = await reactionPose(page);
+      if (reactions.length) expect(pose).not.toBe(reactions.at(-1));
+      reactions.push(pose);
       await expect(hint).not.toHaveText(previous, { timeout: 1000 });
       previous = await hint.textContent();
       await expect(hint).toContainText('Pip');
       await expect(page.locator('#loading-score')).toHaveText('0 sparkles');
+      const frames = await samplePipMotion(page, 120);
+      expect(frames.every(frame => frame.activity === 'reacting' && frame.pose === pose)).toBe(true);
+      const parts = JSON.stringify(frames[0].parts);
+      expect(new Set(frames.map(frame => JSON.stringify(frame.parts))).size).toBe(1);
+      if (previousParts) expect(parts, 'Each new reaction has a distinct static pose.').not.toBe(previousParts);
+      previousParts = parts;
       expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
     }
+    expect([...reactions.slice(0, 3)].sort()).toEqual(PIP_REACTIONS);
+    expect([...reactions.slice(3, 6)].sort()).toEqual(PIP_REACTIONS);
     await toy.click();
     await expect(hint).toContainText('Boing!');
     await expect(page.locator('#loading-score')).toHaveText('1 sparkle');

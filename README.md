@@ -39,11 +39,15 @@ removing words, reducing the collection, or adding image requests during play.
 The maintained HTML shell includes an inline, dependency-free treasure toy: tap it, wiggle
 it sideways, use Enter/Space, or press Xbox A while the game downloads. The chest bounces,
 peeks open, and makes stars, hearts or bubbles; every five taps brings a little star party.
-Chest taps also lead Pip through a dance: left wing, right wing, then alternating
-hip swings. Quick taps form a short, bounded sequence. A quiet original tune is
-synthesized locally after the first interaction; its sound control can mute it.
-Music stops when loading ends or the page hides, and returning never starts it
-without another interaction. Reduced motion keeps clear pose feedback.
+Pip dances automatically: alternating wing raises and hip swings, including while
+the ready screen waits for **Enter game**. Tap Pip or the chest to interrupt him
+with a jump, a shy head scratch or a playful bonk and bounce back. The three
+reactions appear in shuffled groups without consecutive repeats; rapid taps
+replace the current reaction, and Pip resumes dancing when it finishes.
+A quiet original tune starts after the first interaction; its sound control can
+mute it. Leaving the page stops both music and movement. Returning resumes the
+dance, with music waiting for another interaction. Reduced motion stops automatic
+dancing and gives each tap a distinct still pose and readable response.
 Repeated taps do not show a browser highlight or select the caption, while keyboard focus
 and pinch zoom remain available. It works before the engine script arrives and needs no
 extra image, font or audio downloads, or device-motion permission. Effects are capped at 12 particles,
