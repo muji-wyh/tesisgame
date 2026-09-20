@@ -1,35 +1,8 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, swipeLearn,
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint, memoryPoint,
   progressRegion, headerIconRect, openRewards, observeAudio, visibleColorCount } = require('./game-ui.cjs');
 
-const learningStatus = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
 const READY = 'Find 3 word';
-
-async function learnWords(page, testInfo, prefix) {
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(learningStatus);
-  const second = (await page.locator('#game-status').textContent()).match(learningStatus)[1];
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).not.toHaveText(`Learn: ${second}. Swipe to explore. Tap the picture to hear.`);
-  const words = [];
-  for (let index = 0; index < 5; index++) {
-    if (index) {
-      const previous = await page.locator('#game-status').textContent();
-      await swipeLearn(page, 'next');
-      await expect(page.locator('#game-status')).not.toHaveText(previous);
-    }
-    await expect(page.locator('#game-status')).toHaveText(learningStatus);
-    const word = (await page.locator('#game-status').textContent()).match(learningStatus)[1];
-    words.push(word);
-    if (prefix) await page.screenshot({ path: testInfo.outputPath(`${prefix}-${index + 1}-${word}.png`), scale: 'css' });
-  }
-  expect(words[1]).toBe(second);
-  expect(new Set(words).size, 'A lesson teaches five distinct word-picture associations.').toBe(5);
-  const last = await page.locator('#game-status').textContent();
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(last);
-  return words;
-}
 
 async function cardTap(page, index) {
   const point = boardPoint(await metrics(page), index);
@@ -80,19 +53,25 @@ async function answerPair(page, word, pair, picture = pair.Picture) {
   await cardTap(page, picture);
 }
 
-test('Learn shows five associations and the lesson survives Match and Memory switches', async ({ page }, testInfo) => {
+test('five words survive switching between Match and Memory', async ({ page }, testInfo) => {
   const errors = await openGame(page);
-  const words = await learnWords(page, testInfo, 'learn');
-  await chooseMode(page, 'match');
-  await expect(page.locator('#game-status')).toContainText(READY);
-  expect([...(await scanBoard(page)).keys()].sort()).toEqual([...words].sort());
+  const words = [...(await scanBoard(page)).keys()].sort();
   await page.screenshot({ path: testInfo.outputPath('same-lesson-match.png'), scale: 'css' });
   await chooseMode(page, 'memory');
   await expect(page.locator('#game-status')).toContainText('Memory.');
-  await expect(page.locator('#selection-status')).toBeEmpty();
-  await chooseMode(page, 'learn');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
-  expect(await learnWords(page, testInfo)).toEqual(words);
+  const remembered = [], bounds = await metrics(page);
+  for (let index = 0; index < 10; index++) {
+    const point = memoryPoint(bounds, index);
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
+    remembered.push((await page.locator('#selection-status').textContent()).match(/: ([a-z]+)\.$/)[1]);
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+  }
+  expect(remembered.sort()).toEqual(words.flatMap(word => [word, word]).sort());
+  await chooseMode(page, 'match');
+  await expect(page.locator('#game-status')).toContainText(READY);
+  expect([...(await scanBoard(page)).keys()].sort()).toEqual(words);
   expect(errors).toEqual([]);
 });
 

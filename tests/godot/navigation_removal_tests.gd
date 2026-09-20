@@ -114,8 +114,8 @@ func _run() -> void:
 		"A direct world choice keeps the page open and preserves the current game")
 	app._hide_collection()
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "learn" and app.model.lesson_words != before_words,
-		"New adventure still starts a fresh explicit Learn lesson")
+	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != before_words,
+		"New adventure starts a fresh Match board")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

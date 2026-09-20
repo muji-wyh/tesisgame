@@ -1,13 +1,11 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, swipeLearn,
+const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, matchWords, discoverMatchCards,
   headerPoint, boardPoint, resultPoint, openRewards, chooseRewardSection, collectionHeaderRect } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const INTRO = 'Learn five words. Swipe left or right; tap the picture to hear.';
-const WORD = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
+const INTRO = 'Find 3 word–picture pairs. Two cards have no match.';
 const RETRY = 'Room choices could not be remembered. You can keep practising. Choose Retry saving.';
-const wordStatus = word => `Learn: ${word}. Swipe to explore. Tap the picture to hear.`;
 
 async function record(page, key = ROOM_KEY) {
   return page.evaluate(key => localStorage.getItem(key), key);
@@ -25,20 +23,6 @@ function roomFields(saved) {
 async function pieceCount(page) {
   const counts = (await record(page, MEDAL_KEY))?.match(/counts=\{([\s\S]*?)\}/)?.[1] || '';
   return [...counts.matchAll(/:\s*(\d+)/g)].reduce((total, match) => total + Number(match[1]), 0);
-}
-
-async function learnWords(page) {
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(WORD);
-  await swipeLearn(page, 'previous');
-  const words = [];
-  for (let index = 0; index < 5; index++) {
-    if (index) await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(WORD);
-    words.push((await page.locator('#game-status').textContent()).match(WORD)[1]);
-  }
-  expect(new Set(words).size).toBe(5);
-  return words;
 }
 
 async function finishMatch(page, won) {
@@ -115,11 +99,11 @@ test(`result review words support ${input} swiping without a scrollbar or accide
 }
 
 for (const won of [true, false]) {
-test(`New adventure starts the next lesson directly after a ${won ? 'win' : 'loss'}`, async ({ page }, testInfo) => {
+test(`New adventure starts Match directly after a ${won ? 'win' : 'loss'}`, async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 5);
   const world = await page.locator('meta[name="theme-color"]').getAttribute('content');
-  const originalWords = await learnWords(page), pieces = await pieceCount(page);
+  const originalWords = await matchWords(page), pieces = await pieceCount(page);
   expect((await finishMatch(page, won)).sort()).toEqual([...originalWords].sort());
   const saved = await record(page), previousTopic = visits(saved)[0];
   await page.screenshot({ path: testInfo.outputPath(`result-actions-${won ? 'win' : 'loss'}.png`), scale: 'css' });
@@ -130,7 +114,7 @@ test(`New adventure starts the next lesson directly after a ${won ? 'win' : 'los
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', world);
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath(`direct-next-lesson-${won ? 'win' : 'loss'}.png`), scale: 'css' });
-  const nextWords = await learnWords(page);
+  const nextWords = await matchWords(page);
   expect(nextWords.filter(word => originalWords.includes(word)), 'A direct New adventure rotates the five-word topic without a picker.').toEqual([]);
   const changed = await record(page);
   expect(visits(changed)[0]).not.toBe(previousTopic);
@@ -140,11 +124,12 @@ test(`New adventure starts the next lesson directly after a ${won ? 'win' : 'los
 });
 }
 
-test('More sections and Back preserve the displayed lesson without a manual picker', async ({ page }, testInfo) => {
+test('More sections and Back preserve the Match board and selected card', async ({ page }, testInfo) => {
   const errors = await openGame(page);
-  const words = await learnWords(page);
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[3]));
+  const cards = await discoverMatchCards(page), selected = cards[3];
+  const point = boardPoint(await metrics(page), selected.index);
+  await tap(page, point.x, point.y);
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
   const saved = await record(page), medals = await record(page, MEDAL_KEY);
   await openRewards(page);
   await chooseRewardSection(page, 'medals');
@@ -154,17 +139,16 @@ test('More sections and Back preserve the displayed lesson without a manual pick
   await chooseRewardSection(page, 'room');
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).toHaveText(INTRO);
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[4]));
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[3]));
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
+  await tap(page, point.x, point.y);
+  expect(await discoverMatchCards(page)).toEqual(cards);
   expect(await record(page)).toBe(saved);
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   expect(errors).toEqual([]);
 });
 
-test('main-header Retry saving preserves lesson position, world and existing collections', async ({ page }, testInfo) => {
+test('main-header Retry saving preserves Match selection, world and existing collections', async ({ page }, testInfo) => {
   await page.addInitScript(() => {
     if (localStorage.getItem('wordBuddies.playroom') === null) {
       localStorage.setItem('wordBuddies.playroom', '[playroom]\nversion=1\ntoy="toy-spring"\nbackdrop="backdrop-spring"\nfavorite="spring-1"\n\n[stickers]\nword_ids=["cat", "apple"]\ndisplay_word_id="cat"\n');
@@ -173,10 +157,10 @@ test('main-header Retry saving preserves lesson position, world and existing col
   });
   const errors = await openGame(page);
   await chooseTheme(page, 0);
-  const words = await learnWords(page);
-  await swipeLearn(page, 'previous');
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[2]));
+  const cards = await discoverMatchCards(page), selected = cards[2];
+  const point = boardPoint(await metrics(page), selected.index);
+  await tap(page, point.x, point.y);
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
   const saved = await record(page), medals = await record(page, MEDAL_KEY);
   await page.evaluate(() => {
     const save = Storage.prototype.setItem;
@@ -199,10 +183,9 @@ test('main-header Retry saving preserves lesson position, world and existing col
   expect(recovered).toContain('preferred_theme_id="space"');
   expect(visits(recovered)).toEqual(visits(saved));
   expect(roomFields(recovered)).toEqual(roomFields(saved));
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[1]));
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(wordStatus(words[2]));
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
+  await tap(page, point.x, point.y);
+  expect(await discoverMatchCards(page)).toEqual(cards);
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   await page.reload();
   await enterGame(page);

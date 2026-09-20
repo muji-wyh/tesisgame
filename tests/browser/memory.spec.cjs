@@ -281,7 +281,7 @@ test('five Memory pairs earn one saved piece and New adventure refreshes the les
   await screenshot(page, testInfo, 'memory-saved-piece');
   const next = resultPoint(await metrics(page), 'newAdventure');
   await tap(page, next.x, next.y);
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await chooseMode(page, 'memory');
   await expect(page.locator('#game-status')).toContainText(READY);
   const refreshed = await discoverBoard(page);

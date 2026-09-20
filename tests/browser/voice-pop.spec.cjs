@@ -310,7 +310,7 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'true');
-  await chooseMode(page, 'learn');
+  await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   await expect(page.locator('#pop-status')).toBeEmpty();
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
@@ -322,7 +322,7 @@ test('leaving while permission is pending rejects a late grant and every callbac
   const errors = await open(page, { automatic: false });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
   expect((await state(page)).remaining).toBe(30);
-  await chooseMode(page, 'learn');
+  await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   const otherModeStatus = await page.locator('#game-status').textContent();
   await page.evaluate(() => {
@@ -538,7 +538,7 @@ test('failed abort and stop keep a visible microphone warning and block mode exi
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await popOne(page);
   await page.evaluate(() => { window.__popSpeech.instances.at(-1).failShutdown = true; });
-  await chooseMode(page, 'learn');
+  await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
   await expect(page.locator('#speech-panel')).toBeVisible();
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-pop-stop-failed', 'true');

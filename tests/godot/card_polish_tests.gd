@@ -31,7 +31,7 @@ func contrast(first: Color, second: Color) -> float:
 func _run() -> void:
 	var Data = load("res://scripts/game_data.gd")
 	check(Data.get_script_constant_map().get("GAME_NAME", "") == "Pip and Words", "The visible game has its new Pip and Words name")
-	var backgrounds := ["#effbef", "#fff4df", "#fff2e5", "#eef5ff", "#e7f8fa", "#f1edfb"]
+	var backgrounds := ["#effbef", "#fff4df", "#fff2e5", "#eef5ff", "#e7f8fa", "#f1edfb", "#f0f8e7", "#fff0f7"]
 	for index in range(Data.THEMES.size()):
 		var palette: Dictionary = Data.theme(Data.THEMES.keys()[index])
 		check(palette.background == Color(backgrounds[index]), "Each theme has its own refreshed background")
@@ -117,16 +117,18 @@ func _run() -> void:
 			"The gift label and 44px action fit both stacked and wide card layouts")
 	app._hide_collection()
 	app.set_reduced_motion(false)
-	check(app.new_round(27, false, "at-home", "learn", "pillow"), "The new vocabulary can start an animated Learn card")
+	check(app.new_round(27, false, "at-home", "match", "pillow"), "The new vocabulary can start animated Match cards")
 	await settle()
-	var lesson = app._lesson
-	var lesson_rect: Rect2 = lesson.picture_button.get_global_rect()
-	lesson.picture_button.pressed.emit()
-	check(lesson._picture_press._tween != null and lesson._word_press._tween != null,
-		"A new noun gets picture and label press feedback even without sound")
-	lesson.cancel_swipe()
-	check(lesson.picture_button.get_global_rect() == lesson_rect and lesson._picture_press._tween == null
-		and lesson._word_press._tween == null, "A new gesture settles Learn motion without moving its target")
+	for id in ["pillow:image", "pillow:word"]:
+		var noun_card = app.cards[id]
+		var noun_rect: Rect2 = noun_card.get_global_rect()
+		noun_card.pressed.emit()
+		check(noun_card._press_motion._tween != null and not app.audio.voice.playing,
+			"A new noun gets picture and word press feedback even without sound")
+		app._show_collection()
+		check(noun_card.get_global_rect() == noun_rect and noun_card._press_motion._tween == null
+			and noun_card._face.scale == Vector2.ONE, "Opening More settles Match motion without moving its target")
+		app._hide_collection()
 	app.choose_mode("memory")
 	await settle()
 	var memory_card = app._memory.card_buttons[0]

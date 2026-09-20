@@ -39,14 +39,14 @@ func _run() -> void:
 	if view.memory.cards.size() != 10:
 		await _finish(app, directory)
 		return
-	check(view.is_visible_in_tree() and app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "learn", "memory", "pop"],
+	check(view.is_visible_in_tree() and app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "memory", "pop"],
 		"Memory is one of exactly three playable modes")
 	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
 		"Root owns the eye while Memory cards fill their entire assigned view")
 	check(not view.status_label.visible and view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
 		"The Memory scene leaves visible progress to Root's Pip cluster")
 	check(app.model.lesson_words == lesson and app.model.theme_id == "spring", "Memory retains the lesson and selected world")
-	check(not app.grid.visible and not app._lesson.visible, "Memory hides the other mode boards")
+	check(not app.grid.visible and not app._pop.visible, "Memory hides the other mode boards")
 	check(app._success.visible and app._mistakes.visible and app._success.get_parent() == app._header_duck_slot
 		and app._mistakes.get_parent() == app._header_duck_slot, "Memory progress appears only in Root's shared Pip cluster")
 	check(app._status_announcement.contains("Memory") and app._status_announcement.contains("0 of 5"), "Memory announces its own goal and progress")
@@ -169,10 +169,10 @@ func _run() -> void:
 	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
 		"The internal Memory fixture reset preserves its mode, lesson, and world")
 	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	view.round_finished.emit(true, lesson)
 	check(app.model.phase != "won" and view.memory.phase == "stopped", "Leaving Memory blocks stale completion")
-	for mode in ["match", "memory", "learn"]:
+	for mode in ["match", "memory", "pop"]:
 		app.choose_mode(mode)
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "Existing " + mode + " mode remains reachable with the same lesson")
 	await _check_feedback_shortcut_focus(app)
@@ -195,7 +195,7 @@ func _finish(app, directory: String) -> void:
 func _check_feedback_shortcut_focus(app) -> void:
 	for correct in [false, true]:
 		for action in ["card", "study"]:
-			app.choose_mode("learn")
+			app.choose_mode("match")
 			app.choose_mode("memory")
 			await process_frame
 			await process_frame
@@ -268,7 +268,7 @@ func _check_host_layout(app) -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(480, 480)]:
 		root.size = dimensions
-		app.choose_mode("learn")
+		app.choose_mode("match")
 		app.choose_mode("memory")
 		for frame in range(4):
 			await process_frame

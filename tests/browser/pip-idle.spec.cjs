@@ -92,7 +92,7 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
   const state = await gameState(page);
   const lesson = await capture(page, area.lesson);
   const resting = await capture(page, area.body);
-  await page.screenshot({ path: testInfo.outputPath('pip-resting-learn.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('pip-resting-match.png'), scale: 'css' });
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await expectGesture(page, area.body, resting, testInfo, 'pip-autonomous-body-gesture');
@@ -110,7 +110,7 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
     if (await changedPixels(page, danceFrames[index - 1], danceFrames[index]) > 0.025) movingSteps++;
   }
   expect(movingSteps, 'Pip changes its wings and body through multiple dance steps.').toBeGreaterThanOrEqual(3);
-  await page.screenshot({ path: testInfo.outputPath('pip-autonomous-learn.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('pip-autonomous-match.png'), scale: 'css' });
   expect(await gameState(page)).toEqual(state);
   expect((await capture(page, area.lesson)).equals(lesson), 'Idle gestures preserve the displayed word, picture and lesson controls.').toBe(true);
 
@@ -211,6 +211,6 @@ test('page lifecycle pauses Pip and resumes autonomous gestures without changing
     expect(await gameState(page)).toEqual(state);
     expect((await capture(page, area.lesson)).equals(lesson)).toBe(true);
   }
-  await page.screenshot({ path: testInfo.outputPath('pip-resumed-learn.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('pip-resumed-match.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });

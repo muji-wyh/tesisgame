@@ -1,10 +1,9 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint, swipeLearn,
+const { metrics, tap, rendered, enterGame, openGame, boardPoint, matchWords, discoverMatchCards,
   resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomControl } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const learningStatus = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
 const PICNIC = 'apple banana orange pear grape cherry melon carrot tomato corn peas egg bread cake cookie cheese milk water juice rice pumpkin coconut pineapple watermelon strawberry'.split(' ');
 const APPLE_STAGES = [
   '1/3 · An apple for Pip!',
@@ -47,20 +46,6 @@ async function previewLockedApple(page, hasGoal = false) {
 async function requestPreviewGoal(page) {
   await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   await page.keyboard.press('Enter');
-}
-
-async function learnWords(page) {
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(learningStatus);
-  await swipeLearn(page, 'previous');
-  const words = [];
-  for (let index = 0; index < 5; index++) {
-    if (index) await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(learningStatus);
-    words.push((await page.locator('#game-status').textContent()).match(learningStatus)[1]);
-  }
-  expect(new Set(words).size).toBe(5);
-  return words;
 }
 
 async function winMatch(page) {
@@ -143,17 +128,16 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   // pass even when a focused button has incorrectly scrolled off screen.
   const help = await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   await tap(page, help.x, help.y);
-  await expect(page.locator('#game-status')).toContainText('Picnic time. Learn five words. Help Pip get Autumn apple.');
+  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 3 word–picture pairs. Help Pip get Autumn apple.');
   const goalSave = await record(page);
   expect(goalSave).toContain('goal_item_id="toy-autumn"');
   expect(goalSave).toContain('preferred_theme_id="autumn"');
-  const words = await learnWords(page);
+  const words = await matchWords(page);
   expect(words).toContain('apple');
   expect(words.every(word => PICNIC.includes(word))).toBe(true);
   expect(await pieceCount(page)).toBe(2);
   expect(stickerIds(await record(page))).toEqual(initialStickers);
   await page.screenshot({ path: testInfo.outputPath('gift-apple-lesson.png'), scale: 'css' });
-  await chooseMode(page, 'match');
   await winMatch(page);
   expect(await pieceCount(page)).toBe(2);
   await claimChest(page);
@@ -186,7 +170,10 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
 test('a failed gift-goal save keeps the previous goal and lesson until the visible retry succeeds', async ({ page }, testInfo) => {
   await seedAppleGift(page, { goal: 'toy-spring' });
   const errors = await openGame(page);
-  const previousWords = await learnWords(page);
+  const previousCards = await discoverMatchCards(page), selected = previousCards[3];
+  const selectedPoint = boardPoint(await metrics(page), selected.index);
+  await tap(page, selectedPoint.x, selectedPoint.y);
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
   const original = await record(page);
   const medals = await record(page, MEDAL_KEY);
   await openRoom(page);
@@ -217,19 +204,18 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   expect(failedMessage.equals(beforeMessage), 'A failed goal save must show feedback on the same visible toy card.').toBe(false);
   await page.screenshot({ path: testInfo.outputPath('gift-goal-save-failed.png'), scale: 'css' });
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(`Learn: ${previousWords[3]}. Swipe to explore. Tap the picture to hear.`);
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(`Learn: ${previousWords[4]}. Swipe to explore. Tap the picture to hear.`);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
+  await tap(page, selectedPoint.x, selectedPoint.y);
+  expect(await discoverMatchCards(page)).toEqual(previousCards);
   await page.evaluate(() => window.restoreGiftGoalSave());
   await openRoom(page);
   await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Picnic time. Learn five words. Help Pip get Autumn apple.');
+  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 3 word–picture pairs. Help Pip get Autumn apple.');
   expect(await record(page)).toContain('goal_item_id="toy-autumn"');
   expect(await record(page)).toContain('preferred_theme_id="autumn"');
-  expect(await learnWords(page)).toContain('apple');
+  expect(await matchWords(page)).toContain('apple');
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   expect(stickerIds(await record(page))).toEqual(stickerIds(original));
   await page.screenshot({ path: testInfo.outputPath('gift-goal-save-recovered.png'), scale: 'css' });
@@ -253,7 +239,7 @@ test('a completed saved goal stays keyboard reachable at 320px and toy replay gr
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   expect(stickerIds(await record(page))).toEqual(stickers);
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await openRoom(page);
   await roomControl(page, 'goal', { goal: true });
   await page.keyboard.press('Enter');

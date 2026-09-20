@@ -202,13 +202,13 @@ func _run() -> void:
 		check(app.model.feedback_ids == feedback_ids and not app.feedback_timer.paused,
 			"Returning from More preserves the marked cards and resumes automatic progress")
 		app._controller_back()
-	for mode in ["learn", "memory", "match"]:
+	for mode in ["pop", "memory", "match"]:
 		root.size = Vector2i(480, 900)
 		app.choose_mode(mode)
 		await settle()
 		root.size = Vector2i(480, 480)
 		await settle()
-		var view: Control = app._lesson if mode == "learn" else app._memory if mode == "memory" else app.grid
+		var view: Control = app._pop if mode == "pop" else app._memory if mode == "memory" else app.grid
 		check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), mode + " returns to the smaller viewport without stale container height: " + str(view.get_global_rect()))
 	app.queue_free()
 	await process_frame

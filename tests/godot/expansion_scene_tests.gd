@@ -34,17 +34,24 @@ func _run() -> void:
 	app._voice_mode = true
 	app._toggle_voice()
 	check(root.gui_get_focus_owner() == app._voice_button, "Toggling Voice retains keyboard focus after layout changes")
-	app.choose_mode("learn")
-	check(app._mode_id == "learn" and app._lesson.is_visible_in_tree() and not app.grid.visible, "Learn replaces the matching board")
-	check(not app.hint_button.visible and not app._voice_button.visible, "Learn hides Match-only controls")
-	check(app._lesson.word_label.get_theme_color("font_color") == Color("#35415e"), "The learned word retains dark readable text")
+	app.choose_mode("memory")
+	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app.grid.visible, "Memory replaces the matching board")
+	check(not app.hint_button.visible and not app._voice_button.visible, "Memory hides Match-only controls")
+	var word_index := 0
+	while app._memory.memory.cards[word_index].kind != "word":
+		word_index += 1
+	app._memory.card_buttons[word_index].pressed.emit()
+	check(app._memory.card_buttons[word_index].word_label.is_visible_in_tree()
+		and app._memory.card_buttons[word_index].word_label.get_theme_color("font_color") == Color("#35415e"),
+		"A revealed Memory word retains dark readable text")
 	app.choose_theme("ocean")
-	check(app.model.theme_id == "ocean", "All worlds remain selectable while learning")
+	check(app.model.theme_id == "ocean", "All worlds remain selectable during Memory")
+	var selection: Array = app._memory.memory.selected_indices.duplicate()
 	app._show_collection()
-	var target: Dictionary = app._lesson.current_word.duplicate()
-	app._lesson.picture_button.pressed.emit()
-	app._lesson._move(1)
-	check(app.model.successes == 0 and app.model.mistakes == 0 and app._lesson.current_word == target, "Covered learning controls cannot change the lesson under More")
+	app._memory.card_buttons[(word_index + 1) % app._memory.card_buttons.size()].pressed.emit()
+	app._memory.study_button.button_down.emit()
+	check(app.model.successes == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
+		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
 	app._room.action_button.pressed.emit()
 	check(app._playroom_caption.text.to_lower().contains("ball"), "The room toy action gives visible play feedback")
 	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
@@ -101,9 +108,9 @@ func _run() -> void:
 	app._hide_collection()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "learn" and app.model.phase == "waiting" and app.model.successes == 0
+	check(app._mode_id == "match" and app.model.phase == "waiting" and app.model.successes == 0
 		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
-		"New adventure starts fresh Learn words with a normal new attempt")
+		"New adventure starts a fresh Match board with a normal new attempt")
 	check(app.model.theme_id == "ocean" and app._favorite_reward_id == "ocean-1"
 		and app.medal_progress.count_for("ocean-1") == 1,
 		"A fresh adventure preserves the selected world, favorite, and earned piece")
@@ -121,19 +128,19 @@ func _run() -> void:
 		app._continue_match()
 	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect pairs enter the shared encouragement screen")
 	app.choose_mode("match")
-	check(app.grid.visible and app.model.cards.size() == 8 and not app._lesson.visible and not app._memory.visible,
+	check(app.grid.visible and app.model.cards.size() == 8 and not app._pop.visible and not app._memory.visible,
 		"Returning from loss restores the original eight-card game")
 	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 		root.size = dimensions
 		await process_frame
 		await process_frame
-		for mode in ["learn", "match", "memory"]:
+		for mode in ["match", "memory", "pop"]:
 			app.choose_mode(mode)
 			await process_frame
 			await process_frame
 			for button in app._mode_buttons:
 				check(app.get_global_rect().encloses(button.get_global_rect()), "Mode buttons fit " + str(dimensions))
-			var view: Control = app._lesson if mode == "learn" else app.grid if mode == "match" else app._memory
+			var view: Control = app.grid if mode == "match" else app._memory if mode == "memory" else app._pop
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), mode + " fits " + str(dimensions))
 	app.on_page_hidden()
 	await create_timer(0.1).timeout

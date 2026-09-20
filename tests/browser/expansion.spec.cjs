@@ -59,7 +59,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -211,6 +211,6 @@ test('the room keeps readable gift previews and usable controls on a tablet', as
   await page.screenshot({ path: testInfo.outputPath('room-locked-toy-tablet.png'), scale: 'css' });
   expect(await roomRecord(page)).toContain('toy="toy-ball"');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(errors).toEqual([]);
 });

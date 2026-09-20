@@ -55,14 +55,14 @@ func _run() -> void:
 	app._refresh_collection()
 	var initial_medals: Dictionary = app.medal_progress.counts.duplicate()
 	check(app._room._room.theme_id == "spring", "A saved and earned backdrop still renders in Pip's room")
-	app.choose_mode("learn")
+	app.choose_mode("memory")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_word_book")
 		and not app.has_method("_collect_word_stickers") and not app._room.has_method("set_word_sticker"),
 		"The removed Words UI and runtime collection/display handlers are not retained invisibly")
-	_check_legacy(app, "Loading the old room and starting Learn")
-	app._lesson._move(1)
-	app._lesson._move(-1)
-	_check_legacy(app, "Browsing Learn")
+	_check_legacy(app, "Loading the old room and starting Memory")
+	app._memory.card_buttons[0].pressed.emit()
+	app._controller_back()
+	_check_legacy(app, "Revealing and concealing a Memory card")
 
 	app.choose_mode("match")
 	var pairs: Array = _pairs(app)
@@ -130,7 +130,7 @@ func _run() -> void:
 	app._show_reward_section("room")
 	app._room.item_buttons["toy-space"].pressed.emit()
 	app._room.goal_button.pressed.emit()
-	check(app.playroom_state.goal_item_id == "toy-space" and app._mode_id == "learn" and not app.collection_page.visible,
+	check(app.playroom_state.goal_item_id == "toy-space" and app._mode_id == "match" and not app.collection_page.visible,
 		"A locked gift still saves a goal and starts its related lesson")
 	_check_legacy(app, "Saving a gift goal, preferred world, and lesson visit")
 
@@ -175,15 +175,15 @@ func _run() -> void:
 	check(app.playroom_state.collected_word_ids == LEGACY_IDS and app.playroom_state.displayed_word_id == "bell"
 		and app.playroom_state.backdrop_id == "backdrop-spring",
 		"A failed read retains the last confirmed word and backdrop fields in memory")
-	app._lesson._move(1)
-	var word_before: String = app._lesson.current_word.id
+	var selected_before: String = app.model.cards[0].id
+	app.cards[selected_before].pressed.emit()
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
 	storage.readable = true
 	app._storage_retry_button.pressed.emit()
 	check(not app._journey_save_failed and app.playroom_state.recent_topic_ids[0] == "music-makers",
 		"The ordinary storage retry recovers the pending visit")
-	check(app._lesson.current_word.id == word_before and app.model.lesson_words == lesson_before,
-		"Recovering the legacy record never restarts the current lesson")
+	check(app.model.selected_id == selected_before and app.model.lesson_words == lesson_before,
+		"Recovering the legacy record preserves the selected Match card and vocabulary")
 	_check_legacy(app, "Recovering a read and saving the pending visit", storage)
 	app.queue_free()
 	await process_frame

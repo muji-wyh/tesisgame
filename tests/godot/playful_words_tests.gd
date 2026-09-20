@@ -2,7 +2,6 @@ extends SceneTree
 
 var checks := 0
 var failures := 0
-var heard := 0
 
 
 func _initialize() -> void:
@@ -31,68 +30,61 @@ func _run() -> void:
 	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
-	app.choose_mode("learn")
 	app.set_reduced_motion(false)
 	app.audio.set_muted(true)
-	var lesson = app._lesson
-	lesson.hear_requested.connect(func(_word: Dictionary) -> void: heard += 1)
-	check(lesson.get("_word_play") != null, "Learn has a bounded picture-play controller")
-	if lesson.get("_word_play") != null:
-		var poses: Array = []
-		for id in ["ball", "bell", "rocket", "fish", "boat", "flower"]:
-			var word: Dictionary = app.data.words.filter(func(value: Dictionary) -> bool: return value.id == id)[0]
-			lesson.show_words([word])
-			lesson.set_audio_available(true)
-			await settle()
-			var home: Transform2D = lesson.picture.get_transform()
-			var hitbox: Rect2 = lesson.picture_button.get_global_rect()
-			var label: Rect2 = lesson.word_label.get_global_rect()
-			lesson.picture_button.pressed.emit()
-			var tween: Tween = lesson._word_play.get("_tween")
-			check(tween != null, id + " has a real reaction")
-			if tween != null:
-				tween.pause()
-				tween.custom_step(0.16)
-				var pose: Transform2D = lesson.picture.get_transform()
-				check(not pose.is_equal_approx(home), id + " moves its picture after activation")
-				poses.append(pose)
-				check(lesson.picture_button.get_global_rect().is_equal_approx(hitbox)
-					and lesson.word_label.get_global_rect().is_equal_approx(label),
-					"The readable word and interaction rectangle remain stationary")
-				tween.custom_step(0.44)
-				check(lesson.picture.get_transform().is_equal_approx(home),
-					id + " restores its exact transform within 600ms")
-			lesson.picture_button.pressed.emit()
-			var old: Tween = lesson._word_play.get("_tween")
-			lesson.picture_button.pressed.emit()
-			check(old == null or not old.is_valid(), "Rapid taps replace, not queue, picture reactions")
-			lesson.pause(true)
-			check(lesson.picture.get_transform().is_equal_approx(home) and lesson._word_play.get("_tween") == null,
-				"Pausing cancels picture motion immediately")
-			lesson.pause(false)
-		check(poses.size() == 6 and poses[0] != poses[1] and poses[2] != poses[3],
-			"Nouns use different trajectories rather than one universal bounce")
-		var ball: Dictionary = app.data.words.filter(func(value: Dictionary) -> bool: return value.id == "ball")[0]
-		var book: Dictionary = app.data.words.filter(func(value: Dictionary) -> bool: return value.id == "book")[0]
-		lesson.show_words([ball, book])
-		lesson.set_audio_available(false)
-		var before: int = heard
-		lesson.picture_button.pressed.emit()
-		check(lesson._word_play.get("_tween") != null and heard == before,
-			"Silent Learn still plays visually without requesting unavailable audio")
-		lesson._move(1)
-		check(lesson._word_play.get("_tween") == null, "Changing words cancels the old picture action")
-		lesson.picture_button.pressed.emit()
-		check(lesson._word_play.get("_tween") == null, "Unlisted nouns keep their original static picture")
-		lesson._move(-1)
-		app.set_reduced_motion(true)
-		lesson.set_audio_available(true)
-		before = heard
-		var home: Transform2D = lesson.picture.get_transform()
-		lesson.picture_button.pressed.emit()
-		check(heard == before + 1 and lesson._word_play.get("_tween") == null
-			and lesson.picture.get_transform().is_equal_approx(home),
-			"Reduced motion keeps pronunciation and the original readable picture")
+	var poses: Array = []
+	for entry in [["ball", "play-time"], ["bell", "music-makers"], ["rocket", "space-trip"],
+		["fish", "animal-friends"], ["boat", "on-the-move"], ["flower", "great-outdoors"]]:
+		var id: String = entry[0]
+		check(app.new_round(42, false, entry[1], "match", id), "A real Match board includes the animated noun " + id)
+		await settle()
+		var card = app.cards[id + ":image"]
+		var word_card = app.cards[id + ":word"]
+		var home: Transform2D = card.picture.get_transform()
+		var hitbox: Rect2 = card.get_global_rect()
+		var label: Rect2 = word_card.word_label.get_global_rect()
+		word_card.pressed.emit()
+		card.pressed.emit()
+		var tween: Tween = card._word_play.get("_tween")
+		check(tween != null and not app.audio.voice.playing, id + " has a real picture reaction during silent Match")
+		if tween != null:
+			tween.pause()
+			tween.custom_step(0.16)
+			var pose: Transform2D = card.picture.get_transform()
+			check(not pose.is_equal_approx(home), id + " moves its picture after a correct pair")
+			poses.append(pose)
+			check(card.get_global_rect().is_equal_approx(hitbox)
+				and word_card.word_label.get_global_rect().is_equal_approx(label),
+				"The readable word and interaction rectangle remain stationary")
+			tween.custom_step(0.44)
+			check(card.picture.get_transform().is_equal_approx(home), id + " restores its exact transform within 600ms")
+		app._continue_match()
+		card.pressed.emit()
+		var old: Tween = card._word_play.get("_tween")
+		card.pressed.emit()
+		check(old == null or not old.is_valid(), "Rapid matched-card taps replace, not queue, picture reactions")
+		app._show_collection()
+		check(card.picture.get_transform().is_equal_approx(home) and card._word_play.get("_tween") == null,
+			"Covering Match cancels picture motion immediately")
+		app._hide_collection()
+	check(poses.size() == 6 and poses[0] != poses[1] and poses[2] != poses[3],
+		"Nouns use different trajectories rather than one universal bounce")
+	check(app.new_round(42, false, "play-time", "match", "book"), "An unanimated noun also has a real Match pair")
+	await settle()
+	app.cards["book:word"].pressed.emit()
+	app.cards["book:image"].pressed.emit()
+	check(app.cards["book:image"]._word_play.get("_tween") == null, "Unlisted nouns keep their original static picture")
+	app.set_reduced_motion(true)
+	app.new_round(42, false, "play-time", "match", "ball")
+	app.audio.set_muted(false)
+	await settle()
+	var reduced_home: Transform2D = app.cards["ball:image"].picture.get_transform()
+	app.cards["ball:word"].pressed.emit()
+	app.cards["ball:image"].pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://assets/audio/voice/word-ball.wav")
+		and app.cards["ball:image"]._word_play.get("_tween") == null
+		and app.cards["ball:image"].picture.get_transform().is_equal_approx(reduced_home),
+		"Reduced motion keeps pronunciation and the original readable picture")
 	app.set_reduced_motion(false)
 	app.new_round(42, false, "play-time", "match", "ball")
 	app.audio.set_muted(false)

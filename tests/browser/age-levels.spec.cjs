@@ -1,11 +1,10 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const { enterGame, openGame, openRewards, metrics, tap, rendered, ageButtonRect, collectionHeaderRect,
-  boardPoint, chooseMode, swipeLearn, memoryPoint, roomControl, withMemoryPeek } = require('./game-ui.cjs');
+  boardPoint, chooseMode, matchWords, memoryPoint, roomControl, withMemoryPeek } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const NAMES = { all: 'All words', '4-6': 'Ages 4-6', '7-9': 'Ages 7-9', '10-plus': 'Ages 10+' };
-const WORD = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
 const vocabulary = new Map(words.map(word => [word.id, word]));
 
 async function saved(page) {
@@ -42,20 +41,6 @@ async function matchCards(page) {
   return cards;
 }
 
-async function learnWords(page) {
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(WORD);
-  await swipeLearn(page, 'previous');
-  const result = [];
-  for (let index = 0; index < 5; index++) {
-    if (index) await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(WORD);
-    result.push((await page.locator('#game-status').textContent()).match(WORD)[1]);
-  }
-  expect(new Set(result).size).toBe(5);
-  return result;
-}
-
 async function memoryWords(page) {
   const bounds = await metrics(page), result = [];
   for (let index = 0; index < 10; index++) {
@@ -69,7 +54,7 @@ async function memoryWords(page) {
   return result;
 }
 
-test('age choices preserve the current lesson in all modes and apply after reload', async ({ page }, testInfo) => {
+test('age choices preserve the current lesson in Match and Memory and apply after reload', async ({ page }, testInfo) => {
   test.setTimeout(150000);
   const errors = await openGame(page, { mode: 'match' });
   const before = await matchCards(page);
@@ -91,8 +76,6 @@ test('age choices preserve the current lesson in all modes and apply after reloa
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   await tap(page, first.x, first.y);
   expect(await matchCards(page)).toEqual(before);
-  await chooseMode(page, 'learn');
-  expect((await learnWords(page)).sort()).toEqual(originalWords);
   await chooseMode(page, 'memory');
   const remembered = await memoryWords(page);
   expect([...new Set(remembered)].sort()).toEqual(originalWords);
@@ -154,7 +137,7 @@ test('age saving retries in place with mouse, touch and keyboard at compact widt
   expect(errors).toEqual([]);
 });
 
-test('a new gift lesson uses advanced vocabulary across Learn, Match and Memory', async ({ page }, testInfo) => {
+test('a new gift lesson uses advanced vocabulary across Match and Memory', async ({ page }, testInfo) => {
   test.setTimeout(150000);
   await page.addInitScript(key => {
     if (!localStorage.getItem(key)) {
@@ -172,14 +155,11 @@ test('a new gift lesson uses advanced vocabulary across Learn, Match and Memory'
   await expect(page.locator('#game-status')).toContainText('Winter bell.');
   await roomControl(page, 'goal', { locked: true, item: 'winter' });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Music makers. Learn five words.');
-  const lesson = await learnWords(page);
-  expect(lesson[0]).toBe('bell');
-  expect(lesson.slice(1).every(word => vocabulary.get(word).level === 'advanced')).toBe(true);
+  await expect(page.locator('#game-status')).toContainText('Music makers. Find 3 word–picture pairs.');
+  const lesson = await matchWords(page);
+  expect(lesson).toContain('bell');
+  expect(lesson.filter(word => word !== 'bell').every(word => vocabulary.get(word).level === 'advanced')).toBe(true);
   expect(lesson.some(word => word.length >= 9)).toBe(true);
-  await page.screenshot({ path: testInfo.outputPath('advanced-learn.png'), scale: 'css' });
-  await chooseMode(page, 'match');
-  expect([...new Set((await matchCards(page)).map(card => card.split(': ')[1]))].sort()).toEqual([...lesson].sort());
   await page.screenshot({ path: testInfo.outputPath('advanced-match.png'), scale: 'css' });
   await chooseMode(page, 'memory');
   expect([...new Set(await memoryWords(page))].sort()).toEqual([...lesson].sort());

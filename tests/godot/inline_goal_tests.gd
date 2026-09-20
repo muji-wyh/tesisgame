@@ -114,9 +114,9 @@ func _run() -> void:
 		"Failed goal saves do not jump the page or replace the lesson")
 	app.playroom_state._save_path = save_path
 	app._room.goal_button.pressed.emit()
-	check(app._mode_id == "learn" and app.playroom_state.goal_item_id == "toy-space"
+	check(app._mode_id == "match" and app.playroom_state.goal_item_id == "toy-space"
 		and app.model.lesson_words.any(func(word: Dictionary) -> bool: return word.id == "rocket"),
-		"The inline action still starts the matching gift adventure")
+		"The inline action starts a Match adventure containing the gift word")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

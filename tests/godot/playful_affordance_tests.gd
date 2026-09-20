@@ -104,14 +104,15 @@ func _test_voice_style() -> void:
 				"Prominence keeps all header targets usable on narrow screens")
 	check(app.model.cards == original and not app._voice_mode and not app._voice_listening,
 		"Styling never starts recording or changes the round")
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	app.set_reduced_motion(false)
 	await settle()
-	app._lesson.picture_button.pressed.emit()
-	var tap: Control = app._lesson.get("_tap_effect")
-	check(tap != null and tap.is_visible_in_tree(), "Learn shares the playful sparkle response, including silent play")
-	app._lesson.cancel_swipe()
-	check(tap == null or not tap.visible, "A new Learn gesture cancels the decorative burst")
+	var card = app.cards[app.model.cards[0].id]
+	card.pressed.emit()
+	check(card._feedback_kind == "tap" and card._feedback.is_visible_in_tree(),
+		"Match shares the playful sparkle response, including silent play")
+	app._show_collection()
+	check(not card._feedback.visible, "Opening More cancels the covered card's decorative burst")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

@@ -1,15 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const {
-  THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme, chooseMode,
+  THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
   openRewards, chooseRewardSection, collectionHeaderRect, worldIconRect,
-  contentBounds, pipHeaderRect, roomControl, swipeLearn, boardPoint, resultPoint
+  contentBounds, pipHeaderRect, roomControl, matchWords, boardPoint, resultPoint
 } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 const OLD_COUNTS = { 'spring-1': 3, 'summer-2': 1, 'autumn-6': 2 };
 const VOCABULARY = new Map(require('../../words.json').map(word => [word.id, word]));
-const LEARN_STATUS = /^Learn: ([a-z]+)\. Swipe to explore\. Tap the picture to hear\.$/;
 
 async function record(page, key = ROOM_KEY) {
   return page.evaluate(key => localStorage.getItem(key), key);
@@ -158,14 +157,14 @@ test('all eight theme targets fit 320 by 568 and the new choices survive touch a
   }
   expect(await record(page, MEDAL_KEY)).toBe(originalMedals);
   const saved = await record(page);
-  // openGame navigates to a new exported engine and selects its default Learn
+  // openGame navigates to a new exported engine and selects its default Match
   // mode. It must read the saved world rather than overwrite Candy with Spring.
   const reloadErrors = await openGame(page, { reducedMotion: 'reduce' });
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
   const reloaded = await record(page);
   for (const field of ['toy', 'backdrop', 'favorite', 'preferred_theme_id', 'goal_item_id']) {
     const pattern = new RegExp(`^${field}=(.*)$`, 'm');
-    expect(reloaded.match(pattern)?.[1], `Reload preserves ${field} while Learn may record a new topic visit.`)
+    expect(reloaded.match(pattern)?.[1], `Reload preserves ${field} while the fresh lesson may record a new topic visit.`)
       .toBe(saved.match(pattern)?.[1]);
   }
   expect(await record(page, MEDAL_KEY)).toBe(originalMedals);
@@ -185,20 +184,6 @@ async function seedGiftSaveFixture(page, world) {
     if (localStorage.getItem(medalKey) === null) localStorage.setItem(medalKey, medals);
     if (localStorage.getItem(roomKey) === null) localStorage.setItem(roomKey, room);
   }, { medals, room, medalKey: MEDAL_KEY, roomKey: ROOM_KEY });
-}
-
-async function exploreGiftLesson(page) {
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(LEARN_STATUS);
-  await swipeLearn(page, 'previous');
-  const words = [];
-  for (let index = 0; index < 5; index++) {
-    if (index) await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(LEARN_STATUS);
-    words.push((await page.locator('#game-status').textContent()).match(LEARN_STATUS)[1]);
-  }
-  expect(new Set(words).size).toBe(5);
-  return words;
 }
 
 async function winGiftMatch(page) {
@@ -248,10 +233,10 @@ for (const gift of [
     await page.screenshot({ path: testInfo.outputPath(`${gift.world}-locked-save-fixture.png`), scale: 'css' });
     const goal = await roomControl(page, 'goal', { locked: true, item: gift.world });
     await tap(page, goal.x, goal.y);
-    await expect(page.locator('#game-status')).toContainText(`${gift.topic}. Learn five words. Help Pip get ${gift.name}.`);
+    await expect(page.locator('#game-status')).toContainText(`${gift.topic}. Find 3 word–picture pairs. Help Pip get ${gift.name}.`);
     expect(await record(page)).toContain(`goal_item_id="toy-${gift.world}"`);
     expect(await record(page)).toContain(`preferred_theme_id="${gift.world}"`);
-    const lesson = await exploreGiftLesson(page);
+    const lesson = await matchWords(page);
     expect(lesson).toContain(gift.word);
     for (const word of lesson.filter(word => word !== gift.word)) {
       expect(VOCABULARY.get(word)?.level, 'Only the explicitly chosen gift noun may exceed the selected age level.').toBe('basic');
@@ -259,7 +244,6 @@ for (const gift of [
     expect(await record(page)).toContain('age_band="4-6"');
     expect(await counts(page)).toEqual(originalCounts);
     await page.screenshot({ path: testInfo.outputPath(`${gift.world}-gift-lesson.png`), scale: 'css' });
-    await chooseMode(page, 'match');
     await winGiftMatch(page);
     expect(await counts(page)).toEqual(originalCounts);
     const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');

@@ -54,10 +54,6 @@ func _run() -> void:
 			var card: Button = app.cards[word.id + ":word"]
 			check_label(card.word_label, word, "Match", dimensions)
 			check(app._match_playfield.get_global_rect().grow(1).encloses(card.get_global_rect()), "Match keeps each new word inside its original board")
-			app.choose_mode("learn")
-			await settle()
-			check_label(app._lesson.word_label, word, "Learn", dimensions)
-			check(app._lesson.get_global_rect().encloses(app._lesson.word_label.get_global_rect()), "Learn keeps the complete word inside the lesson card")
 			app.choose_mode("memory")
 			app._memory.begin_peek()
 			await settle()

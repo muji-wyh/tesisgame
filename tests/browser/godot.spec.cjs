@@ -3,7 +3,7 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, lessonPoint, swipeLearn, resultPoint } = require('./game-ui.cjs');
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, resultPoint } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -22,15 +22,12 @@ function watchErrors(page) {
   return errors;
 }
 
-async function ready(scope, match = true) {
+async function ready(scope, renderFrames = true) {
   // This helper also checks new rounds after entry; only a fresh page needs the gate.
   if (await scope.locator('body').getAttribute('data-engine-ready') !== 'true') await enterGame(scope);
   await expect(scope.locator('#status')).toBeHidden();
-  await expect(scope.locator('#game-status')).toContainText(/Learn five words\.|Find 3 word–picture pairs\./);
-  if (!match) return;
-  if ((await scope.locator('#game-status').textContent()).includes('Learn five words.')) await chooseMode(scope, 'match');
   await expect(scope.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await rendered(scope);
+  if (renderFrames) await rendered(scope);
 }
 
 async function canvasMetrics(scope) {
@@ -349,7 +346,7 @@ test('season colors preserve selection and discard obsolete pending music and pr
 });
 
 for (const failure of ['unavailable', 'corrupt']) {
-  test(`${failure} optional audio leaves the round playable and can be retried`, async ({ page, browserName }) => {
+  test(`${failure} optional audio leaves the round playable and can be retried`, async ({ page }) => {
     let failing = true;
     const requests = [];
     await page.route('**/audio-*.sample', async route => {
@@ -363,34 +360,15 @@ for (const failure of ['unavailable', 'corrupt']) {
     });
     await observeAudio(page);
     await page.goto('/');
-    const checkLearnHear = failure === 'unavailable' && browserName === 'chromium';
-    await ready(page, !checkLearnHear);
+    await ready(page);
     test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
-    if (checkLearnHear) {
-      await rendered(page);
-      const bounds = await logicalMetrics(page);
-      const hear = lessonPoint(bounds, 'picture');
-      const initialStarts = await page.evaluate(() => window.audioObservation.starts);
-      await tap(page, hear.x, hear.y);
-      await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
-      const firstWord = (await page.locator('#game-status').textContent()).split('.')[0];
-      await swipeLearn(page, 'next');
-      await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\. Swipe to explore\. Tap the picture to hear\.$/);
-      const nextWord = (await page.locator('#game-status').textContent()).match(/^Learn: ([a-z]+)\./)[1];
-      expect(nextWord).not.toBe(firstWord);
-      const beforeHear = await page.evaluate(() => window.audioObservation.starts);
-      await tap(page, hear.x, hear.y);
-      await expect(page.locator('#game-status')).toHaveText(`${nextWord}. Look at the picture and say the word.`);
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(beforeHear);
-      await chooseMode(page, 'match');
-      await ready(page);
-    }
+    const initialStarts = await page.evaluate(() => window.audioObservation.starts);
     const metrics = await canvasMetrics(page);
     const point = firstCard(metrics);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
     await expect(page.locator('#audio-status')).not.toContainText('Listen');
+    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
     const before = await page.evaluate(() => window.audioObservation.starts);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
@@ -595,7 +573,7 @@ test('new adventures rotate and all five review words replay without opening or 
   await holdChestUntilOpen(page, resultScreenPoint(metrics));
   await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toHaveText('Learn five words. Swipe left or right; tap the picture to hear.');
+  await expect(page.locator('#game-status')).toHaveText('Find 3 word–picture pairs. Two cards have no match.');
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];
@@ -1141,7 +1119,7 @@ for (const outcome of ['win', 'loss']) {
     }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 24 * scale } });
     expect(pixel, 'The softly tinted New adventure button must render, not just accept invisible input.').toEqual([243, 223, 224]);
     await page.touchscreen.tap(next.x, next.y);
-    await expect(page.locator('#game-status')).toContainText('Learn five words.');
+    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
     expect(errors).toEqual([]);
   });
 }
@@ -1173,7 +1151,7 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 

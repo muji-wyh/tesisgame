@@ -30,8 +30,12 @@ func _run() -> void:
 	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
-	check(app.MODES.keys() == ["match", "learn", "memory", "pop"], "The original modes stay ordered before the new Voice Pop mode")
-	check(app._mode_buttons.size() == 4, "Each of the four modes has one visible tab")
+	check(app.MODES.keys() == ["match", "memory", "pop"], "The available modes are ordered Match, Memory and Voice Pop")
+	check(app._mode_buttons.size() == 3, "Each of the three modes has one visible tab")
+	check(app.find_child("Mode_learn", true, false) == null
+		and app.find_child("LearnWords", true, false) == null
+		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_lesson"),
+		"The removed Learn mode creates no tab or hidden lesson view")
 	check(FileAccess.file_exists("res://scripts/icon_button.gd"), "Toolbar and peek controls share drawn icons")
 	for button in [app.collection_button, app.hint_button, app._voice_button]:
 		check(button.text.is_empty(), "The top-right actions use icons rather than text")
@@ -79,6 +83,13 @@ func _run() -> void:
 	check(app.model.phase == "waiting" and app.model.mistakes == 1, "A wrong pair clears automatically without resetting progress")
 	app.choose_mode("memory")
 	await settle()
+	var memory_words: Array = app.model.lesson_words.duplicate(true)
+	var memory_cards: Array = app._memory.memory.cards.duplicate(true)
+	var memory_button_id: int = app._memory.card_buttons[0].get_instance_id()
+	app.choose_mode("learn")
+	check(app._mode_id == "memory" and app.model.lesson_words == memory_words
+		and app._memory.memory.cards == memory_cards and app._memory.card_buttons[0].get_instance_id() == memory_button_id,
+		"A stale Learn mode request leaves the current Memory round and controls unchanged")
 	check(app._memory.has_method("begin_peek") and app._memory.has_method("end_peek"), "Memory exposes hold-to-peek input")
 	check(app._memory.find_child("MemoryFeedback", true, false) == null
 		and app._memory.find_child("MemoryReviewHint", true, false) == null, "Memory has no bottom panel")
@@ -92,7 +103,8 @@ func _run() -> void:
 		app.on_page_hidden()
 		check(not app._memory.memory.studying, "Hiding the page releases a held eye")
 		app.on_page_visible()
-	app.choose_mode("match")
+	check(app.new_round(23, false, "", "learn") and app._mode_id == "match",
+		"A stale Learn round request falls back to a playable Match round")
 	app._show_error("The game data could not load.")
 	await settle()
 	check(app._message.is_visible_in_tree() and app._message.size.x >= 200,

@@ -12,12 +12,11 @@ const MedalProgress = preload("res://scripts/medal_progress.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
-const WordLesson = preload("res://scripts/word_lesson.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
-const MODES := {"match": "Match", "learn": "Learn", "memory": "Memory", "pop": "Voice Pop"}
+const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = 1.2
 const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
@@ -190,7 +189,6 @@ var _mode_id: String = "match"
 var _mode_row: HBoxContainer
 var _mode_buttons: Array[Button] = []
 var _memory: MemoryGarden
-var _lesson: WordLesson
 var _pop: VoicePop
 var _pop_speech_active: bool = false
 var _match_playfield: Control
@@ -461,15 +459,6 @@ func _build_controls() -> void:
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
 	_match_playfield.add_child(grid)
-	_lesson = WordLesson.new()
-	_lesson.name = "LearnWords"
-	_lesson.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_lesson.hear_requested.connect(_lesson_hear)
-	_lesson.word_changed.connect(_association_changed)
-	_lesson.word_changed.connect(func(word: Dictionary) -> void:
-		if _mode_id == "learn" and not _rebuilding:
-			_announce_status("Learn: " + str(word.text) + ". Swipe to explore. Tap the picture to hear."))
-	column.add_child(_lesson)
 	_memory = MemoryGarden.new()
 	_memory.name = "MemoryGarden"
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1543,7 +1532,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pop.stop()
 	_rebuilding = true
 	if not next_mode.is_empty():
-		_mode_id = next_mode
+		_mode_id = next_mode if MODES.has(next_mode) else "match"
+	elif not MODES.has(_mode_id):
+		_mode_id = "match"
 	_memory.stop()
 	duck.settle()
 	_cancel_fragment_delivery()
@@ -1585,8 +1576,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		button.pressed.connect(_select_card.bind(card_data.id))
 		grid.add_child(button)
 		cards[card_data.id] = button
-	_lesson.show_words(model.lesson_words)
-	_lesson.set_audio_available(audio.available and not audio.muted)
 	if _mode_id == "memory":
 		_memory.set_reduced_motion(reduced_motion)
 		_memory.start_round(model.lesson_words, Data.theme(model.theme_id), seed_value)
@@ -1595,7 +1584,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_rebuilding = false
 	_refresh()
 	_layout()
-	if _mode_id == "learn":
+	if not repeat_lesson:
 		_pending_visit_id = model.adventure_id
 		_save_journey()
 	return true
@@ -1792,7 +1781,6 @@ func _refresh() -> void:
 			button.add_theme_font_size_override("font_size", 16)
 	if theme_changed:
 		_memory.set_palette(palette)
-		_lesson.set_palette(palette)
 		for button in [collection_button, hint_button]:
 			Style.square_icon_button(button, palette.accent)
 		Style.square_icon_button(_collection_back, palette.accent)
@@ -1836,7 +1824,6 @@ func _refresh() -> void:
 	_refresh_hint()
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
-	_lesson.visible = playing and _mode_id == "learn"
 	_memory.visible = playing and _mode_id == "memory"
 	_pop.visible = playing and _mode_id == "pop"
 	_mistakes.visible = _success.visible
@@ -1853,9 +1840,7 @@ func _refresh() -> void:
 			_message.text += " %d in a row!" % model.streak
 	else:
 		_message.text = "Find 3 word–picture pairs. Two cards have no match."
-	if playing and _mode_id == "learn":
-		_message.text = "Learn five words. Swipe left or right; tap the picture to hear."
-	elif playing and _mode_id == "memory":
+	if playing and _mode_id == "memory":
 		_message.text = _memory_status()
 	elif playing and _mode_id == "pop":
 		_message.text = "Voice Pop. Say the flying words. 30 seconds."
@@ -2037,15 +2022,11 @@ func _replay_found_word(word_id: String) -> void:
 		return
 	for word in model.lesson_words:
 		if word.id == word_id:
-			_lesson_hear(word)
+			_hear_word(word)
 			return
 
 
-func _association_changed(_word: Dictionary) -> void:
-	audio.stop_voice()
-
-
-func _lesson_hear(word: Dictionary) -> void:
+func _hear_word(word: Dictionary) -> void:
 	if collection_page.visible or _preview_page.visible or _voice_mode:
 		return
 	audio.interact(model.theme_id, model.phase != "lost")
@@ -2175,10 +2156,11 @@ func _fit_mode_buttons() -> void:
 		Color(1, 1, 1, 0.75) if with_counts else Color.TRANSPARENT, Color.TRANSPARENT, ceili(12 / css_scale), 0))
 	var tab_gap: int = roundi(4 / css_scale)
 	_mode_row.add_theme_constant_override("separation", tab_gap)
-	var tab_width: float = minf(ceilf(80 / css_scale), floorf((size.x - 2 * ceilf(12 / css_scale) - 3 * tab_gap) / 4))
+	var tab_count: int = _mode_buttons.size()
+	var tab_width: float = minf(ceilf(80 / css_scale), floorf((size.x - 2 * ceilf(12 / css_scale) - (tab_count - 1) * tab_gap) / tab_count))
 	var tab_font_size: int = ceili(14 / css_scale)
 	var tab_font: Font = _mode_buttons[0].get_theme_font("font")
-	# Keep all four labels fully readable at the same size, including Voice Pop.
+	# Keep every label fully readable at the same size, including Voice Pop.
 	while tab_font_size > ceili(11 / css_scale):
 		var longest: float = 0.0
 		for mode_label in MODES.values():
@@ -2489,7 +2471,7 @@ func _select_card(id: String) -> void:
 		if model.phase in ["waiting", "matching", "feedback"]:
 			cards[id].play_press()
 			var word: Dictionary = model.card_by_id(id).word
-			_lesson_hear(word)
+			_hear_word(word)
 			cards[word.id + ":image"].play_word()
 		return
 	if model.phase == "feedback":
@@ -2545,7 +2527,6 @@ func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	_pop.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
-	_lesson.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
 	if duck != null:
@@ -2774,7 +2755,6 @@ func on_page_hidden() -> void:
 	_stop_pop_listening()
 	_pointer_focus_active = false
 	_proactive_touches.clear()
-	_lesson.cancel_swipe()
 	_found_words_scroll.cancel_drag()
 	_stop_voice()
 	feedback_timer.paused = true
@@ -3017,9 +2997,6 @@ func _move_focus(direction: Vector2) -> void:
 	if candidates.is_empty():
 		return
 	var current := get_viewport().gui_get_focus_owner()
-	if direction.x != 0 and _mode_id == "learn" and _lesson.controls().has(current):
-		_lesson._move(int(direction.x))
-		return
 	if not candidates.has(current):
 		candidates[0].grab_focus()
 		return
@@ -3088,9 +3065,6 @@ func _default_focus() -> Control:
 		return _result_retry_button if _save_error else _new_adventure_button
 	if model.phase == "lost":
 		return _result_retry_button if _save_error else _new_adventure_button
-	if _mode_id == "learn":
-		var lesson_controls: Array[Control] = _lesson.controls()
-		return lesson_controls[0] if not lesson_controls.is_empty() else collection_button
 	if _mode_id == "pop":
 		var pop_focus: Control = _pop.default_focus()
 		return pop_focus if _valid_focus(pop_focus) else collection_button
@@ -3139,7 +3113,6 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 
 func _audio_status(message: String) -> void:
 	var can_hear: bool = audio.available and not audio.muted
-	_lesson.set_audio_available(can_hear)
 	if not can_hear and _mode_id == "pop" and _pop.game.phase == "finished":
 		_pop.report_voice_unavailable()
 	if _host != null:
@@ -3153,7 +3126,6 @@ func _announce_status(message: String) -> void:
 
 
 func _show_error(message: String) -> void:
-	_lesson.hide()
 	_memory.hide()
 	_pop.hide()
 	_outcome.hide()
@@ -3185,7 +3157,6 @@ func _connect_browser() -> void:
 		_proactive_touches.clear()
 		_pointer_focus_active = false
 		duck.note_activity()
-		_lesson.cancel_swipe()
 		_found_words_scroll.cancel_drag()
 		_memory.end_peek()
 		_room.playground.cancel()
@@ -3442,7 +3413,7 @@ func _drag_chest(delta: Vector2) -> void:
 func _new_adventure() -> void:
 	if collection_page.visible or _preview_page.visible or not model.phase in ["won", "lost"] or model.chest_state == "opening":
 		return
-	if new_round(-1, false, "", "learn"):
+	if new_round(-1, false, "", "match"):
 		_default_focus().grab_focus()
 
 
@@ -3473,10 +3444,10 @@ func _start_gift_adventure(id: String) -> void:
 	var topics := {"spring": "great-outdoors", "summer": "play-time", "autumn": "picnic-time", "winter": "music-makers", "ocean": "ocean-discovery", "space": "space-trip", "jungle": "animal-friends", "candy": "picnic-time"}
 	_preferred_theme = gift.theme
 	_hide_collection()
-	if not new_round(-1, false, topics[gift.theme], "learn", gift.word_id):
+	if not new_round(-1, false, topics[gift.theme], "match", gift.word_id):
 		return
 	_default_focus().grab_focus()
-	_announce_status("%s. Learn five words. Help Pip get %s. Win games in %s and open their chests." % [model.adventure_name, gift.name, Data.theme(gift.theme).name])
+	_announce_status("%s. Find 3 word–picture pairs. Help Pip get %s. Win games in %s and open their chests." % [model.adventure_name, gift.name, Data.theme(gift.theme).name])
 
 
 func _save_journey() -> void:
@@ -3512,7 +3483,6 @@ func _show_collection() -> void:
 	_collection_scroll.scroll_vertical = 0
 	_stop_voice()
 	feedback_timer.paused = true
-	_lesson.pause(true)
 	_cancel_fragment_delivery()
 	_stop_feedback_animations()
 	_cancel_loss_play()
@@ -3575,7 +3545,6 @@ func _hide_collection() -> void:
 			control.focus_mode = _collection_focus_modes[control]
 	_collection_focus_modes.clear()
 	feedback_timer.paused = false
-	_lesson.pause(false)
 	_memory.pause(false)
 	_refresh()
 	if _valid_focus(_focus_before_collection):

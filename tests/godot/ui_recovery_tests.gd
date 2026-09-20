@@ -113,11 +113,11 @@ func _run() -> void:
 				bounds, reads, storage.reads, retry_rect,
 				visible_retry.get_global_rect() if visible_retry != null else Rect2(), root.gui_get_focus_owner(),
 				viewport_before, root.get_visible_rect(), overlapping])
-	var learn_mode: Button = app.find_child("Mode_learn", true, false)
+	var memory_mode: Button = app.find_child("Mode_memory", true, false)
 	var match_mode: Button = app.find_child("Mode_match", true, false)
-	check(not learn_mode.disabled and not match_mode.disabled, "Unavailable progress does not disable practice or learning")
-	learn_mode.pressed.emit()
-	check(app._mode_id == "learn" and app._lesson.is_visible_in_tree(), "Learn remains explicitly available during a storage failure")
+	check(not memory_mode.disabled and not match_mode.disabled, "Unavailable progress does not disable either card game")
+	memory_mode.pressed.emit()
+	check(app._mode_id == "memory" and app._memory.is_visible_in_tree(), "Memory remains available during a storage failure")
 	match_mode.pressed.emit()
 	check(app._mode_id == "match" and not app.cards.is_empty(), "The Match tab remains usable after initial storage failure")
 	app.choose_theme("ocean")
@@ -149,9 +149,9 @@ func _run() -> void:
 		var completed_lesson: Array = app.model.lesson_words.duplicate(true)
 		app._new_adventure_button.pressed.emit()
 		check(_total(app) == before + 1, "New adventure after %s saves the unopened victory's piece" % mode)
-		check(app.model.phase == "waiting" and app._mode_id == "learn" and app.model.lesson_words.size() == 5
+		check(app.model.phase == "waiting" and app._mode_id == "match" and app.model.lesson_words.size() == 5
 			and app.model.lesson_words != completed_lesson and app.model.hints_remaining == 3,
-			"Successful reward preservation starts a fresh five-word Learn lesson with three hints")
+			"Successful reward preservation starts a fresh five-word Match round with three hints")
 		var fresh_lesson: Array = app.model.lesson_words.duplicate(true)
 		app._new_adventure_button.pressed.emit()
 		check(app.model.lesson_words == fresh_lesson and _total(app) == before + 1,
@@ -164,7 +164,7 @@ func _run() -> void:
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	storage.fail_write = true
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "memory" and app.model.phase == "won", "A failed New adventure save keeps the winning mode instead of switching to Learn")
+	check(app._mode_id == "memory" and app.model.phase == "won", "A failed New adventure save keeps the completed Memory game")
 	check(app._save_error and not app._pending_fragment.is_empty() and _total(app) == before, "Failed departure retains one pending piece without inflating progress")
 	check(not app._message.is_visible_in_tree(), "A saving error does not add duplicate text below the result actions")
 	check(app._result_retry_button.is_visible_in_tree() and app._result_retry_button.text == "Retry saving"
@@ -172,7 +172,7 @@ func _run() -> void:
 		"A failed result exposes only the focused save-retry action")
 	check(app._result_retry_button.tooltip_text == app.medal_progress.error, "Retry saving keeps the storage error available in its tooltip")
 	app._result_retry_button.pressed.emit()
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	app.new_round()
 	check(app.model.phase == "won" and app._mode_id == "memory" and app.model.lesson_words == lesson and _total(app) == before,
 		"Repeated failed retry, mode changes, and direct resets cannot discard the victory")
@@ -189,8 +189,8 @@ func _run() -> void:
 		and app._default_focus() == app._new_adventure_button,
 		"Successful saving restores New adventure as the normal result action")
 	app._new_adventure_button.pressed.emit()
-	check(app.model.phase == "waiting" and app._mode_id == "learn" and app.model.lesson_words != lesson
-		and _total(app) == before + 1, "Only New adventure starts fresh learning after saving, without another piece")
+	check(app.model.phase == "waiting" and app._mode_id == "match" and app.model.lesson_words != lesson
+		and _total(app) == before + 1, "Only New adventure starts a fresh Match after saving, without another piece")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

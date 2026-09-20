@@ -110,14 +110,16 @@ func _run() -> void:
 	var memory_cards: Array = app._memory.memory.cards.duplicate(true)
 	root.size = Vector2i(1366, 768)
 	await settle()
-	check(app._memory.memory.cards == memory_cards and app._memory.card_buttons.size() == 10
+	check(app.model.lesson_words == lesson and app._memory.memory.cards == memory_cards and app._memory.card_buttons.size() == 10
 		and not app.grid.is_visible_in_tree(), "Memory keeps its own ten-card board and order")
-	app.choose_mode("learn")
+	app.choose_mode("pop")
 	await settle()
-	check(app.model.lesson_words == lesson and app._lesson.current_word == lesson[0]
-		and not app.grid.is_visible_in_tree(), "Learn keeps its combined picture-and-word lesson card")
+	check(app.model.lesson_words == lesson and app._pop.is_visible_in_tree()
+		and not app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
+		"Voice Pop replaces the board without losing the shared five-word adventure")
 	app.choose_mode("match")
 	await settle()
+	check(app.model.lesson_words == lesson, "Returning to Match retains the shared adventure words")
 	check_groups(app)
 	app.queue_free()
 	await process_frame

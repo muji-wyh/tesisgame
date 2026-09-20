@@ -50,7 +50,7 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup preserves Match without activating speech")
-	var modes: Array[String] = ["match", "learn", "memory", "pop"]
+	var modes: Array[String] = ["match", "memory", "pop"]
 	var saw_scrollable_results: bool = false
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(679, 900), Vector2i(680, 900), Vector2i(844, 390), Vector2i(1366, 768)]:
 		root.size = dimensions
@@ -71,7 +71,7 @@ func _run() -> void:
 				check(current_positions == original_positions, "Mode tabs stay in the same positions at %s in %s" % [dimensions, mode])
 		var view = app._pop
 		view.set_process(false)
-		check(view.is_visible_in_tree() and not app.grid.is_visible_in_tree() and not app._lesson.visible and not app._memory.visible,
+		check(view.is_visible_in_tree() and not app.grid.is_visible_in_tree() and not app._memory.visible,
 			"Voice Pop owns the visible playfield at " + str(dimensions))
 		check(not app.hint_button.visible and not app._voice_button.visible and not app._memory.study_button.visible,
 			"Other modes' actions do not intrude into Voice Pop")

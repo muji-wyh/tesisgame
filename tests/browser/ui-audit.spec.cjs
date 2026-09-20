@@ -2,18 +2,13 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, collectionBounds, openRewards: rewards,
   chooseRewardSection: rewardSection, worldIconRect, roomControl, leaveRoomPreview: leavePreview, rendered, openGame,
-  boardPoint, lessonPoint, swipeLearn, memoryMetrics, memoryPoint, withMemoryPeek, visibleColorCount } = require('./game-ui.cjs');
+  boardPoint, discoverMatchCards, memoryMetrics, memoryPoint, withMemoryPeek, visibleColorCount } = require('./game-ui.cjs');
 
 // Exploratory release audit: interact through the rendered game and its public announcements.
 const SIZES = [{ width: 390, height: 844 }, { width: 320, height: 568 }, { width: 844, height: 390 }];
 
 async function memoryCard(page, index) {
   const point = memoryPoint(await memoryMetrics(page), index);
-  await tap(page, point.x, point.y);
-}
-
-async function lesson(page, control, options) {
-  const point = lessonPoint(await metrics(page), control, options);
   await tap(page, point.x, point.y);
 }
 
@@ -59,27 +54,17 @@ for (const size of SIZES) {
     const errors = await openGame(page);
     const evidence = [];
     const shot = (name, options) => capture(page, testInfo, name, evidence, options);
-    await shot('01-learn-entry');
-    await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\. Swipe to explore\. Tap the picture to hear\.$/);
-    await shot('02-learn-next');
-    const learned = await page.locator('#game-status').textContent();
+    await shot('01-match-entry');
+    const originalCards = await discoverMatchCards(page);
     await rewards(page);
-    await shot('03-more-from-learn');
+    await shot('03-more-from-match');
     await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
-    await shot('04-worlds-from-learn');
+    await rewardSection(page, 'medals');
+    await shot('04-worlds-from-match');
     await rewardSection(page, 'room');
     await page.keyboard.press('Escape');
-    await swipeLearn(page, 'previous');
-    await expect(page.locator('#game-status')).not.toHaveText(learned);
-    await swipeLearn(page, 'next');
-    await expect(page.locator('#game-status')).toHaveText(learned);
-    await lesson(page, 'picture');
-    await shot('05-learn-return-hear');
-    if (await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext))) {
-      const word = learned.match(/^Learn: ([a-z]+)/)[1];
-      await expect(page.locator('#game-status'), 'Returning from More preserves the displayed word.').toHaveText(`${word}. Look at the picture and say the word.`);
-    }
+    expect(await discoverMatchCards(page), 'Returning from More preserves all five words and their card positions.').toEqual(originalCards);
+    await shot('05-match-return');
 
     await chooseMode(page, 'match');
     await expect(page.locator('#game-status')).toContainText('Find 3 word');
@@ -155,7 +140,7 @@ for (const size of SIZES) {
     await shot('20-world-return-room');
     await page.keyboard.press('Escape');
     expect.soft(errors).toEqual([]);
-    expect.soft(learned).toContain('Learn:');
+    expect.soft(originalCards).toHaveLength(8);
   });
 }
 
@@ -187,7 +172,7 @@ test('locked room previews provide a usable return and Medals has its own entry'
   await rewardSection(page, 'room');
   await shot('room-direct-return');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
 });
 
 test('More has Pip and Medals with direct world choices and preserved game state', async ({ page }, testInfo) => {

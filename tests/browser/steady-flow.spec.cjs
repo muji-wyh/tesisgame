@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, learnCardRect, swipeLearn,
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint,
   memoryMetrics, memoryPoint, resultPoint, progressRegion, visibleColorCount } = require('./game-ui.cjs');
 
 async function click(page, point) {
@@ -138,25 +138,6 @@ test(`Memory keeps remembered positions through automatic corrections and a full
   expect(errors).toEqual([]);
 });
 }
-
-test('Learn returns to the same card frame after swipes settle', async ({ page }, testInfo) => {
-  const errors = await openGame(page);
-  const beforeGeometry = await geometry(page), bounds = await metrics(page);
-  const card = learnCardRect(bounds), edge = { x: card.x + 4, y: card.y + card.height / 2 };
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\./);
-  const second = await page.locator('#game-status').textContent();
-  const frame = await patch(page, edge, 8, 48);
-  await shot(page, testInfo, 'learn-second');
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).not.toHaveText(second);
-  expect((await patch(page, edge, 8, 48)).equals(frame), 'After a swipe settles, the card returns to the same frame.').toBe(true);
-  await swipeLearn(page, 'previous');
-  await expect(page.locator('#game-status')).toHaveText(second);
-  await shot(page, testInfo, 'learn-returned');
-  expect(await geometry(page)).toEqual(beforeGeometry);
-  expect(errors).toEqual([]);
-});
 
 test('Match accepts the next card on the first tap during nonfinal feedback', async ({ page }, testInfo) => {
   const errors = await openGame(page);

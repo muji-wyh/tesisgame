@@ -22,24 +22,25 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(true)
-	app.choose_mode("learn")
+	app.choose_mode("memory")
 	await process_frame
 	await process_frame
-	app._lesson.picture_button.pressed.emit()
-	check(app.audio.voice.playing, "Hear starts the displayed lesson word")
-	app._lesson._move(1)
-	check(not app.audio.voice.playing, "Next stops the old pronunciation before displaying another word")
-	app._lesson.picture_button.pressed.emit()
-	app._lesson._move(-1)
-	check(not app.audio.voice.playing, "Previous also stops the old pronunciation")
-	app._lesson.picture_button.grab_focus()
+	var memory_card: Button = app._memory.card_buttons[0]
+	memory_card.pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + app._memory.memory.cards[0].word.audio),
+		"Revealing a Memory card pronounces its displayed word")
+	memory_card.pressed.emit()
+	check(not app.audio.voice.playing, "Concealing the selected Memory card stops its pronunciation")
+	memory_card.pressed.emit()
+	memory_card.grab_focus()
 	app._show_collection()
-	check(not app._focus_candidates().has(app._lesson.picture_button) and not app.audio.voice.playing,
-		"The covered Learn picture stays outside modal focus and pronunciation")
+	check(not app._focus_candidates().has(memory_card) and not app.audio.voice.playing,
+		"The covered Memory card stays outside modal focus and pronunciation")
 	app._hide_collection()
-	check(root.gui_get_focus_owner() == app._lesson.picture_button and app._valid_focus(app._lesson.picture_button),
-		"Returning from More restores focus to the same playable Learn picture")
+	check(root.gui_get_focus_owner() == memory_card and app._valid_focus(memory_card),
+		"Returning from More restores focus to the same playable Memory card")
 	app.choose_mode("match")
+	check(not app.audio.voice.playing, "Changing game mode stops the prior card's pronunciation")
 	var first: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
 		return card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty())[0]
 	var other: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "image" and card.word.id != first.word.id)[0]
@@ -144,7 +145,7 @@ func _run() -> void:
 		"Memory first-tap shortcut selects exactly the new card without another attempt")
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + memory.memory.cards[next_card].word.audio),
 		"Memory first-tap shortcut replaces old feedback speech with the tapped card's actual word")
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	app.choose_mode("memory")
 	memory = app._memory
 	a = 0
@@ -162,8 +163,8 @@ func _run() -> void:
 	memory.study_button.button_up.emit()
 	check(not memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing and memory.memory.attempts == 1,
 		"Releasing the eye stays silent and preserves progress")
-	app.choose_mode("learn")
-	app._lesson.picture_button.pressed.emit()
+	app.choose_mode("match")
+	app.cards[app.model.cards[0].id].pressed.emit()
 	app._show_collection()
 	check(not app.audio.voice.playing, "Opening rewards stops speech about a now-covered picture")
 	app.medal_progress.counts["spring-1"] = 3
@@ -273,7 +274,7 @@ func _check_pop_hit_audio(app) -> void:
 		and expected_paths.has(effect.stream.resource_path)
 		and (expected_paths.size() < 2 or effect.stream.resource_path != last_path),
 		"The next unmuted spoken hit resumes the pool without repeating the last audible slice")
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	check(not effect.playing, "Leaving Voice Pop stops its active hit sound")
 	app.choose_mode("pop")
 	await process_frame

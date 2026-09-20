@@ -79,7 +79,7 @@ func _run() -> void:
 	app._hide_collection()
 	app._age_buttons["10-plus"].pressed.emit()
 	check(app.playroom_state.age_band_id == "4-6", "Hidden age controls cannot change the preference")
-	for mode in ["learn", "memory", "match"]:
+	for mode in ["memory", "pop", "match"]:
 		app.choose_mode(mode)
 		await settle()
 		check(app.model.lesson_words == words and app.model.age_band_id == "all",
@@ -145,8 +145,8 @@ func _run() -> void:
 		check(app.theme_buttons.has(root.gui_get_focus_owner()) or app._collection_tabs.values().has(root.gui_get_focus_owner())
 			or app._collection_back.has_focus(), "Up from the age row reaches the header rather than scrolled content")
 	app._hide_collection()
-	check(app.new_round(33, false, "music-makers", "learn") and app.model.age_band_id == "4-6",
-		"A new Learn lesson also uses the saved preference")
+	check(app.new_round(33, false, "music-makers", "match") and app.model.age_band_id == "4-6",
+		"A new Match round uses the saved age preference")
 	app.choose_mode("memory")
 	check(app.model.age_band_id == "4-6" and app._memory.memory.cards.all(
 		func(card: Dictionary) -> bool: return app.Data.word_level(card.word) == 1),

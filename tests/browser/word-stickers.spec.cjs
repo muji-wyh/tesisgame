@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint, lessonPoint, swipeLearn,
+const { metrics, tap, rendered, enterGame, openGame, boardPoint, observeAudio,
   openRewards, chooseTheme, chooseRewardSection: section } = require('./game-ui.cjs');
 
 const KEY = 'wordBuddies.playroom';
@@ -12,23 +12,11 @@ async function record(page) {
   };
 }
 
-async function pictureTap(page) {
-  const point = lessonPoint(await metrics(page), 'picture');
-  await tap(page, point.x, point.y);
-}
-
-test('picture taps pronounce and Match no longer creates runtime word stickers', async ({ page }, testInfo) => {
+test('Match card taps pronounce and Match no longer creates runtime word stickers', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
+  await observeAudio(page);
   const errors = await openGame(page);
-  await swipeLearn(page, 'next');
-  await expect(page.locator('#game-status')).toHaveText(/^Learn: [a-z]+\./);
-  const before = await page.locator('#game-status').textContent();
-  const word = before.match(/^Learn: ([a-z]+)/)[1];
-  await pictureTap(page);
-  const canHear = await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext));
-  await expect(page.locator('#game-status')).toHaveText(canHear ? `${word}. Look at the picture and say the word.` : before);
-  expect((await record(page)).ids).toEqual([]);
-  await chooseMode(page, 'match');
+  const initialStarts = await page.evaluate(() => window.audioObservation.starts);
   const b = await metrics(page);
   const cards = new Map();
   for (let index = 0; index < 8; index++) {
@@ -40,6 +28,9 @@ test('picture taps pronounce and Match no longer creates runtime word stickers',
     cards.get(id)[kind] = index;
     await tap(page, p.x, p.y);
     await expect(page.locator('#selection-status')).toBeEmpty();
+  }
+  if (await page.evaluate(() => window.audioObservation.available)) {
+    expect(await page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
   }
   expect((await record(page)).ids).toEqual([]);
   const [id, pair] = [...cards.entries()].find(([, item]) => item.Word !== undefined && item.Picture !== undefined);
@@ -74,7 +65,7 @@ test('saved word sticker records survive More, world choices and reload', async 
   await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-worlds-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await chooseTheme(page, 5);
   expect(await record(page)).toEqual(saved);
   await page.reload();

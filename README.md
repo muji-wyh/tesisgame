@@ -126,12 +126,11 @@ Give the frame a usable size, with a minimum content dimension of 320 CSS pixels
 
 ## Play
 
-The game uses compact square icon actions and four small mode tabs, leaving the cards as the
+The game uses compact square icon actions and three small mode tabs, leaving the cards as the
 main focus. Pip and the success/mistake indicators form one compact status cluster;
-Learn has no score counter. Memory's marked pairs retain their progress. Card positions stay fixed
+Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
-On wider screens the mode tabs share the header row. Tall Learn cards keep the
-illustration and word near the top instead of leaving a large empty upper area.
+On wider screens the mode tabs share the header row.
 
 **More** opens **Pip** and **Medals**, with an icon to return. Eight larger world
 icons share the top header on wider screens and wrap below it on small screens.
@@ -139,9 +138,7 @@ Choosing one keeps the current page and scroll position open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
 shows an in-page retry notice. Medal and gift goals live here rather than above the cards.
 Results keep the chest or bear, word review, and the next action without game-mode
-controls. Learn has no bottom buttons: its display is the navigation and pronunciation
-surface, with a compact `1/5` counter in the card's upper-right corner. Slides use the
-same appearance during tapping and dragging; keyboard/controller focus remains visible.
+controls. Keyboard and controller focus remains visible across the available games.
 
 **Pip the duck** is the game's round, wide-eyed companion. He appears on the
 loading screen, board, results, collection, reward previews, and voice panel.
@@ -169,22 +166,16 @@ not require a purchase or a new reward. The loading and voice companions use
 the same themed artwork, and the loader reads the saved world when available.
 
 Start in **Match**, with its tab selected and the matching board ready.
-Choose **Learn** for a large picture with its written word. Swipe left for
-the next word or right for the previous word; mouse dragging works too. Tap the
-display to hear the word. With the display focused, use **Left/Right** or the Xbox
-D-pad/left stick to browse, and **Enter**, **Space**, or Xbox **A** to hear it.
-The card follows the drag and reveals the neighboring word, then settles into
-place on release. Edges resist dragging beyond the lesson. Reduced motion keeps
-direct finger tracking but removes the settling animation.
+Tap a word and its matching picture; completed cards remain available for pronunciation.
+Use the arrow keys or Xbox D-pad/left stick to focus a card, and **Enter**,
+**Space**, or Xbox **A** to activate it.
 Six pictures also have short, noun-specific play reactions: the ball hops, bell
 swings, rocket lifts, fish swims, boat rocks, and flower grows. Tap or use the
 existing keyboard/controller activation to replay them. The written word and
 input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
-The first and last words do not wrap or start a game automatically. Swipes never
-play audio, and navigation still works when sound is unavailable. Learn never awards points.
-The tabs are ordered **Match**, **Learn**, **Memory**, **Voice Pop**; entry and reload select Match.
+The tabs are ordered **Match**, **Memory**, **Voice Pop**; entry and reload select Match.
 
 ### Voice Pop
 
@@ -246,7 +237,7 @@ all five pairs opens the normal chest for one saved medal piece.
 **New adventure** is the normal result action; **Repeat lesson** has been removed.
 **Retry saving** appears only if reward storage needs recovery, without restarting play.
 **New adventure** on
-results starts a fresh five-word Learn lesson directly. The manual Explore
+results starts a fresh Match game with five vocabulary words. The manual Explore
 picker has been removed. Existing room choices, world preferences, and journey
 metadata are preserved; a failed write keeps play available and offers
 **Retry saving** in the header without resetting the current word.
@@ -299,7 +290,7 @@ Choose a locked toy to preview it without moving the page. Its card shows the
 remaining pieces and an inline arrow to start or continue its adventure; there
 is no separate **Help Pip get this** row. The arrow saves the goal and starts a
 related five-word adventure in its reward world. The lesson includes the desired
-toy's word. Learn, Match, and Memory keep those same
+toy's word. Match and Memory keep those same
 five words; only normal wins and opened chests earn pieces. The goal caption shows
 the chosen gift and remaining pieces, including its world if you switch away.
 The same card lets you continue the goal or use its toy once earned, including after reload.
@@ -402,7 +393,7 @@ walls and toy-card illustration backgrounds add color without reducing text
 contrast. Existing word and reward artwork is retained; Jungle and Candy add
 their own original reward illustrations.
 
-Accepted Match, Learn, Memory and toy-card clicks give a short content press
+Accepted Match, Memory and toy-card clicks give a short content press
 and bounce. The button and grid never move, Memory retains its existing flip,
 and the six noun-specific picture reactions still play. Repeated clicks replace
 the animation; navigation, resizing and reduced motion settle it immediately.
@@ -432,7 +423,7 @@ Age ranges are **suggested vocabulary guides, not reading-age assessments or res
 Choose whichever level feels right; no birthdate, profile, or account is collected.
 Every topic remains playable at every level, with earlier words available for review.
 The choice is saved on this device and applies to the **next lesson**. Switching between
-Match, Learn, and Memory keeps the current five words and their active level. Changing
+Match and Memory keeps the current five words and their active level. Changing
 the age never resets a round, its hints, medal pieces, or toys. An unsuccessful save
 keeps the confirmed selection and offers a visible tap-to-retry message.
 On very short screens, the age row scrolls with the collection so reward tiles

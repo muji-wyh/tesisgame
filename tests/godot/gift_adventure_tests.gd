@@ -60,13 +60,13 @@ func _exercise(app, directory: String) -> void:
 		app._room.item_buttons["toy-" + entry[0]].pressed.emit()
 		check(app._room.goal_button.is_visible_in_tree(), "Locked " + entry[0] + " has an actionable goal")
 		app._room.goal_button.pressed.emit()
-		check(not app.collection_page.visible and app._mode_id == "learn", "Choosing a gift starts Learn")
+		check(not app.collection_page.visible and app._mode_id == "match" and app.grid.is_visible_in_tree(), "Choosing a gift starts its Match board")
 		check(app.model.theme_id == entry[0] and app.model.adventure_id == entry[1], "Gift selects its reward world and related topic")
 		check(app.model.lesson_words.size() == 5 and app.model.lesson_words.any(func(word: Dictionary) -> bool: return word.id == entry[2]), "The lesson contains the desired toy's noun")
 		check(app.playroom_state.goal_item_id == "toy-" + entry[0], "The chosen gift persists")
 		check(app._gift_label.text.contains(app.playroom_state.selected_goal(app.medal_progress.counts).name), "The medal goal names the player's chosen gift")
 		var lesson: Array = app.model.lesson_words.duplicate(true)
-		for mode in ["match", "memory", "learn"]:
+		for mode in ["memory", "pop", "match"]:
 			app.choose_mode(mode)
 			check(app.model.lesson_words == lesson, "Gift words remain identical in " + mode)
 	check(app.medal_progress.counts == original_counts and app.playroom_state.toy_id == "toy-ball", "Selecting goals and learning never grant or equip locked gifts")
@@ -185,7 +185,7 @@ func _exercise(app, directory: String) -> void:
 	app._show_collection()
 	app._room.item_buttons["toy-winter"].pressed.emit()
 	app._room.goal_button.pressed.emit()
-	check(app._mode_id == "learn" and app.playroom_state.goal_item_id == "toy-winter"
+	check(app._mode_id == "match" and app.playroom_state.goal_item_id == "toy-winter"
 		and app.playroom_state.backdrop_id == "backdrop-autumn",
 		"A real toy goal can replace the ignored legacy goal while preserving the chosen backdrop")
 	var confirmed = load("res://scripts/playroom_state.gd").new(directory + "/legacy-backdrop-confirmed.cfg", storage)

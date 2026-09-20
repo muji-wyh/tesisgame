@@ -15,7 +15,7 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	if not app.get("_mode_id") == "match":
-		check(false, "New scene instances initialize in Match before Learn is explicitly chosen")
+		check(false, "New scene instances initialize in Match")
 		app.free()
 		quit(1)
 		return
@@ -28,12 +28,12 @@ func _run() -> void:
 	await process_frame
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	app.choose_theme("spring")
-	check(app._lesson.is_visible_in_tree() and app.model.lesson_words.size() == 5, "Learn exposes exactly five concrete associations")
+	check(app.grid.is_visible_in_tree() and app.model.lesson_words.size() == 5, "Match starts with five vocabulary associations")
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	var world: String = app.model.theme_id
-	for mode in ["match", "memory", "learn", "match"]:
+	for mode in ["memory", "pop", "match"]:
 		app.choose_mode(mode)
 		check(app.model.lesson_words == lesson and app.model.theme_id == world, "Mode " + mode + " retains the exact lesson and world")
 		check(app.model.successes == 0 and app.model.mistakes == 0, "Mode change resets only the attempt")
@@ -66,44 +66,47 @@ func _run() -> void:
 	check(app._found_words.get_child_count() == 5, "Review includes all five lesson words")
 	check(app._found_words.get_child(0).get_meta("word_id") == wrong[0].word.id, "Review presents missed words first")
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "learn" and app._lesson.is_visible_in_tree() and app.model.lesson_words != lesson,
-		"New adventure leaves result review for a fresh five-word Learn lesson")
+	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != lesson,
+		"New adventure leaves result review for a fresh Match board")
 	check(app.model.lesson_words.size() == 5 and app.model.theme_id == world and app.model.hints_remaining == 3,
 		"The fresh lesson preserves the world and renews the normal hint allowance")
-	app._lesson._move(1)
-	check(app.model.successes == 0 and app.medal_progress.counts.is_empty(), "Browsing Learn never scores or awards pieces")
-	check(not app._lesson.audio_available and app._lesson.hear_hint_label.text.contains("No sound"),
-		"Muted Learn keeps a written word and an honest no-sound cue")
+	var current: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
+		return card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty())[0].word.duplicate()
+	var current_card: Button = app.cards[current.id + ":word"]
+	var picture_card: Button = app.cards[current.id + ":image"]
+	current_card.pressed.emit()
+	check(app.model.successes == 0 and app.medal_progress.counts.is_empty(), "Selecting one Match word never scores or awards pieces")
+	check(not app.audio.voice.playing and current_card.word_label.visible and picture_card.picture.visible,
+		"Muted Match keeps the written word and matching picture readable")
 	app.audio.available = false
 	app._audio_status("Sound is not available in this browser.")
-	check(app._lesson.controls() == [app._lesson.picture_button] and app._lesson.word_label.visible
-		and app._lesson.picture.visible, "Unavailable audio never removes the lesson's readable, navigable association")
-	for index in range(4):
-		app._lesson._move(1)
-	check(app._valid_focus(app._default_focus()), "The last silent lesson word keeps an enabled keyboard/controller target")
+	check(not current_card.disabled and not picture_card.disabled and current_card.word_label.visible
+		and picture_card.picture.visible, "Unavailable audio keeps the matching association readable and playable")
+	check(app._valid_focus(app._default_focus()), "Silent Match keeps an enabled keyboard/controller target")
 	app.audio.available = true
 	app.audio.set_muted(false)
 	app._audio_status("")
-	check(app._lesson.audio_available, "Audio recovery restores Learn pronunciation")
+	app._hear_word(current)
+	check(app.audio.voice.playing, "Audio recovery restores word pronunciation")
 	app.audio.status_changed.emit("Sound could not load. You can keep playing. Tap a card to try again.")
-	check(app._lesson.audio_available, "Optional music failure does not disable bundled word pronunciation")
+	check(app.audio.voice.playing, "Optional music failure does not disable bundled word pronunciation")
 	var word_failures: Array[bool] = []
 	var audio_statuses: Array[String] = []
 	app.audio.word_failed.connect(func() -> void: word_failures.append(true))
 	app.audio.status_changed.connect(func(message: String) -> void: audio_statuses.append(message))
-	var current: Dictionary = app._lesson.current_word.duplicate()
 	var missing_word: Dictionary = current.duplicate()
 	missing_word.audio = "assets/audio/voice/word-missing-test.wav"
-	app._lesson_hear(missing_word)
+	app._hear_word(missing_word)
 	check(word_failures.size() == 1 and not app.audio.voice.playing
 		and audio_statuses.any(func(message: String) -> bool: return message.contains("could not load")),
 		"Actual pronunciation failure stops playback and reports the missing audio")
-	check(app._lesson.current_word == current and app._lesson.word_label.text == current.text
-		and app._lesson.picture.texture.resource_path == "res://" + current.image,
+	check(app.model.selected_id == current.id + ":word" and current_card.word_label.text == current.text
+		and picture_card.picture.texture.resource_path == "res://" + current.image,
 		"Failed playback preserves the same readable picture-word association")
 	app.audio.status_changed.emit("")
 	check(not app.audio.voice.playing, "A later optional music success cannot restart a failed word")
-	app._lesson.picture_button.pressed.emit()
+	app._controller_back()
+	current_card.pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + current.audio),
 		"Retrying the visible bundled word restores its actual pronunciation")
 	check(app.model.successes == 0 and app.model.mistakes == 0 and app.model.hints_remaining == 3
@@ -114,8 +117,8 @@ func _run() -> void:
 			stopped_playbacks.append(weakref(player.get_stream_playback()))
 	app.audio.set_muted(true)
 	app._audio_status("")
-	check(not app._lesson.audio_available and app._lesson.hear_hint_label.text.contains("No sound"),
-		"Muted audio consistently restores the silent learning fallback")
+	check(not app.audio.voice.playing and not current_card.disabled and not picture_card.disabled,
+		"Muting stops pronunciation while preserving playable cards")
 	var before_reset: Array = app.model.lesson_words.duplicate(true)
 	app.new_round()
 	check(app.model.lesson_words != before_reset, "An unseeded internal fixture reset selects fresh words")

@@ -1,7 +1,7 @@
 const { expect } = require('@playwright/test');
 const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
-const MODES = ['match', 'learn', 'memory', 'pop'];
+const MODES = ['match', 'memory', 'pop'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -16,61 +16,6 @@ async function tap(page, x, y) {
   await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
 }
 
-function learnCardRect(bounds) {
-  const content = contentBounds(bounds);
-  return { x: content.x, y: content.top, width: content.width, height: bounds.height - content.top - content.padding };
-}
-
-function learnArtRect(bounds) {
-  const card = learnCardRect(bounds), scale = uiScale(bounds);
-  const wide = card.width >= 420 && card.width >= card.height * 1.3;
-  const edge = Math.min(360 / scale, wide ? card.width / 2 - 24 / scale : card.width - 24 / scale,
-    card.height - (wide ? 48 : 100) / scale);
-  const top = wide ? (card.height - edge) / 2
-    : Math.max(12 / scale, Math.min(64 / scale, (card.height - edge - 64 / scale) * 0.25));
-  return { x: card.x + (wide ? (card.width / 2 - edge) / 2 : (card.width - edge) / 2),
-    y: card.y + top, width: edge, height: edge };
-}
-
-async function swipeLearn(page, direction, { input = 'mouse' } = {}) {
-  if (!['next', 'previous'].includes(direction)) throw new Error(`Unknown Learn direction: ${direction}`);
-  if (!['mouse', 'touch'].includes(input)) throw new Error(`Unknown Learn input: ${input}`);
-  const bounds = await metrics(page), card = learnCardRect(bounds);
-  const point = fraction => ({ x: bounds.x + (card.x + card.width * fraction) * bounds.scale,
-    y: bounds.y + (card.y + card.height / 2) * bounds.scale });
-  const start = point(direction === 'next' ? 0.75 : 0.25);
-  const end = point(direction === 'next' ? 0.25 : 0.75);
-  if (input === 'touch') {
-    const client = await page.context().newCDPSession(page);
-    let pressed = false;
-    try {
-      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
-      pressed = true;
-      await rendered(page);
-      for (let step = 1; step <= 6; step++) {
-        await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{
-          id: 1, x: start.x + (end.x - start.x) * step / 6, y: start.y
-        }] });
-        await rendered(page);
-      }
-    } finally {
-      if (pressed) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await client.detach();
-    }
-  } else {
-    await page.mouse.move(start.x, start.y);
-    await page.mouse.down();
-    try {
-      await rendered(page);
-      await page.mouse.move(end.x, end.y, { steps: 6 });
-      await rendered(page);
-    } finally {
-      await page.mouse.up();
-    }
-  }
-  await rendered(page);
-}
-
 function uiScale(bounds) {
   if (!Number.isFinite(bounds.scale) || bounds.scale <= 0) throw new Error('Logical canvas bounds must include their CSS scale.');
   return Math.max(2 / 3, bounds.scale);
@@ -80,13 +25,13 @@ function modeHeight(bounds) {
   return Math.ceil(44 / uiScale(bounds));
 }
 
-function modeRect(bounds, name, currentMode = 'learn') {
+function modeRect(bounds, name, currentMode = 'match') {
   const index = MODES.indexOf(name);
-  if (index < 0) throw new Error(`Unknown mode: ${name}. Use learn, match or memory.`);
+  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory or pop.`);
   if (!MODES.includes(currentMode)) throw new Error(`Unknown current mode: ${currentMode}.`);
   const content = contentBounds(bounds);
   const scale = uiScale(bounds), gap = Math.round(4 / scale);
-  const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - 3 * gap) / 4));
+  const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - (MODES.length - 1) * gap) / MODES.length));
   let rowX = content.x, rowWidth = content.width, y = content.padding + content.header + content.gap;
   if (content.inlineModes) {
     const pipWidth = Math.ceil(132 / scale);
@@ -375,7 +320,7 @@ async function enterGame(scope) {
   await expect(scope.locator('#status')).toBeHidden();
 }
 
-async function openGame(page, { reducedMotion = 'reduce', mode = 'learn' } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'match' } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -384,7 +329,6 @@ async function openGame(page, { reducedMotion = 'reduce', mode = 'learn' } = {})
   await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await rendered(page);
-  // Shared word-discovery fixtures explicitly enter Learn after checking the real startup mode.
   if (mode !== 'match') await chooseMode(page, mode);
   return errors;
 }
@@ -402,11 +346,24 @@ function boardPoint(bounds, index, { top: overrideTop } = {}) {
     y: top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2 };
 }
 
-function lessonPoint(bounds, key, options) {
-  if (options !== undefined) throw new Error('WordLesson is Learn-only; feedback has no footer controls.');
-  if (key !== 'picture') throw new Error(`Learn has no ${key} button. Use swipeLearn or the top mode tabs.`);
-  const card = learnCardRect(bounds);
-  return { x: card.x + card.width / 2, y: card.y + card.height / 2 };
+async function discoverMatchCards(page) {
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  const bounds = await metrics(page), cards = [];
+  for (let index = 0; index < 8; index++) {
+    const point = boardPoint(bounds, index);
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
+    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
+    cards.push({ index, kind, word });
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+  }
+  expect(new Set(cards.map(card => card.word)).size).toBe(5);
+  return cards;
+}
+
+async function matchWords(page) {
+  return [...new Set((await discoverMatchCards(page)).map(card => card.word))];
 }
 
 async function memoryMetrics(page) {
@@ -470,6 +427,6 @@ function resultPoint(bounds, key, { gift = false } = {}) {
     y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { THEME_IDS, THEME_COLORS, metrics, tap, learnCardRect, learnArtRect, swipeLearn, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
-  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, lessonPoint,
+module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+  progressRegion, openRewards, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

@@ -62,7 +62,7 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   await page.goto('/');
   await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Rewards are unavailable.');
-  await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-learn.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-match.png'), scale: 'css' });
 
   await chooseMode(page, 'match');
   const card = boardPoint(await metrics(page), 0);
@@ -92,12 +92,12 @@ test('New adventure preserves unopened victory pieces across reload', async ({ p
   await winMatch(page);
   expect(await pieceCount(page)).toBe(0);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
   await chooseMode(page, 'match');
   await winMatch(page);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toHaveText('Learn five words. Swipe left or right; tap the picture to hear.');
+  await expect(page.locator('#game-status')).toHaveText('Find 3 word–picture pairs. Two cards have no match.');
   expect(await pieceCount(page)).toBe(2);
   await page.reload();
   await enterGame(page);
@@ -134,7 +134,7 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
   await expect(page.locator('#game-status')).toContainText('A new piece!');
   expect(await pieceCount(page)).toBe(1);
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Learn five words.');
+  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
   await page.screenshot({ path: testInfo.outputPath('victory-save-recovered.png'), scale: 'css' });
   expect(errors).toEqual([]);

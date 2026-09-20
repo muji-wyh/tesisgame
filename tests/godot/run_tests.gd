@@ -450,6 +450,11 @@ func _test_data(words: Array) -> void:
 	if data_script == null or not data_script.can_instantiate():
 		return
 	check(data_script.validate_words(words) == "", "The shared words.json is accepted")
+	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"], ["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
+		check(data_script.confusable_words(pair[0], pair[1]) and data_script.confusable_words(pair[1], pair[0]),
+			"Overlapping names cannot become contradictory answer alternatives")
+	check(not data_script.confusable_words("cat", "dog") and not data_script.confusable_words("rocket", "earth"),
+		"Visually distinct vocabulary remains available as useful alternatives")
 	check(data_script.validate_words({}) != "", "Non-array vocabularies are rejected")
 	check(data_script.validate_words(words.slice(0, 4)) != "", "Small vocabularies are rejected")
 	var duplicate: Array = words.duplicate(true)
@@ -940,14 +945,14 @@ func _test_scene() -> void:
 			and not app._world_choices.is_visible_in_tree(),
 			"World choices live in More instead of competing with the playfield")
 	var theme_style_id: int = app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id()
-	var lesson_style_id: int = app._lesson.picture_button.get_theme_stylebox("normal").get_instance_id()
+	var mode_style_id: int = app._mode_buttons[0].get_theme_stylebox("normal").get_instance_id()
 	app._refresh()
 	check(app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id() == theme_style_id
-		and app._lesson.picture_button.get_theme_stylebox("normal").get_instance_id() == lesson_style_id,
+		and app._mode_buttons[0].get_theme_stylebox("normal").get_instance_id() == mode_style_id,
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
-	app.choose_mode("learn")
+	app.choose_mode("pop")
 	check(app._success.total_count == 0 and not app._gift_label.is_visible_in_tree(),
-		"Learn removes score and gift chrome that compete with the word")
+		"Voice Pop hides card-pair progress and gift chrome during its speaking game")
 	app.choose_mode("memory")
 	check(app._success.total_count == 5 and app._mistakes.total_count == 0
 		and app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree(),
@@ -1562,9 +1567,9 @@ func _test_scene() -> void:
 	app._new_adventure_button.pressed.emit()
 	check_no_reward_flight(app, "New adventure cancels the active reward flight")
 	check(app.collection_button.scale == Vector2.ONE, "New adventure resets the target bounce scale")
-	check(app._mode_id == "learn" and app.model.lesson_words != lesson_before_adventure
+	check(app._mode_id == "match" and app.model.lesson_words != lesson_before_adventure
 		and app.medal_progress.counts == saved_before_adventure,
-		"The visible result action starts fresh Learn words without duplicating the delivered reward")
+		"The visible result action starts a fresh Match board without duplicating the delivered reward")
 	app.choose_mode("match")
 	var wrong: Array = wrong_pair_for(app.model)
 	var wrong_start: Vector2 = app.cards[wrong[0]].position

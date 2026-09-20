@@ -32,28 +32,10 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	app.choose_mode("learn")
-	await settle()
-	check(app._lesson.progress_label.text == "1/5", "Learn uses the compact page count")
-	check(app._lesson.progress_label.get_parent() == app._lesson.picture_button,
-		"The page count is an absolute child of the slide")
-	check(app._lesson.picture_button.get_global_rect().encloses(app._lesson.progress_label.get_global_rect()),
-		"The page count stays inside the card")
-	check(app._lesson.progress_label.position.x > app._lesson.picture_button.size.x * 0.5
-		and app._lesson.progress_label.position.y <= 16, "The compact count is anchored at the card's top-right")
-	var normal: StyleBox = app._lesson.picture_button.get_theme_stylebox("normal")
-	check(app._lesson.picture_button.get_theme_stylebox("hover") == normal
-		and app._lesson.picture_button.get_theme_stylebox("pressed") == normal
-		and app._lesson.picture_button.get_theme_stylebox("disabled") == normal,
-		"Learn cards have one consistent appearance, including their preview")
-	check(app._lesson.picture_button.get_theme_stylebox("focus") is StyleBoxEmpty,
-		"A pointer-focused Learn card has no selected-state glow")
-	check(app._lesson.picture_button.position.y == 0 and app._lesson.global_position.y <= 132,
-		"Learn has no empty count row and starts below a compact header")
-	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y, 40),
-		"The header centers its actions in a 56px row")
 	app.choose_mode("match")
 	await settle()
+	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y, 40),
+		"The header centers its actions in a 56px row")
 	check(app._header_duck_slot.is_ancestor_of(app._success) and app._header_duck_slot.is_ancestor_of(app._mistakes),
 		"Both counters belong to Pip's status cluster")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
@@ -110,13 +92,11 @@ func _run() -> void:
 		rows[y] = int(rows.get(y, 0)) + 1
 	check(rows.values().all(func(count: int) -> bool: return count == rows.values()[0])
 		and rows.values()[0] in [2, 5], "Every Memory row has the same number of cards")
-	app.choose_mode("learn")
+	app.choose_mode("match")
 	root.size = Vector2i(768, 1024)
 	await settle()
-	check(app._mode_row.get_parent() == app._header and app._lesson.global_position.y <= 80,
+	check(app._mode_row.get_parent() == app._header and app._match_playfield.global_position.y <= 80,
 		"A wide viewport uses one compact header row")
-	check(app._lesson.picture.position.y * app.Style.ui_scale(app) <= 64.1,
-		"Tall Learn cards do not leave a large empty region above the illustration")
 	root.size = Vector2i(390, 844)
 	await settle()
 	check(app._mode_row.get_parent() == app._main_column,

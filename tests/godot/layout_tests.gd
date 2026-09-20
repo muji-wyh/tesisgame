@@ -36,15 +36,15 @@ func _run() -> void:
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
-	check(app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "learn", "memory", "pop"],
-		"The centered mode switch includes the new Voice Pop game")
+	check(app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "memory", "pop"],
+		"The centered mode switch contains Match, Memory and Voice Pop")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
 		root.size = dimensions
 		app.size = dimensions
-		for mode in ["learn", "match", "memory"]:
+		for mode in ["match", "memory"]:
 			app.choose_mode(mode)
 			await settle()
-			var view: Control = app._lesson if mode == "learn" else app._match_playfield if mode == "match" else app._memory
+			var view: Control = app._match_playfield if mode == "match" else app._memory
 			var css_scale: float = app.Style.ui_scale(app)
 			var inline_modes: bool = dimensions.x * css_scale >= 680
 			var play_top: int = 76 if inline_modes else 128
@@ -64,14 +64,10 @@ func _run() -> void:
 					check(counter.get_parent() == app._header_duck_slot
 						and app._header_duck_slot.get_global_rect().grow(1).encloses(counter.get_global_rect()),
 						"Numeric progress stays grouped inside Pip's header panel")
-			if mode == "learn":
-				check(not app._success.is_visible_in_tree() and not app._mistakes.is_visible_in_tree(),
-					"Learn has no invented game score")
-			else:
-				check(app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree()
-					and app._success.total_count == (5 if mode == "memory" else 3)
-					and app._mistakes.total_count == (0 if mode == "memory" else 3),
-					"Match and Memory keep their own correct totals and mistake policy beside Pip")
+			check(app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree()
+				and app._success.total_count == (5 if mode == "memory" else 3)
+				and app._mistakes.total_count == (0 if mode == "memory" else 3),
+				"Match and Memory keep their own correct totals and mistake policy beside Pip")
 			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button] + app._mode_buttons:
 				if control.is_visible_in_tree():
 					check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "Navigation fits the viewport")
@@ -86,9 +82,6 @@ func _run() -> void:
 				return button.size.x * css_scale < 90 and button.size.y * css_scale < 48),
 				"Mode buttons keep natural compact widths and heights at %s %s: %s CSS" % [
 					dimensions, mode, app._mode_buttons.map(func(button: Button) -> Vector2: return button.size * css_scale)])
-			if mode == "learn" and dimensions.y > 600:
-				check(app._lesson.controls() == [app._lesson.picture_button],
-					"A phone lesson leaves the display clear of bottom action buttons")
 			if mode == "match":
 				check(app.grid.get_rect().is_equal_approx(Rect2(Vector2.ZERO, app._match_playfield.size))
 					and not app._message.is_visible_in_tree(),
@@ -194,8 +187,8 @@ func _run() -> void:
 	var old_lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
 	await settle()
-	check(app._mode_id == "learn" and not app.collection_page.visible and app.model.lesson_words != old_lesson,
-		"New adventure starts a fresh lesson directly instead of opening Explore")
+	check(app._mode_id == "match" and not app.collection_page.visible and app.model.lesson_words != old_lesson
+		and app.grid.is_visible_in_tree(), "New adventure starts a fresh Match round directly")
 	var primary := Button.new()
 	for world in app.model.THEMES:
 		app.Style.primary_button(primary, app.Data.theme(world).accent)
