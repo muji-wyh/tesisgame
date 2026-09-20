@@ -20,3 +20,13 @@ Speech recognition is simulated; no physical microphone was opened. WebKit runs
 as Windows device emulation, not on physical Apple hardware.
 
 Evidence: `build/voice-pop-qa/square-voice-pop-glow`.
+
+## Production
+
+Runtime commit `75e3aef` was merged into `main`, pushed and deployed to
+`https://gentle-forest-02ff42900.3.azurestaticapps.net/`. All four startup files
+match the tested export by SHA-256; hashes are saved in
+`2026-09-20-square-voice-pop-glow-production-manifest.json`.
+
+Both production Chromium portrait/landscape cases passed. A production screenshot
+was reviewed and confirms the square outer glow.
