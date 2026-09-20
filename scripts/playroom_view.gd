@@ -219,7 +219,6 @@ var _palette: Dictionary = {}
 var _reduced_motion: bool = false
 var _preview_id: String = ""
 var _last_toy: String = ""
-var _last_backdrop: String = ""
 var _toy: Dictionary = {}
 var _room: RoomScene
 var _room_title: Label
@@ -321,13 +320,12 @@ func _build() -> void:
 
 func configure(state, counts: Dictionary, palette: Dictionary, reduced_motion: bool) -> void:
 	_build()
-	var changed: bool = state.toy_id != _last_toy or state.backdrop_id != _last_backdrop
+	var changed: bool = state.toy_id != _last_toy
 	_state = state
 	_counts = counts.duplicate()
 	_palette = palette
 	_reduced_motion = reduced_motion
 	_last_toy = state.toy_id
-	_last_backdrop = state.backdrop_id
 	if changed or (not _preview_id.is_empty() and _state.owned(_item(_preview_id), _counts)):
 		_preview_id = ""
 		_reset_sequence()
@@ -488,18 +486,17 @@ func _equipped_toy() -> Dictionary:
 func _refresh_room() -> void:
 	var previous_toy: String = _toy.get("id", "")
 	_toy = _equipped_toy()
-	var backdrop: Dictionary = _item(_state.backdrop_id)
-	if backdrop.is_empty() or not _state.owned(backdrop, _counts):
-		backdrop = _item("backdrop-home")
 	var preview := _item(_preview_id)
 	_preview_locked = not preview.is_empty() and preview.slot == "toy" and not _state.owned(preview, _counts)
 	if not preview.is_empty() and preview.slot == "toy":
 		_toy = preview
 	if _toy.id != previous_toy:
 		_reset_sequence()
-	_room.theme_id = backdrop.theme if backdrop.id != "backdrop-home" else "home"
-	_room.palette = Data.theme(backdrop.theme) if Data.THEMES.has(backdrop.theme) else _palette
-	_room_title.text = str(backdrop.name)
+	# The world picker owns the room's appearance; legacy backdrop choices remain save data.
+	_room.theme_id = str(_palette.get("id", "home"))
+	_room.palette = _palette
+	_room_title.text = str(_palette.get("name", "")) + " room" if _room.theme_id != "home" else "Pip's home"
+	_room.queue_redraw()
 	_toy_art = _art(_toy)
 	toy_button.icon = _toy_art
 	toy_button.add_theme_constant_override("icon_max_width", 84)

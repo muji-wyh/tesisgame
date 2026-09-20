@@ -146,8 +146,8 @@ func _exercise(app, directory: String) -> void:
 	app._show_collection()
 	app._show_reward_section("room")
 	app._refresh()
-	check(app._room._room.theme_id == "autumn" and app.playroom_state.backdrop_id == "backdrop-autumn",
-		"The existing saved backdrop still renders after removing Rooms")
+	check(app._room._room.theme_id == app.model.theme_id and app.playroom_state.backdrop_id == "backdrop-autumn",
+		"The room follows the current world while retaining the legacy backdrop in saved state")
 	check(not app._room.goal_button.is_visible_in_tree()
 		and not app._room.goal_label.text.contains(app.playroom_state.item("backdrop-space").name)
 		and not app._gift_label.text.contains(app.playroom_state.item("backdrop-space").name),
@@ -242,7 +242,8 @@ func _test_completed_goal_use(app, directory: String, storage: BrowserStorage, g
 	owned_card.pressed.emit()
 	check(reloaded.toy_id == goal_id and reloaded.backdrop_id == previous_backdrop,
 		"Retrying the completed toy's owned card preserves the existing backdrop")
-	check(app._room._toy.id == reloaded.toy_id and app._room._room.theme_id == ("home" if reloaded.backdrop_id == "backdrop-home" else reloaded.item(reloaded.backdrop_id).theme), "Successful retry updates the actual room to the equipped gift")
+	check(app._room._toy.id == reloaded.toy_id and app._room._room.theme_id == app.model.theme_id,
+		"Successful retry equips the gift while keeping the room in the current world")
 	owned_card.pressed.emit()
 	check(app.medal_progress.counts == counts and reloaded.collected_word_ids == stickers and app.model.lesson_words == lesson and reloaded.goal_item_id == goal_id, "Repeated completed-goal use preserves the lesson and cannot duplicate rewards or stickers")
 	var confirmed = load("res://scripts/playroom_state.gd").new(directory + "/confirmed-" + goal_id + ".cfg", storage)

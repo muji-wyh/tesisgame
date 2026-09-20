@@ -131,8 +131,8 @@ func _run() -> void:
 	check(view.controls().has(view.toy_button) and not view.toy_button.disabled, "Toy play remains available for host focus wiring")
 	state.backdrop_id = "backdrop-spring"
 	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
-	check(view._room.theme_id == "spring" and state.backdrop_id == "backdrop-spring",
-		"An already saved backdrop still renders without a Rooms chooser")
+	check(view._room.theme_id == "ocean" and state.backdrop_id == "backdrop-spring",
+		"The current world renders while a legacy backdrop remains unchanged in saved state")
 	state.goal_item_id = "backdrop-ocean"
 	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
 	check(state.selected_goal({}).id == "backdrop-ocean" and not view.goal_button.visible
@@ -274,7 +274,64 @@ func _run() -> void:
 		check(control.get_global_rect().position.x >= view.global_position.x - 1 and control.get_global_rect().end.x <= view.global_position.x + view.size.x + 1, "Room controls fit a narrow phone column")
 	view.queue_free()
 	await process_frame
+	await _check_current_theme_rendering()
 	_finish()
+
+
+func _check_current_theme_rendering() -> void:
+	var data = load("res://scripts/game_data.gd")
+	var state_script = load("res://scripts/playroom_state.gd")
+	var view_script = load("res://scripts/playroom_view.gd")
+	for fixture in [
+		{"id": "backdrop-home", "pieces": 0, "name": "default home"},
+		{"id": "backdrop-spring", "pieces": 0, "name": "unearned legacy Spring room"},
+		{"id": "backdrop-spring", "pieces": 3, "name": "earned legacy Spring room"}
+	]:
+		var state = state_script.new()
+		state.toy_id = "toy-autumn"
+		state.backdrop_id = fixture.id
+		state.favorite_id = "spring-1"
+		state.goal_item_id = "backdrop-ocean"
+		var legacy_words: Array[String] = ["cat", "bell"]
+		state.collected_word_ids = legacy_words
+		state.displayed_word_id = "bell"
+		state.preferred_theme_id = "autumn"
+		var counts := {"spring-1": 3, "summer-1": 3, "autumn-1": 3, "spring-3": fixture.pieces}
+		var original_counts := counts.duplicate(true)
+		var view = view_script.new()
+		root.add_child(view)
+		view.size = Vector2(280, 1400)
+		for theme_id in data.THEMES:
+			var palette: Dictionary = data.theme(theme_id)
+			view.configure(state, counts, palette, true)
+			await process_frame
+			_check_current_room_palette(view, palette, fixture.name + " in " + theme_id)
+			check(view._toy.id == "toy-autumn" and view._toy_label.text == "apple"
+				and state.toy_id == "toy-autumn" and state.backdrop_id == fixture.id
+				and counts == original_counts and view._counts == original_counts,
+				"Changing to " + theme_id + " preserves the equipped apple, legacy backdrop and medal progress for " + fixture.name)
+		view.configure(state, counts, data.theme("autumn"), true)
+		view.item_buttons["toy-space"].pressed.emit()
+		check(view._preview_locked and view._toy.id == "toy-space" and view.toy_button.disabled,
+			"The " + fixture.name + " fixture still supports a locked toy preview")
+		_check_current_room_palette(view, data.theme("autumn"), fixture.name + " previewing a Space toy in Autumn")
+		view.configure(state, counts, data.theme("ocean"), true)
+		_check_current_room_palette(view, data.theme("ocean"), fixture.name + " switching worlds during a locked preview")
+		check(view._preview_locked and view._toy.id == "toy-space" and state.toy_id == "toy-autumn"
+			and state.backdrop_id == fixture.id and counts == original_counts and view._counts == original_counts
+			and state.favorite_id == "spring-1" and state.goal_item_id == "backdrop-ocean"
+			and state.collected_word_ids == ["cat", "bell"] and state.displayed_word_id == "bell"
+			and state.preferred_theme_id == "autumn",
+			"Rendering and previewing every world preserves all existing choices and legacy rewards for " + fixture.name)
+		view.queue_free()
+		await process_frame
+
+
+func _check_current_room_palette(view, palette: Dictionary, context: String) -> void:
+	check(view._room.theme_id == palette.id and view._room.palette == palette,
+		"The " + context + " uses the current world's decorations, wall and floor colors")
+	check(view._room_title.text == palette.name + " room" and view.playground.accent == palette.accent,
+		"The " + context + " uses the current world's room title and interaction color")
 
 
 func _finish() -> void:

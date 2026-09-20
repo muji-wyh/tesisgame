@@ -75,8 +75,8 @@ func _run() -> void:
 		func(id: String) -> bool: return id.begins_with("toy-")), "Rewards offers toys, not hidden backdrop choices")
 	check(app.find_child("RoomCategory_backdrop", true, false) == null and not app._room.has_method("_show_category"),
 		"The Rooms category and its switching route are removed")
-	check(app.playroom_state.backdrop_id == "backdrop-spring" and app._room._room.theme_id == "spring",
-		"Removing the chooser preserves the previously saved backdrop")
+	check(app.playroom_state.backdrop_id == "backdrop-spring" and app._room._room.theme_id == app.model.theme_id,
+		"The current world's room preserves the legacy backdrop field without restoring its chooser")
 	var before_words: Array = app.model.lesson_words.duplicate(true)
 	var before_goal: String = app.playroom_state.goal_item_id
 	app._start_gift_adventure("backdrop-space")

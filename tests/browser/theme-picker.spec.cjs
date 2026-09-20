@@ -1,6 +1,63 @@
 const { test, expect } = require('@playwright/test');
+const { writeFile } = require('node:fs/promises');
 const { openGame, metrics, tap, boardPoint, openRewards, chooseRewardSection,
-  worldIconRect, collectionBounds, rendered } = require('./game-ui.cjs');
+  worldIconRect, collectionBounds, rendered, enterGame, roomLayout,
+  THEME_IDS, THEME_COLORS } = require('./game-ui.cjs');
+
+async function expectRoomFloor(page, testInfo, index, suffix = '') {
+  const bounds = await metrics(page), room = roomLayout(bounds);
+  // This clear floor patch is below the wall and above the first row of toys.
+  const point = { x: Math.round(bounds.x + (room.x + room.width - 12) * bounds.scale),
+    y: Math.round(bounds.y + (room.top + 186) * bounds.scale) };
+  const expected = THEME_COLORS[index].slice(1).match(/../g).map(value => parseInt(value, 16));
+  let screenshot;
+  await expect.poll(async () => {
+    screenshot = await page.screenshot({ scale: 'css' });
+    const actual = await page.evaluate(async ({ png, point }) => {
+      const image = new Image();
+      image.src = 'data:image/png;base64,' + png;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
+      return [...context.getImageData(point.x, point.y, 1, 1).data].slice(0, 3);
+    }, { png: screenshot.toString('base64'), point });
+    return Math.max(...actual.map((value, channel) => Math.abs(value - expected[channel])));
+  }, { message: `Pip's actual room floor must use ${THEME_IDS[index]}, even with an earned legacy Spring backdrop.` }).toBeLessThanOrEqual(2);
+  await writeFile(testInfo.outputPath(`legacy-room-${THEME_IDS[index]}${suffix}.png`), screenshot);
+}
+
+test('the room follows every selected world despite an earned legacy backdrop', async ({ page }, testInfo) => {
+  const counts = { 'spring-1': 3, 'summer-1': 3, 'autumn-1': 3, 'spring-3': 3 };
+  await page.addInitScript(counts => {
+    if (localStorage.getItem('wordBuddies.playroom') !== null) return;
+    localStorage.setItem('wordBuddies.medalProgress', `[medals]\nversion=1\ncounts=${JSON.stringify(counts)}\n`);
+    localStorage.setItem('wordBuddies.playroom', '[playroom]\nversion=1\ntoy="toy-autumn"\nbackdrop="backdrop-spring"\nfavorite="spring-1"\n\n[journey]\npreferred_theme_id="autumn"\ngoal_item_id=""\nrecent_topic_ids=[]\n');
+  }, counts);
+  const errors = await openGame(page);
+  await openRewards(page);
+  const original = await page.evaluate(() => ({
+    room: localStorage.getItem('wordBuddies.playroom').split('[journey]')[0],
+    medals: localStorage.getItem('wordBuddies.medalProgress')
+  }));
+  await expectRoomFloor(page, testInfo, 2, '-startup');
+  for (const [index, id] of THEME_IDS.entries()) {
+    const rect = worldIconRect(await metrics(page), index);
+    await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
+    await expectRoomFloor(page, testInfo, index);
+    const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'));
+    expect(saved).toContain(`preferred_theme_id="${id}"`);
+    expect(saved.split('[journey]')[0]).toBe(original.room);
+    expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(original.medals);
+  }
+  await page.reload();
+  await enterGame(page);
+  await openRewards(page);
+  await expectRoomFloor(page, testInfo, 7, '-reload');
+  expect(errors).toEqual([]);
+});
 
 test('larger themes stay on the current page and retry saving in place', async ({ page }, testInfo) => {
   const errors = await openGame(page, { mode: 'match' });

@@ -43,6 +43,7 @@ func _run() -> void:
 		"The fixture starts with a previously saved collection and displayed word")
 	check(legacy.select_item("backdrop-spring", {"spring-3": 3}),
 		"The compatibility state API seeds a previously saved backdrop without a Rooms chooser")
+	check(legacy.prefer_theme("autumn"), "The legacy fixture has Autumn selected independently of its saved Spring backdrop")
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
@@ -54,7 +55,9 @@ func _run() -> void:
 	app.medal_progress.counts["spring-3"] = 3
 	app._refresh_collection()
 	var initial_medals: Dictionary = app.medal_progress.counts.duplicate()
-	check(app._room._room.theme_id == "spring", "A saved and earned backdrop still renders in Pip's room")
+	check(app.model.theme_id == "autumn" and app._room._room.theme_id == app.model.theme_id
+		and app._room._room.palette.id == app.model.theme_id,
+		"A legacy backdrop does not override the current world's room decorations or colors")
 	app.choose_mode("memory")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_word_book")
 		and not app.has_method("_collect_word_stickers") and not app._room.has_method("set_word_sticker"),
@@ -118,8 +121,8 @@ func _run() -> void:
 	app._room.item_buttons["toy-spring"].pressed.emit()
 	check(app.playroom_state.toy_id == "toy-spring" and app.playroom_state.backdrop_id == "backdrop-spring",
 		"Saving an owned toy preserves the existing backdrop without a hidden backdrop control")
-	check(not app._room.item_buttons.has("backdrop-spring") and app._room._room.theme_id == "spring",
-		"The saved backdrop remains visible as artwork, not an available chooser")
+	check(not app._room.item_buttons.has("backdrop-spring") and app._room._room.theme_id == app.model.theme_id,
+		"Saving a toy keeps the room in the current world without restoring a backdrop chooser")
 	_check_legacy(app, "Saving a toy choice")
 	app._show_reward_section("medals")
 	app._open_reward_preview("spring-1")
