@@ -36,3 +36,15 @@ were reported. Screenshots of both sway extremes were inspected.
 
 Browser evidence: `build/voice-pop-qa/loading-hip-sway-browser` and
 `build/voice-pop-qa/loading-hip-sway-local`.
+
+## Production
+
+Runtime commit `f96d4df` was merged into `main`, pushed and deployed. All four
+startup files match the tested export by SHA-256; see
+`2026-09-20-loading-hip-sway-production-manifest.json`.
+
+The actual production visit passed the same toe/hip trajectory checks, all three
+tap reactions, gesture-gated music and entry cleanup, with zero JavaScript
+errors. Its measured shoulder/hip ranges match the local export. Both production
+sway extremes were inspected in screenshots. Evidence:
+`build/voice-pop-qa/loading-hip-sway-production`.
