@@ -116,12 +116,12 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
 
   const pip = headerPoint(await metrics(page), 'pip');
   await tap(page, pip.x, pip.y);
-  await expect(page.locator('#game-status')).toContainText("Pip says: duck! Pip's happy dance!", { timeout: 2000 });
+  await expect(page.locator('#game-status')).toContainText("Pip says hello! Pip's happy dance!", { timeout: 2000 });
   expect((await gameState(page)).saves).toEqual(state.saves);
   expect((await capture(page, area.lesson)).equals(lesson), 'Clicking Pip does not advance the lesson.').toBe(true);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  // The short pronunciation finishes before checking a stationary whole body.
+  // The short greeting finishes before checking a stationary whole body.
   await page.waitForTimeout(1800);
   await expectStill(page, area.body);
   await page.screenshot({ path: testInfo.outputPath('pip-reduced-motion.png'), scale: 'css' });

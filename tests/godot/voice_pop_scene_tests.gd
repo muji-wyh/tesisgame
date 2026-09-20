@@ -187,8 +187,11 @@ func _run() -> void:
 			and view._stats.get_child(1).get_child(0).get_child(0).text == str(result.unique_words),
 			"Exact score and distinct words remain visible in their result tiles")
 		var report_requests: Array[String] = []
+		var pip_requests: Array[String] = []
 		var on_report: Callable = func(text: String) -> void: report_requests.append(text)
+		var on_pip: Callable = func(text: String) -> void: pip_requests.append(text)
 		view.report_requested.connect(on_report)
+		view.pip_report_requested.connect(on_pip)
 		view.report_button.pressed.emit()
 		check(report_requests.size() == 1 and report_requests.back() == initial_report, "Hear Pip replays the current report")
 		view.next_report_button.pressed.emit()
@@ -210,10 +213,12 @@ func _run() -> void:
 		view.next_report_button.pressed.emit()
 		check(int(view.snapshot().report_step) == 0 and str(view.snapshot().report) == initial_report,
 			"The three report pages cycle back to the original round summary")
+		var ordinary_requests: int = report_requests.size()
 		view.pip.pressed.emit()
 		check(str(view.snapshot().report).contains("High five") and str(view.snapshot().report).contains(initial_report),
 			"Pip's high five adds a reaction while keeping the actual report")
-		check(report_requests.back() == str(view.snapshot().report), "The high five speaks its visible feedback")
+		check(pip_requests == [str(view.snapshot().report)] and report_requests.size() == ordinary_requests,
+			"A Pip tap requests its greeting and visible report once through a separate audio route")
 		check(view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
 			"A high five prepends its matching recorded clip")
 		check(view.game.summary() == result, "Report browsing and Pip interaction leave the round result unchanged")
@@ -226,6 +231,7 @@ func _run() -> void:
 			"Loading never pretends that Pip has started speaking")
 		view.set_report_audio_state("idle")
 		view.report_requested.disconnect(on_report)
+		view.pip_report_requested.disconnect(on_pip)
 		if dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
 			await check_compact_reports(view, dimensions, "One-hit round")
 		await settle()

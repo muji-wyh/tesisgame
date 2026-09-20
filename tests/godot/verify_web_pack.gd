@@ -18,6 +18,11 @@ func _initialize() -> void:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
 			failures += 1
 	var excluded := OS.get_cmdline_user_args()
+	for path in load("res://scripts/game_audio.gd").PIP_SOUND_PATHS:
+		var greeting: AudioStream = load(path) if ResourceLoader.exists(path) else null
+		if greeting == null or greeting.get_length() < 0.1 or greeting.get_length() > 0.6:
+			printerr("A Pip greeting is missing or invalid in the startup pack: " + path)
+			failures += 1
 	if excluded.has("--require-pop-slices"):
 		excluded.remove_at(excluded.find("--require-pop-slices"))
 		var paths: Array = load("res://scripts/game_audio.gd").POP_SLICE_PATHS

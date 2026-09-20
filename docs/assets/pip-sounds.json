@@ -1,0 +1,33 @@
+{
+  "sourceDirectory": "D:/uwork/AssetsSource/AIGenSFX/duck_gaga",
+  "note": "User-selected finished WAVs copied unchanged and tracked in Git. No normalization, trimming or pitch changes.",
+  "assets": [
+    {
+      "file": "assets/audio/pip/duck_double_01_bouncy.wav",
+      "seconds": 0.36,
+      "sampleRate": 48000,
+      "channels": 1,
+      "bitDepth": 24,
+      "sha256": "d2e9a21398802fea049a6bcf0eb19ca20b82d21ac1a8de9f167d197344f0a066",
+      "peakDbfs": -7.5
+    },
+    {
+      "file": "assets/audio/pip/duck_double_03_derpy.wav",
+      "seconds": 0.37,
+      "sampleRate": 48000,
+      "channels": 1,
+      "bitDepth": 24,
+      "sha256": "11b32ac187dd1b9a9b62110a937408af97d4c01f9e8d23b83989b12b2eb3359e",
+      "peakDbfs": -7.5
+    },
+    {
+      "file": "assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
+      "seconds": 0.18,
+      "sampleRate": 48000,
+      "channels": 1,
+      "bitDepth": 24,
+      "sha256": "e82dce1edcc38a65282ba51add3b125ab7cd508a2d3abb8ebff9168e95c1e2cb",
+      "peakDbfs": -7.5
+    }
+  ]
+}

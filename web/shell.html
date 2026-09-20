@@ -657,6 +657,62 @@
       }
       const startupProgress = createStartupProgress();
 
+      function createLoadingPipSounds() {
+        let players = [];
+        let activePlayer = null;
+        let generation = 0;
+        let lastIndex = -1;
+        let bag = [];
+        try {
+          if (typeof window.Audio === 'function') players = $PIP_SOUNDS_JSON.map(uri => {
+            const player = new Audio(uri);
+            player.preload = 'auto';
+            player.volume = .55;
+            return player;
+          });
+        } catch { /* Pip still reacts when browser audio is unavailable. */ }
+
+        function stop() {
+          generation++;
+          activePlayer = null;
+          for (const player of players) {
+            player.pause();
+            try { player.currentTime = 0; } catch { /* Metadata may still be loading. */ }
+          }
+        }
+
+        function play(gestureAllowed) {
+          if (!gestureAllowed || !canPlayLoadingDance() || !players.length) return;
+          stop();
+          if (!bag.length) {
+            bag = players.map((_, index) => index);
+            for (let index = bag.length - 1; index > 0; index--) {
+              const other = Math.floor(Math.random() * (index + 1));
+              [bag[index], bag[other]] = [bag[other], bag[index]];
+            }
+            if (bag.length > 1 && bag.at(-1) === lastIndex) [bag[0], bag[bag.length - 1]] = [bag.at(-1), bag[0]];
+          }
+          lastIndex = bag.pop();
+          const player = players[lastIndex];
+          const request = generation;
+          activePlayer = player;
+          try {
+            Promise.resolve(player.play()).then(() => {
+              // A pending play must not resume an old sound, or stop a newer
+              // click that has already reused the same preloaded element.
+              if (request !== generation) {
+                if (activePlayer !== player) player.pause();
+              } else if (!canPlayLoadingDance()) stop();
+            }).catch(() => {
+              if (request === generation) activePlayer = null;
+            });
+          } catch { activePlayer = null; }
+        }
+
+        return { play, stop };
+      }
+      const loadingPipSounds = createLoadingPipSounds();
+
       function createLoadingMusic() {
         let context = null;
         let output = null;
@@ -913,6 +969,7 @@
         window.clearTimeout(slowNotice);
         stopLoadingGamepad();
         loadingMusic.stop();
+        loadingPipSounds.stop();
         loadingEvents.abort();
         clearLoadingEffects();
         toy.disabled = true;
@@ -922,6 +979,7 @@
 
       loadingDuck.addEventListener('click', event => {
         playWithDuck(event.isTrusted);
+        loadingPipSounds.play(event.isTrusted);
       }, loadingListener);
 
       function playWithTreasure(gestureAllowed = false) {
@@ -1069,6 +1127,7 @@
           clearLoadingEffects();
           stopLoadingGamepad();
           loadingMusic.stop();
+          loadingPipSounds.stop();
         } else {
           startLoadingDance();
           startLoadingGamepad(true);
@@ -1079,6 +1138,7 @@
         clearLoadingEffects();
         stopLoadingGamepad();
         loadingMusic.stop();
+        loadingPipSounds.stop();
       }, loadingListener);
       window.addEventListener('pageshow', () => {
         if (!loadingPageSuspended) return;

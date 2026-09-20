@@ -36,7 +36,8 @@
     "test:cards": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/card_polish_tests.gd",
     "test:match-groups": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/match_groups_tests.gd",
     "test:playful-ui": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/memory_back_design_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/playful_affordance_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/proactive_pip_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/pip_engagement_scene_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/home_pip_moves_tests.gd",
-    "test:themes": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/new_theme_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/pip_outfit_tests.gd && node --test tests/pip-wardrobe.test.cjs tests/world-audio.test.cjs"
+    "test:themes": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/new_theme_tests.gd && node tools/run-godot.cjs --headless --path . --script res://tests/godot/pip_outfit_tests.gd && node --test tests/pip-wardrobe.test.cjs tests/world-audio.test.cjs",
+    "test:pip-audio": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/pip_audio_tests.gd"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

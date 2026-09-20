@@ -75,7 +75,8 @@ func _run() -> void:
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
 			"Playing with Pip never changes game progress")
-		check(app.audio.voice.playing, "Pip's greeting uses the bundled duck pronunciation")
+		check(app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
+			"Pip's greeting plays one of the imported duck sounds")
 		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The game-header greeting still performs its original first trick")
 		app.audio.halt()
 		app.audio.interact(app.model.theme_id, false)
@@ -104,8 +105,9 @@ func _run() -> void:
 		app.duck.pressed.emit()
 		app._update_duck()
 		check(app._room.playground.interaction_kind == "poke" and app.duck._room_reaction in ["jump", "shy", "bonk"]
-			and app.duck.pose != 0 and app.duck._trick.is_empty() and not app.duck.speaking,
-			"The room duck gives a visible loading-page response while preserving the Poke event and avoiding a header trick")
+			and app.duck.pose != 0 and app.duck._trick.is_empty() and app.duck.speaking
+			and app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
+			"The room duck keeps its loading-page response and Poke event while speaking the imported greeting")
 		app.medal_progress.counts["spring-1"] = 1
 		app._refresh_collection()
 		app._open_reward_preview("spring-1")

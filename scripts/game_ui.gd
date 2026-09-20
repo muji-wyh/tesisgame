@@ -481,6 +481,7 @@ func _build_controls() -> void:
 	_pop.round_finished.connect(_pop_finished)
 	_pop.hear_requested.connect(_pop_hear)
 	_pop.report_requested.connect(_pop_report)
+	_pop.pip_report_requested.connect(_pop_report.bind(true))
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
@@ -1044,7 +1045,10 @@ func _room_toy(kind: String) -> void:
 func _room_pip_interaction(kind: String, message: String) -> void:
 	if kind in ["poke", "pet", "catch", "fetch"]:
 		audio.interact(model.theme_id, model.phase != "lost")
-		audio.cue("select")
+		if kind in ["poke", "pet"]:
+			audio.play_pip()
+		else:
+			audio.cue("select")
 	_announce_status(message)
 
 
@@ -1671,7 +1675,7 @@ func _pop_finished(_result: Dictionary) -> void:
 	_pop_report(_pop.report_text())
 
 
-func _pop_report(text: String) -> void:
+func _pop_report(text: String, pip_greeting: bool = false) -> void:
 	if _mode_id != "pop" or _pop.game.phase != "finished" or collection_page.visible or _preview_page.visible:
 		return
 	if not _stop_pop_listening():
@@ -1680,7 +1684,10 @@ func _pop_report(text: String) -> void:
 	audio.halt()
 	_announce_status("Pip says: " + text)
 	audio.interact(model.theme_id, false)
-	audio.narrate(_pop.report_audio())
+	var clips: Array[String] = _pop.report_audio()
+	if pip_greeting and audio.active and not audio.muted and audio.available:
+		clips.push_front(audio.next_pip_sound())
+	audio.narrate(clips)
 
 
 func _pop_narration_state(state: String) -> void:
@@ -3684,10 +3691,5 @@ func _play_duck() -> void:
 	if _mode_id == "pop":
 		audio.stop_narration()
 	audio.interact(model.theme_id, model.phase != "lost")
-	audio.cue("select")
-	for word in data.words:
-		if word.id == "duck":
-			audio.say("res://" + word.audio)
-			_announce_status("Pip says: duck! " + caption)
-			return
-	_announce_status("Pip waves hello!")
+	audio.play_pip()
+	_announce_status("Pip says hello! " + caption)

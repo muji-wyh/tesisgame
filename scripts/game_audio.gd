@@ -11,6 +11,11 @@ const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/peach.wav",
 	"res://assets/imported-audio/pop-slices/coconut.wav",
 ]
+const PIP_SOUND_PATHS := [
+	"res://assets/audio/pip/duck_double_01_bouncy.wav",
+	"res://assets/audio/pip/duck_double_03_derpy.wav",
+	"res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
+]
 
 signal status_changed(message: String)
 signal word_failed
@@ -38,10 +43,13 @@ var _narration_index: int = 0
 var _pop_slice_paths: Array[String] = []
 var _pop_slice_rng := RandomNumberGenerator.new()
 var _last_pop_slice_path: String = ""
+var _pip_rng := RandomNumberGenerator.new()
+var _last_pip_path: String = ""
 
 
 func _ready() -> void:
 	_pop_slice_rng.randomize()
+	_pip_rng.randomize()
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
@@ -110,6 +118,22 @@ func _next_pop_slice() -> String:
 		return POP_SLICE_PATH if ResourceLoader.exists(POP_SLICE_PATH) else "res://assets/audio/sfx/select.wav"
 	_last_pop_slice_path = choices[_pop_slice_rng.randi_range(0, choices.size() - 1)]
 	return _last_pop_slice_path
+
+
+func next_pip_sound() -> String:
+	# Keep mascot sounds independent from cards, rewards and other random effects.
+	var choices: Array = PIP_SOUND_PATHS.duplicate()
+	choices.erase(_last_pip_path)
+	_last_pip_path = choices[_pip_rng.randi_range(0, choices.size() - 1)]
+	return _last_pip_path
+
+
+func play_pip() -> void:
+	if muted or not active or not available:
+		return
+	# The shared voice channel replaces the previous greeting on rapid taps and
+	# already stops on mute, page changes and microphone activation.
+	say(next_pip_sound())
 
 
 func say(path: String) -> void:

@@ -57,6 +57,21 @@ const sfxIds = [
   ...seasons.flatMap(({ id }) => [`${id}-arrive`, `${id}-open`])
 ];
 
+test('Pip greetings preserve the three selected WAVs in the repository', () => {
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/pip-sounds.json')));
+  assert.equal(manifest.assets.length, 3);
+  assert.equal(new Set(manifest.assets.map(asset => asset.sha256)).size, 3);
+  for (const asset of manifest.assets) {
+    const bytes = fs.readFileSync(path.join(root, asset.file));
+    assert.equal(sha256(bytes), asset.sha256, asset.file);
+    assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
+    assert.equal(bytes.toString('ascii', 8, 12), 'WAVE');
+    const metadata = fs.readFileSync(path.join(root, asset.file + '.import'), 'utf8');
+    assert.match(metadata, /edit\/loop_mode=0/);
+    assert.match(metadata, /edit\/normalize=false/);
+  }
+});
+
 test('the duck mascot has four original reusable poses and is embedded for the web loader', () => {
   const filename = path.join(root, 'assets', 'images', 'mascots', 'pip.svg');
   assert.ok(fs.existsSync(filename), 'The original Pip sprite sheet is missing');

@@ -16,6 +16,11 @@ function inlineMascot(html) {
   if (!html.includes('$PIP_MASCOT_URI')) throw new Error('The web shell is missing the Pip mascot placeholder.');
   const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'mascots', 'pip.svg'));
   html = html.replaceAll('$PIP_MASCOT_URI', `data:image/svg+xml;base64,${svg.toString('base64')}`);
+  if (html.includes('$PIP_SOUNDS_JSON')) {
+    const sounds = ['duck_double_01_bouncy.wav', 'duck_double_03_derpy.wav', 'duck_quack_innocent_deep_short_04.wav']
+      .map(filename => `data:audio/wav;base64,${fs.readFileSync(path.join(root, 'assets', 'audio', 'pip', filename)).toString('base64')}`);
+    html = html.replaceAll('$PIP_SOUNDS_JSON', JSON.stringify(sounds));
+  }
   if (!html.includes('$PIP_WARDROBE_JSON')) return html;
   const partNames = ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'];
   const outfits = Object.fromEntries(['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(theme => {

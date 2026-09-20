@@ -6,6 +6,7 @@ signal hit(word: Dictionary)
 signal round_finished(summary: Dictionary)
 signal hear_requested(word: Dictionary)
 signal report_requested(text: String)
+signal pip_report_requested(text: String)
 signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
@@ -1104,7 +1105,7 @@ func set_report_audio_state(state: String) -> void:
 
 
 func _high_five() -> void:
-	if pip == null or not is_instance_valid(pip) or game.phase != "finished":
+	if pip == null or not is_instance_valid(pip) or game.phase != "finished" or not is_visible_in_tree():
 		return
 	pip.perform_trick("high-five")
 	_report_feedback = _prompt_text("high-five") + " "
@@ -1112,7 +1113,8 @@ func _high_five() -> void:
 	_message = report_text()
 	_layout()
 	_publish(true)
-	_hear_report()
+	pip.react("happy")
+	pip_report_requested.emit(report_text())
 
 
 func _replay() -> void:

@@ -262,6 +262,23 @@ func _report_lifecycle() -> void:
 	view.pip.pressed.emit()
 	check(view.report_audio()[0] == "res://assets/audio/pop/high-five.wav" and view.report_text().begins_with(str(prompts["high-five"])),
 		"High five prepends matching visible feedback and recorded audio")
+	var greeting: AudioStream = app.audio.narration.stream
+	check(greeting != null and greeting.resource_path.begins_with("res://assets/audio/pip/")
+		and app.audio.narration.playing and app.audio._narration_streams.size() == view.report_audio().size() + 1
+		and not app.audio.voice.playing and not app.audio.effect.playing,
+		"A result Pip tap queues one imported greeting before the report on the single narration player")
+	app.audio._narration_finished()
+	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]] and view.pip.speaking,
+		"Finishing the greeting continues into the matching high-five sentence without cutting off the report")
+	view.pip.pressed.emit()
+	check(app.audio.narration.stream != greeting
+		and app.audio.narration.stream.resource_path.begins_with("res://assets/audio/pip/")
+		and app.audio._narration_streams.size() == view.report_audio().size() + 1,
+		"A second Pip tap replaces the queue with a different greeting instead of stacking narration")
+	view.report_button.pressed.emit()
+	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]]
+		and app.audio._narration_streams.size() == view.report_audio().size(),
+		"Hear Pip replays only the visible report without adding another random greeting")
 	var review: Dictionary = view.game.summary().missed_words[0]
 	app._pop_hear(review)
 	check(not app.audio.narration.playing and app.audio.voice.playing
