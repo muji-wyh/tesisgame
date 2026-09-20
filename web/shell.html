@@ -757,7 +757,8 @@
         return { start, stop };
       }
       const loadingMusic = createLoadingMusic();
-      const danceSequence = ['left-wing', 'right-wing', 'hip-left', 'hip-right', 'left-wing', 'right-wing', 'hip-right', 'hip-left'];
+      const danceBeats = 12;
+      const danceDuration = danceBeats * 440;
       let danceGeneration = 0;
       let loadingPageSuspended = false;
       let reactionBag = [];
@@ -779,20 +780,36 @@
         }
       }
 
-      function dancePose(name) {
-        const left = name === 'left-wing';
-        const right = name === 'right-wing';
-        const direction = name === 'hip-right' || right ? 1 : -1;
-        const hip = !left && !right;
+      function dancePose(beat) {
+        const clamp = value => Math.max(0, Math.min(1, value));
+        const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
+        const wave = start => Math.sin(Math.PI * clamp((beat - start) / 2));
+        const left = wave(0), right = wave(2);
+        const amount = smooth((beat - 4) / .65) * smooth((danceBeats - beat) / .65);
+        const phase = (beat - 4) * Math.PI;
+        const hips = Math.sin(phase) * amount;
+        const follow = Math.sin(phase - .32) * amount;
+        // Sink during the weight transfer, then rise into each hip accent.
+        const bend = Math.pow(Math.cos(phase), 2) * amount;
+        const bounce = Math.max(left, right);
+        const n = value => Number(value.toFixed(3));
         return {
-          body: `translate(${hip ? direction * 8 : 0}px, -2px) rotate(${hip ? direction * 9 : direction * 3}deg)`,
-          head: `translate(${hip ? -direction * 2 : 0}px, -3px) rotate(${-direction * 5}deg)`,
-          'left-wing': `rotate(${left ? 108 : hip ? 18 - direction * 12 : 8}deg)`,
-          'right-wing': `rotate(${right ? -108 : hip ? -18 - direction * 12 : -8}deg)`,
-          'left-foot': `translateY(${direction < 0 ? -4 : 0}px) rotate(${direction < 0 ? -10 : 0}deg)`,
-          'right-foot': `translateY(${direction > 0 ? -4 : 0}px) rotate(${direction > 0 ? 10 : 0}deg)`
+          // Shear below the shoulders: the hem swings further than the chest.
+          // A small counter-lean keeps the head balanced over the planted feet.
+          body: `translate(${n(hips * 6)}px, ${n(bend * 1.5 - bounce)}px) rotate(${n(-hips * 2)}deg) skewX(${n(hips * 18)}deg) scale(${n(1 + bend * .045)}, ${n(1 - bend * .06)})`,
+          head: `translate(${n(-follow * 1.8)}px, ${n(bend * 3 - bounce * 1.5)}px) rotate(${n(-follow * 4)}deg)`,
+          'left-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(left * 108 - amount * 22 - follow * 3)}deg)`,
+          'right-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(-right * 108 + amount * 22 - follow * 3)}deg)`,
+          // Rotate around each outside toe (24,110 / 99,111), never slide or
+          // lift the whole foot. Only the heel opposite the weight rises.
+          'left-foot': `translate(-16px, 7px) rotate(${n(-Math.max(hips, 0) * 5 - right * 2)}deg) translate(16px, -7px)`,
+          'right-foot': `translate(19px, 8px) rotate(${n(Math.max(-hips, 0) * 5 + left * 2)}deg) translate(-19px, -8px)`
         };
       }
+
+      // Sample the curved movement once. Playback stays in six bounded browser
+      // animations, with no per-frame JavaScript or queued dance steps.
+      const dancePoses = Array.from({ length: danceBeats * 8 + 1 }, (_, index) => dancePose(index / 8));
 
       function canPlayLoadingDance() {
         return !loadingEvents.signal.aborted && !document.hidden && !loadingPageSuspended;
@@ -805,12 +822,11 @@
         loadingDuck.dataset.pose = 'dance';
         // One compositor-driven loop per limb keeps dancing through engine startup
         // without queuing timers or trying to catch up after a busy frame.
-        const poses = danceSequence.map(step => dancePose(step));
         for (const [name, part] of Object.entries(danceParts)) {
-          const frames = [...poses, poses[0]].map((pose, index) => ({
-            transform: pose[name], offset: index / poses.length, easing: 'ease-in-out'
+          const frames = dancePoses.map((pose, index) => ({
+            transform: pose[name], offset: index / (dancePoses.length - 1)
           }));
-          part.animate(frames, { duration: 3520, iterations: Infinity });
+          part.animate(frames, { duration: danceDuration, iterations: Infinity });
         }
       }
 

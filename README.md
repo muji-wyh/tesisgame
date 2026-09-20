@@ -39,8 +39,10 @@ removing words, reducing the collection, or adding image requests during play.
 The maintained HTML shell includes an inline, dependency-free treasure toy: tap it, wiggle
 it sideways, use Enter/Space, or press Xbox A while the game downloads. The chest bounces,
 peeks open, and makes stars, hearts or bubbles; every five taps brings a little star party.
-Pip dances automatically: alternating wing raises and hip swings, including while
-the ready screen waits for **Enter game**. Tap Pip or the chest to interrupt him
+Pip dances automatically: wing raises followed by grounded hip sways, including
+while the ready screen waits for **Enter game**. His toes stay planted, heels rock
+with the weight shift, and his upper body follows the waist with a slight delay.
+Tap Pip or the chest to interrupt him
 with a jump, a shy head scratch or a playful bonk and bounce back. The three
 reactions appear in shuffled groups without consecutive repeats; rapid taps
 replace the current reaction, and Pip resumes dancing when it finishes.
