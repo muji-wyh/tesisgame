@@ -29,6 +29,7 @@ func setup(item: Dictionary, texture: Texture2D) -> void:
 	add_child(picture)
 	title_label = Style.label(item.name, 14)
 	title_label.clip_text = true
+	title_label.add_theme_constant_override("line_spacing", 0)
 	add_child(title_label)
 	detail_label = Style.label("", 12)
 	detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -171,9 +172,14 @@ func _layout_in_room(scale: float) -> void:
 	title_label.visible = not _showing_error
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.add_theme_font_size_override("font_size", ceili(12 / scale))
-	title_label.position = Vector2(4 / scale, 70 / scale)
-	title_label.size = Vector2(maxf(0, size.x - 8 / scale), 34 / scale)
+	var title_font: Font = title_label.get_theme_font("font")
+	var title_size: int = ceili(12 / scale)
+	# Font metrics round in logical pixels; reserve both wrapped lines at any scale.
+	while title_size > 1 and title_font.get_height(title_size) * 2 > 42 / scale:
+		title_size -= 1
+	title_label.add_theme_font_size_override("font_size", title_size)
+	title_label.position = Vector2(4 / scale, 64 / scale)
+	title_label.size = Vector2(maxf(0, size.x - 8 / scale), 42 / scale)
 	detail_label.visible = _showing_error
 	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail_label.add_theme_font_size_override("font_size", ceili(11 / scale))

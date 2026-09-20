@@ -116,7 +116,7 @@ func _check_owned_display_navigation(app) -> void:
 	app._refresh_collection()
 	var earned: Dictionary = app.medal_progress.counts.duplicate()
 	var stickers: Array = app.playroom_state.collected_word_ids.duplicate()
-	for dimensions in [Vector2i(320, 568), Vector2i(390, 844)]:
+	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(768, 1024), Vector2i(1366, 768), Vector2i(1920, 1080)]:
 		root.size = dimensions
 		for frame in range(6):
 			await process_frame
@@ -134,7 +134,10 @@ func _check_owned_display_navigation(app) -> void:
 				"Keyboard focus reaches the whole " + item.id + " display card at " + str(dimensions))
 			check(card.title_label.is_visible_in_tree() and card.title_label.text == item.name
 				and card.title_label.get_visible_line_count() == card.title_label.get_line_count(),
-				"The owned " + item.id + " retains its readable full name at " + str(dimensions))
+				"The owned %s retains its full name at %s: visible=%d/%d, size=%s, font_height=%f, scale=%f" % [
+					item.id, dimensions, card.title_label.get_visible_line_count(), card.title_label.get_line_count(),
+					card.title_label.size, card.title_label.get_theme_font("font").get_height(card.title_label.get_theme_font_size("font_size")),
+					app.Style.ui_scale(app)])
 			app._controller_accept()
 			check(app.playroom_state.toy_id == item.id and app._room._toy.id == item.id
 				and not app._room._preview_locked,
