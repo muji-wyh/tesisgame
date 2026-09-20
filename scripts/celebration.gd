@@ -12,9 +12,7 @@ var _elapsed: float = 0.0
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var additive := CanvasItemMaterial.new()
-	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	material = additive
+	# Alpha blending keeps seasonal colors visible on the light treasure scenery.
 	set_process(false)
 
 
@@ -114,21 +112,21 @@ func _draw() -> void:
 	var burst: float = smoothstep(0.42, 0.85, _elapsed)
 	var light: Color = _palette.light
 	var spark: Color = _palette.spark
-	_texture("glow", center, Vector2.ONE * unit * (0.8 + burst), Color(light, fade * 0.7 * charge))
-	_texture("ray", center - Vector2(0, size.y * 0.18), Vector2(unit * 0.8, size.y * 1.2),
-		Color(light, fade * burst * 0.45))
+	_texture("glow", center, Vector2.ONE * unit * (0.65 + burst * 0.5), Color(light, fade * 0.3 * charge))
+	_texture("ray", center - Vector2(0, size.y * 0.18), Vector2(unit * 0.55, size.y * 0.8),
+		Color(light, fade * burst * 0.18))
 	var ray_count: int = {"spring": 10, "summer": 12, "autumn": 8, "winter": 6, "ocean": 8, "space": 12, "jungle": 9, "candy": 10}[_palette.id]
 	var ray_speed: float = 0.3 if _palette.id == "summer" else -0.12
 	for ray in range(ray_count):
 		var angle: float = TAU * float(ray) / float(ray_count) + _elapsed * ray_speed
-		_texture("ray", center, Vector2(unit * 0.13, unit * 1.3), Color(light, fade * burst * 0.22), angle)
+		_texture("ray", center, Vector2(unit * 0.10, unit), Color(light, fade * burst * 0.12), angle)
 	for ring in range(2):
 		var age: float = _elapsed - 0.45 - float(ring) * 0.24
 		if age > 0.0 and age < 1.6:
 			var radius: float = lerpf(0.12, 1.45, age / 1.6) * unit
 			_texture("ring", center, Vector2.ONE * radius, Color(spark, (1.0 - age / 1.6) * 0.9))
 	var flash: float = maxf(0.0, 1.0 - absf(_elapsed - 0.68) / 0.28)
-	_texture("burst", center, Vector2.ONE * unit * 1.4, Color(light, flash * 0.65))
+	_texture("burst", center, Vector2.ONE * unit * 0.95, Color(light, flash * 0.25))
 	for particle in _particles:
 		var age: float = _elapsed - 0.45 - float(particle.delay)
 		if age <= 0.0:

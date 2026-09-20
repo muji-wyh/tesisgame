@@ -111,10 +111,14 @@ func _run() -> void:
 				and app.theme_buttons[0].get_global_rect().get_center().y * scale < 44,
 				"Wide screens move theme choices up into the top header")
 	app._hide_collection()
+	await _check_treasure_themes(app)
 	root.size = Vector2i(320, 568)
 	app.model.phase = "lost"
 	app._refresh()
 	await settle()
+	var treasure: Control = app.get("_treasure_backdrop")
+	check(treasure != null and not treasure.visible and not treasure.is_visible_in_tree(),
+		"The encouragement result hides the treasure world's scene and theme badge")
 	var review: ScrollContainer = app._found_words_scroll
 	check(review.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 		and not review.get_h_scroll_bar().visible, "Review words scroll without a visible scrollbar")
@@ -211,3 +215,84 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Theme and review: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_treasure_themes(app) -> void:
+	var treasure: Control = app.get("_treasure_backdrop")
+	check(treasure != null, "The treasure result has a dedicated world scene")
+	if treasure == null:
+		return
+	var data = load("res://scripts/game_data.gd")
+	check(app.new_round(732, false, "", "match"), "The treasure-world fixture starts a real Match round")
+	check(not treasure.visible and not treasure.is_visible_in_tree(), "Active play hides the treasure scene")
+	app.choose_theme("spring")
+	for card in app.model.cards:
+		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
+			app.cards[card.id].pressed.emit()
+			app.cards[card.word.id + ":image"].pressed.emit()
+			app.feedback_timer.timeout.emit()
+	await settle()
+	check(app.model.phase == "won" and app.model.chest_state == "closed",
+		"Three real matches enter the themed treasure result with an unopened chest")
+	check(treasure.mouse_filter == Control.MOUSE_FILTER_IGNORE and treasure.focus_mode == Control.FOCUS_NONE,
+		"The world scenery never captures chest pointer input or keyboard focus")
+	var counts_before: Dictionary = app.medal_progress.counts.duplicate(true)
+	for theme_id in data.THEMES:
+		app.choose_theme(theme_id)
+		await settle()
+		_check_treasure_palette(treasure, data.theme(theme_id), "before opening")
+		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == theme_id,
+			"The unopened chest follows the selected " + theme_id + " world")
+		check(app.medal_progress.counts == counts_before and app.model.reward_theme.is_empty(),
+			"Viewing the " + theme_id + " treasure world cannot claim a medal piece")
+	app.choose_theme("spring")
+	await settle()
+	var point: Vector2 = app.chest_button.get_global_rect().get_center()
+	await pointer(point, true)
+	app._process(0.1)
+	await pointer(point, false)
+	check(app.model.chest_state == "closed" and app.medal_progress.counts == counts_before,
+		"A brief tap through the world scene leaves the chest closed and rewards untouched")
+	var original_drag: Vector2 = app.chest.drag_offset
+	await pointer(point, true)
+	await motion(point - Vector2(12, 0), false)
+	check(not app._holding_chest and app.chest.drag_offset != original_drag,
+		"Dragging the chest over its world scenery cancels the hold and moves the chest")
+	await pointer(point - Vector2(12, 0), false)
+	check(app.model.chest_state == "closed" and app.medal_progress.counts == counts_before,
+		"Releasing a chest drag cannot open it or award a piece")
+	await pointer(point, true)
+	app._process(1.21)
+	await pointer(point, false)
+	await settle()
+	var earned_id: String = app.model.reward_id
+	var earned_counts: Dictionary = counts_before.duplicate(true)
+	earned_counts["spring-1"] = int(earned_counts.get("spring-1", 0)) + 1
+	check(app.model.chest_state == "opened" and app.model.reward_theme == "spring" and earned_id == "spring-1"
+		and app.medal_progress.counts == earned_counts,
+		"A full hold through the scenery opens the Spring chest and saves exactly its first medal piece")
+	var saved_bytes := FileAccess.get_file_as_string(app.medal_progress._save_path)
+	var pending: Dictionary = app._pending_fragment.duplicate(true)
+	for theme_id in data.THEMES:
+		app.choose_theme(theme_id)
+		await settle()
+		_check_treasure_palette(treasure, data.theme(theme_id), "after opening a Spring chest")
+		check(app.model.phase == "won" and app.model.chest_state == "opened" and app.chest.mode == "opened"
+			and app.chest.theme_id == "spring" and app.model.reward_theme == "spring" and app.model.reward_id == earned_id,
+			"Changing the scene to " + theme_id + " preserves the already earned Spring chest and reward")
+		check(app.medal_progress.counts == earned_counts and app._pending_fragment == pending
+			and FileAccess.get_file_as_string(app.medal_progress._save_path) == saved_bytes,
+			"Changing the opened result to " + theme_id + " cannot rewrite progress or add another piece")
+	app._open_chest()
+	app._on_chest_opened()
+	var reloaded = load("res://scripts/medal_progress.gd").new(app.medal_progress._save_path, app.medal_progress._legacy_path)
+	check(reloaded.load_progress() and reloaded.counts == earned_counts and app.medal_progress.counts == earned_counts,
+		"Repeated open callbacks after a world change preserve the same single reward through reload")
+	check(app.new_round(733, false, "", "match"), "A new adventure still leaves the themed treasure result")
+	check(not treasure.visible and not treasure.is_visible_in_tree() and app.medal_progress.counts == earned_counts,
+		"The next lesson hides its old treasure scene without claiming the reward again")
+
+
+func _check_treasure_palette(treasure, palette: Dictionary, context: String) -> void:
+	check(treasure.is_visible_in_tree() and treasure.theme_id == palette.id and treasure.palette == palette,
+		"The " + palette.name + " treasure scene follows the selected world " + context)

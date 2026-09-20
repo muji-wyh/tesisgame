@@ -90,8 +90,8 @@ func _measure_bounds() -> void:
 func _fit() -> void:
 	if _pieces.is_empty() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return
-	var margin: float = 0.77 if _style == "crystal" else 0.96
-	var fit: float = minf(size.x * margin / _bounds.size.x, size.y * 0.78 / _bounds.size.y)
+	# Leave the themed scenery visible and room for the crystal's opening pieces.
+	var fit: float = minf(size.x * 0.62 / _bounds.size.x, size.y * 0.60 / _bounds.size.y)
 	var bob: float = 0.0 if reduced_motion else sin(_idle_time * 2.0) * 4.0
 	var shake_offset := Vector2.ZERO
 	if not reduced_motion and hold_progress > 0.0:

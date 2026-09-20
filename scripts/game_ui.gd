@@ -6,6 +6,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
+const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
 const Effects = preload("res://scripts/celebration.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const MedalProgress = preload("res://scripts/medal_progress.gd")
@@ -225,6 +226,7 @@ var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
 var _stage: Panel
+var _treasure_backdrop: TreasureBackdrop
 var _result_text: VBoxContainer
 var _result_footer: VBoxContainer
 var _result_actions: HBoxContainer
@@ -491,13 +493,16 @@ func _build_controls() -> void:
 	_stage.clip_contents = true
 	_stage.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
 	_outcome.add_child(_stage)
+	_treasure_backdrop = TreasureBackdrop.new()
+	_stage.add_child(_treasure_backdrop)
+	_treasure_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	effects = Effects.new()
+	_stage.add_child(effects)
+	effects.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest = Chest.new()
 	_stage.add_child(chest)
 	chest.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest.opened.connect(_on_chest_opened)
-	effects = Effects.new()
-	_stage.add_child(effects)
-	effects.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest_button = Button.new()
 	chest_button.text = ""
 	chest_button.tooltip_text = "Open the treasure chest"
@@ -515,6 +520,8 @@ func _build_controls() -> void:
 	chest_button.gui_input.connect(_chest_input)
 	_medallion = Panel.new()
 	_medallion.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Crystal pieces use local draw orders up to 5; keep the earned medal readable.
+	_medallion.z_index = 10
 	_stage.add_child(_medallion)
 	reward_image = _medal_picture(_medallion)
 	reward_image.offset_left = 8
@@ -1850,6 +1857,9 @@ func _refresh() -> void:
 	elif playing and _mode_id == "pop":
 		_message.text = "Voice Pop. Say the flying words. 30 seconds."
 	var won: bool = model.phase == "won"
+	_treasure_backdrop.visible = won
+	if won:
+		_treasure_backdrop.configure(palette)
 	chest.visible = won
 	chest_button.visible = won
 	failure_image.visible = model.phase == "lost"
@@ -1861,7 +1871,7 @@ func _refresh() -> void:
 	chest_button.disabled = (model.chest_state != "closed" and not _fragment_active) or _save_error
 	chest_button.tooltip_text = "Place the piece" if _fragment_active else "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
-	_stage.add_theme_stylebox_override("panel", Style.box(palette.accent.darkened(0.67), palette.accent.lightened(0.35), 26, 2))
+	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
 	if won:
 		var reward_id: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		var reward_palette: Dictionary = Data.theme(reward_id)

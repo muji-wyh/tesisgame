@@ -48,6 +48,7 @@ func _run() -> void:
 		chest.play_tap()
 		check(is_zero_approx(chest._tap_remaining), "An opening chest ignores short-tap play")
 	chest.free()
+	_check_themed_chests(data)
 	var effect = load("res://scripts/celebration.gd").new()
 	root.add_child(effect)
 	effect.configure(data.chests)
@@ -83,3 +84,43 @@ func _run() -> void:
 		medal.free()
 	print("Chest reveal: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_themed_chests(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(320, 320)
+	var opened_themes: Array[String] = []
+	chest.opened.connect(func() -> void: opened_themes.append(chest.theme_id))
+	for theme_id in data.THEMES:
+		chest.clear()
+		chest.reduced_motion = true
+		var palette: Dictionary = data.theme(theme_id)
+		chest.configure_skin(palette, data.chests)
+		var before: int = opened_themes.size()
+		chest.start_open(true)
+		chest.configure_skin(palette, data.chests)
+		chest.start_open(true)
+		chest.finish_immediately()
+		check(chest.mode == "opened" and chest.theme_id == theme_id
+			and opened_themes.size() == before + 1 and opened_themes.back() == theme_id,
+			"Refreshing the earned " + theme_id + " chest keeps it open without awarding again")
+		for dimensions in [Vector2(320, 190), Vector2(180, 400), Vector2(640, 420)]:
+			chest.size = dimensions
+			chest.set_drag_offset(Vector2.ZERO)
+			var stage := Rect2(Vector2.ZERO, chest.size).grow(0.5)
+			var visible_pieces := 0
+			var outside: Array[String] = []
+			for piece in chest._pieces:
+				var sprite: Sprite2D = piece.node
+				if not sprite.is_visible_in_tree() or sprite.modulate.a <= 0.001:
+					continue
+				visible_pieces += 1
+				var transform: Transform2D = chest.get_global_transform().affine_inverse() * sprite.get_global_transform()
+				var bounds: Rect2 = sprite.get_rect()
+				for corner in [bounds.position, Vector2(bounds.end.x, bounds.position.y), bounds.end, Vector2(bounds.position.x, bounds.end.y)]:
+					if not stage.has_point(transform * corner):
+						outside.append(str(piece.role) + " at " + str(transform * corner))
+			check(visible_pieces > 0 and outside.is_empty(),
+				"The opened %s chest keeps every transformed artwork corner inside %s without clipping: %s" % [theme_id, dimensions, outside])
+	chest.free()
