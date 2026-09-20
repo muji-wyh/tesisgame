@@ -281,8 +281,10 @@ worlds are added; the new shelves begin empty in an existing save.
 
 Open **More > Pip** to visit **Pip's playroom**. A ball is playable immediately.
 Each world's first completed medal unlocks its toy, making nine toys including
-the starter ball. Every earned toy appears on the shelves inside **Pip's home**.
-Choose a toy there to play; a small check marks the equipped toy. Only toys you
+the starter ball. Every earned toy appears directly on the floor of **Pip's home**.
+Tap a toy to play with it immediately; choosing a different toy starts its first
+step in that same tap. Drag any earned toy to toss it to Pip. The other toys stay
+visible and playable. Only toys you
 have not earned remain in the cards below the room, with their exact requirements.
 Newly earned toys move into the home automatically, and the lower list disappears
 when all nine are owned. Locked cards use their own world colors, larger
@@ -304,10 +306,11 @@ related five-word adventure in its reward world. The lesson includes the desired
 toy's word. Match and Memory keep those same
 five words; only normal wins and opened chests earn pieces. The goal caption shows
 the chosen gift and remaining pieces, including its world if you switch away.
-The locked card lets you continue the goal. Once earned, select the toy in the
+The locked card lets you continue the goal. Once earned, play with the toy in the
 home, including after reload; completed gifts have no extra **Use toy** arrow.
-Save failures appear beside the affected toy and can be retried there. Pointer selection keeps scroll and card
-positions stable; keyboard/controller focus still reveals the full card and its action.
+If choosing a different toy cannot be saved, its play action waits and a short
+message beside that toy offers a retry. Locked-card selection keeps scroll and
+card positions stable; keyboard/controller focus reveals each toy or card.
 An unopened or unsaved chest must be collected before starting a gift adventure.
 An explicitly chosen gift lesson always includes its toy's noun, even when that
 noun belongs to an older age level; the other four words respect the selected

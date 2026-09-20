@@ -97,12 +97,12 @@ async function tryGift(page) {
   await rendered(page);
 }
 
-async function playAppleStages(page, testInfo, prefix, firstTouch = false) {
-  await roomControl(page, 'toy');
+async function playAppleStages(page, testInfo, prefix, { firstTouch = false, alreadyStarted = false } = {}) {
+  const toy = alreadyStarted ? null : await roomControl(page, 'toy');
   for (let index = 0; index < APPLE_STAGES.length; index++) {
-    if (index === 0 && firstTouch) {
-      const bounds = await metrics(page);
-      const toy = roomPoint(bounds, 'toy');
+    if (index === 0 && alreadyStarted) {
+      // Selecting an owned floor toy has already played this stage.
+    } else if (index === 0 && firstTouch) {
       await tap(page, toy.x, toy.y);
     } else {
       await page.keyboard.press('Enter');
@@ -146,7 +146,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   await tryGift(page);
   const earnedStickers = stickerIds(await record(page));
   await page.screenshot({ path: testInfo.outputPath('gift-apple-ready.png'), scale: 'css' });
-  await playAppleStages(page, testInfo, 'gift-apple-stage', true);
+  await playAppleStages(page, testInfo, 'gift-apple-stage', { firstTouch: true });
   expect(await pieceCount(page)).toBe(3);
   expect(stickerIds(await record(page))).toEqual(earnedStickers);
   await page.reload();
@@ -157,8 +157,6 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   }
   await openRoom(page);
   await roomControl(page, 'autumn');
-  await page.keyboard.press('Enter');
-  await roomControl(page, 'toy');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText(APPLE_STAGES[0]);
   expect(await pieceCount(page)).toBe(3);
@@ -233,9 +231,9 @@ test('an earned saved goal stays keyboard reachable in Pip\'s home at 320px and 
   await roomControl(page, 'autumn');
   await page.screenshot({ path: testInfo.outputPath('gift-completed-goal-320.png'), scale: 'css' });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Offer the apple');
+  await expect(page.locator('#game-status')).toHaveText(APPLE_STAGES[0]);
   expect(await record(page)).toContain('toy="toy-autumn"');
-  await playAppleStages(page, testInfo, 'gift-keyboard-320-stage');
+  await playAppleStages(page, testInfo, 'gift-keyboard-320-stage', { alreadyStarted: true });
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   expect(stickerIds(await record(page))).toEqual(stickers);
   await page.keyboard.press('Escape');

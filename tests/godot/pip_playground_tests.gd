@@ -33,7 +33,8 @@ func _run() -> void:
 	var room = app._room
 	var stage: Control = room.playground
 	var before_position: Vector2 = room.duck_slot.position
-	var floor_point: Vector2 = stage.get_global_rect().end - Vector2(28, 12)
+	var floor_point: Vector2 = stage.get_global_rect().end - Vector2(10, 10)
+	check(_is_empty_floor(app, floor_point), "The first movement tap is clear of Pip, toy art and clickable nouns")
 	await _tap(floor_point)
 	await create_timer(0.2).timeout
 	check(room.duck_slot.position.distance_to(before_position) > 2.0, "A real empty-floor tap actually moves Pip from the resting spot")
@@ -61,6 +62,7 @@ func _run() -> void:
 	await _check_interruption(app, playground)
 	check(_progress(app) == score, "Petting, poking, moving and throwing cannot alter the lesson, medals or saved room choices")
 	check(_saved_files(directory) == saved, "Direct Pip interactions never write position, affection or toy motion into any save")
+	await _check_owned_floor_play(app, playground)
 	await _finish(app, directory)
 
 
@@ -143,9 +145,11 @@ func _check_floor_movement(app, playground) -> void:
 		await _show_stage(app)
 		var start: Vector2 = playground.duck_position
 		var direction := 1.0 if start.x < playground.size.x * 0.5 else -1.0
-		var x: float = start.x + direction * (app.duck.size.x * 0.5 + 14.0) if distance == "near" else playground.size.x - 36.0 if direction > 0 else 36.0
-		var point := Vector2(x, playground.size.y - 12.0)
-		await _tap(playground.get_global_transform() * point)
+		var x: float = start.x + direction * (app.duck.size.x * 0.5 + 14.0) if distance == "near" else playground.size.x - 10.0 if direction > 0 else 10.0
+		var point := Vector2(x, playground.size.y - 4.0)
+		var screen_point: Vector2 = playground.get_global_transform() * point
+		check(_is_empty_floor(app, screen_point), "The " + distance + " movement tap is clear of every clickable toy noun")
+		await _tap(screen_point)
 		var target: Vector2 = playground.target_position
 		check(playground.motion_kind == ("walk" if distance == "near" else "run"), "An empty-floor " + distance + " tap chooses an appropriate walk or run")
 		await _advance(playground, 0.15)
@@ -227,11 +231,13 @@ func _check_locked_toy(app, playground) -> void:
 		# The preceding locked-toy drag scrolls; its first stop tap must not select.
 		await _tap(owned_card.get_global_rect().get_center(), "touch")
 		check(app._room._preview_locked and app._collection_velocity == Vector2.ZERO,
-			"A touch stops the gliding toy list without accidentally choosing a toy")
+			"A touch stops the gliding toy list without accidentally choosing a toy: preview=%s velocity=%s stage=%d" % [
+				app._room._preview_locked, app._collection_velocity, app._room._stage])
 	await _tap(owned_card.get_global_rect().get_center(), "touch")
 	check(not app._room._preview_locked and app._room._toy.id == app.playroom_state.toy_id
-		and interactions.size() == before and playground.motion_kind.is_empty(),
-		"Touching an owned display card exits the preview without also calling Pip or starting toy motion")
+		and interactions.size() == before and playground.motion_kind.is_empty() and app._room._stage == 1,
+		"One touch on the owned floor toy exits a locked preview and starts its first action without calling Pip: preview=%s stage=%d events=%s motion=%s" % [
+			app._room._preview_locked, app._room._stage, interactions.slice(before), playground.motion_kind])
 	await _show_stage(app)
 	playground.toss_to_pip()
 	check(playground.flight_active, "Returning from a locked preview immediately restores the owned ball")
@@ -311,14 +317,102 @@ func _check_room_bounds(app, label: String) -> void:
 	var bounds: Rect2 = app._room.playground.get_global_rect().grow(1.0)
 	check(bounds.encloses(app.duck.get_global_rect()), label + " keeps Pip inside the room")
 	check(bounds.encloses(app._room.toy_button.get_global_rect()), label + " keeps the resting toy inside the room")
-	check(not app._room.owned_grid.get_global_rect().intersects(bounds.grow(-1.0)),
-		label + " keeps the owned display outside the active gesture area")
+	check(app._room.owned_toys.get_children().all(func(toy: Control) -> bool: return bounds.encloses(toy.get_global_rect())),
+		label + " keeps every owned toy inside the active gesture area")
+
+
+func _check_owned_floor_play(app, playground) -> void:
+	playground.cancel()
+	root.size = Vector2i(768, 1024)
+	for theme_id in app.Data.THEMES:
+		for medal in app.Data.medals(theme_id):
+			app.medal_progress.counts[medal.id] = 3
+	app._refresh_collection()
+	app.set_reduced_motion(true)
+	await _show_stage(app)
+	await _tap(playground.get_global_transform() * Vector2(52, 272))
+	var room = app._room
+	var earned: Dictionary = app.medal_progress.counts.duplicate(true)
+	var stickers: Array = app.playroom_state.collected_word_ids.duplicate()
+	var lesson: Array = app.model.lesson_words.duplicate(true)
+	var actions: Array[String] = []
+	var words: Array[String] = []
+	var on_action := func(kind: String) -> void: actions.append(kind)
+	var on_word := func(word: String) -> void: words.append(word)
+	room.toy_played.connect(on_action)
+	room.word_requested.connect(on_word)
+	check(room.owned_toys.get_child_count() == 9 and not room._item_grid.visible,
+		"An all-earned fixture places every toy on the floor and leaves no lower catalog")
+	for method in ["mouse", "touch"]:
+		for item in app.playroom_state.toys():
+			var other: String = "toy-candy" if item.id == "toy-ball" else "toy-ball"
+			check(app._select_room_item(other), "Prepare a different saved toy before directly tapping " + item.id)
+			await _settle()
+			var source: Button = room.item_buttons[item.id]
+			app._collection_scroll.ensure_control_visible(source)
+			await _settle()
+			var center: Vector2 = source.get_global_rect().get_center()
+			var home: Vector2 = playground.get_global_transform().affine_inverse() * center
+			var before_actions: int = actions.size()
+			var before_words: int = words.size()
+			var before_interactions: int = interactions.size()
+			await _tap(center, method)
+			check(app.playroom_state.toy_id == item.id and room._toy.id == item.id and room._stage == 1,
+				"One real %s tap selects and immediately plays %s: selected=%s stage=%d" % [method, item.id, app.playroom_state.toy_id, room._stage])
+			check(actions.slice(before_actions) == [item.action] and words.slice(before_words) == [item.word_id]
+				and interactions.size() == before_interactions,
+				"The %s tap on %s produces exactly one noun and action, with no floor gesture or duplicate mouse action" % [method, item.id])
+			check(not source.visible and room.toy_button.visible and playground._toy_home.distance_to(home) < 1.0
+				and room.owned_toys.get_children().filter(func(toy: Control) -> bool: return toy.visible).size() == 8,
+				"Playing %s keeps its own floor location and shows one active object alongside eight other toys" % item.id)
+	app.set_reduced_motion(false)
+	for method in ["mouse", "touch"]:
+		for id in ["toy-summer", "toy-autumn", "toy-space"]:
+			check(app._select_room_item("toy-ball"), "Prepare the starter before directly dragging " + id)
+			await _show_stage(app)
+			await _tap(playground.get_global_transform() * Vector2(52, 272))
+			await _advance(playground, 4.0)
+			await _settle()
+			var source: Button = room.item_buttons[id]
+			app._collection_scroll.ensure_control_visible(source)
+			await _settle()
+			var center: Vector2 = source.get_global_rect().get_center()
+			var before: int = interactions.size()
+			var before_actions: int = actions.size()
+			var before_scroll: int = app._collection_scroll.scroll_vertical
+			await _drag(center, center + Vector2(-45, -24), method)
+			check(app.playroom_state.toy_id == id and room._toy.id == id and playground.flight_active
+				and playground.toy_phase == "flying" and interactions.slice(before).count("throw") == 1,
+				"One real %s drag selects and throws the previously inactive %s exactly once" % [method, id])
+			check(actions.size() == before_actions and room._stage == 0
+				and app._collection_scroll.scroll_vertical == before_scroll,
+				"Dragging %s with %s does not also tap its sequence or scroll the collection" % [id, method])
+			await _advance(playground, 8.0)
+			check(not playground.flight_active and playground.toy_phase == "idle"
+				and (interactions.slice(before).has("catch") or interactions.slice(before).has("fetch")),
+				"The %s returns to a playable resting state after its direct %s throw" % [id, method])
+	check(app.medal_progress.counts == earned and app.playroom_state.collected_word_ids == stickers
+		and app.model.lesson_words == lesson,
+		"Playing and throwing every earned floor toy never changes medals, collected words or the lesson")
+	room.toy_played.disconnect(on_action)
+	room.word_requested.disconnect(on_word)
 
 
 func _hit_context(app, playground, point: Vector2) -> String:
 	var duck_rect: Rect2 = app.duck.get_global_rect()
 	var toy_rect: Rect2 = app._room.toy_button.get_global_rect()
 	return "point=%s duck=%s slot=%s toy=%s on_duck=%s on_toy=%s duck_feet=%s toy_phase=%s" % [point, duck_rect, app._room.duck_slot.get_global_rect(), toy_rect, duck_rect.has_point(point), toy_rect.has_point(point), playground.duck_position, playground.toy_phase]
+
+
+func _is_empty_floor(app, point: Vector2) -> bool:
+	var room = app._room
+	if not room.playground.get_global_rect().has_point(point): return false
+	var occupied: Array[Control] = [app.duck, room.toy_button, room._toy_label]
+	for toy in room.owned_toys.get_children():
+		occupied.append(toy)
+		occupied.append(toy.title_label)
+		occupied.append(toy.detail_label)
+	return occupied.all(func(control: Control) -> bool: return not control.is_visible_in_tree() or not control.get_global_rect().has_point(point))
 
 
 func _progress(app) -> Array:

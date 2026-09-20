@@ -52,11 +52,11 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   const locked = await page.screenshot({ path: testInfo.outputPath('room-locked-toy-phone.png'), scale: 'css' });
   expect(locked.equals(still), 'A locked gift shows its artwork and exact requirement.').toBe(false);
   await leavePreview(page);
-  await expect(page.locator('#game-status')).toContainText('ball');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   expect(await roomRecord(page)).toBe(saved);
   await playRoomToy(page);
   expect(await roomRecord(page)).toBe(saved);
-  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
+  await expect(page.locator('#game-status')).toHaveText('2/3 · Pip rolls the ball back!');
   await tapRoomControl(page, 'space');
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('room-locked-rocket-phone.png'), scale: 'css' });
@@ -87,7 +87,7 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
   await expect(page.locator('#game-status')).toContainText('18 of 48 medals complete.');
   expect(await roomRecord(page)).toContain('favorite="spring-1"');
   await tapRoomControl(page, 'spring');
-  await expect(page.locator('#game-status')).toContainText('Water the flower');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   const saved = await roomRecord(page);
   expect(saved).toContain('backdrop="backdrop-spring"');
@@ -129,7 +129,7 @@ test('a failed room write preserves the selected toy and succeeds on retry', asy
   await page.screenshot({ path: testInfo.outputPath('room-save-retry.png'), scale: 'css' });
   await page.evaluate(() => window.restorePlayroomSave());
   await tapRoomControl(page, 'spring');
-  await expect(page.locator('#game-status')).toContainText('Water the flower');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   expect(errors).toEqual([]);
 });
@@ -154,28 +154,29 @@ test('a failed initial room read recovers after storage becomes available', asyn
   await expect(page.locator('#game-status')).toContainText('Your room could not be saved.');
   await page.evaluate(() => { window.blockRoomRead = false; });
   await tapRoomControl(page, 'spring');
-  await expect(page.locator('#game-status')).toContainText('Water the flower');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · A drink for the flower!');
   expect(await roomRecord(page)).toContain('toy="toy-spring"');
   expect(errors).toEqual([]);
 });
 
-test('dragging an owned gift scrolls without equipping it on release', async ({ page }, testInfo) => {
+test('dragging a locked gift scrolls without opening its preview on release', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 650 });
-  await seedGifts(page);
   const errors = await openGame(page);
   await openRoom(page);
   const saved = await roomRecord(page);
   const bounds = await metrics(page);
   const gift = await roomControl(page, 'spring');
+  const status = await page.locator('#game-status').textContent();
   await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + gift.y * bounds.scale);
   await page.mouse.down();
   await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + (gift.y - 110) * bounds.scale, { steps: 8 });
   await page.mouse.up();
   expect(await roomRecord(page)).toBe(saved);
-  await page.screenshot({ path: testInfo.outputPath('room-gift-drag.png'), scale: 'css' });
-  await tap(page, gift.x, gift.y - 110);
-  await expect(page.locator('#game-status')).toContainText('Water the flower');
-  expect(await roomRecord(page)).toContain('toy="toy-spring"');
+  await expect(page.locator('#game-status')).toHaveText(status);
+  await page.screenshot({ path: testInfo.outputPath('room-locked-gift-drag.png'), scale: 'css' });
+  await tapRoomControl(page, 'spring');
+  await expect(page.locator('#game-status')).toContainText('Preview only. Spring flower.');
+  expect(await roomRecord(page)).toBe(saved);
   expect(errors).toEqual([]);
 });
 

@@ -190,11 +190,23 @@ function roomLayout(bounds, owned = ['ball']) {
   const toys = ['ball', ...THEME_IDS];
   owned = toys.filter(toy => toy === 'ball' || owned.includes(toy));
   const locked = toys.filter(toy => !owned.includes(toy));
-  const ownedColumns = Math.min(owned.length, Math.max(2, Math.min(6, Math.floor((width * scale - 24 + 8) / 104))));
-  const ownedRows = Math.ceil(owned.length / ownedColumns);
-  const shelfWidth = Math.min(width - 24 / scale, (ownedColumns * 104 - 8) / scale);
-  const homeHeight = 304 + (8 + ownedRows * 108 + 12) / scale + (ownedRows - 1) * Math.ceil(8 / scale);
-  return { x, width, top, padding, gap, scale, owned, locked, ownedColumns, shelfWidth, homeHeight };
+  const homes = {};
+  const firstSlots = Math.max(1, Math.floor((width - 180) / 104));
+  const columns = Math.max(2, Math.floor((width - 24) / 104));
+  for (const [index, toy] of owned.entries()) {
+    if (owned.length === 1) homes[toy] = { x: width - 66, y: 230 };
+    else if (index < firstSlots) homes[toy] = {
+      x: 180 + (width - 180 - firstSlots * 104) / 2 + 52 + index * 104,
+      y: 230 + 12 * (index % 2)
+    };
+    else {
+      const row = Math.floor((index - firstSlots) / columns), column = (index - firstSlots) % columns;
+      homes[toy] = { x: (width - columns * 104) / 2 + 52 + column * 104,
+        y: 342 + row * 112 + 12 * ((column + row + 1) % 2) };
+    }
+  }
+  const homeHeight = owned.length === 1 ? 304 : Math.max(304, ...Object.values(homes).map(point => point.y + 80));
+  return { x, width, top, padding, gap, scale, owned, locked, homes, homeHeight };
 }
 
 async function roomState(page) {
@@ -217,11 +229,12 @@ async function roomState(page) {
   };
 }
 
-function roomPoint(bounds, name, { item = '', owned = ['ball'] } = {}) {
+function roomPoint(bounds, name, { item = '', owned = ['ball'], equipped = 'ball' } = {}) {
   const { x, width, top, padding, gap } = collectionBounds(bounds), scale = uiScale(bounds);
   if (name === 'pip') return { x: x + 88, y: top + 216 };
-  if (name === 'toy') return { x: x + width - 66, y: top + 230 };
+  if (name === 'preview') return { x: x + width - 66, y: top + 110 };
   const layout = roomLayout(bounds, owned);
+  if (name === 'toy') name = layout.owned.includes(equipped) ? equipped : 'ball';
   if (name === 'goal') {
     if (!item) throw new Error('The inline goal control needs its toy card name.');
     if (layout.owned.includes(item)) throw new Error('Earned toys are selected directly in Pip\'s home.');
@@ -229,18 +242,19 @@ function roomPoint(bounds, name, { item = '', owned = ['ball'] } = {}) {
     return { x: card.x + card.width / 2 - 30 / scale, y: card.y - 34 / scale };
   }
   const inHome = layout.owned.includes(name);
-  const index = (inHome ? layout.owned : layout.locked).indexOf(name);
+  // Focus reveals both the 64px sprite and its noun or two-line retry label.
+  if (inHome) return { x: x + layout.homes[name].x,
+    y: Math.min(top + layout.homes[name].y, bounds.height - padding - 64),
+    width: 64, height: 64, inHome: true };
+  const index = layout.locked.indexOf(name);
   if (index < 0) throw new Error(`Unknown room control: ${name}`);
-  const columns = inHome ? layout.ownedColumns : width * scale >= 720 ? 3 : 2;
-  const cardGap = inHome ? Math.ceil(8 / scale) : gap;
-  const rowX = inHome ? x + (width - layout.shelfWidth) / 2 : x;
-  const rowWidth = inHome ? layout.shelfWidth : width;
-  const cell = (rowWidth - (columns - 1) * cardGap) / columns;
-  const height = (inHome ? 108 : 128) / scale;
-  const firstItem = top + (inHome ? 304 + 8 / scale : layout.homeHeight + gap) + height / 2;
-  const center = firstItem + Math.floor(index / columns) * (height + cardGap);
+  const columns = width * scale >= 720 ? 3 : 2;
+  const cell = (width - (columns - 1) * gap) / columns;
+  const height = 128 / scale;
+  const firstItem = top + layout.homeHeight + gap + height / 2;
+  const center = firstItem + Math.floor(index / columns) * (height + gap);
   return {
-    x: rowX + index % columns * (cell + cardGap) + cell / 2,
+    x: x + index % columns * (cell + gap) + cell / 2,
     y: Math.min(center, bounds.height - padding - height / 2),
     width: cell, height, inHome
   };
@@ -250,19 +264,22 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const bounds = await metrics(page);
   const state = await roomState(page), layout = roomLayout(bounds, state.owned);
   const active = locked ? item : state.selected;
+  const equipped = layout.owned.includes(state.equipped) ? state.equipped : 'ball';
+  const target = name === 'toy' ? equipped : name;
+  if (name === 'toy' && locked) throw new Error('A locked preview has no active playable toy; select an owned object.');
   await chooseRewardSection(page, 'room');
-  const controls = ['pip', ...(locked ? [] : ['toy']), ...layout.owned];
+  const controls = ['pip', ...(locked ? [] : [equipped]), ...layout.owned.filter(toy => locked || toy !== equipped)];
   for (const toy of layout.locked) {
     controls.push(toy);
     if (toy === active) controls.push('goal');
   }
-  if (!controls.includes(name)) throw new Error(`Unavailable room control: ${name}`);
+  if (!controls.includes(target)) throw new Error(`Unavailable room control: ${name}`);
   // Two tabs lead to Back, the world icons, four age choices, then the room controls.
-  for (let index = 0; index < 7 + THEME_IDS.length + controls.indexOf(name); index++) {
+  for (let index = 0; index < 7 + THEME_IDS.length + controls.indexOf(target); index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
-  return roomPoint(bounds, name, { item: active, owned: layout.owned });
+  return roomPoint(bounds, target, { item: active, owned: layout.owned, equipped });
 }
 
 async function leaveRoomPreview(page, { item = '' } = {}) {
@@ -287,6 +304,44 @@ async function leaveRoomPreview(page, { item = '' } = {}) {
     }
   }
   await rendered(page);
+}
+
+async function dragRoomToy(page, name, input = 'mouse') {
+  if (!['mouse', 'touch'].includes(input)) throw new Error(`Unknown toy drag input: ${input}`);
+  const toy = await roomControl(page, name), bounds = await metrics(page);
+  const points = [0, 20, 44].map(offset => ({
+    x: bounds.x + (toy.x - offset) * bounds.scale,
+    y: bounds.y + (toy.y - offset) * bounds.scale
+  }));
+  if (input === 'mouse') {
+    await page.mouse.move(points[0].x, points[0].y);
+    await page.mouse.down();
+    try {
+      for (const point of points.slice(1)) {
+        await page.mouse.move(point.x, point.y, { steps: 3 });
+        await rendered(page);
+      }
+    } finally {
+      await page.mouse.up();
+    }
+  } else {
+    const client = await page.context().newCDPSession(page);
+    let pressed = false;
+    try {
+      for (const [index, point] of points.entries()) {
+        await client.send('Input.dispatchTouchEvent', {
+          type: index === 0 ? 'touchStart' : 'touchMove', touchPoints: [{ id: 1, ...point }]
+        });
+        pressed = true;
+        await rendered(page);
+      }
+    } finally {
+      if (pressed) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await client.detach();
+    }
+  }
+  await rendered(page);
+  return points;
 }
 
 async function rendered(page) {
@@ -481,5 +536,5 @@ function resultPoint(bounds, key, { gift = false } = {}) {
 }
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
-  progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
+  progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

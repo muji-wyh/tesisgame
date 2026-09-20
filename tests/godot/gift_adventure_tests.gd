@@ -129,7 +129,7 @@ func _exercise(app, directory: String) -> void:
 	check(reloaded.load_state() and reloaded.goal_item_id == "toy-autumn" and reloaded.toy_id == "toy-autumn", "Immediate reload keeps the completed goal and toy")
 	app._room.configure(reloaded, earned, load("res://scripts/game_data.gd").theme("autumn"), true)
 	check(not app._room.goal_button.is_visible_in_tree() and not app._room.goal_label.is_visible_in_tree()
-		and app._room.item_buttons["toy-autumn"].get_parent() == app._room.owned_grid
+		and app._room.item_buttons["toy-autumn"].get_parent() == app._room.owned_toys
 		and not app._room.toy_button.disabled, "A completed saved goal stays playable in the room without a gift-goal arrow after reload")
 	app._room.configure(reloaded, earned, load("res://scripts/game_data.gd").theme("autumn"), false)
 	app._room.toy_button.pressed.emit()
@@ -222,10 +222,10 @@ func _test_completed_goal_use(app, directory: String, storage: BrowserStorage, g
 	app.playroom_state = reloaded
 	app._playroom_ready = true
 	app._refresh_collection()
-	check(app._room.item_buttons[goal_id] == owned_card and owned_card.get_parent() == app._room.owned_grid
+	check(app._room.item_buttons[goal_id] == owned_card and owned_card.get_parent() == app._room.owned_toys
 		and owned_card.is_visible_in_tree() and not owned_card.disabled
 		and not app._room.goal_button.is_visible_in_tree() and not app._room.goal_label.is_visible_in_tree(),
-		"The reloaded completed goal uses its existing owned card without a gift-goal label or arrow")
+		"The reloaded completed goal places its toy on the playable floor without a gift-goal label or arrow")
 	var saved_bytes: String = storage.text
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	var stickers: Array = reloaded.collected_word_ids.duplicate()

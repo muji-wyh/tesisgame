@@ -173,7 +173,9 @@ func _run() -> void:
 	app._room.toy_button.pressed.emit()
 	check(app.audio.voice.playing, "The current room toy pronounces its word")
 	app._room.item_buttons["toy-spring"].pressed.emit()
-	check(app._room._toy.word_id == "flower" and not app.audio.voice.playing, "Choosing an owned toy stops the word for the replaced toy")
+	check(app._room._toy.word_id == "flower" and app._room._stage == 1 and app.audio.voice.playing
+		and app.audio.voice.stream == load("res://assets/audio/voice/word-flower.wav"),
+		"The first tap on an owned floor toy replaces the previous word with its own pronunciation and action")
 	app._room.toy_button.pressed.emit()
 	check(app.audio.voice.playing, "The replacement toy can pronounce its word")
 	app._hide_collection()

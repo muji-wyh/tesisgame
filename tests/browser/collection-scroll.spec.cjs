@@ -112,7 +112,7 @@ for (const ratio of [1, 2, 3]) {
           await rendered(page);
         }
         const bounds = await metrics(page), collection = collectionBounds(bounds);
-        const point = locked ? roomPoint(bounds, 'toy') : { x: collection.x + collection.width / 2, y: collection.top + 90 };
+        const point = locked ? roomPoint(bounds, 'preview') : { x: collection.x + collection.width / 2, y: collection.top + 90 };
         const start = { x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale };
         const status = await page.locator('#game-status').textContent();
         const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));

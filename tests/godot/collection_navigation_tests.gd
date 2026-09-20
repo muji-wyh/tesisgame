@@ -120,27 +120,31 @@ func _check_owned_display_navigation(app) -> void:
 		root.size = dimensions
 		for frame in range(6):
 			await process_frame
-		check(app._room.owned_grid.get_child_count() == 9 and not app._room._item_grid.visible
+		check(app._room.owned_toys.get_child_count() == 9 and not app._room._item_grid.visible
 			and app._room.item_buttons.keys().all(func(id: String) -> bool: return app._room.item_buttons[id] == original_cards[id]),
 			"The fully earned home retains all nine controls and removes the empty locked catalog at " + str(dimensions))
 		for item in app.playroom_state.toys():
 			var card: Button = app._room.item_buttons[item.id]
-			card.grab_focus()
+			var active: bool = app._room._toy.id == item.id and not app._room._preview_locked
+			var control: Button = app._room.toy_button if active else card
+			var label: Label = app._room._toy_label if active else card.title_label
+			control.grab_focus()
 			for frame in range(5):
 				await process_frame
-			check(card.has_focus() and app._focus_candidates().has(card)
-				and app._collection_scroll.get_global_rect().grow(1).encloses(card.get_global_rect())
-				and app._room._room.get_global_rect().grow(1).encloses(card.get_global_rect()),
-				"Keyboard focus reaches the whole " + item.id + " display card at " + str(dimensions))
-			check(card.title_label.is_visible_in_tree() and card.title_label.text == item.name
-				and card.title_label.get_visible_line_count() == card.title_label.get_line_count(),
-				"The owned %s retains its full name at %s: visible=%d/%d, size=%s, font_height=%f, scale=%f" % [
-					item.id, dimensions, card.title_label.get_visible_line_count(), card.title_label.get_line_count(),
-					card.title_label.size, card.title_label.get_theme_font("font").get_height(card.title_label.get_theme_font_size("font_size")),
+			check(control.has_focus() and app._focus_candidates().has(control)
+				and app._collection_scroll.get_global_rect().grow(1).encloses(control.get_global_rect())
+				and app._room._room.get_global_rect().grow(1).encloses(control.get_global_rect()),
+				"Keyboard focus reaches the playable " + item.id + " on the floor at " + str(dimensions))
+			check(label.is_visible_in_tree() and label.text == item.word_id
+				and label.get_visible_line_count() == label.get_line_count()
+				and app._collection_scroll.get_global_rect().grow(1).encloses(label.get_global_rect()),
+				"The playable %s retains its readable noun at %s: visible=%d/%d, size=%s, font_height=%f, scale=%f" % [
+					item.id, dimensions, label.get_visible_line_count(), label.get_line_count(),
+					label.size, label.get_theme_font("font").get_height(label.get_theme_font_size("font_size")),
 					app.Style.ui_scale(app)])
 			app._controller_accept()
 			check(app.playroom_state.toy_id == item.id and app._room._toy.id == item.id
-				and not app._room._preview_locked,
-				"Controller selection equips " + item.id + " from the owned display")
+				and not app._room._preview_locked and app._room._stage == 1,
+				"One controller activation equips and starts " + item.id + " directly on the floor")
 	check(app.medal_progress.counts == earned and app.playroom_state.collected_word_ids == stickers,
 		"Selecting every displayed toy preserves earned pieces and collected words")

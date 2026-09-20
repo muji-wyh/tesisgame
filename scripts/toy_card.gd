@@ -8,6 +8,8 @@ var title_label: Label
 var detail_label: Label
 var badge: Label
 var in_room: bool = false
+var room_word: String = ""
+var item_name: String = ""
 var _press_motion := Motion.new()
 var _palette: Dictionary = {}
 var _using: bool = false
@@ -17,6 +19,8 @@ var _goal_action: Control
 
 
 func setup(item: Dictionary, texture: Texture2D) -> void:
+	room_word = item.word_id
+	item_name = item.name
 	name = "RoomItem_" + item.id
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	focus_mode = Control.FOCUS_ALL
@@ -58,8 +62,8 @@ func present(palette: Dictionary, using: bool, detail: String) -> void:
 	var fill: Color = Color.WHITE.lerp(light, 0.18 if using else 0.04)
 	var edge: Color = accent if using else accent.lightened(0.72)
 	if in_room:
-		fill = Color(accent, 0.07) if using else Color.TRANSPARENT
-		edge = Color(accent, 0.38) if using else Color.TRANSPARENT
+		fill = Color.TRANSPARENT
+		edge = Color.TRANSPARENT
 	var normal := Style.box(fill, edge, ceili(16 / scale), maxi(1, roundi((2 if using else 1) / scale)))
 	normal.shadow_color = Color.TRANSPARENT if in_room else Color(accent, 0.10)
 	normal.shadow_size = ceili(3 / scale)
@@ -69,6 +73,9 @@ func present(palette: Dictionary, using: bool, detail: String) -> void:
 	add_theme_stylebox_override("hover", Style.box(Color.WHITE.lerp(light, 0.24 if using else 0.08), accent.lightened(0.25), ceili(16 / scale), 1))
 	add_theme_stylebox_override("pressed", Style.box(Color.WHITE.lerp(light, 0.4), accent, ceili(16 / scale), 2))
 	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, ceili(16 / scale), maxi(2, roundi(2 / scale))))
+	if in_room:
+		for style_name in ["normal", "disabled", "hover", "pressed"]:
+			add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 	badge.text = "Using" if using else ""
 	badge.add_theme_color_override("font_color", Color.WHITE)
 	var pill := Style.box(accent, Color.TRANSPARENT, ceili(8 / scale), 0)
@@ -116,6 +123,7 @@ func _layout() -> void:
 	if in_room:
 		_layout_in_room(scale)
 		return
+	title_label.text = item_name
 	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var wide: bool = size.x * scale >= 240
 	custom_minimum_size = Vector2(44, 128) / scale
@@ -163,28 +171,27 @@ func _layout() -> void:
 
 
 func _layout_in_room(scale: float) -> void:
-	custom_minimum_size = Vector2(44, 108) / scale
+	custom_minimum_size = Vector2(64, 64)
 	badge.hide()
 	picture.show()
-	var art_size: float = (40 if _showing_error else 52) / scale
-	picture.position = Vector2((size.x - art_size) * 0.5, 8 / scale)
-	picture.size = Vector2.ONE * art_size
+	picture.position = Vector2.ZERO
+	picture.size = Vector2(64, 64)
+	if _showing_error:
+		picture.position = Vector2(12, 0)
+		picture.size = Vector2(40, 40)
 	title_label.visible = not _showing_error
-	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.text = room_word
+	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var title_font: Font = title_label.get_theme_font("font")
-	var title_size: int = ceili(12 / scale)
-	# Font metrics round in logical pixels; reserve both wrapped lines at any scale.
-	while title_size > 1 and title_font.get_height(title_size) * 2 > 42 / scale:
-		title_size -= 1
-	title_label.add_theme_font_size_override("font_size", title_size)
-	title_label.position = Vector2(4 / scale, 64 / scale)
-	title_label.size = Vector2(maxf(0, size.x - 8 / scale), 42 / scale)
+	title_label.add_theme_font_size_override("font_size", 21)
+	title_label.position = Vector2(-16, 65)
+	title_label.size = Vector2(96, 26)
 	detail_label.visible = _showing_error
+	if _showing_error: detail_label.text = "Not saved\nTap to retry"
 	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail_label.add_theme_font_size_override("font_size", ceili(11 / scale))
-	detail_label.position = Vector2(4 / scale, 56 / scale)
-	detail_label.size = Vector2(maxf(0, size.x - 8 / scale), 48 / scale)
+	detail_label.add_theme_font_size_override("font_size", 14)
+	detail_label.position = Vector2(-16, 65)
+	detail_label.size = Vector2(96, 40)
 	queue_redraw()
 
 
@@ -194,13 +201,6 @@ func _draw() -> void:
 	var center := picture.get_rect().get_center()
 	var radius: float = picture.size.x * 0.53
 	if in_room:
-		draw_set_transform(Vector2(center.x, picture.position.y + picture.size.y), 0, Vector2(1, 0.2))
-		draw_circle(Vector2.ZERO, radius * 0.85, Color(_palette.accent, 0.14))
-		draw_set_transform(Vector2.ZERO)
-		if _using:
-			var unit: float = 1 / Style.ui_scale(self)
-			var tick := Vector2(size.x - 15 * unit, 12 * unit)
-			draw_polyline(PackedVector2Array([tick + Vector2(-4, 0) * unit, tick + Vector2(-1, 3) * unit, tick + Vector2(5, -4) * unit]), _palette.accent, 2 * unit, true)
 		return
 	draw_circle(center, radius, _palette.light.lightened(0.35))
 	var spark: Color = _palette.spark

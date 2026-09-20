@@ -85,10 +85,10 @@ func _run() -> void:
 	await settle()
 	check(app.playroom_state.toy_id == "toy-spring" and app.medal_progress.counts == before,
 		"Previewing a shell cannot equip it or change earned pieces")
-	check(flower._using and not flower.badge.is_visible_in_tree() and flower.tooltip_text.contains("Using")
+	check(flower._using and not flower.badge.is_visible_in_tree() and flower.tooltip_text.contains("Tap to play. Drag to toss.")
 		and room.goal_label.text.contains("Preview")
 		and room.item_buttons.values().filter(func(button: Button) -> bool: return button._using).size() == 1,
-		"Exactly one owned toy retains its selection marker and accessible Using state during a locked Preview")
+		"A locked preview preserves the saved toy and keeps its direct play instructions without a selection badge")
 	check(shell.get_theme_stylebox("normal").bg_color == ordinary
 		and shell.get_theme_stylebox("normal").get_border_width(SIDE_LEFT) == 1,
 		"A preview keeps a neutral surface rather than another selected card fill")
@@ -108,13 +108,15 @@ func _run() -> void:
 		for id in room.item_buttons:
 			var button = room.item_buttons[id]
 			var owned: bool = app.playroom_state.owned(app.playroom_state.item(id), app.medal_progress.counts)
-			var height: int = 108 if owned else 128
-			check(button.in_room == owned and absf(button.size.y * scale - height) <= 1 and button.size.x * scale >= 44,
-				"Owned toys use compact 108px cards while locked toys retain 128px cards and usable targets")
+			check(button.in_room == owned
+				and (button.size.is_equal_approx(Vector2(64, 64)) if owned else absf(button.size.y * scale - 128) <= 1)
+				and button.size.x * scale >= 44,
+				"Owned toys use full-size 64px floor targets while locked toys retain their catalog cards")
 			for label in [button.title_label, button.detail_label, button.badge]:
 				if label.is_visible_in_tree():
-					check(button.get_global_rect().grow(1).encloses(label.get_global_rect()),
-						"Toy titles, details and badges stay inside their cards")
+					var bounds: Rect2 = room._room.get_global_rect() if owned else button.get_global_rect()
+					check(bounds.grow(1).encloses(label.get_global_rect()),
+						"Toy nouns stay on the playable floor and catalog text stays inside its cards")
 			check(button.get_global_rect().grow(1).encloses(button.picture.get_global_rect()), "Illustrations fit the tile")
 		check(shell.get_global_rect().grow(1).encloses(room.goal_label.get_global_rect())
 			and shell.get_global_rect().encloses(room.goal_button.get_global_rect()),
@@ -162,12 +164,13 @@ func _test_retry_layout(app) -> void:
 		root.size = dimensions
 		await settle()
 		var card = app._room.item_buttons["toy-ball"]
-		card.pressed.emit()
+		app._room.toy_button.pressed.emit()
 		await settle()
-		check(not app._playroom_ready and card.get_parent() == app._room.owned_grid and card.in_room
-			and card.detail_label.is_visible_in_tree() and card.detail_label.text.contains("Tap again to retry"),
-			"A real failed-load selection exposes retry instructions on the starter toy inside Pip's room")
-		_check_retry_regions(card, card.detail_label, app.Style.ui_scale(app))
+		var label: Label = app._room._toy_label
+		check(not app._playroom_ready and card.get_parent() == app._room.owned_toys and card.in_room
+			and label.is_visible_in_tree() and label.text.contains("Tap to retry"),
+			"A real failed-load selection exposes retry instructions beside the starter toy on the playable floor")
+		_check_retry_regions(app._room, card, label)
 	app.playroom_state = confirmed
 	app._playroom_ready = true
 	confirmed.goal_item_id = "toy-spring"
@@ -178,20 +181,21 @@ func _test_retry_layout(app) -> void:
 		var card = app._room.item_buttons["toy-spring"]
 		app._room.show_item_error("toy-spring", "Not saved\nTap again to retry", "Fixture save failure.")
 		await settle()
-		check(card.get_parent() == app._room.owned_grid and card.detail_label.is_visible_in_tree()
+		var label: Label = app._room._toy_label if not card.visible else card.detail_label
+		check(card.get_parent() == app._room.owned_toys and label.is_visible_in_tree()
 			and not app._room.goal_label.is_visible_in_tree() and not app._room.goal_button.is_visible_in_tree(),
-			"An earned goal retries through its owned card without a gift-goal label or arrow")
-		_check_retry_regions(card, card.detail_label, app.Style.ui_scale(app))
+			"An earned goal retries through its floor toy without a gift-goal label or arrow")
+		_check_retry_regions(app._room, card, label)
 
 
-func _check_retry_regions(card, label: Label, scale: float) -> void:
+func _check_retry_regions(room, card, label: Label) -> void:
 	check(card._using and not card.badge.is_visible_in_tree(),
-		"The owned toy retains its selection marker without a text badge during save recovery")
+		"The owned toy retains its saved state without a text badge during save recovery")
 	check(label.is_visible_in_tree() and label.get_visible_line_count() == label.get_line_count(),
 		"The owned toy shows every line of its retry instructions")
-	check(card.get_global_rect().encloses(label.get_global_rect())
-		and card.in_room and absf(card.size.y * scale - 108) <= 1,
-		"The full retry state fits inside the compact owned card")
+	check(room.playground.get_global_rect().encloses(label.get_global_rect())
+		and card.in_room and card.size.is_equal_approx(Vector2(64, 64)),
+		"The full retry state fits on the playable floor beside its normal-size toy")
 	if card.picture.is_visible_in_tree():
 		check(not card.picture.get_global_rect().intersects(label.get_global_rect()), "Retry instructions stay clear of the toy illustration")
 

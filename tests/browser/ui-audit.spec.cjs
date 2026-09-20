@@ -157,10 +157,10 @@ test('locked room previews provide a usable return and Medals has its own entry'
   await expect.soft(page.locator('#game-status')).toContainText('Complete Blossom', { timeout: 1500 });
   await leavePreview(page);
   await shot('locked-toy-after-return');
-  await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
+  await expect.soft(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!', { timeout: 1500 });
   await roomControl(page, 'toy');
   await page.keyboard.press('Enter');
-  await expect.soft(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!', { timeout: 1500 });
+  await expect.soft(page.locator('#game-status')).toHaveText('2/3 · Pip rolls the ball back!', { timeout: 1500 });
   await roomTap(page, 'space');
   await shot('locked-rocket-before-return');
   await expect.soft(page.locator('#game-status')).toContainText('Complete Rocket', { timeout: 1500 });

@@ -951,7 +951,7 @@ func _build_playroom() -> void:
 	_collection_duck_slot.queue_free()
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
-	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _preview_page.visible and not _collection_dragged
+	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _preview_page.visible and not _collection_dragged and _collection_velocity.length_squared() < 100.0
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_collection_duck_slot = _room.duck_slot
@@ -3100,7 +3100,7 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 	if _collection_scroll != null and collection_page.visible and not _collection_dragging and not _pointer_focus_active:
 		var target: Control = control.get_parent() if control == _room.goal_button and control.get_parent() is Button else control
 		_cancel_collection_inertia()
-		_collection_scroll.ensure_control_visible(target)
+		_reveal_room_control(target)
 		# Goal text and room controls can settle over multiple container passes.
 		for frame in range(3):
 			await get_tree().process_frame
@@ -3108,7 +3108,18 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 				return
 			if target != control and control.get_parent() != target:
 				return
-			_collection_scroll.ensure_control_visible(target)
+			_reveal_room_control(target)
+
+
+func _reveal_room_control(target: Control) -> void:
+	_collection_scroll.ensure_control_visible(target)
+	var caption: Control = null
+	if target == _room.toy_button:
+		caption = _room._toy_label
+	elif target.get_parent() == _room.owned_toys:
+		caption = target.detail_label if target.detail_label.is_visible_in_tree() else target.title_label
+	if caption != null and caption.is_visible_in_tree():
+		_collection_scroll.ensure_control_visible(caption)
 
 
 func _audio_status(message: String) -> void:
@@ -3561,7 +3572,7 @@ func _hide_reward_preview_if_open() -> void:
 
 func _announce_collection_state() -> void:
 	var guidance := "Pip's room. Choose toys for Pip. Choose Medals to see your pieces."
-	guidance += " %d toys in Pip's home. %d toys to unlock below. Choose a toy in the room to play." % [_room.owned_grid.get_child_count(), _room._item_grid.get_child_count()]
+	guidance += " %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
 	if _collection_section == "medals":
 		guidance = "Medals. Win a game and open its chest to collect a piece. Three pieces complete a medal. Choose Pip's room to use your gifts."
 	var message: String = "My rewards opened. %d of %d medals complete. %s. %s %d earlier rewards. Choose a world from the icons above, or use Back to return." % [

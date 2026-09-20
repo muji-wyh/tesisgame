@@ -26,7 +26,7 @@ test('an equipped starter in Pip\'s home keeps failed-load retry text readable',
   await page.screenshot({ path: testInfo.outputPath('using-ball-retry-320.png'), scale: 'css' });
   await page.evaluate(() => { window.blockRoomRead = false; });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Roll the ball');
+  await expect(page.locator('#game-status')).toHaveText('1/3 · The ball rolls to Pip!');
   expect(await page.evaluate(key => localStorage.getItem(key), ROOM_KEY)).toContain('toy="toy-ball"');
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('using-ball-recovered-320.png'), scale: 'css' });

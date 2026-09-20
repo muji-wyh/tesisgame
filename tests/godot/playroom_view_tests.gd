@@ -124,8 +124,10 @@ func _run() -> void:
 		"The Rooms category and its switching API are removed, not merely hidden")
 	check(view.feedback_text == feedback_before and previews.size() == previews_before and selections.is_empty(),
 		"A legacy backdrop ID cannot open a hidden preview or equipment route")
-	check(view.controls().has(view.item_buttons["toy-spring"]) and view.item_buttons.values().all(func(button: Button) -> bool: return button.visible),
-		"All nine toy choices remain available for host focus and scrolling")
+	check(view.controls().has(view.item_buttons["toy-spring"])
+		and view.item_buttons.values().filter(func(button: Button) -> bool: return button.visible).size() == 8
+		and not view.item_buttons[state.toy_id].visible,
+		"All nine toy choices retain their host wiring while the active toy appears only once")
 	check(view.controls().has(view.toy_button) and not view.toy_button.disabled, "Toy play remains available for host focus wiring")
 	state.backdrop_id = "backdrop-spring"
 	view.configure(state, {"spring-3": 3}, data.theme("ocean"), true)
@@ -153,9 +155,9 @@ func _run() -> void:
 	view.configure(state, unlocked_counts, data.theme("ocean"), true)
 	await process_frame
 	await process_frame
-	check(view.item_buttons["toy-spring"] == unlocking_card and unlocking_card.get_parent() == view.owned_grid
+	check(view.item_buttons["toy-spring"] == unlocking_card and unlocking_card.get_parent() == view.owned_toys
 		and view.item_buttons.values() == original_controls,
-		"Unlocking moves the existing card into Pip's home without replacing host-wired controls")
+		"Unlocking moves the existing toy onto the playable floor without replacing host-wired controls")
 	check(view._preview_id.is_empty() and not view._preview_locked and view._toy.id == state.toy_id
 		and selections.is_empty(), "Unlocking clears the preview without silently changing the selected toy")
 	_check_toy_partition(view, state, unlocked_counts, "newly unlocked room")
@@ -167,7 +169,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check_toy_partition(view, state, counts, "fully earned room")
-	check(view.owned_grid.get_child_count() == 9 and not view._item_grid.visible
+	check(view.owned_toys.get_child_count() == 9 and not view._item_grid.visible
 		and is_equal_approx(view.get_combined_minimum_size().y, view._room.get_combined_minimum_size().y),
 		"All nine toys fit inside the home without an empty catalog row below it")
 	var expected := {"spring": ["flower", "water"], "summer": ["ball", "roll"], "autumn": ["apple", "offer"], "winter": ["bell", "ring"], "ocean": ["shell", "open"], "space": ["rocket", "launch"], "jungle": ["monkey", "swing"], "candy": ["cake", "decorate"]}
@@ -239,6 +241,9 @@ func _run() -> void:
 	state.toy_id = "toy-spring"
 	view.configure(state, {}, data.theme("spring"), true)
 	check(view.toy_button.tooltip_text.ends_with("Tap: Roll the ball"), "A saved item without earned ownership renders the starter fallback")
+	await process_frame
+	await process_frame
+	_check_toy_partition(view, state, {}, "unearned saved-toy fallback")
 	view.configure(state, counts, data.theme("spring"), false)
 	view.toy_button.pressed.emit()
 	check(view.is_processing(), "Normal toy actions run a bounded animation")
@@ -288,7 +293,7 @@ func _check_room_text(view, context: String) -> void:
 
 
 func _check_toy_partition(view, state, counts: Dictionary, context: String) -> void:
-	var owned: Array = view.owned_grid.get_children()
+	var owned: Array = view.owned_toys.get_children()
 	var locked: Array = view._item_grid.get_children()
 	check(owned.size() + locked.size() == state.toys().size()
 		and owned.all(func(card: Node) -> bool: return not locked.has(card)),
@@ -296,17 +301,21 @@ func _check_toy_partition(view, state, counts: Dictionary, context: String) -> v
 	for item in state.toys():
 		var card: Button = view.item_buttons[item.id]
 		var earned: bool = state.owned(item, counts)
+		var active: bool = earned and not view._preview_locked and item.id == view._toy.id
+		var visible_control: Control = view.toy_button if active else card
 		check((owned.has(card) if earned else locked.has(card)) and card.in_room == earned
-			and card.is_visible_in_tree() and card.focus_mode == Control.FOCUS_ALL,
-			"The " + context + " keeps " + item.id + " visible and focusable in its ownership group")
+			and visible_control.is_visible_in_tree() and visible_control.focus_mode == Control.FOCUS_ALL
+			and (not card.visible and card.focus_mode == Control.FOCUS_NONE if active else true),
+			"The " + context + " renders " + item.id + " exactly once through a usable toy or locked card")
+		if earned:
+			check(view.playground.get_global_rect().grow(1).encloses(visible_control.get_global_rect()),
+				"The " + context + " puts the playable " + item.id + " directly inside Pip's floor")
 	var stage_bounds: Rect2 = view.playground.get_global_rect()
-	var shelf_bounds: Rect2 = view.owned_grid.get_global_rect()
-	check(view.owned_grid.get_parent() == view._room and is_equal_approx(stage_bounds.size.y, 304)
-		and stage_bounds.end.y < shelf_bounds.position.y
-		and view._room.get_global_rect().grow(1).encloses(shelf_bounds),
-		"The " + context + " contains its display below the fixed stage without overlapping direct play")
-	check(owned.all(func(card: Control) -> bool: return shelf_bounds.grow(1).encloses(card.get_global_rect())),
-		"The " + context + " includes the last owned card inside the room's scrollable bounds")
+	check(view.owned_toys.get_parent() == view._room and stage_bounds == view._room.get_global_rect()
+		and not view._room.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "shelves"),
+		"The " + context + " makes the entire home playable without a separate shelf")
+	check(owned.all(func(card: Control) -> bool: return stage_bounds.grow(1).encloses(card.get_global_rect())),
+		"The " + context + " includes the last earned toy inside the room's scrollable floor")
 
 
 func _capture() -> void:

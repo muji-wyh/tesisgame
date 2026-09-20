@@ -1,9 +1,12 @@
 const { test, expect } = require('@playwright/test');
-const { THEME_IDS, openGame, openRewards, roomControl, roomState, tap, rendered } = require('./game-ui.cjs');
+const { THEME_IDS, openGame, openRewards, roomControl, roomState, dragRoomToy, tap, rendered } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const FIRST_ACTION = { ball: 'Roll the ball', spring: 'Water the flower', autumn: 'Offer the apple', candy: 'Set the cake' };
+const FIRST_STAGE = {
+  ball: '1/3 · The ball rolls to Pip!', spring: '1/3 · A drink for the flower!',
+  autumn: '1/3 · An apple for Pip!', candy: "1/3 · A cake for Pip's party!"
+};
 
 async function seedHome(page, themes, equipped = 'ball') {
   const counts = Object.fromEntries(themes.map(theme => [`${theme}-1`, 3]));
@@ -32,11 +35,11 @@ for (const fixture of [
     await page.screenshot({ path: testInfo.outputPath(`${fixture.name}-home.png`), scale: 'css' });
     const toy = await roomControl(page, fixture.choose);
     await tap(page, toy.x, toy.y);
-    await expect(page.locator('#game-status')).toContainText(FIRST_ACTION[fixture.choose]);
+    await expect(page.locator('#game-status')).toHaveText(FIRST_STAGE[fixture.choose]);
     expect((await roomState(page)).equipped).toBe(fixture.choose);
     expect((await roomState(page)).medals).toBe(original.medals);
     await rendered(page);
-    await page.screenshot({ path: testInfo.outputPath(`${fixture.name}-owned-toy-selected.png`), scale: 'css' });
+    await page.screenshot({ path: testInfo.outputPath(`${fixture.name}-owned-toy-first-action.png`), scale: 'css' });
     expect(errors).toEqual([]);
   });
 }
@@ -68,9 +71,48 @@ test('a locked preview returns through an owned home toy and a failed save retri
   await page.screenshot({ path: testInfo.outputPath('owned-flower-save-failed.png'), scale: 'css' });
   await page.evaluate(() => window.restoreHomeToySave());
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Water the flower');
+  await expect(page.locator('#game-status')).toHaveText(FIRST_STAGE.spring);
   expect((await roomState(page)).equipped).toBe('spring');
   expect((await roomState(page)).medals).toBe(original.medals);
   await page.screenshot({ path: testInfo.outputPath('owned-flower-save-recovered.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
+
+test('each inactive floor toy plays on its first tap and keeps keyboard focus for the next step', async ({ page }, testInfo) => {
+  test.setTimeout(150000);
+  await seedHome(page, ['spring', 'autumn']);
+  const errors = await openGame(page), original = await roomState(page);
+  await openRewards(page);
+  for (const [toy, secondStage] of [
+    ['spring', '2/3 · The flower grows taller!'],
+    ['autumn', '2/3 · Pip nibbles the apple. Crunch!']
+  ]) {
+    expect((await roomState(page)).equipped).not.toBe(toy);
+    const point = await roomControl(page, toy);
+    await tap(page, point.x, point.y);
+    await expect(page.locator('#game-status')).toHaveText(FIRST_STAGE[toy]);
+    expect((await roomState(page)).equipped).toBe(toy);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#game-status')).toHaveText(secondStage);
+    await page.screenshot({ path: testInfo.outputPath(`floor-${toy}-second-step.png`), scale: 'css' });
+  }
+  expect((await roomState(page)).medals).toBe(original.medals);
+  expect(errors).toEqual([]);
+});
+
+for (const input of ['mouse', 'touch']) {
+  test(`${input} dragging an inactive floor toy selects and throws it in one gesture`, async ({ page, browserName }, testInfo) => {
+    test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
+    test.setTimeout(150000);
+    await seedHome(page, ['spring', 'autumn']);
+    const errors = await openGame(page), original = await roomState(page);
+    await openRewards(page);
+    expect(original.equipped).toBe('ball');
+    await dragRoomToy(page, 'spring', input);
+    await expect(page.locator('#game-status')).toContainText('Pip caught the flower!');
+    expect((await roomState(page)).equipped).toBe('spring');
+    expect((await roomState(page)).medals).toBe(original.medals);
+    await page.screenshot({ path: testInfo.outputPath(`inactive-flower-${input}-thrown.png`), scale: 'css' });
+    expect(errors).toEqual([]);
+  });
+}

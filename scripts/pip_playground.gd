@@ -18,6 +18,9 @@ var interaction_allowed: Callable
 var reduced_motion := false
 var toy_word := "ball"
 var toy_locked := false
+var toy_targets: Dictionary = {}
+var active_toy_id := ""
+var activate_toy: Callable
 var accent := Color("#438363")
 
 var _slot: Control
@@ -26,6 +29,8 @@ var _label: Label
 var _duck: Button
 var _home := Vector2.ZERO
 var _toy_home := Vector2.ZERO
+var _fixed_toy_home := false
+var _crowded := false
 var _pointer := -1
 var _gesture := ""
 var _press := Vector2.ZERO
@@ -66,11 +71,13 @@ func layout_room(dimensions: Vector2) -> void:
 	var changed := size != dimensions
 	size = dimensions
 	_slot.size = Vector2(96, 112)
-	_home = _clamp_floor(Vector2(88, size.y - 32))
+	_home = _clamp_floor(Vector2(88, minf(272, size.y - 32)))
 	_toy.size = Vector2(64, 64)
 	_toy.pivot_offset = _toy.size * 0.5
-	if changed or not _initialized:
+	if not _fixed_toy_home and (changed or not _initialized):
 		_toy_home = Vector2(size.x - 66, size.y - 74)
+	elif _fixed_toy_home:
+		_toy_home = _clamp_toy(_toy_home)
 	_label.size = Vector2(96, 26)
 	if not _initialized:
 		duck_position = _home
@@ -82,6 +89,15 @@ func layout_room(dimensions: Vector2) -> void:
 		cancel()
 	_place_duck()
 	if toy_phase == "idle":
+		_clear_toy_space()
+		_place_toy(_toy_home)
+
+
+func set_toy_home(point: Vector2, crowded: bool = false) -> void:
+	_fixed_toy_home = true
+	_crowded = crowded
+	_toy_home = _clamp_toy(point) if _initialized else point
+	if _initialized and toy_phase == "idle":
 		_clear_toy_space()
 		_place_toy(_toy_home)
 
@@ -101,7 +117,7 @@ func _allowed() -> bool:
 
 
 func _clamp_floor(point: Vector2) -> Vector2:
-	return Vector2(clampf(point.x, 52, maxf(52, size.x - 52)), clampf(point.y, size.y * 0.57 + 38, size.y - 12))
+	return Vector2(clampf(point.x, 52, maxf(52, size.x - 52)), clampf(point.y, minf(size.y * 0.57, 173.28) + 38, size.y - 12))
 
 
 func _clamp_toy(point: Vector2) -> Vector2:
@@ -113,6 +129,8 @@ func _place_duck() -> void:
 
 
 func _clear_toy_space() -> bool:
+	if _crowded:
+		return false
 	if not Rect2(_slot.position, _slot.size).grow(8).intersects(Rect2(_toy_home - _toy.size * 0.5, _toy.size)):
 		return false
 	_toy_home.x = size.x - 66 if duck_position.x < size.x * 0.5 else 66
@@ -264,6 +282,39 @@ func _point_visible(point: Vector2) -> bool:
 	return true
 
 
+func _draw_depth(item: CanvasItem) -> int:
+	var depth := 0
+	var current: CanvasItem = item
+	while current != null:
+		depth += current.z_index
+		if not current.z_as_relative: break
+		current = current.get_parent_item()
+	return depth
+
+
+func _draws_above(front: Control, back: Control) -> bool:
+	var front_depth := _draw_depth(front)
+	var back_depth := _draw_depth(back)
+	return front_depth > back_depth or (front_depth == back_depth and front.is_greater_than(back))
+
+
+func _toy_target_at(point: Vector2) -> Dictionary:
+	var result: Dictionary = {}
+	if _toy.is_visible_in_tree() and (_toy.get_global_rect().has_point(point) or (_label.is_visible_in_tree() and _label.get_global_rect().has_point(point))):
+		result = {"id": active_toy_id, "control": _toy}
+	for id in toy_targets:
+		var control := toy_targets[id] as Control
+		if not is_instance_valid(control) or not control.is_visible_in_tree(): continue
+		var hit := control.get_global_rect().has_point(point)
+		for label_property in ["title_label", "detail_label"]:
+			if hit: break
+			var label: Control = control.get(label_property) as Control if label_property in control else null
+			hit = is_instance_valid(label) and label.is_visible_in_tree() and label.get_global_rect().has_point(point)
+		if hit and (result.is_empty() or _draws_above(control, result.control)):
+			result = {"id": str(id), "control": control}
+	return result
+
+
 func _input(event: InputEvent) -> void:
 	if not _allowed(): return
 	var pointer := -2
@@ -299,21 +350,39 @@ func _input(event: InputEvent) -> void:
 			moving = true
 	else:
 		return
+	if _pointer != -1 and pointer != _pointer:
+		# The held object keeps ownership; a second pointer must not reach a room Button.
+		if _point_visible(point): get_viewport().set_input_as_handled()
+		return
 	var local := get_global_transform().affine_inverse() * point
 	if pressed and _pointer == -1 and _point_visible(point):
-		var on_toy := _toy.get_global_rect().has_point(point)
+		var toy_target := _toy_target_at(point)
+		var on_toy := not toy_target.is_empty()
 		var on_duck := _slot.get_global_rect().has_point(point)
-		if on_toy and _toy.z_index > 0: on_duck = false
-		_floor_tap_allowed = not (on_toy and not on_duck and toy_locked)
+		if on_toy and on_duck and _draws_above(toy_target.control, _duck if is_instance_valid(_duck) else _slot): on_duck = false
+		var blocked := false
+		var target_locked := on_toy and str(toy_target.id) == active_toy_id and toy_locked
+		if on_toy and not on_duck and not target_locked:
+			get_viewport().set_input_as_handled()
+			# Saving may synchronously rebuild the room and cancel its previous gesture.
+			# Reuse this press after activation instead of requiring a second tap or drag.
+			if activate_toy.is_valid():
+				blocked = not bool(activate_toy.call(str(toy_target.id))) or toy_locked
+			else:
+				blocked = str(toy_target.id) != active_toy_id
+			local = get_global_transform().affine_inverse() * point
+		_floor_tap_allowed = not blocked and not (on_toy and not on_duck and target_locked)
 		if not _floor_tap_allowed: on_toy = false
 		if on_toy or on_duck: get_viewport().set_input_as_handled()
-		if on_toy and not on_duck:
+		if blocked:
+			get_viewport().set_input_as_handled()
+		elif on_toy and not on_duck:
 			if toy_phase != "idle" or not motion_kind.is_empty(): cancel()
 		elif on_duck:
 			_begin_action()
 		_pointer = pointer
 		# Pip draws above the toy; the visible front object owns overlapping hits.
-		_gesture = "duck" if on_duck else "toy" if on_toy else "floor"
+		_gesture = "blocked" if blocked else "duck" if on_duck else "toy" if on_toy else "floor"
 		_press = local
 		_last = local
 		_last_screen = point
@@ -322,6 +391,11 @@ func _input(event: InputEvent) -> void:
 		set_process(true)
 	elif pointer == _pointer:
 		if _gesture != "floor": get_viewport().set_input_as_handled()
+		if _gesture == "blocked":
+			if released:
+				_pointer = -1
+				_gesture = ""
+			return
 		if moving:
 			# Floor scrolling moves this canvas; measure that gesture in viewport coordinates.
 			_travel += point.distance_to(_last_screen) if _gesture == "floor" else local.distance_to(_last)
@@ -347,7 +421,7 @@ func _input(event: InputEvent) -> void:
 			elif gesture == "toy":
 				if _travel > 8: _launch(_clamp_toy(local), local + (local - _press) * 0.35)
 				else: toy_tapped.emit()
-			elif _travel < 12 and _floor_tap_allowed:
+			elif gesture == "floor" and _travel < 12 and _floor_tap_allowed:
 				_begin_action()
 				_move_to(local)
 				_report(motion_kind if not motion_kind.is_empty() else "walk", "Pip %s over!" % ("runs" if motion_kind == "run" else "walks"))
