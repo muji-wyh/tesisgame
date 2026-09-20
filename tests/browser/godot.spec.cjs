@@ -3,7 +3,7 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, resultPoint } = require('./game-ui.cjs');
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -596,7 +596,11 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   const greet = async (x, y, inRoom = false) => {
     await rendered(page);
     await page.touchscreen.tap(bounds.x + x * scale, bounds.y + y * scale);
-    await expect(page.locator('#game-status')).toContainText(inRoom ? 'Quack! You tickled Pip!' : 'Pip says: duck!');
+    if (inRoom) {
+      await expect(page.locator('#game-status')).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
+    } else {
+      await expect(page.locator('#game-status')).toContainText('Pip says: duck!');
+    }
   };
   await greet(40, 40);
   await expect(page.locator('#selection-status')).toBeEmpty();
@@ -608,7 +612,8 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
   await openRewards(page);
   await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
-  await greet(104, 308, true);
+  const roomPip = await roomControl(page, 'pip');
+  await greet(roomPip.x, roomPip.y, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   await openMedals(page, true);
   await page.keyboard.press('Enter');

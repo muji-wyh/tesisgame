@@ -3113,6 +3113,12 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 
 func _reveal_room_control(target: Control) -> void:
 	_collection_scroll.ensure_control_visible(target)
+	if target == _collection_duck_slot:
+		# The jumping head rises above the fixed input slot. Reveal its artwork too.
+		var jump_top: float = target.get_global_rect().position.y - 16.0
+		var visible_top: float = _collection_scroll.get_global_rect().position.y
+		if jump_top < visible_top:
+			_collection_scroll.scroll_vertical -= ceili(visible_top - jump_top)
 	var caption: Control = null
 	if target == _room.toy_button:
 		caption = _room._toy_label
@@ -3601,6 +3607,7 @@ func _update_duck() -> void:
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
 	var normal_view: bool = not in_preview and (not in_collection or _collection_section == "room")
+	duck.set_home_playground(in_collection and normal_view and _collection_section == "room")
 	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
 	if _mode_id == "pop":
 		active_phase = _pop.game.phase

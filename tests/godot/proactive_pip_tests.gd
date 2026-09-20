@@ -1,6 +1,7 @@
 extends SceneTree
 
 const REACTIONS := ["high-five", "peekaboo", "flutter"]
+const HOME_REACTIONS := ["jump", "shy", "bonk"]
 const DANCES := ["dance-wave", "dance-sway", "dance-hop"]
 const IDLE_SEQUENCE := [
 	"dance-wave", "wave", "dance-sway", "high-five", "dance-hop", "peekaboo",
@@ -154,6 +155,16 @@ func _start_invitation(duck) -> void:
 	duck.set_proactive_allowed(true)
 	duck.note_activity()
 	check(_is_quiet_interval(_wait_for_invitation(duck)), "A fresh invitation waits six to nine quiet seconds")
+
+
+func _start_home_dance(duck) -> void:
+	duck.settle()
+	duck.set_home_playground(true)
+	duck.set_proactive_allowed(true)
+	duck.note_activity()
+	var waited: float = _wait_for_invitation(duck)
+	check(waited >= 0.3 and waited <= 0.5 and duck._idle_action == "home-dance",
+		"Home starts its loading-page dance after a short quiet beat")
 
 
 func _check_idle_timing(duck) -> void:
@@ -391,6 +402,7 @@ func _check_playground(duck) -> void:
 	stage.add_child(playground)
 	playground.setup(slot, toy, label)
 	playground.set_duck(duck)
+	duck.set_home_playground(true)
 	duck.reparent(slot)
 	duck.position = Vector2.ZERO
 	duck.size = Vector2(96, 96)
@@ -405,22 +417,26 @@ func _check_playground(duck) -> void:
 	playground.interaction_started.connect(func() -> void: starts.append(true))
 	playground.toy_tapped.connect(func() -> void: toy_taps.append(true))
 	var bounds: Rect2 = duck.get_global_rect()
+	var reactions: Array[String] = []
 	for tap in range(12):
 		var count_before := reports.size()
 		playground.poke()
-		var expected: String = ["poke", "high-five", "peekaboo", "flutter"][tap % 4]
+		var expected: String = duck._room_reaction
 		check(reports.slice(count_before) == ["poke"] and playground.interaction_kind == "poke"
-			and duck._room_reaction == expected and duck._trick.is_empty() and duck.pose != 0,
+			and expected in HOME_REACTIONS and duck._trick.is_empty() and duck.pose != 0,
 			"Room tap %d keeps the Poke event contract while visibly responding with %s" % [tap + 1, expected])
-		check(duck._room_reaction_left > 0.0 and duck._room_reaction_left <= 1.1,
-			expected + " remains one short room response")
+		check(is_equal_approx(duck._room_reaction_left, 1.15 if expected == "shy" else 0.85),
+			expected + " runs its complete loading-page response duration")
+		check(reactions.is_empty() or expected != reactions.back(), "A new shuffled Home response never repeats its immediate predecessor")
+		reactions.append(expected)
 		_advance(duck, 2.0)
 		check(duck._room_reaction.is_empty(), expected + " room artwork cleans itself up")
-	check(captions.slice(0, 4).size() == 4 and captions.slice(0, 4).all(
-		func(message: String) -> bool: return captions.slice(0, 4).count(message) == 1),
-		"Room poke variation has four distinct captions")
-	check(captions.slice(0, 4) == captions.slice(4, 8) and captions.slice(4, 8) == captions.slice(8, 12),
-		"The room variation repeats a bounded four-step progression without persistence")
+	for start in range(0, 12, 3):
+		var bag: Array[String] = reactions.slice(start, start + 3)
+		var bag_captions: Array[String] = captions.slice(start, start + 3)
+		check(HOME_REACTIONS.all(func(kind: String) -> bool: return bag.has(kind))
+			and bag_captions.all(func(message: String) -> bool: return not message.is_empty() and bag_captions.count(message) == 1),
+			"Each shuffled three-tap bag includes jumping, shy head-scratching and bonking with distinct captions")
 	check(duck.get_global_rect() == bounds and playground.toy_phase == "idle",
 		"Poke variation never moves the hit target or starts a toy sequence")
 	for reduced in [false, true]:
@@ -458,7 +474,7 @@ func _check_playground(duck) -> void:
 		and reports.size() == report_count and starts.size() == start_count and toy_taps.size() == toy_count,
 		"Neither a direct toss nor a pointer gesture can activate a locked toy")
 	playground.cancel()
-	_start_invitation(duck)
+	_start_home_dance(duck)
 	_advance(duck, 90.0)
 	check(reports.size() == report_count and starts.size() == start_count and toy_taps.size() == toy_count
 		and room_state == [playground.duck_position, playground.target_position,
@@ -474,6 +490,7 @@ func _check_playground(duck) -> void:
 	check(playground.flight_active and playground.toy_phase == "flying",
 		"Toss still launches the owned toy using the existing physics")
 	playground.cancel()
+	duck.set_home_playground(false)
 	duck.reparent(root)
 	stage.free()
 
@@ -498,7 +515,7 @@ func _room_drag(playground, point: Vector2) -> void:
 func _check_held_room_gestures(duck, playground, slot: Control, toy: Button) -> void:
 	for held in ["duck", "toy", "floor"]:
 		playground.cancel()
-		_start_invitation(duck)
+		_start_home_dance(duck)
 		var point: Vector2 = slot.get_global_rect().get_center() if held == "duck" else toy.get_global_rect().get_center() if held == "toy" else Vector2(180, 284)
 		_room_press(playground, point, true)
 		check(duck._idle_action.is_empty() and playground.is_processing(),
@@ -514,7 +531,9 @@ func _check_held_room_gestures(duck, playground, slot: Control, toy: Button) -> 
 		playground.cancel()
 		check(not playground.is_processing() and playground._pointer == -1,
 			"Releasing/canceling the " + held + " removes the temporary gesture processing")
-		check(_is_quiet_interval(_wait_for_invitation(duck)), "After the " + held + " gesture Pip resumes only after a new quiet interval")
+		var waited: float = _wait_for_invitation(duck)
+		check(waited >= 0.3 and waited <= 0.5 and duck._idle_action == "home-dance",
+			"After the " + held + " gesture Pip resumes the Home dance after a short quiet beat")
 	playground.cancel()
 	duck.note_activity()
 	var waiting: float = duck._idle_wait

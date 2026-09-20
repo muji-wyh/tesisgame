@@ -4,6 +4,7 @@ const SHEET = preload("res://assets/images/mascots/pip.svg")
 const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
 const Outfits = preload("res://scripts/pip_outfits.gd")
+const LoadingMoves = preload("res://scripts/pip_loading_moves.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const IDLE_ACTIONS := ["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"]
 const IDLE_DANCES := ["dance-wave", "dance-sway", "dance-hop"]
@@ -21,6 +22,7 @@ const TRICK_CAPTIONS := {
 var speaking: bool = false
 var reduced_motion: bool = false
 var compact: bool = false
+var home_playground: bool = false
 var pose: int = 0
 var reaction_left: float = 0.0
 var accent: Color = Style.GOOD
@@ -163,13 +165,13 @@ func set_room_motion(kind: String, direction: float = 1.0) -> void:
 
 
 func react_in_room(kind: String) -> void:
-	if (not kind in ["pet", "poke", "catch"] and not kind in SOCIAL_TRICKS) or _idle_paused or not is_visible_in_tree():
+	if (not kind in ["pet", "poke", "catch"] and not kind in SOCIAL_TRICKS and not kind in LoadingMoves.REACTIONS) or _idle_paused or not is_visible_in_tree():
 		return
 	_reset_idle()
 	_room_motion = ""
 	_room_step = 0.0
 	_room_reaction = kind
-	_room_reaction_left = 0.0 if reduced_motion else ROOM_REACTION_SECONDS
+	_room_reaction_left = 0.0 if reduced_motion else _room_reaction_duration()
 	reaction_left = 0.0
 	clear_trick()
 	_update_pose()
@@ -225,13 +227,26 @@ func set_proactive_allowed(value: bool) -> void:
 	note_activity()
 
 
+func set_home_playground(value: bool) -> void:
+	if home_playground == value:
+		return
+	home_playground = value
+	_reset_idle()
+	queue_redraw()
+
+
+func _room_reaction_duration() -> float:
+	return LoadingMoves.duration(_room_reaction) if _room_reaction in LoadingMoves.REACTIONS else ROOM_REACTION_SECONDS
+
+
 func _reset_idle() -> void:
 	_idle_action = ""
 	_idle_left = 0.0
-	_idle_wait = _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 3.0)
+	_idle_wait = 0.35 if home_playground else _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 3.0)
 
 
 func _idle_duration() -> float:
+	if _idle_action == "home-dance": return LoadingMoves.DANCE_SECONDS
 	return DANCE_SECONDS if _idle_action in IDLE_DANCES else IDLE_SECONDS
 
 
@@ -241,6 +256,15 @@ func _advance_idle(delta: float) -> void:
 		_reset_idle()
 		return
 	if not _proactive_allowed or speaking or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
+		return
+	if home_playground:
+		if _idle_action == "home-dance":
+			_idle_left = fposmod(_idle_left - delta, LoadingMoves.DANCE_SECONDS)
+		else:
+			_idle_wait -= delta
+			if _idle_wait <= 0.0:
+				_idle_action = "home-dance"
+				_idle_left = LoadingMoves.DANCE_SECONDS
 		return
 	if not _idle_action.is_empty():
 		_idle_left = maxf(0.0, _idle_left - delta)
@@ -310,6 +334,10 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var edge: float = 54.0 if compact else minf(size.x, size.y)
 	var origin := Vector2(0, -2) if compact else (size - Vector2.ONE * edge) * 0.5
+	# Explicit tap feedback wins even while a previous word finishes speaking.
+	if _room_reaction in LoadingMoves.REACTIONS or (not speaking and _idle_action == "home-dance"):
+		_draw_loading_moves(origin, edge)
+		return
 	var wave: float = sin((1.0 - reaction_left / 0.65) * PI) if reaction_left > 0.0 else 0.0
 	var turn: float = (-0.07 if _reaction == "curious" else 0.07) * wave
 	var trick_progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
@@ -419,6 +447,37 @@ func _draw() -> void:
 		for index in range(2):
 			draw_arc(origin + Vector2(edge * 0.8, edge * 0.55), edge * (0.08 + index * 0.06),
 				-0.75, 0.75, 12, accent, 1.6, true)
+
+
+func _draw_loading_moves(origin: Vector2, edge: float) -> void:
+	var reacting: bool = _room_reaction in LoadingMoves.REACTIONS
+	var progress: float = 0.45 if reduced_motion else 1.0 - _room_reaction_left / _room_reaction_duration()
+	var transforms: Array[Transform2D] = LoadingMoves.reaction(_room_reaction, progress, reduced_motion) if reacting else LoadingMoves.dance(LoadingMoves.DANCE_SECONDS - _idle_left)
+	# Keep planted toes at the ordinary mascot baseline. The existing room slot
+	# has headroom for a jump without resizing or moving its touch target.
+	var unit: float = edge / 120.0
+	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), origin)
+	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
+	var source_edge: float = outfit.get_height()
+	draw_set_transform(origin + Vector2(61, 112) * unit, 0.0, Vector2(39, 5) * unit)
+	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14))
+	for index in [4, 5, 0, 1, 2, 3]:
+		draw_set_transform_matrix(base * transforms[index])
+		draw_texture_rect_region(outfit, Rect2(Vector2.ZERO, Vector2(120, 120)),
+			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
+		if index == 1 and reacting:
+			if _room_reaction == "shy":
+				for cheek in [Vector2(31, 62), Vector2(91, 59)]:
+					draw_set_transform_matrix(base * transforms[1] * Transform2D(Vector2(8, 0), Vector2(0, 5), cheek))
+					draw_circle(Vector2.ZERO, 1.0, Color(0.93, 0.55, 0.61, 0.8))
+			elif _room_reaction == "bonk":
+				# Keep the stars inside the floor even when Pip stands at its edge.
+				for center in [Vector2(20, 20), Vector2(94, 12)]:
+					var points := PackedVector2Array()
+					for ray in range(8):
+						points.append(center + Vector2.from_angle(ray * PI / 4.0) * (7.0 if ray % 2 == 0 else 2.5))
+					draw_colored_polygon(points, Color("#ffd979"))
+	draw_set_transform(Vector2.ZERO)
 
 
 func _draw_dance(origin: Vector2, edge: float, routine: String, progress: float) -> void:

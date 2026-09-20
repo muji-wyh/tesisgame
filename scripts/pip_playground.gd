@@ -4,9 +4,7 @@ signal interaction(kind: String, message: String)
 signal interaction_started
 signal toy_tapped
 
-const POKE_REACTIONS := ["poke", "high-five", "peekaboo", "flutter"]
-const POKE_CAPTIONS := ["Quack! You tickled Pip!", "High five! Pip taps your hand!",
-	"Peekaboo! Pip sees you!", "Flutter! Pip flaps hello!"]
+const LoadingMoves = preload("res://scripts/pip_loading_moves.gd")
 
 var duck_position := Vector2.ZERO
 var target_position := Vector2.ZERO
@@ -45,7 +43,8 @@ var _duration := 0.7
 var _initialized := false
 var _paused := false
 var _pet_count := 0
-var _poke_index := 0
+var _poke_bag: Array[String] = []
+var _previous_poke := ""
 
 
 func _ready() -> void:
@@ -175,9 +174,16 @@ func pet() -> void:
 func poke() -> void:
 	if not _allowed(): return
 	_begin_action()
-	_react(POKE_REACTIONS[_poke_index])
-	_report("poke", POKE_CAPTIONS[_poke_index])
-	_poke_index = (_poke_index + 1) % POKE_REACTIONS.size()
+	if _poke_bag.is_empty():
+		_poke_bag.assign(LoadingMoves.REACTIONS)
+		_poke_bag.shuffle()
+		if _poke_bag[0] == _previous_poke:
+			var first := _poke_bag[0]
+			_poke_bag[0] = _poke_bag[1]
+			_poke_bag[1] = first
+	_previous_poke = _poke_bag.pop_front()
+	_react(_previous_poke)
+	_report("poke", LoadingMoves.CAPTIONS[_previous_poke])
 
 
 func call_pip() -> void:
@@ -377,7 +383,8 @@ func _input(event: InputEvent) -> void:
 		if blocked:
 			get_viewport().set_input_as_handled()
 		elif on_toy and not on_duck:
-			if toy_phase != "idle" or not motion_kind.is_empty(): cancel()
+			# Grabbing even a resting toy takes over any current mascot reaction.
+			cancel()
 		elif on_duck:
 			_begin_action()
 		_pointer = pointer

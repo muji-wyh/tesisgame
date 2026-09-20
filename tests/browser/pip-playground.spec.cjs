@@ -2,7 +2,8 @@ const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomControl, chooseRewardSection, visibleColorCount } = require('./game-ui.cjs');
 
 const SAVES = ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'];
-const POKES = ['Quack! You tickled Pip!', 'High five! Pip taps your hand!', 'Peekaboo! Pip sees you!'];
+const POKES = ['Boing! Pip jumps for you!', 'Aww! Pip feels shy!', 'Boop! Pip bounces right back!'];
+const POKE_PATTERN = /^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/;
 const PET = ['Pip leans into your hand. Lovely!', 'Soft strokes. Pip feels loved!'];
 
 function playground(bounds) {
@@ -28,9 +29,17 @@ async function begin(page, { width = 390, height = 844, reducedMotion = 'no-pref
   });
   const errors = await openGame(page, { reducedMotion });
   const lesson = await page.locator('#game-status').textContent();
+  const roomOpenedAt = Date.now();
   const bounds = await openRoom(page);
   const saved = await savedState(page);
-  return { errors, lesson, bounds, room: playground(bounds), saved };
+  return { errors, lesson, bounds, room: playground(bounds), saved, roomOpenedAt };
+}
+
+async function expectPoke(page, previous = '') {
+  const status = page.locator('#game-status');
+  await expect(status).toHaveText(POKE_PATTERN, { timeout: 800 });
+  if (previous) await expect(status).not.toHaveText(previous, { timeout: 800 });
+  return status.textContent();
 }
 
 async function savedState(page) {
@@ -145,12 +154,133 @@ async function screenshot(page, testInfo, name) {
   expect(await visibleColorCount(page, canvas), `${name}: raw canvas must show the game`).toBeGreaterThan(20);
 }
 
+async function reactionFrame(page, testInfo, caption, startedAt, suffix = 'midpoint') {
+  await page.waitForTimeout(Math.max(0, 350 - (Date.now() - startedAt)));
+  const key = caption.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
+  const name = `pip-home-${key}-${suffix}`;
+  const full = await page.screenshot({ path: testInfo.outputPath(`${name}.png`), scale: 'css' });
+  const completedAt = Date.now();
+  await testInfo.attach(name, { body: full, contentType: 'image/png' });
+  await testInfo.attach(`${name}-caption`, {
+    body: JSON.stringify({ caption, screenshotCompletedAfterMs: completedAt - startedAt }), contentType: 'application/json'
+  });
+}
+
+test('Home dances promptly and shuffled loading reactions replace each other without changing rewards', async ({ page }, testInfo) => {
+  const { errors, bounds, room, saved, roomOpenedAt } = await begin(page, page.viewportSize());
+  const status = page.locator('#game-status');
+  const roomCaption = await status.textContent();
+  const anchor = await patch(page, bounds, room.anchor);
+  const motion = { x: room.foot.x - 56, y: room.foot.y - 116, width: 112, height: 120 };
+  const resting = await patch(page, bounds, motion);
+  await visibleChange(page, bounds, motion, resting, testInfo, 'pip-home-autodance-body', 0.035);
+  let previousFrame = await patch(page, bounds, motion);
+  const changes = [];
+  for (let index = 0; index < 3; index++) {
+    await page.waitForTimeout(180);
+    const frame = await patch(page, bounds, motion);
+    changes.push(await changedFraction(page, previousFrame, frame));
+    previousFrame = frame;
+  }
+  expect(changes.filter(change => change > 0.01).length,
+    'The automatic dance must keep moving, not merely switch to a different still pose.').toBeGreaterThanOrEqual(2);
+  expect(Date.now() - roomOpenedAt, 'Home dances before the former six-second idle delay.').toBeLessThan(5500);
+  await expect(status).toHaveText(roomCaption);
+  await screenshot(page, testInfo, 'pip-home-autodance');
+
+  const captions = [];
+  for (let index = 0; index < POKES.length; index++) {
+    const startedAt = Date.now();
+    await tap(page, room.pip.x, room.pip.y);
+    const caption = await expectPoke(page, captions[captions.length - 1]);
+    captions.push(caption);
+    await reactionFrame(page, testInfo, caption, startedAt);
+    // Capture each animated response independently for visual review.
+    await page.waitForTimeout(Math.max(0, 1300 - (Date.now() - startedAt)));
+  }
+  expect([...captions].sort(), 'One shuffle bag contains each surprise exactly once.').toEqual([...POKES].sort());
+
+  // Measure game feedback inside the page; screenshot encoding and transport
+  // can take longer than the complete reaction on a desktop viewport.
+  const timingProbe = await page.evaluateHandle(allowed => {
+    const taps = [], changes = [], status = document.getElementById('game-status');
+    const onTap = event => taps.push({ at: performance.now(), trusted: event.isTrusted });
+    const observer = new MutationObserver(() => {
+      const caption = status.textContent;
+      if (allowed.includes(caption) && caption !== changes[changes.length - 1]?.caption) {
+        changes.push({ at: performance.now(), caption });
+      }
+    });
+    document.addEventListener('touchend', onTap, true);
+    observer.observe(status, { childList: true, characterData: true, subtree: true });
+    return { finish() {
+      document.removeEventListener('touchend', onTap, true);
+      observer.disconnect();
+      return { taps, changes };
+    } };
+  }, POKES);
+  let firstRapid, replacement, replacementAt, timing;
+  try {
+    await tap(page, room.pip.x, room.pip.y);
+    firstRapid = await expectPoke(page, captions[captions.length - 1]);
+    replacementAt = Date.now();
+    await tap(page, room.pip.x, room.pip.y);
+    replacement = await expectPoke(page, firstRapid);
+  } finally {
+    timing = await timingProbe.evaluate(probe => probe.finish());
+    await timingProbe.dispose();
+  }
+  expect(timing.taps.map(tap => tap.trusted)).toEqual([true, true]);
+  expect(timing.changes.map(change => change.caption)).toEqual([firstRapid, replacement]);
+  for (let index = 0; index < 2; index++) {
+    const latency = timing.changes[index].at - timing.taps[index].at;
+    expect(latency, 'A trusted tap must promptly replace the game feedback.').toBeGreaterThanOrEqual(0);
+    expect(latency, 'A trusted tap must promptly replace the game feedback.').toBeLessThan(250);
+  }
+  expect(timing.changes[1].at - timing.changes[0].at,
+    'The second reaction starts before even the shortest first reaction could finish.').toBeLessThan(850);
+  await reactionFrame(page, testInfo, replacement, replacementAt, 'rapid-replacement');
+  await testInfo.attach('pip-home-trusted-tap-timing', {
+    body: JSON.stringify(timing), contentType: 'application/json'
+  });
+  // Static accessible poses let us compare the actual rendered response without
+  // screenshot latency sampling different moments in two short animations.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await rendered(page);
+  const references = new Map();
+  for (let index = 0; index < 6 && references.size < POKES.length; index++) {
+    await tap(page, room.pip.x, room.pip.y);
+    replacement = await expectPoke(page, replacement);
+    await rendered(page);
+    references.set(replacement, await patch(page, bounds, motion));
+  }
+  expect(references.size).toBe(POKES.length);
+  for (let index = 0; index < 2; index++) {
+    await tap(page, room.pip.x, room.pip.y);
+    replacement = await expectPoke(page, replacement);
+  }
+  await rendered(page);
+  const replaced = await patch(page, bounds, motion);
+  await testInfo.attach('pip-home-static-rapid-replacement', { body: replaced, contentType: 'image/png' });
+  expect(await changedFraction(page, references.get(replacement), replaced),
+    'The latest tap must immediately select its own visible pose.').toBeLessThan(0.005);
+  for (const caption of POKES.filter(caption => caption !== replacement)) {
+    expect(await changedFraction(page, references.get(caption), replaced),
+      'The replacement must visibly differ from the other reactions.').toBeGreaterThan(0.02);
+  }
+  await page.waitForTimeout(1400);
+  await expect(status).toHaveText(replacement);
+  expect((await patch(page, bounds, room.anchor)).equals(anchor), 'Dancing and tapping cannot scroll the room').toBe(true);
+  expect(await savedState(page)).toEqual(saved);
+  expect(errors).toEqual([]);
+});
+
 test('Pip responds visibly to a poke and real strokes without scrolling the room', async ({ page, browserName }, testInfo) => {
   const { errors, bounds, room, saved } = await begin(page);
   const anchor = await patch(page, bounds, room.anchor);
   const before = await patch(page, bounds, room.body);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
+  let previousPoke = await expectPoke(page);
   await visibleChange(page, bounds, room.body, before, testInfo, 'pip-poke-body');
   await screenshot(page, testInfo, 'pip-poke');
 
@@ -163,7 +293,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   ]) {
     if (name === 'touch') {
       await tap(page, room.pip.x, room.pip.y);
-      await expect(page.locator('#game-status')).toHaveText(POKES[1]);
+      previousPoke = await expectPoke(page, previousPoke);
     }
     const resting = await patch(page, bounds, room.body);
     await drag(page, bounds, strokes);
@@ -176,7 +306,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   }
   // A release must leave the next independent tap usable, with no stuck drag owner.
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKES[browserName === 'chromium' ? 2 : 1]);
+  await expectPoke(page, previousPoke);
   expect(await savedState(page)).toEqual(saved);
   expect(errors).toEqual([]);
 });
@@ -202,13 +332,16 @@ test('a dragged ball visibly travels to Pip and empty ground makes Pip walk and 
     timeout: 4000, intervals: [100], message: 'The ball visibly returns home before testing ground movement.'
   }).toBeLessThan(0.02);
 
-  const near = { x: room.foot.x + 88, y: room.foot.y + 2 };
-  const far = { x: room.x + room.width - 55, y: room.foot.y + 2 };
+  // The bottom edge is below both the ball sprite and its clickable noun.
+  const floorY = room.y + room.height - 4;
+  const near = { x: room.foot.x + 68, y: floorY };
+  const far = { x: room.x + room.width - 10, y: floorY };
   for (const [name, destination, message] of [
     ['walk', near, 'Pip walks over!'], ['run', far, 'Pip runs over!']
   ]) {
-    // These patches contain the destination floor, not captions or button focus rings.
-    const arrival = { x: destination.x - 24, y: destination.y - 76, width: 48, height: 58 };
+    // Pip's feet stop 52px from the sides and 12px above the bottom edge.
+    const endpoint = { x: Math.min(destination.x, room.x + room.width - 52), y: room.y + room.height - 12 };
+    const arrival = { x: endpoint.x - 24, y: endpoint.y - 76, width: 48, height: 58 };
     const empty = await patch(page, bounds, arrival);
     const leftToy = { ...toyRect, x: room.x + 66 - 28 };
     const emptyLeft = name === 'run' ? await patch(page, bounds, leftToy) : null;
@@ -240,7 +373,7 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   }
   await openRoom(page);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
+  const firstPoke = await expectPoke(page);
   await screenshot(page, testInfo, 'pip-after-interrupted-stroke');
 
   await mouseDrag(page, bounds, [room.toy,
@@ -253,7 +386,7 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   await expect(page.locator('#game-status')).toHaveText(lesson);
   await openRoom(page);
   await tap(page, room.pip.x, room.pip.y);
-  await expect(page.locator('#game-status')).toHaveText(POKES[1]);
+  const secondPoke = await expectPoke(page, firstPoke);
 
   const list = { x: 24, y: bounds.height - 180, width: bounds.width - 48, height: 140 };
   const before = await patch(page, bounds, list);
@@ -263,7 +396,7 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   ]);
   await visibleChange(page, bounds, list, before, testInfo, 'gift-list-scroll', 0.15);
   await screenshot(page, testInfo, 'gift-list-after-drag');
-  await expect(page.locator('#game-status')).toHaveText(POKES[1]);
+  await expect(page.locator('#game-status')).toHaveText(secondPoke);
   expect(await savedState(page)).toEqual(saved);
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toHaveText(lesson);
@@ -275,7 +408,7 @@ test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard
   const toyRect = { x: room.toy.x - 28, y: room.toy.y - 28, width: 56, height: 56 };
   await roomControl(page, 'pip');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText(POKES[0]);
+  await expectPoke(page);
   await screenshot(page, testInfo, 'pip-narrow-keyboard-pip');
 
   await page.keyboard.press('Tab');
@@ -290,11 +423,13 @@ test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard
   // Restore the room's top after keyboard focus has followed the moving toy.
   await chooseRewardSection(page, 'room');
   const original = await patch(page, bounds, room.body);
-  const arrival = { x: room.x + room.width - 98, y: room.y + room.height - 112, width: 60, height: 68 };
+  const destination = { x: room.x + room.width - 10, y: room.y + room.height - 4 };
+  const endpoint = { x: room.x + room.width - 52, y: room.y + room.height - 12 };
+  const arrival = { x: endpoint.x - 30, y: endpoint.y - 88, width: 60, height: 68 };
   const beforeArrival = await patch(page, bounds, arrival);
   const leftToy = { ...toyRect, x: room.x + 66 - 28 };
   const emptyLeft = await patch(page, bounds, leftToy);
-  await tap(page, room.x + room.width - 68, room.y + room.height - 24);
+  await tap(page, destination.x, destination.y);
   await expect(page.locator('#game-status')).toHaveText('Pip walks over!');
   await visibleChange(page, bounds, room.body, original, testInfo, 'pip-reduced-motion-departs', 0.15);
   await visibleChange(page, bounds, arrival, beforeArrival, testInfo, 'pip-reduced-motion-arrives', 0.18);

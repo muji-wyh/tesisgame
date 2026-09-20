@@ -103,9 +103,9 @@ func _run() -> void:
 			"The collection duck stops speaking about the covered game picture")
 		app.duck.pressed.emit()
 		app._update_duck()
-		check(app._room.playground.interaction_kind == "poke" and app.duck._room_reaction == "poke"
-			and app.duck.pose == 1 and app.duck._trick.is_empty() and not app.duck.speaking,
-			"The room duck gives a visible surprised poke response without starting a header trick")
+		check(app._room.playground.interaction_kind == "poke" and app.duck._room_reaction in ["jump", "shy", "bonk"]
+			and app.duck.pose != 0 and app.duck._trick.is_empty() and not app.duck.speaking,
+			"The room duck gives a visible loading-page response while preserving the Poke event and avoiding a header trick")
 		app.medal_progress.counts["spring-1"] = 1
 		app._refresh_collection()
 		app._open_reward_preview("spring-1")

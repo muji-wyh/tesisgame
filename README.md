@@ -294,7 +294,7 @@ The Rooms/backdrop chooser has been removed. Existing saved backgrounds remain
 intact and continue to render; they are not advertised as new gifts or goals.
 Drag blank areas of the room canvas, including locked toy previews, to scroll.
 A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
-retain their play interactions. Pet Pip directly, tap Pip to poke, or drag a toy
+retain their play interactions. Pet Pip directly, tap Pip for a surprise, or drag a toy
 to toss it. The locked toy cards sit directly below the room, with no separate
 shortcut buttons, step caption or toy action button. Tap the toy itself to
 advance its three play steps and replay; keyboard and controller activation
@@ -342,14 +342,19 @@ Pip's beak follows the actual pronunciation/prompt player, including delayed
 audio downloads and page transitions, rather than merely reacting to a button
 press. Background music and sound effects do not make him talk. During microphone
 play he listens instead. Reduced motion uses static speaking/greeting poses.
-After 6–9 seconds of inactivity in normal play or Pip's room, Pip may wave,
+After 6–9 seconds of inactivity in normal play, Pip may wave,
 offer a high five, play peekaboo, look around, stretch, preen, hop or dance.
 Small gestures last 1.8 seconds and dances last 3.2 seconds, followed by another
 full quiet interval. Input, held pointers, Peek, speech and answer feedback take priority.
 Invitations make no sound, change no status text, and never start recording,
 spend hints or alter progress. They stop in previews, background tabs and with
-reduced motion. Pip's touch target stays in place. Repeated room pokes now
-alternate between a tickle, high five, peekaboo and flutter without new controls.
+reduced motion. Pip's touch target stays in place. In Pip's Home, the loading
+page's 5.28-second dance starts automatically: left wing, right wing, then a
+grounded hip sway. Tapping Pip replaces the dance with a jump, shy head scratch,
+or playful bonk; each shuffled group of three contains every reaction once.
+Rapid taps replace the current reaction immediately. Stroking, walking and toy
+play pause the dance, which resumes after a short quiet beat. Reduced motion
+uses distinct static tap poses and disables automatic dancing.
 Godot and the inline HTML mascot use the same wardrobe sources. The build embeds
 the loader's themed poses and dance parts, so its companion needs no additional
 image request.
