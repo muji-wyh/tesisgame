@@ -33,3 +33,15 @@ Local evidence: `build/voice-pop-qa/remove-pip-shortcuts-browser` and
 `build/voice-pop-qa/remove-pip-shortcuts-scroll`; the saved-gift pass is in
 `build/voice-pop-qa/remove-pip-shortcuts-navigation` alongside the initial
 fixed-header sampling failures.
+
+## Production
+
+Runtime commit `7769442` was merged into `main`, pushed and deployed. All four
+startup files match the tested export by SHA-256; see
+`2026-09-20-remove-pip-shortcuts-production-manifest.json`.
+
+The actual production game passed the apple's three steps at all three tested
+viewports, with zero page errors and unchanged medal ownership. Phone and tablet
+screenshots were inspected again: the removed row leaves no empty space and
+the primary toy action remains reachable. Evidence:
+`build/voice-pop-qa/remove-pip-shortcuts-production`.
