@@ -19,6 +19,10 @@ const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const NEON := [CYAN, PINK, VIOLET]
+const CARD_COLORS := [
+	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
+	Color("#bfa3ff"), Color("#80e3bb"), Color("#ffb77d")
+]
 
 var game = PopModel.new()
 var reduced_motion: bool = false
@@ -311,7 +315,7 @@ func receive_transcript(text: String) -> void:
 				visual = item
 		if not visual.is_empty():
 			_bursts.append({"center": visual.center, "radius": float(visual.size.x) * 0.48,
-				"age": 0.0, "color": NEON[int(target.uid) % NEON.size()], "points": int(target.get("points", 100))})
+				"age": 0.0, "color": _card_color(int(target.uid)), "points": int(target.get("points", 100))})
 		_last_hit = "+%d" % int(target.get("points", 100))
 		if int(target.get("combo", 0)) > 1:
 			_last_hit += "  ·  %d× COMBO" % int(target.combo)
@@ -717,19 +721,23 @@ func _draw_atmosphere(scale: float) -> void:
 	draw_line(Vector2(24.0 / scale, horizon), Vector2(size.x - 24.0 / scale, horizon), Color(CYAN, 0.12), 1.0 / scale)
 
 
+func _card_color(uid: int) -> Color:
+	return CARD_COLORS[(uid - 1) % CARD_COLORS.size()]
+
+
 func _draw_capsule(target: Dictionary, scale: float) -> void:
 	var capsule_size: Vector2 = target.size
 	var rect := Rect2(-capsule_size * 0.5, capsule_size)
-	var accent: Color = NEON[int(target.uid) % NEON.size()]
+	var accent: Color = _card_color(int(target.uid))
 	draw_set_transform(target.center, target.rotation)
 	var shadow: StyleBoxFlat = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
 	draw_style_box(shadow, Rect2(rect.position + Vector2(0, 6.0 / scale), capsule_size))
 	draw_style_box(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))), rect.grow(4.0 / scale))
-	draw_style_box(Style.box(Color("#fbfcff"), accent.lightened(0.35), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))), rect)
-	draw_line(rect.position + Vector2(19.0 / scale, 5.0 / scale), Vector2(rect.end.x - 19.0 / scale, rect.position.y + 5.0 / scale), Color.WHITE, 2.0 / scale, true)
+	draw_style_box(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))), rect)
+	draw_line(rect.position + Vector2(19.0 / scale, 5.0 / scale), Vector2(rect.end.x - 19.0 / scale, rect.position.y + 5.0 / scale), Color(1, 1, 1, 0.65), 2.0 / scale, true)
 	var art_edge: float = minf(capsule_size.x - 28.0 / scale, capsule_size.y * 0.61)
 	var art_center := Vector2(0, rect.position.y + 10.0 / scale + art_edge * 0.5)
-	draw_circle(art_center, art_edge * 0.52, Color(accent, 0.095))
+	draw_circle(art_center, art_edge * 0.52, Color("#fffaf2"))
 	var texture: Texture2D = _textures.get(str(target.word.get("id", target.word.get("text", ""))), null)
 	if texture != null:
 		var original: Vector2 = texture.get_size()
@@ -774,7 +782,7 @@ func _draw_burst(burst: Dictionary, scale: float) -> void:
 		var side: float = (8.0 if index % 2 else 12.0) * (1.0 - progress * 0.7) / scale
 		var tangent := direction.orthogonal()
 		var points := PackedVector2Array([position + direction * side, position - direction * side * 0.6 + tangent * side * 0.5, position - direction * side * 0.3 - tangent * side * 0.65])
-		draw_colored_polygon(points, Color(NEON[index % NEON.size()], 1.0 - progress))
+		draw_colored_polygon(points, Color(CARD_COLORS[index % CARD_COLORS.size()], 1.0 - progress))
 	var font: Font = ThemeDB.fallback_font
 	var label: String = "+%d" % int(burst.points)
 	var font_size: int = ceili(23.0 / scale)
