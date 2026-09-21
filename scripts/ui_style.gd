@@ -6,6 +6,18 @@ const GOOD := Color("#4e966a")
 const WRONG := Color("#c46a59")
 
 
+static func hint_palette(palette: Dictionary) -> Dictionary:
+	var accent: Color = palette.get("accent", GOOD)
+	var spark: Color = palette.get("spark", accent.lightened(0.3))
+	var light: Color = palette.get("light", accent.lightened(0.7))
+	var current := Color.from_hsv(accent.h, clampf(accent.s, 0.6, 0.88), 0.98)
+	return {
+		"edge": accent.darkened(0.08), "current": current, "core": current.lightened(0.88),
+		"spark": Color.from_hsv(spark.h, maxf(spark.s, 0.55), 1.0),
+		"fill": Color.WHITE.lerp(light, 0.29), "border": accent.lightened(0.35)
+	}
+
+
 static func draw_match_badge(canvas: CanvasItem, center: Vector2, radius: float) -> void:
 	canvas.draw_circle(center, radius, GOOD)
 	canvas.draw_arc(center, radius, 0.0, TAU, 28, GOOD.darkened(0.15), 2.0, true)

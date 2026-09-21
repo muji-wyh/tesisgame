@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
+const { THEME_COLORS, metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
@@ -62,14 +62,36 @@ function resultScreenPoint(metrics, key = 'chest') {
 
 const firstCard = (metrics) => cardPoint(metrics, 0);
 
-async function hintImage(page) {
+async function hintImage(page, countOnly = false) {
   const bounds = await logicalMetrics(page), icon = headerIconRect(bounds, 'hint');
+  const clip = countOnly ? { x: icon.x + icon.width * 0.67, y: icon.y + icon.height * 0.66,
+    width: icon.width * 0.22, height: icon.height * 0.24 } : icon;
   await page.mouse.move(0, 0);
   await rendered(page);
   return page.screenshot({ scale: 'css', clip: {
-    x: bounds.x + icon.x * bounds.scale, y: bounds.y + icon.y * bounds.scale,
-    width: icon.width * bounds.scale, height: icon.height * bounds.scale
+    x: bounds.x + clip.x * bounds.scale, y: bounds.y + clip.y * bounds.scale,
+    width: clip.width * bounds.scale, height: clip.height * bounds.scale
   } });
+}
+
+async function boltColors(page, screenshot) {
+  return page.evaluate(async encoded => {
+    const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
+    const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+    const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const counts = { saturated: 0, warm: 0, cool: 0, purple: 0, pink: 0 };
+    for (let index = 0; index < pixels.length; index += 4) {
+      const [red, green, blue] = pixels.subarray(index, index + 3);
+      if (Math.max(red, green, blue) < 100 || Math.max(red, green, blue) - Math.min(red, green, blue) < 55) continue;
+      counts.saturated++;
+      if (red > blue + 45 && red > green + 5) counts.warm++;
+      if (green > red + 25 && blue > red + 25) counts.cool++;
+      if (blue > green + 30 && red > green + 15) counts.purple++;
+      if (red > green + 35 && blue > green + 15 && red > blue + 5) counts.pink++;
+    }
+    return counts;
+  }, screenshot.toString('base64'));
 }
 
 async function assertFits(scope) {
@@ -694,22 +716,24 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   const linkClip = { x: Math.round((pictureCenter.x + wordCenter.x) / 2 - 16),
     y: Math.round((pictureCenter.y + wordCenter.y) / 2 - 16), width: 32, height: 32 };
   const current = await page.screenshot({ path: testInfo.outputPath('hint-direct-before.png'), clip: linkClip, scale: 'css' });
-  const bluePixels = await page.evaluate(async encoded => {
-    const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
-    const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
-    const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
-    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-    let count = 0;
-    for (let index = 0; index < pixels.length; index += 4) {
-      const [red, green, blue] = pixels.subarray(index, index + 3);
-      if (red < 140 && green > red + 30 && blue > red + 45 && green > 90 && blue > 100) count++;
-    }
-    return count;
-  }, current.toString('base64'));
-  expect(bluePixels, 'A cyan-blue bolt visibly connects the hinted cards along their direct axis.').toBeGreaterThan(4);
+  expect((await boltColors(page, current)).saturated, 'A saturated electric bolt visibly connects the hinted cards.').toBeGreaterThan(4);
   await expect.poll(async () => (await page.screenshot({
     path: testInfo.outputPath('hint-direct-after.png'), clip: linkClip, scale: 'css'
   })).equals(current), { timeout: 3000, intervals: [200], message: 'The direct electric bolt flickers between the hinted cards.' }).toBe(false);
+  const initialTheme = THEME_COLORS.indexOf(await page.locator('meta[name="theme-color"]').getAttribute('content'));
+  const initialSelection = await page.locator('#selection-status').textContent();
+  const remainingHints = await hintImage(page, true);
+  for (const [theme, index, color] of [['autumn', 2, 'warm'], ['ocean', 4, 'cool'], ['space', 5, 'purple'], ['candy', 7, 'pink']]) {
+    await chooseSeason(page, index);
+    await expect(page.locator('#game-status')).toHaveText(firstHint);
+    await expect(page.locator('#selection-status')).toHaveText(initialSelection);
+    expect((await hintImage(page, true)).equals(remainingHints), `${theme} preserves the remaining hint count.`).toBe(true);
+    const themed = await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}-bolt.png`), clip: linkClip, scale: 'css' });
+    expect((await boltColors(page, themed))[color], `${theme} recolors the active bolt to its ${color} palette.`).toBeGreaterThan(4);
+    await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}.png`), scale: 'css' });
+  }
+  await chooseSeason(page, initialTheme);
+  await expect(page.locator('#game-status')).toHaveText(firstHint);
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);

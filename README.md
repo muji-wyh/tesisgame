@@ -384,7 +384,8 @@ the selected PNGs; clean checkouts retain the original SVG fallbacks. See the
 provenance record for selection, hashes and release evidence.
 
 Use the **lightbulb icon** (or Xbox **X**) when you get stuck. An electric arc connects a real unmatched
-picture and word directly, with a jagged white-blue bolt, small forks and contact sparks; its word is spoken.
+picture and word directly, with a pulsing bright core, split lightning filaments, branching sparks and contact bursts;
+its word is spoken. The bolt and hinted cards share the current world's colors and update immediately when the theme changes.
 The connection follows the straight axis between both cards, including diagonal pairs. Hints follow your selected card when it has a
 partner; otherwise they point to a complete pair. Each round has **three hints**, with no
 score penalty. The icon's small badge shows how many remain, including zero; only a new

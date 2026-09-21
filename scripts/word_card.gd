@@ -164,8 +164,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		fill = Color("#ffe8e2")
 		border = Style.WRONG
 	if hinted and not selected and not matched and not wrong:
-		fill = Color("#f0fcff")
-		border = Color("#9ad5e5")
+		var hint_colors: Dictionary = Style.hint_palette(palette)
+		fill = hint_colors.fill
+		border = hint_colors.border
 	var radius: int = ceili(14 / Style.ui_scale(self)) if _back != null else 20
 	var normal: StyleBoxFlat = Style.box(fill, border, radius, 2 if selected or matched or wrong or hinted else 1)
 	normal.shadow_color = Color(accent, 0.11)

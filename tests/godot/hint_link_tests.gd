@@ -86,6 +86,90 @@ func check_link(app, image_id: String, word_id: String, columns: int, stage: Str
 	coverage[columns]["aligned" if absf(offset) <= 1.0 else "offset"] = true
 
 
+func round_state(app) -> Array:
+	return [app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
+		app.model.hint_ids.duplicate(), app.model.hints_remaining, app.model.phase, app.model.selected_id,
+		app.model.matched_ids.duplicate(), app.model.successes, app.model.mistakes, app.model.streak]
+
+
+func card_appearance(card) -> Array:
+	var normal: StyleBoxFlat = card.get_theme_stylebox("normal")
+	var disabled_style: StyleBoxFlat = card.get_theme_stylebox("disabled")
+	return [normal.bg_color, normal.border_color, disabled_style.bg_color, disabled_style.border_color,
+		card.match_mark.visible, card.disabled]
+
+
+func hue_distance(first: Color, second: Color) -> float:
+	var difference: float = absf(first.h - second.h)
+	return minf(difference, 1.0 - difference)
+
+
+func check_theme_switches(app) -> void:
+	app.new_round(21, false, "", "match")
+	await settle()
+	app._request_hint()
+	await settle()
+	var hinted: Array = app.model.hint_ids.duplicate()
+	check(hinted.size() == 2 and app.model.hints_remaining == 2, "Theme switching starts with one real, paid hint")
+	if hinted.size() != 2:
+		return
+	var link = app._hint_link
+	var original_state: Array = round_state(app)
+	var original_path: PackedVector2Array = global_path(link)
+	var original_source: Control = link.source
+	var original_target: Control = link.target
+	var palettes: Dictionary = {}
+	var currents: Array[Color] = []
+	var probe = app.Card.new()
+	probe.setup(app.model.cards[0])
+	probe.set_reduced_motion(true)
+	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy", "spring"]:
+		app.choose_theme(theme_id)
+		await settle()
+		var palette: Dictionary = app.Data.theme(theme_id)
+		var valid_colors: bool = ["edge", "current", "core", "spark", "fill", "border"].all(
+			func(key: String) -> bool: return link.colors.get(key) is Color)
+		check(valid_colors and link.colors == app.Style.hint_palette(palette),
+			theme_id + ": the active arc receives the current theme's complete shared palette")
+		if not valid_colors:
+			continue
+		var current: Color = link.colors.current
+		var spark: Color = link.colors.spark
+		check(hue_distance(current, palette.accent) < 0.035 and current.v > palette.accent.v,
+			theme_id + ": the electric current keeps the theme's primary hue with a brighter charge")
+		check(hue_distance(spark, palette.spark) < 0.035 and not spark.is_equal_approx(current),
+			theme_id + ": fork sparks use the theme's distinct secondary color")
+		for id in hinted:
+			var style: StyleBoxFlat = app.cards[id].get_theme_stylebox("normal")
+			check(style.bg_color == link.colors.fill and style.border_color == link.colors.border
+				and not app.cards[id].match_mark.visible,
+				theme_id + ": both hinted cards share the arc's themed treatment without showing success")
+		probe.refresh(palette, false, false, false, false, false)
+		var ordinary: StyleBoxFlat = probe.get_theme_stylebox("normal")
+		check(ordinary.bg_color != link.colors.fill and ordinary.border_color != link.colors.border,
+			theme_id + ": the theme's hinted cards remain distinguishable from ordinary cards")
+		for state in ["selected", "matched", "wrong"]:
+			probe.refresh(palette, state == "selected", state == "matched", state == "wrong", false, false)
+			var before: Array = card_appearance(probe)
+			probe.refresh(palette, state == "selected", state == "matched", state == "wrong", false, true)
+			check(card_appearance(probe) == before,
+				theme_id + ": hint styling cannot replace a card's " + state + " feedback")
+		check(app.model.theme_id == theme_id and round_state(app) == original_state
+			and app._hint_link == link and link.source == original_source and link.target == original_target,
+			theme_id + ": switching theme preserves the paid hint, card instances and round progress")
+		check(link.active and link.is_visible_in_tree() and not link.is_processing()
+			and same_path(global_path(link), original_path),
+			theme_id + ": switching theme keeps the same direct geometry and reduced-motion behavior")
+		if palettes.has(theme_id):
+			check(link.colors == palettes[theme_id], "Returning to Spring restores its original electric colors")
+		else:
+			palettes[theme_id] = link.colors.duplicate()
+			currents.append(current)
+	check(palettes.size() == 8 and currents.all(func(color: Color) -> bool: return currents.count(color) == 1),
+		"All eight worlds have a distinct electric primary color instead of sharing the old blue")
+	probe.free()
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 900)
@@ -136,6 +220,7 @@ func _run() -> void:
 	for columns in [2, 4]:
 		check(coverage[columns].aligned and coverage[columns].offset,
 			"%d-column fixtures cover both aligned pairs and pairs in different rows or columns" % columns)
+	await check_theme_switches(app)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
