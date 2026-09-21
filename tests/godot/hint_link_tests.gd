@@ -37,15 +37,15 @@ func same_path(first: PackedVector2Array, second: PackedVector2Array) -> bool:
 	return true
 
 
-func crosses_rect(first: Vector2, second: Vector2, bounds: Rect2) -> bool:
-	if bounds.has_point(first) or bounds.has_point(second):
-		return true
+func facing_boundary(bounds: Rect2, other_center: Vector2) -> Vector2:
 	var corners := PackedVector2Array([bounds.position, Vector2(bounds.end.x, bounds.position.y),
 		bounds.end, Vector2(bounds.position.x, bounds.end.y)])
 	for edge in range(4):
-		if Geometry2D.segment_intersects_segment(first, second, corners[edge], corners[(edge + 1) % 4]) != null:
-			return true
-	return false
+		var intersection: Variant = Geometry2D.segment_intersects_segment(
+			bounds.get_center(), other_center, corners[edge], corners[(edge + 1) % 4])
+		if intersection != null:
+			return intersection
+	return Vector2(INF, INF)
 
 
 func check_link(app, image_id: String, word_id: String, columns: int, stage: String) -> void:
@@ -56,37 +56,33 @@ func check_link(app, image_id: String, word_id: String, columns: int, stage: Str
 	check(link.source == app.cards[image_id] and link.target == app.cards[word_id],
 		stage + ": direction always runs from picture to word, regardless of hint order")
 	var points: PackedVector2Array = global_path(link)
-	check(points.size() >= 2, stage + ": the link has a drawable path")
-	if points.size() < 2:
+	check(points.size() == 2, stage + ": one direct segment joins the cards without gutter detours")
+	if points.size() != 2:
 		return
 	var picture: Rect2 = app.cards[image_id].get_global_rect()
 	var word: Rect2 = app.cards[word_id].get_global_rect()
 	var first: Vector2 = points[0]
-	var last: Vector2 = points[points.size() - 1]
-	var vertical: bool = columns == 2
-	var low: float = picture.end.x if vertical else picture.end.y
-	var high: float = word.position.x if vertical else word.position.y
-	check(absf((first.x if vertical else first.y) - low) <= 1.0
-		and picture.grow(1.0).has_point(first), stage + ": the path starts on the picture's facing edge")
-	check(absf((last.x if vertical else last.y) - high) <= 1.0
-		and word.grow(1.0).has_point(last), stage + ": the path ends on the word's facing edge")
-	var inside_gutter := true
-	var inside_board := true
-	for point in points:
-		var across: float = point.x if vertical else point.y
-		inside_gutter = inside_gutter and across >= low - 1.0 and across <= high + 1.0
-		inside_board = inside_board and app._match_playfield.get_global_rect().grow(1.0).has_point(point)
-	check(high > low and inside_gutter, stage + ": every segment stays in the central " + ("vertical" if vertical else "horizontal") + " gutter")
-	check(inside_board, stage + ": the entire link remains inside the board")
-	for id in app.cards:
-		if id == image_id or id == word_id:
-			continue
-		var interior: Rect2 = app.cards[id].get_global_rect().grow(-1.0)
-		var crossed := false
-		for index in range(1, points.size()):
-			crossed = crossed or crosses_rect(points[index - 1], points[index], interior)
-		check(not crossed, stage + ": the link never crosses unrelated card " + id)
-	var offset: float = picture.get_center().y - word.get_center().y if vertical else picture.get_center().x - word.get_center().x
+	var last: Vector2 = points[1]
+	var axis: Vector2 = (word.get_center() - picture.get_center()).normalized()
+	var pixel_scale: float = app.Style.ui_scale(link)
+	check(picture.has_point(first) and word.has_point(last),
+		stage + ": the electricity reaches inside both intended cards")
+	check(absf((first - picture.get_center()).cross(axis)) * pixel_scale <= 0.5
+		and absf((last - word.get_center()).cross(axis)) * pixel_scale <= 0.5,
+		stage + ": both endpoints lie on the picture-to-word center axis")
+	check((first - picture.get_center()).dot(axis) > 0.0
+		and (word.get_center() - last).dot(axis) > 0.0 and (last - first).dot(axis) > 0.0,
+		stage + ": the segment connects the facing halves of the cards in picture-to-word order")
+	var picture_edge: Vector2 = facing_boundary(picture, word.get_center())
+	var word_edge: Vector2 = facing_boundary(word, picture.get_center())
+	check(picture_edge.is_finite() and word_edge.is_finite(),
+		stage + ": the center ray crosses both card boundaries")
+	check(absf(first.distance_to(picture_edge) * pixel_scale - 18.0) <= 1.0
+		and absf(last.distance_to(word_edge) * pixel_scale - 18.0) <= 1.0,
+		stage + ": endpoints extend about 18 screen pixels inside each facing boundary")
+	var board: Rect2 = app._match_playfield.get_global_rect().grow(1.0)
+	check(board.has_point(first) and board.has_point(last), stage + ": the direct link remains inside the board")
+	var offset: float = picture.get_center().y - word.get_center().y if columns == 2 else picture.get_center().x - word.get_center().x
 	coverage[columns]["aligned" if absf(offset) <= 1.0 else "offset"] = true
 
 

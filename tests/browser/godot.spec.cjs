@@ -686,22 +686,14 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
   const twoLeft = await hintImage(page);
-  await page.screenshot({ path: testInfo.outputPath('hint-link.png'), scale: 'css' });
-  const board = contentBounds(await logicalMetrics(page));
-  const areaHeight = metrics.height / scale - board.top - board.padding;
-  const columns = board.width >= areaHeight || areaHeight < 318 ? 4 : 2, rows = 8 / columns;
-  const cardWidth = (board.width - (columns - 1) * 10) / columns * scale;
-  const cardHeight = (areaHeight - (rows - 1) * 10) / rows * scale;
-  // Sample only the central gap linking the cards, excluding every card and Pip.
-  const linkClip = columns === 2 ? {
-    x: Math.round(metrics.x + board.x * scale + cardWidth + 5 * scale - 3),
-    y: Math.round(metrics.y + board.top * scale), width: 6, height: Math.floor(areaHeight * scale)
-  } : {
-    x: Math.round(metrics.x + board.x * scale),
-    y: Math.round(metrics.y + board.top * scale + cardHeight + 5 * scale - 3),
-    width: Math.floor(board.width * scale), height: 6
-  };
-  const current = await page.screenshot({ path: testInfo.outputPath('hint-link-before.png'), clip: linkClip, scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('hint-direct.png'), scale: 'css' });
+  await page.waitForTimeout(160);
+  await page.screenshot({ path: testInfo.outputPath('hint-direct-next.png'), scale: 'css' });
+  const pictureCenter = cardPoint(metrics, firstPair.Picture), wordCenter = cardPoint(metrics, firstPair.Word);
+  // Sample the direct connection's midpoint, independently of board gutters or Pip's animation.
+  const linkClip = { x: Math.round((pictureCenter.x + wordCenter.x) / 2 - 16),
+    y: Math.round((pictureCenter.y + wordCenter.y) / 2 - 16), width: 32, height: 32 };
+  const current = await page.screenshot({ path: testInfo.outputPath('hint-direct-before.png'), clip: linkClip, scale: 'css' });
   const bluePixels = await page.evaluate(async encoded => {
     const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
     const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
@@ -714,10 +706,10 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
     }
     return count;
   }, current.toString('base64'));
-  expect(bluePixels, 'A cyan-blue connection visibly crosses the gap between the hinted cards.').toBeGreaterThan(4);
+  expect(bluePixels, 'A cyan-blue bolt visibly connects the hinted cards along their direct axis.').toBeGreaterThan(4);
   await expect.poll(async () => (await page.screenshot({
-    path: testInfo.outputPath('hint-link-after.png'), clip: linkClip, scale: 'css'
-  })).equals(current), { timeout: 3000, intervals: [200], message: 'Electric current flows through the connection between the hinted cards.' }).toBe(false);
+    path: testInfo.outputPath('hint-direct-after.png'), clip: linkClip, scale: 'css'
+  })).equals(current), { timeout: 3000, intervals: [200], message: 'The direct electric bolt flickers between the hinted cards.' }).toBe(false);
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
@@ -735,6 +727,9 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await expect(page.locator('#game-status')).toHaveText(secondHint);
   const oneLeft = await hintImage(page);
   expect(oneLeft.equals(twoLeft), 'The native digit badge changes from two remaining hints to one.').toBe(false);
+  await page.screenshot({ path: testInfo.outputPath('hint-direct-second.png'), scale: 'css' });
+  await page.waitForTimeout(160);
+  await page.screenshot({ path: testInfo.outputPath('hint-direct-second-next.png'), scale: 'css' });
   for (const index of [secondPair.Word, secondPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);

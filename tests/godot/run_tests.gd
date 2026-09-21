@@ -770,7 +770,7 @@ func _test_play_improvements(app) -> void:
 		var image_id: String = hinted[0] if app.model.card_by_id(hinted[0]).kind == "image" else hinted[1]
 		var word_id: String = hinted[1] if hinted[0] == image_id else hinted[0]
 		check(link.active and link.is_visible_in_tree() and link.mouse_filter == Control.MOUSE_FILTER_IGNORE
-			and link.source == app.cards[image_id] and link.target == app.cards[word_id] and link.path.size() >= 2,
+			and link.source == app.cards[image_id] and link.target == app.cards[word_id] and link.path.size() == 2,
 			"One noninteractive electric arc connects the hinted image card to its matching word")
 		check(link.is_processing() == not app.reduced_motion,
 			"The connecting hint arc survives the selected card's short press feedback")

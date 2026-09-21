@@ -1,10 +1,10 @@
 extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
-const EDGE := Color("#147ca8")
-const CURRENT := Color("#2ddcff")
-const CORE := Color("#efffff")
-const PERIOD: float = 1.4
+const EDGE := Color("#2362d6")
+const CURRENT := Color("#27cdff")
+const CORE := Color("#f4ffff")
+const PERIOD: float = 1.2
 
 var active: bool = false
 var reduced_motion: bool = false
@@ -13,10 +13,7 @@ var phase: float = 0.0
 var source: Control
 var target: Control
 var path := PackedVector2Array()
-var _split_columns: bool = true
-var _lengths := PackedFloat32Array()
 var _distance: float = 0.0
-var _gap: float = 10.0
 var _pixel: float = 1.0
 
 
@@ -27,7 +24,7 @@ func _ready() -> void:
 	_update_processing()
 
 
-func configure(first: Control, second: Control, split_columns: bool, reduce: bool, pause: bool) -> void:
+func configure(first: Control, second: Control, reduce: bool, pause: bool) -> void:
 	# Hint IDs can start with an already selected word. Always send energy from picture to word.
 	if is_instance_valid(first) and first.get("card_data") != null and first.card_data.get("kind", "") == "word":
 		var swap: Control = first
@@ -43,7 +40,6 @@ func configure(first: Control, second: Control, split_columns: bool, reduce: boo
 			if is_instance_valid(card):
 				card.item_rect_changed.connect(refresh_geometry)
 	active = is_instance_valid(source) and is_instance_valid(target) and source != target
-	_split_columns = split_columns
 	reduced_motion = reduce
 	paused = pause
 	visible = active and not paused
@@ -82,7 +78,6 @@ func _process(_delta: float) -> void:
 
 func refresh_geometry() -> void:
 	path.clear()
-	_lengths.clear()
 	_distance = 0.0
 	_pixel = 1.0 / Style.ui_scale(self)
 	if not active or not is_instance_valid(source) or not is_instance_valid(target):
@@ -91,38 +86,28 @@ func refresh_geometry() -> void:
 	var transform: Transform2D = get_global_transform().affine_inverse()
 	var a: Rect2 = transform * source.get_global_rect()
 	var b: Rect2 = transform * target.get_global_rect()
-	var route := PackedVector2Array()
-	if _split_columns:
-		_gap = maxf(1.0, b.position.x - a.end.x)
-		var lane: float = (a.end.x + b.position.x) * 0.5
-		route = PackedVector2Array([
-			Vector2(a.end.x, a.get_center().y), Vector2(lane, a.get_center().y),
-			Vector2(lane, b.get_center().y), Vector2(b.position.x, b.get_center().y)
-		])
-	else:
-		_gap = maxf(1.0, b.position.y - a.end.y)
-		var lane: float = (a.end.y + b.position.y) * 0.5
-		route = PackedVector2Array([
-			Vector2(a.get_center().x, a.end.y), Vector2(a.get_center().x, lane),
-			Vector2(b.get_center().x, lane), Vector2(b.get_center().x, b.position.y)
-		])
-	# Coincident lane turns collapse when the suggested pair is directly opposite.
-	for point in route:
-		if path.is_empty() or path[-1].distance_squared_to(point) > 0.001:
-			path.append(point)
-	_lengths.append(0.0)
-	for index in range(1, path.size()):
-		_distance += path[index - 1].distance_to(path[index])
-		_lengths.append(_distance)
+	var direction: Vector2 = (b.get_center() - a.get_center()).normalized()
+	if direction.is_zero_approx():
+		queue_redraw()
+		return
+	# One direct strike on the center-to-center axis, including diagonal pairs.
+	# Contacts sit just inside each card so even neighboring cards have a visible bolt.
+	path = PackedVector2Array([_contact(a, direction), _contact(b, -direction)])
+	_distance = path[0].distance_to(path[1])
 	queue_redraw()
 
 
-func _point_at(distance: float) -> Vector2:
-	for index in range(1, _lengths.size()):
-		if _lengths[index] >= distance:
-			var segment: float = _lengths[index] - _lengths[index - 1]
-			return path[index - 1].lerp(path[index], (distance - _lengths[index - 1]) / maxf(segment, 0.001))
-	return path[-1]
+func _contact(bounds: Rect2, direction: Vector2) -> Vector2:
+	var half_size: Vector2 = bounds.size * 0.5
+	var edge_distance: float = minf(half_size.x / maxf(absf(direction.x), 0.0001),
+		half_size.y / maxf(absf(direction.y), 0.0001))
+	var inset: float = minf(18.0 * _pixel, minf(half_size.x, half_size.y) * 0.36)
+	return bounds.get_center() + direction * maxf(0.0, edge_distance - inset)
+
+
+func _noise(index: float, strike: float) -> float:
+	# Local deterministic noise keeps the bolt sharp without touching gameplay's RNG.
+	return fposmod(sin(index * 127.1 + strike * 311.7) * 43758.5453, 1.0) * 2.0 - 1.0
 
 
 func _draw() -> void:
@@ -131,25 +116,47 @@ func _draw() -> void:
 	var points := PackedVector2Array()
 	var colors := PackedColorArray()
 	var cores := PackedColorArray()
-	var segments: int = clampi(ceili(_distance / (6.0 * _pixel)), 8, 160)
-	var amplitude: float = minf(1.4 * _pixel, _gap * 0.12)
+	var direction: Vector2 = (path[1] - path[0]).normalized()
+	var normal: Vector2 = direction.orthogonal()
+	var segments: int = clampi(ceili(_distance / (10.0 * _pixel)), 5, 100)
+	var amplitude: float = minf(9.0 * _pixel, _distance * 0.13)
+	var strike: float = floorf(phase * 14.0)
+	var surge: float = 0.5 + 0.5 * sin(phase * TAU * 2.0)
 	for index in range(segments + 1):
 		var along: float = float(index) / float(segments)
-		var distance: float = along * _distance
-		var tangent: Vector2 = (_point_at(minf(_distance, distance + _pixel)) - _point_at(maxf(0, distance - _pixel))).normalized()
-		var wave: float = sin(float(index) * 2.3 + phase * TAU * 3.0) * 0.65 + sin(float(index) * 3.7 - phase * TAU * 2.0) * 0.35
-		var pin: float = minf(1.0, minf(distance, _distance - distance) / (4.0 * _pixel))
-		points.append(_point_at(distance) + tangent.orthogonal() * wave * amplitude * pin)
-		var pulse: float = maxf(0.0, 1.0 - fposmod(phase - along, 1.0) / 0.24)
+		var pin: float = minf(1.0, minf(along, 1.0 - along) * 8.0)
+		var jag: float = _noise(float(index), strike) * amplitude * pin
+		points.append(path[0].lerp(path[1], along) + normal * jag)
+		var pulse: float = maxf(0.0, 1.0 - fposmod(phase * 2.0 - along, 1.0) / 0.2)
 		colors.append(CURRENT.lerp(CORE, pulse))
-		cores.append(Color(CORE, 0.25 + pulse * 0.75))
-	# The arc runs through the gutter, not across other pictures or words.
-	draw_polyline(points, Color(CURRENT, 0.22), minf(8.0 * _pixel, _gap * 0.58), true)
-	draw_polyline(points, EDGE, minf(4.0 * _pixel, _gap * 0.4), true)
-	draw_polyline_colors(points, colors, minf(2.7 * _pixel, _gap * 0.28), true)
-	draw_polyline_colors(points, cores, minf(1.2 * _pixel, _gap * 0.15), true)
-	for endpoint in [path[0], path[-1]]:
-		draw_circle(endpoint, 5.0 * _pixel, Color(CURRENT, 0.2))
-		draw_circle(endpoint, 3.2 * _pixel, EDGE)
-		draw_circle(endpoint, 2.3 * _pixel, CURRENT)
-		draw_circle(endpoint, 1.1 * _pixel, CORE)
+		cores.append(Color(CORE, 0.72 + pulse * 0.28))
+	# Short, changing forks and a white-hot core read as electricity, not a wavy wire.
+	var fork_count: int = clampi(ceili(_distance / (120.0 * _pixel)), 1, 4)
+	for fork in range(fork_count):
+		var index: int = clampi(roundi(float(segments) * float(fork + 1) / float(fork_count + 1)), 1, segments - 1)
+		var side: float = -1.0 if _noise(float(fork + 50), strike) < 0.0 else 1.0
+		var reach: float = minf(_distance * 0.22, (16.0 + 9.0 * absf(_noise(float(fork + 80), strike))) * _pixel)
+		var start: Vector2 = points[index]
+		var fork_points := PackedVector2Array([start,
+			start + direction * reach * 0.25 + normal * reach * side * 0.5,
+			start + direction * reach * 0.55 + normal * reach * side * 0.38,
+			start + direction * reach * 0.8 + normal * reach * side])
+		draw_polyline(fork_points, Color(CURRENT, 0.16), 6.0 * _pixel, true)
+		draw_polyline(fork_points, Color(EDGE, 0.75), 2.6 * _pixel, true)
+		draw_polyline(fork_points, Color(CURRENT.lerp(CORE, 0.6), 0.9), 1.2 * _pixel, true)
+	draw_polyline(points, Color(EDGE, 0.08), (15.0 + surge * 3.0) * _pixel, true)
+	draw_polyline(points, Color(CURRENT, 0.2), (9.0 + surge * 2.0) * _pixel, true)
+	draw_polyline(points, EDGE, 4.6 * _pixel, true)
+	draw_polyline_colors(points, colors, 3.2 * _pixel, true)
+	draw_polyline_colors(points, cores, (1.25 + surge * 0.35) * _pixel, true)
+	for endpoint in path:
+		draw_circle(endpoint, (8.0 + surge * 2.0) * _pixel, Color(CURRENT, 0.16))
+		for ray in range(5):
+			var angle: float = float(ray) * TAU / 5.0 + _noise(float(ray + 100), strike) * 0.4
+			var ray_direction := Vector2.from_angle(angle)
+			var ray_length: float = (6.0 + absf(_noise(float(ray + 120), strike)) * 6.0) * _pixel
+			draw_line(endpoint + ray_direction * 4.0 * _pixel, endpoint + ray_direction * ray_length,
+				CURRENT, 1.5 * _pixel, true)
+		draw_circle(endpoint, 3.8 * _pixel, EDGE)
+		draw_circle(endpoint, 2.8 * _pixel, CURRENT)
+		draw_circle(endpoint, 1.6 * _pixel, CORE)

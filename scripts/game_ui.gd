@@ -2089,7 +2089,7 @@ func _refresh_hint_link() -> void:
 	if _mode_id == "match" and grid.is_visible_in_tree() and model.hint_ids.size() == 2:
 		first = cards.get(model.hint_ids[0])
 		second = cards.get(model.hint_ids[1])
-	_hint_link.configure(first, second, grid.columns == 2, reduced_motion,
+	_hint_link.configure(first, second, reduced_motion,
 		_page_hidden or collection_page.visible or _preview_page.visible)
 
 
