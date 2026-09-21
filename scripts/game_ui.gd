@@ -4,6 +4,7 @@ const Model = preload("res://scripts/game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
+const HintLink = preload("res://scripts/hint_link.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
@@ -193,6 +194,7 @@ var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_speech_active: bool = false
 var _match_playfield: Control
+var _hint_link: HintLink
 var _content_margins: MarginContainer
 var _new_adventure_button: Button
 var _journey_save_failed: bool = false
@@ -461,6 +463,14 @@ func _build_controls() -> void:
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
 	_match_playfield.add_child(grid)
+	_hint_link = HintLink.new()
+	_hint_link.name = "HintLink"
+	_hint_link.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_match_playfield.add_child(_hint_link)
+	_hint_link.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_hint_link.hide()
+	grid.sort_children.connect(func() -> void: _refresh_hint_link.call_deferred())
+	grid.visibility_changed.connect(_refresh_hint_link)
 	_memory = MemoryGarden.new()
 	_memory.name = "MemoryGarden"
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -2065,10 +2075,22 @@ func _refresh_match_cards() -> void:
 		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
 			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
 			locked, model.hint_ids.has(id))
-		cards[id].set_hint_paused(_page_hidden or collection_page.visible or _preview_page.visible)
 		cards[id].disabled = locked
 		cards[id].picture.modulate.a = 1.0
 		cards[id].word_label.modulate.a = 1.0
+	_refresh_hint_link()
+
+
+func _refresh_hint_link() -> void:
+	if _hint_link == null or collection_page == null or _preview_page == null:
+		return
+	var first: Control = null
+	var second: Control = null
+	if _mode_id == "match" and grid.is_visible_in_tree() and model.hint_ids.size() == 2:
+		first = cards.get(model.hint_ids[0])
+		second = cards.get(model.hint_ids[1])
+	_hint_link.configure(first, second, grid.columns == 2, reduced_motion,
+		_page_hidden or collection_page.visible or _preview_page.visible)
 
 
 func _continue_match() -> void:
@@ -2145,6 +2167,7 @@ func _fit_grid() -> void:
 		var button: Button = cards[display_order[index].id]
 		if grid.get_child(index) != button:
 			grid.move_child(button, index)
+	_refresh_hint_link.call_deferred()
 
 
 func _fit_mode_buttons() -> void:
@@ -2464,7 +2487,7 @@ func _refresh_hint() -> void:
 	elif _voice_mode and model.phase == "feedback":
 		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
 	elif not model.hint_ids.is_empty():
-		hint_button.tooltip_text = "Hint active. Match the two electric cards before using another."
+		hint_button.tooltip_text = "Hint active. Follow the electric link between the two matching cards."
 	else:
 		hint_button.tooltip_text = "%d %s left (Xbox X)" % [model.hints_remaining, "hint" if model.hints_remaining == 1 else "hints"]
 	_set_accessibility_name(hint_button, hint_button.tooltip_text)
@@ -2549,6 +2572,7 @@ func choose_theme(id: String) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	_hint_link.set_reduced_motion(value)
 	_pop.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	for card in cards.values():
@@ -2775,8 +2799,7 @@ func _retry_reward_save() -> void:
 
 func on_page_hidden() -> void:
 	_page_hidden = true
-	for card in cards.values():
-		card.set_hint_paused(true)
+	_hint_link.set_paused(true)
 	if _mode_id == "pop":
 		_pop.pause()
 	_stop_pop_listening()
@@ -2809,8 +2832,7 @@ func on_page_hidden() -> void:
 
 func on_page_visible() -> void:
 	_page_hidden = false
-	for card in cards.values():
-		card.set_hint_paused(collection_page.visible or _preview_page.visible)
+	_refresh_hint_link()
 	duck.set_idle_paused(false)
 	_room.playground.pause(false)
 	feedback_timer.paused = collection_page.visible
@@ -3178,6 +3200,7 @@ func _show_error(message: String) -> void:
 	_outcome.hide()
 	_match_playfield.show()
 	grid.hide()
+	_refresh_hint_link()
 	for button in theme_buttons + _mode_buttons + [hint_button, _voice_button, collection_button]:
 		button.disabled = true
 		button.focus_mode = Control.FOCUS_NONE
@@ -3547,8 +3570,7 @@ func _show_collection() -> void:
 			_collection_focus_modes[button] = button.focus_mode
 			button.focus_mode = Control.FOCUS_NONE
 	collection_page.show()
-	for card in cards.values():
-		card.set_hint_paused(true)
+	_hint_link.set_paused(true)
 	_memory.pause(true)
 	_collection_back.grab_focus()
 	_update_duck()

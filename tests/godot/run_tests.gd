@@ -764,27 +764,36 @@ func _test_play_improvements(app) -> void:
 			"Repeated hint signals cannot move focus, cancel the card, or spend another hint")
 		await create_timer(0.7).timeout
 		for id in hinted:
-			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
-				"Hinted cards have a lightning marker, not just a different color")
-			check(app.cards[id]._hint_current.active and app.cards[id]._hint_current.is_visible_in_tree()
-				and app.cards[id]._hint_current.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-				"Both members of the hint carry a conducting border that cannot intercept input")
-			check(app.cards[id]._hint_current.is_processing() == not app.reduced_motion,
-				"The hint current survives the selected card's short press feedback")
+			check(not app.cards[id].match_mark.visible,
+				"Hinted cards do not display the success badge before they are matched")
+		var link = app._hint_link
+		var image_id: String = hinted[0] if app.model.card_by_id(hinted[0]).kind == "image" else hinted[1]
+		var word_id: String = hinted[1] if hinted[0] == image_id else hinted[0]
+		check(link.active and link.is_visible_in_tree() and link.mouse_filter == Control.MOUSE_FILTER_IGNORE
+			and link.source == app.cards[image_id] and link.target == app.cards[word_id] and link.path.size() >= 2,
+			"One noninteractive electric arc connects the hinted image card to its matching word")
+		check(link.is_processing() == not app.reduced_motion,
+			"The connecting hint arc survives the selected card's short press feedback")
 		check(app.cards[hinted[0]].get_theme_stylebox("normal").bg_color != app.cards[hinted[1]].get_theme_stylebox("normal").bg_color,
 			"The selected hint card keeps a distinct surface after its short press reaction ends")
 		var previous_reduced_motion: bool = app.reduced_motion
+		app.set_reduced_motion(false)
+		var moving_phase: float = link.phase
+		await create_timer(0.08).timeout
+		check(link.phase != moving_phase, "The active connecting arc advances its flowing electrical motion")
 		app.set_reduced_motion(true)
-		for id in hinted:
-			check(not app.cards[id]._hint_current.is_processing() and app.cards[id]._hint_current.active,
-				"Reduced motion keeps the electric hint visible without running an animation")
+		var still_phase: float = link.phase
+		await process_frame
+		await process_frame
+		check(link.reduced_motion and not link.is_processing() and link.active and link.is_visible_in_tree()
+			and is_equal_approx(link.phase, still_phase),
+			"Reduced motion keeps the connecting arc visible and still")
 		app.set_reduced_motion(previous_reduced_motion)
 		check(app._success.is_visible_in_tree() and app._success.filled_count == 0
 			and app._success.get_parent() == app._header_duck_slot,
 			"A hint keeps ordinary progress beside Pip without adding an instruction row")
 		app._show_collection()
-		for id in hinted:
-			check(not app.cards[id]._hint_current.is_processing(), "Opening rewards stops hidden hint animation")
+		check(link.paused and link.active and not link.is_processing(), "Opening rewards pauses the connecting hint arc")
 		var previous_hint: Array = hinted.duplicate()
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
@@ -794,21 +803,19 @@ func _test_play_improvements(app) -> void:
 		app._hide_collection()
 		app.on_page_hidden()
 		app.choose_theme("winter")
-		for id in hinted:
-			check(not app.cards[id]._hint_current.is_processing(), "Page hiding keeps current paused through a theme refresh")
+		check(link.paused and link.active and not link.is_processing(),
+			"Page hiding keeps the connecting arc paused through a theme refresh")
 		check(app.hint_button.disabled and app.model.hints_remaining == 2 and not app.model.request_hint(),
 			"Page hiding and season changes preserve the active hint and allowance")
 		app.on_page_visible()
-		for id in hinted:
-			check(app.cards[id]._hint_current.is_processing() == not app.reduced_motion,
-				"Returning to the board restores hint motion according to the accessibility setting")
+		check(not link.paused and link.active and link.is_processing() == not app.reduced_motion,
+			"Returning to the board restores arc motion according to the accessibility setting")
 		app.cards[hinted[0]].pressed.emit()
 		app.cards[hinted[0]].pressed.emit()
 		check(app.model.hint_ids.is_empty() and not app.hint_button.disabled and app.hint_button.count == 2,
 			"Clearing the current makes the second hint available")
-		for id in hinted:
-			check(not app.cards[id]._hint_current.active and not app.cards[id]._hint_current.is_processing(),
-				"Cancelling the hint releases both continuous animations")
+		check(not link.active and not link.is_processing() and link.path.is_empty(),
+			"Cancelling a hint removes its connecting arc and stops its animation")
 		app.hint_button.pressed.emit()
 		var second_hint: Array = app.model.hint_ids.duplicate()
 		check(app.model.hints_remaining == 1 and app.hint_button.count == 1,
@@ -826,6 +833,9 @@ func _test_play_improvements(app) -> void:
 			app.cards[third_hint[0]].pressed.emit()
 		app.cards[third_hint[1]].pressed.emit()
 		check(app.model.successes == 1, "Completing a hint uses an already selected card instead of cancelling it")
+		check(not link.active and not link.is_processing()
+			and app.cards[third_hint[0]].match_mark.visible and app.cards[third_hint[1]].match_mark.visible,
+			"Matching the hinted pair removes the arc and shows success badges only on the completed cards")
 		check(app.hint_button.disabled, "The exhausted hint stays disabled during match feedback")
 		app.feedback_timer.timeout.emit()
 		for pair in pairs_for(app.model):

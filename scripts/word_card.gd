@@ -3,26 +3,14 @@ extends Button
 const Style = preload("res://scripts/ui_style.gd")
 const WordPlay = preload("res://scripts/word_play.gd")
 const CardMotion = preload("res://scripts/card_motion.gd")
-const HintCurrent = preload("res://scripts/hint_current.gd")
 
 class MatchMark:
 	extends Control
 
-	var hinted: bool = false
-
 	func _draw() -> void:
 		var center := size * 0.5
 		var radius := minf(size.x, size.y) * 0.44
-		if not hinted:
-			Style.draw_match_badge(self, center, radius)
-			return
-		var bolt := PackedVector2Array()
-		for point in [Vector2(0.2, -1), Vector2(-0.65, 0.12), Vector2(-0.06, 0.12),
-				Vector2(-0.2, 1), Vector2(0.65, -0.2), Vector2(0.06, -0.2)]:
-			bolt.append(center + point * radius)
-		draw_colored_polygon(bolt, Color("#b8f5ff"))
-		bolt.append(bolt[0])
-		draw_polyline(bolt, HintCurrent.EDGE, 1.8, true)
+		Style.draw_match_badge(self, center, radius)
 
 
 class FeedbackOverlay:
@@ -79,7 +67,6 @@ var _back: Control
 var _shown_face_up: bool = true
 var _flip: Tween
 var _feedback: FeedbackOverlay
-var _hint_current: HintCurrent
 var _feedback_state: String = ""
 var _feedback_kind: String = ""
 var _feedback_left: float = 0.0
@@ -123,12 +110,6 @@ func setup(value: Dictionary) -> void:
 	word_label.visible = value.kind == "word"
 	_face.add_child(word_label)
 	word_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_hint_current = HintCurrent.new()
-	_hint_current.name = "HintCurrent"
-	_hint_current.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_hint_current)
-	_hint_current.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_hint_current.hide()
 	match_mark = MatchMark.new()
 	match_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(match_mark)
@@ -186,7 +167,6 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		fill = Color("#f0fcff")
 		border = Color("#9ad5e5")
 	var radius: int = ceili(14 / Style.ui_scale(self)) if _back != null else 20
-	_hint_current.configure(hinted and not matched and not wrong, reduced_motion, radius)
 	var normal: StyleBoxFlat = Style.box(fill, border, radius, 2 if selected or matched or wrong or hinted else 1)
 	normal.shadow_color = Color(accent, 0.11)
 	normal.shadow_size = 3
@@ -195,10 +175,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	add_theme_stylebox_override("disabled", normal)
 	add_theme_stylebox_override("hover", Style.box(fill, accent, radius, 3))
 	add_theme_stylebox_override("pressed", Style.box(accent.lightened(0.8), accent, radius, 3))
-	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, HintCurrent.EDGE if hinted else accent, radius, 2 if hinted else 4))
+	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, accent, radius, 4))
 	disabled = matched or locked
-	match_mark.hinted = hinted and not matched
-	match_mark.visible = matched or hinted
+	match_mark.visible = matched
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.4 if matched else 1.0
 	word_label.modulate.a = 0.4 if matched else 1.0
@@ -206,17 +185,10 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
-	if _hint_current != null:
-		_hint_current.set_reduced_motion(value)
 	if value:
 		stop_word_play()
 		_stop_feedback()
 		_settle_flip()
-
-
-func set_hint_paused(value: bool) -> void:
-	if _hint_current != null:
-		_hint_current.set_paused(value)
 
 
 func set_back(back: Control) -> void:

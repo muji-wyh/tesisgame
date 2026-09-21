@@ -46,7 +46,7 @@ func check_feedback(app, ids: Array, correct: bool) -> void:
 		check(card.picture.texture.resource_path == "res://" + data.word.image and card.word_label.text == data.word.text,
 			"Feedback preserves the card's original word and picture")
 		if correct:
-			check(card.match_mark.visible and not card.match_mark.hinted and not card.disabled
+			check(card.match_mark.visible and not card.disabled
 				and card.picture.modulate.a == 1.0 and card.word_label.modulate.a == 1.0,
 				"Completed cards remain fully readable and enabled for pronunciation replay")
 	check(not app._message.is_visible_in_tree()

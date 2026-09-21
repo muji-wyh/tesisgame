@@ -686,20 +686,38 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
   const twoLeft = await hintImage(page);
-  await page.screenshot({ path: testInfo.outputPath('hint-current.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('hint-link.png'), scale: 'css' });
   const board = contentBounds(await logicalMetrics(page));
   const areaHeight = metrics.height / scale - board.top - board.padding;
   const columns = board.width >= areaHeight || areaHeight < 318 ? 4 : 2, rows = 8 / columns;
   const cardWidth = (board.width - (columns - 1) * 10) / columns * scale;
   const cardHeight = (areaHeight - (rows - 1) * 10) / rows * scale;
-  const hintedCard = cardPoint(metrics, firstPair.Word);
-  // Only the hinted card's top edge is sampled; Pip and card contents cannot fake current motion.
-  const edgeClip = { x: Math.round(hintedCard.x - cardWidth / 2 + 4),
-    y: Math.round(hintedCard.y - cardHeight / 2 + 1), width: Math.floor(cardWidth - 8), height: 14 };
-  const current = await page.screenshot({ path: testInfo.outputPath('hint-current-edge-before.png'), clip: edgeClip, scale: 'css' });
+  // Sample only the central gap linking the cards, excluding every card and Pip.
+  const linkClip = columns === 2 ? {
+    x: Math.round(metrics.x + board.x * scale + cardWidth + 5 * scale - 3),
+    y: Math.round(metrics.y + board.top * scale), width: 6, height: Math.floor(areaHeight * scale)
+  } : {
+    x: Math.round(metrics.x + board.x * scale),
+    y: Math.round(metrics.y + board.top * scale + cardHeight + 5 * scale - 3),
+    width: Math.floor(board.width * scale), height: 6
+  };
+  const current = await page.screenshot({ path: testInfo.outputPath('hint-link-before.png'), clip: linkClip, scale: 'css' });
+  const bluePixels = await page.evaluate(async encoded => {
+    const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
+    const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+    const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let count = 0;
+    for (let index = 0; index < pixels.length; index += 4) {
+      const [red, green, blue] = pixels.subarray(index, index + 3);
+      if (red < 140 && green > red + 30 && blue > red + 45 && green > 90 && blue > 100) count++;
+    }
+    return count;
+  }, current.toString('base64'));
+  expect(bluePixels, 'A cyan-blue connection visibly crosses the gap between the hinted cards.').toBeGreaterThan(4);
   await expect.poll(async () => (await page.screenshot({
-    path: testInfo.outputPath('hint-current-edge-after.png'), clip: edgeClip, scale: 'css'
-  })).equals(current), { timeout: 3000, intervals: [200], message: 'Electric current moves along the hinted card border.' }).toBe(false);
+    path: testInfo.outputPath('hint-link-after.png'), clip: linkClip, scale: 'css'
+  })).equals(current), { timeout: 3000, intervals: [200], message: 'Electric current flows through the connection between the hinted cards.' }).toBe(false);
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
