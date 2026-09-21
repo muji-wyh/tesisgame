@@ -1190,7 +1190,8 @@
           notice.textContent = privacy;
           panel.setAttribute('data-pop-stop-failed', String(presentation === 'pop' && stopFailed));
           panel.hidden = !enabled || (presentation === 'pop' && !stopFailed);
-          aura?.setAttribute('data-listening', String(presentation === 'pop' && enabled && active && listening && !document.hidden));
+          // Both voice modes share the same viewport light and listening lifecycle.
+          aura?.setAttribute('data-listening', String(enabled && active && listening && !document.hidden));
           // JavaScriptBridge collects positional arguments into the GDScript callback Array.
           onState?.(enabled, listening, message);
         }

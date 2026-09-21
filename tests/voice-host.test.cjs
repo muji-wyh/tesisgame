@@ -138,13 +138,17 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
 }
 
 test('Voice activation starts recognition immediately without a second control', () => {
-  const f = fixture();
+  const f = fixture({ autoStart: false });
   f.host.speechMode(true);
   assert.equal(f.starts, 1);
+  assert.equal(f.aura.attributes['data-listening'], 'false', 'Pending permission does not light the border');
+  f.latest.callbacks.start();
+  assert.equal(f.aura.attributes['data-listening'], 'true', 'Match uses the shared light after actual listening starts');
   f.host.speechMode(true);
   assert.equal(f.starts, 1, 'An already active mode never starts a duplicate recognizer');
   f.host.speechMode(false);
   assert.equal(f.panel.hidden, true);
+  assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.equal(f.aborts, 1);
 });
 
@@ -184,6 +188,7 @@ test('recognition activity drives one bounded visual reaction and stops cleanly'
   f.advance(1000);
   assert.equal(f.panel.attributes['data-state'], 'off');
   assert.equal(f.panel.attributes['data-heard'], 'false');
+  assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.equal(f.pendingTimers, 0);
 });
 
@@ -195,6 +200,7 @@ test('a failed microphone shutdown stays visible and blocks another recording', 
   f.host.stopSpeech();
   assert.equal(f.panel.hidden, false);
   assert.equal(f.panel.attributes['data-state'], 'error');
+  assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.match(f.status.textContent, /close this tab/i);
   f.host.speechMode(true);
   assert.equal(f.starts, 1);
@@ -319,9 +325,11 @@ test('utterance endings restart once after a delay while Stop exits the entire m
   old.end();
   assert.equal(f.starts, 1, 'onend cannot restart synchronously');
   assert.equal(f.panel.attributes['data-state'], 'starting');
+  assert.equal(f.aura.attributes['data-listening'], 'false', 'The border stops while recognition reconnects');
   assert.equal(f.panel.attributes['data-heard'], 'false');
   f.advance(1500);
   assert.equal(f.starts, 2, 'duplicate onend schedules only one restart');
+  assert.equal(f.aura.attributes['data-listening'], 'true');
   old.result([['stale doll', true]]);
   assert.deepEqual(f.results, [['one word', false]]);
   f.host.speechMode(false);
@@ -408,6 +416,7 @@ for (const code of ['not-allowed', 'service-not-allowed', 'no-speech', 'audio-ca
       code === 'no-speech' ? /no speech/i : code === 'audio-capture' ? /microphone/i : /network/i);
     assert.equal(f.panel.attributes['data-state'], 'error');
     assert.equal(f.panel.hidden, false, 'The error remains visible with manual play available');
+    assert.equal(f.aura.attributes['data-listening'], 'false');
     assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
     f.advance(5000);
     old.result([['late doll', true]]);
@@ -460,6 +469,7 @@ test('visibility and pagehide stop speech; showing the page never starts it agai
     assert.equal(f.starts, 1);
     assert.deepEqual(f.results, []);
     assert.equal(f.elements.canvas.focusCalls.length, 0, 'Page-hide cleanup never changes focus');
+    assert.equal(f.aura.attributes['data-listening'], 'false');
   }
   const hidden = fixture();
   hidden.document.hidden = true;
@@ -575,7 +585,7 @@ test('only Pop emits the lexical callback and switching presentation releases th
   f.host.stopSpeech();
   f.listen();
   assert.equal(f.panel.hidden, false, 'An ordinary activation after Pop uses Match presentation again');
-  assert.equal(f.aura.attributes['data-listening'], 'false');
+  assert.equal(f.aura.attributes['data-listening'], 'true', 'Match keeps the same listening border after switching from Pop');
   f.latest.result([['sun', true]]);
   assert.deepEqual(f.popWords, ['cat']);
   assert.deepEqual(f.results.at(-1), ['sun', true]);

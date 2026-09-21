@@ -3,7 +3,7 @@ const { boardPoint, chooseMode, chooseTheme, contentBounds, headerPoint, headerI
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
-    const fixture = { instances: [], starts: 0, aborts: 0 };
+    const fixture = { instances: [], starts: 0, aborts: 0, automatic: true };
     class Recognition {
       constructor() { this.results = []; this.running = false; fixture.instances.push(this); }
       start() {
@@ -12,7 +12,7 @@ async function installRecognition(page, api = 'standard') {
         fixture.starts++;
         this.activationAtStart = navigator.userActivation?.isActive ?? null;
         this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
-        queueMicrotask(() => this.callbacks.start?.());
+        if (fixture.automatic) queueMicrotask(() => this.callbacks.start?.());
       }
       abort() {
         this.running = false;
@@ -51,6 +51,13 @@ async function installRecognition(page, api = 'standard') {
   }, { api });
 }
 
+async function expectSpeechAura(page, listening) {
+  const aura = page.locator('#pop-aura');
+  await expect(aura).toHaveAttribute('data-listening', String(listening));
+  await expect(aura).toHaveCSS('opacity', listening ? '1' : '0');
+  await expect(aura).toHaveCSS('visibility', listening ? 'visible' : 'hidden');
+}
+
 async function openGame(page, api = 'standard') {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -61,6 +68,7 @@ async function openGame(page, api = 'standard') {
   await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
+  await expectSpeechAura(page, false);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   return errors;
 }
@@ -106,6 +114,7 @@ async function listen(page) {
   await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeVisible();
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+  await expectSpeechAura(page, true);
   await expect(page.locator('#speech-button')).toHaveCount(0);
   await expect(page.locator('#speech-notice')).toContainText(/browser.*remotely/i);
   await expect(page.locator('#speech-notice')).toContainText(/(?:save|store)s? no voice or transcripts/i);
@@ -136,12 +145,23 @@ test('Voice is a prominent primary action without automatic recording', async ({
   }, available.toString('base64'));
   expect(fraction, 'The microphone has a filled theme surface, not a faint outline-only icon.').toBeGreaterThan(0.5);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
-  await listen(page);
+  await page.evaluate(() => { window.speechFixture.automatic = false; });
+  await toggleVoice(page);
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'starting');
+  await expectSpeechAura(page, false);
+  // A requested microphone is not yet listening. Only the recognizer's real
+  // start callback may turn on the same viewport aura used by Voice Pop.
+  await page.evaluate(() => window.speechFixture.instances.at(-1).callbacks.start());
+  await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+  await expectSpeechAura(page, true);
+  await expect(page.locator('#pop-aura')).toHaveCSS('pointer-events', 'none');
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   const active = await page.screenshot({ path: testInfo.outputPath('voice-primary-listening.png'), clip, scale: 'css' });
   expect(active.equals(available)).toBe(false);
+  await page.screenshot({ path: testInfo.outputPath('voice-match-listening-aura.png'), scale: 'css' });
   await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeHidden();
+  await expectSpeechAura(page, false);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   expect(errors).toEqual([]);
 });
@@ -153,6 +173,7 @@ test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewpo
   expect(await page.evaluate(() => window.wordBuddiesHost.speechAvailable())).toBe(true);
   await listen(page);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+  expect(await page.locator('#pop-aura').boundingBox(), 'Match speech uses the full viewport perimeter.').toEqual({ x: 0, y: 0, ...viewport });
   const panel = await page.locator('#speech-panel').boundingBox();
   const buddy = await page.locator('#speech-buddy').boundingBox();
   const notice = await page.locator('#speech-notice').boundingBox();
@@ -280,6 +301,7 @@ test('interim speech does not score; final sentences queue distinct real pairs a
     pairs.slice(1).map(([word]) => word));
   await expect(page.locator('#game-status')).toContainText('You did it!');
   await expect(page.locator('#speech-panel')).toBeHidden();
+  await expectSpeechAura(page, false);
   await expect(page.locator('#speech-transcript')).toBeEmpty();
   expect(await page.evaluate(() => window.speechFixture.aborts)).toBeGreaterThanOrEqual(1);
   const won = await page.locator('#game-status').textContent();
@@ -403,6 +425,7 @@ test('Voice off clears the panel and stale results cannot interfere with a newer
   await expect(page.locator('#speech-panel')).toBeVisible();
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
   await expect(page.locator('#speech-transcript')).toBeEmpty();
+  await expectSpeechAura(page, true);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(2);
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word}`), pairs[0][0]);
   await expect(page.locator('#game-status')).toContainText('Great match!');
@@ -430,6 +453,7 @@ test('permission denial stays visible and never retries automatically', async ({
   await page.evaluate(() => window.speechFixture.error('not-allowed'));
   await expect(page.locator('#speech-status')).toContainText(/permission|denied|blocked/i);
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'error');
+  await expectSpeechAura(page, false);
   await expect.poll(() => page.locator('#speech-panel').evaluate(element =>
     element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length
   )).toBe(0);
@@ -472,6 +496,7 @@ for (const event of ['visibilitychange', 'pagehide']) {
       } else window.dispatchEvent(new Event(event));
     }, event);
     await expect(page.locator('#speech-panel')).toBeHidden();
+    await expectSpeechAura(page, false);
     await page.evaluate(() => {
       window.speechFixture.emit('late doll', true);
       window.speechFixture.end();
@@ -480,6 +505,7 @@ for (const event of ['visibilitychange', 'pagehide']) {
     });
     await page.waitForTimeout(900);
     await expect(page.locator('#speech-transcript')).toBeEmpty();
+    await expectSpeechAura(page, false);
     expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
     expect(await page.evaluate(() => window.speechFixture.aborts)).toBeGreaterThanOrEqual(1);
     expect(errors).toEqual([]);

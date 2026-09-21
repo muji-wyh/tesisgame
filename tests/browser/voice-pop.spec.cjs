@@ -221,6 +221,7 @@ async function expectListeningAura(page) {
   const aura = page.locator('#pop-aura');
   await expect(aura).toHaveAttribute('data-listening', 'true');
   await expect(aura).toHaveCSS('opacity', '1');
+  await expect(aura).toHaveCSS('visibility', 'visible');
   await expect(aura).toHaveCSS('pointer-events', 'none');
   const bounds = await aura.boundingBox(), viewport = page.viewportSize();
   expect(bounds, 'The listening glow follows the full viewport perimeter').toEqual({
@@ -301,8 +302,10 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   await page.waitForTimeout(1300);
   expect((await state(page)).remaining).toBe(30);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
+  await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('not-allowed'));
   await expect(page.locator('#pop-status')).toContainText(/permission|allow/i);
+  await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   await page.screenshot({ path: info.outputPath('permission-denied.png') });
   await page.evaluate(() => { window.__popSpeech.automatic = true; });
   await action(page, /retry|try.*mic|enable|listen/i);
@@ -314,6 +317,7 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   await expect(page.locator('#pop-status')).toBeEmpty();
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
+  await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   expect(await page.evaluate(() => window.__popSpeech.aborts)).toBeGreaterThan(0);
   expect(errors).toEqual([]);
 });
