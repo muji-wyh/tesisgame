@@ -756,19 +756,35 @@ func _test_play_improvements(app) -> void:
 		check(app.model.hints_remaining == 2 and app.hint_button.disabled and app.hint_button.count == 2,
 			"An active first hint shows two remaining and blocks duplicate spending")
 		check(app.hint_button.focus_mode == Control.FOCUS_NONE,
-			"Keyboard navigation skips a hint while its stars are active")
+			"Keyboard navigation skips a hint while its current is active")
 		app.cards[hinted[0]].pressed.emit()
 		app.hint_button.pressed.emit()
 		check(app.cards[hinted[0]].has_focus() and app.model.selected_id == hinted[0]
 			and app.model.hints_remaining == 2,
 			"Repeated hint signals cannot move focus, cancel the card, or spend another hint")
+		await create_timer(0.7).timeout
 		for id in hinted:
 			check(app.cards[id].match_mark.visible and app.cards[id].match_mark.hinted,
-				"Hinted cards have a star marker, not just a different color")
+				"Hinted cards have a lightning marker, not just a different color")
+			check(app.cards[id]._hint_current.active and app.cards[id]._hint_current.is_visible_in_tree()
+				and app.cards[id]._hint_current.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+				"Both members of the hint carry a conducting border that cannot intercept input")
+			check(app.cards[id]._hint_current.is_processing() == not app.reduced_motion,
+				"The hint current survives the selected card's short press feedback")
+		check(app.cards[hinted[0]].get_theme_stylebox("normal").bg_color != app.cards[hinted[1]].get_theme_stylebox("normal").bg_color,
+			"The selected hint card keeps a distinct surface after its short press reaction ends")
+		var previous_reduced_motion: bool = app.reduced_motion
+		app.set_reduced_motion(true)
+		for id in hinted:
+			check(not app.cards[id]._hint_current.is_processing() and app.cards[id]._hint_current.active,
+				"Reduced motion keeps the electric hint visible without running an animation")
+		app.set_reduced_motion(previous_reduced_motion)
 		check(app._success.is_visible_in_tree() and app._success.filled_count == 0
 			and app._success.get_parent() == app._header_duck_slot,
 			"A hint keeps ordinary progress beside Pip without adding an instruction row")
 		app._show_collection()
+		for id in hinted:
+			check(not app.cards[id]._hint_current.is_processing(), "Opening rewards stops hidden hint animation")
 		var previous_hint: Array = hinted.duplicate()
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
@@ -778,13 +794,21 @@ func _test_play_improvements(app) -> void:
 		app._hide_collection()
 		app.on_page_hidden()
 		app.choose_theme("winter")
+		for id in hinted:
+			check(not app.cards[id]._hint_current.is_processing(), "Page hiding keeps current paused through a theme refresh")
 		check(app.hint_button.disabled and app.model.hints_remaining == 2 and not app.model.request_hint(),
 			"Page hiding and season changes preserve the active hint and allowance")
 		app.on_page_visible()
+		for id in hinted:
+			check(app.cards[id]._hint_current.is_processing() == not app.reduced_motion,
+				"Returning to the board restores hint motion according to the accessibility setting")
 		app.cards[hinted[0]].pressed.emit()
 		app.cards[hinted[0]].pressed.emit()
 		check(app.model.hint_ids.is_empty() and not app.hint_button.disabled and app.hint_button.count == 2,
-			"Clearing the stars makes the second hint available")
+			"Clearing the current makes the second hint available")
+		for id in hinted:
+			check(not app.cards[id]._hint_current.active and not app.cards[id]._hint_current.is_processing(),
+				"Cancelling the hint releases both continuous animations")
 		app.hint_button.pressed.emit()
 		var second_hint: Array = app.model.hint_ids.duplicate()
 		check(app.model.hints_remaining == 1 and app.hint_button.count == 1,

@@ -667,6 +667,7 @@ test('Pip speaks with actual prompt playback, not pending downloads or music', a
 test('three hints per round are shared by touch and Xbox', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await ready(page);
   const { metrics, discovered } = await discoverCards(page);
@@ -685,7 +686,20 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
   const twoLeft = await hintImage(page);
-  await page.screenshot({ path: testInfo.outputPath('hint-stars.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('hint-current.png'), scale: 'css' });
+  const board = contentBounds(await logicalMetrics(page));
+  const areaHeight = metrics.height / scale - board.top - board.padding;
+  const columns = board.width >= areaHeight || areaHeight < 318 ? 4 : 2, rows = 8 / columns;
+  const cardWidth = (board.width - (columns - 1) * 10) / columns * scale;
+  const cardHeight = (areaHeight - (rows - 1) * 10) / rows * scale;
+  const hintedCard = cardPoint(metrics, firstPair.Word);
+  // Only the hinted card's top edge is sampled; Pip and card contents cannot fake current motion.
+  const edgeClip = { x: Math.round(hintedCard.x - cardWidth / 2 + 4),
+    y: Math.round(hintedCard.y - cardHeight / 2 + 1), width: Math.floor(cardWidth - 8), height: 14 };
+  const current = await page.screenshot({ path: testInfo.outputPath('hint-current-edge-before.png'), clip: edgeClip, scale: 'css' });
+  await expect.poll(async () => (await page.screenshot({
+    path: testInfo.outputPath('hint-current-edge-after.png'), clip: edgeClip, scale: 'css'
+  })).equals(current), { timeout: 3000, intervals: [200], message: 'Electric current moves along the hinted card border.' }).toBe(false);
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);

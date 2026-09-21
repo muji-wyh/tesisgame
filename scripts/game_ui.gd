@@ -214,6 +214,7 @@ var reward_image: Medal
 var failure_image: TextureRect
 var failure_button: Button
 var reduced_motion: bool = false
+var _page_hidden: bool = false
 var _background: ColorRect
 var _success: ProgressBadges
 var _mistakes: ProgressBadges
@@ -2064,6 +2065,7 @@ func _refresh_match_cards() -> void:
 		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
 			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
 			locked, model.hint_ids.has(id))
+		cards[id].set_hint_paused(_page_hidden or collection_page.visible or _preview_page.visible)
 		cards[id].disabled = locked
 		cards[id].picture.modulate.a = 1.0
 		cards[id].word_label.modulate.a = 1.0
@@ -2462,7 +2464,7 @@ func _refresh_hint() -> void:
 	elif _voice_mode and model.phase == "feedback":
 		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
 	elif not model.hint_ids.is_empty():
-		hint_button.tooltip_text = "Hint active. Follow the stars before using another."
+		hint_button.tooltip_text = "Hint active. Match the two electric cards before using another."
 	else:
 		hint_button.tooltip_text = "%d %s left (Xbox X)" % [model.hints_remaining, "hint" if model.hints_remaining == 1 else "hints"]
 	_set_accessibility_name(hint_button, hint_button.tooltip_text)
@@ -2772,6 +2774,9 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	_page_hidden = true
+	for card in cards.values():
+		card.set_hint_paused(true)
 	if _mode_id == "pop":
 		_pop.pause()
 	_stop_pop_listening()
@@ -2803,6 +2808,9 @@ func on_page_hidden() -> void:
 
 
 func on_page_visible() -> void:
+	_page_hidden = false
+	for card in cards.values():
+		card.set_hint_paused(collection_page.visible or _preview_page.visible)
 	duck.set_idle_paused(false)
 	_room.playground.pause(false)
 	feedback_timer.paused = collection_page.visible
@@ -3539,6 +3547,8 @@ func _show_collection() -> void:
 			_collection_focus_modes[button] = button.focus_mode
 			button.focus_mode = Control.FOCUS_NONE
 	collection_page.show()
+	for card in cards.values():
+		card.set_hint_paused(true)
 	_memory.pause(true)
 	_collection_back.grab_focus()
 	_update_duck()

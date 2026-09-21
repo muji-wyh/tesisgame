@@ -383,8 +383,8 @@ transparent Sprites and deployed. Builds with these verified local overrides use
 the selected PNGs; clean checkouts retain the original SVG fallbacks. See the
 provenance record for selection, hashes and release evidence.
 
-Use the **lightbulb icon** (or Xbox **X**) when you get stuck. A real unmatched pair gets gold borders
-and star badges, and its word is spoken. Hints follow your selected card when it has a
+Use the **lightbulb icon** (or Xbox **X**) when you get stuck. A real unmatched pair gets synchronized
+electric borders and lightning badges, and its word is spoken. Hints follow your selected card when it has a
 partner; otherwise they point to a complete pair. Each round has **three hints**, with no
 score penalty. The icon's small badge shows how many remain, including zero; only a new
 round restores all three.
@@ -397,7 +397,7 @@ so keyboard and controller players can continue with **Enter** or **A**.
 Correct matches now make small star bursts. Consecutive matches grow the celebration
 and show **2 in a row!** or **3 in a row!** beside the match badges, without a countdown.
 Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
-keeps the encouragement and hint stars without moving particles.
+keeps the encouragement and static electric borders without moving particles.
 
 Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**,
 **Space**, **Jungle** or **Candy** theme until you choose one. Your chosen world is
