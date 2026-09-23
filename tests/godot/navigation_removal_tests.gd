@@ -69,7 +69,6 @@ func _run() -> void:
 	check(app.playroom_state.select_item("backdrop-spring", app.medal_progress.counts),
 		"Existing backdrop selections remain valid saved data")
 	app._show_collection()
-	app._show_reward_section("room")
 	await settle()
 	check(app._room.item_buttons.size() == 9 and app._room.item_buttons.keys().all(
 		func(id: String) -> bool: return id.begins_with("toy-")), "Rewards offers toys, not hidden backdrop choices")
@@ -86,13 +85,10 @@ func _run() -> void:
 	for world in app.model.THEMES:
 		toy_counts[world + "-1"] = 3
 	check(app.playroom_state.next_gift(toy_counts).is_empty(), "Gift prompts do not advertise the removed rooms")
-	check(app._collection_tabs.keys() == ["room", "medals"],
-		"World selection has no separate navigation tab")
-	for section in ["room", "medals"]:
-		app._show_reward_section(section)
-		await settle()
-		check(app._world_choices.is_visible_in_tree() and app._world_choices.get_parent() == app._collection_header,
-			"The world choices are directly available in both reward sections")
+	check(not app.has_method("_show_reward_section") and app._collection_title.text == "Pip",
+		"World selection has no separate navigation tab or retained section route")
+	check(app._world_choices.is_visible_in_tree() and app._world_choices.get_parent() == app._collection_header,
+		"The world choices are directly available in Pip's room")
 	for width in [320, 768]:
 		root.size = Vector2i(width, 1024)
 		await settle()
@@ -109,7 +105,7 @@ func _run() -> void:
 	var cards: Array = app.model.cards.duplicate(true)
 	var hints: int = app.model.hints_remaining
 	app.theme_buttons[4].pressed.emit()
-	check(app.collection_page.visible and app._collection_section == "medals" and app.model.theme_id == "ocean"
+	check(app.collection_page.visible and app._room.is_visible_in_tree() and app.model.theme_id == "ocean"
 		and app.model.cards == cards and app.model.hints_remaining == hints,
 		"A direct world choice keeps the page open and preserves the current game")
 	app._hide_collection()

@@ -61,10 +61,10 @@ async function chooseTheme(page, index) {
   const world = worldIconRect(await metrics(page), index);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText('My rewards opened.');
+  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
   await rendered(page);
 }
 
@@ -82,8 +82,8 @@ function collectionBounds(bounds) {
   const x = Math.max(padding, Math.round((bounds.width - 960 / scale) / 2)), width = bounds.width - x * 2;
   const worldSide = Math.ceil(52 / scale), worldGap = Math.round(6 / scale);
   const worldWidth = worldSide * THEME_IDS.length + worldGap * (THEME_IDS.length - 1);
-  const tabWidth = Math.min(80 / scale, (usableWidth - 44 / scale - gap * 3) / 2);
-  const inlineWorlds = usableWidth >= worldWidth + tabWidth * 2 + Math.ceil(44 / scale) + gap * 3;
+  const titleWidth = Math.ceil(80 / scale);
+  const inlineWorlds = usableWidth >= worldWidth + titleWidth * 2 + Math.ceil(44 / scale) + gap * 3;
   const worldColumns = usableWidth >= worldWidth ? THEME_IDS.length : Math.max(1, Math.min(4, Math.floor((usableWidth + worldGap) / (worldSide + worldGap))));
   const worldRowGap = Math.round(4 / scale);
   const rows = Math.ceil(THEME_IDS.length / worldColumns), worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
@@ -106,14 +106,13 @@ function ageButtonRect(bounds, id) {
 }
 
 function collectionHeaderRect(bounds, section) {
-  const { x, width, padding, gap, headerHeight } = collectionBounds(bounds), scale = uiScale(bounds);
+  const { x, width, padding, headerHeight } = collectionBounds(bounds), scale = uiScale(bounds);
   const height = Math.ceil(44 / scale);
   const y = padding + (headerHeight - height) / 2;
   if (section === 'back') return { x: x + width - height, y, width: height, height };
-  const tab = ['room', 'medals'].indexOf(section);
-  if (tab < 0) throw new Error(`Unknown reward section: ${section}`);
-  const tabWidth = Math.min(80 / scale, (width - 44 / scale - gap * 3) / 2);
-  return { x: x + tab * (tabWidth + gap), y, width: tabWidth, height };
+  if (section === 'users') return { x: x + width - height - Math.ceil(80 / scale) - Math.ceil(8 / scale), y, width: Math.ceil(80 / scale), height };
+  if (section !== 'room') throw new Error(`Unknown room header item: ${section}`);
+  return { x, y, width: Math.ceil(80 / scale), height };
 }
 
 function worldIconRect(bounds, index) {
@@ -122,24 +121,14 @@ function worldIconRect(bounds, index) {
     worldGap: spacing, worldRowGap, worldColumns: columns, worldHeight } = collectionBounds(bounds);
   let rowX = x, rowWidth = width, y = padding + headerHeight + gap;
   if (inlineWorlds) {
-    const tab = collectionHeaderRect(bounds, 'room'), back = collectionHeaderRect(bounds, 'back');
-    rowX += 2 * (tab.width + gap);
-    rowWidth -= tab.width * 2 + back.width + gap * 3;
+    const title = collectionHeaderRect(bounds, 'room'), back = collectionHeaderRect(bounds, 'back');
+    rowX += title.width + gap;
+    rowWidth -= title.width * 2 + back.width + gap * 3;
     y = padding + (headerHeight - worldHeight) / 2;
   }
   const left = rowX + (rowWidth - side * columns - spacing * (columns - 1)) / 2;
   return { x: left + index % columns * (side + spacing),
     y: y + Math.floor(index / columns) * (side + worldRowGap), width: side, height: side };
-}
-
-function firstMedalPoint(bounds) {
-  const { x, width, top, gap } = collectionBounds(bounds), scale = uiScale(bounds);
-  const shelfPadding = Math.ceil(16 / scale), shelfGap = Math.ceil(12 / scale);
-  const columns = (width - shelfPadding * 2) * scale >= 780 ? 6 : 3;
-  const cell = (width - shelfPadding * 2 - shelfGap * (columns - 1)) / columns;
-  const spacing = Math.ceil(20 / scale);
-  const guideHeight = Math.ceil(64 / scale) + gap * 2;
-  return { x: x + shelfPadding + cell / 2, y: top + guideHeight + spacing + shelfPadding + 36 / scale + shelfGap + 64 / scale };
 }
 
 function headerIconRect(bounds, key = 'rewards') {
@@ -171,17 +160,7 @@ function progressRegion(bounds, mode = 'match') {
 async function openRewards(page) {
   const point = headerPoint(await metrics(page));
   await tap(page, point.x, point.y);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
-  await rendered(page);
-}
-
-async function chooseRewardSection(page, section) {
-  const tab = collectionHeaderRect(await metrics(page), section);
-  if (section === 'back') throw new Error('Back closes the collection; it is not a reward section.');
-  await tap(page, tab.x + tab.width / 2, tab.y + tab.height / 2);
-  await expect(page.locator('#game-status')).toContainText({
-    room: 'Choose toys for Pip.', medals: 'Medals.'
-  }[section]);
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await rendered(page);
 }
 
@@ -267,15 +246,23 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const equipped = layout.owned.includes(state.equipped) ? state.equipped : 'ball';
   const target = name === 'toy' ? equipped : name;
   if (name === 'toy' && locked) throw new Error('A locked preview has no active playable toy; select an owned object.');
-  await chooseRewardSection(page, 'room');
+  // Focus Back without activating it, then traverse the real room controls.
+  const back = collectionHeaderRect(bounds, 'back'), title = collectionHeaderRect(bounds, 'room');
+  await page.mouse.move(bounds.x + (back.x + back.width / 2) * bounds.scale,
+    bounds.y + (back.y + back.height / 2) * bounds.scale);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + (title.x + title.width / 2) * bounds.scale,
+    bounds.y + (title.y + title.height / 2) * bounds.scale);
+  await page.mouse.up();
   const controls = ['pip', ...(locked ? [] : [equipped]), ...layout.owned.filter(toy => locked || toy !== equipped)];
   for (const toy of layout.locked) {
     controls.push(toy);
     if (toy === active) controls.push('goal');
   }
   if (!controls.includes(target)) throw new Error(`Unavailable room control: ${name}`);
-  // Two tabs lead to Back, the world icons, four age choices, then the room controls.
-  for (let index = 0; index < 7 + THEME_IDS.length + controls.indexOf(target); index++) {
+  // Wide layouts place worlds before Back; narrow layouts put them below it.
+  const steps = 5 + (collectionBounds(bounds).inlineWorlds ? 0 : THEME_IDS.length);
+  for (let index = 0; index < steps + controls.indexOf(target); index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
   }
@@ -539,6 +526,6 @@ function resultPoint(bounds, key, { gift = false } = {}) {
     y: bounds.height - content.padding - actionHeight / 2 - extra };
 }
 
-module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, chooseRewardSection, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, firstMedalPoint, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, ageButtonRect, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

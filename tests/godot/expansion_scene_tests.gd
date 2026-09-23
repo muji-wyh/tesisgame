@@ -100,11 +100,13 @@ func _run() -> void:
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")
 	app._show_collection()
-	app._open_reward_preview("ocean-1")
-	app._wear_preview_reward()
-	check(app._favorite_reward_id == "ocean-1", "An earned medal can be displayed with Pip")
+	check(app.playroom_state.set_favorite("ocean-1"), "The compatibility state API retains a legacy favorite")
+	app._favorite_reward_id = app.playroom_state.favorite_id
+	app._refresh_collection()
+	check(app._playroom_medal.visible and app._favorite_reward_id == "ocean-1",
+		"An existing earned favorite remains a room decoration")
 	var saved := ConfigFile.new()
-	check(saved.load(app.playroom_save_path.get_basename() + "-v2.cfg") == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The favorite survives reload")
+	check(saved.load(app.playroom_save_path.get_basename() + "-v2.cfg") == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The existing favorite survives reload")
 	app._hide_collection()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()

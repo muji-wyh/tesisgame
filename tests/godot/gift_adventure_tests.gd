@@ -64,24 +64,24 @@ func _exercise(app, directory: String) -> void:
 		check(app.model.theme_id == entry[0] and app.model.adventure_id == entry[1], "Gift selects its reward world and related topic")
 		check(app.model.lesson_words.size() == 5 and app.model.lesson_words.any(func(word: Dictionary) -> bool: return word.id == entry[2]), "The lesson contains the desired toy's noun")
 		check(app.playroom_state.goal_item_id == "toy-" + entry[0], "The chosen gift persists")
-		check(app._gift_label.text.contains(app.playroom_state.selected_goal(app.medal_progress.counts).name), "The medal goal names the player's chosen gift")
 		var lesson: Array = app.model.lesson_words.duplicate(true)
 		for mode in ["memory", "pop", "match"]:
 			app.choose_mode(mode)
 			check(app.model.lesson_words == lesson, "Gift words remain identical in " + mode)
 	check(app.medal_progress.counts == original_counts and app.playroom_state.toy_id == "toy-ball", "Selecting goals and learning never grant or equip locked gifts")
 	app.choose_theme("spring")
-	check(app._gift_label.text.contains("Candy"), "Playing another world still identifies where the goal is earned")
+	check(app.playroom_state.selected_goal(app.medal_progress.counts).theme == "candy",
+		"Playing another world preserves the selected gift's earning world")
 	app._show_collection()
 	app._collection_dragged = true
 	var original_goal: String = app.playroom_state.goal_item_id
 	app._start_gift_adventure("toy-autumn")
 	check(app.collection_page.visible and app.playroom_state.goal_item_id == original_goal, "Swipe releases cannot start a gift adventure")
 	app._collection_dragged = false
-	app._show_reward_section("medals")
+	app._hide_collection()
 	app._start_gift_adventure("toy-autumn")
-	check(app.playroom_state.goal_item_id == original_goal, "Covered room controls cannot start a goal")
-	app._show_reward_section("room")
+	check(app.playroom_state.goal_item_id == original_goal, "Hidden room controls cannot start a goal")
+	app._show_collection()
 	app.model.phase = "won"
 	app.model.chest_state = "closed"
 	app._start_gift_adventure("toy-autumn")
@@ -144,13 +144,11 @@ func _exercise(app, directory: String) -> void:
 	check(app.playroom_state.set_goal("backdrop-space", app.medal_progress.counts),
 		"Seed a previously saved backdrop goal without exposing a new UI route")
 	app._show_collection()
-	app._show_reward_section("room")
 	app._refresh()
 	check(app._room._room.theme_id == app.model.theme_id and app.playroom_state.backdrop_id == "backdrop-autumn",
 		"The room follows the current world while retaining the legacy backdrop in saved state")
 	check(not app._room.goal_button.is_visible_in_tree()
-		and not app._room.goal_label.text.contains(app.playroom_state.item("backdrop-space").name)
-		and not app._gift_label.text.contains(app.playroom_state.item("backdrop-space").name),
+		and not app._room.goal_label.text.contains(app.playroom_state.item("backdrop-space").name),
 		"Pip and the reward guide do not market or resume an old backdrop goal")
 	check(app.playroom_state.selected_goal(app.medal_progress.counts).id == "backdrop-space",
 		"Ignoring a legacy goal in the UI never erases its saved value")

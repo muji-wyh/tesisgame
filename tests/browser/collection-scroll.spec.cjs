@@ -1,12 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, chooseRewardSection, enterGame } = require('./game-ui.cjs');
-
-async function openMedals(page) {
-  await openRewards(page);
-  await chooseRewardSection(page, 'medals');
-  await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
-  await rendered(page);
-}
+const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, enterGame } = require('./game-ui.cjs');
 
 async function contentShift(page, before, after) {
   const bounds = await metrics(page), collection = collectionBounds(bounds);
@@ -59,27 +52,31 @@ for (const ratio of [1, 2, 3]) {
       reducedMotion: 'reduce'
     });
 
-    test('rendered reward rows move one pixel for each finger pixel', async ({ page, browserName }, testInfo) => {
+    test('rendered room content moves one pixel for each finger pixel', async ({ page, browserName }, testInfo) => {
       test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto('/');
       await enterGame(page);
-      await openMedals(page);
-      const before = await page.screenshot({ path: testInfo.outputPath('medals-before-drag.png'), scale: 'css' });
+      await openRewards(page);
+      await rendered(page);
+      const bounds = await metrics(page), collection = collectionBounds(bounds);
+      const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
+        y: bounds.y + (collection.top + 90) * bounds.scale };
+      const before = await page.screenshot({ path: testInfo.outputPath('room-before-drag.png'), scale: 'css' });
       const client = await page.context().newCDPSession(page);
       const measurements = [];
       try {
         await client.send('Input.dispatchTouchEvent', {
-          type: 'touchStart', touchPoints: [{ id: 1, x: 190, y: 470 }]
+          type: 'touchStart', touchPoints: [{ id: 1, ...start }]
         });
         for (const displacement of [30, 60, 90, 60]) {
           await client.send('Input.dispatchTouchEvent', {
-            type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 470 - displacement }]
+            type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - displacement }]
           });
           await rendered(page);
           const after = await page.screenshot({
-            path: testInfo.outputPath(`medals-drag-${measurements.length + 1}-${displacement}.png`), scale: 'css'
+            path: testInfo.outputPath(`room-drag-${measurements.length + 1}-${displacement}.png`), scale: 'css'
           });
           const measured = await contentShift(page, before, after);
           measurements.push({ finger: displacement, content: measured.pixels, error: measured.error });
@@ -102,7 +99,7 @@ for (const ratio of [1, 2, 3]) {
         await page.goto('/');
         await enterGame(page);
         await openRewards(page);
-        await chooseRewardSection(page, 'room');
+
         if (locked) {
           await roomControl(page, 'spring');
           await page.keyboard.press('Enter');
@@ -153,7 +150,7 @@ test('mouse dragging the room background scrolls without calling Pip', async ({ 
   await page.goto('/');
   await enterGame(page);
   await openRewards(page);
-  await chooseRewardSection(page, 'room');
+
   const bounds = await metrics(page), collection = collectionBounds(bounds);
   const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
     y: bounds.y + (collection.top + 90) * bounds.scale };
@@ -223,25 +220,29 @@ test.describe('collection release momentum', () => {
     test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
     await page.goto('/');
     await enterGame(page);
-    await openMedals(page);
+    await openRewards(page);
+    await rendered(page);
+    const bounds = await metrics(page), collection = collectionBounds(bounds);
+    const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
+      y: bounds.y + (collection.top + 90) * bounds.scale };
     const client = await page.context().newCDPSession(page);
     let touching = false;
     async function flick() {
       await client.send('Input.dispatchTouchEvent', {
-        type: 'touchStart', touchPoints: [{ id: 1, x: 190, y: 470 }]
+        type: 'touchStart', touchPoints: [{ id: 1, ...start }]
       });
       touching = true;
       for (const displacement of [20, 40, 60]) {
         await page.waitForTimeout(40);
         await client.send('Input.dispatchTouchEvent', {
-          type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 470 - displacement }]
+          type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - displacement }]
         });
       }
       await page.waitForTimeout(40);
       // Queue the final move and release together; an IPC round trip can look like a stationary hold.
       await Promise.all([
         client.send('Input.dispatchTouchEvent', {
-          type: 'touchMove', touchPoints: [{ id: 1, x: 190, y: 390 }]
+          type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - 80 }]
         }),
         client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
       ]);
@@ -262,7 +263,7 @@ test.describe('collection release momentum', () => {
       expect(slowShift - glideShift).toBeLessThan(glideShift - releaseShift);
       await flick();
       await client.send('Input.dispatchTouchEvent', {
-        type: 'touchStart', touchPoints: [{ id: 1, x: 190, y: 420 }]
+        type: 'touchStart', touchPoints: [{ id: 1, ...start }]
       });
       touching = true;
       await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
@@ -271,7 +272,7 @@ test.describe('collection release momentum', () => {
       await page.waitForTimeout(160);
       const settled = await page.screenshot({ scale: 'css' });
       expect((await contentShift(page, stopped, settled)).pixels).toBeLessThanOrEqual(1);
-      await expect(page.locator('#game-status')).toContainText('My rewards opened');
+      await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
     } finally {
       if (touching) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
       await client.detach();

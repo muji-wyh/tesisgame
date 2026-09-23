@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { metrics, tap, uiScale, modeRect, collectionBounds, firstMedalPoint,
-  enterGame, openGame, openRewards, chooseRewardSection, rendered, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, modeRect, roomControl,
+  enterGame, openGame, openRewards, rendered, visibleColorCount } = require('./game-ui.cjs');
 
 test('Match, Memory and Voice Pop fit compact and desktop screens with Match selected on entry and reload', async ({ page }, testInfo) => {
   async function capture(name, { afterResize = false } = {}) {
@@ -61,29 +61,25 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
   expect(errors).toEqual([]);
 });
 
-test('playful Medals keeps Pip interactive and earned progress intact', async ({ page }, testInfo) => {
+test('Pip and earned toys remain interactive without changing reward progress', async ({ page }, testInfo) => {
   await page.addInitScript(() => {
     localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"spring-1":3,"spring-2":1}\n');
   });
   const errors = await openGame(page);
   await openRewards(page);
-  await chooseRewardSection(page, 'medals');
   const status = page.locator('#game-status');
-  await expect(status).toContainText('1 of 48 medals complete.');
+  await expect(status).toContainText("Pip's room opened. 2 toys in Pip's home.");
   const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
-  await page.mouse.move(0, 0);
   await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath('playful-medals-shelves.png'), scale: 'css' });
-  const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
-  await tap(page, collection.x + collection.padding + 32 / scale, collection.top + collection.gap + 32 / scale);
-  await expect(status).toContainText('Pip says: duck!');
+  await page.screenshot({ path: testInfo.outputPath('playful-room.png'), scale: 'css' });
+  const pip = await roomControl(page, 'pip');
+  await tap(page, pip.x, pip.y);
+  await expect(status).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
-  const first = firstMedalPoint(bounds);
-  await tap(page, first.x, first.y);
-  await expect(status).toContainText('Blossom #1');
-  await page.screenshot({ path: testInfo.outputPath('earned-medal-preview.png'), scale: 'css' });
-  await page.keyboard.press('Escape');
-  await expect(status).toContainText('Medals. Win a game');
+  await roomControl(page, 'spring');
+  await page.keyboard.press('Enter');
+  await expect(status).toContainText('1/3 · A drink for the flower!');
+  await page.screenshot({ path: testInfo.outputPath('earned-flower-play.png'), scale: 'css' });
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
   expect(errors).toEqual([]);
 });

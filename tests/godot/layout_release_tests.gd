@@ -55,27 +55,20 @@ func _run() -> void:
 		app.model.phase = "waiting"
 		app._refresh()
 		app._show_collection()
-		app._show_reward_section("medals")
 		await settle()
-		if app._world_grid.columns == 3:
+		if app._world_grid.columns == 4:
 			app.theme_buttons[0].grab_focus()
 			app._move_focus(Vector2.DOWN)
-			check(root.gui_get_focus_owner() == app.theme_buttons[3], "Controller Down reaches the second row of worlds on a narrow screen")
-		app.medal_progress.counts["space-2"] = 3
-		app._refresh_collection()
-		await settle()
-		app._open_reward_preview("space-2")
-		await settle()
+			check(root.gui_get_focus_owner() == app.theme_buttons[4], "Controller Down reaches the second row of worlds on a narrow screen")
 		var scale: float = app.Style.ui_scale(app)
-		var preview_height: float = app._preview_wear_button.size.y * scale
-		check(preview_height >= 44 and preview_height <= 46, "Opening a reward keeps the shared compact action height at %s: %s CSS px" % [dimensions, preview_height])
-		check(viewport.encloses(app._preview_wear_button.get_global_rect()), "Preview display action stays on screen at " + str(dimensions))
-		for control in [app._preview_title, app._preview_close]:
-			check(viewport.encloses(control.get_global_rect()), "Long reward title keeps preview header on screen at %s: %s" % [dimensions, control.name])
+		var back_height: float = app._collection_back.size.y * scale
+		check(back_height >= 44 and back_height <= 46, "More keeps its compact Back target at " + str(dimensions))
+		for control in [app._collection_title, app._collection_back]:
+			check(viewport.encloses(control.get_global_rect()), "The room header remains on screen at %s: %s" % [dimensions, control.name])
 		app._layout_collection()
 		await settle()
-		check(absf(app._preview_wear_button.size.y * scale - preview_height) <= 1, "Relayout does not change the preview action height")
-		app._hide_reward_preview()
+		check(absf(app._collection_back.size.y * scale - back_height) <= 1,
+			"Relayout does not change the room's Back target height")
 		app._hide_collection()
 	app.queue_free()
 	await process_frame

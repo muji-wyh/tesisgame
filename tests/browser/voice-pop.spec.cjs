@@ -622,7 +622,7 @@ test('speech failure and More pause the round, then Resume keeps the remaining t
   expect((await state(page)).hits).toBe(paused.hits);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened");
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.keyboard.press('Escape');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');

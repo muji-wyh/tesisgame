@@ -17,7 +17,7 @@ npm run prepare:multiplayer
 npm start
 ```
 
-`npm start` imports the resources, exports Godot to Web, and serves the result at `http://127.0.0.1:4173`.
+`npm start` imports the resources, exports Godot to Web, and serves the result at `http://127.0.0.1:41773`.
 
 To build without starting a server:
 
@@ -149,16 +149,16 @@ Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
 On wider screens the mode tabs share the header row.
 
-**More** opens **Pip** and **Medals**, with an icon to return. Eight larger world
+**More** opens **Pip's room**, with an icon to return. Eight larger world
 icons share the top header on wider screens and wrap below it on small screens.
 Choosing one keeps the current page and scroll position open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
-shows an in-page retry notice. Medal and gift goals live here rather than above the cards.
+shows an in-page retry notice. Locked toy cards show gift progress below the room.
 Results keep the chest or bear, word review, and the next action without game-mode
 controls. Keyboard and controller focus remains visible across the available games.
 
 **Pip the duck** is the game's round, wide-eyed companion. He appears on the
-loading screen, board, results, collection, reward previews, and voice panel.
+loading screen, board, results, playroom, and voice panel.
 Tap him to cycle through a dance, a crunchy carrot snack, a bubble party,
 a high five, peekaboo, and a fluttering hello; he also reacts to selections, matches, hints,
 season changes, and rewards. These reactions never change scoring or saved progress.
@@ -176,7 +176,7 @@ Pip has a complete outfit for each world, with both a hat and clothing:
 | Jungle | Safari hat and a pocketed explorer vest. |
 | Candy | Chef's hat and pink apron over a mint shirt. |
 
-The outfit follows the selected world; a medal preview uses that medal's world.
+The outfit follows the selected world.
 The same wardrobe appears in Pip's speaking poses, quiet gestures and dances,
 with hats following his head and clothes following his body. Dressing Pip does
 not require a purchase or a new reward. The loading and voice companions use
@@ -204,11 +204,39 @@ round and leaves a **Mode** button for later. Starting multiplayer retains the
 previous round's hit/score summary and starts a fresh 30-second round after the
 local microphone actually starts. The selected mode lasts for this page session.
 
-Local multiplayer supports up to four naturally alternating speakers on one
-microphone. A new voice must hit a visible word before receiving P1, P2, P3 or
-P4. Clearly different fifth voices do not score; uncertain matches go to the
-nearest existing player. Player colors and hit counts remain visible, and the
-result ranks by hits with ties. Voice matching is experimental: a very short
+Open **More → Users** to save up to ten users in this browser. Each user chooses
+a name and emoji avatar, then reads the six suggested phrases with pauses.
+Enrollment needs at least three independent speech turns and 12 seconds of
+effective speech, usually 12–20 seconds of speaking. Progress excludes internal
+pauses and gives feedback for quiet, clipped, short or inconsistent samples.
+Models prepare in the background; recording becomes available once they are
+ready. Review the sample and choose **Save**.
+
+Each profile can keep up to eight voice templates. **Add voice samples** appends
+another recording only after Save and a match to the existing voice; **Re-record
+voice** replaces it. Names and avatars remain editable, and profiles can be
+deleted. Existing single-template profiles work unchanged and can be strengthened
+with additional recordings. Adding samples preserves the original references
+alongside recent samples.
+
+Choose **Identify user** and say two sentences with a pause between them. It
+needs at least four seconds of effective speech and agreement between separate
+turns before showing the saved name and emoji. It stops automatically and offers
+guidance and retry when the evidence is unknown, ambiguous or inconsistent.
+Identification uses the existing local model and leaves the saved library
+unchanged. Both identification and gameplay compare the two strongest supporting
+templates for each person, using the original single template for older profiles.
+The similarity and next-person margin thresholds remain 0.60 and 0.08.
+See [voice matching validation](docs/qa/2026-09-24-voice-accuracy.md) for checks
+and the remaining real-speaker testing needs.
+
+Local multiplayer supports up to four registered speakers per round, taking
+turns on one microphone. Only a clear match to the saved voice library can hit
+a word; unknown or ambiguous voices do not score. The first four matched users
+to hit a visible word join that round. Their emoji avatars and hit counts remain
+visible, and results show names and rank by hits with ties. Profile changes apply
+to the next round; pausing preserves the current players. Solo continues to use
+browser speech and does not identify users. Voice matching is experimental: a very short
 word, similar voices or overlapping speakers can be misassigned. The initial
 similarity thresholds have not been calibrated with a children's voice study.
 
@@ -216,8 +244,11 @@ Model readiness means files have passed SHA-256 checks and all three actual
 inference paths have initialized and warmed up, not just that downloading has
 finished. Valid model files are cached when browser storage permits. Failure
 leaves solo play available and offers Retry. Ready local multiplayer works
-offline; solo recognition retains its browser service requirements. Audio and
-voice vectors are never uploaded or persisted. Backgrounding stops capture;
+offline; solo recognition retains its browser service requirements. Local multiplayer
+audio and voice vectors are never uploaded. Enrollment voice vectors, names and
+emoji are saved in local browser storage; raw recordings are discarded. Clearing
+site data removes the library, and profiles made with an older speaker model must
+be re-recorded. Backgrounding stops capture;
 resuming requires a new gesture. Multiplayer results allow up to three seconds
 to finish already-captured words before freezing the standings.
 
@@ -291,14 +322,9 @@ cancelled gestures, and multiple touches never trigger pronunciation or rewards.
 Result actions stay compact and centered rather than stretching across the page.
 Save retries and newly unlocked toy actions use the same styling.
 
-**Medals** groups rewards on world-colored treasure shelves. Empty slots are
-original duck-faced mystery eggs; collected pieces retain their actual artwork
-and counts. Quieter surfaces and wider spacing keep the medals distinct, without
-repeating "Complete" or "Surprise!" under every item. Earlier rewards use compact,
-named chips rather than a second full-size grid. Pip joins the next-treasure guide,
-and medal artwork gives a small
-wiggle on hover or keyboard focus without moving its input target. Reduced
-motion and hidden views stop these reactions. These effects never award pieces.
+The **Medals** page, tab, and reward preview have been removed. Chest rewards,
+piece progress, toy unlocks, and existing saves remain available. More opens the
+playroom directly, with world and age choices above it.
 
 The eight worlds are **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**,
 **Space**, **Jungle** and **Candy**, with **48 active medals**: six per world.
@@ -306,7 +332,7 @@ The 200-word vocabulary spans 12 adventures, including ocean discovery, space tr
 garden trails, and music makers. Pictures are original SVG illustrations generated by
 the existing local art pipeline, and every word has its own spoken recording.
 
-The two new medal shelves add distinct treasures:
+Jungle and Candy chest rewards include these treasures:
 
 | World | Six medals | Toy unlocked by its first completed medal |
 |---|---|---|
@@ -314,9 +340,9 @@ The two new medal shelves add distinct treasures:
 | Candy | Party Cake, Cookie, Lollipop, Wrapped Candy, Ice Cream, Candy Castle. | Candy cake. |
 
 Existing medal IDs, completed pieces and earlier rewards are retained when these
-worlds are added; the new shelves begin empty in an existing save.
+worlds are added; their reward progress begins empty in an existing save.
 
-Open **More > Pip** to visit **Pip's playroom**. A ball is playable immediately.
+Open **More** to visit **Pip's playroom**. A ball is playable immediately.
 Each world's first completed medal unlocks its toy, making nine toys including
 the starter ball. Every earned toy appears directly on the floor of **Pip's home**.
 Tap a toy to play with it immediately; choosing a different toy starts its first
@@ -362,15 +388,14 @@ for another round. Step feedback remains available to assistive technology.
 Toy play is temporary and never grants extra medals. Reduced motion
 shows each stage's static result. The next gift shows its name and
 remaining pieces. Newly unlocked gifts offer **Try it with Pip** after the reward saves.
-Open an earned medal and choose **Display with Pip** to save it as the playroom's favorite.
-Toy, backdrop, and favorite save together immediately in browser storage, or in
+Previously saved favorite medals remain displayed in the playroom.
+Toy, legacy backdrop, and favorite data save together immediately in browser storage, or in
 `user://playroom-v2.cfg` in native builds. The earlier favorite is migrated, and medal
 progress remains unchanged. Failed reads/writes show a retryable notice.
 
 The Words album and word-sticker display have been removed. Existing saved word
 fields remain intact for compatibility, but games no longer collect new stickers.
-Medals uses uniform tiles grouped by world, with the next medal goal alongside the
-collection. The compact world icons keep their full tooltip and accessibility names.
+The compact world icons keep their full tooltip and accessibility names.
 
 Card selections ripple and successful matches sparkle. Effects
 are bounded and respect reduced motion; the same controls work with touch, keyboard, and Xbox.
@@ -405,8 +430,7 @@ belong to its topic. New adventure chooses a different available topic and fresh
 Custom word lists with too few related words use a mixed Word explorers board; seeded
 rounds remain reproducible. Changing the season keeps the current adventure.
 
-**More > Medals** previews your next medal and its piece count. After a round,
-the review shelf shows all five words, even if the round ended with mistakes.
+After a round, the review shelf shows all five words, even if the round ended with mistakes.
 Tap a word's picture, or focus it and press Enter/Xbox A, to hear it again and make Pip
 react. These word buttons never spend a hint or grant another reward.
 
@@ -491,9 +515,15 @@ remain usable without shrinking the controls.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short tap gives a little wiggle and glint. Hold it for **1.2 seconds** to charge it:
-the shake and latch glow build without a progress bar, followed by the existing
-**1.8-second opening**. Releasing early or dragging cancels charging. Changing seasons
-cannot reroll an opening or alter an earned fragment.
+theme-colored progress rings, illuminated ticks, converging sparks and a percentage
+badge build toward the unlock. A local synthesized sound rises in pitch and pulse
+rate with the actual hold, then blends into the theme's opening sound and an outward
+light burst. The existing **1.8-second opening** follows. Releasing early, dragging,
+opening More, or leaving the page cancels the charge immediately. Muting silences
+the charge too. Reduced motion keeps the percentage and static progress ring while
+removing shake, moving sparks and the burst. Browser accessibility exposes the same
+progress without repeated live announcements. Changing seasons cannot reroll an
+opening or alter an earned fragment.
 
 Each win earns **one fragment**. **Three fragments complete a medal**, and each
 season has **six medals**. The next piece always advances the first unfinished
@@ -501,8 +531,8 @@ medal in that season; there are no duplicate fragments or rare missing pieces.
 An ordinary reveal uses 24 seasonal particles and snaps the new piece into the
 visible partial medal. Tap the chest panel or press A/Enter to place it sooner.
 Finishing a medal triggers the larger 72-particle celebration and a flight into
-the collection under **More**. A complete season can still celebrate future wins without
-inventing more medals or resetting the collection.
+the **More** icon. A complete season can still celebrate future wins without
+inventing more medals or resetting reward progress.
 
 Fragments are saved before their assembly animation. Hiding the page or replaying
 during opening finishes the earned claim once, then settles its visuals.
@@ -510,10 +540,9 @@ Reduced motion shows the saved piece immediately after the hold.
 If saving fails, **Retry saving** retries the same piece instead of rerolling,
 pretending it was saved, or silently discarding it.
 
-Collection headings show completed medals, such as **Spring 2/6**. Tiles show
-empty, partial (**1/3**, **2/3**), or complete medals. Earlier whole rewards are
-preserved: existing rewards 1-6 become complete medals; earned rewards 7-10 remain
-available under **Earlier rewards**. Native versioned progress uses `user://medals.cfg`;
+The chest shows the earned piece count. Earlier whole rewards are preserved in
+saved data: existing rewards 1-6 become complete medals; earned rewards 7-10 retain
+their IDs. Native versioned progress uses `user://medals.cfg`;
 the old `user://rewards.cfg` is left unchanged. Corrupt or unsupported saves show
 an error rather than being reset.
 
@@ -521,20 +550,12 @@ Web builds save medal progress immediately in browser storage so a quick reload
 cannot lose a newly earned piece. Existing browser filesystem saves migrate on
 load, while native builds retain the transactional `user://medals.cfg` save.
 
-Tap an earned tile to open its larger seasonal preview; partial medals reveal
-only their earned pieces. Taps alternate between a bounce, a twirl and a little hug, with Spring hearts,
-Summer stars, Autumn leaves, Winter snowflakes, Ocean bubbles, Space stars,
-Jungle leaves or Candy hearts. Every five taps brings a bigger
-high-five party. The visible play count starts fresh when a preview opens and never grants
-another reward. These finite, native effects use at most twelve shapes and no new downloads;
-rapid taps replace the previous reaction instead of stacking animations.
-
-Collection swipes follow the finger one-to-one, then glide and slow naturally on release.
-A new touch stops the glide without opening the tile underneath. Scrolling stops at the
-edges and when leaving the collection; wheel and keyboard scrolling remain available
-without visible scrollbars. Controller navigation brings earned rewards back into view
-even after touch scrolling. Reduced motion keeps direct finger scrolling, disables the
-automatic glide, and gives static preview feedback, including the high-five message.
+Room swipes follow the finger one-to-one, then glide and slow naturally on release.
+A new touch stops the glide without activating the item underneath. Scrolling stops at the
+edges and when leaving the room; wheel and keyboard scrolling remain available
+without visible scrollbars. Controller navigation brings toys back into view
+even after touch scrolling. Reduced motion keeps direct finger scrolling and disables the
+automatic glide.
 A won reward is still revealed immediately after the required hold.
 
 **Play again** starts a fresh round, avoiding the previous board's words when at least
@@ -567,7 +588,7 @@ or cost a mistake. A sentence containing several available words is resolved
 through the same match-feedback sequence, once per pair.
 
 Click **Voice** again to exit. Winning, losing, replaying, opening a
-collection/preview, or hiding the page also stops listening. Game music and spoken
+playroom, or hiding the page also stops listening. Game music and spoken
 prompts are quiet while voice mode is enabled so the game cannot match its own
 audio. Touch matching remains available.
 
@@ -586,10 +607,10 @@ An embedding site must also allow `microphone` in its iframe permissions.
 |---|---|
 | D-pad / left stick | Move focus between available controls. |
 | A | Activate the focused control; hold the eye to peek, hold a chest to open it, or tap to place its piece. |
-| B | Cancel the selected card, exit voice play, close a reward preview, or go back. |
+| B | Cancel the selected card, exit voice play, or go back. |
 | X | Use one of the round's three hints and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |
-| Y / Menu | Open or close More (Pip, Medals, and direct world choices), not restart the game. |
+| Y / Menu | Open or close More (Pip's room, world and age choices), preserving the game. |
 
 Choose **Play again** with A to start another round. Locked rewards are skipped during
 navigation; completed Match cards remain available to hear again. Releasing A or

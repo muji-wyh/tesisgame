@@ -24,80 +24,59 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.medal_progress.counts["winter-6"] = 3
 	app._refresh_collection()
-	check(app._reward_slots["winter-6"].picture.texture == null, "Hidden medals do not load their artwork during startup refresh")
 	app._show_collection()
-	check(app._reward_slots["winter-6"].picture.texture == null, "Opening Pip's room keeps medal artwork deferred")
-	check(app._room.is_visible_in_tree(), "Rewards starts with Pip's room")
-	check(app._collection_rows.all(func(row) -> bool: return not row.is_visible_in_tree()), "Medals do not share the room's long toy list")
-	check(app.has_method("_show_reward_section"), "Rewards has a direct route between the room and medals")
-	if app.has_method("_show_reward_section"):
-		app._show_reward_section("medals")
+	check(app._room.is_visible_in_tree(), "More opens Pip's room")
+	root.size = Vector2i(480, 600)
+	await process_frame
+	await process_frame
+	var wheel := InputEventMouseButton.new()
+	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	wheel.pressed = true
+	wheel.factor = 3.0
+	app._collection_scroll_input(wheel, app._collection_scroll)
+	check(app._collection_scroll.scroll_vertical == 144, "A larger wheel movement scrolls proportionally instead of one fixed step")
+	var after_scroll: int = app._collection_scroll.scroll_vertical
+	wheel.pressed = false
+	app._collection_scroll_input(wheel, app._collection_scroll)
+	check(app._collection_scroll.scroll_vertical == after_scroll, "Wheel release does not scroll twice")
+	app._hide_collection()
+	app._show_collection()
+	check(app._room.visible and app._collection_scroll.scroll_vertical == 0,
+		"Reopening More returns to the room scene")
+	root.size = Vector2i(960, 480)
+	await process_frame
+	await process_frame
+	var card: Button = app._room.item_buttons["toy-space"]
+	card.grab_focus()
+	app._collection_scroll.ensure_control_visible(card)
+	var position: int = app._collection_scroll.scroll_vertical
+	card.pressed.emit()
+	await process_frame
+	await process_frame
+	check(root.gui_get_focus_owner() == card and app._collection_scroll.scroll_vertical == position,
+		"A locked preview keeps the current card focus and scroll position")
+	app._room.goal_button.grab_focus()
+	await process_frame
+	await process_frame
+	check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
+	var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
+	owned_card.grab_focus()
+	await process_frame
+	await process_frame
+	check(root.gui_get_focus_owner() == owned_card and app._collection_scroll.get_global_rect().encloses(owned_card.get_global_rect()), "An owned toy card stays reachable for leaving a locked preview on landscape screens")
+	owned_card.pressed.emit()
+	app._hide_collection()
+	check(app.playroom_state.set_goal("toy-spring", app.medal_progress.counts), "An unfinished gift can be selected before its final piece")
+	app.medal_progress.counts["spring-1"] = 3
+	app._unlocked_gift = load("res://scripts/playroom_state.gd").item("toy-spring")
+	app._try_unlocked_gift()
+	for frame in range(5):
 		await process_frame
-		check(app._reward_slots["winter-6"].picture.texture != null, "Opening Medals loads earned medal artwork")
-		check(not app._room.is_visible_in_tree(), "Medals hides the room's toy controls")
-		check(app._collection_rows.all(func(row) -> bool: return row.is_visible_in_tree()), "The Medals route exposes every theme")
-		root.size = Vector2i(480, 600)
-		await process_frame
-		await process_frame
-		var wheel := InputEventMouseButton.new()
-		wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
-		wheel.pressed = true
-		wheel.factor = 3.0
-		app._collection_scroll_input(wheel, app._collection_scroll)
-		check(app._collection_scroll.scroll_vertical == 144, "A larger wheel movement scrolls proportionally instead of one fixed step")
-		var after_scroll: int = app._collection_scroll.scroll_vertical
-		wheel.pressed = false
-		app._collection_scroll_input(wheel, app._collection_scroll)
-		check(app._collection_scroll.scroll_vertical == after_scroll, "Wheel release does not scroll twice")
-		check(app._status_announcement.contains("Medals"), "The current reward section is announced")
-		app.medal_progress.counts["spring-1"] = 1
-		app._refresh_collection()
-		app._open_reward_preview("spring-1")
-		check(app._preview_page.visible, "An earned piece opens from Medals")
-		app._hide_reward_preview()
-		check(app._collection_section == "medals" and not app._room.visible, "Closing a medal returns to the same reward section")
-		app._show_reward_section("room")
-		check(app._room.visible and app._collection_scroll.scroll_vertical == 0, "Returning to the room starts at its scene")
-		check(not app._valid_focus(app._reward_slots["spring-1"].button), "Hidden medals cannot take keyboard or controller focus")
-		app._hide_collection()
-		app._show_collection()
-		check(app._room.visible and app._collection_tabs.values().all(func(button) -> bool: return button.visible),
-			"More retains its direct reward sections without an adventure picker")
-		root.size = Vector2i(960, 480)
-		await process_frame
-		await process_frame
-		var card: Button = app._room.item_buttons["toy-space"]
-		card.grab_focus()
-		app._collection_scroll.ensure_control_visible(card)
-		var position: int = app._collection_scroll.scroll_vertical
-		card.pressed.emit()
-		await process_frame
-		await process_frame
-		check(root.gui_get_focus_owner() == card and app._collection_scroll.scroll_vertical == position,
-			"A locked preview keeps the current card focus and scroll position")
-		app._room.goal_button.grab_focus()
-		await process_frame
-		await process_frame
-		check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
-		var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
-		owned_card.grab_focus()
-		await process_frame
-		await process_frame
-		check(root.gui_get_focus_owner() == owned_card and app._collection_scroll.get_global_rect().encloses(owned_card.get_global_rect()), "An owned toy card stays reachable for leaving a locked preview on landscape screens")
-		owned_card.pressed.emit()
-		app._show_reward_section("medals")
-		app._hide_collection()
-		check(app.playroom_state.set_goal("toy-spring", app.medal_progress.counts), "An unfinished gift can be selected before its final piece")
-		app.medal_progress.counts["spring-1"] = 3
-		app._unlocked_gift = load("res://scripts/playroom_state.gd").item("toy-spring")
-		app._try_unlocked_gift()
-		for frame in range(5):
-			await process_frame
-		check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip opens the gift in the room after visiting Medals")
-		check(root.gui_get_focus_owner() == app._room.toy_button and app._collection_scroll.get_global_rect().encloses(app._room.toy_button.get_global_rect()),
-			"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d/%d" % [
-				app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
-				app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
+	check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip reopens the room with the earned gift")
+	check(root.gui_get_focus_owner() == app._room.toy_button and app._collection_scroll.get_global_rect().encloses(app._room.toy_button.get_global_rect()),
+		"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d/%d" % [
+			app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
+			app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
 	await _check_owned_display_navigation(app)
 	app.queue_free()
 	await process_frame

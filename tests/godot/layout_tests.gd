@@ -56,7 +56,7 @@ func _run() -> void:
 					"Inline mode tabs sit between Pip on the left and the action icons on the right")
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), "%s %s: the playfield fits the screen" % [dimensions, mode])
 			check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()), "World choices stay out of active play")
-			check(not app._gift_label.is_visible_in_tree(), "Reward marketing does not take space above the game")
+			check(not app._room.is_visible_in_tree(), "The room does not take space above the game")
 			check(app.duck.is_visible_in_tree(), "Pip remains a visible guide")
 			for counter in [app._success, app._mistakes]:
 				if counter.is_visible_in_tree():
@@ -98,63 +98,44 @@ func _run() -> void:
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
 	var progress_before: Array = [app.model.phase, app.model.successes, app.model.mistakes, app.model.streak]
 	check(not selected.is_empty(), "The world-change fixture contains a real selected card")
-	for section in ["room", "medals"]:
+	for world_id in ["ocean", "space"]:
 		if not app.collection_page.visible:
 			app._show_collection()
-		app._show_reward_section(section)
 		await settle()
 		check(app.theme_buttons.size() == 8 and app._collection_header.is_ancestor_of(app._world_choices),
-			"Wide world choices share the More header from " + section)
+			"Wide world choices share the More header")
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All eight worlds remain selectable")
-		var world_id: String = "ocean" if app.model.theme_id != "ocean" else "space"
 		app._world_grid.get_node(app.Data.theme(world_id).name).pressed.emit()
 		await settle()
-		check(app.model.theme_id == world_id and app.collection_page.visible and app._collection_section == section
+		check(app.model.theme_id == world_id and app.collection_page.visible and app._room.is_visible_in_tree()
 			and app.playroom_state.preferred_theme_id == world_id,
-			"Choosing a world saves the preference and keeps " + section + " open")
+			"Choosing a world saves the preference and keeps Pip's room open")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
 			and app.model.hints_remaining == hints_remaining and app.model.lesson_words == lesson_before
 			and [app.model.phase, app.model.successes, app.model.mistakes, app.model.streak] == progress_before,
-			"Changing a world from " + section + " preserves the exact round, cards, selection, and hints")
+			"Changing a world preserves the exact round, cards, selection, and hints")
 	root.size = Vector2i(480, 900)
 	app.size = Vector2(480, 900)
 	if not app.collection_page.visible:
 		app._show_collection()
-	app._show_reward_section("room")
 	await settle()
 	check(app._room._room.get_global_rect().position.y - app._collection_scroll.global_position.y <= 8,
 		"Pip's playable scene starts immediately below the persistent More controls, without repeated headings or goals")
 	check(not app._room.goal_label.is_visible_in_tree() and not app._room.goal_button.is_visible_in_tree(),
 		"Unselected gifts do not create a standalone status or action row")
-	check(app._collection_tabs.keys() == ["room", "medals"]
-		and app._collection_tabs.values().map(func(button: Button) -> String: return button.text) == ["Pip", "Medals"],
-		"More separates Pip and Medals while retaining its World strip")
+	check(app._collection_title.text == "Pip" and not app.has_method("_show_reward_section"),
+		"More keeps a single room and the shared World strip without retired navigation")
 	for dimensions in [Vector2i(480, 900), Vector2i(1040, 900)]:
 		root.size = dimensions
 		app.size = dimensions
-		app._show_reward_section("medals")
 		await settle()
 		var scale: float = app.Style.ui_scale(app)
-		var columns: int = 6 if app._collection_scroll.size.x * scale - 32 >= 780 else 3
-		check(app._collection_rows.all(func(row: GridContainer) -> bool: return row.columns == columns),
-			"Medals use three or six uniform columns at the available CSS width")
-		check(app._next_goal.is_visible_in_tree() and app._collection_grid.get_child(0) == app._next_goal,
-			"The next reward goal belongs above the Medals collection")
-		for slot in app._reward_slots.values():
-			check(absf(slot.button.size.y * scale - 128) <= 1
-				and slot.label.text == "0/3",
-				"Every mystery reward keeps a uniform 128 CSS-pixel tile and its real piece count")
-			check(slot.picture.texture == null and slot.button.disabled,
-				"Empty medals do not expose or eagerly load reward artwork")
 		check(app._collection_back.text.is_empty() and app._collection_back.symbol == app.Icons.Symbol.BACK
 			and is_equal_approx(app._collection_back.size.y, ceilf(44 / scale)),
 			"More uses a compact Back icon without losing its target size at %s: size=%s scale=%s minimum=%s header=%s" % [
 				dimensions, app._collection_back.size, scale, app._collection_back.get_combined_minimum_size(), app._collection_header.size])
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"World choices remain available above the medal shelves")
-		app._show_reward_section("room")
-		await settle()
-		check(not app._next_goal.is_visible_in_tree(), "Pip does not repeat the next medal goal")
+			"World choices remain available above Pip's room")
 		check(app._world_grid.columns == (4 if dimensions.x == 480 else 8), "World choices use two complete rows on phones and one on wide screens")
 		check(app._world_grid.get_theme_constant("h_separation") == roundi(6 / scale),
 			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")

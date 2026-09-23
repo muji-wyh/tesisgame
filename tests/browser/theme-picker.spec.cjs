@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { writeFile } = require('node:fs/promises');
-const { openGame, metrics, tap, boardPoint, openRewards, chooseRewardSection,
+const { openGame, metrics, tap, boardPoint, openRewards,
   worldIconRect, collectionBounds, rendered, enterGame, roomLayout,
   THEME_IDS, THEME_COLORS } = require('./game-ui.cjs');
 
@@ -65,8 +65,7 @@ test('larger themes stay on the current page and retry saving in place', async (
   await tap(page, first.x, first.y);
   const selection = await page.locator('#selection-status').textContent();
   await openRewards(page);
-  for (const [section, index, color] of [['room', 4, '#e7f8fa'], ['medals', 1, '#fff4df']]) {
-    await chooseRewardSection(page, section);
+  for (const [index, color] of [[4, '#e7f8fa'], [1, '#fff4df']]) {
     const bounds = await metrics(page), rect = worldIconRect(bounds, index);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(52);
     if (collectionBounds(bounds).inlineWorlds) {
@@ -74,9 +73,9 @@ test('larger themes stay on the current page and retry saving in place', async (
     }
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', color);
-    await expect(page.locator('#game-status')).toContainText(section === 'room' ? 'Choose toys for Pip.' : 'Medals.');
+    await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
     expect(await page.locator('#selection-status').textContent()).toBe(selection);
-    await page.screenshot({ path: testInfo.outputPath(`larger-themes-${section}.png`), scale: 'css' });
+    await page.screenshot({ path: testInfo.outputPath(`larger-themes-${index}.png`), scale: 'css' });
   }
   await page.evaluate(() => {
     const save = Storage.prototype.setItem;
@@ -93,7 +92,7 @@ test('larger themes stay on the current page and retry saving in place', async (
   await page.evaluate(() => window.restoreThemeSaving());
   rect = worldIconRect(await metrics(page), 5);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
-  await expect(page.locator('#game-status')).toContainText('Medals.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await expect(page.locator('#game-status')).not.toContainText('Changes not saved.');
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'))).toContain('preferred_theme_id="space"');
   await page.setViewportSize({ width: 320, height: 568 });

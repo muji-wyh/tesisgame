@@ -99,17 +99,11 @@ func _run() -> void:
 	check(app.duck._trick == "flutter", "The next header tap offers a flutter")
 	app.duck.settle()
 	app._show_collection()
-	app._show_reward_section("medals")
-	check(not observe_idle(app, 20) and not app.duck.home_playground, "Medal browsing stays quiet and disables the Home dance")
-	app._show_reward_section("room")
 	app.duck.settle()
 	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3)
 		and app.duck.home_playground and app.duck._idle_action == "home-dance",
 		"Entering Home starts the loading-page dance within half a second without a tap")
 	_test_home_gates(app)
-	app._preview_page.show()
-	check(not observe_idle(app, 20), "A reward preview blocks unrelated invitations")
-	app._preview_page.hide()
 	app.on_page_hidden()
 	check(not observe_idle(app, 20), "Page lifecycle keeps the separate idle pause effective")
 	app.on_page_visible()
@@ -133,7 +127,9 @@ func _test_home_focus_headroom(app) -> void:
 	var original_scroll: int = app._collection_scroll.scroll_vertical
 	var saved_toy: String = app.playroom_state.toy_id
 	var saved_medals: Dictionary = app.medal_progress.counts.duplicate(true)
-	for dimensions in [Vector2i(390, 568), Vector2i(960, 720)]:
+
+	# The compact room needs a shorter desktop viewport to scroll Pip offscreen.
+	for dimensions in [Vector2i(390, 568), Vector2i(960, 600)]:
 		root.size = dimensions
 		await settle()
 		app._collection_back.grab_focus()

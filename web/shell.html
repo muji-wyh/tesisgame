@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="">
   <title>Pip and Words</title>
+  <link rel="stylesheet" href="voice-profiles.css">
   <script>
     (() => {
       const param = new URLSearchParams(window.location.search).get("scoutTheme");
@@ -357,10 +358,11 @@
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh Match game directly. Retry saving appears only if a reward could not be saved.
-        More opens Pip's room and Medals. The arrow icon returns to the game.
+        More opens Pip's room. The arrow icon returns to the game.
+        Users in More lets you save up to ten names, emoji avatars and voice profiles in this browser. Raw recordings are discarded after enrollment. Multiplayer counts only clearly matched registered voices; solo does not identify players.
         Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
-        Your next medal and gift progress are in Medals. Your chosen world is remembered as you explore vocabulary topics.
-        Medals shows six medals per theme, with three pieces per medal. Winning Match or Memory earns one piece.
+        Locked toy cards show gift progress. Your chosen world is remembered as you explore vocabulary topics.
+        Winning Match or Memory earns one piece. Three pieces complete a medal in the chest reward.
         Pip's playroom starts with a ball. Each world's first completed medal unlocks a toy.
         All earned toys are together on the floor inside Pip's home. Tap a toy to play with it immediately; choosing a different toy starts its first step in that same tap. Drag any earned toy to toss it to Pip. Other toys stay visible and playable.
         Only toys still to unlock appear below the room; new gifts move into the home automatically.
@@ -369,9 +371,10 @@
         Choosing a locked toy card keeps your scroll position. Keyboard focus reveals each toy or card. If a new toy choice cannot be saved, its play action waits and you can retry on the same toy.
         Toys have three steps you control, with a new result at each step and replay at the end.
         Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, launch a rocket, swing a monkey, or decorate a cake. Each toy says its word. Locked gifts show how many pieces you need.
-        Open an earned medal and choose Display with Pip to save a favorite alongside your room choices.
-        Swipe to explore My rewards. Motion follows your device's reduced-motion setting.</p>
+        Swipe to explore Pip's room and toys. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
+      <div id="chest-progress" class="sr-only" role="progressbar" aria-label="Treasure chest unlock progress"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
@@ -487,6 +490,8 @@
   </div>
   <script src="multiplayer-capture.js"></script>
   <script src="multiplayer-host.js"></script>
+  <script src="voice-profiles.js"></script>
+  <script src="voice-profiles-ui.js"></script>
   <script>
     (() => {
       'use strict';
@@ -1070,7 +1075,7 @@
         gamepadPressed = pressed;
         const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
         if (startPressed && !gamepadStartPressed) enterOnStartRelease = !enterButton.disabled;
-        // Enter on release so the same Start press cannot open My Rewards in Godot.
+        // Enter on release so the same Start press cannot open Pip's room in Godot.
         if (!startPressed && gamepadStartPressed && enterOnStartRelease) { enterGame(); return; }
         gamepadStartPressed = startPressed;
         gamepadFrame = window.requestAnimationFrame(pollLoadingGamepad);
@@ -1159,8 +1164,35 @@
         const transcript = document.getElementById('speech-transcript');
         const notice = document.getElementById('speech-notice');
         const privacy = 'Browser speech may process audio remotely. Game stores no voice or transcripts.';
-        const localPrivacy = 'Multiplayer audio stays on this device. No voice or voice profiles are saved.';
+        const localPrivacy = 'Multiplayer recognizes registered voices only. Voice profiles stay in this browser; recordings are discarded.';
         const multiplayer = window.VoicePopMultiplayer ? new window.VoicePopMultiplayer() : null;
+        let onVoiceProfiles = null;
+        let profileStore = null;
+        let profileStoreError = '';
+        try {
+          if (window.VoiceProfileStore) profileStore = new window.VoiceProfileStore();
+          else profileStoreError = 'Voice users are unavailable. Reload this page to retry.';
+        }
+        catch (error) { profileStoreError = error.message || 'Voice users could not be loaded.'; }
+        const profilesUI = window.VoiceProfilesUI && profileStore ? new window.VoiceProfilesUI({
+          multiplayer, store: profileStore,
+          onChanged: () => notifyVoiceProfiles(),
+          onClose: () => { notifyVoiceProfiles(); focusGame(); }
+        }) : null;
+        function voiceProfilesState() {
+          try {
+            const saved = profileStore?.list() || [];
+            const avatars = new Map((profilesUI?.metadataSnapshot(saved) || []).map(profile => [profile.id, profile.avatar_png]));
+            return JSON.stringify({ open: profilesUI?.isOpen() || false,
+              profiles: saved.filter(profile => profile.modelVersion === window.SPEAKER_MODEL_VERSION)
+                .map(profile => ({ ...profile, avatar_png: avatars.get(profile.id) || '' })),
+              error: profileStoreError });
+          } catch (error) {
+            return JSON.stringify({ open: profilesUI?.isOpen() || false, profiles: [],
+              error: error.message || 'Voice users could not be loaded.' });
+          }
+        }
+        function notifyVoiceProfiles() { onVoiceProfiles?.(voiceProfilesState()); }
         let onPopEvent = null;
         let backend = 'single';
         let onResult = null;
@@ -1176,6 +1208,7 @@
         let heardTimer = 0;
         let heardReaction = 0;
         let stopFailed = false;
+        let localMicrophoneBlocked = false;
         let presentation = 'match';
         let silentRestarts = 0;
         const popAliases = new Map();
@@ -1217,11 +1250,8 @@
           const previous = recognition;
           recognition = null;
           stopFailed = false;
-          if (multiplayer && !multiplayer.stop()) {
-            stopFailed = true;
-            return false;
-          }
-          if (!previous) return true;
+          const localStopped = !multiplayer || multiplayer.stop();
+          if (!previous) { stopFailed = !localStopped; return localStopped; }
           previous.onstart = previous.onresult = previous.onerror = previous.onend = null;
           try { previous.abort(); } catch (abortError) {
             if (abortError.name !== 'InvalidStateError') {
@@ -1234,7 +1264,8 @@
               }
             }
           }
-          return true;
+          stopFailed = !localStopped;
+          return localStopped;
         }
 
         function closeSpeech(restoreFocus) {
@@ -1260,7 +1291,8 @@
           return closeSpeech(true);
         }
 
-        function speechMode(value, nextPresentation = 'match', playMode = 'single', sessionId = '', elapsedMs = 0) {
+        function speechMode(value, nextPresentation = 'match', playMode = 'single', sessionId = '', elapsedMs = 0, resumeRound = false) {
+          if (profilesUI?.isOpen()) return;
           if (!value || document.hidden) { stopSpeech(); return; }
           nextPresentation = nextPresentation === 'pop' ? 'pop' : 'match';
           const nextBackend = nextPresentation === 'pop' && playMode === 'multi' ? 'multi' : 'single';
@@ -1274,6 +1306,13 @@
           transcript.textContent = '';
           if (backend === 'multi') {
             if (!multiplayer?.isReady()) { report('Multiplayer is still preparing. Continue solo or tap Retry.'); return; }
+            try {
+              if (!profileStore) { report(profileStoreError || 'Voice users are unavailable. Reload to retry.'); return; }
+              // A paused native round keeps its validated opening snapshot.
+              if (resumeRound !== true && !profileStore.list().some(profile => profile.modelVersion === window.SPEAKER_MODEL_VERSION)) {
+                report('Add or re-record a voice user from More > Users first.'); return;
+              }
+            } catch (error) { report(error.message || 'Voice users could not be loaded.'); return; }
             active = true;
             const token = ++generation;
             const valid = () => token === generation && enabled && active && backend === 'multi' && !document.hidden;
@@ -1520,9 +1559,49 @@
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden && multiplayer?.isReady()) multiplayer.verifyReady();
         });
+        window.addEventListener('storage', () => notifyVoiceProfiles());
+        multiplayer?.observe(state => {
+          const blocked = state.microphoneBlocked === true;
+          if (blocked === localMicrophoneBlocked) return;
+          localMicrophoneBlocked = blocked;
+          if (!blocked) {
+            stopFailed = false;
+            enabled = active = listening = false;
+            report();
+            return;
+          }
+          // A canceled permission request can finish after the editor has closed.
+          // Keep a visible warning and invalidate game results until capture stops.
+          generation++;
+          enabled = stopFailed = true;
+          active = listening = false;
+          presentation = 'pop';
+          backend = 'multi';
+          report();
+          Promise.resolve().then(() => { if (localMicrophoneBlocked) closeSpeech(false); });
+        });
 
         return {
           speechAvailable, speechMode, stopSpeech, popStatus,
+          voiceProfilesState,
+          observeVoiceProfiles(callback) {
+            onVoiceProfiles = typeof callback === 'function' ? callback : null;
+            notifyVoiceProfiles();
+          },
+          openVoiceProfiles() {
+            if (!profilesUI) {
+              profileStoreError ||= 'Voice users are unavailable. Reload this page to retry.';
+              notifyVoiceProfiles();
+              return false;
+            }
+            if (profilesUI.isOpen()) return true;
+            if (!closeSpeech(false)) return false;
+            Promise.resolve(profilesUI.open()).then(notifyVoiceProfiles).catch(error => {
+              profileStoreError = error.message || 'Voice users could not be opened.';
+              notifyVoiceProfiles();
+            });
+            return true;
+          },
           prepareMultiplayer() { multiplayer?.prepare(); },
           multiplayerState() { return JSON.stringify(multiplayer?.state || { status: 'unsupported', message: 'Local multiplayer is unavailable.' }); },
           observeMultiplayerState(callback) {
@@ -1654,6 +1733,14 @@
         announce(text) {
           document.getElementById('game-status').textContent = text;
         },
+        chestProgress(percent) {
+          const progress = document.getElementById('chest-progress');
+          progress.hidden = percent < 0;
+          const value = Math.max(0, Math.min(100, Math.floor(Number(percent) || 0)));
+          progress.setAttribute('aria-valuenow', String(value));
+          progress.setAttribute('aria-valuetext', value === 100 ? 'Opening!' :
+            `${value >= 75 ? 'Almost open' : 'Keep holding'}. ${value}%`);
+        },
         selectionStatus(text) {
           document.getElementById('selection-status').textContent = text;
         },
@@ -1680,6 +1767,7 @@
           for (const type of ['touchcancel', 'pointercancel']) {
             canvas.addEventListener(type, () => onInputCanceled(), { capture: true });
           }
+          window.addEventListener('blur', () => onInputCanceled());
           document.addEventListener('visibilitychange', () => {
             if (document.hidden) onHidden();
             else onVisible();

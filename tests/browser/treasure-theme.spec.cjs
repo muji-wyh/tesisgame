@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, enterGame,
-  chooseTheme, openRewards, chooseRewardSection, collectionHeaderRect,
+  chooseTheme, openRewards, collectionHeaderRect,
   contentBounds, discoverMatchCards, boardPoint, resultPoint, visibleColorCount
 } = require('./game-ui.cjs');
 
@@ -121,7 +121,7 @@ async function compareScenery(page, testInfo, phase, samples) {
 async function closeRewards(page) {
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText('My rewards opened.');
+  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
   await rendered(page);
 }
 
@@ -187,7 +187,6 @@ test('all eight treasure stages follow the selected world while a real chest cla
   await compareScenery(page, testInfo, 'opened', opened);
 
   await openRewards(page);
-  await chooseRewardSection(page, 'medals');
   await closeRewards(page);
   await expect(page.locator('#game-status')).toContainText('Party Cake');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[6]);
@@ -200,8 +199,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
   expect(await counts(page), 'Reload keeps the earned Candy piece while the chosen world remains Jungle.').toEqual(earnedCounts);
   expect(persistentFields(await record(page)), 'Reload preserves owned items, chosen world, stickers and learning settings.').toEqual(savedRoom);
   await openRewards(page);
-  await chooseRewardSection(page, 'medals');
-  await page.screenshot({ path: testInfo.outputPath('treasure-jungle-reloaded-medals.png'), fullPage: true, scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('treasure-jungle-reloaded-room.png'), fullPage: true, scale: 'css' });
   expect(await record(page, MEDAL_KEY)).toBe(earnedSave);
   expect(errors).toEqual([]);
 });

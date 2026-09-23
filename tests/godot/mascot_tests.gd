@@ -108,25 +108,14 @@ func _run() -> void:
 			and app.duck.pose != 0 and app.duck._trick.is_empty() and app.duck.speaking
 			and app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
 			"The room duck keeps its loading-page response and Poke event while speaking the imported greeting")
-		app.medal_progress.counts["spring-1"] = 1
-		app._refresh_collection()
-		app._open_reward_preview("spring-1")
-		await process_frame
-		app._update_duck()
-		check(app.duck.visible and app.duck.get_global_rect().intersects(app._preview_duck_slot.get_global_rect()),
-			"The reward preview has its own visible duck position")
-		app._preview_play_button.grab_focus()
-		app._move_focus(Vector2.UP)
-		check(app._preview_close.has_focus(), "Up from reward play still reaches Back before the optional mascot")
 		app.on_page_hidden()
 		check(not app.duck.speaking, "Hiding the page silences Pip along with the audio")
 		if app.duck.has_method("set_idle_paused"):
 			check(not app.duck.is_processing(), "Background pages stop Pip's idle animation loop")
 			app.on_page_visible()
-			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._medals_duck_slot
+			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._collection_duck_slot
 				and not app.duck.speaking and not app.audio.active,
-				"Returning to Medals restores its guide without restarting audio")
-			app._show_reward_section("room")
+				"Returning to Pip's room restores its mascot without restarting audio")
 			await process_frame
 			await process_frame
 			check(app.duck.is_processing() and not app.audio.active,

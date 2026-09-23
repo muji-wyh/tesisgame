@@ -47,9 +47,9 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 8
+	check(app._collection_title.text == "Pip" and app.theme_buttons.size() == 8
 		and app._world_choices.get_parent() == app._collection_header,
-		"Rewards keeps Pip and Medals tabs plus a persistent World strip")
+		"More keeps a single Pip title plus a persistent World strip")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
 		"The shared strip has no retained World heading or tagline fields")
 	var css_scale: float = app.Style.ui_scale(app)
@@ -69,17 +69,11 @@ func _run() -> void:
 		check(button.text.is_empty() and button.size.is_equal_approx(Vector2.ONE * ceilf(52 / css_scale))
 			and button.get_theme_constant("icon_max_width") == ceili(36 / css_scale),
 			"Each named World icon has a 52 CSS-pixel square target and 36 CSS-pixel artwork")
-	check(not app._goal_medal.is_visible_in_tree(), "The Pip page does not mix in medal progress")
-	app._show_reward_section("worlds")
-	check(app._collection_section == "room" and app._room.is_visible_in_tree(),
-		"The obsolete Worlds page route cannot replace the current reward section")
-	app._show_reward_section("medals")
-	await settle()
-	check(app._goal_medal.is_visible_in_tree(), "The next medal belongs with the medal collection")
-	check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-		"The World strip remains available while browsing Medals")
-	check(app._collection_rows.all(func(row: GridContainer) -> bool: return row.columns in [3, 6]),
-		"Medal rows are regular grids")
+	check(not app.has_method("_show_reward_section") and app.find_child("Rewards_medals", true, false) == null,
+		"Obsolete collection routes and Medals navigation are removed")
+	check(app._room.is_visible_in_tree() and app._collection_grid.get_children().all(
+		func(child: Node) -> bool: return child == app._room or child == app._age_choices),
+		"More contains the room and responsive age choices without a medal goal or shelves")
 	app._hide_collection()
 	check(is_equal_approx(app.grid.global_position.y * app.Style.ui_scale(app), game_top),
 		"Adding the More strip does not move the game's header or playfield")

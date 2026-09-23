@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const { chooseMode, enterGame, metrics, rendered, tap } = require('./game-ui.cjs');
+const { chooseMode, enterGame, metrics, rendered, tap, openRewards, collectionHeaderRect } = require('./game-ui.cjs');
+const { SPEAKER_MODEL_VERSION } = require('../../web/voice-profiles.js');
 
 // This fixture exercises the real host, JavaScriptBridge and Godot UI with
 // deterministic recognition events. It does not assert acoustic model quality.
@@ -40,6 +41,22 @@ const multiplayerFixture = `(${function installMultiplayerFixture() {
       record.options.onStarted();
     }
     stop() { if (this.current) this.current.stopped = true; this.current = null; return true; }
+    async startEnrollment(options) {
+      this.stop();
+      this.enrollment = options;
+      options.onStarted();
+      return true;
+    }
+    sample() { this.enrollment.onProgress({ segments: 3, voicedMs: 13200, requiredSegments: 3, requiredVoicedMs: 12000, progress: 1, canFinish: true }); }
+    async finishEnrollment() {
+      const embedding = Array(256).fill(0); embedding[0] = 1;
+      this.enrollment.onComplete({ embedding, templates: [embedding.slice(), embedding.slice(), embedding.slice()],
+        segments: Array.from({ length: 3 }, () => ({ embedding: embedding.slice(), voicedMs: 4400 })),
+        modelVersion: window.SPEAKER_MODEL_VERSION, quality: { segments: 3, voicedMs: 13200 } });
+      this.enrollment = null;
+      return true;
+    }
+    cancelEnrollment() { this.enrollment = null; return true; }
     async flush() {
       this.flushes++;
       const record = this.current;
@@ -50,7 +67,7 @@ const multiplayerFixture = `(${function installMultiplayerFixture() {
       const record = this.current;
       if (!record?.started) throw new Error('Fixture microphone has not started');
       const elapsed = record.options.elapsedMs + performance.now() - record.startedAt;
-      const embedding = [0, 0, 0, 0, 0];
+      const embedding = Array(256).fill(0);
       embedding[player - 1] = 1;
       const event = { type: 'utterance', sessionId: record.options.sessionId,
         eventId: eventId || 'fixture-' + (++this.serial), text,
@@ -65,7 +82,7 @@ const multiplayerFixture = `(${function installMultiplayerFixture() {
   window.VoicePopMultiplayer = Multiplayer;
 }.toString()})();`;
 
-async function open(page) {
+async function open(page, { seed = true } = {}) {
   await page.route('**/multiplayer-host.js', route => route.fulfill({ contentType: 'application/javascript', body: multiplayerFixture }));
   await page.route('**/models/voice-pop/**', route => route.abort());
   await page.addInitScript(() => {
@@ -90,6 +107,14 @@ async function open(page) {
     Object.defineProperty(window, 'webkitSpeechRecognition', { configurable: true, value: undefined });
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => { throw new Error('Tests never capture a real microphone'); };
   });
+  if (seed) await page.addInitScript(modelVersion => {
+    if (localStorage.getItem('voice-pop-voice-profiles-v1') !== null) return;
+    localStorage.setItem('voice-pop-voice-profiles-v1', JSON.stringify({ schemaVersion: 1, revision: 1,
+      profiles: ['🐱', '🐶', '🐼', '🦊', '🐰'].map((emoji, index) => ({
+        id: 'user-' + (index + 1), name: ['Mia', 'Leo', 'Amy', 'Max', 'Zoe'][index], emoji,
+        embedding: Array.from({ length: 256 }, (_, i) => i === index ? 1 : 0), modelVersion
+      })) }));
+  }, SPEAKER_MODEL_VERSION);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (/SCRIPT ERROR|Parse Error/.test(message.text())) errors.push(message.text()); });
@@ -154,9 +179,84 @@ async function pop(page, player = 0) {
     if (player) window.__multi.emit(text, player);
     else window.__solo.instances.at(-1).emit(text);
   }, { text: target.text, player });
-  if (player !== 5) await expect.poll(async () => (await state(page)).hits).toBe(before + 1);
+  if (player < 5) await expect.poll(async () => (await state(page)).hits).toBe(before + 1);
   return target;
 }
+
+async function users(page) {
+  await openRewards(page);
+  const control = collectionHeaderRect(await metrics(page), 'users');
+  await tap(page, control.x + control.width / 2, control.y + control.height / 2);
+  await expect(page.getByRole('dialog')).toBeVisible();
+}
+
+test('Users records, saves and restores an emoji profile that can score in multiplayer', async ({ page }, info) => {
+  const errors = await open(page, { seed: false });
+  await users(page);
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByRole('heading', { name: 'Users 0/10' })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Add user', exact: true }).click();
+  await dialog.getByLabel('Name', { exact: true }).fill('Mia');
+  await dialog.getByRole('button', { name: 'Cat', exact: true }).click();
+  await expect(dialog.getByRole('button', { name: 'Record voice', exact: true })).toBeDisabled();
+  await page.evaluate(() => window.__multi.setState({ status: 'ready', loaded: 1000, total: 1000 }));
+  await expect(dialog.getByLabel('Name', { exact: true })).toHaveValue('Mia');
+  await dialog.getByRole('button', { name: 'Record voice', exact: true }).click();
+  await page.evaluate(() => window.__multi.sample());
+  await expect(dialog).toContainText('Ready to stop');
+  await dialog.getByRole('button', { name: 'Stop', exact: true }).click();
+  await expect(dialog).toContainText('Ready to save');
+  expect(await page.evaluate(() => localStorage.getItem('voice-pop-voice-profiles-v1'))).toBeNull();
+  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(dialog.getByRole('heading', { name: 'Users 1/10' })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('saved-voice-user.png') });
+  await dialog.getByRole('button', { name: 'Close users' }).click();
+  await expect(dialog).toBeHidden();
+  expect(await page.evaluate(() => window.__multi.enrollment)).toBeNull();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('voice-pop-voice-profiles-v1')));
+  expect(saved.profiles).toHaveLength(1);
+  expect(saved.profiles[0]).toMatchObject({ name: 'Mia', emoji: '🐱', modelVersion: SPEAKER_MODEL_VERSION });
+  expect(Object.keys(saved.profiles[0]).sort()).toEqual(['embedding', 'emoji', 'id', 'modelVersion', 'name', 'templates']);
+  expect(saved.profiles[0].templates).toHaveLength(3);
+  for (const template of saved.profiles[0].templates) {
+    expect(template).toHaveLength(256);
+    expect(Math.hypot(...template)).toBeCloseTo(1, 6);
+  }
+
+  await page.reload();
+  await enterGame(page);
+  await users(page);
+  await expect(dialog.getByRole('heading', { name: 'Users 1/10' })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Edit Mia', exact: true }).click();
+  await dialog.getByLabel('Name', { exact: true }).fill('Mimi');
+  await dialog.getByRole('button', { name: 'Fox', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(dialog.getByRole('button', { name: 'Edit Mimi', exact: true })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Close users' }).click();
+  const back = collectionHeaderRect(await metrics(page), 'back');
+  await tap(page, back.x + back.width / 2, back.y + back.height / 2);
+  await chooseMode(page, 'pop');
+  await startMultiplayer(page);
+  await pop(page, 6);
+  await rendered(page);
+  expect((await state(page)).players).toEqual([]);
+  await pop(page, 1);
+  expect((await state(page)).players[0]).toMatchObject({ id: saved.profiles[0].id, name: 'Mimi', emoji: '🦊', hits: 1 });
+  await page.screenshot({ path: info.outputPath('enrolled-avatar-playing.png') });
+  await users(page);
+  await dialog.getByRole('button', { name: 'Edit Mimi', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Delete user', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Delete permanently', exact: true }).click();
+  await expect(dialog.getByRole('heading', { name: 'Users 0/10' })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Close users' }).click();
+  await tap(page, back.x + back.width / 2, back.y + back.height / 2);
+  await action(page, 'RetryListening');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await pop(page, 1);
+  expect((await state(page)).players[0]).toMatchObject({ name: 'Mimi', emoji: '🦊', hits: 2 });
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('voice-pop-voice-profiles-v1')).profiles)).toEqual([]);
+  expect(errors).toEqual([]);
+});
 
 test('background readiness leaves solo playable and switches only after a new microphone starts', async ({ page, browserName }, info) => {
   const errors = await open(page);
@@ -191,13 +291,19 @@ test('background readiness leaves solo playable and switches only after a new mi
   expect((await state(page)).remaining).toBe(30);
   await page.evaluate(() => window.__multi.grant());
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const unknown = await pop(page, 6);
+  await rendered(page);
+  expect((await state(page)).players).toEqual([]);
+  expect((await state(page)).targets.some(target => target.uid === unknown.uid)).toBe(true);
   for (const player of [1, 2, 3, 4]) await pop(page, player);
   await page.evaluate(() => window.__multi.repeatLast());
   expect((await state(page)).hits).toBe(4);
   const fifth = await pop(page, 5);
   await rendered(page);
   expect((await state(page)).hits).toBe(4);
-  expect((await state(page)).players.map(player => [player.id, player.hits])).toEqual([['P1', 1], ['P2', 1], ['P3', 1], ['P4', 1]]);
+  expect((await state(page)).players.map(player => [player.id, player.emoji, player.hits])).toEqual([
+    ['user-1', '🐱', 1], ['user-2', '🐶', 1], ['user-3', '🐼', 1], ['user-4', '🦊', 1]
+  ]);
   expect((await state(page)).targets.some(target => target.uid === fifth.uid)).toBe(true);
   await page.screenshot({ path: info.outputPath('four-player-hud.png') });
   await page.evaluate(() => window.__multi.fail());
@@ -235,7 +341,7 @@ test('multiplayer drains at the deadline, ranks tied hits, and replay remembers 
   expect((await state(page)).remaining).toBe(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 5000 });
   const result = await state(page);
-  expect(result.ranking.map(player => [player.id, player.hits, player.rank])).toEqual([['P1', 1, 1], ['P2', 1, 1]]);
+  expect(result.ranking.map(player => [player.name, player.emoji, player.hits, player.rank])).toEqual([['Mia', '🐱', 1, 1], ['Leo', '🐶', 1, 1]]);
   await page.screenshot({ path: info.outputPath('multiplayer-results.png') });
   await action(page, 'Replay');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
@@ -272,7 +378,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
     await page.waitForTimeout(120);
     current = await state(page);
-    expect(current.players.map(player => player.id)).toEqual(['P1', 'P2']);
+    expect(current.players.map(player => player.id)).toEqual(['user-1', 'user-2']);
     for (const target of current.targets) {
       expect(target.x).toBeGreaterThanOrEqual(-1);
       expect(target.x + target.width).toBeLessThanOrEqual(bounds.width + 1);

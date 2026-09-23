@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomControl, chooseRewardSection, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomControl, visibleColorCount } = require('./game-ui.cjs');
 
 const SAVES = ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'];
 const POKES = ['Boing! Pip jumps for you!', 'Aww! Pip feels shy!', 'Boop! Pip bounces right back!'];
@@ -421,7 +421,6 @@ test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard
   await screenshot(page, testInfo, 'pip-narrow-keyboard-toy-action');
   await page.keyboard.press('Enter');
   // Restore the room's top after keyboard focus has followed the moving toy.
-  await chooseRewardSection(page, 'room');
   const original = await patch(page, bounds, room.body);
   const destination = { x: room.x + room.width - 10, y: room.y + room.height - 4 };
   const endpoint = { x: room.x + room.width - 52, y: room.y + room.height - 12 };

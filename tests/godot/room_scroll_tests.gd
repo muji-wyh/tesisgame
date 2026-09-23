@@ -60,7 +60,6 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	app._show_collection()
-	app._show_reward_section("room")
 	await settle()
 	var scene: Control = app._room._room
 	for touch in [false, true]:

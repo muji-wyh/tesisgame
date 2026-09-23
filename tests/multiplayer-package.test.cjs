@@ -11,6 +11,7 @@ function fixture(t) {
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
   fs.mkdirSync(path.join(directory, 'web'));
   for (const name of ['host', 'capture', 'audio', 'worker']) fs.writeFileSync(path.join(directory, 'web', `multiplayer-${name}.js`), `// ${name}`);
+  for (const name of ['voice-profiles.js', 'voice-profiles-ui.js', 'voice-profiles.css']) fs.writeFileSync(path.join(directory, 'web', name), '/* voice profiles */');
   const source = path.join(directory, 'build', 'multiplayer');
   const output = path.join(directory, 'output');
   fs.mkdirSync(source, { recursive: true }); fs.mkdirSync(output);

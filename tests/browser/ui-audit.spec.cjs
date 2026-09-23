@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, collectionBounds, openRewards: rewards,
-  chooseRewardSection: rewardSection, worldIconRect, roomControl, leaveRoomPreview: leavePreview, rendered, openGame,
+const { metrics, tap, chooseMode, chooseTheme, openRewards: rewards,
+  worldIconRect, roomControl, leaveRoomPreview: leavePreview, rendered, openGame,
   boardPoint, discoverMatchCards, memoryMetrics, memoryPoint, withMemoryPeek, visibleColorCount } = require('./game-ui.cjs');
 
 // Exploratory release audit: interact through the rendered game and its public announcements.
@@ -58,10 +58,8 @@ for (const size of SIZES) {
     const originalCards = await discoverMatchCards(page);
     await rewards(page);
     await shot('03-more-from-match');
-    await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
-    await rewardSection(page, 'medals');
+    await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
     await shot('04-worlds-from-match');
-    await rewardSection(page, 'room');
     await page.keyboard.press('Escape');
     expect(await discoverMatchCards(page), 'Returning from More preserves all five words and their card positions.').toEqual(originalCards);
     await shot('05-match-return');
@@ -117,26 +115,18 @@ for (const size of SIZES) {
       await expect(page.locator('#game-status')).toContainText('ball');
       await shot('14c-room-locked-return');
     }
-    await rewardSection(page, 'medals');
-    await shot('15-medals-section');
-    await scrollToEnd(page, browserName, size);
-    await rendered(page);
-    await shot('16-medals-scrolled');
-    await rewardSection(page, 'room');
-    await rendered(page);
-    await shot('16b-room-section-return');
     await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText('Find a pair.');
     await shot('17-final-return');
     await rewards(page);
-    await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
+    await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
     await shot('18-worlds');
     await page.keyboard.press('Escape');
     await chooseTheme(page, 5);
     await expect(page.locator('#game-status')).toContainText('Find a pair.');
     await shot('19-memory-space-world');
     await rewards(page);
-    await expect(page.locator('#game-status')).toContainText("Pip's room.");
+    await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
     await shot('20-world-return-room');
     await page.keyboard.press('Escape');
     expect.soft(errors).toEqual([]);
@@ -144,7 +134,7 @@ for (const size of SIZES) {
   });
 }
 
-test('locked room previews provide a usable return and Medals has its own entry', async ({ page }, testInfo) => {
+test('locked toy previews return to the room without changing saved choices', async ({ page }, testInfo) => {
   test.setTimeout(90000);
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page);
@@ -168,15 +158,11 @@ test('locked room previews provide a usable return and Medals has its own entry'
   await shot('locked-rocket-after-return');
   await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
   expect.soft(await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'))).toBe(saved);
-  await rewardSection(page, 'medals');
-  await shot('medals-direct-entry');
-  await rewardSection(page, 'room');
-  await shot('room-direct-return');
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
 });
 
-test('More has Pip and Medals with direct world choices and preserved game state', async ({ page }, testInfo) => {
+test('More opens Pip with direct world choices and preserved game state', async ({ page }, testInfo) => {
   const errors = await openGame(page, { mode: 'match' });
   const first = boardPoint(await metrics(page), 0);
   await tap(page, first.x, first.y);
@@ -186,15 +172,8 @@ test('More has Pip and Medals with direct world choices and preserved game state
   const saved = await page.evaluate(keys => keys.map(key => localStorage.getItem(key)), keys);
   const evidence = [];
   await rewards(page);
-  await rewardSection(page, 'room');
   await capture(page, testInfo, 'rewards-pip', evidence);
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Medals.');
-  await capture(page, testInfo, 'rewards-medals-direct-worlds', evidence);
-  for (let index = 0; index < (collectionBounds(await metrics(page)).inlineWorlds ? 7 : 1); index++) {
-    await page.keyboard.press('Tab');
-  }
+  // More focuses Back directly now that it has no section tabs.
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toHaveText(status);
   expect(await page.evaluate(keys => keys.map(key => localStorage.getItem(key)), keys)).toEqual(saved);
@@ -203,7 +182,7 @@ test('More has Pip and Medals with direct world choices and preserved game state
   const world = worldIconRect(await metrics(page), 5);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f1edfb');
-  await expect(page.locator('#game-status')).toContainText('Medals.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   expect(errors).toEqual([]);
   expect.soft(errors).toEqual([]);

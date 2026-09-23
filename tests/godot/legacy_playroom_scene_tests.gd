@@ -43,6 +43,7 @@ func _run() -> void:
 		"The fixture starts with a previously saved collection and displayed word")
 	check(legacy.select_item("backdrop-spring", {"spring-3": 3}),
 		"The compatibility state API seeds a previously saved backdrop without a Rooms chooser")
+	check(legacy.set_favorite("spring-1"), "The fixture retains a previously saved favorite medal")
 	check(legacy.prefer_theme("autumn"), "The legacy fixture has Autumn selected independently of its saved Spring backdrop")
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
@@ -114,23 +115,18 @@ func _run() -> void:
 	app.medal_progress.counts["spring-1"] = 3
 	app.medal_progress.counts["spring-3"] = 3
 	app._show_collection()
-	check(app._collection_tabs.keys() == ["room", "medals"] and app.theme_buttons.size() == 8
+	check(app._collection_title.text == "Pip" and app.theme_buttons.size() == 8
 		and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-		"Removing Words and Rooms preserves Pip, Medals, and every World choice")
-	app._show_reward_section("room")
+		"Removing retired pages preserves Pip and every World choice")
 	app._room.item_buttons["toy-spring"].pressed.emit()
 	check(app.playroom_state.toy_id == "toy-spring" and app.playroom_state.backdrop_id == "backdrop-spring",
 		"Saving an owned toy preserves the existing backdrop without a hidden backdrop control")
 	check(not app._room.item_buttons.has("backdrop-spring") and app._room._room.theme_id == app.model.theme_id,
 		"Saving a toy keeps the room in the current world without restoring a backdrop chooser")
 	_check_legacy(app, "Saving a toy choice")
-	app._show_reward_section("medals")
-	app._open_reward_preview("spring-1")
-	app._wear_preview_reward()
-	check(app.playroom_state.favorite_id == "spring-1", "The earned medal still saves as Pip's favorite")
-	_check_legacy(app, "Saving a favorite medal")
-	app._hide_reward_preview()
-	app._show_reward_section("room")
+	check(app.playroom_state.favorite_id == "spring-1" and app._playroom_medal.visible,
+		"The old favorite remains a static room decoration")
+	_check_legacy(app, "Retaining an existing favorite medal")
 	app._room.item_buttons["toy-space"].pressed.emit()
 	app._room.goal_button.pressed.emit()
 	check(app.playroom_state.goal_item_id == "toy-space" and app._mode_id == "match" and not app.collection_page.visible,
@@ -144,7 +140,6 @@ func _run() -> void:
 	app._playroom_ready = app.playroom_state.load_state()
 	check(app._playroom_ready, "The same legacy record can be loaded through browser storage")
 	app._show_collection()
-	app._show_reward_section("room")
 	var previous_toy: String = app.playroom_state.toy_id
 	storage.writable = false
 	app._room.item_buttons["toy-ball"].pressed.emit()
@@ -158,11 +153,10 @@ func _run() -> void:
 	app._room.item_buttons["toy-ball"].pressed.emit()
 	check(app.playroom_state.toy_id == "toy-ball", "The same room control retries successfully")
 	_check_legacy(app, "Retrying the browser room save", storage)
-	app._show_reward_section("medals")
 	app.theme_buttons[app.model.THEMES.find("ocean")].pressed.emit()
 	check(app.playroom_state.preferred_theme_id == "ocean" and app.collection_page.visible
-		and app._collection_section == "medals",
-		"A world card saves the preference without leaving Medals")
+		and app._room.is_visible_in_tree(),
+		"A world card saves the preference without leaving Pip's room")
 	_check_legacy(app, "Saving a world through the redesigned menu", storage)
 	app._hide_collection()
 	check(FileAccess.get_file_as_string(state_path) == native_bytes,

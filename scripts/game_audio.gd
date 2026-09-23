@@ -16,6 +16,8 @@ const PIP_SOUND_PATHS := [
 	"res://assets/audio/pip/duck_double_03_derpy.wav",
 	"res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
 ]
+const CHEST_SAMPLE_RATE := 22050
+const CHEST_PULSE_SECONDS := 0.28
 
 signal status_changed(message: String)
 signal word_failed
@@ -26,6 +28,7 @@ var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var narration: AudioStreamPlayer
+var chest_charge: AudioStreamPlayer
 var narration_state: String = "idle"
 var muted: bool = false
 var active: bool = false
@@ -45,6 +48,10 @@ var _pop_slice_rng := RandomNumberGenerator.new()
 var _last_pop_slice_path: String = ""
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
+var _chest_charge_active: bool = false
+var _chest_charge_progress: float = -1.0
+var _chest_charge_loop: AudioStreamWAV
+var _chest_charge_accent: AudioStreamWAV
 
 
 func _ready() -> void:
@@ -134,6 +141,97 @@ func play_pip() -> void:
 	# The shared voice channel replaces the previous greeting on rapid taps and
 	# already stops on mute, page changes and microphone activation.
 	say(next_pip_sound())
+
+
+func set_chest_charge(progress: float) -> void:
+	if not is_finite(progress):
+		return
+	if muted or not active or not available:
+		stop_chest_charge()
+		return
+	if not _chest_charge_active:
+		# Only the hold's explicit beginning arms playback. A late progress event
+		# after cancel, mute or completion cannot start another sound.
+		if progress != 0.0:
+			return
+		if chest_charge == null:
+			chest_charge = _player(0.06)
+			chest_charge.finished.connect(_chest_charge_finished)
+		if _chest_charge_loop == null:
+			_chest_charge_loop = _synth_chest_sound(false)
+			_chest_charge_accent = _synth_chest_sound(true)
+		_chest_charge_active = true
+		_chest_charge_progress = 0.0
+		chest_charge.stream = _chest_charge_loop
+		chest_charge.pitch_scale = 0.82
+		chest_charge.volume_db = linear_to_db(0.06)
+		chest_charge.play()
+	# One looping pulse supplies both the accelerating rhythm and rising tone.
+	# Adjusting its rate does not restart it or queue work between hold frames.
+	_chest_charge_progress = maxf(_chest_charge_progress, clampf(progress, 0.0, 1.0))
+	var energy: float = pow(_chest_charge_progress, 1.35)
+	chest_charge.pitch_scale = lerpf(0.82, 2.4, energy)
+	chest_charge.volume_db = linear_to_db(lerpf(0.06, 0.2, energy))
+
+
+func stop_chest_charge() -> void:
+	_chest_charge_active = false
+	_chest_charge_progress = -1.0
+	if chest_charge != null:
+		chest_charge.stop()
+		chest_charge.stream = null
+
+
+func complete_chest_charge() -> void:
+	if not _chest_charge_active:
+		return
+	stop_chest_charge()
+	if muted or not active or not available:
+		return
+	# The dedicated channel leaves the existing theme-open effect free to play.
+	chest_charge.stream = _chest_charge_accent
+	chest_charge.pitch_scale = 1.0
+	chest_charge.volume_db = linear_to_db(0.24)
+	chest_charge.play()
+
+
+func _chest_charge_finished() -> void:
+	if not _chest_charge_active and chest_charge != null:
+		chest_charge.stream = null
+
+
+func _synth_chest_sound(completed: bool) -> AudioStreamWAV:
+	var duration: float = 0.44 if completed else CHEST_PULSE_SECONDS
+	var frames: int = int(round(duration * CHEST_SAMPLE_RATE))
+	var samples := PackedByteArray()
+	samples.resize(frames * 2)
+	for index in range(frames):
+		var time: float = float(index) / CHEST_SAMPLE_RATE
+		var sample: float = 0.0
+		if completed:
+			# A tiny ascending major chord is rendered once, with no delayed calls.
+			for note in range(3):
+				var age: float = time - float(note) * 0.045
+				if age < 0.0:
+					continue
+				var frequency: float = [659.25, 783.99, 1046.5][note]
+				var envelope: float = minf(age / 0.006, 1.0) * exp(-age * 12.0) * minf((duration - time) / 0.025, 1.0)
+				sample += (sin(TAU * frequency * age) + 0.18 * sin(TAU * frequency * 2.0 * age)) * envelope * 0.3
+		else:
+			var envelope: float = minf(time / 0.005, 1.0) * exp(-time * 40.0) * clampf((0.12 - time) / 0.025, 0.0, 1.0)
+			var phase: float = TAU * 520.0 * time
+			sample = (0.76 * sin(phase) + 0.18 * sin(phase * 2.0) + 0.06 * sin(phase * 3.0)) * envelope * 0.58
+		samples.encode_s16(index * 2, int(clampf(sample, -1.0, 1.0) * 32767.0))
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = CHEST_SAMPLE_RATE
+	stream.stereo = false
+	stream.data = samples
+	if not completed:
+		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		stream.loop_begin = 0
+		stream.loop_end = frames
+	return stream
 
 
 func say(path: String) -> void:
@@ -337,6 +435,7 @@ func stop_voice() -> void:
 
 func halt() -> void:
 	active = false
+	stop_chest_charge()
 	stop_narration()
 	if music != null:
 		stop_music()

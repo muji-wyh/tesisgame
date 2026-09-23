@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
-  openRewards, chooseRewardSection, collectionHeaderRect, worldIconRect,
+  openRewards, collectionHeaderRect, worldIconRect,
   contentBounds, pipHeaderRect, roomControl, matchWords, boardPoint, resultPoint
 } = require('./game-ui.cjs');
 
@@ -32,7 +32,7 @@ function cssClip(bounds, rect, padding = 0) {
 async function closeRewards(page) {
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText('My rewards opened.');
+  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
   await rendered(page);
 }
 
@@ -101,7 +101,6 @@ test('all eight theme choices give Pip different visible outfits in the header a
     await page.screenshot({ path: testInfo.outputPath(`wardrobe-header-${theme}.png`), scale: 'css',
       clip: cssClip(bounds, { x: content.x, y: content.padding, width: content.width, height: content.header }) });
     await openRewards(page);
-    await chooseRewardSection(page, 'room');
     await settled(page);
     await page.screenshot({ path: testInfo.outputPath(`wardrobe-room-${theme}.png`), fullPage: true, scale: 'css' });
     await closeRewards(page);
@@ -150,7 +149,7 @@ test('all eight theme targets fit 320 by 568 and the new choices survive touch a
     const world = worldIconRect(await metrics(page), index);
     await tap(page, world.x + world.width / 2, world.y + world.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-    await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+    await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
     expect(await record(page)).toContain(`preferred_theme_id="${THEME_IDS[index]}"`);
     await rendered(page);
     await page.screenshot({ path: testInfo.outputPath(`wardrobe-${THEME_IDS[index]}-320.png`), scale: 'css' });

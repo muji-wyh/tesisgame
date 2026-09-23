@@ -64,17 +64,16 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	var cards: Array = app.model.cards.duplicate(true)
 	app._show_collection()
-	for section in ["room", "medals"]:
-		app._show_reward_section(section)
+	for theme_index in [4, 1]:
 		await settle()
 		app._collection_scroll.scroll_vertical = 48
 		var scroll: int = app._collection_scroll.scroll_vertical
-		var button: Button = app.theme_buttons[4 if section == "room" else 1]
+		var button: Button = app.theme_buttons[theme_index]
 		button.grab_focus()
 		button.pressed.emit()
 		await settle()
-		check(app.collection_page.visible and app._collection_section == section,
-			"Choosing a theme stays on the current reward page")
+		check(app.collection_page.visible and app._room.is_visible_in_tree(),
+			"Choosing a theme keeps Pip's room open")
 		check(app._collection_scroll.scroll_vertical == scroll and button.has_focus(),
 			"Theme selection preserves scroll and control focus")
 		check(app.model.cards == cards and app.model.hints_remaining == 3,

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, enterGame, openGame, boardPoint, observeAudio,
-  openRewards, chooseTheme, chooseRewardSection: section } = require('./game-ui.cjs');
+  openRewards, chooseTheme } = require('./game-ui.cjs');
 
 const KEY = 'wordBuddies.playroom';
 
@@ -44,7 +44,6 @@ test('Match card taps pronounce and Match no longer creates runtime word sticker
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('picture-audio-without-sticker-writes.png'), scale: 'css' });
   await openRewards(page);
-  await section(page, 'medals');
   expect((await record(page)).ids).toEqual([]);
   await page.reload();
   await enterGame(page);
@@ -61,8 +60,7 @@ test('saved word sticker records survive More, world choices and reload', async 
   const saved = await record(page);
   expect(saved).toEqual({ ids: ['cat', 'apple', 'rocket', 'bell'], displayed: 'cat' });
   await openRewards(page);
-  await section(page, 'medals');
-  await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
+  await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-worlds-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');

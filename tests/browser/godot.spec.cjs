@@ -2,8 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { THEME_COLORS, metrics: logicalMetrics, tap, chooseMode, chooseTheme, chooseRewardSection, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, firstMedalPoint, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl } = require('./game-ui.cjs');
+const { THEME_COLORS, metrics: logicalMetrics, tap, chooseMode, chooseTheme, openRewards, enterGame,
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -35,17 +35,6 @@ async function canvasMetrics(scope) {
     const rect = canvas.getBoundingClientRect();
     return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
   });
-}
-
-async function openMedals(page, focusLast = false) {
-  await chooseRewardSection(page, 'medals');
-  await expect(page.locator('#game-status')).toContainText('Medals. Win a game');
-  if (focusLast) {
-    // Medals -> Pip -> last earned medal; locked medals cannot take focus.
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Shift+Tab');
-  }
-  await rendered(page);
 }
 
 function cardPoint(metrics, index) {
@@ -164,12 +153,12 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   await pressGamepad(page, 5);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 9);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await pressGamepad(page, 1);
@@ -354,7 +343,7 @@ test('season colors preserve selection and discard obsolete pending music and pr
     const before = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
-      // Opening My rewards cancels the stale selected-word prompt; only the final world's music may start.
+      // Opening Pip's room cancels the stale selected-word prompt; only the final world's music may start.
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
       expect(new Set(held.requests.map(request => request.url())).size).toBe(12);
       expect(held.requests).toHaveLength(12);
@@ -588,7 +577,7 @@ test('new adventures rotate and all five review words replay without opening or 
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(`${reviewed[4]}. Look at the picture and say the word.`);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
   // Back restores the found-word focus; deliberately press inside the chest stage.
@@ -607,7 +596,7 @@ test('new adventures rotate and all five review words replay without opening or 
   expect(errors).toEqual([]);
 });
 
-test('Pip follows the board, chest, collection, preview and loss pages without extra rewards', async ({ page }, testInfo) => {
+test('Pip follows the board, chest, room and loss pages without extra rewards', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await page.setViewportSize({ width: 390, height: 650 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -632,18 +621,13 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
+  const earnedProgress = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   const roomPip = await roomControl(page, 'pip');
   await greet(roomPip.x, roomPip.y, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
-  await openMedals(page, true);
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Blossom #1 reward preview opened');
-  await greet(58, 58);
-  await page.screenshot({ path: testInfo.outputPath('pip-preview.png'), scale: 'css' });
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
+  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(earnedProgress);
   await page.keyboard.press('Escape');
   await page.reload();
   await ready(page);
@@ -651,7 +635,7 @@ test('Pip follows the board, chest, collection, preview and loss pages without e
   await greet(40, 40);
   await page.screenshot({ path: testInfo.outputPath('pip-loss.png'), scale: 'css' });
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('0 of 48 medals complete');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   expect(errors).toEqual([]);
 });
 
@@ -904,7 +888,7 @@ test('three mistakes end a round and the counter cannot reset the limits', async
   expect(errors).toEqual([]);
 });
 
-test('fresh adventures assemble three fragments into a medal and preserve progress', async ({ page }, testInfo) => {
+test('fresh adventures assemble three reward pieces, unlock a toy and preserve progress', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -930,8 +914,11 @@ test('fresh adventures assemble three fragments into a medal and preserve progre
     }
     await pressGamepad(page, 3);
     const completed = Math.floor((round + 1) / 3);
-    await expect(page.locator('#game-status')).toContainText(`My rewards opened. ${completed} of 48 medals complete.`);
-    await expect(page.locator('#game-status')).toContainText(`Spring ${completed}/6`);
+    await expect(page.locator('#game-status')).toContainText(`Pip's room opened. ${completed + 1} toys in Pip's home.`);
+    const progress = await roomState(page);
+    expect(progress.owned.includes('spring')).toBe(round >= 2);
+    expect(progress.medals).toMatch(new RegExp(`"spring-1"\\s*:\\s*${Math.min(round + 1, 3)}`));
+    if (round === 3) expect(progress.medals).toMatch(/"spring-2"\s*:\s*1/);
     await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
     await pressGamepad(page, 1);
     if (round < 3) {
@@ -944,11 +931,15 @@ test('fresh adventures assemble three fragments into a medal and preserve progre
   await chooseSeason(page, 0);
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 1 of 48 medals complete. Spring 1/6');
-  await openMedals(page, true);
-  await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toContainText('Ladybug #2 reward preview opened');
-  await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened. 2 toys in Pip's home.");
+  const restored = await roomState(page);
+  expect(restored.owned).toContain('spring');
+  expect(restored.medals).toMatch(/"spring-1"\s*:\s*3/);
+  expect(restored.medals).toMatch(/"spring-2"\s*:\s*1/);
+  await roomControl(page, 'spring');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toContainText('1/3 · A drink for the flower!');
+  expect((await roomState(page)).medals).toBe(restored.medals);
   expect(errors).toEqual([]);
 });
 
@@ -972,98 +963,6 @@ test('Xbox chest charging cancels on disconnect and works again after reconnect'
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
   expect(errors).toEqual([]);
 });
-
-test('earned rewards respond to deliberate touch and stay closed after a swipe', async ({ page, browserName }, testInfo) => {
-  const errors = watchErrors(page);
-  await installGamepad(page);
-  await page.setViewportSize({ width: 390, height: 650 });
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
-  await ready(page);
-  await chooseSeason(page, 0);
-  await winWithTouch(page);
-  await page.evaluate(() => window.gamepadFixture.connect());
-  await holdControllerChest(page);
-  const earned = (await page.locator('#game-status').textContent()).split('\n')[0].replace(/^A new piece!\s*/, '');
-  await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
-  await openMedals(page);
-  await page.screenshot({ path: testInfo.outputPath('reward-collection.png'), scale: 'css' });
-  await rendered(page);
-  const rewardBounds = await logicalMetrics(page);
-  const firstReward = firstMedalPoint(rewardBounds);
-  const rewardPoint = { x: rewardBounds.x + firstReward.x * rewardBounds.scale,
-    y: rewardBounds.y + firstReward.y * rewardBounds.scale };
-  await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
-  await expect(page.locator('#game-status')).toContainText('reward preview opened');
-  await expect(page.locator('#game-status')).toContainText(earned);
-  await page.screenshot({ path: testInfo.outputPath('reward-preview.png'), scale: 'css' });
-  await page.touchscreen.tap(195, 340);
-  await expect(page.locator('#game-status')).toContainText('Boing! Tap 1');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
-  if (browserName === 'chromium') {
-    const client = await page.context().newCDPSession(page);
-    try {
-      await client.send('Input.dispatchTouchEvent', {
-        type: 'touchStart', touchPoints: [{ id: 1, x: rewardPoint.x, y: rewardPoint.y }]
-      });
-      await client.send('Input.dispatchTouchEvent', {
-        type: 'touchMove', touchPoints: [{ id: 1, x: rewardPoint.x, y: rewardPoint.y - 32 }]
-      });
-      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
-      rewardPoint.y -= 32;
-    } finally {
-      await client.detach();
-    }
-  }
-  await page.touchscreen.tap(rewardPoint.x, rewardPoint.y);
-  await expect(page.locator('#game-status')).toContainText('reward preview opened');
-  await pressGamepad(page, 12);
-  await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
-  await pressGamepad(page, 1);
-  await expect(page.locator('#game-status')).toContainText('A new piece!');
-  expect(errors).toEqual([]);
-});
-
-for (const [season, name] of ['Spring', 'Summer', 'Autumn', 'Winter', 'Ocean', 'Space', 'Jungle', 'Candy'].entries()) {
-  test(`${name} preview play varies reactions and celebrates five taps without extra rewards`, async ({ page }, testInfo) => {
-    const errors = watchErrors(page);
-    await installGamepad(page);
-    await page.setViewportSize({ width: 390, height: 650 });
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
-    await ready(page);
-    await chooseSeason(page, season);
-    await winWithTouch(page);
-    await page.evaluate(() => window.gamepadFixture.connect());
-    await holdControllerChest(page);
-    await pressGamepad(page, 3);
-    await openMedals(page, true);
-    await pressGamepad(page, 0);
-    await expect(page.locator('#game-status')).toContainText('reward preview opened');
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    const reactions = ['Boing! Tap 1', 'Wheee! Tap 2', 'Big hug! Tap 3', 'Boing! Tap 4', `High five! ${name} party!`];
-    for (const [index, reaction] of reactions.entries()) {
-      if (index === 2) await pressGamepad(page, 0);
-      else await page.touchscreen.tap(195, 340);
-      await expect(page.locator('#game-status')).toContainText(reaction);
-    }
-    await page.waitForTimeout(220);
-    await page.screenshot({ path: testInfo.outputPath(`reward-party-${name.toLowerCase()}.png`), scale: 'css' });
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await pressGamepad(page, 0);
-    await expect(page.locator('#game-status')).toContainText('Big hug! Tap 6');
-    const still = await page.screenshot({ scale: 'css' });
-    await page.waitForTimeout(250);
-    expect((await page.screenshot({ scale: 'css' })).equals(still), 'Reduced-motion play stays visually still.').toBe(true);
-    await pressGamepad(page, 1);
-    await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
-    expect(errors).toEqual([]);
-  });
-}
 
 test('completes matches and opens a one-shot reward while optional audio is still downloading', async ({ page }) => {
   const errors = watchErrors(page);
@@ -1200,7 +1099,7 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Good try! You kept trying');
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened. 0 of 48 medals complete.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toContainText('Good try!');
   await pressGamepad(page, 13);

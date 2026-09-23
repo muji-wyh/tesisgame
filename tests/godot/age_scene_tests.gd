@@ -48,16 +48,15 @@ func _run() -> void:
 		app.model.successes, app.model.mistakes, app.model.streak]
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	app._show_collection()
-	for section in ["room", "medals"]:
-		app._show_reward_section(section)
+	for age_id in ["7-9", "4-6"]:
 		await settle()
 		app._collection_scroll.scroll_vertical = 60
 		var scroll: int = app._collection_scroll.scroll_vertical
-		var button: Button = app._age_buttons["7-9" if section == "room" else "4-6"]
+		var button: Button = app._age_buttons[age_id]
 		button.grab_focus()
 		button.pressed.emit()
 		await settle()
-		check(app.collection_page.visible and app._collection_section == section
+		check(app.collection_page.visible and app._room.is_visible_in_tree()
 			and button.has_focus() and app._collection_scroll.scroll_vertical == scroll,
 			"Changing age stays on the same More page without moving scroll or focus")
 		check(app.model.cards == cards and app.model.lesson_words == words and app.model.age_band_id == "all"
@@ -72,10 +71,6 @@ func _run() -> void:
 	app._age_buttons["10-plus"].pressed.emit()
 	check(app.playroom_state.age_band_id == "4-6", "A dragged gesture cannot change age")
 	app._collection_dragged = false
-	app._preview_page.show()
-	app._age_buttons["10-plus"].pressed.emit()
-	check(app.playroom_state.age_band_id == "4-6", "A covered age control cannot change the preference")
-	app._preview_page.hide()
 	app._hide_collection()
 	app._age_buttons["10-plus"].pressed.emit()
 	check(app.playroom_state.age_band_id == "4-6", "Hidden age controls cannot change the preference")
@@ -92,7 +87,6 @@ func _run() -> void:
 		func(word: Dictionary) -> bool: return app.Data.word_level(word) == 1),
 		"The next Match lesson uses the saved basic vocabulary")
 	app._show_collection()
-	app._show_reward_section("room")
 	await settle()
 	var saved_path: String = app.playroom_state._save_path
 	var original := FileAccess.get_file_as_string(saved_path)
@@ -143,7 +137,7 @@ func _run() -> void:
 		check(app.playroom_state.age_band_id == "4-6" and app._age_buttons["4-6"].button_pressed,
 			"Controller accept selects and saves an age level")
 		app._move_focus(Vector2.UP)
-		check(app.theme_buttons.has(root.gui_get_focus_owner()) or app._collection_tabs.values().has(root.gui_get_focus_owner())
+		check(app.theme_buttons.has(root.gui_get_focus_owner())
 			or app._collection_back.has_focus(), "Up from the age row reaches the header rather than scrolled content")
 	app._hide_collection()
 	check(app.new_round(33, false, "music-makers", "match") and app.model.age_band_id == "4-6",
@@ -155,16 +149,14 @@ func _run() -> void:
 	root.size = Vector2i(320, 320)
 	app._show_collection()
 	await settle()
-	for section in ["room", "medals"]:
-		app._show_reward_section(section)
-		await settle()
-		check(app._age_choices.get_parent() == app._collection_grid and app._age_choices.is_visible_in_tree()
-			and app._collection_scroll.size.y >= 128,
-			"Short screens scroll the age row with content instead of squeezing reward tiles")
-		app._age_buttons["7-9"].grab_focus()
-		await settle()
-		check(app._collection_scroll.get_global_rect().encloses(app._age_buttons["7-9"].get_global_rect()),
-			"Keyboard focus can reveal scrolled age choices on short screens")
+	await settle()
+	check(app._age_choices.get_parent() == app._collection_grid and app._age_choices.is_visible_in_tree()
+		and app._collection_scroll.size.y >= 128,
+		"Short screens scroll the age row with content instead of squeezing the room")
+	app._age_buttons["7-9"].grab_focus()
+	await settle()
+	check(app._collection_scroll.get_global_rect().encloses(app._age_buttons["7-9"].get_global_rect()),
+		"Keyboard focus can reveal scrolled age choices on short screens")
 	app._build_collection()
 	await settle()
 	check(app._age_buttons.size() == 4 and app._age_buttons["7-9"].is_inside_tree(),

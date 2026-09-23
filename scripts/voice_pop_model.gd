@@ -7,11 +7,14 @@ const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
 const EPSILON: float = 0.000001
 const MAX_PLAYERS: int = 4
+const MAX_VOICE_PROFILES: int = 10
+const EMBEDDING_SIZE: int = 256
+const MAX_VOICE_TEMPLATES: int = 8
 const SETTLE_DURATION: float = 3.0
 # Experimental cosine thresholds, deliberately configurable for the short-word
 # voice study. These are not a claim of calibrated speaker recognition accuracy.
-const NEW_SPEAKER_SIMILARITY: float = 0.35
-const UPDATE_SPEAKER_SIMILARITY: float = 0.60
+const SPEAKER_SIMILARITY: float = 0.60
+const SPEAKER_MARGIN: float = 0.08
 # These nouns do not take a regular plural in the pictured sense. In particular,
 # never derive a singular by removing letters from arbitrary recognized speech.
 const UNCHANGED_PLURALS: Array[String] = [
@@ -40,10 +43,11 @@ var round_id: String = ""
 
 var _round_counter: int = 0
 var _settling_elapsed: float = 0.0
-var _new_speaker_similarity: float = NEW_SPEAKER_SIMILARITY
-var _update_speaker_similarity: float = UPDATE_SPEAKER_SIMILARITY
+var _speaker_similarity: float = SPEAKER_SIMILARITY
+var _speaker_margin: float = SPEAKER_MARGIN
+var _voice_profiles: Array[Dictionary] = []
+var _round_profiles: Array[Dictionary] = []
 var _players: Array[Dictionary] = []
-var _embedding_size: int = 0
 var _seen_events: Dictionary = {}
 var _target_history: Array[Dictionary] = []
 var _history_by_uid: Dictionary = {}
@@ -100,7 +104,11 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 func start() -> bool:
 	if phase in ["running", "paused", "settling"] or _words.is_empty():
 		return false
+	if play_mode == "multi" and _voice_profiles.is_empty():
+		return false
 	_reset_round()
+	if play_mode == "multi":
+		_round_profiles = _voice_profiles.duplicate(true)
 	_round_counter += 1
 	round_id = str(_round_counter)
 	phase = "running"
@@ -116,14 +124,58 @@ func set_play_mode(mode: String) -> bool:
 	return true
 
 
-func configure_speaker_matching(new_similarity: float = NEW_SPEAKER_SIMILARITY,
-		update_similarity: float = UPDATE_SPEAKER_SIMILARITY) -> bool:
-	if not phase in ["ready", "finished"] or not is_finite(new_similarity) or not is_finite(update_similarity):
+func set_voice_profiles(profiles: Array) -> bool:
+	# Replace the library atomically. An active/paused round retains its own
+	# snapshot, including names and avatars, until the next successful start.
+	if profiles.size() > MAX_VOICE_PROFILES:
 		return false
-	if new_similarity < -1.0 or new_similarity > 1.0 or update_similarity < new_similarity or update_similarity > 1.0:
+	var validated: Array[Dictionary] = []
+	var ids: Dictionary = {}
+	for profile in profiles:
+		if not profile is Dictionary or not profile.has_all(["id", "name", "emoji", "embedding"]):
+			return false
+		for key in ["id", "name", "emoji"]:
+			if not profile[key] is String or profile[key].strip_edges().is_empty():
+				return false
+		var id: String = profile.id.strip_edges()
+		if ids.has(id) or id.length() > 128 or profile.name.length() > 64 or profile.emoji.length() > 32:
+			return false
+		var embedding: Array[float] = _normalized_embedding(profile.embedding)
+		if embedding.size() != EMBEDDING_SIZE:
+			return false
+		var templates: Array = []
+		if profile.has("templates"):
+			if not profile.templates is Array or profile.templates.is_empty() or profile.templates.size() > MAX_VOICE_TEMPLATES:
+				return false
+			for candidate in profile.templates:
+				var template: Array[float] = _normalized_embedding(candidate)
+				if template.size() != EMBEDDING_SIZE:
+					return false
+				templates.append(template)
+		else:
+			templates.append(embedding.duplicate())
+		var avatar: Variant = profile.get("avatar_png", "")
+		if not avatar is String or avatar.length() > 131072:
+			return false
+		validated.append({"id": id, "name": profile.name.strip_edges(), "emoji": profile.emoji,
+			"embedding": embedding, "templates": templates, "avatar_png": avatar})
+		ids[id] = true
+	_voice_profiles = validated
+	return true
+
+
+func voice_profile_count() -> int:
+	return _voice_profiles.size()
+
+
+func configure_speaker_matching(similarity: float = SPEAKER_SIMILARITY,
+		margin: float = SPEAKER_MARGIN) -> bool:
+	if not phase in ["ready", "finished"] or not is_finite(similarity) or not is_finite(margin):
 		return false
-	_new_speaker_similarity = new_similarity
-	_update_speaker_similarity = update_similarity
+	if similarity < 0.0 or similarity > 1.0 or margin < 0.0 or margin > 1.0:
+		return false
+	_speaker_similarity = similarity
+	_speaker_margin = margin
 	return true
 
 
@@ -233,7 +285,7 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 	if start_ms >= DURATION * 1000.0 or end_ms > DURATION * 1000.0 or start_ms > elapsed * 1000.0 + EPSILON:
 		return removed
 	var embedding: Array[float] = _normalized_embedding(event.embedding)
-	if embedding.is_empty() or (_embedding_size > 0 and embedding.size() != _embedding_size):
+	if embedding.size() != EMBEDDING_SIZE:
 		return removed
 	_seen_events[event.event_id] = true
 	var spoken: Dictionary = {}
@@ -269,6 +321,9 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 		hit.combo = entry.combo
 		hit.player_id = player.id
 		hit.player_index = player_index
+		hit.player_name = player.name
+		hit.player_emoji = player.emoji
+		hit.player_avatar_png = player.avatar_png
 		removed.append(hit)
 	if phase == "running" and targets.is_empty():
 		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
@@ -278,7 +333,7 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 func players_snapshot() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for player in _players:
-		result.append({"id": player.id, "index": player.index, "hits": player.hits})
+		result.append(player.duplicate(true))
 	return result
 
 
@@ -321,7 +376,7 @@ func _reset_round() -> void:
 	_next_spawn_at = 0.0
 	_settling_elapsed = 0.0
 	_players.clear()
-	_embedding_size = 0
+	_round_profiles.clear()
 	_seen_events.clear()
 	_target_history.clear()
 	_history_by_uid.clear()
@@ -431,31 +486,41 @@ func _normalized_embedding(value: Variant) -> Array[float]:
 func _identify_player(embedding: Array[float]) -> int:
 	var best_index: int = -1
 	var best_similarity: float = -2.0
-	for player in _players:
-		var similarity: float = 0.0
-		for index in range(embedding.size()):
-			similarity += embedding[index] * player.centroid[index]
+	var second_similarity: float = -2.0
+	for profile_index in range(_round_profiles.size()):
+		var profile: Dictionary = _round_profiles[profile_index]
+		# Two supporting recordings reduce reliance on one unusually close sample.
+		# A legacy profile keeps its original single-template behavior.
+		var scores: Array[float] = []
+		for template in profile.templates:
+			var score: float = 0.0
+			for index in range(embedding.size()):
+				score += embedding[index] * template[index]
+			scores.append(clampf(score, -1.0, 1.0))
+		scores.sort()
+		var similarity: float = scores[-1]
+		if scores.size() > 1:
+			similarity = (similarity + scores[-2]) * 0.5
 		if similarity > best_similarity:
-			best_index = player.index
+			second_similarity = best_similarity
+			best_index = profile_index
 			best_similarity = similarity
-	if best_index < 0 or best_similarity < _new_speaker_similarity:
-		if _players.size() >= MAX_PLAYERS:
-			return -1
-		best_index = _players.size()
-		_embedding_size = embedding.size()
-		_players.append({"id": "P%d" % (best_index + 1), "index": best_index, "hits": 0,
-			"centroid": embedding.duplicate(), "observations": 1})
-	elif best_similarity >= _update_speaker_similarity:
-		# Ambiguous speech still scores for the nearest player, but cannot slowly
-		# contaminate their reference voice (including an ambiguous fifth speaker).
-		var player: Dictionary = _players[best_index]
-		var weight: float = minf(float(player.observations), 20.0)
-		var combined: Array[float] = []
-		for index in range(embedding.size()):
-			combined.append(player.centroid[index] * weight + embedding[index])
-		player.centroid = _normalized_embedding(combined)
-		player.observations += 1
-	return best_index
+		elif similarity > second_similarity:
+			second_similarity = similarity
+	# Compare against the entire registered library, even profiles that have not
+	# hit a word yet. Never turn a weak or ambiguous voice into a new player.
+	if best_index < 0 or best_similarity < _speaker_similarity or best_similarity - second_similarity < _speaker_margin:
+		return -1
+	var matched: Dictionary = _round_profiles[best_index]
+	for player in _players:
+		if player.id == matched.id:
+			return player.index
+	if _players.size() >= MAX_PLAYERS:
+		return -1
+	var player_index: int = _players.size()
+	_players.append({"id": matched.id, "name": matched.name, "emoji": matched.emoji,
+		"avatar_png": matched.avatar_png, "index": player_index, "hits": 0})
+	return player_index
 
 
 func _rebuild_multi_score() -> void:
@@ -492,13 +557,10 @@ func _rebuild_multi_score() -> void:
 
 
 func _clear_voice_evidence() -> void:
-	for player in _players:
-		player.erase("centroid")
-		player.erase("observations")
+	_round_profiles.clear()
 	_target_history.clear()
 	_history_by_uid.clear()
 	_seen_events.clear()
-	_embedding_size = 0
 
 
 func _record_word(collection: Array[Dictionary], word: Dictionary) -> void:

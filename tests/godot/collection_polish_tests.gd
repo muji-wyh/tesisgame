@@ -73,51 +73,12 @@ func _run() -> void:
 	app._refresh()
 	root.size = Vector2i(768, 1024)
 	app._show_collection()
-	app._show_reward_section("medals")
 	await settle()
-	check(app.duck.is_visible_in_tree() and app._next_goal.is_ancestor_of(app.duck),
-		"Pip is present in the next-treasure guide on Medals")
-	check(app._medals_duck_slot.get_global_rect().encloses(app.duck.get_global_rect()),
-		"Pip fits the guide slot without covering its text or neighboring artwork")
-	var shelves: Variant = app.get("_collection_shelves")
-	check(shelves is Array and shelves.size() == 8,
-		"Each world has its own treasure shelf")
-	for slot in app._reward_slots.values():
-		check(slot.picture.get("mystery_egg") == true and slot.picture.texture == null
-			and slot.picture.pieces == 0 and slot.button.disabled,
-			"Empty rewards are mystery eggs without loading or granting their artwork")
-		check(slot.label.text == "0/3", "Empty rewards keep their real fragment count without repeated copy")
+	check(app.duck.is_visible_in_tree() and app._room.is_ancestor_of(app.duck),
+		"Pip remains present in the room")
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	app._play_duck()
-	check(app.medal_progress.counts == counts and not app._preview_page.visible,
-		"Playing with Pip does not grant or open an unearned reward")
-	var picture = app._reward_slots["spring-1"].picture
-	check(picture.has_method("wiggle"), "Medal artwork has a bounded playful reaction")
-	if picture.has_method("wiggle"):
-		var button: Button = app._reward_slots["spring-1"].button
-		var rect: Rect2 = button.get_global_rect()
-		picture.wiggle(false)
-		var tween: Tween = picture.get("_wiggle")
-		if tween != null:
-			tween.pause()
-			tween.custom_step(0.045)
-		check(not is_zero_approx(picture.rotation), "The artwork visibly reacts during a wiggle")
-		check(button.get_global_rect().is_equal_approx(rect), "Wiggling artwork does not move its input target")
-		picture.hide()
-		check(is_zero_approx(picture.rotation) and picture.scale == Vector2.ONE,
-			"Hidden artwork cancels its reaction")
-		picture.show()
-		app.set_reduced_motion(false)
-		picture.wiggle(false)
-		tween = picture.get("_wiggle")
-		if tween != null:
-			tween.pause()
-			tween.custom_step(0.045)
-		app.set_reduced_motion(true)
-		check(is_zero_approx(picture.rotation), "Enabling reduced motion cancels an in-progress medal reaction")
-		picture.wiggle(true)
-		check(is_zero_approx(picture.rotation) and picture.scale == Vector2.ONE,
-			"Reduced motion keeps medal artwork still")
+	check(app.medal_progress.counts == counts, "Playing with Pip does not grant a reward")
 	var decoration = load("res://scripts/medal_view.gd").new()
 	root.add_child(decoration)
 	decoration.scale = Vector2.ONE * 0.6

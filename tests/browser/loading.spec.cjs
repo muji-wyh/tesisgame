@@ -750,7 +750,7 @@ test('game input stays paused while the ready game is still covered by the loadi
   await expect(page.locator('#game-status')).toHaveText(initial);
   await page.screenshot({ path: testInfo.outputPath('real-entered-game.png'), scale: 'css' });
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('My rewards opened.');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
 });
 
 for (const input of ['touch', 'keyboard', 'mouse']) test(`ready loading playground waits for deliberate ${input} entry`, async ({ page }, testInfo) => {

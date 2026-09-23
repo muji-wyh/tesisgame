@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, matchWords, discoverMatchCards,
-  headerPoint, boardPoint, resultPoint, openRewards, chooseRewardSection, collectionHeaderRect } = require('./game-ui.cjs');
+  headerPoint, boardPoint, resultPoint, openRewards, collectionHeaderRect } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -124,7 +124,7 @@ test(`New adventure starts Match directly after a ${won ? 'win' : 'loss'}`, asyn
 });
 }
 
-test('More sections and Back preserve the Match board and selected card', async ({ page }, testInfo) => {
+test('Pip room and Back preserve the Match board and selected card', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   const cards = await discoverMatchCards(page), selected = cards[3];
   const point = boardPoint(await metrics(page), selected.index);
@@ -132,11 +132,9 @@ test('More sections and Back preserve the Match board and selected card', async 
   await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
   const saved = await record(page), medals = await record(page, MEDAL_KEY);
   await openRewards(page);
-  await chooseRewardSection(page, 'medals');
-  await expect(page.locator('#game-status')).toContainText('Medals.');
-  await expect(page.locator('#game-status')).toContainText('Choose a world from the icons above');
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
   await page.screenshot({ path: testInfo.outputPath('more-worlds-preserves-lesson.png'), scale: 'css' });
-  await chooseRewardSection(page, 'room');
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');

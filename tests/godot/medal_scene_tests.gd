@@ -44,7 +44,6 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
-	check(app._reward_slots.size() == 48, "A new player sees six active medals per theme")
 	check(app.medal_progress.count_for("spring-1") == 0, "A new player's first medal is empty")
 	app.new_round(6)
 	app.choose_theme("spring")
@@ -76,13 +75,6 @@ func _run() -> void:
 		"An ordinary piece snaps into the medal without a second collection flight")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 1, "A repeated opening callback cannot duplicate the piece")
-	app._show_collection()
-	app._open_reward_preview("spring-1")
-	check(app._preview_image.pieces == 1, "A partial medal preview does not reveal the full medal")
-	check(app._status_announcement.contains("Piece 1 of 3"),
-		"The partial medal preview announces its fragment progress")
-	app._hide_reward_preview()
-	app._hide_collection()
 	app.new_round(7)
 	app.choose_theme("spring")
 	win(app)
@@ -102,7 +94,8 @@ func _run() -> void:
 	app._finish_fragment_delivery()
 	check(app.medal_progress.count_for("spring-1") == 3, "Tapping placement repeatedly cannot add pieces")
 	app._show_collection()
-	check(app._collection_headings.spring.text == "Spring 1/6", "The collection distinguishes medals from fragments")
+	check(app._room.item_buttons["toy-spring"].get_parent() == app._room.owned_toys,
+		"Completing the first medal unlocks the Spring toy in Pip's room")
 	app._hide_collection()
 	app.new_round(9)
 	app.choose_theme("spring")
@@ -189,13 +182,11 @@ func _run() -> void:
 	check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL,
 		"Closing a collection after feedback restores the currently available hint")
 	app._show_collection()
-	app._open_reward_preview("winter-1")
-	app.medal_progress.counts["spring-1"] = 1
+	app.medal_progress.counts["spring-1"] = 3
 	app._refresh_collection()
 	app._refresh()
-	app._hide_reward_preview()
-	check(app._reward_slots["spring-1"].button.focus_mode == Control.FOCUS_ALL,
-		"Closing a preview makes newly earned medal tiles keyboard-reachable")
+	check(app._room.item_buttons["toy-spring"].focus_mode == Control.FOCUS_ALL,
+		"Newly earned toys become keyboard-reachable after refreshing the room")
 	app._hide_collection()
 	root.size = Vector2i(390, 844)
 	app.new_round(6)
@@ -229,13 +220,9 @@ func _run() -> void:
 	root.add_child(archive_app)
 	await process_frame
 	await process_frame
-	check(archive_app._reward_slots.size() == 49 and archive_app._reward_slots.has("spring-7")
-		and archive_app.medal_progress.completed_count() == 0,
-		"Earlier rewards stay visible without becoming extra active medals")
-	archive_app._show_collection()
-	archive_app._open_reward_preview("spring-7")
-	check(archive_app._preview_title.text == "Sprout #7" and archive_app._preview_image.pieces == 3,
-		"An archived reward keeps its full artwork and original name")
+	check(archive_app.medal_progress.legacy_rewards.has("spring-7")
+		and archive_app.collected_rewards.has("spring-7") and archive_app.medal_progress.completed_count() == 0,
+		"Earlier rewards remain saved without becoming extra active medals")
 	archive_app.queue_free()
 	await process_frame
 	var files := DirAccess.open(directory)

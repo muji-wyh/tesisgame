@@ -3,7 +3,8 @@ const path = require('node:path');
 const { createHash } = require('node:crypto');
 
 function packageMultiplayer(root, output) {
-  for (const name of ['multiplayer-host.js', 'multiplayer-capture.js', 'multiplayer-audio.js', 'multiplayer-worker.js']) {
+  for (const name of ['multiplayer-host.js', 'multiplayer-capture.js', 'multiplayer-audio.js', 'multiplayer-worker.js',
+    'voice-profiles.js', 'voice-profiles-ui.js', 'voice-profiles.css']) {
     fs.copyFileSync(path.join(root, 'web', name), path.join(output, name));
   }
   const source = path.join(root, 'build', 'multiplayer');

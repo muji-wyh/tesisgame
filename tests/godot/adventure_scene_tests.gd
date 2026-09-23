@@ -20,7 +20,7 @@ func _run() -> void:
 	var properties: Array = app.get_property_list().map(
 		func(property: Dictionary) -> String: return property.name)
 	var integrated := true
-	for property in ["_found_words", "_goal_label", "_goal_medal"]:
+	for property in ["_found_words"]:
 		check(properties.has(property), "The adventure scene provides " + property)
 		integrated = integrated and properties.has(property)
 	if not integrated:
@@ -49,17 +49,9 @@ func _run() -> void:
 	check(not properties.has("_match_caption"), "Match has no separate Find 3 pairs caption")
 	check(not app._found_words.is_visible_in_tree() and app._found_words.get_child_count() == 0,
 		"An unplayed board has no earned word buttons")
-	check(app._goal_label.text.contains("0/3") and app._goal_medal.pieces == 0
-		and app._goal_medal.texture != null
-		and app._goal_medal.texture.resource_path == "res://assets/images/rewards/spring-1.svg",
-		"Medals previews the first medal's three-piece goal")
 	app._show_collection()
-	app._show_reward_section("room")
-	check(not app._goal_label.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-		"Pip keeps world choices available without repeating the next medal goal")
-	app._show_reward_section("medals")
-	check(app._goal_label.is_visible_in_tree() and app._goal_medal.is_visible_in_tree(),
-		"The next goal is visible with the medal collection")
+	check(app._room.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
+		"More opens Pip with every world choice available")
 	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)
 	check(words.size() == 3, "The scene starts with three matchable words")
@@ -97,9 +89,8 @@ func _run() -> void:
 	_check_replay(app)
 	app.chest.finish_immediately()
 	app._finish_fragment_delivery()
-	check(app.medal_progress.count_for("spring-1") == 1 and app._goal_label.text.contains("1/3")
-		and app._goal_medal.pieces == 1,
-		"Collecting a fragment immediately updates the next goal in Medals")
+	check(app.medal_progress.count_for("spring-1") == 1 and app.reward_image.pieces == 1,
+		"Collecting a fragment updates the saved progress and chest medal")
 	_check_replay(app)
 	app.audio.set_muted(true)
 	for dimensions in [Vector2i(320, 320), Vector2i(320, 321), Vector2i(390, 844), Vector2i(844, 390)]:
@@ -114,19 +105,16 @@ func _run() -> void:
 		and app.model.hints_remaining == 3, "Reset removes old word actions and renews all three hints")
 	app.medal_progress.counts["spring-1"] = 3
 	app.choose_theme("spring")
-	check(app._goal_label.text.contains("0/3") and app._goal_medal.pieces == 0
-		and app.collection_button.tooltip_text.contains("Ladybug")
-		and app._goal_medal.texture != null
-		and app._goal_medal.texture.resource_path == "res://assets/images/rewards/spring-2.svg",
-		"Completing Blossom moves the next goal to Ladybug")
+	check(app.medal_progress.next_fragment("spring").medal_id == "spring-2",
+		"Completing Blossom moves the next chest reward to Ladybug")
 	app.choose_theme("winter")
-	check(app.collection_button.tooltip_text.contains("Snowflake") and app._goal_label.text.contains("0/3"),
-		"Changing season updates the reward goal without changing the adventure")
+	check(app.medal_progress.next_fragment("winter").medal_id == "winter-1",
+		"Changing season selects that season's next chest reward")
 	check(app.model.adventure_name == adventure, "Season selection preserves the current adventure topic")
 	for index in range(1, 7):
 		app.medal_progress.counts["winter-%d" % index] = 3
 	app._refresh()
-	check(app._goal_label.text.contains("6/6"), "A completed season shows six collected medals")
+	check(app.medal_progress.completed_count("winter") == 6, "A completed season retains six earned medals")
 	app.new_round(19)
 	words = _pairs(app)
 	if not words.is_empty():

@@ -11,6 +11,7 @@ signal status_changed(snapshot: Dictionary)
 signal play_mode_requested(mode: String)
 signal multiplayer_retry_requested
 signal settling_requested
+signal voice_profiles_requested
 
 const Style = preload("res://scripts/ui_style.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
@@ -108,6 +109,12 @@ var _mode_bar: Control
 var _mode_choices: HBoxContainer
 var _previous_summary_label: Label
 var _player_labels: Array[Label] = []
+var _player_avatars: Array[TextureRect] = []
+var _player_emoji: Array[Label] = []
+var _avatar_textures: Dictionary = {}
+var _last_hit_profile: Dictionary = {}
+var _last_hit_avatar: TextureRect
+var _last_hit_emoji: Label
 var _ready_prompt_seen: bool = false
 var _choice_tween: Tween
 var _header_height: float = 0.0
@@ -152,6 +159,12 @@ func _build() -> void:
 	_live_caption = _label("LISTENING", 10, CYAN)
 	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, transcript_label, _live_caption]:
 		_hud.add_child(item)
+	_last_hit_avatar = _avatar_control()
+	_last_hit_avatar.name = "HitPlayerAvatar"
+	_hud.add_child(_last_hit_avatar)
+	_last_hit_emoji = _label("", 18)
+	_last_hit_emoji.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hud.add_child(_last_hit_emoji)
 	_gate = ScrollContainer.new()
 	_gate.name = "MicrophoneGate"
 	_gate.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -173,7 +186,7 @@ func _build() -> void:
 	_gate_body.add_child(_gate_actions)
 	retry_button = _action("Start listening", true)
 	retry_button.name = "RetryListening"
-	retry_button.pressed.connect(func() -> void: request_listening.emit())
+	retry_button.pressed.connect(_request_listening)
 	_gate_back = _action("Back")
 	_gate_back.pressed.connect(_exit)
 	_gate_actions.add_child(retry_button)
@@ -236,12 +249,63 @@ func _build_mode_bar() -> void:
 	_previous_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_previous_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_mode_bar.add_child(_previous_summary_label)
-	for index in range(4):
-		var player: Label = _label("P%d · —" % (index + 1), 12, PLAYER_COLORS[index])
+	for index in range(PopModel.MAX_PLAYERS):
+		var avatar: TextureRect = _avatar_control()
+		avatar.name = "Player%dAvatar" % (index + 1)
+		_hud.add_child(avatar)
+		_player_avatars.append(avatar)
+		var emoji: Label = _label("", 20)
+		emoji.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_hud.add_child(emoji)
+		_player_emoji.append(emoji)
+		var player: Label = _label("—", 13, PLAYER_COLORS[index % PLAYER_COLORS.size()])
 		player.name = "Player%dHits" % (index + 1)
 		_hud.add_child(player)
 		_player_labels.append(player)
 	_update_multiplayer_ui()
+
+
+func set_voice_profiles(profiles: Array) -> bool:
+	if not game.set_voice_profiles(profiles):
+		return false
+	_build()
+	_update_multiplayer_ui()
+	_update_profile_gate()
+	_layout()
+	_publish(true)
+	return true
+
+
+func voice_profile_count() -> int:
+	return game.voice_profile_count()
+
+
+func _missing_voice_profiles() -> bool:
+	return play_mode == "multi" and game.phase in ["ready", "finished"] and game.voice_profile_count() == 0
+
+
+func _update_profile_gate() -> void:
+	if _missing_voice_profiles() and game.phase == "ready":
+		_message = "Add a voice player in More to play multiplayer."
+		_gate_title.text = "Meet the players"
+		_gate_copy.text = _message
+		_gate_note.text = "Choose an emoji, add a name, and record a voice."
+		retry_button.text = "Add voice player"
+		retry_button.disabled = false
+	elif game.phase == "ready" and retry_button.text == "Add voice player":
+		_message = "Your voice players are ready. Start listening to play."
+		_gate_title.text = "Ready to pop?"
+		_gate_copy.text = _message
+		_gate_note.text = "Your 30 seconds start when Pip can hear you."
+		retry_button.text = "Start listening"
+		retry_button.disabled = _words.is_empty()
+
+
+func _request_listening() -> void:
+	if _missing_voice_profiles():
+		voice_profiles_requested.emit()
+		return
+	request_listening.emit()
 
 
 func set_multiplayer_state(state: Dictionary) -> void:
@@ -260,6 +324,7 @@ func set_multiplayer_state(state: Dictionary) -> void:
 		retry_button.text = "Retry listening"
 		retry_button.disabled = _words.is_empty()
 	_update_multiplayer_ui()
+	_update_profile_gate()
 	_layout()
 	_publish(true)
 
@@ -270,6 +335,7 @@ func set_play_mode(mode: String) -> bool:
 	play_mode = mode
 	_show_mode_choices(false)
 	_update_multiplayer_ui()
+	_update_profile_gate()
 	_layout()
 	_publish(true)
 	return true
@@ -302,13 +368,13 @@ func _update_multiplayer_ui() -> void:
 	mode_button.text = "Retry" if status == "error" and play_mode == "single" else "Mode"
 	mode_button.tooltip_text = "Retry preparing multiplayer" if mode_button.text == "Retry" else "Choose solo or multiplayer"
 	solo_button.text = "Start solo" if play_mode == "multi" else "Continue solo"
-	multiplayer_button.text = "Continue multiplayer" if play_mode == "multi" else "Start multiplayer"
+	multiplayer_button.text = "Add voice player" if game.voice_profile_count() == 0 and game.phase != "paused" else "Continue multiplayer" if play_mode == "multi" else "Start multiplayer"
 	multiplayer_button.disabled = status != "ready"
 	_previous_summary_label.visible = not previous_round_summary.is_empty()
 	if not previous_round_summary.is_empty():
 		var last_mode: String = "multiplayer" if str(previous_round_summary.get("play_mode", "single")) == "multi" else "solo"
 		_previous_summary_label.text = "Previous %s: %d hits · %d points" % [last_mode, int(previous_round_summary.get("hits", 0)), int(previous_round_summary.get("score", 0))]
-	_gate_privacy.text = "Multiplayer speech stays on this device. Voice profiles clear after the round." if play_mode == "multi" else "Browser speech may process audio remotely. Game stores no voice or transcripts."
+	_gate_privacy.text = "Saved voices stay on this device. Round audio is not stored." if play_mode == "multi" else "Browser speech may process audio remotely. Game stores no voice or transcripts."
 
 
 func _toggle_mode_choices() -> void:
@@ -345,6 +411,9 @@ func _choose_solo() -> void:
 func _choose_multiplayer() -> void:
 	if str(multiplayer_state.get("status", "idle")) != "ready":
 		return
+	if game.voice_profile_count() == 0 and (play_mode != "multi" or game.phase in ["ready", "finished"]):
+		voice_profiles_requested.emit()
+		return
 	_show_mode_choices(false)
 	if play_mode != "multi":
 		play_mode_requested.emit("multi")
@@ -370,6 +439,8 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	_last_target_ids = ""
 	_last_hit = ""
 	_last_hit_left = 0.0
+	_last_hit_profile.clear()
+	_avatar_textures.clear()
 	_clear_transcript()
 	set_report_speaking(false)
 	_report_step = 0
@@ -389,6 +460,7 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	_gate.scroll_vertical = 0
 	set_reduced_motion(motion_reduced)
 	_update_multiplayer_ui()
+	_update_profile_gate()
 	set_process(is_visible_in_tree())
 	_layout()
 	_publish(true)
@@ -396,6 +468,17 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 
 func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_build()
+	if _missing_voice_profiles() and game.phase == "ready":
+		_enabled = enabled
+		_listening = false
+		_listening_tick_usec = -1
+		_pending = false
+		_gate.show()
+		_hud.hide()
+		_update_profile_gate()
+		_layout()
+		_publish(true)
+		return
 	var was_running: bool = _listening and game.phase == "running"
 	if was_running and not listening:
 		_sync_game_clock()
@@ -511,9 +594,11 @@ func _present_hits(struck: Array) -> void:
 				visual = item
 		if not visual.is_empty():
 			_bursts.append({"center": visual.center, "radius": float(visual.size.x) * 0.48,
-				"age": 0.0, "color": PLAYER_COLORS[int(target.get("player_index", 0)) % 4] if play_mode == "multi" else _card_color(int(target.uid)),
-				"points": int(target.get("points", 100)), "player_id": str(target.get("player_id", ""))})
-		_last_hit = "%s +1 HIT" % str(target.get("player_id", "")) if play_mode == "multi" else "+%d" % int(target.get("points", 100))
+				"age": 0.0, "color": PLAYER_COLORS[int(target.get("player_index", 0)) % PLAYER_COLORS.size()] if play_mode == "multi" else _card_color(int(target.uid)),
+				"points": int(target.get("points", 100)), "player_id": str(target.get("player_id", "")),
+				"emoji": str(target.get("player_emoji", "")), "avatar_png": str(target.get("player_avatar_png", ""))})
+		_last_hit_profile = {"name": target.get("player_name", ""), "emoji": target.get("player_emoji", ""), "avatar_png": target.get("player_avatar_png", "")}
+		_last_hit = "%s +1 HIT" % str(target.get("player_name", "")).left(18) if play_mode == "multi" else "+%d" % int(target.get("points", 100))
 		if play_mode == "single" and int(target.get("combo", 0)) > 1:
 			_last_hit += "  ·  %d× COMBO" % int(target.combo)
 		_last_hit_left = 1.15
@@ -649,6 +734,7 @@ func snapshot() -> Dictionary:
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
 		"play_mode": play_mode, "round_id": game.round_id, "players": game.players_snapshot(), "ranking": game.ranking(),
+		"voice_profile_count": game.voice_profile_count(),
 		"multiplayer": multiplayer_state.duplicate(true), "mode_choices_visible": _mode_choices.visible,
 		"previous_round": previous_round_summary.duplicate(true),
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
@@ -786,8 +872,18 @@ func _update_hud() -> void:
 		score_label.text = str(game.hits)
 	var players: Array = game.players_snapshot()
 	for index in range(_player_labels.size()):
+		var joined: bool = play_mode == "multi" and index < players.size()
+		var player: Dictionary = players[index] if joined else {}
+		var texture: Texture2D = _avatar_texture(str(player.get("avatar_png", "")))
 		_player_labels[index].visible = play_mode == "multi"
-		_player_labels[index].text = "P%d · %s" % [index + 1, str(players[index].hits) if index < players.size() else "—"]
+		_player_labels[index].text = str(player.hits) if joined else "—"
+		_player_labels[index].tooltip_text = "%s · %d hits" % [player.name, player.hits] if joined else "Waiting for a registered player"
+		_player_labels[index].set("accessibility_name", _player_labels[index].tooltip_text)
+		_player_avatars[index].texture = texture
+		_player_avatars[index].visible = joined and texture != null
+		_player_avatars[index].tooltip_text = str(player.get("name", ""))
+		_player_emoji[index].text = str(player.get("emoji", ""))
+		_player_emoji[index].visible = joined and texture == null
 	hits_label.text = "%d %s" % [game.hits, "hit" if game.hits == 1 else "hits"]
 	transcript_label.visible = not _transcript.is_empty()
 	prompt_label.visible = _transcript.is_empty()
@@ -799,6 +895,7 @@ func _update_hud() -> void:
 	if game.phase == "settling":
 		_live_caption.text = "FINISHING THE LAST WORDS…"
 	_live_caption.add_theme_color_override("font_color", PINK if _last_hit_left > 0.0 else CYAN)
+	_update_hit_avatar()
 
 
 func _layout() -> void:
@@ -847,7 +944,13 @@ func _layout() -> void:
 		var players_width: float = width - side * 2.0 if compact_players else width
 		var players_left: float = edge + side if compact_players else edge
 		var players_top: float = _header_height + (34.0 if compact_players else 60.0) / scale
-		_place_label(_player_labels[index], Rect2(players_left + players_width * index / 4.0, players_top, players_width / 4.0, 24.0 / scale), 12)
+		var cell_width: float = players_width / float(PopModel.MAX_PLAYERS)
+		var center_x: float = players_left + cell_width * (float(index) + 0.5)
+		var avatar_rect := Rect2(center_x - 25.0 / scale, players_top, 24.0 / scale, 24.0 / scale)
+		_player_avatars[index].position = avatar_rect.position
+		_player_avatars[index].size = avatar_rect.size
+		_place_label(_player_emoji[index], avatar_rect, 20)
+		_place_label(_player_labels[index], Rect2(center_x + 1.0 / scale, players_top, 28.0 / scale, 24.0 / scale), 13)
 	var speech_top: float = _header_height + players_height + (59.0 if short else 65.0) / scale
 	var speech_height: float = (36.0 if short else 44.0) / scale
 	_place_label(prompt_label, Rect2(edge, speech_top, width, speech_height), 17 if short else 20)
@@ -859,6 +962,7 @@ func _layout() -> void:
 	prompt_label.size.y = speech_height
 	_update_transcript_window()
 	_place_label(_live_caption, Rect2(edge, speech_top + speech_height, width, 17 / scale), 10)
+	_update_hit_avatar()
 	var top: float = speech_top + speech_height + (17.0 if compact_players else 25.0) / scale
 	_arena = Rect2(edge, top, width, maxf(64.0 / scale, size.y - top - 18.0 / scale))
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
@@ -1048,6 +1152,7 @@ func _draw_burst(burst: Dictionary, scale: float) -> void:
 	var progress: float = clampf(age / (0.35 if reduced_motion else 0.75), 0.0, 1.0)
 	if reduced_motion:
 		draw_arc(center, float(burst.radius) * 0.7, 0.0, TAU, 28, Color(accent, 1.0 - progress), 3.0 / scale, true)
+		_draw_burst_score(burst, center, scale, 0.0)
 		return
 	var radius: float = lerpf(12.0 / scale, float(burst.radius) * 1.7, ease(progress, 0.45))
 	draw_arc(center, radius, 0.0, TAU, 48, Color(accent, (1.0 - progress) * 0.7), 3.0 / scale, true)
@@ -1070,11 +1175,23 @@ func _draw_burst(burst: Dictionary, scale: float) -> void:
 		var tangent := direction.orthogonal()
 		var points := PackedVector2Array([position + direction * side, position - direction * side * 0.6 + tangent * side * 0.5, position - direction * side * 0.3 - tangent * side * 0.65])
 		draw_colored_polygon(points, Color(CARD_COLORS[index % CARD_COLORS.size()], 1.0 - progress))
+	_draw_burst_score(burst, center, scale, progress)
+
+
+func _draw_burst_score(burst: Dictionary, center: Vector2, scale: float, progress: float) -> void:
 	var font: Font = ThemeDB.fallback_font
-	var label: String = "%s +1" % str(burst.player_id) if not str(burst.get("player_id", "")).is_empty() else "+%d" % int(burst.points)
+	var multiplayer: bool = not str(burst.get("player_id", "")).is_empty()
+	var texture: Texture2D = _avatar_texture(str(burst.get("avatar_png", ""))) if multiplayer else null
+	var label: String = "+1" if multiplayer else "+%d" % int(burst.points)
+	if multiplayer and texture == null:
+		label = str(burst.get("emoji", "")) + " " + label
 	var font_size: int = ceili(23.0 / scale)
 	var text_width: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
-	draw_string(font, center + Vector2(-text_width * 0.5, -36.0 / scale - progress * 34.0 / scale), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
+	var avatar_width: float = 30.0 / scale if texture != null else 0.0
+	var baseline: Vector2 = center + Vector2(-(text_width + avatar_width) * 0.5, -36.0 / scale - progress * 34.0 / scale)
+	if texture != null:
+		draw_texture_rect(texture, Rect2(baseline - Vector2(0, 24.0 / scale), Vector2.ONE * 26.0 / scale), false, Color(1, 1, 1, 1.0 - progress))
+	draw_string(font, baseline + Vector2(avatar_width, 0), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
 
 
 func _finish() -> void:
@@ -1210,7 +1327,7 @@ func _add_player_ranking(ranking: Array) -> void:
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	board.add_child(heading)
 	if ranking.is_empty():
-		var empty: Label = _label("No players joined yet. Pop a word to join the next round.", 14, SOFT)
+		var empty: Label = _label("No registered players hit a word. Try your saved voices next round.", 14, SOFT)
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		board.add_child(empty)
 	_ranking_grid = GridContainer.new()
@@ -1218,7 +1335,7 @@ func _add_player_ranking(ranking: Array) -> void:
 	board.add_child(_ranking_grid)
 	for player in ranking:
 		var tied: bool = ranking.filter(func(other: Dictionary) -> bool: return int(other.rank) == int(player.rank)).size() > 1
-		var accent: Color = PLAYER_COLORS[int(player.index) % 4]
+		var accent: Color = PLAYER_COLORS[int(player.index) % PLAYER_COLORS.size()]
 		var panel := PanelContainer.new()
 		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1229,12 +1346,30 @@ func _add_player_ranking(ranking: Array) -> void:
 		var stack := VBoxContainer.new()
 		stack.add_theme_constant_override("separation", 0)
 		panel.add_child(stack)
-		var caption: String = "%d. %s%s" % [int(player.rank), str(player.id), " · tied" if tied else ""]
+		var identity := HBoxContainer.new()
+		identity.add_theme_constant_override("separation", ceili(4.0 / Style.ui_scale(self)))
+		stack.add_child(identity)
+		var texture: Texture2D = _avatar_texture(str(player.get("avatar_png", "")))
+		if texture != null:
+			var avatar: TextureRect = _avatar_control()
+			avatar.name = "RankingAvatar%d" % int(player.index)
+			avatar.texture = texture
+			avatar.custom_minimum_size = Vector2.ONE * 28.0 / Style.ui_scale(self)
+			avatar.set_meta("pop_edge", 28.0)
+			identity.add_child(avatar)
+		else:
+			identity.add_child(_label(str(player.get("emoji", "")), 20))
+		var caption: String = "%d. %s" % [int(player.rank), str(player.name)]
 		var label: Label = _label(caption, 15, accent)
-		label.name = "Ranking" + str(player.id)
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		stack.add_child(label)
-		stack.add_child(_label("%d %s" % [int(player.hits), "hit" if int(player.hits) == 1 else "hits"], 18, WHITE))
+		label.name = "Ranking%d" % int(player.index)
+		label.set_meta("voice_profile_id", player.id)
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.clip_text = true
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		label.tooltip_text = "%s · rank %d%s" % [str(player.name), int(player.rank), " (tied)" if tied else ""]
+		label.set("accessibility_name", label.tooltip_text)
+		identity.add_child(label)
+		stack.add_child(_label("%d %s%s" % [int(player.hits), "hit" if int(player.hits) == 1 else "hits", " · tied" if tied else ""], 15, WHITE))
 
 
 func _add_review(title: String, words: Array, color: Color) -> void:
@@ -1478,6 +1613,59 @@ func _pending_message(message: String) -> bool:
 		or value.begins_with("allow microphone access if your browser asks") \
 		or value.begins_with("listening paused. continuing") \
 		or value.begins_with("listening paused. say a word when listening resumes")
+
+
+func _avatar_control() -> TextureRect:
+	var avatar := TextureRect.new()
+	avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	avatar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	return avatar
+
+
+func _avatar_texture(encoded: String) -> Texture2D:
+	if encoded.is_empty():
+		return null
+	if _avatar_textures.has(encoded):
+		return _avatar_textures[encoded]
+	_avatar_textures[encoded] = null
+	var base64: String = encoded.trim_prefix("data:image/png;base64,")
+	if base64.length() > 131072:
+		return null
+	var bytes: PackedByteArray = Marshalls.base64_to_raw(base64)
+	# Check the PNG dimensions before decoding compressed pixels. Browser emoji
+	# avatars are small; profile data must never allocate an unbounded image.
+	if bytes.size() < 24 or bytes.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]):
+		return null
+	var width: int = int(bytes[16]) * 16777216 + int(bytes[17]) * 65536 + int(bytes[18]) * 256 + int(bytes[19])
+	var height: int = int(bytes[20]) * 16777216 + int(bytes[21]) * 65536 + int(bytes[22]) * 256 + int(bytes[23])
+	if width <= 0 or height <= 0 or width > 256 or height > 256:
+		return null
+	var decoded := Image.new()
+	if decoded.load_png_from_buffer(bytes) != OK:
+		return null
+	var texture := ImageTexture.create_from_image(decoded)
+	_avatar_textures[encoded] = texture
+	return texture
+
+
+func _update_hit_avatar() -> void:
+	if _last_hit_avatar == null:
+		return
+	var visible_hit: bool = play_mode == "multi" and _last_hit_left > 0.0 and not _reconnecting and game.phase == "running"
+	var texture: Texture2D = _avatar_texture(str(_last_hit_profile.get("avatar_png", ""))) if visible_hit else null
+	_last_hit_avatar.texture = texture
+	_last_hit_avatar.visible = visible_hit and texture != null
+	_last_hit_emoji.text = str(_last_hit_profile.get("emoji", ""))
+	_last_hit_emoji.visible = visible_hit and texture == null
+	var scale: float = Style.ui_scale(self)
+	var font: Font = _live_caption.get_theme_font("font")
+	var text_width: float = font.get_string_size(_live_caption.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, _live_caption.get_theme_font_size("font_size")).x
+	var left: float = maxf(_live_caption.position.x, _live_caption.get_rect().get_center().x - text_width * 0.5 - 23.0 / scale)
+	var rect := Rect2(left, _live_caption.position.y - 2.0 / scale, 20.0 / scale, 20.0 / scale)
+	_last_hit_avatar.position = rect.position
+	_last_hit_avatar.size = rect.size
+	_place_label(_last_hit_emoji, rect, 18)
 
 
 func _label(text: String, font_size: int, color: Color = WHITE) -> Label:

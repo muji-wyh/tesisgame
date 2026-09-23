@@ -51,7 +51,6 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	app.medal_progress.counts = {"spring-1": 3, "space-1": 2}
 	app._show_collection()
-	app._show_reward_section("room")
 	await settle()
 	var words: Array = app.model.lesson_words.duplicate(true)
 	for id in ["toy-space", "toy-spring"]:

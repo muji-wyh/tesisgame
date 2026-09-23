@@ -165,25 +165,12 @@ func _check_click_routes() -> void:
 	app._collection_dragged = false
 	app._collection_velocity = Vector2.ZERO
 	playground.pause(false)
-	app._show_reward_section("medals")
-	await _settle()
-	app._update_duck()
-	app.audio.halt()
-	before = _voice_requests(app)
-	await _tap(app.duck.get_global_rect().get_center())
-	_check_greeting(app, before, "A real Medals Pip click")
-	app._open_reward_preview("spring-1")
-	await _settle()
-	app._update_duck()
-	app.audio.halt()
-	before = _voice_requests(app)
-	await _tap(app.duck.get_global_rect().get_center())
-	_check_greeting(app, before, "A real reward-preview Pip click")
+	app._hide_collection()
 	app.audio.halt()
 	state = app.audio._pip_rng.state
 	playground.poke()
 	check(not app.audio.voice.playing and app.audio._pip_rng.state == state,
-		"The covered Home cannot greet through the reward preview")
+		"The hidden Home cannot greet during gameplay")
 	app.duck.pressed.emit()
 	app.on_page_hidden()
 	check(not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.active,
