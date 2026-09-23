@@ -25,7 +25,12 @@ function expectHitSlice(sound) {
   // Godot may resample to the output rate, so allow one output sample of rounding.
   const possibleSources = expectedSlices.filter(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
   expect(possibleSources.length, `Played ${sound.duration}s must match the imported pool or this checkout's fallback`).toBeGreaterThan(0);
-  expect(possibleSources.some(asset => asset.channels === sound.channels)).toBe(true);
+  // Godot's WebAudio sample bridge uploads stereo, including mono fallback WAVs.
+  expect(sound.channels).toBe(2);
+  if (possibleSources.every(asset => asset.channels === 1)) {
+    expect(sound.channelFingerprints, 'The mono fallback must be duplicated into both output channels').toHaveLength(2);
+    expect(sound.channelFingerprints[0]).toBe(sound.channelFingerprints[1]);
+  }
   expect(sound.loop, 'A slice is a single hit, never a music loop').toBe(false);
   expect(sound.playbackRate).toBe(1);
   expect(sound.contextState, 'The real WebAudio context must be running at playback').toBe('running');
@@ -34,6 +39,8 @@ function expectHitSlice(sound) {
 }
 
 async function installSpeech(page, { automatic = true, available = true } = {}) {
+  // These recognition fixtures exercise solo mode without downloading local models.
+  await page.route('**/multiplayer/manifest.json', route => route.abort());
   await page.addInitScript(({ automatic, available }) => {
     const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], utterances: [], cancelled: 0, automatic };
     class Recognition {
@@ -148,7 +155,12 @@ async function scrollResults(page, delta) {
   const before = await state(page);
   const bounds = await metrics(page), content = contentBounds(bounds);
   const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
-  const top = bounds.y + content.top * bounds.scale + 30;
+  // The multiplayer status strip sits above the result scroller. Start inside
+  // a visible result control's vertical band so touch drags reach that scroller.
+  const firstResult = before.controls.filter(control =>
+    /^(Pip|HearPip|NextReport|Replay|Back|Hear_)/.test(control.name))
+    .sort((a, b) => a.y - b.y)[0];
+  const top = bounds.y + (firstResult ? firstResult.y + Math.min(firstResult.height / 2, 10) : content.top) * bounds.scale + 10;
   const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 30;
   if (page.context().browser().browserType().name() === 'chromium') {
     await page.mouse.move(x, (top + bottom) / 2);
@@ -176,17 +188,27 @@ async function scrollResults(page, delta) {
         canvas.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
           touches, targetTouches: touches, changedTouches: list([touch]) }));
       }, { type, x, y });
+      let firstMoveScroll, lastMoveScroll;
       await dispatch('touchstart', start);
       try {
         await rendered(page);
         for (let step = 1; step <= 8; step++) {
           await dispatch('touchmove', start + (end - start) * step / 8);
           await rendered(page);
+          if (step === 1) firstMoveScroll = (await state(page)).resultsScroll;
+          if (step === 8) lastMoveScroll = (await state(page)).resultsScroll;
         }
       } finally {
         await dispatch('touchend', end);
       }
       await rendered(page);
+      // Focusing a partly clipped button can nudge the scroll on touch-down.
+      // The remaining moves must keep scrolling; a focus-only nudge is not a swipe.
+      if (delta > 0 && firstMoveScroll < current.resultsScrollMax - 1) {
+        expect(lastMoveScroll, 'Dragging from a result button continues beyond its initial focus adjustment').toBeGreaterThan(firstMoveScroll);
+      } else if (delta < 0 && firstMoveScroll > 0) {
+        expect(lastMoveScroll, 'A downward swipe keeps moving the result list toward its top').toBeLessThan(firstMoveScroll);
+      }
     }
   }
   await rendered(page);
@@ -308,7 +330,7 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   await page.screenshot({ path: info.outputPath('permission-denied.png') });
   await page.evaluate(() => { window.__popSpeech.automatic = true; });
-  await action(page, /retry|try.*mic|enable|listen/i);
+  await action(page, /^RetryListening /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
@@ -347,6 +369,9 @@ test('leaving while permission is pending rejects a late grant and every callbac
 });
 
 test('a spoken interim word pops its exact target once, gives hit feedback and produces Pip report after 30 seconds', async ({ page, browserName }, info) => {
+  // Includes a real 30-second round, recorded report playback and several full
+  // touch swipes. Keep each response deadline strict while allowing the workflow.
+  test.setTimeout(150000);
   await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
@@ -555,7 +580,7 @@ test('failed abort and stop keep a visible microphone warning and block mode exi
   expect(warning.x + warning.width).toBeLessThanOrEqual(page.viewportSize().width);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   const paused = await state(page);
-  await action(page, /retry|listen/i);
+  await action(page, /^RetryListening /);
   await page.evaluate(() => {
     const old = window.__popSpeech.instances[0];
     old.grant();
@@ -570,7 +595,7 @@ test('failed abort and stop keep a visible microphone warning and block mode exi
   await expect(page.locator('#speech-panel')).toBeVisible();
   await page.screenshot({ path: info.outputPath('microphone-stop-failed.png') });
   await page.evaluate(() => { window.__popSpeech.instances[0].failShutdown = false; });
-  await action(page, /retry|listen/i);
+  await action(page, /^RetryListening /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect((await state(page)).hits).toBe(paused.hits);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
@@ -592,7 +617,7 @@ test('speech failure and More pause the round, then Resume keeps the remaining t
   await page.waitForTimeout(1200);
   expect((await state(page)).remaining).toBe(paused.remaining);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
-  await action(page, /resume|retry|listen/i);
+  await action(page, /^RetryListening /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect((await state(page)).hits).toBe(paused.hits);
   const more = headerPoint(await metrics(page));
@@ -601,7 +626,7 @@ test('speech failure and More pause the round, then Resume keeps the remaining t
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.keyboard.press('Escape');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
-  await action(page, /resume|retry|listen/i);
+  await action(page, /^RetryListening /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await page.screenshot({ path: info.outputPath('resumed.png') });
   expect(errors).toEqual([]);

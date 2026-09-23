@@ -485,6 +485,8 @@
     <span class="pop-aura-edge pop-aura-edge--bottom"><span class="pop-aura-flow"></span></span>
     <span class="pop-aura-edge pop-aura-edge--left"><span class="pop-aura-flow"></span></span>
   </div>
+  <script src="multiplayer-capture.js"></script>
+  <script src="multiplayer-host.js"></script>
   <script>
     (() => {
       'use strict';
@@ -1157,6 +1159,10 @@
         const transcript = document.getElementById('speech-transcript');
         const notice = document.getElementById('speech-notice');
         const privacy = 'Browser speech may process audio remotely. Game stores no voice or transcripts.';
+        const localPrivacy = 'Multiplayer audio stays on this device. No voice or voice profiles are saved.';
+        const multiplayer = window.VoicePopMultiplayer ? new window.VoicePopMultiplayer() : null;
+        let onPopEvent = null;
+        let backend = 'single';
         let onResult = null;
         let onPopResult = null;
         let onState = null;
@@ -1187,7 +1193,7 @@
           panel.setAttribute('data-state', state);
           statusText.textContent = state === 'listening' ? 'Pip is listening!' :
             state === 'starting' ? 'Opening my ears...' : message;
-          notice.textContent = privacy;
+          notice.textContent = backend === 'multi' ? localPrivacy : privacy;
           panel.setAttribute('data-pop-stop-failed', String(presentation === 'pop' && stopFailed));
           panel.hidden = !enabled || (presentation === 'pop' && !stopFailed);
           // Both voice modes share the same viewport light and listening lifecycle.
@@ -1211,6 +1217,10 @@
           const previous = recognition;
           recognition = null;
           stopFailed = false;
+          if (multiplayer && !multiplayer.stop()) {
+            stopFailed = true;
+            return false;
+          }
           if (!previous) return true;
           previous.onstart = previous.onresult = previous.onerror = previous.onend = null;
           try { previous.abort(); } catch (abortError) {
@@ -1250,16 +1260,37 @@
           return closeSpeech(true);
         }
 
-        function speechMode(value, nextPresentation = 'match') {
+        function speechMode(value, nextPresentation = 'match', playMode = 'single', sessionId = '', elapsedMs = 0) {
           if (!value || document.hidden) { stopSpeech(); return; }
           nextPresentation = nextPresentation === 'pop' ? 'pop' : 'match';
+          const nextBackend = nextPresentation === 'pop' && playMode === 'multi' ? 'multi' : 'single';
           if (enabled) {
-            if (presentation === nextPresentation || !closeSpeech(false)) return;
+            if ((presentation === nextPresentation && backend === nextBackend) || !closeSpeech(false)) return;
           }
           presentation = nextPresentation;
+          backend = nextBackend;
           silentRestarts = 0;
           enabled = true;
           transcript.textContent = '';
+          if (backend === 'multi') {
+            if (!multiplayer?.isReady()) { report('Multiplayer is still preparing. Continue solo or tap Retry.'); return; }
+            active = true;
+            const token = ++generation;
+            const valid = () => token === generation && enabled && active && backend === 'multi' && !document.hidden;
+            report('Opening the local microphone...');
+            multiplayer.start({ sessionId: String(sessionId || token), elapsedMs: Number(elapsedMs) || 0,
+              onStarted() { if (valid()) { listening = true; report('Listening locally. Say an English word.'); } },
+              onEvent(event) {
+                if (!valid() || !listening) return;
+                transcript.textContent = event.text;
+                onPopEvent?.(JSON.stringify(event));
+                if (valid()) onResult?.(event.text, true);
+              },
+              onFlushed(event) { if (valid()) onPopEvent?.(JSON.stringify(event)); },
+              onError(error) { if (valid()) localFailure(error); }
+            }).catch(error => { if (valid()) localFailure(error); });
+            return;
+          }
           if (!speechAvailable()) {
             report(presentation === 'pop'
               ? 'Voice is unavailable here. Open this game in a supported browser on HTTPS, or choose another mode.'
@@ -1274,6 +1305,13 @@
           const token = ++generation;
           report(presentation === 'pop' ? 'Allow microphone access if your browser asks. The round starts when listening.' : 'Starting microphone...');
           startRecognition(token);
+        }
+
+        function localFailure(error) {
+          if (['NotAllowedError', 'SecurityError'].includes(error?.name)) { failedRecognition('not-allowed'); return; }
+          release();
+          transcript.textContent = '';
+          report(error?.message || 'Local listening stopped. Tap Retry or start a solo round.');
         }
 
         function failedRecognition(code) {
@@ -1448,7 +1486,12 @@
             'report-audio': JSON.stringify((Array.isArray(state.report_audio) ? state.report_audio : [])
               .filter(path => typeof path === 'string' && /^res:\/\/assets\/audio\/(?:pop|voice)\/[a-z0-9-]+\.wav$/.test(path))),
             'results-scroll': number(state.results_scroll), 'results-scroll-max': number(state.results_scroll_max),
-            'results-scrollbar-visible': state.results_scrollbar_visible === true })) {
+            'results-scrollbar-visible': state.results_scrollbar_visible === true,
+            'play-mode': state.play_mode === 'multi' ? 'multi' : 'single',
+            'multiplayer-state': JSON.stringify(state.multiplayer || {}),
+            'mode-choices-visible': state.mode_choices_visible === true,
+            players: JSON.stringify(state.players || []), ranking: JSON.stringify(state.ranking || []),
+            'previous-round': JSON.stringify(state.previous_round || {}) })) {
             popStatusText.setAttribute('data-' + name, String(value));
           }
           const message = typeof state.message === 'string' ? state.message : '';
@@ -1473,10 +1516,27 @@
           if (document.hidden) closeSpeech(false);
         });
         window.addEventListener('pagehide', () => closeSpeech(false));
-        window.addEventListener('offline', () => { if (enabled) failedRecognition('offline'); });
+        window.addEventListener('offline', () => { if (enabled && backend !== 'multi') failedRecognition('offline'); });
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && multiplayer?.isReady()) multiplayer.verifyReady();
+        });
 
         return {
           speechAvailable, speechMode, stopSpeech, popStatus,
+          prepareMultiplayer() { multiplayer?.prepare(); },
+          multiplayerState() { return JSON.stringify(multiplayer?.state || { status: 'unsupported', message: 'Local multiplayer is unavailable.' }); },
+          observeMultiplayerState(callback) {
+            if (typeof callback !== 'function') return;
+            if (multiplayer) multiplayer.observe(state => callback(JSON.stringify(state)));
+            else callback(JSON.stringify({ status: 'unsupported', message: 'Local multiplayer is unavailable.' }));
+          },
+          observePopEvent(callback) { onPopEvent = typeof callback === 'function' ? callback : null; },
+          flushMultiplayer() {
+            const token = generation;
+            if (backend === 'multi' && enabled) multiplayer?.flush().catch(error => {
+              if (token === generation && enabled && backend === 'multi') localFailure(error);
+            });
+          },
           observePopSpeech(callback) { onPopResult = typeof callback === 'function' ? callback : null; },
           observeSpeech(resultCallback, stateCallback) {
             onResult = resultCallback;

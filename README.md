@@ -3,8 +3,9 @@
 A **Godot game delivered on the Web** for early English learners. Gameplay, cards, audio, chest animation and celebrations run in GDScript. The HTML shell hosts the exported engine and integrates browser sizing, accessibility announcements, lifecycle events and read-only asset URLs.
 
 Players need a browser, not a Godot installation. The game is a static website
-with no game backend or external image service. Optional voice play uses the
-browser's speech-recognition provider.
+with no game backend or external image service. Solo voice play uses the
+browser's speech-recognition provider. Voice Pop can additionally prepare local
+multiplayer models on demand; multiplayer microphone audio stays on the device.
 
 ## Run and build
 
@@ -12,6 +13,7 @@ Development prerequisites: **Godot 4.7**, its matching **Web export templates**,
 
 ```powershell
 npm ci
+npm run prepare:multiplayer
 npm start
 ```
 
@@ -23,7 +25,16 @@ To build without starting a server:
 npm run build:web
 ```
 
-The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, on-demand `.sample` audio, icon and `.br` files together. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
+The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, on-demand `.sample` audio, `multiplayer/` directory, icon and `.br` files together. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
+
+`prepare:multiplayer` provisions the pinned local speech runtime and six model
+files in ignored `build/multiplayer`. Run it once before the first Web build and
+again after changing the runtime sources or model pins. The build verifies every
+prepared file and publishes models separately from the Godot startup pack. See
+[the local multiplayer notes](docs/voice-pop-multiplayer.md) for model sources,
+build requirements, validation and the limits of the experimental voice matching.
+The current optional download is 112.34 MB before HTTP compression; it is cached
+by version when browser storage permits and is not part of the initial game load.
 
 The build fingerprints engine files and the game pack independently, then generates Brotli
 sidecars with Node's built-in compressor. Azure serves the compressed variants automatically;
@@ -185,6 +196,31 @@ The tabs are ordered **Match**, **Memory**, **Voice Pop**; entry and reload sele
 
 ### Voice Pop
 
+The top bar shows **Solo · Preparing multiplayer**, actual download progress,
+initialization, or **Multiplayer ready**. Preparation runs separately from solo
+listening and never changes the current round. When ready, a slide-down choice
+offers **Continue solo** or **Start multiplayer**. Continuing solo keeps the
+round and leaves a **Mode** button for later. Starting multiplayer retains the
+previous round's hit/score summary and starts a fresh 30-second round after the
+local microphone actually starts. The selected mode lasts for this page session.
+
+Local multiplayer supports up to four naturally alternating speakers on one
+microphone. A new voice must hit a visible word before receiving P1, P2, P3 or
+P4. Clearly different fifth voices do not score; uncertain matches go to the
+nearest existing player. Player colors and hit counts remain visible, and the
+result ranks by hits with ties. Voice matching is experimental: a very short
+word, similar voices or overlapping speakers can be misassigned. The initial
+similarity thresholds have not been calibrated with a children's voice study.
+
+Model readiness means files have passed SHA-256 checks and all three actual
+inference paths have initialized and warmed up, not just that downloading has
+finished. Valid model files are cached when browser storage permits. Failure
+leaves solo play available and offers Retry. Ready local multiplayer works
+offline; solo recognition retains its browser service requirements. Audio and
+voice vectors are never uploaded or persisted. Backgrounding stops capture;
+resuming requires a new gesture. Multiplayer results allow up to three seconds
+to finish already-captured words before freezing the standings.
+
 Choose Voice Pop to request speech permission. The 30-second clock starts only when
 the microphone is listening. A narrow peach/pink and blue/violet glow follows the
 screen edges, meets at right-angle corners and diffuses softly inward.
@@ -213,9 +249,10 @@ does not depend on an installed browser TTS voice or runtime speech credentials.
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume
 continues it without resetting the score. Leaving the mode or finishing stops
-recognition. Browser speech can process audio remotely; the game does not save
-recordings or transcripts. A secure browser with SpeechRecognition support is
-required; unsupported browsers show an explanation and a way back to Match.
+recognition. Solo browser speech can process audio remotely; the game does not save
+recordings or transcripts. Solo needs secure-browser SpeechRecognition support;
+local multiplayer instead needs WebAssembly SIMD, Workers and AudioWorklet.
+Unsupported devices show an explanation and a way back to Match.
 Reduced motion keeps a static edge glow and simpler hit feedback.
 Switch between them to practise the same lesson.
 Sky and Listen have been removed. Match keeps the eight-card, three-pair puzzle.

@@ -3,6 +3,7 @@ const path = require('node:path');
 const { runGodot } = require('./run-godot.cjs');
 const { prepare, inlineMascot } = require('./prepare-godot.cjs');
 const { packageWebExport, collectOptionalAudio } = require('./package-web.cjs');
+const { packageMultiplayer } = require('./package-multiplayer.cjs');
 
 const root = path.resolve(__dirname, '..');
 prepare();
@@ -27,5 +28,7 @@ const verification = runGodot([
 ]);
 process.stdout.write(verification.stdout);
 const downloadBytes = packageWebExport(output, audio);
+const multiplayerBytes = packageMultiplayer(root, output);
 fs.copyFileSync(path.join(root, 'web', 'staticwebapp.config.json'), path.join(output, 'staticwebapp.config.json'));
 console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB startup, ${audio.length} on-demand audio assets).`);
+console.log(`Local multiplayer: ${(multiplayerBytes / 1000000).toFixed(2)} MB on demand; no models in the startup game pack.`);

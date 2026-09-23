@@ -193,6 +193,9 @@ var _mode_buttons: Array[Button] = []
 var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_speech_active: bool = false
+var _pop_bridge_session: String = ""
+var _pop_session_serial: int = 0
+var _pop_switching_mode: bool = false
 var _match_playfield: Control
 var _hint_link: HintLink
 var _content_margins: MarginContainer
@@ -324,6 +327,8 @@ var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _pop_result_callback: JavaScriptObject
+var _multiplayer_state_callback: JavaScriptObject
+var _multiplayer_event_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -494,6 +499,9 @@ func _build_controls() -> void:
 	_pop.report_requested.connect(_pop_report)
 	_pop.pip_report_requested.connect(_pop_report.bind(true))
 	_pop.status_changed.connect(_pop_status_changed)
+	_pop.play_mode_requested.connect(_switch_pop_mode)
+	_pop.multiplayer_retry_requested.connect(_prepare_pop_multiplayer)
+	_pop.settling_requested.connect(_flush_pop_multiplayer)
 	_pop.hide()
 	column.add_child(_pop)
 	_outcome = Control.new()
@@ -1633,6 +1641,64 @@ func _configure_pop(seed_value: int = -1) -> void:
 	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
 	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
 	_pop.configure(pool, Data.theme(model.theme_id), reduced_motion, seed_value)
+	_prepare_pop_multiplayer()
+
+
+func _prepare_pop_multiplayer() -> void:
+	if _host != null:
+		_host.prepareMultiplayer()
+	else:
+		_pop.set_multiplayer_state({"status": "unsupported", "message": "Local multiplayer requires the Web game in a supported browser."})
+
+
+func _switch_pop_mode(mode: String) -> void:
+	if _pop_switching_mode or mode == _pop.play_mode or mode not in ["single", "multi"] \
+		or _mode_id != "pop" or collection_page.visible or _preview_page.visible:
+		return
+	if mode == "multi" and str(_pop.multiplayer_state.get("status", "idle")) != "ready":
+		return
+	_pop_switching_mode = true
+	_pop._sync_game_clock()
+	var previous: Dictionary = _pop.game.summary()
+	if not _stop_pop_listening():
+		_pop_switching_mode = false
+		return
+	_pop.stop()
+	_pop.set_play_mode(mode)
+	_configure_pop()
+	_pop.remember_previous_round(previous)
+	_start_pop_listening()
+	_pop_switching_mode = false
+
+
+func _flush_pop_multiplayer() -> void:
+	if _host != null and _pop_speech_active:
+		_host.flushMultiplayer()
+
+
+func _on_multiplayer_state(arguments: Array) -> void:
+	if arguments.is_empty():
+		return
+	var value: Variant = JSON.parse_string(str(arguments[0]))
+	if value is Dictionary:
+		_pop.set_multiplayer_state(value)
+
+
+func _on_multiplayer_event(arguments: Array) -> void:
+	if arguments.is_empty() or _mode_id != "pop" or _pop.play_mode != "multi" or not _pop_speech_active \
+		or collection_page.visible or _preview_page.visible:
+		return
+	var value: Variant = JSON.parse_string(str(arguments[0]))
+	if not value is Dictionary or str(value.get("sessionId", "")) != _pop_bridge_session or _pop_bridge_session.is_empty():
+		return
+	if str(value.get("type", "utterance")) == "flushed":
+		_pop.complete_settling()
+		return
+	if str(value.get("type", "utterance")) != "utterance":
+		return
+	_pop.receive_speech_event({"round_id": _pop.game.round_id, "event_id": str(value.get("eventId", "")),
+		"text": str(value.get("text", "")), "start_ms": value.get("startMs", -1), "end_ms": value.get("endMs", -1),
+		"embedding": value.get("embedding", [])})
 
 
 func _start_pop_listening() -> void:
@@ -1643,11 +1709,19 @@ func _start_pop_listening() -> void:
 		return
 	if _pop.game.phase == "finished":
 		_configure_pop()
+	if _pop.game.phase == "settling":
+		return
+	if _pop.play_mode == "multi" and str(_pop.multiplayer_state.get("status", "idle")) != "ready":
+		_pop.set_listening(false, false, "Multiplayer is not ready. Retry preparation or start a solo round from Mode.")
+		_prepare_pop_multiplayer()
+		return
 	if _host == null:
 		_pop.set_listening(true, false, "Voice Pop needs a browser with speech recognition. Open the Web game in Chrome or Safari.")
 		return
 	_pop_speech_active = true
-	_host.speechMode(true, "pop")
+	_pop_session_serial += 1
+	_pop_bridge_session = "pop-%d-%d" % [Time.get_ticks_usec(), _pop_session_serial]
+	_host.speechMode(true, "pop", _pop.play_mode, _pop_bridge_session, _pop.game.elapsed * 1000.0)
 
 
 func _stop_pop_listening() -> bool:
@@ -1658,6 +1732,7 @@ func _stop_pop_listening() -> bool:
 		if was_active and not bool(_host.stopSpeech()):
 			_pop_speech_active = true
 			return false
+	_pop_bridge_session = ""
 	return true
 
 
@@ -2838,6 +2913,8 @@ func on_page_visible() -> void:
 	_room.playground.pause(false)
 	feedback_timer.paused = collection_page.visible
 	_memory.pause(collection_page.visible)
+	if _mode_id == "pop":
+		_prepare_pop_multiplayer()
 
 
 func _notification(what: int) -> void:
@@ -3237,9 +3314,13 @@ func _connect_browser() -> void:
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
 	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible and not _preview_page.visible:
+		if _mode_id == "pop" and _pop.play_mode == "single" and _pop_speech_active and not collection_page.visible and not _preview_page.visible:
 			_pop.receive_transcript(str(arguments[0])))
 	_host.observePopSpeech(_pop_result_callback)
+	_multiplayer_state_callback = JavaScriptBridge.create_callback(_on_multiplayer_state)
+	_host.observeMultiplayerState(_multiplayer_state_callback)
+	_multiplayer_event_callback = JavaScriptBridge.create_callback(_on_multiplayer_event)
+	_host.observePopEvent(_multiplayer_event_callback)
 
 
 func _toggle_voice() -> void:

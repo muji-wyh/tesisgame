@@ -359,15 +359,19 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
       if (fingerprints.has(buffer)) return fingerprints.get(buffer);
       // Equal-length clips still need content identity: six fruit slices last 270 ms.
       let hash = 2166136261, peak = 0;
+      const channelFingerprints = [];
       for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
         const samples = buffer.getChannelData(channel);
         const bits = new Uint32Array(samples.buffer, samples.byteOffset, samples.length);
+        let channelHash = 2166136261;
         for (let index = 0; index < samples.length; index++) {
           hash = Math.imul(hash ^ bits[index], 16777619) >>> 0;
+          channelHash = Math.imul(channelHash ^ bits[index], 16777619) >>> 0;
           peak = Math.max(peak, Math.abs(samples[index]));
         }
+        channelFingerprints.push(channelHash.toString(16));
       }
-      const result = { fingerprint: `${buffer.sampleRate}:${buffer.numberOfChannels}:${buffer.length}:${hash.toString(16)}`, peak };
+      const result = { fingerprint: `${buffer.sampleRate}:${buffer.numberOfChannels}:${buffer.length}:${hash.toString(16)}`, channelFingerprints, peak };
       fingerprints.set(buffer, result);
       return result;
     }

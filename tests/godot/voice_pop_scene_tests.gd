@@ -16,6 +16,73 @@ func settle() -> void:
 	for frame in range(8):
 		await process_frame
 
+
+func result_pointer(point: Vector2, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.device = InputEvent.DEVICE_ID_EMULATION
+	event.position = point
+	event.global_position = point
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	event.pressed = pressed
+	root.push_input(event, true)
+	await process_frame
+
+
+func check_result_touch_scroll(view) -> void:
+	# ScrollContainer consumes the mouse events emulated from touch. Enable the
+	# touchscreen hint for the headless display, then send real viewport input.
+	var original_touch_hint: bool = Input.emulate_touch_from_mouse
+	Input.emulate_touch_from_mouse = true
+	check(DisplayServer.is_touchscreen_available(), "The headless drag fixture exposes the touchscreen hint")
+	var buttons: Array = [view.pip, view.report_button, view.next_report_button,
+		view.replay_button, view.back_button, view._review_buttons[0]]
+	for button in buttons:
+		view._results.scroll_vertical = 0
+		await settle()
+		button.grab_focus()
+		view._ensure_result_control(button)
+		await settle()
+		var pressed: Array[bool] = []
+		var record: Callable = func() -> void: pressed.append(true)
+		button.pressed.connect(record)
+		var point: Vector2 = button.get_global_rect().intersection(view._results.get_global_rect()).get_center()
+		var before: int = view._results.scroll_vertical
+		await result_pointer(point, true)
+		for step in range(1, 7):
+			var motion := InputEventMouseMotion.new()
+			motion.device = InputEvent.DEVICE_ID_EMULATION
+			motion.position = point + Vector2(0, -20 * step)
+			motion.global_position = motion.position
+			motion.relative = Vector2(0, -20)
+			motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+			root.push_input(motion, true)
+			await process_frame
+		check(view._results.scroll_vertical > before + 40,
+			"Dragging from %s continuously scrolls beyond any focus reveal (before=%d after=%d max=%.1f point=%s button=%s viewport=%s filter=%d parent_filter=%d)" % [
+				button.name, before, view._results.scroll_vertical, float(view.snapshot().results_scroll_max), point,
+				button.get_global_rect(), view._results.get_global_rect(), button.mouse_filter, button.get_parent().mouse_filter])
+		await result_pointer(point + Vector2(0, -120), false)
+		check(pressed.is_empty() and view.game.phase == "finished",
+			"Dragging from %s cancels its click without leaving the results" % button.name)
+		button.pressed.disconnect(record)
+		view._results.set_process_internal(false)
+	var heard: Array[Dictionary] = []
+	var on_hear: Callable = func(word: Dictionary) -> void: heard.append(word)
+	view.hear_requested.connect(on_hear)
+	var review: Button = view._review_buttons[0]
+	view._ensure_result_control(review)
+	await settle()
+	var tap: Vector2 = review.get_global_rect().get_center()
+	await result_pointer(tap, true)
+	await result_pointer(tap, false)
+	check(heard.size() == 1, "A stationary result word tap still plays exactly once after dragging")
+	view.hear_requested.disconnect(on_hear)
+	Input.emulate_touch_from_mouse = original_touch_hint
+	view._results.scroll_vertical = 0
+	await settle()
+
+
 func check_result_actions(view, dimensions: Vector2i, context: String) -> void:
 	check(view._results.scroll_vertical == 0, "%s stays at scroll zero at %s" % [context, dimensions])
 	var viewport_rect: Rect2 = view._results.get_global_rect()
@@ -239,6 +306,8 @@ func _run() -> void:
 			"Results never paint a scrollbar at " + str(dimensions))
 		if float(view.snapshot().results_scroll_max) > 1.0:
 			saw_scrollable_results = true
+			if dimensions == Vector2i(320, 568):
+				await check_result_touch_scroll(view)
 			view._results.scroll_vertical = mini(100, int(view.snapshot().results_scroll_max))
 			await settle()
 			check(view._results.scroll_vertical > 0 and float(view.snapshot().results_scroll) > 0,

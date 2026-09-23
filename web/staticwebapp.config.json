@@ -20,6 +20,7 @@
     }
   ],
   "mimeTypes": {
+    ".onnx": "application/octet-stream",
     ".wasm": "application/wasm",
     ".pck": "application/octet-stream",
     ".sample": "application/octet-stream",
