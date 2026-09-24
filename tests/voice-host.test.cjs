@@ -930,6 +930,148 @@ test('the Pop glow covers the viewport edges, ignores input and respects reduced
   assert.match(shell, /Winning Match or Memory earns one piece/);
 });
 
+function enablePhraseHints(f) {
+  f.window.SpeechRecognition.prototype.phrases = [];
+  f.window.SpeechRecognitionPhrase = class {
+    constructor(phrase, boost) { this.phrase = phrase; this.boost = boost; }
+  };
+  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat', 'SUN', 'cat', 'bad phrase', null] }));
+}
+
+test('Solo supplies bounded game vocabulary when contextual phrases are supported', () => {
+  const f = fixture();
+  enablePhraseHints(f);
+  f.listen('pop');
+  assert.deepEqual(Array.from(f.latest.phrases, value => [value.phrase, value.boost]), [['cat', 2], ['sun', 2]]);
+  f.latest.result([['hello', true]]);
+  assert.deepEqual(f.popWords, ['hello'], 'Hints do not rewrite unrelated recognition into a target');
+  f.host.stopSpeech();
+  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['pear'] }));
+  f.listen('pop');
+  assert.deepEqual(Array.from(f.latest.phrases, value => value.phrase), ['pear'], 'A new lesson replaces old hints');
+});
+
+test('browsers without contextual phrases retain normal Solo recognition', () => {
+  const f = fixture({ api: 'prefixed' });
+  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat'] }));
+  f.listen('pop');
+  assert.equal(f.starts, 1);
+  assert.equal('phrases' in f.latest, false);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+});
+
+test('a service rejecting contextual phrases retries once without them and fences old results', () => {
+  const f = fixture();
+  enablePhraseHints(f);
+  f.listen('pop');
+  const old = f.latest;
+  old.error('phrases-not-supported');
+  assert.equal(f.aborts, 1);
+  old.result([['cat', true]]);
+  assert.deepEqual(f.popWords, []);
+  f.advance(400);
+  assert.equal(f.starts, 2);
+  assert.equal(Object.hasOwn(f.latest, 'phrases'), false);
+  assert.equal(f.states.at(-1)[1], true);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+  f.latest.error('phrases-not-supported');
+  f.advance(5000);
+  assert.equal(f.starts, 2, 'A repeated service failure cannot create an unbounded retry loop');
+});
+
+test('a browser rejecting the phrase setter falls back before opening the microphone', () => {
+  const f = fixture();
+  enablePhraseHints(f);
+  Object.defineProperty(f.window.SpeechRecognition.prototype, 'phrases', {
+    configurable: true, get() { return []; }, set() { throw new Error('Experimental API is disabled'); }
+  });
+  f.listen('pop');
+  assert.equal(f.starts, 1);
+  assert.equal(f.states.at(-1)[1], true);
+  f.latest.result([['sun', true]]);
+  assert.deepEqual(f.popWords, ['sun']);
+});
+
+test('a synchronous NotSupportedError from biased start falls back and ordinary Match has no hints', () => {
+  const f = fixture();
+  enablePhraseHints(f);
+  const start = f.window.SpeechRecognition.prototype.start;
+  f.window.SpeechRecognition.prototype.start = function () {
+    if (Object.hasOwn(this, 'phrases')) throw Object.assign(new Error('Unsupported hints'), { name: 'NotSupportedError' });
+    return start.call(this);
+  };
+  f.host.speechMode(true, 'pop');
+  f.advance(400);
+  assert.equal(f.starts, 1);
+  assert.equal(f.states.at(-1)[1], true);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+
+  const match = fixture();
+  enablePhraseHints(match);
+  match.listen('match');
+  assert.equal(Object.hasOwn(match.latest, 'phrases'), false);
+});
+
+test('homophone revisions cannot replay an already consumed Solo target', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [
+    { uid: 1, text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }
+  ] }));
+  f.latest.result([['sun', false]]);
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.latest.result([['son', false]]);
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [
+    { uid: 2, text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }
+  ] }));
+  f.latest.result([['sons', true]]);
+  assert.deepEqual(f.popWords, ['sun']);
+  f.latest.result([['sons', true], ['son', true]], 1);
+  assert.deepEqual(f.popWords, ['sun', 'son'], 'A genuinely new result can score a new throw');
+});
+
+test('an empty final Solo hypothesis supplies one unclear-speech notification without restarting', () => {
+  const f = fixture();
+  f.listen('pop');
+  const states = f.states.length;
+  f.latest.result([['', false]]);
+  assert.deepEqual(f.popWords, []);
+  f.latest.result([['...', true]]);
+  f.latest.result([['...', true]]);
+  assert.deepEqual(f.popWords, ['']);
+  assert.deepEqual(f.results, [['...', true]], 'Raw text is presented once');
+  assert.equal(f.states.length, states);
+  assert.equal(f.starts, 1);
+});
+
+test('non-scoring multiplayer feedback preserves raw text without changing microphone state', () => {
+  const f = fixture({ multiplayer: true, localAutoStart: false });
+  const events = [];
+  f.host.observePopEvent(value => events.push(JSON.parse(value)));
+  f.local.publish({ status: 'ready' });
+  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['sun', 'cat'] }));
+  f.host.speechMode(true, 'pop', 'multi', 'feedback');
+  const session = f.local.startCalls[0];
+  assert.deepEqual(Array.from(session.vocabulary), ['sun', 'cat']);
+  const feedback = { type: 'feedback', sessionId: 'feedback', eventId: 'f-1', text: 'sun', reason: 'identity_unconfirmed' };
+  session.onFeedback(feedback);
+  assert.equal(events.length, 0, 'No feedback before permission and listening');
+  session.onStarted();
+  const stateCount = f.states.length;
+  session.onFeedback(feedback);
+  assert.deepEqual(events, [feedback]);
+  assert.equal(f.transcript.textContent, 'sun');
+  assert.equal(f.states.length, stateCount);
+  assert.deepEqual(f.popWords, []);
+  assert.deepEqual(f.results, [], 'Feedback is displayed through its dedicated path, not a scoring callback');
+  f.host.stopSpeech();
+  session.onFeedback({ ...feedback, eventId: 'late' });
+  assert.equal(events.length, 1);
+});
+
 test('multiplayer preparation publishes independent JSON state while solo recognition continues unchanged', () => {
   const f = fixture({ multiplayer: true });
   const preparations = [];
@@ -996,7 +1138,7 @@ test('local multiplayer waits for actual microphone start and works without brow
     start_ms: 2400, end_ms: 2800, embedding: [0.1, -0.9] };
   session.onEvent(utterance);
   assert.deepEqual(events, [utterance]);
-  assert.deepEqual(f.results, [['cat', true]]);
+  assert.deepEqual(f.results, [], 'Native event validation is the only multiplayer transcript presentation path');
   assert.deepEqual(f.popWords, [], 'The single-player lexical scorer never receives multiplayer events');
   assert.match(f.notice.textContent, /profiles stay in this browser/i);
 });

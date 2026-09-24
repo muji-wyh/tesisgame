@@ -1355,11 +1355,17 @@ func _on_multiplayer_event(arguments: Array) -> void:
 	if str(value.get("type", "utterance")) == "flushed":
 		_pop.complete_settling()
 		return
-	if str(value.get("type", "utterance")) != "utterance":
+	var event_type: Variant = value.get("type", "utterance")
+	if not event_type is String or not event_type in ["utterance", "feedback"]:
 		return
-	_pop.receive_speech_event({"round_id": _pop.game.round_id, "event_id": str(value.get("eventId", "")),
-		"text": str(value.get("text", "")), "start_ms": value.get("startMs", -1), "end_ms": value.get("endMs", -1),
-		"embedding": value.get("embedding", [])})
+	var event: Dictionary = {"round_id": _pop.game.round_id, "event_id": value.get("eventId", ""),
+		"text": value.get("text", ""), "start_ms": value.get("startMs", -1), "end_ms": value.get("endMs", -1)}
+	if event_type == "feedback":
+		event.reason = value.get("reason", "")
+		_pop.receive_speech_feedback(event)
+	else:
+		event.embedding = value.get("embedding", [])
+		_pop.receive_speech_event(event)
 
 
 func _start_pop_listening() -> void:

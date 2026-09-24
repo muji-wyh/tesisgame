@@ -181,6 +181,20 @@
           }
         } catch { /* A private-mode storage error must not prevent downloading. */ }
         if (!bytes) {
+          // Assets have content-addressed URLs. A runtime update can reuse
+          // unchanged model bytes from an older version only after revalidation.
+          try {
+            const previous = await this.env.caches?.match?.(asset.href);
+            if (previous) {
+              const stored = await previous.arrayBuffer();
+              if (stored.byteLength === asset.bytes && await this.digest(stored) === asset.sha256) {
+                bytes = stored;
+                try { await cache?.put(asset.href, new this.env.Response(bytes)); } catch { /* Cache is optional. */ }
+              }
+            }
+          } catch { /* Continue with a verified download when cache lookup fails. */ }
+        }
+        if (!bytes) {
           const request = await this.fetchTimed(asset.href);
           try {
             if (request.response.body?.getReader) {
@@ -258,6 +272,7 @@
         return;
       }
       if (message.type === 'utterance') this.session.onEvent?.(message);
+      if (message.type === 'feedback' && this.session.started) this.session.onFeedback?.(message);
       if (message.type === 'flushed') this.session.onFlushed?.(message);
     }
     runtimeError(message) {
@@ -295,6 +310,8 @@
       session.queued = queued;
       let started = false;
       try { this.worker.postMessage({ type: 'start', sessionId: options.sessionId, timeOffsetMs: options.elapsedMs || 0, mode: session.mode,
+        ...(session.mode === 'game' ? { vocabulary: [...new Set((Array.isArray(options.vocabulary) ? options.vocabulary : [])
+          .filter(word => typeof word === 'string' && /^[a-z]{1,32}$/i.test(word)).map(word => word.toLowerCase()))].slice(0, 200) } : {}),
         ...(session.mode === 'enrollment' ? { maxTimeMs: 60000 } : session.mode === 'identification' ? { maxTimeMs: 30000 } : {}) }); }
       catch (error) { this.runtimeError(error.message); return Promise.reject(error); }
       const send = frame => {

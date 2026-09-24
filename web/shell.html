@@ -1212,6 +1212,8 @@
         let presentation = 'match';
         let silentRestarts = 0;
         const popAliases = new Map();
+        let popVocabulary = [];
+        let phraseBiasUnsupported = false;
         const maxSilentRestarts = 2;
 
         function speechAvailable() {
@@ -1318,12 +1320,17 @@
             const valid = () => token === generation && enabled && active && backend === 'multi' && !document.hidden;
             report('Opening the local microphone...');
             multiplayer.start({ sessionId: String(sessionId || token), elapsedMs: Number(elapsedMs) || 0,
+              vocabulary: popVocabulary.slice(),
               onStarted() { if (valid()) { listening = true; report('Listening locally. Say an English word.'); } },
               onEvent(event) {
                 if (!valid() || !listening) return;
                 transcript.textContent = event.text;
                 onPopEvent?.(JSON.stringify(event));
-                if (valid()) onResult?.(event.text, true);
+              },
+              onFeedback(event) {
+                if (!valid() || !listening) return;
+                transcript.textContent = typeof event.text === 'string' ? event.text : '';
+                onPopEvent?.(JSON.stringify(event));
               },
               onFlushed(event) { if (valid()) onPopEvent?.(JSON.stringify(event)); },
               onError(error) { if (valid()) localFailure(error); }
@@ -1401,9 +1408,29 @@
         function startRecognition(token) {
           if (token !== generation || !enabled || !active || document.hidden) return;
           let current;
+          let usingPhrases = false;
+          const retryWithoutPhrases = () => {
+            phraseBiasUnsupported = true;
+            if (!release()) { report(); return; }
+            active = true;
+            report('Starting microphone...');
+            scheduleRestart(generation);
+          };
           try {
             const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             current = new Recognition();
+            // Contextual bias is optional in browsers. Keep normal recognition
+            // available when the API or the browser's speech service rejects it.
+            if (presentation === 'pop' && !phraseBiasUnsupported && popVocabulary.length &&
+                'phrases' in current && typeof window.SpeechRecognitionPhrase === 'function') {
+              try {
+                current.phrases = popVocabulary.map(word => new window.SpeechRecognitionPhrase(word, 2));
+                usingPhrases = true;
+              } catch {
+                phraseBiasUnsupported = true;
+                current = new Recognition();
+              }
+            }
             recognition = current;
             current.lang = 'en-US';
             current.interimResults = true;
@@ -1430,6 +1457,11 @@
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
                 if (isFinal) lastFinal = index;
+                if (presentation === 'pop' && popResultCurrent && isFinal && !/[\p{L}\p{N}_]/u.test(text)) {
+                  // A completed empty hypothesis is feedback, never a target.
+                  onPopResult?.('');
+                  if (!text && valid()) onResult?.(text, true);
+                }
                 if (text) {
                   heardSpeech = true;
                   silentRestarts = 0;
@@ -1466,7 +1498,8 @@
             };
             current.onerror = event => {
               if (!valid()) return;
-              if (presentation === 'pop' && event.error === 'no-speech') retryPopSilence();
+              if (usingPhrases && event.error === 'phrases-not-supported') retryWithoutPhrases();
+              else if (presentation === 'pop' && event.error === 'no-speech') retryPopSilence();
               else failedRecognition(event.error);
             };
             current.onend = () => {
@@ -1484,6 +1517,7 @@
             current.start();
           } catch (error) {
             if (token !== generation || !enabled || !active) return;
+            if (usingPhrases && error.name === 'NotSupportedError') { retryWithoutPhrases(); return; }
             failedRecognition(['NotAllowedError', 'SecurityError'].includes(error.name) ? 'not-allowed' :
               ['NotFoundError', 'NotReadableError'].includes(error.name) ? 'audio-capture' :
               error.name === 'NetworkError' ? 'network' : '');
@@ -1500,6 +1534,11 @@
           const remaining = Math.ceil(number(state.remaining));
           const hits = Math.floor(number(state.hits)), score = Math.floor(number(state.score));
           const combo = Math.floor(number(state.best_combo));
+          if (Array.isArray(state.vocabulary) || phase === 'idle') {
+            popVocabulary = [...new Set((Array.isArray(state.vocabulary) ? state.vocabulary : [])
+              .filter(word => typeof word === 'string' && /^[a-z]{1,32}$/i.test(word))
+              .map(word => word.toLowerCase()))].slice(0, 200);
+          }
           // The model supplies accepted noun forms; the host never guesses a singular
           // from a partial hypothesis, possessive, or arbitrary recognized suffix.
           for (const target of Array.isArray(state.targets) ? state.targets : []) {
@@ -1520,6 +1559,8 @@
             targets: JSON.stringify(targets), controls: JSON.stringify(controls),
             transcript: typeof state.transcript === 'string' ? state.transcript : '',
             'transcript-final': state.transcript_final === true,
+            'recognition-feedback': typeof state.recognition_feedback === 'string' ? state.recognition_feedback : '',
+            'recognition-message': typeof state.recognition_message === 'string' ? state.recognition_message : '',
             report: typeof state.report === 'string' ? state.report : '', 'report-step': Math.floor(number(state.report_step)),
             'report-speaking': state.report_speaking === true, 'report-loading': state.report_loading === true,
             'report-audio': JSON.stringify((Array.isArray(state.report_audio) ? state.report_audio : [])

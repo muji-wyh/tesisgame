@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { chooseMode, enterGame, metrics, rendered, tap, openRewards, collectionHeaderRect } = require('./game-ui.cjs');
 const { SPEAKER_MODEL_VERSION } = require('../../web/voice-profiles.js');
+const catalogWords = require('../../words.json').map(word => word.text);
 
 // This fixture exercises the real host, JavaScriptBridge and Godot UI with
 // deterministic recognition events. It does not assert acoustic model quality.
@@ -77,6 +78,17 @@ const multiplayerFixture = `(${function installMultiplayerFixture() {
       return event;
     }
     repeatLast() { this.current?.options.onEvent(this.lastEvent); }
+    feedback(reason, text = '') {
+      const record = this.current;
+      if (!record?.started) throw new Error('Fixture microphone has not started');
+      const elapsed = record.options.elapsedMs + performance.now() - record.startedAt;
+      const event = { type: 'feedback', sessionId: record.options.sessionId,
+        eventId: 'feedback-' + (++this.serial), reason, text,
+        startMs: Math.max(record.options.elapsedMs, elapsed - 60), endMs: Math.max(record.options.elapsedMs + 1, elapsed - 15) };
+      this.lastFeedback = event;
+      record.options.onFeedback(event);
+      return event;
+    }
     fail() { this.current?.options.onError(new Error('Fixture microphone interrupted. Tap Retry.')); }
   }
   window.VoicePopMultiplayer = Multiplayer;
@@ -129,6 +141,8 @@ async function open(page, { seed = true } = {}) {
 async function state(page) {
   return page.locator('#pop-status').evaluate(element => ({
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining), hits: Number(element.dataset.hits),
+    transcript: element.dataset.transcript || '', recognitionFeedback: element.dataset.recognitionFeedback || '',
+    recognitionMessage: element.dataset.recognitionMessage || '',
     mode: element.dataset.playMode, multiplayer: JSON.parse(element.dataset.multiplayerState || '{}'),
     choices: element.dataset.modeChoicesVisible === 'true', previous: JSON.parse(element.dataset.previousRound || '{}'),
     players: JSON.parse(element.dataset.players || '[]'), ranking: JSON.parse(element.dataset.ranking || '[]'),
@@ -327,6 +341,91 @@ test('background readiness leaves solo playable and switches only after a new mi
   await expect(page.locator('#pop-status')).toHaveAttribute('data-play-mode', 'single');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect((await state(page)).previous.hits).toBe(4);
+  expect(errors).toEqual([]);
+});
+
+test('multiplayer receives round vocabulary and shows non-scoring recognition feedback independently of hits', async ({ page }, info) => {
+  const errors = await open(page);
+  await startMultiplayer(page);
+  const vocabulary = await page.evaluate(() => window.__multi.current.options.vocabulary);
+  expect([...vocabulary].sort()).toEqual([...catalogWords].sort());
+  const before = await state(page);
+  expect(vocabulary.length).toBeGreaterThan(before.targets.length);
+  await page.waitForTimeout(100);
+  const word = (await state(page)).targets[0].text;
+  await page.evaluate(text => window.__multi.feedback('identity_unconfirmed', text), word);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-recognition-feedback', 'identity_unconfirmed');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', word);
+  expect((await state(page)).recognitionMessage).toMatch(/voice|who|identify/i);
+  expect((await state(page)).hits).toBe(before.hits);
+  expect((await state(page)).players).toEqual([]);
+  expect((await state(page)).phase).toBe('running');
+  await rendered(page);
+  expect((await state(page)).transcript).toBe(word);
+  await page.screenshot({ path: info.outputPath('word-heard-identity-unconfirmed.png') });
+
+  await page.evaluate(() => window.__multi.feedback('unclear_speech'));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-recognition-feedback', 'unclear_speech');
+  expect((await state(page)).recognitionMessage).toMatch(/hear|clear|try|again|say/i);
+  expect((await state(page)).hits).toBe(before.hits);
+  await pop(page, 1);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-recognition-feedback', '');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-recognition-message', '');
+  expect((await state(page)).players[0]).toMatchObject({ name: 'Mia', hits: 1 });
+  await page.evaluate(() => { window.__firstScoredEvent = window.__multi.lastEvent; });
+  await pop(page, 1);
+  const afterHit = await state(page);
+  await page.evaluate(() => {
+    window.__multi.current.options.onFeedback(window.__multi.lastFeedback);
+    window.__multi.current.options.onEvent(window.__firstScoredEvent);
+  });
+  await rendered(page);
+  expect((await state(page)).recognitionFeedback).toBe('');
+  expect((await state(page)).transcript).toBe(afterHit.transcript);
+  expect((await state(page)).hits).toBe(afterHit.hits);
+  expect(errors).toEqual([]);
+});
+
+test('stale recognition feedback cannot cross microphone sessions or a switch back to Solo', async ({ page }) => {
+  const errors = await open(page);
+  await startMultiplayer(page);
+  await page.waitForTimeout(100);
+  await page.evaluate(() => window.__multi.feedback('timing_unavailable', 'a word was heard'));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-recognition-feedback', 'timing_unavailable');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', 'a word was heard');
+  await page.evaluate(() => window.__multi.fail());
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  await action(page, 'RetryListening');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await pop(page, 1);
+  const resumed = await state(page);
+  await page.evaluate(() => {
+    const old = window.__multi.records[0];
+    const event = { ...window.__multi.lastFeedback, eventId: 'stale-feedback', text: 'stale feedback' };
+    old.options.onFeedback(event);
+    window.__multi.current.options.onFeedback(event);
+  });
+  await rendered(page);
+  expect((await state(page)).recognitionFeedback).toBe('');
+  expect((await state(page)).transcript).toBe(resumed.transcript);
+  expect((await state(page)).hits).toBe(resumed.hits);
+
+  await action(page, 'ChoosePopMode');
+  await action(page, 'ContinueSolo');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-play-mode', 'single');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await pop(page);
+  const solo = await state(page);
+  await page.evaluate(() => {
+    for (const record of window.__multi.records) record.options.onFeedback({
+      ...window.__multi.lastFeedback, sessionId: record.options.sessionId,
+      eventId: 'stale-after-switch', reason: 'identity_unconfirmed', text: 'old multiplayer words'
+    });
+  });
+  await rendered(page);
+  expect((await state(page)).recognitionFeedback).toBe('');
+  expect((await state(page)).transcript).toBe(solo.transcript);
+  expect((await state(page)).hits).toBe(solo.hits);
   expect(errors).toEqual([]);
 });
 

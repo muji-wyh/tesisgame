@@ -552,6 +552,7 @@ func show_transcript(text: String, is_final: bool) -> void:
 func _clear_transcript() -> void:
 	_transcript = ""
 	_transcript_final = false
+	game.clear_recognition_feedback()
 	if transcript_label != null:
 		transcript_label.text = ""
 		transcript_label.hide()
@@ -572,6 +573,10 @@ func receive_transcript(text: String) -> void:
 		return
 	_refresh_targets()
 	var struck: Array = game.hit_transcript(text)
+	# Browser recognition reports lexical tokens one at a time. A polite filler
+	# after the matched noun must not replace that answer's short celebration.
+	if struck.is_empty() and _last_hit_left > 0.0:
+		game.clear_recognition_feedback()
 	_present_hits(struck)
 
 
@@ -580,13 +585,30 @@ func receive_speech_event(event: Dictionary) -> void:
 		return
 	_sync_game_clock()
 	_refresh_targets()
+	var before: int = game.recognition_revision
 	var struck: Array = game.hit_speech_event(event)
+	if game.recognition_revision == before:
+		return
 	if game.phase == "running":
 		show_transcript(str(event.get("text", "")), true)
 	_present_hits(struck)
 
 
+func receive_speech_feedback(event: Dictionary) -> void:
+	if play_mode != "multi" or game.phase not in ["running", "settling"] or not is_visible_in_tree():
+		return
+	_sync_game_clock()
+	if not game.accept_speech_feedback(event):
+		return
+	if game.phase == "running":
+		show_transcript(str(event.text), true)
+	_present_hits([])
+
+
 func _present_hits(struck: Array) -> void:
+	if struck.is_empty() and not game.recognition_feedback.is_empty():
+		_last_hit_left = 0.0
+		_last_hit_profile.clear()
 	for target in struck:
 		var visual: Dictionary = {}
 		for item in _draw_targets:
@@ -734,7 +756,8 @@ func snapshot() -> Dictionary:
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
 		"play_mode": play_mode, "round_id": game.round_id, "players": game.players_snapshot(), "ranking": game.ranking(),
-		"voice_profile_count": game.voice_profile_count(),
+		"voice_profile_count": game.voice_profile_count(), "vocabulary": game.vocabulary(),
+		"recognition_feedback": game.recognition_feedback, "recognition_message": game.recognition_message,
 		"multiplayer": multiplayer_state.duplicate(true), "mode_choices_visible": _mode_choices.visible,
 		"previous_round": previous_round_summary.duplicate(true),
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
@@ -890,6 +913,8 @@ func _update_hud() -> void:
 	_live_caption.text = "RECONNECTING · TIMER PAUSED" if _reconnecting else _last_hit if _last_hit_left > 0.0 else "LISTENING · SPEAK TO POP"
 	if not _transcript.is_empty() and _last_hit_left <= 0.0 and not _reconnecting:
 		_live_caption.text = "HEARD YOU · KEEP GOING" if _transcript_final else "HEARING YOU…"
+	if not _reconnecting and not game.recognition_message.is_empty():
+		_live_caption.text = game.recognition_message
 	if game.phase == "running" and game.targets.is_empty() and game.remaining < 3.0:
 		_live_caption.text = "NICE POPPING · ROUND ENDING"
 	if game.phase == "settling":

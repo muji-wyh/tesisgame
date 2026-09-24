@@ -24,6 +24,7 @@ func _run() -> void:
 	_test_start_and_reset()
 	_test_time_and_pause()
 	_test_recognition()
+	_test_homophones_vocabulary_and_feedback()
 	_test_form_snapshots()
 	_test_expiry_and_results()
 	_test_frame_independence()
@@ -150,6 +151,56 @@ func _test_form_snapshots() -> void:
 		game.targets[0].forms.append("thorn")
 		check(game.hit_transcript("thorn").is_empty(), "Modifying a transport snapshot cannot broaden valid speech matches")
 		check(game.hit_transcript(fixture[0]).size() == 1, "Original word matching survives changes to exported forms")
+
+
+func _test_homophones_vocabulary_and_feedback() -> void:
+	for pair in [["sun", "son", "sons"], ["flower", "flour", "flours"], ["pear", "pair", "pairs"], ["plane", "plain", "plains"]]:
+		for alternative in pair.slice(1):
+			var game := Model.new()
+			game.configure(words([pair[0]]), 3)
+			game.start()
+			check(game.targets[0].forms.has(alternative), "The visible word publishes its vetted homophone " + alternative)
+			check(game.hit_transcript("_" + alternative + " " + alternative + "2").is_empty(), "Homophones still require exact token boundaries")
+			check(game.hit_transcript(alternative).size() == 1, "A true homophone or its plural hits " + pair[0])
+			check(game.hit_transcript(pair[0]).is_empty() and game.hits == 1, "Alternate spellings cannot hit the same target twice")
+	var pool: Array = words(["sun", "flower", "pear", "plane", "helicopter", "octopus", "bee", "eye", "nose"])
+	var vocabulary_game := Model.new()
+	vocabulary_game.configure(pool, 3)
+	var published: Array[String] = vocabulary_game.vocabulary()
+	check(published.size() == pool.size() and published.has("sun") and not published.has("son"),
+		"Ready vocabulary contains the whole configured canonical pool, never homophone aliases")
+	published.append("invented")
+	vocabulary_game.start()
+	check(vocabulary_game.vocabulary().size() == pool.size() and vocabulary_game.targets.size() == 1,
+		"Canonical vocabulary is an independent snapshot, not the currently visible target list")
+	for fixture in [["helicopter", "helencopter"], ["octopus", "octapus"], ["bee", "be"], ["eye", "I"], ["nose", "knows"], ["plane", "plan"]]:
+		var strict := Model.new()
+		strict.configure(words([fixture[0]]), 3)
+		strict.start()
+		check(strict.hit_transcript(fixture[1]).is_empty(), "Unvetted spelling and function-word aliases stay rejected for " + fixture[0])
+	var collision := Model.new()
+	collision.configure([
+		{"id": "sun", "text": "sun", "image": "sun.svg", "audio": "sun.wav"},
+		{"id": "son", "text": "son", "image": "son.svg", "audio": "son.wav"}
+	], 1)
+	collision.start()
+	for frame in range(60):
+		collision.advance(0.5)
+		check(collision.targets.size() <= 1, "Overlapping canonical and homophone forms never appear together")
+	var feedback := Model.new()
+	feedback.configure(words(["sun"]), 3)
+	feedback.start()
+	feedback.hit_transcript("")
+	check(feedback.recognition_feedback == "unclear_speech" and not feedback.recognition_message.is_empty(),
+		"An empty final browser transcript gives a clear retry message")
+	feedback.hit_transcript("...")
+	check(feedback.recognition_feedback == "unclear_speech" and feedback.hits == 0, "Punctuation cannot manufacture a word")
+	feedback.hit_transcript("hello")
+	check(feedback.recognition_feedback == "no_matching_target", "A clear but unavailable solo word explains which words to use")
+	feedback.hit_transcript("son")
+	check(feedback.recognition_feedback.is_empty() and feedback.recognition_message.is_empty(), "A successful answer clears prior recognition feedback")
+	feedback.configure(pool, 3)
+	check(feedback.recognition_feedback.is_empty() and feedback.recognition_revision == 0, "New rounds reset recognition feedback")
 
 
 func _test_expiry_and_results() -> void:

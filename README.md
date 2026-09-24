@@ -262,6 +262,26 @@ The HUD shows recognized speech as it changes, including interim speech and word
 that do not score. Long sentences keep their newest two lines in view. Pausing,
 finishing or leaving clears that text.
 
+Voice Pop supplies the round's age-appropriate vocabulary as recognition context.
+Solo uses contextual phrases when the browser exposes that optional API; browsers
+that lack or reject it continue with ordinary speech recognition. Recognized
+text still needs to match a target. Both modes accept a small, explicit set of
+homophones: sun/son, flower/flour, pear/pair and plane/plain, including their
+regular plurals. Similar spellings and arbitrary partial words are not accepted.
+Local recognition uses a four-path beam search with a modest vocabulary bonus.
+Its 12,590-byte BPE vocabulary downloads with the optional runtime; the existing
+ONNX models and saved voice profiles are unchanged. A runtime update can reuse
+unchanged assets from an older cache after checking their size and SHA-256 again.
+
+The live caption distinguishes unclear speech, an unconfirmed voice user, a
+word whose target has expired, and words that do not match a target. Local
+transcription can appear even when the sound is too short to identify its speaker
+or its timing cannot safely be matched. These messages do not pause the clock or
+award points. Multiplayer still scores using captured audio time and registered
+voice profiles; the speaker similarity thresholds are unchanged. Solo browsers
+do not supply reliable word timestamps, so late Solo results still need a current
+target when received. No accuracy percentage is implied by these safeguards.
+
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
 points). Dropped objects end the combo; there is no losing screen. Pip reports the
 actual results in a speech bubble after 30 seconds. His three report pages cover

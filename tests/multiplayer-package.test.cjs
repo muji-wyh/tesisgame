@@ -56,6 +56,8 @@ test('successive exports remove obsolete generated assets without removing unrel
   const destination = path.join(f.output, 'multiplayer');
   const previous = JSON.parse(fs.readFileSync(path.join(destination, 'manifest.json'))).assets[0].url;
   fs.writeFileSync(path.join(destination, 'notes.txt'), 'Keep non-generated files');
+  fs.writeFileSync(path.join(destination, 'bpe-0123456789abcdef.vocab'), 'Obsolete generated vocabulary');
+  fs.writeFileSync(path.join(destination, 'notes.vocab'), 'Keep non-generated vocabulary');
   const next = Buffer.from('a new model version');
   fs.writeFileSync(path.join(f.source, 'model.onnx'), next);
   Object.assign(f.manifest.assets[0], { bytes: next.length, sha256: createHash('sha256').update(next).digest('hex') });
@@ -65,5 +67,7 @@ test('successive exports remove obsolete generated assets without removing unrel
   assert.notEqual(current, previous);
   assert.equal(fs.existsSync(path.join(destination, previous)), false);
   assert.equal(fs.existsSync(path.join(destination, 'notes.txt')), true);
+  assert.equal(fs.existsSync(path.join(destination, 'bpe-0123456789abcdef.vocab')), false);
+  assert.equal(fs.existsSync(path.join(destination, 'notes.vocab')), true);
   assert.deepEqual(fs.readFileSync(path.join(destination, current)), next);
 });

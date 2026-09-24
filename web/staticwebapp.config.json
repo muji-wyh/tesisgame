@@ -21,6 +21,7 @@
   ],
   "mimeTypes": {
     ".onnx": "application/octet-stream",
+    ".vocab": "text/plain; charset=utf-8",
     ".wasm": "application/wasm",
     ".pck": "application/octet-stream",
     ".sample": "application/octet-stream",

@@ -9,7 +9,7 @@
     minimumSegmentMs: 700, consistencyThreshold: 0.45 });
   const MODEL_FILES = {
     encoder: '/encoder.onnx', decoder: '/decoder.onnx', joiner: '/joiner.onnx',
-    tokens: '/tokens.txt', speaker: '/speaker.onnx', vad: '/silero_vad.onnx'
+    tokens: '/tokens.txt', bpe: '/bpe.vocab', speaker: '/speaker.onnx', vad: '/silero_vad.onnx'
   };
 
   function wordsFromResult(result, segmentStartMs, segmentEndMs) {
@@ -163,6 +163,7 @@
       Object.values(MODEL_FILES).forEach((file) => module.FS.unlink(file));
 
       // Exercise all three actual inference paths before reporting ready.
+      this.setVocabulary(['cat']);
       const silence = new Float32Array(RATE);
       this.copy(silence);
       for (let i = 0; i < RATE; i += 512) module._vp_accept(this.pointer + i * 4, Math.min(512, RATE - i));
@@ -199,7 +200,28 @@
       this.audioBuffer = null;
     }
 
-    start({ sessionId, timeOffsetMs = 0, maxTimeMs = 30000, mode = 'game' }) {
+    setVocabulary(vocabulary) {
+      // Only canonical English nouns enter the native hotword syntax. Slashes,
+      // colons and other syntax cannot inject phrases or change bias scores.
+      const words = [...new Set((Array.isArray(vocabulary) ? vocabulary : []).slice(0, 512)
+        .filter(word => typeof word === 'string')
+        .map(word => word.trim().toUpperCase())
+        .filter(word => word.length <= 64 && /^[A-Z]+(?:[ -][A-Z]+)*$/.test(word)))];
+      if (!words.length) return;
+      const text = `${words.join('\n')}\0`;
+      const pointer = this.module._malloc(text.length);
+      if (!pointer) throw new Error('Not enough memory for speech vocabulary.');
+      try {
+        const bytes = new Uint8Array(this.module.HEAPF32.buffer, pointer, text.length);
+        for (let i = 0; i < text.length; i++) bytes[i] = text.charCodeAt(i);
+        this.module._vp_set_vocabulary(pointer);
+      } finally {
+        new Uint8Array(this.module.HEAPF32.buffer, pointer, text.length).fill(0);
+        this.module._free(pointer);
+      }
+    }
+
+    start({ sessionId, timeOffsetMs = 0, maxTimeMs = 30000, mode = 'game', vocabulary = [] }) {
       if (!this.ready) throw new Error('Local speech recognition is not ready.');
       if (typeof sessionId !== 'string' || !sessionId) throw new Error('Missing speech session ID.');
       if (!['game', 'enrollment', 'identification'].includes(mode)) throw new Error('Invalid microphone session mode.');
@@ -207,6 +229,7 @@
       maxTimeMs = Math.min(mode === 'enrollment' ? 60000 : 30000, maxTimeMs);
       if (!Number.isFinite(timeOffsetMs) || timeOffsetMs < 0 || timeOffsetMs >= maxTimeMs) throw new Error('Invalid round clock.');
       this.module._vp_reset();
+      if (mode === 'game') this.setVocabulary(vocabulary);
       this.clearAudio();
       this.sessionId = sessionId;
       this.timeOffsetMs = timeOffsetMs;
@@ -220,6 +243,14 @@
         lastEnd: -Infinity, turnId: 0, contaminatedTurns: new Set() };
       this.audioBuffer = new Float32Array(Math.floor((this.maxTimeMs - timeOffsetMs) * RATE / 1000));
       this.send({ type: 'started', sessionId });
+    }
+
+    feedback(text, startMs, endMs, reason) {
+      // Feedback is a terminal, non-scoring alternative to an utterance. It
+      // never changes listening state or invents a timestamp in an ASR tail.
+      if (!this.sessionId || !Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) return;
+      this.send({ type: 'feedback', sessionId: this.sessionId,
+        eventId: `${this.sessionId}:${++this.eventSequence}`, text, startMs, endMs, reason });
     }
 
     audio({ sessionId, samples, sampleOffset }) {
@@ -253,8 +284,9 @@
             if (this.enrollment.failure || this.enrollment.mode === 'identification' && this.enrollmentCanFinish()) break;
             continue;
           }
+          const capturedCount = Math.max(0, Math.min(count, this.sampleCount - start));
           const startMs = this.timeOffsetMs + start * 1000 / RATE;
-          const endMs = Math.min(this.maxTimeMs, this.timeOffsetMs + Math.min(start + count, this.sampleCount) * 1000 / RATE);
+          const endMs = Math.min(this.maxTimeMs, this.timeOffsetMs + (start + capturedCount) * 1000 / RATE);
           // VAD clips can shave off an initial consonant. Preserve 200 ms of
           // actual captured context on each side for ASR, while embeddings and
           // scoring remain bounded by the detected speech segment.
@@ -262,7 +294,8 @@
           const contextEnd = Math.min(this.sampleCount, start + count + 3200);
           this.copy(this.audioBuffer.subarray(contextStart, contextEnd));
           const result = JSON.parse(module.UTF8ToString(module._vp_transcribe(this.pointer, contextEnd - contextStart)));
-          if (!String(result.text || '').trim()) continue;
+          const text = String(result.text || '').trim();
+          if (!text) { this.feedback('', startMs, endMs, 'unclear_speech'); continue; }
           const contextStartMs = this.timeOffsetMs + contextStart * 1000 / RATE;
           const contextEndMs = this.timeOffsetMs + contextEnd * 1000 / RATE;
           let words = wordsFromResult(result, contextStartMs, contextEndMs).filter((word) => word.startMs >= startMs);
@@ -272,29 +305,33 @@
             // scoring, after proving that the token lies in captured audio.
             // A token emitted only in the synthetic ASR tail is still rejected.
             const bounds = voicedBounds(module.HEAPF32.subarray(pointer / 4,
-              pointer / 4 + Math.min(count, this.sampleCount - start)));
-            if (!bounds) continue;
+              pointer / 4 + capturedCount));
+            if (!bounds) { this.feedback(text, startMs, endMs, 'identity_unconfirmed'); continue; }
             words[0].startMs = startMs + bounds.start * 1000 / RATE;
             words[0].endMs = Math.min(endMs, startMs + bounds.end * 1000 / RATE);
           } else {
             words = wordsFromResult(result, contextStartMs, endMs).filter((word) => word.startMs >= startMs);
           }
-          if (!words.length) continue;
+          if (!words.length) { this.feedback(text, startMs, endMs, 'timing_unavailable'); continue; }
           // VAD silence boundaries are not speaker boundaries. Adjacent words
           // may come from different players even without overlapping speech.
           // Use disjoint token-aligned clips, allowing 100 ms before token
           // emission. Never reuse a mixed-segment voice vector for every word.
           const boundaries = [0, ...words.slice(1).map((word) => Math.max(0,
-            Math.min(count, Math.floor((word.startMs - startMs) * RATE / 1000) - 1600))), count];
+            Math.min(capturedCount, Math.floor((word.startMs - startMs) * RATE / 1000) - 1600))), capturedCount];
           for (let i = 0; i < words.length; i++) {
             const clipStart = boundaries[i];
             const clipLength = boundaries[i + 1] - clipStart;
-            if (clipLength < 2560) continue; // Under 160 ms cannot provide a useful voice sample.
+            const unconfirmed = () => this.feedback(words[i].text, words[i].startMs, words[i].endMs, 'identity_unconfirmed');
+            if (clipLength < 2560) { unconfirmed(); continue; } // Under 160 ms cannot provide a useful voice sample.
             const dim = module._vp_embed(pointer + clipStart * 4, clipLength);
-            if (dim !== 256) continue;
+            if (dim !== 256) { unconfirmed(); continue; }
             const embeddingPointer = module._vp_embedding();
             const embedding = Array.from(module.HEAPF32.subarray(embeddingPointer / 4, embeddingPointer / 4 + dim));
-            if (!embedding.every(Number.isFinite)) throw new Error('Speaker recognition produced invalid output.');
+            const norm = Math.hypot(...embedding);
+            if (!embedding.every(Number.isFinite) || !Number.isFinite(norm) || norm < 1e-8) {
+              embedding.fill(0); unconfirmed(); continue;
+            }
             this.send({ type: 'utterance', sessionId: this.sessionId,
               eventId: `${this.sessionId}:${++this.eventSequence}`, ...words[i], embedding });
           }

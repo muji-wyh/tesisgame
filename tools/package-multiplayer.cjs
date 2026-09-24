@@ -36,7 +36,7 @@ function packageMultiplayer(root, output) {
   // This generated directory is deployed in full. Keep its size bounded across
   // repeated local builds by removing only our obsolete content-addressed files.
   for (const entry of fs.readdirSync(destination, { withFileTypes: true })) {
-    if (entry.isFile() && /^[a-z0-9-]+-[a-f0-9]{16}\.(?:onnx|txt|js|wasm)$/.test(entry.name) && !names.has(entry.name)) {
+    if (entry.isFile() && /^[a-z0-9-]+-[a-f0-9]{16}\.(?:onnx|txt|vocab|js|wasm)$/.test(entry.name) && !names.has(entry.name)) {
       fs.unlinkSync(path.join(destination, entry.name));
     }
   }

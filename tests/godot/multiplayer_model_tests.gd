@@ -53,6 +53,7 @@ func _run() -> void:
 	_test_settling_and_deadline()
 	_test_pause_and_ranking()
 	_test_multiword_and_timestamp_order()
+	_test_recognition_feedback()
 	print("Voice Pop multiplayer model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -357,3 +358,62 @@ func _test_multiword_and_timestamp_order() -> void:
 	late.advance(0.1)
 	late.hit_speech_event(_event(late, "second", "cat", _voice(0), 6500.0, 6600.0))
 	check(late.hits == 2 and late.misses == 0 and late.best_combo == 2 and late.score == 22, "Late recognition reconstructs scores without leaving an expired-target combo break")
+
+
+func _test_recognition_feedback() -> void:
+	var game = _game(["sun"])
+	game.advance(0.2)
+	var uncertain: Dictionary = _event(game, "unknown-voice", "son", _voice(20))
+	check(game.hit_speech_event(uncertain).is_empty() and game.recognition_feedback == "identity_unconfirmed"
+		and game.players_snapshot().is_empty(), "A valid homophone with an unknown voice explains identity rejection without joining")
+	var revision: int = game.recognition_revision
+	uncertain.embedding = _voice(0)
+	check(game.hit_speech_event(uncertain).is_empty() and game.recognition_revision == revision,
+		"A repeated event cannot revise feedback or turn a rejected identity into a hit")
+	game.hit_speech_event(_event(game, "no-word", "hello", _voice(20)))
+	check(game.recognition_feedback == "no_matching_target" and game.players_snapshot().is_empty(),
+		"Unavailable targets are classified before identity matching")
+	var diagnosis: Dictionary = _event(game, "diagnosis", "son", [])
+	diagnosis.erase("embedding")
+	diagnosis.reason = "identity_unconfirmed"
+	check(game.accept_speech_feedback(diagnosis) and game.recognition_feedback == "identity_unconfirmed" and game.hits == 0,
+		"Terminal worker diagnostics can show recognized text without an embedding or scoring")
+	revision = game.recognition_revision
+	for change in [{"event_id": "diagnosis"}, {"event_id": "wrong-round", "round_id": "old"},
+		{"event_id": "wrong-time", "start_ms": -1.0}, {"event_id": "future", "start_ms": 1000.0},
+		{"event_id": "bad-text", "text": null}, {"event_id": "bad-reason", "reason": "invented"},
+		{"event_id": "bad-end", "end_ms": INF}, {"event_id": 17}]:
+		var invalid: Dictionary = diagnosis.duplicate(true)
+		invalid.merge(change, true)
+		check(not game.accept_speech_feedback(invalid) and game.recognition_revision == revision
+			and game.recognition_feedback == "identity_unconfirmed", "Malformed, stale and duplicate feedback leaves the current caption intact")
+	var malformed: Dictionary = _event(game, "bad-vector", "sun", [])
+	check(game.hit_speech_event(malformed).is_empty() and game.recognition_revision == revision,
+		"An invalid scoring event cannot replace the current feedback")
+	var consumed: Dictionary = _event(game, "diagnosis", "sun", _voice(0))
+	check(game.hit_speech_event(consumed).is_empty(), "A terminal diagnostic ID cannot be reused as a scoring event")
+	var hit: Array = game.hit_speech_event(_event(game, "clear-voice", "son", _voice(0)))
+	check(hit.size() == 1 and game.hits == 1 and game.recognition_feedback.is_empty()
+		and game.recognition_message.is_empty(), "A registered voice scores the homophone once and clears rejection feedback")
+	var late = _game(["sun"])
+	late.advance(6.0)
+	check(late.hit_speech_event(_event(late, "expired", "son", _voice(0), 5600.0, 5700.0)).is_empty()
+		and late.recognition_feedback == "target_expired" and late.players_snapshot().is_empty(),
+		"Speech beginning after a target expires explains the unavailable target without joining a player")
+	check(late.hit_speech_event(_event(late, "historical", "son", _voice(0), 100.0, 200.0)).size() == 1
+		and late.recognition_feedback.is_empty(), "Feedback never introduces grace: valid historical speech still scores its original target")
+	var unclear: Dictionary = _event(late, "unclear", "", [])
+	unclear.erase("embedding")
+	unclear.reason = "unclear_speech"
+	check(late.accept_speech_feedback(unclear) and late.recognition_feedback == "unclear_speech",
+		"An empty local transcript can explain unclear speech without fabricating a score")
+	late.pause()
+	revision = late.recognition_revision
+	check(late.recognition_feedback.is_empty(), "Pausing clears the previous recognition message")
+	unclear.event_id = "paused"
+	check(not late.accept_speech_feedback(unclear) and late.recognition_revision == revision, "Paused rounds reject diagnostic callbacks")
+	late.resume()
+	late.stop()
+	revision = late.recognition_revision
+	unclear.event_id = "finished"
+	check(not late.accept_speech_feedback(unclear) and late.recognition_revision == revision, "Finished rounds keep their feedback frozen")

@@ -55,11 +55,12 @@ test('word events use Zipformer token timestamps and discard ambiguous untimed m
   assert.deepEqual(wordsFromResult({ text: 'cat dog', tokens: [' CA', 'T', ' ', 'DO', 'G'], timestamps: [0.1, 0.2, 0.3, 0.4, 0.5] }, 0, 900).map((word) => word.text), ['cat', 'dog']);
 });
 
-test('adjacent words receive their own disjoint audio embeddings instead of one mixed speaker vector', () => {
+test('adjacent words receive disjoint voice clips and feedback never reuses a scoring event ID', () => {
   const messages = [];
   const clips = [];
   const heap = new Float32Array(65536);
   let available = true;
+  let secondTimestamp = 0.6;
   const engine = new VoicePopInference((event) => messages.push(event));
   engine.sessionId = 'two-speakers';
   engine.sampleCount = 16000;
@@ -72,7 +73,7 @@ test('adjacent words receive their own disjoint audio embeddings instead of one 
     _vp_segment_start: () => 0,
     _vp_segment_samples: () => 400,
     _vp_transcribe: () => 0,
-    UTF8ToString: () => JSON.stringify({ text: 'cat dog', tokens: ['▁CAT', '▁DOG'], timestamps: [0.2, 0.6] }),
+    UTF8ToString: () => JSON.stringify({ text: 'cat dog', tokens: ['▁CAT', '▁DOG'], timestamps: [0.1, secondTimestamp] }),
     _vp_embed(pointer, count) {
       heap.fill(0, 20000, 20256);
       heap[20000 + clips.length] = 1;
@@ -87,6 +88,13 @@ test('adjacent words receive their own disjoint audio embeddings instead of one 
   assert.equal(clips[0].pointer + clips[0].count * 4, clips[1].pointer);
   assert.equal(clips[0].count + clips[1].count, 16000);
   assert.notDeepEqual(messages[0].embedding, messages[1].embedding);
+  available = true;
+  secondTimestamp = 0.2;
+  engine.drain();
+  assert.equal(messages[2].type, 'feedback');
+  assert.equal(messages[2].reason, 'identity_unconfirmed');
+  assert.equal(messages[3].type, 'utterance');
+  assert.equal(new Set(messages.map(event => event.eventId)).size, 4);
 });
 
 test('an isolated word emitted at the VAD end uses actual PCM bounds; synthetic-tail emissions are rejected', () => {
@@ -114,7 +122,74 @@ test('an isolated word emitted at the VAD end uses actual PCM bounds; synthetic-
   assert.equal(real.length, 1);
   assert.equal(real[0].startMs, 200);
   assert.equal(real[0].endMs, 600);
-  assert.equal(run(1.1).length, 0);
+  const tail = run(1.1);
+  assert.equal(tail.length, 1);
+  assert.equal(tail[0].type, 'feedback');
+  assert.equal(tail[0].reason, 'timing_unavailable');
+  assert.equal(tail[0].text, 'cat');
+  assert.equal(tail[0].startMs, 0);
+  assert.equal(tail[0].endMs, 800, 'Feedback keeps the real VAD interval, not the synthetic token timestamp');
+});
+
+test('unusable detected speech reports non-scoring feedback without stopping or changing identity rules', () => {
+  const cases = [
+    { result: { text: '' }, reason: 'unclear_speech', text: '' },
+    { result: { text: ' RAW WORDS ' }, reason: 'timing_unavailable', text: 'RAW WORDS' },
+    { dimension: 0, reason: 'identity_unconfirmed', text: 'cat' },
+    { value: NaN, reason: 'identity_unconfirmed', text: 'cat' },
+    { value: 0, reason: 'identity_unconfirmed', text: 'cat' },
+    { count: 1600, reason: 'identity_unconfirmed', text: 'cat' }
+  ];
+  for (const item of cases) {
+    const events = [], heap = new Float32Array(65536), count = item.count || 16000;
+    heap.fill(0.1, 100, 100 + count);
+    heap[20000] = item.value ?? 1;
+    let available = true;
+    const engine = new VoicePopInference(event => events.push(event));
+    Object.assign(engine, { sessionId: 'feedback-round', timeOffsetMs: 3000, sampleCount: count,
+      maxTimeMs: 30000, audioBuffer: new Float32Array(count), copy() {} });
+    engine.module = {
+      HEAPF32: heap, _vp_front: () => available ? count : 0,
+      _vp_segment_start: () => 0, _vp_segment_samples: () => 400,
+      _vp_transcribe: () => 0,
+      UTF8ToString: () => JSON.stringify(item.result || { text: 'cat', tokens: [' CA', 'T'], timestamps: [0.02, 0.04] }),
+      _vp_embed: () => item.dimension ?? 256, _vp_embedding: () => 80000,
+      _vp_pop() { available = false; }
+    };
+    engine.drain();
+    assert.deepEqual(events, [{ type: 'feedback', sessionId: 'feedback-round', eventId: 'feedback-round:1',
+      text: item.text, startMs: 3000, endMs: 3000 + count / 16, reason: item.reason }]);
+    assert.equal(engine.sessionId, 'feedback-round');
+    assert.equal(events[0].embedding, undefined);
+    engine.drain();
+    assert.equal(events.length, 1, 'A drained segment cannot produce duplicate feedback');
+  }
+});
+
+test('game vocabulary uses safe canonical BPE phrases, is copied then erased, and resets across sessions', () => {
+  const heap = new Float32Array(4096), messages = [], vocabularies = [];
+  let active = '', frees = 0;
+  const engine = new VoicePopInference(event => messages.push(event));
+  engine.ready = true;
+  engine.module = {
+    HEAPF32: heap, _malloc: () => 4,
+    _vp_reset() { active = ''; },
+    _vp_set_vocabulary(pointer) {
+      const bytes = new Uint8Array(heap.buffer, pointer);
+      active = String.fromCharCode(...bytes.subarray(0, bytes.indexOf(0)));
+      vocabularies.push(active);
+    },
+    _free() { assert.ok(heap.every(value => value === 0)); frees++; }
+  };
+  engine.start({ sessionId: 'biased', vocabulary: ['cat', ' CAT ', 'ice cream', 'dog:99', 'cat/dog', 'cat\ndog', 3, 'x'.repeat(65)] });
+  assert.equal(active, 'CAT\nICE CREAM');
+  assert.equal(frees, 1);
+  engine.start({ sessionId: 'plain' });
+  assert.equal(active, '');
+  engine.start({ sessionId: 'profile', mode: 'enrollment', vocabulary: ['cat'] });
+  assert.equal(active, '', 'Profile capture must never inherit or set a game vocabulary');
+  assert.deepEqual(vocabularies, ['CAT\nICE CREAM']);
+  assert.equal(messages.filter(event => event.type === 'started').length, 3);
 });
 
 test('worker fences old sessions, rejects audio gaps and clips samples at the round deadline', () => {
@@ -658,7 +733,7 @@ test('real WASM recognizes words and keeps held-out same-recording voice segment
   const engine = new VoicePopInference((event) => messages.push(event), async () => factory({ wasmBinary: new Uint8Array(assets['runtime-wasm']), print() {}, printErr() {} }));
   await engine.init({ assets, runtime: manifest.runtime });
   assert.equal(messages[0].type, 'ready');
-  engine.start({ sessionId: 'real-audio' });
+  engine.start({ sessionId: 'real-audio', vocabulary: ['cat', 'dog', 'fish', 'duck', 'cow'] });
   const word = wavSamples(path.join(root, 'assets/audio/voice/word-cat.wav'));
   const audio = new Float32Array(3200 + word.length + 16000);
   audio.set(word, 3200);
@@ -680,6 +755,48 @@ test('real WASM recognizes words and keeps held-out same-recording voice segment
       engine.audio({ sessionId, samples: joined.slice(sampleOffset, sampleOffset + 512), sampleOffset });
     if (flush) engine.flush({ sessionId });
   };
+  const rawResults = [], originalTranscribe = engine.module._vp_transcribe;
+  engine.module._vp_transcribe = (...args) => {
+    const pointer = originalTranscribe(...args);
+    rawResults.push(JSON.parse(engine.module.UTF8ToString(pointer)).text.trim().toLowerCase());
+    return pointer;
+  };
+  engine.start({ sessionId: 'real-biased-silence', vocabulary: ['cat', 'dog', 'fish', 'duck', 'cow'] });
+  feed('real-biased-silence', [new Float32Array(32000)]);
+  assert.equal(messages.some(event => event.sessionId === 'real-biased-silence' && ['utterance', 'feedback'].includes(event.type)), false,
+    'Vocabulary bias does not turn silence into speech or diagnostic noise');
+  assert.equal(rawResults.length, 0);
+  engine.start({ sessionId: 'real-off-vocabulary', vocabulary: ['moon', 'sun', 'star', 'cloud', 'rain'] });
+  feed('real-off-vocabulary', [new Float32Array(3200), word, new Float32Array(16000)]);
+  assert.ok(rawResults.includes('cat'), 'A word outside the hinted vocabulary remains available to the decoder');
+  const recording = wavSamples(path.join(root, 'assets/audio/voice/welcome.wav'));
+  const catalog = [...new Set([...fs.readFileSync(path.join(root, 'scripts/game_data.gd'), 'utf8')
+    .matchAll(/"words": \[([^\]]+)\]/g)]
+    .flatMap(match => [...match[1].matchAll(/"([a-z]+)"/g)].map(value => value[1])))];
+  assert.ok(catalog.length >= 200, 'Exercise the complete round vocabulary, not only a few favorable hints');
+  for (const [sessionId, vocabulary] of [
+    ['real-biased-narration', ['cat', 'dog', 'fish', 'duck', 'cow']],
+    ['real-catalog-narration', catalog]
+  ]) {
+    rawResults.length = 0;
+    engine.start({ sessionId, vocabulary });
+    feed(sessionId, [new Float32Array(3200), recording, new Float32Array(16000)]);
+    assert.equal(rawResults.join(' '), 'find three pairs some cards have no match a picture or a word',
+      'Unrelated narration remains ordinary speech with a small or full round vocabulary');
+  }
+  rawResults.length = 0;
+  engine.start({ sessionId: 'real-catalog-octopus', vocabulary: catalog });
+  feed('real-catalog-octopus', [new Float32Array(3200), wavSamples(path.join(root, 'assets/audio/voice/word-octopus.wav')), new Float32Array(16000)]);
+  assert.deepEqual(rawResults, ['octopus'], 'Actual BPE context bias resolves this fixture beyond the unassisted octapus transcription');
+  const originalEmbed = engine.module._vp_embed;
+  engine.module._vp_embed = () => 0;
+  engine.start({ sessionId: 'real-unconfirmed-word', vocabulary: ['cat'] });
+  feed('real-unconfirmed-word', [new Float32Array(3200), word, new Float32Array(16000)]);
+  const unconfirmed = messages.filter(event => event.sessionId === 'real-unconfirmed-word' && event.type === 'feedback');
+  assert.ok(unconfirmed.some(event => event.text === 'cat' && event.reason === 'identity_unconfirmed'));
+  assert.equal(messages.some(event => event.sessionId === 'real-unconfirmed-word' && event.type === 'utterance'), false);
+  engine.module._vp_embed = originalEmbed;
+  engine.module._vp_transcribe = originalTranscribe;
   let enrollmentTranscriptions = 0;
   const transcribe = engine.module._vp_transcribe;
   engine.module._vp_transcribe = (...args) => { enrollmentTranscriptions++; return transcribe(...args); };
@@ -691,7 +808,6 @@ test('real WASM recognizes words and keeps held-out same-recording voice segment
   const captured = engine.audioBuffer;
   // Repeated source audio is only a deterministic pipeline smoke fixture. The
   // held-out half never enters enrollment; this does not measure human accuracy.
-  const recording = wavSamples(path.join(root, 'assets/audio/voice/welcome.wav'));
   let split = 0, quietest = Infinity;
   for (let offset = Math.floor(recording.length * 0.4); offset < recording.length * 0.6; offset += 160) {
     const energy = recording.subarray(offset, offset + 160).reduce((sum, value) => sum + value * value, 0);

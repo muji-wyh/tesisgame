@@ -26,6 +26,19 @@ const SPECIAL_PLURALS: Dictionary = {
 	"scarf": ["scarves", "scarfs"], "tomato": ["tomatoes"], "octopus": ["octopuses", "octopi"],
 	"cactus": ["cacti", "cactuses"]
 }
+# Vetted spelling alternatives for the same English sounds. Keep this list
+# explicit: approximate spelling and similar-sounding nouns are not answers.
+const HOMOPHONES: Dictionary = {
+	"sun": ["son", "sons"], "flower": ["flour", "flours"],
+	"pear": ["pair", "pairs"], "plane": ["plain", "plains"]
+}
+const RECOGNITION_MESSAGES: Dictionary = {
+	"unclear_speech": "Say the word again, loud and clear.",
+	"identity_unconfirmed": "Say it again so I know who is speaking.",
+	"target_expired": "That word has gone. Try one on screen.",
+	"no_matching_target": "Try a word you can see on screen.",
+	"timing_unavailable": "Try that word again."
+}
 
 var phase: String = "ready"
 var remaining: float = DURATION
@@ -40,6 +53,9 @@ var hit_words: Array[Dictionary] = []
 var missed_words: Array[Dictionary] = []
 var play_mode: String = "single"
 var round_id: String = ""
+var recognition_feedback: String = ""
+var recognition_message: String = ""
+var recognition_revision: int = 0
 
 var _round_counter: int = 0
 var _settling_elapsed: float = 0.0
@@ -168,6 +184,13 @@ func voice_profile_count() -> int:
 	return _voice_profiles.size()
 
 
+func vocabulary() -> Array[String]:
+	var result: Array[String] = []
+	for word in _words:
+		result.append(word.text)
+	return result
+
+
 func configure_speaker_matching(similarity: float = SPEAKER_SIMILARITY,
 		margin: float = SPEAKER_MARGIN) -> bool:
 	if not phase in ["ready", "finished"] or not is_finite(similarity) or not is_finite(margin):
@@ -207,6 +230,7 @@ func advance(delta: float) -> void:
 func pause() -> void:
 	if phase == "running":
 		phase = "paused"
+		clear_recognition_feedback()
 
 
 func resume() -> void:
@@ -218,6 +242,7 @@ func stop() -> void:
 	# Leaving a round is not a missed answer and cannot manufacture extra results.
 	phase = "finished"
 	targets.clear()
+	clear_recognition_feedback()
 	_clear_voice_evidence()
 
 
@@ -260,6 +285,7 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 		targets.erase(target)
 	if not removed.is_empty() and targets.is_empty():
 		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
+	_set_recognition_feedback("" if not removed.is_empty() else "unclear_speech" if spoken.is_empty() else "no_matching_target")
 	return removed
 
 
@@ -268,26 +294,13 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 # a later throw of the same word. Only pre-deadline captured audio is accepted.
 func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 	var removed: Array[Dictionary] = []
-	if play_mode != "multi" or not phase in ["running", "settling"]:
-		return removed
-	if not event.has_all(["round_id", "event_id", "text", "start_ms", "end_ms", "embedding"]):
-		return removed
-	if not event.round_id is String or event.round_id != round_id or not event.event_id is String or event.event_id.is_empty():
-		return removed
-	if _seen_events.has(event.event_id) or not event.text is String:
-		return removed
-	if not _is_number(event.start_ms) or not _is_number(event.end_ms):
-		return removed
-	var start_ms: float = float(event.start_ms)
-	var end_ms: float = float(event.end_ms)
-	if not is_finite(start_ms) or not is_finite(end_ms) or start_ms < 0.0 or end_ms <= start_ms:
-		return removed
-	if start_ms >= DURATION * 1000.0 or end_ms > DURATION * 1000.0 or start_ms > elapsed * 1000.0 + EPSILON:
+	if not _valid_speech_event(event) or not event.has("embedding"):
 		return removed
 	var embedding: Array[float] = _normalized_embedding(event.embedding)
 	if embedding.size() != EMBEDDING_SIZE:
 		return removed
 	_seen_events[event.event_id] = true
+	var start_ms: float = float(event.start_ms)
 	var spoken: Dictionary = {}
 	for token in _tokens.search_all(event.text.to_lower()):
 		spoken[token.get_string()] = true
@@ -300,9 +313,11 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 				eligible.append(entry)
 				break
 	if eligible.is_empty():
+		_set_recognition_feedback(_unavailable_target_feedback(spoken, start_ms))
 		return removed
 	var player_index: int = _identify_player(embedding)
 	if player_index < 0:
+		_set_recognition_feedback("identity_unconfirmed")
 		return removed
 	var player: Dictionary = _players[player_index]
 	for entry in eligible:
@@ -327,7 +342,55 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 		removed.append(hit)
 	if phase == "running" and targets.is_empty():
 		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
+	_set_recognition_feedback("")
 	return removed
+
+
+func accept_speech_feedback(event: Dictionary) -> bool:
+	if not _valid_speech_event(event) or not event.get("reason") is String \
+		or not event.reason in ["unclear_speech", "identity_unconfirmed", "timing_unavailable"]:
+		return false
+	_seen_events[event.event_id] = true
+	_set_recognition_feedback(event.reason)
+	return true
+
+
+func _valid_speech_event(event: Dictionary) -> bool:
+	if play_mode != "multi" or not phase in ["running", "settling"] \
+		or not event.has_all(["round_id", "event_id", "text", "start_ms", "end_ms"]):
+		return false
+	if not event.round_id is String or event.round_id != round_id or not event.event_id is String \
+		or event.event_id.is_empty() or event.event_id.length() > 256 or _seen_events.has(event.event_id):
+		return false
+	if not event.text is String or event.text.length() > 2000 or not _is_number(event.start_ms) or not _is_number(event.end_ms):
+		return false
+	var start_ms: float = float(event.start_ms)
+	var end_ms: float = float(event.end_ms)
+	return is_finite(start_ms) and is_finite(end_ms) and start_ms >= 0.0 and end_ms > start_ms \
+		and start_ms < DURATION * 1000.0 and end_ms <= DURATION * 1000.0 and start_ms <= elapsed * 1000.0 + EPSILON
+
+
+func _unavailable_target_feedback(spoken: Dictionary, start_ms: float) -> String:
+	if spoken.is_empty():
+		return "unclear_speech"
+	for entry in _target_history:
+		if start_ms + EPSILON < entry.expires_ms:
+			continue
+		for form in _aliases.get(entry.target.word.id, []):
+			if spoken.has(form):
+				return "target_expired"
+	return "no_matching_target"
+
+
+func _set_recognition_feedback(code: String) -> void:
+	recognition_feedback = code
+	recognition_message = RECOGNITION_MESSAGES.get(code, "")
+	recognition_revision += 1
+
+
+func clear_recognition_feedback() -> void:
+	if not recognition_feedback.is_empty() or not recognition_message.is_empty():
+		_set_recognition_feedback("")
 
 
 func players_snapshot() -> Array[Dictionary]:
@@ -361,6 +424,9 @@ func summary() -> Dictionary:
 
 
 func _reset_round() -> void:
+	recognition_feedback = ""
+	recognition_message = ""
+	recognition_revision = 0
 	elapsed = 0.0
 	remaining = DURATION
 	targets.clear()
@@ -586,4 +652,6 @@ func _word_forms(noun: String) -> Array[String]:
 		forms.append(noun + "es")
 	else:
 		forms.append(noun + "s")
+	for homophone in HOMOPHONES.get(noun, []):
+		forms.append(homophone)
 	return forms

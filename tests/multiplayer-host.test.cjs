@@ -222,6 +222,27 @@ test('cached bytes are hash-verified; corrupt entries are replaced and valid ent
   assert.equal(f.host.state.loaded, f.host.state.total);
 });
 
+test('a runtime update reuses verified unchanged assets from older caches and redownloads corrupt ones', async () => {
+  const f = fixture();
+  const urls = f.manifest.assets.map(asset => new URL(asset.url, 'https://game.example/multiplayer/manifest.json').href);
+  const previous = new Map([
+    [urls[0], new Response(Uint8Array.from([4, 3, 2, 1]))],
+    [urls[1], new Response(f.bytes[1])]
+  ]);
+  f.env.caches.match = async url => previous.get(url)?.clone();
+  assert.equal(await f.host.prepare(), true);
+  assert.deepEqual(f.fetches.map(request => request.url), ['https://game.example/multiplayer/manifest.json', urls[0]]);
+  assert.deepEqual(f.cacheWrites, urls, 'Revalidated reused bytes enter the new version cache');
+  assert.equal(f.host.state.loaded, f.host.state.total);
+});
+
+test('cross-version cache lookup failure falls back to normal verified downloads', async () => {
+  const f = fixture();
+  f.env.caches.match = async () => { throw new Error('Storage unavailable'); };
+  assert.equal(await f.host.prepare(), true);
+  assert.equal(f.fetches.length, 3);
+});
+
 test('unsupported devices and invalid manifests fail without touching microphone or starting workers', async () => {
   for (const missing of ['Worker', 'AudioWorkletNode', 'crypto']) {
     const f = fixture();
@@ -810,6 +831,29 @@ test('a broken inference worker reports one identification error and physically 
   assert.equal(f.host.session, null);
   assert.equal(f.host.state.status, 'error');
   assert.equal(f.timers.size, 0);
+});
+
+test('game vocabulary is validated and feedback is separated from hits and fenced by the capture session', async () => {
+  const gate = deferred(), f = fixture({ captureGate: gate });
+  await f.host.prepare();
+  const feedback = [], hits = [];
+  const pending = f.host.start({ sessionId: 'words', vocabulary: ['Cat', 'sun', 'Cat', 'bad phrase', '<script>', null],
+    onFeedback: value => feedback.push(value), onEvent: value => hits.push(value) });
+  const start = f.worker.messages.find(item => item.message.type === 'start').message;
+  assert.deepEqual(start.vocabulary, ['cat', 'sun']);
+  const message = { type: 'feedback', sessionId: 'words', eventId: 'f-1', text: 'cat', reason: 'identity_unconfirmed' };
+  f.worker.emit(message);
+  assert.equal(feedback.length, 0);
+  gate.resolve(f.captures[0]);
+  await pending;
+  f.worker.emit({ ...message, sessionId: 'old' });
+  f.worker.emit(message);
+  assert.deepEqual(feedback, [message]);
+  assert.deepEqual(hits, []);
+  assert.equal(f.host.isReady(), true);
+  f.host.stop();
+  f.worker.emit({ ...message, eventId: 'late' });
+  assert.equal(feedback.length, 1);
 });
 
 test('multiple saved templates recover supported variation without accepting one isolated high score', () => {

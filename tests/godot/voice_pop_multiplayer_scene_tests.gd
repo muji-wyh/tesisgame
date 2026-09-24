@@ -75,6 +75,8 @@ func _run() -> void:
 		view.set_multiplayer_state({"status": "downloading", "loaded": 420, "total": 1000})
 		check(view.multiplayer_label.text.contains("42%") and view.play_mode == "single", "Cold download reports real byte progress and leaves solo selected")
 		check(view.game.phase == "ready" and view.game.remaining == 30.0, "Model preparation does not start the game timer")
+		check(view.snapshot().vocabulary == view.game.vocabulary() and view.snapshot().vocabulary.size() > view.snapshot().targets.size(),
+			"The ready snapshot supplies canonical vocabulary for the whole configured round before listening")
 		app._on_voice_state([true, true, "Listening."])
 		view._advance_game(0.4)
 		var remaining: float = view.game.remaining
@@ -129,6 +131,9 @@ func _run() -> void:
 		unknown.eventId = "unknown-correct"
 		unknown.embedding = voice(10)
 		app._on_multiplayer_event([JSON.stringify(unknown)])
+		check(view.snapshot().recognition_feedback == "identity_unconfirmed" and view.snapshot().transcript == first.text
+			and view._live_caption.text == view.snapshot().recognition_message,
+			"A heard target remains visible when the registered voice cannot be confirmed")
 		var ambiguous: Dictionary = first.duplicate(true)
 		ambiguous.eventId = "ambiguous-correct"
 		ambiguous.embedding = voice(0)
@@ -137,8 +142,37 @@ func _run() -> void:
 		app._on_multiplayer_event([JSON.stringify(ambiguous)])
 		check(view.game.hits == 0 and view.snapshot().players.is_empty(),
 			"Unknown and ambiguous correct voices cannot join or consume a target")
+		var feedback: Dictionary = {"type": "feedback", "sessionId": "current-session", "eventId": "unclear-feedback",
+			"text": "", "startMs": view.game.elapsed * 1000.0, "endMs": view.game.elapsed * 1000.0 + 10.0,
+			"reason": "unclear_speech"}
+		app._on_multiplayer_event([JSON.stringify(feedback)])
+		check(view.snapshot().recognition_feedback == "unclear_speech" and view.snapshot().transcript.is_empty()
+			and view.game.hits == 0 and view.game.phase == "running",
+			"Embedding-free worker feedback clears old raw text and explains unclear speech without interrupting play")
+		var feedback_before: Array = [view.snapshot().recognition_feedback, view.snapshot().recognition_message, view.snapshot().transcript]
+		for changes in [{"eventId": "unclear-feedback", "text": "duplicate"},
+			{"eventId": "stale-feedback", "sessionId": "old-session", "text": "stale"},
+			{"eventId": "bad-feedback", "reason": "invented"}, {"eventId": "bad-text", "text": 12},
+			{"eventId": "bad-time", "startMs": -1.0}]:
+			var rejected: Dictionary = feedback.duplicate(true)
+			rejected.merge(changes, true)
+			app._on_multiplayer_event([JSON.stringify(rejected)])
+			check([view.snapshot().recognition_feedback, view.snapshot().recognition_message, view.snapshot().transcript] == feedback_before,
+				"Rejected worker feedback cannot overwrite the caption or raw transcript")
+		feedback.eventId = "timing-feedback"
+		feedback.reason = "timing_unavailable"
+		feedback.text = "a clear raw sentence"
+		app._on_multiplayer_event([JSON.stringify(feedback)])
+		check(view.snapshot().transcript == feedback.text and view.snapshot().recognition_feedback == "timing_unavailable"
+			and view._live_caption.text == view.snapshot().recognition_message, "Raw text is displayed independently of usable scoring timestamps or an embedding")
 		app._on_multiplayer_event([JSON.stringify(first)])
 		app._on_multiplayer_event([JSON.stringify(first)])
+		check(view.snapshot().recognition_feedback.is_empty() and view.snapshot().recognition_message.is_empty(), "A valid hit clears recognition rejection feedback")
+		var duplicate: Dictionary = first.duplicate(true)
+		duplicate.text = "tampered duplicate text"
+		app._on_multiplayer_event([JSON.stringify(duplicate)])
+		check(view.snapshot().transcript == first.text and view.snapshot().recognition_feedback.is_empty(),
+			"Duplicate scoring callbacks cannot replace raw transcription or a successful result")
 		check(view.game.hits == 1 and view.snapshot().players.size() == 1 and view._player_labels[0].text == "1"
 			and view.snapshot().players[0].id == "saved-ada" and view.snapshot().players[0].name == "Ada",
 			"A deduplicated first hit joins the saved player and updates the HUD")
@@ -150,6 +184,12 @@ func _run() -> void:
 		check(view.game.hits == 1, "The legacy solo callback cannot score in multiplayer")
 		view._advance_game(1.0)
 		var second: Dictionary = event_for(view, "current-session", "p2-first", voice(1))
+		var unsure_second: Dictionary = second.duplicate(true)
+		unsure_second.eventId = "unsure-second"
+		unsure_second.embedding = voice(10)
+		app._on_multiplayer_event([JSON.stringify(unsure_second)])
+		check(view.snapshot().recognition_feedback == "identity_unconfirmed" and view._last_hit_left == 0.0,
+			"A new multiplayer identity rejection immediately replaces an older hit celebration")
 		app._on_multiplayer_event([JSON.stringify(second)])
 		check(view.snapshot().players.size() == 2 and view._player_labels[1].text == "1"
 			and view._player_labels[0].get_theme_color("font_color") != view._player_labels[1].get_theme_color("font_color"), "A second saved player receives a distinct stable color and hit count")

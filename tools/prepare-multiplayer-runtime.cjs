@@ -20,11 +20,14 @@ const SDK_VERSION = '3.1.53';
 const SDK_REVISION = 'a2b92777574c2feda07994cd4f1079a3dfc151f8';
 const ASR_REVISION = '672fbf1b30579d6585301139bb363f42a0ad4a24';
 const ASR_BASE = `https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-en-2023-06-26/resolve/${ASR_REVISION}`;
+const BPE_SOURCE = { bytes: 244865, sha256: 'c53433de083c4a6ad12d034550ef22de68cec62c4f58932a7b6b8b2f1e743fa5', source: `${ASR_BASE}/bpe.model` };
 const MODELS = [
   { id: 'encoder', file: 'encoder.onnx', bytes: 71082637, sha256: '0d072fd4ef956294ba9db9e9a71a541ac70659095ec4934c8453d8b2fe740187', source: `${ASR_BASE}/encoder-epoch-99-avg-1-chunk-16-left-64.int8.onnx` },
   { id: 'decoder', file: 'decoder.onnx', bytes: 2092621, sha256: '7bf787f90b194b307e5a4ad6a34fadb4e748304c35f78a8d66358a05b13ee6ef', source: `${ASR_BASE}/decoder-epoch-99-avg-1-chunk-16-left-64.onnx` },
   { id: 'joiner', file: 'joiner.onnx', bytes: 259335, sha256: 'd944208d660d67c8d72cd2acaeac971fa5ceb8c80e76c1968148846fedd6e297', source: `${ASR_BASE}/joiner-epoch-99-avg-1-chunk-16-left-64.int8.onnx` },
   { id: 'tokens', file: 'tokens.txt', bytes: 5048, sha256: '49e3c2646595fd907228b3c6787069658f67b17377c60aeb8619c4551b2316fb', source: `${ASR_BASE}/tokens.txt` },
+  { id: 'bpe', file: 'bpe.vocab', bytes: 12590, sha256: 'f191a4935f668fa8cd8e607bcd378404f948321cd3134a5ea13d324ba921673d', source: BPE_SOURCE.source,
+    derivation: { sourceSha256: BPE_SOURCE.sha256, tool: 'sentencepiece==0.2.1', format: 'UTF-8 piece<TAB>score<LF>, in model ID order' } },
   { id: 'speaker', file: 'speaker.onnx', bytes: 26530550, sha256: 'e9848563da86f263117134dfd7ad63c92355b37de492b55e325400c9d9c39012', source: 'https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/wespeaker_en_voxceleb_resnet34_LM.onnx' },
   { id: 'vad', file: 'silero_vad.onnx', bytes: 643854, sha256: '9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6', source: 'https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx' }
 ];
@@ -62,6 +65,29 @@ function run(command, args, options = {}) {
   if (result.status !== 0) throw new Error(`${path.basename(command)} exited with ${result.status}`);
 }
 
+async function prepareBpeVocabulary(file, expected) {
+  if (matches(file, expected)) return;
+  const source = path.join(TOOLCHAIN, 'bpe.model');
+  await download(BPE_SOURCE.source, source, BPE_SOURCE);
+  const python = process.env.PYTHON || 'python';
+  const pythonTools = path.join(TOOLCHAIN, 'python-tools');
+  if (!fs.existsSync(path.join(pythonTools, 'sentencepiece-0.2.1.dist-info'))) {
+    run(python, ['-m', 'pip', 'install', '--disable-pip-version-check', '--target', pythonTools, 'sentencepiece==0.2.1']);
+  }
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  // Export the model's actual unigram scores, not token IDs or guessed ranks.
+  // This tiny derived asset is served dynamically; the build-only model and
+  // SentencePiece package are never added to the browser download.
+  run(python, ['-c', [
+    'import pathlib, sys, sentencepiece as spm',
+    'assert spm.__version__ == "0.2.1"',
+    'model = spm.SentencePieceProcessor(model_file=sys.argv[1])',
+    'text = "".join(f"{model.id_to_piece(i)}\\t{model.get_score(i)}\\n" for i in range(model.get_piece_size()))',
+    'pathlib.Path(sys.argv[2]).write_text(text, encoding="utf-8", newline="\\n")'
+  ].join('\n'), source, file], { env: { ...process.env, PYTHONPATH: [pythonTools, process.env.PYTHONPATH].filter(Boolean).join(path.delimiter) } });
+  if (!matches(file, expected)) throw new Error('Checksum or size mismatch for generated BPE vocabulary.');
+}
+
 async function buildRuntime() {
   fs.mkdirSync(TOOLCHAIN, { recursive: true });
   const source = path.join(TOOLCHAIN, `sherpa-onnx-${SHERPA_VERSION}`);
@@ -71,6 +97,21 @@ async function buildRuntime() {
       sha256: '00934703536de1ae7463ade4365917153b94ecd090cd07a340c8b1b594166626'
     });
     run('tar', ['-xf', archive, '-C', TOOLCHAIN]);
+  }
+  // Upstream defaults this optional BPE worker pool to hardware_concurrency().
+  // Single-thread WASM cannot create pthreads; per-stream hotwords call the
+  // synchronous Encode overload, so a zero-sized pool is both valid and needed.
+  const tokenizerSource = path.join(source, 'sherpa-onnx', 'csrc', 'online-recognizer-transducer-impl.h');
+  const tokenizerText = fs.readFileSync(tokenizerSource, 'utf8');
+  const tokenizerPrefix = `std::make_unique<ssentencepiece::Ssentencepiece>(${tokenizerText.includes('\r\n') ? '\r\n' : '\n'}            `;
+  const originalTokenizer = `${tokenizerPrefix}config_.model_config.bpe_vocab);`;
+  const wasmTokenizer = `${tokenizerPrefix}config_.model_config.bpe_vocab, 0);  // Voice Pop: synchronous WASM tokenizer.`;
+  const originalCount = tokenizerText.split(originalTokenizer).length - 1;
+  const patchedCount = tokenizerText.split(wasmTokenizer).length - 1;
+  if (originalCount === 1 && patchedCount === 0) {
+    fs.writeFileSync(tokenizerSource, tokenizerText.replace(originalTokenizer, wasmTokenizer));
+  } else if (originalCount !== 0 || patchedCount !== 1) {
+    throw new Error('The pinned sherpa BPE tokenizer source changed.');
   }
 
   const python = process.env.PYTHON || 'python';
@@ -117,7 +158,7 @@ async function notices(output, build) {
     'Silero VAD: MIT. ONNX Runtime 1.17.1: MIT.',
     'Emscripten 3.1.53: MIT and University of Illinois/NCSA. Eigen 3.4.1: MPL-2.0.',
     'Model source URLs and fixed SHA256 hashes are recorded in manifest.json.',
-    'Source adapter: tools/multiplayer-runtime. No changes to upstream library source.'
+    'Source adapter: tools/multiplayer-runtime. The build patches the sherpa-onnx online BPE tokenizer to use a zero-sized worker pool: hotwords encode synchronously in single-thread WebAssembly. The exact patch is in tools/prepare-multiplayer-runtime.cjs.'
   ];
   const local = [
     ['sherpa-onnx', path.join(TOOLCHAIN, `sherpa-onnx-${SHERPA_VERSION}`, 'LICENSE')],
@@ -153,7 +194,11 @@ async function notices(output, build) {
 
 async function prepareRuntime({ output = OUTPUT, skipBuild = false } = {}) {
   fs.mkdirSync(output, { recursive: true });
-  for (const model of MODELS) await download(model.source, path.join(output, 'models', model.file), model);
+  for (const model of MODELS) {
+    const file = path.join(output, 'models', model.file);
+    if (model.id === 'bpe') await prepareBpeVocabulary(file, model);
+    else await download(model.source, file, model);
+  }
   const build = skipBuild ? path.join(TOOLCHAIN, 'runtime-build') : await buildRuntime();
   const assets = [];
   for (const extension of ['js', 'wasm']) {
@@ -163,7 +208,8 @@ async function prepareRuntime({ output = OUTPUT, skipBuild = false } = {}) {
     fs.copyFileSync(built, path.join(output, file));
     assets.push({ id: `runtime-${extension}`, url: file, bytes: fs.statSync(built).size, sha256: hash(built) });
   }
-  assets.push(...MODELS.map((model) => ({ id: model.id, url: `models/${model.file}`, bytes: model.bytes, sha256: model.sha256, source: model.source })));
+  assets.push(...MODELS.map((model) => ({ id: model.id, url: `models/${model.file}`, bytes: model.bytes, sha256: model.sha256, source: model.source,
+    ...(model.derivation ? { derivation: model.derivation } : {}) })));
   await notices(output, build);
   const version = crypto.createHash('sha256').update(JSON.stringify(assets)).digest('hex').slice(0, 16);
   const manifest = {

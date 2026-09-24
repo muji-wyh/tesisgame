@@ -16,6 +16,7 @@ const SherpaOnnxSpeakerEmbeddingExtractor *speaker = nullptr;
 const SherpaOnnxVoiceActivityDetector *vad = nullptr;
 const SherpaOnnxSpeechSegment *segment = nullptr;
 std::string output;
+std::string vocabulary;
 std::vector<float> embedding;
 
 void ReleaseSegment() {
@@ -31,6 +32,10 @@ void ClearResult() {
   embedding.clear();
   output.clear();
 }
+void ClearVocabulary() {
+  std::fill(vocabulary.begin(), vocabulary.end(), '\0');
+  vocabulary.clear();
+}
 }
 
 extern "C" {
@@ -43,6 +48,7 @@ EMSCRIPTEN_KEEPALIVE void vp_destroy() {
   speaker = nullptr;
   vad = nullptr;
   ClearResult();
+  ClearVocabulary();
 }
 
 EMSCRIPTEN_KEEPALIVE int vp_create() {
@@ -57,7 +63,13 @@ EMSCRIPTEN_KEEPALIVE int vp_create() {
   asr.model_config.num_threads = 1;
   asr.model_config.provider = "cpu";
   asr.model_config.model_type = "zipformer2";
-  asr.decoding_method = "greedy_search";
+  asr.model_config.modeling_unit = "bpe";
+  asr.model_config.bpe_vocab = "/bpe.vocab";
+  // Context bias needs modified beam search and the model's real BPE scores.
+  // Keep ordinary speech available: nouns add a modest bonus, not a grammar.
+  asr.decoding_method = "modified_beam_search";
+  asr.max_active_paths = 4;
+  asr.hotwords_score = 1.0f;
   recognizer = SherpaOnnxCreateOnlineRecognizer(&asr);
   if (!recognizer) return 0;
 
@@ -86,6 +98,12 @@ EMSCRIPTEN_KEEPALIVE void vp_reset() {
   ReleaseSegment();
   if (vad) SherpaOnnxVoiceActivityDetectorReset(vad);
   ClearResult();
+  ClearVocabulary();
+}
+
+EMSCRIPTEN_KEEPALIVE void vp_set_vocabulary(const char *words) {
+  ClearVocabulary();
+  if (words) vocabulary = words;
 }
 
 EMSCRIPTEN_KEEPALIVE void vp_accept(const float *samples, int n) {
@@ -120,7 +138,9 @@ EMSCRIPTEN_KEEPALIVE void vp_pop() {
 // stream per utterance prevents a preceding player's words leaking into the
 // next turn. InputFinished + tail silence lets the final short word decode.
 EMSCRIPTEN_KEEPALIVE const char *vp_transcribe(const float *samples, int n) {
-  auto *stream = SherpaOnnxCreateOnlineStream(recognizer);
+  auto *stream = vocabulary.empty()
+      ? SherpaOnnxCreateOnlineStream(recognizer)
+      : SherpaOnnxCreateOnlineStreamWithHotwords(recognizer, vocabulary.c_str());
   SherpaOnnxOnlineStreamAcceptWaveform(stream, 16000, samples, n);
   std::vector<float> tail(8000, 0.0f);
   SherpaOnnxOnlineStreamAcceptWaveform(stream, 16000, tail.data(), tail.size());

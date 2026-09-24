@@ -178,6 +178,10 @@ func _run() -> void:
 		check(view.game.hits == before + 1 and view.game.hit_words[0].id == word.id, "A spoken visible word produces an exact hit")
 		check(view.game.targets.all(func(target: Dictionary) -> bool: return target.word.id != word.id), "A popped target is removed immediately")
 		check(view.transcript_label.text.contains(sentence), "Hit feedback does not replace the full sentence with the popped noun")
+		var success_caption: String = view._live_caption.text
+		view.receive_transcript("please")
+		check(view.snapshot().recognition_feedback.is_empty() and view._live_caption.text == success_caption
+			and view._last_hit_left > 0.0, "A trailing solo filler cannot erase the current hit celebration")
 		var revised: String = "I think it is the " + str(word.text) + ", please"
 		view.show_transcript(revised, false)
 		check(view.transcript_label.text.contains(revised) and not bool(view.snapshot().transcript_final), "Interim revisions replace the displayed hypothesis immediately")
@@ -199,8 +203,19 @@ func _run() -> void:
 		check(view.transcript_label.text.length() <= 2000 and view.transcript_label.text.ends_with("newest cat")
 			and str(view.snapshot().transcript).ends_with("newest cat"),
 			"The bounded speech buffer retains new words after a very long hypothesis")
+		view._process(1.16)
+		view.receive_transcript("please")
+		check(view.snapshot().recognition_feedback == "no_matching_target" and view._live_caption.text == view.snapshot().recognition_message,
+			"An unrelated solo answer after the celebration window gets useful feedback")
+		view.receive_transcript("")
+		check(view.snapshot().recognition_feedback == "unclear_speech", "An empty final browser result shows a retry message")
+		view.show_transcript("A new raw hypothesis", false)
+		check(view._live_caption.text == view.snapshot().recognition_message,
+			"Raw hypotheses do not overwrite a specific recognition reason with generic encouragement")
 		app._on_voice_state([true, false, "Speech network error. Tap Retry."])
 		check(not view.transcript_label.is_visible_in_tree() and str(view.snapshot().transcript).is_empty(), "Pausing clears the live transcript")
+		check(view.snapshot().recognition_feedback.is_empty() and view.snapshot().recognition_message.is_empty(),
+			"Background or listening pauses clear stale recognition feedback")
 		view.show_transcript("This is a stale paused hypothesis", false)
 		check(str(view.snapshot().transcript).is_empty(), "A late hypothesis cannot repopulate the paused HUD")
 		var remaining: float = view.game.remaining
