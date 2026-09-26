@@ -30,9 +30,15 @@ async function winMatch(page) {
   }
 }
 
-async function pressChest(page) {
+async function pressChest(page, holdMilliseconds = null) {
   const bounds = await metrics(page), point = resultPoint(bounds, 'chest');
-  await page.mouse.move(bounds.x + point.x * bounds.scale, bounds.y + point.y * bounds.scale);
+  const x = bounds.x + point.x * bounds.scale, y = bounds.y + point.y * bounds.scale;
+  if (holdMilliseconds !== null) {
+    // Avoid assertion waits while the short hold is active.
+    await page.mouse.click(x, y, { delay: holdMilliseconds });
+    return;
+  }
+  await page.mouse.move(x, y);
   await page.mouse.down();
 }
 
@@ -54,15 +60,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   await expect(progress).toHaveAttribute('hidden', '');
   expect(await pieces(page)).toBe(baseline);
 
-  await pressChest(page);
-  try {
-    await expect(progress).not.toHaveAttribute('hidden', '');
-    await expect.poll(async () => Number(await progress.getAttribute('aria-valuenow')),
-      { intervals: [30, 50], timeout: 2500 }).toBeGreaterThanOrEqual(15);
-    await expect(progress).toHaveAttribute('aria-valuetext', /Keep holding/);
-  } finally {
-    await page.mouse.up();
-  }
+  await pressChest(page, 250);
   await expect(progress).toHaveAttribute('hidden', '');
   await expect(progress).toHaveAttribute('aria-valuenow', '0');
   expect(await pieces(page)).toBe(baseline);
@@ -72,6 +70,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   await pressChest(page);
   try {
     await expect(progress).not.toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuetext', /Keep holding/);
     await expect.poll(async () => Number(await progress.getAttribute('aria-valuenow')),
       { intervals: [30, 50], timeout: 2500 }).toBeGreaterThanOrEqual(20);
     await screenshot(page, testInfo, 'holding');
@@ -133,17 +132,12 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
 
 test('reduced motion keeps hold progress and releases without claiming early', async ({ page }, testInfo) => {
   const errors = await openGame(page, { reducedMotion: 'reduce' });
+  await chooseTheme(page, 4); // Ocean exercises the larger crystal chest.
   await winMatch(page);
   const baseline = await pieces(page), progress = page.locator('#chest-progress');
-  await pressChest(page);
-  try {
-    await expect(progress).not.toHaveAttribute('hidden', '');
-    await expect.poll(async () => Number(await progress.getAttribute('aria-valuenow')),
-      { intervals: [30, 50], timeout: 2500 }).toBeGreaterThanOrEqual(15);
-  } finally {
-    await page.mouse.up();
-  }
+  await pressChest(page, 250);
   await expect(progress).toHaveAttribute('hidden', '');
+  await expect(progress).toHaveAttribute('aria-valuenow', '0');
   expect(await pieces(page)).toBe(baseline);
   await pressChest(page);
   try {
