@@ -40,10 +40,9 @@ function expectHitSlice(sound) {
 }
 
 async function installSpeech(page, { automatic = true, available = true, phraseHints = false } = {}) {
-  // These recognition fixtures exercise solo mode without downloading local models.
-  await page.route('**/multiplayer/manifest.json', route => route.abort());
+  // Exercise the browser recognition lifecycle without opening a physical microphone.
   await page.addInitScript(({ automatic, available, phraseHints }) => {
-    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], utterances: [], cancelled: 0, automatic };
+    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], automatic };
     class Recognition {
       constructor() { this.results = []; fixture.instances.push(this); }
       start() {
@@ -88,9 +87,8 @@ async function installSpeech(page, { automatic = true, available = true, phraseH
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
       speak(utterance) {
         fixture.spoken.push(utterance.text);
-        fixture.utterances.push(utterance);
         queueMicrotask(() => utterance.onstart?.());
-      }, cancel() { fixture.cancelled++; }
+      }, cancel() {}
     } });
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => { throw new Error('Test must not capture a physical microphone'); };
   }, { automatic, available, phraseHints });
@@ -164,8 +162,8 @@ async function scrollResults(page, delta) {
   const before = await state(page);
   const bounds = await metrics(page), content = contentBounds(bounds);
   const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
-  // The multiplayer status strip sits above the result scroller. Start inside
-  // a visible result control's vertical band so touch drags reach that scroller.
+  // Start inside a visible result control's vertical band so touch drags reach
+  // the result scroller on every viewport.
   const firstResult = before.controls.filter(control =>
     /^(Pip|HearPip|NextReport|Replay|Back|Hear_)/.test(control.name))
     .sort((a, b) => a.y - b.y)[0];
@@ -291,7 +289,28 @@ async function popOne(page, { interim = false } = {}) {
   return word;
 }
 
-test('Solo receives the complete round vocabulary before recognition starts and keeps unmatched speech readable', async ({ page }) => {
+test('Voice Pop starts with browser recognition without voice users or local model downloads', async ({ page }) => {
+  const legacyRequests = [];
+  page.on('request', request => {
+    if (/\/(?:multiplayer(?:\/|-)|voice-profiles(?:-ui)?\.)/.test(new URL(request.url()).pathname)) {
+      legacyRequests.push(request.url());
+    }
+  });
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
+  const current = await state(page);
+  expect(current.controls.some(control => /ChoosePopMode|ContinueSolo|StartMultiplayer|VoiceProfiles/.test(control.name))).toBe(false);
+  await popOne(page);
+  const more = headerPoint(await metrics(page));
+  await tap(page, more.x, more.y);
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened");
+  await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
+  expect(legacyRequests).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('Voice Pop receives the complete round vocabulary before recognition starts and keeps unmatched speech readable', async ({ page }) => {
   const errors = await open(page, { phraseHints: true });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   const hints = await page.evaluate(() => window.__popSpeech.instances.at(-1).phrasesAtStart);

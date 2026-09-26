@@ -200,7 +200,7 @@ func _test_homophones_vocabulary_and_feedback() -> void:
 	feedback.hit_transcript("son")
 	check(feedback.recognition_feedback.is_empty() and feedback.recognition_message.is_empty(), "A successful answer clears prior recognition feedback")
 	feedback.configure(pool, 3)
-	check(feedback.recognition_feedback.is_empty() and feedback.recognition_revision == 0, "New rounds reset recognition feedback")
+	check(feedback.recognition_feedback.is_empty() and feedback.recognition_message.is_empty(), "New rounds reset recognition feedback")
 
 
 func _test_expiry_and_results() -> void:

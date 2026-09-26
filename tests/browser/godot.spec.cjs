@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { THEME_COLORS, metrics: logicalMetrics, tap, chooseMode, chooseTheme, openRewards, enterGame,
+const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, pipHeaderRect, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState } = require('./game-ui.cjs');
 
 test.beforeAll(() => {

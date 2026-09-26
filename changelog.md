@@ -2,6 +2,16 @@
 
 Notable changes to Pip and Words (formerly Word Buddies), grouped by date with the newest changes first.
 
+## 2026-09-26
+
+- Returned Voice Pop to single-player play using the browser's system speech
+  recognition, with microphone pause/resume, live captions, scoring and reports.
+- Removed multiplayer mode, saved voice users, speaker identification and the
+  downloadable local speech runtime. Web builds no longer require speech models
+  and remove retired generated speech assets from previous exports.
+- Removed unused game code, styles and voice recordings, and consolidated test
+  commands so each native and Node suite runs once by default.
+
 ## 2026-09-17
 
 - Made Pip's Voice Pop results a three-part spoken and readable report with real

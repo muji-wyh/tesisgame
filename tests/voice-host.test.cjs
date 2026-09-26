@@ -3,7 +3,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const { SPEAKER_MODEL_VERSION } = require('../web/voice-profiles.js');
 
 const shell = fs.readFileSync(path.join(__dirname, '..', 'web', 'shell.html'), 'utf8');
 
@@ -15,8 +14,7 @@ function speechEvent(entries, resultIndex = 0) {
   return { resultIndex, results };
 }
 
-function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false,
-  multiplayer = false, localAutoStart = true, profiles = [{ id: 'saved-user', modelVersion: SPEAKER_MODEL_VERSION }], profileError = '' } = {}) {
+function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false } = {}) {
   const block = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?\n      \}/)?.[0];
   assert.ok(block, 'The maintained shell needs its isolated inline speech host');
   const handlers = new WeakMap();
@@ -97,55 +95,12 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
   }
   if (api === 'standard') window.SpeechRecognition = Recognition;
   if (api === 'prefixed') window.webkitSpeechRecognition = Recognition;
-  const localInstances = [];
-  window.SPEAKER_MODEL_VERSION = SPEAKER_MODEL_VERSION;
-  if (profiles !== null) window.VoiceProfileStore = class {
-    list() { if (profileError) throw new Error(profileError); return profiles; }
-  };
-  let users;
-  window.VoiceProfilesUI = class {
-    constructor(options) { this.options = options; this.opened = false; users = this; }
-    isOpen() { return this.opened; }
-    metadataSnapshot(values = profiles) { return values.map(profile => ({ ...profile, avatar_png: 'avatar' })); }
-    async open() { this.opened = true; return true; }
-    close() { this.opened = false; this.options.onClose(); }
-  };
-  if (multiplayer) {
-    window.VoicePopMultiplayer = class {
-      constructor() {
-        this.state = { status: 'idle', loaded: 0, total: 0, progress: 0, message: '' };
-        this.listeners = [];
-        this.startCalls = [];
-        this.prepareCalls = this.stopCalls = this.flushCalls = this.verifyCalls = 0;
-        this.stopFails = false;
-        localInstances.push(this);
-      }
-      isReady() { return this.state.status === 'ready'; }
-      observe(callback) { this.listeners.push(callback); callback({ ...this.state }); }
-      publish(update) {
-        this.state = { ...this.state, ...update };
-        for (const callback of this.listeners) callback({ ...this.state });
-      }
-      prepare() { this.prepareCalls++; this.publish({ status: 'downloading' }); return Promise.resolve(true); }
-      start(options) {
-        this.startCalls.push(options);
-        this.session = options;
-        if (this.startError) return Promise.reject(this.startError);
-        if (localAutoStart) options.onStarted();
-        return Promise.resolve(true);
-      }
-      stop() { this.stopCalls++; this.session = null; return !this.stopFails; }
-      flush() { this.flushCalls++; return this.flushPromise || Promise.resolve(); }
-      verifyReady() { this.verifyCalls++; return Promise.resolve(this.isReady()); }
-    };
-  }
   const spoken = [];
-  let summaryCancels = 0;
   if (synthesis) {
     window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
     window.speechSynthesis = {
       speak(utterance) { spoken.push(utterance); },
-      cancel() { summaryCancels++; }
+      cancel() {}
     };
   }
   const host = vm.runInNewContext(`(${block})()`, { window, document });
@@ -167,11 +122,8 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
   });
   return {
     host, document, window, elements, instances, states, results, popWords, advance, spoken,
-    get users() { return users; },
-    get local() { return localInstances[0]; },
     get starts() { return starts; }, get aborts() { return aborts; },
     get pendingTimers() { return timers.size; },
-    get summaryCancels() { return summaryCancels; },
     get latest() { return instances.at(-1); },
     get status() { return elements['speech-status']; },
     get panel() { return elements['speech-panel']; },
@@ -938,7 +890,7 @@ function enablePhraseHints(f) {
   f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat', 'SUN', 'cat', 'bad phrase', null] }));
 }
 
-test('Solo supplies bounded game vocabulary when contextual phrases are supported', () => {
+test('Voice Pop supplies bounded game vocabulary when contextual phrases are supported', () => {
   const f = fixture();
   enablePhraseHints(f);
   f.listen('pop');
@@ -951,7 +903,7 @@ test('Solo supplies bounded game vocabulary when contextual phrases are supporte
   assert.deepEqual(Array.from(f.latest.phrases, value => value.phrase), ['pear'], 'A new lesson replaces old hints');
 });
 
-test('browsers without contextual phrases retain normal Solo recognition', () => {
+test('browsers without contextual phrases retain normal Voice Pop recognition', () => {
   const f = fixture({ api: 'prefixed' });
   f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat'] }));
   f.listen('pop');
@@ -1015,7 +967,7 @@ test('a synchronous NotSupportedError from biased start falls back and ordinary 
   assert.equal(Object.hasOwn(match.latest, 'phrases'), false);
 });
 
-test('homophone revisions cannot replay an already consumed Solo target', () => {
+test('homophone revisions cannot replay an already consumed Voice Pop target', () => {
   const f = fixture();
   f.listen('pop');
   f.host.popStatus(JSON.stringify({ phase: 'running', targets: [
@@ -1033,7 +985,7 @@ test('homophone revisions cannot replay an already consumed Solo target', () => 
   assert.deepEqual(f.popWords, ['sun', 'son'], 'A genuinely new result can score a new throw');
 });
 
-test('an empty final Solo hypothesis supplies one unclear-speech notification without restarting', () => {
+test('an empty final Voice Pop hypothesis supplies one unclear-speech notification without restarting', () => {
   const f = fixture();
   f.listen('pop');
   const states = f.states.length;
@@ -1047,338 +999,21 @@ test('an empty final Solo hypothesis supplies one unclear-speech notification wi
   assert.equal(f.starts, 1);
 });
 
-test('non-scoring multiplayer feedback preserves raw text without changing microphone state', () => {
-  const f = fixture({ multiplayer: true, localAutoStart: false });
-  const events = [];
-  f.host.observePopEvent(value => events.push(JSON.parse(value)));
-  f.local.publish({ status: 'ready' });
-  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['sun', 'cat'] }));
-  f.host.speechMode(true, 'pop', 'multi', 'feedback');
-  const session = f.local.startCalls[0];
-  assert.deepEqual(Array.from(session.vocabulary), ['sun', 'cat']);
-  const feedback = { type: 'feedback', sessionId: 'feedback', eventId: 'f-1', text: 'sun', reason: 'identity_unconfirmed' };
-  session.onFeedback(feedback);
-  assert.equal(events.length, 0, 'No feedback before permission and listening');
-  session.onStarted();
-  const stateCount = f.states.length;
-  session.onFeedback(feedback);
-  assert.deepEqual(events, [feedback]);
-  assert.equal(f.transcript.textContent, 'sun');
-  assert.equal(f.states.length, stateCount);
-  assert.deepEqual(f.popWords, []);
-  assert.deepEqual(f.results, [], 'Feedback is displayed through its dedicated path, not a scoring callback');
-  f.host.stopSpeech();
-  session.onFeedback({ ...feedback, eventId: 'late' });
-  assert.equal(events.length, 1);
-});
-
-test('multiplayer preparation publishes independent JSON state while solo recognition continues unchanged', () => {
-  const f = fixture({ multiplayer: true });
-  const preparations = [];
-  f.host.observeMultiplayerState(value => {
-    assert.equal(typeof value, 'string', 'Preparation is a single JSON bridge argument');
-    preparations.push(JSON.parse(value));
-  });
-  f.listen('pop');
-  const stateCount = f.states.length;
-  const recognizer = f.latest;
-  f.host.prepareMultiplayer();
-  f.local.publish({ status: 'downloading', loaded: 42, total: 100, progress: 0.42 });
-  f.local.publish({ status: 'initializing', loaded: 100, progress: 1 });
-  f.local.publish({ status: 'ready' });
-  assert.equal(f.local.prepareCalls, 1);
-  assert.deepEqual(preparations.map(state => state.status), ['idle', 'downloading', 'downloading', 'initializing', 'ready']);
-  assert.equal(preparations[2].progress, 0.42);
-  assert.equal(JSON.parse(f.host.multiplayerState()).status, 'ready');
-  assert.equal(f.states.length, stateCount, 'Model progress never impersonates microphone state or pauses the game');
-  assert.equal(f.starts, 1);
-  assert.equal(f.aborts, 0);
-  assert.equal(f.local.startCalls.length, 0, 'Ready does not switch modes automatically');
-  recognizer.result([['cat', true]]);
-  assert.deepEqual(f.popWords, ['cat']);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-});
-
-test('failed or unavailable local preparation stays separate from the current solo round', () => {
-  const f = fixture({ multiplayer: true });
-  f.listen('pop');
-  const before = f.states.length;
-  for (const status of ['error', 'unsupported']) f.local.publish({ status, message: 'Local preparation failed' });
-  assert.equal(f.states.length, before);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-  f.latest.result([['dog', true]]);
-  assert.deepEqual(f.popWords, ['dog']);
-  const unavailable = fixture();
-  let state;
-  unavailable.host.observeMultiplayerState(value => { state = JSON.parse(value); });
-  unavailable.host.prepareMultiplayer();
-  assert.equal(state.status, 'unsupported');
-  assert.equal(JSON.parse(unavailable.host.multiplayerState()).status, 'unsupported');
-});
-
-test('local multiplayer waits for actual microphone start and works without browser speech or a network', () => {
-  const f = fixture({ multiplayer: true, api: 'missing', online: false, localAutoStart: false });
-  const events = [];
-  f.host.observePopEvent(value => events.push(JSON.parse(value)));
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'session-1', 2345);
-  assert.equal(f.starts, 0);
-  assert.equal(f.local.startCalls.length, 1);
-  const session = f.local.startCalls[0];
-  assert.equal(session.sessionId, 'session-1');
-  assert.equal(session.elapsedMs, 2345);
-  assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
-  assert.equal(f.aura.attributes['data-listening'], 'false');
-  session.onEvent({ type: 'utterance', text: 'too soon', sessionId: 'session-1' });
-  assert.deepEqual(events, [], 'Permission-pending audio cannot score or start the timer');
-  session.onStarted();
-  assert.deepEqual(f.states.at(-1).slice(0, 2), [true, true]);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-  const utterance = { type: 'utterance', sessionId: 'session-1', event_id: 'word-1', text: 'cat',
-    start_ms: 2400, end_ms: 2800, embedding: [0.1, -0.9] };
-  session.onEvent(utterance);
-  assert.deepEqual(events, [utterance]);
-  assert.deepEqual(f.results, [], 'Native event validation is the only multiplayer transcript presentation path');
-  assert.deepEqual(f.popWords, [], 'The single-player lexical scorer never receives multiplayer events');
-  assert.match(f.notice.textContent, /profiles stay in this browser/i);
-});
-
-test('switching recognition backends releases the old one and fences all old session callbacks', () => {
-  const f = fixture({ multiplayer: true });
-  const events = [];
-  f.host.observePopEvent(value => events.push(JSON.parse(value)));
-  f.listen('pop');
-  const solo = f.latest;
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'multi-a');
-  assert.equal(f.aborts, 1);
-  assert.equal(f.local.startCalls.length, 1);
-  const old = f.local.startCalls[0];
-  solo.callbacks.start();
-  solo.result([['old solo word', true]]);
-  assert.deepEqual(f.popWords, []);
-  old.onEvent({ type: 'utterance', sessionId: 'multi-a', text: 'cat' });
-  assert.equal(events.length, 1);
-  f.host.speechMode(true, 'pop', 'multi', 'multi-a');
-  assert.equal(f.local.startCalls.length, 1, 'Repeated activation never opens a duplicate microphone');
-  f.host.stopSpeech();
-  f.host.speechMode(true, 'pop', 'multi', 'multi-b');
-  const current = f.local.startCalls[1];
-  const stateCount = f.states.length;
-  old.onStarted();
-  old.onEvent({ type: 'utterance', sessionId: 'multi-a', text: 'late cat' });
-  old.onFlushed({ type: 'flushed', sessionId: 'multi-a' });
-  old.onError(new Error('Late old error'));
-  assert.equal(f.states.length, stateCount, 'Old callbacks cannot affect the replacement round');
-  assert.equal(events.length, 1);
-  current.onEvent({ type: 'utterance', sessionId: 'multi-b', text: 'dog' });
-  assert.equal(events.length, 2);
-  f.host.speechMode(true, 'pop', 'single');
-  f.advance();
-  assert.equal(f.starts, 2);
-  current.onEvent({ type: 'utterance', sessionId: 'multi-b', text: 'late dog' });
-  assert.equal(events.length, 2);
-  f.latest.result([['sun', true]]);
-  assert.deepEqual(f.popWords, ['sun']);
-  assert.match(f.notice.textContent, /remotely/i);
-});
-
-test('offline events stop solo but keep a ready local multiplayer microphone and round active', () => {
-  const f = fixture({ multiplayer: true });
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'offline-local');
-  const before = f.states.length, stops = f.local.stopCalls;
-  f.window.navigator.onLine = false;
-  f.window.dispatch('offline');
-  assert.equal(f.states.length, before);
-  assert.equal(f.local.stopCalls, stops);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-  f.host.speechMode(true, 'pop', 'single');
-  assert.match(f.states.at(-1)[2], /offline/i);
-  assert.equal(f.aura.attributes['data-listening'], 'false');
-});
-
-test('flush completion is bridged only for the active multiplayer session', async () => {
-  const f = fixture({ multiplayer: true });
-  const events = [];
-  f.host.observePopEvent(value => events.push(JSON.parse(value)));
-  f.host.flushMultiplayer();
-  assert.equal(f.local.flushCalls, 0);
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'settling');
-  const session = f.local.startCalls[0];
-  f.host.flushMultiplayer();
-  assert.equal(f.local.flushCalls, 1);
-  session.onEvent({ type: 'utterance', text: 'cat', sessionId: 'settling' });
-  session.onFlushed({ type: 'flushed', sessionId: 'settling' });
-  assert.deepEqual(events.map(event => event.type), ['utterance', 'flushed']);
-  f.host.stopSpeech();
-  session.onFlushed({ type: 'flushed', sessionId: 'settling' });
-  assert.equal(events.length, 2);
-  f.host.flushMultiplayer();
-  assert.equal(f.local.flushCalls, 1);
-  await Promise.resolve();
-});
-
-test('an old flush rejection cannot pause a new multiplayer round', async () => {
-  const f = fixture({ multiplayer: true });
-  f.local.publish({ status: 'ready' });
-  let rejectOld;
-  f.local.flushPromise = new Promise((_resolve, reject) => { rejectOld = reject; });
-  f.host.speechMode(true, 'pop', 'multi', 'old');
-  f.host.flushMultiplayer();
-  f.host.stopSpeech();
-  f.host.speechMode(true, 'pop', 'multi', 'current');
-  const before = f.states.length, stops = f.local.stopCalls;
-  rejectOld(new Error('Old flush timed out'));
-  await Promise.resolve();
-  await Promise.resolve();
-  assert.equal(f.states.length, before);
-  assert.equal(f.local.stopCalls, stops);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-});
-
-test('local permission failure and runtime failure show recovery without restarting browser speech', async () => {
-  const f = fixture({ multiplayer: true });
-  f.local.publish({ status: 'ready' });
-  f.local.startError = Object.assign(new Error('Denied'), { name: 'NotAllowedError' });
-  f.host.speechMode(true, 'pop', 'multi', 'denied');
-  await Promise.resolve();
-  await Promise.resolve();
-  assert.equal(f.starts, 0);
-  assert.equal(f.aura.attributes['data-listening'], 'false');
-  assert.match(f.states.at(-1)[2], /permission.*retry/i);
-  f.local.startError = null;
-  f.host.stopSpeech();
-  f.host.speechMode(true, 'pop', 'multi', 'retry');
-  f.local.startCalls.at(-1).onError(new Error('Local model worker failed. Tap Retry.'));
-  assert.equal(f.aura.attributes['data-listening'], 'false');
-  assert.match(f.states.at(-1)[2], /local model worker failed.*retry/i);
-  assert.equal(f.starts, 0);
-  assert.equal(f.local.prepareCalls, 0, 'Microphone faults do not silently restart model preparation');
-});
-
-test('background return verifies ready models but requires a new gesture to reopen the microphone', () => {
-  const f = fixture({ multiplayer: true, localAutoStart: false });
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'pending');
-  const old = f.local.startCalls[0];
-  f.document.hidden = true;
-  f.document.dispatch('visibilitychange');
-  old.onStarted();
-  old.onEvent({ type: 'utterance', sessionId: 'pending', text: 'cat' });
-  assert.equal(f.aura.attributes['data-listening'], 'false');
-  f.document.hidden = false;
-  f.document.dispatch('visibilitychange');
-  assert.equal(f.local.verifyCalls, 1);
-  assert.equal(f.local.startCalls.length, 1);
-  assert.deepEqual(f.states.at(-1), [false, false, '']);
-  assert.deepEqual(f.results, []);
-});
-
-test('failed local microphone shutdown prevents switching to browser recognition', () => {
-  const f = fixture({ multiplayer: true });
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'active');
-  f.local.stopFails = true;
-  assert.equal(f.host.stopSpeech(), false);
-  f.host.speechMode(true, 'pop', 'single');
-  assert.equal(f.starts, 0);
-  assert.equal(f.panel.hidden, false);
-  assert.equal(f.panel.attributes['data-pop-stop-failed'], 'true');
-  assert.match(f.status.textContent, /close this tab/i);
-  f.local.stopFails = false;
-  assert.equal(f.host.stopSpeech(), true);
-});
-
-test('multiplayer refuses absent, empty, unreadable and incompatible voice libraries', () => {
-  for (const options of [
-    { profiles: null }, { profiles: [] }, { profileError: 'Saved voice profiles could not be read.' },
-    { profiles: [{ id: 'old', modelVersion: 'retired-model' }] }
-  ]) {
-    const f = fixture({ multiplayer: true, ...options });
-    f.local.publish({ status: 'ready' });
-    f.host.speechMode(true, 'pop', 'multi', 'no-library');
-    assert.equal(f.local.startCalls.length, 0, 'No local capture starts without a compatible profile');
-    assert.match(f.states.at(-1)[2], /voice user|voice profile/i);
-    f.host.speechMode(true, 'pop', 'single');
-    assert.equal(f.starts, 1, 'Solo is still usable');
+test('Voice Pop uses system recognition without loading local models or voice profiles', () => {
+  assert.doesNotMatch(shell, /(?:src|href)="(?:multiplayer|voice-profiles)[^"]*"/);
+  for (const api of ['standard', 'prefixed']) {
+    const f = fixture({ api });
+    assert.deepEqual(Object.keys(f.host).sort(), ['observePopSpeech', 'observeSpeech', 'popStatus',
+      'speechAvailable', 'speechBounds', 'speechMode', 'stopSpeech']);
+    f.listen('pop');
+    assert.equal(f.starts, 1);
+    assert.equal(f.latest.lang, 'en-US');
+    assert.equal(f.states.at(-1)[1], true);
+    f.latest.result([['cat', true]]);
+    assert.deepEqual(f.popWords, ['cat']);
+    assert.match(f.notice.textContent, /remotely/i);
+    f.host.stopSpeech();
+    assert.equal(f.aborts, 1);
+    assert.equal(f.aura.attributes['data-listening'], 'false');
   }
-});
-
-test('opening Users stops speech, rejects stale words and prevents game capture until closed', async () => {
-  const f = fixture({ multiplayer: true });
-  f.listen('pop');
-  const old = f.latest.callbacks;
-  const observed = [];
-  f.host.observeVoiceProfiles(value => observed.push(JSON.parse(value)));
-  assert.equal(f.host.openVoiceProfiles(), true);
-  await new Promise(setImmediate);
-  assert.equal(f.aborts, 1);
-  assert.equal(observed.at(-1).open, true);
-  old.result(speechEvent([['cat', true]]));
-  f.host.speechMode(true, 'pop', 'single');
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'blocked');
-  assert.equal(f.starts, 1);
-  assert.equal(f.local.startCalls.length, 0);
-  assert.deepEqual(f.popWords, []);
-  f.users.close();
-  assert.equal(observed.at(-1).open, false);
-  assert.equal(f.starts, 1, 'Closing Users never resumes a microphone automatically');
-  f.listen('pop');
-  assert.equal(f.starts, 2);
-});
-
-test('failed microphone release blocks Users and library updates exclude older models', async () => {
-  const profiles = [{ id: 'old', modelVersion: 'retired' }, { id: 'current', name: 'Mia', modelVersion: SPEAKER_MODEL_VERSION }];
-  const f = fixture({ multiplayer: true, profiles });
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'active');
-  f.local.stopFails = true;
-  assert.equal(f.host.openVoiceProfiles(), false);
-  assert.equal(f.users.opened, false);
-  const observed = [];
-  f.host.observeVoiceProfiles(value => observed.push(JSON.parse(value)));
-  assert.deepEqual(observed.at(-1).profiles.map(profile => profile.id), ['current']);
-  profiles[1].name = 'Edited in another tab';
-  f.window.dispatch('storage');
-  assert.equal(observed.at(-1).profiles[0].name, 'Edited in another tab');
-  f.local.stopFails = false;
-  assert.equal(f.host.openVoiceProfiles(), true);
-  await Promise.resolve();
-  assert.equal(f.users.opened, true);
-});
-
-test('a paused multiplayer round can resume its opening voice snapshot after the library is emptied', () => {
-  const f = fixture({ multiplayer: true, profiles: [] });
-  f.local.publish({ status: 'ready' });
-  f.host.speechMode(true, 'pop', 'multi', 'resume', 1200, true);
-  assert.equal(f.local.startCalls.length, 1);
-  assert.equal(f.aura.attributes['data-listening'], 'true');
-  f.host.stopSpeech();
-  f.host.speechMode(true, 'pop', 'multi', 'fresh', 0, false);
-  assert.equal(f.local.startCalls.length, 1, 'A new round still requires a saved compatible voice');
-});
-
-test('a late enrollment microphone release failure remains visible outside Users and stops browser speech', async () => {
-  const f = fixture({ multiplayer: true });
-  f.listen('pop');
-  const stale = f.latest.callbacks;
-  f.local.stopFails = true;
-  f.local.publish({ microphoneBlocked: true, microphoneMessage: 'Cannot stop microphone' });
-  await new Promise(setImmediate);
-  assert.equal(f.panel.hidden, false);
-  assert.equal(f.panel.attributes['data-pop-stop-failed'], 'true');
-  assert.equal(f.aborts, 1, 'Browser recognition is released even when local capture cannot stop');
-  assert.match(f.status.textContent, /could not be stopped/i);
-  stale.result(speechEvent([['cat', true]]));
-  assert.deepEqual(f.popWords, []);
-  f.host.speechMode(true, 'pop', 'single');
-  assert.equal(f.starts, 1);
-  f.local.stopFails = false;
-  f.local.publish({ microphoneBlocked: false, microphoneMessage: '' });
-  assert.equal(f.panel.hidden, true);
-  f.listen('pop');
-  assert.equal(f.starts, 2);
 });

@@ -5,18 +5,11 @@ var pieces: int = 0
 var fragment_index: int = -1
 var accent: Color = Color("#438363")
 var show_missing: bool = false
-var mystery_egg: bool = false
-var _wiggle: Tween
 
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	resized.connect(func() -> void:
-		stop_wiggle()
-		queue_redraw())
-	visibility_changed.connect(func() -> void:
-		if not is_visible_in_tree():
-			stop_wiggle())
+	resized.connect(queue_redraw)
 
 
 func configure(image: Texture2D, count: int, color: Color, fragment: int = -1) -> void:
@@ -27,54 +20,10 @@ func configure(image: Texture2D, count: int, color: Color, fragment: int = -1) -
 	queue_redraw()
 
 
-func wiggle(reduced_motion: bool) -> void:
-	stop_wiggle()
-	if reduced_motion or not is_visible_in_tree():
-		return
-	pivot_offset = size * 0.5
-	_wiggle = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_wiggle.tween_property(self, "rotation", -0.1, 0.08)
-	_wiggle.tween_property(self, "rotation", 0.075, 0.1)
-	_wiggle.tween_property(self, "rotation", 0.0, 0.12)
-
-
-func stop_wiggle() -> void:
-	if _wiggle == null:
-		return
-	_wiggle.kill()
-	_wiggle = null
-	rotation = 0.0
-	scale = Vector2.ONE
-
-
-func _draw_mystery(center: Vector2, radius: float) -> void:
-	var shell := PackedVector2Array()
-	for index in range(65):
-		var angle: float = TAU * index / 64.0
-		shell.append(center + Vector2(cos(angle) * radius * (0.76 + sin(angle) * 0.12), sin(angle) * radius))
-	draw_colored_polygon(shell, accent.lightened(0.88))
-	draw_polyline(shell, accent.lightened(0.4), maxf(1, radius * 0.04), true)
-	for side in [-1, 1]:
-		var eye: Vector2 = center + Vector2(side * radius * 0.23, -radius * 0.12)
-		draw_circle(eye, radius * 0.12, Color.WHITE)
-		draw_circle(eye + Vector2(radius * 0.025, radius * 0.015), radius * 0.055, Color("#35415e"))
-	draw_colored_polygon(PackedVector2Array([
-		center + Vector2(-radius * 0.14, radius * 0.07),
-		center + Vector2(0, radius * 0.01),
-		center + Vector2(radius * 0.14, radius * 0.07),
-		center + Vector2(0, radius * 0.15)
-	]), Color("#eda54a"))
-	for point in [Vector2(-0.32, 0.5), Vector2(0.3, 0.65), Vector2(0.1, -0.64)]:
-		draw_circle(center + point * radius, radius * 0.065, accent.lightened(0.65))
-
-
 func _draw() -> void:
 	var center := size * 0.5
 	var radius := minf(size.x, size.y) * 0.46
 	if radius <= 0.0:
-		return
-	if mystery_egg and pieces == 0 and fragment_index < 0:
-		_draw_mystery(center, radius)
 		return
 	var image_rect := Rect2(center - Vector2.ONE * radius, Vector2.ONE * radius * 2.0)
 	if fragment_index < 0:

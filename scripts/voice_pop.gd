@@ -8,10 +8,6 @@ signal hear_requested(word: Dictionary)
 signal report_requested(text: String)
 signal pip_report_requested(text: String)
 signal status_changed(snapshot: Dictionary)
-signal play_mode_requested(mode: String)
-signal multiplayer_retry_requested
-signal settling_requested
-signal voice_profiles_requested
 
 const Style = preload("res://scripts/ui_style.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
@@ -24,7 +20,6 @@ const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const NEON := [CYAN, PINK, VIOLET]
-const PLAYER_COLORS := [CYAN, PINK, Color("#ffdc70"), VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
 	Color("#bfa3ff"), Color("#80e3bb"), Color("#ffb77d")
@@ -43,17 +38,8 @@ var prompt_label: Label
 var transcript_label: Label
 var report_button: Button
 var next_report_button: Button
-var play_mode: String = "single"
-var previous_round_summary: Dictionary = {}
-var multiplayer_state: Dictionary = {"status": "idle", "progress": 0.0}
-var mode_button: Button
-var solo_button: Button
-var multiplayer_button: Button
-var multiplayer_label: Label
 
 var _words: Array = []
-var _palette: Dictionary = {}
-var _seed: int = -1
 var _textures: Dictionary = {}
 var _enabled: bool = false
 var _listening: bool = false
@@ -64,10 +50,8 @@ var _stopped: bool = true
 var _pending: bool = false
 var _pending_left: float = 0.0
 var _reconnecting: bool = false
-var _clock: float = 0.0
 var _publish_key: String = ""
 var _geometry_publish_pending: bool = false
-var _last_target_ids: String = ""
 var _last_hit: String = ""
 var _last_hit_left: float = 0.0
 var _transcript: String = ""
@@ -102,24 +86,8 @@ var _report_kicker: Label
 var _report_actions: HBoxContainer
 var _stats: GridContainer
 var _result_actions: HBoxContainer
-var _ranking_grid: GridContainer
 var _review_grids: Array[GridContainer] = []
 var _review_buttons: Array[Button] = []
-var _mode_bar: Control
-var _mode_choices: HBoxContainer
-var _previous_summary_label: Label
-var _player_labels: Array[Label] = []
-var _player_avatars: Array[TextureRect] = []
-var _player_emoji: Array[Label] = []
-var _avatar_textures: Dictionary = {}
-var _last_hit_profile: Dictionary = {}
-var _last_hit_avatar: TextureRect
-var _last_hit_emoji: Label
-var _ready_prompt_seen: bool = false
-var _choice_tween: Tween
-var _header_height: float = 0.0
-var _settling_started: bool = false
-var _settling_tick_usec: int = -1
 
 
 func _ready() -> void:
@@ -159,12 +127,6 @@ func _build() -> void:
 	_live_caption = _label("LISTENING", 10, CYAN)
 	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, transcript_label, _live_caption]:
 		_hud.add_child(item)
-	_last_hit_avatar = _avatar_control()
-	_last_hit_avatar.name = "HitPlayerAvatar"
-	_hud.add_child(_last_hit_avatar)
-	_last_hit_emoji = _label("", 18)
-	_last_hit_emoji.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_hud.add_child(_last_hit_emoji)
 	_gate = ScrollContainer.new()
 	_gate.name = "MicrophoneGate"
 	_gate.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -186,7 +148,7 @@ func _build() -> void:
 	_gate_body.add_child(_gate_actions)
 	retry_button = _action("Start listening", true)
 	retry_button.name = "RetryListening"
-	retry_button.pressed.connect(_request_listening)
+	retry_button.pressed.connect(func() -> void: request_listening.emit())
 	_gate_back = _action("Back")
 	_gate_back.pressed.connect(_exit)
 	_gate_actions.add_child(retry_button)
@@ -208,7 +170,6 @@ func _build() -> void:
 	_gate.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _queue_geometry_publish())
 	for container in [_gate, _gate_body, _results, _result_body]:
 		container.resized.connect(_queue_geometry_publish)
-	_build_mode_bar()
 	_gate.visibility_changed.connect(_queue_geometry_publish)
 	_results.visibility_changed.connect(_queue_geometry_publish)
 	resized.connect(_layout)
@@ -216,218 +177,10 @@ func _build() -> void:
 	_layout()
 
 
-func _build_mode_bar() -> void:
-	_mode_bar = Control.new()
-	_mode_bar.name = "MultiplayerStatus"
-	_mode_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_mode_bar)
-	multiplayer_label = _label("Solo · Preparing multiplayer…", 11, SOFT)
-	multiplayer_label.name = "MultiplayerReadiness"
-	multiplayer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	multiplayer_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	multiplayer_label.max_lines_visible = 2
-	_mode_bar.add_child(multiplayer_label)
-	mode_button = _action("Mode")
-	mode_button.name = "ChoosePopMode"
-	mode_button.pressed.connect(_toggle_mode_choices)
-	_mode_bar.add_child(mode_button)
-	_mode_choices = HBoxContainer.new()
-	_mode_choices.name = "MultiplayerChoices"
-	_mode_choices.clip_contents = true
-	_mode_bar.add_child(_mode_choices)
-	solo_button = _action("Continue solo")
-	solo_button.name = "ContinueSolo"
-	solo_button.pressed.connect(_choose_solo)
-	multiplayer_button = _action("Start multiplayer", true)
-	multiplayer_button.name = "StartMultiplayer"
-	multiplayer_button.pressed.connect(_choose_multiplayer)
-	_mode_choices.add_child(solo_button)
-	_mode_choices.add_child(multiplayer_button)
-	_mode_choices.hide()
-	_previous_summary_label = _label("", 10, SOFT)
-	_previous_summary_label.name = "PreviousRoundSummary"
-	_previous_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_previous_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_mode_bar.add_child(_previous_summary_label)
-	for index in range(PopModel.MAX_PLAYERS):
-		var avatar: TextureRect = _avatar_control()
-		avatar.name = "Player%dAvatar" % (index + 1)
-		_hud.add_child(avatar)
-		_player_avatars.append(avatar)
-		var emoji: Label = _label("", 20)
-		emoji.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_hud.add_child(emoji)
-		_player_emoji.append(emoji)
-		var player: Label = _label("—", 13, PLAYER_COLORS[index % PLAYER_COLORS.size()])
-		player.name = "Player%dHits" % (index + 1)
-		_hud.add_child(player)
-		_player_labels.append(player)
-	_update_multiplayer_ui()
-
-
-func set_voice_profiles(profiles: Array) -> bool:
-	if not game.set_voice_profiles(profiles):
-		return false
-	_build()
-	_update_multiplayer_ui()
-	_update_profile_gate()
-	_layout()
-	_publish(true)
-	return true
-
-
-func voice_profile_count() -> int:
-	return game.voice_profile_count()
-
-
-func _missing_voice_profiles() -> bool:
-	return play_mode == "multi" and game.phase in ["ready", "finished"] and game.voice_profile_count() == 0
-
-
-func _update_profile_gate() -> void:
-	if _missing_voice_profiles() and game.phase == "ready":
-		_message = "Add a voice player in More to play multiplayer."
-		_gate_title.text = "Meet the players"
-		_gate_copy.text = _message
-		_gate_note.text = "Choose an emoji, add a name, and record a voice."
-		retry_button.text = "Add voice player"
-		retry_button.disabled = false
-	elif game.phase == "ready" and retry_button.text == "Add voice player":
-		_message = "Your voice players are ready. Start listening to play."
-		_gate_title.text = "Ready to pop?"
-		_gate_copy.text = _message
-		_gate_note.text = "Your 30 seconds start when Pip can hear you."
-		retry_button.text = "Start listening"
-		retry_button.disabled = _words.is_empty()
-
-
-func _request_listening() -> void:
-	if _missing_voice_profiles():
-		voice_profiles_requested.emit()
-		return
-	request_listening.emit()
-
-
-func set_multiplayer_state(state: Dictionary) -> void:
-	_build()
-	var previous_status: String = str(multiplayer_state.get("status", "idle"))
-	multiplayer_state = state.duplicate(true)
-	var ready: bool = str(state.get("status", "idle")) == "ready"
-	if ready and previous_status != "ready" and not _ready_prompt_seen and play_mode == "single":
-		_ready_prompt_seen = true
-		_show_mode_choices(true)
-	elif not ready and play_mode == "single":
-		_show_mode_choices(false)
-	if ready and play_mode == "multi" and game.phase in ["ready", "paused"] and not _listening and not _pending:
-		_message = "Multiplayer is ready. Tap Retry listening to continue."
-		_gate_copy.text = _message
-		retry_button.text = "Retry listening"
-		retry_button.disabled = _words.is_empty()
-	_update_multiplayer_ui()
-	_update_profile_gate()
-	_layout()
-	_publish(true)
-
-
-func set_play_mode(mode: String) -> bool:
-	if mode not in ["single", "multi"] or not game.set_play_mode(mode):
-		return false
-	play_mode = mode
-	_show_mode_choices(false)
-	_update_multiplayer_ui()
-	_update_profile_gate()
-	_layout()
-	_publish(true)
-	return true
-
-
-func remember_previous_round(summary: Dictionary) -> void:
-	previous_round_summary = summary.duplicate(true)
-	_update_multiplayer_ui()
-	_layout()
-
-
-func _update_multiplayer_ui() -> void:
-	if multiplayer_label == null:
-		return
-	var status: String = str(multiplayer_state.get("status", "idle"))
-	var prefix: String = "Multiplayer" if play_mode == "multi" else "Solo"
-	var detail: String = "Preparing multiplayer…"
-	match status:
-		"downloading":
-			var loaded: float = float(multiplayer_state.get("loaded", 0.0))
-			var total: float = float(multiplayer_state.get("total", 0.0))
-			detail = "Preparing multiplayer %d%%" % clampi(floori(100.0 * loaded / total), 0, 100) if total > 0.0 else "Downloading multiplayer…"
-		"initializing": detail = "Starting multiplayer…"
-		"ready": detail = "On device" if play_mode == "multi" else "Multiplayer ready"
-		"error": detail = "Multiplayer failed"
-		"unsupported": detail = "Multiplayer not supported"
-	multiplayer_label.text = prefix + " · " + detail
-	multiplayer_label.tooltip_text = str(multiplayer_state.get("message", multiplayer_label.text))
-	mode_button.visible = status in ["ready", "error"] or play_mode == "multi"
-	mode_button.text = "Retry" if status == "error" and play_mode == "single" else "Mode"
-	mode_button.tooltip_text = "Retry preparing multiplayer" if mode_button.text == "Retry" else "Choose solo or multiplayer"
-	solo_button.text = "Start solo" if play_mode == "multi" else "Continue solo"
-	multiplayer_button.text = "Add voice player" if game.voice_profile_count() == 0 and game.phase != "paused" else "Continue multiplayer" if play_mode == "multi" else "Start multiplayer"
-	multiplayer_button.disabled = status != "ready"
-	_previous_summary_label.visible = not previous_round_summary.is_empty()
-	if not previous_round_summary.is_empty():
-		var last_mode: String = "multiplayer" if str(previous_round_summary.get("play_mode", "single")) == "multi" else "solo"
-		_previous_summary_label.text = "Previous %s: %d hits · %d points" % [last_mode, int(previous_round_summary.get("hits", 0)), int(previous_round_summary.get("score", 0))]
-	_gate_privacy.text = "Saved voices stay on this device. Round audio is not stored." if play_mode == "multi" else "Browser speech may process audio remotely. Game stores no voice or transcripts."
-
-
-func _toggle_mode_choices() -> void:
-	if str(multiplayer_state.get("status", "idle")) == "error" and play_mode == "single":
-		multiplayer_retry_requested.emit()
-		return
-	_show_mode_choices(not _mode_choices.visible)
-
-
-func _show_mode_choices(value: bool) -> void:
-	if _mode_choices == null:
-		return
-	if _choice_tween != null:
-		_choice_tween.kill()
-	_mode_choices.visible = value
-	_mode_choices.modulate.a = 1.0
-	_layout()
-	if value and not reduced_motion and is_inside_tree():
-		var destination: Vector2 = _mode_choices.position
-		_mode_choices.position.y -= 10.0 / Style.ui_scale(self)
-		_mode_choices.modulate.a = 0.0
-		_choice_tween = create_tween().set_parallel(true)
-		_choice_tween.tween_property(_mode_choices, "position", destination, 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		_choice_tween.tween_property(_mode_choices, "modulate:a", 1.0, 0.2)
-	_publish(true)
-
-
-func _choose_solo() -> void:
-	_show_mode_choices(false)
-	if play_mode != "single":
-		play_mode_requested.emit("single")
-
-
-func _choose_multiplayer() -> void:
-	if str(multiplayer_state.get("status", "idle")) != "ready":
-		return
-	if game.voice_profile_count() == 0 and (play_mode != "multi" or game.phase in ["ready", "finished"]):
-		voice_profiles_requested.emit()
-		return
-	_show_mode_choices(false)
-	if play_mode != "multi":
-		play_mode_requested.emit("multi")
-
-
-func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, seed_value: int = -1) -> void:
+func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1) -> void:
 	_build()
 	_words = words.duplicate(true)
-	_palette = palette.duplicate()
-	_seed = seed_value
 	game.configure(_words, seed_value)
-	game.set_play_mode(play_mode)
-	_settling_started = false
-	_settling_tick_usec = -1
 	_enabled = false
 	_listening = false
 	_listening_tick_usec = -1
@@ -436,11 +189,8 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	_pending = false
 	_reconnecting = false
 	_publish_key = ""
-	_last_target_ids = ""
 	_last_hit = ""
 	_last_hit_left = 0.0
-	_last_hit_profile.clear()
-	_avatar_textures.clear()
 	_clear_transcript()
 	set_report_speaking(false)
 	_report_step = 0
@@ -459,8 +209,6 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 	_hud.hide()
 	_gate.scroll_vertical = 0
 	set_reduced_motion(motion_reduced)
-	_update_multiplayer_ui()
-	_update_profile_gate()
 	set_process(is_visible_in_tree())
 	_layout()
 	_publish(true)
@@ -468,30 +216,12 @@ func configure(words: Array, palette: Dictionary, motion_reduced: bool = false, 
 
 func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_build()
-	if _missing_voice_profiles() and game.phase == "ready":
-		_enabled = enabled
-		_listening = false
-		_listening_tick_usec = -1
-		_pending = false
-		_gate.show()
-		_hud.hide()
-		_update_profile_gate()
-		_layout()
-		_publish(true)
-		return
 	var was_running: bool = _listening and game.phase == "running"
 	if was_running and not listening:
 		_sync_game_clock()
 	_enabled = enabled
 	_listening = listening
 	_message = message
-	if game.phase == "settling":
-		# A flush closes the microphone while queued utterances still arrive.
-		# Readiness/listening callbacks must not turn the final drain into a new gate.
-		_listening_tick_usec = -1
-		_message = "Finishing the last words…"
-		_publish(true)
-		return
 	if _finished_sent:
 		_listening = false
 		_listening_tick_usec = -1
@@ -566,7 +296,7 @@ func _update_transcript_window() -> void:
 
 
 func receive_transcript(text: String) -> void:
-	if play_mode != "single" or not _listening or game.phase != "running" or not is_visible_in_tree():
+	if not _listening or game.phase != "running" or not is_visible_in_tree():
 		return
 	_sync_game_clock()
 	if game.phase != "running":
@@ -580,35 +310,9 @@ func receive_transcript(text: String) -> void:
 	_present_hits(struck)
 
 
-func receive_speech_event(event: Dictionary) -> void:
-	if play_mode != "multi" or game.phase not in ["running", "settling"] or not is_visible_in_tree():
-		return
-	_sync_game_clock()
-	_refresh_targets()
-	var before: int = game.recognition_revision
-	var struck: Array = game.hit_speech_event(event)
-	if game.recognition_revision == before:
-		return
-	if game.phase == "running":
-		show_transcript(str(event.get("text", "")), true)
-	_present_hits(struck)
-
-
-func receive_speech_feedback(event: Dictionary) -> void:
-	if play_mode != "multi" or game.phase not in ["running", "settling"] or not is_visible_in_tree():
-		return
-	_sync_game_clock()
-	if not game.accept_speech_feedback(event):
-		return
-	if game.phase == "running":
-		show_transcript(str(event.text), true)
-	_present_hits([])
-
-
 func _present_hits(struck: Array) -> void:
 	if struck.is_empty() and not game.recognition_feedback.is_empty():
 		_last_hit_left = 0.0
-		_last_hit_profile.clear()
 	for target in struck:
 		var visual: Dictionary = {}
 		for item in _draw_targets:
@@ -616,12 +320,10 @@ func _present_hits(struck: Array) -> void:
 				visual = item
 		if not visual.is_empty():
 			_bursts.append({"center": visual.center, "radius": float(visual.size.x) * 0.48,
-				"age": 0.0, "color": PLAYER_COLORS[int(target.get("player_index", 0)) % PLAYER_COLORS.size()] if play_mode == "multi" else _card_color(int(target.uid)),
-				"points": int(target.get("points", 100)), "player_id": str(target.get("player_id", "")),
-				"emoji": str(target.get("player_emoji", "")), "avatar_png": str(target.get("player_avatar_png", ""))})
-		_last_hit_profile = {"name": target.get("player_name", ""), "emoji": target.get("player_emoji", ""), "avatar_png": target.get("player_avatar_png", "")}
-		_last_hit = "%s +1 HIT" % str(target.get("player_name", "")).left(18) if play_mode == "multi" else "+%d" % int(target.get("points", 100))
-		if play_mode == "single" and int(target.get("combo", 0)) > 1:
+				"age": 0.0, "color": _card_color(int(target.uid)),
+				"points": int(target.get("points", 100))})
+		_last_hit = "+%d" % int(target.get("points", 100))
+		if int(target.get("combo", 0)) > 1:
 			_last_hit += "  ·  %d× COMBO" % int(target.combo)
 		_last_hit_left = 1.15
 		hit.emit(target.word)
@@ -632,9 +334,6 @@ func _present_hits(struck: Array) -> void:
 
 
 func pause() -> void:
-	if game.phase == "settling":
-		complete_settling()
-		return
 	if _finished_sent:
 		_listening_tick_usec = -1
 		return
@@ -646,8 +345,6 @@ func pause() -> void:
 	_clear_transcript()
 	_pending = false
 	_reconnecting = false
-	_settling_started = false
-	_settling_tick_usec = -1
 	if game.phase == "running":
 		game.pause()
 	_message = "Listening paused. Tap Retry to keep popping."
@@ -673,8 +370,6 @@ func stop() -> void:
 	_stopped = true
 	_pending = false
 	_reconnecting = false
-	_settling_started = false
-	_settling_tick_usec = -1
 	_message = ""
 	game.stop()
 	_bursts.clear()
@@ -688,11 +383,6 @@ func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if value:
 		_bursts.clear()
-		if _choice_tween != null:
-			_choice_tween.kill()
-		if _mode_choices != null:
-			_mode_choices.modulate.a = 1.0
-			_layout()
 	if pip != null and is_instance_valid(pip):
 		pip.set_reduced_motion(value)
 	_refresh_targets()
@@ -703,12 +393,6 @@ func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	if not is_visible_in_tree():
 		return result
-	if mode_button.visible:
-		result.append(mode_button)
-	if _mode_choices.visible:
-		result.append(solo_button)
-		if not multiplayer_button.disabled:
-			result.append(multiplayer_button)
 	if _gate != null and _gate.visible:
 		if not retry_button.disabled:
 			result.append(retry_button)
@@ -746,7 +430,7 @@ func snapshot() -> Dictionary:
 		candidates.push_front(retry_button)
 	for control in candidates:
 		var rect: Rect2 = control.get_global_rect()
-		var visible_rect: Rect2 = _mode_bar.get_global_rect() if _mode_bar.is_ancestor_of(control) else _gate.get_global_rect() if _gate.visible else _results.get_global_rect()
+		var visible_rect: Rect2 = _gate.get_global_rect() if _gate.visible else _results.get_global_rect()
 		# Fractional viewport scaling can put an aligned right edge a few floating
 		# point units outside its parent; keep fully visible controls discoverable.
 		if not visible_rect.grow(0.01).encloses(rect):
@@ -755,11 +439,8 @@ func snapshot() -> Dictionary:
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
-		"play_mode": play_mode, "round_id": game.round_id, "players": game.players_snapshot(), "ranking": game.ranking(),
-		"voice_profile_count": game.voice_profile_count(), "vocabulary": game.vocabulary(),
+		"vocabulary": game.vocabulary(),
 		"recognition_feedback": game.recognition_feedback, "recognition_message": game.recognition_message,
-		"multiplayer": multiplayer_state.duplicate(true), "mode_choices_visible": _mode_choices.visible,
-		"previous_round": previous_round_summary.duplicate(true),
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
 		"transcript": _transcript, "transcript_final": _transcript_final,
@@ -802,8 +483,6 @@ func _process(delta: float) -> void:
 	if not is_visible_in_tree():
 		_listening_tick_usec = -1
 		return
-	if not reduced_motion:
-		_clock += delta
 	if _pending:
 		_pending_left = maxf(0.0, _pending_left - delta)
 		if _pending_left <= 0.0:
@@ -821,14 +500,6 @@ func _process(delta: float) -> void:
 
 
 func _sync_game_clock() -> void:
-	if game.phase == "settling":
-		var settling_now: int = Time.get_ticks_usec()
-		if _settling_tick_usec >= 0:
-			game.finish_settling(maxf(0.0, float(settling_now - _settling_tick_usec) / 1000000.0))
-		_settling_tick_usec = settling_now
-		if game.phase == "finished" and not _finished_sent:
-			_finish()
-		return
 	if not _listening or game.phase != "running":
 		_listening_tick_usec = -1
 		return
@@ -844,18 +515,9 @@ func _sync_game_clock() -> void:
 func _advance_game(elapsed_seconds: float) -> void:
 	# Keep simulation directly tickable in scene tests. Production supplies real
 	# monotonic time because Godot can clamp frame delta under slow Web rendering.
-	if game.phase == "settling":
-		game.finish_settling(elapsed_seconds)
-	elif _listening and game.phase == "running":
-		game.advance(elapsed_seconds)
-	else:
+	if not _listening or game.phase != "running":
 		return
-	if game.phase == "settling" and not _settling_started:
-		_settling_started = true
-		_settling_tick_usec = Time.get_ticks_usec()
-		_clear_transcript()
-		_message = "Finishing the last words…"
-		settling_requested.emit()
+	game.advance(elapsed_seconds)
 	if game.phase == "finished" and not _finished_sent:
 		_finish()
 	_refresh_targets()
@@ -864,17 +526,10 @@ func _advance_game(elapsed_seconds: float) -> void:
 	queue_redraw()
 
 
-func complete_settling() -> void:
-	if game.phase != "settling":
-		return
-	game.finish_settling(3.0)
-	_finish()
-
-
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		set_report_speaking(false)
-		if game.phase in ["running", "settling"]:
+		if game.phase == "running":
 			pause()
 		_listening_tick_usec = -1
 		set_process(false)
@@ -889,24 +544,6 @@ func _update_hud() -> void:
 	time_label.text = "%02d" % ceili(maxf(0.0, game.remaining))
 	time_label.add_theme_color_override("font_color", PINK if game.remaining <= 5.0 else WHITE)
 	score_label.text = str(game.score)
-	_mode_caption.text = "MULTIPLAYER" if play_mode == "multi" else "VOICE POP"
-	_score_caption.text = "TOTAL HITS" if play_mode == "multi" else "SCORE"
-	if play_mode == "multi":
-		score_label.text = str(game.hits)
-	var players: Array = game.players_snapshot()
-	for index in range(_player_labels.size()):
-		var joined: bool = play_mode == "multi" and index < players.size()
-		var player: Dictionary = players[index] if joined else {}
-		var texture: Texture2D = _avatar_texture(str(player.get("avatar_png", "")))
-		_player_labels[index].visible = play_mode == "multi"
-		_player_labels[index].text = str(player.hits) if joined else "—"
-		_player_labels[index].tooltip_text = "%s · %d hits" % [player.name, player.hits] if joined else "Waiting for a registered player"
-		_player_labels[index].set("accessibility_name", _player_labels[index].tooltip_text)
-		_player_avatars[index].texture = texture
-		_player_avatars[index].visible = joined and texture != null
-		_player_avatars[index].tooltip_text = str(player.get("name", ""))
-		_player_emoji[index].text = str(player.get("emoji", ""))
-		_player_emoji[index].visible = joined and texture == null
 	hits_label.text = "%d %s" % [game.hits, "hit" if game.hits == 1 else "hits"]
 	transcript_label.visible = not _transcript.is_empty()
 	prompt_label.visible = _transcript.is_empty()
@@ -917,10 +554,7 @@ func _update_hud() -> void:
 		_live_caption.text = game.recognition_message
 	if game.phase == "running" and game.targets.is_empty() and game.remaining < 3.0:
 		_live_caption.text = "NICE POPPING · ROUND ENDING"
-	if game.phase == "settling":
-		_live_caption.text = "FINISHING THE LAST WORDS…"
 	_live_caption.add_theme_color_override("font_color", PINK if _last_hit_left > 0.0 else CYAN)
-	_update_hit_avatar()
 
 
 func _layout() -> void:
@@ -932,51 +566,16 @@ func _layout() -> void:
 	var edge: float = 16.0 / scale
 	var width: float = maxf(0.0, size.x - edge * 2.0)
 	var short: bool = size.y * scale < 350.0
-	var compact_players: bool = play_mode == "multi" and short and width * scale >= 480.0
-	_previous_summary_label.visible = not previous_round_summary.is_empty() and not (short and _mode_choices.visible)
-	var choices_height: float = 40.0 / scale if _mode_choices.visible else 0.0
-	var previous_height: float = 24.0 / scale if _previous_summary_label.visible else 0.0
-	_header_height = 38.0 / scale + choices_height + previous_height
-	_mode_bar.position = Vector2(edge, 4.0 / scale)
-	_mode_bar.size = Vector2(width, _header_height - 4.0 / scale)
-	_style_action(mode_button)
-	mode_button.custom_minimum_size = Vector2(0, 30.0 / scale)
-	mode_button.add_theme_font_size_override("font_size", ceili(11.0 / scale))
-	var button_width: float = maxf(60.0 / scale, mode_button.get_combined_minimum_size().x) if mode_button.visible else 0.0
-	_place_label(multiplayer_label, Rect2(0, 0, width - button_width - 6.0 / scale, 32.0 / scale), 11)
-	mode_button.position = Vector2(width - button_width, 0)
-	mode_button.size = Vector2(button_width, 30.0 / scale)
-	_mode_choices.position = Vector2(0, 34.0 / scale)
-	_mode_choices.size = Vector2(width, choices_height)
-	_mode_choices.add_theme_constant_override("separation", ceili(6.0 / scale))
-	for button in [solo_button, multiplayer_button]:
-		_style_action(button, button == multiplayer_button)
-		button.custom_minimum_size = Vector2(0, 36.0 / scale)
-		button.add_theme_font_size_override("font_size", ceili(11.0 / scale))
-	_place_label(_previous_summary_label, Rect2(0, 32.0 / scale + choices_height, width, previous_height), 10)
 	_hud.position = Vector2.ZERO
 	_hud.size = size
 	var side: float = minf(86.0 / scale, width * 0.28)
-	_place_label(time_label, Rect2(edge, _header_height + 12 / scale, side, 33 / scale), 29)
-	_place_label(_time_caption, Rect2(edge, _header_height + 43 / scale, side, 16 / scale), 9)
-	_place_label(score_label, Rect2(size.x - edge - side, _header_height + 12 / scale, side, 33 / scale), 25)
-	_place_label(_score_caption, Rect2(size.x - edge - side, _header_height + 43 / scale, side, 16 / scale), 9)
-	_place_label(_mode_caption, Rect2(edge + side, _header_height + 15 / scale, width - side * 2, 16 / scale), 10)
-	_place_label(hits_label, Rect2(edge + side, _header_height + 31 / scale, width - side * 2, 26 / scale), 17)
-	hits_label.visible = not compact_players
-	var players_height: float = 24.0 / scale if play_mode == "multi" and not compact_players else 0.0
-	for index in range(_player_labels.size()):
-		var players_width: float = width - side * 2.0 if compact_players else width
-		var players_left: float = edge + side if compact_players else edge
-		var players_top: float = _header_height + (34.0 if compact_players else 60.0) / scale
-		var cell_width: float = players_width / float(PopModel.MAX_PLAYERS)
-		var center_x: float = players_left + cell_width * (float(index) + 0.5)
-		var avatar_rect := Rect2(center_x - 25.0 / scale, players_top, 24.0 / scale, 24.0 / scale)
-		_player_avatars[index].position = avatar_rect.position
-		_player_avatars[index].size = avatar_rect.size
-		_place_label(_player_emoji[index], avatar_rect, 20)
-		_place_label(_player_labels[index], Rect2(center_x + 1.0 / scale, players_top, 28.0 / scale, 24.0 / scale), 13)
-	var speech_top: float = _header_height + players_height + (59.0 if short else 65.0) / scale
+	_place_label(time_label, Rect2(edge, 12 / scale, side, 33 / scale), 29)
+	_place_label(_time_caption, Rect2(edge, 43 / scale, side, 16 / scale), 9)
+	_place_label(score_label, Rect2(size.x - edge - side, 12 / scale, side, 33 / scale), 25)
+	_place_label(_score_caption, Rect2(size.x - edge - side, 43 / scale, side, 16 / scale), 9)
+	_place_label(_mode_caption, Rect2(edge + side, 15 / scale, width - side * 2, 16 / scale), 10)
+	_place_label(hits_label, Rect2(edge + side, 31 / scale, width - side * 2, 26 / scale), 17)
+	var speech_top: float = (59.0 if short else 65.0) / scale
 	var speech_height: float = (36.0 if short else 44.0) / scale
 	_place_label(prompt_label, Rect2(edge, speech_top, width, speech_height), 17 if short else 20)
 	_place_label(transcript_label, Rect2(edge, speech_top, width, speech_height), 14 if short else 17)
@@ -987,11 +586,10 @@ func _layout() -> void:
 	prompt_label.size.y = speech_height
 	_update_transcript_window()
 	_place_label(_live_caption, Rect2(edge, speech_top + speech_height, width, 17 / scale), 10)
-	_update_hit_avatar()
-	var top: float = speech_top + speech_height + (17.0 if compact_players else 25.0) / scale
+	var top: float = speech_top + speech_height + 25.0 / scale
 	_arena = Rect2(edge, top, width, maxf(64.0 / scale, size.y - top - 18.0 / scale))
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
-	var gate_top: float = maxf(_header_height + 10.0 / scale, (size.y - 290.0 / scale) * 0.5)
+	var gate_top: float = maxf(18.0 / scale, (size.y - 290.0 / scale) * 0.5)
 	_gate.position = Vector2((size.x - gate_width) * 0.5, gate_top)
 	_gate.size = Vector2(gate_width, maxf(48.0 / scale, size.y - gate_top - 18.0 / scale))
 	_gate_body.add_theme_constant_override("separation", ceili(10.0 / scale))
@@ -1009,8 +607,8 @@ func _layout() -> void:
 	_style_action(retry_button, true)
 	_style_action(_gate_back)
 	var result_width: float = minf(width - 8.0 / scale, 760.0 / scale)
-	_results.position = Vector2((size.x - result_width) * 0.5, _header_height + 8.0 / scale)
-	_results.size = Vector2(result_width, maxf(0.0, size.y - _header_height - edge - 8.0 / scale))
+	_results.position = Vector2((size.x - result_width) * 0.5, edge)
+	_results.size = Vector2(result_width, maxf(0.0, size.y - edge * 2.0))
 	_result_body.add_theme_constant_override("separation", ceili(8.0 / scale))
 	if _report_actions != null and is_instance_valid(_report_actions):
 		_report_actions.add_theme_constant_override("separation", ceili(8.0 / scale))
@@ -1022,14 +620,10 @@ func _layout() -> void:
 		_stats.columns = 4 if result_width * scale >= 480.0 else 2
 		_stats.add_theme_constant_override("h_separation", ceili(8.0 / scale))
 		_stats.add_theme_constant_override("v_separation", ceili(8.0 / scale))
-	if _ranking_grid != null and is_instance_valid(_ranking_grid):
-		_ranking_grid.columns = 4 if result_width * scale >= 580.0 else 2
-		_ranking_grid.add_theme_constant_override("h_separation", ceili(8.0 / scale))
-		_ranking_grid.add_theme_constant_override("v_separation", ceili(8.0 / scale))
 	if _result_actions != null and is_instance_valid(_result_actions):
 		# Keep the main actions above the statistics on compact screens: longer
 		# coaching sentences must not push Replay and Back across the scroll edge.
-		var action_index: int = 1 if play_mode == "multi" else 2 if size.y * scale < 460.0 else 3
+		var action_index: int = 2 if size.y * scale < 460.0 else 3
 		if _result_actions.get_index() != action_index:
 			_result_body.move_child(_result_actions, action_index)
 		_result_actions.add_theme_constant_override("separation", ceili(10.0 / scale))
@@ -1115,7 +709,7 @@ func _draw() -> void:
 	if _hud != null and _hud.visible:
 		var side: float = minf(86.0 / scale, (size.x - 32.0 / scale) * 0.28)
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
-			draw_style_box(Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1), Rect2(x, _header_height + 10.0 / scale, side, 52.0 / scale))
+			draw_style_box(Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1), Rect2(x, 10.0 / scale, side, 52.0 / scale))
 		for target in _draw_targets:
 			_draw_capsule(target, scale)
 		for burst in _bursts:
@@ -1205,18 +799,10 @@ func _draw_burst(burst: Dictionary, scale: float) -> void:
 
 func _draw_burst_score(burst: Dictionary, center: Vector2, scale: float, progress: float) -> void:
 	var font: Font = ThemeDB.fallback_font
-	var multiplayer: bool = not str(burst.get("player_id", "")).is_empty()
-	var texture: Texture2D = _avatar_texture(str(burst.get("avatar_png", ""))) if multiplayer else null
-	var label: String = "+1" if multiplayer else "+%d" % int(burst.points)
-	if multiplayer and texture == null:
-		label = str(burst.get("emoji", "")) + " " + label
+	var label: String = "+%d" % int(burst.points)
 	var font_size: int = ceili(23.0 / scale)
 	var text_width: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
-	var avatar_width: float = 30.0 / scale if texture != null else 0.0
-	var baseline: Vector2 = center + Vector2(-(text_width + avatar_width) * 0.5, -36.0 / scale - progress * 34.0 / scale)
-	if texture != null:
-		draw_texture_rect(texture, Rect2(baseline - Vector2(0, 24.0 / scale), Vector2.ONE * 26.0 / scale), false, Color(1, 1, 1, 1.0 - progress))
-	draw_string(font, baseline + Vector2(avatar_width, 0), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
+	draw_string(font, center + Vector2(-text_width * 0.5, -36.0 / scale - progress * 34.0 / scale), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
 
 
 func _finish() -> void:
@@ -1243,7 +829,6 @@ func _build_results(summary: Dictionary) -> void:
 		child.queue_free()
 	_review_grids.clear()
 	_review_buttons.clear()
-	_ranking_grid = null
 	var scale: float = Style.ui_scale(self)
 	_report_pages = _make_report(summary)
 	_report_step = 0
@@ -1317,8 +902,6 @@ func _build_results(summary: Dictionary) -> void:
 	back_button.pressed.connect(_exit)
 	_result_actions.add_child(replay_button)
 	_result_actions.add_child(back_button)
-	if str(summary.get("play_mode", "single")) == "multi":
-		_add_player_ranking(summary.get("ranking", []))
 	_add_review("Words you popped", summary.get("hit_words", []), CYAN)
 	_add_review("Try these next time", summary.get("missed_words", []), PINK)
 	if _review_buttons.is_empty():
@@ -1338,63 +921,6 @@ func _build_results(summary: Dictionary) -> void:
 	_show_report(0)
 	pip.perform_trick("flutter")
 	_layout()
-
-
-func _add_player_ranking(ranking: Array) -> void:
-	var board := VBoxContainer.new()
-	board.name = "PlayerLeaderboard"
-	board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	board.add_theme_constant_override("separation", ceili(8.0 / Style.ui_scale(self)))
-	_result_body.add_child(board)
-	_result_body.move_child(board, 0)
-	var heading: Label = _label("PLAYER RANKING · MOST HITS WINS", 13, CYAN)
-	heading.name = "PlayerRankingHeading"
-	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	board.add_child(heading)
-	if ranking.is_empty():
-		var empty: Label = _label("No registered players hit a word. Try your saved voices next round.", 14, SOFT)
-		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		board.add_child(empty)
-	_ranking_grid = GridContainer.new()
-	_ranking_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	board.add_child(_ranking_grid)
-	for player in ranking:
-		var tied: bool = ranking.filter(func(other: Dictionary) -> bool: return int(other.rank) == int(player.rank)).size() > 1
-		var accent: Color = PLAYER_COLORS[int(player.index) % PLAYER_COLORS.size()]
-		var panel := PanelContainer.new()
-		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		panel.custom_minimum_size.y = 56.0 / Style.ui_scale(self)
-		panel.set_meta("pop_min_height", 56.0)
-		panel.add_theme_stylebox_override("panel", Style.box(SURFACE, accent.darkened(0.4), ceili(13.0 / Style.ui_scale(self)), 1))
-		_ranking_grid.add_child(panel)
-		var stack := VBoxContainer.new()
-		stack.add_theme_constant_override("separation", 0)
-		panel.add_child(stack)
-		var identity := HBoxContainer.new()
-		identity.add_theme_constant_override("separation", ceili(4.0 / Style.ui_scale(self)))
-		stack.add_child(identity)
-		var texture: Texture2D = _avatar_texture(str(player.get("avatar_png", "")))
-		if texture != null:
-			var avatar: TextureRect = _avatar_control()
-			avatar.name = "RankingAvatar%d" % int(player.index)
-			avatar.texture = texture
-			avatar.custom_minimum_size = Vector2.ONE * 28.0 / Style.ui_scale(self)
-			avatar.set_meta("pop_edge", 28.0)
-			identity.add_child(avatar)
-		else:
-			identity.add_child(_label(str(player.get("emoji", "")), 20))
-		var caption: String = "%d. %s" % [int(player.rank), str(player.name)]
-		var label: Label = _label(caption, 15, accent)
-		label.name = "Ranking%d" % int(player.index)
-		label.set_meta("voice_profile_id", player.id)
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.clip_text = true
-		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		label.tooltip_text = "%s · rank %d%s" % [str(player.name), int(player.rank), " (tied)" if tied else ""]
-		label.set("accessibility_name", label.tooltip_text)
-		identity.add_child(label)
-		stack.add_child(_label("%d %s%s" % [int(player.hits), "hit" if int(player.hits) == 1 else "hits", " · tied" if tied else ""], 15, WHITE))
 
 
 func _add_review(title: String, words: Array, color: Color) -> void:
@@ -1634,63 +1160,9 @@ func _cache_texture(word: Dictionary) -> void:
 func _pending_message(message: String) -> bool:
 	var value: String = message.to_lower()
 	return value.begins_with("starting") or value == "listening..." \
-		or value.begins_with("opening the local microphone") \
 		or value.begins_with("allow microphone access if your browser asks") \
 		or value.begins_with("listening paused. continuing") \
 		or value.begins_with("listening paused. say a word when listening resumes")
-
-
-func _avatar_control() -> TextureRect:
-	var avatar := TextureRect.new()
-	avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	avatar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	avatar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	return avatar
-
-
-func _avatar_texture(encoded: String) -> Texture2D:
-	if encoded.is_empty():
-		return null
-	if _avatar_textures.has(encoded):
-		return _avatar_textures[encoded]
-	_avatar_textures[encoded] = null
-	var base64: String = encoded.trim_prefix("data:image/png;base64,")
-	if base64.length() > 131072:
-		return null
-	var bytes: PackedByteArray = Marshalls.base64_to_raw(base64)
-	# Check the PNG dimensions before decoding compressed pixels. Browser emoji
-	# avatars are small; profile data must never allocate an unbounded image.
-	if bytes.size() < 24 or bytes.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]):
-		return null
-	var width: int = int(bytes[16]) * 16777216 + int(bytes[17]) * 65536 + int(bytes[18]) * 256 + int(bytes[19])
-	var height: int = int(bytes[20]) * 16777216 + int(bytes[21]) * 65536 + int(bytes[22]) * 256 + int(bytes[23])
-	if width <= 0 or height <= 0 or width > 256 or height > 256:
-		return null
-	var decoded := Image.new()
-	if decoded.load_png_from_buffer(bytes) != OK:
-		return null
-	var texture := ImageTexture.create_from_image(decoded)
-	_avatar_textures[encoded] = texture
-	return texture
-
-
-func _update_hit_avatar() -> void:
-	if _last_hit_avatar == null:
-		return
-	var visible_hit: bool = play_mode == "multi" and _last_hit_left > 0.0 and not _reconnecting and game.phase == "running"
-	var texture: Texture2D = _avatar_texture(str(_last_hit_profile.get("avatar_png", ""))) if visible_hit else null
-	_last_hit_avatar.texture = texture
-	_last_hit_avatar.visible = visible_hit and texture != null
-	_last_hit_emoji.text = str(_last_hit_profile.get("emoji", ""))
-	_last_hit_emoji.visible = visible_hit and texture == null
-	var scale: float = Style.ui_scale(self)
-	var font: Font = _live_caption.get_theme_font("font")
-	var text_width: float = font.get_string_size(_live_caption.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, _live_caption.get_theme_font_size("font_size")).x
-	var left: float = maxf(_live_caption.position.x, _live_caption.get_rect().get_center().x - text_width * 0.5 - 23.0 / scale)
-	var rect := Rect2(left, _live_caption.position.y - 2.0 / scale, 20.0 / scale, 20.0 / scale)
-	_last_hit_avatar.position = rect.position
-	_last_hit_avatar.size = rect.size
-	_place_label(_last_hit_emoji, rect, 18)
 
 
 func _label(text: String, font_size: int, color: Color = WHITE) -> Label:

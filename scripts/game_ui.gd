@@ -164,8 +164,6 @@ var _age_buttons: Dictionary = {}
 var _age_notice: Label
 var _age_save_failed: bool = false
 var _collection_title: Label
-var _voice_profiles_button: Button
-var _voice_profiles_open: bool = false
 var _collection_header: HBoxContainer
 var _collection_header_spacer: Control
 var _collection_column: VBoxContainer
@@ -188,9 +186,6 @@ var _mode_buttons: Array[Button] = []
 var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_speech_active: bool = false
-var _pop_bridge_session: String = ""
-var _pop_session_serial: int = 0
-var _pop_switching_mode: bool = false
 var _match_playfield: Control
 var _hint_link: HintLink
 var _content_margins: MarginContainer
@@ -246,7 +241,6 @@ var _collection_back: Icons
 var _collection_focus_modes: Dictionary = {}
 var _focus_before_collection: Control
 var _playroom_medal: Medal
-var _playroom_buttons: Array[Button] = []
 var _favorite_reward_id: String = ""
 var playroom_save_path: String = "user://playroom.cfg"
 var _duck_trick_index: int = 0
@@ -300,9 +294,6 @@ var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _pop_result_callback: JavaScriptObject
-var _multiplayer_state_callback: JavaScriptObject
-var _multiplayer_event_callback: JavaScriptObject
-var _voice_profiles_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -406,7 +397,7 @@ func _build_controls() -> void:
 	collection_button = Icons.new()
 	collection_button.name = "Rewards"
 	collection_button.symbol = Icons.Symbol.MORE
-	collection_button.tooltip_text = "More: Pip's room, voice users, worlds and age levels"
+	collection_button.tooltip_text = "More: Pip's room, worlds and age levels"
 	_set_accessibility_name(collection_button, collection_button.tooltip_text)
 	collection_button.pressed.connect(_show_collection)
 	_toolbar.add_child(collection_button)
@@ -474,10 +465,6 @@ func _build_controls() -> void:
 	_pop.report_requested.connect(_pop_report)
 	_pop.pip_report_requested.connect(_pop_report.bind(true))
 	_pop.status_changed.connect(_pop_status_changed)
-	_pop.play_mode_requested.connect(_switch_pop_mode)
-	_pop.multiplayer_retry_requested.connect(_prepare_pop_multiplayer)
-	_pop.voice_profiles_requested.connect(_open_voice_profiles)
-	_pop.settling_requested.connect(_flush_pop_multiplayer)
 	_pop.hide()
 	column.add_child(_pop)
 	_outcome = Control.new()
@@ -677,13 +664,6 @@ func _build_collection_shell() -> void:
 	_collection_header_spacer = spacer
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(spacer)
-	_voice_profiles_button = Button.new()
-	_voice_profiles_button.name = "VoiceProfiles"
-	_voice_profiles_button.text = "Users"
-	_voice_profiles_button.tooltip_text = "Voice users: save up to 10 names, emoji avatars and voices on this device"
-	_set_accessibility_name(_voice_profiles_button, _voice_profiles_button.tooltip_text)
-	_voice_profiles_button.pressed.connect(_open_voice_profiles)
-	header.add_child(_voice_profiles_button)
 	_collection_back = Icons.new()
 	_collection_back.symbol = Icons.Symbol.BACK
 	_collection_back.tooltip_text = "Back to game"
@@ -822,7 +802,6 @@ func _choose_world(id: String) -> void:
 
 
 func _build_playroom() -> void:
-	_playroom_buttons.clear()
 	_collection_duck_slot.queue_free()
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
@@ -844,8 +823,6 @@ func _build_playroom() -> void:
 	for control in _room.controls():
 		control.gui_input.connect(_collection_scroll_input.bind(control))
 		control.focus_entered.connect(_ensure_collection_focus_visible.bind(control))
-		if control is Button:
-			_playroom_buttons.append(control)
 	_refresh_favorite_reward()
 
 
@@ -928,15 +905,6 @@ func _try_unlocked_gift() -> void:
 	await get_tree().process_frame
 	if collection_page.visible and _room.toy_button.has_focus():
 		_collection_scroll.ensure_control_visible(_room.toy_button)
-
-
-func _play_duck_trick(kind: String) -> void:
-	if not collection_page.visible or _collection_dragged:
-		return
-	_room.feedback_text = duck.perform_trick(kind)
-	audio.interact(model.theme_id, model.phase != "lost")
-	audio.cue("select")
-	_announce_status(_room.feedback_text)
 
 
 func _load_favorite_reward() -> void:
@@ -1254,144 +1222,22 @@ func choose_mode(id: String) -> void:
 func _configure_pop(seed_value: int = -1) -> void:
 	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
 	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
-	_pop.configure(pool, Data.theme(model.theme_id), reduced_motion, seed_value)
-	_prepare_pop_multiplayer()
-
-
-func _prepare_pop_multiplayer() -> void:
-	if _host != null:
-		_host.prepareMultiplayer()
-	else:
-		_pop.set_multiplayer_state({"status": "unsupported", "message": "Local multiplayer requires the Web game in a supported browser."})
-
-
-func _open_voice_profiles() -> void:
-	if _voice_profiles_open:
-		return
-	if not collection_page.visible:
-		_show_collection()
-	if not collection_page.visible:
-		return
-	if _host == null:
-		_announce_status("Voice users are available in the Web game on this device.")
-		return
-	if not _stop_pop_listening():
-		return
-	_stop_voice()
-	audio.halt()
-	_stop_controller_actions()
-	_voice_profiles_open = bool(_host.openVoiceProfiles())
-
-
-func _on_voice_profiles(arguments: Array) -> void:
-	if arguments.is_empty():
-		return
-	var state: Variant = JSON.parse_string(str(arguments[0]))
-	if not state is Dictionary:
-		return
-	var was_open: bool = _voice_profiles_open
-	_voice_profiles_open = bool(state.get("open", false))
-	var profiles: Variant = state.get("profiles", [])
-	if profiles is Array:
-		_pop.set_voice_profiles(profiles)
-	_voice_profiles_button.tooltip_text = "Voice users: %d of 10 saved on this device" % _pop.voice_profile_count()
-	_set_accessibility_name(_voice_profiles_button, _voice_profiles_button.tooltip_text)
-	var error: String = str(state.get("error", ""))
-	if not error.is_empty():
-		_voice_profiles_button.tooltip_text = error
-		if collection_page.visible:
-			_announce_status(error)
-	if was_open and not _voice_profiles_open:
-		_stop_controller_actions()
-		if collection_page.visible:
-			_voice_profiles_button.grab_focus()
-			if error.is_empty():
-				_announce_collection_state()
-
-
-func _switch_pop_mode(mode: String) -> void:
-	if _pop_switching_mode or mode == _pop.play_mode or mode not in ["single", "multi"] \
-		or _mode_id != "pop" or collection_page.visible:
-		return
-	if mode == "multi" and str(_pop.multiplayer_state.get("status", "idle")) != "ready":
-		return
-	if mode == "multi" and _pop.voice_profile_count() == 0:
-		_open_voice_profiles()
-		return
-	_pop_switching_mode = true
-	_pop._sync_game_clock()
-	var previous: Dictionary = _pop.game.summary()
-	if not _stop_pop_listening():
-		_pop_switching_mode = false
-		return
-	_pop.stop()
-	_pop.set_play_mode(mode)
-	_configure_pop()
-	_pop.remember_previous_round(previous)
-	_start_pop_listening()
-	_pop_switching_mode = false
-
-
-func _flush_pop_multiplayer() -> void:
-	if _host != null and _pop_speech_active:
-		_host.flushMultiplayer()
-
-
-func _on_multiplayer_state(arguments: Array) -> void:
-	if arguments.is_empty():
-		return
-	var value: Variant = JSON.parse_string(str(arguments[0]))
-	if value is Dictionary:
-		_pop.set_multiplayer_state(value)
-
-
-func _on_multiplayer_event(arguments: Array) -> void:
-	if arguments.is_empty() or _mode_id != "pop" or _pop.play_mode != "multi" or not _pop_speech_active \
-		or collection_page.visible:
-		return
-	var value: Variant = JSON.parse_string(str(arguments[0]))
-	if not value is Dictionary or str(value.get("sessionId", "")) != _pop_bridge_session or _pop_bridge_session.is_empty():
-		return
-	if str(value.get("type", "utterance")) == "flushed":
-		_pop.complete_settling()
-		return
-	var event_type: Variant = value.get("type", "utterance")
-	if not event_type is String or not event_type in ["utterance", "feedback"]:
-		return
-	var event: Dictionary = {"round_id": _pop.game.round_id, "event_id": value.get("eventId", ""),
-		"text": value.get("text", ""), "start_ms": value.get("startMs", -1), "end_ms": value.get("endMs", -1)}
-	if event_type == "feedback":
-		event.reason = value.get("reason", "")
-		_pop.receive_speech_feedback(event)
-	else:
-		event.embedding = value.get("embedding", [])
-		_pop.receive_speech_event(event)
+	_pop.configure(pool, reduced_motion, seed_value)
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or collection_page.visible or _voice_profiles_open:
+	if _mode_id != "pop" or collection_page.visible:
 		return
 	audio.halt()
 	if not _stop_pop_listening():
 		return
 	if _pop.game.phase == "finished":
 		_configure_pop()
-	if _pop.game.phase == "settling":
-		return
-	if _pop.play_mode == "multi" and _pop.game.phase != "paused" and _pop.voice_profile_count() == 0:
-		_pop.set_listening(false, false, "Add a voice user from More > Users before playing multiplayer.")
-		return
-	if _pop.play_mode == "multi" and str(_pop.multiplayer_state.get("status", "idle")) != "ready":
-		_pop.set_listening(false, false, "Multiplayer is not ready. Retry preparation or start a solo round from Mode.")
-		_prepare_pop_multiplayer()
-		return
 	if _host == null:
 		_pop.set_listening(true, false, "Voice Pop needs a browser with speech recognition. Open the Web game in Chrome or Safari.")
 		return
 	_pop_speech_active = true
-	_pop_session_serial += 1
-	_pop_bridge_session = "pop-%d-%d" % [Time.get_ticks_usec(), _pop_session_serial]
-	_host.speechMode(true, "pop", _pop.play_mode, _pop_bridge_session, _pop.game.elapsed * 1000.0, _pop.game.phase == "paused")
+	_host.speechMode(true, "pop")
 
 
 func _stop_pop_listening() -> bool:
@@ -1402,7 +1248,6 @@ func _stop_pop_listening() -> bool:
 		if was_active and not bool(_host.stopSpeech()):
 			_pop_speech_active = true
 			return false
-	_pop_bridge_session = ""
 	return true
 
 
@@ -1995,14 +1840,12 @@ func _layout_collection() -> void:
 	var title_width: float = ceilf(80 / scale)
 	_collection_title.custom_minimum_size = Vector2(title_width, ceilf(44 / scale))
 	_collection_title.add_theme_font_size_override("font_size", ceili(18 / scale))
-	Style.action_button(_voice_profiles_button, _active_palette.get("accent", Style.GOOD))
-	_voice_profiles_button.custom_minimum_size = Vector2(title_width, ceilf(44 / scale))
 	Style.square_icon_button(_collection_back, _active_palette.get("accent", Style.GOOD))
 	if is_instance_valid(_world_grid):
 		var side: int = ceili(52 / scale)
 		var spacing: int = roundi(6 / scale)
 		var world_width: float = side * theme_buttons.size() + spacing * (theme_buttons.size() - 1)
-		var inline_worlds: bool = usable_width >= world_width + title_width * 2 + ceilf(44 / scale) + gap * 3
+		var inline_worlds: bool = usable_width >= world_width + title_width + ceilf(44 / scale) + gap * 2
 		var parent: Node = _collection_header if inline_worlds else _collection_column
 		if _world_choices.get_parent() != parent:
 			var focused: Control = get_viewport().gui_get_focus_owner()
@@ -2476,8 +2319,6 @@ func on_page_visible() -> void:
 	_room.playground.pause(false)
 	feedback_timer.paused = collection_page.visible
 	_memory.pause(collection_page.visible)
-	if _mode_id == "pop":
-		_prepare_pop_multiplayer()
 
 
 func _notification(what: int) -> void:
@@ -2513,9 +2354,6 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if _voice_profiles_open:
-		get_viewport().set_input_as_handled()
-		return
 	# Handle mapped controller events before GUI defaults can activate or move focus.
 	if event is InputEventJoypadButton:
 		if event.pressed:
@@ -2564,8 +2402,6 @@ func _input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _voice_profiles_open:
-		return
 	if event.is_action_pressed("ui_cancel"):
 		_controller_back()
 
@@ -2870,15 +2706,9 @@ func _connect_browser() -> void:
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
 	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		if _mode_id == "pop" and _pop.play_mode == "single" and _pop_speech_active and not collection_page.visible:
+		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible:
 			_pop.receive_transcript(str(arguments[0])))
 	_host.observePopSpeech(_pop_result_callback)
-	_multiplayer_state_callback = JavaScriptBridge.create_callback(_on_multiplayer_state)
-	_host.observeMultiplayerState(_multiplayer_state_callback)
-	_multiplayer_event_callback = JavaScriptBridge.create_callback(_on_multiplayer_event)
-	_host.observePopEvent(_multiplayer_event_callback)
-	_voice_profiles_callback = JavaScriptBridge.create_callback(_on_voice_profiles)
-	_host.observeVoiceProfiles(_voice_profiles_callback)
 
 
 func _toggle_voice() -> void:
@@ -3258,7 +3088,7 @@ func _hide_collection() -> void:
 
 
 func _announce_collection_state() -> void:
-	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Choose Users to add names, avatars and voices. Choose a world or age level above, or use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
+	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Choose a world or age level above, or use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."
 	if _age_save_failed:

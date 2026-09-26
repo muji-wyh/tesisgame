@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseMode, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
+const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {

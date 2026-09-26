@@ -20,7 +20,7 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure'
   },
   webServer: {
-    command: 'npm run serve:web',
+    command: 'node node_modules/http-server/bin/http-server build/web -a 127.0.0.1 -p 4173 --brotli -c-1',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     timeout: 20000

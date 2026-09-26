@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, enterGame } = require('./game-ui.cjs');
+const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, enterGame, rendered } = require('./game-ui.cjs');
 
 async function contentShift(page, before, after) {
   const bounds = await metrics(page), collection = collectionBounds(bounds);
@@ -37,10 +37,6 @@ async function contentShift(page, before, after) {
     }
     return best;
   }, { before: before.toString('base64'), after: after.toString('base64'), contentTop });
-}
-
-async function rendered(page) {
-  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 }
 
 for (const ratio of [1, 2, 3]) {

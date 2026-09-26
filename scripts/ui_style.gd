@@ -71,15 +71,6 @@ static func quiet_button(control: Button, accent: Color, minimum_width: float = 
 	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, 16, 2))
 
 
-static func primary_button(control: Button, accent: Color) -> void:
-	button(control, accent)
-	for state in ["normal", "hover", "pressed", "hover_pressed", "focus"]:
-		control.add_theme_color_override("font_" + state + "_color" if state != "normal" else "font_color", Color.WHITE)
-	control.add_theme_stylebox_override("normal", box(accent, accent, 16, 0))
-	control.add_theme_stylebox_override("hover", box(accent.darkened(0.08), accent, 16, 0))
-	control.add_theme_stylebox_override("pressed", box(accent.darkened(0.16), accent, 16, 0))
-
-
 static func action_button(control: Button, accent: Color, primary: bool = false) -> void:
 	button(control, accent, 0)
 	var scale: float = ui_scale(control)

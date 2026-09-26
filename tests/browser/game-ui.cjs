@@ -25,10 +25,9 @@ function modeHeight(bounds) {
   return Math.ceil(44 / uiScale(bounds));
 }
 
-function modeRect(bounds, name, currentMode = 'match') {
+function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory or pop.`);
-  if (!MODES.includes(currentMode)) throw new Error(`Unknown current mode: ${currentMode}.`);
   const content = contentBounds(bounds);
   const scale = uiScale(bounds), gap = Math.round(4 / scale);
   const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - (MODES.length - 1) * gap) / MODES.length));
@@ -45,12 +44,8 @@ function modeRect(bounds, name, currentMode = 'match') {
 }
 
 async function chooseMode(page, name) {
-  const bounds = await metrics(page), modes = MODES.map(current => modeRect(bounds, name, current));
-  // The shared interior stays clickable as the Pip and toolbar widths recenter the row.
-  const left = Math.max(...modes.map(mode => mode.x));
-  const right = Math.min(...modes.map(mode => mode.x + mode.width));
-  if (right <= left) throw new Error(`No shared hit area for mode ${name}.`);
-  await tap(page, (left + right) / 2, modes[0].y + modes[0].height / 2);
+  const rect = modeRect(await metrics(page), name);
+  await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
 }
 
@@ -83,7 +78,7 @@ function collectionBounds(bounds) {
   const worldSide = Math.ceil(52 / scale), worldGap = Math.round(6 / scale);
   const worldWidth = worldSide * THEME_IDS.length + worldGap * (THEME_IDS.length - 1);
   const titleWidth = Math.ceil(80 / scale);
-  const inlineWorlds = usableWidth >= worldWidth + titleWidth * 2 + Math.ceil(44 / scale) + gap * 3;
+  const inlineWorlds = usableWidth >= worldWidth + titleWidth + Math.ceil(44 / scale) + gap * 2;
   const worldColumns = usableWidth >= worldWidth ? THEME_IDS.length : Math.max(1, Math.min(4, Math.floor((usableWidth + worldGap) / (worldSide + worldGap))));
   const worldRowGap = Math.round(4 / scale);
   const rows = Math.ceil(THEME_IDS.length / worldColumns), worldHeight = rows * worldSide + (rows - 1) * worldRowGap;
@@ -110,7 +105,6 @@ function collectionHeaderRect(bounds, section) {
   const height = Math.ceil(44 / scale);
   const y = padding + (headerHeight - height) / 2;
   if (section === 'back') return { x: x + width - height, y, width: height, height };
-  if (section === 'users') return { x: x + width - height - Math.ceil(80 / scale) - Math.ceil(8 / scale), y, width: Math.ceil(80 / scale), height };
   if (section !== 'room') throw new Error(`Unknown room header item: ${section}`);
   return { x, y, width: Math.ceil(80 / scale), height };
 }
@@ -123,7 +117,7 @@ function worldIconRect(bounds, index) {
   if (inlineWorlds) {
     const title = collectionHeaderRect(bounds, 'room'), back = collectionHeaderRect(bounds, 'back');
     rowX += title.width + gap;
-    rowWidth -= title.width * 2 + back.width + gap * 3;
+    rowWidth -= title.width + back.width + gap * 2;
     y = padding + (headerHeight - worldHeight) / 2;
   }
   const left = rowX + (rowWidth - side * columns - spacing * (columns - 1)) / 2;

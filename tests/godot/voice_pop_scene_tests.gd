@@ -117,6 +117,8 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup preserves Match without activating speech")
+	check(app.find_child("VoiceProfiles", true, false) == null, "More has no voice-user enrollment entry")
+	check(not app.collection_button.tooltip_text.contains("voice users"), "More describes only the available room settings")
 	var modes: Array[String] = ["match", "memory", "pop"]
 	var saw_scrollable_results: bool = false
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(679, 900), Vector2i(680, 900), Vector2i(844, 390), Vector2i(1366, 768)]:
@@ -138,6 +140,8 @@ func _run() -> void:
 				check(current_positions == original_positions, "Mode tabs stay in the same positions at %s in %s" % [dimensions, mode])
 		var view = app._pop
 		view.set_process(false)
+		check(view.find_child("ChoosePopMode", true, false) == null and view.find_child("MultiplayerStatus", true, false) == null,
+			"Voice Pop goes directly to browser listening without a play-mode selector")
 		check(view.is_visible_in_tree() and not app.grid.is_visible_in_tree() and not app._memory.visible,
 			"Voice Pop owns the visible playfield at " + str(dimensions))
 		check(not app.hint_button.visible and not app._voice_button.visible and not app._memory.study_button.visible,
@@ -256,6 +260,8 @@ func _run() -> void:
 		check(Rect2(Vector2.ZERO, app.size).grow(1).encloses(view.get_global_rect()), "The result view fits at " + str(dimensions))
 		var snapshot: Dictionary = view.snapshot()
 		check(snapshot.phase == "finished", "Accessible state reflects the visible results")
+		check(view.find_child("PlayerLeaderboard", true, false) == null and not snapshot.has("ranking")
+			and not snapshot.has("players"), "Results show individual progress without player rankings")
 		check(str(snapshot.transcript).is_empty() and not view.transcript_label.is_visible_in_tree(), "Results clear the completed round's transcript")
 		view.show_transcript("This is a stale finished hypothesis", true)
 		check(str(view.snapshot().transcript).is_empty(), "Late hypotheses cannot revive a completed round's transcript")

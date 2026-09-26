@@ -144,8 +144,8 @@ Each run writes `build/unity-art-import/<run-id>/prepared.json`,
 `assets/imported-unity/manifest.json` lists verified imported PNGs and hashes.
 Keep the source mapping in Git; keep licensed images and source package ignored.
 Run `node --test tests/unity-art.test.cjs` for archive/mapping safety checks, then
-the normal Godot import and web build. Inspect the actual art in Learn and quiz
-views. Verify the exported and deployed game contains and displays selected
+the normal Godot import and web build. Inspect the actual art in Match, Memory
+and Voice Pop. Verify the exported and deployed game contains and displays selected
 overrides before calling the Unity integration complete.
 
 The real September 11 import succeeded in
@@ -180,8 +180,8 @@ The learning pass changed twelve nouns:
 | comet / meteor | Icy nucleus and two blue tails versus a fiery atmospheric streak |
 
 The two astronomical drawings and the shell/clam pair are still teaching
-illustrations, not mutually exclusive definitions. The quiz excludes overlapping
-word pairs. A contact sheet was rendered for comparison in
+illustrations, not mutually exclusive definitions. The games exclude confusing
+word pairs from a round or simultaneous Voice Pop targets. A contact sheet was rendered for comparison in
 `build/visuals/semantic-art-before.png` and `semantic-art-after.png`.
 
 The September 11 [full original-catalog audit](../qa/2026-09-11-catalog-semantic-audit.md)

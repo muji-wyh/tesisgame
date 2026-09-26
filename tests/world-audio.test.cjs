@@ -14,7 +14,7 @@ function fixture(t) {
   return directory;
 }
 
-test('the new-world provenance pins exactly the twelve shipped audio files', () => {
+test('the new-world provenance pins every retained audio file', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jungle-candy-audio.json'), 'utf8'));
   const expected = added.flatMap(id => [
     `assets/audio/bgm/${id}.wav`,
@@ -102,9 +102,7 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));
-    for (const suffix of ['theme', 'arrive', 'open']) {
-      assert.ok(sources.includes(`res://assets/audio/voice/${id}-${suffix}.wav`));
-    }
+    assert.ok(sources.includes(`res://assets/audio/voice/${id}-theme.wav`));
   }
   fs.unlinkSync(path.join(directory, 'assets/audio/bgm/candy.wav.import'));
   assert.throws(() => collectOptionalAudio(directory), /candy\.wav\.import/);

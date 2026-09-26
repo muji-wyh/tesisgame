@@ -170,14 +170,18 @@ func _run() -> void:
 	await settle()
 	check(app._mode_id == "match" and not app.collection_page.visible and app.model.lesson_words != old_lesson
 		and app.grid.is_visible_in_tree(), "New adventure starts a fresh Match round directly")
-	var primary := Button.new()
+	var action := Button.new()
 	for world in app.model.THEMES:
-		app.Style.primary_button(primary, app.Data.theme(world).accent)
-		for state in ["normal", "hover", "pressed"]:
-			var fill: Color = primary.get_theme_stylebox(state).bg_color.srgb_to_linear()
-			var luminance: float = 0.2126 * fill.r + 0.7152 * fill.g + 0.0722 * fill.b
-			check(1.05 / (luminance + 0.05) >= 4.5, world + ": primary button text has readable contrast")
-	primary.free()
+		for primary in [false, true]:
+			app.Style.action_button(action, app.Data.theme(world).accent, primary)
+			for state in ["normal", "hover", "pressed"]:
+				var fill: Color = action.get_theme_stylebox(state).bg_color.srgb_to_linear()
+				var ink: Color = action.get_theme_color("font_color" if state == "normal" else "font_" + state + "_color").srgb_to_linear()
+				var fill_luminance: float = 0.2126 * fill.r + 0.7152 * fill.g + 0.0722 * fill.b
+				var ink_luminance: float = 0.2126 * ink.r + 0.7152 * ink.g + 0.0722 * ink.b
+				check((maxf(fill_luminance, ink_luminance) + 0.05) / (minf(fill_luminance, ink_luminance) + 0.05) >= 4.5,
+					world + ": action button text has readable contrast")
+	action.free()
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

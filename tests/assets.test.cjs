@@ -13,34 +13,16 @@ const rewardSymbols = seasons.flatMap(({ id }) =>
 );
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedPrompts = {
-  welcome: "Find three pairs. Some cards have no match. Tap a picture or a word!",
-  correct: 'Great match! Well done!',
   wrong: "Not quite. Let's try another one!",
   loss: "Good try! Let's play again!",
   'spring-theme': 'Welcome to spring!',
   'summer-theme': 'Welcome to summer!',
   'autumn-theme': 'Welcome to autumn!',
   'winter-theme': 'Welcome to winter!',
-  'spring-arrive': 'You did it! Tap the spring chest for a surprise!',
-  'summer-arrive': 'You did it! Tap the summer chest for a surprise!',
-  'autumn-arrive': 'You did it! Tap the autumn chest for a surprise!',
-  'winter-arrive': 'You did it! Tap the winter chest for a surprise!',
-  'spring-open': 'A spring flower for you! Great job!',
-  'summer-open': 'A summer sun for you! Great job!',
-  'autumn-open': 'An autumn leaf for you! Great job!',
-  'winter-open': 'A winter snowflake for you! Great job!',
   'ocean-theme': 'Welcome to the ocean!',
-  'ocean-arrive': 'You did it! Tap the ocean chest for a surprise!',
-  'ocean-open': 'An ocean treasure for you! Great job!',
   'space-theme': 'Welcome to space!',
-  'space-arrive': 'You did it! Tap the space chest for a surprise!',
-  'space-open': 'A space treasure for you! Great job!',
   'jungle-theme': 'Welcome to the jungle!',
-  'jungle-arrive': 'You did it! Tap the jungle chest for a surprise!',
-  'jungle-open': 'A jungle treasure for you! Great job!',
-  'candy-theme': 'Welcome to candy land!',
-  'candy-arrive': 'You did it! Tap the candy chest for a surprise!',
-  'candy-open': 'A candy treasure for you! Great job!'
+  'candy-theme': 'Welcome to candy land!'
 };
 const expectedRewardColors = {
   spring: ['#edf8ec', '#438363', '#8ecf6b'],
@@ -289,7 +271,7 @@ test('the generated image directories contain exactly the 273 named SVGs', () =>
   }
 });
 
-test('voice prompts contain exactly the twenty-eight specified English messages', () => {
+test('voice prompts contain exactly the ten specified English messages', () => {
   const filename = path.join(root, 'voice-prompts.json');
   assert.ok(fs.existsSync(filename), 'Missing voice-prompts.json');
   const prompts = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -300,7 +282,7 @@ test('voice prompts contain exactly the twenty-eight specified English messages'
   }
 });
 
-test('all twenty-eight English prompts have nonempty prerecorded mono voice WAVs', () => {
+test('all ten English prompts have nonempty prerecorded mono voice WAVs', () => {
   for (const id of Object.keys(expectedPrompts)) {
     assertVoice(path.join('assets', 'audio', 'voice', `${id}.wav`));
   }
@@ -315,15 +297,16 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice output contains exactly 200 word recordings and twenty-eight prompts', () => {
+test('voice sources contain the active recordings and eight preserved legacy prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
-  assert.equal(expected.length, 228);
-  assert.deepEqual(assetFiles(directory), expected.sort());
+  assert.equal(expected.length, 210);
+  const legacy = ['ocean', 'space', 'jungle', 'candy'].flatMap(id => [`${id}-arrive.wav`, `${id}-open.wav`]);
+  assert.deepEqual(assetFiles(directory), [...expected, ...legacy].sort());
 });
 
 test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs', () => {

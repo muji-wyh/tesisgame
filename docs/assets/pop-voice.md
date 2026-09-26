@@ -7,8 +7,8 @@ the game does not assemble number fragments or use the browser's default TTS.
 
 `pop-voice-prompts.json` is a flat object mapping 51 stable IDs to their complete
 English scripts. The batch contains **2,158 source text characters**. WAV paths
-are `assets/audio/pop/<id>.wav`; the original 200 vocabulary recordings and 22
-existing prompts remain separate and unchanged by this generator.
+are `assets/audio/pop/<id>.wav`; the 200 vocabulary recordings and general game
+prompts remain separate and unchanged by this generator.
 
 ## Report content
 

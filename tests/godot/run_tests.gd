@@ -619,7 +619,7 @@ func _test_audio() -> void:
 	check(controller.music.playing, "A gesture starts native background music")
 	check(controller.music.stream.loop_mode == AudioStreamWAV.LOOP_FORWARD, "Background music loops")
 	check(controller.music.stream != original and original.loop_mode == original_loop, "Loop setup does not mutate the shared WAV")
-	controller.cue("select", "welcome")
+	controller.cue("select", "wrong")
 	check(controller.effect.playing and controller.voice.playing, "Effects and voice use independent native channels")
 	check(is_equal_approx(db_to_linear(controller.music.volume_db), 0.04), "Speech ducks background music")
 	check(is_equal_approx(db_to_linear(controller.effect.volume_db), 0.24), "Effects have a bounded gain")
@@ -1040,6 +1040,7 @@ func _test_scene() -> void:
 			app._end_collection_drag()
 			app.on_page_hidden()
 			check(app._collection_velocity == Vector2.ZERO, "Hiding the page cancels collection momentum")
+			app.on_page_visible()
 		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")
@@ -1193,6 +1194,7 @@ func _test_scene() -> void:
 	app.on_page_hidden()
 	check(app._controller_last_direction == Vector2.ZERO and app._controller_stick == Vector2.ZERO,
 		"Hiding the page stops controller navigation until another input")
+	app.on_page_visible()
 	joy_axis(JOY_AXIS_LEFT_X, 0.0)
 	await process_frame
 	app.set_reduced_motion(true)
@@ -1367,6 +1369,7 @@ func _test_scene() -> void:
 	check_no_reward_flight(app, "Hiding cancels a reward flight started by finish_immediately")
 	check(app._medallion.scale == Vector2.ONE, "Hiding does not leave a queued reward-pop animation")
 	check(app._reward_tween == null or not app._reward_tween.is_running(), "Hiding cancels the reveal tween too")
+	app.on_page_visible()
 	app.new_round(91)
 	win_round(app)
 	prepare_completion(app)
@@ -1473,6 +1476,7 @@ func _test_scene() -> void:
 		check(app._failure_tween == null and app.model.phase == "lost" and not app.audio.active,
 			"Hiding the page cancels bear play without changing the result")
 		app._play_loss_bear()
+		app.on_page_visible()
 	app.new_round(92)
 	if app.has_method("_play_loss_bear"):
 		check(not app.failure_button.visible and app._failure_tween == null,

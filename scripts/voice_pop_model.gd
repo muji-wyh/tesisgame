@@ -6,15 +6,6 @@ const DURATION: float = 30.0
 const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
 const EPSILON: float = 0.000001
-const MAX_PLAYERS: int = 4
-const MAX_VOICE_PROFILES: int = 10
-const EMBEDDING_SIZE: int = 256
-const MAX_VOICE_TEMPLATES: int = 8
-const SETTLE_DURATION: float = 3.0
-# Experimental cosine thresholds, deliberately configurable for the short-word
-# voice study. These are not a claim of calibrated speaker recognition accuracy.
-const SPEAKER_SIMILARITY: float = 0.60
-const SPEAKER_MARGIN: float = 0.08
 # These nouns do not take a regular plural in the pictured sense. In particular,
 # never derive a singular by removing letters from arbitrary recognized speech.
 const UNCHANGED_PLURALS: Array[String] = [
@@ -26,6 +17,7 @@ const SPECIAL_PLURALS: Dictionary = {
 	"scarf": ["scarves", "scarfs"], "tomato": ["tomatoes"], "octopus": ["octopuses", "octopi"],
 	"cactus": ["cacti", "cactuses"]
 }
+
 # Vetted spelling alternatives for the same English sounds. Keep this list
 # explicit: approximate spelling and similar-sounding nouns are not answers.
 const HOMOPHONES: Dictionary = {
@@ -34,10 +26,7 @@ const HOMOPHONES: Dictionary = {
 }
 const RECOGNITION_MESSAGES: Dictionary = {
 	"unclear_speech": "Say the word again, loud and clear.",
-	"identity_unconfirmed": "Say it again so I know who is speaking.",
-	"target_expired": "That word has gone. Try one on screen.",
-	"no_matching_target": "Try a word you can see on screen.",
-	"timing_unavailable": "Try that word again."
+	"no_matching_target": "Try a word you can see on screen."
 }
 
 var phase: String = "ready"
@@ -51,22 +40,8 @@ var best_combo: int = 0
 var score: int = 0
 var hit_words: Array[Dictionary] = []
 var missed_words: Array[Dictionary] = []
-var play_mode: String = "single"
-var round_id: String = ""
 var recognition_feedback: String = ""
 var recognition_message: String = ""
-var recognition_revision: int = 0
-
-var _round_counter: int = 0
-var _settling_elapsed: float = 0.0
-var _speaker_similarity: float = SPEAKER_SIMILARITY
-var _speaker_margin: float = SPEAKER_MARGIN
-var _voice_profiles: Array[Dictionary] = []
-var _round_profiles: Array[Dictionary] = []
-var _players: Array[Dictionary] = []
-var _seen_events: Dictionary = {}
-var _target_history: Array[Dictionary] = []
-var _history_by_uid: Dictionary = {}
 
 var _words: Array[Dictionary] = []
 var _aliases: Dictionary = {}
@@ -118,70 +93,13 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 
 
 func start() -> bool:
-	if phase in ["running", "paused", "settling"] or _words.is_empty():
-		return false
-	if play_mode == "multi" and _voice_profiles.is_empty():
+	if phase in ["running", "paused"] or _words.is_empty():
 		return false
 	_reset_round()
-	if play_mode == "multi":
-		_round_profiles = _voice_profiles.duplicate(true)
-	_round_counter += 1
-	round_id = str(_round_counter)
 	phase = "running"
 	_spawn()
 	_next_spawn_at = _spawn_interval()
 	return true
-
-
-func set_play_mode(mode: String) -> bool:
-	if not mode in ["single", "multi"] or not phase in ["ready", "finished"]:
-		return false
-	play_mode = mode
-	return true
-
-
-func set_voice_profiles(profiles: Array) -> bool:
-	# Replace the library atomically. An active/paused round retains its own
-	# snapshot, including names and avatars, until the next successful start.
-	if profiles.size() > MAX_VOICE_PROFILES:
-		return false
-	var validated: Array[Dictionary] = []
-	var ids: Dictionary = {}
-	for profile in profiles:
-		if not profile is Dictionary or not profile.has_all(["id", "name", "emoji", "embedding"]):
-			return false
-		for key in ["id", "name", "emoji"]:
-			if not profile[key] is String or profile[key].strip_edges().is_empty():
-				return false
-		var id: String = profile.id.strip_edges()
-		if ids.has(id) or id.length() > 128 or profile.name.length() > 64 or profile.emoji.length() > 32:
-			return false
-		var embedding: Array[float] = _normalized_embedding(profile.embedding)
-		if embedding.size() != EMBEDDING_SIZE:
-			return false
-		var templates: Array = []
-		if profile.has("templates"):
-			if not profile.templates is Array or profile.templates.is_empty() or profile.templates.size() > MAX_VOICE_TEMPLATES:
-				return false
-			for candidate in profile.templates:
-				var template: Array[float] = _normalized_embedding(candidate)
-				if template.size() != EMBEDDING_SIZE:
-					return false
-				templates.append(template)
-		else:
-			templates.append(embedding.duplicate())
-		var avatar: Variant = profile.get("avatar_png", "")
-		if not avatar is String or avatar.length() > 131072:
-			return false
-		validated.append({"id": id, "name": profile.name.strip_edges(), "emoji": profile.emoji,
-			"embedding": embedding, "templates": templates, "avatar_png": avatar})
-		ids[id] = true
-	_voice_profiles = validated
-	return true
-
-
-func voice_profile_count() -> int:
-	return _voice_profiles.size()
 
 
 func vocabulary() -> Array[String]:
@@ -189,17 +107,6 @@ func vocabulary() -> Array[String]:
 	for word in _words:
 		result.append(word.text)
 	return result
-
-
-func configure_speaker_matching(similarity: float = SPEAKER_SIMILARITY,
-		margin: float = SPEAKER_MARGIN) -> bool:
-	if not phase in ["ready", "finished"] or not is_finite(similarity) or not is_finite(margin):
-		return false
-	if similarity < 0.0 or similarity > 1.0 or margin < 0.0 or margin > 1.0:
-		return false
-	_speaker_similarity = similarity
-	_speaker_margin = margin
-	return true
 
 
 func advance(delta: float) -> void:
@@ -219,7 +126,7 @@ func advance(delta: float) -> void:
 		remaining = maxf(0.0, DURATION - elapsed)
 		_expire_targets()
 		if elapsed >= DURATION:
-			phase = "settling" if play_mode == "multi" else "finished"
+			phase = "finished"
 			targets.clear()
 			break
 		if _next_spawn_at <= elapsed + EPSILON:
@@ -243,21 +150,11 @@ func stop() -> void:
 	phase = "finished"
 	targets.clear()
 	clear_recognition_feedback()
-	_clear_voice_evidence()
-
-
-func finish_settling(delta: float) -> void:
-	if phase != "settling" or delta <= 0.0 or not is_finite(delta):
-		return
-	_settling_elapsed = minf(SETTLE_DURATION, _settling_elapsed + delta)
-	if _settling_elapsed + EPSILON >= SETTLE_DURATION:
-		phase = "finished"
-		_clear_voice_evidence()
 
 
 func hit_transcript(text: String) -> Array[Dictionary]:
 	var removed: Array[Dictionary] = []
-	if play_mode != "single" or phase != "running" or remaining <= 0.0:
+	if phase != "running" or remaining <= 0.0:
 		return removed
 	var spoken: Dictionary = {}
 	for token in _tokens.search_all(text.to_lower()):
@@ -289,103 +186,9 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 	return removed
 
 
-# Timestamps are milliseconds of active round time, excluding microphone pauses.
-# A word belongs to targets visible when speech STARTED; late results cannot hit
-# a later throw of the same word. Only pre-deadline captured audio is accepted.
-func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
-	var removed: Array[Dictionary] = []
-	if not _valid_speech_event(event) or not event.has("embedding"):
-		return removed
-	var embedding: Array[float] = _normalized_embedding(event.embedding)
-	if embedding.size() != EMBEDDING_SIZE:
-		return removed
-	_seen_events[event.event_id] = true
-	var start_ms: float = float(event.start_ms)
-	var spoken: Dictionary = {}
-	for token in _tokens.search_all(event.text.to_lower()):
-		spoken[token.get_string()] = true
-	var eligible: Array[Dictionary] = []
-	for entry in _target_history:
-		if entry.outcome == "hit" or start_ms < entry.spawned_ms or start_ms + EPSILON >= entry.expires_ms:
-			continue
-		for form in _aliases.get(entry.target.word.id, []):
-			if spoken.has(form):
-				eligible.append(entry)
-				break
-	if eligible.is_empty():
-		_set_recognition_feedback(_unavailable_target_feedback(spoken, start_ms))
-		return removed
-	var player_index: int = _identify_player(embedding)
-	if player_index < 0:
-		_set_recognition_feedback("identity_unconfirmed")
-		return removed
-	var player: Dictionary = _players[player_index]
-	for entry in eligible:
-		entry.outcome = "hit"
-		entry.hit_ms = start_ms
-		entry.player_index = player_index
-		player.hits += 1
-		for target in targets.duplicate():
-			if target.uid == entry.target.uid:
-				targets.erase(target)
-	_rebuild_multi_score()
-	for entry in eligible:
-		var hit: Dictionary = entry.target.duplicate(true)
-		hit.age = clampf(elapsed - entry.spawned_ms / 1000.0, 0.0, hit.lifetime)
-		hit.points = entry.points
-		hit.combo = entry.combo
-		hit.player_id = player.id
-		hit.player_index = player_index
-		hit.player_name = player.name
-		hit.player_emoji = player.emoji
-		hit.player_avatar_png = player.avatar_png
-		removed.append(hit)
-	if phase == "running" and targets.is_empty():
-		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
-	_set_recognition_feedback("")
-	return removed
-
-
-func accept_speech_feedback(event: Dictionary) -> bool:
-	if not _valid_speech_event(event) or not event.get("reason") is String \
-		or not event.reason in ["unclear_speech", "identity_unconfirmed", "timing_unavailable"]:
-		return false
-	_seen_events[event.event_id] = true
-	_set_recognition_feedback(event.reason)
-	return true
-
-
-func _valid_speech_event(event: Dictionary) -> bool:
-	if play_mode != "multi" or not phase in ["running", "settling"] \
-		or not event.has_all(["round_id", "event_id", "text", "start_ms", "end_ms"]):
-		return false
-	if not event.round_id is String or event.round_id != round_id or not event.event_id is String \
-		or event.event_id.is_empty() or event.event_id.length() > 256 or _seen_events.has(event.event_id):
-		return false
-	if not event.text is String or event.text.length() > 2000 or not _is_number(event.start_ms) or not _is_number(event.end_ms):
-		return false
-	var start_ms: float = float(event.start_ms)
-	var end_ms: float = float(event.end_ms)
-	return is_finite(start_ms) and is_finite(end_ms) and start_ms >= 0.0 and end_ms > start_ms \
-		and start_ms < DURATION * 1000.0 and end_ms <= DURATION * 1000.0 and start_ms <= elapsed * 1000.0 + EPSILON
-
-
-func _unavailable_target_feedback(spoken: Dictionary, start_ms: float) -> String:
-	if spoken.is_empty():
-		return "unclear_speech"
-	for entry in _target_history:
-		if start_ms + EPSILON < entry.expires_ms:
-			continue
-		for form in _aliases.get(entry.target.word.id, []):
-			if spoken.has(form):
-				return "target_expired"
-	return "no_matching_target"
-
-
 func _set_recognition_feedback(code: String) -> void:
 	recognition_feedback = code
 	recognition_message = RECOGNITION_MESSAGES.get(code, "")
-	recognition_revision += 1
 
 
 func clear_recognition_feedback() -> void:
@@ -393,40 +196,17 @@ func clear_recognition_feedback() -> void:
 		_set_recognition_feedback("")
 
 
-func players_snapshot() -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	for player in _players:
-		result.append(player.duplicate(true))
-	return result
-
-
-func ranking() -> Array[Dictionary]:
-	var result: Array[Dictionary] = players_snapshot()
-	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return a.hits > b.hits if a.hits != b.hits else a.index < b.index)
-	var last_hits: int = -1
-	var last_rank: int = 0
-	for index in range(result.size()):
-		if result[index].hits != last_hits:
-			last_rank = index + 1
-			last_hits = result[index].hits
-		result[index].rank = last_rank
-	return result
-
-
 func summary() -> Dictionary:
 	return {
 		"hits": hits, "misses": misses, "score": score, "best_combo": best_combo,
 		"unique_words": hit_words.size(), "hit_words": hit_words.duplicate(true),
-		"missed_words": missed_words.duplicate(true), "duration": DURATION, "elapsed": elapsed,
-		"play_mode": play_mode, "round_id": round_id, "players": players_snapshot(), "ranking": ranking()
+		"missed_words": missed_words.duplicate(true), "duration": DURATION, "elapsed": elapsed
 	}
 
 
 func _reset_round() -> void:
 	recognition_feedback = ""
 	recognition_message = ""
-	recognition_revision = 0
 	elapsed = 0.0
 	remaining = DURATION
 	targets.clear()
@@ -440,12 +220,6 @@ func _reset_round() -> void:
 	_spawn_counts.clear()
 	_next_uid = 1
 	_next_spawn_at = 0.0
-	_settling_elapsed = 0.0
-	_players.clear()
-	_round_profiles.clear()
-	_seen_events.clear()
-	_target_history.clear()
-	_history_by_uid.clear()
 
 
 func _spawn_interval() -> float:
@@ -480,21 +254,13 @@ func _spawn() -> void:
 		free_lanes.erase(target.lane)
 	var lane: int = free_lanes[_rng.randi_range(0, free_lanes.size() - 1)]
 	var center: float = 0.23 + lane * 0.27
-	var target: Dictionary = {
+	targets.append({
 		"uid": _next_uid, "word": word.duplicate(true), "age": 0.0, "lifetime": lifetime,
 		"forms": _aliases[word.id].duplicate(),
 		"lane": lane, "x_start": center + _rng.randf_range(-0.02, 0.02),
 		"x_end": center + _rng.randf_range(-0.025, 0.025),
 		"peak": _rng.randf_range(0.18, 0.45), "spin": _rng.randf_range(-0.14, 0.14)
-	}
-	targets.append(target)
-	if play_mode == "multi":
-		var entry: Dictionary = {
-			"target": target.duplicate(true), "spawned_ms": elapsed * 1000.0,
-			"expires_ms": (elapsed + lifetime) * 1000.0, "outcome": "pending"
-		}
-		_target_history.append(entry)
-		_history_by_uid[_next_uid] = entry
+	})
 	_spawn_counts[word.id] = fewest + 1
 	_next_uid += 1
 
@@ -513,120 +279,10 @@ func _expire_targets() -> void:
 	for target in targets.duplicate():
 		if target.age + EPSILON < target.lifetime:
 			continue
-		if play_mode == "multi":
-			_history_by_uid[target.uid].outcome = "expired"
-		else:
-			misses += 1
-			combo = 0
-			_record_word(missed_words, target.word)
+		misses += 1
+		combo = 0
+		_record_word(missed_words, target.word)
 		targets.erase(target)
-	if play_mode == "multi":
-		_rebuild_multi_score()
-
-
-func _is_number(value: Variant) -> bool:
-	return value is int or value is float
-
-
-func _normalized_embedding(value: Variant) -> Array[float]:
-	var normalized: Array[float] = []
-	if not value is Array and not value is PackedFloat32Array and not value is PackedFloat64Array:
-		return normalized
-	if value.is_empty() or value.size() > 4096:
-		return normalized
-	var squared_length: float = 0.0
-	for element in value:
-		if not _is_number(element) or not is_finite(float(element)):
-			return []
-		var component: float = float(element)
-		squared_length += component * component
-		normalized.append(component)
-	if not is_finite(squared_length) or squared_length <= EPSILON:
-		return []
-	var length: float = sqrt(squared_length)
-	for index in range(normalized.size()):
-		normalized[index] /= length
-	return normalized
-
-
-func _identify_player(embedding: Array[float]) -> int:
-	var best_index: int = -1
-	var best_similarity: float = -2.0
-	var second_similarity: float = -2.0
-	for profile_index in range(_round_profiles.size()):
-		var profile: Dictionary = _round_profiles[profile_index]
-		# Two supporting recordings reduce reliance on one unusually close sample.
-		# A legacy profile keeps its original single-template behavior.
-		var scores: Array[float] = []
-		for template in profile.templates:
-			var score: float = 0.0
-			for index in range(embedding.size()):
-				score += embedding[index] * template[index]
-			scores.append(clampf(score, -1.0, 1.0))
-		scores.sort()
-		var similarity: float = scores[-1]
-		if scores.size() > 1:
-			similarity = (similarity + scores[-2]) * 0.5
-		if similarity > best_similarity:
-			second_similarity = best_similarity
-			best_index = profile_index
-			best_similarity = similarity
-		elif similarity > second_similarity:
-			second_similarity = similarity
-	# Compare against the entire registered library, even profiles that have not
-	# hit a word yet. Never turn a weak or ambiguous voice into a new player.
-	if best_index < 0 or best_similarity < _speaker_similarity or best_similarity - second_similarity < _speaker_margin:
-		return -1
-	var matched: Dictionary = _round_profiles[best_index]
-	for player in _players:
-		if player.id == matched.id:
-			return player.index
-	if _players.size() >= MAX_PLAYERS:
-		return -1
-	var player_index: int = _players.size()
-	_players.append({"id": matched.id, "name": matched.name, "emoji": matched.emoji,
-		"avatar_png": matched.avatar_png, "index": player_index, "hits": 0})
-	return player_index
-
-
-func _rebuild_multi_score() -> void:
-	# Recompute in speech-time order so a delayed valid answer replaces its
-	# provisional miss and does not corrupt combos or the practice-word list.
-	var outcomes: Array[Dictionary] = []
-	for entry in _target_history:
-		if entry.outcome != "pending":
-			outcomes.append(entry)
-	outcomes.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var time_a: float = a.hit_ms if a.outcome == "hit" else a.expires_ms
-		var time_b: float = b.hit_ms if b.outcome == "hit" else b.expires_ms
-		return time_a < time_b if time_a != time_b else a.target.uid < b.target.uid)
-	hits = 0
-	misses = 0
-	combo = 0
-	best_combo = 0
-	score = 0
-	hit_words.clear()
-	missed_words.clear()
-	for entry in outcomes:
-		if entry.outcome == "expired":
-			misses += 1
-			combo = 0
-			_record_word(missed_words, entry.target.word)
-			continue
-		hits += 1
-		combo += 1
-		best_combo = maxi(best_combo, combo)
-		entry.points = 10 + mini(combo - 1, 5) * 2
-		entry.combo = combo
-		score += entry.points
-		_record_word(hit_words, entry.target.word)
-
-
-func _clear_voice_evidence() -> void:
-	_round_profiles.clear()
-	_target_history.clear()
-	_history_by_uid.clear()
-	_seen_events.clear()
 
 
 func _record_word(collection: Array[Dictionary], word: Dictionary) -> void:

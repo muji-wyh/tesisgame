@@ -3,9 +3,8 @@
 A **Godot game delivered on the Web** for early English learners. Gameplay, cards, audio, chest animation and celebrations run in GDScript. The HTML shell hosts the exported engine and integrates browser sizing, accessibility announcements, lifecycle events and read-only asset URLs.
 
 Players need a browser, not a Godot installation. The game is a static website
-with no game backend or external image service. Solo voice play uses the
-browser's speech-recognition provider. Voice Pop can additionally prepare local
-multiplayer models on demand; multiplayer microphone audio stays on the device.
+with no game backend or external image service. Voice Pop is a single-player
+game that uses the browser's system speech-recognition provider.
 
 ## Run and build
 
@@ -13,7 +12,6 @@ Development prerequisites: **Godot 4.7**, its matching **Web export templates**,
 
 ```powershell
 npm ci
-npm run prepare:multiplayer
 npm start
 ```
 
@@ -25,16 +23,11 @@ To build without starting a server:
 npm run build:web
 ```
 
-The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, on-demand `.sample` audio, `multiplayer/` directory, icon and `.br` files together. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
+The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, on-demand `.sample` audio, icon and `.br` files together. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
 
-`prepare:multiplayer` provisions the pinned local speech runtime and six model
-files in ignored `build/multiplayer`. Run it once before the first Web build and
-again after changing the runtime sources or model pins. The build verifies every
-prepared file and publishes models separately from the Godot startup pack. See
-[the local multiplayer notes](docs/voice-pop-multiplayer.md) for model sources,
-build requirements, validation and the limits of the experimental voice matching.
-The current optional download is 112.34 MB before HTTP compression; it is cached
-by version when browser storage permits and is not part of the initial game load.
+Speech recognition needs no model preparation or additional game download.
+Rebuilding an older export removes its generated local speech models and retired
+multiplayer and voice-profile scripts while preserving unrelated output files.
 
 The build fingerprints engine files and the game pack independently, then generates Brotli
 sidecars with Node's built-in compressor. Azure serves the compressed variants automatically;
@@ -77,7 +70,7 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 Word pronunciations and immediate sound effects stay in the startup **PCK alongside WASM**.
-The eight background tracks, twenty-eight game prompts and Voice Pop report recordings
+The eight background tracks, ten game prompts and Voice Pop report recordings
 are separate, content-hashed Godot `.sample` resources. Their URLs are embedded in HTML, so no extra startup manifest
 request is needed. The build opens the actual exported PCK to confirm that word speech is
 present and both the optional source resources and their imported payloads are absent.
@@ -196,61 +189,9 @@ The tabs are ordered **Match**, **Memory**, **Voice Pop**; entry and reload sele
 
 ### Voice Pop
 
-The top bar shows **Solo · Preparing multiplayer**, actual download progress,
-initialization, or **Multiplayer ready**. Preparation runs separately from solo
-listening and never changes the current round. When ready, a slide-down choice
-offers **Continue solo** or **Start multiplayer**. Continuing solo keeps the
-round and leaves a **Mode** button for later. Starting multiplayer retains the
-previous round's hit/score summary and starts a fresh 30-second round after the
-local microphone actually starts. The selected mode lasts for this page session.
-
-Open **More → Users** to save up to ten users in this browser. Each user chooses
-a name and emoji avatar, then reads the six suggested phrases with pauses.
-Enrollment needs at least three independent speech turns and 12 seconds of
-effective speech, usually 12–20 seconds of speaking. Progress excludes internal
-pauses and gives feedback for quiet, clipped, short or inconsistent samples.
-Models prepare in the background; recording becomes available once they are
-ready. Review the sample and choose **Save**.
-
-Each profile can keep up to eight voice templates. **Add voice samples** appends
-another recording only after Save and a match to the existing voice; **Re-record
-voice** replaces it. Names and avatars remain editable, and profiles can be
-deleted. Existing single-template profiles work unchanged and can be strengthened
-with additional recordings. Adding samples preserves the original references
-alongside recent samples.
-
-Choose **Identify user** and say two sentences with a pause between them. It
-needs at least four seconds of effective speech and agreement between separate
-turns before showing the saved name and emoji. It stops automatically and offers
-guidance and retry when the evidence is unknown, ambiguous or inconsistent.
-Identification uses the existing local model and leaves the saved library
-unchanged. Both identification and gameplay compare the two strongest supporting
-templates for each person, using the original single template for older profiles.
-The similarity and next-person margin thresholds remain 0.60 and 0.08.
-See [voice matching validation](docs/qa/2026-09-24-voice-accuracy.md) for checks
-and the remaining real-speaker testing needs.
-
-Local multiplayer supports up to four registered speakers per round, taking
-turns on one microphone. Only a clear match to the saved voice library can hit
-a word; unknown or ambiguous voices do not score. The first four matched users
-to hit a visible word join that round. Their emoji avatars and hit counts remain
-visible, and results show names and rank by hits with ties. Profile changes apply
-to the next round; pausing preserves the current players. Solo continues to use
-browser speech and does not identify users. Voice matching is experimental: a very short
-word, similar voices or overlapping speakers can be misassigned. The initial
-similarity thresholds have not been calibrated with a children's voice study.
-
-Model readiness means files have passed SHA-256 checks and all three actual
-inference paths have initialized and warmed up, not just that downloading has
-finished. Valid model files are cached when browser storage permits. Failure
-leaves solo play available and offers Retry. Ready local multiplayer works
-offline; solo recognition retains its browser service requirements. Local multiplayer
-audio and voice vectors are never uploaded. Enrollment voice vectors, names and
-emoji are saved in local browser storage; raw recordings are discarded. Clearing
-site data removes the library, and profiles made with an older speaker model must
-be re-recorded. Backgrounding stops capture;
-resuming requires a new gesture. Multiplayer results allow up to three seconds
-to finish already-captured words before freezing the standings.
+Voice Pop is a single-player game using the system speech service exposed by
+`SpeechRecognition` or `webkitSpeechRecognition`. It starts directly without
+a mode selection or voice enrollment.
 
 Choose Voice Pop to request speech permission. The 30-second clock starts only when
 the microphone is listening. A narrow peach/pink and blue/violet glow follows the
@@ -263,24 +204,17 @@ that do not score. Long sentences keep their newest two lines in view. Pausing,
 finishing or leaving clears that text.
 
 Voice Pop supplies the round's age-appropriate vocabulary as recognition context.
-Solo uses contextual phrases when the browser exposes that optional API; browsers
+It uses contextual phrases when the browser exposes that optional API; browsers
 that lack or reject it continue with ordinary speech recognition. Recognized
-text still needs to match a target. Both modes accept a small, explicit set of
+text still needs to match a target. The game accepts a small, explicit set of
 homophones: sun/son, flower/flour, pear/pair and plane/plain, including their
 regular plurals. Similar spellings and arbitrary partial words are not accepted.
-Local recognition uses a four-path beam search with a modest vocabulary bonus.
-Its 12,590-byte BPE vocabulary downloads with the optional runtime; the existing
-ONNX models and saved voice profiles are unchanged. A runtime update can reuse
-unchanged assets from an older cache after checking their size and SHA-256 again.
 
-The live caption distinguishes unclear speech, an unconfirmed voice user, a
-word whose target has expired, and words that do not match a target. Local
-transcription can appear even when the sound is too short to identify its speaker
-or its timing cannot safely be matched. These messages do not pause the clock or
-award points. Multiplayer still scores using captured audio time and registered
-voice profiles; the speaker similarity thresholds are unchanged. Solo browsers
-do not supply reliable word timestamps, so late Solo results still need a current
-target when received. No accuracy percentage is implied by these safeguards.
+The live caption distinguishes unclear speech and words that do not match a
+current target. These messages do not pause the clock or
+award points. Browsers do not supply reliable word timestamps, so late results
+still need a current target when received. No accuracy percentage is implied by
+these safeguards.
 
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
 points). Dropped objects end the combo; there is no losing screen. Pip reports the
@@ -300,9 +234,9 @@ does not depend on an installed browser TTS voice or runtime speech credentials.
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume
 continues it without resetting the score. Leaving the mode or finishing stops
-recognition. Solo browser speech can process audio remotely; the game does not save
-recordings or transcripts. Solo needs secure-browser SpeechRecognition support;
-local multiplayer instead needs WebAssembly SIMD, Workers and AudioWorklet.
+recognition. Browser speech can process audio remotely; the game does not save
+recordings or transcripts. Voice Pop needs a secure browser with SpeechRecognition
+or webkitSpeechRecognition support and an available speech service.
 Unsupported devices show an explanation and a way back to Match.
 Reduced motion keeps a static edge glow and simpler hit feedback.
 Switch between them to practise the same lesson.
@@ -578,14 +512,14 @@ even after touch scrolling. Reduced motion keeps direct finger scrolling and dis
 automatic glide.
 A won reward is still revealed immediately after the required hold.
 
-**Play again** starts a fresh round, avoiding the previous board's words when at least
+**New adventure** starts a fresh round, avoiding the previous board's words when at least
 five unused words are available. Small vocabularies still produce a complete board;
 explicit seeds remain reproducible. Audio starts with normal game interaction and stops on
 hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen
 uses the encouraging bear, a gentle effect and prerecorded English speech. Tap the bear
 or focus it and press Xbox A for a happy wiggle, little hearts and rotating encouragement.
 Bear play never restarts lost-round music or changes the result. Reduced motion keeps the
-encouragement without movement, and Play again remains the initial controller action.
+encouragement without movement, and New adventure remains the initial controller action.
 
 ### Voice play
 
@@ -632,7 +566,7 @@ An embedding site must also allow `microphone` in its iframe permissions.
 | LB / RB | Change the game season without restarting the round. |
 | Y / Menu | Open or close More (Pip's room, world and age choices), preserving the game. |
 
-Choose **Play again** with A to start another round. Locked rewards are skipped during
+Choose **New adventure** with A to start another round. Locked rewards are skipped during
 navigation; completed Match cards remain available to hear again. Releasing A or
 disconnecting also releases a held Memory eye. Releasing A early cancels an incomplete chest
 charge; reconnecting retains the current round. A held on the loading toy must be released
@@ -745,11 +679,13 @@ try {
 The existing `tools\generate-voices.ps1` command forwards to the same generator.
 Keep keys in the process environment, never in source files or the Web export.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
-The game prompt catalog contains 28 messages, including the three Jungle and
-three Candy prompts; together with the 200 word recordings it produces 228
-files under `assets\audio\voice`. Voice Pop report recordings remain in their
-separate directory. Source details, hashes and generation checks for the twelve
-new world audio files are in [Jungle and Candy audio](docs/assets/jungle-candy-audio.md).
+The game prompt catalog contains ten messages: wrong-answer and loss feedback,
+plus one greeting for each world. Together with the 200 word recordings, the
+generator maintains 210 active files under `assets\audio\voice`. Eight legacy
+arrival/opening recordings remain preserved as source assets but are excluded
+from generation and Web delivery. Voice Pop report recordings remain in their
+separate directory. Source details, hashes and generation checks are in
+[Jungle and Candy audio](docs/assets/jungle-candy-audio.md).
 
 ## Chest artwork
 
@@ -807,6 +743,11 @@ npm test
 npm run test:browser
 npm run test:all
 ```
+
+`npm test` imports resources and runs each native and Node suite once. Use
+`node tools/run-tests.cjs --list` to inspect the complete plan, or a focused
+command such as `npm run test:voice-pop` or `npm run test:pip-audio` during
+development. Browser checks remain in `npm run test:browser`.
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and flight, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 

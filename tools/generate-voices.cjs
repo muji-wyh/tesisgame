@@ -11,9 +11,8 @@ const PROFILE = Object.freeze({
   format: 'riff-24khz-16bit-mono-pcm'
 });
 const PROMPT_IDS = [
-  'welcome', 'correct', 'wrong', 'loss',
-  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].flatMap(season =>
-    [`${season}-theme`, `${season}-arrive`, `${season}-open`])
+  'wrong', 'loss',
+  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`)
 ];
 
 function englishText(text) {

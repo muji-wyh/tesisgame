@@ -97,7 +97,7 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     'index.pck': Buffer.from('game data '.repeat(1024))
   };
   const audio = [{
-    source: 'res://assets/audio/voice/welcome.wav',
+    source: 'res://assets/audio/voice/wrong.wav',
     bytes: Buffer.from('RSRC optional audio '.repeat(1024))
   }];
   const writeExport = () => {
@@ -172,6 +172,40 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
       'public, max-age=31536000, immutable');
   }
+});
+
+test('rebuilding a legacy export removes retired local speech assets and preserves unrelated output', t => {
+  const { packageWebExport } = require('../tools/package-web.cjs');
+  const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'voice-pop-solo-export-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const writeExport = () => {
+    fs.writeFileSync(path.join(directory, 'index.html'),
+      '<script src="index.js"></script><script>const config = {};</script>');
+    for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
+      fs.writeFileSync(path.join(directory, `index.${suffix}`), suffix === 'js' ? startupFixture : suffix);
+    }
+  };
+  const legacyScripts = ['multiplayer-host.js', 'multiplayer-capture.js', 'multiplayer-audio.js', 'multiplayer-worker.js',
+    'voice-profiles.js', 'voice-profiles-ui.js', 'voice-profiles.css'];
+  const legacyAssets = ['encoder-0123456789abcdef.onnx', 'decoder-0123456789abcdef.onnx', 'joiner-0123456789abcdef.onnx',
+    'speaker-0123456789abcdef.onnx', 'vad-0123456789abcdef.onnx', 'tokens-0123456789abcdef.txt',
+    'bpe-0123456789abcdef.vocab', 'runtime-js-0123456789abcdef.js', 'runtime-wasm-0123456789abcdef.wasm',
+    'manifest.json', 'THIRD_PARTY_NOTICES.txt'];
+  fs.mkdirSync(path.join(directory, 'multiplayer'));
+  const removed = [...legacyScripts, ...legacyAssets.map(name => `multiplayer/${name}`)]
+    .flatMap(name => [name, `${name}.br`, `${name}.gz`]);
+  for (const name of removed) fs.writeFileSync(path.join(directory, name), 'retired generated asset');
+  const preserved = ['notes.txt', 'multiplayer-notes.js', 'multiplayer/notes.txt', 'multiplayer/notes.vocab',
+    'multiplayer/custom-0123456789abcdef.onnx'];
+  for (const name of preserved) fs.writeFileSync(path.join(directory, name), 'keep unrelated output');
+  writeExport();
+  packageWebExport(directory);
+  for (const name of removed) assert.equal(fs.existsSync(path.join(directory, name)), false, name);
+  for (const name of preserved) assert.equal(fs.readFileSync(path.join(directory, name), 'utf8'), 'keep unrelated output', name);
+  for (const name of preserved.filter(name => name.startsWith('multiplayer/'))) fs.unlinkSync(path.join(directory, name));
+  writeExport();
+  packageWebExport(directory);
+  assert.equal(fs.existsSync(path.join(directory, 'multiplayer')), false, 'Empty retired asset directories should not ship');
 });
 
 function startupHarness(overrides = {}) {
