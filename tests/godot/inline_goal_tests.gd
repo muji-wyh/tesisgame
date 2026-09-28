@@ -54,24 +54,24 @@ func _run() -> void:
 	await settle()
 	var words: Array = app.model.lesson_words.duplicate(true)
 	for id in ["toy-space", "toy-spring"]:
-		app._collection_scroll.scroll_vertical = 0
-		await settle()
 		var card: Button = app._room.item_buttons[id]
-		var viewport: Rect2 = app._collection_scroll.get_global_rect()
-		app._collection_scroll.scroll_vertical = maxi(0, roundi(card.global_position.y - viewport.end.y + 44))
+		var strip: ScrollContainer = app._room.toy_shelf
+		if strip.is_ancestor_of(card):
+			strip.ensure_control_visible(card)
 		await settle()
-		var scroll: int = app._collection_scroll.scroll_vertical
+		var viewport: Rect2 = strip.get_global_rect() if strip.is_ancestor_of(card) else app._collection_scroll.get_global_rect()
+		var scroll: int = strip.scroll_horizontal
 		var before: Rect2 = card.get_global_rect()
 		var visible: Rect2 = before.intersection(viewport)
 		check(visible.size.y > 12, "The card has a real visible pointer target")
 		await tap(visible.get_center())
-		check(app._collection_scroll.scroll_vertical == scroll, "Pointer card selection keeps the exact scroll offset: " + id)
+		check(strip.scroll_horizontal == scroll, "Pointer card selection keeps the exact horizontal scroll offset: " + id)
 		check(card.get_global_rect().is_equal_approx(before), "Card selection does not move the grid under the pointer: " + id)
 		check(app.collection_page.visible and app.model.lesson_words == words, "Preview/equipment does not start a lesson")
 		if id == "toy-space":
 			check(app._room.goal_button.get_parent() == card and app._room.goal_label.get_parent() == card,
 				"The goal action and status belong to the selected card")
-			check(app._room.goal_button.text.is_empty() and app._room.goal_label.text.contains("1 more piece"),
+			check(app._room.goal_button.text.is_empty() and app._room.goal_label.text.contains("2/3") and app._room.goal_label.text.contains("1 left"),
 				"The standalone Help button is replaced by an inline status and action")
 			check(card.get_global_rect().encloses(app._room.goal_button.get_global_rect())
 				and card.get_global_rect().encloses(app._room.goal_label.get_global_rect()),
@@ -84,7 +84,7 @@ func _run() -> void:
 			root.push_input(tab, true)
 			await settle()
 			check(app._room.goal_button.has_focus()
-				and app._collection_scroll.get_global_rect().grow(1).encloses(card.get_global_rect()),
+				and app._room.toy_shelf.get_global_rect().grow(1).encloses(card.get_global_rect()),
 				"Keyboard focus reveals both the inline action and its card status")
 	check(app.find_children("*", "Button", true, false).all(func(button: Button) -> bool:
 		return button.text != "Help Pip get this"), "No standalone Help Pip get this control remains")
@@ -97,19 +97,19 @@ func _run() -> void:
 	var rocket: Button = app._room.item_buttons["toy-space"]
 	rocket.grab_focus()
 	await settle()
-	check(app._collection_scroll.get_global_rect().grow(1).encloses(rocket.get_global_rect()),
+	check(app._room.toy_shelf.get_global_rect().grow(1).encloses(rocket.get_global_rect()),
 		"Keyboard focus still scrolls a toy card fully into view")
 	rocket.pressed.emit()
 	await settle()
 	var save_path: String = app.playroom_state._save_path
 	app.playroom_state._save_path = directory + "/missing/room.cfg"
-	var scroll: int = app._collection_scroll.scroll_vertical
+	var scroll: int = app._room.toy_shelf.scroll_horizontal
 	app._room.goal_button.pressed.emit()
 	await settle()
 	check(app.collection_page.visible and app._room.goal_label.text.contains("Not saved")
 		and app._room.goal_label.get_parent() == rocket,
 		"A failed goal save is shown on the same card")
-	check(app._collection_scroll.scroll_vertical == scroll and app.model.lesson_words == words,
+	check(app._room.toy_shelf.scroll_horizontal == scroll and app.model.lesson_words == words,
 		"Failed goal saves do not jump the page or replace the lesson")
 	app.playroom_state._save_path = save_path
 	app._room.goal_button.pressed.emit()

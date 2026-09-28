@@ -50,14 +50,14 @@ func _run() -> void:
 	app._show_collection()
 	for age_id in ["7-9", "4-6"]:
 		await settle()
-		app._collection_scroll.scroll_vertical = 60
-		var scroll: int = app._collection_scroll.scroll_vertical
 		var button: Button = app._age_buttons[age_id]
 		button.grab_focus()
+		await settle()
+		var scroll: int = app._age_scroll.scroll_horizontal
 		button.pressed.emit()
 		await settle()
 		check(app.collection_page.visible and app._room.is_visible_in_tree()
-			and button.has_focus() and app._collection_scroll.scroll_vertical == scroll,
+			and button.has_focus() and app._age_scroll.scroll_horizontal == scroll,
 			"Changing age stays on the same More page without moving scroll or focus")
 		check(app.model.cards == cards and app.model.lesson_words == words and app.model.age_band_id == "all"
 			and [app.model.selected_id, app.model.hints_remaining, app.model.phase,
@@ -115,30 +115,30 @@ func _run() -> void:
 		check(app._age_buttons.keys() == ["all", "4-6", "7-9", "10-plus"], "All four age choices remain directly available")
 		for id in app._age_buttons:
 			var button: Button = app._age_buttons[id]
+			button.grab_focus()
+			await settle()
 			check(button.is_visible_in_tree() and button.size.x * scale >= 48 and button.size.y * scale >= 48,
 				"Age buttons retain 48 CSS-pixel input targets at " + str(dimensions))
-			check(app.get_global_rect().encloses(button.get_global_rect())
+			check(app._age_scroll.get_global_rect().grow(1).encloses(button.get_global_rect())
 				and str(button.get("accessibility_name")).contains(app.Data.age_band(id).name),
-				"Age choices fit the viewport and retain descriptive accessible names")
+				"Focused age choices fit their strip and retain descriptive accessible names")
 		check(app._age_choices.get_global_rect().end.y <= app._collection_scroll.global_position.y
-			and app._collection_scroll.size.y * scale >= 160,
-			"Compact age controls leave a usable, separate scrolling content area")
+			and app._collection_scroll.size.y * scale >= 100
+			and app._collection_scroll.scroll_vertical == 0,
+			"The top age strip leaves a usable fixed playground even in landscape")
 		check(not app._age_notice.is_visible_in_tree()
 			and is_equal_approx(app._age_choices.size.y, app._age_row.size.y),
 			"The hidden notice leaves no reserved height or gap below the age buttons")
 		var order: Array = app._focus_candidates()
-		check(order.find(app._collection_back) < order.find(app._age_buttons["all"])
+		check(order.find(app._age_buttons["all"]) < order.find(app._room.toy_button)
 			and app._focus_center(app._age_buttons["all"]).y < app._focus_center(app._room.toy_button).y,
-			"Age controls follow the header and precede scrolling content in focus order")
+			"Age controls share the top header and precede the fixed playground in focus order")
 		app._age_buttons["all"].grab_focus()
 		app._move_focus(Vector2.RIGHT)
 		check(app._age_buttons["4-6"].has_focus(), "Controller navigation traverses the age row left to right")
 		app._controller_accept()
 		check(app.playroom_state.age_band_id == "4-6" and app._age_buttons["4-6"].button_pressed,
 			"Controller accept selects and saves an age level")
-		app._move_focus(Vector2.UP)
-		check(app.theme_buttons.has(root.gui_get_focus_owner())
-			or app._collection_back.has_focus(), "Up from the age row reaches the header rather than scrolled content")
 	app._hide_collection()
 	check(app.new_round(33, false, "music-makers", "match") and app.model.age_band_id == "4-6",
 		"A new Match round uses the saved age preference")
@@ -150,13 +150,14 @@ func _run() -> void:
 	app._show_collection()
 	await settle()
 	await settle()
-	check(app._age_choices.get_parent() == app._collection_grid and app._age_choices.is_visible_in_tree()
-		and app._collection_scroll.size.y >= 128,
-		"Short screens scroll the age row with content instead of squeezing the room")
+	check(not app._collection_grid.is_ancestor_of(app._age_choices) and app._age_choices.is_visible_in_tree()
+		and app._collection_scroll.scroll_vertical == 0
+		and app.get_global_rect().grow(1).encloses(app._room.toy_shelf.get_global_rect()),
+		"Short screens keep the top age strip and bottom toys inside the fixed page")
 	app._age_buttons["7-9"].grab_focus()
 	await settle()
-	check(app._collection_scroll.get_global_rect().encloses(app._age_buttons["7-9"].get_global_rect()),
-		"Keyboard focus can reveal scrolled age choices on short screens")
+	check(app._age_scroll.get_global_rect().grow(1).encloses(app._age_buttons["7-9"].get_global_rect()),
+		"Keyboard focus reveals the age choice inside its top horizontal strip")
 	app._build_collection()
 	await settle()
 	check(app._age_buttons.size() == 4 and app._age_buttons["7-9"].is_inside_tree(),

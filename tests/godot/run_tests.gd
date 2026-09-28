@@ -893,11 +893,11 @@ func _test_scene() -> void:
 	check(has_property(app, "collection_page") and app.collection_page != null,
 		"The rewards collection has an in-game page")
 	var collection_scroll := collection_scroll(app)
-	check(collection_scroll != null, "The rewards collection scrolls in a native ScrollContainer")
+	check(collection_scroll != null, "The room has a fixed native viewport")
 	if collection_scroll != null:
-		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
-			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER,
-			"Rewards scrollbars are hidden without disabling touch or wheel scrolling")
+		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED
+			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED,
+			"The playground viewport disables whole-page scrolling on both axes")
 	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	if app.has_method("_show_collection"):
@@ -930,104 +930,32 @@ func _test_scene() -> void:
 		root.size = Vector2i(320, 320)
 		await process_frame
 		await process_frame
-		collection_scroll.scroll_vertical = 80
-		var start_scroll: int = collection_scroll.scroll_vertical
 		var point := room_toy.get_global_rect().get_center()
+		var stage_bounds: Rect2 = app._room._room.get_global_rect()
 		emit_scroll_press(room_toy, point, true)
 		emit_scroll_motion(room_toy, point + Vector2(0, -43), Vector2(0, -43))
 		emit_scroll_motion(collection_scroll, point + Vector2(0, -43), Vector2(0, -43))
 		emit_scroll_press(room_toy, point + Vector2(0, -43), false)
-		check(abs(collection_scroll.scroll_vertical - (start_scroll + 43)) <= 1,
-			"Collection touch drag scrolls exactly one logical pixel per finger pixel")
-		room_toy.pressed.emit()
-		check(app.playroom_state.toy_id == selected_toy, "A vertical room swipe never selects a toy on release")
-		collection_scroll.scroll_vertical = 15
-		emit_scroll_press(collection_scroll, point, true)
-		emit_scroll_motion(collection_scroll, point + Vector2(0, 1000), Vector2(0, 1000))
-		emit_scroll_press(collection_scroll, point + Vector2(0, 1000), false)
-		check(collection_scroll.scroll_vertical == 0, "Collection drag clamps at the top")
-		collection_scroll.scroll_vertical = 0
-		emit_scroll_press(collection_scroll, point, true)
-		emit_scroll_motion(collection_scroll, point + Vector2(0, -10000), Vector2(0, -10000))
-		emit_scroll_press(collection_scroll, point + Vector2(0, -10000), false)
-		var max_scroll: int = max(0, int(app._collection_grid.size.y - collection_scroll.size.y))
-		check(abs(collection_scroll.scroll_vertical - max_scroll) <= 1, "Collection drag clamps at the bottom")
-		var before_wheel: int = collection_scroll.scroll_vertical
-		emit_scroll_wheel(collection_scroll, point, MOUSE_BUTTON_WHEEL_UP)
-		check(collection_scroll.scroll_vertical < before_wheel, "Mouse wheel scrolling still works with hidden bars")
-		check(app.has_method("_advance_collection_inertia"), "The collection supports release momentum")
-		if app.has_method("_advance_collection_inertia"):
-			collection_scroll.scroll_vertical = 80
-			app._start_collection_drag(Vector2(100, 250), 0)
-			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
-			app._update_collection_drag(Vector2(100, 210))
-			var drag_velocity: Vector2 = app._collection_velocity
-			app._update_collection_drag(Vector2(100, 210))
-			check(app._collection_velocity == drag_velocity,
-				"Duplicated touch and emulated mouse positions do not amplify momentum")
-			app._end_collection_drag()
-			var released_scroll: int = collection_scroll.scroll_vertical
-			app._advance_collection_inertia(0.1)
-			check(collection_scroll.scroll_vertical > released_scroll,
-				"Releasing a moving finger continues scrolling in the same direction")
-			check(app._collection_velocity.length() < drag_velocity.length(),
-				"Collection momentum loses speed smoothly")
-			app._start_collection_drag(Vector2(100, 210), 0)
-			app._start_collection_drag(Vector2(100, 210), -2)
-			check(app._collection_velocity == Vector2.ZERO and app._collection_dragged,
-				"A new touch stops momentum and remains a stop gesture after mouse emulation")
-			app._end_collection_drag()
-			room_toy.pressed.emit()
-			check(app.playroom_state.toy_id == selected_toy, "Tapping to stop momentum does not select a moving toy")
-			collection_scroll.scroll_vertical = max_scroll - 5
-			app._start_collection_drag(Vector2(100, 210), 0)
-			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
-			app._update_collection_drag(Vector2(100, 170))
-			app._end_collection_drag()
-			app._advance_collection_inertia(0.5)
-			check(collection_scroll.scroll_vertical == max_scroll and app._collection_velocity == Vector2.ZERO,
-				"Momentum stops at the collection boundary without overshoot")
-			collection_scroll.scroll_vertical = 80
-			app._start_collection_drag(Vector2(100, 250), 0)
-			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
-			app._update_collection_drag(Vector2(100, 210))
-			app._end_collection_drag()
-			app.set_reduced_motion(true)
-			var reduced_scroll: int = collection_scroll.scroll_vertical
-			app._advance_collection_inertia(0.5)
-			check(collection_scroll.scroll_vertical == reduced_scroll and app._collection_velocity == Vector2.ZERO,
-				"Reduced motion cancels automatic gliding without disabling finger scrolling")
-			app.set_reduced_motion(false)
-			check(app.collection_button.focus_mode == Control.FOCUS_NONE
-				and app._focus_candidates().all(func(control: Control) -> bool: return app.collection_page.is_ancestor_of(control)),
-				"Restyling after a motion change preserves the collection's keyboard focus boundary")
-			check(app.theme_buttons.all(func(button: Button) -> bool: return app._valid_focus(button)),
-				"The World strip stays keyboard-accessible inside the open collection")
-			collection_scroll.scroll_vertical = max_scroll
-			await process_frame
-			await process_frame
-			app._collection_back.grab_focus()
-			# Controller navigation reaches the playable room after the fixed header.
-			for step in range(20):
-				if room_toy.has_focus():
-					break
-				app._move_focus(Vector2.DOWN)
-				await process_frame
-				await process_frame
-			check(room_toy.has_focus(),
-				"Controller navigation reaches the scrolled-off room toy: focus=%s candidates=%s" % [
-					root.gui_get_focus_owner().name,
-					app._focus_candidates().map(func(control: Control) -> String:
-						return "%s:%s" % [control.name, app._focus_center(control)])])
-			check(collection_scroll.get_global_rect().encloses(room_toy.get_global_rect()),
-				"Switching from scrolled touch input brings the focused room toy back into view: %s within %s" % [room_toy.get_global_rect(), collection_scroll.get_global_rect()])
-			app._start_collection_drag(Vector2(100, 250), 0)
-			app._collection_last_sample_usec = Time.get_ticks_usec() - 50000
-			app._update_collection_drag(Vector2(100, 210))
-			app._end_collection_drag()
-			app.on_page_hidden()
-			check(app._collection_velocity == Vector2.ZERO, "Hiding the page cancels collection momentum")
-			app.on_page_visible()
+		check(collection_scroll.scroll_vertical == 0 and app._room._room.get_global_rect() == stage_bounds,
+			"A vertical gesture does not move the fixed room viewport")
+		emit_scroll_wheel(collection_scroll, point, MOUSE_BUTTON_WHEEL_DOWN)
+		check(collection_scroll.scroll_vertical == 0, "Wheel input cannot move the whole room page")
+		app.set_reduced_motion(true)
+		check(app.collection_button.focus_mode == Control.FOCUS_NONE
+			and app._focus_candidates().all(func(control: Control) -> bool: return app.collection_page.is_ancestor_of(control)),
+			"Restyling after a motion change preserves the room's keyboard focus boundary")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return app._valid_focus(button)),
+			"The World strip stays keyboard-accessible inside the open room")
+		room_toy.grab_focus()
+		await process_frame
+		await process_frame
+		check(room_toy.has_focus() and collection_scroll.get_global_rect().grow(1).encloses(room_toy.get_global_rect()),
+			"Keyboard focus reaches an earned floor toy without scrolling the page")
+		check(app.playroom_state.toy_id == selected_toy, "Room gestures and focus do not change the selected toy")
+		app.on_page_hidden()
+		check(app._collection_velocity == Vector2.ZERO, "Hiding the page leaves no room momentum")
+		app.on_page_visible()
+		app.set_reduced_motion(false)
 		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")

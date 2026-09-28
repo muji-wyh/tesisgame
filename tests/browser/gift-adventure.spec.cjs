@@ -180,11 +180,10 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   const collection = collectionBounds(bounds);
   const card = roomPoint(bounds, 'autumn', { owned: (await roomState(page)).owned }), scale = Math.max(2 / 3, bounds.scale);
-  const columns = collection.width * scale >= 720 ? 3 : 2;
-  const cell = (collection.width - collection.gap * (columns - 1)) / columns;
-  const goalClip = { x: bounds.x + (card.x - cell / 2 + 6 / scale) * bounds.scale,
-    y: bounds.y + (card.y + 4 / scale) * bounds.scale,
-    width: (cell - 12 / scale) * bounds.scale, height: 50 / scale * bounds.scale };
+  const cell = collection.shelfItemWidth;
+  const goalClip = { x: bounds.x + (card.x - cell / 2 + 56 / scale) * bounds.scale,
+    y: bounds.y + (card.y - 27 / scale) * bounds.scale,
+    width: (cell - 112 / scale) * bounds.scale, height: 54 / scale * bounds.scale };
   const beforeMessage = await page.screenshot({ path: testInfo.outputPath('gift-goal-message-before.png'), clip: goalClip, scale: 'css' });
   await page.evaluate(() => {
     const save = Storage.prototype.setItem;

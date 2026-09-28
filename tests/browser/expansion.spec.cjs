@@ -169,7 +169,7 @@ test('dragging a locked gift scrolls without opening its preview on release', as
   const status = await page.locator('#game-status').textContent();
   await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + gift.y * bounds.scale);
   await page.mouse.down();
-  await page.mouse.move(bounds.x + gift.x * bounds.scale, bounds.y + (gift.y - 110) * bounds.scale, { steps: 8 });
+  await page.mouse.move(bounds.x + (gift.x - 90) * bounds.scale, bounds.y + gift.y * bounds.scale, { steps: 8 });
   await page.mouse.up();
   expect(await roomRecord(page)).toBe(saved);
   await expect(page.locator('#game-status')).toHaveText(status);

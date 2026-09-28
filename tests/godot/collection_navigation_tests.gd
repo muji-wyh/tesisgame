@@ -34,7 +34,7 @@ func _run() -> void:
 	wheel.pressed = true
 	wheel.factor = 3.0
 	app._collection_scroll_input(wheel, app._collection_scroll)
-	check(app._collection_scroll.scroll_vertical == 144, "A larger wheel movement scrolls proportionally instead of one fixed step")
+	check(app._collection_scroll.scroll_vertical == 0, "Mouse wheel input cannot move the fixed playground vertically")
 	var after_scroll: int = app._collection_scroll.scroll_vertical
 	wheel.pressed = false
 	app._collection_scroll_input(wheel, app._collection_scroll)
@@ -48,17 +48,18 @@ func _run() -> void:
 	await process_frame
 	var card: Button = app._room.item_buttons["toy-space"]
 	card.grab_focus()
-	app._collection_scroll.ensure_control_visible(card)
-	var position: int = app._collection_scroll.scroll_vertical
+	app._room.toy_shelf.ensure_control_visible(card)
+	await process_frame
+	var position: int = app._room.toy_shelf.scroll_horizontal
 	card.pressed.emit()
 	await process_frame
 	await process_frame
-	check(root.gui_get_focus_owner() == card and app._collection_scroll.scroll_vertical == position,
+	check(root.gui_get_focus_owner() == card and app._room.toy_shelf.scroll_horizontal == position,
 		"A locked preview keeps the current card focus and scroll position")
 	app._room.goal_button.grab_focus()
 	await process_frame
 	await process_frame
-	check(app._collection_scroll.get_global_rect().encloses(app._room.goal_button.get_global_rect()), "The gift goal stays visible after previewing a scrolled gift on landscape screens")
+	check(app._room.toy_shelf.get_global_rect().grow(1).encloses(app._room.goal_button.get_global_rect()), "Focusing a nested gift action reveals its card in the bottom strip on landscape screens")
 	var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
 	owned_card.grab_focus()
 	await process_frame

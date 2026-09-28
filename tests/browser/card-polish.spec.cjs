@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const { THEME_IDS, openGame, openRewards, metrics, rendered, roomControl, collectionBounds,
-  uiScale, worldIconRect, tap, visibleColorCount } = require('./game-ui.cjs');
+  uiScale, worldControl, tap, visibleColorCount } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 
@@ -91,15 +91,12 @@ test('Pip and Words distinguishes the equipped toy from a preview and animates w
   const png = await page.screenshot({ path: testInfo.outputPath('using-flower-preview-shell.png'), scale: 'css' });
   expect(await visibleColorCount(page, png)).toBeGreaterThan(20);
   const bounds = await metrics(page), scale = uiScale(bounds), collection = collectionBounds(bounds);
-  const columns = collection.width * scale >= 720 ? 3 : 2;
-  const cardWidth = (collection.width - (columns - 1) * collection.gap) / columns;
-  const wide = cardWidth * scale >= 240, artSide = (wide ? 72 : 56) / scale;
-  const artX = target.x - cardWidth / 2 + (wide ? 16 / scale
-    : 12 / scale + (cardWidth - 72 / scale - artSide) / 2);
-  const artY = target.y - 64 / scale + (wide ? 28 : 8) / scale;
+  const cardWidth = collection.shelfItemWidth, artSide = 40 / scale;
+  const artX = target.x - cardWidth / 2 + 8 / scale;
+  const artY = target.y - artSide / 2;
   const artClip = { x: bounds.x + artX * bounds.scale, y: bounds.y + artY * bounds.scale,
     width: artSide * bounds.scale, height: artSide * bounds.scale };
-  const width = Math.min(collection.width, bounds.width - 24), height = 120 / scale;
+  const width = collection.width, height = collection.shelfHeight;
   const strip = { x: bounds.x + collection.x * bounds.scale,
     y: bounds.y + (bounds.height - collection.padding - height) * bounds.scale,
     width: width * bounds.scale, height: height * bounds.scale };
@@ -128,7 +125,7 @@ test('Pip and Words distinguishes the equipped toy from a preview and animates w
   expect((await page.screenshot({ clip: strip, scale: 'css' })).equals(still),
     'Reduced motion keeps a repeatedly previewed card visually still.').toBe(true);
   for (const [index, name] of THEME_IDS.entries()) {
-    const rect = worldIconRect(await metrics(page), index);
+    const rect = await worldControl(page, index);
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await rendered(page);
     await page.screenshot({ path: testInfo.outputPath(`toy-cards-${name}.png`), scale: 'css' });

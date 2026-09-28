@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
-const { enterGame, openGame, openRewards, metrics, tap, rendered, ageButtonRect, collectionHeaderRect,
+const { enterGame, openGame, openRewards, metrics, tap, rendered, ageControl, collectionHeaderRect,
   boardPoint, chooseMode, matchWords, memoryPoint, roomControl, withMemoryPeek } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
@@ -12,7 +12,7 @@ async function saved(page) {
 }
 
 async function age(page, id, input = 'touch') {
-  const bounds = await metrics(page), rect = ageButtonRect(bounds, id);
+  const bounds = await metrics(page), rect = await ageControl(page, id);
   if (input === 'mouse') {
     await page.mouse.click(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
       bounds.y + (rect.y + rect.height / 2) * bounds.scale);
@@ -125,7 +125,7 @@ test('age saving retries in place with mouse, touch and keyboard at compact widt
   await page.setViewportSize({ width: 320, height: 568 });
   await rendered(page);
   for (const id of Object.keys(NAMES)) {
-    const bounds = await metrics(page), rect = ageButtonRect(bounds, id);
+    const bounds = await metrics(page), rect = await ageControl(page, id);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(48);
     expect(rect.height * bounds.scale).toBeGreaterThanOrEqual(48);
     expect((rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(320);

@@ -60,7 +60,7 @@ test('saved word sticker records survive More, world choices and reload', async 
   const saved = await record(page);
   expect(saved).toEqual({ ids: ['cat', 'apple', 'rocket', 'bell'], displayed: 'cat' });
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
+  await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-worlds-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');

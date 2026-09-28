@@ -56,10 +56,9 @@ func _run() -> void:
 		app._refresh()
 		app._show_collection()
 		await settle()
-		if app._world_grid.columns == 4:
-			app.theme_buttons[0].grab_focus()
-			app._move_focus(Vector2.DOWN)
-			check(root.gui_get_focus_owner() == app.theme_buttons[4], "Controller Down reaches the second row of worlds on a narrow screen")
+		app.theme_buttons[0].grab_focus()
+		app._move_focus(Vector2.RIGHT)
+		check(root.gui_get_focus_owner() == app.theme_buttons[1], "Controller Right traverses the single-row world strip")
 		var scale: float = app.Style.ui_scale(app)
 		var back_height: float = app._collection_back.size.y * scale
 		check(back_height >= 44 and back_height <= 46, "More keeps its compact Back target at " + str(dimensions))

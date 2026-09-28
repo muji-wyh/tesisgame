@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomControl, visibleColorCount } = require('./game-ui.cjs');
+const { metrics, tap, rendered, openGame, openRewards, collectionBounds, roomLayout, roomControl, visibleColorCount } = require('./game-ui.cjs');
 
 const SAVES = ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'];
 const POKES = ['Boing! Pip jumps for you!', 'Aww! Pip feels shy!', 'Boop! Pip bounces right back!'];
@@ -8,14 +8,13 @@ const PET = ['Pip leans into your hand. Lovely!', 'Soft strokes. Pip feels loved
 
 function playground(bounds) {
   // The room has no saved gift goal or displayed sticker in these fresh profiles.
-  // Verified against the exported 390px room; all input uses its public canvas scale.
-  const { x, top: y, width } = collectionBounds(bounds), height = 304;
-  const foot = { x: x + 88, y: y + height - 32 };
+  const { x, top: y, width, homeHeight: height, pipFoot, homes } = roomLayout(bounds);
+  const foot = { x: x + pipFoot.x, y: y + pipFoot.y };
   return {
     x, y, width, height, foot,
     pip: { x: foot.x, y: foot.y - 56 },
     body: { x: foot.x - 30, y: foot.y - 88, width: 60, height: 68 },
-    toy: { x: x + width - 66, y: y + height - 74 },
+    toy: { x: x + homes.ball.x, y: y + homes.ball.y },
     anchor: { x: x + 8, y: y + 4, width: width - 16, height: 32 }
   };
 }
@@ -359,7 +358,7 @@ test('a dragged ball visibly travels to Pip and empty ground makes Pip walk and 
   expect(errors).toEqual([]);
 });
 
-test('leaving during a gesture restores input and gift-list drags still scroll without equipping', async ({ page }, testInfo) => {
+test('leaving during a gesture restores input and gift-shelf swipes do not equip a toy', async ({ page }, testInfo) => {
   const { errors, lesson, bounds, room, saved } = await begin(page);
   const point = screenPoint(bounds, room.pip);
   await page.mouse.move(point.x, point.y);
@@ -388,11 +387,12 @@ test('leaving during a gesture restores input and gift-list drags still scroll w
   await tap(page, room.pip.x, room.pip.y);
   const secondPoke = await expectPoke(page, firstPoke);
 
-  const list = { x: 24, y: bounds.height - 180, width: bounds.width - 48, height: 140 };
+  const collection = collectionBounds(bounds);
+  const list = { x: collection.x, y: collection.shelfTop, width: collection.width, height: collection.shelfHeight };
   const before = await patch(page, bounds, list);
   await mouseDrag(page, bounds, [
-    { x: bounds.width * 0.75, y: bounds.height - 60 },
-    { x: bounds.width * 0.75, y: bounds.height - 260 }
+    { x: list.x + list.width * 0.8, y: list.y + list.height / 2 },
+    { x: list.x + list.width * 0.2, y: list.y + list.height / 2 }
   ]);
   await visibleChange(page, bounds, list, before, testInfo, 'gift-list-scroll', 0.15);
   await screenshot(page, testInfo, 'gift-list-after-drag');
@@ -420,7 +420,7 @@ test('narrow reduced-motion play keeps Pip and toy actions reachable by keyboard
   await expect(page.locator('#game-status')).toHaveText('3/3 · Pip catches the ball. Hooray!');
   await screenshot(page, testInfo, 'pip-narrow-keyboard-toy-action');
   await page.keyboard.press('Enter');
-  // Restore the room's top after keyboard focus has followed the moving toy.
+  // The fixed playground remains in place after the toy action.
   const original = await patch(page, bounds, room.body);
   const destination = { x: room.x + room.width - 10, y: room.y + room.height - 4 };
   const endpoint = { x: room.x + room.width - 52, y: room.y + room.height - 12 };

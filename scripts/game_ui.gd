@@ -156,17 +156,18 @@ var _main_column: VBoxContainer
 var _collection_duck_slot: Control
 var _collection_margins: MarginContainer
 var _world_choices: VBoxContainer
-var _world_grid: GridContainer
+var _world_grid: HBoxContainer
+var _world_scroll: ReviewScroll
 var _world_save_notice: Label
 var _age_choices: VBoxContainer
 var _age_row: HBoxContainer
+var _age_scroll: ReviewScroll
 var _age_label: Label
 var _age_buttons: Dictionary = {}
 var _age_notice: Label
 var _age_save_failed: bool = false
 var _collection_title: Label
 var _collection_header: HBoxContainer
-var _collection_header_spacer: Control
 var _collection_column: VBoxContainer
 var cards: Dictionary = {}
 var grid: GridContainer
@@ -268,6 +269,7 @@ var _collection_last_sample_usec: int = 0
 var _controller_mode: bool = false
 var _pointer_focus_active: bool = false
 var _proactive_touches: Dictionary = {}
+var _collection_multi_touch: bool = false
 var _controller_stick: Vector2 = Vector2.ZERO
 var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
@@ -637,25 +639,23 @@ func _build_collection_shell() -> void:
 	_collection_title.name = "PipsRoomTitle"
 	_collection_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	header.add_child(_collection_title)
-	var spacer := Control.new()
-	_collection_header_spacer = spacer
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(spacer)
+	_build_age_choices()
 	_collection_back = Icons.new()
 	_collection_back.symbol = Icons.Symbol.BACK
 	_collection_back.tooltip_text = "Back to game"
 	_set_accessibility_name(_collection_back, "Back to game")
 	_collection_back.pressed.connect(_hide_collection)
 	header.add_child(_collection_back)
-	_build_age_choices()
 	_collection_scroll = ScrollContainer.new()
+	_collection_scroll.name = "PlaygroundViewport"
 	_collection_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_collection_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	_collection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	_collection_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_collection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_collection_scroll.gui_input.connect(_collection_scroll_input.bind(_collection_scroll))
 	column.add_child(_collection_scroll)
 	_collection_grid = VBoxContainer.new()
 	_collection_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_collection_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_collection_scroll.add_child(_collection_grid)
 	collection_page.hide()
 
@@ -663,10 +663,16 @@ func _build_collection_shell() -> void:
 func _build_age_choices() -> void:
 	_age_choices = VBoxContainer.new()
 	_age_choices.name = "AgeChoices"
-	_collection_column.add_child(_age_choices)
+	_age_choices.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_collection_header.add_child(_age_choices)
+	_age_scroll = ReviewScroll.new()
+	_age_scroll.name = "AgeScroll"
+	_age_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
+	_age_choices.add_child(_age_scroll)
 	_age_row = HBoxContainer.new()
-	_age_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	_age_choices.add_child(_age_row)
+	_age_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_age_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_age_scroll.add_child(_age_row)
 	_age_label = Style.label("Age", 14)
 	_age_label.tooltip_text = "A vocabulary guide. Choose the level that feels right."
 	_age_row.add_child(_age_label)
@@ -678,10 +684,7 @@ func _build_age_choices() -> void:
 		button.tooltip_text = band.name + ". Suggested vocabulary for your next lesson."
 		_set_accessibility_name(button, band.name)
 		button.pressed.connect(_choose_age_band.bind(band.id))
-		button.gui_input.connect(_collection_scroll_input.bind(button))
-		button.focus_entered.connect(func() -> void:
-			if _age_choices.get_parent() == _collection_grid:
-				_ensure_collection_focus_visible(button))
+		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		_age_row.add_child(button)
 		_age_buttons[band.id] = button
 	_age_notice = Style.label("", 13)
@@ -716,9 +719,9 @@ func _refresh_age_choices() -> void:
 func _build_collection() -> void:
 	if duck != null and duck.get_parent() != self:
 		duck.reparent(self)
-	if _age_choices.get_parent() == _collection_grid:
-		_age_choices.reparent(_collection_column)
-		_collection_column.move_child(_age_choices, _collection_scroll.get_index())
+	if is_instance_valid(_room) and is_instance_valid(_room.toy_shelf):
+		_room.toy_shelf.get_parent().remove_child(_room.toy_shelf)
+		_room.toy_shelf.queue_free()
 	if is_instance_valid(_world_choices):
 		_world_choices.get_parent().remove_child(_world_choices)
 		_world_choices.queue_free()
@@ -730,9 +733,10 @@ func _build_collection() -> void:
 		_collection_grid.remove_child(child)
 		child.queue_free()
 	_build_playroom()
+	_build_world_choices()
+	_collection_column.move_child(_room.toy_shelf, -1)
 	_refresh_collection()
 	_layout_collection()
-	_build_world_choices()
 
 
 func _build_world_choices() -> void:
@@ -741,12 +745,15 @@ func _build_world_choices() -> void:
 	_world_choices = VBoxContainer.new()
 	_world_choices.name = "WorldChoices"
 	_collection_column.add_child(_world_choices)
-	_collection_column.move_child(_world_choices, 1)
-	var worlds := GridContainer.new()
+	_world_scroll = ReviewScroll.new()
+	_world_scroll.name = "WorldScroll"
+	_world_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
+	_world_choices.add_child(_world_scroll)
+	var worlds := HBoxContainer.new()
 	_world_grid = worlds
-	worlds.columns = 6
-	worlds.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	_world_choices.add_child(worlds)
+	worlds.alignment = BoxContainer.ALIGNMENT_CENTER
+	worlds.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_world_scroll.add_child(worlds)
 	for id in Model.THEMES:
 		var button := Button.new()
 		var palette: Dictionary = Data.theme(id)
@@ -760,6 +767,7 @@ func _build_world_choices() -> void:
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		_set_accessibility_name(button, palette.name)
 		button.pressed.connect(_choose_world.bind(id))
+		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		worlds.add_child(button)
 		theme_buttons.append(button)
 	_world_save_notice = Style.label("Changes not saved. Tap a theme to retry.", 13)
@@ -782,9 +790,12 @@ func _build_playroom() -> void:
 	_collection_duck_slot.queue_free()
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
+	_room.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_dragged and _collection_velocity.length_squared() < 100.0
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+	_room.toy_shelf.reparent(_collection_column)
+	_room.toy_shelf.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
 	_collection_duck_slot = _room.duck_slot
 	_playroom_medal = _room.favorite_medal
 	_room.item_selected.connect(_select_room_item)
@@ -881,7 +892,7 @@ func _try_unlocked_gift() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if collection_page.visible and _room.toy_button.has_focus():
-		_collection_scroll.ensure_control_visible(_room.toy_button)
+		_ensure_collection_focus_visible(_room.toy_button)
 
 
 func _load_favorite_reward() -> void:
@@ -1083,10 +1094,20 @@ func _clear_finished_collection_swipe() -> void:
 
 
 func _collection_max_scroll() -> Vector2i:
-	return Vector2i(
-		maxi(0, int(ceili(_collection_grid.size.x - _collection_scroll.size.x))),
-		maxi(0, int(ceili(_collection_grid.size.y - _collection_scroll.size.y)))
-	)
+	return Vector2i.ZERO
+
+
+func _collection_rails() -> Array[ReviewScroll]:
+	var rails: Array[ReviewScroll] = []
+	for rail in [_age_scroll, _world_scroll, _room.toy_shelf if is_instance_valid(_room) else null]:
+		if is_instance_valid(rail):
+			rails.append(rail)
+	return rails
+
+
+func _cancel_collection_rails() -> void:
+	for rail in _collection_rails():
+		rail.cancel_drag()
 
 
 func _picture(parent: Node) -> TextureRect:
@@ -1627,6 +1648,7 @@ func _layout() -> void:
 		return
 	if _found_words_scroll != null:
 		_found_words_scroll.cancel_drag()
+	_cancel_collection_rails()
 	_refresh_hint()
 	_fit_mode_buttons.call_deferred()
 	_mode_row.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode
@@ -1768,19 +1790,21 @@ func _layout_collection() -> void:
 	if not is_instance_valid(_room):
 		return
 	var scale: float = Style.ui_scale(self)
-	var padding: int = ceili(12 / scale)
-	var gap: int = ceili(8 / scale)
+	var compact: bool = size.y * scale < 500
+	var padding: int = ceili((8 if compact else 12) / scale)
+	var gap: int = ceili((6 if compact else 8) / scale)
 	var max_width: float = 960 / scale
 	for edge in ["left", "right"]:
 		_collection_margins.add_theme_constant_override("margin_" + edge, maxi(padding, roundi((size.x - max_width) * 0.5)))
 	for edge in ["top", "bottom"]:
 		_collection_margins.add_theme_constant_override("margin_" + edge, padding)
 	_collection_margins.set_deferred("size", size)
-	var usable_width: float = maxf(0, minf(size.x - padding * 2, 960 / scale))
 	_collection_column.add_theme_constant_override("separation", gap)
 	_collection_header.add_theme_constant_override("separation", gap)
-	_collection_grid.add_theme_constant_override("separation", ceili(20 / scale))
+	_collection_header.custom_minimum_size.y = ceilf(48 / scale)
+	_collection_grid.add_theme_constant_override("separation", 0)
 	_age_choices.add_theme_constant_override("separation", roundi(4 / scale))
+	_age_scroll.custom_minimum_size.y = ceilf(48 / scale)
 	_age_row.add_theme_constant_override("separation", roundi(6 / scale))
 	_age_label.add_theme_font_size_override("font_size", ceili(14 / scale))
 	_age_label.custom_minimum_size.x = ceilf(30 / scale)
@@ -1791,57 +1815,29 @@ func _layout_collection() -> void:
 		Style.action_button(button, _active_palette.get("accent", Style.GOOD))
 		button.focus_mode = focus
 		button.custom_minimum_size.x = ceilf(52 / scale)
-	var title_width: float = ceilf(80 / scale)
+	var title_width: float = ceilf(40 / scale)
 	_collection_title.custom_minimum_size = Vector2(title_width, ceilf(44 / scale))
 	_collection_title.add_theme_font_size_override("font_size", ceili(18 / scale))
 	Style.square_icon_button(_collection_back, _active_palette.get("accent", Style.GOOD))
 	if is_instance_valid(_world_grid):
-		var side: int = ceili(52 / scale)
+		var side: int = ceili((44 if compact else 52) / scale)
 		var spacing: int = roundi(6 / scale)
-		var world_width: float = side * theme_buttons.size() + spacing * (theme_buttons.size() - 1)
-		var inline_worlds: bool = usable_width >= world_width + title_width + ceilf(44 / scale) + gap * 2
-		var parent: Node = _collection_header if inline_worlds else _collection_column
-		if _world_choices.get_parent() != parent:
-			var focused: Control = get_viewport().gui_get_focus_owner()
-			_world_choices.reparent(parent)
-			parent.move_child(_world_choices, 1)
-			if is_instance_valid(focused) and _world_choices.is_ancestor_of(focused):
-				focused.grab_focus()
 		_world_choices.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_world_choices.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		_collection_header_spacer.visible = not inline_worlds
-		_collection_header.custom_minimum_size.y = ceilf((52 if inline_worlds else 44) / scale)
-		_world_grid.columns = theme_buttons.size() if usable_width >= world_width else maxi(1, mini(4, int((usable_width + spacing) / (side + spacing))))
-		_world_grid.add_theme_constant_override("h_separation", spacing)
-		_world_grid.add_theme_constant_override("v_separation", roundi(4 / scale))
+		_world_scroll.custom_minimum_size.y = side
+		_world_grid.add_theme_constant_override("separation", spacing)
 		_world_save_notice.add_theme_font_size_override("font_size", ceili(13 / scale))
 		for index in range(theme_buttons.size()):
 			var button: Button = theme_buttons[index]
 			var palette: Dictionary = Data.theme(Model.THEMES[index])
 			Style.square_icon_button(button, palette.accent)
 			button.custom_minimum_size = Vector2.ONE * side
-			button.add_theme_constant_override("icon_max_width", ceili(36 / scale))
+			button.add_theme_constant_override("icon_max_width", ceili((30 if compact else 36) / scale))
 			button.add_theme_stylebox_override("normal", Style.box(Color.WHITE, palette.accent.lightened(0.65), ceili(8 / scale), 1))
 			button.add_theme_stylebox_override("pressed", Style.box(palette.light.lightened(0.5), palette.accent, ceili(8 / scale), 2))
 			for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 				var surface: StyleBox = button.get_theme_stylebox(state)
 				for edge in ["left", "right", "top", "bottom"]:
 					surface.set("content_margin_" + edge, 6 / scale)
-		var fixed_height: float = padding * 2 + _collection_header.custom_minimum_size.y + gap
-		if not inline_worlds:
-			var world_rows: int = ceili(float(theme_buttons.size()) / _world_grid.columns)
-			fixed_height += world_rows * side + (world_rows - 1) * roundi(4 / scale) + gap
-		if _world_save_notice.visible:
-			fixed_height += _world_save_notice.get_combined_minimum_size().y
-		var age_height: float = _age_choices.get_combined_minimum_size().y
-		var pin_age: bool = size.y - fixed_height - age_height - gap >= ceilf(128 / scale)
-		var age_parent: Node = _collection_column if pin_age else _collection_grid
-		if _age_choices.get_parent() != age_parent:
-			var focused: Control = get_viewport().gui_get_focus_owner()
-			_age_choices.reparent(age_parent)
-			age_parent.move_child(_age_choices, _collection_scroll.get_index() if pin_age else 0)
-			if is_instance_valid(focused) and _age_choices.is_ancestor_of(focused):
-				focused.grab_focus()
 
 
 func _style_result_actions(accent: Color) -> void:
@@ -2130,6 +2126,8 @@ func on_page_hidden() -> void:
 	_stop_pop_listening()
 	_pointer_focus_active = false
 	_proactive_touches.clear()
+	_collection_multi_touch = false
+	_cancel_collection_rails()
 	_found_words_scroll.cancel_drag()
 	_stop_voice()
 	feedback_timer.paused = true
@@ -2178,6 +2176,11 @@ func _observe_activity(event: InputEvent) -> void:
 			_proactive_touches[event.index] = true
 		else:
 			_proactive_touches.erase(event.index)
+		if _proactive_touches.size() > 1:
+			_collection_multi_touch = true
+			_cancel_collection_rails()
+		elif _proactive_touches.is_empty():
+			_collection_multi_touch = false
 	var meaningful: bool = false
 	if event is InputEventMouseButton or event is InputEventKey or event is InputEventJoypadButton:
 		meaningful = event.is_pressed() and not event.is_echo()
@@ -2407,11 +2410,10 @@ func _move_focus(direction: Vector2) -> void:
 func _focus_center(control: Control) -> Vector2:
 	var center: Vector2 = control.get_global_rect().get_center()
 	if collection_page.visible:
-		# Navigate the collection's content, not its temporarily scrolled screen positions.
-		center = _collection_grid.get_global_transform().affine_inverse() * center
-		if not _collection_grid.is_ancestor_of(control):
-			# Pinned controls keep their real rows when the collection scrolls.
-			center -= Vector2(_collection_scroll.scroll_horizontal, _collection_scroll.scroll_vertical)
+		for rail in _collection_rails():
+			if rail.is_ancestor_of(control):
+				center.x += rail.scroll_horizontal
+				break
 	return center
 
 
@@ -2458,7 +2460,7 @@ func _default_focus() -> Control:
 
 
 func _ensure_collection_focus_visible(control: Control) -> void:
-	if _collection_scroll != null and collection_page.visible and not _collection_dragging and not _pointer_focus_active:
+	if collection_page.visible and not _collection_dragging and not _pointer_focus_active:
 		var target: Control = control.get_parent() if control == _room.goal_button and control.get_parent() is Button else control
 		if control == duck:
 			# Keep tracking the focused duck while revealing its fixed input slot.
@@ -2476,20 +2478,10 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 
 
 func _reveal_room_control(target: Control) -> void:
-	_collection_scroll.ensure_control_visible(target)
-	if target == _collection_duck_slot:
-		# The jumping head rises above the fixed input slot. Reveal its artwork too.
-		var jump_top: float = target.get_global_rect().position.y - 16.0
-		var visible_top: float = _collection_scroll.get_global_rect().position.y
-		if jump_top < visible_top:
-			_collection_scroll.scroll_vertical -= ceili(visible_top - jump_top)
-	var caption: Control = null
-	if target == _room.toy_button:
-		caption = _room._toy_label
-	elif target.get_parent() == _room.owned_toys:
-		caption = target.detail_label if target.detail_label.is_visible_in_tree() else target.title_label
-	if caption != null and caption.is_visible_in_tree():
-		_collection_scroll.ensure_control_visible(caption)
+	for rail in _collection_rails():
+		if rail.is_ancestor_of(target) and rail._pointer == -1:
+			rail.ensure_control_visible(target)
+			return
 
 
 func _audio_status(message: String) -> void:
@@ -2904,6 +2896,7 @@ func _show_collection() -> void:
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	audio.stop_voice()
 	_collection_scroll.scroll_vertical = 0
+	_cancel_collection_rails()
 	_stop_voice()
 	feedback_timer.paused = true
 	_stop_feedback_animations()
@@ -2931,6 +2924,7 @@ func _show_collection() -> void:
 
 func _hide_collection() -> void:
 	audio.stop_voice()
+	_cancel_collection_rails()
 	_end_collection_drag(false)
 	_collection_dragged = false
 	collection_page.hide()
@@ -2950,7 +2944,7 @@ func _hide_collection() -> void:
 
 
 func _announce_collection_state() -> void:
-	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Choose a world or age level above, or use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
+	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Swipe the age choices at the top or the worlds and toys at the bottom. Use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."
 	if _age_save_failed:
@@ -3009,7 +3003,7 @@ func _update_duck() -> void:
 	duck.compact = false
 	duck.tooltip_text = "" if in_collection else "Pip the duck. Press for a hello!"
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
-	duck.custom_minimum_size = Vector2(72, 72) if in_collection else Vector2.ZERO
+	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
 	duck.size = rect.size
 	duck.show()
 	var accent: Color = Data.THEMES[model.theme_id].accent

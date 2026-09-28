@@ -66,15 +66,15 @@ func _run() -> void:
 	app._show_collection()
 	for theme_index in [4, 1]:
 		await settle()
-		app._collection_scroll.scroll_vertical = 48
-		var scroll: int = app._collection_scroll.scroll_vertical
 		var button: Button = app.theme_buttons[theme_index]
 		button.grab_focus()
+		await settle()
+		var scroll: int = app._world_scroll.scroll_horizontal
 		button.pressed.emit()
 		await settle()
 		check(app.collection_page.visible and app._room.is_visible_in_tree(),
 			"Choosing a theme keeps Pip's room open")
-		check(app._collection_scroll.scroll_vertical == scroll and button.has_focus(),
+		check(app._world_scroll.scroll_horizontal == scroll and button.has_focus(),
 			"Theme selection preserves scroll and control focus")
 		check(app.model.cards == cards and app.model.hints_remaining == 3,
 			"The current game is not reset by a theme choice")
@@ -98,17 +98,18 @@ func _run() -> void:
 		await settle()
 		var scale: float = app.Style.ui_scale(app)
 		for button in app.theme_buttons:
+			button.grab_focus()
+			await settle()
 			var surface: StyleBox = button.get_theme_stylebox("normal")
 			check(button.size.x * scale >= 52 and button.size.y * scale >= 52,
 				"The theme buttons are visibly larger")
 			check((button.size - surface.get_minimum_size()).x * scale >= 36
 				and button.get_theme_constant("icon_max_width") * scale >= 36,
 				"Inner padding leaves room for the larger theme artwork")
-			check(app.get_global_rect().encloses(button.get_global_rect()), "Theme choices fit the viewport")
-		if dimensions.x >= 664:
-			check(app._world_choices.get_parent() == app._collection_header
-				and app.theme_buttons[0].get_global_rect().get_center().y * scale < 44,
-				"Wide screens move theme choices up into the top header")
+			check(app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()), "Focus reveals theme choices in their horizontal strip")
+		check(app._world_scroll.get_global_rect().position.y >= app._room._room.get_global_rect().end.y
+			and app._world_scroll.get_global_rect().end.y <= app._room.toy_shelf.global_position.y,
+			"Theme choices stay between the playground and bottom toys at every width")
 	app._hide_collection()
 	await _check_treasure_themes(app)
 	root.size = Vector2i(320, 568)

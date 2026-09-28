@@ -1,277 +1,127 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, uiScale, collectionBounds, roomPoint, roomControl, openRewards, enterGame, rendered } = require('./game-ui.cjs');
+const { metrics, collectionBounds, openRewards, enterGame, rendered } = require('./game-ui.cjs');
 
-async function contentShift(page, before, after) {
-  const bounds = await metrics(page), collection = collectionBounds(bounds);
-  const contentTop = Math.ceil(bounds.y + collection.top * bounds.scale);
-  return page.evaluate(async ({ before, after, contentTop }) => {
-    async function rows(encoded) {
-      const image = new Image();
-      image.src = 'data:image/png;base64,' + encoded;
-      await image.decode();
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0);
-      const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
-      return Array.from({ length: canvas.height }, (_, y) => {
-        let total = 0;
-        for (let x = 20; x < canvas.width - 20; x++) {
-          const index = (y * canvas.width + x) * 4;
-          total += data[index] + data[index + 1] + data[index + 2];
-        }
-        return total / ((canvas.width - 40) * 3);
-      });
-    }
-    const original = await rows(before);
-    const moved = await rows(after);
+function railClip(bounds, name) {
+  const c = collectionBounds(bounds);
+  return { x: bounds.x + c.x * bounds.scale, y: bounds.y + c[`${name}Top`] * bounds.scale,
+    width: c.width * bounds.scale, height: c[`${name}Height`] * bounds.scale };
+}
+
+async function savedState(page) {
+  return page.evaluate(() => ({ status: document.getElementById('game-status').textContent,
+    room: localStorage.getItem('wordBuddies.playroom'), medals: localStorage.getItem('wordBuddies.medalProgress'),
+    theme: document.querySelector('meta[name="theme-color"]').content }));
+}
+
+async function horizontalShift(page, before, after) {
+  return page.evaluate(async sources => {
+    const images = await Promise.all(sources.map(async source => {
+      const image = new Image(); image.src = 'data:image/png;base64,' + source; await image.decode();
+      const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+      return context.getImageData(0, 0, canvas.width, canvas.height);
+    }));
+    const [original, moved] = images;
     let best = { pixels: 0, error: Infinity };
-    // Start below the fixed world and age controls in the current canvas layout.
-    for (let shift = 0; shift <= 180; shift++) {
+    for (let shift = 0; shift <= 80; shift++) {
       let error = 0;
-      for (let y = contentTop; y < original.length - 190; y++) {
-        error += Math.abs(original[y + shift] - moved[y]);
+      for (let y = 6; y < original.height - 6; y += 2) for (let x = 6; x < original.width - 90; x += 2) {
+        const a = (y * original.width + x + shift) * 4, b = (y * moved.width + x) * 4;
+        for (let c = 0; c < 3; c++) error += Math.abs(original.data[a + c] - moved.data[b + c]);
       }
       if (error < best.error) best = { pixels: shift, error };
     }
     return best;
-  }, { before: before.toString('base64'), after: after.toString('base64'), contentTop });
+  }, [before, after].map(png => png.toString('base64')));
 }
 
-for (const ratio of [1, 2, 3]) {
-  test.describe(`collection touch tracking at DPR ${ratio}`, () => {
-    test.use({
-      viewport: { width: 390, height: 650 },
-      deviceScaleFactor: ratio,
-      hasTouch: true,
-      reducedMotion: 'reduce'
-    });
-
-    test('rendered room content moves one pixel for each finger pixel', async ({ page, browserName }, testInfo) => {
-      test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
-      const errors = [];
-      page.on('pageerror', error => errors.push(error.message));
-      await page.goto('/');
-      await enterGame(page);
-      await openRewards(page);
+for (const ratio of [1, 2, 3]) test.describe(`horizontal room rails at DPR ${ratio}`, () => {
+  test.use({ viewport: { width: 390, height: 650 }, deviceScaleFactor: ratio, hasTouch: true, reducedMotion: 'reduce' });
+  test('theme rail tracks finger pixels without changing the world or moving the page', async ({ page, browserName }, testInfo) => {
+    test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
+    await page.goto('/'); await enterGame(page); await openRewards(page);
+    const bounds = await metrics(page), clip = railClip(bounds, 'theme');
+    const start = { x: clip.x + 240, y: clip.y + clip.height / 2 };
+    const saved = await savedState(page), client = await page.context().newCDPSession(page), measurements = [];
+    try {
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
       await rendered(page);
-      const bounds = await metrics(page), collection = collectionBounds(bounds);
-      const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
-        y: bounds.y + (collection.top + 90) * bounds.scale };
-      const before = await page.screenshot({ path: testInfo.outputPath('room-before-drag.png'), scale: 'css' });
-      const client = await page.context().newCDPSession(page);
-      const measurements = [];
-      try {
-        await client.send('Input.dispatchTouchEvent', {
-          type: 'touchStart', touchPoints: [{ id: 1, ...start }]
-        });
-        for (const displacement of [30, 60, 90, 60]) {
-          await client.send('Input.dispatchTouchEvent', {
-            type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - displacement }]
-          });
-          await rendered(page);
-          const after = await page.screenshot({
-            path: testInfo.outputPath(`room-drag-${measurements.length + 1}-${displacement}.png`), scale: 'css'
-          });
-          const measured = await contentShift(page, before, after);
-          measurements.push({ finger: displacement, content: measured.pixels, error: measured.error });
-          expect(Math.abs(measured.pixels - displacement), JSON.stringify(measurements)).toBeLessThanOrEqual(2);
-        }
-      } finally {
-        await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-        await client.detach();
-        await testInfo.attach('rendered-scroll-displacement', {
-          body: JSON.stringify({ devicePixelRatio: ratio, measurements }, null, 2),
-          contentType: 'application/json'
-        });
+      const before = await page.screenshot({ clip, scale: 'css' });
+      for (const displacement of [20, 40, 60, 30]) {
+        await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x: start.x - displacement, y: start.y }] });
+        await rendered(page);
+        const measured = await horizontalShift(page, before, await page.screenshot({ clip, scale: 'css' }));
+        measurements.push({ finger: displacement, content: measured.pixels });
+        expect(Math.abs(measured.pixels - displacement), JSON.stringify(measurements)).toBeLessThanOrEqual(2);
       }
-      expect(errors).toEqual([]);
-    });
-
-    for (const locked of [false, true]) {
-      test(`room ${locked ? 'locked toy' : 'empty canvas'} drag scrolls instead of moving Pip`, async ({ page, browserName }, testInfo) => {
-        test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
-        await page.goto('/');
-        await enterGame(page);
-        await openRewards(page);
-
-        if (locked) {
-          await roomControl(page, 'spring');
-          await page.keyboard.press('Enter');
-          await expect(page.locator('#game-status')).toContainText('Complete Blossom');
-          await page.mouse.move(190, 350);
-          await page.mouse.wheel(0, -2600);
-          await rendered(page);
-        }
-        const bounds = await metrics(page), collection = collectionBounds(bounds);
-        const point = locked ? roomPoint(bounds, 'preview') : { x: collection.x + collection.width / 2, y: collection.top + 90 };
-        const start = { x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale };
-        const status = await page.locator('#game-status').textContent();
-        const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
-        if (locked) {
-          await page.touchscreen.tap(start.x, start.y);
-          expect(await page.locator('#game-status').textContent()).toBe(status);
-        }
-        await page.mouse.move(0, 0);
-        const before = await page.screenshot({ scale: 'css' });
-        const client = await page.context().newCDPSession(page);
-        try {
-          await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
-          for (const displacement of [20, 40, 60]) {
-            await client.send('Input.dispatchTouchEvent', {
-              type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - displacement }]
-            });
-            await rendered(page);
-            const after = await page.screenshot({
-              path: testInfo.outputPath(`room-${locked ? 'locked' : 'background'}-${displacement}.png`), scale: 'css'
-            });
-            const measured = await contentShift(page, before, after);
-            expect(Math.abs(measured.pixels - displacement), JSON.stringify(measured)).toBeLessThanOrEqual(2);
-          }
-        } finally {
-          await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-          await client.detach();
-        }
-        expect(await page.locator('#game-status').textContent()).toBe(status);
-        expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
-      });
+    } finally {
+      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await client.detach();
     }
+    expect(await savedState(page)).toEqual(saved);
+    expect(await page.evaluate(() => [scrollX, scrollY])).toEqual([0, 0]);
+    await testInfo.attach('horizontal-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
+    await page.screenshot({ path: testInfo.outputPath('fixed-room-after-theme-swipe.png'), scale: 'css' });
   });
-}
-
-test('mouse dragging the room background scrolls without calling Pip', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 390, height: 650 });
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
-  await enterGame(page);
-  await openRewards(page);
-
-  const bounds = await metrics(page), collection = collectionBounds(bounds);
-  const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
-    y: bounds.y + (collection.top + 90) * bounds.scale };
-  const status = await page.locator('#game-status').textContent();
-  const before = await page.screenshot({ scale: 'css' });
-  await page.mouse.move(start.x, start.y);
-  await page.mouse.down();
-  try {
-    await page.mouse.move(start.x, start.y - 60, { steps: 6 });
-    await rendered(page);
-    const after = await page.screenshot({ path: testInfo.outputPath('room-background-mouse.png'), scale: 'css' });
-    const measured = await contentShift(page, before, after);
-    expect(Math.abs(measured.pixels - 60), JSON.stringify(measured)).toBeLessThanOrEqual(2);
-  } finally {
-    await page.mouse.up();
-  }
-  expect(await page.locator('#game-status').textContent()).toBe(status);
 });
 
-for (const input of ['mouse', 'touch']) {
-  test(`${input} toy-card selection keeps scrolled content stationary`, async ({ page }, testInfo) => {
-    await page.setViewportSize({ width: 390, height: 650 });
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.addInitScript(() => {
-      localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"space-1":2}\n');
-    });
-    await page.goto('/');
-    await enterGame(page);
-    await openRewards(page);
-    const card = await roomControl(page, 'space');
-    const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
-    const point = { x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale };
-    const previousY = point.y - (128 / scale + collection.gap) * bounds.scale;
-    await page.mouse.move(point.x, previousY);
-    await page.mouse.down();
-    await page.mouse.move(point.x, previousY + 30, { steps: 6 });
-    await page.mouse.up();
-    await rendered(page);
-    point.y += 30;
-    const cell = (collection.width - collection.gap) / 2;
-    const untouchedX = card.x > collection.x + collection.width / 2 ? collection.x : collection.x + cell + collection.gap;
-    const clip = { x: bounds.x + (untouchedX + 4 / scale) * bounds.scale,
-      y: bounds.y + collection.top * bounds.scale,
-      width: (cell - 8 / scale) * bounds.scale,
-      height: (bounds.height - collection.top - collection.padding) * bounds.scale };
-    const before = await page.screenshot({ clip, scale: 'css' });
-    const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
-    if (input === 'touch') await page.touchscreen.tap(point.x, point.y);
-    else await page.mouse.click(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Space rocket. Complete Rocket: 2/3. 1 more piece');
-    await rendered(page);
-    const after = await page.screenshot({ clip, scale: 'css' });
-    expect(after.equals(before), 'The untouched card column must not move when selecting a partially visible toy.').toBe(true);
-    expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
-    await expect(page.locator('#help')).not.toContainText('Help Pip get this');
-    await page.screenshot({ path: testInfo.outputPath(`inline-goal-stable-${input}.png`), scale: 'css' });
+for (const input of ['mouse', 'touch']) for (const name of ['theme', 'shelf']) {
+  test(`${input} ${name} rail swipe leaves the playground and other controls fixed without activation`, async ({ page, browserName }, testInfo) => {
+    test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
+    await page.setViewportSize({ width: 390, height: 650 }); await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/'); await enterGame(page); await openRewards(page);
+    const bounds = await metrics(page), c = collectionBounds(bounds), clip = railClip(bounds, name);
+    const stationaryClip = { x: bounds.x + c.x * bounds.scale, y: bounds.y + c.padding * bounds.scale,
+      width: c.width * bounds.scale, height: (c.top + 36 - c.padding) * bounds.scale };
+    const otherClip = railClip(bounds, name === 'theme' ? 'shelf' : 'theme');
+    // A neighboring theme tooltip can cast its shadow over the strip's outer edge.
+    // Compare the card content to measure movement independently of that hover overlay.
+    otherClip.y += 8;
+    otherClip.height -= 16;
+    const start = { x: clip.x + 240, y: clip.y + clip.height / 2 }, saved = await savedState(page);
+    const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
+    try {
+      if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
+      else { await page.mouse.move(start.x, start.y); await page.mouse.down(); }
+      await rendered(page);
+      const before = await page.screenshot({ clip, scale: 'css' });
+      const stationary = await page.screenshot({ clip: stationaryClip, scale: 'css' });
+      const other = await page.screenshot({ clip: otherClip, scale: 'css' });
+      for (let step = 1; step <= 5; step++) {
+        const point = { x: start.x - step * 12, y: start.y };
+        if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...point }] });
+        else await page.mouse.move(point.x, point.y);
+        await rendered(page);
+      }
+      expect((await horizontalShift(page, before, await page.screenshot({ clip, scale: 'css' }))).pixels).toBeGreaterThanOrEqual(58);
+      expect((await page.screenshot({ clip: stationaryClip, scale: 'css' })).equals(stationary), 'The header and room title stay fixed.').toBe(true);
+      const otherAfter = await page.screenshot({ clip: otherClip, scale: 'css' });
+      if (!otherAfter.equals(other)) {
+        await testInfo.attach('stationary-rail-before', { body: other, contentType: 'image/png' });
+        await testInfo.attach('stationary-rail-after', { body: otherAfter, contentType: 'image/png' });
+      }
+      expect(otherAfter.equals(other), 'Only the dragged rail moves.').toBe(true);
+    } finally {
+      if (client) { await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await client.detach(); }
+      else await page.mouse.up();
+    }
+    expect(await savedState(page)).toEqual(saved);
+    await page.screenshot({ path: testInfo.outputPath(`${name}-${input}-swipe.png`), scale: 'css' });
   });
 }
 
-test.describe('collection release momentum', () => {
-  test.use({
-    viewport: { width: 390, height: 650 }, deviceScaleFactor: 2, hasTouch: true,
-    reducedMotion: 'no-preference'
-  });
-
-  test('a released swipe glides, slows down, and stops at the next touch', async ({ page, browserName }) => {
-    test.skip(browserName !== 'chromium', 'Real touch-move dispatch uses the Chromium DevTools protocol.');
-    await page.goto('/');
-    await enterGame(page);
-    await openRewards(page);
-    await rendered(page);
-    const bounds = await metrics(page), collection = collectionBounds(bounds);
-    const start = { x: bounds.x + (collection.x + collection.width / 2) * bounds.scale,
-      y: bounds.y + (collection.top + 90) * bounds.scale };
-    const client = await page.context().newCDPSession(page);
-    let touching = false;
-    async function flick() {
-      await client.send('Input.dispatchTouchEvent', {
-        type: 'touchStart', touchPoints: [{ id: 1, ...start }]
-      });
-      touching = true;
-      for (const displacement of [20, 40, 60]) {
-        await page.waitForTimeout(40);
-        await client.send('Input.dispatchTouchEvent', {
-          type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - displacement }]
-        });
-      }
-      await page.waitForTimeout(40);
-      // Queue the final move and release together; an IPC round trip can look like a stationary hold.
-      await Promise.all([
-        client.send('Input.dispatchTouchEvent', {
-          type: 'touchMove', touchPoints: [{ id: 1, x: start.x, y: start.y - 80 }]
-        }),
-        client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
-      ]);
-      touching = false;
-    }
-    try {
-      const before = await page.screenshot({ scale: 'css' });
-      await flick();
-      await page.waitForTimeout(100);
-      const gliding = await page.screenshot({ scale: 'css' });
-      // The finger ends at 80px; a screenshot after release already includes gliding.
-      const releaseShift = 80;
-      const glideShift = (await contentShift(page, before, gliding)).pixels;
-      expect(glideShift).toBeGreaterThan(releaseShift + 3);
-      await page.waitForTimeout(100);
-      const slower = await page.screenshot({ scale: 'css' });
-      const slowShift = (await contentShift(page, before, slower)).pixels;
-      expect(slowShift - glideShift).toBeLessThan(glideShift - releaseShift);
-      await flick();
-      await client.send('Input.dispatchTouchEvent', {
-        type: 'touchStart', touchPoints: [{ id: 1, ...start }]
-      });
-      touching = true;
-      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      touching = false;
-      const stopped = await page.screenshot({ scale: 'css' });
-      await page.waitForTimeout(160);
-      const settled = await page.screenshot({ scale: 'css' });
-      expect((await contentShift(page, stopped, settled)).pixels).toBeLessThanOrEqual(1);
-      await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
-    } finally {
-      if (touching) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await client.detach();
-    }
-  });
+test('vertical dragging cannot scroll the fixed room page', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 568 }); await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/'); await enterGame(page); await openRewards(page);
+  const bounds = await metrics(page), c = collectionBounds(bounds);
+  const start = { x: bounds.x + (c.x + c.width / 2) * bounds.scale, y: bounds.y + (c.top + 80) * bounds.scale };
+  const saved = await savedState(page);
+  await page.mouse.move(start.x, start.y);
+  const before = await page.screenshot({ scale: 'css' });
+  await page.mouse.down(); await page.mouse.move(start.x, start.y - 60, { steps: 6 }); await page.mouse.up(); await rendered(page);
+  expect((await page.screenshot({ scale: 'css' })).equals(before), 'A vertical drag leaves the fixed room layout unchanged.').toBe(true);
+  expect(await savedState(page)).toEqual(saved);
+  expect(await page.evaluate(() => ({ x: scrollX, y: scrollY,
+    fits: document.documentElement.scrollHeight <= innerHeight && document.documentElement.scrollWidth <= innerWidth })))
+    .toEqual({ x: 0, y: 0, fits: true });
+  await page.screenshot({ path: testInfo.outputPath('fixed-room-320.png'), scale: 'css' });
 });

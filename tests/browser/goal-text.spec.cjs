@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openRewards, roomControl, roomPoint, roomState, metrics, collectionBounds,
-  uiScale, tap, rendered } = require('./game-ui.cjs');
+const { openGame, openRewards, roomControl, metrics, collectionBounds, tap } = require('./game-ui.cjs');
 
 test.use({
   viewport: { width: 1024, height: 768 },
@@ -9,18 +8,13 @@ test.use({
   reducedMotion: 'reduce'
 });
 
-async function checkBelowBell(page, testInfo, name, fromGoal = false) {
-  // Reveal the next locked row without refreshing away an in-place retry message.
-  for (let index = 0; index < (fromGoal ? 2 : 3); index++) {
-    await page.keyboard.press('Tab');
-    await rendered(page);
-  }
-  const bounds = await metrics(page), collection = collectionBounds(bounds), scale = uiScale(bounds);
-  const cell = (collection.width - collection.gap * 2) / 3;
-  const lastRow = roomPoint(bounds, 'space', { owned: (await roomState(page)).owned });
-  const bottom = bounds.y + (lastRow.y - 64 / scale - collection.gap) * bounds.scale;
-  const left = bounds.x + (collection.x + cell + collection.gap) * bounds.scale;
-  const clip = { x: left + 20, y: bottom + 2, width: cell * bounds.scale - 40, height: 13 };
+async function checkBelowBell(page, testInfo, name) {
+  // Reveal the bell without activating it or dismissing its in-place retry message.
+  const card = await roomControl(page, 'winter', { locked: true, item: 'winter' });
+  const bounds = await metrics(page), collection = collectionBounds(bounds);
+  const bottom = bounds.y + (collection.shelfTop + collection.shelfHeight) * bounds.scale;
+  const left = bounds.x + (card.x - card.width / 2) * bounds.scale;
+  const clip = { x: left + 20, y: bottom + 2, width: card.width * bounds.scale - 40, height: 5 };
   const png = await page.screenshot({ path: testInfo.outputPath(`${name}.png`), scale: 'css' });
   const ink = await page.evaluate(async ({ data, clip }) => {
     const image = new Image();
@@ -65,7 +59,7 @@ test('inline goal and retry text stay inside the bell card at desktop scaling', 
   await roomControl(page, 'goal', { locked: true, item: 'winter' });
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('could not be saved');
-  await checkBelowBell(page, testInfo, 'bell-retry-contained', true);
+  await checkBelowBell(page, testInfo, 'bell-retry-contained');
   await page.evaluate(() => window.restoreGoalTextSave());
   expect(errors).toEqual([]);
 });

@@ -20,6 +20,8 @@ var toy_targets: Dictionary = {}
 var active_toy_id := ""
 var activate_toy: Callable
 var accent := Color("#438363")
+var toy_size: float = 64.0
+var toy_label_width: float = 96.0
 
 var _slot: Control
 var _toy: Button
@@ -69,15 +71,18 @@ func layout_room(dimensions: Vector2) -> void:
 		return
 	var changed := size != dimensions
 	size = dimensions
-	_slot.size = Vector2(96, 112)
-	_home = _clamp_floor(Vector2(88, minf(272, size.y - 32)))
-	_toy.size = Vector2(64, 64)
+	var duck_scale: float = minf(1, maxf(0.25, size.y / 160.0))
+	_slot.size = Vector2(96, 112) * duck_scale
+	_home = _clamp_floor(Vector2(minf(88, size.x * 0.16), size.y - 32))
+	_toy.custom_minimum_size = Vector2.ONE * toy_size
+	_toy.size = Vector2.ONE * toy_size
 	_toy.pivot_offset = _toy.size * 0.5
 	if not _fixed_toy_home and (changed or not _initialized):
 		_toy_home = Vector2(size.x - 66, size.y - 74)
 	elif _fixed_toy_home:
 		_toy_home = _clamp_toy(_toy_home)
-	_label.size = Vector2(96, 26)
+	_label.size = Vector2(toy_label_width, 26)
+	_label.add_theme_font_size_override("font_size", 16 if toy_size < 60 else 21)
 	if not _initialized:
 		duck_position = _home
 		target_position = _home
@@ -116,11 +121,18 @@ func _allowed() -> bool:
 
 
 func _clamp_floor(point: Vector2) -> Vector2:
-	return Vector2(clampf(point.x, 52, maxf(52, size.x - 52)), clampf(point.y, minf(size.y * 0.57, 173.28) + 38, size.y - 12))
+	var half_width: float = minf(_slot.size.x * 0.5 + 4, size.x * 0.5)
+	var bottom: float = maxf(0, size.y - 12)
+	var top: float = minf(bottom, maxf(_slot.size.y + 4, size.y * 0.57 + 24))
+	return Vector2(clampf(point.x, half_width, maxf(half_width, size.x - half_width)), clampf(point.y, top, bottom))
 
 
 func _clamp_toy(point: Vector2) -> Vector2:
-	return Vector2(clampf(point.x, 34, maxf(34, size.x - 34)), clampf(point.y, 68, size.y - 36))
+	var half_size: float = toy_size * 0.5
+	var left: float = minf(half_size + 4, size.x * 0.5)
+	var label_height: float = maxf(26, _label.get_combined_minimum_size().y) if _label != null else 26
+	var bottom: float = maxf(half_size, size.y - half_size - label_height - 2)
+	return Vector2(clampf(point.x, left, maxf(left, size.x - left)), clampf(point.y, minf(half_size + 4, bottom), bottom))
 
 
 func _place_duck() -> void:
@@ -137,10 +149,12 @@ func _clear_toy_space() -> bool:
 
 
 func _place_toy(center: Vector2) -> void:
+	center = _clamp_toy(center)
 	_toy.z_index = 90 if toy_phase != "idle" else 0
 	_label.z_index = _toy.z_index
 	_toy.position = center - _toy.size * 0.5
-	_label.position = Vector2(clampf(center.x - 48, 4, maxf(4, size.x - 100)), minf(center.y + 33, size.y - 27))
+	var label_height: float = maxf(26, _label.get_combined_minimum_size().y)
+	_label.position = Vector2(clampf(center.x - toy_label_width * 0.5, 4, maxf(4, size.x - toy_label_width - 4)), minf(center.y + toy_size * 0.5 + 1, size.y - label_height - 1))
 
 
 func _react(kind: String) -> void:
@@ -294,7 +308,7 @@ func _draw_depth(item: CanvasItem) -> int:
 	while current != null:
 		depth += current.z_index
 		if not current.z_as_relative: break
-		current = current.get_parent_item()
+		current = current.get_parent() as CanvasItem
 	return depth
 
 

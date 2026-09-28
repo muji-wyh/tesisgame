@@ -142,9 +142,11 @@ Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
 On wider screens the mode tabs share the header row.
 
-**More** opens **Pip's room**, with an icon to return. Eight larger world
-icons share the top header on wider screens and wrap below it on small screens.
-Choosing one keeps the current page and scroll position open while changing the
+**More** opens **Pip's room**, with an icon to return. Age choices stay at the top,
+toys stay at the bottom, and the world strip sits
+just above the toys. Each strip scrolls horizontally without a visible scrollbar.
+Pip's playground fills the remaining space; the page itself never scrolls.
+Choosing a world keeps the current page open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
 shows an in-page retry notice. Locked toy cards show gift progress below the room.
 Results keep the chest or bear, word review, and the next action without game-mode
@@ -281,7 +283,8 @@ The **Medals** page, tab, and reward preview have been removed. Ordinary chest
 results show the chest, review cards and next action. A toy unlock shows
 **A gift for Pip!** with **Try it with Pip**.
 Chest rewards, piece progress, toy unlocks, and existing saves remain available.
-More opens the playroom directly, with world and age choices above it.
+More opens the playroom directly, with age choices at the top and worlds above
+the bottom toy strip.
 
 The eight worlds are **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**,
 **Space**, **Jungle** and **Candy**. Their saved gift progress retains six reward
@@ -308,16 +311,17 @@ step in that same tap. Drag any earned toy to toss it to Pip. The other toys sta
 visible and playable. Only toys you
 have not earned remain in the cards below the room, with their exact requirements.
 Newly earned toys move into the home automatically, and the lower list disappears
-when all nine are owned. Locked cards use their own world colors, larger
-illustrations and a wider side-by-side layout when space permits.
+when all nine are owned. Locked cards use their own world colors and show the
+illustration beside the name and progress in one horizontal strip.
 Previewing a locked gift keeps the equipped toy and all earned pieces intact.
 The Rooms/backdrop chooser has been removed. Existing saved backgrounds remain
 intact and continue to render; they are not advertised as new gifts or goals.
-Drag blank areas of the room canvas, including locked toy previews, to scroll.
+The room canvas stays fixed while the age, world, and locked-toy strips scroll
+horizontally by touch, mouse drag, wheel, or keyboard focus without scrollbars.
 A stationary floor tap still calls Pip; direct duck and unlocked-toy gestures
 retain their play interactions. Pet Pip directly, tap Pip for a surprise, or drag a toy
-to toss it. The locked toy cards sit directly below the room, with no separate
-shortcut buttons, step caption or toy action button. Tap the toy itself to
+to toss it. The locked toy cards stay at the bottom below the world strip, with no
+separate shortcut buttons, step caption or toy action button. Tap the toy itself to
 advance its three play steps and replay; keyboard and controller activation
 work on the toy too. To leave a locked preview, choose a toy inside Pip's home.
 Choose a locked toy to preview it without moving the page. Its card shows the
@@ -468,8 +472,8 @@ The choice is saved on this device and applies to the **next lesson**. Switching
 Match and Memory keeps the current five words and their active level. Changing
 the age never resets a round, its hints, medal pieces, or toys. An unsuccessful save
 keeps the confirmed selection and offers a visible tap-to-retry message.
-On very short screens, the age row scrolls with the collection so reward tiles
-remain usable without shrinking the controls.
+The age row stays at the top even on short screens. Horizontal scrolling keeps
+all four choices reachable without moving the playground or bottom strips.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short press compresses the lock or body immediately and releases with a 120 ms
@@ -523,12 +527,10 @@ Web builds save medal progress immediately in browser storage so a quick reload
 cannot lose a newly earned piece. Existing browser filesystem saves migrate on
 load, while native builds retain the transactional `user://medals.cfg` save.
 
-Room swipes follow the finger one-to-one, then glide and slow naturally on release.
-A new touch stops the glide without activating the item underneath. Scrolling stops at the
-edges and when leaving the room; wheel and keyboard scrolling remain available
-without visible scrollbars. Controller navigation brings toys back into view
-even after touch scrolling. Reduced motion keeps direct finger scrolling and disables the
-automatic glide.
+The three room strips follow horizontal drags without activating a choice on
+release. Their scroll positions are independent, with no visible scrollbars or
+whole-page scrolling. Keyboard and controller focus reveal offscreen choices.
+Pip and earned toys remain inside the fixed playground during play and resizing.
 A won reward is still revealed immediately after the required hold.
 
 **New adventure** starts a fresh round, avoiding the previous board's words when at least

@@ -99,6 +99,7 @@ func _run() -> void:
 	check(app.duck._trick == "flutter", "The next header tap offers a flutter")
 	app.duck.settle()
 	app._show_collection()
+	await settle()
 	app.duck.settle()
 	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3)
 		and app.duck.home_playground and app.duck._idle_action == "home-dance",
@@ -128,26 +129,22 @@ func _test_home_focus_headroom(app) -> void:
 	var saved_toy: String = app.playroom_state.toy_id
 	var saved_medals: Dictionary = app.medal_progress.counts.duplicate(true)
 
-	# The compact room needs a shorter desktop viewport to scroll Pip offscreen.
 	for dimensions in [Vector2i(390, 568), Vector2i(960, 600)]:
 		root.size = dimensions
 		await settle()
 		app._collection_back.grab_focus()
-		app._collection_scroll.scroll_vertical = int(app._collection_max_scroll().y)
-		await settle()
 		var before_scroll: int = app._collection_scroll.scroll_vertical
-		var clipped_top: float = app._collection_scroll.get_global_rect().position.y
-		check(before_scroll > 0 and app._collection_duck_slot.get_global_rect().position.y < clipped_top + 16,
-			"The scrolled Home fixture places Pip's jumping head above the visible area at " + str(dimensions))
+		check(before_scroll == 0 and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
+			"The fixed Home viewport keeps Pip visible at " + str(dimensions))
 		app.duck.grab_focus()
 		await settle()
 		var viewport_bounds: Rect2 = app._collection_scroll.get_global_rect()
 		var slot_bounds: Rect2 = app._collection_duck_slot.get_global_rect()
 		var jump_bounds := Rect2(slot_bounds.position - Vector2(0, 16), slot_bounds.size + Vector2(0, 16))
-		check(app.duck.has_focus() and app._collection_scroll.scroll_vertical < before_scroll
+		check(app.duck.has_focus() and app._collection_scroll.scroll_vertical == before_scroll
 			and slot_bounds.position.y - viewport_bounds.position.y >= 15.5
 			and viewport_bounds.grow(0.5).encloses(jump_bounds),
-			"Focusing Pip reveals its whole slot plus 16 logical pixels above the head at %s: viewport=%s slot=%s scroll=%d -> %d" % [
+			"Focusing Pip preserves its whole slot plus 16 logical pixels above the head at %s: viewport=%s slot=%s scroll=%d -> %d" % [
 				dimensions, viewport_bounds, slot_bounds, before_scroll, app._collection_scroll.scroll_vertical])
 		app.duck.react_in_room("jump")
 		app.duck._process(0.425)

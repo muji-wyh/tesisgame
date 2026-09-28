@@ -1,14 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const { writeFile } = require('node:fs/promises');
 const { openGame, metrics, tap, boardPoint, openRewards,
-  worldIconRect, collectionBounds, rendered, enterGame, roomLayout,
+  worldControl, collectionBounds, rendered, enterGame, roomLayout,
   THEME_IDS, THEME_COLORS } = require('./game-ui.cjs');
 
 async function expectRoomFloor(page, testInfo, index, suffix = '') {
   const bounds = await metrics(page), room = roomLayout(bounds);
   // This clear floor patch is below the wall and above the first row of toys.
   const point = { x: Math.round(bounds.x + (room.x + room.width - 12) * bounds.scale),
-    y: Math.round(bounds.y + (room.top + 186) * bounds.scale) };
+    y: Math.round(bounds.y + (room.top + room.homeHeight * 0.65) * bounds.scale) };
   const expected = THEME_COLORS[index].slice(1).match(/../g).map(value => parseInt(value, 16));
   let screenshot;
   await expect.poll(async () => {
@@ -43,7 +43,7 @@ test('the room follows every selected world despite an earned legacy backdrop', 
   }));
   await expectRoomFloor(page, testInfo, 2, '-startup');
   for (const [index, id] of THEME_IDS.entries()) {
-    const rect = worldIconRect(await metrics(page), index);
+    const rect = await worldControl(page, index);
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
     await expectRoomFloor(page, testInfo, index);
@@ -66,11 +66,9 @@ test('larger themes stay on the current page and retry saving in place', async (
   const selection = await page.locator('#selection-status').textContent();
   await openRewards(page);
   for (const [index, color] of [[4, '#e7f8fa'], [1, '#fff4df']]) {
-    const bounds = await metrics(page), rect = worldIconRect(bounds, index);
+    const bounds = await metrics(page), rect = await worldControl(page, index);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(52);
-    if (collectionBounds(bounds).inlineWorlds) {
-      expect((rect.y + rect.height / 2) * bounds.scale).toBeLessThan(44);
-    }
+    expect(rect.y).toBe(collectionBounds(bounds).themeTop);
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', color);
     await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
@@ -85,12 +83,12 @@ test('larger themes stay on the current page and retry saving in place', async (
     };
     window.restoreThemeSaving = () => { Storage.prototype.setItem = save; };
   });
-  let rect = worldIconRect(await metrics(page), 5);
+  let rect = await worldControl(page, 5);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await expect(page.locator('#game-status')).toContainText('Changes not saved.');
   await page.screenshot({ path: testInfo.outputPath('theme-save-notice.png'), scale: 'css' });
   await page.evaluate(() => window.restoreThemeSaving());
-  rect = worldIconRect(await metrics(page), 5);
+  rect = await worldControl(page, 5);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await expect(page.locator('#game-status')).not.toContainText('Changes not saved.');
@@ -99,7 +97,7 @@ test('larger themes stay on the current page and retry saving in place', async (
   await rendered(page);
   const bounds = await metrics(page);
   for (let index = 0; index < 8; index++) {
-    rect = worldIconRect(bounds, index);
+    rect = await worldControl(page, index);
     expect(rect.width * bounds.scale).toBeGreaterThanOrEqual(52);
     expect((rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(320);
   }

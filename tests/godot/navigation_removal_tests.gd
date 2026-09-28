@@ -87,19 +87,21 @@ func _run() -> void:
 	check(app.playroom_state.next_gift(toy_counts).is_empty(), "Gift prompts do not advertise the removed rooms")
 	check(not app.has_method("_show_reward_section") and app._collection_title.text == "Pip",
 		"World selection has no separate navigation tab or retained section route")
-	check(app._world_choices.is_visible_in_tree() and app._world_choices.get_parent() == app._collection_header,
+	check(app._world_choices.is_visible_in_tree() and app._world_scroll.is_ancestor_of(app._world_grid),
 		"The world choices are directly available in Pip's room")
 	for width in [320, 768]:
 		root.size = Vector2i(width, 1024)
 		await settle()
-		check(app._world_grid.columns == (4 if width == 320 else 8), "Theme choices adapt without shrinking their targets")
+		check(app._world_grid is HBoxContainer, "Theme choices keep a single horizontal row without shrinking their targets")
 		for index in range(app.theme_buttons.size()):
 			var button: Button = app.theme_buttons[index]
 			var scale: float = app.Style.ui_scale(app)
+			button.grab_focus()
+			await settle()
 			check(button.is_visible_in_tree() and button.size.x * scale >= 52 and button.size.x * scale < 54
 				and button.size.y * scale >= 52 and button.size.y * scale < 54
-				and app.get_global_rect().encloses(button.get_global_rect()),
-				"Each direct world choice stays usable and inside the viewport")
+				and app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
+				"Focus reveals each full-size world choice within its own strip")
 			check(button.text.is_empty() and button.tooltip_text == app.Data.theme(app.model.THEMES[index]).name,
 				"Compact world icons retain their full names")
 	var cards: Array = app.model.cards.duplicate(true)

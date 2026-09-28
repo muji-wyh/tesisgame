@@ -170,7 +170,7 @@ func _run() -> void:
 	await process_frame
 	_check_toy_partition(view, state, counts, "fully earned room")
 	check(view.owned_toys.get_child_count() == 9 and not view._item_grid.visible
-		and is_equal_approx(view.get_combined_minimum_size().y, view._room.get_combined_minimum_size().y),
+		and not view.toy_shelf.visible,
 		"All nine toys fit inside the home without an empty catalog row below it")
 	var expected := {"spring": ["flower", "water"], "summer": ["ball", "roll"], "autumn": ["apple", "offer"], "winter": ["bell", "ring"], "ocean": ["shell", "open"], "space": ["rocket", "launch"], "jungle": ["monkey", "swing"], "candy": ["cake", "decorate"]}
 	var next_actions := {"spring": ["Grow the flower", "Bloom the flower"], "summer": ["Return the ball", "Catch the ball"], "autumn": ["Nibble the apple", "Finish the apple"], "winter": ["Answer the bell", "Chime the bell"], "ocean": ["Listen to the shell", "Hear the waves"], "space": ["Ignite the rocket", "Launch the rocket"], "jungle": ["Wave to the monkey", "High-five the monkey"], "candy": ["Frost the cake", "Sprinkle the cake"]}
@@ -340,9 +340,7 @@ func _finish() -> void:
 
 
 func _check_room_text(view, context: String) -> void:
-	var room_bounds: Rect2 = view._room.get_global_rect()
-	check(absf(view._item_grid.global_position.y - room_bounds.end.y - view.get_theme_constant("separation")) <= 1
-		if view._item_grid.visible else is_equal_approx(view.get_combined_minimum_size().y, view._room.get_combined_minimum_size().y),
+	check(view.toy_shelf.is_ancestor_of(view._item_grid) and view.toy_shelf.visible == view._item_grid.visible,
 		"The " + context + " locked catalog follows the home only while unearned toys remain")
 	check(not view._toy_label.text.is_empty() and view.feedback_text.to_lower().contains(view._toy_label.text.to_lower()),
 		"The " + context + " visible toy noun retains its feedback association")
@@ -372,7 +370,7 @@ func _check_toy_partition(view, state, counts: Dictionary, context: String) -> v
 		and not view._room.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "shelves"),
 		"The " + context + " makes the entire home playable without a separate shelf")
 	check(owned.all(func(card: Control) -> bool: return stage_bounds.grow(1).encloses(card.get_global_rect())),
-		"The " + context + " includes the last earned toy inside the room's scrollable floor")
+		"The " + context + " includes the last earned toy inside the room's fixed floor")
 
 
 func _capture() -> void:

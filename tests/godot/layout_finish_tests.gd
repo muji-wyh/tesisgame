@@ -48,16 +48,16 @@ func _run() -> void:
 	app._show_collection()
 	await settle()
 	check(app._collection_title.text == "Pip" and app.theme_buttons.size() == 8
-		and app._world_choices.get_parent() == app._collection_header,
+		and app._world_scroll.is_ancestor_of(app._world_grid),
 		"More keeps a single Pip title plus a persistent World strip")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
 		"The shared strip has no retained World heading or tagline fields")
 	var css_scale: float = app.Style.ui_scale(app)
-	check(is_equal_approx(app._world_choices.global_position.y * css_scale, 12)
-		and is_equal_approx(app._age_choices.global_position.y * css_scale, 72)
-		and app._collection_scroll.global_position.y == app._age_choices.get_global_rect().end.y + ceili(8 / css_scale),
-		"The World strip shares the header, followed directly by age controls and scrolling content")
-	check(app._world_grid.columns == 8 and app._world_grid.get_theme_constant("h_separation") == roundi(6 / css_scale),
+	check(app._age_choices.get_global_rect().end.y <= app._collection_scroll.global_position.y
+		and app._collection_scroll.get_global_rect().end.y <= app._world_scroll.global_position.y
+		and app._world_scroll.get_global_rect().end.y <= app._room.toy_shelf.global_position.y,
+		"Age stays above the fixed playground, with worlds immediately above the bottom toy strip")
+	check(app._world_grid is HBoxContainer and app._world_grid.get_theme_constant("separation") == roundi(6 / css_scale),
 		"Eight World icons form one row with six CSS-pixel gaps")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")
 	check(app._collection_back.text.is_empty() and is_equal_approx(app._collection_back.size.x, app._collection_back.size.y),
@@ -72,8 +72,8 @@ func _run() -> void:
 	check(not app.has_method("_show_reward_section") and app.find_child("Rewards_medals", true, false) == null,
 		"Obsolete collection routes and Medals navigation are removed")
 	check(app._room.is_visible_in_tree() and app._collection_grid.get_children().all(
-		func(child: Node) -> bool: return child == app._room or child == app._age_choices),
-		"More contains the room and responsive age choices without a medal goal or shelves")
+		func(child: Node) -> bool: return child == app._room),
+		"The center contains only the expanding playground while settings and toys have fixed strips")
 	app._hide_collection()
 	check(is_equal_approx(app.grid.global_position.y * app.Style.ui_scale(app), game_top),
 		"Adding the More strip does not move the game's header or playfield")

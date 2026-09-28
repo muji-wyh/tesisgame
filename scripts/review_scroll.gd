@@ -35,15 +35,34 @@ func cancel_drag() -> void:
 func _button_at(point: Vector2) -> Button:
 	if get_child_count() == 0:
 		return null
-	for child in get_child(0).get_children():
-		if child is Button and child.is_visible_in_tree() and not child.disabled and child.get_global_rect().has_point(point):
+	return _nested_button_at(get_child(0), point)
+
+
+func _nested_button_at(parent: Node, point: Vector2) -> Button:
+	for child in parent.get_children():
+		if not child is Control or not child.is_visible_in_tree():
+			continue
+		var nested: Button = _nested_button_at(child, point)
+		if nested != null:
+			return nested
+		if child is Button and not child.disabled and child.get_global_rect().has_point(point):
 			return child
 	return null
+
+
+func _scroll_by(distance: float) -> void:
+	var bar := get_h_scroll_bar()
+	scroll_horizontal = clampi(roundi(scroll_horizontal + distance), 0, maxi(0, roundi(bar.max_value - bar.page)))
 
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or (interaction_allowed.is_valid() and not interaction_allowed.call()):
 		cancel_drag()
+		return
+	if event is InputEventPanGesture and get_global_rect().has_point(event.position):
+		cancel_drag()
+		_scroll_by((event.delta.x if absf(event.delta.x) > absf(event.delta.y) else event.delta.y) * 24 / Style.ui_scale(self))
+		get_viewport().set_input_as_handled()
 		return
 	var pointer := -2
 	var pressed := false
@@ -61,6 +80,13 @@ func _input(event: InputEvent) -> void:
 				_suppress_emulated_mouse = false
 			return
 		if event is InputEventMouseButton:
+			if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN, MOUSE_BUTTON_WHEEL_LEFT, MOUSE_BUTTON_WHEEL_RIGHT] and get_global_rect().has_point(point):
+				if event.pressed:
+					cancel_drag()
+					var direction: float = -1.0 if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_LEFT] else 1.0
+					_scroll_by(direction * 48 * event.factor / Style.ui_scale(self))
+				get_viewport().set_input_as_handled()
+				return
 			if event.button_index != MOUSE_BUTTON_LEFT:
 				return
 			pressed = event.pressed

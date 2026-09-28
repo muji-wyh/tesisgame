@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, openRewards: rewards,
-  worldIconRect, roomControl, leaveRoomPreview: leavePreview, rendered, openGame,
+  worldControl, collectionBounds, roomControl, leaveRoomPreview: leavePreview, rendered, openGame,
   boardPoint, discoverMatchCards, memoryMetrics, memoryPoint, withMemoryPeek, visibleColorCount } = require('./game-ui.cjs');
 
 // Exploratory release audit: interact through the rendered game and its public announcements.
@@ -18,18 +18,14 @@ async function roomTap(page, name, options) {
 }
 
 async function scrollToEnd(page, browserName, size) {
-  if (browserName === 'chromium') {
-    await page.mouse.move(size.width / 2, size.height / 2);
-    await page.mouse.wheel(0, 2600);
-  } else {
-    // Mobile WebKit has no wheel API; use the game's supported pointer drag.
-    for (let swipe = 0; swipe < 6; swipe++) {
-      await page.mouse.move(size.width / 2, size.height - 30);
-      await page.mouse.down();
-      await page.mouse.move(size.width / 2, 100, { steps: 8 });
-      await page.mouse.up();
-      await rendered(page);
-    }
+  const bounds = await metrics(page), collection = collectionBounds(bounds);
+  const y = bounds.y + (collection.shelfTop + collection.shelfHeight / 2) * bounds.scale;
+  for (let swipe = 0; swipe < 6; swipe++) {
+    await page.mouse.move(size.width - 50, y);
+    await page.mouse.down();
+    await page.mouse.move(50, y, { steps: 8 });
+    await page.mouse.up();
+    await rendered(page);
   }
   await rendered(page);
 }
@@ -58,7 +54,7 @@ for (const size of SIZES) {
     const originalCards = await discoverMatchCards(page);
     await rewards(page);
     await shot('03-more-from-match');
-    await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
+    await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
     await shot('04-worlds-from-match');
     await page.keyboard.press('Escape');
     expect(await discoverMatchCards(page), 'Returning from More preserves all five words and their card positions.').toEqual(originalCards);
@@ -119,7 +115,7 @@ for (const size of SIZES) {
     await expect(page.locator('#game-status')).toContainText('Find a pair.');
     await shot('17-final-return');
     await rewards(page);
-    await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
+    await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
     await shot('18-worlds');
     await page.keyboard.press('Escape');
     await chooseTheme(page, 5);
@@ -179,7 +175,7 @@ test('More opens Pip with direct world choices and preserved game state', async 
   expect(await page.evaluate(keys => keys.map(key => localStorage.getItem(key)), keys)).toEqual(saved);
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   await rewards(page);
-  const world = worldIconRect(await metrics(page), 5);
+  const world = await worldControl(page, 5);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f1edfb');
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");

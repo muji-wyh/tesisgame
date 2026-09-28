@@ -102,8 +102,8 @@ func _run() -> void:
 		if not app.collection_page.visible:
 			app._show_collection()
 		await settle()
-		check(app.theme_buttons.size() == 8 and app._collection_header.is_ancestor_of(app._world_choices),
-			"Wide world choices share the More header")
+		check(app.theme_buttons.size() == 8 and app._world_scroll.is_ancestor_of(app._world_grid),
+			"World choices stay in their independent horizontal strip")
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All eight worlds remain selectable")
 		app._world_grid.get_node(app.Data.theme(world_id).name).pressed.emit()
 		await settle()
@@ -135,9 +135,9 @@ func _run() -> void:
 			"More uses a compact Back icon without losing its target size at %s: size=%s scale=%s minimum=%s header=%s" % [
 				dimensions, app._collection_back.size, scale, app._collection_back.get_combined_minimum_size(), app._collection_header.size])
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"World choices remain available above Pip's room")
-		check(app._world_grid.columns == (4 if dimensions.x == 480 else 8), "World choices use two complete rows on phones and one on wide screens")
-		check(app._world_grid.get_theme_constant("h_separation") == roundi(6 / scale),
+			"World choices remain available below Pip's room")
+		check(app._world_grid is HBoxContainer, "World choices remain in one horizontally scrollable row at every width")
+		check(app._world_grid.get_theme_constant("separation") == roundi(6 / scale),
 			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")
 		for index in range(app.theme_buttons.size()):
 			var button: Button = app.theme_buttons[index]
@@ -147,8 +147,8 @@ func _run() -> void:
 				and button.icon_alignment == HORIZONTAL_ALIGNMENT_CENTER,
 				"Every World icon retains its exact tooltip and accessible name")
 			check(button.size.is_equal_approx(Vector2.ONE * ceilf(52 / scale))
-				and app.get_global_rect().grow(1).encloses(button.get_global_rect()),
-				"Every World icon has a larger 52 CSS-pixel square target")
+				and is_equal_approx(button.global_position.y, app.theme_buttons[0].global_position.y),
+				"Every World icon keeps a larger 52 CSS-pixel square target in one row")
 			check(button.get_theme_constant("icon_max_width") == ceili(36 / scale),
 				"World artwork uses a 36 CSS-pixel icon cap")
 	app._hide_collection()

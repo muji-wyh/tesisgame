@@ -36,7 +36,7 @@ func check_text(app, id: String, state: String) -> void:
 			"The separate title remains inside the card without overlapping its retry details")
 	check(label.get_line_count() + title_lines == 3 and label.get_theme_font_size("font_size") * scale >= 12,
 		"The complete three-line state stays readable instead of being clipped or shrunk away")
-	check(absf(card.size.y * scale - 128) <= 1, "Fitting text does not change the fixed card height")
+	check(absf(card.size.y - app._room.toy_shelf.size.y) <= 1, "Fitting text does not change the fixed bottom strip height")
 
 
 func _run() -> void:

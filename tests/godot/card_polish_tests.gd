@@ -109,9 +109,9 @@ func _run() -> void:
 			var button = room.item_buttons[id]
 			var owned: bool = app.playroom_state.owned(app.playroom_state.item(id), app.medal_progress.counts)
 			check(button.in_room == owned
-				and (button.size.is_equal_approx(Vector2(64, 64)) if owned else absf(button.size.y * scale - 128) <= 1)
+				and (button.size.is_equal_approx(Vector2(64, 64)) if owned else absf(button.size.y - room.toy_shelf.size.y) <= 1)
 				and button.size.x * scale >= 44,
-				"Owned toys use full-size 64px floor targets while locked toys retain their catalog cards")
+				"Owned toys keep usable floor targets while locked cards fill their fixed bottom strip")
 			for label in [button.title_label, button.detail_label, button.badge]:
 				if label.is_visible_in_tree():
 					var bounds: Rect2 = room._room.get_global_rect() if owned else button.get_global_rect()
@@ -120,7 +120,7 @@ func _run() -> void:
 			check(button.get_global_rect().grow(1).encloses(button.picture.get_global_rect()), "Illustrations fit the tile")
 		check(shell.get_global_rect().grow(1).encloses(room.goal_label.get_global_rect())
 			and shell.get_global_rect().encloses(room.goal_button.get_global_rect()),
-			"The gift label and 44px action fit both stacked and wide card layouts")
+			"The gift label and 44px action fit the bottom strip in portrait and landscape")
 	app._hide_collection()
 	app.set_reduced_motion(false)
 	check(app.new_round(27, false, "at-home", "match", "pillow"), "The new vocabulary can start animated Match cards")
@@ -195,7 +195,7 @@ func _check_retry_regions(room, card, label: Label) -> void:
 		"The owned toy shows every line of its retry instructions")
 	check(room.playground.get_global_rect().encloses(label.get_global_rect())
 		and card.in_room and card.size.is_equal_approx(Vector2(64, 64)),
-		"The full retry state fits on the playable floor beside its normal-size toy")
+		"The full retry state fits on the playable floor beside its normal-size toy: room=%s label=%s card=%s in_room=%s" % [room.playground.get_global_rect(), label.get_global_rect(), card.size, card.in_room])
 	if card.picture.is_visible_in_tree():
 		check(not card.picture.get_global_rect().intersects(label.get_global_rect()), "Retry instructions stay clear of the toy illustration")
 

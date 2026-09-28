@@ -87,20 +87,20 @@ func _run() -> void:
 		check(app._collection_title.is_visible_in_tree() and app._collection_back.is_visible_in_tree(),
 			"The room title and Back remain available at " + str(dimensions))
 		for button in app.theme_buttons:
-			check(button.is_visible_in_tree() and app.get_global_rect().grow(0.5).encloses(button.get_global_rect()),
-				"World choices remain visible inside the viewport at " + str(dimensions))
+			button.grab_focus()
+			await settle()
+			check(button.is_visible_in_tree() and app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
+				"World choices remain reachable inside their strip at " + str(dimensions))
 	root.size = Vector2i(480, 480)
 	await settle()
-	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
-	await settle()
-	var scroll_before: int = app._collection_scroll.scroll_vertical
-	check(not app._collection_scroll.get_global_rect().intersects(app.duck.get_global_rect()),
-		"The focus regression starts with Pip fully scrolled out of view")
+	check(app._collection_scroll.scroll_vertical == 0
+		and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
+		"Pip remains inside the fixed playground before focus changes")
 	app.duck.grab_focus()
 	await settle()
-	check(app.duck.has_focus() and app._collection_scroll.scroll_vertical < scroll_before
+	check(app.duck.has_focus() and app._collection_scroll.scroll_vertical == 0
 		and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
-		"Keyboard focus reveals Pip after deferred layout and keeps focus on the duck")
+		"Keyboard focus keeps Pip visible without scrolling the page")
 	check(app._collection_duck_slot.global_position.y - 16 >= app._collection_scroll.global_position.y,
 		"The focused duck also retains room for its jumping head")
 	app._choose_world("ocean")

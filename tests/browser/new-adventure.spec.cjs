@@ -133,7 +133,7 @@ test('Pip room and Back preserve the Match board and selected card', async ({ pa
   const saved = await record(page), medals = await record(page, MEDAL_KEY);
   await openRewards(page);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
-  await expect(page.locator('#game-status')).toContainText('Choose a world or age level above');
+  await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
   await page.screenshot({ path: testInfo.outputPath('more-worlds-preserves-lesson.png'), scale: 'css' });
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);

@@ -8,6 +8,9 @@ var title_label: Label
 var detail_label: Label
 var badge: Label
 var in_room: bool = false
+var compact_shelf: bool = false
+var room_size: float = 64.0
+var room_label_width: float = 96.0
 var room_word: String = ""
 var item_name: String = ""
 var _press_motion := Motion.new()
@@ -22,7 +25,7 @@ func setup(item: Dictionary, texture: Texture2D) -> void:
 	room_word = item.word_id
 	item_name = item.name
 	name = "RoomItem_" + item.id
-	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_horizontal = Control.SIZE_FILL
 	focus_mode = Control.FOCUS_ALL
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	picture = TextureRect.new()
@@ -125,73 +128,64 @@ func _layout() -> void:
 		return
 	title_label.text = item_name
 	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	var wide: bool = size.x * scale >= 240
-	custom_minimum_size = Vector2(44, 128) / scale
-	title_label.add_theme_font_size_override("font_size", ceili((12 if _showing_error and not wide else 14) / scale))
+	var height: float = 76 if compact_shelf else 104
+	custom_minimum_size = Vector2(216, height) / scale
+	title_label.add_theme_font_size_override("font_size", ceili(14 / scale))
 	detail_label.add_theme_font_size_override("font_size", ceili(12 / scale))
 	badge.add_theme_font_size_override("font_size", ceili(11 / scale))
 	badge.visible = _using
 	var has_goal: bool = is_instance_valid(_goal_label)
-	var art_size: float = (72 if wide else 56) / scale
-	var art_width: float = size.x - (72 if has_goal else 24) / scale
-	picture.position = Vector2(16 / scale if wide else 12 / scale + (art_width - art_size) * 0.5, (28 if wide else 8) / scale)
+	var art_size: float = (40 if has_goal else 48 if compact_shelf else 64) / scale
+	picture.position = Vector2(8 / scale, (height / scale - art_size) * 0.5)
 	picture.size = Vector2.ONE * art_size
 	picture.show()
-	var text_left: float = (104 if wide else 8) / scale
-	var text_width: float = maxf(0, size.x - text_left - (16 if wide else 8) / scale)
+	var text_left: float = (56 if has_goal else 68 if compact_shelf else 84) / scale
+	var text_width: float = maxf(0, size.x - text_left - (56 if has_goal else 8) / scale)
 	for label in [title_label, detail_label]:
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	var title_height: float = title_label.get_theme_font("font").get_height(title_label.get_theme_font_size("font_size"))
-	title_label.position = Vector2(text_left, (42 if wide else 64 if _showing_error else 66) / scale)
+	title_label.position = Vector2(text_left, (14 if compact_shelf else 28) / scale)
 	title_label.size = Vector2(text_width, title_height)
-	detail_label.position = Vector2(text_left, 72 / scale if wide else title_label.position.y + title_height + 2 / scale)
-	detail_label.size = Vector2(text_width, maxf(0, 120 / scale - detail_label.position.y))
+	detail_label.position = Vector2(text_left, title_label.position.y + title_height + 4 / scale)
+	detail_label.size = Vector2(text_width, maxf(0, (height - 6) / scale - detail_label.position.y))
 	var badge_width: float = maxf(48 / scale, badge.get_theme_font("font").get_string_size("Using", HORIZONTAL_ALIGNMENT_LEFT, -1, badge.get_theme_font_size("font_size")).x + 12 / scale)
-	badge.position = Vector2(text_left if wide else (size.x - badge_width) * 0.5, (14 if wide else 104 if has_goal else 96) / scale)
+	badge.position = Vector2(text_left, 6 / scale)
 	badge.size = Vector2(badge_width, 20 / scale)
-	if _showing_error and _using and not wide:
-		var header_end: float = size.x - (60 if has_goal else 8) / scale
-		var thumbnail: float = maxf(0, minf(art_size, header_end - 14 / scale - badge_width))
-		picture.visible = thumbnail >= 16 / scale
-		picture.position = Vector2(8 / scale, 36 / scale - thumbnail * 0.5)
-		picture.size = Vector2.ONE * thumbnail
-		badge.position = Vector2(header_end - badge_width, 26 / scale)
 	if has_goal:
 		_goal_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		_goal_label.position = Vector2(text_left, (54 if wide else 66) / scale)
-		var short_goal: bool = _using and not _showing_error
-		_goal_label.size = Vector2(text_width, ((46 if short_goal else 66) if wide else (36 if short_goal else 54)) / scale)
-		_goal_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
+		_goal_label.position = Vector2(text_left, (height - 54) * 0.5 / scale)
+		_goal_label.size = Vector2(text_width, 54 / scale)
+		_goal_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		_goal_action.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 		_goal_action.offset_left = -52 / scale
 		_goal_action.offset_right = -8 / scale
-		_goal_action.offset_top = 8 / scale
-		_goal_action.offset_bottom = 52 / scale
+		_goal_action.offset_top = (height - 44) * 0.5 / scale
+		_goal_action.offset_bottom = (height + 44) * 0.5 / scale
 	queue_redraw()
 
 
 func _layout_in_room(scale: float) -> void:
-	custom_minimum_size = Vector2(64, 64)
+	custom_minimum_size = Vector2.ONE * room_size
 	badge.hide()
 	picture.show()
 	picture.position = Vector2.ZERO
-	picture.size = Vector2(64, 64)
+	picture.size = Vector2.ONE * room_size
 	if _showing_error:
-		picture.position = Vector2(12, 0)
-		picture.size = Vector2(40, 40)
+		picture.position = Vector2(room_size * 0.1875, 0)
+		picture.size = Vector2.ONE * room_size * 0.625
 	title_label.visible = not _showing_error
 	title_label.text = room_word
 	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.add_theme_font_size_override("font_size", 21)
-	title_label.position = Vector2(-16, 65)
-	title_label.size = Vector2(96, 26)
+	title_label.add_theme_font_size_override("font_size", 16 if room_size < 60 else 21)
+	title_label.position = Vector2((room_size - room_label_width) * 0.5, room_size + 1)
+	title_label.size = Vector2(room_label_width, 24)
 	detail_label.visible = _showing_error
 	if _showing_error: detail_label.text = "Not saved\nTap to retry"
 	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail_label.add_theme_font_size_override("font_size", 14)
-	detail_label.position = Vector2(-16, 65)
-	detail_label.size = Vector2(96, 40)
+	detail_label.position = Vector2((room_size - room_label_width) * 0.5, room_size * 0.625 + 1 if _showing_error else room_size + 1)
+	detail_label.size = Vector2(room_label_width, 40)
 	queue_redraw()
 
 

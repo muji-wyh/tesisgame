@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
-  openRewards, collectionHeaderRect, worldIconRect,
+  openRewards, collectionHeaderRect, worldControl,
   contentBounds, pipHeaderRect, roomControl, matchWords, boardPoint, resultPoint
 } = require('./game-ui.cjs');
 
@@ -78,8 +78,7 @@ async function foregroundDifference(page, first, second, firstColor, secondColor
 
 test('all eight theme choices give Pip different visible outfits in the header and room', async ({ page }, testInfo) => {
   test.setTimeout(150000);
-  // This tall phone frame keeps the room and the remaining locked toy cards in one
-  // visual artifact, without replacing the game's internal scrolling behavior.
+  // Keep the fixed room and both horizontal rails in one visual artifact.
   await page.setViewportSize({ width: 390, height: 1560 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   expect(THEME_IDS).toEqual(['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']);
@@ -124,29 +123,23 @@ test('all eight theme choices give Pip different visible outfits in the header a
   expect(errors).toEqual([]);
 });
 
-test('all eight theme targets fit 320 by 568 and the new choices survive touch and reload', async ({ page }, testInfo) => {
+test('all eight themes are reachable in the 320 by 568 rail and survive touch and reload', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   await openRewards(page);
   const originalMedals = await record(page, MEDAL_KEY);
   const bounds = await metrics(page), viewport = page.viewportSize();
-  const targets = THEME_IDS.map((theme, index) => ({ theme, rect: cssClip(bounds, worldIconRect(bounds, index)) }));
-  for (const [index, { theme, rect }] of targets.entries()) {
+  for (const [index, theme] of THEME_IDS.entries()) {
+    const rect = cssClip(bounds, await worldControl(page, index));
     expect(rect.width, `${theme}: minimum touch width`).toBeGreaterThanOrEqual(52 - 0.01);
     expect(rect.height, `${theme}: minimum touch height`).toBeGreaterThanOrEqual(52 - 0.01);
     expect(rect.x, `${theme}: left edge`).toBeGreaterThanOrEqual(0);
     expect(rect.y, `${theme}: top edge`).toBeGreaterThanOrEqual(0);
     expect(rect.x + rect.width, `${theme}: right edge`).toBeLessThanOrEqual(viewport.width + 0.01);
     expect(rect.y + rect.height, `${theme}: bottom edge`).toBeLessThanOrEqual(viewport.height + 0.01);
-    for (const previous of targets.slice(0, index)) {
-      const other = previous.rect;
-      expect(rect.x + rect.width <= other.x + 0.01 || other.x + other.width <= rect.x + 0.01 ||
-        rect.y + rect.height <= other.y + 0.01 || other.y + other.height <= rect.y + 0.01,
-      `${theme} and ${previous.theme} have separate touch targets.`).toBe(true);
-    }
   }
   for (const index of [6, 7, 6, 7]) {
-    const world = worldIconRect(await metrics(page), index);
+    const world = await worldControl(page, index);
     await tap(page, world.x + world.width / 2, world.y + world.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
     await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
