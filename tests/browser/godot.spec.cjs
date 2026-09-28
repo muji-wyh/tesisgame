@@ -1132,8 +1132,8 @@ for (const outcome of ['win', 'loss']) {
       const context = canvas.getContext('2d');
       context.drawImage(image, 0, 0);
       return [...context.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data].slice(0, 3);
-    }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 24 * scale } });
-    expect(pixel, 'The softly tinted New adventure button must render, not just accept invisible input.').toEqual([243, 223, 224]);
+    }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 20 } });
+    expect(pixel, 'The filled New adventure button must render, not just accept invisible input.').toEqual([185, 69, 69]);
     await page.touchscreen.tap(next.x, next.y);
     await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
     expect(errors).toEqual([]);

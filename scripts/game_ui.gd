@@ -1847,7 +1847,7 @@ func _layout_collection() -> void:
 func _style_result_actions(accent: Color) -> void:
 	_result_action_scale = Style.ui_scale(self)
 	Style.action_button(_result_retry_button, accent, true)
-	Style.action_button(_new_adventure_button, accent, true)
+	Style.prominent_action_button(_new_adventure_button, accent)
 	Style.action_button(_try_gift_button, accent)
 
 
@@ -1862,8 +1862,9 @@ func _layout_result() -> void:
 	_result_footer.add_theme_constant_override("separation", gap)
 	_result_actions.add_theme_constant_override("separation", gap)
 	var width: float = minf(176 / scale, maxf(0, dimensions.x))
-	for button in [_result_retry_button, _new_adventure_button, _try_gift_button]:
+	for button in [_result_retry_button, _try_gift_button]:
 		button.custom_minimum_size.x = width
+	_new_adventure_button.custom_minimum_size.x = minf(224 / scale, maxf(0, dimensions.x))
 	var footer_height: float = _result_footer.get_combined_minimum_size().y
 	_result_footer.position = Vector2(0, maxf(0, dimensions.y - footer_height))
 	_result_footer.size = Vector2(dimensions.x, footer_height)
