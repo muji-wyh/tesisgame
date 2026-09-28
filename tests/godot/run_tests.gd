@@ -94,25 +94,12 @@ func prepare_completion(app) -> void:
 		app._refresh_collection()
 
 
-func visible_reward_flight(app) -> TextureRect:
-	if not has_property(app, "_reward_flight_image"):
-		return null
-	var flight = app._reward_flight_image
-	if flight != null and is_instance_valid(flight) and flight.visible:
-		return flight as TextureRect
-	return null
-
-
-func check_no_reward_flight(app, message: String) -> void:
-	check(has_property(app, "_reward_flight_image"), "The reward flight overlay exists")
-	check(visible_reward_flight(app) == null, message)
-
-
-func step_reward_tween(app, seconds: float, message: String) -> void:
-	check(app._reward_tween != null and app._reward_tween.is_valid(), message)
-	if app._reward_tween != null:
-		app._reward_tween.pause()
-		app._reward_tween.custom_step(seconds)
+func check_no_collectible_presentation(app, message: String) -> void:
+	var medal_script = load("res://scripts/medal_view.gd")
+	var art: Array[Node] = app._stage.find_children("*", "", true, false)
+	check(not art.any(func(node: Node) -> bool: return node.get_script() == medal_script)
+		and app.find_child("MedalFragment", true, false) == null
+		and app.find_child("RewardFlight", true, false) == null, message)
 
 
 func collection_scroll(app) -> ScrollContainer:
@@ -1214,11 +1201,11 @@ func _test_scene() -> void:
 	check(not app.model.reward_id.is_empty(), "Opening selects a seasonal reward variant")
 	check(app.collected_rewards.has(app.model.reward_id) if has_property(app, "collected_rewards") else false,
 		"Opened rewards are recorded in the collection")
-	check_no_reward_flight(app, "Reduced motion skips the moving reward flight")
+	check_no_collectible_presentation(app, "Reduced motion does not reveal collectible artwork or a flight")
 	check(app.collection_button.scale == Vector2.ONE, "Reduced motion does not bounce the rewards button")
 	app.choose_theme("winter")
 	check(app.model.reward_theme == "spring" and app.chest.theme_id == "spring", "Earned chest remains spring")
-	check(app.reward_image.visible, "Opening displays the reward medallion")
+	check(app.chest.visible and app.chest.mode == "opened", "Opening keeps the earned chest visible")
 	app.new_round(81)
 	check(app.audio.muted, "An internal fixture reset preserves mute")
 	check(app.model.chest_state == "closed" and app.effects.particle_count() == 0, "An internal fixture reset clears reward/effects")
@@ -1246,69 +1233,27 @@ func _test_scene() -> void:
 	check(app.effects.particle_count() == 0, "Opening anticipation waits for the physical release beat")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
 	check(app.effects.particle_count() == 24, "The lid release starts the small 24-particle celebration")
-	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
+	check_no_collectible_presentation(app, "The opening chest has no collectible artwork or flight")
 	var opened_reward_id: String = app.model.reward_id
 	var reward_count_before: int = app.collected_rewards.size()
 	var was_collected: bool = app.collected_rewards.has(opened_reward_id)
 	app.chest.finish_immediately()
-	app._finish_fragment_delivery()
 	check(app.model.chest_state == "opened", "The native animation completes the reward")
 	check(app.collected_rewards.has(opened_reward_id), "The opened reward is recorded before visual delivery")
 	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
 		"The reward collection changes exactly once when opening finishes")
-	check(visible_reward_flight(app) == null, "The flight copy waits for the reveal pop and pause")
-	step_reward_tween(app, 0.56, "The reward tween starts the flight after the pop and pause")
-	var flight := visible_reward_flight(app)
-	check(flight != null, "A visible reward copy appears for the flight")
-	if flight != null:
-		var data_script: GDScript = load("res://scripts/game_data.gd")
-		var reward: Dictionary = data_script.reward(opened_reward_id)
-		check(flight.get_parent() == app and flight.z_index < app.collection_page.z_index,
-			"The reward flight is a root overlay below the collection page")
-		check(flight.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-			"The reward flight copy never steals input")
-		check(flight.texture == load(reward.symbol),
-			"The reward flight uses the locked earned reward texture")
-		var start_size: Vector2 = flight.size
-		step_reward_tween(app, 0.19, "The reward tween advances along the flight path")
-		root.size = Vector2i(390, 844)
-		app.choose_theme("winter")
-		var manual_tween: Tween = app._reward_tween
-		var manual_elapsed := manual_tween.get_total_elapsed_time()
+	check_no_collectible_presentation(app, "A saved chest completes without a collectible pop or flight")
+	root.size = Vector2i(390, 844)
+	app.choose_theme("winter")
+	for frame in range(6):
 		await process_frame
-		await process_frame
-		var settled_target: Rect2 = app.collection_button.get_global_rect()
-		var target_stayed_settled := true
-		for frame in range(4):
-			await process_frame
-			target_stayed_settled = target_stayed_settled and app.collection_button.get_global_rect().is_equal_approx(settled_target)
-		check(target_stayed_settled, "The resized reward target remains settled across four additional paused-tween frames")
-		check(is_equal_approx(manual_tween.get_total_elapsed_time(), manual_elapsed),
-			"Manual reward timing is unaffected by SceneTree frame delays")
-		check(flight.texture == load(reward.symbol),
-			"Changing season during flight does not swap the earned reward artwork")
-		var center_before_bounce: Vector2 = app.collection_button.get_global_rect().get_center()
-		step_reward_tween(app, 0.201, "The reward tween reaches the current rewards button center")
-		var target_center: Vector2 = app.collection_button.get_global_rect().get_center()
-		check(flight.get_global_rect().get_center().distance_to(target_center) <= 1.0,
-			"The reward flight lands on the actual current My Rewards button center: flight=%s target=%s before_bounce=%s button_size=%s pivot=%s scale=%s" % [
-				flight.get_global_rect().get_center(), target_center, center_before_bounce, app.collection_button.size,
-				app.collection_button.pivot_offset, app.collection_button.scale])
-		check(flight.size.x < start_size.x and flight.size.y < start_size.y,
-			"The reward shrinks into the collection button during flight")
-		check(app.collection_button.scale != Vector2.ONE,
-			"The rewards button visibly bounces on arrival")
-		if app._reward_tween != null:
-			app._reward_tween.custom_step(1.0)
-		await process_frame
-		check(app.collection_button.scale == Vector2.ONE,
-			"The rewards button settles back to normal scale")
-		check(visible_reward_flight(app) == null,
-			"The flight copy is removed after arrival")
+	check_no_collectible_presentation(app, "Later frames and a world change cannot reveal a delayed collectible")
+	check(app.model.reward_id == opened_reward_id and app.collection_button.scale == Vector2.ONE,
+		"World changes preserve the saved reward without bouncing the room button")
 	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
-		"The flight animation does not duplicate the collection entry")
+		"Presentation changes do not duplicate the saved collection entry")
 	app.new_round(90)
-	check_no_reward_flight(app, "Starting a new round leaves no reward flight behind")
+	check_no_collectible_presentation(app, "Starting a new round leaves no reward flight behind")
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
@@ -1369,9 +1314,7 @@ func _test_scene() -> void:
 	app.on_page_hidden()
 	check(app.model.chest_state == "opened", "Hiding finalizes an already-earned opening once")
 	check(app.effects.particle_count() == 0, "Hiding during opening clears particles")
-	check_no_reward_flight(app, "Hiding cancels a reward flight started by finish_immediately")
-	check(app._medallion.scale == Vector2.ONE, "Hiding does not leave a queued reward-pop animation")
-	check(app._reward_tween == null or not app._reward_tween.is_running(), "Hiding cancels the reveal tween too")
+	check_no_collectible_presentation(app, "Background completion has no collectible artwork or queued flight")
 	app.on_page_visible()
 	app.new_round(91)
 	win_round(app)
@@ -1381,12 +1324,10 @@ func _test_scene() -> void:
 		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
-	app._finish_fragment_delivery()
-	step_reward_tween(app, 0.56, "The reward tween can be cancelled by opening the collection")
-	check(visible_reward_flight(app) != null, "The reward flight is visible before collection opens")
+	check_no_collectible_presentation(app, "A completed chest has no collectible delivery before visiting the room")
 	app._show_collection()
-	check_no_reward_flight(app, "Opening My Rewards cancels the active reward flight")
-	check(app.collection_button.scale == Vector2.ONE, "Opening My Rewards resets the target bounce scale")
+	check_no_collectible_presentation(app, "Opening Pip's room cannot reveal a hidden collectible flight")
+	check(app.collection_button.scale == Vector2.ONE, "Opening Pip's room keeps its entry at its normal scale")
 	app._hide_collection()
 	app.new_round(91)
 	win_round(app)
@@ -1396,14 +1337,12 @@ func _test_scene() -> void:
 		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
-	app._finish_fragment_delivery()
-	step_reward_tween(app, 0.56, "The reward tween can be cancelled by New adventure")
-	check(visible_reward_flight(app) != null, "The reward flight is visible before New adventure")
+	check_no_collectible_presentation(app, "A completed chest has no collectible delivery to delay another adventure")
 	var lesson_before_adventure: Array = app.model.lesson_words.duplicate(true)
 	var saved_before_adventure: Dictionary = app.medal_progress.counts.duplicate()
 	app._new_adventure_button.pressed.emit()
-	check_no_reward_flight(app, "New adventure cancels the active reward flight")
-	check(app.collection_button.scale == Vector2.ONE, "New adventure resets the target bounce scale")
+	check_no_collectible_presentation(app, "New adventure does not carry over collectible artwork")
+	check(app.collection_button.scale == Vector2.ONE, "New adventure preserves the room entry's normal scale")
 	check(app._mode_id == "match" and app.model.lesson_words != lesson_before_adventure
 		and app.medal_progress.counts == saved_before_adventure,
 		"The visible result action starts a fresh Match board without duplicating the delivered reward")

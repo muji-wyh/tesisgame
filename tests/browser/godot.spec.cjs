@@ -566,11 +566,11 @@ async function holdChestUntilOpen(page, point) {
   await page.mouse.down();
   try {
     // Keep holding through slow rendered frames instead of releasing on the runner's clock.
-    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/, { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText(/^(Chest opened! Ready for another adventure\?|A gift for Pip! .+ unlocked!)$/, { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
-  await expect(page.locator('#game-status')).not.toContainText('Tap to place!');
+  await expect(page.locator('#game-status')).not.toContainText(/A new piece!|Medal complete!|All six collected!|Piece \d of 3|Tap to place!/);
 }
 
 async function winWithTouch(page, board) {
@@ -591,13 +591,13 @@ async function winWithTouch(page, board) {
 async function holdControllerChest(page) {
   await page.evaluate(() => window.gamepadFixture.button(0, true));
   try {
-    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/, { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText(/^(Chest opened! Ready for another adventure\?|A gift for Pip! .+ unlocked!)$/, { timeout: 15000 });
   } finally {
     await page.evaluate(() => window.gamepadFixture.button(0, false));
     // Let the engine sample the release before another simulated A press.
     await page.waitForTimeout(120);
   }
-  await expect(page.locator('#game-status')).not.toContainText('Tap to place!');
+  await expect(page.locator('#game-status')).not.toContainText(/A new piece!|Medal complete!|All six collected!|Piece \d of 3|Tap to place!/);
 }
 
 test('new adventures rotate and all five review words replay without opening or awarding the chest', async ({ page }, testInfo) => {
@@ -649,10 +649,10 @@ test('new adventures rotate and all five review words replay without opening or 
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 1);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   // Back restores the found-word focus; deliberately press inside the chest stage.
   await holdChestUntilOpen(page, resultScreenPoint(metrics));
-  await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
+  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
   await resultTap(page, 'newAdventure');
   await expect(page.locator('#game-status')).toHaveText('Find 3 word–picture pairs. Two cards have no match.');
   await ready(page);
@@ -958,7 +958,7 @@ test('three mistakes end a round and the counter cannot reset the limits', async
   expect(errors).toEqual([]);
 });
 
-test('fresh adventures assemble three reward pieces, unlock a toy and preserve progress', async ({ page }, testInfo) => {
+test('fresh adventures save chest progress, unlock a toy and preserve progress', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -980,7 +980,7 @@ test('fresh adventures assemble three reward pieces, unlock a toy and preserve p
       await expect(page.locator('#game-status')).toContainText('A gift for Pip!');
       await expect(page.locator('#game-status')).toContainText('Spring flower unlocked!');
     } else {
-      await expect(page.locator('#game-status')).toContainText(`Piece ${round % 3 + 1} of 3`);
+      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
     }
     await pressGamepad(page, 3);
     const completed = Math.floor((round + 1) / 3);
@@ -1021,12 +1021,12 @@ test('Xbox chest charging cancels on disconnect and works again after reconnect'
   await winWithTouch(page);
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   await page.evaluate(() => window.gamepadFixture.button(0, true));
   await page.waitForTimeout(120);
   await page.evaluate(() => window.gamepadFixture.disconnect());
   await page.waitForTimeout(1700);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   await page.evaluate(() => window.gamepadFixture.connect());
   await holdControllerChest(page);
   await pressGamepad(page, 0);

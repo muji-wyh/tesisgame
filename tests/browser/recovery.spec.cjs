@@ -127,12 +127,12 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
   expect(await medalRecord(page)).toBe(before);
   // A separate retry action replaces navigation until the reward is safe.
   await resultTap(page, 'retry');
-  await expect(page.locator('#game-status')).toContainText('Keep your piece');
+  await expect(page.locator('#game-status')).toContainText('Save your progress');
   expect(await medalRecord(page)).toBe(before);
   await page.screenshot({ path: testInfo.outputPath('victory-save-failed.png'), scale: 'css' });
   await page.evaluate(() => window.restoreRewardSave());
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('A new piece!');
+  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   expect(await pieceCount(page)).toBe(1);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');

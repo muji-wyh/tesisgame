@@ -88,9 +88,8 @@ func _run() -> void:
 		"Opening captures one reward before pronunciation replay")
 	_check_replay(app)
 	app.chest.finish_immediately()
-	app._finish_fragment_delivery()
-	check(app.medal_progress.count_for("spring-1") == 1 and app.reward_image.pieces == 1,
-		"Collecting a fragment updates the saved progress and chest medal")
+	check(app.medal_progress.count_for("spring-1") == 1 and app._title.text == "Chest opened!",
+		"Opening the chest updates saved progress without a collectible result")
 	_check_replay(app)
 	app.audio.set_muted(true)
 	for dimensions in [Vector2i(320, 320), Vector2i(320, 321), Vector2i(390, 844), Vector2i(844, 390)]:

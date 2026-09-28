@@ -205,7 +205,6 @@ var collection_page: Panel
 var collected_rewards: Dictionary = {}
 var _result_retry_button: Button
 var chest_button: Button
-var reward_image: Medal
 var failure_image: TextureRect
 var failure_button: Button
 var reduced_motion: bool = false
@@ -227,12 +226,6 @@ var _result_actions: HBoxContainer
 var _result_action_scale: float = -1.0
 var _title: Label
 var _caption: Label
-var _medallion: Panel
-var _reward_number: Label
-var _reward_flight_image: TextureRect
-var _fragment_image: Medal
-var _fragment_tween: Tween
-var _fragment_active: bool = false
 var _pending_fragment: Dictionary = {}
 var _progress_ready: bool = false
 var _save_error: bool = false
@@ -250,9 +243,6 @@ var _failure_tween: Tween
 var _loss_reaction_index: int = 0
 var _last_phase: String = ""
 var _rebuilding: bool = false
-var _reward_tween: Tween
-var _reward_transfer_active: bool = false
-var _reward_delivered_to_collection: bool = false
 var _feedback_tweens: Array[Tween] = []
 var _feedback_sparkles: Array[Control] = []
 var _holding_chest: bool = false
@@ -505,24 +495,7 @@ func _build_controls() -> void:
 	chest_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest_button.button_down.connect(_start_chest_hold)
 	chest_button.button_up.connect(_end_chest_hold)
-	chest_button.pressed.connect(_finish_fragment_delivery)
 	chest_button.gui_input.connect(_chest_input)
-	_medallion = Panel.new()
-	_medallion.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Crystal pieces use local draw orders up to 5; keep the earned medal readable.
-	_medallion.z_index = 10
-	_stage.add_child(_medallion)
-	reward_image = _medal_picture(_medallion)
-	reward_image.offset_left = 8
-	reward_image.offset_top = 8
-	reward_image.offset_right = -8
-	reward_image.offset_bottom = -24
-	_reward_number = Style.label("", 18)
-	_reward_number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_reward_number.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-	_medallion.add_child(_reward_number)
-	_reward_number.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_reward_number.offset_bottom = -4
 	failure_image = _picture(_stage)
 	failure_image.texture = load("res://assets/images/scenes/try-again.svg")
 	failure_image.offset_left = 20
@@ -554,7 +527,7 @@ func _build_controls() -> void:
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_title)
-	_caption = Style.label("Hold to find a piece!", 22)
+	_caption = Style.label("Hold to open your chest!", 22)
 	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_caption.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1128,13 +1101,6 @@ func _picture(parent: Node) -> TextureRect:
 	return picture
 
 
-func _medal_picture(parent: Node) -> Medal:
-	var picture := Medal.new()
-	parent.add_child(picture)
-	picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	return picture
-
-
 func _set_accessibility_name(control: Control, label: String) -> void:
 	for property in control.get_property_list():
 		if property.name == "accessibility_name":
@@ -1151,7 +1117,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		chest.finish_immediately()
 	_settling_chest = false
 	if (_save_error and not _pending_fragment.is_empty()) or (model.phase == "won" and model.chest_state != "opened"):
-		_announce_status("Your piece is waiting to be saved. Choose Retry saving.")
+		_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
 		return false
 	_stop_voice()
 	if not _stop_pop_listening():
@@ -1164,7 +1130,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_mode_id = "match"
 	_memory.stop()
 	duck.settle()
-	_cancel_fragment_delivery()
 	_pending_fragment.clear()
 	_unlocked_gift.clear()
 	_save_error = not _progress_ready
@@ -1178,8 +1143,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	audio.halt()
 	_cancel_loss_play()
 	_loss_reaction_index = 0
-	_cancel_reward_delivery(false)
-	_reward_delivered_to_collection = false
 	_stop_feedback_animations()
 	_last_phase = ""
 	for button in _found_words.get_children():
@@ -1477,10 +1440,8 @@ func _refresh() -> void:
 	failure_button.visible = model.phase == "lost"
 	failure_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 26, 3))
 	_failure_sparkle.accent = palette.accent
-	_medallion.visible = won and not _reward_transfer_active and not _reward_delivered_to_collection
-	reward_image.visible = _medallion.visible
-	chest_button.disabled = (model.chest_state != "closed" and not _fragment_active) or _save_error
-	chest_button.tooltip_text = "Place the piece" if _fragment_active else "Hold to open the treasure chest"
+	chest_button.disabled = model.chest_state != "closed" or _save_error
+	chest_button.tooltip_text = "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
 	if won:
@@ -1488,38 +1449,20 @@ func _refresh() -> void:
 		var reward_palette: Dictionary = Data.theme(reward_id)
 		chest.reduced_motion = reduced_motion
 		chest.configure_skin(reward_palette, data.chests)
-		var reward: Dictionary = Data.reward(model.reward_id)
-		if reward.is_empty():
-			var next: Dictionary = medal_progress.next_fragment(reward_id) if _progress_ready else {}
-			reward = Data.reward(next.medal_id) if not next.is_empty() else Data.medals(reward_id).back()
-		var pieces: int = medal_progress.count_for(reward.id)
-		var displayed_pieces: int = int(_pending_fragment.before) if _fragment_active else pieces
 		_title.text = "You did it!"
-		_caption.text = "Hold to find a piece!" if medal_progress.completed_count(reward_id) < 6 else "Hold for a celebration!"
+		_caption.text = "Hold to open your chest!"
 		if model.chest_state == "opening":
 			_caption.text = "Here comes your surprise!"
 		elif model.chest_state == "opened":
-			if _pending_fragment.is_empty():
-				_title.text = "All six collected!"
-				_caption.text = reward_palette.name + " collection"
-			elif pieces < int(_pending_fragment.after):
-				_title.text = "Saving your piece"
+			_title.text = "Chest opened!"
+			_caption.text = "Ready for another adventure?"
+			if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
+				_title.text = "Saving your progress"
 				_caption.text = "Please wait."
-			elif pieces == 3 and not _fragment_active:
-				_title.text = "Medal complete!"
-				_caption.text = "%s\n%s %d of 6 medals" % [reward.name, reward_palette.name, medal_progress.completed_count(reward_id)]
-			else:
-				_title.text = "A new piece!"
-				_caption.text = "%s\nPiece %d of 3" % [reward.name, pieces]
-				if _fragment_active:
-					_caption.text += "\nTap to place!"
-		reward_image.configure(load(reward.symbol) if displayed_pieces > 0 else null, displayed_pieces, reward_palette.accent)
-		_reward_number.text = "%d/3" % displayed_pieces
-		_medallion.add_theme_stylebox_override("panel", Style.box(Color.WHITE, reward_palette.light, 64, 5))
 		if _save_error:
-			_title.text = "Keep your piece"
+			_title.text = "Save your progress"
 			_caption.text = "Saving failed.\nChoose Retry saving."
-		elif not _unlocked_gift.is_empty() and not _fragment_active:
+		elif not _unlocked_gift.is_empty():
 			_title.text = "A gift for Pip!"
 			_caption.text = str(_unlocked_gift.name) + " unlocked!"
 	elif model.phase == "lost":
@@ -1942,10 +1885,6 @@ func _layout_result() -> void:
 		_stage.size = Vector2(dimensions.x, maxf(72.0, dimensions.y - text_height - 10.0))
 		_result_text.position = Vector2(0, _stage.size.y + 10.0)
 		_result_text.size = Vector2(dimensions.x, text_height)
-	var diameter: float = clampf(minf(_stage.size.x, _stage.size.y) * 0.3, 64.0, 128.0)
-	_medallion.size = Vector2.ONE * diameter
-	_medallion.pivot_offset = _medallion.size * 0.5
-	_medallion.position = Vector2(maxf(4, _stage.size.x - diameter - 12), maxf(4, _stage.size.y - diameter - 12))
 
 
 func _can_request_hint() -> bool:
@@ -2076,8 +2015,6 @@ func set_reduced_motion(value: bool) -> void:
 		_cancel_collection_inertia()
 		_stop_feedback_animations()
 		effects.clear()
-		_cancel_reward_delivery(true)
-		_cancel_fragment_delivery()
 		_cancel_loss_play()
 		chest.finish_immediately()
 	if not data.words.is_empty():
@@ -2108,7 +2045,6 @@ func _open_chest() -> void:
 	_holding_chest = false
 	_hold_elapsed = 0.0
 	_finish_chest_drag()
-	_reward_delivered_to_collection = false
 	_chest_reward_announced = false
 	if not _settling_chest:
 		audio.interact(model.reward_theme)
@@ -2133,7 +2069,7 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 	if _host != null:
 		_host.chestCue(theme_id, cue, step)
 	if cue == "release":
-		effects.release(Data.theme(theme_id), reduced_motion, not _pending_fragment.is_empty())
+		effects.release(Data.theme(theme_id), reduced_motion, true)
 
 
 func _on_chest_opened() -> void:
@@ -2166,144 +2102,6 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 	_refresh_collection()
 	_refresh()
 	duck.react("happy")
-	if _pending_fragment.is_empty() or reduced_motion or collection_page.visible or _page_hidden or _settling_chest:
-		return
-	_start_fragment_delivery()
-
-
-func _start_fragment_delivery() -> void:
-	_cancel_fragment_delivery()
-	_fragment_active = true
-	_fragment_image = Medal.new()
-	_fragment_image.name = "MedalFragment"
-	_fragment_image.z_index = collection_page.z_index - 5
-	var reward: Dictionary = Data.reward(_pending_fragment.medal_id)
-	_fragment_image.configure(load(reward.symbol), int(_pending_fragment.after), Data.theme(reward.theme).accent, int(_pending_fragment.after) - 1)
-	add_child(_fragment_image)
-	_refresh()
-	_place_fragment(0.0)
-	_fragment_tween = create_tween()
-	_fragment_tween.tween_interval(0.35)
-	_fragment_tween.tween_method(_place_fragment, 0.0, 1.0, 0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_fragment_tween.tween_callback(_finish_fragment_delivery)
-	if _controller_mode:
-		chest_button.grab_focus()
-
-
-func _place_fragment(progress: float) -> void:
-	if not is_instance_valid(_fragment_image):
-		return
-	var stage_rect: Rect2 = _stage.get_global_rect()
-	var start: Vector2 = stage_rect.get_center()
-	var target: Vector2 = reward_image.get_global_rect().get_center()
-	var edge: float = clampf(minf(stage_rect.size.x, stage_rect.size.y) * 0.45, 32.0, 144.0)
-	var target_edge: float = minf(reward_image.size.x, reward_image.size.y)
-	_fragment_image.size = Vector2.ONE * lerpf(edge, target_edge, progress)
-	var center: Vector2 = start.lerp(target, progress) + Vector2(0, -sin(progress * PI) * minf(32.0, stage_rect.size.y * 0.1))
-	_fragment_image.position = get_global_transform().affine_inverse() * center - _fragment_image.size * 0.5
-
-
-func _finish_fragment_delivery(celebrate: bool = true) -> void:
-	if not _fragment_active:
-		return
-	_fragment_active = false
-	if _fragment_tween != null:
-		_fragment_tween.kill()
-	_fragment_tween = null
-	if is_instance_valid(_fragment_image):
-		_fragment_image.hide()
-		_fragment_image.queue_free()
-	_fragment_image = null
-	_refresh()
-	if celebrate and bool(_pending_fragment.completed) and not reduced_motion and not collection_page.visible:
-		effects.start(Data.theme(model.reward_theme), false)
-		_start_reward_delivery(model.reward_id)
-
-
-func _cancel_fragment_delivery() -> void:
-	_finish_fragment_delivery(false)
-
-
-func _start_reward_delivery(reward_id: String) -> void:
-	_cancel_reward_delivery(true)
-	_medallion.scale = Vector2.ONE * 0.2
-	collection_button.pivot_offset = collection_button.size * 0.5
-	_reward_tween = create_tween()
-	_reward_tween.tween_property(_medallion, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_reward_tween.tween_interval(0.2)
-	_reward_tween.tween_callback(_show_reward_flight.bind(reward_id))
-	_reward_tween.tween_method(_place_reward_flight, 0.0, 1.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_reward_tween.tween_callback(func() -> void:
-		collection_button.pivot_offset = collection_button.size * 0.5
-		_place_reward_flight(1.0)
-		collection_button.scale = Vector2.ONE * 1.12
-	)
-	_reward_tween.tween_interval(0.08)
-	_reward_tween.tween_property(collection_button, "scale", Vector2.ONE, 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_reward_tween.tween_callback(_finish_reward_delivery)
-
-
-func _show_reward_flight(reward_id: String) -> void:
-	var reward: Dictionary = Data.reward(reward_id)
-	if reward.is_empty():
-		return
-	if _reward_flight_image == null or not is_instance_valid(_reward_flight_image):
-		_reward_flight_image = TextureRect.new()
-		_reward_flight_image.name = "RewardFlight"
-		_reward_flight_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_reward_flight_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		_reward_flight_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		_reward_flight_image.z_index = collection_page.z_index - 5
-		add_child(_reward_flight_image)
-	_reward_transfer_active = true
-	_reward_flight_image.texture = load(reward.symbol)
-	_reward_flight_image.visible = true
-	_medallion.visible = false
-	reward_image.visible = false
-	_place_reward_flight(0.0)
-
-
-func _place_reward_flight(progress: float) -> void:
-	if _reward_flight_image == null or not is_instance_valid(_reward_flight_image) or not _reward_flight_image.visible:
-		return
-	var start_rect: Rect2 = reward_image.get_global_rect()
-	var start_center: Vector2 = start_rect.get_center()
-	var target_center: Vector2 = collection_button.get_global_rect().get_center()
-	var eased: float = smoothstep(0.0, 1.0, clampf(progress, 0.0, 1.0))
-	var arc: float = clampf(start_center.distance_to(target_center) * 0.18, 26.0, 82.0)
-	var center: Vector2 = start_center.lerp(target_center, eased) + Vector2(0.0, -sin(eased * PI) * arc)
-	var end_edge: float = clampf(minf(collection_button.get_global_rect().size.x, collection_button.get_global_rect().size.y) * 0.48, 30.0, 46.0)
-	var flight_size: Vector2 = start_rect.size.lerp(Vector2.ONE * end_edge, eased)
-	_reward_flight_image.size = flight_size
-	_reward_flight_image.position = get_global_transform().affine_inverse() * center - flight_size * 0.5
-
-
-func _finish_reward_delivery() -> void:
-	if _reward_flight_image != null and is_instance_valid(_reward_flight_image):
-		_reward_flight_image.queue_free()
-	_reward_flight_image = null
-	_reward_transfer_active = false
-	_reward_delivered_to_collection = true
-	collection_button.scale = Vector2.ONE
-	_reward_tween = null
-
-
-func _cancel_reward_delivery(show_static_reveal: bool = true) -> void:
-	var had_motion := _reward_tween != null or _reward_transfer_active or (_reward_flight_image != null and is_instance_valid(_reward_flight_image))
-	if _reward_tween != null:
-		_reward_tween.kill()
-	_reward_tween = null
-	if _reward_flight_image != null and is_instance_valid(_reward_flight_image):
-		_reward_flight_image.queue_free()
-	_reward_flight_image = null
-	_reward_transfer_active = false
-	collection_button.scale = Vector2.ONE
-	collection_button.pivot_offset = collection_button.size * 0.5
-	_medallion.scale = Vector2.ONE
-	if show_static_reveal and model.phase == "won" and model.chest_state == "opened" and (had_motion or not _reward_delivered_to_collection):
-		_reward_delivered_to_collection = false
-		_medallion.visible = true
-		reward_image.visible = true
 
 
 func _retry_reward_save() -> void:
@@ -2349,8 +2147,6 @@ func on_page_hidden() -> void:
 	chest.finish_immediately()
 	chest.stop_reaction()
 	effects.clear()
-	_cancel_fragment_delivery()
-	_cancel_reward_delivery(true)
 
 
 func on_page_visible() -> void:
@@ -2638,7 +2434,7 @@ func _default_focus() -> Control:
 	if collection_page.visible:
 		return _collection_back
 	if model.phase == "won":
-		if (model.chest_state == "closed" or _fragment_active) and not _save_error:
+		if model.chest_state == "closed" and not _save_error:
 			return chest_button
 		return _result_retry_button if _save_error else _new_adventure_button
 	if model.phase == "lost":
@@ -3052,7 +2848,7 @@ func _start_gift_adventure(id: String) -> void:
 		_select_room_item(id)
 		return
 	if not _progress_ready or (_save_error and not _pending_fragment.is_empty()):
-		var message := "Your piece is waiting. Use Back, then Retry saving before a new adventure."
+		var message := "Your progress is waiting. Use Back, then Retry saving before a new adventure."
 		_room.show_item_error(id, "Save your reward first", message)
 		_announce_status(message)
 		return
@@ -3107,12 +2903,10 @@ func _show_collection() -> void:
 	_collection_scroll.scroll_vertical = 0
 	_stop_voice()
 	feedback_timer.paused = true
-	_cancel_fragment_delivery()
 	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
 	_finish_chest_drag()
-	_cancel_reward_delivery(true)
 	_end_collection_drag(false)
 	_collection_dragged = false
 	_refresh_favorite_reward()

@@ -95,7 +95,6 @@ func _run() -> void:
 	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
 	app._open_chest()
 	app.chest.finish_immediately()
-	app._finish_fragment_delivery()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match win earns one ordinary medal piece")
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")

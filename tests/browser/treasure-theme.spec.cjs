@@ -72,8 +72,8 @@ async function captureStage(page, testInfo, theme, phase) {
     `${phase}/${theme}: reduced-motion scenery is settled before comparison.`).toBe(true);
   const full = await page.screenshot({ path: testInfo.outputPath(`treasure-${phase}-${theme}.png`), fullPage: true, scale: 'css' });
   expect(await visibleColorCount(page, full), `${phase}/${theme}: evidence contains the rendered game.`).toBeGreaterThan(20);
-  // The full screenshots retain the theme badge, distinctive scenery, chest,
-  // medal and review controls for visual inspection at each real device size.
+  // The full screenshots retain the theme badge, distinctive scenery, chest
+  // and review controls for visual inspection at each real device size.
   return { theme, png: edge.toString('base64') };
 }
 
@@ -130,7 +130,7 @@ function persistentFields(saved) {
     'word_ids', 'display_word_id', 'age_band'].map(field => [field, saved.match(new RegExp(`^${field}=(.*)$`, 'm'))?.[1]]));
 }
 
-test('all eight treasure stages follow the selected world while a real chest claim keeps its earned medal after navigation and reload', async ({ page }, testInfo) => {
+test('all eight treasure stages follow the selected world while a real chest claim keeps its saved progress after navigation and reload', async ({ page }, testInfo) => {
   test.setTimeout(180000);
   // Preserve each project's desktop, iPhone and iPad dimensions.
   await seedPriorSave(page);
@@ -143,7 +143,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
   const closed = [];
   for (const [index, theme] of THEME_IDS.entries()) {
     await chooseTheme(page, index);
-    await expect(page.locator('#game-status')).toContainText('You did it!');
+    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
     expect(await record(page)).toContain(`preferred_theme_id="${theme}"`);
     expect(await record(page, MEDAL_KEY), `${theme}: browsing closed stages never awards a piece.`).toBe(beforeClaim);
     closed.push(await captureStage(page, testInfo, theme, 'closed'));
@@ -161,9 +161,8 @@ test('all eight treasure stages follow the selected world while a real chest cla
     await expect(page.locator('#game-status')).toContainText('Here comes your surprise!');
     await page.waitForTimeout(450);
     await page.screenshot({ path: testInfo.outputPath('treasure-opening-candy.png'), scale: 'css' });
-    await expect(page.locator('#game-status')).toContainText('A new piece!');
-    await expect(page.locator('#game-status')).toContainText('Party Cake');
-    await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await expect(page.locator('#game-status')).not.toContainText(/Party Cake|Piece \d of 3|Medal|Tap to place!/);
   } finally {
     await page.mouse.up();
   }
@@ -177,9 +176,8 @@ test('all eight treasure stages follow the selected world while a real chest cla
   for (const index of [7, 0, 1, 2, 3, 4, 5, 6]) {
     const theme = THEME_IDS[index];
     await chooseTheme(page, index);
-    await expect(page.locator('#game-status')).toContainText('A new piece!');
-    await expect(page.locator('#game-status')).toContainText('Party Cake');
-    await expect(page.locator('#game-status')).toContainText('Piece 1 of 3');
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
+    await expect(page.locator('#game-status')).not.toContainText(/Party Cake|Piece \d of 3|Medal|Tap to place!/);
     expect(await record(page)).toContain(`preferred_theme_id="${theme}"`);
     expect(await record(page, MEDAL_KEY), `${theme}: changing the open stage never moves or duplicates its Candy piece.`).toBe(earnedSave);
     opened.push(await captureStage(page, testInfo, theme, 'opened'));
@@ -188,7 +186,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
 
   await openRewards(page);
   await closeRewards(page);
-  await expect(page.locator('#game-status')).toContainText('Party Cake');
+  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[6]);
   expect(await record(page, MEDAL_KEY)).toBe(earnedSave);
   const savedRoom = persistentFields(await record(page));

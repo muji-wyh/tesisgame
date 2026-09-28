@@ -23,6 +23,19 @@ func win(app) -> void:
 			app.feedback_timer.timeout.emit()
 
 
+func check_no_collectible_presentation(app, phase: String) -> void:
+	var medal_script = load("res://scripts/medal_view.gd")
+	var stage_nodes: Array[Node] = app._stage.find_children("*", "", true, false)
+	check(not stage_nodes.any(func(node: Node) -> bool: return node.get_script() == medal_script)
+		and app.find_child("MedalFragment", true, false) == null
+		and app.find_child("RewardFlight", true, false) == null,
+		phase + " has no collectible art, assembly piece or toolbar flight")
+	check(not (app._title.text + " " + app._caption.text).to_lower().contains("medal")
+		and not (app._title.text + " " + app._caption.text).to_lower().contains("piece")
+		and not app.chest_button.tooltip_text.to_lower().contains("piece"),
+		phase + " does not advertise the retired collectible presentation")
+
+
 func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	var integrated: bool = app.get_property_list().any(
@@ -48,7 +61,8 @@ func _run() -> void:
 	app.new_round(6)
 	app.choose_theme("spring")
 	win(app)
-	check(app._medallion.visible and app.reward_image.pieces == 0, "The unopened chest shows the empty medal goal")
+	check(app._caption.text == "Hold to open your chest!", "The unopened chest offers the chest interaction")
+	check_no_collectible_presentation(app, "The unopened chest")
 	app.chest_button.button_down.emit()
 	app._advance_ui(0.1)
 	app.chest_button.button_up.emit()
@@ -58,23 +72,24 @@ func _run() -> void:
 	app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "opening" and app.effects.particle_count() == 0,
-		"A full hold starts anticipation before the fragment release")
+		"A full hold starts anticipation before the chest release")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
-	check(app.effects.particle_count() == 24, "The physical release starts the small fragment reveal")
+	check(app.effects.particle_count() == 24, "The physical release keeps the small chest celebration")
 	check(app._pending_fragment.medal_id == "spring-1" and app._pending_fragment.after == 1,
 		"Opening locks the first missing fragment")
 	app.chest.finish_immediately()
-	check(app.medal_progress.count_for("spring-1") == 1 and app._fragment_active,
-		"The piece is saved before the assembly animation")
-	check(app.reward_image.pieces == 0 and app._fragment_image.fragment_index == 0,
-		"The flying piece corresponds to the actual empty sector")
+	check(app.medal_progress.count_for("spring-1") == 1 and app._title.text == "Chest opened!"
+		and app._caption.text == "Ready for another adventure?",
+		"The first saved chest acknowledges success without exposing its internal progress unit")
+	check_no_collectible_presentation(app, "A normal saved opening")
 	var reload = progress_script.new(directory + "/medals.cfg", directory + "/old.cfg")
 	check(reload.load_progress() and reload.count_for("spring-1") == 1,
-		"Saved progress is recoverable before animation completion")
-	app._fragment_tween.pause()
-	app._fragment_tween.custom_step(1.0)
-	check(not app._fragment_active and app.reward_image.pieces == 1 and app._reward_tween == null,
-		"An ordinary piece snaps into the medal without a second collection flight")
+		"Saved chest progress survives a persisted reload")
+	for frame in range(6):
+		await process_frame
+	check_no_collectible_presentation(app, "Later presentation frames")
+	check(app._new_adventure_button.visible and app.chest_button.disabled,
+		"The saved result moves directly to another adventure without a placement action")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 1, "A repeated opening callback cannot duplicate the piece")
 	app.new_round(7)
@@ -82,8 +97,9 @@ func _run() -> void:
 	win(app)
 	app._open_chest()
 	app.on_page_hidden()
-	check(app.medal_progress.count_for("spring-1") == 2 and not app._fragment_active
-		and app.reward_image.pieces == 2, "Hiding finalizes one earned piece and leaves a static assembled medal")
+	check(app.medal_progress.count_for("spring-1") == 2,
+		"Hiding finalizes one earned progress unit")
+	check_no_collectible_presentation(app, "Background completion")
 	app.on_page_visible()
 	app.new_round(8)
 	app.choose_theme("spring")
@@ -91,11 +107,12 @@ func _run() -> void:
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.completed_count("spring") == 1, "The third piece completes one medal")
-	app._finish_fragment_delivery()
-	check(app.effects.particle_count() == 72 and app._reward_tween != null,
-		"Completing a medal gets the full celebration and collection flight")
-	app._finish_fragment_delivery()
-	check(app.medal_progress.count_for("spring-1") == 3, "Tapping placement repeatedly cannot add pieces")
+	check(app.effects.particle_count() <= 24 and app._title.text == "A gift for Pip!"
+		and app._try_gift_button.visible,
+		"Completing saved progress offers the unlocked toy without a collectible celebration")
+	check_no_collectible_presentation(app, "A toy unlock")
+	app._on_chest_opened()
+	check(app.medal_progress.count_for("spring-1") == 3, "A repeated completion cannot add progress")
 	app._show_collection()
 	check(app._room.item_buttons["toy-spring"].get_parent() == app._room.owned_toys,
 		"Completing the first medal unlocks the Spring toy in Pip's room")
@@ -107,8 +124,9 @@ func _run() -> void:
 	app._open_chest()
 	check(app.model.reward_id == "spring-2" and app.medal_progress.count_for("spring-2") == 1,
 		"The next win starts the next medal rather than a duplicate")
-	check(not app._fragment_active and app.effects.particle_count() == 0,
-		"Reduced motion immediately displays the saved piece")
+	check(app.effects.particle_count() == 0 and app._title.text == "Chest opened!",
+		"Reduced motion immediately acknowledges the saved chest")
+	check_no_collectible_presentation(app, "Reduced-motion completion")
 	app.new_round(10)
 	app.choose_theme("winter")
 	win(app)
@@ -121,7 +139,8 @@ func _run() -> void:
 	app._open_chest()
 	check(app._save_error and app._result_retry_button.text == "Retry saving"
 		and app._result_retry_button.is_visible_in_tree() and not app._new_adventure_button.is_visible_in_tree()
-		and not app._fragment_active, "A failed save offers only Retry saving instead of pretending to collect a fragment")
+		and app._title.text == "Save your progress", "A failed save offers only Retry saving without announcing success")
+	check_no_collectible_presentation(app, "A failed save")
 	var pending: Dictionary = app._pending_fragment.duplicate()
 	var lesson_before_retry: Array = app.model.lesson_words.duplicate(true)
 	app.medal_progress = progress_script.new(directory + "/retry.cfg", directory + "/old.cfg")
@@ -130,6 +149,7 @@ func _run() -> void:
 	check(not app._save_error and app.model.phase == "won"
 		and app.model.lesson_words == lesson_before_retry and app.medal_progress.count_for(pending.medal_id) == pending.after,
 		"Retry saving commits the same captured piece without changing the lesson or result")
+	check_no_collectible_presentation(app, "A successful save retry")
 	app._retry_reward_save()
 	check(app.model.phase == "won" and app.model.lesson_words == lesson_before_retry
 		and app.medal_progress.count_for(pending.medal_id) == pending.after,
@@ -142,8 +162,10 @@ func _run() -> void:
 	win(app)
 	var complete: Dictionary = app.medal_progress.counts.duplicate()
 	app._open_chest()
-	check(app._title.text == "All six collected!" and app.medal_progress.counts == complete,
-		"A completed theme celebrates without inventing a seventh medal")
+	check(app._title.text == "Chest opened!" and app._caption.text == "Ready for another adventure?"
+		and app.medal_progress.counts == complete,
+		"An exhausted theme acknowledges the chest without inventing more progress")
+	check_no_collectible_presentation(app, "An exhausted theme")
 	app.new_round(12)
 	var spoken: Array[String] = []
 	for card in app.model.cards:

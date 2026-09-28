@@ -88,7 +88,7 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
   const chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
-  try { await expect(page.locator('#game-status')).toContainText(/Piece 1 of 3|A new piece!/); }
+  try { await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 }); }
   finally { await page.mouse.up(); }
   await shot(page, testInfo, 'match-chest-claimed');
   expect(await geometry(page)).toEqual(beforeGeometry);

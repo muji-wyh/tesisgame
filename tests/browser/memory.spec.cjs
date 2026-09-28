@@ -244,7 +244,7 @@ test('Memory accepts the next card and held eye directly from automatic feedback
     await cardTap(page, pair[1]);
     await waitFeedback(page, true, index === remaining.length - 1);
   }
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to find a piece!');
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   expect(await medalRecord(page)).toBe(saved);
   await screenshot(page, testInfo, 'memory-no-footer-victory');
   expect(await metrics(page)).toEqual({ x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, scale: bounds.scale });
@@ -269,9 +269,9 @@ test('five Memory pairs earn one saved piece and New adventure refreshes the les
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
-  try { await expect(page.locator('#game-status')).toContainText('Piece 1 of 3'); }
+  try { await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 }); }
   finally { await page.mouse.up(); }
-  await expect(page.locator('#game-status')).not.toContainText('Tap to place!');
+  await expect(page.locator('#game-status')).not.toContainText(/A new piece!|Medal complete!|Piece \d of 3|Tap to place!/);
   const claimed = await medalRecord(page);
   expect(claimed).not.toBe(before);
   expect(claimed).toMatch(/"spring-1"\s*:\s*1/);

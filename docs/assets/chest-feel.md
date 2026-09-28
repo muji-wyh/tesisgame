@@ -46,7 +46,7 @@ logic through separate step helpers.
 | `unlock` | Automatic +7.62 s (8.82 s total) | Lock/core sound |
 | `release` | Automatic +7.82 s (9.02 s total) | Lid sound and small seasonal burst |
 | `settle` | Automatic +8.45 s (9.65 s total) | Material landing sound |
-| `opened` | Automatic +9.3 s (10.5 s total) | Existing save-before-reveal transaction |
+| `opened` | Automatic +9.3 s (10.5 s total) | Save progress before the opened result |
 
 A frame stall consumes expired beats without playing a backlog. The quiet
 transition still stops audio, and fast-forward/background settlement remains
@@ -58,6 +58,14 @@ piece after an interruption, without replaying the opening. Repeated callbacks
 cannot grant or announce another piece. Background completion and new-round
 auto-claims save the earned piece silently. Reduced motion skips physical beats
 and displays the saved result directly after the full hold.
+
+The closed chest reads **Hold to open your chest!**. After saving, ordinary and
+fully completed worlds show **Chest opened!** and **Ready for another adventure?**.
+A toy unlock instead shows **A gift for Pip!** with **Try it with Pip** directly.
+Piece counts and medal records still drive persistence and gift requirements,
+but the result has no collectible badge, assembly, tap-to-place interaction or
+flight to the toolbar. The 24-particle seasonal burst belongs to the lid release;
+completing a medal does not add a larger post-opening celebration.
 
 ## Original sound bank
 

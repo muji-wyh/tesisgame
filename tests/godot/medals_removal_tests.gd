@@ -125,8 +125,10 @@ func _run() -> void:
 	check(app.model.phase == "won" and app.model.chest_state == "closed", "Winning still offers the reward chest")
 	app._open_chest()
 	app.chest.finish_immediately()
-	check(app.medal_progress.count_for("spring-1") == 3 and app.reward_image.pieces == 3,
-		"The chest still saves and displays the next earned fragment")
+	check(app.medal_progress.count_for("spring-1") == 3
+		and app.find_child("MedalFragment", true, false) == null
+		and app.find_child("RewardFlight", true, false) == null,
+		"The chest still saves progress without collectible assembly or flight")
 	check(app._unlocked_gift.get("id", "") == "toy-spring" and app._try_gift_button.visible,
 		"Completing the existing reward unlocks its toy and offers Try it with Pip")
 	app._try_gift_button.pressed.emit()

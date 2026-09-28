@@ -104,7 +104,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   } finally {
     await page.mouse.up();
   }
-  await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
+  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   const progressHistory = await page.evaluate(start => window.chestObservation.progress.slice(start), progressStart);
   expect(progressHistory.some(state => !state.hidden && state.percent > 0 && state.percent < 14 &&
     state.text.includes('Hold to begin'))).toBe(true);
@@ -187,8 +187,8 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     testInfo.annotations.push({ type: 'audio', description: 'WebAudio unavailable in this runtime; visual and reward flow verified.' });
   }
 
-  // The input surface may still place the flying fragment. A second hold must
-  // never repeat the persisted reward or return to a charging state.
+  // A second hold on the opened chest must never repeat the persisted reward
+  // or return to a charging state.
   await pressChest(page);
   try {
     await page.waitForTimeout(1350);
@@ -220,7 +220,7 @@ test('reduced motion keeps hold progress and releases without claiming early', a
     await expect.poll(async () => Number(await progress.getAttribute('aria-valuenow')),
       { intervals: [30, 50], timeout: 2500 }).toBeGreaterThanOrEqual(20);
     await screenshot(page, testInfo, 'reduced-motion-holding');
-    await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
@@ -257,7 +257,7 @@ test('unavailable themed samples use immediate local feedback without delaying r
   expect(await pieces(page)).toBe(baseline);
   await pressChest(page);
   try {
-    await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
