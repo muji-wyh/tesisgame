@@ -65,7 +65,7 @@ func _run() -> void:
 						and app._header_duck_slot.get_global_rect().grow(1).encloses(counter.get_global_rect()),
 						"Numeric progress stays grouped inside Pip's header panel")
 			check(app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree()
-				and app._success.total_count == (5 if mode == "memory" else 3)
+				and app._success.total_count == 5
 				and app._mistakes.total_count == (0 if mode == "memory" else 3),
 				"Match and Memory keep their own correct totals and mistake policy beside Pip")
 			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button] + app._mode_buttons:
@@ -89,6 +89,7 @@ func _run() -> void:
 			if mode == "match" and dimensions == Vector2i(480, 900):
 				check(app.grid.size.x * app.grid.size.y >= 0.6 * dimensions.x * dimensions.y,
 					"The matching board owns at least 60% of a portrait screen")
+	await _test_voice_layout(app)
 	app.choose_mode("match")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
@@ -189,3 +190,35 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Gameplay-first layouts: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _test_voice_layout(app) -> void:
+	app.choose_mode("match")
+	var previous_scale_mode: int = root.content_scale_mode
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	for dimensions in [Vector2i(320, 568), Vector2i(360, 640), Vector2i(568, 320)]:
+		root.size = dimensions
+		app.size = dimensions
+		for voice_enabled in [false, true]:
+			app._on_voice_state([voice_enabled, voice_enabled, ""])
+			await settle()
+			var context: String = "%s with voice %s" % [dimensions, voice_enabled]
+			var playfield: Rect2 = app._match_playfield.get_global_rect()
+			var speech_panel: Rect2 = app._voice_space.get_global_rect()
+			var css_scale: float = app.Style.ui_scale(app)
+			check(app.grid.columns == (2 if dimensions.x < dimensions.y else 5),
+				context + ": five pairs retain portrait columns or landscape rows")
+			check(app.grid.get_global_rect().is_equal_approx(playfield),
+				context + ": the grid fits the actual space remaining below speech controls")
+			for card in app.cards.values():
+				check(app.get_global_rect().grow(1).encloses(card.get_global_rect())
+					and playfield.grow(1).encloses(card.get_global_rect()),
+					context + ": every card stays entirely inside the viewport and playfield")
+				check(card.size.x * css_scale >= 44 and card.size.y * css_scale >= 44,
+					context + ": all ten cards retain usable touch targets")
+				if voice_enabled:
+					check(not card.get_global_rect().intersects(speech_panel),
+						context + ": speech controls do not obscure a card")
+	app._on_voice_state([false, false, ""])
+	root.content_scale_mode = previous_scale_mode
+	await settle()

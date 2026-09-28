@@ -22,7 +22,7 @@ async function resultTap(page, key) {
 async function winMatch(page) {
   const bounds = await metrics(page);
   const cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -33,7 +33,7 @@ async function winMatch(page) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards.entries()].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [word, pair]] of pairs.entries()) {
     const written = boardPoint(bounds, pair.Word), pictured = boardPoint(bounds, pair.Picture);
     await tap(page, written.x, written.y);
@@ -41,7 +41,7 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
 }
@@ -93,16 +93,16 @@ test('New adventure preserves unopened victory pieces across reload', async ({ p
   await winMatch(page);
   expect(await pieceCount(page)).toBe(0);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
   await chooseMode(page, 'match');
   await winMatch(page);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toHaveText('Find 3 word–picture pairs. Two cards have no match.');
+  await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
   await page.screenshot({ path: testInfo.outputPath('unopened-pieces-restored.png'), scale: 'css' });
   expect(errors).toEqual([]);
@@ -135,7 +135,7 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
   await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   expect(await pieceCount(page)).toBe(1);
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
   await page.screenshot({ path: testInfo.outputPath('victory-save-recovered.png'), scale: 'css' });
   expect(errors).toEqual([]);

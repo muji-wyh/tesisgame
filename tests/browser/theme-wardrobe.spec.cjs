@@ -180,7 +180,7 @@ async function seedGiftSaveFixture(page, world) {
 
 async function winGiftMatch(page) {
   const bounds = await metrics(page), cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -191,7 +191,7 @@ async function winGiftMatch(page) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [word, pair]] of pairs.entries()) {
     const written = boardPoint(bounds, pair.Word), pictured = boardPoint(bounds, pair.Picture);
     await tap(page, written.x, written.y);
@@ -199,7 +199,7 @@ async function winGiftMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
 }
 
@@ -225,7 +225,7 @@ for (const gift of [
     await page.screenshot({ path: testInfo.outputPath(`${gift.world}-locked-save-fixture.png`), scale: 'css' });
     const goal = await roomControl(page, 'goal', { locked: true, item: gift.world });
     await tap(page, goal.x, goal.y);
-    await expect(page.locator('#game-status')).toContainText(`${gift.topic}. Find 3 word–picture pairs. Help Pip get ${gift.name}.`);
+    await expect(page.locator('#game-status')).toContainText(`${gift.topic}. Find 5 word–picture pairs. Help Pip get ${gift.name}.`);
     expect(await record(page)).toContain(`goal_item_id="toy-${gift.world}"`);
     expect(await record(page)).toContain(`preferred_theme_id="${gift.world}"`);
     const lesson = await matchWords(page);

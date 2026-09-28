@@ -121,7 +121,7 @@ test('loading Pip plays the three supplied recordings without repeats or overlap
   if (backend.supported) expect(maximum, 'A real recording played during the burst.').toBe(1);
   await duck.click();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect.poll(() => page.evaluate(() => pipMediaObservation.players.every(player => player.paused && player.currentTime < 0.01)),
     { message: 'Leaving the loader pauses and rewinds every Pip player.' }).toBe(true);
   const count = await page.evaluate(() => pipMediaObservation.events.length);

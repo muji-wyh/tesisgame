@@ -5,6 +5,7 @@ signal changed
 const Data = preload("res://scripts/game_data.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MAX_HINTS: int = 3
+const MATCH_PAIR_COUNT: int = 5
 
 var cards: Array[Dictionary] = []
 var lesson_words: Array = []
@@ -124,11 +125,9 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	adventure_id = next_adventure_id
 	adventure_name = next_adventure_name
 	cards.clear()
-	for index in range(3):
+	for index in range(MATCH_PAIR_COUNT):
 		_add_card(pool[index], "word")
 		_add_card(pool[index], "image")
-	_add_card(pool[3], "word")
-	_add_card(pool[4], "image")
 	_shuffle(cards, rng)
 	theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
 	if repeat_lesson:
@@ -222,7 +221,7 @@ func _spoken_pair(word_id: String) -> Array[String]:
 func request_hint() -> bool:
 	if hints_remaining <= 0 or not hint_ids.is_empty() or not phase in ["waiting", "matching"]:
 		return false
-	# ponytail: eight-card boards; scan for partners instead of maintaining a pair index.
+	# Scan this small board for partners instead of maintaining a separate pair index.
 	var candidates: Array[Dictionary] = cards.duplicate()
 	if not selected_id.is_empty():
 		candidates.push_front(card_by_id(selected_id))
@@ -303,7 +302,7 @@ func resolve_feedback() -> void:
 		return
 	feedback_ids.clear()
 	selected_id = ""
-	if successes >= 3:
+	if successes >= MATCH_PAIR_COUNT:
 		phase = "won"
 	elif mistakes >= 3:
 		phase = "lost"

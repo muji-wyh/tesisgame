@@ -1407,7 +1407,7 @@ func _refresh() -> void:
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
 	_new_adventure_button.visible = not _save_error
 	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
-	var progress_total: int = 3 if _mode_id == "match" else 5 if _mode_id == "memory" else 0
+	var progress_total: int = Model.MATCH_PAIR_COUNT if _mode_id == "match" else 5 if _mode_id == "memory" else 0
 	_success.set_filled_count(model.successes, progress_total)
 	_success.tooltip_text = "%d matches" % model.successes if progress_total > 0 else ""
 	_mistakes.set_filled_count(model.mistakes, 0 if _mode_id == "memory" else 3)
@@ -1444,7 +1444,7 @@ func _refresh() -> void:
 		if model.streak > 1:
 			_message.text += " %d in a row!" % model.streak
 	else:
-		_message.text = "Find 3 word–picture pairs. Two cards have no match."
+		_message.text = "Find %d word–picture pairs." % Model.MATCH_PAIR_COUNT
 	if playing and _mode_id == "memory":
 		_message.text = _memory_status()
 	elif playing and _mode_id == "pop":
@@ -1679,18 +1679,25 @@ func _fit_grid() -> void:
 	if grid == null or _rebuilding or cards.is_empty() or not grid.is_visible_in_tree():
 		return
 	var area: Vector2 = _match_playfield.size
-	for card in cards.values():
-		card.custom_minimum_size = Vector2(72, 72)
 	grid.add_theme_constant_override("h_separation", 10)
-	grid.columns = 4 if area.x >= area.y or area.y < 318 else 2
+	grid.columns = Model.MATCH_PAIR_COUNT if area.x >= area.y or area.y < 318 else 2
+	var rows := ceili(float(cards.size()) / grid.columns)
+	var cell_size := Vector2(
+		maxf(1, (area.x - (grid.columns - 1) * 10) / grid.columns),
+		maxf(1, (area.y - (rows - 1) * 10) / rows))
+	for card in cards.values():
+		# The speech panel shares the playfield; let all five pairs fit its remaining space.
+		card.custom_minimum_size = Vector2(72, 72).min(cell_size)
 	grid.position = Vector2.ZERO
 	grid.size = area
 	var pictures: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "image")
 	var words: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "word")
 	var display_order: Array = pictures + words
 	if grid.columns == 2:
-		display_order = [pictures[0], words[0], pictures[1], words[1],
-			pictures[2], words[2], pictures[3], words[3]]
+		display_order = []
+		for index in range(pictures.size()):
+			display_order.append(pictures[index])
+			display_order.append(words[index])
 	for index in range(display_order.size()):
 		var button: Button = cards[display_order[index].id]
 		if grid.get_child(index) != button:
@@ -1892,7 +1899,7 @@ func _can_request_hint() -> bool:
 	if _mode_id != "match" or model.hints_remaining <= 0 or not model.hint_ids.is_empty() or not model.error.is_empty():
 		return false
 	if model.phase == "feedback":
-		return not _voice_mode and model.successes < 3 and model.mistakes < 3
+		return not _voice_mode and model.successes < Model.MATCH_PAIR_COUNT and model.mistakes < 3
 	return model.phase in ["waiting", "matching"]
 
 
@@ -1903,7 +1910,7 @@ func _refresh_hint() -> void:
 	hint_button.count = model.hints_remaining
 	if model.hints_remaining <= 0:
 		hint_button.tooltip_text = "No hints left. Start a new round for three more."
-	elif model.successes >= 3 or model.mistakes >= 3:
+	elif model.successes >= Model.MATCH_PAIR_COUNT or model.mistakes >= 3:
 		hint_button.tooltip_text = "Round finished. View your result."
 	elif _voice_mode and model.phase == "feedback":
 		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
@@ -2666,7 +2673,7 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 			sparkle.name = "MatchSparkle"
 			sparkle.accent = Data.theme(model.theme_id).accent
 			sparkle.shape_kind = RewardSparkle.Shape.STAR
-			sparkle.particle_count = 2 + model.streak
+			sparkle.particle_count = mini(2 + model.streak, 6)
 			sparkle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			card.add_child(sparkle)
 			sparkle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -2863,7 +2870,7 @@ func _start_gift_adventure(id: String) -> void:
 	if not new_round(-1, false, topics[gift.theme], "match", gift.word_id):
 		return
 	_default_focus().grab_focus()
-	_announce_status("%s. Find 3 word–picture pairs. Help Pip get %s. Win games in %s and open their chests." % [model.adventure_name, gift.name, Data.theme(gift.theme).name])
+	_announce_status("%s. Find %d word–picture pairs. Help Pip get %s. Win games in %s and open their chests." % [model.adventure_name, Model.MATCH_PAIR_COUNT, gift.name, Data.theme(gift.theme).name])
 
 
 func _save_journey() -> void:

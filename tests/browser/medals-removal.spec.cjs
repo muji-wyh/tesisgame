@@ -35,7 +35,7 @@ test('More opens only Pip\'s room while saved reward pieces still unlock playabl
   await expect(status).toContainText('1/3 · A drink for the flower!');
   expect((await roomState(page)).medals).toBe(saved.medals);
   await page.keyboard.press('Escape');
-  await expect(status).toContainText('Find 3 word');
+  await expect(status).toContainText('Find 5 word');
 
   await page.reload();
   await enterGame(page);

@@ -26,14 +26,14 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
   });
   const errors = await openGame(page, { mode: 'match' });
   const status = page.locator('#game-status');
-  await expect(status).toContainText('Find 3 word');
+  await expect(status).toContainText('Find 5 word');
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expect(page.locator('#help')).not.toContainText('Repeat lesson');
   for (const viewport of [{ width: 320, height: 568 }, { width: 1280, height: 800 }]) {
     await page.setViewportSize(viewport);
     await rendered(page);
     const bounds = await metrics(page);
-    const modes = [['match', 'Find 3 word'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
+    const modes = [['match', 'Find 5 word'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
     const targets = modes.map(([name]) => modeRect(bounds, name));
     for (const [index, [name, announcement]] of modes.entries()) {
       const rect = targets[index];
@@ -49,12 +49,12 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
     }
     const match = targets[0];
     await tap(page, match.x + match.width / 2, match.y + match.height / 2);
-    await expect(status).toContainText('Find 3 word');
+    await expect(status).toContainText('Find 5 word');
     await capture(`three-modes-${viewport.width}`, { afterResize: true });
   }
   await page.reload();
   await enterGame(page);
-  await expect(status).toContainText('Find 3 word');
+  await expect(status).toContainText('Find 5 word');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('#speech-panel')).toBeHidden();
   await capture('match-default-entry');

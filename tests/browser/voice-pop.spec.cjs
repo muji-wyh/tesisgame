@@ -722,6 +722,6 @@ test('unsupported speech gives an actionable explanation without starting a time
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.screenshot({ path: info.outputPath('unsupported.png') });
   await action(page, /back|match|exit/i);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   expect(errors).toEqual([]);
 });

@@ -30,9 +30,9 @@ func state(app) -> Array:
 func check_groups(app) -> void:
 	var pictures: Array = app.grid.get_children().filter(func(card: Button) -> bool: return card.card_data.kind == "image")
 	var words: Array = app.grid.get_children().filter(func(card: Button) -> bool: return card.card_data.kind == "word")
-	check(pictures.size() == 4 and words.size() == 4 and app.grid.get_child_count() == 8,
-		"Match still has exactly four pictures and four words")
-	if pictures.size() != 4 or words.size() != 4:
+	check(pictures.size() == 5 and words.size() == 5 and app.grid.get_child_count() == 10,
+		"Match still has exactly five pictures and five words")
+	if pictures.size() != 5 or words.size() != 5:
 		return
 	for kind in ["image", "word"]:
 		var expected: Array = app.model.cards.filter(func(card: Dictionary) -> bool: return card.kind == kind).map(

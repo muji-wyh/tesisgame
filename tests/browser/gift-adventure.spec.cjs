@@ -51,7 +51,7 @@ async function requestPreviewGoal(page) {
 async function winMatch(page) {
   const bounds = await metrics(page);
   const cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -62,7 +62,7 @@ async function winMatch(page) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards.entries()].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [word, pair]] of pairs.entries()) {
     const written = boardPoint(bounds, pair.Word), pictured = boardPoint(bounds, pair.Picture);
     await tap(page, written.x, written.y);
@@ -70,7 +70,7 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
 }
@@ -128,7 +128,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   // pass even when a focused button has incorrectly scrolled off screen.
   const help = await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   await tap(page, help.x, help.y);
-  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 3 word–picture pairs. Help Pip get Autumn apple.');
+  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 5 word–picture pairs. Help Pip get Autumn apple.');
   const goalSave = await record(page);
   expect(goalSave).toContain('goal_item_id="toy-autumn"');
   expect(goalSave).toContain('preferred_theme_id="autumn"');
@@ -151,7 +151,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   expect(stickerIds(await record(page))).toEqual(earnedStickers);
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   for (const field of ['goal_item_id="toy-autumn"', 'preferred_theme_id="autumn"', 'toy="toy-autumn"']) {
     expect(await record(page)).toContain(field);
   }
@@ -209,7 +209,7 @@ test('a failed gift-goal save keeps the previous goal and lesson until the visib
   await openRoom(page);
   await roomControl(page, 'goal', { locked: true, item: 'autumn' });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 3 word–picture pairs. Help Pip get Autumn apple.');
+  await expect(page.locator('#game-status')).toContainText('Picnic time. Find 5 word–picture pairs. Help Pip get Autumn apple.');
   expect(await record(page)).toContain('goal_item_id="toy-autumn"');
   expect(await record(page)).toContain('preferred_theme_id="autumn"');
   expect(await matchWords(page)).toContain('apple');
@@ -236,7 +236,7 @@ test('an earned saved goal stays keyboard reachable in Pip\'s home at 320px and 
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   expect(stickerIds(await record(page))).toEqual(stickers);
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await openRoom(page);
   await roomControl(page, 'autumn');
   await page.keyboard.press('Enter');

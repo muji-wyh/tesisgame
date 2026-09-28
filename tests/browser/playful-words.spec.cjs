@@ -9,14 +9,14 @@ async function wordMatch(page, item, word) {
   await page.keyboard.press('Enter');
   await roomControl(page, 'goal', { locked: true, item });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   const cards = (await discoverMatchCards(page)).filter(card => card.word === word);
   expect(cards.map(card => card.kind).sort()).toEqual(['Picture', 'Word']);
   const bounds = await metrics(page);
   const pair = Object.fromEntries(cards.map(card => [card.kind, boardPoint(bounds, card.index)]));
   for (const kind of ['Word', 'Picture']) await tap(page, pair[kind].x, pair[kind].y);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await rendered(page);
   return { errors, pair, bounds };

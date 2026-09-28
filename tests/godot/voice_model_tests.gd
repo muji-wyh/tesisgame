@@ -40,10 +40,8 @@ func _board(model_script: GDScript, words: Array):
 	model.cards.clear()
 	for id in ["doll", "cat", "sun", "dog", "boat"]:
 		var word: Dictionary = words.filter(func(value: Dictionary) -> bool: return value.id == id)[0]
-		if id != "dog":
-			model.cards.append({"id": id + ":word", "kind": "word", "word": word})
-		if id != "boat":
-			model.cards.append({"id": id + ":image", "kind": "image", "word": word})
+		model.cards.append({"id": id + ":word", "kind": "word", "word": word})
+		model.cards.append({"id": id + ":image", "kind": "image", "word": word})
 	return model
 
 
@@ -58,7 +56,12 @@ func _test_candidates(model_script: GDScript, words: Array) -> void:
 		"Repeated words produce distinct candidate IDs")
 	check(model.spoken_matches("dollars caterpillar sunshine") == [],
 		"Substrings cannot match doll, cat or sun")
-	check(model.spoken_matches("dog boat") == [], "Both one-sided distractors are excluded")
+	check(model.spoken_matches("dog boat") == ["dog", "boat"], "All five lesson words have real spoken-match targets")
+	var incomplete = _board(model_script, words)
+	incomplete.cards.assign(incomplete.cards.filter(func(card: Dictionary) -> bool: return card.id not in ["dog:word", "boat:image"]))
+	check(incomplete.spoken_matches("dog boat") == []
+		and incomplete.match_spoken_word("dog") == "ignored" and incomplete.match_spoken_word("boat") == "ignored",
+		"Defensive candidate checks reject incomplete pairs without scoring")
 	check(model.spoken_matches("nothing relevant") == [], "Unrelated speech has no candidates")
 	check(model.spoken_matches("") == [], "Empty speech has no candidates")
 	check(model.successes == 0 and model.mistakes == 0 and model.phase == "waiting",
@@ -82,8 +85,8 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	check(model.request_hint() and model.hints_remaining == 2,
 		"The voice round can consume the first of three hints")
 	var hint: Array = model.hint_ids.duplicate()
-	check(model.match_spoken_word("boat") == "ignored" and model.match_spoken_word("dog") == "ignored",
-		"Neither distractor can score a spoken match")
+	check(model.match_spoken_word("fish") == "ignored" and model.match_spoken_word("bear") == "ignored",
+		"Words outside the current board cannot score a spoken match")
 	check(model.match_spoken_word("not-a-card") == "ignored" and model.hint_ids == hint,
 		"Invalid IDs leave the existing hint unchanged")
 	model.select("boat:word")
@@ -119,10 +122,19 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	check(model.successes == 3 and model.streak == 3 and model.mistakes == 0,
 		"Three spoken matches retain the existing success and streak rules")
 	model.resolve_feedback()
-	check(model.phase == "won", "The existing three-match threshold wins the round")
+	check(model.phase == "waiting" and model.successes == 3,
+		"The third spoken match leaves the round active")
+	check(model.match_spoken_word("dog") == "correct" and model.successes == 4, "The fourth lesson word scores through speech")
+	model.resolve_feedback()
+	check(model.phase == "waiting" and model.successes == 4,
+		"The fourth spoken match leaves one real pair available")
+	check(model.match_spoken_word("boat") == "correct" and model.phase == "feedback" and model.successes == 5,
+		"The fifth spoken match waits for normal feedback")
+	model.resolve_feedback()
+	check(model.phase == "won", "Resolving the fifth spoken match wins the round")
 	check(model.spoken_matches("doll cat sun boat dog") == [],
 		"Late recognition candidates are ignored after winning")
-	check(model.match_spoken_word("cat") == "ignored" and model.successes == 3,
+	check(model.match_spoken_word("cat") == "ignored" and model.successes == 5,
 		"Late spoken scoring cannot change a won round")
 	check(model.hints_remaining == 1 and not model.request_hint(),
 		"Winning through speech cannot refill or spend the remaining hint")

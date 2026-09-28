@@ -54,7 +54,7 @@ func _run() -> void:
 		"More opens Pip with every world choice available")
 	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)
-	check(words.size() == 3, "The scene starts with three matchable words")
+	check(words.size() == 5, "The scene starts with five matchable words")
 	app._request_hint()
 	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2,
 		"The adventure spends the first of three hints")
@@ -148,10 +148,10 @@ func _run() -> void:
 		check(not app._voice_mode, "Voice-earned words use the same result shelf and exit listening")
 	app.new_round(22)
 	words = _pairs(app)
-	_match(app, words[0])
-	_match(app, words[1])
-	app.cards[words[2].id + ":word"].pressed.emit()
-	app.cards[words[2].id + ":image"].pressed.emit()
+	for word in words.slice(0, 4):
+		_match(app, word)
+	app.cards[words[4].id + ":word"].pressed.emit()
+	app.cards[words[4].id + ":image"].pressed.emit()
 	app._show_collection()
 	app._continue_match()
 	await create_timer(0.8).timeout
@@ -194,9 +194,13 @@ func _match(app, word: Dictionary) -> void:
 func _lose(app) -> void:
 	var wrong: Array[String] = []
 	for card in app.model.cards:
-		if app.model.card_by_id(card.word.id + (":image" if card.kind == "word" else ":word")).is_empty():
+		if app.model.matched_ids.has(card.id):
+			continue
+		if wrong.is_empty() or (card.kind != app.model.card_by_id(wrong[0]).kind and card.word.id != app.model.card_by_id(wrong[0]).word.id):
 			wrong.append(card.id)
-	check(wrong.size() == 2, "The loss fixture uses the board's two genuine distractors")
+		if wrong.size() == 2:
+			break
+	check(wrong.size() == 2, "The loss fixture uses a real unmatched word and a different picture")
 	if wrong.size() != 2:
 		return
 	for attempt in range(3):

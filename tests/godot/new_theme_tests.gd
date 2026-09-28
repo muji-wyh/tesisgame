@@ -104,10 +104,10 @@ func _check_game_models(words: Array) -> void:
 		var cards: Array = model.cards.duplicate(true)
 		check(model.set_theme(world.id) and model.theme_id == world.id and model.cards == cards,
 			"Choosing a new world preserves the live lesson")
-		for word in model.lesson_words.slice(0, 3):
+		for word in model.lesson_words:
 			check(model.match_spoken_word(word.id) == "correct", "The new world keeps normal pair scoring")
 			model.resolve_feedback()
-		check(model.phase == "won" and model.successes == 3, "Three correct pairs win in the new world")
+		check(model.phase == "won" and model.successes == 5, "Five correct pairs win in the new world")
 		check(model.begin_open(world.id + "-1") and model.reward_theme == world.id,
 			"Winning captures the new world's reward identity")
 		check(not model.set_theme("spring") and model.finish_open() and model.reward_id == world.id + "-1",
@@ -135,7 +135,7 @@ func _check_age_limited_gifts(words: Array) -> void:
 			check(started, "Ages 4-6 can start the " + gift.id + " gift lesson, including the live random entry point")
 			if not started:
 				continue
-			check(model.age_band_id == band.id and model.lesson_words.size() == 5 and model.cards.size() == 8,
+			check(model.age_band_id == band.id and model.lesson_words.size() == 5 and model.cards.size() == 10,
 				"A gift lesson preserves the selected age and complete board")
 			check(model.lesson_words[0].id == gift.word
 				and not model.card_by_id(gift.word + ":word").is_empty()

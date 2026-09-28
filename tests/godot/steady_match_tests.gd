@@ -132,29 +132,41 @@ func _run() -> void:
 		app.cards[next].pressed.emit()
 		check(app.model.selected_id == next and app.model.successes == 2, "Correct feedback also accepts the first tap on another card")
 		app.cards[pairs[2] + ":image"].pressed.emit()
-		check(app.model.phase == "feedback" and app.model.successes == 3, "The final pair scores exactly once")
+		check(app.model.phase == "feedback" and app.model.successes == 3, "The third pair scores exactly once without ending play")
 		check_feedback(app, [next, pairs[2] + ":image"], true)
+		app._continue_match()
+		check(app.model.phase == "waiting" and not app.hint_button.disabled,
+			"The board and unused hints remain active after the third match")
+		var available_hints: int = app.model.hints_remaining
+		app._request_hint()
+		check(app.model.hints_remaining == available_hints - 1 and app.model.hint_ids.size() == 2,
+			"The visible Hint action can still guide a remaining pair after three matches")
+		var hinted: Array = app.model.hint_ids.duplicate()
+		if app.model.selected_id != hinted[0]:
+			app.cards[hinted[0]].pressed.emit()
+		app.cards[hinted[1]].pressed.emit()
+		app._continue_match()
+		check(app.model.phase == "waiting" and app.model.successes == 4 and app.grid.is_visible_in_tree(),
+			"The fourth match leaves the final pair playable without showing the chest")
+		var final_word: String = pairs.filter(func(id: String) -> bool: return not app.model.matched_ids.has(id + ":word"))[0]
+		app.cards[final_word + ":word"].pressed.emit()
+		app.cards[final_word + ":image"].pressed.emit()
+		check(app.model.phase == "feedback" and app.model.successes == 5, "The fifth pair scores exactly once before the result")
 		var final_hints: int = app.model.hints_remaining
 		app._request_hint()
 		check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_remaining == final_hints,
 			"Hint cannot bypass the terminal feedback timer or spend unused allowance")
-		var orphan: String = ""
-		for id in app.cards:
-			if not app.model.matched_ids.has(id):
-				orphan = id
-				break
-		if dimensions == Vector2i(480, 480):
-			app.cards[orphan].pressed.emit()
-			check(app.model.phase == "won" and app.model.selected_id.is_empty(),
-				"A card tap after the final pair advances only to the result")
-		else:
-			await create_timer(0.8).timeout
-			check(app.model.phase == "won" and app.model.selected_id.is_empty(),
-				"The final pair automatically enters the result without another button")
+		var completed_card: String = final_word + ":word"
+		app.cards[completed_card].pressed.emit()
+		check(app.model.phase == "feedback" and app.model.successes == 5 and app.model.selected_id.is_empty(),
+			"Tapping a completed card during final feedback neither rescores nor starts another selection")
+		await create_timer(0.8).timeout
+		check(app.model.phase == "won" and app.model.selected_id.is_empty(),
+			"The fifth pair automatically enters the result without another button")
 		check(root.gui_get_focus_owner() == app.chest_button, "The winning result keeps chest focus")
-		app.cards[orphan].pressed.emit()
+		app.cards[completed_card].pressed.emit()
 		app._continue_match()
-		check(app.model.phase == "won" and app.model.successes == 3 and app.model.mistakes == 2, "Repeated result input neither restarts nor scores")
+		check(app.model.phase == "won" and app.model.successes == 5 and app.model.mistakes == 2, "Repeated result input neither restarts nor scores")
 	app.new_round(21, true)
 	var wrong: Array = []
 	for card in app.model.cards:
@@ -175,28 +187,30 @@ func _run() -> void:
 	check(root.gui_get_focus_owner() == app._new_adventure_button, "The losing result focuses New adventure")
 	app.new_round(21, true)
 	await settle()
-	var before_orphan: Dictionary = board_state(app)
+	var before_mismatch: Dictionary = board_state(app)
 	for kind in ["word", "image"]:
-		var orphan: Dictionary = {}
-		var paired: Dictionary = {}
+		var first: Dictionary = {}
+		var second: Dictionary = {}
 		for card in app.model.cards:
-			var partner: Dictionary = app.model.card_by_id(card.word.id + (":image" if card.kind == "word" else ":word"))
-			if card.kind == kind and partner.is_empty():
-				orphan = card
-			elif card.kind != kind and not partner.is_empty():
-				paired = card
-		app.cards[orphan.id].pressed.emit()
-		app.cards[paired.id].pressed.emit()
+			if card.kind == kind:
+				first = card
+				break
+		for card in app.model.cards:
+			if card.kind != kind and card.word.id != first.word.id:
+				second = card
+				break
+		app.cards[first.id].pressed.emit()
+		app.cards[second.id].pressed.emit()
 		await settle()
-		check(app.model.missed_word_ids.has(orphan.word.id) and app.model.missed_word_ids.has(paired.word.id),
-			"Both words in an unpaired-card mistake remain in missed-first result review")
-		check_feedback(app, [orphan.id, paired.id], false)
-		check_board(app, before_orphan, "Unpaired " + kind)
+		check(app.model.missed_word_ids.has(first.word.id) and app.model.missed_word_ids.has(second.word.id),
+			"Both words in a mismatched pair remain in missed-first result review")
+		check_feedback(app, [first.id, second.id], false)
+		check_board(app, before_mismatch, "Mismatched " + kind)
 		var feedback_ids: Array = app.model.feedback_ids.duplicate()
 		app._show_collection()
 		check(app.feedback_timer.paused and app._focus_candidates().all(func(control: Control) -> bool:
 			return not app.cards.values().has(control)), "More pauses feedback and removes the covered board from navigation")
-		app.cards[orphan.id].pressed.emit()
+		app.cards[first.id].pressed.emit()
 		check(app.model.feedback_ids == feedback_ids, "Covered cards cannot clear either incorrect mark")
 		app._hide_collection()
 		check(app.model.feedback_ids == feedback_ids and not app.feedback_timer.paused,

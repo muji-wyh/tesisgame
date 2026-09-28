@@ -184,12 +184,12 @@ func _run() -> void:
 	check(app.model.successes == 1 and app.model.phase == "feedback",
 		"A final spoken board word uses the normal matching feedback")
 	app._on_voice_result([" and ".join(spoken), true])
-	for step in range(3):
+	for step in range(spoken.size()):
 		app.feedback_timer.timeout.emit()
-	check(app.model.phase == "won" and app.model.successes == 3 and not app._voice_mode
+	check(app.model.phase == "won" and app.model.successes == 5 and not app._voice_mode
 		and app._speech_queue.is_empty(), "Distinct spoken words queue safely and winning exits voice mode")
 	app._on_voice_result([spoken[0], true])
-	check(app.model.successes == 3, "Late voice callbacks cannot change a completed round")
+	check(app.model.successes == 5, "Late voice callbacks cannot change a completed round")
 	app.new_round(13)
 	app._on_voice_state([true, true, "Listening"])
 	app._show_collection()

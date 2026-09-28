@@ -4,7 +4,7 @@ const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, ma
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const INTRO = 'Find 3 word–picture pairs. Two cards have no match.';
+const INTRO = 'Find 5 word–picture pairs.';
 const RETRY = 'Room choices could not be remembered. You can keep practising. Choose Retry saving.';
 
 async function record(page, key = ROOM_KEY) {
@@ -27,9 +27,9 @@ async function pieceCount(page) {
 
 async function finishMatch(page, won) {
   await chooseMode(page, 'match');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   const bounds = await metrics(page), cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -40,8 +40,9 @@ async function finishMatch(page, won) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
-  for (let index = 0; index < 3; index++) {
+  expect(pairs).toHaveLength(5);
+  const attempts = won ? pairs.length : 3;
+  for (let index = 0; index < attempts; index++) {
     const [word, pair] = won ? pairs[index] : pairs[0];
     const written = boardPoint(bounds, pair.Word);
     const pictured = boardPoint(bounds, won ? pair.Picture : pairs[1][1].Picture);
@@ -50,7 +51,7 @@ async function finishMatch(page, won) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText(won ? 'Great match!' : 'Not quite.');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? (won ? 'You did it!' : 'Good try!') : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === attempts - 1 ? (won ? 'You did it!' : 'Good try!') : 'Find 5 word');
   }
   return [...cards.keys()];
 }
@@ -187,7 +188,7 @@ test('main-header Retry saving preserves Match selection, world and existing col
   expect(await record(page, MEDAL_KEY)).toBe(medals);
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', world);
   const restored = await record(page);
   expect(restored).toContain('preferred_theme_id="space"');

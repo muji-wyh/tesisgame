@@ -26,7 +26,7 @@ async function ready(scope, renderFrames = true) {
   // This helper also checks new rounds after entry; only a fresh page needs the gate.
   if (await scope.locator('body').getAttribute('data-engine-ready') !== 'true') await enterGame(scope);
   await expect(scope.locator('#status')).toBeHidden();
-  await expect(scope.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(scope.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   if (renderFrames) await rendered(scope);
 }
 
@@ -132,7 +132,7 @@ test('real touch input selects and cancels a native Godot card', async ({ page }
   await page.touchscreen.tap(point.x, point.y);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await page.touchscreen.tap(point.x, point.y);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -162,7 +162,7 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await pressGamepad(page, 1);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await pressGamepad(page, 15);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
@@ -173,7 +173,7 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   await page.touchscreen.tap(point.x, point.y);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await page.touchscreen.tap(point.x, point.y);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
@@ -186,7 +186,7 @@ test('holding Xbox A across startup does not select an unseen native card', asyn
   await page.goto('/');
   await ready(page);
   await page.waitForTimeout(200);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.evaluate(() => window.gamepadFixture.button(0, false));
   await page.waitForTimeout(120);
@@ -381,7 +381,7 @@ test('hiding prevents pending audio from restarting until another gesture', asyn
       });
       expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
       await page.touchscreen.tap(point.x, point.y);
-      await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+      await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
       expect(held.nonChestRequests).toHaveLength(1);
       held.checkChestBanks(preparedThemes);
@@ -452,7 +452,7 @@ for (const failure of ['unavailable', 'corrupt']) {
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
     const before = await page.evaluate(() => window.audioObservation.starts);
     await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
     expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
     await Promise.all(requests.map(async request => (await request.response()).finished()));
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -496,7 +496,7 @@ test('the exported game runs inside a normal website iframe', async ({ page }) =
   await page.locator('iframe').evaluate((element) => { element.style.height = '80%'; });
   await expect.poll(async () => (await canvasMetrics(frame)).height).toBeLessThan(page.viewportSize().height);
   await assertFits(frame);
-  await expect(frame.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(frame.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -537,7 +537,7 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
 async function discoverCards(page) {
   const metrics = await canvasMetrics(page);
   const discovered = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -545,7 +545,7 @@ async function discoverCards(page) {
     if (!discovered.has(word)) discovered.set(word, {});
     discovered.get(word)[kind] = index;
     await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   }
   return { metrics, discovered };
 }
@@ -576,14 +576,14 @@ async function holdChestUntilOpen(page, point) {
 async function winWithTouch(page, board) {
   const { metrics, discovered } = board ?? await discoverCards(page);
   const pairs = [...discovered.values()].filter(pair => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (let index = 0; index < pairs.length; index++) {
     for (const card of [pairs[index].Word, pairs[index].Picture]) {
       const point = cardPoint(metrics, card);
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
   }
   return metrics;
 }
@@ -645,7 +645,7 @@ test('new adventures rotate and all five review words replay without opening or 
   await holdChestUntilOpen(page, resultScreenPoint(metrics));
   await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toHaveText('Find 3 word–picture pairs. Two cards have no match.');
+  await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];
@@ -784,7 +784,7 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
     await page.touchscreen.tap(point.x, point.y);
   }
   await continueMatch(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toHaveText(/^Hint: match the [a-z]+ cards\.$/);
@@ -823,9 +823,20 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
     await page.touchscreen.tap(point.x, point.y);
   }
   await continueMatch(page);
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  const exhausted = await page.locator('#game-status').textContent();
   await pressGamepad(page, 2);
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status'), 'Three hints do not cover all five pairs, and exhausted hints cannot change the board.').toHaveText(exhausted);
+  const remaining = [...discovered].filter(([word]) => !used.has(word));
+  expect(remaining).toHaveLength(2);
+  for (const [index, [, pair]] of remaining.entries()) {
+    for (const card of [pair.Word, pair.Picture]) {
+      const point = cardPoint(metrics, card);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+    await continueMatch(page);
+    await expect(page.locator('#game-status')).toContainText(index === remaining.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
+  }
   await holdControllerChest(page);
   await pressGamepad(page, 0);
   await ready(page);
@@ -903,7 +914,7 @@ test('keyboard hints focus a suggested card ready for Enter', async ({ page }) =
   await expect(page.locator('#canvas')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('#selection-status')).toBeEmpty();
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -932,7 +943,7 @@ test('three mistakes end a round and the counter cannot reset the limits', async
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page, false);
-    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find 5 word–picture pairs.');
   }
   // Results replace the counters with a passive topic title, never a reset control.
   const resultCounterPoint = { x: metrics.x + metrics.width * 0.75 - 64 * scale, y: counterPoint.y };
@@ -1021,7 +1032,7 @@ test('Xbox chest charging cancels on disconnect and works again after reconnect'
   await page.evaluate(() => window.gamepadFixture.connect());
   await holdControllerChest(page);
   await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -1034,14 +1045,14 @@ test('completes matches and opens a one-shot reward while optional audio is stil
     await ready(page);
     const { metrics, discovered } = await discoverCards(page);
     const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
-    expect(pairs).toHaveLength(3);
+    expect(pairs).toHaveLength(5);
     for (let index = 0; index < pairs.length; index++) {
       for (const card of [pairs[index].Word, pairs[index].Picture]) {
         const point = cardPoint(metrics, card);
         await page.touchscreen.tap(point.x, point.y);
       }
       await continueMatch(page);
-      await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word–picture pairs.');
+      await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
     }
     const chestPoint = resultScreenPoint(metrics);
     await holdChestUntilOpen(page, chestPoint);
@@ -1071,14 +1082,14 @@ test('dragging the reward chest cancels hold-open without losing pointer control
   await ready(page);
   const { metrics, discovered } = await discoverCards(page);
   const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (let index = 0; index < pairs.length; index++) {
     for (const card of [pairs[index].Word, pairs[index].Picture]) {
       const point = cardPoint(metrics, card);
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
   }
   const chestPoint = resultScreenPoint(metrics);
   await page.mouse.move(chestPoint.x, chestPoint.y);
@@ -1101,7 +1112,7 @@ async function loseWithTouch(page) {
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page, false);
-    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(attempt === 2 ? 'Good try!' : 'Find 5 word–picture pairs.');
   }
   return metrics;
 }
@@ -1135,7 +1146,7 @@ for (const outcome of ['win', 'loss']) {
     }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 20 } });
     expect(pixel, 'The filled New adventure button must render, not just accept invisible input.').toEqual([185, 69, 69]);
     await page.touchscreen.tap(next.x, next.y);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
     expect(errors).toEqual([]);
   });
 }
@@ -1167,7 +1178,7 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
   await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 

@@ -37,7 +37,7 @@ async function winMatch(page) {
   const pairs = cards.filter(card => card.kind === 'Word').map(word =>
     [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
   ).filter(([, picture]) => picture);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [word, picture]] of pairs.entries()) {
     const written = boardPoint(bounds, word.index), pictured = boardPoint(bounds, picture.index);
     await tap(page, written.x, written.y);
@@ -45,7 +45,7 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
 }
 
@@ -192,7 +192,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
   const savedRoom = persistentFields(await record(page));
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[6]);
   expect(await counts(page), 'Reload keeps the earned Candy piece while the chosen world remains Jungle.').toEqual(earnedCounts);
   expect(persistentFields(await record(page)), 'Reload preserves owned items, chosen world, stickers and learning settings.').toEqual(savedRoom);

@@ -318,7 +318,7 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, or Voice Pop.
-        Match: find three matching word and picture pairs. Two cards have no match.
+        Match: find five matching word and picture pairs.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
         A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for More.
@@ -364,7 +364,7 @@
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
-          <div class="speech-score"><span id="speech-successes">0/3</span><span id="speech-mistakes">0/3</span></div>
+          <div class="speech-score"><span id="speech-successes">0/5</span><span id="speech-mistakes">0/3</span></div>
         </div>
         <div class="speech-bubble">
           <div class="speech-heading">
@@ -1647,7 +1647,7 @@
           setPipTheme(theme);
         },
         roundProgress(successes, mistakes) {
-          document.getElementById('speech-successes').textContent = `${successes}/3`;
+          document.getElementById('speech-successes').textContent = `${successes}/5`;
           document.getElementById('speech-mistakes').textContent = `${mistakes}/3`;
         },
         observe(onHidden, onMotion, onVisible, onInputCanceled) {

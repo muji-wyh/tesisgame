@@ -879,7 +879,7 @@ test('the Pop glow covers the viewport edges, ignores input and respects reduced
   assert.match(auraElement, /\baria-hidden="true"/);
   assert.match(auraElement, /\bdata-listening="false"/);
   assert.match(shell, /id="pop-status"[^>]*role="status"/);
-  assert.match(shell, /Winning Match or Memory earns one piece/);
+  assert.match(shell, /Match: find five matching word and picture pairs/);
 });
 
 function enablePhraseHints(f) {

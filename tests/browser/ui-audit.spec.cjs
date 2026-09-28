@@ -61,7 +61,7 @@ for (const size of SIZES) {
     await shot('05-match-return');
 
     await chooseMode(page, 'match');
-    await expect(page.locator('#game-status')).toContainText('Find 3 word');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word');
     const first = boardPoint(await metrics(page), 0);
     await tap(page, first.x, first.y);
     await expect(page.locator('#selection-status')).not.toBeEmpty();
@@ -126,7 +126,7 @@ for (const size of SIZES) {
     await shot('20-world-return-room');
     await page.keyboard.press('Escape');
     expect.soft(errors).toEqual([]);
-    expect.soft(originalCards).toHaveLength(8);
+    expect.soft(originalCards).toHaveLength(10);
   });
 }
 
@@ -155,7 +155,7 @@ test('locked toy previews return to the room without changing saved choices', as
   await expect.soft(page.locator('#game-status')).toContainText('ball', { timeout: 1500 });
   expect.soft(await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'))).toBe(saved);
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
 });
 
 test('More opens Pip with direct world choices and preserved game state', async ({ page }, testInfo) => {

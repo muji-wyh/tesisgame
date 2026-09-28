@@ -161,8 +161,8 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 	var seen_words: Dictionary = {}
 	for seed_value in range(80):
 		check(model.reset(words, seed_value), "A valid vocabulary starts a round")
-		check(model.cards.size() == 8, "There are eight cards")
-		check(pairs_for(model).size() == 3, "There are exactly three complete pairs")
+		check(model.cards.size() == 10, "There are ten cards")
+		check(pairs_for(model).size() == 5, "There are exactly five complete pairs")
 		var ids: Dictionary = {}
 		var counts: Dictionary = {}
 		var kinds: Dictionary = {"word": 0, "image": 0}
@@ -171,10 +171,10 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 			ids[card.id] = true
 			counts[card.word.id] = counts.get(card.word.id, 0) + 1
 			kinds[card.kind] += 1
-		check(ids.size() == 8, "Card IDs are unique")
-		check(counts.size() == 5, "Pairs and distractors use five distinct words")
-		check(counts.values().count(1) == 2, "Two cards have no matching partner")
-		check(kinds.word == 4 and kinds.image == 4, "Distractors are one of each kind")
+		check(ids.size() == 10, "Card IDs are unique")
+		check(counts.size() == 5, "The five pairs use five distinct words")
+		check(counts.values().count(2) == 5, "Every word has exactly one matching picture")
+		check(kinds.word == 5 and kinds.image == 5, "The board balances five words and five pictures")
 		check(model.phase == "waiting", "Rounds start waiting")
 		check(model.successes == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
@@ -203,12 +203,12 @@ func _test_fresh_rounds(model_script: GDScript, words: Array) -> void:
 		model.reset(vocabulary)
 		check(model.cards.all(func(card: Dictionary) -> bool: return not previous.has(card.word.id)),
 			"An unseeded model reset prefers five words absent from the previous board")
-		check(pairs_for(model).size() == 3 and model.cards.size() == 8,
-			"Fresh boards retain three complete pairs and eight cards")
+		check(pairs_for(model).size() == 5 and model.cards.size() == 10,
+			"Fresh boards retain five complete pairs and ten cards")
 	for count in range(5, 10):
 		model.reset(words.slice(0, count))
 		model.reset(words.slice(0, count))
-		check(model.cards.size() == 8 and pairs_for(model).size() == 3,
+		check(model.cards.size() == 10 and pairs_for(model).size() == 5,
 			"Small vocabularies fall back to a full valid board")
 	model.reset(words, 17)
 	var expected: Array = model.cards.duplicate(true)
@@ -302,8 +302,8 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		model.select(pair[0])
 		model.select(pair[1])
 		model.resolve_feedback()
-	check(model.streak == 3 and model.phase == "won" and not model.request_hint(),
-		"A three-match streak wins normally and closes hint input")
+	check(model.streak == 5 and model.phase == "won" and not model.request_hint(),
+		"A five-match streak wins normally and closes hint input")
 	model.reset(words, 6)
 	check(model.streak == 0 and model.hint_ids.is_empty() and model.hints_remaining == 3,
 		"A new model round clears streaks and restores all three hints")
@@ -312,14 +312,8 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	check(not model.request_hint() and model.hints_remaining == 3,
 		"A rejected request during feedback does not spend a hint")
 	model.resolve_feedback()
-	for card in model.cards:
-		if not pairs.any(func(pair: Array) -> bool: return pair.has(card.id)):
-			model.select(card.id)
-			check(model.request_hint() and model.hints_remaining == 2 and not model.hint_ids.has(card.id),
-				"A distractor hint finds a complete unmatched pair instead")
-			check(model.selected_id == "" and model.phase == "waiting",
-				"A distractor selection is cleared so following the hint cannot cause a mistake")
-			break
+	check(model.request_hint() and model.hints_remaining == 2 and model.selected_id.is_empty(),
+		"After a match, a hint finds another complete pair without creating a selection or mistake")
 	var hint: Array = model.hint_ids.duplicate()
 	check(hint.size() == 2 and not hint.any(func(id: String) -> bool: return model.matched_ids.has(id)),
 		"Hints never recommend already matched cards")
@@ -356,11 +350,21 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 	check(not model.has_method("set_practice") and not has_property(model, "practice_mode"),
 		"There is no unlimited-attempt mode or method to bypass the loss threshold")
 	model.reset(words, 27)
-	for pair in pairs_for(model):
+	var pairs: Array = pairs_for(model)
+	for index in range(pairs.size()):
+		var pair: Array = pairs[index]
 		model.select(pair[0])
 		model.select(pair[1])
+		check(model.phase == "feedback" and model.successes == index + 1,
+			"Every correct pair waits for feedback before a possible result")
 		model.resolve_feedback()
-	check(model.phase == "won" and model.successes == 3, "Three successes win")
+		if index in [2, 3]:
+			check(model.phase == "waiting" and model.matched_ids.size() == (index + 1) * 2,
+				"The round remains active after match %d with its earned cards intact" % (index + 1))
+		if index == 2:
+			check(model.request_hint() and model.hints_remaining == 2 and model.hint_ids.size() == 2,
+				"A remaining hint is still available after the third match")
+	check(model.phase == "won" and model.successes == 5, "Only the fifth resolved success wins")
 	check(model.select(model.cards[0].id) == "ignored", "Winning locks the board")
 	check(model.set_theme("spring"), "A closed chest follows theme selection")
 	check(has_property(model, "reward_id"), "The model stores the selected reward variant")
@@ -746,13 +750,13 @@ func _test_play_improvements(app) -> void:
 				"Correct feedback retains its accessible match or streak encouragement: streak=%d phase=%s announcement=%s message=%s save_error=%s" % [
 					app.model.streak, app.model.phase, app._status_announcement, app._message.text, app._save_error])
 			app.feedback_timer.timeout.emit()
-		check(app.model.streak == 3 and app._success.filled_count == 3, "Consecutive matches retain their streak and exact progress")
+		check(app.model.streak == 5 and app._success.filled_count == 5, "Consecutive matches retain their streak and exact progress")
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 0 and app.hint_button.disabled,
 			"Xbox X cannot exceed the three shared hints")
 		app.set_reduced_motion(true)
-		check(app.model.streak == 3 and app._success.filled_count == 3, "Reduced motion preserves the completed streak and progress")
+		check(app.model.streak == 5 and app._success.filled_count == 5, "Reduced motion preserves the completed streak and progress")
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
@@ -858,7 +862,7 @@ func _test_scene() -> void:
 		"Mistake badges are passive counters, not an unlimited-attempt toggle")
 	check(app._voice_button.disabled and app._voice_button.focus_mode == Control.FOCUS_NONE,
 		"Keyboard navigation skips Voice when recognition is unavailable")
-	check(app.cards.size() == 8, "The scene creates eight native card buttons")
+	check(app.cards.size() == 10, "The scene creates ten native card buttons")
 	check(app.find_child("Mute", true, false) == null and app.find_child("Listen", true, false) == null,
 		"Mute and Listen controls are removed")
 	check(app.find_child("Motion", true, false) == null,
@@ -886,8 +890,8 @@ func _test_scene() -> void:
 		and app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree(),
 		"Memory groups five-pair progress and an unbounded mistake count beside Pip")
 	app.choose_mode("match")
-	check(app._success.total_count == 3,
-		"Match retains its three-pair progress")
+	check(app._success.total_count == 5,
+		"Match displays its five-pair progress")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
@@ -978,7 +982,7 @@ func _test_scene() -> void:
 		var viewport: Rect2 = root.get_visible_rect()
 		var pixels_per_unit: Vector2 = Vector2(dimensions_value) / viewport.size
 		check(app.model.cards == round_cards, "Resizing does not create a new round")
-		check(app.grid.columns in [2, 4] and (dimensions_value.x < dimensions_value.y or app.grid.columns == 4),
+		check(app.grid.columns in [2, 5] and (dimensions_value.x < dimensions_value.y or app.grid.columns == 5),
 			"Grid adapts to the visible instructions and available playfield: " + str(dimensions_value))
 		var controls: Array = app.cards.values()
 		if has_property(app, "theme_buttons"):
@@ -1058,7 +1062,7 @@ func _test_scene() -> void:
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Matching cards keep their scale while local badges celebrate the answer")
 	if app._success.has_method("set_filled_count"):
-		check(app._success.filled_count == 1 and app._success.total_count == 3,
+		check(app._success.filled_count == 1 and app._success.total_count == 5,
 			"A match fills exactly one friendly success badge")
 	else:
 		check(false, "A match fills exactly one friendly success badge")

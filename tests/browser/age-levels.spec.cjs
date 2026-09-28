@@ -30,7 +30,7 @@ async function closeMore(page) {
 
 async function matchCards(page) {
   const bounds = await metrics(page), cards = [];
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -83,7 +83,7 @@ test('age choices preserve the current lesson in Match and Memory and apply afte
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(rewards);
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   const nextWords = (await matchCards(page)).map(card => card.split(': ')[1]);
   expect(nextWords.every(word => vocabulary.get(word).level === 'basic')).toBe(true);
   await openRewards(page);
@@ -155,7 +155,7 @@ test('a new gift lesson uses advanced vocabulary across Match and Memory', async
   await expect(page.locator('#game-status')).toContainText('Winter bell.');
   await roomControl(page, 'goal', { locked: true, item: 'winter' });
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Music makers. Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Music makers. Find 5 word–picture pairs.');
   const lesson = await matchWords(page);
   expect(lesson).toContain('bell');
   expect(lesson.filter(word => word !== 'bell').every(word => vocabulary.get(word).level === 'advanced')).toBe(true);

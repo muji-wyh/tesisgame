@@ -55,7 +55,7 @@ func _test_catalog(adventures: Array, words: Array) -> void:
 		check(not adventure.id.is_empty() and not adventure.name.is_empty(), "Every adventure has a stable ID and visible name")
 		check(not adventure_ids.has(adventure.id), "Adventure IDs are unique")
 		adventure_ids[adventure.id] = true
-		check(adventure.words.size() >= 5, "Each adventure can form a complete eight-card board")
+		check(adventure.words.size() >= 5, "Each adventure can form a complete ten-card board")
 		for id in adventure.words:
 			check(all_ids.has(id), "Adventure words use existing illustrated vocabulary: " + id)
 			check(not included.has(id), "A word belongs to one clear adventure: " + id)
@@ -69,7 +69,7 @@ func _test_adventures(model, adventures: Array, words: Array) -> void:
 		check(model.reset(vocabulary, 17), "An adventure starts with its own vocabulary")
 		check(model.adventure_id == adventure.id and model.adventure_name == adventure.name, "The round identifies its available adventure")
 		_check_board(model)
-		check(model.cards.all(func(card: Dictionary) -> bool: return adventure.words.has(card.word.id)), "All pairs and distractors belong to the named adventure")
+		check(model.cards.all(func(card: Dictionary) -> bool: return adventure.words.has(card.word.id)), "All five pairs belong to the named adventure")
 	model.reset(words, 23)
 	var matching_adventures: Array = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id == model.adventure_id)
 	check(matching_adventures.size() == 1, "A full-vocabulary round names a known adventure")
@@ -126,20 +126,20 @@ func _test_freshness_before_adventures(model, words: Array) -> void:
 
 
 func _test_seeded_compatibility(model, words: Array) -> void:
-	# Preserve the original 140-word lesson/card seeds; theme draws use the current eight-world catalog.
+	# Preserve lesson selection while pinning deterministic ten-card layouts and theme draws.
 	var original_words: Array = words.slice(0, 140)
 	for fixture in [
-		{"seed": 0, "topic": "at-home", "theme": "summer", "lesson": ["chair", "fork", "table", "door", "soap"],
-			"cards": ["soap:image", "fork:word", "table:word", "chair:word", "chair:image", "door:word", "fork:image", "table:image"]},
-		{"seed": 23, "topic": "at-home", "theme": "spring", "lesson": ["lamp", "plate", "table", "fork", "chair"],
-			"cards": ["table:word", "chair:image", "plate:image", "table:image", "lamp:word", "lamp:image", "fork:word", "plate:word"]},
-		{"seed": 101, "topic": "ocean-discovery", "theme": "winter", "lesson": ["squid", "crab", "clam", "coral", "seal"],
-			"cards": ["clam:image", "seal:image", "crab:image", "squid:image", "clam:word", "squid:word", "crab:word", "coral:word"]}
+		{"seed": 0, "topic": "at-home", "theme": "spring", "lesson": ["chair", "fork", "table", "door", "soap"],
+			"cards": ["table:word", "soap:image", "chair:word", "door:image", "soap:word", "fork:word", "table:image", "fork:image", "door:word", "chair:image"]},
+		{"seed": 23, "topic": "at-home", "theme": "candy", "lesson": ["lamp", "plate", "table", "fork", "chair"],
+			"cards": ["plate:word", "lamp:word", "table:word", "table:image", "fork:image", "chair:image", "plate:image", "lamp:image", "chair:word", "fork:word"]},
+		{"seed": 101, "topic": "ocean-discovery", "theme": "jungle", "lesson": ["squid", "crab", "clam", "coral", "seal"],
+			"cards": ["crab:word", "clam:image", "squid:word", "clam:word", "squid:image", "crab:image", "seal:word", "seal:image", "coral:image", "coral:word"]}
 	]:
 		check(model.reset(original_words, fixture.seed, false, ""), "An empty request preserves ordinary seeded selection")
-		check(model.adventure_id == fixture.topic and model.theme_id == fixture.theme, "Existing seeds retain their topic and theme")
+		check(model.adventure_id == fixture.topic and model.theme_id == fixture.theme, "Ten-card seeds select the expected topic and theme")
 		check(model.lesson_words.map(func(word: Dictionary) -> String: return word.id) == fixture.lesson, "Existing seeds retain their five ordered words")
-		check(model.cards.map(func(card: Dictionary) -> String: return card.id) == fixture.cards, "Existing seeds retain their exact card arrangement")
+		check(model.cards.map(func(card: Dictionary) -> String: return card.id) == fixture.cards, "Ten-card seeds retain their exact complete-pair arrangement")
 
 
 func _test_requested_adventures(model, adventures: Array, words: Array) -> void:
@@ -296,6 +296,6 @@ func _check_board(model) -> void:
 	for card in model.cards:
 		counts[card.word.id] = counts.get(card.word.id, 0) + 1
 		kinds[card.kind] += 1
-	check(model.cards.size() == 8 and counts.size() == 5 and counts.values().count(2) == 3 and counts.values().count(1) == 2,
-		"Adventure boards retain eight cards, three pairs, and two distractors")
-	check(kinds.word == 4 and kinds.image == 4, "Adventure boards balance word and picture cards")
+	check(model.cards.size() == 10 and counts.size() == 5 and counts.values().count(2) == 5,
+		"Adventure boards contain ten cards with five complete pairs and no distractors")
+	check(kinds.word == 5 and kinds.image == 5, "Adventure boards balance word and picture cards")

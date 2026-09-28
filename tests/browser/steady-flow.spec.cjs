@@ -42,7 +42,7 @@ async function start(page, reducedMotion) {
 
 async function matchCards(page, bounds) {
   const cards = [];
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await click(page, point);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -54,7 +54,7 @@ async function matchCards(page, bounds) {
   const pairs = cards.filter(card => card.kind === 'Word').map(word =>
     [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
   ).filter(([, picture]) => picture);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   return { cards, pairs };
 }
 
@@ -73,7 +73,7 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
   await expect(page.locator('#game-status')).toContainText('Not quite.');
   await shot(page, testInfo, 'match-wrong');
   expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback leaves the untouched card at the same position.').toBe(true);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   for (const [index, pair] of pairs.entries()) {
     await click(page, pair[0].point);
     await expect(page.locator('#selection-status')).toHaveText(`Word: ${pair[0].word}`);
@@ -83,7 +83,7 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
       await shot(page, testInfo, 'match-correct');
       expect((await patch(page, untouched.point)).equals(still), 'A correct answer cannot move the rest of the board.').toBe(true);
     }
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
   const chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
@@ -176,12 +176,18 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   await click(page, pairs[0][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await click(page, pairs[1][0].point);
   await click(page, pairs[1][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  const distractor = cards.find(card => !pairs.some(pair => pair.includes(card)));
-  await click(page, distractor.point);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
+  for (const [word, picture] of pairs.slice(3)) {
+    await click(page, word.point);
+    await click(page, picture.point);
+    await expect(page.locator('#game-status')).toContainText('Great match!');
+    if (word !== pairs.at(-1)[0]) await expect(page.locator('#game-status')).toContainText('Find 5 word');
+  }
+  await click(page, pairs[0][0].point);
   await expect(page.locator('#game-status')).toContainText('You did it!');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await shot(page, testInfo, 'responsive-match-won');

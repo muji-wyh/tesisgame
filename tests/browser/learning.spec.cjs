@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint, memoryPoint,
   progressRegion, headerIconRect, openRewards, observeAudio, visibleColorCount } = require('./game-ui.cjs');
 
-const READY = 'Find 3 word';
+const READY = 'Find 5 word';
 
 async function cardTap(page, index) {
   const point = boardPoint(await metrics(page), index);
@@ -11,7 +11,7 @@ async function cardTap(page, index) {
 
 async function scanBoard(page) {
   const cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     await cardTap(page, index);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
     const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
@@ -21,7 +21,7 @@ async function scanBoard(page) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   expect(cards.size).toBe(5);
-  expect([...cards.values()].filter(card => card.Word !== undefined && card.Picture !== undefined)).toHaveLength(3);
+  expect([...cards.values()].filter(card => card.Word !== undefined && card.Picture !== undefined)).toHaveLength(5);
   return cards;
 }
 
@@ -128,7 +128,7 @@ test(`Match ${correct ? 'correct' : 'wrong'} feedback resolves automatically wit
   await expect(page.locator('#selection-status')).toBeEmpty();
   const timing = await page.evaluate(() => {
     const feedback = window.matchStatuses.find(entry => /^(Great match!|Not quite\.)/.test(entry.text));
-    const ready = window.matchStatuses.find(entry => entry.time >= feedback?.time && entry.text.startsWith('Find 3 word'));
+    const ready = window.matchStatuses.find(entry => entry.time >= feedback?.time && entry.text.startsWith('Find 5 word'));
     return feedback && ready ? ready.time - feedback.time : null;
   });
   expect(timing, 'Public announcements must include both feedback and its automatic resolution.').not.toBeNull();

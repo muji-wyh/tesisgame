@@ -75,7 +75,7 @@ func _run() -> void:
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
 			pairs.append(card.word.id)
-	check(pairs.size() == 3, "The shared lesson supplies exactly three playable Match pairs")
+	check(pairs.size() == 5, "The shared lesson supplies exactly five playable Match pairs")
 	app.cards[pairs[0] + ":word"].grab_focus()
 	app.cards[pairs[0] + ":word"].pressed.emit()
 	app.cards[pairs[0] + ":image"].pressed.emit()
@@ -91,7 +91,7 @@ func _run() -> void:
 		app.cards[word_id + ":word"].pressed.emit()
 		app.cards[word_id + ":image"].pressed.emit()
 		app._continue_match()
-	check(app.model.phase == "won" and app.model.successes == 3, "Three Match pairs enter the shared win screen")
+	check(app.model.phase == "won" and app.model.successes == 5, "Five Match pairs enter the shared win screen")
 	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
 	app._open_chest()
 	app.chest.finish_immediately()
@@ -129,8 +129,8 @@ func _run() -> void:
 		app._continue_match()
 	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect pairs enter the shared encouragement screen")
 	app.choose_mode("match")
-	check(app.grid.visible and app.model.cards.size() == 8 and not app._pop.visible and not app._memory.visible,
-		"Returning from loss restores the original eight-card game")
+	check(app.grid.visible and app.model.cards.size() == 10 and not app._pop.visible and not app._memory.visible,
+		"Returning from loss restores the ten-card game")
 	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 		root.size = dimensions
 		await process_frame

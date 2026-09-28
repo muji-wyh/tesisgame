@@ -65,7 +65,7 @@ test('the starter toy remains still with reduced motion and locked gifts cannot 
   await expect(page.locator('#game-status')).toContainText('ball');
   expect(await roomRecord(page)).toBe(saved);
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });
 
@@ -82,7 +82,7 @@ test('toys and migrated favorites preserve a legacy backdrop through reload', as
   }, ROOM_KEY);
   await page.reload();
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await openRoom(page);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened. 7 toys in Pip's home.");
   expect(await roomRecord(page)).toContain('favorite="spring-1"');
@@ -221,6 +221,6 @@ test('the room keeps readable gift previews and usable controls on a tablet', as
   await page.screenshot({ path: testInfo.outputPath('room-locked-toy-tablet.png'), scale: 'css' });
   expect(await roomRecord(page)).toContain('toy="toy-ball"');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });

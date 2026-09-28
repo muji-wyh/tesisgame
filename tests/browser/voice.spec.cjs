@@ -66,7 +66,7 @@ async function openGame(page, api = 'standard') {
   await page.goto('/');
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expectSpeechAura(page, false);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
@@ -88,7 +88,7 @@ function cardPoint(bounds, index) {
 async function discoverBoard(page) {
   const bounds = await metrics(page);
   const cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = cardPoint(bounds, index);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -96,10 +96,10 @@ async function discoverBoard(page) {
     if (!cards.has(word)) cards.set(word, {});
     cards.get(word)[kind] = index;
     await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   }
   const pairs = [...cards].filter(([, card]) => card.Word !== undefined && card.Picture !== undefined);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   return { pairs, bounds };
 }
 
@@ -166,7 +166,7 @@ test('Voice is a prominent primary action without automatic recording', async ({
   expect(errors).toEqual([]);
 });
 
-for (const viewport of [{ width: 320, height: 568 }, { width: 1366, height: 768 }]) {
+for (const viewport of [{ width: 320, height: 568 }, { width: 568, height: 320 }, { width: 1366, height: 768 }]) {
 test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewport.width}px`, async ({ page, browserName }, testInfo) => {
   await page.setViewportSize(viewport);
   const errors = await openGame(page);
@@ -293,13 +293,13 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await expect(page.locator('#game-status')).toHaveText(waiting);
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word.toUpperCase()}!`, true), first);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await page.evaluate(word => window.speechFixture.emit(`${word} ${word}`, true), first);
   await page.waitForTimeout(900);
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
-  await page.evaluate(words => window.speechFixture.emit(`A ${words[0]}, ${words[0]} and ${words[1]}!`),
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  await page.evaluate(words => window.speechFixture.emit(`A ${words[0]}, ${words[0]}, ${words.slice(1).join(', ')}!`),
     pairs.slice(1).map(([word]) => word));
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status'), 'All four remaining distinct words finish their queued feedback before the round ends.').toContainText('You did it!', { timeout: 15000 });
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expectSpeechAura(page, false);
   await expect(page.locator('#speech-transcript')).toBeEmpty();
@@ -324,7 +324,7 @@ test('turning Voice off during feedback resumes the automatic Match timer', asyn
   await toggleVoice(page);
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expect(page.locator('#game-status')).toContainText('Voice off.');
-  await expect(page.locator('#game-status'), 'No deleted Continue control is required after leaving Voice.').toContainText('Find 3 word', { timeout: 2500 });
+  await expect(page.locator('#game-status'), 'No deleted Continue control is required after leaving Voice.').toContainText('Find 5 word', { timeout: 2500 });
   await expect(page.locator('#selection-status')).toBeEmpty();
   expect(errors).toEqual([]);
 });
@@ -337,7 +337,7 @@ test('matched cards stay quiet and cannot rescore while Voice is listening', asy
   const [word, pair] = pairs[0];
   await page.evaluate(word => window.speechFixture.emit(word), word);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')]);
   const starts = await page.evaluate(() => window.audioObservation.starts);
   const bounds = await logicalMetrics(page), panel = await page.locator('#speech-panel').boundingBox();
@@ -346,7 +346,7 @@ test('matched cards stay quiet and cannot rescore while Voice is listening', asy
   for (let repeat = 0; repeat < 3; repeat++) {
     await tap(page, matched.x, matched.y);
     await rendered(page);
-    await expect(page.locator('#game-status')).toContainText('Find 3 word');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word');
     await expect(page.locator('#selection-status')).toBeEmpty();
     await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
     expect(await page.evaluate(() => window.audioObservation.starts)).toBe(starts);
@@ -368,9 +368,9 @@ test('Voice Pip displays the real round progress supplied by the native game', a
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0]}`);
   await page.touchscreen.tap(wrong.x, wrong.y);
   await expect(page.locator('#game-status')).toContainText('Not quite.');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await listen(page);
-  await expect(page.locator('#speech-successes')).toHaveText('0/3');
+  await expect(page.locator('#speech-successes')).toHaveText('0/5');
   await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
   await expect(page.locator('#speech-successes')).toBeVisible();
   await expect(page.locator('#speech-mistakes')).toBeVisible();
@@ -386,9 +386,9 @@ test('Voice Pip displays the real round progress supplied by the native game', a
   const before = await page.locator('.speech-score').screenshot({ scale: 'css' });
   await page.evaluate(word => window.speechFixture.emit(word), pairs[0][0]);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
-  await expect(page.locator('#speech-successes')).toHaveText('1/3');
+  await expect(page.locator('#speech-successes')).toHaveText('1/5');
   await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
   await rendered(page);
   const after = await page.locator('.speech-score').screenshot({ scale: 'css' });
@@ -478,7 +478,7 @@ test('missing recognition leaves ordinary manual matching available', async ({ p
   }
   await expect(page.locator('#game-status')).toContainText('Great match!');
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await expect(page.locator('#selection-status')).toBeEmpty();
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await expect(page.locator('#speech-panel')).toBeHidden();

@@ -19,7 +19,7 @@ test('Match card taps pronounce and Match no longer creates runtime word sticker
   const initialStarts = await page.evaluate(() => window.audioObservation.starts);
   const b = await metrics(page);
   const cards = new Map();
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const p = boardPoint(b, index);
     await tap(page, p.x, p.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -39,7 +39,7 @@ test('Match card taps pronounce and Match no longer creates runtime word sticker
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${id}`);
   await tap(page, pictured.x, pictured.y);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   expect((await record(page)).ids, 'Matching must not recreate the removed Words collection.').toEqual([]);
   await rendered(page);
   await page.screenshot({ path: testInfo.outputPath('picture-audio-without-sticker-writes.png'), scale: 'css' });
@@ -63,7 +63,7 @@ test('saved word sticker records survive More, world choices and reload', async 
   await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-worlds-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await chooseTheme(page, 5);
   expect(await record(page)).toEqual(saved);
   await page.reload();

@@ -80,7 +80,7 @@ func _run() -> void:
 		app.cards[word.id + ":image"].pressed.emit()
 		_check_legacy(app, "Correct Match and matched-card replay for " + word.id)
 		app._continue_match()
-	check(app.model.phase == "won" and app.model.successes == 3 and app.medal_progress.counts == initial_medals,
+	check(app.model.phase == "won" and app.model.successes == 5 and app.medal_progress.counts == initial_medals,
 		"Matching still wins normally without collecting words or claiming unopened medals")
 	app._open_chest()
 	app.chest.finish_immediately()

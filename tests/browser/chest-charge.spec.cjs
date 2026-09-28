@@ -18,7 +18,7 @@ async function winMatch(page) {
   const pairs = cards.filter(card => card.kind === 'Word').map(word =>
     [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
   ).filter(([, picture]) => picture);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [word, picture]] of pairs.entries()) {
     const written = boardPoint(bounds, word.index), pictured = boardPoint(bounds, picture.index);
     await tap(page, written.x, written.y);
@@ -26,7 +26,7 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
 }
 

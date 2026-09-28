@@ -46,7 +46,7 @@ func _initialize() -> void:
 				if model.lesson_words.size() != 5:
 					check(false, "Every age produces five words, not a partial board")
 					continue
-				check(model.cards.size() == 8 and model.hints_remaining == 3, "Age selection preserves Classic Match rules")
+				check(model.cards.size() == 10 and model.hints_remaining == 3, "Age selection preserves Classic Match rules")
 				check(model.lesson_words.all(func(word: Dictionary): return Data.word_level(word) <= band.max_level),
 					"The lesson stays within the chosen vocabulary level")
 				if band.id != "all":

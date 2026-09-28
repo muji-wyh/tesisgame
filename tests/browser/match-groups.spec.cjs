@@ -3,7 +3,7 @@ const { openGame, metrics, boardPoint, tap, rendered } = require('./game-ui.cjs'
 
 async function readBoard(page) {
   const bounds = await metrics(page), cards = [];
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -14,13 +14,17 @@ async function readBoard(page) {
   }
   const sideBySide = boardPoint(bounds, 0).y !== boardPoint(bounds, 3).y;
   expect(cards.map(card => card.kind)).toEqual(sideBySide
-    ? ['Picture', 'Word', 'Picture', 'Word', 'Picture', 'Word', 'Picture', 'Word']
-    : ['Picture', 'Picture', 'Picture', 'Picture', 'Word', 'Word', 'Word', 'Word']);
+    ? Array.from({ length: 5 }, () => ['Picture', 'Word']).flat()
+    : [...Array(5).fill('Picture'), ...Array(5).fill('Word')]);
+  expect(new Set(cards.filter(card => card.kind === 'Picture').map(card => card.word)).size).toBe(5);
+  expect(cards.filter(card => card.kind === 'Picture').map(card => card.word).sort())
+    .toEqual(cards.filter(card => card.kind === 'Word').map(card => card.word).sort());
   return { cards, sideBySide };
 }
 
-test('Match keeps pictures and words in separate groups through rotation and a complete game', async ({ page }, testInfo) => {
+test('Match keeps five real pairs in separate groups through rotation and completes only after all five', async ({ page }, testInfo) => {
   const errors = await openGame(page, { mode: 'match' });
+  const originalViewport = page.viewportSize();
   const first = await readBoard(page);
   await page.screenshot({ path: testInfo.outputPath('match-groups-before.png'), scale: 'css' });
   const picture = first.cards.find(card => card.kind === 'Picture');
@@ -42,14 +46,26 @@ test('Match keeps pictures and words in separate groups through rotation and a c
   const pairs = next.cards.filter(card => card.kind === 'Picture').map(picture =>
     [picture, next.cards.find(word => word.kind === 'Word' && word.word === picture.word)]
   ).filter(([, word]) => word);
-  expect(pairs).toHaveLength(3);
+  expect(pairs).toHaveLength(5);
   for (const [index, [picture, word]] of pairs.entries()) {
     await tap(page, picture.point.x, picture.point.y);
     await expect(page.locator('#selection-status')).toHaveText(`Picture: ${picture.word}`);
     await tap(page, word.point.x, word.point.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === 2 ? 'You did it!' : 'Find 3 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    if (index === 1) {
+      await page.setViewportSize(originalViewport);
+      await rendered(page);
+      for (const card of next.cards) {
+        card.point = first.cards.find(original => original.kind === card.kind && original.word === card.word).point;
+      }
+      const earned = pairs[0][0];
+      await tap(page, earned.point.x, earned.point.y);
+      await expect(page.locator('#game-status')).toHaveText(`${earned.word}. Look at the picture and say the word.`);
+      await expect(page.locator('#selection-status'), 'Resizing preserves completed pairs instead of making them selectable again.').toBeEmpty();
+      await page.screenshot({ path: testInfo.outputPath('match-five-pairs-progress-after-rotation.png'), scale: 'css' });
+    }
   }
   await page.screenshot({ path: testInfo.outputPath('match-groups-complete.png'), scale: 'css' });
   expect(errors).toEqual([]);

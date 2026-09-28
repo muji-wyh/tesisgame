@@ -478,7 +478,7 @@ async function enterGame(scope) {
   await expect(scope.locator('#status')).toBeHidden();
 }
 
-async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 3 word–picture pairs.' } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.' } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -496,8 +496,8 @@ function boardPoint(bounds, index, { top: overrideTop } = {}) {
   const top = overrideTop === undefined ? normalTop : overrideTop;
   if (!Number.isFinite(top) || top < 0 || top >= bounds.height) throw new Error('Invalid Match playfield top.');
   const areaHeight = bounds.height - top - contentBounds(bounds).padding;
-  const columns = areaWidth >= areaHeight || areaHeight < 318 ? 4 : 2;
-  const rows = 8 / columns;
+  const columns = areaWidth >= areaHeight || areaHeight < 318 ? 5 : 2;
+  const rows = 10 / columns;
   const width = (areaWidth - (columns - 1) * 10) / columns;
   const cellHeight = (areaHeight - (rows - 1) * 10) / rows;
   return { x: x + (index % columns) * (width + 10) + width / 2,
@@ -507,7 +507,7 @@ function boardPoint(bounds, index, { top: overrideTop } = {}) {
 async function discoverMatchCards(page) {
   await expect(page.locator('#selection-status')).toBeEmpty();
   const bounds = await metrics(page), cards = [];
-  for (let index = 0; index < 8; index++) {
+  for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
     await tap(page, point.x, point.y);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
@@ -517,6 +517,9 @@ async function discoverMatchCards(page) {
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   expect(new Set(cards.map(card => card.word)).size).toBe(5);
+  for (const word of new Set(cards.map(card => card.word))) {
+    expect(cards.filter(card => card.word === word).map(card => card.kind).sort()).toEqual(['Picture', 'Word']);
+  }
   return cards;
 }
 

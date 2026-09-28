@@ -245,7 +245,7 @@ or webkitSpeechRecognition support and an available speech service.
 Unsupported devices show an explanation and a way back to Match.
 Reduced motion keeps a static edge glow and simpler hit feedback.
 Switch between them to practise the same lesson.
-Sky and Listen have been removed. Match keeps the eight-card, three-pair puzzle.
+Sky and Listen have been removed. Match uses a ten-card, five-pair puzzle.
 Correct and wrong feedback stays on the cards and clears automatically after a short
 pause; there is no footer or extra confirmation step. Selecting the next unmatched
 card continues immediately. Tap any card, including a completed pair, to hear its
@@ -386,7 +386,7 @@ Godot and the inline HTML mascot use the same wardrobe sources. The build embeds
 the loader's themed poses and dance parts, so its companion needs no additional
 image request.
 
-Find three matching word/picture pairs among **eight cards**. One extra word and one extra picture have no matching partner. Three correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left. Matched cards stay available for pronunciation, not for scoring again.
+Find five matching word/picture pairs among **ten cards**. Every word has a matching picture. Five correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left. Matched cards stay available for pronunciation, not for scoring again.
 
 Each round is a small **word adventure**: Animal friends, Picnic time, Great outdoors,
 Dress up, On the move, Play time, At home, Head to toe, Ocean discovery, Space trip,
@@ -451,11 +451,11 @@ Correct/wrong feedback keeps priority, and these visual effects never score
 another answer or move a clickable target.
 
 The vocabulary pool contains **200 illustrated English words** for parent-guided play.
-Matching rounds use five different words on eight cards;
+Matching rounds use five different words on ten cards;
 Memory uses those five words on ten cards. Tap a matching card to hear its pronunciation.
 
-In **Match**, a two-column board puts all four pictures in the left column and
-all four words in the right column. A two-row board puts all pictures in the top
+In **Match**, a two-column board puts all five pictures in the left column and
+all five words in the right column. A two-row board puts all pictures in the top
 row and all words in the bottom row. Each type keeps its shuffled order; matching
 partners are not deliberately lined up. Resizing preserves the current round and hints.
 

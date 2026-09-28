@@ -2,7 +2,7 @@ extends SceneTree
 
 var checks := 0
 var failures := 0
-var coverage := {2: {"aligned": false, "offset": false}, 4: {"aligned": false, "offset": false}}
+var coverage := {2: {"aligned": false, "offset": false}, 5: {"aligned": false, "offset": false}}
 
 
 func _initialize() -> void:
@@ -185,8 +185,8 @@ func _run() -> void:
 	for seed_value in range(8):
 		app.new_round(seed_value, false, "", "match")
 		await settle()
-		check(app.grid.get_child_count() == 8 and app._hint_link is Control,
-			"The real board keeps eight cards and one independent link control")
+		check(app.grid.get_child_count() == 10 and app._hint_link is Control,
+			"The real board keeps ten cards and one independent link control")
 		for data in app.model.cards:
 			var word_id: String = data.word.id + ":word"
 			if data.kind != "image" or not app.cards.has(word_id):
@@ -208,16 +208,16 @@ func _run() -> void:
 			var word_instance: int = app.cards[word_id].get_instance_id()
 			root.size = Vector2i(900, 480)
 			await settle()
-			check_link(app, image_id, word_id, 4, stage + " landscape after resize")
+			check_link(app, image_id, word_id, 5, stage + " landscape after resize")
 			check(app.model.hint_ids == [image_id, word_id]
 				and app.cards[image_id].get_instance_id() == image_instance
 				and app.cards[word_id].get_instance_id() == word_instance,
 				stage + ": resize preserves the active hint and both existing cards")
 			check(not same_path(global_path(app._hint_link), portrait_path),
 				stage + ": resize updates endpoints automatically without manually refreshing geometry")
-		if coverage[2].aligned and coverage[2].offset and coverage[4].aligned and coverage[4].offset:
+		if coverage[2].aligned and coverage[2].offset and coverage[5].aligned and coverage[5].offset:
 			break
-	for columns in [2, 4]:
+	for columns in [2, 5]:
 		check(coverage[columns].aligned and coverage[columns].offset,
 			"%d-column fixtures cover both aligned pairs and pairs in different rows or columns" % columns)
 	await check_theme_switches(app)
