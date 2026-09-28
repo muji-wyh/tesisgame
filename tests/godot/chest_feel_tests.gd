@@ -130,7 +130,7 @@ func _run() -> void:
 		chest._advance_animation(0.03)
 		var fit_after: float = chest.hold_effect_snapshot().get("fitted_scale", -2.0)
 		check(fit_before > 0.0 and is_equal_approx(fit_before, fit_after),
-			theme + " keeps the same fitted scale when the progress badge disappears")
+			theme + " keeps the same fitted scale when the progress effects disappear")
 		check(cues.back() == [theme, "settle", 0], theme + " plays one settle beat")
 		chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
 		check(openings.size() == previous and chest.mode == "opening", theme + " does not grant a reward before five seconds including confirmation")

@@ -15,14 +15,15 @@ the source hinge; the Space cover detaches and floats. Crystal's center unlocks
 before its outer facets and reveals an interior cavity. Candy opens in two waves.
 Rigid bodies keep their dimensions; Candy intentionally compresses and rebounds.
 
-The view reserves one measured motion envelope, so removing the percentage badge
-cannot enlarge the chest. Local lock/core pressure and the ground shadow respond
+The view reserves one measured motion envelope throughout the progress effects
+and opening. Local lock/core pressure and the ground shadow respond
 inside `begin_hold()`, without waiting for a tween or a network result.
 Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
-The three stars and percentage follow elapsed time up to the lid-release beat,
-instead of staying at 100% throughout the buildup. The first star lights just
+The three stars and progress arc follow elapsed time up to the lid-release beat.
+There is no visible phase or percentage label; semantic progress remains
+available to screen readers. The first star lights just
 before hold confirmation and remains lit as automatic opening begins. Seven
 material pulses accelerate from 380 ms intervals to 140 ms. Their shared timestamps drive
 both physical impulses and sounds. Lock pressure, local light, inward particles

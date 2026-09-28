@@ -53,7 +53,6 @@ func _run() -> void:
 	_check_themed_chests(data)
 	_check_hold_feedback(data)
 	_check_hold_bounds(data)
-	_check_progress_alignment(data)
 	var effect = load("res://scripts/celebration.gd").new()
 	root.add_child(effect)
 	effect.configure(data.chests)
@@ -141,7 +140,7 @@ func _check_hold_feedback(data) -> void:
 	chest.begin_hold()
 	var state: Dictionary = chest.hold_effect_snapshot()
 	check(state.active and state.phase == "holding" and state.percent == 0 and state.text.contains("0%"),
-		"Holding has an immediate readable zero-percent start, before the first game frame")
+		"Holding exposes semantic zero-percent progress before the first game frame")
 	chest.set_hold_progress(0.45)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent == 15 and state.text.contains("15%") and not state.status.is_empty()
@@ -152,8 +151,8 @@ func _check_hold_feedback(data) -> void:
 	check(chest.hold_effect_snapshot().percent == 34 and chest.mode == "closed" and openings.is_empty(),
 		"Completing confirmation never opens the chest or reports the whole buildup complete")
 	chest.set_hold_progress(0.0)
-	check(not chest.hold_effect_snapshot().active and not chest._charge_label.visible and not chest._glint.visible
-		and is_zero_approx(chest.hold_progress), "Releasing immediately clears the ring, percentage, glow and hold state")
+	check(not chest.hold_effect_snapshot().active and not chest._charge.visible and not chest._glint.visible
+		and is_zero_approx(chest.hold_progress), "Releasing immediately clears the ring, glow and hold state")
 	chest._advance_animation(3.0)
 	check(not chest.hold_effect_snapshot().active and chest.mode == "closed" and openings.is_empty(),
 		"Cancelled charging has no delayed animation or open callback")
@@ -174,13 +173,13 @@ func _check_hold_feedback(data) -> void:
 	chest.begin_hold()
 	chest.set_hold_progress(0.63)
 	var pose: Transform2D = chest._art.transform
-	var badge: Rect2 = chest._charge_label.get_rect()
+	var effect_bounds: Dictionary = chest.hold_effect_snapshot().bounds
 	for delta in [0.08, 0.25, 1.5]:
 		chest._advance_animation(delta)
 		state = chest.hold_effect_snapshot()
 		check(state.active and state.percent == 63 and state.text.contains("63%") and not state.animated
-			and state.spark_count == 0 and chest._art.transform == pose and chest._charge_label.get_rect() == badge,
-			"Reduced motion retains readable progress without bob, shake, moving sparks or shifting text")
+			and state.spark_count == 0 and chest._art.transform == pose and state.bounds == effect_bounds,
+			"Reduced motion retains semantic progress without bob, shake, moving sparks or shifting effects")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active, "Reduced-motion progress also clears immediately on cancel")
 	chest.reduced_motion = false
@@ -196,14 +195,14 @@ func _check_hold_feedback(data) -> void:
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent > 50 and state.percent < 70 and state.phase == "building"
 		and state.spark_count > 0 and openings.is_empty(),
-		"Automatic buildup keeps readable advancing progress and gathering sparks")
+		"Automatic buildup keeps semantic progress advancing with gathering sparks")
 	chest._advance_animation(Feel.RELEASE_TIME - 1.0 + 0.01)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent == 100 and state.phase == "release" and state.spark_count > 0,
 		"Only the final physical release reaches 100 percent and scatters sparks")
 	chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(not chest.hold_effect_snapshot().active and chest.mode == "opening" and openings.is_empty(),
-		"The progress readout finishes after release while the reward settles")
+		"The progress effects finish after release while the reward settles")
 	chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
 	check(chest.mode == "opening" and openings.is_empty(), "The complete 3.8-second automatic opening precedes the reward")
 	chest._advance_animation(0.02)
@@ -248,14 +247,8 @@ func _check_hold_bounds(data) -> void:
 					chest._advance_animation(Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME)
 				var state: Dictionary = chest.hold_effect_snapshot()
 				var bounds := Rect2(Vector2(state.bounds.x, state.bounds.y), Vector2(state.bounds.width, state.bounds.height))
-				check(state.active and stage.encloses(bounds) and stage.encloses(chest._charge_label.get_rect()),
-					"The %s %s halo, sparks and readout stay inside %s" % [theme_id, phase, dimensions])
-				var font: Font = chest._charge_label.get_theme_font("font")
-				var font_size: int = chest._charge_label.get_theme_font_size("font_size")
-				var width: float = font.get_string_size(state.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-				check(width + 16.0 / chest._charge_scale <= chest._charge_label.size.x + 0.5
-					and font_size * chest._charge_scale >= 14.0,
-					"The %s %s percentage fits without truncation at a legible size in %s: text=%s, badge=%s, scale=%s" % [theme_id, phase, dimensions, width, chest._charge_label.size.x, chest._charge_scale])
+				check(state.active and bounds.has_area() and stage.encloses(bounds),
+					"The %s %s halo and sparks stay inside %s" % [theme_id, phase, dimensions])
 				var outside: Array[String] = []
 				for piece in chest._pieces:
 					var sprite: Sprite2D = piece.node
@@ -267,30 +260,4 @@ func _check_hold_bounds(data) -> void:
 						if not stage.has_point(transform * corner):
 							outside.append(str(piece.role) + " at " + str(transform * corner))
 				check(outside.is_empty(), "The %s %s chest artwork remains unclipped in %s: %s" % [theme_id, phase, dimensions, outside])
-	chest.free()
-
-
-func _check_progress_alignment(data) -> void:
-	var chest = load("res://scripts/chest_view.gd").new()
-	root.add_child(chest)
-	var scale: float = chest.Style.ui_scale(chest)
-	for css_width in [320.0, 390.0, 420.0, 600.0]:
-		chest.clear()
-		chest.size = Vector2(css_width, 300.0) / scale
-		chest.configure_skin(data.theme("summer"), data.chests)
-		chest.begin_hold()
-		var badge: Rect2 = chest._charge_label.get_rect()
-		for progress in [0.09, 0.1, 0.99, 1.0]:
-			chest.set_hold_progress(progress)
-			check(chest._charge_label.get_rect() == badge,
-				"The %s CSS-pixel stage keeps its progress badge stationary across digit changes" % css_width)
-		chest.start_open(false)
-		check(chest._charge_label.get_rect() == badge,
-			"The %s CSS-pixel stage keeps the full-charge release readout in the same place" % css_width)
-		if css_width < 420:
-			check(is_equal_approx((chest.size.x - badge.end.x) * scale, 10.0),
-				"The %s CSS-pixel mobile stage right-aligns progress with a 10-pixel inset beside the theme badge" % css_width)
-		else:
-			check(is_equal_approx(badge.get_center().x, chest.size.x * 0.5),
-				"The %s CSS-pixel wide stage preserves centered progress" % css_width)
 	chest.free()

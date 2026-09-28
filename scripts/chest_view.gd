@@ -26,7 +26,6 @@ var _tap_remaining: float = 0.0
 var _glint := Node2D.new()
 var _glint_color: Color = Color.WHITE
 var _charge := Node2D.new()
-var _charge_label := Label.new()
 var _charge_color := Color("#58d7c5")
 var _charge_spark := Color("#fff4be")
 var _hold_active: bool = false
@@ -37,8 +36,7 @@ var _charge_radius := Vector2.ZERO
 var _charge_bounds := Rect2()
 var _charge_scale: float = 1.0
 var _charge_unit: float = 1.0
-var _charge_style_scale: float = -1.0
-var _charge_status: String = ""
+var _charge_inset: float = 0.0
 var _shadow := Node2D.new()
 var _details := Node2D.new()
 var _motion_bounds := Rect2()
@@ -72,14 +70,6 @@ func _ready() -> void:
 	add_child(_glint)
 	_glint.hide()
 	_glint.draw.connect(_draw_glint)
-	_charge_label.name = "UnlockProgress"
-	_charge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_charge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_charge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_charge_label.clip_text = true
-	_charge_label.add_theme_color_override("font_color", Color.WHITE)
-	_charge_label.hide()
-	add_child(_charge_label)
 	resized.connect(_fit)
 	visibility_changed.connect(_visibility_changed)
 	_visibility_changed()
@@ -96,7 +86,6 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_glint_color = palette.light
 	_charge_color = palette.get("accent", _glint_color)
 	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
-	_charge_style_scale = -1.0
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
@@ -197,10 +186,9 @@ func _fit() -> void:
 	if _pieces.is_empty() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return
 	_update_charge()
-	# Reserve the same physical envelope before, during and after the readout.
-	# Its disappearance cannot cause a sudden scale or position change.
+	# Keep the same physical envelope throughout the progress effects and opening.
 	var pixel: float = 1.0 / _charge_scale
-	var safe_top: float = _charge_label.position.y + _charge_label.size.y + 4.0 * pixel
+	var safe_top: float = _charge_inset + 4.0 * pixel
 	var bottom: float = maxf(safe_top, size.y - 7.0 * pixel)
 	var available_height: float = maxf(0.0, bottom - safe_top)
 	_fit_scale = maxf(0.0, minf(size.x * 0.79 / _motion_bounds.size.x, available_height * 0.87 / _motion_bounds.size.y))
@@ -231,42 +219,12 @@ func _update_charge() -> void:
 	var active: bool = is_visible_in_tree() and ((_hold_active and mode == "closed")
 		or (_release_active and mode == "opening" and _elapsed < Feel.SETTLE_TIME))
 	_charge.visible = active
-	_charge_label.visible = active
 	_charge_scale = maxf(0.25, Style.ui_scale(self))
 	var pixel: float = 1.0 / _charge_scale
 	var margin: float = minf(10.0 * pixel, minf(size.x, size.y) * 0.08)
-	var percent: int = mini(100, floori(performance_progress() * 100.0))
-	var status: String = performance_status()
-	_charge_status = status
-	if size.x * _charge_scale < 210:
-		status = "Get ready!" if mode == "opening" else "Hold"
-	if mode == "opening" and size.x * _charge_scale < 150:
-		status = "Open"
-	_charge_label.text = "%s · %d%%" % [status, percent]
-	var font_size: int = ceili(14.0 * pixel)
-	var font: Font = _charge_label.get_theme_font("font")
-	var statuses: Array[String] = ["Hold to begin", "Gathering", "Building tension", "Get ready!", "Opening!"]
-	if size.x * _charge_scale < 210:
-		statuses = ["Hold", "Open" if size.x * _charge_scale < 150 else "Get ready!"]
-	var text_width: float = 0.0
-	for candidate in statuses:
-		text_width = maxf(text_width, font.get_string_size(candidate + " · 100%", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
+	_charge_inset = margin
 	var available: float = maxf(0.0, size.x - margin * 2.0)
-	_charge_label.add_theme_font_size_override("font_size", font_size)
-	var label_size := Vector2(minf(available, text_width + 22.0 * pixel), font.get_height(font_size) + 10.0 * pixel)
-	# The theme badge occupies the upper-left corner on phone-sized stages.
-	var label_x: float = size.x - margin - label_size.x if size.x * _charge_scale < 420 else (size.x - label_size.x) * 0.5
-	_charge_label.position = Vector2(label_x, margin)
-	_charge_label.size = label_size
-	if not is_equal_approx(_charge_style_scale, _charge_scale):
-		_charge_style_scale = _charge_scale
-		var badge: StyleBoxFlat = Style.box(_charge_color.darkened(0.72), _charge_spark.lightened(0.18), ceili(12.0 * pixel), maxi(1, roundi(pixel)))
-		badge.content_margin_left = 8.0 * pixel
-		badge.content_margin_right = 8.0 * pixel
-		badge.content_margin_top = 3.0 * pixel
-		badge.content_margin_bottom = 3.0 * pixel
-		_charge_label.add_theme_stylebox_override("normal", badge)
-	var top: float = _charge_label.position.y + label_size.y + 5.0 * pixel
+	var top: float = margin + 5.0 * pixel
 	var available_height: float = maxf(0.0, size.y - margin - top)
 	_charge_unit = minf(pixel, minf(available, available_height) / 100.0)
 	_charge_center = Vector2(size.x * 0.5, top + available_height * 0.52)
@@ -481,12 +439,14 @@ func hold_effect_snapshot() -> Dictionary:
 				first_visible = false
 	var body_offset: Vector2 = _physical_pose.get("offset", Vector2.ZERO)
 	var body_scale: Vector2 = _physical_pose.get("scale", Vector2.ONE)
+	var percent: int = mini(100, floori(performance_progress() * 100.0))
+	var status: String = performance_status()
 	return {"active": active, "phase": performance_phase(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"tension": Feel.tension(_elapsed) if mode == "opening" else 0.0,
 		"pulse_strength": Feel.pulse_strength(_elapsed) if mode == "opening" else 0.0,
-		"percent": mini(100, floori(performance_progress() * 100.0)),
-		"text": _charge_label.text if active else "", "status": _charge_status if active else "",
+		"percent": percent,
+		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
 		"theme": theme_id, "material": _feel.material, "rigged": _rigged,
 		"opening_time": _elapsed, "cancel_remaining": _cancel_remaining,
@@ -502,9 +462,7 @@ func hold_effect_snapshot() -> Dictionary:
 		"cues": _cue_log.duplicate(true), "cue_count": _cue_log.size(),
 		"spark_count": (12 if opening and _elapsed >= Feel.RELEASE_TIME else _charge_particle_count() + 1) if drawing and not reduced_motion else 0,
 		"bounds": {"x": _charge_bounds.position.x, "y": _charge_bounds.position.y,
-			"width": _charge_bounds.size.x, "height": _charge_bounds.size.y},
-		"badge_bounds": {"x": _charge_label.position.x, "y": _charge_label.position.y,
-			"width": _charge_label.size.x, "height": _charge_label.size.y}}
+			"width": _charge_bounds.size.x, "height": _charge_bounds.size.y}}
 
 
 func _draw_glint() -> void:
@@ -583,7 +541,7 @@ func _draw_details() -> void:
 	var center: Vector2 = _art.transform * (_bounds.get_center() - Vector2(0, _bounds.size.y * 0.12))
 	var extent := Vector2(_bounds.size.x * _fit_scale * 0.48, _bounds.size.y * _fit_scale * 0.40)
 	var radius: float = maxf(0.8, minf(extent.x, extent.y) * 0.055)
-	var detail_min := Vector2(radius * 3.0, _charge_label.get_rect().end.y + radius * 3.0)
+	var detail_min := Vector2(radius * 3.0, _charge_inset + radius * 3.0)
 	var detail_max := Vector2(maxf(detail_min.x, size.x - radius * 3.0), maxf(detail_min.y, size.y - radius * 3.0))
 	var color := Color(_charge_spark, fade * 0.75)
 	var detail: String = _feel.decoration
@@ -674,7 +632,6 @@ func stop_reaction() -> void:
 	_art.rotation = 0.0
 	_glint.hide()
 	_charge.hide()
-	_charge_label.hide()
 	_apply_pose(0.0)
 	_fit()
 
