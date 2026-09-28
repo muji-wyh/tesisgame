@@ -61,8 +61,11 @@ cannot grant or announce another piece. Background completion and new-round
 auto-claims save the earned piece silently. Reduced motion skips physical beats
 and displays the saved result directly after the full hold.
 
-The closed chest reads **Hold to open your chest!**. After saving, ordinary and
-fully completed worlds show **Chest opened!** and **Ready for another adventure?**.
+Ordinary chest results show the chest, review cards and next action without a
+victory title, instruction or review heading. When vertical space permits, cards
+sit below the chest with only their height reserved. Hold instructions and
+completion status remain available to screen readers; pending-save and
+failed-save messages remain visible.
 A toy unlock instead shows **A gift for Pip!** with **Try it with Pip** directly.
 Piece counts and medal records still drive persistence and gift requirements,
 but the result has no collectible badge, assembly, tap-to-place interaction or

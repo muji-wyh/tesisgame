@@ -214,7 +214,6 @@ var _success: ProgressBadges
 var _mistakes: ProgressBadges
 var _found_words: HBoxContainer
 var _found_words_scroll: ReviewScroll
-var _found_words_heading: Label
 var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
@@ -519,6 +518,7 @@ func _build_controls() -> void:
 	failure_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	failure_button.hide()
 	_result_text = VBoxContainer.new()
+	_result_text.alignment = BoxContainer.ALIGNMENT_END
 	_result_text.add_theme_constant_override("separation", 10)
 	_outcome.add_child(_result_text)
 	_result_text.minimum_size_changed.connect(_layout_result)
@@ -532,10 +532,6 @@ func _build_controls() -> void:
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_caption.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_caption)
-	_found_words_heading = Style.label("Practise these words · tap to hear", 14)
-	_found_words_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_found_words_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_result_text.add_child(_found_words_heading)
 	_found_words = HBoxContainer.new()
 	_found_words.name = "FoundWords"
 	_found_words.add_theme_constant_override("separation", 8)
@@ -1431,6 +1427,11 @@ func _refresh() -> void:
 	elif playing and _mode_id == "pop":
 		_message.text = "Voice Pop. Say the flying words. 30 seconds."
 	var won: bool = model.phase == "won"
+	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
+		and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after)
+	var show_result_message: bool = not won or _save_error or saving_reward or not _unlocked_gift.is_empty()
+	_title.visible = show_result_message
+	_caption.visible = show_result_message
 	_treasure_backdrop.visible = won
 	if won:
 		_treasure_backdrop.configure(palette)
@@ -1456,7 +1457,7 @@ func _refresh() -> void:
 		elif model.chest_state == "opened":
 			_title.text = "Chest opened!"
 			_caption.text = "Ready for another adventure?"
-			if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
+			if saving_reward:
 				_title.text = "Saving your progress"
 				_caption.text = "Please wait."
 		if _save_error:
@@ -1519,11 +1520,9 @@ func _refresh() -> void:
 func _refresh_found_words(playing: bool, accent: Color) -> void:
 	var show_words: bool = not playing and not model.lesson_words.is_empty()
 	_found_words.visible = show_words
-	_found_words_heading.visible = show_words
 	_found_words_scroll.visible = show_words
 	if not show_words or collection_page.visible:
 		return
-	_found_words_heading.text = "Review · missed words first" if not model.missed_word_ids.is_empty() else "Words practised · tap to hear"
 	if _found_words.get_child_count() == 0:
 		for word in model.review_words():
 			var button := Button.new()
@@ -1872,7 +1871,8 @@ func _layout_result() -> void:
 	_title.add_theme_font_size_override("font_size", 28 if compact else 34)
 	_caption.add_theme_font_size_override("font_size", 18 if compact else 22)
 	var minimum_text: Vector2 = _result_text.get_combined_minimum_size()
-	if size.x >= size.y or dimensions.y < minimum_text.y + 82.0:
+	var show_message: bool = _title.visible or _caption.visible
+	if (show_message and size.x >= size.y) or dimensions.y < minimum_text.y + 82.0:
 		var text_width: float = maxf(maxf(minimum_text.x, 232.0 if _found_words.visible else 0.0), (dimensions.x - 16.0) * 0.39)
 		var stage_width: float = maxf(72.0, dimensions.x - 16.0 - text_width)
 		_stage.position = Vector2.ZERO
@@ -1880,7 +1880,7 @@ func _layout_result() -> void:
 		_result_text.position = Vector2(stage_width + 16.0, 0)
 		_result_text.size = Vector2(maxf(0.0, dimensions.x - stage_width - 16.0), dimensions.y)
 	else:
-		var text_height: float = maxf(170.0, minimum_text.y)
+		var text_height: float = maxf(170.0 if show_message else 0.0, minimum_text.y)
 		_stage.position = Vector2.ZERO
 		_stage.size = Vector2(dimensions.x, maxf(72.0, dimensions.y - text_height - 10.0))
 		_result_text.position = Vector2(0, _stage.size.y + 10.0)

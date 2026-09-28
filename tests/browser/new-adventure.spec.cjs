@@ -61,7 +61,7 @@ test(`result review words support ${input} swiping without a scrollbar or accide
   await page.setViewportSize({ width: 960, height: 720 });
   const errors = await openGame(page, { mode: 'match' });
   await finishMatch(page, false);
-  const bounds = await metrics(page), review = resultPoint(bounds, 'review');
+  const bounds = await metrics(page), review = resultPoint(bounds, 'review', { message: true });
   const point = { x: bounds.x + (review.x + 80) * bounds.scale, y: bounds.y + review.y * bounds.scale };
   await page.touchscreen.tap(point.x, point.y);
   const status = page.locator('#game-status');

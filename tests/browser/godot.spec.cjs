@@ -602,30 +602,19 @@ async function holdControllerChest(page) {
 
 test('new adventures rotate and all five review words replay without opening or awarding the chest', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
-  const topics = {
-    'Animal friends': 'cat dog fish duck cow pig hen sheep horse goat rabbit mouse bear lion tiger monkey panda zebra fox owl frog turtle bee ant',
-    'Picnic time': 'apple banana orange pear grape cherry melon carrot tomato corn peas egg bread cake cookie cheese milk water juice rice',
-    'Great outdoors': 'sun moon star cloud rain snow tree leaf flower',
-    'Dress up': 'hat coat shirt dress sock shoe glove scarf boot skirt pants vest tie ring watch crown',
-    'On the move': 'car bus train truck plane boat bike',
-    'Play time': 'ball book doll kite drum block',
-    'At home': 'bed chair table door lamp clock key phone cup bowl plate spoon fork soap brush towel',
-    'Head to toe': 'eye ear nose mouth hand foot arm leg head tooth',
-    'Ocean discovery': 'whale shark crab seal shell coral squid clam',
-    'Space trip': 'earth rocket planet comet meteor alien rover galaxy',
-    'Garden trail': 'seed root grass rose berry acorn pebble pond',
-    'Music makers': 'piano flute violin guitar bell harp horn tuba'
-  };
+  const catalog = fs.readFileSync(path.join(__dirname, '..', '..', 'scripts', 'game_data.gd'), 'utf8');
+  const adventures = JSON.parse(catalog.match(/const ADVENTURES: Array\[Dictionary\] = (\[[\s\S]*?\r?\n\])/)[1]);
+  const topics = Object.fromEntries(adventures.map(({ name, words }) => [name, words]));
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
   const board = await discoverCards(page);
   const words = [...board.discovered.keys()];
-  const adventure = Object.keys(topics).find(name => words.every(word => topics[name].split(' ').includes(word)));
+  const adventure = Object.keys(topics).find(name => words.every(word => topics[name].includes(word)));
   expect(adventure, 'The five lesson words share a concrete adventure topic.').toBeTruthy();
   expect(words).toHaveLength(5);
-  expect(words.every(word => topics[adventure].split(' ').includes(word))).toBe(true);
+  expect(words.every(word => topics[adventure].includes(word))).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('word-adventure.png'), scale: 'css' });
   await winWithTouch(page, board);
   await page.screenshot({ path: testInfo.outputPath('found-word-shelf.png'), scale: 'css' });
@@ -658,7 +647,7 @@ test('new adventures rotate and all five review words replay without opening or 
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];
-  const nextAdventure = Object.keys(topics).find(name => nextWords.every(word => topics[name].split(' ').includes(word)));
+  const nextAdventure = Object.keys(topics).find(name => nextWords.every(word => topics[name].includes(word)));
   expect(nextAdventure).toBeTruthy();
   expect(nextAdventure).not.toBe(adventure);
   expect([...nextBoard.discovered.keys()].filter(word => words.includes(word))).toEqual([]);

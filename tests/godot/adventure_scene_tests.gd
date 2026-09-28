@@ -288,6 +288,8 @@ func _check_result_bounds(app) -> void:
 		check(not buttons[index - 1].get_global_rect().intersects(buttons[index].get_global_rect()),
 			"Adjacent found words retain separate touch targets")
 	for control in [result_action, app._title, app._caption]:
+		if not control.is_visible_in_tree():
+			continue
 		var children: Array = app._result_text.get_children().filter(
 			func(child: Control) -> bool: return child.is_visible_in_tree()).map(
 			func(child: Control) -> String:

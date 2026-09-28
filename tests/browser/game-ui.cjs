@@ -511,15 +511,16 @@ async function withMemoryPeek(page, held) {
   await rendered(page);
 }
 
-function resultPoint(bounds, key, { gift = false } = {}) {
+function resultPoint(bounds, key, { gift = false, message = false } = {}) {
   if (!['chest', 'review', 'gift', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
   const content = contentBounds(bounds);
   const scale = uiScale(bounds), actionHeight = Math.ceil(48 / scale), actionGap = Math.ceil(8 / scale);
-  const landscape = bounds.width >= bounds.height || bounds.height < 560;
-  const textWidth = landscape ? Math.max(232, (content.width - 16) * 0.39) : content.width;
-  const left = content.x + content.width - textWidth;
   const top = content.padding + content.header + content.gap;
   const extra = gift ? actionHeight + actionGap : 0;
+  const availableHeight = bounds.height - content.padding - top - actionHeight - actionGap - extra;
+  const landscape = ((message || gift) && (bounds.width >= bounds.height || bounds.height < 560)) || availableHeight < 170;
+  const textWidth = landscape ? Math.max(232, (content.width - 16) * 0.39) : content.width;
+  const left = content.x + content.width - textWidth;
   if (key === 'chest') return { x: content.x + 36, y: top + 116 };
   if (key === 'gift') return { x: content.x + content.width / 2, y: bounds.height - content.padding - actionHeight / 2 };
   if (key === 'review') return { x: left + 36, y: bounds.height - content.padding - actionHeight - 44 - actionGap - extra };

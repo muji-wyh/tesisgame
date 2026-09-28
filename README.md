@@ -276,9 +276,9 @@ cancelled gestures, and multiple touches never trigger pronunciation or rewards.
 Result actions stay compact and centered rather than stretching across the page.
 Save retries and newly unlocked toy actions use the same styling.
 
-The **Medals** page, tab, and reward preview have been removed. A saved chest
-shows **Chest opened!**. A toy unlock instead shows **A gift for Pip!** with
-**Try it with Pip**.
+The **Medals** page, tab, and reward preview have been removed. Ordinary chest
+results show the chest, review cards and next action. A toy unlock shows
+**A gift for Pip!** with **Try it with Pip**.
 Chest rewards, piece progress, toy unlocks, and existing saves remain available.
 More opens the playroom directly, with world and age choices above it.
 
@@ -496,9 +496,10 @@ Each win earns **one fragment**. **Three fragments complete a medal**, and each
 season has **six medals**. The next piece always advances the first unfinished
 medal in that season; there are no duplicate fragments or rare missing pieces.
 These records support gift progress without a post-opening collectible display.
-The closed chest reads **Hold to open your chest!**. The opening keeps its small
-24-particle seasonal release burst. After a successful save, ordinary and fully
-completed worlds show **Chest opened!** and **Ready for another adventure?**.
+Ordinary chest results omit the victory title, instruction and review heading;
+the cards sit directly below the chest when vertical space permits. Hold
+instructions and completion announcements remain accessible to screen readers. The opening
+keeps its small 24-particle seasonal release burst. Save notices remain visible.
 A newly unlocked toy instead shows **A gift for Pip!** with **Try it with Pip**
 directly. There is no medal badge, piece assembly, tap-to-place action, toolbar
 flight or larger medal-completion celebration. A complete season keeps its
