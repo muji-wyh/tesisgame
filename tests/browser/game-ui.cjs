@@ -219,8 +219,12 @@ function roomLayout(bounds, owned = ['ball']) {
   }
   const duckScale = Math.min(1, Math.max(0.25, homeHeight / 160));
   const halfDuck = Math.min(48 * duckScale + 4, width / 2), bottom = Math.max(0, homeHeight - 12);
-  const floorTop = Math.min(bottom, Math.max(112 * duckScale + 4, homeHeight * 0.57 + 24));
-  const pipFoot = { x: Math.max(halfDuck, Math.min(Math.min(88, width * 0.16), width - halfDuck)),
+  const pipX = Math.max(halfDuck, Math.min(Math.min(88, width * 0.16), width - halfDuck));
+  const duckEdge = 96 * duckScale, feetInset = (112 * duckScale - duckEdge) / 2 + duckEdge * 8 / 120;
+  const floorYAt = x => homeHeight * (0.70 - 0.13 * Math.max(0, Math.min(1, Math.min(x, width - x) / Math.max(1, Math.min(width * 0.13, 92)))));
+  const floorTop = Math.min(bottom, Math.max(112 * duckScale + 4,
+    Math.max(floorYAt(pipX - duckEdge * 0.33), floorYAt(pipX + duckEdge * 0.33)) + feetInset + 4));
+  const pipFoot = { x: pipX,
     y: Math.max(floorTop, Math.min(homeHeight - 32, bottom)) };
   return { x, width, top, padding, gap, scale, owned, locked, homes, homeHeight, tileSize, duckScale, pipFoot };
 }
@@ -278,11 +282,52 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
   const target = name === 'toy' ? equipped : name;
   if (name === 'toy' && locked) throw new Error('A locked preview has no active playable toy; select an owned object.');
   await focusRoomBack(page, bounds);
+  const beforeFocus = target === 'pip' ? await page.screenshot({ scale: 'css' }) : null;
   const controls = roomFocusOrder(bounds, state, { locked, item });
   if (!controls.includes(target)) throw new Error(`Unavailable room control: ${name}`);
   for (let index = 0; index <= controls.indexOf(target); index++) {
     await page.keyboard.press('Tab');
     await rendered(page);
+  }
+  if (beforeFocus) {
+    // Pip can retain a position after a resize. Find its visible focus response
+    // instead of treating the nominal home coordinate as the current actor position.
+    const afterFocus = await page.screenshot({ scale: 'css' });
+    const center = await page.evaluate(async ({ before, after, bounds, layout }) => {
+      const images = await Promise.all([before, after].map(async png => {
+        const image = new Image();
+        image.src = 'data:image/png;base64,' + png;
+        await image.decode();
+        return image;
+      }));
+      const canvas = document.createElement('canvas');
+      canvas.width = images[0].width; canvas.height = images[0].height;
+      const context = canvas.getContext('2d');
+      const frames = images.map(image => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, 0, 0);
+        return context.getImageData(0, 0, canvas.width, canvas.height).data;
+      });
+      let left = canvas.width, top = canvas.height, right = -1, bottom = -1;
+      const startX = Math.max(0, Math.ceil(bounds.x + layout.x * bounds.scale));
+      const startY = Math.max(0, Math.ceil(bounds.y + layout.top * bounds.scale));
+      const endX = Math.min(canvas.width, Math.floor(bounds.x + (layout.x + layout.width) * bounds.scale));
+      const endY = Math.min(canvas.height, Math.floor(bounds.y + (layout.top + layout.homeHeight) * bounds.scale));
+      for (let y = startY; y < endY; y++) {
+        for (let x = startX; x < endX; x++) {
+          const offset = (y * canvas.width + x) * 4;
+          if ([0, 1, 2].every(channel => Math.abs(frames[0][offset + channel] - frames[1][offset + channel]) < 24)) continue;
+          left = Math.min(left, x); right = Math.max(right, x);
+          top = Math.min(top, y); bottom = Math.max(bottom, y);
+        }
+      }
+      return right > left && bottom > top ? {
+        x: ((left + right) / 2 - bounds.x) / bounds.scale,
+        y: ((top + bottom) / 2 - bounds.y) / bounds.scale
+      } : null;
+    }, { before: beforeFocus.toString('base64'), after: afterFocus.toString('base64'), bounds, layout });
+    expect(center, 'The real room must visibly focus Pip before a pointer interaction.').not.toBeNull();
+    return center;
   }
   return roomPoint(bounds, target, { item: active, owned: layout.owned, equipped });
 }

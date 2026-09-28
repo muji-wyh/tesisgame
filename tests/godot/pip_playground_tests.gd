@@ -55,6 +55,7 @@ func _run() -> void:
 	await _check_duck_gestures(app, playground)
 	await _check_legacy_toy_sequences(app, playground)
 	await _check_floor_movement(app, playground)
+	await _check_perspective_floor(app, playground)
 	await _check_throwing(app, playground)
 	await _check_fetch_at_floor_edge(app, playground)
 	await _check_locked_toy(app, playground)
@@ -161,6 +162,48 @@ func _check_floor_movement(app, playground) -> void:
 	check(not playground.motion_kind.is_empty(), "The internal call_pip method starts a real movement")
 	await _advance(playground, 4.0)
 	_check_room_bounds(app, "internal call movement")
+
+
+func _check_perspective_floor(app, playground) -> void:
+	var original_size: Vector2i = root.size
+	for dimensions in [Vector2i(480, 900), Vector2i(320, 568), Vector2i(844, 390)]:
+		root.size = dimensions
+		for frame in range(6):
+			await process_frame
+		playground.cancel()
+		await _show_stage(app)
+		_check_grounded_feet(app, "after resizing to " + str(dimensions))
+		for right in [false, true]:
+			var point := Vector2(playground.size.x - 6.0 if right else 6.0, 1.0)
+			var screen: Vector2 = playground.get_global_transform() * point
+			var context := "%s upper edge at %s" % ["right" if right else "left", dimensions]
+			check(_is_empty_floor(app, screen), "The " + context + " tap is clear of all playable objects")
+			await _tap(screen)
+			await _advance(playground, 4.0)
+			check(playground.motion_kind.is_empty() and playground.duck_position.distance_to(playground.target_position) < 1.0,
+				"Pip settles at the clamped " + context + " target")
+			_check_grounded_feet(app, context)
+	root.size = original_size
+	for frame in range(6):
+		await process_frame
+	await _show_stage(app)
+
+
+func _check_grounded_feet(app, context: String) -> void:
+	var playground: Control = app._room.playground
+	var interior = load("res://scripts/room_interior.gd")
+	var edge: float = minf(app.duck.size.x, app.duck.size.y)
+	var origin: Vector2 = (app.duck.size - Vector2.ONE * edge) * 0.5
+	var to_room: Transform2D = playground.get_global_transform().affine_inverse() * app.duck.get_global_transform()
+	# The ordinary 120px mascot art plants both outer toes on its 112px baseline.
+	var feet: Array[Vector2] = [to_room * (origin + Vector2(24, 112) * edge / 120.0),
+		to_room * (origin + Vector2(99, 112) * edge / 120.0)]
+	check(feet.all(func(foot: Vector2) -> bool: return foot.y >= interior.floor_y_at(playground.size, foot.x) - 0.5),
+		"Both rendered feet stay below the sloped wall-floor boundary " + context + ": " + str(feet))
+	var bounds := Rect2(Vector2.ZERO, playground.size).grow(0.5)
+	check(bounds.encloses(_render_rect(app.duck, playground))
+		and feet.all(func(foot: Vector2) -> bool: return bounds.has_point(foot)),
+		"Pip and both rendered feet remain inside the playground " + context)
 
 
 func _check_throwing(app, playground) -> void:

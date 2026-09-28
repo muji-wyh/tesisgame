@@ -146,6 +146,9 @@ On wider screens the mode tabs share the header row.
 toys stay at the bottom, and the world strip sits
 just above the toys. Each strip scrolls horizontally without a visible scrollbar.
 Pip's playground fills the remaining space; the page itself never scrolls.
+The room has perspective side walls, timber flooring, an inset window with a
+themed outdoor view, soft daylight, and contact shadows under Pip and the toys.
+Its architecture redraws on resize or a world change; play effects remain separate.
 Choosing a world keeps the current page open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
 shows an in-page retry notice. Locked toy cards show gift progress below the room.

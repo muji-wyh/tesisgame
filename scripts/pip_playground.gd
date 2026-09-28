@@ -5,6 +5,7 @@ signal interaction_started
 signal toy_tapped
 
 const LoadingMoves = preload("res://scripts/pip_loading_moves.gd")
+const Interior = preload("res://scripts/room_interior.gd")
 
 var duck_position := Vector2.ZERO
 var target_position := Vector2.ZERO
@@ -122,9 +123,15 @@ func _allowed() -> bool:
 
 func _clamp_floor(point: Vector2) -> Vector2:
 	var half_width: float = minf(_slot.size.x * 0.5 + 4, size.x * 0.5)
+	var x := clampf(point.x, half_width, maxf(half_width, size.x - half_width))
 	var bottom: float = maxf(0, size.y - 12)
-	var top: float = minf(bottom, maxf(_slot.size.y + 4, size.y * 0.57 + 24))
-	return Vector2(clampf(point.x, half_width, maxf(half_width, size.x - half_width)), clampf(point.y, top, bottom))
+	# Pip is drawn in a centered square with its planted toes at 112/120 of the art.
+	# Keep both feet below the side-wall junction, including the slot's lower padding.
+	var edge := minf(_slot.size.x, _slot.size.y)
+	var feet_inset := (_slot.size.y - edge) * 0.5 + edge * (8.0 / 120.0)
+	var floor_y := maxf(Interior.floor_y_at(size, x - edge * 0.33), Interior.floor_y_at(size, x + edge * 0.33))
+	var top: float = minf(bottom, maxf(_slot.size.y + 4, floor_y + feet_inset + 4))
+	return Vector2(x, clampf(point.y, top, bottom))
 
 
 func _clamp_toy(point: Vector2) -> Vector2:

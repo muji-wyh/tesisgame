@@ -15,6 +15,8 @@ const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
 const ToyCard = preload("res://scripts/toy_card.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
+const Interior = preload("res://scripts/room_interior.gd")
+const GroundShadows = preload("res://scripts/room_ground_shadows.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
 const ACTIONS := {
 	"water": ["Water the flower", "Grow the flower", "Bloom the flower"],
@@ -37,6 +39,17 @@ const OUTCOMES := {
 	"decorate": ["A cake for Pip's party!", "A swirl of frosting on the cake!", "Sprinkles on the cake. Ready to celebrate!"]
 }
 
+class RoomArchitecture extends Control:
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		show_behind_parent = true
+		resized.connect(queue_redraw)
+
+	func _draw() -> void:
+		var room: Control = get_parent()
+		Interior.draw_room(self, room.palette, room.theme_id)
+
+
 class RoomScene extends Control:
 	var theme_id: String = "home"
 	var palette: Dictionary = {}
@@ -47,66 +60,7 @@ class RoomScene extends Control:
 
 	func _draw() -> void:
 		var accent: Color = palette.get("accent", Color("#438363"))
-		var background: Color = palette.get("background", Color("#edf8ec"))
-		draw_style_box(preload("res://scripts/ui_style.gd").box(background, accent.lightened(0.6), 24, 2), Rect2(Vector2.ZERO, size))
 		var floor_y := size.y * 0.57
-		var wall := Style.box(palette.get("light", background).lightened(0.4), Color.TRANSPARENT, 22, 0)
-		wall.corner_radius_bottom_left = 0
-		wall.corner_radius_bottom_right = 0
-		draw_style_box(wall, Rect2(Vector2(2, 2), Vector2(maxf(0, size.x - 4), maxf(0, floor_y - 2))))
-		draw_line(Vector2(12, floor_y), Vector2(size.x - 12, floor_y), accent.lightened(0.6), 2, true)
-		if theme_id == "space":
-			for index in range(14):
-				var point := Vector2(18 + fmod(index * 47.0, maxf(20, size.x - 36)), 32 + fmod(index * 31.0, 100))
-				draw_circle(point, 1.5 + index % 2, accent.lightened(0.35))
-			draw_arc(Vector2(size.x * 0.69, 65), 25, 0, TAU, 32, accent.lightened(0.55), 5, true)
-		elif theme_id == "ocean":
-			for row in range(3):
-				for index in range(8):
-					draw_arc(Vector2(index * 44 + 8, 75 + row * 29), 24, 0.12, PI - 0.12, 14, accent.lightened(0.67), 2, true)
-		elif theme_id == "winter":
-			for index in range(10):
-				var point := Vector2(22 + fmod(index * 49.0, maxf(20, size.x - 40)), 46 + fmod(index * 37.0, 84))
-				draw_line(point - Vector2(4, 0), point + Vector2(4, 0), accent.lightened(0.58), 2, true)
-				draw_line(point - Vector2(0, 4), point + Vector2(0, 4), accent.lightened(0.58), 2, true)
-		elif theme_id == "summer":
-			draw_circle(Vector2(size.x - 49, 59), 24, Color("#ffd878"))
-			for index in range(8):
-				var direction := Vector2.from_angle(index * TAU / 8)
-				draw_line(Vector2(size.x - 49, 59) + direction * 29, Vector2(size.x - 49, 59) + direction * 36, Color("#e9b34a"), 3, true)
-		elif theme_id == "autumn":
-			for index in range(7):
-				var point := Vector2(22 + index * maxf(20, (size.x - 44) / 7), 48 + index % 3 * 26)
-				draw_colored_polygon(PackedVector2Array([point, point + Vector2(11, -8), point + Vector2(16, 3), point + Vector2(6, 10)]), Color("#d9ab66"))
-		elif theme_id == "spring":
-			for index in range(5):
-				var point := Vector2(24 + index * maxf(24, (size.x - 48) / 5), floor_y + 21)
-				draw_line(point, point - Vector2(0, 15), accent.lightened(0.35), 2, true)
-				draw_circle(point - Vector2(0, 17), 5, Color("#edb5bd") if index % 2 == 0 else Color("#f0d077"))
-		elif theme_id == "jungle":
-			for index in range(5):
-				var point := Vector2(25 + index * maxf(30, (size.x - 50) / 4), 39 + index % 2 * 12)
-				var vine := PackedVector2Array([point, point + Vector2(-4, 28), point + Vector2(3, 56 + index % 3 * 12)])
-				draw_polyline(vine, Color("#87b16b"), 3, true)
-				for side in [-1, 1]:
-					var leaf := PackedVector2Array([point + Vector2(0, 20), point + Vector2(side * 9, 6), point + Vector2(side * 23, 4), point + Vector2(side * 20, 21), point + Vector2(side * 9, 27)])
-					draw_colored_polygon(leaf, Color("#9fc77b") if index % 2 == 0 else Color("#b9d893"))
-					draw_line(point + Vector2(0, 20), point + Vector2(side * 19, 9), Color("#679951"), 1.5, true)
-		elif theme_id == "candy":
-			for index in range(3):
-				var point := Vector2(size.x * (0.16 + index * 0.34), 62 + index % 2 * 22)
-				draw_line(point, point + Vector2(0, 61), Color("#dab4c7"), 5, true)
-				draw_circle(point, 20, Color("#f1accd") if index != 1 else Color("#a6dbc9"))
-				draw_arc(point, 14, -PI * 0.5, PI, 22, Color("#fff5fa"), 4, true)
-				draw_arc(point, 7, PI * 0.5, TAU, 16, Color("#fff5fa"), 4, true)
-			for index in range(8):
-				var point := Vector2(20 + fmod(index * 61.0, maxf(20, size.x - 40)), 43 + index % 3 * 35)
-				draw_line(point, point + Vector2(5, -3), Color("#e6bf77"), 3, true)
-		else:
-			var window := Rect2(Vector2(size.x * 0.67 - 32, 38), Vector2(64, 58))
-			draw_style_box(preload("res://scripts/ui_style.gd").box(accent.lightened(0.88), accent.lightened(0.5), 10, 3), window)
-			draw_line(Vector2(window.get_center().x, window.position.y + 2), Vector2(window.get_center().x, window.end.y - 2), accent.lightened(0.5), 3, true)
-			draw_line(Vector2(window.position.x + 2, window.get_center().y), Vector2(window.end.x - 2, window.get_center().y), accent.lightened(0.5), 3, true)
 		if action.is_empty():
 			return
 		var point := toy_center
@@ -221,6 +175,8 @@ var _preview_id: String = ""
 var _last_toy: String = ""
 var _toy: Dictionary = {}
 var _room: RoomScene
+var _room_interior: RoomArchitecture
+var _ground_shadows: GroundShadows
 var _room_title: Label
 var _toy_label: Label
 var _item_grid: HBoxContainer
@@ -265,6 +221,14 @@ func _build() -> void:
 	_room.resized.connect(_layout_room)
 	_room.gui_input.connect(func(event: InputEvent) -> void: background_input.emit(event, _room))
 	add_child(_room)
+	_room_interior = RoomArchitecture.new()
+	_room_interior.name = "RoomArchitecture"
+	_room.add_child(_room_interior)
+	_room_interior.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_ground_shadows = GroundShadows.new()
+	_ground_shadows.name = "RoomGroundShadows"
+	_room.add_child(_ground_shadows)
+	_ground_shadows.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_room_title = Style.label("Pip's home", 18)
 	_room_title.clip_text = true
 	_room_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -309,6 +273,12 @@ func _build() -> void:
 	owned_toys.name = "OwnedToys"
 	owned_toys.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_room.add_child(owned_toys)
+	_ground_shadows.duck_slot = duck_slot
+	_ground_shadows.active_toy = toy_button
+	_ground_shadows.owned_toys = owned_toys
+	_ground_shadows.playground = playground
+	_ground_shadows.track(duck_slot)
+	_ground_shadows.track(toy_button)
 	add_child(goal_label)
 	add_child(goal_button)
 	toy_shelf = ReviewScroll.new()
@@ -428,6 +398,7 @@ func _build_items() -> void:
 		var button := ToyCard.new()
 		button.setup(item, _art(item))
 		button.set_meta("toy_id", item.id)
+		_ground_shadows.track(button)
 		button.picture.self_modulate = SUMMER_BALL_TINT if item.id == "toy-summer" else Color.WHITE
 		button.pressed.connect(_choose_item.bind(item.id))
 		_item_grid.add_child(button)
@@ -518,6 +489,7 @@ func _refresh_room() -> void:
 	# The world picker owns the room's appearance; legacy backdrop choices remain save data.
 	_room.theme_id = str(_palette.get("id", "home"))
 	_room.palette = _palette
+	_room_interior.queue_redraw()
 	_room_title.text = str(_palette.get("name", "")) + " room" if _room.theme_id != "home" else "Pip's home"
 	_room.queue_redraw()
 	_toy_art = _art(_toy)

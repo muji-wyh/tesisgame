@@ -4,31 +4,52 @@ const { openGame, metrics, tap, boardPoint, openRewards,
   worldControl, collectionBounds, rendered, enterGame, roomLayout,
   THEME_IDS, THEME_COLORS } = require('./game-ui.cjs');
 
-async function expectRoomFloor(page, testInfo, index, suffix = '') {
+function pixelDifference(left, right) {
+  return left.reduce((total, channel, index) => total + Math.abs(channel - right[index]), 0) / left.length;
+}
+
+async function expectRoomInterior(page, testInfo, index, references, suffix = '') {
   const bounds = await metrics(page), room = roomLayout(bounds);
-  // This clear floor patch is below the wall and above the first row of toys.
-  const point = { x: Math.round(bounds.x + (room.x + room.width - 12) * bounds.scale),
-    y: Math.round(bounds.y + (room.top + room.homeHeight * 0.65) * bounds.scale) };
-  const expected = THEME_COLORS[index].slice(1).match(/../g).map(value => parseInt(value, 16));
-  let screenshot;
-  await expect.poll(async () => {
+  // The wall and window contain real theme artwork without moving actors or labels.
+  // Compare rendered images so shading, floorboards and daylight need not be flat RGB.
+  const patch = { x: bounds.x + (room.x + room.width * 0.28) * bounds.scale,
+    y: bounds.y + (room.top + room.homeHeight * 0.16) * bounds.scale,
+    width: room.width * 0.54 * bounds.scale, height: room.homeHeight * 0.27 * bounds.scale };
+  let screenshot, pixels;
+  const capture = async () => {
     screenshot = await page.screenshot({ scale: 'css' });
-    const actual = await page.evaluate(async ({ png, point }) => {
+    pixels = await page.evaluate(async ({ png, patch }) => {
       const image = new Image();
       image.src = 'data:image/png;base64,' + png;
       await image.decode();
       const canvas = document.createElement('canvas');
-      canvas.width = image.width; canvas.height = image.height;
+      canvas.width = 64; canvas.height = 32;
       const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0);
-      return [...context.getImageData(point.x, point.y, 1, 1).data].slice(0, 3);
-    }, { png: screenshot.toString('base64'), point });
-    return Math.max(...actual.map((value, channel) => Math.abs(value - expected[channel])));
-  }, { message: `Pip's actual room floor must use ${THEME_IDS[index]}, even with an earned legacy Spring backdrop.` }).toBeLessThanOrEqual(2);
+      context.drawImage(image, patch.x, patch.y, patch.width, patch.height, 0, 0, 64, 32);
+      return [...context.getImageData(0, 0, 64, 32).data].filter((_, channel) => channel % 4 !== 3);
+    }, { png: screenshot.toString('base64'), patch });
+  };
+  await rendered(page);
+  const reference = references.get(index);
+  if (reference) {
+    await expect.poll(async () => {
+      await capture();
+      return pixelDifference(pixels, reference);
+    }, { message: `The ${THEME_IDS[index]} room artwork must survive a theme round-trip and reload.` }).toBeLessThanOrEqual(1);
+  } else if (references.size) {
+    await expect.poll(async () => {
+      await capture();
+      return Math.min(...[...references.values()].map(other => pixelDifference(pixels, other)));
+    }, { message: `The actual ${THEME_IDS[index]} room artwork must differ from every other world, despite the legacy Spring backdrop.` }).toBeGreaterThan(2);
+  } else {
+    await capture();
+  }
+  references.set(index, pixels);
   await writeFile(testInfo.outputPath(`legacy-room-${THEME_IDS[index]}${suffix}.png`), screenshot);
 }
 
 test('the room follows every selected world despite an earned legacy backdrop', async ({ page }, testInfo) => {
+  test.setTimeout(120000);
   const counts = { 'spring-1': 3, 'summer-1': 3, 'autumn-1': 3, 'spring-3': 3 };
   await page.addInitScript(counts => {
     if (localStorage.getItem('wordBuddies.playroom') !== null) return;
@@ -41,12 +62,13 @@ test('the room follows every selected world despite an earned legacy backdrop', 
     room: localStorage.getItem('wordBuddies.playroom').split('[journey]')[0],
     medals: localStorage.getItem('wordBuddies.medalProgress')
   }));
-  await expectRoomFloor(page, testInfo, 2, '-startup');
+  const interiors = new Map();
+  await expectRoomInterior(page, testInfo, 2, interiors, '-startup');
   for (const [index, id] of THEME_IDS.entries()) {
     const rect = await worldControl(page, index);
     await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-    await expectRoomFloor(page, testInfo, index);
+    await expectRoomInterior(page, testInfo, index, interiors);
     const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.playroom'));
     expect(saved).toContain(`preferred_theme_id="${id}"`);
     expect(saved.split('[journey]')[0]).toBe(original.room);
@@ -55,7 +77,7 @@ test('the room follows every selected world despite an earned legacy backdrop', 
   await page.reload();
   await enterGame(page);
   await openRewards(page);
-  await expectRoomFloor(page, testInfo, 7, '-reload');
+  await expectRoomInterior(page, testInfo, 7, interiors, '-reload');
   expect(errors).toEqual([]);
 });
 
