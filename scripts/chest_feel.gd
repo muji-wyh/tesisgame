@@ -2,13 +2,13 @@ extends RefCounted
 
 const CANCEL_SECONDS: float = 0.12
 const HOLD_SECONDS: float = 1.2
-const BUILDUP_SECONDS: float = 7.5
-const ANTICIPATION_TIME: float = 7.22
+const BUILDUP_SECONDS: float = 2.0
+const ANTICIPATION_TIME: float = 1.72
 const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.12
 const RELEASE_TIME: float = BUILDUP_SECONDS + 0.32
 const SETTLE_TIME: float = BUILDUP_SECONDS + 0.95
 const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
-const PULSE_TIMES := [0.55, 1.65, 2.60, 3.42, 4.12, 4.72, 5.23, 5.66, 6.02, 6.32, 6.57, 6.78, 6.96, 7.12]
+const PULSE_TIMES := [0.10, 0.48, 0.81, 1.09, 1.32, 1.50, 1.64]
 
 
 static func progress(elapsed: float) -> float:
@@ -40,7 +40,7 @@ static func phase(elapsed: float) -> String:
 		return "release"
 	if elapsed >= ANTICIPATION_TIME:
 		return "anticipation"
-	return "building" if elapsed >= 3.4 else "gathering"
+	return "building" if elapsed >= ANTICIPATION_TIME * 0.45 else "gathering"
 
 
 static func timeline() -> Array:
@@ -49,7 +49,7 @@ static func timeline() -> Array:
 		events.append({"cue": "tension_pulse", "step": index + 1, "time": PULSE_TIMES[index]})
 	for step in range(1, 4):
 		events.append({"cue": "charge_step", "step": step,
-			"time": (HOLD_SECONDS + RELEASE_TIME) * float(step) / 3.0 - HOLD_SECONDS})
+			"time": maxf(0.0, (HOLD_SECONDS + RELEASE_TIME) * float(step) / 3.0 - HOLD_SECONDS)})
 	for event in [["anticipation", ANTICIPATION_TIME], ["unlock", UNLOCK_TIME], ["release", RELEASE_TIME], ["settle", SETTLE_TIME]]:
 		events.append({"cue": event[0], "step": 0, "time": event[1]})
 	events.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

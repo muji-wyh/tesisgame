@@ -144,12 +144,12 @@ func _check_hold_feedback(data) -> void:
 		"Holding has an immediate readable zero-percent start, before the first game frame")
 	chest.set_hold_progress(0.45)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.percent == 5 and state.text.contains("5%") and not state.status.is_empty()
+	check(state.active and state.percent == 15 and state.text.contains("15%") and not state.status.is_empty()
 		and state.animated and state.spark_count > 0,
 		"Confirmation contributes its real elapsed share of the complete progress")
 	chest.set_hold_progress(2.0)
 	chest._advance_animation(2.0)
-	check(chest.hold_effect_snapshot().percent == 13 and chest.mode == "closed" and openings.is_empty(),
+	check(chest.hold_effect_snapshot().percent == 34 and chest.mode == "closed" and openings.is_empty(),
 		"Completing confirmation never opens the chest or reports the whole buildup complete")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active and not chest._charge_label.visible and not chest._glint.visible
@@ -188,16 +188,16 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.phase == "gathering" and state.percent == 13 and not state.status.is_empty()
+	check(state.active and state.phase == "gathering" and state.percent == 34 and not state.status.is_empty()
 		and chest.mode == "opening" and openings.is_empty(),
 		"Confirmation flows into automatic gathering without resetting or finishing progress")
 	chest.start_open(false)
-	chest._advance_animation(4.0)
+	chest._advance_animation(1.0)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent > 50 and state.percent < 70 and state.phase == "building"
 		and state.spark_count > 0 and openings.is_empty(),
 		"Automatic buildup keeps readable advancing progress and gathering sparks")
-	chest._advance_animation(Feel.RELEASE_TIME - 4.0 + 0.01)
+	chest._advance_animation(Feel.RELEASE_TIME - 1.0 + 0.01)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent == 100 and state.phase == "release" and state.spark_count > 0,
 		"Only the final physical release reaches 100 percent and scatters sparks")
@@ -205,7 +205,7 @@ func _check_hold_feedback(data) -> void:
 	check(not chest.hold_effect_snapshot().active and chest.mode == "opening" and openings.is_empty(),
 		"The progress readout finishes after release while the reward settles")
 	chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
-	check(chest.mode == "opening" and openings.is_empty(), "The complete 9.3-second automatic opening precedes the reward")
+	check(chest.mode == "opening" and openings.is_empty(), "The complete 3.8-second automatic opening precedes the reward")
 	chest._advance_animation(0.02)
 	chest.start_open(false)
 	chest.finish_immediately()
@@ -241,9 +241,9 @@ func _check_hold_bounds(data) -> void:
 				if phase == "gathering":
 					chest.start_open(false)
 				elif phase == "building":
-					chest._advance_animation(4.0)
+					chest._advance_animation(1.0)
 				elif phase == "anticipation":
-					chest._advance_animation(Feel.ANTICIPATION_TIME - 4.0 + 0.01)
+					chest._advance_animation(Feel.ANTICIPATION_TIME - 1.0 + 0.01)
 				elif phase == "release":
 					chest._advance_animation(Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME)
 				var state: Dictionary = chest.hold_effect_snapshot()

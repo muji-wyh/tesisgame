@@ -176,8 +176,8 @@ func _check_tension_rhythm() -> void:
 		var starting_pitch: float = player.pitch_scale
 		var starting_music: float = audio.music.volume_db
 		check(player.playing and loop == audio.cache[Bank.path_for(theme, "charge")], "Automatic " + theme + " buildup uses the prepared material loop")
-		for step in range(1, 15):
-			audio.set_chest_tension(float(step) / 14.0)
+		for step in range(1, 8):
+			audio.set_chest_tension(float(step) / 7.0)
 			audio.chest_cue(theme, "tension_pulse", step)
 			check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")]
 				and player.stream == loop and audio._chest_last_tension_pulse == step,
@@ -204,7 +204,7 @@ func _check_tension_rhythm() -> void:
 			"Anticipation removes all chest tails and nearly silences music")
 		var next_player: int = audio._chest_next_player
 		audio.chest_cue(theme, "anticipation")
-		audio.chest_cue(theme, "tension_pulse", 15)
+		audio.chest_cue(theme, "tension_pulse", 8)
 		audio.set_chest_tension(0.0)
 		audio.set_chest_tension(1.0)
 		check(_playing(audio) == 0 and audio._chest_next_player == next_player,
@@ -241,7 +241,7 @@ func _check_tension_interruption() -> void:
 		audio.interact("space", false)
 		audio.chest_cue("space", "opening")
 		audio.set_chest_tension(0.8)
-		audio.chest_cue("space", "tension_pulse", 9)
+		audio.chest_cue("space", "tension_pulse", 6)
 		match reason:
 			"mute": audio.set_muted(true)
 			"halt": audio.halt()
@@ -257,7 +257,7 @@ func _check_tension_interruption() -> void:
 		var next_player: int = audio._chest_next_player
 		audio.set_chest_tension(0.0)
 		audio.set_chest_tension(1.0)
-		audio.chest_cue("space", "tension_pulse", 10)
+		audio.chest_cue("space", "tension_pulse", 7)
 		check(not audio.chest_charge.playing and audio._chest_next_player == next_player,
 			"Old automatic progress and pulses stay silent after " + reason)
 		audio.stop_chest_performance()

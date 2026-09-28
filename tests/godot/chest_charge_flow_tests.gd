@@ -120,12 +120,20 @@ func _run() -> void:
 	_begin(app)
 	check(app.chest.hold_effect_snapshot().percent == 0, "Reholding starts a fresh charge at zero")
 	app._advance_ui(0.6)
-	check(app.chest.hold_effect_snapshot().percent == 6 and app.audio.chest_charge.pitch_scale > pitch,
+	check(app.chest.hold_effect_snapshot().percent == 17 and app.audio.chest_charge.pitch_scale > pitch,
 		"Confirmation advances its real share of the complete progress and rising audio pitch")
-	app._advance_ui(0.61)
+	app._advance_ui(0.57)
+	check(not cues.any(func(item): return item[1] == "charge_step"),
+		"The hold keeps its first progress star silent until one third of the complete buildup")
+	app._advance_ui(0.01)
+	check(app.model.chest_state == "closed" and cues.back() == ["spring", "charge_step", 1],
+		"The first progress star sounds during the hold immediately before confirmation")
+	app._advance_ui(0.03)
 	state = app.chest.hold_effect_snapshot()
-	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 13,
+	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 34,
 		"Completing confirmation starts automatic gathering at its true elapsed progress")
+	check(cues.filter(func(item): return item[1] == "charge_step") == [["spring", "charge_step", 1]],
+		"The automatic handoff does not replay the first progress star")
 	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
 		and app.audio._chest_phase == "opening",
 		"Confirmation hands its audio loop to the automatic tension timeline")
@@ -284,12 +292,12 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	app.chest.set_process(false)
-	app.chest._advance_animation(7.2)
+	app.chest._advance_animation(2.1)
 	state = app.chest.hold_effect_snapshot()
 	check(state.percent > 90 and state.percent < 100 and _pieces(app) == 0
 		and not app.audio._chest_rewarded and not app.audio._chest_seen.has("release0"),
 		"Late in the buildup, anticipation has not saved or announced a reward")
-	app.chest._advance_animation(Feel.UNLOCK_TIME - 7.2 + 0.01)
+	app.chest._advance_animation(Feel.UNLOCK_TIME - 2.1 + 0.01)
 	app.chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
 	app.chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(app.audio._chest_seen.has("unlock0") and app.audio._chest_seen.has("release0")
@@ -353,7 +361,7 @@ func _run() -> void:
 	storage.fail_write = true
 	_begin(app)
 	app._advance_ui(1.21)
-	app.chest._advance_animation(3.5)
+	app.chest._advance_animation(1.0)
 	check(app.audio.chest_charge.playing, "The interrupted scenario starts with an active automatic tension loop")
 	cues.clear()
 	app.set_reduced_motion(true)

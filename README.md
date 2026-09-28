@@ -473,9 +473,9 @@ remain usable without shrinking the controls.
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short press compresses the lock or body immediately and releases with a 120 ms
 return. Hold it for **1.2 seconds** to confirm, then release your finger while a
-**9.3-second automatic performance** builds and opens the chest: **10.5 seconds
+**3.8-second automatic performance** builds and opens the chest: **5 seconds
 in total**. Three stars and a percentage badge progress through the full buildup,
-reaching 100% at the lid release. Fourteen material beats grow closer together,
+reaching 100% at the lid release. Seven material beats grow closer together,
 the lock strains and background music recedes. A 400 ms quiet breath precedes
 the unlock, followed by the lid release, recoil and saved reward. Each world
 keeps its own material motion and sound. The art fit stays fixed throughout.

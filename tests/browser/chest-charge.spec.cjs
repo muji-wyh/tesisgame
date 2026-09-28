@@ -51,7 +51,7 @@ async function screenshot(page, testInfo, phase) {
 
 async function observeChest(page) {
   await page.addInitScript(() => {
-    window.chestObservation = { cues: [], presses: [], progress: [] };
+    window.chestObservation = { cues: [], presses: [], progress: [], statuses: [] };
     window.addEventListener('wordbuddies:chest-cue', event => {
       window.chestObservation.cues.push(event.detail);
     });
@@ -60,6 +60,10 @@ async function observeChest(page) {
     }, true);
     document.addEventListener('DOMContentLoaded', () => {
       const progress = document.getElementById('chest-progress');
+      const status = document.getElementById('game-status');
+      new MutationObserver(() => {
+        window.chestObservation.statuses.push({ at: performance.now(), text: status.textContent });
+      }).observe(status, { childList: true });
       new MutationObserver(() => {
         window.chestObservation.progress.push({
           at: performance.now(),
@@ -106,10 +110,12 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   }
   await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   const progressHistory = await page.evaluate(start => window.chestObservation.progress.slice(start), progressStart);
-  expect(progressHistory.some(state => !state.hidden && state.percent > 0 && state.percent < 14 &&
-    state.text.includes('Hold to begin'))).toBe(true);
+  const holdingProgress = progressHistory.filter(state => !state.hidden && state.phase === 'holding');
+  expect(holdingProgress.some(state => state.percent >= 30 && state.text.includes('Hold to begin'))).toBe(true);
+  expect(holdingProgress.every(state => state.percent <= 34),
+    'The 1.2-second hold fills about one third of the bar before the automatic opening').toBe(true);
   for (const phase of ['gathering', 'building', 'anticipation']) {
-    expect(progressHistory.some(state => !state.hidden && state.phase === phase && state.percent >= 13 &&
+    expect(progressHistory.some(state => !state.hidden && state.phase === phase && state.percent >= 34 &&
       state.percent < 100), `Progress remains active and incomplete during ${phase}`).toBe(true);
   }
   const activeProgress = progressHistory.filter(state => !state.hidden);
@@ -131,19 +137,41 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     .map(event => `${event.cue}:${event.step}`)).toEqual([
     'press:0', 'cancel:0', 'press:0', 'opening:0', 'anticipation:0', 'unlock:0', 'release:0', 'settle:0'
   ]);
-  expect(cues.filter(event => event.cue === 'charge_step').map(event => event.step)).toEqual([1, 2, 3]);
+  const steps = cues.filter(event => event.cue === 'charge_step');
+  expect(steps.map(event => event.step), 'Each star lights once across the hold and automatic opening').toEqual([1, 2, 3]);
   const pulses = cues.filter(event => event.cue === 'tension_pulse');
-  expect(pulses.map(event => event.step)).toEqual(Array.from({ length: 14 }, (_, index) => index + 1));
+  expect(pulses.map(event => event.step)).toEqual(Array.from({ length: 7 }, (_, index) => index + 1));
   const intervals = pulses.slice(1).map((pulse, index) => pulse.at - pulses[index].at);
   expect(intervals.slice(-3).reduce((sum, value) => sum + value, 0) / 3,
     'Late tension beats arrive much faster than the early beats').toBeLessThan(
-    intervals.slice(0, 3).reduce((sum, value) => sum + value, 0) / 3 * 0.4);
+    intervals.slice(0, 3).reduce((sum, value) => sum + value, 0) / 3 * 0.75);
   expect(cues.every(event => event.theme === 'summer')).toBe(true);
   const opening = cues.find(event => event.cue === 'opening');
+  const acceptedPress = cues.filter(event => event.cue === 'press').at(-1);
+  expect(cues.indexOf(steps[0]), 'The first star belongs to the hold before opening begins').toBeLessThan(cues.indexOf(opening));
+  expect(steps[0].at - acceptedPress.at).toBeGreaterThanOrEqual(1070);
+  expect(cues.indexOf(steps[1])).toBeGreaterThan(cues.indexOf(opening));
+  expect(cues.indexOf(steps[2])).toBeGreaterThan(cues.indexOf(opening));
   const hush = cues.find(event => event.cue === 'anticipation');
   expect(cues.find(event => event.cue === 'unlock').at - hush.at,
     'A quiet breath separates the tension rhythm from unlocking').toBeGreaterThanOrEqual(300);
-  expect(openingStates[0].at - opening.at, '100 percent waits for the final release').toBeGreaterThanOrEqual(7800);
+  expect(openingStates[0].at - opening.at, '100 percent waits for the 2.32-second release').toBeGreaterThanOrEqual(2220);
+  // These are browser-observed beat times. Allow frame delivery jitter while
+  // still rejecting an early release or the former ten-second sequence.
+  for (const [cue, milliseconds] of [['anticipation', 1720], ['unlock', 2120], ['release', 2320], ['settle', 2950]]) {
+    const elapsed = cues.find(event => event.cue === cue).at - opening.at;
+    expect(elapsed, `${cue} cannot precede its automatic-opening boundary`).toBeGreaterThanOrEqual(milliseconds - 100);
+    expect(elapsed, `${cue} stays within the shorter automatic-opening sequence`).toBeLessThanOrEqual(milliseconds + 500);
+  }
+  const completed = observation.statuses.find(status => status.text === 'Chest opened! Ready for another adventure?');
+  expect(completed).toBeDefined();
+  expect(completed.at - opening.at, 'Saving waits for the full 3.8-second automatic sequence').toBeGreaterThanOrEqual(3700);
+  expect(completed.at - acceptedPress.at, 'The full hold and opening last five seconds').toBeGreaterThanOrEqual(4900);
+  expect(completed.at - acceptedPress.at, 'The completed chest no longer takes ten seconds').toBeLessThanOrEqual(6000);
+  await testInfo.attach('chest-completion-timing', {
+    body: JSON.stringify({ hold: opening.at - acceptedPress.at, automatic: completed.at - opening.at,
+      total: completed.at - acceptedPress.at }, null, 2), contentType: 'application/json'
+  });
 
   if (await page.evaluate(() => window.audioObservation.available)) {
     const allSounds = await page.evaluate(() => window.audioObservation.playbacks);
@@ -156,10 +184,6 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     await testInfo.attach('chest-cue-timing', {
       body: JSON.stringify({ cues, timing }, null, 2), contentType: 'application/json'
     });
-    expect(timing.find(event => event.cue === 'unlock').milliseconds,
-      'The chest remains locked through its complete buildup and final breath').toBeGreaterThanOrEqual(7600);
-    expect(timing.find(event => event.cue === 'release').milliseconds,
-      'The lid release preserves the long buildup').toBeGreaterThanOrEqual(7800);
     const startsAt = cues[0].at - 100;
     const chestSounds = allSounds.filter(sound => sound.at >= startsAt &&
       [0.19, 0.22, 0.24, 0.31, 0.44, 0.48, 0.68, 0.74].some(duration => Math.abs(sound.duration - duration) < 0.001));
@@ -170,7 +194,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       expect(chestSounds.filter(sound => Math.abs(sound.duration - duration) < 0.001)).toHaveLength(1);
     }
     const reward = chestSounds.find(sound => Math.abs(sound.duration - 0.74) < 0.001);
-    expect(reward.at - opening.at).toBeGreaterThanOrEqual(9200);
+    expect(reward.at - opening.at).toBeGreaterThanOrEqual(3700);
     const alignment = [['unlock', 0.31], ['release', 0.68], ['settle', 0.48]].map(([cue, duration]) => ({
       cue, milliseconds: chestSounds.find(sound => Math.abs(sound.duration - duration) < 0.001).at - cues.find(event => event.cue === cue).at
     }));

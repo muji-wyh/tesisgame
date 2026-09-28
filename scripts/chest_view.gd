@@ -840,6 +840,7 @@ func start_open(reduce: bool) -> void:
 	if mode != "closed":
 		return
 	reduced_motion = reduce
+	var confirmed_steps: int = _charge_step
 	stop_reaction()
 	hold_progress = 0.0
 	mode = "opening"
@@ -847,6 +848,9 @@ func start_open(reduce: bool) -> void:
 	_animation_origin_frame = Engine.get_process_frames()
 	_release_active = not reduced_motion
 	_opening_cues.clear()
+	# A shorter buildup can light the first star before confirmation completes.
+	for step in range(1, confirmed_steps + 1):
+		_opening_cues["charge_step:" + str(step)] = true
 	_opening_cues_enabled = is_visible_in_tree() and not reduced_motion
 	_emit_cue("opening")
 	if reduced_motion:
@@ -899,11 +903,12 @@ func set_hold_progress(value: float) -> void:
 		_tap_remaining = 0.0
 		_cancel_remaining = 0.0
 		_charge_step = 0
-	elif reduced_motion:
-		var crossed: int = mini(CHARGE_STEPS, floori(hold_progress * CHARGE_STEPS + 0.000001))
+	else:
+		var crossed: int = mini(CHARGE_STEPS, floori(performance_progress() * CHARGE_STEPS + 0.000001))
+		var duration: float = Feel.HOLD_SECONDS if reduced_motion else Feel.HOLD_SECONDS + Feel.RELEASE_TIME
 		while _charge_step < crossed:
 			_charge_step += 1
-			_emit_cue("charge_step", _charge_step, float(_charge_step) * 1.2 / CHARGE_STEPS)
+			_emit_cue("charge_step", _charge_step, float(_charge_step) * duration / CHARGE_STEPS)
 	_apply_pose(0.0)
 	_fit()
 

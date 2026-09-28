@@ -58,6 +58,7 @@ func _start() -> void:
 	chest.cue_requested.connect(_on_cue)
 	chest.opened.connect(func() -> void:
 		reward_time = clock_seconds
+		sound.finish_chest_motion()
 		sound.chest_reward(theme_id))
 	ready_to_capture = true
 
@@ -99,7 +100,7 @@ func _process(delta: float) -> bool:
 	chest._process(delta)
 	if phase == 4:
 		sound.set_chest_tension(chest.tension_progress())
-	if clock_seconds >= 13.0:
+	if clock_seconds >= 7.5:
 		print(JSON.stringify({"theme": theme_id, "cues": cues, "reward_time": reward_time,
 			"state": chest.hold_effect_snapshot()}))
 		quit()
