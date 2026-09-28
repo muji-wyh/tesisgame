@@ -55,7 +55,14 @@ for a successful save. No assets, reward rules or save formats were changed.
   iPhone WebKit and iPad WebKit, plus desktop reduced motion and invalid optional
   samples. They verify release-after-confirmation, cancellation, all fourteen
   pulse ordinals, faster late cadence, the quiet gap, continuous progress and
-  one saved reward. Chromium also checks cue/audio scheduling within 50 ms.
+  one saved reward. Chromium also records cue/audio scheduling for inspection.
+- Production deployment of the same pack passed startup availability checks and
+  all 72 theme-sample hash/resource checks. One complete production opening
+  passed: press-to-reward audio was 10.668 seconds and quiet-cue-to-unlock was
+  421.3 ms. Cue-to-WebAudio scheduling offsets were 4.5 ms for unlock, 50.9 ms
+  for release and 2.9 ms for settle. The release observation slightly exceeds
+  the 50 ms target; this check does not assert that latency target or establish
+  physical audio/display synchronization.
 
 Logs and generated previews are kept under ignored `build/` paths. Relevant logs
 include `chest-rhythm-tests.log`, `chest-rhythm-feel-final.log`,
@@ -63,7 +70,9 @@ include `chest-rhythm-tests.log`, `chest-rhythm-feel-final.log`,
 `chest-rhythm-browser-desktop.log`, `chest-rhythm-browser-mobile.log` and
 `chest-rhythm-build.log`. Native recordings, timing/audio reports and the
 preview gallery are in `build/chest-feel/`; capture output is in
-`chest-rhythm-capture.log`.
+`chest-rhythm-capture.log`. Production evidence is in
+`chest-rhythm-production.log`, `chest-rhythm-production-smoke.log` and
+`chest-production-smoke/report.json`.
 
 ## Validation limits
 
