@@ -269,8 +269,9 @@ results starts a fresh Match game with five vocabulary words. The manual Explore
 picker has been removed. Existing room choices, world preferences, and journey
 metadata are preserved; a failed write keeps play available and offers
 **Retry saving** in the header without resetting the current word.
-The result shelf reviews all five words, with missed words first. Swipe or drag
-horizontally to reveal them without a scrollbar; a stationary tap replays a word.
+The result shelf reviews all five words, with missed words first. The row is
+centered when it fits. Swipe or drag overflowing rows horizontally without a
+scrollbar; a stationary tap replays a word.
 Keyboard and controller focus still scroll the final word into view. Drags,
 cancelled gestures, and multiple touches never trigger pronunciation or rewards.
 Result actions stay compact and centered rather than stretching across the page.

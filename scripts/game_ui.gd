@@ -534,6 +534,8 @@ func _build_controls() -> void:
 	_result_text.add_child(_caption)
 	_found_words = HBoxContainer.new()
 	_found_words.name = "FoundWords"
+	_found_words.alignment = BoxContainer.ALIGNMENT_CENTER
+	_found_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_found_words.add_theme_constant_override("separation", 8)
 	_found_words_scroll = ReviewScroll.new()
 	_found_words_scroll.custom_minimum_size = Vector2(0, 88)

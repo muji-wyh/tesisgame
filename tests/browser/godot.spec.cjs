@@ -621,7 +621,9 @@ test('new adventures rotate and all five review words replay without opening or 
 
   const { metrics } = board;
   const reviewed = [];
-  await resultTap(page, 'review');
+  // Winning focuses the chest; Tab reaches the first review card at any row alignment.
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
   for (let index = 0; index < 5; index++) {
     if (index) {
       await page.keyboard.press('Tab');
