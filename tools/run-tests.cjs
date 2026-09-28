@@ -43,7 +43,7 @@ const groups = {
   'layout-release': { godot: ['layout_release_tests'] },
   themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },
   'pip-audio': { godot: ['pip_audio_tests'] },
-  'chest-charge': { godot: ['chest_reveal_tests', 'chest_audio_tests', 'chest_charge_flow_tests'] }
+  'chest-charge': { godot: ['chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests'] }
 };
 
 const allGroups = Object.keys(groups);

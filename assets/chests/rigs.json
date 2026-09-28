@@ -1,0 +1,304 @@
+{
+  "version": 1,
+  "source": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2",
+  "coordinate_system": "top-left origin, y-down; normalized top-left pivots",
+  "generator": "tools/prepare-chest-rigs.py",
+  "pillow_version": "12.2.0",
+  "numpy_version": "2.4.6",
+  "sources": [
+    {
+      "path": "assets/chests/royal/closed.png",
+      "sha256": "5d56092692cfff431c49856c40237ae31285a8344b20ace4d375b901e201946d"
+    },
+    {
+      "path": "assets/chests/royal/open.png",
+      "sha256": "95c5d1710ba4d33dce489d7a782a4cd10ce6e7d6465f32c07afa55ccfb9631b3"
+    },
+    {
+      "path": "assets/chests/energy/closed.png",
+      "sha256": "fde353205c24986d7fdad4c72055b88b53eecc8987a6a407935b8b4933c2c1e8"
+    },
+    {
+      "path": "assets/chests/energy/open.png",
+      "sha256": "276af1f68e908556831be6d5a466c89f626834624828940f9a501f493070bc75"
+    }
+  ],
+  "styles": {
+    "royal": {
+      "canvas": [
+        1024,
+        1024
+      ],
+      "hinge": [
+        540,
+        475
+      ],
+      "closed_bounds": [
+        39,
+        309,
+        837,
+        905
+      ],
+      "parts": [
+        {
+          "name": "lid_inner",
+          "role": "lid_inner",
+          "texture": "assets/chests/rigs/royal/lid_inner.png",
+          "pivot": [
+            0.5895627644569816,
+            0.8833333333333333
+          ],
+          "position": [
+            540,
+            475
+          ],
+          "order": 0,
+          "crop": [
+            122,
+            157,
+            831,
+            517
+          ],
+          "width": 709,
+          "height": 360,
+          "bytes": 265539,
+          "sha256": "b2af0391e93031760219b768ee0281bf7f8e6845d4c77918fb0eb55f775e71c6"
+        },
+        {
+          "name": "interior",
+          "role": "interior",
+          "texture": "assets/chests/rigs/royal/interior.png",
+          "pivot": [
+            0.5997088791848617,
+            0.5328467153284672
+          ],
+          "position": [
+            512,
+            512
+          ],
+          "order": 1,
+          "crop": [
+            100,
+            439,
+            787,
+            576
+          ],
+          "width": 687,
+          "height": 137,
+          "bytes": 68232,
+          "sha256": "24d6bb91043985717dbe89c260da523cff0c0bff7c0826435d8efe5463194af7"
+        },
+        {
+          "name": "body",
+          "role": "body",
+          "texture": "assets/chests/rigs/royal/body.png",
+          "pivot": [
+            0.5927318295739349,
+            -0.005115089514066497
+          ],
+          "position": [
+            512,
+            512
+          ],
+          "order": 2,
+          "crop": [
+            39,
+            514,
+            837,
+            905
+          ],
+          "width": 798,
+          "height": 391,
+          "bytes": 298336,
+          "sha256": "b9bdfcb18967ba29fe2ed8f87251a6f87a35b806099e0c6579597a03b9362d04"
+        },
+        {
+          "name": "lid_outer",
+          "role": "lid_outer",
+          "texture": "assets/chests/rigs/royal/lid_outer.png",
+          "pivot": [
+            0.6325224071702945,
+            0.6217228464419475
+          ],
+          "position": [
+            540,
+            475
+          ],
+          "order": 3,
+          "crop": [
+            46,
+            309,
+            827,
+            576
+          ],
+          "width": 781,
+          "height": 267,
+          "bytes": 203853,
+          "sha256": "4af9b7ed4b2c7ca28b7b39ce4c8824045f042fccda39c629174c0df6e567b6fc"
+        },
+        {
+          "name": "latch",
+          "role": "latch",
+          "texture": "assets/chests/rigs/royal/latch.png",
+          "pivot": [
+            0.5,
+            0.1511627906976744
+          ],
+          "position": [
+            316,
+            534
+          ],
+          "order": 4,
+          "crop": [
+            207,
+            495,
+            425,
+            753
+          ],
+          "width": 218,
+          "height": 258,
+          "bytes": 56833,
+          "sha256": "d9a6a09d6d7981e00acb3ce11ad63a36e0908b90e7aa495be57b7d69c9211b60"
+        }
+      ]
+    },
+    "energy": {
+      "canvas": [
+        1024,
+        1024
+      ],
+      "hinge": [
+        600,
+        460
+      ],
+      "closed_bounds": [
+        128,
+        319,
+        883,
+        1001
+      ],
+      "parts": [
+        {
+          "name": "lid_inner",
+          "role": "lid_inner",
+          "texture": "assets/chests/rigs/energy/lid_inner.png",
+          "pivot": [
+            0.5462822458270106,
+            0.9479392624728851
+          ],
+          "position": [
+            600,
+            460
+          ],
+          "order": 0,
+          "crop": [
+            240,
+            23,
+            899,
+            484
+          ],
+          "width": 659,
+          "height": 461,
+          "bytes": 201479,
+          "sha256": "9e394b07c294b685b752a6a5a28f7e2b01cb360e57e67188d3085fdffe8cd9c7"
+        },
+        {
+          "name": "interior",
+          "role": "interior",
+          "texture": "assets/chests/rigs/energy/interior.png",
+          "pivot": [
+            0.5118549511854951,
+            0.3793103448275862
+          ],
+          "position": [
+            512,
+            512
+          ],
+          "order": 1,
+          "crop": [
+            145,
+            435,
+            862,
+            638
+          ],
+          "width": 717,
+          "height": 203,
+          "bytes": 72406,
+          "sha256": "4539defbb70fa910d316c5049b158ab50c3810ba76b81f5779b99acfc2a76f04"
+        },
+        {
+          "name": "body",
+          "role": "body",
+          "texture": "assets/chests/rigs/energy/body.png",
+          "pivot": [
+            0.5086092715231788,
+            -0.0700218818380744
+          ],
+          "position": [
+            512,
+            512
+          ],
+          "order": 2,
+          "crop": [
+            128,
+            544,
+            883,
+            1001
+          ],
+          "width": 755,
+          "height": 457,
+          "bytes": 252394,
+          "sha256": "814d83eab384b20af33be8cba1af1458962674c825de94a9156979d7ada84c86"
+        },
+        {
+          "name": "lid_outer",
+          "role": "lid_outer",
+          "texture": "assets/chests/rigs/energy/lid_outer.png",
+          "pivot": [
+            0.6241610738255033,
+            0.44200626959247646
+          ],
+          "position": [
+            600,
+            460
+          ],
+          "order": 3,
+          "crop": [
+            135,
+            319,
+            880,
+            638
+          ],
+          "width": 745,
+          "height": 319,
+          "bytes": 141350,
+          "sha256": "85342818751be12d89e908f30901bbaff5082365b8bafaa980a781c86161a92e"
+        },
+        {
+          "name": "core",
+          "role": "core",
+          "texture": "assets/chests/rigs/energy/core.png",
+          "pivot": [
+            0.5,
+            0.512987012987013
+          ],
+          "position": [
+            369,
+            648
+          ],
+          "order": 4,
+          "crop": [
+            229,
+            490,
+            509,
+            798
+          ],
+          "width": 280,
+          "height": 308,
+          "bytes": 96892,
+          "sha256": "a96d19313035c3f49a5dfc6c365375a3588b9c277c01f52ce55489b453ed3710"
+        }
+      ]
+    }
+  }
+}

@@ -191,10 +191,57 @@ test('the manifest records exactly nineteen original paths, hashes and image dim
   }
 });
 
-test('only the nineteen selected PNGs are imported and Godot image sidecars are allowed', () => {
+test('only nineteen original PNGs and checksum-listed derived rig layers are present', () => {
   const files = listFiles(chestRoot);
-  assert.deepEqual(files.filter((file) => /\.png$/i.test(file)).sort(), expectedFiles.map(({ path: filename }) => filename).sort());
+  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
+  assert.equal(rigs.version, 1);
+  assert.deepEqual(Object.keys(rigs.styles).sort(), ['energy', 'royal']);
+  const parts = Object.values(rigs.styles).flatMap((style) => style.parts);
+  assert.equal(parts.length, 10);
+  assert.equal(new Set(parts.map((part) => part.texture)).size, 10);
+  for (const part of parts) {
+    assert.match(part.texture, /^assets\/chests\/rigs\/(?:royal|energy)\/[a-z_]+\.png$/);
+    const image = readPng(part.texture);
+    assert.equal(sha256(image.bytes), part.sha256, part.texture);
+    assert.equal(image.bytes.length, part.bytes, part.texture);
+    assert.equal(image.width, part.width, part.texture);
+    assert.equal(image.height, part.height, part.texture);
+  }
+  assert.deepEqual(files.filter((file) => /\.png$/i.test(file)).sort(), [
+    ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture)
+  ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
+});
+
+test('derived rigs preserve original source hashes and share exact lid hinges', () => {
+  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
+  const originals = readManifest().files;
+  assert.equal(rigs.sources.length, 4);
+  for (const source of rigs.sources) {
+    const original = originals.find((file) => file.path === source.path);
+    assert.ok(original, source.path);
+    assert.equal(source.sha256, original.sha256, source.path);
+    assert.equal(sha256(fs.readFileSync(absolute(source.path))), source.sha256, source.path);
+  }
+  for (const [name, style] of Object.entries(rigs.styles)) {
+    assert.deepEqual(style.canvas, [1024, 1024]);
+    assert.deepEqual(style.parts.map((part) => part.role).sort(),
+      ['body', 'interior', 'lid_inner', 'lid_outer', name === 'royal' ? 'latch' : 'core'].sort());
+    for (const part of style.parts) {
+      assert.equal(part.name, part.role);
+      assert.equal(part.pivot.length, 2);
+      assert.equal(part.position.length, 2);
+      assert.ok([...part.pivot, ...part.position].every(Number.isFinite), part.role);
+      assert.equal(part.crop.length, 4);
+      assert.ok(part.crop.every(Number.isSafeInteger), part.role);
+      assert.ok(part.crop.every((value) => value >= 0 && value <= 1024), part.role);
+      assert.equal(part.crop[2] - part.crop[0], part.width, part.role);
+      assert.equal(part.crop[3] - part.crop[1], part.height, part.role);
+      assert.ok(Math.abs(part.position[0] - part.pivot[0] * part.width - part.crop[0]) < 1e-8, part.role);
+      assert.ok(Math.abs(part.position[1] - part.pivot[1] * part.height - part.crop[1]) < 1e-8, part.role);
+      if (part.role.startsWith('lid_')) assert.deepEqual(part.position, style.hinge);
+    }
+  }
 });
 
 test('SOURCE documents the free demo version, selected paths and non-imported Unity behavior', () => {

@@ -87,18 +87,22 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
   const expected = [
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
-    ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`)
+    ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
+    ...themes.flatMap(id => ['press', 'charge', 'step', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
+      .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
   ];
   fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
   for (const [index, source] of expected.entries()) {
     const metadata = path.join(directory, `${source}.import`);
     fs.mkdirSync(path.dirname(metadata), { recursive: true });
+    fs.writeFileSync(path.join(directory, source), 'source fixture');
     fs.writeFileSync(metadata, `path="res://.godot/imported/${index}.sample"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', `${index}.sample`), `RSRCfixture-${index}`);
   }
   const audio = collectOptionalAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
+  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 72);
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));

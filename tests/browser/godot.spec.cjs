@@ -213,23 +213,85 @@ test('orientation changes preserve selection and fit the resized canvas', async 
 });
 
 async function holdOptionalAudio(page) {
+  const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../build/web/index.html'), 'utf8')
+    .match(/const config = (\{[^\r\n]*\});/)[1]);
+  const chestSamples = new Set(Object.entries(config.audioAssets)
+    .filter(([source]) => source.includes('/audio/chests/')).map(([, file]) => file));
+  const chestSourceFor = new Map(Object.entries(config.audioAssets)
+    .filter(([source]) => source.includes('/audio/chests/')).map(([source, file]) => [file, source]));
   const requests = [];
+  const lifecycle = new Map();
+  page.on('requestfinished', request => {
+    const state = lifecycle.get(request);
+    if (state) state.requestFinishedAt = Date.now();
+  });
+  page.on('requestfailed', request => {
+    const state = lifecycle.get(request);
+    if (state) state.requestFailedAt = Date.now();
+  });
   let release;
   const pending = new Promise(resolve => { release = resolve; });
   await page.route('**/audio-*.sample', async route => {
-    requests.push(route.request());
+    const request = route.request();
+    requests.push(request);
+    const state = { requestedAt: Date.now(), responseStatus: null, bodyState: 'waiting for response' };
+    lifecycle.set(request, state);
     await pending;
+    state.releasedAt = Date.now();
     await route.continue();
+    state.continuedAt = Date.now();
   });
   return {
     requests, release,
+    get chestRequests() {
+      return requests.filter(request => chestSamples.has(new URL(request.url()).pathname.split('/').at(-1)));
+    },
+    get nonChestRequests() {
+      return requests.filter(request => !chestSamples.has(new URL(request.url()).pathname.split('/').at(-1)));
+    },
+    checkChestBanks(expectedThemes) {
+      const sources = this.chestRequests.map(request => chestSourceFor.get(new URL(request.url()).pathname.split('/').at(-1)));
+      const themes = expectedThemes || [...new Set(sources.map(source => source.match(/\/chests\/([a-z]+)-/)[1]))];
+      expect(themes.length).toBeGreaterThan(0);
+      const expected = [...chestSourceFor.values()].filter(source => themes.some(theme => source.includes(`/chests/${theme}-`)));
+      expect(expected).toHaveLength(themes.length * 9);
+      expect(sources.sort(), 'Each prepared theme downloads its complete nine-cue bank once').toEqual(expected.sort());
+      return themes;
+    },
     async finish() {
-      release();
-      await Promise.all(requests.map(async request => {
-        const response = await request.response();
-        expect(response?.ok()).toBe(true);
-        await response.finished();
-      }));
+      await test.step('Release optional audio and inspect bounded request completion', async () => {
+        release();
+        const released = requests.slice();
+        const completed = Promise.all(released.map(async request => {
+          const state = lifecycle.get(request);
+          const response = await request.response();
+          state.responseStatus = response?.status() ?? null;
+          state.bodyState = 'pending';
+          expect(response?.ok()).toBe(true);
+          const error = await response.finished();
+          state.bodyState = error ? 'failed' : 'finished';
+          state.bodyError = error?.message ?? null;
+        }));
+        let timer;
+        try {
+          // Godot can abandon optional requests before their held routes resume.
+          // Chromium may then leave an unread response body pending indefinitely.
+          // Keep network evidence bounded; callers still assert the exact audio
+          // playback count and the game state after the response headers arrive.
+          await Promise.race([completed, new Promise(resolve => { timer = setTimeout(resolve, 5000); })]);
+        } finally {
+          clearTimeout(timer);
+          await test.info().attach('optional-audio-request-lifecycle', {
+            body: JSON.stringify(released.map(request => ({
+              url: request.url(), ...lifecycle.get(request),
+              failure: request.failure(), timing: request.timing()
+            })), null, 2), contentType: 'application/json'
+          });
+        }
+        for (const request of released) {
+          expect(lifecycle.get(request).responseStatus, `Optional audio headers: ${request.url()}`).toBe(200);
+        }
+      });
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     }
   };
@@ -266,7 +328,10 @@ test('optional audio downloads never delay bundled words or card input', async (
   try {
     await page.goto('/');
     await ready(page);
-    expect(held.requests).toEqual([]);
+    // Initialization may prepare Spring before the round chooses another world.
+    expect(held.nonChestRequests).toEqual([]);
+    const preparedThemes = held.checkChestBanks();
+    expect(preparedThemes.length).toBeLessThanOrEqual(2);
     test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
     const metrics = await canvasMetrics(page);
     const point = firstCard(metrics);
@@ -274,8 +339,9 @@ test('optional audio downloads never delay bundled words or card input', async (
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toHaveText('Now find its match!');
     await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(beforeWord + 2);
-    await expect.poll(() => new Set(held.requests.map(request => request.url())).size).toBe(1);
-    expect(held.requests).toHaveLength(1);
+    await expect.poll(() => new Set(held.nonChestRequests.map(request => request.url())).size).toBe(1);
+    expect(held.nonChestRequests).toHaveLength(1);
+    held.checkChestBanks(preparedThemes);
     await expect(page.locator('#audio-status')).toBeEmpty();
     const beforeRelease = await page.evaluate(() => window.audioObservation.starts);
     await held.finish();
@@ -296,11 +362,12 @@ test('hiding prevents pending audio from restarting until another gesture', asyn
     try {
       await page.goto('/');
       await ready(page);
+      const preparedThemes = held.checkChestBanks();
       test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
       const metrics = await canvasMetrics(page);
       const point = firstCard(metrics);
       await page.touchscreen.tap(point.x, point.y);
-      await expect.poll(() => held.requests.length).toBe(1);
+      await expect.poll(() => held.nonChestRequests.length).toBe(1);
       const before = await page.evaluate(() => window.audioObservation.starts);
       await page.evaluate(() => {
         Object.defineProperty(document, 'hidden', { configurable: true, value: true });
@@ -316,7 +383,8 @@ test('hiding prevents pending audio from restarting until another gesture', asyn
       await page.touchscreen.tap(point.x, point.y);
       await expect(page.locator('#game-status')).toContainText('Find 3 word–picture pairs.');
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
-      expect(held.requests).toHaveLength(1);
+      expect(held.nonChestRequests).toHaveLength(1);
+      held.checkChestBanks(preparedThemes);
       expect(errors).toEqual([]);
     } finally {
       held.release();
@@ -331,6 +399,7 @@ test('season colors preserve selection and discard obsolete pending music and pr
   try {
     await page.goto('/');
     await ready(page);
+    const preparedThemes = held.checkChestBanks();
     const point = firstCard(await canvasMetrics(page));
     await page.touchscreen.tap(point.x, point.y);
     const selected = await page.locator('#selection-status').textContent();
@@ -345,8 +414,9 @@ test('season colors preserve selection and discard obsolete pending music and pr
     if (await page.evaluate(() => window.audioObservation.available)) {
       // Opening Pip's room cancels the stale selected-word prompt; only the final world's music may start.
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
-      expect(new Set(held.requests.map(request => request.url())).size).toBe(12);
-      expect(held.requests).toHaveLength(12);
+      expect(new Set(held.nonChestRequests.map(request => request.url())).size).toBe(12);
+      expect(held.nonChestRequests).toHaveLength(12);
+      held.checkChestBanks([...new Set([...preparedThemes, 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space'])]);
     }
     await assertFits(page);
     expect(errors).toEqual([]);

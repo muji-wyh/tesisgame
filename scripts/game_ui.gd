@@ -255,7 +255,10 @@ var _reward_delivered_to_collection: bool = false
 var _feedback_tweens: Array[Tween] = []
 var _feedback_sparkles: Array[Control] = []
 var _holding_chest: bool = false
+var _settling_chest: bool = false
+var _chest_reward_announced: bool = false
 var _hold_elapsed: float = 0.0
+var _hold_origin_frame: int = -1
 var _chest_announced_percent: int = -1
 var _drag_distance: float = 0.0
 var _dragging_chest: bool = false
@@ -486,6 +489,7 @@ func _build_controls() -> void:
 	_stage.add_child(chest)
 	chest.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest.opened.connect(_on_chest_opened)
+	chest.cue_requested.connect(_on_chest_cue)
 	chest_button = Button.new()
 	chest_button.text = ""
 	chest_button.tooltip_text = "Open the treasure chest"
@@ -1137,10 +1141,13 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
+	_settling_chest = true
+	audio.stop_chest_performance()
 	if model.phase == "won" and model.chest_state == "closed":
 		_open_chest()
 	if model.chest_state == "opening":
 		chest.finish_immediately()
+	_settling_chest = false
 	if (_save_error and not _pending_fragment.is_empty()) or (model.phase == "won" and model.chest_state != "opened"):
 		_announce_status("Your piece is waiting to be saved. Choose Retry saving.")
 		return false
@@ -1373,6 +1380,7 @@ func _refresh() -> void:
 	var theme_changed: bool = str(_active_palette.get("id", "")) != model.theme_id
 	if theme_changed:
 		_active_palette = Data.theme(model.theme_id)
+		audio.prepare_chest(model.theme_id)
 	var palette: Dictionary = _active_palette
 	_background.color = palette.background.lightened(0.72)
 	if theme_changed:
@@ -2031,6 +2039,9 @@ func _resolve_feedback() -> void:
 func choose_theme(id: String) -> void:
 	if (_save_error and not _pending_fragment.is_empty()) or not model.set_theme(id):
 		return
+	if _holding_chest:
+		_cancel_chest_hold()
+		_finish_chest_drag()
 	_preferred_theme = id
 	_save_journey()
 	if collection_page.visible:
@@ -2096,12 +2107,28 @@ func _open_chest() -> void:
 	_hold_elapsed = 0.0
 	_finish_chest_drag()
 	_reward_delivered_to_collection = false
-	audio.interact(model.reward_theme)
-	audio.complete_chest_charge()
-	audio.cue(model.reward_theme + "-open")
+	_chest_reward_announced = false
+	if not _settling_chest:
+		audio.interact(model.reward_theme)
 	_publish_chest_charge(1.0)
-	effects.start(Data.theme(model.reward_theme), reduced_motion, not _pending_fragment.is_empty())
-	chest.start_open(reduced_motion)
+	chest.start_open(reduced_motion or _settling_chest)
+
+
+func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
+	if audio == null or _settling_chest or _page_hidden or collection_page.visible or model.phase != "won":
+		return
+	var expected_theme: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
+	if theme_id != expected_theme:
+		return
+	if cue in ["press", "charge_step"] and (not _holding_chest or model.chest_state != "closed"):
+		return
+	if cue in ["opening", "unlock", "release", "settle"] and model.chest_state != "opening":
+		return
+	audio.chest_cue(theme_id, cue, step)
+	if _host != null:
+		_host.chestCue(theme_id, cue, step)
+	if cue == "release":
+		effects.release(Data.theme(theme_id), reduced_motion, not _pending_fragment.is_empty())
 
 
 func _on_chest_opened() -> void:
@@ -2111,13 +2138,19 @@ func _on_chest_opened() -> void:
 	_commit_fragment()
 
 
-func _commit_fragment() -> void:
+func _commit_fragment(explicit_retry: bool = false) -> void:
 	var before: Dictionary = medal_progress.counts.duplicate()
 	if not _pending_fragment.is_empty() and not medal_progress.claim(_pending_fragment):
 		_save_error = true
 		_refresh()
 		return
 	_save_error = false
+	if not _chest_reward_announced:
+		_chest_reward_announced = true
+		if not _settling_chest and not _page_hidden and not collection_page.visible:
+			if explicit_retry:
+				audio.interact(model.reward_theme)
+			audio.chest_reward(model.reward_theme, explicit_retry)
 	for item in playroom_state.toys():
 		if not playroom_state.owned(item, before) and playroom_state.owned(item, medal_progress.counts):
 			_unlocked_gift = item
@@ -2125,7 +2158,7 @@ func _commit_fragment() -> void:
 	_refresh_collection()
 	_refresh()
 	duck.react("happy")
-	if _pending_fragment.is_empty() or reduced_motion or collection_page.visible:
+	if _pending_fragment.is_empty() or reduced_motion or collection_page.visible or _page_hidden or _settling_chest:
 		return
 	_start_fragment_delivery()
 
@@ -2275,7 +2308,7 @@ func _retry_reward_save() -> void:
 			_build_collection()
 		_refresh()
 	else:
-		_commit_fragment()
+		_commit_fragment(true)
 	if not _valid_focus(get_viewport().gui_get_focus_owner()):
 		_default_focus().grab_focus()
 
@@ -2322,9 +2355,13 @@ func on_page_visible() -> void:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_PAUSED and audio != null:
+	# Web focus/visibility is coordinated by the host; native desktop focus
+	# loss must also release input and settle any already-earned opening.
+	var native_focus_out: bool = not OS.has_feature("web") and what == NOTIFICATION_APPLICATION_FOCUS_OUT
+	var native_focus_in: bool = not OS.has_feature("web") and what == NOTIFICATION_APPLICATION_FOCUS_IN
+	if (what == NOTIFICATION_APPLICATION_PAUSED or native_focus_out) and audio != null:
 		on_page_hidden()
-	elif what == NOTIFICATION_APPLICATION_RESUMED and duck != null:
+	elif (what == NOTIFICATION_APPLICATION_RESUMED or native_focus_in) and duck != null:
 		on_page_visible()
 
 
@@ -2859,12 +2896,14 @@ func _start_chest_hold() -> void:
 		return
 	_holding_chest = true
 	_hold_elapsed = 0.0
+	_hold_origin_frame = Engine.get_process_frames()
 	_drag_distance = 0.0
 	_dragging_chest = true
 	_drag_has_anchor = false
-	chest.begin_hold()
 	audio.interact(model.theme_id)
 	audio.stop_voice()
+	audio.prepare_chest(model.theme_id)
+	chest.begin_hold()
 	audio.set_chest_charge(0.0)
 	_publish_chest_charge(0.0)
 	set_process(true)
@@ -2872,21 +2911,24 @@ func _start_chest_hold() -> void:
 
 func _end_chest_hold() -> void:
 	if _holding_chest:
-		var playful_tap: bool = _hold_elapsed < HOLD_SECONDS and _drag_distance <= 10.0
-		_cancel_chest_hold()
-		if playful_tap:
-			chest.play_tap()
-			audio.cue("select")
+		_cancel_chest_hold(true)
 	_finish_chest_drag()
 
 
-func _cancel_chest_hold() -> void:
+func _cancel_chest_hold(animate_return: bool = false) -> void:
 	_holding_chest = false
 	_hold_elapsed = 0.0
+	_hold_origin_frame = -1
 	if chest != null:
-		chest.set_hold_progress(0.0)
+		if animate_return:
+			chest.cancel_hold()
+		else:
+			chest.set_hold_progress(0.0)
 	if audio != null:
-		audio.stop_chest_charge()
+		if animate_return:
+			audio.stop_chest_charge()
+		else:
+			audio.stop_chest_performance()
 	_publish_chest_charge()
 
 
@@ -2908,10 +2950,18 @@ func _finish_chest_drag() -> void:
 
 
 func _process(delta: float) -> void:
+	# Input may start a hold in this frame; delta includes time from before
+	# that press. Start counting on the next frame without delaying its pose.
+	var hold_delta: float = 0.0 if Engine.get_process_frames() == _hold_origin_frame else delta
+	_advance_ui(delta, hold_delta)
+
+
+func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 	_update_duck()
 	_advance_collection_inertia(delta)
-	if _holding_chest:
-		_hold_elapsed += delta
+	var elapsed: float = delta if hold_delta < 0.0 else hold_delta
+	if _holding_chest and elapsed > 0.0 and is_finite(elapsed):
+		_hold_elapsed += elapsed
 		var progress: float = clampf(_hold_elapsed / HOLD_SECONDS, 0.0, 1.0)
 		chest.set_hold_progress(progress)
 		audio.set_chest_charge(progress)
@@ -2962,7 +3012,8 @@ func _chest_input(event: InputEvent) -> void:
 	var displacement: Vector2 = position - _drag_anchor_position
 	_drag_distance = maxf(_drag_distance, displacement.length())
 	if _drag_distance > 10.0:
-		_cancel_chest_hold()
+		if _holding_chest:
+			_cancel_chest_hold(true)
 	chest.set_drag_offset(_drag_anchor_offset + displacement)
 
 

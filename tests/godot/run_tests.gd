@@ -1090,14 +1090,14 @@ func _test_scene() -> void:
 	var cards_before_controller: Array = app.model.cards.duplicate(true)
 	var focus_before_axis: Control = root.gui_get_focus_owner()
 	joy_axis(JOY_AXIS_LEFT_X, 0.25)
-	app._process(0.5)
+	app._advance_ui(0.5)
 	await process_frame
 	check(root.gui_get_focus_owner() == focus_before_axis, "Left stick deadzone does not move focus")
 	joy_axis(JOY_AXIS_LEFT_X, 1.0)
 	await process_frame
 	var focus_after_axis: Control = root.gui_get_focus_owner()
 	check(focus_after_axis != null and focus_after_axis != focus_before_axis, "Left stick moves focus once past the deadzone")
-	app._process(0.05)
+	app._advance_ui(0.05)
 	await process_frame
 	check(root.gui_get_focus_owner() == focus_after_axis, "Left stick repeat waits instead of jumping every frame")
 	joy_axis(JOY_AXIS_LEFT_X, 0.0)
@@ -1106,13 +1106,13 @@ func _test_scene() -> void:
 	joy_button(JOY_BUTTON_DPAD_DOWN, true)
 	await process_frame
 	var dpad_first_focus: Control = root.gui_get_focus_owner()
-	app._process(0.4)
+	app._advance_ui(0.4)
 	check(root.gui_get_focus_owner() != dpad_first_focus,
 		"Holding the D-pad repeats navigation after the initial delay")
 	joy_button(JOY_BUTTON_DPAD_DOWN, false)
 	await process_frame
 	var dpad_released_focus: Control = root.gui_get_focus_owner()
-	app._process(0.5)
+	app._advance_ui(0.5)
 	check(root.gui_get_focus_owner() == dpad_released_focus,
 		"Releasing the D-pad stops repeated navigation")
 	var theme_before_controller: String = app.model.theme_id
@@ -1170,7 +1170,8 @@ func _test_scene() -> void:
 		app.choose_theme(season)
 		await process_frame
 		check(app.chest.theme_id == season, "Closed chest follows selected season")
-		check(app.chest.piece_count() == (9 if season in ["winter", "ocean", "candy"] else 2), "Chest uses real imported artwork")
+		check(app.chest.piece_count() == 9 if season in ["winter", "ocean", "candy"] else app.chest.piece_count() >= 4,
+			"Chest uses the imported Crystal assembly or derived physical body/lid/lock layers")
 	app.choose_theme("spring")
 	joy_axis(JOY_AXIS_LEFT_X, 1.0)
 	await process_frame
@@ -1184,7 +1185,7 @@ func _test_scene() -> void:
 	await process_frame
 	check(app._holding_chest and app._controller_holding_chest,
 		"The disconnected controller was actually charging the chest")
-	app._process(0.4)
+	app._advance_ui(0.4)
 	Input.joy_connection_changed.emit(0, false)
 	check(not app._holding_chest and not app._controller_holding_chest,
 		"Disconnecting the controller cancels its incomplete chest charge")
@@ -1200,12 +1201,12 @@ func _test_scene() -> void:
 	app.set_reduced_motion(true)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
-		app._process(0.5)
+		app._advance_ui(0.5)
 	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "closed", "A short chest press does not open it")
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
-		app._process(1.21)
+		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	await process_frame
 	check(app.model.chest_state == "opened", "A completed hold reveals the reduced-motion reward")
@@ -1232,7 +1233,7 @@ func _test_scene() -> void:
 	joy_button(JOY_BUTTON_A, true)
 	await process_frame
 	if app.has_method("_process"):
-		app._process(1.21)
+		app._advance_ui(1.21)
 	joy_button(JOY_BUTTON_A, false)
 	await process_frame
 	check(app.model.chest_state == "opening", "Normal opening is staged, not immediate")
@@ -1242,7 +1243,9 @@ func _test_scene() -> void:
 	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
 	await process_frame
 	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
-	check(app.effects.particle_count() == 24, "Opening first reveals the earned fragment with 24 particles")
+	check(app.effects.particle_count() == 0, "Opening anticipation waits for the physical release beat")
+	app.chest._advance_animation(0.33)
+	check(app.effects.particle_count() == 24, "The lid release starts the small 24-particle celebration")
 	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
 	var opened_reward_id: String = app.model.reward_id
 	var reward_count_before: int = app.collected_rewards.size()
@@ -1361,7 +1364,7 @@ func _test_scene() -> void:
 		check(false, "The chest receives native drag input")
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
-		app._process(1.21)
+		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	app.on_page_hidden()
 	check(app.model.chest_state == "opened", "Hiding finalizes an already-earned opening once")
@@ -1375,7 +1378,7 @@ func _test_scene() -> void:
 	prepare_completion(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
-		app._process(1.21)
+		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
 	app._finish_fragment_delivery()
@@ -1390,7 +1393,7 @@ func _test_scene() -> void:
 	prepare_completion(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
-		app._process(1.21)
+		app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
 	app._finish_fragment_delivery()

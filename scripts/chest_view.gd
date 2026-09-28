@@ -1,12 +1,14 @@
 extends Control
 
 signal opened
+signal cue_requested(theme_id: String, cue: String, step: int)
 
 const OPEN_SECONDS: float = 1.8
 const RELEASE_SECONDS: float = 0.72
 const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const Style = preload("res://scripts/ui_style.gd")
+const Feel = preload("res://scripts/chest_feel.gd")
 
 var theme_id: String = ""
 var reduced_motion: bool = false
@@ -37,14 +39,35 @@ var _charge_scale: float = 1.0
 var _charge_unit: float = 1.0
 var _charge_style_scale: float = -1.0
 var _charge_status: String = ""
+var _shadow := Node2D.new()
+var _details := Node2D.new()
+var _motion_bounds := Rect2()
+var _ground_center := Vector2.ZERO
+var _fit_scale: float = 1.0
+var _physical_pose: Dictionary = {}
+var _rigged: bool = false
+var _cancel_remaining: float = 0.0
+var _cancel_pressure: float = 0.0
+var _cancel_progress: float = 0.0
+var _charge_step: int = 0
+var _opening_cues_enabled: bool = false
+var _opening_cues: Dictionary = {}
+var _cue_log: Array[Dictionary] = []
+var _feel: Dictionary = Feel.profile("spring")
+var _crystal_cavity: Node2D
+var _animation_origin_frame: int = -1
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_shadow)
+	_shadow.draw.connect(_draw_shadow)
 	add_child(_charge)
 	_charge.hide()
 	_charge.draw.connect(_draw_charge)
 	add_child(_art)
+	add_child(_details)
+	_details.draw.connect(_draw_details)
 	add_child(_glint)
 	_glint.hide()
 	_glint.draw.connect(_draw_glint)
@@ -66,6 +89,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 		return
 	stop_reaction()
 	theme_id = palette.id
+	_feel = Feel.profile(theme_id)
 	_style = palette.chest
 	_tint = palette.tint
 	_glint_color = palette.light
@@ -75,21 +99,53 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
+	_crystal_cavity = null
 	for child in _art.get_children():
 		child.free()
 	_pieces.clear()
+	_rigged = false
 	var style: Dictionary = manifest.styles[_style]
 	if _style == "crystal":
 		for part in style.parts:
 			var matrix: Array = part.transform
 			var pose := Transform2D(Vector2(matrix[0], matrix[1]), Vector2(matrix[2], matrix[3]), Vector2(matrix[4], matrix[5]))
 			_add_piece(part.texture, part.name, pose, Vector2(part.pivot[0], part.pivot[1]), int(part.order), part.flip_h, part.flip_v)
-	else:
+		_crystal_cavity = Node2D.new()
+		_pieces[0].node.add_child(_crystal_cavity)
+		_crystal_cavity.draw.connect(_draw_crystal_cavity)
+	elif not _load_rig():
 		_add_piece(style.closed, "closed", Transform2D.IDENTITY, Vector2(0.5, 0.5))
 		_add_piece(style.open, "open", Transform2D.IDENTITY, Vector2(0.5, 0.5))
 	_measure_bounds()
+	_measure_motion_bounds()
 	_apply_pose(0.0)
 	_fit()
+
+
+func _load_rig() -> bool:
+	const RIG_PATH: String = "res://assets/chests/rigs.json"
+	if not FileAccess.file_exists(RIG_PATH):
+		return false
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(RIG_PATH))
+	if not manifest is Dictionary or not manifest.get("styles") is Dictionary:
+		return false
+	var rig: Variant = manifest.styles.get(_style)
+	if not rig is Dictionary or not rig.get("parts") is Array or rig.parts.is_empty():
+		return false
+	for part in rig.parts:
+		if not part is Dictionary or not part.has_all(["texture", "pivot", "position", "role"]):
+			return false
+		if not ResourceLoader.exists("res://" + str(part.texture)):
+			return false
+	for part in rig.parts:
+		var pivot := Vector2(float(part.pivot[0]), float(part.pivot[1]))
+		var position := Vector2(float(part.position[0]), float(part.position[1]))
+		# Derived rig pivots use top-left coordinates. Original Crystal geometry
+		# retains its imported bottom-left pivot convention in _add_piece.
+		_add_piece(str(part.texture), str(part.role), Transform2D(0.0, position),
+			Vector2(pivot.x, 1.0 - pivot.y), int(part.get("order", 0)))
+	_rigged = true
+	return true
 
 
 func _add_piece(path: String, role: String, pose: Transform2D, pivot: Vector2, order: int = 0, flip_h: bool = false, flip_v: bool = false) -> void:
@@ -120,43 +176,51 @@ func _measure_bounds() -> void:
 				_bounds = _bounds.expand(point)
 
 
+func _measure_motion_bounds() -> void:
+	_motion_bounds = _bounds
+	for frame in range(37):
+		var time: float = OPEN_SECONDS * float(frame) / 36.0
+		for index in range(_pieces.size()):
+			var state: Dictionary = _piece_pose(index, time, true)
+			if float(state.alpha) <= 0.001:
+				continue
+			var rect: Rect2 = _pieces[index].node.get_rect()
+			for corner in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
+				_motion_bounds = _motion_bounds.expand(state.pose * corner)
+	# A fixed margin contains the body's small recoil, Candy's elastic motion,
+	# and finite taps without asking the parent stage to stop clipping.
+	_motion_bounds = _motion_bounds.grow(maxf(_bounds.size.x, _bounds.size.y) * 0.065)
+
+
 func _fit() -> void:
 	if _pieces.is_empty() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return
-	# Leave the themed scenery visible and room for the crystal's opening pieces.
-	var fit: float = minf(size.x * 0.62 / _bounds.size.x, size.y * 0.60 / _bounds.size.y)
 	_update_charge()
-	var bob: float = 0.0 if reduced_motion else sin(_idle_time * 2.0) * 4.0
-	var shake_offset := Vector2.ZERO
-	if not reduced_motion and hold_progress > 0.0:
-		var strength: float = minf(size.x * 0.012, 3.0 / Style.ui_scale(self)) * hold_progress * hold_progress
-		shake_offset = Vector2(sin(_idle_time * lerpf(18.0, 72.0, hold_progress)), cos(_idle_time * 61.0)) * strength
-	var pulse: Vector2 = Vector2.ONE
-	if _hold_active and not reduced_motion:
-		var anticipation: float = smoothstep(0.65, 1.0, hold_progress)
-		var beat: float = sin(clampf(fposmod(hold_progress * CHARGE_STEPS, 1.0) / 0.32, 0.0, 1.0) * PI)
-		pulse.y -= anticipation * 0.07 + beat * 0.035
-		bob += anticipation * minf(size.y * 0.025, 5.0 / _charge_scale)
-	if mode == "opening" and not reduced_motion:
-		var spring: float = sin(clampf(_elapsed / 0.62, 0.0, 1.0) * PI)
-		pulse = Vector2(1.0 - spring * 0.055, 1.0 + spring * 0.08)
-		bob -= sin(clampf(_elapsed / OPEN_SECONDS, 0.0, 1.0) * PI) * size.y * 0.07
-	var safe_top: float = 0.0
-	if _charge_label.visible:
-		safe_top = _charge_label.position.y + _charge_label.size.y + 3.0 / _charge_scale
-		if _style == "crystal":
-			# Crystal artwork fills its source bounds, unlike the padded chest sprites.
-			var crown_top: float = maxf(safe_top, _charge_center.y - _charge_radius.y * 0.5 + 22.0 * _charge_unit)
-			var clearance: float = 1.0 - smoothstep(RELEASE_SECONDS, 0.95, _elapsed) if mode == "opening" else 1.0
-			safe_top = lerpf(safe_top, crown_top, clearance)
-		var bottom: float = size.y - 6.0 / _charge_scale
-		fit = minf(fit, maxf(0.0, bottom - safe_top) * 0.88 / _bounds.size.y)
-		var half_height: float = _bounds.size.y * fit * maxf(pulse.y, 1.0) * 0.5
-		bob = clampf(size.y * 0.59 + bob, safe_top + half_height, bottom - half_height) - size.y * 0.59
-	drag_offset = _clamp_drag_offset(drag_offset, fit, bob, pulse, safe_top)
-	_art.scale = Vector2.ONE * fit * pulse
-	_art.position = Vector2(size.x * 0.5, size.y * 0.59 + bob) - _bounds.get_center() * _art.scale + drag_offset + shake_offset
-	_art.rotation = 0.0 if reduced_motion else sin(_tap_remaining * 24.0) * 0.04 * (_tap_remaining / 0.35)
+	# Reserve the same physical envelope before, during and after the readout.
+	# Its disappearance cannot cause a sudden scale or position change.
+	var pixel: float = 1.0 / _charge_scale
+	var safe_top: float = _charge_label.position.y + _charge_label.size.y + 4.0 * pixel
+	var bottom: float = maxf(safe_top, size.y - 7.0 * pixel)
+	var available_height: float = maxf(0.0, bottom - safe_top)
+	_fit_scale = maxf(0.0, minf(size.x * 0.79 / _motion_bounds.size.x, available_height * 0.87 / _motion_bounds.size.y))
+	var center := Vector2(size.x * 0.5, safe_top + available_height * 0.54)
+	var hold: Vector2 = _hold_pose_state()
+	var pose_time: float = _elapsed if mode in ["opening", "opened"] else _charge_time
+	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"])
+	if reduced_motion:
+		_physical_pose = {"offset": Vector2.ZERO, "scale": Vector2.ONE, "rotation": 0.0}
+	var offset: Vector2 = _physical_pose.offset * _bounds.size.x * _fit_scale
+	var pulse: Vector2 = _physical_pose.scale
+	var bob: float = center.y - size.y * 0.59
+	drag_offset = _clamp_drag_offset(drag_offset, _fit_scale, bob, Vector2.ONE, safe_top)
+	_art.scale = Vector2.ONE * _fit_scale * pulse
+	_art.rotation = float(_physical_pose.rotation)
+	if not reduced_motion:
+		_art.rotation += sin(_tap_remaining * 24.0) * 0.025 * (_tap_remaining / 0.35)
+	_art.position = center - _art.transform.basis_xform(_motion_bounds.get_center()) + drag_offset + offset
+	_ground_center = center + Vector2(0.0, (_bounds.end.y - _motion_bounds.get_center().y) * _fit_scale) + drag_offset
+	_shadow.queue_redraw()
+	_details.queue_redraw()
 	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0)
 	_glint.queue_redraw()
 
@@ -166,8 +230,6 @@ func _update_charge() -> void:
 		or (_release_active and mode == "opening" and _elapsed < 0.95))
 	_charge.visible = active
 	_charge_label.visible = active
-	if not active:
-		return
 	_charge_scale = maxf(0.25, Style.ui_scale(self))
 	var pixel: float = 1.0 / _charge_scale
 	var margin: float = minf(10.0 * pixel, minf(size.x, size.y) * 0.08)
@@ -308,26 +370,102 @@ func _charge_particle_count() -> int:
 	return 8 + mini(2, floori(hold_progress * CHARGE_STEPS)) * 4
 
 
+func _hold_pose_state() -> Vector2:
+	if reduced_motion:
+		return Vector2.ZERO
+	if _cancel_remaining > 0.0:
+		var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
+		return Vector2(_cancel_pressure, _cancel_progress) * returning
+	return Vector2(0.30 + hold_progress * 0.70, hold_progress) if _hold_active else Vector2.ZERO
+
+
 func begin_hold() -> void:
-	if mode != "closed" or not is_visible_in_tree():
+	if mode != "closed" or not is_visible_in_tree() or _hold_active:
 		return
 	_hold_active = true
+	_animation_origin_frame = Engine.get_process_frames()
 	_release_active = false
+	_cancel_remaining = 0.0
 	_charge_time = 0.0
+	_charge_step = 0
+	_cue_log.clear()
 	hold_progress = 0.0
 	_tap_remaining = 0.0
+	_apply_pose(0.0)
 	_fit()
+	_emit_cue("press")
+
+
+func cancel_hold() -> void:
+	if not _hold_active or mode != "closed":
+		return
+	_cancel_pressure = 0.30 + hold_progress * 0.70
+	_animation_origin_frame = Engine.get_process_frames()
+	_cancel_progress = hold_progress
+	_cancel_remaining = 0.0 if reduced_motion else Feel.CANCEL_SECONDS
+	_hold_active = false
+	hold_progress = 0.0
+	_charge_step = 0
+	_tap_remaining = 0.0
+	_emit_cue("cancel")
+	_apply_pose(0.0)
+	_fit()
+
+
+func _emit_cue(cue: String, step: int = 0, cue_time: float = -1.0) -> void:
+	if not is_visible_in_tree() or theme_id.is_empty():
+		return
+	var time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * 1.2
+	if cue_time >= 0.0:
+		time = cue_time
+	_cue_log.append({"theme": theme_id, "cue": cue, "step": step, "time": time})
+	if _cue_log.size() > 12:
+		_cue_log.pop_front()
+	cue_requested.emit(theme_id, cue, step)
 
 
 func hold_effect_snapshot() -> Dictionary:
 	var active: bool = _charge.visible and is_visible_in_tree()
 	var opening: bool = active and mode == "opening"
 	var drawing: bool = active and _charge_radius.x > 0.0 and _charge_radius.y > 0.0
+	var pieces: Array[Dictionary] = []
+	var signature: PackedStringArray = ["body:%.3f:%.3f:%.3f:%.3f:%.3f" % [
+		_art.position.x, _art.position.y, _art.rotation, _art.scale.x, _art.scale.y]]
+	var rendered_bounds := Rect2()
+	var first_visible: bool = true
+	for piece in _pieces:
+		var transform: Transform2D = piece.node.transform
+		var alpha: float = piece.node.modulate.a
+		pieces.append({"role": piece.role, "x": transform.origin.x, "y": transform.origin.y,
+			"rotation": transform.get_rotation(), "scale_x": transform.get_scale().x,
+			"scale_y": transform.get_scale().y, "alpha": alpha})
+		signature.append("%s:%.3f:%.3f:%.3f:%.3f:%.3f:%.3f" % [piece.role, transform.origin.x,
+			transform.origin.y, transform.get_rotation(), transform.get_scale().x, transform.get_scale().y, alpha])
+		if alpha > 0.001:
+			var rect: Rect2 = piece.node.get_rect()
+			for corner in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
+				var point: Vector2 = _art.transform * transform * corner
+				rendered_bounds = Rect2(point, Vector2.ZERO) if first_visible else rendered_bounds.expand(point)
+				first_visible = false
+	var body_offset: Vector2 = _physical_pose.get("offset", Vector2.ZERO)
+	var body_scale: Vector2 = _physical_pose.get("scale", Vector2.ONE)
 	return {"active": active, "phase": "opening" if opening else ("holding" if active else "idle"),
 		"progress": 1.0 if opening else hold_progress,
 		"percent": 100 if opening else mini(100, floori(hold_progress * 100.0)),
 		"text": _charge_label.text if active else "", "status": _charge_status if active else "",
 		"animated": active and not reduced_motion,
+		"theme": theme_id, "material": _feel.material, "rigged": _rigged,
+		"opening_time": _elapsed, "cancel_remaining": _cancel_remaining,
+		"animation_origin_frame": _animation_origin_frame,
+		"interior_open": _crystal_opening(),
+		"fitted_scale": _fit_scale, "pose_signature": "/".join(signature), "pieces": pieces,
+		"physical_pose": {"x": body_offset.x, "y": body_offset.y, "scale_x": body_scale.x,
+			"scale_y": body_scale.y, "rotation": _physical_pose.get("rotation", 0.0)},
+		"physical_bounds": {"x": rendered_bounds.position.x, "y": rendered_bounds.position.y,
+			"width": rendered_bounds.size.x, "height": rendered_bounds.size.y},
+		"motion_bounds": {"x": _motion_bounds.position.x, "y": _motion_bounds.position.y,
+			"width": _motion_bounds.size.x, "height": _motion_bounds.size.y},
+		"cues": _cue_log.duplicate(true), "cue_count": _cue_log.size(),
 		"spark_count": (12 if opening and _elapsed < RELEASE_SECONDS else _charge_particle_count() + 1 if not opening else 0) if drawing and not reduced_motion else 0,
 		"bounds": {"x": _charge_bounds.position.x, "y": _charge_bounds.position.y,
 			"width": _charge_bounds.size.x, "height": _charge_bounds.size.y},
@@ -346,10 +484,142 @@ func _draw_glint() -> void:
 	_glint.draw_line(center - Vector2(0, radius * 0.6), center + Vector2(0, radius * 0.6), Color(Color.WHITE, power), 2.0, true)
 
 
+func _draw_shadow() -> void:
+	if _bounds.size.x <= 0.0 or _fit_scale <= 0.0:
+		return
+	var width: float = _bounds.size.x * _fit_scale * 0.35
+	var height: float = maxf(1.0, minf(width * 0.10, size.y * 0.04))
+	var lift: float = maxf(0.0, -float(_physical_pose.get("offset", Vector2.ZERO).y))
+	for layer in range(3):
+		var radius := Vector2(width, height) * (1.0 - float(layer) * 0.18 + lift)
+		var points := PackedVector2Array()
+		for index in range(32):
+			points.append(_ground_center + Vector2.from_angle(TAU * float(index) / 32.0) * radius)
+		_shadow.draw_colored_polygon(points, Color(0.10, 0.13, 0.19, (0.045 + float(layer) * 0.013) * (1.0 - lift * 3.0)))
+
+
+func _crystal_opening() -> float:
+	if _style != "crystal" or not mode in ["opening", "opened"]:
+		return 0.0
+	return smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.38, _elapsed)
+
+
+func _crystal_face_points(coordinates: Array, opening: float) -> PackedVector2Array:
+	var sprite: Sprite2D = _pieces[0].node
+	var texture_size: Vector2 = sprite.texture.get_size()
+	var points := PackedVector2Array()
+	# Coordinates follow the top face of the original Crystal base. Reveal
+	# depth away from its front rim instead of replacing or tinting the box.
+	for point in coordinates:
+		var coordinate: Vector2 = Vector2(point) / Vector2(805.0, 609.0)
+		coordinate.y = lerpf(0.205, coordinate.y, opening)
+		points.append(sprite.offset + coordinate * texture_size)
+	return points
+
+
+func _draw_crystal_cavity() -> void:
+	var opening: float = _crystal_opening()
+	if _crystal_cavity == null or opening <= 0.001:
+		return
+	var rim: PackedVector2Array = _crystal_face_points([
+		Vector2(29, 91), Vector2(222, 12), Vector2(783, 48), Vector2(595, 140)], opening)
+	var inside: PackedVector2Array = _crystal_face_points([
+		Vector2(49, 86), Vector2(229, 28), Vector2(750, 56), Vector2(587, 121)], opening)
+	var floor: PackedVector2Array = _crystal_face_points([
+		Vector2(105, 99), Vector2(254, 50), Vector2(694, 74), Vector2(575, 122)], opening)
+	_crystal_cavity.draw_colored_polygon(rim, _charge_color.darkened(0.62))
+	_crystal_cavity.draw_colored_polygon(inside, Color("#10252e").lerp(_charge_color.darkened(0.90), 0.35))
+	_crystal_cavity.draw_colored_polygon(floor, _charge_color.darkened(0.81))
+	var edge := PackedVector2Array([rim[3], rim[0], rim[1], rim[2]])
+	_crystal_cavity.draw_polyline(edge, Color(_charge_spark, 0.70), 2.5, true)
+
+
+func _draw_details() -> void:
+	if reduced_motion or _fit_scale <= 0.0 or not (_hold_active or mode == "opening"):
+		return
+	var opening_now: bool = mode == "opening"
+	var time: float = _elapsed if opening_now else _charge_time
+	var release: float = maxf(0.0, time - Feel.RELEASE_TIME) if opening_now else 0.0
+	var fade: float = 1.0 - smoothstep(1.05, 1.6, time) if opening_now else 0.35 + hold_progress * 0.55
+	var center: Vector2 = _art.transform * (_bounds.get_center() - Vector2(0, _bounds.size.y * 0.12))
+	var extent := Vector2(_bounds.size.x * _fit_scale * 0.48, _bounds.size.y * _fit_scale * 0.40)
+	var radius: float = maxf(0.8, minf(extent.x, extent.y) * 0.055)
+	var detail_min := Vector2(radius * 3.0, _charge_label.get_rect().end.y + radius * 3.0)
+	var detail_max := Vector2(maxf(detail_min.x, size.x - radius * 3.0), maxf(detail_min.y, size.y - radius * 3.0))
+	var color := Color(_charge_spark, fade * 0.75)
+	var detail: String = _feel.decoration
+	if detail == "orbit":
+		for ring in range(2):
+			var orbit := PackedVector2Array()
+			for index in range(33):
+				var angle: float = TAU * float(index) / 32.0
+				var position: Vector2 = center + Vector2(cos(angle), sin(angle) * 0.30).rotated(-0.22 + ring * 0.44) * extent.x * (0.65 + ring * 0.18)
+				orbit.append(position.clamp(detail_min, detail_max))
+			_details.draw_polyline(orbit, Color(_charge_color, fade * 0.55), maxf(1.0, radius * 0.35), true)
+	for index in range(8):
+		var phase: float = float(index) / 8.0
+		var angle: float = TAU * phase + (time * 0.22 if detail == "orbit" else 0.0)
+		var distance: float = 0.75 + (minf(release, 0.55) * 0.4 if opening_now else sin(time * 2.0 + index) * 0.04)
+		var position: Vector2 = center + Vector2(cos(angle), sin(angle)) * extent * distance
+		if detail == "petals":
+			var side: float = -1.0 if index < 4 else 1.0
+			var anchor := Vector2(_bounds.get_center().x + side * _bounds.size.x * 0.29,
+				_bounds.position.y + _bounds.size.y * 0.35)
+			var flick: float = sin(clampf(release / 0.52, 0.0, 1.0) * PI)
+			position = _art.transform * anchor + Vector2.from_angle(phase * TAU * 2.0) * radius * (1.6 + hold_progress * 0.6)
+			position += Vector2(side * release * extent.x * 0.20, -flick * extent.y * 0.18)
+		elif detail == "bubbles":
+			position.y -= fposmod(time * 9.0 + index * 3.0, maxf(1.0, extent.y * 0.4))
+		elif detail == "falling_leaves":
+			var side: float = -1.0 if index < 4 else 1.0
+			position = center + Vector2(side * extent.x * (0.63 + float(index % 4) * 0.09), -extent.y * 0.46)
+			position += Vector2(sin(time * 3.0 + index) * radius * 1.8, release * release * extent.y * 0.65 + float(index % 4) * radius)
+		elif detail == "vine_leaves":
+			var side: float = -1.0 if index < 4 else 1.0
+			var row: float = float(index % 4)
+			var anchor := Vector2(_bounds.get_center().x + side * _bounds.size.x * 0.31,
+				_bounds.get_center().y + _bounds.size.y * (0.10 + row * 0.045))
+			var pull: float = Feel.opening(theme_id, time - 0.14 - row * 0.035) if opening_now else hold_progress * 0.25
+			var origin: Vector2 = _art.transform * anchor
+			position = origin + Vector2(side * radius * (3.2 + row * 0.6 + pull * 2.0), -radius * (1.5 + row + pull * 4.0))
+			position = position.clamp(detail_min, detail_max)
+			var bend: Vector2 = origin.lerp(position, 0.50) + Vector2(side * radius * 1.4, radius * (1.0 - pull))
+			_details.draw_polyline(PackedVector2Array([origin.clamp(detail_min, detail_max), bend.clamp(detail_min, detail_max), position]),
+				Color(_charge_color, fade * 0.6), maxf(1.0, radius * 0.35), true)
+		# Decoration is clipped to measured stage space, including short phones.
+		position = position.clamp(detail_min, detail_max)
+		match detail:
+			"sun_rays":
+				var direction := Vector2.from_angle(angle)
+				_details.draw_line(position - direction * radius, position + direction * radius * (1.8 + hold_progress), color, maxf(1.0, radius * 0.50), true)
+			"ice_facets":
+				for arm in range(3):
+					var direction := Vector2.from_angle(float(arm) * PI / 3.0)
+					_details.draw_line(position - direction * radius, position + direction * radius, color, maxf(1.0, radius * 0.27), true)
+			"bubbles":
+				_details.draw_arc(position, radius * (0.7 + phase), 0.0, TAU, 16, color, maxf(1.0, radius * 0.25), true)
+				_details.draw_circle(position + Vector2(-0.25, -0.35) * radius, radius * 0.20, Color(Color.WHITE, fade * 0.6))
+			"orbit":
+				_details.draw_circle(position, radius * (1.1 if index % 2 == 0 else 0.55), color)
+			"sprinkles":
+				var direction := Vector2.from_angle(angle + sin(time * 8.0 + index) * 0.35)
+				_details.draw_line(position - direction * radius, position + direction * radius, Color(_charge_color if index % 2 else _charge_spark, fade), maxf(1.0, radius * 0.7), true)
+			_:
+				var direction := Vector2.from_angle(angle + sin(time * 3.0 + index) * 0.2)
+				var side := direction.orthogonal()
+				var leaf := PackedVector2Array([position - direction * radius * 1.5,
+					position + side * radius * 0.7, position + direction * radius * 1.5,
+					position - side * radius * 0.7])
+				_details.draw_colored_polygon(leaf, color)
+				if detail == "vine_leaves":
+					_details.draw_line(position - direction * radius * 2.8, position + direction * radius * 1.5, Color(_charge_color, fade * 0.65), maxf(1.0, radius * 0.3), true)
+
+
 func play_tap() -> void:
 	if reduced_motion or mode != "closed":
 		return
 	_tap_remaining = 0.35
+	_animation_origin_frame = Engine.get_process_frames()
 	_fit()
 
 
@@ -359,15 +629,19 @@ func stop_reaction() -> void:
 	_hold_active = false
 	_release_active = false
 	_charge_time = 0.0
+	_cancel_remaining = 0.0
+	_charge_step = 0
+	_opening_cues_enabled = false
 	_art.rotation = 0.0
 	_glint.hide()
 	_charge.hide()
 	_charge_label.hide()
+	_apply_pose(0.0)
 	_fit()
 
 
 func _clamp_drag_offset(value: Vector2, fit: float, bob: float, pulse: Vector2, safe_top: float) -> Vector2:
-	var dimensions: Vector2 = _bounds.size * fit * pulse
+	var dimensions: Vector2 = _motion_bounds.size * fit * pulse
 	var center := Vector2(size.x * 0.5, size.y * 0.59 + bob)
 	var minimum := dimensions * 0.5 - center
 	minimum.y += safe_top
@@ -378,24 +652,148 @@ func _clamp_drag_offset(value: Vector2, fit: float, bob: float, pulse: Vector2, 
 	)
 
 
-func _apply_pose(progress: float) -> void:
-	for index in range(_pieces.size()):
-		var piece: Dictionary = _pieces[index]
-		var sprite: Sprite2D = piece.node
-		var pose: Transform2D = piece.rest
-		var alpha: float = 1.0
-		if _style == "crystal":
-			if piece.role != "chest":
-				var direction: Vector2 = pose.origin - _bounds.get_center()
-				if direction.length_squared() < 1.0:
-					direction = Vector2.UP
-				var rotation_delta: float = (0.13 if index % 2 == 0 else -0.13) * progress
-				pose = pose * Transform2D(rotation_delta, Vector2.ZERO)
-				pose.origin += direction.normalized() * _bounds.size.x * 0.13 * progress
+func _rotate_piece(pose: Transform2D, angle: float) -> Transform2D:
+	var origin: Vector2 = pose.origin
+	pose = pose.rotated(angle)
+	pose.origin = origin
+	return pose
+
+
+func _charged_piece_pose(index: int, pressure: float, progress: float, time: float) -> Transform2D:
+	var piece: Dictionary = _pieces[index]
+	var pose: Transform2D = piece.rest
+	if pressure <= 0.0:
+		return pose
+	var tension: float = sin(time * float(_feel.frequency)) * progress * progress
+	if _style == "crystal" and piece.role != "chest":
+		var direction: Vector2 = pose.origin - _bounds.get_center()
+		if direction.length_squared() < 1.0:
+			direction = Vector2.UP
+		var group: int = (index * 3) % 8 % CHARGE_STEPS
+		var stage: float = smoothstep(float(group) / CHARGE_STEPS, float(group + 1) / CHARGE_STEPS, progress)
+		var turn: float = (0.010 * pressure + 0.025 * stage) * (1.0 if index % 2 == 0 else -1.0)
+		if theme_id == "winter":
+			turn *= 0.40
+		elif theme_id == "ocean":
+			turn *= 0.75
+		elif theme_id == "candy":
+			turn *= 1.65
+		pose = _rotate_piece(pose, turn)
+		pose.origin -= direction.normalized() * _bounds.size.x * (0.003 * pressure + 0.008 * stage)
+	elif _rigged and piece.role == "latch":
+		var stages: float = smoothstep(0.0, 1.0 / 3.0, progress) * 0.25
+		stages += smoothstep(1.0 / 3.0, 2.0 / 3.0, progress) * 0.30
+		stages += smoothstep(2.0 / 3.0, 1.0, progress) * 0.45
+		var turn: float = (0.010 * pressure + stages * 0.012 + tension * 0.008) * (0.65 if theme_id == "autumn" else 1.0)
+		pose = pose * Transform2D(turn, Vector2.ZERO)
+		pose.origin.y += _bounds.size.y * (0.004 * pressure + stages * 0.003)
+	elif _rigged and piece.role == "core":
+		var stages: float = smoothstep(0.0, 1.0 / 3.0, progress) * 0.035
+		stages += smoothstep(1.0 / 3.0, 2.0 / 3.0, progress) * 0.050
+		stages += smoothstep(2.0 / 3.0, 1.0, progress) * 0.070
+		var turn: float = (0.020 * pressure + stages + tension * 0.006) * (1.0 if theme_id == "summer" else -1.0)
+		pose = pose * Transform2D(turn, Vector2.ZERO)
+	return pose
+
+
+func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
+	var piece: Dictionary = _pieces[index]
+	var hold: Vector2 = _hold_pose_state()
+	var charge_time: float = _charge_time
+	if opening_now:
+		var anticipation: float = 1.0 - smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time)
+		hold = Vector2.ONE * anticipation if not reduced_motion else Vector2.ZERO
+		charge_time = 1.2 + time
+	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
+	var alpha: float = 1.0
+	var progress: float = Feel.opening(theme_id, time) if opening_now else 0.0
+	if _style == "crystal" and piece.role == "01":
+		# The small central crystal is the lock. It releases before the large
+		# facets, so their shared source artwork still reads as a mechanism.
+		var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+		var twist: float = 0.14 if theme_id == "winter" else -0.10 if theme_id == "ocean" else 0.20
+		pose = _rotate_piece(pose, twist * unlock)
+		pose.origin.y -= _bounds.size.y * 0.035 * unlock
+	elif _style == "crystal" and piece.role != "chest":
+		# Opposing facets move in distinct waves, never as one enlarged sprite.
+		if theme_id == "candy":
+			var delay: float = 0.0 if index % 2 == 0 else 0.14
+			progress = Feel.opening(theme_id, time - delay) if opening_now else 0.0
 		else:
-			alpha = 1.0 - progress if piece.role == "closed" else progress
-		sprite.transform = pose
-		sprite.modulate = Color(_tint.r, _tint.g, _tint.b, alpha)
+			progress = Feel.opening(theme_id, time, (index * 3) % 8) if opening_now else 0.0
+		var direction: Vector2 = pose.origin - _bounds.get_center()
+		if direction.length_squared() < 1.0:
+			direction = Vector2.UP
+		var spread: float = float(_feel.spread)
+		var turn: float = (0.11 if index % 2 == 0 else -0.11) * progress
+		if theme_id == "winter":
+			turn *= 0.45
+		elif theme_id == "ocean":
+			var side: float = -1.0 if direction.x < 0.0 else 1.0
+			direction = Vector2(side, -0.60 - absf(direction.y) / maxf(1.0, _bounds.size.y))
+			turn = side * 0.21 * progress
+		elif theme_id == "candy":
+			turn *= 1.65
+		pose = _rotate_piece(pose, turn)
+		pose.origin += direction.normalized() * _bounds.size.x * spread * progress
+	elif _rigged:
+		match piece.role:
+			"lid_outer":
+				if theme_id == "space":
+					# A magnetic cover keeps its rigid silhouette while detaching;
+					# it does not inherit the solar chest's hinged opening.
+					var age: float = maxf(0.0, time - Feel.SETTLE_TIME)
+					var magnetic: float = sin(age * 19.0) * exp(-age * 9.0) if opening_now else 0.0
+					pose = pose * Transform2D(-0.045 * progress + magnetic * 0.025, Vector2.ZERO)
+					pose.origin += Vector2(_bounds.size.x * 0.015 * progress,
+						-_bounds.size.y * (0.29 * progress + magnetic * 0.010))
+				else:
+					var squash: float = maxf(0.0, cos(clampf(progress, 0.0, 1.0) * PI))
+					pose = pose * Transform2D(0.0, Vector2(1.0, maxf(0.001, squash)), 0.0, Vector2.ZERO)
+					alpha = 1.0 if progress < 0.5 else 0.0
+					if theme_id == "jungle":
+						var pull: float = sin(clampf(progress, 0.0, 1.0) * PI)
+						pose = pose * Transform2D(-0.055 * pull, Vector2.ZERO)
+						pose.origin.x += _bounds.size.x * 0.018 * pull
+			"lid_inner":
+				var rise: float = maxf(0.0, -cos(clampf(progress, 0.0, 1.0) * PI))
+				pose = pose * Transform2D(0.0, Vector2(1.0, maxf(0.001, rise)), 0.0, Vector2.ZERO)
+				alpha = 1.0 if progress >= 0.5 and theme_id != "space" else 0.0
+				if theme_id == "autumn" and opening_now:
+					var age: float = maxf(0.0, time - Feel.SETTLE_TIME)
+					var backfall: float = sin(age * 17.0) * exp(-age * 8.0)
+					pose = pose * Transform2D(-0.075 * backfall, Vector2.ZERO)
+					pose.origin.y += _bounds.size.y * 0.012 * backfall
+				elif theme_id == "jungle":
+					var pull: float = sin(clampf(progress, 0.0, 1.0) * PI)
+					pose = pose * Transform2D(-0.055 * pull, Vector2.ZERO)
+					pose.origin.x += _bounds.size.x * 0.018 * pull
+			"interior":
+				alpha = 1.0 if progress > 0.06 else 0.0
+			"latch":
+				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+				pose = pose * Transform2D(-0.22 * unlock, Vector2.ZERO)
+				pose.origin.y += _bounds.size.y * 0.035 * unlock
+			"core":
+				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+				pose = pose * Transform2D((PI * 0.16 if theme_id == "summer" else -PI * 0.25) * unlock, Vector2.ZERO)
+				pose.origin.y -= _bounds.size.y * 0.018 * progress
+	elif _style != "crystal":
+		# Old manifests still render safely if a derived rig is unavailable.
+		# The fallback swaps only at the edge-on opening beat; it never ghosts
+		# two complete boxes through an alpha crossfade.
+		alpha = 1.0 if (piece.role == "closed") == (progress < 0.5) else 0.0
+	return {"pose": pose, "alpha": alpha}
+
+
+func _apply_pose(_progress: float) -> void:
+	for index in range(_pieces.size()):
+		var state: Dictionary = _piece_pose(index, _elapsed, mode in ["opening", "opened"])
+		var sprite: Sprite2D = _pieces[index].node
+		sprite.transform = state.pose
+		sprite.modulate = Color(_tint.r, _tint.g, _tint.b, float(state.alpha))
+	if is_instance_valid(_crystal_cavity):
+		_crystal_cavity.queue_redraw()
 
 
 func start_open(reduce: bool) -> void:
@@ -406,10 +804,15 @@ func start_open(reduce: bool) -> void:
 	hold_progress = 0.0
 	mode = "opening"
 	_elapsed = 0.0
+	_animation_origin_frame = Engine.get_process_frames()
 	_release_active = not reduced_motion
+	_opening_cues.clear()
+	_opening_cues_enabled = is_visible_in_tree() and not reduced_motion
+	_emit_cue("opening")
 	if reduced_motion:
 		finish_immediately()
 	else:
+		_apply_pose(0.0)
 		_fit()
 
 
@@ -418,6 +821,7 @@ func finish_immediately() -> void:
 		return
 	mode = "opened"
 	_release_active = false
+	_opening_cues_enabled = false
 	_elapsed = OPEN_SECONDS
 	_apply_pose(1.0)
 	_fit()
@@ -428,9 +832,12 @@ func clear() -> void:
 	stop_reaction()
 	mode = "closed"
 	_elapsed = 0.0
+	_animation_origin_frame = -1
 	theme_id = ""
 	hold_progress = 0.0
 	drag_offset = Vector2.ZERO
+	_cue_log.clear()
+	_opening_cues.clear()
 	_apply_pose(0.0)
 	_fit()
 
@@ -442,11 +849,22 @@ func set_hold_progress(value: float) -> void:
 		value = 0.0
 	if value > 0.0 and not _hold_active:
 		begin_hold()
-	hold_progress = clampf(value, 0.0, 1.0) if is_visible_in_tree() else 0.0
+	if value > 0.0:
+		hold_progress = maxf(hold_progress, clampf(value, 0.0, 1.0)) if is_visible_in_tree() else 0.0
+	else:
+		hold_progress = 0.0
 	if hold_progress <= 0.0:
 		_hold_active = false
 		_charge_time = 0.0
 		_tap_remaining = 0.0
+		_cancel_remaining = 0.0
+		_charge_step = 0
+	else:
+		var crossed: int = mini(CHARGE_STEPS, floori(hold_progress * CHARGE_STEPS + 0.000001))
+		while _charge_step < crossed:
+			_charge_step += 1
+			_emit_cue("charge_step", _charge_step, float(_charge_step) * 1.2 / CHARGE_STEPS)
+	_apply_pose(0.0)
 	_fit()
 
 
@@ -466,14 +884,31 @@ func _visibility_changed() -> void:
 
 
 func _process(delta: float) -> void:
+	# A parent or input callback can begin this action earlier in this same
+	# frame. Its delta describes time before that transition and is not earned.
+	if Engine.get_process_frames() == _animation_origin_frame:
+		return
+	_advance_animation(delta)
+
+
+func _advance_animation(delta: float) -> void:
+	# The deterministic step is also used by native simulations. Runtime
+	# callers go through _process so a new action cannot inherit an old delta.
+	if delta <= 0.0 or not is_finite(delta) or not is_visible_in_tree():
+		return
 	_idle_time += delta
 	if _hold_active and not reduced_motion:
 		_charge_time += delta
 	_tap_remaining = maxf(0.0, _tap_remaining - delta)
+	_cancel_remaining = maxf(0.0, _cancel_remaining - delta)
 	if mode == "opening":
-		_elapsed += delta
-		var progress: float = smoothstep(0.3, 1.15, _elapsed)
-		_apply_pose(progress)
+		_elapsed = minf(OPEN_SECONDS, _elapsed + delta)
+		if _opening_cues_enabled:
+			for event in [["unlock", Feel.UNLOCK_TIME], ["release", Feel.RELEASE_TIME], ["settle", Feel.SETTLE_TIME]]:
+				if _elapsed >= float(event[1]) and not _opening_cues.has(event[0]):
+					_opening_cues[event[0]] = true
+					_emit_cue(event[0], 0, float(event[1]))
 		if _elapsed >= OPEN_SECONDS:
 			finish_immediately()
+	_apply_pose(0.0)
 	_fit()

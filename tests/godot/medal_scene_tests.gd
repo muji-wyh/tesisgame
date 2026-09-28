@@ -50,15 +50,17 @@ func _run() -> void:
 	win(app)
 	check(app._medallion.visible and app.reward_image.pieces == 0, "The unopened chest shows the empty medal goal")
 	app.chest_button.button_down.emit()
-	app._process(0.1)
+	app._advance_ui(0.1)
 	app.chest_button.button_up.emit()
-	check(app.chest._tap_remaining > 0.0 and app.model.chest_state == "closed",
-		"A brief chest press reacts without awarding a piece")
+	check(app.chest._cancel_remaining > 0.0 and app.model.chest_state == "closed",
+		"A brief chest press returns smoothly without awarding a piece")
 	app.chest_button.button_down.emit()
-	app._process(1.21)
+	app._advance_ui(1.21)
 	app.chest_button.button_up.emit()
-	check(app.model.chest_state == "opening" and app.effects.particle_count() == 24,
-		"A full hold starts a small fragment reveal")
+	check(app.model.chest_state == "opening" and app.effects.particle_count() == 0,
+		"A full hold starts anticipation before the fragment release")
+	app.chest._advance_animation(0.33)
+	check(app.effects.particle_count() == 24, "The physical release starts the small fragment reveal")
 	check(app._pending_fragment.medal_id == "spring-1" and app._pending_fragment.after == 1,
 		"Opening locks the first missing fragment")
 	app.chest.finish_immediately()
@@ -82,6 +84,7 @@ func _run() -> void:
 	app.on_page_hidden()
 	check(app.medal_progress.count_for("spring-1") == 2 and not app._fragment_active
 		and app.reward_image.pieces == 2, "Hiding finalizes one earned piece and leaves a static assembled medal")
+	app.on_page_visible()
 	app.new_round(8)
 	app.choose_theme("spring")
 	win(app)

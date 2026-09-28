@@ -51,7 +51,7 @@ func _run() -> void:
 		await create_timer(0.2).timeout
 		await _capture(season + "-closed")
 		app.chest_button.button_down.emit()
-		app._process(1.21)
+		app._advance_ui(1.21)
 		app.chest_button.button_up.emit()
 		await create_timer(0.72).timeout
 		await _capture(season + "-burst")

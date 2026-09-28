@@ -16,8 +16,8 @@ const PIP_SOUND_PATHS := [
 	"res://assets/audio/pip/duck_double_03_derpy.wav",
 	"res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
 ]
-const CHEST_SAMPLE_RATE := 22050
-const CHEST_PULSE_SECONDS := 0.28
+const ChestSoundBank = preload("res://scripts/chest_sound_bank.gd")
+const CHEST_EVENT_CHANNELS := 3
 
 signal status_changed(message: String)
 signal word_failed
@@ -52,6 +52,14 @@ var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_charge_loop: AudioStreamWAV
 var _chest_charge_accent: AudioStreamWAV
+var _chest_theme: String = "spring"
+var _chest_phase: String = "idle"
+var _chest_seen: Dictionary = {}
+var _chest_rewarded: bool = false
+var _chest_players: Array[AudioStreamPlayer] = []
+var _chest_next_player: int = 0
+var _chest_fallbacks: Dictionary = {}
+var _chest_prime_pending: Dictionary = {}
 
 
 func _ready() -> void:
@@ -143,6 +151,147 @@ func play_pip() -> void:
 	say(next_pip_sound())
 
 
+func prepare_chest(theme_id: String) -> void:
+	var theme: String = ChestSoundBank.theme_id(theme_id)
+	if theme != _chest_theme or _chest_phase == "finished":
+		stop_chest_performance()
+	_chest_theme = theme
+	for cue_name: String in ChestSoundBank.CUES:
+		var path: String = ChestSoundBank.path_for(theme, cue_name)
+		if not cache.has(path) and not _loading.has(path):
+			_preload_chest_stream(path, cue_name == "charge")
+	_prime_chest_fallbacks(theme)
+
+
+func _prime_chest_fallbacks(theme: String) -> void:
+	if _chest_prime_pending.has(theme):
+		return
+	_chest_prime_pending[theme] = true
+	for cue_name: String in ChestSoundBank.CUES:
+		var path: String = ChestSoundBank.path_for(theme, cue_name)
+		if cache.has(path) or _chest_fallbacks.has(path):
+			continue
+		# Cold optional downloads should not make the first press render a bank
+		# of samples. Prime at most one small fallback per frame while waiting.
+		await get_tree().process_frame
+		if not is_inside_tree() or theme != _chest_theme:
+			break
+		if not cache.has(path) and not _chest_fallbacks.has(path):
+			_chest_fallbacks[path] = ChestSoundBank.fallback(theme, cue_name)
+	_chest_prime_pending.erase(theme)
+
+
+func _preload_chest_stream(path: String, loop: bool) -> void:
+	# Preparing may fill the shared cache, but never owns playback. A download
+	# completing after cancellation cannot replay the original gesture.
+	await _stream(path, loop)
+
+
+func _chest_stream(theme: String, cue_name: String) -> AudioStreamWAV:
+	var path: String = ChestSoundBank.path_for(theme, cue_name)
+	if cache.get(path) is AudioStreamWAV:
+		return cache[path]
+	if not _chest_fallbacks.has(path):
+		_chest_fallbacks[path] = ChestSoundBank.fallback(theme, cue_name)
+	return _chest_fallbacks[path]
+
+
+func _ensure_chest_players() -> void:
+	if chest_charge != null:
+		return
+	chest_charge = _player(0.075)
+	chest_charge.finished.connect(_chest_charge_finished)
+	for index in range(CHEST_EVENT_CHANNELS):
+		var player: AudioStreamPlayer = _player(0.36)
+		player.finished.connect(_chest_event_finished.bind(player))
+		_chest_players.append(player)
+
+
+func _chest_event_finished(player: AudioStreamPlayer) -> void:
+	if not player.playing:
+		player.stream = null
+
+
+func _play_chest_event(cue_name: String, gain: float = 0.36, pitch: float = 1.0) -> void:
+	_ensure_chest_players()
+	# A fixed three-channel ring bounds overlap even under rapid input. Reusing
+	# a channel replaces its old sound; it never creates a queued callback.
+	var player: AudioStreamPlayer = _chest_players[_chest_next_player]
+	_chest_next_player = (_chest_next_player + 1) % CHEST_EVENT_CHANNELS
+	player.stop()
+	player.stream = _chest_stream(_chest_theme, cue_name)
+	player.pitch_scale = pitch
+	player.volume_db = linear_to_db(gain)
+	player.play()
+
+
+func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
+	if muted or not active or not available:
+		return
+	var theme: String = ChestSoundBank.theme_id(theme_id)
+	if cue_name.begins_with("charge_step"):
+		if cue_name != "charge_step":
+			step = cue_name.trim_prefix("charge_step").to_int()
+		cue_name = "step"
+	if cue_name == "press":
+		if _chest_phase == "holding" and theme == _chest_theme:
+			return
+		stop_chest_performance()
+		_chest_theme = theme
+		_chest_phase = "holding"
+	elif cue_name == "opening":
+		if theme != _chest_theme or _chest_phase in ["opening", "finished"]:
+			return
+		# Direct openings (including reduced motion) are an explicit start too.
+		_chest_phase = "opening"
+		_chest_rewarded = false
+		stop_chest_charge()
+	elif theme != _chest_theme:
+		return
+	var event_key: String = cue_name + str(step)
+	if _chest_seen.has(event_key):
+		return
+	match cue_name:
+		"press":
+			_play_chest_event("press", 0.33)
+		"step":
+			if _chest_phase != "holding" or step < 1 or step > 3:
+				return
+			_play_chest_event("step", 0.23 + float(step) * 0.035, 0.9 + float(step) * 0.11)
+		"cancel":
+			if _chest_phase != "holding":
+				return
+			stop_chest_performance()
+			_chest_phase = "cancelled"
+			_play_chest_event("cancel", 0.22)
+		"opening":
+			_play_chest_event("opening", 0.22)
+		"unlock", "release", "settle":
+			if _chest_phase != "opening":
+				return
+			_play_chest_event(cue_name, 0.45 if cue_name == "release" else 0.34)
+		_:
+			return
+	_chest_seen[event_key] = true
+
+
+func chest_reward(theme_id: String, explicit_retry: bool = false) -> void:
+	# The caller invokes this only after the reward save succeeds. The material
+	# opening cues never contain this success accent, so a failed save stays quiet.
+	if muted or not active or not available or _chest_rewarded:
+		return
+	var resumed_receipt: bool = explicit_retry and _chest_phase in ["idle", "cancelled"]
+	if ChestSoundBank.theme_id(theme_id) != _chest_theme or (_chest_phase != "opening" and not resumed_receipt):
+		return
+	# A user-requested successful save retry may follow a background or mute
+	# that cleared the performance. Acknowledge that save without replaying its
+	# old press, charge, opening or release beats.
+	_chest_rewarded = true
+	_chest_phase = "finished"
+	stop_chest_charge()
+	_play_chest_event("reward", 0.37)
+
+
 func set_chest_charge(progress: float) -> void:
 	if not is_finite(progress):
 		return
@@ -154,24 +303,25 @@ func set_chest_charge(progress: float) -> void:
 		# after cancel, mute or completion cannot start another sound.
 		if progress != 0.0:
 			return
-		if chest_charge == null:
-			chest_charge = _player(0.06)
-			chest_charge.finished.connect(_chest_charge_finished)
-		if _chest_charge_loop == null:
-			_chest_charge_loop = _synth_chest_sound(false)
-			_chest_charge_accent = _synth_chest_sound(true)
+		_ensure_chest_players()
+		_chest_charge_loop = _chest_stream(_chest_theme, "charge")
+		_chest_charge_accent = _chest_stream(_chest_theme, "opening")
+		if _chest_phase != "holding":
+			_chest_seen.clear()
+			_chest_rewarded = false
+			_chest_phase = "holding"
 		_chest_charge_active = true
 		_chest_charge_progress = 0.0
 		chest_charge.stream = _chest_charge_loop
-		chest_charge.pitch_scale = 0.82
-		chest_charge.volume_db = linear_to_db(0.06)
+		chest_charge.pitch_scale = 0.86
+		chest_charge.volume_db = linear_to_db(0.075)
 		chest_charge.play()
-	# One looping pulse supplies both the accelerating rhythm and rising tone.
-	# Adjusting its rate does not restart it or queue work between hold frames.
+	# A quiet material pulse supports the three explicit visual charge steps.
+	# Progress changes its rate without restarting or replacing the current clip.
 	_chest_charge_progress = maxf(_chest_charge_progress, clampf(progress, 0.0, 1.0))
 	var energy: float = pow(_chest_charge_progress, 1.35)
-	chest_charge.pitch_scale = lerpf(0.82, 2.4, energy)
-	chest_charge.volume_db = linear_to_db(lerpf(0.06, 0.2, energy))
+	chest_charge.pitch_scale = lerpf(0.86, 1.42, energy)
+	chest_charge.volume_db = linear_to_db(lerpf(0.075, 0.19, energy))
 
 
 func stop_chest_charge() -> void:
@@ -186,52 +336,31 @@ func complete_chest_charge() -> void:
 	if not _chest_charge_active:
 		return
 	stop_chest_charge()
+	_chest_phase = "opening"
 	if muted or not active or not available:
 		return
-	# The dedicated channel leaves the existing theme-open effect free to play.
+	# Preserve the generic API for callers outside the staged chest performance.
+	# This is only a small material release, never the saved-reward accent.
 	chest_charge.stream = _chest_charge_accent
 	chest_charge.pitch_scale = 1.0
-	chest_charge.volume_db = linear_to_db(0.24)
+	chest_charge.volume_db = linear_to_db(0.22)
 	chest_charge.play()
 
 
 func _chest_charge_finished() -> void:
-	if not _chest_charge_active and chest_charge != null:
+	if not _chest_charge_active and chest_charge != null and not chest_charge.playing:
 		chest_charge.stream = null
 
 
-func _synth_chest_sound(completed: bool) -> AudioStreamWAV:
-	var duration: float = 0.44 if completed else CHEST_PULSE_SECONDS
-	var frames: int = int(round(duration * CHEST_SAMPLE_RATE))
-	var samples := PackedByteArray()
-	samples.resize(frames * 2)
-	for index in range(frames):
-		var time: float = float(index) / CHEST_SAMPLE_RATE
-		var sample: float = 0.0
-		if completed:
-			# A tiny ascending major chord is rendered once, with no delayed calls.
-			for note in range(3):
-				var age: float = time - float(note) * 0.045
-				if age < 0.0:
-					continue
-				var frequency: float = [659.25, 783.99, 1046.5][note]
-				var envelope: float = minf(age / 0.006, 1.0) * exp(-age * 12.0) * minf((duration - time) / 0.025, 1.0)
-				sample += (sin(TAU * frequency * age) + 0.18 * sin(TAU * frequency * 2.0 * age)) * envelope * 0.3
-		else:
-			var envelope: float = minf(time / 0.005, 1.0) * exp(-time * 40.0) * clampf((0.12 - time) / 0.025, 0.0, 1.0)
-			var phase: float = TAU * 520.0 * time
-			sample = (0.76 * sin(phase) + 0.18 * sin(phase * 2.0) + 0.06 * sin(phase * 3.0)) * envelope * 0.58
-		samples.encode_s16(index * 2, int(clampf(sample, -1.0, 1.0) * 32767.0))
-	var stream := AudioStreamWAV.new()
-	stream.format = AudioStreamWAV.FORMAT_16_BITS
-	stream.mix_rate = CHEST_SAMPLE_RATE
-	stream.stereo = false
-	stream.data = samples
-	if not completed:
-		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-		stream.loop_begin = 0
-		stream.loop_end = frames
-	return stream
+func stop_chest_performance() -> void:
+	stop_chest_charge()
+	for player: AudioStreamPlayer in _chest_players:
+		player.stop()
+		player.stream = null
+	_chest_phase = "idle"
+	_chest_seen.clear()
+	_chest_rewarded = false
+	_chest_next_player = 0
 
 
 func say(path: String) -> void:
@@ -435,7 +564,7 @@ func stop_voice() -> void:
 
 func halt() -> void:
 	active = false
-	stop_chest_charge()
+	stop_chest_performance()
 	stop_narration()
 	if music != null:
 		stop_music()

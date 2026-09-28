@@ -52,6 +52,13 @@ func clear() -> void:
 	queue_redraw()
 
 
+func release(palette: Dictionary, reduced_motion: bool, small: bool = false) -> void:
+	# The chest owns anticipation; start this effect at the actual release beat.
+	start(palette, reduced_motion, small)
+	if not reduced_motion:
+		_elapsed = 0.45
+
+
 func particle_count() -> int:
 	return _particles.size()
 

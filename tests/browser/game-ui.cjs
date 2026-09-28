@@ -25,7 +25,7 @@ function modeHeight(bounds) {
   return Math.ceil(44 / uiScale(bounds));
 }
 
-function modeRect(bounds, name) {
+function modeRect(bounds, name, { recovery = false } = {}) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory or pop.`);
   const content = contentBounds(bounds);
@@ -35,16 +35,22 @@ function modeRect(bounds, name) {
   if (content.inlineModes) {
     const pipWidth = Math.ceil(132 / scale);
     const toolbarWidth = 3 * Math.ceil(44 / scale) + 2 * content.gap;
-    rowX += pipWidth + content.gap;
-    rowWidth -= pipWidth + toolbarWidth + content.gap * 2;
+    if (recovery) {
+      // Retry rewards and the mode row share the header's stretch width.
+      rowWidth = (rowWidth - toolbarWidth - content.gap * 2) / 2;
+      rowX += rowWidth + content.gap;
+    } else {
+      rowX += pipWidth + content.gap;
+      rowWidth -= pipWidth + toolbarWidth + content.gap * 2;
+    }
     y = content.padding + (content.header - modeHeight(bounds)) / 2;
   }
   const left = rowX + (rowWidth - MODES.length * width - (MODES.length - 1) * gap) / 2;
   return { x: left + index * (width + gap), y, width, height: modeHeight(bounds) };
 }
 
-async function chooseMode(page, name) {
-  const rect = modeRect(await metrics(page), name);
+async function chooseMode(page, name, options = {}) {
+  const rect = modeRect(await metrics(page), name, options);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
 }
@@ -367,6 +373,7 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
             const result = start(...values);
             window.audioObservation.starts++;
             if (source.buffer) window.audioObservation.playbacks.push({ duration: source.buffer.duration,
+              at: performance.now(), scheduledAt: values[0] || context.currentTime,
               sampleRate: source.buffer.sampleRate, channels: source.buffer.numberOfChannels,
               loop: source.loop, contextState: context.state, playbackRate: source.playbackRate.value,
               phase: phaseSelector ? document.querySelector(phaseSelector)?.dataset.phase || '' : '',

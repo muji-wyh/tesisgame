@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, rendered, enterGame, openGame, boardPoint,
-  resultPoint, headerPoint } = require('./game-ui.cjs');
+  resultPoint, headerPoint, memoryPoint } = require('./game-ui.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 
@@ -64,12 +64,13 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   await expect(page.locator('#game-status')).toContainText('Rewards are unavailable.');
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-match.png'), scale: 'css' });
 
-  await chooseMode(page, 'match');
+  await chooseMode(page, 'match', { recovery: true });
   const card = boardPoint(await metrics(page), 0);
   await tap(page, card.x, card.y);
   await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-  await chooseMode(page, 'memory');
-  await page.keyboard.press('Enter');
+  await chooseMode(page, 'memory', { recovery: true });
+  const memoryCard = memoryPoint(await metrics(page), 0);
+  await tap(page, memoryCard.x, memoryCard.y);
   await expect(page.locator('#selection-status')).toHaveText(/^Memory card 1\. (Word|Picture): [a-z]+\.$/);
   const selected = await page.locator('#selection-status').textContent();
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-memory.png'), scale: 'css' });

@@ -30,7 +30,7 @@ func _run() -> void:
 		for tap in range(20):
 			chest.play_tap()
 		check(chest._tap_remaining <= 0.35, "Rapid taps replace the finite reaction instead of stacking")
-		chest._process(0.4)
+		chest._advance_animation(0.4)
 		check(is_zero_approx(chest._tap_remaining) and is_zero_approx(chest._art.rotation),
 			"The short-tap reaction settles without changing the chest state")
 		check(chest.mode == "closed", "Tapping never opens a chest")
@@ -146,13 +146,13 @@ func _check_hold_feedback(data) -> void:
 		and state.animated and state.spark_count > 0,
 		"Hold feedback reports the actual progress with a visible status and gathering sparks")
 	chest.set_hold_progress(2.0)
-	chest._process(2.0)
+	chest._advance_animation(2.0)
 	check(chest.hold_effect_snapshot().percent == 100 and chest.mode == "closed" and openings.is_empty(),
 		"Reaching full visual charge never opens the chest or awards its contents without the game action")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active and not chest._charge_label.visible and not chest._glint.visible
 		and is_zero_approx(chest.hold_progress), "Releasing immediately clears the ring, percentage, glow and hold state")
-	chest._process(3.0)
+	chest._advance_animation(3.0)
 	check(not chest.hold_effect_snapshot().active and chest.mode == "closed" and openings.is_empty(),
 		"Cancelled charging has no delayed animation or open callback")
 	chest.begin_hold()
@@ -174,7 +174,7 @@ func _check_hold_feedback(data) -> void:
 	var pose: Transform2D = chest._art.transform
 	var badge: Rect2 = chest._charge_label.get_rect()
 	for delta in [0.08, 0.25, 1.5]:
-		chest._process(delta)
+		chest._advance_animation(delta)
 		state = chest.hold_effect_snapshot()
 		check(state.active and state.percent == 63 and state.text.contains("63%") and not state.animated
 			and state.spark_count == 0 and chest._art.transform == pose and chest._charge_label.get_rect() == badge,
@@ -190,15 +190,15 @@ func _check_hold_feedback(data) -> void:
 		and chest.mode == "opening" and openings.is_empty(),
 		"The real open action carries a full-charge readout into one finite release effect")
 	chest.start_open(false)
-	chest._process(0.73)
+	chest._advance_animation(0.73)
 	check(chest.hold_effect_snapshot().active and chest.hold_effect_snapshot().spark_count == 0,
 		"The release sparks finish before the short full-charge readout disappears")
-	chest._process(0.23)
+	chest._advance_animation(0.23)
 	check(not chest.hold_effect_snapshot().active and chest.mode == "opening" and openings.is_empty(),
 		"The release effect finishes while the existing chest opening animation continues")
-	chest._process(0.83)
+	chest._advance_animation(0.83)
 	check(chest.mode == "opening" and openings.is_empty(), "Charge feedback does not shorten the 1.8-second opening timing")
-	chest._process(0.02)
+	chest._advance_animation(0.02)
 	chest.start_open(false)
 	chest.finish_immediately()
 	check(chest.mode == "opened" and openings.size() == 1 and not chest.hold_effect_snapshot().active,
@@ -209,7 +209,7 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	chest.clear()
-	chest._process(3.0)
+	chest._advance_animation(3.0)
 	check(chest.mode == "closed" and not chest.hold_effect_snapshot().active and openings.size() == 1,
 		"Clearing during release removes the effect and prevents a stale open callback")
 	chest.free()
@@ -233,7 +233,7 @@ func _check_hold_bounds(data) -> void:
 				if phase == "release":
 					chest.start_open(false)
 				elif phase == "opening":
-					chest._process(0.68)
+					chest._advance_animation(0.68)
 				var state: Dictionary = chest.hold_effect_snapshot()
 				var bounds := Rect2(Vector2(state.bounds.x, state.bounds.y), Vector2(state.bounds.width, state.bounds.height))
 				check(state.active and stage.encloses(bounds) and stage.encloses(chest._charge_label.get_rect()),

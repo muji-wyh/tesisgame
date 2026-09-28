@@ -70,7 +70,7 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 Word pronunciations and immediate sound effects stay in the startup **PCK alongside WASM**.
-The eight background tracks, ten game prompts and Voice Pop report recordings
+The eight background tracks, ten game prompts, Voice Pop report recordings and themed chest Foley
 are separate, content-hashed Godot `.sample` resources. Their URLs are embedded in HTML, so no extra startup manifest
 request is needed. The build opens the actual exported PCK to confirm that word speech is
 present and both the optional source resources and their imported payloads are absent.
@@ -468,16 +468,23 @@ On very short screens, the age row scrolls with the collection so reward tiles
 remain usable without shrinking the controls.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
-A short tap gives a little wiggle and glint. Hold it for **1.2 seconds** to charge it:
-theme-colored progress rings, illuminated ticks, converging sparks and a percentage
-badge build toward the unlock. A local synthesized sound rises in pitch and pulse
-rate with the actual hold, then blends into the theme's opening sound and an outward
-light burst. The existing **1.8-second opening** follows. Releasing early, dragging,
-opening More, or leaving the page cancels the charge immediately. Muting silences
-the charge too. Reduced motion keeps the percentage and static progress ring while
-removing shake, moving sparks and the burst. Browser accessibility exposes the same
-progress without repeated live announcements. Changing seasons cannot reroll an
-opening or alter an earned fragment.
+A short press compresses the lock or body immediately and releases with a 120 ms
+return. Hold it for **1.2 seconds**: three progress stars, a percentage badge and
+material sounds follow the actual hold at one-third, two-thirds and full charge.
+Each world has its own pressure, unlock, lid or crystal motion and short Foley.
+The **1.8-second opening** pauses briefly, unlocks at 120 ms, releases at 320 ms,
+and settles at 950 ms. Its art fit remains fixed when the progress badge disappears.
+Releasing early or dragging cancels immediately; a fresh press interrupts the return.
+Opening More or leaving the page stops the performance. Reduced motion keeps
+readable progress and shows the saved result directly after a complete hold.
+Browser accessibility exposes progress without repeated live announcements.
+Changing worlds cannot reroll an opening or alter an earned fragment.
+
+Chest sounds use a dedicated four-player pool. Entering a world preloads its nine
+short, original procedural Foley clips; unavailable samples use a small local
+fallback immediately. Downloads never own playback and cannot replay missed cues.
+The success accent plays only after persistence succeeds, once per reward.
+Muting, backgrounding and leaving the result stop all chest channels.
 
 Each win earns **one fragment**. **Three fragments complete a medal**, and each
 season has **six medals**. The next piece always advances the first unfinished
@@ -576,7 +583,7 @@ tap or click the game once to enable sound.
 Particle textures load only for the first animated celebration, rather than delaying startup.
 Reduced-motion players do not load those unused textures.
 
-On the Web, background music and non-word speech download only when requested. Card input,
+On the Web, background music, non-word speech and chest Foley download only when requested. Card input,
 word pronunciation, scoring and chest opening never wait for them. Native HTTP requests share
 in-flight downloads, use a 15-second timeout and 4 MB limit, and check resource signatures and
 content hashes before loading. Decoded sounds are cached for the session; the browser caches
@@ -689,14 +696,23 @@ separate directory. Source details, hashes and generation checks are in
 
 ## Chest artwork
 
-Selected artwork is imported from the user-provided **Modern 2D Animated Chests Pack_FREE Demo 1.0.2**. Its three source designs become four seasonal treatments:
+Selected artwork is imported from the user-provided **Modern 2D Animated Chests Pack_FREE Demo 1.0.2**. Its three source designs support eight distinct motion and sound treatments:
 
 | Season | Source chest | Treatment |
 |---|---|---|
-| Spring | Royal | Green-tinted gold, green flower burst and fluttering petals. |
-| Summer | Energy | Red/pink light, red sun rays and outward-spinning sparks. |
-| Autumn | Royal | Yellow-gold light, yellow leaves and drifting confetti. |
-| Winter | Crystal | Nine-part assembled chest, outlined white snowflakes and neutral crystal light. |
+| Spring | Royal | Light wood, unfolding lid, petals and flower bells. |
+| Summer | Energy | Heating core, pressure release and a fast lid spring. |
+| Autumn | Royal | Heavy wood, metal latch, slower hinge and a small landing recoil. |
+| Winter | Crystal | Staggered facets, a central unlock and short ice resonance. |
+| Ocean | Crystal | Inward pressure, buoyant release, bubbles and soft water. |
+| Space | Energy | Magnetic steps, a floating cover and servo/airlock sounds. |
+| Jungle | Royal | Vine tension, a pulled lid, delayed leaves and woody recoil. |
+| Candy | Crystal | Elastic compression, a two-beat opening, pops and sugar rattles. |
+
+`scripts/chest_feel.gd` defines shared cue times and per-world motion profiles.
+`assets/chests/rigs.json` describes derived Royal/Energy layers; the original
+19-file source manifest remains unchanged. The derived art reuses the original
+pixels and textures rather than replacing the silhouette with a new illustration.
 
 The importer copies 19 PNGs byte-for-byte, records SHA256 and source paths, and converts the Crystal prefab's rest transforms, pivots, flips and ordering into `assets\chests\manifest.json`. Unity scripts, materials, prefabs and animation clips are **not** executed or shipped; motion is recreated natively in Godot.
 

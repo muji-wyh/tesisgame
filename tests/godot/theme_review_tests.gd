@@ -248,7 +248,7 @@ func _check_treasure_themes(app) -> void:
 	await settle()
 	var point: Vector2 = app.chest_button.get_global_rect().get_center()
 	await pointer(point, true)
-	app._process(0.1)
+	app._advance_ui(0.1)
 	await pointer(point, false)
 	check(app.model.chest_state == "closed" and app.medal_progress.counts == counts_before,
 		"A brief tap through the world scene leaves the chest closed and rewards untouched")
@@ -261,7 +261,7 @@ func _check_treasure_themes(app) -> void:
 	check(app.model.chest_state == "closed" and app.medal_progress.counts == counts_before,
 		"Releasing a chest drag cannot open it or award a piece")
 	await pointer(point, true)
-	app._process(1.21)
+	app._advance_ui(1.21)
 	await pointer(point, false)
 	await settle()
 	var earned_id: String = app.model.reward_id

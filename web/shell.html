@@ -1620,6 +1620,13 @@
           progress.setAttribute('aria-valuetext', value === 100 ? 'Opening!' :
             `${value >= 75 ? 'Almost open' : 'Keep holding'}. ${value}%`);
         },
+        chestCue(theme, cue, step) {
+          // A small read-only event exposes the same physical beat used by Godot
+          // audio; it does not open a chest or award a reward.
+          window.dispatchEvent(new CustomEvent('wordbuddies:chest-cue', {
+            detail: { theme: String(theme), cue: String(cue), step: Number(step) || 0, at: performance.now() }
+          }));
+        },
         selectionStatus(text) {
           document.getElementById('selection-status').textContent = text;
         },

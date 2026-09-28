@@ -212,7 +212,7 @@ func _check_chests_and_celebration(manifest: Dictionary) -> void:
 	for world in NEW_WORLDS:
 		var palette: Dictionary = Data.theme(world.id)
 		chest.configure_skin(palette, manifest)
-		check(chest.theme_id == world.id and chest.piece_count() == (9 if world.chest == "crystal" else 2),
+		check(chest.theme_id == world.id and chest.piece_count() == (9 if world.chest == "crystal" else 5),
 			"The new world renders a complete supported chest")
 		effects.start(palette, false, true)
 		check(effects.particle_count() == 24 and effects._token != null, "A new-world fragment starts its own symbol celebration")

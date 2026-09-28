@@ -1,5 +1,21 @@
 extends SceneTree
 
+class BrowserStorage:
+	extends RefCounted
+	var fail_write: bool = false
+	var writes: int = 0
+	var saved: String = "[medals]\nversion=1\ncounts={}\n"
+
+	func medalProgress() -> String:
+		return saved
+
+	func saveMedalProgress(value: String) -> bool:
+		if fail_write:
+			return false
+		writes += 1
+		saved = value
+		return true
+
 var checks: int = 0
 var failures: int = 0
 
@@ -50,7 +66,7 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 		reason + " stops and releases the charge sound")
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " leaves the earned chest closed without awarding a piece")
-	app._process(2.0)
+	app._advance_ui(2.0)
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " cannot complete later from an old frame")
 
@@ -68,6 +84,9 @@ func _run() -> void:
 	await process_frame
 	app.set_reduced_motion(false)
 	app.audio.set_muted(false)
+	var cues: Array = []
+	app.chest.cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
+		cues.append([theme_id, cue, step]))
 	_begin(app)
 	check(not app._holding_chest and not app.chest.hold_effect_snapshot().active,
 		"A hold before winning cannot charge a chest")
@@ -80,7 +99,10 @@ func _run() -> void:
 	check(app.audio._chest_charge_active and app.audio.chest_charge.playing
 		and app.audio.chest_charge.stream == app.audio._chest_charge_loop,
 		"The same button-down arms the audible charge loop")
-	app._process(0.36)
+	app._process(0.25)
+	check(is_zero_approx(app._hold_elapsed) and app.chest.hold_effect_snapshot().percent == 0,
+		"A fresh press never consumes the preceding slow frame's 250 milliseconds")
+	app._advance_ui(0.36)
 	var elapsed: float = app._hold_elapsed
 	var percent: int = app.chest.hold_effect_snapshot().percent
 	var pitch: float = app.audio.chest_charge.pitch_scale
@@ -95,25 +117,35 @@ func _run() -> void:
 	_check_cancelled(app, 0, "Releasing an incomplete hold")
 	_begin(app)
 	check(app.chest.hold_effect_snapshot().percent == 0, "Reholding starts a fresh charge at zero")
-	app._process(0.6)
+	app._advance_ui(0.6)
 	check(app.chest.hold_effect_snapshot().percent == 50 and app.audio.chest_charge.pitch_scale > pitch,
 		"The same elapsed time advances the visible percentage and rising audio pitch")
-	app._process(0.61)
+	app._advance_ui(0.61)
 	state = app.chest.hold_effect_snapshot()
 	check(app.model.chest_state == "opening" and state.phase == "opening" and state.percent == 100,
 		"Completing the real hold starts the existing opening at full charge")
-	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
-		and app.audio.chest_charge.stream == app.audio._chest_charge_accent,
-		"Full charge replaces the loop with one finite release accent")
+	check(not app.audio._chest_charge_active and not app.audio.chest_charge.playing
+		and app.audio.chest_charge.stream == null and app.audio._chest_phase == "opening",
+		"Full charge stops the loop and arms the physical opening timeline")
+	check(not app.audio._chest_rewarded and not cues.any(func(item): return item[1] == "release"),
+		"Full charge neither announces the reward nor plays the later lid release")
+	app.chest._process(0.25)
+	check(is_zero_approx(app.chest.hold_effect_snapshot().opening_time)
+		and not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
+		"Opening keeps its full initial tension instead of consuming the hold frame's 250 milliseconds")
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
 	check(app.model.chest_state == "opened" and _pieces(app) == 1,
 		"Finishing the actual opening claims exactly one piece")
+	check(app.audio._chest_rewarded and app._chest_reward_announced,
+		"The saved reward is announced after the piece was persisted")
+	check(not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
+		"Skipping the opening never replays missed physical cues")
 	app._on_chest_opened()
 	app.chest.finish_immediately()
 	_begin(app)
-	app._process(2.0)
+	app._advance_ui(2.0)
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().active,
 		"Repeated opening callbacks and a hold on the opened chest cannot duplicate the reward")
 	var saved = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
@@ -122,7 +154,7 @@ func _run() -> void:
 
 	_win(app, 82)
 	_begin(app)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	var motion := InputEventMouseMotion.new()
 	motion.button_mask = MOUSE_BUTTON_MASK_LEFT
 	motion.relative = Vector2(24, 0)
@@ -131,7 +163,7 @@ func _run() -> void:
 	_check_cancelled(app, 1, "Dragging the chest beyond the movement threshold")
 	app.chest_button.button_up.emit()
 	_begin(app)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	var drag := InputEventScreenDrag.new()
 	drag.relative = Vector2(0, 24)
 	drag.position = Vector2(50, 74)
@@ -139,7 +171,7 @@ func _run() -> void:
 	_check_cancelled(app, 1, "Dragging the chest with a touch")
 	app.chest_button.button_up.emit()
 	_begin(app)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	app._toggle_collection()
 	_check_cancelled(app, 1, "Opening More during a hold")
 	_begin(app)
@@ -147,7 +179,7 @@ func _run() -> void:
 		"A late start while More is open cannot restart charge feedback")
 	app._hide_collection()
 	_begin(app)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	app.on_page_hidden()
 	_check_cancelled(app, 1, "Backgrounding the game during a hold")
 	_begin(app)
@@ -156,24 +188,39 @@ func _run() -> void:
 	app.on_page_visible()
 	_begin(app)
 	check(app._holding_chest, "Returning to the foreground permits a fresh hold")
-	app._process(0.4)
+	app._advance_ui(0.4)
+	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+	_check_cancelled(app, 1, "Losing native application focus during a hold")
+	_begin(app)
+	check(not app._holding_chest and not app.audio._chest_charge_active,
+		"A stale press cannot restart a native hold until application focus returns")
+	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)
+	_begin(app)
+	check(app._holding_chest, "Regaining native application focus permits a fresh press")
+	app._advance_ui(0.4)
 	check(app.new_round(83), "A new round can leave an earned chest during a hold")
 	check(_pieces(app) == 2 and app.model.chest_state == "closed" and app.model.phase == "waiting"
 		and not app._holding_chest and not app.chest.hold_effect_snapshot().active
 		and not app.audio._chest_charge_active and not app.audio.chest_charge.playing,
 		"A new round preserves the existing one-piece auto-claim and clears all old charge feedback")
-	app._process(2.0)
+	app._advance_ui(2.0)
 	app._on_chest_opened()
 	check(_pieces(app) == 2, "Late hold frames and open callbacks cannot award the new round a piece")
 
 	_win(app, 84)
+	_begin(app)
+	app._advance_ui(0.4)
+	app.choose_theme("winter")
+	_check_cancelled(app, 2, "Changing worlds during an unfinished hold")
+	check(app.chest.theme_id == "winter", "A new world cannot inherit the previous world's hold or sound")
+	app.choose_theme("spring")
 	app.chest_button.grab_focus()
 	var accept := InputEventJoypadButton.new()
 	accept.button_index = JOY_BUTTON_A
 	accept.pressed = true
 	app._input(accept)
 	app.set_process(false)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	check(app._controller_holding_chest and app.chest.hold_effect_snapshot().active,
 		"Controller A drives the same real chest charge")
 	accept.pressed = false
@@ -182,12 +229,12 @@ func _run() -> void:
 	accept.pressed = true
 	app._input(accept)
 	app.set_process(false)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	app._on_joy_connection_changed(0, false)
 	_check_cancelled(app, 2, "Disconnecting the controller")
 	check(not app._controller_holding_chest, "A controller disconnect clears its held-action latch")
 	_begin(app)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	var escape := InputEventKey.new()
 	escape.keycode = KEY_ESCAPE
 	escape.pressed = true
@@ -197,7 +244,7 @@ func _run() -> void:
 	accept.pressed = true
 	app._input(accept)
 	app.set_process(false)
-	app._process(0.4)
+	app._advance_ui(0.4)
 	var back := InputEventJoypadButton.new()
 	back.button_index = JOY_BUTTON_B
 	back.pressed = true
@@ -207,7 +254,7 @@ func _run() -> void:
 
 	app.set_reduced_motion(true)
 	_begin(app)
-	app._process(0.6)
+	app._advance_ui(0.6)
 	state = app.chest.hold_effect_snapshot()
 	check(state.active and state.percent == 50 and state.text.contains("50%")
 		and not state.animated and state.spark_count == 0 and _pieces(app) == 2,
@@ -215,12 +262,72 @@ func _run() -> void:
 	app.chest_button.button_up.emit()
 	_check_cancelled(app, 2, "Releasing a reduced-motion hold")
 	_begin(app)
-	app._process(1.21)
+	app._advance_ui(1.21)
 	check(app.model.chest_state == "opened" and _pieces(app) == 3
 		and not app.chest.hold_effect_snapshot().active and app.effects.particle_count() == 0,
 		"A full reduced-motion hold completes once without the opening motion")
 	app._on_chest_opened()
 	check(_pieces(app) == 3, "Reduced-motion completion also ignores duplicate callbacks")
+
+	# Exercise persistence with audible feedback enabled. A failed save must not
+	# announce success, and a visible retry must announce one saved piece only.
+	var storage := BrowserStorage.new()
+	app.medal_progress = progress_script.new(directory + "/retry.cfg", directory + "/retry-legacy.cfg", storage)
+	check(app.medal_progress.load_progress(), "The retry scenario starts with isolated browser storage")
+	app.set_reduced_motion(false)
+	_win(app, 85)
+	storage.fail_write = true
+	_begin(app)
+	app._advance_ui(1.21)
+	app.chest.set_process(false)
+	app.chest._advance_animation(0.13)
+	app.chest._advance_animation(0.2)
+	app.chest._advance_animation(0.63)
+	check(app.audio._chest_seen.has("unlock0") and app.audio._chest_seen.has("release0")
+		and app.audio._chest_seen.has("settle0"), "Real opening motion drives the three physical sound beats")
+	app.chest.finish_immediately()
+	check(app._save_error and _pieces(app) == 0 and not app._chest_reward_announced
+		and not app.audio._chest_rewarded, "A failed reward save never plays or presents success")
+	app._retry_reward_save()
+	check(storage.writes == 0 and not app.audio._chest_rewarded,
+		"Repeated failed retries do not play a success sound")
+	app.on_page_hidden()
+	app.on_page_visible()
+	app.audio.set_muted(true)
+	app.audio.set_muted(false)
+	storage.fail_write = false
+	app._retry_reward_save()
+	check(storage.writes == 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
+		"An explicit successful retry after background/mute saves and announces the waiting reward once")
+	check(not app.audio._chest_seen.has("release0") and not app.audio._chest_seen.has("unlock0"),
+		"A successful retry after interruption never replays missed physical sounds")
+	app._retry_reward_save()
+	app._on_chest_opened()
+	check(storage.writes == 1 and _pieces(app) == 1, "Stale retries and callbacks cannot write a second reward")
+	_win(app, 86)
+	_begin(app)
+	app._advance_ui(1.21)
+	cues.clear()
+	app.on_page_hidden()
+	check(_pieces(app) == 2 and app.model.chest_state == "opened" and cues.is_empty()
+		and app.audio._chest_phase == "idle", "Background completion saves once without replaying opening or reward sounds")
+	app.on_page_visible()
+	app.chest._advance_animation(2.0)
+	check(_pieces(app) == 2 and app.audio._chest_phase == "idle", "Foregrounding does not replay the completed performance")
+	_win(app, 87)
+	_begin(app)
+	app._advance_ui(1.21)
+	cues.clear()
+	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+	check(_pieces(app) == 3 and app.model.chest_state == "opened" and cues.is_empty()
+		and app.audio._chest_phase == "idle",
+		"Native focus loss during opening saves once without playing missed physical or reward sounds")
+	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)
+	app.chest._advance_animation(2.0)
+	app._on_chest_opened()
+	check(_pieces(app) == 3 and cues.is_empty() and app.audio._chest_phase == "idle",
+		"Duplicate native focus events and foreground frames cannot replay or duplicate the saved piece")
 	app.audio.halt()
 	app.set_process(false)
 	await process_frame
