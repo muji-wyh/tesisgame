@@ -7,6 +7,7 @@ extends SceneTree
 const Chest = preload("res://scripts/chest_view.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Data = preload("res://scripts/game_data.gd")
+const Feel = preload("res://scripts/chest_feel.gd")
 
 var chest
 var sound
@@ -15,6 +16,7 @@ var ready_to_capture: bool = false
 var theme_id: String = "autumn"
 var phase: int = 0
 var cues: Array = []
+var reward_time: float = -1.0
 
 
 func _initialize() -> void:
@@ -54,7 +56,9 @@ func _start() -> void:
 	sound.prepare_chest(theme_id)
 	sound.interact(theme_id, false)
 	chest.cue_requested.connect(_on_cue)
-	chest.opened.connect(func() -> void: sound.chest_reward(theme_id))
+	chest.opened.connect(func() -> void:
+		reward_time = clock_seconds
+		sound.chest_reward(theme_id))
 	ready_to_capture = true
 
 
@@ -72,7 +76,7 @@ func _process(delta: float) -> bool:
 		sound.set_chest_charge(0.0)
 		phase = 1
 	if phase == 1:
-		var progress: float = clampf((clock_seconds - 0.3) / 1.2, 0.0, 1.0)
+		var progress: float = clampf((clock_seconds - 0.3) / Feel.HOLD_SECONDS, 0.0, 1.0)
 		chest.set_hold_progress(maxf(0.001, progress))
 		sound.set_chest_charge(progress)
 		if clock_seconds >= 0.48:
@@ -84,7 +88,7 @@ func _process(delta: float) -> bool:
 		sound.set_chest_charge(0.0)
 		phase = 3
 	if phase == 3:
-		var progress: float = clampf((clock_seconds - 0.85) / 1.2, 0.0, 1.0)
+		var progress: float = clampf((clock_seconds - 0.85) / Feel.HOLD_SECONDS, 0.0, 1.0)
 		chest.set_hold_progress(maxf(0.001, progress))
 		sound.set_chest_charge(progress)
 		if progress >= 1.0:
@@ -93,7 +97,10 @@ func _process(delta: float) -> bool:
 	# Retain the runtime frame-origin guard: this frame's delta predates an
 	# opening or cancel initiated above and must not advance that new action.
 	chest._process(delta)
-	if clock_seconds >= 5.0:
-		print(JSON.stringify({"theme": theme_id, "cues": cues, "state": chest.hold_effect_snapshot()}))
+	if phase == 4:
+		sound.set_chest_tension(chest.tension_progress())
+	if clock_seconds >= 13.0:
+		print(JSON.stringify({"theme": theme_id, "cues": cues, "reward_time": reward_time,
+			"state": chest.hold_effect_snapshot()}))
 		quit()
 	return false

@@ -1612,13 +1612,15 @@
         announce(text) {
           document.getElementById('game-status').textContent = text;
         },
-        chestProgress(percent) {
+        chestProgress(percent, phase = 'holding') {
           const progress = document.getElementById('chest-progress');
           progress.hidden = percent < 0;
           const value = Math.max(0, Math.min(100, Math.floor(Number(percent) || 0)));
           progress.setAttribute('aria-valuenow', String(value));
-          progress.setAttribute('aria-valuetext', value === 100 ? 'Opening!' :
-            `${value >= 75 ? 'Almost open' : 'Keep holding'}. ${value}%`);
+          const status = { holding: 'Hold to begin', gathering: 'Gathering', building: 'Building tension',
+            anticipation: 'Get ready!', release: 'Opening!' }[String(phase)] || 'Hold to begin';
+          progress.setAttribute('data-phase', String(phase));
+          progress.setAttribute('aria-valuetext', phase === 'release' ? 'Opening!' : `${status}. ${value}%`);
         },
         chestCue(theme, cue, step) {
           // A small read-only event exposes the same physical beat used by Godot

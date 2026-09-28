@@ -11,13 +11,14 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build', 'chest-feel');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+const pulseTimes = [0.55, 1.65, 2.60, 3.42, 4.12, 4.72, 5.23, 5.66, 6.02, 6.32, 6.57, 6.78, 6.96, 7.12];
 const stages = [
   { id: 'rest', name: 'Rest', time: 0.2 },
-  { id: 'pressure', name: 'Pressure', time: 1.2 },
-  { id: 'unlock', name: 'Unlock', time: 2.23 },
-  { id: 'release', name: 'Release', time: 2.48 },
-  { id: 'opening', name: 'Opening', time: 2.72 },
-  { id: 'settled', name: 'Settled', time: 3.5 }
+  { id: 'gathering', name: 'Gathering', time: 3.0 },
+  { id: 'building', name: 'Building tension', time: 7.6 },
+  { id: 'anticipation', name: 'Final breath', time: 9.35 },
+  { id: 'release', name: 'Release', time: 10.0 },
+  { id: 'settled', name: 'Settled', time: 11.6 }
 ];
 
 function run(binary, args) {
@@ -49,11 +50,12 @@ function render(theme) {
 }
 
 function validateCapture(captured, theme) {
-  const expected = ['press:0', 'cancel:0', 'press:0', 'charge_step:1', 'charge_step:2',
-    'charge_step:3', 'opening:0', 'unlock:0', 'release:0', 'settle:0'];
-  const actual = captured.cues.map(cue => `${cue.cue}:${cue.step}`);
+  const expected = ['press:0', 'cancel:0', 'press:0', 'opening:0', 'anticipation:0',
+    'unlock:0', 'release:0', 'settle:0'];
+  const actual = captured.cues.filter(cue => !['charge_step', 'tension_pulse'].includes(cue.cue))
+    .map(cue => `${cue.cue}:${cue.step}`);
   if (captured.theme !== theme || JSON.stringify(actual) !== JSON.stringify(expected) ||
-      captured.cues.some(cue => cue.theme !== theme) || captured.state.opening_time !== 1.8) {
+      captured.cues.some(cue => cue.theme !== theme) || captured.state.opening_time !== 9.3) {
     throw new Error(`The ${theme} recording has an incomplete or duplicated physical cue sequence.`);
   }
   const opening = captured.cues.find(cue => cue.cue === 'opening').time;
@@ -62,16 +64,28 @@ function validateCapture(captured, theme) {
   if (opening - press < 1.2 - 0.001 || opening - press > 1.2 + tolerance) {
     throw new Error(`The ${theme} recording did not preserve the complete 1.2-second hold.`);
   }
-  for (const [name, seconds] of [['unlock', 0.12], ['release', 0.32], ['settle', 0.95]]) {
+  if (captured.reward_time - press < 10.5 - 0.001 || captured.reward_time - press > 10.5 + tolerance * 2) {
+    throw new Error(`The ${theme} recording did not preserve the complete 10.5-second reward sequence.`);
+  }
+  for (const [name, seconds] of [['anticipation', 7.22], ['unlock', 7.62], ['release', 7.82], ['settle', 8.45]]) {
     const elapsed = captured.cues.find(cue => cue.cue === name).time - opening;
     if (elapsed < seconds - 0.001 || elapsed > seconds + tolerance) {
       throw new Error(`The ${theme} ${name} cue is early or outside the one-frame capture tolerance.`);
     }
   }
-  for (const cue of captured.cues.filter(value => value.cue === 'charge_step')) {
-    if (Math.abs(cue.time - press - cue.step * 0.4) > tolerance) {
+  const milestones = captured.cues.filter(value => value.cue === 'charge_step');
+  if (JSON.stringify(milestones.map(cue => cue.step)) !== '[1,2,3]') {
+    throw new Error(`The ${theme} recording must light each of its three progress stars exactly once.`);
+  }
+  for (const cue of milestones) {
+    if (Math.abs(cue.time - press - cue.step * (9.02 / 3)) > tolerance * 2) {
       throw new Error(`The ${theme} charge milestone ${cue.step} is out of time.`);
     }
+  }
+  const pulses = captured.cues.filter(value => value.cue === 'tension_pulse');
+  if (pulses.length !== pulseTimes.length || pulses.some((cue, index) =>
+    cue.step !== index + 1 || Math.abs(cue.time - opening - pulseTimes[index]) > tolerance)) {
+    throw new Error(`The ${theme} recording missed or duplicated an accelerating tension beat.`);
   }
 }
 
@@ -89,8 +103,8 @@ function convert(theme, captured) {
     '-show_streams', '-show_format', '-of', 'json', mp4]).stdout);
   const video = probe.streams.find(stream => stream.codec_type === 'video');
   const audio = probe.streams.find(stream => stream.codec_type === 'audio');
-  if (!audio || video?.width !== 640 || video?.height !== 640 || Number(probe.format.duration) < 5) {
-    throw new Error(`The ${theme} preview is missing audio, square video, or the complete five-second sequence.`);
+  if (!audio || video?.width !== 640 || video?.height !== 640 || Number(probe.format.duration) < 13) {
+    throw new Error(`The ${theme} preview is missing audio, square video, or the complete thirteen-second sequence.`);
   }
   const meter = run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner', '-i', mp4,
     '-vn', '-af', 'volumedetect', '-f', 'null', '-']).stderr;
@@ -98,6 +112,23 @@ function convert(theme, captured) {
   const peak = Number(meter.match(/max_volume:\s*(-?[\d.]+) dB/)?.[1]);
   if (!Number.isFinite(mean) || !Number.isFinite(peak) || peak <= -90) {
     throw new Error(`The ${theme} preview audio is silent or cannot be measured.`);
+  }
+  const openingAt = captured.cues.find(cue => cue.cue === 'opening').time;
+  const audioEnvelope = Object.fromEntries([
+    ['late_tension', 6.97, 0.2], ['quiet_breath', 7.32, 0.2], ['release', 7.87, 0.25]
+  ].map(([name, relativeStart, seconds]) => {
+    const measurement = run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner',
+      '-ss', String(openingAt + relativeStart), '-t', String(seconds), '-i', mp4,
+      '-vn', '-af', 'volumedetect', '-f', 'null', '-']).stderr;
+    return [name, {
+      start_seconds: openingAt + relativeStart, duration_seconds: seconds,
+      mean_dbfs: Number(measurement.match(/mean_volume:\s*(-?[\d.]+) dB/)?.[1]),
+      peak_dbfs: Number(measurement.match(/max_volume:\s*(-?[\d.]+) dB/)?.[1])
+    }];
+  }));
+  if (Object.values(audioEnvelope).some(slice => !Number.isFinite(slice.mean_dbfs)) ||
+      audioEnvelope.quiet_breath.mean_dbfs > audioEnvelope.late_tension.mean_dbfs - 6) {
+    throw new Error(`The ${theme} mixed audio does not preserve the quiet breath before release.`);
   }
   for (const stage of stages) {
     run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
@@ -112,9 +143,10 @@ function convert(theme, captured) {
     ...inputs, '-filter_complex_threads', '1', '-filter_complex',
     `${scales};${stack}xstack=inputs=6:layout=${layout}[grid]`, '-map', '[grid]', '-frames:v', '1',
     path.join(output, `${theme}-grid.png`)]);
-  const report = { theme, duration: Number(probe.format.duration), dimensions: [video.width, video.height],
+  const report = { rhythm_version: 2, theme, duration: Number(probe.format.duration), dimensions: [video.width, video.height],
     frames_per_second: video.r_frame_rate, audio: { codec: audio.codec_name, channels: audio.channels,
       sample_rate: Number(audio.sample_rate), mean_dbfs: mean, peak_dbfs: peak },
+    audio_envelope: audioEnvelope,
     capture: captured, source_sha256: provenance(), inspected_by_human: false,
     validation_scope: 'Engine recording, media structure, non-silent audio, and scripted cue timing. No human listening or real-device performance claim.' };
   fs.writeFileSync(path.join(output, `${theme}-report.json`), JSON.stringify(report, null, 2) + '\n');
@@ -122,8 +154,10 @@ function convert(theme, captured) {
 }
 
 function writeGallery() {
-  const available = themes.filter(theme => fs.existsSync(path.join(output, `${theme}-report.json`)));
-  const reports = available.map(theme => JSON.parse(fs.readFileSync(path.join(output, `${theme}-report.json`), 'utf8')));
+  const reports = themes.filter(theme => fs.existsSync(path.join(output, `${theme}-report.json`)))
+    .map(theme => JSON.parse(fs.readFileSync(path.join(output, `${theme}-report.json`), 'utf8')))
+    .filter(report => report.rhythm_version === 2);
+  const available = reports.map(report => report.theme);
   reports.forEach(report => validateCapture(report.capture, report.theme));
   fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify(reports, null, 2) + '\n');
   if (available.length === themes.length) {
@@ -157,7 +191,8 @@ summary{cursor:pointer;font-size:14px}.stages{display:grid;grid-template-columns
 figure{margin:0}img{display:block;width:100%;background:#f6f4ee;border-radius:6px}figcaption{font-size:11px;color:#536170;margin-top:4px}
 footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-width:760px){main{padding:20px 12px}.gallery{grid-template-columns:1fr}h1{font-size:26px}}
 </style><main><header><h1>Chest motion and sound review</h1>
-<p>Eight themes at the same size. Each recording includes a short cancelled press, a complete 1.2-second hold, and the 1.8-second opening. Play with sound to review contact, charge, unlock, release, settle, and reward cues.</p>
+<p>Eight themes at the same size. Each recording includes a short cancelled press followed by the complete 10.5-second reward sequence: hold for 1.2 seconds, let go, then watch tension build automatically toward a final breath and release.</p>
+<p>Progress advances throughout the buildup. Fourteen increasingly close beats lead into a brief hush; the lid stays closed until the final release. Play with sound to compare each theme's rhythm.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>
 <section class="gallery">${cards}</section>

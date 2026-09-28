@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Feel = preload("res://scripts/chest_feel.gd")
+
 var checks: int = 0
 var failures: int = 0
 
@@ -142,13 +144,13 @@ func _check_hold_feedback(data) -> void:
 		"Holding has an immediate readable zero-percent start, before the first game frame")
 	chest.set_hold_progress(0.45)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.percent == 45 and state.text.contains("45%") and not state.status.is_empty()
+	check(state.active and state.percent == 5 and state.text.contains("5%") and not state.status.is_empty()
 		and state.animated and state.spark_count > 0,
-		"Hold feedback reports the actual progress with a visible status and gathering sparks")
+		"Confirmation contributes its real elapsed share of the complete progress")
 	chest.set_hold_progress(2.0)
 	chest._advance_animation(2.0)
-	check(chest.hold_effect_snapshot().percent == 100 and chest.mode == "closed" and openings.is_empty(),
-		"Reaching full visual charge never opens the chest or awards its contents without the game action")
+	check(chest.hold_effect_snapshot().percent == 13 and chest.mode == "closed" and openings.is_empty(),
+		"Completing confirmation never opens the chest or reports the whole buildup complete")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active and not chest._charge_label.visible and not chest._glint.visible
 		and is_zero_approx(chest.hold_progress), "Releasing immediately clears the ring, percentage, glow and hold state")
@@ -186,18 +188,24 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.phase == "opening" and state.percent == 100 and state.status == "Unlocking"
+	check(state.active and state.phase == "gathering" and state.percent == 13 and not state.status.is_empty()
 		and chest.mode == "opening" and openings.is_empty(),
-		"The real open action carries a full-charge readout into one finite release effect")
+		"Confirmation flows into automatic gathering without resetting or finishing progress")
 	chest.start_open(false)
-	chest._advance_animation(0.73)
-	check(chest.hold_effect_snapshot().active and chest.hold_effect_snapshot().spark_count == 0,
-		"The release sparks finish before the short full-charge readout disappears")
-	chest._advance_animation(0.23)
+	chest._advance_animation(4.0)
+	state = chest.hold_effect_snapshot()
+	check(state.active and state.percent > 50 and state.percent < 70 and state.phase == "building"
+		and state.spark_count > 0 and openings.is_empty(),
+		"Automatic buildup keeps readable advancing progress and gathering sparks")
+	chest._advance_animation(Feel.RELEASE_TIME - 4.0 + 0.01)
+	state = chest.hold_effect_snapshot()
+	check(state.active and state.percent == 100 and state.phase == "release" and state.spark_count > 0,
+		"Only the final physical release reaches 100 percent and scatters sparks")
+	chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(not chest.hold_effect_snapshot().active and chest.mode == "opening" and openings.is_empty(),
-		"The release effect finishes while the existing chest opening animation continues")
-	chest._advance_animation(0.83)
-	check(chest.mode == "opening" and openings.is_empty(), "Charge feedback does not shorten the 1.8-second opening timing")
+		"The progress readout finishes after release while the reward settles")
+	chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
+	check(chest.mode == "opening" and openings.is_empty(), "The complete 9.3-second automatic opening precedes the reward")
 	chest._advance_animation(0.02)
 	chest.start_open(false)
 	chest.finish_immediately()
@@ -209,7 +217,7 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	chest.clear()
-	chest._advance_animation(3.0)
+	chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	check(chest.mode == "closed" and not chest.hold_effect_snapshot().active and openings.size() == 1,
 		"Clearing during release removes the effect and prevents a stale open callback")
 	chest.free()
@@ -229,11 +237,15 @@ func _check_hold_bounds(data) -> void:
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
 			check(chest._charge_color == data.theme(theme_id).accent,
 				"The %s charge ring follows its chest's theme palette" % theme_id)
-			for phase in ["hold", "release", "opening"]:
-				if phase == "release":
+			for phase in ["hold", "gathering", "building", "anticipation", "release"]:
+				if phase == "gathering":
 					chest.start_open(false)
-				elif phase == "opening":
-					chest._advance_animation(0.68)
+				elif phase == "building":
+					chest._advance_animation(4.0)
+				elif phase == "anticipation":
+					chest._advance_animation(Feel.ANTICIPATION_TIME - 4.0 + 0.01)
+				elif phase == "release":
+					chest._advance_animation(Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME)
 				var state: Dictionary = chest.hold_effect_snapshot()
 				var bounds := Rect2(Vector2(state.bounds.x, state.bounds.y), Vector2(state.bounds.width, state.bounds.height))
 				check(state.active and stage.encloses(bounds) and stage.encloses(chest._charge_label.get_rect()),

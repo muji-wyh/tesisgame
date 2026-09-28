@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Feel = preload("res://scripts/chest_feel.gd")
+
 class BrowserStorage:
 	extends RefCounted
 	var fail_write: bool = false
@@ -118,15 +120,15 @@ func _run() -> void:
 	_begin(app)
 	check(app.chest.hold_effect_snapshot().percent == 0, "Reholding starts a fresh charge at zero")
 	app._advance_ui(0.6)
-	check(app.chest.hold_effect_snapshot().percent == 50 and app.audio.chest_charge.pitch_scale > pitch,
-		"The same elapsed time advances the visible percentage and rising audio pitch")
+	check(app.chest.hold_effect_snapshot().percent == 6 and app.audio.chest_charge.pitch_scale > pitch,
+		"Confirmation advances its real share of the complete progress and rising audio pitch")
 	app._advance_ui(0.61)
 	state = app.chest.hold_effect_snapshot()
-	check(app.model.chest_state == "opening" and state.phase == "opening" and state.percent == 100,
-		"Completing the real hold starts the existing opening at full charge")
-	check(not app.audio._chest_charge_active and not app.audio.chest_charge.playing
-		and app.audio.chest_charge.stream == null and app.audio._chest_phase == "opening",
-		"Full charge stops the loop and arms the physical opening timeline")
+	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 13,
+		"Completing confirmation starts automatic gathering at its true elapsed progress")
+	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
+		and app.audio._chest_phase == "opening",
+		"Confirmation hands its audio loop to the automatic tension timeline")
 	check(not app.audio._chest_rewarded and not cues.any(func(item): return item[1] == "release"),
 		"Full charge neither announces the reward nor plays the later lid release")
 	app.chest._process(0.25)
@@ -135,6 +137,8 @@ func _run() -> void:
 		"Opening keeps its full initial tension instead of consuming the hold frame's 250 milliseconds")
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
+	check(app.model.chest_state == "opening" and app.chest.hold_effect_snapshot().active,
+		"Releasing after confirmation lets the automatic performance continue")
 	app.chest.finish_immediately()
 	check(app.model.chest_state == "opened" and _pieces(app) == 1,
 		"Finishing the actual opening claims exactly one piece")
@@ -280,9 +284,14 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	app.chest.set_process(false)
-	app.chest._advance_animation(0.13)
-	app.chest._advance_animation(0.2)
-	app.chest._advance_animation(0.63)
+	app.chest._advance_animation(7.2)
+	state = app.chest.hold_effect_snapshot()
+	check(state.percent > 90 and state.percent < 100 and _pieces(app) == 0
+		and not app.audio._chest_rewarded and not app.audio._chest_seen.has("release0"),
+		"Late in the buildup, anticipation has not saved or announced a reward")
+	app.chest._advance_animation(Feel.UNLOCK_TIME - 7.2 + 0.01)
+	app.chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
+	app.chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(app.audio._chest_seen.has("unlock0") and app.audio._chest_seen.has("release0")
 		and app.audio._chest_seen.has("settle0"), "Real opening motion drives the three physical sound beats")
 	app.chest.finish_immediately()
@@ -328,6 +337,42 @@ func _run() -> void:
 	app._on_chest_opened()
 	check(_pieces(app) == 3 and cues.is_empty() and app.audio._chest_phase == "idle",
 		"Duplicate native focus events and foreground frames cannot replay or duplicate the saved piece")
+	_win(app, 88)
+	app.set_reduced_motion(true)
+	storage.fail_write = true
+	_begin(app)
+	app._advance_ui(1.21)
+	check(app._save_error and _pieces(app) == 3 and not app.audio._chest_rewarded
+		and not app.audio.chest_charge.playing and is_equal_approx(app.audio._chest_music_duck, 1.0),
+		"A reduced-motion save failure leaves no tension loop or music duck and does not announce success")
+	storage.fail_write = false
+	app._retry_reward_save()
+	check(_pieces(app) == 4, "The reduced-motion failure remains safely retryable")
+	_win(app, 89)
+	app.set_reduced_motion(false)
+	storage.fail_write = true
+	_begin(app)
+	app._advance_ui(1.21)
+	app.chest._advance_animation(3.5)
+	check(app.audio.chest_charge.playing, "The interrupted scenario starts with an active automatic tension loop")
+	cues.clear()
+	app.set_reduced_motion(true)
+	check(app._save_error and _pieces(app) == 4 and not app.audio._chest_rewarded
+		and not app.audio.chest_charge.playing and is_equal_approx(app.audio._chest_music_duck, 1.0)
+		and not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
+		"Reducing motion during buildup stops tension without missed accents even when saving fails")
+	storage.fail_write = false
+	app._retry_reward_save()
+	check(_pieces(app) == 5, "The interrupted reduced-motion failure saves one piece on explicit retry")
+	_win(app, 90)
+	app.set_reduced_motion(false)
+	_begin(app)
+	app._advance_ui(1.21)
+	app._show_collection()
+	app._advance_ui(0.25)
+	check(app.collection_page.visible and app._chest_announced_percent == -1,
+		"The room keeps hidden chest progress hidden on later automatic-opening frames")
+	app.on_page_hidden()
 	app.audio.halt()
 	app.set_process(false)
 	await process_frame

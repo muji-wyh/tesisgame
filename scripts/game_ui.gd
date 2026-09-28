@@ -7,6 +7,7 @@ const Card = preload("res://scripts/word_card.gd")
 const HintLink = preload("res://scripts/hint_link.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
+const ChestFeel = preload("res://scripts/chest_feel.gd")
 const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
 const Effects = preload("res://scripts/celebration.gd")
 const Medal = preload("res://scripts/medal_view.gd")
@@ -19,7 +20,7 @@ const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
-const HOLD_SECONDS: float = 1.2
+const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 
@@ -260,6 +261,7 @@ var _chest_reward_announced: bool = false
 var _hold_elapsed: float = 0.0
 var _hold_origin_frame: int = -1
 var _chest_announced_percent: int = -1
+var _chest_announced_phase: String = "idle"
 var _drag_distance: float = 0.0
 var _dragging_chest: bool = false
 var _drag_has_anchor: bool = false
@@ -2110,8 +2112,9 @@ func _open_chest() -> void:
 	_chest_reward_announced = false
 	if not _settling_chest:
 		audio.interact(model.reward_theme)
-	_publish_chest_charge(1.0)
 	chest.start_open(reduced_motion or _settling_chest)
+	if chest.mode == "opening":
+		_publish_chest_charge(chest.performance_progress(), chest.performance_phase())
 
 
 func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
@@ -2120,9 +2123,11 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 	var expected_theme: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 	if theme_id != expected_theme:
 		return
-	if cue in ["press", "charge_step"] and (not _holding_chest or model.chest_state != "closed"):
+	if cue == "press" and (not _holding_chest or model.chest_state != "closed"):
 		return
-	if cue in ["opening", "unlock", "release", "settle"] and model.chest_state != "opening":
+	if cue == "charge_step" and not ((_holding_chest and model.chest_state == "closed") or model.chest_state == "opening"):
+		return
+	if cue in ["opening", "tension_pulse", "anticipation", "unlock", "release", "settle"] and model.chest_state != "opening":
 		return
 	audio.chest_cue(theme_id, cue, step)
 	if _host != null:
@@ -2134,6 +2139,9 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 func _on_chest_opened() -> void:
 	if not model.finish_open():
 		return
+	# Physical completion stops the bed even if the following save fails.
+	# The success accent remains gated by the separate persistence result.
+	audio.finish_chest_motion()
 	_publish_chest_charge()
 	_commit_fragment()
 
@@ -2932,14 +2940,17 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 	_publish_chest_charge()
 
 
-func _publish_chest_charge(progress: float = -1.0) -> void:
+func _publish_chest_charge(progress: float = -1.0, phase: String = "holding") -> void:
 	# Expose real progress without flooding screen readers with live announcements.
 	var percent: int = int(floorf(clampf(progress, 0.0, 1.0) * 20.0)) * 5 if progress >= 0.0 else -1
-	if percent == _chest_announced_percent:
+	if progress < 0.0:
+		phase = "idle"
+	if percent == _chest_announced_percent and phase == _chest_announced_phase:
 		return
 	_chest_announced_percent = percent
+	_chest_announced_phase = phase
 	if _host != null:
-		_host.chestProgress(percent)
+		_host.chestProgress(percent, phase)
 
 
 func _finish_chest_drag() -> void:
@@ -2965,10 +2976,13 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 		var progress: float = clampf(_hold_elapsed / HOLD_SECONDS, 0.0, 1.0)
 		chest.set_hold_progress(progress)
 		audio.set_chest_charge(progress)
-		_publish_chest_charge(progress)
+		_publish_chest_charge(chest.performance_progress())
 		if progress >= 1.0:
 			_holding_chest = false
 			_open_chest()
+	if model.chest_state == "opening" and chest.mode == "opening" and not _page_hidden and not collection_page.visible:
+		audio.set_chest_tension(chest.tension_progress())
+		_publish_chest_charge(chest.performance_progress(), chest.performance_phase())
 	if _controller_last_direction != Vector2.ZERO:
 		_controller_repeat_elapsed += delta
 		if _controller_repeat_elapsed >= 0.34:

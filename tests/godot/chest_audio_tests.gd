@@ -42,6 +42,9 @@ func _last_player(audio) -> AudioStreamPlayer:
 func _run() -> void:
 	await _check_material_assets()
 	await _check_performance()
+	await _check_tension_rhythm()
+	await _check_tension_interruption()
+	await _check_motion_completion_before_save()
 	await _check_cancellation_and_guards()
 	await _check_delayed_preparation()
 	await _check_saved_retry()
@@ -127,7 +130,8 @@ func _check_performance() -> void:
 		check(audio._chest_next_player == next_player, "Duplicate step aliases do not replay")
 	check(audio.get_child_count() == 8 and _playing(audio) <= 4, "The performance uses only four bounded chest channels")
 	audio.chest_cue("autumn", "opening")
-	check(not player.playing and player.stream == null and not audio._chest_charge_active, "Opening immediately detaches the charge loop")
+	check(player.playing and player.stream == loop and not audio._chest_charge_active
+		and audio._chest_tension_progress == 0.0, "Opening hands the single loop channel to the automatic buildup")
 	check(not audio._chest_rewarded and audio._chest_phase == "opening", "Opening alone never acknowledges a saved reward")
 	for cue_name in ["unlock", "release", "settle"]:
 		audio.chest_cue("autumn", cue_name)
@@ -153,6 +157,155 @@ func _check_performance() -> void:
 	audio.set_chest_charge(0.0)
 	check(audio.chest_charge.stream == loop and audio.get_child_count() == 8, "The next chest reuses resources and players")
 	audio.stop_chest_performance()
+	audio.queue_free()
+	await process_frame
+
+
+func _check_tension_rhythm() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	for theme: String in Bank.THEMES:
+		audio.prepare_chest(theme)
+		audio.set_chest_tension(0.0)
+		check(audio.chest_charge == null or not audio.chest_charge.playing, "Progress cannot arm an idle " + theme + " buildup")
+		audio.interact(theme, false)
+		audio.chest_cue(theme, "opening")
+		var player: AudioStreamPlayer = audio.chest_charge
+		var loop: AudioStream = player.stream
+		var starting_gain: float = player.volume_db
+		var starting_pitch: float = player.pitch_scale
+		var starting_music: float = audio.music.volume_db
+		check(player.playing and loop == audio.cache[Bank.path_for(theme, "charge")], "Automatic " + theme + " buildup uses the prepared material loop")
+		for step in range(1, 15):
+			audio.set_chest_tension(float(step) / 14.0)
+			audio.chest_cue(theme, "tension_pulse", step)
+			check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")]
+				and player.stream == loop and audio._chest_last_tension_pulse == step,
+				"Tension pulse %d keeps the %s material and stable bed" % [step, theme])
+			var next_player: int = audio._chest_next_player
+			audio.chest_cue(theme, "tension_pulse", step)
+			audio.chest_cue(theme, "tension_pulse", step - 1)
+			check(audio._chest_next_player == next_player, "Duplicate or older pulse ordinals never replay")
+		check(player.volume_db > starting_gain and player.pitch_scale > starting_pitch
+			and audio.music.volume_db < starting_music, "The " + theme + " buildup rises in energy while music leaves room")
+		var pitch: float = player.pitch_scale
+		audio.set_chest_tension(0.1)
+		audio.set_chest_tension(NAN)
+		audio.set_chest_tension(INF)
+		audio.set_chest_charge(0.0)
+		check(player.pitch_scale == pitch and audio._chest_tension_progress == 1.0 and audio._chest_phase == "opening",
+			"Invalid or old progress cannot rewind tension or restore the hold")
+		for step in range(1, 3):
+			audio.chest_cue(theme, "charge_step", step)
+			check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")], "Progress star %d remains audible during buildup" % step)
+		check(_playing(audio) <= 4 and audio.get_child_count() == 8, "Rapid pulses and stars stay within the same four chest channels")
+		audio.chest_cue(theme, "anticipation")
+		check(_playing(audio) == 0 and player.stream == null and audio.music.volume_db < -50.0,
+			"Anticipation removes all chest tails and nearly silences music")
+		var next_player: int = audio._chest_next_player
+		audio.chest_cue(theme, "anticipation")
+		audio.chest_cue(theme, "tension_pulse", 15)
+		audio.set_chest_tension(0.0)
+		audio.set_chest_tension(1.0)
+		check(_playing(audio) == 0 and audio._chest_next_player == next_player,
+			"Duplicate hush and late pulses or progress preserve the silence")
+		audio.chest_cue(theme, "unlock")
+		check(not player.playing and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")],
+			"Unlock begins the final material release after silence")
+		audio.chest_cue(theme, "charge_step", 3)
+		check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")], "The final progress star remains available at release")
+		audio.chest_cue(theme, "release")
+		check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")]
+			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12)) and not audio._chest_rewarded,
+			"The " + theme + " release restores music without claiming the saved reward")
+		audio.chest_reward(theme)
+		check(audio._chest_rewarded and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "reward")],
+			"Only a save acknowledgement plays the success accent after tension")
+		audio.stop_chest_performance()
+		audio.chest_cue(theme, "opening")
+		audio.set_chest_tension(0.9)
+		audio.chest_cue(theme, "release")
+		check(not player.playing and player.stream == null, "Release stops the bed even if a long frame skipped anticipation")
+		audio.stop_chest_performance()
+	audio.queue_free()
+	await process_frame
+
+
+func _check_tension_interruption() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	audio.prepare_chest("space")
+	for reason in ["mute", "halt", "navigation", "unavailable"]:
+		audio.available = true
+		audio.set_muted(false)
+		audio.interact("space", false)
+		audio.chest_cue("space", "opening")
+		audio.set_chest_tension(0.8)
+		audio.chest_cue("space", "tension_pulse", 9)
+		match reason:
+			"mute": audio.set_muted(true)
+			"halt": audio.halt()
+			"navigation": audio.stop_chest_performance()
+			"unavailable":
+				audio.available = false
+				audio.set_chest_tension(0.9)
+		check(not audio.chest_charge.playing and audio.chest_charge.stream == null,
+			"The " + reason + " path stops the automatic buildup")
+		audio.available = true
+		audio.set_muted(false)
+		audio.interact("space", false)
+		var next_player: int = audio._chest_next_player
+		audio.set_chest_tension(0.0)
+		audio.set_chest_tension(1.0)
+		audio.chest_cue("space", "tension_pulse", 10)
+		check(not audio.chest_charge.playing and audio._chest_next_player == next_player,
+			"Old automatic progress and pulses stay silent after " + reason)
+		audio.stop_chest_performance()
+		check(is_equal_approx(audio.music.volume_db, linear_to_db(0.12)), "Ending a performance restores normal music gain")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_motion_completion_before_save() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	for theme: String in Bank.THEMES:
+		for progress: float in [0.0, 0.65]:
+			audio.prepare_chest(theme)
+			audio.interact(theme, false)
+			audio.chest_cue(theme, "opening")
+			audio.set_chest_tension(progress)
+			audio.chest_cue(theme, "tension_pulse", 1)
+			var next_player: int = audio._chest_next_player
+			audio.finish_chest_motion()
+			check(_playing(audio) == 0 and audio.chest_charge.stream == null
+				and is_equal_approx(audio.music.volume_db, linear_to_db(0.12)),
+				"Finishing " + theme + " motion before save stops every physical sound and restores music")
+			check(audio._chest_phase == "opening" and not audio._chest_rewarded
+				and audio._chest_next_player == next_player,
+				"Physical completion keeps the pending receipt without playing a success accent")
+			audio.finish_chest_motion()
+			audio.set_chest_tension(0.0)
+			audio.set_chest_tension(1.0)
+			audio.set_chest_charge(0.0)
+			for cue_name: String in ["press", "opening", "tension_pulse", "charge_step", "anticipation", "unlock", "release", "settle"]:
+				audio.chest_cue(theme, cue_name, 2 if cue_name in ["tension_pulse", "charge_step"] else 0)
+			check(_playing(audio) == 0 and audio._chest_next_player == next_player,
+				"Repeated completion and late motion updates cannot revive a finished performance")
+			audio.chest_reward(theme, true)
+			check(audio._chest_rewarded and _playing(audio) == 1
+				and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "reward")],
+				"A later successful save plays exactly its reward receipt after skipped motion")
+			next_player = audio._chest_next_player
+			audio.finish_chest_motion()
+			audio.chest_reward(theme, true)
+			check(audio._chest_next_player == next_player and _playing(audio) == 1,
+				"Duplicate completion cannot cut off or replay the acknowledged reward")
+			audio.stop_chest_performance()
+			audio.chest_cue(theme, "press")
+			check(audio._chest_phase == "holding" and _playing(audio) == 1,
+				"A new performance explicitly clears the old motion guard")
+			audio.stop_chest_performance()
 	audio.queue_free()
 	await process_frame
 

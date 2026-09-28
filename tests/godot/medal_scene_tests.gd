@@ -59,7 +59,7 @@ func _run() -> void:
 	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "opening" and app.effects.particle_count() == 0,
 		"A full hold starts anticipation before the fragment release")
-	app.chest._advance_animation(0.33)
+	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
 	check(app.effects.particle_count() == 24, "The physical release starts the small fragment reveal")
 	check(app._pending_fragment.medal_id == "spring-1" and app._pending_fragment.after == 1,
 		"Opening locks the first missing fragment")

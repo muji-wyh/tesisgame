@@ -1244,7 +1244,7 @@ func _test_scene() -> void:
 	await process_frame
 	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
 	check(app.effects.particle_count() == 0, "Opening anticipation waits for the physical release beat")
-	app.chest._advance_animation(0.33)
+	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
 	check(app.effects.particle_count() == 24, "The lid release starts the small 24-particle celebration")
 	check_no_reward_flight(app, "The reward flight does not appear before the chest finishes opening")
 	var opened_reward_id: String = app.model.reward_id

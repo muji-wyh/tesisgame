@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Feel = preload("res://scripts/chest_feel.gd")
+
 var checks: int = 0
 var failures: int = 0
 
@@ -23,6 +25,10 @@ func _poses(chest) -> Array:
 
 
 func _run() -> void:
+	check(is_equal_approx(Feel.HOLD_SECONDS + Feel.OPEN_SECONDS, 10.5),
+		"A confirmed opening has a complete 10.5-second rhythm")
+	check(Feel.RELEASE_TIME > 7.8 and Feel.OPEN_SECONDS - Feel.RELEASE_TIME >= 1.4,
+		"The long buildup resolves in a brisk release with room for the reward to settle")
 	var data = load("res://scripts/game_data.gd").new()
 	check(data.load_all(), "The original imported artwork remains valid")
 	var chest = load("res://scripts/chest_view.gd").new()
@@ -53,21 +59,51 @@ func _run() -> void:
 		chest.set_hold_progress(0.8)
 		chest.set_hold_progress(1.0)
 		chest.set_hold_progress(1.0)
-		check(cues.filter(func(item): return item[1] == "charge_step") ==
-			[[theme, "charge_step", 1], [theme, "charge_step", 2], [theme, "charge_step", 3]],
-			theme + " emits exactly one beat for each real progress milestone")
+		check(not cues.any(func(item): return item[1] == "charge_step"),
+			theme + " keeps its three progress milestones for the complete buildup")
 		var previous: int = openings.size()
 		chest.start_open(false)
-		check(cues.back() == [theme, "opening", 0], theme + " stops charge at the start of opening")
+		check(cues.back() == [theme, "opening", 0], theme + " confirms the automatic buildup once")
 		chest._process(0.25)
 		check(chest.hold_effect_snapshot().opening_time == 0.0 and cues.back() == [theme, "opening", 0],
 			theme + " cannot spend the frame delta from before its opening transition")
-		chest._advance_animation(0.09)
-		check(not cues.any(func(item): return item[1] == "unlock"), theme + " keeps the initial anticipation pause")
-		chest._advance_animation(0.04)
+		var pulse_times: Array[float] = []
+		var percent_before: int = chest.hold_effect_snapshot().percent
+		var increasing_progress: bool = true
+		var sealed: bool = true
+		for frame in range(432):
+			var pulse_count: int = cues.filter(func(item): return item[1] == "tension_pulse").size()
+			chest._advance_animation(1.0 / 60.0)
+			var state: Dictionary = chest.hold_effect_snapshot()
+			if cues.filter(func(item): return item[1] == "tension_pulse").size() > pulse_count:
+				pulse_times.append(state.opening_time)
+			increasing_progress = increasing_progress and state.percent >= percent_before and state.percent < 100
+			percent_before = state.percent
+			sealed = sealed and state.interior_open == 0.0 and openings.size() == previous
+		check(increasing_progress and percent_before > 90,
+			theme + " continuously advances real progress without reaching 100 during buildup")
+		check(sealed, theme + " keeps the reward sealed throughout the escalating buildup")
+		check(pulse_times.size() == 14, theme + " emits fourteen distinct tension beats")
+		for index in range(2, pulse_times.size()):
+			check(pulse_times[index] - pulse_times[index - 1] < pulse_times[index - 1] - pulse_times[index - 2],
+				theme + " shortens each tension-beat interval toward the final release")
+		check(not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
+			theme + " keeps physical release and settlement silent throughout buildup")
+		chest._advance_animation(0.03)
+		check(cues.back() == [theme, "anticipation", 0], theme + " cuts into a deliberate final hush")
+		var still_pose: Array = _poses(chest)
+		chest._advance_animation(0.38)
+		check(_poses(chest) == still_pose and cues.back() == [theme, "anticipation", 0],
+			theme + " holds still during the breath before unlocking")
+		chest._advance_animation(Feel.UNLOCK_TIME - 7.61 + 0.001)
 		check(cues.back() == [theme, "unlock", 0], theme + " unlock sound follows the actual lock beat")
-		chest._advance_animation(0.20)
+		chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
 		check(cues.back() == [theme, "release", 0], theme + " releases at the lid-motion beat")
+		check(chest.hold_effect_snapshot().percent == 100,
+			theme + " reaches 100 percent at the physical release rather than confirmation")
+		check(cues.filter(func(item): return item[1] == "charge_step") ==
+			[[theme, "charge_step", 1], [theme, "charge_step", 2], [theme, "charge_step", 3]],
+			theme + " emits each whole-performance progress star only once")
 		chest._advance_animation(0.27)
 		var style: String = data.theme(theme).chest
 		if not family_poses.has(style):
@@ -86,11 +122,11 @@ func _run() -> void:
 		check(fit_before > 0.0 and is_equal_approx(fit_before, fit_after),
 			theme + " keeps the same fitted scale when the progress badge disappears")
 		check(cues.back() == [theme, "settle", 0], theme + " plays one settle beat")
-		chest._advance_animation(0.82)
-		check(openings.size() == previous and chest.mode == "opening", theme + " does not grant a reward before 1.8 seconds")
+		chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
+		check(openings.size() == previous and chest.mode == "opening", theme + " does not grant a reward before 10.5 seconds including confirmation")
 		chest._advance_animation(0.02)
 		chest.finish_immediately()
-		check(openings.size() == previous + 1 and chest.mode == "opened", theme + " opens once at the existing deadline")
+		check(openings.size() == previous + 1 and chest.mode == "opened", theme + " opens once at the complete performance deadline")
 		check(cues.filter(func(item): return item[1] in ["unlock", "release", "settle"]).size() == 3,
 			theme + " never duplicates physical beats on repeated finish")
 
@@ -114,7 +150,7 @@ func _run() -> void:
 		chest._advance_animation(0.13)
 		check(_poses(chest) == rest, theme + " returns every physical part to rest within 120 milliseconds")
 		var count: int = cues.size()
-		chest._advance_animation(3.0)
+		chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 		check(cues.size() == count and chest.mode == "closed", theme + " has no stale release after cancellation")
 
 		chest.begin_hold()
@@ -137,6 +173,29 @@ func _run() -> void:
 		chest.start_open(true)
 		check(chest.mode == "opened" and openings.size() == previous + 1 and cues.size() == count + 1,
 			theme + " reduced motion only emits opening, then immediately completes")
+	chest.clear()
+	chest.configure_skin(data.theme("space"), data.chests)
+	chest.reduced_motion = false
+	cues.clear()
+	chest.start_open(false)
+	chest._advance_animation(6.0)
+	check(not cues.any(func(item): return item[1] in ["tension_pulse", "charge_step"]),
+		"A stalled frame consumes old tension beats instead of playing an audio backlog")
+	chest._advance_animation(0.021)
+	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 9]],
+		"A recovered frame plays only the next live tension beat")
+	var cue_count: int = cues.size()
+	chest.finish_immediately()
+	chest._advance_animation(Feel.OPEN_SECONDS)
+	check(cues.size() == cue_count, "Finishing after a stall never replays missed beats or final release")
+	chest.clear()
+	chest.configure_skin(data.theme("space"), data.chests)
+	chest.start_open(false)
+	chest._advance_animation(6.90)
+	cues.clear()
+	chest._advance_animation(0.23)
+	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 14]],
+		"A 230-millisecond frame coalesces overlapping late pulses into its newest live beat")
 	chest.free()
 	_check_crystal_mechanism(data)
 	_check_motion_bounds(data)
@@ -155,7 +214,7 @@ func _check_crystal_mechanism(data) -> void:
 		chest.configure_skin(data.theme(theme), data.chests)
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " has no open cavity while closed")
 		chest.start_open(false)
-		chest._advance_animation(0.319)
+		chest._advance_animation(Feel.RELEASE_TIME - 0.001)
 		var core_moves: bool = false
 		var panels_wait: bool = true
 		for piece in chest._pieces:
@@ -194,7 +253,9 @@ func _check_motion_bounds(data) -> void:
 			var prior: float = 0.0
 			var outside: Array[String] = []
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
-			for time in [0.0, 0.12, 0.31, 0.44, 0.61, 0.76, 0.95, 1.2, 1.8]:
+			for time in [0.0, 1.65, 3.42, 5.66, 7.12, Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
+				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
+				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]:
 				chest._advance_animation(time - prior)
 				prior = time
 				var state: Dictionary = chest.hold_effect_snapshot()

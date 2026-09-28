@@ -1,7 +1,9 @@
 # Eight-world chest performance
 
-The chest keeps the existing 1.2-second hold, three real progress stars and
-1.8-second opening. Reward selection and the save format are unchanged.
+The chest uses a 1.2-second confirmation hold followed by a 9.3-second automatic
+performance, totaling 10.5 seconds. Its original 1.8-second physical opening
+follows a 7.5-second tension buildup. Reward selection and the save format are
+unchanged. The user can release after confirmation; no ten-second hold is needed.
 
 ## Motion and timing
 
@@ -18,6 +20,14 @@ inside `begin_hold()`, without waiting for a tween or a network result.
 Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
+The three stars and percentage follow elapsed time up to the lid-release beat,
+instead of staying at 100% throughout the buildup. Fourteen material pulses
+accelerate from 1.10-second intervals to 160 ms. Their shared timestamps drive
+both physical impulses and sounds. Lock pressure, local light, inward particles
+and the material loop rise in intensity. Background music progressively ducks,
+then the sound tails and strained pose stop for the final quiet breath. The lid
+stays shut until release; its opening speed is not slowed down to fill the wait.
+
 Hold and opening transitions record their engine-frame origin. Runtime stepping
 does not consume the delta from before a press or phase transition, which avoids
 early unlocks on slow frames. Deterministic native simulations advance the same
@@ -28,13 +38,19 @@ logic through separate step helpers.
 | Cue | Time | Consumer |
 | --- | --- | --- |
 | `press` | Pointer/key/controller hold starts | Contact sound |
-| `charge_step` | 1/3, 2/3, 3/3 of actual hold | Material accent and progress stars |
+| `charge_step` | 1/3, 2/3, 3/3 of elapsed hold-to-release time | Material accent and progress stars |
 | `cancel` | Early release or drag | Stop charge, brief return sound |
-| `opening` | Full hold | Stop charge, quiet tension sound |
-| `unlock` | Opening +120 ms | Lock/core sound |
-| `release` | Opening +320 ms | Lid sound and small seasonal burst |
-| `settle` | Opening +950 ms | Material landing sound |
-| `opened` | Opening +1.8 s | Existing save-before-reveal transaction |
+| `opening` | Confirmation completes at 1.2 s | Begin automatic tension bed |
+| `tension_pulse` | Automatic +0.55 s through +7.12 s | Fourteen accelerating material beats |
+| `anticipation` | Automatic +7.22 s | Stop charge/tails and nearly silence music |
+| `unlock` | Automatic +7.62 s (8.82 s total) | Lock/core sound |
+| `release` | Automatic +7.82 s (9.02 s total) | Lid sound and small seasonal burst |
+| `settle` | Automatic +8.45 s (9.65 s total) | Material landing sound |
+| `opened` | Automatic +9.3 s (10.5 s total) | Existing save-before-reveal transaction |
+
+A frame stall consumes expired beats without playing a backlog. The quiet
+transition still stops audio, and fast-forward/background settlement remains
+silent. Reduced motion retains the short confirmation and skips the buildup.
 
 The success sound is outside the physical clock: `game_ui.gd` calls it only after
 the reward save succeeds. An explicit save retry can acknowledge the newly saved

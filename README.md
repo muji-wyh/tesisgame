@@ -469,12 +469,15 @@ remain usable without shrinking the controls.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short press compresses the lock or body immediately and releases with a 120 ms
-return. Hold it for **1.2 seconds**: three progress stars, a percentage badge and
-material sounds follow the actual hold at one-third, two-thirds and full charge.
-Each world has its own pressure, unlock, lid or crystal motion and short Foley.
-The **1.8-second opening** pauses briefly, unlocks at 120 ms, releases at 320 ms,
-and settles at 950 ms. Its art fit remains fixed when the progress badge disappears.
-Releasing early or dragging cancels immediately; a fresh press interrupts the return.
+return. Hold it for **1.2 seconds** to confirm, then release your finger while a
+**9.3-second automatic performance** builds and opens the chest: **10.5 seconds
+in total**. Three stars and a percentage badge progress through the full buildup,
+reaching 100% at the lid release. Fourteen material beats grow closer together,
+the lock strains and background music recedes. A 400 ms quiet breath precedes
+the unlock, followed by the lid release, recoil and saved reward. Each world
+keeps its own material motion and sound. The art fit stays fixed throughout.
+Releasing or dragging before confirmation cancels immediately; a fresh press
+interrupts the return. After confirmation, the performance finishes automatically.
 Opening More or leaving the page stops the performance. Reduced motion keeps
 readable progress and shows the saved result directly after a complete hold.
 Browser accessibility exposes progress without repeated live announcements.

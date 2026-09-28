@@ -62,7 +62,9 @@ async function observeChest(page) {
       const progress = document.getElementById('chest-progress');
       new MutationObserver(() => {
         window.chestObservation.progress.push({
+          at: performance.now(),
           hidden: progress.hidden,
+          phase: progress.getAttribute('data-phase'),
           percent: Number(progress.getAttribute('aria-valuenow')),
           text: progress.getAttribute('aria-valuetext'),
           saved: localStorage.getItem('wordBuddies.medalProgress') || ''
@@ -97,13 +99,22 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   try {
     // Capture transient states in the page. Screenshot encoding can take longer
     // than the complete hold, and must not make an already-completed phase fail.
-    await expect(page.locator('#game-status')).toContainText('A new piece!');
+    await expect.poll(() => page.evaluate(() => window.chestObservation.cues.some(cue => cue.cue === 'opening')),
+      { timeout: 4000 }).toBe(true);
   } finally {
     await page.mouse.up();
   }
+  await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
   const progressHistory = await page.evaluate(start => window.chestObservation.progress.slice(start), progressStart);
-  expect(progressHistory.some(state => !state.hidden && state.percent >= 20 && state.percent < 100 &&
-    state.text.includes('Keep holding'))).toBe(true);
+  expect(progressHistory.some(state => !state.hidden && state.percent > 0 && state.percent < 14 &&
+    state.text.includes('Hold to begin'))).toBe(true);
+  for (const phase of ['gathering', 'building', 'anticipation']) {
+    expect(progressHistory.some(state => !state.hidden && state.phase === phase && state.percent >= 13 &&
+      state.percent < 100), `Progress remains active and incomplete during ${phase}`).toBe(true);
+  }
+  const activeProgress = progressHistory.filter(state => !state.hidden);
+  expect(activeProgress.every((state, index) => index === 0 || state.percent >= activeProgress[index - 1].percent),
+    'Progress advances continuously from confirmation through release').toBe(true);
   const openingStates = progressHistory.filter(state => !state.hidden && state.percent === 100 && state.text === 'Opening!');
   expect(openingStates.length).toBeGreaterThan(0);
   expect(openingStates.every(state => state.saved === unopenedSave), 'Opening cannot claim the piece early').toBe(true);
@@ -114,17 +125,29 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   await rendered(page);
   await screenshot(page, testInfo, 'opened');
 
+  const observation = await page.evaluate(() => window.chestObservation);
+  const cues = observation.cues;
+  expect(cues.filter(event => !['tension_pulse', 'charge_step'].includes(event.cue))
+    .map(event => `${event.cue}:${event.step}`)).toEqual([
+    'press:0', 'cancel:0', 'press:0', 'opening:0', 'anticipation:0', 'unlock:0', 'release:0', 'settle:0'
+  ]);
+  expect(cues.filter(event => event.cue === 'charge_step').map(event => event.step)).toEqual([1, 2, 3]);
+  const pulses = cues.filter(event => event.cue === 'tension_pulse');
+  expect(pulses.map(event => event.step)).toEqual(Array.from({ length: 14 }, (_, index) => index + 1));
+  const intervals = pulses.slice(1).map((pulse, index) => pulse.at - pulses[index].at);
+  expect(intervals.slice(-3).reduce((sum, value) => sum + value, 0) / 3,
+    'Late tension beats arrive much faster than the early beats').toBeLessThan(
+    intervals.slice(0, 3).reduce((sum, value) => sum + value, 0) / 3 * 0.4);
+  expect(cues.every(event => event.theme === 'summer')).toBe(true);
+  const opening = cues.find(event => event.cue === 'opening');
+  const hush = cues.find(event => event.cue === 'anticipation');
+  expect(cues.find(event => event.cue === 'unlock').at - hush.at,
+    'A quiet breath separates the tension rhythm from unlocking').toBeGreaterThanOrEqual(300);
+  expect(openingStates[0].at - opening.at, '100 percent waits for the final release').toBeGreaterThanOrEqual(7800);
+
   if (await page.evaluate(() => window.audioObservation.available)) {
     const allSounds = await page.evaluate(() => window.audioObservation.playbacks);
     await testInfo.attach('all-audio', { body: JSON.stringify(allSounds, null, 2), contentType: 'application/json' });
-    const observation = await page.evaluate(() => window.chestObservation);
-    const cues = observation.cues;
-    expect(cues.map(event => `${event.cue}:${event.step}`)).toEqual([
-      'press:0', 'cancel:0', 'press:0', 'charge_step:1', 'charge_step:2',
-      'charge_step:3', 'opening:0', 'unlock:0', 'release:0', 'settle:0'
-    ]);
-    expect(cues.every(event => event.theme === 'summer')).toBe(true);
-    const opening = cues.find(event => event.cue === 'opening');
     // These are observable scheduling measurements, not a physical-device
     // claim about display scanout, speakers or Bluetooth output latency.
     const timing = cues.filter(event => ['press', 'unlock', 'release', 'settle'].includes(event.cue))
@@ -134,9 +157,9 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       body: JSON.stringify({ cues, timing }, null, 2), contentType: 'application/json'
     });
     expect(timing.find(event => event.cue === 'unlock').milliseconds,
-      'The opening keeps its first 100 milliseconds of tension').toBeGreaterThanOrEqual(100);
+      'The chest remains locked through its complete buildup and final breath').toBeGreaterThanOrEqual(7600);
     expect(timing.find(event => event.cue === 'release').milliseconds,
-      'The lid release cannot consume time from the preceding hold frame').toBeGreaterThanOrEqual(300);
+      'The lid release preserves the long buildup').toBeGreaterThanOrEqual(7800);
     const startsAt = cues[0].at - 100;
     const chestSounds = allSounds.filter(sound => sound.at >= startsAt &&
       [0.19, 0.22, 0.24, 0.31, 0.44, 0.48, 0.68, 0.74].some(duration => Math.abs(sound.duration - duration) < 0.001));
@@ -147,7 +170,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       expect(chestSounds.filter(sound => Math.abs(sound.duration - duration) < 0.001)).toHaveLength(1);
     }
     const reward = chestSounds.find(sound => Math.abs(sound.duration - 0.74) < 0.001);
-    expect(reward.at - opening.at).toBeGreaterThanOrEqual(1700);
+    expect(reward.at - opening.at).toBeGreaterThanOrEqual(9200);
     const alignment = [['unlock', 0.31], ['release', 0.68], ['settle', 0.48]].map(([cue, duration]) => ({
       cue, milliseconds: chestSounds.find(sound => Math.abs(sound.duration - duration) < 0.001).at - cues.find(event => event.cue === cue).at
     }));
@@ -197,7 +220,7 @@ test('reduced motion keeps hold progress and releases without claiming early', a
     await expect.poll(async () => Number(await progress.getAttribute('aria-valuenow')),
       { intervals: [30, 50], timeout: 2500 }).toBeGreaterThanOrEqual(20);
     await screenshot(page, testInfo, 'reduced-motion-holding');
-    await expect(page.locator('#game-status')).toContainText('A new piece!');
+    await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
@@ -234,7 +257,7 @@ test('unavailable themed samples use immediate local feedback without delaying r
   expect(await pieces(page)).toBe(baseline);
   await pressChest(page);
   try {
-    await expect(page.locator('#game-status')).toContainText('A new piece!');
+    await expect(page.locator('#game-status')).toContainText('A new piece!', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }

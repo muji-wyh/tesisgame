@@ -566,7 +566,7 @@ async function holdChestUntilOpen(page, point) {
   await page.mouse.down();
   try {
     // Keep holding through slow rendered frames instead of releasing on the runner's clock.
-    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/);
+    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/, { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
@@ -591,7 +591,7 @@ async function winWithTouch(page, board) {
 async function holdControllerChest(page) {
   await page.evaluate(() => window.gamepadFixture.button(0, true));
   try {
-    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/);
+    await expect(page.locator('#game-status')).toContainText(/A new piece!|Medal complete!|A gift for Pip!|All six collected!/, { timeout: 15000 });
   } finally {
     await page.evaluate(() => window.gamepadFixture.button(0, false));
     // Let the engine sample the release before another simulated A press.

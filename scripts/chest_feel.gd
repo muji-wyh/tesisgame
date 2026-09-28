@@ -1,10 +1,60 @@
 extends RefCounted
 
 const CANCEL_SECONDS: float = 0.12
-const UNLOCK_TIME: float = 0.12
-const RELEASE_TIME: float = 0.32
-const SETTLE_TIME: float = 0.95
-const OPEN_SECONDS: float = 1.8
+const HOLD_SECONDS: float = 1.2
+const BUILDUP_SECONDS: float = 7.5
+const ANTICIPATION_TIME: float = 7.22
+const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.12
+const RELEASE_TIME: float = BUILDUP_SECONDS + 0.32
+const SETTLE_TIME: float = BUILDUP_SECONDS + 0.95
+const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
+const PULSE_TIMES := [0.55, 1.65, 2.60, 3.42, 4.12, 4.72, 5.23, 5.66, 6.02, 6.32, 6.57, 6.78, 6.96, 7.12]
+
+
+static func progress(elapsed: float) -> float:
+	return clampf((HOLD_SECONDS + elapsed) / (HOLD_SECONDS + RELEASE_TIME), 0.0, 1.0)
+
+
+static func tension(elapsed: float) -> float:
+	return pow(clampf(elapsed / ANTICIPATION_TIME, 0.0, 1.0), 1.45)
+
+
+static func tension_clock(elapsed: float) -> float:
+	# Freeze the strained pose during the final quiet breath.
+	var time: float = minf(elapsed, ANTICIPATION_TIME)
+	return HOLD_SECONDS + time * 0.5 + pow(time / ANTICIPATION_TIME, 3.0) * 1.8
+
+
+static func pulse_strength(elapsed: float) -> float:
+	if elapsed >= ANTICIPATION_TIME:
+		return 0.0
+	for index in range(PULSE_TIMES.size() - 1, -1, -1):
+		var age: float = elapsed - float(PULSE_TIMES[index])
+		if age >= 0.0:
+			return exp(-age * 18.0) * (0.3 + tension(elapsed) * 0.7)
+	return 0.0
+
+
+static func phase(elapsed: float) -> String:
+	if elapsed >= RELEASE_TIME:
+		return "release"
+	if elapsed >= ANTICIPATION_TIME:
+		return "anticipation"
+	return "building" if elapsed >= 3.4 else "gathering"
+
+
+static func timeline() -> Array:
+	var events: Array = []
+	for index in range(PULSE_TIMES.size()):
+		events.append({"cue": "tension_pulse", "step": index + 1, "time": PULSE_TIMES[index]})
+	for step in range(1, 4):
+		events.append({"cue": "charge_step", "step": step,
+			"time": (HOLD_SECONDS + RELEASE_TIME) * float(step) / 3.0 - HOLD_SECONDS})
+	for event in [["anticipation", ANTICIPATION_TIME], ["unlock", UNLOCK_TIME], ["release", RELEASE_TIME], ["settle", SETTLE_TIME]]:
+		events.append({"cue": event[0], "step": 0, "time": event[1]})
+	events.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return (a.cue == "charge_step" and b.cue != "charge_step") if is_equal_approx(float(a.time), float(b.time)) else float(a.time) < float(b.time))
+	return events
 
 # Motion is expressed in chest-relative units; the view fits one measured
 # envelope for the complete action instead of resizing as badges disappear.
@@ -48,6 +98,11 @@ static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
 
 static func body_pose(theme_id: String, pressure: float, progress: float, time: float, opening_now: bool) -> Dictionary:
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
+	if opening_now and time < UNLOCK_TIME:
+		var energy: float = tension(time)
+		var strained: Dictionary = body_pose(theme_id, 0.42 + energy * 0.58, energy, tension_clock(time), false)
+		strained.offset.y += pulse_strength(time) * 0.007
+		return strained
 	var offset := Vector2(0.0, float(feel.press) * pressure)
 	var scale := Vector2.ONE
 	var rotation: float = 0.0

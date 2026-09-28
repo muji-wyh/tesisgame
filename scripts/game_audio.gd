@@ -50,6 +50,11 @@ var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
+var _chest_tension_progress: float = -1.0
+var _chest_last_tension_pulse: int = 0
+var _chest_anticipating: bool = false
+var _chest_motion_finished: bool = false
+var _chest_music_duck: float = 1.0
 var _chest_charge_loop: AudioStreamWAV
 var _chest_charge_accent: AudioStreamWAV
 var _chest_theme: String = "spring"
@@ -226,7 +231,7 @@ func _play_chest_event(cue_name: String, gain: float = 0.36, pitch: float = 1.0)
 
 
 func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
-	if muted or not active or not available:
+	if muted or not active or not available or _chest_motion_finished:
 		return
 	var theme: String = ChestSoundBank.theme_id(theme_id)
 	if cue_name.begins_with("charge_step"):
@@ -246,6 +251,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 		_chest_phase = "opening"
 		_chest_rewarded = false
 		stop_chest_charge()
+		_start_chest_tension()
 	elif theme != _chest_theme:
 		return
 	var event_key: String = cue_name + str(step)
@@ -255,7 +261,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 		"press":
 			_play_chest_event("press", 0.33)
 		"step":
-			if _chest_phase != "holding" or step < 1 or step > 3:
+			if _chest_phase not in ["holding", "opening"] or step < 1 or step > 3:
 				return
 			_play_chest_event("step", 0.23 + float(step) * 0.035, 0.9 + float(step) * 0.11)
 		"cancel":
@@ -266,9 +272,33 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 			_play_chest_event("cancel", 0.22)
 		"opening":
 			_play_chest_event("opening", 0.22)
+		"tension_pulse":
+			if _chest_phase != "opening" or _chest_anticipating or _chest_tension_progress < 0.0 or step <= _chest_last_tension_pulse:
+				return
+			_chest_last_tension_pulse = step
+			var energy: float = pow(_chest_tension_progress, 1.2)
+			_play_chest_event("step", lerpf(0.17, 0.36, energy), lerpf(0.72, 1.55, energy))
+		"anticipation":
+			if _chest_phase != "opening" or _chest_anticipating:
+				return
+			# The same timeline that tightens the rhythm cuts every material tail
+			# before the lock releases. No timer or queued sound survives this hush.
+			_chest_anticipating = true
+			stop_chest_charge()
+			for player: AudioStreamPlayer in _chest_players:
+				player.stop()
+				player.stream = null
+			_chest_music_duck = 0.015
+			_update_music_gain()
 		"unlock", "release", "settle":
 			if _chest_phase != "opening":
 				return
+			# A skipped anticipation cue cannot leave the bed underneath release.
+			_chest_anticipating = true
+			stop_chest_charge()
+			if cue_name == "release" or cue_name == "settle":
+				_chest_music_duck = 1.0
+				_update_music_gain()
 			_play_chest_event(cue_name, 0.45 if cue_name == "release" else 0.34)
 		_:
 			return
@@ -289,6 +319,8 @@ func chest_reward(theme_id: String, explicit_retry: bool = false) -> void:
 	_chest_rewarded = true
 	_chest_phase = "finished"
 	stop_chest_charge()
+	_chest_music_duck = 1.0
+	_update_music_gain()
 	_play_chest_event("reward", 0.37)
 
 
@@ -297,6 +329,8 @@ func set_chest_charge(progress: float) -> void:
 		return
 	if muted or not active or not available:
 		stop_chest_charge()
+		return
+	if _chest_phase in ["opening", "finished"]:
 		return
 	if not _chest_charge_active:
 		# Only the hold's explicit beginning arms playback. A late progress event
@@ -324,9 +358,41 @@ func set_chest_charge(progress: float) -> void:
 	chest_charge.volume_db = linear_to_db(lerpf(0.075, 0.19, energy))
 
 
+func _start_chest_tension() -> void:
+	_ensure_chest_players()
+	_chest_charge_loop = _chest_stream(_chest_theme, "charge")
+	_chest_tension_progress = 0.0
+	_chest_last_tension_pulse = 0
+	_chest_anticipating = false
+	chest_charge.stream = _chest_charge_loop
+	chest_charge.pitch_scale = 0.76
+	chest_charge.volume_db = linear_to_db(0.055)
+	chest_charge.play()
+	set_chest_tension(0.0)
+
+
+func set_chest_tension(progress: float) -> void:
+	if not is_finite(progress):
+		return
+	if muted or not active or not available:
+		stop_chest_charge()
+		return
+	# Only an explicit opening arms this bed. Frame updates and downloaded
+	# assets cannot revive it after anticipation, interruption or completion.
+	if _chest_phase != "opening" or _chest_anticipating or _chest_tension_progress < 0.0:
+		return
+	_chest_tension_progress = maxf(_chest_tension_progress, clampf(progress, 0.0, 1.0))
+	var energy: float = pow(_chest_tension_progress, 1.7)
+	chest_charge.pitch_scale = lerpf(0.76, 1.62, energy)
+	chest_charge.volume_db = linear_to_db(lerpf(0.055, 0.23, energy))
+	_chest_music_duck = lerpf(0.55, 0.25, energy)
+	_update_music_gain()
+
+
 func stop_chest_charge() -> void:
 	_chest_charge_active = false
 	_chest_charge_progress = -1.0
+	_chest_tension_progress = -1.0
 	if chest_charge != null:
 		chest_charge.stop()
 		chest_charge.stream = null
@@ -352,6 +418,22 @@ func _chest_charge_finished() -> void:
 		chest_charge.stream = null
 
 
+func finish_chest_motion() -> void:
+	if _chest_phase != "opening" or _chest_motion_finished:
+		return
+	# The physical timeline can finish before persistence succeeds, especially
+	# when reduced motion skips its release cues. Silence that performance while
+	# retaining the pending receipt for a later successful save acknowledgement.
+	_chest_motion_finished = true
+	_chest_anticipating = true
+	stop_chest_charge()
+	for player: AudioStreamPlayer in _chest_players:
+		player.stop()
+		player.stream = null
+	_chest_music_duck = 1.0
+	_update_music_gain()
+
+
 func stop_chest_performance() -> void:
 	stop_chest_charge()
 	for player: AudioStreamPlayer in _chest_players:
@@ -361,6 +443,11 @@ func stop_chest_performance() -> void:
 	_chest_seen.clear()
 	_chest_rewarded = false
 	_chest_next_player = 0
+	_chest_last_tension_pulse = 0
+	_chest_anticipating = false
+	_chest_motion_finished = false
+	_chest_music_duck = 1.0
+	_update_music_gain()
 
 
 func say(path: String) -> void:
@@ -537,7 +624,7 @@ func _voice_finished() -> void:
 func _update_music_gain() -> void:
 	if music != null:
 		var speaking: bool = (voice != null and voice.playing) or (narration != null and narration.playing)
-		music.volume_db = linear_to_db(0.04 if speaking else 0.12)
+		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck)
 
 
 func set_muted(value: bool) -> void:

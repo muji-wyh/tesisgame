@@ -3,12 +3,12 @@ extends Control
 signal opened
 signal cue_requested(theme_id: String, cue: String, step: int)
 
-const OPEN_SECONDS: float = 1.8
+const Feel = preload("res://scripts/chest_feel.gd")
+const OPEN_SECONDS: float = Feel.OPEN_SECONDS
 const RELEASE_SECONDS: float = 0.72
 const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const Style = preload("res://scripts/ui_style.gd")
-const Feel = preload("res://scripts/chest_feel.gd")
 
 var theme_id: String = ""
 var reduced_motion: bool = false
@@ -52,6 +52,7 @@ var _cancel_progress: float = 0.0
 var _charge_step: int = 0
 var _opening_cues_enabled: bool = false
 var _opening_cues: Dictionary = {}
+var _opening_timeline: Array = Feel.timeline()
 var _cue_log: Array[Dictionary] = []
 var _feel: Dictionary = Feel.profile("spring")
 var _crystal_cavity: Node2D
@@ -179,7 +180,7 @@ func _measure_bounds() -> void:
 func _measure_motion_bounds() -> void:
 	_motion_bounds = _bounds
 	for frame in range(37):
-		var time: float = OPEN_SECONDS * float(frame) / 36.0
+		var time: float = Feel.BUILDUP_SECONDS + 1.8 * float(frame) / 36.0
 		for index in range(_pieces.size()):
 			var state: Dictionary = _piece_pose(index, time, true)
 			if float(state.alpha) <= 0.001:
@@ -221,31 +222,32 @@ func _fit() -> void:
 	_ground_center = center + Vector2(0.0, (_bounds.end.y - _motion_bounds.get_center().y) * _fit_scale) + drag_offset
 	_shadow.queue_redraw()
 	_details.queue_redraw()
-	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0)
+	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
+		or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME))
 	_glint.queue_redraw()
 
 
 func _update_charge() -> void:
 	var active: bool = is_visible_in_tree() and ((_hold_active and mode == "closed")
-		or (_release_active and mode == "opening" and _elapsed < 0.95))
+		or (_release_active and mode == "opening" and _elapsed < Feel.SETTLE_TIME))
 	_charge.visible = active
 	_charge_label.visible = active
 	_charge_scale = maxf(0.25, Style.ui_scale(self))
 	var pixel: float = 1.0 / _charge_scale
 	var margin: float = minf(10.0 * pixel, minf(size.x, size.y) * 0.08)
-	var percent: int = 100 if mode == "opening" else mini(100, floori(hold_progress * 100.0))
-	var status: String = "Unlocking" if mode == "opening" else _hold_status()
+	var percent: int = mini(100, floori(performance_progress() * 100.0))
+	var status: String = performance_status()
 	_charge_status = status
 	if size.x * _charge_scale < 210:
-		status = "Unlocking" if mode == "opening" else "Hold"
+		status = "Get ready!" if mode == "opening" else "Hold"
 	if mode == "opening" and size.x * _charge_scale < 150:
 		status = "Open"
 	_charge_label.text = "%s · %d%%" % [status, percent]
 	var font_size: int = ceili(14.0 * pixel)
 	var font: Font = _charge_label.get_theme_font("font")
-	var statuses: Array[String] = ["Gathering", "Keep holding", "Almost there!", "Unlocking"]
+	var statuses: Array[String] = ["Hold to begin", "Gathering", "Building tension", "Get ready!", "Opening!"]
 	if size.x * _charge_scale < 210:
-		statuses = ["Hold", "Open" if size.x * _charge_scale < 150 else "Unlocking"]
+		statuses = ["Hold", "Open" if size.x * _charge_scale < 150 else "Get ready!"]
 	var text_width: float = 0.0
 	for candidate in statuses:
 		text_width = maxf(text_width, font.get_string_size(candidate + " · 100%", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
@@ -290,9 +292,11 @@ func _draw_charge() -> void:
 	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
 		return
 	var pixel: float = _charge_unit
-	var progress: float = 1.0 if mode == "opening" else hold_progress
-	var release: float = clampf(_elapsed / RELEASE_SECONDS, 0.0, 1.0) if mode == "opening" else 0.0
+	var progress: float = performance_progress()
+	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
+	var release: float = clampf((_elapsed - Feel.RELEASE_TIME) / RELEASE_SECONDS, 0.0, 1.0) if releasing else 0.0
 	var alpha: float = 1.0 - release if mode == "opening" else 1.0
+	var pulse: float = Feel.pulse_strength(_elapsed) if mode == "opening" else 0.0
 	# A crown of three stars keeps every milestone above the chest and reward.
 	var start: float = PI
 	var sweep: float = PI
@@ -301,7 +305,7 @@ func _draw_charge() -> void:
 	var energy: Color = _charge_color.lerp(gold, smoothstep(0.6, 1.0, progress) * 0.8)
 	var glow_size: Vector2 = _charge_radius * (1.5 + progress * 0.55)
 	_charge.draw_texture_rect(CHARGE_GLOW, Rect2(_charge_center - glow_size * 0.5, glow_size), false,
-		Color(gold, (0.16 + progress * 0.38) * alpha))
+		Color(gold, (0.16 + progress * 0.30 + pulse * 0.16) * alpha))
 	for index in range(CHARGE_STEPS):
 		var segment_start: float = start + sweep * float(index) / CHARGE_STEPS + 0.06
 		var segment_end: float = start + sweep * float(index + 1) / CHARGE_STEPS - 0.06
@@ -325,7 +329,7 @@ func _draw_charge() -> void:
 		_draw_charge_star(position, radius * (1.0 + beat * 0.25), Color(gold if lit else Color.WHITE, alpha if lit else 0.45 * alpha))
 	if reduced_motion:
 		return
-	if mode == "opening":
+	if releasing:
 		if release >= 1.0:
 			return
 		var radius: Vector2 = _charge_radius * lerpf(0.75, 1.12, release)
@@ -337,10 +341,11 @@ func _draw_charge() -> void:
 			_draw_charge_star(position, (2.0 + (1.0 - release) * 3.0) * pixel, Color(gold, (1.0 - release) * 0.95))
 	else:
 		var count: int = _charge_particle_count()
+		var clock: float = minf(_elapsed, Feel.ANTICIPATION_TIME) if mode == "opening" else _charge_time
 		var swirl: float = smoothstep(0.15, 0.65, progress)
 		var converge: float = smoothstep(0.65, 1.0, progress)
 		for index in range(count):
-			var phase: float = fposmod(_charge_time * (0.5 + progress * 0.9) + float(index) * 0.173, 1.0)
+			var phase: float = fposmod(clock * (0.5 + progress * 0.9) + float(index) * 0.173, 1.0)
 			var angle: float = start + float(index) * 2.399963 + phase * swirl * 1.8
 			var direction := Vector2.from_angle(angle)
 			var distance: float = lerpf(1.08, 0.72 - converge * 0.42, phase)
@@ -363,11 +368,38 @@ func _draw_charge_star(center: Vector2, radius: float, color: Color) -> void:
 
 
 func _hold_status() -> String:
-	return "Almost there!" if hold_progress >= 2.0 / 3.0 else "Keep holding" if hold_progress >= 1.0 / 3.0 else "Gathering"
+	return "Hold to begin"
+
+
+func performance_progress() -> float:
+	if mode in ["opening", "opened"]:
+		return Feel.progress(_elapsed)
+	return hold_progress if reduced_motion else hold_progress * Feel.HOLD_SECONDS / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
+
+
+func performance_phase() -> String:
+	if mode == "opened":
+		return "opened"
+	if mode == "opening":
+		return Feel.phase(_elapsed)
+	return "holding" if _hold_active else "idle"
+
+
+func tension_progress() -> float:
+	return Feel.tension(_elapsed) if mode == "opening" else 0.0
+
+
+func performance_status() -> String:
+	match performance_phase():
+		"gathering": return "Gathering"
+		"building": return "Building tension"
+		"anticipation": return "Get ready!"
+		"release", "opened": return "Opening!"
+	return _hold_status()
 
 
 func _charge_particle_count() -> int:
-	return 8 + mini(2, floori(hold_progress * CHARGE_STEPS)) * 4
+	return 8 + mini(2, floori(performance_progress() * CHARGE_STEPS)) * 4
 
 
 func _hold_pose_state() -> Vector2:
@@ -376,7 +408,7 @@ func _hold_pose_state() -> Vector2:
 	if _cancel_remaining > 0.0:
 		var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 		return Vector2(_cancel_pressure, _cancel_progress) * returning
-	return Vector2(0.30 + hold_progress * 0.70, hold_progress) if _hold_active else Vector2.ZERO
+	return Vector2(0.30 + hold_progress * 0.12, performance_progress()) if _hold_active else Vector2.ZERO
 
 
 func begin_hold() -> void:
@@ -399,9 +431,9 @@ func begin_hold() -> void:
 func cancel_hold() -> void:
 	if not _hold_active or mode != "closed":
 		return
-	_cancel_pressure = 0.30 + hold_progress * 0.70
+	_cancel_pressure = _hold_pose_state().x
 	_animation_origin_frame = Engine.get_process_frames()
-	_cancel_progress = hold_progress
+	_cancel_progress = performance_progress()
 	_cancel_remaining = 0.0 if reduced_motion else Feel.CANCEL_SECONDS
 	_hold_active = false
 	hold_progress = 0.0
@@ -419,7 +451,7 @@ func _emit_cue(cue: String, step: int = 0, cue_time: float = -1.0) -> void:
 	if cue_time >= 0.0:
 		time = cue_time
 	_cue_log.append({"theme": theme_id, "cue": cue, "step": step, "time": time})
-	if _cue_log.size() > 12:
+	if _cue_log.size() > 32:
 		_cue_log.pop_front()
 	cue_requested.emit(theme_id, cue, step)
 
@@ -449,9 +481,11 @@ func hold_effect_snapshot() -> Dictionary:
 				first_visible = false
 	var body_offset: Vector2 = _physical_pose.get("offset", Vector2.ZERO)
 	var body_scale: Vector2 = _physical_pose.get("scale", Vector2.ONE)
-	return {"active": active, "phase": "opening" if opening else ("holding" if active else "idle"),
-		"progress": 1.0 if opening else hold_progress,
-		"percent": 100 if opening else mini(100, floori(hold_progress * 100.0)),
+	return {"active": active, "phase": performance_phase(),
+		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
+		"tension": Feel.tension(_elapsed) if mode == "opening" else 0.0,
+		"pulse_strength": Feel.pulse_strength(_elapsed) if mode == "opening" else 0.0,
+		"percent": mini(100, floori(performance_progress() * 100.0)),
 		"text": _charge_label.text if active else "", "status": _charge_status if active else "",
 		"animated": active and not reduced_motion,
 		"theme": theme_id, "material": _feel.material, "rigged": _rigged,
@@ -466,7 +500,7 @@ func hold_effect_snapshot() -> Dictionary:
 		"motion_bounds": {"x": _motion_bounds.position.x, "y": _motion_bounds.position.y,
 			"width": _motion_bounds.size.x, "height": _motion_bounds.size.y},
 		"cues": _cue_log.duplicate(true), "cue_count": _cue_log.size(),
-		"spark_count": (12 if opening and _elapsed < RELEASE_SECONDS else _charge_particle_count() + 1 if not opening else 0) if drawing and not reduced_motion else 0,
+		"spark_count": (12 if opening and _elapsed >= Feel.RELEASE_TIME else _charge_particle_count() + 1) if drawing and not reduced_motion else 0,
 		"bounds": {"x": _charge_bounds.position.x, "y": _charge_bounds.position.y,
 			"width": _charge_bounds.size.x, "height": _charge_bounds.size.y},
 		"badge_bounds": {"x": _charge_label.position.x, "y": _charge_label.position.y,
@@ -477,6 +511,8 @@ func _draw_glint() -> void:
 	var center: Vector2 = _art.position + _bounds.get_center() * _art.scale
 	center.y -= _bounds.size.y * _art.scale.y * 0.08
 	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
+	if mode == "opening":
+		power = Feel.tension(_elapsed) * 0.55 + Feel.pulse_strength(_elapsed) * 0.45
 	var radius: float = minf(size.x, size.y) * 0.07
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
@@ -539,8 +575,11 @@ func _draw_details() -> void:
 		return
 	var opening_now: bool = mode == "opening"
 	var time: float = _elapsed if opening_now else _charge_time
+	if opening_now and time >= Feel.ANTICIPATION_TIME and time < Feel.UNLOCK_TIME:
+		time = Feel.ANTICIPATION_TIME
 	var release: float = maxf(0.0, time - Feel.RELEASE_TIME) if opening_now else 0.0
-	var fade: float = 1.0 - smoothstep(1.05, 1.6, time) if opening_now else 0.35 + hold_progress * 0.55
+	var visual_progress: float = performance_progress()
+	var fade: float = (0.35 + visual_progress * 0.65) * (1.0 - smoothstep(Feel.BUILDUP_SECONDS + 1.05, Feel.BUILDUP_SECONDS + 1.6, time)) if opening_now else 0.35 + visual_progress * 0.55
 	var center: Vector2 = _art.transform * (_bounds.get_center() - Vector2(0, _bounds.size.y * 0.12))
 	var extent := Vector2(_bounds.size.x * _fit_scale * 0.48, _bounds.size.y * _fit_scale * 0.40)
 	var radius: float = maxf(0.8, minf(extent.x, extent.y) * 0.055)
@@ -566,7 +605,7 @@ func _draw_details() -> void:
 			var anchor := Vector2(_bounds.get_center().x + side * _bounds.size.x * 0.29,
 				_bounds.position.y + _bounds.size.y * 0.35)
 			var flick: float = sin(clampf(release / 0.52, 0.0, 1.0) * PI)
-			position = _art.transform * anchor + Vector2.from_angle(phase * TAU * 2.0) * radius * (1.6 + hold_progress * 0.6)
+			position = _art.transform * anchor + Vector2.from_angle(phase * TAU * 2.0) * radius * (1.6 + visual_progress * 0.6)
 			position += Vector2(side * release * extent.x * 0.20, -flick * extent.y * 0.18)
 		elif detail == "bubbles":
 			position.y -= fposmod(time * 9.0 + index * 3.0, maxf(1.0, extent.y * 0.4))
@@ -579,7 +618,7 @@ func _draw_details() -> void:
 			var row: float = float(index % 4)
 			var anchor := Vector2(_bounds.get_center().x + side * _bounds.size.x * 0.31,
 				_bounds.get_center().y + _bounds.size.y * (0.10 + row * 0.045))
-			var pull: float = Feel.opening(theme_id, time - 0.14 - row * 0.035) if opening_now else hold_progress * 0.25
+			var pull: float = Feel.opening(theme_id, time - 0.14 - row * 0.035) if opening_now else visual_progress * 0.25
 			var origin: Vector2 = _art.transform * anchor
 			position = origin + Vector2(side * radius * (3.2 + row * 0.6 + pull * 2.0), -radius * (1.5 + row + pull * 4.0))
 			position = position.clamp(detail_min, detail_max)
@@ -591,7 +630,7 @@ func _draw_details() -> void:
 		match detail:
 			"sun_rays":
 				var direction := Vector2.from_angle(angle)
-				_details.draw_line(position - direction * radius, position + direction * radius * (1.8 + hold_progress), color, maxf(1.0, radius * 0.50), true)
+				_details.draw_line(position - direction * radius, position + direction * radius * (1.8 + visual_progress), color, maxf(1.0, radius * 0.50), true)
 			"ice_facets":
 				for arm in range(3):
 					var direction := Vector2.from_angle(float(arm) * PI / 3.0)
@@ -702,8 +741,9 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var charge_time: float = _charge_time
 	if opening_now:
 		var anticipation: float = 1.0 - smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time)
-		hold = Vector2.ONE * anticipation if not reduced_motion else Vector2.ZERO
-		charge_time = 1.2 + time
+		var energy: float = Feel.tension(time)
+		hold = Vector2(0.42 + energy * 0.58, energy) * anticipation if not reduced_motion else Vector2.ZERO
+		charge_time = Feel.tension_clock(time)
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
 	var alpha: float = 1.0
 	var progress: float = Feel.opening(theme_id, time) if opening_now else 0.0
@@ -859,7 +899,7 @@ func set_hold_progress(value: float) -> void:
 		_tap_remaining = 0.0
 		_cancel_remaining = 0.0
 		_charge_step = 0
-	else:
+	elif reduced_motion:
 		var crossed: int = mini(CHARGE_STEPS, floori(hold_progress * CHARGE_STEPS + 0.000001))
 		while _charge_step < crossed:
 			_charge_step += 1
@@ -904,10 +944,15 @@ func _advance_animation(delta: float) -> void:
 	if mode == "opening":
 		_elapsed = minf(OPEN_SECONDS, _elapsed + delta)
 		if _opening_cues_enabled:
-			for event in [["unlock", Feel.UNLOCK_TIME], ["release", Feel.RELEASE_TIME], ["settle", Feel.SETTLE_TIME]]:
-				if _elapsed >= float(event[1]) and not _opening_cues.has(event[0]):
-					_opening_cues[event[0]] = true
-					_emit_cue(event[0], 0, float(event[1]))
+			for event in _opening_timeline:
+				var key: String = str(event.cue) + ":" + str(event.step)
+				if _elapsed >= float(event.time) and not _opening_cues.has(key):
+					_opening_cues[key] = true
+					var newer_pulse: bool = event.cue == "tension_pulse" and int(event.step) < Feel.PULSE_TIMES.size() and _elapsed >= float(Feel.PULSE_TIMES[int(event.step)])
+					# A stalled frame may cross several beats. Consume them, but
+					# never play a backlog; the quiet transition still stops audio.
+					if not newer_pulse and (_elapsed - float(event.time) <= 0.20 or event.cue == "anticipation"):
+						_emit_cue(str(event.cue), int(event.step), float(event.time))
 		if _elapsed >= OPEN_SECONDS:
 			finish_immediately()
 	_apply_pose(0.0)
