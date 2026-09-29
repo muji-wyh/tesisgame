@@ -235,6 +235,143 @@ async function observeLoadingAudio(page) {
   });
 }
 
+async function controlPipMedia(page, behavior = 'resolve') {
+  await page.addInitScript(behavior => {
+    // This adapter controls media completion independently from the real
+    // animation clock. The recording tests separately verify actual WAV audio.
+    const probe = window.loadingPipMediaProbe = { players: [], calls: [], behavior };
+    window.Audio = class extends EventTarget {
+      constructor(source) {
+        super();
+        this.src = source;
+        this.paused = true;
+        this.ended = false;
+        this.currentTime = 0;
+        probe.players.push(this);
+      }
+      play() {
+        this.paused = false;
+        this.ended = false;
+        const call = { player: this, behavior: probe.behavior };
+        probe.calls.push(call);
+        if (call.behavior === 'reject') return Promise.reject(new Error('Playback was rejected.'));
+        if (call.behavior === 'pending') return new Promise((resolve, reject) => Object.assign(call, { resolve, reject }));
+        return Promise.resolve();
+      }
+      pause() { this.paused = true; }
+      emit(type) {
+        if (type === 'ended' || type === 'error') this.paused = true;
+        if (type === 'ended') this.ended = true;
+        const event = new Event(type);
+        this.dispatchEvent(event);
+        if (typeof this['on' + type] === 'function') this['on' + type](event);
+      }
+    };
+  }, behavior);
+}
+
+for (const first of ['sound', 'motion']) test(`loading Pip waits for both completions when ${first} finishes first`, async ({ page }) => {
+  await controlPipMedia(page);
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await duck.tap();
+  const pose = await reactionPose(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(1);
+  if (first === 'sound') {
+    await page.evaluate(() => loadingPipMediaProbe.calls[0].player.emit('ended'));
+    await duck.tap();
+    await expect(duck).toHaveAttribute('data-pose', pose);
+    await expect(duck).toHaveAttribute('data-activity', 'reacting');
+  } else {
+    await expectAutomaticDance(page);
+    await duck.tap();
+    await expectAutomaticDance(page);
+  }
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length),
+    'Completing only one part does not accept another call.').toBe(1);
+  if (first === 'sound') await expectAutomaticDance(page);
+  else await page.evaluate(() => loadingPipMediaProbe.calls[0].player.emit('ended'));
+  await page.waitForTimeout(180);
+  await expectAutomaticDance(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length), 'Ignored input is never queued.').toBe(1);
+  await duck.tap();
+  expect(await reactionPose(page)).not.toBe(pose);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(2);
+});
+
+test('loading Pip keeps a pending play request busy until playback ends', async ({ page }) => {
+  await controlPipMedia(page, 'pending');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await duck.tap();
+  await reactionPose(page);
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  await duck.tap();
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(1);
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  await page.evaluate(() => loadingPipMediaProbe.calls[0].resolve());
+  await duck.tap();
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length), 'A resolved play promise marks the start, not the end, of playback.').toBe(1);
+  await page.evaluate(() => loadingPipMediaProbe.calls[0].player.emit('ended'));
+  await duck.tap();
+  await reactionPose(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(2);
+});
+
+for (const failure of ['reject', 'error']) test(`loading Pip accepts fresh input after a media ${failure}`, async ({ page }) => {
+  await controlPipMedia(page, failure === 'reject' ? 'reject' : 'resolve');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await duck.tap();
+  const pose = await reactionPose(page);
+  if (failure === 'error') await page.evaluate(() => loadingPipMediaProbe.calls[0].player.emit('error'));
+  await duck.tap();
+  await expect(duck).toHaveAttribute('data-pose', pose);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length), 'A failed sound must still let the accepted action finish.').toBe(1);
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  await page.evaluate(() => { loadingPipMediaProbe.behavior = 'resolve'; });
+  await duck.tap();
+  expect(await reactionPose(page)).not.toBe(pose);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(2);
+});
+
+test('loading Pip cancels a pending response while hidden and ignores stale completion after resume', async ({ page }) => {
+  await controlPipMedia(page, 'pending');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await duck.tap();
+  await reactionPose(page);
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  expect(await page.evaluate(() => loadingPipMediaProbe.players.every(player => player.paused))).toBe(true);
+  await page.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+    loadingPipMediaProbe.behavior = 'resolve';
+  });
+  await duck.tap();
+  await reactionPose(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(2);
+  await page.evaluate(() => {
+    loadingPipMediaProbe.calls[0].resolve();
+    loadingPipMediaProbe.calls[0].player.emit('ended');
+  });
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls[1].player.paused), 'An old completion must not stop the current sound.').toBe(false);
+  await duck.tap();
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length), 'An old completion must not unlock the current sound.').toBe(2);
+  await page.evaluate(() => loadingPipMediaProbe.calls[1].player.emit('ended'));
+  await duck.tap();
+  await reactionPose(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(3);
+});
+
 test('loading Pip dances automatically without input or music and keeps dancing until entry', async ({ page }, testInfo) => {
   await observeLoadingAudio(page);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -329,12 +466,12 @@ test('Pip and chest touch, keyboard and controller taps play all three reactions
   await testInfo.attach('loading-random-reactions.json', { body: JSON.stringify(evidence), contentType: 'application/json' });
 });
 
-test('rapid loading taps replace the active reaction without a backlog and recover to dancing', async ({ page }, testInfo) => {
+test('rapid loading taps preserve the active reaction without a backlog and recover to dancing', async ({ page }, testInfo) => {
   await progressShell(page);
   await expectAutomaticDance(page);
   const duck = page.locator('#loading-duck');
   await duck.tap();
-  await reactionPose(page);
+  const pose = await reactionPose(page);
   const burst = await page.evaluate(() => {
     const duck = document.getElementById('loading-duck'), toy = document.getElementById('loading-toy');
     const records = [];
@@ -343,26 +480,27 @@ test('rapid loading taps replace the active reaction without a backlog and recov
       (index % 2 ? toy : duck).click();
       const current = duck.getAnimations({ subtree: true });
       records.push({ pose: duck.dataset.pose, activity: duck.dataset.activity, queued: duck.dataset.queued,
-        count: current.length, replaced: previous.every(animation => !current.includes(animation) && animation.playState === 'idle') });
+        count: current.length, preserved: previous.length === current.length && previous.every(animation => current.includes(animation)) });
     }
     return records;
   });
   for (const [index, frame] of burst.entries()) {
-    expect(PIP_REACTIONS).toContain(frame.pose);
+    expect(frame.pose).toBe(pose);
     expect(frame.activity).toBe('reacting');
     expect(frame.queued).toBe('0');
     expect(frame.count).toBeGreaterThan(0);
     expect(frame.count).toBeLessThanOrEqual(6);
-    expect(frame.replaced, `Tap ${index + 1} cancels the previous reaction immediately.`).toBe(true);
-    if (index) expect(frame.pose).not.toBe(burst[index - 1].pose);
+    expect(frame.preserved, `Tap ${index + 1} leaves the current reaction running.`).toBe(true);
   }
   await expectAutomaticDance(page);
   const recovered = await samplePipMotion(page, 400);
   expect(recovered.every(frame => frame.activity === 'dancing' && frame.pose === 'dance'),
-    'An old completion callback must not resurrect a replaced reaction.').toBe(true);
+    'Ignored taps must not replay when the accepted reaction finishes.').toBe(true);
   await expect(duck).toHaveAttribute('data-queued', '0');
   await page.screenshot({ path: testInfo.outputPath('loading-rapid-taps-recovered.png'), scale: 'css' });
-  await testInfo.attach('loading-reaction-preemption.json', { body: JSON.stringify({ burst, recovered }), contentType: 'application/json' });
+  await duck.tap();
+  expect(await reactionPose(page), 'A fresh tap after completion starts the next reaction.').not.toBe(pose);
+  await testInfo.attach('loading-reaction-serialization.json', { body: JSON.stringify({ burst, recovered }), contentType: 'application/json' });
 });
 
 test('loading dance stops while hidden and reduced motion can change without losing interaction', async ({ page }, testInfo) => {
@@ -433,6 +571,7 @@ test('loading music is enabled by default and stays on until explicit game entry
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
   await toy.dispatchEvent('click');
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
+  await expectAutomaticDance(page);
   await toy.click();
   if (!await page.evaluate(() => loadingAudioProbe.supported)) {
     await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
@@ -1035,7 +1174,7 @@ test('a reveal callback error shows retry instead of leaving the completed loade
   await expect(page.locator('#retry')).toBeVisible();
 });
 
-test('every Pip tap gives visible feedback with reduced motion without awarding chest sparkles', async ({ page }) => {
+test('each completed Pip tap gives visible feedback with reduced motion without awarding chest sparkles', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await whileEngineScriptIsPending(page, async toy => {
     const duck = page.getByRole('button', { name: 'Dance with Pip the duck' });
@@ -1060,6 +1199,7 @@ test('every Pip tap gives visible feedback with reduced motion without awarding 
       if (previousParts) expect(parts, 'Each new reaction has a distinct static pose.').not.toBe(previousParts);
       previousParts = parts;
       expect(await duck.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+      await expect(duck).toHaveAttribute('data-activity', 'idle');
     }
     expect([...reactions.slice(0, 3)].sort()).toEqual(PIP_REACTIONS);
     expect([...reactions.slice(3, 6)].sort()).toEqual(PIP_REACTIONS);

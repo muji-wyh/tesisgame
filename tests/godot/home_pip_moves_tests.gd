@@ -250,9 +250,22 @@ func _check_real_taps(duck) -> void:
 				"A real " + method + " tap interrupts the dance with exactly one loading-page reaction")
 			check(is_equal_approx(duck._room_reaction_left, 1.15 if kind == "shy" else 0.85)
 				and (reactions.is_empty() or reactions.back() != kind),
-				"Rapid " + method + " taps replace the previous reaction without duration stacking or immediate repetition")
+				"An accepted " + method + " tap starts a complete response without immediate repetition")
 			reactions.append(kind)
 			_advance(duck, 0.04)
+			var time_left: float = duck._room_reaction_left
+			var bag: Array = playground._poke_bag.duplicate()
+			for repeated in range(3):
+				_pointer(center, true, method)
+				_pointer(center, false, method)
+			check(events.size() == before + 1 and duck._room_reaction == kind
+				and is_equal_approx(duck._room_reaction_left, time_left) and playground._poke_bag == bag,
+				"Rapid " + method + " taps leave the active motion, caption and shuffle bag untouched")
+			_pointer(center, true, method)
+			_advance(duck, 1.3)
+			_pointer(center, false, method)
+			check(events.size() == before + 1 and duck._room_reaction.is_empty(),
+				"A busy " + method + " press stays ignored even if its release occurs after the preceding action ends")
 	for start in range(0, 12, 3):
 		var bag: Array[String] = reactions.slice(start, start + 3)
 		check(REACTIONS.all(func(kind: String) -> bool: return bag.count(kind) == 1),

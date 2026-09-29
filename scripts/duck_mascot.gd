@@ -176,6 +176,11 @@ func perform_trick(kind: String) -> String:
 	return TRICK_CAPTIONS[kind]
 
 
+func is_manual_action_busy() -> bool:
+	# Static reduced-motion poses have no remaining animation to wait for.
+	return _trick_left > 0.0 or _room_reaction_left > 0.0 or _gameplay_left > 0.0
+
+
 func clear_trick() -> void:
 	_trick = ""
 	_trick_left = 0.0

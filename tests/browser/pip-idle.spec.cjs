@@ -135,6 +135,7 @@ test('Pip offers six direct reactions without changing the lesson or saved progr
   const captions = ["Pip's happy dance!", 'Crunch! A carrot for Pip!', 'Pop! Bubble party!',
     'High five, friend!', 'Peekaboo! Here is Pip!', 'Flutter, flutter! Hello!'];
   for (const [index, caption] of captions.entries()) {
+    if (index > 0) await page.waitForTimeout(1950);
     await tap(page, pip.x, pip.y);
     await expect(page.locator('#game-status')).toContainText(caption);
     expect((await gameState(page)).saves).toEqual(original.saves);

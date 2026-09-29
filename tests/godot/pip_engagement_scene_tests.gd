@@ -94,7 +94,12 @@ func _run() -> void:
 	app._play_duck()
 	check(app.duck._trick == "high-five", "Header Pip's tap cycle includes a new high five")
 	app._play_duck()
+	check(app.duck._trick == "high-five" and app._duck_trick_index == 4,
+		"A repeated header activation preserves the current action and next trick index")
+	app.duck._process(app.duck.TRICK_SECONDS)
+	app._play_duck()
 	check(app.duck._trick == "peekaboo", "The next header tap offers peekaboo")
+	app.duck._process(app.duck.TRICK_SECONDS)
 	app._play_duck()
 	check(app.duck._trick == "flutter", "The next header tap offers a flutter")
 	app.duck.settle()

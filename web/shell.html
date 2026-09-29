@@ -640,6 +640,7 @@
       function createLoadingPipSounds() {
         let players = [];
         let activePlayer = null;
+        let clearCompletion = () => {};
         let generation = 0;
         let lastIndex = -1;
         let bag = [];
@@ -654,6 +655,7 @@
 
         function stop() {
           generation++;
+          clearCompletion();
           activePlayer = null;
           for (const player of players) {
             player.pause();
@@ -662,7 +664,7 @@
         }
 
         function play(gestureAllowed) {
-          if (!gestureAllowed || !canPlayLoadingDance() || !players.length) return;
+          if (!gestureAllowed || !canPlayLoadingDance() || !players.length || activePlayer) return;
           stop();
           if (!bag.length) {
             bag = players.map((_, index) => index);
@@ -676,6 +678,18 @@
           const player = players[lastIndex];
           const request = generation;
           activePlayer = player;
+          const finish = () => {
+            if (request !== generation) return;
+            clearCompletion();
+            activePlayer = null;
+          };
+          player.addEventListener('ended', finish);
+          player.addEventListener('error', finish);
+          clearCompletion = () => {
+            player.removeEventListener('ended', finish);
+            player.removeEventListener('error', finish);
+            clearCompletion = () => {};
+          };
           try {
             Promise.resolve(player.play()).then(() => {
               // A pending play must not resume an old sound, or stop a newer
@@ -683,13 +697,11 @@
               if (request !== generation) {
                 if (activePlayer !== player) player.pause();
               } else if (!canPlayLoadingDance()) stop();
-            }).catch(() => {
-              if (request === generation) activePlayer = null;
-            });
-          } catch { activePlayer = null; }
+            }).catch(finish);
+          } catch { finish(); }
         }
 
-        return { play, stop };
+        return { play, stop, isBusy: () => activePlayer !== null };
       }
       const loadingPipSounds = createLoadingPipSounds();
 
@@ -784,6 +796,7 @@
       const danceBeats = 12;
       const danceDuration = danceBeats * 440;
       let danceGeneration = 0;
+      let reactionTimer = 0;
       let loadingPageSuspended = false;
       let reactionBag = [];
       let previousReaction = '';
@@ -795,6 +808,8 @@
 
       function clearLoadingDance() {
         danceGeneration++;
+        window.clearTimeout(reactionTimer);
+        reactionTimer = 0;
         loadingDuck.dataset.activity = 'idle';
         loadingDuck.dataset.pose = 'idle';
         loadingDuck.dataset.queued = '0';
@@ -897,30 +912,33 @@
       }
 
       function playWithDuck(gestureAllowed = false, describe = true) {
-        if (!canPlayLoadingDance()) return;
+        if (!canPlayLoadingDance() || loadingDuck.dataset.activity === 'reacting' || loadingPipSounds.isBusy()) return false;
         loadingMusic.start(gestureAllowed);
         const name = nextPipReaction(), reaction = pipReaction(name);
-        // A new poke takes over immediately. Cancelled reactions cannot restart
-        // an old dance, and quick taps never leave an animation backlog.
+        // Ignore repeat input until both the action and its recording finish.
+        // There is no queued poke to replay after the player stops tapping.
         clearLoadingDance();
         loadingDuck.dataset.activity = 'reacting';
         loadingDuck.dataset.pose = name;
         if (describe) hint.textContent = pipReactionLabels[name];
+        const generation = danceGeneration;
+        const finish = () => {
+          if (generation !== danceGeneration) return;
+          clearLoadingDance();
+          startLoadingDance();
+        };
         if (motion.matches) {
           for (const [part, transform] of Object.entries(reaction.still)) danceParts[part].style.transform = transform;
-          return;
+          reactionTimer = window.setTimeout(finish, reaction.duration);
+          return true;
         }
-        const generation = danceGeneration;
         for (const [partName, part] of Object.entries(danceParts)) {
           const animation = part.animate(reaction.beats.map(([offset, pose]) => ({
             offset, transform: pose[partName] || 'translate(0, 0) rotate(0deg)', easing: 'ease-in-out'
           })), { duration: reaction.duration });
-          if (partName === 'body') animation.onfinish = () => {
-            if (generation !== danceGeneration) return;
-            clearLoadingDance();
-            startLoadingDance();
-          };
+          if (partName === 'body') animation.onfinish = finish;
         }
+        return true;
       }
 
       function clearLoadingEffects() {
@@ -943,8 +961,7 @@
       }
 
       loadingDuck.addEventListener('click', event => {
-        playWithDuck(event.isTrusted);
-        loadingPipSounds.play(event.isTrusted);
+        if (playWithDuck(event.isTrusted)) loadingPipSounds.play(event.isTrusted);
       }, loadingListener);
 
       function playWithTreasure(gestureAllowed = false) {

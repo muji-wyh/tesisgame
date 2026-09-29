@@ -589,6 +589,7 @@ func _build_controls() -> void:
 	header.move_child(_storage_retry_button, 0)
 	_build_collection_shell()
 	audio = Audio.new()
+	_pop.pip_audio_busy = audio.is_pip_busy
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
 	audio.narration_state_changed.connect(_pop_narration_state)
@@ -795,6 +796,7 @@ func _build_playroom() -> void:
 	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_dragged and _collection_velocity.length_squared() < 100.0
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
+	_room.playground.pip_audio_busy = audio.is_pip_busy
 	_room.toy_shelf.reparent(_collection_column)
 	_room.toy_shelf.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
 	_collection_duck_slot = _room.duck_slot
@@ -3057,13 +3059,17 @@ func _update_duck() -> void:
 
 
 func _play_duck() -> void:
-	if collection_page.visible and _collection_dragged:
+	if _page_hidden or not duck.is_visible_in_tree() or (collection_page.visible and _collection_dragged):
 		return
 	if collection_page.visible:
 		_room.playground.poke()
 		return
+	if duck.is_manual_action_busy() or audio.is_pip_busy():
+		return
 	var tricks := ["dance", "snack", "bubbles", "high-five", "peekaboo", "flutter"]
 	var caption: String = duck.perform_trick(tricks[_duck_trick_index % tricks.size()])
+	if caption.is_empty():
+		return
 	_duck_trick_index += 1
 	if _voice_mode or _pop_speech_active:
 		return

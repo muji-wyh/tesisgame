@@ -14,6 +14,7 @@ var interaction_kind := ""
 var flight_active := false
 var toy_phase := "idle"
 var interaction_allowed: Callable
+var pip_audio_busy: Callable
 var reduced_motion := false
 var toy_word := "ball"
 var toy_locked := false
@@ -184,8 +185,18 @@ func _begin_action() -> void:
 	interaction_started.emit()
 
 
+func _pip_busy() -> bool:
+	return _gesture == "duck" \
+		or (is_instance_valid(_duck) and _duck.is_manual_action_busy()) \
+		or (pip_audio_busy.is_valid() and bool(pip_audio_busy.call()))
+
+
 func pet() -> void:
-	if not _allowed(): return
+	if not _allowed() or _pip_busy(): return
+	_perform_pet()
+
+
+func _perform_pet() -> void:
 	_begin_action()
 	_pet_count += 1
 	_react("pet")
@@ -193,7 +204,11 @@ func pet() -> void:
 
 
 func poke() -> void:
-	if not _allowed(): return
+	if not _allowed() or _pip_busy(): return
+	_perform_poke()
+
+
+func _perform_poke() -> void:
 	_begin_action()
 	if _poke_bag.is_empty():
 		_poke_bag.assign(LoadingMoves.REACTIONS)
@@ -388,6 +403,13 @@ func _input(event: InputEvent) -> void:
 		var on_duck := _slot.get_global_rect().has_point(point)
 		if on_toy and on_duck and _draws_above(toy_target.control, _duck if is_instance_valid(_duck) else _slot): on_duck = false
 		var blocked := false
+		if on_duck and _pip_busy():
+			# Consume the whole press, even if Pip finishes before its release.
+			# Ignored taps must not cancel a gesture, advance its bag or queue work.
+			_pointer = pointer
+			_gesture = "blocked"
+			get_viewport().set_input_as_handled()
+			return
 		var target_locked := on_toy and str(toy_target.id) == active_toy_id and toy_locked
 		if on_toy and not on_duck and not target_locked:
 			get_viewport().set_input_as_handled()
@@ -444,8 +466,10 @@ func _input(event: InputEvent) -> void:
 				cancel()
 				return
 			if gesture == "duck":
-				if _travel > 18: pet()
-				else: poke()
+				# This gesture was accepted on press. Its pet preview may still be
+				# moving; finish the same interaction without treating it as a new tap.
+				if _travel > 18: _perform_pet()
+				else: _perform_poke()
 			elif gesture == "toy":
 				if _travel > 8: _launch(_clamp_toy(local), local + (local - _press) * 0.35)
 				else: toy_tapped.emit()

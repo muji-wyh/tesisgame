@@ -45,11 +45,13 @@ var _music_error: bool = false
 var _narration_generation: int = 0
 var _narration_streams: Array[AudioStream] = []
 var _narration_index: int = 0
+var _narration_pip_greeting: bool = false
 var _pop_slice_paths: Array[String] = []
 var _pop_slice_rng := RandomNumberGenerator.new()
 var _last_pop_slice_path: String = ""
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
+var _pip_voice_request: int = -1
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_tension_progress: float = -1.0
@@ -152,11 +154,18 @@ func next_pip_sound() -> String:
 
 
 func play_pip() -> void:
-	if muted or not active or not available:
+	if muted or not active or not available or is_pip_busy():
 		return
-	# The shared voice channel replaces the previous greeting on rapid taps and
-	# already stops on mute, page changes and microphone activation.
+	# Ignore repeated greetings while their download or voice is still active.
+	# The shared channel keeps existing mute, page and microphone cleanup.
 	say(next_pip_sound())
+
+
+func is_pip_busy() -> bool:
+	if not active or muted or not available:
+		return false
+	return (_pip_voice_request >= 0 and _pip_voice_request == _playback_requests.get(voice, -1)) \
+		or (_narration_pip_greeting and narration_state in ["loading", "speaking"])
 
 
 func play_pip_reaction(correct: bool) -> void:
@@ -515,6 +524,7 @@ func narrate(paths: Array[String]) -> void:
 		_set_narration_state("unavailable")
 		return
 	var generation: int = _narration_generation
+	_narration_pip_greeting = paths[0] in PIP_SOUND_PATHS
 	_set_narration_state("loading")
 	var loaded: Array[AudioStream] = []
 	# Prepare the whole page before speaking. A missing word or closing sentence
@@ -524,6 +534,7 @@ func narrate(paths: Array[String]) -> void:
 		if generation != _narration_generation or not is_inside_tree() or not active or muted or not available:
 			return
 		if stream == null:
+			_narration_pip_greeting = false
 			_set_narration_state("unavailable")
 			status_changed.emit("Pip's voice could not load. Read along or tap Try Pip again.")
 			return
@@ -535,6 +546,7 @@ func narrate(paths: Array[String]) -> void:
 
 func stop_narration() -> void:
 	_narration_generation += 1
+	_narration_pip_greeting = false
 	_narration_streams.clear()
 	_narration_index = 0
 	if narration != null:
@@ -548,6 +560,8 @@ func _play_narration_clip() -> void:
 	if muted or not active or not available or _narration_index >= _narration_streams.size():
 		stop_narration()
 		return
+	if _narration_index > 0:
+		_narration_pip_greeting = false
 	narration.stream = _narration_streams[_narration_index]
 	narration.play()
 	_set_narration_state("speaking")
@@ -570,13 +584,19 @@ func _set_narration_state(state: String) -> void:
 func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 	_stop(player)
 	var request_id: int = _playback_requests[player]
+	if player == voice and path in PIP_SOUND_PATHS:
+		_pip_voice_request = request_id
 	var stream: AudioStream = await _stream(path, loop)
 	# A completed download may be cached, but must never revive an obsolete cue.
 	if request_id != _playback_requests[player] or not active or muted or not available:
+		if player == voice and _pip_voice_request == request_id:
+			_pip_voice_request = -1
 		return
 	if player == music:
 		_music_pending = false
 	if stream == null:
+		if player == voice and _pip_voice_request == request_id:
+			_pip_voice_request = -1
 		if player == music:
 			current_theme = ""
 			_music_error = true
@@ -670,6 +690,7 @@ func _stop(player: AudioStreamPlayer) -> void:
 
 
 func _voice_finished() -> void:
+	_pip_voice_request = -1
 	_update_music_gain()
 
 

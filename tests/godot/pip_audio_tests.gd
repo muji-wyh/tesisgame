@@ -23,6 +23,7 @@ func check(condition: bool, message: String) -> void:
 
 func _run() -> void:
 	await _check_audio_selection()
+	await _check_pending_greetings()
 	await _check_click_routes()
 	print("Pip audio: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -54,6 +55,7 @@ func _check_audio_selection() -> void:
 	var repeating := false
 	var stacked := false
 	for index in range(32):
+		audio.stop_voice()
 		audio.play_pip()
 		var path: String = audio.voice.stream.resource_path if audio.voice.stream != null else ""
 		valid = valid and audio.voice.playing and PIP_PATHS.has(path)
@@ -61,9 +63,15 @@ func _check_audio_selection() -> void:
 		stacked = stacked or audio.effect.playing or audio.narration.playing or audio.get_children() != players
 		seen[path] = true
 		previous = path
-	check(valid and seen.size() == PIP_PATHS.size(), "Repeated Pip taps actually play every supplied sound on the voice channel")
+		var state: int = audio._pip_rng.state
+		var request: int = audio._playback_requests.get(audio.voice, 0)
+		for repeated in range(4): audio.play_pip()
+		check(audio.is_pip_busy() and audio._pip_rng.state == state
+			and audio._playback_requests.get(audio.voice, 0) == request and audio.voice.stream.resource_path == path,
+			"Repeated audio requests preserve the playing recording, request and random choice")
+	check(valid and seen.size() == PIP_PATHS.size(), "Successive completed Pip greetings play every supplied sound on the voice channel")
 	check(not repeating, "Consecutive Pip greetings never choose the same clip")
-	check(not stacked, "Rapid Pip taps replace the greeting without stacking effect, narration or player nodes")
+	check(not stacked, "Pip greetings never stack effect, narration or player nodes")
 	for blocked in ["inactive", "muted", "unavailable"]:
 		audio.halt()
 		audio.muted = blocked == "muted"
@@ -81,6 +89,46 @@ func _check_audio_selection() -> void:
 	audio.play_pip()
 	audio.set_muted(true)
 	check(not audio.voice.playing and not audio.active, "Mute immediately stops an active imported duck greeting")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_pending_greetings() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	audio.active = true
+	# Hold the existing shared resource loader open without network or wall-clock races.
+	for path in PIP_PATHS: audio._loading[path] = true
+	audio.play_pip()
+	var pending: String = audio._last_pip_path
+	var state: int = audio._pip_rng.state
+	var request: int = audio._playback_requests.get(audio.voice, 0)
+	for repeated in range(5): audio.play_pip()
+	check(audio.is_pip_busy() and not audio.voice.playing and audio._pip_rng.state == state
+		and audio._playback_requests.get(audio.voice, 0) == request,
+		"A pending Pip download owns one request and ignores repeated greetings before playback begins")
+	audio._loading.erase(pending)
+	audio._stream_loaded.emit(pending)
+	check(not audio.is_pip_busy() and not audio.voice.playing,
+		"A failed Pip download releases its sound gate without playing or queuing a greeting")
+	audio.play_pip()
+	pending = audio._last_pip_path
+	check(audio.is_pip_busy(), "A fresh deliberate greeting can retry after a failed download")
+	audio.halt()
+	check(not audio.is_pip_busy(), "Halting releases a pending Pip greeting immediately")
+	audio.cache[pending] = load(pending)
+	audio._loading.erase(pending)
+	audio._stream_loaded.emit(pending)
+	check(not audio.is_pip_busy() and not audio.voice.playing,
+		"A late successful download cannot revive a cancelled greeting")
+	audio.active = true
+	for path in PIP_PATHS: audio.cache[path] = load(path)
+	audio.play_pip()
+	check(audio.is_pip_busy() and audio.voice.playing, "A new gesture still plays after a cancelled request")
+	audio.say("res://assets/audio/voice/word-duck.wav")
+	check(not audio.is_pip_busy() and audio.voice.playing,
+		"A different pronunciation releases the old Pip owner on the shared voice channel")
+	audio.halt()
 	audio.queue_free()
 	await process_frame
 
@@ -179,6 +227,7 @@ func _check_click_routes() -> void:
 	await _settle()
 	check(not app.audio.voice.playing and not app.audio.active,
 		"Returning to the page does not restart a stale greeting")
+	await _check_serialized_routes(app)
 	check(app.audio.get_children() == players, "All native Pip click routes keep the same four audio players")
 	check(_progress(app) == progress, "Pip sounds leave the lesson, cards, medals, toys, backdrop and reward goal unchanged")
 	check(_saved_files(directory) == saved, "Pip greetings do not write or alter any saved progress")
@@ -189,6 +238,115 @@ func _check_click_routes() -> void:
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)
+
+
+func _check_serialized_routes(app) -> void:
+	var cached: Dictionary = app.audio.cache.duplicate()
+	for in_home in [false, true]:
+		if in_home: app._show_collection()
+		else: app._hide_collection()
+		await _settle()
+		app._update_duck()
+		var context := "Home" if in_home else "Header"
+		for sound_outlasts_motion in [false, true]:
+			app.audio.halt()
+			app.duck.settle()
+			app.set_reduced_motion(false)
+			for path in PIP_PATHS:
+				app.audio.cache[path] = _silence(1.5 if sound_outlasts_motion else 0.1)
+			var before: int = _voice_requests(app)
+			app.duck.pressed.emit()
+			app.duck.set_process(false)
+			check(app.audio.is_pip_busy() and app.duck.is_manual_action_busy(),
+				context + " activation starts both the action and its greeting")
+			var caption: String = app._status_announcement
+			var index: int = app._duck_trick_index
+			var rng: int = app.audio._pip_rng.state
+			for repeated in range(4): app.duck.pressed.emit()
+			await _tap(app.duck.get_global_rect().get_center())
+			check(_voice_requests(app) == before + 1 and app.audio._pip_rng.state == rng
+				and app._status_announcement == caption and app._duck_trick_index == index,
+				context + " repeated button and pointer activations do not restart audio, advance actions or change feedback")
+			if sound_outlasts_motion:
+				app.duck._process(4.0)
+				app.duck.set_process(false)
+				check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy(),
+					context + " test reaches finished motion while the longer real audio is still playing")
+			else:
+				await _wait_for_voice(app.audio)
+				check(app.duck.is_manual_action_busy() and not app.audio.is_pip_busy(),
+					context + " test reaches finished audio while its longer motion is still running")
+			app.duck.pressed.emit()
+			await _tap(app.duck.get_global_rect().get_center())
+			check(_voice_requests(app) == before + 1 and app._status_announcement == caption
+				and app._duck_trick_index == index,
+				context + " continues rejecting taps until both motion and sound have finished")
+			app.duck._process(4.0)
+			app.duck.set_process(false)
+			await _wait_for_voice(app.audio)
+			check(not app.duck.is_manual_action_busy() and not app.audio.is_pip_busy()
+				and _voice_requests(app) == before + 1,
+				context + " becomes idle without replaying any ignored tap")
+			app.duck.pressed.emit()
+			check(_voice_requests(app) == before + 2,
+				context + " accepts the next deliberate gesture after both channels finish")
+		app.audio.halt()
+		app.duck.settle()
+		app.set_reduced_motion(true)
+		for path in PIP_PATHS: app.audio.cache[path] = _silence(0.2)
+		var before: int = _voice_requests(app)
+		app.duck.pressed.emit()
+		app.duck.pressed.emit()
+		check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy() and _voice_requests(app) == before + 1,
+			context + " reduced motion keeps a static pose while its real greeting blocks repeats")
+		await _wait_for_voice(app.audio)
+		app.duck.pressed.emit()
+		check(_voice_requests(app) == before + 2,
+			context + " static reduced-motion artwork does not lock input after sound completion")
+		app.on_page_hidden()
+		check(not app.audio.is_pip_busy() and not app.duck.is_manual_action_busy(),
+			context + " background cleanup cancels both manual action owners")
+		app.on_page_visible()
+		await _settle()
+		before = _voice_requests(app)
+		app.duck.pressed.emit()
+		check(_voice_requests(app) == before + 1,
+			context + " accepts a new gesture after foreground recovery")
+		app.audio.halt()
+		app.duck.settle()
+		app.audio.available = false
+		app.duck.pressed.emit()
+		check(not app.audio.is_pip_busy() and not app.audio.voice.playing,
+			context + " unavailable audio cannot leave a phantom sound owner")
+		var unavailable_caption: String = app._status_announcement
+		app.duck.pressed.emit()
+		check(app._status_announcement != unavailable_caption,
+			context + " remains usable with static reduced-motion feedback and unavailable audio")
+		app.audio.available = true
+		app.audio.halt()
+		app.duck.settle()
+	app.audio.cache = cached
+	app._hide_collection()
+	app.set_reduced_motion(true)
+	app._update_duck()
+
+
+func _silence(seconds: float) -> AudioStreamWAV:
+	var clip := AudioStreamWAV.new()
+	clip.format = AudioStreamWAV.FORMAT_16_BITS
+	clip.mix_rate = 22050
+	var data := PackedByteArray()
+	data.resize(int(seconds * clip.mix_rate) * 2)
+	data.fill(0)
+	clip.data = data
+	return clip
+
+
+func _wait_for_voice(audio) -> void:
+	for attempt in range(60):
+		if not audio.voice.playing: break
+		await create_timer(0.05).timeout
+	check(not audio.voice.playing and not audio.is_pip_busy(), "The real AudioStreamPlayer completion releases Pip's audio owner")
 
 
 func _check_greeting(app, before: int, context: String) -> void:

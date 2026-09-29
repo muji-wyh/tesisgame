@@ -28,10 +28,17 @@ async function begin(page, { width = 390, height = 844, reducedMotion = 'no-pref
   });
   const errors = await openGame(page, { reducedMotion });
   const lesson = await page.locator('#game-status').textContent();
-  const roomOpenedAt = Date.now();
   const bounds = await openRoom(page);
+  const room = playground(bounds), pip = await roomControl(page, 'pip');
+  // Responsive setup can preserve Pip's earlier floor position. Use his visible
+  // focus target instead of mistaking the nominal home position for the actor.
+  const dx = pip.x - room.pip.x, dy = pip.y - room.pip.y;
+  for (const part of ['pip', 'body', 'foot']) {
+    room[part].x += dx;
+    room[part].y += dy;
+  }
   const saved = await savedState(page);
-  return { errors, lesson, bounds, room: playground(bounds), saved, roomOpenedAt };
+  return { errors, lesson, bounds, room, saved };
 }
 
 async function expectPoke(page, previous = '') {
@@ -165,15 +172,16 @@ async function reactionFrame(page, testInfo, caption, startedAt, suffix = 'midpo
   });
 }
 
-test('Home dances promptly and shuffled loading reactions replace each other without changing rewards', async ({ page }, testInfo) => {
-  const { errors, bounds, room, saved, roomOpenedAt } = await begin(page, page.viewportSize());
+test('Home dances promptly and completes each shuffled Pip reaction before accepting another tap', async ({ page }, testInfo) => {
+  const { errors, bounds, room, saved } = await begin(page, page.viewportSize());
   const status = page.locator('#game-status');
   const roomCaption = await status.textContent();
   const anchor = await patch(page, bounds, room.anchor);
   const motion = { x: room.foot.x - 56, y: room.foot.y - 116, width: 112, height: 120 };
   const resting = await patch(page, bounds, motion);
   await visibleChange(page, bounds, motion, resting, testInfo, 'pip-home-autodance-body', 0.035);
-  expect(Date.now() - roomOpenedAt, 'Home dances before the former six-second idle delay.').toBeLessThan(5500);
+  // The native timing test checks the sub-second start. Screenshot transport and
+  // PNG decoding do not measure animation latency; here verify the visible motion.
   const danceFrames = [await patch(page, bounds, motion)];
   // Equal sampling intervals can land on matching points of the hip sway.
   // Observe several distinct poses over one complete routine instead.
@@ -210,35 +218,38 @@ test('Home dances promptly and shuffled loading reactions replace each other wit
         changes.push({ at: performance.now(), caption });
       }
     });
-    document.addEventListener('touchend', onTap, true);
+    document.addEventListener('mouseup', onTap, true);
     observer.observe(status, { childList: true, characterData: true, subtree: true });
     return { finish() {
-      document.removeEventListener('touchend', onTap, true);
+      document.removeEventListener('mouseup', onTap, true);
       observer.disconnect();
       return { taps, changes };
     } };
   }, POKES);
   let firstRapid, replacement, replacementAt, timing;
+  const rapidStartedAt = Date.now();
   try {
-    await tap(page, room.pip.x, room.pip.y);
+    const point = screenPoint(bounds, room.pip);
+    // One driver command keeps both real releases inside the same short action.
+    await page.mouse.click(point.x, point.y, { clickCount: 2, delay: 0 });
     firstRapid = await expectPoke(page, captions[captions.length - 1]);
-    replacementAt = Date.now();
-    await tap(page, room.pip.x, room.pip.y);
-    replacement = await expectPoke(page, firstRapid);
   } finally {
     timing = await timingProbe.evaluate(probe => probe.finish());
     await timingProbe.dispose();
   }
   expect(timing.taps.map(tap => tap.trusted)).toEqual([true, true]);
-  expect(timing.changes.map(change => change.caption)).toEqual([firstRapid, replacement]);
-  for (let index = 0; index < 2; index++) {
-    const latency = timing.changes[index].at - timing.taps[index].at;
-    expect(latency, 'A trusted tap must promptly replace the game feedback.').toBeGreaterThanOrEqual(0);
-    expect(latency, 'A trusted tap must promptly replace the game feedback.').toBeLessThan(250);
-  }
-  expect(timing.changes[1].at - timing.changes[0].at,
-    'The second reaction starts before even the shortest first reaction could finish.').toBeLessThan(850);
-  await reactionFrame(page, testInfo, replacement, replacementAt, 'rapid-replacement');
+  expect(timing.changes.map(change => change.caption), 'A busy tap leaves the first complete response in progress.').toEqual([firstRapid]);
+  const latency = timing.changes[0].at - timing.taps[0].at;
+  expect(latency, 'The first trusted tap responds promptly.').toBeGreaterThanOrEqual(0);
+  expect(latency, 'The first trusted tap responds promptly.').toBeLessThan(250);
+  expect(timing.taps[1].at - timing.taps[0].at,
+    'The ignored gesture arrives while even the shortest first reaction is still active.').toBeLessThan(850);
+  await page.waitForTimeout(Math.max(0, 1300 - (Date.now() - rapidStartedAt)));
+  await expect(status).toHaveText(firstRapid);
+  replacementAt = Date.now();
+  await tap(page, room.pip.x, room.pip.y);
+  replacement = await expectPoke(page, firstRapid);
+  await reactionFrame(page, testInfo, replacement, replacementAt, 'next-complete-response');
   await testInfo.attach('pip-home-trusted-tap-timing', {
     body: JSON.stringify(timing), contentType: 'application/json'
   });
@@ -282,6 +293,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
   let previousPoke = await expectPoke(page);
   await visibleChange(page, bounds, room.body, before, testInfo, 'pip-poke-body');
   await screenshot(page, testInfo, 'pip-poke');
+  await page.waitForTimeout(1300);
 
   const strokes = [0, 23, -23, 23, -23, 23, 0].map(offset => ({
     x: room.pip.x + offset, y: room.pip.y - 18
@@ -291,8 +303,10 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
     ...(browserName === 'chromium' ? [['touch', touchDrag]] : [])
   ]) {
     if (name === 'touch') {
+      await page.waitForTimeout(1300);
       await tap(page, room.pip.x, room.pip.y);
       previousPoke = await expectPoke(page, previousPoke);
+      await page.waitForTimeout(1300);
     }
     const resting = await patch(page, bounds, room.body);
     await drag(page, bounds, strokes);
@@ -304,6 +318,7 @@ test('Pip responds visibly to a poke and real strokes without scrolling the room
     expect(await savedState(page)).toEqual(saved);
   }
   // A release must leave the next independent tap usable, with no stuck drag owner.
+  await page.waitForTimeout(1300);
   await tap(page, room.pip.x, room.pip.y);
   await expectPoke(page, previousPoke);
   expect(await savedState(page)).toEqual(saved);

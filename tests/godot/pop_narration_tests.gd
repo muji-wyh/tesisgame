@@ -259,6 +259,7 @@ func _report_lifecycle() -> void:
 	check(app.audio.narration.playing and view.report_audio() != first_page
 		and app.audio.narration.stream == app.audio.cache[view.report_audio()[0]],
 		"Changing pages replaces the old narration with the new page's recorded clips")
+	view.pip.settle()
 	view.pip.pressed.emit()
 	check(view.report_audio()[0] == "res://assets/audio/pop/high-five.wav" and view.report_text().begins_with(str(prompts["high-five"])),
 		"High five prepends matching visible feedback and recorded audio")
@@ -267,14 +268,25 @@ func _report_lifecycle() -> void:
 		and app.audio.narration.playing and app.audio._narration_streams.size() == view.report_audio().size() + 1
 		and not app.audio.voice.playing and not app.audio.effect.playing,
 		"A result Pip tap queues one imported greeting before the report on the single narration player")
+	var greeting_generation: int = app.audio._narration_generation
+	var greeting_random: int = app.audio._pip_rng.state
+	view.pip.pressed.emit()
+	check(app.audio.narration.stream == greeting and app.audio._narration_generation == greeting_generation
+		and app.audio._pip_rng.state == greeting_random,
+		"Repeated result Pip taps do not restart the current quack or consume another random greeting")
 	app.audio._narration_finished()
 	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]] and view.pip.speaking,
 		"Finishing the greeting continues into the matching high-five sentence without cutting off the report")
 	view.pip.pressed.emit()
+	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]]
+		and app.audio._narration_generation == greeting_generation,
+		"A finished quack does not unlock another result Pip tap while its high-five action is still active")
+	view.pip._process(view.pip.TRICK_SECONDS)
+	view.pip.pressed.emit()
 	check(app.audio.narration.stream != greeting
 		and app.audio.narration.stream.resource_path.begins_with("res://assets/audio/pip/")
 		and app.audio._narration_streams.size() == view.report_audio().size() + 1,
-		"A second Pip tap replaces the queue with a different greeting instead of stacking narration")
+		"A deliberate result Pip tap after both motion and quack finish starts the next greeting")
 	view.report_button.pressed.emit()
 	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]]
 		and app.audio._narration_streams.size() == view.report_audio().size(),

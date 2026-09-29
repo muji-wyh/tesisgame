@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { openGame, enterGame, metrics, tap, headerPoint, openRewards, roomPoint, observeAudio } = require('./game-ui.cjs');
+const { openGame, enterGame, metrics, headerPoint, openRewards, roomControl, observeAudio } = require('./game-ui.cjs');
 
 function hash(source) {
   let value = 2166136261;
@@ -93,6 +93,7 @@ test('loading Pip plays the three supplied recordings without repeats or overlap
   await duck.dispatchEvent('click');
   expect(await page.evaluate(() => pipMediaObservation.events), 'An untrusted click cannot start audio.').toEqual([]);
   for (let index = 0; index < 6; index++) {
+    await expect(duck).toHaveAttribute('data-activity', 'idle');
     if (index === 1) await duck.tap();
     else if (index === 2) { await duck.focus(); await page.keyboard.press('Enter'); }
     else await duck.click();
@@ -109,13 +110,16 @@ test('loading Pip plays the three supplied recordings without repeats or overlap
     expect(played.muted).toBe(false);
     expect(played.volume).toBeGreaterThan(0);
   }
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
   const sequence = await page.evaluate(() => pipMediaObservation.events.map(event => event.hash));
   expect(new Set(sequence.slice(0, 3)).size, 'One shuffle includes all three real recordings.').toBe(3);
   for (let index = 1; index < sequence.length; index++) expect(sequence[index], 'Adjacent calls differ, including at a shuffle boundary.').not.toBe(sequence[index - 1]);
 
-  for (let index = 0; index < 8; index++) await duck.click({ delay: 0 });
+  await duck.click({ clickCount: 8, delay: 0 });
+  expect(await page.evaluate(() => pipMediaObservation.events.length), 'A rapid burst starts one complete greeting.').toBe(7);
   if (backend.supported) await expect.poll(() => page.evaluate(() => pipMediaObservation.events.at(-1)?.ended)).toBe(true);
-  expect(await page.evaluate(() => pipMediaObservation.events.length)).toBe(14);
+  await expect(duck).toHaveAttribute('data-activity', 'idle');
+  expect(await page.evaluate(() => pipMediaObservation.events.length), 'Ignored clicks never replay after the action and sound finish.').toBe(7);
   const maximum = await page.evaluate(() => pipMediaObservation.maxPlaying);
   expect(maximum, 'Rapid clicks never stack voices.').toBeLessThanOrEqual(1);
   if (backend.supported) expect(maximum, 'A real recording played during the burst.').toBe(1);
@@ -145,15 +149,29 @@ async function greetings(page) {
     durations.some(duration => Math.abs(sound.duration - duration) <= 2 / sound.sampleRate)), samples.map(sample => sample.duration));
 }
 
-test('native header and Home poke or pet play real short Pip greetings without changing progress', async ({ page, browserName }, testInfo) => {
-  await observeAudio(page, { fingerprintBuffers: true });
-  const errors = await openGame(page, { reducedMotion: 'reduce' });
+for (const reducedMotion of ['reduce', 'no-preference']) test(`native header and Home finish each Pip action and real greeting before another tap with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
+  await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+  const errors = await openGame(page, { reducedMotion });
   const available = await page.evaluate(() => audioObservation.available);
   if (browserName === 'chromium') expect(available, 'Chromium must exercise the real native audio path.').toBe(true);
   if (!available) testInfo.annotations.push({ type: 'audio capability', description: 'This WebKit runtime has no AudioContext; native direct input and progress checks still run, audible assertions are unavailable.' });
-  const original = await saves(page), header = headerPoint(await metrics(page), 'pip');
-  async function expectGreetingAfter(action) {
+  const original = await saves(page), bounds = await metrics(page), header = headerPoint(bounds, 'pip');
+  const screen = point => ({ x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale });
+  const click = (point, count = 1) => {
+    const { x, y } = screen(point);
+    return page.mouse.click(x, y, { clickCount: count, delay: 0 });
+  };
+  async function burst(point, input = 'mouse') {
+    const count = available || reducedMotion === 'no-preference' ? 3 : 1;
+    if (input === 'mouse') return click(point, count);
+    const { x, y } = screen(point);
+    // Real touch acceptance is separate from the atomic mouse burst: traced
+    // driver round trips can outlast a complete short quack between touch calls.
+    await page.touchscreen.tap(x, y);
+  }
+  async function expectGreetingAfter(action, motionSeconds, repeat) {
     const before = (await greetings(page)).length;
+    const startedAt = Date.now();
     await action();
     if (available) {
       await expect.poll(async () => (await greetings(page)).length).toBe(before + 1);
@@ -164,18 +182,30 @@ test('native header and Home poke or pet play real short Pip greetings without c
       expect([1, 2]).toContain(sound.channels);
       expect(sound.peak, 'The native player submits audible PCM, not a silent placeholder.').toBeGreaterThan(0.01);
       expect(sound.fingerprint).toBeTruthy();
-      await page.waitForTimeout(420);
+      const caption = await page.locator('#game-status').textContent();
+      expect((await greetings(page)).length, 'The trusted burst starts only one complete quack.').toBe(before + 1);
+      await expect.poll(async () => (await greetings(page))[before]?.endedAt,
+        { message: 'The actual audio source finishes before the next independent greeting.' }).toBeTruthy();
+      const completed = (await greetings(page))[before];
+      expect((completed.endedAt - completed.at) / 1000, 'An ignored repeat never truncates the recording.').toBeGreaterThan(sound.duration - 0.06);
+      if (reducedMotion === 'no-preference' && Date.now() - startedAt < motionSeconds * 1000 - 200) {
+        await repeat();
+        expect((await greetings(page)).length, 'A finished quack still waits for its longer action.').toBe(before + 1);
+        await expect(page.locator('#game-status')).toHaveText(caption);
+      }
     }
+    if (reducedMotion === 'no-preference') await page.waitForTimeout(Math.max(0, motionSeconds * 1000 + 120 - (Date.now() - startedAt)));
+    expect((await greetings(page)).length, 'Busy gestures are discarded instead of queued.').toBe(available ? before + 1 : before);
   }
   for (let index = 0; index < 4; index++) {
-    await expectGreetingAfter(() => tap(page, header.x, header.y));
+    await expectGreetingAfter(() => burst(header), 1.8, () => click(header));
     await expect(page.locator('#game-status')).toContainText('Pip says hello!');
   }
   await page.screenshot({ path: testInfo.outputPath('pip-random-sound-header.png'), scale: 'css' });
   await openRewards(page);
-  const bounds = await metrics(page), pip = roomPoint(bounds, 'pip');
+  const pip = await roomControl(page, 'pip');
   for (let index = 0; index < 2; index++) {
-    await expectGreetingAfter(() => tap(page, pip.x, pip.y));
+    await expectGreetingAfter(() => burst(pip, index ? 'touch' : 'mouse'), 1.15, () => click(pip));
     await expect(page.locator('#game-status')).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
   }
   await expectGreetingAfter(async () => {
@@ -185,7 +215,11 @@ test('native header and Home poke or pet play real short Pip greetings without c
     try {
       for (const offset of [23, -23, 0]) await page.mouse.move(x + offset * bounds.scale, y, { steps: 3 });
     } finally { await page.mouse.up(); }
-  });
+    // The normal action still owns this follow-up press. With reduced motion,
+    // a driver round trip can outlast the complete short recording; atomic
+    // header and Home mouse bursts above verify the audio-only gate instead.
+    if (reducedMotion === 'no-preference') await click(pip);
+  }, 1.2, () => click(pip));
   await expect(page.locator('#game-status')).toHaveText('Pip leans into your hand. Lovely!');
   expect(await saves(page)).toEqual(original);
   const played = await greetings(page);

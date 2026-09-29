@@ -29,6 +29,7 @@ const CARD_COLORS := [
 var game = PopModel.new()
 var reduced_motion: bool = false
 var pip: Button
+var pip_audio_busy: Callable
 var replay_button: Button
 var back_button: Button
 var retry_button: Button
@@ -336,6 +337,7 @@ func _present_hits(struck: Array) -> void:
 
 func pause() -> void:
 	if _finished_sent:
+		if is_instance_valid(pip): pip.settle()
 		_listening_tick_usec = -1
 		return
 	_sync_game_clock()
@@ -363,6 +365,7 @@ func pause() -> void:
 
 func stop() -> void:
 	_clear_transcript()
+	if is_instance_valid(pip): pip.settle()
 	set_report_speaking(false)
 	_listening = false
 	_listening_tick_usec = -1
@@ -1130,6 +1133,8 @@ func set_report_audio_state(state: String) -> void:
 
 func _high_five() -> void:
 	if pip == null or not is_instance_valid(pip) or game.phase != "finished" or not is_visible_in_tree():
+		return
+	if pip.is_manual_action_busy() or (pip_audio_busy.is_valid() and bool(pip_audio_busy.call())):
 		return
 	pip.perform_trick("high-five")
 	_report_feedback = _prompt_text("high-five") + " "
