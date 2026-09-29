@@ -32,6 +32,51 @@ const expectedFiles = [
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const absolute = (relativePath) => path.join(root, ...relativePath.split('/'));
 
+function soundEnergy(samples, rate) {
+  const alpha = 1 - Math.exp(-2 * Math.PI * 400 / rate);
+  let low = 0, body = 0, total = 0;
+  for (const sample of samples) {
+    low += alpha * (sample - low);
+    body += low * low;
+    total += sample * sample;
+  }
+  return { rms: Math.sqrt(total / samples.length), bodyRatio: body / total };
+}
+
+test('all 88 authored chest cues reproduce exactly and stay within the optional audio budget', () => {
+  const audio = require('../tools/generate-chest-audio.cjs');
+  const files = fs.readdirSync(absolute('assets/audio/chests')).filter(name => name.endsWith('.wav'));
+  const expected = audio.THEMES.flatMap(theme => Object.keys(audio.CUES).map(cue => `${theme}-${cue}.wav`));
+  assert.equal(expected.length, 88);
+  assert.deepEqual(files.sort(), expected.sort());
+  let bytes = 0;
+  for (const theme of audio.THEMES) for (const cue of Object.keys(audio.CUES)) {
+    const authored = fs.readFileSync(absolute(`assets/audio/chests/${theme}-${cue}.wav`));
+    assert.deepEqual(authored, audio.wav(audio.render(theme, cue)), `${theme}/${cue} is reproducible`);
+    bytes += authored.length;
+  }
+  assert.ok(bytes < 1600000, 'The complete layered bank stays below 1.6 MB');
+});
+
+test('chest strikes add upper material detail and the final transition rises into a broad release', () => {
+  const audio = require('../tools/generate-chest-audio.cjs');
+  const window = (samples, start, end) => samples.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE));
+  for (const theme of audio.THEMES) {
+    const strikes = ['step', 'step-detail', 'step-roll'].map(cue => soundEnergy(audio.render(theme, cue), audio.RATE));
+    assert.ok(strikes.every(strike => strike.bodyRatio > 0.60), `${theme} keeps low body in every strike texture`);
+    assert.ok(strikes[0].bodyRatio > strikes[1].bodyRatio && strikes[1].bodyRatio > strikes[2].bodyRatio,
+      `${theme} grows upper detail through three textures instead of only changing identical-click volume`);
+    assert.ok(strikes[0].bodyRatio - strikes[2].bodyRatio > 0.12, `${theme} has a substantial timbral progression`);
+    const bridge = audio.render(theme, 'opening');
+    assert.ok(soundEnergy(window(bridge, 0.16, 0.21), audio.RATE).rms >
+      soundEnergy(window(bridge, 0.02, 0.07), audio.RATE).rms * 3, `${theme} bridges toward the release`);
+    const release = audio.render(theme, 'release');
+    assert.ok(soundEnergy(window(release, 0.15, 0.35), audio.RATE).rms > 0.10,
+      `${theme} releases with a broad body and air tail`);
+    assert.ok(release.every(sample => Math.abs(sample) < 0.79), `${theme} leaves unclipped mixing headroom`);
+  }
+});
+
 function readManifest() {
   const filename = path.join(chestRoot, 'manifest.json');
   assert.ok(fs.existsSync(filename), 'Missing imported chest manifest');

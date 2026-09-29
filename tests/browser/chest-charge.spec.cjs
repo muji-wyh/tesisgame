@@ -237,10 +237,11 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   expect(steps[0].at - acceptedPress.at).toBeGreaterThanOrEqual(1070);
   expect(cues.indexOf(steps[1])).toBeGreaterThan(cues.indexOf(opening));
   expect(cues.indexOf(steps[2])).toBeGreaterThan(cues.indexOf(opening));
-  const hush = cues.find(event => event.cue === 'anticipation');
-  expect(cues.find(event => event.cue === 'unlock').at - hush.at,
-    'A short final breath separates the tension rhythm from unlocking').toBeGreaterThanOrEqual(100);
-  expect(cues.find(event => event.cue === 'unlock').at - hush.at).toBeLessThanOrEqual(350);
+  const anticipation = cues.find(event => event.cue === 'anticipation');
+  const release = cues.find(event => event.cue === 'release');
+  expect(cues.find(event => event.cue === 'unlock').at - anticipation.at,
+    'The final pressure rise starts before the lock releases').toBeGreaterThanOrEqual(100);
+  expect(cues.find(event => event.cue === 'unlock').at - anticipation.at).toBeLessThanOrEqual(350);
   expect(openingStates[0].at - opening.at, '100 percent waits for the 2.16-second release').toBeGreaterThanOrEqual(2060);
   // These are browser-observed beat times. Allow frame delivery jitter while
   // still rejecting an early release or the former ten-second sequence.
@@ -285,15 +286,20 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     const cancelledBed = beds.filter(sound => audioOnset(sound) < acceptedPress.at - 100);
     const acceptedBed = beds.filter(sound => audioOnset(sound) >= acceptedPress.at - 100);
     expectBedChain(cancelledBed, { press: cues[0], stop: cancel });
-    expectBedChain(acceptedBed, { press: acceptedPress, stop: hush, opening });
-    const strikes = chestSounds.filter(sound => hasDuration(sound, 0.24));
-    const strikeCues = cues.filter(isRhythmCue);
-    expect(strikes, 'Only physical hold and opening beats play; all stars and confirmation remain silent').toHaveLength(strikeCues.length);
-    expect(new Set(strikes.map(sound => sound.fingerprint)).size, 'All attacks use the same themed step sample, without an opening one-shot').toBe(1);
-    for (const [index, sound] of strikes.entries()) {
-      expect(Math.abs(audioOnset(sound) - strikeCues[index].at),
-        `${strikeCues[index].cue} ${strikeCues[index].step} follows its physical cue`).toBeLessThanOrEqual(100);
+    expectBedChain(acceptedBed, { press: acceptedPress, stop: release, opening });
+    expect(audioStop(acceptedBed.at(-1)), 'The pressure bed continues through unlocking until release')
+      .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
+    const attacks = chestSounds.filter(sound => hasDuration(sound, 0.24));
+    const attackCues = cues.filter(event => isRhythmCue(event) || event.cue === 'anticipation');
+    expect(attacks, 'Every body beat has one source, followed by one final transition rise').toHaveLength(attackCues.length);
+    for (const [index, sound] of attacks.entries()) {
+      expect(Math.abs(audioOnset(sound) - attackCues[index].at),
+        `${attackCues[index].cue} ${attackCues[index].step} follows its physical cue`).toBeLessThanOrEqual(100);
     }
+    const strikes = attacks.filter((_, index) => isRhythmCue(attackCues[index]));
+    const transition = attacks[attackCues.findIndex(event => event.cue === 'anticipation')];
+    const strikeCues = cues.filter(isRhythmCue);
+    expect(strikes, 'Progress stars and confirmation add no extra percussive attacks').toHaveLength(strikeCues.length);
     // Match by cue order so a cancelled hold or a shared confirmation frame
     // cannot make a valid hold beat look like an extra opening attack.
     const cancelledStrikes = strikeCues.length - rhythm.length;
@@ -304,9 +310,17 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       expect(sound.playbackRate, 'Material strikes retain their physical pitch as their cadence accelerates')
         .toBeCloseTo(1, 3);
     }
-    expect(Math.abs(audioStop(acceptedStrikes.at(-1)) - hush.at), 'The last strike tail stops with the sustained bed for a clean final breath').toBeLessThanOrEqual(100);
-    expect(chestSounds.filter(sound => audioOnset(sound) > hush.at + 30 && audioOnset(sound) < cues.find(event => event.cue === 'unlock').at - 30),
-      'No material attack fills the quiet breath').toEqual([]);
+    const textures = acceptedStrikes.map(sound => sound.fingerprint)
+      .filter((fingerprint, index, all) => index === 0 || fingerprint !== all[index - 1]);
+    expect(textures, 'The buildup develops from grounded impact through material detail into a bright final roll').toHaveLength(3);
+    expect(new Set(textures).size, 'Each of the three buildup textures has distinct audible content').toBe(3);
+    expect(textures.includes(transition.fingerprint), 'The final rise bridges into release with its own material texture').toBe(false);
+    const transitionEnd = transition.stoppedAt === undefined ?
+      audioOnset(transition) + transition.duration / transition.playbackRate * 1000 : audioStop(transition);
+    expect(transitionEnd, 'The final rise remains audible through unlocking instead of introducing a silent breath')
+      .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
+    expect(transitionEnd, 'The transition resolves into the physical release instead of replaying later')
+      .toBeLessThanOrEqual(release.at + 150);
     const alignment = [['unlock', 0.31], ['release', 0.68], ['settle', 0.48]].map(([cue, duration]) => ({
       cue, milliseconds: audioOnset(chestSounds.find(sound => hasDuration(sound, duration))) - cues.find(event => event.cue === cue).at
     }));
@@ -425,7 +439,7 @@ test('unavailable themed samples use immediate local feedback without delaying r
   const config = JSON.parse(html.match(/const config = (\{[^\r\n]*\});/)[1]);
   const samples = new Set(Object.entries(config.audioAssets)
     .filter(([source]) => source.includes('/audio/chests/')).map(([, file]) => file));
-  expect(samples.size).toBe(72);
+  expect(samples.size).toBe(88);
   let failedRequests = 0;
   await page.route(url => samples.has(url.pathname.split('/').at(-1)), async route => {
     failedRequests += 1;
@@ -448,7 +462,7 @@ test('unavailable themed samples use immediate local feedback without delaying r
     await page.mouse.up();
   }
   expect(await pieces(page)).toBe(baseline + 1);
-  expect(failedRequests).toBeGreaterThanOrEqual(9);
+  expect(failedRequests).toBeGreaterThanOrEqual(11);
   const cues = await page.evaluate(() => window.chestObservation.cues);
   expect(cues.filter(event => event.cue === 'release')).toHaveLength(1);
   if (await page.evaluate(() => window.audioObservation.available)) {

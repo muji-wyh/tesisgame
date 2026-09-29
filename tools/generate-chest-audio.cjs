@@ -12,7 +12,7 @@ const crypto = require('node:crypto');
 const RATE = 22050;
 const TAU = Math.PI * 2;
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const CUES = { press: 0.19, charge: 0.8, step: 0.24, cancel: 0.22, opening: 0.24, unlock: 0.31, release: 0.68, settle: 0.48, reward: 0.74 };
+const CUES = { press: 0.19, charge: 0.8, step: 0.24, 'step-detail': 0.24, 'step-roll': 0.24, cancel: 0.22, opening: 0.24, unlock: 0.31, release: 0.68, settle: 0.48, reward: 0.74 };
 const MATERIALS = {
   spring: 'Hollow wood, dry leaf movement and a soft flower bell',
   summer: 'Warm airflow, a cork-like pop and a bright rounded release',
@@ -85,7 +85,9 @@ function render(theme, cue) {
   const duration = CUES[cue];
   const samples = new Float64Array(Math.round(RATE * duration));
   const rng = random(`${theme}/${cue}/v1`);
-  const force = { press: 0.62, charge: 0.45, step: 0.62, cancel: 0.42, opening: 0.45, unlock: 0.9, release: 0.82, settle: 0.63, reward: 0.75 }[cue];
+  const strike = cue.startsWith('step');
+  const strikeStage = ['step', 'step-detail', 'step-roll'].indexOf(cue);
+  const force = { press: 0.62, charge: 0.45, step: 0.62, cancel: 0.42, opening: 0.45, unlock: 0.9, release: 0.82, settle: 0.63, reward: 0.75 }[strike ? 'step' : cue];
   const opening = ['opening', 'release', 'charge'].includes(cue);
   const reward = cue === 'reward';
   const settle = cue === 'settle' || cue === 'cancel';
@@ -145,11 +147,32 @@ function render(theme, cue) {
   function releaseAir(cutoff) {
     let low = 0;
     const seconds = duration - 0.012;
-    layer(0.012, seconds, 0.62, (t) => {
+    layer(0.012, seconds, 0.94, (t) => {
       const alpha = 1 - Math.exp(-TAU * (350 + cutoff * Math.exp(-t * 2.6)) / RATE);
       low += alpha * (rng() * 2 - 1 - low);
       const bloom = (1 - Math.exp(-t / 0.045)) * Math.exp(-t / 0.26);
       return low * bloom * Math.min(1, (seconds - t) / 0.085);
+    });
+  }
+
+  function brightTail() {
+    const base = BODY_FREQUENCIES[theme];
+    // One simultaneous material shimmer, never the saved-reward melody.
+    modes(0.065, duration - 0.065, [base * 7.9, base * 12.31, base * 17.73], 0.14, 1.6);
+    noise(0.035, duration - 0.035, 0.22, 6200, 0.070, 1.8);
+  }
+
+  function risingBridge() {
+    samples.fill(0);
+    let air = 0;
+    layer(0, duration, 1.0, (t) => {
+      const progress = Math.min(1, t / 0.215);
+      const alpha = 1 - Math.exp(-TAU * (550 + 4100 * progress * progress) / RATE);
+      air += alpha * (rng() * 2 - 1 - air);
+      const base = BODY_FREQUENCIES[theme] * 2.3;
+      const phase = TAU * (base * t + 1450 * t * t);
+      const texture = air * 0.72 + Math.sin(phase) * 0.16 + Math.sin(phase * 1.51) * 0.07;
+      return texture * (0.16 + 0.84 * progress * progress) * Math.min(1, t / 0.008) * Math.min(1, (duration - t) / 0.014);
     });
   }
 
@@ -170,7 +193,7 @@ function render(theme, cue) {
         sweep(0.026, duration * 0.8, 0.16, 310, 180, 1.9, 1.6);
         noise(0.012, duration * 0.86, 0.36, 1600, 0.024, 2, 0.9);
       }
-      if (cue === 'unlock' || cue === 'step' || reward) metal(680, 0.2);
+      if (cue === 'unlock' || strike || reward) metal(680, 0.2);
       if (settle) modes(0.065, duration - 0.065, [92, 221, 511], 0.21, 8);
       if (reward) bells(523.25, 0.11);
       break;
@@ -198,7 +221,7 @@ function render(theme, cue) {
           (0.65 + 0.35 * Math.sin(TAU * 47 * t)) * envelope(t, duration * 0.85, 0.026, 1.8));
         noise(0.014, duration * 0.9, cue === 'release' ? 0.61 : 0.25, 1750, 0.026, 2.4);
       }
-      if (cue === 'unlock' || cue === 'step') metal(890, 0.22, 0.08);
+      if (cue === 'unlock' || strike) metal(890, 0.22, 0.08);
       if (reward) modes(0.23, duration - 0.23, [330, 495], 0.14, 4);
       break;
     case 'jungle':
@@ -219,25 +242,40 @@ function render(theme, cue) {
       break;
   }
 
-  if (cue === 'step') {
-    // Keep each material's contact color, but let a grounded body carry the
-    // hit. Its 18 ms attack meets the visible compression before the return.
+  if (strike) {
+    // Layer in rim resonance, strained material and a brighter air edge as
+    // tension grows. Every stage retains the same grounded body frequency.
     for (let i = 0; i < samples.length; i++) {
       const tail = ['winter', 'ocean', 'candy'].includes(theme)
         ? Math.exp(-Math.max(0, i / RATE - 0.018) * 26) : 1;
-      samples[i] *= 0.32 * tail;
+      samples[i] *= [0.38, 0.52, 0.58][strikeStage] * tail;
     }
-    bodyImpact(BODY_FREQUENCIES[theme], 0.82);
-    noise(0, 0.025, 0.10, 1700, 0.001, 5);
+    bodyImpact(BODY_FREQUENCIES[theme], strikeStage === 2 ? 0.91 : 0.82);
+    noise(0, 0.025, 0.12, 2000, 0.001, 5);
+    if (strikeStage >= 1) {
+      modes(0.007, 0.125, [BODY_FREQUENCIES[theme] * 3.1, BODY_FREQUENCIES[theme] * 6.4], 0.17, 3.4);
+      noise(0.012, 0.13, 0.32, 3200, 0.012, 3.0, 0.35);
+    }
+    if (strikeStage === 2) {
+      noise(0.002, 0.145, 0.65, 5700, 0.010, 2.7);
+      modes(0.010, 0.13, [BODY_FREQUENCIES[theme] * 8.3, BODY_FREQUENCIES[theme] * 13.7], 0.13, 3.5);
+    }
+  } else if (cue === 'opening') {
+    risingBridge();
   } else if (cue === 'release') {
     // A synchronized crack starts the release, then cavity weight and air
     // bloom around the floor recoil. The saved-reward melody remains separate.
     for (let i = 0; i < samples.length; i++) samples[i] *= 0.36;
     bodyImpact(BODY_FREQUENCIES[theme] * 0.82, 0.9, true);
-    noise(0, 0.045, 0.38, 3200, 0.001, 5);
-    releaseAir(theme === 'ocean' ? 620 : (theme === 'winter' ? 2600 : 1700));
+    noise(0, 0.045, 0.44, 4400, 0.001, 5);
+    releaseAir(theme === 'ocean' ? 1400 : (theme === 'winter' ? 4200 : 3200));
+    brightTail();
   }
 
+  if (cue === 'release') {
+    // Gentle saturation gives the broad bloom headroom beside its sharp crack.
+    for (let i = 0; i < samples.length; i++) samples[i] = 0.8 * Math.tanh(samples[i] / 0.8);
+  }
   // Remove any DC bias and taper both boundaries. A looping charge asset has
   // the same zero-value seam as its one-shot siblings, without an audible click.
   const mean = samples.reduce((sum, value) => sum + value, 0) / samples.length;
@@ -248,11 +286,12 @@ function render(theme, cue) {
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
-  if (cue === 'step' || cue === 'release') {
+  if (strike || cue === 'release' || cue === 'opening') {
     // Equal material-strike energy lets the shared crescendo read on every
     // theme, including the otherwise very quiet magnetic and flower locks.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const gain = Math.min((cue === 'release' ? 0.135 : 0.07) / rms, 0.78 / Math.min(maximum, 0.78));
+    const target = cue === 'release' ? 0.15 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
+    const gain = Math.min(target / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }
   return samples;

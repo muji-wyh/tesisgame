@@ -299,15 +299,21 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	app.chest.set_process(false)
-	app.chest._advance_animation(Feel.UNLOCK_TIME - 0.02)
+	app.chest._advance_animation(Feel.ANTICIPATION_TIME + 0.01)
+	app.chest._advance_animation(Feel.UNLOCK_TIME - 0.02 - app.chest.hold_effect_snapshot().opening_time)
 	state = app.chest.hold_effect_snapshot()
 	check(state.percent > 90 and state.percent < 100 and _pieces(app) == 0
 		and not app.audio._chest_rewarded and not app.audio._chest_seen.has("release0"),
 		"Late in the buildup, anticipation has not saved or announced a reward")
+	check(app.audio.chest_charge.playing and app.audio._chest_seen.has("anticipation0"),
+		"The final transition keeps the continuous pressure bed audible before unlocking")
 	app.chest._advance_animation(0.03)
+	check(app.audio.chest_charge.playing and app.audio._chest_seen.has("unlock0")
+		and not app.audio._chest_seen.has("release0"),
+		"Unlocking adds its material accent without cutting the pressure bed")
 	app.chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
 	check(app.chest.hold_effect_snapshot().release_flash > 0.0 and app.effects.particle_count() == 0
-		and _pieces(app) == 0 and not app.audio._chest_rewarded,
+		and _pieces(app) == 0 and not app.audio._chest_rewarded and not app.audio.chest_charge.playing,
 		"Physical release lights the chest cavity immediately without a separate delayed global burst or early reward")
 	app.chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(app.audio._chest_seen.has("unlock0") and app.audio._chest_seen.has("release0")
@@ -390,6 +396,39 @@ func _run() -> void:
 	storage.fail_write = false
 	app._retry_reward_save()
 	check(_pieces(app) == 5, "The interrupted reduced-motion failure saves one piece on explicit retry")
+	_win(app, 91)
+	app.set_reduced_motion(false)
+	_begin(app)
+	app._advance_ui(1.21)
+	app.chest._advance_animation(Feel.ANTICIPATION_TIME + 0.001)
+	check(app.audio.chest_charge.playing and app.audio._chest_seen.has("anticipation0"),
+		"The stalled-release scenario reaches the audible final pressure rise")
+	var stalled_pieces: int = _pieces(app)
+	var stalled_writes: int = storage.writes
+	var stalled_player: int = app.audio._chest_next_player
+	cues.clear()
+	app.chest._advance_animation(Feel.RELEASE_TIME + 0.24 - app.chest.hold_effect_snapshot().opening_time)
+	check(app.chest.performance_phase() == "release" and cues.is_empty()
+		and not app.audio._chest_seen.has("release0"),
+		"A frame beyond the release freshness window consumes missed accents without replaying them")
+	app._advance_ui(0.0)
+	check(not app.audio.chest_charge.playing and app.audio.chest_charge.stream == null,
+		"Physical release stops the pressure bed even when its one-shot cue was suppressed")
+	check(app.model.chest_state == "opening" and _pieces(app) == stalled_pieces
+		and storage.writes == stalled_writes and not app.audio._chest_rewarded
+		and cues.is_empty() and app.audio._chest_next_player == stalled_player,
+		"Stopping stale pressure adds no late cue, saved piece or early reward")
+	for frame in range(3):
+		app.chest._advance_animation(0.05)
+		app._advance_ui(0.0)
+		app.audio.set_chest_tension(1.0)
+	check(not app.audio.chest_charge.playing and app.audio.chest_charge.stream == null
+		and cues.is_empty() and app.audio._chest_next_player == stalled_player
+		and _pieces(app) == stalled_pieces and storage.writes == stalled_writes,
+		"Later release frames and stale tension updates cannot restart the bed or replay missed accents")
+	app.chest.finish_immediately()
+	check(_pieces(app) == stalled_pieces + 1 and storage.writes == stalled_writes + 1,
+		"The stalled opening still saves exactly one reward at actual completion")
 	_win(app, 90)
 	app.set_reduced_motion(false)
 	_begin(app)

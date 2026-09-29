@@ -67,9 +67,14 @@ static func pulse_motion(elapsed: float, holding: bool = false) -> float:
 
 static func release_flash(elapsed: float) -> float:
 	var age: float = elapsed - RELEASE_TIME
-	if age < 0.0 or age >= 0.85:
+	if age < 0.0 or age >= 1.02:
 		return 0.0
-	return lerpf(0.55, 1.0, smoothstep(0.0, 0.06, age)) * (1.0 - smoothstep(0.08, 0.85, age))
+	return lerpf(0.70, 1.0, smoothstep(0.0, 0.045, age)) * (1.0 - smoothstep(0.12, 1.02, age))
+
+
+static func final_drive(elapsed: float) -> float:
+	# The last roll becomes continuous pressure instead of stopping in mid-air.
+	return smoothstep(1.80, RELEASE_TIME, elapsed)
 
 
 static func phase(elapsed: float) -> String:
@@ -140,7 +145,7 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
 	if is_inf(pulse_time):
 		pulse_time = time
-	if opening_now and time < UNLOCK_TIME:
+	if opening_now and time < RELEASE_TIME:
 		var energy: float = tension(time)
 		pressure = 0.30 + energy * 0.70
 	var offset := Vector2(0.0, float(feel.press) * pressure)
@@ -149,18 +154,21 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 	if pressure > 0.0:
 		if theme_id == "candy":
 			scale = Vector2(1.0 + pressure * 0.045, 1.0 - pressure * 0.065)
-	if (not opening_now and pressure > 0.0) or (opening_now and time < UNLOCK_TIME):
+	if (not opening_now and pressure > 0.0) or (opening_now and time < RELEASE_TIME):
 		var strike: float = pulse_motion(pulse_time, not opening_now)
 		var strength: float = pulse_strength(pulse_time, not opening_now)
+		var drive: float = final_drive(time) if opening_now else 0.0
 		offset.x = strike * shake_distance(theme_id)
-		offset.y += strength * 0.008
-		rotation = strike * (0.040 if theme_id == "candy" else 0.028)
+		offset.x += drive * (-0.004 + sin((time - 1.80) * 72.0) * 0.0015)
+		offset.y += strength * 0.008 + drive * 0.010
+		rotation = strike * (0.040 if theme_id == "candy" else 0.028) - drive * 0.018
 		if theme_id == "candy":
-			scale += Vector2(0.018, -0.025) * strength
+			scale += Vector2(0.018, -0.025) * (strength + drive * 0.6)
 		return {"offset": offset, "scale": scale, "rotation": rotation}
 	if opening_now:
-		var preparation: float = 1.0 - smoothstep(UNLOCK_TIME, RELEASE_TIME, time)
-		offset = Vector2(0.0, float(feel.press) * preparation)
+		var preparation: float = 1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + 0.075, time)
+		offset = Vector2(-0.004, float(feel.press) + 0.010) * preparation
+		rotation = -0.018 * preparation
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
 		var recoil: float = sin(minf(strike_age / 0.18, 1.0) * PI)
 		# The floor takes the release impulse while the lid moves upward.

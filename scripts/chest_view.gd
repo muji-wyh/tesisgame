@@ -253,7 +253,7 @@ func _fit() -> void:
 		if returning > 0.0:
 			offset.x = _cancel_shift_x * returning
 		elif _hold_active or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME):
-			offset.x = _pulse_motion() * maxf(6.0 * pixel, Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
+			offset.x += _pulse_motion() * maxf(0.0, 6.0 * pixel - Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
 	_body_shift_x = offset.x
 	var pulse: Vector2 = _physical_pose.scale
 	var bob: float = center.y - size.y * 0.59
@@ -273,7 +273,7 @@ func _fit() -> void:
 	_flash.queue_redraw()
 	_seam_light.queue_redraw()
 	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
-		or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME))
+		or (mode == "opening" and _elapsed < Feel.RELEASE_TIME))
 	_glint.queue_redraw()
 
 
@@ -314,8 +314,7 @@ func _draw_charge() -> void:
 	var pixel: float = _charge_unit
 	var progress: float = performance_progress()
 	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
-	var release: float = clampf((_elapsed - Feel.RELEASE_TIME) / RELEASE_SECONDS, 0.0, 1.0) if releasing else 0.0
-	var alpha: float = 1.0 - release if mode == "opening" else 1.0
+	var alpha: float = 1.0 - smoothstep(0.0, 0.16, _elapsed - Feel.RELEASE_TIME) if releasing else 1.0
 	var pulse: float = _pulse_strength()
 	# A crown of three stars keeps every milestone above the chest and reward.
 	var start: float = PI
@@ -350,18 +349,11 @@ func _draw_charge() -> void:
 	if reduced_motion:
 		return
 	if releasing:
-		if release >= 1.0:
-			return
-		var radius: Vector2 = _charge_radius * lerpf(0.75, 1.12, release)
-		_charge.draw_polyline(_ellipse_points(radius, start, start + TAU),
-			Color(_charge_spark.lightened(0.4), (1.0 - release) * 0.85), lerpf(4.0, 1.0, release) * pixel, true)
-		for index in range(12):
-			var direction := Vector2.from_angle(start + TAU * float(index) / 12.0)
-			var position: Vector2 = _charge_center + direction * radius
-			_draw_charge_star(position, (2.0 + (1.0 - release) * 3.0) * pixel, Color(gold, (1.0 - release) * 0.95))
+		# The progress crown yields to the single cavity-centred release wave.
+		return
 	else:
 		var count: int = _charge_particle_count()
-		var clock: float = minf(_elapsed, Feel.ANTICIPATION_TIME) if mode == "opening" else _charge_time
+		var clock: float = _elapsed if mode == "opening" else _charge_time
 		var swirl: float = smoothstep(0.15, 0.65, progress)
 		var converge: float = smoothstep(0.65, 1.0, progress)
 		for index in range(count):
@@ -551,6 +543,10 @@ func hold_effect_snapshot() -> Dictionary:
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
+		"final_drive": Feel.final_drive(_elapsed) if mode == "opening" and not reduced_motion else 0.0,
+		"release_radius": {"x": _release_radius().x, "y": _release_radius().y},
+		"release_bounds": {"x": _release_bounds().position.x, "y": _release_bounds().position.y,
+			"width": _release_bounds().size.x, "height": _release_bounds().size.y},
 		"lid_pressure": _lid_pressure(),
 		"light_origin": {"x": _light_origin().x, "y": _light_origin().y},
 		"ground_center": {"x": _ground_center.x, "y": _ground_center.y},
@@ -580,7 +576,7 @@ func _draw_glint() -> void:
 	center.y -= _bounds.size.y * _art.scale.y * 0.08
 	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
 	if mode == "opening":
-		power = Feel.tension(_elapsed) * 0.55 + _pulse_strength() * 0.45
+		power = Feel.tension(_elapsed) * 0.55 + _pulse_strength() * 0.45 + Feel.final_drive(_elapsed) * 0.40
 	var radius: float = minf(size.x, size.y) * 0.07
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
@@ -610,7 +606,8 @@ func _lid_pressure() -> float:
 	var hold: Vector2 = _hold_pose_state()
 	var energy: float = tension_progress() if mode == "opening" else hold.y
 	var fade: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.10, _elapsed) if mode == "opening" else 1.0
-	return pow(energy, 1.6) * fade
+	var drive: float = Feel.final_drive(_elapsed) if mode == "opening" else 0.0
+	return (pow(energy, 1.6) + drive * 0.28) * fade
 
 
 func _release_power() -> float:
@@ -639,6 +636,18 @@ func _light_origin() -> Vector2:
 	return (seam[0] + seam[1] * 2.0 + seam[2]) * 0.25 if seam.size() == 3 else size * 0.5
 
 
+func _release_bounds() -> Rect2:
+	var inset: float = minf(8.0 / _charge_scale, minf(size.x, size.y) * 0.06)
+	return Rect2(Vector2.ONE * inset, (size - Vector2.ONE * inset * 2.0).max(Vector2.ZERO))
+
+
+func _release_radius() -> Vector2:
+	var origin: Vector2 = _light_origin()
+	var safe: Rect2 = _release_bounds()
+	return Vector2(maxf(0.0, minf(origin.x - safe.position.x, safe.end.x - origin.x)),
+		maxf(0.0, minf(origin.y - safe.position.y, safe.end.y - origin.y))) * 0.94
+
+
 func _draw_radiance() -> void:
 	if reduced_motion or _fit_scale <= 0.0:
 		return
@@ -649,22 +658,26 @@ func _draw_radiance() -> void:
 	var origin: Vector2 = _light_origin()
 	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
 	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
-	var glow := Vector2(width * (0.60 + flash * 0.90), width * (0.35 + flash * 0.90))
+	var radius: Vector2 = _release_radius()
+	var glow: Vector2 = Vector2(width * 0.60, width * 0.35).lerp(radius * 2.0, flash)
 	_radiance.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
-		Color(_release_color, pressure * 0.35 + flash * 0.85))
+		Color(_release_color, pressure * 0.35 + flash))
 	if flash <= 0.0:
 		return
-	var height: float = maxf(0.0, origin.y - _charge_inset - 6.0 / _charge_scale)
-	height *= 0.65 + 0.35 * smoothstep(0.0, 0.12, age)
+	var safe: Rect2 = _release_bounds()
+	var expansion: float = 0.55 + 0.45 * smoothstep(0.0, 0.12, age)
+	var height: float = maxf(0.0, origin.y - safe.position.y) * expansion
 	# Light emerges from the cavity and fades upward, behind the moving lid.
-	for ray in range(5):
-		var lean: float = float(ray - 2) * 0.12
-		var half_width: float = width * (0.07 if ray % 2 == 0 else 0.035)
-		var top: Vector2 = origin + Vector2(lean * width, -height)
+	for ray in range(7):
+		var lean: float = float(ray - 3) / 3.0
+		var half_width: float = safe.size.x * (0.085 if ray % 2 == 0 else 0.045)
+		var top: Vector2 = origin + Vector2(lean * radius.x * 0.88, -height)
 		var points := PackedVector2Array([origin - Vector2(width * 0.08, 0),
-			origin + Vector2(width * 0.08, 0), top + Vector2(half_width, 0), top - Vector2(half_width, 0)])
-		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, flash * 0.55),
-			Color(_release_color, flash * 0.55), Color(_release_color, 0), Color(_release_color, 0)]))
+			origin + Vector2(width * 0.08, 0),
+			Vector2(minf(safe.end.x, top.x + half_width), top.y),
+			Vector2(maxf(safe.position.x, top.x - half_width), top.y)])
+		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, flash * 0.80),
+			Color(_release_color, flash * 0.80), Color(_release_color, 0), Color(_release_color, 0)]))
 
 
 func _draw_seam() -> void:
@@ -693,34 +706,38 @@ func _draw_flash() -> void:
 		return
 	var origin: Vector2 = _light_origin()
 	var pixel: float = 1.0 / _charge_scale
-	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
 	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
-	var burst: float = 1.0 - smoothstep(0.08, 0.34, age)
-	var glow := Vector2(width * (0.55 + age * 0.85), width * (0.30 + age * 0.65))
+	var burst: float = 1.0 - smoothstep(0.10, 0.38, age)
+	var radius: Vector2 = _release_radius()
+	var expansion: float = lerpf(0.45, 1.0, smoothstep(0.0, 0.065, age))
+	var glow: Vector2 = radius * 2.0 * expansion
 	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
-		Color(_release_color, flash * 0.90))
-	# One contained hot flash, followed by a coloured bloom; never a repeated
-	# full-screen strobe. The exact same release age drives recoil and sound.
+		Color(_release_color, flash * 0.88))
+	# One broad coloured burst retains the silhouette instead of covering it
+	# with a white frame. Every extent is bounded by the local stage.
 	_flash.draw_polyline(seam, Color(_release_color.lightened(0.60), flash * burst), (4.0 + burst * 8.0) * pixel, true)
-	var core := Vector2(width * (0.38 + age * 0.4), width * 0.20)
+	var core: Vector2 = radius * Vector2(0.65, 0.54) * expansion
 	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - core * 0.5, core), false,
 		Color(Color.WHITE, flash * burst))
 	for wedge in range(20):
 		var a: float = TAU * float(wedge) / 20.0
 		var b: float = TAU * float(wedge + 1) / 20.0
-		var ray_a: Vector2 = Vector2.from_angle(a) * Vector2(width * (0.34 if wedge % 2 == 0 else 0.11), width * 0.20)
-		var ray_b: Vector2 = Vector2.from_angle(b) * Vector2(width * (0.11 if wedge % 2 == 0 else 0.34), width * 0.20)
+		var ray_a: Vector2 = Vector2.from_angle(a) * radius * (0.78 if wedge % 2 == 0 else 0.22) * expansion
+		var ray_b: Vector2 = Vector2.from_angle(b) * radius * (0.22 if wedge % 2 == 0 else 0.78) * expansion
 		_flash.draw_polygon(PackedVector2Array([origin, origin + ray_a, origin + ray_b]),
 			PackedColorArray([Color(Color.WHITE, flash * burst * 0.88), Color(_release_color, 0), Color(_release_color, 0)]))
-	var travel: float = 1.0 - exp(-age * 5.0)
+	var travel: float = 1.0 - exp(-age * 8.0)
+	var wave: PackedVector2Array = []
+	for point in range(65):
+		wave.append(origin + Vector2.from_angle(TAU * float(point) / 64.0) * radius * (0.18 + travel * 0.78))
+	var wave_alpha: float = flash * (1.0 - smoothstep(0.10, 0.48, age))
+	_flash.draw_polyline(wave, Color(_release_color, wave_alpha * 0.36), (8.0 - travel * 5.0) * pixel, true)
+	_flash.draw_polyline(wave, Color(_release_color.lightened(0.45), wave_alpha * 0.80), (3.0 - travel) * pixel, true)
 	for ray in range(12):
-		var direction := Vector2.from_angle(-PI + PI * float(ray) / 11.0)
-		var reach: float = minf(width * 0.56, minf(origin.x - 4.0 * pixel, size.x - origin.x - 4.0 * pixel))
-		if direction.y < -0.001:
-			reach = minf(reach, maxf(0.0, origin.y - _charge_inset - 4.0 * pixel) / -direction.y)
-		var head: Vector2 = origin + direction * reach * travel
-		var tail: Vector2 = origin + direction * reach * maxf(0.0, travel - 0.10)
-		_flash.draw_line(tail, head, Color(_release_color.lightened(0.30), flash * 0.85), 2.0 * pixel, true)
+		var direction := Vector2.from_angle(TAU * float(ray) / 12.0)
+		var head: Vector2 = origin + direction * radius * travel
+		var tail: Vector2 = origin + direction * radius * maxf(0.0, travel - 0.24)
+		_flash.draw_line(tail, head, Color(_release_color.lightened(0.30), flash * 0.85), (4.0 - travel * 2.0) * pixel, true)
 
 
 func _crystal_opening() -> float:
@@ -764,8 +781,6 @@ func _draw_details() -> void:
 		return
 	var opening_now: bool = mode == "opening"
 	var time: float = _elapsed if opening_now else _charge_time
-	if opening_now and time >= Feel.ANTICIPATION_TIME and time < Feel.UNLOCK_TIME:
-		time = Feel.ANTICIPATION_TIME
 	var release: float = maxf(0.0, time - Feel.RELEASE_TIME) if opening_now else 0.0
 	var visual_progress: float = performance_progress()
 	var fade: float = (0.35 + visual_progress * 0.65) * (1.0 - smoothstep(Feel.BUILDUP_SECONDS + 1.05, Feel.BUILDUP_SECONDS + 1.6, time)) if opening_now else 0.35 + visual_progress * 0.55
@@ -937,7 +952,7 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var hold: Vector2 = _hold_pose_state()
 	var charge_time: float = _pulse_clock()
 	if opening_now:
-		var anticipation: float = 1.0 - smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time)
+		var anticipation: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.075, time)
 		var energy: float = Feel.tension(time)
 		hold = Vector2(0.30 + energy * 0.70, energy) * anticipation if not reduced_motion else Vector2.ZERO
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
@@ -1181,9 +1196,10 @@ func _advance_animation(delta: float) -> void:
 					_opening_cues[key] = true
 					var newer_pulse: bool = event.cue == "tension_pulse" and int(event.step) < Feel.PULSE_TIMES.size() and _elapsed >= float(Feel.PULSE_TIMES[int(event.step)])
 					# Coalesce missed beats and latch the newest live kick to its
-					# sound. Long stalls and the final hush never replay a backlog.
+					# sound. Long stalls never replay a backlog or start a late rise.
 					var live_pulse: bool = event.cue != "tension_pulse" or (not newer_pulse and _elapsed < Feel.ANTICIPATION_TIME)
-					if live_pulse and (_elapsed - float(event.time) <= 0.20 or event.cue == "anticipation"):
+					var live_rise: bool = event.cue != "anticipation" or (_elapsed < Feel.RELEASE_TIME and _elapsed - float(event.time) <= 0.08)
+					if live_pulse and live_rise and _elapsed - float(event.time) <= 0.20:
 						_emit_cue(str(event.cue), int(event.step), float(event.time))
 		if _elapsed >= OPEN_SECONDS:
 			finish_immediately()

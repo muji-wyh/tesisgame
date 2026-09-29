@@ -32,7 +32,7 @@ func _run() -> void:
 	check(is_equal_approx(Feel.RELEASE_TIME, 2.16) and Feel.OPEN_SECONDS - Feel.RELEASE_TIME >= 1.4,
 		"The compact buildup preserves the physical release and reward settling time")
 	check(is_equal_approx(Feel.UNLOCK_TIME - Feel.ANTICIPATION_TIME, 0.14),
-		"The final breath preserves 140 milliseconds of deliberate silence")
+		"The final pressure rise leads the lock release by 140 milliseconds")
 	var data = load("res://scripts/game_data.gd").new()
 	check(data.load_all(), "The original imported artwork remains valid")
 	var chest = load("res://scripts/chest_view.gd").new()
@@ -104,11 +104,11 @@ func _run() -> void:
 		check(not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
 			theme + " keeps physical release and settlement silent throughout buildup")
 		chest._advance_animation(0.05)
-		check(cues.back() == [theme, "anticipation", 0], theme + " cuts into a deliberate final hush")
-		var still_pose: Array = _poses(chest)
+		check(cues.back() == [theme, "anticipation", 0], theme + " transitions its rapid roll into the final pressure rise")
+		var final_pose: Array = _poses(chest)
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time - 0.01)
-		check(_poses(chest) == still_pose and cues.back() == [theme, "anticipation", 0],
-			theme + " holds still during the breath before unlocking")
+		check(_poses(chest) != final_pose and cues.back() == [theme, "anticipation", 0],
+			theme + " continues loading its physical mechanism right up to unlocking")
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
 		check(cues.back() == [theme, "unlock", 0], theme + " unlock sound follows the actual lock beat")
 		chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
@@ -226,12 +226,11 @@ func _run() -> void:
 		"The last live beat remains audible when delivered 51 milliseconds late")
 	chest._advance_animation(0.020)
 	check(chest.hold_effect_snapshot().pulse_motion < 0.0,
-		"A late final strike still develops a visible impulse before the global hush")
+		"A late final strike still develops its impulse before the final pressure rise")
 	chest._advance_animation(0.015)
 	check(is_zero_approx(chest.hold_effect_snapshot().pulse_motion)
-		and is_zero_approx(chest.hold_effect_snapshot().physical_pose.x)
 		and cues.back() == ["space", "anticipation", 0],
-		"The global final breath cuts off a delayed kick before its own return duration")
+		"The final drive replaces a delayed rhythmic kick without repeating its sound")
 	chest.clear()
 	chest.configure_skin(data.theme("space"), data.chests)
 	chest.start_open(false)
@@ -239,7 +238,18 @@ func _run() -> void:
 	chest._advance_animation(Feel.ANTICIPATION_TIME + 0.001)
 	check(not cues.any(func(item): return item[1] == "tension_pulse")
 		and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-		"A frame returning during the final breath never invents a late strike or silent kick")
+		"A frame returning during the final drive never invents a stale rhythmic strike")
+	for return_time in [Feel.ANTICIPATION_TIME + 0.10, Feel.RELEASE_TIME + 0.02]:
+		chest.clear()
+		chest.configure_skin(data.theme("space"), data.chests)
+		chest.start_open(false)
+		cues.clear()
+		chest._advance_animation(return_time)
+		check(not cues.any(func(item): return item[1] in ["tension_pulse", "anticipation"]),
+			"A long frame at %.2f seconds skips the stale transition rise and prior rhythmic strikes" % return_time)
+		chest.finish_immediately()
+		check(not cues.any(func(item): return item[1] == "anticipation"),
+			"Finishing after a stalled final drive cannot replay its transition rise")
 	chest.free()
 	_check_shared_pulse_motion(data)
 	_check_small_stage_pixels(data)
@@ -302,10 +312,10 @@ func _check_shared_pulse_motion(data) -> void:
 			previous_direction = direction
 		check(late > early * 1.25, theme + " builds a stronger final roll without requiring a large flat slide")
 		chest._advance_animation(Feel.ANTICIPATION_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
-		var hush: Array = _poses(chest)
+		var final_pose: Array = _poses(chest)
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time - 0.01)
-		check(_poses(chest) == hush and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-			theme + " ends every kick before the short still breath")
+		check(_poses(chest) != final_pose and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+			theme + " carries continuous physical strain from its last strike into unlocking")
 	chest.free()
 
 
@@ -399,9 +409,23 @@ func _check_pressure_release(data) -> void:
 		chest._advance_animation(Feel.ANTICIPATION_TIME)
 		var ready: Dictionary = chest.hold_effect_snapshot()
 		check(ready.lid_pressure > early_pressure + 0.5 and _lid_poses(chest) != resting_lid,
-			theme + " stores visible pressure in its actual lid or facets before the final breath")
+			theme + " stores visible pressure in its actual lid or facets before the final rise")
 		check(is_zero_approx(ready.release_flash), theme + " keeps its release flash out of the buildup")
-		chest._advance_animation(Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME)
+		var prior_final_pose: Array = _poses(chest)
+		var prior_pressure: float = ready.lid_pressure
+		var prior_drive: float = ready.final_drive
+		for time in [Feel.ANTICIPATION_TIME + 0.06, Feel.UNLOCK_TIME - 0.001,
+			Feel.RELEASE_TIME - 0.03, Feel.RELEASE_TIME - 0.001]:
+			chest._advance_animation(time - chest.hold_effect_snapshot().opening_time)
+			var driving: Dictionary = chest.hold_effect_snapshot()
+			check(_poses(chest) != prior_final_pose and driving.lid_pressure > prior_pressure
+				and driving.final_drive > prior_drive
+				and driving.percent < 100 and driving.interior_open == 0.0,
+				"The %s final rise keeps loading a closed chest at %.3f seconds without a stationary gap" % [theme, time])
+			prior_final_pose = _poses(chest)
+			prior_pressure = driving.lid_pressure
+			prior_drive = driving.final_drive
+		chest._advance_animation(Feel.RELEASE_TIME - chest.hold_effect_snapshot().opening_time)
 		var released: Dictionary = chest.hold_effect_snapshot()
 		var release_lid: Array = _lid_poses(chest)
 		check(released.release_flash >= 0.5 and released.percent == 100,
@@ -423,9 +447,26 @@ func _check_pressure_release(data) -> void:
 		chest._advance_animation(0.065)
 		check(chest.hold_effect_snapshot().release_flash >= 0.9 and _lid_poses(chest) != release_lid,
 			theme + " opens real parts while its release flash peaks, without a delayed separate celebration")
-		chest._advance_animation(0.785)
+		for drag in [Vector2.ZERO, Vector2(-440.0, 0.0), Vector2(440.0, 0.0)]:
+			chest.set_drag_offset(drag)
+			var spread: Dictionary = chest.hold_effect_snapshot()
+			var center := Vector2(spread.light_origin.x, spread.light_origin.y)
+			var radius := Vector2(spread.release_radius.x, spread.release_radius.y)
+			var safe: Dictionary = spread.release_bounds
+			var safe_bounds := Rect2(Vector2(safe.x, safe.y), Vector2(safe.width, safe.height))
+			check(Rect2(Vector2.ZERO, chest.size).encloses(safe_bounds)
+				and safe_bounds.encloses(Rect2(center - radius, radius * 2.0))
+				and radius.x > 0.0 and radius.y > 0.0,
+				"The %s broad flash remains inside its safe stage even at drag %s" % [theme, drag])
+		chest.set_drag_offset(Vector2.ZERO)
+		var peak_flash: float = chest.hold_effect_snapshot().release_flash
+		chest._advance_animation(0.3)
+		check(chest.hold_effect_snapshot().release_flash > 0.0
+			and chest.hold_effect_snapshot().release_flash < peak_flash,
+			theme + " carries a fading colored tail after its initial flash")
+		chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
 		check(is_zero_approx(chest.hold_effect_snapshot().release_flash),
-			theme + " lets the single flash decay before reward settlement")
+			theme + " lets the single flash decay before the saved reward result")
 		chest.finish_immediately()
 		check(is_zero_approx(chest.hold_effect_snapshot().release_flash), theme + " leaves no lingering flash on its saved result")
 		for interrupted in ["cancel", "skip", "reduced"]:
@@ -456,20 +497,32 @@ func _check_crystal_mechanism(data) -> void:
 		chest.configure_skin(data.theme(theme), data.chests)
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " has no open cavity while closed")
 		chest.start_open(false)
-		chest._advance_animation(Feel.RELEASE_TIME - 0.001)
+		chest._advance_animation(Feel.UNLOCK_TIME - 0.001)
+		var armed_poses: Dictionary = {}
+		for piece in chest._pieces:
+			armed_poses[piece.role] = piece.node.transform
+		chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
 		var core_moves: bool = false
 		var panels_wait: bool = true
 		for piece in chest._pieces:
-			var rest: Transform2D = piece.rest
+			var armed: Transform2D = armed_poses[piece.role]
 			var actual: Transform2D = piece.node.transform
-			var displacement: float = actual.origin.distance_to(rest.origin)
+			var displacement: float = actual.origin.distance_to(armed.origin)
 			if piece.role == "01":
 				core_moves = displacement > 5.0
 			elif piece.role != "chest":
-				panels_wait = panels_wait and displacement < 1.0 and absf(actual.get_rotation() - rest.get_rotation()) < 0.002
-		check(core_moves and panels_wait, theme + " unlocks its source central crystal before its outer panels move")
+				panels_wait = panels_wait and displacement < 1.0 and absf(actual.get_rotation() - armed.get_rotation()) < 0.002
+		check(core_moves and panels_wait, theme + " unlocks its central crystal while its outer panels retain their armed pose")
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " keeps the cavity sealed until the release beat")
 		chest._advance_animation(0.18)
+		var spreading_panels: int = 0
+		for piece in chest._pieces:
+			if piece.role not in ["chest", "01"]:
+				var armed: Transform2D = armed_poses[piece.role]
+				var actual: Transform2D = piece.node.transform
+				if actual.origin.distance_to(armed.origin) > 5.0:
+					spreading_panels += 1
+		check(spreading_panels >= 2, theme + " spreads its outer panels only after the release beat")
 		var cavity: float = chest.hold_effect_snapshot().interior_open
 		check(cavity > 0.0 and cavity < 1.0, theme + " reveals interior depth as the panels separate")
 		chest._advance_animation(0.3)
@@ -496,7 +549,7 @@ func _check_motion_bounds(data) -> void:
 			var outside: Array[String] = []
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
 			for time in [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
-				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
+				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.065, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
 				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]:
 				chest._advance_animation(time - prior)
 				prior = time
@@ -505,5 +558,15 @@ func _check_motion_bounds(data) -> void:
 				var bounds := Rect2(Vector2(physical.x, physical.y), Vector2(physical.width, physical.height))
 				if not stage.encloses(bounds) or bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
 					outside.append("%.2fs: %s" % [time, bounds])
+				if is_equal_approx(time, Feel.RELEASE_TIME + 0.065):
+					var origin := Vector2(state.light_origin.x, state.light_origin.y)
+					var radius := Vector2(state.release_radius.x, state.release_radius.y)
+					var safe: Dictionary = state.release_bounds
+					var safe_bounds := Rect2(Vector2(safe.x, safe.y), Vector2(safe.width, safe.height))
+					check(stage.encloses(safe_bounds) and safe_bounds.encloses(Rect2(origin - radius, radius * 2.0)),
+						"The %s release bloom stays within its safe extent at %s" % [theme, dimensions])
+					if dimensions.x >= 320.0 and dimensions.x >= dimensions.y * 2.0:
+						check(radius.x * 2.0 >= dimensions.x * 0.80,
+							"The %s release fills at least eighty percent of its centered wide stage at %s" % [theme, dimensions])
 			check(outside.is_empty(), "The %s material motion stays inside %s through every physical beat: %s" % [theme, dimensions, outside])
 	chest.free()

@@ -11,7 +11,7 @@ function collectOptionalAudio(root) {
     ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
-    ...fs.readdirSync(path.join(root, 'assets/audio/chests')).filter(name => /^[a-z]+-[a-z]+\.wav$/.test(name))
+    ...fs.readdirSync(path.join(root, 'assets/audio/chests')).filter(name => /^(?:spring|summer|autumn|winter|ocean|space|jungle|candy)-[a-z]+(?:-[a-z]+)*\.wav$/.test(name))
       .sort().map(name => `assets/audio/chests/${name}`)
   ];
   return sources.map(source => {

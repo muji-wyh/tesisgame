@@ -491,10 +491,12 @@ shadow grounds the chest while growing lid pressure and brighter seams make the
 approaching release visible. A shared curve builds intensity early and continues
 through confirmation without restarting. Material impacts retain their low body
 as a quieter pressure texture rises and background music recedes; the progress
-stars add no competing clicks. A 140 ms quiet breath precedes the unlock, followed
-80 ms later by the lid release and a theme-colored flash. The flash peaks within
-60 ms, opens into a short beam and afterglow, and fades over 850 ms as the chest
-settles. Each world keeps its own material motion and sound. The art fit stays
+stars add no competing clicks. Three strike textures add detail and brightness
+as the rhythm tightens. The last roll flows into a continuous rising rush, while
+the body keeps straining through unlock. Release opens a broad theme-colored
+bloom, seven beams and an outward light wave. The flash peaks within 45 ms and
+fades over 1.02 seconds as the chest settles; the progress crown fades immediately
+to make room for it. Each world keeps its own material motion and sound. The art fit stays
 fixed throughout.
 Releasing or dragging before confirmation cancels immediately; a fresh press
 interrupts the return. After confirmation, the performance finishes automatically.

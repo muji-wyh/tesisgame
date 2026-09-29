@@ -1,7 +1,7 @@
 extends RefCounted
 
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
-const CUES := ["press", "charge", "step", "cancel", "opening", "unlock", "release", "settle", "reward"]
+const CUES := ["press", "charge", "step", "step-detail", "step-roll", "cancel", "opening", "unlock", "release", "settle", "reward"]
 const SAMPLE_RATE := 11025
 const BODY_FREQUENCIES := {
 	"spring": 112.0, "summer": 98.0, "autumn": 82.0, "winter": 128.0,
@@ -33,6 +33,10 @@ static func path_for(theme: String, cue: String) -> String:
 	return "res://assets/audio/chests/%s-%s.wav" % [theme_id(theme), cue]
 
 
+static func pulse_cue(energy: float) -> String:
+	return "step-roll" if energy >= 0.82 else ("step-detail" if energy >= 0.56 else "step")
+
+
 static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	# A small, deterministic material texture is available during download. It is
 	# rendered only on first use and never awaits or schedules a later replacement.
@@ -40,9 +44,12 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
 	var duration: float = 0.64 if cue == "charge" else (0.42 if cue == "reward" else 0.2)
-	var impact: bool = cue in ["step", "release"]
+	var impact: bool = cue.begins_with("step") or cue == "release"
+	var strike_stage: int = ["step", "step-detail", "step-roll"].find(cue)
 	if impact:
 		duration = 0.68 if cue == "release" else 0.24
+	elif cue == "opening":
+		duration = 0.24
 	var frames: int = roundi(duration * SAMPLE_RATE)
 	var samples := PackedByteArray()
 	samples.resize(frames * 2)
@@ -58,7 +65,11 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	var peak: float = 0.0
 	for index in range(frames):
 		var time: float = float(index) / SAMPLE_RATE
-		filtered += float(profile[2]) * (rng.randf_range(-1.0, 1.0) - filtered)
+		var noise: float = rng.randf_range(-1.0, 1.0)
+		var filter_rate: float = float(profile[2])
+		if cue == "opening":
+			filter_rate = 1.0 - exp(-TAU * (550.0 + 4100.0 * pow(minf(time / 0.215, 1.0), 2.0)) / SAMPLE_RATE)
+		filtered += filter_rate * (noise - filtered)
 		var envelope: float = minf(time / 0.004, 1.0) * exp(-time * 18.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.024), 1.0)
 		if cue == "charge":
 			# Keep cold-cache pressure sustained too. All rhythmic attacks come
@@ -76,6 +87,11 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		if cue == "charge":
 			# Friction rises separately from the fixed, low chest resonance.
 			sample = (body * 0.075 + filtered * float(profile[1]) * 1.5) * envelope
+		elif cue == "opening":
+			var rise: float = minf(time / 0.215, 1.0)
+			var rise_phase: float = TAU * (float(BODY_FREQUENCIES[theme]) * 2.3 * time + 1450.0 * time * time)
+			sample = (filtered * 0.72 + sin(rise_phase) * 0.16 + sin(rise_phase * 1.51) * 0.07) * (0.16 + 0.84 * rise * rise)
+			sample *= minf(time / 0.008, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.014), 1.0)
 		elif impact:
 			var releasing: bool = cue == "release"
 			var impact_phase: float = TAU * float(BODY_FREQUENCIES[theme]) * (0.82 if releasing else 1.0) * time
@@ -83,9 +99,15 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 			var pressure: float = (0.2 + 0.8 * minf(time / 0.07, 1.0)) * exp(-time / 0.22) if releasing else minf(time / 0.018, 1.0) * exp(-time / 0.041)
 			sample = weight * pressure * 0.75
 			sample += (body * 0.035 + filtered * (0.26 if releasing else 0.07)) * exp(-time / 0.01)
+			if strike_stage >= 1:
+				sample += (sin(impact_phase * 3.1) * 0.12 + filtered * 0.22) * minf(time / 0.012, 1.0) * exp(-time / 0.04)
+			if strike_stage >= 2:
+				sample += ((noise - filtered) * 0.40 + sin(impact_phase * 8.3) * 0.12) * minf(time / 0.010, 1.0) * exp(-time / 0.045)
 			if releasing:
 				var air_age: float = maxf(0.0, time - 0.012)
-				sample += filtered * 0.22 * (1.0 - exp(-air_age / 0.045)) * exp(-air_age / 0.26)
+				sample += (filtered * 0.32 + (noise - filtered) * 0.15) * (1.0 - exp(-air_age / 0.045)) * exp(-air_age / 0.26)
+				var shine_age: float = maxf(0.0, time - 0.065)
+				sample += (sin(impact_phase * 7.9) + 0.35 * sin(impact_phase * 12.31)) * 0.07 * minf(shine_age / 0.04, 1.0) * exp(-shine_age / 0.28)
 			sample *= minf(time / 0.002, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.045), 1.0)
 			if not releasing:
 				sample *= 1.0 - smoothstep(0.15, 0.19, time)
@@ -93,8 +115,8 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		energy += sample * sample
 		peak = maxf(peak, absf(sample))
 	var gain: float = 1.0
-	if impact or cue == "charge":
-		var target: float = 0.12 if cue == "charge" else (0.135 if cue == "release" else 0.07)
+	if impact or cue in ["charge", "opening"]:
+		var target: float = 0.12 if cue == "charge" else (0.15 if cue == "release" else (0.11 if cue == "opening" else [0.07, 0.075, 0.082][strike_stage]))
 		gain = minf(target / maxf(sqrt(energy / frames), 0.000001), 0.75 / maxf(peak, 0.000001))
 	for index in range(frames):
 		samples.encode_s16(index * 2, roundi(clampf(rendered[index] * gain, -0.75, 0.75) * 32767.0))

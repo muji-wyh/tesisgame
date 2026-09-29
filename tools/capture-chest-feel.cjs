@@ -11,7 +11,7 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build', 'chest-feel');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const rhythmVersion = 6;
+const rhythmVersion = 7;
 const holdPulseTimes = [0.08, 0.40, 0.68, 0.91, 1.12];
 const pulseTimes = [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
   1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86];
@@ -29,7 +29,7 @@ function visualStages(captured) {
     { id: 'late-hold', name: 'Last holding recoil', time: at('hold_pulse', 5) + 2 / 60 },
     { id: 'gathering', name: 'First opening recoil', time: at('tension_pulse', 1) + 2 / 60 },
     { id: 'building', name: 'Final opening recoil', time: at('tension_pulse', 15) + 2 / 60 },
-    { id: 'anticipation', name: 'Final breath', time: at('anticipation') + 0.05 },
+    { id: 'anticipation', name: 'Continuous final rise', time: at('anticipation') + 0.10 },
     { id: 'release', name: 'Theme flash', time: at('release') + 0.06 },
     { id: 'lid-gap', name: 'Lid gap and light beam', time: at('release') + 0.20 },
     { id: 'settled', name: 'Settled', time: captured.reward_time + 0.20 }
@@ -160,7 +160,7 @@ function convert(theme, captured) {
   const pressAt = captured.cues.filter(cue => cue.cue === 'press').at(-1).time;
   const audioEnvelope = Object.fromEntries([
     ['early_tension', pressAt + 0.08, 0.25], ['middle_tension', openingAt + 0.70, 0.25],
-    ['late_tension', openingAt + 1.66, 0.25], ['quiet_breath', openingAt + 1.97, 0.10],
+    ['late_tension', openingAt + 1.66, 0.25], ['final_rise', openingAt + 1.97, 0.15],
     ['release', openingAt + cueTimes.release, 0.25]
   ].map(([name, start, seconds]) => {
     const measurement = run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner',
@@ -180,8 +180,11 @@ function convert(theme, captured) {
       audioEnvelope.late_tension.mean_dbfs < audioEnvelope.early_tension.mean_dbfs + 3) {
     throw new Error(`The ${theme} actual mixed audio does not build from its first hold beat through the opening to the final roll.`);
   }
-  if (audioEnvelope.quiet_breath.mean_dbfs > audioEnvelope.late_tension.mean_dbfs - 6) {
-    throw new Error(`The ${theme} mixed audio does not preserve the quiet breath before release.`);
+  if (audioEnvelope.final_rise.mean_dbfs < audioEnvelope.late_tension.mean_dbfs - 3) {
+    throw new Error(`The ${theme} mixed audio loses its continuous final rise before release.`);
+  }
+  if (audioEnvelope.release.mean_dbfs < audioEnvelope.final_rise.mean_dbfs + 2 || peak > -1) {
+    throw new Error(`The ${theme} release needs a clear dynamic lift without clipping.`);
   }
   const stages = visualStages(captured);
   for (const stage of stages) {
@@ -201,9 +204,9 @@ function convert(theme, captured) {
     frames_per_second: video.r_frame_rate, audio: { codec: audio.codec_name, channels: audio.channels,
       sample_rate: Number(audio.sample_rate), mean_dbfs: mean, peak_dbfs: peak },
     audio_envelope: audioEnvelope, hold_pulse_seconds: holdPulseTimes, tension_pulse_seconds: pulseTimes,
-    quiet_breath_seconds: Number((cueTimes.unlock - cueTimes.anticipation).toFixed(3)), visual_stages: stages,
+    continuous_rise_seconds: Number((cueTimes.release - cueTimes.anticipation).toFixed(3)), visual_stages: stages,
     capture: captured, source_sha256: provenance(), inspected_by_human: false,
-    validation_scope: 'Engine recording, media structure, actual mixed crescendo and quiet-breath measurements, and scripted cue timing. No human listening or real-device performance claim.' };
+    validation_scope: 'Engine recording, media structure, actual mixed crescendo and continuous rise measurements, and scripted cue timing. No human listening or real-device performance claim.' };
   fs.writeFileSync(path.join(output, `${theme}-report.json`), JSON.stringify(report, null, 2) + '\n');
   return report;
 }
@@ -248,12 +251,12 @@ footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-wid
 </style><main><header><h1>Chest motion and sound review</h1>
 <p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
 <p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: hold for 1.2 seconds as five grounded recoils gather pressure, then let go as fifteen opening beats build toward release.</p>
-<p>The first holding beat begins at 80 milliseconds. The body pivots about its base while the lid presses against its lock and the seam grows brighter. The rhythm accelerates into a tight final roll, followed by a 140-millisecond hush, unlock and release. Material impacts keep their body as pressure rises; progress stars stay silent.</p>
-<p>A theme-colored flash peaks 60 milliseconds after release, then opens into a short beam and afterglow. The lid, light and release sound share the same cue.</p>
+<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll flows into a rising rush while the body keeps straining; there is no silent stop before release. The lid opens into a broad theme-colored bloom, outward light wave and material impact. Progress stars fade as the light expands.</p>
+<p>A theme-colored flash peaks 45 milliseconds after release, then opens into a broad beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>
 <section class="gallery">${cards}</section>
-<footer>Automated checks verify video dimensions, duration, mixed audio crescendo from holding through opening, the final quiet breath, and cue timing. The stills use delivered cues to show weighted recoil, the flash crest and the opening lid. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
+<footer>Automated checks verify video dimensions, duration, mixed audio crescendo, continuity into the final rise, release headroom and cue timing. The stills use delivered cues to show weighted recoil, the flash crest and the opening lid. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
 <script>document.querySelector('#hide').addEventListener('change',event=>document.body.classList.toggle('hide-names',event.target.checked));document.querySelector('#mute').addEventListener('change',event=>document.querySelectorAll('video').forEach(video=>video.muted=event.target.checked));document.querySelectorAll('video').forEach(video=>video.addEventListener('play',()=>document.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()})));</script></html>\n`;
   fs.writeFileSync(path.join(output, 'index.html'), gallery);
   // The printed entry point is immutable by content, just like every embedded

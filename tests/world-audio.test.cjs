@@ -88,7 +88,7 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
-    ...themes.flatMap(id => ['press', 'charge', 'step', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
+    ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
       .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
   ];
   fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
@@ -102,7 +102,9 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
   const audio = collectOptionalAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
-  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 72);
+  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
+  assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));
+  assert.ok(audio.some(file => file.source.endsWith('/winter-step-roll.wav')));
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));

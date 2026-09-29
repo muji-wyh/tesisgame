@@ -2779,8 +2779,14 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 			_holding_chest = false
 			_open_chest()
 	if model.chest_state == "opening" and chest.mode == "opening" and not _page_hidden and not collection_page.visible:
-		audio.set_chest_tension(chest.tension_progress())
-		_publish_chest_charge(chest.performance_progress(), chest.performance_phase())
+		var phase: String = chest.performance_phase()
+		if phase == "release":
+			# A stalled frame may consume the release cue without playing its
+			# stale accent. Physical release must still end the pressure bed.
+			audio.stop_chest_charge()
+		else:
+			audio.set_chest_tension(chest.tension_progress())
+		_publish_chest_charge(chest.performance_progress(), phase)
 	if _controller_last_direction != Vector2.ZERO:
 		_controller_repeat_elapsed += delta
 		if _controller_repeat_elapsed >= 0.34:
