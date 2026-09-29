@@ -57,6 +57,7 @@ func _run() -> void:
 	_check_opening_cancel(data)
 	_check_release_commitment(data)
 	_check_hold_feedback(data)
+	_check_crown_effects(data)
 	_check_buildup_glow(data)
 	_check_hold_bounds(data)
 	var effect = load("res://scripts/celebration.gd").new()
@@ -606,6 +607,86 @@ func _check_hold_feedback(data) -> void:
 	chest.free()
 
 
+func _check_crown_effects(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	var duration: float = Feel.HOLD_SECONDS + Feel.RELEASE_TIME
+	for theme in data.THEMES:
+		chest.clear()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.begin_hold()
+		var early_start: Dictionary = _advance_crown_to(chest, 0.25)
+		var early_end: Dictionary = _advance_crown_to(chest, 0.45)
+		var before: Dictionary = _advance_crown_to(chest, Feel.HOLD_SECONDS)
+		chest.start_open(false)
+		var after: Dictionary = chest.hold_effect_snapshot()
+		check(is_equal_approx(after.crown_clock, before.crown_clock)
+			and is_equal_approx(after.crown_flow_phase, before.crown_flow_phase)
+			and after.crown_streaks == before.crown_streaks and after.crown_milestones == before.crown_milestones,
+			theme + " preserves crown travelers and milestone effects across the hold-to-opening handoff")
+		var late_start: Dictionary = _advance_crown_to(chest, 2.70)
+		var late_end: Dictionary = _advance_crown_to(chest, 2.90)
+		check(early_end.crown_flow_phase > early_start.crown_flow_phase
+			and late_end.crown_flow_phase - late_start.crown_flow_phase >
+				(early_end.crown_flow_phase - early_start.crown_flow_phase) * 2.0,
+			theme + " visibly accelerates crown energy during equal-duration early and late intervals")
+		var valid_streaks: bool = true
+		for state in [early_start, early_end, before, after, late_start, late_end]:
+			valid_streaks = valid_streaks and not state.crown_streaks.is_empty()
+			for streak in state.crown_streaks:
+				valid_streaks = valid_streaks and streak.start >= 0.0 and streak.end > streak.start \
+					and streak.end <= state.performance_progress + 0.000001
+		check(valid_streaks, theme + " clips every traveling streak to earned progress instead of lighting the unfilled rail")
+		chest.cancel_open(true)
+		var cancelled: Dictionary = chest.hold_effect_snapshot()
+		check(not cancelled.active and is_zero_approx(cancelled.crown_clock) and cancelled.crown_streaks.is_empty()
+			and cancelled.crown_milestones.all(func(value: float) -> bool: return is_zero_approx(value))
+			and is_zero_approx(cancelled.crown_crest),
+			theme + " immediately clears crown travelers and bursts when an opening is cancelled")
+		chest.reduced_motion = true
+		chest.begin_hold()
+		chest.set_hold_progress(0.8)
+		var reduced: Dictionary = chest.hold_effect_snapshot()
+		chest._advance_animation(0.5)
+		var static_state: Dictionary = chest.hold_effect_snapshot()
+		check(static_state.active and static_state.percent == 80 and static_state.crown_streaks.is_empty()
+			and static_state.crown_milestones.all(func(value: float) -> bool: return is_zero_approx(value))
+			and is_zero_approx(static_state.crown_crest) and static_state.crown_flow_phase == reduced.crown_flow_phase
+			and static_state.crown_effect_bounds == reduced.crown_effect_bounds,
+			theme + " keeps a readable static crown without travelers or bursts in reduced motion")
+
+		chest.clear()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.begin_hold()
+		for index in range(3):
+			var threshold: float = duration * float(index + 1) / 3.0
+			var unearned: Dictionary = _advance_crown_to(chest, threshold - 0.005)
+			var burst: Dictionary = _advance_crown_to(chest, threshold + 0.08)
+			var settled: Dictionary = _advance_crown_to(chest, threshold + 0.36)
+			check(is_zero_approx(unearned.crown_milestones[index]) and burst.crown_milestones[index] > 0.0
+				and is_zero_approx(settled.crown_milestones[index]),
+				"%s milestone %d celebrates its real threshold once and then settles" % [theme, index + 1])
+			if index == 2:
+				check(unearned.crown_crest == 0.0 and burst.crown_crest > 0.0 and settled.crown_crest == 0.0
+					and burst.release_flash > 0.0 and settled.release_flash > 0.0,
+					theme + " briefly crowns completion before yielding to the existing cavity release flash")
+	chest.free()
+
+
+func _advance_crown_to(chest, elapsed: float) -> Dictionary:
+	if elapsed <= Feel.HOLD_SECONDS:
+		chest.set_hold_progress(elapsed / Feel.HOLD_SECONDS)
+	else:
+		if chest.mode == "closed":
+			chest.set_hold_progress(1.0)
+			chest.start_open(false)
+		chest._advance_animation(elapsed - Feel.HOLD_SECONDS - chest.hold_effect_snapshot().opening_time)
+	return chest.hold_effect_snapshot()
+
+
 func _check_buildup_glow(data) -> void:
 	var chest = load("res://scripts/chest_view.gd").new()
 	root.add_child(chest)
@@ -692,6 +773,10 @@ func _check_hold_bounds(data) -> void:
 				var bounds := Rect2(Vector2(state.bounds.x, state.bounds.y), Vector2(state.bounds.width, state.bounds.height))
 				check(state.active and bounds.has_area() and stage.encloses(bounds),
 					"The %s %s halo and sparks stay inside %s" % [theme_id, phase, dimensions])
+				var crown: Dictionary = state.crown_effect_bounds
+				var crown_bounds := Rect2(Vector2(crown.x, crown.y), Vector2(crown.width, crown.height))
+				check(crown_bounds.has_area() and stage.encloses(crown_bounds),
+					"The %s %s crown rail, comet and milestone bursts fit inside %s: %s" % [theme_id, phase, dimensions, crown_bounds])
 				var outside: Array[String] = []
 				for piece in chest._pieces:
 					var sprite: Sprite2D = piece.node
