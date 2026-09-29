@@ -279,30 +279,28 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 			var energy: float = ChestFeel.tension(float(ChestFeel.PULSE_TIMES[step - 1]))
 			_play_chest_pulse(energy)
 		"anticipation":
-			if _chest_phase != "opening" or _chest_anticipating:
+			if _chest_phase != "opening" or _chest_tension_progress < 0.0 or _chest_seen.has("unlock0"):
 				return
-			# The final compression gathers into a rising air transition. Keep
-			# its pressure source running until release so no silent gap appears.
-			_chest_anticipating = true
-			if chest_charge != null and chest_charge.playing:
-				chest_charge.pitch_scale = 1.46
-				# Pressure takes over the energy of the ending strike roll while
-				# the bridge gains brightness, rather than dipping before payoff.
-				chest_charge.volume_db = linear_to_db(0.50)
-			_chest_music_duck = 0.14
-			_update_music_gain()
-			_play_chest_event("opening", 0.52)
+			# Progress may already have quieted the bed on this frame. The
+			# one-shot remains independently deduplicated by its delivered cue.
+			_hold_chest_anticipation()
+			_play_chest_event("opening", 0.32)
 		"unlock", "release", "settle":
 			if _chest_phase != "opening":
 				return
-			_chest_anticipating = true
+			if cue_name == "unlock":
+				if _chest_tension_progress < 0.0:
+					return
+				_hold_chest_anticipation()
+			else:
+				_chest_anticipating = true
 			if cue_name == "release" or cue_name == "settle":
-				# Unlock stays inside the rise. Release takes over the sound field,
+				# Unlock stays inside the breath. Release takes over the sound field,
 				# even when a long frame skipped the transition or unlock cue.
 				stop_chest_charge()
 				if cue_name == "release":
 					# Give the release impact and expanding bloom a clear onset.
-					# The rising bridge and latch should not mask that contact.
+					# The held breath and latch should not mask that contact.
 					for player: AudioStreamPlayer in _chest_players:
 						player.stop()
 						player.stream = null
@@ -310,7 +308,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 				# Completion restores the normal mix after the material tail.
 				_chest_music_duck = 0.45 if cue_name == "settle" else 0.20
 				_update_music_gain()
-			_play_chest_event(cue_name, 0.86 if cue_name == "release" else (0.26 if cue_name == "unlock" else 0.42))
+			_play_chest_event(cue_name, 0.86 if cue_name == "release" else (0.055 if cue_name == "unlock" else 0.42))
 		_:
 			return
 	_chest_seen[event_key] = true
@@ -401,7 +399,26 @@ func set_chest_tension(progress: float) -> void:
 	if _chest_phase != "opening" or _chest_anticipating or _chest_tension_progress < 0.0:
 		return
 	_chest_tension_progress = maxf(_chest_tension_progress, clampf(progress, 0.0, 1.0))
-	_apply_chest_tension_energy(_chest_tension_progress)
+	if _chest_tension_progress >= 1.0:
+		# The steady held state must survive a frame that skips the short
+		# breath cue. This changes the mix without replaying that one-shot.
+		_hold_chest_anticipation()
+	else:
+		_apply_chest_tension_energy(_chest_tension_progress)
+
+
+func _hold_chest_anticipation() -> void:
+	if _chest_anticipating:
+		return
+	_chest_anticipating = true
+	for player: AudioStreamPlayer in _chest_players:
+		player.stop()
+		player.stream = null
+	if chest_charge != null and chest_charge.playing:
+		chest_charge.pitch_scale = 1.42
+		chest_charge.volume_db = linear_to_db(0.025)
+	_chest_music_duck = 0.06
+	_update_music_gain()
 
 
 func _apply_chest_tension_energy(energy: float) -> void:

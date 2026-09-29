@@ -111,7 +111,7 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		var noise: float = rng.randf_range(-1.0, 1.0)
 		var filter_rate: float = float(profile[2])
 		if cue == "opening":
-			filter_rate = 1.0 - exp(-TAU * (550.0 + 4100.0 * pow(minf(time / 0.215, 1.0), 2.0)) / SAMPLE_RATE)
+			filter_rate = 1.0 - exp(-TAU * (420.0 + 1880.0 * pow(1.0 - minf(time / 0.060, 1.0), 2.0)) / SAMPLE_RATE)
 		filtered += filter_rate * (noise - filtered)
 		if payoff_cue:
 			payoff_air += payoff_filter * (noise - payoff_air)
@@ -134,10 +134,12 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 			# Friction rises separately from the fixed, low chest resonance.
 			sample = (body * 0.075 + filtered * float(profile[1]) * 1.5) * envelope
 		elif cue == "opening":
-			var rise: float = minf(time / 0.215, 1.0)
-			var rise_phase: float = TAU * (float(BODY_FREQUENCIES[theme]) * 2.3 * time + 1450.0 * time * time)
-			sample = (filtered * 0.72 + sin(rise_phase) * 0.16 + sin(rise_phase * 1.51) * 0.07) * (0.16 + 0.84 * rise * rise)
-			sample *= minf(time / 0.008, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.014), 1.0)
+			# Brake into the same quiet held breath as the authored cue. Its
+			# sample envelope supplies the pause without another runtime clock.
+			var remaining: float = pow(1.0 - minf(time / 0.060, 1.0), 2.0)
+			var held_phase: float = TAU * float(BODY_FREQUENCIES[theme]) * 2.3 * time
+			sample = (filtered * 0.72 + sin(held_phase) * 0.12 + sin(held_phase * 1.51) * 0.045) * (0.025 + 0.975 * remaining)
+			sample *= minf(time / 0.006, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.014), 1.0)
 		elif cue == "reward":
 			# The saved reward resolves upward through diffuse material overtones.
 			# It stays separate from the release, including when persistence retries.
@@ -188,7 +190,7 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		peak = maxf(peak, absf(sample))
 	var gain: float = 1.0
 	if impact or cue in ["charge", "opening", "reward"]:
-		var target: float = 0.12 if cue in ["charge", "reward"] else (0.17 if cue == "release" else (0.085 if cue == "settle" else (0.11 if cue == "opening" else [0.07, 0.075, 0.082][strike_stage])))
+		var target: float = 0.12 if cue in ["charge", "reward"] else (0.17 if cue == "release" else (0.085 if cue == "settle" else (0.055 if cue == "opening" else [0.07, 0.075, 0.082][strike_stage])))
 		gain = minf(target / maxf(sqrt(energy / frames), 0.000001), 0.75 / maxf(peak, 0.000001))
 	for index in range(frames):
 		samples.encode_s16(index * 2, roundi(clampf(rendered[index] * gain, -0.75, 0.75) * 32767.0))

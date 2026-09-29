@@ -11,7 +11,7 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build', 'chest-feel');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const rhythmVersion = 8;
+const rhythmVersion = 9;
 const holdPulseTimes = [0.08, 0.40, 0.68, 0.91, 1.12];
 const pulseTimes = [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
   1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86];
@@ -29,7 +29,10 @@ function visualStages(captured) {
     { id: 'late-hold', name: 'Last holding recoil', time: at('hold_pulse', 5) + 2 / 60 },
     { id: 'gathering', name: 'First opening recoil', time: at('tension_pulse', 1) + 2 / 60 },
     { id: 'building', name: 'Final opening recoil', time: at('tension_pulse', 15) + 2 / 60 },
-    { id: 'anticipation', name: 'Continuous final rise', time: at('anticipation') + 0.10 },
+    { id: 'anticipation', name: 'Final brake', time: at('anticipation') + 0.03 },
+    { id: 'held-early', name: 'Held pose · early', time: at('anticipation') + 0.09 },
+    // Keep stills inside the hold, clear of Movie Maker/decoder frame rounding.
+    { id: 'held-late', name: 'Held pose · late', time: at('anticipation') + 0.15 },
     { id: 'release', name: 'Theme flash', time: at('release') + 0.06 },
     { id: 'lid-gap', name: 'Lid gap and light beam', time: at('release') + 0.20 },
     { id: 'lid-stop', name: 'Mechanical stop', time: at('settle') + 0.04 },
@@ -159,9 +162,11 @@ function convert(theme, captured) {
   }
   const openingAt = captured.cues.find(cue => cue.cue === 'opening').time;
   const pressAt = captured.cues.filter(cue => cue.cue === 'press').at(-1).time;
+  const anticipationAt = captured.cues.find(cue => cue.cue === 'anticipation').time;
   const audioEnvelope = Object.fromEntries([
     ['early_tension', pressAt + 0.08, 0.25], ['middle_tension', openingAt + 0.70, 0.25],
-    ['late_tension', openingAt + 1.66, 0.25], ['final_rise', openingAt + 1.97, 0.15],
+    ['late_tension', openingAt + 1.66, 0.25], ['final_brake', anticipationAt, 0.06],
+    ['held_breath', anticipationAt + 0.07, 0.13],
     ['release', openingAt + cueTimes.release, 0.25]
   ].map(([name, start, seconds]) => {
     const measurement = run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner',
@@ -181,10 +186,11 @@ function convert(theme, captured) {
       audioEnvelope.late_tension.mean_dbfs < audioEnvelope.early_tension.mean_dbfs + 3) {
     throw new Error(`The ${theme} actual mixed audio does not build from its first hold beat through the opening to the final roll.`);
   }
-  if (audioEnvelope.final_rise.mean_dbfs < audioEnvelope.late_tension.mean_dbfs - 3) {
-    throw new Error(`The ${theme} mixed audio loses its continuous final rise before release.`);
+  if (audioEnvelope.held_breath.mean_dbfs > audioEnvelope.late_tension.mean_dbfs - 10) {
+    throw new Error(`The ${theme} mixed audio needs a quiet held breath after its final roll.`);
   }
-  if (audioEnvelope.release.mean_dbfs < audioEnvelope.final_rise.mean_dbfs + 2 || peak > -1) {
+  if (audioEnvelope.release.mean_dbfs < audioEnvelope.held_breath.mean_dbfs + 12 ||
+      audioEnvelope.release.mean_dbfs < audioEnvelope.late_tension.mean_dbfs + 2 || peak > -1) {
     throw new Error(`The ${theme} release needs a clear dynamic lift without clipping.`);
   }
   const stages = visualStages(captured);
@@ -193,6 +199,13 @@ function convert(theme, captured) {
       '-ss', String(stage.time), '-i', mp4, '-frames:v', '1',
       path.join(output, `${theme}-${stage.id}.png`)]);
   }
+  // Compare the body and lid at two points inside the hold using identical
+  // full-stage crops. Progress is allowed to advance, so pixels need not match.
+  const heldComparison = `${theme}-held-comparison.png`;
+  run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
+    '-i', path.join(output, `${theme}-held-early.png`), '-i', path.join(output, `${theme}-held-late.png`),
+    '-filter_complex_threads', '1', '-filter_complex', '[0:v][1:v]hstack=inputs=2[comparison]',
+    '-map', '[comparison]', '-frames:v', '1', path.join(output, heldComparison)]);
   const inputs = stages.flatMap(stage => ['-i', path.join(output, `${theme}-${stage.id}.png`)]);
   const scales = stages.map((stage, index) => `[${index}:v]scale=320:320[s${index}]`).join(';');
   const layout = stages.map((stage, index) => `${index % 3 * 320}_${Math.floor(index / 3) * 320}`).join('|');
@@ -205,9 +218,12 @@ function convert(theme, captured) {
     frames_per_second: video.r_frame_rate, audio: { codec: audio.codec_name, channels: audio.channels,
       sample_rate: Number(audio.sample_rate), mean_dbfs: mean, peak_dbfs: peak },
     audio_envelope: audioEnvelope, hold_pulse_seconds: holdPulseTimes, tension_pulse_seconds: pulseTimes,
-    continuous_rise_seconds: Number((cueTimes.release - cueTimes.anticipation).toFixed(3)), visual_stages: stages,
+    brake_seconds: 0.06, held_breath_seconds: Number((cueTimes.release - cueTimes.anticipation - 0.06).toFixed(3)),
+    visual_stages: stages, held_pose_comparison: { file: heldComparison, crop: [0, 0, 640, 640],
+      early_time: stages.find(stage => stage.id === 'held-early').time,
+      late_time: stages.find(stage => stage.id === 'held-late').time },
     capture: captured, source_sha256: provenance(), inspected_by_human: false,
-    validation_scope: 'Engine recording, media structure, actual mixed crescendo and continuous rise measurements, and scripted cue timing. No human listening or real-device performance claim.' };
+    validation_scope: 'Engine recording, media structure, actual mixed crescendo and held-breath contrast, same-crop pose samples, and scripted cue timing. No human listening or real-device performance claim.' };
   fs.writeFileSync(path.join(output, `${theme}-report.json`), JSON.stringify(report, null, 2) + '\n');
   return report;
 }
@@ -237,6 +253,7 @@ function writeGallery() {
     <p class="measure">640 × 640 · 60 fps · ${report.duration.toFixed(2)} s · recorded audio ${report.audio.mean_dbfs} dBFS mean</p>
     <details><summary>Inspect the ${report.visual_stages.length} physical stages</summary>
       <div class="stages">${report.visual_stages.map(stage => `<figure><img loading="lazy" src="${assetUrl(`${report.theme}-${stage.id}.png`)}" alt="${stage.name} at ${stage.time.toFixed(3)} seconds"><figcaption>${stage.name} · ${stage.time.toFixed(2)} s</figcaption></figure>`).join('')}</div>
+      <figure class="held-comparison"><img loading="lazy" src="${assetUrl(report.held_pose_comparison.file)}" alt="Early and late held poses using the same crop"><figcaption>Held pose: early at ${report.held_pose_comparison.early_time.toFixed(2)} s (left), late at ${report.held_pose_comparison.late_time.toFixed(2)} s (right). Compare the loaded body and lid; progress still advances.</figcaption></figure>
     </details></article>`).join('\n');
   const gallery = `<!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -249,17 +266,17 @@ main{max-width:1440px;margin:auto;padding:32px 24px}h1{margin:0 0 8px;font-size:
 h2{font-size:18px;margin:0 0 12px}.theme-name{font-weight:400;color:#69727a;margin-left:12px}.hide-names .theme-name{visibility:hidden}
 video{display:block;width:100%;aspect-ratio:1;background:#f6f4ee;border-radius:10px}.measure{font-size:12px;color:#66737a}
 summary{cursor:pointer;font-size:14px}.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
-figure{margin:0}img{display:block;width:100%;background:#f6f4ee;border-radius:6px}figcaption{font-size:11px;color:#536170;margin-top:4px}
+figure{margin:0}.held-comparison{margin-top:16px}img{display:block;width:100%;background:#f6f4ee;border-radius:6px}figcaption{font-size:11px;color:#536170;margin-top:4px}
 footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-width:760px){main{padding:20px 12px}.gallery{grid-template-columns:1fr}h1{font-size:26px}}
 </style><main><header><h1>Chest motion and sound review</h1>
 <p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
 <p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: keep holding as five grounded recoils grow into fifteen increasingly strong opening beats. Let go when the lid releases; the remaining animation completes automatically.</p>
-<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll flows into a rising rush while the body keeps straining; there is no silent stop before release. A dry crack and weighty impact drive the base into its contact shadow as the lid accelerates upward. The lid meets its mechanical stop 420 milliseconds after release, then quickly damps its return. Progress stars fade into a broad theme-colored bloom and outward light wave.</p>
+<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll brakes over 60 milliseconds, then holds the loaded chest for 160 milliseconds with a quiet breath. Progress continues through the pause. A dry crack and weighty impact release the tension immediately, driving the base into its contact shadow as the lid accelerates upward. The lid meets its mechanical stop 420 milliseconds after release, then quickly damps its return. Progress stars fade into a broad theme-colored bloom and outward light wave.</p>
 <p>A theme-colored flash peaks 45 milliseconds after release, then opens into a broad beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>
 <section class="gallery">${cards}</section>
-<footer>Automated checks verify video dimensions, duration, mixed audio crescendo, continuity into the final rise, release headroom and cue timing. The stills use delivered cues to show weighted recoil, the flash crest and the opening lid. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
+<footer>Automated checks verify video dimensions, duration, mixed audio crescendo, contrast during the held breath, release headroom and cue timing. The stills use delivered cues to show weighted recoil, two held poses, the flash crest and the opening lid. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
 <script>document.querySelector('#hide').addEventListener('change',event=>document.body.classList.toggle('hide-names',event.target.checked));document.querySelector('#mute').addEventListener('change',event=>document.querySelectorAll('video').forEach(video=>video.muted=event.target.checked));document.querySelectorAll('video').forEach(video=>video.addEventListener('play',()=>document.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()})));</script></html>\n`;
   fs.writeFileSync(path.join(output, 'index.html'), gallery);
   // The printed entry point is immutable by content, just like every embedded

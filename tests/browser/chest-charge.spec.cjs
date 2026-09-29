@@ -318,7 +318,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   const anticipation = cues.find(event => event.cue === 'anticipation');
   const release = cues.find(event => event.cue === 'release');
   expect(cues.find(event => event.cue === 'unlock').at - anticipation.at,
-    'The final pressure rise starts before the lock releases').toBeGreaterThanOrEqual(100);
+    'The final held breath starts before the quiet latch cue').toBeGreaterThanOrEqual(100);
   expect(cues.find(event => event.cue === 'unlock').at - anticipation.at).toBeLessThanOrEqual(350);
   expect(openingStates[0].at - opening.at, '100 percent waits for the 2.16-second release').toBeGreaterThanOrEqual(2060);
   // These are browser-observed beat times. Allow frame delivery jitter while
@@ -359,6 +359,17 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       'Release, landing, reward and music retain combined output headroom').toBeLessThan(0.99);
     expect(Math.max(...payoffOutput.map(sample => sample.rms)),
       'The final payoff produces audible mixed output').toBeGreaterThan(0.02);
+    const rollOutput = output.filter(sample => sample.at >= anticipation.at - 200 && sample.at < anticipation.at);
+    const heldOutput = output.filter(sample => sample.at >= anticipation.at + 100 && sample.at < release.at);
+    expect(heldOutput.length, 'The brief held breath reaches the actual output analyser').toBeGreaterThanOrEqual(2);
+    const meanRms = samples => samples.reduce((sum, sample) => sum + sample.rms, 0) / samples.length;
+    expect(meanRms(heldOutput), 'The held pose has a quieter sound bed than the preceding roll')
+      .toBeLessThan(meanRms(rollOutput) * 0.70);
+    expect(Math.max(...payoffOutput.filter(sample => sample.at < release.at + 300).map(sample => sample.rms)),
+      'The opening impact restores strong contrast after the held breath').toBeGreaterThan(meanRms(heldOutput) * 2);
+    await testInfo.attach('chest-held-breath-output', {
+      body: JSON.stringify({ roll: rollOutput, held: heldOutput }, null, 2), contentType: 'application/json'
+    });
     await testInfo.attach('chest-payoff-output', { body: JSON.stringify(payoffOutput, null, 2), contentType: 'application/json' });
     const allSounds = await page.evaluate(() => window.audioObservation.playbacks);
     await testInfo.attach('all-audio', { body: JSON.stringify(allSounds, null, 2), contentType: 'application/json' });
@@ -402,7 +413,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
     const attacks = chestSounds.filter(sound => hasDuration(sound, 0.24));
     const attackCues = cues.filter(event => isRhythmCue(event) || event.cue === 'anticipation');
-    expect(attacks, 'Every body beat has one source, followed by one final transition rise').toHaveLength(attackCues.length);
+    expect(attacks, 'Every body beat has one source, followed by one final gathered breath').toHaveLength(attackCues.length);
     for (const [index, sound] of attacks.entries()) {
       expect(Math.abs(audioOnset(sound) - attackCues[index].at),
         `${attackCues[index].cue} ${attackCues[index].step} follows its physical cue`).toBeLessThanOrEqual(100);
@@ -425,10 +436,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       .filter((fingerprint, index, all) => index === 0 || fingerprint !== all[index - 1]);
     expect(textures, 'The buildup develops from grounded impact through material detail into a bright final roll').toHaveLength(3);
     expect(new Set(textures).size, 'Each of the three buildup textures has distinct audible content').toBe(3);
-    expect(textures.includes(transition.fingerprint), 'The final rise bridges into release with its own material texture').toBe(false);
+    expect(textures.includes(transition.fingerprint), 'The held breath has its own material texture').toBe(false);
     const transitionEnd = transition.stoppedAt === undefined ?
       audioOnset(transition) + transition.duration / transition.playbackRate * 1000 : audioStop(transition);
-    expect(transitionEnd, 'The final rise remains audible through unlocking instead of introducing a silent breath')
+    expect(transitionEnd, 'The quiet breath remains live through the latch cue without a source restart')
       .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
     expect(transitionEnd, 'The transition resolves into the physical release instead of replaying later')
       .toBeLessThanOrEqual(release.at + 150);

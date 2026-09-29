@@ -4,6 +4,8 @@ const CANCEL_SECONDS: float = 0.12
 const HOLD_SECONDS: float = 1.2
 const BUILDUP_SECONDS: float = 2.0
 const ANTICIPATION_TIME: float = 1.94
+const PAUSE_START_TIME: float = 2.0
+const RELEASE_BLEND_SECONDS: float = 0.075
 const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.08
 const RELEASE_TIME: float = BUILDUP_SECONDS + 0.16
 const SETTLE_TIME: float = RELEASE_TIME + 0.42
@@ -26,12 +28,28 @@ static func tension(elapsed: float) -> float:
 	return pow(clampf((HOLD_SECONDS + elapsed) / (HOLD_SECONDS + ANTICIPATION_TIME), 0.0, 1.0), 0.72)
 
 
+static func anticipation_pose_time(elapsed: float) -> float:
+	# Brake the visible mechanism, then hold its exact loaded pose. Only the
+	# pose clock pauses: input, cue delivery and reward timing keep advancing.
+	if elapsed < ANTICIPATION_TIME or elapsed >= RELEASE_TIME + RELEASE_BLEND_SECONDS:
+		return elapsed
+	var brake: float = PAUSE_START_TIME - ANTICIPATION_TIME
+	var held: float = ANTICIPATION_TIME + brake * 0.5
+	if elapsed < PAUSE_START_TIME:
+		var age: float = elapsed - ANTICIPATION_TIME
+		return ANTICIPATION_TIME + age - age * age / (2.0 * brake)
+	if elapsed < RELEASE_TIME:
+		return held
+	# Carry the stored mechanism into release without snapping to a later pose.
+	return lerpf(held, elapsed, smoothstep(RELEASE_TIME, RELEASE_TIME + RELEASE_BLEND_SECONDS, elapsed))
+
+
 static func buildup_intensity(elapsed: float) -> float:
 	if not is_finite(elapsed):
 		return 0.0
 	# Motion and light reserve more range for the last third of the hold.
 	# Sound keeps its existing energy curve and exact authored beat times.
-	return pow(progress(elapsed), 1.35)
+	return pow(progress(anticipation_pose_time(elapsed)), 1.35)
 
 
 static func _buildup_sway(elapsed: float) -> float:
@@ -56,12 +74,14 @@ static func _buildup_sway(elapsed: float) -> float:
 
 
 static func buildup_motion(elapsed: float, pulse_time: float = -INF) -> float:
-	if not is_finite(elapsed) or elapsed < -HOLD_SECONDS or elapsed >= RELEASE_TIME + 0.075:
+	if not is_finite(elapsed) or elapsed < -HOLD_SECONDS or elapsed >= RELEASE_TIME + RELEASE_BLEND_SECONDS:
 		return 0.0
 	if elapsed >= RELEASE_TIME:
 		# Retain the exact last loaded pose as the release takes its weight.
 		# The small-stage pixel floor consumes this same short return envelope.
-		return buildup_motion(RELEASE_TIME - 0.000001) * (1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + 0.075, elapsed))
+		return buildup_motion(RELEASE_TIME - 0.000001) * (1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + RELEASE_BLEND_SECONDS, elapsed))
+	var intensity: float = buildup_intensity(elapsed)
+	elapsed = anticipation_pose_time(elapsed)
 	var holding: bool = elapsed < 0.0
 	if is_inf(pulse_time):
 		pulse_time = elapsed + HOLD_SECONDS if holding else elapsed
@@ -71,7 +91,7 @@ static func buildup_motion(elapsed: float, pulse_time: float = -INF) -> float:
 	var sway: float = _buildup_sway(elapsed)
 	var motion: float = strike * (1.0 - sustain * 0.45) * (1.0 - handover)
 	motion += sway * (sustain * 0.50 + handover * 0.35)
-	return motion * lerpf(0.80, 2.55, buildup_intensity(elapsed))
+	return motion * lerpf(0.80, 2.55, intensity)
 
 
 static func pulse_duration(index: int, holding: bool = false) -> float:
@@ -121,8 +141,9 @@ static func release_flash(elapsed: float) -> float:
 
 
 static func final_drive(elapsed: float) -> float:
-	# The last roll becomes continuous pressure instead of stopping in mid-air.
-	return smoothstep(1.80, RELEASE_TIME, elapsed)
+	# Gather into maximum compression before the brief held breath.
+	var held: float = ANTICIPATION_TIME + (PAUSE_START_TIME - ANTICIPATION_TIME) * 0.5
+	return smoothstep(1.80, held, anticipation_pose_time(elapsed))
 
 
 static func phase(elapsed: float) -> String:
@@ -229,11 +250,10 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 			scale += Vector2(0.018, -0.025) * (strength + drive * 0.6)
 		return {"offset": offset, "scale": scale, "rotation": rotation}
 	if opening_now:
-		var preparation: float = 1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + 0.075, time)
-		offset = Vector2(-0.004, float(feel.press) + 0.010) * preparation
-		var loaded_motion: float = buildup_motion(time)
-		offset.x += loaded_motion * shake_distance(theme_id)
-		rotation = loaded_motion * rocking - 0.010 * preparation
+		var preparation: float = 1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + RELEASE_BLEND_SECONDS, time)
+		var held: Dictionary = body_pose(theme_id, 1.0, 1.0, RELEASE_TIME - 0.000001, true, -1.0)
+		offset = held.offset * preparation
+		rotation = float(held.rotation) * preparation
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
 		var recoil: float = release_load(time)
 		var settle: float = stop_response(time)
@@ -256,8 +276,8 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 				# Compression registers before the elastic return pulls upward.
 				var bounce_age: float = maxf(0.0, strike_age - 0.060)
 				var bounce: float = sin(bounce_age * 18.0) * exp(-bounce_age * 8.0)
-				scale = Vector2(1.0 + preparation * 0.0558 + recoil * 0.025 - bounce * 0.070,
-					1.0 - preparation * 0.080 - recoil * 0.035 + bounce * 0.100)
+				scale = Vector2.ONE.lerp(held.scale, preparation)
+				scale += Vector2(recoil * 0.025 - bounce * 0.070, -recoil * 0.035 + bounce * 0.100)
 				offset.y += absf(bounce) * 0.008
 	return {"offset": offset, "scale": scale, "rotation": rotation}
 

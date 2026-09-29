@@ -58,6 +58,25 @@ test('all 88 authored chest cues reproduce exactly and stay within the bundled a
   assert.ok(bytes < 1600000, 'The complete layered bank stays below 1.6 MB');
 });
 
+test('the final chest breath brakes into a quiet hold before the unchanged release', () => {
+  const audio = require('../tools/generate-chest-audio.cjs');
+  for (const theme of audio.THEMES) {
+    const breath = audio.render(theme, 'opening');
+    const window = (start, end) => soundEnergy(breath.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE)), audio.RATE).rms;
+    const early = window(0.006, 0.035);
+    const held = window(0.060, 0.210);
+    assert.equal(breath.length, Math.round(0.24 * audio.RATE), `${theme} preserves the shared cue duration`);
+    assert.ok(early > 0.08 && early < 0.25, `${theme} gathers a short audible breath during the brake`);
+    assert.ok(held > 0.0002 && held < early * 0.12, `${theme} holds live tension at least 18 dB below the brake`);
+    for (let step = 0; step < 8; step++) {
+      assert.ok(window(0.060 + step * 0.020, 0.080 + step * 0.020) < early * 0.12,
+        `${theme} cannot rise again or add a second attack during its held pose`);
+    }
+    assert.ok(breath[0] === 0 && breath.at(-1) === 0, `${theme} breath has clean sample boundaries`);
+    assert.ok(breath.every(sample => Math.abs(sample) < 0.79), `${theme} breath retains mixing headroom`);
+  }
+});
+
 test('chest strikes rise into a weighted release with audible bloom and a compact material stop', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const window = (samples, start, end) => samples.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE));
@@ -67,9 +86,6 @@ test('chest strikes rise into a weighted release with audible bloom and a compac
     assert.ok(strikes[0].bodyRatio > strikes[1].bodyRatio && strikes[1].bodyRatio > strikes[2].bodyRatio,
       `${theme} grows upper detail through three textures instead of only changing identical-click volume`);
     assert.ok(strikes[0].bodyRatio - strikes[2].bodyRatio > 0.12, `${theme} has a substantial timbral progression`);
-    const bridge = audio.render(theme, 'opening');
-    assert.ok(soundEnergy(window(bridge, 0.16, 0.21), audio.RATE).rms >
-      soundEnergy(window(bridge, 0.02, 0.07), audio.RATE).rms * 3, `${theme} bridges toward the release`);
     const release = audio.render(theme, 'release');
     const contact = soundEnergy(window(release, 0, 0.04), audio.RATE).rms;
     let strongest = 0, strongestTime = 0;

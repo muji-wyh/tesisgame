@@ -24,6 +24,32 @@ func _poses(chest) -> Array:
 	return values
 
 
+func _art_points(chest) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	for piece in chest._pieces:
+		var rect: Rect2 = piece.node.get_rect()
+		var transform: Transform2D = chest._art.transform * piece.node.transform
+		for corner in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
+			points.append(transform * corner)
+	return points
+
+
+func _maximum_movement(before: Array[Vector2], after: Array[Vector2]) -> float:
+	if before.size() != after.size():
+		return INF
+	var movement: float = 0.0
+	for index in range(before.size()):
+		movement = maxf(movement, before[index].distance_to(after[index]))
+	return movement
+
+
+func _piece_colors(chest) -> Array[Color]:
+	var colors: Array[Color] = []
+	for piece in chest._pieces:
+		colors.append(piece.node.modulate)
+	return colors
+
+
 func _run() -> void:
 	check(is_equal_approx(Feel.HOLD_SECONDS + Feel.OPEN_SECONDS, 5.0),
 		"A confirmed opening has a complete five-second rhythm")
@@ -32,7 +58,10 @@ func _run() -> void:
 	check(is_equal_approx(Feel.RELEASE_TIME, 2.16) and Feel.OPEN_SECONDS - Feel.RELEASE_TIME >= 1.4,
 		"The compact buildup preserves the physical release and reward settling time")
 	check(is_equal_approx(Feel.UNLOCK_TIME - Feel.ANTICIPATION_TIME, 0.14),
-		"The final pressure rise leads the lock release by 140 milliseconds")
+		"The final brake leads the scheduled lock cue by 140 milliseconds")
+	check(is_equal_approx(Feel.PAUSE_START_TIME - Feel.ANTICIPATION_TIME, 0.06)
+		and is_equal_approx(Feel.RELEASE_TIME - Feel.PAUSE_START_TIME, 0.16),
+		"A sixty-millisecond brake introduces a brief held breath before the unchanged release deadline")
 	var data = load("res://scripts/game_data.gd").new()
 	check(data.load_all(), "The original imported artwork remains valid")
 	var chest = load("res://scripts/chest_view.gd").new()
@@ -104,13 +133,18 @@ func _run() -> void:
 		check(not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
 			theme + " keeps physical release and settlement silent throughout buildup")
 		chest._advance_animation(0.05)
-		check(cues.back() == [theme, "anticipation", 0], theme + " transitions its rapid roll into the final pressure rise")
+		check(cues.back() == [theme, "anticipation", 0], theme + " transitions its rapid roll into the final brake")
 		var final_pose: Array = _poses(chest)
+		chest._advance_animation(Feel.PAUSE_START_TIME - chest.hold_effect_snapshot().opening_time)
+		check(_poses(chest) != final_pose and chest.hold_effect_snapshot().anticipation_held,
+			theme + " brakes into a distinct held pose before releasing")
+		final_pose = _poses(chest)
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time - 0.01)
-		check(_poses(chest) != final_pose and cues.back() == [theme, "anticipation", 0],
-			theme + " continues loading its physical mechanism right up to unlocking")
+		check(_poses(chest) == final_pose and cues.back() == [theme, "anticipation", 0],
+			theme + " holds the loaded mechanism while the cue clock continues")
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
-		check(cues.back() == [theme, "unlock", 0], theme + " unlock sound follows the actual lock beat")
+		check(cues.back() == [theme, "unlock", 0] and _poses(chest) == final_pose,
+			theme + " delivers the scheduled unlock cue without breaking the held pose")
 		chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
 		check(cues.back() == [theme, "release", 0], theme + " releases at the lid-motion beat")
 		check(chest.hold_effect_snapshot().percent == 100,
@@ -314,9 +348,13 @@ func _check_shared_pulse_motion(data) -> void:
 		check(late > early * 1.25, theme + " builds a stronger final roll without requiring a large flat slide")
 		chest._advance_animation(Feel.ANTICIPATION_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
 		var final_pose: Array = _poses(chest)
-		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time - 0.01)
+		chest._advance_animation(Feel.PAUSE_START_TIME - chest.hold_effect_snapshot().opening_time)
 		check(_poses(chest) != final_pose and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-			theme + " carries continuous physical strain from its last strike into unlocking")
+			theme + " finishes braking after its last strike without replaying a rhythmic impulse")
+		final_pose = _poses(chest)
+		chest._advance_animation(Feel.RELEASE_TIME - chest.hold_effect_snapshot().opening_time - 0.001)
+		check(_poses(chest) == final_pose and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+			theme + " holds its final body and part transforms without another rhythmic strike")
 	chest.free()
 
 
@@ -413,24 +451,46 @@ func _check_pressure_release(data) -> void:
 			theme + " stores visible pressure in its actual lid or facets before the final rise")
 		check(is_zero_approx(ready.release_flash), theme + " keeps its release flash out of the buildup")
 		var prior_final_pose: Array = _poses(chest)
-		var prior_pressure: float = ready.lid_pressure
-		var prior_drive: float = ready.final_drive
-		for time in [Feel.ANTICIPATION_TIME + 0.06, Feel.UNLOCK_TIME - 0.001,
+		chest._advance_animation((Feel.PAUSE_START_TIME - Feel.ANTICIPATION_TIME) * 0.5)
+		var braking: Dictionary = chest.hold_effect_snapshot()
+		check(_poses(chest) != prior_final_pose and not braking.anticipation_held
+			and braking.anticipation_pose_time > ready.anticipation_pose_time
+			and braking.anticipation_pose_time - ready.anticipation_pose_time < braking.opening_time - ready.opening_time,
+			theme + " slows its actual mechanism into the held breath instead of cutting directly to a frozen frame")
+		chest._advance_animation(Feel.PAUSE_START_TIME - braking.opening_time)
+		var held: Dictionary = chest.hold_effect_snapshot()
+		var held_poses: Array = _poses(chest)
+		var held_points: Array[Vector2] = _art_points(chest)
+		var held_colors: Array[Color] = _piece_colors(chest)
+		var prior_progress: float = held.performance_progress
+		var prior_clock: float = held.crown_clock
+		check(held.anticipation_held and held.final_drive > ready.final_drive,
+			theme + " reaches its maximum loaded pose at the start of the pause")
+		for time in [Feel.PAUSE_START_TIME + 0.04, Feel.UNLOCK_TIME,
 			Feel.RELEASE_TIME - 0.03, Feel.RELEASE_TIME - 0.001]:
 			chest._advance_animation(time - chest.hold_effect_snapshot().opening_time)
-			var driving: Dictionary = chest.hold_effect_snapshot()
-			check(_poses(chest) != prior_final_pose and driving.lid_pressure > prior_pressure
-				and driving.final_drive > prior_drive
-				and driving.percent < 100 and driving.interior_open == 0.0,
-				"The %s final rise keeps loading a closed chest at %.3f seconds without a stationary gap" % [theme, time])
-			prior_final_pose = _poses(chest)
-			prior_pressure = driving.lid_pressure
-			prior_drive = driving.final_drive
+			var paused: Dictionary = chest.hold_effect_snapshot()
+			check(paused.anticipation_held and _poses(chest) == held_poses
+				and paused.lid_pressure == held.lid_pressure and paused.final_drive == held.final_drive
+				and paused.light_origin == held.light_origin and paused.ground_center == held.ground_center,
+				"The %s body, mechanism and anchored light remain still at %.3f seconds" % [theme, time])
+			check(_piece_colors(chest) == held_colors and paused.buildup_glow == held.buildup_glow
+				and paused.buildup_bounds == held.buildup_bounds and paused.visual_progress == held.visual_progress
+				and paused.crown_flow_phase == held.crown_flow_phase and paused.crown_streaks == held.crown_streaks,
+				"The %s surface light and crown decoration hold with the mechanism at %.3f seconds" % [theme, time])
+			check(paused.performance_progress > prior_progress and paused.crown_clock > prior_clock
+				and paused.percent < 100 and paused.interior_open == 0.0 and paused.release_flash == 0.0,
+				"The %s real progress advances through the pause without opening or flashing early at %.3f seconds" % [theme, time])
+			prior_progress = paused.performance_progress
+			prior_clock = paused.crown_clock
 		chest._advance_animation(Feel.RELEASE_TIME - chest.hold_effect_snapshot().opening_time)
 		var released: Dictionary = chest.hold_effect_snapshot()
 		var release_lid: Array = _lid_poses(chest)
-		check(released.release_flash >= 0.5 and released.percent == 100,
+		check(released.release_flash >= 0.5 and released.percent == 100 and not released.anticipation_held,
 			theme + " visibly releases stored light on the same beat that progress reaches 100 percent")
+		var release_snap: float = _maximum_movement(held_points, _art_points(chest))
+		check(release_snap < 0.05,
+			"The %s release begins from its exact held artwork pose without a screen-space snap (%.4f pixels)" % [theme, release_snap])
 		check(not colors.has(released.release_color), theme + " has a distinct release light color")
 		colors.append(released.release_color)
 		var origin := Vector2(released.light_origin.x, released.light_origin.y)
@@ -445,9 +505,16 @@ func _check_pressure_release(data) -> void:
 				belongs_to_body = body_bounds.has_point(origin)
 		check(Rect2(Vector2.ZERO, chest.size).has_point(origin) and belongs_to_body,
 			theme + " anchors its light inside the fitted chest instead of the screen center")
-		chest._advance_animation(0.065)
+		chest._advance_animation(0.025)
+		check(_maximum_movement(held_points, _art_points(chest)) > 0.1 and _lid_poses(chest) != release_lid,
+			theme + " starts moving its actual artwork within twenty-five milliseconds after the held breath")
+		chest._advance_animation(0.04)
 		check(chest.hold_effect_snapshot().release_flash >= 0.9 and _lid_poses(chest) != release_lid,
 			theme + " opens real parts while its release flash peaks, without a delayed separate celebration")
+		chest._advance_animation(Feel.RELEASE_BLEND_SECONDS - 0.065)
+		check(is_equal_approx(chest.hold_effect_snapshot().anticipation_pose_time,
+			chest.hold_effect_snapshot().opening_time),
+			theme + " rejoins the live presentation clock during the release without extending the performance")
 		for drag in [Vector2.ZERO, Vector2(-440.0, 0.0), Vector2(440.0, 0.0)]:
 			chest.set_drag_offset(drag)
 			var spread: Dictionary = chest.hold_effect_snapshot()
@@ -470,7 +537,7 @@ func _check_pressure_release(data) -> void:
 			theme + " lets the single flash decay before the saved reward result")
 		chest.finish_immediately()
 		check(is_zero_approx(chest.hold_effect_snapshot().release_flash), theme + " leaves no lingering flash on its saved result")
-		for interrupted in ["cancel", "skip", "reduced"]:
+		for interrupted in ["cancel", "paused_cancel", "skip", "reduced"]:
 			chest.clear()
 			chest.configure_skin(data.theme(theme), data.chests)
 			chest.reduced_motion = interrupted == "reduced"
@@ -478,6 +545,12 @@ func _check_pressure_release(data) -> void:
 			chest.set_hold_progress(0.8)
 			if interrupted == "cancel":
 				chest.cancel_hold()
+			elif interrupted == "paused_cancel":
+				chest.start_open(false)
+				chest._advance_animation((Feel.PAUSE_START_TIME + Feel.RELEASE_TIME) * 0.5)
+				check(chest.hold_effect_snapshot().anticipation_held and not chest.opening_committed(),
+					theme + " keeps the held pose cancellable before the real release")
+				chest.cancel_open()
 			else:
 				chest.start_open(chest.reduced_motion)
 				chest.finish_immediately()
@@ -542,24 +615,25 @@ func _check_crystal_mechanism(data) -> void:
 		chest.configure_skin(data.theme(theme), data.chests)
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " has no open cavity while closed")
 		chest.start_open(false)
-		chest._advance_animation(Feel.UNLOCK_TIME - 0.001)
+		chest._advance_animation(Feel.PAUSE_START_TIME)
 		var armed_poses: Dictionary = {}
 		for piece in chest._pieces:
 			armed_poses[piece.role] = piece.node.transform
-		chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
-		var core_moves: bool = false
-		var panels_wait: bool = true
+		chest._advance_animation(Feel.RELEASE_TIME - Feel.PAUSE_START_TIME - 0.001)
+		var mechanism_waits: bool = true
 		for piece in chest._pieces:
-			var armed: Transform2D = armed_poses[piece.role]
-			var actual: Transform2D = piece.node.transform
-			var displacement: float = actual.origin.distance_to(armed.origin)
-			if piece.role == "01":
-				core_moves = displacement > 5.0
-			elif piece.role != "chest":
-				panels_wait = panels_wait and displacement < 1.0 and absf(actual.get_rotation() - armed.get_rotation()) < 0.002
-		check(core_moves and panels_wait, theme + " unlocks its central crystal while its outer panels retain their armed pose")
+			mechanism_waits = mechanism_waits and piece.node.transform == armed_poses[piece.role]
+		check(mechanism_waits and chest.hold_effect_snapshot().anticipation_held,
+			theme + " holds its central lock and all outer facets throughout the brief pause")
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " keeps the cavity sealed until the release beat")
-		chest._advance_animation(0.18)
+		chest._advance_animation(Feel.RELEASE_TIME + Feel.RELEASE_BLEND_SECONDS - chest.hold_effect_snapshot().opening_time)
+		var core_moves: bool = false
+		for piece in chest._pieces:
+			if piece.role == "01":
+				var armed: Transform2D = armed_poses[piece.role]
+				core_moves = piece.node.transform.origin.distance_to(armed.origin) > 5.0
+		check(core_moves, theme + " unlocks its central crystal as the held mechanism blends into release")
+		chest._advance_animation(Feel.RELEASE_TIME + 0.18 - chest.hold_effect_snapshot().opening_time)
 		var spreading_panels: int = 0
 		for piece in chest._pieces:
 			if piece.role not in ["chest", "01"]:
@@ -596,8 +670,10 @@ func _check_motion_bounds(data) -> void:
 				_record_buildup_bounds(chest, stage, float(frame) / 60.0 - Feel.HOLD_SECONDS, outside)
 			chest.start_open(false)
 			var prior: float = 0.0
-			var sample_times: Array = [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
-				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.065, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
+			var sample_times: Array = [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.PAUSE_START_TIME, Feel.UNLOCK_TIME,
+				Feel.RELEASE_TIME - 0.001, Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.025,
+				Feel.RELEASE_TIME + 0.065, Feel.RELEASE_TIME + Feel.RELEASE_BLEND_SECONDS,
+				Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
 				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]
 			for frame in range(1, ceili(Feel.OPEN_SECONDS * 60.0)):
 				sample_times.append(float(frame) / 60.0)

@@ -159,7 +159,8 @@ func _run() -> void:
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
 	_check_cancelled(app, 0, "Releasing just after confirmation")
-	for release_at in [2.0, Feel.HOLD_SECONDS + Feel.RELEASE_TIME - 0.01]:
+	for release_at in [2.0, Feel.HOLD_SECONDS + (Feel.PAUSE_START_TIME + Feel.RELEASE_TIME) * 0.5,
+		Feel.HOLD_SECONDS + Feel.RELEASE_TIME - 0.01]:
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
@@ -167,6 +168,9 @@ func _run() -> void:
 		app._advance_ui(0.0)
 		check(app.model.chest_state == "opening" and app._holding_chest and _pieces(app) == 0,
 			"Holding for %.2f seconds still allows cancellation before the lid releases" % release_at)
+		if release_at >= Feel.HOLD_SECONDS + Feel.PAUSE_START_TIME:
+			check(app.chest.hold_effect_snapshot().anticipation_held and not app.chest.opening_committed(),
+				"The real input controller still accepts cancellation during the held breath at %.2f seconds" % release_at)
 		app.chest_button.button_up.emit()
 		_check_cancelled(app, 0, "Releasing after %.2f seconds" % release_at)
 	# A second press during the visual return must not be blocked or inherit
@@ -725,12 +729,20 @@ func _motion_window(trace: Array, start: float, end: float) -> Dictionary:
 	var points: Array = trace.filter(func(sample): return sample.time >= start and sample.time <= end)
 	var minimum: float = INF
 	var maximum: float = -INF
+	var minimum_y: float = INF
+	var maximum_y: float = -INF
+	var minimum_glow: float = INF
+	var maximum_glow: float = -INF
 	var glow: float = 0.0
 	var quiet: float = 0.0
 	var longest_quiet: float = 0.0
 	for index in range(points.size()):
 		minimum = minf(minimum, points[index].point.x)
 		maximum = maxf(maximum, points[index].point.x)
+		minimum_y = minf(minimum_y, points[index].point.y)
+		maximum_y = maxf(maximum_y, points[index].point.y)
+		minimum_glow = minf(minimum_glow, points[index].glow)
+		maximum_glow = maxf(maximum_glow, points[index].glow)
 		glow += points[index].glow
 		if index > 0:
 			if absf(points[index].point.x - points[index - 1].point.x) < 0.20:
@@ -738,7 +750,10 @@ func _motion_window(trace: Array, start: float, end: float) -> Dictionary:
 			else:
 				quiet = 0.0
 			longest_quiet = maxf(longest_quiet, quiet)
-	return {"span": maximum - minimum, "glow": glow / maxf(1.0, points.size()), "quiet": longest_quiet}
+	return {"span": maximum - minimum, "vertical_span": maximum_y - minimum_y,
+		"glow": glow / maxf(1.0, points.size()), "glow_span": maximum_glow - minimum_glow,
+		"duration": points.back().time - points.front().time if points.size() > 1 else 0.0,
+		"quiet": longest_quiet}
 
 
 func _check_gameplay_pixels(directory: String) -> void:
@@ -816,7 +831,9 @@ func _check_gameplay_pixels(directory: String) -> void:
 			var trace: Array = _buildup_trace(app)
 			var early: Dictionary = _motion_window(trace, 0.08, 0.55)
 			var middle: Dictionary = _motion_window(trace, 1.35, 1.85)
-			var final: Dictionary = _motion_window(trace, 2.80, 3.32)
+			var final: Dictionary = _motion_window(trace, 2.80, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME)
+			var held: Dictionary = _motion_window(trace, Feel.HOLD_SECONDS + Feel.PAUSE_START_TIME,
+				Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
 			var envelope := Vector3(early.span, middle.span, final.span)
 			envelope_min = envelope_min.min(envelope)
 			envelope_max = envelope_max.max(envelope)
@@ -825,15 +842,18 @@ func _check_gameplay_pixels(directory: String) -> void:
 				"The actual %s body at %s grows from %.2f to %.2f to %.2f screen-pixel shake spans" %
 				[theme_id, dimensions, early.span, middle.span, final.span])
 			check(final.quiet <= 0.075,
-				"The actual %s final buildup at %s never becomes still between beats for more than %.0f milliseconds" %
+				"The actual %s final roll at %s stays active before its deliberate brake (longest quiet interval %.0f milliseconds)" %
 				[theme_id, dimensions, final.quiet * 1000.0])
+			check(held.duration >= 0.14 and held.span < 0.01 and held.vertical_span < 0.01 and held.glow_span < 0.000001,
+				"The actual %s body and buildup glow at %s hold for %.0f milliseconds before the release (%.4f by %.4f screen pixels)" %
+				[theme_id, dimensions, held.duration * 1000.0, held.span, held.vertical_span])
 			check(middle.glow > early.glow + 0.10 and final.glow > middle.glow + 0.15,
 				"The actual %s buildup light at %s strengthens across the same motion windows (%.2f, %.2f, %.2f)" %
 				[theme_id, dimensions, early.glow, middle.glow, final.glow])
 			app.chest.finish_immediately()
 	print("Real gameplay body motion across 32 theme/viewport cases: first %.2f-%.2f screen px (minimum: %s); late %.2f-%.2f screen px (minimum: %s)" %
 		[first_range.x, first_range.y, first_min_case, late_range.x, late_range.y, late_min_case])
-	print("Continuous gameplay shake spans: early %.2f-%.2f, middle %.2f-%.2f, late %.2f-%.2f screen px; longest late quiet interval %.0f ms" %
+	print("Gameplay shake before the held breath: early %.2f-%.2f, middle %.2f-%.2f, late %.2f-%.2f screen px; longest final-roll quiet interval %.0f ms" %
 		[envelope_min.x, envelope_max.x, envelope_min.y, envelope_max.y, envelope_min.z, envelope_max.z, longest_quiet * 1000.0])
 	app.audio.halt()
 	app.free()

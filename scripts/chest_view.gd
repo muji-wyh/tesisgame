@@ -276,7 +276,7 @@ func _fit() -> void:
 		# The beat controls the whole body, not just its glow or decoration.
 		if returning > 0.0:
 			offset.x = _cancel_shift_x * returning
-		elif _hold_active or (mode == "opening" and _elapsed < Feel.RELEASE_TIME + 0.075):
+		elif _hold_active or (mode == "opening" and _elapsed < Feel.RELEASE_TIME + Feel.RELEASE_BLEND_SECONDS):
 			offset.x += Feel.buildup_motion(_buildup_time(), _pulse_clock()) * maxf(0.0,
 				6.0 * pixel - Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
 		if mode == "opening":
@@ -340,7 +340,7 @@ func _draw_charge() -> void:
 	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
 		return
 	var pixel: float = _charge_unit
-	var progress: float = performance_progress()
+	var progress: float = _visual_performance_progress()
 	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
 	var alpha: float = 1.0 - smoothstep(0.0, 0.22, _elapsed - Feel.RELEASE_TIME) if releasing else 1.0
 	if alpha <= 0.0:
@@ -411,13 +411,13 @@ func _crown_clock() -> float:
 
 
 func _crown_flow_phase() -> float:
-	var time: float = _crown_clock()
+	var time: float = Feel.HOLD_SECONDS + Feel.anticipation_pose_time(_elapsed) if mode == "opening" else _crown_clock()
 	return 0.40 * time + 0.35 * time * time
 
 
 func _crown_streaks() -> Array[Vector2]:
 	var streaks: Array[Vector2] = []
-	var progress: float = performance_progress()
+	var progress: float = _visual_performance_progress()
 	if reduced_motion or not _charge.visible or progress <= 0.0 or progress >= 1.0:
 		return streaks
 	for index in range(3):
@@ -511,6 +511,14 @@ func performance_progress() -> float:
 	if mode in ["opening", "opened"]:
 		return Feel.progress(_elapsed)
 	return hold_progress if reduced_motion else hold_progress * Feel.HOLD_SECONDS / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
+
+
+func _visual_performance_progress() -> float:
+	# Keep the rail loaded during the held breath. Semantic progress continues
+	# on elapsed time, and the third star still lights on the real release cue.
+	if mode == "opening" and not reduced_motion and _elapsed < Feel.RELEASE_TIME:
+		return Feel.progress(Feel.anticipation_pose_time(_elapsed))
+	return performance_progress()
 
 
 func performance_phase() -> String:
@@ -741,6 +749,9 @@ func hold_effect_snapshot() -> Dictionary:
 			break
 	return {"active": active, "phase": performance_phase(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
+		"visual_progress": _visual_performance_progress(),
+		"anticipation_held": mode == "opening" and not reduced_motion and _elapsed >= Feel.PAUSE_START_TIME and _elapsed < Feel.RELEASE_TIME,
+		"anticipation_pose_time": Feel.anticipation_pose_time(_elapsed),
 		"tension": tension_progress(),
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
@@ -1188,9 +1199,9 @@ func _draw_details() -> void:
 	if reduced_motion or _fit_scale <= 0.0 or not (_hold_active or mode == "opening"):
 		return
 	var opening_now: bool = mode == "opening"
-	var time: float = _elapsed if opening_now else _charge_time
+	var time: float = Feel.anticipation_pose_time(_elapsed) if opening_now else _charge_time
 	var release: float = maxf(0.0, time - Feel.RELEASE_TIME) if opening_now else 0.0
-	var visual_progress: float = performance_progress()
+	var visual_progress: float = _visual_performance_progress()
 	var fade: float = (0.35 + visual_progress * 0.65) * (1.0 - smoothstep(Feel.BUILDUP_SECONDS + 1.05, Feel.BUILDUP_SECONDS + 1.6, time)) if opening_now else 0.35 + visual_progress * 0.55
 	var center: Vector2 = _art.transform * (_bounds.get_center() - Vector2(0, _bounds.size.y * 0.12))
 	var extent := Vector2(_bounds.size.x * _fit_scale * 0.48, _bounds.size.y * _fit_scale * 0.40)
@@ -1351,9 +1362,10 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var piece: Dictionary = _pieces[index]
 	var hold: Vector2 = _hold_pose_state()
 	var charge_time: float = _pulse_clock()
+	var mechanism_time: float = Feel.anticipation_pose_time(time) if opening_now else time
 	if opening_now:
-		var anticipation: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.075, time)
-		var energy: float = Feel.tension(time)
+		var anticipation: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + Feel.RELEASE_BLEND_SECONDS, time)
+		var energy: float = Feel.tension(mechanism_time)
 		hold = Vector2(0.30 + energy * 0.70, energy) * anticipation if not reduced_motion else Vector2.ZERO
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
 	var alpha: float = 1.0
@@ -1362,7 +1374,7 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	if _style == "crystal" and piece.role == "01":
 		# The small central crystal is the lock. It releases before the large
 		# facets, so their shared source artwork still reads as a mechanism.
-		var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+		var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, mechanism_time) if opening_now else 0.0
 		var twist: float = 0.14 if theme_id == "winter" else -0.10 if theme_id == "ocean" else 0.20
 		pose = _rotate_piece(pose, twist * unlock)
 		pose.origin.y -= _bounds.size.y * 0.035 * unlock
@@ -1418,11 +1430,11 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 			"interior":
 				alpha = 1.0 if progress > 0.01 or hold.y > 0.30 else 0.0
 			"latch":
-				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, mechanism_time) if opening_now else 0.0
 				pose = pose * Transform2D(-0.22 * unlock, Vector2.ZERO)
 				pose.origin.y += _bounds.size.y * 0.035 * unlock
 			"core":
-				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
+				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, mechanism_time) if opening_now else 0.0
 				pose = pose * Transform2D((PI * 0.16 if theme_id == "summer" else -PI * 0.25) * unlock, Vector2.ZERO)
 				pose.origin.y -= _bounds.size.y * 0.018 * progress
 	elif _style != "crystal":

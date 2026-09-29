@@ -27,17 +27,21 @@ inside `begin_hold()`, without waiting for a tween or a network result.
 Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
-The three stars and progress arc follow elapsed time up to the lid-release beat.
+The three stars follow elapsed time up to the lid-release beat. The progress
+arc follows it until the final held pose, then completes on release.
 There is no visible phase or percentage label; semantic progress remains
 available to screen readers. The first star lights just
 before the initial hold ends and remains lit as the opening phase begins. Five
 holding beats lead into fifteen opening beats. Intervals tighten from 320 ms to
 60 ms, and their shared timestamps drive both physical impulses and sounds.
 Lock pressure, lid strain, seam light, inward particles and the material loop
-rise in intensity. Background music progressively ducks. From opening +1.80 s,
-the last roll blends into continuously increasing strain and a rising air texture.
-The pressure bed continues through unlock to release, with no silent stop or
-frozen pose. Its opening speed is not slowed down to fill the wait.
+rise in intensity. Background music progressively ducks. At opening +1.94 s,
+the final roll brakes over 60 ms into a loaded pose. From +2.00 s to +2.16 s,
+the chest holds that pose for 160 ms: body, lid strain, shadow, local light and
+flowing decoration stop moving while the real progress and input clock continue. Sound takes the
+same short breath, quieting the pressure without restarting its source. A tiny
+latch clicks inside the hold; the lid then releases immediately at the original
+beat. The pause fits inside the existing five seconds.
 
 Release triggers the opening lid, material sound and theme-colored light from
 one cue. The flash reaches its crest within 45 ms and expands across the safe
@@ -62,14 +66,15 @@ logic through separate step helpers.
 | `cancel` | Release or drag before the lid releases | Stop all performance sounds, brief return sound |
 | `opening` | Initial pressure completes at 1.2 s; hold remains active | Continue pressure bed without restarting |
 | `tension_pulse` | Opening +0.11 s through +1.86 s | Fifteen accelerating material beats |
-| `anticipation` | Opening +1.94 s | Continuous rising bridge over the pressure bed |
-| `unlock` | Opening +2.08 s (3.28 s total) | Lock/core sound |
+| `anticipation` | Opening +1.94 s | Brake for 60 ms, then hold the loaded pose and quiet breath for 160 ms |
+| `unlock` | Opening +2.08 s (3.28 s total) | Subtle lock/core sound within the held pose |
 | `release` | Opening +2.16 s (3.36 s total) | Complete input; lid, material sound, local theme flash and twelve light streaks |
 | `settle` | Opening +2.58 s (3.78 s total) | Material landing sound |
 | `opened` | Opening +3.8 s (5 s total), with no further hold required | Save progress before the opened result |
 
-A frame stall consumes expired beats without playing a backlog. A rising bridge
-more than 80 ms late is skipped; release still stops the bed. Fast-forward and
+A frame stall consumes expired beats without playing a backlog. A breath cue
+more than 80 ms late is skipped; the steady bed still quiets from real progress,
+and release stops it. Fast-forward and
 explicit new-round settlement remain silent. Backgrounding cancels unreleased
 chests and silently settles already released ones. Reduced motion retains the
 initial 1.2-second hold and skips the buildup.
@@ -120,7 +125,11 @@ Each theme includes `press`, `charge`, `step`, `step-detail`, `step-roll`, `canc
 `opening`, `unlock`, `release`, `settle` and `reward`. Holding and opening beats
 progress from grounded contact through detailed impacts to a bright rolling
 texture, keeping a fixed body pitch. The separate pressure texture rises gently
-in pitch, and the `opening` clip bridges anticipation into release. The release
+in pitch until anticipation. The 240 ms `opening` clip gathers a short breath,
+then falls into a quiet tail over 60 ms. Residual roll tails are cleared; the
+pressure source stays live at a fixed pitch and low gain throughout the hold.
+Music ducks further and the latch stays subtle, leaving contrast for release.
+The release
 combines an immediate low-mid impact and crisp crack with an expanding air bloom
 and diffuse theme-colored shimmer. The strongest impact lands inside 45 ms;
 the audible 300-500 ms bloom supports the flash before fading by the end of the
@@ -171,11 +180,15 @@ node tools/capture-chest-feel.cjs
 ```
 
 Outputs go to `build/chest-feel/`: 7.5-second MP4s with the engine's mixed audio,
-nine stills per world, motion grids, resource hashes, cue/media reports and
+twelve stills per world, motion grids, resource hashes, cue/media reports and
 `index.html`. Each gallery also has a content-hashed entry point, and embedded
 media URLs carry content hashes so updated captures cannot reuse stale previews.
-Stills sample delivered recoil cues after 33 ms, the release flash after 60 ms,
-and the opening lid after 200 ms. The gallery can hide theme names for a listening
+Stills sample delivered recoil cues after 33 ms, the anticipation brake after
+30 ms, the held pose after 90 ms and 190 ms, the release flash after 60 ms,
+and the opening lid after 200 ms. A side-by-side comparison uses the same
+640 x 640 crop for both held poses; real progress may still advance between them.
+Mixed-audio checks measure the quiet hold separately from the preceding roll
+and the following release. The gallery can hide theme names for a listening
 and motion review. Capturing
 with a fixed 60 fps is an offline render setting, not a mobile frame-rate result.
 

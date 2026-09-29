@@ -198,17 +198,20 @@ function render(theme, cue) {
     });
   }
 
-  function risingBridge() {
+  function heldBreath() {
     samples.fill(0);
     let air = 0;
     layer(0, duration, 1.0, (t) => {
-      const progress = Math.min(1, t / 0.215);
-      const alpha = 1 - Math.exp(-TAU * (550 + 4100 * progress * progress) / RATE);
+      // Close the air and pressure over the same 60 ms as the motion brake.
+      // The remaining quiet texture holds its breath until the release cue.
+      const progress = Math.min(1, t / 0.060);
+      const remaining = (1 - progress) ** 2;
+      const alpha = 1 - Math.exp(-TAU * (420 + 1880 * remaining) / RATE);
       air += alpha * (rng() * 2 - 1 - air);
       const base = BODY_FREQUENCIES[theme] * 2.3;
-      const phase = TAU * (base * t + 1450 * t * t);
-      const texture = air * 0.72 + Math.sin(phase) * 0.16 + Math.sin(phase * 1.51) * 0.07;
-      return texture * (0.16 + 0.84 * progress * progress) * Math.min(1, t / 0.008) * Math.min(1, (duration - t) / 0.014);
+      const phase = TAU * base * t;
+      const texture = air * 0.72 + Math.sin(phase) * 0.12 + Math.sin(phase * 1.51) * 0.045;
+      return texture * (0.025 + 0.975 * remaining) * Math.min(1, t / 0.006) * Math.min(1, (duration - t) / 0.014);
     });
   }
 
@@ -297,7 +300,7 @@ function render(theme, cue) {
       modes(0.010, 0.13, [BODY_FREQUENCIES[theme] * 8.3, BODY_FREQUENCIES[theme] * 13.7], 0.13, 3.5);
     }
   } else if (cue === 'opening') {
-    risingBridge();
+    heldBreath();
   } else if (cue === 'release') {
     // Keep the loaded contact, then open its sound into air and material light.
     // The body lands first; the 0.5-second bloom is its expanding payoff.
@@ -347,7 +350,7 @@ function render(theme, cue) {
     // Equal material-strike energy lets the shared crescendo read on every
     // theme, including the otherwise very quiet magnetic and flower locks.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const target = cue === 'release' ? 0.17 : reward ? 0.12 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
+    const target = cue === 'release' ? 0.17 : reward ? 0.12 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.055 : [0.07, 0.075, 0.082][strikeStage];
     const gain = Math.min(target / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }

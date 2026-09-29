@@ -93,6 +93,22 @@ func _check_grounded_impact(source: PackedByteArray, sample_rate: int, cue: Stri
 			label + " settles quickly after a small damped rebound")
 
 
+func _check_held_breath(source: PackedByteArray, sample_rate: int, label: String) -> void:
+	var early: float = _rms(source, roundi(0.006 * sample_rate) * 2, roundi(0.035 * sample_rate) * 2)
+	var held: float = _rms(source, roundi(0.060 * sample_rate) * 2, roundi(0.210 * sample_rate) * 2)
+	check(absi(source.size() - roundi(sample_rate * 0.24) * 2) <= 2,
+		label + " preserves the shared anticipation cue duration")
+	check(early > 0.08 and early < 0.25, label + " gathers an audible breath during the brake")
+	check(held > 0.0002 and held < early * 0.12,
+		label + " holds live tension at least 18 dB below the brake")
+	for window in range(8):
+		var start: float = 0.060 + float(window) * 0.020
+		check(_rms(source, roundi(start * sample_rate) * 2, roundi((start + 0.020) * sample_rate) * 2) < early * 0.12,
+			label + " cannot rise again or add another attack during its held pose")
+	check(source.decode_s16(0) == 0 and source.decode_s16(source.size() - 2) == 0,
+		label + " has clean sample boundaries")
+
+
 func _check_reward_sound(source: PackedByteArray, sample_rate: int, label: String) -> float:
 	var level: float = _rms(source, 0, source.size())
 	check(level > 0.10 and level < 0.14, label + " plays a substantial saved reward accent")
@@ -115,6 +131,7 @@ func _run() -> void:
 	await _check_material_assets()
 	await _check_performance()
 	await _check_tension_rhythm()
+	await _check_anticipation_delivery_order()
 	await _check_delayed_rhythm_delivery()
 	await _check_tension_interruption()
 	await _check_motion_completion_before_save()
@@ -164,10 +181,7 @@ func _check_material_assets() -> void:
 			if cue_name == "reward":
 				reward_levels.append(_check_reward_sound(source.slice(44), 22050, theme + "/reward"))
 			if cue_name == "opening":
-				var early: float = _rms(source, 44 + roundi(0.020 * 22050) * 2, 44 + roundi(0.070 * 22050) * 2)
-				var late: float = _rms(source, 44 + roundi(0.160 * 22050) * 2, 44 + roundi(0.210 * 22050) * 2)
-				check(late > early * 3.0 and late > 0.10,
-					"The " + theme + " transition grows into release instead of another decaying click")
+				_check_held_breath(source.slice(44), 22050, theme + "/opening")
 			if cue_name == "charge":
 				var window_frames: int = (source.size() - 44) / 8
 				var texture_energy: Array[float] = []
@@ -194,9 +208,9 @@ func _check_material_assets() -> void:
 		fallback_reward_levels.append(_check_reward_sound(fallback.data, Bank.SAMPLE_RATE, theme + "/reward fallback"))
 		fallback = Bank.fallback(theme, "opening")
 		check(fallback.get_length() >= Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME
-			and _rms(fallback.data, roundi(0.16 * Bank.SAMPLE_RATE) * 2, roundi(0.21 * Bank.SAMPLE_RATE) * 2)
-			> 3.0 * _rms(fallback.data, roundi(0.02 * Bank.SAMPLE_RATE) * 2, roundi(0.07 * Bank.SAMPLE_RATE) * 2),
-			"The " + theme + " fallback transition rises and covers the entire final compression")
+			and fallback.data == Bank.fallback(theme, "opening").data,
+			"The " + theme + " fallback breath is deterministic and covers the final brake and hold")
+		_check_held_breath(fallback.data, Bank.SAMPLE_RATE, theme + "/opening fallback")
 	check(total_bytes < 1600000 and fingerprints.size() == 88, "All eight complete material banks with three strike textures fit within 1.6 MB")
 	check(reward_levels.size() == Bank.THEMES.size() and reward_levels.max() / reward_levels.min() < 1.15,
 		"Every theme acknowledges a saved reward at a comparable authored level")
@@ -390,14 +404,18 @@ func _check_tension_rhythm() -> void:
 				"Automatic progress star %d does not add a second unsynchronized beat" % step)
 		check(_playing(audio) <= 4 and audio.get_child_count() == 8, "Rapid pulses and stars stay within the same four chest channels")
 		var before_transition: int = audio._chest_next_player
+		var before_breath_gain: float = player.volume_db
+		var before_breath_position: float = player.get_playback_position()
 		audio.chest_cue(theme, "anticipation")
 		var bridge: AudioStreamPlayer = _last_player(audio)
-		check(player.playing and player.stream == loop and is_equal_approx(player.pitch_scale, 1.46)
-			and is_equal_approx(player.volume_db, linear_to_db(0.50))
+		check(player.playing and player.stream == loop and is_equal_approx(player.pitch_scale, 1.42)
+			and is_equal_approx(player.volume_db, linear_to_db(0.025))
+			and player.get_playback_position() >= before_breath_position and before_breath_gain - player.volume_db > 18.0
 			and bridge.playing and bridge.stream == audio.cache[Bank.path_for(theme, "opening")]
+			and is_equal_approx(bridge.volume_db, linear_to_db(0.32)) and _playing(audio) == 2
 			and audio._chest_next_player == (before_transition + 1) % 3
-			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.14)),
-			"Anticipation layers one rising bridge over the continuing bed without a silent gap")
+			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
+			"Anticipation clears residual roll tails and gathers one breath over the quiet uninterrupted bed")
 		var next_player: int = audio._chest_next_player
 		audio.chest_cue(theme, "anticipation")
 		audio.chest_cue(theme, "tension_pulse", Feel.PULSE_TIMES.size())
@@ -405,12 +423,15 @@ func _check_tension_rhythm() -> void:
 		audio.set_chest_tension(0.0)
 		audio.set_chest_tension(1.0)
 		check(player.playing and player.stream == loop and bridge.playing
-			and audio._chest_next_player == next_player and is_equal_approx(player.pitch_scale, 1.46),
-			"Duplicate transition and late pulses or progress cannot restart or rewind the final rise")
+			and audio._chest_next_player == next_player and is_equal_approx(player.pitch_scale, 1.42)
+			and is_equal_approx(player.volume_db, linear_to_db(0.025)) and _playing(audio) == 2,
+			"Duplicate anticipation and late pulses or progress cannot restart or amplify the held breath")
 		audio.chest_cue(theme, "unlock")
 		check(player.playing and player.stream == loop and bridge.playing
-			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")],
-			"Unlock stays inside the continuing pressure and transition")
+			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")]
+			and is_equal_approx(_last_player(audio).volume_db, linear_to_db(0.055))
+			and is_equal_approx(player.volume_db, linear_to_db(0.025)),
+			"The tiny latch stays inside the held breath without rebuilding the crescendo")
 		next_player = audio._chest_next_player
 		audio.chest_cue(theme, "charge_step", 3)
 		check(audio._chest_next_player == next_player,
@@ -443,7 +464,7 @@ func _check_tension_rhythm() -> void:
 	# The cue clock, rather than the previous UI frame, sets each strike's
 	# intensity. Two different last-frame energy values must yield one beat.
 	var scheduled_pulse: Array = []
-	for stale_energy: float in [Feel.tension(0.0), 1.0]:
+	for stale_energy: float in [Feel.tension(0.0), 0.99]:
 		audio.prepare_chest("autumn")
 		audio.interact("autumn", false)
 		audio.chest_cue("autumn", "opening")
@@ -465,6 +486,60 @@ func _check_tension_rhythm() -> void:
 		audio.stop_chest_performance()
 	check(scheduled_pulse[0].is_equal_approx(scheduled_pulse[1]),
 		"A held beat also uses its schedule rather than stale or advanced UI progress")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_anticipation_delivery_order() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	for theme: String in Bank.THEMES:
+		for progress_first: bool in [true, false]:
+			audio.prepare_chest(theme)
+			audio.interact(theme, false)
+			audio.chest_cue(theme, "opening")
+			audio.set_chest_tension(0.95)
+			audio.chest_cue(theme, "tension_pulse", Feel.PULSE_TIMES.size())
+			var bed: AudioStream = audio.chest_charge.stream
+			var next_player: int = audio._chest_next_player
+			if progress_first:
+				audio.set_chest_tension(1.0)
+				check(_playing(audio) == 1 and audio.chest_charge.stream == bed
+					and audio._chest_next_player == next_player and not audio._chest_seen.has("anticipation0")
+					and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
+					and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
+					"Saturated %s progress quietly enters the hold without inventing a breath cue" % theme)
+				audio.chest_cue(theme, "anticipation")
+				check(_playing(audio) == 2 and audio._chest_next_player == (next_player + 1) % 3
+					and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "opening")],
+					"A normally delivered %s breath still plays once after progress enters the same hold" % theme)
+			else:
+				audio.chest_cue(theme, "unlock")
+				check(_playing(audio) == 2 and audio.chest_charge.stream == bed
+					and audio._chest_next_player == (next_player + 1) % 3
+					and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")]
+					and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
+					and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
+					"The %s unlock independently quiets a missed anticipation without a breath replay" % theme)
+			next_player = audio._chest_next_player
+			audio.set_chest_tension(1.0)
+			audio.set_chest_tension(0.1)
+			audio.chest_cue(theme, "anticipation")
+			check(audio._chest_next_player == next_player and _playing(audio) == 2
+				and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025)),
+				"Repeated progress and late %s anticipation cannot clear or replay an existing held sound" % theme)
+			audio.chest_cue(theme, "release")
+			next_player = audio._chest_next_player
+			audio.set_chest_tension(1.0)
+			audio.chest_cue(theme, "anticipation")
+			audio.chest_cue(theme, "unlock")
+			audio.chest_cue(theme, "release")
+			check(audio._chest_next_player == next_player and not audio.chest_charge.playing
+				and audio.chest_charge.stream == null and _playing(audio) == 1
+				and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")]
+				and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.20)),
+				"Late %s held-state updates cannot restart the bed or interrupt the single release" % theme)
+			audio.stop_chest_performance()
 	audio.queue_free()
 	await process_frame
 
@@ -526,12 +601,14 @@ func _check_delayed_rhythm_delivery() -> void:
 		var bridge_index: int = audio._chest_next_player
 		check(audio.chest_charge.playing and _last_player(audio).playing
 			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "opening")]
+			and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
+			and _playing(audio) == 2
 			and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-			"The %s final compression starts its rising bridge over continuing pressure" % theme)
+			"The %s final brake clears the roll and takes a held breath over quiet pressure" % theme)
 		chest._advance_animation(0.01)
 		check(audio.chest_charge.playing and audio._chest_next_player == bridge_index
 			and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-			"The %s transition continues without another beat or source restart" % theme)
+			"The %s held breath continues without another beat or source restart" % theme)
 		audio.stop_chest_performance()
 		chest.clear()
 		chest.configure_skin(data.theme(theme), data.chests)
@@ -600,17 +677,49 @@ func _check_delayed_rhythm_delivery() -> void:
 		chest._advance_animation(Feel.ANTICIPATION_TIME)
 		check(audio._chest_last_tension_pulse == 0 and audio.chest_charge.playing
 			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "opening")]
+			and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
 			and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
-			"A " + theme + " frame reaching compression consumes old beats and sounds only its current rise")
+			"A " + theme + " frame reaching the brake consumes old beats and sounds only its current breath")
+		audio.stop_chest_performance()
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		audio.prepare_chest(theme)
+		chest.start_open(false)
+		chest._advance_animation(1.90)
+		audio.set_chest_tension(chest.tension_progress())
+		check(audio._chest_last_tension_pulse == Feel.PULSE_TIMES.size() and _playing(audio) == 2,
+			"The %s stalled-frame fixture reaches the final roll with its bed and newest strike" % theme)
+		before_jump = audio._chest_next_player
+		chest._advance_animation(0.14)
+		audio.set_chest_tension(chest.tension_progress())
+		check(not audio._chest_seen.has("anticipation0") and audio._chest_next_player == before_jump
+			and _playing(audio) == 1 and audio.chest_charge.playing
+			and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
+			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
+			"A %s frame from 1.90 to 2.04 seconds skips the late breath but still quiets the held state" % theme)
+		audio.set_chest_tension(1.0)
+		chest._advance_animation(Feel.UNLOCK_TIME - chest._elapsed + 0.000001)
+		audio.set_chest_tension(chest.tension_progress())
+		check(not audio._chest_seen.has("anticipation0") and audio._chest_next_player == (before_jump + 1) % 3
+			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")]
+			and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
+			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
+			"The %s latch preserves that quiet hold without backfilling a skipped breath" % theme)
+		chest._advance_animation(Feel.RELEASE_TIME - chest._elapsed + 0.000001)
+		audio.set_chest_tension(chest.tension_progress())
+		check(not audio.chest_charge.playing and _playing(audio) == 1
+			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")],
+			"The %s release stops the quiet bed after the skipped anticipation" % theme)
 		audio.stop_chest_performance()
 		chest.clear()
 		chest.configure_skin(data.theme(theme), data.chests)
 		audio.prepare_chest(theme)
 		chest.start_open(false)
 		chest._advance_animation(Feel.RELEASE_TIME + 0.01)
+		audio.set_chest_tension(chest.tension_progress())
 		check(not audio._chest_seen.has("anticipation0") and not audio.chest_charge.playing
 			and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")],
-			"A " + theme + " frame arriving after release cannot replay the missed rise over the payoff")
+			"A " + theme + " frame arriving after release cannot replay the missed breath over the payoff")
 		audio.stop_chest_performance()
 	chest.queue_free()
 	audio.queue_free()
