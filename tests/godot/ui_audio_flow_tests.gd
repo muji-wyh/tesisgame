@@ -231,6 +231,7 @@ func _run() -> void:
 			and app.model.successes == 1 and app.feedback_timer.is_stopped(),
 			"Stopping Voice also permits the immediate next-card shortcut before its timer expires")
 	await _check_pop_hit_audio(app)
+	await _check_pop_exit_audio(app)
 	app.audio.halt()
 	_check_pop_slice_choices()
 	app.queue_free()
@@ -291,6 +292,51 @@ func _check_pop_hit_audio(app) -> void:
 	check(not effect.playing and not app.audio.active and not _pop_hit_visible_word(app)
 		and app._pop.game.hits == hits_before_hide,
 		"Returning to the page cannot replay an old slice or accept words before listening resumes")
+
+
+func _check_pop_exit_audio(app) -> void:
+	for destination in ["match", "memory"]:
+		for state in ["pending", "listening", "denied", "report", "muted"]:
+			app.choose_mode("pop")
+			app._pop.set_process(false)
+			if state in ["listening", "report", "muted"]:
+				app._on_voice_state([true, true, "Listening."])
+			elif state == "denied":
+				app._on_voice_state([true, false, "Microphone permission was denied."])
+			if state == "report":
+				app._pop._advance_game(31.0)
+			if state == "muted":
+				app.audio.set_muted(true)
+			app.choose_mode(destination)
+			var label: String = "Leaving %s Voice Pop for %s" % [state, destination]
+			check(app._mode_id == destination and not app._voice_mode and not app._pop_speech_active,
+				label + " clears microphone input and quiet-mode guards")
+			check(not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.narration.playing,
+				label + " cannot carry over an old word, hit or report")
+			check(app.audio.muted == (state == "muted") and app.audio.active == (state != "muted")
+				and app.audio.music.playing == (state != "muted"),
+				label + " restores background music immediately while preserving the mute choice")
+			var word: Dictionary
+			if destination == "match":
+				word = app.model.cards[0].word
+				app.cards[app.model.cards[0].id].pressed.emit()
+			else:
+				word = app._memory.memory.cards[0].word
+				app._memory.card_buttons[0].pressed.emit()
+			check(app.audio.voice.playing == (state != "muted") and app.audio.effect.playing == (state != "muted"),
+				label + " permits the new card's pronunciation and selection sound unless muted")
+			if state != "muted":
+				check(app.audio.voice.stream == load("res://" + word.audio),
+					label + " pronounces the destination card's exact word")
+			app.audio.set_muted(false)
+			app._pop.set_process(true)
+	app.choose_mode("pop")
+	app.on_page_hidden()
+	app.choose_mode("match")
+	check(not app.audio.active and not app.audio.music.playing,
+		"A mode change delivered to a hidden page cannot restore background audio")
+	app.on_page_visible()
+	await process_frame
 
 
 func _slice_fallback() -> String:

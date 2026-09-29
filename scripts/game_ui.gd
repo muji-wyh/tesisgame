@@ -1208,6 +1208,10 @@ func choose_mode(id: String) -> void:
 		_default_focus().grab_focus()
 		if id == "pop":
 			_start_pop_listening()
+		elif not _page_hidden:
+			# The mode gesture restores playback after new_round silences the
+			# previous mode. Voice Pop stays quiet while its microphone is open.
+			audio.interact(model.theme_id)
 
 
 func _configure_pop(seed_value: int = -1) -> void:

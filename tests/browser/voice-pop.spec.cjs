@@ -1,9 +1,10 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame } = require('./game-ui.cjs');
+const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
-const catalogWords = require('../../words.json').map(word => word.text);
+const catalog = require('../../words.json');
+const catalogWords = catalog.map(word => word.text);
 const assetPath = relative => path.resolve(__dirname, '../..', relative);
 const expectedSlices = sliceAssets.filter(asset => fs.existsSync(assetPath(asset.destination)));
 if (!expectedSlices.length) {
@@ -37,6 +38,19 @@ function expectHitSlice(sound) {
   expect(sound.contextState, 'The real WebAudio context must be running at playback').toBe('running');
   expect(sound.fingerprint).toBeTruthy();
   expect(sound.peak, 'The selected slice has audible PCM samples').toBeGreaterThan(0.05);
+}
+
+function waveDuration(relative) {
+  const bytes = fs.readFileSync(assetPath(relative));
+  let bytesPerSecond, dataBytes;
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const chunk = bytes.toString('ascii', offset, offset + 4), size = bytes.readUInt32LE(offset + 4);
+    if (chunk === 'fmt ') bytesPerSecond = bytes.readUInt32LE(offset + 16);
+    if (chunk === 'data') dataBytes = size;
+    offset += 8 + size + (size % 2);
+  }
+  if (!bytesPerSecond || !dataBytes) throw new Error(`Invalid WAV: ${relative}`);
+  return dataBytes / bytesPerSecond;
 }
 
 async function installSpeech(page, { automatic = true, available = true, phraseHints = false } = {}) {
@@ -393,6 +407,92 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   expect(await page.evaluate(() => window.__popSpeech.aborts)).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+});
+
+test('leaving Voice Pop restores music immediately and card audio in Match and Memory', async ({ page, browserName }, info) => {
+  await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+  const errors = await open(page);
+  const available = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(available, 'Chromium must exercise real WebAudio playback').toBe(true);
+  test.skip(!available, 'This browser runtime has no WebAudio; native mode-switch audio coverage runs separately.');
+  const evidence = [];
+  const selectSeconds = waveDuration('assets/audio/sfx/select.wav');
+
+  for (const destination of ['match', 'memory']) {
+    if (destination === 'memory') await chooseMode(page, 'pop');
+    await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+    const listeningTheme = await page.locator('html').getAttribute('data-pip-theme');
+    const listeningMusicSeconds = waveDuration(`assets/audio/bgm/${listeningTheme}.wav`);
+    const listening = await page.evaluate(() => ({
+      starts: window.audioObservation.starts,
+      recognizers: window.__popSpeech.starts,
+      recognizerIndex: window.__popSpeech.instances.length - 1
+    }));
+    await page.waitForTimeout(650);
+    expect(await page.evaluate(() => window.audioObservation.starts), 'Listening without a hit stays quiet').toBe(listening.starts);
+    expect(await page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
+      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
+    listeningMusicSeconds), 'Voice Pop stops the previous mode\'s music').toBe(false);
+
+    const beforeExit = await page.evaluate(() => window.audioObservation.playbacks.length);
+    await chooseMode(page, destination);
+    await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
+    await expect(page.locator('#speech-panel')).toBeHidden();
+    const theme = await page.locator('html').getAttribute('data-pip-theme');
+    const musicSeconds = waveDuration(`assets/audio/bgm/${theme}.wav`);
+    // Godot restarts looping samples itself; AudioBufferSourceNode.loop stays
+    // false. Identify this world's music from its actual recording instead.
+    await expect.poll(() => page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).some(sound =>
+      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.contextState === 'running' &&
+      sound.stoppedAt === undefined && sound.endedAt === undefined), { from: beforeExit, seconds: musicSeconds }),
+    { message: `Switching from Voice Pop to ${destination} must restore music before any card tap` }).toBe(true);
+    const modeStatus = await page.locator('#game-status').textContent();
+
+    // Browsers can deliver an already queued start/result/end after abort. None
+    // may re-enter the listening quiet guard or stop the destination's music.
+    await page.evaluate(index => {
+      const old = window.__popSpeech.instances[index];
+      old.grant();
+      old.emit('cat');
+      old.fail('network');
+      old.end();
+    }, listening.recognizerIndex);
+    await page.waitForTimeout(650);
+    expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(listening.recognizers);
+    await expect(page.locator('#game-status')).toHaveText(modeStatus);
+    await expect(page.locator('#speech-panel')).toBeHidden();
+    const music = await page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).findLast(sound =>
+      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.endedAt === undefined),
+    { from: beforeExit, seconds: musicSeconds });
+    expect(music, 'The restored recording remains live after late recognition callbacks').toBeTruthy();
+    expect(music.stoppedAt, 'Late recognition callbacks cannot stop restored music').toBeUndefined();
+    expect(music.endedAt).toBeUndefined();
+    expect(await page.evaluate(() => window.audioObservation.contexts.some(context => context.state === 'running'))).toBe(true);
+
+    const beforeCard = await page.evaluate(() => window.audioObservation.playbacks.length);
+    const bounds = await metrics(page);
+    const point = destination === 'match' ? boardPoint(bounds, 0) : memoryPoint(bounds, 0);
+    await tap(page, point.x, point.y);
+    const pattern = destination === 'match' ? /^(Word|Picture): (.+)$/ : /^Memory card 1\. (Word|Picture): (.+)\.$/;
+    await expect(page.locator('#selection-status')).toHaveText(pattern);
+    const word = (await page.locator('#selection-status').textContent()).match(pattern)[2];
+    const selectedWord = catalog.find(entry => entry.text === word);
+    expect(selectedWord, 'The selected label must belong to the real vocabulary').toBeTruthy();
+    const wordSeconds = waveDuration(selectedWord.audio);
+    await expect.poll(() => page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).some(sound =>
+      sound.contextState === 'running' && Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate),
+    { from: beforeCard, seconds: wordSeconds }), { message: `${destination} must pronounce its selected word after Voice Pop` }).toBe(true);
+    const sounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeCard);
+    const select = sounds.find(sound => Math.abs(sound.duration - selectSeconds) <= 1 / sound.sampleRate);
+    expect(select, 'The destination card also plays its bundled selection sound').toBeTruthy();
+    expect(select.contextState).toBe('running');
+    expect(select.fingerprint).toBeTruthy();
+    expect(select.peak, 'Selection feedback contains audible PCM').toBeGreaterThan(0.01);
+    await expect(page.locator('#audio-status')).toBeEmpty();
+    evidence.push({ destination, theme, word, recording: selectedWord.audio, music, cardSounds: sounds });
+  }
+  await info.attach('voice-pop-exit-audio.json', { body: JSON.stringify(evidence), contentType: 'application/json' });
   expect(errors).toEqual([]);
 });
 
