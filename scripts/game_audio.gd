@@ -301,8 +301,8 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 				# even when a long frame skipped the transition or unlock cue.
 				stop_chest_charge()
 				if cue_name == "release":
-					# Hand the entire material field to one dry impact. Leaving the
-					# rising bridge or latch ringing would blur its loaded contact.
+					# Give the release impact and expanding bloom a clear onset.
+					# The rising bridge and latch should not mask that contact.
 					for player: AudioStreamPlayer in _chest_players:
 						player.stop()
 						player.stream = null
@@ -310,7 +310,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 				# Completion restores the normal mix after the material tail.
 				_chest_music_duck = 0.45 if cue_name == "settle" else 0.20
 				_update_music_gain()
-			_play_chest_event(cue_name, 0.78 if cue_name == "release" else (0.26 if cue_name == "unlock" else 0.42))
+			_play_chest_event(cue_name, 0.86 if cue_name == "release" else (0.26 if cue_name == "unlock" else 0.42))
 		_:
 			return
 	_chest_seen[event_key] = true
@@ -341,7 +341,7 @@ func chest_reward(theme_id: String, explicit_retry: bool = false) -> void:
 	stop_chest_charge()
 	_chest_music_duck = 1.0
 	_update_music_gain()
-	_play_chest_event("reward", 0.37)
+	_play_chest_event("reward", 0.54)
 
 
 func set_chest_charge(progress: float) -> void:

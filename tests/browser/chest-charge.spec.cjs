@@ -193,7 +193,7 @@ async function observeChest(page) {
 }
 
 test('an earned chest cancels on release, recharges visibly and saves one piece', async ({ page }, testInfo) => {
-  await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   // Summer has one of the widest world badges on the narrow phone stage.
@@ -220,6 +220,12 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
 
   const unopenedSave = await rewardSave(page);
   const progressStart = await page.evaluate(() => window.chestObservation.progress.length);
+  await page.evaluate(() => {
+    window.chestOutputSamples = [];
+    window.chestOutputTimer = setInterval(() => {
+      window.chestOutputSamples.push(...window.audioOutputObservation.read());
+    }, 16);
+  });
   await pressChest(page);
   try {
     // Capture transient states in the page. Screenshot encoding can take longer
@@ -338,6 +344,22 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   });
 
   if (await page.evaluate(() => window.audioObservation.available)) {
+    await expect.poll(() => page.evaluate(start => {
+      const payoff = window.audioObservation.playbacks.filter(sound => sound.at >= start &&
+        [0.68, 0.74].some(duration => Math.abs(sound.duration - duration) < 0.001));
+      return payoff.length === 2 && payoff.every(sound => Number.isFinite(sound.endedAt));
+    }, cues[0].at - 100), { message: 'The release and saved reward reach their natural end' }).toBe(true);
+    const output = await page.evaluate(() => {
+      clearInterval(window.chestOutputTimer);
+      return window.chestOutputSamples;
+    });
+    const payoffOutput = output.filter(sample => sample.at >= release.at && sample.at <= completed.at + 850);
+    expect(payoffOutput.length, 'The final release and receipt reach the output analyser').toBeGreaterThan(10);
+    expect(Math.max(...payoffOutput.map(sample => sample.peak)),
+      'Release, landing, reward and music retain combined output headroom').toBeLessThan(0.99);
+    expect(Math.max(...payoffOutput.map(sample => sample.rms)),
+      'The final payoff produces audible mixed output').toBeGreaterThan(0.02);
+    await testInfo.attach('chest-payoff-output', { body: JSON.stringify(payoffOutput, null, 2), contentType: 'application/json' });
     const allSounds = await page.evaluate(() => window.audioObservation.playbacks);
     await testInfo.attach('all-audio', { body: JSON.stringify(allSounds, null, 2), contentType: 'application/json' });
     // These are observable scheduling measurements, not a physical-device
@@ -358,6 +380,18 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     }
     const reward = chestSounds.find(sound => Math.abs(sound.duration - 0.74) < 0.001);
     expect(reward.at - opening.at).toBeGreaterThanOrEqual(3700);
+    for (const duration of [0.68, 0.74]) {
+      const sound = chestSounds.find(sound => hasDuration(sound, duration));
+      // Godot may stop/disconnect the WebAudio source from its natural-ended
+      // callback. Reject early stops, while allowing that completed cleanup.
+      if (Number.isFinite(sound.stoppedAt)) {
+        expect(sound.stopScheduledAt, 'Release bloom and saved reward finish before source cleanup')
+          .toBeGreaterThanOrEqual(sound.scheduledAt + duration / sound.playbackRate - 0.01);
+      }
+      expect(Number.isFinite(sound.endedAt), 'Both payoff sources reach their natural end').toBe(true);
+      expect(sound.endedAt - audioOnset(sound), 'The complete payoff envelope reaches the output')
+        .toBeGreaterThanOrEqual(duration * 1000 - 100);
+    }
     const beds = chestSounds.filter(sound => hasDuration(sound, 0.8));
     const cancel = cues.find(event => event.cue === 'cancel');
     const cancelledBed = beds.filter(sound => audioOnset(sound) < acceptedPress.at - 100);

@@ -65,7 +65,7 @@ logic through separate step helpers.
 | `anticipation` | Opening +1.94 s | Continuous rising bridge over the pressure bed |
 | `unlock` | Opening +2.08 s (3.28 s total) | Lock/core sound |
 | `release` | Opening +2.16 s (3.36 s total) | Complete input; lid, material sound, local theme flash and twelve light streaks |
-| `settle` | Opening +2.95 s (4.15 s total) | Material landing sound |
+| `settle` | Opening +2.58 s (3.78 s total) | Material landing sound |
 | `opened` | Opening +3.8 s (5 s total), with no further hold required | Save progress before the opened result |
 
 A frame stall consumes expired beats without playing a backlog. A rising bridge
@@ -121,8 +121,16 @@ Each theme includes `press`, `charge`, `step`, `step-detail`, `step-roll`, `canc
 progress from grounded contact through detailed impacts to a bright rolling
 texture, keeping a fixed body pitch. The separate pressure texture rises gently
 in pitch, and the `opening` clip bridges anticipation into release. The release
-combines immediate contact with cavity resonance, outward air and a bright tail;
-background music stays ducked through that impact. Progress stars remain silent.
+combines an immediate low-mid impact and crisp crack with an expanding air bloom
+and diffuse theme-colored shimmer. The strongest impact lands inside 45 ms;
+the audible 300-500 ms bloom supports the flash before fading by the end of the
+680 ms clip. The quieter lid stop can overlap the bloom without cutting it off.
+Background music stays ducked through the physical release. Progress stars
+remain silent. The separate 740 ms saved-reward accent resolves upward and has
+consistent energy across all eight themes; it only plays after saving succeeds.
+Release and reward clips target source RMS levels of 0.17 and 0.12, with a 0.78
+peak ceiling and playback gains of 0.86 and 0.54. Their layered envelopes provide
+contrast while preserving mixing headroom, rather than raising every sound.
 WAVs are mono, 16-bit PCM at 22,050 Hz,
 1,549,152 bytes in total. Regenerate and inspect their hashes and dynamics with:
 

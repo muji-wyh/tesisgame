@@ -58,7 +58,7 @@ test('all 88 authored chest cues reproduce exactly and stay within the bundled a
   assert.ok(bytes < 1600000, 'The complete layered bank stays below 1.6 MB');
 });
 
-test('chest strikes rise into a dry weighted release and a compact material stop', () => {
+test('chest strikes rise into a weighted release with audible bloom and a compact material stop', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const window = (samples, start, end) => samples.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE));
   for (const theme of audio.THEMES) {
@@ -79,13 +79,17 @@ test('chest strikes rise into a dry weighted release and a compact material stop
     }
     assert.ok(contact > 0.30 && strongestTime >= 0.01 && strongestTime <= 0.045,
       `${theme} loads its main release inside the first 45 ms`);
-    assert.ok(soundEnergy(window(release, 0.15, 0.30), audio.RATE).rms > 0.035,
-      `${theme} retains a short resonating cavity after contact`);
-    assert.ok(soundEnergy(window(release, 0.30, 0.50), audio.RATE).rms < contact * 0.04,
-      `${theme} damps its release before the lid's mechanical stop without an airy tail`);
+    assert.equal(release.length, Math.round(0.68 * audio.RATE), `${theme} keeps the physical release duration`);
+    assert.ok(soundEnergy(window(release, 0.15, 0.30), audio.RATE).rms > 0.075,
+      `${theme} retains a resonating cavity after contact`);
+    const bloom = soundEnergy(window(release, 0.30, 0.50), audio.RATE).rms;
+    assert.ok(bloom > 0.035 && bloom < contact * 0.30,
+      `${theme} expands into an audible bloom without a second louder impact`);
+    assert.ok(soundEnergy(window(release, 0.62, audio.CUES.release), audio.RATE).rms < bloom * 0.15,
+      `${theme} damps the bloom before the physical sample ends`);
     const material = soundEnergy(release, audio.RATE);
-    assert.ok(material.bodyRatio > 0.70 && material.phoneRatio > 0.20,
-      `${theme} combines grounded resonance with audible low-mid harmonics`);
+    assert.ok(soundEnergy(window(release, 0, 0.12), audio.RATE).bodyRatio > 0.60 && material.phoneRatio > 0.18,
+      `${theme} keeps its initial cavity weight and phone-audible harmonics beneath the bloom`);
     assert.ok(release.every(sample => Math.abs(sample) < 0.79), `${theme} leaves unclipped mixing headroom`);
     const settle = audio.render(theme, 'settle');
     const landing = soundEnergy(settle, audio.RATE);
@@ -95,7 +99,34 @@ test('chest strikes rise into a dry weighted release and a compact material stop
       soundEnergy(window(settle, 0, 0.04), audio.RATE).rms * 0.02,
     `${theme} stops ringing after its compact rebound`);
     assert.ok(settle.every(sample => Math.abs(sample) < 0.79), `${theme} landing stays unclipped`);
+    const settleAt = Math.round(0.42 * audio.RATE);
+    let mixedPeak = 0;
+    for (let index = 0; index < Math.max(release.length, settleAt + settle.length); index++) {
+      const mixed = (release[index] || 0) * 0.86 + (settle[index - settleAt] || 0) * 0.42;
+      mixedPeak = Math.max(mixedPeak, Math.abs(mixed));
+    }
+    assert.ok(mixedPeak < 0.85, `${theme} leaves music headroom while release and landing overlap`);
   }
+});
+
+test('saved reward accents resolve audibly at an even level across all eight themes', () => {
+  const audio = require('../tools/generate-chest-audio.cjs');
+  const levels = [];
+  for (const theme of audio.THEMES) {
+    const reward = audio.render(theme, 'reward');
+    const window = (start, end) => soundEnergy(reward.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE)), audio.RATE).rms;
+    const level = soundEnergy(reward, audio.RATE).rms;
+    levels.push(level);
+    assert.equal(reward.length, Math.round(0.74 * audio.RATE), `${theme} keeps the saved receipt duration`);
+    assert.ok(level > 0.10 && level < 0.14, `${theme} plays a substantial saved reward accent`);
+    const resolving = window(0.30, 0.50);
+    assert.ok(resolving > 0.08, `${theme} sustains its resolving phrase beyond the initial contact`);
+    assert.ok(window(0.62, audio.CUES.reward) < resolving * 0.25, `${theme} fades its reward cleanly after resolving`);
+    assert.ok(reward.every(sample => Math.abs(sample) < 0.79), `${theme} reward retains mixing headroom`);
+    assert.ok(reward[0] === 0 && reward.at(-1) === 0, `${theme} reward has clean sample boundaries`);
+  }
+  assert.ok(Math.max(...levels) / Math.min(...levels) < 1.15,
+    'Every theme acknowledges a saved reward at a comparable audible level');
 });
 
 function readManifest() {

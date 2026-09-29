@@ -24,6 +24,16 @@ const MATERIALS = {
   candy: 'Elastic squash, a soft pop and scattered sugar grains'
 };
 const BODY_FREQUENCIES = { spring: 112, summer: 98, autumn: 82, winter: 128, ocean: 78, space: 90, jungle: 102, candy: 118 };
+const PAYOFF_PROFILES = {
+  spring: { note: 523.25, air: 0.46, cutoff: 3600, shimmer: 0.15, spread: 0.006 },
+  summer: { note: 587.33, air: 0.76, cutoff: 4600, shimmer: 0.13, spread: 0.008 },
+  autumn: { note: 392.00, air: 0.40, cutoff: 2700, shimmer: 0.12, spread: 0.014 },
+  winter: { note: 783.99, air: 0.42, cutoff: 5200, shimmer: 0.21, spread: 0.004 },
+  ocean: { note: 392.00, air: 0.62, cutoff: 1800, shimmer: 0.17, spread: 0.010 },
+  space: { note: 440.00, air: 0.69, cutoff: 4100, shimmer: 0.16, spread: 0.012 },
+  jungle: { note: 493.88, air: 0.57, cutoff: 2900, shimmer: 0.12, spread: 0.016 },
+  candy: { note: 659.25, air: 0.39, cutoff: 3800, shimmer: 0.20, spread: 0.008 }
+};
 
 function random(seed) {
   let state = 2166136261;
@@ -155,6 +165,39 @@ function render(theme, cue) {
     });
   }
 
+  function bloom(start, seconds, gain, cutoff) {
+    // A broad expanding pressure cloud gives the contact room to open into.
+    // Its soft front avoids introducing a second strike after the latch crack.
+    let low = 0;
+    let dark = 0;
+    const alpha = 1 - Math.exp(-TAU * cutoff / RATE);
+    const darkAlpha = 1 - Math.exp(-TAU * 360 / RATE);
+    layer(start, seconds, gain, (t) => {
+      const white = rng() * 2 - 1;
+      low += alpha * (white - low);
+      dark += darkAlpha * (low - dark);
+      const swell = (1 - Math.exp(-t / 0.028)) * Math.exp(-t / 0.20);
+      return (low - dark * 0.72) * swell * Math.min(1, (seconds - t) / 0.085);
+    });
+  }
+
+  function shimmer(start, seconds, base, gain, spread, attack = 0.022) {
+    // Detuned modal clusters sound like resonant material catching the light,
+    // not a sustained oscillator or a sequence of electronic notification beeps.
+    const ratios = [1, 1.498, 2.008, 2.756, 3.73];
+    const phases = ratios.map(() => rng() * TAU);
+    layer(start, seconds, gain, (t) => {
+      let sound = 0;
+      for (let index = 0; index < ratios.length; index++) {
+        const phase = TAU * base * ratios[index] * t + phases[index];
+        const cluster = Math.sin(phase) + 0.38 * Math.sin(phase * (1 + spread));
+        sound += cluster * Math.exp(-t * index * 1.7) / (1 + index * 1.8);
+      }
+      const swell = (1 - Math.exp(-t / attack)) * Math.exp(-t / 0.25);
+      return sound * swell * Math.min(1, (seconds - t) / 0.095);
+    });
+  }
+
   function risingBridge() {
     samples.fill(0);
     let air = 0;
@@ -256,14 +299,26 @@ function render(theme, cue) {
   } else if (cue === 'opening') {
     risingBridge();
   } else if (cue === 'release') {
-    // Preserve a small material signature, then make the release one loaded
-    // contact. Long air and shimmer tails make this moment sound weightless.
-    for (let i = 0; i < samples.length; i++) samples[i] *= 0.20 * Math.exp(-Math.max(0, i / RATE - 0.04) * 16);
+    // Keep the loaded contact, then open its sound into air and material light.
+    // The body lands first; the 0.5-second bloom is its expanding payoff.
+    const payoff = PAYOFF_PROFILES[theme];
+    for (let i = 0; i < samples.length; i++) samples[i] *= 0.42;
     const base = Math.max(86, BODY_FREQUENCIES[theme]);
-    weightedContact(0, 0.38, base, 1.20, 0.088);
-    noise(0, 0.024, 0.40, theme === 'ocean' ? 1500 : 3200, 0.0008, 5.5);
-    modes(0.007, 0.14, [base * 3.1, base * 5.6], 0.11, 6.8);
-    noise(0.020, 0.16, 0.14, 1400, 0.008, 5.0);
+    weightedContact(0, 0.36, base, 1.10, 0.085);
+    noise(0, 0.024, 0.60, theme === 'ocean' ? 2900 : 5200, 0.0008, 5.0);
+    modes(0.006, 0.20, [base * 3.1, base * 5.97, base * 9.04], 0.22, 4.0);
+    bloom(0.014, 0.57, payoff.air * 1.9, payoff.cutoff);
+    shimmer(0.018, 0.58, payoff.note, payoff.shimmer * 1.85, payoff.spread);
+  } else if (reward) {
+    // A short resolving gesture is reserved for the saved reward. Staggered
+    // material overtones bloom into a consonant fifth, rather than another hit.
+    const payoff = PAYOFF_PROFILES[theme];
+    for (let i = 0; i < samples.length; i++) samples[i] *= 0.48;
+    modes(0.002, 0.13, [payoff.note * 0.5, payoff.note * 1.007], 0.15, 4.0);
+    bloom(0.012, 0.37, payoff.air * 0.18, payoff.cutoff);
+    shimmer(0.008, 0.57, payoff.note, 0.28, payoff.spread, 0.009);
+    shimmer(0.105, 0.56, payoff.note * 1.25, 0.18, payoff.spread, 0.012);
+    shimmer(0.205, 0.50, payoff.note * 1.5, 0.30, payoff.spread, 0.015);
   } else if (cue === 'settle') {
     // A quieter mechanical stop and a small damped return anchor the lid.
     // Keep theme detail, but avoid a second long release or reward-like chime.
@@ -274,8 +329,8 @@ function render(theme, cue) {
     noise(0, 0.019, 0.18, 2400, 0.001, 6.0);
   }
 
-  if (cue === 'release' || cue === 'settle') {
-    // Gentle saturation gives the dry contact headroom beside its cavity body.
+  if (cue === 'release' || cue === 'settle' || reward) {
+    // Gentle saturation leaves headroom for the contact and resolving layers.
     for (let i = 0; i < samples.length; i++) samples[i] = 0.8 * Math.tanh(samples[i] / 0.8);
   }
   // Remove any DC bias and taper both boundaries. A looping charge asset has
@@ -288,11 +343,11 @@ function render(theme, cue) {
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
-  if (strike || cue === 'release' || cue === 'settle' || cue === 'opening') {
+  if (strike || cue === 'release' || cue === 'settle' || cue === 'opening' || reward) {
     // Equal material-strike energy lets the shared crescendo read on every
     // theme, including the otherwise very quiet magnetic and flower locks.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const target = cue === 'release' ? 0.15 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
+    const target = cue === 'release' ? 0.17 : reward ? 0.12 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
     const gain = Math.min(target / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }

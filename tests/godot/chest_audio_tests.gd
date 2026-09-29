@@ -40,7 +40,10 @@ func _rms(source: PackedByteArray, start: int, end: int) -> float:
 func _check_grounded_impact(source: PackedByteArray, sample_rate: int, cue: String, label: String) -> void:
 	var low: float = 0.0
 	var low_energy: float = 0.0
+	var body_energy: float = 0.0
 	var total_energy: float = 0.0
+	var peak: float = 0.0
+	var body_end: int = roundi(0.12 * sample_rate) * 2 if cue == "release" else source.size()
 	var alpha: float = 1.0 - exp(-TAU * 400.0 / sample_rate)
 	var low180: float = 0.0
 	var low1200: float = 0.0
@@ -48,17 +51,21 @@ func _check_grounded_impact(source: PackedByteArray, sample_rate: int, cue: Stri
 	for offset in range(0, source.size(), 2):
 		var sample: float = float(source.decode_s16(offset)) / 32768.0
 		low += alpha * (sample - low)
-		low_energy += low * low
+		if offset < body_end:
+			low_energy += low * low
+			body_energy += sample * sample
 		total_energy += sample * sample
+		peak = maxf(peak, absf(sample))
 		low180 += (1.0 - exp(-TAU * 180.0 / sample_rate)) * (sample - low180)
 		low1200 += (1.0 - exp(-TAU * 1200.0 / sample_rate)) * (sample - low1200)
 		phone_energy += (low1200 - low180) * (low1200 - low180)
-	check(low_energy / maxf(total_energy, 0.000001) > 0.60,
-		label + " retains low cavity weight instead of a thin high-only tick")
+	check(low_energy / maxf(body_energy, 0.000001) > 0.60,
+		label + " retains low cavity weight in its initial contact")
 	if cue not in ["release", "settle"]:
 		return
 	check(phone_energy / maxf(total_energy, 0.000001) > 0.18,
 		label + " keeps audible low-mid harmonics for small speakers")
+	check(peak < 0.79, label + " retains unclipped mixing headroom")
 	var strongest: float = 0.0
 	var strongest_time: float = 0.0
 	for window in range(50):
@@ -68,17 +75,40 @@ func _check_grounded_impact(source: PackedByteArray, sample_rate: int, cue: Stri
 			strongest = energy
 			strongest_time = time + 0.010
 	var contact: float = _rms(source, 0, roundi(0.040 * sample_rate) * 2)
-	check(contact > (0.25 if cue == "release" else 0.15), label + " has a solid immediate contact")
+	check(contact > (0.30 if cue == "release" else 0.15), label + " has a solid immediate contact")
 	check(strongest_time >= 0.010 and strongest_time <= 0.045,
 		label + " carries its main weight inside the first 45 ms")
 	if cue == "release":
-		check(_rms(source, roundi(0.150 * sample_rate) * 2, roundi(0.300 * sample_rate) * 2) > 0.035,
-			label + " retains a short resonating cavity beyond contact")
-		check(_rms(source, roundi(0.300 * sample_rate) * 2, roundi(0.500 * sample_rate) * 2) < contact * 0.04,
-			label + " damps its air and resonance before the mechanical stop")
+		check(absi(source.size() - roundi(sample_rate * 0.68) * 2) <= 2,
+			label + " keeps the physical release duration")
+		check(_rms(source, roundi(0.150 * sample_rate) * 2, roundi(0.300 * sample_rate) * 2) > 0.075,
+			label + " retains a resonating cavity beyond contact")
+		var bloom: float = _rms(source, roundi(0.300 * sample_rate) * 2, roundi(0.500 * sample_rate) * 2)
+		check(bloom > 0.035 and bloom < contact * 0.30,
+			label + " expands into an audible bloom without a second louder impact")
+		check(_rms(source, roundi(0.620 * sample_rate) * 2, source.size()) < bloom * 0.15,
+			label + " damps its bloom before the physical sample ends")
 	else:
 		check(_rms(source, roundi(0.180 * sample_rate) * 2, roundi(0.400 * sample_rate) * 2) < contact * 0.02,
 			label + " settles quickly after a small damped rebound")
+
+
+func _check_reward_sound(source: PackedByteArray, sample_rate: int, label: String) -> float:
+	var level: float = _rms(source, 0, source.size())
+	check(level > 0.10 and level < 0.14, label + " plays a substantial saved reward accent")
+	var resolving: float = _rms(source, roundi(0.300 * sample_rate) * 2, roundi(0.500 * sample_rate) * 2)
+	check(resolving > 0.08, label + " sustains its resolving phrase beyond the initial contact")
+	check(_rms(source, roundi(0.620 * sample_rate) * 2, source.size()) < resolving * 0.25,
+		label + " fades cleanly after resolving")
+	var peak: float = 0.0
+	for offset in range(0, source.size(), 2):
+		peak = maxf(peak, absf(float(source.decode_s16(offset)) / 32768.0))
+	check(peak < 0.79, label + " retains unclipped mixing headroom")
+	check(source.decode_s16(0) == 0 and source.decode_s16(source.size() - 2) == 0,
+		label + " has clean sample boundaries")
+	check(absi(source.size() - roundi(sample_rate * 0.74) * 2) <= 2,
+		label + " keeps the saved receipt duration")
+	return level
 
 
 func _run() -> void:
@@ -103,6 +133,8 @@ func _check_material_assets() -> void:
 	root.add_child(audio)
 	var fingerprints: Dictionary = {}
 	var total_bytes: int = 0
+	var reward_levels: Array[float] = []
+	var fallback_reward_levels: Array[float] = []
 	check(Bank.pulse_cue(0.0) == "step" and Bank.pulse_cue(0.559) == "step"
 		and Bank.pulse_cue(0.56) == "step-detail" and Bank.pulse_cue(0.819) == "step-detail"
 		and Bank.pulse_cue(0.82) == "step-roll" and Bank.pulse_cue(1.0) == "step-roll",
@@ -129,6 +161,8 @@ func _check_material_assets() -> void:
 			check(source.decode_s16(44) == 0 and source.decode_s16(source.size() - 2) == 0, "Clean sample boundaries: " + theme + "/" + cue_name)
 			if cue_name.begins_with("step") or cue_name in ["release", "settle"]:
 				_check_grounded_impact(source.slice(44), 22050, cue_name, theme + "/" + cue_name)
+			if cue_name == "reward":
+				reward_levels.append(_check_reward_sound(source.slice(44), 22050, theme + "/reward"))
 			if cue_name == "opening":
 				var early: float = _rms(source, 44 + roundi(0.020 * 22050) * 2, 44 + roundi(0.070 * 22050) * 2)
 				var late: float = _rms(source, 44 + roundi(0.160 * 22050) * 2, 44 + roundi(0.210 * 22050) * 2)
@@ -154,12 +188,20 @@ func _check_material_assets() -> void:
 				and fallback.data.decode_s16(0) == 0 and fallback.data.decode_s16(fallback.data.size() - 2) == 0,
 				"The " + theme + "/" + cue_name + " fallback is deterministic with clean boundaries")
 			_check_grounded_impact(fallback.data, Bank.SAMPLE_RATE, cue_name, theme + "/" + cue_name + " fallback")
+		fallback = Bank.fallback(theme, "reward")
+		check(fallback.data == Bank.fallback(theme, "reward").data,
+			"The " + theme + " saved reward fallback is deterministic")
+		fallback_reward_levels.append(_check_reward_sound(fallback.data, Bank.SAMPLE_RATE, theme + "/reward fallback"))
 		fallback = Bank.fallback(theme, "opening")
 		check(fallback.get_length() >= Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME
 			and _rms(fallback.data, roundi(0.16 * Bank.SAMPLE_RATE) * 2, roundi(0.21 * Bank.SAMPLE_RATE) * 2)
 			> 3.0 * _rms(fallback.data, roundi(0.02 * Bank.SAMPLE_RATE) * 2, roundi(0.07 * Bank.SAMPLE_RATE) * 2),
 			"The " + theme + " fallback transition rises and covers the entire final compression")
 	check(total_bytes < 1600000 and fingerprints.size() == 88, "All eight complete material banks with three strike textures fit within 1.6 MB")
+	check(reward_levels.size() == Bank.THEMES.size() and reward_levels.max() / reward_levels.min() < 1.15,
+		"Every theme acknowledges a saved reward at a comparable authored level")
+	check(fallback_reward_levels.size() == Bank.THEMES.size() and fallback_reward_levels.max() / fallback_reward_levels.min() < 1.15,
+		"Every theme acknowledges a saved reward at a comparable fallback level")
 	check(audio.get_child_count() == 4 and _playing(audio) == 0, "Preparing themes never allocates playback channels or makes a sound")
 	audio.queue_free()
 	await process_frame
@@ -374,17 +416,22 @@ func _check_tension_rhythm() -> void:
 		check(audio._chest_next_player == next_player,
 			"The final progress star stays visual so the release retains its single impact")
 		audio.chest_cue(theme, "release")
-		check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")]
-			and is_equal_approx(_last_player(audio).volume_db, linear_to_db(0.78))
+		var release_player: AudioStreamPlayer = _last_player(audio)
+		check(release_player.stream == audio.cache[Bank.path_for(theme, "release")]
+			and is_equal_approx(release_player.volume_db, linear_to_db(0.86))
 			and not player.playing and player.stream == null and not bridge.playing and _playing(audio) == 1
 			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.20)) and not audio._chest_rewarded,
-			"The " + theme + " release replaces the bridge with one dry impact while music stays behind it")
+			"The " + theme + " release replaces the bridge with one weighted payoff while music stays behind it")
 		audio.chest_cue(theme, "settle")
 		check(is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.45))
 			and is_equal_approx(_last_player(audio).volume_db, linear_to_db(0.42)),
 			"The " + theme + " landing remains in front of the returning music")
+		check(release_player.playing and release_player.stream == audio.cache[Bank.path_for(theme, "release")]
+			and release_player != _last_player(audio),
+			"The " + theme + " mechanical stop preserves the release bloom on its own channel")
 		audio.chest_reward(theme)
 		check(audio._chest_rewarded and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "reward")]
+			and is_equal_approx(_last_player(audio).volume_db, linear_to_db(0.54))
 			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12)),
 			"Only a save acknowledgement plays the success accent and restores music after tension")
 		audio.stop_chest_performance()

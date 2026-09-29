@@ -21,6 +21,18 @@ const PROFILES := {
 	"jungle": [193.0, 0.43, 0.3],
 	"candy": [185.0, 0.22, 0.16],
 }
+const PAYOFF_PROFILES := {
+	"spring": [523.25, 0.46, 3600.0, 0.15, 0.006],
+	"summer": [587.33, 0.76, 4600.0, 0.13, 0.008],
+	"autumn": [392.00, 0.40, 2700.0, 0.12, 0.014],
+	"winter": [783.99, 0.42, 5200.0, 0.21, 0.004],
+	"ocean": [392.00, 0.62, 1800.0, 0.17, 0.010],
+	"space": [440.00, 0.69, 4100.0, 0.16, 0.012],
+	"jungle": [493.88, 0.57, 2900.0, 0.12, 0.016],
+	"candy": [659.25, 0.39, 3800.0, 0.20, 0.008],
+}
+const SHIMMER_RATIOS := [1.0, 1.498, 2.008, 2.756, 3.73]
+const SHIMMER_PHASES := [0.17, 1.09, 2.37, 0.64, 1.83]
 
 
 static func theme_id(value: String) -> String:
@@ -45,13 +57,30 @@ static func _weighted_contact(time: float, base: float, duration: float, decay: 
 	return body * minf(1.0, time / 0.004) * exp(-time / decay) * minf(1.0, (duration - time) / 0.045)
 
 
+static func _bloom_envelope(time: float, duration: float) -> float:
+	if time < 0.0 or time >= duration:
+		return 0.0
+	return (1.0 - exp(-time / 0.028)) * exp(-time / 0.20) * minf(1.0, (duration - time) / 0.085)
+
+
+static func _shimmer(time: float, duration: float, base: float, spread: float, attack: float = 0.022) -> float:
+	if time < 0.0 or time >= duration:
+		return 0.0
+	var sound: float = 0.0
+	for index in range(SHIMMER_RATIOS.size()):
+		var phase: float = TAU * base * float(SHIMMER_RATIOS[index]) * time + float(SHIMMER_PHASES[index])
+		var cluster: float = sin(phase) + 0.38 * sin(phase * (1.0 + spread))
+		sound += cluster * exp(-time * index * 1.7) / (1.0 + index * 1.8)
+	return sound * (1.0 - exp(-time / attack)) * exp(-time / 0.25) * minf(1.0, (duration - time) / 0.095)
+
+
 static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	# A small, deterministic material texture covers missing bundled recordings.
 	# It is rendered only on first use and never schedules a later replacement.
 	# The authored Foley assets contain the more detailed leaf/hinge/air layers.
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
-	var duration: float = 0.64 if cue == "charge" else (0.42 if cue == "reward" else 0.2)
+	var duration: float = 0.64 if cue == "charge" else (0.74 if cue == "reward" else 0.2)
 	var impact: bool = cue.begins_with("step") or cue in ["release", "settle"]
 	var strike_stage: int = ["step", "step-detail", "step-roll"].find(cue)
 	if impact:
@@ -66,6 +95,12 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = (theme + "/" + cue).hash()
 	var filtered: float = 0.0
+	var payoff: Array = PAYOFF_PROFILES[theme]
+	var payoff_cue: bool = cue in ["release", "reward"]
+	var payoff_air: float = 0.0
+	var payoff_dark: float = 0.0
+	var payoff_filter: float = 1.0 - exp(-TAU * minf(float(payoff[2]), SAMPLE_RATE * 0.45) / SAMPLE_RATE)
+	var dark_filter: float = 1.0 - exp(-TAU * 360.0 / SAMPLE_RATE)
 	var base: float = profile[0] * (0.75 if cue in ["cancel", "settle"] else 1.0)
 	if cue == "charge":
 		base = PRESSURE_FREQUENCIES[theme]
@@ -78,6 +113,9 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		if cue == "opening":
 			filter_rate = 1.0 - exp(-TAU * (550.0 + 4100.0 * pow(minf(time / 0.215, 1.0), 2.0)) / SAMPLE_RATE)
 		filtered += filter_rate * (noise - filtered)
+		if payoff_cue:
+			payoff_air += payoff_filter * (noise - payoff_air)
+			payoff_dark += dark_filter * (payoff_air - payoff_dark)
 		var envelope: float = minf(time / 0.004, 1.0) * exp(-time * 18.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.024), 1.0)
 		if cue == "charge":
 			# Keep fallback pressure sustained too. All rhythmic attacks come
@@ -100,6 +138,19 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 			var rise_phase: float = TAU * (float(BODY_FREQUENCIES[theme]) * 2.3 * time + 1450.0 * time * time)
 			sample = (filtered * 0.72 + sin(rise_phase) * 0.16 + sin(rise_phase * 1.51) * 0.07) * (0.16 + 0.84 * rise * rise)
 			sample *= minf(time / 0.008, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.014), 1.0)
+		elif cue == "reward":
+			# The saved reward resolves upward through diffuse material overtones.
+			# It stays separate from the release, including when persistence retries.
+			var note: float = float(payoff[0])
+			var spread: float = float(payoff[4])
+			sample *= 0.48
+			sample += _weighted_contact(time - 0.002, note * 0.5, 0.13, 0.025) * 0.08
+			sample += (payoff_air - payoff_dark * 0.72) * _bloom_envelope(time - 0.012, 0.37) * float(payoff[1]) * 0.18
+			sample += _shimmer(time - 0.008, 0.57, note, spread, 0.009) * 0.28
+			sample += _shimmer(time - 0.105, 0.56, note * 1.25, spread, 0.012) * 0.18
+			sample += _shimmer(time - 0.205, 0.50, note * 1.5, spread, 0.015) * 0.30
+			sample = 0.8 * tanh(sample / 0.8)
+			sample *= minf(time / 0.003, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.018), 1.0)
 		elif impact:
 			var releasing: bool = cue == "release"
 			var settling: bool = cue == "settle"
@@ -113,13 +164,15 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 			if strike_stage >= 2:
 				sample += ((noise - filtered) * 0.40 + sin(impact_phase * 8.3) * 0.12) * minf(time / 0.010, 1.0) * exp(-time / 0.045)
 			if releasing:
-				# The fallback release has the same quick load, phone-audible
-				# cavity harmonics and short dry tail as the authored material.
+				# A quick crack and phone-audible cavity open into the same broad
+				# air and harmonic bloom as the authored material payoff.
 				var contact_base: float = maxf(86.0, float(BODY_FREQUENCIES[theme]))
-				sample = _weighted_contact(time, contact_base, 0.38, 0.088) * 1.20
-				sample += (filtered * 0.35 + (noise - filtered) * 0.11) * exp(-time / 0.006)
-				sample += body * 0.045 * envelope * exp(-maxf(0.0, time - 0.04) * 16.0)
-				sample += filtered * 0.10 * minf(time / 0.008, 1.0) * exp(-time / 0.035)
+				sample = _weighted_contact(time, contact_base, 0.36, 0.085) * 1.25
+				sample += (filtered * 0.40 + (noise - filtered) * 0.22) * exp(-time / 0.005)
+				sample += body * 0.10 * envelope
+				sample += (sin(impact_phase * 3.1) + 0.35 * sin(impact_phase * 5.97)) * minf(time / 0.006, 1.0) * exp(-time / 0.045) * 0.20
+				sample += (payoff_air - payoff_dark * 0.72) * _bloom_envelope(time - 0.014, 0.57) * float(payoff[1]) * 1.9
+				sample += _shimmer(time - 0.018, 0.58, float(payoff[0]), float(payoff[4])) * float(payoff[3]) * 1.85
 			elif settling:
 				var contact_base: float = maxf(90.0, float(BODY_FREQUENCIES[theme]) * 1.10)
 				sample = _weighted_contact(time, contact_base, 0.19, 0.042) * 0.80
@@ -134,8 +187,8 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		energy += sample * sample
 		peak = maxf(peak, absf(sample))
 	var gain: float = 1.0
-	if impact or cue in ["charge", "opening"]:
-		var target: float = 0.12 if cue == "charge" else (0.15 if cue == "release" else (0.085 if cue == "settle" else (0.11 if cue == "opening" else [0.07, 0.075, 0.082][strike_stage])))
+	if impact or cue in ["charge", "opening", "reward"]:
+		var target: float = 0.12 if cue in ["charge", "reward"] else (0.17 if cue == "release" else (0.085 if cue == "settle" else (0.11 if cue == "opening" else [0.07, 0.075, 0.082][strike_stage])))
 		gain = minf(target / maxf(sqrt(energy / frames), 0.000001), 0.75 / maxf(peak, 0.000001))
 	for index in range(frames):
 		samples.encode_s16(index * 2, roundi(clampf(rendered[index] * gain, -0.75, 0.75) * 32767.0))
