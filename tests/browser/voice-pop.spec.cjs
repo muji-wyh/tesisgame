@@ -4,6 +4,7 @@ const path = require('node:path');
 const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
+const { assets: referenceSlices } = require('../../docs/assets/voice-pop-reference-audio.json');
 const catalog = require('../../words.json');
 const bundledAudioTest = test.extend({
   // Require the game's real tap gestures to unlock audio in these focused tests.
@@ -11,7 +12,9 @@ const bundledAudioTest = test.extend({
 });
 const catalogWords = catalog.map(word => word.text);
 const assetPath = relative => path.resolve(__dirname, '../..', relative);
-const expectedSlices = sliceAssets.filter(asset => fs.existsSync(assetPath(asset.destination)));
+const referenceAvailable = referenceSlices.length > 0 && referenceSlices.every(asset => fs.existsSync(assetPath(asset.destination)));
+const expectedSlices = (referenceAvailable ? referenceSlices : sliceAssets)
+  .filter(asset => fs.existsSync(assetPath(asset.destination)));
 if (!expectedSlices.length) {
   // A clean source checkout uses one tracked sound; private imports are optional.
   const destination = fs.existsSync(assetPath('assets/imported-audio/pop-slice.wav'))
@@ -562,6 +565,79 @@ test('leaving while permission is pending rejects a late grant and every callbac
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expect(page.locator('#game-status')).toHaveText(otherModeStatus);
   expect(errors).toEqual([]);
+});
+
+bundledAudioTest('three words in one utterance keep all slice tails and backgrounding stops the whole pool', async ({ page, browserName }, info) => {
+  const audioRequests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
+  const errors = await open(page);
+  const available = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(available).toBe(true);
+  bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio; native slice pool coverage runs separately.');
+  // The introductory throws allow two targets. Three first overlap only
+  // after the spawn cadence accelerates, and that overlap has a short window.
+  let before;
+  await expect.poll(async () => {
+    before = await state(page);
+    return before.targets.length;
+  }, { timeout: 20000, intervals: [50] }).toBe(3);
+  const words = before.targets.map(target => target.text).join(' ');
+  const started = await page.evaluate(words => {
+    const from = window.audioObservation.playbacks.length;
+    window.__popSpeech.instances.at(-1).emit(words, false);
+    return from;
+  }, words);
+  const slicesSince = async from => (await page.evaluate(from => window.audioObservation.playbacks.slice(from), from)).filter(isHitSlice);
+  await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 3);
+  await expect.poll(async () => (await slicesSince(started)).length).toBe(3);
+  await expect.poll(async () => (await slicesSince(started)).every(sound => sound.endedAt !== undefined)).toBe(true);
+  const triple = await slicesSince(started);
+  triple.forEach(expectHitSlice);
+  expect(Math.max(...triple.map(sound => sound.scheduledAt)) - Math.min(...triple.map(sound => sound.scheduledAt)),
+    'Three lexical callbacks share the same short hit window').toBeLessThan(0.12);
+  for (const sound of triple) {
+    if (sound.stopScheduledAt !== undefined) {
+      expect(sound.stopScheduledAt - sound.scheduledAt, 'A simultaneous hit keeps its complete PCM tail')
+        .toBeGreaterThanOrEqual(sound.duration - 0.04);
+    }
+    expect(sound.endedAt - sound.at, 'A hit is not interrupted by the next hit').toBeGreaterThan(sound.duration * 1000 - 60);
+  }
+  if (expectedSlices.length > 1) {
+    expect(triple[1].fingerprint).not.toBe(triple[0].fingerprint);
+    expect(triple[2].fingerprint).not.toBe(triple[1].fingerprint);
+  }
+  await page.evaluate(words => window.__popSpeech.instances.at(-1).emit(words, true), words);
+  await rendered(page);
+  expect((await state(page)).hits).toBe(before.hits + 3);
+  expect((await slicesSince(started)).length, 'Finalizing an utterance never replays any slice').toBe(3);
+
+  let next;
+  await expect.poll(async () => {
+    next = await state(page);
+    return next.targets.length;
+  }, { timeout: 10000, intervals: [50] }).toBe(3);
+  const interrupted = await page.evaluate(words => {
+    const from = window.audioObservation.playbacks.length;
+    window.__popSpeech.instances.at(-1).emit(words);
+    // Let Godot submit this frame's sources, then use the actual page lifecycle.
+    setTimeout(() => window.dispatchEvent(new Event('pagehide')), 60);
+    return from;
+  }, next.targets.map(target => target.text).join(' '));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  await expect.poll(async () => (await slicesSince(interrupted)).length).toBe(3);
+  const stopped = await slicesSince(interrupted);
+  for (const sound of stopped) {
+    expect(sound.stopScheduledAt, 'Backgrounding stops every active slice channel').toBeDefined();
+    expect(sound.stopScheduledAt - sound.scheduledAt).toBeLessThan(sound.duration);
+  }
+  const paused = await state(page);
+  await page.evaluate(words => window.__popSpeech.instances.at(-1).emit(words), words);
+  await page.waitForTimeout(400);
+  expect((await state(page)).hits).toBe(paused.hits);
+  expect((await slicesSince(interrupted)).length).toBe(3);
+  expect(audioRequests, 'Reference sounds are already in the game pack').toEqual([]);
+  expect(errors).toEqual([]);
+  await info.attach('triple-slice-audio.json', { body: JSON.stringify({ triple, stopped }), contentType: 'application/json' });
 });
 
 test('a spoken interim word pops its exact target once, gives hit feedback and produces Pip report after 30 seconds', async ({ page, browserName }, info) => {

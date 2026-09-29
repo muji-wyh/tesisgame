@@ -142,14 +142,20 @@ func _check_pop(app) -> void:
 	_expect_reaction(app, true, "A spoken Voice Pop hit")
 	check(view.game.hits == 1 and view.game.score == 10 and view.game.misses == 0,
 		"A spoken hit keeps the established score and combo rules")
-	check(app.audio.effect.playing and not app.audio.voice.playing and not app.audio.music.playing,
+	check(app.audio.last_pop_player() != null and app.audio.last_pop_player().playing
+		and not app.audio.effect.playing and not app.audio.voice.playing and not app.audio.music.playing,
 		"The duck call accompanies the Pop slice without word prompts or background music")
+	var slice_player: AudioStreamPlayer = app.audio.last_pop_player()
+	var slice_rng: int = app.audio._pop_slice_rng.state
 	view.receive_transcript(word.text)
 	check(view.game.hits == 1 and view.game.misses == 0 and missed_batches.size() == batches_before,
 		"A repeated transcript cannot duplicate a hit or turn it into a miss")
+	check(app.audio.last_pop_player() == slice_player and app.audio._pop_slice_rng.state == slice_rng,
+		"A repeated transcript cannot play another slice or consume its random choice")
 	app._on_voice_state([true, false, "Listening paused. Continuing..."])
-	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and _reaction_playing(app),
-		"Normal speech-recognizer rollover does not cut off a just-earned celebration")
+	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and _reaction_playing(app)
+		and slice_player.playing,
+		"Normal speech-recognizer rollover does not cut off a just-earned celebration or slice tail")
 	app._on_voice_state([true, true, "Listening."])
 	check(view.game.hits == 1 and missed_batches.size() == batches_before,
 		"Recognizer rollover resumes the same score without manufacturing missed words")
@@ -180,7 +186,8 @@ func _check_preferences(app) -> void:
 		check(app.duck._gameplay_reaction == "happy" and app.duck.scale == Vector2.ONE
 			and is_zero_approx(app.duck.rotation),
 			"Muted reduced-motion " + mode + " still shows the successful emotion without moving the input target")
-		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing,
+		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing
+			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			"Muted " + mode + " suppresses the call and existing effects")
 		check((app._pop.game.hits if mode == "pop" else app.model.successes) == 1,
 			"Accessibility settings do not change " + mode + " scoring")
@@ -204,7 +211,8 @@ func _check_lifecycle(app) -> void:
 			"hidden": app.on_page_hidden()
 			"new_round": app.new_round(85, true)
 			"mode_exit": app.choose_mode("memory")
-		check(not _reaction_playing(app) and app.duck._gameplay_reaction.is_empty(),
+		check(not _reaction_playing(app) and app.duck._gameplay_reaction.is_empty()
+			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			transition + " clears the active call and emotion immediately")
 		check(missed_batches.size() == before[2], transition + " never classifies a cleared target as missed")
 		view._advance_game(30.0)
@@ -217,4 +225,6 @@ func _check_lifecycle(app) -> void:
 			app._hide_collection()
 		elif transition == "hidden":
 			app.on_page_visible()
-		check(not _reaction_playing(app), transition + " does not replay old feedback on return")
+		check(not _reaction_playing(app)
+			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
+			transition + " does not replay old feedback on return")

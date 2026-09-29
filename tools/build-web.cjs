@@ -23,9 +23,10 @@ const verification = runGodot([
   '--script', path.join(root, 'tests', 'godot', 'verify_web_pack.gd'), '--',
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slice.wav')) ? ['--require-pop-slice'] : []),
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slices')) ? ['--require-pop-slices'] : []),
+  ...(audio.some(file => file.source.startsWith('res://assets/imported-audio/pop-reference/')) ? ['--require-pop-reference'] : []),
   ...audio.flatMap(file => [file.source, file.imported])
 ]);
 process.stdout.write(verification.stdout);
 const downloadBytes = packageWebExport(output);
 fs.copyFileSync(path.join(root, 'web', 'staticwebapp.config.json'), path.join(output, 'staticwebapp.config.json'));
-console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB startup; ${audio.length} music, prompt and chest assets verified inside the game pack).`);
+console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB startup; ${audio.length} music, prompt, chest and optional slice assets verified inside the game pack).`);

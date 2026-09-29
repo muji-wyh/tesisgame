@@ -1,0 +1,93 @@
+{
+  "source": {
+    "file": "fruit_ninja.mp4",
+    "sha256": "24aede3aa3cc104dcc1c1e28fbfbed82223647fbf90a803ea79ebb4291a5c79e",
+    "seconds": 56.8,
+    "sampleRate": 44100,
+    "channels": 1,
+    "codec": "AAC LC"
+  },
+  "note": "User-provided gameplay recording. These are filtered excerpts of one mixed mono track, not isolated original stems. Raw video, extracted audio and imports remain Git-ignored; the local Web export bundles the three finished hits.",
+  "processing": {
+    "decoder": "FFmpeg floating-point AAC decode",
+    "bladeHighpassHz": 230,
+    "cutHighpassHz": 170,
+    "lowpassHz": 8000,
+    "attackSeconds": 0.002,
+    "bladeReleaseSeconds": 0.032,
+    "cutReleaseSeconds": 0.06,
+    "targetRms": 0.125,
+    "peakLimit": 0.62,
+    "runtimeGain": 0.24,
+    "maxSimultaneousHits": 3,
+    "runtimePlaybackRate": 1
+  },
+  "assets": [
+    {
+      "id": "quick",
+      "destination": "assets/imported-audio/pop-reference/quick.wav",
+      "sha256": "d606dac66a6445ea31658856d69e85e9afcf552f5964fda25e37c78afc2c68ed",
+      "seconds": 0.2770068027210884,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.1522,
+      "rmsDbfs": -21.6898,
+      "blade": {
+        "start": 1.215,
+        "seconds": 0.155
+      },
+      "cut": {
+        "start": 2.386,
+        "seconds": 0.245
+      },
+      "bladeGain": 0.78,
+      "cutGain": 1,
+      "cutOffsetSeconds": 0.032
+    },
+    {
+      "id": "juicy",
+      "destination": "assets/imported-audio/pop-reference/juicy.wav",
+      "sha256": "01556a54bcd4746f34a836854aef4ca4a2c4a83ec1a93202dad1007d0f71b703",
+      "seconds": 0.2970068027210884,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.1522,
+      "rmsDbfs": -19.1667,
+      "blade": {
+        "start": 1.215,
+        "seconds": 0.145
+      },
+      "cut": {
+        "start": 1.372,
+        "seconds": 0.265
+      },
+      "bladeGain": 0.66,
+      "cutGain": 1,
+      "cutOffsetSeconds": 0.032
+    },
+    {
+      "id": "crisp",
+      "destination": "assets/imported-audio/pop-reference/crisp.wav",
+      "sha256": "4b947aa7df68be21316916f03fbe2334d7026b4dcc3c5c550dd19310c305bed6",
+      "seconds": 0.31700680272108844,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.1522,
+      "rmsDbfs": -19.8541,
+      "blade": {
+        "start": 1.215,
+        "seconds": 0.165
+      },
+      "cut": {
+        "start": 1.466,
+        "seconds": 0.285
+      },
+      "bladeGain": 0.88,
+      "cutGain": 0.92,
+      "cutOffsetSeconds": 0.032
+    }
+  ]
+}

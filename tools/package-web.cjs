@@ -6,6 +6,71 @@ const { patchWebEngine } = require('./patch-web-engine.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const CHEST_CUES = ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward'];
+const POP_REFERENCE_IDS = ['quick', 'juicy', 'crisp'];
+
+function importedAudio(root, source) {
+  const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');
+  const imported = metadata.match(/^path="(res:\/\/\.godot\/imported\/[^"/\\]+\.sample)"$/m)?.[1];
+  if (!imported) throw new Error(`Import ${source} before packaging required audio.`);
+  const bytes = fs.readFileSync(path.join(root, ...imported.slice(6).split('/')));
+  if (!['RSRC', 'RSCC'].includes(bytes.subarray(0, 4).toString('ascii'))) {
+    throw new Error(`Expected an imported Godot audio resource: ${imported}`);
+  }
+  return { source: `res://${source}`, imported, bytes };
+}
+
+function collectPopReferenceAudio(root) {
+  const directory = path.join(root, 'assets/imported-audio/pop-reference');
+  if (!fs.existsSync(directory)) return [];
+  if (!fs.statSync(directory).isDirectory()) throw new Error('The optional Voice Pop reference bank must be a directory.');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/voice-pop-reference-audio.json'), 'utf8'));
+  if (!Array.isArray(manifest.assets) || manifest.assets.length !== POP_REFERENCE_IDS.length) {
+    throw new Error('The Voice Pop reference bank must declare all three variants.');
+  }
+  const expected = POP_REFERENCE_IDS.map(id => `${id}.wav`).sort();
+  const present = fs.readdirSync(directory).filter(name => name.toLowerCase().endsWith('.wav')).sort();
+  if (JSON.stringify(present) !== JSON.stringify(expected)) {
+    throw new Error('The optional Voice Pop reference bank is incomplete or has unexpected WAVs; provide all three variants or remove the bank.');
+  }
+  return manifest.assets.map((asset, index) => {
+    const source = `assets/imported-audio/pop-reference/${POP_REFERENCE_IDS[index]}.wav`;
+    if (asset.id !== POP_REFERENCE_IDS[index] || asset.destination !== source ||
+        !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.sampleRate !== 44100 ||
+        asset.channels !== 1 || asset.bitDepth !== 16 ||
+        !Number.isFinite(asset.seconds) || asset.seconds < 0.20 || asset.seconds > 0.50) {
+      throw new Error(`Invalid Voice Pop reference manifest entry: ${POP_REFERENCE_IDS[index]}`);
+    }
+    const bytes = fs.readFileSync(path.join(root, source));
+    if (createHash('sha256').update(bytes).digest('hex') !== asset.sha256) {
+      throw new Error(`Voice Pop reference audio hash mismatch: ${source}`);
+    }
+    const invalid = () => { throw new Error(`Invalid mono PCM16 Voice Pop reference WAV: ${source}`); };
+    if (bytes.length < 44 || bytes.toString('ascii', 0, 4) !== 'RIFF' ||
+        bytes.toString('ascii', 8, 12) !== 'WAVE' || bytes.readUInt32LE(4) !== bytes.length - 8) invalid();
+    let format, samples;
+    for (let offset = 12; offset < bytes.length;) {
+      if (offset + 8 > bytes.length) invalid();
+      const name = bytes.toString('ascii', offset, offset + 4);
+      const length = bytes.readUInt32LE(offset + 4);
+      const end = offset + 8 + length;
+      if (end + length % 2 > bytes.length) invalid();
+      if (name === 'fmt ') {
+        if (format || length < 16) invalid();
+        format = bytes.subarray(offset + 8, end);
+      }
+      if (name === 'data') {
+        if (samples || length === 0 || length % 2) invalid();
+        samples = bytes.subarray(offset + 8, end);
+      }
+      offset = end + length % 2;
+    }
+    if (!format || !samples || format.readUInt16LE(0) !== 1 || format.readUInt16LE(2) !== 1 ||
+        format.readUInt32LE(4) !== 44100 || format.readUInt32LE(8) !== 88200 ||
+        format.readUInt16LE(12) !== 2 || format.readUInt16LE(14) !== 16 ||
+        Math.abs(samples.length / 88200 - asset.seconds) > 1 / 44100) invalid();
+    return importedAudio(root, source);
+  });
+}
 
 // These formerly separate downloads are required resources in the game pack.
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
@@ -18,16 +83,7 @@ function collectRequiredAudio(root) {
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
-  return sources.map(source => {
-    const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');
-    const imported = metadata.match(/^path="(res:\/\/\.godot\/imported\/[^"]+\.sample)"$/m)?.[1];
-    if (!imported) throw new Error(`Import ${source} before packaging required audio.`);
-    const bytes = fs.readFileSync(path.join(root, ...imported.slice(6).split('/')));
-    if (!['RSRC', 'RSCC'].includes(bytes.subarray(0, 4).toString('ascii'))) {
-      throw new Error(`Expected an imported Godot audio resource: ${imported}`);
-    }
-    return { source: `res://${source}`, imported, bytes };
-  });
+  return [...sources.map(source => importedAudio(root, source)), ...collectPopReferenceAudio(root)];
 }
 
 function removeRetiredVoiceAssets(directory) {
@@ -106,4 +162,4 @@ function packageWebExport(directory) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectRequiredAudio };
+module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio };

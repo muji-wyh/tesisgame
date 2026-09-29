@@ -2563,6 +2563,7 @@ func _on_voice_state(arguments: Array) -> void:
 		# Recognition rolls over after an utterance. Let that word's short
 		# emotion finish while the recognizer reconnects automatically.
 		if not bool(arguments[1]) and not _pop._reconnecting:
+			audio.stop_pop_slices()
 			audio.stop_pip_reaction()
 			duck.settle()
 		return
@@ -2895,6 +2896,7 @@ func _retry_storage() -> void:
 func _show_collection() -> void:
 	if _mode_id == "pop":
 		_pop.pause()
+		audio.stop_pop_slices()
 	if not _stop_pop_listening():
 		return
 	_focus_before_collection = get_viewport().gui_get_focus_owner()

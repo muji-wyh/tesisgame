@@ -12,6 +12,7 @@ signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
+const Slice = preload("res://scripts/voice_pop_slice.gd")
 const Duck = preload("res://scripts/duck_mascot.gd")
 const NAVY := Color("#080e23")
 const SURFACE := Color("#16203c")
@@ -64,6 +65,8 @@ var _report_pages: Array[Dictionary] = []
 var _report_prompts: Dictionary = {}
 var _report_audio_state: String = "idle"
 var _bursts: Array[Dictionary] = []
+var _slice_clip: Control
+var _slice_canvas: Node2D
 var _draw_targets: Array[Dictionary] = []
 var _arena: Rect2
 var _hud: Control
@@ -129,6 +132,14 @@ func _build() -> void:
 	_live_caption = _label("LISTENING", 10, CYAN)
 	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, transcript_label, _live_caption]:
 		_hud.add_child(item)
+	_slice_clip = Control.new()
+	_slice_clip.name = "SliceArena"
+	_slice_clip.clip_contents = true
+	_slice_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_slice_clip)
+	_slice_canvas = Node2D.new()
+	_slice_canvas.draw.connect(_draw_slices)
+	_slice_clip.add_child(_slice_canvas)
 	_gate = ScrollContainer.new()
 	_gate.name = "MicrophoneGate"
 	_gate.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -198,7 +209,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_report_step = 0
 	_report_feedback = ""
 	_report_pages.clear()
-	_bursts.clear()
+	_clear_slices()
 	_draw_targets.clear()
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
 	_gate_title.text = "Ready to pop?"
@@ -250,6 +261,10 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_pending = transient
 		_pending_left = 10.0 if transient else 0.0
 		_reconnecting = transient and game.phase in ["running", "paused"]
+		# Browser utterance rollover briefly pauses recognition after a hit.
+		# Let that earned cut finish, but discard it on an actual error or exit.
+		if not _reconnecting:
+			_clear_slices()
 		if game.phase == "running":
 			game.pause()
 		_gate_title.text = "Opening microphone…" if transient else "Round paused" if game.phase == "paused" else "Ready to pop?"
@@ -321,9 +336,10 @@ func _present_hits(struck: Array) -> void:
 			if int(item.uid) == int(target.uid):
 				visual = item
 		if not visual.is_empty():
-			_bursts.append({"center": visual.center, "radius": float(visual.size.x) * 0.48,
-				"age": 0.0, "color": _card_color(int(target.uid)),
-				"points": int(target.get("points", 100))})
+			if _bursts.size() >= Slice.MAX_EFFECTS:
+				_bursts.pop_front()
+			_bursts.append(Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
+				int(target.get("combo", 1))))
 		_last_hit = "+%d" % int(target.get("points", 100))
 		if int(target.get("combo", 0)) > 1:
 			_last_hit += "  ·  %d× COMBO" % int(target.combo)
@@ -332,10 +348,12 @@ func _present_hits(struck: Array) -> void:
 	_refresh_targets()
 	_update_hud()
 	_publish(true)
+	_slice_canvas.queue_redraw()
 	queue_redraw()
 
 
 func pause() -> void:
+	_clear_slices()
 	if _finished_sent:
 		if is_instance_valid(pip): pip.settle()
 		_listening_tick_usec = -1
@@ -376,7 +394,7 @@ func stop() -> void:
 	_reconnecting = false
 	_message = ""
 	game.stop()
-	_bursts.clear()
+	_clear_slices()
 	_draw_targets.clear()
 	set_process(false)
 	_publish(true)
@@ -386,7 +404,7 @@ func stop() -> void:
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if value:
-		_bursts.clear()
+		_clear_slices()
 	if pip != null and is_instance_valid(pip):
 		pip.set_reduced_motion(value)
 	_refresh_targets()
@@ -493,14 +511,12 @@ func _process(delta: float) -> void:
 			set_listening(_enabled, false, "Still waiting for the microphone. Check the browser prompt, or retry.")
 	_sync_game_clock()
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
-	for index in range(_bursts.size() - 1, -1, -1):
-		_bursts[index].age = float(_bursts[index].age) + delta
-		if float(_bursts[index].age) > (0.35 if reduced_motion else 0.75):
-			_bursts.remove_at(index)
+	_advance_slices(delta)
 	_refresh_targets()
 	_update_hud()
 	_publish()
 	queue_redraw()
+	_slice_canvas.queue_redraw()
 
 
 func _sync_game_clock() -> void:
@@ -537,6 +553,7 @@ func _advance_game(elapsed_seconds: float) -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
+		_clear_slices()
 		set_report_speaking(false)
 		if game.phase == "running":
 			pause()
@@ -597,6 +614,9 @@ func _layout() -> void:
 	_place_label(_live_caption, Rect2(edge, speech_top + speech_height, width, 17 / scale), 10)
 	var top: float = speech_top + speech_height + 25.0 / scale
 	_arena = Rect2(edge, top, width, maxf(64.0 / scale, size.y - top - 18.0 / scale))
+	_slice_clip.position = _arena.position
+	_slice_clip.size = _arena.size
+	_slice_canvas.queue_redraw()
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
 	var gate_top: float = maxf(18.0 / scale, (size.y - 290.0 / scale) * 0.5)
 	_gate.position = Vector2((size.x - gate_width) * 0.5, gate_top)
@@ -721,8 +741,6 @@ func _draw() -> void:
 			draw_style_box(Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1), Rect2(x, 10.0 / scale, side, 52.0 / scale))
 		for target in _draw_targets:
 			_draw_capsule(target, scale)
-		for burst in _bursts:
-			_draw_burst(burst, scale)
 
 
 func _draw_atmosphere(scale: float) -> void:
@@ -773,45 +791,171 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-func _draw_burst(burst: Dictionary, scale: float) -> void:
-	var age: float = float(burst.age)
-	var center: Vector2 = burst.center
-	var accent: Color = burst.color
-	var progress: float = clampf(age / (0.35 if reduced_motion else 0.75), 0.0, 1.0)
-	if reduced_motion:
-		draw_arc(center, float(burst.radius) * 0.7, 0.0, TAU, 28, Color(accent, 1.0 - progress), 3.0 / scale, true)
-		_draw_burst_score(burst, center, scale, 0.0)
+func _clear_slices() -> void:
+	_bursts.clear()
+	if is_instance_valid(_slice_canvas):
+		_slice_canvas.queue_redraw()
+
+
+func _advance_slices(delta: float) -> void:
+	if delta <= 0.0 or not is_finite(delta):
 		return
-	var radius: float = lerpf(12.0 / scale, float(burst.radius) * 1.7, ease(progress, 0.45))
-	draw_arc(center, radius, 0.0, TAU, 48, Color(accent, (1.0 - progress) * 0.7), 3.0 / scale, true)
-	draw_arc(center, radius * 0.74, 0.0, TAU, 40, Color.WHITE * Color(1, 1, 1, (1.0 - progress) * 0.4), 1.0 / scale, true)
-	if age < 0.19:
-		var flash: float = 1.0 - age / 0.19
-		draw_circle(center, (20.0 + 28.0 * age / 0.19) / scale, Color(WHITE, flash * 0.75))
-		var from: Vector2 = center + Vector2(-1.0, 0.48) * float(burst.radius)
-		var to: Vector2 = center + Vector2(1.0, -0.48) * float(burst.radius)
-		draw_line(from, to, Color(accent, flash * 0.8), 15.0 / scale, true)
-		draw_line(from, to, Color(WHITE, flash), 5.0 / scale, true)
-		var crack := PackedVector2Array([center + Vector2(-26, -34) / scale, center + Vector2(-6, -7) / scale, center + Vector2(12, 0) / scale, center + Vector2(26, 34) / scale])
-		draw_polyline(crack, Color(WHITE, flash), 3.0 / scale, true)
-	for index in range(11):
-		var angle: float = TAU * float(index) / 11.0 + 0.22
-		var direction := Vector2(cos(angle), sin(angle))
-		var distance: float = (24.0 + 115.0 * progress) / scale
-		var position: Vector2 = center + direction * distance + Vector2(0, progress * progress * 52.0 / scale)
-		var side: float = (8.0 if index % 2 else 12.0) * (1.0 - progress * 0.7) / scale
-		var tangent := direction.orthogonal()
-		var points := PackedVector2Array([position + direction * side, position - direction * side * 0.6 + tangent * side * 0.5, position - direction * side * 0.3 - tangent * side * 0.65])
-		draw_colored_polygon(points, Color(CARD_COLORS[index % CARD_COLORS.size()], 1.0 - progress))
-	_draw_burst_score(burst, center, scale, progress)
+	for index in range(_bursts.size() - 1, -1, -1):
+		_bursts[index].age = float(_bursts[index].age) + delta
+		if float(_bursts[index].age) >= (Slice.STILL_DURATION if reduced_motion else Slice.DURATION):
+			_bursts.remove_at(index)
 
 
-func _draw_burst_score(burst: Dictionary, center: Vector2, scale: float, progress: float) -> void:
+func slice_snapshot() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for burst in _bursts:
+		var first: Dictionary = Slice.pose(burst, -1.0, reduced_motion)
+		var second: Dictionary = Slice.pose(burst, 1.0, reduced_motion)
+		result.append({"uid": burst.uid, "word": str(burst.word.text), "age": burst.age,
+			"center": burst.center, "size": burst.size, "rotation": burst.rotation,
+			"first_offset": first.offset, "second_offset": second.offset,
+			"first_rotation": first.rotation, "second_rotation": second.rotation,
+			"alpha": first.alpha, "strength": burst.strength, "reduced_motion": reduced_motion})
+	return result
+
+
+func _draw_slices() -> void:
+	if _hud == null or not _hud.visible:
+		return
+	var scale: float = Style.ui_scale(self)
+	for burst in _bursts:
+		var age: float = float(burst.age)
+		var center: Vector2 = burst.center - _arena.position
+		var accent: Color = burst.color
+		if reduced_motion:
+			var alpha: float = float(Slice.pose(burst, 1.0, true).alpha)
+			_slice_canvas.draw_set_transform(center, float(burst.rotation))
+			var seam: PackedVector2Array = _slice_seam(burst, scale)
+			_slice_canvas.draw_line(seam[0], seam[1], Color(accent, alpha * 0.35), 9.0 / scale, true)
+			_slice_canvas.draw_line(seam[0], seam[1], Color(WHITE, alpha), 2.5 / scale, true)
+			_slice_canvas.draw_set_transform(Vector2.ZERO)
+			_draw_slice_score(burst, center, scale, 0.0, alpha)
+			continue
+		_draw_slice_splash(burst, center, scale)
+		for side in [-1.0, 1.0]:
+			_draw_slice_half(burst, center, side, scale)
+		_draw_slice_droplets(burst, center, scale)
+		if age < Slice.BLADE_DURATION:
+			_slice_canvas.draw_set_transform(center, float(burst.rotation))
+			var flash: float = 1.0 - smoothstep(0.045, Slice.BLADE_DURATION, age)
+			_slice_canvas.draw_colored_polygon(Slice.blade_ribbon(burst, 12.0 * float(burst.strength), scale), Color(accent, flash * 0.42))
+			_slice_canvas.draw_colored_polygon(Slice.blade_ribbon(burst, 6.0 * float(burst.strength), scale), Color(accent.lightened(0.5), flash * 0.85))
+			_slice_canvas.draw_colored_polygon(Slice.blade_ribbon(burst, 2.7, scale), Color(WHITE, flash))
+			_slice_canvas.draw_set_transform(Vector2.ZERO)
+		_draw_slice_score(burst, center, scale, clampf(age / Slice.DURATION, 0.0, 1.0),
+			1.0 - smoothstep(0.45, Slice.DURATION, age))
+
+
+func _slice_seam(burst: Dictionary, scale: float) -> PackedVector2Array:
+	return Slice.seam(burst.size, 19.0 / scale, int(burst.uid))
+
+
+func _draw_slice_half(burst: Dictionary, center: Vector2, side: float, scale: float) -> void:
+	var pose: Dictionary = Slice.pose(burst, side)
+	var alpha: float = float(pose.alpha)
+	var accent: Color = burst.color
+	var capsule_size: Vector2 = burst.size
+	var normal: Vector2 = Slice.normal(int(burst.uid))
+	var origin: Vector2 = Slice.cut_origin(capsule_size)
+	var polygon: PackedVector2Array = Slice.clip_half(Slice.rounded_rect(capsule_size, 19.0 / scale), origin, normal, side)
+	_slice_canvas.draw_set_transform(center + pose.offset + Vector2(0, 5.0 / scale), float(burst.rotation) + float(pose.rotation))
+	_slice_canvas.draw_colored_polygon(polygon, Color(0, 0, 0, alpha * 0.25))
+	_slice_canvas.draw_set_transform(center + pose.offset, float(burst.rotation) + float(pose.rotation))
+	_slice_canvas.draw_colored_polygon(polygon, Color(accent, alpha))
+	var outline: PackedVector2Array = polygon.duplicate()
+	outline.append(outline[0])
+	_slice_canvas.draw_polyline(outline, Color(accent.lightened(0.45), alpha), 2.0 / scale, true)
+	var art_edge: float = minf(capsule_size.x - 28.0 / scale, capsule_size.y * 0.61)
+	var art_center := Vector2(0, -capsule_size.y * 0.5 + 10.0 / scale + art_edge * 0.5)
+	var disc := PackedVector2Array()
+	for index in range(32):
+		var angle: float = float(index) * TAU / 32.0
+		disc.append(art_center + Vector2(cos(angle), sin(angle)) * art_edge * 0.52)
+	var half_disc: PackedVector2Array = Slice.clip_half(disc, origin, normal, side)
+	if half_disc.size() >= 3:
+		_slice_canvas.draw_colored_polygon(half_disc, Color(Color("#fffaf2"), alpha))
+	var texture: Texture2D = _textures.get(str(burst.word.get("id", burst.word.get("text", ""))), null)
+	if texture != null:
+		var original: Vector2 = texture.get_size()
+		var art_size: Vector2 = original * minf(art_edge / maxf(1.0, original.x), art_edge / maxf(1.0, original.y))
+		var art_rect := Rect2(art_center - art_size * 0.5, art_size)
+		var art_polygon := PackedVector2Array([art_rect.position, Vector2(art_rect.end.x, art_rect.position.y),
+			art_rect.end, Vector2(art_rect.position.x, art_rect.end.y)])
+		art_polygon = Slice.clip_half(art_polygon, origin, normal, side)
+		if art_polygon.size() >= 3:
+			_slice_canvas.draw_polygon(art_polygon, PackedColorArray([Color(1, 1, 1, alpha)]), Slice.texture_uv(art_polygon, art_rect), texture)
+	# The cut crosses the illustration; the readable word remains on the lower half.
+	if side > 0.0:
+		_draw_slice_word(burst, capsule_size, scale, alpha)
+	var seam: PackedVector2Array = _slice_seam(burst, scale)
+	_slice_canvas.draw_line(seam[0] + normal * side * 1.5 / scale, seam[1] + normal * side * 1.5 / scale,
+		Color(accent.darkened(0.28), alpha), 4.0 / scale, true)
+	_slice_canvas.draw_line(seam[0], seam[1], Color(accent.lightened(0.7), alpha), 2.0 / scale, true)
+	_slice_canvas.draw_set_transform(Vector2.ZERO)
+
+
+func _draw_slice_word(burst: Dictionary, capsule_size: Vector2, scale: float, alpha: float) -> void:
+	var word: String = str(burst.word.text)
+	var font: Font = ThemeDB.fallback_font
+	var font_size: int = ceili(clampf(capsule_size.x * scale * 0.17, 18.0, 26.0) / scale)
+	while font_size > ceili(13.0 / scale) and font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > capsule_size.x - 16.0 / scale:
+		font_size -= 1
+	var width: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	_slice_canvas.draw_string(font, Vector2(-width * 0.5, capsule_size.y * 0.5 - 11.0 / scale), word,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(Color("#243454"), alpha))
+
+
+func _draw_slice_splash(burst: Dictionary, center: Vector2, scale: float) -> void:
+	var age: float = float(burst.age)
+	if age >= 0.34:
+		return
+	var accent: Color = burst.color
+	var fade: float = (1.0 - age / 0.34) * 0.22
+	var radius: float = (18.0 + 16.0 * smoothstep(0.0, 0.1, age)) * float(burst.strength) / scale
+	var polygon := PackedVector2Array()
+	for index in range(20):
+		var angle: float = float(index) * TAU / 20.0
+		var reach: float = radius * (1.0 if index % 2 else 1.6)
+		polygon.append(center + Vector2(cos(angle), sin(angle) * 0.76) * reach)
+	_slice_canvas.draw_colored_polygon(polygon, Color(accent, fade))
+
+
+func _draw_slice_droplets(burst: Dictionary, center: Vector2, scale: float) -> void:
+	var age: float = maxf(0.0, float(burst.age) - Slice.IMPACT_HOLD)
+	var fade: float = 1.0 - smoothstep(0.25, 0.65, age)
+	if fade <= 0.0:
+		return
+	var accent: Color = burst.color
+	var normal: Vector2 = Slice.normal(int(burst.uid)).rotated(float(burst.rotation))
+	var origin: Vector2 = center + Slice.cut_origin(burst.size).rotated(float(burst.rotation))
+	for index in range(12):
+		var angle: float = float((index * 7 + int(burst.uid) * 3) % 13) / 12.0 - 0.5
+		var direction: Vector2 = normal.rotated(angle * 1.5) * (-1.0 if index % 2 else 1.0)
+		var speed: float = (112.0 + float((index * 23 + int(burst.uid) * 11) % 100)) * float(burst.strength) / scale
+		var point: Vector2 = origin + direction * speed * age + Vector2(0, 230.0 * age * age / scale)
+		var side: float = (2.5 + float(index % 3) * 1.1) * (1.0 - age * 0.6) / scale
+		var across: Vector2 = direction.orthogonal()
+		var droplet := PackedVector2Array([point + direction * side * 2.0, point + across * side,
+			point - direction * side * 0.8, point - across * side])
+		_slice_canvas.draw_colored_polygon(droplet, Color(accent, fade * 0.9))
+		_slice_canvas.draw_circle(point - across * side * 0.25, side * 0.3, Color(accent.lightened(0.65), fade))
+
+
+func _draw_slice_score(burst: Dictionary, center: Vector2, scale: float, progress: float, alpha: float) -> void:
 	var font: Font = ThemeDB.fallback_font
 	var label: String = "+%d" % int(burst.points)
-	var font_size: int = ceili(23.0 / scale)
-	var text_width: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
-	draw_string(font, center + Vector2(-text_width * 0.5, -36.0 / scale - progress * 34.0 / scale), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, 1.0 - progress))
+	var font_size: int = ceili(25.0 / scale)
+	var width: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+	var point: Vector2 = center + Vector2(-width * 0.5, -float(burst.size.y) * 0.48 - progress * 24.0 / scale)
+	point.x = clampf(point.x, 3.0 / scale, maxf(3.0 / scale, _arena.size.x - width - 3.0 / scale))
+	point.y = clampf(point.y, float(font_size), maxf(float(font_size), _arena.size.y - 4.0 / scale))
+	_slice_canvas.draw_string(font, point + Vector2(0, 2.0 / scale), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(NAVY, alpha))
+	_slice_canvas.draw_string(font, point, label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(WHITE, alpha))
 
 
 func _finish() -> void:
@@ -821,7 +965,7 @@ func _finish() -> void:
 	_clear_transcript()
 	_message = "Round complete. Tap a word to hear it, or play again."
 	_draw_targets.clear()
-	_bursts.clear()
+	_clear_slices()
 	_hud.hide()
 	_gate.hide()
 	_build_results(game.summary())

@@ -2,6 +2,10 @@ extends SceneTree
 
 
 func _initialize() -> void:
+	_verify.call_deferred()
+
+
+func _verify() -> void:
 	var failures := 0
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
@@ -42,6 +46,23 @@ func _initialize() -> void:
 				printerr("A random Voice Pop slice is missing or invalid in the startup pack: " + path)
 				failures += 1
 		print("Voice Pop: %d random slice sounds checked in the startup pack." % paths.size())
+	if required.has("--require-pop-reference"):
+		required.remove_at(required.find("--require-pop-reference"))
+		var controller = load("res://scripts/game_audio.gd").new()
+		root.add_child(controller)
+		var paths: Array = controller.POP_REFERENCE_PATHS
+		if paths.size() != 3 or controller._pop_slice_paths != paths:
+			printerr("The complete Voice Pop reference bank must be selected in the startup pack.")
+			failures += 1
+		for path in paths:
+			var slice: AudioStreamWAV = (load(path) as AudioStreamWAV) if ResourceLoader.exists(path) else null
+			if slice == null or slice.mix_rate != 44100 or slice.stereo \
+				or slice.format != AudioStreamWAV.FORMAT_16_BITS or slice.loop_mode != AudioStreamWAV.LOOP_DISABLED \
+				or slice.get_length() < 0.20 or slice.get_length() > 0.50:
+				printerr("A Voice Pop reference slice is missing or invalid in the startup pack: " + path)
+				failures += 1
+		controller.free()
+		print("Voice Pop: %d reference slice variants checked and selected in the startup pack." % paths.size())
 	if required.has("--require-pop-slice"):
 		required.remove_at(required.find("--require-pop-slice"))
 		var path := "res://assets/imported-audio/pop-slice.wav"

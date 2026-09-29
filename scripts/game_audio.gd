@@ -1,6 +1,13 @@
 extends Node
 
 const POP_SLICE_PATH := "res://assets/imported-audio/pop-slice.wav"
+const POP_REFERENCE_PATHS := [
+	"res://assets/imported-audio/pop-reference/quick.wav",
+	"res://assets/imported-audio/pop-reference/juicy.wav",
+	"res://assets/imported-audio/pop-reference/crisp.wav",
+]
+const POP_HIT_CHANNELS := 3
+const POP_HIT_GAIN := 0.24
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -45,6 +52,9 @@ var _narration_pip_greeting: bool = false
 var _pop_slice_paths: Array[String] = []
 var _pop_slice_rng := RandomNumberGenerator.new()
 var _last_pop_slice_path: String = ""
+var _pop_players: Array[AudioStreamPlayer] = []
+var _pop_next_player: int = 0
+var _pop_last_player: AudioStreamPlayer
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
 var _pip_voice_request: int = -1
@@ -72,6 +82,18 @@ func _ready() -> void:
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
+	var reference_paths: Array[String] = []
+	for path: String in POP_REFERENCE_PATHS:
+		var stream: AudioStream = load(path) if ResourceLoader.exists(path) else null
+		if stream is AudioStreamWAV and not stream.stereo and stream.mix_rate == 44100 \
+			and stream.format == AudioStreamWAV.FORMAT_16_BITS and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED \
+			and stream.get_length() >= 0.20 and stream.get_length() <= 0.50:
+			reference_paths.append(path)
+			cache[path] = stream
+	if reference_paths.size() == POP_REFERENCE_PATHS.size():
+		_pop_slice_paths = reference_paths
+	for index in range(POP_HIT_CHANNELS):
+		_pop_players.append(_player(POP_HIT_GAIN))
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -108,15 +130,37 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 
 
 func cue(effect_id: String = "", voice_id: String = "") -> void:
-	if muted or not active:
+	if muted or not active or not available:
 		return
 	if not effect_id.is_empty():
 		var path: String = "res://assets/audio/sfx/" + effect_id + ".wav"
 		if effect_id == "pop-slice":
-			path = _next_pop_slice()
-		_play(effect, path)
+			_play_pop_slice()
+		else:
+			_play(effect, path)
 	if not voice_id.is_empty():
 		say("res://assets/audio/voice/" + voice_id + ".wav")
+
+
+func _play_pop_slice() -> void:
+	# Short overlapping slices keep simultaneous words from cutting off each
+	# other. A fourth hit replaces the oldest of three fixed channels.
+	var player: AudioStreamPlayer = _pop_players[_pop_next_player]
+	_pop_next_player = (_pop_next_player + 1) % _pop_players.size()
+	_pop_last_player = player
+	_play(player, _next_pop_slice())
+
+
+func last_pop_player() -> AudioStreamPlayer:
+	return _pop_last_player
+
+
+func stop_pop_slices() -> void:
+	for player: AudioStreamPlayer in _pop_players:
+		_stop(player)
+		player.stream = null
+	_pop_next_player = 0
+	_pop_last_player = null
 
 
 func _next_pop_slice() -> String:
@@ -634,6 +678,7 @@ func stop_voice() -> void:
 
 func halt() -> void:
 	active = false
+	stop_pop_slices()
 	stop_pip_reaction()
 	stop_chest_performance()
 	stop_narration()

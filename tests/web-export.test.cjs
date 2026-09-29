@@ -94,6 +94,119 @@ test('accessible help describes the current controls rather than the removed mot
   assert.match(help, /device.*reduced-motion/i);
 });
 
+function referenceBankFixture(t, populated = true) {
+  const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'voice-pop-reference-export-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const bank = path.join(directory, 'assets/imported-audio/pop-reference');
+  const manifestPath = path.join(directory, 'docs/assets/voice-pop-reference-audio.json');
+  const writeImport = source => {
+    const sourcePath = path.join(directory, source);
+    const imported = `.godot/imported/${path.basename(source)}-fixture.sample`;
+    fs.mkdirSync(path.dirname(sourcePath), { recursive: true });
+    fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
+    fs.writeFileSync(`${sourcePath}.import`, `[remap]\npath="res://${imported}"\n`);
+    fs.writeFileSync(path.join(directory, imported), 'RSRC fixture audio');
+    return imported;
+  };
+  const assets = ['quick', 'juicy', 'crisp'].map((id, index) => {
+    const samples = 13230;
+    const wav = Buffer.alloc(44 + samples * 2);
+    wav.write('RIFF'); wav.writeUInt32LE(wav.length - 8, 4); wav.write('WAVEfmt ', 8);
+    wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22);
+    wav.writeUInt32LE(44100, 24); wav.writeUInt32LE(88200, 28); wav.writeUInt16LE(2, 32); wav.writeUInt16LE(16, 34);
+    wav.write('data', 36); wav.writeUInt32LE(samples * 2, 40);
+    for (let frame = 0; frame < samples; frame++) wav.writeInt16LE(Math.round(Math.sin(frame * (0.04 + index * 0.01)) * 8000), 44 + frame * 2);
+    return { id, destination: `assets/imported-audio/pop-reference/${id}.wav`,
+      sha256: require('node:crypto').createHash('sha256').update(wav).digest('hex'),
+      seconds: samples / 44100, sampleRate: 44100, channels: 1, bitDepth: 16, wav };
+  });
+  const writeManifest = () => {
+    fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
+    fs.writeFileSync(manifestPath, JSON.stringify({ assets: assets.map(({ wav, ...asset }) => asset) }));
+  };
+  if (populated) {
+    fs.mkdirSync(bank, { recursive: true });
+    for (const asset of assets) {
+      fs.writeFileSync(path.join(directory, asset.destination), asset.wav);
+      writeImport(asset.destination);
+    }
+    writeManifest();
+  }
+  return { directory, bank, assets, manifestPath, writeManifest, writeImport };
+}
+
+test('an absent optional Voice Pop reference bank preserves clean-checkout packaging', t => {
+  const fixture = referenceBankFixture(t, false);
+  assert.deepEqual(require('../tools/package-web.cjs').collectPopReferenceAudio(fixture.directory), []);
+});
+
+test('the complete Voice Pop reference bank joins the required in-pack audio inventory', t => {
+  const fixture = referenceBankFixture(t);
+  const { collectPopReferenceAudio, collectRequiredAudio } = require('../tools/package-web.cjs');
+  const reference = collectPopReferenceAudio(fixture.directory);
+  assert.deepEqual(reference.map(asset => asset.source), fixture.assets.map(asset => `res://${asset.destination}`));
+  assert.ok(reference.every(asset => asset.imported.startsWith('res://.godot/imported/') && asset.bytes.length > 4));
+  fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
+  fs.writeFileSync(path.join(fixture.directory, 'pop-voice-prompts.json'), '{}');
+  for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
+    fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
+    for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
+      fixture.writeImport(`assets/audio/chests/${theme}-${cue}.wav`);
+    }
+  }
+  const required = collectRequiredAudio(fixture.directory);
+  assert.equal(required.length, 99);
+  assert.deepEqual(required.slice(-3), reference);
+  assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
+    'Reference slices remain required pack resources without an HTTP audio map');
+});
+
+test('a partial or ambiguous Voice Pop reference bank fails instead of shipping mixed fallback audio', t => {
+  const { collectPopReferenceAudio } = require('../tools/package-web.cjs');
+  const fixture = referenceBankFixture(t);
+  fs.unlinkSync(path.join(fixture.bank, 'crisp.wav'));
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /incomplete/);
+  fs.writeFileSync(path.join(fixture.bank, 'crisp.wav'), fixture.assets[2].wav);
+  fs.writeFileSync(path.join(fixture.bank, 'extra.wav'), fixture.assets[2].wav);
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /unexpected WAVs/);
+  fs.unlinkSync(path.join(fixture.bank, 'extra.wav'));
+  fixture.assets[0].destination = '../outside.wav';
+  fixture.writeManifest();
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid.*manifest/);
+});
+
+test('Voice Pop reference source validation rejects changed bytes and malformed WAV metadata', t => {
+  const { collectPopReferenceAudio } = require('../tools/package-web.cjs');
+  const fixture = referenceBankFixture(t);
+  const filename = path.join(fixture.directory, fixture.assets[0].destination);
+  const invalid = Buffer.from(fixture.assets[0].wav);
+  invalid.writeUInt16LE(2, 22);
+  fs.writeFileSync(filename, invalid);
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /hash mismatch/);
+  fixture.assets[0].sha256 = require('node:crypto').createHash('sha256').update(invalid).digest('hex');
+  fixture.writeManifest();
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid mono PCM16/);
+  fs.writeFileSync(filename, fixture.assets[0].wav);
+  fixture.assets[0].sha256 = require('node:crypto').createHash('sha256').update(fixture.assets[0].wav).digest('hex');
+  fixture.assets[0].seconds += 0.01;
+  fixture.writeManifest();
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid mono PCM16/);
+});
+
+test('Voice Pop reference packaging rejects missing, unsafe or invalid Godot imports', t => {
+  const { collectPopReferenceAudio } = require('../tools/package-web.cjs');
+  const fixture = referenceBankFixture(t);
+  const asset = fixture.assets[0];
+  const metadata = path.join(fixture.directory, `${asset.destination}.import`);
+  fs.unlinkSync(metadata);
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /ENOENT/);
+  fs.writeFileSync(metadata, '[remap]\npath="res://.godot/imported/../outside.sample"\n');
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Import.*before packaging/);
+  const imported = fixture.writeImport(asset.destination);
+  fs.writeFileSync(path.join(fixture.directory, imported), 'not an imported sample');
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Expected an imported Godot audio resource/);
+});
+
 test('Web delivery compresses and fingerprints assets without mixing cached game versions', (t) => {
   const filename = path.join(root, 'tools', 'package-web.cjs');
   assert.ok(fs.existsSync(filename), 'The mobile Web export packager is missing');

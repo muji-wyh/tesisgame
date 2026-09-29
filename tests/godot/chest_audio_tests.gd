@@ -148,6 +148,7 @@ func _run() -> void:
 func _check_material_assets() -> void:
 	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
+	var initial_channels: int = audio.get_child_count()
 	var fingerprints: Dictionary = {}
 	var total_bytes: int = 0
 	var reward_levels: Array[float] = []
@@ -216,7 +217,7 @@ func _check_material_assets() -> void:
 		"Every theme acknowledges a saved reward at a comparable authored level")
 	check(fallback_reward_levels.size() == Bank.THEMES.size() and fallback_reward_levels.max() / fallback_reward_levels.min() < 1.15,
 		"Every theme acknowledges a saved reward at a comparable fallback level")
-	check(audio.get_child_count() == 4 and _playing(audio) == 0, "Preparing themes never allocates playback channels or makes a sound")
+	check(audio.get_child_count() == initial_channels and _playing(audio) == 0, "Preparing themes never allocates playback channels or makes a sound")
 	audio.queue_free()
 	await process_frame
 
@@ -224,6 +225,7 @@ func _check_material_assets() -> void:
 func _check_performance() -> void:
 	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
+	var initial_channels: int = audio.get_child_count()
 	audio.prepare_chest("autumn")
 	audio.chest_cue("autumn", "press")
 	audio.chest_cue("autumn", "hold_pulse", 1)
@@ -269,7 +271,7 @@ func _check_performance() -> void:
 		check(audio._chest_next_player == next_player, "Holding star %d stays silent between the scheduled beats" % step)
 		audio.chest_cue("autumn", "charge_step" + str(step))
 		check(audio._chest_next_player == next_player, "Duplicate step aliases do not replay")
-	check(audio.get_child_count() == 8 and _playing(audio) <= 4, "The performance uses only four bounded chest channels")
+	check(audio.get_child_count() == initial_channels + 4 and _playing(audio) <= 4, "The performance uses only four bounded chest channels")
 	audio.set_chest_charge(1.0)
 	var confirmation_gain: float = player.volume_db
 	var confirmation_pitch: float = player.pitch_scale
@@ -311,7 +313,7 @@ func _check_performance() -> void:
 	audio.prepare_chest("autumn")
 	audio.chest_cue("autumn", "press")
 	audio.set_chest_charge(0.0)
-	check(audio.chest_charge.stream == loop and audio.get_child_count() == 8, "The next chest reuses resources and players")
+	check(audio.chest_charge.stream == loop and audio.get_child_count() == initial_channels + 4, "The next chest reuses resources and players")
 	audio.stop_chest_performance()
 	audio.queue_free()
 	await process_frame
@@ -320,6 +322,7 @@ func _check_performance() -> void:
 func _check_tension_rhythm() -> void:
 	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
+	var initial_channels: int = audio.get_child_count()
 	for theme: String in Bank.THEMES:
 		audio.prepare_chest(theme)
 		audio.set_chest_tension(0.0)
@@ -402,7 +405,7 @@ func _check_tension_rhythm() -> void:
 			audio.chest_cue(theme, "charge_step", step)
 			check(audio._chest_next_player == before_stars,
 				"Automatic progress star %d does not add a second unsynchronized beat" % step)
-		check(_playing(audio) <= 4 and audio.get_child_count() == 8, "Rapid pulses and stars stay within the same four chest channels")
+		check(_playing(audio) <= 4 and audio.get_child_count() == initial_channels + 4, "Rapid pulses and stars stay within the same four chest channels")
 		var before_transition: int = audio._chest_next_player
 		var before_breath_gain: float = player.volume_db
 		var before_breath_position: float = player.get_playback_position()
@@ -864,6 +867,7 @@ func _check_cancellation_and_guards() -> void:
 func _check_bundled_preparation() -> void:
 	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
+	var initial_cached: int = audio.cache.size()
 	for theme: String in Bank.THEMES:
 		audio.prepare_chest(theme)
 		audio.prepare_chest(theme)
@@ -887,7 +891,7 @@ func _check_bundled_preparation() -> void:
 		await process_frame
 		check(_playing(audio) == 0 and audio.chest_charge.stream == null,
 			"Background cancellation stops every chest channel with no delayed playback")
-	check(audio.cache.size() == Bank.THEMES.size() * Bank.CUES.size(),
+	check(audio.cache.size() - initial_cached == Bank.THEMES.size() * Bank.CUES.size(),
 		"Every theme is cached locally without allocating network requests")
 	audio.queue_free()
 	await process_frame
