@@ -56,6 +56,7 @@ func _run() -> void:
 	_check_opening_cancel(data)
 	_check_release_commitment(data)
 	_check_hold_feedback(data)
+	_check_buildup_glow(data)
 	_check_hold_bounds(data)
 	var effect = load("res://scripts/celebration.gd").new()
 	root.add_child(effect)
@@ -480,6 +481,65 @@ func _check_hold_feedback(data) -> void:
 	chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	check(chest.mode == "closed" and not chest.hold_effect_snapshot().active and openings.size() == 1,
 		"Clearing during release removes the effect and prevents a stale open callback")
+	chest.free()
+
+
+func _check_buildup_glow(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.set_process(false)
+	for theme in data.THEMES:
+		for dimensions in [Vector2(320, 72), Vector2(180, 400), Vector2(440, 360), Vector2(768, 480)]:
+			chest.clear()
+			chest.size = dimensions
+			chest.reduced_motion = false
+			chest.configure_skin(data.theme(theme), data.chests)
+			check(is_zero_approx(chest.hold_effect_snapshot().buildup_glow),
+				"The idle %s chest has no buildup glow at %s" % [theme, dimensions])
+			var previous_intensity: float = 0.0
+			var previous_glow: float = 0.0
+			chest.begin_hold()
+			for elapsed in [0.16, 1.65, 3.22]:
+				if elapsed < Feel.HOLD_SECONDS:
+					chest.set_hold_progress(elapsed / Feel.HOLD_SECONDS)
+				else:
+					if chest.mode == "closed":
+						chest.set_hold_progress(1.0)
+						chest.start_open(false)
+					chest._advance_animation(elapsed - Feel.HOLD_SECONDS - chest.hold_effect_snapshot().opening_time)
+				var state: Dictionary = chest.hold_effect_snapshot()
+				var geometry: Dictionary = state.buildup_bounds
+				var halo := Rect2(Vector2(geometry.x, geometry.y), Vector2(geometry.width, geometry.height))
+				check(state.buildup_intensity > previous_intensity and state.buildup_glow > previous_glow
+					and state.buildup_color == Feel.FLASH_COLORS[theme].to_html(false),
+					"The %s actual themed buildup light grows from press to middle to final strain at %s" % [theme, dimensions])
+				check(halo.has_area() and Rect2(Vector2.ZERO, dimensions).grow(0.5).encloses(halo)
+					and is_zero_approx(state.release_flash) and not chest.opening_committed(),
+					"The %s buildup halo has visible safe geometry without prematurely flashing or opening at %s" % [theme, dimensions])
+				previous_intensity = state.buildup_intensity
+				previous_glow = state.buildup_glow
+			check(previous_glow >= 0.6,
+				"The %s final buildup has substantial visible light at %s" % [theme, dimensions])
+			chest.cancel_open(true)
+			check(is_zero_approx(chest.hold_effect_snapshot().buildup_glow)
+				and is_zero_approx(chest.hold_effect_snapshot().buildup_intensity),
+				"Cancelling %s removes its buildup light immediately while the body returns at %s" % [theme, dimensions])
+			chest._advance_animation(0.13)
+			chest.reduced_motion = true
+			chest.begin_hold()
+			chest.set_hold_progress(0.9)
+			var static_pose: String = chest.hold_effect_snapshot().pose_signature
+			chest._advance_animation(0.4)
+			check(is_zero_approx(chest.hold_effect_snapshot().buildup_glow)
+				and chest.hold_effect_snapshot().pose_signature == static_pose,
+				"Reduced-motion %s retains only readable progress without shaking or growing light at %s" % [theme, dimensions])
+			chest.reduced_motion = false
+			chest.set_hold_progress(1.0)
+			chest.start_open(false)
+			chest._advance_animation(Feel.RELEASE_TIME + 0.101)
+			check(is_zero_approx(chest.hold_effect_snapshot().buildup_glow)
+				and chest.hold_effect_snapshot().release_flash > 0.0,
+				"The %s buildup hands its light to the release within 100 milliseconds at %s" % [theme, dimensions])
 	chest.free()
 
 

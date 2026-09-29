@@ -241,7 +241,7 @@ func _fit() -> void:
 	_fit_scale = maxf(0.0, minf(size.x * 0.79 / _motion_bounds.size.x, available_height * 0.87 / _motion_bounds.size.y))
 	var center := Vector2(size.x * 0.5, safe_top + available_height * 0.54)
 	var hold: Vector2 = _hold_pose_state()
-	var pose_time: float = _elapsed if mode in ["opening", "opened"] else _charge_time
+	var pose_time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * Feel.HOLD_SECONDS
 	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"], _pulse_clock())
 	if mode == "opened" and not reduced_motion:
 		var phase: float = _idle_time * TAU / OPEN_SWAY_SECONDS
@@ -261,8 +261,9 @@ func _fit() -> void:
 		# The beat controls the whole body, not just its glow or decoration.
 		if returning > 0.0:
 			offset.x = _cancel_shift_x * returning
-		elif _hold_active or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME):
-			offset.x += _pulse_motion() * maxf(0.0, 6.0 * pixel - Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
+		elif _hold_active or (mode == "opening" and _elapsed < Feel.RELEASE_TIME + 0.075):
+			offset.x += Feel.buildup_motion(_buildup_time(), _pulse_clock()) * maxf(0.0,
+				6.0 * pixel - Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
 	_body_shift_x = offset.x
 	var pulse: Vector2 = _physical_pose.scale
 	var bob: float = center.y - size.y * 0.59
@@ -440,6 +441,31 @@ func _pulse_strength() -> float:
 	return Feel.pulse_strength(_pulse_clock(), _pulse_holding)
 
 
+func _buildup_time() -> float:
+	return _elapsed if mode == "opening" else (hold_progress - 1.0) * Feel.HOLD_SECONDS
+
+
+func _buildup_intensity() -> float:
+	if reduced_motion or not is_visible_in_tree():
+		return 0.0
+	if not _hold_active and not (mode == "opening" and _opening_cues_enabled):
+		return 0.0
+	var fade: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.10, _elapsed) if mode == "opening" else 1.0
+	return Feel.buildup_intensity(_buildup_time()) * fade
+
+
+func _buildup_glow() -> float:
+	var intensity: float = _buildup_intensity()
+	# Pressure stays luminous between impacts. Only a small accent follows
+	# the sounded beat, so the increasingly fast roll never becomes a strobe.
+	return (intensity * 0.09 + pow(intensity, 1.35) * 0.82) * (0.88 + _pulse_strength() * 0.12)
+
+
+func _buildup_bounds() -> Rect2:
+	var radius: Vector2 = _release_radius() * lerpf(0.40, 0.95, _buildup_intensity())
+	return Rect2(_light_origin() - radius, radius * 2.0)
+
+
 func performance_status() -> String:
 	match performance_phase():
 		"gathering": return "Gathering"
@@ -583,6 +609,10 @@ func hold_effect_snapshot() -> Dictionary:
 		"tension": tension_progress(),
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
+		"buildup_intensity": _buildup_intensity(), "buildup_glow": _buildup_glow(),
+		"buildup_color": _release_color.to_html(false),
+		"buildup_bounds": {"x": _buildup_bounds().position.x, "y": _buildup_bounds().position.y,
+			"width": _buildup_bounds().size.x, "height": _buildup_bounds().size.y},
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
 		"opened_glow": _opened_glow(), "opened_idle_time": _idle_time,
 		"opened_animated": mode == "opened" and is_visible_in_tree() and not reduced_motion and not _idle_paused,
@@ -615,12 +645,9 @@ func hold_effect_snapshot() -> Dictionary:
 
 
 func _draw_glint() -> void:
-	var center: Vector2 = _art.position + _bounds.get_center() * _art.scale
-	center.y -= _bounds.size.y * _art.scale.y * 0.08
-	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
-	if mode == "opening":
-		power = Feel.tension(_elapsed) * 0.55 + _pulse_strength() * 0.45 + Feel.final_drive(_elapsed) * 0.40
-	var radius: float = minf(size.x, size.y) * 0.07
+	var center: Vector2 = _light_origin()
+	var power: float = maxf(_buildup_glow(), _tap_remaining / 0.35 * 0.6)
+	var radius: float = minf(size.x, size.y) * (0.05 + _buildup_intensity() * 0.04)
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
 	_glint.draw_line(center - Vector2(radius, 0), center + Vector2(radius, 0), Color(_glint_color, power), 3.0, true)
@@ -707,10 +734,11 @@ func _draw_radiance() -> void:
 	if _fit_scale <= 0.0:
 		return
 	var pressure: float = _lid_pressure()
+	var buildup: float = _buildup_glow()
 	var flash: float = _release_power()
 	var ambient: float = _opened_glow()
 	var light: float = maxf(flash, ambient)
-	if pressure <= 0.001 and light <= 0.001:
+	if pressure <= 0.001 and buildup <= 0.001 and light <= 0.001:
 		return
 	var origin: Vector2 = _light_origin()
 	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
@@ -720,23 +748,27 @@ func _draw_radiance() -> void:
 	var glow: Vector2 = Vector2(width * 0.60, width * 0.35).lerp(radius * 2.0, spread)
 	_radiance.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
 		Color(_release_color, pressure * 0.35 + light))
-	if light <= 0.0:
-		return
+	if buildup > 0.001:
+		_radiance.draw_texture_rect(CHARGE_GLOW, _buildup_bounds(), false, Color(_release_color, buildup))
 	var safe: Rect2 = _release_bounds()
-	var expansion: float = 0.55 + 0.45 * smoothstep(0.0, 0.12, age)
+	var expansion: float = 0.12 + _buildup_intensity() * 0.70
+	if light > 0.0:
+		expansion = maxf(expansion, 0.55 + 0.45 * smoothstep(0.0, 0.12, age))
 	var height: float = maxf(0.0, origin.y - safe.position.y) * expansion
-	# Light emerges from the cavity and fades upward, behind the moving lid.
+	# Growing shafts leak around the sealed lid before the full release beam.
+	# They share the body's pressure envelope and remain inside the stage.
 	for ray in range(7):
 		var lean: float = float(ray - 3) / 3.0
 		if mode == "opened" and not reduced_motion:
 			lean += sin(_idle_time * TAU / (OPEN_SWAY_SECONDS * 1.8) + float(ray) * 0.7) * 0.045 * smoothstep(0.0, 0.65, _idle_time)
-		var half_width: float = safe.size.x * (0.085 if ray % 2 == 0 else 0.045)
-		var top: Vector2 = origin + Vector2(lean * radius.x * 0.88, -height)
+		var beam_spread: float = 1.0 if light > 0.0 else 0.45 + _buildup_intensity() * 0.40
+		var half_width: float = safe.size.x * (0.085 if ray % 2 == 0 else 0.045) * beam_spread
+		var top: Vector2 = origin + Vector2(lean * radius.x * 0.88 * beam_spread, -height)
 		var points := PackedVector2Array([origin - Vector2(width * 0.08, 0),
 			origin + Vector2(width * 0.08, 0),
 			Vector2(minf(safe.end.x, top.x + half_width), top.y),
 			Vector2(maxf(safe.position.x, top.x - half_width), top.y)])
-		var ray_alpha: float = maxf(flash * 0.80, ambient * 0.52)
+		var ray_alpha: float = maxf(maxf(flash * 0.80, ambient * 0.52), buildup * 0.48)
 		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, ray_alpha),
 			Color(_release_color, ray_alpha), Color(_release_color, 0), Color(_release_color, 0)]))
 
@@ -748,12 +780,21 @@ func _draw_seam() -> void:
 	if seam.is_empty():
 		return
 	var pressure: float = _lid_pressure()
+	var buildup: float = _buildup_glow()
 	var pixel: float = 1.0 / _charge_scale
 	# The solid lock/core occludes this light; it cannot shine through metal.
 	if pressure > 0.001:
 		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.18), (5.0 + pressure * 8.0) * pixel, true)
 		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.80), (1.0 + pressure * 2.0) * pixel, true)
 		_seam_light.draw_polyline(seam, Color(Color.WHITE, pressure * 0.72), pixel, true)
+	if buildup > 0.001:
+		var origin: Vector2 = _light_origin()
+		var width: float = _bounds.size.x * _fit_scale
+		var glow: Vector2 = Vector2(width * (0.60 + buildup * 0.25), width * (0.10 + buildup * 0.22)).min(_release_radius() * 2.0)
+		_seam_light.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
+			Color(_release_color.lightened(0.20), buildup * 0.80))
+		_seam_light.draw_polyline(seam, Color(_release_color, buildup * 0.30), (8.0 + buildup * 12.0) * pixel, true)
+		_seam_light.draw_polyline(seam, Color(_release_color.lightened(0.55), buildup), (1.0 + buildup * 2.0) * pixel, true)
 	var ambient: float = _opened_glow()
 	if ambient > 0.001:
 		var origin: Vector2 = _light_origin()
@@ -1130,6 +1171,7 @@ func _apply_pose(_progress: float) -> void:
 			elif role == "lid_inner":
 				lighting = lighting.darkened((1.0 - open) * 0.20)
 			# Reflected light on the body ties the effect to the chest surface.
+			lighting = lighting.lerp(_release_color.lightened(0.48), _buildup_glow() * 0.16)
 			lighting = lighting.lerp(_release_color.lightened(0.58), _release_power() * 0.23)
 		lighting = lighting.lerp(_release_color.lightened(0.58), _opened_glow() * 0.11)
 		sprite.modulate = Color(lighting, float(state.alpha))

@@ -212,9 +212,11 @@ function convert(theme, captured) {
 }
 
 function writeGallery() {
+  const currentSources = provenance();
   const reports = themes.filter(theme => fs.existsSync(path.join(output, `${theme}-report.json`)))
     .map(theme => JSON.parse(fs.readFileSync(path.join(output, `${theme}-report.json`), 'utf8')))
-    .filter(report => report.rhythm_version === rhythmVersion);
+    .filter(report => report.rhythm_version === rhythmVersion &&
+      Object.entries(currentSources).every(([file, hash]) => report.source_sha256?.[file] === hash));
   const available = reports.map(report => report.theme);
   reports.forEach(report => validateCapture(report.capture, report.theme));
   fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify(reports, null, 2) + '\n');
@@ -250,7 +252,7 @@ figure{margin:0}img{display:block;width:100%;background:#f6f4ee;border-radius:6p
 footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-width:760px){main{padding:20px 12px}.gallery{grid-template-columns:1fr}h1{font-size:26px}}
 </style><main><header><h1>Chest motion and sound review</h1>
 <p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
-<p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: hold for 1.2 seconds as five grounded recoils gather pressure, then let go as fifteen opening beats build toward release.</p>
+<p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: keep holding as five grounded recoils grow into fifteen increasingly strong opening beats. Let go when the lid releases; the remaining animation completes automatically.</p>
 <p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll flows into a rising rush while the body keeps straining; there is no silent stop before release. The lid opens into a broad theme-colored bloom, outward light wave and material impact. Progress stars fade as the light expands.</p>
 <p>A theme-colored flash peaks 45 milliseconds after release, then opens into a broad beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>

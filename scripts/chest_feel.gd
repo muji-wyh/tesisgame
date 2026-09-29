@@ -26,6 +26,54 @@ static func tension(elapsed: float) -> float:
 	return pow(clampf((HOLD_SECONDS + elapsed) / (HOLD_SECONDS + ANTICIPATION_TIME), 0.0, 1.0), 0.72)
 
 
+static func buildup_intensity(elapsed: float) -> float:
+	if not is_finite(elapsed):
+		return 0.0
+	# Motion and light reserve more range for the last third of the hold.
+	# Sound keeps its existing energy curve and exact authored beat times.
+	return pow(progress(elapsed), 1.35)
+
+
+static func _buildup_sway(elapsed: float) -> float:
+	var beat_count: int = HOLD_PULSE_TIMES.size() + PULSE_TIMES.size()
+	for ordinal in range(beat_count - 1, -1, -1):
+		var holding: bool = ordinal < HOLD_PULSE_TIMES.size()
+		var index: int = ordinal if holding else ordinal - HOLD_PULSE_TIMES.size()
+		var beat: float = float(HOLD_PULSE_TIMES[index]) - HOLD_SECONDS if holding else float(PULSE_TIMES[index])
+		if elapsed < beat:
+			continue
+		var next: float = ANTICIPATION_TIME
+		if holding:
+			next = float(HOLD_PULSE_TIMES[index + 1]) - HOLD_SECONDS if index + 1 < HOLD_PULSE_TIMES.size() else float(PULSE_TIMES[0])
+		elif index + 1 < PULSE_TIMES.size():
+			next = float(PULSE_TIMES[index + 1])
+		# Alternating half-swings follow the same intervals as the audible
+		# strikes. Keep this continuous clock when a delivered strike is late;
+		# only its separate contact impulse follows the latched audio clock.
+		var phase: float = (elapsed - beat) / maxf(0.001, next - beat)
+		return sin(phase * PI) * (1.0 if ordinal % 2 == 0 else -1.0)
+	return 0.0
+
+
+static func buildup_motion(elapsed: float, pulse_time: float = -INF) -> float:
+	if not is_finite(elapsed) or elapsed < -HOLD_SECONDS or elapsed >= RELEASE_TIME + 0.075:
+		return 0.0
+	if elapsed >= RELEASE_TIME:
+		# Retain the exact last loaded pose as the release takes its weight.
+		# The small-stage pixel floor consumes this same short return envelope.
+		return buildup_motion(RELEASE_TIME - 0.000001) * (1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + 0.075, elapsed))
+	var holding: bool = elapsed < 0.0
+	if is_inf(pulse_time):
+		pulse_time = elapsed + HOLD_SECONDS if holding else elapsed
+	var sustain: float = smoothstep(0.38, 0.78, progress(elapsed))
+	var handover: float = smoothstep(1.80, ANTICIPATION_TIME, elapsed)
+	var strike: float = pulse_motion(pulse_time, holding)
+	var sway: float = _buildup_sway(elapsed)
+	var motion: float = strike * (1.0 - sustain * 0.45) * (1.0 - handover)
+	motion += sway * (sustain * 0.50 + handover * 0.35)
+	return motion * lerpf(0.80, 2.55, buildup_intensity(elapsed))
+
+
 static func pulse_duration(index: int, holding: bool = false) -> float:
 	var beats: Array = HOLD_PULSE_TIMES if holding else PULSE_TIMES
 	var end: float = HOLD_SECONDS + float(PULSE_TIMES[0]) if holding else ANTICIPATION_TIME
@@ -143,6 +191,7 @@ static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
 
 static func body_pose(theme_id: String, pressure: float, progress: float, time: float, opening_now: bool, pulse_time: float = -INF) -> Dictionary:
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
+	var rocking: float = 0.040 if theme_id == "candy" else 0.024 + float(feel.tension) * 2.0
 	if is_inf(pulse_time):
 		pulse_time = time
 	if opening_now and time < RELEASE_TIME:
@@ -155,20 +204,22 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		if theme_id == "candy":
 			scale = Vector2(1.0 + pressure * 0.045, 1.0 - pressure * 0.065)
 	if (not opening_now and pressure > 0.0) or (opening_now and time < RELEASE_TIME):
-		var strike: float = pulse_motion(pulse_time, not opening_now)
+		var elapsed: float = time if opening_now else time - HOLD_SECONDS
+		var motion: float = buildup_motion(elapsed, pulse_time)
 		var strength: float = pulse_strength(pulse_time, not opening_now)
 		var drive: float = final_drive(time) if opening_now else 0.0
-		offset.x = strike * shake_distance(theme_id)
-		offset.x += drive * (-0.004 + sin((time - 1.80) * 72.0) * 0.0015)
+		offset.x = motion * shake_distance(theme_id) - drive * 0.004
 		offset.y += strength * 0.008 + drive * 0.010
-		rotation = strike * (0.040 if theme_id == "candy" else 0.028) - drive * 0.018
+		rotation = motion * rocking - drive * 0.010
 		if theme_id == "candy":
 			scale += Vector2(0.018, -0.025) * (strength + drive * 0.6)
 		return {"offset": offset, "scale": scale, "rotation": rotation}
 	if opening_now:
 		var preparation: float = 1.0 - smoothstep(RELEASE_TIME, RELEASE_TIME + 0.075, time)
 		offset = Vector2(-0.004, float(feel.press) + 0.010) * preparation
-		rotation = -0.018 * preparation
+		var loaded_motion: float = buildup_motion(time)
+		offset.x += loaded_motion * shake_distance(theme_id)
+		rotation = loaded_motion * rocking - 0.010 * preparation
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
 		var recoil: float = sin(minf(strike_age / 0.18, 1.0) * PI)
 		# The floor takes the release impulse while the lid moves upward.
@@ -178,16 +229,16 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 			"spring": offset.y -= recoil * 0.007
 			"summer": offset.y += recoil * 0.004
 			"autumn": offset.y += recoil * 0.012 + settle * 0.004
-			"winter": offset.x = sin(strike_age * 32.0) * exp(-strike_age * 13.0) * 0.003
+			"winter": offset.x += sin(strike_age * 32.0) * exp(-strike_age * 13.0) * 0.003
 			"ocean":
 				offset.y -= sin(clampf(strike_age / 1.45, 0.0, 1.0) * PI) * 0.020
-				rotation = sin(strike_age * 5.0) * exp(-strike_age * 2.8) * 0.018
+				rotation += sin(strike_age * 5.0) * exp(-strike_age * 2.8) * 0.018
 			"space": offset.y -= smoothstep(RELEASE_TIME, SETTLE_TIME, time) * 0.025
-			"jungle": rotation = sin(strike_age * 10.0) * exp(-strike_age * 5.0) * 0.027
+			"jungle": rotation += sin(strike_age * 10.0) * exp(-strike_age * 5.0) * 0.027
 			"candy":
 				var bounce: float = sin(strike_age * 15.0) * exp(-strike_age * 4.8)
-				scale = Vector2(1.0 + preparation * 0.045 - bounce * 0.070,
-					1.0 - preparation * 0.065 + bounce * 0.100)
+				scale = Vector2(1.0 + preparation * 0.0558 - bounce * 0.070,
+					1.0 - preparation * 0.080 + bounce * 0.100)
 				offset.y -= absf(bounce) * 0.025
 	return {"offset": offset, "scale": scale, "rotation": rotation}
 

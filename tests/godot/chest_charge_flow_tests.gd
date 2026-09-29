@@ -701,6 +701,46 @@ func _body_center(chest) -> Vector2:
 	return Vector2.ZERO
 
 
+func _buildup_trace(app) -> Array:
+	var trace: Array = []
+	_begin(app)
+	for frame in range(1, 73):
+		var target: float = Feel.HOLD_SECONDS * float(frame) / 72.0
+		var delta: float = target - app._hold_elapsed
+		app._advance_ui(delta)
+		if app.model.chest_state == "closed":
+			app.chest._advance_animation(delta)
+		trace.append({"time": target, "point": _body_center(app.chest),
+			"glow": app.chest.hold_effect_snapshot().buildup_glow})
+	for frame in range(1, ceili(Feel.RELEASE_TIME * 60.0) + 1):
+		var target: float = minf(float(frame) / 60.0, Feel.RELEASE_TIME - 0.001)
+		app.chest._advance_animation(target - app.chest.hold_effect_snapshot().opening_time)
+		app._advance_ui(0.0)
+		trace.append({"time": Feel.HOLD_SECONDS + target, "point": _body_center(app.chest),
+			"glow": app.chest.hold_effect_snapshot().buildup_glow})
+	return trace
+
+
+func _motion_window(trace: Array, start: float, end: float) -> Dictionary:
+	var points: Array = trace.filter(func(sample): return sample.time >= start and sample.time <= end)
+	var minimum: float = INF
+	var maximum: float = -INF
+	var glow: float = 0.0
+	var quiet: float = 0.0
+	var longest_quiet: float = 0.0
+	for index in range(points.size()):
+		minimum = minf(minimum, points[index].point.x)
+		maximum = maxf(maximum, points[index].point.x)
+		glow += points[index].glow
+		if index > 0:
+			if absf(points[index].point.x - points[index - 1].point.x) < 0.20:
+				quiet += points[index].time - points[index - 1].time
+			else:
+				quiet = 0.0
+			longest_quiet = maxf(longest_quiet, quiet)
+	return {"span": maximum - minimum, "glow": glow / maxf(1.0, points.size()), "quiet": longest_quiet}
+
+
 func _check_gameplay_pixels(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/visible.cfg", directory + "/visible-legacy.cfg")
@@ -718,7 +758,10 @@ func _check_gameplay_pixels(directory: String) -> void:
 	var late_range := Vector2(INF, -INF)
 	var first_min_case: String = ""
 	var late_min_case: String = ""
-	for dimensions in [Vector2i(390, 664), Vector2i(844, 390), Vector2i(1366, 768)]:
+	var envelope_min := Vector3(INF, INF, INF)
+	var envelope_max := Vector3.ZERO
+	var longest_quiet: float = 0.0
+	for dimensions in [Vector2i(390, 664), Vector2i(844, 390), Vector2i(1024, 768), Vector2i(1366, 768)]:
 		root.size = dimensions
 		for theme_id in app.data.THEMES:
 			seed_value += 1
@@ -769,9 +812,29 @@ func _check_gameplay_pixels(directory: String) -> void:
 			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == 5
 				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == 15,
 				"The real %s result emits all twenty body beats at %s" % [theme_id, dimensions])
+			app._end_chest_hold()
+			var trace: Array = _buildup_trace(app)
+			var early: Dictionary = _motion_window(trace, 0.08, 0.55)
+			var middle: Dictionary = _motion_window(trace, 1.35, 1.85)
+			var final: Dictionary = _motion_window(trace, 2.80, 3.32)
+			var envelope := Vector3(early.span, middle.span, final.span)
+			envelope_min = envelope_min.min(envelope)
+			envelope_max = envelope_max.max(envelope)
+			longest_quiet = maxf(longest_quiet, final.quiet)
+			check(middle.span > early.span * 1.20 and final.span > middle.span * 1.35 and final.span >= 8.0,
+				"The actual %s body at %s grows from %.2f to %.2f to %.2f screen-pixel shake spans" %
+				[theme_id, dimensions, early.span, middle.span, final.span])
+			check(final.quiet <= 0.075,
+				"The actual %s final buildup at %s never becomes still between beats for more than %.0f milliseconds" %
+				[theme_id, dimensions, final.quiet * 1000.0])
+			check(middle.glow > early.glow + 0.10 and final.glow > middle.glow + 0.15,
+				"The actual %s buildup light at %s strengthens across the same motion windows (%.2f, %.2f, %.2f)" %
+				[theme_id, dimensions, early.glow, middle.glow, final.glow])
 			app.chest.finish_immediately()
-	print("Real gameplay body motion across 24 theme/viewport cases: first %.2f-%.2f screen px (minimum: %s); late %.2f-%.2f screen px (minimum: %s)" %
+	print("Real gameplay body motion across 32 theme/viewport cases: first %.2f-%.2f screen px (minimum: %s); late %.2f-%.2f screen px (minimum: %s)" %
 		[first_range.x, first_range.y, first_min_case, late_range.x, late_range.y, late_min_case])
+	print("Continuous gameplay shake spans: early %.2f-%.2f, middle %.2f-%.2f, late %.2f-%.2f screen px; longest late quiet interval %.0f ms" %
+		[envelope_min.x, envelope_max.x, envelope_min.y, envelope_max.y, envelope_min.z, envelope_max.z, longest_quiet * 1000.0])
 	app.audio.halt()
 	app.free()
 	await process_frame

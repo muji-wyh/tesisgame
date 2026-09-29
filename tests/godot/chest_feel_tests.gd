@@ -542,22 +542,26 @@ func _check_motion_bounds(data) -> void:
 			chest.size = dimensions
 			chest.reduced_motion = false
 			chest.configure_skin(data.theme(theme), data.chests)
-			chest.begin_hold()
-			chest.set_hold_progress(0.99)
-			chest.start_open(false)
-			var prior: float = 0.0
 			var outside: Array[String] = []
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
-			for time in [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
+			chest.begin_hold()
+			for frame in range(1, 73):
+				chest.set_hold_progress(float(frame) / 72.0)
+				chest._advance_animation(Feel.HOLD_SECONDS / 72.0)
+				_record_buildup_bounds(chest, stage, float(frame) / 60.0 - Feel.HOLD_SECONDS, outside)
+			chest.start_open(false)
+			var prior: float = 0.0
+			var sample_times: Array = [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
 				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.065, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
-				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]:
+				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]
+			for frame in range(1, ceili(Feel.OPEN_SECONDS * 60.0)):
+				sample_times.append(float(frame) / 60.0)
+			sample_times.sort()
+			for time in sample_times:
 				chest._advance_animation(time - prior)
 				prior = time
+				_record_buildup_bounds(chest, stage, time, outside)
 				var state: Dictionary = chest.hold_effect_snapshot()
-				var physical: Dictionary = state.physical_bounds
-				var bounds := Rect2(Vector2(physical.x, physical.y), Vector2(physical.width, physical.height))
-				if not stage.encloses(bounds) or bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
-					outside.append("%.2fs: %s" % [time, bounds])
 				if is_equal_approx(time, Feel.RELEASE_TIME + 0.065):
 					var origin := Vector2(state.light_origin.x, state.light_origin.y)
 					var radius := Vector2(state.release_radius.x, state.release_radius.y)
@@ -568,5 +572,20 @@ func _check_motion_bounds(data) -> void:
 					if dimensions.x >= 320.0 and dimensions.x >= dimensions.y * 2.0:
 						check(radius.x * 2.0 >= dimensions.x * 0.80,
 							"The %s release fills at least eighty percent of its centered wide stage at %s" % [theme, dimensions])
-			check(outside.is_empty(), "The %s material motion stays inside %s through every physical beat: %s" % [theme, dimensions, outside])
+			check(outside.is_empty(), "The %s body, parts and buildup light stay inside %s at sixty samples per second: %s" % [theme, dimensions, outside])
 	chest.free()
+
+
+func _record_buildup_bounds(chest, stage: Rect2, time: float, outside: Array[String]) -> void:
+	if outside.size() >= 12:
+		return
+	var state: Dictionary = chest.hold_effect_snapshot()
+	var physical: Dictionary = state.physical_bounds
+	var bounds := Rect2(Vector2(physical.x, physical.y), Vector2(physical.width, physical.height))
+	if not stage.encloses(bounds) or not bounds.has_area():
+		outside.append("%.3fs body: %s" % [time, bounds])
+	if state.buildup_glow > 0.0:
+		var light: Dictionary = state.buildup_bounds
+		var halo := Rect2(Vector2(light.x, light.y), Vector2(light.width, light.height))
+		if not stage.encloses(halo) or not halo.has_area():
+			outside.append("%.3fs halo: %s" % [time, halo])
