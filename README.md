@@ -503,7 +503,12 @@ as the rhythm tightens. The last roll flows into a continuous rising rush, while
 the body keeps straining through unlock. Release opens a broad theme-colored
 bloom, seven beams and an outward light wave. The flash peaks within 45 ms and
 fades over 1.02 seconds as the chest settles; the progress crown fades immediately
-to make room for it. Each world keeps its own material motion and sound. The art fit stays
+to make room for it. A compact material crack and low-mid impact load the base
+into a tighter contact shadow while the lid accelerates upward. The lid or
+facets meet a mechanical stop 420 ms after release, with a small, quickly damped
+return synchronized to the contact sound. The body stays grounded, and rigid
+themes retain their dimensions; Candy keeps its elastic deformation.
+Each world keeps its own material motion and sound. The art fit stays
 fixed throughout.
 Releasing or dragging before the lid releases cancels immediately; a fresh press
 interrupts the return and starts from zero. Once the lid releases, letting go
@@ -514,7 +519,7 @@ the initial 1.2-second hold.
 Browser accessibility exposes progress without repeated live announcements.
 Changing worlds cannot reroll an opening or alter an earned fragment.
 
-Chest sounds use a dedicated four-player pool. Entering a world preloads its nine
+Chest sounds use a dedicated four-player pool. Entering a world preloads its eleven
 short, original procedural Foley clips; unavailable samples use a small local
 fallback immediately. Downloads never own playback and cannot replay missed cues.
 The success accent plays only after persistence succeeds, once per reward.

@@ -133,33 +133,26 @@ function render(theme, cue) {
       modes(start, duration - start, [base * [1, 1.25, 1.5][i], base * [2.76, 3.42, 4.17][i]], gain, 3.5);
     }
   }
-  function bodyImpact(base, gain, bloom = false) {
-    const seconds = bloom ? 0.58 : 0.19;
+  function bodyImpact(base, gain) {
+    const seconds = 0.19;
     layer(0, seconds, gain, (t) => {
-      const pressure = bloom ? (0.2 + 0.8 * Math.min(1, t / 0.07)) * Math.exp(-t / 0.22)
-        : Math.min(1, t / 0.018) * Math.exp(-t / 0.041);
+      const pressure = Math.min(1, t / 0.018) * Math.exp(-t / 0.041);
       const phase = TAU * base * t;
       // Low-mid harmonics retain physical weight on small phone speakers.
       const body = Math.sin(phase) + 0.55 * Math.sin(phase * 2.03) + 0.22 * Math.sin(phase * 3.81);
       return body * pressure * Math.min(1, t / 0.002) * Math.min(1, (seconds - t) / 0.045);
     });
   }
-  function releaseAir(cutoff) {
-    let low = 0;
-    const seconds = duration - 0.012;
-    layer(0.012, seconds, 0.94, (t) => {
-      const alpha = 1 - Math.exp(-TAU * (350 + cutoff * Math.exp(-t * 2.6)) / RATE);
-      low += alpha * (rng() * 2 - 1 - low);
-      const bloom = (1 - Math.exp(-t / 0.045)) * Math.exp(-t / 0.26);
-      return low * bloom * Math.min(1, (seconds - t) / 0.085);
+  function weightedContact(start, seconds, base, gain, decay) {
+    layer(start, seconds, gain, (t) => {
+      // A fast load and tiny downward pitch relaxation read as a solid cavity.
+      // The second through sixth harmonics carry weight on phone speakers too.
+      const phase = TAU * base * (t + 0.13 * 0.025 * (1 - Math.exp(-t / 0.025)));
+      const body = Math.sin(phase) + 0.72 * Math.sin(phase * 2.03)
+        + 0.38 * Math.sin(phase * 3.97) + 0.15 * Math.sin(phase * 6.13);
+      const pressure = Math.min(1, t / 0.004) * Math.exp(-t / decay);
+      return body * pressure * Math.min(1, (seconds - t) / 0.045);
     });
-  }
-
-  function brightTail() {
-    const base = BODY_FREQUENCIES[theme];
-    // One simultaneous material shimmer, never the saved-reward melody.
-    modes(0.065, duration - 0.065, [base * 7.9, base * 12.31, base * 17.73], 0.14, 1.6);
-    noise(0.035, duration - 0.035, 0.22, 6200, 0.070, 1.8);
   }
 
   function risingBridge() {
@@ -263,17 +256,26 @@ function render(theme, cue) {
   } else if (cue === 'opening') {
     risingBridge();
   } else if (cue === 'release') {
-    // A synchronized crack starts the release, then cavity weight and air
-    // bloom around the floor recoil. The saved-reward melody remains separate.
-    for (let i = 0; i < samples.length; i++) samples[i] *= 0.36;
-    bodyImpact(BODY_FREQUENCIES[theme] * 0.82, 0.9, true);
-    noise(0, 0.045, 0.44, 4400, 0.001, 5);
-    releaseAir(theme === 'ocean' ? 1400 : (theme === 'winter' ? 4200 : 3200));
-    brightTail();
+    // Preserve a small material signature, then make the release one loaded
+    // contact. Long air and shimmer tails make this moment sound weightless.
+    for (let i = 0; i < samples.length; i++) samples[i] *= 0.20 * Math.exp(-Math.max(0, i / RATE - 0.04) * 16);
+    const base = Math.max(86, BODY_FREQUENCIES[theme]);
+    weightedContact(0, 0.38, base, 1.20, 0.088);
+    noise(0, 0.024, 0.40, theme === 'ocean' ? 1500 : 3200, 0.0008, 5.5);
+    modes(0.007, 0.14, [base * 3.1, base * 5.6], 0.11, 6.8);
+    noise(0.020, 0.16, 0.14, 1400, 0.008, 5.0);
+  } else if (cue === 'settle') {
+    // A quieter mechanical stop and a small damped return anchor the lid.
+    // Keep theme detail, but avoid a second long release or reward-like chime.
+    for (let i = 0; i < samples.length; i++) samples[i] *= 0.28 * Math.exp(-Math.max(0, i / RATE - 0.025) * 22);
+    const base = Math.max(90, BODY_FREQUENCIES[theme] * 1.10);
+    weightedContact(0, 0.19, base, 0.80, 0.042);
+    weightedContact(0.065, 0.13, base * 0.94, 0.19, 0.028);
+    noise(0, 0.019, 0.18, 2400, 0.001, 6.0);
   }
 
-  if (cue === 'release') {
-    // Gentle saturation gives the broad bloom headroom beside its sharp crack.
+  if (cue === 'release' || cue === 'settle') {
+    // Gentle saturation gives the dry contact headroom beside its cavity body.
     for (let i = 0; i < samples.length; i++) samples[i] = 0.8 * Math.tanh(samples[i] / 0.8);
   }
   // Remove any DC bias and taper both boundaries. A looping charge asset has
@@ -286,11 +288,11 @@ function render(theme, cue) {
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
-  if (strike || cue === 'release' || cue === 'opening') {
+  if (strike || cue === 'release' || cue === 'settle' || cue === 'opening') {
     // Equal material-strike energy lets the shared crescendo read on every
     // theme, including the otherwise very quiet magnetic and flower locks.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const target = cue === 'release' ? 0.15 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
+    const target = cue === 'release' ? 0.15 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.11 : [0.07, 0.075, 0.082][strikeStage];
     const gain = Math.min(target / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }

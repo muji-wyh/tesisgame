@@ -254,6 +254,7 @@ func _run() -> void:
 	_check_shared_pulse_motion(data)
 	_check_small_stage_pixels(data)
 	_check_pressure_release(data)
+	_check_weighted_release(data)
 	_check_crystal_mechanism(data)
 	_check_motion_bounds(data)
 	print("Chest feel: %d assertions, %d failures" % [checks, failures])
@@ -483,6 +484,50 @@ func _check_pressure_release(data) -> void:
 			chest._advance_animation(Feel.RELEASE_TIME + 0.065)
 			check(is_zero_approx(chest.hold_effect_snapshot().release_flash),
 				"The %s %s path cannot replay a missed release flash" % [theme, interrupted])
+	chest.free()
+
+
+func _check_weighted_release(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.set_process(false)
+	for theme in data.THEMES:
+		for dimensions in [Vector2(320, 72), Vector2(440, 360)]:
+			chest.clear()
+			chest.size = dimensions
+			chest.reduced_motion = false
+			chest.configure_skin(data.theme(theme), data.chests)
+			chest.start_open(false)
+			chest._advance_animation(Feel.RELEASE_TIME)
+			var before: Dictionary = chest.hold_effect_snapshot()
+			chest._advance_animation(0.04)
+			var impact: Dictionary = chest.hold_effect_snapshot()
+			var compression: float = impact.grounding_pivot.y - before.grounding_pivot.y
+			check(compression >= 1.5 and impact.release_flash > 0.9,
+				"%s visibly loads its base by %.2f pixels with the release flash at %s" % [theme, compression, dimensions])
+			var remains_grounded: bool = true
+			var remains_rigid: bool = true
+			var braking: Array = []
+			for frame in range(24):
+				chest._advance_animation(1.0 / 60.0)
+				var state: Dictionary = chest.hold_effect_snapshot()
+				remains_grounded = remains_grounded and state.physical_pose.y >= -0.0001
+				remains_rigid = remains_rigid and is_equal_approx(state.physical_pose.scale_x, 1.0) and is_equal_approx(state.physical_pose.scale_y, 1.0)
+				if frame == 16:
+					braking = _poses(chest)
+				if frame == 21:
+					check(_poses(chest) != braking, theme + " continues braking its parts into the audible stop without a stationary gap")
+			check(remains_grounded and (theme == "candy" or remains_rigid),
+				theme + " keeps a planted rigid base while its lid or facets release")
+			var stopped: Array = _poses(chest)
+			check(chest.hold_effect_snapshot().cues.filter(func(cue): return cue.cue == "settle").size() == 1,
+				theme + " sounds its mechanical stop within 440 milliseconds of release")
+			chest._advance_animation(0.04)
+			check(_poses(chest) != stopped, theme + " visibly responds to the mechanical stop instead of ending in a static ease-out")
+			chest._advance_animation(0.40)
+			var rested: Dictionary = chest.hold_effect_snapshot()
+			check(absf(rested.physical_pose.y) < 0.001 and absf(rested.physical_pose.rotation) < 0.002,
+				theme + " quickly damps its physical return rather than floating through the reward tail")
 	chest.free()
 
 

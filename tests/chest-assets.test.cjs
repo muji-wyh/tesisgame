@@ -34,13 +34,18 @@ const absolute = (relativePath) => path.join(root, ...relativePath.split('/'));
 
 function soundEnergy(samples, rate) {
   const alpha = 1 - Math.exp(-2 * Math.PI * 400 / rate);
-  let low = 0, body = 0, total = 0;
+  const phoneLow = 1 - Math.exp(-2 * Math.PI * 180 / rate);
+  const phoneHigh = 1 - Math.exp(-2 * Math.PI * 1200 / rate);
+  let low = 0, body = 0, total = 0, low180 = 0, low1200 = 0, phone = 0;
   for (const sample of samples) {
     low += alpha * (sample - low);
+    low180 += phoneLow * (sample - low180);
+    low1200 += phoneHigh * (sample - low1200);
     body += low * low;
+    phone += (low1200 - low180) ** 2;
     total += sample * sample;
   }
-  return { rms: Math.sqrt(total / samples.length), bodyRatio: body / total };
+  return { rms: Math.sqrt(total / samples.length), bodyRatio: body / total, phoneRatio: phone / total };
 }
 
 test('all 88 authored chest cues reproduce exactly and stay within the optional audio budget', () => {
@@ -58,7 +63,7 @@ test('all 88 authored chest cues reproduce exactly and stay within the optional 
   assert.ok(bytes < 1600000, 'The complete layered bank stays below 1.6 MB');
 });
 
-test('chest strikes add upper material detail and the final transition rises into a broad release', () => {
+test('chest strikes rise into a dry weighted release and a compact material stop', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const window = (samples, start, end) => samples.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE));
   for (const theme of audio.THEMES) {
@@ -71,9 +76,30 @@ test('chest strikes add upper material detail and the final transition rises int
     assert.ok(soundEnergy(window(bridge, 0.16, 0.21), audio.RATE).rms >
       soundEnergy(window(bridge, 0.02, 0.07), audio.RATE).rms * 3, `${theme} bridges toward the release`);
     const release = audio.render(theme, 'release');
-    assert.ok(soundEnergy(window(release, 0.15, 0.35), audio.RATE).rms > 0.10,
-      `${theme} releases with a broad body and air tail`);
+    const contact = soundEnergy(window(release, 0, 0.04), audio.RATE).rms;
+    let strongest = 0, strongestTime = 0;
+    for (let start = 0; start < 0.25; start += 0.005) {
+      const energy = soundEnergy(window(release, start, start + 0.02), audio.RATE).rms;
+      if (energy > strongest) { strongest = energy; strongestTime = start + 0.01; }
+    }
+    assert.ok(contact > 0.30 && strongestTime >= 0.01 && strongestTime <= 0.045,
+      `${theme} loads its main release inside the first 45 ms`);
+    assert.ok(soundEnergy(window(release, 0.15, 0.30), audio.RATE).rms > 0.035,
+      `${theme} retains a short resonating cavity after contact`);
+    assert.ok(soundEnergy(window(release, 0.30, 0.50), audio.RATE).rms < contact * 0.04,
+      `${theme} damps its release before the lid's mechanical stop without an airy tail`);
+    const material = soundEnergy(release, audio.RATE);
+    assert.ok(material.bodyRatio > 0.70 && material.phoneRatio > 0.20,
+      `${theme} combines grounded resonance with audible low-mid harmonics`);
     assert.ok(release.every(sample => Math.abs(sample) < 0.79), `${theme} leaves unclipped mixing headroom`);
+    const settle = audio.render(theme, 'settle');
+    const landing = soundEnergy(settle, audio.RATE);
+    assert.ok(landing.rms < material.rms * 0.65 && landing.bodyRatio > 0.65 && landing.phoneRatio > 0.20,
+      `${theme} has a quieter but tangible material stop`);
+    assert.ok(soundEnergy(window(settle, 0.18, 0.4), audio.RATE).rms <
+      soundEnergy(window(settle, 0, 0.04), audio.RATE).rms * 0.02,
+    `${theme} stops ringing after its compact rebound`);
+    assert.ok(settle.every(sample => Math.abs(sample) < 0.79), `${theme} landing stays unclipped`);
   }
 });
 

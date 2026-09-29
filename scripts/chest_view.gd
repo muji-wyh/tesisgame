@@ -281,6 +281,10 @@ func _fit() -> void:
 		elif _hold_active or (mode == "opening" and _elapsed < Feel.RELEASE_TIME + 0.075):
 			offset.x += Feel.buildup_motion(_buildup_time(), _pulse_clock()) * maxf(0.0,
 				6.0 * pixel - Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
+		if mode == "opening":
+			# A small stage must still show the base taking the release impact.
+			offset.y += Feel.release_load(_elapsed) * maxf(0.0,
+				4.0 * pixel - 0.050 * _bounds.size.x * _fit_scale)
 	_body_shift_x = offset.x
 	var pulse: Vector2 = _physical_pose.scale
 	var bob: float = center.y - size.y * 0.59
@@ -756,6 +760,8 @@ func hold_effect_snapshot() -> Dictionary:
 			"width": _buildup_bounds().size.x, "height": _buildup_bounds().size.y},
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
 		"release_impact": _release_impact(),
+		"release_load": Feel.release_load(_elapsed) if mode == "opening" and not reduced_motion else 0.0,
+		"stop_response": Feel.stop_response(_elapsed) if mode == "opening" and not reduced_motion else 0.0,
 		"release_additive": _flash.material is CanvasItemMaterial and _flash.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD,
 		"release_burst_origin": {"x": burst_origin.x, "y": burst_origin.y},
 		"release_bloom_bounds": {"x": bloom_bounds.position.x, "y": bloom_bounds.position.y,
@@ -818,13 +824,16 @@ func _draw_shadow() -> void:
 	var height: float = maxf(1.0, minf(width * 0.10, size.y * 0.04))
 	var lift: float = maxf(0.0, -float(_physical_pose.get("offset", Vector2.ZERO).y))
 	var pressure: float = _hold_pose_state().x if mode == "closed" else maxf(0.0, float(_physical_pose.get("offset", Vector2.ZERO).y)) * 15.0
+	var impact: float = Feel.release_load(_elapsed) if mode == "opening" and not reduced_motion else 0.0
+	var contact: float = impact + absf(Feel.stop_response(_elapsed)) if mode == "opening" and not reduced_motion else 0.0
 	for layer in range(5):
 		var radius := Vector2(width, height) * (1.0 - float(layer) * 0.14 + lift)
+		radius *= Vector2(1.0 - contact * 0.10, 1.0 - contact * 0.28)
 		var points := PackedVector2Array()
 		for index in range(32):
 			points.append(_ground_center + Vector2.from_angle(TAU * float(index) / 32.0) * radius)
 		_shadow.draw_colored_polygon(points, Color(0.07, 0.10, 0.16,
-			(0.045 + float(layer) * 0.018 + pressure * 0.018) * (1.0 - lift * 3.0)))
+			(0.045 + float(layer) * 0.018 + pressure * 0.018 + contact * 0.065) * (1.0 - lift * 3.0)))
 
 
 func _lid_pressure() -> float:
@@ -1364,6 +1373,7 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
 	var alpha: float = 1.0
 	var progress: float = Feel.opening(theme_id, time) if opening_now else 0.0
+	var stop: float = Feel.stop_response(time) if opening_now and not reduced_motion else 0.0
 	if _style == "crystal" and piece.role == "01":
 		# The small central crystal is the lock. It releases before the large
 		# facets, so their shared source artwork still reads as a mechanism.
@@ -1374,8 +1384,7 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	elif _style == "crystal" and piece.role != "chest":
 		# Opposing facets move in distinct waves, never as one enlarged sprite.
 		if theme_id == "candy":
-			var delay: float = 0.0 if index % 2 == 0 else 0.14
-			progress = Feel.opening(theme_id, time - delay) if opening_now else 0.0
+			progress = Feel.opening(theme_id, time, 0 if index % 2 == 0 else 7) if opening_now else 0.0
 		else:
 			progress = Feel.opening(theme_id, time, (index * 3) % 8) if opening_now else 0.0
 		var direction: Vector2 = pose.origin - _bounds.get_center()
@@ -1392,18 +1401,17 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 		elif theme_id == "candy":
 			turn *= 1.65
 		pose = _rotate_piece(pose, turn)
-		pose.origin += direction.normalized() * _bounds.size.x * spread * progress
+		pose.origin += direction.normalized() * _bounds.size.x * spread * (progress - stop * 0.10)
+		pose = _rotate_piece(pose, stop * (0.040 if index % 2 == 0 else -0.040))
 	elif _rigged:
 		match piece.role:
 			"lid_outer":
 				if theme_id == "space":
 					# A magnetic cover keeps its rigid silhouette while detaching;
 					# it does not inherit the solar chest's hinged opening.
-					var age: float = maxf(0.0, time - Feel.SETTLE_TIME)
-					var magnetic: float = sin(age * 19.0) * exp(-age * 9.0) if opening_now else 0.0
-					pose = pose * Transform2D(-0.045 * progress + magnetic * 0.025, Vector2.ZERO)
+					pose = pose * Transform2D(-0.045 * progress + stop * 0.065, Vector2.ZERO)
 					pose.origin += Vector2(_bounds.size.x * 0.015 * progress,
-						-_bounds.size.y * (0.29 * progress + magnetic * 0.010))
+						-_bounds.size.y * (0.29 * progress - stop * 0.030))
 				else:
 					var squash: float = maxf(0.0, cos(clampf(progress, 0.0, 1.0) * PI))
 					pose = pose * Transform2D(0.0, Vector2(1.0, maxf(0.001, squash)), 0.0, Vector2.ZERO)
@@ -1416,12 +1424,9 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 				var rise: float = maxf(0.0, -cos(clampf(progress, 0.0, 1.0) * PI))
 				pose = pose * Transform2D(0.0, Vector2(1.0, maxf(0.001, rise)), 0.0, Vector2.ZERO)
 				alpha = 1.0 if progress >= 0.5 and theme_id != "space" else 0.0
-				if theme_id == "autumn" and opening_now:
-					var age: float = maxf(0.0, time - Feel.SETTLE_TIME)
-					var backfall: float = sin(age * 17.0) * exp(-age * 8.0)
-					pose = pose * Transform2D(-0.075 * backfall, Vector2.ZERO)
-					pose.origin.y += _bounds.size.y * 0.012 * backfall
-				elif theme_id == "jungle":
+				pose = pose * Transform2D(-stop * (0.12 if theme_id == "autumn" else 0.085), Vector2.ZERO)
+				pose.origin.y += _bounds.size.y * 0.024 * stop
+				if theme_id == "jungle":
 					var pull: float = sin(clampf(progress, 0.0, 1.0) * PI)
 					pose = pose * Transform2D(-0.055 * pull, Vector2.ZERO)
 					pose.origin.x += _bounds.size.x * 0.018 * pull
@@ -1472,8 +1477,8 @@ func _apply_pose(_progress: float) -> void:
 		var source: Sprite2D = edge.source
 		var rim: Sprite2D = edge.node
 		rim.transform = source.transform
-		rim.scale.y = maxf(0.045, rim.scale.y)
-		rim.position.y += _bounds.size.y * 0.010
+		rim.scale.y = maxf(0.060, rim.scale.y)
+		rim.position.y += _bounds.size.y * 0.017
 		rim.modulate = Color(_tint.darkened(0.42).lerp(_release_color, _release_power() * 0.12), source.modulate.a)
 	if is_instance_valid(_crystal_cavity):
 		_crystal_cavity.queue_redraw()

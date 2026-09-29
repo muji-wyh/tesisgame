@@ -6,7 +6,7 @@ const BUILDUP_SECONDS: float = 2.0
 const ANTICIPATION_TIME: float = 1.94
 const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.08
 const RELEASE_TIME: float = BUILDUP_SECONDS + 0.16
-const SETTLE_TIME: float = BUILDUP_SECONDS + 0.95
+const SETTLE_TIME: float = RELEASE_TIME + 0.42
 const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
 const HOLD_PULSE_TIMES := [0.08, 0.40, 0.68, 0.91, 1.12]
 const PULSE_TIMES := [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
@@ -166,27 +166,41 @@ static func profile(theme_id: String) -> Dictionary:
 
 static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
-	var delay: float = RELEASE_TIME + float(index) * float(feel.stagger)
-	var value: float = clampf((elapsed - delay) / float(feel.hinge), 0.0, 1.0)
-	# The initial gap, pressure release and impact belong to one beat. The
-	# remainder brakes into a physical stop rather than delaying the first gap.
-	var driven: float = 1.0 - pow(1.0 - value, 3.0)
+	var delay: float = float(index) * float(feel.stagger) * 0.55
+	var throw_seconds: float = SETTLE_TIME - RELEASE_TIME - delay
+	var value: float = clampf((elapsed - RELEASE_TIME - delay) / throw_seconds, 0.0, 1.0)
+	# Accelerate a rigid mass, then brake into the common mechanical stop.
+	# An instant ease-out gives the lid full speed on its first frame and
+	# spends the rest of the opening drifting toward its destination.
+	# Faster themes spend more travel early, but every part keeps braking
+	# until the audible stop rather than pausing before an unrelated kick.
+	var driven: float = smoothstep(0.0, 1.0, pow(value, clampf(float(feel.hinge) / 0.52, 0.70, 1.30)))
 	match theme_id:
-		"summer":
-			# The solar mechanism releases quickly and brakes before its stop.
-			return driven
 		"autumn":
-			return lerpf(driven, smoothstep(0.0, 1.0, value), 0.25)
-		"winter":
-			return driven
-		"space":
-			return driven
+			return pow(driven, 1.12)
+		"ocean":
+			return pow(driven, 0.88)
 		"candy":
-			return 1.0 - exp(-value * 6.0) * cos(value * 9.5) if value < 1.0 else 1.0
+			return driven + sin(value * PI) * 0.12
 		"jungle":
 			return driven + sin(value * PI) * 0.045
 		_:
 			return driven
+
+
+static func release_load(elapsed: float) -> float:
+	var age: float = elapsed - RELEASE_TIME
+	if age < 0.0:
+		return 0.0
+	return smoothstep(0.0, 0.025, age) * (1.0 - smoothstep(0.065, 0.29, age))
+
+
+static func stop_response(elapsed: float) -> float:
+	var age: float = elapsed - SETTLE_TIME
+	if age < 0.0 or age >= 0.28:
+		return 0.0
+	# One firm stop and a much smaller return, never a lingering spring.
+	return sin(age * 31.0) * exp(-age * 14.0) * (1.0 - smoothstep(0.18, 0.28, age))
 
 
 static func body_pose(theme_id: String, pressure: float, progress: float, time: float, opening_now: bool, pulse_time: float = -INF) -> Dictionary:
@@ -221,31 +235,30 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		offset.x += loaded_motion * shake_distance(theme_id)
 		rotation = loaded_motion * rocking - 0.010 * preparation
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
-		# A quick load into the floor makes the lid's upward release tangible.
-		# Hold that weight briefly, then recover with one small damped return.
-		# Hard materials stay rigid; the impulse moves their mass, not the art.
-		var recoil: float = smoothstep(0.0, 0.035, strike_age) * (1.0 - smoothstep(0.055, 0.235, strike_age))
-		var return_age: float = maxf(0.0, strike_age - 0.18)
-		var rebound: float = sin(clampf(return_age / 0.34, 0.0, 1.0) * PI) * exp(-return_age * 4.0)
-		offset.y += recoil * (0.042 if theme_id == "autumn" else 0.034) - rebound * 0.006
-		var settle: float = exp(-maxf(0.0, time - SETTLE_TIME) * 16.0) * sin(maxf(0.0, time - SETTLE_TIME) * 24.0)
+		var recoil: float = release_load(time)
+		var settle: float = stop_response(time)
+		# The base absorbs the lid's upward force. It stays on the floor as
+		# the lid brakes; floating the entire chest discards that weight.
+		offset.y += recoil * (0.060 if theme_id == "autumn" else 0.050)
+		offset.y += absf(settle) * 0.016
+		rotation -= recoil * 0.012 + settle * 0.025
+		offset.x += settle * 0.006
 		match theme_id:
-			"spring": offset.y -= recoil * 0.008
+			"spring": offset.y -= recoil * 0.004
 			"summer": offset.y += recoil * 0.004
-			"autumn": offset.y += recoil * 0.010 + settle * 0.004
+			"autumn": offset.y += absf(settle) * 0.006
 			"winter": offset.x += sin(strike_age * 32.0) * exp(-strike_age * 13.0) * 0.003
 			"ocean":
-				offset.y -= sin(clampf(strike_age / 1.45, 0.0, 1.0) * PI) * 0.020
-				rotation += sin(strike_age * 5.0) * exp(-strike_age * 2.8) * 0.018
-			"space": offset.y -= smoothstep(RELEASE_TIME, SETTLE_TIME, time) * 0.025
+				rotation += sin(strike_age * 6.0) * exp(-strike_age * 7.0) * 0.012
+			"space": offset.y += absf(settle) * 0.004
 			"jungle": rotation += sin(strike_age * 10.0) * exp(-strike_age * 5.0) * 0.027
 			"candy":
 				# Compression registers before the elastic return pulls upward.
 				var bounce_age: float = maxf(0.0, strike_age - 0.060)
-				var bounce: float = sin(bounce_age * 15.0) * exp(-bounce_age * 4.8)
+				var bounce: float = sin(bounce_age * 18.0) * exp(-bounce_age * 8.0)
 				scale = Vector2(1.0 + preparation * 0.0558 + recoil * 0.025 - bounce * 0.070,
 					1.0 - preparation * 0.080 - recoil * 0.035 + bounce * 0.100)
-				offset.y -= absf(bounce) * 0.025
+				offset.y += absf(bounce) * 0.008
 	return {"offset": offset, "scale": scale, "rotation": rotation}
 
 

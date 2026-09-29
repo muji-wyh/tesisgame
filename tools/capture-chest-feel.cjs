@@ -11,11 +11,11 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build', 'chest-feel');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const rhythmVersion = 7;
+const rhythmVersion = 8;
 const holdPulseTimes = [0.08, 0.40, 0.68, 0.91, 1.12];
 const pulseTimes = [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
   1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86];
-const cueTimes = { anticipation: 1.94, unlock: 2.08, release: 2.16, settle: 2.95 };
+const cueTimes = { anticipation: 1.94, unlock: 2.08, release: 2.16, settle: 2.58 };
 
 function visualStages(captured) {
   const press = captured.cues.filter(cue => cue.cue === 'press').at(-1).time;
@@ -32,6 +32,7 @@ function visualStages(captured) {
     { id: 'anticipation', name: 'Continuous final rise', time: at('anticipation') + 0.10 },
     { id: 'release', name: 'Theme flash', time: at('release') + 0.06 },
     { id: 'lid-gap', name: 'Lid gap and light beam', time: at('release') + 0.20 },
+    { id: 'lid-stop', name: 'Mechanical stop', time: at('settle') + 0.04 },
     { id: 'settled', name: 'Settled', time: captured.reward_time + 0.20 }
   ];
 }
@@ -253,7 +254,7 @@ footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-wid
 </style><main><header><h1>Chest motion and sound review</h1>
 <p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
 <p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: keep holding as five grounded recoils grow into fifteen increasingly strong opening beats. Let go when the lid releases; the remaining animation completes automatically.</p>
-<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll flows into a rising rush while the body keeps straining; there is no silent stop before release. The lid opens into a broad theme-colored bloom, outward light wave and material impact. Progress stars fade as the light expands.</p>
+<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll flows into a rising rush while the body keeps straining; there is no silent stop before release. A dry crack and weighty impact drive the base into its contact shadow as the lid accelerates upward. The lid meets its mechanical stop 420 milliseconds after release, then quickly damps its return. Progress stars fade into a broad theme-colored bloom and outward light wave.</p>
 <p>A theme-colored flash peaks 45 milliseconds after release, then opens into a broad beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>

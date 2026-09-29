@@ -316,7 +316,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   expect(openingStates[0].at - opening.at, '100 percent waits for the 2.16-second release').toBeGreaterThanOrEqual(2060);
   // These are browser-observed beat times. Allow frame delivery jitter while
   // still rejecting an early release or the former ten-second sequence.
-  for (const [cue, milliseconds] of [['anticipation', 1940], ['unlock', 2080], ['release', 2160], ['settle', 2950]]) {
+  for (const [cue, milliseconds] of [['anticipation', 1940], ['unlock', 2080], ['release', 2160], ['settle', 2580]]) {
     const elapsed = cues.find(event => event.cue === cue).at - opening.at;
     expect(elapsed, `${cue} cannot precede its opening boundary`).toBeGreaterThanOrEqual(milliseconds - 100);
     expect(elapsed, `${cue} stays within the shorter opening sequence`).toBeLessThanOrEqual(milliseconds + 500);
