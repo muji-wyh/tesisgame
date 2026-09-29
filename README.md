@@ -485,14 +485,17 @@ return. Hold it for **1.2 seconds** to confirm, then release your finger while a
 in total**. Three stars and a progress arc fill through the buildup, completing
 at the lid release. Phase text and percentages are available to screen readers
 without a visible label. Five material beats begin 80 ms into the hold, followed
-by eighteen opening beats. Their spacing tightens from 300 ms to an 85 ms roll,
-with each strike driving the same visible whole-body kick and counter-swing.
-A shared curve builds intensity early and continues through confirmation without
-restarting. Clear strikes lead the sound above a quieter pressure texture while
-background music recedes; the progress stars add no competing clicks.
-A 180 ms quiet breath precedes
-the unlock, followed by the lid release, recoil and saved reward. Each world
-keeps its own material motion and sound. The art fit stays fixed throughout.
+by fifteen opening beats. Their spacing tightens from 320 ms to a 60 ms roll,
+with each strike driving a weighted recoil about the body's base. The contact
+shadow grounds the chest while growing lid pressure and brighter seams make the
+approaching release visible. A shared curve builds intensity early and continues
+through confirmation without restarting. Material impacts retain their low body
+as a quieter pressure texture rises and background music recedes; the progress
+stars add no competing clicks. A 140 ms quiet breath precedes the unlock, followed
+80 ms later by the lid release and a theme-colored flash. The flash peaks within
+60 ms, opens into a short beam and afterglow, and fades over 850 ms as the chest
+settles. Each world keeps its own material motion and sound. The art fit stays
+fixed throughout.
 Releasing or dragging before confirmation cancels immediately; a fresh press
 interrupts the return. After confirmation, the performance finishes automatically.
 Opening More or leaving the page stops the performance. Reduced motion keeps
@@ -512,8 +515,9 @@ medal in that season; there are no duplicate fragments or rare missing pieces.
 These records support gift progress without a post-opening collectible display.
 Ordinary chest results omit the victory title, instruction and review heading;
 the cards sit directly below the chest when vertical space permits. Hold
-instructions and completion announcements remain accessible to screen readers. The opening
-keeps its small 24-particle seasonal release burst. Save notices remain visible.
+instructions and completion announcements remain accessible to screen readers.
+The chest's local flash and twelve radial light streaks accompany release;
+theme decorations remain around the chest. Save notices remain visible.
 A newly unlocked toy instead shows **A gift for Pip!** with **Try it with Pip**
 directly. There is no medal badge, piece assembly, tap-to-place action, toolbar
 flight or larger medal-completion celebration. A complete season keeps its

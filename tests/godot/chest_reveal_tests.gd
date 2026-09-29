@@ -143,12 +143,12 @@ func _check_hold_feedback(data) -> void:
 		"Holding exposes semantic zero-percent progress before the first game frame")
 	chest.set_hold_progress(0.45)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.percent == 15 and state.text.contains("15%") and not state.status.is_empty()
+	check(state.active and state.percent == 16 and state.text.contains("16%") and not state.status.is_empty()
 		and state.animated and state.spark_count > 0,
 		"Confirmation contributes its real elapsed share of the complete progress")
 	chest.set_hold_progress(2.0)
 	chest._advance_animation(2.0)
-	check(chest.hold_effect_snapshot().percent == 34 and chest.mode == "closed" and openings.is_empty(),
+	check(chest.hold_effect_snapshot().percent == 35 and chest.mode == "closed" and openings.is_empty(),
 		"Completing confirmation never opens the chest or reports the whole buildup complete")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active and not chest._charge.visible and not chest._glint.visible
@@ -187,7 +187,7 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.phase == "gathering" and state.percent == 34 and not state.status.is_empty()
+	check(state.active and state.phase == "gathering" and state.percent == 35 and not state.status.is_empty()
 		and chest.mode == "opening" and openings.is_empty(),
 		"Confirmation flows into automatic gathering without resetting or finishing progress")
 	chest.start_open(false)

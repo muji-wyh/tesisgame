@@ -309,9 +309,11 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 			_chest_anticipating = true
 			stop_chest_charge()
 			if cue_name == "release" or cue_name == "settle":
-				_chest_music_duck = 1.0
+				# Keep the physical release and landing in front of the music.
+				# Completion restores the normal mix after the material tail.
+				_chest_music_duck = 0.45 if cue_name == "settle" else 0.20
 				_update_music_gain()
-			_play_chest_event(cue_name, 0.68 if cue_name == "release" else 0.34)
+			_play_chest_event(cue_name, 0.76 if cue_name == "release" else 0.34)
 		_:
 			return
 	_chest_seen[event_key] = true
@@ -320,7 +322,9 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 func _play_chest_pulse(energy: float) -> void:
 	# Clear material attacks carry the rhythm from the first held beat onward.
 	# Keep headroom for the final release instead of making the pressure hum loud.
-	_play_chest_event("step", lerpf(0.30, 0.56, energy), lerpf(0.95, 1.55, energy))
+	# Retain the cavity's low body instead of pitching the whole chest upward.
+	# Cadence, gain and the separate pressure texture communicate the rise.
+	_play_chest_event("step", lerpf(0.30, 0.56, energy), 1.0)
 
 
 func chest_reward(theme_id: String, explicit_retry: bool = false) -> void:
@@ -406,8 +410,8 @@ func set_chest_tension(progress: float) -> void:
 func _apply_chest_tension_energy(energy: float) -> void:
 	# Pressure supports the accelerating attacks without masking their rhythm.
 	# The shared early-rising curve makes the confirmation hold feel active too.
-	chest_charge.pitch_scale = lerpf(0.8, 1.85, energy)
-	chest_charge.volume_db = linear_to_db(lerpf(0.045, 0.18, energy))
+	chest_charge.pitch_scale = lerpf(0.92, 1.24, energy)
+	chest_charge.volume_db = linear_to_db(lerpf(0.035, 0.22, energy))
 	_chest_music_duck = lerpf(0.68, 0.20, energy)
 	_update_music_gain()
 

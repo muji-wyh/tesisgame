@@ -2074,8 +2074,8 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 	audio.chest_cue(theme_id, cue, step)
 	if _host != null:
 		_host.chestCue(theme_id, cue, step)
-	if cue == "release":
-		effects.release(Data.theme(theme_id), reduced_motion, true)
+	# ChestView owns the cavity-anchored flash on this exact release frame.
+	# A second screen-centred celebration would produce a later visual climax.
 
 
 func _on_chest_opened() -> void:

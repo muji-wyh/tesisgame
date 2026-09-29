@@ -11,25 +11,27 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build', 'chest-feel');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const rhythmVersion = 5;
-const holdPulseTimes = [0.08, 0.38, 0.65, 0.89, 1.10];
-const pulseTimes = [0.08, 0.245, 0.395, 0.535, 0.665, 0.785, 0.895, 0.995,
-  1.09, 1.18, 1.265, 1.35, 1.435, 1.52, 1.605, 1.69, 1.775, 1.86];
+const rhythmVersion = 6;
+const holdPulseTimes = [0.08, 0.40, 0.68, 0.91, 1.12];
+const pulseTimes = [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
+  1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86];
+const cueTimes = { anticipation: 1.94, unlock: 2.08, release: 2.16, settle: 2.95 };
 
 function visualStages(captured) {
   const press = captured.cues.filter(cue => cue.cue === 'press').at(-1).time;
   const accepted = captured.cues.filter(cue => cue.time >= press);
   const at = (name, step = 0) => accepted.find(cue => cue.cue === name && cue.step === step).time;
-  // Sample the frame after the delivered kick, not a fixed timestamp that can
-  // accidentally show the return between beats. Keep the real capture clock.
+  // Sample each weighted impulse after its attack, using delivered cue times.
+  // Separate the flash crest from the later lid gap so both remain reviewable.
   return [
     { id: 'rest', name: 'Rest', time: 0.2 },
-    { id: 'first-hold', name: 'First holding kick', time: at('hold_pulse', 1) + 1 / 60 },
-    { id: 'late-hold', name: 'Last holding kick', time: at('hold_pulse', 5) + 1 / 60 },
-    { id: 'gathering', name: 'First opening kick', time: at('tension_pulse', 1) + 1 / 60 },
-    { id: 'building', name: 'Final opening kick', time: at('tension_pulse', 18) + 1 / 60 },
+    { id: 'first-hold', name: 'First holding recoil', time: at('hold_pulse', 1) + 2 / 60 },
+    { id: 'late-hold', name: 'Last holding recoil', time: at('hold_pulse', 5) + 2 / 60 },
+    { id: 'gathering', name: 'First opening recoil', time: at('tension_pulse', 1) + 2 / 60 },
+    { id: 'building', name: 'Final opening recoil', time: at('tension_pulse', 15) + 2 / 60 },
     { id: 'anticipation', name: 'Final breath', time: at('anticipation') + 0.05 },
-    { id: 'release', name: 'Release', time: at('release') + 0.15 },
+    { id: 'release', name: 'Theme flash', time: at('release') + 0.06 },
+    { id: 'lid-gap', name: 'Lid gap and light beam', time: at('release') + 0.20 },
     { id: 'settled', name: 'Settled', time: captured.reward_time + 0.20 }
   ];
 }
@@ -88,7 +90,7 @@ function validateCapture(captured, theme) {
   if (captured.reward_time - press < 5.0 - 0.001 || captured.reward_time - press > 5.0 + tolerance * 2) {
     throw new Error(`The ${theme} recording did not preserve the complete five-second reward sequence.`);
   }
-  for (const [name, seconds] of [['anticipation', 1.94], ['unlock', 2.12], ['release', 2.32], ['settle', 2.95]]) {
+  for (const [name, seconds] of Object.entries(cueTimes)) {
     const elapsed = captured.cues.find(cue => cue.cue === name).time - opening;
     if (elapsed < seconds - 0.001 || elapsed > seconds + tolerance) {
       throw new Error(`The ${theme} ${name} cue is early or outside the one-frame capture tolerance.`);
@@ -102,7 +104,7 @@ function validateCapture(captured, theme) {
     throw new Error(`The ${theme} recording must retain its first progress star from the confirmation hold.`);
   }
   for (const cue of milestones) {
-    if (Math.abs(cue.time - press - cue.step * (3.52 / 3)) > tolerance * 2) {
+    if (Math.abs(cue.time - press - cue.step * ((1.2 + cueTimes.release) / 3)) > tolerance * 2) {
       throw new Error(`The ${theme} charge milestone ${cue.step} is out of time.`);
     }
   }
@@ -120,7 +122,7 @@ function validateCapture(captured, theme) {
   const ordered = [...holdPulseTimes.map((_, index) => `hold_pulse:${index + 1}`),
     ...pulseTimes.map((_, index) => `tension_pulse:${index + 1}`)];
   if (JSON.stringify(rhythm.map(cue => `${cue.cue}:${cue.step}`)) !== JSON.stringify(ordered)) {
-    throw new Error(`The ${theme} recording must join five holding beats to eighteen opening beats without restarting.`);
+    throw new Error(`The ${theme} recording must join five holding beats to fifteen opening beats without restarting.`);
   }
   const intervals = rhythm.slice(1).map((cue, index) => cue.time - rhythm[index].time);
   const early = intervals.slice(0, 3).reduce((total, value) => total + value, 0) / 3;
@@ -159,7 +161,7 @@ function convert(theme, captured) {
   const audioEnvelope = Object.fromEntries([
     ['early_tension', pressAt + 0.08, 0.25], ['middle_tension', openingAt + 0.70, 0.25],
     ['late_tension', openingAt + 1.66, 0.25], ['quiet_breath', openingAt + 1.97, 0.10],
-    ['release', openingAt + 2.37, 0.25]
+    ['release', openingAt + cueTimes.release, 0.25]
   ].map(([name, start, seconds]) => {
     const measurement = run(process.env.FFMPEG_BIN || 'ffmpeg', ['-hide_banner',
       '-ss', String(start), '-t', String(seconds), '-i', mp4,
@@ -199,7 +201,7 @@ function convert(theme, captured) {
     frames_per_second: video.r_frame_rate, audio: { codec: audio.codec_name, channels: audio.channels,
       sample_rate: Number(audio.sample_rate), mean_dbfs: mean, peak_dbfs: peak },
     audio_envelope: audioEnvelope, hold_pulse_seconds: holdPulseTimes, tension_pulse_seconds: pulseTimes,
-    quiet_breath_seconds: 0.18, visual_stages: stages,
+    quiet_breath_seconds: Number((cueTimes.unlock - cueTimes.anticipation).toFixed(3)), visual_stages: stages,
     capture: captured, source_sha256: provenance(), inspected_by_human: false,
     validation_scope: 'Engine recording, media structure, actual mixed crescendo and quiet-breath measurements, and scripted cue timing. No human listening or real-device performance claim.' };
   fs.writeFileSync(path.join(output, `${theme}-report.json`), JSON.stringify(report, null, 2) + '\n');
@@ -244,13 +246,14 @@ summary{cursor:pointer;font-size:14px}.stages{display:grid;grid-template-columns
 figure{margin:0}img{display:block;width:100%;background:#f6f4ee;border-radius:6px}figcaption{font-size:11px;color:#536170;margin-top:4px}
 footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-width:760px){main{padding:20px 12px}.gallery{grid-template-columns:1fr}h1{font-size:26px}}
 </style><main><header><h1>Chest motion and sound review</h1>
-<p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 18 opening beats · 5-second reward sequence</p>
-<p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: hold for 1.2 seconds as five kicks gather pressure, then let go as eighteen opening beats build toward release.</p>
-<p>The first holding beat begins at 80 milliseconds. The rhythm accelerates into a tight final roll, followed by a 180-millisecond hush; the lid stays closed until the final release. Progress stars stay silent so each sound follows a physical kick.</p>
+<p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
+<p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: hold for 1.2 seconds as five grounded recoils gather pressure, then let go as fifteen opening beats build toward release.</p>
+<p>The first holding beat begins at 80 milliseconds. The body pivots about its base while the lid presses against its lock and the seam grows brighter. The rhythm accelerates into a tight final roll, followed by a 140-millisecond hush, unlock and release. Material impacts keep their body as pressure rises; progress stars stay silent.</p>
+<p>A theme-colored flash peaks 60 milliseconds after release, then opens into a short beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>
 <section class="gallery">${cards}</section>
-<footer>Automated checks verify video dimensions, duration, mixed audio crescendo from holding through opening, the final quiet breath, and cue timing. The peak-frame images are selected from delivered kicks. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
+<footer>Automated checks verify video dimensions, duration, mixed audio crescendo from holding through opening, the final quiet breath, and cue timing. The stills use delivered cues to show weighted recoil, the flash crest and the opening lid. This isolated large preview does not establish motion visibility in the real game stage, human listening quality, or real-device performance. <a href="${assetUrl('report.json')}">Media and cue report</a>.</footer></main>
 <script>document.querySelector('#hide').addEventListener('change',event=>document.body.classList.toggle('hide-names',event.target.checked));document.querySelector('#mute').addEventListener('change',event=>document.querySelectorAll('video').forEach(video=>video.muted=event.target.checked));document.querySelectorAll('video').forEach(video=>video.addEventListener('play',()=>document.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()})));</script></html>\n`;
   fs.writeFileSync(path.join(output, 'index.html'), gallery);
   // The printed entry point is immutable by content, just like every embedded

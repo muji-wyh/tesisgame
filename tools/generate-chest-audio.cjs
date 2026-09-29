@@ -23,6 +23,7 @@ const MATERIALS = {
   jungle: 'Tensioned vine creak, hollow wood and coarse leaves',
   candy: 'Elastic squash, a soft pop and scattered sugar grains'
 };
+const BODY_FREQUENCIES = { spring: 112, summer: 98, autumn: 82, winter: 128, ocean: 78, space: 90, jungle: 102, candy: 118 };
 
 function random(seed) {
   let state = 2166136261;
@@ -43,14 +44,14 @@ function renderTensionTexture(theme) {
   // Runtime pitch and gain supply the rise; the shared visual timeline owns
   // every audible strike, so the bed cannot introduce a competing pulse.
   const profiles = {
-    spring: { base: 246, modes: [1, 2.79, 5.16], air: 0.2, cutoff: 1800, rough: 0 },
-    summer: { base: 164, modes: [1, 2, 3.8], air: 0.75, cutoff: 2200, rough: 0 },
-    autumn: { base: 91, modes: [1, 2.79, 5.16], air: 0.3, cutoff: 1100, rough: 0.1 },
-    winter: { base: 510, modes: [1, 2.83, 4.59], air: 0.12, cutoff: 3200, rough: 0 },
-    ocean: { base: 78, modes: [1, 1.96, 3.28], air: 0.8, cutoff: 380, rough: 0 },
-    space: { base: 122, modes: [1, 3.27, 5.82], air: 0.3, cutoff: 1750, rough: 0.22 },
-    jungle: { base: 193, modes: [1, 2.79, 5.16], air: 0.55, cutoff: 1300, rough: 0.3 },
-    candy: { base: 185, modes: [1, 2, 3], air: 0.23, cutoff: 950, rough: 0.08 }
+    spring: { base: 360, modes: [1, 2.79, 5.16], air: 0.36, cutoff: 1800, rough: 0 },
+    summer: { base: 240, modes: [1, 2, 3.8], air: 0.75, cutoff: 2200, rough: 0 },
+    autumn: { base: 210, modes: [1, 2.79, 5.16], air: 0.36, cutoff: 1100, rough: 0.1 },
+    winter: { base: 680, modes: [1, 2.83, 4.59], air: 0.3, cutoff: 3200, rough: 0 },
+    ocean: { base: 140, modes: [1, 1.96, 3.28], air: 0.8, cutoff: 500, rough: 0 },
+    space: { base: 310, modes: [1, 3.27, 5.82], air: 0.4, cutoff: 1750, rough: 0.22 },
+    jungle: { base: 260, modes: [1, 2.79, 5.16], air: 0.55, cutoff: 1300, rough: 0.3 },
+    candy: { base: 330, modes: [1, 2, 3], air: 0.38, cutoff: 950, rough: 0.08 }
   };
   const profile = profiles[theme];
   const samples = new Float64Array(Math.round(RATE * CUES.charge));
@@ -67,7 +68,9 @@ function renderTensionTexture(theme) {
       return value + Math.sin(TAU * frequency * time + profile.rough * Math.sin(TAU * 45 * time)) / (1 + index * 3.2);
     }, 0);
     const seam = Math.min(1, i / (RATE * 0.004), (samples.length - 1 - i) / (RATE * 0.008));
-    samples[i] = (body * 0.2 + filtered * profile.air) * seam;
+    // Friction and pressure rise above the body hits without turning their
+    // low resonance into an increasingly small, high-pitched toy sound.
+    samples[i] = (body * 0.075 + filtered * profile.air) * seam;
     sum += samples[i] * samples[i];
     peak = Math.max(peak, Math.abs(samples[i]));
   }
@@ -128,17 +131,38 @@ function render(theme, cue) {
       modes(start, duration - start, [base * [1, 1.25, 1.5][i], base * [2.76, 3.42, 4.17][i]], gain, 3.5);
     }
   }
+  function bodyImpact(base, gain, bloom = false) {
+    const seconds = bloom ? 0.58 : 0.19;
+    layer(0, seconds, gain, (t) => {
+      const pressure = bloom ? (0.2 + 0.8 * Math.min(1, t / 0.07)) * Math.exp(-t / 0.22)
+        : Math.min(1, t / 0.018) * Math.exp(-t / 0.041);
+      const phase = TAU * base * t;
+      // Low-mid harmonics retain physical weight on small phone speakers.
+      const body = Math.sin(phase) + 0.55 * Math.sin(phase * 2.03) + 0.22 * Math.sin(phase * 3.81);
+      return body * pressure * Math.min(1, t / 0.002) * Math.min(1, (seconds - t) / 0.045);
+    });
+  }
+  function releaseAir(cutoff) {
+    let low = 0;
+    const seconds = duration - 0.012;
+    layer(0.012, seconds, 0.62, (t) => {
+      const alpha = 1 - Math.exp(-TAU * (350 + cutoff * Math.exp(-t * 2.6)) / RATE);
+      low += alpha * (rng() * 2 - 1 - low);
+      const bloom = (1 - Math.exp(-t / 0.045)) * Math.exp(-t / 0.26);
+      return low * bloom * Math.min(1, (seconds - t) / 0.085);
+    });
+  }
 
   switch (theme) {
     case 'spring':
       wood(settle ? 174 : 246, settle ? 0.44 : 0.32);
       leaves(0.025, duration * 0.7, opening ? 0.34 : 0.19, opening ? 8 : 4);
-      if (reward || cue === 'unlock' || cue === 'release') bells(1046.5, reward ? 0.2 : 0.11);
+      if (reward || cue === 'unlock') bells(1046.5, reward ? 0.2 : 0.11);
       break;
     case 'summer':
       noise(0, duration * 0.94, opening ? 0.66 : 0.29, 2200, opening ? 0.04 : 0.008, 2.4);
       sweep(0.006, Math.min(duration, 0.19), 0.44, settle ? 300 : 540, settle ? 100 : 155, 6);
-      if (reward || cue === 'release') bells(784, 0.19);
+      if (reward) bells(784, 0.19);
       break;
     case 'autumn':
       wood(settle ? 102 : 154, 0.6);
@@ -195,6 +219,25 @@ function render(theme, cue) {
       break;
   }
 
+  if (cue === 'step') {
+    // Keep each material's contact color, but let a grounded body carry the
+    // hit. Its 18 ms attack meets the visible compression before the return.
+    for (let i = 0; i < samples.length; i++) {
+      const tail = ['winter', 'ocean', 'candy'].includes(theme)
+        ? Math.exp(-Math.max(0, i / RATE - 0.018) * 26) : 1;
+      samples[i] *= 0.32 * tail;
+    }
+    bodyImpact(BODY_FREQUENCIES[theme], 0.82);
+    noise(0, 0.025, 0.10, 1700, 0.001, 5);
+  } else if (cue === 'release') {
+    // A synchronized crack starts the release, then cavity weight and air
+    // bloom around the floor recoil. The saved-reward melody remains separate.
+    for (let i = 0; i < samples.length; i++) samples[i] *= 0.36;
+    bodyImpact(BODY_FREQUENCIES[theme] * 0.82, 0.9, true);
+    noise(0, 0.045, 0.38, 3200, 0.001, 5);
+    releaseAir(theme === 'ocean' ? 620 : (theme === 'winter' ? 2600 : 1700));
+  }
+
   // Remove any DC bias and taper both boundaries. A looping charge asset has
   // the same zero-value seam as its one-shot siblings, without an audible click.
   const mean = samples.reduce((sum, value) => sum + value, 0) / samples.length;
@@ -202,11 +245,6 @@ function render(theme, cue) {
   for (let i = 0; i < samples.length; i++) {
     const fade = Math.min(1, i / (RATE * 0.003), (samples.length - 1 - i) / (RATE * 0.018));
     samples[i] = (samples[i] - mean) * fade;
-    if (cue === 'step' && ['winter', 'ocean', 'candy'].includes(theme)) {
-      // Keep each crystal, bubble or rubber attack distinct in the fast roll.
-      // Preserve its onset/color and clip duration while shortening the tail.
-      samples[i] *= Math.exp(-Math.max(0, i / RATE - 0.018) * 26);
-    }
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
@@ -214,7 +252,7 @@ function render(theme, cue) {
     // Equal material-strike energy lets the shared crescendo read on every
     // theme, including the otherwise very quiet magnetic and flower locks.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const gain = Math.min((cue === 'release' ? 0.1 : 0.07) / rms, 0.78 / Math.min(maximum, 0.78));
+    const gain = Math.min((cue === 'release' ? 0.135 : 0.07) / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }
   return samples;

@@ -61,7 +61,7 @@ func _begin(app) -> void:
 
 func _check_cancelled(app, pieces: int, reason: String) -> void:
 	check(not app._holding_chest and is_zero_approx(app._hold_elapsed)
-		and not app.chest.hold_effect_snapshot().active,
+		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		reason + " clears the hold and visible progress immediately")
 	check(not app.audio._chest_charge_active and not app.audio.chest_charge.playing
 		and app.audio.chest_charge.stream == null,
@@ -128,15 +128,15 @@ func _run() -> void:
 	app._advance_ui(0.6)
 	check(app.chest.hold_effect_snapshot().percent == 17 and app.audio.chest_charge.pitch_scale > pitch,
 		"Confirmation advances its real share of the complete progress and rising audio pitch")
-	app._advance_ui(0.57)
+	app._advance_ui(0.51)
 	check(not cues.any(func(item): return item[1] == "charge_step"),
 		"The hold keeps its first progress star silent until one third of the complete buildup")
-	app._advance_ui(0.01)
+	app._advance_ui(0.02)
 	check(app.model.chest_state == "closed" and cues.back() == ["spring", "charge_step", 1],
 		"The first progress star lights during the hold immediately before confirmation")
-	app._advance_ui(0.03)
+	app._advance_ui(0.08)
 	state = app.chest.hold_effect_snapshot()
-	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 34,
+	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 35,
 		"Completing confirmation starts automatic gathering at its true elapsed progress")
 	check(cues.filter(func(item): return item[1] == "charge_step") == [["spring", "charge_step", 1]],
 		"The automatic handoff does not replay the first progress star")
@@ -154,7 +154,7 @@ func _run() -> void:
 	check(app.model.chest_state == "opening" and app.chest.hold_effect_snapshot().active,
 		"Releasing after confirmation lets the automatic performance continue")
 	app.chest.finish_immediately()
-	check(app.model.chest_state == "opened" and _pieces(app) == 1,
+	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")
 	check(app.audio._chest_rewarded and app._chest_reward_announced,
 		"The saved reward is announced after the piece was persisted")
@@ -282,7 +282,8 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	check(app.model.chest_state == "opened" and _pieces(app) == 3
-		and not app.chest.hold_effect_snapshot().active and app.effects.particle_count() == 0,
+		and not app.chest.hold_effect_snapshot().active and app.effects.particle_count() == 0
+		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"A full reduced-motion hold completes once without the opening motion")
 	app._on_chest_opened()
 	check(_pieces(app) == 3, "Reduced-motion completion also ignores duplicate callbacks")
@@ -298,13 +299,16 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	app.chest.set_process(false)
-	app.chest._advance_animation(2.1)
+	app.chest._advance_animation(Feel.UNLOCK_TIME - 0.02)
 	state = app.chest.hold_effect_snapshot()
 	check(state.percent > 90 and state.percent < 100 and _pieces(app) == 0
 		and not app.audio._chest_rewarded and not app.audio._chest_seen.has("release0"),
 		"Late in the buildup, anticipation has not saved or announced a reward")
-	app.chest._advance_animation(Feel.UNLOCK_TIME - 2.1 + 0.01)
+	app.chest._advance_animation(0.03)
 	app.chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
+	check(app.chest.hold_effect_snapshot().release_flash > 0.0 and app.effects.particle_count() == 0
+		and _pieces(app) == 0 and not app.audio._chest_rewarded,
+		"Physical release lights the chest cavity immediately without a separate delayed global burst or early reward")
 	app.chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)
 	check(app.audio._chest_seen.has("unlock0") and app.audio._chest_seen.has("release0")
 		and app.audio._chest_seen.has("settle0"), "Real opening motion drives the three physical sound beats")
@@ -336,13 +340,14 @@ func _run() -> void:
 	cues.clear()
 	app.on_page_hidden()
 	check(_pieces(app) == 2 and app.model.chest_state == "opened" and cues.is_empty()
-		and app.audio._chest_phase == "idle", "Background completion saves once without replaying opening or reward sounds")
+		and app.audio._chest_phase == "idle" and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
+		"Background completion saves once without replaying opening light or reward sounds")
 	app.on_page_visible()
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	app._on_chest_cue("spring", "tension_pulse", 2)
 	app.audio.set_chest_tension(1.0)
 	check(_pieces(app) == 2 and app.audio._chest_phase == "idle" and cues.is_empty()
-		and not app.audio.chest_charge.playing,
+		and not app.audio.chest_charge.playing and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Foregrounding and stale rhythm callbacks do not replay the completed performance")
 	_win(app, 87)
 	_begin(app)
@@ -452,11 +457,13 @@ func _check_gameplay_pixels(directory: String) -> void:
 			var before: Vector2 = _body_center(app.chest)
 			app._advance_ui(0.00101)
 			app.chest._advance_animation(0.00101)
+			app._advance_ui(0.025)
+			app.chest._advance_animation(0.025)
 			var first: float = _body_center(app.chest).distance_to(before)
 			if first < first_range.x:
 				first_min_case = "%s at %s" % [theme_id, dimensions]
 			first_range = Vector2(minf(first_range.x, first), maxf(first_range.y, first))
-			check(first >= 3.5, "%s at viewport %s/stage %s: first actual body kick is %.2f screen pixels (minimum 3.5)" %
+			check(first >= 0.5, "%s at viewport %s/stage %s: first accelerating body beat is visible at %.2f screen pixels" %
 				[theme_id, dimensions, app._stage.size, first])
 			for beat in Feel.HOLD_PULSE_TIMES.slice(1):
 				var delta: float = float(beat) + 0.00001 - app._hold_elapsed
@@ -470,17 +477,18 @@ func _check_gameplay_pixels(directory: String) -> void:
 				app.chest._advance_animation(float(beat) - 0.001 - app.chest.hold_effect_snapshot().opening_time)
 				before = _body_center(app.chest)
 				app.chest._advance_animation(0.00101)
+				app.chest._advance_animation(0.025)
 				if is_equal_approx(float(beat), float(Feel.PULSE_TIMES.back())):
 					late = _body_center(app.chest).distance_to(before)
 			if late < late_range.x:
 				late_min_case = "%s at %s" % [theme_id, dimensions]
 			late_range = Vector2(minf(late_range.x, late), maxf(late_range.y, late))
-			check(late >= 10.0, "%s at viewport %s/stage %s: late actual body kick is %.2f screen pixels (minimum 10)" %
+			check(late >= 2.0 and late > first, "%s at viewport %s/stage %s: final body rocking grows to %.2f screen pixels" %
 				[theme_id, dimensions, app._stage.size, late])
 			var cues: Array = app.chest.hold_effect_snapshot().cues
 			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == 5
-				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == 18,
-				"The real %s result emits all twenty-three body beats at %s" % [theme_id, dimensions])
+				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == 15,
+				"The real %s result emits all twenty body beats at %s" % [theme_id, dimensions])
 			app.chest.finish_immediately()
 	print("Real gameplay body motion across 24 theme/viewport cases: first %.2f-%.2f screen px (minimum: %s); late %.2f-%.2f screen px (minimum: %s)" %
 		[first_range.x, first_range.y, first_min_case, late_range.x, late_range.y, late_min_case])

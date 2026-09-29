@@ -3,6 +3,14 @@ extends RefCounted
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const CUES := ["press", "charge", "step", "cancel", "opening", "unlock", "release", "settle", "reward"]
 const SAMPLE_RATE := 11025
+const BODY_FREQUENCIES := {
+	"spring": 112.0, "summer": 98.0, "autumn": 82.0, "winter": 128.0,
+	"ocean": 78.0, "space": 90.0, "jungle": 102.0, "candy": 118.0,
+}
+const PRESSURE_FREQUENCIES := {
+	"spring": 360.0, "summer": 240.0, "autumn": 210.0, "winter": 680.0,
+	"ocean": 140.0, "space": 310.0, "jungle": 260.0, "candy": 330.0,
+}
 const PROFILES := {
 	"spring": [246.0, 0.22, 0.23],
 	"summer": [340.0, 0.5, 0.18],
@@ -32,13 +40,22 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
 	var duration: float = 0.64 if cue == "charge" else (0.42 if cue == "reward" else 0.2)
+	var impact: bool = cue in ["step", "release"]
+	if impact:
+		duration = 0.68 if cue == "release" else 0.24
 	var frames: int = roundi(duration * SAMPLE_RATE)
 	var samples := PackedByteArray()
 	samples.resize(frames * 2)
+	var rendered := PackedFloat32Array()
+	rendered.resize(frames)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = (theme + "/" + cue).hash()
 	var filtered: float = 0.0
 	var base: float = profile[0] * (0.75 if cue in ["cancel", "settle"] else 1.0)
+	if cue == "charge":
+		base = PRESSURE_FREQUENCIES[theme]
+	var energy: float = 0.0
+	var peak: float = 0.0
 	for index in range(frames):
 		var time: float = float(index) / SAMPLE_RATE
 		filtered += float(profile[2]) * (rng.randf_range(-1.0, 1.0) - filtered)
@@ -57,8 +74,30 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		var body: float = sin(phase) + 0.28 * sin(phase * (2.83 if theme == "winter" else 2.71)) * (1.0 if cue == "charge" else exp(-time * 20.0))
 		var sample: float = (body * 0.25 + filtered * float(profile[1])) * envelope
 		if cue == "charge":
-			sample *= 0.64
-		samples.encode_s16(index * 2, roundi(clampf(sample, -0.75, 0.75) * 32767.0))
+			# Friction rises separately from the fixed, low chest resonance.
+			sample = (body * 0.075 + filtered * float(profile[1]) * 1.5) * envelope
+		elif impact:
+			var releasing: bool = cue == "release"
+			var impact_phase: float = TAU * float(BODY_FREQUENCIES[theme]) * (0.82 if releasing else 1.0) * time
+			var weight: float = sin(impact_phase) + 0.55 * sin(impact_phase * 2.03) + 0.22 * sin(impact_phase * 3.81)
+			var pressure: float = (0.2 + 0.8 * minf(time / 0.07, 1.0)) * exp(-time / 0.22) if releasing else minf(time / 0.018, 1.0) * exp(-time / 0.041)
+			sample = weight * pressure * 0.75
+			sample += (body * 0.035 + filtered * (0.26 if releasing else 0.07)) * exp(-time / 0.01)
+			if releasing:
+				var air_age: float = maxf(0.0, time - 0.012)
+				sample += filtered * 0.22 * (1.0 - exp(-air_age / 0.045)) * exp(-air_age / 0.26)
+			sample *= minf(time / 0.002, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.045), 1.0)
+			if not releasing:
+				sample *= 1.0 - smoothstep(0.15, 0.19, time)
+		rendered[index] = sample
+		energy += sample * sample
+		peak = maxf(peak, absf(sample))
+	var gain: float = 1.0
+	if impact or cue == "charge":
+		var target: float = 0.12 if cue == "charge" else (0.135 if cue == "release" else 0.07)
+		gain = minf(target / maxf(sqrt(energy / frames), 0.000001), 0.75 / maxf(peak, 0.000001))
+	for index in range(frames):
+		samples.encode_s16(index * 2, roundi(clampf(rendered[index] * gain, -0.75, 0.75) * 32767.0))
 	var stream := AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS
 	stream.mix_rate = SAMPLE_RATE

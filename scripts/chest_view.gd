@@ -17,6 +17,7 @@ var _art := Node2D.new()
 var _pieces: Array[Dictionary] = []
 var _bounds := Rect2()
 var _body_pivot := Vector2.ZERO
+var _body_floor := Vector2.ZERO
 var _elapsed: float = 0.0
 var _idle_time: float = 0.0
 var _tint: Color = Color.WHITE
@@ -63,12 +64,19 @@ var _pulse_holding: bool = false
 var _body_shift_x: float = 0.0
 var _cancel_shift_x: float = 0.0
 var _cancel_body_pose: Dictionary = {}
+var _radiance := Node2D.new()
+var _flash := Node2D.new()
+var _seam_light := Node2D.new()
+var _release_color := Color.WHITE
+var _lid_edges: Array[Dictionary] = []
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_shadow)
 	_shadow.draw.connect(_draw_shadow)
+	add_child(_radiance)
+	_radiance.draw.connect(_draw_radiance)
 	add_child(_charge)
 	_charge.hide()
 	_charge.draw.connect(_draw_charge)
@@ -78,6 +86,12 @@ func _ready() -> void:
 	add_child(_glint)
 	_glint.hide()
 	_glint.draw.connect(_draw_glint)
+	add_child(_flash)
+	_flash.z_index = 10
+	_flash.draw.connect(_draw_flash)
+	add_child(_seam_light)
+	_seam_light.z_index = 3
+	_seam_light.draw.connect(_draw_seam)
 	resized.connect(_fit)
 	visibility_changed.connect(_visibility_changed)
 	_visibility_changed()
@@ -94,6 +108,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_glint_color = palette.light
 	_charge_color = palette.get("accent", _glint_color)
 	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
+	_release_color = Feel.FLASH_COLORS.get(theme_id, palette.light)
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
@@ -101,6 +116,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	for child in _art.get_children():
 		child.free()
 	_pieces.clear()
+	_lid_edges.clear()
 	_rigged = false
 	var style: Dictionary = manifest.styles[_style]
 	if _style == "crystal":
@@ -158,6 +174,17 @@ func _add_piece(path: String, role: String, pose: Transform2D, pivot: Vector2, o
 	sprite.flip_v = flip_v
 	_art.add_child(sprite)
 	_pieces.append({"node": sprite, "rest": pose, "role": role})
+	if role in ["lid_outer", "lid_inner"]:
+		# Keep a solid rim through the edge-on hinge pose. Its thickness is
+		# projected separately, so the lid never collapses into a paper line.
+		var edge := Sprite2D.new()
+		edge.texture = sprite.texture
+		edge.centered = false
+		edge.offset = sprite.offset
+		edge.z_index = order
+		_art.add_child(edge)
+		_art.move_child(edge, sprite.get_index())
+		_lid_edges.append({"node": edge, "source": sprite, "role": role})
 
 
 func _measure_bounds() -> void:
@@ -173,9 +200,12 @@ func _measure_bounds() -> void:
 			else:
 				_bounds = _bounds.expand(point)
 	_body_pivot = _bounds.get_center()
+	_body_floor = Vector2(_body_pivot.x, _bounds.end.y)
 	for piece in _pieces:
 		if piece.role in ["body", "chest"]:
-			_body_pivot = piece.rest * piece.node.get_rect().get_center()
+			var body_rect: Rect2 = piece.node.get_rect()
+			_body_pivot = piece.rest * Vector2(body_rect.get_center().x, body_rect.end.y * 0.98 + body_rect.position.y * 0.02)
+			_body_floor = piece.rest * Vector2(body_rect.get_center().x, body_rect.end.y)
 			break
 
 
@@ -223,7 +253,7 @@ func _fit() -> void:
 		if returning > 0.0:
 			offset.x = _cancel_shift_x * returning
 		elif _hold_active or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME):
-			offset.x = _pulse_motion() * maxf(13.0 * pixel, Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
+			offset.x = _pulse_motion() * maxf(6.0 * pixel, Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
 	_body_shift_x = offset.x
 	var pulse: Vector2 = _physical_pose.scale
 	var bob: float = center.y - size.y * 0.59
@@ -232,14 +262,16 @@ func _fit() -> void:
 	_art.rotation = float(_physical_pose.rotation)
 	if not reduced_motion:
 		_art.rotation += sin(_tap_remaining * 24.0) * 0.025 * (_tap_remaining / 0.35)
-	# Rotate around the solid body, not the expanded lid's fitting envelope.
-	# Otherwise a tall lid moves the pivot above the box and its rotation can
-	# cancel the very translation that should make the beat visible.
+	# Rock around the feet: the body has leverage above a planted contact,
+	# rather than spinning a flat card around its centre.
 	_art.position = center - _motion_bounds.get_center() * _art.scale + drag_offset + offset
 	_art.position += _body_pivot * _art.scale - _art.transform.basis_xform(_body_pivot)
-	_ground_center = center + Vector2(offset.x * 0.65, (_bounds.end.y - _motion_bounds.get_center().y) * _fit_scale) + drag_offset
+	_ground_center = center + (_body_floor - _motion_bounds.get_center()) * _fit_scale + Vector2(offset.x * 0.20, 0.0) + drag_offset
 	_shadow.queue_redraw()
 	_details.queue_redraw()
+	_radiance.queue_redraw()
+	_flash.queue_redraw()
+	_seam_light.queue_redraw()
 	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
 		or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME))
 	_glint.queue_redraw()
@@ -289,11 +321,11 @@ func _draw_charge() -> void:
 	var start: float = PI
 	var sweep: float = PI
 	var intensity: float = 0.25 + progress * 0.75
-	var gold := Color("#ffd269")
-	var energy: Color = _charge_color.lerp(gold, smoothstep(0.6, 1.0, progress) * 0.8)
+	var gold: Color = _release_color.lightened(0.30)
+	var energy: Color = _charge_color.lerp(_release_color, smoothstep(0.2, 1.0, progress))
 	var glow_size: Vector2 = _charge_radius * (1.5 + progress * 0.55)
 	_charge.draw_texture_rect(CHARGE_GLOW, Rect2(_charge_center - glow_size * 0.5, glow_size), false,
-		Color(gold, (0.16 + progress * 0.30 + pulse * 0.16) * alpha))
+		Color(_release_color, (0.10 + progress * 0.20 + pulse * 0.10) * alpha))
 	for index in range(CHARGE_STEPS):
 		var segment_start: float = start + sweep * float(index) / CHARGE_STEPS + 0.06
 		var segment_end: float = start + sweep * float(index + 1) / CHARGE_STEPS - 0.06
@@ -518,6 +550,11 @@ func hold_effect_snapshot() -> Dictionary:
 		"tension": tension_progress(),
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
+		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
+		"lid_pressure": _lid_pressure(),
+		"light_origin": {"x": _light_origin().x, "y": _light_origin().y},
+		"ground_center": {"x": _ground_center.x, "y": _ground_center.y},
+		"grounding_pivot": {"x": (_art.transform * _body_pivot).x, "y": (_art.transform * _body_pivot).y},
 		"percent": percent,
 		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
@@ -557,12 +594,133 @@ func _draw_shadow() -> void:
 	var width: float = _bounds.size.x * _fit_scale * 0.35
 	var height: float = maxf(1.0, minf(width * 0.10, size.y * 0.04))
 	var lift: float = maxf(0.0, -float(_physical_pose.get("offset", Vector2.ZERO).y))
-	for layer in range(3):
-		var radius := Vector2(width, height) * (1.0 - float(layer) * 0.18 + lift)
+	var pressure: float = _hold_pose_state().x if mode == "closed" else maxf(0.0, float(_physical_pose.get("offset", Vector2.ZERO).y)) * 15.0
+	for layer in range(5):
+		var radius := Vector2(width, height) * (1.0 - float(layer) * 0.14 + lift)
 		var points := PackedVector2Array()
 		for index in range(32):
 			points.append(_ground_center + Vector2.from_angle(TAU * float(index) / 32.0) * radius)
-		_shadow.draw_colored_polygon(points, Color(0.10, 0.13, 0.19, (0.045 + float(layer) * 0.013) * (1.0 - lift * 3.0)))
+		_shadow.draw_colored_polygon(points, Color(0.07, 0.10, 0.16,
+			(0.045 + float(layer) * 0.018 + pressure * 0.018) * (1.0 - lift * 3.0)))
+
+
+func _lid_pressure() -> float:
+	if reduced_motion:
+		return 0.0
+	var hold: Vector2 = _hold_pose_state()
+	var energy: float = tension_progress() if mode == "opening" else hold.y
+	var fade: float = 1.0 - smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.10, _elapsed) if mode == "opening" else 1.0
+	return pow(energy, 1.6) * fade
+
+
+func _release_power() -> float:
+	# Background/skip completion has no delayed flash to replay on return.
+	return Feel.release_flash(_elapsed) if mode == "opening" and _opening_cues_enabled and not reduced_motion else 0.0
+
+
+func _seam_points() -> PackedVector2Array:
+	for piece in _pieces:
+		if piece.role in ["body", "chest"]:
+			var rect: Rect2 = piece.node.get_rect()
+			var ratios: Array = [Vector2(0.03, 0.03), Vector2(0.67, 0.20), Vector2(0.98, 0.025)]
+			if _style == "royal":
+				ratios = [Vector2(0.08, 0.02), Vector2(0.68, 0.14), Vector2(0.94, 0.01)]
+			elif _style == "crystal":
+				ratios = [Vector2(0.04, 0.15), Vector2(0.74, 0.23), Vector2(0.97, 0.08)]
+			var points := PackedVector2Array()
+			for ratio: Vector2 in ratios:
+				points.append(_art.transform * piece.node.transform * (rect.position + rect.size * ratio))
+			return points
+	return PackedVector2Array()
+
+
+func _light_origin() -> Vector2:
+	var seam: PackedVector2Array = _seam_points()
+	return (seam[0] + seam[1] * 2.0 + seam[2]) * 0.25 if seam.size() == 3 else size * 0.5
+
+
+func _draw_radiance() -> void:
+	if reduced_motion or _fit_scale <= 0.0:
+		return
+	var pressure: float = _lid_pressure()
+	var flash: float = _release_power()
+	if pressure <= 0.001 and flash <= 0.001:
+		return
+	var origin: Vector2 = _light_origin()
+	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
+	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
+	var glow := Vector2(width * (0.60 + flash * 0.90), width * (0.35 + flash * 0.90))
+	_radiance.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
+		Color(_release_color, pressure * 0.35 + flash * 0.85))
+	if flash <= 0.0:
+		return
+	var height: float = maxf(0.0, origin.y - _charge_inset - 6.0 / _charge_scale)
+	height *= 0.65 + 0.35 * smoothstep(0.0, 0.12, age)
+	# Light emerges from the cavity and fades upward, behind the moving lid.
+	for ray in range(5):
+		var lean: float = float(ray - 2) * 0.12
+		var half_width: float = width * (0.07 if ray % 2 == 0 else 0.035)
+		var top: Vector2 = origin + Vector2(lean * width, -height)
+		var points := PackedVector2Array([origin - Vector2(width * 0.08, 0),
+			origin + Vector2(width * 0.08, 0), top + Vector2(half_width, 0), top - Vector2(half_width, 0)])
+		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, flash * 0.55),
+			Color(_release_color, flash * 0.55), Color(_release_color, 0), Color(_release_color, 0)]))
+
+
+func _draw_seam() -> void:
+	if reduced_motion or _fit_scale <= 0.0:
+		return
+	var seam: PackedVector2Array = _seam_points()
+	if seam.is_empty():
+		return
+	var pressure: float = _lid_pressure()
+	var pixel: float = 1.0 / _charge_scale
+	# The solid lock/core occludes this light; it cannot shine through metal.
+	if pressure > 0.001:
+		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.18), (5.0 + pressure * 8.0) * pixel, true)
+		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.80), (1.0 + pressure * 2.0) * pixel, true)
+		_seam_light.draw_polyline(seam, Color(Color.WHITE, pressure * 0.72), pixel, true)
+
+
+func _draw_flash() -> void:
+	if reduced_motion or _fit_scale <= 0.0:
+		return
+	var flash: float = _release_power()
+	if flash <= 0.001:
+		return
+	var seam: PackedVector2Array = _seam_points()
+	if seam.is_empty():
+		return
+	var origin: Vector2 = _light_origin()
+	var pixel: float = 1.0 / _charge_scale
+	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
+	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
+	var burst: float = 1.0 - smoothstep(0.08, 0.34, age)
+	var glow := Vector2(width * (0.55 + age * 0.85), width * (0.30 + age * 0.65))
+	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
+		Color(_release_color, flash * 0.90))
+	# One contained hot flash, followed by a coloured bloom; never a repeated
+	# full-screen strobe. The exact same release age drives recoil and sound.
+	_flash.draw_polyline(seam, Color(_release_color.lightened(0.60), flash * burst), (4.0 + burst * 8.0) * pixel, true)
+	var core := Vector2(width * (0.38 + age * 0.4), width * 0.20)
+	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - core * 0.5, core), false,
+		Color(Color.WHITE, flash * burst))
+	for wedge in range(20):
+		var a: float = TAU * float(wedge) / 20.0
+		var b: float = TAU * float(wedge + 1) / 20.0
+		var ray_a: Vector2 = Vector2.from_angle(a) * Vector2(width * (0.34 if wedge % 2 == 0 else 0.11), width * 0.20)
+		var ray_b: Vector2 = Vector2.from_angle(b) * Vector2(width * (0.11 if wedge % 2 == 0 else 0.34), width * 0.20)
+		_flash.draw_polygon(PackedVector2Array([origin, origin + ray_a, origin + ray_b]),
+			PackedColorArray([Color(Color.WHITE, flash * burst * 0.88), Color(_release_color, 0), Color(_release_color, 0)]))
+	var travel: float = 1.0 - exp(-age * 5.0)
+	for ray in range(12):
+		var direction := Vector2.from_angle(-PI + PI * float(ray) / 11.0)
+		var reach: float = minf(width * 0.56, minf(origin.x - 4.0 * pixel, size.x - origin.x - 4.0 * pixel))
+		if direction.y < -0.001:
+			reach = minf(reach, maxf(0.0, origin.y - _charge_inset - 4.0 * pixel) / -direction.y)
+		var head: Vector2 = origin + direction * reach * travel
+		var tail: Vector2 = origin + direction * reach * maxf(0.0, travel - 0.10)
+		_flash.draw_line(tail, head, Color(_release_color.lightened(0.30), flash * 0.85), 2.0 * pixel, true)
 
 
 func _crystal_opening() -> float:
@@ -752,11 +910,17 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 			turn *= 1.65
 		pose = _rotate_piece(pose, turn)
 		pose.origin -= direction.normalized() * _bounds.size.x * (0.003 * pressure + 0.008 * stage)
+		# The plates visibly resist pressure; the body underneath stays solid.
+		pose.origin.y -= _bounds.size.y * 0.014 * pow(progress, 1.6)
+	elif _rigged and piece.role == "lid_outer":
+		var stored: float = pow(progress, 1.6)
+		pose.origin.y -= _bounds.size.y * (0.014 * stored + absf(tension) * 0.005)
+		pose = pose * Transform2D(tension * 0.006, Vector2.ZERO)
 	elif _rigged and piece.role == "latch":
 		var stages: float = smoothstep(0.0, 1.0 / 3.0, progress) * 0.25
 		stages += smoothstep(1.0 / 3.0, 2.0 / 3.0, progress) * 0.30
 		stages += smoothstep(2.0 / 3.0, 1.0, progress) * 0.45
-		var turn: float = (0.010 * pressure + stages * 0.012 + tension * 0.008) * (0.65 if theme_id == "autumn" else 1.0)
+		var turn: float = (0.010 * pressure + stages * 0.060 + tension * 0.016) * (0.65 if theme_id == "autumn" else 1.0)
 		pose = pose * Transform2D(turn, Vector2.ZERO)
 		pose.origin.y += _bounds.size.y * (0.004 * pressure + stages * 0.003)
 	elif _rigged and piece.role == "core":
@@ -841,7 +1005,7 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 					pose = pose * Transform2D(-0.055 * pull, Vector2.ZERO)
 					pose.origin.x += _bounds.size.x * 0.018 * pull
 			"interior":
-				alpha = 1.0 if progress > 0.06 else 0.0
+				alpha = 1.0 if progress > 0.01 or hold.y > 0.30 else 0.0
 			"latch":
 				var unlock: float = smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time) if opening_now else 0.0
 				pose = pose * Transform2D(-0.22 * unlock, Vector2.ZERO)
@@ -863,7 +1027,24 @@ func _apply_pose(_progress: float) -> void:
 		var state: Dictionary = _piece_pose(index, _elapsed, mode in ["opening", "opened"])
 		var sprite: Sprite2D = _pieces[index].node
 		sprite.transform = state.pose
-		sprite.modulate = Color(_tint.r, _tint.g, _tint.b, float(state.alpha))
+		var lighting: Color = _tint
+		if not reduced_motion:
+			var role: String = _pieces[index].role
+			var open: float = Feel.opening(theme_id, _elapsed) if mode in ["opening", "opened"] else 0.0
+			if role == "lid_outer":
+				lighting = lighting.darkened(open * 0.22)
+			elif role == "lid_inner":
+				lighting = lighting.darkened((1.0 - open) * 0.20)
+			# Reflected light on the body ties the effect to the chest surface.
+			lighting = lighting.lerp(_release_color.lightened(0.58), _release_power() * 0.23)
+		sprite.modulate = Color(lighting, float(state.alpha))
+	for edge in _lid_edges:
+		var source: Sprite2D = edge.source
+		var rim: Sprite2D = edge.node
+		rim.transform = source.transform
+		rim.scale.y = maxf(0.045, rim.scale.y)
+		rim.position.y += _bounds.size.y * 0.010
+		rim.modulate = Color(_tint.darkened(0.42).lerp(_release_color, _release_power() * 0.12), source.modulate.a)
 	if is_instance_valid(_crystal_cavity):
 		_crystal_cavity.queue_redraw()
 

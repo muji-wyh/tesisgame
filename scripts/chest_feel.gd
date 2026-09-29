@@ -4,13 +4,16 @@ const CANCEL_SECONDS: float = 0.12
 const HOLD_SECONDS: float = 1.2
 const BUILDUP_SECONDS: float = 2.0
 const ANTICIPATION_TIME: float = 1.94
-const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.12
-const RELEASE_TIME: float = BUILDUP_SECONDS + 0.32
+const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.08
+const RELEASE_TIME: float = BUILDUP_SECONDS + 0.16
 const SETTLE_TIME: float = BUILDUP_SECONDS + 0.95
 const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
-const HOLD_PULSE_TIMES := [0.08, 0.38, 0.65, 0.89, 1.10]
-const PULSE_TIMES := [0.08, 0.245, 0.395, 0.535, 0.665, 0.785, 0.895, 0.995,
-	1.09, 1.18, 1.265, 1.35, 1.435, 1.52, 1.605, 1.69, 1.775, 1.86]
+const HOLD_PULSE_TIMES := [0.08, 0.40, 0.68, 0.91, 1.12]
+const PULSE_TIMES := [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
+	1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86]
+const FLASH_COLORS := {"spring": Color("#89ef9c"), "summer": Color("#ffcd51"),
+	"autumn": Color("#ff9b45"), "winter": Color("#8ccfff"), "ocean": Color("#4be6e0"),
+	"space": Color("#b994ff"), "jungle": Color("#a9e74b"), "candy": Color("#ff92d4")}
 
 
 static func progress(elapsed: float) -> float:
@@ -53,15 +56,20 @@ static func pulse_strength(elapsed: float, holding: bool = false) -> float:
 
 
 static func pulse_motion(elapsed: float, holding: bool = false) -> float:
-	# Each audible strike starts one visible kick and a damped counter-swing.
-	# Its return finishes before the next strike, even in the final fast roll.
 	var pulse: Vector3 = _pulse_state(elapsed, holding)
-	# Give the attack enough width to read on a display instead of missing a
-	# narrow sine peak between rendered frames as the beat intervals shorten.
-	var kick: float = 1.0 - 0.30 * smoothstep(0.0, 0.35, pulse.x)
-	kick -= 1.05 * smoothstep(0.35, 0.65, pulse.x)
-	kick += 0.35 * smoothstep(0.65, 1.0, pulse.x)
+	# A mass accelerates into its impact instead of teleporting to full tilt.
+	# A small immediate response bridges the audio device's output latency.
+	var kick: float = lerpf(0.18, 1.0, smoothstep(0.0, 0.25, pulse.x))
+	kick *= 1.0 - smoothstep(0.30, 0.78, pulse.x)
+	kick -= sin(smoothstep(0.66, 1.0, pulse.x) * PI) * 0.12
 	return pulse.y * kick * pulse.z
+
+
+static func release_flash(elapsed: float) -> float:
+	var age: float = elapsed - RELEASE_TIME
+	if age < 0.0 or age >= 0.85:
+		return 0.0
+	return lerpf(0.55, 1.0, smoothstep(0.0, 0.06, age)) * (1.0 - smoothstep(0.08, 0.85, age))
 
 
 static func phase(elapsed: float) -> String:
@@ -107,22 +115,25 @@ static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
 	var delay: float = RELEASE_TIME + float(index) * float(feel.stagger)
 	var value: float = clampf((elapsed - delay) / float(feel.hinge), 0.0, 1.0)
+	# The initial gap, pressure release and impact belong to one beat. The
+	# remainder brakes into a physical stop rather than delaying the first gap.
+	var driven: float = 1.0 - pow(1.0 - value, 3.0)
 	match theme_id:
 		"summer":
 			# The solar mechanism releases quickly and brakes before its stop.
-			return 1.0 - pow(1.0 - value, 3.0)
+			return driven
 		"autumn":
-			return smoothstep(0.0, 1.0, value * value)
+			return lerpf(driven, smoothstep(0.0, 1.0, value), 0.25)
 		"winter":
-			return smoothstep(0.0, 0.72, value)
+			return driven
 		"space":
-			return value * value * (3.0 - 2.0 * value)
+			return driven
 		"candy":
 			return 1.0 - exp(-value * 6.0) * cos(value * 9.5) if value < 1.0 else 1.0
 		"jungle":
-			return smoothstep(0.0, 1.0, value) + sin(value * PI) * 0.08
+			return driven + sin(value * PI) * 0.045
 		_:
-			return smoothstep(0.0, 1.0, value)
+			return driven
 
 
 static func body_pose(theme_id: String, pressure: float, progress: float, time: float, opening_now: bool, pulse_time: float = -INF) -> Dictionary:
@@ -143,7 +154,7 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		var strength: float = pulse_strength(pulse_time, not opening_now)
 		offset.x = strike * shake_distance(theme_id)
 		offset.y += strength * 0.008
-		rotation = strike * (0.090 if theme_id == "candy" else 0.075)
+		rotation = strike * (0.040 if theme_id == "candy" else 0.028)
 		if theme_id == "candy":
 			scale += Vector2(0.018, -0.025) * strength
 		return {"offset": offset, "scale": scale, "rotation": rotation}
@@ -151,7 +162,9 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		var preparation: float = 1.0 - smoothstep(UNLOCK_TIME, RELEASE_TIME, time)
 		offset = Vector2(0.0, float(feel.press) * preparation)
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
-		var recoil: float = sin(minf(strike_age / 0.28, 1.0) * PI)
+		var recoil: float = sin(minf(strike_age / 0.18, 1.0) * PI)
+		# The floor takes the release impulse while the lid moves upward.
+		offset.y += recoil * (0.028 if theme_id == "autumn" else 0.018)
 		var settle: float = exp(-maxf(0.0, time - SETTLE_TIME) * 16.0) * sin(maxf(0.0, time - SETTLE_TIME) * 24.0)
 		match theme_id:
 			"spring": offset.y -= recoil * 0.007
@@ -172,4 +185,4 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 
 
 static func shake_distance(theme_id: String) -> float:
-	return 0.055 + float(PROFILES.get(theme_id, PROFILES.spring).tension) * 4.0
+	return 0.012 + float(PROFILES.get(theme_id, PROFILES.spring).tension) * 1.8

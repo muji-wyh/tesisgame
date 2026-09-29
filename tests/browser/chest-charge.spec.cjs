@@ -4,9 +4,17 @@ const {
   openRewards, visibleColorCount, observeAudio, chooseTheme
 } = require('./game-ui.cjs');
 
-const HOLD_PULSE_TIMES = [0.08, 0.38, 0.65, 0.89, 1.10];
-const PULSE_TIMES = [0.08, 0.245, 0.395, 0.535, 0.665, 0.785, 0.895, 0.995,
-  1.09, 1.18, 1.265, 1.35, 1.435, 1.52, 1.605, 1.69, 1.775, 1.86];
+// Keep mobile CSS geometry while isolating cadence from software-renderer fill
+// cost. Passive trace screenshots can also stall the final 60 ms beat gaps;
+// explicit state screenshots remain. High-DPR timing still needs real devices.
+test.use({
+  deviceScaleFactor: 1,
+  trace: { mode: 'retain-on-failure', screenshots: false, snapshots: true, sources: false }
+});
+
+const HOLD_PULSE_TIMES = [0.08, 0.40, 0.68, 0.91, 1.12];
+const PULSE_TIMES = [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
+  1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86];
 const isRhythmCue = event => ['hold_pulse', 'tension_pulse'].includes(event.cue);
 const hasDuration = (sound, duration) => Math.abs(sound.duration - duration) < 0.001;
 const isChestSound = sound => [0.19, 0.22, 0.24, 0.31, 0.48, 0.68, 0.74, 0.8]
@@ -170,10 +178,17 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     await page.mouse.up();
   }
   await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+  const completionObservation = await page.evaluate(() => ({
+    chest: window.chestObservation,
+    audio: { available: window.audioObservation.available, playbacks: window.audioObservation.playbacks }
+  }));
+  await testInfo.attach('chest-completion-observation', {
+    body: JSON.stringify(completionObservation, null, 2), contentType: 'application/json'
+  });
   const progressHistory = await page.evaluate(start => window.chestObservation.progress.slice(start), progressStart);
   const holdingProgress = progressHistory.filter(state => !state.hidden && state.phase === 'holding');
   expect(holdingProgress.some(state => state.percent >= 30 && state.text.includes('Hold to begin'))).toBe(true);
-  expect(holdingProgress.every(state => state.percent <= 34),
+  expect(holdingProgress.every(state => state.percent <= 36),
     'The 1.2-second hold fills about one third of the bar before the automatic opening').toBe(true);
   for (const phase of ['gathering', 'building', 'anticipation']) {
     expect(progressHistory.some(state => !state.hidden && state.phase === phase && state.percent >= 34 &&
@@ -207,10 +222,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   expect(holdPulses.map(event => event.step), 'The accepted hold delivers all five physical beats')
     .toEqual(HOLD_PULSE_TIMES.map((_, index) => index + 1));
   const pulses = cues.filter(event => event.cue === 'tension_pulse');
-  expect(pulses.map(event => event.step), 'The automatic opening delivers all eighteen physical beats')
+  expect(pulses.map(event => event.step), 'The automatic opening delivers all fifteen physical beats')
     .toEqual(PULSE_TIMES.map((_, index) => index + 1));
   const rhythm = acceptedCues.filter(isRhythmCue);
-  expect(rhythm.map(event => event.cue), 'Confirmation joins five hold beats directly to eighteen opening beats')
+  expect(rhythm.map(event => event.cue), 'Confirmation joins five hold beats directly to fifteen opening beats')
     .toEqual([...HOLD_PULSE_TIMES.map(() => 'hold_pulse'), ...PULSE_TIMES.map(() => 'tension_pulse')]);
   // The authored first beat is at 80 ms. This browser bound includes engine
   // frame and bridge delivery jitter, not a physical display-latency claim.
@@ -226,10 +241,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   expect(cues.find(event => event.cue === 'unlock').at - hush.at,
     'A short final breath separates the tension rhythm from unlocking').toBeGreaterThanOrEqual(100);
   expect(cues.find(event => event.cue === 'unlock').at - hush.at).toBeLessThanOrEqual(350);
-  expect(openingStates[0].at - opening.at, '100 percent waits for the 2.32-second release').toBeGreaterThanOrEqual(2220);
+  expect(openingStates[0].at - opening.at, '100 percent waits for the 2.16-second release').toBeGreaterThanOrEqual(2060);
   // These are browser-observed beat times. Allow frame delivery jitter while
   // still rejecting an early release or the former ten-second sequence.
-  for (const [cue, milliseconds] of [['anticipation', 1940], ['unlock', 2120], ['release', 2320], ['settle', 2950]]) {
+  for (const [cue, milliseconds] of [['anticipation', 1940], ['unlock', 2080], ['release', 2160], ['settle', 2950]]) {
     const elapsed = cues.find(event => event.cue === cue).at - opening.at;
     expect(elapsed, `${cue} cannot precede its automatic-opening boundary`).toBeGreaterThanOrEqual(milliseconds - 100);
     expect(elapsed, `${cue} stays within the shorter automatic-opening sequence`).toBeLessThanOrEqual(milliseconds + 500);
@@ -285,16 +300,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     const acceptedStrikes = strikes.slice(cancelledStrikes);
     expect(acceptedStrikes).toHaveLength(HOLD_PULSE_TIMES.length + PULSE_TIMES.length);
     expectAccelerating(acceptedStrikes.map(audioOnset), 'Actual WebAudio onsets accelerate from the hold into the final roll');
-    for (const [index, sound] of acceptedStrikes.entries()) {
-      const scheduledTime = index < HOLD_PULSE_TIMES.length ? HOLD_PULSE_TIMES[index] :
-        1.2 + PULSE_TIMES[index - HOLD_PULSE_TIMES.length];
-      const energy = Math.pow(scheduledTime / 3.14, 0.72);
-      expect(sound.playbackRate, 'Strike pitch follows scheduled tension without restarting at confirmation')
-        .toBeCloseTo(0.95 + (1.55 - 0.95) * energy, 3);
-      if (index) expect(sound.playbackRate, 'Every later audible strike rises in pitch')
-        .toBeGreaterThan(acceptedStrikes[index - 1].playbackRate);
+    for (const sound of acceptedStrikes) {
+      expect(sound.playbackRate, 'Material strikes retain their physical pitch as their cadence accelerates')
+        .toBeCloseTo(1, 3);
     }
-    expect(acceptedStrikes.at(-1).playbackRate / acceptedStrikes[0].playbackRate, 'The final strike has a clearly higher register').toBeGreaterThan(1.5);
     expect(Math.abs(audioStop(acceptedStrikes.at(-1)) - hush.at), 'The last strike tail stops with the sustained bed for a clean final breath').toBeLessThanOrEqual(100);
     expect(chestSounds.filter(sound => audioOnset(sound) > hush.at + 30 && audioOnset(sound) < cues.find(event => event.cue === 'unlock').at - 30),
       'No material attack fills the quiet breath').toEqual([]);
