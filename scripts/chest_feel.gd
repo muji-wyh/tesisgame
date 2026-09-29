@@ -221,14 +221,18 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		offset.x += loaded_motion * shake_distance(theme_id)
 		rotation = loaded_motion * rocking - 0.010 * preparation
 		var strike_age: float = maxf(0.0, time - RELEASE_TIME)
-		var recoil: float = sin(minf(strike_age / 0.18, 1.0) * PI)
-		# The floor takes the release impulse while the lid moves upward.
-		offset.y += recoil * (0.028 if theme_id == "autumn" else 0.018)
+		# A quick load into the floor makes the lid's upward release tangible.
+		# Hold that weight briefly, then recover with one small damped return.
+		# Hard materials stay rigid; the impulse moves their mass, not the art.
+		var recoil: float = smoothstep(0.0, 0.035, strike_age) * (1.0 - smoothstep(0.055, 0.235, strike_age))
+		var return_age: float = maxf(0.0, strike_age - 0.18)
+		var rebound: float = sin(clampf(return_age / 0.34, 0.0, 1.0) * PI) * exp(-return_age * 4.0)
+		offset.y += recoil * (0.042 if theme_id == "autumn" else 0.034) - rebound * 0.006
 		var settle: float = exp(-maxf(0.0, time - SETTLE_TIME) * 16.0) * sin(maxf(0.0, time - SETTLE_TIME) * 24.0)
 		match theme_id:
-			"spring": offset.y -= recoil * 0.007
+			"spring": offset.y -= recoil * 0.008
 			"summer": offset.y += recoil * 0.004
-			"autumn": offset.y += recoil * 0.012 + settle * 0.004
+			"autumn": offset.y += recoil * 0.010 + settle * 0.004
 			"winter": offset.x += sin(strike_age * 32.0) * exp(-strike_age * 13.0) * 0.003
 			"ocean":
 				offset.y -= sin(clampf(strike_age / 1.45, 0.0, 1.0) * PI) * 0.020
@@ -236,9 +240,11 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 			"space": offset.y -= smoothstep(RELEASE_TIME, SETTLE_TIME, time) * 0.025
 			"jungle": rotation += sin(strike_age * 10.0) * exp(-strike_age * 5.0) * 0.027
 			"candy":
-				var bounce: float = sin(strike_age * 15.0) * exp(-strike_age * 4.8)
-				scale = Vector2(1.0 + preparation * 0.0558 - bounce * 0.070,
-					1.0 - preparation * 0.080 + bounce * 0.100)
+				# Compression registers before the elastic return pulls upward.
+				var bounce_age: float = maxf(0.0, strike_age - 0.060)
+				var bounce: float = sin(bounce_age * 15.0) * exp(-bounce_age * 4.8)
+				scale = Vector2(1.0 + preparation * 0.0558 + recoil * 0.025 - bounce * 0.070,
+					1.0 - preparation * 0.080 - recoil * 0.035 + bounce * 0.100)
 				offset.y -= absf(bounce) * 0.025
 	return {"offset": offset, "scale": scale, "rotation": rotation}
 

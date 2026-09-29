@@ -99,6 +99,9 @@ func _ready() -> void:
 	_glint.draw.connect(_draw_glint)
 	add_child(_flash)
 	_flash.z_index = 10
+	var light_material := CanvasItemMaterial.new()
+	light_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_flash.material = light_material
 	_flash.draw.connect(_draw_flash)
 	add_child(_seam_light)
 	_seam_light.z_index = 3
@@ -723,6 +726,10 @@ func hold_effect_snapshot() -> Dictionary:
 	var beam_bounds: Rect2 = _opened_beam_bounds()
 	var cavity_bounds: Rect2 = _cavity_glow_bounds()
 	var crown_bounds: Rect2 = _crown_effect_bounds()
+	var burst_origin: Vector2 = _release_burst_origin()
+	var bloom_bounds: Rect2 = _release_bloom_bounds()
+	var core_bounds: Rect2 = _release_core_bounds()
+	var wave_bounds: Rect2 = _release_wave_bounds()
 	var crown_streaks: Array[Dictionary] = []
 	var crown_milestones: Array[float] = []
 	for streak in _crown_streaks():
@@ -748,6 +755,15 @@ func hold_effect_snapshot() -> Dictionary:
 		"buildup_bounds": {"x": _buildup_bounds().position.x, "y": _buildup_bounds().position.y,
 			"width": _buildup_bounds().size.x, "height": _buildup_bounds().size.y},
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
+		"release_impact": _release_impact(),
+		"release_additive": _flash.material is CanvasItemMaterial and _flash.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD,
+		"release_burst_origin": {"x": burst_origin.x, "y": burst_origin.y},
+		"release_bloom_bounds": {"x": bloom_bounds.position.x, "y": bloom_bounds.position.y,
+			"width": bloom_bounds.size.x, "height": bloom_bounds.size.y},
+		"release_core_bounds": {"x": core_bounds.position.x, "y": core_bounds.position.y,
+			"width": core_bounds.size.x, "height": core_bounds.size.y},
+		"release_wave_bounds": {"x": wave_bounds.position.x, "y": wave_bounds.position.y,
+			"width": wave_bounds.size.x, "height": wave_bounds.size.y},
 		"opened_glow": _opened_glow(), "opened_idle_time": _idle_time,
 		"opened_beam_strength": _beam_strength(), "opened_surface_light": surface_light,
 		"opened_light_color": _release_color.to_html(false),
@@ -854,7 +870,80 @@ func _cavity_origin() -> Vector2:
 
 
 func _beam_strength() -> float:
-	return maxf(_release_power() * 0.80, _opened_glow() * 0.96)
+	return maxf(_release_power() * 0.80, _opened_glow() * 0.96) + _release_impact() * 0.90
+
+
+func _release_impact() -> float:
+	return _release_power() * (1.0 - smoothstep(0.16, 0.60, _elapsed - Feel.RELEASE_TIME))
+
+
+func _release_burst_origin() -> Vector2:
+	var safe: Rect2 = _release_bounds()
+	return _cavity_origin().clamp(safe.position, safe.end)
+
+
+func _release_bloom_bounds() -> Rect2:
+	var origin: Vector2 = _release_burst_origin()
+	var safe: Rect2 = _release_bounds()
+	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
+	var spread: float = lerpf(0.28, 0.98, smoothstep(0.0, 0.10, age))
+	var top_left: Vector2 = origin.lerp(safe.position, spread)
+	return Rect2(top_left, origin.lerp(safe.end, spread) - top_left)
+
+
+func _release_core_bounds() -> Rect2:
+	var width: float = _bounds.size.x * _fit_scale
+	var extent := Vector2(width * 0.85, width * 0.58)
+	return Rect2(_release_burst_origin() - extent * 0.5, extent).intersection(_release_bounds())
+
+
+func _release_edge_point(angle: float, reach: float) -> Vector2:
+	var origin: Vector2 = _release_burst_origin()
+	# Leave space for the widest wave stroke as well as the parent's clipping.
+	var inset: float = minf(5.0 / _charge_scale, minf(size.x, size.y) * 0.04)
+	var safe: Rect2 = _release_bounds().grow(-inset)
+	var direction := Vector2.from_angle(angle)
+	var extent := Vector2(maxf(0.0, safe.end.x - origin.x if direction.x >= 0.0 else origin.x - safe.position.x),
+		maxf(0.0, safe.end.y - origin.y if direction.y >= 0.0 else origin.y - safe.position.y))
+	return origin + direction * extent * reach
+
+
+func _release_wave_points() -> PackedVector2Array:
+	var points := PackedVector2Array()
+	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
+	var travel: float = 0.16 + (1.0 - exp(-age * 14.0)) * 0.80
+	for index in range(65):
+		points.append(_release_edge_point(TAU * float(index) / 64.0, travel))
+	return points
+
+
+func _release_wave_bounds() -> Rect2:
+	var points: PackedVector2Array = _release_wave_points()
+	var bounds := Rect2(points[0], Vector2.ZERO)
+	for point in points:
+		bounds = bounds.expand(point)
+	return bounds.grow(_release_wave_width() * 0.5)
+
+
+func _release_wave_width() -> float:
+	return minf(9.0 / _charge_scale, minf(size.x, size.y) * 0.08)
+
+
+func _draw_release_bloom(bounds: Rect2, color: Color) -> void:
+	# Four texture quadrants keep the hot source at the actual cavity while
+	# filling the space above it, even in a shallow landscape stage.
+	var origin: Vector2 = _release_burst_origin()
+	var half_texture: Vector2 = CHARGE_GLOW.get_size() * 0.5
+	for row in range(2):
+		for column in range(2):
+			var top_left := Vector2(bounds.position.x if column == 0 else origin.x,
+				bounds.position.y if row == 0 else origin.y)
+			var bottom_right := Vector2(origin.x if column == 0 else bounds.end.x,
+				origin.y if row == 0 else bounds.end.y)
+			var rect := Rect2(top_left, bottom_right - top_left)
+			if rect.size.x > 0.01 and rect.size.y > 0.01:
+				_flash.draw_texture_rect_region(CHARGE_GLOW, rect,
+					Rect2(Vector2(column, row) * half_texture, half_texture), color)
 
 
 func _opened_beam_bounds() -> Rect2:
@@ -954,24 +1043,25 @@ func _draw_cavity_light() -> void:
 		return
 	var width: float = minf(_bounds.size.x * _fit_scale, bounds.size.x)
 	var hot: Color = _release_color.lightened(0.82)
+	var impact: float = _release_impact()
 	for ray in range(7):
 		var lean: float = float(ray - 3) / 3.0
 		if mode == "opened" and not reduced_motion:
 			lean += sin(_idle_time * TAU / (OPEN_SWAY_SECONDS * 1.8) + float(ray) * 0.7) * 0.045 * smoothstep(0.0, 0.65, _idle_time)
 		var top_x: float = origin.x + lean * bounds.size.x * 0.38
-		var spread: float = bounds.size.x * (0.11 if ray % 2 == 0 else 0.065)
+		var spread: float = bounds.size.x * (0.11 if ray % 2 == 0 else 0.065) * (1.0 + impact * 0.28)
 		var left := Vector2(maxf(bounds.position.x, top_x - spread), bounds.position.y)
 		var right := Vector2(minf(bounds.end.x, top_x + spread), bounds.position.y)
 		var base_left: Vector2 = origin - Vector2(width * 0.13, 0)
 		var base_right: Vector2 = origin + Vector2(width * 0.13, 0)
-		var alpha: float = strength * (1.0 if ray == 3 else 0.76)
+		var alpha: float = minf(1.0, strength * (1.0 if ray == 3 else 0.76))
 		# A white-hot mouth becomes saturated theme light farther from its
 		# source. Midpoints preserve a visible shaft instead of a faint triangle.
 		_cavity_light.draw_polygon(PackedVector2Array([base_left, base_right,
 			base_right.lerp(right, 0.46), right, left, base_left.lerp(left, 0.46)]),
 			PackedColorArray([Color(hot, alpha), Color(hot, alpha),
-				Color(_release_color.lightened(0.12), alpha * 0.58), Color(_release_color, 0),
-				Color(_release_color, 0), Color(_release_color.lightened(0.12), alpha * 0.58)]))
+				Color(_release_color.lightened(0.12 + impact * 0.48), alpha * (0.58 + impact * 0.24)), Color(_release_color, 0),
+				Color(_release_color, 0), Color(_release_color.lightened(0.12 + impact * 0.48), alpha * (0.58 + impact * 0.24))]))
 	var glow: Rect2 = _cavity_glow_bounds()
 	_cavity_light.draw_texture_rect(CHARGE_GLOW, glow, false, Color(_release_color, strength))
 	var core := Rect2(origin - glow.size * Vector2(0.28, 0.18), glow.size * Vector2(0.56, 0.36))
@@ -1021,40 +1111,37 @@ func _draw_flash() -> void:
 	var seam: PackedVector2Array = _seam_points()
 	if seam.is_empty():
 		return
-	var origin: Vector2 = _light_origin()
+	var origin: Vector2 = _release_burst_origin()
 	var pixel: float = 1.0 / _charge_scale
 	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
-	var burst: float = 1.0 - smoothstep(0.10, 0.38, age)
-	var radius: Vector2 = _release_radius()
-	var expansion: float = lerpf(0.45, 1.0, smoothstep(0.0, 0.065, age))
-	var glow: Vector2 = radius * 2.0 * expansion
-	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
-		Color(_release_color, flash * 0.88))
-	# One broad coloured burst retains the silhouette instead of covering it
-	# with a white frame. Every extent is bounded by the local stage.
-	_flash.draw_polyline(seam, Color(_release_color.lightened(0.60), flash * burst), (4.0 + burst * 8.0) * pixel, true)
-	var core: Vector2 = radius * Vector2(0.65, 0.54) * expansion
-	_flash.draw_texture_rect(CHARGE_GLOW, Rect2(origin - core * 0.5, core), false,
-		Color(Color.WHITE, flash * burst))
-	for wedge in range(20):
-		var a: float = TAU * float(wedge) / 20.0
-		var b: float = TAU * float(wedge + 1) / 20.0
-		var ray_a: Vector2 = Vector2.from_angle(a) * radius * (0.78 if wedge % 2 == 0 else 0.22) * expansion
-		var ray_b: Vector2 = Vector2.from_angle(b) * radius * (0.22 if wedge % 2 == 0 else 0.78) * expansion
-		_flash.draw_polygon(PackedVector2Array([origin, origin + ray_a, origin + ray_b]),
-			PackedColorArray([Color(Color.WHITE, flash * burst * 0.88), Color(_release_color, 0), Color(_release_color, 0)]))
-	var travel: float = 1.0 - exp(-age * 8.0)
-	var wave: PackedVector2Array = []
-	for point in range(65):
-		wave.append(origin + Vector2.from_angle(TAU * float(point) / 64.0) * radius * (0.18 + travel * 0.78))
-	var wave_alpha: float = flash * (1.0 - smoothstep(0.10, 0.48, age))
-	_flash.draw_polyline(wave, Color(_release_color, wave_alpha * 0.36), (8.0 - travel * 5.0) * pixel, true)
-	_flash.draw_polyline(wave, Color(_release_color.lightened(0.45), wave_alpha * 0.80), (3.0 - travel) * pixel, true)
+	var impact: float = _release_impact()
+	var expansion: float = lerpf(0.28, 0.98, smoothstep(0.0, 0.10, age))
+	var hot: Color = _release_color.lightened(0.88)
+	# Additive light has a distinct white-hot attack, then reveals the themed
+	# rays and the chest again. The bloom reaches upward independently of the
+	# floor clearance, so landscape layouts retain a substantial release.
+	_draw_release_bloom(_release_bloom_bounds(), Color(_release_color.lightened(0.18), flash * 0.85))
+	_draw_release_bloom(_release_core_bounds(), Color(hot, impact * 0.90))
+	_flash.draw_polyline(seam, Color(hot, impact), (5.0 + impact * 9.0) * pixel, true)
+	for wedge in range(24):
+		var a: float = TAU * float(wedge) / 24.0 - 0.06
+		var b: float = a + TAU / 24.0 * 0.42
+		var ray_a: Vector2 = _release_edge_point(a, expansion * (0.98 if wedge % 2 == 0 else 0.64))
+		var ray_b: Vector2 = _release_edge_point(b, expansion * (0.64 if wedge % 2 == 0 else 0.98))
+		if absf((ray_a - origin).cross(ray_b - origin)) > 0.01:
+			_flash.draw_polygon(PackedVector2Array([origin, ray_a, ray_b]),
+				PackedColorArray([Color(hot, impact * 0.78), Color(_release_color, 0), Color(_release_color, 0)]))
+	var travel: float = 1.0 - exp(-age * 14.0)
+	var wave: PackedVector2Array = _release_wave_points()
+	var wave_alpha: float = flash * (1.0 - smoothstep(0.14, 0.50, age))
+	var wave_width: float = _release_wave_width()
+	_flash.draw_polyline(wave, Color(_release_color, wave_alpha * 0.55), wave_width, true)
+	_flash.draw_polyline(wave, Color(hot, wave_alpha * 0.95), wave_width * 0.30, true)
 	for ray in range(12):
-		var direction := Vector2.from_angle(TAU * float(ray) / 12.0)
-		var head: Vector2 = origin + direction * radius * travel
-		var tail: Vector2 = origin + direction * radius * maxf(0.0, travel - 0.24)
-		_flash.draw_line(tail, head, Color(_release_color.lightened(0.30), flash * 0.85), (4.0 - travel * 2.0) * pixel, true)
+		var angle: float = TAU * float(ray) / 12.0 - 0.15
+		var head: Vector2 = _release_edge_point(angle, travel * 0.96)
+		var tail: Vector2 = _release_edge_point(angle, maxf(0.0, travel - 0.30))
+		_flash.draw_line(tail, head, Color(hot, impact * 0.90), (4.0 - travel * 2.0) * pixel, true)
 
 
 func _crystal_opening() -> float:
@@ -1393,7 +1480,7 @@ func _apply_pose(_progress: float) -> void:
 
 
 func _update_surface_light() -> void:
-	var light: float = maxf(_opened_glow(), _release_power())
+	var light: float = maxf(_opened_glow(), _release_power()) + _release_impact() * 0.55
 	if light <= 0.0:
 		if _surface_light_active:
 			for piece in _pieces:

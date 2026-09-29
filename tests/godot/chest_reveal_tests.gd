@@ -53,6 +53,7 @@ func _run() -> void:
 	_check_themed_chests(data)
 	_check_opened_ambience(data)
 	_check_opened_light_handoff(data)
+	_check_release_light(data)
 	_check_opened_bounds(data)
 	_check_opening_cancel(data)
 	_check_release_commitment(data)
@@ -117,7 +118,8 @@ func _check_themed_chests(data) -> void:
 			and opened_themes.size() == before + 1 and opened_themes.back() == theme_id,
 			"Refreshing the earned " + theme_id + " chest keeps it open without awarding again")
 		var state: Dictionary = chest.hold_effect_snapshot()
-		check(state.opened_glow > 0.0 and not state.opened_animated and is_zero_approx(state.opened_idle_time),
+		check(state.opened_glow > 0.0 and not state.opened_animated and is_zero_approx(state.opened_idle_time)
+			and is_zero_approx(state.release_impact) and is_zero_approx(state.release_flash),
 			"The reduced-motion " + theme_id + " chest opens directly into a steady themed light")
 		for dimensions in [Vector2(320, 190), Vector2(180, 400), Vector2(640, 420)]:
 			chest.size = dimensions
@@ -271,7 +273,7 @@ func _check_opened_ambience(data) -> void:
 		chest._advance_animation(2.0)
 		state = chest.hold_effect_snapshot()
 		check(chest.mode == "opened" and state.opened_glow > 0.0 and state.opened_animated
-			and is_zero_approx(state.release_flash) and cues.size() == cue_count
+			and is_zero_approx(state.release_flash) and is_zero_approx(state.release_impact) and cues.size() == cue_count
 			and openings.size() == previous_openings + 2,
 			theme + " shows earned idle light after skipping without a delayed flash, sound or reward")
 		var next_theme: String = "winter" if theme != "winter" else "spring"
@@ -366,6 +368,92 @@ func _check_opened_light_handoff(data) -> void:
 	chest.free()
 
 
+func _check_release_light(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.set_process(false)
+	for theme in data.THEMES:
+		for dimensions in [Vector2(320, 72), Vector2(180, 400), Vector2(440, 360)]:
+			chest.clear()
+			chest.size = dimensions
+			chest.reduced_motion = false
+			chest.configure_skin(data.theme(theme), data.chests)
+			chest.start_open(false)
+			chest._advance_animation(Feel.RELEASE_TIME - 0.01)
+			var before: Dictionary = chest.hold_effect_snapshot()
+			check(is_zero_approx(before.release_impact) and is_zero_approx(before.release_flash),
+				"%s reserves its release impact for the physical opening at %s" % [theme, dimensions])
+			var samples: Array[Dictionary] = []
+			var geometry_issues: Array[String] = []
+			for age in [0.016, 0.10, 0.22, 0.42, 0.66, 1.10]:
+				chest._advance_animation(Feel.RELEASE_TIME + age - chest.hold_effect_snapshot().opening_time)
+				var state: Dictionary = chest.hold_effect_snapshot()
+				samples.append(state)
+				if state.release_impact > 0.0:
+					_record_release_geometry(chest, state, geometry_issues)
+				if is_equal_approx(age, 0.10):
+					for drag in [Vector2(-dimensions.x, 0.0), Vector2(dimensions.x, 0.0)]:
+						chest.set_drag_offset(drag)
+						_record_release_geometry(chest, chest.hold_effect_snapshot(), geometry_issues)
+					chest.set_drag_offset(Vector2.ZERO)
+			var onset: Dictionary = samples[0]
+			var peak: Dictionary = samples[1]
+			var fading: Dictionary = samples[2]
+			var late: Dictionary = samples[3]
+			var ambient: Dictionary = samples[5]
+			check(onset.release_impact > 0.0 and peak.release_impact >= 0.60
+				and peak.release_impact > onset.release_impact and peak.release_additive,
+				"%s rapidly builds a bright additive release at %s" % [theme, dimensions])
+			check(peak.opened_beam_strength >= ambient.opened_beam_strength * 1.35
+				and peak.opened_surface_light >= ambient.opened_surface_light * 1.20,
+				"%s has a stronger release than its lasting cavity and surface light at %s" % [theme, dimensions])
+			var first_bloom: Dictionary = onset.release_bloom_bounds
+			var bloom: Dictionary = peak.release_bloom_bounds
+			check(bloom.width >= dimensions.x * 0.80 and bloom.height >= dimensions.y * 0.75
+				and bloom.width * bloom.height > first_bloom.width * first_bloom.height * 1.35,
+				"%s expands its cavity bloom across the stage within 100 milliseconds at %s" % [theme, dimensions])
+			var first_wave: Dictionary = onset.release_wave_bounds
+			var wave: Dictionary = fading.release_wave_bounds
+			check(wave.width * wave.height > first_wave.width * first_wave.height * 2.0,
+				"%s visibly pushes its release wave outward from the cavity at %s" % [theme, dimensions])
+			check(geometry_issues.is_empty(),
+				"%s keeps its broad bloom, hot core and actual wave inside %s, including dragged positions: %s" % [theme, dimensions, geometry_issues])
+			check(fading.release_impact > late.release_impact and late.release_impact > 0.0
+				and is_zero_approx(samples[4].release_impact) and is_zero_approx(ambient.release_impact)
+				and is_zero_approx(ambient.release_flash) and ambient.opened_glow > 0.0,
+				"%s has one finite release attack and decay before retaining only its opened light at %s" % [theme, dimensions])
+			chest.finish_immediately()
+			var opened: Dictionary = chest.hold_effect_snapshot()
+			check(is_zero_approx(opened.release_impact) and is_zero_approx(opened.release_flash),
+				"%s cannot retain or replay its release impact after completion at %s" % [theme, dimensions])
+	chest.free()
+
+
+func _record_release_geometry(chest, state: Dictionary, issues: Array[String]) -> void:
+	var stage := Rect2(Vector2.ZERO, chest.size).grow(0.5)
+	var safe_data: Dictionary = state.release_bounds
+	var safe := Rect2(Vector2(safe_data.x, safe_data.y), Vector2(safe_data.width, safe_data.height))
+	var cavity := Vector2(state.cavity_origin.x, state.cavity_origin.y)
+	var origin := Vector2(state.release_burst_origin.x, state.release_burst_origin.y)
+	if not origin.is_finite() or not stage.has_point(origin) or origin.distance_to(cavity.clamp(safe.position, safe.end)) > 0.02:
+		issues.append("Release source does not follow its fitted cavity: %s / %s" % [origin, cavity])
+	for field in ["release_bloom_bounds", "release_core_bounds", "release_wave_bounds"]:
+		var geometry: Dictionary = state[field]
+		var bounds := Rect2(Vector2(geometry.x, geometry.y), Vector2(geometry.width, geometry.height))
+		if not bounds.has_area() or not stage.encloses(bounds):
+			issues.append("%s at %.3fs: %s" % [field, state.opening_time, bounds])
+		if field != "release_wave_bounds" and not bounds.grow(0.01).has_point(origin):
+			issues.append(field + " no longer encloses its cavity source")
+	var wave: Dictionary = state.release_wave_bounds
+	var wave_bounds := Rect2(Vector2(wave.x, wave.y), Vector2(wave.width, wave.height)).grow(0.01)
+	var points: PackedVector2Array = chest._release_wave_points()
+	if points.size() < 12:
+		issues.append("Release wave has no substantial drawable contour")
+	for point in points:
+		if not point.is_finite() or not stage.has_point(point) or not wave_bounds.has_point(point):
+			issues.append("Release wave point is outside its measured stage bounds: %s" % point)
+
+
 func _check_opened_bounds(data) -> void:
 	var chest = load("res://scripts/chest_view.gd").new()
 	root.add_child(chest)
@@ -426,7 +514,7 @@ func _check_opening_cancel(data) -> void:
 			var state: Dictionary = chest.hold_effect_snapshot()
 			check(chest.mode == "closed" and not state.active and state.percent == 0
 				and is_zero_approx(state.opening_time) and is_zero_approx(state.release_flash)
-				and is_zero_approx(state.opened_glow),
+				and is_zero_approx(state.release_impact) and is_zero_approx(state.opened_glow),
 				"%s clears opening progress and light immediately when released at %.2f seconds" % [theme, Feel.HOLD_SECONDS + release_time])
 			check(is_equal_approx(state.cancel_remaining, Feel.CANCEL_SECONDS),
 				theme + " returns its cancelled opening without blocking a new press")
