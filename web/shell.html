@@ -99,9 +99,6 @@
     #loading-duck .pip-shy-cheeks, #loading-duck .pip-bonk-stars { opacity: 0; }
     #loading-duck[data-pose="shy"] .pip-shy-cheeks { opacity: .8; }
     #loading-duck[data-pose="bonk"] .pip-bonk-stars { opacity: 1; }
-    #loading-music { min-height: 44px; padding: 4px 9px; font-size: 12px;
-      color: var(--cp-text); background: var(--cp-surface-soft); border: 1px solid var(--cp-border); }
-    #loading-music[aria-pressed="true"] { color: var(--cp-accent); border-color: var(--cp-accent); }
     @keyframes pip-blink { 0%, 95%, 100% { background-position: 0% 0%; } 96%, 99% { background-position: 66.6667% 0%; } }
     #chest-art { transform-origin: 140px 185px; }
     #chest-lid { transform-origin: 140px 118px; }
@@ -446,7 +443,6 @@
             <div class="play-caption">
               <span id="loading-score" class="sr-only" role="status">0 sparkles</span>
               <span id="loading-hint" aria-live="polite">Tap Pip for a surprise!</span>
-              <button id="loading-music" type="button" aria-label="Loading music" aria-pressed="false" data-audio-state="off">♪ Music off</button>
             </div>
           </div>
           <div class="loading-download">
@@ -493,7 +489,6 @@
       const loadingNote = document.getElementById('loading-note');
       const percent = document.getElementById('loading-percent');
       const loadingDuck = document.getElementById('loading-duck');
-      const musicButton = document.getElementById('loading-music');
       const danceParts = Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']
         .map(part => [part, document.getElementById('loading-pip-' + part)]));
       const pipWardrobe = $PIP_WARDROBE_JSON;
@@ -703,17 +698,10 @@
         let output = null;
         let timer = 0;
         let generation = 0;
-        let muted = false;
         let nextNote = 0;
         let beat = 0;
         const voices = new Set();
         const melody = [72, 76, 79, 76, 81, 79, 76, 74, 72, 76, 79, 84, 83, 79, 76, 74];
-
-        function display(state) {
-          musicButton.dataset.audioState = state;
-          musicButton.setAttribute('aria-pressed', String(state === 'running'));
-          musicButton.textContent = state === 'running' ? '♪ Music on' : state === 'unavailable' ? '♪ No music' : '♪ Music off';
-        }
 
         function stop() {
           generation++;
@@ -730,7 +718,6 @@
           const closing = context;
           context = null;
           if (closing && closing.state !== 'closed') closing.close().catch(() => {});
-          display('off');
         }
 
         function note(pitch, when, duration, strength, type) {
@@ -769,34 +756,28 @@
         }
 
         function start(gestureAllowed) {
-          if (!gestureAllowed || muted || document.hidden || loadingEvents.signal.aborted || context) return;
+          if (!gestureAllowed || document.hidden || loadingEvents.signal.aborted || context) return;
           const Audio = window.AudioContext || window.webkitAudioContext;
-          if (!Audio) { display('unavailable'); return; }
+          if (!Audio) return;
           const request = ++generation;
           try {
             context = new Audio();
             output = context.createGain();
             output.gain.value = .09;
             output.connect(context.destination);
-            display('starting');
             const opening = context;
             Promise.resolve(opening.resume()).then(() => {
               if (context !== opening || request !== generation) return;
               if (document.hidden || loadingEvents.signal.aborted || opening.state !== 'running') { stop(); return; }
               beat = 0;
               nextNote = opening.currentTime + .025;
-              display('running');
               schedule();
             }).catch(() => {
-              if (context === opening) { stop(); display('unavailable'); }
+              if (context === opening) stop();
             });
-          } catch (_) { stop(); display('unavailable'); }
+          } catch (_) { stop(); }
         }
 
-        musicButton.addEventListener('click', event => {
-          if (context) { muted = true; stop(); }
-          else { muted = false; start(event.isTrusted); }
-        }, loadingListener);
         return { start, stop };
       }
       const loadingMusic = createLoadingMusic();
@@ -959,7 +940,6 @@
         clearLoadingEffects();
         toy.disabled = true;
         loadingDuck.disabled = true;
-        musicButton.disabled = true;
       }
 
       loadingDuck.addEventListener('click', event => {

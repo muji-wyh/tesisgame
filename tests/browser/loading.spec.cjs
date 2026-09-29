@@ -410,15 +410,15 @@ test('loading dance stops while hidden and reduced motion can change without los
 test('the automatic loading dance and its controls fit compact and desktop screens', async ({ page }, testInfo) => {
   await progressShell(page);
   await expectAutomaticDance(page);
+  await expect(page.locator('#loading-music')).toHaveCount(0);
   for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }, { width: 320, height: 320 }, { width: 1366, height: 768 }]) {
     await page.setViewportSize(viewport);
-    for (const selector of ['#loading-toy', '#loading-duck', '#loading-music', '#progress']) {
+    for (const selector of ['#loading-toy', '#loading-duck', '#progress']) {
       const box = await page.locator(selector).boundingBox();
       expect(box.x, selector).toBeGreaterThanOrEqual(0);
       expect(box.y, selector).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width, selector).toBeLessThanOrEqual(viewport.width);
       expect(box.y + box.height, selector).toBeLessThanOrEqual(viewport.height);
-      if (selector === '#loading-music') expect(box.height).toBeGreaterThanOrEqual(44);
     }
     expect(await page.locator('#status').evaluate(element => element.scrollHeight <= element.clientHeight)).toBe(true);
     await expectAutomaticDance(page);
@@ -426,19 +426,15 @@ test('the automatic loading dance and its controls fit compact and desktop scree
   }
 });
 
-test('loading music uses a real quiet audio clock and stays on until explicit game entry', async ({ page }, testInfo) => {
+test('loading music is enabled by default and stays on until explicit game entry', async ({ page }, testInfo) => {
   await observeLoadingAudio(page);
   await progressShell(page);
-  const music = page.getByRole('button', { name: 'Loading music', exact: true });
   const toy = page.locator('#loading-toy');
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
   await toy.dispatchEvent('click');
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
   await toy.click();
   if (!await page.evaluate(() => loadingAudioProbe.supported)) {
-    await expect(music).toHaveAttribute('data-audio-state', 'unavailable');
-    await expect(music).toHaveAttribute('aria-pressed', 'false');
-    await expect(music).toHaveText('♪ No music');
     await expect(page.locator('#loading-score')).toHaveText('2 sparkles');
     await page.evaluate(() => window.reportDownload(100, 100));
     await expect(page.locator('#loading-percent')).toHaveText('98%');
@@ -447,12 +443,12 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
     await expect(page.locator('#status')).toBeHidden({ timeout: 700 });
     expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
     await testInfo.attach('loading-music-capability.json', {
-      body: JSON.stringify({ audioContext: false, verified: 'Explicit unavailable feedback; dance and game readiness remain usable.' }),
+      body: JSON.stringify({ audioContext: false, verified: 'Dance and game readiness remain usable without audio support.' }),
       contentType: 'application/json'
     });
     return;
   }
-  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.at(-1)?.state)).toBe('running');
   await expect.poll(() => page.evaluate(() => {
     const samples = new Float32Array(256);
     loadingAudioProbe.analysers.at(-1).getFloatTimeDomainData(samples);
@@ -462,17 +458,10 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
   await page.waitForTimeout(260);
   expect(await page.evaluate(() => loadingAudioProbe.contexts[0].currentTime)).toBeGreaterThan(firstTime + .12);
   expect(await page.evaluate(() => new Set(loadingAudioProbe.notes.map(note => note.pitch)).size)).toBeGreaterThan(1);
-  await music.focus();
-  await page.keyboard.press('Enter');
-  await expect(music).toHaveAttribute('aria-pressed', 'false');
-  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts[0].state)).toBe('closed');
-  const stopped = await page.evaluate(() => loadingAudioProbe.notes.length);
+  const playing = await page.evaluate(() => loadingAudioProbe.notes.length);
   await toy.click();
-  await page.waitForTimeout(180);
-  expect(await page.evaluate(() => loadingAudioProbe.notes.length)).toBe(stopped);
-  await music.focus();
-  await page.keyboard.press('Space');
-  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.notes.length)).toBeGreaterThan(playing);
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(1);
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -484,9 +473,9 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
   const hiddenCount = await page.evaluate(() => loadingAudioProbe.contexts.length);
   await page.waitForTimeout(180);
   expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(hiddenCount);
-  await expect(music).toHaveAttribute('aria-pressed', 'false');
+  expect(await page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   await toy.click();
-  await expect(music).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.at(-1)?.state)).toBe('running');
   await page.evaluate(() => window.reportDownload(100, 100));
   await expect(page.locator('#loading-percent')).toHaveText('98%');
   await page.evaluate(() => {
@@ -497,7 +486,6 @@ test('loading music uses a real quiet audio clock and stays on until explicit ga
   await page.waitForTimeout(1000);
   await expect(page.locator('#status')).toBeVisible();
   await expectAutomaticDance(page);
-  await expect(music).toHaveAttribute('aria-pressed', 'true');
   expect(await page.evaluate(() => loadingAudioProbe.contexts.at(-1).state)).toBe('running');
   const readyAt = await page.evaluate(() => performance.now());
   await enterGame(page);
@@ -520,7 +508,8 @@ for (const ending of ['failure', 'pagehide']) test(`loading dance and music stop
   await progressShell(page);
   await page.locator('#loading-toy').click();
   const supported = await page.evaluate(() => loadingAudioProbe.supported);
-  await expect(page.locator('#loading-music')).toHaveAttribute('data-audio-state', supported ? 'running' : 'unavailable');
+  if (supported) await expect.poll(() => page.evaluate(() => loadingAudioProbe.contexts.at(-1)?.state)).toBe('running');
+  else expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(0);
   if (ending === 'pagehide') {
     await page.locator('#loading-duck').dispatchEvent('click');
     await reactionPose(page);
@@ -547,7 +536,6 @@ for (const ending of ['failure', 'pagehide']) test(`loading dance and music stop
     await page.evaluate(() => window.dispatchEvent(new Event('pageshow')));
     await expectAutomaticDance(page);
     await page.waitForTimeout(180);
-    await expect(page.locator('#loading-music')).toHaveAttribute('aria-pressed', 'false');
     expect(await page.evaluate(() => loadingAudioProbe.contexts.length)).toBe(contextCount);
     expect(await page.evaluate(() => loadingAudioProbe.contexts.every(context => context.state === 'closed'))).toBe(true);
   }
@@ -795,7 +783,7 @@ for (const input of ['touch', 'keyboard', 'mouse']) test(`ready loading playgrou
     }
     await button.tap();
   } else if (input === 'keyboard') {
-    await page.locator('#loading-music').focus();
+    await page.locator('#loading-duck').focus();
     await page.keyboard.press('Tab');
     await expect(button).toBeFocused();
     await page.keyboard.press('Enter');
