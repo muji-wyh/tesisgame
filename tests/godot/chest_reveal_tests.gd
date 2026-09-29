@@ -54,6 +54,7 @@ func _run() -> void:
 	_check_opened_ambience(data)
 	_check_opened_bounds(data)
 	_check_opening_cancel(data)
+	_check_release_commitment(data)
 	_check_hold_feedback(data)
 	_check_hold_bounds(data)
 	var effect = load("res://scripts/celebration.gd").new()
@@ -288,7 +289,7 @@ func _check_opening_cancel(data) -> void:
 	chest.cue_requested.connect(func(theme: String, cue: String, step: int) -> void:
 		cues.append([theme, cue, step]))
 	for theme in data.THEMES:
-		for release_time in [0.8, Feel.RELEASE_TIME + 0.2, Feel.OPEN_SECONDS - 0.01]:
+		for release_time in [0.8, Feel.UNLOCK_TIME, Feel.RELEASE_TIME - 0.01]:
 			chest.clear()
 			chest.reduced_motion = false
 			chest.configure_skin(data.theme(theme), data.chests)
@@ -337,6 +338,56 @@ func _check_opening_cancel(data) -> void:
 		check(chest.mode == "opened" and openings.size() == earned and chest.hold_effect_snapshot().opened_glow > 0.0,
 			theme + " cannot retract an already completed reduced-motion reward")
 		openings.clear()
+	chest.free()
+
+
+func _check_release_commitment(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	var openings: Array[String] = []
+	var releases: Array[String] = []
+	var cues: Array = []
+	chest.opened.connect(func() -> void: openings.append(chest.theme_id))
+	chest.release_reached.connect(func() -> void: releases.append(chest.theme_id))
+	chest.cue_requested.connect(func(theme: String, cue: String, step: int) -> void:
+		cues.append([theme, cue, step]))
+	for theme in data.THEMES:
+		for elapsed in [Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.24, Feel.OPEN_SECONDS - 0.01]:
+			chest.clear()
+			chest.reduced_motion = false
+			chest.configure_skin(data.theme(theme), data.chests)
+			var before_openings: int = openings.size()
+			var before_releases: int = releases.size()
+			chest.start_open(false)
+			chest._advance_animation(Feel.RELEASE_TIME - 0.001)
+			check(not chest.opening_committed() and releases.size() == before_releases,
+				theme + " remains cancellable right up to the physical lid release")
+			cues.clear()
+			chest._advance_animation(elapsed - chest.hold_effect_snapshot().opening_time)
+			var committed: Dictionary = chest.hold_effect_snapshot()
+			check(chest.opening_committed() and chest.mode == "opening" and releases.size() == before_releases + 1
+				and openings.size() == before_openings,
+				theme + " commits its opening at the physical release without saving the reward early")
+			if elapsed > Feel.RELEASE_TIME + 0.20:
+				check(not cues.any(func(item): return item[1] == "release"),
+					theme + " commits even when a stalled frame intentionally suppresses its stale release sound")
+			chest.cancel_open(true)
+			chest.cancel_open(false)
+			var released: Dictionary = chest.hold_effect_snapshot()
+			check(chest.mode == "opening" and released.opening_time == committed.opening_time
+				and released.pose_signature == committed.pose_signature and released.release_flash == committed.release_flash
+				and is_zero_approx(released.cancel_remaining),
+				theme + " cannot close, rewind or truncate its light after the lid has released")
+			chest._advance_animation(Feel.OPEN_SECONDS - released.opening_time - 0.001)
+			check(chest.mode == "opening" and openings.size() == before_openings,
+				theme + " preserves the complete flash and settling tail before awarding")
+			chest._advance_animation(0.002)
+			chest.cancel_open(true)
+			chest.finish_immediately()
+			check(chest.mode == "opened" and openings.size() == before_openings + 1
+				and releases.size() == before_releases + 1 and chest.hold_effect_snapshot().opened_glow > 0.0,
+				theme + " completes exactly once and keeps its opened glow after release")
 	chest.free()
 
 

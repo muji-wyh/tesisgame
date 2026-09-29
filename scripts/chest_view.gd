@@ -1,6 +1,7 @@
 extends Control
 
 signal opened
+signal release_reached
 signal cue_requested(theme_id: String, cue: String, step: int)
 
 const Feel = preload("res://scripts/chest_feel.gd")
@@ -504,8 +505,12 @@ func cancel_hold() -> void:
 	_fit()
 
 
+func opening_committed() -> bool:
+	return mode == "opened" or (mode == "opening" and _elapsed >= Feel.RELEASE_TIME)
+
+
 func cancel_open(animate_return: bool = true) -> void:
-	if mode != "opening":
+	if mode != "opening" or opening_committed():
 		return
 	var body_pose: Dictionary = _physical_pose.duplicate(true)
 	var shift_x: float = _body_shift_x
@@ -1272,7 +1277,12 @@ func _advance_animation(delta: float) -> void:
 	_tap_remaining = maxf(0.0, _tap_remaining - delta)
 	_cancel_remaining = maxf(0.0, _cancel_remaining - delta)
 	if mode == "opening":
+		var was_committed: bool = opening_committed()
 		_elapsed = minf(OPEN_SECONDS, _elapsed + delta)
+		if not was_committed and opening_committed():
+			# Input completes with the visible release, independently of audio
+			# cues that may be skipped after a stalled or interrupted frame.
+			release_reached.emit()
 		if _opening_cues_enabled:
 			for event in _opening_timeline:
 				if mode != "opening" or not _opening_cues_enabled:

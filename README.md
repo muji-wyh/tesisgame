@@ -480,9 +480,10 @@ all four choices reachable without moving the playground or bottom strips.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short press compresses the lock or body immediately and releases with a 120 ms
-return. Keep holding for **5 seconds**: **1.2 seconds** of initial pressure followed
-by **3.8 seconds** of buildup, opening and settling. Release at any point before
-completion to cancel and reset progress. Three stars and a progress arc fill through the buildup, completing
+return. The full performance lasts **5 seconds**. Keep holding through the initial
+pressure and buildup until the lid releases and the light flashes, about **3.36
+seconds** after pressing. You can then let go while the remaining **1.64 seconds**
+of opening and settling finish automatically. Three stars and a progress arc fill through the buildup, completing
 at the lid release. Phase text and percentages are available to screen readers
 without a visible label. Five material beats begin 80 ms into the hold, followed
 by fifteen opening beats. Their spacing tightens from 320 ms to a 60 ms roll,
@@ -498,11 +499,12 @@ bloom, seven beams and an outward light wave. The flash peaks within 45 ms and
 fades over 1.02 seconds as the chest settles; the progress crown fades immediately
 to make room for it. Each world keeps its own material motion and sound. The art fit stays
 fixed throughout.
-Releasing or dragging before completion cancels immediately, including while the
-lid is opening or settling; a fresh press interrupts the return and starts from
-zero. Opening More or hiding the page cancels the performance and preserves the
-unopened chest. Reduced motion keeps readable progress and shows the saved result
-directly after the initial 1.2-second hold.
+Releasing or dragging before the lid releases cancels immediately; a fresh press
+interrupts the return and starts from zero. Once the lid releases, letting go
+keeps its motion, light and sound running. Opening More or hiding the page cancels
+an unreleased chest, or silently finishes one whose lid has already released.
+Reduced motion keeps readable progress and shows the saved result directly after
+the initial 1.2-second hold.
 Browser accessibility exposes progress without repeated live announcements.
 Changing worlds cannot reroll an opening or alter an earned fragment.
 
@@ -527,7 +529,7 @@ flight or larger medal-completion celebration. A complete season keeps its
 saved progress when future chests open.
 
 Rewards are saved before the opened result appears. Hiding the page cancels an
-unfinished opening. Explicitly starting a new round still settles the earned
+unreleased chest and silently saves an already released one. Explicitly starting a new round still settles the earned
 claim once. Reduced motion shows the saved result immediately after its shorter hold.
 If saving fails, **Retry saving** retries the same piece instead of rerolling,
 pretending it was saved, or silently discarding it.
@@ -596,7 +598,7 @@ An embedding site must also allow `microphone` in its iframe permissions.
 | Control | Action |
 |---|---|
 | D-pad / left stick | Move focus between available controls. |
-| A | Activate the focused control; hold the eye to peek, or keep holding a chest until it finishes opening. Release early to cancel. |
+| A | Activate the focused control; hold the eye to peek, or hold a chest until its lid releases. Let go before the lid releases to cancel. |
 | B | Cancel the selected card, exit voice play, or go back. |
 | X | Use one of the round's three hints and focus a card in the suggested pair. |
 | LB / RB | Change the game season without restarting the round. |

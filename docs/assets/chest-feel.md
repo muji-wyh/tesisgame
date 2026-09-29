@@ -1,11 +1,12 @@
 # Eight-world chest performance
 
-The chest requires a continuous 5-second hold: 1.2 seconds of initial pressure
-followed by a 3.8-second opening performance. The lid releases 3.36 seconds after
-the press, leaving 1.64 seconds for its opening, light and settling. Releasing at
-any point before completion cancels the performance, stops its sounds and resets
-progress while preserving the unopened chest. Reward selection and the save
-format are unchanged.
+The chest uses a 5-second performance: 1.2 seconds of initial pressure followed
+by 3.8 seconds of buildup, opening and settling. Keep holding until the lid
+releases 3.36 seconds after the press. That visible release completes input;
+letting go preserves the remaining 1.64 seconds of motion, light and sound.
+Releasing earlier cancels the performance, stops its sounds and resets progress
+while preserving the unopened chest. Reward selection and the save format are
+unchanged.
 
 ## Motion and timing
 
@@ -58,19 +59,26 @@ logic through separate step helpers.
 | `press` | Pointer/key/controller hold starts | Contact sound |
 | `hold_pulse` | Hold +0.08 s through +1.12 s | Five weighted material beats |
 | `charge_step` | 1/3, 2/3, 3/3 of elapsed hold-to-release time | Silent progress stars |
-| `cancel` | Release or drag any time before completion | Stop all performance sounds, brief return sound |
+| `cancel` | Release or drag before the lid releases | Stop all performance sounds, brief return sound |
 | `opening` | Initial pressure completes at 1.2 s; hold remains active | Continue pressure bed without restarting |
 | `tension_pulse` | Opening +0.11 s through +1.86 s | Fifteen accelerating material beats |
 | `anticipation` | Opening +1.94 s | Continuous rising bridge over the pressure bed |
 | `unlock` | Opening +2.08 s (3.28 s total) | Lock/core sound |
-| `release` | Opening +2.16 s (3.36 s total) | Lid, material sound, local theme flash and twelve light streaks |
+| `release` | Opening +2.16 s (3.36 s total) | Complete input; lid, material sound, local theme flash and twelve light streaks |
 | `settle` | Opening +2.95 s (4.15 s total) | Material landing sound |
-| `opened` | Opening +3.8 s (5 s total) while still held | Save progress before the opened result |
+| `opened` | Opening +3.8 s (5 s total), with no further hold required | Save progress before the opened result |
 
 A frame stall consumes expired beats without playing a backlog. A rising bridge
 more than 80 ms late is skipped; release still stops the bed. Fast-forward and
-explicit new-round settlement remain silent. Backgrounding cancels unfinished
-openings. Reduced motion retains the initial 1.2-second hold and skips the buildup.
+explicit new-round settlement remain silent. Backgrounding cancels unreleased
+chests and silently settles already released ones. Reduced motion retains the
+initial 1.2-second hold and skips the buildup.
+
+`release_reached` marks the irreversible input boundary independently of filtered
+sound cues. It is emitted once when the clock crosses the lid-release time, even
+if a stalled frame skips that sound. The UI releases input ownership before
+disabling the chest button, so its resulting button-up cannot close the chest.
+`opened` continues to mark the end of the full physical performance.
 
 The success sound is outside the physical clock: `game_ui.gd` calls it only after
 the reward save succeeds. An explicit save retry can acknowledge the newly saved

@@ -495,6 +495,7 @@ func _build_controls() -> void:
 	_stage.add_child(chest)
 	chest.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest.opened.connect(_on_chest_opened)
+	chest.release_reached.connect(_on_chest_released)
 	chest.cue_requested.connect(_on_chest_cue)
 	chest_button = Button.new()
 	chest_button.text = ""
@@ -1501,8 +1502,8 @@ func _refresh() -> void:
 	failure_button.visible = model.phase == "lost"
 	failure_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 26, 3))
 	_failure_sparkle.accent = palette.accent
-	chest_button.disabled = model.chest_state == "opened" or _save_error
-	chest_button.tooltip_text = "Hold to open the treasure chest"
+	chest_button.disabled = model.chest_state == "opened" or chest.opening_committed() or _save_error
+	chest_button.tooltip_text = "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
 	if won:
@@ -1513,7 +1514,7 @@ func _refresh() -> void:
 		_title.text = "You did it!"
 		_caption.text = "Hold to open your chest!"
 		if model.chest_state == "opening":
-			_caption.text = "Keep holding to open. Release to cancel."
+			_caption.text = "Your chest is open. You can let go!" if chest.opening_committed() else "Keep holding to open. Release to cancel."
 		elif model.chest_state == "opened":
 			_title.text = "Chest opened!"
 			_caption.text = "Ready for another adventure?"
@@ -2108,6 +2109,17 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 	# A second screen-centred celebration would produce a later visual climax.
 
 
+func _on_chest_released() -> void:
+	if model.chest_state != "opening" or not chest.opening_committed():
+		return
+	# Clear the gesture before disabling its button can emit button_up.
+	_holding_chest = false
+	_hold_elapsed = 0.0
+	_hold_origin_frame = -1
+	_finish_chest_drag()
+	_refresh()
+
+
 func _on_chest_opened() -> void:
 	if chest.mode != "opened":
 		return
@@ -2122,6 +2134,16 @@ func _on_chest_opened() -> void:
 	audio.finish_chest_motion()
 	_publish_chest_charge()
 	_commit_fragment()
+
+
+func _settle_released_chest() -> void:
+	if model.chest_state != "opening" or not chest.opening_committed():
+		return
+	var was_settling: bool = _settling_chest
+	_settling_chest = true
+	audio.stop_chest_performance()
+	chest.finish_immediately()
+	_settling_chest = was_settling
 
 
 func _commit_fragment(explicit_retry: bool = false) -> void:
@@ -2180,6 +2202,7 @@ func on_page_hidden() -> void:
 	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
+	_settle_released_chest()
 	_finish_chest_drag()
 	_end_collection_drag(false)
 	audio.halt()
@@ -2768,6 +2791,11 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 	_hold_elapsed = 0.0
 	_hold_origin_frame = -1
 	var was_opening: bool = model.chest_state == "opening"
+	if was_opening and chest != null and chest.opening_committed():
+		# The visible release completes input. Its motion, light and sounds
+		# continue even if a pointer/key is released or a controller disconnects.
+		_finish_chest_drag()
+		return
 	if chest != null:
 		if was_opening:
 			chest.cancel_open(animate_return)
@@ -2965,6 +2993,7 @@ func _show_collection() -> void:
 	_stop_feedback_animations()
 	_cancel_loss_play()
 	_cancel_chest_hold()
+	_settle_released_chest()
 	_finish_chest_drag()
 	_end_collection_drag(false)
 	_collection_dragged = false

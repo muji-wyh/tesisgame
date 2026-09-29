@@ -159,14 +159,14 @@ func _run() -> void:
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
 	_check_cancelled(app, 0, "Releasing just after confirmation")
-	for release_at in [2.0, 3.5, Feel.HOLD_SECONDS + Feel.OPEN_SECONDS - 0.01]:
+	for release_at in [2.0, Feel.HOLD_SECONDS + Feel.RELEASE_TIME - 0.01]:
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
 		app.chest._advance_animation(release_at - Feel.HOLD_SECONDS)
 		app._advance_ui(0.0)
 		check(app.model.chest_state == "opening" and app._holding_chest and _pieces(app) == 0,
-			"Holding for %.2f seconds still requires release-aware completion" % release_at)
+			"Holding for %.2f seconds still allows cancellation before the lid releases" % release_at)
 		app.chest_button.button_up.emit()
 		_check_cancelled(app, 0, "Releasing after %.2f seconds" % release_at)
 	# A second press during the visual return must not be blocked or inherit
@@ -532,9 +532,161 @@ func _run() -> void:
 	await process_frame
 	app.free()
 	await process_frame
+	await _check_release_commitment(directory)
 	await _check_gameplay_pixels(directory)
 	print("Chest charge flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_release_commitment(directory: String) -> void:
+	var storage := BrowserStorage.new()
+	var app = load("res://scenes/main.tscn").instantiate()
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(
+		directory + "/committed.cfg", directory + "/committed-legacy.cfg", storage)
+	app.playroom_save_path = directory + "/committed-room.cfg"
+	app._mode_id = "match"
+	root.add_child(app)
+	await process_frame
+	await process_frame
+	app.set_reduced_motion(false)
+	app.audio.set_muted(false)
+	var cues: Array = []
+	app.chest.cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
+		cues.append([theme_id, cue, step]))
+	var seed_value: int = 700
+	for release_time in [Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.24, Feel.OPEN_SECONDS - 0.01]:
+		seed_value += 1
+		_win(app, seed_value)
+		var pieces: int = _pieces(app)
+		var writes: int = storage.writes
+		_begin(app)
+		app._advance_ui(Feel.HOLD_SECONDS)
+		app.chest.set_process(false)
+		app.chest._advance_animation(Feel.RELEASE_TIME - 0.001)
+		check(app._holding_chest and not app.chest.opening_committed() and _pieces(app) == pieces,
+			"The gesture remains cancellable one millisecond before its physical release")
+		cues.clear()
+		app.chest._advance_animation(release_time - app.chest.hold_effect_snapshot().opening_time)
+		var committed: Dictionary = app.chest.hold_effect_snapshot()
+		var pending: Dictionary = app._pending_fragment.duplicate(true)
+		check(not app._holding_chest and app.chest.opening_committed() and app.model.chest_state == "opening"
+			and not pending.is_empty() and _pieces(app) == pieces and storage.writes == writes,
+			"The physical lid release frees the held gesture while retaining its unclaimed reward")
+		if release_time > Feel.RELEASE_TIME + 0.20:
+			check(not cues.any(func(item): return item[1] == "release"),
+				"A stale release accent is suppressed without suppressing the irreversible state transition")
+		app.chest_button.button_up.emit()
+		var touch_release := InputEventScreenTouch.new()
+		touch_release.pressed = false
+		app._chest_input(touch_release)
+		app._end_chest_hold()
+		var released: Dictionary = app.chest.hold_effect_snapshot()
+		check(app.model.chest_state == "opening" and app.chest.opening_committed()
+			and released.opening_time == committed.opening_time and released.pose_signature == committed.pose_signature
+			and released.release_flash == committed.release_flash and app._pending_fragment == pending
+			and not cues.any(func(item): return item[1] == "cancel"),
+			"Mouse and touch release after %.2f seconds preserve the full opening tail and light" % (Feel.HOLD_SECONDS + release_time))
+		app._on_chest_opened()
+		app._advance_ui(0.0)
+		check(_pieces(app) == pieces and storage.writes == writes and app.model.chest_state == "opening",
+			"A completion callback before the physical tail finishes cannot claim the committed reward early")
+		app.chest._advance_animation(Feel.OPEN_SECONDS - released.opening_time - 0.001)
+		check(app.model.chest_state == "opening" and _pieces(app) == pieces and storage.writes == writes,
+			"Letting go does not shorten the five-second opening performance")
+		app.chest._advance_animation(0.002)
+		check(app.model.chest_state == "opened" and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
+			"The released opening saves once at its original deadline and keeps its themed glow")
+		app.chest_button.button_up.emit()
+		app.chest.cancel_open(true)
+		app._on_chest_opened()
+		app.chest.finish_immediately()
+		app.chest._advance_animation(0.5)
+		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1
+			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
+			"Repeated releases and old callbacks cannot retract or duplicate the opened reward")
+
+	for interruption in ["background", "More", "native focus"]:
+		seed_value += 1
+		_win(app, seed_value)
+		var pieces: int = _pieces(app)
+		var writes: int = storage.writes
+		_begin(app)
+		app._advance_ui(Feel.HOLD_SECONDS)
+		app.chest.set_process(false)
+		app.chest._advance_animation(Feel.RELEASE_TIME + 0.01)
+		check(app.chest.opening_committed() and not app._holding_chest,
+			interruption + " exercises an already released lid before the save deadline")
+		cues.clear()
+		match interruption:
+			"background": app.on_page_hidden()
+			"More": app._show_collection()
+			"native focus": app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+		check(app.model.chest_state == "opened" and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+			and cues.is_empty() and not app.audio._chest_rewarded and not app.audio.chest_charge.playing
+			and app.audio._chest_players.all(func(player): return not player.playing),
+			interruption + " silently saves the committed opening without replaying its remaining sounds")
+		match interruption:
+			"background": app.on_page_visible()
+			"More": app._hide_collection()
+			"native focus": app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)
+		app.chest_button.button_up.emit()
+		app._on_chest_opened()
+		app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1 and cues.is_empty()
+			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
+			"Returning from " + interruption + " retains the saved light without a late sound or duplicate reward")
+
+	for interruption in ["background", "More"]:
+		seed_value += 1
+		_win(app, seed_value)
+		var pieces: int = _pieces(app)
+		var writes: int = storage.writes
+		storage.fail_write = true
+		_begin(app)
+		app._advance_ui(Feel.HOLD_SECONDS)
+		app.chest.set_process(false)
+		app.chest._advance_animation(Feel.RELEASE_TIME + 0.01)
+		var pending: Dictionary = app._pending_fragment.duplicate(true)
+		if interruption == "background":
+			app.on_page_hidden()
+		else:
+			app._show_collection()
+		check(app._save_error and app.model.chest_state == "opened" and app._pending_fragment == pending
+			and _pieces(app) == pieces and storage.writes == writes and not app.audio._chest_rewarded,
+			interruption + " preserves the exact committed reward when persistence fails")
+		if interruption == "background":
+			app.on_page_visible()
+		else:
+			app._hide_collection()
+		app._retry_reward_save()
+		check(app._save_error and _pieces(app) == pieces and storage.writes == writes,
+			"An unsuccessful retry cannot discard or duplicate the committed reward")
+		storage.fail_write = false
+		app._retry_reward_save()
+		app._retry_reward_save()
+		app._on_chest_opened()
+		check(not app._save_error and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+			and app.audio._chest_rewarded, "An explicit successful retry saves the same committed reward once")
+
+	seed_value += 1
+	_win(app, seed_value)
+	var pieces: int = _pieces(app)
+	var writes: int = storage.writes
+	_begin(app)
+	app._advance_ui(Feel.HOLD_SECONDS)
+	app.chest.set_process(false)
+	app.chest._advance_animation(Feel.RELEASE_TIME)
+	check(app.new_round(seed_value + 1) and app.model.phase == "waiting"
+		and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
+		"Explicitly skipping the committed tail still saves its single earned reward before the next round")
+	app._on_chest_opened()
+	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+	check(_pieces(app) == pieces + 1 and storage.writes == writes + 1,
+		"Late callbacks from the skipped opening cannot award the next round")
+	app.audio.halt()
+	app.free()
+	await process_frame
 
 
 func _body_center(chest) -> Vector2:

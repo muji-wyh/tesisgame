@@ -1056,10 +1056,12 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
 
     await hold();
     try {
-      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+      await expect(progress).toHaveAttribute('data-phase', 'release', { timeout: 7000 });
     } finally {
       await release();
     }
+    expect((await roomState(page)).medals, 'Releasing at the flash precedes the final reward save').toBe(before);
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
     const saved = (await roomState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
@@ -1069,7 +1071,7 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
   });
 }
 
-test('held touch cancels during chest opening and a fresh hold saves one piece', async ({ page, browserName }) => {
+test('held touch cancels before the flash and releasing at the flash saves one piece', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'Trusted held touch uses Chromium CDP.');
   const errors = watchErrors(page);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -1077,6 +1079,16 @@ test('held touch cancels during chest opening and a fresh hold saves one piece',
   await ready(page);
   const chest = resultScreenPoint(await winWithTouch(page));
   const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+  await page.evaluate(() => {
+    window.chestTouchReleases = [];
+    window.addEventListener('touchend', event => {
+      window.chestTouchReleases.push({
+        trusted: event.isTrusted,
+        phase: document.getElementById('chest-progress').getAttribute('data-phase'),
+        saved: localStorage.getItem('wordBuddies.medalProgress') || ''
+      });
+    }, true);
+  });
   const client = await page.context().newCDPSession(page);
   const hold = () => client.send('Input.dispatchTouchEvent', {
     type: 'touchStart', touchPoints: [{ id: 1, ...chest }]
@@ -1101,10 +1113,16 @@ test('held touch cancels during chest opening and a fresh hold saves one piece',
 
     await hold();
     try {
-      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+      await expect(progress).toHaveAttribute('data-phase', 'release', { timeout: 7000 });
     } finally {
       await release();
     }
+    const releases = await page.evaluate(() => window.chestTouchReleases);
+    expect(releases).toHaveLength(2);
+    expect(releases[1], 'The real touch ends at the flash before the reward is saved').toEqual({
+      trusted: true, phase: 'release', saved: before
+    });
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
     const saved = (await roomState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
