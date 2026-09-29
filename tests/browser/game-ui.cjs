@@ -393,8 +393,8 @@ async function rendered(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 }
 
-async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '' } = {}) {
-  await page.addInitScript(({ fingerprintBuffers, phaseSelector }) => {
+async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '', trackSourceLifecycle = false } = {}) {
+  await page.addInitScript(({ fingerprintBuffers, phaseSelector, trackSourceLifecycle }) => {
     const NativeContext = window.AudioContext || window.webkitAudioContext;
     window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0, playbacks: [] };
     if (!NativeContext) return;
@@ -427,15 +427,36 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
         const createSource = context.createBufferSource.bind(context);
         context.createBufferSource = () => {
           const source = createSource(), start = source.start.bind(source);
+          let playback;
+          if (trackSourceLifecycle) {
+            const stop = source.stop.bind(source);
+            source.stop = (...values) => {
+              const at = performance.now(), contextTime = context.currentTime;
+              const result = stop(...values);
+              if (playback) {
+                playback.stoppedAt = at;
+                playback.stopContextTime = contextTime;
+                playback.stopScheduledAt = values[0] || contextTime;
+              }
+              return result;
+            };
+            source.addEventListener('ended', () => {
+              if (playback) playback.endedAt = performance.now();
+            });
+          }
           source.start = (...values) => {
+            const at = performance.now(), contextTime = context.currentTime;
             const result = start(...values);
             window.audioObservation.starts++;
-            if (source.buffer) window.audioObservation.playbacks.push({ duration: source.buffer.duration,
-              at: performance.now(), scheduledAt: values[0] || context.currentTime,
-              sampleRate: source.buffer.sampleRate, channels: source.buffer.numberOfChannels,
-              loop: source.loop, contextState: context.state, playbackRate: source.playbackRate.value,
-              phase: phaseSelector ? document.querySelector(phaseSelector)?.dataset.phase || '' : '',
-              ...fingerprint(source.buffer) });
+            if (source.buffer) {
+              playback = { duration: source.buffer.duration,
+                at, contextTime, scheduledAt: values[0] || contextTime,
+                sampleRate: source.buffer.sampleRate, channels: source.buffer.numberOfChannels,
+                loop: source.loop, contextState: context.state, playbackRate: source.playbackRate.value,
+                phase: phaseSelector ? document.querySelector(phaseSelector)?.dataset.phase || '' : '',
+                ...fingerprint(source.buffer) };
+              window.audioObservation.playbacks.push(playback);
+            }
             return result;
           };
           return source;
@@ -445,7 +466,7 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
     });
     if (window.AudioContext) window.AudioContext = WrappedContext;
     else window.webkitAudioContext = WrappedContext;
-  }, { fingerprintBuffers, phaseSelector });
+  }, { fingerprintBuffers, phaseSelector, trackSourceLifecycle });
 }
 
 async function visibleColorCount(page, png) {

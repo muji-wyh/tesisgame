@@ -49,7 +49,7 @@ func _win(app, seed_value: int) -> void:
 			app.cards[card.word.id + ":image"].pressed.emit()
 			app._continue_match()
 	check(app.model.phase == "won" and app.model.chest_state == "closed",
-		"Three real word-picture matches earn a closed chest")
+		"Five real word-picture matches earn a closed chest")
 
 
 func _begin(app) -> void:
@@ -71,6 +71,11 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 	app._advance_ui(2.0)
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " cannot complete later from an old frame")
+	var next_player: int = app.audio._chest_next_player
+	app._on_chest_cue(app.chest.theme_id, "tension_pulse", 1)
+	app.audio.set_chest_tension(1.0)
+	check(app.audio._chest_next_player == next_player and not app.audio.chest_charge.playing,
+		reason + " rejects a late rhythm pulse and progress update from the cancelled performance")
 
 
 func _run() -> void:
@@ -324,13 +329,20 @@ func _run() -> void:
 	_win(app, 86)
 	_begin(app)
 	app._advance_ui(1.21)
+	app.chest._advance_animation(float(Feel.PULSE_TIMES[0]) + 0.001)
+	check(app.audio._chest_last_tension_pulse == 1 and app.audio.chest_charge.playing,
+		"Background interruption exercises an actual audible rhythm after its first synchronized kick")
 	cues.clear()
 	app.on_page_hidden()
 	check(_pieces(app) == 2 and app.model.chest_state == "opened" and cues.is_empty()
 		and app.audio._chest_phase == "idle", "Background completion saves once without replaying opening or reward sounds")
 	app.on_page_visible()
-	app.chest._advance_animation(2.0)
-	check(_pieces(app) == 2 and app.audio._chest_phase == "idle", "Foregrounding does not replay the completed performance")
+	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+	app._on_chest_cue("spring", "tension_pulse", 2)
+	app.audio.set_chest_tension(1.0)
+	check(_pieces(app) == 2 and app.audio._chest_phase == "idle" and cues.is_empty()
+		and not app.audio.chest_charge.playing,
+		"Foregrounding and stale rhythm callbacks do not replay the completed performance")
 	_win(app, 87)
 	_begin(app)
 	app._advance_ui(1.21)

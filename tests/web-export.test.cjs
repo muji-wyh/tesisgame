@@ -306,11 +306,69 @@ test('the generated startup patch rejects missing, duplicate, and changed templa
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   assert.throws(() => patchWebEngine('unrecognized engine'), /Godot Web startup patch/);
   assert.throws(() => patchWebEngine(startupFixture.repeat(2)), /Godot Web startup patch/);
-  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)']) {
+  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)']) {
     assert.ok(startupFixture.includes(marker));
     assert.throws(() => patchWebEngine(startupFixture.replace(marker, `${marker} changed`)), /Godot Web startup patch/);
   }
   assert.throws(() => patchWebEngine(patchWebEngine(startupFixture)), /Godot Web startup patch/);
+});
+
+test('looped WebAudio samples restore their pitch before a replacement source can render', () => {
+  const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
+  function restartFixture(source, pitch, rate, paused = false) {
+    const sources = [], starts = [], positionMessages = [];
+    const buffer = { duration: 0.8 };
+    const destination = {};
+    const context = {
+      currentTime: 17,
+      createBufferSource() {
+        const listeners = new Map();
+        const source = {
+          playbackRate: { value: 1 }, connections: [], disconnected: false,
+          addEventListener(name, callback) { listeners.set(name, callback); },
+          removeEventListener(name) { listeners.delete(name); },
+          disconnect() { this.disconnected = true; },
+          connect(node) { this.connections.push(node); },
+          start(time, offset) { starts.push({ rate: this.playbackRate.value, time, offset }); },
+          ended() { listeners.get('ended')?.(); }
+        };
+        sources.push(source);
+        return source;
+      }
+    };
+    const sandbox = { GodotAudio: { ctx: context } };
+    require('node:vm').runInNewContext(source, sandbox);
+    const node = Object.assign(Object.create(sandbox.SampleNode.prototype), {
+      _source: context.createBufferSource(), _onended: null,
+      _sampleNodeBuses: new Map([[0, { getInputNode: () => destination }]]),
+      _positionWorklet: { port: { postMessage: message => positionMessages.push(message.type) } },
+      _playbackRate: rate, _pitchScale: pitch, startTime: 0, offset: 0.125,
+      pauseTime: paused ? 0.3 : 0, isPaused: paused, isStarted: true,
+      getSample: () => ({ getAudioBuffer: () => buffer, loopMode: 'forward' })
+    });
+    node._addEndedListener();
+    if (paused) node._unpause();
+    else sources[0].ended();
+    assert.equal(sources.length, 2, 'A single loop or resume replaces exactly one source');
+    assert.equal(sources[0].disconnected, true);
+    assert.equal(sources[1].buffer, buffer);
+    assert.deepEqual(sources[1].connections, [destination, node._positionWorklet]);
+    assert.deepEqual(positionMessages, ['clear']);
+    assert.equal(starts[0].offset, paused ? 0.425 : 0.125);
+    assert.equal(node.isStarted, true);
+    assert.equal(node.isPaused, false);
+    return starts[0].rate;
+  }
+  // Establish the engine regression using its independent source snapshot:
+  // the new source starts at 1 even while the stored pitch is already 1.85.
+  assert.equal(restartFixture(startupFixture, 1.85, 1), 1);
+  const patched = patchWebEngine(startupFixture);
+  for (const [pitch, rate] of [[0.8, 1], [1.85, 1], [1.55, 0.5]]) {
+    for (const paused of [false, true]) {
+      assert.equal(restartFixture(patched, pitch, rate, paused), pitch * rate,
+        'Playback rate must be correct in start(), before any later game frame');
+    }
+  }
 });
 
 test('streaming and fallback compilation failures reach initialization with the original cause', async () => {
@@ -486,4 +544,15 @@ function makeModuleConfig(response) {
 				}
 
 var IDBFS = { dbs: {}, DB_VERSION: 21, DB_STORE_NAME: 'FILE_DATA', getDB:(name,callback)=>{var db=IDBFS.dbs[name];if(db){return callback(null,db)}var req;try{req=IDBFS.indexedDB().open(name,IDBFS.DB_VERSION)}catch(e){return callback(e)}if(!req){return callback("Unable to connect to IndexedDB")}req.onupgradeneeded=e=>{var db=e.target.result;var transaction=e.target.transaction;var fileStore;if(db.objectStoreNames.contains(IDBFS.DB_STORE_NAME)){fileStore=transaction.objectStore(IDBFS.DB_STORE_NAME)}else{fileStore=db.createObjectStore(IDBFS.DB_STORE_NAME)}if(!fileStore.indexNames.contains("timestamp")){fileStore.createIndex("timestamp","timestamp",{unique:false})}};req.onsuccess=()=>{db=req.result;IDBFS.dbs[name]=db;callback(null,db)};req.onerror=e=>{callback(e.target.error);e.preventDefault()}} };
+
+var SampleNode = class SampleNode {
+getPlaybackRate(){return this._playbackRate}getPitchScale(){return this._pitchScale}getOutputNode(){return this._source}
+restart(){this.isPaused=false;this.pauseTime=0;this._resetSourceStartTime();this._restart()}
+connect(node){return this.getOutputNode().connect(node)}
+_resetSourceStartTime(){this._sourceStartTime=GodotAudio.ctx.currentTime}
+_syncPlaybackRate(){this._source.playbackRate.value=this.getPlaybackRate()*this.getPitchScale()}
+_restart(){if(this._source!=null){this._source.disconnect()}this._source=GodotAudio.ctx.createBufferSource();this._source.buffer=this.getSample().getAudioBuffer();for(const sampleNodeBus of this._sampleNodeBuses.values()){this.connect(sampleNodeBus.getInputNode())}this._addEndedListener();const pauseTime=this.isPaused?this.pauseTime:0;if(this._positionWorklet!=null){this._positionWorklet.port.postMessage({type:"clear"});this._source.connect(this._positionWorklet)}this._source.start(this.startTime,this.offset+pauseTime);this.isStarted=true}
+_unpause(){this._restart();this.isPaused=false;this.pauseTime=0}
+_addEndedListener(){if(this._onended!=null){this._source.removeEventListener("ended",this._onended)}const self=this;this._onended=_=>{if(self.isPaused){return}switch(self.getSample().loopMode){case"disabled":self.stop();break;case"forward":case"backward":self.restart();break;default:}};this._source.addEventListener("ended",this._onended)}
+};
 `;

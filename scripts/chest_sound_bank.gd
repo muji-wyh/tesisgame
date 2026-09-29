@@ -31,7 +31,7 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	# The authored Foley assets contain the more detailed leaf/hinge/air layers.
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
-	var duration: float = 0.36 if cue == "charge" else (0.42 if cue == "reward" else 0.2)
+	var duration: float = 0.64 if cue == "charge" else (0.42 if cue == "reward" else 0.2)
 	var frames: int = roundi(duration * SAMPLE_RATE)
 	var samples := PackedByteArray()
 	samples.resize(frames * 2)
@@ -43,15 +43,21 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		var time: float = float(index) / SAMPLE_RATE
 		filtered += float(profile[2]) * (rng.randf_range(-1.0, 1.0) - filtered)
 		var envelope: float = minf(time / 0.004, 1.0) * exp(-time * 18.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.024), 1.0)
+		if cue == "charge":
+			# Keep cold-cache pressure sustained too. All rhythmic attacks come
+			# from the shared pulse events, never from this texture's loop seam.
+			envelope = minf(time / 0.004, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.008), 1.0)
 		var phase: float = TAU * base * time
-		if theme == "candy":
+		if theme == "candy" and cue != "charge":
 			phase += TAU * 440.0 * time * time
 		elif theme == "space":
 			phase += 0.65 * sin(TAU * 43.0 * time)
 		elif theme == "jungle":
 			phase += 1.1 * sin(TAU * 27.0 * time)
-		var body: float = sin(phase) + 0.28 * sin(phase * (2.83 if theme == "winter" else 2.71)) * exp(-time * 20.0)
+		var body: float = sin(phase) + 0.28 * sin(phase * (2.83 if theme == "winter" else 2.71)) * (1.0 if cue == "charge" else exp(-time * 20.0))
 		var sample: float = (body * 0.25 + filtered * float(profile[1])) * envelope
+		if cue == "charge":
+			sample *= 0.64
 		samples.encode_s16(index * 2, roundi(clampf(sample, -0.75, 0.75) * 32767.0))
 	var stream := AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS

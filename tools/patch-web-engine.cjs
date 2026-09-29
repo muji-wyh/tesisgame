@@ -1,5 +1,5 @@
 // Godot 4.7.1 release export template fixes. Keep these anchors exact: an engine
-// upgrade must be reviewed, not silently packaged with disconnected startup promises.
+// upgrade must be reviewed, not silently packaged with broken startup or audio.
 const patches = [
   {
     name: "preserve fetched response while tracking download progress",
@@ -51,6 +51,13 @@ const patches = [
 		return response;
 	}
 `
+  },
+  {
+    name: "preserve playback pitch when a WebAudio sample restarts",
+    // A loop's ended callback replaces the source outside the game frame.
+    // Restore its rate before start(), rather than waiting for the next frame.
+    before: `_restart(){if(this._source!=null){this._source.disconnect()}this._source=GodotAudio.ctx.createBufferSource();this._source.buffer=this.getSample().getAudioBuffer();`,
+    after: `_restart(){if(this._source!=null){this._source.disconnect()}this._source=GodotAudio.ctx.createBufferSource();this._source.buffer=this.getSample().getAudioBuffer();this._syncPlaybackRate();`
   },
   {
     name: "WASM callback rejection bridge",

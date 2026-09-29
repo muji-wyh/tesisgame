@@ -55,6 +55,8 @@ var _cue_log: Array[Dictionary] = []
 var _feel: Dictionary = Feel.profile("spring")
 var _crystal_cavity: Node2D
 var _animation_origin_frame: int = -1
+var _pulse_step: int = 0
+var _pulse_started_at: float = 0.0
 
 
 func _ready() -> void:
@@ -195,7 +197,7 @@ func _fit() -> void:
 	var center := Vector2(size.x * 0.5, safe_top + available_height * 0.54)
 	var hold: Vector2 = _hold_pose_state()
 	var pose_time: float = _elapsed if mode in ["opening", "opened"] else _charge_time
-	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"])
+	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"], _pulse_clock())
 	if reduced_motion:
 		_physical_pose = {"offset": Vector2.ZERO, "scale": Vector2.ONE, "rotation": 0.0}
 	var offset: Vector2 = _physical_pose.offset * _bounds.size.x * _fit_scale
@@ -254,7 +256,7 @@ func _draw_charge() -> void:
 	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
 	var release: float = clampf((_elapsed - Feel.RELEASE_TIME) / RELEASE_SECONDS, 0.0, 1.0) if releasing else 0.0
 	var alpha: float = 1.0 - release if mode == "opening" else 1.0
-	var pulse: float = Feel.pulse_strength(_elapsed) if mode == "opening" else 0.0
+	var pulse: float = Feel.pulse_strength(_pulse_clock())
 	# A crown of three stars keeps every milestone above the chest and reward.
 	var start: float = PI
 	var sweep: float = PI
@@ -344,7 +346,20 @@ func performance_phase() -> String:
 
 
 func tension_progress() -> float:
-	return Feel.tension(_elapsed) if mode == "opening" else 0.0
+	if mode == "opening":
+		return Feel.tension(_elapsed)
+	return Feel.tension((hold_progress - 1.0) * Feel.HOLD_SECONDS) if _hold_active else 0.0
+
+
+func _pulse_clock() -> float:
+	if mode != "opening" or not _opening_cues_enabled or _pulse_step <= 0 or _elapsed >= Feel.ANTICIPATION_TIME:
+		return -1.0
+	var age: float = _elapsed - _pulse_started_at
+	if age >= Feel.pulse_duration(_pulse_step - 1):
+		return -1.0
+	# Begin the kick on the frame that actually sounds the beat. Slow frames
+	# must not start an already-decayed kick or invent a skipped later beat.
+	return float(Feel.PULSE_TIMES[_pulse_step - 1]) + age
 
 
 func performance_status() -> String:
@@ -366,7 +381,8 @@ func _hold_pose_state() -> Vector2:
 	if _cancel_remaining > 0.0:
 		var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 		return Vector2(_cancel_pressure, _cancel_progress) * returning
-	return Vector2(0.30 + hold_progress * 0.12, performance_progress()) if _hold_active else Vector2.ZERO
+	var energy: float = tension_progress()
+	return Vector2(0.30 + energy * 0.70, energy) if _hold_active else Vector2.ZERO
 
 
 func begin_hold() -> void:
@@ -391,7 +407,7 @@ func cancel_hold() -> void:
 		return
 	_cancel_pressure = _hold_pose_state().x
 	_animation_origin_frame = Engine.get_process_frames()
-	_cancel_progress = performance_progress()
+	_cancel_progress = _hold_pose_state().y
 	_cancel_remaining = 0.0 if reduced_motion else Feel.CANCEL_SECONDS
 	_hold_active = false
 	hold_progress = 0.0
@@ -408,6 +424,9 @@ func _emit_cue(cue: String, step: int = 0, cue_time: float = -1.0) -> void:
 	var time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * 1.2
 	if cue_time >= 0.0:
 		time = cue_time
+	if cue == "tension_pulse":
+		_pulse_step = step
+		_pulse_started_at = _elapsed
 	_cue_log.append({"theme": theme_id, "cue": cue, "step": step, "time": time})
 	if _cue_log.size() > 32:
 		_cue_log.pop_front()
@@ -443,8 +462,9 @@ func hold_effect_snapshot() -> Dictionary:
 	var status: String = performance_status()
 	return {"active": active, "phase": performance_phase(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
-		"tension": Feel.tension(_elapsed) if mode == "opening" else 0.0,
-		"pulse_strength": Feel.pulse_strength(_elapsed) if mode == "opening" else 0.0,
+		"tension": tension_progress(),
+		"pulse_strength": Feel.pulse_strength(_pulse_clock()),
+		"pulse_motion": Feel.pulse_motion(_pulse_clock()),
 		"percent": percent,
 		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
@@ -470,7 +490,7 @@ func _draw_glint() -> void:
 	center.y -= _bounds.size.y * _art.scale.y * 0.08
 	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
 	if mode == "opening":
-		power = Feel.tension(_elapsed) * 0.55 + Feel.pulse_strength(_elapsed) * 0.45
+		power = Feel.tension(_elapsed) * 0.55 + Feel.pulse_strength(_pulse_clock()) * 0.45
 	var radius: float = minf(size.x, size.y) * 0.07
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
@@ -629,6 +649,7 @@ func stop_reaction() -> void:
 	_cancel_remaining = 0.0
 	_charge_step = 0
 	_opening_cues_enabled = false
+	_pulse_step = 0
 	_art.rotation = 0.0
 	_glint.hide()
 	_charge.hide()
@@ -660,7 +681,7 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 	var pose: Transform2D = piece.rest
 	if pressure <= 0.0:
 		return pose
-	var tension: float = sin(time * float(_feel.frequency)) * progress * progress
+	var tension: float = Feel.pulse_motion(time)
 	if _style == "crystal" and piece.role != "chest":
 		var direction: Vector2 = pose.origin - _bounds.get_center()
 		if direction.length_squared() < 1.0:
@@ -695,12 +716,12 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var piece: Dictionary = _pieces[index]
 	var hold: Vector2 = _hold_pose_state()
-	var charge_time: float = _charge_time
+	var charge_time: float = -1.0
 	if opening_now:
 		var anticipation: float = 1.0 - smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time)
 		var energy: float = Feel.tension(time)
-		hold = Vector2(0.42 + energy * 0.58, energy) * anticipation if not reduced_motion else Vector2.ZERO
-		charge_time = Feel.tension_clock(time)
+		hold = Vector2(0.30 + energy * 0.70, energy) * anticipation if not reduced_motion else Vector2.ZERO
+		charge_time = _pulse_clock()
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
 	var alpha: float = 1.0
 	var progress: float = Feel.opening(theme_id, time) if opening_now else 0.0
@@ -911,9 +932,10 @@ func _advance_animation(delta: float) -> void:
 				if _elapsed >= float(event.time) and not _opening_cues.has(key):
 					_opening_cues[key] = true
 					var newer_pulse: bool = event.cue == "tension_pulse" and int(event.step) < Feel.PULSE_TIMES.size() and _elapsed >= float(Feel.PULSE_TIMES[int(event.step)])
-					# A stalled frame may cross several beats. Consume them, but
-					# never play a backlog; the quiet transition still stops audio.
-					if not newer_pulse and (_elapsed - float(event.time) <= 0.20 or event.cue == "anticipation"):
+					# Coalesce missed beats and latch the newest live kick to its
+					# sound. Long stalls and the final hush never replay a backlog.
+					var live_pulse: bool = event.cue != "tension_pulse" or (not newer_pulse and _elapsed < Feel.ANTICIPATION_TIME)
+					if live_pulse and (_elapsed - float(event.time) <= 0.20 or event.cue == "anticipation"):
 						_emit_cue(str(event.cue), int(event.step), float(event.time))
 		if _elapsed >= OPEN_SECONDS:
 			finish_immediately()

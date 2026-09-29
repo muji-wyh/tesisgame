@@ -31,8 +31,8 @@ func _run() -> void:
 		"A short confirmation leaves 3.8 seconds for the automatic performance")
 	check(is_equal_approx(Feel.RELEASE_TIME, 2.32) and Feel.OPEN_SECONDS - Feel.RELEASE_TIME >= 1.4,
 		"The compact buildup preserves the physical release and reward settling time")
-	check(is_equal_approx(Feel.UNLOCK_TIME - Feel.ANTICIPATION_TIME, 0.4),
-		"The final breath preserves 400 milliseconds of deliberate silence")
+	check(is_equal_approx(Feel.UNLOCK_TIME - Feel.ANTICIPATION_TIME, 0.18),
+		"The final breath preserves 180 milliseconds of deliberate silence")
 	var data = load("res://scripts/game_data.gd").new()
 	check(data.load_all(), "The original imported artwork remains valid")
 	var chest = load("res://scripts/chest_view.gd").new()
@@ -81,7 +81,7 @@ func _run() -> void:
 		var percent_before: int = chest.hold_effect_snapshot().percent
 		var increasing_progress: bool = true
 		var sealed: bool = true
-		for frame in range(102):
+		for frame in range(114):
 			var pulse_count: int = cues.filter(func(item): return item[1] == "tension_pulse").size()
 			chest._advance_animation(1.0 / 60.0)
 			var state: Dictionary = chest.hold_effect_snapshot()
@@ -93,16 +93,19 @@ func _run() -> void:
 		check(increasing_progress and percent_before > 80,
 			theme + " continuously advances real progress without reaching 100 during buildup")
 		check(sealed, theme + " keeps the reward sealed throughout the escalating buildup")
-		check(pulse_times.size() == 7, theme + " emits seven distinct tension beats")
+		check(pulse_times.size() == 9, theme + " emits nine distinct tension beats")
 		for index in range(2, pulse_times.size()):
-			check(pulse_times[index] - pulse_times[index - 1] < pulse_times[index - 1] - pulse_times[index - 2],
-				theme + " shortens each tension-beat interval toward the final release")
+			check(float(Feel.PULSE_TIMES[index]) - float(Feel.PULSE_TIMES[index - 1])
+				< float(Feel.PULSE_TIMES[index - 1]) - float(Feel.PULSE_TIMES[index - 2])
+				and pulse_times[index] - pulse_times[index - 1]
+				<= pulse_times[index - 1] - pulse_times[index - 2] + 1.0 / 60.0,
+				theme + " shortens its beat schedule with at most one frame of delivery quantization")
 		check(not cues.any(func(item): return item[1] in ["unlock", "release", "settle"]),
 			theme + " keeps physical release and settlement silent throughout buildup")
-		chest._advance_animation(0.03)
+		chest._advance_animation(0.05)
 		check(cues.back() == [theme, "anticipation", 0], theme + " cuts into a deliberate final hush")
 		var still_pose: Array = _poses(chest)
-		chest._advance_animation(0.38)
+		chest._advance_animation(0.16)
 		check(_poses(chest) == still_pose and cues.back() == [theme, "anticipation", 0],
 			theme + " holds still during the breath before unlocking")
 		chest._advance_animation(Feel.UNLOCK_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
@@ -188,10 +191,13 @@ func _run() -> void:
 	chest.reduced_motion = false
 	cues.clear()
 	chest.start_open(false)
-	chest._advance_animation(0.8)
+	chest._advance_animation(0.78)
 	check(not cues.any(func(item): return item[1] in ["tension_pulse", "charge_step"]),
 		"A stalled frame consumes old tension beats instead of playing an audio backlog")
-	chest._advance_animation(0.021)
+	check(is_zero_approx(chest.hold_effect_snapshot().pulse_motion)
+		and is_zero_approx(chest.hold_effect_snapshot().physical_pose.x),
+		"A skipped stale beat cannot create a silent body kick")
+	chest._advance_animation(0.061)
 	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 3]],
 		"A recovered frame plays only the next live tension beat")
 	var cue_count: int = cues.size()
@@ -201,16 +207,100 @@ func _run() -> void:
 	chest.clear()
 	chest.configure_skin(data.theme("space"), data.chests)
 	chest.start_open(false)
-	chest._advance_animation(1.43)
+	chest._advance_animation(1.57)
 	cues.clear()
 	chest._advance_animation(0.23)
-	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 7]],
+	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 8]],
 		"A 230-millisecond frame coalesces overlapping late pulses into its newest live beat")
+	check(chest.hold_effect_snapshot().pulse_motion < 0.0
+		and chest.hold_effect_snapshot().physical_pose.x < -0.004,
+		"The coalesced eighth beat starts its own negative kick on the sound-delivery frame")
+	chest.clear()
+	chest.configure_skin(data.theme("space"), data.chests)
+	chest.start_open(false)
+	cues.clear()
+	chest._advance_animation(float(Feel.PULSE_TIMES.back()) + 0.051)
+	check(cues.filter(func(item): return item[1] == "tension_pulse") == [["space", "tension_pulse", 9]]
+		and chest.hold_effect_snapshot().physical_pose.x > 0.004,
+		"The last live beat remains visible and audible when delivered 51 milliseconds late")
+	chest._advance_animation(0.025)
+	check(is_zero_approx(chest.hold_effect_snapshot().pulse_motion)
+		and is_zero_approx(chest.hold_effect_snapshot().physical_pose.x)
+		and cues.back() == ["space", "anticipation", 0],
+		"The global final breath cuts off a delayed kick before its own return duration")
+	chest.clear()
+	chest.configure_skin(data.theme("space"), data.chests)
+	chest.start_open(false)
+	cues.clear()
+	chest._advance_animation(Feel.ANTICIPATION_TIME + 0.001)
+	check(not cues.any(func(item): return item[1] == "tension_pulse")
+		and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+		"A frame returning during the final breath never invents a late strike or silent kick")
 	chest.free()
+	_check_shared_pulse_motion(data)
 	_check_crystal_mechanism(data)
 	_check_motion_bounds(data)
 	print("Chest feel: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_shared_pulse_motion(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.set_process(false)
+	chest.size = Vector2(440, 360)
+	for theme in data.THEMES:
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.begin_hold()
+		chest.set_hold_progress(0.6)
+		chest._advance_animation(0.15)
+		var held: Array = _poses(chest)
+		chest._advance_animation(0.27)
+		check(_poses(chest) == held,
+			theme + " holds pressure without an independent periodic shake before confirmation")
+		chest.start_open(false)
+		var previous_amplitude: float = 0.0
+		var previous_direction: float = 0.0
+		for index in range(Feel.PULSE_TIMES.size()):
+			var beat: float = float(Feel.PULSE_TIMES[index])
+			chest._advance_animation(beat - 0.001 - chest.hold_effect_snapshot().opening_time)
+			var settled: Dictionary = chest.hold_effect_snapshot()
+			check(is_zero_approx(settled.physical_pose.x) and is_zero_approx(settled.physical_pose.rotation),
+				"The %s body settles before tension beat %d rather than vibrating off the rhythm" % [theme, index + 1])
+			chest._advance_animation(0.00101)
+			var struck: Dictionary = chest.hold_effect_snapshot()
+			var amplitude: float = absf(struck.physical_pose.x)
+			var direction: float = signf(struck.physical_pose.x)
+			check(struck.cues.filter(func(cue): return cue.cue == "tension_pulse").size() == index + 1
+				and amplitude > 0.004 and direction == signf(struck.pulse_motion),
+				"The %s rendered body kicks on the same frame as tension beat %d" % [theme, index + 1])
+			check(amplitude > previous_amplitude and (index == 0 or direction != previous_direction),
+				"The %s kicks alternate direction and grow stronger toward release" % theme)
+			previous_amplitude = amplitude
+			previous_direction = direction
+		chest._advance_animation(Feel.ANTICIPATION_TIME - chest.hold_effect_snapshot().opening_time + 0.001)
+		var hush: Array = _poses(chest)
+		chest._advance_animation(0.15)
+		check(_poses(chest) == hush and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+			theme + " ends every kick before the short still breath")
+		for frame_delay: float in [0.00001, 1.0 / 120.0, 1.0 / 60.0]:
+			chest.clear()
+			chest.configure_skin(data.theme(theme), data.chests)
+			chest.start_open(false)
+			var early: float = 0.0
+			var late: float = 0.0
+			for index in range(Feel.PULSE_TIMES.size()):
+				chest._advance_animation(float(Feel.PULSE_TIMES[index]) + frame_delay
+					- chest.hold_effect_snapshot().opening_time)
+				var amplitude: float = absf(chest.hold_effect_snapshot().physical_pose.x)
+				if index < 3:
+					early += amplitude
+				elif index >= Feel.PULSE_TIMES.size() - 3:
+					late += amplitude
+			check(late > early * 1.25,
+				"The %s late kicks remain stronger when first rendered %.1f milliseconds after their cues" % [theme, frame_delay * 1000.0])
+	chest.free()
 
 
 func _check_crystal_mechanism(data) -> void:
@@ -263,7 +353,7 @@ func _check_motion_bounds(data) -> void:
 			var prior: float = 0.0
 			var outside: Array[String] = []
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
-			for time in [0.0, 0.10, 0.48, 0.81, 1.09, 1.32, 1.50, 1.64, Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
+			for time in [0.0] + Feel.PULSE_TIMES + [Feel.ANTICIPATION_TIME, Feel.UNLOCK_TIME,
 				Feel.RELEASE_TIME - 0.01, Feel.RELEASE_TIME + 0.12, Feel.RELEASE_TIME + 0.29,
 				Feel.RELEASE_TIME + 0.44, Feel.SETTLE_TIME, Feel.OPEN_SECONDS]:
 				chest._advance_animation(time - prior)

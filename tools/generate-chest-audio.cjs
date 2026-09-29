@@ -12,7 +12,7 @@ const crypto = require('node:crypto');
 const RATE = 22050;
 const TAU = Math.PI * 2;
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const CUES = { press: 0.19, charge: 0.44, step: 0.24, cancel: 0.22, opening: 0.24, unlock: 0.31, release: 0.68, settle: 0.48, reward: 0.74 };
+const CUES = { press: 0.19, charge: 0.8, step: 0.24, cancel: 0.22, opening: 0.24, unlock: 0.31, release: 0.68, settle: 0.48, reward: 0.74 };
 const MATERIALS = {
   spring: 'Hollow wood, dry leaf movement and a soft flower bell',
   summer: 'Warm airflow, a cork-like pop and a bright rounded release',
@@ -38,8 +38,47 @@ function envelope(time, duration, attack = 0.008, decay = 5) {
   return Math.min(1, time / attack) * Math.exp(-time * decay / duration) * Math.min(1, (duration - time) / 0.035);
 }
 
+function renderTensionTexture(theme) {
+  // Sustained material pressure has no repeating attack or rhythmic envelope.
+  // Runtime pitch and gain supply the rise; the shared visual timeline owns
+  // every audible strike, so the bed cannot introduce a competing pulse.
+  const profiles = {
+    spring: { base: 246, modes: [1, 2.79, 5.16], air: 0.2, cutoff: 1800, rough: 0 },
+    summer: { base: 164, modes: [1, 2, 3.8], air: 0.75, cutoff: 2200, rough: 0 },
+    autumn: { base: 91, modes: [1, 2.79, 5.16], air: 0.3, cutoff: 1100, rough: 0.1 },
+    winter: { base: 510, modes: [1, 2.83, 4.59], air: 0.12, cutoff: 3200, rough: 0 },
+    ocean: { base: 78, modes: [1, 1.96, 3.28], air: 0.8, cutoff: 380, rough: 0 },
+    space: { base: 122, modes: [1, 3.27, 5.82], air: 0.3, cutoff: 1750, rough: 0.22 },
+    jungle: { base: 193, modes: [1, 2.79, 5.16], air: 0.55, cutoff: 1300, rough: 0.3 },
+    candy: { base: 185, modes: [1, 2, 3], air: 0.23, cutoff: 950, rough: 0.08 }
+  };
+  const profile = profiles[theme];
+  const samples = new Float64Array(Math.round(RATE * CUES.charge));
+  const rng = random(`${theme}/steady-pressure/v2`);
+  const alpha = 1 - Math.exp(-TAU * profile.cutoff / RATE);
+  let filtered = 0;
+  let sum = 0;
+  let peak = 0;
+  for (let i = 0; i < samples.length; i++) {
+    const time = i / RATE;
+    filtered += alpha * (rng() * 2 - 1 - filtered);
+    const body = profile.modes.reduce((value, ratio, index) => {
+      const frequency = Math.round(profile.base * ratio * CUES.charge) / CUES.charge;
+      return value + Math.sin(TAU * frequency * time + profile.rough * Math.sin(TAU * 45 * time)) / (1 + index * 3.2);
+    }, 0);
+    const seam = Math.min(1, i / (RATE * 0.004), (samples.length - 1 - i) / (RATE * 0.008));
+    samples[i] = (body * 0.2 + filtered * profile.air) * seam;
+    sum += samples[i] * samples[i];
+    peak = Math.max(peak, Math.abs(samples[i]));
+  }
+  const gain = Math.min(0.12 / Math.sqrt(sum / samples.length), 0.72 / peak);
+  for (let i = 0; i < samples.length; i++) samples[i] *= gain;
+  return samples;
+}
+
 function render(theme, cue) {
   assert.ok(THEMES.includes(theme) && Object.hasOwn(CUES, cue));
+  if (cue === 'charge') return renderTensionTexture(theme);
   const duration = CUES[cue];
   const samples = new Float64Array(Math.round(RATE * duration));
   const rng = random(`${theme}/${cue}/v1`);
@@ -166,6 +205,13 @@ function render(theme, cue) {
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
+  if (cue === 'step' || cue === 'release') {
+    // Equal material-strike energy lets the shared crescendo read on every
+    // theme, including the otherwise very quiet magnetic and flower locks.
+    const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
+    const gain = Math.min((cue === 'release' ? 0.1 : 0.07) / rms, 0.78 / Math.min(maximum, 0.78));
+    for (let i = 0; i < samples.length; i++) samples[i] *= gain;
+  }
   return samples;
 }
 

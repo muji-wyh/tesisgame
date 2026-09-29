@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Bank = preload("res://scripts/chest_sound_bank.gd")
+const Feel = preload("res://scripts/chest_feel.gd")
 
 class DelayedAudio:
 	extends "res://scripts/game_audio.gd"
@@ -39,10 +40,19 @@ func _last_player(audio) -> AudioStreamPlayer:
 	return audio._chest_players[(audio._chest_next_player + 2) % 3]
 
 
+func _rms(source: PackedByteArray, start: int, end: int) -> float:
+	var energy: float = 0.0
+	for offset in range(start, end, 2):
+		var sample: float = float(source.decode_s16(offset)) / 32768.0
+		energy += sample * sample
+	return sqrt(energy / maxf(1.0, float(end - start) / 2.0))
+
+
 func _run() -> void:
 	await _check_material_assets()
 	await _check_performance()
 	await _check_tension_rhythm()
+	await _check_delayed_rhythm_delivery()
 	await _check_tension_interruption()
 	await _check_motion_completion_before_save()
 	await _check_cancellation_and_guards()
@@ -68,7 +78,8 @@ func _check_material_assets() -> void:
 			total_bytes += source.size()
 			check(source.size() > 44 and source.slice(0, 4).get_string_from_ascii() == "RIFF", "Real WAV: " + theme + "/" + cue_name)
 			var stream: AudioStreamWAV = audio.cache.get(path)
-			check(stream != null and not stream.stereo and stream.mix_rate == 22050 and stream.get_length() <= 0.75,
+			check(stream != null and not stream.stereo and stream.mix_rate == 22050
+				and stream.get_length() <= (0.81 if cue_name == "charge" else 0.75),
 				"A short mono clip preloads: " + theme + "/" + cue_name)
 			if stream == null:
 				continue
@@ -79,6 +90,14 @@ func _check_material_assets() -> void:
 				maximum = maxi(maximum, absi(source.decode_s16(offset)))
 			check(maximum > 1000 and maximum < 27000, "Audible unclipped material energy: " + theme + "/" + cue_name)
 			check(source.decode_s16(44) == 0 and source.decode_s16(source.size() - 2) == 0, "Clean sample boundaries: " + theme + "/" + cue_name)
+			if cue_name == "charge":
+				var window_frames: int = (source.size() - 44) / 8
+				var texture_energy: Array[float] = []
+				for window in range(4):
+					texture_energy.append(_rms(source, 44 + window * window_frames * 2,
+						44 + (window + 1) * window_frames * 2))
+				check(texture_energy.min() > 0.07 and texture_energy.max() / texture_energy.min() < 1.6,
+					"The %s tension texture stays audible without an independent decaying beat" % theme)
 			var fingerprint: String = str(hash(source))
 			check(not fingerprints.has(fingerprint), "Every material and action has distinct PCM")
 			fingerprints[fingerprint] = true
@@ -129,9 +148,20 @@ func _check_performance() -> void:
 		audio.chest_cue("autumn", "charge_step" + str(step))
 		check(audio._chest_next_player == next_player, "Duplicate step aliases do not replay")
 	check(audio.get_child_count() == 8 and _playing(audio) <= 4, "The performance uses only four bounded chest channels")
+	audio.set_chest_charge(1.0)
+	var confirmation_gain: float = player.volume_db
+	var confirmation_pitch: float = player.pitch_scale
+	var confirmation_position: float = player.get_playback_position()
+	next_player = audio._chest_next_player
 	audio.chest_cue("autumn", "opening")
 	check(player.playing and player.stream == loop and not audio._chest_charge_active
-		and audio._chest_tension_progress == 0.0, "Opening hands the single loop channel to the automatic buildup")
+		and is_equal_approx(audio._chest_tension_progress, Feel.tension(0.0)),
+		"Opening hands the existing loop channel to the same continuous tension")
+	check(is_equal_approx(player.volume_db, confirmation_gain) and is_equal_approx(player.pitch_scale, confirmation_pitch)
+		and player.get_playback_position() >= confirmation_position,
+		"Confirming never restarts the material loop or drops its pitch and gain")
+	check(audio._chest_next_player == next_player,
+		"The automatic handoff adds no offbeat opening attack")
 	check(not audio._chest_rewarded and audio._chest_phase == "opening", "Opening alone never acknowledges a saved reward")
 	for cue_name in ["unlock", "release", "settle"]:
 		audio.chest_cue("autumn", cue_name)
@@ -176,35 +206,49 @@ func _check_tension_rhythm() -> void:
 		var starting_pitch: float = player.pitch_scale
 		var starting_music: float = audio.music.volume_db
 		check(player.playing and loop == audio.cache[Bank.path_for(theme, "charge")], "Automatic " + theme + " buildup uses the prepared material loop")
-		for step in range(1, 8):
-			audio.set_chest_tension(float(step) / 7.0)
+		var previous_pulse_gain: float = -100.0
+		var previous_pulse_pitch: float = 0.0
+		var previous_bed_gain: float = player.volume_db
+		var previous_bed_pitch: float = player.pitch_scale
+		for step in range(1, Feel.PULSE_TIMES.size() + 1):
+			audio.set_chest_tension(Feel.tension(float(Feel.PULSE_TIMES[step - 1])))
 			audio.chest_cue(theme, "tension_pulse", step)
 			check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")]
 				and player.stream == loop and audio._chest_last_tension_pulse == step,
 				"Tension pulse %d keeps the %s material and stable bed" % [step, theme])
+			check(_last_player(audio).volume_db > previous_pulse_gain and _last_player(audio).pitch_scale > previous_pulse_pitch
+				and player.volume_db > previous_bed_gain and player.pitch_scale > previous_bed_pitch,
+				"Every %s beat and its continuous bed grow in audible energy and pitch" % theme)
+			previous_pulse_gain = _last_player(audio).volume_db
+			previous_pulse_pitch = _last_player(audio).pitch_scale
+			previous_bed_gain = player.volume_db
+			previous_bed_pitch = player.pitch_scale
 			var next_player: int = audio._chest_next_player
 			audio.chest_cue(theme, "tension_pulse", step)
 			audio.chest_cue(theme, "tension_pulse", step - 1)
 			check(audio._chest_next_player == next_player, "Duplicate or older pulse ordinals never replay")
-		check(player.volume_db > starting_gain and player.pitch_scale > starting_pitch
+		check(player.volume_db - starting_gain > 5.0 and player.pitch_scale > starting_pitch * 1.4
 			and audio.music.volume_db < starting_music, "The " + theme + " buildup rises in energy while music leaves room")
 		var pitch: float = player.pitch_scale
+		var energy: float = audio._chest_tension_progress
 		audio.set_chest_tension(0.1)
 		audio.set_chest_tension(NAN)
 		audio.set_chest_tension(INF)
 		audio.set_chest_charge(0.0)
-		check(player.pitch_scale == pitch and audio._chest_tension_progress == 1.0 and audio._chest_phase == "opening",
+		check(player.pitch_scale == pitch and audio._chest_tension_progress == energy and audio._chest_phase == "opening",
 			"Invalid or old progress cannot rewind tension or restore the hold")
+		var before_stars: int = audio._chest_next_player
 		for step in range(1, 3):
 			audio.chest_cue(theme, "charge_step", step)
-			check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")], "Progress star %d remains audible during buildup" % step)
+			check(audio._chest_next_player == before_stars,
+				"Automatic progress star %d does not add a second unsynchronized beat" % step)
 		check(_playing(audio) <= 4 and audio.get_child_count() == 8, "Rapid pulses and stars stay within the same four chest channels")
 		audio.chest_cue(theme, "anticipation")
 		check(_playing(audio) == 0 and player.stream == null and audio.music.volume_db < -50.0,
 			"Anticipation removes all chest tails and nearly silences music")
 		var next_player: int = audio._chest_next_player
 		audio.chest_cue(theme, "anticipation")
-		audio.chest_cue(theme, "tension_pulse", 8)
+		audio.chest_cue(theme, "tension_pulse", Feel.PULSE_TIMES.size())
 		audio.set_chest_tension(0.0)
 		audio.set_chest_tension(1.0)
 		check(_playing(audio) == 0 and audio._chest_next_player == next_player,
@@ -212,8 +256,10 @@ func _check_tension_rhythm() -> void:
 		audio.chest_cue(theme, "unlock")
 		check(not player.playing and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "unlock")],
 			"Unlock begins the final material release after silence")
+		next_player = audio._chest_next_player
 		audio.chest_cue(theme, "charge_step", 3)
-		check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")], "The final progress star remains available at release")
+		check(audio._chest_next_player == next_player,
+			"The final progress star stays visual so the release retains its single impact")
 		audio.chest_cue(theme, "release")
 		check(_last_player(audio).stream == audio.cache[Bank.path_for(theme, "release")]
 			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12)) and not audio._chest_rewarded,
@@ -227,6 +273,74 @@ func _check_tension_rhythm() -> void:
 		audio.chest_cue(theme, "release")
 		check(not player.playing and player.stream == null, "Release stops the bed even if a long frame skipped anticipation")
 		audio.stop_chest_performance()
+	# The cue clock, rather than the previous UI frame, sets each strike's
+	# intensity. Two different last-frame energy values must yield one beat.
+	var scheduled_pulse: Array = []
+	for stale_energy: float in [Feel.tension(0.0), 1.0]:
+		audio.prepare_chest("autumn")
+		audio.interact("autumn", false)
+		audio.chest_cue("autumn", "opening")
+		audio.set_chest_tension(stale_energy)
+		audio.chest_cue("autumn", "tension_pulse", 5)
+		scheduled_pulse.append(Vector2(_last_player(audio).volume_db, _last_player(audio).pitch_scale))
+		audio.stop_chest_performance()
+	check(scheduled_pulse[0].is_equal_approx(scheduled_pulse[1]),
+		"A live beat has the same energy with stale or advanced UI progress")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_delayed_rhythm_delivery() -> void:
+	var data = load("res://scripts/game_data.gd").new()
+	check(data.load_all(), "Delayed rhythm tests load the original chest artwork")
+	var audio = load("res://scripts/game_audio.gd").new()
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(audio)
+	root.add_child(chest)
+	chest.set_process(false)
+	chest.size = Vector2(440, 360)
+	chest.cue_requested.connect(audio.chest_cue)
+	for theme: String in Bank.THEMES:
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		audio.prepare_chest(theme)
+		audio.interact(theme, false)
+		chest.start_open(false)
+		var delivered: Array[int] = []
+		for frame in range(32):
+			var previous: int = audio._chest_last_tension_pulse
+			chest._advance_animation(0.06)
+			var state: Dictionary = chest.hold_effect_snapshot()
+			if audio._chest_last_tension_pulse > previous:
+				delivered.append(audio._chest_last_tension_pulse)
+				check(absf(state.physical_pose.x) > 0.004 and state.pulse_strength > 0.4
+					and _last_player(audio).playing
+					and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "step")],
+					"A 60-millisecond %s frame starts each audible strike with its body kick and glow" % theme)
+		check(delivered == [1, 2, 3, 4, 5, 6, 7, 8, 9],
+			"The %s rhythm delivers all nine beats at a 60-millisecond frame cadence" % theme)
+		chest._advance_animation(0.03)
+		check(_playing(audio) == 0 and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+			"The %s final breath stops the delivered sound and motion together" % theme)
+		audio.stop_chest_performance()
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		audio.prepare_chest(theme)
+		chest.start_open(false)
+		# This delivery is still live, but the old absolute clock had already
+		# decayed its visual attack by the time the matching sound began.
+		chest._advance_animation(float(Feel.PULSE_TIMES[0]) + 0.08)
+		var delayed: Dictionary = chest.hold_effect_snapshot()
+		check(audio._chest_last_tension_pulse == 1 and _last_player(audio).playing
+			and is_equal_approx(delayed.pulse_motion, Feel.pulse_motion(float(Feel.PULSE_TIMES[0])))
+			and delayed.physical_pose.x > 0.004,
+			"An 80-millisecond late %s strike starts a full fresh kick with the actual audio" % theme)
+		chest._advance_animation(Feel.pulse_duration(0) + 0.001)
+		check(audio._chest_last_tension_pulse == 1
+			and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
+			"The delayed %s kick returns once without inventing another beat" % theme)
+		audio.stop_chest_performance()
+	chest.queue_free()
 	audio.queue_free()
 	await process_frame
 
