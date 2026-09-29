@@ -51,6 +51,8 @@ func _run() -> void:
 		check(is_zero_approx(chest._tap_remaining), "An opening chest ignores short-tap play")
 	chest.free()
 	_check_themed_chests(data)
+	_check_opened_ambience(data)
+	_check_opened_bounds(data)
 	_check_hold_feedback(data)
 	_check_hold_bounds(data)
 	var effect = load("res://scripts/celebration.gd").new()
@@ -109,6 +111,9 @@ func _check_themed_chests(data) -> void:
 		check(chest.mode == "opened" and chest.theme_id == theme_id
 			and opened_themes.size() == before + 1 and opened_themes.back() == theme_id,
 			"Refreshing the earned " + theme_id + " chest keeps it open without awarding again")
+		var state: Dictionary = chest.hold_effect_snapshot()
+		check(state.opened_glow > 0.0 and not state.opened_animated and is_zero_approx(state.opened_idle_time),
+			"The reduced-motion " + theme_id + " chest opens directly into a steady themed light")
 		for dimensions in [Vector2(320, 190), Vector2(180, 400), Vector2(640, 420)]:
 			chest.size = dimensions
 			chest.set_drag_offset(Vector2.ZERO)
@@ -127,6 +132,148 @@ func _check_themed_chests(data) -> void:
 						outside.append(str(piece.role) + " at " + str(transform * corner))
 			check(visible_pieces > 0 and outside.is_empty(),
 				"The opened %s chest keeps every transformed artwork corner inside %s without clipping: %s" % [theme_id, dimensions, outside])
+	chest.free()
+
+
+func _check_opened_ambience(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	var openings: Array[String] = []
+	var cues: Array = []
+	chest.opened.connect(func() -> void: openings.append(chest.theme_id))
+	chest.cue_requested.connect(func(theme: String, cue: String, step: int) -> void:
+		cues.append([theme, cue, step]))
+	for theme in data.THEMES:
+		chest.clear()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme(theme), data.chests)
+		var state: Dictionary = chest.hold_effect_snapshot()
+		check(is_zero_approx(state.opened_glow) and not state.opened_animated,
+			theme + " keeps its idle light and sway exclusive to the earned opening")
+		var previous_openings: int = openings.size()
+		chest.start_open(false)
+		chest._advance_animation(Feel.OPEN_SECONDS - 0.02)
+		state = chest.hold_effect_snapshot()
+		var fitted_scale: float = state.fitted_scale
+		check(state.opened_glow > 0.0 and chest.mode == "opening" and openings.size() == previous_openings,
+			theme + " carries its settling light into the saved result without rewarding early")
+		chest._advance_animation(0.03)
+		state = chest.hold_effect_snapshot()
+		check(chest.mode == "opened" and openings.size() == previous_openings + 1
+			and state.opened_glow > 0.0 and state.opened_animated and not state.active,
+			theme + " retains light and starts a gentle idle after its single opening completes")
+		check(state.release_color == Feel.FLASH_COLORS[theme].to_html(false)
+			and is_zero_approx(state.release_flash) and is_equal_approx(state.fitted_scale, fitted_scale),
+			theme + " keeps its themed light and fitted size after the one-shot flash finishes")
+		var saved_scale: Vector2 = chest._art.scale
+		var cue_count: int = cues.size()
+		var minimum_rotation: float = chest._art.rotation
+		var maximum_rotation: float = chest._art.rotation
+		var previous_rotation: float = chest._art.rotation
+		var maximum_step: float = 0.0
+		var stays_lit: bool = true
+		var fixed_scale: bool = true
+		for frame in range(48):
+			chest._advance_animation(0.25)
+			state = chest.hold_effect_snapshot()
+			stays_lit = stays_lit and state.opened_glow > 0.0 and is_zero_approx(state.release_flash)
+			fixed_scale = fixed_scale and chest._art.scale.is_equal_approx(saved_scale) and is_equal_approx(state.fitted_scale, fitted_scale)
+			minimum_rotation = minf(minimum_rotation, chest._art.rotation)
+			maximum_rotation = maxf(maximum_rotation, chest._art.rotation)
+			maximum_step = maxf(maximum_step, absf(chest._art.rotation - previous_rotation))
+			previous_rotation = chest._art.rotation
+		check(stays_lit and fixed_scale, theme + " stays illuminated for twelve seconds without resizing or squashing its open body")
+		check(maximum_rotation > 0.005 and minimum_rotation < -0.005 and maximum_rotation <= 0.05
+			and minimum_rotation >= -0.05 and maximum_step < 0.02,
+			theme + " sways gently in both directions instead of resuming its fast opening shake")
+		check(cues.size() == cue_count and openings.size() == previous_openings + 1,
+			theme + " never repeats opening sounds or reward signals during its idle")
+
+		chest.hide()
+		var hidden_time: float = chest.hold_effect_snapshot().opened_idle_time
+		chest._advance_animation(7.0)
+		state = chest.hold_effect_snapshot()
+		check(not chest.is_processing() and not state.opened_animated and state.opened_idle_time == hidden_time,
+			theme + " freezes its idle clock while the result is hidden")
+		chest.show()
+		chest._advance_animation(0.25)
+		state = chest.hold_effect_snapshot()
+		check(state.opened_glow > 0.0 and state.opened_animated and state.opened_idle_time > hidden_time
+			and cues.size() == cue_count and openings.size() == previous_openings + 1,
+			theme + " resumes the earned ambience without replaying its opening")
+
+		chest.set_idle_paused(true)
+		var paused: Dictionary = chest.hold_effect_snapshot()
+		chest._advance_animation(9.0)
+		state = chest.hold_effect_snapshot()
+		check(not state.opened_animated and state.opened_idle_time == paused.opened_idle_time
+			and state.pose_signature == paused.pose_signature and state.opened_glow == paused.opened_glow,
+			theme + " freezes its pose and light when the page explicitly pauses the result")
+		chest.set_idle_paused(false)
+		chest._advance_animation(0.25)
+		check(chest.hold_effect_snapshot().opened_animated
+			and chest.hold_effect_snapshot().opened_idle_time > paused.opened_idle_time,
+			theme + " resumes its slow idle after the page returns")
+
+		chest.reduced_motion = true
+		chest._advance_animation(0.01)
+		var static_state: Dictionary = chest.hold_effect_snapshot()
+		var static_result: bool = static_state.opened_glow > 0.0 and not static_state.opened_animated
+		for delta in [0.3, 4.0, 12.0]:
+			chest._advance_animation(delta)
+			state = chest.hold_effect_snapshot()
+			static_result = static_result and state.pose_signature == static_state.pose_signature \
+				and state.opened_glow == static_state.opened_glow and state.opened_idle_time == static_state.opened_idle_time
+		check(static_result, theme + " retains a steady light with no sway or breathing when reduced motion is enabled")
+		chest.start_open(false)
+		chest.finish_immediately()
+		check(openings.size() == previous_openings + 1 and cues.size() == cue_count,
+			theme + " ignores duplicate starts and finishes while showing the lit result")
+
+		chest.clear()
+		state = chest.hold_effect_snapshot()
+		check(chest.mode == "closed" and is_zero_approx(state.opened_glow) and not state.opened_animated
+			and is_zero_approx(state.opened_idle_time), theme + " clears every opened idle effect for the next reward")
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.start_open(false)
+		cue_count = cues.size()
+		chest.finish_immediately()
+		chest._advance_animation(2.0)
+		state = chest.hold_effect_snapshot()
+		check(chest.mode == "opened" and state.opened_glow > 0.0 and state.opened_animated
+			and is_zero_approx(state.release_flash) and cues.size() == cue_count
+			and openings.size() == previous_openings + 2,
+			theme + " shows earned idle light after skipping without a delayed flash, sound or reward")
+		var next_theme: String = "winter" if theme != "winter" else "spring"
+		chest.configure_skin(data.theme(next_theme), data.chests)
+		state = chest.hold_effect_snapshot()
+		check(chest.mode == "closed" and is_zero_approx(state.opened_glow)
+			and is_zero_approx(state.opened_idle_time) and not state.opened_animated,
+			theme + " cannot carry its open ambience into a newly configured chest")
+	chest.free()
+
+
+func _check_opened_bounds(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	for theme in data.THEMES:
+		for dimensions in [Vector2(320, 320), Vector2(320, 110), Vector2(320, 72), Vector2(180, 120), Vector2(180, 400), Vector2(640, 190)]:
+			chest.clear()
+			chest.size = dimensions
+			chest.configure_skin(data.theme(theme), data.chests)
+			chest.start_open(false)
+			chest.finish_immediately()
+			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
+			var outside: Array[String] = []
+			for frame in range(25):
+				chest._advance_animation(0.5)
+				var state: Dictionary = chest.hold_effect_snapshot()
+				var physical: Dictionary = state.physical_bounds
+				var bounds := Rect2(Vector2(physical.x, physical.y), Vector2(physical.width, physical.height))
+				if not stage.encloses(bounds) or not bounds.has_area():
+					outside.append("%.2fs: %s" % [state.opened_idle_time, bounds])
+			check(outside.is_empty(), "The opened %s chest sways without cropping its lid or facets at %s: %s" % [theme, dimensions, outside])
 	chest.free()
 
 

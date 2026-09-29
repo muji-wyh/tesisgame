@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, resultPoint,
-  openRewards, visibleColorCount, observeAudio, chooseTheme
+  openRewards, visibleColorCount, observeAudio, chooseTheme, contentBounds, uiScale
 } = require('./game-ui.cjs');
 
 // Keep mobile CSS geometry while isolating cadence from software-renderer fill
@@ -111,6 +111,52 @@ async function screenshot(page, testInfo, phase) {
   expect(await visibleColorCount(page, png), `${phase} evidence includes the real rendered game`).toBeGreaterThan(20);
 }
 
+async function openedChestFrame(page, testInfo, name) {
+  const bounds = await metrics(page), content = contentBounds(bounds), scale = uiScale(bounds);
+  const top = content.padding + content.header + content.gap;
+  // These rounds award the first piece, so no toy-unlock message changes the
+  // full-width stage. Exclude the header mascot and the New adventure button.
+  const height = bounds.height - content.padding - top - Math.ceil(56 / scale) - Math.ceil(8 / scale) - 10;
+  const frame = await page.screenshot({ scale: 'css', clip: {
+    x: bounds.x + (content.x + 4) * bounds.scale, y: bounds.y + (top + 4) * bounds.scale,
+    width: (content.width - 8) * bounds.scale, height: (height - 8) * bounds.scale
+  } });
+  if (testInfo) await testInfo.attach(name, { body: frame, contentType: 'image/png' });
+  return frame;
+}
+
+async function openedChestMotion(page, before, after) {
+  return page.evaluate(async sources => {
+    const frames = await Promise.all(sources.map(async source => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${source}`;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
+      return { width: image.width, height: image.height,
+        pixels: context.getImageData(0, 0, image.width, image.height).data };
+    }));
+    const { width, height } = frames[0];
+    let changed = 0, bodyChanged = 0, bodyPixels = 0;
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const offset = (y * width + x) * 4;
+      const distance = [0, 1, 2].reduce((sum, channel) =>
+        sum + (frames[0].pixels[offset + channel] - frames[1].pixels[offset + channel]) ** 2, 0);
+      const body = x > width * 0.22 && x < width * 0.78 && y > height * 0.30 && y < height * 0.92;
+      if (body) bodyPixels++;
+      // Reject compression noise and the slow, low-contrast breathing glow.
+      // The actual chest silhouette must move, not only the distant light rays.
+      if (distance > 45 ** 2) {
+        changed++;
+        if (body) bodyChanged++;
+      }
+    }
+    return { changed: changed / (width * height), bodyChanged: bodyChanged / bodyPixels };
+  }, [before, after].map(frame => frame.toString('base64')));
+}
+
 async function observeChest(page) {
   await page.addInitScript(() => {
     window.chestObservation = { cues: [], presses: [], progress: [], statuses: [] };
@@ -206,6 +252,26 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   const saved = await rewardSave(page);
   await rendered(page);
   await screenshot(page, testInfo, 'opened');
+  const idleCueCount = await page.evaluate(() => window.chestObservation.cues.length);
+  const idleAudioCount = await page.evaluate(() => window.audioObservation.playbacks.length);
+  const idleFirst = await openedChestFrame(page, testInfo, 'opened-glow-and-sway-first');
+  let idleSecond, idleMotion;
+  // A single pair can land on equal angles on either side of the six-second
+  // sway. Observe at several phases instead of depending on screenshot timing.
+  await expect.poll(async () => {
+    idleSecond = await openedChestFrame(page);
+    idleMotion = await openedChestMotion(page, idleFirst, idleSecond);
+    return idleMotion.bodyChanged;
+  }, { timeout: 8500, intervals: [700],
+    message: 'The opened chest keeps gently swaying after its one-shot release has finished' }).toBeGreaterThan(0.003);
+  await testInfo.attach('opened-glow-and-sway-later', { body: idleSecond, contentType: 'image/png' });
+  await testInfo.attach('opened-chest-motion', {
+    body: JSON.stringify(idleMotion, null, 2), contentType: 'application/json'
+  });
+  expect(await page.evaluate(() => window.chestObservation.cues.length), 'Ambient movement cannot replay opening cues').toBe(idleCueCount);
+  expect((await page.evaluate(start => window.audioObservation.playbacks.slice(start), idleAudioCount)).filter(isChestSound),
+    'The persistent glow and sway do not replay opening or reward sounds').toEqual([]);
+  expect(await rewardSave(page), 'Ambient movement cannot award another piece').toBe(saved);
 
   const observation = await page.evaluate(() => window.chestObservation);
   const cues = observation.cues;
@@ -383,6 +449,14 @@ test('reduced motion keeps hold progress and releases without claiming early', a
   expect(cues.filter(event => ['hold_pulse', 'tension_pulse', 'unlock', 'release', 'settle'].includes(event.cue))).toEqual([]);
   expect(cues.filter(event => event.cue === 'opening')).toHaveLength(1);
   await screenshot(page, testInfo, 'reduced-motion-opened');
+  const saved = await rewardSave(page);
+  const first = await openedChestFrame(page, testInfo, 'reduced-opened-static-glow-first');
+  await page.waitForTimeout(1500);
+  const second = await openedChestFrame(page, testInfo, 'reduced-opened-static-glow-later');
+  expect(await openedChestMotion(page, first, second), 'Reduced motion retains a steady illuminated chest without sway or pulsing')
+    .toEqual({ changed: 0, bodyChanged: 0 });
+  expect(await page.evaluate(() => window.chestObservation.cues.length)).toBe(cues.length);
+  expect(await rewardSave(page)).toBe(saved);
   expect(errors).toEqual([]);
 });
 

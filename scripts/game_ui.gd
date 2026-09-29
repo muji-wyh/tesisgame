@@ -2163,6 +2163,7 @@ func _retry_reward_save() -> void:
 
 func on_page_hidden() -> void:
 	_page_hidden = true
+	chest.set_idle_paused(true)
 	_hint_link.set_paused(true)
 	if _mode_id == "pop":
 		_pop.pause()
@@ -2195,6 +2196,7 @@ func on_page_hidden() -> void:
 
 func on_page_visible() -> void:
 	_page_hidden = false
+	chest.set_idle_paused(false)
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
 	_room.playground.pause(false)

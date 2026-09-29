@@ -5,6 +5,7 @@ signal cue_requested(theme_id: String, cue: String, step: int)
 
 const Feel = preload("res://scripts/chest_feel.gd")
 const OPEN_SECONDS: float = Feel.OPEN_SECONDS
+const OPEN_SWAY_SECONDS: float = 6.0
 const RELEASE_SECONDS: float = 0.72
 const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
@@ -20,6 +21,7 @@ var _body_pivot := Vector2.ZERO
 var _body_floor := Vector2.ZERO
 var _elapsed: float = 0.0
 var _idle_time: float = 0.0
+var _idle_paused: bool = false
 var _tint: Color = Color.WHITE
 var _style: String = ""
 var drag_offset: Vector2 = Vector2.ZERO
@@ -239,6 +241,11 @@ func _fit() -> void:
 	var hold: Vector2 = _hold_pose_state()
 	var pose_time: float = _elapsed if mode in ["opening", "opened"] else _charge_time
 	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"], _pulse_clock())
+	if mode == "opened" and not reduced_motion:
+		var phase: float = _idle_time * TAU / OPEN_SWAY_SECONDS
+		var ease_in: float = smoothstep(0.0, 0.65, _idle_time)
+		var sway: float = 0.018 if theme_id == "autumn" else 0.024 if theme_id == "candy" else 0.021
+		_physical_pose.rotation += sin(phase) * sway * ease_in
 	var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 	if returning > 0.0 and not _cancel_body_pose.is_empty():
 		_physical_pose = {"offset": _cancel_body_pose.offset * returning,
@@ -543,6 +550,8 @@ func hold_effect_snapshot() -> Dictionary:
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
+		"opened_glow": _opened_glow(), "opened_idle_time": _idle_time,
+		"opened_animated": mode == "opened" and is_visible_in_tree() and not reduced_motion and not _idle_paused,
 		"final_drive": Feel.final_drive(_elapsed) if mode == "opening" and not reduced_motion else 0.0,
 		"release_radius": {"x": _release_radius().x, "y": _release_radius().y},
 		"release_bounds": {"x": _release_bounds().position.x, "y": _release_bounds().position.y,
@@ -615,6 +624,18 @@ func _release_power() -> float:
 	return Feel.release_flash(_elapsed) if mode == "opening" and _opening_cues_enabled and not reduced_motion else 0.0
 
 
+func _opened_glow() -> float:
+	if not is_visible_in_tree():
+		return 0.0
+	if mode == "opened":
+		return 0.56 if reduced_motion else 0.56 + sin(_idle_time * TAU / OPEN_SWAY_SECONDS) * 0.045
+	if mode == "opening" and _opening_cues_enabled and not reduced_motion:
+		# Establish the lasting light before the one-shot burst fades, so the
+		# cavity never goes dark between the release and the opened result.
+		return smoothstep(0.32, 0.90, _elapsed - Feel.RELEASE_TIME) * 0.56
+	return 0.0
+
+
 func _seam_points() -> PackedVector2Array:
 	for piece in _pieces:
 		if piece.role in ["body", "chest"]:
@@ -649,20 +670,23 @@ func _release_radius() -> Vector2:
 
 
 func _draw_radiance() -> void:
-	if reduced_motion or _fit_scale <= 0.0:
+	if _fit_scale <= 0.0:
 		return
 	var pressure: float = _lid_pressure()
 	var flash: float = _release_power()
-	if pressure <= 0.001 and flash <= 0.001:
+	var ambient: float = _opened_glow()
+	var light: float = maxf(flash, ambient)
+	if pressure <= 0.001 and light <= 0.001:
 		return
 	var origin: Vector2 = _light_origin()
 	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
 	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
 	var radius: Vector2 = _release_radius()
-	var glow: Vector2 = Vector2(width * 0.60, width * 0.35).lerp(radius * 2.0, flash)
+	var spread: float = maxf(flash, smoothstep(0.0, 0.50, ambient) * 0.94)
+	var glow: Vector2 = Vector2(width * 0.60, width * 0.35).lerp(radius * 2.0, spread)
 	_radiance.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
-		Color(_release_color, pressure * 0.35 + flash))
-	if flash <= 0.0:
+		Color(_release_color, pressure * 0.35 + light))
+	if light <= 0.0:
 		return
 	var safe: Rect2 = _release_bounds()
 	var expansion: float = 0.55 + 0.45 * smoothstep(0.0, 0.12, age)
@@ -670,18 +694,21 @@ func _draw_radiance() -> void:
 	# Light emerges from the cavity and fades upward, behind the moving lid.
 	for ray in range(7):
 		var lean: float = float(ray - 3) / 3.0
+		if mode == "opened" and not reduced_motion:
+			lean += sin(_idle_time * TAU / (OPEN_SWAY_SECONDS * 1.8) + float(ray) * 0.7) * 0.045 * smoothstep(0.0, 0.65, _idle_time)
 		var half_width: float = safe.size.x * (0.085 if ray % 2 == 0 else 0.045)
 		var top: Vector2 = origin + Vector2(lean * radius.x * 0.88, -height)
 		var points := PackedVector2Array([origin - Vector2(width * 0.08, 0),
 			origin + Vector2(width * 0.08, 0),
 			Vector2(minf(safe.end.x, top.x + half_width), top.y),
 			Vector2(maxf(safe.position.x, top.x - half_width), top.y)])
-		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, flash * 0.80),
-			Color(_release_color, flash * 0.80), Color(_release_color, 0), Color(_release_color, 0)]))
+		var ray_alpha: float = maxf(flash * 0.80, ambient * 0.52)
+		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, ray_alpha),
+			Color(_release_color, ray_alpha), Color(_release_color, 0), Color(_release_color, 0)]))
 
 
 func _draw_seam() -> void:
-	if reduced_motion or _fit_scale <= 0.0:
+	if _fit_scale <= 0.0:
 		return
 	var seam: PackedVector2Array = _seam_points()
 	if seam.is_empty():
@@ -693,6 +720,16 @@ func _draw_seam() -> void:
 		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.18), (5.0 + pressure * 8.0) * pixel, true)
 		_seam_light.draw_polyline(seam, Color(_release_color, pressure * 0.80), (1.0 + pressure * 2.0) * pixel, true)
 		_seam_light.draw_polyline(seam, Color(Color.WHITE, pressure * 0.72), pixel, true)
+	var ambient: float = _opened_glow()
+	if ambient > 0.001:
+		var origin: Vector2 = _light_origin()
+		var radius: Vector2 = _release_radius()
+		var glow: Vector2 = Vector2(_bounds.size.x * _fit_scale * 0.72,
+			_bounds.size.x * _fit_scale * 0.25).min(radius * 2.0)
+		_seam_light.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
+			Color(_release_color.lightened(0.35), ambient * 0.65))
+		_seam_light.draw_polyline(seam, Color(_release_color, ambient * 0.45), 4.0 * pixel, true)
+		_seam_light.draw_polyline(seam, Color(_release_color.lightened(0.65), ambient * 0.85), 1.5 * pixel, true)
 
 
 func _draw_flash() -> void:
@@ -1052,6 +1089,7 @@ func _apply_pose(_progress: float) -> void:
 				lighting = lighting.darkened((1.0 - open) * 0.20)
 			# Reflected light on the body ties the effect to the chest surface.
 			lighting = lighting.lerp(_release_color.lightened(0.58), _release_power() * 0.23)
+		lighting = lighting.lerp(_release_color.lightened(0.58), _opened_glow() * 0.11)
 		sprite.modulate = Color(lighting, float(state.alpha))
 	for edge in _lid_edges:
 		var source: Sprite2D = edge.source
@@ -1092,6 +1130,7 @@ func finish_immediately() -> void:
 	if mode != "opening":
 		return
 	mode = "opened"
+	_idle_time = 0.0
 	_release_active = false
 	_opening_cues_enabled = false
 	_elapsed = OPEN_SECONDS
@@ -1104,6 +1143,7 @@ func clear() -> void:
 	stop_reaction()
 	mode = "closed"
 	_elapsed = 0.0
+	_idle_time = 0.0
 	_animation_origin_frame = -1
 	theme_id = ""
 	hold_progress = 0.0
@@ -1166,7 +1206,12 @@ func piece_count() -> int:
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		stop_reaction()
-	set_process(is_visible_in_tree())
+	set_process(is_visible_in_tree() and not _idle_paused)
+
+
+func set_idle_paused(value: bool) -> void:
+	_idle_paused = value
+	set_process(is_visible_in_tree() and not _idle_paused)
 
 
 func _process(delta: float) -> void:
@@ -1180,9 +1225,10 @@ func _process(delta: float) -> void:
 func _advance_animation(delta: float) -> void:
 	# The deterministic step is also used by native simulations. Runtime
 	# callers go through _process so a new action cannot inherit an old delta.
-	if delta <= 0.0 or not is_finite(delta) or not is_visible_in_tree():
+	if delta <= 0.0 or not is_finite(delta) or not is_visible_in_tree() or _idle_paused:
 		return
-	_idle_time += delta
+	if mode == "opened" and not reduced_motion:
+		_idle_time += delta
 	if _hold_active and not reduced_motion:
 		_charge_time += delta
 	_tap_remaining = maxf(0.0, _tap_remaining - delta)
