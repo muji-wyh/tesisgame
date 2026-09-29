@@ -70,14 +70,15 @@ func _run() -> void:
 		"A brief chest press returns smoothly without awarding a piece")
 	app.chest_button.button_down.emit()
 	app._advance_ui(1.21)
-	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "opening" and app.effects.particle_count() == 0,
-		"A full hold starts anticipation before the chest release")
+		"Maintaining the hold starts anticipation before the chest release")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
-	check(app.effects.particle_count() == 24, "The physical release keeps the small chest celebration")
+	check(app.effects.particle_count() == 0 and app.chest.hold_effect_snapshot().release_flash > 0.0,
+		"The physical release lights the chest without a separate collectible celebration")
 	check(app._pending_fragment.medal_id == "spring-1" and app._pending_fragment.after == 1,
 		"Opening locks the first missing fragment")
 	app.chest.finish_immediately()
+	app.chest_button.button_up.emit()
 	check(app.medal_progress.count_for("spring-1") == 1 and app._title.text == "Chest opened!"
 		and app._caption.text == "Ready for another adventure?",
 		"The first saved chest acknowledges success without exposing its internal progress unit")
@@ -97,10 +98,13 @@ func _run() -> void:
 	win(app)
 	app._open_chest()
 	app.on_page_hidden()
-	check(app.medal_progress.count_for("spring-1") == 2,
-		"Hiding finalizes one earned progress unit")
-	check_no_collectible_presentation(app, "Background completion")
+	check(app.medal_progress.count_for("spring-1") == 1 and app.model.chest_state == "closed",
+		"Hiding preserves the earned chest without claiming its cancelled opening")
+	check_no_collectible_presentation(app, "Background cancellation")
 	app.on_page_visible()
+	app._open_chest()
+	app.chest.finish_immediately()
+	check(app.medal_progress.count_for("spring-1") == 2, "Reopening the interrupted chest saves exactly one progress unit")
 	app.new_round(8)
 	app.choose_theme("spring")
 	win(app)

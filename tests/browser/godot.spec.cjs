@@ -600,6 +600,11 @@ async function holdControllerChest(page) {
   await expect(page.locator('#game-status')).not.toContainText(/A new piece!|Medal complete!|All six collected!|Piece \d of 3|Tap to place!/);
 }
 
+function rewardPieceTotal(saved) {
+  return [...(saved || '').matchAll(/"([a-z]+-\d+)"\s*:\s*(\d+)/g)]
+    .reduce((total, [, , count]) => total + Number(count), 0);
+}
+
 test('new adventures rotate and all five review words replay without opening or awarding the chest', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   const catalog = fs.readFileSync(path.join(__dirname, '..', '..', 'scripts', 'game_data.gd'), 'utf8');
@@ -1016,24 +1021,129 @@ test('fresh adventures save chest progress, unlock a toy and preserve progress',
   expect(errors).toEqual([]);
 });
 
-test('Xbox chest charging cancels on disconnect and works again after reconnect', async ({ page }) => {
+for (const input of ['Space', 'Enter', 'Xbox A']) {
+  test(`${input} chest hold cancels during opening and a fresh hold saves one piece`, async ({ page }) => {
+    const errors = watchErrors(page), controller = input === 'Xbox A';
+    if (controller) await installGamepad(page);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    await ready(page);
+    await winWithTouch(page);
+    if (controller) await page.evaluate(() => window.gamepadFixture.connect());
+    const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+    const hold = () => controller
+      ? page.evaluate(() => window.gamepadFixture.button(0, true)) : page.keyboard.down(input);
+    const release = () => controller
+      ? page.evaluate(() => window.gamepadFixture.button(0, false)) : page.keyboard.up(input);
+
+    await hold();
+    try {
+      // Release after the initial hold has entered the moving opening sequence.
+      await expect(progress).toHaveAttribute('data-phase', 'building', { timeout: 5000 });
+    } finally {
+      await release();
+    }
+    await expect(progress).toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuenow', '0');
+    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    expect((await roomState(page)).medals).toBe(before);
+    // Cross the original completion deadline before starting another attempt.
+    await page.waitForTimeout(4100);
+    await expect(progress).toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuenow', '0');
+    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    expect((await roomState(page)).medals).toBe(before);
+
+    await hold();
+    try {
+      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    } finally {
+      await release();
+    }
+    const saved = (await roomState(page)).medals;
+    expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
+    await expect(progress).toHaveAttribute('hidden', '');
+    await page.waitForTimeout(300);
+    expect((await roomState(page)).medals).toBe(saved);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('held touch cancels during chest opening and a fresh hold saves one piece', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'Trusted held touch uses Chromium CDP.');
+  const errors = watchErrors(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await ready(page);
+  const chest = resultScreenPoint(await winWithTouch(page));
+  const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+  const client = await page.context().newCDPSession(page);
+  const hold = () => client.send('Input.dispatchTouchEvent', {
+    type: 'touchStart', touchPoints: [{ id: 1, ...chest }]
+  });
+  const release = () => client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  try {
+    await hold();
+    try {
+      await expect(progress).toHaveAttribute('data-phase', 'building', { timeout: 5000 });
+    } finally {
+      await release();
+    }
+    await expect(progress).toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuenow', '0');
+    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    expect((await roomState(page)).medals).toBe(before);
+    await page.waitForTimeout(4100);
+    await expect(progress).toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuenow', '0');
+    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    expect((await roomState(page)).medals).toBe(before);
+
+    await hold();
+    try {
+      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    } finally {
+      await release();
+    }
+    const saved = (await roomState(page)).medals;
+    expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
+    await expect(progress).toHaveAttribute('hidden', '');
+    await page.waitForTimeout(300);
+    expect((await roomState(page)).medals).toBe(saved);
+    expect(errors).toEqual([]);
+  } finally {
+    await client.detach();
+  }
+});
+
+test('Xbox chest opening cancels on disconnect and works again after reconnect', async ({ page }) => {
   const errors = watchErrors(page);
   await installGamepad(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await ready(page);
   await winWithTouch(page);
+  const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   await page.evaluate(() => window.gamepadFixture.button(0, true));
-  await page.waitForTimeout(120);
+  await expect(progress).toHaveAttribute('data-phase', 'building', { timeout: 5000 });
   await page.evaluate(() => window.gamepadFixture.disconnect());
-  await page.waitForTimeout(1700);
+  await expect(progress).toHaveAttribute('hidden', '');
+  await expect(progress).toHaveAttribute('aria-valuenow', '0');
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  expect((await roomState(page)).medals).toBe(before);
+  await page.waitForTimeout(4100);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  expect((await roomState(page)).medals).toBe(before);
   await page.evaluate(() => window.gamepadFixture.connect());
   await holdControllerChest(page);
+  const saved = (await roomState(page)).medals;
+  expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  expect((await roomState(page)).medals).toBe(saved);
   expect(errors).toEqual([]);
 });
 

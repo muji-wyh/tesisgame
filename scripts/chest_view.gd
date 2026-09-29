@@ -66,6 +66,7 @@ var _pulse_holding: bool = false
 var _body_shift_x: float = 0.0
 var _cancel_shift_x: float = 0.0
 var _cancel_body_pose: Dictionary = {}
+var _cancel_piece_poses: Array[Dictionary] = []
 var _radiance := Node2D.new()
 var _flash := Node2D.new()
 var _seam_light := Node2D.new()
@@ -468,6 +469,7 @@ func begin_hold() -> void:
 	_animation_origin_frame = Engine.get_process_frames()
 	_release_active = false
 	_cancel_remaining = 0.0
+	_cancel_piece_poses.clear()
 	_charge_time = 0.0
 	_charge_step = 0
 	_hold_pulse_step = 0
@@ -484,6 +486,7 @@ func begin_hold() -> void:
 func cancel_hold() -> void:
 	if not _hold_active or mode != "closed":
 		return
+	_cancel_piece_poses.clear()
 	_cancel_pressure = _hold_pose_state().x
 	_cancel_body_pose = _physical_pose.duplicate(true)
 	_cancel_shift_x = _body_shift_x
@@ -496,6 +499,32 @@ func cancel_hold() -> void:
 	_hold_pulse_step = 0
 	_pulse_step = 0
 	_tap_remaining = 0.0
+	_emit_cue("cancel")
+	_apply_pose(0.0)
+	_fit()
+
+
+func cancel_open(animate_return: bool = true) -> void:
+	if mode != "opening":
+		return
+	var body_pose: Dictionary = _physical_pose.duplicate(true)
+	var shift_x: float = _body_shift_x
+	var piece_poses: Array[Dictionary] = []
+	for piece in _pieces:
+		piece_poses.append({"pose": piece.node.transform, "alpha": piece.node.modulate.a})
+	mode = "closed"
+	_elapsed = 0.0
+	_idle_time = 0.0
+	_opening_cues.clear()
+	stop_reaction()
+	_animation_origin_frame = Engine.get_process_frames()
+	if animate_return and not reduced_motion:
+		_cancel_remaining = Feel.CANCEL_SECONDS
+		_cancel_pressure = 0.0
+		_cancel_progress = 0.0
+		_cancel_body_pose = body_pose
+		_cancel_shift_x = shift_x
+		_cancel_piece_poses = piece_poses
 	_emit_cue("cancel")
 	_apply_pose(0.0)
 	_fit()
@@ -910,6 +939,7 @@ func stop_reaction() -> void:
 	_release_active = false
 	_charge_time = 0.0
 	_cancel_remaining = 0.0
+	_cancel_piece_poses.clear()
 	_charge_step = 0
 	_opening_cues_enabled = false
 	_pulse_step = 0
@@ -1075,8 +1105,15 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 
 
 func _apply_pose(_progress: float) -> void:
+	var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 	for index in range(_pieces.size()):
 		var state: Dictionary = _piece_pose(index, _elapsed, mode in ["opening", "opened"])
+		if returning > 0.0 and index < _cancel_piece_poses.size():
+			# Return the entire mechanism from the last rendered pose. Rewinding
+			# the timeline would replay its pressure kicks and unlock motion.
+			var rest_pose: Transform2D = state.pose
+			state.pose = rest_pose.interpolate_with(_cancel_piece_poses[index].pose, returning)
+			state.alpha = lerpf(float(state.alpha), float(_cancel_piece_poses[index].alpha), returning)
 		var sprite: Sprite2D = _pieces[index].node
 		sprite.transform = state.pose
 		var lighting: Color = _tint
@@ -1170,6 +1207,7 @@ func set_hold_progress(value: float) -> void:
 		_charge_time = 0.0
 		_tap_remaining = 0.0
 		_cancel_remaining = 0.0
+		_cancel_piece_poses.clear()
 		_charge_step = 0
 		_hold_pulse_step = 0
 		_pulse_step = 0
@@ -1237,6 +1275,8 @@ func _advance_animation(delta: float) -> void:
 		_elapsed = minf(OPEN_SECONDS, _elapsed + delta)
 		if _opening_cues_enabled:
 			for event in _opening_timeline:
+				if mode != "opening" or not _opening_cues_enabled:
+					break
 				var key: String = str(event.cue) + ":" + str(event.step)
 				if _elapsed >= float(event.time) and not _opening_cues.has(key):
 					_opening_cues[key] = true

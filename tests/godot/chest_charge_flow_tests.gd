@@ -64,13 +64,18 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		reason + " clears the hold and visible progress immediately")
 	check(not app.audio._chest_charge_active and not app.audio.chest_charge.playing
-		and app.audio.chest_charge.stream == null,
-		reason + " stops and releases the charge sound")
-	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
+		and app.audio.chest_charge.stream == null
+		and app.audio._chest_players.all(func(player): return not player.playing or player.stream == app.audio._chest_stream(app.chest.theme_id, "cancel")),
+		reason + " stops the pressure bed and old accents, allowing only the brief release feedback")
+	check(app.model.chest_state == "closed" and app.chest.mode == "closed" and _pieces(app) == pieces
+		and app._pending_fragment.is_empty() and app.model.reward_id.is_empty() and app.model.reward_theme.is_empty(),
 		reason + " leaves the earned chest closed without awarding a piece")
 	app._advance_ui(2.0)
+	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+	app.chest.finish_immediately()
+	app._on_chest_opened()
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
-		reason + " cannot complete later from an old frame")
+		reason + " cannot complete later from an old frame or finish callback")
 	var next_player: int = app.audio._chest_next_player
 	app._on_chest_cue(app.chest.theme_id, "hold_pulse", 1)
 	app._on_chest_cue(app.chest.theme_id, "tension_pulse", 1)
@@ -137,7 +142,9 @@ func _run() -> void:
 	app._advance_ui(0.08)
 	state = app.chest.hold_effect_snapshot()
 	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 35,
-		"Completing confirmation starts automatic gathering at its true elapsed progress")
+		"Completing confirmation keeps the gesture held while gathering advances")
+	check(app._holding_chest and not app.chest_button.disabled,
+		"The opening keeps both its held gesture and button release path active")
 	check(cues.filter(func(item): return item[1] == "charge_step") == [["spring", "charge_step", 1]],
 		"The automatic handoff does not replay the first progress star")
 	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
@@ -151,9 +158,35 @@ func _run() -> void:
 		"Opening keeps its full initial tension instead of consuming the hold frame's 250 milliseconds")
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
-	check(app.model.chest_state == "opening" and app.chest.hold_effect_snapshot().active,
-		"Releasing after confirmation lets the automatic performance continue")
+	_check_cancelled(app, 0, "Releasing just after confirmation")
+	for release_at in [2.0, 3.5, Feel.HOLD_SECONDS + Feel.OPEN_SECONDS - 0.01]:
+		_begin(app)
+		app._advance_ui(Feel.HOLD_SECONDS)
+		app.chest.set_process(false)
+		app.chest._advance_animation(release_at - Feel.HOLD_SECONDS)
+		app._advance_ui(0.0)
+		check(app.model.chest_state == "opening" and app._holding_chest and _pieces(app) == 0,
+			"Holding for %.2f seconds still requires release-aware completion" % release_at)
+		app.chest_button.button_up.emit()
+		_check_cancelled(app, 0, "Releasing after %.2f seconds" % release_at)
+	# A second press during the visual return must not be blocked or inherit
+	# any of the abandoned opening's elapsed time, flash or reward selection.
+	_begin(app)
+	app._advance_ui(Feel.HOLD_SECONDS)
+	app.chest._advance_animation(0.8)
+	app.chest_button.button_up.emit()
+	_begin(app)
+	check(app._holding_chest and app.chest.hold_effect_snapshot().percent == 0
+		and is_zero_approx(app.chest.hold_effect_snapshot().opening_time)
+		and app._pending_fragment.is_empty(), "Repressing during rollback immediately starts from zero")
+	app._on_chest_opened()
+	app._advance_ui(0.2)
+	check(app.model.chest_state == "closed" and _pieces(app) == 0 and app._holding_chest,
+		"A stale completion after repressing cannot save or skip the new hold")
+	app._advance_ui(1.0)
+	cues.clear()
 	app.chest.finish_immediately()
+	app.chest_button.button_up.emit()
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")
 	check(app.audio._chest_rewarded and app._chest_reward_announced,
@@ -269,6 +302,51 @@ func _run() -> void:
 	app._input(back)
 	_check_cancelled(app, 2, "Pressing controller B during a hold")
 	check(not app._controller_holding_chest, "Controller Back also clears the held-action latch")
+	for input_kind in ["mouse release", "touch release", "touch cancellation", "mouse drag", "touch drag", "controller release", "controller disconnect", "controller back", "Escape", "More"]:
+		app.chest_button.grab_focus()
+		if input_kind.begins_with("controller"):
+			accept.pressed = true
+			app._input(accept)
+			app.set_process(false)
+		else:
+			_begin(app)
+		app._advance_ui(Feel.HOLD_SECONDS)
+		app.chest.set_process(false)
+		app.chest._advance_animation(0.8)
+		check(app.model.chest_state == "opening" and app._holding_chest,
+			input_kind + " reaches the same two-second active opening")
+		match input_kind:
+			"mouse release":
+				var release := InputEventMouseButton.new()
+				release.button_index = MOUSE_BUTTON_LEFT
+				release.pressed = false
+				app._chest_input(release)
+			"touch release", "touch cancellation":
+				var release := InputEventScreenTouch.new()
+				release.pressed = false
+				release.canceled = input_kind == "touch cancellation"
+				app._chest_input(release)
+			"mouse drag":
+				app._chest_input(motion)
+			"touch drag":
+				app._chest_input(drag)
+			"controller release":
+				accept.pressed = false
+				app._input(accept)
+			"controller disconnect":
+				app._on_joy_connection_changed(0, false)
+			"controller back":
+				app._input(back)
+			"Escape":
+				app._unhandled_input(escape)
+			"More":
+				app._toggle_collection()
+		_check_cancelled(app, 2, input_kind + " during the opening")
+		app._end_chest_hold()
+		if input_kind == "More":
+			app._hide_collection()
+		accept.pressed = false
+		app._input(accept)
 
 	app.set_reduced_motion(true)
 	_begin(app)
@@ -345,30 +423,41 @@ func _run() -> void:
 		"Background interruption exercises an actual audible rhythm after its first synchronized kick")
 	cues.clear()
 	app.on_page_hidden()
-	check(_pieces(app) == 2 and app.model.chest_state == "opened" and cues.is_empty()
+	check(_pieces(app) == 1 and app.model.chest_state == "closed" and cues.all(func(item): return item[1] == "cancel")
 		and app.audio._chest_phase == "idle" and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
-		"Background completion saves once without replaying opening light or reward sounds")
+		"Backgrounding an incomplete opening cancels it without saving or replaying a sound")
 	app.on_page_visible()
+	cues.clear()
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	app._on_chest_cue("spring", "tension_pulse", 2)
 	app.audio.set_chest_tension(1.0)
-	check(_pieces(app) == 2 and app.audio._chest_phase == "idle" and cues.is_empty()
+	app._on_chest_opened()
+	check(_pieces(app) == 1 and app.model.chest_state == "closed" and app.audio._chest_phase == "idle" and cues.is_empty()
 		and not app.audio.chest_charge.playing and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
-		"Foregrounding and stale rhythm callbacks do not replay the completed performance")
+		"Foregrounding and stale callbacks cannot resume or reward the interrupted opening")
+	_begin(app)
+	app._advance_ui(Feel.HOLD_SECONDS)
+	app.chest.finish_immediately()
+	check(_pieces(app) == 2, "The earned chest remains available to reopen after background cancellation")
 	_win(app, 87)
 	_begin(app)
 	app._advance_ui(1.21)
 	cues.clear()
 	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
-	check(_pieces(app) == 3 and app.model.chest_state == "opened" and cues.is_empty()
+	check(_pieces(app) == 2 and app.model.chest_state == "closed" and cues.all(func(item): return item[1] == "cancel")
 		and app.audio._chest_phase == "idle",
-		"Native focus loss during opening saves once without playing missed physical or reward sounds")
+		"Native focus loss during opening cancels the gesture without saving a reward")
 	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
 	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)
+	cues.clear()
 	app.chest._advance_animation(2.0)
 	app._on_chest_opened()
-	check(_pieces(app) == 3 and cues.is_empty() and app.audio._chest_phase == "idle",
-		"Duplicate native focus events and foreground frames cannot replay or duplicate the saved piece")
+	check(_pieces(app) == 2 and app.model.chest_state == "closed" and cues.is_empty() and app.audio._chest_phase == "idle",
+		"Duplicate native focus events and stale frames cannot complete the cancelled gesture")
+	_begin(app)
+	app._advance_ui(Feel.HOLD_SECONDS)
+	app.chest.finish_immediately()
+	check(_pieces(app) == 3, "Regaining focus permits a fresh opening of the unclaimed chest")
 	_win(app, 88)
 	app.set_reduced_motion(true)
 	storage.fail_write = true

@@ -222,10 +222,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     // than the complete hold, and must not make an already-completed phase fail.
     await expect.poll(() => page.evaluate(() => window.chestObservation.cues.some(cue => cue.cue === 'opening')),
       { timeout: 4000 }).toBe(true);
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
-  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   const completionObservation = await page.evaluate(() => ({
     chest: window.chestObservation,
     audio: { available: window.audioObservation.available, playbacks: window.audioObservation.playbacks }
@@ -237,7 +237,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   const holdingProgress = progressHistory.filter(state => !state.hidden && state.phase === 'holding');
   expect(holdingProgress.some(state => state.percent >= 30 && state.text.includes('Hold to begin'))).toBe(true);
   expect(holdingProgress.every(state => state.percent <= 36),
-    'The 1.2-second hold fills about one third of the bar before the automatic opening').toBe(true);
+    'The 1.2-second hold fills about one third of the bar before the opening phase').toBe(true);
   for (const phase of ['gathering', 'building', 'anticipation']) {
     expect(progressHistory.some(state => !state.hidden && state.phase === phase && state.percent >= 34 &&
       state.percent < 100), `Progress remains active and incomplete during ${phase}`).toBe(true);
@@ -282,7 +282,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     'press:0', 'cancel:0', 'press:0', 'opening:0', 'anticipation:0', 'unlock:0', 'release:0', 'settle:0'
   ]);
   const steps = cues.filter(event => event.cue === 'charge_step');
-  expect(steps.map(event => event.step), 'Each star lights once across the hold and automatic opening').toEqual([1, 2, 3]);
+  expect(steps.map(event => event.step), 'Each star lights once across the hold and opening phases').toEqual([1, 2, 3]);
   const opening = cues.find(event => event.cue === 'opening');
   const acceptedPress = cues.filter(event => event.cue === 'press').at(-1);
   const acceptedCues = cues.slice(cues.indexOf(acceptedPress));
@@ -290,7 +290,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   expect(holdPulses.map(event => event.step), 'The accepted hold delivers all five physical beats')
     .toEqual(HOLD_PULSE_TIMES.map((_, index) => index + 1));
   const pulses = cues.filter(event => event.cue === 'tension_pulse');
-  expect(pulses.map(event => event.step), 'The automatic opening delivers all fifteen physical beats')
+  expect(pulses.map(event => event.step), 'The opening phase delivers all fifteen physical beats')
     .toEqual(PULSE_TIMES.map((_, index) => index + 1));
   const rhythm = acceptedCues.filter(isRhythmCue);
   expect(rhythm.map(event => event.cue), 'Confirmation joins five hold beats directly to fifteen opening beats')
@@ -315,12 +315,12 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   // still rejecting an early release or the former ten-second sequence.
   for (const [cue, milliseconds] of [['anticipation', 1940], ['unlock', 2080], ['release', 2160], ['settle', 2950]]) {
     const elapsed = cues.find(event => event.cue === cue).at - opening.at;
-    expect(elapsed, `${cue} cannot precede its automatic-opening boundary`).toBeGreaterThanOrEqual(milliseconds - 100);
-    expect(elapsed, `${cue} stays within the shorter automatic-opening sequence`).toBeLessThanOrEqual(milliseconds + 500);
+    expect(elapsed, `${cue} cannot precede its opening boundary`).toBeGreaterThanOrEqual(milliseconds - 100);
+    expect(elapsed, `${cue} stays within the shorter opening sequence`).toBeLessThanOrEqual(milliseconds + 500);
   }
   const completed = observation.statuses.find(status => status.text === 'Chest opened! Ready for another adventure?');
   expect(completed).toBeDefined();
-  expect(completed.at - opening.at, 'Saving waits for the full 3.8-second automatic sequence').toBeGreaterThanOrEqual(3700);
+  expect(completed.at - opening.at, 'Saving waits for the full 3.8-second opening sequence').toBeGreaterThanOrEqual(3700);
   expect(completed.at - acceptedPress.at, 'The full hold and opening last five seconds').toBeGreaterThanOrEqual(4900);
   expect(completed.at - acceptedPress.at, 'The completed chest no longer takes ten seconds').toBeLessThanOrEqual(6000);
   await testInfo.attach('chest-completion-timing', {
@@ -462,52 +462,162 @@ test('reduced motion keeps hold progress and releases without claiming early', a
   expect(errors).toEqual([]);
 });
 
-test('background completion stops tension and never replays missed beats on return', async ({ page }, testInfo) => {
+test('releasing during opening or settling cancels the reward and a fresh full hold claims once', async ({ page }, testInfo) => {
   await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await chooseTheme(page, 1);
   await winMatch(page);
-  const baseline = await pieces(page);
-  await pressChest(page);
-  let hidden;
-  try {
-    await expect.poll(() => page.evaluate(() => window.chestObservation.cues.filter(cue => cue.cue === 'tension_pulse').length),
-      { intervals: [20, 30], timeout: 4000 }).toBeGreaterThanOrEqual(2);
-    // Exercise the existing host lifecycle callback, without directly invoking
-    // chest state or relying on the runner's actual tab focus.
-    hidden = await page.evaluate(() => {
-      const state = { at: performance.now(), cues: window.chestObservation.cues.length,
-        sounds: window.audioObservation.playbacks.length };
-      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-      document.dispatchEvent(new Event('visibilitychange'));
-      return state;
+  const baseline = await pieces(page), unopenedSave = await rewardSave(page);
+  const status = page.locator('#game-status'), progress = page.locator('#chest-progress');
+
+  for (const phase of ['opening', 'settling']) {
+    const start = await page.evaluate(() => window.chestObservation.cues.length);
+    await pressChest(page);
+    let released;
+    try {
+      // Observe real cue boundaries without screenshots delaying the release.
+      // The first attempt lasts about two seconds; the second reaches the
+      // settling pose after the bar has already displayed 100 percent.
+      await page.waitForFunction(({ start, phase }) => {
+        const cues = window.chestObservation.cues.slice(start);
+        const press = cues.find(cue => cue.cue === 'press');
+        return press && (phase === 'opening' ?
+          performance.now() - press.at >= 2000 && cues.some(cue => cue.cue === 'opening') :
+          cues.some(cue => cue.cue === 'settle'));
+      }, { start, phase }, { timeout: 7000 });
+      released = await page.evaluate(start => ({
+        at: performance.now(), cues: window.chestObservation.cues.slice(start),
+        status: document.getElementById('game-status').textContent,
+        saved: localStorage.getItem('wordBuddies.medalProgress') || ''
+      }), start);
+    } finally {
+      await page.mouse.up();
+    }
+    const press = released.cues.find(cue => cue.cue === 'press');
+    expect(released.at - press.at, `${phase} cancellation happens after confirmation`).toBeGreaterThanOrEqual(1900);
+    expect(released.status, 'The release precedes completion').not.toBe('Chest opened! Ready for another adventure?');
+    expect(released.saved, 'Holding partway through opening never claims a piece').toBe(unopenedSave);
+    expect(released.cues.some(cue => cue.cue === 'opening')).toBe(true);
+    if (phase === 'settling') expect(released.cues.some(cue => cue.cue === 'release')).toBe(true);
+    await expect(status).toHaveText('You did it! Hold to open your chest!');
+    await expect(progress).toHaveAttribute('hidden', '');
+    await expect(progress).toHaveAttribute('aria-valuenow', '0');
+    expect(await rewardSave(page)).toBe(unopenedSave);
+    const cancelled = await page.evaluate(() => ({
+      cues: window.chestObservation.cues.length, sounds: window.audioObservation.playbacks.length
+    }));
+    // Cross the cancelled attempt's original completion deadline. It must not
+    // resume its cues, sounds, or pending save while the chest is closed.
+    await page.waitForTimeout(Math.max(500, 5600 - (released.at - press.at)));
+    expect(await page.evaluate(() => window.chestObservation.cues.length)).toBe(cancelled.cues);
+    expect((await page.evaluate(start => window.audioObservation.playbacks.slice(start), cancelled.sounds)).filter(isChestSound),
+      'A cancelled opening cannot replay a material cue or reward accent').toEqual([]);
+    await expect(status).toHaveText('You did it! Hold to open your chest!');
+    expect(await rewardSave(page), 'The abandoned opening cannot save at its former deadline').toBe(unopenedSave);
+    await testInfo.attach(`released-during-${phase}`, {
+      body: JSON.stringify(released, null, 2), contentType: 'application/json'
     });
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
-    expect(await pieces(page)).toBe(baseline + 1);
-    await page.waitForTimeout(250);
+    await screenshot(page, testInfo, `cancelled-during-${phase}`);
+  }
+
+  await pressChest(page);
+  try {
+    await expect(status).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
   } finally {
     await page.mouse.up();
-    await page.evaluate(() => {
-      delete document.hidden;
-      document.dispatchEvent(new Event('visibilitychange'));
-    });
   }
+  expect(await pieces(page)).toBe(baseline + 1);
   const saved = await rewardSave(page);
-  await page.waitForTimeout(1600);
-  expect(await page.evaluate(() => window.chestObservation.cues.length), 'Returning cannot catch up old tension, unlock or release cues').toBe(hidden.cues);
-  const playbacks = await page.evaluate(() => window.audioObservation.playbacks);
-  expect(playbacks.slice(hidden.sounds).filter(isChestSound), 'Background completion and return stay silent, including the reward accent').toEqual([]);
-  if (await page.evaluate(() => window.audioObservation.available)) {
-    const cues = await page.evaluate(() => window.chestObservation.cues);
-    const opening = cues.find(cue => cue.cue === 'opening'), press = cues.find(cue => cue.cue === 'press');
-    const bed = playbacks.filter(sound => hasDuration(sound, 0.8) && audioOnset(sound) >= press.at - 100);
-    expectBedChain(bed, { press, stop: hidden, opening });
-  }
+  await page.waitForTimeout(500);
   expect(await rewardSave(page)).toBe(saved);
-  await screenshot(page, testInfo, 'background-completed');
+  const cues = await page.evaluate(() => window.chestObservation.cues);
+  expect(cues.filter(cue => cue.cue === 'press')).toHaveLength(3);
+  expect(cues.filter(cue => cue.cue === 'cancel')).toHaveLength(2);
+  expect(cues.filter(cue => cue.cue === 'opening')).toHaveLength(3);
+  expect((await page.evaluate(() => window.chestObservation.statuses))
+    .filter(state => state.text === 'Chest opened! Ready for another adventure?')).toHaveLength(1);
+  await screenshot(page, testInfo, 'reheld-after-opening-cancellations');
   expect(errors).toEqual([]);
 });
+
+for (const interruption of ['background', 'focus loss']) {
+  test(`${interruption} cancels opening without a reward or delayed replay`, async ({ page }, testInfo) => {
+    await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+    await observeChest(page);
+    const errors = await openGame(page, { reducedMotion: 'no-preference' });
+    await chooseTheme(page, 1);
+    await winMatch(page);
+    const baseline = await pieces(page), unopenedSave = await rewardSave(page);
+    const status = page.locator('#game-status'), progress = page.locator('#chest-progress');
+    await pressChest(page);
+    let interrupted, cancelled;
+    try {
+      await expect.poll(() => page.evaluate(() => window.chestObservation.cues.filter(cue => cue.cue === 'tension_pulse').length),
+        { intervals: [20, 30], timeout: 4000 }).toBeGreaterThanOrEqual(2);
+      // Exercise the existing host lifecycle callback, without directly invoking
+      // chest state or relying on the runner's actual tab focus.
+      interrupted = await page.evaluate(interruption => {
+        const state = { at: performance.now(), cues: window.chestObservation.cues.length,
+          sounds: window.audioObservation.playbacks.length };
+        if (interruption === 'background') {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+          document.dispatchEvent(new Event('visibilitychange'));
+        } else {
+          window.dispatchEvent(new Event('blur'));
+        }
+        return state;
+      }, interruption);
+      // The lifecycle event itself must cancel, before the pointer is released.
+      await expect(status).toHaveText('You did it! Hold to open your chest!');
+      await expect(progress).toHaveAttribute('hidden', '');
+      await expect(progress).toHaveAttribute('aria-valuenow', '0');
+      expect(await rewardSave(page)).toBe(unopenedSave);
+      cancelled = await page.evaluate(() => ({ cues: window.chestObservation.cues.length,
+        sounds: window.audioObservation.playbacks.length }));
+      await page.waitForTimeout(4200);
+      await expect(status).toHaveText('You did it! Hold to open your chest!');
+      expect(await pieces(page)).toBe(baseline);
+    } finally {
+      await page.mouse.up();
+      if (interruption === 'background') {
+        await page.evaluate(() => {
+          delete document.hidden;
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+      } else {
+        await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+      }
+    }
+    await page.waitForTimeout(500);
+    expect(await page.evaluate(() => window.chestObservation.cues.length), 'Returning cannot catch up old tension, unlock or release cues').toBe(cancelled.cues);
+    const playbacks = await page.evaluate(() => window.audioObservation.playbacks);
+    expect(playbacks.slice(cancelled.sounds).filter(isChestSound), 'The cancelled opening and return cannot replay material sounds or the reward accent').toEqual([]);
+    if (interruption === 'background') {
+      expect(cancelled.cues, 'Background cancellation stays silent').toBe(interrupted.cues);
+      expect(playbacks.slice(interrupted.sounds).filter(isChestSound)).toEqual([]);
+    }
+    if (await page.evaluate(() => window.audioObservation.available)) {
+      const cues = await page.evaluate(() => window.chestObservation.cues);
+      const opening = cues.find(cue => cue.cue === 'opening'), press = cues.find(cue => cue.cue === 'press');
+      const bed = playbacks.filter(sound => hasDuration(sound, 0.8) && audioOnset(sound) >= press.at - 100);
+      expectBedChain(bed, { press, stop: interrupted, opening });
+    }
+    expect(await rewardSave(page)).toBe(unopenedSave);
+    await screenshot(page, testInfo, `${interruption.replace(' ', '-')}-cancelled`);
+    await pressChest(page);
+    try {
+      await expect(status).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    } finally {
+      await page.mouse.up();
+    }
+    expect(await pieces(page)).toBe(baseline + 1);
+    const saved = await rewardSave(page);
+    await page.waitForTimeout(500);
+    expect(await rewardSave(page)).toBe(saved);
+    expect(errors).toEqual([]);
+  });
+}
 
 test('unavailable themed samples use immediate local feedback without delaying rewards', async ({ page }, testInfo) => {
   const fs = require('node:fs'), path = require('node:path');

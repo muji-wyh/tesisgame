@@ -1501,7 +1501,7 @@ func _refresh() -> void:
 	failure_button.visible = model.phase == "lost"
 	failure_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 26, 3))
 	_failure_sparkle.accent = palette.accent
-	chest_button.disabled = model.chest_state != "closed" or _save_error
+	chest_button.disabled = model.chest_state == "opened" or _save_error
 	chest_button.tooltip_text = "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
@@ -1513,7 +1513,7 @@ func _refresh() -> void:
 		_title.text = "You did it!"
 		_caption.text = "Hold to open your chest!"
 		if model.chest_state == "opening":
-			_caption.text = "Here comes your surprise!"
+			_caption.text = "Keep holding to open. Release to cancel."
 		elif model.chest_state == "opened":
 			_title.text = "Chest opened!"
 			_caption.text = "Ready for another adventure?"
@@ -2062,7 +2062,6 @@ func set_reduced_motion(value: bool) -> void:
 
 func _open_chest() -> void:
 	if model.phase != "won" or model.chest_state != "closed":
-		_cancel_chest_hold()
 		return
 	if not _progress_ready:
 		_progress_ready = medal_progress.load_progress()
@@ -2081,9 +2080,7 @@ func _open_chest() -> void:
 	if not model.begin_open(id):
 		_cancel_chest_hold()
 		return
-	_holding_chest = false
 	_hold_elapsed = 0.0
-	_finish_chest_drag()
 	_chest_reward_announced = false
 	if not _settling_chest:
 		audio.interact(model.reward_theme)
@@ -2112,6 +2109,12 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 
 
 func _on_chest_opened() -> void:
+	if chest.mode != "opened":
+		return
+	_holding_chest = false
+	_hold_elapsed = 0.0
+	_hold_origin_frame = -1
+	_finish_chest_drag()
 	if not model.finish_open():
 		return
 	# Physical completion stops the bed even if the following save fails.
@@ -2186,7 +2189,6 @@ func on_page_hidden() -> void:
 	_room.playground.pause(true)
 	_memory.set_reduced_motion(true)
 	_memory.set_reduced_motion(reduced_motion)
-	chest.finish_immediately()
 	chest.stop_reaction()
 	effects.clear()
 
@@ -2203,7 +2205,7 @@ func on_page_visible() -> void:
 
 func _notification(what: int) -> void:
 	# Web focus/visibility is coordinated by the host; native desktop focus
-	# loss must also release input and settle any already-earned opening.
+	# loss must also cancel any unfinished chest gesture.
 	var native_focus_out: bool = not OS.has_feature("web") and what == NOTIFICATION_APPLICATION_FOCUS_OUT
 	var native_focus_in: bool = not OS.has_feature("web") and what == NOTIFICATION_APPLICATION_FOCUS_IN
 	if (what == NOTIFICATION_APPLICATION_PAUSED or native_focus_out) and audio != null:
@@ -2765,8 +2767,11 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 	_holding_chest = false
 	_hold_elapsed = 0.0
 	_hold_origin_frame = -1
+	var was_opening: bool = model.chest_state == "opening"
 	if chest != null:
-		if animate_return:
+		if was_opening:
+			chest.cancel_open(animate_return)
+		elif animate_return:
 			chest.cancel_hold()
 		else:
 			chest.set_hold_progress(0.0)
@@ -2775,6 +2780,10 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 			audio.stop_chest_charge()
 		else:
 			audio.stop_chest_performance()
+	if was_opening:
+		_pending_fragment.clear()
+		_chest_reward_announced = false
+		model.cancel_open()
 	_publish_chest_charge()
 
 
@@ -2809,14 +2818,13 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 	_update_duck()
 	_advance_collection_inertia(delta)
 	var elapsed: float = delta if hold_delta < 0.0 else hold_delta
-	if _holding_chest and elapsed > 0.0 and is_finite(elapsed):
+	if _holding_chest and model.chest_state == "closed" and elapsed > 0.0 and is_finite(elapsed):
 		_hold_elapsed += elapsed
 		var progress: float = clampf(_hold_elapsed / HOLD_SECONDS, 0.0, 1.0)
 		chest.set_hold_progress(progress)
 		audio.set_chest_charge(progress)
 		_publish_chest_charge(chest.performance_progress())
 		if progress >= 1.0:
-			_holding_chest = false
 			_open_chest()
 	if model.chest_state == "opening" and chest.mode == "opening" and not _page_hidden and not collection_page.visible:
 		var phase: String = chest.performance_phase()

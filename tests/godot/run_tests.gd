@@ -377,8 +377,14 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 	check(model.chest_state == "opening" and model.reward_theme == "spring", "Opening captures its theme")
 	check(not model.begin_open("spring-2") if has_property(model, "reward_id") else false, "Repeated opening is rejected")
 	check(not model.set_theme("summer"), "Theme changes are locked during opening")
+	check(model.cancel_open() and model.chest_state == "closed" and model.phase == "won"
+		and model.reward_id.is_empty() and model.reward_theme.is_empty(),
+		"Cancelling opening keeps the won round and discards its unclaimed reward selection")
+	check(not model.cancel_open() and not model.finish_open(), "A cancelled opening rejects duplicate cancellation and stale completion")
+	check(model.begin_open("spring-1"), "The same earned chest can reopen after cancellation")
 	check(model.finish_open(), "Opening completes once")
 	check(not model.finish_open(), "Opening completion is one-shot")
+	check(not model.cancel_open() and model.chest_state == "opened", "Releasing after completion cannot retract a saved reward")
 	check(model.set_theme("winter"), "Theme can change after opening")
 	check(model.reward_theme == "spring" and model.chest_state == "opened", "Earned reward is immutable")
 	model.reset(words, 27)
@@ -1153,7 +1159,6 @@ func _test_scene() -> void:
 	await process_frame
 	if app.has_method("_process"):
 		app._advance_ui(1.21)
-	joy_button(JOY_BUTTON_A, false)
 	await process_frame
 	check(app.model.chest_state == "opening", "Normal opening is staged, not immediate")
 	check(app.theme_buttons.all(func(button: Button) -> bool: return button.disabled) if has_property(app, "theme_buttons") else false,
@@ -1164,12 +1169,14 @@ func _test_scene() -> void:
 	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
 	check(app.effects.particle_count() == 0, "Opening anticipation waits for the physical release beat")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
-	check(app.effects.particle_count() == 24, "The lid release starts the small 24-particle celebration")
+	check(app.effects.particle_count() == 0 and app.chest.hold_effect_snapshot().release_flash > 0.0,
+		"The lid release lights the chest without a separate collectible celebration")
 	check_no_collectible_presentation(app, "The opening chest has no collectible artwork or flight")
 	var opened_reward_id: String = app.model.reward_id
 	var reward_count_before: int = app.collected_rewards.size()
 	var was_collected: bool = app.collected_rewards.has(opened_reward_id)
 	app.chest.finish_immediately()
+	joy_button(JOY_BUTTON_A, false)
 	check(app.model.chest_state == "opened", "The native animation completes the reward")
 	check(app.collected_rewards.has(opened_reward_id), "The opened reward is recorded before visual delivery")
 	check(app.collected_rewards.size() == reward_count_before + (0 if was_collected else 1),
@@ -1242,11 +1249,11 @@ func _test_scene() -> void:
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._advance_ui(1.21)
-	app.chest_button.button_up.emit()
 	app.on_page_hidden()
-	check(app.model.chest_state == "opened", "Hiding finalizes an already-earned opening once")
+	check(app.model.chest_state == "closed" and app._pending_fragment.is_empty(),
+		"Hiding cancels an incomplete opening and preserves the earned closed chest")
 	check(app.effects.particle_count() == 0, "Hiding during opening clears particles")
-	check_no_collectible_presentation(app, "Background completion has no collectible artwork or queued flight")
+	check_no_collectible_presentation(app, "Background cancellation has no collectible artwork or queued flight")
 	app.on_page_visible()
 	app.new_round(91)
 	win_round(app)
@@ -1254,8 +1261,8 @@ func _test_scene() -> void:
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._advance_ui(1.21)
-	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
+	app.chest_button.button_up.emit()
 	check_no_collectible_presentation(app, "A completed chest has no collectible delivery before visiting the room")
 	app._show_collection()
 	check_no_collectible_presentation(app, "Opening Pip's room cannot reveal a hidden collectible flight")
@@ -1267,8 +1274,8 @@ func _test_scene() -> void:
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._advance_ui(1.21)
-	app.chest_button.button_up.emit()
 	app.chest.finish_immediately()
+	app.chest_button.button_up.emit()
 	check_no_collectible_presentation(app, "A completed chest has no collectible delivery to delay another adventure")
 	var lesson_before_adventure: Array = app.model.lesson_words.duplicate(true)
 	var saved_before_adventure: Dictionary = app.medal_progress.counts.duplicate()

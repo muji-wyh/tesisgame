@@ -1,10 +1,11 @@
 # Eight-world chest performance
 
-The chest uses a 1.2-second confirmation hold followed by a 3.8-second automatic
-performance, totaling 5 seconds. The lid releases 3.36 seconds after the successful
-press, leaving 1.64 seconds for its opening, light and settling. Reward selection
-and the save format are unchanged. The user can release after confirmation while
-the remaining sequence runs automatically.
+The chest requires a continuous 5-second hold: 1.2 seconds of initial pressure
+followed by a 3.8-second opening performance. The lid releases 3.36 seconds after
+the press, leaving 1.64 seconds for its opening, light and settling. Releasing at
+any point before completion cancels the performance, stops its sounds and resets
+progress while preserving the unopened chest. Reward selection and the save
+format are unchanged.
 
 ## Motion and timing
 
@@ -28,11 +29,11 @@ A new hold interrupts that return and starts from zero.
 The three stars and progress arc follow elapsed time up to the lid-release beat.
 There is no visible phase or percentage label; semantic progress remains
 available to screen readers. The first star lights just
-before hold confirmation and remains lit as automatic opening begins. Five
+before the initial hold ends and remains lit as the opening phase begins. Five
 holding beats lead into fifteen opening beats. Intervals tighten from 320 ms to
 60 ms, and their shared timestamps drive both physical impulses and sounds.
 Lock pressure, lid strain, seam light, inward particles and the material loop
-rise in intensity. Background music progressively ducks. From automatic +1.80 s,
+rise in intensity. Background music progressively ducks. From opening +1.80 s,
 the last roll blends into continuously increasing strain and a rising air texture.
 The pressure bed continues through unlock to release, with no silent stop or
 frozen pose. Its opening speed is not slowed down to fill the wait.
@@ -57,26 +58,26 @@ logic through separate step helpers.
 | `press` | Pointer/key/controller hold starts | Contact sound |
 | `hold_pulse` | Hold +0.08 s through +1.12 s | Five weighted material beats |
 | `charge_step` | 1/3, 2/3, 3/3 of elapsed hold-to-release time | Silent progress stars |
-| `cancel` | Early release or drag | Stop charge, brief return sound |
-| `opening` | Confirmation completes at 1.2 s | Continue pressure bed without restarting |
-| `tension_pulse` | Automatic +0.11 s through +1.86 s | Fifteen accelerating material beats |
-| `anticipation` | Automatic +1.94 s | Continuous rising bridge over the pressure bed |
-| `unlock` | Automatic +2.08 s (3.28 s total) | Lock/core sound |
-| `release` | Automatic +2.16 s (3.36 s total) | Lid, material sound, local theme flash and twelve light streaks |
-| `settle` | Automatic +2.95 s (4.15 s total) | Material landing sound |
-| `opened` | Automatic +3.8 s (5 s total) | Save progress before the opened result |
+| `cancel` | Release or drag any time before completion | Stop all performance sounds, brief return sound |
+| `opening` | Initial pressure completes at 1.2 s; hold remains active | Continue pressure bed without restarting |
+| `tension_pulse` | Opening +0.11 s through +1.86 s | Fifteen accelerating material beats |
+| `anticipation` | Opening +1.94 s | Continuous rising bridge over the pressure bed |
+| `unlock` | Opening +2.08 s (3.28 s total) | Lock/core sound |
+| `release` | Opening +2.16 s (3.36 s total) | Lid, material sound, local theme flash and twelve light streaks |
+| `settle` | Opening +2.95 s (4.15 s total) | Material landing sound |
+| `opened` | Opening +3.8 s (5 s total) while still held | Save progress before the opened result |
 
 A frame stall consumes expired beats without playing a backlog. A rising bridge
 more than 80 ms late is skipped; release still stops the bed. Fast-forward and
-background settlement remain silent. Reduced motion retains the short
-confirmation and skips the buildup.
+explicit new-round settlement remain silent. Backgrounding cancels unfinished
+openings. Reduced motion retains the initial 1.2-second hold and skips the buildup.
 
 The success sound is outside the physical clock: `game_ui.gd` calls it only after
 the reward save succeeds. An explicit save retry can acknowledge the newly saved
 piece after an interruption, without replaying the opening. Repeated callbacks
-cannot grant or announce another piece. Background completion and new-round
-auto-claims save the earned piece silently. Reduced motion skips physical beats
-and displays the saved result directly after the full hold.
+cannot grant or announce another piece. New-round auto-claims save the earned
+piece silently. Reduced motion skips physical beats and displays the saved result
+directly after its shorter hold.
 
 Ordinary chest results show the chest, review cards and next action without a
 victory title, instruction or review heading. When vertical space permits, cards

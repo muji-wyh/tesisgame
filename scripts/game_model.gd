@@ -331,6 +331,16 @@ func begin_open(id: Variant = null) -> bool:
 	return true
 
 
+func cancel_open() -> bool:
+	if phase != "won" or chest_state != "opening":
+		return false
+	chest_state = "closed"
+	reward_theme = ""
+	reward_id = ""
+	changed.emit()
+	return true
+
+
 func finish_open() -> bool:
 	if phase != "won" or chest_state != "opening":
 		return false

@@ -158,7 +158,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
   try {
-    await expect(page.locator('#game-status')).toContainText('Here comes your surprise!');
+    await expect(page.locator('#game-status')).toContainText('Keep holding to open. Release to cancel.');
     await page.waitForTimeout(450);
     await page.screenshot({ path: testInfo.outputPath('treasure-opening-candy.png'), scale: 'css' });
     await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });

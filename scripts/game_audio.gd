@@ -276,7 +276,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 		_chest_theme = theme
 		_chest_phase = "holding"
 	elif cue_name == "opening":
-		if theme != _chest_theme or _chest_phase in ["opening", "finished"]:
+		if theme != _chest_theme or _chest_phase in ["opening", "finished", "cancelled"]:
 			return
 		# Direct openings (including reduced motion) are an explicit start too.
 		_chest_phase = "opening"
@@ -303,7 +303,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 			var energy: float = ChestFeel.tension(float(ChestFeel.HOLD_PULSE_TIMES[step - 1]) - ChestFeel.HOLD_SECONDS)
 			_play_chest_pulse(energy)
 		"cancel":
-			if _chest_phase != "holding":
+			if _chest_phase not in ["holding", "opening"]:
 				return
 			stop_chest_performance()
 			_chest_phase = "cancelled"

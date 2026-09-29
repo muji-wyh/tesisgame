@@ -53,6 +53,7 @@ func _run() -> void:
 	_check_themed_chests(data)
 	_check_opened_ambience(data)
 	_check_opened_bounds(data)
+	_check_opening_cancel(data)
 	_check_hold_feedback(data)
 	_check_hold_bounds(data)
 	var effect = load("res://scripts/celebration.gd").new()
@@ -274,6 +275,68 @@ func _check_opened_bounds(data) -> void:
 				if not stage.encloses(bounds) or not bounds.has_area():
 					outside.append("%.2fs: %s" % [state.opened_idle_time, bounds])
 			check(outside.is_empty(), "The opened %s chest sways without cropping its lid or facets at %s: %s" % [theme, dimensions, outside])
+	chest.free()
+
+
+func _check_opening_cancel(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	var openings: Array[String] = []
+	var cues: Array = []
+	chest.opened.connect(func() -> void: openings.append(chest.theme_id))
+	chest.cue_requested.connect(func(theme: String, cue: String, step: int) -> void:
+		cues.append([theme, cue, step]))
+	for theme in data.THEMES:
+		for release_time in [0.8, Feel.RELEASE_TIME + 0.2, Feel.OPEN_SECONDS - 0.01]:
+			chest.clear()
+			chest.reduced_motion = false
+			chest.configure_skin(data.theme(theme), data.chests)
+			var rest: String = chest.hold_effect_snapshot().pose_signature
+			chest.begin_hold()
+			chest.set_hold_progress(1.0)
+			chest.start_open(false)
+			chest._advance_animation(release_time)
+			chest.cancel_open(true)
+			var state: Dictionary = chest.hold_effect_snapshot()
+			check(chest.mode == "closed" and not state.active and state.percent == 0
+				and is_zero_approx(state.opening_time) and is_zero_approx(state.release_flash)
+				and is_zero_approx(state.opened_glow),
+				"%s clears opening progress and light immediately when released at %.2f seconds" % [theme, Feel.HOLD_SECONDS + release_time])
+			check(is_equal_approx(state.cancel_remaining, Feel.CANCEL_SECONDS),
+				theme + " returns its cancelled opening without blocking a new press")
+			var cue_count: int = cues.size()
+			chest._advance_animation(Feel.CANCEL_SECONDS + 0.01)
+			state = chest.hold_effect_snapshot()
+			check(state.pose_signature == rest and is_zero_approx(state.cancel_remaining)
+				and is_zero_approx(state.interior_open),
+				theme + " returns every lid, latch or crystal facet to the closed pose within 120 milliseconds")
+			chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+			chest.finish_immediately()
+			check(openings.is_empty() and cues.size() == cue_count and chest.mode == "closed",
+				theme + " cannot finish or replay a physical cue after cancellation")
+			chest.begin_hold()
+			check(chest.hold_effect_snapshot().active and chest.hold_effect_snapshot().percent == 0,
+				theme + " allows the earned chest to be held again from zero")
+		chest.start_open(false)
+		chest._advance_animation(0.8)
+		chest.cancel_open(true)
+		chest.begin_hold()
+		chest.set_hold_progress(0.1)
+		var next: Dictionary = chest.hold_effect_snapshot()
+		check(chest.mode == "closed" and next.active and next.percent < 10 and is_zero_approx(next.cancel_remaining),
+			theme + " immediately replaces rollback with a fresh press")
+		chest.start_open(false)
+		chest._advance_animation(0.8)
+		chest.cancel_open(false)
+		check(chest.mode == "closed" and is_zero_approx(chest.hold_effect_snapshot().cancel_remaining),
+			theme + " supports immediate cancellation on background or navigation")
+		chest.start_open(true)
+		var earned: int = openings.size()
+		chest.cancel_open(true)
+		check(chest.mode == "opened" and openings.size() == earned and chest.hold_effect_snapshot().opened_glow > 0.0,
+			theme + " cannot retract an already completed reduced-motion reward")
+		openings.clear()
 	chest.free()
 
 
