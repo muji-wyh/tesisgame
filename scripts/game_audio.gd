@@ -29,6 +29,7 @@ var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var narration: AudioStreamPlayer
+var pip_reaction: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var narration_state: String = "idle"
 var muted: bool = false
@@ -156,6 +157,25 @@ func play_pip() -> void:
 	# The shared voice channel replaces the previous greeting on rapid taps and
 	# already stops on mute, page changes and microphone activation.
 	say(next_pip_sound())
+
+
+func play_pip_reaction(correct: bool) -> void:
+	if muted or not active or not available:
+		return
+	if pip_reaction == null:
+		pip_reaction = _player(0.68)
+	# Gameplay feelings have their own short, nonverbal voice. They cannot
+	# replace a card's pronunciation, its answer cue or a report sentence.
+	pip_reaction.pitch_scale = 1.12 if correct else 0.80
+	pip_reaction.volume_db = linear_to_db(0.68 if correct else 0.54)
+	_play(pip_reaction, PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2])
+
+
+func stop_pip_reaction() -> void:
+	if pip_reaction != null:
+		# Invalidate a pending optional download as well as an audible quack.
+		_stop(pip_reaction)
+		pip_reaction.stream = null
 
 
 func prepare_chest(theme_id: String) -> void:
@@ -683,6 +703,7 @@ func stop_voice() -> void:
 
 func halt() -> void:
 	active = false
+	stop_pip_reaction()
 	stop_chest_performance()
 	stop_narration()
 	if music != null:

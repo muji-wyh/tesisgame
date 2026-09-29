@@ -13,6 +13,10 @@ const DANCE_SECONDS: float = 3.2
 const PROACTIVE_IDLE_SECONDS: float = 6.0
 const TRICK_SECONDS: float = 1.8
 const ROOM_REACTION_SECONDS: float = 1.1
+const GAMEPLAY_HAPPY_SECONDS: float = 1.25
+const GAMEPLAY_SAD_SECONDS: float = 1.35
+const GAMEPLAY_PIVOTS := [Vector2(61, 98), Vector2(61, 72), Vector2(33, 78),
+	Vector2(88, 78), Vector2(40, 103), Vector2(80, 103)]
 const SOCIAL_TRICKS := ["high-five", "peekaboo", "flutter"]
 const TRICK_CAPTIONS := {
 	"dance": "Pip's happy dance!", "snack": "Crunch! A carrot for Pip!", "bubbles": "Pop! Bubble party!",
@@ -47,6 +51,8 @@ var _room_direction: float = 1.0
 var _room_step: float = 0.0
 var _room_reaction: String = ""
 var _room_reaction_left: float = 0.0
+var _gameplay_reaction: String = ""
+var _gameplay_left: float = 0.0
 
 
 func _ready() -> void:
@@ -101,11 +107,15 @@ func set_reduced_motion(value: bool) -> void:
 		_trick = ""
 	if not value and is_zero_approx(_room_reaction_left):
 		_room_reaction = ""
+	if not value and is_zero_approx(_gameplay_left):
+		_gameplay_reaction = ""
 	_visibility_changed()
 	_update_pose()
 
 
 func react(kind: String = "happy") -> void:
+	if not _gameplay_reaction.is_empty():
+		return
 	_reset_idle()
 	_reaction = kind
 	reaction_left = 0.0 if reduced_motion else 0.65
@@ -116,7 +126,35 @@ func react(kind: String = "happy") -> void:
 	_update_pose()
 
 
+func react_gameplay(correct: bool) -> void:
+	if _idle_paused or not is_visible_in_tree():
+		return
+	clear_room_interaction()
+	_reset_idle()
+	_trick = ""
+	_trick_left = 0.0
+	reaction_left = 0.0
+	_reaction = ""
+	_gameplay_reaction = "happy" if correct else "sad"
+	_gameplay_left = _gameplay_duration()
+	set_process(true)
+	_update_pose()
+
+
+func clear_gameplay_reaction() -> void:
+	_gameplay_reaction = ""
+	_gameplay_left = 0.0
+	if reduced_motion:
+		set_process(false)
+	_update_pose()
+
+
+func _gameplay_duration() -> float:
+	return GAMEPLAY_HAPPY_SECONDS if _gameplay_reaction == "happy" else GAMEPLAY_SAD_SECONDS
+
+
 func settle() -> void:
+	clear_gameplay_reaction()
 	clear_room_interaction()
 	_reset_idle()
 	reaction_left = 0.0
@@ -128,7 +166,7 @@ func settle() -> void:
 
 
 func perform_trick(kind: String) -> String:
-	if not TRICK_CAPTIONS.has(kind):
+	if not TRICK_CAPTIONS.has(kind) or not _gameplay_reaction.is_empty():
 		return ""
 	_reset_idle()
 	_trick = kind
@@ -149,6 +187,8 @@ func set_room_motion(kind: String, direction: float = 1.0) -> void:
 		return
 	if not kind.is_empty() and (_idle_paused or not is_visible_in_tree()):
 		return
+	if not kind.is_empty():
+		clear_gameplay_reaction()
 	_room_direction = -1.0 if direction < 0.0 else 1.0
 	if _room_motion == kind:
 		queue_redraw()
@@ -167,6 +207,7 @@ func set_room_motion(kind: String, direction: float = 1.0) -> void:
 func react_in_room(kind: String) -> void:
 	if (not kind in ["pet", "poke", "catch"] and not kind in SOCIAL_TRICKS and not kind in LoadingMoves.REACTIONS) or _idle_paused or not is_visible_in_tree():
 		return
+	clear_gameplay_reaction()
 	_reset_idle()
 	_room_motion = ""
 	_room_step = 0.0
@@ -193,8 +234,9 @@ func clear_room_interaction() -> void:
 
 
 func _visibility_changed() -> void:
-	set_process(is_visible_in_tree() and not reduced_motion and not _idle_paused)
+	set_process(is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0) and not _idle_paused)
 	if not is_visible_in_tree():
+		clear_gameplay_reaction()
 		clear_room_interaction()
 		_reset_idle()
 		reaction_left = 0.0
@@ -206,6 +248,7 @@ func set_idle_paused(value: bool) -> void:
 		return
 	_idle_paused = value
 	if value:
+		clear_gameplay_reaction()
 		clear_room_interaction()
 	_reset_idle()
 	_visibility_changed()
@@ -255,7 +298,7 @@ func _advance_idle(delta: float) -> void:
 	if delta > 0.5:
 		_reset_idle()
 		return
-	if not _proactive_allowed or speaking or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
+	if not _proactive_allowed or speaking or not _gameplay_reaction.is_empty() or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
 		return
 	if home_playground:
 		if _idle_action == "home-dance":
@@ -282,7 +325,9 @@ func _advance_idle(delta: float) -> void:
 
 func _update_pose() -> void:
 	pose = 0
-	if speaking:
+	if not _gameplay_reaction.is_empty():
+		pose = 3 if _gameplay_reaction == "happy" else 2
+	elif speaking:
 		pose = 1 if reduced_motion else 1 - int(_speech_time * 8.0) % 2
 	elif not _room_reaction.is_empty():
 		if _room_reaction in SOCIAL_TRICKS:
@@ -311,7 +356,17 @@ func _trick_pose(kind: String, progress: float) -> int:
 
 
 func _process(delta: float) -> void:
-	if reduced_motion or _idle_paused or not is_visible_in_tree():
+	if _idle_paused or not is_visible_in_tree():
+		return
+	if _gameplay_left > 0.0:
+		_gameplay_left = maxf(0.0, _gameplay_left - delta)
+		if is_zero_approx(_gameplay_left):
+			_gameplay_reaction = ""
+			_reset_idle()
+			if reduced_motion:
+				set_process(false)
+				_update_pose()
+	if reduced_motion:
 		return
 	_idle_time += delta
 	_speech_time += delta
@@ -334,6 +389,9 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var edge: float = 54.0 if compact else minf(size.x, size.y)
 	var origin := Vector2(0, -2) if compact else (size - Vector2.ONE * edge) * 0.5
+	if not _gameplay_reaction.is_empty():
+		_draw_gameplay_reaction(origin, edge)
+		return
 	# Explicit tap feedback wins even while a previous word finishes speaking.
 	if _room_reaction in LoadingMoves.REACTIONS or (not speaking and _idle_action == "home-dance"):
 		_draw_loading_moves(origin, edge)
@@ -447,6 +505,143 @@ func _draw() -> void:
 		for index in range(2):
 			draw_arc(origin + Vector2(edge * 0.8, edge * 0.55), edge * (0.08 + index * 0.06),
 				-0.75, 0.75, 12, accent, 1.6, true)
+
+
+static func _gameplay_arc(progress: float, start: float, finish: float) -> float:
+	return sin(PI * clampf((progress - start) / (finish - start), 0.0, 1.0))
+
+
+static func _gameplay_transforms(correct: bool, progress: float, reduced: bool = false) -> Array[Transform2D]:
+	var time: float = clampf(progress, 0.0, 1.0)
+	var envelope: float = 1.0 if reduced else smoothstep(0.0, 0.055, time) * (1.0 - smoothstep(0.84, 1.0, time))
+	var hips := Vector2.ZERO
+	var head := Vector2.ZERO
+	var tilt := 0.0
+	var head_tilt := 0.0
+	var left_wing := 0.0
+	var right_wing := 0.0
+	var feet_y := 0.0
+	var feet_turn := 0.0
+	var body_scale := Vector2.ONE
+	if correct:
+		var first: float = 0.0 if reduced else _gameplay_arc(time, 0.10, 0.52)
+		var second: float = 0.0 if reduced else _gameplay_arc(time, 0.55, 0.84)
+		var lift: float = first * 24.0 + second * 14.0
+		var crouch: float = 0.0 if reduced else _gameplay_arc(time, 0.0, 0.10) + _gameplay_arc(time, 0.48, 0.57) * 0.9 + _gameplay_arc(time, 0.81, 0.94) * 0.6
+		var airborne: float = maxf(first, second)
+		hips = Vector2(0.0 if reduced else sin(time * TAU * 2.0) * 2.5 * envelope, crouch * 5.0 - lift)
+		tilt = 0.0 if reduced else sin(time * TAU * 2.0) * 0.085 * envelope
+		head = Vector2(hips.x * 0.65, hips.y - airborne * 2.0)
+		head_tilt = -tilt * 0.8
+		left_wing = deg_to_rad(78.0) if reduced else deg_to_rad(20.0 + airborne * (78.0 + sin(time * TAU * 4.0) * 15.0)) * envelope
+		right_wing = -left_wing
+		feet_y = -lift
+		feet_turn = (0.1 + airborne * 0.32) * envelope
+		body_scale = Vector2(1.0 + crouch * 0.12 - airborne * 0.035, 1.0 - crouch * 0.14 + airborne * 0.055)
+	else:
+		var slump: float = 1.0 if reduced else smoothstep(0.0, 0.16, time) * (1.0 - smoothstep(0.78, 1.0, time))
+		var sigh: float = 0.0 if reduced else _gameplay_arc(time, 0.28, 0.72) * 1.8
+		hips = Vector2(-2.0, 6.0) * slump
+		tilt = -0.065 * slump
+		head = Vector2(-4.0, 10.0 + sigh) * slump
+		head_tilt = -0.19 * slump
+		left_wing = -0.48 * slump
+		right_wing = 0.48 * slump
+		feet_turn = -0.065 * slump
+		body_scale = Vector2(1.0 + slump * 0.045, 1.0 - slump * 0.08)
+	return [
+		_gameplay_part_transform(0, hips, tilt, body_scale),
+		_gameplay_part_transform(1, head, head_tilt),
+		_gameplay_part_transform(2, hips, left_wing + tilt),
+		_gameplay_part_transform(3, hips, right_wing + tilt),
+		_gameplay_part_transform(4, Vector2(hips.x * 0.3, feet_y), -feet_turn),
+		_gameplay_part_transform(5, Vector2(hips.x * 0.3, feet_y), feet_turn),
+	]
+
+
+static func _gameplay_part_transform(index: int, translation: Vector2, angle: float, stretch: Vector2 = Vector2.ONE) -> Transform2D:
+	var pivot: Vector2 = GAMEPLAY_PIVOTS[index]
+	var transform := Transform2D(angle, stretch, 0.0, Vector2.ZERO)
+	transform.origin = pivot + translation - transform * pivot
+	return transform
+
+
+func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
+	var correct: bool = _gameplay_reaction == "happy"
+	var progress: float = 0.45 if reduced_motion else 1.0 - _gameplay_left / _gameplay_duration()
+	var envelope: float = 1.0 if reduced_motion else smoothstep(0.0, 0.055, progress) * (1.0 - smoothstep(0.84, 1.0, progress))
+	var transforms: Array[Transform2D] = _gameplay_transforms(correct, progress, reduced_motion)
+	# Inset around the planted baseline as the wings open. Even the leap apex
+	# stays inside a 52-pixel header slot without moving its input rectangle.
+	var inset: float = 1.0 - (0.20 if correct else 0.045) * envelope
+	var unit: float = edge / 120.0 * inset
+	var base_origin := origin + Vector2(edge * (1.0 - inset) * 0.5, edge * (1.0 - inset) * 112.0 / 120.0)
+	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
+	var airborne: float = clampf((98.0 - (transforms[0] * GAMEPLAY_PIVOTS[0]).y) / 24.0, 0.0, 1.0)
+	draw_set_transform(origin + Vector2(edge * 0.51, edge * 0.94), 0.0,
+		Vector2(edge * (0.31 - airborne * 0.095), edge * 0.036))
+	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.19 - airborne * 0.09))
+	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
+	var source_edge: float = outfit.get_height()
+	for index in [4, 5, 0, 1, 2, 3]:
+		draw_set_transform_matrix(base * transforms[index])
+		draw_texture_rect_region(outfit, Rect2(Vector2.ZERO, Vector2(120, 120)),
+			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
+		if index == 1:
+			_draw_gameplay_face(correct, progress)
+	draw_set_transform_matrix(base)
+	if correct:
+		for index in range(3):
+			var point := Vector2(13 + index * 47, 34 - (index % 2) * 21)
+			var radius: float = 4.0 * envelope
+			var rays := PackedVector2Array()
+			for ray in range(8):
+				rays.append(point + Vector2.from_angle(ray * PI / 4.0) * (radius if ray % 2 == 0 else radius * 0.32))
+			if radius > 0.01:
+				draw_colored_polygon(rays, Color(Color("#f1b638"), envelope))
+	draw_set_transform(Vector2.ZERO)
+
+
+func _draw_gameplay_face(correct: bool, progress: float) -> void:
+	# Paint inside the original eye outlines so hats and helmet rims continue
+	# to travel with the same head layer, retaining every theme's wardrobe.
+	for index in range(2):
+		var center := Vector2(42, 46) if index == 0 else Vector2(77, 44)
+		_draw_gameplay_oval(center, Vector2(9.8, 12.8) if index == 0 else Vector2(8.8, 11.8), Color("#fffef4"))
+		if correct:
+			var smile := PackedVector2Array()
+			for step in range(13):
+				var amount: float = float(step) / 6.0 - 1.0
+				smile.append(center + Vector2(amount * 7.0, -3.0 + amount * amount * 6.0))
+			draw_polyline(smile, Color("#4e473e"), 3.2, true)
+		else:
+			var direction: float = 1.0 if index == 0 else -1.0
+			draw_line(center + Vector2(-8, -3 + direction * 3), center + Vector2(8, -3 - direction * 3), Color("#785d3e"), 3.0, true)
+			draw_circle(center + Vector2(direction * 2.0, 5.0), 3.4, Color("#4e473e"))
+			draw_circle(center + Vector2(direction * 2.0 - 0.8, 3.8), 1.2, Color.WHITE)
+			var fall: float = 0.3 if reduced_motion else fposmod(maxf(0.0, progress - 0.12) * 2.4 + index * 0.36, 1.0)
+			var tear := center + Vector2(direction * 8.0, 15.0 + fall * 9.0)
+			var fade: float = 1.0 if reduced_motion else smoothstep(0.0, 0.12, progress) * (1.0 - smoothstep(0.78, 1.0, progress))
+			draw_colored_polygon(PackedVector2Array([tear + Vector2(0, -7), tear + Vector2(-3.2, 0), tear + Vector2(3.2, 0)]), Color(Color("#73bce9"), fade))
+			draw_circle(tear, 3.2, Color(Color("#73bce9"), fade))
+			draw_circle(tear + Vector2(-0.9, -0.7), 1.0, Color(1, 1, 1, fade * 0.8))
+	_draw_gameplay_oval(Vector2(62, 69), Vector2(20, 4.2), Color("#f5b06d"))
+	if correct:
+		_draw_gameplay_oval(Vector2(62, 69), Vector2(11.0, 7.0), Color("#895732"))
+		_draw_gameplay_oval(Vector2(62, 73), Vector2(6.5, 2.6), Color("#ed9c82"))
+	else:
+		var frown := PackedVector2Array()
+		for step in range(13):
+			var amount: float = float(step) / 6.0 - 1.0
+			frown.append(Vector2(62 + amount * 15.0, 67.5 + amount * amount * 4.0))
+		draw_polyline(frown, Color("#ad793e"), 2.3, true)
+
+
+func _draw_gameplay_oval(center: Vector2, radii: Vector2, tint: Color) -> void:
+	var points := PackedVector2Array()
+	for index in range(32):
+		points.append(center + Vector2.from_angle(index * TAU / 32.0) * radii)
+	draw_colored_polygon(points, tint)
 
 
 func _draw_loading_moves(origin: Vector2, edge: float) -> void:

@@ -53,6 +53,29 @@ function waveDuration(relative) {
   return dataBytes / bytesPerSecond;
 }
 
+const pipReactions = {
+  happy: { duration: waveDuration('assets/audio/pip/duck_double_01_bouncy.wav'), playbackRate: 1.12 },
+  sad: { duration: waveDuration('assets/audio/pip/duck_quack_innocent_deep_short_04.wav'), playbackRate: 0.8 }
+};
+
+function isPipReaction(sound, emotion) {
+  const expected = pipReactions[emotion];
+  return Math.abs(sound.duration - expected.duration) <= 1 / sound.sampleRate &&
+    Math.abs(sound.playbackRate - expected.playbackRate) < 0.001;
+}
+
+function isHitSlice(sound) {
+  return sound.playbackRate === 1 && expectedSlices.some(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
+}
+
+function expectPipReaction(sound, emotion) {
+  expect(isPipReaction(sound, emotion), `The ${emotion} call uses its real Pip recording and expressive pitch`).toBe(true);
+  expect(sound.contextState).toBe('running');
+  expect(sound.loop).toBe(false);
+  expect(sound.fingerprint).toBeTruthy();
+  expect(sound.peak, 'Pip feedback contains real audible PCM').toBeGreaterThan(0.01);
+}
+
 async function installSpeech(page, { automatic = true, available = true, phraseHints = false } = {}) {
   // Exercise the browser recognition lifecycle without opening a physical microphone.
   await page.addInitScript(({ automatic, available, phraseHints }) => {
@@ -535,23 +558,32 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   await page.screenshot({ path: info.outputPath('flying-words.png') });
   const runningSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
   const runningSoundCount = async () => (await runningSounds()).length;
+  const hitSlices = async () => (await runningSounds()).filter(isHitSlice);
+  const happyCalls = async () => (await runningSounds()).filter(sound => isPipReaction(sound, 'happy'));
   expect(await runningSounds(), 'Listening starts quietly, with no prompt or background music').toEqual([]);
   const word = await popOne(page, { interim: true });
   if (audioAvailable) {
-    await expect.poll(runningSoundCount, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
-    expectHitSlice((await runningSounds())[0]);
+    await expect.poll(async () => (await hitSlices()).length, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
+    await expect.poll(async () => (await happyCalls()).length, { message: 'Pip celebrates the hit with one bright duck call.' }).toBe(1);
+    expectHitSlice((await hitSlices())[0]);
+    expectPipReaction((await happyCalls())[0], 'happy');
   }
   await page.screenshot({ path: info.outputPath('hit-burst.png') });
   const hits = (await state(page)).hits;
   await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
   await page.waitForTimeout(300);
   expect((await state(page)).hits).toBe(hits);
-  if (audioAvailable) expect(await runningSoundCount(), 'Finalizing the same recognition cannot replay the slice.').toBe(1);
+  if (audioAvailable) {
+    expect((await hitSlices()).length, 'Finalizing the same recognition cannot replay the slice.').toBe(1);
+    expect((await happyCalls()).length, 'Finalizing the same recognition cannot replay Pip\'s celebration.').toBe(1);
+  }
   const secondWord = await popOne(page);
   if (audioAvailable) {
-    await expect.poll(runningSoundCount).toBe(2);
-    const slices = await runningSounds();
+    await expect.poll(async () => (await hitSlices()).length).toBe(2);
+    await expect.poll(async () => (await happyCalls()).length).toBe(2);
+    const slices = await hitSlices();
     slices.forEach(expectHitSlice);
+    (await happyCalls()).forEach(sound => expectPipReaction(sound, 'happy'));
     if (expectedSlices.length > 1) {
       expect(slices[1].fingerprint, 'Consecutive spoken hits play different PCM audio, including equal-duration fruit variants').not.toBe(slices[0].fingerprint);
     } else {
@@ -561,7 +593,16 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   const after = await state(page);
   expect(after.score).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
-  expect(await runningSoundCount(), 'The entire listening round contains only its two hit sounds, with no prompts or BGM').toBe(audioAvailable ? 2 : 0);
+  if (audioAvailable) {
+    const all = await runningSounds(), sadCalls = all.filter(sound => isPipReaction(sound, 'sad'));
+    expect((await hitSlices()).length, 'Only the two real hits play slice sounds.').toBe(2);
+    expect((await happyCalls()).length, 'Only the two real hits produce happy calls.').toBe(2);
+    expect(sadCalls.length, 'Letting targets fall produces sad calls.').toBeGreaterThan(0);
+    sadCalls.forEach(sound => expectPipReaction(sound, 'sad'));
+    expect(all.length, 'Live gameplay contains only hit slices and outcome calls, with no prompts or BGM.').toBe(4 + sadCalls.length);
+  } else {
+    expect(await runningSoundCount()).toBe(0);
+  }
   expect(await page.evaluate(() => window.__popSpeech.spoken), 'Listening never triggers system speech prompts').toEqual([]);
   await info.attach('hit-audio-durations.json', { body: JSON.stringify({ expectedSources: expectedSlices, playbacks: await runningSounds() }), contentType: 'application/json' });
   expect(Date.now() - start).toBeGreaterThanOrEqual(29000);

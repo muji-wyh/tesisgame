@@ -456,6 +456,7 @@ func _build_controls() -> void:
 	_pop.request_listening.connect(_start_pop_listening)
 	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
 	_pop.hit.connect(_pop_hit)
+	_pop.missed.connect(_pop_missed)
 	_pop.round_finished.connect(_pop_finished)
 	_pop.hear_requested.connect(_pop_hear)
 	_pop.report_requested.connect(_pop_report)
@@ -1224,6 +1225,7 @@ func _start_pop_listening() -> void:
 	if _mode_id != "pop" or collection_page.visible:
 		return
 	audio.halt()
+	duck.settle()
 	if not _stop_pop_listening():
 		return
 	if _pop.game.phase == "finished":
@@ -1247,10 +1249,26 @@ func _stop_pop_listening() -> bool:
 
 
 func _pop_hit(_word: Dictionary) -> void:
-	if _mode_id != "pop":
+	if _mode_id != "pop" or collection_page.visible or _page_hidden:
 		return
 	audio.interact(model.theme_id, false)
 	audio.cue("pop-slice")
+	_react_to_gameplay(true)
+
+
+func _pop_missed(_count: int) -> void:
+	if _count <= 0 or _mode_id != "pop" or collection_page.visible or _page_hidden:
+		return
+	audio.interact(model.theme_id, false)
+	_react_to_gameplay(false)
+
+
+func _react_to_gameplay(correct: bool) -> void:
+	if collection_page.visible or _page_hidden:
+		return
+	duck.react_gameplay(correct)
+	if not _voice_mode:
+		audio.play_pip_reaction(correct)
 
 
 func _pop_hear(word: Dictionary) -> void:
@@ -1310,7 +1328,7 @@ func _memory_answer(_words: Array, correct: bool) -> void:
 	if _mode_id != "memory" or collection_page.visible:
 		return
 	audio.cue("correct" if correct else "wrong")
-	duck.react("happy" if correct else "curious")
+	_react_to_gameplay(correct)
 
 
 func _memory_progress(successes: int, _attempts: int) -> void:
@@ -2586,6 +2604,11 @@ func _sync_voice_bounds() -> void:
 func _on_voice_state(arguments: Array) -> void:
 	if _mode_id == "pop":
 		_pop.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
+		# Recognition rolls over after an utterance. Let that word's short
+		# emotion finish while the recognizer reconnects automatically.
+		if not bool(arguments[1]) and not _pop._reconnecting:
+			audio.stop_pip_reaction()
+			duck.settle()
 		return
 	var enabled: bool = bool(arguments[0])
 	if enabled and model.phase in ["won", "lost"]:
@@ -2662,7 +2685,7 @@ func _stop_voice() -> void:
 
 func _animate_feedback(ids: Array[String], correct: bool) -> void:
 	_stop_feedback_animations()
-	duck.react("happy" if correct else "curious")
+	_react_to_gameplay(correct)
 	if correct:
 		for id in ids:
 			cards[id].play_word()
@@ -2912,6 +2935,8 @@ func _show_collection() -> void:
 		return
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	audio.stop_voice()
+	audio.stop_pip_reaction()
+	duck.settle()
 	_collection_scroll.scroll_vertical = 0
 	_cancel_collection_rails()
 	_stop_voice()
@@ -2941,6 +2966,8 @@ func _show_collection() -> void:
 
 func _hide_collection() -> void:
 	audio.stop_voice()
+	audio.stop_pip_reaction()
+	duck.settle()
 	_cancel_collection_rails()
 	_end_collection_drag(false)
 	_collection_dragged = false

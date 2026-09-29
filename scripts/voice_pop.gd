@@ -3,6 +3,7 @@ extends Control
 signal request_listening
 signal exit_requested
 signal hit(word: Dictionary)
+signal missed(count: int)
 signal round_finished(summary: Dictionary)
 signal hear_requested(word: Dictionary)
 signal report_requested(text: String)
@@ -517,7 +518,12 @@ func _advance_game(elapsed_seconds: float) -> void:
 	# monotonic time because Godot can clamp frame delta under slow Web rendering.
 	if not _listening or game.phase != "running":
 		return
+	var previous_misses: int = game.misses
 	game.advance(elapsed_seconds)
+	if game.misses > previous_misses:
+		# One response per batch of expired targets; clearing or pausing a round
+		# does not count as a miss, and slow frames cannot queue a chorus.
+		missed.emit(game.misses - previous_misses)
 	if game.phase == "finished" and not _finished_sent:
 		_finish()
 	_refresh_targets()

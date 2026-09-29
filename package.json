@@ -38,6 +38,7 @@
     "test:playful-ui": "node tools/run-tests.cjs playful-ui",
     "test:themes": "node tools/run-tests.cjs themes",
     "test:pip-audio": "node tools/run-tests.cjs pip-audio",
+    "test:pip-feedback": "node tools/run-tests.cjs pip-feedback",
     "test:chest-charge": "node tools/run-tests.cjs chest-charge"
   },
   "devDependencies": {
