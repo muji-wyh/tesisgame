@@ -81,10 +81,6 @@ func _run() -> void:
 	app._start_gift_adventure("backdrop-space")
 	check(app.collection_page.visible and app.model.lesson_words == before_words
 		and app.playroom_state.goal_item_id == before_goal, "Old room-gift entry points cannot start or save a new adventure")
-	var toy_counts: Dictionary = {}
-	for world in app.model.THEMES:
-		toy_counts[world + "-1"] = 3
-	check(app.playroom_state.next_gift(toy_counts).is_empty(), "Gift prompts do not advertise the removed rooms")
 	check(not app.has_method("_show_reward_section") and app._collection_title.text == "Pip",
 		"World selection has no separate navigation tab or retained section route")
 	check(app._world_choices.is_visible_in_tree() and app._world_scroll.is_ancestor_of(app._world_grid),

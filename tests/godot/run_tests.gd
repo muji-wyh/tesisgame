@@ -41,7 +41,6 @@ func _run() -> void:
 	_test_results(model_script, words)
 	_test_data(words)
 	_test_controls()
-	_test_effects()
 	await _test_audio()
 	await _test_scene()
 	print("Godot: %d assertions, %d failures" % [checks, failures])
@@ -456,7 +455,7 @@ func _test_data(words: Array) -> void:
 		check(data_script.validate_words(duplicate) != "", "External/traversal image paths are rejected")
 	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		var theme: Dictionary = data_script.theme(season)
-		check(theme.id == season and theme.prize != "", "Each season has a named reward")
+		check(theme.id == season and theme.name != "", "Each theme has a display name")
 		check(data_script.has_method("rewards") and data_script.has_method("reward"),
 			"Seasonal reward lookup helpers exist")
 		if data_script.has_method("rewards") and data_script.has_method("reward"):
@@ -559,42 +558,6 @@ func _test_controls() -> void:
 	card.refresh(load("res://scripts/game_data.gd").theme("spring"), false, true, false, false)
 	check(card.match_mark.visible, "A matched card displays the success badge")
 	card.free()
-
-
-func _test_effects() -> void:
-	var effect_script: GDScript = load("res://scripts/celebration.gd")
-	var data_script: GDScript = load("res://scripts/game_data.gd")
-	var effect_view = effect_script.new()
-	root.add_child(effect_view)
-	var data = data_script.new()
-	check(data.load_all(), "Celebration assets are valid")
-	effect_view.configure(data.chests)
-	check(effect_view._textures.is_empty(), "Celebration textures do not delay startup")
-	effect_view.start(data_script.theme("spring"), true)
-	check(effect_view._textures.is_empty(), "Reduced motion does not load unused particle textures")
-	effect_view.start(data_script.theme("spring"), false)
-	check(effect_view._textures.size() == data.chests.particles.size(), "The first celebration loads its textures")
-	check(effect_view.particle_count() == 72, "Native celebration has 72 particles")
-	for category in range(3):
-		var quadrants: Dictionary = {}
-		for particle in effect_view._particles:
-			if particle.kind == category:
-				quadrants[int(fposmod(particle.angle, TAU) / (PI * 0.5))] = true
-		check(quadrants.size() == 4, "Every particle category spans the whole circle")
-	effect_view._process(4.9)
-	check(effect_view.particle_count() == 0, "Celebration clears itself after its lifetime")
-	effect_view.start(data_script.theme("winter"), true)
-	check(effect_view.particle_count() == 0, "Reduced motion creates no particles")
-	check(effect_view.has_method("_particle_position"), "Seasons have distinct motion profiles")
-	if effect_view.has_method("_particle_position"):
-		var positions: Array[Vector2] = []
-		var sample := {"kind": 0, "angle": 0.6, "distance": 0.8}
-		for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
-			effect_view.start(data_script.theme(season), false)
-			var position: Vector2 = effect_view._particle_position(sample, 1.0, Vector2.ZERO, 200.0)
-			check(not positions.has(position), "Each season has a different particle trajectory")
-			positions.append(position)
-	effect_view.free()
 
 
 func _test_audio() -> void:
@@ -965,7 +928,8 @@ func _test_scene() -> void:
 			"Keyboard focus reaches an earned floor toy without scrolling the page")
 		check(app.playroom_state.toy_id == selected_toy, "Room gestures and focus do not change the selected toy")
 		app.on_page_hidden()
-		check(app._collection_velocity == Vector2.ZERO, "Hiding the page leaves no room momentum")
+		check(not app._collection_dragging and app._collection_drag_pointer == -1,
+			"Hiding the page ends the room gesture")
 		app.on_page_visible()
 		app.set_reduced_motion(false)
 		app._hide_collection()
@@ -1137,7 +1101,9 @@ func _test_scene() -> void:
 	app.chest_button.button_up.emit()
 	await process_frame
 	check(app.model.chest_state == "opened", "A completed hold reveals the reduced-motion reward")
-	check(app.effects.particle_count() == 0, "Reduced motion has no moving particles")
+	check(not app.chest.hold_effect_snapshot().animated
+		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
+		"Reduced motion completes without chest particles or a release flash")
 	check(not app.model.reward_id.is_empty(), "Opening selects a seasonal reward variant")
 	check(app.collected_rewards.has(app.model.reward_id) if has_property(app, "collected_rewards") else false,
 		"Opened rewards are recorded in the collection")
@@ -1148,7 +1114,9 @@ func _test_scene() -> void:
 	check(app.chest.visible and app.chest.mode == "opened", "Opening keeps the earned chest visible")
 	app.new_round(81)
 	check(app.audio.muted, "An internal fixture reset preserves mute")
-	check(app.model.chest_state == "closed" and app.effects.particle_count() == 0, "An internal fixture reset clears reward/effects")
+	check(app.model.chest_state == "closed" and app.chest.mode == "closed"
+		and not app.chest.hold_effect_snapshot().active,
+		"An internal fixture reset clears the reward and chest performance")
 	check(app.feedback_timer.is_stopped(), "An internal fixture reset cancels the feedback timer")
 	app.set_reduced_motion(false)
 	for pair in pairs_for(app.model):
@@ -1169,9 +1137,10 @@ func _test_scene() -> void:
 	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
 	await process_frame
 	check(app.model.theme_id == locked_theme, "Controller shoulder season changes are disabled while the chest opens")
-	check(app.effects.particle_count() == 0, "Opening anticipation waits for the physical release beat")
+	check(is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
+		"Opening anticipation waits for the physical release beat")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
-	check(app.effects.particle_count() == 0 and app.chest.hold_effect_snapshot().release_flash > 0.0,
+	check(app.chest.hold_effect_snapshot().release_flash > 0.0,
 		"The lid release lights the chest without a separate collectible celebration")
 	check_no_collectible_presentation(app, "The opening chest has no collectible artwork or flight")
 	var opened_reward_id: String = app.model.reward_id
@@ -1199,19 +1168,28 @@ func _test_scene() -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	if app.has_method("_drag_chest"):
-		app._drag_chest(Vector2(10000, 10000))
-		root.size = Vector2i(844, 390)
-		await process_frame
-		await process_frame
-		var chest_rect := Rect2(
-			app.chest._art.position + app.chest._bounds.position * app.chest._art.scale,
-			app.chest._bounds.size * app.chest._art.scale
-		)
-		check(Rect2(Vector2.ZERO, app.chest.size).grow(0.5).encloses(chest_rect),
-			"Chest dragging stays inside its canvas after resizing")
-	else:
-		check(false, "The chest can be dragged inside its canvas")
+	var drag_press := InputEventMouseButton.new()
+	drag_press.button_index = MOUSE_BUTTON_LEFT
+	drag_press.pressed = true
+	app._chest_input(drag_press)
+	var edge_drag := InputEventMouseMotion.new()
+	edge_drag.position = Vector2(10000, 10000)
+	edge_drag.relative = edge_drag.position
+	edge_drag.button_mask = MOUSE_BUTTON_MASK_LEFT
+	app._chest_input(edge_drag)
+	check(not app._holding_chest and app.chest.drag_offset != Vector2.ZERO,
+		"A real chest drag cancels the hold and moves the closed chest")
+	drag_press.pressed = false
+	app._chest_input(drag_press)
+	root.size = Vector2i(844, 390)
+	await process_frame
+	await process_frame
+	var chest_rect := Rect2(
+		app.chest._art.position + app.chest._bounds.position * app.chest._art.scale,
+		app.chest._bounds.size * app.chest._art.scale
+	)
+	check(Rect2(Vector2.ZERO, app.chest.size).grow(0.5).encloses(chest_rect),
+		"Chest dragging stays inside its canvas after resizing")
 	if app.has_method("_chest_input"):
 		root.size = Vector2i(960, 540)
 		await process_frame
@@ -1254,7 +1232,9 @@ func _test_scene() -> void:
 	app.on_page_hidden()
 	check(app.model.chest_state == "closed" and app._pending_fragment.is_empty(),
 		"Hiding cancels an incomplete opening and preserves the earned closed chest")
-	check(app.effects.particle_count() == 0, "Hiding during opening clears particles")
+	check(not app.chest.hold_effect_snapshot().active
+		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
+		"Hiding during opening clears the chest's charge and flash")
 	check_no_collectible_presentation(app, "Background cancellation has no collectible artwork or queued flight")
 	app.on_page_visible()
 	app.new_round(91)
@@ -1371,7 +1351,8 @@ func _test_scene() -> void:
 	var second: String = wrong_pair_for(app.model)[0]
 	app.on_page_hidden()
 	check(not app.audio.active, "Hiding pauses audio until another gesture")
-	check(app.effects.particle_count() == 0, "Hiding clears transient effects")
+	check(app._feedback_tweens.is_empty() and app._feedback_sparkles.is_empty(),
+		"Hiding clears transient match effects")
 	check(app.model.selected_id == first, "Hiding does not reset a selection")
 	app.cards[second].pressed.emit()
 	app.queue_free()

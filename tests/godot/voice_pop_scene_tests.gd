@@ -17,6 +17,17 @@ func settle() -> void:
 		await process_frame
 
 
+func wait_for_result_pip(view, context: String) -> void:
+	for attempt in range(80):
+		var audio_busy: bool = view.pip_audio_busy.is_valid() and bool(view.pip_audio_busy.call())
+		if not view.pip.is_manual_action_busy() and not audio_busy:
+			break
+		await create_timer(0.05).timeout
+	check(not view.pip.is_manual_action_busy()
+		and (not view.pip_audio_busy.is_valid() or not bool(view.pip_audio_busy.call())),
+		context + " finishes the current animation and greeting before the next tap")
+
+
 func result_pointer(point: Vector2, pressed: bool) -> void:
 	var event := InputEventMouseButton.new()
 	event.device = InputEvent.DEVICE_ID_EMULATION
@@ -98,7 +109,11 @@ func check_compact_reports(view, dimensions: Vector2i, fixture: String) -> void:
 		var context: String = "%s report page %d" % [fixture, report_step + 1]
 		check(int(view.snapshot().report_step) == report_step, context + " is the requested page")
 		check_result_actions(view, dimensions, context)
+		await wait_for_result_pip(view, context)
 		view.pip.pressed.emit()
+		check(str(view.snapshot().report).contains("High five")
+			and view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
+			context + " actually displays the high five before its layout is checked")
 		await settle()
 		check_result_actions(view, dimensions, context + " after high five")
 		if report_step < 2:
@@ -302,6 +317,14 @@ func _run() -> void:
 		check(int(view.snapshot().report_step) == 0 and str(view.snapshot().report) == initial_report,
 			"The three report pages cycle back to the original round summary")
 		var ordinary_requests: int = report_requests.size()
+		if view.pip.is_manual_action_busy():
+			view.pip.pressed.emit()
+			check(str(view.snapshot().report) == initial_report and pip_requests.is_empty()
+				and report_requests.size() == ordinary_requests,
+				"A tap during the result's entrance animation leaves the report unchanged")
+		await wait_for_result_pip(view, "The result entrance")
+		check(pip_requests.is_empty() and report_requests.size() == ordinary_requests,
+			"An ignored entrance tap cannot queue a later greeting or report")
 		view.pip.pressed.emit()
 		check(str(view.snapshot().report).contains("High five") and str(view.snapshot().report).contains(initial_report),
 			"Pip's high five adds a reaction while keeping the actual report")
@@ -309,6 +332,17 @@ func _run() -> void:
 			"A Pip tap requests its greeting and visible report once through a separate audio route")
 		check(view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
 			"A high five prepends its matching recorded clip")
+		var high_five_report: String = str(view.snapshot().report)
+		var high_five_remaining: float = view.pip._trick_left
+		for tap in range(3):
+			view.pip.pressed.emit()
+		check(pip_requests == [high_five_report] and report_requests.size() == ordinary_requests
+			and str(view.snapshot().report) == high_five_report
+			and view.pip._trick_left == high_five_remaining,
+			"Repeated taps cannot restart a high five or duplicate its report request")
+		await wait_for_result_pip(view, "The accepted high five")
+		check(pip_requests == [high_five_report] and report_requests.size() == ordinary_requests,
+			"Finishing a high five does not replay ignored taps")
 		check(view.game.summary() == result, "Report browsing and Pip interaction leave the round result unchanged")
 		view.set_report_speaking(true)
 		check(view.pip.speaking and bool(view.snapshot().report_speaking), "Pip's mouth starts only when report speech starts")

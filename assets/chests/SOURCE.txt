@@ -21,7 +21,7 @@ Source-file caveat: 11 original PNGs contain trailing data after IEND:
 Royal closed/open, Energy open, and Crystal parts 01 through 08.
 Their trailing bytes are preserved byte-for-byte, without normalization.
 FFmpeg's stream reader reports an extra-image error for Royal closed.png;
-the image payloads of all 19 PNGs decode when bounded by IEND.
+the image payloads of all 14 PNGs decode when bounded by IEND.
 Godot import and rendering are validated separately by the native project.
 
 Selected original relative paths -> imported image paths:
@@ -39,8 +39,3 @@ Chests/Crystal/Sprites/SPR_06.png -> assets/chests/crystal/part_06.png
 Chests/Crystal/Sprites/SPR_07.png -> assets/chests/crystal/part_07.png
 Chests/Crystal/Sprites/SPR_08.png -> assets/chests/crystal/part_08.png
 Particles/Textures/portal_glow.png -> assets/chests/particles/portal_glow.png
-Particles/Textures/ring.png -> assets/chests/particles/ring.png
-Particles/Textures/sparkle3.png -> assets/chests/particles/sparkle3.png
-Particles/Textures/lightray1.png -> assets/chests/particles/lightray1.png
-Particles/Textures/explosion_spike01.png -> assets/chests/particles/explosion_spike01.png
-Particles/Textures/magic_orb2.png -> assets/chests/particles/magic_orb2.png

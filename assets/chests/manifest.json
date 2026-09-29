@@ -187,12 +187,7 @@
     }
   },
   "particles": {
-    "glow": "assets/chests/particles/portal_glow.png",
-    "ring": "assets/chests/particles/ring.png",
-    "spark": "assets/chests/particles/sparkle3.png",
-    "ray": "assets/chests/particles/lightray1.png",
-    "burst": "assets/chests/particles/explosion_spike01.png",
-    "orb": "assets/chests/particles/magic_orb2.png"
+    "glow": "assets/chests/particles/portal_glow.png"
   },
   "files": [
     {
@@ -290,41 +285,6 @@
       "path": "assets/chests/particles/portal_glow.png",
       "source": "Particles/Textures/portal_glow.png",
       "sha256": "bd68c67e5db6347f12237150c84d6e83055480b11a37906a0d140d3e2294a17c",
-      "width": 512,
-      "height": 512
-    },
-    {
-      "path": "assets/chests/particles/ring.png",
-      "source": "Particles/Textures/ring.png",
-      "sha256": "0d1f60531d815b052d211ff8112e1e82d792555dbbc6d44d9ae957d93de805cd",
-      "width": 512,
-      "height": 512
-    },
-    {
-      "path": "assets/chests/particles/sparkle3.png",
-      "source": "Particles/Textures/sparkle3.png",
-      "sha256": "74c2a40f4ad85def13006522a4c814eb39b4c8b3197b4ba1de15b8061ba61961",
-      "width": 256,
-      "height": 256
-    },
-    {
-      "path": "assets/chests/particles/lightray1.png",
-      "source": "Particles/Textures/lightray1.png",
-      "sha256": "237ee4fe5300d09282786fba21de357fd7ae8e966c9d142d4f8232cf44313ff4",
-      "width": 1024,
-      "height": 256
-    },
-    {
-      "path": "assets/chests/particles/explosion_spike01.png",
-      "source": "Particles/Textures/explosion_spike01.png",
-      "sha256": "dee582d3f1a11adc9756a0ff2877c5862d26a64156dc7662c7b99697be54e913",
-      "width": 1024,
-      "height": 1024
-    },
-    {
-      "path": "assets/chests/particles/magic_orb2.png",
-      "source": "Particles/Textures/magic_orb2.png",
-      "sha256": "e092d8fb4ec7cf0fcc75d73463d4bcd0938daa637f067ac5fa20a519de615e3f",
       "width": 512,
       "height": 512
     }

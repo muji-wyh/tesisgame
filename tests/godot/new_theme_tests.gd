@@ -62,7 +62,7 @@ func _run() -> void:
 	_check_game_models(data.words)
 	_check_age_limited_gifts(data.words)
 	_check_progress_and_room()
-	await _check_chests_and_celebration(data.chests)
+	await _check_chests(data.chests)
 	print("New themes: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -76,7 +76,7 @@ func _check_catalog() -> void:
 		check(palette.name == world.name and palette.chest == world.chest,
 			"The new world has its intended title and supported chest skin")
 		check(ResourceLoader.exists(palette.symbol) and load(palette.symbol) is Texture2D,
-			"The theme chooser and celebration can load the new world symbol")
+			"The theme chooser can load the new world symbol")
 		var medals: Array = Data.medals(world.id)
 		check(medals.size() == 6 and Data.rewards(world.id).size() == 6, "Each new world contains six active medals")
 		for index in range(medals.size()):
@@ -201,25 +201,15 @@ func _check_progress_and_room() -> void:
 		"Saved new-world progress reloads without changing old medal pieces")
 
 
-func _check_chests_and_celebration(manifest: Dictionary) -> void:
+func _check_chests(manifest: Dictionary) -> void:
 	var chest = load("res://scripts/chest_view.gd").new()
-	var effects = load("res://scripts/celebration.gd").new()
 	root.add_child(chest)
-	root.add_child(effects)
 	chest.size = Vector2(240, 240)
-	effects.size = Vector2(240, 240)
-	effects.configure(manifest)
 	for world in NEW_WORLDS:
 		var palette: Dictionary = Data.theme(world.id)
 		chest.configure_skin(palette, manifest)
 		check(chest.theme_id == world.id and chest.piece_count() == (9 if world.chest == "crystal" else 5),
 			"The new world renders a complete supported chest")
-		effects.start(palette, false, true)
-		check(effects.particle_count() == 24 and effects._token != null, "A new-world fragment starts its own symbol celebration")
-		effects._process(0.8)
 		await process_frame
-		effects.start(palette, true)
-		check(effects.particle_count() == 0, "New-world celebrations honor reduced motion")
 	chest.queue_free()
-	effects.queue_free()
 	await process_frame

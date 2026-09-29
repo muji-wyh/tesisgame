@@ -191,18 +191,16 @@ func _check_click_routes() -> void:
 	check(not app.audio.voice.playing and app.audio._pip_rng.state == state and interactions.size() == event_count + 1,
 		"Muted Home pokes retain their visual response without drawing or playing a greeting")
 	app.audio.set_muted(false)
-	for blocked in ["swipe", "inertia", "paused"]:
+	for blocked in ["swipe", "paused"]:
 		app.audio.halt()
 		state = app.audio._pip_rng.state
 		event_count = interactions.size()
 		app._collection_dragged = blocked == "swipe"
-		app._collection_velocity = Vector2(20, 0) if blocked == "inertia" else Vector2.ZERO
 		playground.pause(blocked == "paused")
 		app.duck.pressed.emit()
 		check(not app.audio.voice.playing and app.audio._pip_rng.state == state and interactions.size() == event_count,
 			"A " + blocked + " Home interaction cannot leak a Pip greeting")
 	app._collection_dragged = false
-	app._collection_velocity = Vector2.ZERO
 	playground.pause(false)
 	app._hide_collection()
 	app.audio.halt()

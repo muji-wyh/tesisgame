@@ -54,13 +54,12 @@ func _run() -> void:
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
 	app._room.toy_button.pressed.emit()
 	check(app._room.feedback_text.to_lower().contains("ball"), "The room toy action gives named accessibility feedback")
-	app._collection_scroll.scroll_vertical = app._collection_max_scroll().y
-	await process_frame
-	await process_frame
 	app.duck.grab_focus()
 	await process_frame
 	await process_frame
-	check(app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()), "Keyboard focus scrolls Pip into view")
+	check(app._collection_scroll.scroll_vertical == 0
+		and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
+		"Keyboard focus keeps Pip visible in the fixed playground")
 	var scroll_before: int = app._collection_scroll.scroll_vertical
 	var trick_before: int = app._duck_trick_index
 	await _stroke_duck(app.duck)

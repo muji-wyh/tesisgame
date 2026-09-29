@@ -75,9 +75,9 @@ func _run() -> void:
 		await process_frame
 	check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip reopens the room with the earned gift")
 	check(root.gui_get_focus_owner() == app._room.toy_button and app._collection_scroll.get_global_rect().encloses(app._room.toy_button.get_global_rect()),
-		"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d/%d" % [
+		"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d" % [
 			app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
-			app._collection_scroll.scroll_vertical, app._collection_max_scroll().y])
+			app._collection_scroll.scroll_vertical])
 	await _check_owned_display_navigation(app)
 	app.queue_free()
 	await process_frame

@@ -14,7 +14,7 @@ function fixture(t) {
   return directory;
 }
 
-test('the new-world provenance pins every retained audio file', () => {
+test('the new-world provenance preserves its history and pins all six active audio files', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jungle-candy-audio.json'), 'utf8'));
   const expected = added.flatMap(id => [
     `assets/audio/bgm/${id}.wav`,
@@ -22,31 +22,50 @@ test('the new-world provenance pins every retained audio file', () => {
     ...['theme', 'arrive', 'open'].map(suffix => `assets/audio/voice/${id}-${suffix}.wav`)
   ]);
   assert.deepEqual(manifest.files.map(file => file.path), expected);
+  const active = added.flatMap(id => [
+    `assets/audio/bgm/${id}.wav`,
+    `assets/audio/sfx/${id}-arrive.wav`,
+    `assets/audio/voice/${id}-theme.wav`
+  ]);
+  const retired = added.flatMap(id => [
+    `assets/audio/sfx/${id}-open.wav`,
+    `assets/audio/voice/${id}-arrive.wav`,
+    `assets/audio/voice/${id}-open.wav`
+  ]);
   for (const file of manifest.files) {
+    if (!active.includes(file.path)) {
+      assert.ok(retired.includes(file.path), `Unclassified historical audio: ${file.path}`);
+      assert.equal(fs.existsSync(path.join(root, file.path)), false,
+        `Retired audio is documented but must not return to the source inventory: ${file.path}`);
+      continue;
+    }
     const bytes = fs.readFileSync(path.join(root, file.path));
     assert.equal(bytes.length, file.bytes, file.path);
     assert.equal(createHash('sha256').update(bytes).digest('hex'), file.sha256, file.path);
   }
 });
 
-test('missing-only SFX generation adds four distinct new cues without rewriting old effects', (t) => {
+test('missing-only SFX generation adds two arrival cues without rewriting effects or restoring retired openings', (t) => {
   const { sounds, makeWave, generateSfx } = require('../tools/generate-sfx.cjs');
   const directory = fixture(t);
   const output = path.join(directory, 'assets/audio/sfx');
   fs.mkdirSync(output, { recursive: true });
-  const ids = added.flatMap(id => [`${id}-arrive`, `${id}-open`]);
+  const ids = added.map(id => `${id}-arrive`);
+  const active = ['select', 'correct', 'wrong', 'loss', ...themes.map(id => `${id}-arrive`)];
+  assert.deepEqual(Object.keys(sounds).sort(), [...active].sort());
   const original = Buffer.from('An existing effect must remain byte-for-byte unchanged.');
-  const retained = Object.keys(sounds).filter(id => !ids.includes(id));
+  const retained = active.filter(id => !ids.includes(id));
   for (const id of retained) fs.writeFileSync(path.join(output, `${id}.wav`), original);
-  assert.equal(generateSfx({ root: directory, onlyMissing: true }), 4);
+  assert.equal(generateSfx({ root: directory, onlyMissing: true }), 2);
   const generated = ids.map(id => {
     const bytes = fs.readFileSync(path.join(output, `${id}.wav`));
     assert.deepEqual(bytes, makeWave(sounds[id]));
     return bytes.toString('base64');
   });
-  assert.equal(new Set(generated).size, 4);
+  assert.equal(new Set(generated).size, 2);
   for (const id of retained) assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original);
   assert.equal(generateSfx({ root: directory, onlyMissing: true }), 0);
+  assert.deepEqual(fs.readdirSync(output).sort(), active.map(id => `${id}.wav`).sort());
 });
 
 test('missing-only BGM generation preserves all existing tracks and adds playable jungle and candy tunes', (t) => {

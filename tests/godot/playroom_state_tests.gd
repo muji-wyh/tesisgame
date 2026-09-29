@@ -47,7 +47,6 @@ func _run() -> void:
 			if _directory(_root):
 				_test_catalog()
 				_test_selection_and_reload()
-				_test_goals()
 				_test_invalid_records()
 				_test_native_failures()
 				_test_browser_storage()
@@ -57,8 +56,8 @@ func _run() -> void:
 					_test_age_memory()
 					_test_invalid_age()
 					_test_age_failures()
-				var journey_ready: bool = _script.new().has_method("remember_visit") and _script.new().has_method("prefer_theme") and _script.new().has_method("suggested_adventure")
-				check(journey_ready, "PlayroomState exposes journey memory and suggestions")
+				var journey_ready: bool = _script.new().has_method("remember_visit") and _script.new().has_method("prefer_theme")
+				check(journey_ready, "PlayroomState exposes journey memory")
 				if journey_ready:
 					_test_journey_memory()
 					_test_invalid_journey()
@@ -194,27 +193,6 @@ func _test_selection_and_reload() -> void:
 	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known write blocker")
 
 
-func _test_goals() -> void:
-	var state = _script.new()
-	var gift: Dictionary = state.next_gift({})
-	check(gift.id == "toy-spring" and gift.remaining_pieces == 3, "Nearest gifts break ties in catalog order")
-	gift = state.next_gift({"spring-1": 2}, "spring")
-	check(gift.id == "toy-spring" and gift.remaining_pieces == 1, "A partial first medal has one piece left for its toy")
-	gift = state.next_gift({"spring-1": 3, "spring-2": 1, "spring-3": 1}, "spring")
-	check(gift.is_empty(), "Completing a world's toy never starts advertising its unearned backdrop")
-	gift = state.next_gift({"spring-1": 1, "spring-3": 3}, "spring")
-	check(gift.id == "toy-spring" and gift.remaining_pieces == 2, "An already earned sparse backdrop is skipped")
-	gift = state.next_gift({"spring-1": 3, "ocean-1": 2})
-	check(gift.id == "toy-ocean" and gift.remaining_pieces == 1, "The nearest unfinished gift can belong to another world")
-	check(state.next_gift({"spring-1": 3}, "spring").is_empty(), "A world with its toy earned has no further active gift")
-	check(state.next_gift({}, "unknown").is_empty(), "Unknown world filters produce no gift")
-	var complete: Dictionary = {}
-	for theme_id in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
-		complete[theme_id + "-1"] = 3
-	var before := complete.duplicate(true)
-	check(state.next_gift(complete).is_empty() and complete == before, "Earning every toy leaves no active gift even when all legacy backdrops are still locked")
-
-
 func _test_invalid_records() -> void:
 	var invalid: Array = ["", "[playroom\n", _text(null), _text(2), _text(1.0), _text(true), _text(1, null), _text(1, 5), _text(1, "unknown"), _text(1, "backdrop-home"), _text(1, "toy-ball", null), _text(1, "toy-ball", "toy-ball"), _text(1, "toy-ball", "backdrop-home", null), _text(1, "toy-ball", "backdrop-home", 1), _text(1, "toy-ball", "backdrop-home", "unknown")]
 	for index in range(invalid.size()):
@@ -344,12 +322,10 @@ func _test_journey_memory() -> void:
 		return
 	check(state.recent_topic_ids.is_empty() and state.preferred_theme_id.is_empty(), "An old record without journey fields migrates to empty history and no preferred theme")
 	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading an old record does not rewrite its bytes")
-	check(state.suggested_adventure() == topics[0], "A new journey suggests the first catalog topic")
 	check(not state.remember_visit("unknown") and not state.prefer_theme("unknown"), "Unknown topics and themes are rejected")
 	check(FileAccess.get_file_as_string(fixture.path) == original and state.recent_topic_ids.is_empty(), "Rejected journey changes preserve the old record and memory")
 	check(state.remember_visit(topics[0]) and state.remember_visit(topics[2]), "Known topics are remembered")
 	check(state.recent_topic_ids == [topics[2], topics[0]], "History is most recent first")
-	check(state.suggested_adventure() == topics[1], "Suggestions use the first unvisited topic in catalog order")
 	check(state.remember_visit(topics[0]) and state.recent_topic_ids == [topics[0], topics[2]], "Revisiting moves a topic to the front without duplicates")
 	check(state.prefer_theme("ocean"), "A known preferred theme can be stored")
 	var counts := {"spring-1": 3, "winter-3": 3}
@@ -363,8 +339,8 @@ func _test_journey_memory() -> void:
 	check(counts == before, "Journey and customization never mutate medal counts")
 	for id in topics:
 		check(state.remember_visit(id), "Every known topic can be visited")
-	check(state.recent_topic_ids.size() == mini(12, topics.size()) and state.suggested_adventure() == topics[0], "A complete journey suggests its least recently visited topic and stays within twelve entries")
-	check(state.remember_visit(topics[0]) and state.suggested_adventure() == topics[1], "Revisiting updates the least-recent suggestion")
+	check(state.recent_topic_ids.size() == mini(12, topics.size()) and state.recent_topic_ids.front() == topics.back(), "Journey history stays within twelve entries with the latest visit first")
+	check(state.remember_visit(topics[0]) and state.recent_topic_ids.front() == topics[0], "Revisiting updates the latest topic")
 	check(state.prefer_theme("") and state.preferred_theme_id.is_empty(), "The preferred theme can be cleared")
 	_directory(fixture.path + ".pending")
 	check(state.remember_visit(topics[0]) and state.prefer_theme(""), "Remembering the latest topic or same preference is idempotent without a write")

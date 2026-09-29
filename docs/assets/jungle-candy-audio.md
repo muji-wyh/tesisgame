@@ -1,9 +1,10 @@
 # Jungle and candy audio
 
-Each world provides a background track, two chest effects and one spoken theme
-greeting. The original September 18 expansion also included arrival and opening
-voice prompts, which are no longer used. Those four recordings remain preserved
-as source assets but are excluded from generation and Web delivery. The dated
+Each world provides a background track, an arrival effect and one spoken theme
+greeting. Chest interactions use the separate authored material bank described
+in [Chest feel](chest-feel.md). The original September 18 expansion also included
+arrival and opening voice prompts and opening jingles. Those four recordings and
+two jingles are retired and removed from the active source assets. The dated
 `jungle-candy-audio.json` retains the original source paths, formats, durations
 and SHA-256 hashes.
 
@@ -36,8 +37,9 @@ this expansion. SHA-256 comparison confirmed that all 295 previously existing
 WAV files remained byte for byte unchanged. The BGM and SFX generators also
 avoid rewriting identical outputs during full regeneration.
 
-The two background tracks, two active theme greetings and four small effects
-are bundled in the startup game pack. Packaging requires their Godot imports,
+The two background tracks, two active theme greetings and two arrival effects,
+along with the current chest material bank, are bundled in the startup game pack.
+Packaging requires their Godot imports,
 so import the source WAVs through the normal build before validating the required
 audio. The pack verifier loads the exported resources to confirm they are playable;
 no audio download is needed after startup.
@@ -50,5 +52,5 @@ greeting paths inside the bundled-audio contract:
 
 ```powershell
 node --test tests/voice-generation.test.cjs tests/world-audio.test.cjs
-node --test --test-name-pattern='voice|English|pronunciation|background tracks|original effects|chest openings|SFX generator' tests/assets.test.cjs
+node --test --test-name-pattern='voice|English|pronunciation|background tracks|active effects|SFX generator' tests/assets.test.cjs
 ```

@@ -118,28 +118,28 @@ const CONFUSABLE_WORDS: Dictionary = {
 const THEMES: Dictionary = {
 	"spring": {"name": "Spring", "background": Color("#effbef"), "accent": Color("#237a57"),
 		"light": Color("#bfe9c5"), "spark": Color("#ffa8bb"), "tint": Color("#eefbd6"),
-		"chest": "royal", "prize": "A spring flower!"},
+		"chest": "royal"},
 	"summer": {"name": "Summer", "background": Color("#fff4df"), "accent": Color("#b94545"),
 		"light": Color("#ffd192"), "spark": Color("#21afbc"), "tint": Color("#fff0cd"),
-		"chest": "energy", "prize": "A summer sun!"},
+		"chest": "energy"},
 	"autumn": {"name": "Autumn", "background": Color("#fff2e5"), "accent": Color("#995323"),
 		"light": Color("#ffd19b"), "spark": Color("#b46386"), "tint": Color("#ffe6c5"),
-		"chest": "royal", "prize": "An autumn leaf!"},
+		"chest": "royal"},
 	"winter": {"name": "Winter", "background": Color("#eef5ff"), "accent": Color("#456791"),
 		"light": Color("#c9dcf5"), "spark": Color("#aa97d4"), "tint": Color("#e6edff"),
-		"chest": "crystal", "prize": "A winter snowflake!"},
+		"chest": "crystal"},
 	"ocean": {"name": "Ocean", "background": Color("#e7f8fa"), "accent": Color("#13758b"),
 		"light": Color("#afdee6"), "spark": Color("#ffad87"), "tint": Color("#e1f4ef"),
-		"chest": "crystal", "prize": "An ocean treasure!"},
+		"chest": "crystal"},
 	"space": {"name": "Space", "background": Color("#f1edfb"), "accent": Color("#694a99"),
 		"light": Color("#d6c8f0"), "spark": Color("#efb451"), "tint": Color("#eae3ff"),
-		"chest": "energy", "prize": "A space treasure!"},
+		"chest": "energy"},
 	"jungle": {"name": "Jungle", "background": Color("#f0f8e7"), "accent": Color("#2d7048"),
 		"light": Color("#c8e3a4"), "spark": Color("#ebbe68"), "tint": Color("#e8f2cd"),
-		"chest": "royal", "prize": "A jungle discovery!"},
+		"chest": "royal"},
 	"candy": {"name": "Candy", "background": Color("#fff0f7"), "accent": Color("#a53d73"),
 		"light": Color("#f5c9e0"), "spark": Color("#69bea9"), "tint": Color("#fce5f0"),
-		"chest": "crystal", "prize": "A candy surprise!"}
+		"chest": "crystal"}
 }
 const REWARD_NAMES: Dictionary = {
 	"spring": ["Blossom", "Ladybug", "Bee", "Tulip", "Rainbow", "Bunny", "Sprout", "Butterfly", "Nest", "Dewdrop"],
@@ -301,7 +301,7 @@ func load_all() -> bool:
 	if not value.styles.crystal.get("parts") is Array or value.styles.crystal.parts.size() != 9:
 		error = "The Crystal chest needs all nine pieces."
 		return false
-	if not value.get("files") is Array or value.files.size() != 19:
+	if not value.get("files") is Array or value.files.size() != 14:
 		error = "The chest artwork import is incomplete."
 		return false
 	for file in value.files:

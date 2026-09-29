@@ -35,57 +35,47 @@ const themes = {
   spring: {
     frequencies: [659.25, 783.99, 987.77, 1318.51],
     voice: { timbre: 'spring', gain: 0.11, attack: 0.025, release: 0.22, decay: 0.5 },
-    arrive: { step: 0.15, noteDuration: 0.34 },
-    open: { step: 0.18, noteDuration: 0.43 }
+    arrive: { step: 0.15, noteDuration: 0.34 }
   },
   summer: {
     frequencies: [523.25, 659.25, 783.99, 1046.5],
     voice: { timbre: 'summer', gain: 0.11, attack: 0.015, release: 0.12, decay: 0.9 },
-    arrive: { step: 0.13, noteDuration: 0.23 },
-    open: { step: 0.15, noteDuration: 0.26 }
+    arrive: { step: 0.13, noteDuration: 0.23 }
   },
   autumn: {
     frequencies: [392, 493.88, 587.33, 783.99],
     voice: { timbre: 'autumn', gain: 0.12, attack: 0.025, release: 0.22, decay: 0.6 },
-    arrive: { step: 0.17, noteDuration: 0.38 },
-    open: { step: 0.18, noteDuration: 0.45 }
+    arrive: { step: 0.17, noteDuration: 0.38 }
   },
   winter: {
     frequencies: [783.99, 1046.5, 1174.66, 1567.98],
     voice: { timbre: 'winter', gain: 0.14, attack: 0.015, release: 0.38, decay: 2.4 },
-    arrive: { step: 0.17, noteDuration: 0.54 },
-    open: { step: 0.18, noteDuration: 0.61 }
+    arrive: { step: 0.17, noteDuration: 0.54 }
   },
   ocean: {
     frequencies: [440, 554.37, 659.25, 880],
     voice: { timbre: 'spring', gain: 0.12, attack: 0.04, release: 0.28, decay: 0.65 },
-    arrive: { step: 0.18, noteDuration: 0.40 },
-    open: { step: 0.19, noteDuration: 0.45 }
+    arrive: { step: 0.18, noteDuration: 0.40 }
   },
   space: {
     frequencies: [587.33, 880, 1174.66, 1479.98],
     voice: { timbre: 'winter', gain: 0.12, attack: 0.025, release: 0.31, decay: 1.4 },
-    arrive: { step: 0.15, noteDuration: 0.43 },
-    open: { step: 0.18, noteDuration: 0.53 }
+    arrive: { step: 0.15, noteDuration: 0.43 }
   },
   jungle: {
     frequencies: [392, 523.25, 587.33, 783.99],
     voice: { timbre: 'jungle', gain: 0.14, attack: 0.012, release: 0.20, decay: 1.2 },
-    arrive: { step: 0.16, noteDuration: 0.30 },
-    open: { step: 0.17, noteDuration: 0.36 }
+    arrive: { step: 0.16, noteDuration: 0.30 }
   },
   candy: {
     frequencies: [659.25, 830.61, 987.77, 1318.51],
     voice: { timbre: 'candy', gain: 0.12, attack: 0.012, release: 0.26, decay: 1.5 },
-    arrive: { step: 0.14, noteDuration: 0.38 },
-    open: { step: 0.16, noteDuration: 0.46 }
+    arrive: { step: 0.14, noteDuration: 0.38 }
   }
 };
 
 for (const [id, theme] of Object.entries(themes)) {
   sounds[`${id}-arrive`] = melody(theme.frequencies, { ...theme.voice, ...theme.arrive });
-  const opening = [...theme.frequencies, ...theme.frequencies.slice(0, -1).reverse()];
-  sounds[`${id}-open`] = melody(opening, { ...theme.voice, ...theme.open });
 }
 
 function tone(note, time) {

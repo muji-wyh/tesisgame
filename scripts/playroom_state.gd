@@ -72,18 +72,6 @@ static func owned(entry: Dictionary, counts: Dictionary) -> bool:
 	return not known.is_empty() and (known.required_pieces == 0 or _pieces(counts, known.medal_id) >= known.required_pieces)
 
 
-static func next_gift(counts: Dictionary, theme_id: String = "") -> Dictionary:
-	var result: Dictionary = {}
-	for entry in toys():
-		if (not theme_id.is_empty() and entry.theme != theme_id) or owned(entry, counts):
-			continue
-		var remaining: int = _remaining_pieces(entry, counts)
-		if result.is_empty() or remaining < result.remaining_pieces:
-			result = entry
-			result.remaining_pieces = remaining
-	return result
-
-
 static func _remaining_pieces(entry: Dictionary, counts: Dictionary) -> int:
 	if owned(entry, counts):
 		return 0
@@ -346,13 +334,6 @@ func prefer_theme(id: String) -> bool:
 		return false
 	preferred_theme_id = id
 	return true
-
-
-func suggested_adventure() -> String:
-	for topic in Data.ADVENTURES:
-		if not recent_topic_ids.has(topic.id):
-			return topic.id
-	return recent_topic_ids.back() if not recent_topic_ids.is_empty() else ""
 
 
 func _persist(next_toy: String, next_backdrop: String, next_favorite: String, next_recent: Array[String], next_preferred: String, next_collected: Array[String], next_displayed: String, next_goal: String, next_age_band: String = "") -> bool:

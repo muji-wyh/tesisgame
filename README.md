@@ -623,9 +623,6 @@ charge; reconnecting retains the current round. A held on the loading toy must b
 before selecting a native game control. If the browser keeps controller-only audio muted,
 tap or click the game once to enable sound.
 
-Particle textures load only for the first animated celebration, rather than delaying startup.
-Reduced-motion players do not load those unused textures.
-
 Web and native playback both load audio directly from packaged Godot resources.
 All sounds arrive with the initial game pack; decoded streams are cached for the
 session. The browser caches the immutable game-pack URL between visits, and an
@@ -735,9 +732,9 @@ Keep keys in the process environment, never in source files or the Web export.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
 The game prompt catalog contains ten messages: wrong-answer and loss feedback,
 plus one greeting for each world. Together with the 350 word recordings, the
-generator maintains 360 active files under `assets\audio\voice`. Eight legacy
-arrival/opening recordings remain preserved as source assets but are excluded
-from generation and Web delivery. Voice Pop report recordings remain in their
+generator maintains 360 active files under `assets\audio\voice`. Retired
+arrival/opening recordings have been removed; historical provenance remains in
+the asset documentation. Voice Pop report recordings remain in their
 separate directory. Source details, hashes and generation checks are in
 [Jungle and Candy audio](docs/assets/jungle-candy-audio.md).
 
@@ -758,10 +755,10 @@ Selected artwork is imported from the user-provided **Modern 2D Animated Chests 
 
 `scripts/chest_feel.gd` defines shared cue times and per-world motion profiles.
 `assets/chests/rigs.json` describes derived Royal/Energy layers; the original
-19-file source manifest remains unchanged. The derived art reuses the original
+source manifest retains the 14 images used by the current chest. The derived art reuses the original
 pixels and textures rather than replacing the silhouette with a new illustration.
 
-The importer copies 19 PNGs byte-for-byte, records SHA256 and source paths, and converts the Crystal prefab's rest transforms, pivots, flips and ordering into `assets\chests\manifest.json`. Unity scripts, materials, prefabs and animation clips are **not** executed or shipped; motion is recreated natively in Godot.
+The importer copies 14 PNGs byte-for-byte, records SHA256 and source paths, and converts the Crystal prefab's rest transforms, pivots, flips and ordering into `assets\chests\manifest.json`. The retired collectible celebration and its five unused particle textures are no longer included. Unity scripts, materials, prefabs and animation clips are **not** executed or shipped; motion is recreated natively in Godot.
 
 ```powershell
 node tools\import-chests.cjs "D:\uwork\AssetsSource\Modern 2D Animated Chests Pack_FREE Demo"

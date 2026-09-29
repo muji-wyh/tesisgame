@@ -9,12 +9,7 @@ const chestRoot = path.join(root, 'assets', 'chests');
 const partNames = ['chest', ...Array.from({ length: 8 }, (_, index) => String(index + 1).padStart(2, '0'))];
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 const expectedParticles = {
-  glow: 'assets/chests/particles/portal_glow.png',
-  ring: 'assets/chests/particles/ring.png',
-  spark: 'assets/chests/particles/sparkle3.png',
-  ray: 'assets/chests/particles/lightray1.png',
-  burst: 'assets/chests/particles/explosion_spike01.png',
-  orb: 'assets/chests/particles/magic_orb2.png'
+  glow: 'assets/chests/particles/portal_glow.png'
 };
 const expectedFiles = [
   ...['Royal', 'Energy'].flatMap((style) => [
@@ -200,7 +195,7 @@ SpriteRenderer:
   return { text: documents.join(''), sprites, rootTransform, middleTransform, middleTransformId, transforms, renderers };
 }
 
-test('all nineteen selected chest and particle PNGs exist with valid IHDR dimensions', () => {
+test('all fourteen selected chest and glow PNGs exist with valid IHDR dimensions', () => {
   for (const file of expectedFiles) {
     const image = readPng(file.path);
     if (/\/(?:royal|energy)\//.test(file.path)) {
@@ -245,9 +240,9 @@ test('Crystal has nine unique parts with finite nonsingular Godot transforms and
   }
 });
 
-test('the manifest records exactly nineteen original paths, hashes and image dimensions', () => {
+test('the manifest records exactly fourteen original paths, hashes and image dimensions', () => {
   const files = readManifest().files;
-  assert.equal(files.length, 19);
+  assert.equal(files.length, 14);
   assert.deepEqual(
     files.map(({ path: output, source }) => ({ path: output, source })).sort((a, b) => a.path.localeCompare(b.path)),
     [...expectedFiles].sort((a, b) => a.path.localeCompare(b.path))
@@ -262,7 +257,7 @@ test('the manifest records exactly nineteen original paths, hashes and image dim
   }
 });
 
-test('only nineteen original PNGs and checksum-listed derived rig layers are present', () => {
+test('only fourteen original PNGs and checksum-listed derived rig layers are present', () => {
   const files = listFiles(chestRoot);
   const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
   assert.equal(rigs.version, 1);
@@ -489,7 +484,7 @@ test('source checksums agree and a real importer rerun leaves every imported byt
   const result = importChests(DEFAULT_SOURCE);
   assert.deepEqual(result.manifest, manifest);
   assert.equal(result.written, 0);
-  assert.equal(result.unchanged, 21);
+  assert.equal(result.unchanged, 16);
   for (const [filename, before] of snapshot) {
     assert.equal(sha256(fs.readFileSync(absolute(filename))), before.hash, filename);
     assert.equal(fs.statSync(absolute(filename), { bigint: true }).mtimeNs, before.mtime, filename);

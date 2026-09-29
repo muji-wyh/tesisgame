@@ -9,7 +9,6 @@ const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
 const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
-const Effects = preload("res://scripts/celebration.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const MedalProgress = preload("res://scripts/medal_progress.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
@@ -21,7 +20,6 @@ const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
-const SCROLL_FRICTION: float = 8.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 
 class InputActivityObserver extends Node:
@@ -73,11 +71,11 @@ class ProgressBadges:
 class RewardSparkle:
 	extends Control
 
-	enum Shape { CIRCLE, HEART, STAR, LEAF, SNOWFLAKE }
+	enum Shape { HEART, STAR }
 
 	var progress: float = 0.0
 	var accent: Color = Style.GOOD
-	var shape_kind: Shape = Shape.CIRCLE
+	var shape_kind: Shape = Shape.HEART
 	var particle_count: int = 8
 
 	func set_progress(value: float) -> void:
@@ -91,35 +89,17 @@ class RewardSparkle:
 		var radius := minf(size.x, size.y) * lerpf(0.22, 0.45, progress)
 		var alpha := 1.0 - progress
 		draw_arc(center, radius, 0.0, TAU, 40, Color(accent.r, accent.g, accent.b, alpha * 0.75), 4.0, true)
-		var count: int = clampi(particle_count, 1, 12)
-		if count == 12:
-			draw_arc(center, radius * 0.72, 0.0, TAU, 40, Color(accent.r, accent.g, accent.b, alpha * 0.35), 2.0, true)
+		var count: int = clampi(particle_count, 1, 8)
 		for index in range(count):
 			var angle := TAU * float(index) / float(count) + progress * 0.18
 			var point := center + Vector2(cos(angle), sin(angle)) * radius * 0.86
 			var tint: Color = Color.WHITE if index % 3 == 2 else accent.lightened(0.35 if index % 3 == 1 else 0.0)
 			tint.a = alpha
-			var symbol_size: float = lerpf(8.0, 14.0, progress) * (1.25 if count == 12 else 1.0)
+			var symbol_size: float = lerpf(8.0, 14.0, progress)
 			_draw_symbol(point, symbol_size, progress * (0.5 if index % 2 == 0 else -0.5), tint)
 
 	func _draw_symbol(point: Vector2, radius: float, rotation_angle: float, tint: Color) -> void:
 		var stroke := Color(accent.r, accent.g, accent.b, tint.a)
-		if shape_kind == Shape.CIRCLE:
-			draw_circle(point, radius * 0.3, tint)
-			return
-		if shape_kind == Shape.SNOWFLAKE:
-			var branches := PackedVector2Array()
-			for arm in range(6):
-				var direction := Vector2.UP.rotated(TAU * float(arm) / 6.0 + rotation_angle)
-				branches.append(point)
-				branches.append(point + direction * radius)
-				for side in [-1.0, 1.0]:
-					var fork := point + direction * radius * 0.58
-					branches.append(fork)
-					branches.append(fork + direction.rotated(side * 0.65) * radius * 0.32)
-			draw_multiline(branches, stroke, 4.0, true)
-			draw_multiline(branches, Color(1, 1, 1, tint.a), 1.6, true)
-			return
 		var vertices: Array[Vector2] = []
 		match shape_kind:
 			Shape.HEART:
@@ -129,12 +109,6 @@ class RewardSparkle:
 			Shape.STAR:
 				for index in range(10):
 					vertices.append(Vector2.UP.rotated(PI * float(index) / 5.0) * (1.0 if index % 2 == 0 else 0.45))
-			Shape.LEAF:
-				vertices = [Vector2(0, -1), Vector2(0.22, -0.4), Vector2(0.6, -0.7),
-					Vector2(0.53, -0.18), Vector2(1, -0.3), Vector2(0.65, 0.25),
-					Vector2(0.8, 0.48), Vector2(0.2, 0.55), Vector2(0, 1),
-					Vector2(-0.2, 0.55), Vector2(-0.8, 0.48), Vector2(-0.65, 0.25),
-					Vector2(-1, -0.3), Vector2(-0.53, -0.18), Vector2(-0.6, -0.7), Vector2(-0.22, -0.4)]
 		var outline := PackedVector2Array()
 		for vertex in vertices:
 			outline.append(point + vertex.rotated(rotation_angle) * radius)
@@ -174,7 +148,6 @@ var grid: GridContainer
 var feedback_timer: Timer
 var audio: Audio
 var chest: Chest
-var effects: Effects
 var theme_buttons: Array[Button] = []
 var hint_button: Icons
 var _voice_button: Icons
@@ -262,11 +235,6 @@ var _collection_dragging: bool = false
 var _collection_dragged: bool = false
 var _collection_drag_pointer: int = -1
 var _collection_drag_start_position: Vector2 = Vector2.ZERO
-var _collection_drag_start_scroll: Vector2 = Vector2.ZERO
-var _collection_velocity: Vector2 = Vector2.ZERO
-var _collection_inertia_position: Vector2 = Vector2.ZERO
-var _collection_last_scroll: Vector2 = Vector2.ZERO
-var _collection_last_sample_usec: int = 0
 var _controller_mode: bool = false
 var _pointer_focus_active: bool = false
 var _proactive_touches: Dictionary = {}
@@ -309,7 +277,6 @@ func _ready() -> void:
 	if not data.load_all():
 		_show_error(data.error)
 		return
-	effects.configure(data.chests)
 	_load_collected_rewards()
 	_build_collection()
 	if OS.has_feature("web"):
@@ -489,9 +456,6 @@ func _build_controls() -> void:
 	_treasure_backdrop = TreasureBackdrop.new()
 	_stage.add_child(_treasure_backdrop)
 	_treasure_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	effects = Effects.new()
-	_stage.add_child(effects)
-	effects.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chest = Chest.new()
 	_stage.add_child(chest)
 	chest.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -716,7 +680,6 @@ func _choose_age_band(id: String) -> void:
 	if not collection_page.visible or _collection_dragged:
 		_refresh_age_choices()
 		return
-	_cancel_collection_inertia()
 	_age_save_failed = not _ensure_playroom_loaded() or not playroom_state.set_age_band(id)
 	_refresh_age_choices()
 	_announce_status(_age_notice.text if _age_save_failed else "Next lesson: " + Data.age_band(playroom_state.age_band_id).name)
@@ -808,7 +771,7 @@ func _build_playroom() -> void:
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
 	_room.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_dragged and _collection_velocity.length_squared() < 100.0
+	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_dragged
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_room.playground.pip_audio_busy = audio.is_pip_busy
@@ -823,7 +786,7 @@ func _build_playroom() -> void:
 	_room.pip_interaction.connect(_room_pip_interaction)
 	_room.background_input.connect(_collection_scroll_input)
 	_room.playground.interaction_started.connect(func() -> void:
-		_end_collection_drag(false)
+		_end_collection_drag()
 		_collection_dragged = false)
 	_room.goal_requested.connect(_start_gift_adventure)
 	for control in _room.controls():
@@ -836,7 +799,7 @@ func _room_previewed(message: String) -> void:
 	if not collection_page.visible or _collection_dragged:
 		return
 	audio.stop_voice()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	_announce_status(message)
 
 
@@ -998,14 +961,8 @@ func _cancel_loss_play() -> void:
 func _collection_scroll_input(event: InputEvent, source: Control) -> void:
 	if not collection_page.visible or _collection_scroll == null:
 		return
-	if event is InputEventKey and event.pressed:
-		_cancel_collection_inertia()
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			if event.pressed:
-				_cancel_collection_inertia()
-				var distance: int = roundi(48.0 * event.factor) * (1 if event.button_index == MOUSE_BUTTON_WHEEL_DOWN else -1)
-				_collection_scroll.scroll_vertical = clampi(_collection_scroll.scroll_vertical + distance, 0, _collection_max_scroll().y)
 			_collection_scroll.accept_event()
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -1021,7 +978,7 @@ func _collection_scroll_input(event: InputEvent, source: Control) -> void:
 	elif event is InputEventScreenTouch:
 		if event.canceled:
 			if event.index == _collection_drag_pointer:
-				_end_collection_drag(false)
+				_end_collection_drag()
 		elif event.pressed:
 			_start_collection_drag(_event_position_in_collection(event, source), event.index)
 		elif event.index == _collection_drag_pointer:
@@ -1039,15 +996,10 @@ func _event_position_in_collection(event: InputEvent, source: Control) -> Vector
 func _start_collection_drag(position: Vector2, pointer: int) -> void:
 	if _collection_dragging:
 		return
-	var stopping_glide: bool = _collection_velocity.length_squared() >= 100.0
-	_cancel_collection_inertia()
 	_collection_dragging = true
-	_collection_dragged = stopping_glide
+	_collection_dragged = false
 	_collection_drag_pointer = pointer
 	_collection_drag_start_position = position
-	_collection_drag_start_scroll = Vector2(_collection_scroll.scroll_horizontal, _collection_scroll.scroll_vertical)
-	_collection_last_scroll = _collection_drag_start_scroll
-	_collection_last_sample_usec = Time.get_ticks_usec()
 
 
 func _update_collection_drag(position: Vector2) -> void:
@@ -1056,63 +1008,19 @@ func _update_collection_drag(position: Vector2) -> void:
 	var displacement: Vector2 = position - _collection_drag_start_position
 	if displacement.length() > 8.0:
 		_collection_dragged = true
-	var maximum: Vector2i = _collection_max_scroll()
-	_collection_scroll.scroll_horizontal = clampi(int(round(_collection_drag_start_scroll.x - displacement.x)), 0, maximum.x)
-	_collection_scroll.scroll_vertical = clampi(int(round(_collection_drag_start_scroll.y - displacement.y)), 0, maximum.y)
-	var current_scroll := Vector2(_collection_scroll.scroll_horizontal, _collection_scroll.scroll_vertical)
-	if current_scroll != _collection_last_scroll:
-		var now_usec: int = Time.get_ticks_usec()
-		var elapsed: float = maxf(float(now_usec - _collection_last_sample_usec) / 1000000.0, 1.0 / 240.0)
-		var sample: Vector2 = ((current_scroll - _collection_last_scroll) / elapsed).limit_length(2600.0)
-		_collection_velocity = _collection_velocity.lerp(sample, 0.75)
-		_collection_last_scroll = current_scroll
-		_collection_last_sample_usec = now_usec
 
 
-func _end_collection_drag(allow_inertia: bool = true) -> void:
-	if not allow_inertia:
-		_cancel_collection_inertia()
+func _end_collection_drag() -> void:
 	if not _collection_dragging:
 		return
 	_collection_dragging = false
 	_collection_drag_pointer = -1
-	if not allow_inertia or reduced_motion or not _collection_dragged or Time.get_ticks_usec() - _collection_last_sample_usec > 120000:
-		_cancel_collection_inertia()
-	_collection_inertia_position = Vector2(_collection_scroll.scroll_horizontal, _collection_scroll.scroll_vertical)
 	_clear_finished_collection_swipe.call_deferred()
-
-
-func _cancel_collection_inertia() -> void:
-	_collection_velocity = Vector2.ZERO
-
-
-func _advance_collection_inertia(delta: float) -> void:
-	if _collection_dragging:
-		return
-	if not collection_page.visible or reduced_motion or _collection_velocity.length_squared() < 100.0:
-		_cancel_collection_inertia()
-		return
-	# Integrate exponential damping without making glide distance depend on frame rate.
-	var decay: float = exp(-SCROLL_FRICTION * delta)
-	var target: Vector2 = _collection_inertia_position + _collection_velocity * (1.0 - decay) / SCROLL_FRICTION
-	var maximum: Vector2i = _collection_max_scroll()
-	_collection_inertia_position = Vector2(clampf(target.x, 0, maximum.x), clampf(target.y, 0, maximum.y))
-	_collection_velocity *= decay
-	if not is_equal_approx(target.x, _collection_inertia_position.x):
-		_collection_velocity.x = 0.0
-	if not is_equal_approx(target.y, _collection_inertia_position.y):
-		_collection_velocity.y = 0.0
-	_collection_scroll.scroll_horizontal = int(round(_collection_inertia_position.x))
-	_collection_scroll.scroll_vertical = int(round(_collection_inertia_position.y))
 
 
 func _clear_finished_collection_swipe() -> void:
 	if not _collection_dragging:
 		_collection_dragged = false
-
-
-func _collection_max_scroll() -> Vector2i:
-	return Vector2i.ZERO
 
 
 func _collection_rails() -> Array[ReviewScroll]:
@@ -1172,11 +1080,10 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_save_error = not _progress_ready
 	feedback_timer.stop()
 	feedback_timer.paused = false
-	effects.clear()
 	chest.clear()
 	_cancel_chest_hold()
 	_finish_chest_drag()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	audio.halt()
 	_cancel_loss_play()
 	_loss_reaction_index = 0
@@ -1694,7 +1601,7 @@ func _layout() -> void:
 	_message.hide()
 	_stop_feedback_animations()
 	_cancel_loss_play()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	_fit_grid.call_deferred()
 	_layout_collection()
 	_layout_result()
@@ -2030,7 +1937,6 @@ func choose_theme(id: String) -> void:
 		_refresh_collection()
 		_announce_collection_state()
 	duck.react("happy")
-	effects.clear()
 	if not _voice_mode and not _pop_speech_active:
 		audio.interact(model.theme_id, model.phase != "lost")
 		audio.cue("", model.theme_id + "-theme")
@@ -2053,9 +1959,7 @@ func set_reduced_motion(value: bool) -> void:
 		if _holding_chest:
 			chest.begin_hold()
 			chest.set_hold_progress(_hold_elapsed / HOLD_SECONDS)
-		_cancel_collection_inertia()
 		_stop_feedback_animations()
-		effects.clear()
 		_cancel_loss_play()
 		chest.finish_immediately()
 	if not data.words.is_empty():
@@ -2207,7 +2111,7 @@ func on_page_hidden() -> void:
 	_cancel_chest_hold()
 	_settle_released_chest()
 	_finish_chest_drag()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	audio.halt()
 	duck.settle()
 	duck.set_idle_paused(true)
@@ -2216,7 +2120,6 @@ func on_page_hidden() -> void:
 	_memory.set_reduced_motion(true)
 	_memory.set_reduced_motion(reduced_motion)
 	chest.stop_reaction()
-	effects.clear()
 
 
 func on_page_visible() -> void:
@@ -2458,8 +2361,6 @@ func _update_controller_navigation() -> void:
 
 
 func _move_focus(direction: Vector2) -> void:
-	if collection_page.visible and not _collection_dragging:
-		_cancel_collection_inertia()
 	var candidates: Array[Control] = _focus_candidates()
 	if candidates.is_empty():
 		return
@@ -2549,7 +2450,6 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 		if control == duck:
 			# Keep tracking the focused duck while revealing its fixed input slot.
 			target = _collection_duck_slot
-		_cancel_collection_inertia()
 		_reveal_room_control(target)
 		# Goal text and room controls can settle over multiple container passes.
 		for frame in range(3):
@@ -2620,7 +2520,7 @@ func _connect_browser() -> void:
 		_found_words_scroll.cancel_drag()
 		_memory.end_peek()
 		_room.playground.cancel()
-		_end_collection_drag(false))
+		_end_collection_drag())
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
@@ -2864,7 +2764,6 @@ func _process(delta: float) -> void:
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 	_update_duck()
-	_advance_collection_inertia(delta)
 	var elapsed: float = delta if hold_delta < 0.0 else hold_delta
 	if _holding_chest and model.chest_state == "closed" and elapsed > 0.0 and is_finite(elapsed):
 		_hold_elapsed += elapsed
@@ -2929,10 +2828,6 @@ func _chest_input(event: InputEvent) -> void:
 		if _holding_chest:
 			_cancel_chest_hold(true)
 	chest.set_drag_offset(_drag_anchor_offset + displacement)
-
-
-func _drag_chest(delta: Vector2) -> void:
-	chest.set_drag_offset(chest.drag_offset + delta)
 
 
 func _new_adventure() -> void:
@@ -3015,7 +2910,7 @@ func _show_collection() -> void:
 	_cancel_chest_hold()
 	_settle_released_chest()
 	_finish_chest_drag()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	_collection_dragged = false
 	_refresh_favorite_reward()
 	_refresh_collection()
@@ -3039,7 +2934,7 @@ func _hide_collection() -> void:
 	audio.stop_pip_reaction()
 	duck.settle()
 	_cancel_collection_rails()
-	_end_collection_drag(false)
+	_end_collection_drag()
 	_collection_dragged = false
 	collection_page.hide()
 	duck.clear_trick()

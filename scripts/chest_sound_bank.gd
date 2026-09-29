@@ -46,8 +46,8 @@ static func _weighted_contact(time: float, base: float, duration: float, decay: 
 
 
 static func fallback(theme: String, cue: String) -> AudioStreamWAV:
-	# A small, deterministic material texture is available during download. It is
-	# rendered only on first use and never awaits or schedules a later replacement.
+	# A small, deterministic material texture covers missing bundled recordings.
+	# It is rendered only on first use and never schedules a later replacement.
 	# The authored Foley assets contain the more detailed leaf/hinge/air layers.
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
@@ -80,7 +80,7 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 		filtered += filter_rate * (noise - filtered)
 		var envelope: float = minf(time / 0.004, 1.0) * exp(-time * 18.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.024), 1.0)
 		if cue == "charge":
-			# Keep cold-cache pressure sustained too. All rhythmic attacks come
+			# Keep fallback pressure sustained too. All rhythmic attacks come
 			# from the shared pulse events, never from this texture's loop seam.
 			envelope = minf(time / 0.004, 1.0) * minf(float(frames - 1 - index) / (SAMPLE_RATE * 0.008), 1.0)
 		var phase: float = TAU * base * time
@@ -113,7 +113,7 @@ static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 			if strike_stage >= 2:
 				sample += ((noise - filtered) * 0.40 + sin(impact_phase * 8.3) * 0.12) * minf(time / 0.010, 1.0) * exp(-time / 0.045)
 			if releasing:
-				# The cold-cache release has the same quick load, phone-audible
+				# The fallback release has the same quick load, phone-audible
 				# cavity harmonics and short dry tail as the authored material.
 				var contact_base: float = maxf(86.0, float(BODY_FREQUENCIES[theme]))
 				sample = _weighted_contact(time, contact_base, 0.38, 0.088) * 1.20

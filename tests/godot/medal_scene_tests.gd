@@ -70,10 +70,10 @@ func _run() -> void:
 		"A brief chest press returns smoothly without awarding a piece")
 	app.chest_button.button_down.emit()
 	app._advance_ui(1.21)
-	check(app.model.chest_state == "opening" and app.effects.particle_count() == 0,
+	check(app.model.chest_state == "opening" and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Maintaining the hold starts anticipation before the chest release")
 	app.chest._advance_animation(app.chest.Feel.RELEASE_TIME + 0.01)
-	check(app.effects.particle_count() == 0 and app.chest.hold_effect_snapshot().release_flash > 0.0,
+	check(app.chest.hold_effect_snapshot().release_flash > 0.0,
 		"The physical release lights the chest without a separate collectible celebration")
 	check(app._pending_fragment.medal_id == "spring-1" and app._pending_fragment.after == 1,
 		"Opening locks the first missing fragment")
@@ -111,7 +111,7 @@ func _run() -> void:
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.completed_count("spring") == 1, "The third piece completes one medal")
-	check(app.effects.particle_count() <= 24 and app._title.text == "A gift for Pip!"
+	check(app.chest.mode == "opened" and app._title.text == "A gift for Pip!"
 		and app._try_gift_button.visible,
 		"Completing saved progress offers the unlocked toy without a collectible celebration")
 	check_no_collectible_presentation(app, "A toy unlock")
@@ -128,7 +128,8 @@ func _run() -> void:
 	app._open_chest()
 	check(app.model.reward_id == "spring-2" and app.medal_progress.count_for("spring-2") == 1,
 		"The next win starts the next medal rather than a duplicate")
-	check(app.effects.particle_count() == 0 and app._title.text == "Chest opened!",
+	check(not app.chest.hold_effect_snapshot().animated
+		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash) and app._title.text == "Chest opened!",
 		"Reduced motion immediately acknowledges the saved chest")
 	check_no_collectible_presentation(app, "Reduced-motion completion")
 	app.new_round(10)

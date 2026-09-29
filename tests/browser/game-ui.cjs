@@ -253,7 +253,6 @@ function roomPoint(bounds, name, { item = '', owned = ['ball'], equipped = 'ball
   const layout = roomLayout(bounds, owned);
   const { x, width, top, scale, gap } = layout;
   if (name === 'pip') return { x: x + layout.pipFoot.x, y: top + layout.pipFoot.y - 56 * layout.duckScale };
-  if (name === 'preview') return { x: x + width - Math.min(66, width * 0.23), y: top + Math.min(110, layout.homeHeight * 0.4) };
   if (name === 'toy') name = layout.owned.includes(equipped) ? equipped : 'ball';
   if (name === 'goal') {
     if (!item) throw new Error('The inline goal control needs its toy card name.');

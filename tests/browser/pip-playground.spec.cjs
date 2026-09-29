@@ -346,15 +346,31 @@ test('a dragged ball visibly travels to Pip and empty ground makes Pip walk and 
     timeout: 4000, intervals: [100], message: 'The ball visibly returns home before testing ground movement.'
   }).toBeLessThan(0.02);
 
-  // The bottom edge is below both the ball sprite and its clickable noun.
+  // Fetching can move Pip, and responsive layout can leave him near the back
+  // wall. Sample his current position and walk sideways at that same depth.
+  const pip = await roomControl(page, 'pip');
+  const { duckScale } = roomLayout(bounds);
+  const foot = { x: pip.x, y: pip.y + 56 * duckScale };
+  const near = { x: foot.x + 68, y: foot.y };
+  // The far target is below both the ball sprite and its clickable noun.
   const floorY = room.y + room.height - 4;
-  const near = { x: room.foot.x + 68, y: floorY };
   const far = { x: room.x + room.width - 10, y: floorY };
+  let previousFoot = foot;
   for (const [name, destination, message] of [
     ['walk', near, 'Pip walks over!'], ['run', far, 'Pip runs over!']
   ]) {
-    // Pip's feet stop 52px from the sides and 12px above the bottom edge.
-    const endpoint = { x: Math.min(destination.x, room.x + room.width - 52), y: room.y + room.height - 12 };
+    // Account for the slot's side margin and the front edge of the floor.
+    const endpoint = {
+      x: Math.min(destination.x, room.x + room.width - 48 * duckScale - 4),
+      y: Math.min(destination.y, room.y + room.height - 12)
+    };
+    const distance = Math.hypot(endpoint.x - previousFoot.x, endpoint.y - previousFoot.y);
+    if (name === 'walk') {
+      expect(distance, 'The nearby floor target must sit outside Pip\'s clickable slot.').toBeGreaterThan(48 * duckScale + 4);
+      expect(distance, 'The nearby floor target must exercise walking.').toBeLessThan(120);
+    } else {
+      expect(distance, 'The distant floor target must exercise running.').toBeGreaterThan(120);
+    }
     const arrival = { x: endpoint.x - 24, y: endpoint.y - 76, width: 48, height: 58 };
     const empty = await patch(page, bounds, arrival);
     const leftToy = { ...toyRect, x: room.x + 66 - 28 };
@@ -368,6 +384,7 @@ test('a dragged ball visibly travels to Pip and empty ground makes Pip walk and 
     }
     await screenshot(page, testInfo, `pip-${name}`);
     expect((await patch(page, bounds, room.anchor)).equals(anchor), 'Ground input cannot scroll the room').toBe(true);
+    previousFoot = endpoint;
   }
   expect(await savedState(page)).toEqual(saved);
   expect(errors).toEqual([]);

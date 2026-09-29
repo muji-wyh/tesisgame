@@ -466,13 +466,12 @@ func _check_playground(duck) -> void:
 	var toy_count := toy_taps.size()
 	var room_state: Array = [playground.duck_position, playground.target_position,
 		playground.toy_phase, toy.position, toy.scale, toy.rotation, label.text]
-	playground.toss_to_pip()
 	_room_press(playground, toy.get_global_rect().get_center(), true)
 	_room_drag(playground, toy.get_global_rect().get_center() - Vector2(70, 25))
 	_room_press(playground, toy.get_global_rect().get_center() - Vector2(70, 25), false)
 	check(not playground.flight_active and playground.toy_phase == "idle"
 		and reports.size() == report_count and starts.size() == start_count and toy_taps.size() == toy_count,
-		"Neither a direct toss nor a pointer gesture can activate a locked toy")
+		"A pointer gesture cannot activate a locked toy")
 	playground.cancel()
 	_start_home_dance(duck)
 	_advance(duck, 90.0)
@@ -484,11 +483,6 @@ func _check_playground(duck) -> void:
 	playground.pet()
 	check(playground.interaction_kind == "pet" and duck._room_reaction == "pet",
 		"Pet remains available after richer room pokes")
-	playground.call_pip()
-	check(not playground.motion_kind.is_empty(), "Call still starts the existing room movement")
-	playground.toss_to_pip()
-	check(playground.flight_active and playground.toy_phase == "flying",
-		"Toss still launches the owned toy using the existing physics")
 	playground.cancel()
 	duck.set_home_playground(false)
 	duck.reparent(root)

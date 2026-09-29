@@ -360,7 +360,7 @@ func _run() -> void:
 	_begin(app)
 	app._advance_ui(1.21)
 	check(app.model.chest_state == "opened" and _pieces(app) == 3
-		and not app.chest.hold_effect_snapshot().active and app.effects.particle_count() == 0
+		and not app.chest.hold_effect_snapshot().active
 		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"A full reduced-motion hold completes once without the opening motion")
 	app._on_chest_opened()
@@ -390,7 +390,7 @@ func _run() -> void:
 		and not app.audio._chest_seen.has("release0"),
 		"Unlocking adds its material accent without cutting the pressure bed")
 	app.chest._advance_animation(Feel.RELEASE_TIME - Feel.UNLOCK_TIME)
-	check(app.chest.hold_effect_snapshot().release_flash > 0.0 and app.effects.particle_count() == 0
+	check(app.chest.hold_effect_snapshot().release_flash > 0.0
 		and _pieces(app) == 0 and not app.audio._chest_rewarded and not app.audio.chest_charge.playing,
 		"Physical release lights the chest cavity immediately without a separate delayed global burst or early reward")
 	app.chest._advance_animation(Feel.SETTLE_TIME - Feel.RELEASE_TIME)

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OUTPUT := "res://build/visuals"
+const ChestFeel = preload("res://scripts/chest_feel.gd")
 
 
 func _initialize() -> void:
@@ -51,13 +52,15 @@ func _run() -> void:
 		await create_timer(0.2).timeout
 		await _capture(season + "-closed")
 		app.chest_button.button_down.emit()
-		app._advance_ui(1.21)
+		app._advance_ui(ChestFeel.HOLD_SECONDS)
+		await app.chest.release_reached
 		app.chest_button.button_up.emit()
-		await create_timer(0.72).timeout
-		await _capture(season + "-burst")
-		await create_timer(2.0).timeout
+		await create_timer(0.06).timeout
+		await _capture(season + "-release")
+		if app.chest.mode != "opened":
+			await app.chest.opened
 		await _capture(season + "-reward")
-	print("Rendered the actual Godot board and all four seasonal fragment reveals.")
+	print("Rendered the actual Godot board and all four seasonal chest openings.")
 	app.queue_free()
 	await process_frame
 	var saves := DirAccess.open(save_directory)

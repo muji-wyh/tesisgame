@@ -80,6 +80,14 @@ func _check_duck_gestures(app, playground) -> void:
 		var poke_feedback: String = app._room.feedback_text
 		before = interactions.size()
 		var center: Vector2 = app.duck.get_global_rect().get_center()
+		check(app.duck.is_manual_action_busy(), method + " poke owns its animation until it finishes")
+		await _drag(center - Vector2(22, 0), center + Vector2(26, 0), method)
+		check(playground.interaction_kind == "poke" and interactions.size() == before
+			and app._room.feedback_text == poke_feedback,
+			method + " stroke during a poke is ignored without interrupting its action or feedback")
+		await _wait_for_pip(app, method + " poke completion")
+		check(interactions.size() == before, method + " ignored stroke is not replayed after the poke finishes")
+		center = app.duck.get_global_rect().get_center()
 		hit_context = _hit_context(app, playground, center - Vector2(22, 0))
 		await _drag(center - Vector2(22, 0), center + Vector2(26, 0), method)
 		check(playground.interaction_kind == "pet" and interactions.slice(before) == ["pet"], method + " stroke pets Pip once without a release poke or duplicate emulated-mouse action: kind=%s events=%s; %s" % [playground.interaction_kind, interactions.slice(before), hit_context])
@@ -158,10 +166,6 @@ func _check_floor_movement(app, playground) -> void:
 		await _advance(playground, 4.0)
 		check(playground.duck_position.distance_to(target) < 1.0 and playground.motion_kind.is_empty(), "Pip reaches the " + distance + " target and stops without drifting")
 		_check_room_bounds(app, distance + " movement")
-	playground.call_pip()
-	check(not playground.motion_kind.is_empty(), "The internal call_pip method starts a real movement")
-	await _advance(playground, 4.0)
-	_check_room_bounds(app, "internal call movement")
 
 
 func _check_perspective_floor(app, playground) -> void:
@@ -222,10 +226,10 @@ func _check_throwing(app, playground) -> void:
 	check(app._room.feedback_text.contains("ball"), "The throw outcome keeps the ball-word association in accessibility feedback")
 	_check_room_bounds(app, "mouse throw")
 	before = interactions.size()
-	playground.toss_to_pip()
-	check(playground.flight_active, "The internal toss_to_pip method launches a real ball")
+	await _throw_toward_pip(app, playground)
+	check(playground.flight_active, "A drag aimed at Pip launches a real ball")
 	await _advance(playground, 8.0)
-	check(interactions.slice(before).count("catch") == 1 and app._room.feedback_text.contains("Pip caught the ball!"), "An internally aimed toss reaches Pip and reports one actual catch")
+	check(interactions.slice(before).count("catch") == 1 and app._room.feedback_text.contains("Pip caught the ball!"), "A drag aimed at Pip reports one actual catch")
 	check(playground.toy_phase == "idle", "Pip returns an aimed toss to the resting toy")
 	before = interactions.size()
 	toy_center = app._room.toy_button.get_global_rect().get_center()
@@ -262,27 +266,19 @@ func _check_locked_toy(app, playground) -> void:
 	await _show_stage(app)
 	check(app._room._preview_locked and app._room.toy_button.disabled, "The unearned Summer ball is a locked preview")
 	var before := interactions.size()
-	playground.toss_to_pip()
 	var center: Vector2 = app._room.toy_button.get_global_rect().get_center()
 	await _drag(center, center - Vector2(70, 20))
-	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "Neither the internal toss method nor a real drag can throw a locked toy")
+	check(not playground.flight_active and playground.toy_phase == "idle" and interactions.size() == before, "A real drag cannot throw a locked toy")
 	check(app.playroom_state.toy_id == "toy-ball", "Playing with a locked preview cannot equip it")
 	var owned_card: Button = app._room.item_buttons[app.playroom_state.toy_id]
-	app._collection_scroll.ensure_control_visible(owned_card)
 	await _settle()
-	if app._collection_velocity.length_squared() >= 100.0:
-		# The preceding locked-toy drag scrolls; its first stop tap must not select.
-		await _tap(owned_card.get_global_rect().get_center(), "touch")
-		check(app._room._preview_locked and app._collection_velocity == Vector2.ZERO,
-			"A touch stops the gliding toy list without accidentally choosing a toy: preview=%s velocity=%s stage=%d" % [
-				app._room._preview_locked, app._collection_velocity, app._room._stage])
 	await _tap(owned_card.get_global_rect().get_center(), "touch")
 	check(not app._room._preview_locked and app._room._toy.id == app.playroom_state.toy_id
 		and interactions.size() == before and playground.motion_kind.is_empty() and app._room._stage == 1,
 		"One touch on the owned floor toy exits a locked preview and starts its first action without calling Pip: preview=%s stage=%d events=%s motion=%s" % [
 			app._room._preview_locked, app._room._stage, interactions.slice(before), playground.motion_kind])
 	await _show_stage(app)
-	playground.toss_to_pip()
+	await _throw_toward_pip(app, playground)
 	check(playground.flight_active, "Returning from a locked preview immediately restores the owned ball")
 	playground.cancel()
 
@@ -291,6 +287,7 @@ func _check_canceled_touch(app, playground) -> void:
 	for held in ["toy", "duck"]:
 		playground.cancel()
 		await _show_stage(app)
+		await _wait_for_pip(app, "Before the canceled " + held + " gesture")
 		var control: Control = app._room.toy_button if held == "toy" else app.duck
 		var point: Vector2 = control.get_global_rect().get_center()
 		var before := interactions.size()
@@ -299,6 +296,9 @@ func _check_canceled_touch(app, playground) -> void:
 			point += Vector2(-30, -20)
 			await _motion(point, Vector2(-30, -20), "touch")
 			check(playground.toy_phase == "drag", "A real touch holds the toy before a system cancellation")
+		else:
+			check(playground._pointer == 0 and playground._gesture == "duck",
+				"The cancellation fixture owns a fresh Pip touch rather than a blocked repeat")
 		var event := InputEventScreenTouch.new()
 		event.index = 0
 		event.position = point
@@ -308,9 +308,14 @@ func _check_canceled_touch(app, playground) -> void:
 		Input.flush_buffered_events()
 		await process_frame
 		await _button(point, false, "touch")
-		check(interactions.size() == before and playground.toy_phase == "idle" and not playground.flight_active and playground.motion_kind.is_empty(), "A canceled " + held + " touch and late release cannot settle as a throw or poke")
+		check(interactions.size() == before and playground.toy_phase == "idle"
+			and not playground.flight_active and playground.motion_kind.is_empty()
+			and playground._pointer == -1 and playground._gesture.is_empty(),
+			"A canceled " + held + " touch and late release cannot settle as a throw or poke")
+	var after_cancel: int = interactions.size()
 	await _tap(app.duck.get_global_rect().get_center(), "touch")
-	check(playground.interaction_kind == "poke", "A fresh touch works immediately after a system cancellation")
+	check(playground.interaction_kind == "poke" and interactions.slice(after_cancel) == ["poke"],
+		"A fresh touch works exactly once immediately after a system cancellation")
 	playground.cancel()
 
 
@@ -326,32 +331,30 @@ func _check_interruption(app, playground) -> void:
 	var before := interactions.size()
 	playground.pet()
 	playground.poke()
-	playground.call_pip()
-	playground.toss_to_pip()
 	check(interactions.size() == before and not playground.flight_active and playground.motion_kind.is_empty(), "A hidden playground rejects synthetic interaction actions")
 	await _settle()
 	check(app.duck.get_parent() == app._header_duck_art_slot and root.get_visible_rect().encloses(app.duck.get_global_rect()), "Leaving Rewards restores the shared Pip to the art slot beside its game counters")
 	app._show_collection()
 	await _show_stage(app)
-	playground.toss_to_pip()
+	await _throw_toward_pip(app, playground)
 	app.on_page_hidden()
 	check(not playground.flight_active and playground.toy_phase == "idle" and playground.motion_kind.is_empty(), "Backgrounding cancels an active flight without a delayed catch")
 	app.on_page_visible()
 	await _show_stage(app)
-	playground.toss_to_pip()
+	await _throw_toward_pip(app, playground)
 	root.size = Vector2i(320, 680)
 	await _settle()
 	await _advance(playground, 8.0)
 	_check_room_bounds(app, "resize during a throw")
 	check(playground.toy_phase == "idle", "Resizing during a throw leaves a recoverable resting ball")
 	app.set_reduced_motion(true)
-	playground.toss_to_pip()
+	await _throw_toward_pip(app, playground)
 	await _advance(playground, 8.0)
 	check(not playground.flight_active and playground.toy_phase == "idle" and not playground.is_processing(), "Reduced motion leaves a stable usable result without a running animation loop")
 	playground.pet()
 	check(playground.interaction_kind == "pet", "Reduced motion still gives direct petting feedback")
 	app.set_reduced_motion(false)
-	playground.toss_to_pip()
+	await _throw_toward_pip(app, playground)
 	check(playground.flight_active, "Normal ball play resumes after reduced motion is switched off")
 	playground.cancel()
 
@@ -488,9 +491,25 @@ func _settle() -> void:
 	await process_frame
 
 
+func _wait_for_pip(app, context: String) -> void:
+	for attempt in range(80):
+		if not app.duck.is_manual_action_busy() and not app.audio.is_pip_busy():
+			break
+		await create_timer(0.05).timeout
+	check(not app.duck.is_manual_action_busy() and not app.audio.is_pip_busy(),
+		context + " finishes the real action and audio before accepting the next gesture")
+
+
 func _tap(position: Vector2, method: String = "mouse") -> void:
 	await _button(position, true, method)
 	await _button(position, false, method)
+
+
+func _throw_toward_pip(app, playground) -> void:
+	var start: Vector2 = app._room.toy_button.get_global_rect().get_center()
+	var target: Vector2 = playground.get_global_transform() * (playground.duck_position - Vector2(0, 56))
+	# The release carries the drag's direction a little farther through the air.
+	await _drag(start, start.lerp(target, 1.0 / 1.35))
 
 
 func _drag(start: Vector2, end: Vector2, method: String = "mouse") -> void:

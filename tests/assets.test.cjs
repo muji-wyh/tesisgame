@@ -36,7 +36,7 @@ const expectedRewardColors = {
 };
 const sfxIds = [
   'select', 'correct', 'wrong', 'loss',
-  ...seasons.flatMap(({ id }) => [`${id}-arrive`, `${id}-open`])
+  ...seasons.map(({ id }) => `${id}-arrive`)
 ];
 
 test('Pip greetings preserve the three selected WAVs in the repository', () => {
@@ -87,7 +87,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 480); // Includes Pip's eight wardrobes and ten derived chest layers.
+  assert.equal(imports.length, 475); // Includes Pip's eight wardrobes and ten derived chest layers.
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -318,7 +318,7 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice sources contain the active recordings and eight preserved legacy prompts', () => {
+test('voice sources contain exactly 350 pronunciations and ten active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
@@ -326,8 +326,7 @@ test('voice sources contain the active recordings and eight preserved legacy pro
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
   assert.equal(expected.length, 360);
-  const legacy = ['ocean', 'space', 'jungle', 'candy'].flatMap(id => [`${id}-arrive.wav`, `${id}-open.wav`]);
-  assert.deepEqual(assetFiles(directory), [...expected, ...legacy].sort());
+  assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
 test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs', () => {
@@ -347,7 +346,7 @@ test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs
   );
 });
 
-test('all twenty original effects have gentle, non-silent PCM samples and smooth endpoints', () => {
+test('all twelve active effects have gentle, non-silent PCM samples and smooth endpoints', () => {
   for (const id of sfxIds) {
     const wave = readWave(path.join('assets', 'audio', 'sfx', `${id}.wav`));
     assert.equal(wave.sampleRate, 22050, id);
@@ -363,17 +362,6 @@ test('all twenty original effects have gentle, non-silent PCM samples and smooth
     assetFiles(path.join(root, 'assets', 'audio', 'sfx')),
     sfxIds.map((id) => `${id}.wav`).sort()
   );
-});
-
-test('the eight themed chest openings have different SHA256 values and last one to two seconds', () => {
-  const hashes = new Set();
-  for (const { id } of seasons) {
-    const wave = readWave(path.join('assets', 'audio', 'sfx', `${id}-open.wav`));
-    hashes.add(sha256(wave.bytes));
-    const seconds = wave.data.length / wave.blockAlign / wave.sampleRate;
-    assert.ok(seconds >= 1 && seconds <= 2, `${id} opening duration: ${seconds}`);
-  }
-  assert.equal(hashes.size, 8);
 });
 
 test('the SFX generator exactly reproduces its named files and rejects excessive float peaks', () => {

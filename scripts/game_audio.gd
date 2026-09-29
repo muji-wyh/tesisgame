@@ -57,7 +57,6 @@ var _chest_anticipating: bool = false
 var _chest_motion_finished: bool = false
 var _chest_music_duck: float = 1.0
 var _chest_charge_loop: AudioStreamWAV
-var _chest_charge_accent: AudioStreamWAV
 var _chest_theme: String = "spring"
 var _chest_phase: String = "idle"
 var _chest_seen: Dictionary = {}
@@ -197,7 +196,6 @@ func _ensure_chest_players() -> void:
 	if chest_charge != null:
 		return
 	chest_charge = _player(0.075)
-	chest_charge.finished.connect(_chest_charge_finished)
 	for index in range(CHEST_EVENT_CHANNELS):
 		var player: AudioStreamPlayer = _player(0.36)
 		player.finished.connect(_chest_event_finished.bind(player))
@@ -361,7 +359,6 @@ func set_chest_charge(progress: float) -> void:
 			return
 		_ensure_chest_players()
 		_chest_charge_loop = _chest_stream(_chest_theme, "charge")
-		_chest_charge_accent = _chest_stream(_chest_theme, "opening")
 		if _chest_phase != "holding":
 			_chest_seen.clear()
 			_chest_rewarded = false
@@ -422,26 +419,6 @@ func stop_chest_charge() -> void:
 	_chest_tension_progress = -1.0
 	if chest_charge != null:
 		chest_charge.stop()
-		chest_charge.stream = null
-
-
-func complete_chest_charge() -> void:
-	if not _chest_charge_active:
-		return
-	stop_chest_charge()
-	_chest_phase = "opening"
-	if muted or not active or not available:
-		return
-	# Preserve the generic API for callers outside the staged chest performance.
-	# This is only a small material release, never the saved-reward accent.
-	chest_charge.stream = _chest_charge_accent
-	chest_charge.pitch_scale = 1.0
-	chest_charge.volume_db = linear_to_db(0.22)
-	chest_charge.play()
-
-
-func _chest_charge_finished() -> void:
-	if not _chest_charge_active and chest_charge != null and not chest_charge.playing:
 		chest_charge.stream = null
 
 

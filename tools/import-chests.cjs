@@ -7,12 +7,7 @@ const SOURCE_NAME = 'Modern 2D Animated Chests Pack_FREE Demo 1.0.2';
 const root = path.join(__dirname, '..');
 const partNames = ['chest', ...Array.from({ length: 8 }, (_, index) => String(index + 1).padStart(2, '0'))];
 const particles = {
-  glow: 'assets/chests/particles/portal_glow.png',
-  ring: 'assets/chests/particles/ring.png',
-  spark: 'assets/chests/particles/sparkle3.png',
-  ray: 'assets/chests/particles/lightray1.png',
-  burst: 'assets/chests/particles/explosion_spike01.png',
-  orb: 'assets/chests/particles/magic_orb2.png'
+  glow: 'assets/chests/particles/portal_glow.png'
 };
 const crystalImages = partNames.map((name) => ({
   name,
@@ -291,7 +286,7 @@ Source-file caveat: 11 original PNGs contain trailing data after IEND:
 Royal closed/open, Energy open, and Crystal parts 01 through 08.
 Their trailing bytes are preserved byte-for-byte, without normalization.
 FFmpeg's stream reader reports an extra-image error for Royal closed.png;
-the image payloads of all 19 PNGs decode when bounded by IEND.
+the image payloads of all ${selectedImages.length} PNGs decode when bounded by IEND.
 Godot import and rendering are validated separately by the native project.
 
 Selected original relative paths -> imported image paths:

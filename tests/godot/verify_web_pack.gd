@@ -21,8 +21,7 @@ func _initialize() -> void:
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 	var effects := ["select", "correct", "wrong", "loss"]
 	for theme in themes:
-		for cue in ["arrive", "open"]:
-			effects.append(theme + "-" + cue)
+		effects.append(theme + "-arrive")
 	for effect in effects:
 		var path: String = "res://assets/audio/sfx/" + effect + ".wav"
 		var stream: AudioStream = load(path) if ResourceLoader.exists(path) else null
@@ -66,5 +65,16 @@ func _initialize() -> void:
 			if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 				printerr("A retired voice prompt is still bundled: " + path)
 				failures += 1
+	for theme in themes:
+		var path: String = "res://assets/audio/sfx/" + theme + "-open.wav"
+		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
+			printerr("A replaced opening jingle is still bundled: " + path)
+			failures += 1
+	for path in ["res://scripts/celebration.gd", "res://assets/chests/particles/ring.png",
+		"res://assets/chests/particles/sparkle3.png", "res://assets/chests/particles/lightray1.png",
+		"res://assets/chests/particles/explosion_spike01.png", "res://assets/chests/particles/magic_orb2.png"]:
+		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
+			printerr("A retired collectible effect is still bundled: " + path)
+			failures += 1
 	print("Startup pack: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
 	quit(1 if failures else 0)

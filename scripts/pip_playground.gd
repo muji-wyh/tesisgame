@@ -222,14 +222,6 @@ func _perform_poke() -> void:
 	_report("poke", LoadingMoves.CAPTIONS[_previous_poke])
 
 
-func call_pip() -> void:
-	if not _allowed(): return
-	_begin_action()
-	var point := _home if duck_position.distance_to(_home) > 36 else Vector2(size.x - 68, size.y - 24)
-	_move_to(point)
-	_report("call", "Come here, Pip! Tap the floor to choose where Pip goes.")
-
-
 func _move_to(point: Vector2) -> void:
 	target_position = _clamp_floor(point)
 	var distance := duck_position.distance_to(target_position)
@@ -243,12 +235,6 @@ func _move_to(point: Vector2) -> void:
 		_duck.set_room_motion(motion_kind, signf(target_position.x - duck_position.x))
 	set_process(_pointer != -1 or not motion_kind.is_empty() or toy_phase != "idle")
 	queue_redraw()
-
-
-func toss_to_pip() -> void:
-	if not _allowed() or toy_locked: return
-	_begin_action()
-	_launch(_toy_home, duck_position - Vector2(0, 56))
 
 
 func _launch(start: Vector2, end: Vector2) -> void:

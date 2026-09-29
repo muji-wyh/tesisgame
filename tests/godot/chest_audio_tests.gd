@@ -682,10 +682,9 @@ func _check_cancellation_and_guards() -> void:
 		audio.interact("jungle", false)
 		var next_player: int = audio._chest_next_player
 		audio.set_chest_charge(0.9)
-		audio.complete_chest_charge()
 		audio.chest_cue("jungle", "hold_pulse", 4)
 		check(not audio.chest_charge.playing and audio._chest_next_player == next_player,
-			"Late hold progress, beats, or completion after " + reason + " cannot restart performance")
+			"Late hold progress or beats after " + reason + " cannot restart performance")
 		audio.stop_chest_performance()
 		check(audio._chest_last_hold_pulse == 0, "Stopping the " + reason + " performance resets its held-beat ordinal")
 	audio.play_pip()
@@ -697,10 +696,9 @@ func _check_cancellation_and_guards() -> void:
 	audio.stop_chest_performance()
 	check(audio.voice.playing and audio.voice.stream == greeting and audio.effect.playing and audio.effect.stream == effect,
 		"Stopping chest audio preserves independent voice and effect channels")
+	audio.chest_cue("jungle", "press")
 	audio.set_chest_charge(0.0)
-	audio.complete_chest_charge()
-	check(audio.chest_charge.stream == audio._chest_charge_accent and not audio._chest_rewarded,
-		"The generic completion API remains finite and does not claim a reward")
+	audio.chest_cue("jungle", "opening")
 	audio.set_muted(true)
 	check(_playing(audio) == 0 and not audio.voice.playing and not audio.effect.playing, "Mute stops old and new channels together")
 	audio.queue_free()

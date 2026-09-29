@@ -7,7 +7,6 @@ signal cue_requested(theme_id: String, cue: String, step: int)
 const Feel = preload("res://scripts/chest_feel.gd")
 const OPEN_SECONDS: float = Feel.OPEN_SECONDS
 const OPEN_SWAY_SECONDS: float = 6.0
-const RELEASE_SECONDS: float = 0.72
 const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
@@ -28,7 +27,6 @@ var _tint: Color = Color.WHITE
 var _style: String = ""
 var drag_offset: Vector2 = Vector2.ZERO
 var hold_progress: float = 0.0
-var _tap_remaining: float = 0.0
 var _glint := Node2D.new()
 var _glint_color: Color = Color.WHITE
 var _charge := Node2D.new()
@@ -241,8 +239,8 @@ func _measure_motion_bounds() -> void:
 			var rect: Rect2 = _pieces[index].node.get_rect()
 			for corner in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
 				_motion_bounds = _motion_bounds.expand(state.pose * corner)
-	# A fixed margin contains the body's small recoil, Candy's elastic motion,
-	# and finite taps without asking the parent stage to stop clipping.
+	# A fixed margin contains body recoil and Candy's elastic motion without
+	# asking the parent stage to stop clipping.
 	_motion_bounds = _motion_bounds.grow(maxf(_bounds.size.x, _bounds.size.y) * 0.065)
 
 
@@ -291,8 +289,6 @@ func _fit() -> void:
 	drag_offset = _clamp_drag_offset(drag_offset, _fit_scale, bob, Vector2.ONE, safe_top)
 	_art.scale = Vector2.ONE * _fit_scale * pulse
 	_art.rotation = float(_physical_pose.rotation)
-	if not reduced_motion:
-		_art.rotation += sin(_tap_remaining * 24.0) * 0.025 * (_tap_remaining / 0.35)
 	# Rock around the feet: the body has leverage above a planted contact,
 	# rather than spinning a flat card around its centre.
 	_art.position = center - _motion_bounds.get_center() * _art.scale + drag_offset + offset
@@ -304,7 +300,7 @@ func _fit() -> void:
 	_cavity_light.queue_redraw()
 	_flash.queue_redraw()
 	_seam_light.queue_redraw()
-	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
+	_glint.visible = not reduced_motion and (hold_progress > 0.0
 		or (mode == "opening" and _elapsed < Feel.RELEASE_TIME))
 	_glint.queue_redraw()
 
@@ -628,7 +624,6 @@ func begin_hold() -> void:
 	_pulse_holding = true
 	_cue_log.clear()
 	hold_progress = 0.0
-	_tap_remaining = 0.0
 	_apply_pose(0.0)
 	_fit()
 	_emit_cue("press")
@@ -649,7 +644,6 @@ func cancel_hold() -> void:
 	_charge_step = 0
 	_hold_pulse_step = 0
 	_pulse_step = 0
-	_tap_remaining = 0.0
 	_emit_cue("cancel")
 	_apply_pose(0.0)
 	_fit()
@@ -809,7 +803,7 @@ func hold_effect_snapshot() -> Dictionary:
 
 func _draw_glint() -> void:
 	var center: Vector2 = _light_origin()
-	var power: float = maxf(_buildup_glow(), _tap_remaining / 0.35 * 0.6)
+	var power: float = _buildup_glow()
 	var radius: float = minf(size.x, size.y) * (0.05 + _buildup_intensity() * 0.04)
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
@@ -1272,16 +1266,7 @@ func _draw_details() -> void:
 					_details.draw_line(position - direction * radius * 2.8, position + direction * radius * 1.5, Color(_charge_color, fade * 0.65), maxf(1.0, radius * 0.3), true)
 
 
-func play_tap() -> void:
-	if reduced_motion or mode != "closed":
-		return
-	_tap_remaining = 0.35
-	_animation_origin_frame = Engine.get_process_frames()
-	_fit()
-
-
 func stop_reaction() -> void:
-	_tap_remaining = 0.0
 	hold_progress = 0.0
 	_hold_active = false
 	_release_active = false
@@ -1579,7 +1564,6 @@ func set_hold_progress(value: float) -> void:
 	if hold_progress <= 0.0:
 		_hold_active = false
 		_charge_time = 0.0
-		_tap_remaining = 0.0
 		_cancel_remaining = 0.0
 		_cancel_piece_poses.clear()
 		_charge_step = 0
@@ -1643,7 +1627,6 @@ func _advance_animation(delta: float) -> void:
 		_idle_time += delta
 	if _hold_active and not reduced_motion:
 		_charge_time += delta
-	_tap_remaining = maxf(0.0, _tap_remaining - delta)
 	_cancel_remaining = maxf(0.0, _cancel_remaining - delta)
 	if mode == "opening":
 		var was_committed: bool = opening_committed()
