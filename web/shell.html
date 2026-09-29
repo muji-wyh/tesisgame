@@ -69,9 +69,24 @@
       padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
     }
     [hidden] { display: none !important; }
-    .loader-layout { display: grid; grid-template-areas: "heading" "toy" "download";
+    .loader-layout { display: grid; grid-template-areas: "heading" "themes" "toy" "download";
       gap: 24px; width: min(100%, 380px); }
     .loading-heading { grid-area: heading; }
+    #loading-themes { grid-area: themes; min-width: 0; }
+    .loading-theme-heading { display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; padding: 0 4px 6px; font-size: 14px; text-align: left; }
+    #loading-theme-label { font-weight: 700; }
+    #loading-theme-name { color: var(--cp-accent); font-weight: 650; }
+    #loading-theme-options { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain;
+      scrollbar-width: none; padding: 4px; scroll-padding-inline: 4px; touch-action: pan-x pinch-zoom; }
+    #loading-theme-options::-webkit-scrollbar { display: none; }
+    .loading-theme { flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
+      min-height: 48px; padding: 10px 13px; border: 2px solid transparent; border-radius: 14px;
+      background: var(--cp-surface); color: var(--cp-text-muted); font-size: 14px; font-weight: 600; }
+    .loading-theme-icon { font-size: 22px; line-height: 1; }
+    .loading-theme[aria-pressed="true"] { border-color: var(--cp-accent); color: var(--cp-accent);
+      background: var(--cp-accent-soft); box-shadow: 0 2px 0 var(--cp-accent); }
+    .loading-theme:focus-visible { outline-offset: 1px; }
     h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
     p { margin: 0; line-height: 1.5; }
     #loading-play { grid-area: toy; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
@@ -282,12 +297,12 @@
       #status { padding: 16px; }
       .loader-layout { gap: 12px; }
       h1 { font-size: 32px; margin-bottom: 4px; }
-      #loading-toy { height: 180px; }
-      #loading-duck { height: 164px; }
+      #loading-toy { height: 140px; }
+      #loading-duck { height: 130px; }
     }
     @media (max-height: 500px) and (min-width: 501px) {
       .loader-layout { width: min(100%, 720px); grid-template-columns: 1fr 1fr;
-        grid-template-areas: "heading toy" "download toy"; gap: 20px 32px; align-items: center; }
+        grid-template-areas: "heading toy" "themes toy" "download toy"; gap: 12px 32px; align-items: center; }
       #loading-toy { height: 204px; }
       #loading-duck { height: 180px; }
     }
@@ -295,11 +310,13 @@
       #status { padding: 12px; }
       .loader-layout, .loading-download { gap: 4px; }
       h1 { font-size: 28px; }
+      .loading-theme-heading { display: none; }
+      .loading-theme { min-height: 44px; padding-block: 8px; }
       .play-caption span { font-size: 12px; }
-      #loading-toy { height: 64px; }
-      #loading-duck { height: 64px; }
-      #status[data-state="slow"] #loading-toy { height: 48px; }
-      #status[data-state="slow"] #loading-duck { height: 64px; }
+      #loading-toy { height: 56px; }
+      #loading-duck { height: 56px; }
+      #status[data-state="slow"] #loading-toy { height: 40px; }
+      #status[data-state="slow"] #loading-duck { height: 48px; }
       #status[data-state="slow"] #enter-game { display: none; }
       #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
       .play-caption { margin-top: 4px; }
@@ -377,6 +394,13 @@
           <header class="loading-heading">
             <h1 id="loading-title">Pip and Words</h1>
           </header>
+          <section id="loading-themes" aria-label="Choose a theme">
+            <div class="loading-theme-heading">
+              <span id="loading-theme-label">Choose a theme</span>
+              <span id="loading-theme-name" aria-live="polite"></span>
+            </div>
+            <div id="loading-theme-options" role="group" aria-label="Themes"></div>
+          </section>
           <div id="loading-play">
             <div class="toy-scene">
               <button id="loading-toy" type="button" aria-label="Tap or wiggle the treasure chest" aria-describedby="loading-hint">
@@ -504,12 +528,63 @@
           '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="31" cy="62" rx="8" ry="5"/><ellipse cx="91" cy="59" rx="8" ry="5"/></g>' +
           '<g class="pip-bonk-stars" fill="#FFD979" stroke="#B88535" stroke-width="1.5"><path d="m10 20 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/><path d="m109 12 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/></g>');
       }
-      let savedPipTheme = 'spring';
+      const themePicker = document.getElementById('loading-themes');
+      const themeOptions = document.getElementById('loading-theme-options');
+      const themeName = document.getElementById('loading-theme-name');
+      const loadingThemes = {
+        spring: { name: 'Spring', icon: '🌸', background: '#effbef', accent: '#237a57', light: '#bfe9c5' },
+        summer: { name: 'Summer', icon: '☀️', background: '#fff4df', accent: '#b94545', light: '#ffd192' },
+        autumn: { name: 'Autumn', icon: '🍁', background: '#fff2e5', accent: '#995323', light: '#ffd19b' },
+        winter: { name: 'Winter', icon: '❄️', background: '#eef5ff', accent: '#456791', light: '#c9dcf5' },
+        ocean: { name: 'Ocean', icon: '🌊', background: '#e7f8fa', accent: '#13758b', light: '#afdee6' },
+        space: { name: 'Space', icon: '🚀', background: '#f1edfb', accent: '#694a99', light: '#d6c8f0' },
+        jungle: { name: 'Jungle', icon: '🌿', background: '#f0f8e7', accent: '#2d7048', light: '#c8e3a4' },
+        candy: { name: 'Candy', icon: '🍬', background: '#fff0f7', accent: '#a53d73', light: '#f5c9e0' }
+      };
+      const themeIds = Object.keys(loadingThemes);
+      let selectedTheme = 'spring';
       try {
-        savedPipTheme = (localStorage.getItem('wordBuddies.playroom') || '')
+        selectedTheme = (localStorage.getItem('wordBuddies.playroom') || '')
           .match(/(?:^|\n)preferred_theme_id="([a-z]+)"/)?.[1] || 'spring';
       } catch {}
-      setPipTheme(savedPipTheme);
+      const themeButtons = themeIds.map(id => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'loading-theme';
+        button.dataset.theme = id;
+        button.innerHTML = `<span class="loading-theme-icon" aria-hidden="true">${loadingThemes[id].icon}</span><span>${loadingThemes[id].name}</span>`;
+        themeOptions.appendChild(button);
+        return button;
+      });
+      function revealThemeChoice(button) {
+        const rail = themeOptions.getBoundingClientRect(), choice = button.getBoundingClientRect();
+        if (choice.left < rail.left + 4) themeOptions.scrollLeft -= rail.left + 4 - choice.left;
+        else if (choice.right > rail.right - 4) themeOptions.scrollLeft += choice.right - rail.right + 4;
+      }
+      function selectLoadingTheme(requested, focus = false) {
+        selectedTheme = Object.hasOwn(loadingThemes, requested) ? requested : 'spring';
+        const palette = loadingThemes[selectedTheme];
+        const dark = document.documentElement.dataset.theme === 'dark';
+        status.dataset.theme = selectedTheme;
+        status.style.setProperty('--cp-bg', dark ? '#3d3b3a' : palette.background);
+        status.style.setProperty('--cp-accent', dark ? palette.light : palette.accent);
+        status.style.setProperty('--cp-accent-hover', dark ? palette.light : palette.accent);
+        status.style.setProperty('--cp-accent-soft', dark ? `${palette.light}22` : `${palette.accent}12`);
+        status.style.setProperty('--cp-highlight', `${palette.accent}22`);
+        themeName.textContent = palette.name;
+        setPipTheme(selectedTheme);
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#3d3b3a' : palette.background;
+        for (const button of themeButtons) {
+          const selected = button.dataset.theme === selectedTheme;
+          button.setAttribute('aria-pressed', String(selected));
+          button.tabIndex = selected ? 0 : -1;
+          if (selected) {
+            if (focus) button.focus({ preventScroll: true });
+            revealThemeChoice(button);
+          }
+        }
+      }
+      selectLoadingTheme(selectedTheme);
       const downloadStatus = document.getElementById('download-status');
       const loadingEvents = new AbortController();
       const loadingListener = { signal: loadingEvents.signal };
@@ -520,6 +595,7 @@
       let gamepadFrame = 0;
       let gamepadPressed = false;
       let gamepadStartPressed = false;
+      let gamepadThemeDirection = 0;
       let enterOnStartRelease = false;
       let gamepadBlocked = false;
       let gesture = null;
@@ -534,8 +610,17 @@
         retry.hidden = false;
         status.dataset.state = 'slow';
       }, 16000);
-      document.querySelector('meta[name="theme-color"]').content =
-        getComputedStyle(document.body).getPropertyValue('--cp-bg').trim();
+      themeButtons.forEach(button => {
+        button.addEventListener('click', () => selectLoadingTheme(button.dataset.theme), loadingListener);
+        button.addEventListener('keydown', event => {
+          const index = themeIds.indexOf(selectedTheme);
+          const next = { ArrowLeft: (index + themeIds.length - 1) % themeIds.length,
+            ArrowRight: (index + 1) % themeIds.length, Home: 0, End: themeIds.length - 1 }[event.key];
+          if (next === undefined) return;
+          event.preventDefault();
+          selectLoadingTheme(themeIds[next], true);
+        }, loadingListener);
+      });
 
       function createStartupProgress() {
         let active = true;
@@ -958,6 +1043,7 @@
         clearLoadingEffects();
         toy.disabled = true;
         loadingDuck.disabled = true;
+        themeButtons.forEach(button => { button.disabled = true; });
       }
 
       loadingDuck.addEventListener('click', event => {
@@ -1036,6 +1122,7 @@
         gamepadFrame = 0;
         gamepadPressed = false;
         gamepadStartPressed = false;
+        gamepadThemeDirection = 0;
         enterOnStartRelease = false;
       }
 
@@ -1048,6 +1135,13 @@
         const pressed = pads.some(pad => pad.buttons[0]?.pressed);
         if (pressed && !gamepadPressed) playWithTreasure();
         gamepadPressed = pressed;
+        const themeDirection = Number(pads.some(pad => pad.buttons[5]?.pressed))
+          - Number(pads.some(pad => pad.buttons[4]?.pressed));
+        if (themeDirection && themeDirection !== gamepadThemeDirection) {
+          const next = (themeIds.indexOf(selectedTheme) + themeDirection + themeIds.length) % themeIds.length;
+          selectLoadingTheme(themeIds[next]);
+        }
+        gamepadThemeDirection = themeDirection;
         const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
         if (startPressed && !gamepadStartPressed) enterOnStartRelease = !enterButton.disabled;
         // Enter on release so the same Start press cannot open Pip's room in Godot.
@@ -1062,6 +1156,8 @@
           const pads = loadingGamepads();
           gamepadPressed = pads.some(pad => pad.buttons[0]?.pressed);
           gamepadStartPressed = pads.some(pad => pad.buttons[9]?.pressed);
+          gamepadThemeDirection = Number(pads.some(pad => pad.buttons[5]?.pressed))
+            - Number(pads.some(pad => pad.buttons[4]?.pressed));
           enterOnStartRelease = false;
         }
         pollLoadingGamepad();
@@ -1526,6 +1622,7 @@
         status.hidden = false;
         status.dataset.state = 'error';
         loadingPlay.hidden = true;
+        themePicker.hidden = true;
         loadingNote.hidden = true;
         percent.hidden = true;
         downloadStatus.hidden = true;
@@ -1554,9 +1651,10 @@
         enterButton.disabled = true;
         const onReveal = revealGame;
         revealGame = null;
-        try { onReveal?.(); }
+        try { onReveal?.(selectedTheme); }
         catch (error) { startupFailure(error); return; }
         if (failed) return;
+        document.querySelector('meta[name="theme-color"]').content = loadingThemes[selectedTheme].background;
         stopLoadingPlay();
         window.removeEventListener('unhandledrejection', onEngineFailure);
         document.body.dataset.engineReady = 'true';
@@ -1584,6 +1682,9 @@
         },
         controllerAcceptHeld() {
           return loadingGamepads().some(pad => pad.buttons[0]?.pressed);
+        },
+        loadingTheme() {
+          return selectedTheme;
         },
         favoriteReward() {
           try { return localStorage.getItem('wordBuddies.favoriteReward') || ''; }
@@ -1638,10 +1739,14 @@
         },
         background(color, accent = '#438363', light = '#d7efc7', theme = 'spring') {
           document.body.style.backgroundColor = color;
-          document.querySelector('meta[name="theme-color"]').content = color;
           container.style.setProperty('--voice-accent', accent);
           container.style.setProperty('--voice-light', light);
-          setPipTheme(theme);
+          // Startup can finish after a newer loading-screen choice. The final
+          // choice reaches the paused game when the player explicitly enters.
+          if (entered) {
+            document.querySelector('meta[name="theme-color"]').content = color;
+            setPipTheme(theme);
+          }
         },
         roundProgress(successes, mistakes) {
           document.getElementById('speech-successes').textContent = `${successes}/5`;

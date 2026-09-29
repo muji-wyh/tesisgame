@@ -283,6 +283,7 @@ var _active_palette: Dictionary = {}
 var _styled_mode_id: String = ""
 var _host: JavaScriptObject
 var _loading_finished_callback: JavaScriptObject
+var _loading_revealed: bool = false
 var _hidden_callback: JavaScriptObject
 var _visible_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
@@ -321,6 +322,10 @@ func _ready() -> void:
 	_connect_browser()
 	_load_favorite_reward()
 	_refresh_favorite_reward()
+	if _host != null:
+		var loading_theme: Variant = _host.loadingTheme()
+		if loading_theme is String and Model.THEMES.has(loading_theme):
+			_preferred_theme = loading_theme
 	new_round()
 	if _host != null:
 		get_tree().paused = true
@@ -330,7 +335,14 @@ func _ready() -> void:
 		_host.ready(_loading_finished_callback)
 
 
-func _on_loading_finished(_args: Array) -> void:
+func _on_loading_finished(args: Array) -> void:
+	if _loading_revealed:
+		return
+	_loading_revealed = true
+	if not args.is_empty() and args[0] is String and Model.THEMES.has(args[0]):
+		_preferred_theme = args[0]
+		model.set_theme(_preferred_theme)
+		_save_journey()
 	_stop_controller_actions()
 	get_tree().paused = false
 

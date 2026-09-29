@@ -55,6 +55,7 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	var directory := "user://theme-review-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
+	await _check_loading_theme(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
@@ -215,6 +216,56 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Theme and review: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_loading_theme(directory: String) -> void:
+	var cases: Array[Array] = [["space"], ["unknown"], [], [42], ["candy"]]
+	for index in range(cases.size()):
+		var app = load("res://scenes/main.tscn").instantiate()
+		var prefix: String = directory + "/loading-%d" % index
+		app.medal_progress = load("res://scripts/medal_progress.gd").new(prefix + "-medals.cfg", prefix + "-legacy.cfg")
+		app.playroom_save_path = prefix + "-room.cfg"
+		root.add_child(app)
+		await settle()
+		app._preferred_theme = "autumn"
+		app.model.set_theme("autumn")
+		app._save_journey()
+		var cards: Array = app.model.cards.duplicate(true)
+		var journey: Array = app.playroom_state.recent_topic_ids.duplicate()
+		var counts: Dictionary = app.medal_progress.counts.duplicate(true)
+		var save_path: String = app.playroom_state._save_path
+		var save_fails: bool = index == cases.size() - 1
+		if save_fails:
+			app.playroom_state._save_path = directory + "/missing/room.cfg"
+		paused = true
+		app._on_loading_finished(cases[index])
+		var expected: String = "space" if index == 0 else ("candy" if save_fails else "autumn")
+		check(not paused and app.model.theme_id == expected and app._preferred_theme == expected,
+			"Loading entry applies only a valid latest theme before resuming the game")
+		check(app.duck.theme_id == expected and app._active_palette.id == expected,
+			"Pip and the native scene use the loading theme on the first revealed frame")
+		check(app.model.cards == cards and app.model.phase == "waiting" and app.model.successes == 0
+			and app.model.mistakes == 0 and app.model.hints_remaining == 3
+			and app.playroom_state.recent_topic_ids == journey and app.medal_progress.counts == counts,
+			"Loading theme handoff preserves the prepared lesson, journey and reward progress")
+		check(not app.audio.active and not app.audio.voice.playing and not app.audio.is_pip_busy(),
+			"Loading theme handoff does not start narration or another Pip sound")
+		if save_fails:
+			check(app._journey_save_failed and app._storage_retry_button.visible,
+				"A failed loading theme save still enters the chosen world with a visible retry")
+			app.playroom_state._save_path = save_path
+			app._retry_storage()
+			check(not app._journey_save_failed, "Loading theme persistence recovers through the normal save retry")
+		var reloaded = load("res://scripts/playroom_state.gd").new(save_path)
+		check(reloaded.load_state() and reloaded.preferred_theme_id == expected,
+			"The loading theme is remembered through the existing playroom save")
+		paused = true
+		app._on_loading_finished(["winter"])
+		check(paused and app.model.theme_id == expected,
+			"A duplicate loading callback cannot change the theme or override a later pause")
+		paused = false
+		app.queue_free()
+		await process_frame
 
 
 func _check_treasure_themes(app) -> void:
