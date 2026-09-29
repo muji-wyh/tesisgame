@@ -52,6 +52,7 @@ func _run() -> void:
 	chest.free()
 	_check_themed_chests(data)
 	_check_opened_ambience(data)
+	_check_opened_light_handoff(data)
 	_check_opened_bounds(data)
 	_check_opening_cancel(data)
 	_check_release_commitment(data)
@@ -176,17 +177,31 @@ func _check_opened_ambience(data) -> void:
 		var previous_rotation: float = chest._art.rotation
 		var maximum_step: float = 0.0
 		var stays_lit: bool = true
+		var minimum_beam: float = INF
+		var minimum_surface: float = INF
+		var light_issues: Array[String] = []
 		var fixed_scale: bool = true
 		for frame in range(48):
 			chest._advance_animation(0.25)
 			state = chest.hold_effect_snapshot()
 			stays_lit = stays_lit and state.opened_glow > 0.0 and is_zero_approx(state.release_flash)
+			minimum_beam = minf(minimum_beam, state.opened_beam_strength)
+			minimum_surface = minf(minimum_surface, state.opened_surface_light)
+			var surface: Dictionary = _surface_light_snapshot(chest, state)
+			if surface.visible == 0 or surface.minimum < 0.60 or not surface.issues.is_empty():
+				light_issues.append("%.2fs: %s" % [state.opened_idle_time, surface])
 			fixed_scale = fixed_scale and chest._art.scale.is_equal_approx(saved_scale) and is_equal_approx(state.fitted_scale, fitted_scale)
 			minimum_rotation = minf(minimum_rotation, chest._art.rotation)
 			maximum_rotation = maxf(maximum_rotation, chest._art.rotation)
 			maximum_step = maxf(maximum_step, absf(chest._art.rotation - previous_rotation))
 			previous_rotation = chest._art.rotation
 		check(stays_lit and fixed_scale, theme + " stays illuminated for twelve seconds without resizing or squashing its open body")
+		check(minimum_beam >= 0.65 and minimum_surface >= 0.60,
+			"%s sustains strong cavity rays and reflected body light after the flash: beam %.3f, surface %.3f" % [theme, minimum_beam, minimum_surface])
+		check(light_issues.is_empty(),
+			"%s lights every visible body, lid and facet from its moving cavity: %s" % [theme, light_issues])
+		check(state.opened_light_color == Feel.FLASH_COLORS[theme].to_html(false),
+			theme + " uses its theme color for the persistent cavity light")
 		check(maximum_rotation > 0.005 and minimum_rotation < -0.005 and maximum_rotation <= 0.05
 			and minimum_rotation >= -0.05 and maximum_step < 0.02,
 			theme + " sways gently in both directions instead of resuming its fast opening shake")
@@ -222,13 +237,21 @@ func _check_opened_ambience(data) -> void:
 		chest.reduced_motion = true
 		chest._advance_animation(0.01)
 		var static_state: Dictionary = chest.hold_effect_snapshot()
-		var static_result: bool = static_state.opened_glow > 0.0 and not static_state.opened_animated
+		var static_surface: Dictionary = _surface_light_snapshot(chest, static_state)
+		var static_result: bool = static_state.opened_glow > 0.0 and not static_state.opened_animated \
+			and static_state.opened_beam_strength >= 0.65 and static_state.opened_surface_light >= 0.60 \
+			and static_surface.visible > 0 and static_surface.minimum >= 0.60 and static_surface.issues.is_empty()
 		for delta in [0.3, 4.0, 12.0]:
 			chest._advance_animation(delta)
 			state = chest.hold_effect_snapshot()
 			static_result = static_result and state.pose_signature == static_state.pose_signature \
-				and state.opened_glow == static_state.opened_glow and state.opened_idle_time == static_state.opened_idle_time
-		check(static_result, theme + " retains a steady light with no sway or breathing when reduced motion is enabled")
+				and state.opened_glow == static_state.opened_glow and state.opened_idle_time == static_state.opened_idle_time \
+				and state.opened_beam_strength == static_state.opened_beam_strength \
+				and state.opened_surface_light == static_state.opened_surface_light \
+				and state.opened_light_color == static_state.opened_light_color \
+				and state.opened_beam_bounds == static_state.opened_beam_bounds \
+				and _surface_light_snapshot(chest, state) == static_surface
+		check(static_result, theme + " retains strong static rays and surface light with no sway or breathing when reduced motion is enabled")
 		chest.start_open(false)
 		chest.finish_immediately()
 		check(openings.size() == previous_openings + 1 and cues.size() == cue_count,
@@ -237,7 +260,9 @@ func _check_opened_ambience(data) -> void:
 		chest.clear()
 		state = chest.hold_effect_snapshot()
 		check(chest.mode == "closed" and is_zero_approx(state.opened_glow) and not state.opened_animated
-			and is_zero_approx(state.opened_idle_time), theme + " clears every opened idle effect for the next reward")
+			and is_zero_approx(state.opened_idle_time) and is_zero_approx(state.opened_beam_strength)
+			and is_zero_approx(state.opened_surface_light) and is_zero_approx(_surface_light_snapshot(chest, state).maximum),
+			theme + " clears every opened idle effect and surface light for the next reward")
 		chest.configure_skin(data.theme(theme), data.chests)
 		chest.start_open(false)
 		cue_count = cues.size()
@@ -257,6 +282,89 @@ func _check_opened_ambience(data) -> void:
 	chest.free()
 
 
+func _surface_light_snapshot(chest, state: Dictionary) -> Dictionary:
+	var visible: int = 0
+	var minimum: float = INF
+	var maximum: float = 0.0
+	var issues: Array[String] = []
+	var uniforms: Array[Dictionary] = []
+	var cavity := Vector2(state.cavity_origin.x, state.cavity_origin.y)
+	for piece in chest._pieces:
+		var sprite: Sprite2D = piece.node
+		if not sprite.is_visible_in_tree() or sprite.modulate.a <= 0.001:
+			continue
+		visible += 1
+		var material := sprite.material as ShaderMaterial
+		if material == null or material.shader == null:
+			issues.append(str(piece.role) + " has no surface-light shader")
+			continue
+		var strength: Variant = material.get_shader_parameter("light_strength")
+		var origin: Variant = material.get_shader_parameter("light_origin")
+		var distance: Variant = material.get_shader_parameter("light_distance")
+		var color: Variant = material.get_shader_parameter("light_color")
+		if not strength is float or not origin is Vector2 or not distance is Vector2 or not color is Color:
+			issues.append(str(piece.role) + " is missing a surface-light uniform")
+			continue
+		if not is_finite(strength) or not origin.is_finite() or not distance.is_finite() or distance.x <= 0.0 or distance.y <= 0.0:
+			issues.append(str(piece.role) + " has an invalid surface-light uniform")
+			continue
+		minimum = minf(minimum, strength)
+		maximum = maxf(maximum, strength)
+		uniforms.append({"role": piece.role, "strength": strength, "origin": origin,
+			"distance": distance, "color": color})
+		# Reverse the actual shader UVs through the sprite's full transform.
+		# A shared world-space light must stay inside the cavity as parts move.
+		var texture_position: Vector2 = origin
+		if sprite.flip_h:
+			texture_position.x = 1.0 - texture_position.x
+		if sprite.flip_v:
+			texture_position.y = 1.0 - texture_position.y
+		var source: Vector2 = chest._art.transform * sprite.transform * (sprite.offset + texture_position * sprite.texture.get_size())
+		if source.distance_to(cavity) > 0.02:
+			issues.append("%s light source is %.3f pixels from the cavity" % [piece.role, source.distance_to(cavity)])
+	return {"visible": visible, "minimum": minimum, "maximum": maximum,
+		"issues": issues, "uniforms": uniforms}
+
+
+func _check_opened_light_handoff(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	for theme in data.THEMES:
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.start_open(false)
+		chest._advance_animation(Feel.RELEASE_TIME + 0.08)
+		var state: Dictionary = chest.hold_effect_snapshot()
+		var previous: Dictionary = state
+		var minimum_beam: float = state.opened_beam_strength
+		var minimum_surface: float = state.opened_surface_light
+		var largest_step: float = 0.0
+		var completion_step: float = INF
+		var last_mode: String = chest.mode
+		# Dense sampling spans the burst, its fade, completion, and the first idle.
+		for frame in range(220):
+			chest._advance_animation(1.0 / 120.0)
+			state = chest.hold_effect_snapshot()
+			minimum_beam = minf(minimum_beam, state.opened_beam_strength)
+			minimum_surface = minf(minimum_surface, state.opened_surface_light)
+			var change: float = maxf(absf(state.opened_beam_strength - previous.opened_beam_strength),
+				absf(state.opened_surface_light - previous.opened_surface_light))
+			largest_step = maxf(largest_step, change)
+			if last_mode == "opening" and chest.mode == "opened":
+				completion_step = change
+			last_mode = chest.mode
+			previous = state
+		check(minimum_beam >= 0.65 and minimum_surface >= 0.60,
+			"%s has no dark gap as the release burst becomes lasting light: beam %.3f, surface %.3f" % [theme, minimum_beam, minimum_surface])
+		check(largest_step < 0.08 and completion_step < 0.04,
+			"%s blends into its opened light without a brightness jump: sample %.3f, completion %.3f" % [theme, largest_step, completion_step])
+		check(chest.mode == "opened" and is_zero_approx(state.release_flash)
+			and state.opened_beam_strength >= 0.65 and state.opened_surface_light >= 0.60,
+			theme + " retains strong light after the one-shot release flash has fully ended")
+	chest.free()
+
+
 func _check_opened_bounds(data) -> void:
 	var chest = load("res://scripts/chest_view.gd").new()
 	root.add_child(chest)
@@ -269,6 +377,7 @@ func _check_opened_bounds(data) -> void:
 			chest.finish_immediately()
 			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.5)
 			var outside: Array[String] = []
+			var light_outside: Array[String] = []
 			for frame in range(25):
 				chest._advance_animation(0.5)
 				var state: Dictionary = chest.hold_effect_snapshot()
@@ -276,7 +385,20 @@ func _check_opened_bounds(data) -> void:
 				var bounds := Rect2(Vector2(physical.x, physical.y), Vector2(physical.width, physical.height))
 				if not stage.encloses(bounds) or not bounds.has_area():
 					outside.append("%.2fs: %s" % [state.opened_idle_time, bounds])
+				var beam := Rect2(Vector2(state.opened_beam_bounds.x, state.opened_beam_bounds.y),
+					Vector2(state.opened_beam_bounds.width, state.opened_beam_bounds.height))
+				var core := Rect2(Vector2(state.cavity_glow_bounds.x, state.cavity_glow_bounds.y),
+					Vector2(state.cavity_glow_bounds.width, state.cavity_glow_bounds.height))
+				var origin := Vector2(state.cavity_origin.x, state.cavity_origin.y)
+				if not stage.encloses(beam) or not stage.encloses(core) or not core.has_area() \
+					or not stage.has_point(origin) or not core.grow(0.01).has_point(origin) \
+					or beam.size.x < bounds.size.x * 0.75 or beam.size.y < bounds.size.y * 0.25 \
+					or absf(beam.end.y - origin.y) > 0.01 or absf(beam.get_center().x - origin.x) > 0.01:
+					light_outside.append("%.2fs: beam %s, core %s, cavity %s, chest %s" % [
+						state.opened_idle_time, beam, core, origin, bounds])
 			check(outside.is_empty(), "The opened %s chest sways without cropping its lid or facets at %s: %s" % [theme, dimensions, outside])
+			check(light_outside.is_empty(),
+				"The opened %s chest keeps substantial cavity-centered rays and its bright core inside %s: %s" % [theme, dimensions, light_outside])
 	chest.free()
 
 

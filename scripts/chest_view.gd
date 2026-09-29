@@ -10,6 +10,7 @@ const OPEN_SWAY_SECONDS: float = 6.0
 const RELEASE_SECONDS: float = 0.72
 const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
 
 var theme_id: String = ""
@@ -69,10 +70,12 @@ var _cancel_shift_x: float = 0.0
 var _cancel_body_pose: Dictionary = {}
 var _cancel_piece_poses: Array[Dictionary] = []
 var _radiance := Node2D.new()
+var _cavity_light := Node2D.new()
 var _flash := Node2D.new()
 var _seam_light := Node2D.new()
 var _release_color := Color.WHITE
 var _lid_edges: Array[Dictionary] = []
+var _surface_light_active: bool = false
 
 
 func _ready() -> void:
@@ -85,6 +88,8 @@ func _ready() -> void:
 	_charge.hide()
 	_charge.draw.connect(_draw_charge)
 	add_child(_art)
+	add_child(_cavity_light)
+	_cavity_light.draw.connect(_draw_cavity_light)
 	add_child(_details)
 	_details.draw.connect(_draw_details)
 	add_child(_glint)
@@ -108,6 +113,8 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	theme_id = palette.id
 	_feel = Feel.profile(theme_id)
 	_style = palette.chest
+	# Above the inner lid/interior, below the solid front and floating facets.
+	_cavity_light.z_index = 0 if _style == "crystal" else 1
 	_tint = palette.tint
 	_glint_color = palette.light
 	_charge_color = palette.get("accent", _glint_color)
@@ -121,6 +128,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 		child.free()
 	_pieces.clear()
 	_lid_edges.clear()
+	_surface_light_active = false
 	_rigged = false
 	var style: Dictionary = manifest.styles[_style]
 	if _style == "crystal":
@@ -176,6 +184,10 @@ func _add_piece(path: String, role: String, pose: Transform2D, pivot: Vector2, o
 	sprite.z_index = order
 	sprite.flip_h = flip_h
 	sprite.flip_v = flip_v
+	var material := ShaderMaterial.new()
+	material.shader = SURFACE_LIGHT
+	material.set_shader_parameter("light_strength", 0.0)
+	sprite.material = material
 	_art.add_child(sprite)
 	_pieces.append({"node": sprite, "rest": pose, "role": role})
 	if role in ["lid_outer", "lid_inner"]:
@@ -280,6 +292,7 @@ func _fit() -> void:
 	_shadow.queue_redraw()
 	_details.queue_redraw()
 	_radiance.queue_redraw()
+	_cavity_light.queue_redraw()
 	_flash.queue_redraw()
 	_seam_light.queue_redraw()
 	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
@@ -604,6 +617,13 @@ func hold_effect_snapshot() -> Dictionary:
 	var body_scale: Vector2 = _physical_pose.get("scale", Vector2.ONE)
 	var percent: int = mini(100, floori(performance_progress() * 100.0))
 	var status: String = performance_status()
+	var beam_bounds: Rect2 = _opened_beam_bounds()
+	var cavity_bounds: Rect2 = _cavity_glow_bounds()
+	var surface_light: float = 0.0
+	for piece in _pieces:
+		if piece.role in ["body", "chest"]:
+			surface_light = float(piece.node.material.get_shader_parameter("light_strength"))
+			break
 	return {"active": active, "phase": performance_phase(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"tension": tension_progress(),
@@ -615,6 +635,13 @@ func hold_effect_snapshot() -> Dictionary:
 			"width": _buildup_bounds().size.x, "height": _buildup_bounds().size.y},
 		"release_flash": _release_power(), "release_color": _release_color.to_html(false),
 		"opened_glow": _opened_glow(), "opened_idle_time": _idle_time,
+		"opened_beam_strength": _beam_strength(), "opened_surface_light": surface_light,
+		"opened_light_color": _release_color.to_html(false),
+		"cavity_origin": {"x": _cavity_origin().x, "y": _cavity_origin().y},
+		"opened_beam_bounds": {"x": beam_bounds.position.x, "y": beam_bounds.position.y,
+			"width": beam_bounds.size.x, "height": beam_bounds.size.y},
+		"cavity_glow_bounds": {"x": cavity_bounds.position.x, "y": cavity_bounds.position.y,
+			"width": cavity_bounds.size.x, "height": cavity_bounds.size.y},
 		"opened_animated": mode == "opened" and is_visible_in_tree() and not reduced_motion and not _idle_paused,
 		"final_drive": Feel.final_drive(_elapsed) if mode == "opening" and not reduced_motion else 0.0,
 		"release_radius": {"x": _release_radius().x, "y": _release_radius().y},
@@ -689,12 +716,45 @@ func _opened_glow() -> float:
 	if not is_visible_in_tree():
 		return 0.0
 	if mode == "opened":
-		return 0.56 if reduced_motion else 0.56 + sin(_idle_time * TAU / OPEN_SWAY_SECONDS) * 0.045
+		return 0.94 if reduced_motion else 0.94 + sin(_idle_time * TAU / OPEN_SWAY_SECONDS) * 0.04
 	if mode == "opening" and _opening_cues_enabled and not reduced_motion:
 		# Establish the lasting light before the one-shot burst fades, so the
 		# cavity never goes dark between the release and the opened result.
-		return smoothstep(0.32, 0.90, _elapsed - Feel.RELEASE_TIME) * 0.56
+		return smoothstep(0.06, 0.42, _elapsed - Feel.RELEASE_TIME) * 0.94
 	return 0.0
+
+
+func _cavity_origin_in_art() -> Vector2:
+	for piece in _pieces:
+		if piece.role == "interior":
+			var rect: Rect2 = piece.node.get_rect()
+			return piece.node.transform * (rect.position + rect.size * Vector2(0.50, 0.58))
+		if piece.role == "chest" and _style == "crystal":
+			var rect: Rect2 = piece.node.get_rect()
+			return piece.node.transform * (rect.position + rect.size * Vector2(0.51, 0.145))
+	return _body_pivot - Vector2(0, _bounds.size.y * 0.5)
+
+
+func _cavity_origin() -> Vector2:
+	return _art.transform * _cavity_origin_in_art()
+
+
+func _beam_strength() -> float:
+	return maxf(_release_power() * 0.80, _opened_glow() * 0.96)
+
+
+func _opened_beam_bounds() -> Rect2:
+	var safe: Rect2 = _release_bounds()
+	var origin: Vector2 = _cavity_origin()
+	var half_width: float = minf(origin.x - safe.position.x, safe.end.x - origin.x) * 0.94
+	return Rect2(Vector2(origin.x - half_width, safe.position.y),
+		Vector2(half_width * 2.0, maxf(0.0, origin.y - safe.position.y)))
+
+
+func _cavity_glow_bounds() -> Rect2:
+	var origin: Vector2 = _cavity_origin()
+	var width: float = _bounds.size.x * _fit_scale
+	return Rect2(origin - Vector2(width * 0.40, width * 0.16), Vector2(width * 0.80, width * 0.32)).intersection(_release_bounds())
 
 
 func _seam_points() -> PackedVector2Array:
@@ -742,7 +802,6 @@ func _draw_radiance() -> void:
 		return
 	var origin: Vector2 = _light_origin()
 	var width: float = minf(_bounds.size.x * _fit_scale, size.x * 0.80)
-	var age: float = maxf(0.0, _elapsed - Feel.RELEASE_TIME)
 	var radius: Vector2 = _release_radius()
 	var spread: float = maxf(flash, smoothstep(0.0, 0.50, ambient) * 0.94)
 	var glow: Vector2 = Vector2(width * 0.60, width * 0.35).lerp(radius * 2.0, spread)
@@ -752,25 +811,57 @@ func _draw_radiance() -> void:
 		_radiance.draw_texture_rect(CHARGE_GLOW, _buildup_bounds(), false, Color(_release_color, buildup))
 	var safe: Rect2 = _release_bounds()
 	var expansion: float = 0.12 + _buildup_intensity() * 0.70
-	if light > 0.0:
-		expansion = maxf(expansion, 0.55 + 0.45 * smoothstep(0.0, 0.12, age))
 	var height: float = maxf(0.0, origin.y - safe.position.y) * expansion
-	# Growing shafts leak around the sealed lid before the full release beam.
-	# They share the body's pressure envelope and remain inside the stage.
+	# Sealed-lid leakage stays behind the chest. Once open, the cavity's
+	# shafts render in front of the inner lid so it cannot swallow the light.
+	if buildup <= 0.001:
+		return
 	for ray in range(7):
 		var lean: float = float(ray - 3) / 3.0
-		if mode == "opened" and not reduced_motion:
-			lean += sin(_idle_time * TAU / (OPEN_SWAY_SECONDS * 1.8) + float(ray) * 0.7) * 0.045 * smoothstep(0.0, 0.65, _idle_time)
-		var beam_spread: float = 1.0 if light > 0.0 else 0.45 + _buildup_intensity() * 0.40
+		var beam_spread: float = 0.45 + _buildup_intensity() * 0.40
 		var half_width: float = safe.size.x * (0.085 if ray % 2 == 0 else 0.045) * beam_spread
 		var top: Vector2 = origin + Vector2(lean * radius.x * 0.88 * beam_spread, -height)
 		var points := PackedVector2Array([origin - Vector2(width * 0.08, 0),
 			origin + Vector2(width * 0.08, 0),
 			Vector2(minf(safe.end.x, top.x + half_width), top.y),
 			Vector2(maxf(safe.position.x, top.x - half_width), top.y)])
-		var ray_alpha: float = maxf(maxf(flash * 0.80, ambient * 0.52), buildup * 0.48)
+		var ray_alpha: float = buildup * 0.48
 		_radiance.draw_polygon(points, PackedColorArray([Color(_release_color, ray_alpha),
 			Color(_release_color, ray_alpha), Color(_release_color, 0), Color(_release_color, 0)]))
+
+
+func _draw_cavity_light() -> void:
+	var strength: float = _beam_strength()
+	if _fit_scale <= 0.0 or strength <= 0.001:
+		return
+	var origin: Vector2 = _cavity_origin()
+	var bounds: Rect2 = _opened_beam_bounds()
+	if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
+		return
+	var width: float = minf(_bounds.size.x * _fit_scale, bounds.size.x)
+	var hot: Color = _release_color.lightened(0.82)
+	for ray in range(7):
+		var lean: float = float(ray - 3) / 3.0
+		if mode == "opened" and not reduced_motion:
+			lean += sin(_idle_time * TAU / (OPEN_SWAY_SECONDS * 1.8) + float(ray) * 0.7) * 0.045 * smoothstep(0.0, 0.65, _idle_time)
+		var top_x: float = origin.x + lean * bounds.size.x * 0.38
+		var spread: float = bounds.size.x * (0.11 if ray % 2 == 0 else 0.065)
+		var left := Vector2(maxf(bounds.position.x, top_x - spread), bounds.position.y)
+		var right := Vector2(minf(bounds.end.x, top_x + spread), bounds.position.y)
+		var base_left: Vector2 = origin - Vector2(width * 0.13, 0)
+		var base_right: Vector2 = origin + Vector2(width * 0.13, 0)
+		var alpha: float = strength * (1.0 if ray == 3 else 0.76)
+		# A white-hot mouth becomes saturated theme light farther from its
+		# source. Midpoints preserve a visible shaft instead of a faint triangle.
+		_cavity_light.draw_polygon(PackedVector2Array([base_left, base_right,
+			base_right.lerp(right, 0.46), right, left, base_left.lerp(left, 0.46)]),
+			PackedColorArray([Color(hot, alpha), Color(hot, alpha),
+				Color(_release_color.lightened(0.12), alpha * 0.58), Color(_release_color, 0),
+				Color(_release_color, 0), Color(_release_color.lightened(0.12), alpha * 0.58)]))
+	var glow: Rect2 = _cavity_glow_bounds()
+	_cavity_light.draw_texture_rect(CHARGE_GLOW, glow, false, Color(_release_color, strength))
+	var core := Rect2(origin - glow.size * Vector2(0.28, 0.18), glow.size * Vector2(0.56, 0.36))
+	_cavity_light.draw_texture_rect(CHARGE_GLOW, core, false, Color(hot, strength))
 
 
 func _draw_seam() -> void:
@@ -799,12 +890,12 @@ func _draw_seam() -> void:
 	if ambient > 0.001:
 		var origin: Vector2 = _light_origin()
 		var radius: Vector2 = _release_radius()
-		var glow: Vector2 = Vector2(_bounds.size.x * _fit_scale * 0.72,
-			_bounds.size.x * _fit_scale * 0.25).min(radius * 2.0)
+		var glow: Vector2 = Vector2(_bounds.size.x * _fit_scale * 0.98,
+			_bounds.size.x * _fit_scale * 0.44).min(radius * 2.0)
 		_seam_light.draw_texture_rect(CHARGE_GLOW, Rect2(origin - glow * 0.5, glow), false,
-			Color(_release_color.lightened(0.35), ambient * 0.65))
-		_seam_light.draw_polyline(seam, Color(_release_color, ambient * 0.45), 4.0 * pixel, true)
-		_seam_light.draw_polyline(seam, Color(_release_color.lightened(0.65), ambient * 0.85), 1.5 * pixel, true)
+			Color(_release_color.lightened(0.50), ambient * 0.80))
+		_seam_light.draw_polyline(seam, Color(_release_color, ambient * 0.72), 6.0 * pixel, true)
+		_seam_light.draw_polyline(seam, Color(_release_color.lightened(0.82), ambient), 2.0 * pixel, true)
 
 
 func _draw_flash() -> void:
@@ -881,9 +972,10 @@ func _draw_crystal_cavity() -> void:
 		Vector2(49, 86), Vector2(229, 28), Vector2(750, 56), Vector2(587, 121)], opening)
 	var floor: PackedVector2Array = _crystal_face_points([
 		Vector2(105, 99), Vector2(254, 50), Vector2(694, 74), Vector2(575, 122)], opening)
-	_crystal_cavity.draw_colored_polygon(rim, _charge_color.darkened(0.62))
-	_crystal_cavity.draw_colored_polygon(inside, Color("#10252e").lerp(_charge_color.darkened(0.90), 0.35))
-	_crystal_cavity.draw_colored_polygon(floor, _charge_color.darkened(0.81))
+	var light: float = maxf(_opened_glow(), _release_power())
+	_crystal_cavity.draw_colored_polygon(rim, _charge_color.darkened(0.62).lerp(_release_color, light * 0.35))
+	_crystal_cavity.draw_colored_polygon(inside, Color("#10252e").lerp(_release_color, light * 0.68))
+	_crystal_cavity.draw_colored_polygon(floor, _charge_color.darkened(0.81).lerp(_release_color.lightened(0.86), light))
 	var edge := PackedVector2Array([rim[3], rim[0], rim[1], rim[2]])
 	_crystal_cavity.draw_polyline(edge, Color(_charge_spark, 0.70), 2.5, true)
 
@@ -1173,8 +1265,8 @@ func _apply_pose(_progress: float) -> void:
 			# Reflected light on the body ties the effect to the chest surface.
 			lighting = lighting.lerp(_release_color.lightened(0.48), _buildup_glow() * 0.16)
 			lighting = lighting.lerp(_release_color.lightened(0.58), _release_power() * 0.23)
-		lighting = lighting.lerp(_release_color.lightened(0.58), _opened_glow() * 0.11)
 		sprite.modulate = Color(lighting, float(state.alpha))
+	_update_surface_light()
 	for edge in _lid_edges:
 		var source: Sprite2D = edge.source
 		var rim: Sprite2D = edge.node
@@ -1184,6 +1276,35 @@ func _apply_pose(_progress: float) -> void:
 		rim.modulate = Color(_tint.darkened(0.42).lerp(_release_color, _release_power() * 0.12), source.modulate.a)
 	if is_instance_valid(_crystal_cavity):
 		_crystal_cavity.queue_redraw()
+
+
+func _update_surface_light() -> void:
+	var light: float = maxf(_opened_glow(), _release_power())
+	if light <= 0.0:
+		if _surface_light_active:
+			for piece in _pieces:
+				piece.node.material.set_shader_parameter("light_strength", 0.0)
+		_surface_light_active = false
+		return
+	_surface_light_active = true
+	var origin: Vector2 = _cavity_origin_in_art()
+	for piece in _pieces:
+		var sprite: Sprite2D = piece.node
+		var material: ShaderMaterial = sprite.material
+		var source: Vector2 = sprite.transform.affine_inverse() * origin
+		var uv: Vector2 = (source - sprite.offset) / sprite.texture.get_size()
+		if sprite.flip_h:
+			uv.x = 1.0 - uv.x
+		if sprite.flip_v:
+			uv.y = 1.0 - uv.y
+		var weight: float = 0.90 if piece.role in ["body", "chest", "closed", "open"] else 1.15
+		if piece.role in ["interior", "lid_inner", "core"]:
+			weight = 1.35
+		material.set_shader_parameter("light_color", _release_color.lightened(0.55))
+		material.set_shader_parameter("light_strength", light * weight)
+		material.set_shader_parameter("light_origin", uv)
+		material.set_shader_parameter("light_distance", sprite.texture.get_size() * sprite.scale.abs()
+			/ Vector2(maxf(1.0, _bounds.size.x * 0.72), maxf(1.0, _bounds.size.y * 0.65)))
 
 
 func start_open(reduce: bool) -> void:
