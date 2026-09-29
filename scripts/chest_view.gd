@@ -16,6 +16,7 @@ var mode: String = "closed"
 var _art := Node2D.new()
 var _pieces: Array[Dictionary] = []
 var _bounds := Rect2()
+var _body_pivot := Vector2.ZERO
 var _elapsed: float = 0.0
 var _idle_time: float = 0.0
 var _tint: Color = Color.WHITE
@@ -57,6 +58,11 @@ var _crystal_cavity: Node2D
 var _animation_origin_frame: int = -1
 var _pulse_step: int = 0
 var _pulse_started_at: float = 0.0
+var _hold_pulse_step: int = 0
+var _pulse_holding: bool = false
+var _body_shift_x: float = 0.0
+var _cancel_shift_x: float = 0.0
+var _cancel_body_pose: Dictionary = {}
 
 
 func _ready() -> void:
@@ -166,6 +172,11 @@ func _measure_bounds() -> void:
 				first = false
 			else:
 				_bounds = _bounds.expand(point)
+	_body_pivot = _bounds.get_center()
+	for piece in _pieces:
+		if piece.role in ["body", "chest"]:
+			_body_pivot = piece.rest * piece.node.get_rect().get_center()
+			break
 
 
 func _measure_motion_bounds() -> void:
@@ -198,9 +209,22 @@ func _fit() -> void:
 	var hold: Vector2 = _hold_pose_state()
 	var pose_time: float = _elapsed if mode in ["opening", "opened"] else _charge_time
 	_physical_pose = Feel.body_pose(theme_id, hold.x, hold.y, pose_time, mode in ["opening", "opened"], _pulse_clock())
+	var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
+	if returning > 0.0 and not _cancel_body_pose.is_empty():
+		_physical_pose = {"offset": _cancel_body_pose.offset * returning,
+			"scale": Vector2.ONE.lerp(_cancel_body_pose.scale, returning),
+			"rotation": float(_cancel_body_pose.rotation) * returning}
 	if reduced_motion:
 		_physical_pose = {"offset": Vector2.ZERO, "scale": Vector2.ONE, "rotation": 0.0}
 	var offset: Vector2 = _physical_pose.offset * _bounds.size.x * _fit_scale
+	if not reduced_motion:
+		# Keep kicks readable even when a short phone stage fits a tiny chest.
+		# The beat controls the whole body, not just its glow or decoration.
+		if returning > 0.0:
+			offset.x = _cancel_shift_x * returning
+		elif _hold_active or (mode == "opening" and _elapsed < Feel.ANTICIPATION_TIME):
+			offset.x = _pulse_motion() * maxf(13.0 * pixel, Feel.shake_distance(theme_id) * _bounds.size.x * _fit_scale)
+	_body_shift_x = offset.x
 	var pulse: Vector2 = _physical_pose.scale
 	var bob: float = center.y - size.y * 0.59
 	drag_offset = _clamp_drag_offset(drag_offset, _fit_scale, bob, Vector2.ONE, safe_top)
@@ -208,8 +232,12 @@ func _fit() -> void:
 	_art.rotation = float(_physical_pose.rotation)
 	if not reduced_motion:
 		_art.rotation += sin(_tap_remaining * 24.0) * 0.025 * (_tap_remaining / 0.35)
-	_art.position = center - _art.transform.basis_xform(_motion_bounds.get_center()) + drag_offset + offset
-	_ground_center = center + Vector2(0.0, (_bounds.end.y - _motion_bounds.get_center().y) * _fit_scale) + drag_offset
+	# Rotate around the solid body, not the expanded lid's fitting envelope.
+	# Otherwise a tall lid moves the pivot above the box and its rotation can
+	# cancel the very translation that should make the beat visible.
+	_art.position = center - _motion_bounds.get_center() * _art.scale + drag_offset + offset
+	_art.position += _body_pivot * _art.scale - _art.transform.basis_xform(_body_pivot)
+	_ground_center = center + Vector2(offset.x * 0.65, (_bounds.end.y - _motion_bounds.get_center().y) * _fit_scale) + drag_offset
 	_shadow.queue_redraw()
 	_details.queue_redraw()
 	_glint.visible = not reduced_motion and (hold_progress > 0.0 or _tap_remaining > 0.0
@@ -256,7 +284,7 @@ func _draw_charge() -> void:
 	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
 	var release: float = clampf((_elapsed - Feel.RELEASE_TIME) / RELEASE_SECONDS, 0.0, 1.0) if releasing else 0.0
 	var alpha: float = 1.0 - release if mode == "opening" else 1.0
-	var pulse: float = Feel.pulse_strength(_pulse_clock())
+	var pulse: float = _pulse_strength()
 	# A crown of three stars keeps every milestone above the chest and reward.
 	var start: float = PI
 	var sweep: float = PI
@@ -352,14 +380,31 @@ func tension_progress() -> float:
 
 
 func _pulse_clock() -> float:
-	if mode != "opening" or not _opening_cues_enabled or _pulse_step <= 0 or _elapsed >= Feel.ANTICIPATION_TIME:
+	if reduced_motion or _pulse_step <= 0:
 		return -1.0
-	var age: float = _elapsed - _pulse_started_at
-	if age >= Feel.pulse_duration(_pulse_step - 1):
+	var clock: float = _elapsed
+	var beats: Array = Feel.PULSE_TIMES
+	if _pulse_holding:
+		if mode != "closed" or not _hold_active:
+			return -1.0
+		clock = hold_progress * Feel.HOLD_SECONDS
+		beats = Feel.HOLD_PULSE_TIMES
+	elif mode != "opening" or not _opening_cues_enabled or _elapsed >= Feel.ANTICIPATION_TIME:
+		return -1.0
+	var age: float = clock - _pulse_started_at
+	if age < 0.0 or age >= Feel.pulse_duration(_pulse_step - 1, _pulse_holding):
 		return -1.0
 	# Begin the kick on the frame that actually sounds the beat. Slow frames
 	# must not start an already-decayed kick or invent a skipped later beat.
-	return float(Feel.PULSE_TIMES[_pulse_step - 1]) + age
+	return float(beats[_pulse_step - 1]) + age
+
+
+func _pulse_motion() -> float:
+	return Feel.pulse_motion(_pulse_clock(), _pulse_holding)
+
+
+func _pulse_strength() -> float:
+	return Feel.pulse_strength(_pulse_clock(), _pulse_holding)
 
 
 func performance_status() -> String:
@@ -394,6 +439,9 @@ func begin_hold() -> void:
 	_cancel_remaining = 0.0
 	_charge_time = 0.0
 	_charge_step = 0
+	_hold_pulse_step = 0
+	_pulse_step = 0
+	_pulse_holding = true
 	_cue_log.clear()
 	hold_progress = 0.0
 	_tap_remaining = 0.0
@@ -406,12 +454,16 @@ func cancel_hold() -> void:
 	if not _hold_active or mode != "closed":
 		return
 	_cancel_pressure = _hold_pose_state().x
+	_cancel_body_pose = _physical_pose.duplicate(true)
+	_cancel_shift_x = _body_shift_x
 	_animation_origin_frame = Engine.get_process_frames()
 	_cancel_progress = _hold_pose_state().y
 	_cancel_remaining = 0.0 if reduced_motion else Feel.CANCEL_SECONDS
 	_hold_active = false
 	hold_progress = 0.0
 	_charge_step = 0
+	_hold_pulse_step = 0
+	_pulse_step = 0
 	_tap_remaining = 0.0
 	_emit_cue("cancel")
 	_apply_pose(0.0)
@@ -421,14 +473,15 @@ func cancel_hold() -> void:
 func _emit_cue(cue: String, step: int = 0, cue_time: float = -1.0) -> void:
 	if not is_visible_in_tree() or theme_id.is_empty():
 		return
-	var time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * 1.2
+	var time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * Feel.HOLD_SECONDS
 	if cue_time >= 0.0:
 		time = cue_time
-	if cue == "tension_pulse":
+	if cue in ["hold_pulse", "tension_pulse"]:
 		_pulse_step = step
-		_pulse_started_at = _elapsed
+		_pulse_holding = cue == "hold_pulse"
+		_pulse_started_at = hold_progress * Feel.HOLD_SECONDS if _pulse_holding else _elapsed
 	_cue_log.append({"theme": theme_id, "cue": cue, "step": step, "time": time})
-	if _cue_log.size() > 32:
+	if _cue_log.size() > 64:
 		_cue_log.pop_front()
 	cue_requested.emit(theme_id, cue, step)
 
@@ -463,8 +516,8 @@ func hold_effect_snapshot() -> Dictionary:
 	return {"active": active, "phase": performance_phase(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"tension": tension_progress(),
-		"pulse_strength": Feel.pulse_strength(_pulse_clock()),
-		"pulse_motion": Feel.pulse_motion(_pulse_clock()),
+		"pulse_strength": _pulse_strength(),
+		"pulse_motion": _pulse_motion(),
 		"percent": percent,
 		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
@@ -490,7 +543,7 @@ func _draw_glint() -> void:
 	center.y -= _bounds.size.y * _art.scale.y * 0.08
 	var power: float = maxf(hold_progress * hold_progress, _tap_remaining / 0.35 * 0.6)
 	if mode == "opening":
-		power = Feel.tension(_elapsed) * 0.55 + Feel.pulse_strength(_pulse_clock()) * 0.45
+		power = Feel.tension(_elapsed) * 0.55 + _pulse_strength() * 0.45
 	var radius: float = minf(size.x, size.y) * 0.07
 	for layer in range(3):
 		_glint.draw_circle(center, radius * (1.8 - float(layer) * 0.4), Color(_glint_color, power * 0.1))
@@ -650,6 +703,8 @@ func stop_reaction() -> void:
 	_charge_step = 0
 	_opening_cues_enabled = false
 	_pulse_step = 0
+	_hold_pulse_step = 0
+	_pulse_holding = false
 	_art.rotation = 0.0
 	_glint.hide()
 	_charge.hide()
@@ -681,7 +736,7 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 	var pose: Transform2D = piece.rest
 	if pressure <= 0.0:
 		return pose
-	var tension: float = Feel.pulse_motion(time)
+	var tension: float = Feel.pulse_motion(time, _pulse_holding)
 	if _style == "crystal" and piece.role != "chest":
 		var direction: Vector2 = pose.origin - _bounds.get_center()
 		if direction.length_squared() < 1.0:
@@ -716,12 +771,11 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var piece: Dictionary = _pieces[index]
 	var hold: Vector2 = _hold_pose_state()
-	var charge_time: float = -1.0
+	var charge_time: float = _pulse_clock()
 	if opening_now:
 		var anticipation: float = 1.0 - smoothstep(Feel.UNLOCK_TIME, Feel.RELEASE_TIME, time)
 		var energy: float = Feel.tension(time)
 		hold = Vector2(0.30 + energy * 0.70, energy) * anticipation if not reduced_motion else Vector2.ZERO
-		charge_time = _pulse_clock()
 	var pose: Transform2D = _charged_piece_pose(index, hold.x, hold.y, charge_time)
 	var alpha: float = 1.0
 	var progress: float = Feel.opening(theme_id, time) if opening_now else 0.0
@@ -881,7 +935,20 @@ func set_hold_progress(value: float) -> void:
 		_tap_remaining = 0.0
 		_cancel_remaining = 0.0
 		_charge_step = 0
+		_hold_pulse_step = 0
+		_pulse_step = 0
 	else:
+		if not reduced_motion:
+			var time: float = hold_progress * Feel.HOLD_SECONDS
+			var latest: int = _hold_pulse_step
+			while latest < Feel.HOLD_PULSE_TIMES.size() and time >= float(Feel.HOLD_PULSE_TIMES[latest]):
+				latest += 1
+			if latest > _hold_pulse_step:
+				_hold_pulse_step = latest
+				var beat: float = float(Feel.HOLD_PULSE_TIMES[latest - 1])
+				# A stalled frame consumes missed beats without playing a burst.
+				if time - beat <= 0.20:
+					_emit_cue("hold_pulse", latest, beat)
 		var crossed: int = mini(CHARGE_STEPS, floori(performance_progress() * CHARGE_STEPS + 0.000001))
 		var duration: float = Feel.HOLD_SECONDS if reduced_motion else Feel.HOLD_SECONDS + Feel.RELEASE_TIME
 		while _charge_step < crossed:

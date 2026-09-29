@@ -4,7 +4,10 @@ const {
   openRewards, visibleColorCount, observeAudio, chooseTheme
 } = require('./game-ui.cjs');
 
-const PULSE_TIMES = [0.10, 0.50, 0.84, 1.12, 1.35, 1.53, 1.67, 1.78, 1.87];
+const HOLD_PULSE_TIMES = [0.08, 0.38, 0.65, 0.89, 1.10];
+const PULSE_TIMES = [0.08, 0.245, 0.395, 0.535, 0.665, 0.785, 0.895, 0.995,
+  1.09, 1.18, 1.265, 1.35, 1.435, 1.52, 1.605, 1.69, 1.775, 1.86];
+const isRhythmCue = event => ['hold_pulse', 'tension_pulse'].includes(event.cue);
 const hasDuration = (sound, duration) => Math.abs(sound.duration - duration) < 0.001;
 const isChestSound = sound => [0.19, 0.22, 0.24, 0.31, 0.48, 0.68, 0.74, 0.8]
   .some(duration => hasDuration(sound, duration));
@@ -191,18 +194,30 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
 
   const observation = await page.evaluate(() => window.chestObservation);
   const cues = observation.cues;
-  expect(cues.filter(event => !['tension_pulse', 'charge_step'].includes(event.cue))
+  expect(cues.filter(event => !isRhythmCue(event) && event.cue !== 'charge_step')
     .map(event => `${event.cue}:${event.step}`)).toEqual([
     'press:0', 'cancel:0', 'press:0', 'opening:0', 'anticipation:0', 'unlock:0', 'release:0', 'settle:0'
   ]);
   const steps = cues.filter(event => event.cue === 'charge_step');
   expect(steps.map(event => event.step), 'Each star lights once across the hold and automatic opening').toEqual([1, 2, 3]);
-  const pulses = cues.filter(event => event.cue === 'tension_pulse');
-  expect(pulses.map(event => event.step)).toEqual(PULSE_TIMES.map((_, index) => index + 1));
-  expectAccelerating(pulses.map(pulse => pulse.at), 'Late tension cues arrive much faster than the early cues');
-  expect(cues.every(event => event.theme === 'summer')).toBe(true);
   const opening = cues.find(event => event.cue === 'opening');
   const acceptedPress = cues.filter(event => event.cue === 'press').at(-1);
+  const acceptedCues = cues.slice(cues.indexOf(acceptedPress));
+  const holdPulses = acceptedCues.filter(event => event.cue === 'hold_pulse');
+  expect(holdPulses.map(event => event.step), 'The accepted hold delivers all five physical beats')
+    .toEqual(HOLD_PULSE_TIMES.map((_, index) => index + 1));
+  const pulses = cues.filter(event => event.cue === 'tension_pulse');
+  expect(pulses.map(event => event.step), 'The automatic opening delivers all eighteen physical beats')
+    .toEqual(PULSE_TIMES.map((_, index) => index + 1));
+  const rhythm = acceptedCues.filter(isRhythmCue);
+  expect(rhythm.map(event => event.cue), 'Confirmation joins five hold beats directly to eighteen opening beats')
+    .toEqual([...HOLD_PULSE_TIMES.map(() => 'hold_pulse'), ...PULSE_TIMES.map(() => 'tension_pulse')]);
+  // The authored first beat is at 80 ms. This browser bound includes engine
+  // frame and bridge delivery jitter, not a physical display-latency claim.
+  expect(holdPulses[0].at - acceptedPress.at, 'A physical beat arrives near the start of holding').toBeGreaterThanOrEqual(0);
+  expect(holdPulses[0].at - acceptedPress.at, 'The hold does not wait for its first star before shaking').toBeLessThanOrEqual(200);
+  expectAccelerating(rhythm.map(pulse => pulse.at), 'The final roll is much faster than the first holding beats');
+  expect(cues.every(event => event.theme === 'summer')).toBe(true);
   expect(cues.indexOf(steps[0]), 'The first star belongs to the hold before opening begins').toBeLessThan(cues.indexOf(opening));
   expect(steps[0].at - acceptedPress.at).toBeGreaterThanOrEqual(1070);
   expect(cues.indexOf(steps[1])).toBeGreaterThan(cues.indexOf(opening));
@@ -257,22 +272,30 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     expectBedChain(cancelledBed, { press: cues[0], stop: cancel });
     expectBedChain(acceptedBed, { press: acceptedPress, stop: hush, opening });
     const strikes = chestSounds.filter(sound => hasDuration(sound, 0.24));
-    expect(strikes, 'Only the hold milestone and nine physical tension strikes play; automatic stars and opening add no attacks').toHaveLength(10);
+    const strikeCues = cues.filter(isRhythmCue);
+    expect(strikes, 'Only physical hold and opening beats play; all stars and confirmation remain silent').toHaveLength(strikeCues.length);
     expect(new Set(strikes.map(sound => sound.fingerprint)).size, 'All attacks use the same themed step sample, without an opening one-shot').toBe(1);
-    // A frame can deliver the final hold star and opening confirmation
-    // together. Match that first attack to its star, then the nine ordered
-    // strikes to their individual cues instead of dividing by wall time.
-    expect(strikes[0].playbackRate, 'The first attack is the hold milestone').toBeCloseTo(0.96, 3);
-    expect(Math.abs(audioOnset(strikes[0]) - steps[0].at), 'The hold milestone follows its own visual cue').toBeLessThanOrEqual(100);
-    const tensionSounds = strikes.slice(1);
-    expect(tensionSounds).toHaveLength(PULSE_TIMES.length);
-    expectAccelerating(tensionSounds.map(audioOnset), 'Actual WebAudio material onsets accelerate toward release');
-    for (const [index, sound] of tensionSounds.entries()) {
-      expect(Math.abs(audioOnset(sound) - pulses[index].at), `Tension strike ${index + 1} follows its physical cue`).toBeLessThanOrEqual(100);
-      if (index) expect(sound.playbackRate, 'Every later audible strike rises in pitch').toBeGreaterThan(tensionSounds[index - 1].playbackRate);
+    for (const [index, sound] of strikes.entries()) {
+      expect(Math.abs(audioOnset(sound) - strikeCues[index].at),
+        `${strikeCues[index].cue} ${strikeCues[index].step} follows its physical cue`).toBeLessThanOrEqual(100);
     }
-    expect(tensionSounds.at(-1).playbackRate / tensionSounds[0].playbackRate, 'The final strike has a clearly higher register').toBeGreaterThan(1.5);
-    expect(Math.abs(audioStop(tensionSounds.at(-1)) - hush.at), 'The last strike tail stops with the sustained bed for a clean final breath').toBeLessThanOrEqual(100);
+    // Match by cue order so a cancelled hold or a shared confirmation frame
+    // cannot make a valid hold beat look like an extra opening attack.
+    const cancelledStrikes = strikeCues.length - rhythm.length;
+    const acceptedStrikes = strikes.slice(cancelledStrikes);
+    expect(acceptedStrikes).toHaveLength(HOLD_PULSE_TIMES.length + PULSE_TIMES.length);
+    expectAccelerating(acceptedStrikes.map(audioOnset), 'Actual WebAudio onsets accelerate from the hold into the final roll');
+    for (const [index, sound] of acceptedStrikes.entries()) {
+      const scheduledTime = index < HOLD_PULSE_TIMES.length ? HOLD_PULSE_TIMES[index] :
+        1.2 + PULSE_TIMES[index - HOLD_PULSE_TIMES.length];
+      const energy = Math.pow(scheduledTime / 3.14, 0.72);
+      expect(sound.playbackRate, 'Strike pitch follows scheduled tension without restarting at confirmation')
+        .toBeCloseTo(0.95 + (1.55 - 0.95) * energy, 3);
+      if (index) expect(sound.playbackRate, 'Every later audible strike rises in pitch')
+        .toBeGreaterThan(acceptedStrikes[index - 1].playbackRate);
+    }
+    expect(acceptedStrikes.at(-1).playbackRate / acceptedStrikes[0].playbackRate, 'The final strike has a clearly higher register').toBeGreaterThan(1.5);
+    expect(Math.abs(audioStop(acceptedStrikes.at(-1)) - hush.at), 'The last strike tail stops with the sustained bed for a clean final breath').toBeLessThanOrEqual(100);
     expect(chestSounds.filter(sound => audioOnset(sound) > hush.at + 30 && audioOnset(sound) < cues.find(event => event.cue === 'unlock').at - 30),
       'No material attack fills the quiet breath').toEqual([]);
     const alignment = [['unlock', 0.31], ['release', 0.68], ['settle', 0.48]].map(([cue, duration]) => ({
@@ -334,7 +357,7 @@ test('reduced motion keeps hold progress and releases without claiming early', a
   await expect(progress).toHaveAttribute('hidden', '');
   expect(await pieces(page)).toBe(baseline + 1);
   const cues = await page.evaluate(() => window.chestObservation.cues);
-  expect(cues.filter(event => ['unlock', 'release', 'settle'].includes(event.cue))).toEqual([]);
+  expect(cues.filter(event => ['hold_pulse', 'tension_pulse', 'unlock', 'release', 'settle'].includes(event.cue))).toEqual([]);
   expect(cues.filter(event => event.cue === 'opening')).toHaveLength(1);
   await screenshot(page, testInfo, 'reduced-motion-opened');
   expect(errors).toEqual([]);

@@ -202,6 +202,11 @@ function render(theme, cue) {
   for (let i = 0; i < samples.length; i++) {
     const fade = Math.min(1, i / (RATE * 0.003), (samples.length - 1 - i) / (RATE * 0.018));
     samples[i] = (samples[i] - mean) * fade;
+    if (cue === 'step' && ['winter', 'ocean', 'candy'].includes(theme)) {
+      // Keep each crystal, bubble or rubber attack distinct in the fast roll.
+      // Preserve its onset/color and clip duration while shortening the tail.
+      samples[i] *= Math.exp(-Math.max(0, i / RATE - 0.018) * 26);
+    }
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;

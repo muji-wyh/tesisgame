@@ -52,6 +52,7 @@ var _last_pip_path: String = ""
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_tension_progress: float = -1.0
+var _chest_last_hold_pulse: int = 0
 var _chest_last_tension_pulse: int = 0
 var _chest_anticipating: bool = false
 var _chest_motion_finished: bool = false
@@ -263,10 +264,15 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 		"step":
 			if _chest_phase not in ["holding", "opening"] or step < 1 or step > 3:
 				return
-			# Automatic opening has its own shared accelerating pulse timeline.
-			# Progress stars should not insert competing, evenly spaced strikes.
-			if _chest_phase == "holding":
-				_play_chest_event("step", 0.19, 0.96)
+			# Progress stars stay silent; the shared hold and opening beats own
+			# the full rhythm, without extra clicks between their strikes.
+			pass
+		"hold_pulse":
+			if _chest_phase != "holding" or not _chest_charge_active or step <= _chest_last_hold_pulse or step > ChestFeel.HOLD_PULSE_TIMES.size():
+				return
+			_chest_last_hold_pulse = step
+			var energy: float = ChestFeel.tension(float(ChestFeel.HOLD_PULSE_TIMES[step - 1]) - ChestFeel.HOLD_SECONDS)
+			_play_chest_pulse(energy)
 		"cancel":
 			if _chest_phase != "holding":
 				return
@@ -283,7 +289,7 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 			_chest_last_tension_pulse = step
 			# Read the strike's own timestamp, not the previous UI frame's energy.
 			var energy: float = ChestFeel.tension(float(ChestFeel.PULSE_TIMES[step - 1]))
-			_play_chest_event("step", lerpf(0.17, 0.55, energy), lerpf(0.82, 1.62, energy))
+			_play_chest_pulse(energy)
 		"anticipation":
 			if _chest_phase != "opening" or _chest_anticipating:
 				return
@@ -309,6 +315,12 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 		_:
 			return
 	_chest_seen[event_key] = true
+
+
+func _play_chest_pulse(energy: float) -> void:
+	# Clear material attacks carry the rhythm from the first held beat onward.
+	# Keep headroom for the final release instead of making the pressure hum loud.
+	_play_chest_event("step", lerpf(0.30, 0.56, energy), lerpf(0.95, 1.55, energy))
 
 
 func chest_reward(theme_id: String, explicit_retry: bool = false) -> void:
@@ -392,11 +404,10 @@ func set_chest_tension(progress: float) -> void:
 
 
 func _apply_chest_tension_energy(energy: float) -> void:
-	# The bed stays smooth while the synchronized material strikes get faster.
-	# Its rising register and fourfold gain make the crescendo audible even on
-	# small speakers; music yields continuously until the final quiet breath.
+	# Pressure supports the accelerating attacks without masking their rhythm.
+	# The shared early-rising curve makes the confirmation hold feel active too.
 	chest_charge.pitch_scale = lerpf(0.8, 1.85, energy)
-	chest_charge.volume_db = linear_to_db(lerpf(0.08, 0.32, energy))
+	chest_charge.volume_db = linear_to_db(lerpf(0.045, 0.18, energy))
 	_chest_music_duck = lerpf(0.68, 0.20, energy)
 	_update_music_gain()
 
@@ -455,6 +466,7 @@ func stop_chest_performance() -> void:
 	_chest_seen.clear()
 	_chest_rewarded = false
 	_chest_next_player = 0
+	_chest_last_hold_pulse = 0
 	_chest_last_tension_pulse = 0
 	_chest_anticipating = false
 	_chest_motion_finished = false

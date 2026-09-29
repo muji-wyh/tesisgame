@@ -8,7 +8,9 @@ const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.12
 const RELEASE_TIME: float = BUILDUP_SECONDS + 0.32
 const SETTLE_TIME: float = BUILDUP_SECONDS + 0.95
 const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
-const PULSE_TIMES := [0.10, 0.50, 0.84, 1.12, 1.35, 1.53, 1.67, 1.78, 1.87]
+const HOLD_PULSE_TIMES := [0.08, 0.38, 0.65, 0.89, 1.10]
+const PULSE_TIMES := [0.08, 0.245, 0.395, 0.535, 0.665, 0.785, 0.895, 0.995,
+	1.09, 1.18, 1.265, 1.35, 1.435, 1.52, 1.605, 1.69, 1.775, 1.86]
 
 
 static func progress(elapsed: float) -> float:
@@ -18,37 +20,42 @@ static func progress(elapsed: float) -> float:
 static func tension(elapsed: float) -> float:
 	# Negative opening time represents the confirmation hold. Neither the
 	# pressure nor the sound starts its crescendo again when that hold ends.
-	return pow(clampf((HOLD_SECONDS + elapsed) / (HOLD_SECONDS + ANTICIPATION_TIME), 0.0, 1.0), 1.45)
+	return pow(clampf((HOLD_SECONDS + elapsed) / (HOLD_SECONDS + ANTICIPATION_TIME), 0.0, 1.0), 0.72)
 
 
-static func pulse_duration(index: int) -> float:
-	var next: float = float(PULSE_TIMES[index + 1]) if index + 1 < PULSE_TIMES.size() else ANTICIPATION_TIME
-	return minf(0.24, (next - float(PULSE_TIMES[index])) * 0.90)
+static func pulse_duration(index: int, holding: bool = false) -> float:
+	var beats: Array = HOLD_PULSE_TIMES if holding else PULSE_TIMES
+	var end: float = HOLD_SECONDS + float(PULSE_TIMES[0]) if holding else ANTICIPATION_TIME
+	var next: float = float(beats[index + 1]) if index + 1 < beats.size() else end
+	return minf(0.24, (next - float(beats[index])) * 0.90)
 
 
-static func _pulse_state(elapsed: float) -> Vector3:
-	if elapsed >= ANTICIPATION_TIME:
+static func _pulse_state(elapsed: float, holding: bool = false) -> Vector3:
+	if elapsed >= (HOLD_SECONDS if holding else ANTICIPATION_TIME):
 		return Vector3.ZERO
-	for index in range(PULSE_TIMES.size() - 1, -1, -1):
-		var beat: float = float(PULSE_TIMES[index])
+	var beats: Array = HOLD_PULSE_TIMES if holding else PULSE_TIMES
+	for index in range(beats.size() - 1, -1, -1):
+		var beat: float = float(beats[index])
 		var age: float = elapsed - beat
 		if age >= 0.0:
-			var duration: float = pulse_duration(index)
+			var duration: float = pulse_duration(index, holding)
 			var phase: float = clampf(age / duration, 0.0, 1.0)
-			return Vector3(phase, 0.28 + tension(beat) * 0.72 if phase < 1.0 else 0.0,
-				1.0 if index % 2 == 0 else -1.0)
+			var energy: float = tension(beat - HOLD_SECONDS if holding else beat)
+			var direction: int = index + (0 if holding else HOLD_PULSE_TIMES.size())
+			return Vector3(phase, 0.28 + energy * 0.72 if phase < 1.0 else 0.0,
+				1.0 if direction % 2 == 0 else -1.0)
 	return Vector3.ZERO
 
 
-static func pulse_strength(elapsed: float) -> float:
-	var pulse: Vector3 = _pulse_state(elapsed)
+static func pulse_strength(elapsed: float, holding: bool = false) -> float:
+	var pulse: Vector3 = _pulse_state(elapsed, holding)
 	return pulse.y * (1.0 - smoothstep(0.15, 1.0, pulse.x))
 
 
-static func pulse_motion(elapsed: float) -> float:
+static func pulse_motion(elapsed: float, holding: bool = false) -> float:
 	# Each audible strike starts one visible kick and a damped counter-swing.
 	# Its return finishes before the next strike, even in the final fast roll.
-	var pulse: Vector3 = _pulse_state(elapsed)
+	var pulse: Vector3 = _pulse_state(elapsed, holding)
 	# Give the attack enough width to read on a display instead of missing a
 	# narrow sine peak between rendered frames as the beat intervals shorten.
 	var kick: float = 1.0 - 0.30 * smoothstep(0.0, 0.35, pulse.x)
@@ -124,20 +131,22 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 		pulse_time = time
 	if opening_now and time < UNLOCK_TIME:
 		var energy: float = tension(time)
-		var strained: Dictionary = body_pose(theme_id, 0.30 + energy * 0.70, energy, 0.0, false)
-		var strike: float = pulse_motion(pulse_time)
-		strained.offset.x += strike * (0.011 + float(feel.tension) * 2.5)
-		strained.offset.y += pulse_strength(pulse_time) * 0.006
-		strained.rotation = strike * (0.015 if theme_id == "candy" else 0.009)
-		if theme_id == "candy":
-			strained.scale += Vector2(0.012, -0.018) * pulse_strength(pulse_time)
-		return strained
+		pressure = 0.30 + energy * 0.70
 	var offset := Vector2(0.0, float(feel.press) * pressure)
 	var scale := Vector2.ONE
 	var rotation: float = 0.0
 	if pressure > 0.0:
 		if theme_id == "candy":
 			scale = Vector2(1.0 + pressure * 0.045, 1.0 - pressure * 0.065)
+	if (not opening_now and pressure > 0.0) or (opening_now and time < UNLOCK_TIME):
+		var strike: float = pulse_motion(pulse_time, not opening_now)
+		var strength: float = pulse_strength(pulse_time, not opening_now)
+		offset.x = strike * shake_distance(theme_id)
+		offset.y += strength * 0.008
+		rotation = strike * (0.090 if theme_id == "candy" else 0.075)
+		if theme_id == "candy":
+			scale += Vector2(0.018, -0.025) * strength
+		return {"offset": offset, "scale": scale, "rotation": rotation}
 	if opening_now:
 		var preparation: float = 1.0 - smoothstep(UNLOCK_TIME, RELEASE_TIME, time)
 		offset = Vector2(0.0, float(feel.press) * preparation)
@@ -160,3 +169,7 @@ static func body_pose(theme_id: String, pressure: float, progress: float, time: 
 					1.0 - preparation * 0.065 + bounce * 0.100)
 				offset.y -= absf(bounce) * 0.025
 	return {"offset": offset, "scale": scale, "rotation": rotation}
+
+
+static func shake_distance(theme_id: String) -> float:
+	return 0.055 + float(PROFILES.get(theme_id, PROFILES.spring).tension) * 4.0

@@ -2065,7 +2065,7 @@ func _on_chest_cue(theme_id: String, cue: String, step: int) -> void:
 	var expected_theme: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 	if theme_id != expected_theme:
 		return
-	if cue == "press" and (not _holding_chest or model.chest_state != "closed"):
+	if cue in ["press", "hold_pulse"] and (not _holding_chest or model.chest_state != "closed"):
 		return
 	if cue == "charge_step" and not ((_holding_chest and model.chest_state == "closed") or model.chest_state == "opening"):
 		return

@@ -72,6 +72,7 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " cannot complete later from an old frame")
 	var next_player: int = app.audio._chest_next_player
+	app._on_chest_cue(app.chest.theme_id, "hold_pulse", 1)
 	app._on_chest_cue(app.chest.theme_id, "tension_pulse", 1)
 	app.audio.set_chest_tension(1.0)
 	check(app.audio._chest_next_player == next_player and not app.audio.chest_charge.playing,
@@ -132,7 +133,7 @@ func _run() -> void:
 		"The hold keeps its first progress star silent until one third of the complete buildup")
 	app._advance_ui(0.01)
 	check(app.model.chest_state == "closed" and cues.back() == ["spring", "charge_step", 1],
-		"The first progress star sounds during the hold immediately before confirmation")
+		"The first progress star lights during the hold immediately before confirmation")
 	app._advance_ui(0.03)
 	state = app.chest.hold_effect_snapshot()
 	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 34,
@@ -398,5 +399,91 @@ func _run() -> void:
 	await process_frame
 	app.free()
 	await process_frame
+	await _check_gameplay_pixels(directory)
 	print("Chest charge flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _body_center(chest) -> Vector2:
+	for piece in chest._pieces:
+		if piece.role in ["body", "chest"]:
+			var sprite: Sprite2D = piece.node
+			# Headless screen transforms omit the window's canvas stretch. These
+			# EXPAND layouts fill the window, so map actual sprite canvas geometry
+			# through the requested viewport dimensions explicitly.
+			var point: Vector2 = sprite.get_global_transform_with_canvas() * sprite.get_rect().get_center()
+			return point * Vector2(root.size) / root.get_visible_rect().size
+	return Vector2.ZERO
+
+
+func _check_gameplay_pixels(directory: String) -> void:
+	var app = load("res://scenes/main.tscn").instantiate()
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/visible.cfg", directory + "/visible-legacy.cfg")
+	app.playroom_save_path = directory + "/visible-room.cfg"
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.content_scale_size = Vector2i(480, 480)
+	root.add_child(app)
+	for frame in range(4):
+		await process_frame
+	app.set_reduced_motion(false)
+	app.audio.set_muted(true)
+	var seed_value: int = 300
+	var first_range := Vector2(INF, -INF)
+	var late_range := Vector2(INF, -INF)
+	var first_min_case: String = ""
+	var late_min_case: String = ""
+	for dimensions in [Vector2i(390, 664), Vector2i(844, 390), Vector2i(1366, 768)]:
+		root.size = dimensions
+		for theme_id in app.data.THEMES:
+			seed_value += 1
+			_win(app, seed_value)
+			app.choose_theme(theme_id)
+			app.set_process(false)
+			app.chest.set_process(false)
+			for frame in range(4):
+				await process_frame
+			check(app.chest.is_visible_in_tree() and app._stage.size.y > 0,
+				"The %s chest uses the real visible result stage at %s" % [theme_id, dimensions])
+			_begin(app)
+			var first_time: float = float(Feel.HOLD_PULSE_TIMES[0])
+			app._advance_ui(first_time - 0.001)
+			app.chest._advance_animation(first_time - 0.001)
+			var before: Vector2 = _body_center(app.chest)
+			app._advance_ui(0.00101)
+			app.chest._advance_animation(0.00101)
+			var first: float = _body_center(app.chest).distance_to(before)
+			if first < first_range.x:
+				first_min_case = "%s at %s" % [theme_id, dimensions]
+			first_range = Vector2(minf(first_range.x, first), maxf(first_range.y, first))
+			check(first >= 3.5, "%s at viewport %s/stage %s: first actual body kick is %.2f screen pixels (minimum 3.5)" %
+				[theme_id, dimensions, app._stage.size, first])
+			for beat in Feel.HOLD_PULSE_TIMES.slice(1):
+				var delta: float = float(beat) + 0.00001 - app._hold_elapsed
+				app._advance_ui(delta)
+				app.chest._advance_animation(delta)
+			app._advance_ui(Feel.HOLD_SECONDS + 0.00001 - app._hold_elapsed)
+			check(app.model.chest_state == "opening" and app.chest.mode == "opening",
+				"The real %s hold controller starts the automatic sequence at %s" % [theme_id, dimensions])
+			var late: float = 0.0
+			for beat in Feel.PULSE_TIMES:
+				app.chest._advance_animation(float(beat) - 0.001 - app.chest.hold_effect_snapshot().opening_time)
+				before = _body_center(app.chest)
+				app.chest._advance_animation(0.00101)
+				if is_equal_approx(float(beat), float(Feel.PULSE_TIMES.back())):
+					late = _body_center(app.chest).distance_to(before)
+			if late < late_range.x:
+				late_min_case = "%s at %s" % [theme_id, dimensions]
+			late_range = Vector2(minf(late_range.x, late), maxf(late_range.y, late))
+			check(late >= 10.0, "%s at viewport %s/stage %s: late actual body kick is %.2f screen pixels (minimum 10)" %
+				[theme_id, dimensions, app._stage.size, late])
+			var cues: Array = app.chest.hold_effect_snapshot().cues
+			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == 5
+				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == 18,
+				"The real %s result emits all twenty-three body beats at %s" % [theme_id, dimensions])
+			app.chest.finish_immediately()
+	print("Real gameplay body motion across 24 theme/viewport cases: first %.2f-%.2f screen px (minimum: %s); late %.2f-%.2f screen px (minimum: %s)" %
+		[first_range.x, first_range.y, first_min_case, late_range.x, late_range.y, late_min_case])
+	app.audio.halt()
+	app.free()
+	await process_frame
