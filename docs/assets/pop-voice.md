@@ -69,9 +69,10 @@ validation. All synthesis and conversion finishes in a private staging directory
 before any final recording is published. A synthesis or conversion failure
 leaves existing recordings intact.
 
-The Web build must keep these optional recordings outside the startup PCK,
-publish the Godot-imported audio as optional assets, and load them through the
-game's audio path. The generator does not run Godot or change import settings.
+The Web build includes all report recordings in the startup PCK and verifies
+their source and imported resource paths against the actual exported pack.
+Reports load through the game's local audio path with no later network request.
+The generator does not run Godot or change import settings.
 
 ## Asset inventory
 

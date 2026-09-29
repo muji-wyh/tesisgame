@@ -114,12 +114,13 @@ func _run() -> void:
 			check(not app.duck.is_processing(), "Background pages stop Pip's idle animation loop")
 			app.on_page_visible()
 			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._collection_duck_slot
-				and not app.duck.speaking and not app.audio.active,
-				"Returning to Pip's room restores its mascot without restarting audio")
+				and not app.duck.speaking and app.audio.active and app.audio.music.playing
+				and not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.effect.playing,
+				"Returning to Pip's room restores its mascot and music without replaying old speech or effects")
 			await process_frame
 			await process_frame
-			check(app.duck.is_processing() and not app.audio.active,
-				"Returning to the visible room resumes quiet mascot activity without restarting audio")
+			check(app.duck.is_processing() and app.audio.music.playing and not app.audio.voice.playing,
+				"Returning to the visible room resumes mascot activity and music without another greeting")
 		app._hide_collection()
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()

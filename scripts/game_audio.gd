@@ -23,7 +23,6 @@ const CHEST_EVENT_CHANNELS := 3
 signal status_changed(message: String)
 signal word_failed
 signal narration_state_changed(state: String)
-signal _stream_loaded(path: String)
 
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
@@ -37,10 +36,7 @@ var active: bool = false
 var current_theme: String = ""
 var cache: Dictionary = {}
 var available: bool = true
-var remote_audio: Dictionary = {}
-var _loading: Dictionary = {}
 var _playback_requests: Dictionary = {}
-var _music_pending: bool = false
 var _music_error: bool = false
 var _narration_generation: int = 0
 var _narration_streams: Array[AudioStream] = []
@@ -69,7 +65,6 @@ var _chest_rewarded: bool = false
 var _chest_players: Array[AudioStreamPlayer] = []
 var _chest_next_player: int = 0
 var _chest_fallbacks: Dictionary = {}
-var _chest_prime_pending: Dictionary = {}
 
 
 func _ready() -> void:
@@ -86,13 +81,6 @@ func _ready() -> void:
 	narration.finished.connect(_narration_finished)
 	if OS.has_feature("web"):
 		available = bool(JavaScriptBridge.eval("Boolean(window.AudioContext || window.webkitAudioContext)"))
-		var host: JavaScriptObject = JavaScriptBridge.get_interface("wordBuddiesHost")
-		if host != null:
-			var assets: Variant = JSON.parse_string(str(host.audioAssets()))
-			if assets is Dictionary:
-				remote_audio = assets
-			else:
-				push_warning("Optional audio configuration could not load.")
 
 
 func _player(gain: float) -> AudioStreamPlayer:
@@ -114,10 +102,9 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 	if not play_music:
 		stop_music()
 		return
-	if current_theme == theme_id and (music.playing or _music_pending) and not _music_error:
+	if current_theme == theme_id and music.playing and not _music_error:
 		return
 	current_theme = theme_id
-	_music_pending = true
 	_play(music, "res://assets/audio/bgm/" + theme_id + ".wav", true)
 
 
@@ -156,7 +143,7 @@ func next_pip_sound() -> String:
 func play_pip() -> void:
 	if muted or not active or not available or is_pip_busy():
 		return
-	# Ignore repeated greetings while their download or voice is still active.
+	# Ignore repeated greetings while their voice is still active.
 	# The shared channel keeps existing mute, page and microphone cleanup.
 	say(next_pip_sound())
 
@@ -182,7 +169,6 @@ func play_pip_reaction(correct: bool) -> void:
 
 func stop_pip_reaction() -> void:
 	if pip_reaction != null:
-		# Invalidate a pending optional download as well as an audible quack.
 		_stop(pip_reaction)
 		pip_reaction.stream = null
 
@@ -194,39 +180,14 @@ func prepare_chest(theme_id: String) -> void:
 	_chest_theme = theme
 	for cue_name: String in ChestSoundBank.CUES:
 		var path: String = ChestSoundBank.path_for(theme, cue_name)
-		if not cache.has(path) and not _loading.has(path):
-			_preload_chest_stream(path, cue_name == "charge")
-	_prime_chest_fallbacks(theme)
-
-
-func _prime_chest_fallbacks(theme: String) -> void:
-	if _chest_prime_pending.has(theme):
-		return
-	_chest_prime_pending[theme] = true
-	for cue_name: String in ChestSoundBank.CUES:
-		var path: String = ChestSoundBank.path_for(theme, cue_name)
-		if cache.has(path) or _chest_fallbacks.has(path):
-			continue
-		# Cold optional downloads should not make the first press render a bank
-		# of samples. Prime at most one small fallback per frame while waiting.
-		await get_tree().process_frame
-		if not is_inside_tree() or theme != _chest_theme:
-			break
-		if not cache.has(path) and not _chest_fallbacks.has(path):
-			_chest_fallbacks[path] = ChestSoundBank.fallback(theme, cue_name)
-	_chest_prime_pending.erase(theme)
-
-
-func _preload_chest_stream(path: String, loop: bool) -> void:
-	# Preparing may fill the shared cache, but never owns playback. A download
-	# completing after cancellation cannot replay the original gesture.
-	await _stream(path, loop)
+		_stream(path, cue_name == "charge")
 
 
 func _chest_stream(theme: String, cue_name: String) -> AudioStreamWAV:
 	var path: String = ChestSoundBank.path_for(theme, cue_name)
-	if cache.get(path) is AudioStreamWAV:
-		return cache[path]
+	var stream: AudioStream = _stream(path, cue_name == "charge")
+	if stream is AudioStreamWAV:
+		return stream
 	if not _chest_fallbacks.has(path):
 		_chest_fallbacks[path] = ChestSoundBank.fallback(theme, cue_name)
 	return _chest_fallbacks[path]
@@ -438,8 +399,8 @@ func set_chest_tension(progress: float) -> void:
 	if muted or not active or not available:
 		stop_chest_performance()
 		return
-	# Only an explicit opening arms this bed. Frame updates and downloaded
-	# assets cannot revive it after anticipation, interruption or completion.
+	# Only an explicit opening arms this bed. Frame updates cannot revive it
+	# after anticipation, interruption or completion.
 	if _chest_phase != "opening" or _chest_anticipating or _chest_tension_progress < 0.0:
 		return
 	_chest_tension_progress = maxf(_chest_tension_progress, clampf(progress, 0.0, 1.0))
@@ -593,13 +554,11 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 	if player == voice and path in PIP_SOUND_PATHS:
 		_pip_voice_request = request_id
 	var stream: AudioStream = await _stream(path, loop)
-	# A completed download may be cached, but must never revive an obsolete cue.
+	# State callbacks may cancel or replace this request during preparation.
 	if request_id != _playback_requests[player] or not active or muted or not available:
 		if player == voice and _pip_voice_request == request_id:
 			_pip_voice_request = -1
 		return
-	if player == music:
-		_music_pending = false
 	if stream == null:
 		if player == voice and _pip_voice_request == request_id:
 			_pip_voice_request = -1
@@ -621,21 +580,12 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 
 
 func _stream(path: String, loop: bool = false) -> AudioStream:
+	# Every recording is already in the startup pack. Loading a stream only
+	# reads local resources; gameplay never waits for an audio HTTP request.
 	if cache.has(path):
 		return cache[path]
-	if _loading.has(path):
-		while _loading.has(path):
-			await _stream_loaded
-		if cache.has(path):
-			return cache[path]
-		# Every waiter shares this attempt's result. A cancelled request must not
-		# turn a failed shared download into another serialized retry.
-		return null
-	_loading[path] = true
 	var resource: Resource
-	if remote_audio.has(path):
-		resource = await _download(str(remote_audio[path]))
-	elif ResourceLoader.exists(path):
+	if ResourceLoader.exists(path):
 		resource = load(path)
 	if resource is AudioStream:
 		if not loop:
@@ -646,46 +596,7 @@ func _stream(path: String, loop: bool = false) -> AudioStream:
 			looping.loop_begin = 0
 			looping.loop_end = int(round(looping.get_length() * looping.mix_rate))
 			cache[path] = looping
-	_loading.erase(path)
-	_stream_loaded.emit(path)
 	return cache.get(path)
-
-
-func _download(url: String) -> Resource:
-	var request := HTTPRequest.new()
-	request.timeout = 15.0
-	request.body_size_limit = 4 * 1024 * 1024
-	add_child(request)
-	if request.request(url) != OK:
-		request.queue_free()
-		return null
-	var response: Array = await request.request_completed
-	request.queue_free()
-	if response[0] != HTTPRequest.RESULT_SUCCESS or response[1] != 200:
-		return null
-	var body: PackedByteArray = response[3]
-	if body.size() < 4 or not body.slice(0, 4).get_string_from_ascii() in ["RSRC", "RSCC"]:
-		return null
-	var digest := HashingContext.new()
-	digest.start(HashingContext.HASH_SHA256)
-	digest.update(body)
-	var filename := "audio-" + digest.finish().hex_encode().substr(0, 16) + ".sample"
-	if url.get_file() != filename:
-		return null
-	# Imported .sample files are Godot resources, not raw WAV buffers.
-	# Keep only the decoded resource; the browser caches the immutable HTTP asset.
-	var local_path := "user://" + filename
-	var file := FileAccess.open(local_path, FileAccess.WRITE)
-	if file == null:
-		return null
-	file.store_buffer(body)
-	var stored: bool = file.get_error() == OK
-	file.close()
-	var resource: Resource
-	if stored:
-		resource = ResourceLoader.load(local_path, "", ResourceLoader.CACHE_MODE_IGNORE)
-	DirAccess.remove_absolute(local_path)
-	return resource
 
 
 func _stop(player: AudioStreamPlayer) -> void:
@@ -718,7 +629,6 @@ func set_muted(value: bool) -> void:
 
 func stop_music() -> void:
 	current_theme = ""
-	_music_pending = false
 	_stop(music)
 
 

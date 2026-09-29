@@ -53,6 +53,21 @@ const patches = [
 `
   },
   {
+    name: "register the engine audio context for foreground and gesture recovery",
+    before: `const ctx=new(window.AudioContext||window.webkitAudioContext)(opts);GodotAudio.ctx=ctx;ctx.onstatechange=function(){`,
+    after: `const ctx=new(window.AudioContext||window.webkitAudioContext)(opts);GodotAudio.ctx=ctx;window.wordBuddiesHost?.attachAudioContext?.(ctx);ctx.onstatechange=function(){`
+  },
+  {
+    name: "release the registered audio context when the engine closes",
+    before: `close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;if(!ctx){resolve();return}`,
+    after: `close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;window.wordBuddiesHost?.attachAudioContext?.(null);if(!ctx){resolve();return}`
+  },
+  {
+    name: "allow later audio gesture recovery after a rejected resume",
+    before: `function _godot_audio_resume(){if(GodotAudio.ctx&&GodotAudio.ctx.state!=="running"){GodotAudio.ctx.resume()}}`,
+    after: `function _godot_audio_resume(){const ctx=GodotAudio.ctx;if(ctx&&ctx.state!=="running"&&ctx.state!=="closed"){try{Promise.resolve(ctx.resume()).catch(()=>{})}catch(e){}}}`
+  },
+  {
     name: "preserve playback pitch when a WebAudio sample restarts",
     // A loop's ended callback replaces the source outside the game frame.
     // Restore its rate before start(), rather than waiting for the next frame.

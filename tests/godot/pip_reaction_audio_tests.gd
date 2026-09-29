@@ -4,21 +4,6 @@ const Audio = preload("res://scripts/game_audio.gd")
 const HAPPY_PATH := "res://assets/audio/pip/duck_double_01_bouncy.wav"
 const SAD_PATH := "res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav"
 
-class DelayedAudio extends "res://scripts/game_audio.gd":
-	signal released
-	var resolved: Dictionary = {}
-	var downloads: Array[String] = []
-
-	func _download(url: String) -> Resource:
-		downloads.append(url)
-		while not resolved.has(url):
-			await released
-		return resolved[url]
-
-	func resolve(url: String, resource: Resource) -> void:
-		resolved[url] = resource
-		released.emit()
-
 var checks := 0
 var failures := 0
 
@@ -37,7 +22,7 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	await _check_reaction_channel()
 	await _check_cancellation()
-	await _check_delayed_reactions()
+	await _check_bundled_reactions()
 	# The audio mixer retires stopped playback objects on its next buffer.
 	await create_timer(0.15).timeout
 	print("Pip reaction audio: %d assertions, %d failures" % [checks, failures])
@@ -137,64 +122,29 @@ func _check_cancellation() -> void:
 	await process_frame
 
 
-func _check_delayed_reactions() -> void:
-	var audio := DelayedAudio.new()
+func _check_bundled_reactions() -> void:
+	var audio := Audio.new()
 	root.add_child(audio)
-	audio.remote_audio[HAPPY_PATH] = "test://happy"
-	audio.remote_audio[SAD_PATH] = "test://sad"
 	audio.interact("spring", false)
+	for path: String in [HAPPY_PATH, SAD_PATH]:
+		audio.play_pip_reaction(path == HAPPY_PATH)
+		check(audio.pip_reaction.playing and audio.pip_reaction.stream == load(path),
+			"A first-use reaction immediately plays its bundled recording")
+		audio.halt()
+		audio.interact("winter", false)
+		await process_frame
+		check(not audio.pip_reaction.playing,
+			"A mode change does not replay the previous reaction")
 	audio.play_pip_reaction(true)
-	audio.play_pip_reaction(true)
-	check(not audio.pip_reaction.playing and audio.downloads == ["test://happy"],
-		"Repeated reactions share an optional download without stacking playback")
-	audio.halt()
-	audio.interact("winter", false)
-	audio.resolve("test://happy", load(HAPPY_PATH))
+	audio.set_muted(true)
+	audio.set_muted(false)
+	audio.interact("spring", false)
 	await process_frame
-	check(audio.cache.has(HAPPY_PATH) and not audio.pip_reaction.playing,
-		"A download completed after mode change is cached without reviving a stale quack")
+	check(not audio.pip_reaction.playing, "Unmuting keeps the previous emotion stopped")
 	audio.play_pip_reaction(false)
-	audio.play_pip_reaction(true)
-	var happy_stream: AudioStream = audio.pip_reaction.stream
-	var happy_request: int = audio._playback_requests[audio.pip_reaction]
-	audio.resolve("test://sad", load(SAD_PATH))
-	await process_frame
-	check(audio.pip_reaction.playing and audio.pip_reaction.stream == happy_stream
-		and audio.pip_reaction.pitch_scale > 1.0 and audio._playback_requests[audio.pip_reaction] == happy_request,
-		"An older sad download cannot overwrite the newer happy reaction")
+	check(audio.pip_reaction.playing and audio.pip_reaction.stream == load(SAD_PATH),
+		"A new result plays without reloading the game")
+	check(audio.get_children().all(func(child: Node) -> bool: return child is AudioStreamPlayer),
+		"Reactions only allocate bounded audio channels, never download nodes")
 	audio.queue_free()
-	await process_frame
-
-	var muted_audio := DelayedAudio.new()
-	root.add_child(muted_audio)
-	muted_audio.remote_audio[HAPPY_PATH] = "test://muted"
-	muted_audio.interact("spring", false)
-	muted_audio.play_pip_reaction(true)
-	muted_audio.set_muted(true)
-	muted_audio.set_muted(false)
-	muted_audio.interact("spring", false)
-	muted_audio.resolve("test://muted", load(HAPPY_PATH))
-	await process_frame
-	check(not muted_audio.pip_reaction.playing, "Mute invalidates a download even if playback is enabled before it finishes")
-	muted_audio.queue_free()
-	await process_frame
-
-	var failed_audio := DelayedAudio.new()
-	root.add_child(failed_audio)
-	failed_audio.remote_audio[HAPPY_PATH] = "test://failed"
-	failed_audio.interact("spring", false)
-	failed_audio.say("res://assets/audio/voice/word-apple.wav")
-	var word: AudioStream = failed_audio.voice.stream
-	var word_failures: Array[bool] = []
-	failed_audio.word_failed.connect(func() -> void: word_failures.append(true))
-	failed_audio.play_pip_reaction(true)
-	failed_audio.resolve("test://failed", null)
-	await process_frame
-	check(failed_audio.active and not failed_audio.pip_reaction.playing
-		and failed_audio.voice.playing and failed_audio.voice.stream == word and word_failures.is_empty(),
-		"A missing reaction does not stop card speech or report a failed vocabulary recording")
-	failed_audio.remote_audio.erase(HAPPY_PATH)
-	failed_audio.play_pip_reaction(true)
-	check(failed_audio.pip_reaction.playing, "The next result can retry after an optional reaction download fails")
-	failed_audio.queue_free()
 	await process_frame

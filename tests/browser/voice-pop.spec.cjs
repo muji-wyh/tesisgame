@@ -2,8 +2,13 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const catalog = require('../../words.json');
+const bundledAudioTest = test.extend({
+  // Require the game's real tap gestures to unlock audio in these focused tests.
+  launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] }
+});
 const catalogWords = catalog.map(word => word.text);
 const assetPath = relative => path.resolve(__dirname, '../..', relative);
 const expectedSlices = sliceAssets.filter(asset => fs.existsSync(assetPath(asset.destination)));
@@ -433,17 +438,24 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   expect(errors).toEqual([]);
 });
 
-test('leaving Voice Pop restores music immediately and card audio in Match and Memory', async ({ page, browserName }, info) => {
-  await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+bundledAudioTest('leaving Voice Pop restores music immediately and card audio in Match and Memory', async ({ page, browserName }, info) => {
+  const audioRequests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await open(page);
   const available = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(available, 'Chromium must exercise real WebAudio playback').toBe(true);
-  test.skip(!available, 'This browser runtime has no WebAudio; native mode-switch audio coverage runs separately.');
+  bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio; native mode-switch audio coverage runs separately.');
+  expect(audioRequests, 'Startup audio is bundled in the game pack').toEqual([]);
   const evidence = [];
   const selectSeconds = waveDuration('assets/audio/sfx/select.wav');
 
   for (const destination of ['match', 'memory']) {
-    if (destination === 'memory') await chooseMode(page, 'pop');
+    if (destination === 'memory') {
+      // Voice recognition correctly pauses offline; start the next round online.
+      await page.context().setOffline(false);
+      expect(await page.evaluate(() => navigator.onLine)).toBe(true);
+      await chooseMode(page, 'pop');
+    }
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
     const listeningTheme = await page.locator('html').getAttribute('data-pip-theme');
     const listeningMusicSeconds = waveDuration(`assets/audio/bgm/${listeningTheme}.wav`);
@@ -458,6 +470,8 @@ test('leaving Voice Pop restores music immediately and card audio in Match and M
       Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
     listeningMusicSeconds), 'Voice Pop stops the previous mode\'s music').toBe(false);
 
+    await page.context().setOffline(true);
+    expect(await page.evaluate(() => navigator.onLine)).toBe(false);
     const beforeExit = await page.evaluate(() => window.audioObservation.playbacks.length);
     await chooseMode(page, destination);
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
@@ -492,6 +506,7 @@ test('leaving Voice Pop restores music immediately and card audio in Match and M
     expect(music.stoppedAt, 'Late recognition callbacks cannot stop restored music').toBeUndefined();
     expect(music.endedAt).toBeUndefined();
     expect(await page.evaluate(() => window.audioObservation.contexts.some(context => context.state === 'running'))).toBe(true);
+    const musicOutput = await expectOutputEnergy(page);
 
     const beforeCard = await page.evaluate(() => window.audioObservation.playbacks.length);
     const bounds = await metrics(page);
@@ -512,10 +527,16 @@ test('leaving Voice Pop restores music immediately and card audio in Match and M
     expect(select.contextState).toBe('running');
     expect(select.fingerprint).toBeTruthy();
     expect(select.peak, 'Selection feedback contains audible PCM').toBeGreaterThan(0.01);
+    const cardOutput = await expectOutputEnergy(page);
     await expect(page.locator('#audio-status')).toBeEmpty();
-    evidence.push({ destination, theme, word, recording: selectedWord.audio, music, cardSounds: sounds });
+    expect(audioRequests, `Offline ${destination} music and card audio need no audio HTTP requests`).toEqual([]);
+    evidence.push({ destination, theme, word, recording: selectedWord.audio, music, cardSounds: sounds,
+      musicOutput, cardOutput });
   }
-  await info.attach('voice-pop-exit-audio.json', { body: JSON.stringify(evidence), contentType: 'application/json' });
+  await info.attach('voice-pop-exit-audio.json', {
+    body: JSON.stringify({ offlineDuringDestination: true, audioRequests, transitions: evidence }), contentType: 'application/json'
+  });
+  expect(audioRequests).toEqual([]);
   expect(errors).toEqual([]);
 });
 
@@ -697,35 +718,73 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   expect(errors).toEqual([]);
 });
 
-test('unavailable report audio stays readable and retries with the natural voice instead of system TTS', async ({ page, browserName }, info) => {
-  await observeAudio(page);
+bundledAudioTest('bundled report audio plays without audio requests and replays offline without system TTS', async ({ page, browserName }, info) => {
+  bundledAudioTest.setTimeout(120000);
+  const audioRequests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
-  if (browserName === 'chromium') expect(await page.evaluate(() => window.audioObservation.available)).toBe(true);
-  await page.route('**/audio-*.sample', route => route.fulfill({ status: 404, body: '' }));
+  const available = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(available, 'Chromium must exercise real bundled report playback').toBe(true);
+  bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio; native report audio coverage runs separately.');
+  // Keep recognition online so the real round clock can finish naturally.
+  expect(await page.evaluate(() => navigator.onLine)).toBe(true);
+  expect(audioRequests, 'No separate audio files are fetched during startup').toEqual([]);
+  const recording = 'assets/audio/pop/round-0.wav';
+  const reportSeconds = waveDuration(recording);
+  const beforeReport = await page.evaluate(() => window.audioObservation.playbacks.length);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
-  await expect.poll(async () => (await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Try Pip again');
+  await expectReportDelivery(page);
   const report = await state(page);
   expect(report.hits).toBe(0);
   expect(report.score).toBe(0);
   expect(report.report).toContain('0 words');
   expect(report.report).toContain('practise');
-  expect(report.reportSpeaking).toBe(false);
+  expect(report.reportAudio).toEqual([`res://${recording}`]);
+  expect(report.reportSpeaking).toBe(true);
   expect(report.reportLoading).toBe(false);
+  const automatic = await expectRecording(page, beforeReport, recording, { active: true });
+  expect(automatic.loop).toBe(false);
+  expect(automatic.playbackRate).toBe(1);
+  const automaticOutput = await expectOutputEnergy(page);
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
-  await page.screenshot({ path: info.outputPath('readable-report-audio-unavailable.png') });
-  await page.unroute('**/audio-*.sample');
-  const starts = await page.evaluate(() => window.audioObservation.starts);
+  expect(audioRequests, 'The automatic recorded report needs no audio HTTP requests').toEqual([]);
+  await expect.poll(async () => (await state(page)).reportSpeaking,
+    { timeout: Math.ceil((reportSeconds + 3) * 1000) }).toBe(false);
+  await expect.poll(() => page.evaluate(at => window.audioObservation.playbacks.find(sound => sound.at === at)?.endedAt,
+    automatic.at), { message: 'The real automatic report source finishes naturally' }).toBeDefined();
+  expect((await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear Pip');
+  expect((await state(page)).reportLoading).toBe(false);
+  await page.context().setOffline(true);
+  expect(await page.evaluate(() => navigator.onLine)).toBe(false);
+  await page.screenshot({ path: info.outputPath('bundled-report-offline.png') });
+
+  const beforeReplay = await page.evaluate(() => window.audioObservation.playbacks.length);
   await resultAction(page, /HearPip/);
   await expectReportDelivery(page);
-  if (await page.evaluate(() => window.audioObservation.available)) {
-    expect(await page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(starts);
-  }
+  const replay = await expectRecording(page, beforeReplay, recording, { active: true });
+  expect(replay.at).toBeGreaterThan(automatic.at);
+  expect(replay.loop).toBe(false);
+  expect(replay.playbackRate).toBe(1);
+  const replayOutput = await expectOutputEnergy(page);
   expect((await state(page)).report).toBe(report.report);
-  await page.screenshot({ path: info.outputPath('natural-voice-retry.png') });
+  expect((await state(page)).reportAudio).toEqual(report.reportAudio);
+  expect((await state(page)).reportLoading).toBe(false);
+  expect(audioRequests, 'Replaying the report does not request an audio file').toEqual([]);
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-report-speaking', 'false');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-report-loading', 'false');
+  await expect.poll(() => page.evaluate(at => {
+    const sound = window.audioObservation.playbacks.find(playback => playback.at === at);
+    return sound.stoppedAt !== undefined || sound.endedAt !== undefined;
+  }, replay.at), { message: 'Leaving Voice Pop leaves no live report source' }).toBe(true);
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
+  const sources = await page.evaluate(times => window.audioObservation.playbacks.filter(sound => times.includes(sound.at)),
+    [automatic.at, replay.at]);
+  await info.attach('bundled-report-offline-audio.json', {
+    body: JSON.stringify({ automaticOnline: true, replayOffline: true, recording, reportSeconds, report: report.report,
+      sources, automaticOutput, replayOutput, audioRequests }), contentType: 'application/json'
+  });
+  expect(audioRequests).toEqual([]);
   expect(errors).toEqual([]);
 });
 

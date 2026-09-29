@@ -48,7 +48,7 @@ function soundEnergy(samples, rate) {
   return { rms: Math.sqrt(total / samples.length), bodyRatio: body / total, phoneRatio: phone / total };
 }
 
-test('all 88 authored chest cues reproduce exactly and stay within the optional audio budget', () => {
+test('all 88 authored chest cues reproduce exactly and stay within the bundled audio budget', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const files = fs.readdirSync(absolute('assets/audio/chests')).filter(name => name.endsWith('.wav'));
   const expected = audio.THEMES.flatMap(theme => Object.keys(audio.CUES).map(cue => `${theme}-${cue}.wav`));

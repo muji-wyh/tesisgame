@@ -3,17 +3,6 @@ extends SceneTree
 const Bank = preload("res://scripts/chest_sound_bank.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 
-class DelayedAudio:
-	extends "res://scripts/game_audio.gd"
-	signal release_download
-	var download_count: int = 0
-	var downloaded: AudioStreamWAV
-
-	func _download(_url: String) -> Resource:
-		download_count += 1
-		await release_download
-		return downloaded
-
 var checks := 0
 var failures := 0
 
@@ -100,7 +89,7 @@ func _run() -> void:
 	await _check_tension_interruption()
 	await _check_motion_completion_before_save()
 	await _check_cancellation_and_guards()
-	await _check_delayed_preparation()
+	await _check_bundled_preparation()
 	await _check_saved_retry()
 	# Give the native audio mixing thread time to retire stopped playback even
 	# while other scene tests or movie captures are using the same machine.
@@ -718,50 +707,34 @@ func _check_cancellation_and_guards() -> void:
 	await process_frame
 
 
-func _check_delayed_preparation() -> void:
-	var audio := DelayedAudio.new()
+func _check_bundled_preparation() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
-	audio.downloaded = Bank.fallback("winter", "press")
-	for cue_name: String in Bank.CUES:
-		audio.remote_audio[Bank.path_for("space", cue_name)] = "test://" + cue_name
-	audio.prepare_chest("space")
-	audio.prepare_chest("space")
-	check(audio.download_count == Bank.CUES.size() and audio._loading.size() == Bank.CUES.size() and audio.chest_charge == null, "Repeated prepares share each pending download without playback")
-	await process_frame
-	check(audio._chest_fallbacks.size() == 1 and audio.chest_charge == null, "Cold preparation primes only one quiet fallback in its first frame")
-	await process_frame
-	check(audio._chest_fallbacks.size() == 2, "The second fallback waits for a separate frame instead of blocking a gesture")
-	audio.interact("space", false)
-	audio.chest_cue("space", "press")
-	audio.set_chest_charge(0.0)
-	var fallback: AudioStream = audio.chest_charge.stream
-	check(audio.chest_charge.playing and fallback != audio.downloaded, "A cold gesture uses its immediate material fallback")
-	audio.release_download.emit()
-	await process_frame
-	check(audio._loading.is_empty() and audio.chest_charge.stream == fallback, "Finishing a download never replaces the active gesture")
-	audio.stop_chest_performance()
-	audio.chest_cue("space", "press")
-	audio.set_chest_charge(0.0)
-	check(audio.chest_charge.stream == audio.cache[Bank.path_for("space", "charge")], "A fresh gesture uses the completed cache")
-	audio.stop_chest_performance()
-	audio.cache.clear()
-	audio.prepare_chest("space")
-	audio.chest_cue("space", "press")
-	audio.set_chest_charge(0.0)
-	audio.halt()
-	audio.release_download.emit()
-	await process_frame
-	check(_playing(audio) == 0 and audio.chest_charge.stream == null and audio._loading.is_empty(), "Download after pagehide caches quietly without late playback")
-	audio.cache.clear()
-	audio.downloaded = null
-	audio.prepare_chest("space")
-	audio.release_download.emit()
-	await process_frame
-	audio.interact("space", false)
-	audio.chest_cue("space", "press")
-	audio.set_chest_charge(0.0)
-	check(audio.chest_charge.playing and audio.cache.is_empty() and audio._loading.is_empty(), "A failed optional download keeps the immediate material fallback usable")
-	audio.halt()
+	for theme: String in Bank.THEMES:
+		audio.prepare_chest(theme)
+		audio.prepare_chest(theme)
+		for cue_name: String in Bank.CUES:
+			var path: String = Bank.path_for(theme, cue_name)
+			check(audio.cache.get(path) is AudioStreamWAV,
+				theme + " " + cue_name + " is immediately ready from the game pack")
+		check(audio._chest_fallbacks.is_empty() and _playing(audio) == 0,
+			"Preparation reads authored local recordings without starting playback or a fallback")
+		audio.interact(theme, false)
+		audio.chest_cue(theme, "press")
+		audio.set_chest_charge(0.0)
+		var charge: AudioStreamWAV = audio.chest_charge.stream
+		check(charge == audio.cache[Bank.path_for(theme, "charge")]
+			and charge.loop_mode == AudioStreamWAV.LOOP_FORWARD,
+			"The first press immediately uses the complete authored looping charge")
+		audio.prepare_chest(theme)
+		check(audio.chest_charge.playing and audio.chest_charge.stream == charge,
+			"Repeated preparation cannot interrupt an active charge")
+		audio.halt()
+		await process_frame
+		check(_playing(audio) == 0 and audio.chest_charge.stream == null,
+			"Background cancellation stops every chest channel with no delayed playback")
+	check(audio.cache.size() == Bank.THEMES.size() * Bank.CUES.size(),
+		"Every theme is cached locally without allocating network requests")
 	audio.queue_free()
 	await process_frame
 

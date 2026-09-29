@@ -84,6 +84,75 @@ func _total(app) -> int:
 		count += value
 	return count
 
+
+func _check_audio_recovery(app) -> void:
+	app.audio.set_muted(false)
+	for location in ["match", "memory", "home"]:
+		if location == "home":
+			app._show_collection()
+		else:
+			app.choose_mode(location)
+		app.audio.interact(app.model.theme_id)
+		app.audio.cue("select")
+		app.audio.say("res://" + app.data.words[0].audio)
+		app.audio.play_pip_reaction(true)
+		check(app.audio.music.playing and app.audio.voice.playing and app.audio.pip_reaction.playing,
+			location + " starts with real background music, a word and a Pip call")
+		app.on_page_hidden()
+		app.on_page_hidden()
+		check(not app.audio.active and not app.audio.music.playing and not app.audio.voice.playing,
+			location + " stays silent through repeated background notifications")
+		app.on_page_visible()
+		check(app.audio.active and app.audio.music.playing and app.audio.current_theme == app.model.theme_id,
+			location + " resumes its current background music without a refresh")
+		check(not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.effect.playing
+			and not app.audio.pip_reaction.playing and not app.audio.is_pip_busy(),
+			location + " cannot replay cancelled words, reports, effects or Pip calls")
+		var request: int = app.audio._playback_requests.get(app.audio.music, 0)
+		app.on_page_visible()
+		check(app.audio._playback_requests.get(app.audio.music, 0) == request,
+			location + " ignores duplicate foreground notifications without restarting the music")
+		if location == "home":
+			app._hide_collection()
+	app.choose_mode("match")
+	app.audio.halt()
+	app.on_page_hidden()
+	app.on_page_visible()
+	check(not app.audio.active and not app.audio.music.playing,
+		"A page that was silent before hiding does not acquire new playback on return")
+	for guard in ["muted", "unavailable", "voice", "pop", "lost"]:
+		app.audio.available = true
+		app.audio.set_muted(false)
+		app.audio.interact(app.model.theme_id)
+		app.on_page_hidden()
+		var phase: String = app.model.phase
+		match guard:
+			"muted": app.audio.set_muted(true)
+			"unavailable": app.audio.available = false
+			"voice": app._voice_mode = true
+			"pop": app._pop_speech_active = true
+			"lost": app.model.phase = "lost"
+		app.on_page_visible()
+		check(not app.audio.active and not app.audio.music.playing,
+			"Foreground recovery respects the " + guard + " playback guard")
+		app._voice_mode = false
+		app._pop_speech_active = false
+		app.model.phase = phase
+		app.audio.available = true
+		app.audio.set_muted(false)
+	app._on_voice_state([true, true, "Listening."])
+	check(not app.audio.active, "Match recording keeps ordinary game playback silent")
+	app._toggle_voice()
+	check(app.audio.active and app.audio.music.playing and not app._voice_mode and not app.audio.voice.playing,
+		"Turning Match voice input off restores music without needing another card tap")
+	app._on_voice_state([true, true, "Listening."])
+	app._on_voice_state([false, false, ""])
+	check(app.audio.active and app.audio.music.playing and not app.audio.voice.playing,
+		"The browser's explicit voice-off callback also restores music without old speech")
+	app.audio.set_muted(true)
+	app.new_round(21, true)
+
+
 func _run() -> void:
 	directory = "user://ui-recovery-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -142,6 +211,7 @@ func _run() -> void:
 
 	storage = BrowserStorage.new()
 	app = await _app(storage)
+	_check_audio_recovery(app)
 	for mode in ["match", "memory"]:
 		app.choose_mode(mode)
 		_win(app)

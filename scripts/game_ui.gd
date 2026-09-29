@@ -210,6 +210,7 @@ var failure_image: TextureRect
 var failure_button: Button
 var reduced_motion: bool = false
 var _page_hidden: bool = false
+var _resume_music_after_background: bool = false
 var _background: ColorRect
 var _success: ProgressBadges
 var _mistakes: ProgressBadges
@@ -2184,6 +2185,8 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	if not _page_hidden:
+		_resume_music_after_background = audio.active and audio.music.playing and not audio.muted
 	_page_hidden = true
 	chest.set_idle_paused(true)
 	_hint_link.set_paused(true)
@@ -2217,13 +2220,27 @@ func on_page_hidden() -> void:
 
 
 func on_page_visible() -> void:
+	var resume_music: bool = _page_hidden and _resume_music_after_background
 	_page_hidden = false
+	_resume_music_after_background = false
 	chest.set_idle_paused(false)
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
 	_room.playground.pause(false)
 	feedback_timer.paused = collection_page.visible
 	_memory.pause(collection_page.visible)
+	if resume_music:
+		_restore_mode_music()
+
+
+func _restore_mode_music() -> void:
+	if _page_hidden or _voice_mode or _pop_speech_active or model.phase == "lost":
+		return
+	if _mode_id == "pop" and not collection_page.visible:
+		return
+	# Resume the current room's music only. Interrupted words, quacks and reward
+	# cues were cancelled on exit and must never replay when the page returns.
+	audio.interact(model.theme_id)
 
 
 func _notification(what: int) -> void:
@@ -2619,6 +2636,7 @@ func _toggle_voice() -> void:
 		return
 	if _voice_mode:
 		_stop_voice()
+		_restore_mode_music()
 	elif _host != null and bool(_host.speechAvailable()) and model.phase in ["waiting", "matching", "feedback"]:
 		_voice_mode = true
 		_voice_space.show()
@@ -2665,6 +2683,8 @@ func _on_voice_state(arguments: Array) -> void:
 		audio.halt()
 	else:
 		_speech_queue.clear()
+		if layout_changed:
+			_restore_mode_music()
 		if model.phase == "feedback":
 			feedback_timer.start()
 	if model.phase in ["waiting", "matching", "feedback"] and not str(arguments[2]).is_empty():

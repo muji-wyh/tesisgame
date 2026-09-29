@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy } = require('./bundled-audio.cjs');
 const {
   openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, resultPoint,
   openRewards, visibleColorCount, observeAudio, chooseTheme, contentBounds, uiScale
@@ -696,48 +697,53 @@ test('background after the opening flash silently saves once without replay on r
   expect(errors).toEqual([]);
 });
 
-test('unavailable themed samples use immediate local feedback without delaying rewards', async ({ page }, testInfo) => {
-  const fs = require('node:fs'), path = require('node:path');
-  const html = fs.readFileSync(path.resolve(__dirname, '../../build/web/index.html'), 'utf8');
-  const config = JSON.parse(html.match(/const config = (\{[^\r\n]*\});/)[1]);
-  const samples = new Set(Object.entries(config.audioAssets)
-    .filter(([source]) => source.includes('/audio/chests/')).map(([, file]) => file));
-  expect(samples.size).toBe(88);
-  let failedRequests = 0;
-  await page.route(url => samples.has(url.pathname.split('/').at(-1)), async route => {
-    failedRequests += 1;
-    // A successful HTTP response with invalid resource bytes exercises the
-    // resource-validation failure without unrelated browser network errors.
-    await route.fulfill({ status: 200, body: 'unavailable sample', contentType: 'application/octet-stream' });
-  });
-  await observeAudio(page, { fingerprintBuffers: true });
+test('bundled themed chest samples stay audible offline without delaying rewards', async ({ page, context, browserName }, testInfo) => {
+  const requests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
-  await chooseTheme(page, 5);
-  await winMatch(page);
-  const baseline = await pieces(page);
-  await pressChest(page, 200);
-  expect(await pieces(page)).toBe(baseline);
-  await pressChest(page);
+  await context.setOffline(true);
   try {
+    // Visit an unplayed world only after disconnecting. Its complete authored
+    // bank must already be in the pack, including the sustained material bed.
+    await chooseTheme(page, 5);
+    await winMatch(page);
+    const baseline = await pieces(page);
+    const available = await page.evaluate(() => window.audioObservation.available);
+    if (browserName === 'chromium') expect(available).toBe(true);
+    await pressChest(page, 200);
+    expect(await pieces(page)).toBe(baseline);
+    await pressChest(page);
+    if (available) await expectOutputEnergy(page);
     await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await page.mouse.up();
+    expect(await pieces(page)).toBe(baseline + 1);
+    const cues = await page.evaluate(() => window.chestObservation.cues);
+    expect(cues.every(event => event.theme === 'space')).toBe(true);
+    expect(cues.filter(event => event.cue === 'release')).toHaveLength(1);
+    if (available) {
+      const playbacks = await page.evaluate(() => window.audioObservation.playbacks);
+      const feedback = playbacks.filter(sound => sound.at >= cues[0].at - 100 && isChestSound(sound));
+      expect(feedback.filter(sound => hasDuration(sound, 0.19)), 'Both presses play the authored sample').toHaveLength(2);
+      for (const duration of [0.22, 0.31, 0.68, 0.48, 0.74]) {
+        expect(feedback.filter(sound => hasDuration(sound, duration)), 'Cancel, unlock, release, settle and reward each play once').toHaveLength(1);
+      }
+      expect(feedback.filter(sound => hasDuration(sound, 0.8)).length, 'The authored charge bed loops while offline').toBeGreaterThanOrEqual(2);
+      expect(feedback.filter(sound => hasDuration(sound, 0.24)).length, 'The complete buildup remains audible').toBeGreaterThanOrEqual(20);
+      for (const sound of feedback) {
+        expect(sound.contextState).toBe('running');
+        expect(sound.fingerprint).toBeTruthy();
+        expect(sound.peak).toBeGreaterThan(0.01);
+      }
+      await testInfo.attach('bundled-offline-chest-audio', { body: JSON.stringify(feedback, null, 2), contentType: 'application/json' });
+    }
+    const saved = await rewardSave(page);
+    await page.waitForTimeout(400);
+    expect(await rewardSave(page)).toBe(saved);
+    expect(requests, 'Offline chest playback never attempts an audio HTTP request').toEqual([]);
+    expect(errors).toEqual([]);
   } finally {
     await page.mouse.up();
+    await context.setOffline(false);
   }
-  expect(await pieces(page)).toBe(baseline + 1);
-  expect(failedRequests).toBeGreaterThanOrEqual(11);
-  const cues = await page.evaluate(() => window.chestObservation.cues);
-  expect(cues.filter(event => event.cue === 'release')).toHaveLength(1);
-  if (await page.evaluate(() => window.audioObservation.available)) {
-    const playbacks = await page.evaluate(() => window.audioObservation.playbacks);
-    const feedback = playbacks.filter(sound => sound.at >= cues[0].at - 100 &&
-      [0.2, 0.64, 0.42].some(duration => Math.abs(sound.duration - duration) < 0.001));
-    expect(feedback.length).toBeGreaterThanOrEqual(8);
-    expect(feedback.filter(sound => Math.abs(sound.duration - 0.42) < 0.001)).toHaveLength(1);
-    await testInfo.attach('fallback-audio', { body: JSON.stringify(feedback, null, 2), contentType: 'application/json' });
-  }
-  const saved = await rewardSave(page);
-  await page.waitForTimeout(400);
-  expect(await rewardSave(page)).toBe(saved);
-  expect(errors).toEqual([]);
 });

@@ -1,6 +1,6 @@
 # Pip and Words
 
-A **Godot game delivered on the Web** for early English learners. Gameplay, cards, audio, chest animation and celebrations run in GDScript. The HTML shell hosts the exported engine and integrates browser sizing, accessibility announcements, lifecycle events and read-only asset URLs.
+A **Godot game delivered on the Web** for early English learners. Gameplay, cards, audio, chest animation and celebrations run in GDScript. The HTML shell hosts the exported engine and integrates browser sizing, accessibility announcements and lifecycle events.
 
 Players need a browser, not a Godot installation. The game is a static website
 with no game backend or external image service. Voice Pop is a single-player
@@ -23,7 +23,7 @@ To build without starting a server:
 npm run build:web
 ```
 
-The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, on-demand `.sample` audio, icon and `.br` files together. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
+The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, icon and `.br` files together. All music, speech and sound effects are inside the PCK. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
 
 Speech recognition needs no model preparation or additional game download.
 Rebuilding an older export removes its generated local speech models and retired
@@ -48,10 +48,10 @@ while the ready screen waits for **Enter game**. His toes stay planted, heels ro
 with the weight shift, and his upper body follows the waist with a slight delay.
 Tap Pip or the chest to interrupt him
 with a jump, a shy head scratch or a playful bonk and bounce back. The three
-reactions appear in shuffled groups without consecutive repeats; rapid taps
-replace the current reaction, and Pip resumes dancing when it finishes.
-A quiet original tune starts after the first interaction; its sound control can
-mute it. Leaving the page stops both music and movement. Returning resumes the
+reactions appear in shuffled groups without consecutive repeats. Pip ignores
+additional taps until both the current reaction and call finish, then resumes dancing.
+A quiet original tune starts after the first interaction, with sound enabled by
+default. Leaving the page stops both music and movement. Returning resumes the
 dance, with music waiting for another interaction. Reduced motion stops automatic
 dancing and gives each tap a distinct still pose and readable response.
 Repeated taps do not show a browser highlight or select the caption, while keyboard focus
@@ -69,11 +69,12 @@ staged animation. A separate Game data line shows the real loaded byte counts.
 Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
-Word pronunciations and immediate sound effects stay in the startup **PCK alongside WASM**.
-The eight background tracks, ten game prompts, Voice Pop report recordings and themed chest Foley
-are separate, content-hashed Godot `.sample` resources. Their URLs are embedded in HTML, so no extra startup manifest
-request is needed. The build opens the actual exported PCK to confirm that word speech is
-present and both the optional source resources and their imported payloads are absent.
+All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
+game effects, Pip sounds, eight background tracks, ten game prompts, 51 Voice Pop
+reports and 88 themed chest cues. Once startup finishes, playback needs no further
+audio downloads. The build opens the actual exported PCK and loads the required
+audio resources to verify that they are present and playable. Retired arrival and
+opening voice prompts remain excluded.
 
 The Web preset uses Compatibility rendering, WebGL 2 and single-threaded export. It does not require SharedArrayBuffer, COOP/COEP headers, a service worker or cross-origin isolation. When updating a deployment, replace the complete export; do not rename hashed files or omit their `.br` sidecars.
 
@@ -232,9 +233,9 @@ scrolls by touch, wheel and keyboard focus without showing a scrollbar.
 Pip uses prerecorded Jenny Neural speech with the same friendly delivery as the
 word recordings. Whole sentences report the actual hit count and best combo;
 the review and coaching pages include words from the completed round. The four
-result tiles retain the exact hits, distinct words, combo and score. New report
-clips download only when needed, without adding to the startup pack. Playback
-does not depend on an installed browser TTS voice or runtime speech credentials.
+result tiles retain the exact hits, distinct words, combo and score. All report
+clips are included in the startup pack. Playback does not depend on a later
+download, an installed browser TTS voice or runtime speech credentials.
 
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume
@@ -365,9 +366,9 @@ The compact world icons keep their full tooltip and accessibility names.
 Card selections ripple and successful matches sparkle. Effects
 are bounded and respect reduced motion; the same controls work with touch, keyboard, and Xbox.
 
-Pip's beak follows the actual pronunciation/prompt player, including delayed
-audio downloads and page transitions, rather than merely reacting to a button
-press. Background music and sound effects do not make him talk. During microphone
+Pip's beak follows the actual pronunciation/prompt player through narration
+sequences and page transitions. Background music and sound effects do not make
+him talk. During microphone
 play he listens instead. Reduced motion uses static speaking/greeting poses.
 After 6–9 seconds of inactivity in normal play, Pip may wave,
 offer a high five, play peekaboo, look around, stretch, preen, hop or dance.
@@ -520,8 +521,8 @@ Browser accessibility exposes progress without repeated live announcements.
 Changing worlds cannot reroll an opening or alter an earned fragment.
 
 Chest sounds use a dedicated four-player pool. Entering a world preloads its eleven
-short, original procedural Foley clips; unavailable samples use a small local
-fallback immediately. Downloads never own playback and cannot replay missed cues.
+short, original procedural Foley clips from the game pack; unavailable samples
+use a small local fallback immediately. Skipping motion cannot replay missed cues.
 The success accent plays only after persistence succeeds, once per reward.
 Muting, backgrounding and leaving the result stop all chest channels.
 
@@ -625,14 +626,18 @@ tap or click the game once to enable sound.
 Particle textures load only for the first animated celebration, rather than delaying startup.
 Reduced-motion players do not load those unused textures.
 
-On the Web, background music, non-word speech and chest Foley download only when requested. Card input,
-word pronunciation, scoring and chest opening never wait for them. Native HTTP requests share
-in-flight downloads, use a 15-second timeout and 4 MB limit, and check resource signatures and
-content hashes before loading. Decoded sounds are cached for the session; the browser caches
-their immutable URLs between visits. Temporary resource files are removed after loading.
-Old requests cannot restart hidden music, play the previous theme or replace a newer
-word. Failed downloads show a non-blocking notice and can be retried with another interaction.
-Editor/native play continues to use local audio.
+Web and native playback both load audio directly from packaged Godot resources.
+All sounds arrive with the initial game pack; decoded streams are cached for the
+session. The browser caches the immutable game-pack URL between visits, and an
+audio change gives the pack a new content hash. No runtime audio request or
+temporary downloaded file is needed. Muting, page transitions and backgrounding
+stop the appropriate players; resource failures cannot restart hidden music or
+replace a newer word.
+Returning to a visible game resumes only background music that was already playing;
+cancelled words, Pip calls and reward sounds remain stopped. Background music stays
+off in Voice Pop or while the microphone is active. The shell resumes Godot's existing audio context after a
+browser interruption, with trusted pointer and keyboard gestures retrying if autoplay
+policy blocks foreground recovery. No page refresh or extra sound toggle is required.
 
 ## Vocabulary and generated media
 
@@ -650,7 +655,7 @@ rename preserves existing native and browser saves.
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 | `level` | `basic`, `growing`, or `advanced`; explicitly authored for every catalogue entry. Older four-field callers default to `basic`; invalid supplied levels are rejected. |
 
-The 350 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate these source recordings; playback and ordinary builds need no speech credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings remain in the startup PCK; only background music and non-word prompts download on demand.
+The 350 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate these source recordings; playback and ordinary builds need no speech credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
 
 Pip's original pose, idle-action and dance-part sheets are maintained under
 `assets\images\mascots`. The regular sheet's four frames are idle, speaking,
@@ -688,7 +693,7 @@ node tools\generate-world-bgm.cjs --missing
 node tools\generate-sfx.cjs
 ```
 
-Edit `voice-prompts.json` to change the spoken prompts. New optional prompt IDs must also be covered by the Web preset's exclusions; the build rejects optional audio accidentally left in the PCK. When adding a word, add its image-generation definition, level-tagged JSON entry, topic membership in `game_data.gd`, and pronunciation recording. Keep at least five non-confusable eligible words per topic at every level. Run `npm run test:ages` and `npm run build:web` afterward: the vocabulary, word pronunciations and immediate effects are packaged into Godot's PCK, while optional music and prompts are published beside it. There is no second runtime word-record list.
+Edit `voice-prompts.json` to change the spoken prompts. Active prompt IDs must have valid Godot imports and remain included in the Web preset; the build rejects required audio missing from the PCK. When adding a word, add its image-generation definition, level-tagged JSON entry, topic membership in `game_data.gd`, and pronunciation recording. Keep at least five non-confusable eligible words per topic at every level. Run `npm run test:ages` and `npm run build:web` afterward: the vocabulary and all active audio are packaged into Godot's PCK. There is no second runtime word-record list.
 
 The compatible version-one playroom save has an optional `[learning] age_band`
 key (`all`, `4-6`, `7-9`, or `10-plus`). Missing keys retain all words; invalid
@@ -807,7 +812,7 @@ npm run test:all
 command such as `npm run test:voice-pop` or `npm run test:pip-audio` during
 development. Browser checks remain in `npm run test:browser`.
 
-The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, delayed/failed optional downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
+The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 
 The [enjoyable-play plan](docs/superpowers/plans/2026-09-09-enjoyable-play.md)
 records the market research, design choices, acceptance criteria, and release process

@@ -269,7 +269,7 @@ func _check_replay(app) -> void:
 		check(app.duck.reaction_left > 0.0, "Pip reacts when a found word is replayed")
 		check(_state(app) == before, "Repeated word taps preserve scoring, chest, pending piece, and saved progress")
 		if app.model.phase == "lost":
-			check(not app.audio.music.playing and not app.audio._music_pending,
+			check(not app.audio.music.playing,
 				"Replaying a word after loss never restarts background music")
 
 

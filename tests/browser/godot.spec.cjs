@@ -2,6 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, waveDuration, expectRecording } = require('./bundled-audio.cjs');
+const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, pipHeaderRect, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState } = require('./game-ui.cjs');
 
@@ -212,91 +214,6 @@ test('orientation changes preserve selection and fit the resized canvas', async 
   expect(errors).toEqual([]);
 });
 
-async function holdOptionalAudio(page) {
-  const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../build/web/index.html'), 'utf8')
-    .match(/const config = (\{[^\r\n]*\});/)[1]);
-  const chestSamples = new Set(Object.entries(config.audioAssets)
-    .filter(([source]) => source.includes('/audio/chests/')).map(([, file]) => file));
-  const chestSourceFor = new Map(Object.entries(config.audioAssets)
-    .filter(([source]) => source.includes('/audio/chests/')).map(([source, file]) => [file, source]));
-  const requests = [];
-  const lifecycle = new Map();
-  page.on('requestfinished', request => {
-    const state = lifecycle.get(request);
-    if (state) state.requestFinishedAt = Date.now();
-  });
-  page.on('requestfailed', request => {
-    const state = lifecycle.get(request);
-    if (state) state.requestFailedAt = Date.now();
-  });
-  let release;
-  const pending = new Promise(resolve => { release = resolve; });
-  await page.route('**/audio-*.sample', async route => {
-    const request = route.request();
-    requests.push(request);
-    const state = { requestedAt: Date.now(), responseStatus: null, bodyState: 'waiting for response' };
-    lifecycle.set(request, state);
-    await pending;
-    state.releasedAt = Date.now();
-    await route.continue();
-    state.continuedAt = Date.now();
-  });
-  return {
-    requests, release,
-    get chestRequests() {
-      return requests.filter(request => chestSamples.has(new URL(request.url()).pathname.split('/').at(-1)));
-    },
-    get nonChestRequests() {
-      return requests.filter(request => !chestSamples.has(new URL(request.url()).pathname.split('/').at(-1)));
-    },
-    checkChestBanks(expectedThemes) {
-      const sources = this.chestRequests.map(request => chestSourceFor.get(new URL(request.url()).pathname.split('/').at(-1)));
-      const themes = expectedThemes || [...new Set(sources.map(source => source.match(/\/chests\/([a-z]+)-/)[1]))];
-      expect(themes.length).toBeGreaterThan(0);
-      const expected = [...chestSourceFor.values()].filter(source => themes.some(theme => source.includes(`/chests/${theme}-`)));
-      expect(expected).toHaveLength(themes.length * 9);
-      expect(sources.sort(), 'Each prepared theme downloads its complete nine-cue bank once').toEqual(expected.sort());
-      return themes;
-    },
-    async finish() {
-      await test.step('Release optional audio and inspect bounded request completion', async () => {
-        release();
-        const released = requests.slice();
-        const completed = Promise.all(released.map(async request => {
-          const state = lifecycle.get(request);
-          const response = await request.response();
-          state.responseStatus = response?.status() ?? null;
-          state.bodyState = 'pending';
-          expect(response?.ok()).toBe(true);
-          const error = await response.finished();
-          state.bodyState = error ? 'failed' : 'finished';
-          state.bodyError = error?.message ?? null;
-        }));
-        let timer;
-        try {
-          // Godot can abandon optional requests before their held routes resume.
-          // Chromium may then leave an unread response body pending indefinitely.
-          // Keep network evidence bounded; callers still assert the exact audio
-          // playback count and the game state after the response headers arrive.
-          await Promise.race([completed, new Promise(resolve => { timer = setTimeout(resolve, 5000); })]);
-        } finally {
-          clearTimeout(timer);
-          await test.info().attach('optional-audio-request-lifecycle', {
-            body: JSON.stringify(released.map(request => ({
-              url: request.url(), ...lifecycle.get(request),
-              failure: request.failure(), timing: request.timing()
-            })), null, 2), contentType: 'application/json'
-          });
-        }
-        for (const request of released) {
-          expect(lifecycle.get(request).responseStatus, `Optional audio headers: ${request.url()}`).toBe(200);
-        }
-      });
-      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    }
-  };
-}
-
 async function chooseSeason(page, index) {
   await chooseTheme(page, index);
 }
@@ -321,150 +238,98 @@ test('the first card interaction uses real browser audio or reports genuine miss
   expect(errors).toEqual([]);
 });
 
-test('optional audio downloads never delay bundled words or card input', async ({ page }) => {
-  const errors = watchErrors(page);
-  const held = await holdOptionalAudio(page);
-  await observeAudio(page);
+test('bundled words and card input work offline immediately after readiness', async ({ page, context, browserName }) => {
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true });
+  await page.goto('/');
+  await ready(page);
+  await context.setOffline(true);
   try {
-    await page.goto('/');
-    await ready(page);
-    // Initialization may prepare Spring before the round chooses another world.
-    expect(held.nonChestRequests).toEqual([]);
-    const preparedThemes = held.checkChestBanks();
-    expect(preparedThemes.length).toBeLessThanOrEqual(2);
-    test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
-    const metrics = await canvasMetrics(page);
-    const point = firstCard(metrics);
-    const beforeWord = await page.evaluate(() => window.audioObservation.starts);
+    const available = await page.evaluate(() => window.audioObservation.available);
+    if (browserName === 'chromium') expect(available).toBe(true);
+    const point = firstCard(await canvasMetrics(page));
+    const before = await page.evaluate(() => window.audioObservation.playbacks.length);
     await page.touchscreen.tap(point.x, point.y);
     await expect(page.locator('#game-status')).toHaveText('Now find its match!');
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(beforeWord + 2);
-    await expect.poll(() => new Set(held.nonChestRequests.map(request => request.url())).size).toBe(1);
-    expect(held.nonChestRequests).toHaveLength(1);
-    held.checkChestBanks(preparedThemes);
-    await expect(page.locator('#audio-status')).toBeEmpty();
-    const beforeRelease = await page.evaluate(() => window.audioObservation.starts);
-    await held.finish();
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(beforeRelease + 1);
-    expect(await page.evaluate(() => window.audioObservation.starts)).toBe(beforeRelease + 1);
-    await expect(page.locator('#audio-status')).toBeEmpty();
+    const selected = await page.locator('#selection-status').textContent();
+    const word = catalog.find(entry => entry.text === selected.split(': ')[1]);
+    expect(word).toBeTruthy();
+    if (available) {
+      await expectRecording(page, before, word.audio);
+      const select = await expectRecording(page, before, 'assets/audio/sfx/select.wav');
+      expect(select.peak, 'The selected card has real PCM feedback').toBeGreaterThan(0.01);
+      await expectOutputEnergy(page);
+      await expect(page.locator('#audio-status')).toBeEmpty();
+    }
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    expect(requests, 'All game audio is available from the loaded pack').toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    held.release();
-    await page.unrouteAll({ behavior: 'wait' });
+    await context.setOffline(false);
   }
 });
 
-test('hiding prevents pending audio from restarting until another gesture', async ({ page }) => {
-    const errors = watchErrors(page);
-    const held = await holdOptionalAudio(page);
-    await observeAudio(page);
-    try {
-      await page.goto('/');
-      await ready(page);
-      const preparedThemes = held.checkChestBanks();
-      test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
-      const metrics = await canvasMetrics(page);
-      const point = firstCard(metrics);
-      await page.touchscreen.tap(point.x, point.y);
-      await expect.poll(() => held.nonChestRequests.length).toBe(1);
-      const before = await page.evaluate(() => window.audioObservation.starts);
-      await page.evaluate(() => {
-        Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-        document.dispatchEvent(new Event('visibilitychange'));
-      });
-      await held.finish();
-      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
-      await page.evaluate(() => {
-        delete document.hidden;
-        document.dispatchEvent(new Event('visibilitychange'));
-      });
-      expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
-      await page.touchscreen.tap(point.x, point.y);
-      await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
-      expect(held.nonChestRequests).toHaveLength(1);
-      held.checkChestBanks(preparedThemes);
-      expect(errors).toEqual([]);
-    } finally {
-      held.release();
-      await page.unrouteAll({ behavior: 'wait' });
-    }
-});
-
-test('season colors preserve selection and discard obsolete pending music and prompts', async ({ page }) => {
-  const errors = watchErrors(page);
-  const held = await holdOptionalAudio(page);
-  await observeAudio(page);
+test('season colors and bundled music preserve selection while offline', async ({ page, context, browserName }) => {
+  // Eight complete room/focus/back traversals can exceed the general 90-second
+  // budget with Chromium's traced software renderer. Each audio assertion
+  // retains its usual timeout while the full UI tour gets time to finish.
+  test.setTimeout(150000);
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
+  await observeOutputAudio(page, { trackSourceLifecycle: true });
+  await page.goto('/');
+  await ready(page);
+  await context.setOffline(true);
   try {
-    await page.goto('/');
-    await ready(page);
-    const preparedThemes = held.checkChestBanks();
+    const available = await page.evaluate(() => window.audioObservation.available);
+    if (browserName === 'chromium') expect(available).toBe(true);
     const point = firstCard(await canvasMetrics(page));
     await page.touchscreen.tap(point.x, point.y);
     const selected = await page.locator('#selection-status').textContent();
-    for (const [index, color] of ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb'].entries()) {
+    const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+    for (const [index, theme] of themes.entries()) {
+      const before = await page.evaluate(() => window.audioObservation.playbacks.length);
       await chooseSeason(page, index);
-      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', color);
+      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
       await expect(page.locator('#game-status')).toHaveText('Now find its match!');
       await expect(page.locator('#selection-status')).toHaveText(selected);
-    }
-    const before = await page.evaluate(() => window.audioObservation.starts);
-    await held.finish();
-    if (await page.evaluate(() => window.audioObservation.available)) {
-      // Opening Pip's room cancels the stale selected-word prompt; only the final world's music may start.
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
-      expect(new Set(held.nonChestRequests.map(request => request.url())).size).toBe(12);
-      expect(held.nonChestRequests).toHaveLength(12);
-      held.checkChestBanks([...new Set([...preparedThemes, 'spring', 'summer', 'autumn', 'winter', 'ocean', 'space'])]);
+      if (available) {
+        // The first choice can already be the current world; inspect the live
+        // source in that case instead of requiring an unnecessary restart.
+        await expectRecording(page, index === 0 ? 0 : before, 'assets/audio/bgm/' + theme + '.wav', { active: true });
+        await expectOutputEnergy(page);
+      }
     }
     await assertFits(page);
+    expect(requests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    held.release();
-    await page.unrouteAll({ behavior: 'wait' });
+    await context.setOffline(false);
   }
 });
 
-for (const failure of ['unavailable', 'corrupt']) {
-  test(`${failure} optional audio leaves the round playable and can be retried`, async ({ page }) => {
-    let failing = true;
-    const requests = [];
-    await page.route('**/audio-*.sample', async route => {
-      requests.push(route.request());
-      if (failing) await route.fulfill({
-        status: failure === 'unavailable' ? 503 : 200,
-        body: failure === 'unavailable' ? 'Temporarily unavailable' : 'RSRC damaged audio',
-        headers: { 'Cache-Control': 'no-store' }
-      });
-      else await route.continue();
-    });
-    await observeAudio(page);
-    await page.goto('/');
-    await ready(page);
-    test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no WebAudio.');
-    const initialStarts = await page.evaluate(() => window.audioObservation.starts);
-    const metrics = await canvasMetrics(page);
-    const point = firstCard(metrics);
-    await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#audio-status')).toContainText('You can keep playing.');
-    await expect(page.locator('#audio-status')).not.toContainText('Listen');
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(initialStarts);
-    const before = await page.evaluate(() => window.audioObservation.starts);
-    await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-    expect(await page.evaluate(() => window.audioObservation.starts)).toBe(before);
-    await Promise.all(requests.map(async request => (await request.response()).finished()));
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    failing = false;
-    const retryStarts = await page.evaluate(() => window.audioObservation.starts);
-    await page.touchscreen.tap(point.x, point.y);
-    await expect(page.locator('#game-status')).toHaveText('Now find its match!');
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThanOrEqual(retryStarts + 2);
-    await expect(page.locator('#audio-status')).toBeEmpty();
-    await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+test('missing browser audio support leaves card input and world selection usable', async ({ page }) => {
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'AudioContext', { configurable: true, value: undefined });
+    Object.defineProperty(window, 'webkitAudioContext', { configurable: true, value: undefined });
   });
-}
+  await page.goto('/');
+  await ready(page);
+  const point = firstCard(await canvasMetrics(page));
+  await page.touchscreen.tap(point.x, point.y);
+  await expect(page.locator('#game-status')).toHaveText('Now find its match!');
+  const selected = await page.locator('#selection-status').textContent();
+  await expect(page.locator('#audio-status')).toHaveText('Sound is not available in this browser.');
+  await chooseSeason(page, 5);
+  await expect(page.locator('#selection-status')).toHaveText(selected);
+  await page.touchscreen.tap(point.x, point.y);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+  expect(requests).toEqual([]);
+  expect(errors).toEqual([]);
+});
 
 test('motion preference changes do not restart the native round', async ({ page }) => {
   const errors = watchErrors(page);
@@ -706,34 +571,33 @@ test('Pip follows the board, chest, room and loss pages without extra rewards', 
   expect(errors).toEqual([]);
 });
 
-test('Pip speaks with actual prompt playback, not pending downloads or music', async ({ page }) => {
-  const errors = watchErrors(page);
+test('Pip speaks with bundled prompt playback while offline', async ({ page, context }) => {
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
   await installGamepad(page);
+  await observeOutputAudio(page, { trackSourceLifecycle: true });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
-  test.skip(!await page.evaluate(() => Boolean(window.AudioContext || window.webkitAudioContext)),
-    'This WebKit runtime has no audio output.');
+  test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no audio output.');
   const bounds = await canvasMetrics(page);
   const scale = Math.min(bounds.width, bounds.height) / 480;
   const pip = pipHeaderRect(await logicalMetrics(page)), unit = pip.width / 54;
   const beak = { x: bounds.x + (pip.x + 16 * unit) * scale, y: bounds.y + (pip.y + 26 * unit) * scale,
     width: 32 * unit * scale, height: 15 * unit * scale };
   const resting = await page.screenshot({ clip: beak, scale: 'css' });
-  const held = await holdOptionalAudio(page);
+  await context.setOffline(true);
   try {
     await page.evaluate(() => window.gamepadFixture.connect());
     for (let index = 0; index < 8; index++) await pressGamepad(page, 5);
-    const waiting = await page.screenshot({ clip: beak, scale: 'css' });
-    await page.waitForTimeout(300);
-    expect((await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(true);
-    await held.finish();
-    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(waiting)).toBe(false);
+    const theme = await page.locator('html').getAttribute('data-pip-theme');
+    await expectRecording(page, 0, 'assets/audio/voice/' + theme + '-theme.wav');
+    await expectOutputEnergy(page);
+    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(resting)).toBe(false);
     await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(resting)).toBe(true);
+    expect(requests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    held.release();
-    await page.unrouteAll({ behavior: 'wait' });
+    await context.setOffline(false);
   }
 });
 
@@ -1165,13 +1029,14 @@ test('Xbox chest opening cancels on disconnect and works again after reconnect',
   expect(errors).toEqual([]);
 });
 
-test('completes matches and opens a one-shot reward while optional audio is still downloading', async ({ page }) => {
-  const errors = watchErrors(page);
-  const held = await holdOptionalAudio(page);
-  await observeAudio(page);
+test('completes matches and opens a one-shot reward with bundled audio offline', async ({ page, context }) => {
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
+  await observeAudio(page, { fingerprintBuffers: true });
+  await page.goto('/');
+  await ready(page);
+  await context.setOffline(true);
   try {
-    await page.goto('/');
-    await ready(page);
+    const beforeReward = rewardPieceTotal((await roomState(page)).medals);
     const { metrics, discovered } = await discoverCards(page);
     const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
     expect(pairs).toHaveLength(5);
@@ -1184,24 +1049,27 @@ test('completes matches and opens a one-shot reward while optional audio is stil
       await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
     }
     const chestPoint = resultScreenPoint(metrics);
+    const beforeChest = await page.evaluate(() => window.audioObservation.playbacks.length);
     await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
+    const saved = (await roomState(page)).medals;
+    expect(rewardPieceTotal(saved)).toBe(beforeReward + 1);
     await page.mouse.down();
     await page.waitForTimeout(1300);
     await page.mouse.up();
     await expect(page.locator('#game-status')).toHaveText(earned);
-    const before = await page.evaluate(() => window.audioObservation.starts);
-    await held.finish();
+    expect((await roomState(page)).medals).toBe(saved);
     if (await page.evaluate(() => window.audioObservation.available)) {
-      // Only the current background music resumes. Dismissing feedback canceled the pending
-      // correct-answer voice, which must not replay over the earned reward.
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
+      const theme = await page.locator('html').getAttribute('data-pip-theme');
+      const reward = await expectRecording(page, beforeChest, 'assets/audio/chests/' + theme + '-reward.wav');
+      expect(reward.peak).toBeGreaterThan(0.01);
+      await expect(page.locator('#audio-status')).toBeEmpty();
     }
     await assertFits(page);
+    expect(requests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    held.release();
-    await page.unrouteAll({ behavior: 'wait' });
+    await context.setOffline(false);
   }
 });
 
@@ -1311,24 +1179,28 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   expect(errors).toEqual([]);
 });
 
-test('losing stops pending music and only plays the current loss prompt', async ({ page }) => {
-  const errors = watchErrors(page);
-  const held = await holdOptionalAudio(page);
-  await observeAudio(page);
+test('losing offline stops music and plays the current bundled loss prompt', async ({ page, context }) => {
+  const errors = watchErrors(page), requests = watchAudioRequests(page);
+  await observeAudio(page, { trackSourceLifecycle: true });
+  await page.goto('/');
+  await ready(page);
+  const theme = await page.locator('html').getAttribute('data-pip-theme');
+  await context.setOffline(true);
   try {
-    await page.goto('/');
-    await ready(page);
+    const before = await page.evaluate(() => window.audioObservation.playbacks.length);
     await loseWithTouch(page);
-    const before = await page.evaluate(() => window.audioObservation.starts);
-    await held.finish();
     if (await page.evaluate(() => window.audioObservation.available)) {
-      await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBe(before + 1);
+      await expectRecording(page, before, 'assets/audio/voice/loss.wav');
+      await expect.poll(() => page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
+        Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
+      waveDuration('assets/audio/bgm/' + theme + '.wav'))).toBe(false);
     }
+    await expect(page.locator('#game-status')).toContainText('Good try!');
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');
+    expect(requests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    held.release();
-    await page.unrouteAll({ behavior: 'wait' });
+    await context.setOffline(false);
   }
 });
 

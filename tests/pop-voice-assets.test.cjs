@@ -7,25 +7,29 @@ const { assertWave } = require('../tools/generate-voices.cjs');
 const { messagesFor, generatePopVoices } = require('../tools/generate-pop-voices.cjs');
 const root = path.resolve(__dirname, '..');
 
-test('every report sentence ships as audible neural PCM and an optional imported resource', () => {
+test('every report sentence ships as audible neural PCM and a required bundled resource', () => {
   const prompts = messagesFor(root);
   const directory = path.join(root, 'assets/audio/pop');
   assert.equal(prompts.length, 51);
   assert.deepEqual(fs.readdirSync(directory).filter(name => name.endsWith('.wav')).sort(),
     prompts.map(({ id }) => `${id}.wav`).sort());
   const hashes = new Set();
-  const optional = require('../tools/package-web.cjs').collectOptionalAudio(root);
+  const required = require('../tools/package-web.cjs').collectRequiredAudio(root);
   for (const { id } of prompts) {
     const bytes = fs.readFileSync(path.join(directory, `${id}.wav`));
     assertWave(bytes, 22050);
     hashes.add(createHash('sha256').update(bytes).digest('hex'));
-    const entry = optional.find(item => item.source === `res://assets/audio/pop/${id}.wav`);
-    assert.ok(entry, `The report must be available through the optional audio map: ${id}`);
+    const entry = required.find(item => item.source === `res://assets/audio/pop/${id}.wav`);
+    assert.ok(entry, `The report must be verified inside the game pack: ${id}`);
     assert.ok(entry.bytes.length > 0);
   }
   assert.equal(hashes.size, prompts.length, 'Each sentence has its own recording');
   const preset = fs.readFileSync(path.join(root, 'export_presets.cfg'), 'utf8');
-  assert.match(preset, /exclude_filter="[^"\n]*assets\/audio\/pop\/\*/);
+  const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
+  for (const { id } of prompts) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(`assets/audio/pop/${id}.wav`, pattern)), false,
+      `The report must not be excluded from the game pack: ${id}`);
+  }
   assert.match(preset, /include_filter="[^"\n]*pop-voice-prompts\.json/);
 });
 

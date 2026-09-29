@@ -130,23 +130,22 @@ WAVs are mono, 16-bit PCM at 22,050 Hz,
 node tools/generate-chest-audio.cjs --report
 ```
 
-The exported bank is optional content-hashed `.sample` audio, excluded from the
-startup PCK and checked by the existing pack verifier. `prepare_chest(theme_id)`
-preloads only the selected world's clips. `chest_sound_bank.gd` supplies small
-11,025 Hz deterministic local replacements, primed one per frame when needed.
-Playback never awaits a download, and a late resource only fills the cache.
+The complete bank is bundled in the startup PCK and loaded by the pack verifier.
+`prepare_chest(theme_id)` caches the selected world's clips directly from the
+pack. `chest_sound_bank.gd` supplies small 11,025 Hz deterministic local
+replacements if a resource is unavailable. Playback requires no later download.
 
 One loop player and three rotating one-shot players bound overlap. They are
 independent of narration, card effects and music. Muting, backgrounding, changing
-worlds and leaving the result stop the chest performance. A cold/failing optional
-resource cannot delay input, animation or saving.
+worlds and leaving the result stop the chest performance. A resource failure
+cannot delay input, animation or saving.
 
 ## Verification and previews
 
 `npm run test:chest-charge` covers local motion, cue order, cancellation,
 sound-resource validity, bounded channels, real-scene reward saves and retries.
 `tests/browser/chest-charge.spec.cjs` exercises the exported game, observes
-browser cue/audio scheduling, and tests missing themed resources. These software
+browser cue/audio scheduling and verifies playback without later audio requests. These software
 measurements do not include display scanout, speaker/Bluetooth latency or physical
 mobile performance.
 

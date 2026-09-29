@@ -23,7 +23,7 @@ func check(condition: bool, message: String) -> void:
 
 func _run() -> void:
 	await _check_audio_selection()
-	await _check_pending_greetings()
+	await _check_bundled_greetings()
 	await _check_click_routes()
 	print("Pip audio: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -93,38 +93,29 @@ func _check_audio_selection() -> void:
 	await process_frame
 
 
-func _check_pending_greetings() -> void:
+func _check_bundled_greetings() -> void:
 	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
-	audio.active = true
-	# Hold the existing shared resource loader open without network or wall-clock races.
-	for path in PIP_PATHS: audio._loading[path] = true
+	audio.interact("spring", false)
 	audio.play_pip()
-	var pending: String = audio._last_pip_path
+	check(audio.is_pip_busy() and audio.voice.playing,
+		"The first greeting starts immediately from the game pack")
 	var state: int = audio._pip_rng.state
 	var request: int = audio._playback_requests.get(audio.voice, 0)
 	for repeated in range(5): audio.play_pip()
-	check(audio.is_pip_busy() and not audio.voice.playing and audio._pip_rng.state == state
-		and audio._playback_requests.get(audio.voice, 0) == request,
-		"A pending Pip download owns one request and ignores repeated greetings before playback begins")
-	audio._loading.erase(pending)
-	audio._stream_loaded.emit(pending)
+	check(audio._pip_rng.state == state and audio._playback_requests.get(audio.voice, 0) == request,
+		"Repeated taps do not queue or replace an active greeting")
+	await create_timer(audio.voice.stream.get_length() + 0.2).timeout
 	check(not audio.is_pip_busy() and not audio.voice.playing,
-		"A failed Pip download releases its sound gate without playing or queuing a greeting")
+		"The real recording's end releases the greeting gate")
 	audio.play_pip()
-	pending = audio._last_pip_path
-	check(audio.is_pip_busy(), "A fresh deliberate greeting can retry after a failed download")
+	check(audio.is_pip_busy() and audio.voice.playing, "The next deliberate greeting is immediately available")
 	audio.halt()
-	check(not audio.is_pip_busy(), "Halting releases a pending Pip greeting immediately")
-	audio.cache[pending] = load(pending)
-	audio._loading.erase(pending)
-	audio._stream_loaded.emit(pending)
-	check(not audio.is_pip_busy() and not audio.voice.playing,
-		"A late successful download cannot revive a cancelled greeting")
-	audio.active = true
-	for path in PIP_PATHS: audio.cache[path] = load(path)
+	check(not audio.is_pip_busy() and not audio.voice.playing, "Halting releases the greeting immediately")
+	await process_frame
+	check(not audio.voice.playing, "No delayed audio can revive a halted greeting")
+	audio.interact("winter", false)
 	audio.play_pip()
-	check(audio.is_pip_busy() and audio.voice.playing, "A new gesture still plays after a cancelled request")
 	audio.say("res://assets/audio/voice/word-duck.wav")
 	check(not audio.is_pip_busy() and audio.voice.playing,
 		"A different pronunciation releases the old Pip owner on the shared voice channel")
@@ -225,8 +216,9 @@ func _check_click_routes() -> void:
 		"Backgrounding the page stops the imported Pip greeting")
 	app.on_page_visible()
 	await _settle()
-	check(not app.audio.voice.playing and not app.audio.active,
-		"Returning to the page does not restart a stale greeting")
+	check(app.audio.active and app.audio.music.playing and not app.audio.voice.playing
+		and not app.audio.narration.playing and not app.audio.effect.playing,
+		"Returning to the page restores background music without replaying a stale greeting")
 	await _check_serialized_routes(app)
 	check(app.audio.get_children() == players, "All native Pip click routes keep the same four audio players")
 	check(_progress(app) == progress, "Pip sounds leave the lesson, cards, medals, toys, backdrop and reward goal unchanged")

@@ -19,21 +19,6 @@ class DeferredAudio extends "res://scripts/game_audio.gd":
 		released.emit()
 
 
-class SharedDownloadAudio extends "res://scripts/game_audio.gd":
-	signal completed
-	var download_count: int = 0
-	var answer: Resource
-
-	func _download(_url: String) -> Resource:
-		download_count += 1
-		await completed
-		return answer
-
-	func resolve(resource: Resource) -> void:
-		answer = resource
-		completed.emit()
-
-
 var checks: int = 0
 var failures: int = 0
 
@@ -69,7 +54,7 @@ func _until(predicate: Callable, seconds: float = 2.0) -> bool:
 
 func _run() -> void:
 	await _queue_lifecycle()
-	await _shared_download_failure()
+	await _bundled_narration()
 	await _report_lifecycle()
 	print("Pop narration: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -98,7 +83,7 @@ func _queue_lifecycle() -> void:
 
 	audio.waiting = {"intro": true, "closing": true}
 	audio.narrate(["intro", "closing"])
-	check(audio.narration_state == "loading" and not audio.narration.playing, "A pending first download keeps Pip silent")
+	check(audio.narration_state == "loading" and not audio.narration.playing, "A pending first preparation keeps Pip silent")
 	audio.resolve("intro", first)
 	check(audio.requested.has("closing") and not audio.narration.playing and audio.narration_state == "loading",
 		"The ready introduction waits for the entire page, including its closing clip")
@@ -112,7 +97,7 @@ func _queue_lifecycle() -> void:
 	audio.stop_narration()
 	audio.resolve("cancelled", first)
 	check(not audio.narration.playing and audio.narration_state == "idle",
-		"An old download cannot revive a cancelled request")
+		"An old preparation cannot revive a cancelled request")
 	audio.waiting["old-page"] = true
 	audio.waiting["new-page"] = true
 	audio.narrate(["old-page"])
@@ -120,7 +105,7 @@ func _queue_lifecycle() -> void:
 	audio.resolve("old-page", first)
 	check(not audio.narration.playing and audio.narration_state == "loading", "A stale page cannot interrupt the latest page's loading state")
 	audio.resolve("new-page", second)
-	check(audio.narration.playing and audio.narration.stream == second, "Only the latest page may start after overlapping downloads")
+	check(audio.narration.playing and audio.narration.stream == second, "Only the latest page may start after overlapping preparations")
 	audio.stop_narration()
 
 	states.clear()
@@ -150,7 +135,7 @@ func _queue_lifecycle() -> void:
 			"stop_voice": audio.stop_voice()
 		audio.resolve(delayed, second)
 		check(not audio.narration.playing and not audio.narration_state in ["loading", "speaking"],
-			action + " cancels pending narration and prevents a late download from starting it")
+			action + " cancels pending narration and prevents a late preparation from starting it")
 		if action == "word":
 			check(audio.voice.playing and audio.voice.stream == first, "A requested word replaces narration with the exact word stream")
 		audio.set_muted(false)
@@ -175,25 +160,28 @@ func _queue_lifecycle() -> void:
 	audio.free()
 
 
-func _shared_download_failure() -> void:
-	var audio := SharedDownloadAudio.new()
+func _bundled_narration() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
 	root.add_child(audio)
 	audio.interact("spring", false)
-	var path: String = "res://assets/audio/pop/shared-download-test.wav"
-	audio.remote_audio[path] = "controlled-download"
-	for request in range(4):
-		audio.narrate([path])
-	check(audio.download_count == 1 and audio.narration_state == "loading", "Rapid Hear requests share one actual stream download")
-	audio.resolve(null)
-	await process_frame
-	check(audio.download_count == 1 and audio.narration_state == "unavailable" and not audio.narration.playing,
-		"Shared failure releases all obsolete waiters without a chain of automatic retries")
-	audio.narrate([path])
-	check(audio.download_count == 2 and audio.narration_state == "loading", "A fresh user retry is allowed to make one new download")
-	var loaded: AudioStream = _clip()
-	audio.resolve(loaded)
-	check(audio.narration.playing and audio.narration.stream == loaded, "A successful explicit retry uses the newly loaded stream")
+	var paths: Array[String] = ["res://assets/audio/pop/round-0.wav", "res://assets/audio/pop/high-five.wav"]
+	audio.narrate(paths)
+	check(audio.narration_state == "speaking" and audio.narration.playing
+		and audio.narration.stream == load(paths[0]),
+		"A first-use report immediately speaks using bundled recordings")
+	check(audio._narration_streams.size() == paths.size(),
+		"The full report is ready locally before its first sentence")
+	for request in range(4): audio.narrate(paths)
+	check(audio.narration_state == "speaking" and audio._narration_streams.size() == paths.size(),
+		"Repeated Hear requests replace a single queue without waiting for preparations")
 	audio.halt()
+	await process_frame
+	check(audio.narration_state == "idle" and not audio.narration.playing,
+		"Leaving the report stops playback without late work restarting it")
+	audio.interact("winter", false)
+	audio.narrate(paths)
+	check(audio.narration.playing and audio.narration.stream == load(paths[0]),
+		"Returning to the report works immediately without a page refresh")
 	audio.queue_free()
 	await process_frame
 

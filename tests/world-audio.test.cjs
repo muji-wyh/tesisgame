@@ -77,8 +77,8 @@ test('missing-only BGM generation preserves all existing tracks and adds playabl
   assert.equal(generateWorldBgm({ root: directory, onlyMissing: true }), 0);
 });
 
-test('optional Web audio includes both new worlds and fails clearly if their imports are missing', (t) => {
-  const { collectOptionalAudio } = require('../tools/package-web.cjs');
+test('required bundled audio includes both new worlds and rejects missing or invalid imports', (t) => {
+  const { collectRequiredAudio } = require('../tools/package-web.cjs');
   const directory = fixture(t);
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
   const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
@@ -99,7 +99,7 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
     fs.writeFileSync(metadata, `path="res://.godot/imported/${index}.sample"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', `${index}.sample`), `RSRCfixture-${index}`);
   }
-  const audio = collectOptionalAudio(directory);
+  const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
@@ -110,6 +110,19 @@ test('optional Web audio includes both new worlds and fails clearly if their imp
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));
     assert.ok(sources.includes(`res://assets/audio/voice/${id}-theme.wav`));
   }
+  const lastImport = path.join(directory, `${expected.at(-1)}.import`);
+  const original = fs.readFileSync(lastImport);
+  fs.writeFileSync(lastImport, 'path="res://missing-resource"\n');
+  assert.throws(() => collectRequiredAudio(directory), /before packaging required audio/);
+  fs.writeFileSync(lastImport, original);
+  const lastResource = path.join(directory, '.godot/imported', `${expected.length - 1}.sample`);
+  fs.writeFileSync(lastResource, 'invalid resource');
+  assert.throws(() => collectRequiredAudio(directory), /Expected an imported Godot audio resource/);
+  fs.writeFileSync(lastResource, 'RSRC restored fixture');
+  fs.unlinkSync(lastImport);
+  assert.throws(() => collectRequiredAudio(directory), /winter-unlock\.wav\.import/,
+    'A missing chest cue cannot silently disappear from the required bundle');
+  fs.writeFileSync(lastImport, original);
   fs.unlinkSync(path.join(directory, 'assets/audio/bgm/candy.wav.import'));
-  assert.throws(() => collectOptionalAudio(directory), /candy\.wav\.import/);
+  assert.throws(() => collectRequiredAudio(directory), /candy\.wav\.import/);
 });

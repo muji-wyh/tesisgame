@@ -605,6 +605,31 @@
       let entered = false;
       let revealGame = null;
       let engine = null;
+      function createGameAudioRecovery() {
+        let context = null;
+        let inGame = false;
+
+        function resume() {
+          if (!inGame || document.hidden || !context || context.state === 'running' || context.state === 'closed') return;
+          try {
+            // A browser may require a fresh gesture after an interruption. A
+            // rejected or pending attempt must not prevent that later retry.
+            Promise.resolve(context.resume()).catch(() => {});
+          } catch (_) {}
+        }
+
+        for (const type of ['pointerup', 'keydown']) {
+          document.addEventListener(type, event => { if (event.isTrusted) resume(); }, { capture: true });
+        }
+        document.addEventListener('visibilitychange', resume);
+        window.addEventListener('pageshow', resume);
+        return {
+          attach(value) { context = value; },
+          enter() { inGame = true; resume(); },
+          stop() { inGame = false; context = null; }
+        };
+      }
+      const gameAudioRecovery = createGameAudioRecovery();
       const slowNotice = window.setTimeout(() => {
         loadingNote.hidden = false;
         retry.hidden = false;
@@ -1608,6 +1633,7 @@
       const speechHost = createSpeechHost();
 
       function fail(reason) {
+        gameAudioRecovery.stop();
         if (failed) return;
         failed = true;
         revealGame = null;
@@ -1648,6 +1674,7 @@
       function enterGame() {
         if (failed || entered || enterButton.disabled || document.hidden) return;
         entered = true;
+        gameAudioRecovery.enter();
         enterButton.disabled = true;
         const onReveal = revealGame;
         revealGame = null;
@@ -1664,9 +1691,14 @@
       }
       enterButton.addEventListener('click', enterGame, loadingListener);
 
-      // Host lifecycle, controller state and asset URLs, never gameplay mutations.
+      // Host lifecycle and controller state, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ...speechHost,
+        attachAudioContext(context) {
+          // Godot provides its existing playback context; the host never creates
+          // a second engine, resumes a recording or replays an interrupted cue.
+          gameAudioRecovery.attach(context);
+        },
         ready(onReveal) {
           if (failed || readyReceived) return;
           readyReceived = true;
@@ -1732,10 +1764,6 @@
         },
         audioStatus(text) {
           document.getElementById('audio-status').textContent = text;
-        },
-        audioAssets() {
-          return JSON.stringify(Object.fromEntries(Object.entries(config.audioAssets || {})
-            .map(([path, file]) => [path, new URL(file, document.baseURI).href])));
         },
         background(color, accent = '#438363', light = '#d7efc7', theme = 'spring') {
           document.body.style.backgroundColor = color;

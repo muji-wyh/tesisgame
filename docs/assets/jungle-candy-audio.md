@@ -36,17 +36,17 @@ this expansion. SHA-256 comparison confirmed that all 295 previously existing
 WAV files remained byte for byte unchanged. The BGM and SFX generators also
 avoid rewriting identical outputs during full regeneration.
 
-The two background tracks and two theme greetings are optional Web downloads. Packaging
-requires their Godot imports, so import the source WAVs through the normal build
-before collecting optional audio. The four small effects stay in the startup
-game pack. Missing or failed optional downloads continue through the existing
-audio error/retry path without blocking gameplay.
+The two background tracks, two active theme greetings and four small effects
+are bundled in the startup game pack. Packaging requires their Godot imports,
+so import the source WAVs through the normal build before validating the required
+audio. The pack verifier loads the exported resources to confirm they are playable;
+no audio download is needed after startup.
 
 The September 18 validation covered all eight BGM tracks, all twenty effects, 228 vocabulary and
 prompt recordings, six-prompt missing-only synthesis, old-file preservation,
 deterministic new music/effects and all eight original optional Web audio paths.
-The maintained tests now verify the retained assets and four current optional
-Web audio paths:
+The maintained tests now verify the retained assets and four required music and
+greeting paths inside the bundled-audio contract:
 
 ```powershell
 node --test tests/voice-generation.test.cjs tests/world-audio.test.cjs

@@ -36,6 +36,18 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
+  const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
+  for (const source of [
+    'assets/audio/bgm/spring.wav', 'assets/audio/pop/round-0.wav',
+    'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
+    'assets/audio/voice/wrong.wav', 'assets/audio/voice/loss.wav'
+  ]) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
+      `Active audio must be included in the game pack: ${source}`);
+  }
+  for (const source of ['assets/audio/voice/ocean-arrive.wav', 'assets/audio/voice/ocean-open.wav']) {
+    assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Retired audio stays excluded: ${source}`);
+  }
   const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
   assert.match(project, /textures\/vram_compression\/import_s3tc_bptc=true/);
   assert.match(project, /textures\/vram_compression\/import_etc2_astc=true/);
@@ -94,17 +106,13 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     'index.wasm': Buffer.from('engine bytecode '.repeat(8192)),
     'index.audio.worklet.js': Buffer.from('audio worklet'),
     'index.audio.position.worklet.js': Buffer.from('position worklet'),
-    'index.pck': Buffer.from('game data '.repeat(1024))
+    'index.pck': Buffer.from('game data and bundled audio '.repeat(1024))
   };
-  const audio = [{
-    source: 'res://assets/audio/voice/wrong.wav',
-    bytes: Buffer.from('RSRC optional audio '.repeat(1024))
-  }];
   const writeExport = () => {
     for (const [name, bytes] of Object.entries(files)) fs.writeFileSync(path.join(directory, name), bytes);
     fs.writeFileSync(path.join(directory, 'index.html'),
       `<script src="index.js"></script><script>const config = ${JSON.stringify({
-        executable: 'index', args: [], fileSizes: {
+        executable: 'index', args: [], audioAssets: { 'res://assets/audio/voice/wrong.wav': 'retired.sample' }, fileSizes: {
           'index.wasm': files['index.wasm'].length,
           'index.pck': files['index.pck'].length
         }
@@ -114,7 +122,7 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     .match(/const config = (\{[^\r\n]*\});/)[1]);
   writeExport();
   fs.writeFileSync(path.join(directory, 'keep.txt'), 'unrelated file');
-  const initialBytes = packageWebExport(directory, audio);
+  const initialBytes = packageWebExport(directory);
   const first = readConfig();
   assert.match(first.executable, /^engine-[a-f0-9]{16}$/);
   assert.match(first.mainPack, /^game-[a-f0-9]{16}\.pck$/);
@@ -136,45 +144,40 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   assert.equal(first.fileSizes[first.mainPack], files['index.pck'].length);
   assert.ok(fs.readFileSync(path.join(directory, 'index.html'), 'utf8').includes(`src="${first.executable}.js"`));
   assert.ok(fs.statSync(path.join(directory, `${first.executable}.wasm.br`)).size < files['index.wasm'].length / 4);
-  assert.ok(first.audioAssets, 'Optional audio needs an on-demand URL map');
-  const firstAudio = first.audioAssets[audio[0].source];
-  assert.match(firstAudio, /^audio-[a-f0-9]{16}\.sample$/);
-  assert.deepEqual(fs.readFileSync(path.join(directory, firstAudio)), audio[0].bytes);
-  assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, `${firstAudio}.br`))), audio[0].bytes);
-  assert.equal(first.fileSizes[firstAudio], undefined, 'Optional audio must not participate in startup preloading');
-  audio[0].bytes = Buffer.from('RSRC changed optional audio');
+  assert.equal(first.audioAssets, undefined, 'Bundled audio must not publish an on-demand URL map');
+  assert.equal(fs.readdirSync(directory).some(name => name.endsWith('.sample') || name.endsWith('.sample.br')), false,
+    'Audio is delivered only inside the game pack');
+  assert.equal(initialBytes, fs.readdirSync(directory).filter(name => name.endsWith('.br'))
+    .reduce((total, name) => total + fs.statSync(path.join(directory, name)).size, 0),
+  'Startup size must count every compressed engine and game-pack byte');
   writeExport();
-  assert.equal(packageWebExport(directory, audio), initialBytes, 'Optional audio must not enlarge the startup payload');
-  const audioUpdate = readConfig();
-  assert.equal(audioUpdate.executable, first.executable);
-  assert.equal(audioUpdate.mainPack, first.mainPack, 'Optional audio updates must not invalidate the game pack');
-  assert.notEqual(audioUpdate.audioAssets[audio[0].source], firstAudio);
-  assert.equal(fs.existsSync(path.join(directory, firstAudio)), false);
+  assert.equal(packageWebExport(directory), initialBytes, 'Identical exports retain the same startup size');
+  assert.equal(readConfig().mainPack, first.mainPack, 'Identical game packs retain their cache key');
 
-  files['index.pck'] = Buffer.from('updated game data');
+  files['index.pck'] = Buffer.from('game data and updated bundled audio');
   writeExport();
-  packageWebExport(directory, audio);
+  packageWebExport(directory);
   const second = readConfig();
   assert.equal(second.executable, first.executable, 'Game changes must reuse the cached engine');
-  assert.notEqual(second.mainPack, first.mainPack, 'New game content must use a new cache key');
+  assert.notEqual(second.mainPack, first.mainPack, 'An audio update inside the game pack must use a new cache key');
   assert.equal(fs.existsSync(path.join(directory, first.mainPack)), false, 'Obsolete generated packs must not accumulate');
   assert.equal(fs.readFileSync(path.join(directory, 'keep.txt'), 'utf8'), 'unrelated file');
   files['index.js'] = Buffer.from('changed Godot template');
   writeExport();
   const beforeFailure = new Map(fs.readdirSync(directory).map(name => [name, fs.readFileSync(path.join(directory, name))]));
-  assert.throws(() => packageWebExport(directory, audio), /Godot Web startup patch/);
+  assert.throws(() => packageWebExport(directory), /Godot Web startup patch/);
   assert.deepEqual(new Map(fs.readdirSync(directory).map(name => [name, fs.readFileSync(path.join(directory, name))])), beforeFailure,
     'An unknown engine must fail before overwriting or deleting any export file');
   const config = JSON.parse(fs.readFileSync(path.join(root, 'web', 'staticwebapp.config.json'), 'utf8'));
   assert.equal(config.globalHeaders['Cache-Control'], 'no-cache', 'HTML must discover updated asset names');
   assert.equal(config.globalHeaders.Vary, 'Accept-Encoding', 'Caches must distinguish compressed and identity responses');
-  for (const route of ['/engine-*', '/game-*', '/audio-*']) {
+  for (const route of ['/engine-*', '/game-*']) {
     assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
       'public, max-age=31536000, immutable');
   }
 });
 
-test('rebuilding a legacy export removes retired local speech assets and preserves unrelated output', t => {
+test('rebuilding a legacy export removes standalone audio and retired speech assets while preserving unrelated output', t => {
   const { packageWebExport } = require('../tools/package-web.cjs');
   const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'voice-pop-solo-export-'));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
@@ -192,7 +195,7 @@ test('rebuilding a legacy export removes retired local speech assets and preserv
     'bpe-0123456789abcdef.vocab', 'runtime-js-0123456789abcdef.js', 'runtime-wasm-0123456789abcdef.wasm',
     'manifest.json', 'THIRD_PARTY_NOTICES.txt'];
   fs.mkdirSync(path.join(directory, 'multiplayer'));
-  const removed = [...legacyScripts, ...legacyAssets.map(name => `multiplayer/${name}`)]
+  const removed = [...legacyScripts, 'audio-0123456789abcdef.sample', ...legacyAssets.map(name => `multiplayer/${name}`)]
     .flatMap(name => [name, `${name}.br`, `${name}.gz`]);
   for (const name of removed) fs.writeFileSync(path.join(directory, name), 'retired generated asset');
   const preserved = ['notes.txt', 'multiplayer-notes.js', 'multiplayer/notes.txt', 'multiplayer/notes.vocab',
@@ -306,11 +309,44 @@ test('the generated startup patch rejects missing, duplicate, and changed templa
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   assert.throws(() => patchWebEngine('unrecognized engine'), /Godot Web startup patch/);
   assert.throws(() => patchWebEngine(startupFixture.repeat(2)), /Godot Web startup patch/);
-  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)']) {
+  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)', 'GodotAudio.ctx=ctx;ctx.onstatechange', 'GodotAudio.ctx=null;if(!ctx)', 'function _godot_audio_resume()']) {
     assert.ok(startupFixture.includes(marker));
     assert.throws(() => patchWebEngine(startupFixture.replace(marker, `${marker} changed`)), /Godot Web startup patch/);
   }
   assert.throws(() => patchWebEngine(patchWebEngine(startupFixture)), /Godot Web startup patch/);
+});
+
+test('the patched engine shares and releases its existing context and tolerates blocked audio resumes', async () => {
+  const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
+  const registered = [];
+  let attempts = 0;
+  const context = {
+    state: 'suspended',
+    resume() { attempts++; return Promise.reject(new Error('User gesture required')); },
+    close() { this.state = 'closed'; return Promise.resolve(); }
+  };
+  const sandbox = {
+    GodotAudio: {},
+    window: { AudioContext: function () { return context; }, wordBuddiesHost: { attachAudioContext: value => registered.push(value) } }
+  };
+  require('node:vm').runInNewContext(patchWebEngine(startupFixture), sandbox);
+  assert.equal(sandbox.audioInitFixture({}), context);
+  assert.deepEqual(registered, [context], 'The host receives the actual engine context, not a new audio stack');
+  sandbox._godot_audio_resume();
+  await new Promise(resolve => setImmediate(resolve));
+  context.resume = () => { attempts++; context.state = 'running'; return Promise.resolve(); };
+  sandbox._godot_audio_resume();
+  assert.equal(attempts, 2, 'A rejected attempt does not latch out the next user gesture');
+  sandbox._godot_audio_resume();
+  assert.equal(attempts, 2, 'A running context is not interrupted by extra resume calls');
+  await new Promise(resolve => sandbox.audioCloseFixture.close_async(resolve));
+  assert.deepEqual(registered, [context, null]);
+  sandbox._godot_audio_resume();
+  assert.equal(attempts, 2, 'Closing the engine removes the context from both recovery paths');
+  sandbox.GodotAudio.ctx = { state: 'interrupted', resume() { throw new Error('Temporarily unavailable'); } };
+  assert.doesNotThrow(() => sandbox._godot_audio_resume());
+  sandbox.GodotAudio.ctx.state = 'closed';
+  assert.doesNotThrow(() => sandbox._godot_audio_resume());
 });
 
 test('looped WebAudio samples restore their pitch before a replacement source can render', () => {
@@ -544,6 +580,10 @@ function makeModuleConfig(response) {
 				}
 
 var IDBFS = { dbs: {}, DB_VERSION: 21, DB_STORE_NAME: 'FILE_DATA', getDB:(name,callback)=>{var db=IDBFS.dbs[name];if(db){return callback(null,db)}var req;try{req=IDBFS.indexedDB().open(name,IDBFS.DB_VERSION)}catch(e){return callback(e)}if(!req){return callback("Unable to connect to IndexedDB")}req.onupgradeneeded=e=>{var db=e.target.result;var transaction=e.target.transaction;var fileStore;if(db.objectStoreNames.contains(IDBFS.DB_STORE_NAME)){fileStore=transaction.objectStore(IDBFS.DB_STORE_NAME)}else{fileStore=db.createObjectStore(IDBFS.DB_STORE_NAME)}if(!fileStore.indexNames.contains("timestamp")){fileStore.createIndex("timestamp","timestamp",{unique:false})}};req.onsuccess=()=>{db=req.result;IDBFS.dbs[name]=db;callback(null,db)};req.onerror=e=>{callback(e.target.error);e.preventDefault()}} };
+
+function audioInitFixture(opts){const ctx=new(window.AudioContext||window.webkitAudioContext)(opts);GodotAudio.ctx=ctx;ctx.onstatechange=function(){};return ctx}
+var audioCloseFixture={close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;if(!ctx){resolve();return}ctx.close().then(resolve)}};
+function _godot_audio_resume(){if(GodotAudio.ctx&&GodotAudio.ctx.state!=="running"){GodotAudio.ctx.resume()}}
 
 var SampleNode = class SampleNode {
 getPlaybackRate(){return this._playbackRate}getPitchScale(){return this._pitchScale}getOutputNode(){return this._source}

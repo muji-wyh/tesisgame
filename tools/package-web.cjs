@@ -4,20 +4,24 @@ const { createHash } = require('node:crypto');
 const { brotliCompressSync, constants } = require('node:zlib');
 const { patchWebEngine } = require('./patch-web-engine.cjs');
 
-function collectOptionalAudio(root) {
+const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+const CHEST_CUES = ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward'];
+
+// These formerly separate downloads are required resources in the game pack.
+// Keep an explicit chest inventory so a missing cue cannot silently pass export.
+function collectRequiredAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
   const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   const sources = [
-    ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(id => `assets/audio/bgm/${id}.wav`),
+    ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
-    ...fs.readdirSync(path.join(root, 'assets/audio/chests')).filter(name => /^(?:spring|summer|autumn|winter|ocean|space|jungle|candy)-[a-z]+(?:-[a-z]+)*\.wav$/.test(name))
-      .sort().map(name => `assets/audio/chests/${name}`)
+    ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
   return sources.map(source => {
     const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');
     const imported = metadata.match(/^path="(res:\/\/\.godot\/imported\/[^"]+\.sample)"$/m)?.[1];
-    if (!imported) throw new Error(`Import ${source} before packaging optional audio.`);
+    if (!imported) throw new Error(`Import ${source} before packaging required audio.`);
     const bytes = fs.readFileSync(path.join(root, ...imported.slice(6).split('/')));
     if (!['RSRC', 'RSCC'].includes(bytes.subarray(0, 4).toString('ascii'))) {
       throw new Error(`Expected an imported Godot audio resource: ${imported}`);
@@ -45,7 +49,7 @@ function removeRetiredVoiceAssets(directory) {
   if (fs.readdirSync(assets).length === 0) fs.rmdirSync(assets);
 }
 
-function packageWebExport(directory, optionalAudio = []) {
+function packageWebExport(directory) {
   const page = path.join(directory, 'index.html');
   const html = fs.readFileSync(page, 'utf8');
   const match = html.match(/const config = (\{[^\r\n]*\});/);
@@ -64,14 +68,9 @@ function packageWebExport(directory, optionalAudio = []) {
   const executable = `engine-${digest.digest('hex').slice(0, 16)}`;
   const pack = fs.readFileSync(path.join(directory, 'index.pck'));
   const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck`;
-  const audio = optionalAudio.map(file => ({
-    ...file, optional: true,
-    name: `audio-${createHash('sha256').update(file.bytes).digest('hex').slice(0, 16)}.sample`
-  }));
   const files = [
     ...engine.map(file => ({ name: `${executable}.${file.suffix}`, bytes: file.bytes })),
-    { name: mainPack, bytes: pack },
-    ...audio
+    { name: mainPack, bytes: pack }
   ];
   const retained = new Set();
   let downloadBytes = 0;
@@ -83,11 +82,11 @@ function packageWebExport(directory, optionalAudio = []) {
     fs.writeFileSync(path.join(directory, file.name), file.bytes);
     fs.writeFileSync(path.join(directory, `${file.name}.br`), compressed);
     retained.add(file.name).add(`${file.name}.br`);
-    if (!file.optional) downloadBytes += compressed.length;
+    downloadBytes += compressed.length;
   }
   config.executable = executable;
   config.mainPack = mainPack;
-  config.audioAssets = Object.fromEntries(audio.map(file => [file.source, file.name]));
+  delete config.audioAssets;
   config.fileSizes = {
     [`${executable}.wasm`]: engine.find(file => file.suffix === 'wasm').bytes.length,
     [mainPack]: pack.length
@@ -107,4 +106,4 @@ function packageWebExport(directory, optionalAudio = []) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectOptionalAudio };
+module.exports = { packageWebExport, collectRequiredAudio };
