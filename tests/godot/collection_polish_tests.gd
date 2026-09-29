@@ -55,20 +55,20 @@ func _run() -> void:
 			check(button.is_visible_in_tree() and not inactive.is_visible_in_tree(),
 				"Results show one normal New adventure action or one conditional save retry")
 			check(app._default_focus() == button, "The active result action is the default loss-screen focus")
-			var minimum_height: float = 48.0 if save_error else 56.0
-			var maximum_width: float = 180.0 if save_error else 228.0
+			var minimum_height: float = 48.0 if save_error else 64.0
+			var maximum_width: float = 180.0 if save_error else minf(324.0, app._result_text.size.x * scale + 4.0)
 			check(button.size.y * scale >= minimum_height and button.size.y * scale <= minimum_height + 4,
 				"Retry stays compact and New adventure has a prominent touch target at %s" % dimensions)
-			check(button.size.x * scale <= maximum_width and (save_error or button.size.x * scale >= 220),
-				"Result action width reflects its intended emphasis without filling the screen at %s" % dimensions)
+			check(button.size.x * scale <= maximum_width and (save_error or button.size.x * scale >= minf(320.0, app._result_text.size.x * scale) - 4.0),
+				"Result action width reflects its intended emphasis within the available column at %s" % dimensions)
 			check(app.get_global_rect().encloses(button.get_global_rect()),
 				"Result actions stay inside the viewport at %s" % dimensions)
-			var minimum_font_size: float = 14.0 if save_error else 20.0
+			var minimum_font_size: float = 14.0 if save_error else 24.0
 			check(button.get_theme_font_size("font_size") * scale >= minimum_font_size
 				and button.get_theme_font_size("font_size") * scale < minimum_font_size + 2,
 				"Retry labels stay readable and New adventure uses larger primary-action text")
-			check(is_equal_approx(button.get_global_rect().get_center().x, app._result_footer.get_global_rect().get_center().x),
-				"The sole result action stays centered in its footer")
+			check(absf(button.get_global_rect().get_center().x - app._result_footer.get_global_rect().get_center().x) <= 0.5,
+				"The sole result action stays centered in its footer at %s: %s in %s" % [dimensions, button.get_global_rect(), app._result_footer.get_global_rect()])
 			var surface: StyleBoxFlat = button.get_theme_stylebox("normal")
 			check(surface.bg_color.a > 0.9 and surface.border_width_top > 0,
 				"The active result action has a real button surface rather than floating text")

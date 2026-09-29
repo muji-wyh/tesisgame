@@ -108,7 +108,7 @@ test(`New adventure starts Match directly after a ${won ? 'win' : 'loss'}`, asyn
   expect((await finishMatch(page, won)).sort()).toEqual([...originalWords].sort());
   const saved = await record(page), previousTopic = visits(saved)[0];
   await page.screenshot({ path: testInfo.outputPath(`result-actions-${won ? 'win' : 'loss'}.png`), scale: 'css' });
-  const next = resultPoint(await metrics(page), 'newAdventure');
+  const next = resultPoint(await metrics(page), 'newAdventure', { message: !won });
   await tap(page, next.x, next.y);
   await expect(page.locator('#game-status')).toHaveText(INTRO);
   await expect(page.locator('#selection-status')).toBeEmpty();

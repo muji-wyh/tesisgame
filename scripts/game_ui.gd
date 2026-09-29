@@ -560,7 +560,8 @@ func _build_controls() -> void:
 	_result_footer = VBoxContainer.new()
 	_result_footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_result_footer.minimum_size_changed.connect(_layout_result)
-	_outcome.add_child(_result_footer)
+	_result_text.add_child(_result_footer)
+	_result_text.move_child(_result_footer, _found_words_scroll.get_index())
 	var result_actions := HBoxContainer.new()
 	_result_actions = result_actions
 	result_actions.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -1903,13 +1904,9 @@ func _layout_result() -> void:
 	var width: float = minf(176 / scale, maxf(0, dimensions.x))
 	for button in [_result_retry_button, _try_gift_button]:
 		button.custom_minimum_size.x = width
-	_new_adventure_button.custom_minimum_size.x = minf(224 / scale, maxf(0, dimensions.x))
-	var footer_height: float = _result_footer.get_combined_minimum_size().y
-	_result_footer.position = Vector2(0, maxf(0, dimensions.y - footer_height))
-	_result_footer.size = Vector2(dimensions.x, footer_height)
-	dimensions.y = maxf(0, dimensions.y - footer_height - gap)
+	_new_adventure_button.custom_minimum_size.x = minf(320 / scale, maxf(0, dimensions.x))
 	var compact: bool = dimensions.y < 340.0 and _found_words.visible
-	_result_text.add_theme_constant_override("separation", 4 if compact else 10)
+	_result_text.add_theme_constant_override("separation", ceili((8 if compact else 14) / scale))
 	_title.add_theme_font_size_override("font_size", 28 if compact else 34)
 	_caption.add_theme_font_size_override("font_size", 18 if compact else 22)
 	var minimum_text: Vector2 = _result_text.get_combined_minimum_size()

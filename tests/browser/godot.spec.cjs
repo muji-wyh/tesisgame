@@ -556,8 +556,8 @@ async function continueMatch(page, correct = true) {
   await page.keyboard.press('Escape');
 }
 
-async function resultTap(page, key) {
-  const point = resultPoint(await logicalMetrics(page), key);
+async function resultTap(page, key, options = {}) {
+  const point = resultPoint(await logicalMetrics(page), key, options);
   await tap(page, point.x, point.y);
 }
 
@@ -621,7 +621,8 @@ test('new adventures rotate and all five review words replay without opening or 
 
   const { metrics } = board;
   const reviewed = [];
-  // Winning focuses the chest; Tab reaches the first review card at any row alignment.
+  // Winning focuses the chest; skip the primary action to reach the word review.
+  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   for (let index = 0; index < 5; index++) {
@@ -1118,7 +1119,7 @@ async function loseWithTouch(page) {
 }
 
 for (const outcome of ['win', 'loss']) {
-  test(`${outcome} screen visibly renders New adventure below the artwork on a phone`, async ({ page }, testInfo) => {
+  test(`${outcome} screen visibly renders New adventure above the word review on a phone`, async ({ page }, testInfo) => {
     const errors = watchErrors(page);
     await page.setViewportSize({ width: 390, height: 650 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1130,7 +1131,7 @@ for (const outcome of ['win', 'loss']) {
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const metrics = await canvasMetrics(page);
     const scale = Math.min(metrics.width, metrics.height) / 480;
-    const action = resultPoint(await logicalMetrics(page), 'newAdventure');
+    const action = resultPoint(await logicalMetrics(page), 'newAdventure', { message: outcome === 'loss' });
     const next = { x: metrics.x + action.x * scale, y: metrics.y + action.y * scale };
     const screenshot = await page.screenshot({ path: testInfo.outputPath(`result-${outcome}.png`), scale: 'css' });
     const pixel = await page.evaluate(async ({ encoded, point }) => {
@@ -1177,7 +1178,7 @@ test('the loss-screen bear responds to touch and Xbox without restarting the rou
   await pressGamepad(page, 13);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
-  await resultTap(page, 'newAdventure');
+  await resultTap(page, 'newAdventure', { message: true });
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(errors).toEqual([]);
 });

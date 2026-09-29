@@ -116,7 +116,9 @@ async function openedChestFrame(page, testInfo, name) {
   const top = content.padding + content.header + content.gap;
   // These rounds award the first piece, so no toy-unlock message changes the
   // full-width stage. Exclude the header mascot and the New adventure button.
-  const height = bounds.height - content.padding - top - Math.ceil(56 / scale) - Math.ceil(8 / scale) - 10;
+  const availableHeight = bounds.height - content.padding - top;
+  const textGap = Math.ceil((availableHeight < 340 ? 8 : 14) / scale);
+  const height = availableHeight - Math.ceil(64 / scale) - 88 - textGap - 10;
   const frame = await page.screenshot({ scale: 'css', clip: {
     x: bounds.x + (content.x + 4) * bounds.scale, y: bounds.y + (top + 4) * bounds.scale,
     width: (content.width - 8) * bounds.scale, height: (height - 8) * bounds.scale

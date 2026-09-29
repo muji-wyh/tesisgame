@@ -97,24 +97,27 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 static func prominent_action_button(control: Button, accent: Color) -> void:
 	action_button(control, accent, true)
 	var scale: float = ui_scale(control)
-	var radius: int = ceili(16 / scale)
+	var radius: int = ceili(20 / scale)
 	for state in ["normal", "hover", "pressed"]:
 		var pressed: bool = state == "pressed"
 		var fill: Color = accent.darkened(0.16 if pressed else 0.04 if state == "hover" else 0.0)
-		var surface := box(fill, accent.darkened(0.3), radius, maxi(1, roundi(1 / scale)))
-		surface.border_width_bottom = ceili((1 if pressed else 4) / scale)
-		surface.content_margin_left = 24 / scale
-		surface.content_margin_right = 24 / scale
-		surface.content_margin_top = (12 if pressed else 10) / scale
-		surface.content_margin_bottom = (8 if pressed else 10) / scale
+		var surface := box(fill, accent.darkened(0.3), radius, maxi(2, roundi(2 / scale)))
+		surface.border_width_bottom = ceili((2 if pressed else 6) / scale)
+		surface.shadow_color = Color(accent.darkened(0.45), 0.12 if pressed else 0.24)
+		surface.shadow_size = ceili((2 if pressed else 7) / scale)
+		surface.shadow_offset = Vector2(0, (1 if pressed else 5) / scale)
+		surface.content_margin_left = 28 / scale
+		surface.content_margin_right = 28 / scale
+		surface.content_margin_top = (14 if pressed else 10) / scale
+		surface.content_margin_bottom = (6 if pressed else 10) / scale
 		control.add_theme_stylebox_override(state, surface)
 	for state in ["font_color", "font_focus_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
 		control.add_theme_color_override(state, Color.WHITE)
 	var focus := box(Color.TRANSPARENT, INK, radius, maxi(2, roundi(2 / scale)))
 	focus.set_expand_margin_all(3 / scale)
 	control.add_theme_stylebox_override("focus", focus)
-	control.custom_minimum_size.y = ceilf(56 / scale)
-	control.add_theme_font_size_override("font_size", ceili(20 / scale))
+	control.custom_minimum_size.y = ceilf(64 / scale)
+	control.add_theme_font_size_override("font_size", ceili(24 / scale))
 
 
 static func ui_scale(control: Control) -> float:
