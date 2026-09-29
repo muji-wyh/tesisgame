@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ladder</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 15 88 106 M47 15 106 106" stroke="#765445" stroke-width="8"/>
+    <path d="M31 15 88 106 M47 15 106 106" stroke="#bca786" stroke-width="4"/>
+    <path d="M32 15 13 106 M52 15 36 106" stroke="#765445" stroke-width="9"/>
+    <path d="M32 15 13 106 M52 15 36 106" stroke="#e0b785" stroke-width="5"/>
+    <path d="M29 30H49 M25 48H46 M22 66H43 M18 84H40 M15 101H36" stroke="#765445" stroke-width="7"/>
+    <path d="M29 30H49 M25 48H46 M22 66H43 M18 84H40 M15 101H36" stroke="#ebca9a" stroke-width="4"/>
+    <path d="M43 72 82 73" stroke="#b4bdb6" stroke-width="4"/>
+    <path d="M28 14H55" stroke="#d1a06f" stroke-width="7"/>
+  </g>
+</svg>

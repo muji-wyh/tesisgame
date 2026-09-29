@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">dragonfly</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 52Q19 12 13 32Q11 51 54 61 M65 53Q101 13 108 32Q111 52 65 62" fill="#d1e8ed"/>
+    <path d="M54 64Q16 55 18 77Q25 89 55 71 M66 64Q104 55 104 77Q97 89 65 72" fill="#b9dce4"/>
+    <path d="M25 35 51 54 M95 35 70 54 M30 72 50 66 M91 72 71 66" stroke="#94bccb" stroke-width="2"/>
+    <path d="M57 55H64L66 94 60 107 54 94Z" fill="#89b9a7"/>
+    <path d="M56 75H65 M56 86H65 M57 96H63" stroke-width="2"/>
+    <circle cx="60" cy="48" r="10" fill="#99cbb5"/>
+    <circle cx="53" cy="44" r="6" fill="#b8d98f"/><circle cx="67" cy="44" r="6" fill="#b8d98f"/>
+    <circle cx="52" cy="44" r="2.6" fill="#765445" stroke="none"/><circle cx="68" cy="44" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">universe</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="60" r="49" fill="#6e779b" stroke="none"/>
+    <path d="M30 51Q49 24 71 44Q87 60 71 73Q58 84 48 73Q38 62 53 55Q64 50 66 61Q68 70 59 68 M90 70Q69 100 44 81" stroke="#c6b6df" stroke-width="7"/>
+    <circle cx="28" cy="84" r="9" fill="#8dc4c7" stroke-width="2"/>
+    <ellipse cx="89" cy="35" rx="17" ry="5" transform="rotate(-26 89 35)" stroke="#e3c285" stroke-width="3"/>
+    <circle cx="89" cy="35" r="8" fill="#e2b882" stroke-width="2"/>
+    <circle cx="33" cy="31" r="2" fill="#fff0c7" stroke="none"/><circle cx="52" cy="21" r="2" fill="#fff0c7" stroke="none"/><circle cx="93" cy="73" r="2" fill="#fff0c7" stroke="none"/><circle cx="76" cy="96" r="2" fill="#fff0c7" stroke="none"/><circle cx="19" cy="57" r="2" fill="#fff0c7" stroke="none"/><circle cx="68" cy="38" r="2" fill="#fff0c7" stroke="none"/><circle cx="41" cy="99" r="2" fill="#fff0c7" stroke="none"/>
+  </g>
+</svg>

@@ -490,12 +490,12 @@ func _test_sticker_memory() -> void:
 		for id in topic.words:
 			check(not ids.has(id), "Adventure vocabulary gives each sticker one canonical ID")
 			ids.append(id)
-	check(ids.size() == 200 and state.collect_words(ids), "All 200 vocabulary words can be collected")
+	check(ids.size() == 350 and state.collect_words(ids), "All 350 vocabulary words can be collected")
 	ids.clear()
-	check(state.collected_word_ids.size() == 200, "Collection storage does not retain the caller's mutable input array")
+	check(state.collected_word_ids.size() == 350, "Collection storage does not retain the caller's mutable input array")
 	reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids.size() == 200 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
+		check(reloaded.collected_word_ids.size() == 350 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
 	var persisted := ConfigFile.new()
 	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Sticker persistence retains playroom save version one")
 

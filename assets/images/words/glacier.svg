@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">glacier</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 82 24 42 48 17 63 42 83 25 109 77V100L84 108 40 102Z" fill="#a8d3e5"/>
+    <path d="M11 82 48 17 45 68 37 91 41 102 M48 17 63 42 58 72 73 105 M83 25 87 70 109 77" fill="#dceff0"/>
+    <path d="M16 101Q35 93 51 103Q74 94 105 106" stroke="#7eaccc" stroke-width="5"/>
+    <path d="M36 49 30 70 M71 55 72 72 M91 76 97 88" stroke="#80b5d0" stroke-width="3"/>
+  </g>
+</svg>

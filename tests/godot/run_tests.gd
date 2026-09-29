@@ -179,13 +179,15 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		check(model.successes == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
 	check(seen_themes.size() == 8, "New rounds can choose each theme")
-	for seed_value in range(80, 1000):
+	# Larger topic pools need a proportional sampling budget to visit every word.
+	for seed_value in range(80, words.size() * 10):
 		if seen_words.size() == words.size():
 			break
 		model.reset(words, seed_value)
 		for card in model.cards:
 			seen_words[card.word.id] = true
-	check(seen_words.size() == words.size(), "All 200 words can appear across seeded rounds")
+	var unseen: Array = words.filter(func(word: Dictionary) -> bool: return not seen_words.has(word.id))
+	check(unseen.is_empty(), "Every word can appear across seeded rounds; missing: " + str(unseen.map(func(word: Dictionary) -> String: return word.id)))
 	model.reset(words, 17)
 	var deck: Array = model.cards.duplicate(true)
 	var season: String = model.theme_id
@@ -418,7 +420,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 
 
 func _test_data(words: Array) -> void:
-	check(words.size() == 200, "The game includes 200 age-graded picture words")
+	check(words.size() == 350, "The game includes 350 age-graded picture words")
 	var path := "res://scripts/game_data.gd"
 	check(FileAccess.file_exists(path), "The native data loader exists")
 	if not FileAccess.file_exists(path):

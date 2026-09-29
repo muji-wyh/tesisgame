@@ -10,12 +10,17 @@ const EPSILON: float = 0.000001
 # never derive a singular by removing letters from arbitrary recognized speech.
 const UNCHANGED_PLURALS: Array[String] = [
 	"fish", "sheep", "peas", "corn", "bread", "cheese", "milk", "water", "juice", "rice",
-	"rain", "snow", "grass", "pants", "sunglasses", "coral", "squid", "jellyfish", "starfish", "bamboo"
+	"rain", "snow", "grass", "pants", "sunglasses", "coral", "squid", "jellyfish", "starfish", "bamboo",
+	"deer", "honey", "pasta", "sand", "mud", "ice", "wind", "shorts", "dice",
+	"broccoli", "lettuce", "slippers", "earmuffs", "crayons", "asparagus", "cinnamon",
+	"plankton", "swordfish", "binoculars"
 ]
 const SPECIAL_PLURALS: Dictionary = {
 	"mouse": ["mice"], "foot": ["feet"], "tooth": ["teeth"], "leaf": ["leaves"],
 	"scarf": ["scarves", "scarfs"], "tomato": ["tomatoes"], "octopus": ["octopuses", "octopi"],
-	"cactus": ["cacti", "cactuses"]
+	"cactus": ["cacti", "cactuses"], "mango": ["mangoes", "mangos"],
+	"potato": ["potatoes"], "volcano": ["volcanoes", "volcanos"],
+	"domino": ["dominoes", "dominos"]
 }
 
 # Vetted spelling alternatives for the same English sounds. Keep this list
@@ -157,7 +162,7 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 	if phase != "running" or remaining <= 0.0:
 		return removed
 	var spoken: Dictionary = {}
-	for token in _tokens.search_all(text.to_lower()):
+	for token in _tokens.search_all(Data.normalize_spoken_text(text)):
 		spoken[token.get_string()] = true
 	for target in targets.duplicate():
 		if target.age + EPSILON >= target.lifetime:

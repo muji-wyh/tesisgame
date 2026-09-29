@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">soup</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="38" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M20 63 Q22 97 48 102 H74 Q99 97 101 63Z" fill="#9ec9e0"/>
+    <ellipse cx="60" cy="61" rx="41" ry="14" fill="#fff0cd"/>
+    <ellipse cx="60" cy="62" rx="34" ry="9" fill="#ebba72" stroke="none"/>
+    <path d="M81 59 104 29" stroke="#765445" stroke-width="8"/><path d="M81 59 104 29" stroke="#b9cbd1" stroke-width="4"/>
+    <path d="M38 31 Q29 23 38 15 M58 36 Q49 27 58 20 M76 31 Q67 23 76 15" stroke="#bfb8a7" stroke-width="2.5"/>
+    <path d="M33 59 43 56 46 62 36 65Z M66 62 73 56 79 61 73 66Z" fill="#e79469" stroke="none"/>
+    <path d="M52 57 57 62 M52 63 60 62 M85 65 89 61" stroke="#7caa70" stroke-width="3"/>
+    <path d="M29 77 Q34 92 45 95" stroke="#dceff0" stroke-width="4"/>
+  </g>
+</svg>

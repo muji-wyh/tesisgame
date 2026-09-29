@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">neck</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 108 V96 Q21 83 43 79 L48 73 H72 L77 79 Q99 83 102 96 V108Z" fill="#b8d0cb" stroke="#91aaa8" stroke-width="2.5"/>
+    <path d="M47 60 V77 Q60 92 73 77 V60Z" fill="#f1c6a6"/>
+    <path d="M47 62 Q60 70 73 62 V69 Q60 77 47 69Z" fill="#deb092" stroke="none"/>
+    <path d="M32 37 Q29 13 60 12 Q91 13 88 37 L86 47 Q80 65 60 69 Q40 65 34 47Z" fill="#ead0b8" stroke="#ac917c" stroke-width="2.5"/>
+    <path d="M33 34 Q25 18 46 11 Q70 6 86 21 L89 38 80 29 Q59 37 42 25 L36 37Z" fill="#a99177" stroke="#8f7969" stroke-width="2.5"/>
+    <path d="M43 43H48 M72 43H77 M55 56 Q60 59 65 56" stroke="#a18571" stroke-width="2"/>
+    <path d="M36 84 Q60 106 84 84" stroke="#e0e9dd" stroke-width="4"/>
+    <circle cx="60" cy="75" r="16" fill="none" stroke="#e9ad45" stroke-width="3"/>
+    <path d="M106 75H81 m6 -5 -6 5 6 5" fill="none" stroke="#dca83d" stroke-width="3"/>
+  </g>
+</svg>

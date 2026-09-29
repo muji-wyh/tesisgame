@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">beetle</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M37 49 22 37 14 42 M34 67 16 67 12 75 M40 88 24 99 23 109 M83 49 98 37 106 42 M86 67 104 67 108 75 M80 88 96 99 97 109" stroke="#8b8168" stroke-width="3.5"/>
+    <path d="M50 25 42 14 33 12 M70 25 78 14 87 12" stroke-width="2.5"/>
+    <ellipse cx="60" cy="31" rx="16" ry="14" fill="#94ab87"/>
+    <ellipse cx="60" cy="70" rx="29" ry="35" fill="#a9c293"/>
+    <path d="M60 41V104 M42 47 Q52 53 60 54 Q69 53 78 47" stroke="#6f9572" stroke-width="2.5"/>
+    <path d="M41 59 Q34 81 48 94 M79 59 Q86 81 72 94" stroke="#ccdda9" stroke-width="4"/>
+    <path d="M43 39 Q60 29 77 39 L82 50 Q60 59 38 50Z" fill="#87a988"/>
+    <circle cx="54" cy="26" r="2.5" fill="#765445" stroke="none"/><circle cx="66" cy="26" r="2.5" fill="#765445" stroke="none"/>
+  </g>
+</svg>

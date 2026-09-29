@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rug</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 24 105 42 92 99 14 78Z" fill="#dda69f"/>
+    <path d="M34 34 94 48 85 87 25 73Z" fill="#f3d8b2"/>
+    <path d="M61 43 81 65 60 80 40 58Z" fill="#a8c4b0"/>
+    <path d="M61 52 71 64 60 71 50 59Z" fill="#d69d9a" stroke-width="2"/>
+    <path d="M27 27 20 24 M25 35 18 32 M23 44 16 41 M21 52 14 49 M19 61 12 58 M17 70 10 67 M103 47 110 49 M101 55 108 57 M99 64 106 66 M97 72 104 74 M95 81 102 83 M93 90 100 92" stroke="#b88985" stroke-width="2"/>
+    <path d="M39 41 43 42 M82 52 86 53 M33 67 37 68 M75 79 79 80" stroke="#c18d85" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">jacket</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 27 51 20 H69 L80 27 99 48 108 88 91 93 81 56 83 103 H37 L39 56 29 93 12 88 21 48Z" fill="#b0c8ae"/>
+    <path d="M51 20 60 34 69 20 77 29 68 44 60 35 52 44 43 29Z" fill="#d4dec0"/>
+    <path d="M60 35V102 M41 97H79" stroke="#759987" stroke-width="2.5"/>
+    <path d="M42 68 53 72V87H42Z M67 72 78 68V87H67Z" fill="#97b7a0" stroke-width="2.5"/>
+    <path d="M14 83 30 87 M90 87 106 83" stroke="#d6e2c8" stroke-width="4"/>
+    <path d="M57 49H63 M57 59H63 M57 69H63 M57 79H63 M57 89H63" stroke="#ded6ae" stroke-width="2"/>
+    <path d="M59 42H64V49H59Z" fill="#d8cbaa" stroke-width="1.5"/>
+  </g>
+</svg>

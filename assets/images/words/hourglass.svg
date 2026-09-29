@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">hourglass</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M32 22H88Q90 46 67 60Q91 77 88 101H32Q29 77 53 60Q29 44 32 22Z" fill="#dbecee"/>
+    <path d="M36 33H84Q81 47 60 57Q41 47 36 33Z" fill="#e9cc8e" stroke="none"/>
+    <path d="M35 96Q42 79 60 79Q78 79 85 96Z" fill="#e7c386" stroke="none"/>
+    <path d="M60 59V78" stroke="#e0bb78" stroke-width="3"/>
+    <path d="M25 14H96V23H25Z M25 100H96V109H25Z" fill="#bd9673"/>
+    <path d="M38 26Q37 37 43 43 M79 78 82 87" stroke="#fff8df" stroke-width="3"/>
+  </g>
+</svg>

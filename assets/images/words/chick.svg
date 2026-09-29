@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">chick</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="31" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M46 91 45 104 M74 91 75 104 M37 105 45 102 52 105 M68 105 75 102 83 105" stroke="#d5a04e" stroke-width="3"/>
+    <path d="M29 62 Q15 63 19 80 Q27 81 35 73 M91 62 Q105 63 101 80 Q93 81 85 73" fill="#f3ca65"/>
+    <path d="M34 47 Q30 26 50 22 L51 13 59 21 67 12 70 23 Q89 28 86 47 Q100 62 90 83 Q82 97 60 97 Q38 97 30 83 Q20 62 34 47Z" fill="#f8d978"/>
+    <path d="M50 62 60 56 70 62 60 69Z" fill="#efaa63" stroke-width="2.5"/>
+    <circle cx="45" cy="49" r="3.5" fill="#765445" stroke="none"/><circle cx="75" cy="49" r="3.5" fill="#765445" stroke="none"/>
+    <ellipse cx="40" cy="61" rx="5" ry="3" fill="#f1b995" stroke="none"/><ellipse cx="80" cy="61" rx="5" ry="3" fill="#f1b995" stroke="none"/>
+    <path d="M46 81 Q60 87 74 81" stroke="#fff0af" stroke-width="5"/>
+  </g>
+</svg>

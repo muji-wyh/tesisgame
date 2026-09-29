@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">taxi</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="45" ry="4" fill="#eadbc5" stroke="none"/>
+    <rect x="49" y="22" width="23" height="10" rx="3" fill="#f7e4ad" stroke-width="2.5"/>
+    <path d="M13 72 Q14 62 27 61 L39 38 Q42 32 50 32 H72 Q78 32 82 39 L94 61 Q107 63 108 73 V86 H12Z" fill="#f3ce6c"/>
+    <path d="M44 40H58V60H34Z M65 40H74L86 60H65Z" fill="#d7e9e8" stroke-width="2.5"/>
+    <path d="M26 66H94" stroke="#765445" stroke-width="7"/>
+    <path d="M31 66H37 M44 66H50 M57 66H63 M70 66H76 M83 66H89" stroke="#fff0d6" stroke-width="6" stroke-linecap="butt"/>
+    <path d="M61 73V82 M68 75H74" stroke-width="2"/>
+    <path d="M14 74H22 M99 74H107" stroke="#fff0c5" stroke-width="6"/>
+    <circle cx="33" cy="88" r="12" fill="#777a7a"/><circle cx="88" cy="88" r="12" fill="#777a7a"/>
+    <circle cx="33" cy="88" r="5" fill="#f6e6c8" stroke="none"/><circle cx="88" cy="88" r="5" fill="#f6e6c8" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">canoe</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 73 Q53 88 108 66 Q97 99 64 102 Q27 105 12 73Z" fill="#d8a477"/>
+    <path d="M12 73 Q54 48 108 66 Q70 86 12 73Z" fill="#f1d5a6"/>
+    <path d="M23 71 Q63 57 96 67 Q63 78 23 71Z" fill="#a88868" stroke-width="2.5"/>
+    <path d="M38 65 45 75 M72 62 79 72" stroke="#e3bd8d" stroke-width="6"/>
+    <path d="M19 47 91 99" stroke="#765445" stroke-width="6"/><path d="M19 47 91 99" stroke="#d0ab7a" stroke-width="3"/>
+    <path d="M82 88 99 98 Q105 105 98 110 Q92 112 86 103 L78 93Z" fill="#e4c28e" stroke-width="2.5"/>
+    <path d="M20 102H36 M72 110H82 M92 84H108" stroke="#a2cdd1" stroke-width="2.5"/>
+  </g>
+</svg>

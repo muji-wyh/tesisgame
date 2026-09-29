@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">nautilus</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M70 79Q94 55 104 68 M74 84Q111 72 109 89 M77 89Q105 87 106 102 M72 94Q91 101 92 109" stroke="#c89a80" stroke-width="5"/>
+    <path d="M83 75Q86 40 55 25Q22 16 12 48Q2 81 39 97Q66 111 83 75Z" fill="#edd6b7"/>
+    <path d="M77 67Q84 42 62 35Q30 23 24 50Q18 73 46 81Q67 87 72 66Q78 49 59 46Q42 43 40 58Q38 70 53 70Q63 69 59 60" stroke="#b88868" stroke-width="4"/>
+    <path d="M24 33 32 42 M14 51 25 54 M17 72 30 67 M34 91 41 79 M57 99 59 84 M76 88 66 80" stroke="#c29978" stroke-width="5"/>
+    <circle cx="83" cy="81" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

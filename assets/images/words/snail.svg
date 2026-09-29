@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">snail</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="104" rx="46" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M15 94 Q28 81 63 86 L79 77 83 62 Q86 54 93 60 L98 77 Q104 88 96 97 Q75 107 15 100Z" fill="#b6cf8d"/>
+    <path d="M87 63 81 44 M94 64 102 43" stroke="#92b17a" stroke-width="4"/>
+    <circle cx="80" cy="42" r="5" fill="#b6cf8d" stroke-width="2.5"/><circle cx="103" cy="41" r="5" fill="#b6cf8d" stroke-width="2.5"/>
+    <circle cx="81" cy="42" r="2" fill="#765445" stroke="none"/><circle cx="104" cy="41" r="2" fill="#765445" stroke="none"/>
+    <path d="M86 81 Q90 86 95 81" stroke-width="2"/>
+    <circle cx="48" cy="64" r="30" fill="#efc28b"/>
+    <path d="M68 80 Q39 96 29 71 Q23 48 45 43 Q65 39 68 58 Q71 73 56 77 Q43 80 39 67 Q35 56 47 53 Q58 50 59 61 Q61 69 51 67" stroke="#b88b63" stroke-width="3"/>
+  </g>
+</svg>

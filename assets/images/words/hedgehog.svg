@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">hedgehog</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M18 86 13 71 22 68 20 54 30 54 35 39 44 46 56 33 63 45 77 38 78 52 91 54 85 70 91 87Z" fill="#aa8267"/>
+    <path d="M23 89Q36 61 62 66L83 72 108 88Q111 96 94 99H43Q28 98 23 89Z" fill="#e5c19a"/>
+    <path d="M31 69 37 77 M41 57 46 66 M55 51 59 61 M71 55 73 64" stroke="#e3c09c" stroke-width="3"/>
+    <path d="M43 98 41 104H50 M79 99 79 105H89" stroke-width="4"/>
+    <circle cx="87" cy="83" r="2.6" fill="#765445" stroke="none"/><circle cx="108" cy="90" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

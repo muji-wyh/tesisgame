@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">crocodile</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M37 77Q19 81 10 56L42 64Q59 43 84 64L107 67V83L74 89H35Z" fill="#97bd79"/>
+    <path d="M18 64 23 55 29 65 34 54 41 63 46 52 54 59 60 51 68 59" fill="#6a9b6b"/>
+    <path d="M41 83 34 100H49L55 86 M70 85 75 101H89L83 85" fill="#97bd79"/>
+    <path d="M79 78H107 M87 78 91 85 95 78 100 84 104 78" fill="#fff5df" stroke-width="2"/>
+    <circle cx="80" cy="62" r="8" fill="#97bd79"/><circle cx="82" cy="62" r="2.6" fill="#765445" stroke="none"/><circle cx="103" cy="70" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

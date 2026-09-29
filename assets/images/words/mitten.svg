@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mitten</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="28" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M35 86 Q21 77 20 62 Q19 50 29 48 Q38 48 40 61 V37 Q40 15 62 15 Q84 15 85 37 L85 73 Q85 84 76 92Z" fill="#e5a0a4"/>
+    <path d="M43 60 44 78" stroke="#c78288" stroke-width="2.5"/>
+    <path d="M34 87 80 91 77 107 31 103Z" fill="#c19dc5"/>
+    <path d="M39 90 37 102 M49 91 47 103 M59 92 57 104 M69 93 67 104" stroke="#ecd0dd" stroke-width="3"/>
+    <path d="M62 41V65 M50 53H74 M53 44 71 62 M53 62 71 44" stroke="#f7d9cb" stroke-width="2.5"/>
+    <path d="M48 28 Q52 22 60 22" stroke="#f7c6bc" stroke-width="4"/>
+  </g>
+</svg>

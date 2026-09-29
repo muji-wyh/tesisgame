@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">blueberry</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M54 27Q73 13 90 22Q86 38 65 41Z" fill="#91b781"/>
+    <circle cx="41" cy="63" r="27" fill="#9aa5cd"/><circle cx="82" cy="70" r="27" fill="#8296c5"/>
+    <circle cx="57" cy="87" r="24" fill="#8b9fc8"/>
+    <path d="M36 46 43 52 52 48 47 57 50 65 40 61 32 66 34 56 28 51Z M80 52 86 57 95 55 91 64 95 71 85 67 77 73 78 64 73 59Z M53 73 59 78 66 75 64 83 69 89 60 87 54 94 53 85 47 81Z" fill="#677da9" stroke-width="2"/>
+    <path d="M20 60 22 52 M67 51 72 47 M39 89 40 82" stroke="#c8d4e7" stroke-width="4"/>
+  </g>
+</svg>

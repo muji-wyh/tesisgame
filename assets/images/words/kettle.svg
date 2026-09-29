@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">kettle</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M33 53 Q27 19 57 16 Q89 16 86 55" stroke="#765445" stroke-width="10"/>
+    <path d="M33 53 Q27 19 57 16 Q89 16 86 55" stroke="#c59d73" stroke-width="6"/>
+    <path d="M84 66 100 50 108 54 94 77Z" fill="#aac6c9"/>
+    <path d="M28 66 Q33 44 60 44 Q87 44 93 66 L96 86 Q97 106 60 106 Q23 106 24 86Z" fill="#b9d3d1"/>
+    <path d="M39 49 Q42 38 60 38 Q78 38 81 49Z" fill="#d0dfd5"/>
+    <path d="M53 38V30H67V38" fill="#c59d73" stroke-width="2.5"/>
+    <path d="M34 74 Q29 92 47 97" stroke="#e4ebd9" stroke-width="4"/>
+    <path d="M79 95 85 91 M103 45 Q99 37 104 30" stroke="#a6b8b5" stroke-width="2.5"/>
+  </g>
+</svg>

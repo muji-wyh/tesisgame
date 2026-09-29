@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fan</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 78H65V99H55Z" fill="#b8cece"/>
+    <path d="M38 100 Q60 91 82 100 L87 108 H33Z" fill="#9abbbb"/>
+    <circle cx="60" cy="47" r="36" fill="#e0ede4"/>
+    <path d="M60 47 Q35 37 45 20 Q52 12 62 20 Q70 28 60 47 M60 47 Q82 31 91 48 Q95 59 82 65 Q71 67 60 47 M60 47 Q66 73 47 76 Q34 75 37 62 Q40 52 60 47" fill="#8dbec5" stroke-width="2.5"/>
+    <circle cx="60" cy="47" r="30" stroke="#b7cecc" stroke-width="2"/>
+    <path d="M24 47H96 M60 11V83 M35 22 85 72 M35 72 85 22" stroke="#b7cecc" stroke-width="2"/>
+    <circle cx="60" cy="47" r="8" fill="#ebc387" stroke-width="2.5"/>
+    <circle cx="72" cy="103" r="2" fill="#765445" stroke="none"/>
+  </g>
+</svg>

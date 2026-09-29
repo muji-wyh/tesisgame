@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">candy</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 47 14 34 18 56 11 75 35 72 M84 47 106 34 102 56 109 75 85 72" fill="#c4b0d9"/>
+    <path d="M17 45 30 55 M17 65 31 62 M103 45 90 55 M103 65 89 62" stroke="#987fae" stroke-width="2.5"/>
+    <rect x="31" y="37" width="58" height="46" rx="18" fill="#edacac"/>
+    <path d="M39 40 Q47 56 41 80 M57 38 Q67 60 59 83 M76 39 Q85 56 79 79" stroke="#fff0d6" stroke-width="9"/>
+    <rect x="31" y="37" width="58" height="46" rx="18" fill="none"/>
+    <path d="M39 48 37 54" stroke="#ffd3c8" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sand</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 98 Q31 87 44 66 Q56 47 66 64 Q84 91 108 101 Q59 112 12 103Z" fill="#edce96"/>
+    <path d="M37 88 Q48 77 54 66 M71 84 81 94" stroke="#fbe3b2" stroke-width="3"/>
+    <path d="M24 94H26 M41 101H43 M62 93H64 M51 86H53 M82 103H84 M92 98H94 M61 77H63" stroke="#c8a879" stroke-width="2"/>
+    <path d="M76 63 87 21" stroke="#b58b69" stroke-width="5"/>
+    <path d="M82 21 84 12 H96 L94 25 H83" fill="#9ec9e0" stroke-width="2.5"/>
+    <path d="M70 57 87 62 83 76 Q75 85 69 74Z" fill="#9ec9e0" stroke-width="2.5"/>
+    <path d="M15 51 H42 L38 78 Q28 83 19 78Z" fill="#efa890" stroke-width="2.5"/>
+    <path d="M18 52 Q18 34 29 34 Q41 34 40 52" stroke="#b99069" stroke-width="2.5"/>
+    <ellipse cx="28" cy="51" rx="14" ry="4" fill="#f4d59d" stroke-width="2"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">peninsula</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 25H110V102Q82 111 59 103Q32 111 10 99Z" fill="#a2d5e6" stroke="none"/>
+    <path d="M11 25H65L64 47Q51 63 77 72Q95 80 85 92Q75 100 59 90Q35 80 38 59L28 51H11Z" fill="#ecd49b"/>
+    <path d="M11 27H60L58 45Q44 65 70 78Q88 86 78 90Q54 85 47 71Q36 48 26 46H11Z" fill="#9bc488" stroke="none"/>
+    <path d="M78 51H101 M89 67H106 M19 86H31 M39 100H47" stroke="#def1ee" stroke-width="3"/>
+    <path d="M29 28 21 40H37Z" fill="#6e9d6f" stroke-width="2"/>
+  </g>
+</svg>

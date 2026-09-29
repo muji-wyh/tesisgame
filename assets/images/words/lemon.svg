@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">lemon</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="39" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M24 42 Q40 23 64 32 Q87 36 95 59 L104 67 95 77 Q80 99 54 92 Q30 89 24 65 L15 55Z" fill="#f7d968"/>
+    <path d="M57 31 Q68 15 89 20 Q81 37 60 37Z" fill="#91bd7e"/>
+    <path d="M35 48 Q45 38 56 40" stroke="#fff0ad" stroke-width="5"/>
+    <path d="M35 67 37 70 M65 83 68 84 M84 63 85 66 M71 47 73 49 M52 61 54 62" stroke="#dcb64d" stroke-width="2.5"/>
+  </g>
+</svg>

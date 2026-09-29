@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">avalanche</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 102 50 17Q57 8 64 20L110 103Z" fill="#94adbf"/>
+    <path d="M36 44 50 17Q57 8 64 20L78 46 64 38 53 49 46 38Z" fill="#f5f6e9"/>
+    <path d="M57 37 79 61 66 61 91 87 74 83" stroke="#dce6e8" stroke-width="12"/>
+    <path d="M34 101Q20 96 29 86Q28 73 43 74Q44 62 58 66Q74 56 81 72Q96 69 98 83Q112 85 107 102Z" fill="#f5f6ec"/>
+    <path d="M39 84Q45 78 51 85 M70 82Q79 75 86 83 M55 98Q61 89 69 96" stroke="#bbd1df" stroke-width="2.5"/>
+  </g>
+</svg>

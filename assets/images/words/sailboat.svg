@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">sailboat</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 82 H106 L91 101 H35Z" fill="#cfa177"/>
+    <path d="M60 16V82" stroke="#a58160" stroke-width="4"/>
+    <path d="M54 24V74H17Z" fill="#f3d8a6"/>
+    <path d="M67 30 100 74H67Z" fill="#c1dbe0"/>
+    <path d="M49 38 49 67H28" stroke="#fff0cf" stroke-width="3"/>
+    <path d="M60 16 79 21 60 29Z" fill="#e8a59b" stroke-width="2.5"/>
+    <path d="M28 87H95" stroke="#f0d7ad" stroke-width="3"/>
+    <circle cx="48" cy="91" r="3" fill="#91765e" stroke="none"/><circle cx="75" cy="91" r="3" fill="#91765e" stroke="none"/>
+    <path d="M12 107 Q24 101 36 107 Q48 112 60 107 Q72 101 84 107 Q96 112 108 107" stroke="#9fcbd3" stroke-width="3"/>
+  </g>
+</svg>

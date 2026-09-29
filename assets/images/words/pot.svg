@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M29 57 H17 Q9 58 12 70 Q15 78 28 74 M91 57 H103 Q111 58 108 70 Q105 78 92 74" fill="#c49b76"/>
+    <path d="M26 48 H94 V83 Q94 103 60 103 Q26 103 26 83Z" fill="#a5c6c3"/>
+    <ellipse cx="60" cy="48" rx="35" ry="11" fill="#cce0d4"/>
+    <path d="M27 48 Q34 27 60 27 Q86 27 93 48Z" fill="#b9d5cc"/>
+    <path d="M51 28V20 Q60 15 69 20 V28" fill="#bc9974" stroke-width="3"/>
+    <path d="M37 63V83 Q37 93 49 96" stroke="#d8e8d8" stroke-width="4"/>
+    <path d="M82 64V83" stroke="#7ea9a9" stroke-width="2.5"/>
+  </g>
+</svg>

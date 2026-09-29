@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">slide</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 103 40 31 M36 102 51 40" stroke="#765445" stroke-width="7"/>
+    <path d="M20 103 40 31 M36 102 51 40" stroke="#9ebfc9" stroke-width="4"/>
+    <path d="M25 84H40 M30 66H44 M35 48H48" stroke="#95b7c2" stroke-width="4"/>
+    <path d="M40 36 H56 Q64 51 76 71 Q90 95 108 95 L106 105 Q82 107 65 80 L44 45 H39Z" fill="#efbb76"/>
+    <path d="M47 37 71 75 Q88 100 106 100" stroke="#fce1a1" stroke-width="4"/>
+    <path d="M38 36V20 H55 V35 M59 43V31 Q66 40 72 50" stroke="#a5c3c8" stroke-width="4"/>
+    <path d="M76 81V104 M70 100H82" stroke="#9ebfc9" stroke-width="4"/>
+    <path d="M13 108H109" stroke="#bcd0a1" stroke-width="3"/>
+  </g>
+</svg>

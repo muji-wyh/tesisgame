@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tent</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 100 52 25 77 21 108 99Z" fill="#e9b17c"/>
+    <path d="M52 25 82 100 H13Z" fill="#f5ce90"/>
+    <path d="M52 47 29 100 H70Z" fill="#a6846c"/>
+    <path d="M52 47 54 99 H70Z" fill="#846e61" stroke="none"/>
+    <path d="M52 25 51 14 M77 21 80 12 M20 88 11 105 M101 87 109 105" stroke="#9c805e" stroke-width="2.5"/>
+    <path d="M54 27 77 23 105 96" stroke="#f9d8a9" stroke-width="3"/>
+    <path d="M33 100 51 70 53 100Z" fill="#f5d99e" stroke="none"/>
+    <path d="M13 106H106" stroke="#adbf8c" stroke-width="3"/>
+  </g>
+</svg>

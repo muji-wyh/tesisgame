@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">microscope</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M47 31 60 45 86 18 74 9Z" fill="#9ab3bf"/>
+    <path d="M69 16 81 29 M44 34 56 46 47 57 35 46Z" fill="#bfd0d4"/>
+    <path d="M70 35Q101 43 91 74Q84 91 63 95" stroke="#89a7b5" stroke-width="12"/>
+    <path d="M31 66H75V73H31Z M55 73V98 M30 107H96L86 96H43Z" fill="#b5c9cc"/>
+    <circle cx="83" cy="51" r="8" fill="#dcbf8d"/>
+    <path d="M39 62H61 M44 84 57 80 64 86" stroke="#d4bc8c" stroke-width="3"/>
+  </g>
+</svg>

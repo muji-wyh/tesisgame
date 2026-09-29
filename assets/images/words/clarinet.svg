@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">clarinet</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M55 14H64L68 75 81 103Q63 112 39 103L51 75Z" fill="#5d6f7c"/>
+    <path d="M55 13 58 7H64V21H55Z" fill="#b3b7b9"/>
+    <path d="M54 29H65 M53 48H67 M51 72H68 M44 95H76" stroke="#d0c7b4" stroke-width="4"/>
+    <path d="M61 35V87" stroke="#c9c7ba" stroke-width="2.5"/>
+    <circle cx="58" cy="39" r="3" fill="#d7d0ba" stroke-width="1.5"/><circle cx="65" cy="44" r="3" fill="#d7d0ba" stroke-width="1.5"/><circle cx="57" cy="57" r="3" fill="#d7d0ba" stroke-width="1.5"/><circle cx="64" cy="62" r="3" fill="#d7d0ba" stroke-width="1.5"/><circle cx="58" cy="79" r="3" fill="#d7d0ba" stroke-width="1.5"/><circle cx="66" cy="86" r="3" fill="#d7d0ba" stroke-width="1.5"/>
+    <ellipse cx="60" cy="103" rx="20" ry="5" fill="#4d5a69"/>
+  </g>
+</svg>

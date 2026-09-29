@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">onion</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="33" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M49 38 47 22 55 29 60 12 64 28 75 21 71 38 Q92 49 95 68 Q100 92 77 101 Q59 109 39 101 Q17 91 23 68 Q28 48 49 38Z" fill="#e4c395"/>
+    <path d="M54 35 Q42 53 39 73 Q37 92 54 103 M60 31 Q55 65 58 101 M66 35 Q78 54 81 73 Q83 92 66 103" stroke="#bc9365" stroke-width="2.5"/>
+    <path d="M51 104 47 110 M58 105 58 111 M65 104 70 110" stroke="#a98057" stroke-width="2"/>
+    <path d="M33 59 Q29 70 31 79" stroke="#f9e3bc" stroke-width="4"/>
+    <path d="M48 34 Q60 41 73 34" stroke="#b69067" stroke-width="2"/>
+  </g>
+</svg>

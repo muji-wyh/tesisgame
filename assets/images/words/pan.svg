@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pan</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M67 53 96 18 Q101 12 106 17 Q110 21 105 27 L79 64Z" fill="#a88465"/>
+    <path d="M95 23 102 18" stroke="#d7b087" stroke-width="2.5"/>
+    <path d="M16 76 Q20 99 51 104 Q79 108 94 86 V76Z" fill="#8c9a9e"/>
+    <ellipse cx="55" cy="75" rx="40" ry="25" fill="#b5c4c7"/>
+    <ellipse cx="55" cy="73" rx="31" ry="17" fill="#7e919b" stroke-width="2.5"/>
+    <path d="M32 75 Q26 65 40 62 Q51 55 60 62 Q74 62 76 73 Q73 84 60 84 Q39 89 32 75Z" fill="#fff3d7" stroke-width="2"/>
+    <ellipse cx="54" cy="72" rx="10" ry="8" fill="#efc163" stroke="#d4a452" stroke-width="2"/>
+    <path d="M26 88 Q35 97 48 98" stroke="#cbd8d5" stroke-width="3"/>
+  </g>
+</svg>

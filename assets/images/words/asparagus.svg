@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">asparagus</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M31 101 45 40 M48 104 61 36 M67 103 80 39" stroke="#83ad6e" stroke-width="12"/>
+    <path d="M37 42 43 17 50 37 45 49Z M54 38 62 12 68 33 62 46Z M73 41 82 20 88 39 79 50Z" fill="#96b77a"/>
+    <path d="M40 35 46 30 49 36 M58 30 64 25 67 32 M77 36 83 31 87 37 M38 65 44 69 M35 83 40 87 M54 62 60 66 M49 83 55 87 M74 67 79 71 M70 85 75 89" stroke="#5e8e64" stroke-width="2.5"/>
+    <path d="M29 76 78 85 76 93 28 84Z" fill="#dfb681"/>
+  </g>
+</svg>

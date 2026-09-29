@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">avocado</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="36" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M65 19 Q80 17 84 38 Q86 47 94 59 Q109 89 86 101 Q58 114 47 89 Q38 67 51 45 Q51 24 65 19Z" fill="#8bad77"/>
+    <path d="M47 23 Q61 20 66 42 Q68 53 76 66 Q91 93 67 105 Q39 114 24 93 Q12 76 26 55 Q32 46 33 36 Q36 25 47 23Z" fill="#bfd28e"/>
+    <path d="M46 32 Q56 30 59 47 Q62 60 69 72 Q78 91 62 98 Q43 106 31 89 Q22 76 34 59 Q39 49 40 40 Q41 32 46 32Z" fill="#e2e6ad" stroke="none"/>
+    <ellipse cx="48" cy="78" rx="17" ry="20" fill="#bd8f64"/>
+    <path d="M39 69 Q42 63 49 63" stroke="#e1b788" stroke-width="4"/>
+    <path d="M80 36 80 43 M94 75 94 82 M89 94 86 97" stroke="#6d965f" stroke-width="2.5"/>
+  </g>
+</svg>

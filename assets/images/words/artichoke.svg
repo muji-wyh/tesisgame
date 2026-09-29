@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">artichoke</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M56 86 53 106H65L64 86" fill="#84aa6e"/>
+    <path d="M60 93Q21 84 24 50L42 61 37 34 54 49 60 19 69 48 86 33 78 61 98 48Q102 83 60 93Z" fill="#8fba7b"/>
+    <path d="M26 51Q28 74 60 92Q38 72 42 60 M97 50Q92 79 60 92Q81 70 78 60 M42 59Q42 76 60 90Q55 67 54 49 M78 60Q76 76 60 90L69 48" stroke="#688e62"/>
+    <path d="M54 50 60 71 69 49" fill="#c1d493"/>
+  </g>
+</svg>

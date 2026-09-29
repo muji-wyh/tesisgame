@@ -42,8 +42,8 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	var new_words: Array = app.data.words.slice(140)
-	check(new_words.size() == 60, "All sixty new words receive real-mode layout coverage")
+	var new_words: Array = app.data.words.slice(200)
+	check(new_words.size() == 150, "All 150 newly added words receive real-mode layout coverage")
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(480, 480), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768)]:
 		root.size = dimensions
 		await settle()

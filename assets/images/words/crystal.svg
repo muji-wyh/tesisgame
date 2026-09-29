@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">crystal</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M42 44 58 12 75 41 70 98 53 108 41 96Z" fill="#bba4d9"/>
+    <path d="M58 12 57 42 53 108 M42 44 57 42 75 41" fill="#e0ceed"/>
+    <path d="M14 63 24 46 41 61 51 103 33 103Z" fill="#a1c6dd"/>
+    <path d="M24 46 29 65 33 103 M14 63 29 65 41 61" fill="#d2e4eb"/>
+    <path d="M74 62 92 41 108 60 93 99 70 105Z" fill="#9dc8c7"/>
+    <path d="M92 41 90 66 70 105 M74 62 90 66 108 60" fill="#cde7de"/>
+    <path d="M20 21v8m-4-4h8 M97 27v8m-4-4h8 M91 92v6m-3-3h6" stroke="#d5ac61" stroke-width="2.5"/>
+  </g>
+</svg>

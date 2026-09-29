@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">capsule</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M32 82 39 47 53 21H69L84 46 92 82Z" fill="#e9e2cb"/>
+    <path d="M53 21V13H69V21 M31 82H94V94Q60 108 27 94Z" fill="#a2b4c4"/>
+    <path d="M44 48H77L80 75H41Z" fill="#afcddd"/>
+    <circle cx="61" cy="58" r="11" fill="#6b94ad" stroke="#f3ebd5" stroke-width="3"/>
+    <path d="M42 86H81 M50 33H73" stroke="#b4b9bc"/>
+    <path d="M20 21v8m-4-4h8 M97 27v8m-4-4h8 M91 92v6m-3-3h6" stroke="#d5ac61" stroke-width="2.5"/>
+  </g>
+</svg>

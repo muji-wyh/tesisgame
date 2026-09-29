@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">comb</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-20 60 60)">
+      <path d="M19 40 H101 Q108 40 108 47 V54 H12 V47 Q12 40 19 40Z" fill="#df9ea2"/>
+      <path d="M16 54V85 M25 54V85 M34 54V85 M43 54V85 M52 54V85 M61 54V85 M70 54V85 M79 54V85 M88 54V85 M97 54V85 M105 54V85" stroke="#765445" stroke-width="6"/>
+      <path d="M16 54V85 M25 54V85 M34 54V85 M43 54V85 M52 54V85 M61 54V85 M70 54V85 M79 54V85 M88 54V85 M97 54V85 M105 54V85" stroke="#eab4b5" stroke-width="3"/>
+      <path d="M20 46H99" stroke="#f7cdca" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

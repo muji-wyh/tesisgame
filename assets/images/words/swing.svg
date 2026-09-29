@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">swing</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 105 32 23 51 105 M70 105 88 23 106 105" stroke="#765445" stroke-width="7"/>
+    <path d="M17 105 32 23 51 105 M70 105 88 23 106 105" stroke="#afc99b" stroke-width="4"/>
+    <path d="M21 83H45 M76 83H101 M31 23H89" stroke="#765445" stroke-width="7"/>
+    <path d="M21 83H45 M76 83H101 M31 23H89" stroke="#afc99b" stroke-width="4"/>
+    <path d="M46 25V84 M76 25V84" stroke="#c8a778" stroke-width="3"/>
+    <path d="M40 82 H83 L79 91 H43Z" fill="#e7ab87"/>
+    <path d="M43 84H79" stroke="#f6cfa7" stroke-width="2"/>
+    <circle cx="32" cy="23" r="4" fill="#e4d5b5" stroke-width="2"/><circle cx="88" cy="23" r="4" fill="#e4d5b5" stroke-width="2"/>
+  </g>
+</svg>

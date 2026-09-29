@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">radish</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M57 44 Q32 39 27 18 Q50 17 61 42 M60 42 Q50 20 62 10 Q76 20 64 43 M64 43 Q74 18 96 22 Q94 43 66 47" fill="#9fc88b"/>
+    <path d="M40 26 58 42 M63 23V43 M81 30 67 43" stroke="#729f6c" stroke-width="2.5"/>
+    <path d="M59 43 Q84 39 91 61 Q97 81 77 96 L62 109 Q50 97 36 88 Q19 75 27 58 Q35 39 59 43Z" fill="#e99b9d"/>
+    <path d="M37 89 Q48 87 61 93 Q73 87 84 89 L62 109Z" fill="#fff1d8" stroke="none"/>
+    <path d="M37 89 Q48 87 61 93 Q73 87 84 89" stroke="#e4d4bd" stroke-width="2"/>
+    <path d="M62 107 Q69 111 72 106 M35 63 Q37 53 47 50" stroke-width="2.5"/>
+    <path d="M36 62 Q39 54 45 53" stroke="#ffd2c0" stroke-width="4"/>
+  </g>
+</svg>

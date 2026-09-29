@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">parrot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 90H104" stroke="#b58b69" stroke-width="6"/>
+    <path d="M47 81 37 108 62 101 69 80" fill="#8baecb"/>
+    <path d="M41 43 Q42 23 64 23 Q86 24 84 47 Q92 64 79 83 Q62 97 45 80 Q31 64 41 43Z" fill="#a9c98b"/>
+    <path d="M50 51 Q76 42 78 66 Q79 79 56 86 Q44 77 50 51Z" fill="#7caf84" stroke-width="2.5"/>
+    <path d="M59 60 Q68 65 61 80 M67 58 Q76 62 69 75" stroke="#97c6bd" stroke-width="3"/>
+    <path d="M67 26 Q83 24 87 40 Q82 55 68 51 Q57 38 67 26Z" fill="#f5dfb2" stroke="none"/>
+    <path d="M81 36 Q105 37 99 61 L85 48 81 45Z" fill="#e5a46b"/>
+    <circle cx="73" cy="37" r="3.2" fill="#765445" stroke="none"/>
+    <path d="M53 84 53 90 M68 84 68 90 M48 91H57 M63 91H73" stroke-width="2.5"/>
+    <path d="M52 24 51 14 62 23 69 13 72 25" fill="#b6d899" stroke-width="2.5"/>
+  </g>
+</svg>

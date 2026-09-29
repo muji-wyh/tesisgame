@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pencil</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(38 60 60)">
+      <path d="M50 30 H70 V88 L60 110 50 88Z" fill="#f3ce6c"/>
+      <path d="M57 34V88 M64 34V88" stroke="#c99f4e" stroke-width="2"/>
+      <path d="M50 88H70L60 110Z" fill="#edd1a2"/>
+      <path d="M56 101H64L60 110Z" fill="#77736d" stroke-width="2"/>
+      <path d="M50 16 Q50 10 56 10 H64 Q70 10 70 16 V24 H50Z" fill="#eaa5a1"/>
+      <path d="M50 24H70V34H50Z" fill="#ccd6d6" stroke-width="2.5"/>
+      <path d="M51 29H69" stroke="#99acb2" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

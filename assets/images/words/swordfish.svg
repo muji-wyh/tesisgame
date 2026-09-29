@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">swordfish</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M21 64 11 42 14 83 28 72Q50 96 79 70L112 55 78 58Q55 36 24 56Z" fill="#97bbce"/>
+    <path d="M40 48 49 25 62 47 M43 81 53 96 62 79" fill="#779caf"/>
+    <path d="M27 68Q50 81 72 67" fill="#d5e5e6" stroke="none"/>
+    <path d="M56 59Q49 67 57 75 M61 69 53 85 71 73" fill="#8eafbf" stroke-width="2"/>
+    <circle cx="71" cy="60" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

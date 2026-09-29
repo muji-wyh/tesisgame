@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">woodpecker</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M87 13H108V107H82Z" fill="#c29572"/><path d="M97 22 94 43 M96 70 101 95" stroke="#9b7559"/>
+    <path d="M50 86 28 107 40 79" fill="#536c77"/>
+    <path d="M34 66Q30 40 54 39Q77 43 72 70L60 93Q35 97 34 66Z" fill="#fcf3db"/>
+    <path d="M39 46Q59 45 55 82L37 86Q25 65 39 46Z" fill="#586c74"/>
+    <path d="M47 56 35 72 M50 66 40 80" stroke="#fcf3db" stroke-width="3"/>
+    <circle cx="61" cy="35" r="17" fill="#fcf3db"/>
+    <path d="M47 23 58 13 73 19 76 30 59 25Z" fill="#d97670"/>
+    <path d="M76 32 94 39 76 43Z" fill="#c49a62"/>
+    <path d="M61 88 83 81 M63 94 82 91"/><circle cx="67" cy="33" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

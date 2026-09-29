@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cinnamon</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M24 82 77 23Q87 19 94 28L41 91Z" fill="#c4946b"/>
+    <path d="M38 96 88 40Q100 35 104 48L53 104Z" fill="#b88159"/>
+    <path d="M27 82 78 28 M43 97 94 44" stroke="#e4b78b" stroke-width="3"/>
+    <ellipse cx="32" cy="87" rx="11" ry="7" transform="rotate(39 32 87)" fill="#e4b78b"/>
+    <ellipse cx="46" cy="101" rx="10" ry="6" transform="rotate(39 46 101)" fill="#d9ac7d"/>
+    <path d="M29 84Q41 87 34 92Q29 94 29 88 M43 99Q53 102 47 105" stroke="#936341" stroke-width="2.5"/>
+    <path d="M25 52Q11 31 29 23Q40 32 34 48Z" fill="#a6bd83"/>
+  </g>
+</svg>

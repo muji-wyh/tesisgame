@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">island</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="94" rx="49" ry="15" fill="#b3dce1" stroke="none"/>
+    <path d="M20 92 Q32 73 61 77 Q87 77 101 96 Q65 109 20 98Z" fill="#efd59f"/>
+    <path d="M57 87 Q69 53 56 27 L64 25 Q80 57 69 91Z" fill="#c69b6c"/>
+    <path d="M63 37 69 35 M66 49 73 47 M68 62H76 M65 76 73 78" stroke="#a98057" stroke-width="2"/>
+    <path d="M59 28 Q35 12 15 30 Q36 27 50 39 Q32 34 23 54 Q46 43 60 36 Q76 44 91 60 Q94 37 69 31 Q91 22 108 34 Q100 10 63 26 Q59 12 43 11 Q49 19 53 30Z" fill="#96be87"/>
+    <path d="M27 29 59 31 91 44 M59 31 39 43 M65 30 89 24" stroke="#6d9c70" stroke-width="2.5"/>
+    <circle cx="57" cy="37" r="5" fill="#b58b69" stroke-width="2"/><circle cx="67" cy="37" r="5" fill="#b58b69" stroke-width="2"/>
+    <path d="M14 105H34 M81 107H107 M17 82H31" stroke="#8ebfcf" stroke-width="2.5"/>
+  </g>
+</svg>

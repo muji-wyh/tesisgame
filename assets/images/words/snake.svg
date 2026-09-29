@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">snake</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="57" cy="104" rx="41" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M19 89 Q40 104 76 90 Q86 85 78 79 Q72 73 52 77 Q19 83 20 64 Q21 48 54 47 L72 46 Q83 43 80 34" stroke="#765445" stroke-width="18"/>
+    <path d="M19 89 Q40 104 76 90 Q86 85 78 79 Q72 73 52 77 Q19 83 20 64 Q21 48 54 47 L72 46 Q83 43 80 34" stroke="#91bd7e" stroke-width="11"/>
+    <path d="M76 42 Q61 38 65 26 Q70 16 88 22 Q101 27 97 37 Q92 45 76 42Z" fill="#a8cb88"/>
+    <circle cx="88" cy="28" r="3" fill="#765445" stroke="none"/>
+    <path d="M96 35 107 36 M104 36 108 32 M104 36 108 40" stroke="#df8683" stroke-width="2"/>
+    <path d="M37 52 39 60 M54 45 56 53 M27 68 34 67 M49 74 51 81 M73 82 70 90 M44 94 44 101" stroke="#6b9c67" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">rock</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="45" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M14 87 24 54 44 33 75 28 99 48 108 85 89 102 39 103Z" fill="#b7bec2"/>
+    <path d="M24 54 54 49 75 28 M54 49 65 78 39 103 M65 78 108 85 M65 78 88 54 99 48" stroke="#8f9b9f" stroke-width="2.5"/>
+    <path d="M54 49 75 28 99 48 88 54 65 78Z" fill="#d4d8d7" stroke="none"/>
+    <path d="M54 49 75 28 99 48 88 54 65 78Z" stroke="#8f9b9f" stroke-width="2.5"/>
+    <path d="M30 60 24 79 M41 40 50 36" stroke="#e4e6df" stroke-width="4"/>
+  </g>
+</svg>

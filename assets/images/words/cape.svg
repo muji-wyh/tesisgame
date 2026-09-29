@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cape</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 24 Q60 16 76 24 L104 100 Q82 96 60 105 Q38 96 16 100Z" fill="#cf8eaa"/>
+    <path d="M48 31 34 89 M59 35 60 93 M72 31 88 89" stroke="#af7295" stroke-width="3"/>
+    <path d="M43 24 Q60 11 77 24 L70 37 60 31 50 37Z" fill="#e6adc0"/>
+    <path d="M48 24 Q60 19 72 24 L66 28 H54Z" fill="#8c7088" stroke-width="2.5"/>
+    <circle cx="56" cy="34" r="3" fill="#f1ce75" stroke-width="2"/><circle cx="64" cy="34" r="3" fill="#f1ce75" stroke-width="2"/>
+    <path d="M59 34H61 M55 37 47 47 M65 37 73 47" stroke="#f1ce75" stroke-width="2.5"/>
+  </g>
+</svg>

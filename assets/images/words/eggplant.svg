@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">eggplant</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M72 37Q91 47 87 70Q81 103 43 106Q20 106 22 85Q24 68 46 60L61 40Z" fill="#9b82b8"/>
+    <path d="M67 39 62 27 73 33 83 24 82 38 94 45 81 49 75 62 69 49 56 51Z" fill="#91b67c"/>
+    <path d="M78 33Q83 21 91 18" stroke="#6f9666" stroke-width="5"/>
+    <path d="M32 87Q39 74 53 73" stroke="#c6abd7" stroke-width="6"/>
+  </g>
+</svg>

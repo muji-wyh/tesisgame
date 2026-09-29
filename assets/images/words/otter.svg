@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">otter</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 91 Q27 83 41 91 Q59 102 77 92 Q94 83 108 91 M21 105 Q39 99 51 106 M81 105H102" stroke="#acd3d6" stroke-width="3"/>
+    <path d="M46 83 Q28 81 19 97 Q11 104 16 107 Q37 107 56 91" fill="#a98064"/>
+    <ellipse cx="62" cy="76" rx="29" ry="24" transform="rotate(-23 62 76)" fill="#b89070"/>
+    <ellipse cx="63" cy="76" rx="17" ry="21" transform="rotate(-23 63 76)" fill="#ebd2ad" stroke="none"/>
+    <circle cx="68" cy="33" r="8" fill="#b89070"/><circle cx="96" cy="42" r="8" fill="#b89070"/>
+    <ellipse cx="80" cy="47" rx="23" ry="21" transform="rotate(15 80 47)" fill="#c29d7d"/>
+    <ellipse cx="80" cy="56" rx="16" ry="10" fill="#ecd8b8" stroke="none"/>
+    <circle cx="72" cy="43" r="3" fill="#765445" stroke="none"/><circle cx="90" cy="47" r="3" fill="#765445" stroke="none"/>
+    <path d="M77 50 84 52 80 56Z" fill="#765445" stroke="none"/>
+    <path d="M80 56 79 59 M70 57 59 54 M70 61 59 62 M90 60 102 60 M90 64 100 69" stroke-width="1.8"/>
+    <path d="M42 74 54 80 M78 70 72 82" stroke="#b89070" stroke-width="9"/>
+    <path d="M55 88 Q51 78 62 74 Q74 75 71 88Z" fill="#ccb4cb" stroke-width="2.5"/>
+    <path d="M62 75V85 M58 78 59 85 M67 78 65 85" stroke="#a68ba8" stroke-width="1.8"/>
+  </g>
+</svg>

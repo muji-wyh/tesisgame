@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">armadillo</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M27 84Q9 87 11 98Q30 100 42 89" fill="#c49a82"/>
+    <path d="M28 81Q23 42 58 37Q88 35 91 73L78 89H40Z" fill="#bda78e"/>
+    <path d="M41 42Q28 65 43 87 M52 38Q39 66 54 89 M64 39Q51 65 65 87 M76 44Q63 67 75 83" stroke="#8d7565" stroke-width="4"/>
+    <path d="M78 64 77 38 88 55 94 43 97 65 111 80Q107 87 91 86L79 79Z" fill="#d2b59c"/>
+    <path d="M39 87 34 100H46L51 88 M73 87 69 100H81L85 86" fill="#c49a82"/>
+    <circle cx="97" cy="73" r="2.6" fill="#765445" stroke="none"/><circle cx="110" cy="81" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

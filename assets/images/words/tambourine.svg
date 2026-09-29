@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tambourine</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <ellipse cx="60" cy="63" rx="45" ry="37" fill="#d8a679"/>
+    <ellipse cx="60" cy="57" rx="44" ry="34" fill="#f0dfb8"/>
+    <ellipse cx="60" cy="57" rx="34" ry="25" fill="#f7ebcd" stroke="#c7a37c" stroke-width="2"/>
+    <ellipse cx="23" cy="45" rx="9" ry="5" fill="#b5b8bd" stroke-width="2"/><ellipse cx="23" cy="50" rx="9" ry="5" fill="#d9d9cf" stroke-width="2"/><ellipse cx="60" cy="25" rx="9" ry="5" fill="#b5b8bd" stroke-width="2"/><ellipse cx="60" cy="30" rx="9" ry="5" fill="#d9d9cf" stroke-width="2"/><ellipse cx="98" cy="46" rx="9" ry="5" fill="#b5b8bd" stroke-width="2"/><ellipse cx="98" cy="51" rx="9" ry="5" fill="#d9d9cf" stroke-width="2"/><ellipse cx="86" cy="83" rx="9" ry="5" fill="#b5b8bd" stroke-width="2"/><ellipse cx="86" cy="88" rx="9" ry="5" fill="#d9d9cf" stroke-width="2"/><ellipse cx="35" cy="83" rx="9" ry="5" fill="#b5b8bd" stroke-width="2"/><ellipse cx="35" cy="88" rx="9" ry="5" fill="#d9d9cf" stroke-width="2"/>
+    <path d="M28 18 23 12 M95 19 101 13" stroke="#d9ba80"/>
+  </g>
+</svg>

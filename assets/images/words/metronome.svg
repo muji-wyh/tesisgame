@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">metronome</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M41 16H77L97 104H21Z" fill="#be9573"/>
+    <path d="M46 23H71L86 93H32Z" fill="#ecdcba"/>
+    <path d="M56 31H63 M53 43H66 M50 55H69 M48 67H72" stroke="#a48c6f" stroke-width="2"/>
+    <path d="M60 91 80 28" stroke="#7d8f98" stroke-width="4"/>
+    <path d="M68 44 80 48 76 61 64 57Z" fill="#a7bdc2"/>
+    <circle cx="60" cy="90" r="6" fill="#b68b64"/>
+    <path d="M48 107H70" stroke-width="5"/>
+  </g>
+</svg>

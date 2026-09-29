@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ice</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="102" rx="45" ry="7" fill="#d4e9e8" stroke="none"/>
+    <path d="M24 43 66 24 101 44 58 65Z" fill="#e5f3ee" stroke="#86aebc"/>
+    <path d="M24 43 58 65 V102 L23 82Z" fill="#bcdde4" stroke="#86aebc"/>
+    <path d="M58 65 101 44 V81 L58 102Z" fill="#9fcbd8" stroke="#86aebc"/>
+    <path d="M31 50 39 55 M31 59V76 M66 68 72 65 M91 57V75 M40 39 61 30" stroke="#f1faf4" stroke-width="4"/>
+    <path d="M79 47 83 43 80 35 M40 86 46 75 42 67" stroke="#88bacb" stroke-width="2"/>
+    <path d="M14 91 Q10 96 14 99 Q19 99 18 95Z M106 87 Q101 93 104 97 Q110 99 109 93Z" fill="#bcdde4" stroke="#86aebc" stroke-width="2"/>
+  </g>
+</svg>

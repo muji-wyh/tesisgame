@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">peacock</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 84 Q10 86 12 58 Q9 36 30 36 Q23 16 44 16 Q53 13 60 24 Q67 13 76 16 Q97 16 90 36 Q111 36 108 58 Q110 86 60 84Z" fill="#a4c9a0"/>
+    <path d="M60 84 26 48 M60 84 44 29 M60 84 60 36 M60 84 77 29 M60 84 94 48 M60 84 22 71 M60 84 98 71" stroke="#7eae91" stroke-width="2.5"/>
+    <g fill="#e3d185" stroke="#78a38c" stroke-width="2"><ellipse cx="25" cy="48" rx="8" ry="10" transform="rotate(-45 25 48)"/><ellipse cx="43" cy="29" rx="8" ry="10" transform="rotate(-20 43 29)"/><ellipse cx="60" cy="39" rx="8" ry="10"/><ellipse cx="77" cy="29" rx="8" ry="10" transform="rotate(20 77 29)"/><ellipse cx="95" cy="48" rx="8" ry="10" transform="rotate(45 95 48)"/><ellipse cx="23" cy="71" rx="8" ry="9"/><ellipse cx="97" cy="71" rx="8" ry="9"/></g>
+    <g fill="#719eb5" stroke="none"><circle cx="25" cy="49" r="4"/><circle cx="43" cy="30" r="4"/><circle cx="60" cy="40" r="4"/><circle cx="77" cy="30" r="4"/><circle cx="95" cy="49" r="4"/><circle cx="23" cy="71" r="4"/><circle cx="97" cy="71" r="4"/></g>
+    <path d="M54 96 50 107 M65 96 70 107 M45 108H56 M64 108H75" stroke-width="2.5"/>
+    <path d="M49 75 Q60 65 64 72 L62 56 Q57 43 69 40 Q83 40 79 54 L74 67 Q82 89 66 98 Q45 102 38 88Z" fill="#85b6c3"/>
+    <path d="M44 81 Q64 70 68 84 Q64 97 49 91Z" fill="#99c4c3" stroke-width="2.5"/>
+    <path d="M78 47 90 52 78 56Z" fill="#e9be7b" stroke-width="2"/>
+    <circle cx="72" cy="47" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M66 39 64 31 M72 38 74 29" stroke="#719eb5" stroke-width="2.5"/>
+  </g>
+</svg>

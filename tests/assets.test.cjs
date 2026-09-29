@@ -87,7 +87,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 330); // Includes Pip's eight wardrobes and ten derived chest layers.
+  assert.equal(imports.length, 480); // Includes Pip's eight wardrobes and ten derived chest layers.
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -186,10 +186,10 @@ function assertVoice(relativePath) {
   return wave;
 }
 
-test('all 200 leveled vocabulary words have distinct illustrations in one directory', () => {
-  assert.equal(words.length, 200);
-  assert.equal(new Set(words.map(word => word.id)).size, 200);
-  assert.equal(new Set(words.map(word => word.text)).size, 200);
+test('all 350 leveled vocabulary words have distinct illustrations in one directory', () => {
+  assert.equal(words.length, 350);
+  assert.equal(new Set(words.map(word => word.id)).size, 350);
+  assert.equal(new Set(words.map(word => word.text)).size, 350);
   for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
     assert.ok(words.some(word => word.id === original && word.text === original));
   }
@@ -209,13 +209,34 @@ test('the sixty-word age expansion has its own reproducible original art module'
   const filename = path.join(root, 'tools', 'word-art', 'age-expansion.cjs');
   assert.ok(fs.existsSync(filename), 'The original age-expansion art module is missing');
   const art = require(filename);
-  const expansion = words.slice(140);
+  const expansion = words.slice(140, 200);
   assert.equal(expansion.length, 60);
   assert.deepEqual(Object.keys(art).sort(), expansion.map(word => word.id).sort());
   for (const word of expansion) assertSvgGeometry(art[word.id], word.id);
   for (const word of expansion) {
     assert.ok(readSvg(word.image).replace(/\r\n/g, '\n').includes(art[word.id].replace(/\r\n/g, '\n')),
       `${word.id} must match its original art definition`);
+  }
+});
+
+test('each age tier gains fifty unique illustrated nouns without replacing earlier words', () => {
+  const previous = words.slice(0, 200);
+  assert.deepEqual(previous.reduce((counts, word) => {
+    counts[word.level] = (counts[word.level] || 0) + 1;
+    return counts;
+  }, {}), { basic: 98, growing: 62, advanced: 40 });
+  const added = words.slice(200);
+  assert.equal(added.length, 150);
+  for (const level of ['basic', 'growing', 'advanced']) {
+    const additions = added.filter(word => word.level === level);
+    assert.equal(additions.length, 50, `${level} must gain fifty words`);
+    const art = require(`../tools/word-art/${level}-expansion.cjs`);
+    assert.deepEqual(Object.keys(art).sort(), additions.map(word => word.id).sort());
+    for (const word of additions) {
+      assertSvgGeometry(art[word.id], word.id);
+      assert.ok(readSvg(word.image).replace(/\r\n/g, '\n').includes(art[word.id].replace(/\r\n/g, '\n')),
+        `${word.id} must match its original illustration`);
+    }
   }
 });
 
@@ -257,13 +278,13 @@ test('the encouraging try-again scene is a standalone SVG', () => {
   readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
 });
 
-test('the generated image directories contain exactly the 273 named SVGs', () => {
+test('the generated image directories contain exactly the 423 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]],
     ['scenes', ['try-again.svg']]
   ];
-  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 273);
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 423);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
@@ -304,7 +325,7 @@ test('voice sources contain the active recordings and eight preserved legacy pro
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
-  assert.equal(expected.length, 210);
+  assert.equal(expected.length, 360);
   const legacy = ['ocean', 'space', 'jungle', 'candy'].flatMap(id => [`${id}-arrive.wav`, `${id}-open.wav`]);
   assert.deepEqual(assetFiles(directory), [...expected, ...legacy].sort());
 });

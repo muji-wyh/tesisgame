@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">toaster</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 101V108 M91 101V108" stroke="#a98a6c" stroke-width="6"/>
+    <path d="M19 52 Q19 40 31 40 H84 Q100 40 100 57 V98 Q100 105 91 105 H28 Q19 105 19 96Z" fill="#bdd2c6"/>
+    <path d="M29 48H79" stroke="#718f87" stroke-width="7"/>
+    <path d="M36 48V33 Q27 23 40 15 Q50 11 57 17 Q65 9 76 17 Q86 24 77 33V48Z" fill="#d8aa73"/>
+    <path d="M42 44V31 Q34 24 44 20 Q52 18 57 23 Q64 17 72 22 Q79 26 71 32V44Z" fill="#f4d5a0" stroke-width="2"/>
+    <path d="M88 59V82" stroke="#7a958e" stroke-width="3"/>
+    <rect x="85" y="69" width="21" height="7" rx="3" fill="#d4b38b" stroke-width="2.5"/>
+    <circle cx="80" cy="93" r="5" fill="#e7c28c" stroke-width="2.5"/>
+    <path d="M29 60V88Q29 96 38 96" stroke="#e3e8d7" stroke-width="4"/>
+    <path d="M42 70H67 M42 78H67" stroke="#94b5a8" stroke-width="2"/>
+  </g>
+</svg>

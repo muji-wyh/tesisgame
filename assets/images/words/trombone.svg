@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">trombone</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M32 45H90Q108 45 108 62Q108 79 90 79H26" stroke="#b08b59" stroke-width="11"/>
+    <path d="M32 45H90Q108 45 108 62Q108 79 90 79H26" stroke="#e9c37e" stroke-width="6"/>
+    <path d="M17 27Q35 38 52 40V51Q33 52 17 63Z" fill="#edc57b"/>
+    <ellipse cx="17" cy="45" rx="7" ry="18" fill="#c99963"/>
+    <path d="M49 54V77 M71 48V76 M27 79V93H16" stroke="#d7b176" stroke-width="4"/>
+    <path d="M16 89V97" stroke-width="4"/>
+  </g>
+</svg>

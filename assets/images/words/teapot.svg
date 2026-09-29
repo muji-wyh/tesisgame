@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">teapot</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="58" cy="107" rx="31" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M82 54 Q109 40 108 65 Q108 88 86 87 L86 76 Q98 77 98 65 Q98 56 88 64Z" fill="#d6b9d0"/>
+    <path d="M31 68 Q18 66 15 49 L12 43 24 43 Q29 55 40 53Z" fill="#e6ccdc"/>
+    <path d="M33 52 Q22 64 26 86 Q31 106 59 106 Q86 106 91 86 Q96 64 83 52Z" fill="#e6ccdc"/>
+    <path d="M35 51 Q38 38 59 38 Q80 38 84 51Z" fill="#cfb1ce"/>
+    <path d="M53 37V30 Q59 26 65 30V37" fill="#b997bc" stroke-width="2.5"/>
+    <path d="M38 66 Q32 79 39 88" stroke="#f8e9e2" stroke-width="4"/>
+    <path d="M58 91V70 M58 82 Q47 84 46 75 Q55 72 58 82 M59 77 Q62 67 71 70 Q69 79 59 77" fill="#abc39f" stroke="#8baa87" stroke-width="2"/>
+    <circle cx="58" cy="67" r="7" fill="#efb4ac" stroke-width="2"/><circle cx="58" cy="67" r="2.5" fill="#eed39a" stroke="none"/>
+  </g>
+</svg>

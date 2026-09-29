@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">crayons</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-19 35 66)">
+      <path d="M26 35 35 15 44 35 V105 H26Z" fill="#d9908c"/>
+      <path d="M26 43H44V88H26Z" fill="#f0c5b2"/>
+      <path d="M27 49H43 M27 82H43" stroke="#b86e72" stroke-width="3"/>
+      <path d="M31 66 35 59 39 66 35 73Z" fill="#d88d89" stroke-width="1.5"/>
+    </g>
+    <g transform="rotate(1 60 64)">
+      <path d="M51 30 60 10 69 30 V104 H51Z" fill="#83ae9c"/>
+      <path d="M51 39H69V87H51Z" fill="#cee0ba"/>
+      <path d="M52 45H68 M52 81H68" stroke="#709882" stroke-width="3"/>
+      <path d="M56 64 60 57 64 64 60 71Z" fill="#83ae9c" stroke-width="1.5"/>
+    </g>
+    <g transform="rotate(20 87 67)">
+      <path d="M78 37 87 17 96 37 V107 H78Z" fill="#8aaec8"/>
+      <path d="M78 44H96V90H78Z" fill="#cadddf"/>
+      <path d="M79 50H95 M79 84H95" stroke="#6d95b2" stroke-width="3"/>
+      <path d="M83 67 87 60 91 67 87 74Z" fill="#8aaec8" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

@@ -15,7 +15,7 @@ func _initialize() -> void:
 	var Data = load("res://scripts/game_data.gd")
 	var Model = load("res://scripts/game_model.gd")
 	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	check(words.size() == 200, "The expanded catalogue contains 200 illustrated words")
+	check(words.size() == 350, "The expanded catalogue contains 350 illustrated words")
 	check(Data.has_method("age_bands") and Data.has_method("word_level"), "Age levels expose one shared selection contract")
 	if failures:
 		quit(1)
@@ -33,7 +33,15 @@ func _initialize() -> void:
 		check(word.has("level") and word.level in ["basic", "growing", "advanced"],
 			"Every authored word has an explicit reviewed level: " + word.id)
 		level_counts[Data.word_level(word)] += 1
-	check(level_counts == {1: 98, 2: 62, 3: 40}, "The curated catalogue retains 98 basic words and adds meaningful growing and advanced pools")
+	check(level_counts == {1: 148, 2: 112, 3: 90}, "Each level adds fifty words while preserving all previous vocabulary")
+	for band in bands:
+		var eligible: Array = words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= band.max_level)
+		var expected_sizes: Dictionary = {"all": 350, "4-6": 148, "7-9": 260, "10-plus": 350}
+		check(eligible.size() == expected_sizes[band.id], "The " + band.id + " pool retains cumulative review words")
+	for pair in [["bird", "parrot"], ["nut", "hazelnut"], ["boat", "sailboat"],
+		["beach", "sand"], ["foot", "toe"], ["galaxy", "universe"], ["kettle", "teapot"]]:
+		check(Data.confusable_words(pair[0], pair[1]) and Data.confusable_words(pair[1], pair[0]),
+			"New overlapping picture meanings stay out of the same lesson: " + str(pair))
 	for band in bands:
 		for topic in Data.ADVENTURES:
 			var highest_level := 0
@@ -74,11 +82,12 @@ func _initialize() -> void:
 		check(replay.reset(words, 17, false, "", "", band.id) and replay.cards == model.cards
 			and replay.adventure_id == model.adventure_id and replay.age_band_id == band.id,
 			"The same seed and age reproduce the same topic and cards")
-	check(model.reset(words, 17, false, "music-makers", "", "10-plus")
+	var review_words: Array = words.slice(0, 200)
+	check(model.reset(review_words, 17, false, "music-makers", "", "10-plus")
 		and model.lesson_words.all(func(word: Dictionary) -> bool: return Data.word_level(word) == 3),
 		"The first advanced music lesson uses its five advanced nouns")
 	var practiced: Array = model.lesson_words.map(func(word: Dictionary) -> String: return word.id)
-	check(model.reset(words, -1, false, "music-makers", "bell", "10-plus")
+	check(model.reset(review_words, -1, false, "music-makers", "bell", "10-plus")
 		and model.age_band_id == "10-plus" and model.lesson_words[0].id == "bell",
 		"A fresh gift lesson retains its age and required noun")
 	check(model.lesson_words.all(func(word: Dictionary) -> bool: return not practiced.has(word.id) and Data.word_level(word) < 3),

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">porcupine</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M24 84 13 61 25 66 19 42 34 53 35 26 46 45 56 20 62 43 78 25 75 47 95 40 84 62 100 58 91 81Z" fill="#c8a786"/>
+    <path d="M23 79Q29 56 53 56Q76 54 86 71L107 84Q109 94 93 95H37Q22 92 23 79Z" fill="#ad8366"/>
+    <path d="M39 69 31 48 M50 68 47 39 M63 68 68 43 M72 75 84 58" stroke="#eee0ba" stroke-width="3"/>
+    <path d="M39 93V103H49 M75 95V103H87" stroke-width="5"/><circle cx="92" cy="82" r="2.6" fill="#765445" stroke="none"/><circle cx="106" cy="88" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

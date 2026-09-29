@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">slippers</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-14 37 63)">
+      <path d="M19 92 V37 Q19 21 37 21 Q55 21 55 37 V91 Q54 105 37 105 Q20 105 19 92Z" fill="#cab0ce"/>
+      <path d="M23 87V42 Q23 27 37 27 Q51 27 51 42V87 Q51 97 37 97 Q23 97 23 87Z" fill="#f2dccd" stroke-width="2"/>
+      <path d="M20 54 V36 Q19 21 37 21 Q55 21 55 36 V54 Q37 65 20 54Z" fill="#d9bdd8"/>
+      <path d="M24 53 Q37 62 50 53" stroke="#f1dce4" stroke-width="4"/>
+    </g>
+    <g transform="rotate(17 81 67)">
+      <path d="M63 97 V42 Q63 26 81 26 Q99 26 99 42 V96 Q98 110 81 110 Q64 110 63 97Z" fill="#cab0ce"/>
+      <path d="M67 92V47 Q67 32 81 32 Q95 32 95 47V92 Q95 102 81 102 Q67 102 67 92Z" fill="#f2dccd" stroke-width="2"/>
+      <path d="M64 59 V41 Q63 26 81 26 Q99 26 99 41 V59 Q81 70 64 59Z" fill="#d9bdd8"/>
+      <path d="M68 58 Q81 67 94 58" stroke="#f1dce4" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

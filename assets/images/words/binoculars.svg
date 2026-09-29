@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">binoculars</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M29 29H47L54 83H14Z M75 29H93L107 83H66Z" fill="#97b5b3"/>
+    <path d="M30 22H46V35H27Z M75 22H92L95 35H75Z" fill="#77908f"/>
+    <path d="M48 42H75V68H49Z" fill="#acc5bc"/>
+    <circle cx="34" cy="84" r="22" fill="#779493"/><circle cx="87" cy="84" r="22" fill="#779493"/>
+    <circle cx="34" cy="84" r="15" fill="#acd4dd"/><circle cx="87" cy="84" r="15" fill="#acd4dd"/>
+    <path d="M25 84Q24 77 32 75 M79 84Q79 77 86 75" stroke="#ecf5e8" stroke-width="4"/>
+    <rect x="55" y="35" width="13" height="18" rx="4" fill="#c9b891"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">supernova</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="61" r="38" fill="#efd0b1" stroke="none"/>
+    <path d="M60 10 68 43 99 22 79 51 111 62 77 70 98 100 68 81 59 113 51 81 21 102 42 70 10 61 43 51 22 21 52 43Z" fill="#f3cc80"/>
+    <path d="M60 32 66 51 84 61 66 70 60 91 52 71 34 61 52 52Z" fill="#fff2cb" stroke="none"/>
+    <circle cx="60" cy="61" r="10" fill="#fffbee" stroke="none"/><path d="M20 21v8m-4-4h8 M97 27v8m-4-4h8 M91 92v6m-3-3h6" stroke="#d5ac61" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fossil</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M30 20 75 17 105 39 110 81 85 107 37 103 12 77 16 41Z" fill="#d5c5a6"/>
+    <path d="M40 84Q11 63 35 39Q59 17 83 44Q104 72 75 86Q47 99 40 74Q33 54 55 47Q73 41 80 60Q87 76 68 81Q53 87 50 71Q47 58 62 56Q72 55 72 66Q72 75 63 72" stroke="#9f8b6e" stroke-width="5"/>
+    <path d="M29 48 38 52 M29 65 39 64 M41 34 47 43 M58 28 59 41 M78 35 73 44 M93 52 83 57 M91 74 81 70 M78 89 75 80 M59 92 61 83" stroke="#a28e70" stroke-width="2.5"/>
+    <path d="M18 78 25 81 M94 30 91 38 M87 99 97 88" stroke="#eee0c2"/>
+  </g>
+</svg>

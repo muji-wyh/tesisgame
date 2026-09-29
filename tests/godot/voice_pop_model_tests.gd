@@ -116,7 +116,17 @@ func _test_recognition() -> void:
 		["pants", "pant pantses", "pants"],
 		["sunglasses", "sunglass sunglasseses", "sunglasses"],
 		["monkey", "monkies", "monkeys"],
-		["piano", "pianoes", "pianos"]
+		["piano", "pianoes", "pianos"],
+		["yoyo", "yoyodel yo yoing", "A yo-yo!"],
+		["mango", "mangoeses", "mangoes"],
+		["potato", "potatos", "potatoes"],
+		["domino", "dominoeses", "dominoes"],
+		["volcano", "volcanoeses", "volcanoes"],
+		["deer", "deers", "deer"],
+		["shorts", "shortses", "shorts"],
+		["dice", "dices", "dice"],
+		["asparagus", "asparaguses", "asparagus"],
+		["binoculars", "binocularses", "binoculars"]
 	]:
 		var game := Model.new()
 		game.configure(words([fixture[0]]), 3)
@@ -313,7 +323,7 @@ func _test_late_throws() -> void:
 func _test_complete_catalog() -> void:
 	for word in catalog:
 		var game := Model.new()
-		check(game.configure([word], 1) and game.start(), "Each of the 200 illustrated lesson words is eligible: " + word.id)
+		check(game.configure([word], 1) and game.start(), "Each of the 350 illustrated lesson words is eligible: " + word.id)
 		check(game.hit_transcript(word.text).size() == 1, "Each displayed label is recognized exactly: " + word.text)
 	for max_level in [1, 2, 3]:
 		var pool: Array = catalog.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= max_level)

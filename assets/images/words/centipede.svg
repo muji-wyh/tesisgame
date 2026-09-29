@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">centipede</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M19 77 13 94 M30 79 25 100 M43 77 41 98 M56 70 57 93 M68 59 76 78 M79 52 91 67 M24 64 13 54 M38 64 28 49 M51 59 44 43 M63 49 59 33 M74 42 78 26" stroke="#c09463" stroke-width="3"/>
+    <path d="M17 71Q40 81 55 66T83 49" stroke="#d99f6a" stroke-width="17"/>
+    <path d="M28 65 26 80 M41 66 41 80 M53 57 61 68 M66 46 75 59" stroke="#a77b58" stroke-width="3"/>
+    <ellipse cx="91" cy="42" rx="15" ry="13" fill="#e9b37f"/>
+    <path d="M88 30 85 19 M98 31 106 23"/><circle cx="93" cy="39" r="2.6" fill="#765445" stroke="none"/><circle cx="101" cy="44" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">apron</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 35 V24 Q45 12 60 12 Q75 12 75 24 V35" stroke="#765445" stroke-width="8"/>
+    <path d="M45 35 V24 Q45 12 60 12 Q75 12 75 24 V35" stroke="#e4b28f" stroke-width="4"/>
+    <path d="M40 34 H80 Q78 56 89 64 L102 105 Q61 112 18 105 L31 64 Q42 56 40 34Z" fill="#edc795"/>
+    <path d="M31 65 15 54 17 70 28 73 M89 65 105 54 103 70 92 73" fill="#dda680" stroke-width="2.5"/>
+    <path d="M40 71H80V89Q60 101 40 89Z" fill="#efd9b5" stroke-width="2.5"/>
+    <path d="M60 72V95 M45 40H75 M25 100Q60 106 95 100" stroke="#c29773" stroke-width="2"/>
+    <path d="M47 50H73 M48 57H72" stroke="#f8e5c5" stroke-width="3"/>
+  </g>
+</svg>

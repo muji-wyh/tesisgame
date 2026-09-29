@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">dice</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 22 88 12 108 29 79 40Z" fill="#eee0c2"/>
+    <path d="M60 22 79 40 V70 L59 51Z" fill="#d2bdda"/>
+    <path d="M79 40 108 29 V60 L79 70Z" fill="#e3cde4"/>
+    <ellipse cx="85" cy="26" rx="3" ry="2" fill="#765445" stroke="none"/>
+    <ellipse cx="88" cy="49" rx="2.5" ry="3.5" fill="#765445" stroke="none"/><ellipse cx="100" cy="43" rx="2.5" ry="3.5" fill="#765445" stroke="none"/><ellipse cx="99" cy="56" rx="2.5" ry="3.5" fill="#765445" stroke="none"/>
+    <path d="M14 55 47 43 76 61 42 75Z" fill="#fff0d6"/>
+    <path d="M14 55 42 75 V106 L14 85Z" fill="#dfb18f"/>
+    <path d="M42 75 76 61 V93 L42 106Z" fill="#f1d1a2"/>
+    <ellipse cx="36" cy="58" rx="3" ry="2" fill="#765445" stroke="none"/><ellipse cx="53" cy="62" rx="3" ry="2" fill="#765445" stroke="none"/>
+    <ellipse cx="23" cy="69" rx="2.5" ry="3.5" fill="#765445" stroke="none"/><ellipse cx="34" cy="91" rx="2.5" ry="3.5" fill="#765445" stroke="none"/>
+    <path d="M51 78V79 M67 72V73 M59 85V86 M51 95V96 M67 90V91" stroke="#765445" stroke-width="5"/>
+  </g>
+</svg>

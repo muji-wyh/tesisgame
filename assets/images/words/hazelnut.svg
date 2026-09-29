@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">hazelnut</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M48 30Q21 33 17 59Q12 88 36 99Q60 111 79 88Q93 63 71 41L57 24Z" fill="#c08e61"/>
+    <path d="M24 81Q46 71 75 82Q67 108 44 103Q26 98 24 81Z" fill="#e1c397"/>
+    <path d="M31 84 35 93 M43 82 47 97 M56 83 59 96 M67 85 68 91" stroke="#ba996f" stroke-width="2"/>
+    <path d="M26 64Q28 44 44 40 M61 39Q77 54 75 69" stroke="#e2b586" stroke-width="4"/>
+    <path d="M80 69Q106 63 110 85Q107 105 87 106Q69 97 80 69Z" fill="#f3dfb7"/>
+    <path d="M85 79Q95 72 101 86Q102 99 89 99Q79 90 85 79Z" fill="#d3ac77"/>
+    <path d="M64 26Q89 12 101 32Q77 45 64 26Z" fill="#9dbd7d"/>
+  </g>
+</svg>

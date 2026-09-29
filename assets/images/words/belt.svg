@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">belt</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 53 Q57 38 100 48 L105 71 Q63 58 22 81Z" fill="#bc9471"/>
+    <path d="M20 58 Q58 45 99 53 M24 75 Q59 61 101 66" stroke="#e0bd91" stroke-width="2"/>
+    <path d="M42 48 Q71 29 103 45 L108 63 Q77 50 52 66Z" fill="#cba681"/>
+    <path d="M54 50 Q79 39 100 49" stroke="#e5c9a3" stroke-width="2"/>
+    <circle cx="73" cy="49" r="2" fill="#765445" stroke="none"/><circle cx="84" cy="49" r="2" fill="#765445" stroke="none"/><circle cx="95" cy="52" r="2" fill="#765445" stroke="none"/>
+    <rect x="24" y="47" width="30" height="31" rx="5" transform="rotate(-13 39 62)" fill="#e9c574"/>
+    <rect x="31" y="53" width="16" height="19" rx="2" transform="rotate(-13 39 62)" fill="#a88061" stroke-width="2.5"/>
+    <path d="M37 62 57 57" stroke="#f7dea3" stroke-width="4"/>
+    <path d="M60 45 66 64" stroke="#765445" stroke-width="6"/><path d="M60 45 66 64" stroke="#bc9471" stroke-width="3"/>
+  </g>
+</svg>

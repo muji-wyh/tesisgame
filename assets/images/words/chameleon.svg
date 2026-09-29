@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">chameleon</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M31 66Q6 55 13 86Q21 107 37 91Q46 77 33 76Q23 75 25 85" stroke="#87b976" stroke-width="12"/>
+    <path d="M30 75Q29 39 59 42L82 31 97 57 109 67 96 77H42Z" fill="#9fc97e"/>
+    <path d="M36 49 40 36 47 44 52 32 58 42 64 29 70 38" fill="#76a96e"/>
+    <path d="M44 71 43 95H54 M74 73 76 94H88" stroke="#79a86b" stroke-width="7"/>
+    <circle cx="86" cy="56" r="12" fill="#d3dc93"/><circle cx="89" cy="56" r="2.6" fill="#765445" stroke="none"/>
+    <path d="M93 69H108 M22 98H100" stroke-width="3"/>
+    <circle cx="44" cy="59" r="4" fill="#e4d782" stroke="none"/><circle cx="57" cy="64" r="4" fill="#e4d782" stroke="none"/><circle cx="69" cy="54" r="4" fill="#e4d782" stroke="none"/>
+  </g>
+</svg>

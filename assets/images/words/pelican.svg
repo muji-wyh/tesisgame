@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pelican</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M22 88Q14 65 37 62Q65 58 76 73L82 91Q60 107 33 99Z" fill="#fff1d9"/>
+    <path d="M38 73Q55 65 63 90Q43 98 28 88" fill="#e4d5bf"/>
+    <path d="M67 77Q58 58 67 32Q78 17 91 32L86 57Q80 67 83 80" fill="#fff1d9"/>
+    <path d="M84 40 112 49 83 63Q77 54 84 40Z" fill="#e9b577"/>
+    <path d="M85 41 112 49 83 50" fill="#f7ce8b"/>
+    <path d="M40 100 34 109H49 M64 100 58 109H74" fill="#e4ac70"/>
+    <circle cx="80" cy="36" r="2.6" fill="#765445" stroke="none"/>
+  </g>
+</svg>

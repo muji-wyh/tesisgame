@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cave</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 103 18 62 31 35 50 23 77 23 100 47 109 103Z" fill="#b5aba1"/>
+    <path d="M28 103 V72 Q30 43 60 43 Q90 44 94 71 V103Z" fill="#81776f"/>
+    <path d="M40 103 V74 Q43 56 61 57 Q82 59 82 76 V103Z" fill="#645e5b" stroke="none"/>
+    <path d="M31 36 45 45 50 23 M77 23 70 44 M101 48 88 58 M19 66 30 73 M14 91 29 86 M95 85 107 92" stroke="#8f877f" stroke-width="2.5"/>
+    <path d="M44 48 47 67 54 46 M69 46 76 62 79 49" fill="#b5aba1" stroke-width="2.5"/>
+    <path d="M44 104 49 87 55 104 M67 104 73 93 78 104" fill="#91857a" stroke-width="2.5"/>
+    <path d="M25 104 20 95 13 104 M94 104 103 95 109 104" fill="#cbc0aa" stroke-width="2.5"/>
+  </g>
+</svg>

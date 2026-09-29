@@ -12,43 +12,109 @@ const ADVENTURES: Array[Dictionary] = [
 	{"id": "animal-friends", "name": "Animal friends", "words": [
 		"cat", "dog", "fish", "duck", "cow", "pig", "hen", "sheep", "horse", "goat", "rabbit", "mouse",
 		"bear", "lion", "tiger", "monkey", "panda", "zebra", "fox", "owl", "frog", "turtle", "bee", "ant",
-		"elephant", "giraffe", "kangaroo", "penguin", "squirrel"]},
+		"elephant", "giraffe", "kangaroo", "penguin", "squirrel",
+		"bird", "bat", "deer", "snake", "snail", "worm", "spider", "chick",
+		"donkey", "camel", "koala", "otter", "parrot", "peacock", "flamingo", "ladybug",
+		"butterfly", "beetle", "crocodile", "rhinoceros", "chameleon", "armadillo", "porcupine", "centipede",
+		"dragonfly", "hedgehog", "woodpecker", "pelican"]},
 	{"id": "picnic-time", "name": "Picnic time", "words": [
 		"apple", "banana", "orange", "pear", "grape", "cherry", "melon", "carrot", "tomato", "corn", "peas",
 		"egg", "bread", "cake", "cookie", "cheese", "milk", "water", "juice", "rice",
-		"pumpkin", "coconut", "pineapple", "watermelon", "strawberry"]},
+		"pumpkin", "coconut", "pineapple", "watermelon", "strawberry",
+		"lemon", "peach", "plum", "mango", "nut", "soup", "jam", "honey",
+		"pasta", "candy", "broccoli", "cucumber", "lettuce", "onion", "potato", "radish",
+		"avocado", "sandwich", "pancake", "waffle", "artichoke", "asparagus", "eggplant", "cinnamon",
+		"pistachio", "hazelnut", "raspberry", "blueberry", "grapefruit", "pretzel"]},
 	{"id": "great-outdoors", "name": "Great outdoors", "words": [
 		"sun", "moon", "star", "cloud", "rain", "snow", "tree", "leaf", "flower",
-		"river", "lake", "mountain", "rainbow", "waterfall"]},
+		"river", "lake", "mountain", "rainbow", "waterfall",
+		"rock", "hill", "beach", "sand", "mud", "ice", "wind", "desert",
+		"forest", "island", "volcano", "cave", "valley", "glacier", "peninsula", "canyon",
+		"geyser", "avalanche", "stalactite", "crystal", "fossil"]},
 	{"id": "dress-up", "name": "Dress up", "words": [
 		"hat", "coat", "shirt", "dress", "sock", "shoe", "glove", "scarf",
 		"boot", "skirt", "pants", "vest", "tie", "ring", "watch", "crown",
-		"helmet", "sweater", "necklace", "bracelet", "sunglasses"]},
+		"helmet", "sweater", "necklace", "bracelet", "sunglasses",
+		"bag", "belt", "shorts", "mitten", "cape", "jacket", "apron", "slippers",
+		"earmuffs", "backpack"]},
 	{"id": "on-the-move", "name": "On the move", "words": [
 		"car", "bus", "train", "truck", "plane", "boat", "bike",
-		"scooter", "tractor", "ambulance", "helicopter", "submarine"]},
+		"scooter", "tractor", "ambulance", "helicopter", "submarine",
+		"van", "taxi", "wheel", "canoe", "ferry", "sailboat", "glider", "unicycle"]},
 	{"id": "play-time", "name": "Play time", "words": [
 		"ball", "book", "doll", "kite", "drum", "block",
-		"robot", "puzzle", "marble", "balloon", "skateboard"]},
+		"robot", "puzzle", "marble", "balloon", "skateboard",
+		"yoyo", "dice", "swing", "slide", "tent", "domino", "frisbee", "crayons",
+		"sled", "seesaw"]},
 	{"id": "at-home", "name": "At home", "words": [
 		"bed", "chair", "table", "door", "lamp", "clock", "key", "phone", "cup", "bowl", "plate", "spoon",
-		"fork", "soap", "brush", "towel", "window", "mirror", "pillow", "blanket", "sofa"]},
+		"fork", "soap", "brush", "towel", "window", "mirror", "pillow", "blanket", "sofa",
+		"box", "pen", "pencil", "pan", "pot", "comb", "fan", "mop",
+		"rug", "jug", "kettle", "toaster", "ladder", "bucket", "broom", "teapot",
+		"microscope", "compass", "hourglass", "binoculars", "abacus"]},
 	{"id": "head-to-toe", "name": "Head to toe", "words": [
 		"eye", "ear", "nose", "mouth", "hand", "foot", "arm", "leg", "head", "tooth",
-		"finger", "thumb", "elbow", "knee", "ankle"]},
+		"finger", "thumb", "elbow", "knee", "ankle",
+		"toe", "neck"]},
 	{"id": "ocean-discovery", "name": "Ocean discovery", "words": [
 		"whale", "shark", "crab", "seal", "shell", "coral", "squid", "clam",
-		"dolphin", "octopus", "jellyfish", "seahorse", "starfish"]},
+		"dolphin", "octopus", "jellyfish", "seahorse", "starfish",
+		"anemone", "nautilus", "plankton", "stingray", "swordfish"]},
 	{"id": "space-trip", "name": "Space trip", "words": [
 		"earth", "rocket", "planet", "comet", "meteor", "alien", "rover", "galaxy",
-		"astronaut", "satellite", "telescope", "spaceship", "asteroid"]},
+		"astronaut", "satellite", "telescope", "spaceship", "asteroid",
+		"nebula", "supernova", "eclipse", "universe", "capsule", "spacesuit"]},
 	{"id": "garden-trail", "name": "Garden trail", "words": [
 		"seed", "root", "grass", "rose", "berry", "acorn", "pebble", "pond",
-		"mushroom", "cactus", "bamboo", "pinecone", "sunflower"]},
+		"mushroom", "cactus", "bamboo", "pinecone", "sunflower",
+		"tulip", "daisy", "fern"]},
 	{"id": "music-makers", "name": "Music makers", "words": [
 		"piano", "flute", "violin", "guitar", "bell", "harp", "horn", "tuba",
-		"trumpet", "saxophone", "xylophone", "cymbal", "microphone"]}
+		"trumpet", "saxophone", "xylophone", "cymbal", "microphone",
+		"accordion", "clarinet", "trombone", "tambourine", "metronome", "harmonica"]}
 ]
+const CONFUSABLE_WORDS: Dictionary = {
+	"earth": ["planet"],
+	"acorn": ["seed"],
+	"boot": ["shoe"],
+	"shell": ["clam"],
+	"flower": ["rose", "sunflower", "tulip", "daisy"],
+	"comet": ["meteor"],
+	"rocket": ["spaceship"],
+	"asteroid": ["meteor", "comet"],
+	"rose": ["sunflower"],
+	"melon": ["watermelon"],
+	"berry": ["strawberry", "raspberry", "blueberry"],
+	"nut": ["hazelnut", "pistachio"],
+	"bird": ["parrot", "peacock", "flamingo", "woodpecker", "pelican", "owl", "chick", "hen", "duck", "penguin"],
+	"hen": ["chick"],
+	"beetle": ["ladybug"],
+	"porcupine": ["hedgehog"],
+	"rock": ["pebble"],
+	"hill": ["mountain"],
+	"tree": ["forest"],
+	"beach": ["sand"],
+	"sand": ["mud"],
+	"ice": ["glacier"],
+	"coat": ["jacket"],
+	"bag": ["backpack"],
+	"shoe": ["slippers"],
+	"glove": ["mitten"],
+	"boat": ["canoe", "ferry", "sailboat"],
+	"plane": ["glider"],
+	"car": ["taxi"],
+	"foot": ["toe"],
+	"pen": ["pencil"],
+	"kettle": ["teapot"],
+	"leaf": ["fern"],
+	"galaxy": ["nebula", "universe"],
+	"nebula": ["universe"],
+	"star": ["supernova"],
+	"astronaut": ["spacesuit"],
+	"spaceship": ["capsule"],
+	"horn": ["trombone"],
+	"trumpet": ["trombone"]
+}
 const THEMES: Dictionary = {
 	"spring": {"name": "Spring", "background": Color("#effbef"), "accent": Color("#237a57"),
 		"light": Color("#bfe9c5"), "spark": Color("#ffa8bb"), "tint": Color("#eefbd6"),
@@ -110,17 +176,16 @@ static func word_level(word: Dictionary) -> int:
 	return 0
 
 
+static func normalize_spoken_text(text: String) -> String:
+	# Speech engines commonly separate this compound into two tokens.
+	var compound := RegEx.new()
+	compound.compile("(?<![\\w'-])yo[ -]yo(s)?(?![\\w'-])")
+	return compound.sub(text.to_lower(), "yoyo$1", true)
+
+
 static func confusable_words(first: String, second: String) -> bool:
-	if first == second:
-		return true
-	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"],
-		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"],
-		["rocket", "spaceship"], ["asteroid", "meteor"], ["asteroid", "comet"],
-		["flower", "sunflower"], ["rose", "sunflower"], ["melon", "watermelon"],
-		["berry", "strawberry"]]:
-		if first in pair and second in pair:
-			return true
-	return false
+	return (first == second or CONFUSABLE_WORDS.get(first, []).has(second)
+		or CONFUSABLE_WORDS.get(second, []).has(first))
 
 
 static func theme(id: String) -> Dictionary:

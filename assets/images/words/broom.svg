@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">broom</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 78 83 14" stroke="#765445" stroke-width="8"/><path d="M44 78 83 14" stroke="#be9871" stroke-width="4"/>
+    <path d="M37 69 54 78 Q55 91 78 102 Q54 116 14 98 Q37 83 37 69Z" fill="#e5c486"/>
+    <path d="M37 69 54 78 58 87 Q44 85 30 78Z" fill="#aebc91" stroke-width="2.5"/>
+    <path d="M33 83 21 99 M39 86 33 104 M45 88 46 108 M51 89 58 107 M57 91 69 103" stroke="#b99660" stroke-width="2.5"/>
+    <path d="M40 75 51 80" stroke="#d8dbb5" stroke-width="3"/>
+    <path d="M90 100H94 M100 106H104 M87 108H89" stroke="#bfab88" stroke-width="2.5"/>
+  </g>
+</svg>

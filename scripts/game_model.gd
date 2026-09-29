@@ -184,7 +184,7 @@ func spoken_matches(transcript: String) -> Array[String]:
 		return matches
 	var tokens := RegEx.new()
 	tokens.compile("\\b[a-z]+\\b")
-	for token in tokens.search_all(transcript.to_lower()):
+	for token in tokens.search_all(Data.normalize_spoken_text(transcript)):
 		for card in cards:
 			if card.kind != "word" or card.word.text != token.get_string():
 				continue

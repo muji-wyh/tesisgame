@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">broccoli</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 61 50 87 40 103 Q59 111 80 103 L70 85 72 59Z" fill="#b3cf91"/>
+    <path d="M59 62 59 99 M59 85 44 68 M61 76 80 61" stroke="#86ad73" stroke-width="3"/>
+    <path d="M21 66 Q10 61 14 47 Q14 36 28 33 Q31 18 46 23 Q55 9 69 19 Q84 15 90 29 Q107 28 108 44 Q115 56 102 65 Q96 79 81 70 Q66 80 56 68 Q44 78 33 68 Q26 72 21 66Z" fill="#86b385"/>
+    <path d="M24 49 Q21 37 33 37 M41 37 Q40 24 51 27 M59 24 Q67 19 72 27 M82 36 Q93 30 98 42 M42 58 Q49 48 59 57 M76 62 Q88 55 96 62" stroke="#b8d69b" stroke-width="4"/>
+    <path d="M33 37 Q41 43 37 50 M59 39 Q65 32 73 39 M24 59 29 61 M86 47 88 50" stroke="#65946e" stroke-width="2.5"/>
+  </g>
+</svg>

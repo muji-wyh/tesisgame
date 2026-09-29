@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">tulip</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M59 64V108" stroke="#83a875" stroke-width="5"/>
+    <path d="M58 101 Q34 99 24 70 Q48 73 58 93 M62 91 Q69 68 95 63 Q88 90 62 99" fill="#a6c68c"/>
+    <path d="M32 78 56 97 M64 93 87 71" stroke="#83a875" stroke-width="2.5"/>
+    <path d="M30 24 48 35 60 16 72 35 90 24 86 48 Q83 70 60 71 Q37 70 34 48Z" fill="#e7a2ad"/>
+    <path d="M48 35 Q44 54 60 71 Q76 54 72 35" fill="#f1bdbe"/>
+    <path d="M39 39 41 49 M58 32 55 41" stroke="#ffd7ce" stroke-width="3"/>
+    <path d="M47 108H74" stroke="#c2d1a7" stroke-width="3"/>
+  </g>
+</svg>

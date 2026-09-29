@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">jug</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="55" cy="106" rx="30" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M78 40 Q106 34 108 62 Q109 87 80 85 L79 73 Q97 75 97 62 Q96 48 81 51Z" fill="#a9c8d1"/>
+    <path d="M26 23 H79 L77 48 Q82 65 85 88 Q84 104 55 104 Q26 104 25 89 Q27 66 33 50 L29 35 16 29Z" fill="#bcd9dc"/>
+    <path d="M17 29 Q43 33 77 25" stroke="#87acb9" stroke-width="2.5"/>
+    <path d="M32 75 Q55 64 80 74 V89 Q78 98 55 98 Q34 98 32 89Z" fill="#93bac7" stroke="none"/>
+    <path d="M40 42 37 57 M35 67 33 77" stroke="#e4f1e7" stroke-width="4"/>
+    <path d="M64 41H71 M62 53H72 M64 65H75" stroke="#86aebc" stroke-width="2"/>
+  </g>
+</svg>

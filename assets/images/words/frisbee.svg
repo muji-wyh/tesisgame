@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">frisbee</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 65 Q14 41 55 33 Q91 26 104 46 L108 56 Q110 78 69 88 Q28 97 17 76Z" fill="#db9d94"/>
+    <ellipse cx="60" cy="57" rx="46" ry="26" transform="rotate(-13 60 57)" fill="#efb5a5"/>
+    <ellipse cx="60" cy="56" rx="34" ry="17" transform="rotate(-13 60 56)" fill="#f4cbaf" stroke-width="2.5"/>
+    <ellipse cx="60" cy="56" rx="19" ry="9" transform="rotate(-13 60 56)" fill="#e9ad96" stroke="#cf9284" stroke-width="2"/>
+    <path d="M24 55 Q31 43 50 39" stroke="#ffe0be" stroke-width="4"/>
+    <path d="M17 96 38 92 M80 21 101 16 M16 32 29 29" stroke="#c1d1d0" stroke-width="2.5"/>
+  </g>
+</svg>

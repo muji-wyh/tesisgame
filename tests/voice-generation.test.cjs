@@ -71,10 +71,10 @@ test('the voice profile uses warm neural speech with clear, gently paced words',
   assert.throws(() => speechMarkup('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 200 words and ten prompts from the maintained lists', () => {
+test('voice generation derives exactly 350 words and ten prompts from the maintained lists', () => {
   const messages = generator().messagesFor(root);
-  assert.equal(messages.length, 210);
-  assert.equal(new Set(messages.map(message => message.id)).size, 210);
+  assert.equal(messages.length, 360);
+  assert.equal(new Set(messages.map(message => message.id)).size, 360);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });

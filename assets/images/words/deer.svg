@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">deer</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="59" cy="107" rx="41" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M74 66 101 56 96 69 83 76" fill="#d5a378"/>
+    <path d="M35 56 Q52 51 72 60 Q87 61 88 78 L83 103 H76 L75 84 H56 L53 103 H46 L45 81 H36 L33 103 H26 L28 70Z" fill="#d5a378"/>
+    <path d="M41 65 47 78 M65 67 70 78" stroke="#f5d9b2" stroke-width="4"/>
+    <path d="M33 64 26 45 Q21 37 27 29 Q34 22 46 28 L53 39 48 61Z" fill="#deb58c"/>
+    <path d="M28 30 14 27 Q10 35 26 40 M46 30 60 26 Q64 33 49 40" fill="#d5a378" stroke-width="2.5"/>
+    <path d="M32 26 29 13 M29 19 21 13 M42 25 45 12 M45 19 53 12" stroke="#aa805e" stroke-width="3"/>
+    <circle cx="32" cy="41" r="2.8" fill="#765445" stroke="none"/><circle cx="44" cy="41" r="2.8" fill="#765445" stroke="none"/>
+    <ellipse cx="38" cy="51" rx="9" ry="7" fill="#f4d8b8" stroke="none"/>
+    <path d="M35 48H41L38 52Z" fill="#765445" stroke="none"/>
+    <path d="M26 100H33 M46 100H53 M76 100H83" stroke="#93785d" stroke-width="3"/>
+  </g>
+</svg>

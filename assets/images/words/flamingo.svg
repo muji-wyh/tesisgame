@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">flamingo</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 78 47 106 M60 78 78 90 63 102 M40 108H53 M59 103H68" stroke="#cf8b87" stroke-width="3"/>
+    <path d="M21 69 Q37 52 58 60 Q72 72 59 80 Q41 91 24 76 L14 76Z" fill="#eaa5ac"/>
+    <path d="M39 64 Q59 60 62 72 Q54 82 38 78Z" fill="#da8fa0" stroke-width="2.5"/>
+    <path d="M58 65 Q80 66 77 48 Q73 32 85 25 Q96 20 97 33" stroke="#765445" stroke-width="12"/>
+    <path d="M58 65 Q80 66 77 48 Q73 32 85 25 Q96 20 97 33" stroke="#eaa5ac" stroke-width="7"/>
+    <ellipse cx="96" cy="30" rx="10" ry="11" fill="#f0b8bb"/>
+    <path d="M100 36 107 43 102 55 Q94 49 95 39Z" fill="#f4d8b9" stroke-width="2.5"/>
+    <path d="M105 47 102 55 97 51 98 45Z" fill="#77777b" stroke-width="1.5"/>
+    <circle cx="97" cy="28" r="2.5" fill="#765445" stroke="none"/>
+    <path d="M18 107H33 M82 108H104" stroke="#bfdad8" stroke-width="2.5"/>
+  </g>
+</svg>

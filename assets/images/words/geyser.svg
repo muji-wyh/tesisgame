@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">geyser</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="101" rx="47" ry="10" fill="#ccbfa5"/>
+    <ellipse cx="60" cy="98" rx="27" ry="6" fill="#8bb9cd"/>
+    <path d="M44 96Q55 60 47 40Q30 32 29 19Q38 12 46 30Q43 9 57 11Q66 11 63 31Q79 13 88 24Q91 32 71 40Q65 62 77 96Z" fill="#b2dfe8"/>
+    <path d="M58 91V48 M65 32 75 25 M46 38 38 27" stroke="#edf7f1" stroke-width="4"/>
+    <circle cx="25" cy="45" r="3" fill="#a6d8e5" stroke="none"/><circle cx="91" cy="46" r="3" fill="#a6d8e5" stroke="none"/><circle cx="36" cy="58" r="3" fill="#a6d8e5" stroke="none"/><circle cx="84" cy="65" r="3" fill="#a6d8e5" stroke="none"/><circle cx="27" cy="76" r="3" fill="#a6d8e5" stroke="none"/>
+  </g>
+</svg>

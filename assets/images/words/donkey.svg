@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">donkey</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="59" cy="108" rx="43" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M83 64 Q99 60 101 81 M99 77 105 88" stroke="#89939a" stroke-width="4"/>
+    <path d="M36 53 Q58 49 80 60 Q92 66 88 84 L85 104 H77 L76 85 H56 L53 104 H45 L44 84 H36 L32 104 H24 L28 71Z" fill="#adb4b8"/>
+    <path d="M37 59 31 45 25 22 Q24 11 29 11 Q35 12 40 39 L45 16 Q48 8 52 14 L49 45 Q59 56 50 69 L37 72 22 64 Q16 56 23 50Z" fill="#bcc1c1"/>
+    <path d="M30 18 35 37 M48 19 44 38" stroke="#e2bcb1" stroke-width="3"/>
+    <path d="M42 43 45 33 50 41 54 35 58 45 51 52" fill="#7e858a" stroke-width="2"/>
+    <ellipse cx="29" cy="61" rx="12" ry="9" fill="#e5dfcc" stroke-width="2.5"/>
+    <circle cx="38" cy="49" r="3" fill="#765445" stroke="none"/><circle cx="22" cy="60" r="2" fill="#765445" stroke="none"/>
+    <path d="M27 100H33 M46 100H53 M78 100H85 M53 62 Q62 74 78 70" stroke="#8a9399" stroke-width="3"/>
+  </g>
+</svg>

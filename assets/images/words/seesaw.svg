@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">seesaw</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 105 60 71 78 105Z" fill="#afc5ae"/>
+    <path d="M54 91H69" stroke="#d7e2c4" stroke-width="3"/>
+    <path d="M15 87 101 44 106 54 20 97Z" fill="#e3b283"/>
+    <path d="M20 89 101 48" stroke="#f4d1a0" stroke-width="3"/>
+    <path d="M26 80 21 67 M91 49 86 36" stroke="#765445" stroke-width="5"/>
+    <path d="M17 69 27 64 M81 39 91 34" stroke="#9bbdc4" stroke-width="6"/>
+    <path d="M11 86 30 77 34 85 15 94Z M88 48 103 40 108 47 93 55Z" fill="#9fbfce" stroke-width="2.5"/>
+    <circle cx="60" cy="73" r="5" fill="#d9ceab" stroke-width="2.5"/>
+    <path d="M13 108H106" stroke="#bfcea2" stroke-width="3"/>
+  </g>
+</svg>

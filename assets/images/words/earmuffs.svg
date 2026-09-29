@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">earmuffs</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M29 72 V49 Q29 15 60 15 Q91 15 91 49 V72" stroke="#765445" stroke-width="12"/>
+    <path d="M29 72 V49 Q29 15 60 15 Q91 15 91 49 V72" stroke="#b5a6c7" stroke-width="7"/>
+    <path d="M22 62 Q13 65 14 81 Q13 102 29 104 Q45 102 45 84 Q46 66 35 61Z" fill="#e7b5bd"/>
+    <path d="M85 61 Q74 66 75 84 Q75 102 91 104 Q107 102 106 81 Q107 65 98 62Z" fill="#e7b5bd"/>
+    <ellipse cx="29" cy="83" rx="10" ry="15" fill="#f2cbd0" stroke="#d99ba9" stroke-width="2"/>
+    <ellipse cx="91" cy="83" rx="10" ry="15" fill="#f2cbd0" stroke="#d99ba9" stroke-width="2"/>
+    <path d="M28 69 25 76 M91 69 87 77" stroke="#ffe3d9" stroke-width="3"/>
+    <path d="M44 23 Q59 15 76 24" stroke="#d5c8dd" stroke-width="3"/>
+  </g>
+</svg>

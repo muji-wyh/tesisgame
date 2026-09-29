@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">peach</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="34" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M61 36 Q48 23 32 36 Q11 50 25 77 Q38 100 59 106 Q82 99 96 77 Q109 52 89 36 Q76 25 61 36Z" fill="#f0af92"/>
+    <path d="M61 38 Q76 54 68 78 Q63 94 59 104" stroke="#d98e7e" stroke-width="3"/>
+    <path d="M59 33 Q54 23 59 15" stroke="#93785d" stroke-width="4"/>
+    <path d="M60 27 Q72 11 94 20 Q83 35 62 32Z" fill="#91bd7e"/>
+    <path d="M38 44 Q27 53 31 64" stroke="#ffdac0" stroke-width="5"/>
+    <ellipse cx="39" cy="78" rx="10" ry="7" fill="#ec9b8d" stroke="none"/>
+  </g>
+</svg>

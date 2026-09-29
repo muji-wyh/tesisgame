@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">stalactite</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 15H110V34L95 30 83 40 68 29 50 37 31 29 10 39Z" fill="#c6af92"/>
+    <path d="M18 33 27 85 38 31Z M48 34 60 109 74 31Z M84 37 95 83 104 33Z" fill="#d9c5a6"/>
+    <path d="M25 37 28 64 M57 39 61 86 M94 39 95 64" stroke="#f1e1c6" stroke-width="3"/>
+    <path d="M10 20 28 25 43 21 64 24 83 19 110 24" stroke="#a68d72" stroke-width="3"/>
+  </g>
+</svg>

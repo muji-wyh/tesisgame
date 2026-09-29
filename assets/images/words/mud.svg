@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">mud</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 74 Q11 67 24 61 Q33 52 46 59 Q59 50 75 57 Q90 52 99 63 Q114 70 102 80 Q111 90 93 96 Q80 107 62 100 Q45 110 29 98 Q10 96 16 85 Q6 80 18 74Z" fill="#b58b69"/>
+    <path d="M31 75 Q43 70 56 76 M70 86 Q83 81 95 85 M35 94 Q46 97 55 92" stroke="#d7b48b" stroke-width="3"/>
+    <path d="M50 75 Q45 68 50 60 Q54 65 57 70 Q60 77 54 79Z M87 49 Q81 40 86 32 Q93 40 91 46Z M27 40 Q23 33 28 28 Q34 36 31 40Z" fill="#b58b69" stroke-width="2.5"/>
+    <ellipse cx="76" cy="65" rx="7" ry="3" fill="#8f684f" stroke="none"/>
+    <ellipse cx="23" cy="86" rx="5" ry="2" fill="#8f684f" stroke="none"/>
+    <path d="M56 47 57 40 M72 36 76 28" stroke="#b58b69" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">stingray</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M60 70Q79 85 88 98Q100 106 106 94" stroke="#829ca9" stroke-width="5"/>
+    <path d="M60 23Q74 48 108 56Q98 68 80 79L60 69 41 82Q20 67 12 57Q43 48 60 23Z" fill="#a1bfca"/>
+    <path d="M61 29 61 66 M20 58Q42 57 47 71 M102 57Q80 58 73 72" stroke="#c8dbe0" stroke-width="3"/>
+    <circle cx="51" cy="51" r="2.6" fill="#765445" stroke="none"/><circle cx="68" cy="51" r="2.6" fill="#765445" stroke="none"/>
+    <path d="M54 62Q59 66 65 61" stroke-width="2"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">toe</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 15H52V57 Q58 69 75 74 L95 80 Q107 80 109 89 Q111 100 98 102 H36 Q17 101 17 86 Q18 76 24 68Z" fill="#e4c3ac" stroke="#a58b79" stroke-width="2.5"/>
+    <path d="M90 81 Q106 78 109 89 Q111 100 98 102 H89 Q84 91 90 81Z" fill="#f3c8a8"/>
+    <path d="M97 83 Q105 83 105 90 Q100 95 95 89Z" fill="#fae1c9" stroke-width="2"/>
+    <path d="M29 73 Q35 68 41 72 M36 92 Q58 98 79 94" stroke="#c9a18b" stroke-width="2"/>
+    <circle cx="98" cy="91" r="17" fill="none" stroke="#e9ad45" stroke-width="3"/>
+    <path d="M62 86H77 m-6 -5 6 5 -6 5" fill="none" stroke="#dca83d" stroke-width="3"/>
+  </g>
+</svg>

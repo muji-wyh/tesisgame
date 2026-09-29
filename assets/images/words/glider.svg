@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">glider</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M51 49 16 73 11 91 54 67 78 83 91 81 67 56 78 26 74 12 57 45Z" fill="#c4d7dd"/>
+    <path d="M26 52 107 36 110 46 70 63 28 64Z" fill="#e6d1ad"/>
+    <path d="M54 44 34 27 23 28 46 52Z" fill="#d5b5cd"/>
+    <path d="M68 54 Q78 49 90 52 L96 57 Q82 64 69 64 L24 86 18 86Z" fill="#f0e4c9"/>
+    <path d="M75 51 Q84 49 91 53 L93 57 78 59Z" fill="#a6cbd4" stroke-width="2"/>
+    <path d="M34 61 64 54 M79 44 99 41 M34 34 47 46" stroke="#fff1d3" stroke-width="3"/>
+    <path d="M19 100H39 M80 96H107 M20 14H40" stroke="#c4dce0" stroke-width="2.5"/>
+    <path d="M16 39 Q19 31 25 35" stroke="#d9e6e1" stroke-width="3"/>
+  </g>
+</svg>

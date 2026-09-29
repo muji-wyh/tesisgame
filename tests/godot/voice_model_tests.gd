@@ -162,7 +162,7 @@ func _test_locks(model_script: GDScript, words: Array) -> void:
 
 
 func _test_vocabulary(model_script: GDScript, words: Array) -> void:
-	check(words.size() == 200, "Voice tests cover the game's current 200-word vocabulary")
+	check(words.size() == 350, "Voice tests cover the game's current 350-word vocabulary")
 	for word in words:
 		var model = model_script.new()
 		model.cards.assign([
@@ -171,6 +171,10 @@ func _test_vocabulary(model_script: GDScript, words: Array) -> void:
 		])
 		check(model.spoken_matches("I see a " + word.text.to_upper() + "!") == [word.id],
 			"Spoken discovery reads the actual board vocabulary: " + word.id)
+		if word.id == "yoyo":
+			for spelling in ["yo-yo", "yo yo", "YO-YO"]:
+				check(model.spoken_matches(spelling) == [word.id], "Separated yoyo speech still finds the complete word")
+			check(model.spoken_matches("yoyodel yo yoing").is_empty(), "Yoyo normalization cannot match inside another word")
 	var model = _board(model_script, words)
 	for card in model.cards:
 		if card.word.id == "doll":

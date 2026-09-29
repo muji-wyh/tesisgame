@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">honey</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="58" cy="106" rx="35" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M32 44 H78 L83 58 Q91 64 88 90 Q86 103 56 103 Q26 103 24 90 Q21 64 29 58Z" fill="#f4c76b"/>
+    <ellipse cx="55" cy="45" rx="24" ry="7" fill="#a98057"/>
+    <path d="M36 50 Q41 61 46 53 Q49 49 54 57 V68 Q61 75 64 65 L66 55 Q70 59 74 51" fill="#f2b849" stroke="#d29a43" stroke-width="2.5"/>
+    <path d="M64 43 86 21" stroke="#a98057" stroke-width="6"/>
+    <g transform="rotate(42 88 25)"><rect x="77" y="11" width="22" height="30" rx="7" fill="#dfbd87" stroke-width="2.5"/><path d="M78 19H98 M78 26H98 M79 33H97" stroke="#a98057" stroke-width="2.5"/></g>
+    <path d="M39 77 47 72 55 77 V86 L47 91 39 86Z M55 77 63 72 71 77 V86 L63 91 55 86Z" fill="#ffe2a1" stroke="#d7a149" stroke-width="2"/>
+    <path d="M30 72V86" stroke="#ffe9ac" stroke-width="4"/>
+  </g>
+</svg>

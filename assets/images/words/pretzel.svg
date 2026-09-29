@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pretzel</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M38 91Q13 67 23 43Q32 27 48 41L89 92Q99 97 105 83Q115 61 96 43Q82 29 71 44L26 91Q21 99 31 103Q60 114 91 101" stroke="#a87750" stroke-width="18"/>
+    <path d="M38 91Q13 67 23 43Q32 27 48 41L89 92Q99 97 105 83Q115 61 96 43Q82 29 71 44L26 91Q21 99 31 103Q60 114 91 101" stroke="#e6b575" stroke-width="12"/>
+    <path d="M25 55 29 57 M36 40 39 43 M53 54 55 58 M73 80 77 81 M101 66 104 69 M81 44 84 41 M51 99 55 102 M74 103 79 102" stroke="#fff2d6" stroke-width="3"/>
+  </g>
+</svg>

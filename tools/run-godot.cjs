@@ -3,13 +3,13 @@ const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
 
-function runGodot(args) {
+function runGodot(args, { timeout = 180000 } = {}) {
   // Waiting for the actual process is essential with the Windows GUI executable.
   const result = spawnSync(process.env.GODOT_BIN || 'godot', args, {
     cwd: root,
     encoding: 'utf8',
     maxBuffer: 32 * 1024 * 1024,
-    timeout: 180000,
+    timeout,
     windowsHide: true
   });
   if (result.error) {

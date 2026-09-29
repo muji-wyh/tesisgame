@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">anemone</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M29 93Q22 77 38 64H83Q101 80 92 99Z" fill="#d99ba7"/>
+    <path d="M38 76Q15 60 23 35 M45 73Q30 45 43 19 M53 70Q51 37 60 17 M61 71Q75 37 71 22 M71 74Q94 47 89 32 M79 82Q106 71 103 48" stroke="#d7a0bc" stroke-width="8"/>
+    <path d="M42 80Q20 80 16 60 M77 89Q101 86 106 74 M49 79Q40 55 50 40 M64 81Q61 59 77 49" stroke="#eab1c1" stroke-width="7"/>
+    <ellipse cx="59" cy="81" rx="12" ry="8" fill="#ad7e9b" stroke-width="2"/>
+  </g>
+</svg>

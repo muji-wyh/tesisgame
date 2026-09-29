@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">forest</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 89 Q56 69 108 88 V108 H12Z" fill="#b7ce99" stroke="none"/>
+    <path d="M28 89V49 M60 95V32 M94 93V50" stroke="#a5805f" stroke-width="7"/>
+    <path d="M13 64 28 25 45 64 38 62 46 79 H11 L19 62Z" fill="#88b38b"/>
+    <path d="M41 46 60 10 79 46 70 44 84 65 72 62 88 85 H32 L47 62 37 66 49 44Z" fill="#75a789"/>
+    <path d="M75 64 94 26 108 63 100 61 110 80 H74 L82 60Z" fill="#9abd89"/>
+    <path d="M22 57 28 45 33 57 M51 43 60 29 68 43 M83 62 94 47 100 62" stroke="#bfdaa8" stroke-width="2.5"/>
+    <path d="M48 108 Q51 100 59 96 Q67 93 64 88 Q77 94 68 100 L65 108Z" fill="#e4cf9f" stroke="none"/>
+    <path d="M17 102 19 96 22 102 M89 101 92 95 94 100" stroke="#8ba673" stroke-width="2"/>
+  </g>
+</svg>

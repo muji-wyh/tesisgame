@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">camel</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="108" rx="43" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M82 68 Q98 68 101 86" stroke="#b68d62" stroke-width="3"/>
+    <path d="M25 45 Q29 65 38 61 Q42 32 55 38 Q64 43 66 57 Q72 34 83 43 Q92 50 93 72 L87 102 H78 L78 83 H59 L53 102 H45 L46 80 H37 Q23 78 18 55Z" fill="#dfbd87"/>
+    <path d="M15 46 14 26 Q17 17 29 20 L39 25 Q46 26 44 33 Q41 39 29 36 L30 46Z" fill="#dfbd87"/>
+    <path d="M18 24 14 15 24 17 28 24" fill="#d3a870" stroke-width="2.5"/>
+    <circle cx="28" cy="27" r="2.8" fill="#765445" stroke="none"/>
+    <path d="M38 33H42 M17 49 26 47 M20 58 28 55 M46 100H53 M79 100H87" stroke="#b68d62" stroke-width="2.5"/>
+    <path d="M42 63 Q48 68 56 62 M67 63 Q77 69 85 63" stroke="#f3d8a4" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">nebula</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 70Q5 51 25 39Q20 18 43 22Q63 6 74 29Q100 18 102 47Q117 64 97 77Q99 102 74 97Q56 117 44 94Q19 105 17 70Z" fill="#d5b8df" stroke="none"/>
+    <path d="M23 66Q22 35 48 42Q67 18 81 42Q106 52 83 70Q77 101 52 85Q29 90 23 66Z" fill="#bdaedb" stroke="none"/>
+    <path d="M37 68Q37 48 59 51Q76 35 84 54Q88 74 65 75Q53 92 43 77Z" fill="#e8cce5" stroke="none"/>
+    <path d="M58 43 61 57 74 61 61 65 58 79 54 65 42 61 54 57Z" fill="#fff5d6" stroke="none"/>
+    <path d="M20 21v8m-4-4h8 M97 27v8m-4-4h8 M91 92v6m-3-3h6" stroke="#d5ac61" stroke-width="2.5"/><circle cx="35" cy="34" r="2" fill="#fff5df" stroke="none"/><circle cx="92" cy="57" r="2" fill="#fff5df" stroke="none"/><circle cx="31" cy="82" r="2" fill="#fff5df" stroke="none"/><circle cx="79" cy="93" r="2" fill="#fff5df" stroke="none"/>
+  </g>
+</svg>

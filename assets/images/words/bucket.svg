@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">bucket</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="107" rx="32" ry="3" fill="#eadbc5" stroke="none"/>
+    <path d="M23 43 32 97 Q34 107 60 107 Q86 107 88 97 L97 43Z" fill="#a8cbd6"/>
+    <ellipse cx="60" cy="43" rx="37" ry="11" fill="#d9e7e2"/>
+    <ellipse cx="60" cy="43" rx="29" ry="6" fill="#90b2bc" stroke="none"/>
+    <path d="M27 47 Q19 13 60 13 Q101 13 93 47" stroke="#765445" stroke-width="5"/>
+    <path d="M27 47 Q19 13 60 13 Q101 13 93 47" stroke="#c8b699" stroke-width="2.5"/>
+    <path d="M49 14H71" stroke="#b88e68" stroke-width="7"/>
+    <path d="M37 59 42 91 M49 98 Q60 101 72 98" stroke="#d2e6e3" stroke-width="4"/>
+    <path d="M79 59 75 89" stroke="#7fa9b9" stroke-width="2.5"/>
+  </g>
+</svg>

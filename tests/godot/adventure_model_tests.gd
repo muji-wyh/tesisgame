@@ -47,7 +47,7 @@ func _run() -> void:
 
 
 func _test_catalog(adventures: Array, words: Array) -> void:
-	check(words.size() == 200 and adventures.size() == 12, "The expanded catalog contains 200 words in twelve adventures")
+	check(words.size() == 350 and adventures.size() == 12, "The expanded catalog contains 350 words in twelve adventures")
 	var all_ids: Array = words.map(func(word: Dictionary) -> String: return word.id)
 	var included: Dictionary = {}
 	var adventure_ids: Dictionary = {}

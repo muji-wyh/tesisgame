@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ladybug</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 46 24 35 M32 61 17 59 M37 79 22 89 M84 46 96 35 M88 61 103 59 M83 79 98 89" stroke-width="4"/>
+    <path d="M48 27 42 14 M72 27 78 14" stroke-width="2.5"/>
+    <ellipse cx="60" cy="35" rx="18" ry="17" fill="#787575"/>
+    <ellipse cx="60" cy="66" rx="34" ry="37" fill="#e98f83"/>
+    <path d="M60 31V103" stroke-width="3"/>
+    <g fill="#797272" stroke="none"><circle cx="43" cy="49" r="7"/><circle cx="77" cy="49" r="7"/><circle cx="40" cy="73" r="8"/><circle cx="80" cy="73" r="8"/><circle cx="49" cy="92" r="5"/><circle cx="71" cy="92" r="5"/></g>
+    <path d="M34 47 Q39 38 48 35" stroke="#ffc2ae" stroke-width="4"/>
+    <circle cx="54" cy="25" r="3" fill="#f4e4c9" stroke="none"/><circle cx="66" cy="25" r="3" fill="#f4e4c9" stroke="none"/>
+  </g>
+</svg>

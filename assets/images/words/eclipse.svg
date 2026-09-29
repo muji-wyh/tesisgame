@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">eclipse</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="61" cy="61" r="45" fill="#f4dc9b" stroke="none"/>
+    <path d="M61 10V18 M61 103V112 M10 61H18 M103 61H112 M25 25 31 31 M91 91 97 97 M25 97 31 91 M91 31 97 25" stroke="#e0ba72" stroke-width="3"/>
+    <circle cx="61" cy="61" r="34" fill="#53647f" stroke="#edd18c" stroke-width="3"/>
+    <circle cx="46" cy="51" r="8" fill="#61718a" stroke="none"/>
+    <circle cx="72" cy="75" r="11" fill="#5d6d87" stroke="none"/>
+    <path d="M85 31 88 38 96 40 88 43 85 50 82 42 75 40 82 38Z" fill="#fff6d7" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">ferry</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 81 H109 L97 101 H29Z" fill="#88b4c4"/>
+    <path d="M23 50 H96 V80 H23Z" fill="#f0e3c8"/>
+    <path d="M40 35 H89 V50 H40Z" fill="#b6d0d5"/>
+    <path d="M61 35V21H75V35" fill="#dba586"/>
+    <path d="M83 35V17 M83 18 96 24 83 29" fill="#e7b67d" stroke-width="2.5"/>
+    <path d="M21 51H99 M39 35H92" stroke="#8aadb7" stroke-width="4"/>
+    <path d="M30 59H42V67H30Z M49 59H61V67H49Z M68 59H80V67H68Z M87 59H96V67H87Z" fill="#a0c8d1" stroke-width="2"/>
+    <path d="M28 74H41L45 80H24Z M63 74H76L80 80H59Z" fill="#cf9890" stroke-width="2"/>
+    <path d="M18 90H104" stroke="#dce9e0" stroke-width="3"/>
+    <path d="M12 105 Q25 98 38 105 Q51 112 64 105 Q77 98 90 105 Q102 111 109 105" stroke="#9cc8d0" stroke-width="3"/>
+  </g>
+</svg>

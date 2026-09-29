@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">accordion</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="60" cy="106" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M32 35Q60 10 88 34" stroke="#a3836e" stroke-width="5"/>
+    <rect x="12" y="31" width="24" height="66" rx="6" fill="#b5899d"/>
+    <path d="M36 36 42 31 49 37 55 31 62 37 69 31 76 36 83 31 88 36V94L82 99 76 94 69 100 62 94 55 100 49 94 42 100 36 94Z" fill="#dac7b9"/>
+    <path d="M42 35V94 M49 38V93 M55 35V94 M62 38V93 M69 35V94 M76 38V93 M83 35V94" stroke="#a88278" stroke-width="2"/>
+    <rect x="87" y="31" width="22" height="68" rx="5" fill="#b5899d"/>
+    <path d="M20 41H31V86H20Z" fill="#fff3d8"/>
+    <path d="M20 50H29 M20 60H29 M20 70H29 M20 80H29" stroke-width="3"/>
+    <circle cx="97" cy="43" r="2.5" fill="#f4dec3" stroke="none"/><circle cx="101" cy="53" r="2.5" fill="#f4dec3" stroke="none"/><circle cx="96" cy="63" r="2.5" fill="#f4dec3" stroke="none"/><circle cx="101" cy="73" r="2.5" fill="#f4dec3" stroke="none"/><circle cx="96" cy="83" r="2.5" fill="#f4dec3" stroke="none"/>
+  </g>
+</svg>

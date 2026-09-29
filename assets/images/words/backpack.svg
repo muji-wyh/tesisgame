@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">backpack</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 43 Q19 39 20 70 L23 98 H35 M84 43 Q101 39 100 70 L97 98 H85" stroke="#765445" stroke-width="9"/>
+    <path d="M36 43 Q19 39 20 70 L23 98 H35 M84 43 Q101 39 100 70 L97 98 H85" stroke="#d4a06e" stroke-width="5"/>
+    <path d="M47 26 V19 Q60 10 73 19 V26" stroke="#765445" stroke-width="8"/>
+    <path d="M47 26 V19 Q60 10 73 19 V26" stroke="#e1ba85" stroke-width="4"/>
+    <path d="M28 44 Q28 24 60 24 Q92 24 92 44 V95 Q92 108 60 108 Q28 108 28 95Z" fill="#b5ccab"/>
+    <path d="M34 45 Q33 31 60 31 Q87 31 86 45V57H34Z" fill="#d1dfb9" stroke-width="2.5"/>
+    <path d="M35 64H85V93Q83 102 60 102Q37 102 35 93Z" fill="#91b397" stroke-width="2.5"/>
+    <path d="M36 75H84 M58 58H63V67H58Z" stroke="#ead0a0" stroke-width="2.5"/>
+    <path d="M77 76V84 M54 89H66" stroke="#dce7c9" stroke-width="3"/>
+  </g>
+</svg>

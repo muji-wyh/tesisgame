@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">plum</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="106" rx="30" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M61 37 Q40 27 29 46 Q16 69 36 92 Q54 110 75 98 Q99 85 94 58 Q91 31 61 37Z" fill="#9d80b8"/>
+    <path d="M64 39 Q76 67 68 99" stroke="#806897" stroke-width="2.5"/>
+    <path d="M60 37 Q59 22 66 14" stroke="#93785d" stroke-width="4"/>
+    <path d="M64 27 Q78 14 94 25 Q82 36 65 32Z" fill="#91bd7e"/>
+    <path d="M41 45 Q29 56 32 70" stroke="#c8b2dc" stroke-width="5"/>
+    <ellipse cx="47" cy="87" rx="8" ry="4" fill="#ac91c5" stroke="none"/>
+  </g>
+</svg>

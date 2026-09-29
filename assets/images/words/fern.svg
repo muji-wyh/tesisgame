@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">fern</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 109 Q64 68 58 12 M58 108 Q41 75 22 57 M59 108 Q80 77 103 62" stroke="#7c9f6e" stroke-width="3"/>
+    <g fill="#a3c58c" stroke="#7c9f6e" stroke-width="2">
+      <path d="M58 28 Q44 26 44 16 Q57 16 58 28Z M59 39 Q40 38 36 25 Q54 24 59 39Z M60 51 Q37 48 32 35 Q54 33 60 51Z M60 64 Q37 61 29 47 Q52 44 60 64Z M60 78 Q39 77 30 62 Q52 59 60 78Z M60 91 Q41 92 33 78 Q52 73 60 91Z"/>
+      <path d="M59 28 Q72 24 72 15 Q60 17 59 28Z M59 40 Q77 35 79 23 Q63 24 59 40Z M60 52 Q83 45 86 33 Q65 34 60 52Z M60 65 Q83 61 92 45 Q68 46 60 65Z M60 79 Q83 75 91 60 Q69 62 60 79Z M60 91 Q80 92 86 76 Q68 76 60 91Z"/>
+      <path d="M38 77 Q24 79 16 69 Q28 65 38 77Z M45 89 Q29 94 22 84 Q37 79 45 89Z M77 88 Q93 88 103 76 Q89 74 77 88Z M69 100 Q89 103 98 91 Q81 87 69 100Z"/>
+    </g>
+    <path d="M58 14 Q54 9 51 14 Q49 18 53 20" stroke="#8caf7b" stroke-width="2.5"/>
+  </g>
+</svg>

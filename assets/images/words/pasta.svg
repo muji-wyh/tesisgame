@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pasta</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="85" rx="47" ry="22" fill="#c4dfe3"/>
+    <ellipse cx="60" cy="82" rx="39" ry="16" fill="#fff0d6" stroke-width="2.5"/>
+    <path d="M27 81 Q29 65 42 70 Q58 75 54 63 Q50 55 65 58 Q80 60 77 72 Q71 83 90 81 M31 88 Q35 73 48 80 Q62 88 65 77 Q67 70 79 76 M40 91 Q46 85 57 91 Q71 96 82 87 M35 74 Q33 61 47 63 Q57 64 53 72" stroke="#765445" stroke-width="7"/>
+    <path d="M27 81 Q29 65 42 70 Q58 75 54 63 Q50 55 65 58 Q80 60 77 72 Q71 83 90 81 M31 88 Q35 73 48 80 Q62 88 65 77 Q67 70 79 76 M40 91 Q46 85 57 91 Q71 96 82 87 M35 74 Q33 61 47 63 Q57 64 53 72" stroke="#f4d380" stroke-width="4"/>
+    <path d="M84 59V18 M76 18V34 Q84 41 92 34 V18 M84 34V18" stroke="#9baeb6" stroke-width="3"/>
+    <path d="M76 42 Q66 41 65 48 Q67 54 83 49 Q92 46 82 42 Q75 39 71 45 M73 51 Q79 58 72 63" stroke="#e4b961" stroke-width="3.5"/>
+    <path d="M53 78 Q57 64 67 69 Q63 78 53 78Z" fill="#91bd7e" stroke-width="2"/>
+  </g>
+</svg>

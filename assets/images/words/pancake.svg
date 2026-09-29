@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">pancake</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="99" rx="46" ry="10" fill="#c4dce0"/>
+    <path d="M21 76 V88 Q21 104 60 104 Q99 104 99 88 V76Z" fill="#d9a369"/>
+    <ellipse cx="60" cy="77" rx="39" ry="13" fill="#f1cc8c"/>
+    <path d="M23 63 V76 Q23 91 60 91 Q97 91 97 76 V63Z" fill="#d9a369"/>
+    <ellipse cx="60" cy="63" rx="37" ry="13" fill="#f4d79d"/>
+    <path d="M25 51 V63 Q25 78 60 78 Q95 78 95 63 V51Z" fill="#dcab70"/>
+    <ellipse cx="60" cy="51" rx="35" ry="14" fill="#f2d096"/>
+    <path d="M43 42 Q64 34 80 45 Q87 54 73 58 V73 Q69 81 64 73 V61 Q59 60 54 63 V83 Q48 92 45 82 V58 Q26 52 43 42Z" fill="#c8935c" stroke-width="2.5"/>
+    <path d="M48 39 65 33 77 42 61 48 48 44Z" fill="#f9dc85" stroke-width="2"/>
+    <path d="M31 70 38 73 M30 86 40 91" stroke="#f6d89f" stroke-width="3"/>
+  </g>
+</svg>

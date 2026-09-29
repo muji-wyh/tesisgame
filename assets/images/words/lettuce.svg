@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">lettuce</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 86 Q9 80 16 65 Q4 49 20 39 Q19 22 36 25 Q47 10 60 22 Q73 11 86 24 Q105 20 104 40 Q118 51 105 65 Q112 81 96 89 Q82 105 60 103 Q38 106 24 86Z" fill="#b6d59c"/>
+    <path d="M60 99 Q18 90 27 62 Q17 50 34 44 Q35 30 51 38 Q61 25 69 40 Q88 30 90 48 Q106 53 92 69 Q103 94 60 99Z" fill="#cde2a9" stroke="#83ad78" stroke-width="2.5"/>
+    <path d="M60 96 Q34 87 44 62 Q37 52 49 47 Q61 41 70 50 Q86 49 80 65 Q86 85 60 96Z" fill="#e0e8b8" stroke="#9abc85" stroke-width="2.5"/>
+    <path d="M60 98V58 M59 86 45 72 M61 82 77 66 M38 90 27 69 M82 89 95 76 M33 41 27 51 M88 29 86 40" stroke="#9fbf87" stroke-width="2.5"/>
+  </g>
+</svg>

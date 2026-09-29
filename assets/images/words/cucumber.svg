@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">cucumber</title>
+  <circle cx="60" cy="60" r="55" fill="#fff8eb"/>
+  <g fill="none" stroke="#765445" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="105" rx="43" ry="4" fill="#eadbc5" stroke="none"/>
+    <path d="M21 66 73 26 Q88 15 99 29 Q109 44 96 56 L44 95 Q26 107 17 91 Q10 76 21 66Z" fill="#89b587"/>
+    <path d="M27 73 80 33 M31 89 94 43" stroke="#b7d696" stroke-width="4"/>
+    <path d="M26 65 77 27 M45 95 99 53" stroke="#67996f" stroke-width="2.5"/>
+    <ellipse cx="32" cy="82" rx="18" ry="22" transform="rotate(-40 32 82)" fill="#dce3ad"/>
+    <ellipse cx="32" cy="82" rx="13" ry="17" transform="rotate(-40 32 82)" fill="#edf0c5" stroke="#a8c38b" stroke-width="2"/>
+    <path d="M29 72 31 77 M22 79 27 82 M29 86 29 91 M37 80 40 83" stroke="#9daf79" stroke-width="2"/>
+    <path d="M65 50 67 52 M79 45 81 47 M56 64 58 66 M83 30 86 32 M44 58 46 60" stroke="#628d66" stroke-width="2"/>
+  </g>
+</svg>
