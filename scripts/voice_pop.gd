@@ -12,6 +12,7 @@ signal pip_report_requested(text: String)
 signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
+const Data = preload("res://scripts/game_data.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
 const Duck = preload("res://scripts/duck_mascot.gd")
@@ -24,6 +25,8 @@ const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const LAUNCH_SOUND_WINDOW: float = 0.2
 const TARGET_COLLISION_SCALE: float = 0.65
+const HUD_HIT_DURATION: float = 0.9
+const HIT_COLOR := Color("#9dffe0")
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
@@ -38,9 +41,7 @@ var replay_button: Button
 var back_button: Button
 var retry_button: Button
 var time_label: Label
-var score_label: Label
 var hits_label: Label
-var prompt_label: Label
 var transcript_label: Label
 var report_button: Button
 var next_report_button: Button
@@ -58,8 +59,13 @@ var _pending_left: float = 0.0
 var _reconnecting: bool = false
 var _publish_key: String = ""
 var _geometry_publish_pending: bool = false
-var _last_hit: String = ""
 var _last_hit_left: float = 0.0
+var _hud_hit_age: float = HUD_HIT_DURATION
+var _hud_hit_serial: int = 0
+var _hud_hit_amount: int = 0
+var _hud_hit_words := PackedStringArray()
+var _hud_hit_pattern := RegEx.new()
+var _hud_transcript_hit: bool = false
 var _last_launch_uid: int = 0
 var _transcript: String = ""
 var _transcript_final: bool = false
@@ -72,11 +78,11 @@ var _bursts: Array[Dictionary] = []
 var _slice_clip: Control
 var _slice_canvas: Node2D
 var _draw_targets: Array[Dictionary] = []
+var _target_canvas: Node2D
 var _arena: Rect2
 var _hud: Control
-var _time_caption: Label
-var _score_caption: Label
-var _mode_caption: Label
+var _hud_fx: Node2D
+var _hits_caption: Label
 var _live_caption: Label
 var _gate: ScrollContainer
 var _gate_body: VBoxContainer
@@ -116,26 +122,30 @@ func _build() -> void:
 	_hud.name = "ArenaHUD"
 	_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hud)
+	_hud_fx = Node2D.new()
+	_hud_fx.draw.connect(_draw_hud_feedback)
+	_hud.add_child(_hud_fx)
 	time_label = _label("30", 30)
 	time_label.name = "Time"
-	_time_caption = _label("SECONDS", 10, SOFT)
-	score_label = _label("0", 27)
-	score_label.name = "Score"
-	_score_caption = _label("SCORE", 10, SOFT)
-	_mode_caption = _label("VOICE POP", 10, CYAN)
-	hits_label = _label("0 hits", 18)
+	hits_label = _label("0", 28)
 	hits_label.name = "Hits"
-	prompt_label = _label("Say what you see", 20)
-	prompt_label.name = "Prompt"
+	_hits_caption = _label("HITS", 10, SOFT)
+	_hits_caption.name = "HitsCaption"
 	transcript_label = _label("", 17)
 	transcript_label.name = "LiveTranscript"
 	transcript_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	transcript_label.max_lines_visible = 2
 	transcript_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	transcript_label.hide()
-	_live_caption = _label("LISTENING", 10, CYAN)
-	for item in [time_label, _time_caption, score_label, _score_caption, _mode_caption, hits_label, prompt_label, transcript_label, _live_caption]:
+	_live_caption = _label("", 10, CYAN)
+	_live_caption.name = "LiveStatus"
+	for item in [time_label, hits_label, _hits_caption, transcript_label, _live_caption]:
 		_hud.add_child(item)
+	# Live cards pass in front of the field HUD, inside this panel's clip.
+	_target_canvas = Node2D.new()
+	_target_canvas.name = "FlyingCards"
+	_target_canvas.draw.connect(_draw_flying_targets)
+	add_child(_target_canvas)
 	_slice_clip = Control.new()
 	_slice_clip.name = "SliceArena"
 	_slice_clip.clip_contents = true
@@ -206,8 +216,8 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_pending = false
 	_reconnecting = false
 	_publish_key = ""
-	_last_hit = ""
 	_last_hit_left = 0.0
+	_hud_hit_serial = 0
 	_last_launch_uid = 0
 	_clear_transcript()
 	set_report_speaking(false)
@@ -296,6 +306,7 @@ func show_transcript(text: String, is_final: bool) -> void:
 		return
 	_transcript = text.strip_edges().replace("\n", " ").replace("\r", " ").right(2000)
 	_transcript_final = is_final
+	_refresh_transcript_hit()
 	transcript_label.text = _transcript
 	_update_transcript_window()
 	_update_hud()
@@ -306,10 +317,10 @@ func _clear_transcript() -> void:
 	_transcript = ""
 	_transcript_final = false
 	game.clear_recognition_feedback()
+	_clear_hud_feedback()
 	if transcript_label != null:
 		transcript_label.text = ""
 		transcript_label.hide()
-		prompt_label.show()
 
 
 func _update_transcript_window() -> void:
@@ -346,11 +357,22 @@ func _present_hits(struck: Array) -> void:
 				_bursts.pop_front()
 			_bursts.append(Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
 				int(target.get("combo", 1))))
-		_last_hit = "+%d" % int(target.get("points", 100))
-		if int(target.get("combo", 0)) > 1:
-			_last_hit += "  ·  %d× COMBO" % int(target.combo)
 		_last_hit_left = 1.15
 		hit.emit(target.word)
+	if not struck.is_empty():
+		_hud_hit_age = 0.0
+		_hud_hit_serial += 1
+		_hud_hit_amount = struck.size()
+		_hud_hit_words.clear()
+		var forms := PackedStringArray()
+		for target in struck:
+			_hud_hit_words.append(str(target.word.text))
+			for form in target.get("forms", [target.word.text]):
+				if not str(form) in forms:
+					forms.append(str(form))
+		# Reuse accepted noun forms without highlighting a substring or possessive.
+		_hud_hit_pattern.compile("(?<![\\p{L}\\p{N}_'’])(?:%s)(?![\\p{L}\\p{N}_'’])" % "|".join(forms))
+		_refresh_transcript_hit()
 	_refresh_targets()
 	_update_hud()
 	_publish(true)
@@ -402,6 +424,7 @@ func stop() -> void:
 	game.stop()
 	_clear_slices()
 	_draw_targets.clear()
+	_target_canvas.queue_redraw()
 	set_process(false)
 	_publish(true)
 	queue_redraw()
@@ -413,6 +436,7 @@ func set_reduced_motion(value: bool) -> void:
 		_clear_slices()
 	if pip != null and is_instance_valid(pip):
 		pip.set_reduced_motion(value)
+	_apply_hud_feedback()
 	_refresh_targets()
 	queue_redraw()
 
@@ -467,6 +491,7 @@ func snapshot() -> Dictionary:
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
+		"hud": _hud_snapshot(),
 		"vocabulary": game.vocabulary(),
 		"recognition_feedback": game.recognition_feedback, "recognition_message": game.recognition_message,
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
@@ -478,6 +503,20 @@ func snapshot() -> Dictionary:
 		"results_scroll": _results.scroll_vertical,
 		"results_scroll_max": maxf(0.0, _results.get_v_scroll_bar().max_value - _results.get_v_scroll_bar().page),
 		"results_scrollbar_visible": _results.get_v_scroll_bar().is_visible_in_tree()}
+
+
+func _hud_snapshot() -> Dictionary:
+	var result: Dictionary = {}
+	for entry in [["time", time_label], ["hits", hits_label], ["transcript", transcript_label], ["status", _live_caption]]:
+		var label: Label = entry[1]
+		# Describe stable layout bounds, independent of the counter's brief pulse.
+		var rect: Rect2 = _hud.get_global_transform() * Rect2(label.position, label.size)
+		result[entry[0]] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
+			"text": label.text}
+	result.hit_effect = {"serial": _hud_hit_serial, "active": _hud_hit_age < HUD_HIT_DURATION and _hud.visible,
+		"amount": _hud_hit_amount, "words": Array(_hud_hit_words)}
+	result.targets_above_hud = _target_canvas.get_index() > _hud.get_index()
+	return result
 
 
 func _publish(force: bool = false) -> void:
@@ -517,6 +556,7 @@ func _process(delta: float) -> void:
 			set_listening(_enabled, false, "Still waiting for the microphone. Check the browser prompt, or retry.")
 	_sync_game_clock()
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
+	_advance_hud_feedback(delta)
 	_advance_slices(delta)
 	_refresh_targets()
 	_update_hud()
@@ -590,18 +630,101 @@ func _update_hud() -> void:
 		return
 	time_label.text = "%02d" % ceili(maxf(0.0, game.remaining))
 	time_label.add_theme_color_override("font_color", PINK if game.remaining <= 5.0 else WHITE)
-	score_label.text = str(game.score)
-	hits_label.text = "%d %s" % [game.hits, "hit" if game.hits == 1 else "hits"]
-	transcript_label.visible = not _transcript.is_empty()
-	prompt_label.visible = _transcript.is_empty()
-	_live_caption.text = "RECONNECTING · TIMER PAUSED" if _reconnecting else _last_hit if _last_hit_left > 0.0 else "LISTENING · SPEAK TO POP"
-	if not _transcript.is_empty() and _last_hit_left <= 0.0 and not _reconnecting:
-		_live_caption.text = "HEARD YOU · KEEP GOING" if _transcript_final else "HEARING YOU…"
+	hits_label.text = str(game.hits)
+	var celebrating: bool = _hud_hit_age < HUD_HIT_DURATION
+	var visible_text: String = _transcript if not _transcript.is_empty() else " · ".join(_hud_hit_words) if celebrating else ""
+	if transcript_label.text != visible_text:
+		transcript_label.text = visible_text
+		_update_transcript_window()
+	transcript_label.visible = not visible_text.is_empty()
+	_live_caption.text = "Reconnecting…" if _reconnecting else ""
 	if not _reconnecting and not game.recognition_message.is_empty():
 		_live_caption.text = game.recognition_message
 	if game.phase == "running" and game.targets.is_empty() and game.remaining < 3.0:
-		_live_caption.text = "NICE POPPING · ROUND ENDING"
-	_live_caption.add_theme_color_override("font_color", PINK if _last_hit_left > 0.0 else CYAN)
+		_live_caption.text = "Finishing up…"
+	_live_caption.visible = not _live_caption.text.is_empty()
+	_apply_hud_feedback()
+
+
+func _clear_hud_feedback() -> void:
+	_hud_hit_age = HUD_HIT_DURATION
+	_hud_hit_amount = 0
+	_hud_hit_words.clear()
+	_hud_transcript_hit = false
+	_apply_hud_feedback()
+
+
+func _refresh_transcript_hit() -> void:
+	_hud_transcript_hit = _hud_hit_age < HUD_HIT_DURATION and (_transcript.is_empty() \
+		or (_hud_hit_pattern.is_valid() and _hud_hit_pattern.search(Data.normalize_spoken_text(_transcript)) != null))
+
+
+func _advance_hud_feedback(delta: float) -> void:
+	if delta <= 0.0 or not is_finite(delta):
+		return
+	var was_active: bool = _hud_hit_age < HUD_HIT_DURATION
+	_hud_hit_age = minf(HUD_HIT_DURATION, _hud_hit_age + delta)
+	_apply_hud_feedback()
+	if was_active and _hud_hit_age >= HUD_HIT_DURATION:
+		_update_hud()
+		_publish(true)
+
+
+func _apply_hud_feedback() -> void:
+	if hits_label == null:
+		return
+	var active: bool = _hud_hit_age < HUD_HIT_DURATION
+	var pulse: float = 0.0
+	if active and not reduced_motion:
+		pulse = sin(clampf(_hud_hit_age / 0.38, 0.0, 1.0) * PI) * 0.28
+	hits_label.pivot_offset = hits_label.size * 0.5
+	hits_label.scale = Vector2.ONE * (1.0 + pulse)
+	hits_label.add_theme_color_override("font_color", HIT_COLOR if active else WHITE)
+	_hits_caption.add_theme_color_override("font_color", HIT_COLOR if active else SOFT)
+	var highlight_words: bool = active and _hud_transcript_hit
+	transcript_label.add_theme_color_override("font_color", HIT_COLOR if highlight_words else WHITE)
+	transcript_label.add_theme_color_override("font_shadow_color", Color(HIT_COLOR, 0.55) if highlight_words else Color.TRANSPARENT)
+	transcript_label.add_theme_constant_override("shadow_outline_size", 4 if highlight_words else 0)
+	if _hud_fx != null:
+		_hud_fx.queue_redraw()
+
+
+func _draw_hud_feedback() -> void:
+	if not _hud.visible or _hud_hit_age >= HUD_HIT_DURATION:
+		return
+	var scale: float = Style.ui_scale(self)
+	var progress: float = _hud_hit_age / HUD_HIT_DURATION
+	var alpha: float = 1.0 if reduced_motion else 1.0 - smoothstep(0.48, 1.0, progress)
+	var speech: Rect2 = Rect2(transcript_label.position, transcript_label.size)
+	var count: Rect2 = Rect2(hits_label.position, hits_label.size)
+	var center: Vector2 = count.get_center()
+	var highlight: Rect2 = Rect2(count.position - Vector2(2, 0) / scale, count.size + Vector2(4, 16) / scale)
+	_hud_fx.draw_style_box(Style.box(Color(HIT_COLOR, 0.12 * alpha), Color(HIT_COLOR, 0.45 * alpha), ceili(12.0 / scale), 1), highlight)
+	if reduced_motion:
+		if _hud_transcript_hit:
+			_hud_fx.draw_line(Vector2(speech.position.x + 8.0 / scale, speech.end.y),
+				Vector2(speech.end.x - 8.0 / scale, speech.end.y), HIT_COLOR, 2.0 / scale, true)
+		return
+	var sweep: float = smoothstep(0.0, 0.36, progress)
+	var half_span: float = maxf(0.0, speech.size.x * 0.5 - 8.0 / scale) * sweep
+	var underline := Vector2(speech.get_center().x, speech.end.y - 2.0 / scale)
+	if _hud_transcript_hit:
+		_hud_fx.draw_line(underline - Vector2(half_span, 0), underline + Vector2(half_span, 0), Color(HIT_COLOR, 0.22 * alpha), 7.0 / scale, true)
+		_hud_fx.draw_line(underline - Vector2(half_span, 0), underline + Vector2(half_span, 0), Color(HIT_COLOR, alpha), 2.0 / scale, true)
+	var font: Font = ThemeDB.fallback_font
+	var font_size: int = ceili(16.0 / scale)
+	var addition: String = "+%d" % _hud_hit_amount
+	var text_width: float = font.get_string_size(addition, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var lift: float = 15.0 * sin(progress * PI * 0.5) / scale
+	_hud_fx.draw_string(font, Vector2(center.x - text_width * 0.5, count.end.y + 39.0 / scale - lift),
+		addition, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(HIT_COLOR, alpha))
+	for index in range(7):
+		var angle: float = float(index) * TAU / 7.0 - PI * 0.5
+		var radius: float = (15.0 + 28.0 * sin(progress * PI * 0.5)) / scale
+		var point: Vector2 = center + Vector2(cos(angle), sin(angle)) * Vector2(radius, radius * 0.7)
+		var reach: float = (3.0 + sin(progress * PI) * 2.0) / scale
+		_hud_fx.draw_line(point - Vector2(reach, 0), point + Vector2(reach, 0), Color(HIT_COLOR, alpha), 1.5 / scale, true)
+		_hud_fx.draw_line(point - Vector2(0, reach), point + Vector2(0, reach), Color(WHITE, alpha), 1.5 / scale, true)
 
 
 func _layout() -> void:
@@ -612,28 +735,23 @@ func _layout() -> void:
 	custom_minimum_size = Vector2(180, 160) / scale
 	var edge: float = 16.0 / scale
 	var width: float = maxf(0.0, size.x - edge * 2.0)
-	var short: bool = size.y * scale < 350.0
 	_hud.position = Vector2.ZERO
 	_hud.size = size
-	var side: float = minf(86.0 / scale, width * 0.28)
-	_place_label(time_label, Rect2(edge, 12 / scale, side, 33 / scale), 29)
-	_place_label(_time_caption, Rect2(edge, 43 / scale, side, 16 / scale), 9)
-	_place_label(score_label, Rect2(size.x - edge - side, 12 / scale, side, 33 / scale), 25)
-	_place_label(_score_caption, Rect2(size.x - edge - side, 43 / scale, side, 16 / scale), 9)
-	_place_label(_mode_caption, Rect2(edge + side, 15 / scale, width - side * 2, 16 / scale), 10)
-	_place_label(hits_label, Rect2(edge + side, 31 / scale, width - side * 2, 26 / scale), 17)
-	var speech_top: float = (59.0 if short else 65.0) / scale
-	var speech_height: float = (36.0 if short else 44.0) / scale
-	_place_label(prompt_label, Rect2(edge, speech_top, width, speech_height), 17 if short else 20)
-	_place_label(transcript_label, Rect2(edge, speech_top, width, speech_height), 14 if short else 17)
+	var side: float = minf(72.0 / scale, width * 0.22)
+	_place_label(time_label, Rect2(edge, 13 / scale, side, 46 / scale), 30)
+	_place_label(hits_label, Rect2(size.x - edge - side, 12 / scale, side, 35 / scale), 28)
+	_place_label(_hits_caption, Rect2(size.x - edge - side, 45 / scale, side, 14 / scale), 9)
+	var speech_x: float = edge + side + 8.0 / scale
+	var speech_width: float = maxf(1.0, width - side * 2.0 - 16.0 / scale)
+	var speech_height: float = 44.0 / scale
+	_place_label(transcript_label, Rect2(speech_x, 12.0 / scale, speech_width, speech_height), 16 if size.x * scale < 360.0 else 19)
 	# Font ascent/descent and line spacing can exceed the nominal font size.
 	# Reserve two actual lines instead of clipping the second at some UI scales.
 	speech_height = maxf(speech_height, 2.0 * transcript_label.get_line_height() + transcript_label.get_theme_constant("line_spacing"))
 	transcript_label.size.y = speech_height
-	prompt_label.size.y = speech_height
 	_update_transcript_window()
-	_place_label(_live_caption, Rect2(edge, speech_top + speech_height, width, 17 / scale), 10)
-	var top: float = speech_top + speech_height + 25.0 / scale
+	_place_label(_live_caption, Rect2(edge, 16.0 / scale + speech_height, width, 19.0 / scale), 10)
+	var top: float = 10.0 / scale
 	_arena = Rect2(edge, top, width, maxf(64.0 / scale, size.y - top - 18.0 / scale))
 	_slice_clip.position = _arena.position
 	_slice_clip.size = _arena.size
@@ -685,6 +803,7 @@ func _layout() -> void:
 		grid.add_theme_constant_override("v_separation", ceili(8.0 / scale))
 	for button in _review_buttons:
 		button.custom_minimum_size = Vector2(0.0, 66.0 / scale)
+	_apply_hud_feedback()
 	_refresh_targets()
 	queue_redraw()
 	_queue_geometry_publish()
@@ -692,11 +811,15 @@ func _layout() -> void:
 
 func _refresh_targets() -> void:
 	_draw_targets.clear()
+	if _target_canvas != null:
+		_target_canvas.queue_redraw()
 	if _arena.size.x <= 0.0 or _arena.size.y <= 0.0 or game.phase not in ["running", "paused"]:
 		return
 	var scale: float = Style.ui_scale(self)
-	var capsule_width: float = clampf(minf(_arena.size.x * 0.43, _arena.size.y * 0.57), 112.0 / scale, 202.0 / scale)
-	var capsule_height: float = minf(clampf(capsule_width * 0.83, 96.0 / scale, 162.0 / scale), _arena.size.y - 4.0 / scale)
+	# Give the cards more flight height without increasing their illustrated size.
+	var card_space_height: float = maxf(64.0 / scale, _arena.size.y - (110.0 if size.y * scale < 350.0 else 124.0) / scale)
+	var capsule_width: float = clampf(minf(_arena.size.x * 0.43, card_space_height * 0.57), 112.0 / scale, 202.0 / scale)
+	var capsule_height: float = minf(clampf(capsule_width * 0.83, 96.0 / scale, 162.0 / scale), card_space_height - 4.0 / scale)
 	var capsule_size := Vector2(capsule_width, capsule_height)
 	var collision_size: Vector2 = capsule_size * TARGET_COLLISION_SCALE
 	var room: float = maxf(0.0, _arena.size.x - capsule_width - 12.0 / scale)
@@ -708,17 +831,18 @@ func _refresh_targets() -> void:
 		var x: float = _arena.position.x + capsule_width * 0.5 + 6.0 / scale + room * clampf((unit_x - 0.2) / 0.6, 0.0, 1.0)
 		var bottom: float = _arena.end.y - capsule_height * 0.5 - 4.0 / scale
 		var highest: float = _arena.position.y + capsule_height * 0.5 + 5.0 / scale
-		var apex: float = highest + maxf(0.0, bottom - highest) * float(target.peak) * 0.38
+		var apex: float = highest + maxf(0.0, bottom - highest) * float(target.peak) * 0.08
 		var y: float = bottom - (bottom - apex) * 4.0 * progress * (1.0 - progress)
 		var tilt: float = float(target.spin) * sin(progress * PI)
 		if reduced_motion:
 			tilt = 0.0
+			var still_top: float = minf(bottom, maxf(highest, _live_caption.get_rect().end.y + capsule_height * 0.5 + 10.0 / scale))
 			if _arena.size.x >= _arena.size.y * 1.25:
 				x = _arena.position.x + capsule_width * 0.5 + room * float(lane) * 0.5
-				y = (_arena.position.y + _arena.end.y) * 0.5
+				y = clampf((_arena.position.y + _arena.end.y) * 0.5, still_top, bottom)
 			else:
 				x = _arena.position.x + capsule_width * 0.5 + room * (0.0 if lane == 0 else 1.0 if lane == 1 else 0.5)
-				y = highest if lane != 2 else bottom
+				y = still_top if lane != 2 else bottom
 		var center := Vector2(x, y)
 		if not reduced_motion:
 			for burst in _bursts:
@@ -758,11 +882,17 @@ func _draw() -> void:
 	draw_style_box(Style.box(NAVY, Color("#28385d"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale))), Rect2(Vector2.ZERO, size))
 	_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
-		var side: float = minf(86.0 / scale, (size.x - 32.0 / scale) * 0.28)
+		var side: float = time_label.size.x
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
 			draw_style_box(Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1), Rect2(x, 10.0 / scale, side, 52.0 / scale))
-		for target in _draw_targets:
-			_draw_capsule(target, scale)
+
+
+func _draw_flying_targets() -> void:
+	if _hud == null or not _hud.visible:
+		return
+	var scale: float = Style.ui_scale(self)
+	for target in _draw_targets:
+		_draw_capsule(target, scale)
 
 
 func _draw_atmosphere(scale: float) -> void:
@@ -788,20 +918,20 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 	var capsule_size: Vector2 = target.size
 	var rect := Rect2(-capsule_size * 0.5, capsule_size)
 	var accent: Color = _card_color(int(target.uid))
-	draw_set_transform(target.center, target.rotation)
+	_target_canvas.draw_set_transform(target.center, target.rotation)
 	var shadow: StyleBoxFlat = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
-	draw_style_box(shadow, Rect2(rect.position + Vector2(0, 6.0 / scale), capsule_size))
-	draw_style_box(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))), rect.grow(4.0 / scale))
-	draw_style_box(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))), rect)
-	draw_line(rect.position + Vector2(19.0 / scale, 5.0 / scale), Vector2(rect.end.x - 19.0 / scale, rect.position.y + 5.0 / scale), Color(1, 1, 1, 0.65), 2.0 / scale, true)
+	_target_canvas.draw_style_box(shadow, Rect2(rect.position + Vector2(0, 6.0 / scale), capsule_size))
+	_target_canvas.draw_style_box(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))), rect.grow(4.0 / scale))
+	_target_canvas.draw_style_box(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))), rect)
+	_target_canvas.draw_line(rect.position + Vector2(19.0 / scale, 5.0 / scale), Vector2(rect.end.x - 19.0 / scale, rect.position.y + 5.0 / scale), Color(1, 1, 1, 0.65), 2.0 / scale, true)
 	var art_edge: float = minf(capsule_size.x - 28.0 / scale, capsule_size.y * 0.61)
 	var art_center := Vector2(0, rect.position.y + 10.0 / scale + art_edge * 0.5)
-	draw_circle(art_center, art_edge * 0.52, Color("#fffaf2"))
+	_target_canvas.draw_circle(art_center, art_edge * 0.52, Color("#fffaf2"))
 	var texture: Texture2D = _textures.get(str(target.word.get("id", target.word.get("text", ""))), null)
 	if texture != null:
 		var original: Vector2 = texture.get_size()
 		var art_size: Vector2 = original * minf(art_edge / maxf(1.0, original.x), art_edge / maxf(1.0, original.y))
-		draw_texture_rect(texture, Rect2(art_center - art_size * 0.5, art_size), false)
+		_target_canvas.draw_texture_rect(texture, Rect2(art_center - art_size * 0.5, art_size), false)
 	var word: String = str(target.word.get("text", ""))
 	var font: Font = ThemeDB.fallback_font
 	var font_size: int = ceili(clampf(capsule_size.x * scale * 0.17, 18.0, 26.0) / scale)
@@ -809,8 +939,8 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 		font_size -= 1
 	var text_width: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	var baseline: float = rect.end.y - 11.0 / scale
-	draw_string(font, Vector2(-text_width * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color("#243454"))
-	draw_set_transform(Vector2.ZERO)
+	_target_canvas.draw_string(font, Vector2(-text_width * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color("#243454"))
+	_target_canvas.draw_set_transform(Vector2.ZERO)
 
 
 func _clear_slices() -> void:

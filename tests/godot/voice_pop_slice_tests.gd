@@ -136,6 +136,133 @@ func strike(view) -> void:
 	view.receive_transcript(str(view.game.targets[0].word.text))
 
 
+func hud_effect(view) -> Dictionary:
+	return view.snapshot().hud.hit_effect
+
+
+func check_hud_cleared(view, context: String) -> void:
+	check(not bool(hud_effect(view).active) and view.hits_label.scale.is_equal_approx(Vector2.ONE),
+		context + " clears the hit pulse and restores the counter transform")
+	check(view._hud_hit_words.is_empty() and int(view._hud_hit_amount) == 0,
+		context + " discards the previous hit's temporary words and amount")
+
+
+func check_hud_feedback(view) -> void:
+	begin(view)
+	check(not view.transcript_label.visible and int(hud_effect(view).serial) == 0,
+		"A fresh round starts with an empty transcript and no stale hit animation")
+	view.receive_transcript("supercalifragilisticexpialidocious")
+	check(not bool(hud_effect(view).active) and int(hud_effect(view).serial) == 0,
+		"An unmatched utterance never starts successful hit feedback")
+	var first_word: String = str(view.game.targets[0].word.text)
+	strike(view)
+	var first: Dictionary = hud_effect(view)
+	check(bool(first.active) and int(first.serial) == 1 and int(first.amount) == 1
+		and first_word in first.words and view.hits_label.text == "1",
+		"One real hit starts one feedback event and immediately displays the true hit count")
+	check(view.transcript_label.visible and view.transcript_label.text == first_word
+		and str(view.snapshot().transcript).is_empty(),
+		"A hit without a raw browser sentence briefly displays its matched word without inventing a transcript")
+	view._advance_hud_feedback(0.12)
+	check(view.hits_label.scale.x > 1.0 and view.hits_label.scale.y > 1.0,
+		"The live hit count visibly pulses after a successful word")
+	check(view.transcript_label.get_theme_color("font_color") == PopView.HIT_COLOR
+		and view.transcript_label.get_theme_constant("shadow_outline_size") > 0,
+		"A successful word visibly highlights and glows in the transcript row")
+	var progressed_age: float = view._hud_hit_age
+	view.show_transcript("I am thinking about something else", false)
+	check(view.transcript_label.get_theme_color("font_color") == PopView.WHITE
+		and view.transcript_label.get_theme_constant("shadow_outline_size") == 0,
+		"A new unrelated hypothesis does not inherit the previous hit's transcript highlight")
+	check(bool(hud_effect(view).active) and int(hud_effect(view).serial) == 1
+		and is_equal_approx(float(view._hud_hit_age), progressed_age) and view.hits_label.scale.x > 1.0,
+		"An unrelated hypothesis leaves the earned counter pulse running without restarting it")
+	for unrelated in ["super" + first_word, first_word + "ish", first_word + "'s", first_word + "’s"]:
+		view.show_transcript(unrelated, false)
+		check(view.transcript_label.get_theme_color("font_color") == PopView.WHITE
+			and view.transcript_label.get_theme_constant("shadow_outline_size") == 0,
+			"A substring or possessive is not presented as a matched noun: " + unrelated)
+	view.show_transcript("I said " + first_word + "s", false)
+	check(view.transcript_label.get_theme_color("font_color") == PopView.HIT_COLOR
+		and view.transcript_label.get_theme_constant("shadow_outline_size") > 0
+		and int(hud_effect(view).serial) == 1 and is_equal_approx(float(view._hud_hit_age), progressed_age),
+		"An accepted plural retains the actual hit highlight without starting a second animation")
+	view._listening_tick_usec = -1
+	view.receive_transcript(first_word)
+	view.show_transcript("I said " + first_word, false)
+	view.show_transcript("I said " + first_word, true)
+	check(view.transcript_label.get_theme_color("font_color") == PopView.HIT_COLOR
+		and view.transcript_label.get_theme_constant("shadow_outline_size") > 0,
+		"A revised sentence containing the same matched noun keeps its valid highlight")
+	view._layout()
+	view.snapshot()
+	check(int(hud_effect(view).serial) == 1 and is_equal_approx(float(view._hud_hit_age), progressed_age)
+		and view.game.hits == 1 and view.hits_label.text == "1",
+		"Duplicate recognition, final hypotheses and layout refreshes do not restart the pulse or recount a hit")
+	view.game.advance(0.66)
+	view._refresh_targets()
+	var second_word: String = str(view.game.targets[0].word.text)
+	strike(view)
+	check(int(hud_effect(view).serial) == 2 and int(hud_effect(view).amount) == 1
+		and second_word in hud_effect(view).words and float(view._hud_hit_age) < progressed_age
+		and view.hits_label.text == "2",
+		"A new hit restarts feedback immediately without leaving an older counter animation in control")
+	view._advance_hud_feedback(PopView.HUD_HIT_DURATION + 0.1)
+	check(not bool(hud_effect(view).active) and view.hits_label.scale.is_equal_approx(Vector2.ONE)
+		and view.hits_label.text == "2" and view.transcript_label.text == "I said " + first_word,
+		"Completed feedback restores the counter while retaining the latest genuine browser sentence")
+
+	begin(view)
+	view.game.advance(3.0)
+	var sentence: PackedStringArray = []
+	for target in view.game.targets:
+		sentence.append(str(target.word.text))
+	view._listening_tick_usec = -1
+	view.receive_transcript(" ".join(sentence))
+	check(sentence.size() >= 2 and int(hud_effect(view).serial) == 1
+		and int(hud_effect(view).amount) == sentence.size() and hud_effect(view).words.size() == sentence.size()
+		and view.hits_label.text == str(sentence.size()),
+		"One multiword hit batch produces one feedback event with its complete hit count")
+
+	for transition in ["pause", "rollover", "error", "hide", "stop", "configure", "finish"]:
+		begin(view)
+		strike(view)
+		view._advance_hud_feedback(0.12)
+		match transition:
+			"pause": view.pause()
+			"rollover": view.set_listening(true, false, "Listening paused. Continuing...")
+			"error": view.set_listening(true, false, "Speech network error. Tap Retry.")
+			"hide": view.hide()
+			"stop": view.stop()
+			"configure": view.configure(words)
+			"finish": view._advance_game(31.0)
+		check_hud_cleared(view, transition.capitalize())
+		view.show()
+		view.set_process(false)
+
+	begin(view)
+	strike(view)
+	view._advance_hud_feedback(0.12)
+	view.set_reduced_motion(true)
+	check(view.hits_label.scale.is_equal_approx(Vector2.ONE),
+		"Enabling reduced motion immediately removes an in-flight counter pulse")
+	begin(view, true)
+	strike(view)
+	view._advance_hud_feedback(0.12)
+	check(bool(hud_effect(view).active) and view.hits_label.scale.is_equal_approx(Vector2.ONE)
+		and view.transcript_label.visible and view.hits_label.text == "1",
+		"Reduced motion keeps static hit confirmation and the real count without scaling the counter")
+	var still_color: Color = view.transcript_label.get_theme_color("font_color")
+	view._advance_hud_feedback(0.2)
+	check(still_color == PopView.HIT_COLOR and view.transcript_label.get_theme_color("font_color") == still_color
+		and view.hits_label.scale.is_equal_approx(Vector2.ONE),
+		"Reduced-motion feedback retains a steady highlight instead of flashing or pulsing")
+	view._advance_hud_feedback(PopView.HUD_HIT_DURATION + 0.1)
+	check(not bool(hud_effect(view).active) and not view.transcript_label.visible
+		and view.transcript_label.get_theme_color("font_color") == PopView.WHITE,
+		"Temporary matched-word feedback clears after its lifetime when no raw transcript exists")
+
+
 func check_lifecycle(view) -> void:
 	begin(view)
 	view.game.advance(1.5)
@@ -235,6 +362,7 @@ func _run() -> void:
 	root.add_child(view)
 	await process_frame
 	check_lifecycle(view)
+	check_hud_feedback(view)
 	for dimensions in [Vector2(288, 350), Vector2(812, 180), Vector2(740, 530)]:
 		view.size = dimensions
 		view._layout()
@@ -247,8 +375,11 @@ func _run() -> void:
 			"All cut geometry shares the actual arena clip at %s: clip=%s arena=%s position_error=%.9f size_error=%.9f" % [
 				dimensions, view._slice_clip.get_rect(), view._arena,
 				view._slice_clip.position.distance_to(view._arena.position), view._slice_clip.size.distance_to(view._arena.size)])
-		check(view._slice_clip.position.y >= view._live_caption.get_rect().end.y,
-			"Blade trails and droplets cannot paint over the transcript or HUD at " + str(dimensions))
+		check(view._slice_clip.position.y < view.transcript_label.get_rect().end.y
+			and view._slice_clip.get_index() > view._hud.get_index(),
+			"High cuts can paint over the field HUD at " + str(dimensions))
+		check(view.clip_contents and Rect2(Vector2.ZERO, view.size).grow(0.001).encloses(view._slice_clip.get_rect()),
+			"The expanded effects clip remains inside Voice Pop and cannot cover global navigation at " + str(dimensions))
 	view.queue_free()
 	await process_frame
 	print("Voice Pop slices: %d assertions, %d failures" % [checks, failures])

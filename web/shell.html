@@ -374,7 +374,7 @@
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
-        data-phase="idle" data-remaining="30" data-hits="0" data-score="0" data-best-combo="0" data-targets="[]" data-controls="[]"></p>
+        data-phase="idle" data-remaining="30" data-hits="0" data-score="0" data-best-combo="0" data-targets="[]" data-controls="[]" data-hud="{}"></p>
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
@@ -1573,8 +1573,18 @@
             .map(control => ({ name: control.name, text: typeof control.text === 'string' ? control.text : '',
               x: coordinate(control.x), y: coordinate(control.y), width: number(control.width), height: number(control.height),
               disabled: control.disabled === true }));
+          const hudState = state.hud && typeof state.hud === 'object' && !Array.isArray(state.hud) ? state.hud : {};
+          const hudRect = value => ({ x: coordinate(value?.x), y: coordinate(value?.y),
+            width: number(value?.width), height: number(value?.height),
+            text: typeof value?.text === 'string' ? value.text.slice(0, 2000) : '' });
+          const hitEffect = hudState.hit_effect && typeof hudState.hit_effect === 'object' ? hudState.hit_effect : {};
+          const hud = Object.fromEntries(['time', 'hits', 'transcript', 'status'].map(name => [name, hudRect(hudState[name])]));
+          hud.hit_effect = { serial: Math.floor(number(hitEffect.serial)), active: hitEffect.active === true,
+            amount: Math.floor(number(hitEffect.amount)), words: (Array.isArray(hitEffect.words) ? hitEffect.words : [])
+              .filter(word => typeof word === 'string').map(word => word.slice(0, 2000)).slice(0, 32) };
+          hud.targets_above_hud = hudState.targets_above_hud === true;
           for (const [name, value] of Object.entries({ phase, remaining, hits, score, 'best-combo': combo,
-            targets: JSON.stringify(targets), controls: JSON.stringify(controls),
+            targets: JSON.stringify(targets), controls: JSON.stringify(controls), hud: JSON.stringify(hud),
             transcript: typeof state.transcript === 'string' ? state.transcript : '',
             'transcript-final': state.transcript_final === true,
             'recognition-feedback': typeof state.recognition_feedback === 'string' ? state.recognition_feedback : '',

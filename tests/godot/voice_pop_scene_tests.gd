@@ -121,6 +121,62 @@ func check_compact_reports(view, dimensions: Vector2i, fixture: String) -> void:
 	view._show_report(0)
 	await settle()
 
+
+func check_live_hud(view, dimensions: Vector2i) -> void:
+	var time_rect: Rect2 = view.time_label.get_global_rect()
+	var hits_rect: Rect2 = view.hits_label.get_global_rect()
+	var transcript_rect: Rect2 = view.transcript_label.get_global_rect()
+	var field: Rect2 = view.get_global_rect()
+	check(time_rect.end.x <= transcript_rect.position.x + 0.01
+		and transcript_rect.end.x <= hits_rect.position.x + 0.01,
+		"Live speech sits between the timer and hit count at " + str(dimensions))
+	check(transcript_rect.position.y < time_rect.end.y and transcript_rect.end.y > time_rect.position.y
+		and transcript_rect.position.y < hits_rect.end.y and transcript_rect.end.y > hits_rect.position.y,
+		"Timer, live speech and hits share the top HUD row at " + str(dimensions))
+	check(field.grow(1.0).encloses(time_rect) and field.grow(1.0).encloses(hits_rect)
+		and field.grow(1.0).encloses(transcript_rect), "The complete top row fits at " + str(dimensions))
+	check(view.hits_label.get_rect().get_center().x > view.size.x * 0.75
+		and view.hits_label.text == str(view.game.hits) and view._hits_caption.text == "HITS",
+		"The upper-right field shows the actual hit count at " + str(dimensions))
+	var legacy_labels: Array[String] = []
+	for label in view._hud.find_children("*", "Label", true, false):
+		if label.text in ["SECONDS", "VOICE POP", "SCORE"]:
+			legacy_labels.append(label.text)
+	check(legacy_labels.is_empty() and view._hud.find_child("Score", true, false) == null,
+		"The live field contains no legacy seconds, title or score labels")
+	check(view._live_caption.text.is_empty(), "Ordinary listening keeps the top row free of secondary status copy")
+	check(view.clip_contents and view._target_canvas.get_parent() == view._hud.get_parent()
+		and view._target_canvas.get_index() > view._hud.get_index() and bool(view.snapshot().hud.targets_above_hud),
+		"Flying cards paint above the field HUD while remaining clipped to their own view")
+
+
+func check_high_flight(app, dimensions: Vector2i) -> void:
+	var view = app._pop
+	var was_reduced: bool = view.reduced_motion
+	view.set_reduced_motion(false)
+	var original: Dictionary = view.game.targets[0].duplicate(true)
+	var launch: Dictionary = view._draw_targets[0].duplicate(true)
+	view.game.targets[0].age = float(original.lifetime) * 0.5
+	view.game.targets[0].x_start = 0.5
+	view.game.targets[0].x_end = 0.5
+	view.game.targets[0].peak = 0.18
+	view.game.targets[0].spin = 0.0
+	view._refresh_targets()
+	var apex: Dictionary = view._draw_targets[0]
+	var apex_rect: Rect2 = view._global_target_rect(apex)
+	check(float(apex.center.y) < float(launch.center.y) and apex.size == launch.size,
+		"The higher throw retains the launch card's visible size at " + str(dimensions))
+	check(apex_rect.intersects(view.transcript_label.get_global_rect()),
+		"A central throw reaches and may cover the field's transcript row at " + str(dimensions))
+	check(view.get_global_rect().grow(1.0).encloses(apex_rect),
+		"The high apex stays inside the clipped Voice Pop field at " + str(dimensions))
+	for button in app._mode_buttons:
+		check(view.get_global_rect().position.y >= button.get_global_rect().end.y - 1.0,
+			"The flight clipping boundary remains below global mode navigation at " + str(dimensions))
+	view.game.targets[0] = original
+	view.set_reduced_motion(was_reduced)
+
+
 func _run() -> void:
 	var directory: String = "user://voice-pop-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -175,6 +231,8 @@ func _run() -> void:
 		check(view.game.hits == 0 and not bool(view.snapshot().transcript_final), "Displaying an interim sentence does not award a hit")
 		check(view.get_global_rect().grow(1).encloses(view.transcript_label.get_global_rect()),
 			"The live transcript fits inside the playfield at " + str(dimensions))
+		check_live_hud(view, dimensions)
+		check_high_flight(app, dimensions)
 		view._advance_game(1.5)
 		var before_catchup: float = view.game.remaining
 		var catchup_started: int = Time.get_ticks_usec()
@@ -195,12 +253,14 @@ func _run() -> void:
 			"A complete hypothesis remains visible independently of target scoring")
 		view.receive_transcript(word.text)
 		check(view.game.hits == before + 1 and view.game.hit_words[0].id == word.id, "A spoken visible word produces an exact hit")
+		check(view.hits_label.text == str(before + 1) and view.hits_label.text != str(view.game.score),
+			"A spoken hit updates the upper-right count rather than displaying combo points")
 		check(view.game.targets.all(func(target: Dictionary) -> bool: return target.word.id != word.id), "A popped target is removed immediately")
 		check(view.transcript_label.text.contains(sentence), "Hit feedback does not replace the full sentence with the popped noun")
 		var success_caption: String = view._live_caption.text
 		view.receive_transcript("please")
 		check(view.snapshot().recognition_feedback.is_empty() and view._live_caption.text == success_caption
-			and view._last_hit_left > 0.0, "A trailing solo filler cannot erase the current hit celebration")
+			and bool(view.snapshot().hud.hit_effect.active), "A trailing solo filler cannot erase the current hit celebration")
 		var revised: String = "I think it is the " + str(word.text) + ", please"
 		view.show_transcript(revised, false)
 		check(view.transcript_label.text.contains(revised) and not bool(view.snapshot().transcript_final), "Interim revisions replace the displayed hypothesis immediately")

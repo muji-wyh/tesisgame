@@ -183,6 +183,7 @@ async function state(page) {
     reportAudio: JSON.parse(element.dataset.reportAudio || '[]'),
     resultsScrollMax: Number(element.dataset.resultsScrollMax), resultsScrollbarVisible: element.dataset.resultsScrollbarVisible === 'true',
     targets: JSON.parse(element.dataset.targets || '[]'), controls: JSON.parse(element.dataset.controls || '[]'),
+    hud: JSON.parse(element.dataset.hud || '{}'),
     message: element.textContent
   }));
 }
@@ -353,6 +354,78 @@ async function popOne(page, { interim = false } = {}) {
   return word;
 }
 
+function expectCompactHud(hud, bounds) {
+  expect(Object.keys(hud).sort()).toEqual(['hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'transcript']);
+  const content = contentBounds(bounds);
+  for (const key of ['time', 'hits', 'transcript', 'status']) {
+    const rect = hud[key];
+    expect(typeof rect.text).toBe('string');
+    expect([rect.x, rect.y, rect.width, rect.height].every(Number.isFinite), `${key} exposes finite HUD geometry`).toBe(true);
+    expect(rect.width, `${key} retains a real layout even while its text is empty`).toBeGreaterThan(0);
+    expect(rect.height).toBeGreaterThan(0);
+    expect(rect.x).toBeGreaterThanOrEqual(content.x - 1);
+    expect(rect.x + rect.width).toBeLessThanOrEqual(content.x + content.width + 1);
+    expect(rect.y).toBeGreaterThanOrEqual(content.top - 1);
+  }
+  expect(hud.time.text).toMatch(/^\d{2}$/);
+  expect(hud.hits.text).toMatch(/^\d+$/);
+  expect(hud.time.x).toBeLessThan(hud.transcript.x);
+  expect(hud.transcript.x).toBeLessThan(hud.hits.x);
+  expect(Math.abs(hud.time.y - hud.hits.y)).toBeLessThanOrEqual(2);
+  expect(Math.abs(hud.transcript.x + hud.transcript.width / 2 - (content.x + content.width / 2))).toBeLessThanOrEqual(2);
+  expect(hud.status.y).toBeGreaterThanOrEqual(hud.transcript.y + hud.transcript.height - 1);
+  expect(hud.targets_above_hud, 'Airborne words use the foreground layer above the compact HUD').toBe(true);
+}
+
+function intersects(first, second) {
+  return first.x < second.x + second.width && first.x + first.width > second.x &&
+    first.y < second.y + second.height && first.y + first.height > second.y;
+}
+
+async function observeHudFeedback(page) {
+  await page.evaluate(() => {
+    const element = document.querySelector('#pop-status');
+    window.__hudFeedback = [];
+    const read = () => {
+      const hud = JSON.parse(element.dataset.hud || '{}');
+      if (hud.hit_effect) window.__hudFeedback.push(hud);
+      if (window.__hudFeedback.length > 128) window.__hudFeedback.shift();
+    };
+    window.__hudFeedbackObserver?.disconnect();
+    window.__hudFeedbackObserver = new MutationObserver(read);
+    window.__hudFeedbackObserver.observe(element, { attributes: true, attributeFilter: ['data-hud'] });
+    read();
+  });
+}
+
+test('Voice Pop keeps a compact top HUD while airborne words can pass in front of it', async ({ page }, info) => {
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const initial = await state(page);
+  expectCompactHud(initial.hud, await metrics(page));
+  expect(initial.hud.transcript.text).toBe('');
+  expect(initial.hud.status.text).toBe('');
+  expect(initial.hud.hit_effect).toEqual({ serial: 0, active: false, amount: 0, words: [] });
+  await page.screenshot({ path: info.outputPath('compact-top-hud.png') });
+  const phrase = 'I am still thinking';
+  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), phrase);
+  await expect.poll(async () => (await state(page)).hud.transcript.text).toBe(phrase);
+  let overhead;
+  await expect.poll(async () => {
+    const current = await state(page);
+    overhead = current.targets.find(target => ['time', 'hits', 'transcript'].some(key => intersects(target, current.hud[key])));
+    return Boolean(overhead);
+  }, { timeout: 9000, intervals: [100], message: 'The real throw arc reaches the information strip in the foreground' }).toBe(true);
+  const high = await state(page);
+  expect(high.hud.targets_above_hud).toBe(true);
+  expectTargetInsidePlayfield(overhead, await metrics(page));
+  expect(high.hits, 'High throws and HUD layout cannot award a hit').toBe(initial.hits);
+  await page.screenshot({ path: info.outputPath('word-above-top-hud.png') });
+  await info.attach('compact-hud-geometry.json', { body: JSON.stringify({ initial: initial.hud, high: high.hud, overhead }), contentType: 'application/json' });
+  await chooseMode(page, 'match');
+  expect(errors).toEqual([]);
+});
+
 test('Voice Pop starts with browser recognition without voice users or local model downloads', async ({ page }) => {
   const legacyRequests = [];
   page.on('request', request => {
@@ -403,28 +476,45 @@ test('the live HUD shows and revises the whole interim sentence while scoring on
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   const first = 'I am still thinking';
   const before = await state(page);
+  expectCompactHud(before.hud, await metrics(page));
+  await observeHudFeedback(page);
   await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), first);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', first);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript-final', 'false');
   expect((await state(page)).hits).toBe(before.hits);
+  expect((await state(page)).hud.hit_effect.serial).toBe(before.hud.hit_effect.serial);
   await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
   const word = (await state(page)).targets[0].text;
   const sentence = `I think it is a ${word}`;
   await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), sentence);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', sentence);
   await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 1);
+  await page.screenshot({ path: info.outputPath('hit-counter-feedback.png') });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', sentence);
+  const serial = before.hud.hit_effect.serial + 1;
+  await expect.poll(async () => (await state(page)).hud.hit_effect.serial).toBe(serial);
+  expect((await state(page)).hud.hits.text).toBe(String(before.hits + 1));
+  expect((await state(page)).hud.transcript.text).toBe(sentence);
+  expect(await page.evaluate(serial => window.__hudFeedback.some(hud => hud.hit_effect.serial === serial &&
+    hud.hit_effect.active && hud.hit_effect.amount === 1 && hud.hit_effect.words.length === 1), serial),
+    'One true hit starts a shared counter and transcript highlight').toBe(true);
   const revised = `I think it is the ${word}, please`;
   await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), revised);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', revised);
   expect((await state(page)).hits).toBe(before.hits + 1);
+  expect((await state(page)).hud.hit_effect.serial, 'Revising the same recognized word cannot replay the hit pulse').toBe(serial);
+  expect((await state(page)).hud.transcript.text).toBe(revised);
   await page.screenshot({ path: info.outputPath('live-interim-sentence.png') });
   await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, true), revised);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', revised);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript-final', 'true');
   expect((await state(page)).hits).toBe(before.hits + 1);
+  expect((await state(page)).hud.hit_effect.serial, 'Finalizing the interim hit cannot replay its HUD celebration').toBe(serial);
+  await expect.poll(async () => (await state(page)).hud.hit_effect.active).toBe(false);
+  expect((await state(page)).hud.transcript.text, 'The complete recognized sentence outlives its brief celebration').toBe(revised);
   await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('network'));
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', '');
+  expect((await state(page)).hud.hit_effect.active).toBe(false);
   await page.evaluate(() => window.__popSpeech.instances[0].emit('a late stale sentence', false));
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', '');
   await chooseMode(page, 'match');
@@ -1075,6 +1165,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await page.setViewportSize(viewport);
     const errors = await open(page);
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+    expectCompactHud((await state(page)).hud, await metrics(page));
     await expectListeningAura(page);
     await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
     const firstTarget = (await state(page)).targets[0];
@@ -1089,9 +1180,22 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await expectListeningAura(page);
     await rendered(page);
     const reduced = await state(page), bounds = await metrics(page);
+    expectCompactHud(reduced.hud, bounds);
     expect(reduced.targets.length).toBeGreaterThan(0);
     for (const target of reduced.targets) expectTargetInsidePlayfield(target, bounds);
-    await popOne(page);
+    await observeHudFeedback(page);
+    const hitWord = await popOne(page);
+    const updated = await state(page);
+    expect(updated.hud.hit_effect.serial).toBe(reduced.hud.hit_effect.serial + 1);
+    expect(updated.hud.hits.text).toBe(String(updated.hits));
+    expect(updated.hud.transcript.text).toBe(hitWord);
+    expect(await page.evaluate(serial => window.__hudFeedback.some(hud => hud.hit_effect.serial === serial &&
+      hud.hit_effect.active), updated.hud.hit_effect.serial), 'Reduced motion retains static hit feedback').toBe(true);
+    for (const key of ['time', 'hits', 'transcript', 'status']) {
+      expect([updated.hud[key].x, updated.hud[key].y, updated.hud[key].width, updated.hud[key].height],
+        'Reduced-motion feedback preserves the HUD layout').toEqual([reduced.hud[key].x, reduced.hud[key].y,
+        reduced.hud[key].width, reduced.hud[key].height]);
+    }
     await page.screenshot({ path: info.outputPath('reduced-motion-hit.png') });
     await chooseMode(page, 'memory');
     await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
