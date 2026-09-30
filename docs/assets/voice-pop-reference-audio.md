@@ -18,14 +18,14 @@ variants independently of gameplay randomness.
 The finished hits last 277, 297 and 317 milliseconds. They use 44.1 kHz PCM16,
 no loops, and a sample peak ceiling of 0.62 (-4.15 dBFS). At the 0.24 runtime
 gain, even three exactly coincident peak samples sum to at most 0.447. The
-existing happy Pip recording contributes at most approximately 0.287 at its
-own gain, leaving sample headroom for the intended Voice Pop mix. Actual device
+happy Pip call is not layered over successful Voice Pop hits. Pip still jumps
+to celebrate, and missed targets retain the sad Pip recording. Actual device
 volume and microphone leakage still require listening on physical hardware.
 
 Three fixed hit channels allow a short burst of words to finish their sounds.
 A fourth simultaneous hit replaces the oldest channel. Ordinary button effects
-and Pip's reaction use their own players. Muting, hiding the page, leaving the
-mode and stopping the game all stop every hit channel and invalidate its
+and Pip's sad miss reaction use their own players. Muting, hiding the page,
+leaving the mode and stopping the game all stop every hit channel and invalidate its
 playback request; resuming cannot replay old hits.
 
 All three local resources load at game audio startup and ship inside the game

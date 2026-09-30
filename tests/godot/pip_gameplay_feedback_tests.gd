@@ -86,9 +86,9 @@ func _reaction_playing(app) -> bool:
 	return app.audio.pip_reaction != null and app.audio.pip_reaction.playing
 
 
-func _expect_reaction(app, correct: bool, context: String) -> void:
+func _expect_reaction(app, correct: bool, context: String, voiced: bool = true) -> void:
 	check(app.duck._gameplay_reaction == ("happy" if correct else "sad"), context + " gives Pip the matching emotion")
-	check(_reaction_playing(app), context + " plays a dedicated duck call")
+	check(_reaction_playing(app) == voiced, context + (" plays a dedicated duck call" if voiced else " keeps Pip's reaction silent"))
 	check(app.duck.visible and app.duck.size.x > 0.0, context + " keeps Pip visible in the game header")
 
 
@@ -139,12 +139,12 @@ func _check_pop(app) -> void:
 		"Unrecognized speech never creates a missed target, sad face, or duck call")
 	var word: Dictionary = view.game.targets[0].word
 	view.receive_transcript(word.text)
-	_expect_reaction(app, true, "A spoken Voice Pop hit")
+	_expect_reaction(app, true, "A spoken Voice Pop hit", false)
 	check(view.game.hits == 1 and view.game.score == 10 and view.game.misses == 0,
 		"A spoken hit keeps the established score and combo rules")
 	check(app.audio.last_pop_player() != null and app.audio.last_pop_player().playing
 		and not app.audio.effect.playing and not app.audio.voice.playing and not app.audio.music.playing,
-		"The duck call accompanies the Pop slice without word prompts or background music")
+		"The Pop slice plays without word prompts or background music")
 	var slice_player: AudioStreamPlayer = app.audio.last_pop_player()
 	var slice_rng: int = app.audio._pop_slice_rng.state
 	view.receive_transcript(word.text)
@@ -153,7 +153,7 @@ func _check_pop(app) -> void:
 	check(app.audio.last_pop_player() == slice_player and app.audio._pop_slice_rng.state == slice_rng,
 		"A repeated transcript cannot play another slice or consume its random choice")
 	app._on_voice_state([true, false, "Listening paused. Continuing..."])
-	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and _reaction_playing(app)
+	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and not _reaction_playing(app)
 		and slice_player.playing,
 		"Normal speech-recognizer rollover does not cut off a just-earned celebration or slice tail")
 	app._on_voice_state([true, true, "Listening."])
@@ -200,11 +200,15 @@ func _check_lifecycle(app) -> void:
 	for transition in ["speech_pause", "home", "hidden", "new_round", "mode_exit"]:
 		_start(app, "pop")
 		var view = app._pop
+		view._advance_game(6.0)
+		_expect_reaction(app, false, transition + " after a missed word")
+		var missed_call: AudioStream = app.audio.pip_reaction.stream
 		view.receive_transcript(view.game.targets[0].word.text)
-		view._advance_game(0.8)
 		var before: Array = [view.game.hits, view.game.misses, missed_batches.size()]
-		check(_reaction_playing(app) and not app.duck._gameplay_reaction.is_empty(),
-			transition + " begins during real hit feedback with another target still in flight")
+		check(_reaction_playing(app) and app.audio.pip_reaction.stream == missed_call
+			and is_equal_approx(app.audio.pip_reaction.pitch_scale, 0.8)
+			and app.duck._gameplay_reaction == "happy" and app.audio.last_pop_player().playing,
+			transition + " begins during a celebrating hit without replacing the missed word's call")
 		match transition:
 			"speech_pause": app._on_voice_state([true, false, "Speech network error. Tap Retry."])
 			"home": app._show_collection()

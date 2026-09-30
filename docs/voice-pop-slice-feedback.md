@@ -43,10 +43,19 @@ at six hits, using actual combo metadata. Card movement and sound gain stay
 unchanged. Normal recognition rollover lets a newly earned cut finish; an
 actual microphone error, menu visit, or background transition clears it.
 
+Pip keeps the happy jump on a successful Voice Pop hit, while the blade and cut
+recording supplies the hit sound. Hits do not play Pip's happy call. Missed
+targets retain Pip's sad animation and call; Match and Memory feedback are
+unchanged.
+
 See [audio provenance and reproduction](assets/voice-pop-reference-audio.md)
 and the [sample manifest](assets/voice-pop-reference-audio.json).
 
 ## Validation record
+
+The following measurements record the initial reference-slice release, before
+the Voice Pop happy hit call was removed. Its captured mix and export hash are
+historical release evidence rather than measurements of the current hit mix.
 
 Native checks passed: Voice Pop model (20,779), scene (812), slice geometry and
 lifecycle (731), reference audio (31), report narration (63), UI audio flow

@@ -661,9 +661,8 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   const word = await popOne(page, { interim: true });
   if (audioAvailable) {
     await expect.poll(async () => (await hitSlices()).length, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
-    await expect.poll(async () => (await happyCalls()).length, { message: 'Pip celebrates the hit with one bright duck call.' }).toBe(1);
+    expect((await happyCalls()).length, 'Pip celebrates a Voice Pop hit visually without adding a happy call.').toBe(0);
     expectHitSlice((await hitSlices())[0]);
-    expectPipReaction((await happyCalls())[0], 'happy');
   }
   await page.screenshot({ path: info.outputPath('hit-burst.png') });
   const hits = (await state(page)).hits;
@@ -672,15 +671,14 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   expect((await state(page)).hits).toBe(hits);
   if (audioAvailable) {
     expect((await hitSlices()).length, 'Finalizing the same recognition cannot replay the slice.').toBe(1);
-    expect((await happyCalls()).length, 'Finalizing the same recognition cannot replay Pip\'s celebration.').toBe(1);
+    expect((await happyCalls()).length, 'Finalizing the same recognition cannot add a happy call.').toBe(0);
   }
   const secondWord = await popOne(page);
   if (audioAvailable) {
     await expect.poll(async () => (await hitSlices()).length).toBe(2);
-    await expect.poll(async () => (await happyCalls()).length).toBe(2);
+    expect((await happyCalls()).length, 'Repeated Voice Pop hits retain slicing audio without happy calls.').toBe(0);
     const slices = await hitSlices();
     slices.forEach(expectHitSlice);
-    (await happyCalls()).forEach(sound => expectPipReaction(sound, 'happy'));
     if (expectedSlices.length > 1) {
       expect(slices[1].fingerprint, 'Consecutive spoken hits play different PCM audio, including equal-duration fruit variants').not.toBe(slices[0].fingerprint);
     } else {
@@ -693,10 +691,10 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   if (audioAvailable) {
     const all = await runningSounds(), sadCalls = all.filter(sound => isPipReaction(sound, 'sad'));
     expect((await hitSlices()).length, 'Only the two real hits play slice sounds.').toBe(2);
-    expect((await happyCalls()).length, 'Only the two real hits produce happy calls.').toBe(2);
+    expect((await happyCalls()).length, 'No Voice Pop hit produces a happy call during the complete round.').toBe(0);
     expect(sadCalls.length, 'Letting targets fall produces sad calls.').toBeGreaterThan(0);
     sadCalls.forEach(sound => expectPipReaction(sound, 'sad'));
-    expect(all.length, 'Live gameplay contains only hit slices and outcome calls, with no prompts or BGM.').toBe(4 + sadCalls.length);
+    expect(all.length, 'Live gameplay contains only hit slices and sad miss calls, with no happy calls, prompts or BGM.').toBe(2 + sadCalls.length);
   } else {
     expect(await runningSoundCount()).toBe(0);
   }

@@ -1177,7 +1177,7 @@ func _pop_hit(_word: Dictionary) -> void:
 		return
 	audio.interact(model.theme_id, false)
 	audio.cue("pop-slice")
-	_react_to_gameplay(true)
+	duck.react_gameplay(true)
 
 
 func _pop_missed(_count: int) -> void:
