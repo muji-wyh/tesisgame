@@ -11,6 +11,7 @@ const CHARGE_STEPS: int = 3
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
+const Surprise = preload("res://scripts/chest_surprise.gd")
 
 var theme_id: String = ""
 var reduced_motion: bool = false
@@ -74,6 +75,8 @@ var _seam_light := Node2D.new()
 var _release_color := Color.WHITE
 var _lid_edges: Array[Dictionary] = []
 var _surface_light_active: bool = false
+var _surprise := Surprise.new()
+var _surprise_shown: bool = false
 
 
 func _ready() -> void:
@@ -104,6 +107,8 @@ func _ready() -> void:
 	add_child(_seam_light)
 	_seam_light.z_index = 3
 	_seam_light.draw.connect(_draw_seam)
+	add_child(_surprise)
+	_surprise.z_index = 11
 	resized.connect(_fit)
 	visibility_changed.connect(_visibility_changed)
 	_visibility_changed()
@@ -124,6 +129,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
 	_release_color = Feel.FLASH_COLORS.get(theme_id, palette.light)
 	mode = "closed"
+	_surprise_shown = false
 	_elapsed = 0.0
 	_idle_time = 0.0
 	_crystal_cavity = null
@@ -303,6 +309,7 @@ func _fit() -> void:
 	_glint.visible = not reduced_motion and (hold_progress > 0.0
 		or (mode == "opening" and _elapsed < Feel.RELEASE_TIME))
 	_glint.queue_redraw()
+	_surprise.fit(size, _cavity_origin(), _charge_scale)
 
 
 func _update_charge() -> void:
@@ -748,6 +755,7 @@ func hold_effect_snapshot() -> Dictionary:
 			surface_light = float(piece.node.material.get_shader_parameter("light_strength"))
 			break
 	return {"active": active, "phase": performance_phase(),
+		"surprise": _surprise.snapshot(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"visual_progress": _visual_performance_progress(),
 		"anticipation_held": mode == "opening" and not reduced_motion and _elapsed >= Feel.PAUSE_START_TIME and _elapsed < Feel.RELEASE_TIME,
@@ -1278,6 +1286,7 @@ func _draw_details() -> void:
 
 
 func stop_reaction() -> void:
+	_surprise.clear()
 	hold_progress = 0.0
 	_hold_active = false
 	_release_active = false
@@ -1514,6 +1523,7 @@ func start_open(reduce: bool) -> void:
 	if mode != "closed":
 		return
 	reduced_motion = reduce
+	_surprise_shown = false
 	var confirmed_steps: int = _charge_step
 	stop_reaction()
 	hold_progress = 0.0
@@ -1547,8 +1557,17 @@ func finish_immediately() -> void:
 	opened.emit()
 
 
+func show_surprise() -> void:
+	if mode != "opened" or _surprise_shown or _idle_paused or not is_visible_in_tree():
+		return
+	_surprise_shown = true
+	_surprise.fit(size, _cavity_origin(), _charge_scale)
+	_surprise.play(_release_color, reduced_motion)
+
+
 func clear() -> void:
 	stop_reaction()
+	_surprise_shown = false
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
@@ -1619,6 +1638,8 @@ func _visibility_changed() -> void:
 
 func set_idle_paused(value: bool) -> void:
 	_idle_paused = value
+	if value:
+		_surprise.clear()
 	set_process(is_visible_in_tree() and not _idle_paused)
 
 
@@ -1635,6 +1656,9 @@ func _advance_animation(delta: float) -> void:
 	# callers go through _process so a new action cannot inherit an old delta.
 	if delta <= 0.0 or not is_finite(delta) or not is_visible_in_tree() or _idle_paused:
 		return
+	if reduced_motion:
+		_surprise.reduce_motion()
+	_surprise.advance(delta)
 	if mode == "opened" and not reduced_motion:
 		_idle_time += delta
 	if _hold_active and not reduced_motion:

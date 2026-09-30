@@ -44,7 +44,7 @@ const groups = {
   themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },
   'pip-audio': { godot: ['pip_audio_tests', 'pip_reaction_audio_tests'] },
   'pip-feedback': { godot: ['pip_gameplay_motion_tests', 'pip_gameplay_feedback_tests'] },
-  'chest-charge': { godot: ['chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests'] }
+  'chest-charge': { godot: ['chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
 };
 
 const allGroups = Object.keys(groups);

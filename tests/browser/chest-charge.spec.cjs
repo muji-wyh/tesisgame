@@ -506,6 +506,9 @@ test('reduced motion keeps hold progress and releases without claiming early', a
   expect(cues.filter(event => event.cue === 'opening')).toHaveLength(1);
   await screenshot(page, testInfo, 'reduced-motion-opened');
   const saved = await rewardSave(page);
+  // The static cosmetic gift dismisses after 1.1 seconds. Compare the persistent
+  // chest only after that one-shot presentation has ended.
+  await page.waitForTimeout(1200);
   const first = await openedChestFrame(page, testInfo, 'reduced-opened-static-glow-first');
   await page.waitForTimeout(1500);
   const second = await openedChestFrame(page, testInfo, 'reduced-opened-static-glow-later');

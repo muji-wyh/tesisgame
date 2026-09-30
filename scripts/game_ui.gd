@@ -2018,6 +2018,8 @@ func _on_chest_opened() -> void:
 	_finish_chest_drag()
 	if not model.finish_open():
 		return
+	if not _settling_chest and not _page_hidden and not collection_page.visible and chest.is_visible_in_tree():
+		chest.show_surprise()
 	# Physical completion stops the bed even if the following save fails.
 	# The success accent remains gated by the separate persistence result.
 	audio.finish_chest_motion()

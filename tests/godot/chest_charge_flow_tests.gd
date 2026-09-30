@@ -41,7 +41,11 @@ func _pieces(app) -> int:
 
 
 func _win(app, seed_value: int) -> void:
+	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 	check(app.new_round(seed_value), "The next real Match round starts")
+	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+	check(not surprise.active and str(surprise.kind).is_empty() and surprise.play_count == surprise_count,
+		"A new round clears the decorative gift without replaying an automatically settled opening")
 	app.choose_theme("spring")
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
@@ -60,6 +64,9 @@ func _begin(app) -> void:
 
 
 func _check_cancelled(app, pieces: int, reason: String) -> void:
+	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+	check(not surprise.active and str(surprise.kind).is_empty(),
+		reason + " leaves no decorative gift from the cancelled opening")
 	check(not app._holding_chest and is_zero_approx(app._hold_elapsed)
 		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		reason + " clears the hold and visible progress immediately")
@@ -76,6 +83,9 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 	app._on_chest_opened()
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " cannot complete later from an old frame or finish callback")
+	check(not app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.play_count == surprise.play_count,
+		reason + " cannot launch a decorative gift from stale completion callbacks")
 	var next_player: int = app.audio._chest_next_player
 	app._on_chest_cue(app.chest.theme_id, "hold_pulse", 1)
 	app._on_chest_cue(app.chest.theme_id, "tension_pulse", 1)
@@ -189,8 +199,13 @@ func _run() -> void:
 		"A stale completion after repressing cannot save or skip the new hold")
 	app._advance_ui(1.0)
 	cues.clear()
+	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 	app.chest.finish_immediately()
 	app.chest_button.button_up.emit()
+	var first_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+	check(first_surprise.active and not str(first_surprise.kind).is_empty()
+		and first_surprise.play_count == surprise_count + 1,
+		"The visible completed opening launches exactly one decorative gift")
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")
 	check(app.audio._chest_rewarded and app._chest_reward_announced,
@@ -203,6 +218,9 @@ func _run() -> void:
 	app._advance_ui(2.0)
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().active,
 		"Repeated opening callbacks and a hold on the opened chest cannot duplicate the reward")
+	check(app.chest.hold_effect_snapshot().surprise.play_count == first_surprise.play_count
+		and app.chest.hold_effect_snapshot().surprise.kind == first_surprise.kind,
+		"Repeated completion and button signals do not reroll or replay the decorative gift")
 	var saved = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(saved.load_progress() and saved.count_for("spring-1") == 1,
 		"The single earned piece survives reloading the real save")
@@ -402,11 +420,20 @@ func _run() -> void:
 		and app.audio._chest_seen.has("settle0"), "Real opening motion drives the three physical sound beats")
 	app.chest.finish_immediately()
 	check(app._save_error and _pieces(app) == 0 and not app._chest_reward_announced
-		and not app.audio._chest_rewarded, "A failed reward save never plays or presents success")
+		and not app.audio._chest_rewarded, "A failed reward save never announces a saved reward")
+	var failed_save_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+	check(failed_save_surprise.active and not str(failed_save_surprise.kind).is_empty() and storage.writes == 0,
+		"The opening's decorative gift does not depend on or create a successful save")
 	app._retry_reward_save()
 	check(storage.writes == 0 and not app.audio._chest_rewarded,
 		"Repeated failed retries do not play a success sound")
+	check(app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
+		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind,
+		"A failed save retry does not reroll the visible decorative gift")
 	app.on_page_hidden()
+	check(not app.chest.hold_effect_snapshot().surprise.active
+		and str(app.chest.hold_effect_snapshot().surprise.kind).is_empty(),
+		"Backgrounding dismisses the decorative gift immediately")
 	app.on_page_visible()
 	app.audio.set_muted(true)
 	app.audio.set_muted(false)
@@ -414,6 +441,9 @@ func _run() -> void:
 	app._retry_reward_save()
 	check(storage.writes == 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
 		"An explicit successful retry after background/mute saves and announces the waiting reward once")
+	check(not app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count,
+		"A successful save retry cannot replay the dismissed decorative gift")
 	check(not app.audio._chest_seen.has("release0") and not app.audio._chest_seen.has("unlock0"),
 		"A successful retry after interruption never replays missed physical sounds")
 	app._retry_reward_save()
@@ -597,10 +627,18 @@ func _check_release_commitment(directory: String) -> void:
 		app.chest._advance_animation(Feel.OPEN_SECONDS - released.opening_time - 0.001)
 		check(app.model.chest_state == "opening" and _pieces(app) == pieces and storage.writes == writes,
 			"Letting go does not shorten the five-second opening performance")
+		var before_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+		check(not before_surprise.active, "The decorative gift waits until the entire opening is complete")
+		var collected_words: Array = app.playroom_state.collected_word_ids.duplicate()
 		app.chest._advance_animation(0.002)
+		var completed_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 		check(app.model.chest_state == "opened" and _pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"The released opening saves once at its original deadline and keeps its themed glow")
+		check(completed_surprise.active and not str(completed_surprise.kind).is_empty()
+			and completed_surprise.play_count == before_surprise.play_count + 1
+			and app.playroom_state.collected_word_ids == collected_words,
+			"Completion adds one temporary gift without collecting a sticker or another saved reward")
 		app.chest_button.button_up.emit()
 		app.chest.cancel_open(true)
 		app._on_chest_opened()
@@ -609,12 +647,22 @@ func _check_release_commitment(directory: String) -> void:
 		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Repeated releases and old callbacks cannot retract or duplicate the opened reward")
+		check(app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count
+			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind,
+			"Old release and completion callbacks preserve the same decorative gift")
+		app.chest._advance_animation(2.5)
+		check(not app.chest.hold_effect_snapshot().surprise.active
+			and str(app.chest.hold_effect_snapshot().surprise.kind).is_empty()
+			and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+			and app.playroom_state.collected_word_ids == collected_words,
+			"The decorative gift disappears without adding save writes, pieces or collected words")
 
 	for interruption in ["background", "More", "native focus"]:
 		seed_value += 1
 		_win(app, seed_value)
 		var pieces: int = _pieces(app)
 		var writes: int = storage.writes
+		var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
@@ -630,6 +678,9 @@ func _check_release_commitment(directory: String) -> void:
 			and cues.is_empty() and not app.audio._chest_rewarded and not app.audio.chest_charge.playing
 			and app.audio._chest_players.all(func(player): return not player.playing),
 			interruption + " silently saves the committed opening without replaying its remaining sounds")
+		check(not app.chest.hold_effect_snapshot().surprise.active
+			and app.chest.hold_effect_snapshot().surprise.play_count == surprise_count,
+			interruption + " settles the opening without launching a hidden decorative gift")
 		match interruption:
 			"background": app.on_page_visible()
 			"More": app._hide_collection()
@@ -640,6 +691,9 @@ func _check_release_commitment(directory: String) -> void:
 		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1 and cues.is_empty()
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Returning from " + interruption + " retains the saved light without a late sound or duplicate reward")
+		check(not app.chest.hold_effect_snapshot().surprise.active
+			and app.chest.hold_effect_snapshot().surprise.play_count == surprise_count,
+			"Returning from " + interruption + " cannot replay a decorative gift that was skipped")
 
 	for interruption in ["background", "More"]:
 		seed_value += 1
@@ -677,6 +731,7 @@ func _check_release_commitment(directory: String) -> void:
 	_win(app, seed_value)
 	var pieces: int = _pieces(app)
 	var writes: int = storage.writes
+	var before_skip_surprise: int = app.chest.hold_effect_snapshot().surprise.play_count
 	_begin(app)
 	app._advance_ui(Feel.HOLD_SECONDS)
 	app.chest.set_process(false)
@@ -688,6 +743,9 @@ func _check_release_commitment(directory: String) -> void:
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	check(_pieces(app) == pieces + 1 and storage.writes == writes + 1,
 		"Late callbacks from the skipped opening cannot award the next round")
+	check(not app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.play_count == before_skip_surprise,
+		"Skipping to another round clears decorative state without a late gift flight")
 	app.audio.halt()
 	app.free()
 	await process_frame
