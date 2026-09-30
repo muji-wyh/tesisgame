@@ -497,6 +497,34 @@
       'use strict';
       const canvas = document.getElementById('canvas');
       const container = document.getElementById('game');
+      function connectVirtualKeyboardNavigation() {
+        // Godot inserts these two native editors before its canvas. Its Web
+        // keyboard forwards Enter, but leaves Tab and Escape in the browser.
+        const textarea = canvas.previousElementSibling;
+        const input = textarea?.previousElementSibling;
+        if (input?.tagName !== 'INPUT' || textarea?.tagName !== 'TEXTAREA') return;
+        const editors = [input, textarea];
+        if (!editors.every(editor => editor.parentElement === canvas.parentElement &&
+            editor.style.position === 'absolute' && editor.style.zIndex === '-1')) return;
+        for (const editor of editors) {
+          let composing = false;
+          editor.addEventListener('compositionstart', () => { composing = true; });
+          editor.addEventListener('compositionend', () => { composing = false; });
+          editor.addEventListener('blur', () => { composing = false; });
+          editor.addEventListener('keydown', event => {
+            if (event.target !== editor || document.activeElement !== editor || !editor.isConnected ||
+                editor.disabled || canvas.inert || composing || event.isComposing || event.keyCode === 229 ||
+                event.altKey || event.ctrlKey || event.metaKey || !['Tab', 'Escape'].includes(event.key)) return;
+            event.preventDefault();
+            event.stopPropagation();
+            canvas.focus({ preventScroll: true });
+            canvas.dispatchEvent(new KeyboardEvent('keydown', {
+              key: event.key, code: event.code || event.key, shiftKey: event.shiftKey,
+              repeat: event.repeat, bubbles: true, cancelable: true
+            }));
+          });
+        }
+      }
       const status = document.getElementById('status');
       const message = document.getElementById('message');
       const progress = document.getElementById('progress');
@@ -1729,6 +1757,7 @@
         ready(onReveal) {
           if (failed || readyReceived) return;
           readyReceived = true;
+          connectVirtualKeyboardNavigation();
           revealGame = onReveal;
           window.clearTimeout(slowNotice);
           loadingNote.hidden = true;

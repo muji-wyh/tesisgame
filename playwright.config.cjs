@@ -31,6 +31,11 @@ module.exports = defineConfig({
       use: { browserName: 'chromium', viewport: { width: 1366, height: 768 }, hasTouch: true }
     },
     { name: 'iphone-webkit', use: { ...devices['iPhone 13'], browserName: 'webkit' } },
-    { name: 'ipad-webkit', use: { ...devices['iPad Pro 11'], browserName: 'webkit' } }
+    { name: 'ipad-webkit', use: { ...devices['iPad Pro 11'], browserName: 'webkit' } },
+    {
+      name: 'android-chromium',
+      testMatch: 'mobile-keyboard.spec.cjs',
+      use: { ...devices['Pixel 7'], browserName: 'chromium' }
+    }
   ]
 });

@@ -453,13 +453,25 @@ async function activateLeaderboardControl(scope, name) {
   await rendered(scope);
 }
 
+async function typeLeaderboardName(scope, name) {
+  await activateLeaderboardControl(scope, 'LeaderboardName');
+  const nativeEditor = scope.locator('input:focus, textarea:focus');
+  if (await nativeEditor.count()) {
+    // Keep focus on the mobile DOM bridge so software-keyboard input reaches
+    // Godot. Focusing the canvas here would bypass the path real phones use.
+    await nativeEditor.fill(name);
+  } else {
+    await scope.locator('#canvas').pressSequentially(name);
+  }
+  await rendered(scope);
+}
+
 async function finishOnboarding(scope, { name = 'Test player', avatar = 'fox' } = {}) {
   await expect.poll(async () => typeof (await leaderboardSnapshot(scope)).visible,
     { message: 'The first-entry player gate is initialized' }).toBe('boolean');
   if ((await leaderboardSnapshot(scope)).view !== 'onboarding') return;
   await activateLeaderboardControl(scope, `LeaderboardAvatar_${avatar}`);
-  await activateLeaderboardControl(scope, 'LeaderboardName');
-  await scope.locator('#canvas').pressSequentially(name);
+  await typeLeaderboardName(scope, name);
   await activateLeaderboardControl(scope, 'LeaderboardCreatePlayer');
   await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '',
     { message: 'A durable first player unlocks entry to the game' }).not.toBe('onboarding');
@@ -702,5 +714,5 @@ function resultPoint(bounds, key, { gift = false, message = false } = {}) {
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
-  leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, finishOnboarding, chooseRoundPlayer,
+  leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

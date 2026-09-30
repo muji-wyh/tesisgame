@@ -36,6 +36,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
+  assert.match(preset, /html\/experimental_virtual_keyboard=true/,
+    'Touch devices need the native DOM input bridge to open their software keyboard');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
   for (const source of [
     'assets/audio/bgm/spring.wav', 'assets/audio/pop/round-0.wav',

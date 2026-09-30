@@ -396,6 +396,8 @@ func _build_editor(body: VBoxContainer) -> void:
 	_name_input = LineEdit.new()
 	_name_input.name = "LeaderboardName"
 	_name_input.placeholder_text = "Player name"
+	# Tapping opens the mobile keyboard; Tab focus stays with hardware navigation.
+	_name_input.virtual_keyboard_show_on_focus = false
 	_name_input.max_length = 20
 	_name_input.text = _draft_name
 	_name_input.custom_minimum_size.y = 48 / _scale()

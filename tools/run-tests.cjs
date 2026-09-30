@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, '..');
 const groups = {
   leaderboards: {
     godot: ['leaderboard_state_tests', 'leaderboard_scene_tests'],
-    node: ['leaderboard-host']
+    node: ['leaderboard-host', 'virtual-keyboard-host']
   },
   core: {
     godot: [

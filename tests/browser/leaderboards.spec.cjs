@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const { enterGame, chooseMode, chooseRoundPlayer, metrics, tap, rendered, openRewards,
-  leaderboardSnapshot: snapshot, leaderboardControl: control, activateLeaderboardControl: activate } = require('./game-ui.cjs');
+  leaderboardSnapshot: snapshot, leaderboardControl: control, activateLeaderboardControl: activate,
+  typeLeaderboardName: typeName } = require('./game-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.leaderboards';
 // This fixture is also loaded by the native state suite before browser coverage.
@@ -59,12 +60,6 @@ function observeErrors(page) {
 async function openPanel(page, name) {
   await openRewards(page);
   await activate(page, name);
-}
-
-async function typeName(page, name) {
-  await activate(page, 'LeaderboardName');
-  await page.keyboard.type(name);
-  await rendered(page);
 }
 
 async function replay(page) {
