@@ -152,6 +152,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fs.writeFileSync(path.join(fixture.directory, 'pop-voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
+  fixture.writeImport('assets/audio/sfx/match-voice-hit.wav');
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -159,10 +160,12 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 101);
+  assert.equal(required.length, 102);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
+  assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/match-voice-hit.wav'),
+    'The successful voice-match cue ships in the startup pack without a later fetch');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
 });

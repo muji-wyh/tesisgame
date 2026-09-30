@@ -20,6 +20,8 @@ const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
+const MATCH_FEEDBACK_SECONDS: float = 0.7
+const VOICE_MATCH_SECONDS: float = 1.0
 const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 
 class InputActivityObserver extends Node:
@@ -163,6 +165,12 @@ var _pop: VoicePop
 var _pop_speech_active: bool = false
 var _match_playfield: Control
 var _hint_link: HintLink
+var _voice_match_link: HintLink
+var _voice_match_ids: Array[String] = []
+var _voice_match_left: float = 0.0
+var _voice_match_serial: int = 0
+var _voice_match_origin_frame: int = -1
+var _voice_match_published: String = ""
 var _content_margins: MarginContainer
 var _new_adventure_button: Button
 var _journey_save_failed: bool = false
@@ -419,6 +427,13 @@ func _build_controls() -> void:
 	_hint_link.hide()
 	grid.sort_children.connect(func() -> void: _refresh_hint_link.call_deferred())
 	grid.visibility_changed.connect(_refresh_hint_link)
+	_voice_match_link = HintLink.new()
+	_voice_match_link.name = "VoiceMatchLink"
+	_match_playfield.add_child(_voice_match_link)
+	_voice_match_link.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_voice_match_link.hide()
+	grid.sort_children.connect(func() -> void: _refresh_voice_match_link.call_deferred())
+	grid.visibility_changed.connect(_refresh_voice_match_link)
 	_memory = MemoryGarden.new()
 	_memory.name = "MemoryGarden"
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -572,7 +587,7 @@ func _build_controls() -> void:
 	audio.status_changed.connect(_audio_status)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
-	feedback_timer.wait_time = 0.7
+	feedback_timer.wait_time = MATCH_FEEDBACK_SECONDS
 	feedback_timer.timeout.connect(_resolve_feedback)
 	add_child(feedback_timer)
 	duck = Mascot.new()
@@ -1536,6 +1551,7 @@ func _refresh_match_cards() -> void:
 		cards[id].picture.modulate.a = 1.0
 		cards[id].word_label.modulate.a = 1.0
 	_refresh_hint_link()
+	_refresh_voice_match_link()
 
 
 func _refresh_hint_link() -> void:
@@ -1549,6 +1565,79 @@ func _refresh_hint_link() -> void:
 	_hint_link.set_palette(Data.theme(model.theme_id))
 	_hint_link.configure(first, second, reduced_motion,
 		_page_hidden or collection_page.visible)
+
+
+func _start_voice_match_feedback(ids: Array[String]) -> void:
+	_clear_voice_match_feedback()
+	if ids.size() != 2 or _mode_id != "match" or _page_hidden or collection_page.visible:
+		return
+	_voice_match_ids.assign(ids)
+	_voice_match_left = VOICE_MATCH_SECONDS
+	_voice_match_serial += 1
+	_voice_match_origin_frame = Engine.get_process_frames()
+	_refresh_voice_match_link()
+	# A short nonverbal cue is safe beside the microphone; keep music and words quiet.
+	audio.interact(model.theme_id, false)
+	audio.play_match_voice_hit()
+
+
+func _clear_voice_match_feedback() -> void:
+	_voice_match_left = 0.0
+	_voice_match_ids.clear()
+	if _voice_match_link != null:
+		_voice_match_link.configure(null, null, reduced_motion, false)
+	if audio != null:
+		audio.stop_match_voice_hit()
+	_publish_voice_match_feedback()
+
+
+func _refresh_voice_match_link() -> void:
+	if _voice_match_link == null:
+		return
+	if _voice_match_left <= 0.0:
+		return
+	if _mode_id != "match" or _page_hidden or collection_page.visible or not grid.is_visible_in_tree() \
+		or not _voice_mode or _voice_match_ids.size() != 2:
+		_clear_voice_match_feedback()
+		return
+	_voice_match_link.set_palette(Data.theme(model.theme_id))
+	_voice_match_link.configure(cards.get(_voice_match_ids[0]), cards.get(_voice_match_ids[1]), reduced_motion, false)
+	_publish_voice_match_feedback()
+
+
+func _advance_voice_match_feedback(delta: float) -> void:
+	if _voice_match_left <= 0.0 or delta <= 0.0 or not is_finite(delta):
+		return
+	_voice_match_left = maxf(0.0, _voice_match_left - delta)
+	if _voice_match_left <= 0.0:
+		_clear_voice_match_feedback()
+
+
+func _voice_match_feedback_snapshot() -> Dictionary:
+	var result: Dictionary = {"active": _voice_match_left > 0.0 and _voice_match_link != null and _voice_match_link.is_visible_in_tree(),
+		"duration": VOICE_MATCH_SECONDS, "serial": _voice_match_serial, "reduced_motion": reduced_motion}
+	if not result.active:
+		return result
+	for entry in [["source", _voice_match_link.source], ["target", _voice_match_link.target]]:
+		var card: Control = entry[1]
+		var bounds: Rect2 = card.get_global_rect()
+		result[entry[0]] = {"id": str(card.card_data.id), "x": bounds.position.x, "y": bounds.position.y,
+			"width": bounds.size.x, "height": bounds.size.y}
+	var path: Array = []
+	for point in _voice_match_link.path:
+		var global_point: Vector2 = _voice_match_link.get_global_transform() * point
+		path.append({"x": global_point.x, "y": global_point.y})
+	result.path = path
+	return result
+
+
+func _publish_voice_match_feedback() -> void:
+	if _host == null:
+		return
+	var serialized: String = JSON.stringify(_voice_match_feedback_snapshot())
+	if serialized != _voice_match_published:
+		_voice_match_published = serialized
+		_host.voiceMatchFeedback(serialized)
 
 
 func _continue_match() -> void:
@@ -1897,13 +1986,15 @@ func _select_card(id: String) -> void:
 			audio.cue(result, "wrong" if result == "wrong" else "")
 			if result == "correct":
 				audio.say("res://" + model.card_by_id(id).word.audio)
-		feedback_timer.start()
+		feedback_timer.start(MATCH_FEEDBACK_SECONDS)
 	if result != "ignored":
 		cards[id].play_press()
 
 
 func _resolve_feedback() -> void:
 	feedback_timer.stop()
+	feedback_timer.wait_time = MATCH_FEEDBACK_SECONDS
+	_clear_voice_match_feedback()
 	_stop_feedback_animations()
 	model.resolve_feedback()
 	_consume_spoken_word()
@@ -1929,6 +2020,7 @@ func choose_theme(id: String) -> void:
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	_hint_link.set_reduced_motion(value)
+	_voice_match_link.set_reduced_motion(value)
 	_pop.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	for card in cards.values():
@@ -2564,13 +2656,15 @@ func _on_voice_state(arguments: Array) -> void:
 		_refresh_match_cards()
 		_layout()
 	if enabled:
-		audio.halt()
+		# Automatic recognizer rollover must not cut off a just-earned zap.
+		audio.halt(_voice_match_left > 0.0)
 	else:
+		_clear_voice_match_feedback()
 		_speech_queue.clear()
 		if layout_changed:
 			_restore_mode_music()
 		if model.phase == "feedback":
-			feedback_timer.start()
+			feedback_timer.start(MATCH_FEEDBACK_SECONDS)
 	if model.phase in ["waiting", "matching", "feedback"] and not str(arguments[2]).is_empty():
 		_announce_status(str(arguments[2]))
 	elif layout_changed and not enabled and model.phase in ["waiting", "matching", "feedback"]:
@@ -2600,17 +2694,19 @@ func _consume_spoken_word() -> void:
 		var id: String = _speech_queue.pop_front()
 		if model.match_spoken_word(id) == "correct":
 			_animate_feedback(model.feedback_ids, true)
-			feedback_timer.start()
+			_start_voice_match_feedback(model.feedback_ids)
+			feedback_timer.start(VOICE_MATCH_SECONDS)
 			return
 
 
 func _stop_voice() -> void:
+	_clear_voice_match_feedback()
 	var was_enabled: bool = _voice_mode
 	_voice_mode = false
 	_voice_listening = false
 	_speech_queue.clear()
 	if was_enabled and feedback_timer != null and model.phase == "feedback":
-		feedback_timer.start()
+		feedback_timer.start(MATCH_FEEDBACK_SECONDS)
 	if _voice_space != null:
 		_voice_space.hide()
 	if _voice_button != null:
@@ -2748,6 +2844,8 @@ func _process(delta: float) -> void:
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 	_update_duck()
+	if Engine.get_process_frames() != _voice_match_origin_frame:
+		_advance_voice_match_feedback(delta)
 	var elapsed: float = delta if hold_delta < 0.0 else hold_delta
 	if _holding_chest and model.chest_state == "closed" and elapsed > 0.0 and is_finite(elapsed):
 		_hold_elapsed += elapsed

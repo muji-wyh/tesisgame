@@ -81,6 +81,7 @@ function collectRequiredAudio(root) {
   const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
+    'assets/audio/sfx/match-voice-hit.wav',
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),

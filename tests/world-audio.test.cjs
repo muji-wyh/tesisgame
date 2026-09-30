@@ -105,6 +105,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   fs.writeFileSync(path.join(directory, 'pop-voice-prompts.json'), JSON.stringify(popPrompts));
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
+    'assets/audio/sfx/match-voice-hit.wav',
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),

@@ -1767,6 +1767,13 @@
         announce(text) {
           document.getElementById('game-status').textContent = text;
         },
+        voiceMatchFeedback(text) {
+          // Read-only geometry mirrors the same one-second link drawn by Godot.
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object') return;
+          document.getElementById('game-status').dataset.voiceMatchLink = JSON.stringify(value);
+        },
         chestProgress(percent, phase = 'holding') {
           const progress = document.getElementById('chest-progress');
           progress.hidden = percent < 0;

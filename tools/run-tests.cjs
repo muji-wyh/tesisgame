@@ -7,7 +7,7 @@ const groups = {
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
-      'medal_scene_tests', 'voice_model_tests', 'mascot_tests', 'playful_controls_tests',
+      'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests', 'playroom_state_tests', 'playroom_view_tests',
       'pip_playground_tests', 'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
       'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_recovery_tests',

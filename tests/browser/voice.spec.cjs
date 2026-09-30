@@ -1,5 +1,82 @@
 const { test, expect } = require('@playwright/test');
 const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
+const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
+const catalog = require('../../words.json');
+const voiceHitRecording = 'assets/audio/sfx/match-voice-hit.wav';
+
+async function voiceMatchLink(page) {
+  return page.locator('#game-status').evaluate(element => JSON.parse(element.dataset.voiceMatchLink || '{"active":false}'));
+}
+
+async function observeVoiceMatchLinks(page) {
+  await page.evaluate(() => {
+    const element = document.getElementById('game-status');
+    window.voiceMatchLinks = [];
+    window.voiceMatchEvidence = { audioFrom: window.audioObservation.playbacks.length, energy: [] };
+    let previous = '';
+    const record = () => {
+      const state = JSON.parse(element.dataset.voiceMatchLink || '{"active":false}');
+      const key = `${state.serial}:${state.active}`;
+      if (key === previous) return;
+      previous = key;
+      window.voiceMatchLinks.push({ ...state, at: performance.now() });
+      const evidence = window.voiceMatchEvidence;
+      if (!state.active && evidence.sampler && evidence.captureLink?.serial === state.serial) {
+        evidence.energy.push(...window.audioOutputObservation.read());
+        clearInterval(evidence.sampler);
+        evidence.sampler = null;
+        evidence.sampledUntil = performance.now();
+      }
+    };
+    new MutationObserver(record).observe(element, { attributes: true, attributeFilter: ['data-voice-match-link'] });
+    record();
+  });
+}
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (page.isClosed()) return;
+  const evidence = await page.evaluate(() => {
+    if (!window.voiceMatchEvidence) return null;
+    const { sampler, ...recorded } = window.voiceMatchEvidence;
+    clearInterval(sampler);
+    return { ...recorded, links: window.voiceMatchLinks,
+      playbacks: window.audioObservation.playbacks.slice(recorded.audioFrom),
+      finalLink: JSON.parse(document.getElementById('game-status').dataset.voiceMatchLink || '{"active":false}') };
+  }).catch(() => null);
+  if (evidence) await testInfo.attach('match-voice-feedback-evidence', {
+    body: JSON.stringify(evidence, null, 2), contentType: 'application/json'
+  });
+});
+
+async function changedBoltPixels(page, active, cleared, link, bounds) {
+  return page.evaluate(async ({ encoded, link, bounds }) => {
+    const frames = await Promise.all(encoded.map(async source => {
+      const image = new Image(); image.src = 'data:image/png;base64,' + source; await image.decode();
+      const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+      return { width: image.width, height: image.height, pixels: context.getImageData(0, 0, image.width, image.height).data };
+    }));
+    const points = link.path.map(point => ({ x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale }));
+    const cards = [link.source, link.target].map(rect => ({ x: bounds.x + rect.x * bounds.scale,
+      y: bounds.y + rect.y * bounds.scale, width: rect.width * bounds.scale, height: rect.height * bounds.scale }));
+    const [a, b] = points, dx = b.x - a.x, dy = b.y - a.y, length = dx * dx + dy * dy;
+    let changed = 0;
+    // Inspect only the actual link corridor outside the scored cards. Their
+    // own sparkle, bounce, and match badges must not satisfy this assertion.
+    for (let y = Math.max(0, Math.floor(Math.min(a.y, b.y) - 20)); y < Math.min(frames[0].height, Math.ceil(Math.max(a.y, b.y) + 20)); y++) {
+      for (let x = Math.max(0, Math.floor(Math.min(a.x, b.x) - 20)); x < Math.min(frames[0].width, Math.ceil(Math.max(a.x, b.x) + 20)); x++) {
+        if (cards.some(rect => x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height)) continue;
+        const along = Math.max(0, Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / length));
+        if (Math.hypot(x - a.x - along * dx, y - a.y - along * dy) > 20) continue;
+        const offset = (y * frames[0].width + x) * 4;
+        const rgb = [0, 1, 2].map(channel => frames[0].pixels[offset + channel]);
+        const difference = rgb.reduce((sum, value, channel) => sum + Math.abs(value - frames[1].pixels[offset + channel]), 0);
+        if (difference > 60 && Math.max(...rgb) > 100 && Math.max(...rgb) - Math.min(...rgb) > 55) changed++;
+      }
+    }
+    return changed;
+  }, { encoded: [active, cleared].map(frame => frame.toString('base64')), link, bounds });
+}
 
 async function installRecognition(page, api = 'standard') {
   await page.addInitScript(({ api }) => {
@@ -281,25 +358,107 @@ test('the listening buddy cycles nod, wave and tilt without a speaking pose', as
   expect(errors).toEqual([]);
 });
 
-test('interim speech does not score; final sentences queue distinct real pairs and stop on win', async ({ page }) => {
+test('interim speech does not score; final sentences queue distinct real pairs and stop on win', async ({ page }, testInfo) => {
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+  const audioRequests = watchAudioRequests(page);
   const errors = await openGame(page);
   const { pairs } = await discoverBoard(page);
   await listen(page);
+  await observeVoiceMatchLinks(page);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  const from = await page.evaluate(() => window.audioObservation.playbacks.length);
+  const hitSeconds = waveDuration(voiceHitRecording);
+  const soundsSince = () => page.evaluate(from => window.audioObservation.playbacks.slice(from), from);
+  const isElectricHit = sound => Math.abs(sound.duration - hitSeconds) <= 1 / sound.sampleRate && sound.playbackRate === 1;
   const waiting = await page.locator('#game-status').textContent();
   const first = pairs[0][0];
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word}`, false), first);
   await expect(page.locator('#speech-transcript')).toHaveText(`I see a ${first}`);
-  await page.waitForTimeout(900);
+  await page.waitForTimeout(300);
   await expect(page.locator('#game-status')).toHaveText(waiting);
-  await page.evaluate(word => window.speechFixture.emit(`I see a ${word.toUpperCase()}!`, true), first);
-  await expect(page.locator('#game-status')).toContainText('Great match!');
+  expect((await voiceMatchLink(page)).active, 'Interim speech cannot reveal the pair link.').toBe(false);
+  expect(await soundsSince(), 'Interim speech cannot trigger the electric hit or spoken feedback.').toEqual([]);
+  await page.evaluate(() => window.speechFixture.emit('zzzzzz', true));
+  await page.waitForTimeout(200);
+  expect((await voiceMatchLink(page)).active, 'Unknown words cannot reveal the pair link.').toBe(false);
+  expect(await soundsSince(), 'Unknown words keep the listening game quiet.').toEqual([]);
+  // Collect the short sound inside the page before triggering it. Remote
+  // assertion roundtrips must not miss a 460 ms sample or a one-second bolt.
+  const { link, bounds } = await page.evaluate(word => new Promise(resolve => {
+    const evidence = window.voiceMatchEvidence;
+    evidence.sampler = setInterval(() => evidence.energy.push(...window.audioOutputObservation.read()), 10);
+    evidence.emittedAt = performance.now();
+    window.speechFixture.emit(`I see a ${word.toUpperCase()}!`, true);
+    requestAnimationFrame(() => {
+      const rect = document.getElementById('canvas').getBoundingClientRect();
+      const scale = Math.min(rect.width, rect.height) / 480;
+      const link = JSON.parse(document.getElementById('game-status').dataset.voiceMatchLink || '{"active":false}');
+      evidence.captureRequestedAt = performance.now();
+      evidence.captureLink = link;
+      resolve({ link, bounds: { x: rect.x, y: rect.y, width: rect.width / scale, height: rect.height / scale, scale } });
+    });
+  }), first);
+  const activeFrame = await page.screenshot({ path: testInfo.outputPath('match-voice-lightning-active.png'), scale: 'css' });
+  await page.evaluate(() => {
+    window.voiceMatchEvidence.captureCompletedAt = performance.now();
+    window.voiceMatchEvidence.linkAfterCapture = JSON.parse(document.getElementById('game-status').dataset.voiceMatchLink || '{"active":false}');
+  });
+  expect(link.active, 'The scored pair is visible in the first rendered feedback frame.').toBe(true);
+  const firstId = catalog.find(word => word.text === first).id;
+  expect(link.source.id, 'The lightning starts at the scored picture.').toBe(`${firstId}:image`);
+  expect(link.target.id, 'The lightning ends at its matching word.').toBe(`${firstId}:word`);
+  expect(link.duration).toBe(1);
+  expect(link.path).toHaveLength(2);
+  const contains = (rect, point) => point.x >= rect.x - 1 && point.x <= rect.x + rect.width + 1 &&
+    point.y >= rect.y - 1 && point.y <= rect.y + rect.height + 1;
+  expect(contains(link.source, link.path[0]) && contains(link.target, link.path[1]),
+    'Both ends of the lightning touch the scored pair.').toBe(true);
+  if (audioAvailable) {
+    const sound = await expectRecording(page, from, voiceHitRecording);
+    expect(isElectricHit(sound)).toBe(true);
+    expect(sound.loop).toBe(false);
+    expect(sound.fingerprint, 'The electric cue contains a real decoded PCM buffer.').toBeTruthy();
+    expect(sound.peak).toBeGreaterThan(0.01);
+    expect(sound.contextState).toBe('running');
+  }
+  await expect.poll(async () => (await voiceMatchLink(page)).active, { timeout: 1600, intervals: [20, 50] }).toBe(false);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  const clearedFrame = await page.screenshot({ path: testInfo.outputPath('match-voice-lightning-cleared.png'), scale: 'css' });
+  expect(await changedBoltPixels(page, activeFrame, clearedFrame, link, bounds),
+    'Visible lightning pixels connect the pair and disappear after feedback, independently of card animation.').toBeGreaterThan(4);
+  const firstEvents = await page.evaluate(() => window.voiceMatchLinks);
+  const began = firstEvents.find(event => event.active && event.serial === link.serial);
+  const ended = firstEvents.find(event => !event.active && event.serial === link.serial);
+  expect(ended.at - began.at, 'The visible pair link lasts approximately one second.').toBeGreaterThanOrEqual(850);
+  expect(ended.at - began.at).toBeLessThanOrEqual(1400);
+  if (audioAvailable) {
+    const energy = await page.evaluate(until => {
+      const evidence = window.voiceMatchEvidence;
+      return evidence.energy.filter(sample => sample.at >= evidence.emittedAt && sample.at <= until + 50);
+    }, ended.at);
+    expect(Math.max(0, ...energy.map(sample => sample.rms)),
+      'The electric cue produces real destination output during the recorded feedback interval.').toBeGreaterThan(0.00001);
+    const sounds = await soundsSince();
+    expect(sounds).toHaveLength(1);
+    expect(sounds.every(isElectricHit), 'Only the nonverbal electric cue plays while Voice listens.').toBe(true);
+  }
   await page.evaluate(word => window.speechFixture.emit(`${word} ${word}`, true), first);
-  await page.waitForTimeout(900);
+  await page.waitForTimeout(250);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  expect((await voiceMatchLink(page)).active, 'A duplicate already-matched word cannot replay its link.').toBe(false);
+  expect((await voiceMatchLink(page)).serial).toBe(link.serial);
+  if (audioAvailable) expect(await soundsSince(), 'A duplicate cannot replay any sound.').toHaveLength(1);
   await page.evaluate(words => window.speechFixture.emit(`A ${words[0]}, ${words[0]}, ${words.slice(1).join(', ')}!`),
     pairs.slice(1).map(([word]) => word));
   await expect(page.locator('#game-status'), 'All four remaining distinct words finish their queued feedback before the round ends.').toContainText('You did it!', { timeout: 15000 });
+  const hits = (await page.evaluate(() => window.voiceMatchLinks)).filter(event => event.active);
+  expect(hits.map(event => event.target.id), 'One final sentence resolves each distinct pair in spoken order.').toEqual(
+    pairs.map(([text]) => `${catalog.find(word => word.text === text).id}:word`));
+  for (let index = 2; index < hits.length; index++) {
+    expect(hits[index].at - hits[index - 1].at, 'Queued words each keep their own one-second electric connection.').toBeGreaterThanOrEqual(850);
+  }
+  expect((await voiceMatchLink(page)).active).toBe(false);
+  if (audioAvailable) expect((await soundsSince()).filter(isElectricHit), 'Each of the five scored pairs plays one bundled electric hit.').toHaveLength(5);
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expectSpeechAura(page, false);
   await expect(page.locator('#speech-transcript')).toBeEmpty();
@@ -312,6 +471,8 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await page.waitForTimeout(800);
   await expect(page.locator('#game-status')).toHaveText(won);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+  if (audioAvailable) expect((await soundsSince()).filter(isElectricHit), 'Late recognition callbacks cannot replay the hit cue.').toHaveLength(5);
+  expect(audioRequests, 'The hit sound is bundled and never depends on an audio download.').toEqual([]);
   expect(errors).toEqual([]);
 });
 

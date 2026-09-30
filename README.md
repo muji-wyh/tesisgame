@@ -593,6 +593,10 @@ Matching is case-insensitive and uses whole English words: `doll` does not match
 `dollars`. Distractors, unrelated speech, and already matched words do not score
 or cost a mistake. A sentence containing several available words is resolved
 through the same match-feedback sequence, once per pair.
+Each accepted voice match plays a short bundled electric cue and connects its
+picture and word with themed lightning for one second. Queued words receive
+their own full second before the next match, including the last pair before
+the result screen. Reduced motion uses a static bolt with the same duration.
 
 Click **Voice** again to exit. Winning, losing, replaying, opening a
 playroom, or hiding the page also stops listening. Game music and spoken

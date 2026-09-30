@@ -11,6 +11,8 @@ const POP_HIT_GAIN := 0.24
 const POP_LAUNCH_PATH := "res://assets/imported-audio/pop-reference/launch.wav"
 const POP_LAUNCH_FALLBACK := "res://assets/audio/sfx/pop-launch.wav"
 const POP_LAUNCH_GAIN := 0.16
+const MATCH_VOICE_HIT_PATH := "res://assets/audio/sfx/match-voice-hit.wav"
+const MATCH_VOICE_HIT_GAIN := 0.48
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -40,6 +42,7 @@ var voice: AudioStreamPlayer
 var narration: AudioStreamPlayer
 var pip_reaction: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
+var match_voice_hit: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var narration_state: String = "idle"
 var muted: bool = false
@@ -107,6 +110,8 @@ func _ready() -> void:
 		_pop_launch_path = POP_LAUNCH_PATH
 		cache[POP_LAUNCH_PATH] = launch_stream
 	_stream(_pop_launch_path)
+	match_voice_hit = _player(MATCH_VOICE_HIT_GAIN)
+	_stream(MATCH_VOICE_HIT_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -164,6 +169,16 @@ func _play_pop_slice() -> void:
 	_pop_next_player = (_pop_next_player + 1) % _pop_players.size()
 	_pop_last_player = player
 	_play(player, _next_pop_slice())
+
+
+func play_match_voice_hit() -> void:
+	if not muted and active and available:
+		_play(match_voice_hit, MATCH_VOICE_HIT_PATH)
+
+
+func stop_match_voice_hit() -> void:
+	if match_voice_hit != null:
+		_stop(match_voice_hit)
 
 
 func last_pop_player() -> AudioStreamPlayer:
@@ -698,8 +713,10 @@ func stop_voice() -> void:
 		_stop(voice)
 
 
-func halt() -> void:
+func halt(keep_match_voice_hit: bool = false) -> void:
 	active = false
+	if not keep_match_voice_hit:
+		stop_match_voice_hit()
 	stop_pop_sounds()
 	stop_pip_reaction()
 	stop_chest_performance()
