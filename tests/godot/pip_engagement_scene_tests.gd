@@ -45,6 +45,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -220,6 +221,7 @@ func _test_pop_and_audio_gates(app) -> void:
 	app.audio.halt()
 	app._mode_id = "pop"
 	app._configure_pop(7)
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	app.duck.settle()
 	check(observe_idle(app, 9.5), "Voice Pop's ready page permits a quiet invitation")
 	app._pop_speech_active = true

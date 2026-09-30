@@ -2,6 +2,7 @@ extends VBoxContainer
 
 signal changed
 signal score_saved(outcome: Dictionary)
+signal player_confirmed(player_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
 const NAVY := Color("#10172f")
@@ -30,6 +31,8 @@ var _round_id: String = ""
 var _result: Dictionary = {}
 var _reduced: bool = false
 var _submitted: bool = false
+var _confirmed: bool = false
+var _assigned_player_id: String = ""
 var _selected: String = ""
 var _selected_avatar: String = "duck"
 var _draft_name: String = ""
@@ -45,10 +48,12 @@ var _form: VBoxContainer
 var _name_input: LineEdit
 var _error_label: Label
 var _save_button: Button
+var _start_button: Button
 var _create_button: Button
 var _animation: Dictionary = {}
 var _animation_age: float = 0.0
 var _generation: int = 0
+var _ui_generation: int = 0
 var _textures: Dictionary = {}
 var _last_scale: float = -1.0
 var _rescale_pending: bool = false
@@ -155,11 +160,11 @@ func _ready() -> void:
 	set_process(false)
 
 
-func configure(store: RefCounted, view: String = "boards", mode: String = "pop", round_id: String = "", result: Dictionary = {}, reduced: bool = false) -> void:
+func configure(store: RefCounted, view: String = "boards", mode: String = "pop", round_id: String = "", result: Dictionary = {}, reduced: bool = false, assigned_player_id: String = "") -> void:
 	settle_animation()
 	_generation += 1
 	_store = store
-	_view = view if view in ["players", "boards"] else "boards"
+	_view = view if view in ["players", "boards", "onboarding", "picker"] else "boards"
 	_mode = mode if MODES.has(mode) else "pop"
 	_round_mode = _mode
 	_round_id = round_id
@@ -167,18 +172,23 @@ func configure(store: RefCounted, view: String = "boards", mode: String = "pop",
 	_reduced = reduced
 	reduced_motion = reduced
 	_submitted = false
-	_selected = ""
+	_confirmed = false
+	_assigned_player_id = assigned_player_id if _view == "boards" and _mode == "pop" and not _round_id.is_empty() else ""
+	_selected = _assigned_player_id
 	_selected_avatar = "duck"
 	_draft_name = ""
 	_error = ""
 	_notice = ""
-	_editor_open = _view == "players" or _profiles().is_empty()
+	_editor_open = _view in ["players", "onboarding"] or _profiles().is_empty()
 	if not _round_id.is_empty() and _store != null and _store.has_method("round_submission"):
 		var previous: Dictionary = _store.round_submission(_round_id)
 		if not previous.is_empty():
-			_submitted = true
-			_selected = str(previous.get("player_id", ""))
-			_notice = "Score saved. Your personal best is on the board."
+			if str(previous.get("mode", "")) != _round_mode or (not _assigned_player_id.is_empty() and str(previous.get("player_id", "")) != _assigned_player_id):
+				_error = "This round has already been saved for another player or mode."
+			else:
+				_submitted = true
+				_selected = str(previous.get("player_id", ""))
+				_notice = "Score saved. Your personal best is on the board."
 	_build()
 
 
@@ -193,6 +203,7 @@ func refresh_profiles() -> void:
 
 func _build() -> void:
 	_generation += 1
+	_ui_generation += 1
 	_last_scale = _scale()
 	set_process(false)
 	_animation = {}
@@ -204,6 +215,7 @@ func _build() -> void:
 	_form = null
 	_name_input = null
 	_save_button = null
+	_start_button = null
 	_create_button = null
 	_error_label = null
 	for child in get_children():
@@ -222,10 +234,13 @@ func _build() -> void:
 	var body := VBoxContainer.new()
 	body.add_theme_constant_override("separation", _px(14))
 	panel.add_child(body)
-	var eyebrow := _label("YOUR LOCAL PLAYERS" if _view == "players" else "LOCAL LEADERBOARDS", 11, GOLD)
+	var player_view: bool = _view in ["players", "onboarding", "picker"]
+	var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, GOLD)
 	body.add_child(eyebrow)
-	body.add_child(_label("Make it your game" if _view == "players" else "Meet the high scorers", 24, WHITE, true))
-	body.add_child(_label("Up to 10 players. Pick an emoji and a name." if _view == "players" else "Personal bests on this device. Equal scores share a rank.", 12, SOFT, true))
+	var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Make it your game" if player_view else "Meet the high scorers"
+	var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Choose a player before this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
+	body.add_child(_label(heading, 24, WHITE, true))
+	body.add_child(_label(description, 12, SOFT, true))
 	_error_label = _label(_error, 13, Color("#ffb8a9"), true)
 	_error_label.name = "LeaderboardError"
 	_error_label.visible = not _error.is_empty()
@@ -242,6 +257,23 @@ func _build() -> void:
 		_build_profiles(body, false)
 		_build_editor(body)
 		body.add_child(_label("Emoji artwork: Twemoji / CC BY 4.0", 10, SOFT))
+	elif _view == "onboarding":
+		if _profiles().is_empty():
+			_build_editor(body)
+			body.add_child(_label("Players and scores stay on this device.", 12, SOFT, true))
+		else:
+			# A retry or another local view may reveal an existing player after
+			# the loading screen requested onboarding. Never require a duplicate.
+			_selected = str(_profiles()[0].get("id", ""))
+			_set_error("")
+			body.add_child(_label("Your player is ready. Welcome back!", 16, GOLD, true))
+			_start_button = _button("Continue", "LeaderboardStartGame", true)
+			_start_button.disabled = _confirmed
+			_start_button.pressed.connect(_confirm_player.bind(_ui_generation))
+			body.add_child(_start_button)
+			_confirm_player.call_deferred(_ui_generation)
+	elif _view == "picker":
+		_build_picker(body)
 	else:
 		if not _round_id.is_empty():
 			_build_attribution(body)
@@ -253,7 +285,7 @@ func _build() -> void:
 
 
 func _build_attribution(body: VBoxContainer) -> void:
-	if _submitted:
+	if _submitted or not _assigned_player_id.is_empty():
 		var profile: Dictionary = _profile(_selected)
 		var saved := HBoxContainer.new()
 		saved.add_theme_constant_override("separation", _px(10))
@@ -261,10 +293,15 @@ func _build_attribution(body: VBoxContainer) -> void:
 		saved.add_child(icon)
 		var copy := VBoxContainer.new()
 		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		copy.add_child(_label("Saved for " + str(profile.get("name", "your player")), 16, GOLD, true))
-		copy.add_child(_label(_notice if not _notice.is_empty() else "Your personal best is on the board.", 12, SOFT, true))
+		copy.add_child(_label(("Saved for " if _submitted else "Played by ") + str(profile.get("name", "your player")), 16, GOLD, true))
+		copy.add_child(_label(_notice if not _notice.is_empty() else "Your personal best is on the board." if _submitted else "This round belongs to the player chosen before the game.", 12, SOFT, true))
 		saved.add_child(copy)
 		body.add_child(saved)
+		if not _submitted:
+			_save_button = _button("Retry saving", "LeaderboardSaveScore", true)
+			_save_button.visible = not _error.is_empty()
+			_save_button.pressed.connect(_save_score.bind(_ui_generation))
+			body.add_child(_save_button)
 		return
 	body.add_child(_label("Who played this round?", 19, WHITE))
 	body.add_child(_label("Choose a player to save this score, or play again without saving.", 12, SOFT, true))
@@ -272,14 +309,31 @@ func _build_attribution(body: VBoxContainer) -> void:
 	if _profiles().size() < 10:
 		var add := _button("Add player" if not _editor_open else "Choose an emoji and name", "LeaderboardAddPlayer")
 		add.disabled = _editor_open
-		add.pressed.connect(_open_editor)
+		add.pressed.connect(_open_editor.bind(_ui_generation))
 		body.add_child(add)
 		if _editor_open:
 			_build_editor(body)
 	_save_button = _button("Save score", "LeaderboardSaveScore", true)
 	_save_button.disabled = _selected.is_empty()
-	_save_button.pressed.connect(_save_score)
+	_save_button.pressed.connect(_save_score.bind(_ui_generation))
 	body.add_child(_save_button)
+
+
+func _build_picker(body: VBoxContainer) -> void:
+	_build_profiles(body, true)
+	_start_button = _button("Start playing", "LeaderboardStartGame", true)
+	_start_button.custom_minimum_size.y = 56 / _scale()
+	_start_button.add_theme_font_size_override("font_size", _px(18))
+	_start_button.disabled = _selected.is_empty() or _confirmed
+	_start_button.pressed.connect(_confirm_player.bind(_ui_generation))
+	body.add_child(_start_button)
+	if _profiles().size() < 10:
+		var add := _button("Add player" if not _editor_open else "Choose an emoji and name", "LeaderboardAddPlayer")
+		add.disabled = _editor_open or _confirmed
+		add.pressed.connect(_open_editor.bind(_ui_generation))
+		body.add_child(add)
+		if _editor_open:
+			_build_editor(body)
 
 
 func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
@@ -304,7 +358,7 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 		choice.toggle_mode = selectable
 		choice.button_pressed = id == _selected
 		if selectable:
-			choice.pressed.connect(_select_player.bind(id))
+			choice.pressed.connect(_select_player.bind(id, _ui_generation))
 		else:
 			choice.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			choice.focus_mode = Control.FOCUS_NONE
@@ -352,12 +406,13 @@ func _build_editor(body: VBoxContainer) -> void:
 	_name_input.add_theme_stylebox_override("normal", Style.box(SURFACE, EDGE, _px(12), 1))
 	_name_input.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, GOLD, _px(12), 2))
 	_name_input.text_changed.connect(_name_changed)
-	_name_input.text_submitted.connect(func(_text: String): _create_player())
+	var generation: int = _ui_generation
+	_name_input.text_submitted.connect(func(_text: String): _create_player(generation))
 	_name_input.focus_entered.connect(_ensure_visible.bind(_name_input))
 	_form.add_child(_name_input)
-	_create_button = _button("Create player", "LeaderboardCreatePlayer", true)
+	_create_button = _button("Create player & continue" if _view == "onboarding" else "Create player", "LeaderboardCreatePlayer", true)
 	_create_button.disabled = _draft_name.strip_edges().is_empty()
-	_create_button.pressed.connect(_create_player)
+	_create_button.pressed.connect(_create_player.bind(_ui_generation))
 	_form.add_child(_create_button)
 
 
@@ -391,7 +446,7 @@ func _build_board(body: VBoxContainer) -> void:
 		var empty := PanelContainer.new()
 		empty.add_theme_stylebox_override("panel", Style.box(SURFACE, EDGE, _px(16), 1))
 		empty.custom_minimum_size.y = 90 / _scale()
-		var prompt := _label("The first score is waiting.\nFinish a round and choose its player.", 14, SOFT, true)
+		var prompt := _label("The first score is waiting.\nPlay a round to join the board." if _mode == "pop" else "The first score is waiting.\nFinish a round and choose its player.", 14, SOFT, true)
 		prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty.add_child(prompt)
 		body.add_child(empty)
@@ -417,8 +472,8 @@ func _build_board(body: VBoxContainer) -> void:
 	_relayout_board()
 
 
-func _select_player(id: String) -> void:
-	if _submitted:
+func _select_player(id: String, generation: int = -1) -> void:
+	if _submitted or _confirmed or not _assigned_player_id.is_empty() or _profile(id).is_empty() or not _accept_action(generation):
 		return
 	_selected = id
 	_error = ""
@@ -428,6 +483,8 @@ func _select_player(id: String) -> void:
 			_style_button(control, control.button_pressed)
 	if is_instance_valid(_save_button):
 		_save_button.disabled = false
+	if is_instance_valid(_start_button):
+		_start_button.disabled = false
 	_set_error("")
 	changed.emit()
 
@@ -448,15 +505,17 @@ func _name_changed(value: String) -> void:
 	changed.emit()
 
 
-func _open_editor() -> void:
+func _open_editor(generation: int = -1) -> void:
+	if _confirmed or not _assigned_player_id.is_empty() or not _accept_action(generation):
+		return
 	_editor_open = true
 	_build()
 	if is_instance_valid(_name_input):
 		_name_input.grab_focus()
 
 
-func _create_player() -> void:
-	if _store == null or _draft_name.strip_edges().is_empty() or _profiles().size() >= 10:
+func _create_player(generation: int = -1) -> void:
+	if _confirmed or not _assigned_player_id.is_empty() or _store == null or _draft_name.strip_edges().is_empty() or _profiles().size() >= 10 or not _accept_action(generation):
 		return
 	if not _store.ready and not _store.load_state():
 		_set_error(str(_store.error))
@@ -470,15 +529,46 @@ func _create_player() -> void:
 	_editor_open = _view == "players"
 	_error = ""
 	_notice = "Player created."
+	if _view == "onboarding":
+		_confirm_player()
+		return
 	_build()
-	if is_instance_valid(_save_button):
+	if is_instance_valid(_start_button):
+		_start_button.grab_focus()
+	elif is_instance_valid(_save_button):
 		_save_button.grab_focus()
 	elif is_instance_valid(_name_input):
 		_name_input.grab_focus()
 
 
-func _save_score() -> void:
-	if _submitted or _selected.is_empty() or _round_id.is_empty() or _store == null:
+func _confirm_player(generation: int = -1) -> void:
+	if _confirmed or not _view in ["onboarding", "picker"] or _selected.is_empty() or _store == null or not _accept_action(generation):
+		return
+	# Recheck durable profiles before starting, including after another local
+	# view edits storage. No round may begin with an unpersisted identity.
+	if _view == "picker" and not _store.load_state():
+		_set_error(str(_store.error))
+		return
+	if _profile(_selected).is_empty():
+		_selected = ""
+		_error = "Choose a player saved on this device."
+		_build()
+		return
+	_confirmed = true
+	if is_instance_valid(_start_button):
+		_start_button.disabled = true
+	if is_instance_valid(_create_button):
+		_create_button.disabled = true
+	player_confirmed.emit(_selected)
+
+
+func save_assigned_score() -> void:
+	if not _assigned_player_id.is_empty() and _view == "boards" and _round_mode == "pop":
+		_save_score()
+
+
+func _save_score(generation: int = -1) -> void:
+	if _submitted or _selected.is_empty() or _round_id.is_empty() or _store == null or not _accept_action(generation):
 		return
 	if not _store.ready and not _store.load_state():
 		_set_error(str(_store.error))
@@ -497,7 +587,7 @@ func _save_score() -> void:
 	_notice = "UP %d %s!" % [places, "PLACE" if places == 1 else "PLACES"] if improving else "Your first score is on the board!" if first_entry else "New personal best!" if bool(outcome.get("personal_best", false)) else "Score saved. Your personal best stays on the board."
 	_build()
 	var focus := find_child("LeaderboardMode_" + _mode, true, false) as Control
-	if is_instance_valid(focus):
+	if is_instance_valid(focus) and (_assigned_player_id.is_empty() or generation >= 0):
 		focus.grab_focus()
 	if not bool(outcome.get("duplicate", false)):
 		if improving or first_entry:
@@ -528,7 +618,8 @@ func _begin_animation(outcome: Dictionary, generation: int) -> void:
 	# Place the player at the source before scrolling. Short climbs keep their
 	# entire path in view; long climbs reveal the source and follow the player.
 	_apply_animation()
-	_reveal_animation_path(id, is_rise)
+	if is_rise or _assigned_player_id.is_empty():
+		_reveal_animation_path(id, is_rise)
 	await get_tree().process_frame
 	if generation != _generation or _reduced or not is_instance_valid(_board) or not is_visible_in_tree() or _animation.is_empty():
 		return
@@ -591,7 +682,8 @@ func _apply_animation() -> void:
 			_glory.queue_redraw()
 			# Long climbs can span more than one mobile screen. Follow the player
 			# as the surrounding rows move, keeping room for the gold glow.
-			_ensure_visible_now(row, 22 / _scale())
+			if _animation.get("type") == "rise" or _assigned_player_id.is_empty():
+				_ensure_visible_now(row, 22 / _scale())
 
 
 func settle_animation() -> void:
@@ -632,6 +724,8 @@ func _retry_load() -> void:
 	_store.load_state()
 	_error = "" if _store.ready else str(_store.error)
 	_build()
+	if _store.ready:
+		save_assigned_score()
 
 
 func _relayout_board() -> void:
@@ -669,7 +763,9 @@ func _collect_controls(node: Node, result: Array[Control]) -> void:
 
 
 func default_focus() -> Control:
-	if is_instance_valid(_save_button) and not _save_button.disabled:
+	if is_instance_valid(_start_button) and not _start_button.disabled:
+		return _start_button
+	if is_instance_valid(_save_button) and _save_button.visible and not _save_button.disabled:
 		return _save_button
 	if _profiles().is_empty() and is_instance_valid(_name_input):
 		return _name_input
@@ -703,7 +799,7 @@ func snapshot() -> Dictionary:
 					animation["target_y"] = _board.global_position.y + index * _row_step()
 			animation["current_y"] = row_rect.position.y
 	var rect := get_global_rect()
-	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "selected_player": _selected, "error": _error, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "controls": geometry}
+	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "confirmed": _confirmed, "assigned_player": _assigned_player_id, "selected_player": _selected, "error": _error, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "controls": geometry}
 
 
 func _set_error(message: String) -> void:
@@ -711,7 +807,13 @@ func _set_error(message: String) -> void:
 	if is_instance_valid(_error_label):
 		_error_label.text = message
 		_error_label.visible = not message.is_empty()
+	if is_instance_valid(_save_button) and not _assigned_player_id.is_empty() and not _submitted:
+		_save_button.visible = not message.is_empty()
 	changed.emit()
+
+
+func _accept_action(generation: int) -> bool:
+	return not is_queued_for_deletion() and (generation < 0 or generation == _ui_generation)
 
 
 func _profile(id: String) -> Dictionary:

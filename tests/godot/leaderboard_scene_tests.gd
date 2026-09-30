@@ -10,10 +10,11 @@ class BrowserStorage extends RefCounted:
 
 	var text: Variant = null
 	var writable: bool = true
+	var readable: bool = true
 	var writes: int = 0
 
 	func leaderboardState() -> Variant:
-		return text
+		return text if readable else false
 
 	func saveLeaderboardState(value: String) -> bool:
 		if not writable:
@@ -59,6 +60,8 @@ func check_review_modal_touch(app, mode: String) -> void:
 func _run() -> void:
 	var directory := "user://leaderboard-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated integration save directory")
+	await _check_onboarding(directory)
+	await _check_onboarding_recovery(directory)
 	var storage := BrowserStorage.new()
 	var state := State.new(directory + "/leaderboards.cfg", storage)
 	check(state.load_state(), "Load isolated local player state")
@@ -137,73 +140,221 @@ func _check_menu(app, state) -> void:
 	await settle()
 
 
+func _check_onboarding(directory: String) -> void:
+	var storage := BrowserStorage.new()
+	var state := State.new(directory + "/onboarding.cfg", storage)
+	check(state.load_state(), "Load an empty first-visit player store")
+	var app = load("res://scenes/main.tscn").instantiate()
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/onboarding-medals.cfg", directory + "/onboarding-legacy.cfg")
+	app.playroom_save_path = directory + "/onboarding-room.cfg"
+	app.leaderboard_state = state
+	root.add_child(app)
+	await settle()
+	var lesson: Array = app.model.cards.duplicate(true)
+	paused = true
+	app._on_loading_finished(["summer"])
+	await settle()
+	check(not paused and app._leaderboard_overlay.visible and app._leaderboard_gate == "onboarding",
+		"Leaving loading requires a first player before exposing gameplay")
+	check(app.leaderboard_snapshot().view == "onboarding" and not app._leaderboard_close.is_visible_in_tree(),
+		"First-visit creation has no skip or Back action")
+	check(app.model.theme_id == "summer" and app.model.cards == lesson,
+		"Onboarding retains the loading theme and the prepared adventure")
+	app._controller_back()
+	app.choose_mode("pop")
+	check(app._leaderboard_overlay.visible and app._leaderboard_gate == "onboarding" and app._mode_id == "match",
+		"Back and a covered mode action cannot bypass mandatory creation")
+	var panel = app._leaderboard_panel
+	var name_field := panel.find_child("LeaderboardName", true, false) as LineEdit
+	check(action(panel, "LeaderboardCreatePlayer").disabled, "The first player still requires a valid name")
+	action(panel, "LeaderboardAvatar_panda").pressed.emit()
+	name_field.text = "River"
+	name_field.text_changed.emit(name_field.text)
+	storage.writable = false
+	action(panel, "LeaderboardCreatePlayer").pressed.emit()
+	await settle()
+	check(state.profiles.is_empty() and app._leaderboard_gate == "onboarding" and app._leaderboard_overlay.visible,
+		"A failed profile save keeps the first-visit gate open")
+	check(not panel.snapshot().error.is_empty(), "First-visit persistence failure gives a retryable error")
+	storage.writable = true
+	action(panel, "LeaderboardCreatePlayer").pressed.emit()
+	await settle()
+	check(state.profiles.size() == 1 and state.profiles[0].name == "River" and state.profiles[0].avatar == "panda",
+		"The first profile durably stores the selected emoji and name")
+	check(not app._leaderboard_overlay.visible and app._leaderboard_gate.is_empty() and app._mode_id == "match",
+		"Successful first-player creation continues directly into the prepared game")
+	app._on_loading_finished(["winter"])
+	check(not app._leaderboard_overlay.visible and state.profiles.size() == 1 and app.model.theme_id == "summer",
+		"A repeated loading callback cannot reopen creation or add another player")
+	app.audio.halt()
+	app.queue_free()
+	await settle()
+	var returning = load("res://scenes/main.tscn").instantiate()
+	returning.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/returning-medals.cfg", directory + "/returning-legacy.cfg")
+	returning.playroom_save_path = directory + "/returning-room.cfg"
+	returning.leaderboard_state = State.new(directory + "/onboarding.cfg", storage)
+	root.add_child(returning)
+	await settle()
+	returning._on_loading_finished([])
+	check(not returning._leaderboard_overlay.visible and returning.leaderboard_state.profiles.size() == 1,
+		"A later visit with a stored player goes straight from loading into the game")
+	returning.audio.halt()
+	returning.queue_free()
+	await settle()
+
+
+func _check_onboarding_recovery(directory: String) -> void:
+	for count in [1, 10]:
+		var storage := BrowserStorage.new()
+		var seed := State.new(directory + "/recovery-seed.cfg", storage)
+		check(seed.load_state(), "Create a recoverable browser player store")
+		for index in range(count):
+			check(seed.create_profile("Player %d" % (index + 1), State.AVATARS[index]).ok,
+				"Seed recovered player %d of %d" % [index + 1, count])
+		var writes_before: int = storage.writes
+		var bytes_before: String = str(storage.text)
+		storage.readable = false
+		var app = load("res://scenes/main.tscn").instantiate()
+		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/recovery-medals-%d.cfg" % count, directory + "/recovery-legacy-%d.cfg" % count)
+		app.playroom_save_path = directory + "/recovery-room-%d.cfg" % count
+		app.leaderboard_state = State.new(directory + "/recovery.cfg", storage)
+		root.add_child(app)
+		await settle()
+		app._on_loading_finished([])
+		await settle()
+		check(app._leaderboard_gate == "onboarding" and app._leaderboard_overlay.visible
+			and action(app._leaderboard_panel, "LeaderboardRetryLoad") != null,
+			"An unreadable player store gates loading with a visible retry")
+		check(action(app._leaderboard_panel, "LeaderboardCreatePlayer") == null,
+			"Storage errors cannot masquerade as an empty store and create duplicate players")
+		action(app._leaderboard_panel, "LeaderboardRetryLoad").pressed.emit()
+		await settle()
+		check(app._leaderboard_gate == "onboarding" and not app.leaderboard_state.ready,
+			"An unsuccessful read retry keeps mandatory onboarding open")
+		storage.readable = true
+		action(app._leaderboard_panel, "LeaderboardRetryLoad").pressed.emit()
+		await settle()
+		check(not app._leaderboard_overlay.visible and app._leaderboard_gate.is_empty()
+			and app.leaderboard_state.ready and app.leaderboard_state.profiles.size() == count,
+			"Recovering %d saved players continues directly without asking for another profile" % count)
+		check(storage.writes == writes_before and storage.text == bytes_before,
+			"Onboarding recovery preserves every stored player without rewriting the record")
+		app.audio.halt()
+		app.queue_free()
+		await settle()
+	var storage := BrowserStorage.new()
+	var state := State.new(directory + "/stale-onboarding.cfg", storage)
+	check(state.load_state() and state.create_profile("Existing player", "fox").ok,
+		"Seed a returning player for deferred-confirmation coverage")
+	var panel = load("res://scripts/leaderboard_panel.gd").new()
+	var confirmations: Array[String] = []
+	root.add_child(panel)
+	panel.player_confirmed.connect(func(id: String) -> void: confirmations.append(id))
+	panel.configure(state, "onboarding")
+	panel.configure(state, "picker")
+	await settle()
+	check(confirmations.is_empty() and panel.snapshot().view == "picker" and not panel.snapshot().confirmed,
+		"A deferred onboarding recovery cannot confirm a reconfigured player picker")
+	panel.configure(state, "onboarding")
+	await settle()
+	check(confirmations.size() == 1 and confirmations[0] == str(state.profiles[0].id),
+		"The current onboarding recovery confirms an existing durable profile exactly once")
+	panel.queue_free()
+	await settle()
+
+
 func _check_pop(app, state, storage, player_id: String) -> void:
 	app.choose_mode("pop")
 	await settle()
-	app._pop.set_listening(true, true, "Listening")
-	check(app._pop.game.phase == "running", "Voice Pop begins before result attribution exists")
+	check(app._leaderboard_overlay.visible and app._leaderboard_gate == "pop" and app._pop_player_id.is_empty(),
+		"Entering Voice Pop opens a player picker before microphone startup")
+	check(app._pop.game.phase == "ready" and not app._pop_speech_active,
+		"Player selection has no microphone request, targets or running countdown")
+	var panel = app._leaderboard_panel
+	check(action(panel, "LeaderboardStartGame").disabled and panel.snapshot().selected_player.is_empty(),
+		"Each round requires a deliberate player selection before Start game")
+	var remaining: float = app._pop.game.remaining
+	app._on_voice_state([true, true, "Listening"])
+	app._on_voice_result(["apple", true])
+	app._pop._advance_game(3.0)
+	check(app._pop.game.phase == "ready" and app._pop.game.remaining == remaining and app._pop.game.targets.is_empty(),
+		"Late recognition callbacks cannot start or score a round before selecting its player")
+	app._leaderboard_player_confirmed("missing-player")
+	check(app._leaderboard_gate == "pop" and app._pop_player_id.is_empty(),
+		"An invalid player confirmation cannot bypass the picker")
+	app._controller_back()
+	check(not app._leaderboard_overlay.visible and app._leaderboard_gate.is_empty() and app._pop_player_id.is_empty(),
+		"Back cancels the picker without assigning a player or starting speech")
+	app._on_voice_state([true, true, "Listening"])
+	check(app._pop.game.phase == "ready" and not app._pop_speech_active,
+		"A late microphone callback after cancellation leaves the round ready")
+	app._request_pop_player()
+	await settle()
+	panel = app._leaderboard_panel
+	action(panel, "LeaderboardPlayer_" + player_id).pressed.emit()
+	check(not action(panel, "LeaderboardStartGame").disabled and app._pop_player_id.is_empty(),
+		"Choosing an avatar enables Start game without starting immediately")
+	action(panel, "LeaderboardStartGame").pressed.emit()
+	await settle()
+	check(not app._leaderboard_overlay.visible and app._pop_player_id == player_id and app._pop.game.phase == "ready",
+		"Confirming the selected player closes the picker and waits for real listening readiness")
 	var round_id: String = app._leaderboard_round_id
+	app._leaderboard_player_confirmed(str(state.profiles[1].id))
+	check(app._pop_player_id == player_id and app._leaderboard_round_id == round_id,
+		"Repeated or stale confirmation cannot reassign or restart the active round")
+	app._on_voice_state([true, true, "Listening"])
+	check(app._pop.game.phase == "running", "The selected player's round starts only when the microphone is listening")
 	app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
 	check(app._pop.game.hits == 1, "The fixture earns a real spoken hit")
+	storage.writable = false
+	var bytes_before: String = str(storage.text)
 	app._pop._advance_game(60.0)
 	await settle()
-	var panel = app._pop_leaderboard
-	check(is_instance_valid(panel) and panel.is_visible_in_tree(), "Voice Pop attaches player choice to completed results")
+	panel = app._pop_leaderboard
+	check(is_instance_valid(panel) and panel.is_visible_in_tree(), "Voice Pop automatically shows the completed round's leaderboard")
 	check(panel.get_index() == 2 and app._pop.replay_button.is_visible_in_tree(),
-		"Attribution sits after the hit total and Play again, before the word lists")
-	check(state.board("pop").is_empty() and state.round_submission(round_id).is_empty(),
-		"Finishing alone does not assign a score")
+		"The board sits after the hit total and Play again, before the word lists")
+	check(action(panel, "LeaderboardPlayer_" + player_id) == null and action(panel, "LeaderboardAddPlayer") == null,
+		"A completed Voice Pop round has no player chooser or profile editor")
+	panel._select_player(str(state.profiles[1].id))
+	check(panel.snapshot().assigned_player == player_id and panel.snapshot().selected_player == player_id,
+		"The result remains bound to the player selected before play")
+	check(not panel.snapshot().submitted and not panel.snapshot().error.is_empty()
+		and storage.text == bytes_before and not panel.snapshot().animation.active,
+		"Failed automatic persistence leaves the fixed player's result retryable without celebrating")
+	check(action(panel, "LeaderboardSaveScore") != null and action(panel, "LeaderboardSaveScore").text == "Retry saving",
+		"Persistence failure offers Retry saving instead of a new attribution choice")
 	app._pop_finished(app._pop.game.summary())
-	check(app._pop_leaderboard == panel, "Duplicate finish callbacks cannot build another chooser")
-	check(action(panel, "LeaderboardSaveScore").disabled, "A player must explicitly be selected")
-	action(panel, "LeaderboardPlayer_" + player_id).pressed.emit()
-	action(panel, "LeaderboardAddPlayer").pressed.emit()
-	var draft := panel.find_child("LeaderboardName", true, false) as LineEdit
-	draft.text = "Unfinished draft"
-	draft.text_changed.emit(draft.text)
+	check(app._pop_leaderboard == panel and state.round_submission(round_id).is_empty(),
+		"Duplicate finish callbacks cannot attach a second result or retry a failed write implicitly")
 	app._show_collection()
-	await settle()
-	check(not app._pop.is_visible_in_tree() and not app._valid_focus(draft)
-		and draft.focus_mode == Control.FOCUS_NONE,
-		"Opening the menu hides the result form and fences its unfinished text input")
 	app._players_button.pressed.emit()
 	await settle()
 	var menu_name := app._leaderboard_panel.find_child("LeaderboardName", true, false) as LineEdit
 	menu_name.text = "Casey"
 	menu_name.text_changed.emit(menu_name.text)
+	storage.writable = true
 	action(app._leaderboard_panel, "LeaderboardAvatar_bear").pressed.emit()
 	action(app._leaderboard_panel, "LeaderboardCreatePlayer").pressed.emit()
 	await settle()
 	var casey: String = str(state.profiles.back().id)
-	check(state.profiles.size() == 3 and state.profiles.back().name == "Casey", "Players adds a new identity while a Pop result is pending")
+	check(state.profiles.size() == 3 and state.profiles.back().name == "Casey", "The menu can add a future player while a result awaits retry")
 	app._controller_back()
 	app._hide_collection()
 	await settle()
-	var returned: Dictionary = panel.snapshot()
-	var returned_draft := panel.find_child("LeaderboardName", true, false) as LineEdit
-	check(app._pop_leaderboard == panel and action(panel, "LeaderboardPlayer_" + casey) != null,
-		"Returning from the menu refreshes the existing Pop chooser with the new player")
-	check(returned.round_id == round_id and returned.selected_player == player_id and not returned.submitted
-		and returned_draft != null and returned_draft.text == "Unfinished draft",
-		"Refreshing players preserves pending round identity, chosen player and unfinished draft")
-	check(state.board("pop").is_empty() and state.profiles.all(func(profile: Dictionary) -> bool: return profile.name != "Unfinished draft"),
-		"Returning to the round does not save its score or an unfinished profile")
-	storage.writable = false
-	var bytes_before: String = str(storage.text)
-	action(panel, "LeaderboardSaveScore").pressed.emit()
-	check(not panel.snapshot().submitted and not panel.snapshot().error.is_empty()
-		and storage.text == bytes_before and not panel.snapshot().animation.active,
-		"Failed persistence keeps the round available without celebrating or modifying storage")
-	storage.writable = true
+	check(app._pop_leaderboard == panel and panel.snapshot().assigned_player == player_id
+		and action(panel, "LeaderboardPlayer_" + casey) == null and not panel.snapshot().submitted,
+		"Returning from profile management preserves the failed round's locked player")
 	var writes_before: int = storage.writes
 	action(panel, "LeaderboardSaveScore").pressed.emit()
 	await settle()
 	check(panel.snapshot().submitted and state.board("pop")[0].metric == 1 and state.round_submission(round_id).player_id == player_id,
-		"Retry saves the actual hit total for the selected player")
+		"Retry saves the actual hit total for the player selected before play")
 	check(not panel.snapshot().animation.active, "Reduced motion shows the saved rank without a moving celebration")
+	panel.save_assigned_score()
 	panel._save_score()
-	check(storage.writes == writes_before + 1, "Repeated submission cannot write or reward the same round twice")
-	check(action(panel, "LeaderboardSaveScore") == null, "Saved results no longer offer score reassignment")
+	check(storage.writes == writes_before + 1, "Repeated automatic or manual submission cannot save the same round twice")
+	check(action(panel, "LeaderboardSaveScore") == null, "Saved results need no further attribution or save action")
 	app._show_collection()
 	app._leaderboards_button.pressed.emit()
 	await settle()
@@ -211,12 +362,31 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 		"Reopening the saved board does not replay the celebration")
 	app._controller_back()
 	app._hide_collection()
-	app._configure_pop(32)
+	app._pop.replay_button.pressed.emit()
 	await settle()
-	check(app._leaderboard_round_id != round_id and app._leaderboard_result.is_empty(),
-		"A new Voice Pop round gets a new identity and clears pending attribution")
+	check(app._leaderboard_gate == "pop" and action(app._leaderboard_panel, "LeaderboardStartGame").disabled,
+		"Play again asks who will play next instead of silently reusing the last player")
+	app._controller_back()
+	check(app._pop.game.phase == "finished" and app._leaderboard_round_id == round_id and state.board("pop")[0].metric == 1,
+		"Cancelling replay preserves the completed result and saved personal best")
+	app._pop.replay_button.pressed.emit()
+	await settle()
+	action(app._leaderboard_panel, "LeaderboardPlayer_" + casey).pressed.emit()
+	action(app._leaderboard_panel, "LeaderboardStartGame").pressed.emit()
+	await settle()
+	check(app._leaderboard_round_id != round_id and app._leaderboard_result.is_empty()
+		and app._pop_player_id == casey and app._pop.game.phase == "ready",
+		"A confirmed replay creates a fresh round for the newly selected player")
 	check(not app.leaderboard_snapshot().visible and state.board("pop")[0].metric == 1,
-		"Replaying hides previous round attribution while retaining the personal best")
+		"Replaying hides the previous board while retaining its personal best")
+	app._on_voice_state([true, true, "Listening"])
+	app._pop._advance_game(60.0)
+	await settle()
+	var next_round: String = app._leaderboard_round_id
+	check(state.round_submission(next_round).player_id == casey and app._pop_leaderboard.snapshot().submitted,
+		"The next result automatically saves under its newly selected player without another question")
+	check(action(app._pop_leaderboard, "LeaderboardPlayer_" + casey) == null,
+		"Successful automatic saving also omits the old results attribution controls")
 	app.choose_mode("match")
 	await settle()
 
@@ -281,7 +451,7 @@ func _check_memory(app, state, player_id: String) -> void:
 	for mode in ["pop", "match", "memory"]:
 		action(app._leaderboard_panel, "LeaderboardMode_" + mode).pressed.emit()
 		await settle()
-		check(app.leaderboard_snapshot().mode == mode and app.leaderboard_snapshot().rows.size() == 1,
+		check(app.leaderboard_snapshot().mode == mode and app.leaderboard_snapshot().rows.size() == (2 if mode == "pop" else 1),
 			"Saved results can browse the independent %s board" % mode)
 	app._controller_back()
 

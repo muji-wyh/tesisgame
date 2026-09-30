@@ -3,6 +3,7 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { inlineMascot } = require('../../tools/prepare-godot.cjs');
+const { finishOnboarding, leaderboardSnapshot } = require('./game-ui.cjs');
 
 const root = path.resolve(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'build', 'web', 'index.html'), 'utf8')
@@ -874,7 +875,10 @@ test('game input stays paused while the ready game is still covered by the loadi
   await page.screenshot({ path: testInfo.outputPath('real-ready-playground.png'), scale: 'css' });
   await pressGamepad(page, 9);
   await expect(page.locator('#status')).toBeHidden();
-  await expect(page.locator('#game-status')).toHaveText(initial);
+  await expect.poll(async () => (await leaderboardSnapshot(page)).view).toBe('onboarding');
+  await pressGamepad(page, 3);
+  expect((await leaderboardSnapshot(page)).view, 'Room shortcuts cannot bypass first-player creation').toBe('onboarding');
+  await finishOnboarding(page);
   await page.screenshot({ path: testInfo.outputPath('real-entered-game.png'), scale: 'css' });
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");

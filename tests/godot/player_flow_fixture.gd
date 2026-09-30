@@ -1,0 +1,23 @@
+extends RefCounted
+
+const State = preload("res://scripts/leaderboard_state.gd")
+
+
+static func install(app, directory: String, filename: String = "leaderboards.cfg") -> void:
+	app.leaderboard_state = State.new(directory + "/" + filename)
+	assert(app.leaderboard_state.load_state())
+	assert(app.leaderboard_state.create_profile("Test player", "duck").ok)
+
+
+static func choose_pop_player(app) -> void:
+	if app._leaderboard_gate != "pop":
+		app._request_pop_player()
+	var panel = app._leaderboard_panel
+	var id: String = str(app.leaderboard_state.profiles[0].id)
+	var choice := panel.find_child("LeaderboardPlayer_" + id, true, false) as Button
+	assert(choice != null)
+	choice.pressed.emit()
+	var start := panel.find_child("LeaderboardStartGame", true, false) as Button
+	assert(start != null and not start.disabled)
+	start.pressed.emit()
+	assert(app._pop_player_id == id and not app._leaderboard_overlay.visible)

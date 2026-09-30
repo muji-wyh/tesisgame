@@ -225,6 +225,7 @@ func _check_loading_theme(directory: String) -> void:
 		var prefix: String = directory + "/loading-%d" % index
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(prefix + "-medals.cfg", prefix + "-legacy.cfg")
 		app.playroom_save_path = prefix + "-room.cfg"
+		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory, "loading-%d-leaderboards.cfg" % index)
 		root.add_child(app)
 		await settle()
 		app._preferred_theme = "autumn"

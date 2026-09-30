@@ -23,6 +23,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -136,6 +137,8 @@ func _run() -> void:
 		await process_frame
 		for mode in ["match", "memory", "pop"]:
 			app.choose_mode(mode)
+			if mode == "pop":
+				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await process_frame
 			await process_frame
 			for button in app._mode_buttons:

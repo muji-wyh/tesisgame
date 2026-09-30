@@ -492,6 +492,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(390, 844)
 	root.add_child(app)
 	await settle()
@@ -507,6 +508,8 @@ func _run() -> void:
 		var original_positions: Array[Vector2] = []
 		for mode in modes:
 			app.choose_mode(mode)
+			if mode == "pop":
+				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await settle()
 			var current_positions: Array[Vector2] = []
 			for button in app._mode_buttons:
@@ -521,7 +524,7 @@ func _run() -> void:
 		var view = app._pop
 		view.set_process(false)
 		check(view.find_child("ChoosePopMode", true, false) == null and view.find_child("MultiplayerStatus", true, false) == null,
-			"Voice Pop goes directly to browser listening without a play-mode selector")
+			"Voice Pop uses browser listening without the removed multiplayer selector")
 		check(view.is_visible_in_tree() and not app.grid.is_visible_in_tree() and not app._memory.visible,
 			"Voice Pop owns the visible playfield at " + str(dimensions))
 		check(not app.hint_button.visible and not app._voice_button.visible and not app._memory.study_button.visible,
@@ -684,6 +687,7 @@ func _run() -> void:
 			view._results.scroll_vertical = 0
 			await settle()
 		view.replay_button.pressed.emit()
+		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		check(view.game.phase == "ready" and view.game.hits == 0 and view.game.remaining == PopModel.DURATION,
 			"Play again returns to a fresh round that waits for microphone permission")
 		check(not view._results.visible and not bool(view.snapshot().results_hits.active),
@@ -696,6 +700,7 @@ func _run() -> void:
 	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
 	app.playroom_state.age_band_id = "4-6"
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_level(word) == 1),
 		"Voice Pop uses only the selected age group's vocabulary")
 	app._pop.set_process(false)

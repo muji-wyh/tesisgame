@@ -29,6 +29,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -67,6 +68,8 @@ func _exercise(app, directory: String) -> void:
 		var lesson: Array = app.model.lesson_words.duplicate(true)
 		for mode in ["memory", "pop", "match"]:
 			app.choose_mode(mode)
+			if mode == "pop":
+				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			check(app.model.lesson_words == lesson, "Gift words remain identical in " + mode)
 	check(app.medal_progress.counts == original_counts and app.playroom_state.toy_id == "toy-ball", "Selecting goals and learning never grant or equip locked gifts")
 	app.choose_theme("spring")

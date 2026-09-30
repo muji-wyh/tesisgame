@@ -1,16 +1,13 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { enterGame, chooseMode, metrics, tap, rendered, openRewards, contentBounds, uiScale } = require('./game-ui.cjs');
+const { enterGame, chooseMode, chooseRoundPlayer, metrics, tap, rendered, openRewards,
+  leaderboardSnapshot: snapshot, leaderboardControl: control, activateLeaderboardControl: activate } = require('./game-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.leaderboards';
 // This fixture is also loaded by the native state suite before browser coverage.
 const RANKING_FIXTURE = '[leaderboard]\nversion=1\n' +
   'profiles=[{"id":"player-a","name":"Avery","avatar":"fox"},{"id":"player-b","name":"Blake","avatar":"duck"}]\n' +
   'bests={"pop":{"player-a":{"hits":1},"player-b":{"hits":0}},"match":{},"memory":{}}\nreceipts=[]\n';
-
-async function snapshot(page) {
-  return page.locator('#leaderboard-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
-}
 
 async function installFixtures(page, { seed = null, speech = false } = {}) {
   await page.addInitScript(({ key, seed, speech }) => {
@@ -26,10 +23,11 @@ async function installFixtures(page, { seed = null, speech = false } = {}) {
       return setItem.call(this, name, value);
     };
     if (!speech) return;
-    const fixture = { instances: [] };
+    const fixture = { instances: [], starts: 0 };
     class Recognition {
       constructor() { this.results = []; fixture.instances.push(this); }
       start() {
+        fixture.starts++;
         this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
         queueMicrotask(() => this.callbacks.start?.());
       }
@@ -58,64 +56,6 @@ function observeErrors(page) {
   return errors;
 }
 
-async function control(page, name) {
-  await expect.poll(async () => (await snapshot(page)).controls?.some(item => item.name === name),
-    { message: `${name} is exposed by the visible interface` }).toBe(true);
-  return (await snapshot(page)).controls.find(item => item.name === name);
-}
-
-async function focusControl(page, name) {
-  // Real keyboard focus reveals controls inside the modal and result scrollers.
-  // It also exercises the same focus fence as keyboard and gamepad users.
-  for (let attempt = 0; attempt < 55; attempt++) {
-    const current = await snapshot(page);
-    const target = current.controls?.find(item => item.name === name);
-    if (target?.focused) return target;
-    await page.keyboard.press('Tab');
-    // General game controls can occur between embedded leaderboard controls.
-    // Focus diagnostics are sampled every 100 ms, so let each Tab be observed.
-    await page.waitForTimeout(130);
-  }
-  throw new Error(`Keyboard navigation did not reach ${name}: ${JSON.stringify(await snapshot(page))}`);
-}
-
-async function activate(page, name) {
-  let item = await control(page, name);
-  await expect.poll(async () => (await snapshot(page)).controls.find(entry => entry.name === name)?.disabled,
-    { message: `${name} is available` }).toBe(false);
-  const bounds = await metrics(page);
-  const current = await snapshot(page);
-  item = current.controls.find(entry => entry.name === name);
-  const back = current.controls.find(entry => entry.name === 'LeaderboardClose');
-  const content = contentBounds(bounds), inset = 16 / uiScale(bounds);
-  // Voice Pop's result scroller is inset from the playfield on both ends.
-  // A button inside the canvas may still be clipped by that inner viewport.
-  const insidePanel = current.visible && name !== 'LeaderboardClose';
-  const top = insidePanel ? current.modal && back ? back.rect[1] + back.rect[3] : content.top + inset : 0;
-  const bottom = insidePanel ? bounds.height - content.padding - (current.modal ? 0 : inset) : bounds.height;
-  const fitsViewport = ([left, upper, width, height]) => left >= 0 && upper >= top &&
-    left + width <= bounds.width + 1 && upper + height <= bottom + 1;
-  let [x, y, width, height] = item.rect;
-  if (!fitsViewport(item.rect)) {
-    // An error inserted above a focused button can move it out of the clip.
-    // Refocusing through real navigation asks its scroller to reveal it again.
-    if (item.focused) {
-      await page.keyboard.press('Shift+Tab');
-      await page.waitForTimeout(130);
-    }
-    item = await focusControl(page, name);
-    await expect.poll(async () => {
-      item = (await snapshot(page)).controls.find(entry => entry.name === name);
-      return fitsViewport(item.rect);
-    }, { message: `${name} is fully inside its scroll viewport` }).toBe(true);
-    [x, y, width, height] = item.rect;
-  }
-  expect(width, `${name} has a nonempty target`).toBeGreaterThan(0);
-  expect(height, `${name} has a nonempty target`).toBeGreaterThan(0);
-  await tap(page, x + width / 2, y + height / 2);
-  await rendered(page);
-}
-
 async function openPanel(page, name) {
   await openRewards(page);
   await activate(page, name);
@@ -127,6 +67,22 @@ async function typeName(page, name) {
   await rendered(page);
 }
 
+async function replay(page) {
+  // Keyboard navigation reveals Play again even when a rank rise scrolled down.
+  for (let attempt = 0; attempt < 55; attempt++) {
+    const button = await page.locator('#pop-status').evaluate(element =>
+      JSON.parse(element.dataset.controls || '[]').find(item => item.name === 'Replay' && !item.disabled));
+    if (button) {
+      await tap(page, button.x + button.width / 2, button.y + button.height / 2);
+      await rendered(page);
+      return;
+    }
+    await page.keyboard.press('Shift+Tab');
+    await page.waitForTimeout(130);
+  }
+  throw new Error('Play again could not be revealed through the result focus order.');
+}
+
 function expectNarrowLayout(current, bounds) {
   for (const item of current.controls || []) {
     const [x, , width, height] = item.rect;
@@ -136,20 +92,35 @@ function expectNarrowLayout(current, bounds) {
   }
 }
 
-test('players persist locally and the menu offers a separate board for every mode', async ({ page }, info) => {
+test('first entry requires a saved player, players persist locally and every mode has a board', async ({ page }, info) => {
   // Software-rendered canvas calls are slow; action deadlines remain strict.
   test.setTimeout(180000);
   const errors = observeErrors(page);
   await installFixtures(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await enterGame(page);
-  await openPanel(page, 'MenuPlayers');
-  await expect.poll(async () => (await snapshot(page)).view).toBe('players');
+  await enterGame(page, { onboarding: false });
+  await expect.poll(async () => (await snapshot(page)).view).toBe('onboarding');
+  await page.screenshot({ path: info.outputPath('first-player-onboarding.png') });
+  expect((await snapshot(page)).controls.some(item => item.name === 'LeaderboardClose'),
+    'The mandatory first player cannot be dismissed with Back').toBe(false);
+  await page.keyboard.press('Escape');
+  await rendered(page);
+  expect((await snapshot(page)).view, 'Escape cannot skip first-player creation').toBe('onboarding');
   expect((await control(page, 'LeaderboardCreatePlayer')).disabled, 'A blank profile cannot be saved').toBe(true);
   await activate(page, 'LeaderboardAvatar_fox');
   await typeName(page, 'Avery');
+  await page.evaluate(() => { window.__denyLeaderboardSave = true; });
   await activate(page, 'LeaderboardCreatePlayer');
+  await expect.poll(async () => (await snapshot(page)).error || '').not.toBe('');
+  expect((await snapshot(page)).view, 'Save failure keeps gameplay behind the first-player gate').toBe('onboarding');
+  expect((await snapshot(page)).profiles).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY)).toBeNull();
+  await page.evaluate(() => { window.__denyLeaderboardSave = false; });
+  await activate(page, 'LeaderboardCreatePlayer');
+  await expect.poll(async () => (await snapshot(page)).visible).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  await openPanel(page, 'MenuPlayers');
   await expect.poll(async () => (await snapshot(page)).profiles?.map(item => item.name)).toEqual(['Avery']);
   const profile = (await snapshot(page)).profiles[0];
   expect(profile.avatar).toBe('fox');
@@ -175,7 +146,9 @@ test('players persist locally and the menu offers a separate board for every mod
     expect((await snapshot(page)).rows, 'An unsaved round never creates a score').toEqual([]);
   }
   await page.reload();
-  await enterGame(page);
+  await enterGame(page, { onboarding: false });
+  await expect.poll(async () => (await snapshot(page)).visible).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await openPanel(page, 'MenuPlayers');
   expect((await snapshot(page)).profiles).toEqual([profile]);
   expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY)).toContain('Avery');
@@ -183,14 +156,24 @@ test('players persist locally and the menu offers a separate board for every mod
 });
 
 test('a completed Voice Pop round saves once, survives a failed save and visibly climbs the local board', async ({ page }, info) => {
-  test.setTimeout(130000);
+  test.setTimeout(170000);
   const errors = observeErrors(page);
   await installFixtures(page, { seed: RANKING_FIXTURE, speech: true });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await enterGame(page);
-  await chooseMode(page, 'pop');
+  await chooseMode(page, 'pop', { choosePlayer: false });
+  await expect.poll(async () => (await snapshot(page)).view).toBe('picker');
+  await page.screenshot({ path: info.outputPath('voice-pop-player-picker.png') });
+  expect((await control(page, 'LeaderboardStartGame')).disabled, 'Start needs an explicit player choice').toBe(true);
+  expect((await snapshot(page)).selected_player).toBe('');
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'The microphone stays off while choosing a player').toBe(0);
+  const remaining = await page.locator('#pop-status').getAttribute('data-remaining');
+  await page.waitForTimeout(250);
+  expect(await page.locator('#pop-status').getAttribute('data-remaining'), 'The round clock does not tick in the player picker').toBe(remaining);
+  await chooseRoundPlayer(page, { playerId: 'player-b' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await snapshot(page)).round_player_id).toBe('player-b');
   await expect.poll(() => page.locator('#pop-status').evaluate(element => JSON.parse(element.dataset.targets || '[]').length)).toBeGreaterThan(0);
   for (let hit = 1; hit <= 2; hit++) {
     await expect.poll(() => page.locator('#pop-status').evaluate(element => JSON.parse(element.dataset.targets || '[]').length)).toBeGreaterThan(0);
@@ -198,15 +181,16 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
     await page.evaluate(word => window.__leaderboardSpeech.instances.at(-1).emit(word), word);
     await expect(page.locator('#pop-status')).toHaveAttribute('data-hits', String(hit));
   }
+  await page.evaluate(() => { window.__denyLeaderboardSave = true; });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 60000 });
   await expect.poll(async () => (await snapshot(page)).round_id || '').not.toBe('');
   const round = (await snapshot(page)).round_id;
   expect((await snapshot(page)).submitted).toBe(false);
-  expect((await control(page, 'LeaderboardSaveScore')).disabled, 'A finished score requires an explicit player choice').toBe(true);
-  await activate(page, 'LeaderboardPlayer_player-b');
-  await page.evaluate(() => { window.__denyLeaderboardSave = true; });
-  await activate(page, 'LeaderboardSaveScore');
   await expect.poll(async () => (await snapshot(page)).error || '').not.toBe('');
+  expect((await snapshot(page)).selected_player, 'The automatic result save uses the player selected before play').toBe('player-b');
+  expect((await snapshot(page)).controls.some(item => item.name.startsWith('LeaderboardPlayer_')),
+    'Results never ask for a second player choice, including after a save failure').toBe(false);
+  expect((await control(page, 'LeaderboardSaveScore')).disabled, 'A failed automatic save has an enabled retry').toBe(false);
   expect((await snapshot(page)).submitted, 'A storage failure must not claim or animate the round').toBe(false);
   expect((await snapshot(page)).animation.active).toBe(false);
   expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY)).toBe(RANKING_FIXTURE);
@@ -280,6 +264,19 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
     'A saved round cannot be reassigned to another player').toBe(false);
   const saved = await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY);
   expect(await page.evaluate(() => window.__leaderboardWrites.length), 'The failed attempt was retried with one durable write').toBe(1);
+  const startsBeforeReplay = await page.evaluate(() => window.__leaderboardSpeech.starts);
+  await replay(page);
+  await expect.poll(async () => (await snapshot(page)).view).toBe('picker');
+  expect((await snapshot(page)).selected_player, 'Replay requires a fresh explicit choice').toBe('');
+  expect((await control(page, 'LeaderboardStartGame')).disabled).toBe(true);
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'Replay waits for the next player before listening').toBe(startsBeforeReplay);
+  await activate(page, 'LeaderboardPlayer_player-a');
+  await expect.poll(async () => (await snapshot(page)).selected_player).toBe('player-a');
+  await activate(page, 'LeaderboardStartGame');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await snapshot(page)).round_player_id).toBe('player-a');
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts)).toBeGreaterThan(startsBeforeReplay);
+  expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY), 'An unfinished replay cannot overwrite the completed round').toBe(saved);
   await page.reload();
   await enterGame(page);
   await openPanel(page, 'MenuLeaderboards');

@@ -18,6 +18,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -247,6 +248,7 @@ func _run() -> void:
 
 func _check_pop_launch_audio(app) -> void:
 	app.new_round(84, true, "", "pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	var view = app._pop
 	view.set_process(false)
 	var launches: Array[int] = []
@@ -288,6 +290,7 @@ func _check_pop_launch_audio(app) -> void:
 	check(launches == [1, 2] and not player.playing,
 		"Retrying a paused round never replays the cleared launch")
 	app.new_round(85, true, "", "pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	view.set_process(false)
 	launches.clear()
 	app._on_voice_state([true, true, "Listening."])
@@ -299,6 +302,7 @@ func _check_pop_launch_audio(app) -> void:
 		"A long frame never catches up an older target's missed launch sound")
 	for transition in ["home", "hidden", "mode_exit", "mute", "finish"]:
 		app.new_round(86, true, "", "pop")
+		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		view.set_process(false)
 		app._on_voice_state([true, true, "Listening."])
 		check(player.playing, transition + " starts during an audible throw")
@@ -320,6 +324,7 @@ func _check_pop_launch_audio(app) -> void:
 
 func _check_pop_hit_audio(app) -> void:
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	app.audio.set_muted(false)
 	await process_frame
 	app._on_voice_state([true, true, "Listening. Say an English word."])
@@ -356,6 +361,7 @@ func _check_pop_hit_audio(app) -> void:
 	app.choose_mode("match")
 	check(_pop_playing(app.audio) == 0, "Leaving Voice Pop stops all active hit sounds")
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	await process_frame
 	app._on_voice_state([true, true, "Listening. Say an English word."])
 	check(_pop_hit_visible_word(app, 3.0) and _pop_playing(app.audio) == 1, "A new Pop round can start a fresh hit sound")
@@ -374,6 +380,7 @@ func _check_pop_exit_audio(app) -> void:
 	for destination in ["match", "memory"]:
 		for state in ["pending", "listening", "denied", "report", "muted"]:
 			app.choose_mode("pop")
+			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			app._pop.set_process(false)
 			if state in ["listening", "report", "muted"]:
 				app._on_voice_state([true, true, "Listening."])
@@ -408,6 +415,7 @@ func _check_pop_exit_audio(app) -> void:
 			app.audio.set_muted(false)
 			app._pop.set_process(true)
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	app.on_page_hidden()
 	app.choose_mode("match")
 	check(not app.audio.active and not app.audio.music.playing,

@@ -273,6 +273,8 @@ var _pop_result_callback: JavaScriptObject
 var leaderboard_state := LeaderboardState.new()
 var _leaderboard_round_id: String = ""
 var _leaderboard_result: Dictionary = {}
+var _leaderboard_gate: String = ""
+var _pop_player_id: String = ""
 var _leaderboard_overlay: Panel
 var _leaderboard_margins: MarginContainer
 var _leaderboard_panel: LeaderboardPanel
@@ -341,6 +343,9 @@ func _on_loading_finished(args: Array) -> void:
 	_stop_controller_actions()
 	get_tree().paused = false
 	_restore_mode_music()
+	if not leaderboard_state.load_state() or leaderboard_state.profiles.is_empty():
+		_leaderboard_gate = "onboarding"
+		_show_leaderboard("onboarding", false)
 
 
 func _build_controls() -> void:
@@ -728,6 +733,7 @@ func _build_leaderboard_overlay() -> void:
 	scroll.add_child(_leaderboard_panel)
 	_leaderboard_panel.changed.connect(_publish_leaderboards)
 	_leaderboard_panel.score_saved.connect(_leaderboard_score_saved)
+	_leaderboard_panel.player_confirmed.connect(_leaderboard_player_confirmed)
 	resized.connect(_layout_leaderboards)
 	_layout_leaderboards()
 	_leaderboard_overlay.hide()
@@ -763,6 +769,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 			node.focus_mode = Control.FOCUS_NONE
 	leaderboard_state.load_state()
 	_leaderboard_overlay.show()
+	_leaderboard_close.visible = _leaderboard_gate != "onboarding"
 	_leaderboard_close.focus_mode = Control.FOCUS_ALL
 	_found_words_scroll.cancel_drag()
 	_cancel_collection_rails()
@@ -772,12 +779,20 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_leaderboard_panel.configure(leaderboard_state, view, _mode_id, _leaderboard_round_id if include_round else "", _leaderboard_result if include_round else {}, reduced_motion)
 	(_leaderboard_panel.get_parent() as ScrollContainer).scroll_vertical = 0
 	_layout_leaderboards()
-	_leaderboard_close.grab_focus()
-	_announce_status("Players on this device." if view == "players" else "Local leaderboards. Personal bests; tied scores share a rank.")
+	_default_focus().grab_focus()
+	var announcement: String = "Players on this device." if view == "players" else "Local leaderboards. Personal bests; tied scores share a rank."
+	if view == "onboarding":
+		announcement = "Welcome! Create your first player to start playing. Choose an avatar and a name."
+	elif view == "picker":
+		announcement = "Who is playing Voice Pop? Choose a player, then Start playing."
+	_announce_status(announcement)
 	_publish_leaderboards()
 
 
 func _hide_leaderboard() -> void:
+	if _leaderboard_gate == "onboarding":
+		return
+	_leaderboard_gate = ""
 	_leaderboard_panel.settle_animation()
 	_leaderboard_overlay.hide()
 	for control in _leaderboard_focus_modes:
@@ -790,7 +805,38 @@ func _hide_leaderboard() -> void:
 		_default_focus().grab_focus()
 	if collection_page.visible:
 		_announce_collection_state()
+	else:
+		_announce_status(_message.text if model.phase in ["waiting", "matching", "feedback"] else _title.text + " " + _caption.text)
 	_publish_leaderboards()
+	_update_duck()
+
+
+func _request_pop_player() -> void:
+	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+		return
+	if not _stop_pop_listening():
+		return
+	_leaderboard_gate = "pop"
+	_show_leaderboard("picker", false)
+
+
+func _leaderboard_player_confirmed(player_id: String) -> void:
+	if not _leaderboard_overlay.visible or _leaderboard_gate.is_empty():
+		return
+	if not leaderboard_state.ready or not leaderboard_state.profiles.any(func(profile: Dictionary) -> bool: return str(profile.id) == player_id):
+		_leaderboard_panel.refresh_profiles()
+		return
+	var gate: String = _leaderboard_gate
+	_leaderboard_gate = ""
+	_hide_leaderboard()
+	if gate == "pop" and _mode_id == "pop":
+		# Keep the completed result intact until the next player confirms.
+		if _pop.game.phase == "finished":
+			_configure_pop()
+		_pop_player_id = player_id
+		_start_pop_listening()
+	else:
+		_restore_mode_music()
 
 
 func _leaderboard_score_saved(outcome: Dictionary) -> void:
@@ -812,6 +858,8 @@ func leaderboard_snapshot() -> Dictionary:
 	var result: Dictionary = panel.snapshot() if active else {}
 	result["visible"] = active
 	result["modal"] = _leaderboard_overlay.visible
+	result["gate"] = _leaderboard_gate
+	result["round_player_id"] = _pop_player_id
 	var controls: Array = result.get("controls", []).duplicate()
 	var candidates: Array = [_leaderboard_close] if _leaderboard_overlay.visible else [_players_button, _leaderboards_button, _result_board_button]
 	for control in candidates:
@@ -1244,6 +1292,8 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
+	if _leaderboard_gate == "onboarding":
+		return false
 	if _leaderboard_overlay.visible:
 		_hide_leaderboard()
 	_settling_chest = true
@@ -1290,6 +1340,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	_leaderboard_round_id = LeaderboardState.make_round_id()
 	_leaderboard_result.clear()
+	_pop_player_id = ""
 	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
 		model.set_theme(_preferred_theme)
 	for button in cards.values():
@@ -1314,6 +1365,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if not repeat_lesson:
 		_pending_visit_id = model.adventure_id
 		_save_journey()
+	if _mode_id == "pop":
+		_request_pop_player()
 	return true
 
 
@@ -1339,20 +1392,23 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_pop_leaderboard = null
 	_leaderboard_round_id = LeaderboardState.make_round_id()
 	_leaderboard_result.clear()
+	_pop_player_id = ""
 	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
 	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
 	_pop.configure(pool, reduced_motion, seed_value)
+	_pop.retry_button.text = "Choose player"
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or collection_page.visible:
+	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+		return
+	if _pop_player_id.is_empty() or _pop.game.phase == "finished":
+		_request_pop_player()
 		return
 	audio.halt()
 	duck.settle()
 	if not _stop_pop_listening():
 		return
-	if _pop.game.phase == "finished":
-		_configure_pop()
 	if _host == null:
 		_pop.set_listening(true, false, "Voice Pop needs a browser with speech recognition. Open the Web game in Chrome or Safari.")
 		return
@@ -1421,9 +1477,10 @@ func _pop_finished(result: Dictionary) -> void:
 	_pop_leaderboard = LeaderboardPanel.new()
 	_pop_leaderboard.name = "PopLeaderboard"
 	_pop.attach_leaderboard(_pop_leaderboard)
-	_pop_leaderboard.configure(leaderboard_state, "boards", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion)
 	_pop_leaderboard.score_saved.connect(_leaderboard_score_saved)
 	_pop_leaderboard.changed.connect(_publish_leaderboards)
+	_pop_leaderboard.configure(leaderboard_state, "boards", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion, _pop_player_id)
+	_pop_leaderboard.save_assigned_score()
 	_publish_leaderboards()
 
 
@@ -2168,7 +2225,7 @@ func _request_hint() -> void:
 
 
 func _select_card(id: String) -> void:
-	if _mode_id != "match" or collection_page.visible:
+	if _mode_id != "match" or collection_page.visible or _leaderboard_overlay.visible:
 		return
 	if not cards.has(id) or model.card_by_id(id).is_empty():
 		return
@@ -2733,6 +2790,10 @@ func _valid_focus(control: Control) -> bool:
 
 func _default_focus() -> Control:
 	if _leaderboard_overlay.visible:
+		if not _leaderboard_close.visible:
+			for candidate in _leaderboard_panel.controls():
+				if _valid_focus(candidate):
+					return candidate
 		return _leaderboard_close
 	if collection_page.visible:
 		return _collection_back
@@ -2842,7 +2903,7 @@ func _connect_browser() -> void:
 
 
 func _toggle_voice() -> void:
-	if _mode_id != "match" or collection_page.visible:
+	if _mode_id != "match" or collection_page.visible or _leaderboard_overlay.visible:
 		return
 	if _voice_mode:
 		_stop_voice()
@@ -2869,6 +2930,8 @@ func _sync_voice_bounds() -> void:
 
 func _on_voice_state(arguments: Array) -> void:
 	if _mode_id == "pop":
+		if _pop_player_id.is_empty() or _leaderboard_overlay.visible:
+			return
 		_pop.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
 		# Recognition rolls over after an utterance. Let that word's short
 		# emotion finish while the recognizer reconnects automatically.
@@ -3216,6 +3279,8 @@ func _retry_storage() -> void:
 
 
 func _show_collection() -> void:
+	if _leaderboard_overlay.visible:
+		return
 	if _mode_id == "pop":
 		_pop.pause()
 		audio.stop_pop_sounds()

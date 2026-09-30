@@ -61,6 +61,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -113,6 +114,7 @@ func _run() -> void:
 	check(app.model.lesson_words == lesson and app._memory.memory.cards == memory_cards and app._memory.card_buttons.size() == 10
 		and not app.grid.is_visible_in_tree(), "Memory keeps its own ten-card board and order")
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	await settle()
 	check(app.model.lesson_words == lesson and app._pop.is_visible_in_tree()
 		and not app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),

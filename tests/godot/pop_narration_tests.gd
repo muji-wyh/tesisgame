@@ -165,6 +165,7 @@ func _result_lifecycle() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(390, 844)
 	root.add_child(app)
 	await process_frame
@@ -173,6 +174,7 @@ func _result_lifecycle() -> void:
 	app.audio.narration_state_changed.connect(func(state: String) -> void: narration_states.append(state))
 	app.choose_mode("pop")
 	app._configure_pop(37)
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	var view = app._pop
 	view.set_process(false)
 	app._on_voice_state([true, true, "Listening."])
@@ -228,6 +230,7 @@ func _result_lifecycle() -> void:
 	first_review.pressed.emit()
 	check(app.audio.voice.playing, "Review words work again after menu, background, and mute transitions")
 	view.replay_button.pressed.emit()
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	view.set_process(false)
 	check(view.game.phase == "ready" and view.game.hits == 0 and not view._results.visible
 		and not app.audio.voice.playing and not app.audio.narration.playing,
@@ -249,6 +252,7 @@ func _result_lifecycle() -> void:
 		app._pop_hear(review)
 		check(not app.audio.voice.playing, "A late Voice Pop word callback is ignored in " + destination)
 		app.choose_mode("pop")
+		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		view.set_process(false)
 		app._on_voice_state([true, true, "Listening."])
 		view._advance_game(view.game.remaining)

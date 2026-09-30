@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
+const { chooseMode, chooseRoundPlayer, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
@@ -245,6 +245,7 @@ async function action(page, pattern) {
   const button = await visibleAction(page, pattern);
   await tap(page, button.x + button.width / 2, button.y + button.height / 2);
   await rendered(page);
+  if (button.name === 'Replay') await chooseRoundPlayer(page);
   return button;
 }
 
@@ -1214,7 +1215,7 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
     if (reviewedWord || resultsAtEnd(current)) break;
     await scrollResults(page, 180);
   }
-  expect(reviewedWord?.text, 'Word review remains reachable below player attribution in short landscape').toBe(word);
+  expect(reviewedWord?.text, 'Word review remains reachable below the saved leaderboard in short landscape').toBe(word);
   await page.screenshot({ path: info.outputPath('reduced-motion-results.png') });
   await resultAction(page, /^Replay /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');

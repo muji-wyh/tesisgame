@@ -22,6 +22,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(480, 900)
 	root.add_child(app)
 	await process_frame
@@ -43,6 +44,7 @@ func _run() -> void:
 func _start(app, mode: String) -> void:
 	check(app.new_round(84, true, "", mode), "The " + mode + " fixture starts a fresh playable round")
 	if mode == "pop":
+		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		app._pop.set_process(false)
 		app._on_voice_state([true, true, "Listening."])
 

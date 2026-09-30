@@ -35,6 +35,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -76,6 +77,8 @@ func _run() -> void:
 	check(app.playroom_state.age_band_id == "4-6", "Hidden age controls cannot change the preference")
 	for mode in ["memory", "pop", "match"]:
 		app.choose_mode(mode)
+		if mode == "pop":
+			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		await settle()
 		check(app.model.lesson_words == words and app.model.age_band_id == "all",
 			"Switching to " + mode + " retains the active vocabulary, not the next-lesson setting")

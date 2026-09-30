@@ -817,6 +817,7 @@ func _test_scene() -> void:
 	var app = packed.instantiate()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -854,6 +855,7 @@ func _test_scene() -> void:
 		and app._mode_buttons[0].get_theme_stylebox("normal").get_instance_id() == mode_style_id,
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
 	app.choose_mode("pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	check(app._success.total_count == 0 and app._pop.is_visible_in_tree(),
 		"Voice Pop shows its speaking game without card-pair progress")
 	app.choose_mode("memory")

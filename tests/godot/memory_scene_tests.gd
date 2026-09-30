@@ -24,6 +24,7 @@ func _run() -> void:
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -174,6 +175,8 @@ func _run() -> void:
 	check(app.model.phase != "won" and view.memory.phase == "stopped", "Leaving Memory blocks stale completion")
 	for mode in ["match", "memory", "pop"]:
 		app.choose_mode(mode)
+		if mode == "pop":
+			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "Existing " + mode + " mode remains reachable with the same lesson")
 	await _check_feedback_shortcut_focus(app)
 	await _check_host_layout(app)

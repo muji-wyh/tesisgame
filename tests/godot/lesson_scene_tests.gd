@@ -23,6 +23,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -35,6 +36,8 @@ func _run() -> void:
 	var world: String = app.model.theme_id
 	for mode in ["memory", "pop", "match"]:
 		app.choose_mode(mode)
+		if mode == "pop":
+			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		check(app.model.lesson_words == lesson and app.model.theme_id == world, "Mode " + mode + " retains the exact lesson and world")
 		check(app.model.successes == 0 and app.model.mistakes == 0, "Mode change resets only the attempt")
 		if mode == "memory":

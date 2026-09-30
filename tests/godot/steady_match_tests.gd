@@ -61,6 +61,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -219,6 +220,8 @@ func _run() -> void:
 	for mode in ["pop", "memory", "match"]:
 		root.size = Vector2i(480, 900)
 		app.choose_mode(mode)
+		if mode == "pop":
+			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		await settle()
 		root.size = Vector2i(480, 480)
 		await settle()

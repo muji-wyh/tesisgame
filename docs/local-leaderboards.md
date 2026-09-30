@@ -4,6 +4,8 @@ Players and scores belong to the current device and browser profile. There are n
 
 The menu has **Players** and **Leaderboards** entries. Up to ten players can choose an emoji avatar and a name with 1–20 characters. Names may use Unicode; control characters are rejected. Player IDs distinguish profiles even when names match. Creating and selecting players does not record voices or require voice enrollment. Voice Pop continues to use its existing microphone flow for gameplay.
 
+When entering from the loading screen for the first time, create a player before continuing to the game. The avatar and name must be saved successfully before the welcome flow completes. Existing players skip this step.
+
 ## Ranking rules
 
 Each player has one personal best per mode. Boards combine completed rounds across themes and age selections.
@@ -16,7 +18,9 @@ Each player has one personal best per mode. Boards combine completed rounds acro
 
 Matching ranking values share a place, using competition ranks such as **1, 1, 3**. Profile creation order keeps the display stable among ties; it does not break the tie. A worse or equal result never replaces a personal best.
 
-After a round, select who played and save the result. A saved round stays assigned to that player. The leaderboard appears with the result; the menu also provides access to every mode's board. A player can be created from the result screen when needed.
+Before every Voice Pop round, choose who will play and press **Start playing**. A player can also be created in this chooser. The round keeps that identity, and its finished score saves automatically before the leaderboard celebration. Voice Pop results do not ask for the player again. If saving fails, **Retry saving** keeps the same player and round.
+
+After a Match or Memory round, select who played and save the result. A saved round stays assigned to that player. The leaderboard appears with the result; the menu also provides access to every mode's board. Match and Memory players can still be created from their result screens when needed.
 
 When a saved personal best improves the player's place, their avatar and name move upward while displaced rows make room, with a gold trail, glow, and sparkles. First entries have a separate arrival celebration. A higher score that retains the same rank does not claim a rank increase. Reduced motion displays the final ordering directly. Hiding or rebuilding the panel settles the effect, and reopening a saved result does not replay the improvement.
 
@@ -56,4 +60,4 @@ npm run build:web
 npx playwright test tests/browser/leaderboards.spec.cjs --project=desktop-chromium --project=iphone-webkit
 ```
 
-Coverage includes ties and all ranking rules, profile limits and validation, failed saves and retry, corrupt save preservation, native recovery, repeated attribution, rank movement, browser reload, narrow layouts, and reduced motion. Browser microphone fixtures exercise the normal game result flow without recording a real voice. Real-device browser testing remains useful for keyboard behavior, touch scrolling, and rendering performance.
+Coverage includes ties and all ranking rules, profile limits and validation, first-player onboarding, explicit Voice Pop player selection, automatic score attribution, failed saves and retry, corrupt save preservation, native recovery, repeated attribution, rank movement, browser reload, narrow layouts, and reduced motion. Browser microphone fixtures exercise the normal game result flow without recording a real voice. Real-device browser testing remains useful for keyboard behavior, touch scrolling, and rendering performance.

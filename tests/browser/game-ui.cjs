@@ -53,6 +53,7 @@ async function chooseMode(page, name, options = {}) {
   const rect = modeRect(await metrics(page), name, options);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
+  if (name === 'pop' && options.choosePlayer !== false) await chooseRoundPlayer(page);
 }
 
 async function chooseTheme(page, index) {
@@ -390,7 +391,89 @@ async function dragRoomToy(page, name, input = 'mouse') {
 }
 
 async function rendered(page) {
-  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.locator('#canvas').evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
+async function leaderboardSnapshot(scope) {
+  return scope.locator('#leaderboard-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
+}
+
+async function leaderboardControl(scope, name) {
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).controls?.some(item => item.name === name),
+    { message: `${name} is exposed by the visible interface` }).toBe(true);
+  return (await leaderboardSnapshot(scope)).controls.find(item => item.name === name);
+}
+
+async function focusLeaderboardControl(scope, name) {
+  for (let attempt = 0; attempt < 55; attempt++) {
+    const current = await leaderboardSnapshot(scope);
+    const target = current.controls?.find(item => item.name === name);
+    if (target?.focused) return target;
+    await scope.locator('#canvas').press('Tab');
+    // Focus diagnostics are sampled every 100 ms, including within an iframe.
+    await scope.locator('#canvas').evaluate(() => new Promise(resolve => setTimeout(resolve, 130)));
+  }
+  throw new Error(`Keyboard navigation did not reach ${name}: ${JSON.stringify(await leaderboardSnapshot(scope))}`);
+}
+
+async function activateLeaderboardControl(scope, name) {
+  let item = await leaderboardControl(scope, name);
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).controls.find(entry => entry.name === name)?.disabled,
+    { message: `${name} is available` }).toBe(false);
+  const bounds = await metrics(scope), current = await leaderboardSnapshot(scope);
+  item = current.controls.find(entry => entry.name === name);
+  const back = current.controls.find(entry => entry.name === 'LeaderboardClose');
+  const content = contentBounds(bounds), inset = 16 / uiScale(bounds);
+  const insidePanel = current.visible && name !== 'LeaderboardClose';
+  const top = insidePanel ? current.modal ? back ? back.rect[1] + back.rect[3] : content.padding : content.top + inset : 0;
+  const bottom = insidePanel ? bounds.height - content.padding - (current.modal ? 0 : inset) : bounds.height;
+  const fitsViewport = ([left, upper, width, height]) => left >= 0 && upper >= top &&
+    left + width <= bounds.width + 1 && upper + height <= bottom + 1;
+  if (!fitsViewport(item.rect)) {
+    // Refocusing also reveals a button displaced by a newly inserted save error.
+    if (item.focused) {
+      await scope.locator('#canvas').press('Shift+Tab');
+      await scope.locator('#canvas').evaluate(() => new Promise(resolve => setTimeout(resolve, 130)));
+    }
+    item = await focusLeaderboardControl(scope, name);
+    await expect.poll(async () => {
+      item = (await leaderboardSnapshot(scope)).controls.find(entry => entry.name === name);
+      return fitsViewport(item.rect);
+    }, { message: `${name} is fully inside its scroll viewport` }).toBe(true);
+  }
+  const [x, y, width, height] = item.rect;
+  expect(width, `${name} has a nonempty target`).toBeGreaterThan(0);
+  expect(height, `${name} has a nonempty target`).toBeGreaterThan(0);
+  if (scope.touchscreen) {
+    await tap(scope, x + width / 2, y + height / 2);
+  } else {
+    // A locator-relative pointer gesture also works in embedded game frames.
+    await scope.locator('#canvas').click({ position: { x: (x + width / 2) * bounds.scale, y: (y + height / 2) * bounds.scale } });
+  }
+  await rendered(scope);
+}
+
+async function finishOnboarding(scope, { name = 'Test player', avatar = 'fox' } = {}) {
+  await expect.poll(async () => typeof (await leaderboardSnapshot(scope)).visible,
+    { message: 'The first-entry player gate is initialized' }).toBe('boolean');
+  if ((await leaderboardSnapshot(scope)).view !== 'onboarding') return;
+  await activateLeaderboardControl(scope, `LeaderboardAvatar_${avatar}`);
+  await activateLeaderboardControl(scope, 'LeaderboardName');
+  await scope.locator('#canvas').pressSequentially(name);
+  await activateLeaderboardControl(scope, 'LeaderboardCreatePlayer');
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '',
+    { message: 'A durable first player unlocks entry to the game' }).not.toBe('onboarding');
+}
+
+async function chooseRoundPlayer(scope, { playerId } = {}) {
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).view,
+    { message: 'Every fresh Voice Pop round requires a player before it starts' }).toBe('picker');
+  const current = await leaderboardSnapshot(scope);
+  const chosen = playerId || current.profiles[0]?.id;
+  expect(chosen, 'A registered player is available before starting Voice Pop').toBeTruthy();
+  await activateLeaderboardControl(scope, `LeaderboardPlayer_${chosen}`);
+  await activateLeaderboardControl(scope, 'LeaderboardStartGame');
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '').not.toBe('picker');
 }
 
 async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '', trackSourceLifecycle = false } = {}) {
@@ -488,7 +571,7 @@ async function visibleColorCount(page, png) {
   }, png.toString('base64'));
 }
 
-async function enterGame(scope) {
+async function enterGame(scope, { onboarding = true } = {}) {
   await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
   const enter = scope.locator('#enter-game');
   await expect(enter).toBeVisible();
@@ -497,6 +580,7 @@ async function enterGame(scope) {
   await enter.click();
   await expect(scope.locator('body')).toHaveAttribute('data-engine-ready', 'true');
   await expect(scope.locator('#status')).toBeHidden();
+  if (onboarding) await finishOnboarding(scope);
 }
 
 async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.' } = {}) {
@@ -618,4 +702,5 @@ function resultPoint(bounds, key, { gift = false, message = false } = {}) {
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
+  leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, finishOnboarding, chooseRoundPlayer,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

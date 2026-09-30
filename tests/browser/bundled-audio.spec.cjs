@@ -64,7 +64,7 @@ test('the first Enter game gesture starts bundled theme music without another in
 
   // This is the first and only gesture. A card, theme or Pip tap here would
   // hide the regression by calling audio.interact() after the loading handoff.
-  await enterGame(page);
+  await enterGame(page, { onboarding: false });
   const recording = `assets/audio/bgm/${theme}.wav`;
   const music = await expectRecording(page, before.sounds, recording, { active: true });
   const output = await expectOutputEnergy(page);
