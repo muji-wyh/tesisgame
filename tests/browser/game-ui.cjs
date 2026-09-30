@@ -87,7 +87,8 @@ function collectionBounds(bounds, { shelf = true } = {}) {
   const themeHeight = Math.ceil((compact ? 44 : 52) / scale);
   const shelfHeight = shelf ? (compact ? 76 : 104) / scale : 0, shelfItemWidth = 216 / scale;
   const shelfTop = bounds.height - padding - shelfHeight, themeTop = shelfTop - (shelf ? gap : 0) - themeHeight;
-  const top = padding + headerHeight + gap, roomHeight = Math.max(0, themeTop - gap - top);
+  const playerMenuHeight = Math.ceil(40 / scale);
+  const top = padding + headerHeight + gap + playerMenuHeight + gap, roomHeight = Math.max(0, themeTop - gap - top);
   return { x, width, top, padding, gap, compact, headerHeight, ageTop, ageHeight, ageX, ageWidth,
     themeTop, themeHeight, shelfTop, shelfHeight, shelfItemWidth, roomHeight,
     worldSide: themeHeight, worldGap: Math.round(6 / scale) };
@@ -334,7 +335,7 @@ async function roomControl(page, name, { locked = false, item = '' } = {}) {
 function roomFocusOrder(bounds, state, { locked = false, item = '' } = {}) {
   const layout = roomLayout(bounds, state.owned), active = locked ? item : state.selected;
   const equipped = layout.owned.includes(state.equipped) ? state.equipped : 'ball';
-  const controls = ['pip', ...(locked ? [] : [equipped]), ...layout.owned.filter(toy => locked || toy !== equipped),
+  const controls = ['players', 'leaderboards', 'pip', ...(locked ? [] : [equipped]), ...layout.owned.filter(toy => locked || toy !== equipped),
     ...THEME_IDS.map((_, index) => `world-${index}`)];
   for (const toy of layout.locked) {
     controls.push(toy);

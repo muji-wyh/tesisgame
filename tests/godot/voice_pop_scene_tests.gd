@@ -114,8 +114,8 @@ func check_result_contents(view, summary: Dictionary) -> void:
 		check(view._results.find_child(node_name, true, false) == null,
 			"Results do not retain the removed " + node_name + " control")
 	for button in view._results.find_children("*", "Button", true, false):
-		check(button == view.replay_button or str(button.name).begins_with("Hear_"),
-			"Result actions are limited to Play again and individual word playback")
+		check(button == view.replay_button or str(button.name).begins_with("Hear_") or str(button.name).begins_with("Leaderboard"),
+			"Results offer replay, word playback, and local player attribution")
 	var listed_words: Array = summary.hit_words + summary.missed_words
 	check(view._review_buttons.size() == listed_words.size(), "Every recorded word remains available in its result list")
 	for button in view._review_buttons:

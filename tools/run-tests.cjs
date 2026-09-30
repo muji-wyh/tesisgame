@@ -4,6 +4,10 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
+  leaderboards: {
+    godot: ['leaderboard_state_tests', 'leaderboard_scene_tests'],
+    node: ['leaderboard-host']
+  },
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',

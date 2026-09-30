@@ -18,6 +18,8 @@ const VoicePop = preload("res://scripts/voice_pop.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
+const LeaderboardState = preload("res://scripts/leaderboard_state.gd")
+const LeaderboardPanel = preload("res://scripts/leaderboard_panel.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
@@ -268,6 +270,22 @@ var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _pop_result_callback: JavaScriptObject
+var leaderboard_state := LeaderboardState.new()
+var _leaderboard_round_id: String = ""
+var _leaderboard_result: Dictionary = {}
+var _leaderboard_overlay: Panel
+var _leaderboard_margins: MarginContainer
+var _leaderboard_panel: LeaderboardPanel
+var _pop_leaderboard: LeaderboardPanel
+var _leaderboard_close: Button
+var _leaderboard_focus: Control
+var _leaderboard_focus_modes: Dictionary = {}
+var _leaderboard_menu: HBoxContainer
+var _players_button: Button
+var _leaderboards_button: Button
+var _result_board_button: Button
+var _leaderboard_publish_left: float = 0.0
+var _leaderboard_published: String = ""
 
 
 func _ready() -> void:
@@ -296,6 +314,7 @@ func _ready() -> void:
 	reduced_motion = DisplayServer.accessibility_should_reduce_animation() == 1
 	call_deferred("_sync_controller_accept_startup")
 	_connect_browser()
+	leaderboard_state.load_state()
 	_load_favorite_reward()
 	_refresh_favorite_reward()
 	if _host != null:
@@ -382,7 +401,7 @@ func _build_controls() -> void:
 	collection_button = Icons.new()
 	collection_button.name = "Rewards"
 	collection_button.symbol = Icons.Symbol.MORE
-	collection_button.tooltip_text = "More: Pip's room, worlds and age levels"
+	collection_button.tooltip_text = "More: Pip's room, players and leaderboards"
 	_set_accessibility_name(collection_button, collection_button.tooltip_text)
 	collection_button.pressed.connect(_show_collection)
 	_toolbar.add_child(collection_button)
@@ -535,7 +554,7 @@ func _build_controls() -> void:
 	_found_words.add_theme_constant_override("separation", 8)
 	_found_words_scroll = ReviewScroll.new()
 	_found_words_scroll.custom_minimum_size = Vector2(0, 88)
-	_found_words_scroll.interaction_allowed = func() -> bool: return not collection_page.visible
+	_found_words_scroll.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible
 	_result_text.add_child(_found_words_scroll)
 	_found_words_scroll.add_child(_found_words)
 	_result_footer = VBoxContainer.new()
@@ -562,6 +581,14 @@ func _build_controls() -> void:
 	_new_adventure_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_new_adventure_button.pressed.connect(_new_adventure)
 	result_actions.add_child(_new_adventure_button)
+	_result_board_button = Button.new()
+	_result_board_button.name = "ResultLeaderboard"
+	_result_board_button.text = "Leaderboard"
+	_result_board_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_result_board_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_result_board_button.pressed.connect(_show_result_leaderboard)
+	_toolbar.add_child(_result_board_button)
+	_toolbar.move_child(_result_board_button, collection_button.get_index())
 	_try_gift_button = Button.new()
 	_try_gift_button.text = "Try it with Pip"
 	_try_gift_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -582,6 +609,7 @@ func _build_controls() -> void:
 	header.add_child(_storage_retry_button)
 	header.move_child(_storage_retry_button, 0)
 	_build_collection_shell()
+	_build_leaderboard_overlay()
 	audio = Audio.new()
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
@@ -640,6 +668,21 @@ func _build_collection_shell() -> void:
 	_set_accessibility_name(_collection_back, "Back to game")
 	_collection_back.pressed.connect(_hide_collection)
 	header.add_child(_collection_back)
+	_leaderboard_menu = HBoxContainer.new()
+	_leaderboard_menu.name = "PlayerMenu"
+	column.add_child(_leaderboard_menu)
+	_players_button = Button.new()
+	_players_button.name = "MenuPlayers"
+	_players_button.text = "Players"
+	_players_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_players_button.pressed.connect(_show_leaderboard.bind("players", false))
+	_leaderboard_menu.add_child(_players_button)
+	_leaderboards_button = Button.new()
+	_leaderboards_button.name = "MenuLeaderboards"
+	_leaderboards_button.text = "Leaderboards"
+	_leaderboards_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_leaderboards_button.pressed.connect(_show_leaderboard.bind("boards", false))
+	_leaderboard_menu.add_child(_leaderboards_button)
 	_collection_scroll = ScrollContainer.new()
 	_collection_scroll.name = "PlaygroundViewport"
 	_collection_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -654,6 +697,140 @@ func _build_collection_shell() -> void:
 	collection_page.hide()
 
 
+func _build_leaderboard_overlay() -> void:
+	_leaderboard_overlay = Panel.new()
+	_leaderboard_overlay.name = "LeaderboardOverlay"
+	# Pip inherits the room's layer as well as its own elevated draw order.
+	_leaderboard_overlay.z_index = 200
+	_leaderboard_overlay.add_theme_stylebox_override("panel", Style.box(Color("#10182c"), Color.TRANSPARENT, 0, 0))
+	add_child(_leaderboard_overlay)
+	_leaderboard_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_leaderboard_margins = MarginContainer.new()
+	_leaderboard_overlay.add_child(_leaderboard_margins)
+	_leaderboard_margins.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var column := VBoxContainer.new()
+	_leaderboard_margins.add_child(column)
+	_leaderboard_close = Button.new()
+	_leaderboard_close.name = "LeaderboardClose"
+	_leaderboard_close.text = "Back"
+	_leaderboard_close.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	_leaderboard_close.pressed.connect(_hide_leaderboard)
+	column.add_child(_leaderboard_close)
+	var scroll := ScrollContainer.new()
+	scroll.name = "LeaderboardScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.follow_focus = true
+	column.add_child(scroll)
+	_leaderboard_panel = LeaderboardPanel.new()
+	_leaderboard_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(_leaderboard_panel)
+	_leaderboard_panel.changed.connect(_publish_leaderboards)
+	_leaderboard_panel.score_saved.connect(_leaderboard_score_saved)
+	resized.connect(_layout_leaderboards)
+	_layout_leaderboards()
+	_leaderboard_overlay.hide()
+
+
+func _layout_leaderboards() -> void:
+	var scale: float = Style.ui_scale(self)
+	for edge in ["left", "right"]:
+		_leaderboard_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 660 / scale) * 0.5)))
+	for edge in ["top", "bottom"]:
+		_leaderboard_margins.add_theme_constant_override("margin_" + edge, ceili(12 / scale))
+	Style.action_button(_leaderboard_close, Color("#c2afff"), true)
+
+
+func _show_result_leaderboard() -> void:
+	if not _leaderboard_result.is_empty() and model.chest_state != "opening":
+		_show_leaderboard("boards", true)
+
+
+func _show_leaderboard(view: String, include_round: bool) -> void:
+	if _leaderboard_overlay.visible:
+		return
+	_cancel_chest_hold()
+	_finish_chest_drag()
+	audio.stop_voice()
+	audio.stop_pip_reaction()
+	duck.settle()
+	_leaderboard_focus = get_viewport().gui_get_focus_owner()
+	_leaderboard_focus_modes.clear()
+	for node in find_children("*", "Control", true, false):
+		if not _leaderboard_overlay.is_ancestor_of(node):
+			_leaderboard_focus_modes[node] = node.focus_mode
+			node.focus_mode = Control.FOCUS_NONE
+	leaderboard_state.load_state()
+	_leaderboard_overlay.show()
+	_leaderboard_close.focus_mode = Control.FOCUS_ALL
+	_found_words_scroll.cancel_drag()
+	_cancel_collection_rails()
+	if collection_page.visible:
+		_room.settle()
+	_update_duck()
+	_leaderboard_panel.configure(leaderboard_state, view, _mode_id, _leaderboard_round_id if include_round else "", _leaderboard_result if include_round else {}, reduced_motion)
+	(_leaderboard_panel.get_parent() as ScrollContainer).scroll_vertical = 0
+	_layout_leaderboards()
+	_leaderboard_close.grab_focus()
+	_announce_status("Players on this device." if view == "players" else "Local leaderboards. Personal bests; tied scores share a rank.")
+	_publish_leaderboards()
+
+
+func _hide_leaderboard() -> void:
+	_leaderboard_panel.settle_animation()
+	_leaderboard_overlay.hide()
+	for control in _leaderboard_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = _leaderboard_focus_modes[control]
+	_leaderboard_focus_modes.clear()
+	if _valid_focus(_leaderboard_focus):
+		_leaderboard_focus.grab_focus()
+	else:
+		_default_focus().grab_focus()
+	if collection_page.visible:
+		_announce_collection_state()
+	_publish_leaderboards()
+
+
+func _leaderboard_score_saved(outcome: Dictionary) -> void:
+	if not _page_hidden and not bool(outcome.get("duplicate", false)):
+		audio.interact(model.theme_id, false)
+		audio.cue("correct")
+	var message: String = "Score saved. Rank %d." % int(outcome.get("new_rank", 0))
+	if bool(outcome.get("improved", false)):
+		message = "Rank up! From %d to %d. Score saved." % [int(outcome.get("old_rank", 0)), int(outcome.get("new_rank", 0))]
+	_announce_status(message)
+	_publish_leaderboards()
+
+
+func leaderboard_snapshot() -> Dictionary:
+	var panel = _leaderboard_panel if _leaderboard_overlay.visible else _pop_leaderboard
+	var active: bool = is_instance_valid(panel) and panel.is_inside_tree() and panel.is_visible_in_tree() and not collection_page.visible
+	if _leaderboard_overlay.visible:
+		active = true
+	var result: Dictionary = panel.snapshot() if active else {}
+	result["visible"] = active
+	result["modal"] = _leaderboard_overlay.visible
+	var controls: Array = result.get("controls", []).duplicate()
+	var candidates: Array = [_leaderboard_close] if _leaderboard_overlay.visible else [_players_button, _leaderboards_button, _result_board_button]
+	for control in candidates:
+		if is_instance_valid(control) and control.is_visible_in_tree():
+			var rect: Rect2 = control.get_global_rect()
+			controls.append({"name": str(control.name), "text": control.text, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "disabled": control.disabled, "focused": control.has_focus()})
+	result["controls"] = controls
+	return result
+
+
+func _publish_leaderboards() -> void:
+	if _host == null or not is_instance_valid(_leaderboard_overlay):
+		return
+	var value: String = JSON.stringify(leaderboard_snapshot())
+	if value != _leaderboard_published:
+		_leaderboard_published = value
+		_host.leaderboardStatus(value)
+
+
 func _build_age_choices() -> void:
 	_age_choices = VBoxContainer.new()
 	_age_choices.name = "AgeChoices"
@@ -661,7 +838,7 @@ func _build_age_choices() -> void:
 	_collection_header.add_child(_age_choices)
 	_age_scroll = ReviewScroll.new()
 	_age_scroll.name = "AgeScroll"
-	_age_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
+	_age_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
 	_age_choices.add_child(_age_scroll)
 	_age_row = HBoxContainer.new()
 	_age_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -740,7 +917,7 @@ func _build_world_choices() -> void:
 	_collection_column.add_child(_world_choices)
 	_world_scroll = ReviewScroll.new()
 	_world_scroll.name = "WorldScroll"
-	_world_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
+	_world_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
 	_world_choices.add_child(_world_scroll)
 	var worlds := HBoxContainer.new()
 	_world_grid = worlds
@@ -784,12 +961,12 @@ func _build_playroom() -> void:
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
 	_room.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_dragged
+	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_dragged
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_room.playground.pip_audio_busy = audio.is_pip_busy
 	_room.toy_shelf.reparent(_collection_column)
-	_room.toy_shelf.interaction_allowed = func() -> bool: return collection_page.visible and not _collection_multi_touch
+	_room.toy_shelf.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
 	_collection_duck_slot = _room.duck_slot
 	_playroom_medal = _room.favorite_medal
 	_room.item_selected.connect(_select_room_item)
@@ -1067,6 +1244,8 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
+	if _leaderboard_overlay.visible:
+		_hide_leaderboard()
 	_settling_chest = true
 	audio.stop_chest_performance()
 	if model.phase == "won" and model.chest_state == "closed":
@@ -1109,6 +1288,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_rebuilding = false
 		_show_error(model.error)
 		return false
+	_leaderboard_round_id = LeaderboardState.make_round_id()
+	_leaderboard_result.clear()
 	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
 		model.set_theme(_preferred_theme)
 	for button in cards.values():
@@ -1137,7 +1318,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 
 
 func choose_mode(id: String) -> void:
-	if not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
+	if not MODES.has(id) or collection_page.visible or _leaderboard_overlay.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	if id == _mode_id and model.phase in ["waiting", "matching", "feedback"]:
 		_refresh()
@@ -1153,6 +1334,11 @@ func choose_mode(id: String) -> void:
 
 
 func _configure_pop(seed_value: int = -1) -> void:
+	if is_instance_valid(_pop_leaderboard):
+		_pop_leaderboard.settle_animation()
+	_pop_leaderboard = null
+	_leaderboard_round_id = LeaderboardState.make_round_id()
+	_leaderboard_result.clear()
 	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
 	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
 	_pop.configure(pool, reduced_motion, seed_value)
@@ -1225,11 +1411,20 @@ func _pop_hear(word: Dictionary) -> void:
 	audio.say("res://" + word.audio)
 
 
-func _pop_finished(_result: Dictionary) -> void:
+func _pop_finished(result: Dictionary) -> void:
 	if not _stop_pop_listening():
 		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
-		return
 	audio.halt()
+	if _mode_id != "pop" or not _leaderboard_result.is_empty():
+		return
+	_leaderboard_result = result.duplicate(true)
+	_pop_leaderboard = LeaderboardPanel.new()
+	_pop_leaderboard.name = "PopLeaderboard"
+	_pop.attach_leaderboard(_pop_leaderboard)
+	_pop_leaderboard.configure(leaderboard_state, "boards", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion)
+	_pop_leaderboard.score_saved.connect(_leaderboard_score_saved)
+	_pop_leaderboard.changed.connect(_publish_leaderboards)
+	_publish_leaderboards()
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -1351,6 +1546,8 @@ func _refresh() -> void:
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
 	_new_adventure_button.visible = not _save_error
+	_result_board_button.visible = model.phase == "won" and _mode_id in ["match", "memory"]
+	_result_board_button.disabled = model.chest_state == "opening"
 	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
 	var progress_total: int = Model.MATCH_PAIR_COUNT if _mode_id == "match" else 5 if _mode_id == "memory" else 0
 	_success.set_filled_count(model.successes, progress_total)
@@ -1375,7 +1572,7 @@ func _refresh() -> void:
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
 	_memory.visible = playing and _mode_id == "memory"
-	_pop.visible = playing and _mode_id == "pop"
+	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible
 	_mistakes.visible = _success.visible
 	_message.hide()
 	_outcome.visible = not playing
@@ -1441,6 +1638,10 @@ func _refresh() -> void:
 	if _last_phase != model.phase:
 		_last_phase = model.phase
 		if won:
+			if _mode_id == "match":
+				_leaderboard_result = {"won": true, "mistakes": model.mistakes, "hints_used": Model.MAX_HINTS - model.hints_remaining}
+			elif _mode_id == "memory":
+				_leaderboard_result = {"won": true, "attempts": _memory.memory.attempts, "peeks": _memory.memory.peeks}
 			duck.react("happy")
 			audio.cue(model.theme_id + "-arrive")
 			if _controller_mode and not collection_page.visible:
@@ -1826,6 +2027,12 @@ func _layout_collection() -> void:
 		_collection_margins.add_theme_constant_override("margin_" + edge, padding)
 	_collection_margins.set_deferred("size", size)
 	_collection_column.add_theme_constant_override("separation", gap)
+	_leaderboard_menu.add_theme_constant_override("separation", gap)
+	for button in [_players_button, _leaderboards_button]:
+		var previous_focus: int = button.focus_mode
+		Style.action_button(button, _active_palette.get("accent", Style.GOOD), true)
+		button.focus_mode = previous_focus
+		button.custom_minimum_size.y = ceilf(40 / scale)
 	_collection_header.add_theme_constant_override("separation", gap)
 	_collection_header.custom_minimum_size.y = ceilf(48 / scale)
 	_collection_grid.add_theme_constant_override("separation", 0)
@@ -1871,6 +2078,12 @@ func _style_result_actions(accent: Color) -> void:
 	Style.action_button(_result_retry_button, accent, true)
 	Style.prominent_action_button(_new_adventure_button, accent)
 	Style.action_button(_try_gift_button, accent)
+	Style.action_button(_result_board_button, accent)
+	_result_board_button.add_theme_font_size_override("font_size", ceili(12 / _result_action_scale))
+	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var surface: StyleBox = _result_board_button.get_theme_stylebox(state)
+		surface.content_margin_left = 8 / _result_action_scale
+		surface.content_margin_right = 8 / _result_action_scale
 
 
 func _layout_result() -> void:
@@ -1886,7 +2099,9 @@ func _layout_result() -> void:
 	var width: float = minf(176 / scale, maxf(0, dimensions.x))
 	for button in [_result_retry_button, _try_gift_button]:
 		button.custom_minimum_size.x = width
-	_new_adventure_button.custom_minimum_size.x = minf(320 / scale, maxf(0, dimensions.x))
+	var short_result: bool = dimensions.y * scale < 260.0 and (_title.visible or _caption.visible)
+	_new_adventure_button.add_theme_font_size_override("font_size", ceili((18 if short_result else 24) / scale))
+	_new_adventure_button.custom_minimum_size.x = minf(320 / scale, maxf(0, dimensions.x - (88.0 if short_result else 0.0)))
 	var compact: bool = dimensions.y < 340.0 and _found_words.visible
 	_result_text.add_theme_constant_override("separation", ceili((8 if compact else 14) / scale))
 	_title.add_theme_font_size_override("font_size", 28 if compact else 34)
@@ -1909,7 +2124,7 @@ func _layout_result() -> void:
 
 
 func _can_request_hint() -> bool:
-	if collection_page.visible:
+	if collection_page.visible or _leaderboard_overlay.visible:
 		return false
 	if _mode_id != "match" or model.hints_remaining <= 0 or not model.hint_ids.is_empty() or not model.error.is_empty():
 		return false
@@ -2019,6 +2234,11 @@ func choose_theme(id: String) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	for panel in [_leaderboard_panel, _pop_leaderboard]:
+		if is_instance_valid(panel):
+			panel.reduced_motion = value
+			if value:
+				panel.settle_animation()
 	_hint_link.set_reduced_motion(value)
 	_voice_match_link.set_reduced_motion(value)
 	_pop.set_reduced_motion(value)
@@ -2167,6 +2387,9 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	for panel in [_leaderboard_panel, _pop_leaderboard]:
+		if is_instance_valid(panel):
+			panel.settle_animation()
 	if not _page_hidden:
 		_resume_music_after_background = audio.active and audio.music.playing and not audio.muted
 	_page_hidden = true
@@ -2381,6 +2604,9 @@ func _controller_accept() -> void:
 
 
 func _controller_back() -> void:
+	if _leaderboard_overlay.visible:
+		_hide_leaderboard()
+		return
 	if _holding_chest:
 		_cancel_chest_hold()
 		_finish_chest_drag()
@@ -2406,6 +2632,9 @@ func _controller_back() -> void:
 
 
 func _toggle_collection() -> void:
+	if _leaderboard_overlay.visible:
+		_hide_leaderboard()
+		return
 	if collection_page.visible:
 		_hide_collection()
 	else:
@@ -2413,7 +2642,7 @@ func _toggle_collection() -> void:
 
 
 func _cycle_theme(step: int) -> void:
-	if model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
+	if _leaderboard_overlay.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	var index: int = Model.THEMES.find(model.theme_id)
 	if index < 0:
@@ -2495,10 +2724,16 @@ func _focus_candidates() -> Array[Control]:
 
 
 func _valid_focus(control: Control) -> bool:
+	if is_instance_valid(_leaderboard_overlay) and _leaderboard_overlay.visible and is_instance_valid(control) and not _leaderboard_overlay.is_ancestor_of(control):
+		return false
+	if collection_page.visible and not _leaderboard_overlay.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
+		return false
 	return is_instance_valid(control) and control.visible and control.is_visible_in_tree() and control.focus_mode != Control.FOCUS_NONE and not (control is Button and (control as Button).disabled)
 
 
 func _default_focus() -> Control:
+	if _leaderboard_overlay.visible:
+		return _leaderboard_close
 	if collection_page.visible:
 		return _collection_back
 	if model.phase == "won":
@@ -2762,6 +2997,8 @@ func _stop_feedback_animations() -> void:
 
 
 func _start_chest_hold() -> void:
+	if _leaderboard_overlay.visible:
+		return
 	if _holding_chest or _page_hidden or collection_page.visible or _save_error \
 		or model.phase != "won" or model.chest_state != "closed":
 		return
@@ -2843,6 +3080,10 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	_leaderboard_publish_left -= delta
+	if _leaderboard_publish_left <= 0.0:
+		_leaderboard_publish_left = 0.1
+		_publish_leaderboards()
 	_update_duck()
 	if Engine.get_process_frames() != _voice_match_origin_frame:
 		_advance_voice_match_feedback(delta)
@@ -2980,6 +3221,8 @@ func _show_collection() -> void:
 		audio.stop_pop_sounds()
 	if not _stop_pop_listening():
 		return
+	if _mode_id == "pop":
+		_pop.hide()
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	audio.stop_voice()
 	audio.stop_pip_reaction()
@@ -2998,11 +3241,11 @@ func _show_collection() -> void:
 	_refresh_favorite_reward()
 	_refresh_collection()
 	_collection_focus_modes.clear()
-	for node in find_children("*", "Button", true, false):
-		var button := node as Button
-		if button != duck and not collection_page.is_ancestor_of(button):
-			_collection_focus_modes[button] = button.focus_mode
-			button.focus_mode = Control.FOCUS_NONE
+	for node in find_children("*", "Control", true, false):
+		var control := node as Control
+		if control != duck and not collection_page.is_ancestor_of(control):
+			_collection_focus_modes[control] = control.focus_mode
+			control.focus_mode = Control.FOCUS_NONE
 	collection_page.show()
 	_hint_link.set_paused(true)
 	_memory.pause(true)
@@ -3027,6 +3270,8 @@ func _hide_collection() -> void:
 	_collection_focus_modes.clear()
 	feedback_timer.paused = false
 	_memory.pause(false)
+	if _mode_id == "pop" and _pop.game.phase == "finished" and is_instance_valid(_pop_leaderboard):
+		_pop_leaderboard.refresh_profiles()
 	_refresh()
 	if _valid_focus(_focus_before_collection):
 		_focus_before_collection.grab_focus()
@@ -3037,6 +3282,7 @@ func _hide_collection() -> void:
 
 func _announce_collection_state() -> void:
 	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Swipe the age choices at the top or the worlds and toys at the bottom. Use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
+	message += " Choose Players to add an emoji and name, or Leaderboards to view personal bests on this device."
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."
 	if _age_save_failed:
@@ -3055,7 +3301,7 @@ func _update_duck() -> void:
 		return
 	_header_duck_slot.visible = not _voice_mode and not _storage_retry_button.visible
 	var in_collection: bool = collection_page.visible
-	var visible_here: bool = in_collection or not _voice_mode
+	var visible_here: bool = (in_collection or not _voice_mode) and not _leaderboard_overlay.visible
 	duck.set_outfit_theme(model.theme_id)
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
@@ -3105,7 +3351,7 @@ func _update_duck() -> void:
 
 
 func _play_duck() -> void:
-	if _page_hidden or not duck.is_visible_in_tree() or (collection_page.visible and _collection_dragged):
+	if _page_hidden or _leaderboard_overlay.visible or not duck.is_visible_in_tree() or (collection_page.visible and _collection_dragged):
 		return
 	if collection_page.visible:
 		_room.playground.poke()

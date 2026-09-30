@@ -1299,6 +1299,17 @@ func _build_results(summary: Dictionary) -> void:
 	_apply_result_feedback()
 
 
+func attach_leaderboard(panel: Control) -> void:
+	if game.phase != "finished":
+		panel.queue_free()
+		return
+	_result_body.add_child(panel)
+	_result_body.move_child(panel, 2)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.minimum_size_changed.connect(_layout)
+	_layout()
+
+
 func _result_hits_snapshot() -> Dictionary:
 	var visible_result: bool = not _stopped and game.phase == "finished" and _results.visible
 	return {"text": _result_hits.text if visible_result and is_instance_valid(_result_hits) else "",
@@ -1438,11 +1449,13 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 func _ensure_result_control(control: Control) -> void:
 	# Godot's built-in focus scrolling checks scrollbar visibility. Our scrollbars
 	# are intentionally hidden, so reveal focused actions using container bounds.
-	var local_rect: Rect2 = _results.get_global_transform().affine_inverse() * control.get_global_rect()
-	if local_rect.position.y < 0.0:
-		_results.scroll_vertical += floori(local_rect.position.y)
-	elif local_rect.end.y > _results.size.y:
-		_results.scroll_vertical += ceili(local_rect.end.y - _results.size.y)
+	# Work in content coordinates so repeated focus notifications before the
+	# next layout pass request the same offset instead of scrolling twice.
+	var content_rect: Rect2 = _result_body.get_global_transform().affine_inverse() * control.get_global_rect()
+	if content_rect.position.y < _results.scroll_vertical:
+		_results.scroll_vertical = floori(content_rect.position.y)
+	elif content_rect.end.y > _results.scroll_vertical + _results.size.y:
+		_results.scroll_vertical = ceili(content_rect.end.y - _results.size.y)
 
 
 func _replay() -> void:

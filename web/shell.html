@@ -373,6 +373,7 @@
       <div id="chest-progress" class="sr-only" role="progressbar" aria-label="Treasure chest unlock progress"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
+      <p id="leaderboard-status" class="sr-only" role="status" aria-label="Local leaderboards" aria-live="polite" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
         data-phase="idle" data-remaining="50" data-base-duration="50" data-hits="0" data-score="0" data-combo="0" data-best-combo="0" data-bonus-time="0" data-targets="[]" data-controls="[]" data-hud="{}" data-results-hits="{}"></p>
@@ -1755,6 +1756,21 @@
         savePlayroomState(text) {
           try { localStorage.setItem('wordBuddies.playroom', text); return true; }
           catch { return false; }
+        },
+        leaderboardState() {
+          try { return localStorage.getItem('wordBuddies.leaderboards'); }
+          catch { return false; }
+        },
+        saveLeaderboardState(text) {
+          try { localStorage.setItem('wordBuddies.leaderboards', text); return true; }
+          catch { return false; }
+        },
+        leaderboardStatus(text) {
+          // Read-only diagnostics for the native player and ranking controls.
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+          document.getElementById('leaderboard-status').dataset.snapshot = JSON.stringify(value);
         },
         medalProgress() {
           try { return localStorage.getItem('wordBuddies.medalProgress'); }

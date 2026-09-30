@@ -40,8 +40,8 @@ func _run() -> void:
 		if mode == "memory":
 			check(app._memory.memory.cards.all(func(card: Dictionary) -> bool: return lesson.has(card.word)),
 				"Memory questions use exactly the learned words")
-	check(not app._message.is_visible_in_tree() and app._status_announcement.contains("no match"),
-		"The two unmatched cards are explained accessibly without a visible footer")
+	check(not app._message.is_visible_in_tree() and app._status_announcement.contains("Find 5 word"),
+		"The five-pair objective is announced accessibly without a visible footer")
 	var wrong: Array = []
 	for card in app.model.cards:
 		if wrong.is_empty() or (card.kind != wrong[0].kind and card.word.id != wrong[0].word.id):

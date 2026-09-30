@@ -8,6 +8,7 @@ var matched_word_ids: Array[String] = []
 var feedback_words: Array[Dictionary] = []
 var attempts: int = 0
 var mistakes: int = 0
+var peeks: int = 0
 var last_correct: bool = false
 var phase: String = "waiting"
 var studying: bool = false
@@ -53,6 +54,7 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	feedback_words.clear()
 	attempts = 0
 	mistakes = 0
+	peeks = 0
 	last_correct = false
 	studying = false
 	phase = "waiting"
@@ -103,6 +105,8 @@ func set_study(value: bool) -> bool:
 	if not phase in ["waiting", "matching"] or cards.is_empty() or studying == value:
 		return false
 	studying = value
+	if value:
+		peeks += 1
 	selected_indices.clear()
 	phase = "waiting"
 	return true
