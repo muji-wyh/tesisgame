@@ -23,7 +23,7 @@ const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const LAUNCH_SOUND_WINDOW: float = 0.2
-const TARGET_COLLISION_SCALE: float = 0.75
+const TARGET_COLLISION_SCALE: float = 0.65
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
