@@ -27,18 +27,20 @@ function collectPopReferenceAudio(root) {
   if (!Array.isArray(manifest.assets) || manifest.assets.length !== POP_REFERENCE_IDS.length) {
     throw new Error('The Voice Pop reference bank must declare all three variants.');
   }
-  const expected = POP_REFERENCE_IDS.map(id => `${id}.wav`).sort();
+  const ids = [...POP_REFERENCE_IDS, 'launch'];
+  const expected = ids.map(id => `${id}.wav`).sort();
   const present = fs.readdirSync(directory).filter(name => name.toLowerCase().endsWith('.wav')).sort();
   if (JSON.stringify(present) !== JSON.stringify(expected)) {
-    throw new Error('The optional Voice Pop reference bank is incomplete or has unexpected WAVs; provide all three variants or remove the bank.');
+    throw new Error('The optional Voice Pop reference bank is incomplete or has unexpected WAVs; provide all three hit variants and the separate launch, or remove the bank.');
   }
-  return manifest.assets.map((asset, index) => {
-    const source = `assets/imported-audio/pop-reference/${POP_REFERENCE_IDS[index]}.wav`;
-    if (asset.id !== POP_REFERENCE_IDS[index] || asset.destination !== source ||
+  return [...manifest.assets, manifest.launch].map((asset, index) => {
+    const id = ids[index];
+    const source = `assets/imported-audio/pop-reference/${id}.wav`;
+    if (!asset || asset.id !== id || asset.destination !== source ||
         !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.sampleRate !== 44100 ||
         asset.channels !== 1 || asset.bitDepth !== 16 ||
-        !Number.isFinite(asset.seconds) || asset.seconds < 0.20 || asset.seconds > 0.50) {
-      throw new Error(`Invalid Voice Pop reference manifest entry: ${POP_REFERENCE_IDS[index]}`);
+        !Number.isFinite(asset.seconds) || asset.seconds < (id === 'launch' ? 0.10 : 0.20) || asset.seconds > (id === 'launch' ? 0.30 : 0.50)) {
+      throw new Error(`Invalid Voice Pop reference manifest entry: ${id}`);
     }
     const bytes = fs.readFileSync(path.join(root, source));
     if (createHash('sha256').update(bytes).digest('hex') !== asset.sha256) {
@@ -78,6 +80,7 @@ function collectRequiredAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
   const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   const sources = [
+    'assets/audio/sfx/pop-launch.wav',
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),

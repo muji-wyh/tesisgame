@@ -4,7 +4,7 @@ const path = require('node:path');
 const { chooseMode, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
-const { assets: referenceSlices } = require('../../docs/assets/voice-pop-reference-audio.json');
+const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
 const catalog = require('../../words.json');
 const bundledAudioTest = test.extend({
   // Require the game's real tap gestures to unlock audio in these focused tests.
@@ -12,6 +12,7 @@ const bundledAudioTest = test.extend({
 });
 const catalogWords = catalog.map(word => word.text);
 const assetPath = relative => path.resolve(__dirname, '../..', relative);
+const referenceSlices = referenceAssets.filter(asset => asset.id !== 'launch');
 const referenceAvailable = referenceSlices.length > 0 && referenceSlices.every(asset => fs.existsSync(assetPath(asset.destination)));
 const expectedSlices = (referenceAvailable ? referenceSlices : sliceAssets)
   .filter(asset => fs.existsSync(assetPath(asset.destination)));
@@ -59,6 +60,24 @@ function waveDuration(relative) {
   }
   if (!bytesPerSecond || !dataBytes) throw new Error(`Invalid WAV: ${relative}`);
   return dataBytes / bytesPerSecond;
+}
+
+const launchDestination = fs.existsSync(assetPath('assets/imported-audio/pop-reference/launch.wav'))
+  ? 'assets/imported-audio/pop-reference/launch.wav' : 'assets/audio/sfx/pop-launch.wav';
+const expectedLaunch = { destination: launchDestination, seconds: waveDuration(launchDestination) };
+
+function isLaunch(sound) {
+  return sound.playbackRate === 1 && Math.abs(sound.duration - expectedLaunch.seconds) <= 1 / sound.sampleRate;
+}
+
+function expectLaunch(sound) {
+  expect(isLaunch(sound), 'A fresh target uses the bundled launch whoosh').toBe(true);
+  expect(sound.duration, 'The launch is a short cue, not a sustained listening sound').toBeLessThanOrEqual(0.3);
+  expect(sound.channels).toBe(2);
+  expect(sound.loop).toBe(false);
+  expect(sound.contextState).toBe('running');
+  expect(sound.fingerprint).toBeTruthy();
+  expect(sound.peak, 'The launch recording contains audible PCM').toBeGreaterThan(0.01);
 }
 
 const pipReactions = {
@@ -463,12 +482,14 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     const listeningTheme = await page.locator('html').getAttribute('data-pip-theme');
     const listeningMusicSeconds = waveDuration(`assets/audio/bgm/${listeningTheme}.wav`);
     const listening = await page.evaluate(() => ({
-      starts: window.audioObservation.starts,
+      soundIndex: window.audioObservation.playbacks.length,
       recognizers: window.__popSpeech.starts,
       recognizerIndex: window.__popSpeech.instances.length - 1
     }));
     await page.waitForTimeout(650);
-    expect(await page.evaluate(() => window.audioObservation.starts), 'Listening without a hit stays quiet').toBe(listening.starts);
+    const listeningSounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), listening.soundIndex);
+    expect(listeningSounds.every(isLaunch), 'Listening without a hit permits only a fresh target launch').toBe(true);
+    listeningSounds.forEach(expectLaunch);
     expect(await page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
       Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
     listeningMusicSeconds), 'Voice Pop stops the previous mode\'s music').toBe(false);
@@ -567,6 +588,88 @@ test('leaving while permission is pending rejects a late grant and every callbac
   expect(errors).toEqual([]);
 });
 
+bundledAudioTest('fresh Voice Pop targets launch once with audible whooshes and never replay on layout or recognition resume', async ({ page, browserName }, info) => {
+  const audioRequests = watchAudioRequests(page);
+  await observeOutputAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status', trackSourceLifecycle: true });
+  const errors = await open(page, { automatic: false });
+  const available = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(available, 'Chromium must exercise real launch playback').toBe(true);
+  bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio; native launch lifecycle coverage runs separately.');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
+  const originalViewport = page.viewportSize();
+  await page.evaluate(() => {
+    const status = document.querySelector('#pop-status');
+    const seen = new Set();
+    const observation = window.__popLaunchObservation = { targets: [], output: [] };
+    observation.observer = new MutationObserver(() => {
+      if (status.dataset.phase !== 'running') return;
+      for (const target of JSON.parse(status.dataset.targets || '[]')) {
+        if (seen.has(target.uid)) continue;
+        seen.add(target.uid);
+        observation.targets.push({ uid: target.uid, at: performance.now() });
+      }
+    });
+    observation.observer.observe(status, { attributes: true, attributeFilter: ['data-targets', 'data-phase'] });
+    // Sample the actual destination throughout each short launch. Starting an
+    // analyser poll only after a browser assertion can miss its 240 ms tail.
+    observation.timer = setInterval(() => {
+      if (status.dataset.phase === 'running') observation.output.push(...window.audioOutputObservation.read());
+    }, 10);
+    window.__popSpeech.instances.at(-1).grant();
+  });
+  const runningSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
+  const launches = async () => (await runningSounds()).filter(isLaunch);
+  const seenTargets = () => page.evaluate(() => window.__popLaunchObservation.targets);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await launches()).length).toBe(1);
+  expectLaunch((await launches())[0]);
+  expect((await seenTargets()).map(target => target.uid)).toEqual([1]);
+
+  await page.setViewportSize({ width: originalViewport.width - 24, height: originalViewport.height });
+  await page.evaluate(() => {
+    window.dispatchEvent(new Event('resize'));
+    window.__popSpeech.instances.at(-1).emit('supercalifragilisticexpialidocious', false);
+  });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', 'supercalifragilisticexpialidocious');
+  await rendered(page);
+  expect((await state(page)).hits).toBe(0);
+  expect((await launches()).length, 'Layout and transcript refreshes do not replay existing targets').toBe((await seenTargets()).length);
+
+  await page.evaluate(() => window.__popSpeech.instances.at(-1).end());
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  const paused = await state(page), pausedLaunches = (await launches()).length;
+  await expect.poll(() => page.evaluate(() => window.__popSpeech.starts)).toBe(2);
+  await page.setViewportSize(originalViewport);
+  await page.waitForTimeout(850);
+  expect((await state(page)).remaining).toBe(paused.remaining);
+  expect((await state(page)).targets.map(target => target.uid)).toEqual(paused.targets.map(target => target.uid));
+  expect((await launches()).length, 'Waiting for the next recognizer never catches up launch sounds').toBe(pausedLaunches);
+  await page.evaluate(() => window.__popSpeech.instances.at(-1).grant());
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await rendered(page);
+  expect((await launches()).length, 'Resuming preserved targets cannot replay their launch cues').toBe((await seenTargets()).length);
+  await expect.poll(async () => (await seenTargets()).length, { timeout: 10000, intervals: [25, 50, 100] }).toBeGreaterThan(pausedLaunches);
+  await expect.poll(async () => (await launches()).length).toBe((await seenTargets()).length);
+  const all = await runningSounds(), launchSounds = all.filter(isLaunch);
+  launchSounds.forEach(expectLaunch);
+  expect(all.every(isLaunch), 'A round without hits or misses contains launches only, with no BGM, prompts or Pip happy calls').toBe(true);
+  await expect.poll(() => page.evaluate(() => window.__popLaunchObservation.output.some(sample =>
+    sample.state === 'running' && sample.rms > 0.00001)), { message: 'The launch whoosh reaches the real audio destination' }).toBe(true);
+  expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
+  const evidence = await page.evaluate(() => {
+    const observation = window.__popLaunchObservation;
+    clearInterval(observation.timer);
+    observation.observer.disconnect();
+    return { targets: observation.targets, output: observation.output.filter(sample => sample.rms > 0.00001) };
+  });
+  await chooseMode(page, 'match');
+  expect(audioRequests, 'The short launch recording is bundled and never fetched during a round').toEqual([]);
+  expect(errors).toEqual([]);
+  await info.attach('voice-pop-launch-audio.json', {
+    body: JSON.stringify({ expectedLaunch, launches: launchSounds, ...evidence }), contentType: 'application/json'
+  });
+});
+
 bundledAudioTest('three words in one utterance keep all slice tails and backgrounding stops the whole pool', async ({ page, browserName }, info) => {
   const audioRequests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
@@ -657,7 +760,12 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   const runningSoundCount = async () => (await runningSounds()).length;
   const hitSlices = async () => (await runningSounds()).filter(isHitSlice);
   const happyCalls = async () => (await runningSounds()).filter(sound => isPipReaction(sound, 'happy'));
-  expect(await runningSounds(), 'Listening starts quietly, with no prompt or background music').toEqual([]);
+  const initialSounds = await runningSounds();
+  if (audioAvailable) {
+    expect(initialSounds.length, 'The first target has a launch cue').toBeGreaterThan(0);
+    expect(initialSounds.every(isLaunch), 'Listening starts with target launches, without prompts, Pip calls or background music').toBe(true);
+    initialSounds.forEach(expectLaunch);
+  } else expect(initialSounds).toEqual([]);
   const word = await popOne(page, { interim: true });
   if (audioAvailable) {
     await expect.poll(async () => (await hitSlices()).length, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
@@ -690,11 +798,15 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
   if (audioAvailable) {
     const all = await runningSounds(), sadCalls = all.filter(sound => isPipReaction(sound, 'sad'));
+    const launches = all.filter(isLaunch);
     expect((await hitSlices()).length, 'Only the two real hits play slice sounds.').toBe(2);
     expect((await happyCalls()).length, 'No Voice Pop hit produces a happy call during the complete round.').toBe(0);
     expect(sadCalls.length, 'Letting targets fall produces sad calls.').toBeGreaterThan(0);
     sadCalls.forEach(sound => expectPipReaction(sound, 'sad'));
-    expect(all.length, 'Live gameplay contains only hit slices and sad miss calls, with no happy calls, prompts or BGM.').toBe(2 + sadCalls.length);
+    expect(launches.length, 'Fresh targets continue receiving launch cues throughout the round.').toBeGreaterThan(2);
+    launches.forEach(expectLaunch);
+    expect(all.length, 'Live gameplay contains only launches, hit slices and sad miss calls, with no happy calls, prompts or BGM.')
+      .toBe(2 + sadCalls.length + launches.length);
   } else {
     expect(await runningSoundCount()).toBe(0);
   }

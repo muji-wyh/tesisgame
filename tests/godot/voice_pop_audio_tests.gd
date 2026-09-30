@@ -18,11 +18,51 @@ func check(condition: bool, message: String) -> void:
 
 
 func _run() -> void:
+	await _check_launch()
 	await _check_bank_and_overlap()
 	await _check_lifecycle_and_fallback()
 	await create_timer(0.15).timeout
 	print("Voice Pop reference audio: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_launch() -> void:
+	var audio := Audio.new()
+	root.add_child(audio)
+	check(audio.pop_launch != null and audio.cache.has(audio._pop_launch_path),
+		"The dedicated launch channel and its local recording are ready before listening")
+	for blocked in ["inactive", "muted", "unavailable"]:
+		audio.active = blocked != "inactive"
+		audio.muted = blocked == "muted"
+		audio.available = blocked != "unavailable"
+		audio.cue("pop-launch")
+		check(not audio.pop_launch.playing, "An " + blocked + " throw stays silent")
+	audio.muted = false
+	audio.available = true
+	audio.interact("spring", false)
+	audio.cue("pop-launch")
+	var stream: AudioStreamWAV = audio.pop_launch.stream
+	check(audio.pop_launch.playing and stream != null and not stream.stereo and stream.mix_rate == 44100
+		and stream.get_length() >= 0.1 and stream.get_length() <= 0.3
+		and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED,
+		"A thrown word has a short standalone mono whoosh")
+	check(is_equal_approx(audio.pop_launch.pitch_scale, 1.0)
+		and is_equal_approx(db_to_linear(audio.pop_launch.volume_db), 0.16),
+		"The launch uses its authored pitch at a quieter gain than a cut")
+	var request: int = audio._playback_requests[audio.pop_launch]
+	audio.cue("pop-slice")
+	check(audio.pop_launch.playing and audio._playback_requests[audio.pop_launch] == request,
+		"A successful cut never truncates the separate launch recording")
+	audio.stop_pop_sounds()
+	check(not audio.pop_launch.playing and audio.pop_launch.stream == null
+		and audio.last_pop_player() == null, "Stopping Pop clears both launch and cut tails")
+	audio._pop_launch_path = Audio.POP_LAUNCH_FALLBACK
+	audio.cue("pop-launch")
+	check(audio.pop_launch.playing and audio.pop_launch.stream == load(Audio.POP_LAUNCH_FALLBACK),
+		"A clean checkout has a locally bundled launch sound without private source audio")
+	audio.halt()
+	audio.queue_free()
+	await process_frame
 
 
 func _check_bank_and_overlap() -> void:

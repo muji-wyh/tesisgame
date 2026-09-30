@@ -437,6 +437,7 @@ func _build_controls() -> void:
 	_pop.request_listening.connect(_start_pop_listening)
 	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
 	_pop.hit.connect(_pop_hit)
+	_pop.launched.connect(_pop_launched)
 	_pop.missed.connect(_pop_missed)
 	_pop.round_finished.connect(_pop_finished)
 	_pop.hear_requested.connect(_pop_hear)
@@ -1171,6 +1172,13 @@ func _stop_pop_listening() -> bool:
 			_pop_speech_active = true
 			return false
 	return true
+
+
+func _pop_launched(_uid: int) -> void:
+	if _mode_id != "pop" or collection_page.visible or _page_hidden:
+		return
+	audio.interact(model.theme_id, false)
+	audio.cue("pop-launch")
 
 
 func _pop_hit(_word: Dictionary) -> void:
@@ -2564,7 +2572,7 @@ func _on_voice_state(arguments: Array) -> void:
 		# Recognition rolls over after an utterance. Let that word's short
 		# emotion finish while the recognizer reconnects automatically.
 		if not bool(arguments[1]) and not _pop._reconnecting:
-			audio.stop_pop_slices()
+			audio.stop_pop_sounds()
 			audio.stop_pip_reaction()
 			duck.settle()
 		return
@@ -2897,7 +2905,7 @@ func _retry_storage() -> void:
 func _show_collection() -> void:
 	if _mode_id == "pop":
 		_pop.pause()
-		audio.stop_pop_slices()
+		audio.stop_pop_sounds()
 	if not _stop_pop_listening():
 		return
 	_focus_before_collection = get_viewport().gui_get_focus_owner()

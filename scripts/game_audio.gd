@@ -8,6 +8,9 @@ const POP_REFERENCE_PATHS := [
 ]
 const POP_HIT_CHANNELS := 3
 const POP_HIT_GAIN := 0.24
+const POP_LAUNCH_PATH := "res://assets/imported-audio/pop-reference/launch.wav"
+const POP_LAUNCH_FALLBACK := "res://assets/audio/sfx/pop-launch.wav"
+const POP_LAUNCH_GAIN := 0.16
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -36,6 +39,7 @@ var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var narration: AudioStreamPlayer
 var pip_reaction: AudioStreamPlayer
+var pop_launch: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var narration_state: String = "idle"
 var muted: bool = false
@@ -55,6 +59,7 @@ var _last_pop_slice_path: String = ""
 var _pop_players: Array[AudioStreamPlayer] = []
 var _pop_next_player: int = 0
 var _pop_last_player: AudioStreamPlayer
+var _pop_launch_path: String = POP_LAUNCH_FALLBACK
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
 var _pip_voice_request: int = -1
@@ -94,6 +99,14 @@ func _ready() -> void:
 		_pop_slice_paths = reference_paths
 	for index in range(POP_HIT_CHANNELS):
 		_pop_players.append(_player(POP_HIT_GAIN))
+	pop_launch = _player(POP_LAUNCH_GAIN)
+	var launch_stream: AudioStream = load(POP_LAUNCH_PATH) if ResourceLoader.exists(POP_LAUNCH_PATH) else null
+	if launch_stream is AudioStreamWAV and not launch_stream.stereo and launch_stream.mix_rate == 44100 \
+		and launch_stream.format == AudioStreamWAV.FORMAT_16_BITS and launch_stream.loop_mode == AudioStreamWAV.LOOP_DISABLED \
+		and launch_stream.get_length() >= 0.1 and launch_stream.get_length() <= 0.3:
+		_pop_launch_path = POP_LAUNCH_PATH
+		cache[POP_LAUNCH_PATH] = launch_stream
+	_stream(_pop_launch_path)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -136,6 +149,8 @@ func cue(effect_id: String = "", voice_id: String = "") -> void:
 		var path: String = "res://assets/audio/sfx/" + effect_id + ".wav"
 		if effect_id == "pop-slice":
 			_play_pop_slice()
+		elif effect_id == "pop-launch":
+			_play(pop_launch, _pop_launch_path)
 		else:
 			_play(effect, path)
 	if not voice_id.is_empty():
@@ -161,6 +176,13 @@ func stop_pop_slices() -> void:
 		player.stream = null
 	_pop_next_player = 0
 	_pop_last_player = null
+
+
+func stop_pop_sounds() -> void:
+	stop_pop_slices()
+	if pop_launch != null:
+		_stop(pop_launch)
+		pop_launch.stream = null
 
 
 func _next_pop_slice() -> String:
@@ -678,7 +700,7 @@ func stop_voice() -> void:
 
 func halt() -> void:
 	active = false
-	stop_pop_slices()
+	stop_pop_sounds()
 	stop_pip_reaction()
 	stop_chest_performance()
 	stop_narration()

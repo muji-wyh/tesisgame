@@ -108,8 +108,8 @@ function referenceBankFixture(t, populated = true) {
     fs.writeFileSync(path.join(directory, imported), 'RSRC fixture audio');
     return imported;
   };
-  const assets = ['quick', 'juicy', 'crisp'].map((id, index) => {
-    const samples = 13230;
+  const entries = ['quick', 'juicy', 'crisp', 'launch'].map((id, index) => {
+    const samples = id === 'launch' ? 10584 : 13230;
     const wav = Buffer.alloc(44 + samples * 2);
     wav.write('RIFF'); wav.writeUInt32LE(wav.length - 8, 4); wav.write('WAVEfmt ', 8);
     wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22);
@@ -120,19 +120,22 @@ function referenceBankFixture(t, populated = true) {
       sha256: require('node:crypto').createHash('sha256').update(wav).digest('hex'),
       seconds: samples / 44100, sampleRate: 44100, channels: 1, bitDepth: 16, wav };
   });
+  const assets = entries.slice(0, 3);
+  const launch = entries[3];
   const writeManifest = () => {
     fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
-    fs.writeFileSync(manifestPath, JSON.stringify({ assets: assets.map(({ wav, ...asset }) => asset) }));
+    fs.writeFileSync(manifestPath, JSON.stringify({ assets: assets.map(({ wav, ...asset }) => asset),
+      launch: (({ wav, ...asset }) => asset)(launch) }));
   };
   if (populated) {
     fs.mkdirSync(bank, { recursive: true });
-    for (const asset of assets) {
+    for (const asset of entries) {
       fs.writeFileSync(path.join(directory, asset.destination), asset.wav);
       writeImport(asset.destination);
     }
     writeManifest();
   }
-  return { directory, bank, assets, manifestPath, writeManifest, writeImport };
+  return { directory, bank, assets, launch, manifestPath, writeManifest, writeImport };
 }
 
 test('an absent optional Voice Pop reference bank preserves clean-checkout packaging', t => {
@@ -144,10 +147,11 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   const fixture = referenceBankFixture(t);
   const { collectPopReferenceAudio, collectRequiredAudio } = require('../tools/package-web.cjs');
   const reference = collectPopReferenceAudio(fixture.directory);
-  assert.deepEqual(reference.map(asset => asset.source), fixture.assets.map(asset => `res://${asset.destination}`));
+  assert.deepEqual(reference.map(asset => asset.source), [...fixture.assets, fixture.launch].map(asset => `res://${asset.destination}`));
   assert.ok(reference.every(asset => asset.imported.startsWith('res://.godot/imported/') && asset.bytes.length > 4));
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fs.writeFileSync(path.join(fixture.directory, 'pop-voice-prompts.json'), '{}');
+  fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -155,8 +159,10 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 99);
-  assert.deepEqual(required.slice(-3), reference);
+  assert.equal(required.length, 101);
+  assert.deepEqual(required.slice(-4), reference);
+  assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
+    'The source-checkout launch fallback also ships in the startup pack');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
 });
@@ -191,6 +197,22 @@ test('Voice Pop reference source validation rejects changed bytes and malformed 
   fixture.assets[0].seconds += 0.01;
   fixture.writeManifest();
   assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid mono PCM16/);
+});
+
+test('the reference launch is separately validated and never treated as a hit variant', t => {
+  const { collectPopReferenceAudio } = require('../tools/package-web.cjs');
+  const fixture = referenceBankFixture(t);
+  assert.equal(fixture.assets.length, 3);
+  fs.unlinkSync(path.join(fixture.directory, fixture.launch.destination));
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /incomplete/);
+  fs.writeFileSync(path.join(fixture.directory, fixture.launch.destination), fixture.launch.wav);
+  const malformed = JSON.parse(fs.readFileSync(fixture.manifestPath));
+  delete malformed.launch;
+  fs.writeFileSync(fixture.manifestPath, JSON.stringify(malformed));
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid.*launch/);
+  fixture.launch.seconds = 0.4;
+  fixture.writeManifest();
+  assert.throws(() => collectPopReferenceAudio(fixture.directory), /Invalid.*launch/);
 });
 
 test('Voice Pop reference packaging rejects missing, unsafe or invalid Godot imports', t => {

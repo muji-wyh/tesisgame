@@ -4,7 +4,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
-const { importReference, SOURCE_SHA256, VARIANTS } = require('../tools/import-pop-reference.cjs');
+const { importReference, SOURCE_SHA256, VARIANTS, LAUNCH_WINDOW } = require('../tools/import-pop-reference.cjs');
+const { renderLaunch, DESTINATION, SECONDS } = require('../tools/generate-pop-launch.cjs');
 const manifest = require('../docs/assets/voice-pop-reference-audio.json');
 const root = path.resolve(__dirname, '..');
 
@@ -44,6 +45,11 @@ test('the reviewed mono reference and exact blade/cut windows are reproducible',
     assert.equal(asset.destination, `assets/imported-audio/pop-reference/${asset.id}.wav`);
   }
   assert.equal(new Set(manifest.assets.map(asset => asset.sha256)).size, 3);
+  assert.deepEqual(manifest.assets.map(asset => asset.sha256), [
+    'd606dac66a6445ea31658856d69e85e9afcf552f5964fda25e37c78afc2c68ed',
+    '01556a54bcd4746f34a836854aef4ca4a2c4a83ec1a93202dad1007d0f71b703',
+    '4b947aa7df68be21316916f03fbe2334d7026b4dcc3c5c550dd19310c305bed6',
+  ], 'Adding the launch preserves all three reviewed hit waveforms');
 });
 
 test('local reference hits contain a short blade lead-in, cut energy and safe tails', t => {
@@ -74,6 +80,49 @@ test('local reference hits contain a short blade lead-in, cut energy and safe ta
     for (const setting of ['edit/trim=false', 'edit/normalize=false', 'edit/loop_mode=0', 'compress/mode=0']) {
       assert.ok(metadata.includes(setting), `Godot must preserve the authored transient: ${setting}`);
     }
+  }
+});
+
+test('the separate recorded launch precedes every source cut and leaves microphone headroom', t => {
+  const asset = manifest.launch;
+  assert.equal(asset.id, 'launch');
+  assert.equal(asset.destination, 'assets/imported-audio/pop-reference/launch.wav');
+  assert.deepEqual(asset.window, LAUNCH_WINDOW);
+  assert.ok(asset.window.start + asset.window.seconds < Math.min(...VARIANTS.map(variant => variant.blade.start)));
+  assert.ok(manifest.assets.every(hit => hit.destination !== asset.destination));
+  assert.equal(asset.processing.runtimeGain, 0.16);
+  assert.equal(asset.processing.maxSimultaneousLaunches, 1);
+  assert.equal(asset.fallback, DESTINATION);
+  const file = path.join(root, asset.destination);
+  if (!fs.existsSync(file)) return t.skip('The private launch source is absent; the tracked fallback remains available.');
+  const { bytes, samples, rate } = readWave(file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), asset.sha256);
+  assert.equal(samples.length / rate, asset.seconds);
+  assert.ok(asset.seconds <= 0.3);
+  const peak = Math.max(...samples.map(Math.abs));
+  const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
+  assert.ok(peak > 0.25 && peak <= 0.48);
+  assert.ok(rms > 0.04 && rms <= 0.10);
+  assert.ok(peak * asset.processing.runtimeGain < 0.077);
+  assert.equal(samples[0], 0);
+  assert.equal(samples.at(-1), 0);
+});
+
+test('the clean-checkout launch is an original reproducible air cue distinct from the hit bank', () => {
+  const { bytes, samples, rate } = readWave(path.join(root, DESTINATION));
+  assert.deepEqual(bytes, renderLaunch());
+  assert.equal(samples.length / rate, SECONDS);
+  assert.equal(SECONDS, 0.22);
+  const peak = Math.max(...samples.map(Math.abs));
+  const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
+  assert.ok(peak > 0.2 && peak <= 0.45);
+  assert.ok(rms > 0.065 && rms <= 0.085);
+  assert.equal(samples[0], 0);
+  assert.equal(samples.at(-1), 0);
+  assert.ok(manifest.assets.every(asset => Math.abs(asset.seconds - SECONDS) > 0.02));
+  const metadata = fs.readFileSync(path.join(root, DESTINATION + '.import'), 'utf8');
+  for (const setting of ['edit/trim=false', 'edit/normalize=false', 'edit/loop_mode=0', 'compress/mode=0']) {
+    assert.ok(metadata.includes(setting));
   }
 });
 

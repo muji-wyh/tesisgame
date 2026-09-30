@@ -7,7 +7,7 @@
     "channels": 1,
     "codec": "AAC LC"
   },
-  "note": "User-provided gameplay recording. These are filtered excerpts of one mixed mono track, not isolated original stems. Raw video, extracted audio and imports remain Git-ignored; the local Web export bundles the three finished hits.",
+  "note": "User-provided gameplay recording. These are filtered excerpts of one mixed mono track, not isolated original stems. Raw video, extracted audio and imports remain Git-ignored; the local Web export bundles three finished hits and one separate launch.",
   "processing": {
     "decoder": "FFmpeg floating-point AAC decode",
     "bladeHighpassHz": 230,
@@ -89,5 +89,33 @@
       "cutGain": 0.92,
       "cutOffsetSeconds": 0.032
     }
-  ]
+  ],
+  "launch": {
+    "id": "launch",
+    "destination": "assets/imported-audio/pop-reference/launch.wav",
+    "sha256": "8a9f1f9d9399ec6c7057148ffffd9e2d6922b1c612067addd062d1ce9e4d04a3",
+    "seconds": 0.24,
+    "sampleRate": 44100,
+    "channels": 1,
+    "bitDepth": 16,
+    "peakDbfs": -6.3755,
+    "rmsDbfs": -25.3922,
+    "window": {
+      "start": 0.232,
+      "seconds": 0.24
+    },
+    "processing": {
+      "highpassHz": 120,
+      "lowpassHz": 8000,
+      "attackSeconds": 0.003,
+      "releaseSeconds": 0.055,
+      "targetRms": 0.1,
+      "peakLimit": 0.48,
+      "runtimeGain": 0.16,
+      "maxSimultaneousLaunches": 1,
+      "runtimePlaybackRate": 1
+    },
+    "evidence": "The first second shows fruit launching without a blade gesture. This window covers the second launch transient near 0.25 seconds, before the first cut at approximately 1.22 seconds.",
+    "fallback": "assets/audio/sfx/pop-launch.wav"
+  }
 }

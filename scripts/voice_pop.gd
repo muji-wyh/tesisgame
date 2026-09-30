@@ -3,6 +3,7 @@ extends Control
 signal request_listening
 signal exit_requested
 signal hit(word: Dictionary)
+signal launched(uid: int)
 signal missed(count: int)
 signal round_finished(summary: Dictionary)
 signal hear_requested(word: Dictionary)
@@ -21,6 +22,7 @@ const PINK := Color("#ff6cce")
 const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
+const LAUNCH_SOUND_WINDOW: float = 0.2
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
@@ -57,6 +59,7 @@ var _publish_key: String = ""
 var _geometry_publish_pending: bool = false
 var _last_hit: String = ""
 var _last_hit_left: float = 0.0
+var _last_launch_uid: int = 0
 var _transcript: String = ""
 var _transcript_final: bool = false
 var _report_step: int = 0
@@ -204,6 +207,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_publish_key = ""
 	_last_hit = ""
 	_last_hit_left = 0.0
+	_last_launch_uid = 0
 	_clear_transcript()
 	set_report_speaking(false)
 	_report_step = 0
@@ -277,6 +281,7 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_layout()
 	_refresh_targets()
 	_publish(true)
+	_emit_launches()
 	queue_redraw()
 
 
@@ -548,7 +553,22 @@ func _advance_game(elapsed_seconds: float) -> void:
 	_refresh_targets()
 	_update_hud()
 	_publish()
+	_emit_launches()
 	queue_redraw()
+
+
+func _emit_launches() -> void:
+	if not _listening or game.phase != "running" or not is_visible_in_tree():
+		return
+	for target in game.targets:
+		var uid: int = int(target.uid)
+		if uid <= _last_launch_uid:
+			continue
+		_last_launch_uid = uid
+		# A delayed simulation step can create older targets. Never catch up
+		# their launch sounds after they are already well into their flight.
+		if float(target.age) <= LAUNCH_SOUND_WINDOW:
+			launched.emit(uid)
 
 
 func _visibility_changed() -> void:

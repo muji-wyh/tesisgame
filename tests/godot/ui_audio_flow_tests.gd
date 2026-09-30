@@ -230,6 +230,7 @@ func _run() -> void:
 		check(app.model.phase == "matching" and app.model.selected_id == next_id
 			and app.model.successes == 1 and app.feedback_timer.is_stopped(),
 			"Stopping Voice also permits the immediate next-card shortcut before its timer expires")
+	_check_pop_launch_audio(app)
 	await _check_pop_hit_audio(app)
 	await _check_pop_exit_audio(app)
 	app.audio.halt()
@@ -242,6 +243,79 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("UI audio flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_pop_launch_audio(app) -> void:
+	app.new_round(84, true, "", "pop")
+	var view = app._pop
+	view.set_process(false)
+	var launches: Array[int] = []
+	var record_launch := func(uid: int) -> void: launches.append(uid)
+	view.launched.connect(record_launch)
+	app._on_voice_state([true, false, "Opening microphone..."])
+	check(launches.is_empty() and not app.audio.pop_launch.playing,
+		"Waiting for microphone permission cannot throw a word or play a launch")
+	app._on_voice_state([true, true, "Listening."])
+	var player: AudioStreamPlayer = app.audio.pop_launch
+	check(launches == [1] and player.playing and player.stream != null,
+		"The first visible word plays its launch as soon as listening starts")
+	check(not app.audio.music.playing and not app.audio.voice.playing and not app.audio.effect.playing,
+		"Throwing a word does not start background music, a prompt, or a button sound")
+	var request: int = app.audio._playback_requests[player]
+	app._on_voice_state([true, true, "Listening."])
+	view.snapshot()
+	view._layout()
+	view.set_reduced_motion(true)
+	view.set_reduced_motion(false)
+	check(launches == [1] and app.audio._playback_requests[player] == request,
+		"Repeated listening state, layout, snapshots and motion preferences never replay a throw")
+	view._advance_game(2.15)
+	check(launches == [1, 2] and app.audio._playback_requests[player] == request + 1,
+		"The next real target has exactly one separate launch cue")
+	request = app.audio._playback_requests[player]
+	view.receive_transcript(view.game.targets[0].word.text)
+	check(app.audio.last_pop_player().playing and player.playing
+		and app.audio._playback_requests[player] == request,
+		"A hit keeps the launch tail and slice on separate audio channels")
+	app._on_voice_state([true, false, "Listening paused. Continuing..."])
+	app._on_voice_state([true, true, "Listening."])
+	check(launches == [1, 2] and app.audio._playback_requests[player] == request,
+		"Recognizer rollover cannot replay an existing target's launch")
+	app._on_voice_state([true, false, "Speech network error. Tap Retry."])
+	check(not player.playing and player.stream == null,
+		"An actual speech error stops an in-flight launch immediately")
+	app._on_voice_state([true, true, "Listening."])
+	check(launches == [1, 2] and not player.playing,
+		"Retrying a paused round never replays the cleared launch")
+	app.new_round(85, true, "", "pop")
+	view.set_process(false)
+	launches.clear()
+	app._on_voice_state([true, true, "Listening."])
+	request = app.audio._playback_requests[player]
+	view._advance_game(3.0)
+	view._advance_game(0.01)
+	check(launches == [1] and view.game.targets.size() == 2
+		and app.audio._playback_requests[player] == request,
+		"A long frame never catches up an older target's missed launch sound")
+	for transition in ["home", "hidden", "mode_exit", "mute", "finish"]:
+		app.new_round(86, true, "", "pop")
+		view.set_process(false)
+		app._on_voice_state([true, true, "Listening."])
+		check(player.playing, transition + " starts during an audible throw")
+		match transition:
+			"home": app._show_collection()
+			"hidden": app.on_page_hidden()
+			"mode_exit": app.choose_mode("match")
+			"mute": app.audio.set_muted(true)
+			"finish": view._advance_game(30.0)
+		check(not player.playing and player.stream == null,
+			transition + " stops and clears the launch sound")
+		if transition == "home": app._hide_collection()
+		elif transition == "hidden": app.on_page_visible()
+		elif transition == "mute": app.audio.set_muted(false)
+		check(not player.playing, transition + " cannot replay a previous throw on return")
+	view.launched.disconnect(record_launch)
+	app.choose_mode("match")
 
 
 func _check_pop_hit_audio(app) -> void:

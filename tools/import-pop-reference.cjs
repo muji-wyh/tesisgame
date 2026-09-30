@@ -6,6 +6,7 @@ const { spawnSync } = require('node:child_process');
 const SOURCE_SHA256 = '24aede3aa3cc104dcc1c1e28fbfbed82223647fbf90a803ea79ebb4291a5c79e';
 const RATE = 44100;
 const CUT_OFFSET_SECONDS = 0.032;
+const LAUNCH_WINDOW = { start: 0.232, seconds: 0.24 };
 const VARIANTS = [
   { id: 'quick', blade: { start: 1.215, seconds: 0.155 }, cut: { start: 2.386, seconds: 0.245 }, bladeGain: 0.78, cutGain: 1.0 },
   { id: 'juicy', blade: { start: 1.215, seconds: 0.145 }, cut: { start: 1.372, seconds: 0.265 }, bladeGain: 0.66, cutGain: 1.0 },
@@ -106,7 +107,17 @@ function importReference({ source, root = path.resolve(__dirname, '..'), ffmpeg 
       blade: variant.blade, cut: variant.cut, bladeGain: variant.bladeGain, cutGain: variant.cutGain,
       cutOffsetSeconds: CUT_OFFSET_SECONDS };
   });
-  for (const asset of rendered) {
+  const launchSamples = normalize(fade(decode(source, LAUNCH_WINDOW, 120, ffmpeg), 0.003, 0.055), 0.10, 0.48);
+  const launchBytes = wave(launchSamples);
+  const launchStats = statistics(Array.from({ length: launchSamples.length }, (_, index) => launchBytes.readInt16LE(44 + index * 2) / 32768));
+  const launch = { bytes: launchBytes, id: 'launch', destination: 'assets/imported-audio/pop-reference/launch.wav',
+    sha256: sha256(launchBytes), seconds: launchSamples.length / RATE, sampleRate: RATE, channels: 1, bitDepth: 16,
+    peakDbfs: Number((20 * Math.log10(launchStats.peak)).toFixed(4)), rmsDbfs: Number((20 * Math.log10(launchStats.rms)).toFixed(4)),
+    window: LAUNCH_WINDOW, processing: { highpassHz: 120, lowpassHz: 8000, attackSeconds: 0.003, releaseSeconds: 0.055,
+      targetRms: 0.10, peakLimit: 0.48, runtimeGain: 0.16, maxSimultaneousLaunches: 1, runtimePlaybackRate: 1 },
+    evidence: 'The first second shows fruit launching without a blade gesture. This window covers the second launch transient near 0.25 seconds, before the first cut at approximately 1.22 seconds.',
+    fallback: 'assets/audio/sfx/pop-launch.wav' };
+  for (const asset of [...rendered, launch]) {
     const destination = path.join(root, asset.destination);
     fs.mkdirSync(path.dirname(destination), { recursive: true });
     if (!fs.existsSync(destination) || sha256(fs.readFileSync(destination)) !== asset.sha256) fs.writeFileSync(destination, asset.bytes);
@@ -114,11 +125,12 @@ function importReference({ source, root = path.resolve(__dirname, '..'), ffmpeg 
   }
   const manifest = {
     source: { file: 'fruit_ninja.mp4', sha256: SOURCE_SHA256, seconds: 56.8, sampleRate: RATE, channels: 1, codec: 'AAC LC' },
-    note: 'User-provided gameplay recording. These are filtered excerpts of one mixed mono track, not isolated original stems. Raw video, extracted audio and imports remain Git-ignored; the local Web export bundles the three finished hits.',
+    note: 'User-provided gameplay recording. These are filtered excerpts of one mixed mono track, not isolated original stems. Raw video, extracted audio and imports remain Git-ignored; the local Web export bundles three finished hits and one separate launch.',
     processing: { decoder: 'FFmpeg floating-point AAC decode', bladeHighpassHz: 230, cutHighpassHz: 170, lowpassHz: 8000,
       attackSeconds: 0.002, bladeReleaseSeconds: 0.032, cutReleaseSeconds: 0.060,
       targetRms: 0.125, peakLimit: 0.62, runtimeGain: 0.24, maxSimultaneousHits: 3, runtimePlaybackRate: 1 },
     assets: rendered.map(({ bytes, ...asset }) => asset),
+    launch: (({ bytes, ...asset }) => asset)(launch),
   };
   const manifestPath = path.join(root, 'docs/assets/voice-pop-reference-audio.json');
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
@@ -129,7 +141,7 @@ function importReference({ source, root = path.resolve(__dirname, '..'), ffmpeg 
 if (require.main === module) {
   if (!process.argv[2]) throw new Error('Usage: node tools/import-pop-reference.cjs "C:/path/fruit_ninja.mp4"');
   const manifest = importReference({ source: process.argv[2] });
-  console.log(`Imported ${manifest.assets.length} premixed reference hits (${manifest.assets.map(asset => Math.round(asset.seconds * 1000)).join(', ')} ms).`);
+  console.log(`Imported ${manifest.assets.length} premixed reference hits (${manifest.assets.map(asset => Math.round(asset.seconds * 1000)).join(', ')} ms) and a ${Math.round(manifest.launch.seconds * 1000)} ms launch.`);
 }
 
-module.exports = { SOURCE_SHA256, RATE, VARIANTS, CUT_OFFSET_SECONDS, statistics, fade, normalize, wave, importReference };
+module.exports = { SOURCE_SHA256, RATE, VARIANTS, CUT_OFFSET_SECONDS, LAUNCH_WINDOW, statistics, fade, normalize, wave, importMetadata, importReference };
