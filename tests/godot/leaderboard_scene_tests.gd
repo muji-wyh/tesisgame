@@ -44,6 +44,25 @@ func action(panel: Node, control_name: String) -> Button:
 	return panel.find_child(control_name, true, false) as Button
 
 
+func visible_labels(node: Node) -> Array[String]:
+	var result: Array[String] = []
+	if node is Label and node.is_visible_in_tree():
+		result.append(node.text)
+	for child in node.get_children():
+		result.append_array(visible_labels(child))
+	return result
+
+
+func check_compact_result(panel: Node) -> void:
+	check(panel.snapshot().view == "result", "The embedded result uses the compact board presentation")
+	for mode in ["pop", "match", "memory"]:
+		check(action(panel, "LeaderboardMode_" + mode) == null,
+			"The completed Voice Pop result omits the %s mode tab" % mode)
+	var copy := "\n".join(visible_labels(panel))
+	for removed in ["LOCAL LEADERBOARDS", "Meet the high scorers", "Personal bests on this device.", "Saved for", "Played by", "PERSONAL BEST", "Voice Pop", "Most hits wins."]:
+		check(not copy.contains(removed), "The compact result omits repeated copy: " + removed)
+
+
 func check_review_modal_touch(app, mode: String) -> void:
 	var rail = app._found_words_scroll
 	check(not rail.interaction_allowed.call(),
@@ -82,6 +101,7 @@ func _run() -> void:
 	await _check_match(app, state, avery)
 	await _check_memory(app, state, avery)
 	await _check_long_rise(app)
+	await _check_rise_scroll_takeover()
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -131,6 +151,10 @@ func _check_menu(app, state) -> void:
 	check(root.gui_get_focus_owner() == app._players_button, "Closing the modal restores its menu action focus")
 	app._leaderboards_button.pressed.emit()
 	await settle()
+	var menu_copy := visible_labels(app._leaderboard_panel)
+	check(app.leaderboard_snapshot().view == "boards" and menu_copy.has("LOCAL LEADERBOARDS")
+		and menu_copy.has("Meet the high scorers") and menu_copy.has("PERSONAL BEST"),
+		"The standalone menu leaderboard retains its headings and ranking context")
 	for mode in ["pop", "match", "memory"]:
 		action(app._leaderboard_panel, "LeaderboardMode_" + mode).pressed.emit()
 		await settle()
@@ -381,6 +405,7 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	await settle()
 	panel = app._pop_leaderboard
 	check(is_instance_valid(panel) and panel.is_visible_in_tree(), "Voice Pop automatically shows the completed round's leaderboard")
+	check_compact_result(panel)
 	check(panel.get_index() == 2 and app._pop.replay_button.is_visible_in_tree(),
 		"The board sits after the hit total and Play again, before the word lists")
 	check(action(panel, "LeaderboardPlayer_" + player_id) == null and action(panel, "LeaderboardAddPlayer") == null,
@@ -419,6 +444,10 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	await settle()
 	check(panel.snapshot().submitted and state.board("pop")[0].metric == 1 and state.round_submission(round_id).player_id == player_id,
 		"Retry saves the actual hit total for the player selected before play")
+	check_compact_result(panel)
+	check(panel.snapshot().rows.size() == 1 and panel._row_nodes[player_id].name_label.text == "Avery"
+		and panel._row_nodes[player_id].metric_label.text == "1",
+		"The compact result retains the player's actual ranking, avatar/name row, and hit count")
 	check(not panel.snapshot().animation.active, "Reduced motion shows the saved rank without a moving celebration")
 	panel.save_assigned_score()
 	panel._save_score()
@@ -541,14 +570,14 @@ func _check_long_rise(app) -> void:
 	app.duck.settle()
 	app.set_reduced_motion(false)
 	app._show_leaderboard("boards", false)
-	app._leaderboard_panel.configure(state, "boards", "pop", "round-long-rise", {"hits": 20}, false)
+	app._leaderboard_panel.configure(state, "result", "pop", "round-long-rise", {"hits": 20}, false, rising_id)
 	await settle()
 	var panel = app._leaderboard_panel
 	check(state.board("pop")[9].player_id == rising_id and state.board("pop")[9].rank == 10,
 		"The promoted player begins in tenth place")
-	action(panel, "LeaderboardPlayer_" + rising_id).pressed.emit()
-	action(panel, "LeaderboardSaveScore").pressed.emit()
+	panel.save_assigned_score()
 	await settle()
+	check_compact_result(panel)
 	var writes_after_save: int = storage.writes
 	var samples: int = 0
 	var first_local_y: float = -1.0
@@ -578,3 +607,76 @@ func _check_long_rise(app) -> void:
 	check(not panel.snapshot().animation.active and storage.writes == writes_after_save,
 		"Returning from the background does not replay promotion or save the round again")
 	app._controller_back()
+
+
+func _check_rise_scroll_takeover() -> void:
+	var storage := BrowserStorage.new()
+	var state := State.new("user://unused-rank-touch-takeover.cfg", storage)
+	check(state.load_state(), "Load an isolated rank-animation touch fixture")
+	for index in range(10):
+		var created: Dictionary = state.create_profile("Touch player %d" % (index + 1), State.AVATARS[index])
+		check(created.ok and state.submit_round("touch-seed-%d" % index, "pop", created.profile.id, {"hits": 10 - index}).ok,
+			"Seed the touch fixture's ranked player %d" % (index + 1))
+	var scroll := preload("res://scripts/result_scroll.gd").new()
+	scroll.position = Vector2(12, 12)
+	scroll.size = Vector2(370, 170)
+	root.add_child(scroll)
+	var panel := preload("res://scripts/leaderboard_panel.gd").new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(panel)
+	var rising_id: String = str(state.profiles[9].id)
+	panel.configure(state, "result", "pop", "touch-rank-rise", {"hits": 20}, false, rising_id)
+	await settle()
+	panel.save_assigned_score()
+	await settle()
+	panel.set_process(false)
+	check(panel.snapshot().animation.active and panel.snapshot().animation.type == "rise" and scroll.scroll_vertical > 0,
+		"The compact promotion initially follows its rising row in a short scroll viewport")
+	var point := scroll.get_global_transform_with_canvas() * Vector2(180, 45)
+	var touch := InputEventScreenTouch.new()
+	touch.position = point
+	touch.index = 0
+	touch.pressed = true
+	scroll._input(touch)
+	var before_drag: int = scroll.scroll_vertical
+	var drag := InputEventScreenDrag.new()
+	drag.position = point + Vector2(0, 45)
+	drag.index = 0
+	scroll._input(drag)
+	var chosen_scroll: int = scroll.scroll_vertical
+	check(scroll.is_pointer_active() and chosen_scroll == before_drag - 45,
+		"A real touch drag takes the compact result's scrolling position")
+	panel._process(0.35)
+	check(scroll.scroll_vertical == chosen_scroll and panel.snapshot().animation.active,
+		"Rank movement continues without overriding the held finger")
+	touch.position = drag.position
+	touch.pressed = false
+	scroll._input(touch)
+	var progress_before: float = float(panel.snapshot().animation.progress)
+	panel._process(0.20)
+	check(not scroll.is_pointer_active() and scroll.scroll_vertical == chosen_scroll
+		and panel.snapshot().animation.active and float(panel.snapshot().animation.progress) > progress_before,
+		"Releasing the finger does not restart camera following during the same promotion")
+	for frame in range(10):
+		panel._process(0.20)
+		check(scroll.scroll_vertical == chosen_scroll, "The rest of the promotion preserves the user's scroll position")
+	check(not panel.snapshot().animation.active and is_zero_approx(panel._row_nodes[rising_id].position.y),
+		"Touch takeover still settles the promoted player in the final rank")
+	var keyboard_action: Button = panel._button("Review words", "TouchFixtureReview")
+	panel.add_child(keyboard_action)
+	await settle()
+	scroll.scroll_vertical = 0
+	keyboard_action.grab_focus()
+	await settle()
+	check(scroll.get_global_rect().grow(1).encloses(keyboard_action.get_global_rect()),
+		"Keyboard focus can still reveal a control after animation scroll takeover")
+	panel.configure(state, "result", "pop", "touch-next-rise", {"hits": 30}, false, str(state.profiles[8].id))
+	await settle()
+	scroll.scroll_vertical = 0
+	panel.save_assigned_score()
+	await settle()
+	check(panel.snapshot().animation.active and scroll.scroll_vertical > 0,
+		"A later promotion starts with camera following enabled again")
+	panel.settle_animation()
+	scroll.queue_free()
+	await settle()

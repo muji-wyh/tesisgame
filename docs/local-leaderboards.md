@@ -20,6 +20,10 @@ Matching ranking values share a place, using competition ranks such as **1, 1, 3
 
 Before every Voice Pop round, tap a player's avatar or name to start immediately. **Add player** sits below the player-choice frame. Creating a player returns to the choices and focuses the new avatar; tap it to start. The round keeps that identity, and its finished score saves automatically before the leaderboard celebration. Voice Pop results do not ask for the player again. If saving fails, **Retry saving** keeps the same player and round.
 
+The Voice Pop result places the player's avatar and name beside the hit total. Its embedded leaderboard shows the ranking rows directly, without introductory copy, repeated player attribution, mode tabs, or a personal-best heading. The menu's full leaderboard retains its mode selection and ranking explanations.
+
+Result-page touch scrolling follows the finger's distance at the current display scale. Dragging a word or Play again does not activate it, and a browser-canceled gesture cannot become a tap. Once the player scrolls during a rank celebration, that celebration stops moving the page automatically.
+
 After a Match or Memory round, select who played and save the result. A saved round stays assigned to that player. The leaderboard appears with the result; the menu also provides access to every mode's board. Match and Memory players can still be created from their result screens when needed.
 
 When a saved personal best improves the player's place, their avatar and name move upward while displaced rows make room, with a gold trail, glow, and sparkles. First entries have a separate arrival celebration. A higher score that retains the same rank does not claim a rank increase. Reduced motion displays the final ordering directly. Hiding or rebuilding the panel settles the effect, and reopening a saved result does not replay the improvement.

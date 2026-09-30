@@ -32,6 +32,72 @@ func result_pointer(point: Vector2, pressed: bool) -> void:
 	await process_frame
 
 
+func result_touch(point: Vector2, pressed: bool) -> void:
+	var event := InputEventScreenTouch.new()
+	event.index = 23
+	event.position = point
+	event.pressed = pressed
+	# Browser touchcancel reaches Godot as this ordinary release. The host
+	# callback must have invalidated its original pending tap beforehand.
+	root.push_input(event, true)
+	await process_frame
+
+
+func check_result_input_cancellation(app) -> void:
+	var view = app._pop
+	var activations: Array[String] = []
+	var on_replay: Callable = func() -> void: activations.append("replay")
+	var on_hear: Callable = func(_word: Dictionary) -> void: activations.append("hear")
+	view.request_listening.connect(on_replay)
+	view.hear_requested.connect(on_hear)
+	var summary: Dictionary = view.game.summary()
+	for cause in ["browser-cancel", "pause", "background", "modal"]:
+		for touch_first in [true, false]:
+			for button in [view.replay_button, view._review_buttons[0]]:
+				view._results.scroll_vertical = 0
+				view._ensure_result_control(button)
+				await settle()
+				var point: Vector2 = button.get_global_rect().intersection(view._results.get_global_rect()).get_center()
+				var before: int = activations.size()
+				if touch_first:
+					await result_touch(point, true)
+					await result_pointer(point, true)
+				else:
+					await result_pointer(point, true)
+					await result_touch(point, true)
+				check(view._results.is_pointer_active(), "The completed result owns a pending contact before " + cause)
+				match cause:
+					"browser-cancel":
+						app._on_input_canceled([])
+					"pause":
+						view.pause()
+					"background":
+						app.on_page_hidden()
+					"modal":
+						app._show_leaderboard("boards", false)
+				check(not view._results.is_pointer_active() and button.self_modulate.is_equal_approx(Color.WHITE),
+					"%s immediately clears the completed result's pending tap and press tint" % cause)
+				if cause == "background":
+					app.on_page_visible()
+				elif cause == "modal":
+					app._hide_leaderboard()
+				# Release only after the page/modal has returned: stale releases
+				# must stay canceled even when result interaction is allowed again.
+				if touch_first:
+					await result_touch(point, false)
+					await result_pointer(point, false)
+				else:
+					await result_pointer(point, false)
+					await result_touch(point, false)
+				check(activations.size() == before and not app._leaderboard_overlay.visible
+					and view.game.phase == "finished" and view.game.summary() == summary,
+					"An ordinary late release cannot activate %s after %s (touch first=%s)" % [button.name, cause, touch_first])
+	view.request_listening.disconnect(on_replay)
+	view.hear_requested.disconnect(on_hear)
+	view._results.scroll_vertical = 0
+	await settle()
+
+
 func check_result_touch_scroll(view) -> void:
 	# ScrollContainer consumes the mouse events emulated from touch. Enable the
 	# touchscreen hint for the headless display, then send real viewport input.
@@ -114,8 +180,9 @@ func check_result_contents(view, summary: Dictionary) -> void:
 		check(view._results.find_child(node_name, true, false) == null,
 			"Results do not retain the removed " + node_name + " control")
 	for button in view._results.find_children("*", "Button", true, false):
-		check(button == view.replay_button or str(button.name).begins_with("Hear_") or str(button.name).begins_with("Leaderboard"),
-			"Results offer replay, word playback, and local player attribution")
+		check(button == view.replay_button or str(button.name).begins_with("Hear_")
+			or str(button.name) in ["LeaderboardSaveScore", "LeaderboardRetryLoad"],
+			"Results offer only replay, word playback, and persistence recovery")
 	var listed_words: Array = summary.hit_words + summary.missed_words
 	check(view._review_buttons.size() == listed_words.size(), "Every recorded word remains available in its result list")
 	for button in view._review_buttons:
@@ -128,6 +195,32 @@ func check_result_contents(view, summary: Dictionary) -> void:
 	if not summary.missed_words.is_empty():
 		check(Array(labels).any(func(text: String) -> bool: return text.begins_with("Try these next time")),
 			"Missed words retain their practice group caption")
+
+
+func check_result_player(view, profile: Dictionary, dimensions: Vector2i) -> void:
+	var snapshot: Dictionary = view.snapshot().results_hits
+	var player: Dictionary = snapshot.player
+	check(player.get("id") == profile.id and player.get("name") == profile.name and player.get("avatar") == profile.avatar,
+		"The result preserves the selected player's exact identity at " + str(dimensions))
+	if player.is_empty():
+		return
+	var bounds: Rect2 = view._result_hero.get_global_rect()
+	var group := Rect2(Vector2(player.rect[0], player.rect[1]), Vector2(player.rect[2], player.rect[3]))
+	var avatar := Rect2(Vector2(player.avatar_rect[0], player.avatar_rect[1]), Vector2(player.avatar_rect[2], player.avatar_rect[3]))
+	var name_rect := Rect2(Vector2(player.name_rect[0], player.name_rect[1]), Vector2(player.name_rect[2], player.name_rect[3]))
+	var score := Rect2(Vector2(snapshot.rect[0], snapshot.rect[1]), Vector2(snapshot.rect[2], snapshot.rect[3]))
+	check(bounds.grow(1).encloses(group) and bounds.grow(1).encloses(score)
+		and group.end.x <= score.position.x + 1.0,
+		"The avatar/name group stays to the left of the visible hit total at " + str(dimensions))
+	check(group.grow(1).encloses(avatar) and group.grow(1).encloses(name_rect)
+		and avatar.end.x <= name_rect.position.x + 1.0 and name_rect.size.x > 0.0,
+		"The avatar and name share one bounded row without overlap at " + str(dimensions))
+	check(view._result_name.text == profile.name and view._result_name.tooltip_text == profile.name
+		and view._result_name.clip_text and view._result_name.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+		"Long player names retain their full identity while fitting the allotted space")
+	check(view._result_avatar.texture != null
+		and view._result_avatar.texture.resource_path == "res://assets/avatars/" + str(profile.avatar) + ".svg",
+		"The result displays the chosen player's actual avatar")
 
 
 func check_result_feedback(view, total: int) -> void:
@@ -655,6 +748,7 @@ func _run() -> void:
 		check_result_contents(view, result)
 		check_result_actions(view, dimensions, "Completed round")
 		check_result_feedback(view, int(result.hits))
+		check_result_player(view, app.leaderboard_state.profiles[0], dimensions)
 		check(not app.audio.narration.playing and app.audio.narration_state == "idle",
 			"Finishing Voice Pop does not request or play a removed Pip report")
 		var heard: Array[Dictionary] = []
@@ -672,6 +766,7 @@ func _run() -> void:
 			saw_scrollable_results = true
 			if dimensions == Vector2i(320, 568):
 				await check_result_touch_scroll(view)
+				await check_result_input_cancellation(app)
 			view._results.scroll_vertical = mini(100, int(view.snapshot().results_scroll_max))
 			await settle()
 			check(view._results.scroll_vertical > 0 and float(view.snapshot().results_scroll) > 0,
@@ -721,7 +816,12 @@ func _run() -> void:
 	check(app._pop.game.summary() == empty_round, "Zero-hit presentation preserves the actual round result")
 	var long_words: Array = app.data.words.duplicate(true)
 	long_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.text).length() > str(b.text).length())
-	for count in [20, 21]:
+	var long_profile: Dictionary = {"id": "long-name-layout-player", "name": "WWWWWWWWWWWWWWWWWWWW", "avatar": "unicorn"}
+	var assigned_profile: Dictionary = long_profile.duplicate(true)
+	app._pop.set_round_player(assigned_profile)
+	assigned_profile.name = "Changed outside the round"
+	var layout_viewport_size: Vector2i = root.size
+	for count in [20, 21, 123]:
 		var long_result: Dictionary = empty_round.duplicate(true)
 		long_result.hits = count
 		long_result.best_combo = count
@@ -737,10 +837,11 @@ func _run() -> void:
 		await settle()
 		check_result_contents(app._pop, long_result)
 		check_result_feedback(app._pop, count)
-		for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
+		for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
 			root.size = dimensions
 			await settle()
 			check_result_actions(app._pop, dimensions, "Long words, %d hits" % count)
+			check_result_player(app._pop, long_profile, dimensions)
 			var counter: Label = app._pop._result_hits
 			var text_width: float = counter.get_theme_font("font").get_string_size(counter.text,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, counter.get_theme_font_size("font_size")).x
@@ -753,7 +854,12 @@ func _run() -> void:
 		app._pop._advance_result_feedback(0.5)
 		check(str(app._pop.snapshot().results_hits.text) == str(count),
 			"Advancing reduced-motion feedback cannot rewind or recount the displayed total")
+	root.size = layout_viewport_size
+	await settle()
 	check(app._pop.game.summary() == empty_round, "Result-only layout fixtures never alter the underlying scored round")
+	app._pop.configure(app.data.words, true, 42)
+	check(app._pop._round_player.is_empty() and app._pop.snapshot().results_hits.player.is_empty(),
+		"Preparing a new round clears the previous result identity")
 	check_bonus_feedback(app.data.words)
 	check_independent_card_flight(app.data.words)
 	check_portrait_volley_flight(app.data.words)

@@ -1624,9 +1624,18 @@
           hud.targets_above_hud = hudState.targets_above_hud === true;
           const resultsHitState = state.results_hits && typeof state.results_hits === 'object' && !Array.isArray(state.results_hits)
             ? state.results_hits : {};
+          const resultRect = value => Array.isArray(value) && value.length === 4
+            ? [coordinate(value[0]), coordinate(value[1]), number(value[2]), number(value[3])] : [];
+          const resultPlayer = resultsHitState.player;
+          const player = phase === 'finished' && resultPlayer && typeof resultPlayer === 'object' &&
+            !Array.isArray(resultPlayer) && typeof resultPlayer.id === 'string' && resultPlayer.id &&
+            typeof resultPlayer.name === 'string' && typeof resultPlayer.avatar === 'string'
+            ? { id: resultPlayer.id.slice(0, 80), name: resultPlayer.name.slice(0, 80), avatar: resultPlayer.avatar.slice(0, 40),
+              rect: resultRect(resultPlayer.rect), avatar_rect: resultRect(resultPlayer.avatar_rect), name_rect: resultRect(resultPlayer.name_rect) } : {};
           const resultsHits = {
             text: typeof resultsHitState.text === 'string' && /^\d{1,16}$/.test(resultsHitState.text) ? resultsHitState.text : '',
-            total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true
+            total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true,
+            player, rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
           };
           for (const [name, value] of Object.entries({ phase, remaining, hits, score, combo, 'best-combo': bestCombo,
             'base-duration': baseDuration, 'bonus-time': bonusTime,
@@ -1642,7 +1651,7 @@
           }
           const message = typeof state.message === 'string' ? state.message : '';
           const readable = phase === 'idle' ? '' : phase === 'finished'
-            ? `${message ? message + ' ' : ''}Voice Pop. ${hits} hits.`
+            ? `${message ? message + ' ' : ''}Voice Pop. ${player.name ? player.name + '. ' : ''}${hits} hits.`
             : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${bestCombo}.` +
             (targets.length ? ' Words: ' + targets.map(target => target.text).join(', ') + '.' : '');
           if (popStatusText.textContent !== readable) popStatusText.textContent = readable;

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, chooseRoundPlayer, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
+const { chooseMode, chooseRoundPlayer, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint, leaderboardSnapshot, visibleColorCount } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
@@ -210,6 +210,14 @@ function expectSimpleResults(current) {
   expect(current.resultsHits.total).toBe(current.hits);
   expect(current.resultsScrollbarVisible).toBe(false);
   expect(current.transcript).toBe('');
+  const player = current.resultsHits.player;
+  expect(player.id, 'The round keeps the identity chosen before play').toBeTruthy();
+  expect(player.name).toBeTruthy();
+  expect(player.avatar).toBeTruthy();
+  expect(player.rect.every(Number.isFinite)).toBe(true);
+  expect(player.rect[2]).toBeGreaterThan(0);
+  expect(player.rect[0] + player.rect[2], 'The avatar and name remain left of the Hits counter')
+    .toBeLessThanOrEqual(current.resultsHits.rect[0] + 1);
   // The embedded leaderboard has separate diagnostics. Its middle section can
   // occupy the viewport while Play again and the review words are both clipped.
   expect(current.controls.every(control => /^(?:Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
@@ -254,6 +262,23 @@ function resultsAtEnd(current) {
   return current.resultsScroll >= current.resultsScrollMax - 1;
 }
 
+async function dispatchResultTouch(page, type, x, y) {
+  await page.evaluate(({ type, x, y }) => {
+    const canvas = document.querySelector('#canvas');
+    const ending = type === 'touchend' || type === 'touchcancel';
+    const touch = typeof document.createTouch === 'function'
+      ? document.createTouch(window, canvas, 1, x + scrollX, y + scrollY, x, y)
+      : new Touch({ identifier: 1, target: canvas, clientX: x, clientY: y,
+        pageX: x + scrollX, pageY: y + scrollY, screenX: x, screenY: y,
+        radiusX: 1, radiusY: 1, rotationAngle: 0, force: ending ? 0 : 1 });
+    // This WebKit build needs TouchList values; modern engines accept arrays.
+    const list = items => typeof document.createTouchList === 'function' ? document.createTouchList(...items) : items;
+    const touches = list(ending ? [] : [touch]);
+    canvas.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
+      touches, targetTouches: touches, changedTouches: list([touch]) }));
+  }, { type, x, y });
+}
+
 async function scrollResults(page, delta) {
   const before = await state(page);
   const bounds = await metrics(page), content = contentBounds(bounds);
@@ -278,19 +303,7 @@ async function scrollResults(page, delta) {
       if (delta < 0 ? current.resultsScroll === 0 : resultsAtEnd(current)) break;
       const start = delta < 0 ? top : bottom;
       const end = start - Math.sign(delta) * distance;
-      const dispatch = (type, y) => page.evaluate(({ type, x, y }) => {
-        const canvas = document.querySelector('#canvas');
-        const touch = typeof document.createTouch === 'function'
-          ? document.createTouch(window, canvas, 1, x + scrollX, y + scrollY, x, y)
-          : new Touch({ identifier: 1, target: canvas, clientX: x, clientY: y,
-          pageX: x + scrollX, pageY: y + scrollY, screenX: x, screenY: y,
-          radiusX: 1, radiusY: 1, rotationAngle: 0, force: type === 'touchend' ? 0 : 1 });
-        // This WebKit build requires TouchList values; modern engines accept arrays.
-        const list = items => typeof document.createTouchList === 'function' ? document.createTouchList(...items) : items;
-        const touches = list(type === 'touchend' ? [] : [touch]);
-        canvas.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
-          touches, targetTouches: touches, changedTouches: list([touch]) }));
-      }, { type, x, y });
+      const dispatch = (type, y) => dispatchResultTouch(page, type, x, y);
       let firstMoveScroll, lastMoveScroll;
       await dispatch('touchstart', start);
       try {
@@ -319,6 +332,90 @@ async function scrollResults(page, delta) {
     await expect.poll(async () => (await state(page)).resultsScroll).toBeLessThan(before.resultsScroll);
   } else if (delta > 0 && !resultsAtEnd(before)) {
     await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(before.resultsScroll);
+  }
+}
+
+async function expectDirectResultSwipe(page, pattern) {
+  const bounds = await metrics(page), content = contentBounds(bounds);
+  let swipe;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const current = await state(page);
+    const candidates = current.controls.filter(control => pattern.test(control.name) && !control.disabled &&
+      control.y + control.height <= bounds.height - content.padding &&
+      control.y + control.height / 2 > content.top + 16);
+    // The compact result can have only one short screenful of overflow. After
+    // swiping Play again upward, test a word in the opposite direction when
+    // that gives the finger and scroll offset enough room for a real drag.
+    swipe = candidates.flatMap(button => {
+      const center = button.y + button.height / 2;
+      return [
+        { button, direction: 1, distance: Math.min(96, current.resultsScrollMax - current.resultsScroll - 8,
+          center - content.top - 16) },
+        { button, direction: -1, distance: Math.min(96, current.resultsScroll - 8,
+          bounds.height - content.padding - center - 16) }
+      ];
+    }).sort((a, b) => b.distance - a.distance)[0];
+    if (swipe?.distance > 35) break;
+    await scrollResults(page, 130);
+  }
+  expect(swipe, `A fully visible ${pattern} button is available for the swipe`).toBeTruthy();
+  const { button, direction, distance } = swipe;
+  const before = await state(page);
+  expect(distance, 'The gesture has enough room to cross the drag threshold without hitting an edge').toBeGreaterThan(35);
+  const x = bounds.x + (button.x + button.width / 2) * bounds.scale;
+  const y = bounds.y + (button.y + button.height / 2) * bounds.scale;
+  const samples = [];
+  await dispatchResultTouch(page, 'touchstart', x, y);
+  await rendered(page);
+  await dispatchResultTouch(page, 'touchcancel', x, y);
+  await rendered(page);
+  expect((await state(page)).phase, `Browser cancellation cannot activate ${button.name}`).toBe('finished');
+  expect((await leaderboardSnapshot(page)).view, 'The browser cancellation callback prevents a canceled tap from opening the player chooser')
+    .toBe('result');
+  expect((await state(page)).resultsScroll, 'A canceled stationary contact does not move the results').toBe(before.resultsScroll);
+  await dispatchResultTouch(page, 'touchstart', x, y);
+  try {
+    await rendered(page);
+    expect(Math.abs((await state(page)).resultsScroll - before.resultsScroll),
+      'Touch-down on a result button does not jump the list to its focus position').toBeLessThanOrEqual(2);
+    for (let step = 1; step <= 6; step++) {
+      const logicalDistance = direction * distance * step / 6;
+      await dispatchResultTouch(page, 'touchmove', x, y - logicalDistance * bounds.scale);
+      if (step > 1) {
+        await expect.poll(async () => Math.abs((await state(page)).resultsScroll - before.resultsScroll - logicalDistance),
+          { message: `Scroll tracks the pointer one-to-one at scale ${bounds.scale}, step ${step}`, intervals: [40, 80] })
+          .toBeLessThanOrEqual(2);
+      } else await rendered(page);
+      samples.push({ step, pointerDistance: logicalDistance, scrollDistance: (await state(page)).resultsScroll - before.resultsScroll });
+    }
+  } finally {
+    await dispatchResultTouch(page, 'touchend', x, y - direction * distance * bounds.scale);
+  }
+  await page.waitForTimeout(180);
+  const after = await state(page);
+  expect(Math.abs(after.resultsScroll - before.resultsScroll - direction * distance),
+    'Releasing a swipe neither doubles the displacement nor adds a focus jump').toBeLessThanOrEqual(2);
+  expect(after.phase, 'Swiping a result button never starts a new game').toBe('finished');
+  expect((await leaderboardSnapshot(page)).view, 'Swiping Play again cannot open the player chooser').toBe('result');
+  return { button: button.name, canceledTap: true, scale: bounds.scale, direction, samples };
+}
+
+async function captureResultSwipe(page, info, browserName, viewport) {
+  const name = `result-swipe-${viewport.width}x${viewport.height}`;
+  await rendered(page);
+  const png = await page.screenshot({ path: info.outputPath(`${name}.png`), scale: 'css' });
+  const raw = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
+    requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
+  const canvasPng = Buffer.from(raw, 'base64');
+  fs.writeFileSync(info.outputPath(`${name}-canvas.png`), canvasPng);
+  const pageColors = await visibleColorCount(page, png), canvasColors = await visibleColorCount(page, canvasPng);
+  await info.attach(`${name}-rendering`, { body: JSON.stringify({ pageColors, canvasColors }), contentType: 'application/json' });
+  expect(canvasColors, `${name}: the results must remain drawn after resizing and swiping.`).toBeGreaterThan(20);
+  if (pageColors === 1 && process.platform === 'win32' && browserName === 'webkit') {
+    info.annotations.push({ type: 'rendering-limitation',
+      description: `${name}: existing Windows WebKit presentation/capture limitation after resize; the page PNG is blank while the raw canvas renders. Both retained.` });
+  } else {
+    expect(pageColors, `${name}: the page must show the results.`).toBeGreaterThan(20);
   }
 }
 
@@ -1090,7 +1187,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expectSimpleResults(round);
   expect(round.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
   await page.screenshot({ path: info.outputPath('results-hit-animation.png') });
-  await expect.poll(async () => (await state(page)).resultsHits).toEqual({ text: '2', total: 2, active: false });
+  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ text: '2', total: 2, active: false });
   const frames = await page.evaluate(() => window.__resultHitFrames);
   expect(frames[0]).toMatchObject({ text: '0', total: 2, active: true });
   expect(frames.some(frame => frame.text === '1' && frame.active), 'The total counts through an intermediate value').toBe(true);
@@ -1132,7 +1229,8 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toEqual({ text: '', total: 0, active: false });
+  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false, player: {} });
+  expect((await state(page)).resultsHits.player).toEqual({});
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
@@ -1151,7 +1249,7 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   expect(await page.evaluate(() => navigator.onLine)).toBe(true);
   expect(audioRequests, 'No separate audio files are fetched during startup').toEqual([]);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
-  await expect.poll(async () => (await state(page)).resultsHits).toEqual({ text: '0', total: 0, active: false });
+  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ text: '0', total: 0, active: false });
   const zero = await state(page);
   expect(zero.hits).toBe(0);
   expect(zero.score).toBe(0);
@@ -1174,7 +1272,9 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
     output = await expectOutputEnergy(page);
   }
   expectSimpleResults(await state(page));
-  expect((await state(page)).resultsHits).toEqual(zero.resultsHits);
+  const reviewedResult = (await state(page)).resultsHits;
+  expect(reviewedResult).toMatchObject({ text: '0', total: 0, active: false,
+    player: { id: zero.resultsHits.player.id, name: zero.resultsHits.player.name, avatar: zero.resultsHits.player.avatar } });
   expect(audioRequests, 'A review word plays from the game pack while offline').toEqual([]);
   await page.screenshot({ path: info.outputPath('offline-word-review.png') });
   await chooseMode(page, 'match');
@@ -1193,6 +1293,39 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   expect(errors).toEqual([]);
 });
 
+test('Voice Pop result swipes follow the pointer at each display scale without activating buttons', async ({ page, browserName }, info) => {
+  test.setTimeout(150000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await observeAudio(page, { phaseSelector: '#pop-status' });
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
+  await expect.poll(async () => (await leaderboardSnapshot(page)).submitted).toBe(true);
+  await page.waitForTimeout(250);
+  const starts = await page.evaluate(() => window.__popSpeech.starts);
+  const audioStarts = await page.evaluate(() => window.audioObservation.playbacks.length);
+  const observations = [];
+  const viewports = browserName === 'chromium'
+    ? [{ width: 1366, height: 768 }, { width: 960, height: 600 }]
+    : [{ width: 390, height: 844 }, { width: 844, height: 390 }];
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await rendered(page);
+    await scrollResults(page, -10000);
+    await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
+    expectSimpleResults(await state(page));
+    await visibleAction(page, /^Replay /);
+    observations.push(await expectDirectResultSwipe(page, /^Replay$/));
+    observations.push(await expectDirectResultSwipe(page, /^Hear_/));
+    expect(await page.evaluate(() => window.__popSpeech.starts), 'A swipe does not restart the microphone').toBe(starts);
+    expect(await page.evaluate(() => window.audioObservation.playbacks.length),
+      'A swipe on a word button does not pronounce it').toBe(audioStarts);
+    expect((await state(page)).resultsScrollbarVisible).toBe(false);
+    await captureResultSwipe(page, info, browserName, viewport);
+  }
+  await info.attach('result-swipe-displacement.json', { body: JSON.stringify(observations), contentType: 'application/json' });
+  expect(errors).toEqual([]);
+});
+
 test('reduced-motion Voice Pop results show the final hit total immediately', async ({ page }, info) => {
   await page.setViewportSize({ width: 844, height: 390 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1203,7 +1336,7 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
   const results = await state(page);
   expectSimpleResults(results);
   expect(results.hits).toBe(1);
-  expect(results.resultsHits).toEqual({ text: '1', total: 1, active: false });
+  expect(results.resultsHits).toMatchObject({ text: '1', total: 1, active: false });
   await page.waitForTimeout(1400);
   const frames = await page.evaluate(() => window.__resultHitFrames);
   expect(frames.length).toBeGreaterThan(0);
@@ -1220,7 +1353,8 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
   await resultAction(page, /^Replay /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toEqual({ text: '', total: 0, active: false });
+  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false, player: {} });
+  expect((await state(page)).resultsHits.player).toEqual({});
   expect(errors).toEqual([]);
 });
 

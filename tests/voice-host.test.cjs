@@ -869,7 +869,7 @@ test('Pop snapshots expose full live speech and result state without repeating i
   f.host.popStatus(JSON.stringify(state));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true, player: {}, rect: [] });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
   assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
@@ -883,7 +883,7 @@ test('Pop snapshots expose full live speech and result state without repeating i
   f.host.popStatus(JSON.stringify({ phase: 'idle' }));
   assert.equal(f.popStatus.attributes['data-transcript'], '');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, player: {}, rect: [] });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
 });
@@ -894,14 +894,34 @@ test('Pop result snapshots sanitize the hit animation and announce only the fina
     message: 'Round complete. Tap a word to hear it, or play again.',
     results_hits: { text: '4', total: 4.9, active: true, private: 'discard' } };
   f.host.popStatus(JSON.stringify(result));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true, player: {}, rect: [] });
   assert.match(f.popStatus.textContent, /Round complete.*Voice Pop\. 4 hits\./);
   assert.doesNotMatch(f.popStatus.textContent, /Score|combo|seconds/);
   assert.equal(Object.keys(f.popStatus.attributes).some(name => name.startsWith('data-report')), false);
   for (const malformed of [null, [], '4', { text: '<script>', total: 'Infinity', active: 'true' },
     { text: '1'.repeat(17), total: -5, active: 1 }]) {
     f.host.popStatus(JSON.stringify({ ...result, results_hits: malformed }));
-    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false });
+    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, player: {}, rect: [] });
+  }
+});
+
+test('Pop results preserve the chosen player and layout while clearing stale identity on replay', () => {
+  const f = fixture();
+  const player = { id: 'player-a', name: 'Avery', avatar: 'fox', rect: [20, 40, 180, 56],
+    avatar_rect: [20, 40, 56, 56], name_rect: [86, 40, 114, 56] };
+  const results_hits = { text: '8', total: 8, active: false, rect: [220, 20, 120, 96],
+    player: { ...player, private: 'discard' } };
+  f.host.popStatus(JSON.stringify({ phase: 'finished', hits: 8, results_hits }));
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { ...results_hits, player });
+  assert.match(f.popStatus.textContent, /Voice Pop\. Avery\. 8 hits\./);
+  f.host.popStatus(JSON.stringify({ phase: 'running', results_hits }));
+  const replay = JSON.parse(f.popStatus.attributes['data-results-hits']);
+  assert.deepEqual(replay.player, {});
+  assert.deepEqual(replay.rect, []);
+  assert.doesNotMatch(f.popStatus.textContent, /Avery/);
+  for (const invalid of [null, [], 'Avery', { id: 'a', name: 2, avatar: 'fox' }]) {
+    f.host.popStatus(JSON.stringify({ phase: 'finished', results_hits: { ...results_hits, player: invalid } }));
+    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']).player, {});
   }
 });
 

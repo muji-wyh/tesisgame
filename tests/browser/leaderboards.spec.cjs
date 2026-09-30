@@ -105,6 +105,35 @@ function expectInstantPlayerPicker(current) {
   expect(add.rect[1], 'Add player is below and outside the bordered choice frame').toBeGreaterThan(top + height);
 }
 
+function expectCompactResultBoard(current) {
+  expect(current.view, 'The embedded board uses the compact result presentation').toBe('result');
+  expect(current.mode).toBe('pop');
+  expect(current.controls.some(item => item.name.startsWith('LeaderboardMode_')),
+    'Mode switches are available in the menu, not inside a Voice Pop result').toBe(false);
+  expect(current.controls.some(item => item.name.startsWith('LeaderboardPlayer_') || item.name === 'LeaderboardAddPlayer'),
+    'The chosen player cannot be edited in the result board').toBe(false);
+}
+
+async function expectResultIdentity(page, expected) {
+  await rendered(page);
+  const hits = await page.locator('#pop-status').evaluate(element => JSON.parse(element.dataset.resultsHits || '{}'));
+  expect(hits.player).toMatchObject(expected);
+  const bounds = await metrics(page);
+  for (const [name, rect] of Object.entries({ player: hits.player.rect, avatar: hits.player.avatar_rect, name: hits.player.name_rect, hits: hits.rect })) {
+    expect(rect, `${name} exposes its visible layout`).toHaveLength(4);
+    const [x, y, width, height] = rect;
+    expect(rect.every(Number.isFinite), `${name} has finite geometry`).toBe(true);
+    expect(width, `${name} has a visible width`).toBeGreaterThan(0);
+    expect(height, `${name} has a visible height`).toBeGreaterThan(0);
+    expect(x, `${name} remains on the left side of the canvas`).toBeGreaterThanOrEqual(-1);
+    expect(x + width, `${name} remains on the right side of the canvas`).toBeLessThanOrEqual(bounds.width + 1);
+    expect(y, `${name} remains visible at the top of the results`).toBeGreaterThanOrEqual(-1);
+    expect(y + height).toBeLessThanOrEqual(bounds.height + 1);
+  }
+  expect(hits.player.rect[0] + hits.player.rect[2], 'The avatar and name sit to the left of Hits without overlapping')
+    .toBeLessThanOrEqual(hits.rect[0] + 1);
+}
+
 test('first entry requires a saved player, players persist locally and every mode has a board', async ({ page }, info) => {
   // Software-rendered canvas calls are slow; action deadlines remain strict.
   test.setTimeout(180000);
@@ -201,6 +230,9 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   const round = (await snapshot(page)).round_id;
   expect((await snapshot(page)).submitted).toBe(false);
   await expect.poll(async () => (await snapshot(page)).error || '').not.toBe('');
+  expectCompactResultBoard(await snapshot(page));
+  await expectResultIdentity(page, { id: 'player-b', name: 'Blake', avatar: 'duck' });
+  await page.screenshot({ path: info.outputPath('voice-pop-compact-result-retry.png') });
   expect((await snapshot(page)).selected_player, 'The automatic result save uses the player selected before play').toBe('player-b');
   expect((await snapshot(page)).controls.some(item => item.name.startsWith('LeaderboardPlayer_')),
     'Results never ask for a second player choice, including after a save failure').toBe(false);
@@ -248,6 +280,7 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   expect(await page.evaluate(() => window.__rankCaptureError)).toBe('');
   const capture = await page.evaluate(() => window.__rankCapture);
   const celebration = capture.snapshot;
+  expectCompactResultBoard(celebration);
   expect(celebration.animation.active).toBe(true);
   expect(celebration.animation.progress).toBeGreaterThanOrEqual(0.3);
   expect(celebration.animation.progress).toBeLessThan(1);
@@ -273,6 +306,8 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
     .toBeLessThan(frames[0].current_y - frames[0].target_y);
   await info.attach('rank-climb-frames.json', { body: JSON.stringify(frames), contentType: 'application/json' });
   const submitted = await snapshot(page);
+  expectCompactResultBoard(submitted);
+  expect(submitted.controls, 'The saved compact board has no redundant actions').toEqual([]);
   expect(submitted.round_id).toBe(round);
   expect(submitted.controls.some(item => item.name === 'LeaderboardSaveScore' || item.name.startsWith('LeaderboardPlayer_')),
     'A saved round cannot be reassigned to another player').toBe(false);
@@ -292,6 +327,8 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   await page.reload();
   await enterGame(page);
   await openPanel(page, 'MenuLeaderboards');
+  expect((await snapshot(page)).view, 'The menu retains the full leaderboard browser').toBe('boards');
+  expect((await snapshot(page)).controls.filter(item => item.name.startsWith('LeaderboardMode_'))).toHaveLength(3);
   await activate(page, 'LeaderboardMode_pop');
   expect((await snapshot(page)).rows.find(item => item.player_id === 'player-b')).toMatchObject({ rank: 1, name: 'Blake', avatar: 'duck' });
   expect((await snapshot(page)).animation.active, 'Reading a saved score does not replay its celebration').toBe(false);

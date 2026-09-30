@@ -164,7 +164,7 @@ func configure(store: RefCounted, view: String = "boards", mode: String = "pop",
 	settle_animation()
 	_generation += 1
 	_store = store
-	_view = view if view in ["players", "boards", "onboarding", "picker"] else "boards"
+	_view = view if view in ["players", "boards", "result", "onboarding", "picker"] else "boards"
 	_mode = mode if MODES.has(mode) else "pop"
 	_round_mode = _mode
 	_round_id = round_id
@@ -173,7 +173,7 @@ func configure(store: RefCounted, view: String = "boards", mode: String = "pop",
 	reduced_motion = reduced
 	_submitted = false
 	_confirmed = false
-	_assigned_player_id = assigned_player_id if _view == "boards" and _mode == "pop" and not _round_id.is_empty() else ""
+	_assigned_player_id = assigned_player_id if _view in ["boards", "result"] and _mode == "pop" and not _round_id.is_empty() else ""
 	_selected = _assigned_player_id
 	_selected_avatar = "duck"
 	_draft_name = ""
@@ -234,13 +234,14 @@ func _build() -> void:
 	var body := VBoxContainer.new()
 	body.add_theme_constant_override("separation", _px(14))
 	panel.add_child(body)
-	var player_view: bool = _view in ["players", "onboarding", "picker"]
-	var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, GOLD)
-	body.add_child(eyebrow)
-	var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Make it your game" if player_view else "Meet the high scorers"
-	var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Tap your avatar to start this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
-	body.add_child(_label(heading, 24, WHITE, true))
-	body.add_child(_label(description, 12, SOFT, true))
+	if _view != "result":
+		var player_view: bool = _view in ["players", "onboarding", "picker"]
+		var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, GOLD)
+		body.add_child(eyebrow)
+		var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Make it your game" if player_view else "Meet the high scorers"
+		var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Tap your avatar to start this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
+		body.add_child(_label(heading, 24, WHITE, true))
+		body.add_child(_label(description, 12, SOFT, true))
 	_error_label = _label(_error, 13, Color("#ffb8a9"), true)
 	_error_label.name = "LeaderboardError"
 	_error_label.visible = not _error.is_empty()
@@ -277,7 +278,7 @@ func _build() -> void:
 	else:
 		if not _round_id.is_empty():
 			_build_attribution(body)
-		if _round_id.is_empty() or _submitted:
+		if _view != "result" and (_round_id.is_empty() or _submitted):
 			_build_mode_tabs(body)
 		_build_board(body)
 	_pass_scroll_inputs(self)
@@ -285,6 +286,10 @@ func _build() -> void:
 
 
 func _build_attribution(body: VBoxContainer) -> void:
+	if _view == "result":
+		if not _submitted and not _assigned_player_id.is_empty():
+			_build_save_retry(body)
+		return
 	if _submitted or not _assigned_player_id.is_empty():
 		var profile: Dictionary = _profile(_selected)
 		var saved := HBoxContainer.new()
@@ -298,10 +303,7 @@ func _build_attribution(body: VBoxContainer) -> void:
 		saved.add_child(copy)
 		body.add_child(saved)
 		if not _submitted:
-			_save_button = _button("Retry saving", "LeaderboardSaveScore", true)
-			_save_button.visible = not _error.is_empty()
-			_save_button.pressed.connect(_save_score.bind(_ui_generation))
-			body.add_child(_save_button)
+			_build_save_retry(body)
 		return
 	body.add_child(_label("Who played this round?", 19, WHITE))
 	body.add_child(_label("Choose a player to save this score, or play again without saving.", 12, SOFT, true))
@@ -315,6 +317,13 @@ func _build_attribution(body: VBoxContainer) -> void:
 			_build_editor(body)
 	_save_button = _button("Save score", "LeaderboardSaveScore", true)
 	_save_button.disabled = _selected.is_empty()
+	_save_button.pressed.connect(_save_score.bind(_ui_generation))
+	body.add_child(_save_button)
+
+
+func _build_save_retry(body: VBoxContainer) -> void:
+	_save_button = _button("Retry saving", "LeaderboardSaveScore", true)
+	_save_button.visible = not _error.is_empty()
 	_save_button.pressed.connect(_save_score.bind(_ui_generation))
 	body.add_child(_save_button)
 
@@ -430,19 +439,22 @@ func _build_mode_tabs(body: VBoxContainer) -> void:
 
 func _build_board(body: VBoxContainer) -> void:
 	_rows_data = _store.board(_mode)
-	var heading := HBoxContainer.new()
-	var title := _label(MODES.get(_mode, "Voice Pop"), 18, WHITE)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading.add_child(title)
-	heading.add_child(_label("PERSONAL BEST", 10, PURPLE))
-	body.add_child(heading)
-	var rule: String = "Most hits wins."
-	if _mode == "match":
-		rule = "Completed rounds: fewest misses, then hints."
-	elif _mode == "memory":
-		rule = "Completed rounds: fewest turns, then peeks."
-	body.add_child(_label(rule, 12, SOFT, true))
+	if _view != "result":
+		var heading := HBoxContainer.new()
+		var title := _label(MODES.get(_mode, "Voice Pop"), 18, WHITE)
+		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		heading.add_child(title)
+		heading.add_child(_label("PERSONAL BEST", 10, PURPLE))
+		body.add_child(heading)
+		var rule: String = "Most hits wins."
+		if _mode == "match":
+			rule = "Completed rounds: fewest misses, then hints."
+		elif _mode == "memory":
+			rule = "Completed rounds: fewest turns, then peeks."
+		body.add_child(_label(rule, 12, SOFT, true))
 	if _rows_data.is_empty():
+		if _view == "result":
+			return
 		var empty := PanelContainer.new()
 		empty.add_theme_stylebox_override("panel", Style.box(SURFACE, EDGE, _px(16), 1))
 		empty.custom_minimum_size.y = 90 / _scale()
@@ -566,7 +578,7 @@ func _confirm_player(generation: int = -1) -> void:
 
 
 func save_assigned_score() -> void:
-	if not _assigned_player_id.is_empty() and _view == "boards" and _round_mode == "pop":
+	if not _assigned_player_id.is_empty() and _view in ["boards", "result"] and _round_mode == "pop":
 		_save_score()
 
 
@@ -614,7 +626,7 @@ func _begin_animation(outcome: Dictionary, generation: int) -> void:
 	_row_starts.clear()
 	for index in range(before.size()):
 		_row_starts[str(before[index].get("player_id", ""))] = float(index) * _row_step()
-	_animation = {"active": false, "type": "rise" if is_rise else "entry", "player_id": id, "old_rank": int(outcome.get("old_rank", 0)), "new_rank": int(outcome.get("new_rank", 0)), "progress": 0.0}
+	_animation = {"active": false, "type": "rise" if is_rise else "entry", "player_id": id, "old_rank": int(outcome.get("old_rank", 0)), "new_rank": int(outcome.get("new_rank", 0)), "progress": 0.0, "follow_scroll": true}
 	_animation_age = 0.0
 	_glory.rising = is_rise
 	_row_nodes[id].z_index = 3
@@ -641,7 +653,7 @@ func _reveal_animation_path(id: String, is_rise: bool) -> void:
 		var start: float = float(_row_starts.get(id, destination)) if is_rise else destination
 		var lift: float = (22.0 if is_rise else 12.0) / _scale() if is_equal_approx(start, destination) else 0.0
 		var region := Rect2(Vector2(0, minf(start, destination) - lift), Vector2(row.size.x, absf(start - destination) + row.size.y + lift))
-		_scroll_rect_into_view(_board.get_global_transform() * region, 26 / _scale(), true)
+		_scroll_rect_into_view(_board.get_global_transform() * region, 26 / _scale(), true, true)
 		return
 
 
@@ -686,7 +698,7 @@ func _apply_animation() -> void:
 			# Long climbs can span more than one mobile screen. Follow the player
 			# as the surrounding rows move, keeping room for the gold glow.
 			if _animation.get("type") == "rise" or _assigned_player_id.is_empty():
-				_ensure_visible_now(row, 22 / _scale())
+				_scroll_rect_into_view(row.get_global_rect(), 22 / _scale(), false, true)
 
 
 func settle_animation() -> void:
@@ -919,11 +931,19 @@ func _ensure_visible_now(control: Control, padding: float = 0.0) -> void:
 	_scroll_rect_into_view(control.get_global_rect(), padding)
 
 
-func _scroll_rect_into_view(global_rect: Rect2, padding: float = 0.0, require_fit: bool = false) -> void:
+func _scroll_rect_into_view(global_rect: Rect2, padding: float = 0.0, require_fit: bool = false, animation_follow: bool = false) -> void:
+	if animation_follow and not bool(_animation.get("follow_scroll", true)):
+		return
 	var content: Control = self
 	var ancestor: Node = get_parent()
 	while ancestor != null:
 		if ancestor is ScrollContainer:
+			if ancestor.has_method("is_pointer_active") and ancestor.is_pointer_active():
+				# Once the player takes the page, finish this promotion in place.
+				# Keyboard focus reveal and later promotions remain independent.
+				if animation_follow:
+					_animation["follow_scroll"] = false
+				return
 			# Hidden scrollbar rails must still scroll focused controls into view.
 			# Absolute content coordinates keep duplicate focus events idempotent.
 			var content_rect: Rect2 = content.get_global_transform().affine_inverse() * global_rect

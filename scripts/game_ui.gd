@@ -472,6 +472,7 @@ func _build_controls() -> void:
 	_toolbar.move_child(_memory.study_button, 0)
 	_pop = VoicePop.new()
 	_pop.name = "VoicePop"
+	_pop.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
 	_pop.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_pop.request_listening.connect(_start_pop_listening)
 	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
@@ -756,6 +757,7 @@ func _show_result_leaderboard() -> void:
 func _show_leaderboard(view: String, include_round: bool) -> void:
 	if _leaderboard_overlay.visible:
 		return
+	_pop.cancel_result_input()
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	audio.stop_voice()
@@ -834,6 +836,10 @@ func _leaderboard_player_confirmed(player_id: String) -> void:
 		if _pop.game.phase == "finished":
 			_configure_pop()
 		_pop_player_id = player_id
+		for profile in leaderboard_state.profiles:
+			if str(profile.id) == player_id:
+				_pop.set_round_player(profile)
+				break
 		_start_pop_listening()
 	else:
 		_restore_mode_music()
@@ -1479,7 +1485,7 @@ func _pop_finished(result: Dictionary) -> void:
 	_pop.attach_leaderboard(_pop_leaderboard)
 	_pop_leaderboard.score_saved.connect(_leaderboard_score_saved)
 	_pop_leaderboard.changed.connect(_publish_leaderboards)
-	_pop_leaderboard.configure(leaderboard_state, "boards", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion, _pop_player_id)
+	_pop_leaderboard.configure(leaderboard_state, "result", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion, _pop_player_id)
 	_pop_leaderboard.save_assigned_score()
 	_publish_leaderboards()
 
@@ -2882,16 +2888,7 @@ func _connect_browser() -> void:
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
 	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void: set_reduced_motion(bool(arguments[0])))
-	_input_cancel_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void:
-		_proactive_touches.clear()
-		_pointer_focus_active = false
-		_cancel_chest_hold()
-		_finish_chest_drag()
-		duck.note_activity()
-		_found_words_scroll.cancel_drag()
-		_memory.end_peek()
-		_room.playground.cancel()
-		_end_collection_drag())
+	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
@@ -2900,6 +2897,19 @@ func _connect_browser() -> void:
 		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible:
 			_pop.receive_transcript(str(arguments[0])))
 	_host.observePopSpeech(_pop_result_callback)
+
+
+func _on_input_canceled(_arguments: Array = []) -> void:
+	_proactive_touches.clear()
+	_pointer_focus_active = false
+	_cancel_chest_hold()
+	_finish_chest_drag()
+	duck.note_activity()
+	_found_words_scroll.cancel_drag()
+	_pop.cancel_result_input()
+	_memory.end_peek()
+	_room.playground.cancel()
+	_end_collection_drag()
 
 
 func _toggle_voice() -> void:
