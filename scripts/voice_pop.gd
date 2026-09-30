@@ -373,6 +373,26 @@ func receive_transcript(text: String) -> void:
 	_present_hits(struck)
 
 
+func receive_speech_event(json: String) -> bool:
+	if not _listening or game.phase != "running" or not is_visible_in_tree():
+		return false
+	var event = JSON.parse_string(json)
+	if not event is Dictionary:
+		return false
+	_sync_game_clock()
+	if game.phase != "running":
+		return false
+	_refresh_targets()
+	var struck: Array = game.hit_speech_event(event)
+	if struck.is_empty():
+		if _last_hit_left > 0.0:
+			game.clear_recognition_feedback()
+		_present_hits(struck)
+		return false
+	_present_hits(struck)
+	return true
+
+
 func _present_hits(struck: Array) -> void:
 	if struck.is_empty() and not game.recognition_feedback.is_empty():
 		_last_hit_left = 0.0
@@ -541,7 +561,8 @@ func snapshot() -> Dictionary:
 		actions.append({"name": str(control.name), "text": visible_text,
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
-	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
+	return {"phase": "idle" if _stopped else str(game.phase), "round_id": game.round_id,
+		"remaining": float(game.remaining), "hits": int(game.hits),
 		"base_duration": PopModel.DURATION, "bonus_time": float(game.bonus_time), "combo": int(game.combo),
 		"hud": _hud_snapshot(),
 		"vocabulary": game.vocabulary(),

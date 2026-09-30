@@ -2893,9 +2893,12 @@ func _connect_browser() -> void:
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
-	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible:
-			_pop.receive_transcript(str(arguments[0])))
+	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> bool:
+		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible \
+			and not _leaderboard_overlay.visible and not _page_hidden and arguments.size() == 1 \
+			and arguments[0] is String:
+			return _pop.receive_speech_event(arguments[0])
+		return false)
 	_host.observePopSpeech(_pop_result_callback)
 
 

@@ -14,7 +14,7 @@ function speechEvent(entries, resultIndex = 0) {
   return { resultIndex, results };
 }
 
-function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false } = {}) {
+function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false, local = false } = {}) {
   const block = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?\n      \}/)?.[0];
   assert.ok(block, 'The maintained shell needs its isolated inline speech host');
   const handlers = new WeakMap();
@@ -56,6 +56,7 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
   const window = Object.assign(element(), {
     isSecureContext: secure,
     navigator: { onLine: online },
+    performance: { now: () => now },
     setTimeout(callback, delay) {
       const id = nextTimer++;
       timers.set(id, { at: now + delay, callback });
@@ -103,13 +104,41 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
       cancel() {}
     };
   }
-  const host = vm.runInNewContext(`(${block})()`, { window, document });
+  const localPreparation = {
+    modeForNewRound: () => local ? 'local' : 'browser',
+    getState: () => ({ experimentEnabled: local, enabled: local, ready: local,
+      capable: local, status: local ? 'ready' : 'disabled', error: '' }),
+    setVisible() {}
+  };
+  const host = vm.runInNewContext(`(${block})()`, {
+    window, document, createLocalSpeechPreparation: () => localPreparation
+  });
+  let popState = { phase: 'running', round_id: 'round-1', vocabulary: ['cat', 'dog', 'sun'], targets: [
+    { uid: 1, text: 'cat', forms: ['cat', 'cats'] },
+    { uid: 2, text: 'dog', forms: ['dog', 'dogs'] },
+    { uid: 3, text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }
+  ] };
+  function publishPop(changes = {}) {
+    popState = { ...popState, ...changes };
+    return host.popStatus(JSON.stringify(popState));
+  }
+  publishPop();
   const states = [];
   const results = [];
   const popWords = [];
-  host.observePopSpeech(word => {
-    assert.equal(typeof word, 'string', 'Pop emits one lexical word as a positional bridge argument');
-    popWords.push(word);
+  const popEvents = [];
+  host.observePopSpeech(json => {
+    assert.equal(typeof json, 'string', 'Pop emits one JSON event as a positional bridge argument');
+    const event = JSON.parse(json);
+    assert.equal(typeof event.event_id, 'string');
+    assert.equal(typeof event.round_id, 'string');
+    assert.equal(typeof event.target_uid, 'number');
+    assert.equal(typeof event.text, 'string');
+    assert.ok(['interim', 'final'].includes(event.stage));
+    assert.equal(typeof event.received_at_ms, 'number');
+    popEvents.push(event);
+    popWords.push(event.text);
+    return event.target_uid > 0;
   });
   host.observeSpeech((...values) => {
     assert.deepEqual(values.map(value => typeof value), ['string', 'boolean'],
@@ -121,7 +150,7 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
     states.push(values);
   });
   return {
-    host, document, window, elements, instances, states, results, popWords, advance, spoken,
+    host, document, window, elements, instances, states, results, popWords, popEvents, advance, spoken, publishPop,
     get starts() { return starts; }, get aborts() { return aborts; },
     get pendingTimers() { return timers.size; },
     get latest() { return instances.at(-1); },
@@ -534,36 +563,233 @@ test('Pop requests permission immediately but waits for actual listening before 
   assert.equal(f.aura.attributes['data-listening'], 'false');
 });
 
-test('Pop interim words score once through repeated, shortened and revised finals', () => {
+test('Pop waits 150 ms for a stable interim while final words resolve immediately', () => {
   const f = fixture();
   f.listen('pop');
   f.latest.result([['Cat', false]]);
-  assert.deepEqual(f.popWords, ['Cat'], 'Interim speech is delivered immediately');
+  f.advance(149);
+  assert.deepEqual(f.popWords, [], 'A provisional spelling does not immediately consume a target');
   f.latest.result([['Cat', false]]);
+  f.advance(1);
+  assert.deepEqual(f.popWords, ['Cat'], 'Unchanged interim updates do not postpone stability forever');
+  assert.equal(f.popEvents[0].stage, 'interim');
+  assert.equal(f.popEvents[0].received_at_ms, 0, 'The event reports observation time, not fictional audio timing');
+  f.latest.result([['Cat dog', true]]);
+  assert.deepEqual(f.popWords, ['Cat', 'dog'], 'A final accepts its new word without an extra stability delay');
+  assert.equal(f.popEvents[1].stage, 'final');
+});
+
+test('Pop preserves occurrences through inserted prefixes, shortening and reexpanded finals', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['Cat', false]]);
+  f.advance(150);
   f.latest.result([['the cat', false]]);
-  assert.deepEqual(f.popWords, ['Cat', 'the'], 'An inserted prefix cannot replay a consumed target word');
+  f.advance(150);
+  assert.deepEqual(f.popWords, ['Cat'], 'An inserted prefix cannot replay a consumed target word');
   f.latest.result([['the cat dog', false]]);
+  f.advance(150);
   f.latest.result([['cat', false]]);
   f.latest.result([['the cat dog', true]]);
   f.latest.result([['the cat dog', true]]);
   f.latest.result([['the cat dog sun', false]]);
-  assert.deepEqual(f.popWords, ['Cat', 'the', 'dog'], 'Completed result indexes reject late interim revisions too');
+  f.advance(150);
+  assert.deepEqual(f.popWords, ['Cat', 'dog'], 'Completed result indexes reject late interim revisions too');
   assert.ok(f.results.some(([text, final]) => text === 'the cat dog' && final), 'The original full-transcript callback stays intact');
   f.latest.result([['the cat dog', true], ['cat', false]], 1);
   f.latest.result([['the cat dog', true], ['cat', true]], 1);
-  assert.deepEqual(f.popWords, ['Cat', 'the', 'dog', 'cat'], 'A new utterance may legitimately repeat a word');
+  assert.deepEqual(f.popWords, ['Cat', 'dog', 'cat'], 'A new result segment may legitimately repeat a word');
+  assert.equal(new Set(f.popEvents.map(event => event.event_id)).size, 3);
 });
 
-test('Pop delivers newly completed interim words and preserves full nonmatching lexical tokens', () => {
+test('Pop completes a partial candidate without treating substrings or possessives as hits', () => {
   const f = fixture();
   f.listen('pop');
   f.latest.result([['ca', false]]);
+  f.advance(100);
   f.latest.result([['cat', false]]);
+  f.advance(149);
+  assert.deepEqual(f.popWords, []);
+  f.advance(1);
   f.latest.result([['cat cat2 _cat caté cat\'s 2cat cat_dog', true]]);
-  assert.deepEqual(f.popWords, ['ca', 'cat', 'cat2', '_cat', 'caté', "cat's", '2cat', 'cat_dog']);
-  assert.equal(f.popWords.filter(word => word === 'cat').length, 1, 'Completing an interim prefix scores cat once');
+  assert.deepEqual(f.popWords, ['cat'], 'Only the complete target token produces a bound hit event');
+  assert.equal(f.results.at(-1)[0], "cat cat2 _cat caté cat's 2cat cat_dog", 'The raw caption remains complete');
   f.latest.result([['cat', true], ['DOGS', true]], 1);
   assert.equal(f.popWords.at(-1), 'DOGS', 'The model receives original case and handles canonical word matching');
+});
+
+test('a repeated word in one result segment gets a new occurrence bound to the new target', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(150);
+  f.publishPop({ targets: [{ uid: 8, text: 'cat', forms: ['cat', 'cats'] }] });
+  f.latest.result([['cat cat', false]]);
+  f.advance(150);
+  f.latest.result([['cat cats', true]]);
+  assert.deepEqual(f.popWords, ['cat', 'cat']);
+  assert.deepEqual(f.popEvents.map(event => event.target_uid), [1, 8]);
+  assert.notEqual(f.popEvents[0].event_id, f.popEvents[1].event_id);
+});
+
+test('a spelling substitution cannot consume two targets for one spoken occurrence', () => {
+  const f = fixture();
+  f.publishPop({ targets: [{ uid: 1, text: 'cat' }, { uid: 2, text: 'bat' }] });
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(150);
+  f.latest.result([['bat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+  assert.deepEqual(f.results.at(-1), ['bat', true], 'A correction still updates the displayed transcript');
+});
+
+test('a correction before stability may resolve the same unconsumed occurrence', () => {
+  const f = fixture();
+  f.publishPop({ targets: [{ uid: 1, text: 'cat' }, { uid: 2, text: 'bat' }] });
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(100);
+  f.latest.result([['bat', false]]);
+  f.advance(149);
+  assert.deepEqual(f.popWords, []);
+  f.advance(1);
+  assert.deepEqual(f.popWords, ['bat']);
+  assert.equal(f.popEvents[0].target_uid, 2);
+});
+
+test('reordering already consumed occurrences cannot hit replacement targets', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['cat dog', false]]);
+  f.advance(150);
+  f.publishPop({ targets: [{ uid: 10, text: 'cat' }, { uid: 11, text: 'dog' }] });
+  f.latest.result([['dog cat', true]]);
+  assert.deepEqual(f.popWords, ['cat', 'dog']);
+  assert.deepEqual(f.popEvents.map(event => event.target_uid), [1, 2]);
+});
+
+test('a candidate first heard without a target cannot score a later spawn', () => {
+  for (const initial of ['cat', 'ca']) {
+    const f = fixture();
+    f.publishPop({ targets: [] });
+    f.listen('pop');
+    f.latest.result([[initial, false]]);
+    f.publishPop({ targets: [{ uid: 9, text: 'cat' }] });
+    f.latest.result([['cat', true]]);
+    assert.equal(f.popEvents.filter(event => event.target_uid > 0).length, 0, initial);
+    assert.equal(f.popEvents.at(-1).target_uid, 0, 'An unmatched final supplies feedback without inventing a target');
+  }
+});
+
+test('a target expiring during stability cannot be replaced by a fresh copy', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(149);
+  f.publishPop({ targets: [{ uid: 9, text: 'cat' }] });
+  f.advance(1);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popEvents, []);
+  assert.ok(f.host.speechDiagnostics().counts.expired_target >= 1);
+});
+
+test('pending candidates are cancelled on end, stop, background and round changes', () => {
+  for (const action of ['end', 'stop', 'background', 'round', 'removed-result']) {
+    const f = fixture();
+    f.listen('pop');
+    f.latest.result([['cat', false]]);
+    if (action === 'end') f.latest.end();
+    else if (action === 'stop') f.host.stopSpeech();
+    else if (action === 'background') { f.document.hidden = true; f.document.dispatch('visibilitychange'); }
+    else if (action === 'round') f.publishPop({ round_id: 'round-2' });
+    else f.latest.result([]);
+    f.advance(150);
+    assert.deepEqual(f.popEvents, [], action);
+  }
+});
+
+function rotatingWord(index) {
+  return 'word' + String.fromCharCode(97 + Math.floor(index / 676),
+    97 + Math.floor(index / 26) % 26, 97 + index % 26);
+}
+
+test('bounded revision history retires a long segment and cancels its pending target', () => {
+  const f = fixture();
+  f.listen('pop');
+  const prefix = Array.from({ length: 31 }, (_, index) => rotatingWord(index));
+  f.latest.result([[prefix.concat('cat').join(' '), false]]);
+  for (let revision = 31; revision < 551; revision++) {
+    prefix.shift();
+    prefix.push(rotatingWord(revision));
+    f.latest.result([[prefix.concat('cat').join(' '), false]]);
+  }
+  assert.equal(f.host.speechDiagnostics().counts.segment_limit, 1,
+    'Repeated short hypotheses cannot grow deleted occurrence history without a bound');
+  f.advance(150);
+  f.latest.result([['cat', true]]);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popEvents, [], 'The retired pending occurrence and its final cannot replay');
+  f.latest.result([['cat', true], ['cat', true]], 1);
+  assert.deepEqual(f.popWords, ['cat'], 'A fresh result index remains playable after the oversized segment');
+});
+
+test('retiring at the history limit also cancels a candidate created by the final insertion', () => {
+  const f = fixture();
+  f.listen('pop');
+  const prefix = Array.from({ length: 32 }, (_, index) => rotatingWord(index));
+  f.latest.result([[prefix.join(' '), false]]);
+  for (let revision = 32; revision < 512; revision++) {
+    prefix.shift();
+    prefix.push(rotatingWord(revision));
+    f.latest.result([[prefix.join(' '), false]]);
+  }
+  assert.equal(f.host.speechDiagnostics().counts.segment_limit, undefined);
+  f.latest.result([[prefix.concat('cat').join(' '), false]]);
+  assert.equal(f.host.speechDiagnostics().counts.segment_limit, 1);
+  f.advance(150);
+  assert.deepEqual(f.popEvents, [], 'A newly allocated slot cannot outlive the segment that retired it');
+});
+
+test('more than 256 live words retire the segment without truncating it into fresh hits', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  const oversized = Array.from({ length: 256 }, (_, index) => rotatingWord(index)).concat('cat').join(' ');
+  f.latest.result([[oversized, false]]);
+  f.latest.result([[oversized, false]]);
+  assert.equal(f.host.speechDiagnostics().counts.segment_limit, 1);
+  f.advance(150);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popEvents, []);
+  f.latest.result([['cat', true], ['cat', true]], 1);
+  assert.deepEqual(f.popWords, ['cat']);
+});
+
+test('native rejection leaves an occurrence unconsumed for a valid final acknowledgement', () => {
+  const f = fixture();
+  const attempted = [];
+  f.host.observePopSpeech(json => { attempted.push(JSON.parse(json)); return attempted.length > 1; });
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(150);
+  f.latest.result([['cat', true]]);
+  f.latest.result([['cat', true]]);
+  assert.equal(attempted.length, 2);
+  assert.equal(attempted[0].event_id, attempted[1].event_id);
+  assert.deepEqual(attempted.map(event => event.stage), ['interim', 'final']);
+});
+
+test('Pop joins a spoken yo yo before tokenization and preserves its original caption', () => {
+  for (const text of ['yo yo', 'YO-YO', 'yo yos']) {
+    const f = fixture();
+    f.publishPop({ targets: [{ uid: 9, text: 'yoyo', forms: ['yoyo', 'yoyos'] }] });
+    f.listen('pop');
+    f.latest.result([[text, true]]);
+    assert.equal(f.popEvents.length, 1);
+    assert.equal(f.popEvents[0].target_uid, 9);
+    assert.equal(f.popWords[0], text.endsWith('s') ? 'yoyos' : 'yoyo');
+    assert.deepEqual(f.results.at(-1), [text, true]);
+  }
 });
 
 test('only Pop emits the lexical callback and switching presentation releases the previous recognizer', () => {
@@ -597,53 +823,57 @@ test('model-provided noun aliases prevent revised plurals from replaying a targe
     { uid: 2, text: 'mouse', forms: ['mouse', 'mice'] },
     { uid: 3, text: 'bus', forms: ['bus', 'buses'] }
   ];
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets }));
+  f.publishPop({ targets });
   f.latest.result([['ca', false]]);
   f.latest.result([['cat mouse buses', false]]);
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.advance(150);
+  f.publishPop({ targets: [] });
   f.latest.result([['cats mice bus', true]]);
-  assert.deepEqual(f.popWords, ['ca', 'cat', 'mouse', 'buses']);
+  assert.deepEqual(f.popWords, ['cat', 'mouse', 'buses']);
   assert.equal(f.popStatus.attributes['data-targets'], '[]', 'Only currently displayed target geometry is exposed');
+  f.publishPop({ targets: [{ uid: 10, text: 'cat', forms: ['cat', 'cats'] }] });
   f.latest.result([['cats mice bus', true], ['cats', true]], 1);
-  assert.deepEqual(f.popWords, ['ca', 'cat', 'mouse', 'buses', 'cats'], 'New utterances may repeat any accepted noun form');
+  assert.deepEqual(f.popWords, ['cat', 'mouse', 'buses', 'cats'], 'New utterances may repeat any accepted noun form');
 });
 
 test('Pop homophone revisions share one utterance even after that word is thrown again', () => {
   const f = fixture();
   f.listen('pop');
   const forms = ['bear', 'bears', 'bare', 'bares'];
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ uid: 7, text: 'bear', forms }] }));
+  f.publishPop({ targets: [{ uid: 7, text: 'bear', forms }] });
   f.latest.result([['BARE', false]]);
+  f.advance(150);
   assert.deepEqual(f.popWords, ['BARE'], 'The initial homophone is sent unchanged to canonical model matching');
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.publishPop({ targets: [] });
   f.latest.result([['bear', false]]);
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ uid: 8, text: 'bear', forms }] }));
+  f.publishPop({ targets: [{ uid: 8, text: 'bear', forms }] });
   f.latest.result([['bears', false]]);
   f.latest.result([['bares', true]]);
   f.latest.result([['bare bear', false]]);
   assert.deepEqual(f.popWords, ['BARE'], 'Canonical, plural, and late-final revisions cannot hit the replacement target');
   assert.ok(f.results.some(([text, final]) => text === 'bares' && final), 'Full recognized text remains available to the HUD');
   f.latest.result([['bares', true], ['bare', false]], 1);
+  f.advance(150);
   f.latest.result([['bares', true], ['bear', true]], 1);
   assert.deepEqual(f.popWords, ['BARE', 'bare'], 'Only a new utterance can hit the later bear');
 });
 
-test('noun metadata arriving after an interim still recognizes already-consumed aliases', () => {
+test('noun metadata arriving after first observation cannot retarget that old occurrence', () => {
   const f = fixture();
   f.listen('pop');
   f.latest.result([['mice', false]]);
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ text: 'mouse', forms: ['mouse', 'mice'] }] }));
+  f.publishPop({ targets: [{ uid: 8, text: 'mouse', forms: ['mouse', 'mice'] }] });
   f.latest.result([['mouse', true]]);
-  assert.deepEqual(f.popWords, ['mice']);
+  assert.equal(f.popEvents.filter(event => event.target_uid > 0).length, 0);
 });
 
 test('a Pop hit that ends the round rejects remaining words and all stale browser callbacks', () => {
   const f = fixture();
   const delivered = [];
-  f.host.observePopSpeech(word => { delivered.push(word); f.host.stopSpeech(); });
+  f.host.observePopSpeech(json => { delivered.push(JSON.parse(json).text); f.host.stopSpeech(); return true; });
   f.listen('pop');
   const old = f.latest;
-  old.result([['cat dog ball', false], ['sun', true]]);
+  old.result([['cat dog ball', true], ['sun', true]]);
   assert.deepEqual(delivered, ['cat']);
   assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.equal(f.panel.hidden, true);
@@ -971,25 +1201,62 @@ function enablePhraseHints(f) {
   f.window.SpeechRecognitionPhrase = class {
     constructor(phrase, boost) { this.phrase = phrase; this.boost = boost; }
   };
-  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat', 'SUN', 'cat', 'bad phrase', null] }));
+  f.publishPop({ vocabulary: ['cat', 'SUN', 'cat', 'bad phrase', null], targets: [
+    { uid: 1, text: 'cat' }, { uid: 3, text: 'sun' }
+  ] });
 }
 
-test('Voice Pop supplies bounded game vocabulary when contextual phrases are supported', () => {
-  const f = fixture();
+test('local Voice Pop weights live targets above the complete lesson vocabulary', () => {
+  const f = fixture({ local: true });
   enablePhraseHints(f);
+  f.publishPop({ targets: [{ uid: 1, text: 'cat' }] });
   f.listen('pop');
-  assert.deepEqual(Array.from(f.latest.phrases, value => [value.phrase, value.boost]), [['cat', 2], ['sun', 2]]);
+  assert.equal(f.latest.processLocally, true);
+  assert.deepEqual(Array.from(f.latest.phrases, value => [value.phrase, value.boost]), [['cat', 4], ['sun', 1]]);
+  f.publishPop({ targets: [{ uid: 3, text: 'sun' }] });
+  assert.deepEqual(Array.from(f.latest.phrases, value => [value.phrase, value.boost]), [['cat', 1], ['sun', 4]]);
+  assert.equal(f.starts, 1, 'Changing active target hints does not restart the microphone');
   f.latest.result([['hello', true]]);
-  assert.deepEqual(f.popWords, ['hello'], 'Hints do not rewrite unrelated recognition into a target');
+  assert.deepEqual(f.popWords, ['hello']);
+  assert.equal(f.popEvents[0].target_uid, 0, 'Hints do not rewrite unrelated recognition into a target');
   f.host.stopSpeech();
-  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['pear'] }));
+  f.publishPop({ phase: 'ready', round_id: 'round-2', vocabulary: ['pear'], targets: [] });
   f.listen('pop');
   assert.deepEqual(Array.from(f.latest.phrases, value => value.phrase), ['pear'], 'A new lesson replaces old hints');
 });
 
+test('local phrase hints include every eligible word in the real 148, 260 and 350 word pools', () => {
+  const words = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'words.json'), 'utf8'));
+  const levels = { basic: 1, growing: 2, advanced: 3 };
+  for (const [maximum, expected] of [[1, 148], [2, 260], [3, 350]]) {
+    const f = fixture({ local: true });
+    enablePhraseHints(f);
+    const vocabulary = words.filter(word => levels[word.level] <= maximum).map(word => word.text);
+    assert.equal(vocabulary.length, expected);
+    const last = vocabulary.at(-1);
+    f.publishPop({ vocabulary, targets: [{ uid: 10, text: last }] });
+    f.listen('pop');
+    const phrases = Array.from(f.latest.phrases, value => [value.phrase, value.boost]);
+    assert.equal(phrases.length, expected, 'No silent first-200 truncation');
+    assert.deepEqual(phrases.map(([word]) => word), [...vocabulary].sort());
+    assert.equal(phrases.find(([word]) => word === last)[1], 4);
+    assert.equal(phrases.find(([word]) => word === 'cat')[1], 1);
+  }
+});
+
+test('ordinary browser recognition receives no local-only phrase hints even when the API exists', () => {
+  const f = fixture();
+  enablePhraseHints(f);
+  f.listen('pop');
+  assert.equal(Object.hasOwn(f.latest, 'phrases'), false);
+  assert.equal(f.latest.processLocally, undefined);
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+});
+
 test('browsers without contextual phrases retain normal Voice Pop recognition', () => {
   const f = fixture({ api: 'prefixed' });
-  f.host.popStatus(JSON.stringify({ phase: 'ready', vocabulary: ['cat'] }));
+  f.publishPop({ vocabulary: ['cat'] });
   f.listen('pop');
   assert.equal(f.starts, 1);
   assert.equal('phrases' in f.latest, false);
@@ -998,7 +1265,7 @@ test('browsers without contextual phrases retain normal Voice Pop recognition', 
 });
 
 test('a service rejecting contextual phrases retries once without them and fences old results', () => {
-  const f = fixture();
+  const f = fixture({ local: true });
   enablePhraseHints(f);
   f.listen('pop');
   const old = f.latest;
@@ -1018,7 +1285,7 @@ test('a service rejecting contextual phrases retries once without them and fence
 });
 
 test('a browser rejecting the phrase setter falls back before opening the microphone', () => {
-  const f = fixture();
+  const f = fixture({ local: true });
   enablePhraseHints(f);
   Object.defineProperty(f.window.SpeechRecognition.prototype, 'phrases', {
     configurable: true, get() { return []; }, set() { throw new Error('Experimental API is disabled'); }
@@ -1031,7 +1298,7 @@ test('a browser rejecting the phrase setter falls back before opening the microp
 });
 
 test('a synchronous NotSupportedError from biased start falls back and ordinary Match has no hints', () => {
-  const f = fixture();
+  const f = fixture({ local: true });
   enablePhraseHints(f);
   const start = f.window.SpeechRecognition.prototype.start;
   f.window.SpeechRecognition.prototype.start = function () {
@@ -1045,7 +1312,7 @@ test('a synchronous NotSupportedError from biased start falls back and ordinary 
   f.latest.result([['cat', true]]);
   assert.deepEqual(f.popWords, ['cat']);
 
-  const match = fixture();
+  const match = fixture({ local: true });
   enablePhraseHints(match);
   match.listen('match');
   assert.equal(Object.hasOwn(match.latest, 'phrases'), false);
@@ -1054,15 +1321,16 @@ test('a synchronous NotSupportedError from biased start falls back and ordinary 
 test('homophone revisions cannot replay an already consumed Voice Pop target', () => {
   const f = fixture();
   f.listen('pop');
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [
+  f.publishPop({ targets: [
     { uid: 1, text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }
-  ] }));
+  ] });
   f.latest.result([['sun', false]]);
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.advance(150);
+  f.publishPop({ targets: [] });
   f.latest.result([['son', false]]);
-  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [
+  f.publishPop({ targets: [
     { uid: 2, text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }
-  ] }));
+  ] });
   f.latest.result([['sons', true]]);
   assert.deepEqual(f.popWords, ['sun']);
   f.latest.result([['sons', true], ['son', true]], 1);
@@ -1083,15 +1351,17 @@ test('an empty final Voice Pop hypothesis supplies one unclear-speech notificati
   assert.equal(f.starts, 1);
 });
 
-test('Voice Pop uses system recognition without loading local models or voice profiles', () => {
+test('Voice Pop defaults to system recognition without loading custom models or voice profiles', () => {
   assert.doesNotMatch(shell, /(?:src|href)="(?:multiplayer|voice-profiles)[^"]*"/);
   for (const api of ['standard', 'prefixed']) {
     const f = fixture({ api });
     assert.deepEqual(Object.keys(f.host).sort(), ['observePopSpeech', 'observeSpeech', 'popStatus',
-      'speechAvailable', 'speechBounds', 'speechMode', 'stopSpeech']);
+      'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech']);
     f.listen('pop');
     assert.equal(f.starts, 1);
     assert.equal(f.latest.lang, 'en-US');
+    assert.equal(f.latest.maxAlternatives, 3);
+    assert.equal(f.latest.processLocally, undefined);
     assert.equal(f.states.at(-1)[1], true);
     f.latest.result([['cat', true]]);
     assert.deepEqual(f.popWords, ['cat']);
@@ -1100,4 +1370,45 @@ test('Voice Pop uses system recognition without loading local models or voice pr
     assert.equal(f.aborts, 1);
     assert.equal(f.aura.attributes['data-listening'], 'false');
   }
+});
+
+test('alternative hypotheses are diagnostic only and cannot combine into extra hits', () => {
+  const f = fixture();
+  f.host.setSpeechDiagnostics(true);
+  f.listen('pop');
+  const result = Object.assign([
+    { transcript: 'cat', confidence: 0.7 },
+    { transcript: 'dog', confidence: 0.6 },
+    { transcript: 'sun', confidence: 0.5 }
+  ], { isFinal: true });
+  f.latest.callbacks.result({ resultIndex: 0, results: [result] });
+  assert.deepEqual(f.popWords, ['cat']);
+  const diagnostic = f.host.speechDiagnostics().records.find(record => record.type === 'result');
+  assert.deepEqual(JSON.parse(JSON.stringify(diagnostic.alternatives)), result.map(({ transcript: text, confidence }) => ({ text, confidence })));
+  const unbound = fixture();
+  unbound.listen('pop');
+  unbound.latest.callbacks.result({ resultIndex: 0, results: [Object.assign([
+    { transcript: 'cap', confidence: 0.7 }, { transcript: 'cat', confidence: 0.6 }
+  ], { isFinal: true })] });
+  assert.deepEqual(unbound.popWords, ['cap']);
+  assert.equal(unbound.popEvents[0].target_uid, 0, 'A lower-ranked target must not turn an unrelated best hypothesis into a hit');
+});
+
+test('recognition diagnostics retain transcript alternatives only after explicit opt-in', () => {
+  const f = fixture();
+  f.listen('pop');
+  f.latest.result([['private first sentence', true]]);
+  const ordinary = f.host.speechDiagnostics();
+  assert.equal(ordinary.enabled, false);
+  assert.deepEqual(Array.from(ordinary.records), []);
+  assert.equal(ordinary.counts.result, 1);
+  assert.doesNotMatch(JSON.stringify(ordinary), /private first sentence/);
+  f.host.setSpeechDiagnostics(true);
+  f.latest.result([['private first sentence', true], ['cat', true]], 1);
+  assert.ok(f.host.speechDiagnostics().records.some(record => record.type === 'result' && record.alternatives[0].text === 'cat'));
+  f.host.setSpeechDiagnostics(false);
+  f.latest.result([['private first sentence', true], ['cat', true], ['private last sentence', true]], 2);
+  const cleared = f.host.speechDiagnostics();
+  assert.deepEqual(Array.from(cleared.records), []);
+  assert.doesNotMatch(JSON.stringify(cleared), /private|sentence/);
 });

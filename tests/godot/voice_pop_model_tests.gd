@@ -25,6 +25,7 @@ func _run() -> void:
 	_test_time_and_pause()
 	_test_combo_time_bonuses()
 	_test_recognition()
+	_test_bound_speech_events()
 	_test_homophones_vocabulary_and_feedback()
 	_test_form_snapshots()
 	_test_expiry_and_results()
@@ -39,6 +40,114 @@ func _run() -> void:
 
 func words(ids: Array) -> Array:
 	return catalog.filter(func(word: Dictionary) -> bool: return ids.has(word.id))
+
+
+func speech_event(game, target: Dictionary, id: String, text: String = "") -> Dictionary:
+	return {"event_id": id, "round_id": game.round_id, "target_uid": target.uid,
+		"text": target.word.text if text.is_empty() else text, "stage": "interim", "received_at_ms": 120.0}
+
+
+func _test_bound_speech_events() -> void:
+	var game := Model.new()
+	game.configure(words(["cat"]), 7)
+	var ready_round: String = game.round_id
+	check(not ready_round.is_empty(), "A prepared round publishes a speech identity before listening")
+	game.start()
+	check(game.round_id == ready_round, "Starting the microphone retains the prepared speech round identity")
+	var original: Dictionary = game.targets[0].duplicate(true)
+	var candidate: Dictionary = speech_event(game, original, "occurrence-1", "ca")
+	check(game.hit_speech_event(candidate).is_empty(), "A partial candidate cannot hit its bound target")
+	for changes in [
+		{"round_id": "older-round"}, {"target_uid": original.uid + 100}, {"text": "dog"},
+		{"text": "cat dog"}, {"stage": "unknown"}, {"received_at_ms": -1.0},
+		{"received_at_ms": INF}, {"target_uid": 1.5}, {"target_uid": "1"}, {"event_id": ""}
+	]:
+		var invalid: Dictionary = speech_event(game, original, "invalid")
+		invalid.merge(changes, true)
+		check(game.hit_speech_event(invalid).is_empty() and game.hits == 0,
+			"Invalid speech metadata cannot score: " + str(changes))
+	check(game.hit_speech_event({"text": "cat"}).is_empty(), "An unbound legacy string cannot enter the browser event path")
+	candidate.text = "CAT!"
+	var struck: Array = game.hit_speech_event(candidate)
+	check(struck.size() == 1 and struck[0].uid == original.uid and game.hits == 1,
+		"A completed candidate consumes its occurrence only after the bound target is hit")
+	game.advance(0.66)
+	check(game.targets.size() == 1 and game.targets[0].uid != original.uid, "A repeated noun gets a different target identity")
+	var replacement: Dictionary = game.targets[0].duplicate(true)
+	var revised: Dictionary = speech_event(game, replacement, candidate.event_id)
+	revised.stage = "final"
+	check(game.hit_speech_event(revised).is_empty() and game.hits == 1,
+		"A consumed occurrence cannot replay against the next copy of the word")
+	var stale: Dictionary = speech_event(game, original, "stale-target")
+	check(game.hit_speech_event(stale).is_empty() and game.hits == 1,
+		"An unconsumed result bound to the removed target cannot hit its replacement")
+	var repeated: Dictionary = speech_event(game, replacement, "occurrence-2", "cats")
+	struck = game.hit_speech_event(repeated)
+	check(struck.size() == 1 and game.hits == 2 and game.bonus_time == 3.0,
+		"A separate repeated occurrence may hit the replacement and earns the normal combo bonus")
+	check(game.hit_speech_event(repeated).is_empty() and game.bonus_time == 3.0,
+		"Repeating the accepted event never duplicates points or bonus time")
+
+	game.configure(words(["cat"]), 7)
+	check(game.round_id != ready_round, "Reconfiguration invalidates every old speech event even when target IDs restart")
+	game.start()
+	check(game.hit_speech_event(candidate).is_empty(), "A prior round event cannot match the new round's same numbered target")
+	var paused_round: String = game.round_id
+	candidate = speech_event(game, game.targets[0], "after-pause")
+	game.pause()
+	check(game.hit_speech_event(candidate).is_empty(), "Paused speech events cannot consume a target")
+	game.resume()
+	check(game.round_id == paused_round and game.hit_speech_event(candidate).size() == 1,
+		"Pause and resume keep the round identity and do not consume a rejected event")
+	game.stop()
+	check(game.hit_speech_event(candidate).is_empty(), "Stopped rounds reject bound speech events")
+	game.start()
+	check(game.round_id != paused_round, "Starting another finished round creates a new speech identity")
+
+	game.configure(words(["cat"]), 7)
+	game.start()
+	candidate = speech_event(game, game.targets[0], "late-result")
+	game.advance(game.targets[0].lifetime)
+	check(game.hit_speech_event(candidate).is_empty() and game.hits == 0 and game.misses == 1,
+		"A result arriving at the flight boundary cannot score even with an earlier receipt field")
+	game.advance(Model.DURATION)
+	check(game.hit_speech_event(candidate).is_empty() and game.phase == "finished",
+		"A delayed event cannot change a finished round")
+
+	game.configure(words(["bear"]), 7)
+	game.start()
+	candidate = speech_event(game, game.targets[0], "homophone", "BARE")
+	candidate.stage = "final"
+	struck = game.hit_speech_event(candidate)
+	check(struck.size() == 1 and struck[0].word.id == "bear" and game.hit_words[0].id == "bear",
+		"Bound recognition accepts a vetted homophone and retains its canonical result")
+
+	game.configure(words(["cat", "dog"]), 7)
+	game.start()
+	check(game._spawn_target(5.6), "The bound revision fixture has two separate visible words")
+	var first: Dictionary = game.targets[0].duplicate(true)
+	var second: Dictionary = game.targets[1].duplicate(true)
+	candidate = speech_event(game, first, "revision")
+	check(game.hit_speech_event(candidate).size() == 1, "The first stable spelling hits its bound target")
+	candidate = speech_event(game, second, "revision")
+	check(game.hit_speech_event(candidate).is_empty() and game.targets[0].uid == second.uid,
+		"One occurrence revised into another word cannot hit a second target")
+	candidate.event_id = "next-occurrence"
+	check(game.hit_speech_event(candidate).size() == 1, "A distinct occurrence can hit that second target")
+
+	game.configure(words(["cat"]), 7)
+	game.start()
+	var feedback: Dictionary = {"event_id": "feedback", "round_id": game.round_id, "target_uid": 0,
+		"text": "", "stage": "final", "received_at_ms": 140.0}
+	check(game.hit_speech_event(feedback).is_empty() and game.recognition_feedback == "unclear_speech",
+		"An empty final gives retry feedback without awarding or consuming a target")
+	feedback.text = "hello"
+	check(game.hit_speech_event(feedback).is_empty() and game.recognition_feedback == "no_matching_target",
+		"An unbound final explains an unavailable word without guessing a target")
+	feedback.round_id = "old-feedback"
+	feedback.text = ""
+	check(game.hit_speech_event(feedback).is_empty() and game.recognition_feedback == "no_matching_target",
+		"Feedback from an old round cannot overwrite the current recognition message")
 
 
 func _test_start_and_reset() -> void:

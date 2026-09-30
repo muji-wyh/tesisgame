@@ -14,6 +14,7 @@ const RECOGNITION_MESSAGES: Dictionary = {
 }
 
 var phase: String = "ready"
+var round_id: String = ""
 var remaining: float = DURATION
 var elapsed: float = 0.0
 var bonus_time: float = 0.0
@@ -36,6 +37,8 @@ var _next_uid: int = 1
 var _next_spawn_at: float = 0.0
 var _next_burst_at: float = INF
 var _noun := RegEx.new()
+var _round_serial: int = 0
+var _consumed_speech_events: Dictionary = {}
 
 
 func _init() -> void:
@@ -77,7 +80,7 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 func start() -> bool:
 	if phase in ["running", "paused"] or _words.is_empty():
 		return false
-	_reset_round()
+	_reset_round(phase != "ready" or round_id.is_empty())
 	phase = "running"
 	_spawn()
 	_next_burst_at = _rng.randf_range(BURST_WARMUP, BURST_WARMUP + 3.0)
@@ -153,24 +156,68 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 				break
 		if not matched:
 			continue
-		hits += 1
-		combo += 1
-		best_combo = maxi(best_combo, combo)
-		var points: int = 10 + mini(combo - 1, 5) * 2
-		score += points
-		_record_word(hit_words, target.word)
-		var hit: Dictionary = target.duplicate(true)
-		hit.points = points
-		hit.combo = combo
-		hit.time_bonus = 3 if combo == 2 else 5 if combo == 3 else 0
-		bonus_time += float(hit.time_bonus)
-		remaining = maxf(0.0, DURATION + bonus_time - elapsed)
-		removed.append(hit)
-		targets.erase(target)
-	if not removed.is_empty() and targets.is_empty():
-		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
+		removed.append(_hit_target(target))
 	_set_recognition_feedback("" if not removed.is_empty() else "unclear_speech" if spoken.is_empty() else "no_matching_target")
 	return removed
+
+
+func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
+	var removed: Array[Dictionary] = []
+	if phase != "running" or remaining <= 0.0:
+		return removed
+	if not event.has_all(["event_id", "round_id", "target_uid", "text", "stage", "received_at_ms"]):
+		return removed
+	if not event.event_id is String or event.event_id.is_empty() or not event.round_id is String \
+		or event.round_id != round_id or _consumed_speech_events.has(event.event_id):
+		return removed
+	if not event.text is String or not event.stage is String or event.stage not in ["interim", "final"]:
+		return removed
+	if not (event.target_uid is int or event.target_uid is float) \
+		or not (event.received_at_ms is int or event.received_at_ms is float):
+		return removed
+	var uid_number: float = float(event.target_uid)
+	var received_at: float = float(event.received_at_ms)
+	if not is_finite(uid_number) or uid_number < 0.0 or uid_number != floor(uid_number) \
+		or not is_finite(received_at) or received_at < 0.0:
+		return removed
+	var spoken: Array[String] = SpeechWords.tokens(event.text)
+	if uid_number == 0.0:
+		if event.stage == "final":
+			_set_recognition_feedback("unclear_speech" if spoken.is_empty() else "no_matching_target")
+		return removed
+	if spoken.size() != 1:
+		return removed
+	# The browser binds an occurrence to its first visible target. Receipt time is
+	# diagnostic only: it is not an audio timestamp and cannot extend that flight.
+	for target in targets:
+		if float(target.uid) != uid_number or target.age + EPSILON >= target.lifetime:
+			continue
+		if not _aliases.get(target.word.id, []).has(spoken[0]):
+			return removed
+		_consumed_speech_events[event.event_id] = true
+		removed.append(_hit_target(target))
+		clear_recognition_feedback()
+		break
+	return removed
+
+
+func _hit_target(target: Dictionary) -> Dictionary:
+	hits += 1
+	combo += 1
+	best_combo = maxi(best_combo, combo)
+	var points: int = 10 + mini(combo - 1, 5) * 2
+	score += points
+	_record_word(hit_words, target.word)
+	var hit: Dictionary = target.duplicate(true)
+	hit.points = points
+	hit.combo = combo
+	hit.time_bonus = 3 if combo == 2 else 5 if combo == 3 else 0
+	bonus_time += float(hit.time_bonus)
+	remaining = maxf(0.0, DURATION + bonus_time - elapsed)
+	targets.erase(target)
+	if targets.is_empty():
+		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
+	return hit
 
 
 func _set_recognition_feedback(code: String) -> void:
@@ -192,7 +239,11 @@ func summary() -> Dictionary:
 	}
 
 
-func _reset_round() -> void:
+func _reset_round(new_round: bool = true) -> void:
+	if new_round:
+		_round_serial += 1
+		round_id = "pop-%d-%d" % [get_instance_id(), _round_serial]
+	_consumed_speech_events.clear()
 	recognition_feedback = ""
 	recognition_message = ""
 	elapsed = 0.0

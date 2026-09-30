@@ -1282,6 +1282,231 @@
       startLoadingDance();
       startLoadingGamepad();
 
+      function createLocalSpeechPreparation({ onChange, onDiagnostic } = {}) {
+        const experimentEnabled = new URLSearchParams(window.location?.search || '').get('speechLocal') === '1';
+        let enabled = experimentEnabled;
+        let ready = false;
+        let capable = null;
+        let status = enabled ? 'idle' : 'disabled';
+        let error = '';
+        let generation = 0;
+        let pending = null;
+        let busy = false;
+        let disposed = false;
+        let frozenRound = null;
+        let hasFrozenRound = false;
+        let frozenMode = 'browser';
+        let panel = null;
+        let summary = null;
+        let statusText = null;
+        let checkbox = null;
+        let action = null;
+
+        function getState() {
+          return { experimentEnabled, enabled, ready, capable, status, error };
+        }
+
+        function render() {
+          if (!panel) return;
+          const labels = {
+            disabled: 'Browser speech selected',
+            idle: 'Not checked',
+            checking: 'Checking English support...',
+            downloadable: 'English download available',
+            downloading: 'Preparing English...',
+            ready: 'English ready for the next round',
+            unsupported: 'On-device English is unavailable here',
+            error: error === 'user-gesture-required' ? 'Tap Download English to continue' :
+              error === 'permission-denied' ? 'Speech preparation was blocked. Check browser permissions.' :
+              error === 'inactive-document' ? 'Return to this page and try again.' : 'Preparation failed. Try again.'
+          };
+          summary.textContent = `On-device speech · ${labels[status]}`;
+          statusText.textContent = labels[status];
+          checkbox.checked = enabled;
+          action.disabled = !enabled || busy;
+          action.textContent = status === 'downloadable' ? 'Download English' :
+            status === 'ready' ? 'Check again' : status === 'error' ? 'Retry check' : 'Check availability';
+          // A browser download cannot be cancelled by this page. Rechecking can
+          // observe its completion without starting a second installation.
+          if (status === 'downloading' && !busy) {
+            action.disabled = !enabled;
+            action.textContent = 'Check again';
+          }
+        }
+
+        function notify() {
+          render();
+          onChange?.(getState());
+          onDiagnostic?.({ event: 'local-preparation', ...getState() });
+        }
+
+        function localConstructor() {
+          const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (window.isSecureContext !== true || typeof Recognition !== 'function' ||
+              typeof Recognition.available !== 'function' || typeof Recognition.install !== 'function') return null;
+          try {
+            const probe = new Recognition();
+            if (!('processLocally' in probe) || typeof probe.start !== 'function' ||
+                typeof probe.abort !== 'function') return null;
+            probe.lang = 'en-US';
+            probe.processLocally = true;
+            return probe.processLocally === true ? Recognition : null;
+          } catch (_) { return null; }
+        }
+
+        function applyAvailability(value) {
+          ready = value === 'available';
+          status = { available: 'ready', downloadable: 'downloadable', downloading: 'downloading',
+            unavailable: 'unsupported' }[value] || 'error';
+          error = status === 'error' ? 'invalid-availability' : '';
+        }
+
+        function request(installing) {
+          if (disposed || !enabled) return Promise.resolve(getState());
+          if (pending) return pending;
+          const Recognition = localConstructor();
+          capable = !!Recognition;
+          if (!Recognition) {
+            ready = false;
+            status = 'unsupported';
+            error = '';
+            notify();
+            return Promise.resolve(getState());
+          }
+          if (installing && window.navigator?.userActivation?.isActive === false) {
+            ready = false;
+            status = 'error';
+            error = 'user-gesture-required';
+            notify();
+            return Promise.resolve(getState());
+          }
+          const token = ++generation;
+          const current = () => !disposed && enabled && token === generation;
+          ready = false;
+          busy = true;
+          status = installing ? 'downloading' : 'checking';
+          error = '';
+          notify();
+          const work = (async () => {
+            try {
+              if (!current()) return getState();
+              // Call install before the first await so a button's activation is
+              // available to Chrome. It manages the language pack and its bytes.
+              if (installing) {
+                const installed = await Recognition.install({ langs: ['en-US'], processLocally: true });
+                if (!current()) return getState();
+                if (installed !== true) {
+                  status = 'error';
+                  error = 'installation-failed';
+                  notify();
+                  return getState();
+                }
+              }
+              const availability = await Recognition.available({ langs: ['en-US'], processLocally: true });
+              if (!current()) return getState();
+              applyAvailability(availability);
+              notify();
+            } catch (failure) {
+              if (!current()) return getState();
+              ready = false;
+              status = 'error';
+              error = failure?.name === 'NotAllowedError' ? 'permission-denied' :
+                failure?.name === 'InvalidStateError' ? 'inactive-document' :
+                installing ? 'installation-failed' : 'availability-failed';
+              notify();
+            }
+            return getState();
+          })();
+          pending = work;
+          work.then(() => {
+            if (token !== generation) return;
+            pending = null;
+            busy = false;
+            render();
+          });
+          return work;
+        }
+
+        function prepare() { return request(false); }
+        function install() { return request(true); }
+
+        function setEnabled(value) {
+          if (disposed || !experimentEnabled || enabled === !!value) return getState();
+          generation++;
+          pending = null;
+          busy = false;
+          enabled = !!value;
+          status = enabled ? ready ? 'ready' : 'idle' : 'disabled';
+          error = '';
+          notify();
+          return getState();
+        }
+
+        function modeForNewRound(roundId) {
+          if (disposed) return 'browser';
+          if (!hasFrozenRound || !Object.is(frozenRound, roundId)) {
+            hasFrozenRound = true;
+            frozenRound = roundId;
+            frozenMode = !disposed && enabled && ready ? 'local' : 'browser';
+          }
+          return frozenMode;
+        }
+
+        function setVisible(value) { if (panel) panel.hidden = !value || disposed; }
+
+        function dispose() {
+          if (disposed) return;
+          disposed = true;
+          generation++;
+          pending = null;
+          busy = false;
+          enabled = ready = false;
+          status = 'disabled';
+          error = '';
+          panel?.remove();
+          panel = summary = statusText = checkbox = action = null;
+        }
+
+        if (experimentEnabled) {
+          panel = document.createElement('details');
+          panel.id = 'local-speech-experiment';
+          panel.hidden = true;
+          // Keep experiment controls out of Godot's game input path while
+          // retaining native checkbox, button, and disclosure activation.
+          for (const type of ['keydown', 'keyup', 'pointerdown', 'pointerup', 'mousedown', 'mouseup',
+            'click', 'touchstart', 'touchend']) {
+            panel.addEventListener(type, event => event.stopPropagation());
+          }
+          panel.style.cssText = 'position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;max-width:min(320px,calc(100vw - 24px));box-sizing:border-box;padding:10px 12px;border:1px solid #668aaf;border-radius:12px;background:#142a42;color:#fff;font:14px/1.4 system-ui,sans-serif;box-shadow:0 4px 18px #0005;';
+          summary = document.createElement('summary');
+          summary.style.cssText = 'cursor:pointer;font-weight:600;';
+          const controls = document.createElement('div');
+          controls.style.cssText = 'display:grid;gap:8px;margin-top:10px;';
+          const label = document.createElement('label');
+          label.style.cssText = 'display:flex;align-items:center;gap:8px;min-height:36px;';
+          checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          const labelText = document.createElement('span');
+          labelText.textContent = 'Use on-device speech next round';
+          label.append(checkbox, labelText);
+          checkbox.addEventListener('change', () => {
+            setEnabled(checkbox.checked);
+            if (enabled) void prepare();
+          });
+          statusText = document.createElement('span');
+          statusText.setAttribute('aria-live', 'polite');
+          action = document.createElement('button');
+          action.type = 'button';
+          action.style.cssText = 'min-height:40px;padding:8px 12px;border:0;border-radius:8px;background:#b4e8ff;color:#102640;font:600 14px system-ui,sans-serif;cursor:pointer;';
+          action.addEventListener('click', () => { void (status === 'downloadable' ? install() : prepare()); });
+          controls.append(label, statusText, action);
+          panel.append(summary, controls);
+          document.body.append(panel);
+          render();
+        }
+        return { getState, setVisible, setEnabled, prepare, install, modeForNewRound, dispose };
+      }
+
       function createSpeechHost() {
         const panel = document.getElementById('speech-panel');
         const aura = document.getElementById('pop-aura');
@@ -1309,6 +1534,178 @@
         let popVocabulary = [];
         let phraseBiasUnsupported = false;
         const maxSilentRestarts = 2;
+        const stabilityMs = 150;
+        let popRoundId = '';
+        let popPhase = 'idle';
+        let liveTargets = [];
+        let recognitionMode = 'browser';
+        let browserFallbackRound = '';
+        let recognitionSerial = 0;
+        let clearCandidates = () => {};
+        let updatePhrases = () => {};
+        let diagnosticsEnabled = false;
+        const diagnosticCounts = {};
+        const diagnosticRecords = [];
+        const now = () => window.performance?.now?.() ?? Date.now();
+        function diagnose(type, detail = {}) {
+          diagnosticCounts[type] = (diagnosticCounts[type] || 0) + 1;
+          if (!diagnosticsEnabled) return;
+          diagnosticRecords.push({ type, received_at_ms: now(), mode: recognitionMode, ...detail });
+          if (diagnosticRecords.length > 200) diagnosticRecords.shift();
+        }
+        const localSpeech = createLocalSpeechPreparation({
+          onDiagnostic: detail => diagnose(detail.event, detail)
+        });
+
+        function lexicalWords(text) {
+          // Normalize compounds before splitting; keep the original caption intact.
+          const normalized = text.replace(/(?<![\p{L}\p{N}_'’-])yo[ -]yo(s)?(?![\p{L}\p{N}_'’-])/giu,
+            (_, plural) => 'yoyo' + (plural || ''));
+          return normalized.match(/[\p{L}\p{N}_]+(?:['’][\p{L}\p{N}_]+)*/gu) || [];
+        }
+
+        function wordKey(word) { return word.toLowerCase().replaceAll('’', "'"); }
+        function equivalent(first, second) {
+          return first === second || (popAliases.get(first) || []).includes(second);
+        }
+
+        function phraseList() {
+          const activeWords = new Set(liveTargets.map(target => target.text.toLowerCase()));
+          const words = new Set([...popVocabulary, ...activeWords]);
+          return [...words].sort().map(word => [word, activeWords.has(word) ? 4 : 1]);
+        }
+
+        function createCandidates(valid, serial) {
+          const segments = new Map();
+          let nextOccurrence = 1;
+          const cancel = slot => {
+            window.clearTimeout(slot.timer);
+            slot.timer = 0;
+          };
+          const clear = () => {
+            for (const segment of segments.values()) for (const slot of segment.slots) cancel(slot);
+            segments.clear();
+          };
+          const makeSlot = () => ({
+            id: `${serial}:${nextOccurrence++}`, keys: new Set(), text: '', key: '', timer: 0,
+            round: popRoundId, targets: liveTargets.map(target => ({ ...target, forms: [...target.forms] })),
+            binding: null, consumed: false, present: false, observedAt: now()
+          });
+          const matches = (slot, key) => [...slot.keys].some(previous => equivalent(previous, key));
+
+          function commit(slot, stage) {
+            cancel(slot);
+            if (!valid() || !slot.present || slot.consumed || slot.round !== popRoundId) return;
+            const target = slot.binding;
+            if (!target) { diagnose('no_matching_target', { event_id: slot.id }); return; }
+            if (!liveTargets.some(item => item.uid === target.uid && item.forms.includes(slot.key))) {
+              diagnose('expired_target', { event_id: slot.id, target_uid: target.uid });
+              return;
+            }
+            // A callback time is not a word's captured/audio timestamp.
+            const event = { event_id: slot.id, round_id: slot.round, target_uid: target.uid,
+              text: slot.text, stage, received_at_ms: slot.observedAt };
+            const accepted = onPopResult?.(JSON.stringify(event)) === true;
+            slot.consumed = accepted;
+            diagnose(accepted ? 'hit' : 'game_rejected', { event_id: slot.id, target_uid: target.uid });
+          }
+
+          function update(index, text, isFinal) {
+            let segment = segments.get(index);
+            if (!segment) { segment = { slots: [] }; segments.set(index, segment); }
+            if (segment.blocked) {
+              if (isFinal) segments.delete(index);
+              return;
+            }
+            const words = lexicalWords(text);
+            const retire = () => {
+              for (const slot of segment.slots) cancel(slot);
+              segment.slots = [];
+              segment.blocked = true;
+              diagnose('segment_limit', { result_index: index });
+              if (isFinal) segments.delete(index);
+            };
+            // Bound both live text and deleted revision history. Retiring instead
+            // of trimming prevents old consumed occurrences from becoming new IDs.
+            if (words.length > 256) { retire(); return; }
+            const keys = words.map(wordKey);
+            const previous = segment.slots;
+            // Align against retained occurrences, including deleted tombstones. A prefix
+            // insertion retains IDs, a substitution reuses an ID, and repetition adds one.
+            const costs = Array.from({ length: previous.length + 1 }, () => new Float64Array(keys.length + 1));
+            for (let a = previous.length; a >= 0; a--) {
+              for (let b = keys.length; b >= 0; b--) {
+                if (a === previous.length) costs[a][b] = keys.length - b;
+                else if (b === keys.length) costs[a][b] = previous.length - a;
+                else costs[a][b] = Math.min(
+                  costs[a + 1][b + 1] + (matches(previous[a], keys[b]) ? 0 : 1.25),
+                  costs[a + 1][b] + 1, costs[a][b + 1] + 1);
+              }
+            }
+            const retained = [], current = [];
+            let a = 0, b = 0;
+            while (a < previous.length || b < keys.length) {
+              let slot;
+              const equal = a < previous.length && b < keys.length && matches(previous[a], keys[b]);
+              if (a < previous.length && b < keys.length &&
+                  costs[a][b] === costs[a + 1][b + 1] + (equal ? 0 : 1.25)) {
+                slot = previous[a++];
+              } else if (a < previous.length && costs[a][b] === costs[a + 1][b] + 1) {
+                slot = previous[a++];
+                cancel(slot);
+                slot.present = false;
+                retained.push(slot);
+                continue;
+              } else {
+                // A reordered/deleted word may reappear in the same segment. Reuse
+                // its tombstone before allocating a genuinely repeated occurrence.
+                slot = previous.slice(0, a).find(item => !item.present && matches(item, keys[b]));
+                if (slot) retained.splice(retained.indexOf(slot), 1);
+                else slot = makeSlot();
+              }
+              const changed = slot.key !== keys[b] || !slot.present;
+              if (changed) { cancel(slot); slot.observedAt = now(); }
+              slot.key = keys[b];
+              slot.text = words[b++];
+              slot.keys.add(slot.key);
+              slot.present = true;
+              // The first-observation target snapshot fences all later hypotheses,
+              // including a correction from a partial/unrelated word into a target.
+              if (!slot.consumed) {
+                slot.binding = slot.targets.find(target => target.forms.includes(slot.key)) || null;
+              }
+              retained.push(slot);
+              current.push(slot);
+              if (!isFinal && !slot.consumed && slot.binding && !slot.timer) {
+                slot.timer = window.setTimeout(() => commit(slot, 'interim'), stabilityMs);
+              }
+            }
+            segment.slots = retained;
+            if (retained.length > 512) { retire(); return; }
+            if (isFinal) {
+              for (const slot of current) {
+                if (!valid()) break;
+                commit(slot, 'final');
+              }
+              for (const slot of retained) cancel(slot);
+              segments.delete(index);
+              if (!words.length && valid()) {
+                diagnose('unclear_speech');
+                onPopResult?.(JSON.stringify({ event_id: `${serial}:empty:${index}`, round_id: popRoundId,
+                  target_uid: 0, text: '', stage: 'final', received_at_ms: now() }));
+              } else if (current.length && current.every(slot => !slot.binding && !slot.consumed) && valid()) {
+                onPopResult?.(JSON.stringify({ event_id: `${serial}:unmatched:${index}`, round_id: popRoundId,
+                  target_uid: 0, text, stage: 'final', received_at_ms: now() }));
+              }
+            }
+          }
+          function removeAfter(length) {
+            for (const [index, segment] of segments) if (index >= length) {
+              for (const slot of segment.slots) { cancel(slot); slot.present = false; }
+            }
+          }
+          return { update, clear, removeAfter };
+        }
 
         function speechAvailable() {
           return window.isSecureContext === true &&
@@ -1334,6 +1731,8 @@
         function release() {
           // Invalidate first: abort can itself deliver already queued browser events.
           generation++;
+          clearCandidates();
+          updatePhrases = () => {};
           active = false;
           listening = false;
           window.clearTimeout(restartTimer);
@@ -1376,6 +1775,7 @@
           presentation = 'match';
           silentRestarts = 0;
           popAliases.clear();
+          localSpeech.setVisible(false);
           report();
           if (restoreFocus && wasEnabled) focusGame();
           return true;
@@ -1392,6 +1792,8 @@
             if (presentation === nextPresentation || !closeSpeech(false)) return;
           }
           presentation = nextPresentation;
+          recognitionMode = presentation === 'pop' && browserFallbackRound !== popRoundId
+            ? localSpeech.modeForNewRound(popRoundId) : 'browser';
           silentRestarts = 0;
           enabled = true;
           transcript.textContent = '';
@@ -1401,7 +1803,7 @@
               : 'Voice is unavailable here. Use a supported browser on HTTPS, or tap cards.');
             return;
           }
-          if (window.navigator?.onLine === false) {
+          if (window.navigator?.onLine === false && recognitionMode !== 'local') {
             failedRecognition('offline');
             return;
           }
@@ -1440,6 +1842,7 @@
         function scheduleRestart(token) {
           if (token !== generation || !enabled || !active || document.hidden) return;
           window.clearTimeout(restartTimer);
+          diagnose('restart');
           restartTimer = window.setTimeout(() => {
             restartTimer = 0;
             startRecognition(token);
@@ -1460,6 +1863,7 @@
           if (token !== generation || !enabled || !active || document.hidden) return;
           let current;
           let usingPhrases = false;
+          let phraseSignature = '';
           const retryWithoutPhrases = () => {
             phraseBiasUnsupported = true;
             if (!release()) { report(); return; }
@@ -1467,51 +1871,83 @@
             report('Starting microphone...');
             scheduleRestart(generation);
           };
+          const retryBrowserBeforeRound = () => {
+            if (recognitionMode !== 'local' || popPhase !== 'ready') return false;
+            browserFallbackRound = popRoundId;
+            if (!release()) { report(); return true; }
+            recognitionMode = 'browser';
+            active = true;
+            diagnose('local_fallback');
+            report('Starting microphone...');
+            scheduleRestart(generation);
+            return true;
+          };
           try {
             const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             current = new Recognition();
-            // Contextual bias is optional in browsers. Keep normal recognition
-            // available when the API or the browser's speech service rejects it.
-            if (presentation === 'pop' && !phraseBiasUnsupported && popVocabulary.length &&
+            // Chromium only supports contextual phrases for on-device recognition.
+            if (recognitionMode === 'local') current.processLocally = true;
+            if (presentation === 'pop' && recognitionMode === 'local' && !phraseBiasUnsupported &&
                 'phrases' in current && typeof window.SpeechRecognitionPhrase === 'function') {
               try {
-                current.phrases = popVocabulary.map(word => new window.SpeechRecognitionPhrase(word, 2));
+                const phrases = phraseList();
+                current.phrases = phrases.map(([word, boost]) => new window.SpeechRecognitionPhrase(word, boost));
+                phraseSignature = JSON.stringify(phrases);
                 usingPhrases = true;
               } catch {
                 phraseBiasUnsupported = true;
                 current = new Recognition();
+                current.processLocally = true;
               }
             }
             recognition = current;
             current.lang = 'en-US';
             current.interimResults = true;
             current.continuous = true;
+            current.maxAlternatives = 3;
             let lastFinal = -1;
             let heardSpeech = false;
-            const popResults = new Map();
+            const recognitionRound = popRoundId;
             const valid = () => token === generation && recognition === current &&
-              enabled && active && !document.hidden;
+              enabled && active && !document.hidden && (presentation !== 'pop' || recognitionRound === popRoundId);
+            const candidates = createCandidates(() => valid() && listening, ++recognitionSerial);
+            clearCandidates = candidates.clear;
+            updatePhrases = () => {
+              if (!valid() || !usingPhrases) return;
+              const phrases = phraseList(), signature = JSON.stringify(phrases);
+              if (signature === phraseSignature) return;
+              try {
+                current.phrases = phrases.map(([word, boost]) => new window.SpeechRecognitionPhrase(word, boost));
+                phraseSignature = signature;
+              } catch { retryWithoutPhrases(); }
+            };
             current.onstart = () => {
               if (!valid()) return;
               listening = true;
+              diagnose('listening');
               report('Listening. Say an English word.');
             };
             current.onresult = event => {
               if (!valid() || !listening) return;
+              candidates.removeAfter(event.results.length);
               for (let index = event.resultIndex; index < event.results.length; index++) {
                 if (!valid()) break;
                 const result = event.results[index];
                 const isFinal = result.isFinal === true;
                 const popResultCurrent = index > lastFinal;
                 if (isFinal && index <= lastFinal) continue;
-                const text = result[0].transcript.trim();
+                const text = typeof result[0]?.transcript === 'string' ? result[0].transcript.trim() : '';
+                diagnose('result', { result_index: index, final: isFinal,
+                  alternatives: diagnosticsEnabled ? Array.from(result).slice(0, 3).map(alternative => ({
+                    text: String(alternative.transcript || ''),
+                    confidence: Number.isFinite(alternative.confidence) ? alternative.confidence : null
+                  })) : undefined });
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
                 if (isFinal) lastFinal = index;
-                if (presentation === 'pop' && popResultCurrent && isFinal && !/[\p{L}\p{N}_]/u.test(text)) {
-                  // A completed empty hypothesis is feedback, never a target.
-                  onPopResult?.('');
-                  if (!text && valid()) onResult?.(text, true);
+                if (presentation === 'pop' && popResultCurrent) {
+                  candidates.update(index, text, isFinal);
+                  if (!text && isFinal && valid()) onResult?.(text, true);
                 }
                 if (text) {
                   heardSpeech = true;
@@ -1524,34 +1960,21 @@
                     heardTimer = 0;
                     if (valid()) panel.setAttribute('data-heard', 'false');
                   }, 280);
-                  if (presentation === 'pop' && popResultCurrent) {
-                    const words = text.match(/[\p{L}\p{N}_]+(?:['’][\p{L}\p{N}_]+)*/gu) || [];
-                    const emitted = popResults.get(index) || new Set();
-                    popResults.set(index, emitted);
-                    // Revised interim text may complete a partial word. Deliver newly recognized
-                    // words, but never replay the same word within this browser result index.
-                    for (const word of words) {
-                      if (!valid()) break;
-                      const key = word.toLowerCase().replaceAll('’', "'");
-                      const forms = popAliases.get(key) || [key];
-                      const repeated = forms.some(form => emitted.has(form));
-                      emitted.add(key);
-                      if (repeated) continue;
-                      onPopResult?.(word);
-                    }
-                  }
                   if (valid()) onResult?.(text, isFinal);
                 }
               }
             };
             current.onerror = event => {
               if (!valid()) return;
+              diagnose('error', { code: event.error });
               if (usingPhrases && event.error === 'phrases-not-supported') retryWithoutPhrases();
+              else if (event.error === 'language-not-supported' && retryBrowserBeforeRound()) return;
               else if (presentation === 'pop' && event.error === 'no-speech') retryPopSilence();
               else failedRecognition(event.error);
             };
             current.onend = () => {
               if (!valid()) return;
+              candidates.clear();
               recognition = null;
               current.onstart = current.onresult = current.onerror = current.onend = null;
               if (presentation === 'pop' && !heardSpeech) { retryPopSilence(); return; }
@@ -1566,6 +1989,7 @@
           } catch (error) {
             if (token !== generation || !enabled || !active) return;
             if (usingPhrases && error.name === 'NotSupportedError') { retryWithoutPhrases(); return; }
+            if (error.name === 'NotSupportedError' && retryBrowserBeforeRound()) return;
             failedRecognition(['NotAllowedError', 'SecurityError'].includes(error.name) ? 'not-allowed' :
               ['NotFoundError', 'NotReadableError'].includes(error.name) ? 'audio-capture' :
               error.name === 'NetworkError' ? 'network' : '');
@@ -1579,6 +2003,14 @@
           const number = value => Number.isFinite(Number(value)) ? Math.max(0, Number(value)) : 0;
           const coordinate = value => Number.isFinite(Number(value)) ? Number(value) : 0;
           const phase = typeof state.phase === 'string' ? state.phase : 'idle';
+          const roundId = typeof state.round_id === 'string' ? state.round_id : '';
+          if (roundId !== popRoundId) {
+            clearCandidates();
+            popAliases.clear();
+            popRoundId = roundId;
+          }
+          popPhase = phase;
+          localSpeech.setVisible(phase === 'ready' || phase === 'paused');
           const remaining = Math.ceil(number(state.remaining));
           const hits = Math.floor(number(state.hits)), score = Math.floor(number(state.score));
           const combo = Math.floor(number(state.combo)), bestCombo = Math.floor(number(state.best_combo));
@@ -1586,16 +2018,19 @@
           if (Array.isArray(state.vocabulary) || phase === 'idle') {
             popVocabulary = [...new Set((Array.isArray(state.vocabulary) ? state.vocabulary : [])
               .filter(word => typeof word === 'string' && /^[a-z]{1,32}$/i.test(word))
-              .map(word => word.toLowerCase()))].slice(0, 200);
+              .map(word => word.toLowerCase()))];
           }
           // The model supplies accepted noun forms; the host never guesses a singular
           // from a partial hypothesis, possessive, or arbitrary recognized suffix.
+          liveTargets = [];
           for (const target of Array.isArray(state.targets) ? state.targets : []) {
             if (!target || typeof target.text !== 'string') continue;
             const forms = [...new Set([target.text, ...(Array.isArray(target.forms) ? target.forms : [])]
               .filter(form => typeof form === 'string' && /^[a-z]+$/i.test(form)).map(form => form.toLowerCase()))];
             for (const form of forms) popAliases.set(form, forms);
+            if (Number.isInteger(target.uid) && target.uid > 0) liveTargets.push({ uid: target.uid, text: target.text, forms });
           }
+          updatePhrases();
           const targets = (Array.isArray(state.targets) ? state.targets : []).filter(target => target && typeof target.text === 'string')
             .map(target => ({ uid: typeof target.uid === 'number' || typeof target.uid === 'string' ? target.uid : '',
               text: target.text, x: coordinate(target.x), y: coordinate(target.y),
@@ -1637,7 +2072,7 @@
             total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true,
             player, rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
           };
-          for (const [name, value] of Object.entries({ phase, remaining, hits, score, combo, 'best-combo': bestCombo,
+          for (const [name, value] of Object.entries({ phase, 'round-id': popRoundId, remaining, hits, score, combo, 'best-combo': bestCombo,
             'base-duration': baseDuration, 'bonus-time': bonusTime,
             targets: JSON.stringify(targets), controls: JSON.stringify(controls), hud: JSON.stringify(hud),
             transcript: typeof state.transcript === 'string' ? state.transcript : '',
@@ -1673,10 +2108,18 @@
           if (document.hidden) closeSpeech(false);
         });
         window.addEventListener('pagehide', () => closeSpeech(false));
-        window.addEventListener('offline', () => { if (enabled) failedRecognition('offline'); });
+        window.addEventListener('offline', () => { if (enabled && recognitionMode !== 'local') failedRecognition('offline'); });
 
         return {
           speechAvailable, speechMode, stopSpeech, popStatus,
+          speechDiagnostics() {
+            return { enabled: diagnosticsEnabled, mode: recognitionMode, preparation: localSpeech.getState(),
+              counts: { ...diagnosticCounts }, records: JSON.parse(JSON.stringify(diagnosticRecords)) };
+          },
+          setSpeechDiagnostics(value) {
+            diagnosticsEnabled = value === true;
+            diagnosticRecords.length = 0;
+          },
           observePopSpeech(callback) { onPopResult = typeof callback === 'function' ? callback : null; },
           observeSpeech(resultCallback, stateCallback) {
             onResult = resultCallback;

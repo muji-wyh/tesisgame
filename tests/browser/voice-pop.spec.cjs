@@ -10,7 +10,6 @@ const bundledAudioTest = test.extend({
   // Require the game's real tap gestures to unlock audio in these focused tests.
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] }
 });
-const catalogWords = catalog.map(word => word.text);
 const assetPath = relative => path.resolve(__dirname, '../..', relative);
 const referenceSlices = referenceAssets.filter(asset => asset.id !== 'launch');
 const referenceAvailable = referenceSlices.length > 0 && referenceSlices.every(asset => fs.existsSync(assetPath(asset.destination)));
@@ -103,15 +102,19 @@ function expectPipReaction(sound, emotion) {
   expect(sound.peak, 'Pip feedback contains real audible PCM').toBeGreaterThan(0.01);
 }
 
-async function installSpeech(page, { automatic = true, available = true, phraseHints = false } = {}) {
+async function installSpeech(page, { automatic = true, available = true, phraseHints = false,
+  localSupport = false, localAvailability = 'downloadable', installedAvailability = 'available' } = {}) {
   // Exercise the browser recognition lifecycle without opening a physical microphone.
-  await page.addInitScript(({ automatic, available, phraseHints }) => {
-    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], automatic };
+  await page.addInitScript(({ automatic, available, phraseHints, localSupport, localAvailability, installedAvailability }) => {
+    const fixture = { starts: 0, aborts: 0, stops: 0, instances: [], spoken: [], automatic,
+      preparationCalls: [], localAvailability };
     class Recognition {
       constructor() { this.results = []; fixture.instances.push(this); }
       start() {
         fixture.starts++;
         this.phrasesAtStart = Array.from(this.phrases || [], value => ({ phrase: value.phrase, boost: value.boost }));
+        this.localAtStart = this.processLocally === true;
+        this.alternativesAtStart = this.maxAlternatives;
         this.activationAtStart = navigator.userActivation?.isActive ?? null;
         this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
         if (fixture.automatic) queueMicrotask(() => this.grant());
@@ -129,8 +132,9 @@ async function installSpeech(page, { automatic = true, available = true, phraseH
         const callbacks = this.callbacks;
         queueMicrotask(() => callbacks?.end?.());
       }
-      emit(transcript, isFinal = true) {
-        const result = Object.assign([{ transcript, confidence: 0.95 }], { isFinal });
+      emit(transcript, isFinal = true, alternatives = []) {
+        const result = Object.assign([{ transcript, confidence: 0.95 }, ...alternatives.map((text, index) =>
+          ({ transcript: text, confidence: Math.max(0, 0.85 - index * 0.1) }))], { isFinal });
         const resultIndex = this.results.length && !this.results.at(-1).isFinal ? this.results.length - 1 : this.results.length;
         this.results[resultIndex] = result;
         this.callbacks.result?.({ resultIndex, results: this.results });
@@ -144,6 +148,18 @@ async function installSpeech(page, { automatic = true, available = true, phraseH
         constructor(phrase, boost) { this.phrase = phrase; this.boost = boost; }
       } });
     }
+    if (localSupport) {
+      Recognition.prototype.processLocally = false;
+      Recognition.available = async options => {
+        fixture.preparationCalls.push({ method: 'available', options });
+        return fixture.localAvailability;
+      };
+      Recognition.install = async options => {
+        fixture.preparationCalls.push({ method: 'install', options, activation: navigator.userActivation?.isActive ?? null });
+        fixture.localAvailability = installedAvailability;
+        return true;
+      };
+    }
     window.__popSpeech = fixture;
     Object.defineProperty(window, 'SpeechRecognition', { configurable: true, value: available ? Recognition : undefined });
     Object.defineProperty(window, 'webkitSpeechRecognition', { configurable: true, value: undefined });
@@ -155,19 +171,19 @@ async function installSpeech(page, { automatic = true, available = true, phraseH
       }, cancel() {}
     } });
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => { throw new Error('Test must not capture a physical microphone'); };
-  }, { automatic, available, phraseHints });
+  }, { automatic, available, phraseHints, localSupport, localAvailability, installedAvailability });
 }
 
-async function open(page, options) {
-  await installSpeech(page, options);
+async function open(page, { url = '/', choosePlayer = true, ...speechOptions } = {}) {
+  await installSpeech(page, speechOptions);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (/SCRIPT ERROR|Parse Error/.test(message.text())) errors.push(message.text()); });
-  await page.goto('/');
+  await page.goto(url);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
   await enterGame(page);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
-  await chooseMode(page, 'pop');
+  await chooseMode(page, 'pop', { choosePlayer });
   return errors;
 }
 
@@ -599,13 +615,14 @@ test('Voice Pop starts with browser recognition without voice users or local mod
   expect(errors).toEqual([]);
 });
 
-test('Voice Pop receives the complete round vocabulary before recognition starts and keeps unmatched speech readable', async ({ page }) => {
+test('ordinary Voice Pop requests three alternatives without unsupported phrase hints and keeps unmatched speech readable', async ({ page }) => {
   const errors = await open(page, { phraseHints: true });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
-  const hints = await page.evaluate(() => window.__popSpeech.instances.at(-1).phrasesAtStart);
-  expect(hints.map(value => value.phrase).sort()).toEqual([...catalogWords].sort());
-  expect(hints.every(value => value.boost > 0 && value.boost <= 3)).toBe(true);
-  expect(hints.length).toBeGreaterThan((await state(page)).targets.length);
+  const recognition = await page.evaluate(() => {
+    const current = window.__popSpeech.instances.at(-1);
+    return { phrases: current.phrasesAtStart, local: current.localAtStart, alternatives: current.alternativesAtStart };
+  });
+  expect(recognition).toEqual({ phrases: [], local: false, alternatives: 3 });
   const before = await state(page);
   await page.evaluate(() => window.__popSpeech.instances.at(-1).emit('hello everybody'));
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', 'hello everybody');
@@ -623,10 +640,156 @@ test('Voice Pop receives the complete round vocabulary before recognition starts
   expect(errors).toEqual([]);
 });
 
+test('local speech preparation keeps ordinary play available and enables full hints only in a ready new round', async ({ page, browserName }, info) => {
+  const errors = await open(page, { url: '/?speechLocal=1', choosePlayer: false, localSupport: true, phraseHints: true });
+  const preparation = page.locator('#local-speech-experiment');
+  await expect(preparation).toBeVisible();
+  expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
+  await chooseRoundPlayer(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const ordinary = await page.evaluate(() => {
+    const current = window.__popSpeech.instances.at(-1);
+    return { local: current.localAtStart, phrases: current.phrasesAtStart, preparationCalls: window.__popSpeech.preparationCalls };
+  });
+  expect(ordinary, 'An experimental URL alone cannot start an unprepared local recognizer')
+    .toEqual({ local: false, phrases: [], preparationCalls: [] });
+  await expect(preparation).toBeHidden();
+
+  await chooseMode(page, 'match');
+  await chooseMode(page, 'pop', { choosePlayer: false });
+  await expect(preparation).toBeVisible();
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
+  await preparation.locator('summary').click();
+  await preparation.getByRole('button', { name: 'Check availability', exact: true }).click();
+  await expect(preparation.getByRole('button', { name: 'Download English', exact: true })).toBeEnabled();
+  expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
+  expect((await state(page)).remaining).toBe(50);
+  await preparation.getByRole('button', { name: 'Download English', exact: true }).click();
+  await expect(preparation.locator('summary')).toContainText('English ready for the next round');
+  const preparationCalls = await page.evaluate(() => window.__popSpeech.preparationCalls);
+  expect(preparationCalls.map(call => call.method)).toEqual(['available', 'install', 'available']);
+  for (const call of preparationCalls) expect(call.options).toEqual({ langs: ['en-US'], processLocally: true });
+  if (browserName === 'chromium') {
+    expect(preparationCalls.find(call => call.method === 'install').activation,
+      'English installation is invoked during the actual download-button gesture').toBe(true);
+  }
+  expect(await page.evaluate(() => window.__popSpeech.starts), 'Preparation never opens a microphone or restarts a round').toBe(1);
+  expect((await leaderboardSnapshot(page)).view).toBe('picker');
+  expect((await state(page)).remaining).toBe(50);
+
+  await page.screenshot({ path: info.outputPath('local-speech-ready.png') });
+  await chooseRoundPlayer(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
+  const local = await page.evaluate(() => {
+    const current = window.__popSpeech.instances.at(-1);
+    return { local: current.localAtStart, alternatives: current.alternativesAtStart,
+      phrasesAtStart: current.phrasesAtStart,
+      phrases: Array.from(current.phrases || [], value => ({ phrase: value.phrase, boost: value.boost })),
+      targets: JSON.parse(document.getElementById('pop-status').dataset.targets || '[]'),
+      diagnostics: window.wordBuddiesHost.speechDiagnostics() };
+  });
+  expect(local.local).toBe(true);
+  expect(local.alternatives).toBe(3);
+  expect(local.phrasesAtStart.map(value => value.phrase).sort()).toEqual(catalog.map(word => word.text).sort());
+  expect(local.phrases.map(value => value.phrase).sort()).toEqual(catalog.map(word => word.text).sort());
+  const active = new Set(local.targets.map(target => target.text));
+  for (const hint of local.phrases) expect(hint.boost).toBe(active.has(hint.phrase) ? 4 : 1);
+  expect(local.diagnostics.mode).toBe('local');
+  await expect(preparation).toBeHidden();
+  await popOne(page);
+  expect(await page.evaluate(() => window.__popSpeech.starts), 'Updating active-target hints does not restart recognition').toBe(2);
+  await info.attach('local-speech-preparation.json', {
+    body: JSON.stringify({ preparationCalls, local }), contentType: 'application/json'
+  });
+  await chooseMode(page, 'match');
+  expect(errors).toEqual([]);
+});
+
+test('Voice Pop shows interim speech before scoring and cannot score a corrected occurrence twice', async ({ page }, info) => {
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  // Keep the entire live-target sequence inside the page. Mobile protocol
+  // round trips can outlast a throw even when recognition itself is correct.
+  const evidence = await page.evaluate(async () => {
+    const element = document.getElementById('pop-status');
+    const read = () => ({ at: performance.now(), hits: Number(element.dataset.hits),
+      transcript: element.dataset.transcript, targets: JSON.parse(element.dataset.targets || '[]') });
+    const waitFor = (predicate, description) => new Promise((resolve, reject) => {
+      const observer = new MutationObserver(check);
+      const timeout = setTimeout(() => {
+        observer.disconnect();
+        reject(new Error(`Timed out waiting for ${description}: ${JSON.stringify(read())}`));
+      }, 10000);
+      function check() {
+        const value = read();
+        if (!predicate(value)) return;
+        clearTimeout(timeout);
+        observer.disconnect();
+        resolve(value);
+      }
+      observer.observe(element, { attributes: true, attributeFilter: ['data-hits', 'data-transcript', 'data-targets'] });
+      check();
+    });
+    const before = await waitFor(value => {
+      const youngest = [...value.targets].sort((a, b) => a.age - b.age).slice(0, 2);
+      return youngest.length === 2 && youngest[0].age <= 0.7 && youngest[1].age <= 2.8;
+    }, 'two fresh targets');
+    const [second, first] = [...before.targets].sort((a, b) => a.age - b.age);
+    const recognition = window.__popSpeech.instances.at(-1);
+    const emittedAt = performance.now();
+    recognition.emit(first.text, false);
+    const immediate = read();
+    const scored = await waitFor(value => value.hits === before.hits + 1, 'the stable interim hit');
+    const beforeCorrection = read();
+    recognition.emit(second.text, true);
+    const immediateCorrection = read();
+    // Wait beyond the real stability window to catch an incorrectly retained
+    // timer before proving that a separate utterance can hit this same card.
+    await new Promise(resolve => setTimeout(resolve, 200));
+    const afterCorrection = read();
+    recognition.emit(second.text, true);
+    const independent = await waitFor(value => value.hits === before.hits + 2, 'the independent final occurrence');
+    return { first, second, before, emittedAt, immediate, scored, beforeCorrection,
+      immediateCorrection, afterCorrection, independent };
+  });
+  const { first, second, before, immediate, scored, beforeCorrection, immediateCorrection, afterCorrection, independent } = evidence;
+  expect(immediate.hits, 'Interim recognition must wait for the stability window before awarding a hit').toBe(before.hits);
+  expect(immediate.transcript, 'The recognition callback publishes live text without waiting for scoring').toBe(first.text);
+  expect(scored.hits).toBe(before.hits + 1);
+  expect(scored.at - evidence.emittedAt, 'The actual stability timer runs before the interim hit').toBeGreaterThanOrEqual(140);
+  expect(beforeCorrection.targets.some(target => target.uid === second.uid), 'The correction still has a real, hittable target').toBe(true);
+  expect(immediateCorrection.transcript).toBe(second.text);
+  expect(immediateCorrection.hits).toBe(before.hits + 1);
+  expect(afterCorrection.hits, 'Revising the committed occurrence cannot pop a second target').toBe(before.hits + 1);
+  expect(afterCorrection.targets.some(target => target.uid === second.uid), 'The unscored correction target remains live after the stability window').toBe(true);
+  expect(independent.hits).toBe(before.hits + 2);
+  expect(independent.targets.some(target => target.uid === second.uid), 'The next actual occurrence pops the retained target').toBe(false);
+  await info.attach('speech-occurrence-revision.json', { body: JSON.stringify(evidence), contentType: 'application/json' });
+  await chooseMode(page, 'match');
+  expect(errors).toEqual([]);
+});
+
+test('Voice Pop never scores a lower alternative when the first candidate misses', async ({ page }) => {
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
+  const before = await state(page), target = [...before.targets].sort((a, b) => a.age - b.age)[0];
+  await page.evaluate(word => window.__popSpeech.instances.at(-1).emit('zzzzzz', true, [word]), target.text);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', 'zzzzzz');
+  await rendered(page);
+  expect((await state(page)).hits, 'Alternative hypotheses cannot manufacture a correct answer').toBe(before.hits);
+  expect((await state(page)).targets.some(value => value.uid === target.uid)).toBe(true);
+  await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), target.text);
+  await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 1);
+  await chooseMode(page, 'match');
+  expect(errors).toEqual([]);
+});
+
 test('the live HUD shows and revises the whole interim sentence while scoring only the spoken target', async ({ page }, info) => {
   const errors = await open(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
-  const first = 'I am still thinking';
+  const first = 'hello everybody';
   const before = await state(page);
   expectCompactHud(before.hud, await metrics(page));
   await observeHudFeedback(page);
@@ -635,11 +798,39 @@ test('the live HUD shows and revises the whole interim sentence while scoring on
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript-final', 'false');
   expect((await state(page)).hits).toBe(before.hits);
   expect((await state(page)).hud.hit_effect.serial).toBe(before.hud.hit_effect.serial);
-  await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
-  const word = (await state(page)).targets[0].text;
-  const sentence = `I think it is a ${word}`;
-  await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), sentence);
-  await expect.poll(async () => (await state(page)).hits).toBe(before.hits + 1);
+  const hit = await page.evaluate(async expectedHits => {
+    const element = document.getElementById('pop-status');
+    const read = () => ({ at: performance.now(), hits: Number(element.dataset.hits),
+      targets: JSON.parse(element.dataset.targets || '[]'), hud: JSON.parse(element.dataset.hud || '{}') });
+    const waitFor = (predicate, description) => new Promise((resolve, reject) => {
+      const observer = new MutationObserver(check);
+      const timeout = setTimeout(() => {
+        observer.disconnect();
+        reject(new Error(`Timed out waiting for ${description}: ${JSON.stringify(read())}`));
+      }, 10000);
+      function check() {
+        const value = read();
+        if (!predicate(value)) return;
+        clearTimeout(timeout);
+        observer.disconnect();
+        resolve(value);
+      }
+      observer.observe(element, { attributes: true, attributeFilter: ['data-hits', 'data-targets', 'data-hud'] });
+      check();
+    });
+    const ready = await waitFor(value => value.targets.some(target => target.age <= 0.7), 'a fresh HUD target');
+    const target = [...ready.targets].sort((a, b) => a.age - b.age)[0];
+    const sentence = `please show the ${target.text}`;
+    // Select and speak in the same browser task. Remote mobile protocol
+    // round trips must not consume the target's remaining flight time.
+    window.__popSpeech.instances.at(-1).emit(sentence, false);
+    const scored = await waitFor(value => value.hits === expectedHits, 'the interim HUD hit');
+    return { target, sentence, scored };
+  }, before.hits + 1);
+  const word = hit.target.text, sentence = hit.sentence;
+  expect(hit.scored.hits).toBe(before.hits + 1);
+  expect(hit.scored.hud.transcript.text).toBe(sentence);
+  await info.attach('live-hud-hit.json', { body: JSON.stringify(hit), contentType: 'application/json' });
   await page.screenshot({ path: info.outputPath('hit-counter-feedback.png') });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', sentence);
   const serial = before.hud.hit_effect.serial + 1;
@@ -649,7 +840,7 @@ test('the live HUD shows and revises the whole interim sentence while scoring on
   expect(await page.evaluate(serial => window.__hudFeedback.some(hud => hud.hit_effect.serial === serial &&
     hud.hit_effect.active && hud.hit_effect.amount === 1 && hud.hit_effect.words.length === 1), serial),
     'One true hit starts a shared counter and transcript highlight').toBe(true);
-  const revised = `I think it is the ${word}, please`;
+  const revised = `please show that ${word}, please`;
   await page.evaluate(text => window.__popSpeech.instances.at(-1).emit(text, false), revised);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-transcript', revised);
   expect((await state(page)).hits).toBe(before.hits + 1);

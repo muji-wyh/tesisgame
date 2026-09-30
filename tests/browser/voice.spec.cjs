@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, openRewards, roomControl } = require('./game-ui.cjs');
+const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, openRewards, roomPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const voiceHitRecording = 'assets/audio/sfx/match-voice-hit.wav';
@@ -482,10 +482,15 @@ test('Match homophones score the canonical flower once with its voice hit feedba
   // The real Spring toy goal starts a lesson that must contain flower, so this
   // check never depends on the randomized opening topic or five-word selection.
   await openRewards(page);
-  await roomControl(page, 'spring');
-  await page.keyboard.press('Enter');
-  await roomControl(page, 'goal', { locked: true, item: 'spring' });
-  await page.keyboard.press('Enter');
+  // Spring is the first visible locked toy in a fresh profile. Use its real
+  // touch controls instead of traversing the whole room's keyboard focus order
+  // twice; the latter spends this speech test's budget on slow mobile frames.
+  const roomBounds = await logicalMetrics(page);
+  const spring = roomPoint(roomBounds, 'spring');
+  await tap(page, spring.x, spring.y);
+  await expect(page.locator('#game-status')).toContainText('Preview only. Spring flower.');
+  const goal = roomPoint(roomBounds, 'goal', { item: 'spring' });
+  await tap(page, goal.x, goal.y);
   await expect(page.locator('#game-status')).toContainText('Find 5 word');
   const { pairs } = await discoverBoard(page);
   expect(pairs.some(([word]) => word === 'flower'), 'The gift lesson supplies a real flower pair').toBe(true);

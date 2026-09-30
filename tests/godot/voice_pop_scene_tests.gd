@@ -487,6 +487,81 @@ func check_homophone_feedback(words: Array) -> void:
 	view.free()
 
 
+func bound_scene_event(view, id: String) -> Dictionary:
+	var target: Dictionary = view.game.targets[0]
+	return {"event_id": id, "round_id": view.snapshot().round_id, "target_uid": target.uid,
+		"text": target.word.text, "stage": "interim", "received_at_ms": 100.0}
+
+
+func check_bound_speech_events(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	var pool: Array = words.filter(func(word: Dictionary) -> bool: return word.id == "cat")
+	var accepted: Array[String] = []
+	view.hit.connect(func(word: Dictionary) -> void: accepted.append(word.id))
+	view.configure(pool, false, 71)
+	var prepared_id: String = view.snapshot().round_id
+	view.set_listening(true, true, "Listening.")
+	view.set_process(false)
+	view._listening_tick_usec = -1
+	check(not prepared_id.is_empty() and view.snapshot().round_id == prepared_id,
+		"The browser sees one round identity from preparation through actual listening")
+	var event: Dictionary = bound_scene_event(view, "scene-occurrence")
+	view.show_transcript("The cat!", false)
+	check(not view.receive_speech_event("[]") and view.game.hits == 0,
+		"Non-object event JSON cannot enter native scoring")
+	check(view.receive_speech_event(JSON.stringify(event)) and accepted == ["cat"] and view.game.hits == 1,
+		"The bridge acknowledges one bound hit and emits its canonical gameplay reaction")
+	check(view.snapshot().transcript == "The cat!" and view.snapshot().hud.hit_effect.active,
+		"Bound scoring preserves the raw transcript and existing hit celebration")
+	var effect_serial: int = view.snapshot().hud.hit_effect.serial
+	check(not view.receive_speech_event(JSON.stringify(event)) and accepted.size() == 1
+		and view.snapshot().hud.hit_effect.serial == effect_serial,
+		"An event replay returns false without duplicating feedback or reactions")
+	view._advance_game(0.66)
+	view._listening_tick_usec = -1
+	var replacement: Dictionary = bound_scene_event(view, event.event_id)
+	check(not view.receive_speech_event(JSON.stringify(replacement)) and view.game.hits == 1,
+		"A replay cannot bind a consumed occurrence to the next visible copy")
+	replacement.event_id = "scene-second-occurrence"
+	check(view.receive_speech_event(JSON.stringify(replacement)) and view.game.hits == 2
+		and view.snapshot().hud.bonus_effect.amount == 3,
+		"A distinct repeated occurrence scores and presents its normal time reward")
+
+	begin_bonus_round(view, pool)
+	check(view.snapshot().round_id != prepared_id and not view.receive_speech_event(JSON.stringify(event))
+		and view.game.hits == 0, "Starting over rejects callbacks from the previous published round")
+	event = bound_scene_event(view, "scene-paused")
+	var current_id: String = view.snapshot().round_id
+	view.pause()
+	check(not view.receive_speech_event(JSON.stringify(event)) and view.game.hits == 0,
+		"A paused view returns false without consuming a speech event")
+	view.set_listening(true, true, "Listening.")
+	view._listening_tick_usec = -1
+	check(view.snapshot().round_id == current_id and view.receive_speech_event(JSON.stringify(event)),
+		"Resuming preserves the speech round and its unconsumed target")
+
+	begin_bonus_round(view, pool)
+	event = bound_scene_event(view, "scene-expired")
+	view.game.targets[0].age = float(view.game.targets[0].lifetime) - 0.01
+	view._listening_tick_usec = maxi(0, Time.get_ticks_usec() - 100000)
+	check(not view.receive_speech_event(JSON.stringify(event)) and view.game.hits == 0 and view.game.misses == 1,
+		"Event receipt catches the clock up before checking the bound target's flight deadline")
+
+	begin_bonus_round(view, pool)
+	event = bound_scene_event(view, "scene-round-deadline")
+	view.game.elapsed = PopModel.DURATION - 0.01
+	view.game.remaining = 0.01
+	view.game._next_spawn_at = INF
+	view.game.targets[0].lifetime = 0.01
+	view._listening_tick_usec = maxi(0, Time.get_ticks_usec() - 100000)
+	check(not view.receive_speech_event(JSON.stringify(event)) and view.game.phase == "finished"
+		and view.game.hits == 0 and view._finished_sent,
+		"A callback after the round deadline cannot delay or alter settlement")
+	view.free()
+
+
 func check_independent_card_flight(words: Array) -> void:
 	var view = PopView.new()
 	root.add_child(view)
@@ -887,6 +962,7 @@ func _run() -> void:
 		"Preparing a new round clears the previous result identity")
 	check_bonus_feedback(app.data.words)
 	check_homophone_feedback(app.data.words)
+	check_bound_speech_events(app.data.words)
 	check_independent_card_flight(app.data.words)
 	check_portrait_volley_flight(app.data.words)
 	check_volley_launches(app.data.words)
