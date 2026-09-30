@@ -203,8 +203,8 @@ Choose Voice Pop to request speech permission. The initial 50-second clock start
 the microphone is listening. A narrow peach/pink and blue/violet glow follows the
 screen edges, meets at right-angle corners and diffuses softly inward.
 Illustrated word capsules fly up in gentle arcs, with occasional volleys of two
-or three words. Smaller collision boxes give the capsules more room to travel
-together. Say the English name
+or three words. Capsules follow their own flight paths and can pass through one
+another without collision or deflection. Say the English name
 of a visible object to pop it with a slash, shards, and a shockwave. Words always
 appear with their matching pictures and follow the age level chosen in More.
 The HUD shows recognized speech as it changes, including interim speech and words

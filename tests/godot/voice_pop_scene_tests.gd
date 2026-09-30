@@ -369,37 +369,49 @@ func check_bonus_feedback(words: Array) -> void:
 	view.free()
 
 
-func check_smaller_collision_boxes(words: Array) -> void:
+func check_independent_card_flight(words: Array) -> void:
 	var view = PopView.new()
 	root.add_child(view)
 	view.size = Vector2(640, 480)
-	begin_bonus_round(view, words)
-	var first: Dictionary = view.game.targets[0].duplicate(true)
-	first.age = float(first.lifetime) * 0.35
-	first.x_start = 0.30
-	first.x_end = first.x_start
-	first.spin = 0.0
-	view.game.targets.assign([first])
-	view._refresh_targets()
-	var original: Dictionary = view._draw_targets[0].duplicate(true)
-	var room: float = view._arena.size.x - float(original.size.x) - 12.0 / PopView.Style.ui_scale(view)
-	var second: Dictionary = first.duplicate(true)
-	second.uid = int(first.uid) + 1
-	second.x_start = first.x_start + float(original.size.x) * 0.60 / room * 0.60
-	second.x_end = second.x_start
-	view.game.targets.assign([first, second])
-	view._refresh_targets()
-	check(view._draw_targets[0].size == original.size and view._draw_targets[1].size == original.size,
-		"Smaller collision boxes preserve the illustrated card dimensions")
-	check(view._draw_targets[0].center.is_equal_approx(original.center)
-		and is_equal_approx(float(view._draw_targets[0].center.y), float(view._draw_targets[1].center.y))
-		and view._global_target_rect(view._draw_targets[0]).intersects(view._global_target_rect(view._draw_targets[1])),
-		"Cards may overlap at sixty percent center separation without the former collision deflection")
-	second.x_start = first.x_start
-	second.x_end = first.x_end
-	view._refresh_targets()
-	check(absf(float(view._draw_targets[0].center.y) - float(view._draw_targets[1].center.y)) > float(original.size.y) * 0.2,
-		"Truly coincident cards still separate into distinct readable centers")
+	for reduced in [false, true]:
+		begin_bonus_round(view, words, reduced)
+		check(view.game._spawn_target(5.6), "The overlap fixture has two distinct scoreable words")
+		var first: Dictionary = view.game.targets[0].duplicate(true)
+		var second: Dictionary = view.game.targets[1].duplicate(true)
+		for target in [first, second]:
+			target.lifetime = 5.6
+			target.age = 2.0
+			target.x_start = 0.30
+			target.x_end = 0.60
+			target.peak = 0.25
+			target.spin = 0.0
+			target.lane = 0
+		view.game.targets.assign([first])
+		view._refresh_targets()
+		var original: Dictionary = view._draw_targets[0].duplicate(true)
+		var room: float = view._arena.size.x - float(original.size.x) - 12.0 / PopView.Style.ui_scale(view)
+		for separation in [0.30, 0.0]:
+			second.x_start = first.x_start + float(original.size.x) * separation / room * 0.60
+			second.x_end = first.x_end + float(original.size.x) * separation / room * 0.60
+			view.game.targets.assign([second])
+			view._refresh_targets()
+			var second_alone: Dictionary = view._draw_targets[0].duplicate(true)
+			view.game.targets.assign([first, second])
+			view._refresh_targets()
+			check(view._draw_targets[0].center.is_equal_approx(original.center)
+				and view._draw_targets[1].center.is_equal_approx(second_alone.center),
+				"Overlapping and coincident cards retain their independent positions (reduced=%s separation=%s)" % [reduced, separation])
+			check(view._draw_targets[0].size == original.size and view._draw_targets[1].size == original.size
+				and view._global_target_rect(view._draw_targets[0]).intersects(view._global_target_rect(view._draw_targets[1])),
+				"Cards pass through one another without shrinking their illustrations")
+		view.receive_transcript(first.word.text)
+		check(view.game.hits == 1 and view.game.targets.size() == 1
+			and int(view.game.targets[0].uid) == int(second.uid) and view._draw_targets[0].size == original.size,
+			"An overlapping word still scores independently and leaves its neighbor at full size")
+		view._listening_tick_usec = -1
+		view.receive_transcript(second.word.text)
+		check(view.game.hits == 2 and view.game.targets.is_empty(),
+			"Both coincident words remain separately scoreable by speech")
 	view.free()
 
 
@@ -738,7 +750,7 @@ func _run() -> void:
 			"Advancing reduced-motion feedback cannot rewind or recount the displayed total")
 	check(app._pop.game.summary() == empty_round, "Result-only layout fixtures never alter the underlying scored round")
 	check_bonus_feedback(app.data.words)
-	check_smaller_collision_boxes(app.data.words)
+	check_independent_card_flight(app.data.words)
 	check_portrait_volley_flight(app.data.words)
 	check_volley_launches(app.data.words)
 	app.queue_free()
