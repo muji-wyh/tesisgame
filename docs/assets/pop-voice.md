@@ -1,16 +1,28 @@
-# Voice Pop report recordings
+# Legacy Voice Pop report recordings
 
-The report uses prerecorded Microsoft Azure Speech **en-US-JennyNeural** audio,
-matching the existing vocabulary voice: `friendly` style, degree `1.15`, and an
-8% slower speaking rate. Numbers are spoken inside complete recorded sentences;
-the game does not assemble number fragments or use the browser's default TTS.
+The current Voice Pop result view contains **HITS**, **Play again**, and lists of
+popped and missed words. HITS counts up with a brief scale pulse, sparkles and
+glow; reduced motion shows the final count immediately with a static glow.
+Individual word cards still replay their recorded pronunciation, without a
+repetition count. The result view has no Pip report, report pages or automatic
+narration.
+
+The 51 report recordings documented below remain at their existing paths and
+are still bundled in the startup PCK. They are retained legacy assets, unused
+by the current result UI.
+
+The retired report used prerecorded Microsoft Azure Speech **en-US-JennyNeural**
+audio, matching the existing vocabulary voice: `friendly` style, degree `1.15`,
+and an 8% slower speaking rate. Numbers are spoken inside complete recorded
+sentences; the report did not assemble number fragments or use the browser's
+default TTS.
 
 `pop-voice-prompts.json` is a flat object mapping 51 stable IDs to their complete
 English scripts. The batch contains **2,158 source text characters**. WAV paths
 are `assets/audio/pop/<id>.wav`; the 200 vocabulary recordings and general game
 prompts remain separate and unchanged by this generator.
 
-## Report content
+## Legacy report content
 
 - `round-0` through `round-20` report the actual number of pops in 30 seconds,
   with a singular sentence for one pop and an encouraging sentence for zero.
@@ -21,11 +33,12 @@ prompts remain separate and unchanged by this generator.
   word from the round, then explain how to hear or practise it.
 - `ready`, `high-five`, and `round-fallback` cover the remaining short responses.
 
-Runtime selection must use the real result. A count outside the recorded range
-uses `round-fallback`, while the exact results remain visible; an unsupported
-combo must not be clamped to a recorded value. Successful and practice word
-clips come from the existing vocabulary recordings, selected from this round's
-actual result. Pop count and unique-word count are different measurements.
+The retired report selected recordings from the real result. A count outside
+the recorded range used `round-fallback`, while the exact results remained
+visible; an unsupported combo was not clamped to a recorded value. Successful
+and practice word clips came from the existing vocabulary recordings, selected
+from the completed round. Pop count and unique-word count are different
+measurements. This report-selection logic is no longer part of the result UI.
 
 ## Provider, authorization, and cost boundary
 
@@ -37,7 +50,7 @@ created and no paid tier was enabled.
 
 This follows the established project workflow documented under "Regenerate
 natural speech" in `README.md`; the 2026-09-11 catalog audit also records prior
-use of this same F0 resource. The current task explicitly authorized this small
+use of this same F0 resource. The original task explicitly authorized this small
 report batch. The generator waits 3,200 ms before each synthesis request to stay
 under the existing F0 transaction limit. The 2,158-character figure measures
 source text, not an invoice or a statement of remaining monthly quota.
@@ -69,10 +82,11 @@ validation. All synthesis and conversion finishes in a private staging directory
 before any final recording is published. A synthesis or conversion failure
 leaves existing recordings intact.
 
-The Web build includes all report recordings in the startup PCK and verifies
-their source and imported resource paths against the actual exported pack.
-Reports load through the game's local audio path with no later network request.
-The generator does not run Godot or change import settings.
+The Web build still includes all legacy report recordings in the startup PCK
+and verifies their source and imported resource paths against the actual
+exported pack. These files remain local bundled data, but the current result
+UI never requests or plays them. The generator does not run Godot or change
+import settings.
 
 ## Asset inventory
 

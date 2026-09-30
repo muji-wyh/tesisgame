@@ -54,9 +54,8 @@ func _until(predicate: Callable, seconds: float = 2.0) -> bool:
 
 func _run() -> void:
 	await _queue_lifecycle()
-	await _bundled_narration()
-	await _report_lifecycle()
-	print("Pop narration: %d checks, %d failures" % [checks, failures])
+	await _result_lifecycle()
+	print("Pop result audio: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
 
@@ -160,34 +159,8 @@ func _queue_lifecycle() -> void:
 	audio.free()
 
 
-func _bundled_narration() -> void:
-	var audio = load("res://scripts/game_audio.gd").new()
-	root.add_child(audio)
-	audio.interact("spring", false)
-	var paths: Array[String] = ["res://assets/audio/pop/round-0.wav", "res://assets/audio/pop/high-five.wav"]
-	audio.narrate(paths)
-	check(audio.narration_state == "speaking" and audio.narration.playing
-		and audio.narration.stream == load(paths[0]),
-		"A first-use report immediately speaks using bundled recordings")
-	check(audio._narration_streams.size() == paths.size(),
-		"The full report is ready locally before its first sentence")
-	for request in range(4): audio.narrate(paths)
-	check(audio.narration_state == "speaking" and audio._narration_streams.size() == paths.size(),
-		"Repeated Hear requests replace a single queue without waiting for preparations")
-	audio.halt()
-	await process_frame
-	check(audio.narration_state == "idle" and not audio.narration.playing,
-		"Leaving the report stops playback without late work restarting it")
-	audio.interact("winter", false)
-	audio.narrate(paths)
-	check(audio.narration.playing and audio.narration.stream == load(paths[0]),
-		"Returning to the report works immediately without a page refresh")
-	audio.queue_free()
-	await process_frame
-
-
-func _report_lifecycle() -> void:
-	var directory: String = "user://pop-narration-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+func _result_lifecycle() -> void:
+	var directory: String = "user://pop-result-audio-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
@@ -196,130 +169,91 @@ func _report_lifecycle() -> void:
 	root.add_child(app)
 	await process_frame
 	await process_frame
-	app.audio.set_muted(true)
+	var narration_states: Array[String] = []
+	app.audio.narration_state_changed.connect(func(state: String) -> void: narration_states.append(state))
 	app.choose_mode("pop")
-	app._pop.set_process(false)
-	app._on_voice_state([true, true, "Listening."])
-	app._pop._advance_game(31.0)
-	await process_frame
+	app._configure_pop(37)
 	var view = app._pop
-	var prompts: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://pop-voice-prompts.json"))
-	var word_a: Dictionary = app.data.words[0]
-	var word_b: Dictionary = app.data.words[1]
-	var word_c: Dictionary = app.data.words[2]
-	var plan: Array[Dictionary] = view._make_report({"hits": 4, "best_combo": 3, "score": 123,
-		"unique_words": 2, "hit_words": [word_a, word_b], "missed_words": [word_c]})
-	check(plan[0].text == prompts["round-4"] and plan[0].audio == ["res://assets/audio/pop/round-4.wav"],
-		"The round caption is exactly the manifest sentence played by one whole recording")
-	check(plan[1].audio == ["res://assets/audio/pop/highlights-two.wav", "res://" + str(word_a.audio),
-		"res://" + str(word_b.audio), "res://assets/audio/pop/combo-3.wav"],
-		"Highlights narrate the real first two words in order and then a complete combo sentence")
-	check(plan[2].audio == ["res://assets/audio/pop/practice.wav", "res://" + str(word_c.audio),
-		"res://assets/audio/pop/practice-next.wav"] and str(plan[2].text).contains(str(word_c.text)),
-		"Coaching prefers a missed word and matches its picture's actual pronunciation")
-	plan = view._make_report({"hits": 1, "best_combo": 1, "hit_words": [word_a], "missed_words": []})
-	check(plan[1].audio[0] == "res://assets/audio/pop/highlights-one.wav"
-		and plan[2].audio == ["res://assets/audio/pop/repeat.wav", "res://" + str(word_a.audio), "res://assets/audio/pop/repeat-next.wav"],
-		"One highlight and successful-word coaching use their distinct natural recordings")
-	plan = view._make_report({"hits": 0, "best_combo": 0, "hit_words": [], "missed_words": []})
-	check(plan[1].text == prompts["no-highlights"] and plan[1].audio == ["res://assets/audio/pop/no-highlights.wav"]
-		and plan[2].audio == ["res://assets/audio/pop/ready.wav"],
-		"An empty report offers help without inventing words or a combo")
-	plan = view._make_report({"hits": 21, "best_combo": 21, "hit_words": [word_a], "missed_words": []})
-	check(str(plan[0].text).contains("21 words") and str(plan[0].text).contains("Pip says:")
-		and plan[0].audio == ["res://assets/audio/pop/round-fallback.wav"]
-		and not plan[1].audio.has("res://assets/audio/pop/combo-20.wav"),
-		"Beyond the recorded range, exact text remains and generic encouragement never lies about a count")
-	var long_clip: AudioStream = _clip(4.0)
-	for id in prompts:
-		app.audio.cache["res://assets/audio/pop/" + str(id) + ".wav"] = long_clip
-	for word in app.data.words:
-		app.audio.cache["res://" + str(word.audio)] = long_clip
-	app.audio.set_muted(false)
-	view.report_button.pressed.emit()
-	check(app.audio.narration.playing and bool(view.snapshot().report_speaking) and view.pip.speaking,
-		"Hear Pip starts native narration and projects actual playback to the result mouth and snapshot")
-	var first_page: Array = view.report_audio()
-	var exposed: Array = view.snapshot().report_audio
-	exposed.clear()
-	check(view.report_audio() == first_page, "The exposed report audio list cannot mutate the internal page")
-	view.next_report_button.pressed.emit()
-	check(app.audio.narration.playing and view.report_audio() != first_page
-		and app.audio.narration.stream == app.audio.cache[view.report_audio()[0]],
-		"Changing pages replaces the old narration with the new page's recorded clips")
-	view.pip.settle()
-	view.pip.pressed.emit()
-	check(view.report_audio()[0] == "res://assets/audio/pop/high-five.wav" and view.report_text().begins_with(str(prompts["high-five"])),
-		"High five prepends matching visible feedback and recorded audio")
-	var greeting: AudioStream = app.audio.narration.stream
-	check(greeting != null and greeting.resource_path.begins_with("res://assets/audio/pip/")
-		and app.audio.narration.playing and app.audio._narration_streams.size() == view.report_audio().size() + 1
-		and not app.audio.voice.playing and not app.audio.effect.playing,
-		"A result Pip tap queues one imported greeting before the report on the single narration player")
-	var greeting_generation: int = app.audio._narration_generation
-	var greeting_random: int = app.audio._pip_rng.state
-	view.pip.pressed.emit()
-	check(app.audio.narration.stream == greeting and app.audio._narration_generation == greeting_generation
-		and app.audio._pip_rng.state == greeting_random,
-		"Repeated result Pip taps do not restart the current quack or consume another random greeting")
-	app.audio._narration_finished()
-	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]] and view.pip.speaking,
-		"Finishing the greeting continues into the matching high-five sentence without cutting off the report")
-	view.pip.pressed.emit()
-	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]]
-		and app.audio._narration_generation == greeting_generation,
-		"A finished quack does not unlock another result Pip tap while its high-five action is still active")
-	view.pip._process(view.pip.TRICK_SECONDS)
-	view.pip.pressed.emit()
-	check(app.audio.narration.stream != greeting
-		and app.audio.narration.stream.resource_path.begins_with("res://assets/audio/pip/")
-		and app.audio._narration_streams.size() == view.report_audio().size() + 1,
-		"A deliberate result Pip tap after both motion and quack finish starts the next greeting")
-	view.report_button.pressed.emit()
-	check(app.audio.narration.stream == app.audio.cache[view.report_audio()[0]]
-		and app.audio._narration_streams.size() == view.report_audio().size(),
-		"Hear Pip replays only the visible report without adding another random greeting")
-	var review: Dictionary = view.game.summary().missed_words[0]
-	app._pop_hear(review)
-	check(not app.audio.narration.playing and app.audio.voice.playing
-		and not bool(view.snapshot().report_speaking) and not bool(view.snapshot().report_loading),
-		"Listening to a review word ends report narration and immediately clears its UI state")
-
+	view.set_process(false)
+	app._on_voice_state([true, true, "Listening."])
+	view._advance_game(3.0)
+	check(not view.game.targets.is_empty(), "A listening round launches words before the result integration check")
+	if not view.game.targets.is_empty():
+		view.receive_transcript(str(view.game.targets[0].word.text))
+	view._advance_game(31.0)
+	await process_frame
+	check(view.game.phase == "finished" and view.game.hits == 1 and view._results.visible,
+		"The completed round reaches its result with the actual hit count")
+	check(not app._pop_speech_active and not view._listening,
+		"Completing the round stops microphone input before review playback")
+	check(not app.audio.narration.playing and not narration_states.has("loading") and not narration_states.has("speaking"),
+		"Showing the simplified result never starts automatic report narration")
+	check(not app._status_announcement.begins_with("Pip says:"),
+		"Result completion does not announce the removed spoken report")
+	var summary: Dictionary = view.game.summary()
+	var review_words: Array = []
+	review_words.append_array(summary.hit_words)
+	review_words.append_array(summary.missed_words)
+	check(view._review_buttons.size() == review_words.size() and review_words.size() >= 2,
+		"Both popped and missed words remain available for individual pronunciation")
+	for index in range(review_words.size()):
+		var word: Dictionary = review_words[index]
+		app.audio.cache["res://" + str(word.audio)] = _clip(4.0)
+		app.audio.stop_voice()
+		view._review_buttons[index].pressed.emit()
+		check(app.audio.voice.playing and app.audio.voice.stream == app.audio.cache["res://" + str(word.audio)]
+			and not app.audio.narration.playing and not app.audio.music.playing,
+			"Tapping the result word " + str(word.text) + " plays only its pronunciation")
+		check(view.game.summary() == summary, "Review pronunciation cannot change the completed round's scores or words")
+	var first_review: Button = view._review_buttons[0]
 	for action in ["more", "hidden", "mute", "stop_voice"]:
-		view.report_button.pressed.emit()
-		check(app.audio.narration.playing, action + " starts from a genuinely speaking report")
+		first_review.pressed.emit()
+		check(app.audio.voice.playing, action + " starts with a real review word playing")
 		match action:
 			"more": app._show_collection()
 			"hidden": app.on_page_hidden()
 			"mute": app.audio.set_muted(true)
 			"stop_voice": app.audio.stop_voice()
-		check(not app.audio.narration.playing and not view.pip.speaking
-			and not bool(view.snapshot().report_speaking) and not bool(view.snapshot().report_loading),
-			action + " clears actual report playback and both projected states immediately")
+		check(not app.audio.voice.playing and not app.audio.narration.playing,
+			action + " stops review audio immediately without reviving report narration")
+		if action == "more":
+			first_review.pressed.emit()
+			check(not app.audio.voice.playing, "A covered result word cannot pronounce behind the menu")
 		match action:
 			"more": app._hide_collection()
 			"hidden": app.on_page_visible()
 			"mute": app.audio.set_muted(false)
-		check(not app.audio.narration.playing, action + " never resumes speech without a fresh request")
-
-	view._show_report(0)
-	var original_audio: Array = view._report_pages[0].audio
-	view._report_pages[0].audio = ["res://assets/audio/pop/absent-narration-test.wav"]
-	view.report_button.pressed.emit()
-	check(view.report_button.text == "Try Pip again" and not view.pip.speaking,
-		"A missing clip leaves a visible read-along fallback with a real retry action")
-	app.audio.stop_narration()
-	check(view.report_button.text == "Try Pip again" and view._report_kicker.text.contains("READ ALONG"),
-		"A later idle notification does not erase the unavailable explanation")
-	view._report_pages[0].audio = original_audio
-	view.report_button.pressed.emit()
-	check(view.pip.speaking and view.report_button.text == "Hear again", "A successful retry clears the error and shows actual playback")
-	app.choose_mode("match")
-	check(not app.audio.narration.playing and not bool(view.snapshot().report_speaking)
-		and not bool(view.snapshot().report_loading) and view.report_audio().is_empty(),
-		"Changing modes clears narration, loading, speaking, and the report's exported clip list")
-	view.set_report_audio_state("speaking")
-	check(not view.pip.speaking and not bool(view.snapshot().report_speaking), "A late playback state cannot animate results after leaving")
+		check(not app.audio.voice.playing and not app.audio.narration.playing,
+			action + " never resumes speech without a fresh word tap")
+	first_review.pressed.emit()
+	check(app.audio.voice.playing, "Review words work again after menu, background, and mute transitions")
+	view.replay_button.pressed.emit()
+	view.set_process(false)
+	check(view.game.phase == "ready" and view.game.hits == 0 and not view._results.visible
+		and not app.audio.voice.playing and not app.audio.narration.playing,
+		"Play again clears the result and its pronunciation while waiting for fresh microphone readiness")
+	first_review.pressed.emit()
+	check(not app.audio.voice.playing, "A stale result word cannot play over the next round's listening gate")
+	app._on_voice_state([true, true, "Listening."])
+	view._advance_game(31.0)
+	check(view.game.phase == "finished" and not app.audio.narration.playing
+		and not narration_states.has("loading") and not narration_states.has("speaking"),
+		"The next completed round also remains free of automatic narration")
+	for destination in ["match", "memory"]:
+		var review: Dictionary = view.game.summary().missed_words[0]
+		app._pop_hear(review)
+		check(app.audio.voice.playing, destination + " transition starts with an active result pronunciation")
+		app.choose_mode(destination)
+		check(app._mode_id == destination and not app.audio.voice.playing and not app.audio.narration.playing,
+			"Leaving the result for " + destination + " stops the previous word without stale report callbacks")
+		app._pop_hear(review)
+		check(not app.audio.voice.playing, "A late Voice Pop word callback is ignored in " + destination)
+		app.choose_mode("pop")
+		view.set_process(false)
+		app._on_voice_state([true, true, "Listening."])
+		view._advance_game(31.0)
+		check(view.game.phase == "finished" and not app.audio.narration.playing,
+			"Returning from " + destination + " can complete another round without automatic speech")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

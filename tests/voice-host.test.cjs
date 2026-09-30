@@ -826,39 +826,45 @@ test('Pop snapshots expose full live speech and result state without repeating i
     get() { return readable; }, set(value) { readable = value; writes++; }
   });
   const state = { phase: 'running', remaining: 24, transcript: 'I see a ca', transcript_final: false,
-    report: 'You popped four words.', report_step: 2, results_scroll: 14.5, results_scroll_max: 96,
-    results_scrollbar_visible: false, report_speaking: true, report_loading: false,
-    report_audio: ['res://assets/audio/pop/round-4.wav', 'res://assets/audio/voice/word-cat.wav',
-      'https://untrusted.invalid/audio.wav', 'res://assets/audio/pop/../../private.wav'] };
+    results_hits: { text: '2', total: 4, active: true, private: 'discard' },
+    results_scroll: 14.5, results_scroll_max: 96, results_scrollbar_visible: false };
   f.host.popStatus(JSON.stringify(state));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.equal(f.popStatus.attributes['data-report'], 'You popped four words.');
-  assert.equal(f.popStatus.attributes['data-report-step'], '2');
-  assert.equal(f.popStatus.attributes['data-report-speaking'], 'true');
-  assert.equal(f.popStatus.attributes['data-report-loading'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-report-audio']),
-    ['res://assets/audio/pop/round-4.wav', 'res://assets/audio/voice/word-cat.wav']);
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
   assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
   f.host.popStatus(JSON.stringify({ ...state, transcript: 'I see a cat', transcript_final: true,
-    report_step: 3, results_scroll: 38, results_scrollbar_visible: true }));
+    results_hits: { text: '4', total: 4, active: false }, results_scroll: 38, results_scrollbar_visible: true }));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a cat');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'true');
   assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'true');
-  assert.equal(writes, 1, 'Transcription revisions and scrolling cannot interrupt the game announcement');
-  assert.doesNotMatch(readable, /I see|four words/);
+  assert.equal(writes, 1, 'Transcription, counter animation and scrolling cannot interrupt the game announcement');
+  assert.doesNotMatch(readable, /I see/);
   f.host.popStatus(JSON.stringify({ phase: 'idle' }));
   assert.equal(f.popStatus.attributes['data-transcript'], '');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.equal(f.popStatus.attributes['data-report'], '');
-  assert.equal(f.popStatus.attributes['data-report-step'], '0');
-  assert.equal(f.popStatus.attributes['data-report-speaking'], 'false');
-  assert.equal(f.popStatus.attributes['data-report-loading'], 'false');
-  assert.equal(f.popStatus.attributes['data-report-audio'], '[]');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
+});
+
+test('Pop result snapshots sanitize the hit animation and announce only the final hit total', () => {
+  const f = fixture();
+  const result = { phase: 'finished', hits: 4, score: 90, best_combo: 3,
+    message: 'Round complete. Tap a word to hear it, or play again.',
+    results_hits: { text: '4', total: 4.9, active: true, private: 'discard' } };
+  f.host.popStatus(JSON.stringify(result));
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true });
+  assert.match(f.popStatus.textContent, /Round complete.*Voice Pop\. 4 hits\./);
+  assert.doesNotMatch(f.popStatus.textContent, /Score|combo|seconds/);
+  assert.equal(Object.keys(f.popStatus.attributes).some(name => name.startsWith('data-report')), false);
+  for (const malformed of [null, [], '4', { text: '<script>', total: 'Infinity', active: 'true' },
+    { text: '1'.repeat(17), total: -5, active: 1 }]) {
+    f.host.popStatus(JSON.stringify({ ...result, results_hits: malformed }));
+    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false });
+  }
 });
 
 test('the Pop glow covers the viewport edges, ignores input and respects reduced motion', () => {

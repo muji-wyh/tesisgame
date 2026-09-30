@@ -177,10 +177,8 @@ async function state(page) {
     hits: Number(element.dataset.hits), score: Number(element.dataset.score),
     bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
     recognitionFeedback: element.dataset.recognitionFeedback || '', recognitionMessage: element.dataset.recognitionMessage || '',
-    transcriptFinal: element.dataset.transcriptFinal === 'true', report: element.dataset.report || '',
-    reportStep: Number(element.dataset.reportStep), resultsScroll: Number(element.dataset.resultsScroll),
-    reportSpeaking: element.dataset.reportSpeaking === 'true', reportLoading: element.dataset.reportLoading === 'true',
-    reportAudio: JSON.parse(element.dataset.reportAudio || '[]'),
+    transcriptFinal: element.dataset.transcriptFinal === 'true', resultsHits: JSON.parse(element.dataset.resultsHits || '{}'),
+    resultsScroll: Number(element.dataset.resultsScroll),
     resultsScrollMax: Number(element.dataset.resultsScrollMax), resultsScrollbarVisible: element.dataset.resultsScrollbarVisible === 'true',
     targets: JSON.parse(element.dataset.targets || '[]'), controls: JSON.parse(element.dataset.controls || '[]'),
     hud: JSON.parse(element.dataset.hud || '{}'),
@@ -188,17 +186,40 @@ async function state(page) {
   }));
 }
 
-async function expectReportDelivery(page) {
-  const available = await page.evaluate(() => window.audioObservation.available);
-  if (available) {
-    await expect.poll(async () => (await state(page)).reportSpeaking).toBe(true);
-  } else {
-    await expect.poll(async () => (await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Try Pip again');
-    expect((await state(page)).reportSpeaking).toBe(false);
-    expect((await state(page)).reportLoading).toBe(false);
-    expect((await state(page)).report.length).toBeGreaterThan(0);
+async function observeResultHits(page) {
+  await page.evaluate(() => {
+    const element = document.querySelector('#pop-status');
+    window.__resultHitFrames = [];
+    let previous = '';
+    const read = () => {
+      if (element.dataset.phase !== 'finished' || element.dataset.resultsHits === previous) return;
+      previous = element.dataset.resultsHits;
+      window.__resultHitFrames.push({ ...JSON.parse(previous || '{}'), at: performance.now() });
+    };
+    window.__resultHitObserver?.disconnect();
+    window.__resultHitObserver = new MutationObserver(read);
+    window.__resultHitObserver.observe(element, { attributes: true, attributeFilter: ['data-phase', 'data-results-hits'] });
+    read();
+  });
+}
+
+function expectSimpleResults(current) {
+  expect(current.phase).toBe('finished');
+  expect(current.resultsHits.total).toBe(current.hits);
+  expect(current.resultsScrollbarVisible).toBe(false);
+  expect(current.transcript).toBe('');
+  expect(current.controls.length).toBeGreaterThan(0);
+  expect(current.controls.every(control => /^(?:Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
+    'Results offer only Play again and individual word pronunciation').toBe(true);
+  for (const control of current.controls) {
+    expect(control.text, 'Word labels do not include repetition counts').not.toMatch(/×\s*\d/);
+    if (control.name.startsWith('Hear_')) {
+      const word = catalog.find(word => word.id === control.name.slice(5));
+      expect(word, 'Every review card represents a real vocabulary word').toBeTruthy();
+      expect(control.text).toBe(word.text);
+    }
   }
-  return available;
+  expect(current.message).not.toMatch(/Score|Best combo|Pip's report|High five/i);
 }
 
 async function visibleAction(page, pattern) {
@@ -221,6 +242,12 @@ async function action(page, pattern) {
   const button = await visibleAction(page, pattern);
   await tap(page, button.x + button.width / 2, button.y + button.height / 2);
   await rendered(page);
+  return button;
+}
+
+function resultsAtEnd(current) {
+  // Godot exposes integer scroll positions but a fractional scrollbar extent.
+  return current.resultsScroll >= current.resultsScrollMax - 1;
 }
 
 async function scrollResults(page, delta) {
@@ -230,7 +257,7 @@ async function scrollResults(page, delta) {
   // Start inside a visible result control's vertical band so touch drags reach
   // the result scroller on every viewport.
   const firstResult = before.controls.filter(control =>
-    /^(Pip|HearPip|NextReport|Replay|Back|Hear_)/.test(control.name))
+    /^(Replay|Hear_)/.test(control.name))
     .sort((a, b) => a.y - b.y)[0];
   const top = bounds.y + (firstResult ? firstResult.y + Math.min(firstResult.height / 2, 10) : content.top) * bounds.scale + 10;
   const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 30;
@@ -244,7 +271,7 @@ async function scrollResults(page, delta) {
     const swipes = Math.abs(delta) >= 10000 ? 8 : 1;
     for (let swipe = 0; swipe < swipes; swipe++) {
       const current = await state(page);
-      if (delta < 0 ? current.resultsScroll === 0 : current.resultsScroll >= current.resultsScrollMax) break;
+      if (delta < 0 ? current.resultsScroll === 0 : resultsAtEnd(current)) break;
       const start = delta < 0 ? top : bottom;
       const end = start - Math.sign(delta) * distance;
       const dispatch = (type, y) => page.evaluate(({ type, x, y }) => {
@@ -286,7 +313,7 @@ async function scrollResults(page, delta) {
   await rendered(page);
   if (delta < 0 && before.resultsScroll > 0) {
     await expect.poll(async () => (await state(page)).resultsScroll).toBeLessThan(before.resultsScroll);
-  } else if (delta > 0 && before.resultsScroll < before.resultsScrollMax) {
+  } else if (delta > 0 && !resultsAtEnd(before)) {
     await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(before.resultsScroll);
   }
 }
@@ -296,8 +323,7 @@ async function resultAction(page, pattern) {
   await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
   for (let attempt = 0; attempt < 8; attempt++) {
     if ((await state(page)).controls.some(control => !control.disabled && pattern.test(control.name + ' ' + control.text))) {
-      await action(page, pattern);
-      return;
+      return action(page, pattern);
     }
     await scrollResults(page, 180);
   }
@@ -833,9 +859,9 @@ bundledAudioTest('three words in one utterance keep all slice tails and backgrou
   await info.attach('triple-slice-audio.json', { body: JSON.stringify({ triple, stopped }), contentType: 'application/json' });
 });
 
-test('a spoken interim word pops its exact target once, gives hit feedback and produces Pip report after 30 seconds', async ({ page, browserName }, info) => {
-  // Includes a real 30-second round, recorded report playback and several full
-  // touch swipes. Keep each response deadline strict while allowing the workflow.
+test('a spoken interim word pops once and finishes with animated HITS and simple word results', async ({ page, browserName }, info) => {
+  // Includes a real 30-second round, result animation, word replay and touch swipes.
+  // Keep each response deadline strict while allowing the complete workflow.
   test.setTimeout(150000);
   await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
@@ -843,6 +869,7 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   if (browserName === 'chromium') expect(audioAvailable, 'Chromium must exercise real recorded audio').toBe(true);
   await info.attach('native-audio-capability.json', { body: JSON.stringify({ audioAvailable }), contentType: 'application/json' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await observeResultHits(page);
   const start = Date.now();
   await page.waitForTimeout(1700);
   await page.screenshot({ path: info.outputPath('flying-words.png') });
@@ -906,161 +933,134 @@ test('a spoken interim word pops its exact target once, gives hit feedback and p
   expect((await state(page)).remaining).toBe(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   const round = await state(page);
-  expect(round.reportStep).toBe(0);
-  expect(round.report).toContain('30');
-  expect(round.report).toMatch(new RegExp(`\\b${round.hits}\\b`));
-  expect(round.resultsScrollbarVisible).toBe(false);
-  expect(round.transcript).toBe('');
-  expect(round.reportAudio).toEqual([`res://assets/audio/pop/round-${round.hits}.wav`]);
-  await expectReportDelivery(page);
-  expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
-  await page.screenshot({ path: info.outputPath('pip-round-report.png') });
-  const audioBeforeReplay = await page.evaluate(() => window.audioObservation.starts);
-  await resultAction(page, /HearPip/);
-  if (await page.evaluate(() => window.audioObservation.available)) {
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(audioBeforeReplay);
+  expect(round.hits).toBe(2);
+  expectSimpleResults(round);
+  expect(round.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
+  await page.screenshot({ path: info.outputPath('results-hit-animation.png') });
+  await expect.poll(async () => (await state(page)).resultsHits).toEqual({ text: '2', total: 2, active: false });
+  const frames = await page.evaluate(() => window.__resultHitFrames);
+  expect(frames[0]).toMatchObject({ text: '0', total: 2, active: true });
+  expect(frames.some(frame => frame.text === '1' && frame.active), 'The total counts through an intermediate value').toBe(true);
+  expect(frames.some(frame => frame.text === '2' && frame.active), 'The final total retains its brief celebration').toBe(true);
+  expect(frames.at(-1)).toMatchObject({ text: '2', total: 2, active: false });
+  expect(frames.at(-1).at - frames[0].at, 'The result count and celebration last about 1.25 seconds').toBeGreaterThanOrEqual(1000);
+  expect(frames.at(-1).at - frames[0].at).toBeLessThan(2500);
+  expect(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
+    'The simplified result screen does not start automatic narration').toEqual([]);
+  await page.screenshot({ path: info.outputPath('simple-hit-results.png') });
+  await info.attach('result-hit-animation.json', { body: JSON.stringify(frames), contentType: 'application/json' });
+  const reviewed = new Map();
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const current = await state(page);
+    expectSimpleResults(current);
+    for (const control of current.controls.filter(control => control.name.startsWith('Hear_'))) reviewed.set(control.name, control.text);
+    if (resultsAtEnd(current)) break;
+    await scrollResults(page, 200);
   }
-  if (audioAvailable) {
-    await expect.poll(async () => (await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear again');
-    await expect.poll(async () => (await state(page)).reportSpeaking, { timeout: 15000 }).toBe(false);
-    expect((await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear Pip');
-  } else await expectReportDelivery(page);
-  expect((await state(page)).report).toBe(round.report);
-  await resultAction(page, /NextReport/);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '1');
-  const highlights = await state(page);
-  expect(highlights.report.toLowerCase()).toContain(word.toLowerCase());
-  expect(highlights.report.toLowerCase()).toContain(secondWord.toLowerCase());
-  expect(highlights.report).toMatch(new RegExp(`\\b${round.bestCombo}\\b`));
-  expect(highlights.reportAudio[0]).toBe('res://assets/audio/pop/highlights-two.wav');
-  expect(highlights.reportAudio).toContain(`res://assets/audio/voice/word-${word.toLowerCase()}.wav`);
-  expect(highlights.reportAudio).toContain(`res://assets/audio/voice/word-${secondWord.toLowerCase()}.wav`);
-  expect(highlights.reportAudio.at(-1)).toBe(`res://assets/audio/pop/combo-${round.bestCombo}.wav`);
-  await expectReportDelivery(page);
-  await resultAction(page, /NextReport/);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '2');
-  const coaching = await state(page);
-  expect(coaching.report).not.toBe(round.report);
-  expect(coaching.report).not.toBe(highlights.report);
-  expect(coaching.report).toMatch(/say|practi[cs]e|try|next/i);
-  expect(coaching.reportAudio).toHaveLength(3);
-  expect(coaching.reportAudio[0]).toMatch(/\/(?:practice|repeat)\.wav$/);
-  expect(coaching.reportAudio[1]).toMatch(/\/voice\/word-[a-z-]+\.wav$/);
-  await expectReportDelivery(page);
-  await resultAction(page, /NextReport/);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-step', '0');
-  expect((await state(page)).report).toBe(round.report);
-  const beforeInteraction = (await state(page)).message;
-  await resultAction(page, /^Pip(?:\s|$)|high.?five/i);
-  await expect(page.locator('#pop-status')).toContainText(/High five/i);
-  expect((await state(page)).message).not.toBe(beforeInteraction);
-  expect((await state(page)).report).toContain(round.report);
-  expect((await state(page)).reportAudio[0]).toBe('res://assets/audio/pop/high-five.wav');
-  await expectReportDelivery(page);
-  await page.screenshot({ path: info.outputPath('pip-high-five.png') });
-  const finished = await state(page);
-  expect(finished.hits).toBe(round.hits);
-  expect(finished.score).toBe(round.score);
-  expect(finished.bestCombo).toBe(round.bestCombo);
-  if (finished.resultsScrollMax > 0) {
-    await scrollResults(page, -10000);
-    await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
-    await scrollResults(page, 300);
-    await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(0);
-    expect((await state(page)).resultsScrollbarVisible).toBe(false);
+  expect([...reviewed.values()], 'Both successful words remain in the review list').toEqual(expect.arrayContaining([word, secondWord]));
+  expect(reviewed.size, 'Missed words remain available below the successful words').toBeGreaterThan(2);
+  if ((await state(page)).resultsScrollMax > 0) {
+    expect((await state(page)).resultsScroll).toBeGreaterThan(0);
     await page.screenshot({ path: info.outputPath('results-scroll-without-bar.png') });
   }
-  const audioStarts = await page.evaluate(() => window.audioObservation.starts);
-  await resultAction(page, /Hear_/);
-  await expect.poll(async () => (await state(page)).reportSpeaking).toBe(false);
-  expect((await state(page)).reportLoading).toBe(false);
-  if (await page.evaluate(() => window.audioObservation.available)) {
-    await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(audioStarts);
+  const beforeWord = await page.evaluate(() => window.audioObservation.playbacks.length);
+  const wordControl = await resultAction(page, /^Hear_/);
+  if (audioAvailable) {
+    const recording = catalog.find(item => item.id === wordControl.name.slice(5)).audio;
+    await expectRecording(page, beforeWord, recording);
   }
-  expect((await state(page)).hits).toBe(finished.hits);
-  expect((await state(page)).score).toBe(finished.score);
+  expectSimpleResults(await state(page));
+  expect((await state(page)).hits).toBe(round.hits);
+  expect((await state(page)).score).toBe(round.score);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished');
-  await resultAction(page, /play again|replay|another round/i);
+  await resultAction(page, /^Replay /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).reportSpeaking).toBe(false);
-  expect((await state(page)).reportLoading).toBe(false);
+  expect((await state(page)).resultsHits).toEqual({ text: '', total: 0, active: false });
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-bundledAudioTest('bundled report audio plays without audio requests and replays offline without system TTS', async ({ page, browserName }, info) => {
+bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available offline without narration', async ({ page, browserName }, info) => {
   bundledAudioTest.setTimeout(120000);
   const audioRequests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
   const available = await page.evaluate(() => window.audioObservation.available);
-  if (browserName === 'chromium') expect(available, 'Chromium must exercise real bundled report playback').toBe(true);
-  bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio; native report audio coverage runs separately.');
+  if (browserName === 'chromium') expect(available, 'Chromium must exercise real bundled word playback').toBe(true);
+  await observeResultHits(page);
   // Keep recognition online so the real round clock can finish naturally.
   expect(await page.evaluate(() => navigator.onLine)).toBe(true);
   expect(audioRequests, 'No separate audio files are fetched during startup').toEqual([]);
-  const recording = 'assets/audio/pop/round-0.wav';
-  const reportSeconds = waveDuration(recording);
-  const beforeReport = await page.evaluate(() => window.audioObservation.playbacks.length);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
-  await expectReportDelivery(page);
-  const report = await state(page);
-  expect(report.hits).toBe(0);
-  expect(report.score).toBe(0);
-  expect(report.report).toContain('0 words');
-  expect(report.report).toContain('practise');
-  expect(report.reportAudio).toEqual([`res://${recording}`]);
-  expect(report.reportSpeaking).toBe(true);
-  expect(report.reportLoading).toBe(false);
-  const automatic = await expectRecording(page, beforeReport, recording, { active: true });
-  expect(automatic.loop).toBe(false);
-  expect(automatic.playbackRate).toBe(1);
-  const automaticOutput = await expectOutputEnergy(page);
-  expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
-  expect(audioRequests, 'The automatic recorded report needs no audio HTTP requests').toEqual([]);
-  await expect.poll(async () => (await state(page)).reportSpeaking,
-    { timeout: Math.ceil((reportSeconds + 3) * 1000) }).toBe(false);
-  await expect.poll(() => page.evaluate(at => window.audioObservation.playbacks.find(sound => sound.at === at)?.endedAt,
-    automatic.at), { message: 'The real automatic report source finishes naturally' }).toBeDefined();
-  expect((await state(page)).controls.find(control => control.name === 'HearPip')?.text).toBe('Hear Pip');
-  expect((await state(page)).reportLoading).toBe(false);
+  await expect.poll(async () => (await state(page)).resultsHits).toEqual({ text: '0', total: 0, active: false });
+  const zero = await state(page);
+  expect(zero.hits).toBe(0);
+  expect(zero.score).toBe(0);
+  expectSimpleResults(zero);
+  expect(zero.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
+  expect(await page.evaluate(() => window.__resultHitFrames.every(frame => frame.text === '0' && frame.total === 0))).toBe(true);
+  expect(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
+    'Zero hits do not start a report, coaching prompt or background music').toEqual([]);
+  await page.screenshot({ path: info.outputPath('zero-hit-results.png') });
   await page.context().setOffline(true);
   expect(await page.evaluate(() => navigator.onLine)).toBe(false);
-  await page.screenshot({ path: info.outputPath('bundled-report-offline.png') });
-
   const beforeReplay = await page.evaluate(() => window.audioObservation.playbacks.length);
-  await resultAction(page, /HearPip/);
-  await expectReportDelivery(page);
-  const replay = await expectRecording(page, beforeReplay, recording, { active: true });
-  expect(replay.at).toBeGreaterThan(automatic.at);
-  expect(replay.loop).toBe(false);
-  expect(replay.playbackRate).toBe(1);
-  const replayOutput = await expectOutputEnergy(page);
-  expect((await state(page)).report).toBe(report.report);
-  expect((await state(page)).reportAudio).toEqual(report.reportAudio);
-  expect((await state(page)).reportLoading).toBe(false);
-  expect(audioRequests, 'Replaying the report does not request an audio file').toEqual([]);
+  const wordControl = await resultAction(page, /^Hear_/);
+  const recording = catalog.find(item => item.id === wordControl.name.slice(5)).audio;
+  let replay, output;
+  if (available) {
+    replay = await expectRecording(page, beforeReplay, recording, { active: true });
+    expect(replay.loop).toBe(false);
+    expect(replay.playbackRate).toBe(1);
+    output = await expectOutputEnergy(page);
+  }
+  expectSimpleResults(await state(page));
+  expect((await state(page)).resultsHits).toEqual(zero.resultsHits);
+  expect(audioRequests, 'A review word plays from the game pack while offline').toEqual([]);
+  await page.screenshot({ path: info.outputPath('offline-word-review.png') });
   await chooseMode(page, 'match');
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-speaking', 'false');
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-report-loading', 'false');
-  await expect.poll(() => page.evaluate(at => {
-    const sound = window.audioObservation.playbacks.find(playback => playback.at === at);
-    return sound.stoppedAt !== undefined || sound.endedAt !== undefined;
-  }, replay.at), { message: 'Leaving Voice Pop leaves no live report source' }).toBe(true);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
+  if (replay) {
+    await expect.poll(() => page.evaluate(at => {
+      const sound = window.audioObservation.playbacks.find(playback => playback.at === at);
+      return sound.stoppedAt !== undefined || sound.endedAt !== undefined;
+    }, replay.at), { message: 'Leaving Voice Pop leaves no live review word source' }).toBe(true);
+  }
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
-  const sources = await page.evaluate(times => window.audioObservation.playbacks.filter(sound => times.includes(sound.at)),
-    [automatic.at, replay.at]);
-  await info.attach('bundled-report-offline-audio.json', {
-    body: JSON.stringify({ automaticOnline: true, replayOffline: true, recording, reportSeconds, report: report.report,
-      sources, automaticOutput, replayOutput, audioRequests }), contentType: 'application/json'
+  await info.attach('bundled-word-offline-audio.json', {
+    body: JSON.stringify({ audioAvailable: available, replayOffline: true, recording, replay, output, audioRequests }), contentType: 'application/json'
   });
   expect(audioRequests).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('reduced-motion Voice Pop results show the final hit total immediately', async ({ page }, info) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const errors = await open(page);
+  await observeResultHits(page);
+  const word = await popOne(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
+  const results = await state(page);
+  expectSimpleResults(results);
+  expect(results.hits).toBe(1);
+  expect(results.resultsHits).toEqual({ text: '1', total: 1, active: false });
+  await page.waitForTimeout(1400);
+  const frames = await page.evaluate(() => window.__resultHitFrames);
+  expect(frames.length).toBeGreaterThan(0);
+  for (const frame of frames) expect(frame).toMatchObject({ text: '1', total: 1, active: false });
+  expect(results.controls.find(control => control.name === 'Hear_' + word.toLowerCase())?.text).toBe(word);
+  await page.screenshot({ path: info.outputPath('reduced-motion-results.png') });
+  await resultAction(page, /^Replay /);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  expect((await state(page)).hits).toBe(0);
+  expect((await state(page)).resultsHits).toEqual({ text: '', total: 0, active: false });
   expect(errors).toEqual([]);
 });
 

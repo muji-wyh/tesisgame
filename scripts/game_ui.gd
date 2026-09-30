@@ -441,8 +441,6 @@ func _build_controls() -> void:
 	_pop.missed.connect(_pop_missed)
 	_pop.round_finished.connect(_pop_finished)
 	_pop.hear_requested.connect(_pop_hear)
-	_pop.report_requested.connect(_pop_report)
-	_pop.pip_report_requested.connect(_pop_report.bind(true))
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
@@ -570,10 +568,8 @@ func _build_controls() -> void:
 	header.move_child(_storage_retry_button, 0)
 	_build_collection_shell()
 	audio = Audio.new()
-	_pop.pip_audio_busy = audio.is_pip_busy
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
-	audio.narration_state_changed.connect(_pop_narration_state)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
 	feedback_timer.wait_time = 0.7
@@ -1210,7 +1206,6 @@ func _pop_hear(word: Dictionary) -> void:
 	if not _stop_pop_listening():
 		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
 		return
-	_pop.set_report_speaking(false)
 	audio.interact(model.theme_id, false)
 	audio.say("res://" + word.audio)
 
@@ -1219,27 +1214,7 @@ func _pop_finished(_result: Dictionary) -> void:
 	if not _stop_pop_listening():
 		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
 		return
-	_pop_report(_pop.report_text())
-
-
-func _pop_report(text: String, pip_greeting: bool = false) -> void:
-	if _mode_id != "pop" or _pop.game.phase != "finished" or collection_page.visible:
-		return
-	if not _stop_pop_listening():
-		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
-		return
 	audio.halt()
-	_announce_status("Pip says: " + text)
-	audio.interact(model.theme_id, false)
-	var clips: Array[String] = _pop.report_audio()
-	if pip_greeting and audio.active and not audio.muted and audio.available:
-		clips.push_front(audio.next_pip_sound())
-	audio.narrate(clips)
-
-
-func _pop_narration_state(state: String) -> void:
-	if _pop != null:
-		_pop.set_report_audio_state(state)
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -2478,9 +2453,6 @@ func _reveal_room_control(target: Control) -> void:
 
 
 func _audio_status(message: String) -> void:
-	var can_hear: bool = audio.available and not audio.muted
-	if not can_hear and _mode_id == "pop" and _pop.game.phase == "finished":
-		_pop.report_voice_unavailable()
 	if _host != null:
 		_host.audioStatus(message)
 

@@ -374,7 +374,7 @@
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
-        data-phase="idle" data-remaining="30" data-hits="0" data-score="0" data-best-combo="0" data-targets="[]" data-controls="[]" data-hud="{}"></p>
+        data-phase="idle" data-remaining="30" data-hits="0" data-score="0" data-best-combo="0" data-targets="[]" data-controls="[]" data-hud="{}" data-results-hits="{}"></p>
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
@@ -1583,22 +1583,27 @@
             amount: Math.floor(number(hitEffect.amount)), words: (Array.isArray(hitEffect.words) ? hitEffect.words : [])
               .filter(word => typeof word === 'string').map(word => word.slice(0, 2000)).slice(0, 32) };
           hud.targets_above_hud = hudState.targets_above_hud === true;
+          const resultsHitState = state.results_hits && typeof state.results_hits === 'object' && !Array.isArray(state.results_hits)
+            ? state.results_hits : {};
+          const resultsHits = {
+            text: typeof resultsHitState.text === 'string' && /^\d{1,16}$/.test(resultsHitState.text) ? resultsHitState.text : '',
+            total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true
+          };
           for (const [name, value] of Object.entries({ phase, remaining, hits, score, 'best-combo': combo,
             targets: JSON.stringify(targets), controls: JSON.stringify(controls), hud: JSON.stringify(hud),
             transcript: typeof state.transcript === 'string' ? state.transcript : '',
             'transcript-final': state.transcript_final === true,
             'recognition-feedback': typeof state.recognition_feedback === 'string' ? state.recognition_feedback : '',
             'recognition-message': typeof state.recognition_message === 'string' ? state.recognition_message : '',
-            report: typeof state.report === 'string' ? state.report : '', 'report-step': Math.floor(number(state.report_step)),
-            'report-speaking': state.report_speaking === true, 'report-loading': state.report_loading === true,
-            'report-audio': JSON.stringify((Array.isArray(state.report_audio) ? state.report_audio : [])
-              .filter(path => typeof path === 'string' && /^res:\/\/assets\/audio\/(?:pop|voice)\/[a-z0-9-]+\.wav$/.test(path))),
+            'results-hits': JSON.stringify(resultsHits),
             'results-scroll': number(state.results_scroll), 'results-scroll-max': number(state.results_scroll_max),
             'results-scrollbar-visible': state.results_scrollbar_visible === true })) {
             popStatusText.setAttribute('data-' + name, String(value));
           }
           const message = typeof state.message === 'string' ? state.message : '';
-          const readable = phase === 'idle' ? '' : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${combo}.` +
+          const readable = phase === 'idle' ? '' : phase === 'finished'
+            ? `${message ? message + ' ' : ''}Voice Pop. ${hits} hits.`
+            : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${combo}.` +
             (targets.length ? ' Words: ' + targets.map(target => target.text).join(', ') + '.' : '');
           if (popStatusText.textContent !== readable) popStatusText.textContent = readable;
           return true;

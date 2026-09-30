@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PopView = preload("res://scripts/voice_pop.gd")
+
 var checks: int = 0
 var failures: int = 0
 
@@ -15,17 +17,6 @@ func check(value: bool, message: String) -> void:
 func settle() -> void:
 	for frame in range(8):
 		await process_frame
-
-
-func wait_for_result_pip(view, context: String) -> void:
-	for attempt in range(80):
-		var audio_busy: bool = view.pip_audio_busy.is_valid() and bool(view.pip_audio_busy.call())
-		if not view.pip.is_manual_action_busy() and not audio_busy:
-			break
-		await create_timer(0.05).timeout
-	check(not view.pip.is_manual_action_busy()
-		and (not view.pip_audio_busy.is_valid() or not bool(view.pip_audio_busy.call())),
-		context + " finishes the current animation and greeting before the next tap")
 
 
 func result_pointer(point: Vector2, pressed: bool) -> void:
@@ -46,8 +37,7 @@ func check_result_touch_scroll(view) -> void:
 	var original_touch_hint: bool = Input.emulate_touch_from_mouse
 	Input.emulate_touch_from_mouse = true
 	check(DisplayServer.is_touchscreen_available(), "The headless drag fixture exposes the touchscreen hint")
-	var buttons: Array = [view.pip, view.report_button, view.next_report_button,
-		view.replay_button, view.back_button, view._review_buttons[0]]
+	var buttons: Array = [view.replay_button, view._review_buttons[0]]
 	for button in buttons:
 		view._results.scroll_vertical = 0
 		await settle()
@@ -97,29 +87,66 @@ func check_result_touch_scroll(view) -> void:
 func check_result_actions(view, dimensions: Vector2i, context: String) -> void:
 	check(view._results.scroll_vertical == 0, "%s stays at scroll zero at %s" % [context, dimensions])
 	var viewport_rect: Rect2 = view._results.get_global_rect()
-	for button in [view.replay_button, view.back_button]:
-		check(button.is_visible_in_tree() and viewport_rect.encloses(button.get_global_rect()),
-			"%s keeps %s fully visible at %s: viewport=%s button=%s" % [
-				context, button.name, dimensions, viewport_rect, button.get_global_rect()])
+	check(view.replay_button.is_visible_in_tree() and viewport_rect.grow(1.0).encloses(view.replay_button.get_global_rect()),
+		"%s keeps Play again fully visible at %s: viewport=%s button=%s" % [
+			context, dimensions, viewport_rect, view.replay_button.get_global_rect()])
+	check(view._result_hero.is_visible_in_tree() and viewport_rect.grow(1.0).encloses(view._result_hero.get_global_rect()),
+		"%s keeps the HITS celebration fully visible at %s" % [context, dimensions])
+	check(view.replay_button.get_global_rect().position.y >= view._result_hero.get_global_rect().end.y - 1.0,
+		"Play again sits below the hit celebration without covering it")
+	if not view._review_buttons.is_empty():
+		check(view.replay_button.get_global_rect().end.y <= view._review_buttons[0].get_global_rect().position.y + 1.0,
+			"Play again remains above the word lists")
+	check(view.default_focus() == view.replay_button, "Results make Play again the default keyboard action")
 
-func check_compact_reports(view, dimensions: Vector2i, fixture: String) -> void:
-	view._show_report(0)
-	for report_step in range(3):
-		await settle()
-		var context: String = "%s report page %d" % [fixture, report_step + 1]
-		check(int(view.snapshot().report_step) == report_step, context + " is the requested page")
-		check_result_actions(view, dimensions, context)
-		await wait_for_result_pip(view, context)
-		view.pip.pressed.emit()
-		check(str(view.snapshot().report).contains("High five")
-			and view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
-			context + " actually displays the high five before its layout is checked")
-		await settle()
-		check_result_actions(view, dimensions, context + " after high five")
-		if report_step < 2:
-			view.next_report_button.pressed.emit()
-	view._show_report(0)
-	await settle()
+
+func check_result_contents(view, summary: Dictionary) -> void:
+	check(view._result_hits_caption.text == "HITS" and int(view.snapshot().results_hits.total) == int(summary.hits),
+		"The result hero celebrates the actual hit total")
+	var labels: PackedStringArray = []
+	for label in view._results.find_children("*", "Label", true, false):
+		labels.append(str(label.text))
+		check(not str(label.text).contains("×"), "Result words have no repetition-count suffix")
+	check(not "WORDS" in labels and not "BEST COMBO" in labels and not "SCORE" in labels,
+		"Secondary statistics have been removed from results")
+	for node_name in ["Pip", "ResultPip", "HearPip", "NextReport", "Back"]:
+		check(view._results.find_child(node_name, true, false) == null,
+			"Results do not retain the removed " + node_name + " control")
+	for button in view._results.find_children("*", "Button", true, false):
+		check(button == view.replay_button or str(button.name).begins_with("Hear_"),
+			"Result actions are limited to Play again and individual word playback")
+	var listed_words: Array = summary.hit_words + summary.missed_words
+	check(view._review_buttons.size() == listed_words.size(), "Every recorded word remains available in its result list")
+	for button in view._review_buttons:
+		var word_labels: Array = button.find_children("*", "Label", true, false)
+		check(word_labels.size() == 1 and str(word_labels[0].text) == str(button.tooltip_text).trim_prefix("Hear "),
+			"A review card shows its word once without a hidden count label")
+	if not summary.hit_words.is_empty():
+		check(Array(labels).any(func(text: String) -> bool: return text.begins_with("Words you popped")),
+			"Successful words retain their group caption")
+	if not summary.missed_words.is_empty():
+		check(Array(labels).any(func(text: String) -> bool: return text.begins_with("Try these next time")),
+			"Missed words retain their practice group caption")
+
+
+func check_result_feedback(view, total: int) -> void:
+	var summary: Dictionary = view.game.summary()
+	var initial: int = int(view.snapshot().results_hits.text)
+	check(initial >= 0 and initial <= total, "The result counter starts inside the earned hit range")
+	if not view.reduced_motion:
+		check(bool(view.snapshot().results_hits.active), "A fresh result starts its hit celebration")
+		view._advance_result_feedback(0.18)
+		var advanced: int = int(view.snapshot().results_hits.text)
+		check(advanced >= initial and advanced <= total, "The count-up moves toward the earned total without overshooting")
+		if total >= 20:
+			check(advanced > 0 and advanced < total, "A larger result visibly counts through intermediate values")
+	view._advance_result_feedback(PopView.RESULT_HIT_DURATION + 0.1)
+	check(str(view.snapshot().results_hits.text) == str(total) and not bool(view.snapshot().results_hits.active)
+		and view._result_hits.scale.is_equal_approx(Vector2.ONE),
+		"The celebration settles on the exact hit total with a stable readable label")
+	view._advance_result_feedback(0.5)
+	check(str(view.snapshot().results_hits.text) == str(total) and view.game.summary() == summary,
+		"Finishing the celebration neither replays the count-up nor changes earned results")
 
 
 func check_live_hud(view, dimensions: Vector2i) -> void:
@@ -331,7 +358,7 @@ func _run() -> void:
 		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at the 30-second deadline")
 		var result: Dictionary = view.game.summary()
 		check(result.hits == before + 1 and result.unique_words == 1 and result.best_combo >= 1,
-			"The result report reflects the real spoken hits")
+			"The result preserves the real spoken hits")
 		check(Rect2(Vector2.ZERO, app.size).grow(1).encloses(view.get_global_rect()), "The result view fits at " + str(dimensions))
 		var snapshot: Dictionary = view.snapshot()
 		check(snapshot.phase == "finished", "Accessible state reflects the visible results")
@@ -340,82 +367,19 @@ func _run() -> void:
 		check(str(snapshot.transcript).is_empty() and not view.transcript_label.is_visible_in_tree(), "Results clear the completed round's transcript")
 		view.show_transcript("This is a stale finished hypothesis", true)
 		check(str(view.snapshot().transcript).is_empty(), "Late hypotheses cannot revive a completed round's transcript")
-		var initial_report: String = str(snapshot.report)
-		check(int(snapshot.report_step) == 0 and initial_report == view._pip_caption.text and initial_report.contains("30"),
-			"Pip starts with a visible report of the actual 30-second round")
-		check(initial_report.contains(str(result.hits)) and not initial_report.contains("points")
-			and view.report_audio() == ["res://assets/audio/pop/round-%d.wav" % int(result.hits)],
-			"Pip uses the complete recorded hit-count sentence without assembling score fragments")
-		check(view._stats.get_child(3).get_child(0).get_child(0).text == str(result.score)
-			and view._stats.get_child(1).get_child(0).get_child(0).text == str(result.unique_words),
-			"Exact score and distinct words remain visible in their result tiles")
-		var report_requests: Array[String] = []
-		var pip_requests: Array[String] = []
-		var on_report: Callable = func(text: String) -> void: report_requests.append(text)
-		var on_pip: Callable = func(text: String) -> void: pip_requests.append(text)
-		view.report_requested.connect(on_report)
-		view.pip_report_requested.connect(on_pip)
-		view.report_button.pressed.emit()
-		check(report_requests.size() == 1 and report_requests.back() == initial_report, "Hear Pip replays the current report")
-		view.next_report_button.pressed.emit()
-		var highlights: String = str(view.snapshot().report)
-		check(int(view.snapshot().report_step) == 1 and highlights.to_lower().contains(str(word.text).to_lower()),
-			"My highlights names a word the player actually popped")
-		check(highlights.contains("Your best combo was %d" % int(result.best_combo))
-			and view.report_audio().has("res://" + str(word.audio))
-			and view.report_audio().back() == "res://assets/audio/pop/combo-%d.wav" % int(result.best_combo),
-			"Highlights play the actual word and the complete recorded combo sentence")
-		check(report_requests.size() == 2 and report_requests.back() == highlights, "Changing report page also speaks that page")
-		view.next_report_button.pressed.emit()
-		var coaching: String = str(view.snapshot().report)
-		var practice_words: Array = result.missed_words if not result.missed_words.is_empty() else result.hit_words
-		check(int(view.snapshot().report_step) == 2 and practice_words.any(func(item: Dictionary) -> bool:
-			return coaching.to_lower().contains(str(item.text).to_lower())), "Coach me suggests an actual word from this round")
-		check(coaching != initial_report and coaching != highlights and report_requests.back() == coaching,
-			"Coaching provides and speaks a distinct, concrete next step")
-		view.next_report_button.pressed.emit()
-		check(int(view.snapshot().report_step) == 0 and str(view.snapshot().report) == initial_report,
-			"The three report pages cycle back to the original round summary")
-		var ordinary_requests: int = report_requests.size()
-		if view.pip.is_manual_action_busy():
-			view.pip.pressed.emit()
-			check(str(view.snapshot().report) == initial_report and pip_requests.is_empty()
-				and report_requests.size() == ordinary_requests,
-				"A tap during the result's entrance animation leaves the report unchanged")
-		await wait_for_result_pip(view, "The result entrance")
-		check(pip_requests.is_empty() and report_requests.size() == ordinary_requests,
-			"An ignored entrance tap cannot queue a later greeting or report")
-		view.pip.pressed.emit()
-		check(str(view.snapshot().report).contains("High five") and str(view.snapshot().report).contains(initial_report),
-			"Pip's high five adds a reaction while keeping the actual report")
-		check(pip_requests == [str(view.snapshot().report)] and report_requests.size() == ordinary_requests,
-			"A Pip tap requests its greeting and visible report once through a separate audio route")
-		check(view.report_audio().front() == "res://assets/audio/pop/high-five.wav",
-			"A high five prepends its matching recorded clip")
-		var high_five_report: String = str(view.snapshot().report)
-		var high_five_remaining: float = view.pip._trick_left
-		for tap in range(3):
-			view.pip.pressed.emit()
-		check(pip_requests == [high_five_report] and report_requests.size() == ordinary_requests
-			and str(view.snapshot().report) == high_five_report
-			and view.pip._trick_left == high_five_remaining,
-			"Repeated taps cannot restart a high five or duplicate its report request")
-		await wait_for_result_pip(view, "The accepted high five")
-		check(pip_requests == [high_five_report] and report_requests.size() == ordinary_requests,
-			"Finishing a high five does not replay ignored taps")
-		check(view.game.summary() == result, "Report browsing and Pip interaction leave the round result unchanged")
-		view.set_report_speaking(true)
-		check(view.pip.speaking and bool(view.snapshot().report_speaking), "Pip's mouth starts only when report speech starts")
-		view.set_report_speaking(false)
-		check(not view.pip.speaking and not bool(view.snapshot().report_speaking), "Pip's mouth stops when report speech ends or is cancelled")
-		view.set_report_audio_state("loading")
-		check(bool(view.snapshot().report_loading) and not view.pip.speaking,
-			"Loading never pretends that Pip has started speaking")
-		view.set_report_audio_state("idle")
-		view.report_requested.disconnect(on_report)
-		view.pip_report_requested.disconnect(on_pip)
-		if dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
-			await check_compact_reports(view, dimensions, "One-hit round")
+		check_result_contents(view, result)
+		check_result_actions(view, dimensions, "Completed round")
+		check_result_feedback(view, int(result.hits))
+		check(not app.audio.narration.playing and app.audio.narration_state == "idle",
+			"Finishing Voice Pop does not request or play a removed Pip report")
+		var heard: Array[Dictionary] = []
+		var on_hear: Callable = func(item: Dictionary) -> void: heard.append(item)
+		view.hear_requested.connect(on_hear)
+		view._review_buttons[0].pressed.emit()
+		check(heard.size() == 1 and heard[0].id == word.id,
+			"The successful word remains individually playable from its result card")
+		view.hear_requested.disconnect(on_hear)
+		check(view.game.summary() == result, "Reviewing an individual word leaves the earned result unchanged")
 		await settle()
 		check(not bool(view.snapshot().results_scrollbar_visible) and not view._results.get_v_scroll_bar().is_visible_in_tree(),
 			"Results never paint a scrollbar at " + str(dimensions))
@@ -437,18 +401,15 @@ func _run() -> void:
 					view._results.get_v_scroll_bar().page, root.gui_get_focus_owner()])
 			view._results.scroll_vertical = 0
 			await settle()
-		var interactive_pip: bool = false
-		for control in view.controls():
-			if control.is_visible_in_tree() and control.name.to_lower().contains("pip"):
-				interactive_pip = true
-		check(interactive_pip, "Pip is an actual interactive result control")
-		check(not view.default_focus() is Label, "Results provide a usable action for keyboard focus")
+		view.replay_button.pressed.emit()
+		check(view.game.phase == "ready" and view.game.hits == 0 and view.game.remaining == 30.0,
+			"Play again returns to a fresh round that waits for microphone permission")
+		check(not view._results.visible and not bool(view.snapshot().results_hits.active),
+			"Replaying hides results and clears the previous hit celebration")
 		app.choose_mode("match")
-		check(not view.is_visible_in_tree() and not bool(view.snapshot().report_speaking)
-			and not bool(view.snapshot().report_loading) and view.report_audio().is_empty(),
-			"Leaving results clears report playback state and the exposed audio list")
-		view.set_report_speaking(true)
-		check(not view.pip.speaking, "A late report speech callback cannot animate Pip after leaving results")
+		check(not view.is_visible_in_tree() and view.snapshot().phase == "idle"
+			and not bool(view.snapshot().results_hits.active),
+			"Leaving Voice Pop retains no active result celebration")
 		view.set_process(true)
 	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
 	app.playroom_state.age_band_id = "4-6"
@@ -460,39 +421,52 @@ func _run() -> void:
 	app._pop._advance_game(31.0)
 	await settle()
 	var empty_round: Dictionary = app._pop.game.summary()
-	var empty_report: String = str(app._pop.snapshot().report)
 	check(empty_round.hits == 0 and empty_round.score == 0 and empty_round.hit_words.is_empty(),
-		"The no-hit report fixture completes an actual round without invented results")
-	check(empty_report.contains("0 words") and empty_report.contains("30") and not empty_report.contains("points")
-		and app._pop.report_audio() == ["res://assets/audio/pop/round-0.wav"],
-		"Pip accurately reports a zero-hit round using its complete encouraging recording")
-	check(empty_report.to_lower().contains("practise"), "A no-hit round gives encouraging help")
-	app._pop.next_report_button.pressed.emit()
-	check(str(app._pop.snapshot().report).contains("No words popped"), "Empty highlights do not invent a successful word")
-	app._pop.next_report_button.pressed.emit()
-	check(not empty_round.missed_words.is_empty() and str(app._pop.snapshot().report).contains(str(empty_round.missed_words[0].text)),
-		"A no-hit round still offers a specific missed word to practise")
-	check(app._pop.game.summary() == empty_round, "Pip's no-hit coaching leaves the recorded result unchanged")
+		"The no-hit fixture completes an actual round without invented results")
+	check_result_contents(app._pop, empty_round)
+	app._pop._advance_result_feedback(PopView.RESULT_HIT_DURATION + 0.1)
+	check(str(app._pop.snapshot().results_hits.text) == "0" and not empty_round.missed_words.is_empty(),
+		"A no-hit round shows zero and keeps its missed words available for practice")
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
 		root.size = dimensions
 		await settle()
-		await check_compact_reports(app._pop, dimensions, "Zero-hit round")
-	check(app._pop.game.summary() == empty_round, "Compact report pages and every-page high fives preserve the zero-hit result")
-	var long_words: Array = app.data.words.duplicate()
+		check_result_actions(app._pop, dimensions, "Zero-hit round")
+	check(app._pop.game.summary() == empty_round, "Zero-hit presentation preserves the actual round result")
+	var long_words: Array = app.data.words.duplicate(true)
 	long_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.text).length() > str(b.text).length())
 	for count in [20, 21]:
-		var long_report: Dictionary = empty_round.duplicate(true)
-		long_report.hits = count
-		long_report.best_combo = count
-		long_report.unique_words = 2
-		long_report.score = 200
-		long_report.hit_words = long_words.slice(0, 2)
-		long_report.missed_words = long_words.slice(2, 3)
-		app._pop._build_results(long_report)
+		var long_result: Dictionary = empty_round.duplicate(true)
+		long_result.hits = count
+		long_result.best_combo = count
+		long_result.unique_words = 2
+		long_result.score = 200
+		long_result.hit_words = long_words.slice(0, 2).duplicate(true)
+		long_result.missed_words = long_words.slice(2, 3).duplicate(true)
+		long_result.hit_words[0].count = 8
+		long_result.hit_words[1].count = 12
+		long_result.missed_words[0].count = 7
+		app._pop.set_reduced_motion(false)
+		app._pop._build_results(long_result)
+		await settle()
+		check_result_contents(app._pop, long_result)
+		check_result_feedback(app._pop, count)
 		for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
 			root.size = dimensions
 			await settle()
-			await check_compact_reports(app._pop, dimensions, "Two long words, %d hits" % count)
+			check_result_actions(app._pop, dimensions, "Long words, %d hits" % count)
+			var counter: Label = app._pop._result_hits
+			var text_width: float = counter.get_theme_font("font").get_string_size(counter.text,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, counter.get_theme_font_size("font_size")).x
+			check(text_width <= counter.size.x + 1.0, "The full hit total remains readable on compact result screens")
+		app._pop.set_reduced_motion(true)
+		app._pop._build_results(long_result)
+		check(str(app._pop.snapshot().results_hits.text) == str(count)
+			and not bool(app._pop.snapshot().results_hits.active) and app._pop._result_hits.scale.is_equal_approx(Vector2.ONE),
+			"Reduced motion presents the complete hit total immediately without a count-up or scale animation")
+		app._pop._advance_result_feedback(0.5)
+		check(str(app._pop.snapshot().results_hits.text) == str(count),
+			"Advancing reduced-motion feedback cannot rewind or recount the displayed total")
+	check(app._pop.game.summary() == empty_round, "Result-only layout fixtures never alter the underlying scored round")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

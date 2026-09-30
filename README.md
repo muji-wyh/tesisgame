@@ -70,11 +70,11 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
-game effects, Pip sounds, eight background tracks, ten game prompts, 51 Voice Pop
-reports and 88 themed chest cues. Once startup finishes, playback needs no further
-audio downloads. The build opens the actual exported PCK and loads the required
-audio resources to verify that they are present and playable. Retired arrival and
-opening voice prompts remain excluded.
+game effects, Pip sounds, eight background tracks, ten game prompts, 51 legacy
+Voice Pop report recordings and 88 themed chest cues. Once startup finishes,
+playback needs no further audio downloads. The build opens the actual exported
+PCK and loads the required audio resources to verify that they are present and
+playable. Retired arrival and opening voice prompts remain excluded.
 
 The Web preset uses Compatibility rendering, WebGL 2 and single-threaded export. It does not require SharedArrayBuffer, COOP/COEP headers, a service worker or cross-origin isolation. When updating a deployment, replace the complete export; do not rename hashed files or omit their `.br` sidecars.
 
@@ -223,19 +223,18 @@ still need a current target when received. No accuracy percentage is implied by
 these safeguards.
 
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
-points). Dropped objects end the combo; there is no losing screen. Pip reports the
-actual results in a speech bubble after 30 seconds. His three report pages cover
-your round, the words and combos you achieved, and a specific word to practise.
-Choose My highlights / Coach me to continue, Hear Pip to replay his current
-report, or tap Pip for a high-five. His beak follows actual summary playback.
-Review any word's recorded pronunciation or play another round. The result view
-scrolls by touch, wheel and keyboard focus without showing a scrollbar.
-Pip uses prerecorded Jenny Neural speech with the same friendly delivery as the
-word recordings. Whole sentences report the actual hit count and best combo;
-the review and coaching pages include words from the completed round. The four
-result tiles retain the exact hits, distinct words, combo and score. All report
-clips are included in the startup pack. Playback does not depend on a later
-download, an installed browser TTS voice or runtime speech credentials.
+points). Dropped objects end the combo; there is no losing screen. After 30
+seconds, the result view shows only **HITS**, **Play again**, and lists of popped
+and missed words. The hit total counts up, settles with a brief scale pulse and
+sparkles, and keeps a gentle glow. Reduced motion shows the complete total
+immediately with a static glow. Score, unique-word and combo statistics remain
+in the game model but are not displayed on this page.
+
+Tap a word to replay its recorded pronunciation; cards show the picture and word
+without a repetition count. The result view scrolls by touch, wheel and keyboard
+focus without showing a scrollbar. It has no Pip report or automatic narration.
+The 51 legacy Jenny Neural report recordings remain in their existing asset
+directory and startup pack, but the current result UI does not use them.
 
 Microphone denial, missing hardware, or speech-service errors show a retry action.
 More, backgrounding, and recognition interruptions pause the current round; Resume
@@ -366,8 +365,8 @@ The compact world icons keep their full tooltip and accessibility names.
 Card selections ripple and successful matches sparkle. Effects
 are bounded and respect reduced motion; the same controls work with touch, keyboard, and Xbox.
 
-Pip's beak follows the actual pronunciation/prompt player through narration
-sequences and page transitions. Background music and sound effects do not make
+Pip's beak follows the actual pronunciation/prompt player during word playback
+and page transitions. Background music and sound effects do not make
 him talk. During microphone
 play he listens instead. Reduced motion uses static speaking/greeting poses.
 After 6–9 seconds of inactivity in normal play, Pip may wave,
@@ -734,8 +733,9 @@ The game prompt catalog contains ten messages: wrong-answer and loss feedback,
 plus one greeting for each world. Together with the 350 word recordings, the
 generator maintains 360 active files under `assets\audio\voice`. Retired
 arrival/opening recordings have been removed; historical provenance remains in
-the asset documentation. Voice Pop report recordings remain in their
-separate directory. Source details, hashes and generation checks are in
+the asset documentation. Legacy Voice Pop report recordings remain in their
+separate directory and startup pack; the current result UI does not use them.
+Source details, hashes and generation checks are in
 [Jungle and Candy audio](docs/assets/jungle-candy-audio.md).
 
 ## Chest artwork
