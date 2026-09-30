@@ -3,6 +3,7 @@ extends RefCounted
 signal changed
 
 const Data = preload("res://scripts/game_data.gd")
+const SpeechWords = preload("res://scripts/speech_words.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MAX_HINTS: int = 3
 const MATCH_PAIR_COUNT: int = 5
@@ -182,15 +183,21 @@ func spoken_matches(transcript: String) -> Array[String]:
 	var matches: Array[String] = []
 	if phase in ["won", "lost"]:
 		return matches
-	var tokens := RegEx.new()
-	tokens.compile("\\b[a-z]+\\b")
-	for token in tokens.search_all(Data.normalize_spoken_text(transcript)):
+	for token in SpeechWords.tokens(transcript):
+		var candidate: String = ""
 		for card in cards:
-			if card.kind != "word" or card.word.text != token.get_string():
+			if card.kind != "word" or _spoken_pair(card.word.id).is_empty():
 				continue
 			var word_id: String = card.word.id
-			if not matches.has(word_id) and not _spoken_pair(word_id).is_empty():
-				matches.append(word_id)
+			# One token resolves to one available pair. Exact spelling wins if a
+			# future board contains both spellings of the same sound.
+			if card.word.text == token:
+				candidate = word_id
+				break
+			if candidate.is_empty() and SpeechWords.forms(card.word.text).has(token):
+				candidate = word_id
+		if not candidate.is_empty() and not matches.has(candidate):
+			matches.append(candidate)
 	return matches
 
 

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap } = require('./game-ui.cjs');
+const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, openRewards, roomControl } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const voiceHitRecording = 'assets/audio/sfx/match-voice-hit.wav';
@@ -473,6 +473,59 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
   if (audioAvailable) expect((await soundsSince()).filter(isElectricHit), 'Late recognition callbacks cannot replay the hit cue.').toHaveLength(5);
   expect(audioRequests, 'The hit sound is bundled and never depends on an audio download.').toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('Match homophones score the canonical flower once with its voice hit feedback', async ({ page }, testInfo) => {
+  await observeAudio(page);
+  const errors = await openGame(page);
+  // The real Spring toy goal starts a lesson that must contain flower, so this
+  // check never depends on the randomized opening topic or five-word selection.
+  await openRewards(page);
+  await roomControl(page, 'spring');
+  await page.keyboard.press('Enter');
+  await roomControl(page, 'goal', { locked: true, item: 'spring' });
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
+  const { pairs } = await discoverBoard(page);
+  expect(pairs.some(([word]) => word === 'flower'), 'The gift lesson supplies a real flower pair').toBe(true);
+  await listen(page);
+  await observeVoiceMatchLinks(page);
+  await expect(page.locator('#speech-successes')).toHaveText('0/5');
+  const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+  await page.evaluate(() => window.speechFixture.emit('flour', false));
+  await expect(page.locator('#speech-transcript')).toHaveText('flour');
+  await rendered(page);
+  await expect(page.locator('#speech-successes')).toHaveText('0/5');
+  expect((await voiceMatchLink(page)).active, 'Match still waits for a final result').toBe(false);
+  for (const text of ['flours', 'floury']) {
+    await page.evaluate(text => window.speechFixture.emit(text, true), text);
+    await rendered(page);
+    await expect(page.locator('#speech-successes')).toHaveText('0/5');
+  }
+  const recognized = 'The FLOUR!';
+  await page.evaluate(text => window.speechFixture.emit(text, true), recognized);
+  await expect(page.locator('#speech-transcript')).toHaveText(recognized);
+  await expect(page.locator('#speech-successes')).toHaveText('1/5');
+  await expect.poll(() => page.evaluate(() => window.voiceMatchLinks.filter(link => link.active).length)).toBe(1);
+  const link = await page.evaluate(() => window.voiceMatchLinks.find(link => link.active));
+  expect(link.source.id).toBe('flower:image');
+  expect(link.target.id).toBe('flower:word');
+  expect(link.duration).toBe(1);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (audioAvailable) await expectRecording(page, audioFrom, voiceHitRecording);
+  await expect.poll(async () => (await voiceMatchLink(page)).active).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
+  await page.evaluate(() => window.speechFixture.emit('flower flour flower', true));
+  await rendered(page);
+  await expect(page.locator('#speech-successes')).toHaveText('1/5');
+  expect((await voiceMatchLink(page)).serial, 'Equivalent spellings cannot replay the scored pair').toBe(link.serial);
+  const playbacks = await page.evaluate(from => window.audioObservation.playbacks.slice(from), audioFrom);
+  if (audioAvailable) expect(playbacks, 'The canonical and homophone spellings share one electric hit').toHaveLength(1);
+  await testInfo.attach('match-homophone-feedback', {
+    body: JSON.stringify({ recognized, canonical: 'flower', link, playbacks }), contentType: 'application/json'
+  });
+  await toggleVoice(page);
   expect(errors).toEqual([]);
 });
 

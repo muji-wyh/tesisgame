@@ -250,14 +250,33 @@ func _test_form_snapshots() -> void:
 
 
 func _test_homophones_vocabulary_and_feedback() -> void:
-	for pair in [["sun", "son", "sons"], ["flower", "flour", "flours"], ["pear", "pair", "pairs"], ["plane", "plain", "plains"]]:
+	for pair in [
+		["sun", "son", "sons"], ["flower", "flour", "flours"], ["pear", "pair", "pare", "pairs", "pares"],
+		["plane", "plain", "plains"], ["bee", "be", "b"], ["eye", "i", "aye", "ayes"],
+		["nose", "knows"], ["bear", "bare", "bares"], ["deer", "dear"], ["bread", "bred"],
+		["rain", "rein", "reign"], ["ball", "bawl", "bawls"], ["horse", "hoarse"],
+		["carrot", "carat", "caret", "karat", "carats", "carets", "karats"], ["shoe", "shoo", "shoos"],
+		["key", "quay", "quays"], ["bowl", "bole", "boll", "boles", "bolls"], ["whale", "wail", "wale", "wails", "wales"],
+		["tie", "thai", "thais"], ["peas", "pees"],
+		["seed", "cede", "cedes"], ["rose", "rows", "roes"], ["berry", "bury", "buries"],
+		["bell", "belle", "belles"], ["ring", "wring", "wrings"],
+		["cymbal", "symbol", "symbols"], ["plum", "plumb", "plumbs"], ["jam", "jamb", "jambs"],
+		["beach", "beech", "beeches"], ["toe", "tow", "tows"], ["ant", "aunt", "aunts"],
+		["root", "route", "routes"], ["beetle", "beatle", "beatles"], ["ferry", "fairy", "faery", "fairies", "faeries"]
+	]:
 		for alternative in pair.slice(1):
 			var game := Model.new()
 			game.configure(words([pair[0]]), 3)
 			game.start()
 			check(game.targets[0].forms.has(alternative), "The visible word publishes its vetted homophone " + alternative)
-			check(game.hit_transcript("_" + alternative + " " + alternative + "2").is_empty(), "Homophones still require exact token boundaries")
-			check(game.hit_transcript(alternative).size() == 1, "A true homophone or its plural hits " + pair[0])
+			check(game.hit_transcript("_" + alternative + " " + alternative + "2 " + alternative + "'s "
+				+ alternative + "’s " + alternative + "é é" + alternative).is_empty(),
+				"Homophones preserve whole Unicode tokens, numbers, and possessives: " + alternative)
+			var removed: Array = game.hit_transcript(alternative.to_upper() + "! " + alternative + " " + pair[0])
+			check(removed.size() == 1 and game.hits == 1 and game.combo == 1 and game.score == 10,
+				"Repeated true homophones or plurals give exactly one hit for " + pair[0])
+			check(game.hit_words.size() == 1 and game.hit_words[0].id == pair[0] and game.hit_words[0].text == pair[0],
+				"Homophone results keep the illustrated vocabulary identity for " + pair[0])
 			check(game.hit_transcript(pair[0]).is_empty() and game.hits == 1, "Alternate spellings cannot hit the same target twice")
 	var pool: Array = words(["sun", "flower", "pear", "plane", "helicopter", "octopus", "bee", "eye", "nose"])
 	var vocabulary_game := Model.new()
@@ -269,20 +288,40 @@ func _test_homophones_vocabulary_and_feedback() -> void:
 	vocabulary_game.start()
 	check(vocabulary_game.vocabulary().size() == pool.size() and vocabulary_game.targets.size() == 1,
 		"Canonical vocabulary is an independent snapshot, not the currently visible target list")
-	for fixture in [["helicopter", "helencopter"], ["octopus", "octapus"], ["bee", "be"], ["eye", "I"], ["nose", "knows"], ["plane", "plan"]]:
+	for fixture in [
+		["helicopter", "helencopter"], ["octopus", "octapus"], ["plane", "plan"],
+		["ice", "eyes"], ["peas", "peace"], ["pen", "pin"], ["ladder", "latter"],
+		["bear", "beer"], ["bee", "bes"], ["nose", "knowses"], ["rose", "rowses roeses"],
+		["deer", "dears"], ["bread", "breds"], ["rain", "reigns reins"], ["sun", "sonny"], ["knee", "nee"]
+	]:
 		var strict := Model.new()
 		strict.configure(words([fixture[0]]), 3)
 		strict.start()
-		check(strict.hit_transcript(fixture[1]).is_empty(), "Unvetted spelling and function-word aliases stay rejected for " + fixture[0])
-	var collision := Model.new()
-	collision.configure([
-		{"id": "sun", "text": "sun", "image": "sun.svg", "audio": "sun.wav"},
-		{"id": "son", "text": "son", "image": "son.svg", "audio": "son.wav"}
-	], 1)
-	collision.start()
-	for frame in range(60):
-		collision.advance(0.5)
-		check(collision.targets.size() <= 1, "Overlapping canonical and homophone forms never appear together")
+		check(strict.hit_transcript(fixture[1]).is_empty(), "Near sounds and invented alias inflections stay rejected for " + fixture[0])
+	for pair in [["sun", "son"], ["pare", "pear"], ["be", "bee"]]:
+		var collision := Model.new()
+		collision.configure([
+			{"id": pair[0], "text": pair[0], "image": pair[0] + ".svg", "audio": pair[0] + ".wav"},
+			{"id": pair[1], "text": pair[1], "image": pair[1] + ".svg", "audio": pair[1] + ".wav"}
+		], 1)
+		collision.start()
+		for _frame in range(60):
+			collision.advance(0.5)
+			check(collision.targets.size() <= 1, "Overlapping canonical and homophone forms never appear together: " + pair[0])
+	var custom_word: Dictionary = words(["deer"])[0].duplicate(true)
+	custom_word.id = "woodland-deer"
+	var canonical := Model.new()
+	canonical.configure([custom_word], 3)
+	canonical.start()
+	var canonical_hits: Array = canonical.hit_transcript("dear")
+	check(canonical_hits.size() == 1 and canonical_hits[0].word.id == "woodland-deer"
+		and canonical.hit_words.size() == 1 and canonical.hit_words[0].id == "woodland-deer",
+		"Homophone matching reads noun text and preserves a different configured word ID")
+	var unavailable := Model.new()
+	unavailable.configure(words(["cat"]), 3)
+	unavailable.start()
+	check(unavailable.hit_transcript("son flour bare be I dear").is_empty() and unavailable.hits == 0,
+		"Accepted dictionary aliases cannot hit a word absent from the current targets")
 	var feedback := Model.new()
 	feedback.configure(words(["sun"]), 3)
 	feedback.start()

@@ -27,6 +27,7 @@ func _run() -> void:
 	if probe.has_method("spoken_matches") and probe.has_method("match_spoken_word"):
 		var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 		_test_candidates(model_script, words)
+		_test_homophones(model_script, words)
 		_test_matching(model_script, words)
 		_test_locks(model_script, words)
 		_test_vocabulary(model_script, words)
@@ -78,6 +79,73 @@ func _test_candidates(model_script: GDScript, words: Array) -> void:
 	model.match_spoken_word("doll")
 	check(model.spoken_matches("doll cat sun") == ["cat", "sun"],
 		"Correct feedback excludes matched cards but still discovers queued words")
+
+
+func _test_homophones(model_script: GDScript, words: Array) -> void:
+	for fixture in [
+		["sun", "son"], ["flower", "flour"], ["pear", "pair", "pare"], ["plane", "plain"],
+		["bee", "be", "b"], ["eye", "i", "aye"], ["nose", "knows"], ["bear", "bare"],
+		["deer", "dear"], ["bread", "bred"], ["rain", "rein", "reign"], ["ball", "bawl"],
+		["horse", "hoarse"], ["carrot", "carat", "caret", "karat"], ["shoe", "shoo"],
+		["key", "quay"], ["bowl", "bole", "boll"], ["whale", "wail", "wale"], ["seed", "cede"],
+		["tie", "thai"], ["peas", "pees"],
+		["rose", "rows", "roes"], ["berry", "bury"], ["bell", "belle"], ["ring", "wring"],
+		["cymbal", "symbol"], ["plum", "plumb"], ["jam", "jamb"],
+		["beach", "beech"], ["toe", "tow"], ["ant", "aunt"], ["root", "route"],
+		["beetle", "beatle"], ["ferry", "fairy", "faery"]
+	]:
+		var word: Dictionary = words.filter(func(value: Dictionary) -> bool: return value.id == fixture[0])[0].duplicate(true)
+		word.id = "spoken-" + word.id
+		var model = model_script.new()
+		model.cards.assign([
+			{"id": word.id + ":word", "kind": "word", "word": word},
+			{"id": word.id + ":image", "kind": "image", "word": word}
+		])
+		for alternative in fixture.slice(1):
+			check(model.spoken_matches(alternative.to_upper() + "!") == [word.id],
+				"A whole homophone resolves to the illustrated Match ID: " + alternative + " -> " + word.text)
+			check(model.spoken_matches("_" + alternative + " " + alternative + "2 " + alternative + "'s "
+				+ alternative + "’s " + alternative + "é é" + alternative).is_empty(),
+				"Numbers, possessives, and larger Unicode tokens cannot manufacture the alias " + alternative)
+			check(model.spoken_matches(alternative + " " + word.text + " " + alternative) == [word.id],
+				"Repeated equivalent spellings queue the illustrated pair only once: " + word.text)
+		check(model.successes == 0 and model.matched_ids.is_empty(), "Alias discovery stays read-only for " + word.text)
+		var candidates: Array = model.spoken_matches(fixture[1])
+		check(candidates.size() == 1 and model.match_spoken_word(candidates[0]) == "correct"
+			and model.successes == 1 and model.matched_ids == [word.id + ":word", word.id + ":image"],
+			"Homophone scoring uses the real pair and canonical ID: " + word.text)
+		check(model.spoken_matches(fixture[1]).is_empty(), "Matched pairs cannot be queued again through an alias")
+	for fixture in [
+		["cat", "cats cat2 _cat cat's cat’s caté écat"], ["sun", "sons sunny"],
+		["bear", "bears bares beer"], ["plane", "planes plains plan"], ["deer", "dears"],
+		["ice", "eyes"], ["peas", "peace"], ["pen", "pin"], ["ladder", "latter"],
+		["helicopter", "helencopter"], ["octopus", "octapus"], ["knee", "nee"]
+	]:
+		var word: Dictionary = words.filter(func(value: Dictionary) -> bool: return value.id == fixture[0])[0]
+		var model = model_script.new()
+		model.cards.assign([
+			{"id": word.id + ":word", "kind": "word", "word": word},
+			{"id": word.id + ":image", "kind": "image", "word": word}
+		])
+		check(model.spoken_matches(fixture[1]).is_empty(),
+			"Homophones do not enable fuzzy matching or new general plurals in Match: " + word.text)
+	var collision = model_script.new()
+	for noun in ["sun", "son"]:
+		var word: Dictionary = {"id": noun, "text": noun, "image": noun + ".svg", "audio": noun + ".wav"}
+		collision.cards.append({"id": noun + ":word", "kind": "word", "word": word})
+		collision.cards.append({"id": noun + ":image", "kind": "image", "word": word})
+	check(collision.spoken_matches("son") == ["son"] and collision.spoken_matches("sun") == ["sun"],
+		"Exact available spelling wins over another simultaneously valid homophone")
+	check(collision.spoken_matches("sun son") == ["sun", "son"],
+		"Separate exact words can each select one of two equivalent pairs")
+	check(collision.spoken_matches("son son") == ["son"],
+		"Repeating one spelling does not fall through and queue a second homophone")
+	collision.match_spoken_word("sun")
+	check(collision.spoken_matches("sun") == ["son"],
+		"An already matched exact word does not hide its remaining equivalent pair")
+	var off_board = _board(model_script, words)
+	check(off_board.spoken_matches("be bare flour pair").is_empty(),
+		"Dictionary homophones cannot inject words outside the current board")
 
 
 func _test_matching(model_script: GDScript, words: Array) -> void:

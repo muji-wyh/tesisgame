@@ -1,35 +1,13 @@
 extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
+const SpeechWords = preload("res://scripts/speech_words.gd")
 
 const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
 const BURST_WARMUP: float = 8.0
 const EPSILON: float = 0.000001
-# These nouns do not take a regular plural in the pictured sense. In particular,
-# never derive a singular by removing letters from arbitrary recognized speech.
-const UNCHANGED_PLURALS: Array[String] = [
-	"fish", "sheep", "peas", "corn", "bread", "cheese", "milk", "water", "juice", "rice",
-	"rain", "snow", "grass", "pants", "sunglasses", "coral", "squid", "jellyfish", "starfish", "bamboo",
-	"deer", "honey", "pasta", "sand", "mud", "ice", "wind", "shorts", "dice",
-	"broccoli", "lettuce", "slippers", "earmuffs", "crayons", "asparagus", "cinnamon",
-	"plankton", "swordfish", "binoculars"
-]
-const SPECIAL_PLURALS: Dictionary = {
-	"mouse": ["mice"], "foot": ["feet"], "tooth": ["teeth"], "leaf": ["leaves"],
-	"scarf": ["scarves", "scarfs"], "tomato": ["tomatoes"], "octopus": ["octopuses", "octopi"],
-	"cactus": ["cacti", "cactuses"], "mango": ["mangoes", "mangos"],
-	"potato": ["potatoes"], "volcano": ["volcanoes", "volcanos"],
-	"domino": ["dominoes", "dominos"]
-}
-
-# Vetted spelling alternatives for the same English sounds. Keep this list
-# explicit: approximate spelling and similar-sounding nouns are not answers.
-const HOMOPHONES: Dictionary = {
-	"sun": ["son", "sons"], "flower": ["flour", "flours"],
-	"pear": ["pair", "pairs"], "plane": ["plain", "plains"]
-}
 const RECOGNITION_MESSAGES: Dictionary = {
 	"unclear_speech": "Say the word again, loud and clear.",
 	"no_matching_target": "Try a word you can see on screen."
@@ -57,14 +35,10 @@ var _rng := RandomNumberGenerator.new()
 var _next_uid: int = 1
 var _next_spawn_at: float = 0.0
 var _next_burst_at: float = INF
-var _tokens := RegEx.new()
 var _noun := RegEx.new()
 
 
 func _init() -> void:
-	# Keep letters from other alphabets, numbers, and possessives in the same token:
-	# "thorn", "cat2", "cat's", and "caté" must not become a hit for horn or cat.
-	_tokens.compile("[\\p{L}\\p{N}_]+(?:['’][\\p{L}\\p{N}_]+)*")
 	_noun.compile("^[a-z]+$")
 
 
@@ -88,7 +62,7 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 		var word: Dictionary = entry.duplicate(true)
 		word.text = text
 		_words.append(word)
-		_aliases[word.id] = _word_forms(text)
+		_aliases[word.id] = SpeechWords.forms(text, true)
 		seen_ids[word.id] = true
 		seen_texts[text] = true
 	if seed_value < 0:
@@ -167,8 +141,8 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 	if phase != "running" or remaining <= 0.0:
 		return removed
 	var spoken: Dictionary = {}
-	for token in _tokens.search_all(Data.normalize_spoken_text(text)):
-		spoken[token.get_string()] = true
+	for token in SpeechWords.tokens(text):
+		spoken[token] = true
 	for target in targets.duplicate():
 		if target.age + EPSILON >= target.lifetime:
 			continue
@@ -334,21 +308,3 @@ func _record_word(collection: Array[Dictionary], word: Dictionary) -> void:
 	var entry: Dictionary = word.duplicate(true)
 	entry.count = 1
 	collection.append(entry)
-
-
-func _word_forms(noun: String) -> Array[String]:
-	var forms: Array[String] = [noun]
-	if noun in UNCHANGED_PLURALS:
-		return forms
-	if SPECIAL_PLURALS.has(noun):
-		for form in SPECIAL_PLURALS[noun]:
-			forms.append(form)
-	elif noun.ends_with("y") and noun.length() > 1 and not noun[-2] in "aeiou":
-		forms.append(noun.left(-1) + "ies")
-	elif noun.ends_with("s") or noun.ends_with("x") or noun.ends_with("z") or noun.ends_with("ch") or noun.ends_with("sh"):
-		forms.append(noun + "es")
-	else:
-		forms.append(noun + "s")
-	for homophone in HOMOPHONES.get(noun, []):
-		forms.append(homophone)
-	return forms

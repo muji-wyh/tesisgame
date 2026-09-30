@@ -462,6 +462,31 @@ func check_bonus_feedback(words: Array) -> void:
 	view.free()
 
 
+func check_homophone_feedback(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	var accepted: Array[String] = []
+	view.hit.connect(func(word: Dictionary) -> void: accepted.append(word.id))
+	for fixture in [["bee", "be"], ["eye", "I"], ["nose", "knows"], ["deer", "dear"], ["cymbal", "symbol"]]:
+		accepted.clear()
+		begin_bonus_round(view, words.filter(func(word: Dictionary) -> bool: return word.id == fixture[0]))
+		check(view.snapshot().targets[0].forms.has(str(fixture[1]).to_lower()),
+			"The browser receives the same homophone used for scoring: " + fixture[1])
+		var transcript: String = "The " + fixture[1] + "!"
+		view.show_transcript(transcript, true)
+		view.receive_transcript(fixture[1])
+		check(accepted == [fixture[0]] and view.game.hits == 1 and view.game.hit_words[0].id == fixture[0],
+			"The homophone emits a single canonical hit for effects, scoring and review")
+		check(view.snapshot().transcript == transcript and view._hud_transcript_hit
+			and view.snapshot().hud.hit_effect.active and view.snapshot().hud.hit_effect.words == [fixture[0]],
+			"A homophone keeps the raw caption and highlights the hit with the canonical word")
+		view.receive_transcript(fixture[0])
+		check(view.game.hits == 1 and accepted.size() == 1,
+			"Repeating the canonical spelling cannot hit the removed target again")
+	view.free()
+
+
 func check_independent_card_flight(words: Array) -> void:
 	var view = PopView.new()
 	root.add_child(view)
@@ -861,6 +886,7 @@ func _run() -> void:
 	check(app._pop._round_player.is_empty() and app._pop.snapshot().results_hits.player.is_empty(),
 		"Preparing a new round clears the previous result identity")
 	check_bonus_feedback(app.data.words)
+	check_homophone_feedback(app.data.words)
 	check_independent_card_flight(app.data.words)
 	check_portrait_volley_flight(app.data.words)
 	check_volley_launches(app.data.words)

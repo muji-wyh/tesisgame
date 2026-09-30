@@ -608,6 +608,26 @@ test('model-provided noun aliases prevent revised plurals from replaying a targe
   assert.deepEqual(f.popWords, ['ca', 'cat', 'mouse', 'buses', 'cats'], 'New utterances may repeat any accepted noun form');
 });
 
+test('Pop homophone revisions share one utterance even after that word is thrown again', () => {
+  const f = fixture();
+  f.listen('pop');
+  const forms = ['bear', 'bears', 'bare', 'bares'];
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ uid: 7, text: 'bear', forms }] }));
+  f.latest.result([['BARE', false]]);
+  assert.deepEqual(f.popWords, ['BARE'], 'The initial homophone is sent unchanged to canonical model matching');
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [] }));
+  f.latest.result([['bear', false]]);
+  f.host.popStatus(JSON.stringify({ phase: 'running', targets: [{ uid: 8, text: 'bear', forms }] }));
+  f.latest.result([['bears', false]]);
+  f.latest.result([['bares', true]]);
+  f.latest.result([['bare bear', false]]);
+  assert.deepEqual(f.popWords, ['BARE'], 'Canonical, plural, and late-final revisions cannot hit the replacement target');
+  assert.ok(f.results.some(([text, final]) => text === 'bares' && final), 'Full recognized text remains available to the HUD');
+  f.latest.result([['bares', true], ['bare', false]], 1);
+  f.latest.result([['bares', true], ['bear', true]], 1);
+  assert.deepEqual(f.popWords, ['BARE', 'bare'], 'Only a new utterance can hit the later bear');
+});
+
 test('noun metadata arriving after an interim still recognizes already-consumed aliases', () => {
   const f = fixture();
   f.listen('pop');
