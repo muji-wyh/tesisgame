@@ -62,6 +62,7 @@ func _run() -> void:
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated integration save directory")
 	await _check_onboarding(directory)
 	await _check_onboarding_recovery(directory)
+	await _check_picker_actions(directory)
 	var storage := BrowserStorage.new()
 	var state := State.new(directory + "/leaderboards.cfg", storage)
 	check(state.load_state(), "Load isolated local player state")
@@ -263,6 +264,64 @@ func _check_onboarding_recovery(directory: String) -> void:
 	await settle()
 
 
+func _check_picker_actions(directory: String) -> void:
+	var storage := BrowserStorage.new()
+	var state := State.new(directory + "/picker-actions.cfg", storage)
+	check(state.load_state() and state.create_profile("First player", "fox").ok,
+		"Seed a saved player for direct picker actions")
+	var first_id: String = str(state.profiles[0].id)
+	var panel = load("res://scripts/leaderboard_panel.gd").new()
+	var confirmations: Array[String] = []
+	root.add_child(panel)
+	panel.player_confirmed.connect(func(id: String) -> void: confirmations.append(id))
+	panel.configure(state, "picker")
+	await settle()
+	var stale_choice := action(panel, "LeaderboardPlayer_" + first_id)
+	action(panel, "LeaderboardAddPlayer").pressed.emit()
+	stale_choice.pressed.emit()
+	check(confirmations.is_empty() and not panel.snapshot().confirmed,
+		"An avatar from the previous picker build cannot start while the editor opens")
+	await settle()
+	var name_field := panel.find_child("LeaderboardName", true, false) as LineEdit
+	check(is_instance_valid(name_field) and name_field.has_focus(),
+		"The external Add player action opens and focuses the name editor")
+	name_field.text = "New player"
+	name_field.text_changed.emit(name_field.text)
+	var stale_create := action(panel, "LeaderboardCreatePlayer")
+	stale_create.pressed.emit()
+	stale_create.pressed.emit()
+	await settle()
+	var new_id: String = str(state.profiles.back().id)
+	check(state.profiles.size() == 2 and state.profiles.back().name == "New player" and confirmations.is_empty(),
+		"Saving a new player once returns to the chooser without starting a round")
+	check(action(panel, "LeaderboardStartGame") == null and panel.find_child("LeaderboardName", true, false) == null,
+		"After saving, the editor closes and no extra Start action appears")
+	var new_choice := action(panel, "LeaderboardPlayer_" + new_id)
+	check(is_instance_valid(new_choice) and new_choice.has_focus(),
+		"The new player's avatar receives focus for deliberate activation")
+	new_choice.pressed.emit()
+	new_choice.pressed.emit()
+	action(panel, "LeaderboardPlayer_" + first_id).pressed.emit()
+	check(confirmations.size() == 1 and confirmations[0] == new_id and panel.snapshot().confirmed,
+		"Repeated or alternate avatar activation confirms the newly created player exactly once")
+	panel.configure(state, "picker")
+	var old_generation_choice := action(panel, "LeaderboardPlayer_" + first_id)
+	panel.configure(state, "picker")
+	old_generation_choice.pressed.emit()
+	check(confirmations.size() == 1 and panel.snapshot().selected_player.is_empty() and not panel.snapshot().confirmed,
+		"An avatar callback from a previous round cannot choose the next round's player")
+	storage.readable = false
+	action(panel, "LeaderboardPlayer_" + first_id).pressed.emit()
+	check(confirmations.size() == 1 and not panel.snapshot().confirmed and not panel.snapshot().error.is_empty(),
+		"Direct avatar activation still requires a readable durable player record")
+	storage.readable = true
+	action(panel, "LeaderboardPlayer_" + first_id).pressed.emit()
+	check(confirmations.size() == 2 and confirmations[1] == first_id and panel.snapshot().confirmed,
+		"Tapping the avatar again can start once player storage recovers")
+	panel.queue_free()
+	await settle()
+
+
 func _check_pop(app, state, storage, player_id: String) -> void:
 	app.choose_mode("pop")
 	await settle()
@@ -271,8 +330,19 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	check(app._pop.game.phase == "ready" and not app._pop_speech_active,
 		"Player selection has no microphone request, targets or running countdown")
 	var panel = app._leaderboard_panel
-	check(action(panel, "LeaderboardStartGame").disabled and panel.snapshot().selected_player.is_empty(),
-		"Each round requires a deliberate player selection before Start game")
+	check(action(panel, "LeaderboardStartGame") == null and panel.snapshot().selected_player.is_empty(),
+		"Each round offers player avatars directly without a separate Start action")
+	for dimensions in [Vector2i(390, 844), Vector2i(844, 390), Vector2i(960, 720)]:
+		root.size = dimensions
+		await settle()
+		var surface := panel.find_child("LeaderboardSurface", true, false) as Control
+		var add := action(panel, "LeaderboardAddPlayer")
+		check(is_instance_valid(surface) and is_instance_valid(add) and not surface.is_ancestor_of(add),
+			"Add player sits outside the bordered chooser at %s" % dimensions)
+		check(add.get_global_rect().position.y > surface.get_global_rect().end.y,
+			"Add player appears below the bordered chooser at %s" % dimensions)
+		check(add.get_global_rect().position.x >= -1 and add.get_global_rect().end.x <= app.size.x + 1,
+			"The external Add player action fits horizontally at %s" % dimensions)
 	var remaining: float = app._pop.game.remaining
 	app._on_voice_state([true, true, "Listening"])
 	app._on_voice_result(["apple", true])
@@ -292,12 +362,11 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	await settle()
 	panel = app._leaderboard_panel
 	action(panel, "LeaderboardPlayer_" + player_id).pressed.emit()
-	check(not action(panel, "LeaderboardStartGame").disabled and app._pop_player_id.is_empty(),
-		"Choosing an avatar enables Start game without starting immediately")
-	action(panel, "LeaderboardStartGame").pressed.emit()
+	check(app._pop_player_id == player_id and not app._leaderboard_overlay.visible,
+		"Choosing an avatar immediately assigns the player and enters the round")
 	await settle()
 	check(not app._leaderboard_overlay.visible and app._pop_player_id == player_id and app._pop.game.phase == "ready",
-		"Confirming the selected player closes the picker and waits for real listening readiness")
+		"The selected player's round waits for real listening readiness")
 	var round_id: String = app._leaderboard_round_id
 	app._leaderboard_player_confirmed(str(state.profiles[1].id))
 	check(app._pop_player_id == player_id and app._leaderboard_round_id == round_id,
@@ -364,7 +433,8 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	app._hide_collection()
 	app._pop.replay_button.pressed.emit()
 	await settle()
-	check(app._leaderboard_gate == "pop" and action(app._leaderboard_panel, "LeaderboardStartGame").disabled,
+	check(app._leaderboard_gate == "pop" and action(app._leaderboard_panel, "LeaderboardStartGame") == null
+		and app._leaderboard_panel.snapshot().selected_player.is_empty(),
 		"Play again asks who will play next instead of silently reusing the last player")
 	app._controller_back()
 	check(app._pop.game.phase == "finished" and app._leaderboard_round_id == round_id and state.board("pop")[0].metric == 1,
@@ -372,11 +442,10 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 	app._pop.replay_button.pressed.emit()
 	await settle()
 	action(app._leaderboard_panel, "LeaderboardPlayer_" + casey).pressed.emit()
-	action(app._leaderboard_panel, "LeaderboardStartGame").pressed.emit()
 	await settle()
 	check(app._leaderboard_round_id != round_id and app._leaderboard_result.is_empty()
 		and app._pop_player_id == casey and app._pop.game.phase == "ready",
-		"A confirmed replay creates a fresh round for the newly selected player")
+		"Tapping a replay avatar creates a fresh round for the newly selected player")
 	check(not app.leaderboard_snapshot().visible and state.board("pop")[0].metric == 1,
 		"Replaying hides the previous board while retaining its personal best")
 	app._on_voice_state([true, true, "Listening"])

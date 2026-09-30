@@ -87,6 +87,24 @@ function expectNarrowLayout(current, bounds) {
   }
 }
 
+function expectInstantPlayerPicker(current) {
+  expect(current.controls.some(item => item.name === 'LeaderboardStartGame'),
+    'The player choice is the only start action').toBe(false);
+  const [left, top, width, height] = current.surface_rect;
+  const choices = current.controls.filter(item => item.name.startsWith('LeaderboardPlayer_'));
+  expect(choices.length).toBeGreaterThan(0);
+  for (const player of choices) {
+    const [x, y, playerWidth, playerHeight] = player.rect;
+    expect(x, `${player.name} stays inside the choice frame`).toBeGreaterThanOrEqual(left);
+    expect(x + playerWidth).toBeLessThanOrEqual(left + width + 1);
+    expect(y).toBeGreaterThanOrEqual(top);
+    expect(y + playerHeight).toBeLessThanOrEqual(top + height + 1);
+  }
+  const add = current.controls.find(item => item.name === 'LeaderboardAddPlayer');
+  expect(add, 'The separate add-player action remains available').toBeTruthy();
+  expect(add.rect[1], 'Add player is below and outside the bordered choice frame').toBeGreaterThan(top + height);
+}
+
 test('first entry requires a saved player, players persist locally and every mode has a board', async ({ page }, info) => {
   // Software-rendered canvas calls are slow; action deadlines remain strict.
   test.setTimeout(180000);
@@ -159,8 +177,8 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   await enterGame(page);
   await chooseMode(page, 'pop', { choosePlayer: false });
   await expect.poll(async () => (await snapshot(page)).view).toBe('picker');
+  expectInstantPlayerPicker(await snapshot(page));
   await page.screenshot({ path: info.outputPath('voice-pop-player-picker.png') });
-  expect((await control(page, 'LeaderboardStartGame')).disabled, 'Start needs an explicit player choice').toBe(true);
   expect((await snapshot(page)).selected_player).toBe('');
   expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'The microphone stays off while choosing a player').toBe(0);
   const remaining = await page.locator('#pop-status').getAttribute('data-remaining');
@@ -169,6 +187,7 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   await chooseRoundPlayer(page, { playerId: 'player-b' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await expect.poll(async () => (await snapshot(page)).round_player_id).toBe('player-b');
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'One player gesture starts the microphone once').toBe(1);
   await expect.poll(() => page.locator('#pop-status').evaluate(element => JSON.parse(element.dataset.targets || '[]').length)).toBeGreaterThan(0);
   for (let hit = 1; hit <= 2; hit++) {
     await expect.poll(() => page.locator('#pop-status').evaluate(element => JSON.parse(element.dataset.targets || '[]').length)).toBeGreaterThan(0);
@@ -263,14 +282,12 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   await replay(page);
   await expect.poll(async () => (await snapshot(page)).view).toBe('picker');
   expect((await snapshot(page)).selected_player, 'Replay requires a fresh explicit choice').toBe('');
-  expect((await control(page, 'LeaderboardStartGame')).disabled).toBe(true);
+  expectInstantPlayerPicker(await snapshot(page));
   expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'Replay waits for the next player before listening').toBe(startsBeforeReplay);
   await activate(page, 'LeaderboardPlayer_player-a');
-  await expect.poll(async () => (await snapshot(page)).selected_player).toBe('player-a');
-  await activate(page, 'LeaderboardStartGame');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await expect.poll(async () => (await snapshot(page)).round_player_id).toBe('player-a');
-  expect(await page.evaluate(() => window.__leaderboardSpeech.starts)).toBeGreaterThan(startsBeforeReplay);
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'The next player starts replay with one gesture').toBe(startsBeforeReplay + 1);
   expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY), 'An unfinished replay cannot overwrite the completed round').toBe(saved);
   await page.reload();
   await enterGame(page);
@@ -280,5 +297,37 @@ test('a completed Voice Pop round saves once, survives a failed save and visibly
   expect((await snapshot(page)).animation.active, 'Reading a saved score does not replay its celebration').toBe(false);
   expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY)).toBe(saved);
   expect(await page.evaluate(() => window.__leaderboardWrites.length), 'Opening boards performs no score writes').toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('adding a player before Voice Pop returns to the choices until the new avatar is tapped', async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = observeErrors(page);
+  await installFixtures(page, { seed: RANKING_FIXTURE, speech: true });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await enterGame(page);
+  await chooseMode(page, 'pop', { choosePlayer: false });
+  await expect.poll(async () => (await snapshot(page)).view).toBe('picker');
+  expectInstantPlayerPicker(await snapshot(page));
+  await activate(page, 'LeaderboardAddPlayer');
+  await activate(page, 'LeaderboardAvatar_cat');
+  await typeName(page, 'Casey');
+  await activate(page, 'LeaderboardCreatePlayer');
+  await expect.poll(async () => (await snapshot(page)).profiles?.map(profile => profile.name)).toEqual(['Avery', 'Blake', 'Casey']);
+  const current = await snapshot(page);
+  const created = current.profiles.find(profile => profile.name === 'Casey');
+  expect(current.view, 'Saving a profile does not implicitly choose a round player').toBe('picker');
+  expect(current.controls.some(item => item.name === 'LeaderboardName'), 'Saving closes the player editor').toBe(false);
+  expectInstantPlayerPicker(current);
+  await expect.poll(async () => (await control(page, `LeaderboardPlayer_${created.id}`)).focused,
+    { message: 'The newly created player receives focus so one gesture can start the round' }).toBe(true);
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts), 'Creating a profile does not start recording').toBe(0);
+  expect(await page.locator('#pop-status').getAttribute('data-phase')).not.toBe('running');
+  await page.screenshot({ path: info.outputPath('voice-pop-new-player-ready.png') });
+  await activate(page, `LeaderboardPlayer_${created.id}`);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await expect.poll(async () => (await snapshot(page)).round_player_id).toBe(created.id);
+  expect(await page.evaluate(() => window.__leaderboardSpeech.starts)).toBe(1);
   expect(errors).toEqual([]);
 });

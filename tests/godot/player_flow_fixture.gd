@@ -16,8 +16,6 @@ static func choose_pop_player(app) -> void:
 	var id: String = str(app.leaderboard_state.profiles[0].id)
 	var choice := panel.find_child("LeaderboardPlayer_" + id, true, false) as Button
 	assert(choice != null)
+	assert(panel.find_child("LeaderboardStartGame", true, false) == null)
 	choice.pressed.emit()
-	var start := panel.find_child("LeaderboardStartGame", true, false) as Button
-	assert(start != null and not start.disabled)
-	start.pressed.emit()
 	assert(app._pop_player_id == id and not app._leaderboard_overlay.visible)

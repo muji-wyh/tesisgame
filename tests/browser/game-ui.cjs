@@ -484,8 +484,8 @@ async function chooseRoundPlayer(scope, { playerId } = {}) {
   const chosen = playerId || current.profiles[0]?.id;
   expect(chosen, 'A registered player is available before starting Voice Pop').toBeTruthy();
   await activateLeaderboardControl(scope, `LeaderboardPlayer_${chosen}`);
-  await activateLeaderboardControl(scope, 'LeaderboardStartGame');
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '').not.toBe('picker');
+  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '',
+    { message: 'One player gesture starts the round without another confirmation' }).not.toBe('picker');
 }
 
 async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '', trackSourceLifecycle = false } = {}) {

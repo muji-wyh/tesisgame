@@ -784,7 +784,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	if view == "onboarding":
 		announcement = "Welcome! Create your first player to start playing. Choose an avatar and a name."
 	elif view == "picker":
-		announcement = "Who is playing Voice Pop? Choose a player, then Start playing."
+		announcement = "Who is playing Voice Pop? Tap your avatar to start."
 	_announce_status(announcement)
 	_publish_leaderboards()
 

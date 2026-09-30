@@ -238,7 +238,7 @@ func _build() -> void:
 	var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, GOLD)
 	body.add_child(eyebrow)
 	var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Make it your game" if player_view else "Meet the high scorers"
-	var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Choose a player before this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
+	var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Tap your avatar to start this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
 	body.add_child(_label(heading, 24, WHITE, true))
 	body.add_child(_label(description, 12, SOFT, true))
 	_error_label = _label(_error, 13, Color("#ffb8a9"), true)
@@ -321,19 +321,17 @@ func _build_attribution(body: VBoxContainer) -> void:
 
 func _build_picker(body: VBoxContainer) -> void:
 	_build_profiles(body, true)
-	_start_button = _button("Start playing", "LeaderboardStartGame", true)
-	_start_button.custom_minimum_size.y = 56 / _scale()
-	_start_button.add_theme_font_size_override("font_size", _px(18))
-	_start_button.disabled = _selected.is_empty() or _confirmed
-	_start_button.pressed.connect(_confirm_player.bind(_ui_generation))
-	body.add_child(_start_button)
 	if _profiles().size() < 10:
+		var actions := VBoxContainer.new()
+		actions.name = "LeaderboardPickerActions"
+		actions.add_theme_constant_override("separation", _px(14))
+		add_child(actions)
 		var add := _button("Add player" if not _editor_open else "Choose an emoji and name", "LeaderboardAddPlayer")
 		add.disabled = _editor_open or _confirmed
 		add.pressed.connect(_open_editor.bind(_ui_generation))
-		body.add_child(add)
+		actions.add_child(add)
 		if _editor_open:
-			_build_editor(body)
+			_build_editor(actions)
 
 
 func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
@@ -485,9 +483,10 @@ func _select_player(id: String, generation: int = -1) -> void:
 			_style_button(control, control.button_pressed)
 	if is_instance_valid(_save_button):
 		_save_button.disabled = false
-	if is_instance_valid(_start_button):
-		_start_button.disabled = false
 	_set_error("")
+	if _view == "picker":
+		_confirm_player(generation)
+		return
 	changed.emit()
 
 
@@ -535,8 +534,10 @@ func _create_player(generation: int = -1) -> void:
 		_confirm_player()
 		return
 	_build()
-	if is_instance_valid(_start_button):
-		_start_button.grab_focus()
+	if _view == "picker":
+		var player := find_child("LeaderboardPlayer_" + _selected, true, false) as Button
+		if is_instance_valid(player):
+			player.grab_focus()
 	elif is_instance_valid(_save_button):
 		_save_button.grab_focus()
 	elif is_instance_valid(_name_input):
@@ -801,7 +802,9 @@ func snapshot() -> Dictionary:
 					animation["target_y"] = _board.global_position.y + index * _row_step()
 			animation["current_y"] = row_rect.position.y
 	var rect := get_global_rect()
-	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "confirmed": _confirmed, "assigned_player": _assigned_player_id, "selected_player": _selected, "error": _error, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "controls": geometry}
+	var surface := get_node_or_null("LeaderboardSurface") as Control
+	var surface_rect := surface.get_global_rect() if is_instance_valid(surface) else Rect2()
+	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "confirmed": _confirmed, "assigned_player": _assigned_player_id, "selected_player": _selected, "error": _error, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "surface_rect": [surface_rect.position.x, surface_rect.position.y, surface_rect.size.x, surface_rect.size.y], "controls": geometry}
 
 
 func _set_error(message: String) -> void:

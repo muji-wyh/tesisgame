@@ -18,7 +18,7 @@ Each player has one personal best per mode. Boards combine completed rounds acro
 
 Matching ranking values share a place, using competition ranks such as **1, 1, 3**. Profile creation order keeps the display stable among ties; it does not break the tie. A worse or equal result never replaces a personal best.
 
-Before every Voice Pop round, choose who will play and press **Start playing**. A player can also be created in this chooser. The round keeps that identity, and its finished score saves automatically before the leaderboard celebration. Voice Pop results do not ask for the player again. If saving fails, **Retry saving** keeps the same player and round.
+Before every Voice Pop round, tap a player's avatar or name to start immediately. **Add player** sits below the player-choice frame. Creating a player returns to the choices and focuses the new avatar; tap it to start. The round keeps that identity, and its finished score saves automatically before the leaderboard celebration. Voice Pop results do not ask for the player again. If saving fails, **Retry saving** keeps the same player and round.
 
 After a Match or Memory round, select who played and save the result. A saved round stays assigned to that player. The leaderboard appears with the result; the menu also provides access to every mode's board. Match and Memory players can still be created from their result screens when needed.
 
