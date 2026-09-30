@@ -212,6 +212,7 @@ func begin_bonus_round(view, words: Array, reduced: bool = false) -> void:
 	check(view.snapshot().bonus_time == 0.0 and view.snapshot().combo == 0
 		and not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.bonus_effect.serial == 0,
 		"A fresh round has no inherited combo reward or popup")
+	check(not view._time_bonus_badge.is_visible_in_tree(), "A fresh round does not show an unearned bonus badge")
 	view.set_listening(true, true, "Listening.")
 	view.set_process(false)
 	view._listening_tick_usec = -1
@@ -245,9 +246,21 @@ func check_bonus_feedback(words: Array) -> void:
 		and second.hud.bonus_effect.awards == [3] and second.hud.bonus_effect.serial == 1,
 		"Two consecutive real hits award and display three extra seconds")
 	check(view.time_label.text == "%02d" % ceili(view.game.remaining), "The countdown immediately includes earned time")
+	check(view._bonus_overlay.get_parent() == view._target_canvas.get_parent()
+		and view._bonus_overlay.get_index() > view._target_canvas.get_index()
+		and view._bonus_overlay.get_index() > view._slice_clip.get_index()
+		and second.hud.bonus_effect.above_targets,
+		"The earned-time notice paints above both flying words and their slice effects")
+	check(view._bonus_overlay.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and view._time_bonus_badge.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"Foreground time feedback never blocks game input")
+	check(view._time_bonus_badge.is_visible_in_tree() and view._time_bonus_caption.is_visible_in_tree()
+		and second.hud.time_bonus_caption.text == "TIME BONUS" and second.hud.bonus_effect.duration == 1.8,
+		"The earned seconds include an explicit readable caption and a full 1.8-second presentation")
 	view._advance_hud_feedback(0.16)
-	check(view.time_label.scale.x > 1.0 and view._time_bonus_label.position != view._time_bonus_anchor,
-		"Normal reward feedback pulses the timer and gently lifts its bonus badge")
+	check(view.time_label.scale.x > 1.0 and view._time_bonus_badge.position != view._time_bonus_anchor,
+		"Normal reward feedback pulses the timer and moves its foreground bonus badge")
+	view._advance_hud_feedback(0.19)
 	for dimensions in [Vector2(180, 180), Vector2(320, 420), Vector2(640, 190), Vector2(1000, 650)]:
 		view.size = dimensions
 		view._layout()
@@ -256,6 +269,15 @@ func check_bonus_feedback(words: Array) -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, view._time_bonus_label.get_theme_font_size("font_size")).x
 		check(view.get_global_rect().grow(1.0).encloses(rect) and text_width <= rect.size.x + 0.01,
 			"Both individual and combined time rewards remain readable at " + str(dimensions))
+		var caption_rect: Rect2 = view._time_bonus_caption.get_global_rect()
+		var caption_width: float = view._time_bonus_caption.get_theme_font("font").get_string_size("TIME BONUS",
+			HORIZONTAL_ALIGNMENT_LEFT, -1, view._time_bonus_caption.get_theme_font_size("font_size")).x
+		check(view.get_global_rect().grow(1.0).encloses(caption_rect) and caption_width <= caption_rect.size.x + 0.01,
+			"The time reward caption fits without clipping at " + str(dimensions))
+		check(view._time_bonus_label.get_theme_font_size("font_size") * PopView.Style.ui_scale(view) >= 32.0,
+			"Earned seconds use a prominent type size at " + str(dimensions))
+		check(caption_rect.position.y >= rect.end.y - 1.0,
+			"The time reward caption remains distinct from the large earned number at " + str(dimensions))
 		check(rect.position.y >= view.time_label.get_rect().end.y + view.global_position.y - 1.0,
 			"The reward badge stays below the stable countdown at " + str(dimensions))
 	view._listening_tick_usec = -1
@@ -274,7 +296,8 @@ func check_bonus_feedback(words: Array) -> void:
 		and view.snapshot().hud.bonus_effect.serial == 2, "Longer streaks cannot replay either milestone reward")
 	view._advance_hud_feedback(PopView.HUD_BONUS_DURATION)
 	check(not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.time_bonus.text.is_empty()
-		and view.time_label.scale.is_equal_approx(Vector2.ONE), "The bonus popup expires and restores a stable countdown")
+		and not view._time_bonus_badge.is_visible_in_tree() and view.time_label.scale.is_equal_approx(Vector2.ONE),
+		"The bonus popup expires, hides its entire foreground badge and restores a stable countdown")
 	view._advance_game(7.0)
 	check(view.snapshot().combo == 0, "An actual missed target resets the streak")
 	strike_next_bonus_word(view)
@@ -294,10 +317,11 @@ func check_bonus_feedback(words: Array) -> void:
 		"A transient browser utterance rollover does not erase an earned timer reward")
 	view.set_listening(true, true, "Listening.")
 	view.set_reduced_motion(true)
-	var static_position: Vector2 = view._time_bonus_label.position
+	var static_position: Vector2 = view._time_bonus_badge.position
 	view._advance_hud_feedback(0.4)
 	check(view.snapshot().hud.bonus_effect.reduced_motion and view.time_label.scale.is_equal_approx(Vector2.ONE)
-		and view._time_bonus_label.position == static_position and view._time_bonus_label.modulate.a == 1.0,
+		and view._time_bonus_badge.position == static_position and view._time_bonus_badge.scale.is_equal_approx(Vector2.ONE)
+		and view._time_bonus_badge.modulate.a == 1.0 and view._time_bonus_caption.is_visible_in_tree(),
 		"Reduced motion keeps the earned label steady and fully readable without pulsing or drifting")
 	view.set_listening(true, false, "Speech network error. Tap Retry.")
 	check(not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.time_bonus.text.is_empty(),
@@ -317,6 +341,15 @@ func check_bonus_feedback(words: Array) -> void:
 	check(combined.hits == 3 and combined.bonus_time == 8.0 and combined.hud.time_bonus.text == "+8s"
 		and combined.hud.bonus_effect.awards == [3, 5] and combined.hud.bonus_effect.serial == 1,
 		"One three-word result combines both milestones into an accurate eight-second reward")
+	view._advance_hud_feedback(1.3)
+	check(view.snapshot().hud.bonus_effect.active and view._time_bonus_badge.is_visible_in_tree()
+		and view._time_bonus_badge.modulate.a > 0.9 and view._time_bonus_label.text == "+8s",
+		"The bonus remains fully readable for at least 1.3 seconds before returning to the timer")
+	view._advance_hud_feedback(PopView.HUD_BONUS_DURATION - 1.3 - 0.01)
+	check(view.snapshot().hud.bonus_effect.active, "The bonus stays active through its defined exit animation")
+	view._advance_hud_feedback(0.02)
+	check(not view.snapshot().hud.bonus_effect.active and not view._time_bonus_badge.is_visible_in_tree(),
+		"Crossing the presentation duration removes the foreground reward exactly once")
 	begin_bonus_round(view, words)
 	check(view.game._spawn_target(5.6) and view.game._spawn_target(5.6), "Separate lexical callbacks share one three-target fixture")
 	strike_next_bonus_word(view)

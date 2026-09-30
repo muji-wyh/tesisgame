@@ -23,9 +23,10 @@ const SOFT := Color("#a8b9dc")
 const LAUNCH_SOUND_WINDOW: float = 0.2
 const TARGET_COLLISION_SCALE: float = 0.55
 const HUD_HIT_DURATION: float = 0.9
-const HUD_BONUS_DURATION: float = 1.3
+const HUD_BONUS_DURATION: float = 1.8
 const HUD_BONUS_MERGE_WINDOW: float = 0.12
 const HIT_COLOR := Color("#9dffe0")
+const BONUS_COLOR := Color("#ffdf73")
 const RESULT_HIT_DURATION: float = 1.25
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
@@ -66,6 +67,10 @@ var _hud_bonus_serial: int = 0
 var _hud_bonus_amount: int = 0
 var _hud_bonus_awards: Array[int] = []
 var _time_bonus_label: Label
+var _time_bonus_caption: Label
+var _time_bonus_badge: Control
+var _bonus_overlay: Control
+var _bonus_fx: Node2D
 var _time_bonus_anchor := Vector2.ZERO
 var _last_launch_uid: int = 0
 var _transcript: String = ""
@@ -125,10 +130,6 @@ func _build() -> void:
 	_hud.add_child(_hud_fx)
 	time_label = _label(str(int(PopModel.DURATION)), 30)
 	time_label.name = "Time"
-	_time_bonus_label = _label("", 18, HIT_COLOR)
-	_time_bonus_label.name = "TimeBonus"
-	_time_bonus_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_time_bonus_label.hide()
 	hits_label = _label("0", 28)
 	hits_label.name = "Hits"
 	_hits_caption = _label("HITS", 10, SOFT)
@@ -141,7 +142,7 @@ func _build() -> void:
 	transcript_label.hide()
 	_live_caption = _label("", 10, CYAN)
 	_live_caption.name = "LiveStatus"
-	for item in [time_label, _time_bonus_label, hits_label, _hits_caption, transcript_label, _live_caption]:
+	for item in [time_label, hits_label, _hits_caption, transcript_label, _live_caption]:
 		_hud.add_child(item)
 	# Live cards pass in front of the field HUD, inside this panel's clip.
 	_target_canvas = Node2D.new()
@@ -156,6 +157,26 @@ func _build() -> void:
 	_slice_canvas = Node2D.new()
 	_slice_canvas.draw.connect(_draw_slices)
 	_slice_clip.add_child(_slice_canvas)
+	# Earned time stays in the foreground even when a card crosses the timer.
+	_bonus_overlay = Control.new()
+	_bonus_overlay.name = "TimeBonusOverlay"
+	_bonus_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_bonus_overlay)
+	_bonus_fx = Node2D.new()
+	_bonus_fx.draw.connect(_draw_time_bonus)
+	_bonus_overlay.add_child(_bonus_fx)
+	_time_bonus_badge = Control.new()
+	_time_bonus_badge.name = "TimeBonusBadge"
+	_time_bonus_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bonus_overlay.add_child(_time_bonus_badge)
+	_time_bonus_label = _label("", 34, BONUS_COLOR)
+	_time_bonus_label.name = "TimeBonus"
+	_time_bonus_caption = _label("TIME BONUS", 10, WHITE)
+	_time_bonus_caption.name = "TimeBonusCaption"
+	for item in [_time_bonus_label, _time_bonus_caption]:
+		item.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_time_bonus_badge.add_child(item)
+	_bonus_overlay.hide()
 	_gate = ScrollContainer.new()
 	_gate.name = "MicrophoneGate"
 	_gate.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -526,16 +547,20 @@ func snapshot() -> Dictionary:
 
 func _hud_snapshot() -> Dictionary:
 	var result: Dictionary = {}
-	for entry in [["time", time_label], ["time_bonus", _time_bonus_label], ["hits", hits_label], ["transcript", transcript_label], ["status", _live_caption]]:
+	for entry in [["time", time_label], ["time_bonus", _time_bonus_label], ["time_bonus_caption", _time_bonus_caption], ["hits", hits_label], ["transcript", transcript_label], ["status", _live_caption]]:
 		var label: Label = entry[1]
 		# Describe stable layout bounds, independent of the counter's brief pulse.
-		var rect: Rect2 = _hud.get_global_transform() * Rect2(label.position, label.size)
+		var rect: Rect2 = label.get_parent().get_global_transform() * Rect2(label.position, label.size)
+		if label.get_parent() == _time_bonus_badge:
+			rect = _bonus_overlay.get_global_transform() * Rect2(_time_bonus_anchor + label.position, label.size)
 		result[entry[0]] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"text": label.text}
 	result.hit_effect = {"serial": _hud_hit_serial, "active": _hud_hit_age < HUD_HIT_DURATION and _hud.visible,
 		"amount": _hud_hit_amount, "words": Array(_hud_hit_words)}
 	result.bonus_effect = {"serial": _hud_bonus_serial, "active": _hud_bonus_age < HUD_BONUS_DURATION and _hud.visible,
-		"amount": _hud_bonus_amount, "awards": _hud_bonus_awards.duplicate(), "reduced_motion": reduced_motion}
+		"amount": _hud_bonus_amount, "awards": _hud_bonus_awards.duplicate(), "reduced_motion": reduced_motion,
+		"duration": HUD_BONUS_DURATION, "above_targets": _bonus_overlay.get_index() > _target_canvas.get_index()
+			and _bonus_overlay.get_index() > _slice_clip.get_index()}
 	result.targets_above_hud = _target_canvas.get_index() > _hud.get_index()
 	return result
 
@@ -719,16 +744,37 @@ func _apply_hud_feedback() -> void:
 	transcript_label.add_theme_color_override("font_color", HIT_COLOR if highlight_words else WHITE)
 	transcript_label.add_theme_color_override("font_shadow_color", Color(HIT_COLOR, 0.55) if highlight_words else Color.TRANSPARENT)
 	transcript_label.add_theme_constant_override("shadow_outline_size", 4 if highlight_words else 0)
-	var bonus_active: bool = _hud_bonus_age < HUD_BONUS_DURATION
-	var bonus_pulse: float = sin(clampf(_hud_bonus_age / 0.4, 0.0, 1.0) * PI) * 0.16 if bonus_active and not reduced_motion else 0.0
+	var bonus_active: bool = _hud_bonus_age < HUD_BONUS_DURATION and _hud.visible
+	var bonus_pulse: float = 0.0
+	if bonus_active and not reduced_motion:
+		bonus_pulse = sin(clampf(_hud_bonus_age / 0.38, 0.0, 1.0) * PI) * 0.3
+		bonus_pulse += sin(clampf((_hud_bonus_age - 1.3) / 0.5, 0.0, 1.0) * PI) * 0.2
 	time_label.pivot_offset = time_label.size * 0.5
 	time_label.scale = Vector2.ONE * (1.0 + bonus_pulse)
-	time_label.add_theme_color_override("font_color", HIT_COLOR if bonus_active else PINK if game.remaining <= 5.0 else WHITE)
+	time_label.add_theme_color_override("font_color", BONUS_COLOR if bonus_active else PINK if game.remaining <= 5.0 else WHITE)
+	time_label.add_theme_color_override("font_shadow_color", Color(BONUS_COLOR, 0.8) if bonus_active else Color.TRANSPARENT)
+	time_label.add_theme_constant_override("shadow_outline_size", 5 if bonus_active else 0)
+	_bonus_overlay.visible = bonus_active
+	_time_bonus_badge.visible = bonus_active
 	_time_bonus_label.visible = bonus_active
+	_time_bonus_caption.visible = bonus_active
 	_time_bonus_label.text = "+%ds" % _hud_bonus_amount if bonus_active else ""
-	var bonus_progress: float = clampf(_hud_bonus_age / HUD_BONUS_DURATION, 0.0, 1.0)
-	_time_bonus_label.position = _time_bonus_anchor - Vector2(0, 4.0 * sin(bonus_progress * PI * 0.5) / Style.ui_scale(self)) if bonus_active and not reduced_motion else _time_bonus_anchor
-	_time_bonus_label.modulate.a = 1.0 if reduced_motion else 1.0 - smoothstep(0.72, 1.0, bonus_progress)
+	_time_bonus_caption.text = "TIME BONUS" if bonus_active else ""
+	_time_bonus_badge.pivot_offset = _time_bonus_badge.size * 0.5
+	_time_bonus_badge.position = _time_bonus_anchor
+	_time_bonus_badge.scale = Vector2.ONE
+	_time_bonus_badge.modulate.a = 1.0
+	if bonus_active and not reduced_motion:
+		var arrival: float = clampf(_hud_bonus_age / 0.32, 0.0, 1.0)
+		var pop_scale: float = 1.0 + 0.22 * sin(arrival * PI) - 0.2 * pow(1.0 - arrival, 2.0)
+		var collect: float = smoothstep(1.35, HUD_BONUS_DURATION, _hud_bonus_age)
+		var lift := Vector2(0, -7.0 * smoothstep(0.0, 0.65, _hud_bonus_age) / Style.ui_scale(self))
+		var destination: Vector2 = time_label.position + time_label.size * 0.5 - _time_bonus_badge.size * 0.5
+		_time_bonus_badge.position = (_time_bonus_anchor + lift).lerp(destination, collect)
+		_time_bonus_badge.scale = Vector2.ONE * lerpf(pop_scale, 0.45, collect)
+		_time_bonus_badge.modulate.a = 1.0 - collect
+	if _bonus_fx != null:
+		_bonus_fx.queue_redraw()
 	if _hud_fx != null:
 		_hud_fx.queue_redraw()
 
@@ -736,7 +782,6 @@ func _apply_hud_feedback() -> void:
 func _draw_hud_feedback() -> void:
 	if not _hud.visible:
 		return
-	_draw_time_bonus()
 	if _hud_hit_age >= HUD_HIT_DURATION:
 		return
 	var scale: float = Style.ui_scale(self)
@@ -775,24 +820,47 @@ func _draw_hud_feedback() -> void:
 
 
 func _draw_time_bonus() -> void:
-	if _hud_bonus_age >= HUD_BONUS_DURATION:
+	if not _bonus_overlay.visible:
 		return
 	var scale: float = Style.ui_scale(self)
-	var progress: float = _hud_bonus_age / HUD_BONUS_DURATION
-	var alpha: float = _time_bonus_label.modulate.a
-	var rect := Rect2(_time_bonus_label.position, _time_bonus_label.size)
-	_hud_fx.draw_style_box(Style.box(Color("#123e41", alpha * 0.96), Color(HIT_COLOR, alpha * 0.8), ceili(9.0 / scale), 1), rect)
+	var alpha: float = _time_bonus_badge.modulate.a
+	var rect: Rect2 = _time_bonus_badge.get_transform() * Rect2(Vector2.ZERO, _time_bonus_badge.size)
+	var radius: int = ceili(17.0 / scale)
+	for glow in [12.0, 7.0, 3.0]:
+		_bonus_fx.draw_style_box(Style.box(Color(BONUS_COLOR, 0.05 * alpha), Color.TRANSPARENT, radius), rect.grow(glow / scale))
+	_bonus_fx.draw_style_box(Style.box(Color("#453519", 0.97 * alpha), Color(BONUS_COLOR, alpha), radius, maxi(1, ceili(2.0 / scale))), rect)
+	_bonus_fx.draw_style_box(Style.box(Color(BONUS_COLOR, 0.08 * alpha), Color(WHITE, 0.32 * alpha), maxi(1, radius - 3), 1), rect.grow(-4.0 / scale))
 	var timer := Rect2(time_label.position, time_label.size)
-	_hud_fx.draw_style_box(Style.box(Color(HIT_COLOR, 0.06 * alpha), Color(HIT_COLOR, 0.52 * alpha), ceili(11.0 / scale), 1), timer)
+	_bonus_fx.draw_style_box(Style.box(Color(BONUS_COLOR, 0.08 * alpha), Color(BONUS_COLOR, 0.65 * alpha), ceili(12.0 / scale), 1), timer.grow(3.0 / scale))
 	if reduced_motion:
 		return
-	var sweep: float = smoothstep(0.0, 0.35, progress)
-	var center: Vector2 = timer.get_center()
-	for direction in [-1.0, 1.0]:
-		var point: Vector2 = center + Vector2(direction * (timer.size.x * 0.3 + 5.0 * sweep / scale), -4.0 / scale)
-		var reach: float = (1.5 + 1.5 * sin(progress * PI)) / scale
-		_hud_fx.draw_line(point - Vector2(reach, 0), point + Vector2(reach, 0), Color(HIT_COLOR, alpha), 1.5 / scale, true)
-		_hud_fx.draw_line(point - Vector2(0, reach), point + Vector2(0, reach), Color(HIT_COLOR, alpha), 1.5 / scale, true)
+	var burst: float = clampf(_hud_bonus_age / 0.65, 0.0, 1.0)
+	var burst_alpha: float = 1.0 - smoothstep(0.3, 1.0, burst)
+	var center: Vector2 = _time_bonus_anchor + _time_bonus_badge.size * 0.5
+	for index in range(12):
+		var angle: float = TAU * float(index) / 12.0
+		var direction := Vector2(cos(angle), sin(angle) * 0.66)
+		var reach: float = (43.0 + 30.0 * burst) / scale
+		var point: Vector2 = center + direction * reach
+		_bonus_fx.draw_line(point, point + direction * (10.0 * (1.0 - burst) + 3.0) / scale,
+			Color(BONUS_COLOR if index % 2 == 0 else CYAN, burst_alpha), 2.5 / scale, true)
+	# Bright motes curve into the countdown as the large reward badge settles.
+	for index in range(8):
+		var travel: float = clampf((_hud_bonus_age - 0.35 - float(index) * 0.07) / 0.85, 0.0, 1.0)
+		if travel <= 0.0 or travel >= 1.0:
+			continue
+		var direction := Vector2(cos(float(index) * 2.4), sin(float(index) * 2.4))
+		var start: Vector2 = center + direction * Vector2(64.0, 35.0) / scale
+		var destination: Vector2 = timer.get_center()
+		var point: Vector2 = start.lerp(destination, travel) + Vector2(26.0 * sin(travel * PI), 0.0) / scale
+		var mote_alpha: float = sin(travel * PI)
+		_bonus_fx.draw_circle(point, 6.0 / scale, Color(BONUS_COLOR, 0.18 * mote_alpha))
+		_bonus_fx.draw_circle(point, 2.4 / scale, Color(WHITE, mote_alpha))
+	for delay in [0.0, 1.18]:
+		var ring: float = clampf((_hud_bonus_age - delay) / 0.6, 0.0, 1.0)
+		if ring > 0.0 and ring < 1.0:
+			_bonus_fx.draw_arc(timer.get_center(), (22.0 + 18.0 * ring) / scale, 0.0, TAU, 48,
+				Color(BONUS_COLOR, (1.0 - ring) * 0.8), 2.5 / scale, true)
 
 
 func _layout() -> void:
@@ -805,10 +873,14 @@ func _layout() -> void:
 	var width: float = maxf(0.0, size.x - edge * 2.0)
 	_hud.position = Vector2.ZERO
 	_hud.size = size
+	_bonus_overlay.position = Vector2.ZERO
+	_bonus_overlay.size = size
 	var side: float = minf(72.0 / scale, width * 0.22)
 	_place_label(time_label, Rect2(edge, 13 / scale, side, 46 / scale), 30)
-	_place_label(_time_bonus_label, Rect2(edge, 65 / scale, side, 24 / scale), 18)
-	_time_bonus_anchor = _time_bonus_label.position
+	_time_bonus_badge.size = Vector2(minf(140.0 / scale, width - 8.0 / scale), 72.0 / scale)
+	_time_bonus_anchor = Vector2(edge + 4.0 / scale, 80.0 / scale)
+	_place_label(_time_bonus_label, Rect2(4.0 / scale, 2.0 / scale, _time_bonus_badge.size.x - 8.0 / scale, 46.0 / scale), 34)
+	_place_label(_time_bonus_caption, Rect2(4.0 / scale, 50.0 / scale, _time_bonus_badge.size.x - 8.0 / scale, 18.0 / scale), 10)
 	_place_label(hits_label, Rect2(size.x - edge - side, 12 / scale, side, 35 / scale), 28)
 	_place_label(_hits_caption, Rect2(size.x - edge - side, 45 / scale, side, 14 / scale), 9)
 	var speech_x: float = edge + side + 8.0 / scale

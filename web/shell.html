@@ -1583,14 +1583,15 @@
           const hitEffect = hudState.hit_effect && typeof hudState.hit_effect === 'object' ? hudState.hit_effect : {};
           const bonusEffect = hudState.bonus_effect && typeof hudState.bonus_effect === 'object' && !Array.isArray(hudState.bonus_effect)
             ? hudState.bonus_effect : {};
-          const hud = Object.fromEntries(['time', 'hits', 'transcript', 'status', 'time_bonus'].map(name => [name, hudRect(hudState[name])]));
+          const hud = Object.fromEntries(['time', 'hits', 'transcript', 'status', 'time_bonus', 'time_bonus_caption'].map(name => [name, hudRect(hudState[name])]));
           hud.hit_effect = { serial: Math.floor(number(hitEffect.serial)), active: hitEffect.active === true,
             amount: Math.floor(number(hitEffect.amount)), words: (Array.isArray(hitEffect.words) ? hitEffect.words : [])
               .filter(word => typeof word === 'string').map(word => word.slice(0, 2000)).slice(0, 32) };
           hud.bonus_effect = { serial: Math.floor(number(bonusEffect.serial)), active: bonusEffect.active === true,
             amount: Math.floor(number(bonusEffect.amount)), awards: (Array.isArray(bonusEffect.awards) ? bonusEffect.awards : [])
               .filter(award => typeof award === 'number' && Number.isFinite(award) && award > 0).map(Math.floor).slice(0, 32),
-            reduced_motion: bonusEffect.reduced_motion === true };
+            reduced_motion: bonusEffect.reduced_motion === true, duration: number(bonusEffect.duration),
+            above_targets: bonusEffect.above_targets === true };
           hud.targets_above_hud = hudState.targets_above_hud === true;
           const resultsHitState = state.results_hits && typeof state.results_hits === 'object' && !Array.isArray(state.results_hits)
             ? state.results_hits : {};

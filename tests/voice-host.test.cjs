@@ -829,7 +829,9 @@ test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus po
   f.host.popStatus(JSON.stringify({ phase: 'running', base_duration: -50, bonus_time: 'Infinity', combo: -2,
     targets: [{ text: 'cat', age: -1, spawned_at: 'invalid' }],
     hud: { time_bonus: { text: '+8s', x: 10, y: 22, width: 70, height: 30, private: 'discard' },
-      bonus_effect: { serial: 2.9, active: true, amount: 8, awards: [3, 5, '3', null, -1, 'Infinity'], reduced_motion: true, private: 'discard' } } }));
+      time_bonus_caption: { text: 'TIME BONUS', x: 10, y: 56, width: 140, height: 18, private: 'discard' },
+      bonus_effect: { serial: 2.9, active: true, amount: 8, awards: [3, 5, '3', null, -1, 'Infinity'],
+        reduced_motion: true, duration: 1.8, above_targets: true, private: 'discard' } } }));
   assert.equal(f.popStatus.attributes['data-base-duration'], '0');
   assert.equal(f.popStatus.attributes['data-bonus-time'], '0');
   assert.equal(f.popStatus.attributes['data-combo'], '0');
@@ -837,10 +839,22 @@ test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus po
     [{ uid: '', text: 'cat', x: 0, y: 0, width: 0, height: 0, age: 0, spawned_at: 0 }]);
   const hud = JSON.parse(f.popStatus.attributes['data-hud']);
   assert.deepEqual(hud.time_bonus, { text: '+8s', x: 10, y: 22, width: 70, height: 30 });
-  assert.deepEqual(hud.bonus_effect, { serial: 2, active: true, amount: 8, awards: [3, 5], reduced_motion: true });
+  assert.deepEqual(hud.time_bonus_caption, { text: 'TIME BONUS', x: 10, y: 56, width: 140, height: 18 });
+  assert.deepEqual(hud.bonus_effect, { serial: 2, active: true, amount: 8, awards: [3, 5], reduced_motion: true,
+    duration: 1.8, above_targets: true });
+  f.host.popStatus(JSON.stringify({ phase: 'running', hud: {
+    time_bonus_caption: { text: 23, x: 'Infinity', y: 'invalid', width: -40, height: 'Infinity' },
+    bonus_effect: { duration: 'Infinity', above_targets: 'true' }
+  } }));
+  const invalid = JSON.parse(f.popStatus.attributes['data-hud']);
+  assert.deepEqual(invalid.time_bonus_caption, { text: '', x: 0, y: 0, width: 0, height: 0 });
+  assert.equal(invalid.bonus_effect.duration, 0);
+  assert.equal(invalid.bonus_effect.above_targets, false);
   f.host.popStatus(JSON.stringify({ phase: 'idle' }));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-hud']).bonus_effect,
-    { serial: 0, active: false, amount: 0, awards: [], reduced_motion: false });
+  const cleared = JSON.parse(f.popStatus.attributes['data-hud']);
+  assert.deepEqual(cleared.bonus_effect,
+    { serial: 0, active: false, amount: 0, awards: [], reduced_motion: false, duration: 0, above_targets: false });
+  assert.deepEqual(cleared.time_bonus_caption, { text: '', x: 0, y: 0, width: 0, height: 0 });
 });
 
 test('Pop snapshots expose full live speech and result state without repeating interim text in the live region', () => {

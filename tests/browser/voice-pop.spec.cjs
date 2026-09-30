@@ -173,6 +173,7 @@ async function open(page, options) {
 
 async function state(page) {
   return page.locator('#pop-status').evaluate(element => ({
+    sampledAt: performance.now(),
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining),
     combo: Number(element.dataset.combo), bonusTime: Number(element.dataset.bonusTime),
     hits: Number(element.dataset.hits), score: Number(element.dataset.score),
@@ -382,7 +383,7 @@ async function popOne(page, { interim = false } = {}) {
 }
 
 function expectCompactHud(hud, bounds) {
-  expect(Object.keys(hud).sort()).toEqual(['bonus_effect', 'hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'time_bonus', 'transcript']);
+  expect(Object.keys(hud).sort()).toEqual(['bonus_effect', 'hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'time_bonus', 'time_bonus_caption', 'transcript']);
   const content = contentBounds(bounds);
   for (const key of ['time', 'hits', 'transcript', 'status']) {
     const rect = hud[key];
@@ -404,6 +405,28 @@ function expectCompactHud(hud, bounds) {
   expect(hud.targets_above_hud, 'Airborne words use the foreground layer above the compact HUD').toBe(true);
 }
 
+function expectForegroundTimeBonus(hud, bounds, seconds, reducedMotion) {
+  expect(hud.bonus_effect).toMatchObject({ active: true, amount: seconds, reduced_motion: reducedMotion,
+    duration: 1.8, above_targets: true });
+  expect(hud.time_bonus.text).toBe(`+${seconds}s`);
+  expect(hud.time_bonus_caption.text).toBe('TIME BONUS');
+  const content = contentBounds(bounds);
+  for (const key of ['time_bonus', 'time_bonus_caption']) {
+    const label = hud[key];
+    expect([label.x, label.y, label.width, label.height].every(Number.isFinite), `${key} has real foreground geometry`).toBe(true);
+    expect(label.x).toBeGreaterThanOrEqual(content.x - 1);
+    expect(label.x + label.width).toBeLessThanOrEqual(content.x + content.width + 1);
+    expect(label.y).toBeGreaterThanOrEqual(hud.time.y + hud.time.height - 1);
+    expect(label.y + label.height).toBeLessThanOrEqual(bounds.height - content.padding + 1);
+  }
+  expect(hud.time_bonus.height, 'The reward reserves prominent bounds throughout its animation')
+    .toBeGreaterThanOrEqual(hud.time.height);
+  // Font ascent/descent rounds up at fractional scale; allow two CSS pixels of
+  // line-box whitespace while keeping the caption below the number's glyphs.
+  expect(hud.time_bonus_caption.y, 'The caption sits below the earned number')
+    .toBeGreaterThanOrEqual(hud.time_bonus.y + hud.time_bonus.height - 2 / bounds.scale);
+}
+
 function intersects(first, second) {
   return first.x < second.x + second.width && first.x + first.width > second.x &&
     first.y < second.y + second.height && first.y + first.height > second.y;
@@ -413,10 +436,13 @@ async function observeHudFeedback(page) {
   await page.evaluate(() => {
     const element = document.querySelector('#pop-status');
     window.__hudFeedback = [];
+    window.__bonusFeedback = [];
     const read = () => {
       const hud = JSON.parse(element.dataset.hud || '{}');
       if (hud.hit_effect) window.__hudFeedback.push(hud);
+      if (hud.bonus_effect) window.__bonusFeedback.push({ at: performance.now(), ...hud.bonus_effect });
       if (window.__hudFeedback.length > 128) window.__hudFeedback.shift();
+      if (window.__bonusFeedback.length > 128) window.__bonusFeedback.shift();
     };
     window.__hudFeedbackObserver?.disconnect();
     window.__hudFeedbackObserver = new MutationObserver(read);
@@ -564,17 +590,19 @@ test('50-second Voice Pop awards combo time once and keeps reduced-motion feedba
     await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
     const before = await state(page);
     const word = await popOne(page, { interim: true });
+    // Inspect the readable hold phase rather than the badge's first pop-in frame.
+    await page.waitForTimeout(280);
     const awarded = await state(page);
     expect(awarded.combo).toBe(combo);
     expect(awarded.bonusTime).toBe(total);
-    expect(awarded.remaining).toBeGreaterThanOrEqual(before.remaining + bonus - 1);
-    expect(awarded.hud.bonus_effect).toMatchObject({ active: true, amount: bonus, reduced_motion: combo === 3 });
-    expect(awarded.hud.time_bonus.text).toBe(`+${bonus}s`);
-    expectCompactHud(awarded.hud, await metrics(page));
-    const label = awarded.hud.time_bonus;
-    expect(label.x).toBeGreaterThanOrEqual(awarded.hud.time.x - 1);
-    expect(label.y).toBeGreaterThanOrEqual(awarded.hud.time.y);
-    expect(label.x + label.width).toBeLessThanOrEqual(awarded.hud.transcript.x + 1);
+    const elapsedSeconds = (awarded.sampledAt - before.sampledAt) / 1000;
+    const expectedRemaining = before.remaining + bonus - elapsedSeconds;
+    expect(Math.abs(awarded.remaining - expectedRemaining),
+      'The countdown adds the award and subtracts measured play time, within one displayed-second rounding interval')
+      .toBeLessThanOrEqual(1);
+    const bounds = await metrics(page);
+    expectCompactHud(awarded.hud, bounds);
+    expectForegroundTimeBonus(awarded.hud, bounds, bonus, combo === 3);
     await page.screenshot({ path: info.outputPath(`combo-${combo}-time-bonus.png`) });
     await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
     await rendered(page);
@@ -582,10 +610,26 @@ test('50-second Voice Pop awards combo time once and keeps reduced-motion feedba
     expect(finalized.hits).toBe(awarded.hits);
     expect(finalized.bonusTime).toBe(total);
     expect(finalized.hud.bonus_effect.serial).toBe(awarded.hud.bonus_effect.serial);
+    if (combo === 3) {
+      expect(finalized.hud.time_bonus, 'Reduced motion keeps the large reward label in a stable position').toEqual(awarded.hud.time_bonus);
+      expect(finalized.hud.time_bonus_caption, 'Reduced motion keeps its caption steady too').toEqual(awarded.hud.time_bonus_caption);
+    }
   }
   await popOne(page);
   expect((await state(page)).combo).toBe(4);
   expect((await state(page)).bonusTime).toBe(8);
+  await expect.poll(async () => (await state(page)).hud.bonus_effect.active).toBe(false);
+  const ended = await state(page);
+  expect(ended.hud.time_bonus.text).toBe('');
+  const presentation = await page.evaluate(serial => {
+    const frames = window.__bonusFeedback.filter(frame => frame.serial === serial);
+    const start = frames.find(frame => frame.active), end = frames.find(frame => !frame.active);
+    return start && end ? end.at - start.at : null;
+  }, ended.hud.bonus_effect.serial);
+  expect(presentation, 'The bonus has a visible start and a completed cleanup').not.toBeNull();
+  expect(presentation, 'The award remains visible long enough to read').toBeGreaterThan(1500);
+  expect(presentation, 'The transient bonus does not linger over play').toBeLessThan(2600);
+  await page.screenshot({ path: info.outputPath('time-bonus-cleared.png') });
   await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('network'));
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
   const paused = await state(page);

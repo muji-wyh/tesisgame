@@ -226,8 +226,11 @@ these safeguards.
 
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
 points). The second hit in a streak adds 3 seconds to the clock; the third adds
-5 seconds. Dropped objects end the streak, so a later streak can earn these
-bonuses again. There is no losing screen. When the extended clock runs out,
+5 seconds. Each award displays a large gold **+3s / +5s** time-bonus badge above
+the flying cards, with a burst, particles flowing into the clock and a timer
+pulse. The 1.8-second effect becomes a static badge in reduced motion. Dropped
+objects end the streak, so a later streak can earn these bonuses again.
+There is no losing screen. When the extended clock runs out,
 the result view shows only **HITS**, **Play again**, and lists of popped
 and missed words. The hit total counts up, settles with a brief scale pulse and
 sparkles, and keeps a gentle glow. Reduced motion shows the complete total
