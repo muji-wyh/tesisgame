@@ -23,6 +23,7 @@ const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const LAUNCH_SOUND_WINDOW: float = 0.2
+const TARGET_COLLISION_SCALE: float = 0.75
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
@@ -697,6 +698,7 @@ func _refresh_targets() -> void:
 	var capsule_width: float = clampf(minf(_arena.size.x * 0.43, _arena.size.y * 0.57), 112.0 / scale, 202.0 / scale)
 	var capsule_height: float = minf(clampf(capsule_width * 0.83, 96.0 / scale, 162.0 / scale), _arena.size.y - 4.0 / scale)
 	var capsule_size := Vector2(capsule_width, capsule_height)
+	var collision_size: Vector2 = capsule_size * TARGET_COLLISION_SCALE
 	var room: float = maxf(0.0, _arena.size.x - capsule_width - 12.0 / scale)
 	for target in game.targets:
 		_cache_texture(target.word)
@@ -725,15 +727,15 @@ func _refresh_targets() -> void:
 					center += Vector2(sin(age * 100.0), cos(age * 85.0)) * (1.0 - age / 0.14) * 3.0 / scale
 		_draw_targets.append({"uid": int(target.uid), "word": target.word, "forms": target.get("forms", []), "center": center,
 			"size": capsule_size, "rotation": tilt, "progress": progress, "lane": lane})
-	# In narrow portrait play, stagger neighboring capsules vertically rather than letting words cover one another.
+	# Inset collision boxes let the card edges overlap before staggering their centers.
 	for pass_index in range(3):
 		for a in range(_draw_targets.size()):
 			for b in range(a + 1, _draw_targets.size()):
 				var first: Dictionary = _draw_targets[a]
 				var second: Dictionary = _draw_targets[b]
 				var separation := Vector2(absf(first.center.x - second.center.x), absf(first.center.y - second.center.y))
-				if separation.x < capsule_width + 4.0 / scale and separation.y < capsule_height + 8.0 / scale:
-					var move: float = (capsule_height + 8.0 / scale - separation.y) * 0.5
+				if separation.x < collision_size.x and separation.y < collision_size.y:
+					var move: float = (collision_size.y - separation.y) * 0.5
 					var direction: float = -1.0 if first.center.y <= second.center.y else 1.0
 					first.center.y = clampf(first.center.y + direction * move, _arena.position.y + capsule_height * 0.5, _arena.end.y - capsule_height * 0.5)
 					second.center.y = clampf(second.center.y - direction * move, _arena.position.y + capsule_height * 0.5, _arena.end.y - capsule_height * 0.5)
