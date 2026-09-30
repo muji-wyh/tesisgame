@@ -219,7 +219,7 @@ func _check_lifecycle(app) -> void:
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			transition + " clears the active call and emotion immediately")
 		check(missed_batches.size() == before[2], transition + " never classifies a cleared target as missed")
-		view._advance_game(30.0)
+		view._advance_game(view.game.remaining)
 		check(missed_batches.size() == before[2] and not _reaction_playing(app),
 			transition + " prevents late simulation work from restarting feedback")
 		if transition in ["speech_pause", "home", "hidden"]:

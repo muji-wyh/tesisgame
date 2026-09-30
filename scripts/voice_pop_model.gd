@@ -2,9 +2,10 @@ extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
 
-const DURATION: float = 30.0
+const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
+const BURST_WARMUP: float = 8.0
 const EPSILON: float = 0.000001
 # These nouns do not take a regular plural in the pictured sense. In particular,
 # never derive a singular by removing letters from arbitrary recognized speech.
@@ -37,6 +38,7 @@ const RECOGNITION_MESSAGES: Dictionary = {
 var phase: String = "ready"
 var remaining: float = DURATION
 var elapsed: float = 0.0
+var bonus_time: float = 0.0
 var targets: Array[Dictionary] = []
 var hits: int = 0
 var misses: int = 0
@@ -54,6 +56,7 @@ var _spawn_counts: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _next_uid: int = 1
 var _next_spawn_at: float = 0.0
+var _next_burst_at: float = INF
 var _tokens := RegEx.new()
 var _noun := RegEx.new()
 
@@ -103,6 +106,7 @@ func start() -> bool:
 	_reset_round()
 	phase = "running"
 	_spawn()
+	_next_burst_at = _rng.randf_range(BURST_WARMUP, BURST_WARMUP + 3.0)
 	_next_spawn_at = _spawn_interval()
 	return true
 
@@ -117,7 +121,8 @@ func vocabulary() -> Array[String]:
 func advance(delta: float) -> void:
 	if phase != "running" or delta <= 0.0 or not is_finite(delta):
 		return
-	var end_time: float = minf(DURATION, elapsed + delta)
+	var deadline: float = DURATION + bonus_time
+	var end_time: float = minf(deadline, elapsed + delta)
 	# Process spawn/expiry events at their actual time even after a slow frame.
 	# A large delta therefore cannot extend a round or give a late target less time.
 	while phase == "running" and elapsed < end_time:
@@ -128,9 +133,9 @@ func advance(delta: float) -> void:
 		for target in targets:
 			target.age = minf(target.lifetime, target.age + step)
 		elapsed = event_time
-		remaining = maxf(0.0, DURATION - elapsed)
+		remaining = maxf(0.0, deadline - elapsed)
 		_expire_targets()
-		if elapsed >= DURATION:
+		if elapsed >= deadline:
 			phase = "finished"
 			targets.clear()
 			break
@@ -183,6 +188,9 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 		var hit: Dictionary = target.duplicate(true)
 		hit.points = points
 		hit.combo = combo
+		hit.time_bonus = 3 if combo == 2 else 5 if combo == 3 else 0
+		bonus_time += float(hit.time_bonus)
+		remaining = maxf(0.0, DURATION + bonus_time - elapsed)
 		removed.append(hit)
 		targets.erase(target)
 	if not removed.is_empty() and targets.is_empty():
@@ -205,7 +213,8 @@ func summary() -> Dictionary:
 	return {
 		"hits": hits, "misses": misses, "score": score, "best_combo": best_combo,
 		"unique_words": hit_words.size(), "hit_words": hit_words.duplicate(true),
-		"missed_words": missed_words.duplicate(true), "duration": DURATION, "elapsed": elapsed
+		"missed_words": missed_words.duplicate(true), "base_duration": DURATION,
+		"bonus_time": bonus_time, "duration": DURATION + bonus_time, "elapsed": elapsed
 	}
 
 
@@ -213,6 +222,7 @@ func _reset_round() -> void:
 	recognition_feedback = ""
 	recognition_message = ""
 	elapsed = 0.0
+	bonus_time = 0.0
 	remaining = DURATION
 	targets.clear()
 	hits = 0
@@ -225,21 +235,45 @@ func _reset_round() -> void:
 	_spawn_counts.clear()
 	_next_uid = 1
 	_next_spawn_at = 0.0
+	_next_burst_at = INF
 
 
 func _spawn_interval() -> float:
+	for target in targets:
+		if bool(target.get("volley", false)) and float(target.age) <= EPSILON:
+			return 3.0
 	if elapsed < 8.0:
 		return 2.15
 	return 1.85 if elapsed < 18.0 else 1.6
 
 
 func _spawn() -> void:
-	var lifetime: float = minf(lerpf(5.6, 5.0, elapsed / DURATION), remaining)
+	var lifetime: float = minf(lerpf(5.6, 5.0, clampf(elapsed / DURATION, 0.0, 1.0)), remaining)
 	var capacity: int = 2 if elapsed < 6.0 else MAX_TARGETS
 	# Keep the closing seconds active while still giving a child a fair chance to
 	# see and say a new word. Final throws land at the deadline, never after it.
 	if targets.size() >= capacity or lifetime + EPSILON < MIN_LATE_LIFETIME:
 		return
+	var burst_due: bool = elapsed >= _next_burst_at
+	var available: int = capacity - targets.size()
+	# Give a shared launch a clear stage and a short reading window. Older single
+	# throws must land before the wave; closing throws keep their fair window.
+	if burst_due and not targets.is_empty() and remaining >= MIN_LATE_LIFETIME + _spawn_interval():
+		return
+	var count: int = mini(available, _rng.randi_range(2, 3)) if burst_due else 1
+	var spawned: int = 0
+	for _index in range(count):
+		if not _spawn_target(lifetime):
+			break
+		spawned += 1
+	if spawned > 1:
+		for index in range(targets.size() - spawned, targets.size()):
+			targets[index].volley = true
+	if burst_due and spawned > 0:
+		_next_burst_at = elapsed + _rng.randf_range(8.0, 12.0)
+
+
+func _spawn_target(lifetime: float) -> bool:
 	var candidates: Array[Dictionary] = []
 	var fewest: int = 2147483647
 	for word in _words:
@@ -252,7 +286,7 @@ func _spawn() -> void:
 		if count == fewest:
 			candidates.append(word)
 	if candidates.is_empty():
-		return
+		return false
 	var word: Dictionary = candidates[_rng.randi_range(0, candidates.size() - 1)]
 	var free_lanes: Array[int] = [0, 1, 2]
 	for target in targets:
@@ -261,6 +295,7 @@ func _spawn() -> void:
 	var center: float = 0.23 + lane * 0.27
 	targets.append({
 		"uid": _next_uid, "word": word.duplicate(true), "age": 0.0, "lifetime": lifetime,
+		"volley": false,
 		"forms": _aliases[word.id].duplicate(),
 		"lane": lane, "x_start": center + _rng.randf_range(-0.02, 0.02),
 		"x_end": center + _rng.randf_range(-0.025, 0.025),
@@ -268,6 +303,7 @@ func _spawn() -> void:
 	})
 	_spawn_counts[word.id] = fewest + 1
 	_next_uid += 1
+	return true
 
 
 func _can_spawn(word: Dictionary) -> bool:

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PopView = preload("res://scripts/voice_pop.gd")
+const PopModel = preload("res://scripts/voice_pop_model.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -204,6 +205,242 @@ func check_high_flight(app, dimensions: Vector2i) -> void:
 	view.set_reduced_motion(was_reduced)
 
 
+func begin_bonus_round(view, words: Array, reduced: bool = false) -> void:
+	view.configure(words, reduced, 71)
+	check(view.game.remaining == 50.0 and view.game.remaining == PopModel.DURATION
+		and view._gate_note.text.contains("50 seconds"), "A fresh round and its microphone note agree on fifty seconds")
+	check(view.snapshot().bonus_time == 0.0 and view.snapshot().combo == 0
+		and not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.bonus_effect.serial == 0,
+		"A fresh round has no inherited combo reward or popup")
+	view.set_listening(true, true, "Listening.")
+	view.set_process(false)
+	view._listening_tick_usec = -1
+
+
+func strike_next_bonus_word(view) -> String:
+	if view.game.targets.is_empty():
+		view._advance_game(0.66)
+	check(not view.game.targets.is_empty(), "The bonus fixture has a real visible word to speak")
+	if view.game.targets.is_empty():
+		return ""
+	var word: String = view.game.targets[0].word.text
+	view._listening_tick_usec = -1
+	view.receive_transcript(word)
+	return word
+
+
+func check_bonus_feedback(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(320, 420)
+	begin_bonus_round(view, words)
+	strike_next_bonus_word(view)
+	check(view.snapshot().combo == 1 and view.snapshot().bonus_time == 0.0
+		and not view.snapshot().hud.bonus_effect.active, "The first hit starts a streak without inventing extra time")
+	view._advance_hud_feedback(0.65)
+	var second_word: String = strike_next_bonus_word(view)
+	var second: Dictionary = view.snapshot()
+	check(second.combo == 2 and second.bonus_time == 3.0 and second.hud.time_bonus.text == "+3s"
+		and second.hud.bonus_effect.active and second.hud.bonus_effect.amount == 3
+		and second.hud.bonus_effect.awards == [3] and second.hud.bonus_effect.serial == 1,
+		"Two consecutive real hits award and display three extra seconds")
+	check(view.time_label.text == "%02d" % ceili(view.game.remaining), "The countdown immediately includes earned time")
+	view._advance_hud_feedback(0.16)
+	check(view.time_label.scale.x > 1.0 and view._time_bonus_label.position != view._time_bonus_anchor,
+		"Normal reward feedback pulses the timer and gently lifts its bonus badge")
+	for dimensions in [Vector2(180, 180), Vector2(320, 420), Vector2(640, 190), Vector2(1000, 650)]:
+		view.size = dimensions
+		view._layout()
+		var rect: Rect2 = view._time_bonus_label.get_global_rect()
+		var text_width: float = view._time_bonus_label.get_theme_font("font").get_string_size("+8s",
+			HORIZONTAL_ALIGNMENT_LEFT, -1, view._time_bonus_label.get_theme_font_size("font_size")).x
+		check(view.get_global_rect().grow(1.0).encloses(rect) and text_width <= rect.size.x + 0.01,
+			"Both individual and combined time rewards remain readable at " + str(dimensions))
+		check(rect.position.y >= view.time_label.get_rect().end.y + view.global_position.y - 1.0,
+			"The reward badge stays below the stable countdown at " + str(dimensions))
+	view._listening_tick_usec = -1
+	view.receive_transcript(second_word)
+	check(view.snapshot().bonus_time == 3.0 and view.snapshot().hud.bonus_effect.serial == 1,
+		"A duplicate final hypothesis cannot replay or double the earned time")
+	view._advance_hud_feedback(0.65)
+	strike_next_bonus_word(view)
+	var third: Dictionary = view.snapshot()
+	check(third.combo == 3 and third.bonus_time == 8.0 and third.hud.time_bonus.text == "+5s"
+		and third.hud.bonus_effect.awards == [5] and third.hud.bonus_effect.serial == 2,
+		"A later third hit shows its own five-second reward instead of merging unrelated throws")
+	view._advance_hud_feedback(0.65)
+	strike_next_bonus_word(view)
+	check(view.snapshot().combo == 4 and view.snapshot().bonus_time == 8.0
+		and view.snapshot().hud.bonus_effect.serial == 2, "Longer streaks cannot replay either milestone reward")
+	view._advance_hud_feedback(PopView.HUD_BONUS_DURATION)
+	check(not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.time_bonus.text.is_empty()
+		and view.time_label.scale.is_equal_approx(Vector2.ONE), "The bonus popup expires and restores a stable countdown")
+	view._advance_game(7.0)
+	check(view.snapshot().combo == 0, "An actual missed target resets the streak")
+	strike_next_bonus_word(view)
+	view._advance_hud_feedback(0.65)
+	strike_next_bonus_word(view)
+	check(view.snapshot().bonus_time == 11.0 and view.snapshot().hud.time_bonus.text == "+3s",
+		"A new streak after a miss can earn its own second-hit reward")
+	view.pause()
+	check(not view.snapshot().hud.bonus_effect.active and not view._time_bonus_label.visible
+		and view.time_label.scale.is_equal_approx(Vector2.ONE) and view.snapshot().bonus_time == 11.0,
+		"Explicit pause clears cosmetic feedback while retaining earned seconds")
+	view.set_listening(true, true, "Listening.")
+	strike_next_bonus_word(view)
+	var before_rollover: Dictionary = view.snapshot().hud.bonus_effect
+	view.set_listening(true, false, "Listening paused. Continuing...")
+	check(view.snapshot().hud.bonus_effect == before_rollover and view.snapshot().hud.time_bonus.text == "+5s",
+		"A transient browser utterance rollover does not erase an earned timer reward")
+	view.set_listening(true, true, "Listening.")
+	view.set_reduced_motion(true)
+	var static_position: Vector2 = view._time_bonus_label.position
+	view._advance_hud_feedback(0.4)
+	check(view.snapshot().hud.bonus_effect.reduced_motion and view.time_label.scale.is_equal_approx(Vector2.ONE)
+		and view._time_bonus_label.position == static_position and view._time_bonus_label.modulate.a == 1.0,
+		"Reduced motion keeps the earned label steady and fully readable without pulsing or drifting")
+	view.set_listening(true, false, "Speech network error. Tap Retry.")
+	check(not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.time_bonus.text.is_empty(),
+		"A real listening failure clears the temporary timer reward")
+	view.set_listening(true, true, "Listening.")
+	view._advance_game(view.game.remaining + 1.0)
+	check(view.game.phase == "finished" and not view.snapshot().hud.bonus_effect.active,
+		"Completing an extended round leaves no live timer reward behind")
+	begin_bonus_round(view, words)
+	check(view.game._spawn_target(5.6) and view.game._spawn_target(5.6), "The multiword fixture has three distinct real targets")
+	var phrase := PackedStringArray()
+	for target in view.game.targets:
+		phrase.append(target.word.text)
+	view._listening_tick_usec = -1
+	view.receive_transcript(" ".join(phrase))
+	var combined: Dictionary = view.snapshot()
+	check(combined.hits == 3 and combined.bonus_time == 8.0 and combined.hud.time_bonus.text == "+8s"
+		and combined.hud.bonus_effect.awards == [3, 5] and combined.hud.bonus_effect.serial == 1,
+		"One three-word result combines both milestones into an accurate eight-second reward")
+	begin_bonus_round(view, words)
+	check(view.game._spawn_target(5.6) and view.game._spawn_target(5.6), "Separate lexical callbacks share one three-target fixture")
+	strike_next_bonus_word(view)
+	strike_next_bonus_word(view)
+	view._advance_hud_feedback(0.05)
+	strike_next_bonus_word(view)
+	check(view.snapshot().hud.time_bonus.text == "+8s" and view.snapshot().hud.bonus_effect.awards == [3, 5]
+		and view.snapshot().hud.bonus_effect.serial == 2 and view.snapshot().bonus_time == 8.0,
+		"Lexical callbacks arriving within one short frame merge their reward text without losing either award")
+	view.hide()
+	check(not view.snapshot().hud.bonus_effect.active and not view._time_bonus_label.visible,
+		"Hiding the game discards the active timer effect")
+	view.show()
+	view.stop()
+	check(not view.snapshot().hud.bonus_effect.active and view.time_label.scale.is_equal_approx(Vector2.ONE),
+		"Leaving Voice Pop cannot carry a reward animation into another mode")
+	view.free()
+
+
+func check_smaller_collision_boxes(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	begin_bonus_round(view, words)
+	var first: Dictionary = view.game.targets[0].duplicate(true)
+	first.age = float(first.lifetime) * 0.35
+	first.x_start = 0.30
+	first.x_end = first.x_start
+	first.spin = 0.0
+	view.game.targets.assign([first])
+	view._refresh_targets()
+	var original: Dictionary = view._draw_targets[0].duplicate(true)
+	var room: float = view._arena.size.x - float(original.size.x) - 12.0 / PopView.Style.ui_scale(view)
+	var second: Dictionary = first.duplicate(true)
+	second.uid = int(first.uid) + 1
+	second.x_start = first.x_start + float(original.size.x) * 0.60 / room * 0.60
+	second.x_end = second.x_start
+	view.game.targets.assign([first, second])
+	view._refresh_targets()
+	check(view._draw_targets[0].size == original.size and view._draw_targets[1].size == original.size,
+		"Smaller collision boxes preserve the illustrated card dimensions")
+	check(view._draw_targets[0].center.is_equal_approx(original.center)
+		and is_equal_approx(float(view._draw_targets[0].center.y), float(view._draw_targets[1].center.y))
+		and view._global_target_rect(view._draw_targets[0]).intersects(view._global_target_rect(view._draw_targets[1])),
+		"Cards may overlap at sixty percent center separation without the former collision deflection")
+	second.x_start = first.x_start
+	second.x_end = first.x_end
+	view._refresh_targets()
+	check(absf(float(view._draw_targets[0].center.y) - float(view._draw_targets[1].center.y)) > float(original.size.y) * 0.2,
+		"Truly coincident cards still separate into distinct readable centers")
+	view.free()
+
+
+func check_portrait_volley_flight(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(360, 560)
+	begin_bonus_round(view, words)
+	var original: Dictionary = view.game.targets[0].duplicate(true)
+	var volley: Array[Dictionary] = []
+	for lane in range(3):
+		var target: Dictionary = original.duplicate(true)
+		target.uid = int(original.uid) + lane
+		target.lane = lane
+		target.volley = true
+		target.x_start = 0.23 + float(lane) * 0.27
+		target.x_end = target.x_start
+		target.peak = 0.30
+		target.spin = -0.12 if lane == 0 else 0.12
+		volley.append(target)
+	for progress in [0.25, 0.5, 0.75]:
+		for target in volley:
+			target.age = float(target.lifetime) * progress
+		view.game.targets.assign(volley)
+		view._refresh_targets()
+		var middle: Dictionary = view._draw_targets[1].duplicate(true)
+		var middle_rect: Rect2 = view._global_target_rect(middle)
+		check(not middle_rect.intersects(view._global_target_rect(view._draw_targets[0]))
+			and not middle_rect.intersects(view._global_target_rect(view._draw_targets[2])),
+			"The lower center volley keeps all three portrait word cards readable at " + str(progress))
+		view.game.targets.assign([volley[1]])
+		view._refresh_targets()
+		check(view._draw_targets[0].center.is_equal_approx(middle.center)
+			and view._draw_targets[0].size == middle.size,
+			"A surviving volley word retains its trajectory and visual size after neighboring hits")
+	view.free()
+
+
+func check_volley_launches(words: Array) -> void:
+	var view = PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	var launches: Array[int] = []
+	view.launched.connect(func(uid: int) -> void: launches.append(uid))
+	begin_bonus_round(view, words)
+	var latest_uid: int = int(view.game.targets[0].uid)
+	var found_volley: bool = false
+	for frame in range(480):
+		var previous_launches: int = launches.size()
+		view._advance_game(0.05)
+		var fresh: Array[Dictionary] = []
+		for target in view.snapshot().targets:
+			if int(target.uid) > latest_uid:
+				fresh.append(target)
+			latest_uid = maxi(latest_uid, int(target.uid))
+		if fresh.size() < 2:
+			continue
+		found_volley = true
+		check(fresh.size() <= 3 and launches.size() == previous_launches + 1,
+			"A naturally scheduled two- or three-word volley emits one launch sound")
+		var shared_launch: bool = true
+		for target in fresh:
+			shared_launch = shared_launch and absf(float(target.spawned_at) - float(fresh[0].spawned_at)) < 0.0001 \
+				and float(target.age) <= 0.051
+		check(shared_launch, "Browser snapshots expose the shared launch time and fresh target ages")
+		view._emit_launches()
+		view._refresh_targets()
+		view._emit_launches()
+		check(launches.size() == previous_launches + 1, "Repeated refreshes cannot replay a volley's whoosh")
+		break
+	check(found_volley, "The deterministic scene reaches an occasional natural multiword volley")
+	view.free()
+
+
 func _run() -> void:
 	var directory: String = "user://voice-pop-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -244,12 +481,12 @@ func _run() -> void:
 			"Voice Pop owns the visible playfield at " + str(dimensions))
 		check(not app.hint_button.visible and not app._voice_button.visible and not app._memory.study_button.visible,
 			"Other modes' actions do not intrude into Voice Pop")
-		check(view.game.phase == "ready" and view.game.remaining == 30.0, "Waiting for microphone does not consume time")
+		check(view.game.phase == "ready" and view.game.remaining == PopModel.DURATION, "Waiting for microphone does not consume time")
 		view.show_transcript("This arrived before listening", false)
 		check(not view.transcript_label.is_visible_in_tree() and str(view.snapshot().transcript).is_empty(),
 			"Permission waiting cannot display a transcript from an inactive recognizer")
 		view._process(2.0)
-		check(view.game.remaining == 30.0 and view.game.targets.is_empty(), "Permission waiting never starts target motion")
+		check(view.game.remaining == PopModel.DURATION and view.game.targets.is_empty(), "Permission waiting never starts target motion")
 		app._on_voice_state([true, true, "Listening. Say an English word."])
 		check(view.game.phase == "running" and view.game.targets.size() == 1, "A live microphone starts the actual arcade round")
 		view.show_transcript("I am still thinking", false)
@@ -353,9 +590,9 @@ func _run() -> void:
 		check(view.game.phase == "paused" and view.game.remaining == remaining, "Hidden pages preserve the remaining round")
 		app.on_page_visible()
 		app._on_voice_state([true, true, "Listening."])
-		view._advance_game(31.0)
+		view._advance_game(view.game.remaining + 1.0)
 		await settle()
-		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at the 30-second deadline")
+		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at its earned deadline")
 		var result: Dictionary = view.game.summary()
 		check(result.hits == before + 1 and result.unique_words == 1 and result.best_combo >= 1,
 			"The result preserves the real spoken hits")
@@ -402,7 +639,7 @@ func _run() -> void:
 			view._results.scroll_vertical = 0
 			await settle()
 		view.replay_button.pressed.emit()
-		check(view.game.phase == "ready" and view.game.hits == 0 and view.game.remaining == 30.0,
+		check(view.game.phase == "ready" and view.game.hits == 0 and view.game.remaining == PopModel.DURATION,
 			"Play again returns to a fresh round that waits for microphone permission")
 		check(not view._results.visible and not bool(view.snapshot().results_hits.active),
 			"Replaying hides results and clears the previous hit celebration")
@@ -418,7 +655,7 @@ func _run() -> void:
 		"Voice Pop uses only the selected age group's vocabulary")
 	app._pop.set_process(false)
 	app._on_voice_state([true, true, "Listening."])
-	app._pop._advance_game(31.0)
+	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	await settle()
 	var empty_round: Dictionary = app._pop.game.summary()
 	check(empty_round.hits == 0 and empty_round.score == 0 and empty_round.hit_words.is_empty(),
@@ -467,6 +704,10 @@ func _run() -> void:
 		check(str(app._pop.snapshot().results_hits.text) == str(count),
 			"Advancing reduced-motion feedback cannot rewind or recount the displayed total")
 	check(app._pop.game.summary() == empty_round, "Result-only layout fixtures never alter the underlying scored round")
+	check_bonus_feedback(app.data.words)
+	check_smaller_collision_boxes(app.data.words)
+	check_portrait_volley_flight(app.data.words)
+	check_volley_launches(app.data.words)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

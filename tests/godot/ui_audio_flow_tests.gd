@@ -307,7 +307,7 @@ func _check_pop_launch_audio(app) -> void:
 			"hidden": app.on_page_hidden()
 			"mode_exit": app.choose_mode("match")
 			"mute": app.audio.set_muted(true)
-			"finish": view._advance_game(30.0)
+			"finish": view._advance_game(view.game.remaining)
 		check(not player.playing and player.stream == null,
 			transition + " stops and clears the launch sound")
 		if transition == "home": app._hide_collection()
@@ -380,7 +380,7 @@ func _check_pop_exit_audio(app) -> void:
 			elif state == "denied":
 				app._on_voice_state([true, false, "Microphone permission was denied."])
 			if state == "report":
-				app._pop._advance_game(31.0)
+				app._pop._advance_game(app._pop.game.remaining)
 			if state == "muted":
 				app.audio.set_muted(true)
 			app.choose_mode(destination)

@@ -93,7 +93,7 @@ func _process(delta: float) -> bool:
 	if not ready_to_capture or done:
 		return false
 	# Advance the exact production model and presentation separately so capture
-	# frame rate cannot feed wall-clock time back into the 30-second game clock.
+	# frame rate cannot feed wall-clock time back into the round's game clock.
 	view._advance_slices(delta)
 	view._advance_game(delta)
 	view._last_hit_left = maxf(0.0, view._last_hit_left - delta)

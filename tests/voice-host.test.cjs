@@ -794,8 +794,8 @@ test('Pop status projects actual target and control geometry without introducing
   Object.defineProperty(f.popStatus, 'textContent', {
     get() { return readable; }, set(value) { readable = value; writes++; }
   });
-  const payload = { phase: 'playing', remaining: 19.3, hits: 4, score: 90, best_combo: 3,
-    targets: [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, secret: 'discard' }],
+  const payload = { phase: 'playing', remaining: 19.3, base_duration: 50, bonus_time: 8, hits: 4, score: 90, combo: 2, best_combo: 3,
+    targets: [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, age: 1.2, spawned_at: 29.5, secret: 'discard' }],
     controls: [{ name: 'EndPop', text: 'Finish', x: 300, y: 15, width: 52, height: 44, disabled: false, action: 'discard' }],
     message: 'Nice pop!' };
   assert.equal(f.host.popStatus(JSON.stringify(payload)), true);
@@ -804,7 +804,10 @@ test('Pop status projects actual target and control geometry without introducing
   assert.equal(f.popStatus.attributes['data-hits'], '4');
   assert.equal(f.popStatus.attributes['data-score'], '90');
   assert.equal(f.popStatus.attributes['data-best-combo'], '3');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']), [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77 }]);
+  assert.equal(f.popStatus.attributes['data-combo'], '2');
+  assert.equal(f.popStatus.attributes['data-base-duration'], '50');
+  assert.equal(f.popStatus.attributes['data-bonus-time'], '8');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']), [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, age: 1.2, spawned_at: 29.5 }]);
   assert.deepEqual(JSON.parse(f.popStatus.attributes['data-controls']), [{ name: 'EndPop', text: 'Finish', x: 300, y: 15, width: 52, height: 44, disabled: false }]);
   assert.match(readable, /Nice pop!.*4 hits.*Score 90.*Words: cat/);
   f.host.popStatus(JSON.stringify(payload));
@@ -816,7 +819,28 @@ test('Pop status projects actual target and control geometry without introducing
   assert.equal(readable, '');
   assert.equal(f.popStatus.attributes['data-targets'], '[]');
   assert.equal(f.popStatus.attributes['data-controls'], '[]');
+  assert.equal(f.popStatus.attributes['data-combo'], '0');
+  assert.equal(f.popStatus.attributes['data-bonus-time'], '0');
   assert.equal(f.starts, 0, 'Publishing the UI snapshot cannot start speech or mutate gameplay');
+});
+
+test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus popup', () => {
+  const f = fixture();
+  f.host.popStatus(JSON.stringify({ phase: 'running', base_duration: -50, bonus_time: 'Infinity', combo: -2,
+    targets: [{ text: 'cat', age: -1, spawned_at: 'invalid' }],
+    hud: { time_bonus: { text: '+8s', x: 10, y: 22, width: 70, height: 30, private: 'discard' },
+      bonus_effect: { serial: 2.9, active: true, amount: 8, awards: [3, 5, '3', null, -1, 'Infinity'], reduced_motion: true, private: 'discard' } } }));
+  assert.equal(f.popStatus.attributes['data-base-duration'], '0');
+  assert.equal(f.popStatus.attributes['data-bonus-time'], '0');
+  assert.equal(f.popStatus.attributes['data-combo'], '0');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']),
+    [{ uid: '', text: 'cat', x: 0, y: 0, width: 0, height: 0, age: 0, spawned_at: 0 }]);
+  const hud = JSON.parse(f.popStatus.attributes['data-hud']);
+  assert.deepEqual(hud.time_bonus, { text: '+8s', x: 10, y: 22, width: 70, height: 30 });
+  assert.deepEqual(hud.bonus_effect, { serial: 2, active: true, amount: 8, awards: [3, 5], reduced_motion: true });
+  f.host.popStatus(JSON.stringify({ phase: 'idle' }));
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-hud']).bonus_effect,
+    { serial: 0, active: false, amount: 0, awards: [], reduced_motion: false });
 });
 
 test('Pop snapshots expose full live speech and result state without repeating interim text in the live region', () => {

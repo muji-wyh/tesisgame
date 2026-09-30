@@ -23,12 +23,14 @@ func _run() -> void:
 	catalog = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	_test_start_and_reset()
 	_test_time_and_pause()
+	_test_combo_time_bonuses()
 	_test_recognition()
 	_test_homophones_vocabulary_and_feedback()
 	_test_form_snapshots()
 	_test_expiry_and_results()
 	_test_frame_independence()
 	_test_spawn_fairness()
+	_test_simultaneous_throws()
 	_test_late_throws()
 	_test_complete_catalog()
 	print("Voice Pop model: %d assertions, %d failures" % [checks, failures])
@@ -49,9 +51,9 @@ func _test_start_and_reset() -> void:
 	pool.append(pool[0])
 	pool.append(duplicate)
 	check(game.configure(pool, 71), "A valid subset configures even with duplicate input entries")
-	check(game.remaining == 30.0 and game.elapsed == 0.0 and game.phase == "ready", "Permission preparation consumes no play time")
+	check(game.remaining == 50.0 and game.elapsed == 0.0 and game.phase == "ready", "Permission preparation consumes none of the 50 seconds")
 	game.advance(10.0)
-	check(game.remaining == 30.0 and game.targets.is_empty(), "Ready phase never starts moving or counts down")
+	check(game.remaining == Model.DURATION and game.targets.is_empty(), "Ready phase never starts moving or counts down")
 	check(game.start() and game.targets.size() == 1, "Permission success can immediately launch the first illustrated word")
 	var initial: Array = game.targets.duplicate(true)
 	check(not game.start() and game.targets == initial, "A duplicate start callback cannot reset a live round")
@@ -85,10 +87,10 @@ func _test_time_and_pause() -> void:
 	game.advance(NAN)
 	game.advance(INF)
 	check(game.remaining == paused_remaining, "Invalid frame deltas cannot corrupt the clock")
-	game.advance(28.999)
-	check(game.phase == "running" and game.remaining > 0.0, "The round remains playable up to the 30-second deadline")
+	game.advance(Model.DURATION - 1.001)
+	check(game.phase == "running" and game.remaining > 0.0, "The round remains playable up to the 50-second deadline")
 	game.advance(0.001)
-	check(game.phase == "finished" and game.elapsed == 30.0 and game.remaining == 0.0, "The round finishes at exactly 30 active seconds")
+	check(game.phase == "finished" and game.elapsed == Model.DURATION and game.remaining == 0.0, "The round finishes at exactly 50 active seconds")
 	check(game.targets.is_empty(), "The settlement never retains moving targets")
 	var result: Dictionary = game.summary()
 	game.advance(40.0)
@@ -98,6 +100,90 @@ func _test_time_and_pause() -> void:
 	game.advance(1.2)
 	game.stop()
 	check(game.phase == "finished" and game.targets.is_empty() and game.misses == 0, "Leaving stops the round without inventing missed words")
+
+
+func _next_hit(game) -> Dictionary:
+	for _frame in range(30):
+		if not game.targets.is_empty():
+			var removed: Array = game.hit_transcript(str(game.targets[0].word.text))
+			return removed[0] if removed.size() == 1 else {}
+		game.advance(0.1)
+	return {}
+
+
+func _test_combo_time_bonuses() -> void:
+	var game := Model.new()
+	game.configure(catalog, 17)
+	game.start()
+	for _frame in range(400):
+		if game.targets.size() == 3:
+			break
+		game.advance(0.1)
+	check(game.targets.size() == 3, "A seeded round provides three distinct targets for a shared utterance")
+	if game.targets.size() != 3:
+		return
+	var sentence := PackedStringArray()
+	for target in game.targets:
+		sentence.append(target.word.text)
+	var before: float = game.remaining
+	var removed: Array = game.hit_transcript(" ".join(sentence))
+	check(removed.size() == 3 and removed.map(func(hit): return hit.time_bonus) == [0, 3, 5],
+		"A multiword utterance awards each crossed combo milestone to its own hit")
+	check(game.combo == 3 and game.bonus_time == 8.0 and is_equal_approx(game.remaining, before + 8.0),
+		"Combo two adds three seconds and combo three adds five more immediately")
+	check(game.summary().base_duration == 50.0 and game.summary().bonus_time == 8.0 and game.summary().duration == 58.0,
+		"Summary distinguishes base play time, earned time, and the current deadline")
+	before = game.remaining
+	check(game.hit_transcript(" ".join(sentence)).is_empty() and game.bonus_time == 8.0 and game.remaining == before,
+		"Repeating a final hypothesis cannot earn the same time twice")
+	for expected_combo in [4, 5]:
+		var later: Dictionary = _next_hit(game)
+		check(not later.is_empty() and later.time_bonus == 0 and game.combo == expected_combo and game.bonus_time == 8.0,
+			"Higher combos preserve the streak without repeating milestone time")
+	game.pause()
+	before = game.remaining
+	game.advance(200.0)
+	check(game.remaining == before and game.bonus_time == 8.0 and game.hit_transcript("cat").is_empty(),
+		"Pausing freezes earned time and cannot award a late recognition")
+	game.resume()
+	game.advance(0.7)
+	check(not game.targets.is_empty(), "A fresh unanswered word can end the prior hit streak")
+	if game.targets.is_empty():
+		return
+	game.advance(float(game.targets[0].lifetime) - float(game.targets[0].age))
+	check(game.combo == 0 and game.bonus_time == 8.0, "A missed word resets the streak without removing time already earned")
+	var bonuses: Array = []
+	for _hit in range(3):
+		var next: Dictionary = _next_hit(game)
+		bonuses.append(next.get("time_bonus", -1))
+	check(bonuses == [0, 3, 5] and game.combo == 3 and game.bonus_time == 16.0,
+		"A new streak can earn its own two milestones once after a miss")
+	game.advance(1000.0)
+	check(game.phase == "finished" and game.remaining == 0.0 and game.elapsed == 66.0,
+		"A large frame finishes at the extended deadline without stretching it further")
+	var result: Dictionary = game.summary()
+	game.resume()
+	game.hit_transcript(" ".join(sentence))
+	game.advance(50.0)
+	check(game.summary() == result and game.phase == "finished", "Late results cannot resurrect an expired extended round")
+	check(game.start() and game.bonus_time == 0.0 and game.remaining == 50.0 and game.combo == 0,
+		"Replay resets both accumulated time and milestone eligibility")
+	_next_hit(game)
+	_next_hit(game)
+	check(game.bonus_time == 3.0, "The new round awards its own first time milestone")
+	game.configure(catalog, 17)
+	check(game.bonus_time == 0.0 and game.remaining == 50.0 and game.phase == "ready",
+		"Reconfiguration discards the previous round's extended deadline")
+	game.start()
+	game.advance(44.0)
+	for _hit in range(3):
+		_next_hit(game)
+	check(game.bonus_time == 8.0 and game.elapsed < 50.0, "A late successful streak extends the deadline before it expires")
+	game.advance(50.1 - game.elapsed)
+	check(game.phase == "running" and is_equal_approx(game.remaining, 7.9),
+		"Earned time keeps the round running past its original fifty-second deadline")
+	game.advance(7.9)
+	check(game.phase == "finished" and game.elapsed == 58.0, "The late extension still ends at its exact revised deadline")
 
 
 func _test_recognition() -> void:
@@ -135,7 +221,7 @@ func _test_recognition() -> void:
 		var removed: Array = game.hit_transcript(fixture[2])
 		check(removed.size() == 1 and game.hits == 1 and game.targets.is_empty(), "A whole word or valid plural hits " + fixture[0])
 		if removed.size() == 1:
-			check(removed[0].has_all(["uid", "word", "forms", "age", "lifetime", "x_start", "x_end", "peak", "spin", "points", "combo"]), "Hit evidence preserves the throw for an impact effect")
+			check(removed[0].has_all(["uid", "word", "forms", "age", "lifetime", "x_start", "x_end", "peak", "spin", "points", "combo", "time_bonus"]), "Hit evidence preserves the throw and time award for impact feedback")
 		check(game.hit_transcript(fixture[2]).is_empty() and game.hits == 1, "Repeated speech cannot destroy a removed " + fixture[0] + " twice")
 	var game := Model.new()
 	game.configure(words(["cat", "dog", "horn", "apple"]), 9)
@@ -226,7 +312,7 @@ func _test_expiry_and_results() -> void:
 	game.advance(0.7)
 	game.hit_transcript("cat")
 	check(game.hits == 2 and game.hit_words.size() == 1 and game.hit_words[0].count == 2, "Pip's summary distinguishes total hits from unique learned words")
-	game.advance(30.0)
+	game.advance(Model.DURATION + 8.0)
 	var result: Dictionary = game.summary()
 	check(result.unique_words == 1 and result.hits == 2 and result.best_combo == 2 and result.score == 22, "The completed summary reports actual achievements")
 	check(not result.has("accuracy") and not result.has("failed"), "Silence is not represented as fabricated speech accuracy or failure")
@@ -246,9 +332,9 @@ func _test_frame_independence() -> void:
 	slow.configure(catalog, 61)
 	fast.start()
 	slow.start()
-	for _frame in range(300):
+	for _frame in range(ceili(Model.DURATION * 10.0)):
 		fast.advance(0.1)
-	slow.advance(30.0)
+	slow.advance(Model.DURATION)
 	fast.advance(0.000001)
 	check(fast.summary() == slow.summary(), "Slow frames and ordinary frames produce the same complete round")
 	check(fast.phase == "finished" and slow.phase == "finished", "A stalled frame cannot extend the deadline")
@@ -274,7 +360,7 @@ func _test_spawn_fairness() -> void:
 			game.configure(pool, seed_value)
 			game.start()
 			var seen: Dictionary = {}
-			for frame in range(121):
+			for frame in range(ceili(Model.DURATION * 4.0) + 1):
 				for target in game.targets:
 					if not seen.has(target.uid):
 						seen[target.uid] = true
@@ -293,7 +379,7 @@ func _test_spawn_fairness() -> void:
 	game.configure(catalog, 40)
 	game.start()
 	var encountered: Dictionary = {}
-	for _frame in range(300):
+	for _frame in range(ceili((Model.DURATION + 8.0) * 10.0) + 1):
 		for target in game.targets.duplicate():
 			check(not encountered.has(target.word.id), "Available unseen words appear before repeating a successful word")
 			encountered[target.word.id] = true
@@ -302,21 +388,77 @@ func _test_spawn_fairness() -> void:
 	check(encountered.size() >= 20, "Quick successful speech leads to continued active play")
 
 
+func _test_simultaneous_throws() -> void:
+	var sizes_seen: Dictionary = {}
+	var starts_seen: Dictionary = {}
+	for fast_answers in [false, true]:
+		for seed_value in range(8):
+			var game := Model.new()
+			game.configure(catalog, seed_value)
+			game.start()
+			var seen: Dictionary = {}
+			var launches: Dictionary = {}
+			for _frame in range(ceili((Model.DURATION + 8.0) * 10.0) + 1):
+				for target in game.targets:
+					if seen.has(target.uid):
+						continue
+					seen[target.uid] = true
+					var born_at: float = game.elapsed - target.age
+					var key: String = "%.4f" % born_at
+					if not launches.has(key):
+						launches[key] = {"time": born_at, "targets": []}
+					launches[key].targets.append(target.duplicate(true))
+				if fast_answers:
+					for target in game.targets.duplicate():
+						game.hit_transcript(target.word.text)
+				game.advance(0.1)
+			var singles: int = 0
+			var bursts: int = 0
+			var last_burst: float = -INF
+			for launch in launches.values():
+				if launch.targets.size() == 1:
+					singles += 1
+					continue
+				bursts += 1
+				sizes_seen[launch.targets.size()] = true
+				starts_seen["%.2f" % launch.time] = true
+				check(launch.targets.size() >= 2 and launch.targets.size() <= Model.MAX_TARGETS,
+					"A shared throw launches two or three words together within the screen capacity")
+				check(launch.time + 0.00001 >= Model.BURST_WARMUP and launch.time - last_burst >= 8.0 - 0.00001,
+					"Shared throws follow the warmup and leave a cooldown before the next group")
+				last_burst = launch.time
+				for target in launch.targets:
+					check(bool(target.get("volley", false)), "Every member retains its shared-flight marker after launch")
+					check(is_zero_approx(target.age - launch.targets[0].age), "Simultaneous words share the same real launch time")
+					for other in launch.targets:
+						if target.uid == other.uid:
+							continue
+						check(target.lane != other.lane and target.word.id != other.word.id
+							and not Data.confusable_words(target.word.id, other.word.id)
+							and not target.forms.any(func(form): return other.forms.has(form)),
+							"Each shared throw uses distinct lanes, pictures, and accepted spoken forms")
+			check(game.phase == "finished" and bursts >= 1 and singles > bursts,
+				"Shared throws remain occasional and occur with both quick answers and unanswered words")
+	check(sizes_seen.has(2) and sizes_seen.has(3), "Seeded rounds exercise both two-word and three-word throws")
+	check(starts_seen.size() > 4, "Shared throws vary their launch timing between seeded rounds")
+
+
 func _test_late_throws() -> void:
 	var game := Model.new()
 	game.configure(catalog, 14)
 	game.start()
 	var late_count: int = 0
-	for _frame in range(301):
+	for _frame in range(ceili((Model.DURATION + 8.0) * 10.0) + 1):
 		for target in game.targets.duplicate():
 			var born_at: float = game.elapsed - target.age
-			check(born_at <= 27.000001, "No throw begins with less than three seconds left to answer")
-			if born_at > 25.0:
+			var deadline: float = Model.DURATION + game.bonus_time
+			check(born_at <= deadline - Model.MIN_LATE_LIFETIME + 0.000001, "No throw begins with less than three seconds left to answer")
+			if born_at > deadline - 5.0:
 				late_count += 1
-				check(is_equal_approx(born_at + target.lifetime, 30.0), "A late throw's entire flight ends at the round deadline")
+				check(is_equal_approx(born_at + target.lifetime, deadline), "A late throw's entire flight ends at the extended deadline")
 			game.hit_transcript(target.word.text)
 		game.advance(0.1)
-	check(late_count >= 1, "Successful players still receive active throws after the 25-second mark")
+	check(late_count >= 1, "Successful players still receive active throws in the extended round's final five seconds")
 	check(game.phase == "finished" and game.targets.is_empty(), "Shorter closing throws cannot delay the settlement")
 
 

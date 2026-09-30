@@ -199,10 +199,12 @@ Voice Pop is a single-player game using the system speech service exposed by
 `SpeechRecognition` or `webkitSpeechRecognition`. It starts directly without
 a mode selection or voice enrollment.
 
-Choose Voice Pop to request speech permission. The 30-second clock starts only when
+Choose Voice Pop to request speech permission. The initial 50-second clock starts only when
 the microphone is listening. A narrow peach/pink and blue/violet glow follows the
 screen edges, meets at right-angle corners and diffuses softly inward.
-Illustrated word capsules fly up in gentle arcs. Say the English name
+Illustrated word capsules fly up in gentle arcs, with occasional volleys of two
+or three words. Smaller collision boxes give the capsules more room to travel
+together. Say the English name
 of a visible object to pop it with a slash, shards, and a shockwave. Words always
 appear with their matching pictures and follow the age level chosen in More.
 The HUD shows recognized speech as it changes, including interim speech and words
@@ -223,8 +225,10 @@ still need a current target when received. No accuracy percentage is implied by
 these safeguards.
 
 Hits earn 10 points, plus 2 for each step of the current combo (up to 10 bonus
-points). Dropped objects end the combo; there is no losing screen. After 30
-seconds, the result view shows only **HITS**, **Play again**, and lists of popped
+points). The second hit in a streak adds 3 seconds to the clock; the third adds
+5 seconds. Dropped objects end the streak, so a later streak can earn these
+bonuses again. There is no losing screen. When the extended clock runs out,
+the result view shows only **HITS**, **Play again**, and lists of popped
 and missed words. The hit total counts up, settles with a brief scale pulse and
 sparkles, and keeps a gentle glow. Reduced motion shows the complete total
 immediately with a static glow. Score, unique-word and combo statistics remain

@@ -21,8 +21,10 @@ const VIOLET := Color("#a48aff")
 const WHITE := Color("#f5f7ff")
 const SOFT := Color("#a8b9dc")
 const LAUNCH_SOUND_WINDOW: float = 0.2
-const TARGET_COLLISION_SCALE: float = 0.65
+const TARGET_COLLISION_SCALE: float = 0.55
 const HUD_HIT_DURATION: float = 0.9
+const HUD_BONUS_DURATION: float = 1.3
+const HUD_BONUS_MERGE_WINDOW: float = 0.12
 const HIT_COLOR := Color("#9dffe0")
 const RESULT_HIT_DURATION: float = 1.25
 const NEON := [CYAN, PINK, VIOLET]
@@ -59,6 +61,12 @@ var _hud_hit_amount: int = 0
 var _hud_hit_words := PackedStringArray()
 var _hud_hit_pattern := RegEx.new()
 var _hud_transcript_hit: bool = false
+var _hud_bonus_age: float = HUD_BONUS_DURATION
+var _hud_bonus_serial: int = 0
+var _hud_bonus_amount: int = 0
+var _hud_bonus_awards: Array[int] = []
+var _time_bonus_label: Label
+var _time_bonus_anchor := Vector2.ZERO
 var _last_launch_uid: int = 0
 var _transcript: String = ""
 var _transcript_final: bool = false
@@ -115,8 +123,12 @@ func _build() -> void:
 	_hud_fx = Node2D.new()
 	_hud_fx.draw.connect(_draw_hud_feedback)
 	_hud.add_child(_hud_fx)
-	time_label = _label("30", 30)
+	time_label = _label(str(int(PopModel.DURATION)), 30)
 	time_label.name = "Time"
+	_time_bonus_label = _label("", 18, HIT_COLOR)
+	_time_bonus_label.name = "TimeBonus"
+	_time_bonus_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_time_bonus_label.hide()
 	hits_label = _label("0", 28)
 	hits_label.name = "Hits"
 	_hits_caption = _label("HITS", 10, SOFT)
@@ -129,7 +141,7 @@ func _build() -> void:
 	transcript_label.hide()
 	_live_caption = _label("", 10, CYAN)
 	_live_caption.name = "LiveStatus"
-	for item in [time_label, hits_label, _hits_caption, transcript_label, _live_caption]:
+	for item in [time_label, _time_bonus_label, hits_label, _hits_caption, transcript_label, _live_caption]:
 		_hud.add_child(item)
 	# Live cards pass in front of the field HUD, inside this panel's clip.
 	_target_canvas = Node2D.new()
@@ -157,7 +169,7 @@ func _build() -> void:
 	_gate_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_gate_copy = _label(_message, 17, WHITE)
 	_gate_copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_gate_note = _label("30 seconds. See it. Say it. Pop it!", 14, SOFT)
+	_gate_note = _label("%d seconds. See it. Say it. Pop it!" % int(PopModel.DURATION), 14, SOFT)
 	_gate_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	for item in [_gate_icon, _gate_title, _gate_copy, _gate_note]:
 		_gate_body.add_child(item)
@@ -208,6 +220,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_publish_key = ""
 	_last_hit_left = 0.0
 	_hud_hit_serial = 0
+	_hud_bonus_serial = 0
 	_last_launch_uid = 0
 	_clear_transcript()
 	_settle_result_feedback()
@@ -216,7 +229,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
 	_gate_title.text = "Ready to pop?"
 	_gate_copy.text = _message
-	_gate_note.text = "Your 30 seconds start when Pip can hear you."
+	_gate_note.text = "Your %d seconds start when Pip can hear you." % int(PopModel.DURATION)
 	retry_button.text = "Start listening"
 	retry_button.disabled = _words.is_empty()
 	_gate.show()
@@ -258,8 +271,8 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_hud.show()
 	else:
 		_listening_tick_usec = -1
-		_clear_transcript()
 		var transient: bool = enabled and _pending_message(message)
+		_clear_transcript(not (transient and game.phase in ["running", "paused"]))
 		_pending = transient
 		_pending_left = 10.0 if transient else 0.0
 		_reconnecting = transient and game.phase in ["running", "paused"]
@@ -271,7 +284,7 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 			game.pause()
 		_gate_title.text = "Opening microphone…" if transient else "Round paused" if game.phase == "paused" else "Ready to pop?"
 		_gate_copy.text = message if not message.is_empty() else "Allow microphone access to start."
-		_gate_note.text = "%d seconds left. Your progress is safe." % ceili(game.remaining) if game.phase == "paused" else "Your 30 seconds start when Pip can hear you."
+		_gate_note.text = "%d seconds left. Your progress is safe." % ceili(game.remaining) if game.phase == "paused" else "Your %d seconds start when Pip can hear you." % int(PopModel.DURATION)
 		retry_button.text = "Waiting…" if transient else "Retry listening" if game.phase == "paused" or not message.is_empty() else "Start listening"
 		retry_button.disabled = _words.is_empty() or transient
 		_gate.visible = not _reconnecting
@@ -300,11 +313,11 @@ func show_transcript(text: String, is_final: bool) -> void:
 	_publish(true)
 
 
-func _clear_transcript() -> void:
+func _clear_transcript(clear_bonus: bool = true) -> void:
 	_transcript = ""
 	_transcript_final = false
 	game.clear_recognition_feedback()
-	_clear_hud_feedback()
+	_clear_hud_feedback(clear_bonus)
 	if transcript_label != null:
 		transcript_label.text = ""
 		transcript_label.hide()
@@ -334,7 +347,11 @@ func receive_transcript(text: String) -> void:
 func _present_hits(struck: Array) -> void:
 	if struck.is_empty() and not game.recognition_feedback.is_empty():
 		_last_hit_left = 0.0
+	var time_awards: Array[int] = []
 	for target in struck:
+		var time_bonus: int = int(target.get("time_bonus", 0))
+		if time_bonus > 0:
+			time_awards.append(time_bonus)
 		var visual: Dictionary = {}
 		for item in _draw_targets:
 			if int(item.uid) == int(target.uid):
@@ -346,6 +363,8 @@ func _present_hits(struck: Array) -> void:
 				int(target.get("combo", 1))))
 		_last_hit_left = 1.15
 		hit.emit(target.word)
+	if not time_awards.is_empty():
+		_present_time_bonus(time_awards)
 	if not struck.is_empty():
 		_hud_hit_age = 0.0
 		_hud_hit_serial += 1
@@ -365,6 +384,19 @@ func _present_hits(struck: Array) -> void:
 	_publish(true)
 	_slice_canvas.queue_redraw()
 	queue_redraw()
+
+
+func _present_time_bonus(awards: Array[int]) -> void:
+	# Browser lexical callbacks from one utterance can arrive separately in a frame.
+	# Combine that burst, while a later target earns its own clear reward message.
+	if _hud_bonus_age >= HUD_BONUS_MERGE_WINDOW:
+		_hud_bonus_amount = 0
+		_hud_bonus_awards.clear()
+	for amount in awards:
+		_hud_bonus_amount += amount
+		_hud_bonus_awards.append(amount)
+	_hud_bonus_age = 0.0
+	_hud_bonus_serial += 1
 
 
 func pause() -> void:
@@ -456,7 +488,8 @@ func snapshot() -> Dictionary:
 	for target in _draw_targets:
 		var rect: Rect2 = _global_target_rect(target)
 		targets.append({"uid": target.uid, "text": str(target.word.get("text", "")), "forms": target.get("forms", []),
-			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y})
+			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
+			"age": target.age, "spawned_at": target.spawned_at})
 	var actions: Array[Dictionary] = []
 	var candidates: Array[Control] = controls()
 	if _gate != null and _gate.visible and retry_button.disabled:
@@ -478,6 +511,7 @@ func snapshot() -> Dictionary:
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
 	return {"phase": "idle" if _stopped else str(game.phase), "remaining": float(game.remaining), "hits": int(game.hits),
+		"base_duration": PopModel.DURATION, "bonus_time": float(game.bonus_time), "combo": int(game.combo),
 		"hud": _hud_snapshot(),
 		"vocabulary": game.vocabulary(),
 		"recognition_feedback": game.recognition_feedback, "recognition_message": game.recognition_message,
@@ -492,7 +526,7 @@ func snapshot() -> Dictionary:
 
 func _hud_snapshot() -> Dictionary:
 	var result: Dictionary = {}
-	for entry in [["time", time_label], ["hits", hits_label], ["transcript", transcript_label], ["status", _live_caption]]:
+	for entry in [["time", time_label], ["time_bonus", _time_bonus_label], ["hits", hits_label], ["transcript", transcript_label], ["status", _live_caption]]:
 		var label: Label = entry[1]
 		# Describe stable layout bounds, independent of the counter's brief pulse.
 		var rect: Rect2 = _hud.get_global_transform() * Rect2(label.position, label.size)
@@ -500,6 +534,8 @@ func _hud_snapshot() -> Dictionary:
 			"text": label.text}
 	result.hit_effect = {"serial": _hud_hit_serial, "active": _hud_hit_age < HUD_HIT_DURATION and _hud.visible,
 		"amount": _hud_hit_amount, "words": Array(_hud_hit_words)}
+	result.bonus_effect = {"serial": _hud_bonus_serial, "active": _hud_bonus_age < HUD_BONUS_DURATION and _hud.visible,
+		"amount": _hud_bonus_amount, "awards": _hud_bonus_awards.duplicate(), "reduced_motion": reduced_motion}
 	result.targets_above_hud = _target_canvas.get_index() > _hud.get_index()
 	return result
 
@@ -587,15 +623,21 @@ func _advance_game(elapsed_seconds: float) -> void:
 func _emit_launches() -> void:
 	if not _listening or game.phase != "running" or not is_visible_in_tree():
 		return
+	var newest_uid: int = _last_launch_uid
+	var sound_uid: int = 0
 	for target in game.targets:
 		var uid: int = int(target.uid)
 		if uid <= _last_launch_uid:
 			continue
-		_last_launch_uid = uid
+		newest_uid = maxi(newest_uid, uid)
 		# A delayed simulation step can create older targets. Never catch up
 		# their launch sounds after they are already well into their flight.
 		if float(target.age) <= LAUNCH_SOUND_WINDOW:
-			launched.emit(uid)
+			sound_uid = maxi(sound_uid, uid)
+	_last_launch_uid = newest_uid
+	# A volley is one throw gesture. Do not stack two or three identical whooshes.
+	if sound_uid > 0:
+		launched.emit(sound_uid)
 
 
 func _visibility_changed() -> void:
@@ -632,11 +674,15 @@ func _update_hud() -> void:
 	_apply_hud_feedback()
 
 
-func _clear_hud_feedback() -> void:
+func _clear_hud_feedback(clear_bonus: bool = true) -> void:
 	_hud_hit_age = HUD_HIT_DURATION
 	_hud_hit_amount = 0
 	_hud_hit_words.clear()
 	_hud_transcript_hit = false
+	if clear_bonus:
+		_hud_bonus_age = HUD_BONUS_DURATION
+		_hud_bonus_amount = 0
+		_hud_bonus_awards.clear()
 	_apply_hud_feedback()
 
 
@@ -649,9 +695,11 @@ func _advance_hud_feedback(delta: float) -> void:
 	if delta <= 0.0 or not is_finite(delta):
 		return
 	var was_active: bool = _hud_hit_age < HUD_HIT_DURATION
+	var bonus_was_active: bool = _hud_bonus_age < HUD_BONUS_DURATION
 	_hud_hit_age = minf(HUD_HIT_DURATION, _hud_hit_age + delta)
+	_hud_bonus_age = minf(HUD_BONUS_DURATION, _hud_bonus_age + delta)
 	_apply_hud_feedback()
-	if was_active and _hud_hit_age >= HUD_HIT_DURATION:
+	if (was_active and _hud_hit_age >= HUD_HIT_DURATION) or (bonus_was_active and _hud_bonus_age >= HUD_BONUS_DURATION):
 		_update_hud()
 		_publish(true)
 
@@ -671,12 +719,25 @@ func _apply_hud_feedback() -> void:
 	transcript_label.add_theme_color_override("font_color", HIT_COLOR if highlight_words else WHITE)
 	transcript_label.add_theme_color_override("font_shadow_color", Color(HIT_COLOR, 0.55) if highlight_words else Color.TRANSPARENT)
 	transcript_label.add_theme_constant_override("shadow_outline_size", 4 if highlight_words else 0)
+	var bonus_active: bool = _hud_bonus_age < HUD_BONUS_DURATION
+	var bonus_pulse: float = sin(clampf(_hud_bonus_age / 0.4, 0.0, 1.0) * PI) * 0.16 if bonus_active and not reduced_motion else 0.0
+	time_label.pivot_offset = time_label.size * 0.5
+	time_label.scale = Vector2.ONE * (1.0 + bonus_pulse)
+	time_label.add_theme_color_override("font_color", HIT_COLOR if bonus_active else PINK if game.remaining <= 5.0 else WHITE)
+	_time_bonus_label.visible = bonus_active
+	_time_bonus_label.text = "+%ds" % _hud_bonus_amount if bonus_active else ""
+	var bonus_progress: float = clampf(_hud_bonus_age / HUD_BONUS_DURATION, 0.0, 1.0)
+	_time_bonus_label.position = _time_bonus_anchor - Vector2(0, 4.0 * sin(bonus_progress * PI * 0.5) / Style.ui_scale(self)) if bonus_active and not reduced_motion else _time_bonus_anchor
+	_time_bonus_label.modulate.a = 1.0 if reduced_motion else 1.0 - smoothstep(0.72, 1.0, bonus_progress)
 	if _hud_fx != null:
 		_hud_fx.queue_redraw()
 
 
 func _draw_hud_feedback() -> void:
-	if not _hud.visible or _hud_hit_age >= HUD_HIT_DURATION:
+	if not _hud.visible:
+		return
+	_draw_time_bonus()
+	if _hud_hit_age >= HUD_HIT_DURATION:
 		return
 	var scale: float = Style.ui_scale(self)
 	var progress: float = _hud_hit_age / HUD_HIT_DURATION
@@ -713,6 +774,27 @@ func _draw_hud_feedback() -> void:
 		_hud_fx.draw_line(point - Vector2(0, reach), point + Vector2(0, reach), Color(WHITE, alpha), 1.5 / scale, true)
 
 
+func _draw_time_bonus() -> void:
+	if _hud_bonus_age >= HUD_BONUS_DURATION:
+		return
+	var scale: float = Style.ui_scale(self)
+	var progress: float = _hud_bonus_age / HUD_BONUS_DURATION
+	var alpha: float = _time_bonus_label.modulate.a
+	var rect := Rect2(_time_bonus_label.position, _time_bonus_label.size)
+	_hud_fx.draw_style_box(Style.box(Color("#123e41", alpha * 0.96), Color(HIT_COLOR, alpha * 0.8), ceili(9.0 / scale), 1), rect)
+	var timer := Rect2(time_label.position, time_label.size)
+	_hud_fx.draw_style_box(Style.box(Color(HIT_COLOR, 0.06 * alpha), Color(HIT_COLOR, 0.52 * alpha), ceili(11.0 / scale), 1), timer)
+	if reduced_motion:
+		return
+	var sweep: float = smoothstep(0.0, 0.35, progress)
+	var center: Vector2 = timer.get_center()
+	for direction in [-1.0, 1.0]:
+		var point: Vector2 = center + Vector2(direction * (timer.size.x * 0.3 + 5.0 * sweep / scale), -4.0 / scale)
+		var reach: float = (1.5 + 1.5 * sin(progress * PI)) / scale
+		_hud_fx.draw_line(point - Vector2(reach, 0), point + Vector2(reach, 0), Color(HIT_COLOR, alpha), 1.5 / scale, true)
+		_hud_fx.draw_line(point - Vector2(0, reach), point + Vector2(0, reach), Color(HIT_COLOR, alpha), 1.5 / scale, true)
+
+
 func _layout() -> void:
 	if _hud == null:
 		return
@@ -725,6 +807,8 @@ func _layout() -> void:
 	_hud.size = size
 	var side: float = minf(72.0 / scale, width * 0.22)
 	_place_label(time_label, Rect2(edge, 13 / scale, side, 46 / scale), 30)
+	_place_label(_time_bonus_label, Rect2(edge, 65 / scale, side, 24 / scale), 18)
+	_time_bonus_anchor = _time_bonus_label.position
 	_place_label(hits_label, Rect2(size.x - edge - side, 12 / scale, side, 35 / scale), 28)
 	_place_label(_hits_caption, Rect2(size.x - edge - side, 45 / scale, side, 14 / scale), 9)
 	var speech_x: float = edge + side + 8.0 / scale
@@ -807,6 +891,11 @@ func _refresh_targets() -> void:
 		var bottom: float = _arena.end.y - capsule_height * 0.5 - 4.0 / scale
 		var highest: float = _arena.position.y + capsule_height * 0.5 + 5.0 / scale
 		var apex: float = highest + maxf(0.0, bottom - highest) * float(target.peak) * 0.08
+		if bool(target.get("volley", false)) and lane == 1:
+			# A lower center throw fans simultaneous cards apart on portrait fields.
+			# Keep the offset on the target so hitting its neighbors cannot change its flight.
+			var portrait_fan: float = clampf((1.25 - _arena.size.x / _arena.size.y) / 0.35, 0.0, 1.0)
+			apex = minf(bottom, apex + capsule_height * 1.6 * portrait_fan)
 		var y: float = bottom - (bottom - apex) * 4.0 * progress * (1.0 - progress)
 		var tilt: float = float(target.spin) * sin(progress * PI)
 		if reduced_motion:
@@ -825,7 +914,8 @@ func _refresh_targets() -> void:
 				if age < 0.14 and center.distance_to(burst.center) < 150.0 / scale:
 					center += Vector2(sin(age * 100.0), cos(age * 85.0)) * (1.0 - age / 0.14) * 3.0 / scale
 		_draw_targets.append({"uid": int(target.uid), "word": target.word, "forms": target.get("forms", []), "center": center,
-			"size": capsule_size, "rotation": tilt, "progress": progress, "lane": lane})
+			"size": capsule_size, "rotation": tilt, "progress": progress, "lane": lane,
+			"age": float(target.age), "spawned_at": float(target.get("spawned_at", game.elapsed - float(target.age)))})
 	# Inset collision boxes let the card edges overlap before staggering their centers.
 	for pass_index in range(3):
 		for a in range(_draw_targets.size()):

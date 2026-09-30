@@ -174,6 +174,7 @@ async function open(page, options) {
 async function state(page) {
   return page.locator('#pop-status').evaluate(element => ({
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining),
+    combo: Number(element.dataset.combo), bonusTime: Number(element.dataset.bonusTime),
     hits: Number(element.dataset.hits), score: Number(element.dataset.score),
     bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
     recognitionFeedback: element.dataset.recognitionFeedback || '', recognitionMessage: element.dataset.recognitionMessage || '',
@@ -381,7 +382,7 @@ async function popOne(page, { interim = false } = {}) {
 }
 
 function expectCompactHud(hud, bounds) {
-  expect(Object.keys(hud).sort()).toEqual(['hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'transcript']);
+  expect(Object.keys(hud).sort()).toEqual(['bonus_effect', 'hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'time_bonus', 'transcript']);
   const content = contentBounds(bounds);
   for (const key of ['time', 'hits', 'transcript', 'status']) {
     const rect = hud[key];
@@ -393,7 +394,7 @@ function expectCompactHud(hud, bounds) {
     expect(rect.x + rect.width).toBeLessThanOrEqual(content.x + content.width + 1);
     expect(rect.y).toBeGreaterThanOrEqual(content.top - 1);
   }
-  expect(hud.time.text).toMatch(/^\d{2}$/);
+  expect(hud.time.text).toMatch(/^\d{2,}$/);
   expect(hud.hits.text).toMatch(/^\d+$/);
   expect(hud.time.x).toBeLessThan(hud.transcript.x);
   expect(hud.transcript.x).toBeLessThan(hud.hits.x);
@@ -549,12 +550,112 @@ test('the live HUD shows and revises the whole interim sentence while scoring on
   expect(errors).toEqual([]);
 });
 
+test('50-second Voice Pop awards combo time once and keeps reduced-motion feedback readable', async ({ page }, info) => {
+  const errors = await open(page, { automatic: false });
+  expect((await state(page)).remaining).toBe(50);
+  await page.evaluate(() => window.__popSpeech.instances.at(-1).grant());
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await observeHudFeedback(page);
+  await popOne(page);
+  expect((await state(page)).bonusTime).toBe(0);
+
+  for (const [combo, bonus, total] of [[2, 3, 3], [3, 5, 8]]) {
+    if (combo === 3) await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
+    const before = await state(page);
+    const word = await popOne(page, { interim: true });
+    const awarded = await state(page);
+    expect(awarded.combo).toBe(combo);
+    expect(awarded.bonusTime).toBe(total);
+    expect(awarded.remaining).toBeGreaterThanOrEqual(before.remaining + bonus - 1);
+    expect(awarded.hud.bonus_effect).toMatchObject({ active: true, amount: bonus, reduced_motion: combo === 3 });
+    expect(awarded.hud.time_bonus.text).toBe(`+${bonus}s`);
+    expectCompactHud(awarded.hud, await metrics(page));
+    const label = awarded.hud.time_bonus;
+    expect(label.x).toBeGreaterThanOrEqual(awarded.hud.time.x - 1);
+    expect(label.y).toBeGreaterThanOrEqual(awarded.hud.time.y);
+    expect(label.x + label.width).toBeLessThanOrEqual(awarded.hud.transcript.x + 1);
+    await page.screenshot({ path: info.outputPath(`combo-${combo}-time-bonus.png`) });
+    await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), word);
+    await rendered(page);
+    const finalized = await state(page);
+    expect(finalized.hits).toBe(awarded.hits);
+    expect(finalized.bonusTime).toBe(total);
+    expect(finalized.hud.bonus_effect.serial).toBe(awarded.hud.bonus_effect.serial);
+  }
+  await popOne(page);
+  expect((await state(page)).combo).toBe(4);
+  expect((await state(page)).bonusTime).toBe(8);
+  await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('network'));
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  const paused = await state(page);
+  await page.waitForTimeout(350);
+  expect((await state(page)).remaining).toBe(paused.remaining);
+  expect(paused.hud.bonus_effect.active).toBe(false);
+  await chooseMode(page, 'match');
+  await chooseMode(page, 'pop');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
+  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).bonusTime).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('Voice Pop occasionally throws several words together with one launch cue', async ({ page, browserName }, info) => {
+  await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
+  const errors = await open(page);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const available = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(available).toBe(true);
+  await page.evaluate(() => {
+    const status = document.querySelector('#pop-status');
+    window.__popVolley = null;
+    const read = () => {
+      if (window.__popVolley || status.dataset.phase !== 'running') return;
+      const targets = JSON.parse(status.dataset.targets || '[]');
+      const groups = new Map();
+      for (const target of targets) {
+        const key = Number(target.spawned_at).toFixed(5);
+        groups.set(key, [...(groups.get(key) || []), target]);
+      }
+      const wave = [...groups.values()].find(group => group.length >= 2);
+      // Timestamp the actual DOM publication, without a Playwright round trip.
+      if (wave) window.__popVolley = { wave, at: performance.now(), targetCount: targets.length };
+    };
+    const observer = new MutationObserver(read);
+    observer.observe(status, { attributes: true, attributeFilter: ['data-targets'] });
+    read();
+  });
+  await expect.poll(() => page.evaluate(() => Boolean(window.__popVolley)),
+    { timeout: 24000, intervals: [40, 80] }).toBe(true);
+  const { wave, at: waveObservedAt, targetCount } = await page.evaluate(() => window.__popVolley);
+  expect(targetCount).toBeLessThanOrEqual(3);
+  expect(new Set(wave.map(target => target.text)).size).toBe(wave.length);
+  expect(wave[0].spawned_at).toBeGreaterThanOrEqual(8);
+  if (available) {
+    try {
+      await expect.poll(async () => {
+        const sounds = await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
+        return sounds.filter(isLaunch).filter(sound => sound.at >= waveObservedAt - 300 && sound.at <= waveObservedAt + 250).length;
+      }, { message: 'This volley plays one whoosh, without stacking identical sources or reusing an earlier launch' }).toBe(1);
+    } finally {
+      const sounds = await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
+      await info.attach('volley-audio.json', { body: JSON.stringify({ wave, waveObservedAt, sounds }), contentType: 'application/json' });
+    }
+  }
+  // Let the new wave rise fully into the clipped playfield before the capture.
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: info.outputPath('simultaneous-word-volley.png') });
+  await info.attach('word-volley.json', { body: JSON.stringify(wave), contentType: 'application/json' });
+  await chooseMode(page, 'match');
+  expect(errors).toEqual([]);
+});
+
 test('Voice Pop requests permission on entry, waits, recovers from denial, and releases on mode exit', async ({ page, browserName }, info) => {
   const errors = await open(page, { automatic: false });
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
   await expectGestureStart(page, browserName);
   await page.waitForTimeout(1300);
-  expect((await state(page)).remaining).toBe(30);
+  expect((await state(page)).remaining).toBe(50);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('not-allowed'));
@@ -683,7 +784,7 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
 test('leaving while permission is pending rejects a late grant and every callback from that recognizer', async ({ page }) => {
   const errors = await open(page, { automatic: false });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
-  expect((await state(page)).remaining).toBe(30);
+  expect((await state(page)).remaining).toBe(50);
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   const otherModeStatus = await page.locator('#game-status').textContent();
@@ -860,7 +961,7 @@ bundledAudioTest('three words in one utterance keep all slice tails and backgrou
 });
 
 test('a spoken interim word pops once and finishes with animated HITS and simple word results', async ({ page, browserName }, info) => {
-  // Includes a real 30-second round, result animation, word replay and touch swipes.
+  // Includes a real 50-second round plus earned time, result animation and word replay.
   // Keep each response deadline strict while allowing the complete workflow.
   test.setTimeout(150000);
   await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
@@ -912,7 +1013,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   }
   const after = await state(page);
   expect(after.score).toBeGreaterThan(0);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 60000 });
   if (audioAvailable) {
     const all = await runningSounds(), sadCalls = all.filter(sound => isPipReaction(sound, 'sad'));
     const launches = all.filter(isLaunch);
@@ -929,7 +1030,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   }
   expect(await page.evaluate(() => window.__popSpeech.spoken), 'Listening never triggers system speech prompts').toEqual([]);
   await info.attach('hit-audio-durations.json', { body: JSON.stringify({ expectedSources: expectedSlices, playbacks: await runningSounds() }), contentType: 'application/json' });
-  expect(Date.now() - start).toBeGreaterThanOrEqual(29000);
+  expect(Date.now() - start).toBeGreaterThanOrEqual(49000);
   expect((await state(page)).remaining).toBe(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   const round = await state(page);
@@ -997,7 +1098,7 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   // Keep recognition online so the real round clock can finish naturally.
   expect(await page.evaluate(() => navigator.onLine)).toBe(true);
   expect(audioRequests, 'No separate audio files are fetched during startup').toEqual([]);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
   await expect.poll(async () => (await state(page)).resultsHits).toEqual({ text: '0', total: 0, active: false });
   const zero = await state(page);
   expect(zero.hits).toBe(0);
@@ -1046,7 +1147,7 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
   const errors = await open(page);
   await observeResultHits(page);
   const word = await popOne(page);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 35000 });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
   const results = await state(page);
   expectSimpleResults(results);
   expect(results.hits).toBe(1);
@@ -1170,7 +1271,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
     await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
     const firstTarget = (await state(page)).targets[0];
     // Follow the first throw into the middle of its flight; new throws may be crossing the arena edge.
-    await expect.poll(async () => (await state(page)).remaining).toBeLessThanOrEqual(28);
+    await expect.poll(async () => (await state(page)).remaining).toBeLessThanOrEqual(48);
     const midFlight = (await state(page)).targets.find(target => target.uid === firstTarget.uid);
     expect(midFlight, 'The first visible throw is still present during its flight').toBeTruthy();
     expectTargetInsidePlayfield(midFlight, await metrics(page));
@@ -1208,7 +1309,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
 test('unsupported speech gives an actionable explanation without starting a timer', async ({ page }, info) => {
   const errors = await open(page, { available: false });
   await expect(page.locator('#pop-status')).toContainText(/unavailable|supported browser|speech recognition/i);
-  expect((await state(page)).remaining).toBe(30);
+  expect((await state(page)).remaining).toBe(50);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.screenshot({ path: info.outputPath('unsupported.png') });
   await action(page, /back|match|exit/i);

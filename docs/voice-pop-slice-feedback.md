@@ -21,10 +21,12 @@ mixed audio track: it does not supply transparent effects or isolated stems.
    playback, duplicate recognition, reduced motion, and small-screen layout.
    Commit, push, and deploy the same validated Web export.
 
-Recognition, scoring, vocabulary, throw frequency, and the 30-second round are
-unchanged. A spoken hit still awards immediately. This change improves hit
-feedback; it does not improve speech-recognition accuracy or introduce gesture
-controls.
+The original slice-feedback change preserved recognition, scoring, vocabulary
+and throw timing. Voice Pop now starts with 50 seconds, adds time at the second
+and third streak hits, and occasionally throws two or three words together;
+see the current gameplay rules in the README. Spoken hits still award
+immediately. Slice feedback does not change recognition accuracy or introduce
+gesture controls.
 
 ## Presentation
 

@@ -389,7 +389,7 @@ func _build_controls() -> void:
 		button.clip_text = true
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		_set_accessibility_name(button, "Voice Pop: say the flying words in 30 seconds. Requests microphone access." if id == "pop" else str(MODES[id]) + ": practise these same five words")
+		_set_accessibility_name(button, "Voice Pop: say the flying words. Start with %d seconds and earn streak time bonuses. Requests microphone access." % ceili(VoicePop.PopModel.DURATION) if id == "pop" else str(MODES[id]) + ": practise these same five words")
 		button.pressed.connect(choose_mode.bind(id))
 		_mode_row.add_child(button)
 		_mode_buttons.append(button)
@@ -1378,7 +1378,7 @@ func _refresh() -> void:
 	if playing and _mode_id == "memory":
 		_message.text = _memory_status()
 	elif playing and _mode_id == "pop":
-		_message.text = "Voice Pop. Say the flying words. 30 seconds."
+		_message.text = "Voice Pop. Say the flying words. Start with %d seconds." % ceili(VoicePop.PopModel.DURATION)
 	var won: bool = model.phase == "won"
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
 		and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after)

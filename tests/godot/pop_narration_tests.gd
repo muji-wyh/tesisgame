@@ -180,7 +180,7 @@ func _result_lifecycle() -> void:
 	check(not view.game.targets.is_empty(), "A listening round launches words before the result integration check")
 	if not view.game.targets.is_empty():
 		view.receive_transcript(str(view.game.targets[0].word.text))
-	view._advance_game(31.0)
+	view._advance_game(view.game.remaining)
 	await process_frame
 	check(view.game.phase == "finished" and view.game.hits == 1 and view._results.visible,
 		"The completed round reaches its result with the actual hit count")
@@ -235,7 +235,7 @@ func _result_lifecycle() -> void:
 	first_review.pressed.emit()
 	check(not app.audio.voice.playing, "A stale result word cannot play over the next round's listening gate")
 	app._on_voice_state([true, true, "Listening."])
-	view._advance_game(31.0)
+	view._advance_game(view.game.remaining)
 	check(view.game.phase == "finished" and not app.audio.narration.playing
 		and not narration_states.has("loading") and not narration_states.has("speaking"),
 		"The next completed round also remains free of automatic narration")
@@ -251,7 +251,7 @@ func _result_lifecycle() -> void:
 		app.choose_mode("pop")
 		view.set_process(false)
 		app._on_voice_state([true, true, "Listening."])
-		view._advance_game(31.0)
+		view._advance_game(view.game.remaining)
 		check(view.game.phase == "finished" and not app.audio.narration.playing,
 			"Returning from " + destination + " can complete another round without automatic speech")
 	app.queue_free()

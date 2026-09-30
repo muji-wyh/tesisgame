@@ -235,7 +235,7 @@ func check_hud_feedback(view) -> void:
 			"hide": view.hide()
 			"stop": view.stop()
 			"configure": view.configure(words)
-			"finish": view._advance_game(31.0)
+			"finish": view._advance_game(view.game.remaining)
 		check_hud_cleared(view, transition.capitalize())
 		view.show()
 		view.set_process(false)
