@@ -611,8 +611,14 @@ test('50-second Voice Pop awards combo time once and keeps reduced-motion feedba
     expect(finalized.bonusTime).toBe(total);
     expect(finalized.hud.bonus_effect.serial).toBe(awarded.hud.bonus_effect.serial);
     if (combo === 3) {
-      expect(finalized.hud.time_bonus, 'Reduced motion keeps the large reward label in a stable position').toEqual(awarded.hud.time_bonus);
-      expect(finalized.hud.time_bonus_caption, 'Reduced motion keeps its caption steady too').toEqual(awarded.hud.time_bonus_caption);
+      // Screenshot capture can outlast this short effect on a remote build.
+      // Compare geometry independently of text that correctly clears on expiry.
+      for (const key of ['time_bonus', 'time_bonus_caption']) {
+        const { text: beforeText, ...beforeRect } = awarded.hud[key];
+        const { text: afterText, ...afterRect } = finalized.hud[key];
+        expect(afterRect, 'Reduced motion keeps the reward and caption in a stable position').toEqual(beforeRect);
+        expect(afterText).toBe(finalized.hud.bonus_effect.active ? beforeText : '');
+      }
     }
   }
   await popOne(page);
