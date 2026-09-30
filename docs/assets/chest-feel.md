@@ -168,7 +168,7 @@ pack. `chest_sound_bank.gd` supplies small 11,025 Hz deterministic local
 replacements if a resource is unavailable. Playback requires no later download.
 
 One loop player and three rotating one-shot players bound overlap. They are
-independent of narration, card effects and music. Muting, backgrounding, changing
+independent of word playback, card effects and music. Muting, backgrounding, changing
 worlds and leaving the result stop the chest performance. A resource failure
 cannot delay input, animation or saving.
 

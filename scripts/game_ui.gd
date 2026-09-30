@@ -1423,7 +1423,6 @@ func _start_pop_listening() -> void:
 
 
 func _stop_pop_listening() -> bool:
-	audio.stop_narration()
 	var was_active: bool = _pop_speech_active
 	_pop_speech_active = false
 	if _host != null:
@@ -3391,8 +3390,7 @@ func _update_duck() -> void:
 		or (_mode_id == "pop" and active_phase in ["ready", "paused"])
 	var microphone_busy: bool = _pop_speech_active or (_mode_id == "pop"
 		and (_pop._listening or _pop._pending or _pop._reconnecting))
-	var voice_busy: bool = audio.voice.playing or audio.narration.playing \
-		or audio.narration_state in ["loading", "speaking"]
+	var voice_busy: bool = audio.voice.playing
 	duck.set_proactive_allowed(visible_here and quiet_phase and not _voice_mode
 		and not microphone_busy and not voice_busy and not duck.speaking
 		and not _pointer_focus_active and _proactive_touches.is_empty()
@@ -3443,8 +3441,6 @@ func _play_duck() -> void:
 	_duck_trick_index += 1
 	if _voice_mode or _pop_speech_active:
 		return
-	if _mode_id == "pop":
-		audio.stop_narration()
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.play_pip()
 	_announce_status("Pip says hello! " + caption)

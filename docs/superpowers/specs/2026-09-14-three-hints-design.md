@@ -1,5 +1,7 @@
 # Three Hints Per Round Design
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 ## Goal
 
 Increase Match mode from one hint to three successful hints per round without changing scoring, board rules, or the shared touch, keyboard, and Xbox input path.

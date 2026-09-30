@@ -1,7 +1,9 @@
-# Voice Pop fruit-slice variation
+# Voice Pop fruit-slice fallback provenance
 
 The eight finished mixes in the user's `FruitSlice_Arcade_05/wav` directory
-replace the single Voice Pop hit effect. Apple, orange, watermelon, pineapple,
+provide the fallback pool when the preferred
+[reference hit bank](voice-pop-reference-audio.md) is absent.
+Apple, orange, watermelon, pineapple,
 banana, strawberry, peach and coconut all participate in the same random pool;
 the sound does not depend on which vocabulary word was hit. Each audible hit
 draws uniformly from every available sound except the immediately preceding one.
@@ -15,8 +17,9 @@ Godot retains stereo 48 kHz playback, with uncompressed PCM imports and no
 normalization, trimming, looping, or pitch variation. Original PCM24 source WAVs
 remain unchanged; Godot's PCM stream uses its supported 16-bit representation.
 
-The existing effect channel and volume are retained. Fast hits restart the
-channel, so effects cannot pile up at excessive volume. Muting, backgrounding,
+The current runtime uses the same three bounded hit channels and gain for
+every selected hit bank. A fourth overlapping hit replaces the oldest channel.
+Muting, backgrounding,
 leaving Voice Pop and recognition deduplication retain their existing behavior.
 The eight small effects are bundled in the initial game pack to avoid a
 first-hit network delay. Web export rejects a partial or invalid local set.

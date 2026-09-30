@@ -1,5 +1,7 @@
 # Pip's Memory Garden
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 The next playability improvement is a fifth mode, Memory. Existing Match shows all eight cards; Sky and Listen are two-choice recognition. A stable concealed board lets the player decide what to inspect and use remembered positions. All five words in the current lesson participate.
 
 ## Player experience

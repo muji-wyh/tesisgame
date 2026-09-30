@@ -459,12 +459,12 @@ func _test_expiry_and_results() -> void:
 	game.hit_transcript("cat")
 	game.advance(0.7)
 	game.hit_transcript("cat")
-	check(game.hits == 2 and game.hit_words.size() == 1 and game.hit_words[0].count == 2, "Pip's summary distinguishes total hits from unique learned words")
+	check(game.hits == 2 and game.hit_words.size() == 1 and game.hit_words[0].count == 2, "The review lists a repeated word once while preserving its total hits")
 	game.advance(Model.DURATION + 8.0)
 	var result: Dictionary = game.summary()
-	check(result.unique_words == 1 and result.hits == 2 and result.best_combo == 2 and result.score == 22, "The completed summary reports actual achievements")
+	check(result.hit_words.size() == 1 and result.hits == 2 and result.best_combo == 2 and result.score == 22, "The completed summary preserves the real hits and review words")
 	check(not result.has("accuracy") and not result.has("failed"), "Silence is not represented as fabricated speech accuracy or failure")
-	check(result.hit_words[0].text == "cat" and result.missed_words[0].text == "cat", "Pip receives actual illustrated words for celebration and practice")
+	check(result.hit_words[0].text == "cat" and result.missed_words[0].text == "cat", "The review receives the actual illustrated words for practice")
 	var missed_count: int = 0
 	for entry in result.missed_words:
 		missed_count += entry.count

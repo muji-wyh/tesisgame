@@ -1,5 +1,7 @@
 # Single-player system speech restoration — 2026-09-26
 
+> Historical transition record. Later changes added local player attribution and leaderboards, replaced the spoken report, and introduced an optional browser-managed speech experiment. See the [current index](../README.md).
+
 ## Behavior
 
 - Voice Pop starts directly with the browser's `SpeechRecognition` or

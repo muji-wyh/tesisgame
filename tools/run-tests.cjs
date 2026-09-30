@@ -41,8 +41,8 @@ const groups = {
     ]
   },
   'voice-pop': {
-    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_narration_tests'],
-    node: ['voice-host', 'local-speech-host', 'pop-voice-assets', 'voice-pop-reference-assets']
+    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_result_audio_tests'],
+    node: ['voice-host', 'local-speech-host', 'voice-pop-reference-assets']
   },
   'layout-release': { godot: ['layout_release_tests'] },
   themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },

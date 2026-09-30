@@ -1,32 +1,28 @@
 # Voice Pop slice feedback
 
-## Plan and scope
+## Implementation and scope
 
-Reference: the user-provided `fruit_ninja.mp4` (56.8 seconds). Review the blade
-and fruit impacts frame by frame, then reproduce the readable movement in the
-existing Godot 2D renderer. The recording contains a composited picture and one
+Reference: the user-provided `fruit_ninja.mp4` (56.8 seconds). The blade and fruit
+impacts informed the movement implemented in the existing Godot 2D renderer.
+The recording contains a composited picture and one
 mixed audio track: it does not supply transparent effects or isolated stems.
 
-1. Extract short blade and cut windows, filter and fade their edges, and produce
-   three bounded, premixed hit variants. Record source and output hashes and
-   retain the existing private-audio import convention.
-2. Replace the old ring and diagonal line with a tapered curved blade, actual
-   illustration fragments, colored droplets, cut edges, and weighted descent.
-   Keep the word readable on the lower fragment.
-3. Hold the struck target for 44 milliseconds before separating its fragments.
+1. Three premixed hit variants use short blade and cut excerpts with filtering
+   and fades. Source and output hashes retain the private-audio import provenance.
+2. A tapered curved blade, actual illustration fragments, colored droplets,
+   cut edges, and weighted descent keep the word readable on the lower fragment.
+3. The struck target holds for 44 milliseconds before its fragments separate.
    The rest of the game, the speech recognizer, and the round clock keep running.
-4. Use three fixed, preloaded hit channels. Preserve their short tails during a
-   multiword hit, bound overlap, and stop every channel on mode exit or background.
-5. Verify the native geometry and lifecycle, the exported assets, browser
-   playback, duplicate recognition, reduced motion, and small-screen layout.
-   Commit, push, and deploy the same validated Web export.
+4. Three fixed, preloaded hit channels preserve short tails during a multiword
+   hit, bound overlap, and stop on mode exit or background.
 
 The original slice-feedback change preserved recognition, scoring, vocabulary
 and throw timing. Voice Pop now starts with 50 seconds, adds time at the second
 and third streak hits, and occasionally throws two or three words together;
-see the current gameplay rules in the README. Spoken hits still award
-immediately. Slice feedback does not change recognition accuracy or introduce
-gesture controls.
+see the current gameplay rules in the README. Slice feedback starts when a hit
+is accepted. The [speech matcher](voice-matching.md) separately applies the
+interim stability window and candidate deduplication. Slice feedback does not
+change recognition accuracy or introduce gesture controls.
 
 ## Presentation
 
@@ -37,7 +33,8 @@ opposing rotation, gravity, and a short fade make the result readable.
 
 The blade lasts 140 milliseconds; fragments finish within 780 milliseconds.
 At most six effects remain active, and their geometry is clipped to the play
-arena so it cannot cover the listening transcript or HUD. Effect variation uses
+arena. High throws and their cuts can overlap the field HUD; time-bonus feedback
+stays in the foreground. Effect variation uses
 the throw ID rather than the gameplay random generator. Reduced motion uses a
 stationary cut mark and score, with no flying pieces or particles.
 Consecutive hits widen the outer glow and increase splash spread by up to 20%

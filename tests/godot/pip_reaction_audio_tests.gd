@@ -53,8 +53,8 @@ func _check_reaction_channel() -> void:
 		and audio.effect.stream == effect_stream and audio._playback_requests[audio.voice] == word_request
 		and audio._playback_requests[audio.effect] == effect_request,
 		"The reaction preserves the selected word and feedback sound on their existing channels")
-	check(not audio.music.playing and not audio.narration.playing,
-		"A reaction in microphone-friendly playback never starts music or spoken narration")
+	check(not audio.music.playing,
+		"A reaction in microphone-friendly playback never starts background music")
 	var happy_gain: float = audio.pip_reaction.volume_db
 	var players: Array[Node] = audio.get_children()
 	var reaction_player: AudioStreamPlayer = audio.pip_reaction
@@ -76,14 +76,7 @@ func _check_reaction_channel() -> void:
 	check(not audio.pip_reaction.playing and audio.pip_reaction.stream == null
 		and audio.voice.playing and audio.effect.playing,
 		"Stopping the reaction leaves ordinary card audio intact")
-	var narration_paths: Array[String] = ["res://assets/audio/voice/word-apple.wav"]
-	audio.narrate(narration_paths)
-	var narration_stream: AudioStream = audio.narration.stream
-	var narration_generation: int = audio._narration_generation
 	audio.play_pip_reaction(true)
-	check(audio.narration.playing and audio.narration.stream == narration_stream
-		and audio._narration_generation == narration_generation and audio.narration_state == "speaking",
-		"A reaction never cancels or rewinds an active report sentence")
 	check(audio.pip_reaction.stream.get_length() / audio.pip_reaction.pitch_scale < 0.5,
 		"The happy quack stays brief enough for continuous Voice Pop listening")
 	audio.play_pip_reaction(false)

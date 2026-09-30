@@ -1,5 +1,7 @@
 # Voice Pop recognition context and feedback — 2026-09-24
 
+> Historical evidence for the removed multiplayer/voice-profile prototype. Current [speech matching](../voice-matching.md) and [local players](../local-leaderboards.md) use a different architecture.
+
 ## Behavior
 
 - The round's full age-appropriate noun pool is passed to both recognition

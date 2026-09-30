@@ -1,5 +1,7 @@
 # Pip's interactive reward room
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 The room becomes a small playable space. Keep the existing earned toys,
 backgrounds, vocabulary labels, gift goals, stickers and saved choices.
 

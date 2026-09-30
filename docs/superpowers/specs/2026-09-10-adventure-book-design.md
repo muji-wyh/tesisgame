@@ -1,5 +1,7 @@
 # Pip's adventure book
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 The user authorized planning followed directly by implementation, commit, merge to main, push and deployment. Continue the existing Godot game and its original illustrated vocabulary.
 
 ## Experience

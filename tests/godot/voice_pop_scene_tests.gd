@@ -835,7 +835,7 @@ func _run() -> void:
 		await settle()
 		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at its earned deadline")
 		var result: Dictionary = view.game.summary()
-		check(result.hits == before + 1 and result.unique_words == 1 and result.best_combo >= 1,
+		check(result.hits == before + 1 and result.hit_words.size() == 1 and result.best_combo >= 1,
 			"The result preserves the real spoken hits")
 		check(Rect2(Vector2.ZERO, app.size).grow(1).encloses(view.get_global_rect()), "The result view fits at " + str(dimensions))
 		var snapshot: Dictionary = view.snapshot()
@@ -849,7 +849,7 @@ func _run() -> void:
 		check_result_actions(view, dimensions, "Completed round")
 		check_result_feedback(view, int(result.hits))
 		check_result_player(view, app.leaderboard_state.profiles[0], dimensions)
-		check(not app.audio.narration.playing and app.audio.narration_state == "idle",
+		check(not app.audio.voice.playing,
 			"Finishing Voice Pop does not request or play a removed Pip report")
 		var heard: Array[Dictionary] = []
 		var on_hear: Callable = func(item: Dictionary) -> void: heard.append(item)
@@ -925,7 +925,6 @@ func _run() -> void:
 		var long_result: Dictionary = empty_round.duplicate(true)
 		long_result.hits = count
 		long_result.best_combo = count
-		long_result.unique_words = 2
 		long_result.score = 200
 		long_result.hit_words = long_words.slice(0, 2).duplicate(true)
 		long_result.missed_words = long_words.slice(2, 3).duplicate(true)

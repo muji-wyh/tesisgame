@@ -14,6 +14,9 @@ Both identify the underlying recording as [WavJunction.com, Freesound 456770](ht
 
 Loading-page greetings are embedded in the HTML so they work before Godot loads.
 The same sounds are bundled in the game for header, reward and Home interactions.
-Consecutive greetings use different clips; fast taps replace the previous clip.
-Pip's Voice Pop high-five begins with a random greeting, followed by the existing
-spoken report. Ordinary word pronunciation and automatic idle dances are unchanged.
+Consecutive greetings use different clips. Another manual tap is accepted only
+after the current action and call finish; taps during that interval are ignored
+without queuing a later reaction. Voice Pop hits retain Pip's celebration motion
+but omit his happy call; missed targets retain the sad call. The old result
+high-five and spoken report are retired. Ordinary word pronunciation and
+automatic idle dances use their existing audio behavior.

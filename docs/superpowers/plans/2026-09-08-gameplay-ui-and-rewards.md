@@ -1,5 +1,7 @@
 # Gameplay UI and Rewards Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Simplify the game UI, add animated match feedback, persistent seasonal reward collections, and a draggable long-press chest.

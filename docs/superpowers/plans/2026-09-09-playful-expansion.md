@@ -1,5 +1,7 @@
 # Word Buddies playful expansion
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 Keep the existing Godot browser game and its matching, voice, chest, and safe medal-save flows. The user's expanded request authorizes new game modes beyond the earlier matching-only design.
 
 ## Player experience

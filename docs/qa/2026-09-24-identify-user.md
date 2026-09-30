@@ -1,5 +1,7 @@
 # Identify user — 2026-09-24
 
+> Historical evidence for the removed multiplayer/voice-profile prototype. Current [speech matching](../voice-matching.md) and [local players](../local-leaderboards.md) use a different architecture.
+
 This records the initial button implementation. Recording duration, consensus
 and template matching are superseded by the subsequent
 [voice matching improvements](2026-09-24-voice-accuracy.md).

@@ -233,7 +233,7 @@ func clear_recognition_feedback() -> void:
 func summary() -> Dictionary:
 	return {
 		"hits": hits, "misses": misses, "score": score, "best_combo": best_combo,
-		"unique_words": hit_words.size(), "hit_words": hit_words.duplicate(true),
+		"hit_words": hit_words.duplicate(true),
 		"missed_words": missed_words.duplicate(true), "base_duration": DURATION,
 		"bonus_time": bonus_time, "duration": DURATION + bonus_time, "elapsed": elapsed
 	}

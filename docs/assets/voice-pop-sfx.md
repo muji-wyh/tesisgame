@@ -1,6 +1,9 @@
-# Voice Pop slice sound
+# Voice Pop single-slice fallback provenance
 
-Voice Pop hits use `Cut2.wav` from the user's local **Casual Game Music Pack 1.4**.
+The single-slice fallback uses `Cut2.wav` from the user's local
+**Casual Game Music Pack 1.4**. Current Voice Pop prefers the
+[reference hit bank](voice-pop-reference-audio.md), followed by the
+[eight fruit slices](voice-pop-random-slices.md), before this override.
 The source is copied byte for byte: stereo 44.1 kHz, 16-bit PCM, 4,275 frames
 (96.94 ms). It starts within 2.1 ms at −40 dBFS, has zero-valued first/last
 samples and no full-scale samples. Its −0.105 dBFS peak becomes approximately
@@ -26,7 +29,7 @@ can also be loaded from the finished PCK. A development checkout without the
 pack uses the existing short original `select.wav` click. Match/Memory and other
 cues keep their existing audio.
 
-The effect uses the existing single effect player. Rapid hits replace the prior
-sound, and mute, mode changes and page suspension stop it through the existing
-audio lifecycle. It does not start background music or word pronunciation while
-Voice Pop is listening.
+All current Voice Pop hit sources use three bounded hit channels; a fourth
+overlapping hit replaces the oldest channel. Muting, mode changes and page
+suspension stop them through the shared audio lifecycle. The hit does not
+start background music or word pronunciation while Voice Pop is listening.

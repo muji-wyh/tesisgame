@@ -91,6 +91,17 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A replaced opening jingle is still bundled: " + path)
 			failures += 1
+	var retired_reports := ["round-fallback", "high-five", "highlights-one", "highlights-two",
+		"no-highlights", "practice-next", "practice", "ready", "repeat-next", "repeat"]
+	for value in range(21):
+		retired_reports.append("round-%d" % value)
+		if value > 0:
+			retired_reports.append("combo-%d" % value)
+	for report in retired_reports:
+		var path: String = "res://assets/audio/pop/" + report + ".wav"
+		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
+			printerr("A retired Voice Pop report is still bundled: " + path)
+			failures += 1
 	for path in ["res://scripts/celebration.gd", "res://assets/chests/particles/ring.png",
 		"res://assets/chests/particles/sparkle3.png", "res://assets/chests/particles/lightray1.png",
 		"res://assets/chests/particles/explosion_spike01.png", "res://assets/chests/particles/magic_orb2.png"]:

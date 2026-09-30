@@ -1,5 +1,7 @@
 # Voice Pop local multiplayer prototype
 
+> Historical evidence for the removed multiplayer/voice-profile prototype. Current [speech matching](../voice-matching.md) and [local players](../local-leaderboards.md) use a different architecture.
+
 ## Implemented behavior
 
 - Solo browser speech remains playable during background model preparation.

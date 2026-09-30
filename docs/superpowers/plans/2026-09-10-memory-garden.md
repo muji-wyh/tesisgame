@@ -1,5 +1,7 @@
 # Memory Garden Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** Use coordinated subagents for the independent model and view; root integrates and verifies release.
 
 **Goal:** Add a replayable spatial-memory word-picture game with a growing garden and ordinary saved rewards.

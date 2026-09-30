@@ -1,5 +1,7 @@
 # Gameplay UI and Rewards Design
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 ## Goal
 
 Simplify the game chrome, make feedback more playful, and turn the seasonal chest into a draggable long-press reward interaction with a persistent collection page.

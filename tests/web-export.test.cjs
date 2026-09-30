@@ -40,7 +40,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'Touch devices need the native DOM input bridge to open their software keyboard');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
   for (const source of [
-    'assets/audio/bgm/spring.wav', 'assets/audio/pop/round-0.wav',
+    'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
     'assets/audio/voice/wrong.wav', 'assets/audio/voice/loss.wav'
   ]) {
@@ -50,6 +50,11 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const source of ['assets/audio/voice/ocean-arrive.wav', 'assets/audio/voice/ocean-open.wav']) {
     assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Retired audio stays excluded: ${source}`);
   }
+  for (const name of ['ready.wav', 'high-five.wav', 'round-20.wav']) {
+    const source = `assets/audio/pop/${name}`;
+    assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Unused spoken reports stay out of the game pack: ${source}`);
+  }
+  assert.doesNotMatch(preset.match(/^include_filter="([^"]*)"$/m)[1], /pop-voice-prompts\.json/);
   const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
   assert.match(project, /textures\/vram_compression\/import_s3tc_bptc=true/);
   assert.match(project, /textures\/vram_compression\/import_etc2_astc=true/);
@@ -73,7 +78,7 @@ test('the export shell hosts the engine and fits a safe-area container without d
   assert.match(shell, /Dummy/);
   assert.doesNotMatch(shell, /user-scalable\s*=\s*no|maximum-scale\s*=\s*1/);
   assert.doesNotMatch(shell, /GameCore|selectCard|createRound/);
-  // Vocabulary and Pip reports both use prerecorded neural speech in Godot.
+  // Vocabulary pronunciation uses prerecorded neural speech in Godot.
   assert.doesNotMatch(shell, /speechSynthesis|SpeechSynthesisUtterance|speakPopSummary/);
 });
 
@@ -152,7 +157,6 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   assert.deepEqual(reference.map(asset => asset.source), [...fixture.assets, fixture.launch].map(asset => `res://${asset.destination}`));
   assert.ok(reference.every(asset => asset.imported.startsWith('res://.godot/imported/') && asset.bytes.length > 4));
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
-  fs.writeFileSync(path.join(fixture.directory, 'pop-voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   fixture.writeImport('assets/audio/sfx/match-voice-hit.wav');
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
@@ -170,6 +174,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     'The successful voice-match cue ships in the startup pack without a later fetch');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
+  assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/pop/')),
+    'Retired report narration is not a required packaging input');
 });
 
 test('a partial or ambiguous Voice Pop reference bank fails instead of shipping mixed fallback audio', t => {

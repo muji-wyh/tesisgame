@@ -37,6 +37,20 @@ func touch(app, index: int, pressed: bool) -> void:
 	root.push_input(event, true)
 
 
+func play_looping_voice(app) -> void:
+	var silence := AudioStreamWAV.new()
+	silence.format = AudioStreamWAV.FORMAT_16_BITS
+	silence.mix_rate = 22050
+	silence.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	silence.loop_end = 2205
+	var samples := PackedByteArray()
+	samples.resize(4410)
+	samples.fill(0)
+	silence.data = samples
+	app.audio.voice.stream = silence
+	app.audio.voice.play()
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(960, 720)
@@ -175,12 +189,11 @@ func _test_home_gates(app) -> void:
 			app._status_announcement, app._room.toy_button.position, app._room.playground.duck_position] == before
 		and not app.audio.voice.playing,
 		"Repeated Home dance loops change no game state, toy positions, announcements or speech")
-	for state in ["loading", "speaking"]:
-		app.audio._set_narration_state(state)
-		check(not observe_idle(app, 12), "Home dancing yields while narration is " + state)
-		app.audio.stop_narration()
-		check(not observe_idle(app, 0.2) and observe_idle(app, 0.3) and app.duck._idle_action == "home-dance",
-			"Home dancing resumes after narration " + state + " ends and a short quiet beat")
+	play_looping_voice(app)
+	check(app.audio.voice.playing and not observe_idle(app, 12), "Home dancing yields while a word is playing")
+	app.audio.stop_voice()
+	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3) and app.duck._idle_action == "home-dance",
+		"Home dancing resumes after word playback ends and a short quiet beat")
 	touch(app, 0, true)
 	touch(app, 1, true)
 	touch(app, 0, false)
@@ -191,33 +204,15 @@ func _test_home_gates(app) -> void:
 
 
 func _test_pop_and_audio_gates(app) -> void:
-	for state in ["loading", "speaking"]:
-		app.duck._idle_action = "dance-wave"
-		app.duck._idle_left = 2.0
-		app.audio._set_narration_state(state)
-		app._update_duck()
-		check(app.duck._idle_action.is_empty() and not observe_idle(app, 12),
-			"Narration " + state + " interrupts a dance and prevents another invitation")
-		app.audio.stop_narration()
-		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
-			"Stopping narration " + state + " starts a fresh quiet interval")
-	var silence := AudioStreamWAV.new()
-	silence.format = AudioStreamWAV.FORMAT_16_BITS
-	silence.mix_rate = 22050
-	silence.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	silence.loop_end = 2205
-	var samples := PackedByteArray()
-	samples.resize(4410)
-	samples.fill(0)
-	silence.data = samples
-	for player in [app.audio.voice, app.audio.narration]:
-		player.stream = silence
-		player.play()
-		check(player.playing and not observe_idle(app, 12),
-			"A playing voice or narrator blocks invitations independently of the speaking pose")
-		player.stop()
-		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
-			"Finished playback restarts the quiet interval")
+	app.duck._idle_action = "dance-wave"
+	app.duck._idle_left = 2.0
+	play_looping_voice(app)
+	app._update_duck()
+	check(app.audio.voice.playing and app.duck._idle_action.is_empty() and not observe_idle(app, 12),
+		"Word playback interrupts a dance and blocks invitations independently of the speaking pose")
+	app.audio.stop_voice()
+	check(not observe_idle(app, 5.5) and observe_idle(app, 4),
+		"Finished word playback restarts the quiet interval")
 	app.audio.halt()
 	app._mode_id = "pop"
 	app._configure_pop(7)

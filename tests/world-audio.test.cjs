@@ -100,15 +100,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   const { collectRequiredAudio } = require('../tools/package-web.cjs');
   const directory = fixture(t);
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
-  const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
-  fs.writeFileSync(path.join(directory, 'pop-voice-prompts.json'), JSON.stringify(popPrompts));
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
-    ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
     ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
       .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
   ];
@@ -122,6 +119,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   }
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
+  assert.ok(audio.every(file => !file.source.includes('/audio/pop/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
   assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));

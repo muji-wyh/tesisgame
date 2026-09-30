@@ -35,8 +35,14 @@ func _run() -> void:
 	_check_pop(app)
 	_check_preferences(app)
 	_check_lifecycle(app)
+	app.audio.halt()
+	# Give the audio mixer time to release stopped playback before exiting.
+	await create_timer(0.1).timeout
 	app.queue_free()
 	await process_frame
+	for filename in DirAccess.get_files_at(directory):
+		DirAccess.remove_absolute(directory + "/" + filename)
+	DirAccess.remove_absolute(directory)
 	print("Pip gameplay feedback: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 

@@ -78,13 +78,11 @@ function collectPopReferenceAudio(root) {
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
 function collectRequiredAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
-  const popPrompts = JSON.parse(fs.readFileSync(path.join(root, 'pop-voice-prompts.json'), 'utf8'));
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
-    ...Object.keys(popPrompts).map(id => `assets/audio/pop/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
   return [...sources.map(source => importedAudio(root, source)), ...collectPopReferenceAudio(root)];

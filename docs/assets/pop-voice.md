@@ -1,15 +1,12 @@
 # Legacy Voice Pop report recordings
 
-The current Voice Pop result view contains **HITS**, **Play again**, and lists of
-popped and missed words. HITS counts up with a brief scale pulse, sparkles and
-glow; reduced motion shows the final count immediately with a static glow.
-Individual word cards still replay their recorded pronunciation, without a
-repetition count. The result view has no Pip report, report pages or automatic
-narration.
-
-The 51 report recordings documented below remain at their existing paths and
-are still bundled in the startup PCK. They are retained legacy assets, unused
-by the current result UI.
+This is historical provenance for the retired spoken-report subsystem. Its
+51 recordings, prompt catalog, dedicated generator, and runtime narration code
+have been removed from the repository and export. The hashes below remain to
+identify the original assets in Git history; they are not required build inputs.
+See [local leaderboards](../local-leaderboards.md) and the
+[gameplay reference](../gameplay.md) for the current result view, which replays
+individual vocabulary words but has no spoken report.
 
 The retired report used prerecorded Microsoft Azure Speech **en-US-JennyNeural**
 audio, matching the existing vocabulary voice: `friendly` style, degree `1.15`,
@@ -17,10 +14,10 @@ and an 8% slower speaking rate. Numbers are spoken inside complete recorded
 sentences; the report did not assemble number fragments or use the browser's
 default TTS.
 
-`pop-voice-prompts.json` is a flat object mapping 51 stable IDs to their complete
-English scripts. The batch contains **2,158 source text characters**. WAV paths
-are `assets/audio/pop/<id>.wav`; the 200 vocabulary recordings and general game
-prompts remain separate and unchanged by this generator.
+The former `pop-voice-prompts.json` mapped 51 stable IDs to their complete
+English scripts. The batch contained **2,158 source text characters**, with WAVs
+at `assets/audio/pop/<id>.wav`. The vocabulary and general prompts were separate
+from this generator and remain part of the current game.
 
 ## Legacy report content
 
@@ -48,8 +45,8 @@ confirmed `kind=SpeechServices` and **`sku=F0`**. The generation command checked
 F0 again immediately before retrieving the existing credential. No resource was
 created and no paid tier was enabled.
 
-This follows the established project workflow documented under "Regenerate
-natural speech" in `README.md`; the 2026-09-11 catalog audit also records prior
+This followed the project's natural-speech generation workflow; the
+2026-09-11 catalog audit also records prior
 use of this same F0 resource. The original task explicitly authorized this small
 report batch. The generator waits 3,200 ms before each synthesis request to stay
 under the existing F0 transaction limit. The 2,158-character figure measures
@@ -60,17 +57,12 @@ in `finally`. Request headers, provider error bodies, and keys are never printed
 or written to source or Web exports. Playback uses local assets and makes no
 runtime requests to Azure Speech.
 
-## Generation and validation
+## Original generation and validation
 
-Use the credential setup and cleanup documented in `README.md`, then run:
-
-```powershell
-node tools/generate-pop-voices.cjs --missing
-```
-
-`--missing` generates only absent report recordings. Omitting it regenerates the
-51 report recordings, without touching the original vocabulary or prompt folder.
-FFmpeg must be on PATH; this batch uses FFmpeg 7.0.2.
+The removed `tools/generate-pop-voices.cjs` supported missing-only generation
+and complete regeneration without changing vocabulary or general prompts.
+The original batch used FFmpeg 7.0.2. For current vocabulary generation, use
+[the maintained media workflow](generated-media.md#regenerate-natural-speech).
 
 The generator reuses `speechMarkup` and `convertVoice` from the existing voice
 generator, validates the provider's neural voice and friendly-style availability,
@@ -82,11 +74,9 @@ validation. All synthesis and conversion finishes in a private staging directory
 before any final recording is published. A synthesis or conversion failure
 leaves existing recordings intact.
 
-The Web build still includes all legacy report recordings in the startup PCK
-and verifies their source and imported resource paths against the actual
-exported pack. These files remain local bundled data, but the current result
-UI never requests or plays them. The generator does not run Godot or change
-import settings.
+The original Web build verified the recordings' source and imported paths in
+its exported pack. Current builds exclude them. The retired generator did not
+run Godot or change import settings.
 
 ## Asset inventory
 

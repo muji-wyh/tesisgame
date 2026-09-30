@@ -115,7 +115,7 @@ func _run() -> void:
 			app.on_page_visible()
 			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._collection_duck_slot
 				and not app.duck.speaking and app.audio.active and app.audio.music.playing
-				and not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.effect.playing,
+				and not app.audio.voice.playing and not app.audio.effect.playing,
 				"Returning to Pip's room restores its mascot and music without replaying old speech or effects")
 			await process_frame
 			await process_frame

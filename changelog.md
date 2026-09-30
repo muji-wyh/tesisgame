@@ -2,6 +2,19 @@
 
 Notable changes to Pip and Words (formerly Word Buddies), grouped by date with the newest changes first.
 
+Entries describe behavior at their recorded revision, including features later
+removed. Use the [documentation index](docs/README.md) for current guidance.
+
+## 2026-10-01
+
+- Retired the unused Voice Pop spoken-report subsystem and its dedicated
+  recordings and generation workflow, retaining historical source provenance.
+- Consolidated current setup, gameplay, and media references; clearly separated
+  dated QA and design history from maintained guidance. Corrected stale player
+  selection, leaderboard, speech-hint, Pip interaction, and audio fallback descriptions.
+- Isolated deployment test exports and updated obsolete audio regression fixtures
+  while retaining current playback and saved-progress coverage.
+
 ## 2026-09-26
 
 - Returned Voice Pop to single-player play using the browser's system speech

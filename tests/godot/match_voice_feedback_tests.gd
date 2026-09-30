@@ -129,7 +129,7 @@ func _test_callback_and_ignored_results(app) -> void:
 		"A success clears the old hint without spending or refunding another hint")
 	check(_sound_playing(app) and app.audio.match_voice_hit.stream == load(Audio.MATCH_VOICE_HIT_PATH),
 		"The electrical cue starts with the actual successful final callback")
-	check(not app.audio.music.playing and not app.audio.voice.playing and not app.audio.narration.playing,
+	check(not app.audio.music.playing and not app.audio.voice.playing,
 		"Electrical feedback keeps music and spoken playback quiet while the microphone is active")
 	await _settle()
 	_check_contacts(app, word, "Final callback")

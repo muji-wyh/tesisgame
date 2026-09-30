@@ -337,7 +337,7 @@ func _check_pop_hit_audio(app) -> void:
 		"A real spoken target plays one selected reference slice, or the clean-checkout fallback")
 	var first_player: AudioStreamPlayer = app.audio.last_pop_player()
 	var first_path: String = _last_slice_path(app.audio)
-	check(not app.audio.music.playing and not app.audio.voice.playing and not app.audio.narration.playing
+	check(not app.audio.music.playing and not app.audio.voice.playing
 		and not app.audio.effect.playing,
 		"Popping a target uses its dedicated slice voice without BGM, UI clicks or word/report speech")
 	check(_pop_hit_visible_word(app) and _pop_playing(app.audio) == 2
@@ -394,7 +394,7 @@ func _check_pop_exit_audio(app) -> void:
 			var label: String = "Leaving %s Voice Pop for %s" % [state, destination]
 			check(app._mode_id == destination and not app._voice_mode and not app._pop_speech_active,
 				label + " clears microphone input and quiet-mode guards")
-			check(not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.narration.playing
+			check(not app.audio.voice.playing and not app.audio.effect.playing
 				and _pop_playing(app.audio) == 0,
 				label + " cannot carry over an old word, hit or report")
 			check(app.audio.muted == (state == "muted") and app.audio.active == (state != "muted")
@@ -568,7 +568,7 @@ func _check_pop_slice_choices() -> void:
 		"An empty pool uses the earlier slice or tracked select fallback without drawing a missing file")
 	check(audio.effect == effect and audio.get_child_count() == channels
 		and audio._pop_players.size() == 3 and not effect.playing
-		and not audio.music.playing and not audio.voice.playing and not audio.narration.playing,
+		and not audio.music.playing and not audio.voice.playing,
 		"All pool sizes and repeated draws reuse the same three voices without UI effects, music or extra nodes")
 	audio.halt()
 	audio.free()

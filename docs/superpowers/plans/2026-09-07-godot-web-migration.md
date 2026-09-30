@@ -1,5 +1,7 @@
 # Godot Web Migration Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace the HTML game implementation with a Godot game exported to Web, using the supplied animated-chest artwork and retaining the established English learning game.

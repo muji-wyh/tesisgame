@@ -1,5 +1,7 @@
 # Voice matching improvements — 2026-09-24
 
+> Historical evidence for the removed multiplayer/voice-profile prototype. Current [speech matching](../voice-matching.md) and [local players](../local-leaderboards.md) use a different architecture.
+
 ## Behavior
 
 - Enrollment offers six phrases and requires at least 12 seconds of estimated

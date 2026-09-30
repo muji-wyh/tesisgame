@@ -1,5 +1,7 @@
 # Seasonal Word Buddies Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 实现一个面向约 3 岁英文初学者、全英文、无滚动、适配 iPhone / iPad 的图片与单词匹配游戏，包含独立 JSON 词库、可切换的四季主题和模型原创视听奖励。

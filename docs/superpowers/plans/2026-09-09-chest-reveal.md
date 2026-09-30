@@ -1,5 +1,7 @@
 # Playful Chest Reveal Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 **Status:** Implemented. Three fragments complete each of six active medals per
 theme; earlier whole rewards are preserved during migration.
 

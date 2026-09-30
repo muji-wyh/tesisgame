@@ -1,5 +1,7 @@
 # Pip's Gift Adventures
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 The current game has several complete practice modes but weak motivation between
 them: a locked gift is only a preview, and a toy repeats one short animation.
 This iteration gives the player a chosen destination and a more playful payoff.

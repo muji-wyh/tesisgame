@@ -34,17 +34,14 @@ const CHEST_EVENT_CHANNELS := 3
 
 signal status_changed(message: String)
 signal word_failed
-signal narration_state_changed(state: String)
 
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
-var narration: AudioStreamPlayer
 var pip_reaction: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
 var match_voice_hit: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
-var narration_state: String = "idle"
 var muted: bool = false
 var active: bool = false
 var current_theme: String = ""
@@ -52,10 +49,6 @@ var cache: Dictionary = {}
 var available: bool = true
 var _playback_requests: Dictionary = {}
 var _music_error: bool = false
-var _narration_generation: int = 0
-var _narration_streams: Array[AudioStream] = []
-var _narration_index: int = 0
-var _narration_pip_greeting: bool = false
 var _pop_slice_paths: Array[String] = []
 var _pop_slice_rng := RandomNumberGenerator.new()
 var _last_pop_slice_path: String = ""
@@ -116,8 +109,6 @@ func _ready() -> void:
 	effect = _player(0.24)
 	voice = _player(0.64)
 	voice.finished.connect(_voice_finished)
-	narration = _player(0.64)
-	narration.finished.connect(_narration_finished)
 	if OS.has_feature("web"):
 		available = bool(JavaScriptBridge.eval("Boolean(window.AudioContext || window.webkitAudioContext)"))
 
@@ -231,8 +222,7 @@ func play_pip() -> void:
 func is_pip_busy() -> bool:
 	if not active or muted or not available:
 		return false
-	return (_pip_voice_request >= 0 and _pip_voice_request == _playback_requests.get(voice, -1)) \
-		or (_narration_pip_greeting and narration_state in ["loading", "speaking"])
+	return _pip_voice_request >= 0 and _pip_voice_request == _playback_requests.get(voice, -1)
 
 
 func play_pip_reaction(correct: bool) -> void:
@@ -241,7 +231,7 @@ func play_pip_reaction(correct: bool) -> void:
 	if pip_reaction == null:
 		pip_reaction = _player(0.68)
 	# Gameplay feelings have their own short, nonverbal voice. They cannot
-	# replace a card's pronunciation, its answer cue or a report sentence.
+	# replace a card's pronunciation or its answer cue.
 	pip_reaction.pitch_scale = 1.12 if correct else 0.80
 	pip_reaction.volume_db = linear_to_db(0.68 if correct else 0.54)
 	_play(pip_reaction, PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2])
@@ -554,73 +544,9 @@ func stop_chest_performance() -> void:
 
 
 func say(path: String) -> void:
-	stop_narration()
 	if muted or not active:
 		return
 	_play(voice, path)
-
-
-func narrate(paths: Array[String]) -> void:
-	stop_voice()
-	if muted or not active or not available or paths.is_empty():
-		_set_narration_state("unavailable")
-		return
-	var generation: int = _narration_generation
-	_narration_pip_greeting = paths[0] in PIP_SOUND_PATHS
-	_set_narration_state("loading")
-	var loaded: Array[AudioStream] = []
-	# Prepare the whole page before speaking. A missing word or closing sentence
-	# must not leave Pip delivering only the first half of a report.
-	for path in paths:
-		var stream: AudioStream = await _stream(path)
-		if generation != _narration_generation or not is_inside_tree() or not active or muted or not available:
-			return
-		if stream == null:
-			_narration_pip_greeting = false
-			_set_narration_state("unavailable")
-			status_changed.emit("Pip's voice could not load. Read along or tap Try Pip again.")
-			return
-		loaded.append(stream)
-	_narration_streams = loaded
-	_narration_index = 0
-	_play_narration_clip()
-
-
-func stop_narration() -> void:
-	_narration_generation += 1
-	_narration_pip_greeting = false
-	_narration_streams.clear()
-	_narration_index = 0
-	if narration != null:
-		narration.stop()
-		narration.stream = null
-	_set_narration_state("idle")
-	_update_music_gain()
-
-
-func _play_narration_clip() -> void:
-	if muted or not active or not available or _narration_index >= _narration_streams.size():
-		stop_narration()
-		return
-	if _narration_index > 0:
-		_narration_pip_greeting = false
-	narration.stream = _narration_streams[_narration_index]
-	narration.play()
-	_set_narration_state("speaking")
-	_update_music_gain()
-
-
-func _narration_finished() -> void:
-	if narration_state != "speaking" or _narration_streams.is_empty():
-		return
-	_narration_index += 1
-	_play_narration_clip()
-
-
-func _set_narration_state(state: String) -> void:
-	if narration_state != state:
-		narration_state = state
-		narration_state_changed.emit(state)
 
 
 func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
@@ -688,17 +614,14 @@ func _voice_finished() -> void:
 
 func _update_music_gain() -> void:
 	if music != null:
-		var speaking: bool = (voice != null and voice.playing) or (narration != null and narration.playing)
+		var speaking: bool = voice != null and voice.playing
 		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck)
 
 
 func set_muted(value: bool) -> void:
-	var was_narrating: bool = narration_state in ["loading", "speaking"]
 	muted = value
 	if muted:
 		halt()
-		if was_narrating:
-			_set_narration_state("unavailable")
 	status_changed.emit("")
 
 
@@ -708,7 +631,6 @@ func stop_music() -> void:
 
 
 func stop_voice() -> void:
-	stop_narration()
 	if voice != null:
 		_stop(voice)
 
@@ -720,7 +642,6 @@ func halt(keep_match_voice_hit: bool = false) -> void:
 	stop_pop_sounds()
 	stop_pip_reaction()
 	stop_chest_performance()
-	stop_narration()
 	if music != null:
 		stop_music()
 		_stop(effect)

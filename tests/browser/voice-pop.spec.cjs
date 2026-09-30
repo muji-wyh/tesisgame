@@ -94,6 +94,19 @@ function isHitSlice(sound) {
   return sound.playbackRate === 1 && expectedSlices.some(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
 }
 
+function expectResultSaveCue(sounds, available) {
+  // Saving the assigned player's score now has one short success cue. The
+  // removed spoken report and background music must still remain absent.
+  expect(sounds, 'Result completion plays only the score-save cue').toHaveLength(available ? 1 : 0);
+  if (!available) return;
+  const sound = sounds[0], seconds = waveDuration('assets/audio/sfx/correct.wav');
+  expect(Math.abs(sound.duration - seconds)).toBeLessThanOrEqual(1 / sound.sampleRate);
+  expect(sound.loop).toBe(false);
+  expect(sound.playbackRate).toBe(1);
+  expect(sound.contextState).toBe('running');
+  expect(sound.peak, 'The saved-score cue contains audible PCM').toBeGreaterThan(0.01);
+}
+
 function expectPipReaction(sound, emotion) {
   expect(isPipReaction(sound, emotion), `The ${emotion} call uses its real Pip recording and expressive pitch`).toBe(true);
   expect(sound.contextState).toBe('running');
@@ -1386,8 +1399,8 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect(frames.at(-1)).toMatchObject({ text: '2', total: 2, active: false });
   expect(frames.at(-1).at - frames[0].at, 'The result count and celebration last about 1.25 seconds').toBeGreaterThanOrEqual(1000);
   expect(frames.at(-1).at - frames[0].at).toBeLessThan(2500);
-  expect(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
-    'The simplified result screen does not start automatic narration').toEqual([]);
+  expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
+    audioAvailable);
   await page.screenshot({ path: info.outputPath('simple-hit-results.png') });
   await info.attach('result-hit-animation.json', { body: JSON.stringify(frames), contentType: 'application/json' });
   const reviewed = new Map();
@@ -1447,8 +1460,8 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   expectSimpleResults(zero);
   expect(zero.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
   expect(await page.evaluate(() => window.__resultHitFrames.every(frame => frame.text === '0' && frame.total === 0))).toBe(true);
-  expect(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
-    'Zero hits do not start a report, coaching prompt or background music').toEqual([]);
+  expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
+    available);
   await page.screenshot({ path: info.outputPath('zero-hit-results.png') });
   await page.context().setOffline(true);
   expect(await page.evaluate(() => navigator.onLine)).toBe(false);

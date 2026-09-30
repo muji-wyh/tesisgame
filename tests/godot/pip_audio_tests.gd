@@ -38,8 +38,8 @@ func _check_audio_selection() -> void:
 		check(clip is AudioStreamWAV and clip.get_length() > 0.05,
 			"The imported Pip clip is a playable nonempty WAV: " + path.get_file())
 	var players: Array[Node] = audio.get_children()
-	check(players.size() == 4 and players.all(func(player: Node) -> bool: return player is AudioStreamPlayer),
-		"Pip uses the existing audio channels without adding a parallel playback stack")
+	check(players.has(audio.voice) and players.all(func(player: Node) -> bool: return player is AudioStreamPlayer),
+		"Pip has an existing voice channel among the game's startup audio players")
 	audio._pip_rng.seed = 20260920
 	seed(41872)
 	var expected_global: int = randi()
@@ -60,7 +60,7 @@ func _check_audio_selection() -> void:
 		var path: String = audio.voice.stream.resource_path if audio.voice.stream != null else ""
 		valid = valid and audio.voice.playing and PIP_PATHS.has(path)
 		repeating = repeating or path == previous
-		stacked = stacked or audio.effect.playing or audio.narration.playing or audio.get_children() != players
+		stacked = stacked or audio.effect.playing or audio.get_children() != players
 		seen[path] = true
 		previous = path
 		var state: int = audio._pip_rng.state
@@ -71,7 +71,7 @@ func _check_audio_selection() -> void:
 			"Repeated audio requests preserve the playing recording, request and random choice")
 	check(valid and seen.size() == PIP_PATHS.size(), "Successive completed Pip greetings play every supplied sound on the voice channel")
 	check(not repeating, "Consecutive Pip greetings never choose the same clip")
-	check(not stacked, "Pip greetings never stack effect, narration or player nodes")
+	check(not stacked, "Pip greetings never stack effects or player nodes")
 	for blocked in ["inactive", "muted", "unavailable"]:
 		audio.halt()
 		audio.muted = blocked == "muted"
@@ -210,15 +210,15 @@ func _check_click_routes() -> void:
 		"The hidden Home cannot greet during gameplay")
 	app.duck.pressed.emit()
 	app.on_page_hidden()
-	check(not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.active,
+	check(not app.audio.voice.playing and not app.audio.active,
 		"Backgrounding the page stops the imported Pip greeting")
 	app.on_page_visible()
 	await _settle()
 	check(app.audio.active and app.audio.music.playing and not app.audio.voice.playing
-		and not app.audio.narration.playing and not app.audio.effect.playing,
+		and not app.audio.effect.playing,
 		"Returning to the page restores background music without replaying a stale greeting")
 	await _check_serialized_routes(app)
-	check(app.audio.get_children() == players, "All native Pip click routes keep the same four audio players")
+	check(app.audio.get_children() == players, "All native Pip click routes keep the same audio players")
 	check(_progress(app) == progress, "Pip sounds leave the lesson, cards, medals, toys, backdrop and reward goal unchanged")
 	check(_saved_files(directory) == saved, "Pip greetings do not write or alter any saved progress")
 	app.audio.halt()

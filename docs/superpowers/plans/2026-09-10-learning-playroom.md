@@ -1,5 +1,7 @@
 # Learning and Pip's Room Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** Use superpowers:subagent-driven-development to implement the bounded tasks below. Keep each task's files isolated and review the actual diff before integration.
 
 **Goal:** Make word–picture learning explicit and rewarding, integrate free Unity Store art through Unity CLI, then commit and deploy the improved game.

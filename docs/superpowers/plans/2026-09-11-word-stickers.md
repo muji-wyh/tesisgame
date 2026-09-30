@@ -1,5 +1,7 @@
 # Pip's word stickers
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 ## Goal and design
 
 Make the learning rewards refer to the words the child actually finds. Keep the existing five modes and the same five-word lesson when switching modes. A correct target earns its existing picture-and-word sticker once; the twelve-topic Words album in My rewards lets the child hear collected words and display one beside Pip. The large Learn/correction picture also becomes an accessible pronunciation button. Existing toy, medal, chest and journey rules remain intact.

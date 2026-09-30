@@ -1,5 +1,7 @@
 # Pip's Gift Adventures Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 > **For agentic workers:** Use subagent-driven development for the independent
 > state/model and room-view tasks; root owns host integration and release.
 

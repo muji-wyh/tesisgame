@@ -1,5 +1,7 @@
 # Enjoyable Play Implementation Plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 **Goal:** Make Word Buddies easier to enjoy repeatedly through clear round limits,
 fresher rounds, and clear collection goals, then release the finished game.
 

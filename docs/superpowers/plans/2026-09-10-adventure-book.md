@@ -1,5 +1,7 @@
 # Adventure book implementation plan
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 1. Extend the model reset with validated explicit topic selection; retain existing repeat and seeded behavior.
 2. Extend personal-choice persistence with optional visit history and preferred world, preserving existing records and failure recovery.
 3. Build a responsive illustrated adventure book using existing art and normal Godot buttons.

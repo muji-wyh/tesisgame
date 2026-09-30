@@ -1,5 +1,7 @@
 # Original vocabulary semantic audit
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 **Goal:** Finish the outstanding review of the 140 original vocabulary pictures,
 labels and recordings in the accepted learning plan. Fix demonstrated ambiguity
 using the existing SVG artwork pipeline. Unity acquisition and final imported-art

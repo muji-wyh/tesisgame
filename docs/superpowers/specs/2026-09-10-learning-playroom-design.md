@@ -1,5 +1,7 @@
 # Word Buddies: learn, practise, play
 
+> Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
+
 The user asked for a plan followed by implementation, commit and deployment. This design improves the word–picture association and turns rewards into playable objects. The existing Godot browser runtime remains; Unity CLI is an asset import tool.
 
 ## Learning experience

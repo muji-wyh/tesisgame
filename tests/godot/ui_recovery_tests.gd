@@ -105,7 +105,7 @@ func _check_audio_recovery(app) -> void:
 		app.on_page_visible()
 		check(app.audio.active and app.audio.music.playing and app.audio.current_theme == app.model.theme_id,
 			location + " resumes its current background music without a refresh")
-		check(not app.audio.voice.playing and not app.audio.narration.playing and not app.audio.effect.playing
+		check(not app.audio.voice.playing and not app.audio.effect.playing
 			and not app.audio.pip_reaction.playing and not app.audio.is_pip_busy(),
 			location + " cannot replay cancelled words, reports, effects or Pip calls")
 		var request: int = app.audio._playback_requests.get(app.audio.music, 0)

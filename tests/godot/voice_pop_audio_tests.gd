@@ -130,7 +130,7 @@ func _check_bank_and_overlap() -> void:
 	check(all_distinct and randi() == expected_global,
 		"Repeated cuts vary without consuming gameplay randomness or immediately repeating")
 	check(audio.get_child_count() == child_count and not audio.music.playing
-		and not audio.voice.playing and not audio.narration.playing,
+		and not audio.voice.playing,
 		"A long burst stays bounded without starting speech or microphone-competing music")
 	audio.queue_free()
 	await process_frame
