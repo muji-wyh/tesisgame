@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
-const { openGame, chooseTheme, metrics, tap, boardPoint } = require('./game-ui.cjs');
+const { THEME_IDS, enterGame, openGame, chooseTheme, metrics, tap, boardPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 
@@ -35,6 +35,53 @@ async function expectOriginalContextsRunning(page) {
   await expect.poll(() => page.evaluate(() => window.suspendedGameAudio.every(context => context.state === 'running')),
     { message: 'The original AudioContext resumes after the trusted gesture' }).toBe(true);
 }
+
+test('the first Enter game gesture starts bundled theme music without another interaction', async ({ page, browserName }, info) => {
+  const requests = watchAudioRequests(page);
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  await observeOutputAudio(page, { trackSourceLifecycle: true });
+  await page.addInitScript(() => {
+    window.entryAudioGestures = [];
+    document.addEventListener('click', event => {
+      if (event.isTrusted) window.entryAudioGestures.push(event.target.id);
+    }, { capture: true });
+  });
+  await page.goto('/');
+  await expect(page.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
+  await requireAudio(page, browserName);
+  const theme = await page.locator('#status').getAttribute('data-theme');
+  expect(THEME_IDS).toContain(theme);
+  const before = await page.evaluate(() => {
+    window.entryGameContexts = [...window.audioObservation.contexts];
+    return { contexts: entryGameContexts.length, states: entryGameContexts.map(context => context.state),
+      sounds: window.audioObservation.playbacks.length, gestures: window.entryAudioGestures };
+  });
+  expect(before.contexts, 'The real engine creates its playback context before entry').toBe(1);
+  expect(before.sounds, 'Waiting behind the loading screen does not start game music').toBe(0);
+  expect(before.gestures).toEqual([]);
+
+  // This is the first and only gesture. A card, theme or Pip tap here would
+  // hide the regression by calling audio.interact() after the loading handoff.
+  await enterGame(page);
+  const recording = `assets/audio/bgm/${theme}.wav`;
+  const music = await expectRecording(page, before.sounds, recording, { active: true });
+  const output = await expectOutputEnergy(page);
+  await expect.poll(() => page.evaluate(() => window.entryGameContexts.every(context => context.state === 'running')),
+    { message: 'Enter resumes the original engine playback context' }).toBe(true);
+  expect(await page.evaluate(() => window.audioObservation.contexts.length === window.entryGameContexts.length &&
+    window.audioObservation.contexts.every((context, index) => context === window.entryGameContexts[index])),
+  'Entry reuses the engine context created during loading').toBe(true);
+  expect(await page.evaluate(() => window.entryAudioGestures)).toEqual(['enter-game']);
+  expect(requests, 'The first music starts from the bundled pack without another download').toEqual([]);
+  expect(errors).toEqual([]);
+  await info.attach('first-entry-bundled-audio.json', {
+    body: JSON.stringify({ theme, recording, before, music, output,
+      resumes: await page.evaluate(() => window.audioOutputObservation.resumes) }, null, 2),
+    contentType: 'application/json'
+  });
+});
 
 test('suspended bundled audio recovers on the next real card gesture without reloading', async ({ page, context, browserName }, info) => {
   const requests = watchAudioRequests(page);

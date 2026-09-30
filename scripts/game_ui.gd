@@ -313,6 +313,7 @@ func _on_loading_finished(args: Array) -> void:
 		_save_journey()
 	_stop_controller_actions()
 	get_tree().paused = false
+	_restore_mode_music()
 
 
 func _build_controls() -> void:

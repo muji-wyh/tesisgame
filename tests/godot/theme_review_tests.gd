@@ -248,7 +248,11 @@ func _check_loading_theme(directory: String) -> void:
 			and app.model.mistakes == 0 and app.model.hints_remaining == 3
 			and app.playroom_state.recent_topic_ids == journey and app.medal_progress.counts == counts,
 			"Loading theme handoff preserves the prepared lesson, journey and reward progress")
-		check(not app.audio.active and not app.audio.voice.playing and not app.audio.is_pip_busy(),
+		check(app.audio.active and app.audio.music.playing
+			and app.audio.music.stream is AudioStreamWAV
+			and app.audio.music.stream.data == load("res://assets/audio/bgm/" + expected + ".wav").data,
+			"Loading entry starts the selected world's music without an extra gameplay gesture")
+		check(not app.audio.voice.playing and not app.audio.is_pip_busy(),
 			"Loading theme handoff does not start narration or another Pip sound")
 		if save_fails:
 			check(app._journey_save_failed and app._storage_retry_button.visible,
