@@ -14,7 +14,7 @@ function speechEvent(entries, resultIndex = 0) {
   return { resultIndex, results };
 }
 
-function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false, local = false } = {}) {
+function fixture({ api = 'standard', secure = true, autoStart = true, online = true, synthesis = false, local = false, captureEvents = false } = {}) {
   const block = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?\n      \}/)?.[0];
   assert.ok(block, 'The maintained shell needs its isolated inline speech host');
   const handlers = new WeakMap();
@@ -80,7 +80,7 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
   let starts = 0;
   let aborts = 0;
   class Recognition {
-    constructor() { instances.push(this); }
+    constructor() { if (captureEvents) this.onaudiostart = null; instances.push(this); }
     start() {
       starts++;
       this.callbacks = { start: this.onstart, result: this.onresult, error: this.onerror, end: this.onend };
@@ -550,7 +550,7 @@ test('Pop requests permission immediately but waits for actual listening before 
   assert.equal(f.aura.attributes['data-listening'], 'false');
   assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
   assert.match(f.states.at(-1)[2], /microphone access.*round starts when listening/i);
-  f.latest.result([['cat', false]]);
+  f.latest.result([['', false]]);
   f.advance(45000);
   assert.equal(f.starts, 1, 'Pending browser permission neither times out a game nor starts another request');
   assert.deepEqual(f.popWords, []);
@@ -1355,7 +1355,7 @@ test('Voice Pop defaults to system recognition without loading custom models or 
   assert.doesNotMatch(shell, /(?:src|href)="(?:multiplayer|voice-profiles)[^"]*"/);
   for (const api of ['standard', 'prefixed']) {
     const f = fixture({ api });
-    assert.deepEqual(Object.keys(f.host).sort(), ['observePopSpeech', 'observeSpeech', 'popStatus',
+    assert.deepEqual(Object.keys(f.host).sort(), ['observePopSpeech', 'observeQuestSpeech', 'observeSpeech', 'popStatus', 'questTarget',
       'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech']);
     f.listen('pop');
     assert.equal(f.starts, 1);
@@ -1411,4 +1411,52 @@ test('recognition diagnostics retain transcript alternatives only after explicit
   const cleared = f.host.speechDiagnostics();
   assert.deepEqual(Array.from(cleared.records), []);
   assert.doesNotMatch(JSON.stringify(cleared), /private|sentence/);
+});
+
+test('capture-aware recognition waits for audio, while a valid result can prove capture started', () => {
+  for (const evidence of ['audiostart', 'result']) {
+    const f = fixture({ captureEvents: true });
+    f.listen('pop');
+    assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+    assert.match(f.states.at(-1)[2], /waiting for microphone audio/i);
+    f.latest.result([['', false]]);
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    f.advance(7999);
+    if (evidence === 'audiostart') f.latest.onaudiostart();
+    else f.latest.result([['cat', false]]);
+    assert.deepEqual(f.states.at(-1).slice(0, 2), [true, true]);
+    f.advance(1000);
+    assert.equal(f.starts, 1);
+    assert.equal(f.host.speechDiagnostics().counts.capture_timeout, undefined);
+  }
+});
+
+test('capture startup timeout is actionable and old audio events cannot unlock a later session', () => {
+  const f = fixture({ captureEvents: true });
+  f.listen('pop');
+  const lateAudio = f.latest.onaudiostart;
+  f.advance(8000);
+  assert.deepEqual(f.states.at(-1).slice(0, 2), [true, false]);
+  assert.match(f.states.at(-1)[2], /microphone audio did not start/i);
+  assert.equal(f.aborts, 1);
+  f.host.stopSpeech();
+  f.listen('pop');
+  lateAudio();
+  assert.equal(f.aura.attributes['data-listening'], 'false');
+  f.latest.onaudiostart();
+  assert.equal(f.aura.attributes['data-listening'], 'true');
+});
+
+test('a synchronous native stop during capture startup leaves no watchdog behind', () => {
+  const f = fixture({ captureEvents: true });
+  f.host.observeSpeech(() => {}, (_enabled, _listening, message) => {
+    if (message === 'Waiting for microphone audio...') f.host.stopSpeech();
+  });
+  f.listen('pop');
+  assert.equal(f.panel.attributes['data-state'], 'off');
+  assert.equal(f.aborts, 1);
+  assert.equal(f.pendingTimers, 0);
+  f.advance(8000);
+  assert.equal(f.starts, 1);
+  assert.equal(f.host.speechDiagnostics().counts.capture_timeout, undefined);
 });

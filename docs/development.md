@@ -7,6 +7,10 @@ repository root. See the [project README](../README.md) for the short setup path
 
 Development prerequisites: **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**. The `godot` executable must be on PATH; alternatively, set `GODOT_BIN` to its executable path.
 
+Restore the licensed [Talk Quest character build inputs](assets/talk-quest-monsters.md#provenance-and-reproducibility)
+before importing or building a fresh checkout. Their GLBs and portraits remain
+local and are bundled into the compiled game; they are not stored in Git.
+
 ```powershell
 npm ci
 npm start
@@ -144,8 +148,22 @@ npm run test:all
 
 `npm test` imports resources and runs each native and Node suite once. Use
 `node tools/run-tests.cjs --list` to inspect the complete plan, or a focused
-command such as `npm run test:voice-pop` or `npm run test:pip-audio` during
+command such as `npm run test:voice-pop`, `npm run test:talk-quest`, or `npm run test:pip-audio` during
 development. Browser checks remain in `npm run test:browser`.
+
+For Talk Quest's model, character, scene, and browser-host tests, followed by its
+focused exported-game browser checks:
+
+```powershell
+npm run test:talk-quest
+npm run test:browser -- talk-quest.spec.cjs
+```
+
+The browser command rebuilds the Web export and runs the Talk Quest scenarios
+across the configured Chromium and WebKit profiles. Run imports, native tests,
+exports, and browser jobs sequentially against one checkout. The
+[Talk Quest reference](talk-quest.md) describes sentence binding, part choices,
+reward commits, and private checkpoints covered by these suites.
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 

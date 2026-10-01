@@ -4,6 +4,10 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
+  'talk-quest': {
+    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_scene_tests'],
+    node: ['talk-quest-host']
+  },
   leaderboards: {
     godot: ['leaderboard_state_tests', 'leaderboard_scene_tests'],
     node: ['leaderboard-host', 'virtual-keyboard-host']

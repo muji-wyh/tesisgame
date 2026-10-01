@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Talk Quest](2026-10-01-talk-quest.md) | Fourteen-level campaign and combined-worktree art/regression evidence; isolated release passed eight native suites, 237 Node tests, and two Chromium cases; Windows WebKit rotation captures retain the documented presentation limitation |
 | [Repository cleanup](2026-10-01-repository-cleanup.md) | Retired narration assets, current documentation indexes, and compatibility regression checks |
 | [Single-player speech restoration](2026-09-26-single-player-speech.md) | Removal of multiplayer models and enrolled voices; predates today's local leaderboard flow |
 | [SpeechRecognition integration](2026-09-30-speech-recognition.md) | Interim stability, target binding, optional browser-managed local pack, and acoustic test limitations |

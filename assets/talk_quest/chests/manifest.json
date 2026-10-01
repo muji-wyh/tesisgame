@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "renderer": "res://scripts/talk_quest_chest.gd",
+  "authorship": "Original procedural vector artwork and animation",
+  "third_party_derivatives": [],
+  "design_size": [420, 370],
+  "duration_seconds": 5.0,
+  "hold_seconds": 1.2,
+  "release_seconds": 3.36,
+  "chests": [
+    {"id":"chest-01","index":1,"name":"Welcome Mailbox","mechanism":"Side door swings outward; envelope badge, flag, legs and paper stars"},
+    {"id":"chest-02","index":2,"name":"Bubble Capsule","mechanism":"Twin curved covers separate sideways and rise; bubbles emerge"},
+    {"id":"chest-03","index":3,"name":"Breakfast Basket","mechanism":"Individual roll-top slats retract toward the rear; woven basket remains"},
+    {"id":"chest-04","index":4,"name":"Button Wardrobe","mechanism":"Double doors open and two cloth ribbons unfurl"},
+    {"id":"chest-05","index":5,"name":"Sandcastle Chest","mechanism":"Chained drawbridge lowers and tower flag rises"},
+    {"id":"chest-06","index":6,"name":"Palette Case","mechanism":"Palette lid pivots sideways around its corner hinge; brush latch follows"},
+    {"id":"chest-07","index":7,"name":"Orchard Cart","mechanism":"Five crate slats retract sequentially under a striped canopy"},
+    {"id":"chest-08","index":8,"name":"Storybook Coffer","mechanism":"Book-cover lid rotates around the spine; paper birds lift out"},
+    {"id":"chest-09","index":9,"name":"Turtle Treasure","mechanism":"Five separate hexagonal shell plates rise in sequence"},
+    {"id":"chest-10","index":10,"name":"Little Bus Trunk","mechanism":"Roof slides backward and the front step extends"},
+    {"id":"chest-11","index":11,"name":"Pearl Shell Chest","mechanism":"Scalloped top hinges upward; pearl emerges from the lower shell"},
+    {"id":"chest-12","index":12,"name":"Tent Trunk","mechanism":"Star zipper travels upward and two fabric flaps fold outward"},
+    {"id":"chest-13","index":13,"name":"Birthday Cake Box","mechanism":"Upper cake tiers rotate and rise separately; confetti releases"},
+    {"id":"chest-14","index":14,"name":"Robot Toolbox","mechanism":"Face lid lifts and two pairs of cantilever trays unfold; companion preview"},
+    {"id":"chest-15","index":15,"name":"Mushroom Cottage","mechanism":"Spotted mushroom cap turns and lifts above the cottage"},
+    {"id":"chest-16","index":16,"name":"Cloud Pillow Box","mechanism":"Crescent flap curls upward and rainbow arcs appear"},
+    {"id":"chest-17","index":17,"name":"Clockwork Egg","mechanism":"Winding key turns and shell halves separate laterally"},
+    {"id":"chest-18","index":18,"name":"Concertina Chest","mechanism":"Accordion bellows expand horizontally and the top hatch rises; notes"},
+    {"id":"chest-19","index":19,"name":"Honeycomb Hideaway","mechanism":"Seven hexagonal drawers extend with staggered timing"},
+    {"id":"chest-20","index":20,"name":"Patchwork Present","mechanism":"Bow unties and four stitched side panels fold outward"}
+  ]
+}

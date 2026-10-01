@@ -875,7 +875,7 @@ func _test_scene() -> void:
 		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED
 			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED,
 			"The playground viewport disables whole-page scrolling on both axes")
-	check(app.find_children("*", "ProgressBar", true, false).is_empty(),
+	check(app._stage.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	if app.has_method("_show_collection"):
 		app.collection_button.grab_focus()

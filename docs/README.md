@@ -9,6 +9,7 @@ commands, asset counts, and measurements may no longer describe the game.
 | Reference | Scope | Primary implementation |
 | --- | --- | --- |
 | [Gameplay](gameplay.md) | Modes, controls, worlds, room, rewards, and accessibility | `scripts/game_ui.gd`, `scripts/voice_pop.gd`, `scripts/playroom_view.gd` |
+| [Talk Quest](talk-quest.md) | Fourteen conversations, cooperative repairs, twenty treasures, sentence matching, and campaign saves | `scripts/talk_quest.gd`, `scripts/talk_quest_data.gd`, `scripts/talk_quest_model.gd` |
 | [Development and deployment](development.md) | Build, hosting, embedding, and validation | `package.json`, `tools/build-web.cjs`, `tools/deploy-web.ps1` |
 | [Local players and leaderboards](local-leaderboards.md) | Local profiles, result attribution, rankings, persistence | `scripts/leaderboard_state.gd` |
 | [Speech matching](voice-matching.md) | Homophones, interim stability, target binding, local experiment | `scripts/speech_words.gd`, `scripts/voice_pop_model.gd`, `web/shell.html` |
@@ -25,8 +26,9 @@ Build outputs under `build/` are generated evidence, not editable source.
 - [Design archive](superpowers/README.md): previous plans and specifications.
 - [Changelog](../changelog.md): events in chronological context.
 
-Current game modes are Match, Memory, and single-player Voice Pop. Local names
-and avatars support leaderboards; they are not the retired enrolled voice
-profiles. The optional browser-managed local speech experiment is separate
+Current game modes are Match, Memory, single-player Voice Pop, and Talk Quest.
+Local names and avatars support leaderboards for the first three modes; Talk
+Quest keeps shared campaign progress on the device. Local profiles are not the
+retired enrolled voice profiles. The optional browser-managed local speech experiment is separate
 from the removed sherpa-onnx multiplayer runtime. Old medal and sticker records
 remain relevant to save compatibility even though their collection UI is gone.

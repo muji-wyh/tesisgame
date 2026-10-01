@@ -4,8 +4,8 @@ This is the detailed current gameplay reference. Start with the
 [project README](../README.md) for setup and the [documentation index](README.md)
 for implementation and asset references.
 
-The game uses compact square icon actions and three small mode tabs, leaving the cards as the
-main focus. Pip and the success/mistake indicators form one compact status cluster;
+The game uses compact square icon actions and four small mode tabs. Match and
+Memory keep the cards as the main focus. Pip and the success/mistake indicators form one compact status cluster;
 Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
 On wider screens the mode tabs share the header row.
@@ -58,7 +58,7 @@ existing keyboard/controller activation to replay them. The written word and
 input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
-The tabs are ordered **Match**, **Memory**, **Voice Pop**; entry and reload select Match.
+The tabs are ordered **Match**, **Memory**, **Voice Pop**, **Talk Quest**; entry and reload select Match.
 
 ### Voice Pop
 
@@ -130,6 +130,29 @@ recordings or transcripts. Voice Pop needs a secure browser with SpeechRecogniti
 or webkitSpeechRecognition support and an available speech service.
 Unsupported devices show an explanation and a way back to Match.
 Reduced motion keeps a static edge glow and simpler hit feedback.
+
+### Talk Quest
+
+Talk Quest follows Adam and Yoki through fourteen conversations: twelve everyday
+scenes, a birthday boss, and a cooperative toy workshop. Each adventure has its
+own environment and rigged creature. The current speaker, prompted sentence,
+and recognized words appear together. **Speak** starts recognition, **Hear line**
+reads the prompt, and **Type** offers an explicit practice alternative. Only a
+matching complete final sentence advances; interim speech and mistaken answers
+carry no penalty.
+
+In the first thirteen adventures, successful sentences trigger word effects and
+creature reactions until a friendly defeat and victory lead to a treasure.
+The workshop instead asks for one of three illustrated parts before each
+four-line repair. Five repaired toys wake its sleeping friend, with no health
+or damage. Twenty different animated treasures can be collected across the
+campaign and replays.
+
+**Map** pauses an adventure, and **Continue saved adventure** restores its line,
+part selection, or pending treasure after a reload. Campaign progress is shared
+on this device and has no player leaderboard. Audio and recognized transcripts
+are not saved. See [Talk Quest](talk-quest.md) for the full campaign, speech
+rules, checkpoint behavior, and implementation interfaces.
 
 ### Match and Memory
 

@@ -1,0 +1,1585 @@
+{
+  "version": 1,
+  "source_product_id": "380750",
+  "package_sha256": "55dce3d4f4fe9e89fbe3cb98ebde6f2c080a1b07930224aabe24c61b3e9c4b32",
+  "selection_sha256": "5aeebbe27b01305f4d13e156cc3414df2e4496d1ef64d34d91f8de56b4e74775",
+  "normalized_max_extent": 2.0,
+  "coordinates": "Godot Y-up, source front +Z, source rest floor y=0",
+  "total_glb_bytes": 3541680,
+  "creatures": [
+    {
+      "id": "lpm-alien",
+      "name": "Alien",
+      "source_path": "Assets/Monsters/Models/Alien.fbx",
+      "source_sha256": "7e8e12bf237c980fcf5f5b6d3b28a0b89d19030ddf856a61bca7bc1d42983a57",
+      "file": "lpm-alien.glb",
+      "sha256": "8f05151332304e4c7aab281f9072fc7aa831fc9e3cb224a33909491c153f4553",
+      "bytes": 373692,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 3873,
+      "triangles": 7676,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.5257925679458217,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Alien_Main",
+          "source_linear_diffuse": [
+            0.08791638910770416,
+            0.022424455732107162,
+            0.12823157012462616
+          ]
+        },
+        {
+          "name": "Alien_Secondary",
+          "source_linear_diffuse": [
+            0.07850918918848038,
+            0.1912001669406891,
+            0.03529781475663185
+          ]
+        },
+        {
+          "name": "Eye_Black.030",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.030",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Tongue.004",
+          "source_linear_diffuse": [
+            0.10461650043725967,
+            0.03560131788253784,
+            0.06847818195819855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.030|CharacterArmature.030|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.03615624245229801,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7322078565633787,
+          "mean_rest_displacement_normalized": 0.08599052772154576,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.030|CharacterArmature.030|Yes.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.10049812876639018,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7703473588883486,
+          "mean_rest_displacement_normalized": 0.07886220375454055,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-alien.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-alien.png",
+      "thumbnail_sha256": "a50792ae71bfc96b20ef512b6d4f9a1df4d28500b8c2fac3ba9188f30f8a8cec",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          117,
+          132,
+          551,
+          521
+        ],
+        "content_dimensions": [
+          288,
+          258
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          290
+        ]
+      },
+      "design_family": "alien"
+    },
+    {
+      "id": "lpm-alpaking",
+      "name": "Alpaking",
+      "source_path": "Assets/Monsters/Models/Alpaking.fbx",
+      "source_sha256": "7a89d083ac0490a6d4609c32e475a577d1ef220ae2c2e52d1cfd6f97b7099bf2",
+      "file": "lpm-alpaking.glb",
+      "sha256": "afa8cbb8a4968734aa8d5806d0ac97268ec301882616dab4030fbaa638703906",
+      "bytes": 100492,
+      "rig_bones": 17,
+      "mesh_objects": 1,
+      "vertices": 1272,
+      "triangles": 2508,
+      "normalized_extent": 2.0,
+      "normalized_height": 0.9939741817106136,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Alpaking_Main.001",
+          "source_linear_diffuse": [
+            0.3757452964782715,
+            0.22582122683525085,
+            0.011669808067381382
+          ]
+        },
+        {
+          "name": "Alpaking_Secondary.001",
+          "source_linear_diffuse": [
+            0.12823672592639923,
+            0.10650762170553207,
+            0.05489679425954819
+          ]
+        },
+        {
+          "name": "Eye_Black.026",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.026",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Wings.005",
+          "source_linear_diffuse": [
+            0.22025467455387115,
+            0.22025467455387115,
+            0.22025467455387115
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.010|CharacterArmature.010|Flying_Idle.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.49044029223067304,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 1.0430438581055292,
+          "mean_rest_displacement_normalized": 0.030956139889049376,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-alpaking.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-alpaking.png",
+      "thumbnail_sha256": "6d32c9e050389ac9dccc7a7eba69a1e0eeb7df2d6fa3dab9e310a945715536d9",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          159,
+          203,
+          551,
+          420
+        ],
+        "content_dimensions": [
+          288,
+          159
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          191
+        ]
+      },
+      "design_family": "alpaking"
+    },
+    {
+      "id": "lpm-armabee",
+      "name": "Armabee",
+      "source_path": "Assets/Monsters/Models/Armabee.fbx",
+      "source_sha256": "122f644833677eaf35d3d0aa82cb8b2ba61b91b6b351a825ac1c13f7bdcfe961",
+      "file": "lpm-armabee.glb",
+      "sha256": "8233c440e6ac51f6bfd8a07d5e6ea6cb60769d69ba6b5d941fd839a8105920c0",
+      "bytes": 96784,
+      "rig_bones": 17,
+      "mesh_objects": 1,
+      "vertices": 1160,
+      "triangles": 2280,
+      "normalized_extent": 2.0,
+      "normalized_height": 0.8764881350157665,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Armabee_Main.001",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Armabee_Secondary.001",
+          "source_linear_diffuse": [
+            0.3757452964782715,
+            0.22582122683525085,
+            0.011669808067381382
+          ]
+        },
+        {
+          "name": "Eye_Black.024",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.024",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Wings.003",
+          "source_linear_diffuse": [
+            0.22025467455387115,
+            0.22025467455387115,
+            0.22025467455387115
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.012|CharacterArmature.012|Flying_Idle.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.4858237533175862,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 1.0431423664954516,
+          "mean_rest_displacement_normalized": 0.03347260148364712,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-armabee.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-armabee.png",
+      "thumbnail_sha256": "b02bc99359dd362aa8c5def4ed03739d8c6e39655175271e4243ef297b3a3e4b",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          190,
+          192,
+          592,
+          448
+        ],
+        "content_dimensions": [
+          288,
+          183
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          215
+        ]
+      },
+      "design_family": "armabee"
+    },
+    {
+      "id": "lpm-bird",
+      "name": "Bird",
+      "source_path": "Assets/Monsters/Models/Bird.fbx",
+      "source_sha256": "34902c887f6eeb6d88aff39889cf2cddecbb5994905cf22820c85a562110bd20",
+      "file": "lpm-bird.glb",
+      "sha256": "30749bc129bc53bd3b888d6cc97919175b0a99a9ecab6696e69bd3d1551ec1db",
+      "bytes": 310488,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 2876,
+      "triangles": 5704,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.4316289518418814,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Birb_Beak.001",
+          "source_linear_diffuse": [
+            0.3031931519508362,
+            0.01526604313403368,
+            0.008871345780789852
+          ]
+        },
+        {
+          "name": "Birb_Main.001",
+          "source_linear_diffuse": [
+            0.03516615182161331,
+            0.10320878028869629,
+            0.3031931519508362
+          ]
+        },
+        {
+          "name": "Birb_Secondary.001",
+          "source_linear_diffuse": [
+            0.3108087182044983,
+            0.29958730936050415,
+            0.2908429503440857
+          ]
+        },
+        {
+          "name": "Eye_Black.031",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.031",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.031|CharacterArmature.031|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.03638216376441537,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.695639903259412,
+          "mean_rest_displacement_normalized": 0.08744353237440633,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.031|CharacterArmature.031|Yes.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.08300445399786525,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7231553459591953,
+          "mean_rest_displacement_normalized": 0.08099505933294722,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-bird.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-bird.png",
+      "thumbnail_sha256": "c34a3eeebb9b88ec453ed9b81bb1a8f4569abf7dce2de6b0fc4b6f59284021cb",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          121,
+          104,
+          561,
+          509
+        ],
+        "content_dimensions": [
+          288,
+          265
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          297
+        ]
+      },
+      "design_family": "bird"
+    },
+    {
+      "id": "lpm-bunny",
+      "name": "Bunny",
+      "source_path": "Assets/Monsters/Models/Bunny.fbx",
+      "source_sha256": "981a92e69550d090ab08d55bc8eb8d26fac406fa35be5807025496cd29115705",
+      "file": "lpm-bunny.glb",
+      "sha256": "09e9a69104e027d2df2e014d6a559bc6726963e50c4daa65c717d6a459d5276b",
+      "bytes": 397936,
+      "rig_bones": 65,
+      "mesh_objects": 2,
+      "vertices": 4202,
+      "triangles": 8284,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.4378445832317994,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Bunny_Main",
+          "source_linear_diffuse": [
+            0.4261413514614105,
+            0.4969172477722168,
+            0.43392494320869446
+          ]
+        },
+        {
+          "name": "Bunny_Secondary",
+          "source_linear_diffuse": [
+            0.3154486417770386,
+            0.16571900248527527,
+            0.32637256383895874
+          ]
+        },
+        {
+          "name": "Eye_Black.033",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.033",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Material.011",
+          "source_linear_diffuse": [
+            0.1717669665813446,
+            0.2395479679107666,
+            0.037355147302150726
+          ]
+        },
+        {
+          "name": "Material.024",
+          "source_linear_diffuse": [
+            0.38436946272850037,
+            0.103267602622509,
+            0.01065144594758749
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.033|CharacterArmature.033|Idle.017",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.05322971523800252,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7382167717320329,
+          "mean_rest_displacement_normalized": 0.13100781107774354,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.033|CharacterArmature.033|YesStanding",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.12965799061240607,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.760129722599623,
+          "mean_rest_displacement_normalized": 0.12467622684586828,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-bunny.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-bunny.png",
+      "thumbnail_sha256": "1e76d0b1f836d0ae06fe05d1f9df876f23aecc0b76af55de057e40bc563bd917",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          114,
+          154,
+          550,
+          512
+        ],
+        "content_dimensions": [
+          288,
+          236
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          268
+        ]
+      },
+      "design_family": "bunny"
+    },
+    {
+      "id": "lpm-cactoro",
+      "name": "Cactoro",
+      "source_path": "Assets/Monsters/Models/Cactoro.fbx",
+      "source_sha256": "acbf0cc183099f868e1170ca0ba62b6a31188a9c7c7fe84a753a967c715e1655",
+      "file": "lpm-cactoro.glb",
+      "sha256": "c17291c15422d839d8e7ee6b14ed5498f07155f712481abbe69fe90fa6cf189a",
+      "bytes": 347216,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 3233,
+      "triangles": 6398,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.7023268055432625,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Cactoro_Main.001",
+          "source_linear_diffuse": [
+            0.10904479771852493,
+            0.22025159001350403,
+            0.031754184514284134
+          ]
+        },
+        {
+          "name": "Cactoro_Main.002",
+          "source_linear_diffuse": [
+            0.10904479771852493,
+            0.22025159001350403,
+            0.031754184514284134
+          ]
+        },
+        {
+          "name": "Cactoro_Red.002",
+          "source_linear_diffuse": [
+            0.16826944053173065,
+            0.00972121860831976,
+            0.016807377338409424
+          ]
+        },
+        {
+          "name": "Cactoro_Secondary.002",
+          "source_linear_diffuse": [
+            0.34191441535949707,
+            0.1247718334197998,
+            0.023153362795710564
+          ]
+        },
+        {
+          "name": "Eye_Black.035",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.035",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.034|CharacterArmature.034|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.04031794870351382,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.8215464766704147,
+          "mean_rest_displacement_normalized": 0.09261623288677646,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.034|CharacterArmature.034|Yes.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.1084530077061673,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.8488022671001497,
+          "mean_rest_displacement_normalized": 0.08693242072193519,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-cactoro.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-cactoro.png",
+      "thumbnail_sha256": "a47d57af4ffb344a64ee7cb5166a699d691fa1a19f41ce9c06f23e33f389f2e0",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          147,
+          120,
+          535,
+          515
+        ],
+        "content_dimensions": [
+          283,
+          288
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          315,
+          320
+        ]
+      },
+      "design_family": "cactoro"
+    },
+    {
+      "id": "lpm-dino",
+      "name": "Dino",
+      "source_path": "Assets/Monsters/Models/Dino.fbx",
+      "source_sha256": "b964662f70b3b6cba2deaf988e273455c54d36d8d82793092fd0ed8dd97c239c",
+      "file": "lpm-dino.glb",
+      "sha256": "d5cf6efe6a3d11f0633fd2e8e0754e1024258612a87a13980f97e29bac79a782",
+      "bytes": 306484,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 2795,
+      "triangles": 5414,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.387767301705681,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Dino_Main",
+          "source_linear_diffuse": [
+            0.1901720017194748,
+            0.033808086067438126,
+            0.08045528829097748
+          ]
+        },
+        {
+          "name": "Dino_Secondary",
+          "source_linear_diffuse": [
+            0.3757452964782715,
+            0.22582122683525085,
+            0.011669808067381382
+          ]
+        },
+        {
+          "name": "Dino_Teeth",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Dino_Tongue",
+          "source_linear_diffuse": [
+            0.16826944053173065,
+            0.00972121860831976,
+            0.016807377338409424
+          ]
+        },
+        {
+          "name": "Eye_Black.017",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.017",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.003|CharacterArmature.003|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.03634361642148962,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.6952534206945303,
+          "mean_rest_displacement_normalized": 0.08944496935413561,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.003|CharacterArmature.003|Yes.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.08489918064750612,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.6907191642930388,
+          "mean_rest_displacement_normalized": 0.0825517117819004,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-dino.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-dino.png",
+      "thumbnail_sha256": "39023cd31a1a942a94b732d0d519f9700bf4630dd98146257fa2c70f707bc985",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          122,
+          155,
+          547,
+          500
+        ],
+        "content_dimensions": [
+          288,
+          234
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          266
+        ]
+      },
+      "design_family": "dino"
+    },
+    {
+      "id": "lpm-frog",
+      "name": "Frog",
+      "source_path": "Assets/Monsters/Models/Frog.fbx",
+      "source_sha256": "b716387a7be20268652e64b36aff88a8a46169ed8401051b422bebdacf00af76",
+      "file": "lpm-frog.glb",
+      "sha256": "39036e4f53ee7d2f53d98dbe81aba6abaf555bda83741f6aea36d579ebd08d58",
+      "bytes": 288788,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 2532,
+      "triangles": 5016,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.1595674679886365,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.013",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.013",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Frog_Main",
+          "source_linear_diffuse": [
+            0.38436946272850037,
+            0.22206130623817444,
+            0.006481254938989878
+          ]
+        },
+        {
+          "name": "Frog_Secondary",
+          "source_linear_diffuse": [
+            0.014653785154223442,
+            0.011948816478252411,
+            0.004276450723409653
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.005|CharacterArmature.005|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.036046677562849946,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.692562424897727,
+          "mean_rest_displacement_normalized": 0.10321439560149154,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.005|CharacterArmature.005|YesStanding",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.08124315110523268,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.6737475865199862,
+          "mean_rest_displacement_normalized": 0.09635221835139487,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-frog.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-frog.png",
+      "thumbnail_sha256": "2f1d6e8976277a98ef4697d051f2baf6d92ce33413546e0079c970511760817d",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          119,
+          172,
+          565,
+          476
+        ],
+        "content_dimensions": [
+          288,
+          196
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          228
+        ]
+      },
+      "design_family": "frog"
+    },
+    {
+      "id": "lpm-glub",
+      "name": "Glub",
+      "source_path": "Assets/Monsters/Models/Glub.fbx",
+      "source_sha256": "e1837281dc604c5bd320f92501e4f861a733b6af5a1501066a8c0df0893b2418",
+      "file": "lpm-glub.glb",
+      "sha256": "dcd50bd736b55d5a90d25b890c7b862f1c747d8e1d59d3fbca40d211ad81ece9",
+      "bytes": 101592,
+      "rig_bones": 17,
+      "mesh_objects": 1,
+      "vertices": 1294,
+      "triangles": 2528,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.0924318110654327,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.011",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.011",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Glub_Main.001",
+          "source_linear_diffuse": [
+            0.05064760893583298,
+            0.04256204888224602,
+            0.10246928036212921
+          ]
+        },
+        {
+          "name": "Wings.001",
+          "source_linear_diffuse": [
+            0.22025467455387115,
+            0.22025467455387115,
+            0.22025467455387115
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.018|CharacterArmature.018|Flying_Idle.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.48834415434748163,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 1.0431425499648574,
+          "mean_rest_displacement_normalized": 0.030525538367130515,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-glub.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-glub.png",
+      "thumbnail_sha256": "b8999eabc8183eddc929e3a00162aec0790b2ec4d211b4bc0c76ea3231250b63",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          196,
+          202,
+          591,
+          474
+        ],
+        "content_dimensions": [
+          288,
+          198
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          230
+        ]
+      },
+      "design_family": "glub"
+    },
+    {
+      "id": "lpm-goleing",
+      "name": "Goleing",
+      "source_path": "Assets/Monsters/Models/Goleing.fbx",
+      "source_sha256": "cd3ffb05460c0978c8946c6503eae5dc0c5319d0bbe9c86cca9b1656fba3f5c9",
+      "file": "lpm-goleing.glb",
+      "sha256": "f3d84a4a77d12641abc5e4c69f9ed5a324eedd370639941daef122e54a1d619f",
+      "bytes": 166140,
+      "rig_bones": 17,
+      "mesh_objects": 1,
+      "vertices": 1889,
+      "triangles": 3696,
+      "normalized_extent": 2.0,
+      "normalized_height": 0.7084317338277233,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.009",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.009",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Goleling_Main.001",
+          "source_linear_diffuse": [
+            0.1717669665813446,
+            0.2395479679107666,
+            0.037355147302150726
+          ]
+        },
+        {
+          "name": "Goleling_Secondary.001",
+          "source_linear_diffuse": [
+            0.10461650043725967,
+            0.03560131788253784,
+            0.06847818195819855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.020|CharacterArmature.020|Flying_Idle.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.5105439412072216,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 1.048591377151429,
+          "mean_rest_displacement_normalized": 0.05726101719885648,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-goleing.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-goleing.png",
+      "thumbnail_sha256": "85b64cb40999d1063a86a3ad11402c815017b551a4dfed1dcfceecc4ac0445a4",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          180,
+          197,
+          592,
+          426
+        ],
+        "content_dimensions": [
+          288,
+          160
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          192
+        ]
+      },
+      "design_family": "goleing"
+    },
+    {
+      "id": "lpm-hywirl",
+      "name": "Hywirl",
+      "source_path": "Assets/Monsters/Models/Hywirl.fbx",
+      "source_sha256": "376b54e855bb616daeeae10655b1dc4cf69c9ac171d1e0ace9fadde49b8e1652",
+      "file": "lpm-hywirl.glb",
+      "sha256": "ed76914333298d4c7d67c9195adfc1bc118616350389f24c2ae9344f1481faf2",
+      "bytes": 153332,
+      "rig_bones": 48,
+      "mesh_objects": 1,
+      "vertices": 1672,
+      "triangles": 3296,
+      "normalized_extent": 2.0,
+      "normalized_height": 0.9903782618467555,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.007",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.007",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Hywirl_Main",
+          "source_linear_diffuse": [
+            0.24463899433612823,
+            0.05875618755817413,
+            0.32637256383895874
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.022|CharacterArmature.022|Flying_Idle",
+          "frame_start": 1.0,
+          "frame_end": 36.0,
+          "duration_seconds": 1.1666666666666667,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.043354746514714215,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.5331579724789453,
+          "mean_rest_displacement_normalized": 0.09234788897369119,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-hywirl.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-hywirl.png",
+      "thumbnail_sha256": "ba8978f8b5de730194d4799f7d2128aecdad1a9056eb1658081d400613a2881b",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          94,
+          179,
+          545,
+          444
+        ],
+        "content_dimensions": [
+          288,
+          169
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          201
+        ]
+      },
+      "design_family": "hywirl"
+    },
+    {
+      "id": "lpm-mushroom",
+      "name": "Mushroom",
+      "source_path": "Assets/Monsters/Models/Mushroom.fbx",
+      "source_sha256": "e1c07553310e9bc2ccb7b44f415b2cb906e6cb34d9cba4ddb87e99949dc3f535",
+      "file": "lpm-mushroom.glb",
+      "sha256": "a9d571d6c4a2c0d317c649dfa69a984055fdbaadcbddcbb1b9aa84a07c08ff6b",
+      "bytes": 318000,
+      "rig_bones": 58,
+      "mesh_objects": 2,
+      "vertices": 3117,
+      "triangles": 6044,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.5526208989158494,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.004",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.004",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "MushroomKing_Main.001",
+          "source_linear_diffuse": [
+            0.3757452964782715,
+            0.26258161664009094,
+            0.16706378757953644
+          ]
+        },
+        {
+          "name": "MushroomKing_Secondary.001",
+          "source_linear_diffuse": [
+            0.0229788925498724,
+            0.15756268799304962,
+            0.25979575514793396
+          ]
+        },
+        {
+          "name": "Orc_Main.001",
+          "source_linear_diffuse": [
+            0.1717669665813446,
+            0.2395479679107666,
+            0.037355147302150726
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.007|CharacterArmature.007|IdleStanding1",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.04749735939625453,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7493139332248773,
+          "mean_rest_displacement_normalized": 0.1258388406881686,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.007|CharacterArmature.007|Yes.001",
+          "frame_start": 1.0,
+          "frame_end": 31.0,
+          "duration_seconds": 1.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.11965588559687125,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.7704581681906953,
+          "mean_rest_displacement_normalized": 0.12026896050215363,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-mushroom.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-mushroom.png",
+      "thumbnail_sha256": "cd523101d2d71c1dedc6153ba39d20f3e2fa85233f5911e071adff9fb0b52b4d",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          131,
+          134,
+          562,
+          513
+        ],
+        "content_dimensions": [
+          288,
+          253
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          285
+        ]
+      },
+      "design_family": "mushroom"
+    },
+    {
+      "id": "lpm-squidle",
+      "name": "Squidle",
+      "source_path": "Assets/Monsters/Models/Squidle.fbx",
+      "source_sha256": "3dd505f58c47e937429c84f6e8c6dbc56c7bc60a801134a82d4d1f9dacb230ea",
+      "file": "lpm-squidle.glb",
+      "sha256": "11327f9273bec0e8445f15184c0f21f338275a37d1721d6b2b485b5882c6c944",
+      "bytes": 245536,
+      "rig_bones": 55,
+      "mesh_objects": 1,
+      "vertices": 2511,
+      "triangles": 4880,
+      "normalized_extent": 2.0,
+      "normalized_height": 0.7261201063010763,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.028",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.028",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Squidle_Horn",
+          "source_linear_diffuse": [
+            0.3757452964782715,
+            0.26258161664009094,
+            0.16706378757953644
+          ]
+        },
+        {
+          "name": "Squidle_Main",
+          "source_linear_diffuse": [
+            0.25979575514793396,
+            0.047033876180648804,
+            0.1125810295343399
+          ]
+        },
+        {
+          "name": "Squidle_Secondary",
+          "source_linear_diffuse": [
+            0.0229788925498724,
+            0.15756268799304962,
+            0.25979575514793396
+          ]
+        },
+        {
+          "name": "Tongue.003",
+          "source_linear_diffuse": [
+            0.10461650043725967,
+            0.03560131788253784,
+            0.06847818195819855
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.028|CharacterArmature.028|Flying_Idle.014",
+          "frame_start": 1.0,
+          "frame_end": 36.0,
+          "duration_seconds": 1.1666666666666667,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.4138731037958101,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.8596349939147563,
+          "mean_rest_displacement_normalized": 0.09756119741994802,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat",
+        "Celebrate"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-squidle.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-squidle.png",
+      "thumbnail_sha256": "51e2bbe5da4432aadd1ed4cb5ad7a767444a1af509b129f8f9c0c42019d588a4",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          87,
+          191,
+          550,
+          436
+        ],
+        "content_dimensions": [
+          288,
+          152
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          184
+        ]
+      },
+      "design_family": "squidle"
+    },
+    {
+      "id": "lpm-yeti",
+      "name": "Yeti",
+      "source_path": "Assets/Monsters/Models/Yeti.fbx",
+      "source_sha256": "421ef21483c18047eae19dc0487c166452e65ca5fb33c5c60aeda539c345b6e8",
+      "file": "lpm-yeti.glb",
+      "sha256": "afedb85057d49556be70f1788d178e3438b58da2befff40f75f134fa7e3b4601",
+      "bytes": 335200,
+      "rig_bones": 58,
+      "mesh_objects": 1,
+      "vertices": 3183,
+      "triangles": 6094,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.2166344969172898,
+      "front_axis": "+Z",
+      "floor_y": 0.0,
+      "materials": [
+        {
+          "name": "Eye_Black.001",
+          "source_linear_diffuse": [
+            0.013310964219272137,
+            0.013725013472139835,
+            0.015994027256965637
+          ]
+        },
+        {
+          "name": "Eye_White.001",
+          "source_linear_diffuse": [
+            0.2753942608833313,
+            0.2868460416793823,
+            0.3505513072013855
+          ]
+        },
+        {
+          "name": "Tongue.001",
+          "source_linear_diffuse": [
+            0.10461650043725967,
+            0.03560131788253784,
+            0.06847818195819855
+          ]
+        },
+        {
+          "name": "Yeti_Main",
+          "source_linear_diffuse": [
+            0.36184534430503845,
+            0.3672330379486084,
+            0.3565046489238739
+          ]
+        },
+        {
+          "name": "Yeti_Secondary",
+          "source_linear_diffuse": [
+            0.06301002949476242,
+            0.20507875084877014,
+            0.26635563373565674
+          ]
+        },
+        {
+          "name": "Yeti_Teeth",
+          "source_linear_diffuse": [
+            0.538219690322876,
+            0.3744063973426819,
+            0.2365829199552536
+          ]
+        }
+      ],
+      "animations": {
+        "Idle": {
+          "source_action": "CharacterArmature.009|CharacterArmature.009|Idle.006",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.03603377927913372,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.692749301966048,
+          "mean_rest_displacement_normalized": 0.08995230530303326,
+          "valid": true,
+          "export_name": "Idle",
+          "loop": true
+        },
+        "Celebrate": {
+          "source_action": "CharacterArmature.009|CharacterArmature.009|YesStanding",
+          "frame_start": 1.0,
+          "frame_end": 61.0,
+          "duration_seconds": 2.0,
+          "sample_count": 7,
+          "max_vertex_motion_normalized": 0.07930876266145988,
+          "loop_error_normalized": 0.0,
+          "max_extent_ratio": 0.6739793501680706,
+          "mean_rest_displacement_normalized": 0.08224233686313824,
+          "valid": true,
+          "export_name": "Celebrate",
+          "loop": false
+        }
+      },
+      "procedural_fallbacks": [
+        "Hit",
+        "Defeat"
+      ],
+      "resource": "res://assets/talk_quest/monsters/lpm-yeti.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/lpm-yeti.png",
+      "thumbnail_sha256": "fb4223838de0a1fd604f456962303c555aeeb01e0e0e3f3a6b019c7d114d60a9",
+      "thumbnail_processing": {
+        "source_dimensions": [
+          640,
+          640
+        ],
+        "source_alpha_bounds": [
+          111,
+          173,
+          561,
+          489
+        ],
+        "content_dimensions": [
+          288,
+          202
+        ],
+        "margin_px": 16,
+        "output_dimensions": [
+          320,
+          234
+        ]
+      },
+      "design_family": "yeti"
+    }
+  ]
+}

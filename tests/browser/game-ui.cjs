@@ -1,7 +1,7 @@
 const { expect } = require('@playwright/test');
 const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
-const MODES = ['match', 'memory', 'pop'];
+const MODES = ['match', 'memory', 'pop', 'quest'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -27,7 +27,7 @@ function modeHeight(bounds) {
 
 function modeRect(bounds, name, { recovery = false } = {}) {
   const index = MODES.indexOf(name);
-  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory or pop.`);
+  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop or quest.`);
   const content = contentBounds(bounds);
   const scale = uiScale(bounds), gap = Math.round(4 / scale);
   const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - (MODES.length - 1) * gap) / MODES.length));

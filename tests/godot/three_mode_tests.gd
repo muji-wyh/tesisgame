@@ -30,8 +30,8 @@ func _run() -> void:
 	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
-	check(app.MODES.keys() == ["match", "memory", "pop"], "The available modes are ordered Match, Memory and Voice Pop")
-	check(app._mode_buttons.size() == 3, "Each of the three modes has one visible tab")
+	check(app.MODES.keys() == ["match", "memory", "pop", "quest"], "The available modes include Talk Quest after Match, Memory and Voice Pop")
+	check(app._mode_buttons.size() == 4, "Each of the four modes has one visible tab")
 	check(app.find_child("Mode_learn", true, false) == null
 		and app.find_child("LearnWords", true, false) == null
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_lesson"),

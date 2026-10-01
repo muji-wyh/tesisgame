@@ -11,6 +11,11 @@ build/*
 !build/.gdignore
 # Licensed Unity Store textures are shipped only inside the compiled game.
 assets/imported-unity/
+# Licensed Talk Quest characters ship inside the compiled game, not as source packs.
+assets/talk_quest/monsters/*.glb
+assets/talk_quest/monsters/*.glb.import
+assets/talk_quest/monsters/*.png
+assets/talk_quest/monsters/*.png.import
 # User-provided audio ships in the game pack, not as public source assets.
 assets/imported-audio/
 *.unitypackage

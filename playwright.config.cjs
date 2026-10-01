@@ -34,7 +34,7 @@ module.exports = defineConfig({
     { name: 'ipad-webkit', use: { ...devices['iPad Pro 11'], browserName: 'webkit' } },
     {
       name: 'android-chromium',
-      testMatch: ['mobile-keyboard.spec.cjs', 'voice-pop.spec.cjs', 'voice.spec.cjs'],
+      testMatch: ['mobile-keyboard.spec.cjs', 'voice-pop.spec.cjs', 'voice.spec.cjs', 'talk-quest.spec.cjs'],
       use: { ...devices['Pixel 7'], browserName: 'chromium' }
     }
   ]

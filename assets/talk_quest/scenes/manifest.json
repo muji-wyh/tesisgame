@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "renderer": "res://scripts/talk_quest_backdrop.gd",
+  "authorship": "Original procedural vector artwork",
+  "third_party_derivatives": [],
+  "design_size": [960, 540],
+  "max_redraw_fps": 30,
+  "scenes": [
+    {"id":"scene-01","level":1,"name":"At the Front Door","composition":"Porch, arched door, welcome mat, doorbell, plants","motion":"Plant sway, bell bounce, door opens as dialogue finishes"},
+    {"id":"scene-02","level":2,"name":"Clean Hands","composition":"Tiled bathroom, mirror, low sink, soap pump, towel","motion":"Drifting bubbles, pump compression, water after progress"},
+    {"id":"scene-03","level":3,"name":"Breakfast Time","composition":"Kitchen cabinets, window, breakfast table, toast and milk","motion":"Steam curls, small toast bounce"},
+    {"id":"scene-04","level":4,"name":"Getting Dressed","composition":"Bed, wardrobe, shirt, socks, shoes, oval rug","motion":"Wardrobe doors open with progress, shirt lifts gently"},
+    {"id":"scene-05","level":5,"name":"Taking Turns","composition":"Slide platform, roof, ladder, swing, picket fence","motion":"Flag sway, slow swing"},
+    {"id":"scene-06","level":6,"name":"Our Classroom Picture","composition":"Art table, crayons, paper, display board, storage bins","motion":"Sun and tree appear with progress, finished picture appears on board"},
+    {"id":"scene-07","level":7,"name":"Fruit Shopping","composition":"Striped awning, wooden produce bins, apples, bananas, basket","motion":"Fruit settles with gentle staggered bounce"},
+    {"id":"scene-08","level":8,"name":"A Quiet Library","composition":"Curved bookshelves, reading chair, open book, warm standing lamp","motion":"Slow page turn and restrained plant movement"},
+    {"id":"scene-09","level":9,"name":"A Day at the Zoo","composition":"Habitat windows, giraffe, monkey family, penguin, broad path and sign","motion":"Foliage sway"},
+    {"id":"scene-10","level":10,"name":"Riding the Bus","composition":"Blue bus, rounded windows, seats, sliding doors, ticket and stop sign","motion":"Passing city and road, door panels slide with progress"},
+    {"id":"scene-11","level":11,"name":"A Sandcastle at the Beach","composition":"Ocean, shoreline, striped towel, bucket, shells and castle","motion":"Wave motion, bucket tilt, castle towers rise with progress"},
+    {"id":"scene-12","level":12,"name":"Camping Under the Stars","composition":"Night mountains, tent, lantern, two sleeping bags, pillows and teddy","motion":"Slow independent star twinkle"},
+    {"id":"scene-13","level":13,"name":"The Grand Birthday Party","composition":"Birthday stage, bunting, balloons, gifts, toy train, cake and drink","motion":"Balloon sway, success confetti"},
+    {"id":"scene-14","level":14,"name":"Magic Toy Workshop","composition":"Tool board, three part silhouettes, five repair stations, resting cushion","motion":"Only completed toys change color and perform a gentle celebration"}
+  ]
+}

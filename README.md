@@ -13,10 +13,15 @@ handles loading, accessibility, audio recovery, and speech recognition.
 - **Voice Pop:** select a local player, then speak visible words during a
   50-second round. The second consecutive hit adds 3 seconds; the third adds
   5 seconds. Occasional volleys throw several words together. Cards do not collide.
+- **Talk Quest:** fourteen conversations with Adam and Yoki, fourteen rigged
+  monsters, sentence reactions, and twenty animated treasures. Speak a complete
+  sentence or type it. The last adventure repairs five toys through part choices
+  and conversation. Progress and unfinished adventures resume on this device.
 - **Players and leaderboards:** up to ten names and emoji avatars on the current
   device. First-time entry requires creating a player. Voice Pop selects the
   player before each round and saves the result automatically; Match and Memory
-  attribute results afterward. Personal bests rank separately for each mode.
+  attribute results afterward. Personal bests rank separately for Match, Memory,
+  and Voice Pop. Talk Quest saves shared campaign progress for this device.
 - **Eight worlds and 350 words:** choose a theme during loading or in Pip's room.
   Age preferences guide the vocabulary; they do not collect a birthdate.
 - **Chests and toys:** winning Match or Memory advances saved gift progress.
@@ -41,6 +46,7 @@ feedback. Touch, keyboard, and Xbox controller input share the game controls.
 Detailed rules and behavior:
 
 - [Gameplay reference](docs/gameplay.md)
+- [Talk Quest campaign, speech, and saves](docs/talk-quest.md)
 - [Local players and leaderboards](docs/local-leaderboards.md)
 - [Speech matching and the local experiment](docs/voice-matching.md)
 - [Voice Pop slice feedback](docs/voice-pop-slice-feedback.md)
@@ -50,6 +56,10 @@ Detailed rules and behavior:
 
 Install **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**.
 Put `godot` on PATH or set `GODOT_BIN` to the executable path.
+
+Before building a fresh checkout, restore the licensed
+[Talk Quest character inputs](docs/assets/talk-quest-monsters.md#provenance-and-reproducibility).
+The models and portraits stay local and ship inside the compiled game pack.
 
 ```powershell
 npm ci
