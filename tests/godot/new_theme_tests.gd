@@ -208,9 +208,11 @@ func _check_chests(manifest: Dictionary) -> void:
 	for world in NEW_WORLDS:
 		var palette: Dictionary = Data.theme(world.id)
 		chest.configure_skin(palette, manifest)
+		var live: Dictionary = chest.hold_effect_snapshot().get("live_model", {})
 		check(chest.theme_id == world.id and chest.piece_count() == 1
-			and chest.hold_effect_snapshot().opening_frames >= 6 and chest.hold_effect_snapshot().style == world.chest,
-			"The new world renders its own complete downloaded chest and opening sequence")
+			and not live.is_empty() and live.mesh_count > 0 and not live.parts.is_empty()
+			and chest.hold_effect_snapshot().style == world.chest,
+			"The new world renders its own detailed chest with a live animated mechanism")
 		await process_frame
 	chest.queue_free()
 	await process_frame

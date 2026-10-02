@@ -45,6 +45,7 @@ func _run() -> void:
 	await _test_motion()
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(960, 720)
+	await _test_card_style_reuse()
 	var directory := "user://card-polish-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
@@ -153,6 +154,74 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Card polish: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _test_card_style_reuse() -> void:
+	var Data = preload("res://scripts/game_data.gd")
+	var Style = preload("res://scripts/ui_style.gd")
+	var word: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))[0]
+	var card = preload("res://scripts/word_card.gd").new()
+	card.setup({"id": word.id + ":word", "kind": "word", "word": word})
+	root.add_child(card)
+	card.size = Vector2(180, 120)
+	var palette: Dictionary = Data.theme("summer")
+	card.refresh(palette, false, false, false, false)
+	await settle()
+	var resting: Array = _card_styles(card)
+	var font_changes := [0]
+	card.word_label.theme_changed.connect(func() -> void: font_changes[0] += 1)
+	for iteration in range(10):
+		card.refresh(palette, false, false, false, false)
+	await settle()
+	check(_card_styles(card) == resting and font_changes[0] == 0,
+		"Refreshing an unchanged card reuses its styles and does not invalidate label font sizing")
+	card.refresh(palette, false, false, false, true)
+	check(card.disabled and _card_styles(card) == resting,
+		"Reusing a card's surface still applies a changed input lock")
+	card.refresh(palette, true, false, false, false)
+	var selected: Array = _card_styles(card)
+	check(not card.disabled and selected != resting and selected[0].border_color == palette.accent
+		and selected[0].border_width_left == 2,
+		"Selecting a card replaces the resting surface with its active border")
+	card.refresh(palette, true, false, false, false)
+	check(_card_styles(card) == selected, "Repeated selected-card refreshes reuse the active styles")
+	card.refresh(palette, false, true, false, false)
+	check(card.disabled and card.match_mark.visible and card.get_theme_stylebox("normal").bg_color == Color("#e7f5e9"),
+		"Matched state still updates the surface, badge, and input guard")
+	card.refresh(palette, false, false, true, false)
+	check(not card.disabled and not card.match_mark.visible
+		and card.get_theme_stylebox("normal").border_color == Style.WRONG,
+		"Wrong state replaces a cached matched surface and clears its badge")
+	card.refresh(palette, false, false, false, false, true)
+	check(card.get_theme_stylebox("normal").bg_color == Style.hint_palette(palette).fill,
+		"Hints retain their distinct surface after other feedback states")
+	var themed: Array = _card_styles(card)
+	palette = Data.theme("winter")
+	card.refresh(palette, false, false, false, false, true)
+	check(_card_styles(card) != themed and card.get_theme_stylebox("focus").border_color == palette.accent,
+		"Changing worlds refreshes the full card surface including keyboard focus")
+	card.refresh(palette, false, false, false, false)
+	var before_light: Resource = card.get_theme_stylebox("normal")
+	palette.light = Color("#f2b1d2")
+	card.refresh(palette, false, false, false, false)
+	check(card.get_theme_stylebox("normal") != before_light
+		and card.get_theme_stylebox("normal").bg_color == Color.WHITE.lerp(palette.light, 0.1),
+		"A changed light color invalidates the surface even when the accent stays the same")
+	var first_radius: int = card.get_theme_stylebox("normal").corner_radius_top_left
+	card.set_back(Control.new())
+	card.refresh(palette, false, false, false, false)
+	check(card.get_theme_stylebox("normal").corner_radius_top_left == ceili(14 / Style.ui_scale(card))
+		and card.get_theme_stylebox("normal").corner_radius_top_left != first_radius,
+		"Attaching a Memory back refreshes the card's display-scaled corner size")
+	card.queue_free()
+	await process_frame
+
+
+func _card_styles(card: Button) -> Array:
+	var result: Array = []
+	for key in ["normal", "disabled", "hover", "pressed", "focus"]:
+		result.append(card.get_theme_stylebox(key))
+	return result
 
 
 func _test_retry_layout(app) -> void:

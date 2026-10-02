@@ -71,6 +71,7 @@ var _feedback_state: String = ""
 var _feedback_kind: String = ""
 var _feedback_left: float = 0.0
 var _feedback_duration: float = 0.0
+var _style_key: Array = []
 var _word_play := WordPlay.new()
 var _press_motion := CardMotion.new()
 
@@ -168,15 +169,21 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		fill = hint_colors.fill
 		border = hint_colors.border
 	var radius: int = ceili(14 / Style.ui_scale(self)) if _back != null else 20
-	var normal: StyleBoxFlat = Style.box(fill, border, radius, 2 if selected or matched or wrong or hinted else 1)
-	normal.shadow_color = Color(accent, 0.11)
-	normal.shadow_size = 3
-	normal.shadow_offset = Vector2(0, 2)
-	add_theme_stylebox_override("normal", normal)
-	add_theme_stylebox_override("disabled", normal)
-	add_theme_stylebox_override("hover", Style.box(fill, accent, radius, 3))
-	add_theme_stylebox_override("pressed", Style.box(accent.lightened(0.8), accent, radius, 3))
-	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, accent, radius, 4))
+	var border_width: int = 2 if selected or matched or wrong or hinted else 1
+	var style_key: Array = [fill, border, accent, radius, border_width]
+	# Most cards keep the same appearance when another card is selected.
+	# Reuse their resources without skipping feedback or input-state updates.
+	if _style_key != style_key:
+		_style_key = style_key
+		var normal: StyleBoxFlat = Style.box(fill, border, radius, border_width)
+		normal.shadow_color = Color(accent, 0.11)
+		normal.shadow_size = 3
+		normal.shadow_offset = Vector2(0, 2)
+		add_theme_stylebox_override("normal", normal)
+		add_theme_stylebox_override("disabled", normal)
+		add_theme_stylebox_override("hover", Style.box(fill, accent, radius, 3))
+		add_theme_stylebox_override("pressed", Style.box(accent.lightened(0.8), accent, radius, 3))
+		add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, accent, radius, 4))
 	disabled = matched or locked
 	match_mark.visible = matched
 	match_mark.queue_redraw()
@@ -321,7 +328,8 @@ func _fit_text() -> void:
 	var available_width: float = word_label.size.x if size.x < 72 else size.x - 18
 	while font_size > minimum_font and font.get_string_size(word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available_width:
 		font_size -= 1
-	word_label.add_theme_font_size_override("font_size", font_size)
+	if word_label.get_theme_font_size("font_size") != font_size:
+		word_label.add_theme_font_size_override("font_size", font_size)
 	# Short Memory cards need a smaller corner mark to leave the word readable.
 	if match_mark != null:
 		if _back != null:

@@ -1,12 +1,28 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
-const { brotliCompressSync, constants } = require('node:zlib');
+const { brotliCompressSync, brotliDecompressSync, constants } = require('node:zlib');
 const { patchWebEngine } = require('./patch-web-engine.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const CHEST_CUES = ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward'];
 const POP_REFERENCE_IDS = ['quick', 'juicy', 'crisp'];
+
+function compressWebAsset(bytes, candidates = []) {
+  for (const filename of candidates) {
+    try {
+      const compressed = fs.readFileSync(filename);
+      // Filename hashes are only a lookup hint. Verify the complete decoded
+      // content before reusing a sidecar, including caches from interrupted builds.
+      const decoded = brotliDecompressSync(compressed, { maxOutputLength: bytes.length + 1, info: true });
+      if (decoded.buffer.equals(bytes) && decoded.engine.bytesWritten === compressed.length) return compressed;
+    } catch (error) {
+      if (error.code === 'EACCES' || error.code === 'EPERM') throw error;
+      // Missing, truncated or stale caches are disposable; rebuild them below.
+    }
+  }
+  return brotliCompressSync(bytes, { params: { [constants.BROTLI_PARAM_QUALITY]: 11 } });
+}
 
 function importedAudio(root, source) {
   const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');
@@ -81,6 +97,7 @@ function collectRequiredAudio(root) {
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
+    ...['launch', 'impact', 'defeat'].map(id => `assets/audio/quest/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
@@ -131,12 +148,16 @@ function packageWebExport(directory) {
     { name: mainPack, bytes: pack }
   ];
   const retained = new Set();
+  const cachedSidecars = fs.readdirSync(directory)
+    .filter(name => /^(?:engine|game)-[a-f0-9]{16}\..+\.br$/.test(name));
   let downloadBytes = 0;
   // Azure negotiates .br sidecars; the browser handles decompression and caching.
   for (const file of files) {
-    const compressed = brotliCompressSync(file.bytes, {
-      params: { [constants.BROTLI_PARAM_QUALITY]: 11 }
-    });
+    const suffix = file.name.slice(file.name.indexOf('.'));
+    const candidates = cachedSidecars.filter(name => name.endsWith(`${suffix}.br`))
+      .sort((first, second) => Number(second === `${file.name}.br`) - Number(first === `${file.name}.br`))
+      .map(name => path.join(directory, name));
+    const compressed = compressWebAsset(file.bytes, candidates);
     fs.writeFileSync(path.join(directory, file.name), file.bytes);
     fs.writeFileSync(path.join(directory, `${file.name}.br`), compressed);
     retained.add(file.name).add(`${file.name}.br`);
@@ -164,4 +185,4 @@ function packageWebExport(directory) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio };
+module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, compressWebAsset };

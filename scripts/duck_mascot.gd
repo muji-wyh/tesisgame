@@ -53,6 +53,7 @@ var _room_reaction: String = ""
 var _room_reaction_left: float = 0.0
 var _gameplay_reaction: String = ""
 var _gameplay_left: float = 0.0
+var _gameplay_seconds: float = GAMEPLAY_SAD_SECONDS
 
 
 func _ready() -> void:
@@ -126,7 +127,7 @@ func react(kind: String = "happy") -> void:
 	_update_pose()
 
 
-func react_gameplay(correct: bool) -> void:
+func react_gameplay(correct: bool, duration: float = 0.0) -> void:
 	if _idle_paused or not is_visible_in_tree():
 		return
 	clear_room_interaction()
@@ -136,6 +137,9 @@ func react_gameplay(correct: bool) -> void:
 	reaction_left = 0.0
 	_reaction = ""
 	_gameplay_reaction = "happy" if correct else "sad"
+	_gameplay_seconds = GAMEPLAY_HAPPY_SECONDS if correct else GAMEPLAY_SAD_SECONDS
+	if is_finite(duration) and duration > 0.0:
+		_gameplay_seconds = clampf(duration, 0.5, 4.0)
 	_gameplay_left = _gameplay_duration()
 	set_process(true)
 	_update_pose()
@@ -150,7 +154,7 @@ func clear_gameplay_reaction() -> void:
 
 
 func _gameplay_duration() -> float:
-	return GAMEPLAY_HAPPY_SECONDS if _gameplay_reaction == "happy" else GAMEPLAY_SAD_SECONDS
+	return _gameplay_seconds
 
 
 func settle() -> void:

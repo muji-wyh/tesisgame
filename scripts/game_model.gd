@@ -253,7 +253,7 @@ func request_hint() -> bool:
 	return false
 
 
-func select(id: String) -> String:
+func select(id: String, notify: bool = true) -> String:
 	if not phase in ["waiting", "matching"] or matched_ids.has(id):
 		return "ignored"
 	var card: Dictionary = card_by_id(id)
@@ -293,7 +293,8 @@ func select(id: String) -> String:
 					if not missed_word_ids.has(word_id):
 						missed_word_ids.append(word_id)
 				result = "wrong"
-	changed.emit()
+	if notify:
+		changed.emit()
 	return result
 
 

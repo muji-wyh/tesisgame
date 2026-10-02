@@ -16,6 +16,9 @@ test('Talk Quest accessible help describes finite floating words and level-trigg
   assert.match(help, /say the floating words/);
   assert.match(help, /one health point/);
   assert.match(help, /limited supply of words/);
+  assert.match(help, /Speech appears on screen in real time as recognition updates/);
+  assert.match(help, /including words that do not match a target/);
+  assert.doesNotMatch(help, /last recognized word appears briefly/);
   assert.doesNotMatch(help, /Hear line|use Type|matching sentence|repair five toys/);
 });
 
@@ -164,7 +167,7 @@ function wordCheckpoint() {
   return { version: 2, completion_counts: Array(14).fill(0), run: {
     level_number: 1, hits: 1, misses: 0, spawned: 2, elapsed: 2.8, next_spawn_in: 1.5,
     phase: 'playing', clear_number: 1, run_id: 'tq-run-1-2-3', targets: [{ uid: 2, word_id: 'cat',
-      age: 0.65, lifetime: 6.8, lane: 0, x_start: 0.25, x_end: 0.48, peak: 0.22, spin: 0.05 }]
+      age: 0.65, lifetime: 10, lane: 0, x_start: 0.25, x_end: 0.48, peak: 0.22, spin: 0.05 }]
   } };
 }
 
@@ -179,6 +182,16 @@ test('version two quest progress retains finite flights while discarding speech 
   assert.doesNotMatch(f.host.questProgress(), /private|transcript|event_id|recording|forms|feedback|line_index|selected_parts/);
   assert.equal(f.host.saveQuestProgress(JSON.stringify({ ...expected, run: {} })), true);
   assert.deepEqual(JSON.parse(f.host.questProgress()).run, {});
+});
+
+test('ten-second quest checkpoints preserve near-deadline words and accept legacy flights', () => {
+  const f = questFixture();
+  for (const [lifetime, age] of [[10, 9.99], [6.8, 6.79], [5.8, 5.79]]) {
+    const checkpoint = wordCheckpoint();
+    Object.assign(checkpoint.run.targets[0], { lifetime, age });
+    assert.equal(f.host.saveQuestProgress(JSON.stringify(checkpoint)), true);
+    assert.deepEqual(JSON.parse(f.host.questProgress()), checkpoint);
+  }
 });
 
 test('actual exported Godot runs preserve signed instance IDs without blocking microphone startup', () => {
@@ -211,7 +224,9 @@ test('malformed version two checkpoints cannot replace valid saved finite flight
     value => { value.run.next_spawn_in = -1; },
     value => { value.run.run_id = 'private utterance'; },
     value => { value.run.phase = 'private utterance'; },
-    value => { value.run.targets[0].age = 6.8; },
+    value => { value.run.targets[0].age = 10; },
+    value => { value.run.targets[0].lifetime = 9; },
+    value => { value.run.targets[0].lifetime = 10.01; },
     value => { value.run.targets[0].word_id = 'private utterance'; },
     value => { value.run.targets[0].lane = 4; },
     value => { value.run.targets[0].uid = 3; },
@@ -249,8 +264,41 @@ test('quest status is a read-only display snapshot and renders recognized text l
   assert.deepEqual(JSON.parse(f.status.dataset.snapshot), snapshot);
   f.host.questStatus(JSON.stringify({ active: true, view: 'map', completed: [1, 2] }));
   assert.equal(f.status.textContent, 'Talk Quest. 2 of 14 adventures complete.');
+  f.host.questStatus(JSON.stringify({ active: true, view: 'stage', phase: 'paused', targets: [],
+    pause_result: { visible: true, context_phase: 'chest' } }));
+  assert.equal(f.status.textContent, 'Talk Quest paused. Choose Continue to resume or Map to return to the adventures.');
+  assert.deepEqual(f.calls, [], 'Announcing a pause must not start the microphone or other host actions');
   f.host.questStatus(JSON.stringify({ active: false }));
   assert.equal(f.status.textContent, '');
+});
+
+test('repeated Quest snapshots leave the DOM unchanged while geometry and lifecycle changes still publish', () => {
+  const f = questFixture();
+  let snapshot = '', readable = '', snapshotWrites = 0, textWrites = 0;
+  Object.defineProperty(f.status.dataset, 'snapshot', {
+    get() { return snapshot; }, set(value) { snapshot = value; snapshotWrites++; }
+  });
+  Object.defineProperty(f.status, 'textContent', {
+    get() { return readable; }, set(value) { readable = value; textWrites++; }
+  });
+  const states = [
+    { active: true, view: 'map', completed: [1, 2] },
+    { active: true, view: 'stage', phase: 'paused', pause_result: { visible: true } },
+    { active: true, view: 'stage', phase: 'playing', hp: 6, targets: [{ text: 'cat', x: 10 }] },
+    { active: true, view: 'stage', phase: 'playing', hp: 6, targets: [{ text: 'cat', x: 20 }] },
+    { active: false }
+  ];
+  for (const state of states) {
+    f.host.questStatus(JSON.stringify(state));
+    const before = [snapshotWrites, textWrites];
+    f.host.questStatus(JSON.stringify(state));
+    assert.deepEqual([snapshotWrites, textWrites], before, 'Repeated map, pause and game snapshots do not mutate the DOM');
+    assert.deepEqual(JSON.parse(snapshot), state);
+  }
+  assert.equal(snapshotWrites, states.length, 'New geometry still publishes even when readable words are unchanged');
+  assert.equal(textWrites, states.length - 1, 'Moving a target does not repeat the live-region announcement');
+  assert.equal(readable, '');
+  assert.deepEqual(f.calls, [], 'Snapshot updates never start speech or change its bindings');
 });
 
 test('Hear line stops capture before speaking and cannot be cleared by an old utterance callback', () => {
@@ -408,6 +456,93 @@ test('floating-word quest capture starts once and target refreshes keep the acti
     f.latest.result([['cat', true]]);
     assert.equal(f.events.length, 1, 'Acknowledged interim and rewritten final are the same consumed occurrence');
   }
+});
+
+test('Quest publishes every raw live revision immediately and independently from word scoring', () => {
+  const f = speechFixture();
+  f.listenWords();
+  const updates = [
+    ['Um, I think a caterpillar!', false],
+    ['Um, I think CAT!', false],
+    ['', false],
+    ['No, that is a dog.', false],
+    ['No, that is a dog.', true]
+  ];
+  for (const [text, final] of updates) {
+    f.latest.result([[text, final]]);
+    assert.deepEqual(f.genericResults.at(-1), [text, final],
+      'The display sees the whole hypothesis synchronously, without waiting 150 ms or requiring a match');
+  }
+  assert.deepEqual(f.genericResults, updates, 'Every nonempty and empty revision reaches the display exactly once');
+  f.advance(200);
+  assert.deepEqual(f.events.filter(event => event.target_uid > 0), [],
+    'Withdrawn matches and mismatched utterances do not manufacture a scored hit');
+});
+
+test('Quest displays raw text before a final word scores and ends the listening session', () => {
+  const f = speechFixture(), order = [];
+  f.host.observeSpeech((text, final) => order.push(['display', text, final]), () => {});
+  f.host.observeQuestSpeech((json, receipt) => {
+    const event = JSON.parse(json);
+    order.push(['score', event.text, event.target_uid]);
+    receipt.accepted = true;
+    f.host.stopSpeech();
+  });
+  f.listenWords();
+  f.latest.result([['I said CAT!', true]]);
+  assert.deepEqual(order, [['display', 'I said CAT!', true], ['score', 'CAT', 1]],
+    'Raw speech survives the scoring callback stopping capture after the winning word');
+});
+
+test('Quest empty finals and rewritten final hypotheses update only the display once', () => {
+  const f = speechFixture();
+  f.listenWords();
+  f.latest.result([['cat', false]]);
+  assert.deepEqual(f.genericResults, [['cat', false]]);
+  assert.deepEqual(f.events, [], 'The display does not wait for the scoring stability timer');
+  f.advance(150);
+  assert.equal(f.events.length, 1);
+  f.latest.result([['cats', true]]);
+  f.latest.result([['Actually, a cat!', true]]);
+  f.latest.result([['', true]]);
+  assert.deepEqual(f.genericResults, [
+    ['cat', false], ['cats', true], ['Actually, a cat!', true], ['', true]
+  ]);
+  assert.equal(f.events.length, 1, 'A corrected or withdrawn final never scores the consumed occurrence twice');
+  f.latest.result([['', true], ['', true]], 1);
+  assert.deepEqual(f.genericResults.at(-1), ['', true]);
+  assert.equal(f.genericResults.length, 5, 'A new empty final is not duplicated by the candidate callback branch');
+});
+
+test('Quest raw transcript callbacks cannot leak after pause, map, mode exit or round replacement', () => {
+  for (const stop of ['pause', 'map', 'mode', 'round', 'hidden', 'pagehide']) {
+    const f = speechFixture();
+    f.listenWords();
+    const old = f.latest;
+    old.result([['cat', false]]);
+    if (stop === 'pause' || stop === 'map') f.host.stopSpeech();
+    if (stop === 'mode') f.host.speechMode(true, 'match');
+    if (stop === 'round') f.publishWords([{ uid: 1, text: 'dog', remaining_ms: 10000 }], 'quest-words-2');
+    if (stop === 'hidden') { f.document.hidden = true; f.document.dispatch('visibilitychange'); }
+    if (stop === 'pagehide') f.window.dispatch('pagehide');
+    old.result([['stale partial', false]]);
+    old.result([['stale final', true]]);
+    f.advance(200);
+    assert.deepEqual(f.genericResults, [['cat', false]], stop + ' suppresses raw callbacks from old capture');
+    assert.deepEqual(f.events, [], stop + ' also cancels the old bound candidate');
+  }
+});
+
+test('Quest transcript observers can end capture without allowing the displayed word to score', () => {
+  const f = speechFixture(), visible = [];
+  f.host.observeSpeech((text, final) => {
+    visible.push([text, final]);
+    f.host.stopSpeech();
+  }, () => {});
+  f.listenWords();
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(visible, [['cat', true]]);
+  assert.deepEqual(f.events, [], 'A synchronous display-side lifecycle change invalidates the candidate before scoring');
 });
 
 test('quest floating words share Pop token alignment, reviewed aliases and separate occurrence IDs', () => {

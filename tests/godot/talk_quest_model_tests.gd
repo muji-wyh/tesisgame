@@ -23,12 +23,14 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	_test_catalog()
 	_test_spawning_and_budget()
+	_test_ten_second_countdown()
 	_test_bound_events()
 	_test_word_matching()
 	_test_pause_stop_and_retry()
 	_test_full_campaign()
 	_test_replay_rewards()
 	_test_checkpoint_privacy_and_resume()
+	_test_legacy_countdown_upgrade()
 	_test_pending_rewards_and_migration()
 	_test_corrupt_progress()
 	print("Talk Quest model: %d assertions, %d failures" % [checks, failures])
@@ -151,8 +153,8 @@ func _test_spawning_and_budget() -> void:
 	check(game.spawned == 1 and game.targets.size() == 1 and game.total_words == 8,
 		"Level one begins with a live word and a finite eight-word budget")
 	var target: Dictionary = game.targets[0]
-	check(target.age == 0.0 and target.lifetime >= 5.8 and target.forms.has(target.word.text),
-		"New targets have a fair flight lifetime and explicit speech forms")
+	check(target.age == 0.0 and target.lifetime == 10.0 and target.forms.has(target.word.text),
+		"New targets have a ten-second flight lifetime and explicit speech forms")
 	var descriptors: Array[Dictionary] = game.speech_targets()
 	check(descriptors[0].uid == target.uid and descriptors[0].remaining_ms == target.lifetime * 1000.0,
 		"Speech snapshots identify each live flight and its remaining receipt window")
@@ -203,6 +205,36 @@ func _test_spawning_and_budget() -> void:
 			exhausted.advance(10.0)
 	check(exhausted.phase == "lost" and exhausted.hp == 1 and exhausted.hits == exhausted.max_hp - 1,
 		"After m plus one misses, the remaining finite words cannot manufacture victory")
+
+
+func _test_ten_second_countdown() -> void:
+	for number in range(1, Data.LEVEL_COUNT + 1):
+		var game = unlocked_game(number)
+		check(game.targets[0].lifetime == 10.0 and game.speech_targets()[0].remaining_ms == 10000.0,
+			"Every level begins with the full ten-second recognition window")
+		var before_expiry: Dictionary = speech_event(game, "near-deadline-%d" % number)
+		game.advance(9.99)
+		check(game.misses == 0 and game.submit_speech_event(before_expiry).matched,
+			"Words remain hittable just before ten seconds, including late campaign levels")
+		var expires = unlocked_game(number)
+		var at_expiry: Dictionary = speech_event(expires, "at-deadline-%d" % number)
+		expires.advance(10.0)
+		check(expires.misses == 1 and expires.submit_speech_event(at_expiry).reason == "stale_target",
+			"The ten-second boundary expires exactly one initial word and rejects delayed speech")
+		for target: Dictionary in expires.targets:
+			check(target.lifetime == 10.0, "Later spawns keep the same ten-second countdown")
+	var paused = unlocked_game()
+	paused.advance(9.75)
+	paused.pause()
+	paused.advance(20.0)
+	var restored := Model.new()
+	check(restored.import_progress(JSON.parse_string(JSON.stringify(paused.export_progress())))
+		and restored.phase == "paused" and restored.targets[0].age == 9.75,
+		"A ten-second target saves and restores near its deadline without losing the attempt")
+	restored.resume()
+	check(restored.speech_targets()[0].remaining_ms == 250.0, "Resume retains the exact remaining countdown")
+	restored.advance(0.25)
+	check(restored.misses == 1, "A paused or reloaded countdown still expires at its original boundary")
 
 
 func _test_bound_events() -> void:
@@ -376,6 +408,29 @@ func _test_checkpoint_privacy_and_resume() -> void:
 		"The restored finite budget still exhausts exactly once")
 
 
+func _test_legacy_countdown_upgrade() -> void:
+	for number in range(1, Data.LEVEL_COUNT + 1):
+		var legacy = unlocked_game(number)
+		legacy.advance(1.25)
+		var saved: Dictionary = legacy.export_progress()
+		saved.run.targets[0].lifetime = lerpf(6.8, 5.8, float(number - 1) / float(Data.LEVEL_COUNT - 1))
+		var restored := Model.new()
+		check(restored.import_progress(JSON.parse_string(JSON.stringify(saved))) and restored.phase == "paused",
+			"Every earlier level-dependent countdown still restores its saved attempt")
+		check(restored.targets.size() == 1 and restored.targets[0].lifetime == 10.0
+			and restored.targets[0].age == 1.25 and restored.targets[0].uid == legacy.targets[0].uid
+			and restored.elapsed == legacy.elapsed and restored.spawned == legacy.spawned
+			and restored.hp == legacy.hp and restored.misses == legacy.misses,
+			"Old active words gain the ten-second limit while retaining elapsed time and run progress")
+		check(restored.export_progress().run.targets[0].lifetime == 10.0,
+			"The next checkpoint persists the upgraded countdown")
+		restored.resume()
+		check(restored.speech_targets()[0].remaining_ms == 8750.0,
+			"Recognition receives the upgraded remaining time rather than a restarted countdown")
+		restored.advance(8.75)
+		check(restored.misses == 1, "Upgraded flights expire exactly ten seconds after their original launch")
+
+
 func _test_pending_rewards_and_migration() -> void:
 	var game = unlocked_game()
 	complete_battle(game)
@@ -445,7 +500,8 @@ func _test_corrupt_progress() -> void:
 		check(not game.has_saved_run() and game.total_clears == 0,
 			"Inconsistent finite combat checkpoints are discarded: " + str(edits))
 	for edits in [
-		{"uid": 0}, {"uid": 2}, {"word_id": "not-a-word"}, {"age": 100}, {"lifetime": INF},
+		{"uid": 0}, {"uid": 2}, {"word_id": "not-a-word"}, {"age": 10.0}, {"age": 100},
+		{"lifetime": INF}, {"lifetime": 9.0}, {"lifetime": 10.01},
 		{"lane": 3}, {"x_start": NAN}, {"x_end": 20}, {"peak": -1}, {"spin": 20}
 	]:
 		var corrupted: Dictionary = valid.duplicate(true)

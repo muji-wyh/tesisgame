@@ -1241,6 +1241,70 @@ bundledAudioTest('fresh Voice Pop targets launch once with audible whooshes and 
   });
 });
 
+bundledAudioTest.describe('slice audio timing', () => {
+  bundledAudioTest.use({ deviceScaleFactor: 1 });
+
+  bundledAudioTest('accepted hits start their slice sound before publishing the visual hit', async ({ page, browserName }, info) => {
+    const audioRequests = watchAudioRequests(page);
+    await observeOutputAudio(page, { trackSourceLifecycle: true, phaseSelector: '#pop-status' });
+    const errors = await open(page);
+    const available = await page.evaluate(() => window.audioObservation.available);
+    if (browserName === 'chromium') expect(available).toBe(true);
+    bundledAudioTest.skip(!available, 'This browser runtime has no WebAudio.');
+    await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+    await page.evaluate(() => {
+      const status = document.querySelector('#pop-status');
+      const setAttribute = status.setAttribute;
+      let hits = Number(status.dataset.hits);
+      window.popAudioTiming = [];
+      window.popAudioOutput = [];
+      window.popAudioTimer = setInterval(() => {
+        if (window.popAudioTiming.length) window.popAudioOutput.push(...window.audioOutputObservation.read());
+      }, 10);
+      status.setAttribute = function(name, value) {
+        if (name === 'data-hits' && Number(value) > hits) {
+          hits = Number(value);
+          window.popAudioTiming.push({ at: performance.now(), hits,
+            sounds: window.audioObservation.playbacks.length });
+        }
+        return setAttribute.apply(this, arguments);
+      };
+    });
+    // Include cold and repeated samples, combos, and the first chest award.
+    for (let hit = 1; hit <= 9; hit++) {
+      let current;
+      await expect.poll(async () => {
+        current = await state(page);
+        return current.targets.length;
+      }, { intervals: [25] }).toBeGreaterThan(0);
+      await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word), current.targets[0].text);
+      await expect.poll(async () => (await state(page)).hits, { intervals: [25] }).toBe(hit);
+    }
+    const observation = await page.evaluate(() => {
+      clearInterval(window.popAudioTimer);
+      return { hits: window.popAudioTiming, sounds: window.audioObservation.playbacks,
+        output: window.popAudioOutput.filter(sample => sample.rms > 0.00001),
+        chests: Number(document.querySelector('#pop-status').dataset.chestCount),
+        contexts: window.audioObservation.contexts.map(context => ({ state: context.state,
+          baseLatency: context.baseLatency, outputLatency: context.outputLatency })) };
+    });
+    const slices = observation.sounds.filter(isHitSlice);
+    const timingPath = info.outputPath('slice-audio-timing.json');
+    fs.writeFileSync(timingPath, JSON.stringify({ ...observation,
+      slices: slices.map(sound => ({ ...sound, preparationMs: sound.at - sound.createdAt })) }, null, 2));
+    await info.attach('slice-audio-timing.json', { path: timingPath, contentType: 'application/json' });
+    expect(slices).toHaveLength(9);
+    expect(observation.hits).toHaveLength(9);
+    expect(observation.output.length, 'Hit feedback reaches the running audio destination').toBeGreaterThan(0);
+    expect(observation.chests, 'Timing includes the award celebration').toBeGreaterThan(0);
+    for (const [index, hit] of observation.hits.entries()) {
+      expect(slices[index].at, 'Start the sample in the hit callback before publishing its slice effect').toBeLessThanOrEqual(hit.at);
+    }
+    expect(audioRequests, 'Every hit uses already bundled audio').toEqual([]);
+    expect(errors).toEqual([]);
+  });
+});
+
 bundledAudioTest('three words in one utterance keep all slice tails and backgrounding stops the whole pool', async ({ page, browserName }, info) => {
   const audioRequests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });

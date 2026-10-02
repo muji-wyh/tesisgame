@@ -53,7 +53,9 @@
       --cp-warning: #fbbf24;
       --cp-highlight: rgba(253, 142, 161, 0.12);
     }
-    * { box-sizing: border-box; }
+    /* Hide scrollbar chrome without changing scrolling or focus navigation. */
+    * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+    *::-webkit-scrollbar { display: none; width: 0; height: 0; }
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--cp-bg); }
     body { font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--cp-text); overscroll-behavior: none; }
@@ -81,8 +83,7 @@
     #loading-theme-label { font-weight: 700; }
     #loading-theme-name { color: var(--cp-accent); font-weight: 650; }
     #loading-theme-options { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain;
-      scrollbar-width: none; padding: 4px; scroll-padding-inline: 4px; touch-action: pan-x pinch-zoom; }
-    #loading-theme-options::-webkit-scrollbar { display: none; }
+      padding: 4px; scroll-padding-inline: 4px; touch-action: pan-x pinch-zoom; }
     .loading-theme { flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
       min-height: 48px; padding: 10px 13px; border: 2px solid transparent; border-radius: 14px;
       background: var(--cp-surface); color: var(--cp-text-muted); font-size: 14px; font-weight: 600; }
@@ -141,6 +142,7 @@
     progress::-moz-progress-bar { background: var(--cp-accent); border-radius: 0.625rem; }
     #loading-note { font-size: 12px; color: var(--cp-text-soft); }
     #download-status { font-size: 12px; color: var(--cp-text-soft); }
+    .map-credits { color: var(--cp-text-soft); font-size: 12px; white-space: nowrap; }
     button { min-height: 48px; padding: 12px 24px; border: 0; border-radius: 0.625rem;
       background: var(--cp-accent); color: var(--cp-accent-fg); font: inherit; cursor: pointer; }
     button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
@@ -335,7 +337,7 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Talk Quest.
-        Talk Quest has fourteen word adventures. Choose a level on the chapter map to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Your last recognized word appears briefly on screen and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
+        Talk Quest has fourteen word adventures. Choose a level on the chapter map to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Speech appears on screen in real time as recognition updates, including words that do not match a target, and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
         Match: find five matching word and picture pairs.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -484,7 +486,10 @@
               <strong id="loading-percent" aria-hidden="true"></strong>
             </div>
             <progress id="progress" max="1" aria-label="Game loading progress"></progress>
-            <p id="download-status">Waiting for game data...</p>
+            <div class="loading-line">
+              <p id="download-status">Waiting for game data...</p>
+              <a class="map-credits" href="map-credits.html" target="_blank" rel="noopener">Map art credits</a>
+            </div>
             <button id="enter-game" type="button" disabled>Enter game<span id="enter-game-controller" hidden> · Start</span></button>
             <p id="loading-note" hidden>Still loading. You can wait or retry.</p>
             <button id="retry" type="button" hidden>Try again</button>
@@ -1518,6 +1523,7 @@
         const panel = document.getElementById('speech-panel');
         const aura = document.getElementById('pop-aura');
         const popStatusText = document.getElementById('pop-status');
+        const publishedPopAttributes = new Map();
         const statusText = document.getElementById('speech-status');
         const transcript = document.getElementById('speech-transcript');
         const notice = document.getElementById('speech-notice');
@@ -2098,7 +2104,8 @@
                 const result = event.results[index];
                 const isFinal = result.isFinal === true;
                 const popResultCurrent = index > lastFinal;
-                if (isFinal && index <= lastFinal) continue;
+                const questTranscript = presentation === 'quest';
+                if (isFinal && index <= lastFinal && !questTranscript) continue;
                 const text = typeof result[0]?.transcript === 'string' ? result[0].transcript.trim() : '';
                 if (text) captureReady('result');
                 const alternatives = diagnosticsEnabled ? Array.from(result).slice(0, 3).map(alternative => ({
@@ -2109,6 +2116,14 @@
                   alternatives });
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
+                // Quest displays the whole live hypothesis before word scoring,
+                // including mismatches, withdrawn interims and revised finals.
+                if (questTranscript) {
+                  if (!valid()) break;
+                  onResult?.(text, isFinal);
+                  if (!valid()) break;
+                }
+                if (isFinal && index <= lastFinal) continue;
                 if (isFinal) lastFinal = index;
                 if (presentation === 'quest' && !recognitionQuestWords && valid() && listening) {
                   onQuestResult?.(JSON.stringify({
@@ -2118,7 +2133,7 @@
                 }
                 if ((presentation === 'pop' || presentation === 'quest' && recognitionQuestWords) && popResultCurrent) {
                   candidates.update(index, text, isFinal);
-                  if (!text && isFinal && valid()) onResult?.(text, true);
+                  if (!text && isFinal && valid() && !questTranscript) onResult?.(text, true);
                 }
                 if (text) {
                   heardSpeech = true;
@@ -2131,7 +2146,7 @@
                     heardTimer = 0;
                     if (valid()) panel.setAttribute('data-heard', 'false');
                   }, 280);
-                  if (valid()) {
+                  if (valid() && !questTranscript) {
                     if (practice) onResult?.(text, isFinal, alternatives);
                     else onResult?.(text, isFinal);
                   }
@@ -2326,7 +2341,13 @@
             'results-hits': JSON.stringify(resultsHits),
             'results-scroll': number(state.results_scroll), 'results-scroll-max': number(state.results_scroll_max),
             'results-scrollbar-visible': state.results_scrollbar_visible === true })) {
-            popStatusText.setAttribute('data-' + name, String(value));
+            // Geometry arrives frequently; unchanged fields must not generate
+            // extra DOM mutations while speech and audio share the game frame.
+            const serialized = String(value);
+            if (publishedPopAttributes.get(name) !== serialized) {
+              popStatusText.setAttribute('data-' + name, serialized);
+              publishedPopAttributes.set(name, serialized);
+            }
           }
           const message = typeof state.message === 'string' ? state.message : '';
           const readable = phase === 'idle' ? '' : phase === 'finished'
@@ -2802,10 +2823,11 @@
           for (const target of source.targets) {
             if (!target || typeof target !== 'object' || Array.isArray(target) ||
                 typeof target.word_id !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(target.word_id)) return null;
-            const saved = finiteFields(target, { uid: [1, source.spawned, true], age: [0, 6.8],
-              lifetime: [5.8, 6.8], lane: [0, 2, true], x_start: [0.15, 0.85], x_end: [0.15, 0.85],
+            const saved = finiteFields(target, { uid: [1, source.spawned, true], age: [0, 10],
+              lifetime: [5.8, 10], lane: [0, 2, true], x_start: [0.15, 0.85], x_end: [0.15, 0.85],
               peak: [0.1, 0.5], spin: [-0.2, 0.2] });
-            if (!saved || saved.age >= saved.lifetime) return null;
+            // Preserve legacy flight windows alongside the fixed ten-second rule.
+            if (!saved || saved.age >= saved.lifetime || (saved.lifetime > 6.8 && saved.lifetime !== 10)) return null;
             run.targets.push({ ...saved, word_id: target.word_id });
           }
           return run;
@@ -2846,9 +2868,11 @@
             try { value = JSON.parse(text); } catch { return; }
             if (!value || typeof value !== 'object' || Array.isArray(value)) return;
             const status = document.getElementById('quest-status');
-            status.dataset.snapshot = JSON.stringify(value);
+            const snapshot = JSON.stringify(value);
+            if (status.dataset.snapshot !== snapshot) status.dataset.snapshot = snapshot;
             const message = value.active ? (value.view === 'map' ?
               `Talk Quest. ${value.completed?.length || 0} of 14 adventures complete.` :
+              value.pause_result?.visible ? 'Talk Quest paused. Choose Continue to resume or Map to return to the adventures.' :
               Array.isArray(value.targets) ? `Talk Quest. ${value.hp || 0} health remaining.` +
                 (value.targets.length ? ` Words: ${value.targets.map(target => target.text || '').join(', ')}.` : '') +
                 (value.transcript ? ` ${value.transcript}` : '') :

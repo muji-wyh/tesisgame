@@ -35,6 +35,7 @@ func _run() -> void:
 	duck.position = Vector2(100, 100)
 	_check_motion()
 	_check_priority_and_lifecycle(duck)
+	_check_extended_reaction(duck)
 	if DisplayServer.get_name() != "headless":
 		await _check_rendered_faces(duck)
 	duck.free()
@@ -131,6 +132,38 @@ func _check_priority_and_lifecycle(duck) -> void:
 	check(is_equal_approx(duck._gameplay_left, Mascot.GAMEPLAY_HAPPY_SECONDS), "Changing motion settings preserves the current result deadline")
 	check(duck.get_rect() == rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation)
 		and duck.get_child_count() == children, "Results preserve the input target and create no per-hit nodes")
+	duck.settle()
+
+
+func _check_extended_reaction(duck) -> void:
+	duck.react_gameplay(false, 2.4)
+	duck._process(1.2)
+	check(duck._gameplay_reaction == "sad" and is_equal_approx(duck._gameplay_duration(), 2.4)
+		and is_equal_approx(1.0 - duck._gameplay_left / duck._gameplay_duration(), 0.5),
+		"A longer loss reaction stays sad and reaches its midpoint after half its requested duration")
+	duck._process(1.21)
+	check(duck._gameplay_reaction.is_empty(), "An extended reaction finishes at its own deadline")
+	duck.react_gameplay(false, 0.1)
+	check(is_equal_approx(duck._gameplay_duration(), 0.5), "A short override preserves a visible minimum reaction")
+	duck.react_gameplay(false, 10.0)
+	check(is_equal_approx(duck._gameplay_duration(), 4.0), "An excessive override cannot hold a reaction indefinitely")
+	for correct in [true, false]:
+		duck.react_gameplay(correct)
+		check(is_equal_approx(duck._gameplay_duration(), Mascot.GAMEPLAY_HAPPY_SECONDS if correct else Mascot.GAMEPLAY_SAD_SECONDS),
+			"An ordinary reaction resets an earlier duration override")
+	for duration in [-1.0, INF, NAN]:
+		duck.react_gameplay(false, duration)
+		check(is_equal_approx(duck._gameplay_duration(), Mascot.GAMEPLAY_SAD_SECONDS),
+			"An invalid duration retains the standard reaction deadline")
+	duck.set_reduced_motion(true)
+	duck.react_gameplay(false, 2.4)
+	duck._process(1.6)
+	check(duck.pose == 2 and duck._gameplay_reaction == "sad" and duck._gameplay_left > 0.0,
+		"Reduced motion keeps the static sad expression beyond the ordinary short reaction")
+	duck._process(0.81)
+	check(duck._gameplay_reaction.is_empty() and not duck.is_processing(),
+		"The extended reduced-motion expression expires without leaving a processing loop")
+	duck.set_reduced_motion(false)
 	duck.settle()
 
 

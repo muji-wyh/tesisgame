@@ -186,6 +186,17 @@ static func profile(theme_id: String) -> Dictionary:
 
 
 static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
+	return _opening_curve(theme_id, elapsed, index, true)
+
+
+static func rigid_opening(theme_id: String, elapsed: float) -> float:
+	# Imported rigid lids cannot travel beyond the final source pose. Keep
+	# their last movement aligned with the shared mechanical stop instead of
+	# clipping an elastic overshoot into an early full-open plateau.
+	return _opening_curve(theme_id, elapsed, 0, false)
+
+
+static func _opening_curve(theme_id: String, elapsed: float, index: int, elastic: bool) -> float:
 	var feel: Dictionary = PROFILES.get(theme_id, PROFILES.spring)
 	var delay: float = float(index) * float(feel.stagger) * 0.55
 	var throw_seconds: float = SETTLE_TIME - RELEASE_TIME - delay
@@ -202,9 +213,9 @@ static func opening(theme_id: String, elapsed: float, index: int = 0) -> float:
 		"ocean":
 			return pow(driven, 0.88)
 		"candy":
-			return driven + sin(value * PI) * 0.12
+			return driven + sin(value * PI) * 0.12 if elastic else driven
 		"jungle":
-			return driven + sin(value * PI) * 0.045
+			return driven + sin(value * PI) * 0.045 if elastic else driven
 		_:
 			return driven
 

@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { readModelContainer, embeddedModelImages, imageDimensions, readFloatAccessor } = require('./helpers/chest-model-assets.cjs');
 
 const root = path.join(__dirname, '..');
 const chestRoot = path.join(root, 'assets', 'chests');
@@ -165,6 +166,20 @@ function readPng(relativePath) {
   return { bytes, width, height };
 }
 
+function readGlb(relativePath) {
+  const model = readModelContainer(absolute(relativePath));
+  const { gltf } = model;
+  assert.equal(gltf.asset.version, '2.0', relativePath);
+  assert.ok(gltf.nodes?.length > 0 && gltf.meshes?.length > 0, `${relativePath} contains real geometry`);
+  assert.ok(gltf.buffers?.every(buffer => !buffer.uri), `${relativePath} embeds its geometry`);
+  assert.ok((gltf.images || []).every(image => Number.isInteger(image.bufferView)), `${relativePath} embeds its materials`);
+  const primitives = gltf.meshes.flatMap(mesh => mesh.primitives);
+  assert.ok(primitives.every(primitive => Number.isInteger(primitive.attributes.POSITION)), `${relativePath} has vertex positions`);
+  assert.ok(primitives.some(primitive => gltf.accessors[primitive.attributes.POSITION].count >= 100),
+    `${relativePath} contains modeled detail instead of a flat image plane`);
+  return model;
+}
+
 function listFiles(directory) {
   assert.ok(fs.existsSync(directory), `Missing chest directory: ${directory}`);
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -304,7 +319,7 @@ test('the manifest records exactly fourteen original paths, hashes and image dim
   }
 });
 
-test('every chest PNG belongs to the base manifest, derived rigs or downloaded opening catalog', () => {
+test('every chest image belongs to original art, derived rigs or an embedded model material', () => {
   const files = listFiles(chestRoot);
   const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
   assert.equal(rigs.version, 1);
@@ -321,53 +336,107 @@ test('every chest PNG belongs to the base manifest, derived rigs or downloaded o
     assert.equal(image.height, part.height, part.texture);
   }
   const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
-  assert.deepEqual(files.filter((file) => /\.png$/i.test(file)).sort(), [
+  const modelImages = downloaded.assets.flatMap(asset => embeddedModelImages(asset.path, readGlb(asset.path)));
+  for (const image of modelImages) {
+    const actual = fs.readFileSync(absolute(image.path));
+    assert.equal(sha256(actual), sha256(image.bytes), `${image.path} is the exact embedded source texture`);
+    assert.deepEqual(imageDimensions(actual), imageDimensions(image.bytes), `${image.path} retains source dimensions`);
+  }
+  assert.deepEqual(files.filter((file) => /\.(?:png|jpe?g)$/i.test(file)).sort(), [
     ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture),
-    ...downloaded.files.map((file) => file.path)
+    ...modelImages.map(image => image.path)
   ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
 });
 
-test('five downloaded model designs have verified distinct opening frames and source provenance', () => {
+test('five detailed chest models have distinct geometry, continuous articulation and verified provenance', () => {
   const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
-  assert.equal(downloaded.version, 1);
+  assert.equal(downloaded.version, 2);
   assert.deepEqual(Object.keys(downloaded.styles).sort(), ['bonbon', 'bramble', 'harvest', 'nebula', 'tide']);
-  const checksums = new Map(downloaded.files.map((file) => [file.path, file]));
-  assert.equal(checksums.size, downloaded.files.length, 'Every baked frame has one checksum');
+  assert.equal(new Set(Object.values(downloaded.styles).map(style => style.source)).size, 5,
+    'Each replacement comes from a different source design');
+  const checksums = new Map(downloaded.assets.map((file) => [file.path, file]));
+  assert.equal(checksums.size, 5, 'Every model has one checksum');
+  assert.equal(downloaded.assets.length, 5);
   let totalBytes = 0;
-  const closedHashes = new Set();
+  const modelHashes = new Set();
+  const vec3 = (value, label) => {
+    assert.equal(value?.length, 3, label);
+    assert.ok(value.every(Number.isFinite), label);
+  };
   for (const [style, catalog] of Object.entries(downloaded.styles)) {
-    assert.ok(catalog.frames.length >= 6 && catalog.frames.length <= 12, style);
-    const hashes = [];
-    for (const filename of catalog.frames) {
-      assert.match(filename, new RegExp(`^assets/chests/downloaded/${style}/frame-\\d{2}\\.png$`));
-      const record = checksums.get(filename);
-      assert.ok(record, filename);
-      const image = readPng(filename);
-      assert.equal(record.sha256, sha256(image.bytes), filename);
-      assert.equal(record.bytes, image.bytes.length, filename);
-      assert.equal(image.width, 320);
-      assert.equal(image.height, 320);
-      assert.equal(record.width, image.width);
-      assert.equal(record.height, image.height);
-      hashes.push(record.sha256);
-      totalBytes += record.bytes;
+    assert.ok(!Object.hasOwn(catalog, 'frames'), `${style} uses continuous geometry instead of sparse images`);
+    assert.match(catalog.model, /^assets\/chests\/models\/[a-z-]+\.glb$/);
+    const record = checksums.get(catalog.model);
+    assert.ok(record, catalog.model);
+    const model = readGlb(catalog.model);
+    const { bytes, gltf } = model;
+    assert.equal(record.sha256, sha256(bytes), catalog.model);
+    assert.equal(record.bytes, bytes.length, catalog.model);
+    totalBytes += record.bytes;
+    modelHashes.add(record.sha256);
+    const parts = catalog.model_parts;
+    assert.ok(Array.isArray(parts) && parts.some(part => part.role === 'lid'), `${style} articulates its lid during pressure`);
+    const nodeNames = new Set(gltf.nodes.map(node => node.name));
+    for (const part of parts) {
+      assert.ok(['lid', 'lock', 'handle'].includes(part.role), `${style}/${part.node} has a known mechanism role`);
+      assert.ok(part.node && (nodeNames.has(part.node) || nodeNames.has(part.node.split('/').at(-1)) || part.bone),
+        `${style}/${part.node} resolves to a source node or explicit bone`);
+      if (part.bone) assert.ok(nodeNames.has(part.bone), `${style}/${part.bone} exists in the source skeleton`);
+      vec3(part.axis, `${style}/${part.node} hinge axis`);
+      assert.ok(Math.hypot(...part.axis) > 0.99, `${style}/${part.node} has a usable hinge axis`);
+      assert.ok(Number.isFinite(part.angle), `${style}/${part.node} has a finite pressure rotation`);
+      if (part.lift) vec3(part.lift, `${style}/${part.node} pressure lift`);
     }
-    assert.ok(new Set(hashes).size >= 5, `${style} needs actual model motion`);
-    assert.notEqual(hashes[0], hashes.at(-1), `${style} ends in the open pose`);
-    closedHashes.add(hashes[0]);
+    if (catalog.open_animation) {
+      const animation = (gltf.animations || []).find(animation => animation.name === catalog.open_animation);
+      assert.ok(animation, `${style} retains its named opening clip`);
+      const times = animation.samplers.flatMap(sampler => readFloatAccessor(model, sampler.input).map(sample => sample[0]));
+      const start = catalog.open_start ?? Math.min(...times);
+      const end = catalog.open_end ?? Math.max(...times);
+      assert.ok(start >= Math.min(...times) - 1e-5 && end <= Math.max(...times) + 1e-5 && end > start,
+        `${style} selects a valid opening interval from the source clip`);
+      const varyingChannels = animation.channels.filter(channel => {
+        if (!['rotation', 'translation'].includes(channel.target.path)) return false;
+        const sampler = animation.samplers[channel.sampler];
+        let values = readFloatAccessor(model, sampler.output);
+        if (sampler.interpolation === 'CUBICSPLINE') values = values.filter((_, index) => index % 3 === 1);
+        const first = values[0];
+        return values.some(value => {
+          const distance = Math.hypot(...value.map((component, index) => component - first[index]));
+          const equivalentRotation = channel.target.path === 'rotation'
+            && Math.hypot(...value.map((component, index) => component + first[index])) <= 1e-6;
+          return distance > 1e-6 && !equivalentRotation;
+        });
+      });
+      assert.ok(varyingChannels.length > 0, `${style} opens by moving geometry`);
+      for (const channel of varyingChannels) {
+        assert.notEqual(animation.samplers[channel.sampler].interpolation, 'STEP',
+          `${style}/${gltf.nodes[channel.target.node].name} interpolates genuinely moving geometry`);
+      }
+    } else {
+      assert.ok(parts.some(part => Math.abs(part.angle) > 0.5), `${style} supplies a full authored lid hinge`);
+    }
+    for (const property of ['closed_bounds_3d', 'motion_bounds_3d']) {
+      vec3(catalog[property]?.min, `${style}/${property} minimum`);
+      vec3(catalog[property]?.max, `${style}/${property} maximum`);
+      assert.ok(catalog[property].max.every((value, index) => value > catalog[property].min[index]),
+        `${style}/${property} has positive volume`);
+    }
+    vec3(catalog.camera_direction, `${style} camera direction`);
+    assert.ok(Math.hypot(...catalog.camera_direction) > 0.5, `${style} has a nonzero camera direction`);
+    vec3(catalog.cavity_3d, `${style} cavity anchor`);
+    assert.ok(catalog.seam_3d.length >= 2, `${style} has a lit lid seam`);
+    for (const point of catalog.seam_3d) vec3(point, `${style} seam point`);
     const source = downloaded.sources[catalog.source];
     assert.ok(source.title && source.publisher && source.version);
     assert.match(source.package_sha256, /^[a-f0-9]{64}$/);
-    assert.match(source.url, /^https:\/\/assetstore\.unity\.com\//);
+    assert.match(source.url, /^https:\/\/(?:assetstore\.unity\.com|sketchfab\.com)\//);
     assert.match(source.license, /embedded game artwork/);
-    assert.match(catalog.export_sha256, /^[a-f0-9]{64}$/);
-    assert.equal(catalog.closed_bounds.length, 4);
-    assert.ok(catalog.closed_bounds.every((value) => Number.isFinite(value) && value > 0 && value < 320));
-    assert.equal(catalog.cavity.length, 2);
   }
-  assert.equal(closedHashes.size, 5, 'Each new design has different original artwork');
-  assert.ok(totalBytes < 3000000, 'The complete downloaded opening catalog stays below 3 MB');
+  assert.equal(modelHashes.size, 5, 'Each theme owns a different model');
+  assert.deepEqual(listFiles(path.join(chestRoot, 'models')).filter(file => file.endsWith('.glb')).sort(), [...checksums.keys()].sort());
+  assert.ok(totalBytes < 20000000, 'The five embedded models stay below the 20 MB download budget');
   const data = fs.readFileSync(absolute('scripts/game_data.gd'), 'utf8');
   const themeSection = data.slice(data.indexOf('const THEMES:'), data.indexOf('const REWARD_NAMES:'));
   const styles = [...themeSection.matchAll(/"chest": "([a-z]+)"/g)].map((match) => match[1]);

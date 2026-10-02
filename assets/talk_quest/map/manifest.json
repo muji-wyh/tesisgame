@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "backgrounds": [
+    "res://assets/talk_quest/map/atlas-01.png",
+    "res://assets/talk_quest/map/atlas-02.png",
+    "res://assets/talk_quest/map/atlas-03.png"
+  ],
+  "landmarks": [
+    "res://assets/talk_quest/map/level-01.png",
+    "res://assets/talk_quest/map/level-02.png",
+    "res://assets/talk_quest/map/level-03.png",
+    "res://assets/talk_quest/map/level-04.png",
+    "res://assets/talk_quest/map/level-05.png",
+    "res://assets/talk_quest/map/level-06.png",
+    "res://assets/talk_quest/map/level-07.png",
+    "res://assets/talk_quest/map/level-08.png",
+    "res://assets/talk_quest/map/level-09.png",
+    "res://assets/talk_quest/map/level-10.png",
+    "res://assets/talk_quest/map/level-11.png",
+    "res://assets/talk_quest/map/level-12.png",
+    "res://assets/talk_quest/map/level-13.png",
+    "res://assets/talk_quest/map/level-14.png"
+  ],
+  "landmarkSourceNames": [
+    "MAP9/houses/house01",
+    "MAP14/house01",
+    "MAP9/houses/house03",
+    "MAP9/houses/house06",
+    "MAP9/settlement01",
+    "MAP14/house03",
+    "MAP12/settlement01",
+    "MAP14/house02",
+    "MAP12/settlement02",
+    "MAP9/ships/ship04",
+    "MAP14/house04",
+    "MAP6/settlement",
+    "MAP14/house05",
+    "MAP14/house06"
+  ],
+  "ui": {
+    "panel": "res://assets/talk_quest/map/ui-panel.png",
+    "badge": "res://assets/talk_quest/map/ui-badge.png",
+    "cleared": "res://assets/talk_quest/map/ui-cleared.png",
+    "locked": "res://assets/talk_quest/map/ui-locked.png",
+    "current": "res://assets/talk_quest/map/ui-current.png",
+    "trail": "res://assets/talk_quest/map/ui-trail.png",
+    "previous": "res://assets/talk_quest/map/ui-previous.png",
+    "next": "res://assets/talk_quest/map/ui-next.png",
+    "compass": "res://assets/talk_quest/map/ui-compass.png",
+    "banner": "res://assets/talk_quest/map/ui-banner.png",
+    "button": "res://assets/talk_quest/map/ui-button.png",
+    "button_pressed": "res://assets/talk_quest/map/ui-button_pressed.png",
+    "frame": "res://assets/talk_quest/map/ui-frame.png"
+  },
+  "sources": [
+    {
+      "id": "yd-fantasy-world-map",
+      "title": "Fantasy World Map",
+      "creator": "yd",
+      "url": "https://opengameart.org/content/fantasy-world-map-0",
+      "downloadUrl": "https://opengameart.org/sites/default/files/FantasyWorldMap.xcf",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "da402c4e8e2b533a7a38ab093d9bc2ca510d7e06104fcdc316f68573db6220c7",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-cartography",
+      "title": "Cartography Pack",
+      "creator": "Kenney",
+      "url": "https://opengameart.org/content/cartography-pack",
+      "downloadUrl": "https://opengameart.org/sites/default/files/cartographypack.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "5e0c41c70a4bf54fb7607520efda9a1d03a92082e258ec83c6f95c6730b27d85",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-ui-rpg",
+      "title": "UI Pack: RPG Expansion",
+      "creator": "Kenney Vleugels",
+      "url": "https://kenney.nl/assets/ui-pack-rpg-expansion",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/ui-pack-rpg-expansion/7ec4a46657-1677661824/kenney_ui-pack-rpg-expansion.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c69c30c09d74df542842e4ec811735b6d260cd6c9e2ee261d7b894d259a6adb4",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-game-icons",
+      "title": "Game Icons",
+      "creator": "Kenney Vleugels",
+      "url": "https://kenney.nl/assets/game-icons",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/game-icons/1ebf9c14af-1677661579/kenney_game-icons.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "7a86d8d58e0b851e22004b3c70bf90b003632bbf9ac633424daa3bb17d9e7e4e",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "yd-cartography-brushes",
+      "title": "Cartography brushes for GIMP",
+      "creator": "yd",
+      "url": "https://opengameart.org/content/cartography-brushes-for-gimp",
+      "downloadUrl": "https://opengameart.org/sites/default/files/YD_Cartography_Brushes.zip",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sha256": "77bf81b34646d6e4b9b543b4257393826eaad46a551b093c2604e1b47e3e1340",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation",
+      "attribution": "Cartography brushes for GIMP by yd, licensed CC BY 3.0. Adapted by cropping, resizing, tinting, and compositing into Talk Quest map artwork."
+    }
+  ],
+  "preparation": "Authored XCF layers cropped and color-treated; source cartography sprites placed as engraved scenery. No generated terrain or placeholder illustrations.",
+  "animation": "Source assets are static; interface movement is provided separately by the game."
+}

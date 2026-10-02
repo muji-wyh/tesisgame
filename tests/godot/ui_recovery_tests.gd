@@ -34,6 +34,7 @@ func _app(storage: BrowserStorage):
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg", storage)
 	app.playroom_save_path = directory + "/room.cfg"
+	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -153,6 +154,59 @@ func _check_audio_recovery(app) -> void:
 	app.new_round(21, true)
 
 
+func _check_background_collection_close(app) -> void:
+	for mode in ["match", "memory"]:
+		app.new_round(43, true, "", mode)
+		if mode == "match":
+			var first: Dictionary = app.model.cards[0]
+			var wrong: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
+				return card.kind != first.kind and card.word.id != first.word.id)[0]
+			app.cards[first.id].pressed.emit()
+			app.cards[wrong.id].pressed.emit()
+		else:
+			var first: Dictionary = app._memory.memory.cards[0]
+			app._memory.card_buttons[0].pressed.emit()
+			for index in range(1, app._memory.memory.cards.size()):
+				var card: Dictionary = app._memory.memory.cards[index]
+				if card.kind != first.kind and card.word.id != first.word.id:
+					app._memory.card_buttons[index].pressed.emit()
+					break
+		var state = app.model if mode == "match" else app._memory.memory
+		var timer: Timer = app.feedback_timer if mode == "match" else app._memory._feedback_timer
+		check(state.phase == "feedback" and not timer.is_stopped(), mode + " starts a real pending answer before the pause check")
+		app._show_collection()
+		app.on_page_hidden()
+		app._hide_collection()
+		check(app._page_hidden and not app.collection_page.visible and timer.paused and app._memory._paused,
+			mode + " closing More in a background page retains its independent gameplay pause")
+		await create_timer(0.85).timeout
+		check(state.phase == "feedback" and not app.audio.active,
+			mode + " cannot consume hidden feedback time or restart audio after a delayed close")
+		app.on_page_visible()
+		check(not timer.paused and not app._memory._paused, mode + " foreground return releases the remaining background pause")
+		await create_timer(0.85).timeout
+		check(state.phase == "waiting", mode + " feedback finishes normally after the page is visible again")
+	app.new_round(43, true, "", "pop")
+	app._hide_leaderboard()
+	check(app._pop_rewards.configure("background-close", 1, "spring", app.data.chests, true),
+		"The background-close fixture has one real saved treasure chest")
+	app._show_pop_rewards()
+	check(app._pop_rewards_shown and not app._pop_rewards._paused, "Voice Pop treasure begins visible and ready")
+	app._show_collection()
+	app.on_page_hidden()
+	app._hide_collection()
+	check(app._pop_rewards_shown and app._pop_rewards._paused,
+		"Closing More in the background cannot resume Voice Pop treasure animation or input")
+	var button: Button = app._pop_rewards._cards[0].button
+	app._pop_rewards.begin_hold(button)
+	check(app._pop_rewards._active == -1 and not app._pop_rewards._holding,
+		"A stale treasure press after the hidden close cannot start opening a chest")
+	app.on_page_visible()
+	check(not app._pop_rewards._paused and not app._pop_rewards.rewards.entries[0].opened,
+		"Foreground return resumes the same unopened treasure without consuming it")
+	app.new_round(43, true, "", "match")
+
+
 func _run() -> void:
 	directory = "user://ui-recovery-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -212,6 +266,7 @@ func _run() -> void:
 	storage = BrowserStorage.new()
 	app = await _app(storage)
 	_check_audio_recovery(app)
+	await _check_background_collection_close(app)
 	for mode in ["match", "memory"]:
 		app.choose_mode(mode)
 		_win(app)

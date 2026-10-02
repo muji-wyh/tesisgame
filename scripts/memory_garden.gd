@@ -26,6 +26,8 @@ class CardBack:
 	var _light: Color = Color.WHITE
 	var _spark: Color = Style.GOOD
 	var _symbol_rect := Rect2()
+	var _palette_ready: bool = false
+	var _palette_scale: float = -1.0
 
 	func setup(kind: String, index: int) -> void:
 		name = "CardBack"
@@ -48,9 +50,17 @@ class CardBack:
 		set_palette({"accent": Style.GOOD})
 
 	func set_palette(palette: Dictionary) -> void:
-		accent = palette.get("accent", Style.GOOD)
-		_light = palette.get("light", accent.lightened(0.72))
-		_spark = palette.get("spark", accent.lightened(0.35))
+		var next_accent: Color = palette.get("accent", Style.GOOD)
+		var next_light: Color = palette.get("light", next_accent.lightened(0.72))
+		var next_spark: Color = palette.get("spark", next_accent.lightened(0.35))
+		var next_scale: float = Style.ui_scale(self)
+		if _palette_ready and accent == next_accent and _light == next_light and _spark == next_spark and _palette_scale == next_scale:
+			return
+		_palette_ready = true
+		_palette_scale = next_scale
+		accent = next_accent
+		_light = next_light
+		_spark = next_spark
 		fill_color = accent if _kind == "image" else _light.lerp(Color.WHITE, 0.3)
 		ink_color = Color.WHITE if _kind == "image" else accent.darkened(0.12)
 		for label in [kind_label, number_label, symbol_label]:
@@ -298,16 +308,19 @@ func _choose(index: int) -> void:
 	var result: String = memory.select(index)
 	if result == "ignored":
 		return
-	card_buttons[index].play_press()
-	if result in ["correct", "wrong"]:
-		_feedback_timer.start()
-	_refresh()
+	# Start the validated card's pronunciation and answer cue before refreshing
+	# all card faces, styles and layout. Publish the updated prompt afterward.
 	if result != "cancelled":
 		var card: Dictionary = memory.cards[index]
 		card_revealed.emit(card.word, card.kind, index)
 	if result in ["correct", "wrong"]:
-		progress_changed.emit(memory.matched_word_ids.size(), memory.attempts)
 		answer_chosen.emit(memory.feedback_words.duplicate(true), memory.last_correct)
+	card_buttons[index].play_press()
+	if result in ["correct", "wrong"]:
+		_feedback_timer.start()
+	_refresh()
+	if result in ["correct", "wrong"]:
+		progress_changed.emit(memory.matched_word_ids.size(), memory.attempts)
 	prompt_ready.emit()
 
 

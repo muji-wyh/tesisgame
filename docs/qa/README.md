@@ -11,6 +11,12 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Hidden scrollbars](2026-10-02-hidden-scrollbars.md) | Hidden native and Web rails, retained overflow gestures and focus navigation, and compact-screen regressions |
+| [Talk Quest victory and treasure room](2026-10-02-talk-quest-victory.md) | Pip dance and recorded cheers, sourced reward scenery, gesture/save regressions, and full-app responsive captures |
+| [Talk Quest live transcript](2026-10-02-talk-quest-live-transcript.md) | Immediate raw hypotheses, separate scoring, lifecycle clearing, and bounded responsive captions |
+| [Talk Quest countdown and Pip rematch](2026-10-02-talk-quest-pip-loss.md) | Ten-second saved-word migration, Pip's sad-to-encouraging sequence, cancellable calls, and responsive renderer evidence |
+| [Talk Quest atlas refresh](2026-10-02-talk-quest-map.md) | Sourced chapter maps, fourteen destination compositions, responsive and full-caption checks, and renderer evidence |
+| [Repository optimization review](2026-10-02-repository-optimization.md) | Card refresh reuse, hidden-page pause preservation, unchanged host snapshots, and verified build reuse; 81 Godot suites, 302 Node tests, 27 selected browser cases, production content verification and startup smoke check passed |
 | [Talk Quest](2026-10-01-talk-quest.md) | Fourteen-level campaign and combined-worktree art/regression evidence; isolated release passed eight native suites, 237 Node tests, and two Chromium cases; Windows WebKit rotation captures retain the documented presentation limitation |
 | [Repository cleanup](2026-10-01-repository-cleanup.md) | Retired narration assets, current documentation indexes, and compatibility regression checks |
 | [Single-player speech restoration](2026-09-26-single-player-speech.md) | Removal of multiplayer models and enrolled voices; predates today's local leaderboard flow |

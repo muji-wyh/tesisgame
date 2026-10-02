@@ -12,7 +12,8 @@ const Backdrop = preload("res://scripts/talk_quest_backdrop.gd")
 const Treasure = preload("res://scripts/talk_quest_reward_chest.gd")
 const TreasureArt = preload("res://scripts/talk_quest_chest.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
-const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
+const TreasureBackdrop = preload("res://scripts/talk_quest_treasure_stage.gd")
+const Celebration = preload("res://scripts/talk_quest_celebration.gd")
 const GameData = preload("res://scripts/game_data.gd")
 const Creature = preload("res://scripts/talk_quest_monster.gd")
 const Diorama = preload("res://scripts/talk_quest_environment.gd")
@@ -21,6 +22,8 @@ const QuestButton = preload("res://scripts/talk_quest_button.gd")
 const QuestMeter = preload("res://scripts/talk_quest_meter.gd")
 const QuestEffects = preload("res://scripts/talk_quest_effects.gd")
 const WordField = preload("res://scripts/talk_quest_words.gd")
+const QuestResult = preload("res://scripts/talk_quest_result.gd")
+const ResultScroll = preload("res://scripts/result_scroll.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const INK := Color("#30405b")
 const ACCENT := Color("#7263c7")
@@ -59,12 +62,13 @@ var _continue: Button
 var _album_button: Button
 var _level_buttons: Array[Button] = []
 var _album: Control
-var _album_scroll: ScrollContainer
+var _album_scroll: ResultScroll
 var _album_grid: GridContainer
 var _album_back: Button
 var _stage: Control
 var _stage_scroll: ScrollContainer
 var _backdrop: Backdrop
+var _loss_backdrop: Panel
 var _viewport_box: SubViewportContainer
 var _viewport: SubViewport
 var _camera: Camera3D
@@ -86,6 +90,9 @@ var _banner: Label
 var _chest: Treasure
 var _chest_button: Button
 var _treasure_backdrop: TreasureBackdrop
+var _celebration: Celebration
+var _reward_eyebrow: Label
+var _reward_detail: Label
 var _chest_caption: Label
 var _next: Button
 var _resume: Button
@@ -101,11 +108,13 @@ var _victory_wait: float = 0.0
 var _words: WordField
 var _word_count: Label
 var _retry: Button
+var _loss: QuestResult
+var _pause_card: QuestResult
 var _mic_retry: Button
 var _display_hp: int = 0
 var _pending_hits: Array[Dictionary] = []
 var _last_target_key: String = ""
-var _transcript_left: float = 0.0
+var _transcript_final: bool = false
 
 
 func _ready() -> void:
@@ -116,6 +125,7 @@ func _ready() -> void:
 		if _save_progress() and game.phase == "complete":
 			_announce_chest_reward(true)
 		_refresh())
+	_save_retry.z_index = 21
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility)
 	if not OS.has_feature("web"):
@@ -176,6 +186,11 @@ func _build_stage() -> void:
 	_backdrop = Backdrop.new()
 	_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_backdrop)
+	_loss_backdrop = Panel.new()
+	_loss_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_loss_backdrop.add_theme_stylebox_override("panel", Style.box(Color("#101b2c"), Color.TRANSPARENT, 20, 0))
+	_loss_backdrop.hide()
+	_stage.add_child(_loss_backdrop)
 	_viewport_box = SubViewportContainer.new()
 	_viewport_box.stretch = true
 	_viewport_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -232,25 +247,39 @@ func _build_stage() -> void:
 	_word_count.add_theme_color_override("font_color", Color("#d2ddd9"))
 	_transcript = _label(_stage, "", 15)
 	_transcript.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_transcript.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_transcript.max_lines_visible = 2
+	_transcript.clip_text = true
 	_transcript.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_transcript.accessibility_name = "Live transcript"
 	_feedback = _label(_stage, "", 12)
+	_feedback.clip_text = true
+	_feedback.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_feedback.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_mic_retry = _button(_stage, "Retry microphone", _start_listening)
 	_mic_retry.visibility_changed.connect(_layout)
-	_retry = _button(_stage, "Try again", func() -> void: start_level(game.level_number))
 	_banner = _label(_stage, "", 36)
 	_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_banner.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_treasure_backdrop = TreasureBackdrop.new()
-	_treasure_backdrop.show_theme_name = false
 	_stage.add_child(_treasure_backdrop)
-	_stage.move_child(_treasure_backdrop, 0)
+	_stage.move_child(_treasure_backdrop, _loss_backdrop.get_index() + 1)
 	_chest = Treasure.new()
 	_stage.add_child(_chest)
 	_chest.release_reached.connect(_on_chest_released)
 	_chest.opened.connect(_reward_finished)
 	_chest.cue_requested.connect(_on_chest_cue)
+	_celebration = Celebration.new()
+	_celebration.hide()
+	_stage.add_child(_celebration)
+	_reward_eyebrow = _label(_stage, "ADVENTURE COMPLETE", 12)
+	_reward_eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_reward_detail = _label(_stage, "", 14)
+	_reward_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_reward_detail.clip_text = true
+	_reward_detail.max_lines_visible = 1
+	_reward_detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_companion = TextureRect.new()
 	_companion.texture = load("res://assets/talk_quest/monsters/lpm-alien.png")
 	_companion.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -271,15 +300,29 @@ func _build_stage() -> void:
 	_chest_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_chest_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_next = _button(_stage, "Next adventure", _next_level)
-	_resume = _button(_stage, "Continue adventure", _continue_run)
 	_effects = QuestEffects.new()
 	_effects.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_effects)
 	_effects.word_landed.connect(_spell_impact)
+	_loss = QuestResult.new()
+	_loss.hide()
+	_stage.add_child(_loss)
+	_loss.loss_reaction_requested.connect(func() -> void: sound_requested.emit("pip_loss"))
+	_retry = _loss.retry
+	_retry.pressed.connect(func() -> void: start_level(game.level_number))
+	_loss.map_button.pressed.connect(_show_map)
+	_pause_card = QuestResult.new()
+	_pause_card.hide()
+	_stage.add_child(_pause_card)
+	_resume = _pause_card.retry
+	_resume.pressed.connect(_continue_run)
+	_pause_card.map_button.pressed.connect(_show_map)
 	_controls = {"map": _back, "open": _chest_button, "next": _next,
 		"resume": _resume, "continue": _continue, "album": _album_button,
 		"retry": _retry, "mic_retry": _mic_retry, "feedback": _feedback,
-		"word_arena": _words, "stage_scroll": _stage_scroll}
+		"word_arena": _words, "stage_scroll": _stage_scroll,
+		"loss_panel": _loss, "loss_card": _loss.surface,
+		"pause_panel": _pause_card, "pause_card": _pause_card.surface}
 
 
 
@@ -292,8 +335,14 @@ func _build_album() -> void:
 	note.name = "Note"
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_album_back = _button(_album, "Map", _show_map)
-	_album_scroll = ScrollContainer.new()
+	_album_scroll = ResultScroll.new()
+	_album_scroll.interaction_allowed = func() -> bool: return not interaction_allowed.is_valid() or interaction_allowed.call()
 	_album_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_album_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	# Keep the final card border clear of integer scroll rounding at fractional scales.
+	var shelf_padding := StyleBoxEmpty.new()
+	shelf_padding.content_margin_bottom = 4.0
+	_album_scroll.add_theme_stylebox_override("panel", shelf_padding)
 	_album.add_child(_album_scroll)
 	_album_grid = GridContainer.new()
 	_album_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -301,7 +350,14 @@ func _build_album() -> void:
 	for chest_data: Dictionary in QuestData.chests():
 		var item := Panel.new()
 		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		item.add_theme_stylebox_override("panel", Style.box(Color("#fffefb"), Color("#e0dced"), 14, 1))
+		item.focus_mode = Control.FOCUS_ALL
+		var normal := Style.box(Color("#fffefb"), Color("#e0dced"), 14, 1)
+		var focused := Style.box(Color("#fffefb"), Color("#6655b8"), 14, 3)
+		item.add_theme_stylebox_override("panel", normal)
+		item.focus_entered.connect(func() -> void:
+			item.add_theme_stylebox_override("panel", focused)
+			_ensure_album_item(item))
+		item.focus_exited.connect(func() -> void: item.add_theme_stylebox_override("panel", normal))
 		_album_grid.add_child(item)
 		var art := TreasureArt.new()
 		item.add_child(art)
@@ -313,6 +369,22 @@ func _build_album() -> void:
 		item.set_meta("id", chest_data.id)
 		item.set_meta("art", art)
 		item.set_meta("label", label)
+
+
+func cancel_scroll_input() -> void:
+	if is_instance_valid(_album_scroll):
+		_album_scroll.cancel_drag()
+
+
+func _ensure_album_item(item: Control) -> void:
+	if _album_scroll.is_pointer_active():
+		return
+	# Hidden rails still reveal each treasure as keyboard focus moves through it.
+	var content_rect: Rect2 = _album_grid.get_global_transform().affine_inverse() * item.get_global_rect()
+	if content_rect.position.y < _album_scroll.scroll_vertical:
+		_album_scroll.scroll_vertical = floori(content_rect.position.y)
+	elif content_rect.end.y > _album_scroll.scroll_vertical + _album_scroll.size.y:
+		_album_scroll.scroll_vertical = ceili(content_rect.end.y - _album_scroll.size.y)
 
 
 func connect_browser(host: JavaScriptObject) -> void:
@@ -383,6 +455,8 @@ func enter() -> void:
 func start_level(number: int) -> void:
 	if save_failed or not _loaded or not game.start_level(number):
 		return
+	_loss.reset_loss()
+	_celebration.reset()
 	stop_speech()
 	view = "stage"
 	_suspended = false
@@ -401,6 +475,7 @@ func start_level(number: int) -> void:
 
 
 func _setup_scene() -> void:
+	sound_requested.emit("stop")
 	if _camera_tween != null and _camera_tween.is_valid():
 		_camera_tween.kill()
 	_giant_camera_expansion = 1.0
@@ -427,8 +502,9 @@ func _setup_scene() -> void:
 	_chest.configure(game.current_chest())
 	_chest.reset_closed()
 	_treasure_backdrop.configure(GameData.theme(_chest.theme_id))
+	_celebration.pip.set_outfit_theme(_chest.theme_id)
 	_monster_name.text = str(game.level.monster_name)
-	_topline.text = "%02d / 14  ·  %s" % [game.level_number, game.level.title]
+	_topline.text = "%02d / 14" % game.level_number
 	for label in [_topline, _meter_text, _banner]:
 		label.add_theme_color_override("font_color", INK)
 	_monster_name.add_theme_color_override("font_color", Color("#fff9eb"))
@@ -436,7 +512,7 @@ func _setup_scene() -> void:
 	_monster_name.add_theme_constant_override("shadow_offset_x", 1)
 	_monster_name.add_theme_constant_override("shadow_offset_y", 2)
 	_feedback.text = ""
-	_transcript.text = ""
+	_clear_transcript()
 	_words.accent = Color(str(game.level.scene.accent))
 	_words.reduced_motion = reduced_motion
 	_words.present(game.targets)
@@ -477,6 +553,9 @@ func _rebuild_map() -> void:
 
 
 func pause() -> void:
+	cancel_scroll_input()
+	sound_requested.emit("stop")
+	_celebration.pause()
 	stop_speech()
 	# A visible release is irrevocable. Settle it before pausing the model so
 	# the reward callback still sees its chest phase and commits exactly once.
@@ -495,6 +574,8 @@ func pause() -> void:
 	_backdrop.process_mode = Node.PROCESS_MODE_DISABLED
 	_effects.process_mode = Node.PROCESS_MODE_DISABLED
 	_environment.set_active(false)
+	if _camera_tween != null and _camera_tween.is_valid():
+		_camera_tween.pause()
 	_effects.clear()
 	_pending_hits.clear()
 	_display_hp = game.hp
@@ -517,8 +598,9 @@ func _continue_run() -> void:
 	_display_hp = game.hp
 	for item in [_monster, _chest, _backdrop, _effects]:
 		item.process_mode = Node.PROCESS_MODE_INHERIT
+	if _camera_tween != null and _camera_tween.is_valid():
+		_camera_tween.play()
 	if game.phase == "victory":
-		_hold = 1.6
 		_play_victory()
 	if game.phase == "chest":
 		_banner.text = str(game.current_chest().name)
@@ -526,7 +608,7 @@ func _continue_run() -> void:
 		_opening_finished = true
 		_opening = false
 		_chest.set_preview_time(ChestFeel.OPEN_SECONDS)
-		_banner.text = str(game.current_chest().name) + " collected!"
+		_banner.text = str(game.current_chest().name)
 	_refresh()
 	if game.phase == "playing":
 		_start_listening()
@@ -543,6 +625,7 @@ func stop_speech() -> bool:
 	_auto_listen = false
 	_speech_enabled = false
 	_listening = false
+	_clear_transcript()
 	if _host != null:
 		_host.questCancelSpeak()
 		return bool(_host.stopSpeech())
@@ -587,10 +670,42 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	var pending: bool = status.begins_with("starting") or status.begins_with("waiting for microphone audio") \
 		or status.begins_with("allow microphone access") or status.begins_with("listening paused.")
 	_auto_listen = enabled and (listening or pending)
+	if not listening and not (enabled and pending):
+		_clear_transcript()
 	if game.phase == "playing":
 		_feedback.text = "" if listening else message
 	_refresh_controls()
 	_publish()
+
+
+func show_transcript(text: String, is_final: bool) -> void:
+	# Display browser hypotheses independently of the bound attack events.
+	if not _speech_enabled or not _listening or game.phase != "playing" or view != "stage" \
+		or not is_visible_in_tree() or save_failed or _suspended:
+		return
+	if interaction_allowed.is_valid() and not bool(interaction_allowed.call()):
+		return
+	_present_transcript(text, is_final)
+	_publish()
+
+
+func _present_transcript(text: String, is_final: bool) -> void:
+	_transcript.text = text.strip_edges().replace("\n", " ").replace("\r", " ").replace("\t", " ").right(2000)
+	_transcript_final = is_final and not _transcript.text.is_empty()
+	_update_transcript_window()
+
+
+func _clear_transcript() -> void:
+	_transcript_final = false
+	if _transcript != null:
+		_transcript.text = ""
+		_transcript.lines_skipped = 0
+
+
+func _update_transcript_window() -> void:
+	_transcript.lines_skipped = 0
+	# Long utterances keep their newest words in the bounded caption area.
+	_transcript.lines_skipped = maxi(0, _transcript.get_line_count() - _transcript.max_lines_visible)
 
 
 func receive_speech(json: String) -> bool:
@@ -604,8 +719,6 @@ func receive_speech(json: String) -> bool:
 	var result: Dictionary = game.submit_speech_event(event)
 	if not result.accepted:
 		return false
-	_transcript.text = str(event.get("text", "")).left(120)
-	_transcript_left = 2.5
 	_handle_result(result, str(result.get("word", {}).get("text", "")))
 	return bool(result.matched)
 
@@ -615,8 +728,7 @@ func _submit_text(text: String) -> void:
 	if game.phase != "playing" or text.strip_edges().is_empty() or save_failed or _suspended:
 		return
 	var result: Dictionary = game.submit_transcript(text)
-	_transcript.text = text.left(120)
-	_transcript_left = 2.5
+	_present_transcript(text, true)
 	_handle_result(result, str(result.get("word", {}).get("text", text)))
 
 
@@ -631,8 +743,8 @@ func _handle_result(result: Dictionary, word: String) -> void:
 	_pending_hits.append({"time": 0.0, "word": word, "uid": uid})
 	_impact_pending = true
 	_effects.launch_word(uid, word, origin, destination, Style.ui_scale(self))
+	sound_requested.emit("launch")
 	_words.present(game.targets)
-	_transcript.add_theme_color_override("font_color", Color("#477e70"))
 	_feedback.text = ""
 	_save_progress()
 	if result.completed:
@@ -673,6 +785,8 @@ func _spell_impact(target_uid: int) -> void:
 	_update_meter()
 	_pulse_label(_meter_text, Color("#70559e"))
 	sound_requested.emit("hit")
+	if game.phase == "lost" and not _impact_pending:
+		_refresh()
 
 
 func _pulse_label(label: Label, color: Color) -> void:
@@ -695,14 +809,22 @@ func _pulse_label(label: Label, color: Color) -> void:
 
 func _play_victory() -> void:
 	_monster.defeat()
-	if not reduced_motion:
-		_hold = maxf(_hold, _monster.source_animation_duration("Defeat") + 0.35)
-	_banner.text = "You win!"
+	_celebration.set_companion_mode(false)
+	_refresh()
+	var first_celebration: bool = _celebration.begin(_chest.theme_id)
+	if first_celebration:
+		_hold = maxf(3.2, _monster.source_animation_duration("Defeat") + 0.35 if not reduced_motion else 0.0)
+	else:
+		# A resumed victory stays happy without replaying its calls or dance.
+		_celebration.settle()
+		_hold = maxf(0.6, _hold)
+	_effects.clear()
 	_backdrop.celebrate()
 	_environment.celebrate()
 	_effects.celebrate(_viewport_box.position + _viewport_box.size * Vector2(0.5, 0.5))
-	_pulse_label(_banner, INK)
-	sound_requested.emit("victory")
+	if first_celebration:
+		sound_requested.emit("victory")
+		sound_requested.emit("pip_victory")
 	_refresh()
 
 
@@ -830,7 +952,7 @@ func _reward_finished() -> void:
 		_chest.show_surprise()
 	_save_progress()
 	_announce_chest_reward()
-	_banner.text = ("Tinker is your new friend!\n" if game.level_number == 14 else "Treasure discovered!\n") + str(game.current_chest().get("name", ""))
+	_banner.text = str(game.current_chest().get("name", ""))
 	_rebuild_map()
 	_refresh()
 	if not _settling_chest and _next.visible and not _next.disabled:
@@ -840,13 +962,13 @@ func _reward_finished() -> void:
 func _refresh_chest_caption() -> void:
 	if _chest_caption == null:
 		return
-	_chest_caption.text = "Hold to open your chest!"
+	_chest_caption.text = "Hold your treasure to open"
 	if _opening:
-		_chest_caption.text = "Your chest is open. You can let go!" if _chest.opening_committed() else "Keep holding to open. Release to cancel."
+		_chest_caption.text = "It's yours!" if _chest.opening_committed() else "Keep holding..."
 	elif _holding_chest:
-		_chest_caption.text = "Keep holding to open. Release to cancel."
+		_chest_caption.text = "Keep holding..."
 	_chest_button.tooltip_text = _chest_caption.text
-	_chest_button.accessibility_name = _chest_caption.text
+	_chest_button.accessibility_name = "Hold to open your treasure. Release before it opens to cancel."
 
 
 func _chest_input(event: InputEvent) -> void:
@@ -905,6 +1027,8 @@ func _process(delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 	_advance_chest_hold(0.0 if Engine.get_process_frames() == _chest_hold_frame else delta)
+	_treasure_backdrop.set_reveal(1.0 if game.phase == "complete" else _chest.performance_progress() if _opening else 0.0)
+	var started_victory: bool = false
 	if view == "stage" and not _suspended and game.phase != "paused":
 		if game.phase == "playing" and not reduced_motion and _monster.creature_id.begins_with("giant-"):
 			_threat_left -= delta
@@ -920,22 +1044,21 @@ func _process(delta: float) -> void:
 			if _victory_wait <= 0:
 				_victory_pending = false
 				_play_victory()
+				started_victory = true
 		if game.phase == "playing" and not save_failed and (_listening or not OS.has_feature("web")):
 			game.advance(delta)
 			_refresh_word_field()
 			if game.phase == "lost":
 				stop_speech()
-				_banner.text = "Try again!"
 				_save_progress()
 				_refresh()
-		if _transcript_left > 0:
-			_transcript_left = maxf(0, _transcript_left - delta)
-			if _transcript_left <= 0:
-				_transcript.text = ""
-		if _hold > 0:
+		if _hold > 0 and not started_victory and not _victory_pending:
 			_hold = maxf(0.0, _hold - delta)
 			if _hold <= 0:
 				if game.phase == "victory":
+					sound_requested.emit("pip_stop")
+					_celebration.settle()
+					_effects.clear()
 					game.finish_victory()
 					_save_progress()
 					_banner.text = str(game.current_chest().name)
@@ -966,25 +1089,52 @@ func _refresh() -> void:
 	_word_count.visible = _words.visible
 	_transcript.visible = _words.visible
 	_feedback.visible = _words.visible
+	var show_pause: bool = view == "stage" and (game.phase == "paused" or _suspended)
+	var first_pause: bool = show_pause and not _pause_card.visible
+	var context_phase: String = game._paused_phase if game.phase == "paused" else game.phase
+	var reward_context: bool = context_phase in ["chest", "complete"]
+	var show_victory: bool = view == "stage" and game.phase == "victory" and not show_pause and not _victory_pending
+	var show_loss: bool = view == "stage" and game.phase == "lost" and not _suspended and not _impact_pending
 	_monster_name.visible = game.phase in ["playing", "victory", "paused", "lost"]
-	_viewport_box.visible = not game.level.is_empty() and game.phase not in ["chest", "complete"]
-	if game.phase in ["chest", "complete"]:
+	_viewport_box.visible = not game.level.is_empty() and not reward_context and not show_loss
+	if reward_context:
 		_monster.hide()
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if is_visible_in_tree() and view == "stage" and _viewport_box.visible else SubViewport.UPDATE_DISABLED
 	_environment.set_active(is_visible_in_tree() and view == "stage" and _viewport_box.visible and not _suspended and game.phase != "paused")
-	_treasure_backdrop.visible = game.phase in ["chest", "complete"]
-	_chest.visible = game.phase in ["chest", "complete"]
+	_treasure_backdrop.visible = reward_context or show_victory
+	_treasure_backdrop.set_active(is_visible_in_tree() and view == "stage" and not show_pause)
+	_celebration.set_companion_mode(reward_context)
+	if reward_context:
+		_celebration.settle()
+	_celebration.visible = (show_victory or reward_context) and not show_pause
+	_reward_eyebrow.visible = reward_context and not show_pause
+	_reward_detail.visible = reward_context and not show_pause
+	_reward_eyebrow.text = "ADDED TO YOUR COLLECTION" if game.phase == "complete" else "ADVENTURE %02d COMPLETE" % game.level_number
+	_reward_detail.text = ("Tinker is your new friend!" if game.level_number == 14 else "%d / 20 treasures discovered" % game.collected_chests.size()) if game.phase == "complete" else "%d word hits  ·  A treasure for you" % game.hits
+	_chest.visible = reward_context
 	_companion.visible = game.phase == "complete" and game.level_number == 14 and not _suspended
 	_chest_button.visible = game.phase == "chest"
 	_chest_caption.visible = game.phase == "chest" and not _suspended
 	_next.visible = game.phase == "complete"
 	_next.text = "Back to the map" if game.level_number == 14 else "Next adventure"
-	_resume.visible = game.phase == "paused" or _suspended
-	_retry.visible = game.phase == "lost" and not _suspended
-	_banner.visible = game.phase in ["victory", "chest", "complete", "paused", "lost"] or _suspended
-	if game.phase == "paused" or _suspended:
-		_banner.text = "Adventure paused"
-		_chest.hide()
+	_resume.visible = show_pause
+	if show_pause:
+		var subject: String = str(game.current_chest().name) if reward_context else str(game.level.monster_name)
+		_pause_card.present_pause(game.level_number, subject, game.hits, game.max_hp, game.hp, context_phase, save_failed)
+	else:
+		_pause_card.hide()
+	var first_loss: bool = show_loss and not _loss.visible
+	_retry.visible = show_loss
+	if show_loss:
+		_loss.present(game.level_number, str(game.level.monster_name), game.hits, game.max_hp, game.hp, save_failed)
+	else:
+		_loss.hide()
+	_stage_header.visible = not show_loss and not show_pause and not reward_context and not show_victory
+	_topline.visible = _stage_header.visible
+	_back.visible = not show_loss and not show_pause
+	_loss_backdrop.visible = show_loss or show_pause
+	_banner.visible = reward_context and not show_pause
+	if show_pause:
 		_chest_button.hide()
 		_next.hide()
 	if not _impact_pending:
@@ -993,6 +1143,10 @@ func _refresh() -> void:
 	_update_meter()
 	_refresh_controls()
 	_layout()
+	if first_loss and is_visible_in_tree() and not _retry.disabled:
+		_retry.grab_focus()
+	if first_pause and is_visible_in_tree() and not _resume.disabled:
+		_resume.grab_focus()
 	_publish()
 
 
@@ -1004,6 +1158,9 @@ func _refresh_controls() -> void:
 	_next.disabled = not _opening_finished or save_failed
 	_back.disabled = save_failed
 	_retry.disabled = save_failed
+	_loss.map_button.disabled = save_failed
+	_resume.disabled = save_failed
+	_pause_card.map_button.disabled = save_failed
 
 
 func _update_meter() -> void:
@@ -1011,7 +1168,7 @@ func _update_meter() -> void:
 		_meter.hide()
 		_meter_text.hide()
 		return
-	_meter.visible = game.phase in ["playing", "victory", "lost"]
+	_meter.visible = game.phase in ["playing", "lost"] and not _loss.visible and not _pause_card.visible
 	_meter_text.visible = _meter.visible
 	_meter.present(_display_hp, maxi(1, game.max_hp), false)
 	_meter_text.text = "%d / %d" % [_display_hp, game.max_hp]
@@ -1030,6 +1187,7 @@ func _layout() -> void:
 	for panel in [_map, _stage_scroll, _album]:
 		panel.size = size
 	_album_button.add_theme_font_size_override("font_size", ceili(12 / s))
+	_continue.add_theme_font_size_override("font_size", ceili(14 / s))
 	var album_width: float = maxf(132 / s, _album_button.get_combined_minimum_size().x)
 	_map_heading.position = Vector2(6, 0) / s
 	_map_heading.size = Vector2(maxf(1, w - album_width - 18 / s), 34 / s)
@@ -1065,10 +1223,12 @@ func _layout() -> void:
 	_stage.size = Vector2(w, h)
 	_stage_scroll.scroll_vertical = 0
 	var header_h: float = (52 if landscape else 78) / s
-	var footer_h: float = (24 if landscape else 96 if _mic_retry.visible else 44) / s
+	var footer_h: float = (24 if landscape else 120 if _mic_retry.visible else 68) / s
 	var scene_h: float = maxf(76 / s, (h - header_h - footer_h) * 0.48)
 	var arena_top: float = header_h + scene_h
 	_backdrop.size = Vector2(w, h)
+	_loss_backdrop.size = Vector2(w, h)
+	_treasure_backdrop.position = Vector2.ZERO
 	_treasure_backdrop.size = Vector2(w, h)
 	_viewport_box.position = Vector2(0, header_h)
 	_viewport_box.size = Vector2(w, scene_h)
@@ -1076,6 +1236,7 @@ func _layout() -> void:
 	_stage_header.position = Vector2(4, 2) / s
 	_stage_header.size = Vector2(w - 8 / s, header_h - 4 / s)
 	_back.position = Vector2(w - 68 / s, 7 / s)
+	_back.add_theme_font_size_override("font_size", ceili(13 / s))
 	_back.custom_minimum_size.y = ceilf(44 / s)
 	_back.size = Vector2(60, 44) / s
 	_topline.position = Vector2(14, 7) / s
@@ -1094,13 +1255,14 @@ func _layout() -> void:
 	_word_count.position = _words.position + Vector2(12, 7) / s
 	_word_count.size = Vector2(w - 24 / s, 18 / s)
 	_word_count.add_theme_font_size_override("font_size", ceili(11 / s))
-	_transcript.position = Vector2(8 / s, h - 42 / s)
-	_transcript.size = Vector2(w - 16 / s, 22 / s)
+	_transcript.position = Vector2(8 / s, h - 65 / s)
+	_transcript.size = Vector2(w - 16 / s, 44 / s)
+	_transcript.max_lines_visible = 2
 	_transcript.add_theme_font_size_override("font_size", ceili(14 / s))
 	_feedback.position = Vector2(8 / s, h - 21 / s)
 	_feedback.size = Vector2(w - 16 / s, 20 / s)
 	_feedback.add_theme_font_size_override("font_size", ceili(11 / s))
-	_mic_retry.position = Vector2(w * 0.2, h - 94 / s)
+	_mic_retry.position = Vector2(w * 0.2, h - 118 / s)
 	_mic_retry.size = Vector2(w * 0.6, 42 / s)
 	_monster_name.visible = game.phase in ["playing", "victory", "paused", "lost"]
 	if landscape:
@@ -1127,9 +1289,10 @@ func _layout() -> void:
 		_word_count.size = Vector2(_words.size.x - 20 / s, 17 / s)
 		_transcript.position = Vector2(scene_width + 8 / s, h - 23 / s)
 		_transcript.size = Vector2(w - scene_width - 16 / s, 21 / s)
+		_transcript.max_lines_visible = 1
 		_transcript.add_theme_font_size_override("font_size", ceili(12 / s))
 		_feedback.position = Vector2(8 / s, h - 22 / s)
-		_feedback.size = Vector2(w - 16 / s, 21 / s)
+		_feedback.size = Vector2(scene_width - 16 / s, 21 / s)
 		_mic_retry.add_theme_font_size_override("font_size", ceili(12 / s))
 		_mic_retry.custom_minimum_size.y = ceilf(44 / s)
 		_mic_retry.position = Vector2(6 / s, h - footer_h - 46 / s)
@@ -1137,6 +1300,18 @@ func _layout() -> void:
 	else:
 		_mic_retry.add_theme_font_size_override("font_size", ceili(14 / s))
 		_mic_retry.custom_minimum_size.y = ceilf(48 / s)
+	_update_transcript_window()
+	_loss.size = _stage.size
+	_loss.layout()
+	_pause_card.size = _stage.size
+	_pause_card.layout()
+	var intermission: QuestResult = _pause_card if _pause_card.visible else _loss
+	if intermission.visible:
+		_viewport_box.position = intermission.hero_rect.position
+		_viewport_box.size = intermission.hero_rect.size
+		_monster_name.hide()
+		if _pause_card.visible and _viewport_box.visible:
+			_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	_frame_creature()
 	_banner.position = Vector2(w * 0.08, header_h + 6 / s)
 	_banner.size = Vector2(w * 0.84, minf(90 / s, h * 0.21))
@@ -1151,10 +1326,17 @@ func _layout() -> void:
 	_chest_caption.add_theme_font_size_override("font_size", ceili(16 / s))
 	_companion.position = Vector2(w * 0.5 - 36 / s, chest_top - 40 / s)
 	_companion.size = Vector2(72, 72) / s
-	for button in [_next, _resume, _retry]:
+	if _pause_card.visible and _pause_card.context_phase in ["chest", "complete"]:
+		_treasure_backdrop.position = _pause_card.hero_rect.position
+		_treasure_backdrop.size = _pause_card.hero_rect.size
+		_chest.position = _pause_card.hero_rect.position + Vector2(6, 4) / s
+		_chest.size = _pause_card.hero_rect.size - Vector2(12, 35) / s
+		_treasure_backdrop.set_presentation_rects(Rect2(), Rect2(_chest.position - _treasure_backdrop.position, _chest.size))
+	for button in [_next]:
 		_style_button(button, true)
 		button.position = Vector2(w * 0.15, h - 50 / s)
 		button.size = Vector2(w * 0.7, 44 / s)
+	_layout_reward_presentation(s)
 	_effects.size = _stage.size
 	w = size.x
 	h = size.y
@@ -1179,6 +1361,83 @@ func _layout() -> void:
 		item.get_meta("label").position = Vector2(8, 116) / s
 		item.get_meta("label").size = Vector2(tile_w - 16 / s, 40 / s)
 		item.get_meta("label").add_theme_font_size_override("font_size", ceili(12 / s))
+
+
+func _layout_reward_presentation(s: float) -> void:
+	var w: float = size.x
+	var h: float = size.y
+	var unit: float = 1.0 / s
+	var compact: bool = h * s < 320 and w * s >= 440
+	var wide: bool = w > h * 1.2
+	_celebration.set_ui_scale(s)
+	if game.phase == "victory" and not _suspended:
+		_monster_name.hide()
+		if wide:
+			_viewport_box.position = Vector2(0, 48 * unit)
+			_viewport_box.size = Vector2(w * 0.44, maxf(40 * unit, h - 48 * unit))
+			_celebration.position = Vector2(w * 0.44, 8 * unit)
+			_celebration.size = Vector2(w * 0.56, h - 16 * unit)
+		else:
+			_viewport_box.position = Vector2(0, 48 * unit)
+			_viewport_box.size = Vector2(w, maxf(40 * unit, h * 0.35 - 48 * unit))
+			_celebration.position = Vector2(0, h * 0.35)
+			_celebration.size = Vector2(w, h * 0.65)
+		_treasure_backdrop.set_presentation_rects(Rect2(), _celebration.get_rect())
+		_frame_creature()
+	if game.phase not in ["chest", "complete"] or _suspended:
+		return
+	# Set typography before sizing: shrinking a font does not shrink a Label's
+	# size after a previous minimum-size clamp in a differently scaled viewport.
+	_chest_caption.add_theme_font_size_override("font_size", ceili((12 if compact else 15) * unit))
+	_next.add_theme_font_size_override("font_size", ceili((13 if compact else 15) * unit))
+	var title_rect: Rect2
+	var chest_rect: Rect2
+	if compact:
+		var column: float = w * 0.39
+		title_rect = Rect2(10 * unit, 4 * unit, column - 14 * unit, 64 * unit)
+		chest_rect = Rect2(column, 10 * unit, w - column - 6 * unit, h - 20 * unit)
+		_celebration.position = Vector2(8 * unit, 62 * unit)
+		_celebration.size = Vector2(64 * unit, maxf(40 * unit, h - 108 * unit))
+		_chest_caption.position = Vector2(76 * unit, 69 * unit)
+		_chest_caption.size = Vector2(maxf(30 * unit, column - 84 * unit), maxf(36 * unit, h - 119 * unit))
+		_next.position = Vector2(8 * unit, h - 48 * unit)
+		_next.size = Vector2(column - 16 * unit, 44 * unit)
+		_back.position = Vector2(w - 66 * unit, 4 * unit)
+	else:
+		title_rect = Rect2(w * 0.08, 52 * unit, w * 0.84, 94 * unit)
+		var chest_top: float = minf(152 * unit, h * 0.32)
+		chest_rect = Rect2(w * (0.28 if wide else 0.05), chest_top,
+			w * (0.64 if wide else 0.90), maxf(56 * unit, h - chest_top - 64 * unit))
+		var pip_size: float = minf(210 * unit, minf(w * (0.24 if wide else 0.27), h * 0.26))
+		_celebration.position = Vector2(w * (0.045 if wide else 0.01), h - 68 * unit - pip_size)
+		_celebration.size = Vector2(pip_size, pip_size)
+		_chest_caption.position = Vector2(w * 0.12, h - 53 * unit)
+		_chest_caption.size = Vector2(w * 0.76, 42 * unit)
+		_next.position = Vector2(w * 0.19, h - 52 * unit)
+		_next.size = Vector2(w * 0.62, 44 * unit)
+	_reward_eyebrow.position = title_rect.position
+	_reward_eyebrow.size = Vector2(title_rect.size.x, (16 if compact else 20) * unit)
+	_reward_eyebrow.add_theme_font_size_override("font_size", ceili((10 if compact else 11) * unit))
+	_banner.position = title_rect.position + Vector2(0, (18 if compact else 23) * unit)
+	_banner.size = Vector2(title_rect.size.x, (28 if compact else 39) * unit)
+	_banner.add_theme_font_size_override("font_size", ceili((17 if compact else 24) * unit))
+	_banner.max_lines_visible = 1
+	_banner.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_reward_detail.position = title_rect.position + Vector2(0, (48 if compact else 65) * unit)
+	_reward_detail.size = Vector2(title_rect.size.x, 24 * unit)
+	_reward_detail.add_theme_font_size_override("font_size", ceili((10 if compact else 12) * unit))
+	_reward_detail.visible = not compact
+	_chest.position = chest_rect.position
+	_chest.size = chest_rect.size
+	_chest_button.position = chest_rect.position
+	_chest_button.size = chest_rect.size
+	for label in [_banner, _reward_eyebrow, _reward_detail, _chest_caption]:
+		label.add_theme_color_override("font_color", Color("#fff4d9"))
+		label.add_theme_color_override("font_shadow_color", Color("#16242fe0"))
+		label.add_theme_constant_override("shadow_offset_y", 2)
+	_companion.position = Vector2(w - 72 * unit, h - 136 * unit)
+	_companion.size = Vector2(64, 64) * unit
+	_treasure_backdrop.set_presentation_rects(title_rect, chest_rect)
 
 
 func _frame_giant_reaction(kind: String) -> void:
@@ -1243,6 +1502,8 @@ func set_reduced_motion(enabled: bool) -> void:
 			_apply_giant_camera_expansion(1.0)
 		_backdrop.set_reduced_motion(enabled)
 		_chest.set_reduced_motion(enabled)
+		_celebration.set_reduced_motion(enabled)
+		_treasure_backdrop.set_reduced_motion(enabled)
 		if enabled and _opening:
 			_chest.finish_immediately()
 		_environment.set_reduced_motion(enabled)
@@ -1250,6 +1511,8 @@ func set_reduced_motion(enabled: bool) -> void:
 		_words.reduced_motion = enabled
 		_effects.reduced_motion = enabled
 		_meter.reduced_motion = enabled
+		_loss.set_reduced_motion(enabled)
+		_pause_card.set_reduced_motion(enabled)
 		if enabled:
 			for label: Label in _label_tweens:
 				var tween: Tween = _label_tweens[label]
@@ -1303,6 +1566,10 @@ func snapshot() -> Dictionary:
 	var controls: Dictionary = {}
 	for key in _controls:
 		controls[key] = _rect(_controls[key])
+	if _loss.visible:
+		controls["map"] = _rect(_loss.map_button)
+	if _pause_card.visible:
+		controls["map"] = _rect(_pause_card.map_button)
 	controls["map_previous"] = _rect(_atlas._previous)
 	controls["map_next"] = _rect(_atlas._next)
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
@@ -1332,10 +1599,18 @@ func snapshot() -> Dictionary:
 		"targets": targets, "projectiles": _pending_hits.duplicate(true),
 		"completed": game.completed_levels, "unlocked": game.unlocked_level,
 		"chests": game.collected_chests, "total_clears": game.total_clears,
-		"transcript": _transcript.text, "feedback": _feedback.text,
+		"transcript": _transcript.text, "transcript_final": _transcript_final, "feedback": _feedback.text,
 		"listening": _listening, "busy": _hold > 0 or _opening or _holding_chest, "save_failed": save_failed,
 		"holding_chest": _holding_chest, "chest_progress": _chest.performance_progress(),
 		"chest_phase": _chest.performance_phase(), "chest_committed": _chest.opening_committed(),
+		"victory_celebration": _celebration.snapshot(),
+		"treasure_presentation": _treasure_backdrop.snapshot(),
+		"loss_result": {"visible": _loss.is_visible_in_tree(), "hits": _loss.hits, "max_hp": _loss.max_hp,
+			"remaining_hp": _loss.remaining_hp, "reveal": _loss.reveal,
+			"pip_visible": _loss.pip.is_visible_in_tree(), "pip_emotion": _loss.loss_emotion},
+		"pause_result": {"visible": _pause_card.is_visible_in_tree(), "context_phase": _pause_card.context_phase,
+			"hits": _pause_card.hits, "max_hp": _pause_card.max_hp, "remaining_hp": _pause_card.remaining_hp,
+			"reveal": _pause_card.reveal},
 		"controls": controls, "levels": levels, "map_chapter": _atlas.current_chapter, "map_scroll_max": 0,
 		"reduced_motion": reduced_motion, "scroll_offset": 0,
 		"paused": _suspended or game.phase == "paused", "scroll_max": 0}

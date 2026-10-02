@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Bake downloaded chest meshes into small, transparent runtime opening sequences.
+"""Reproduce the retired chest-frame pipeline for archival comparison only.
+
+The live game uses prepare-chest-models.py and package-chest-models.cjs. Legacy
+output stays in build/chest-bakes/legacy-runtime and cannot replace that manifest.
 
 The verified Unity prefab exports under TalkQuest retain source geometry, materials,
 texture mapping and transform hierarchy. No downloaded scripts are executed. Run
@@ -17,8 +20,8 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "assets/chests/downloaded"
 WORK = ROOT / "build/chest-bakes"
+OUTPUT = WORK / "legacy-runtime"
 DEFAULT_SOURCE = Path(r"C:\uworks\TalkQuest")
 FRAME_SIZE = 320
 STYLES = {

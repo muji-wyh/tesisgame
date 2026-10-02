@@ -9,6 +9,9 @@ what ships. Private source packs remain subject to their own licenses.
 
 | Reference | Purpose |
 | --- | --- |
+| [Asset art direction](art-direction.md) | Required sourced artwork, no placeholder game art, and friendly large Talk Quest guardians |
+| [Guardian replacement review](talk-quest-monster-refresh.md) | Fourteen proposed friendly sources, acquisition status, and animation gaps; not shipped assets |
+| [Talk Quest chapter atlas](../../assets/talk_quest/map/SOURCE.md) | Acquired parchment maps, fourteen landmark illustrations, navigation artwork, and source credits |
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |
@@ -22,6 +25,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Talk Quest monsters](talk-quest-monsters.md) | Fourteen licensed rigged characters, source colors and clips, conversion workflow, and provenance |
 | [Talk Quest scenes](../../assets/talk_quest/scenes/README.md) | Fourteen original procedural environments and their [art manifest](../../assets/talk_quest/scenes/manifest.json) |
 | [Talk Quest treasures](../../assets/talk_quest/chests/README.md) | Twenty original container designs, opening mechanisms, and their [art manifest](../../assets/talk_quest/chests/manifest.json) |
+| [Talk Quest treasure room](../../assets/talk_quest/treasure/SOURCE.md) | Acquired interior artwork, textured celebration lighting, and interface framing |
 
 Voice Pop uses the reference hit bank when complete and playable, then the
 eight fruit slices, then the single imported slice, then `select.wav`. Launch

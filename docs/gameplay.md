@@ -131,28 +131,33 @@ or webkitSpeechRecognition support and an available speech service.
 Unsupported devices show an explanation and a way back to Match.
 Reduced motion keeps a static edge glow and simpler hit feedback.
 
+Crossing 100, 200, or 300 points earns one chest opportunity, up to three per
+round, with a visible award effect. **Open chests (N)** on the result page shows
+all earned chests together in different styles. Their hold-to-open interaction
+matches Match mode, and unopened rewards survive leaving or reloading. See
+[Voice Pop treasure](voice-pop-treasure.md) for persistence and the shared catalog.
+
 ### Talk Quest
 
-Talk Quest follows Adam and Yoki through fourteen conversations: twelve everyday
-scenes, a birthday boss, and a cooperative toy workshop. Each adventure has its
-own environment and rigged creature. The current speaker, prompted sentence,
-and recognized words appear together. **Speak** starts recognition, **Hear line**
-reads the prompt, and **Type** offers an explicit practice alternative. Only a
-matching complete final sentence advances; interim speech and mistaken answers
-carry no penalty.
+Talk Quest has fourteen word-combat adventures: twelve everyday destinations
+and two special stages. Its chapter map shows landmarks without monster
+portraits or a scrollbar. Every stage has its own environment and animated
+creature, including three large acquired giants.
 
-In the first thirteen adventures, successful sentences trigger word effects and
-creature reactions until a friendly defeat and victory lead to a treasure.
-The workshop instead asks for one of three illustrated parts before each
-four-line repair. Five repaired toys wake its sleeping friend, with no health
-or damage. Twenty different animated treasures can be collected across the
-campaign and replays.
+Say a flying picture's word to turn it into a glowing projectile. Its launch
+and impact sounds accompany one segment of monster damage. A monster with N
+health receives at most N + m word opportunities, where m is at least three.
+Later stages increase N. Missing too many words leads to a rematch; defeating
+the monster leads to the shared hold-to-open treasure sequence. Twenty treasure
+designs can be collected across first clears and replays. Sentence prompts,
+part selection, and the Speak, Hear line, and Type buttons are retired.
 
-**Map** pauses an adventure, and **Continue saved adventure** restores its line,
-part selection, or pending treasure after a reload. Campaign progress is shared
-on this device and has no player leaderboard. Audio and recognized transcripts
-are not saved. See [Talk Quest](talk-quest.md) for the full campaign, speech
-rules, checkpoint behavior, and implementation interfaces.
+**Map** pauses the adventure. **Continue saved adventure** restores a paused
+battle with its remaining word flights, or its pending treasure, after a reload.
+Pause freezes monster motion and game timing until an explicit Continue action.
+Campaign progress is shared on this device and has no player leaderboard.
+Audio and recognized transcripts are not saved. See [Talk Quest](talk-quest.md)
+for difficulty, speech rules, checkpoints, and implementation interfaces.
 
 ### Match and Memory
 

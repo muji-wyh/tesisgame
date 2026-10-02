@@ -1065,9 +1065,10 @@ func _test_scene() -> void:
 		check(app.chest.theme_id == season, "Closed chest follows selected season")
 		var chest_style: String = app.data.theme(season).chest
 		var expected_pieces: int = 9 if chest_style == "crystal" else 5 if chest_style in ["royal", "energy"] else 1
+		var live: Dictionary = app.chest.hold_effect_snapshot().get("live_model", {})
 		check(app.chest.piece_count() == expected_pieces
-			and (expected_pieces > 1 or app.chest.hold_effect_snapshot().opening_frames >= 6),
-			"Chest uses the complete imported assembly, physical rig or downloaded opening sequence")
+			and (expected_pieces > 1 or (not live.is_empty() and live.mesh_count > 0 and not live.parts.is_empty())),
+			"Chest uses the complete imported assembly, physical rig or live animated model")
 	app.choose_theme("spring")
 	joy_axis(JOY_AXIS_LEFT_X, 1.0)
 	await process_frame

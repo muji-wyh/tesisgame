@@ -529,11 +529,7 @@ func _build_controls() -> void:
 		audio.chest_cue(theme_id, cue, step)
 		if _host != null:
 			_host.chestCue(theme_id, cue, step))
-	_quest.sound_requested.connect(func(kind: String) -> void:
-		if kind == "hit":
-			audio.play_match_voice_hit()
-		elif kind == "victory":
-			audio.chest_cue(model.theme_id, "unlock"))
+	_quest.sound_requested.connect(_quest_sound)
 	_quest.hide()
 	column.add_child(_quest)
 	_outcome = Control.new()
@@ -813,6 +809,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 		return
 	_pop_rewards.pause()
 	_pop.cancel_result_input()
+	_quest.cancel_scroll_input()
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	audio.stop_voice()
@@ -2459,20 +2456,26 @@ func _select_card(id: String) -> void:
 		return
 	if not _voice_mode:
 		audio.interact(model.theme_id, model.phase != "lost")
-	var result: String = model.select(id)
-	if result in ["selected", "reselected"] and not _voice_mode:
-		duck.react("curious")
-		audio.cue("select")
-		audio.say("res://" + model.card_by_id(id).word.audio)
-	elif result in ["correct", "wrong"]:
-		_animate_feedback(model.feedback_ids, result == "correct")
-		if not _voice_mode:
+	# Start the accepted tap's sound before the full board refresh and its
+	# browser status updates. The model still validates every selection first.
+	var result: String = model.select(id, false)
+	if result == "ignored":
+		return
+	if not _voice_mode:
+		if result in ["selected", "reselected"]:
+			audio.cue("select")
+			audio.say("res://" + model.card_by_id(id).word.audio)
+		elif result in ["correct", "wrong"]:
 			audio.cue(result, "wrong" if result == "wrong" else "")
 			if result == "correct":
 				audio.say("res://" + model.card_by_id(id).word.audio)
+	model.changed.emit()
+	if result in ["selected", "reselected"] and not _voice_mode:
+		duck.react("curious")
+	elif result in ["correct", "wrong"]:
+		_animate_feedback(model.feedback_ids, result == "correct")
 		feedback_timer.start(MATCH_FEEDBACK_SECONDS)
-	if result != "ignored":
-		cards[id].play_press()
+	cards[id].play_press()
 
 
 func _resolve_feedback() -> void:
@@ -2531,6 +2534,37 @@ func set_reduced_motion(value: bool) -> void:
 		chest.finish_immediately()
 	if not data.words.is_empty():
 		_refresh()
+
+
+func _quest_sound(kind: String) -> void:
+	if kind == "pip_stop":
+		audio.stop_pip_reaction()
+		return
+	if kind == "stop":
+		audio.stop_quest_sounds()
+		audio.stop_pip_reaction()
+		return
+	if _mode_id != "quest" or _page_hidden \
+		or collection_page.visible or _leaderboard_overlay.visible or not _quest.is_visible_in_tree() \
+		or _quest.view != "stage" or _quest._suspended or _quest.game.phase == "paused":
+		return
+	if kind == "pip_loss":
+		if _quest.game.phase == "lost" and _quest._loss.is_visible_in_tree():
+			audio.interact(model.theme_id, false)
+			audio.play_pip_loss()
+		return
+	if kind == "pip_victory":
+		if _quest.game.phase == "victory":
+			audio.interact(model.theme_id, false)
+			audio.play_pip_victory()
+		return
+	if not audio.QUEST_SOUNDS.has(kind):
+		return
+	# Entering Quest halts the previous mode's audio. Accepted combat events
+	# reactivate effects without starting music over the speech recognizer.
+	# A reserved projectile may still land just after the last word expires.
+	audio.interact(model.theme_id, false)
+	audio.play_quest_sound(kind)
 
 
 func _quest_chest_audio(action: String, theme_id: String, progress: float) -> void:
@@ -3310,6 +3344,7 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	_quest.cancel_chest_input()
+	_quest.cancel_scroll_input()
 	_pop_rewards.cancel_input()
 	duck.note_activity()
 	_found_words_scroll.cancel_drag()
@@ -3393,7 +3428,10 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
-	if _speech_debug_active:
+	if _speech_debug_active or arguments.size() < 2:
+		return
+	if _mode_id == "quest":
+		_quest.show_transcript(str(arguments[0]), bool(arguments[1]))
 		return
 	if _mode_id == "pop":
 		if not collection_page.visible:
@@ -3765,15 +3803,16 @@ func _hide_collection() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
 	_collection_focus_modes.clear()
-	feedback_timer.paused = false
-	_memory.pause(false)
+	# Closing one overlay must not release a separate background pause.
+	feedback_timer.paused = _page_hidden
+	_memory.pause(_page_hidden)
 	if _mode_id == "pop" and not _pop_player_id.is_empty():
 		leaderboard_state.load_state()
 		_reconcile_round_identity()
 	if _mode_id == "pop" and _pop.game.phase == "finished" and is_instance_valid(_pop_leaderboard):
 		_pop_leaderboard.refresh_profiles()
 	_refresh()
-	if _mode_id == "pop" and _pop_rewards_shown:
+	if _mode_id == "pop" and _pop_rewards_shown and not _page_hidden:
 		_pop_rewards.resume()
 	if _valid_focus(_focus_before_collection):
 		_focus_before_collection.grab_focus()

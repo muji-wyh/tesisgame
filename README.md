@@ -12,11 +12,12 @@ handles loading, accessibility, audio recovery, and speech recognition.
 - **Memory:** five hidden pairs, with a hold-to-peek control and no countdown.
 - **Voice Pop:** select a local player, then speak visible words during a
   50-second round. The second consecutive hit adds 3 seconds; the third adds
-  5 seconds. Occasional volleys throw several words together. Cards do not collide.
-- **Talk Quest:** fourteen conversations with Adam and Yoki, fourteen rigged
-  monsters, sentence reactions, and twenty animated treasures. Speak a complete
-  sentence or type it. The last adventure repairs five toys through part choices
-  and conversation. Progress and unfinished adventures resume on this device.
+  5 seconds. Occasional volleys throw several words together. Scores of 100,
+  200, and 300 each earn one chest, with up to three distinct chests shown together.
+- **Talk Quest:** fourteen word-combat adventures with distinct animated
+  monsters and twenty collectible treasure designs. Speak a flying picture's
+  word to launch it at the monster. Later stages increase monster health and
+  the finite word budget. Progress and unfinished adventures resume on this device.
 - **Players and leaderboards:** up to ten names and emoji avatars on the current
   device. First-time entry requires creating a player. Voice Pop selects the
   player before each round and saves the result automatically; Match and Memory
@@ -47,6 +48,7 @@ Detailed rules and behavior:
 
 - [Gameplay reference](docs/gameplay.md)
 - [Talk Quest campaign, speech, and saves](docs/talk-quest.md)
+- [Voice Pop treasure and shared chest models](docs/voice-pop-treasure.md)
 - [Local players and leaderboards](docs/local-leaderboards.md)
 - [Speech matching and the local experiment](docs/voice-matching.md)
 - [Voice Pop slice feedback](docs/voice-pop-slice-feedback.md)
@@ -58,7 +60,8 @@ Install **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**
 Put `godot` on PATH or set `GODOT_BIN` to the executable path.
 
 Before building a fresh checkout, restore the licensed
-[Talk Quest character inputs](docs/assets/talk-quest-monsters.md#provenance-and-reproducibility).
+[Talk Quest character inputs](docs/assets/talk-quest-monsters.md#provenance-and-reproducibility)
+and [animated chest inputs](docs/voice-pop-treasure.md#shared-chest-catalog).
 The models and portraits stay local and ship inside the compiled game pack.
 
 ```powershell
@@ -117,9 +120,10 @@ npm run deploy
 
 The script builds and publishes to the configured `tesisgame` Azure Static Web
 App. It verifies the target and keeps the deployment token in the process
-environment. It does not commit or push Git changes. Use
-`npm run deploy -- -SkipBuild` only when the complete export already reflects
-the intended source.
+environment. It does not commit or push Git changes. A successful build records
+source and output fingerprints outside the published directory. Use
+`npm run deploy -- -SkipBuild` to publish that verified export; deployment refuses
+missing, stale, altered, or incomplete builds before contacting Azure.
 
 See [development and deployment](docs/development.md) for the hosting target,
 iframe permissions, cache behavior, audio recovery, and detailed verification.

@@ -11,7 +11,7 @@ $token = $null
 
 Push-Location (Split-Path -Parent $PSScriptRoot)
 try {
-    $null = Get-Command npm, az, swa
+    $null = Get-Command node, npm, az, swa
     if (-not $SkipBuild) {
         & npm run build:web
         if ($LASTEXITCODE -ne 0) {
@@ -23,6 +23,11 @@ try {
         if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
             throw "Missing Web export file: $file. Run npm run build:web first."
         }
+    }
+
+    & node .\tools\web-build-receipt.cjs --verify
+    if ($LASTEXITCODE -ne 0) {
+        throw 'The Web build is missing, stale or changed after verification. Run npm run build:web. Nothing was deployed.'
     }
 
     $targetJson = & az staticwebapp show --subscription $subscription `

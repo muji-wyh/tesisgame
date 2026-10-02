@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "component": "res://scripts/talk_quest_treasure_stage.gd",
+  "sources": [
+    {
+      "id": "midnight68-interior01",
+      "title": "Interior01",
+      "creator": "Midnight68",
+      "url": "https://opengameart.org/content/interior01",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisitionStatus": "Downloaded original BMP artwork; integrated optimized JPEG derivatives",
+      "animations": "Static source artwork; no supplied animation",
+      "files": [
+        "interior001.bmp",
+        "parlour001_1.bmp"
+      ],
+      "modifications": "Reduced saturation to 72 percent and encoded JPEG at quality 92; runtime tints and crops preserve original room artwork",
+      "downloads": [
+        {
+          "url": "https://opengameart.org/sites/default/files/interior001.bmp",
+          "sha256": "55fbf214a13ec5e4e30b77f76631f8ba7a9a88b1d13025364eb300162cf4cc7b"
+        },
+        {
+          "url": "https://opengameart.org/sites/default/files/parlour001_1.bmp",
+          "sha256": "7973a2d2b1b26525f200fa5f13fd5434eeeae3ea8f38d119422b5518eaf7c028"
+        }
+      ]
+    },
+    {
+      "id": "modern-chests-free-demo",
+      "title": "Modern 2D Animated Chests - FREE Demo 1.0.2",
+      "creator": "Bobardo",
+      "url": "https://assetstore.unity.com/packages/2d/modern-2d-animated-chests-free-demo-360538",
+      "license": "Unity Asset Store Standard EULA",
+      "licenseUrl": "https://unity.com/legal/as-terms",
+      "acquisitionStatus": "User-provided acquired Unity package; existing source textures converted and integrated",
+      "animations": "Source particles are static textures; gentle sprite motion is authored in Godot",
+      "files": [
+        "Particles/Textures/glow1.png",
+        "Particles/Textures/lightray1.png",
+        "Particles/Textures/sparkle3.png"
+      ],
+      "modifications": "Downscaled RGBA images to 256, 512, and 128 pixels maximum edge",
+      "productId": 360538,
+      "version": "1.0.2",
+      "sourceFiles": [
+        {
+          "path": "Particles/Textures/glow1.png",
+          "sha256": "09add033266af5fc6194eb912aaf349813f26598ebe37ccc98300cd11146e822"
+        },
+        {
+          "path": "Particles/Textures/lightray1.png",
+          "sha256": "237ee4fe5300d09282786fba21de357fd7ae8e966c9d142d4f8232cf44313ff4"
+        },
+        {
+          "path": "Particles/Textures/sparkle3.png",
+          "sha256": "74c2a40f4ad85def13006522a4c814eb39b4c8b3197b4ba1de15b8061ba61961"
+        }
+      ]
+    },
+    {
+      "id": "kenney-ui-rpg",
+      "title": "UI Pack: RPG Expansion",
+      "creator": "Kenney Vleugels",
+      "url": "https://kenney.nl/assets/ui-pack-rpg-expansion",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisitionStatus": "Acquired and integrated source UI textures",
+      "animations": "Static source artwork",
+      "files": [
+        "PNG/panelInset_brown.png",
+        "PNG/panel_beige.png"
+      ],
+      "sourceFiles": [
+        {
+          "path": "PNG/panelInset_brown.png",
+          "sha256": "80eac03d26866a23fff8783127f90dc8673ee61591a069a4f6b24b3a2ded1101"
+        },
+        {
+          "path": "PNG/panel_beige.png",
+          "sha256": "4bfe574ccae2e09c32a667f456f714a5c705a594068dd99a4cfa49815a6c1c4f"
+        }
+      ]
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "file": "res://assets/talk_quest/treasure/alcove.jpg",
+      "sha256": "85041ff60b9f369868cc378b409e08dbe2ca7963d6899f938d58c18aa7492987",
+      "bytes": 122430
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/frame.png",
+      "sha256": "4bfe574ccae2e09c32a667f456f714a5c705a594068dd99a4cfa49815a6c1c4f",
+      "bytes": 786
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/halo.png",
+      "sha256": "f293308421e422afd032f7f5c34a8d9d2e4d418af0179c11b217952ff07321c7",
+      "bytes": 20169
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/parlour.jpg",
+      "sha256": "1c08c083aa28d864efd1a532386f0e4120c22d690e837f0e05dc2800c1d80675",
+      "bytes": 94681
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/ray.png",
+      "sha256": "b1bfbaba7e539f75c374f96bcdd11a08f40df805943b5c725c6c16e21d06f5a0",
+      "bytes": 14078
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/sparkle.png",
+      "sha256": "9ec79b64d6d7603067e46117db8fd85115c327366c0ea4049934e53c54db7c9d",
+      "bytes": 9092
+    },
+    {
+      "file": "res://assets/talk_quest/treasure/title-panel.png",
+      "sha256": "80eac03d26866a23fff8783127f90dc8673ee61591a069a4f6b24b3a2ded1101",
+      "bytes": 626
+    }
+  ],
+  "animation": "Native decorative sprite drift at 24 redraws per second; hidden, inactive and reduced-motion presentations stop ambient processing."
+}

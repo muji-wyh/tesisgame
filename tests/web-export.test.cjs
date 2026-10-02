@@ -163,6 +163,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   fixture.writeImport('assets/audio/sfx/match-voice-hit.wav');
+  for (const id of ['launch', 'impact', 'defeat']) fixture.writeImport(`assets/audio/quest/${id}.wav`);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -170,12 +171,16 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 102);
+  assert.equal(required.length, 105);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/match-voice-hit.wav'),
     'The successful voice-match cue ships in the startup pack without a later fetch');
+  for (const id of ['launch', 'impact', 'defeat']) {
+    assert.ok(required.some(asset => asset.source === `res://assets/audio/quest/${id}.wav`),
+      `Talk Quest ${id} ships in the startup pack without a later fetch`);
+  }
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/pop/')),
@@ -459,7 +464,7 @@ test('the generated startup patch rejects missing, duplicate, and changed templa
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   assert.throws(() => patchWebEngine('unrecognized engine'), /Godot Web startup patch/);
   assert.throws(() => patchWebEngine(startupFixture.repeat(2)), /Godot Web startup patch/);
-  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)', 'GodotAudio.ctx=ctx;ctx.onstatechange', 'GodotAudio.ctx=null;if(!ctx)', 'function _godot_audio_resume()']) {
+  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)', 'GodotAudio.ctx=ctx;ctx.onstatechange', 'GodotAudio.ctx=null;if(!ctx)', 'function _godot_audio_resume()', 'GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path)', 'async connectPositionWorklet(start){await']) {
     assert.ok(startupFixture.includes(marker));
     assert.throws(() => patchWebEngine(startupFixture.replace(marker, `${marker} changed`)), /Godot Web startup patch/);
   }
@@ -497,6 +502,111 @@ test('the patched engine shares and releases its existing context and tolerates 
   assert.doesNotThrow(() => sandbox._godot_audio_resume());
   sandbox.GodotAudio.ctx.state = 'closed';
   assert.doesNotThrow(() => sandbox._godot_audio_resume());
+});
+
+function positionWorkletHarness(source = require('../tools/patch-web-engine.cjs').patchWebEngine(startupFixture)) {
+  const events = [];
+  const sandbox = { GodotAudio: {}, window: {} };
+  require('node:vm').runInNewContext(source, sandbox);
+  function prepare(promise, context = { currentTime: 17, close: () => Promise.resolve() }) {
+    sandbox.GodotAudio.ctx = context;
+    context.audioWorklet = { addModule: () => promise };
+    sandbox.positionWorkletInitFixture(context, 'position-worklet.js');
+    return context;
+  }
+  function sample(id) {
+    return Object.assign(Object.create(sandbox.SampleNode.prototype), {
+      isCanceled: false, isStarted: false, startTime: 0, offset: 0,
+      _source: {
+        connect() { events.push(`connect:${id}`); },
+        start() { events.push(`start:${id}`); }
+      },
+      getPositionWorklet() { return {}; }
+    });
+  }
+  return { sandbox, events, prepare, sample };
+}
+
+test('prepared WebAudio hits start within the hit callback before subsequent frame work', async () => {
+  for (const patched of [false, true]) {
+    const { events, prepare, sample } = positionWorkletHarness(patched
+      ? require('../tools/patch-web-engine.cjs').patchWebEngine(startupFixture) : startupFixture);
+    prepare(Promise.resolve());
+    await Promise.resolve();
+    const starts = [sample('one'), sample('two'), sample('three')]
+      .map(node => node.connectPositionWorklet(true));
+    // Any expensive work after this marker blocks the old promise continuation,
+    // even though the position worklet finished loading before the hit callback.
+    events.push('remaining-game-frame-work');
+    const expected = ['connect:one', 'start:one', 'connect:two', 'start:two', 'connect:three', 'start:three'];
+    assert.deepEqual(events, patched ? [...expected, 'remaining-game-frame-work'] : ['remaining-game-frame-work']);
+    await Promise.all(starts);
+    assert.deepEqual(events, patched ? [...expected, 'remaining-game-frame-work'] : ['remaining-game-frame-work', ...expected]);
+  }
+});
+
+test('initial WebAudio hits await worklet loading and preserve cancellation and connect-only requests', async () => {
+  const { sandbox, events, prepare, sample } = positionWorkletHarness();
+  let resolveModule;
+  const loading = new Promise(resolve => { resolveModule = resolve; });
+  const context = prepare(loading);
+  const active = sample('active'), concurrent = sample('concurrent');
+  const cancelled = sample('cancelled'), connected = sample('connected');
+  const pending = [active.connectPositionWorklet(true), concurrent.connectPositionWorklet(true),
+    cancelled.connectPositionWorklet(true), connected.connectPositionWorklet(false)];
+  cancelled.isCanceled = true;
+  assert.deepEqual(events, [], 'No source connects or starts before its worklet is available');
+  resolveModule();
+  await Promise.all(pending);
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, context);
+  assert.deepEqual(events, ['connect:active', 'start:active', 'connect:concurrent', 'start:concurrent', 'connect:connected']);
+  assert.equal(connected.isStarted, false);
+  const stopped = sample('already-cancelled');
+  stopped.isCanceled = true;
+  await stopped.connectPositionWorklet(true);
+  await sample('prepared-connect-only').connectPositionWorklet(false);
+  assert.deepEqual(events.slice(5), ['connect:prepared-connect-only']);
+});
+
+test('rejected worklet preparation stays observable without marking audio ready or creating a detached rejection', async () => {
+  const { sandbox, events, prepare, sample } = positionWorkletHarness();
+  const failure = new Error('Position worklet could not load');
+  let rejectModule;
+  prepare(new Promise((_, reject) => { rejectModule = reject; }));
+  const rejected = assert.rejects(sample('failed').connectPositionWorklet(true), error => error === failure);
+  rejectModule(failure);
+  await rejected;
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, null);
+  assert.deepEqual(events, []);
+  await assert.rejects(sample('still-failed').connectPositionWorklet(true), error => error === failure);
+  // No sample may be requested at all when a page closes during initialization.
+  // The readiness observer must handle this promise without a detached rejection.
+  prepare(Promise.reject(failure));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, null);
+});
+
+test('late worklet completion cannot revive closed audio or mark a replacement context ready', async () => {
+  const { sandbox, events, prepare, sample } = positionWorkletHarness();
+  let resolveOld, resolveNew;
+  const oldContext = prepare(new Promise(resolve => { resolveOld = resolve; }));
+  const stale = sample('old').connectPositionWorklet(true);
+  await new Promise(resolve => sandbox.audioCloseFixture.close_async(resolve));
+  const newContext = prepare(new Promise(resolve => { resolveNew = resolve; }));
+  const current = sample('new').connectPositionWorklet(true);
+  resolveOld();
+  await stale;
+  assert.notEqual(newContext, oldContext);
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, null);
+  assert.deepEqual(events, [], 'An obsolete completion neither starts its source nor bypasses the new load');
+  resolveNew();
+  await current;
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, newContext);
+  assert.deepEqual(events, ['connect:new', 'start:new']);
+  await new Promise(resolve => sandbox.audioCloseFixture.close_async(resolve));
+  assert.equal(sandbox.GodotAudio.audioPositionWorkletReadyContext, null);
+  await sample('after-close').connectPositionWorklet(true);
+  assert.deepEqual(events, ['connect:new', 'start:new']);
 });
 
 test('looped WebAudio samples restore their pitch before a replacement source can render', () => {
@@ -732,11 +842,14 @@ function makeModuleConfig(response) {
 var IDBFS = { dbs: {}, DB_VERSION: 21, DB_STORE_NAME: 'FILE_DATA', getDB:(name,callback)=>{var db=IDBFS.dbs[name];if(db){return callback(null,db)}var req;try{req=IDBFS.indexedDB().open(name,IDBFS.DB_VERSION)}catch(e){return callback(e)}if(!req){return callback("Unable to connect to IndexedDB")}req.onupgradeneeded=e=>{var db=e.target.result;var transaction=e.target.transaction;var fileStore;if(db.objectStoreNames.contains(IDBFS.DB_STORE_NAME)){fileStore=transaction.objectStore(IDBFS.DB_STORE_NAME)}else{fileStore=db.createObjectStore(IDBFS.DB_STORE_NAME)}if(!fileStore.indexNames.contains("timestamp")){fileStore.createIndex("timestamp","timestamp",{unique:false})}};req.onsuccess=()=>{db=req.result;IDBFS.dbs[name]=db;callback(null,db)};req.onerror=e=>{callback(e.target.error);e.preventDefault()}} };
 
 function audioInitFixture(opts){const ctx=new(window.AudioContext||window.webkitAudioContext)(opts);GodotAudio.ctx=ctx;ctx.onstatechange=function(){};return ctx}
+function positionWorkletInitFixture(ctx,path){GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path);}
 var audioCloseFixture={close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;if(!ctx){resolve();return}ctx.close().then(resolve)}};
 function _godot_audio_resume(){if(GodotAudio.ctx&&GodotAudio.ctx.state!=="running"){GodotAudio.ctx.resume()}}
 
 var SampleNode = class SampleNode {
 getPlaybackRate(){return this._playbackRate}getPitchScale(){return this._pitchScale}getOutputNode(){return this._source}
+start(){if(this.isStarted){return}this._resetSourceStartTime();this._source.start(this.startTime,this.offset);this.isStarted=true}
+async connectPositionWorklet(start){await GodotAudio.audioPositionWorkletPromise;if(this.isCanceled){return}this._source.connect(this.getPositionWorklet());if(start){this.start()}}
 restart(){this.isPaused=false;this.pauseTime=0;this._resetSourceStartTime();this._restart()}
 connect(node){return this.getOutputNode().connect(node)}
 _resetSourceStartTime(){this._sourceStartTime=GodotAudio.ctx.currentTime}

@@ -30,20 +30,26 @@ Voice Pop treasure room. Talk Quest keeps its twenty reviewed mechanisms.
 | --- | --- | --- |
 | Spring | Royal | Existing imported 2D rig |
 | Summer | Energy | Existing imported 2D rig |
-| Autumn | Harvest Wood | Downloaded Casual Game Asset Chest |
+| Autumn | Harvest Ironwood | Casual Chests CHEST_2_T3, live model |
 | Winter | Crystal | Existing imported 2D rig |
-| Ocean | Tide Blue | Downloaded Low Poly Treasure Chest |
-| Space | Nebula Vault | Downloaded Stylized Epic Chest |
-| Jungle | Bramble Chest | Downloaded POLY chest model |
-| Candy | Bonbon Barrel | Downloaded POLY chest model |
+| Ocean | Tide Captain | Stylized Sea Chest, live model |
+| Space | Nebula Crown | Stylized Crowned Chest, live model |
+| Jungle | Bramble Relic | POLY STYLE family 5a, live model |
+| Candy | Bonbon Gold | Animated Cartoon Treasure Chest, live model |
 
-The five additional designs use transparent frames rendered from the downloaded
-meshes and materials. They retain the shared five-second performance and have
-different lid mechanisms. Their original package paths, hashes, license
-references, and render settings are recorded in
+The five additional designs render real meshes into transparent, adaptive
+512-1024 pixel viewports. The sea chest retains 2K runtime maps derived from its
+4K source maps; the hand-painted chest keeps its original 512 pixel atlas.
+The remaining designs use modeled trim and adapted materials. Source clips or
+authored hinges animate continuously, with independent hardware pressure and
+real interior lighting. They retain the shared five-second performance,
+cancellation, reduced motion, and exactly-once rewards. Source package hashes,
+license references, and motion provenance are recorded in
 `assets/chests/downloaded/SOURCE.txt` and its manifest.
 
-The PNG opening frames and their Godot import sidecars are private local build
-inputs excluded from Git. They ship inside the compiled game pack. Restore
-them from the retained licensed sources with `tools/prepare-downloaded-chests.py`
-before importing or building a fresh checkout.
+The GLB files and their Godot import sidecars are private local build inputs
+excluded from Git. They ship inside the compiled game pack. Restore them with
+Blender running `tools/prepare-chest-models.py`, then run
+`python tools/prepare-chest-models.py --optimize` followed by
+`node tools/package-chest-models.cjs` before importing or building a fresh
+checkout. The retired 320 pixel opening frames are no longer bundled.

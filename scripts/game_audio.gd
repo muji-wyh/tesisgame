@@ -13,6 +13,11 @@ const POP_LAUNCH_FALLBACK := "res://assets/audio/sfx/pop-launch.wav"
 const POP_LAUNCH_GAIN := 0.16
 const MATCH_VOICE_HIT_PATH := "res://assets/audio/sfx/match-voice-hit.wav"
 const MATCH_VOICE_HIT_GAIN := 0.48
+const QUEST_SOUNDS := {
+	"launch": {"path": "res://assets/audio/quest/launch.wav", "gain": 0.5, "channels": 3},
+	"hit": {"path": "res://assets/audio/quest/impact.wav", "gain": 0.5, "channels": 3},
+	"victory": {"path": "res://assets/audio/quest/defeat.wav", "gain": 0.55, "channels": 1},
+}
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -28,6 +33,8 @@ const PIP_SOUND_PATHS := [
 	"res://assets/audio/pip/duck_double_03_derpy.wav",
 	"res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
 ]
+const PIP_LOSS_ENCOURAGE_DELAY: float = 2.4
+const PIP_VICTORY_SECONDS: float = 3.2
 const ChestSoundBank = preload("res://scripts/chest_sound_bank.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
 const CHEST_EVENT_CHANNELS := 3
@@ -55,12 +62,17 @@ var _last_pop_slice_path: String = ""
 var _pop_players: Array[AudioStreamPlayer] = []
 var _pop_next_player: int = 0
 var _pop_last_player: AudioStreamPlayer
+var _quest_players: Dictionary = {}
+var _quest_next_players: Dictionary = {}
+var _quest_last_players: Dictionary = {}
 var _pop_launch_path: String = POP_LAUNCH_FALLBACK
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
 var _pip_voice_request: int = -1
 var _speech_debug_mix: float = 1.0
 var _pip_reaction_gain: float = 0.68
+var _pip_loss_tween: Tween
+var _pip_victory_tween: Tween
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_tension_progress: float = -1.0
@@ -107,6 +119,14 @@ func _ready() -> void:
 	_stream(_pop_launch_path)
 	match_voice_hit = _player(MATCH_VOICE_HIT_GAIN)
 	_stream(MATCH_VOICE_HIT_PATH)
+	for kind: String in QUEST_SOUNDS:
+		var cue: Dictionary = QUEST_SOUNDS[kind]
+		var players: Array[AudioStreamPlayer] = []
+		for index in range(int(cue.channels)):
+			players.append(_player(float(cue.gain)))
+		_quest_players[kind] = players
+		_quest_next_players[kind] = 0
+		_stream(str(cue.path))
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -176,6 +196,32 @@ func stop_match_voice_hit() -> void:
 		_stop(match_voice_hit)
 
 
+func play_quest_sound(kind: String) -> void:
+	if muted or not active or not available or _speech_debug_mix <= 0.0 or not QUEST_SOUNDS.has(kind):
+		return
+	# Independent bounded banks preserve quick word attacks and their impact
+	# tails without interrupting pronunciation, interface or treasure sounds.
+	var players: Array = _quest_players[kind]
+	var index: int = int(_quest_next_players[kind])
+	var player: AudioStreamPlayer = players[index]
+	_quest_next_players[kind] = (index + 1) % players.size()
+	_quest_last_players[kind] = player
+	_play(player, str(QUEST_SOUNDS[kind].path))
+
+
+func last_quest_player(kind: String) -> AudioStreamPlayer:
+	return _quest_last_players.get(kind)
+
+
+func stop_quest_sounds() -> void:
+	for kind: String in _quest_players:
+		for player: AudioStreamPlayer in _quest_players[kind]:
+			_stop(player)
+			player.stream = null
+		_quest_next_players[kind] = 0
+	_quest_last_players.clear()
+
+
 func last_pop_player() -> AudioStreamPlayer:
 	return _pop_last_player
 
@@ -230,16 +276,60 @@ func is_pip_busy() -> bool:
 
 
 func play_pip_reaction(correct: bool) -> void:
+	_play_pip_call(PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2],
+		1.12 if correct else 0.80, 0.68 if correct else 0.54)
+
+
+func _play_pip_call(path: String, pitch: float, gain: float) -> void:
 	if muted or not active or not available or _speech_debug_mix <= 0.0:
 		return
 	if pip_reaction == null:
 		pip_reaction = _player(0.68)
 	# Gameplay feelings have their own short, nonverbal voice. They cannot
 	# replace a card's pronunciation or its answer cue.
-	pip_reaction.pitch_scale = 1.12 if correct else 0.80
-	_pip_reaction_gain = 0.68 if correct else 0.54
+	pip_reaction.pitch_scale = pitch
+	_pip_reaction_gain = gain
 	pip_reaction.volume_db = linear_to_db(_pip_reaction_gain * _speech_debug_mix)
-	_play(pip_reaction, PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2])
+	_play(pip_reaction, path)
+
+
+func play_pip_loss() -> void:
+	if muted or not active or not available or _speech_debug_mix <= 0.0:
+		return
+	if _pip_loss_tween != null and _pip_loss_tween.is_valid():
+		return
+	stop_pip_reaction()
+	play_pip_reaction(false)
+	# Use the supplied duck calls: a drooping sigh, a quieter second sigh,
+	# then a hopeful double quack when Pip offers another attempt.
+	_pip_loss_tween = create_tween()
+	_pip_loss_tween.tween_interval(0.8)
+	_pip_loss_tween.tween_callback(_pip_loss_sigh)
+	_pip_loss_tween.tween_interval(PIP_LOSS_ENCOURAGE_DELAY - 0.8)
+	_pip_loss_tween.tween_callback(play_pip_reaction.bind(true))
+	_pip_loss_tween.finished.connect(func() -> void: _pip_loss_tween = null)
+
+
+func _pip_loss_sigh() -> void:
+	_play_pip_call(PIP_SOUND_PATHS[2], 0.70, 0.40)
+
+
+func play_pip_victory() -> void:
+	if muted or not active or not available or _speech_debug_mix <= 0.0:
+		return
+	if _pip_victory_tween != null and _pip_victory_tween.is_valid():
+		return
+	stop_pip_reaction()
+	_play_pip_call(PIP_SOUND_PATHS[0], 1.12, 0.68)
+	# The recorded double quacks follow Pip's celebration beats and finish
+	# before the treasure screen. One scheduler owns the whole sequence.
+	_pip_victory_tween = create_tween()
+	_pip_victory_tween.tween_interval(1.0)
+	_pip_victory_tween.tween_callback(_play_pip_call.bind(PIP_SOUND_PATHS[1], 1.08, 0.58))
+	_pip_victory_tween.tween_interval(1.0)
+	_pip_victory_tween.tween_callback(_play_pip_call.bind(PIP_SOUND_PATHS[0], 1.20, 0.66))
+	_pip_victory_tween.tween_interval(PIP_VICTORY_SECONDS - 2.0)
+	_pip_victory_tween.finished.connect(func() -> void: _pip_victory_tween = null)
 
 
 func set_speech_debug_mix(value: float) -> bool:
@@ -256,14 +346,26 @@ func set_speech_debug_mix(value: float) -> bool:
 		match_voice_hit.volume_db = linear_to_db(maxf(0.0001, MATCH_VOICE_HIT_GAIN * value))
 	if pip_reaction != null:
 		pip_reaction.volume_db = linear_to_db(maxf(0.0001, _pip_reaction_gain * value))
+	for kind: String in _quest_players:
+		for player: AudioStreamPlayer in _quest_players[kind]:
+			player.volume_db = linear_to_db(maxf(0.0001, float(QUEST_SOUNDS[kind].gain) * value))
 	if value == 0.0:
 		stop_pop_sounds()
 		stop_match_voice_hit()
 		stop_pip_reaction()
+		stop_quest_sounds()
 	return true
 
 
 func stop_pip_reaction() -> void:
+	if _pip_loss_tween != null:
+		if _pip_loss_tween.is_valid():
+			_pip_loss_tween.kill()
+		_pip_loss_tween = null
+	if _pip_victory_tween != null:
+		if _pip_victory_tween.is_valid():
+			_pip_victory_tween.kill()
+		_pip_victory_tween = null
 	if pip_reaction != null:
 		_stop(pip_reaction)
 		pip_reaction.stream = null
@@ -666,6 +768,7 @@ func halt(keep_match_voice_hit: bool = false) -> void:
 	if not keep_match_voice_hit:
 		stop_match_voice_hit()
 	stop_pop_sounds()
+	stop_quest_sounds()
 	stop_pip_reaction()
 	stop_chest_performance()
 	if music != null:

@@ -8,6 +8,7 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const SAVE_VERSION: int = 2
 const DAMAGE_PER_WORD: int = 1
 const MAX_TARGETS: int = 3
+const WORD_LIFETIME: float = 10.0
 const MAX_TEXT_LENGTH: int = 512
 const MAX_EVENT_ID_LENGTH: int = 160
 const MAX_FINAL_EVENTS: int = 16384
@@ -379,10 +380,6 @@ func _spawn_interval() -> float:
 	return lerpf(2.15, 1.70, float(level_number - 1) / float(Data.LEVEL_COUNT - 1))
 
 
-func _flight_lifetime() -> float:
-	return lerpf(6.8, 5.8, float(level_number - 1) / float(Data.LEVEL_COUNT - 1))
-
-
 func _spawn() -> void:
 	if spawned >= total_words or targets.size() >= MAX_TARGETS:
 		return
@@ -412,7 +409,7 @@ func _spawn() -> void:
 	spawned += 1
 	targets.append({
 		"uid": spawned, "word": word.duplicate(true), "forms": _aliases[word.id].duplicate(),
-		"age": 0.0, "lifetime": _flight_lifetime(), "lane": lane, "volley": false,
+		"age": 0.0, "lifetime": WORD_LIFETIME, "lane": lane, "volley": false,
 		"x_start": x_start, "x_end": x_end, "peak": peak, "spin": spin,
 		"x": x_start, "drift": x_end - x_start, "height": peak, "rotation": spin
 	})
@@ -531,7 +528,7 @@ func _restore_run(saved: Dictionary) -> void:
 		if not entry is Dictionary or not _is_bounded_integer(entry.get("uid"), 1, int(saved.spawned)) \
 			or not _is_bounded_integer(entry.get("lane"), 0, MAX_TARGETS - 1) \
 			or not entry.get("word_id") is String or seen_uids.has(entry.uid) or seen_lanes.has(entry.lane) \
-			or not _number_between(entry.get("lifetime"), 5.8, 6.8) \
+			or not _valid_saved_lifetime(entry.get("lifetime")) \
 			or not _number_between(entry.get("age"), 0.0, float(entry.lifetime) - EPSILON) \
 			or not _number_between(entry.get("x_start"), 0.15, 0.85) \
 			or not _number_between(entry.get("x_end"), 0.15, 0.85) \
@@ -552,9 +549,10 @@ func _restore_run(saved: Dictionary) -> void:
 		seen_forms.append_array(forms)
 		seen_uids[entry.uid] = true
 		seen_lanes[entry.lane] = true
+		# Apply the longer countdown to existing attempts without resetting age.
 		restored_targets.append({
 			"uid": int(entry.uid), "word": word.duplicate(true), "forms": forms,
-			"age": float(entry.age), "lifetime": float(entry.lifetime), "lane": int(entry.lane), "volley": false,
+			"age": float(entry.age), "lifetime": WORD_LIFETIME, "lane": int(entry.lane), "volley": false,
 			"x_start": float(entry.x_start), "x_end": float(entry.x_end), "peak": float(entry.peak), "spin": float(entry.spin),
 			"x": float(entry.x_start), "drift": float(entry.x_end) - float(entry.x_start),
 			"height": float(entry.peak), "rotation": float(entry.spin)
@@ -612,6 +610,11 @@ func _result(reason: String, accepted: bool = false) -> Dictionary:
 
 static func _is_bounded_integer(value: Variant, minimum: int, maximum: int) -> bool:
 	return _number_between(value, float(minimum), float(maximum)) and float(value) == floor(float(value))
+
+
+static func _valid_saved_lifetime(value: Variant) -> bool:
+	# Earlier word-combat saves used shorter, level-dependent flight windows.
+	return _number_between(value, WORD_LIFETIME, WORD_LIFETIME) or _number_between(value, 5.8, 6.8)
 
 
 static func _number_between(value: Variant, minimum: float, maximum: float) -> bool:

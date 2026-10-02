@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { readModelContainer, embeddedModelImages, imageDimensions } = require('./helpers/chest-model-assets.cjs');
 const root = path.resolve(__dirname, '..');
 const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
 const seasons = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map((id) => ({
@@ -88,12 +89,38 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
   const chestManifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/downloaded/manifest.json'), 'utf8'));
-  const chestFrames = Object.values(chestManifest.styles).flatMap(style => style.frames);
-  assert.equal(new Set(chestFrames).size, 43, 'The five downloaded chest designs retain all opening frames');
-  const downloadedImports = imports.filter(filename => filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep));
-  assert.deepEqual(downloadedImports.sort(), chestFrames.map(filename => path.join(root, filename + '.import')).sort());
-  assert.equal(imports.length - downloadedImports.length, 481); // Original art, Pip wardrobes, derived chest layers and surprises.
-  for (const filename of imports) {
+  const chestModels = Object.values(chestManifest.styles).map(style => style.model);
+  assert.equal(new Set(chestModels).size, 5, 'The five added chest designs use separate live models');
+  assert.ok(imports.every(filename => !filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep)),
+    'Retired 320-pixel opening frames are not imported into the game');
+  const modelImports = imports.filter(filename => filename.endsWith('.glb.import'));
+  assert.deepEqual(modelImports.sort(), chestModels.map(filename => path.join(root, filename + '.import')).sort());
+  for (const filename of modelImports) {
+    const metadata = fs.readFileSync(filename, 'utf8');
+    assert.match(metadata, /^type="PackedScene"$/m, filename);
+    assert.match(metadata, /^importer="scene"$/m, filename);
+  }
+  const modelImages = chestModels.flatMap(filename => embeddedModelImages(filename, readModelContainer(path.join(root, filename))));
+  const modelTextureImports = imports.filter(filename => !filename.endsWith('.glb.import')
+    && filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
+  assert.deepEqual(modelTextureImports.sort(), modelImages.map(image => path.join(root, image.path + '.import')).sort(),
+    'Every imported model texture comes from an embedded source image');
+  for (const image of modelImages) {
+    const filename = path.join(root, image.path);
+    const bytes = fs.readFileSync(filename);
+    assert.equal(sha256(bytes), sha256(image.bytes), `${image.path} preserves all source texture bytes`);
+    const dimensions = imageDimensions(bytes);
+    assert.deepEqual(dimensions, imageDimensions(image.bytes), `${image.path} preserves source resolution`);
+    assert.ok(dimensions.width >= 512 && dimensions.height >= 512, `${image.path} retains detailed source material maps`);
+    const metadata = fs.readFileSync(filename + '.import', 'utf8');
+    assert.match(metadata, /^compress\/mode=1$/m, filename);
+    assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
+    assert.match(metadata, /^process\/size_limit=0$/m, filename);
+    assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
+  }
+  const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
+  assert.equal(textureImports.length, 481); // Original art, Pip wardrobes, derived chest layers and surprises.
+  for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
     assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);

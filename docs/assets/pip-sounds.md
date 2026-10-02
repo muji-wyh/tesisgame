@@ -20,3 +20,10 @@ without queuing a later reaction. Voice Pop hits retain Pip's celebration motion
 but omit his happy call; missed targets retain the sad call. The old result
 high-five and spoken report are retired. Ordinary word pronunciation and
 automatic idle dances use their existing audio behavior.
+
+Talk Quest victories play the bouncy double call at 0 seconds, the derpy double
+at 1 second, and the bouncy double again at 2 seconds during Pip's 3.2-second
+dance. These use the same acquired recordings, with per-call pitch and gain.
+One cancellable scheduler owns the sequence. Mute, page hiding, pause, leaving
+Quest, and entering the treasure room stop both queued calls and the current
+reaction voice without interrupting a chest-opening sound.

@@ -6,6 +6,18 @@ view. The matched word becomes a glowing projectile and strikes the monster
 for one health segment. The map shows destination landmarks without monster
 portraits or a scrolling container.
 
+The chapter atlas uses acquired parchment, coastline, building, and navigation
+artwork instead of procedural landscape or landmark drawings. Three distinct
+map views carry fourteen engraved destinations. A floating flag marks the next
+adventure; seals and locks distinguish cleared and unavailable stops. Chapter
+changes dissolve between the source maps. Reduced motion freezes the flag and
+removes that transition. Compact landscape keeps the same accessible controls
+and uses smaller sourced landmarks behind their captions.
+
+The [map source manifest](../assets/talk_quest/map/manifest.json) records the
+downloaded sources and adapted illustrations. The startup-pack verification
+loads every map texture so these assets are available offline after loading.
+
 The twelve ordinary stages and two boss stages retain their distinct scenes,
 approved animated creatures, and reward designs. The workshop finale now uses
 word combat too. Archived conversations remain in the content catalog for save
@@ -16,10 +28,34 @@ Speak, Hear line, or Type controls.
 
 Every monster has N health segments. An attempt can launch at most N + m words,
 where m is the larger of three or one quarter of N rounded upward. Up to three
-words can be visible at once. Each matched word deals exactly one damage;
+words can be visible at once. Every word has a ten-second countdown at all
+fourteen levels. Older saved active words receive the new ten-second limit
+while retaining their elapsed age and the rest of the attempt's progress.
+Each matched word deals exactly one damage;
 expired words use up an opportunity without damaging the monster. Reaching
 zero health ends the battle immediately. Exhausting the entire word budget
 with health remaining leads to Retry.
+
+The rematch screen brings Pip forward beside a dark, gold-edged result card.
+His existing character artwork shows a tearful frown, lowered head, and drooped
+wings for 2.4 seconds, accompanied by two soft, low duck calls. Then he offers a
+high five and the message "Let's try again together!" with a brighter call.
+The calls reuse the [licensed Pip recordings](assets/pip-sounds.md).
+Try again and Map remain available throughout. Earned word hits and remaining
+monster health appear when space permits; very short landscape screens retain
+Pip, encouragement, and the full-size buttons without scrolling. An in-flight
+final hit settles before Pip appears. Reduced motion uses static expressions
+and still advances to encouragement. Pause, leaving, and mute cancel pending
+calls; resuming a loss never replays them. Failed attempts preserve collected
+treasure without granting a new reward.
+
+Pausing uses a matching cool-lit card with Continue and Map actions. It retains
+the frozen creature or chest and shows the appropriate battle or treasure
+status. Words, monster motion, and camera reactions remain suspended; only an
+explicit Continue action resumes the encounter and, during combat, listening.
+Pausing before a chest releases still cancels the hold; pausing after release
+settles its reward exactly once. Reduced motion removes the card entrance and
+ambient movement without changing either action.
 
 | Level | Destination | Health N | Extra words m | Word budget |
 | --- | --- | ---: | ---: | ---: |
@@ -51,6 +87,14 @@ speech round. A recognized noun may match its reviewed plural, compound
 spelling, or homophone through the shared SpeechWords rules. Arbitrary
 substrings, extra nouns, or expired targets never score.
 
+The live caption shows each complete browser hypothesis as soon as it arrives,
+including unfinished phrases, corrections, and speech that does not match a
+target. It retains the latest phrase while listening and through automatic
+recognizer reconnection. Long phrases show their newest two lines in portrait
+or one line in short landscape. Explicit stop, pause, microphone errors, and
+leaving the encounter clear the caption. Display updates cannot score or replace
+the separate bound attack events, and recognized speech is never saved.
+
 A matching interim or final occurrence can hit once. A final mismatch is
 consumed without damage, and an interim match cannot hit again when its final
 result arrives. Pause, resume, retry, and reload create new speech rounds.
@@ -61,6 +105,13 @@ The stage supplies the matched target's picture, word, position, and flight
 progress to the projectile effect. The monster retains its source idle motion,
 friendly hit reactions, final retreat, and victory sequence. Reduced motion
 retains readable hit feedback and the same combat rules.
+
+Accepted words play a short magic launch sound, followed by a separate impact
+when the projectile reaches the monster. The final defeat has its own crumbling
+and resolving cue. These locally bundled effects activate on the first attack,
+allow overlapping hits, respect mute, and stop when the adventure is paused or
+left. They do not start music while speech recognition is active. See the
+[combat audio sources](assets/talk-quest-audio.md).
 
 The presentation uses continuous 3D environments, a perspective camera, and
 framing that adapts to portrait and landscape play. Natural colors, layered
@@ -82,6 +133,17 @@ motion disables the periodic gesture and moving camera. The other eleven
 level creatures remain distinct. See [giant asset provenance](assets/talk-quest-giants.md).
 
 ## Rewards
+
+After the last word lands, Pip performs a 3.2-second dance using the shipped
+costume atlas, accompanied by three cheerful recorded double quacks. Status
+refreshes do not restart it. Pausing, backgrounding, or leaving stops the calls;
+resuming the same victory shows a quiet happy Pip. Reduced motion keeps a
+static smiling pose and still advances to the treasure room.
+
+The treasure room uses acquired interior artwork, ornamental interface art,
+and textured lighting effects. Pip stays beside the treasure; its name,
+collection status, and hold instruction remain readable in portrait and short
+landscape viewports. See the treasure asset manifest for source and licensing.
 
 First clears award chest-01 through chest-14. The first six replays award
 chest-15 through chest-20; later replays cycle through the established twenty

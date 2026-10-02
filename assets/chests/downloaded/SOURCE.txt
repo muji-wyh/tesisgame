@@ -1,51 +1,53 @@
-Downloaded chest artwork for the shared reward presentation
-=========================================================
+Animated model artwork for the shared reward presentation
+========================================================
 
-Five source-derived designs extend the three original animated chest types.
-Each of the eight themes now has a distinct design:
+Five distinct source models replace the former 320 x 320 opening sequences:
 
-Spring: Royal (existing 2D rig)
-Summer: Energy (existing 2D rig)
-Autumn: Harvest Wood (Casual Chests, original CHEST_T3 and openT3 clip)
-Winter: Crystal (existing nine-part 2D rig)
-Ocean: Tide Blue (Low Poly Chest Animated, original blue chest/opening clip)
-Space: Nebula Vault (Stylized 3D Animated Chests, original Epic Chest)
-Jungle: Bramble Chest (POLY STYLE Fantasy Treasure Chest, Treasure_Chest_3a)
-Candy: Bonbon Barrel (POLY STYLE Fantasy Treasure Chest, Treasure_Chest_2a)
+Autumn: Harvest Ironwood - Casual Chests, CHEST_2_T3 (Aztech Games)
+Ocean: Tide Captain - Stylized Sea Chest (Project Zima)
+Space: Nebula Crown - Stylized 3D Animated Chests, Crowned Chest (Bobardo)
+Jungle: Bramble Relic - POLY STYLE Fantasy Treasure Chest, family 5a (Batata Studio)
+Candy: Bonbon Gold - Animated Cartoon Treasure Chest (Flying Saci Game Studio)
 
-Original source packages were downloaded to C:/uworks/TalkQuest/downloads.
-The adjacent manifest records their Unity Asset Store product IDs, publishers,
-versions and complete package SHA-256 values, plus export/frame checksums.
-The source packages remain outside the repository. The derived PNG frames and
-their import sidecars are private local build inputs excluded from Git. They
-ship as embedded game content under the Unity Asset Store Standard EULA, not a
-separate redistributable asset pack. Publisher scripts and controller behavior are not
-included or executed by this game.
+Spring Royal, Summer Energy, and Winter Crystal retain their original 2D rigs.
+The Talk Quest reward subclass retains its separately authored mechanisms.
 
-Geometry and materials came from the previously verified Unity prefab exports
-under C:/uworks/TalkQuest/asset-review/media. All five designs keep their source
-meshes, material colors, UVs and supported textures. Blender Principled shading,
-transparent background and consistent orthographic lighting approximate the
-Unity materials; custom publisher shaders and demo scene effects are not copied.
+The models come from acquired free packages retained under C:/uworks/TalkQuest.
+The adjacent version 2 manifest records each publisher, original package hash,
+source-model hash, source/runtime texture sizes, converted GLB hash, and the
+motion/material adaptation. The source Unity packages remain outside this
+repository. Licensed GLBs and their import sidecars are ignored private build
+inputs and ship only inside the compiled game pack under the Unity Asset Store
+Standard EULA. They are not distributed as a reusable asset library. Publisher
+scripts, controllers, and demo scene behaviors are not imported or executed.
 
-Harvest uses all nine existing samples of the publisher's opening animation.
-Tide uses the first seven source samples, stopping in the open pose before the
-closing half of the publisher's open/close clip. Nebula has an authored magnetic
-lift of the separate source lid. Bramble and Bonbon have authored hinge rotation
-from closed to the publisher's 60-degree open pose using their source pivots.
-The latter three motions are game adaptations, not claims about supplied clips.
+Sea Chest preserves its original UVs and base/normal/PBR detail, with 4K source
+maps reduced to 2K runtime maps. Its shader graph maps green to roughness and
+blue to metallic. The source quaternion animation opens its lid and moves its
+lock and handles. Custom Unity color/dirt modifiers remain approximate.
 
-Rebuild the three authored model sequences with Blender:
-  blender --background --factory-startup --disable-autoexec --python
-    tools/prepare-downloaded-chests.py -- --render
+The Cartoon chest preserves its original hand-painted 512 pixel atlas without
+upscaling. Its embedded Open take supplies the continuous opening motion.
+The three other designs preserve their source silhouettes with adapted material
+response and edge treatment. Their per-design motion provenance is in the
+manifest; authored hinge motion is identified separately from source clips.
 
-Then pack the five designs and verify the source archives:
-  python tools/prepare-downloaded-chests.py --pack
+ChestModelView renders the real geometry with studio reflections, shadows, and
+an interior light into an adaptive 512-1024 square viewport. ChestView places
+this texture using stable 1024-unit design coordinates. There are no sparse
+opening-frame swaps. The caller controls animation sampling, so visibility,
+pause, cancellation, and reduced motion use the same reward lifecycle as the
+original chests. Viewports stop updating while hidden or paused.
 
-Both commands support --source-root to relocate the existing TalkQuest archive.
-The baker keeps its intermediate frames and review contact sheet in build/chest-bakes.
-The 43 runtime frames are lossless RGBA PNGs at 320 x 320, totaling under 3 MB.
+Rebuild all five private models using Blender 5.2:
+  blender --background --factory-startup --disable-autoexec --python tools/prepare-chest-models.py --
+  python tools/prepare-chest-models.py --optimize
+  node tools/package-chest-models.cjs
+  npm run import
 
-The game drives these opening poses with the same ChestView hold confirmation,
-release timing, sounds, body weight, light, cancellation, surprise and reduced
-motion behavior as the existing chest designs. There is no whole-frame dissolve.
+The converter accepts --source-root, --output, and --work. The packager accepts
+the TalkQuest root as its first positional argument. Previews and intermediate
+maps stay under the ignored build/chest-quality directory. Run
+tests/godot/chest_models_visual_review.gd with a graphics renderer and
+--audio-driver Dummy for silent in-game close-ups and animation captures;
+it never touches player saves.

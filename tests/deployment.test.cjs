@@ -30,6 +30,10 @@ function runDeployment(mode = 'success', skipBuild = false, missingExport = null
       $calls.Add(@{ command = 'npm'; arguments = @($args) })
       $global:LASTEXITCODE = ${mode === 'build-failure' ? 9 : 0}
     }
+    function node {
+      $calls.Add(@{ command = 'node'; arguments = @($args) })
+      $global:LASTEXITCODE = ${mode === 'stale-build' ? 1 : 0}
+    }
     function az {
       $calls.Add(@{ command = 'az'; arguments = @($args) })
       $global:LASTEXITCODE = 0
@@ -71,8 +75,9 @@ test('the deployment command builds and publishes only to the explicitly scoped 
   { skip: process.platform !== 'win32' }, () => {
     const report = runDeployment();
     assert.equal(report.failure, null);
-    assert.deepEqual(report.calls.map(call => call.command), ['npm', 'az', 'az', 'swa']);
+    assert.deepEqual(report.calls.map(call => call.command), ['npm', 'node', 'az', 'az', 'swa']);
     assert.deepEqual(report.calls[0].arguments, ['run', 'build:web']);
+    assert.deepEqual(report.calls[1].arguments, ['.\\tools\\web-build-receipt.cjs', '--verify']);
     for (const call of report.calls.filter(call => call.command === 'az')) {
       const args = call.arguments;
       assert.equal(args[args.indexOf('--subscription') + 1], subscription);
@@ -86,11 +91,11 @@ test('the deployment command builds and publishes only to the explicitly scoped 
     assert.match(pkg.scripts.deploy, /powershell.*-File tools[\\/]deploy-web\.ps1/);
   });
 
-test('an explicit SkipBuild deploy reuses the existing export without rebuilding',
+test('an explicit SkipBuild deploy verifies the existing export before publishing without rebuilding',
   { skip: process.platform !== 'win32' }, () => {
     const report = runDeployment('success', true);
     assert.equal(report.failure, null);
-    assert.deepEqual(report.calls.map(call => call.command), ['az', 'az', 'swa']);
+    assert.deepEqual(report.calls.map(call => call.command), ['node', 'az', 'az', 'swa']);
   });
 
 for (const file of ['index.html', 'staticwebapp.config.json']) {
@@ -103,13 +108,14 @@ for (const file of ['index.html', 'staticwebapp.config.json']) {
     });
 }
 
-for (const mode of ['build-failure', 'wrong-target', 'token-failure', 'empty-token', 'deploy-failure']) {
+for (const mode of ['build-failure', 'stale-build', 'wrong-target', 'token-failure', 'empty-token', 'deploy-failure']) {
   test(`deployment fails safely on ${mode} and restores the caller environment`,
     { skip: process.platform !== 'win32' }, () => {
       const report = runDeployment(mode);
       assert.ok(report.failure, `${mode} was incorrectly reported as successful.`);
       if (mode !== 'deploy-failure') assert.equal(report.calls.some(call => call.command === 'swa'), false);
       if (mode === 'build-failure') assert.deepEqual(report.calls.map(call => call.command), ['npm']);
+      if (mode === 'stale-build') assert.deepEqual(report.calls.map(call => call.command), ['npm', 'node']);
       if (mode === 'wrong-target') assert.equal(report.calls.filter(call => call.command === 'az').length, 1);
     });
 }

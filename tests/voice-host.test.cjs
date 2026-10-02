@@ -1124,6 +1124,48 @@ test('Pop status projects actual target and control geometry without introducing
   assert.equal(f.starts, 0, 'Publishing the UI snapshot cannot start speech or mutate gameplay');
 });
 
+test('Pop publishes only changed diagnostic fields while keeping live speech bindings current', () => {
+  const f = fixture();
+  const writes = [];
+  const setAttribute = f.popStatus.setAttribute;
+  f.popStatus.setAttribute = function(name, value) {
+    writes.push(name);
+    setAttribute.call(this, name, value);
+  };
+  const payload = { phase: 'running', round_id: 'deduplicated-round', remaining: 20, hits: 0, score: 0,
+    targets: [{ uid: 7, text: 'cat', forms: ['cat'], x: 31, y: 118, width: 103, height: 77, age: 1.2 }] };
+  f.host.popStatus(JSON.stringify(payload));
+  writes.length = 0;
+  f.host.popStatus(JSON.stringify(payload));
+  assert.deepEqual(writes, [], 'An identical snapshot produces no DOM attribute mutations');
+  payload.targets[0].y = 119;
+  payload.targets[0].age = 1.3;
+  f.host.popStatus(JSON.stringify(payload));
+  assert.deepEqual(writes, ['data-targets'], 'Motion leaves unchanged counters, controls and result fields alone');
+  writes.length = 0;
+  payload.hits = 1;
+  payload.score = 100;
+  f.host.popStatus(JSON.stringify(payload));
+  assert.deepEqual(writes, ['data-hits', 'data-score']);
+  writes.length = 0;
+  payload.targets[0].forms.push('cats');
+  f.host.popStatus(JSON.stringify(payload));
+  assert.deepEqual(writes, [], 'Accepted forms can change without changing diagnostic geometry');
+  f.listen('pop');
+  f.latest.result([['cats', true]]);
+  assert.equal(f.popEvents.at(-1).target_uid, 7, 'Deduplication never skips current speech target bindings');
+  f.host.stopSpeech();
+  writes.length = 0;
+  f.host.popStatus(JSON.stringify({ phase: 'idle' }));
+  assert.equal(f.popStatus.attributes['data-hits'], '0');
+  assert.equal(f.popStatus.attributes['data-score'], '0');
+  assert.equal(f.popStatus.attributes['data-targets'], '[]');
+  assert.ok(writes.includes('data-phase'), 'Returning to idle still publishes the reset');
+  writes.length = 0;
+  f.host.popStatus(JSON.stringify({ phase: 'idle' }));
+  assert.deepEqual(writes, []);
+});
+
 test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus popup', () => {
   const f = fixture();
   f.host.popStatus(JSON.stringify({ phase: 'running', base_duration: -50, bonus_time: 'Infinity', combo: -2,

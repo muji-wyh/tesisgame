@@ -5,8 +5,8 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const groups = {
   'talk-quest': {
-    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
-    node: ['talk-quest-host']
+    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_pip_loss_tests', 'talk_quest_celebration_tests', 'talk_quest_victory_flow_tests', 'talk_quest_transcript_tests', 'talk_quest_audio_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
+    node: ['talk-quest-host', 'quest-audio-assets']
   },
   leaderboards: {
     godot: ['leaderboard_state_tests', 'leaderboard_scene_tests', 'player_management_tests'],
@@ -22,15 +22,15 @@ const groups = {
       'collection_navigation_tests', 'gift_adventure_tests'
     ],
     node: [
-      'assets', 'chest-assets', 'web-export', 'voice-generation', 'deployment', 'playroom-host',
-      'unity-art', 'test-runner'
+      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host',
+      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt'
     ]
   },
   'legacy-saves': { godot: ['legacy_playroom_scene_tests'] },
   flow: {
     godot: [
       'steady_match_tests', 'layout_tests', 'three_mode_tests', 'layout_finish_tests',
-      'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'theme_review_tests',
+      'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
       'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
     ]
   },
@@ -52,7 +52,7 @@ const groups = {
   themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },
   'pip-audio': { godot: ['pip_audio_tests', 'pip_reaction_audio_tests'] },
   'pip-feedback': { godot: ['pip_gameplay_motion_tests', 'pip_gameplay_feedback_tests'] },
-  'chest-charge': { godot: ['chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
+  'chest-charge': { godot: ['chest_models_tests', 'chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
 };
 
 const allGroups = Object.keys(groups);

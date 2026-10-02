@@ -23,6 +23,8 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(true)
+	_check_match_prompt_audio(app)
+	_check_memory_prompt_audio(app)
 	app.choose_mode("memory")
 	await process_frame
 	await process_frame
@@ -245,6 +247,219 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("UI audio flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_match_prompt_audio(app) -> void:
+	var isolated = preload("res://scripts/game_model.gd").new()
+	isolated.reset(app.data.words, 29)
+	var phases: Array[String] = []
+	var model_observer := func() -> void: phases.append(isolated.phase)
+	isolated.changed.connect(model_observer)
+	var isolated_id: String = isolated.cards[0].id
+	check(isolated.select(isolated_id) == "selected" and isolated.select(isolated_id) == "cancelled"
+		and phases == ["matching", "waiting"],
+		"Ordinary model callers still receive one immediate notification per accepted selection")
+	check(isolated.select(isolated_id, false) == "selected" and isolated.selected_id == isolated_id
+		and phases.size() == 2,
+		"A caller may prepare validated selection feedback before publishing the model change")
+	isolated.changed.emit()
+	check(phases == ["matching", "waiting", "matching"]
+		and isolated.select("missing-card", false) == "ignored" and phases.size() == 3,
+		"The caller publishes the accepted state once and invalid cards remain silent")
+	isolated.changed.disconnect(model_observer)
+
+	app.new_round(29, true, "", "match")
+	var first: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "word")[0]
+	var other: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
+		return card.kind == "word" and card.word.id != first.word.id)[0]
+	var notices: Array[Dictionary] = []
+	var observer := func() -> void:
+		notices.append({"phase": app.model.phase, "selected": app.model.selected_id,
+			"effect": app.audio.effect.stream.resource_path if app.audio.effect.playing else "",
+			"voice": app.audio.voice.stream.resource_path if app.audio.voice.playing else ""})
+	app.model.changed.connect(observer)
+	_observe_match_tap(app, notices, first.id)
+	check(notices.size() == 1 and notices[0].phase == "matching"
+		and notices[0].effect == "res://assets/audio/sfx/select.wav"
+		and notices[0].voice == "res://" + first.word.audio,
+		"The first Match tap starts its cue and pronunciation before model observers refresh the board")
+	_observe_match_tap(app, notices, other.id)
+	check(notices.size() == 1 and notices[0].selected == other.id
+		and notices[0].effect == "res://assets/audio/sfx/select.wav"
+		and notices[0].voice == "res://" + other.word.audio,
+		"Reselecting a same-kind card publishes once with the new word already playing")
+	_observe_match_tap(app, notices, other.id)
+	check(notices.size() == 1 and notices[0].phase == "waiting"
+		and notices[0].effect.is_empty() and notices[0].voice.is_empty(),
+		"Cancelling a selection still refreshes once without starting a new sound")
+	notices.clear()
+	app._select_card("missing-card")
+	check(notices.is_empty() and not app.audio.effect.playing and not app.audio.voice.playing,
+		"An invalid UI tap neither notifies observers nor starts audio")
+	_observe_match_tap(app, notices, first.id)
+	_observe_match_tap(app, notices, other.word.id + ":image")
+	check(notices.size() == 1 and notices[0].phase == "feedback"
+		and notices[0].effect == "res://assets/audio/sfx/wrong.wav"
+		and notices[0].voice == "res://assets/audio/voice/wrong.wav"
+		and not app.feedback_timer.is_stopped(),
+		"A wrong pair starts both answer sounds before its single refresh and retains automatic feedback")
+	_observe_match_tap(app, notices, first.id)
+	check(notices.size() == 2 and notices[0].phase == "waiting" and notices[1].phase == "matching"
+		and notices[1].effect == "res://assets/audio/sfx/select.wav"
+		and notices[1].voice == "res://" + first.word.audio and app.feedback_timer.is_stopped(),
+		"The feedback shortcut resolves the old pair once and starts the tapped word before its new refresh")
+	_observe_match_tap(app, notices, first.word.id + ":image")
+	check(notices.size() == 1 and notices[0].phase == "feedback"
+		and notices[0].effect == "res://assets/audio/sfx/correct.wav"
+		and notices[0].voice == "res://" + first.word.audio and app.model.successes == 1,
+		"A correct pair starts its cue and word before refresh without scoring twice")
+	_observe_match_tap(app, notices, first.id)
+	check(notices.is_empty() and app.audio.voice.playing
+		and app.audio.voice.stream == load("res://" + first.word.audio),
+		"A completed card keeps its direct pronunciation replay without publishing a selection")
+	app._continue_match()
+	app.audio.set_muted(true)
+	_observe_match_tap(app, notices, other.id)
+	check(notices.size() == 1 and notices[0].selected == other.id
+		and notices[0].effect.is_empty() and notices[0].voice.is_empty(),
+		"Muted Match taps still update the board once without playing early audio")
+	_observe_match_tap(app, notices, other.id)
+	app.audio.set_muted(false)
+	app._on_voice_state([true, true, "Listening"])
+	_observe_match_tap(app, notices, other.id)
+	check(notices.size() == 1 and notices[0].selected == other.id
+		and notices[0].effect.is_empty() and notices[0].voice.is_empty(),
+		"Voice-mode taps preserve the quiet microphone guard before refresh")
+	app.model.changed.disconnect(observer)
+	app._stop_voice()
+	app.audio.halt()
+
+
+func _check_memory_prompt_audio(app) -> void:
+	app.new_round(73, true, "", "memory")
+	var view = app._memory
+	var first: int = -1
+	var other: int = -1
+	for index in range(view.memory.cards.size()):
+		if view.memory.cards[index].kind == "word":
+			if first < 0:
+				first = index
+			else:
+				other = index
+				break
+	var partner: int = -1
+	var wrong: int = -1
+	for index in range(view.memory.cards.size()):
+		if view.memory.cards[index].kind == "image":
+			if view.memory.cards[index].word.id == view.memory.cards[first].word.id:
+				partner = index
+			elif view.memory.cards[index].word.id == view.memory.cards[other].word.id:
+				wrong = index
+	var first_audio: String = "res://" + view.memory.cards[first].word.audio
+	var other_audio: String = "res://" + view.memory.cards[other].word.audio
+	var events: Array[Dictionary] = []
+	var reveal_observer := func(_word: Dictionary, _kind: String, index: int) -> void:
+		events.append(_memory_audio_snapshot(app, "reveal", index))
+	var answer_observer := func(_words: Array, _correct: bool) -> void:
+		events.append(_memory_audio_snapshot(app, "answer", view.memory.selected_indices.back()))
+	var progress_observer := func(_successes: int, _attempts: int) -> void:
+		events.append(_memory_audio_snapshot(app, "progress", view.memory.selected_indices.back()))
+	var prompt_observer := func() -> void:
+		events.append(_memory_audio_snapshot(app, "prompt", -1))
+	view.card_revealed.connect(reveal_observer)
+	view.answer_chosen.connect(answer_observer)
+	view.progress_changed.connect(progress_observer)
+	view.prompt_ready.connect(prompt_observer)
+	view.card_buttons[first].pressed.emit()
+	check(events.size() == 2 and events[0].event == "reveal" and not events[0].face_up
+		and events[0].effect == "res://assets/audio/sfx/select.wav" and events[0].voice == first_audio
+		and view.card_buttons[first].face_up,
+		"Memory starts its first cue and word before refreshing the accepted card's face")
+	events.clear()
+	view.card_buttons[other].pressed.emit()
+	check(events.size() == 2 and not events[0].face_up and events[0].voice == other_audio
+		and not view.card_buttons[first].face_up and view.card_buttons[other].face_up,
+		"Same-kind Memory reselection pronounces the new word before swapping the visible fronts")
+	events.clear()
+	view.card_buttons[other].pressed.emit()
+	check(events.size() == 1 and events[0].event == "prompt" and events[0].voice.is_empty()
+		and view.memory.phase == "waiting" and not view.card_buttons[other].face_up,
+		"Cancelling Memory emits no new reveal or answer and stops the previous pronunciation")
+	events.clear()
+	view._choose(-1)
+	view._choose(view.memory.cards.size())
+	check(events.is_empty(), "Invalid Memory indices never request an early sound or publish a prompt")
+	view.card_buttons[first].pressed.emit()
+	events.clear()
+	view.card_buttons[wrong].pressed.emit()
+	check(events.map(func(event: Dictionary) -> String: return event.event) == ["reveal", "answer", "progress", "prompt"]
+		and not events[0].face_up and not events[1].face_up and events[2].face_up
+		and events[0].voice == other_audio and events[1].voice == other_audio
+		and events[1].effect == "res://assets/audio/sfx/wrong.wav"
+		and view.memory.attempts == 1 and not view._feedback_timer.is_stopped(),
+		"A mismatch pronounces the second Memory word and starts its answer cue before rendering or publishing progress")
+	events.clear()
+	view.card_buttons[first].pressed.emit()
+	check(events.size() == 3 and events[0].event == "prompt" and events[0].phase == "waiting"
+		and events[0].voice.is_empty() and events[1].event == "reveal" and not events[1].face_up
+		and events[1].voice == first_audio and view.memory.selected_indices == [first]
+		and view.memory.attempts == 1 and view._feedback_timer.is_stopped(),
+		"The Memory feedback shortcut stops old speech and promptly reveals only the new selected card")
+	events.clear()
+	view.card_buttons[partner].pressed.emit()
+	check(events.size() == 4 and events[1].event == "answer" and not events[1].face_up
+		and events[1].effect == "res://assets/audio/sfx/correct.wav" and events[1].voice == first_audio
+		and events[2].face_up and app.model.successes == 1 and view.memory.attempts == 2,
+		"A correct Memory answer starts before the planted face refresh while progress still publishes once")
+	events.clear()
+	view.card_buttons[first].pressed.emit()
+	check(events.is_empty() and view.memory.attempts == 2,
+		"A planted Memory card cannot replay early audio or change the completed answer")
+	view.continue_feedback()
+	check(not app.audio.voice.playing and view.memory.phase == "waiting",
+		"Continuing Memory feedback still stops the finished card's pronunciation")
+	app.audio.set_muted(true)
+	events.clear()
+	view.card_buttons[other].pressed.emit()
+	check(events.size() == 2 and events[0].effect.is_empty() and events[0].voice.is_empty()
+		and view.card_buttons[other].face_up,
+		"Muted Memory taps reveal cards without starting early cue or voice playback")
+	view.card_buttons[other].pressed.emit()
+	app.audio.set_muted(false)
+	view.begin_peek()
+	events.clear()
+	view.card_buttons[other].pressed.emit()
+	check(events.is_empty() and not app.audio.voice.playing and view.memory.attempts == 2,
+		"Held Memory study prevents card audio and scoring")
+	view.end_peek()
+	view.card_buttons[other].pressed.emit()
+	app.on_page_hidden()
+	events.clear()
+	view.card_buttons[wrong].pressed.emit()
+	check(events.is_empty() and view._paused and not app.audio.voice.playing and not app.audio.effect.playing,
+		"Background pause prevents early Memory playback and cancels the active pronunciation")
+	app.on_page_visible()
+	check(not view._paused and not app.audio.voice.playing and view.memory.selected_indices == [other],
+		"Foreground resume preserves Memory selection without replaying an interrupted word")
+	view.card_revealed.disconnect(reveal_observer)
+	view.answer_chosen.disconnect(answer_observer)
+	view.progress_changed.disconnect(progress_observer)
+	view.prompt_ready.disconnect(prompt_observer)
+	app.new_round(73, true, "", "memory")
+
+
+func _memory_audio_snapshot(app, event: String, index: int) -> Dictionary:
+	return {"event": event, "phase": app._memory.memory.phase,
+		"face_up": app._memory.card_buttons[index].face_up if index >= 0 else false,
+		"effect": app.audio.effect.stream.resource_path if app.audio.effect.playing else "",
+		"voice": app.audio.voice.stream.resource_path if app.audio.voice.playing else ""}
+
+
+func _observe_match_tap(app, notices: Array[Dictionary], id: String) -> void:
+	notices.clear()
+	app.audio._stop(app.audio.effect)
+	app.audio.stop_voice()
+	app.cards[id].pressed.emit()
 
 
 func _check_speech_debug(app) -> void:

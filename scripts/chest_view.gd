@@ -12,6 +12,7 @@ const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
 const Surprise = preload("res://scripts/chest_surprise.gd")
+const ModelView = preload("res://scripts/chest_model_view.gd")
 
 var theme_id: String = ""
 var reduced_motion: bool = false
@@ -82,6 +83,11 @@ var _opening_frame: int = 0
 var _frame_closed_bounds := Rect2()
 var _frame_motion_bounds := Rect2()
 var _frame_cavity := Vector2.ZERO
+var _model_view: ModelView
+var _model_time: float = 0.0
+var _cancel_model_drive := Vector2.ZERO
+var _model_rest_time: float = 0.0
+var _cancel_model_time: float = 0.0
 
 
 func _ready() -> void:
@@ -137,7 +143,11 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_surprise_shown = false
 	_elapsed = 0.0
 	_idle_time = 0.0
+	_model_time = 0.0
 	_crystal_cavity = null
+	if is_instance_valid(_model_view):
+		_model_view.free()
+	_model_view = null
 	for child in _art.get_children():
 		child.free()
 	_pieces.clear()
@@ -147,7 +157,9 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_opening_frames.clear()
 	_opening_frame = 0
 	var style: Dictionary = manifest.styles[_style]
-	if style.has("frames"):
+	if style.has("model"):
+		_load_model(style)
+	elif style.has("frames"):
 		_load_opening_frames(style)
 	elif _style == "crystal":
 		for part in style.parts:
@@ -164,6 +176,47 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_measure_motion_bounds()
 	_apply_pose(0.0)
 	_fit()
+
+
+func _load_model(style: Dictionary) -> void:
+	_model_view = ModelView.new()
+	add_child(_model_view)
+	if not _model_view.configure(style):
+		push_error("Unable to configure animated chest model: " + _style)
+		_model_view.free()
+		_model_view = null
+		return
+	# Source materials carry the skin colors; palette tint would erase their
+	# painted detail. The shared reward effects still use the theme colors.
+	_tint = Color.WHITE
+	_cavity_light.z_index = -1
+	var sprite := Sprite2D.new()
+	sprite.texture = _model_view.get_texture()
+	sprite.centered = false
+	sprite.region_enabled = true
+	sprite.region_filter_clip_enabled = true
+	var material := ShaderMaterial.new()
+	material.shader = SURFACE_LIGHT
+	material.set_shader_parameter("light_strength", 0.0)
+	sprite.material = material
+	_art.add_child(sprite)
+	_pieces.append({"node": sprite, "rest": Transform2D.IDENTITY, "role": "body"})
+	_model_view.resolution_changed.connect(_sync_model_surface)
+	_sync_model_surface()
+	_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)
+
+
+func _sync_model_surface() -> void:
+	if not is_instance_valid(_model_view) or _pieces.is_empty():
+		return
+	var sprite: Sprite2D = _pieces[0].node
+	var scale_factor: float = ModelView.DESIGN_SIZE / float(_model_view.size.x)
+	var crop: Rect2 = _model_view.design_bounds()
+	sprite.region_rect = Rect2(crop.position / scale_factor, crop.size / scale_factor)
+	sprite.offset = (crop.position - Vector2.ONE * ModelView.DESIGN_SIZE * 0.5) / scale_factor
+	var pose := Transform2D(0.0, Vector2.ONE * scale_factor, 0.0, Vector2.ZERO)
+	_pieces[0].rest = pose
+	sprite.transform = pose
 
 
 func _load_opening_frames(style: Dictionary) -> void:
@@ -253,6 +306,12 @@ func _add_piece(path: String, role: String, pose: Transform2D, pivot: Vector2, o
 
 
 func _measure_bounds() -> void:
+	if is_instance_valid(_model_view):
+		_bounds = _model_view.closed_bounds()
+		_bounds.position -= Vector2.ONE * ModelView.DESIGN_SIZE * 0.5
+		_body_floor = Vector2(_bounds.get_center().x, _bounds.end.y)
+		_body_pivot = _body_floor - Vector2(0.0, _bounds.size.y * 0.02)
+		return
 	var first := true
 	for piece in _pieces:
 		var rect: Rect2 = piece.node.get_rect()
@@ -278,6 +337,13 @@ func _measure_bounds() -> void:
 
 
 func _measure_motion_bounds() -> void:
+	if is_instance_valid(_model_view):
+		_motion_bounds = _model_view.design_bounds()
+		_motion_bounds.position -= Vector2.ONE * ModelView.DESIGN_SIZE * 0.5
+		# Candy's stronger lateral kicks need extra fixed room on narrow stages.
+		var model_margin: float = 0.14 if theme_id == "candy" else 0.09
+		_motion_bounds = _motion_bounds.grow(maxf(_bounds.size.x, _bounds.size.y) * model_margin)
+		return
 	_motion_bounds = _bounds
 	for frame in range(37):
 		var time: float = Feel.BUILDUP_SECONDS + 1.8 * float(frame) / 36.0
@@ -310,6 +376,8 @@ func _fit() -> void:
 	var bottom: float = maxf(safe_top, size.y - 7.0 * pixel)
 	var available_height: float = maxf(0.0, bottom - safe_top)
 	_fit_scale = maxf(0.0, minf(size.x * 0.79 / _motion_bounds.size.x, available_height * 0.87 / _motion_bounds.size.y))
+	if is_instance_valid(_model_view):
+		_model_view.set_display_size(get_screen_transform().get_scale().abs() * ModelView.DESIGN_SIZE * _fit_scale)
 	var center := Vector2(size.x * 0.5, safe_top + available_height * 0.54)
 	var hold: Vector2 = _hold_pose_state()
 	var pose_time: float = _elapsed if mode in ["opening", "opened"] else hold_progress * Feel.HOLD_SECONDS
@@ -678,10 +746,12 @@ func begin_hold() -> void:
 	if mode != "closed" or not is_visible_in_tree() or _hold_active:
 		return
 	_hold_active = true
+	_model_rest_time = _model_time
 	_animation_origin_frame = Engine.get_process_frames()
 	_release_active = false
 	_cancel_remaining = 0.0
 	_cancel_piece_poses.clear()
+	_cancel_model_drive = Vector2.ZERO
 	_charge_time = 0.0
 	_charge_step = 0
 	_hold_pulse_step = 0
@@ -698,6 +768,8 @@ func cancel_hold() -> void:
 	if not _hold_active or mode != "closed":
 		return
 	_cancel_piece_poses.clear()
+	_cancel_model_drive = Vector2(_lid_pressure(), _pulse_motion())
+	_cancel_model_time = _model_time
 	_cancel_pressure = _hold_pose_state().x
 	_cancel_body_pose = _physical_pose.duplicate(true)
 	_cancel_shift_x = _body_shift_x
@@ -723,6 +795,8 @@ func cancel_open(animate_return: bool = true) -> void:
 		return
 	var body_pose: Dictionary = _physical_pose.duplicate(true)
 	var shift_x: float = _body_shift_x
+	var model_drive := Vector2(_lid_pressure(), _pulse_motion())
+	var model_time: float = _model_time
 	var piece_poses: Array[Dictionary] = []
 	for piece in _pieces:
 		piece_poses.append({"pose": piece.node.transform, "alpha": piece.node.modulate.a})
@@ -739,6 +813,10 @@ func cancel_open(animate_return: bool = true) -> void:
 		_cancel_body_pose = body_pose
 		_cancel_shift_x = shift_x
 		_cancel_piece_poses = piece_poses
+		_cancel_model_drive = model_drive
+		_cancel_model_time = model_time
+	else:
+		_model_time = _model_rest_time
 	_emit_cue("cancel")
 	_apply_pose(0.0)
 	_fit()
@@ -855,6 +933,7 @@ func hold_effect_snapshot() -> Dictionary:
 		"animated": active and not reduced_motion,
 		"theme": theme_id, "style": _style, "material": _feel.material, "rigged": _rigged,
 		"opening_frames": _opening_frames.size(), "opening_frame": _opening_frame,
+		"live_model": _model_view.snapshot() if is_instance_valid(_model_view) else {},
 		"opening_time": _elapsed, "cancel_remaining": _cancel_remaining,
 		"animation_origin_frame": _animation_origin_frame,
 		"interior_open": _crystal_opening(),
@@ -928,6 +1007,8 @@ func _opened_glow() -> float:
 
 
 func _cavity_origin_in_art() -> Vector2:
+	if is_instance_valid(_model_view):
+		return _model_view.cavity_point() - Vector2.ONE * ModelView.DESIGN_SIZE * 0.5
 	if not _opening_frames.is_empty():
 		return _frame_cavity
 	for piece in _pieces:
@@ -1036,6 +1117,11 @@ func _cavity_glow_bounds() -> Rect2:
 
 
 func _seam_points() -> PackedVector2Array:
+	if is_instance_valid(_model_view):
+		var points := PackedVector2Array()
+		for point: Vector2 in _model_view.seam_points():
+			points.append(_art.transform * (point - Vector2.ONE * ModelView.DESIGN_SIZE * 0.5))
+		return points
 	if not _opening_frames.is_empty():
 		var points := PackedVector2Array()
 		for ratio: Vector2 in [Vector2(0.10, 0.42), Vector2(0.56, 0.54), Vector2(0.94, 0.37)]:
@@ -1427,6 +1513,8 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 
 func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var piece: Dictionary = _pieces[index]
+	if is_instance_valid(_model_view):
+		return {"pose": piece.rest, "alpha": 1.0}
 	if not _opening_frames.is_empty():
 		# The original three-dimensional lid motion is baked into the texture;
 		# shared body pressure, release recoil and afterglow still run outside it.
@@ -1524,6 +1612,18 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 
 
 func _apply_pose(_progress: float) -> void:
+	if is_instance_valid(_model_view):
+		var opening: float = Feel.rigid_opening(theme_id, _elapsed) if mode in ["opening", "opened"] else 0.0
+		var pressure: float = _lid_pressure()
+		var pulse: float = _pulse_motion()
+		if _cancel_remaining > 0.0:
+			var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
+			pressure = _cancel_model_drive.x * returning
+			pulse = _cancel_model_drive.y * returning
+		var light: float = maxf(_opened_glow(), _release_power()) + _release_impact() * 0.55
+		_model_view.set_pose(opening, pressure, pulse, _model_time,
+			light, _release_color, reduced_motion,
+			_hold_active or mode == "opening" or _cancel_remaining > 0.0)
 	if not _opening_frames.is_empty():
 		var opening: float = Feel.opening(theme_id, _elapsed) if mode in ["opening", "opened"] else 0.0
 		_set_opening_frame(clampi(roundi(opening * (_opening_frames.size() - 1)), 0, _opening_frames.size() - 1))
@@ -1596,6 +1696,8 @@ func _update_surface_light() -> void:
 func start_open(reduce: bool) -> void:
 	if mode != "closed":
 		return
+	if not _hold_active:
+		_model_rest_time = _model_time
 	reduced_motion = reduce
 	_surprise_shown = false
 	var confirmed_steps: int = _charge_step
@@ -1645,6 +1747,8 @@ func clear() -> void:
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
+	_model_time = 0.0
+	_model_rest_time = 0.0
 	_animation_origin_frame = -1
 	theme_id = ""
 	hold_progress = 0.0
@@ -1708,6 +1812,8 @@ func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		stop_reaction()
 	set_process(is_visible_in_tree() and not _idle_paused)
+	if is_instance_valid(_model_view):
+		_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)
 
 
 func set_idle_paused(value: bool) -> void:
@@ -1715,6 +1821,8 @@ func set_idle_paused(value: bool) -> void:
 	if value:
 		_surprise.clear()
 	set_process(is_visible_in_tree() and not _idle_paused)
+	if is_instance_valid(_model_view):
+		_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)
 
 
 func _process(delta: float) -> void:
@@ -1735,6 +1843,16 @@ func _advance_animation(delta: float) -> void:
 	_surprise.advance(delta)
 	if mode == "opened" and not reduced_motion:
 		_idle_time += delta
+	if is_instance_valid(_model_view) and not reduced_motion:
+		# The mechanical pause also freezes handles and three-dimensional yaw.
+		# Advance its pose clock without changing the shared input/reward clock.
+		if _cancel_remaining > 0.0:
+			var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, maxf(0.0, _cancel_remaining - delta))
+			_model_time = lerpf(_model_rest_time, _cancel_model_time, returning)
+		elif mode == "opening":
+			_model_time += Feel.anticipation_pose_time(minf(OPEN_SECONDS, _elapsed + delta)) - Feel.anticipation_pose_time(_elapsed)
+		else:
+			_model_time += delta
 	if _hold_active and not reduced_motion:
 		_charge_time += delta
 	_cancel_remaining = maxf(0.0, _cancel_remaining - delta)

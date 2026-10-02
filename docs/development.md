@@ -8,8 +8,17 @@ repository root. See the [project README](../README.md) for the short setup path
 Development prerequisites: **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**. The `godot` executable must be on PATH; alternatively, set `GODOT_BIN` to its executable path.
 
 Restore the licensed [Talk Quest character build inputs](assets/talk-quest-monsters.md#provenance-and-reproducibility)
-before importing or building a fresh checkout. Their GLBs and portraits remain
+and [animated chest inputs](voice-pop-treasure.md#shared-chest-catalog)
+before importing or building a fresh checkout. Their models and portraits remain
 local and are bundled into the compiled game; they are not stored in Git.
+
+The three Unity-derived treasure particles also remain private build inputs.
+Restore the prepared `halo.png`, `ray.png`, and `sparkle.png` files to
+`assets/talk_quest/treasure/` from the licensed local asset copy before import.
+The [treasure artwork record](../assets/talk_quest/treasure/SOURCE.md) identifies
+the acquired package, original texture paths, and preparation dimensions;
+`assets/talk_quest/treasure/manifest.json` records the expected prepared hashes.
+Godot regenerates their ignored import metadata when importing the project.
 
 ```powershell
 npm ci
@@ -42,6 +51,13 @@ uncompressed files remain available for other clients. Hashed assets can be cach
 without mixing old and new game versions, and game-only changes reuse the same engine URL.
 HTML revalidates so returning players discover updates. Each build removes obsolete generated
 asset names without deleting unrelated files in the output directory.
+
+Rebuilds reuse Brotli sidecars only when decompressing the complete sidecar reproduces
+the current source bytes. Missing, stale, truncated, or otherwise invalid caches are
+recompressed. After verifying the exported game pack and packaging all files, a
+successful build writes `build/web-build.json` outside the published directory.
+This receipt fingerprints runtime inputs, including local licensed assets, and
+every output file. A failed build invalidates the previous receipt.
 
 Chest and illustration textures use 85%-quality WebP imports at their existing resolution.
 The original SVG/PNG artwork is unchanged. This reduces the game-pack download without
@@ -113,6 +129,8 @@ builds the Web export, explicitly selects the personal subscription
 confirms the production hostname, and keeps the deployment token in the process
 environment only. Build, authentication, and deployment failures stop the command;
 the previous token environment and working directory are restored afterward.
+Before contacting Azure, it checks the successful build receipt against current
+sources and outputs, and requires every engine/game file and compressed sidecar.
 It does not commit or push Git changes.
 
 To publish an export you have already built:
@@ -125,7 +143,9 @@ npm run deploy -- -SkipBuild
 and `Cache-Control: no-cache` for HTML and other unversioned files. `Vary: Accept-Encoding`
 keeps compressed and uncompressed responses distinct in caches. The build copies this
 configuration into the export; the deployment script also explicitly selects the source
-configuration. Omit `-SkipBuild` after changing source files or import settings.
+configuration. `-SkipBuild` refuses absent, stale, altered, or incomplete builds.
+Omit it after changing runtime sources or import settings. Keep unrelated files
+out of `build/web`; the entire directory is published.
 
 ## Embed in a website
 
@@ -166,8 +186,8 @@ npm run test:browser -- talk-quest.spec.cjs
 The browser command rebuilds the Web export and runs the Talk Quest scenarios
 across the configured Chromium and WebKit profiles. Run imports, native tests,
 exports, and browser jobs sequentially against one checkout. The
-[Talk Quest reference](talk-quest.md) describes sentence binding, part choices,
-reward commits, and private checkpoints covered by these suites.
+[Talk Quest reference](talk-quest.md) describes finite word encounters, speech
+attacks, reward commits, and private checkpoints covered by these suites.
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 

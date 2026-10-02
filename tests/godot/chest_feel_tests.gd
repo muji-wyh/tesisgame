@@ -21,8 +21,10 @@ func _poses(chest) -> Array:
 	var values: Array = [chest._art.transform]
 	for piece in chest._pieces:
 		values.append(piece.node.transform)
-	if not chest._opening_frames.is_empty():
-		values.append(chest._opening_frame)
+	var live: Dictionary = chest.hold_effect_snapshot().get("live_model", {})
+	if not live.is_empty():
+		values.append(live.parts)
+		values.append(live.model_rotation)
 	return values
 
 
@@ -87,13 +89,8 @@ func _run() -> void:
 		check(_poses(chest) != rest, theme + " responds in the press call before any frame or timer")
 		check(cues == [[theme, "press", 0]], theme + " emits a single contact beat")
 		chest.set_hold_progress(0.45)
-		if chest._opening_frames.is_empty():
-			check(_poses(chest).slice(1) != rest.slice(1),
-				theme + " builds pressure in its lock, core or facets as well as its body")
-		else:
-			check(_poses(chest) != rest and chest._opening_frame == 0
-				and chest.hold_effect_snapshot().lid_pressure > 0.0 and chest.hold_effect_snapshot().buildup_glow > 0.0,
-				theme + " builds visible body pressure and surface light while the source lid stays sealed")
+		check(_poses(chest).slice(1) != rest.slice(1),
+			theme + " builds pressure in its lock, core, lid or facets as well as its body")
 		chest.begin_hold()
 		check(is_equal_approx(chest.hold_progress, 0.45), theme + " ignores duplicate hold starts")
 		chest.set_hold_progress(0.8)
@@ -166,9 +163,10 @@ func _run() -> void:
 		var poses: Array = _poses(chest)
 		check(not family_poses[style].has(poses), theme + " has distinct physical motion within its shared artwork family")
 		family_poses[style].append(poses)
-		if not chest._opening_frames.is_empty():
-			check(chest._opening_frames.size() >= 6 and chest.hold_effect_snapshot().opening_frame > 0,
-				theme + " animates the downloaded model's lid with multiple source-derived poses")
+		var live: Dictionary = chest.hold_effect_snapshot().get("live_model", {})
+		if not live.is_empty():
+			check(live.open_amount > 0.0 and not live.parts.is_empty(),
+				theme + " continuously opens its real model mechanism after release")
 		elif style != "crystal":
 			check(chest.piece_count() >= 4, theme + " uses a layered body, interior, lid and lock")
 			check(not chest._pieces.any(func(piece): return piece.role in ["closed", "open"]),
@@ -433,10 +431,9 @@ func _check_small_stage_pixels(data) -> void:
 
 
 func _lid_poses(chest) -> Array:
-	if not chest._opening_frames.is_empty():
-		# A baked source lid inherits the shared body's pressure/recoil while
-		# its actual opening changes the displayed source-geometry frame.
-		return [chest._art.transform, chest._opening_frame]
+	var live: Dictionary = chest.hold_effect_snapshot().get("live_model", {})
+	if not live.is_empty():
+		return live.parts.filter(func(part): return part.role == "lid")
 	var poses: Array = []
 	for piece in chest._pieces:
 		if piece.role == "lid_outer" or (chest._style == "crystal" and piece.role not in ["chest", "01"]):
@@ -681,33 +678,29 @@ func _check_downloaded_mechanisms(data) -> void:
 		var state: Dictionary = chest.hold_effect_snapshot()
 		check(not unique_styles.has(state.style), theme + " owns a distinct chest design")
 		unique_styles[state.style] = true
-		if state.opening_frames == 0:
+		var live: Dictionary = state.get("live_model", {})
+		if live.is_empty():
 			continue
 		downloaded_count += 1
-		var closed_texture: Texture2D = chest._pieces[0].node.texture
-		var covers_source_pixels: bool = true
-		for index in range(chest._opening_frames.size()):
-			var texture: Texture2D = chest._opening_frames[index]
-			var alpha_rect: Rect2 = Rect2(texture.get_image().get_used_rect())
-			alpha_rect.position -= texture.get_size() * 0.5
-			var cropped_rect: Rect2 = chest._frame_closed_bounds if index == 0 else chest._frame_motion_bounds
-			covers_source_pixels = covers_source_pixels and cropped_rect.encloses(alpha_rect)
-		check(covers_source_pixels, theme + " crops transparent padding without removing any source pixels")
-		check(chest._bounds == chest._frame_closed_bounds
-			and chest._bounds.size.x < closed_texture.get_width() and chest._bounds.size.y < closed_texture.get_height(),
-			theme + " fits its visible closed model instead of the larger transparent render canvas")
+		var closed_parts: Array = live.parts.duplicate(true)
+		check(chest._pieces[0].node.texture is ViewportTexture and live.resolution >= 512
+			and live.resolution <= 1024 and live.mesh_count > 0,
+			theme + " renders detailed source geometry at an adaptive resolution")
 		chest.start_open(false)
 		chest._advance_animation(Feel.RELEASE_TIME - 0.001)
-		check(chest._opening_frame == 0 and chest._pieces[0].node.texture == closed_texture,
-			theme + " remains visibly closed throughout the shared buildup")
+		live = chest.hold_effect_snapshot().live_model
+		check(live.open_amount == 0.0 and live.parts != closed_parts,
+			theme + " visibly loads its real mechanism while keeping the cavity closed before release")
 		chest._advance_animation(0.18)
-		check(chest._opening_frame > 0 and chest._pieces[0].node.texture != closed_texture,
-			theme + " shows moving source geometry after the release cue")
+		live = chest.hold_effect_snapshot().live_model
+		check(live.open_amount > 0.0 and live.open_amount < 1.0 and live.parts != closed_parts,
+			theme + " moves source geometry continuously after the release cue")
 		chest.finish_immediately()
-		check(chest._opening_frame == state.opening_frames - 1,
+		check(chest.hold_effect_snapshot().live_model.open_amount == 1.0,
 			theme + " leaves its real open model pose visible when complete")
 		chest.clear()
-		check(chest._opening_frame == 0 and chest._pieces[0].node.texture == closed_texture,
+		live = chest.hold_effect_snapshot().live_model
+		check(live.open_amount == 0.0 and live.parts == closed_parts,
 			theme + " resets all visible geometry before the next chest")
 	check(unique_styles.size() == data.THEMES.size() and downloaded_count == 5,
 		"Eight themes have eight designs, including five downloaded chest types")

@@ -521,6 +521,7 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
         window.audioObservation.contexts.push(context);
         const createSource = context.createBufferSource.bind(context);
         context.createBufferSource = () => {
+          const createdAt = performance.now();
           const source = createSource(), start = source.start.bind(source);
           let playback;
           if (trackSourceLifecycle) {
@@ -545,7 +546,7 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
             window.audioObservation.starts++;
             if (source.buffer) {
               playback = { duration: source.buffer.duration,
-                at, contextTime, scheduledAt: values[0] || contextTime,
+                at, createdAt, contextTime, scheduledAt: values[0] || contextTime,
                 sampleRate: source.buffer.sampleRate, channels: source.buffer.numberOfChannels,
                 loop: source.loop, contextState: context.state, playbackRate: source.playbackRate.value,
                 phase: phaseSelector ? document.querySelector(phaseSelector)?.dataset.phase || '' : '',

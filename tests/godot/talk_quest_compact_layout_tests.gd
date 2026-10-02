@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Quest = preload("res://scripts/talk_quest.gd")
+const Style = preload("res://scripts/ui_style.gd")
 const OUTPUT := "res://build/talk-quest-compact"
 var checks: int = 0
 var failures: int = 0
@@ -49,6 +50,47 @@ func check_stage(quest, retry: bool, label: String) -> void:
 		if retry:
 			rect.position += quest._words.position
 			check(not rect.intersects(quest._mic_retry.get_rect()), label + " never covers a word card with the microphone action")
+
+
+func check_continue_after_scale_changes() -> void:
+	var previous_size: Vector2i = root.size
+	var previous_mode: int = root.content_scale_mode
+	var previous_aspect: int = root.content_scale_aspect
+	var previous_scale_size: Vector2i = root.content_scale_size
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.content_scale_size = Vector2i(480, 480)
+	root.size = Vector2i(1440, 900)
+	await settle()
+	var quest = Quest.new()
+	quest.save_path = "user://quest-continue-scale-%d.cfg" % Time.get_ticks_usec()
+	root.add_child(quest)
+	quest.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	quest.set_process(false)
+	quest.start_level(1)
+	quest._show_map()
+	await settle()
+	var initial_scale: float = Style.ui_scale(quest)
+	check(initial_scale > 1.5, "The Continue regression starts with a desktop-scaled interface")
+	for dimensions in [Vector2i(390, 844), Vector2i(568, 320), Vector2i(390, 844)]:
+		root.size = dimensions
+		await settle()
+		var scale: float = Style.ui_scale(quest)
+		check(initial_scale > scale * 1.5, "Resizing changes the real viewport scale instead of only the map dimensions")
+		check(quest._continue.visible and quest.game.has_saved_run(), "The same saved adventure retains its Continue action after resizing")
+		var physical_font: float = quest._continue.get_theme_font_size("font_size") * scale
+		check(physical_font >= 14.0 and physical_font <= 16.0,
+			"Continue text stays readable after desktop-to-phone resizing at %s (%.2f pixels)" % [str(dimensions), physical_font])
+		check(quest._continue.size.y * scale >= 44.0,
+			"The resized Continue action keeps a full-size touch target")
+	var path: String = quest.save_path
+	quest.queue_free()
+	await process_frame
+	DirAccess.remove_absolute(path)
+	root.content_scale_mode = previous_mode
+	root.content_scale_aspect = previous_aspect
+	root.content_scale_size = previous_scale_size
+	root.size = previous_size
 
 
 func _run() -> void:
@@ -101,5 +143,6 @@ func _run() -> void:
 	quest.queue_free()
 	await process_frame
 	DirAccess.remove_absolute(path)
+	await check_continue_after_scale_changes()
 	print("Talk Quest compact layout: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

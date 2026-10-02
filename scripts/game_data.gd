@@ -318,23 +318,23 @@ func load_all() -> bool:
 	var downloaded: Variant = _read_json("res://assets/chests/downloaded/manifest.json")
 	if not error.is_empty():
 		return false
-	if not downloaded is Dictionary or downloaded.get("version") != 1 or not downloaded.get("styles") is Dictionary:
+	if not downloaded is Dictionary or downloaded.get("version") != 2 or not downloaded.get("styles") is Dictionary:
 		error = "The downloaded chest artwork manifest is missing or unsupported."
 		return false
 	for style_id in downloaded.styles:
 		var style: Variant = downloaded.styles[style_id]
-		if not style is Dictionary or not style.get("frames") is Array or style.frames.size() < 6:
-			error = "A downloaded chest opening sequence is incomplete."
+		if not style is Dictionary or not style.get("model") is String:
+			error = "An animated chest model is missing."
 			return false
-		for frame in style.frames:
-			if not frame is String or not frame.begins_with("assets/chests/downloaded/") or frame.contains("..") or frame.contains("\\"):
-				error = "A downloaded chest artwork path is invalid."
-				return false
-			if not ResourceLoader.exists("res://" + frame):
-				error = "Could not load downloaded chest artwork. Please rebuild the game."
-				return false
-		if not style.get("closed_bounds") is Array or style.closed_bounds.size() != 4 or not style.get("cavity") is Array or style.cavity.size() != 2:
-			error = "A downloaded chest has incomplete placement information."
+		var path: String = style.model
+		if not path.begins_with("assets/chests/models/") or not path.ends_with(".glb") or path.contains("..") or path.contains("\\"):
+			error = "An animated chest model path is invalid."
+			return false
+		if not ResourceLoader.exists("res://" + path):
+			error = "Could not load animated chest artwork. Please rebuild the game."
+			return false
+		if not style.get("closed_bounds_3d") is Dictionary or not style.get("motion_bounds_3d") is Dictionary or not style.get("cavity_3d") is Array or style.cavity_3d.size() != 3:
+			error = "An animated chest has incomplete placement information."
 			return false
 		value.styles[style_id] = style
 	var mapped_styles: Dictionary = {}

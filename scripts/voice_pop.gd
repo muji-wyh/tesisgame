@@ -106,7 +106,7 @@ var _hud: Control
 var _hud_fx: Node2D
 var _hits_caption: Label
 var _live_caption: Label
-var _gate: ScrollContainer
+var _gate: ResultScroll
 var _gate_body: VBoxContainer
 var _gate_title: Label
 var _gate_copy: Label
@@ -236,10 +236,11 @@ func _build() -> void:
 		item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_chest_badge.add_child(item)
 	_chest_overlay.hide()
-	_gate = ScrollContainer.new()
+	_gate = ResultScroll.new()
 	_gate.name = "MicrophoneGate"
+	_gate.interaction_allowed = func() -> bool: return not interaction_allowed.is_valid() or interaction_allowed.call()
 	_gate.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_gate.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_gate.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	add_child(_gate)
 	_gate_body = VBoxContainer.new()
 	_gate_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -262,6 +263,8 @@ func _build() -> void:
 	_gate_back.pressed.connect(_exit)
 	_gate_actions.add_child(retry_button)
 	_gate_actions.add_child(_gate_back)
+	for action: Button in [retry_button, _gate_back]:
+		action.focus_entered.connect(func() -> void: _ensure_scroll_control(_gate, _gate_body, action))
 	_gate_privacy = _label("Browser speech may process audio remotely. Game stores no voice or transcripts.", 11, SOFT)
 	_gate_privacy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_gate_body.add_child(_gate_privacy)
@@ -1738,6 +1741,8 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 
 
 func cancel_result_input() -> void:
+	if is_instance_valid(_gate):
+		_gate.cancel_drag()
 	if is_instance_valid(_results):
 		_results.cancel_drag()
 
@@ -1745,15 +1750,21 @@ func cancel_result_input() -> void:
 func _ensure_result_control(control: Control) -> void:
 	if _results.is_pointer_active():
 		return
+	_ensure_scroll_control(_results, _result_body, control)
+
+
+func _ensure_scroll_control(scroll: ResultScroll, body: Control, control: Control) -> void:
+	if scroll.is_pointer_active():
+		return
 	# Godot's built-in focus scrolling checks scrollbar visibility. Our scrollbars
 	# are intentionally hidden, so reveal focused actions using container bounds.
 	# Work in content coordinates so repeated focus notifications before the
 	# next layout pass request the same offset instead of scrolling twice.
-	var content_rect: Rect2 = _result_body.get_global_transform().affine_inverse() * control.get_global_rect()
-	if content_rect.position.y < _results.scroll_vertical:
-		_results.scroll_vertical = floori(content_rect.position.y)
-	elif content_rect.end.y > _results.scroll_vertical + _results.size.y:
-		_results.scroll_vertical = ceili(content_rect.end.y - _results.size.y)
+	var content_rect: Rect2 = body.get_global_transform().affine_inverse() * control.get_global_rect()
+	if content_rect.position.y < scroll.scroll_vertical:
+		scroll.scroll_vertical = floori(content_rect.position.y)
+	elif content_rect.end.y > scroll.scroll_vertical + scroll.size.y:
+		scroll.scroll_vertical = ceili(content_rect.end.y - scroll.size.y)
 
 
 func _replay() -> void:

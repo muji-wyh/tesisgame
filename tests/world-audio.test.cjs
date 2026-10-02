@@ -155,6 +155,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
+    ...['launch', 'impact', 'defeat'].map(id => `assets/audio/quest/${id}.wav`),
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']

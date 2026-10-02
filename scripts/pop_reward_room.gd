@@ -590,10 +590,13 @@ func snapshot() -> Dictionary:
 	for card in _cards:
 		opened += int(card.opened)
 		var rect: Rect2 = card.button.get_global_rect()
+		var art_rect: Rect2 = card.art.get_global_rect()
 		entries.append({"theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
 			"disabled": card.button.disabled, "control": str(card.button.name),
+			"art_rect": {"x": art_rect.position.x, "y": art_rect.position.y,
+				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})
 	return {"round_id": _configured_id, "chest_count": _cards.size(), "opened_count": opened,
 		"chests": entries, "active": _active, "holding": _holding, "opening": _opening,

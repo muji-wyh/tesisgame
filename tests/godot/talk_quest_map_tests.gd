@@ -23,13 +23,78 @@ func settle() -> void:
 		await process_frame
 
 
+func contains_monster_resource(value: Variant) -> bool:
+	if value is Resource:
+		var path: String = value.resource_path.to_lower()
+		return path.contains("/monsters/") or path.ends_with("/talk_quest_monster.gd")
+	if value is Array:
+		for item in value:
+			if contains_monster_resource(item):
+				return true
+	if value is Dictionary:
+		for item in value.values():
+			if contains_monster_resource(item):
+				return true
+	return false
+
+
 func contains_portrait_or_scroll(node: Node) -> bool:
-	if node is TextureRect or node is SubViewport or node is Sprite2D or node is ScrollContainer or node is ScrollBar:
+	if node is ScrollContainer or node is ScrollBar:
 		return true
+	# Sourced landscape and landmark textures are valid map artwork. Inspect
+	# actual resources instead of treating every image node as a creature portrait.
+	for property: Dictionary in node.get_property_list():
+		if int(property.type) in [TYPE_OBJECT, TYPE_ARRAY, TYPE_DICTIONARY] and contains_monster_resource(node.get(str(property.name))):
+			return true
 	for child in node.get_children():
 		if contains_portrait_or_scroll(child):
 			return true
 	return false
+
+
+func check_source_texture(path: String, label: String) -> void:
+	check(not path.is_empty() and ResourceLoader.exists(path, "Texture2D"), label + " has an imported source texture")
+	if path.is_empty() or not ResourceLoader.exists(path, "Texture2D"):
+		return
+	var texture: Texture2D = load(path)
+	check(texture != null and texture.get_width() > 0 and texture.get_height() > 0,
+		label + " resolves to usable artwork instead of an empty image")
+	check(not contains_monster_resource(texture), label + " depicts a place instead of a monster portrait")
+
+
+func check_sourced_art(atlas) -> void:
+	var seen_landmarks: int = 0
+	var manifest_path: String = ""
+	for chapter in range(3):
+		atlas.set_chapter(chapter)
+		var art: Dictionary = atlas.art_snapshot()
+		check_source_texture(str(art.get("background", "")), "Chapter %d background" % (chapter + 1))
+		var paths: Array = art.get("landmarks", [])
+		check(paths.size() == atlas.visible_level_buttons().size(),
+			"Each visible destination has its own sourced landmark assignment")
+		for index in range(paths.size()):
+			check_source_texture(str(paths[index]), "Chapter %d landmark %d" % [chapter + 1, index + 1])
+			seen_landmarks += 1
+		manifest_path = str(art.get("source_manifest", ""))
+	check(seen_landmarks == 14, "All fourteen destinations have sourced artwork")
+	check(not manifest_path.is_empty() and FileAccess.file_exists(manifest_path),
+		"The integrated map retains a source and license manifest")
+	if not manifest_path.is_empty() and FileAccess.file_exists(manifest_path):
+		var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+		check(manifest is Dictionary,
+			"The source and license manifest is readable structured data")
+		if manifest is Dictionary:
+			var interface_art: Dictionary = manifest.get("ui", {})
+			check(not interface_art.is_empty(), "The map retains sourced interface artwork")
+			for role in interface_art:
+				check_source_texture(str(interface_art[role]), "Map interface " + str(role))
+			var sources: Array = manifest.get("sources", [])
+			check(not sources.is_empty(), "The map identifies the original asset sources")
+			for source: Dictionary in sources:
+				for field in ["title", "creator", "url", "license", "licenseUrl", "acquisitionStatus", "animations"]:
+					check(not str(source.get(field, "")).is_empty(),
+						"Source %s records %s" % [str(source.get("id", "unknown")), field])
+	atlas.set_chapter(0)
 
 
 func _run() -> void:
@@ -42,6 +107,7 @@ func _run() -> void:
 	atlas.level_selected.connect(func(number: int) -> void: _selected = number)
 	check(atlas.level_buttons.size() == 14, "All fourteen adventures retain accessible Button controls")
 	check(not contains_portrait_or_scroll(atlas), "The atlas uses place landmarks without creature portraits or scrolling controls")
+	check_sourced_art(atlas)
 	for index in range(14):
 		atlas.set_level_state(index + 1, index < 3, index == 0)
 		var button: Button = atlas.level_buttons[index]
@@ -52,6 +118,7 @@ func _run() -> void:
 	atlas.level_buttons[1].pressed.emit()
 	check(_selected == 2, "Selecting a landmark emits its actual level number")
 	for layout: Dictionary in [
+		{"size": Vector2(296, 308), "scale": 1.0},
 		{"size": Vector2(320, 420), "scale": 1.0},
 		{"size": Vector2(390, 340), "scale": 1.0},
 		{"size": Vector2(844, 225), "scale": 1.0},
@@ -83,6 +150,8 @@ func _run() -> void:
 					and caption.position.y >= 0 and caption.get_rect().end.y <= button.size.y + 1,
 					"Scene captions fit fully inside their responsive landmarks")
 				check(caption.get_theme_font_size("font_size") * float(layout.scale) >= 12, "Responsive captions retain readable type size")
+				check(caption.get_visible_line_count() >= caption.get_line_count(),
+					"The complete scene title remains visible at %s (level %d)" % [str(layout.size), button.number])
 				if button.compact:
 					check(Rect2(Vector2.ZERO, button.size).encloses(button.compact_badge_rect()), "Compact number circles and completion stars paint entirely inside the level target")
 					check(not caption.get_rect().intersects(button.compact_badge_rect()), "Compact captions never overlap the level number")

@@ -60,12 +60,26 @@ const patches = [
   {
     name: "release the registered audio context when the engine closes",
     before: `close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;if(!ctx){resolve();return}`,
-    after: `close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;window.wordBuddiesHost?.attachAudioContext?.(null);if(!ctx){resolve();return}`
+    after: `close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;GodotAudio.audioPositionWorkletReadyContext=null;window.wordBuddiesHost?.attachAudioContext?.(null);if(!ctx){resolve();return}`
   },
   {
     name: "allow later audio gesture recovery after a rejected resume",
     before: `function _godot_audio_resume(){if(GodotAudio.ctx&&GodotAudio.ctx.state!=="running"){GodotAudio.ctx.resume()}}`,
     after: `function _godot_audio_resume(){const ctx=GodotAudio.ctx;if(ctx&&ctx.state!=="running"&&ctx.state!=="closed"){try{Promise.resolve(ctx.resume()).catch(()=>{})}catch(e){}}}`
+  },
+  {
+    name: "remember successful position-worklet preparation for the current audio context",
+    // Observe readiness without replacing the original promise: failed sample
+    // starts must retain their rejection, with no detached rejected promise.
+    before: `GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path);`,
+    after: `GodotAudio.audioPositionWorkletReadyContext=null;const positionWorkletPromise=ctx.audioWorklet.addModule(path);GodotAudio.audioPositionWorkletPromise=positionWorkletPromise;positionWorkletPromise.then(()=>{if(GodotAudio.ctx===ctx&&GodotAudio.audioPositionWorkletPromise===positionWorkletPromise){GodotAudio.audioPositionWorkletReadyContext=ctx}},()=>{});`
+  },
+  {
+    name: "start prepared WebAudio samples before subsequent game-frame work",
+    // Awaiting an already resolved promise still postpones source.start until
+    // after the current callback. The hot path must stay in the hit callback.
+    before: `async connectPositionWorklet(start){await GodotAudio.audioPositionWorkletPromise;if(this.isCanceled){return}this._source.connect(this.getPositionWorklet());if(start){this.start()}}`,
+    after: `async connectPositionWorklet(start){const ctx=GodotAudio.ctx;if(!ctx||this.isCanceled){return}if(GodotAudio.audioPositionWorkletReadyContext!==ctx){await GodotAudio.audioPositionWorkletPromise}if(this.isCanceled||GodotAudio.ctx!==ctx){return}this._source.connect(this.getPositionWorklet());if(start){this.start()}}`
   },
   {
     name: "preserve playback pitch when a WebAudio sample restarts",
