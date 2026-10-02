@@ -5,6 +5,7 @@ const { enterGame, openGame, openRewards, metrics, tap, rendered, ageControl, co
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const NAMES = { all: 'All words', '4-6': 'Ages 4-6', '7-9': 'Ages 7-9', '10-plus': 'Ages 10+' };
+const COUNTS = { all: 350, '4-6': 148, '7-9': 260, '10-plus': 350 };
 const vocabulary = new Map(words.map(word => [word.id, word]));
 
 async function saved(page) {
@@ -22,10 +23,20 @@ async function age(page, id, input = 'touch') {
   await rendered(page);
 }
 
-async function closeMore(page) {
+async function backFromMore(page) {
   const rect = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
+}
+
+async function expectCatalog(page, id) {
+  await expect(page.locator('#game-status')).toContainText(`${NAMES[id]}. ${COUNTS[id]} words.`);
+  await expect(page.locator('#game-status')).toContainText("Back returns to Pip's room.");
+}
+
+async function returnToRoom(page) {
+  await backFromMore(page);
+  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
 }
 
 async function matchCards(page) {
@@ -54,7 +65,7 @@ async function memoryWords(page) {
   return result;
 }
 
-test('age choices preserve the current lesson in Match and Memory and apply after reload', async ({ page }, testInfo) => {
+test('all age catalogues preserve the current lesson in Match and Memory and apply after reload', async ({ page }, testInfo) => {
   test.setTimeout(150000);
   const errors = await openGame(page, { mode: 'match' });
   const before = await matchCards(page);
@@ -67,12 +78,18 @@ test('age choices preserve the current lesson in Match and Memory and apply afte
   const originalSave = await saved(page);
   for (const id of ['4-6', '7-9', '10-plus', 'all', '4-6']) {
     await age(page, id);
-    await expect(page.locator('#game-status')).toContainText(`Next lesson: ${NAMES[id]}`);
+    await expectCatalog(page, id);
     expect(await saved(page)).toBe(originalSave.replace(/^age_band="all"$/m, `age_band="${id}"`));
     expect(await page.locator('#selection-status').textContent()).toBe(selection);
+    await returnToRoom(page);
   }
-  await page.screenshot({ path: testInfo.outputPath('age-choices.png'), scale: 'css' });
-  await closeMore(page);
+  const confirmed = await saved(page);
+  await age(page, '4-6');
+  await expectCatalog(page, '4-6');
+  expect(await saved(page)).toBe(confirmed);
+  await page.screenshot({ path: testInfo.outputPath('age-word-catalogue.png'), scale: 'css' });
+  await returnToRoom(page);
+  await backFromMore(page);
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   await tap(page, first.x, first.y);
   expect(await matchCards(page)).toEqual(before);
@@ -96,8 +113,9 @@ test('age saving retries in place with mouse, touch and keyboard at compact widt
   const errors = await openGame(page, { mode: 'match' });
   await openRewards(page);
   await age(page, '7-9');
-  await expect(page.locator('#game-status')).toContainText('Next lesson: Ages 7-9');
+  await expectCatalog(page, '7-9');
   const confirmed = await saved(page);
+  await returnToRoom(page);
   await page.evaluate(() => {
     const save = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key, value) {
@@ -115,13 +133,16 @@ test('age saving retries in place with mouse, touch and keyboard at compact widt
     await page.evaluate(() => window.restoreAgeSaving());
   }
   await age(page, '10-plus', 'mouse');
-  await expect(page.locator('#game-status')).toContainText('Next lesson: Ages 10+');
+  await expectCatalog(page, '10-plus');
   expect(await saved(page)).toContain('age_band="10-plus"');
+  await returnToRoom(page);
   await age(page, 'all', 'mouse');
+  await expectCatalog(page, 'all');
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Next lesson: Ages 4-6');
+  await expectCatalog(page, '4-6');
   expect(await saved(page)).toContain('age_band="4-6"');
+  await returnToRoom(page);
   await page.setViewportSize({ width: 320, height: 568 });
   await rendered(page);
   for (const id of Object.keys(NAMES)) {
@@ -130,8 +151,10 @@ test('age saving retries in place with mouse, touch and keyboard at compact widt
     expect(rect.height * bounds.scale).toBeGreaterThanOrEqual(48);
     expect((rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(320);
     await age(page, id);
-    await expect(page.locator('#game-status')).toContainText(`Next lesson: ${NAMES[id]}`);
+    await expectCatalog(page, id);
     expect(await saved(page)).toContain(`age_band="${id}"`);
+    if (id === '10-plus') await page.screenshot({ path: testInfo.outputPath('age-catalogue-320.png'), scale: 'css' });
+    await returnToRoom(page);
   }
   await page.screenshot({ path: testInfo.outputPath('age-choices-320.png'), scale: 'css' });
   expect(errors).toEqual([]);
@@ -148,8 +171,9 @@ test('a new gift lesson uses advanced vocabulary across Match and Memory', async
   const errors = await openGame(page, { mode: 'match' });
   await openRewards(page);
   await age(page, '10-plus');
-  await expect(page.locator('#game-status')).toContainText('Next lesson: Ages 10+');
+  await expectCatalog(page, '10-plus');
   expect(await saved(page)).toContain('age_band="10-plus"');
+  await returnToRoom(page);
   await roomControl(page, 'winter');
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Winter bell.');

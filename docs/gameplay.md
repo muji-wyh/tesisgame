@@ -400,8 +400,14 @@ The choice is saved on this device and applies to the **next lesson**. Switching
 Match and Memory keeps the current five words and their active level. Changing
 the age never resets a round, its hints, medal pieces, or toys. An unsuccessful save
 keeps the confirmed selection and offers a visible tap-to-retry message.
+Tapping any age, including the selected age, opens its complete illustrated
+vocabulary across every topic in alphabetical order. The heading shows the word
+count. Tap a picture to hear its recorded pronunciation; swipe vertically or use
+the mouse wheel to browse without a scrollbar. Keyboard and controller focus
+reveal offscreen cards. The age choices remain at the top for switching lists.
+Back returns to Pip's room, and Back again returns to the unchanged game.
 The age row stays at the top even on short screens. Horizontal scrolling keeps
-all four choices reachable without moving the playground or bottom strips.
+all four choices reachable.
 
 The winning chest follows the selected theme and can be dragged inside its panel.
 A short press compresses the lock or body immediately and releases with a 120 ms

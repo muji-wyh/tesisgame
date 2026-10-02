@@ -19,6 +19,7 @@ const VoicePop = preload("res://scripts/voice_pop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const TalkQuest = preload("res://scripts/talk_quest.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
+const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const LeaderboardState = preload("res://scripts/leaderboard_state.gd")
@@ -148,6 +149,7 @@ var _age_label: Label
 var _age_buttons: Dictionary = {}
 var _age_notice: Label
 var _age_save_failed: bool = false
+var _age_catalog: AgeWordCatalog
 var _collection_title: Label
 var _collection_header: HBoxContainer
 var _collection_column: VBoxContainer
@@ -720,7 +722,7 @@ func _build_collection_shell() -> void:
 	_collection_back.symbol = Icons.Symbol.BACK
 	_collection_back.tooltip_text = "Back to game"
 	_set_accessibility_name(_collection_back, "Back to game")
-	_collection_back.pressed.connect(_hide_collection)
+	_collection_back.pressed.connect(_back_from_collection)
 	header.add_child(_collection_back)
 	_leaderboard_menu = HBoxContainer.new()
 	_leaderboard_menu.name = "PlayerMenu"
@@ -748,6 +750,12 @@ func _build_collection_shell() -> void:
 	_collection_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_collection_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_collection_scroll.add_child(_collection_grid)
+	_age_catalog = AgeWordCatalog.new()
+	_age_catalog.name = "AgeWordCatalog"
+	_age_catalog.interaction_allowed = _can_browse_collection
+	_age_catalog.hear_requested.connect(_hear_catalog_word)
+	column.add_child(_age_catalog)
+	_age_catalog.hide()
 	collection_page.hide()
 
 
@@ -1017,7 +1025,7 @@ func _build_age_choices() -> void:
 	_collection_header.add_child(_age_choices)
 	_age_scroll = ReviewScroll.new()
 	_age_scroll.name = "AgeScroll"
-	_age_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
+	_age_scroll.interaction_allowed = _can_browse_collection
 	_age_choices.add_child(_age_scroll)
 	_age_row = HBoxContainer.new()
 	_age_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -1031,8 +1039,8 @@ func _build_age_choices() -> void:
 		button.name = "Age_" + band.id.replace("-", "_")
 		button.text = band.label
 		button.toggle_mode = true
-		button.tooltip_text = band.name + ". Suggested vocabulary for your next lesson."
-		_set_accessibility_name(button, band.name)
+		button.tooltip_text = band.name + ": view words"
+		_set_accessibility_name(button, band.name + ". View all words and choose vocabulary for your next lesson.")
 		button.pressed.connect(_choose_age_band.bind(band.id))
 		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		_age_row.add_child(button)
@@ -1046,12 +1054,84 @@ func _build_age_choices() -> void:
 
 
 func _choose_age_band(id: String) -> void:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_browse_collection() or _collection_dragged or Data.age_band(id).is_empty():
 		_refresh_age_choices()
 		return
 	_age_save_failed = not _ensure_playroom_loaded() or not playroom_state.set_age_band(id)
 	_refresh_age_choices()
-	_announce_status(_age_notice.text if _age_save_failed else "Next lesson: " + Data.age_band(playroom_state.age_band_id).name)
+	if _age_save_failed:
+		_announce_status(_age_notice.text)
+		return
+	_show_age_catalog()
+
+
+func _can_browse_collection() -> bool:
+	return collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden \
+		and not _speech_debug_active and not _collection_multi_touch
+
+
+func _can_use_room() -> bool:
+	return _can_browse_collection() and not _age_catalog.visible and not _collection_dragged
+
+
+func _show_age_catalog() -> void:
+	if not _can_browse_collection():
+		return
+	audio.stop_voice()
+	audio.stop_pip_reaction()
+	_cancel_collection_rails()
+	_room.settle()
+	duck.settle()
+	var band: Dictionary = Data.age_band(playroom_state.age_band_id)
+	var words: Array = data.words.filter(func(word: Dictionary) -> bool:
+		return Data.word_level(word) <= int(band.max_level))
+	_age_buttons[band.id].grab_focus()
+	_age_catalog.configure(words, band, Data.theme(model.theme_id))
+	_age_catalog.show()
+	_sync_collection_content()
+	_update_duck()
+	_announce_collection_state()
+
+
+func _hide_age_catalog() -> void:
+	audio.stop_voice()
+	_age_catalog.cancel_input()
+	_age_catalog.hide()
+	_sync_collection_content()
+	_update_duck()
+
+
+func _sync_collection_content() -> void:
+	var browsing: bool = _age_catalog.visible
+	_collection_title.visible = not browsing
+	_collection_scroll.visible = not browsing
+	_leaderboard_menu.visible = not browsing
+	if is_instance_valid(_world_choices):
+		_world_choices.visible = not browsing
+	if is_instance_valid(_room):
+		_room.toy_shelf.visible = not browsing
+		_room.playground.pause(browsing or _page_hidden)
+	_collection_back.tooltip_text = "Back to Pip's room" if browsing else "Back to game"
+	_set_accessibility_name(_collection_back, _collection_back.tooltip_text)
+
+
+func _hear_catalog_word(word: Dictionary) -> void:
+	if not _can_browse_collection() or not _age_catalog.visible or _age_catalog.scroll.is_pointer_active():
+		return
+	audio.interact(model.theme_id, model.phase != "lost")
+	audio.say("res://" + str(word.audio))
+	_announce_status(str(word.text))
+
+
+func _back_from_collection() -> void:
+	if not _can_browse_collection():
+		return
+	if _age_catalog.visible:
+		_hide_age_catalog()
+		_age_buttons[playroom_state.age_band_id].grab_focus()
+		_announce_collection_state()
+	else:
+		_hide_collection()
 
 
 func _refresh_age_choices() -> void:
@@ -1096,7 +1176,7 @@ func _build_world_choices() -> void:
 	_collection_column.add_child(_world_choices)
 	_world_scroll = ReviewScroll.new()
 	_world_scroll.name = "WorldScroll"
-	_world_scroll.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
+	_world_scroll.interaction_allowed = _can_use_room
 	_world_choices.add_child(_world_scroll)
 	var worlds := HBoxContainer.new()
 	_world_grid = worlds
@@ -1128,7 +1208,7 @@ func _build_world_choices() -> void:
 
 
 func _choose_world(id: String) -> void:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_use_room():
 		return
 	if model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
@@ -1140,12 +1220,12 @@ func _build_playroom() -> void:
 	_room = PlayroomView.new()
 	_room.name = "PipsRoom"
 	_room.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_room.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_dragged
+	_room.interaction_allowed = _can_use_room
 	_collection_grid.add_child(_room)
 	_room.configure(playroom_state, medal_progress.counts, Data.theme(model.theme_id), reduced_motion)
 	_room.playground.pip_audio_busy = audio.is_pip_busy
 	_room.toy_shelf.reparent(_collection_column)
-	_room.toy_shelf.interaction_allowed = func() -> bool: return collection_page.visible and not _leaderboard_overlay.visible and not _collection_multi_touch
+	_room.toy_shelf.interaction_allowed = _can_use_room
 	_collection_duck_slot = _room.duck_slot
 	_playroom_medal = _room.favorite_medal
 	_room.item_selected.connect(_select_room_item)
@@ -1165,7 +1245,7 @@ func _build_playroom() -> void:
 
 
 func _room_previewed(message: String) -> void:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_use_room():
 		return
 	audio.stop_voice()
 	_end_collection_drag()
@@ -1173,7 +1253,7 @@ func _room_previewed(message: String) -> void:
 
 
 func _select_room_item(id: String) -> bool:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_use_room():
 		return false
 	if playroom_state.item(id).get("slot", "") != "toy":
 		return false
@@ -1200,7 +1280,7 @@ func _ensure_playroom_loaded() -> bool:
 
 
 func _room_word(id: String) -> void:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_use_room():
 		return
 	for word in data.words:
 		if word.id == id:
@@ -1210,7 +1290,7 @@ func _room_word(id: String) -> void:
 
 
 func _room_toy(kind: String) -> void:
-	if not collection_page.visible or _collection_dragged:
+	if not _can_use_room():
 		return
 	if kind == "offer":
 		duck.react("happy")
@@ -1220,6 +1300,8 @@ func _room_toy(kind: String) -> void:
 
 
 func _room_pip_interaction(kind: String, message: String) -> void:
+	if not _can_use_room():
+		return
 	if kind in ["poke", "pet", "catch", "fetch"]:
 		audio.interact(model.theme_id, model.phase != "lost")
 		if kind in ["poke", "pet"]:
@@ -1288,6 +1370,7 @@ func _refresh_collection() -> void:
 		if not _playroom_ready:
 			_room.feedback_text = "Room choices could not load. Tap an owned item to retry."
 			_room.show_item_error(playroom_state.toy_id, "Could not load\nTap to retry", _room.feedback_text)
+	_sync_collection_content()
 	_layout_collection()
 
 
@@ -1403,6 +1486,8 @@ func _collection_rails() -> Array[ReviewScroll]:
 func _cancel_collection_rails() -> void:
 	for rail in _collection_rails():
 		rail.cancel_drag()
+	if is_instance_valid(_age_catalog):
+		_age_catalog.cancel_input()
 
 
 func _picture(parent: Node) -> TextureRect:
@@ -2775,7 +2860,7 @@ func on_page_visible() -> void:
 	chest.set_idle_paused(false)
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
-	_room.playground.pause(false)
+	_room.playground.pause(_age_catalog.visible)
 	feedback_timer.paused = collection_page.visible
 	_memory.pause(collection_page.visible)
 	if resume_music:
@@ -2991,7 +3076,7 @@ func _controller_back() -> void:
 		_controller_accept_needs_release = _controller_accept_is_pressed()
 		return
 	if collection_page.visible:
-		_hide_collection()
+		_back_from_collection()
 	elif _voice_mode:
 		_stop_voice()
 	elif _mode_id == "pop":
@@ -3018,7 +3103,7 @@ func _toggle_collection() -> void:
 		_back_from_leaderboard()
 		return
 	if collection_page.visible:
-		_hide_collection()
+		_back_from_collection()
 	else:
 		_show_collection()
 
@@ -3351,6 +3436,7 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_pop.cancel_result_input()
 	_memory.end_peek()
 	_room.playground.cancel()
+	_cancel_collection_rails()
 	_end_collection_drag()
 
 
@@ -3791,6 +3877,7 @@ func _show_collection() -> void:
 
 
 func _hide_collection() -> void:
+	_hide_age_catalog()
 	audio.stop_voice()
 	audio.stop_pip_reaction()
 	duck.settle()
@@ -3822,7 +3909,14 @@ func _hide_collection() -> void:
 
 
 func _announce_collection_state() -> void:
-	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap any toy on the floor to play, or drag it to toss to Pip. Swipe the age choices at the top or the worlds and toys at the bottom. Use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
+	if _age_catalog.visible:
+		var message: String = "%s. %d words. Tap a picture to hear its word. Back returns to Pip's room." % [
+			_age_catalog.title_label.text, _age_catalog.word_buttons.size()]
+		if _age_save_failed:
+			message += " " + _age_notice.text
+		_announce_status(message)
+		return
+	var message: String = "Pip's room opened. %d toys in Pip's home. %d toys to unlock below. Tap an age to see all its words. Tap any toy on the floor to play, or drag it to toss to Pip. Swipe the age choices at the top or the worlds and toys at the bottom. Use Back to return." % [_room.owned_toys.get_child_count(), _room._item_grid.get_child_count()]
 	message += " Choose Players to add an emoji and name, or Leaderboards to view personal bests on this device."
 	if _journey_save_failed:
 		message += " Changes not saved. Choose a theme again to retry."

@@ -34,7 +34,7 @@ const groups = {
       'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
     ]
   },
-  ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests'] },
+  ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests', 'age_word_catalog_tests'] },
   cards: { godot: ['card_polish_tests'] },
   'match-groups': { godot: ['match_groups_tests'] },
   'hint-link': { godot: ['hint_link_tests'] },
