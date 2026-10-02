@@ -1,12 +1,17 @@
 # Talk Quest monster models
 
-The fourteen models in `assets/talk_quest/monsters` are complete rigged 3D
+The original fourteen models in `assets/talk_quest/monsters` are complete rigged 3D
 characters from [Low Poly Monsters Pack, product 380750](https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750).
 They are licensed under the **Standard Unity Asset Store EULA** for use in the
 game. The GLBs, source-preview PNGs, and their Godot import sidecars are private
 local build inputs excluded from Git. They ship inside the compiled game pack.
 The public repository includes the manifests and conversion tools, without
 redistributing the reusable source characters.
+
+The active campaign uses eleven of these original characters and three
+[acquired giants](talk-quest-giants.md) at levels 1, 12 and 14. The original
+catalog remains available for compatibility. That source record also documents
+the supplemental giant manifest and animation provenance.
 
 Each GLB contains the original selected mesh, its source armature, exact embedded
 FBX diffuse colors, and a measured moving source `Idle` clip. Eight characters
@@ -51,9 +56,14 @@ The total GLB payload is about 3.38 MiB. Each model has 17–65 bones, 2,280–8
 source triangles, and at most two exported animations. The standard glTF
 exporter keeps the four strongest normalized skin weights per vertex for Web
 Compatibility performance. Source topology is retained; glTF splits vertices at
-normal/material boundaries. Texture-free materials use source linear diffuse
-values with neutral roughness 0.72 and metallic 0.0. The game's cooperative
-repair emission is a separate temporary visual effect.
+normal/material boundaries. The exported GLB baseline uses texture-free
+materials with source linear diffuse values, roughness 0.72, and metallic 0.0.
+At runtime, creature-specific surface profiles adjust roughness and specular
+response and add shared 64 by 64 procedural color and normal grain. Eye whites
+and pupils retain restrained highlights. Anatomy-specific skeletal gestures
+and weight-dependent reactions are runtime additions, not newly exported source
+animations. The game's cooperative repair emission is a separate temporary
+visual effect.
 
 ## Provenance and reproducibility
 

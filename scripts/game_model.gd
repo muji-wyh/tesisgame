@@ -155,7 +155,8 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 func _distinct_words(words: Array) -> Array:
 	var distinct: Array = []
 	for word in words:
-		if not distinct.any(func(other: Dictionary) -> bool: return Data.confusable_words(word.id, other.id)):
+		if not distinct.any(func(other: Dictionary) -> bool:
+			return Data.confusable_words(word.id, other.id) or SpeechWords.compounds_conflict(word.text, other.text)):
 			distinct.append(word)
 	return distinct
 
@@ -183,7 +184,11 @@ func spoken_matches(transcript: String) -> Array[String]:
 	var matches: Array[String] = []
 	if phase in ["won", "lost"]:
 		return matches
-	for token in SpeechWords.tokens(transcript):
+	var accepted_forms: Array[String] = []
+	for card in cards:
+		if card.kind == "word" and not _spoken_pair(card.word.id).is_empty():
+			accepted_forms.append_array(SpeechWords.forms(card.word.text))
+	for token in SpeechWords.tokens(transcript, accepted_forms):
 		var candidate: String = ""
 		for card in cards:
 			if card.kind != "word" or _spoken_pair(card.word.id).is_empty():

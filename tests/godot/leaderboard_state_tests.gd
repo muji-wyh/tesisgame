@@ -40,6 +40,10 @@ func _run() -> void:
 	_root = "user://leaderboard_state_tests_%d_%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_absolute(_root) == OK, "Create isolated state fixture directory")
 	_test_profiles()
+	_test_profile_updates()
+	_test_profile_removal()
+	_test_profile_mutation_failures()
+	_test_profile_mutation_refresh()
 	_test_browser_fixture()
 	_test_pop_ranking()
 	_test_other_modes()
@@ -110,6 +114,136 @@ func _test_profiles() -> void:
 		var id := State.make_round_id()
 		check(not ids.has(id), "Rapid round IDs stay unique")
 		ids[id] = true
+
+
+func _test_profile_updates() -> void:
+	var fixture := _browser()
+	var state = fixture.state
+	var a := _profile(state, "Avery", "fox")
+	var b := _profile(state, "Blake", "cat")
+	_submit(state, a, "pop", {"hits": 5}, "edit-pop-a")
+	_submit(state, b, "pop", {"hits": 5}, "edit-pop-b")
+	_submit(state, a, "match", {"won": true, "mistakes": 1, "hints_used": 2}, "edit-match-a")
+	_submit(state, a, "memory", {"won": true, "attempts": 6, "peeks": 1}, "edit-memory-a")
+	var edited: Dictionary = state.update_profile(a, "  Zoë  ", "panda")
+	check(edited.ok and edited.error.is_empty() and edited.profile == {"id": a, "name": "Zoë", "avatar": "panda"}, "Editing trims the name while retaining the stable player ID")
+	check(state.profiles[0].id == a and state.profiles[1].id == b, "Editing retains profile creation order")
+	check(state.board("pop")[0].player_id == a and state.board("pop")[0].rank == 1 and state.board("pop")[1].rank == 1, "Editing retains tied leaderboard ranks and display order")
+	for mode in State.MODES:
+		var row: Dictionary = state.board(mode)[0]
+		check(row.name == "Zoë" and row.avatar == "panda", "Edited identity appears on the %s board" % mode)
+		check(state.round_submission("edit-%s-a" % mode).player_id == a, "Editing preserves %s round receipts" % mode)
+	check(state.board("pop")[0].metric == 5 and state.board("match")[0].result == {"won": true, "mistakes": 1, "hints_used": 2} and state.board("memory")[0].result == {"won": true, "attempts": 6, "peeks": 1}, "Editing preserves all personal best results")
+	edited.profile.name = "External change"
+	check(state.profiles[0].name == "Zoë", "Returned edited profiles cannot mutate the saved identity")
+	var reloaded := State.new("user://unused-leaderboard-test.cfg", fixture.storage)
+	check(reloaded.load_state() and reloaded.profiles == state.profiles and reloaded.board("memory") == state.board("memory"), "Edited profiles and scores survive browser reload")
+	check(reloaded.submit_round("edit-pop-a", "pop", a, {"hits": 99}).duplicate, "Editing retains round idempotency after reload")
+	for index in range(8):
+		_profile(state, "Player %d" % index, State.AVATARS[index])
+	check(state.update_profile(a, "Avery", "rocket").ok and state.profiles.size() == State.MAX_PROFILES, "Editing is allowed when all ten player slots are occupied")
+	var saved: String = fixture.storage.text
+	var writes: int = fixture.storage.writes
+	for invalid in ["", "   ", "A".repeat(21), "New\nName", "\tAvery", "New" + String.chr(127) + "Name", "New" + String.chr(0x202e) + "Name"]:
+		var rejected: Dictionary = state.update_profile(a, invalid, "duck")
+		check(not rejected.ok and rejected.profile.is_empty() and not rejected.error.is_empty(), "Invalid edited names return a consistent visible failure")
+	check(not state.update_profile(a, "Avery", "unknown").ok, "Editing rejects unavailable avatars")
+	for invalid in ["", " player-a ", "A".repeat(129), "bad\nplayer", "unknown"]:
+		check(not state.update_profile(invalid, "Avery", "duck").ok, "Editing rejects invalid or missing player IDs")
+		check(not state.remove_profile(invalid).ok, "Removing rejects invalid or missing player IDs")
+	check(fixture.storage.text == saved and fixture.storage.writes == writes and state.profiles[0].name == "Avery", "Rejected profile mutations never write storage or alter identity")
+	var unloaded := State.new("user://unused-leaderboard-test.cfg", fixture.storage)
+	check(not unloaded.update_profile(a, "Edited", "duck").ok and not unloaded.remove_profile(a).ok, "Profile mutations require successfully loaded storage")
+
+
+func _test_profile_removal() -> void:
+	var fixture := _browser()
+	var state = fixture.state
+	var a := _profile(state, "Avery", "fox")
+	var b := _profile(state, "Blake", "cat")
+	var c := _profile(state, "Casey", "frog")
+	for id in [a, b, c]:
+		_submit(state, id, "pop", {"hits": 4}, "remove-pop-" + id)
+		_submit(state, id, "match", {"won": true, "mistakes": 0, "hints_used": 1}, "remove-match-" + id)
+		_submit(state, id, "memory", {"won": true, "attempts": 7, "peeks": 0}, "remove-memory-" + id)
+	var removed: Dictionary = state.remove_profile(b)
+	check(removed.ok and removed.error.is_empty() and removed.profile == {"id": b, "name": "Blake", "avatar": "cat"}, "Removing returns the identity of the deleted player")
+	check(state.profiles.map(func(profile: Dictionary) -> String: return profile.id) == [a, c], "Removing a middle profile preserves the remaining player order")
+	for mode in State.MODES:
+		var rows: Array = state.board(mode)
+		check(rows.map(func(row: Dictionary) -> String: return row.player_id) == [a, c] and rows[0].rank == 1 and rows[1].rank == 1, "Removing purges only the target from the %s board" % mode)
+		check(state.round_submission("remove-%s-%s" % [mode, b]).is_empty(), "Removing purges the target's %s receipts" % mode)
+		check(state.round_submission("remove-%s-%s" % [mode, a]).player_id == a and state.round_submission("remove-%s-%s" % [mode, c]).player_id == c, "Removing preserves other players' %s receipts" % mode)
+	var reloaded := State.new("user://unused-leaderboard-test.cfg", fixture.storage)
+	check(reloaded.load_state() and reloaded.profiles == state.profiles and reloaded.board("match") == state.board("match"), "Deletion survives reload without orphaned results or receipts")
+	var writes: int = fixture.storage.writes
+	check(not state.remove_profile(b).ok and fixture.storage.writes == writes, "Repeated deletion reports the missing player without writing again")
+	check(not state.submit_round("removed-player-round", "pop", b, {"hits": 8}).ok, "Removed players cannot receive new scores")
+	check(state.remove_profile(a).ok and state.remove_profile(c).ok and state.profiles.is_empty(), "The final player can be removed")
+	check(reloaded.load_state() and reloaded.profiles.is_empty(), "An empty player list persists after removing everyone")
+	for mode in State.MODES:
+		check(reloaded.board(mode).is_empty(), "Removing everyone clears the %s leaderboard" % mode)
+	var replacement := _profile(state, "Blake", "cat")
+	check(replacement != b and state.board("pop").is_empty(), "Recreating a name starts a new identity with no inherited scores")
+	for index in range(State.MAX_PROFILES - 1):
+		_profile(state, "Player %d" % index, State.AVATARS[index])
+	check(not state.create_profile("Full", "duck").ok, "A full player list still enforces capacity before removal")
+	check(state.remove_profile(replacement).ok and state.create_profile("New player", "rainbow").ok and state.profiles.size() == State.MAX_PROFILES, "Deleting a profile reclaims one player slot")
+
+
+func _test_profile_mutation_failures() -> void:
+	var fixture := _browser()
+	var state = fixture.state
+	var storage: BrowserStorage = fixture.storage
+	var id := _profile(state, "Avery", "fox")
+	_submit(state, id, "pop", {"hits": 12}, "mutation-retry-round")
+	var saved: String = storage.text
+	storage.writable = false
+	var edited: Dictionary = state.update_profile(id, "Edited", "cat")
+	check(not edited.ok and edited.profile.is_empty() and not edited.error.is_empty(), "Failed profile edits expose an error without a success profile")
+	check(state.ready and state.profiles[0].name == "Avery" and state.profiles[0].avatar == "fox" and storage.text == saved, "Failed edits retain the previous in-memory identity and stored bytes")
+	var removed: Dictionary = state.remove_profile(id)
+	check(not removed.ok and removed.profile.is_empty() and state.profiles.size() == 1, "Failed removal retains the player for retry")
+	check(state.board("pop")[0].metric == 12 and state.round_submission("mutation-retry-round").player_id == id and storage.text == saved, "Failed removal preserves best results and receipts")
+	storage.writable = true
+	check(state.update_profile(id, "Edited", "cat").ok and state.profiles[0].name == "Edited", "A failed edit can be retried")
+	check(state.remove_profile(id).ok and state.profiles.is_empty(), "A failed removal can be retried")
+	id = _profile(state, "Restored", "frog")
+	saved = storage.text
+	var writes: int = storage.writes
+	storage.readable = false
+	check(not state.update_profile(id, "Changed", "dog").ok and not state.ready, "Read failure prevents editing stale state")
+	check(not state.remove_profile(id).ok and storage.text == saved and storage.writes == writes, "An unreadable save cannot be overwritten by profile removal")
+	storage.readable = true
+	check(state.load_state() and state.profiles[0].name == "Restored", "Profile mutations recover after an explicit successful reload")
+	storage.readable = false
+	check(not state.remove_profile(id).ok and not state.ready and storage.text == saved, "Removal itself refreshes storage and rejects read failures")
+	storage.readable = true
+	check(state.load_state() and state.remove_profile(id).ok, "Removal recovers after storage becomes readable")
+
+
+func _test_profile_mutation_refresh() -> void:
+	var fixture := _browser()
+	var state = fixture.state
+	var a := _profile(state, "Avery", "fox")
+	var b := _profile(state, "Blake", "cat")
+	var second := State.new("user://unused-leaderboard-test.cfg", fixture.storage)
+	check(second.load_state(), "A second profile manager loads the original identities")
+	var c := _profile(state, "Casey", "frog")
+	_submit(state, a, "pop", {"hits": 20}, "concurrent-pop")
+	check(state.update_profile(b, "Blake updated", "panda").ok, "Another view edits an unrelated profile")
+	check(second.update_profile(a, "Avery updated", "rocket").ok, "A stale manager can edit a player after refreshing storage")
+	check(second.profiles.size() == 3 and second.profiles[1].name == "Blake updated" and second.profiles[2].id == c and second.board("pop")[0].metric == 20, "Editing retains another view's new profile, identity edit, and score")
+	check(state.remove_profile(b).ok, "Another view can remove a previously loaded player")
+	var saved: String = fixture.storage.text
+	var writes: int = fixture.storage.writes
+	check(not second.update_profile(b, "Resurrected", "cat").ok and second.profiles.size() == 2, "A stale edit never recreates a player removed in another view")
+	check(not second.remove_profile(b).ok and fixture.storage.text == saved and fixture.storage.writes == writes, "A stale delete does not rewrite an already removed player")
+	_submit(state, c, "memory", {"won": true, "attempts": 5, "peeks": 0}, "concurrent-memory")
+	check(state.update_profile(c, "Casey updated", "rainbow").ok, "Another view updates a remaining identity before removal")
+	check(second.remove_profile(a).ok and second.profiles.size() == 1 and second.profiles[0].name == "Casey updated", "Stale removal preserves the latest unrelated profile edit")
+	check(second.board("memory")[0].player_id == c and second.round_submission("concurrent-memory").player_id == c and second.round_submission("concurrent-pop").is_empty(), "Stale removal preserves another player's new result while deleting only the target's receipts")
+	check(state.load_state() and state.profiles == second.profiles, "Both profile managers converge on the persisted result")
 
 
 func _test_browser_fixture() -> void:
@@ -261,6 +395,7 @@ func _test_invalid_saves() -> void:
 		Engine.print_error_messages = printing
 		check(not loaded and not state.ready and not state.error.is_empty(), "Invalid or unsupported saves report an error")
 		check(not state.create_profile("Replacement", "duck").ok and storage.text == value and storage.writes == 0, "Invalid saves are preserved for recovery")
+		check(not state.update_profile("player-a", "Replacement", "cat").ok and not state.remove_profile("player-a").ok and storage.text == value and storage.writes == 0, "Profile management preserves invalid saves for recovery")
 	var empty_path := State.new("")
 	check(not empty_path.load_state() and not empty_path.error.is_empty(), "An empty native path is rejected")
 
@@ -287,6 +422,18 @@ func _test_native_persistence() -> void:
 	check(DirAccess.rename_absolute(path, path + ".previous") == OK, "Simulate an interrupted native replacement")
 	var recovered := State.new(path)
 	check(recovered.load_state() and recovered.board("pop")[0].metric == 18, "An interrupted save recovers its preserved complete record")
+	var second_id := _profile(recovered, "Blake", "cat")
+	check(recovered.update_profile(id, "Avery updated", "panda").ok, "A native profile edit persists")
+	check(reloaded.load_state() and reloaded.profiles[0] == {"id": id, "name": "Avery updated", "avatar": "panda"} and reloaded.board("pop")[0].metric == 18, "Native profile edits retain identity, order, and results after reload")
+	saved = FileAccess.get_file_as_string(path)
+	check(DirAccess.make_dir_absolute(path + ".pending") == OK, "Block staged native profile mutations")
+	check(not recovered.update_profile(id, "Unsaved edit", "dog").ok and recovered.profiles[0].name == "Avery updated", "Failed native edits do not publish the unsaved identity")
+	check(not recovered.remove_profile(id).ok and recovered.profiles.size() == 2 and recovered.board("pop")[0].metric == 18, "Failed native removal retains the player and result")
+	check(FileAccess.get_file_as_string(path) == saved and recovered.round_submission(failed_id).player_id == id, "Failed native profile mutations preserve stored bytes and receipts")
+	check(DirAccess.remove_absolute(path + ".pending") == OK, "Remove the isolated native profile staging blocker")
+	check(recovered.update_profile(id, "Avery retried", "dog").ok and recovered.remove_profile(id).ok, "Failed native profile mutations can retry")
+	check(reloaded.load_state() and reloaded.profiles.size() == 1 and reloaded.profiles[0].id == second_id and reloaded.board("pop").is_empty() and reloaded.round_submission(failed_id).is_empty(), "Native removal survives reload and cleans up its scores and receipts")
+	check(reloaded.remove_profile(second_id).ok and recovered.load_state() and recovered.profiles.is_empty(), "Removing the last native player persists an empty player list")
 	var invalid_path := _root.path_join("invalid.cfg")
 	_files.append(invalid_path)
 	var file := FileAccess.open(invalid_path, FileAccess.WRITE)

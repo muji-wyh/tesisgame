@@ -5,11 +5,11 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const groups = {
   'talk-quest': {
-    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_scene_tests'],
+    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
     node: ['talk-quest-host']
   },
   leaderboards: {
-    godot: ['leaderboard_state_tests', 'leaderboard_scene_tests'],
+    godot: ['leaderboard_state_tests', 'leaderboard_scene_tests', 'player_management_tests'],
     node: ['leaderboard-host', 'virtual-keyboard-host']
   },
   core: {
@@ -45,8 +45,8 @@ const groups = {
     ]
   },
   'voice-pop': {
-    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_result_audio_tests'],
-    node: ['voice-host', 'local-speech-host', 'voice-pop-reference-assets']
+    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'voice_pop_reward_tests', 'pop_reward_room_tests', 'pop_reward_flow_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_result_audio_tests'],
+    node: ['voice-host', 'local-speech-host', 'speech-debug-host', 'voice-pop-reference-assets', 'pop-reward-host']
   },
   'layout-release': { godot: ['layout_release_tests'] },
   themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },

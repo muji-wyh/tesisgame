@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chooseMode, chooseRoundPlayer, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint, leaderboardSnapshot, visibleColorCount } = require('./game-ui.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
 const catalog = require('../../words.json');
@@ -249,8 +249,8 @@ function expectSimpleResults(current) {
     .toBeLessThanOrEqual(current.resultsHits.rect[0] + 1);
   // The embedded leaderboard has separate diagnostics. Its middle section can
   // occupy the viewport while Play again and the review words are both clipped.
-  expect(current.controls.every(control => /^(?:Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
-    'Voice Pop actions remain Play again and individual word pronunciation').toBe(true);
+  expect(current.controls.every(control => /^(?:OpenChests|Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
+    'Voice Pop actions offer earned chests, Play again, and individual word pronunciation').toBe(true);
   for (const control of current.controls) {
     expect(control.text, 'Word labels do not include repetition counts').not.toMatch(/×\s*\d/);
     if (control.name.startsWith('Hear_')) {
@@ -511,7 +511,7 @@ async function popOne(page, { interim = false } = {}) {
 }
 
 function expectCompactHud(hud, bounds) {
-  expect(Object.keys(hud).sort()).toEqual(['bonus_effect', 'hit_effect', 'hits', 'status', 'targets_above_hud', 'time', 'time_bonus', 'time_bonus_caption', 'transcript']);
+  expect(Object.keys(hud).sort()).toEqual(['bonus_effect', 'chests', 'hit_effect', 'hits', 'next_chest', 'score', 'status', 'targets_above_hud', 'time', 'time_bonus', 'time_bonus_caption', 'transcript']);
   const content = contentBounds(bounds);
   for (const key of ['time', 'hits', 'transcript', 'status']) {
     const rect = hud[key];
@@ -1050,7 +1050,7 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     }
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
     const listeningTheme = await page.locator('html').getAttribute('data-pip-theme');
-    const listeningMusicSeconds = waveDuration(`assets/audio/bgm/${listeningTheme}.wav`);
+    const listeningMusicTiming = recordingTiming(`assets/audio/bgm/${listeningTheme}.wav`);
     const listening = await page.evaluate(() => ({
       soundIndex: window.audioObservation.playbacks.length,
       recognizers: window.__popSpeech.starts,
@@ -1060,9 +1060,10 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     const listeningSounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), listening.soundIndex);
     expect(listeningSounds.every(isLaunch), 'Listening without a hit permits only a fresh target launch').toBe(true);
     listeningSounds.forEach(expectLaunch);
-    expect(await page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
-      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
-    listeningMusicSeconds), 'Voice Pop stops the previous mode\'s music').toBe(false);
+    expect(await page.evaluate(timing => window.audioObservation.playbacks.some(sound =>
+      Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate &&
+      sound.stoppedAt === undefined && sound.endedAt === undefined),
+    listeningMusicTiming), 'Voice Pop stops the previous mode\'s music').toBe(false);
 
     await page.context().setOffline(true);
     expect(await page.evaluate(() => navigator.onLine)).toBe(false);
@@ -1071,12 +1072,12 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
     await expect(page.locator('#speech-panel')).toBeHidden();
     const theme = await page.locator('html').getAttribute('data-pip-theme');
-    const musicSeconds = waveDuration(`assets/audio/bgm/${theme}.wav`);
+    const musicTiming = recordingTiming(`assets/audio/bgm/${theme}.wav`);
     // Godot restarts looping samples itself; AudioBufferSourceNode.loop stays
     // false. Identify this world's music from its actual recording instead.
-    await expect.poll(() => page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).some(sound =>
-      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.contextState === 'running' &&
-      sound.stoppedAt === undefined && sound.endedAt === undefined), { from: beforeExit, seconds: musicSeconds }),
+    await expect.poll(() => page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).some(sound =>
+      Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate && sound.contextState === 'running' &&
+      sound.stoppedAt === undefined && sound.endedAt === undefined), { from: beforeExit, timing: musicTiming }),
     { message: `Switching from Voice Pop to ${destination} must restore music before any card tap` }).toBe(true);
     const modeStatus = await page.locator('#game-status').textContent();
 
@@ -1093,9 +1094,9 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(listening.recognizers);
     await expect(page.locator('#game-status')).toHaveText(modeStatus);
     await expect(page.locator('#speech-panel')).toBeHidden();
-    const music = await page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).findLast(sound =>
-      Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.endedAt === undefined),
-    { from: beforeExit, seconds: musicSeconds });
+    const music = await page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).findLast(sound =>
+      Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate && sound.endedAt === undefined),
+    { from: beforeExit, timing: musicTiming });
     expect(music, 'The restored recording remains live after late recognition callbacks').toBeTruthy();
     expect(music.stoppedAt, 'Late recognition callbacks cannot stop restored music').toBeUndefined();
     expect(music.endedAt).toBeUndefined();

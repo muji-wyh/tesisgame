@@ -124,22 +124,22 @@ const THEMES: Dictionary = {
 		"chest": "energy"},
 	"autumn": {"name": "Autumn", "background": Color("#fff2e5"), "accent": Color("#995323"),
 		"light": Color("#ffd19b"), "spark": Color("#b46386"), "tint": Color("#ffe6c5"),
-		"chest": "royal"},
+		"chest": "harvest"},
 	"winter": {"name": "Winter", "background": Color("#eef5ff"), "accent": Color("#456791"),
 		"light": Color("#c9dcf5"), "spark": Color("#aa97d4"), "tint": Color("#e6edff"),
 		"chest": "crystal"},
 	"ocean": {"name": "Ocean", "background": Color("#e7f8fa"), "accent": Color("#13758b"),
 		"light": Color("#afdee6"), "spark": Color("#ffad87"), "tint": Color("#e1f4ef"),
-		"chest": "crystal"},
+		"chest": "tide"},
 	"space": {"name": "Space", "background": Color("#f1edfb"), "accent": Color("#694a99"),
 		"light": Color("#d6c8f0"), "spark": Color("#efb451"), "tint": Color("#eae3ff"),
-		"chest": "energy"},
+		"chest": "nebula"},
 	"jungle": {"name": "Jungle", "background": Color("#f0f8e7"), "accent": Color("#2d7048"),
 		"light": Color("#c8e3a4"), "spark": Color("#ebbe68"), "tint": Color("#e8f2cd"),
-		"chest": "royal"},
+		"chest": "bramble"},
 	"candy": {"name": "Candy", "background": Color("#fff0f7"), "accent": Color("#a53d73"),
 		"light": Color("#f5c9e0"), "spark": Color("#69bea9"), "tint": Color("#fce5f0"),
-		"chest": "crystal"}
+		"chest": "bonbon"}
 }
 const REWARD_NAMES: Dictionary = {
 	"spring": ["Blossom", "Ladybug", "Bee", "Tulip", "Rainbow", "Bunny", "Sprout", "Butterfly", "Nest", "Dewdrop"],
@@ -315,6 +315,34 @@ func load_all() -> bool:
 		if not ResourceLoader.exists("res://" + path):
 			error = "Could not load chest artwork. Please rebuild the game."
 			return false
+	var downloaded: Variant = _read_json("res://assets/chests/downloaded/manifest.json")
+	if not error.is_empty():
+		return false
+	if not downloaded is Dictionary or downloaded.get("version") != 1 or not downloaded.get("styles") is Dictionary:
+		error = "The downloaded chest artwork manifest is missing or unsupported."
+		return false
+	for style_id in downloaded.styles:
+		var style: Variant = downloaded.styles[style_id]
+		if not style is Dictionary or not style.get("frames") is Array or style.frames.size() < 6:
+			error = "A downloaded chest opening sequence is incomplete."
+			return false
+		for frame in style.frames:
+			if not frame is String or not frame.begins_with("assets/chests/downloaded/") or frame.contains("..") or frame.contains("\\"):
+				error = "A downloaded chest artwork path is invalid."
+				return false
+			if not ResourceLoader.exists("res://" + frame):
+				error = "Could not load downloaded chest artwork. Please rebuild the game."
+				return false
+		if not style.get("closed_bounds") is Array or style.closed_bounds.size() != 4 or not style.get("cavity") is Array or style.cavity.size() != 2:
+			error = "A downloaded chest has incomplete placement information."
+			return false
+		value.styles[style_id] = style
+	var mapped_styles: Dictionary = {}
+	for palette in THEMES.values():
+		if not value.styles.has(palette.chest) or mapped_styles.has(palette.chest):
+			error = "Every theme needs its own available chest design."
+			return false
+		mapped_styles[palette.chest] = true
 	chests = value
 	return true
 

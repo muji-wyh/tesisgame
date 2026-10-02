@@ -99,29 +99,52 @@ async function expectOutputEnergy(page) {
   return output;
 }
 
-function waveDuration(relative) {
+function waveInfo(relative) {
   const bytes = fs.readFileSync(path.resolve(__dirname, '../..', relative));
-  let byteRate, dataSize;
+  let byteRate, dataSize, sampleRate;
   for (let offset = 12; offset + 8 <= bytes.length;) {
     const chunk = bytes.toString('ascii', offset, offset + 4), size = bytes.readUInt32LE(offset + 4);
-    if (chunk === 'fmt ') byteRate = bytes.readUInt32LE(offset + 16);
+    if (chunk === 'fmt ') {
+      sampleRate = bytes.readUInt32LE(offset + 12);
+      byteRate = bytes.readUInt32LE(offset + 16);
+    }
     if (chunk === 'data') dataSize = size;
     offset += 8 + size + (size % 2);
   }
-  if (!byteRate || !dataSize) throw new Error(`Invalid WAV: ${relative}`);
-  return dataSize / byteRate;
+  if (!byteRate || !dataSize || !sampleRate) throw new Error(`Invalid WAV: ${relative}`);
+  return { seconds: dataSize / byteRate, sampleRate };
+}
+
+function waveDuration(relative) {
+  return waveInfo(relative).seconds;
+}
+
+function recordingTiming(relative) {
+  const { seconds, sampleRate } = waveInfo(relative);
+  const metadata = fs.readFileSync(path.resolve(__dirname, '../..', `${relative}.import`), 'utf8');
+  let importedRate = sampleRate;
+  if (/^force\/max_rate=true\r?$/m.test(metadata)) {
+    const maximumRate = Number(metadata.match(/^force\/max_rate_hz=(\d+)\r?$/m)?.[1]);
+    if (!maximumRate) throw new Error(`Invalid imported sample rate: ${relative}`);
+    importedRate = Math.min(sampleRate, maximumRate);
+  }
+  // Import downsampling can truncate one imported frame. The browser conversion
+  // can truncate one output frame too; callers add 1 / playback.sampleRate.
+  // The epsilon covers floating-point comparison at the exact frame boundary.
+  return { seconds, importAllowance: 1 / importedRate + 1e-9 };
 }
 
 async function expectRecording(page, from, relative, { active = false } = {}) {
-  const seconds = waveDuration(relative);
+  const timing = recordingTiming(relative);
   let sound;
   await expect.poll(async () => {
-    sound = await page.evaluate(({ from, seconds, active }) => window.audioObservation.playbacks.slice(from).findLast(playback =>
-      Math.abs(playback.duration - seconds) <= 1 / playback.sampleRate && playback.contextState === 'running' &&
-      (!active || (playback.stoppedAt === undefined && playback.endedAt === undefined))), { from, seconds, active });
+    sound = await page.evaluate(({ from, timing, active }) => window.audioObservation.playbacks.slice(from).findLast(playback =>
+      Math.abs(playback.duration - timing.seconds) <= timing.importAllowance + 1 / playback.sampleRate &&
+      playback.contextState === 'running' &&
+      (!active || (playback.stoppedAt === undefined && playback.endedAt === undefined))), { from, timing, active });
     return Boolean(sound);
   }, { message: `The real browser plays bundled ${relative}` }).toBe(true);
   return sound;
 }
 
-module.exports = { watchAudioRequests, observeOutputAudio, expectOutputEnergy, waveDuration, expectRecording };
+module.exports = { watchAudioRequests, observeOutputAudio, expectOutputEnergy, waveDuration, recordingTiming, expectRecording };

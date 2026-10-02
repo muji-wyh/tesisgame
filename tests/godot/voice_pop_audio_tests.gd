@@ -21,9 +21,66 @@ func _run() -> void:
 	await _check_launch()
 	await _check_bank_and_overlap()
 	await _check_lifecycle_and_fallback()
+	await _check_debug_mix()
 	await create_timer(0.15).timeout
 	print("Voice Pop reference audio: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_debug_mix() -> void:
+	var audio := Audio.new()
+	root.add_child(audio)
+	audio.interact("spring", false)
+	check(audio.set_speech_debug_mix(0.35), "The diagnostic reduced mix is accepted")
+	for cue: String in ["launch", "slice", "match", "miss"]:
+		var player: AudioStreamPlayer
+		var gain: float
+		match cue:
+			"launch":
+				audio.cue("pop-launch")
+				player = audio.pop_launch
+				gain = 0.16
+			"slice":
+				audio.cue("pop-slice")
+				player = audio.last_pop_player()
+				gain = 0.24
+			"match":
+				audio.play_match_voice_hit()
+				player = audio.match_voice_hit
+				gain = 0.48
+			"miss":
+				audio.play_pip_reaction(false)
+				player = audio.pip_reaction
+				gain = 0.54
+		check(player.playing and is_equal_approx(db_to_linear(player.volume_db), gain * 0.35),
+			"The reduced diagnostic " + cue + " uses its actual cue and scaled gain: playing=%s gain=%s" % [
+				player.playing, db_to_linear(player.volume_db)])
+	check(is_equal_approx(db_to_linear(audio.voice.volume_db), 0.64)
+		and is_equal_approx(db_to_linear(audio.music.volume_db), 0.12)
+		and is_equal_approx(db_to_linear(audio.effect.volume_db), 0.24),
+		"Diagnostic mixing leaves pronunciation, music and ordinary UI channels unchanged")
+	check(not audio.set_speech_debug_mix(0.8) and is_equal_approx(audio._speech_debug_mix, 0.35),
+		"Unknown diagnostic mix values cannot alter the comparison")
+	check(audio.set_speech_debug_mix(0.0), "The silent diagnostic mix is accepted")
+	audio.cue("pop-launch")
+	audio.cue("pop-slice")
+	audio.play_match_voice_hit()
+	audio.play_pip_reaction(false)
+	check(not audio.pop_launch.playing and audio.last_pop_player() == null
+		and not audio.match_voice_hit.playing and not audio.pip_reaction.playing,
+		"The silent mix stops current tails and starts no competing audio")
+	check(audio.set_speech_debug_mix(1.0), "Ending diagnostics restores the authored mix")
+	audio.cue("pop-launch")
+	audio.cue("pop-slice")
+	audio.play_match_voice_hit()
+	audio.play_pip_reaction(true)
+	check(is_equal_approx(db_to_linear(audio.pop_launch.volume_db), 0.16)
+		and is_equal_approx(db_to_linear(audio.last_pop_player().volume_db), 0.24)
+		and is_equal_approx(db_to_linear(audio.match_voice_hit.volume_db), 0.48)
+		and is_equal_approx(db_to_linear(audio.pip_reaction.volume_db), 0.68),
+		"Normal launch, slice, Match and Pip playback regain their original volume")
+	audio.queue_free()
+	await process_frame
 
 
 func _check_launch() -> void:

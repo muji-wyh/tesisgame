@@ -52,7 +52,7 @@ external images or text labels.
 
 ```powershell
 node tools\generate-images.cjs
-node tools\generate-world-bgm.cjs --missing
+python tools\import-casual-bgm.py --check
 node tools\generate-sfx.cjs
 ```
 
@@ -143,25 +143,28 @@ the startup pack. See [reference audio](voice-pop-reference-audio.md),
 [fruit-slice provenance](voice-pop-random-slices.md), and
 [single-slice provenance](voice-pop-sfx.md) for source requirements.
 
-Four tracks were copied from the user-provided **Casual Game Music Pack 1.4**:
+All eight active theme tracks now use Juhani Junkala's **JRPG Pack 2 Towns** and
+**JRPG Pack 4 Calm**, released under **CC0 1.0**. The town and calm cues provide
+distinct full musical loops for each theme, lasting 46 to 112 seconds. The
+[casual BGM guide](casual-bgm.md) lists their theme assignments, original license
+notices, source downloads, processing, and restoration commands. The active
+[source manifest](casual-bgm.json) pins source and output hashes.
 
-| Season | Source track | Local file |
-|---|---|---|
-| Spring | Flower-Menu-Loop | `assets\audio\bgm\spring.wav` |
-| Summer | Ukulele-Menu-v1-Loop | `assets\audio\bgm\summer.wav` |
-| Autumn | Banjo-Menu-Loop | `assets\audio\bgm\autumn.wav` |
-| Winter | Space-Menu-Loop | `assets\audio\bgm\winter.wav` |
+The October 2, 2026 refresh replaces the earlier four seasonal recordings from
+the user-provided Casual Game Music Pack 1.4 and the four synthesized ocean,
+space, jungle, and candy scores. The dated [Jungle and Candy audio](jungle-candy-audio.md)
+provenance preserves the original music and the retained arrival effects and
+Jenny Neural greetings. `tools\generate-world-bgm.cjs` now preserves existing
+tracks by default; `--replace` explicitly regenerates the four historical scores.
+Restore current music with `tools\import-casual-bgm.py`.
 
-Ocean, Space, Jungle and Candy use original scores from
-`tools\generate-world-bgm.cjs`, bringing the total to eight tracks. Jungle uses
-rounded wooden-key tones and a quiet low pulse; Candy uses soft toy-piano
-overtones. Their source music is distinct from the licensed four-season pack.
-See [Jungle and Candy audio](jungle-candy-audio.md) for the new music,
-chest effects and Jenny Neural prompts.
+The stereo 44.1 kHz PCM16 WAVs use consistent gain for approximately -20 LUFS
+and three-millisecond edge fades. Godot packages compressed BGM resources;
+each track's `.wav.import` retains its mono 22.05 kHz mobile settings. The existing
+music gain, spoken-prompt ducking, chest mix, and silence during microphone
+recognition remain unchanged. Rebuild after changing recordings or import settings.
 
-The stereo 44.1 kHz source WAVs are retained. Godot packages compressed BGM
-resources; each track's `.wav.import` records its `force/mono` and `force/max_rate`
-settings. Mono 22.05 kHz imports reduce the mobile download size without changing
-the source recording. Rebuild after changing these settings.
-
-The chest artwork and music retain their providers' terms; this repository's code license does not grant additional rights to those assets. Confirm distribution permissions before publishing them. The original source packs are not modified.
+Current music retains its CC0 source notices. Chest artwork and superseded
+licensed music retain their providers' terms; this repository's code license
+does not grant additional rights to those assets. The original source packs
+are not modified.

@@ -1,6 +1,14 @@
 extends RefCounted
 
-const Data = preload("res://scripts/game_data.gd")
+# Reviewed ASR spellings only. Separators may vary; arbitrary adjacent nouns
+# must never become a different word simply because that word is on screen.
+const COMPOUND_PARTS: Dictionary = {
+	"seahorse": ["sea", "horse"], "seahorses": ["sea", "horses"],
+	"sunflower": ["sun", "flower"], "sunflowers": ["sun", "flowers"],
+	"sunglasses": ["sun", "glasses"],
+	"pinecone": ["pine", "cone"], "pinecones": ["pine", "cones"],
+	"yoyo": ["yo", "yo"], "yoyos": ["yo", "yos"]
+}
 
 # Exact sound equivalents, including common English pronunciation variants.
 # Plural groups are explicit: do not invent forms such as "bes" or "knowses".
@@ -58,15 +66,55 @@ const SPECIAL_PLURALS: Dictionary = {
 }
 
 
-static func tokens(text: String) -> Array[String]:
+static func normalize_text(text: String, accepted_forms: Array = []) -> String:
+	var normalized: String = text.to_lower()
+	var compounds: Array = COMPOUND_PARTS.keys().filter(func(word: String) -> bool: return accepted_forms.has(word))
+	compounds.sort_custom(func(first: String, second: String) -> bool:
+		return COMPOUND_PARTS[first].size() > COMPOUND_PARTS[second].size() if COMPOUND_PARTS[first].size() != COMPOUND_PARTS[second].size() else first.length() > second.length())
+	for canonical: String in compounds:
+		var pattern := RegEx.new()
+		pattern.compile("(?<![\\p{L}\\p{N}_'’-])" + "[ -]+".join(COMPOUND_PARTS[canonical]) + "(?![\\p{L}\\p{N}_'’-])")
+		normalized = pattern.sub(normalized, canonical, true)
+	return normalized
+
+
+static func tokens(text: String, accepted_forms: Array = ["yoyo", "yoyos"]) -> Array[String]:
 	var pattern := RegEx.new()
 	# Keep Unicode letters, numbers and possessives intact. "bare2", "bared",
 	# "bear's" and "bare\u00e9" must not turn into a hit for bear.
 	pattern.compile("[\\p{L}\\p{N}_]+(?:['\u2019][\\p{L}\\p{N}_]+)*")
 	var result: Array[String] = []
-	for token in pattern.search_all(Data.normalize_spoken_text(text)):
+	for token in pattern.search_all(normalize_text(text, accepted_forms)):
 		result.append(token.get_string())
 	return result
+
+
+static func compounds_conflict(first: String, second: String) -> bool:
+	if not COMPOUND_PARTS.has(first) and not COMPOUND_PARTS.has(second):
+		return false
+	var first_forms: Array[String] = forms(first, true)
+	var second_forms: Array[String] = forms(second, true)
+	for compound: String in COMPOUND_PARTS:
+		var parts: Array = COMPOUND_PARTS[compound]
+		if first_forms.has(compound) and second_forms.any(func(form: String) -> bool: return parts.has(form)):
+			return true
+		if second_forms.has(compound) and first_forms.any(func(form: String) -> bool: return parts.has(form)):
+			return true
+	return false
+
+
+static func browser_lexicon(words: Array) -> Dictionary:
+	var entries: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for word in words:
+		if not word is Dictionary or not word.get("text") is String:
+			continue
+		var noun: String = word.text.strip_edges().to_lower()
+		if noun.is_empty() or seen.has(noun):
+			continue
+		seen[noun] = true
+		entries.append({"text": noun, "forms": forms(noun, true)})
+	return {"compounds": COMPOUND_PARTS.duplicate(true), "words": entries}
 
 
 static func forms(noun: String, include_plurals: bool = false) -> Array[String]:

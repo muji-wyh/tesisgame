@@ -1063,8 +1063,11 @@ func _test_scene() -> void:
 		app.choose_theme(season)
 		await process_frame
 		check(app.chest.theme_id == season, "Closed chest follows selected season")
-		check(app.chest.piece_count() == 9 if season in ["winter", "ocean", "candy"] else app.chest.piece_count() >= 4,
-			"Chest uses the imported Crystal assembly or derived physical body/lid/lock layers")
+		var chest_style: String = app.data.theme(season).chest
+		var expected_pieces: int = 9 if chest_style == "crystal" else 5 if chest_style in ["royal", "energy"] else 1
+		check(app.chest.piece_count() == expected_pieces
+			and (expected_pieces > 1 or app.chest.hold_effect_snapshot().opening_frames >= 6),
+			"Chest uses the complete imported assembly, physical rig or downloaded opening sequence")
 	app.choose_theme("spring")
 	joy_axis(JOY_AXIS_LEFT_X, 1.0)
 	await process_frame

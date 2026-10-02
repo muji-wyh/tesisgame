@@ -28,6 +28,7 @@ func _run() -> void:
 		var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 		_test_candidates(model_script, words)
 		_test_homophones(model_script, words)
+		_test_compounds(model_script, words)
 		_test_matching(model_script, words)
 		_test_locks(model_script, words)
 		_test_vocabulary(model_script, words)
@@ -146,6 +147,46 @@ func _test_homophones(model_script: GDScript, words: Array) -> void:
 	var off_board = _board(model_script, words)
 	check(off_board.spoken_matches("be bare flour pair").is_empty(),
 		"Dictionary homophones cannot inject words outside the current board")
+
+
+func _test_compounds(model_script: GDScript, words: Array) -> void:
+	var speech: GDScript = load("res://scripts/speech_words.gd")
+	for fixture in [["seahorse", "sea horse", "horse"], ["sunflower", "sun flower", "sun"],
+		["sunglasses", "sun glasses", "sun"], ["pinecone", "pine cone", "cone"], ["yoyo", "yo yo", "yo"]]:
+		var model = model_script.new()
+		for noun in [fixture[0], fixture[2]]:
+			var word: Dictionary = {"id": noun, "text": noun}
+			model.cards.append({"id": noun + ":word", "kind": "word", "word": word})
+			model.cards.append({"id": noun + ":image", "kind": "image", "word": word})
+		for spelling in [fixture[1], str(fixture[1]).replace(" ", "-"), str(fixture[1]).to_upper()]:
+			check(model.spoken_matches(spelling) == [fixture[0]],
+				"An explicit compound span selects its whole word instead of a component: " + spelling)
+		check(model.spoken_matches(fixture[0]) == [fixture[0]], "A joined compound keeps the same canonical match")
+		check(speech.compounds_conflict(fixture[0], fixture[2]) and speech.compounds_conflict(fixture[2], fixture[0]),
+			"Compound/component exclusion is symmetric: " + fixture[0])
+		var candidates: Array = [{"id": fixture[0], "text": fixture[0]}, {"id": fixture[2], "text": fixture[2]}]
+		check(model._distinct_words(candidates).size() == 1, "Match dealing excludes compound/component pairs")
+		candidates.reverse()
+		check(model._distinct_words(candidates).size() == 1, "Deal exclusion does not depend on shuffle order")
+	var model = model_script.new()
+	for noun in ["sun", "flower"]:
+		var word: Dictionary = {"id": noun, "text": noun}
+		model.cards.append({"id": noun + ":word", "kind": "word", "word": word})
+		model.cards.append({"id": noun + ":image", "kind": "image", "word": word})
+	check(model.spoken_matches("sun flower") == ["sun", "flower"], "Two intended nouns remain separate without a compound target")
+	check(model.spoken_matches("sunflower").is_empty(), "A joined off-board compound never splits into component hits")
+	check(not speech.compounds_conflict("sun", "flower"), "Component nouns can be dealt together without their compound")
+	for text in ["sea horse2", "_sea horse", "sea horse's", "sea horse’s", "deep-sea-horse", "sea, horse"]:
+		check(not speech.tokens(text, ["seahorse"]).has("seahorse"), "Compound aliases preserve token boundaries: " + text)
+	check(speech.tokens("pine cones sea horses sun flowers yo yos", ["pinecones", "seahorses", "sunflowers", "yoyos"])
+		== ["pinecones", "seahorses", "sunflowers", "yoyos"], "Reviewed plural compound spellings normalize as complete spans")
+	var lexicon: Dictionary = speech.browser_lexicon(words)
+	check(lexicon.words.size() == words.size() and lexicon.compounds.seahorse == ["sea", "horse"],
+		"The browser receives the complete catalog and shared compound definitions")
+	for entry in lexicon.words:
+		check(entry.forms == speech.forms(entry.text, true), "Browser accepted forms match native Pop rules: " + entry.text)
+	lexicon.compounds.seahorse[0] = "changed"
+	check(speech.browser_lexicon(words).compounds.seahorse[0] == "sea", "Browser transport cannot mutate the shared alias source")
 
 
 func _test_matching(model_script: GDScript, words: Array) -> void:

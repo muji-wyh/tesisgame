@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "generator": "tools/prepare-downloaded-chests.py",
+  "styles": {
+    "harvest": {
+      "name": "Harvest Wood",
+      "source": "casual-chests",
+      "frames": [
+        "assets/chests/downloaded/harvest/frame-00.png",
+        "assets/chests/downloaded/harvest/frame-01.png",
+        "assets/chests/downloaded/harvest/frame-02.png",
+        "assets/chests/downloaded/harvest/frame-03.png",
+        "assets/chests/downloaded/harvest/frame-04.png",
+        "assets/chests/downloaded/harvest/frame-05.png",
+        "assets/chests/downloaded/harvest/frame-06.png",
+        "assets/chests/downloaded/harvest/frame-07.png",
+        "assets/chests/downloaded/harvest/frame-08.png"
+      ],
+      "closed_bounds": [
+        50,
+        115,
+        241,
+        303
+      ],
+      "motion_bounds": [
+        50,
+        36,
+        264,
+        303
+      ],
+      "cavity": [
+        145.5,
+        205.24
+      ],
+      "method": "Source openT3 clip sampled by Unity",
+      "export_sha256": "91608aac43bf1d1edc9bfb9c5f46e32dbe7673add90e54ed9b1368879b274c93"
+    },
+    "tide": {
+      "name": "Tide Blue",
+      "source": "low-poly-chest-animated",
+      "frames": [
+        "assets/chests/downloaded/tide/frame-00.png",
+        "assets/chests/downloaded/tide/frame-01.png",
+        "assets/chests/downloaded/tide/frame-02.png",
+        "assets/chests/downloaded/tide/frame-03.png",
+        "assets/chests/downloaded/tide/frame-04.png",
+        "assets/chests/downloaded/tide/frame-05.png",
+        "assets/chests/downloaded/tide/frame-06.png"
+      ],
+      "closed_bounds": [
+        100,
+        114,
+        275,
+        308
+      ],
+      "motion_bounds": [
+        54,
+        42,
+        275,
+        308
+      ],
+      "cavity": [
+        187.5,
+        207.12
+      ],
+      "method": "Opening half of source Chest_Open_Close clip sampled by Unity",
+      "export_sha256": "790613adbf96e48613e766126f2dac65c2bc5f501b2c761811a4860e5a646997"
+    },
+    "nebula": {
+      "name": "Nebula Vault",
+      "source": "stylized-chests",
+      "frames": [
+        "assets/chests/downloaded/nebula/frame-00.png",
+        "assets/chests/downloaded/nebula/frame-01.png",
+        "assets/chests/downloaded/nebula/frame-02.png",
+        "assets/chests/downloaded/nebula/frame-03.png",
+        "assets/chests/downloaded/nebula/frame-04.png",
+        "assets/chests/downloaded/nebula/frame-05.png",
+        "assets/chests/downloaded/nebula/frame-06.png",
+        "assets/chests/downloaded/nebula/frame-07.png",
+        "assets/chests/downloaded/nebula/frame-08.png"
+      ],
+      "closed_bounds": [
+        62,
+        85,
+        251,
+        295
+      ],
+      "motion_bounds": [
+        62,
+        32,
+        252,
+        295
+      ],
+      "cavity": [
+        156.5,
+        185.8
+      ],
+      "method": "Authored magnetic lid lift using original separate lid mesh",
+      "export_sha256": "7acd093b6c755c884c9cf0b0f078ae1fd5c52508a5fa650c25510c5d4e9c544e"
+    },
+    "bramble": {
+      "name": "Bramble Chest",
+      "source": "poly-style-fantasy-chest",
+      "frames": [
+        "assets/chests/downloaded/bramble/frame-00.png",
+        "assets/chests/downloaded/bramble/frame-01.png",
+        "assets/chests/downloaded/bramble/frame-02.png",
+        "assets/chests/downloaded/bramble/frame-03.png",
+        "assets/chests/downloaded/bramble/frame-04.png",
+        "assets/chests/downloaded/bramble/frame-05.png",
+        "assets/chests/downloaded/bramble/frame-06.png",
+        "assets/chests/downloaded/bramble/frame-07.png",
+        "assets/chests/downloaded/bramble/frame-08.png"
+      ],
+      "closed_bounds": [
+        51,
+        93,
+        284,
+        276
+      ],
+      "motion_bounds": [
+        21,
+        73,
+        284,
+        276
+      ],
+      "cavity": [
+        167.5,
+        180.84
+      ],
+      "method": "Authored hinge rotation using original separate lid and source pivot",
+      "export_sha256": "4110f9e09b9654243b52a5c7baba9175b40bf36392f36b8ffecfb865c98c192d"
+    },
+    "bonbon": {
+      "name": "Bonbon Barrel",
+      "source": "poly-style-fantasy-chest",
+      "frames": [
+        "assets/chests/downloaded/bonbon/frame-00.png",
+        "assets/chests/downloaded/bonbon/frame-01.png",
+        "assets/chests/downloaded/bonbon/frame-02.png",
+        "assets/chests/downloaded/bonbon/frame-03.png",
+        "assets/chests/downloaded/bonbon/frame-04.png",
+        "assets/chests/downloaded/bonbon/frame-05.png",
+        "assets/chests/downloaded/bonbon/frame-06.png",
+        "assets/chests/downloaded/bonbon/frame-07.png",
+        "assets/chests/downloaded/bonbon/frame-08.png"
+      ],
+      "closed_bounds": [
+        41,
+        99,
+        292,
+        290
+      ],
+      "motion_bounds": [
+        28,
+        56,
+        292,
+        290
+      ],
+      "cavity": [
+        166.5,
+        190.68
+      ],
+      "method": "Authored hinge rotation using original separate lid and source pivot",
+      "export_sha256": "6176afb8aeca0f003ed1f4ce251f818b77058b44c652ac2c04d92d3ae9ed82c0"
+    }
+  },
+  "sources": {
+    "casual-chests": {
+      "title": "Lowpoly Casual Chests - Free",
+      "publisher": "Aztech Games",
+      "version": "1.0",
+      "product_id": "321819",
+      "url": "https://assetstore.unity.com/packages/slug/321819",
+      "package_sha256": "9fcd03e6b357a72c414d6fde2219e7dd7e99cecef7ba331aaf73e7dd7ac69ce4",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
+    },
+    "low-poly-chest-animated": {
+      "title": "Low Poly Chest Animated",
+      "publisher": "Ekrem C.",
+      "version": "1.0",
+      "product_id": "247127",
+      "url": "https://assetstore.unity.com/packages/slug/247127",
+      "package_sha256": "a0022b1fbe2f1762114774f10a2ecdacf2db169f9c01d51dbe42497213fd8397",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
+    },
+    "stylized-chests": {
+      "title": "Stylized 3D Animated Chests \u2013 FREE Demo",
+      "publisher": "Bobardo",
+      "version": "1.0",
+      "product_id": "360542",
+      "url": "https://assetstore.unity.com/packages/slug/360542",
+      "package_sha256": "2356a6173afd53692fec5fb0360fbfcb9eb3f73549d13600e5446d66c8f18375",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
+    },
+    "poly-style-fantasy-chest": {
+      "title": "POLY STYLE - Fantasy Treasure Chest",
+      "publisher": "Batata Studio",
+      "version": "1.15",
+      "product_id": "280107",
+      "url": "https://assetstore.unity.com/packages/slug/280107",
+      "package_sha256": "ca35e6d033bf29cf3b247d866d8b3db0b4a8800e691a97bbc31002712ac0b75e",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
+    }
+  },
+  "files": [
+    {
+      "path": "assets/chests/downloaded/harvest/frame-00.png",
+      "sha256": "1f49dd90ef97c9ebb8ebe37f44fabfb8db80d5c739b8b7c3c3cd0171e7715b74",
+      "bytes": 55705,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-01.png",
+      "sha256": "0265216bc678ff5a3c4772c52e4f9f5832b9d3a46bb7b95c7e57754d5e235468",
+      "bytes": 57925,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-02.png",
+      "sha256": "0df97ef441db2e3918a4d5f6f971590a06392ee50dc824972034f54442e0076b",
+      "bytes": 60180,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-03.png",
+      "sha256": "e3bb6f090ad379a30e2e96015afeb3705d729d33150a319c18d00dd2b2763ace",
+      "bytes": 60787,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-04.png",
+      "sha256": "44ee91720ff6d2d23835e6d037dcabead53f2f2af9cd7632890fe7ef48019959",
+      "bytes": 64182,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-05.png",
+      "sha256": "0b62fd10027bb0698852682da91394b9e5f1bcb3b910a0c7b56273ff9e3f1a04",
+      "bytes": 66701,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-06.png",
+      "sha256": "470e966b9432afc8465c96378524c162e0c31b3611cad673ca78199091494ac2",
+      "bytes": 67763,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-07.png",
+      "sha256": "c3b9e7a09e9914c1da62cc2930169366922eb2117d6572b3771fb1e80db31b7d",
+      "bytes": 67490,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/harvest/frame-08.png",
+      "sha256": "b9f4d803640f8d1e9cf42a1b1e93d4f01da760c78a364c6f426620e6d6ced4b3",
+      "bytes": 67537,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-00.png",
+      "sha256": "047f57ea9b79a85db32fa498d4a7b41356dea459101aafc37971f0c459fbf92f",
+      "bytes": 44380,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-01.png",
+      "sha256": "5faddcfad5ba56fc0185140a27bf5f08f8f45d2dd0a7473aecd0e933ee0bbee1",
+      "bytes": 49897,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-02.png",
+      "sha256": "6c5dd02a2c7f3fa673dd41a173d4c919172997a3857cdd28ea99e77cce5c8cc0",
+      "bytes": 60253,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-03.png",
+      "sha256": "eeb0144539e7cb06ca41067afa743f61184a8effbc3741a9c7f91bdfdf56c058",
+      "bytes": 56146,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-04.png",
+      "sha256": "87c640c1468a696dd4f396c619052bf9d474ef8799efef35c703b75391ee7b66",
+      "bytes": 60236,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-05.png",
+      "sha256": "6038e5c2c73b7f1c957d0fd7d0b073a174c729d7916b69c9fd3c439e7bb50527",
+      "bytes": 60086,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/tide/frame-06.png",
+      "sha256": "4f50bed672075aa1c88e21a6801d8b1db13ca8a498fd8eca764380d4ed305251",
+      "bytes": 60053,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-00.png",
+      "sha256": "6145976aa41c7174eef32701b4e22364a7e704271aaf213fe8d36624fe9a0c0a",
+      "bytes": 56305,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-01.png",
+      "sha256": "cba610469c56a9c149381e1353f8c9b8310b416465e8cd3e84802285714c8897",
+      "bytes": 58474,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-02.png",
+      "sha256": "b264000150c7e29a7e877881b3d936fd74e955fff593dc9cea9f7bf8425de4ac",
+      "bytes": 60587,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-03.png",
+      "sha256": "16f073436944422bf728879dd5bc680c641dc6be9668e1453e695014024af85d",
+      "bytes": 61987,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-04.png",
+      "sha256": "16d3e50cf2c0ea6ab8b644220a0cde26e47591ea0f69e0bfd1e6d66ea5253535",
+      "bytes": 63254,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-05.png",
+      "sha256": "3fdfbd24de8c5d0db500c12e9046eadafa7b38f2a225859d4548a0d82f1f080e",
+      "bytes": 64671,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-06.png",
+      "sha256": "337eacd830e6218ea18bb295f5f1e9b43c5900139196646b998f23cf54581ab1",
+      "bytes": 65556,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-07.png",
+      "sha256": "3a319ed130674506a3c6ba379bc2896f3463b37da33e88954dee6a9fe6dc62c8",
+      "bytes": 66316,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/nebula/frame-08.png",
+      "sha256": "7442a665cd24da2f45dff1630bf05de719ef03a3c90fa167c59c528a096ac83c",
+      "bytes": 67214,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-00.png",
+      "sha256": "46f073c57530872ffd13e4c99d648e91e03acb1906459ad53086f99f17739061",
+      "bytes": 55572,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-01.png",
+      "sha256": "632a24f183ac5a95ffa4a96cdfa967e9baaea572839cd9df6ac8b941793d1d18",
+      "bytes": 58026,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-02.png",
+      "sha256": "954c6d458d77eb9e22dd924d5c521eb89bdf97265ae17a271cac5fb6b4fcce01",
+      "bytes": 60117,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-03.png",
+      "sha256": "7bef1f1425c11804c872aee3f602eabdab498704658946253488086d5da6a791",
+      "bytes": 61760,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-04.png",
+      "sha256": "70d2f58b52daf00f5f5ea2792c97abb9b79e60b3fe08505b36c6fa5c3c7669ee",
+      "bytes": 63516,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-05.png",
+      "sha256": "3c6a928ea7afb1b976b04db514645130d08d25d40045bc6b0b33be13e5277e11",
+      "bytes": 64286,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-06.png",
+      "sha256": "eecdc07797ff16549fb10be2aa1fa9cd487d5825f4f86a6eb71a3c56d6cd71cb",
+      "bytes": 65136,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-07.png",
+      "sha256": "912f37b4288d7d825042cb303bf378d2839a4189c7016e23868174a58e39140b",
+      "bytes": 65706,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bramble/frame-08.png",
+      "sha256": "571342a26b42e8debef1d9caefc93ba9e0cc870ef1763495491b26d4e884396e",
+      "bytes": 65228,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-00.png",
+      "sha256": "004b37e7b5041b5810fab15615117c0c9e98c258687d699ef0ef95cd7974b291",
+      "bytes": 65475,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-01.png",
+      "sha256": "2f919309a178b69f41a7185ae0efce7e6dcdfb331de0356e0dda34cdb6a5e859",
+      "bytes": 70563,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-02.png",
+      "sha256": "19c874984aecd898c81855bfe80808d965ec548566833b18180d89ab36306c1d",
+      "bytes": 72873,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-03.png",
+      "sha256": "acda5b1220b87a32060baf0d87e952ead6c6c7656b7c71d7270333923eab292d",
+      "bytes": 76431,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-04.png",
+      "sha256": "58b8fc847b64117ea1343e6eb774416ac538fb8a19642ec0b59b173088c3971b",
+      "bytes": 78761,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-05.png",
+      "sha256": "24523c0664518bfa2ce48356b82ba7b434a9cdcf38fc580077e2a734c69149d0",
+      "bytes": 80569,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-06.png",
+      "sha256": "e809958d28a523e15b06a50eff5294d4bafc58e291eeba84e8993bbed1444f56",
+      "bytes": 83460,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-07.png",
+      "sha256": "d5a68ceb667ae1f0b58702ea03027a34487343afa87f4dc031485180a3966aaa",
+      "bytes": 84969,
+      "width": 320,
+      "height": 320
+    },
+    {
+      "path": "assets/chests/downloaded/bonbon/frame-08.png",
+      "sha256": "bee01904204367e39069839b52fab0ad205814717340bb5d50140bc69ae79c94",
+      "bytes": 83464,
+      "width": 320,
+      "height": 320
+    }
+  ]
+}

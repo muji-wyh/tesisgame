@@ -59,6 +59,8 @@ var _pop_launch_path: String = POP_LAUNCH_FALLBACK
 var _pip_rng := RandomNumberGenerator.new()
 var _last_pip_path: String = ""
 var _pip_voice_request: int = -1
+var _speech_debug_mix: float = 1.0
+var _pip_reaction_gain: float = 0.68
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_tension_progress: float = -1.0
@@ -144,9 +146,11 @@ func cue(effect_id: String = "", voice_id: String = "") -> void:
 	if not effect_id.is_empty():
 		var path: String = "res://assets/audio/sfx/" + effect_id + ".wav"
 		if effect_id == "pop-slice":
-			_play_pop_slice()
+			if _speech_debug_mix > 0.0:
+				_play_pop_slice()
 		elif effect_id == "pop-launch":
-			_play(pop_launch, _pop_launch_path)
+			if _speech_debug_mix > 0.0:
+				_play(pop_launch, _pop_launch_path)
 		else:
 			_play(effect, path)
 	if not voice_id.is_empty():
@@ -163,7 +167,7 @@ func _play_pop_slice() -> void:
 
 
 func play_match_voice_hit() -> void:
-	if not muted and active and available:
+	if not muted and active and available and _speech_debug_mix > 0.0:
 		_play(match_voice_hit, MATCH_VOICE_HIT_PATH)
 
 
@@ -226,15 +230,37 @@ func is_pip_busy() -> bool:
 
 
 func play_pip_reaction(correct: bool) -> void:
-	if muted or not active or not available:
+	if muted or not active or not available or _speech_debug_mix <= 0.0:
 		return
 	if pip_reaction == null:
 		pip_reaction = _player(0.68)
 	# Gameplay feelings have their own short, nonverbal voice. They cannot
 	# replace a card's pronunciation or its answer cue.
 	pip_reaction.pitch_scale = 1.12 if correct else 0.80
-	pip_reaction.volume_db = linear_to_db(0.68 if correct else 0.54)
+	_pip_reaction_gain = 0.68 if correct else 0.54
+	pip_reaction.volume_db = linear_to_db(_pip_reaction_gain * _speech_debug_mix)
 	_play(pip_reaction, PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2])
+
+
+func set_speech_debug_mix(value: float) -> bool:
+	if value not in [0.0, 0.35, 1.0]:
+		return false
+	_speech_debug_mix = value
+	# Only the microphone-competing gameplay channels participate in this
+	# temporary comparison. Music, spoken words and rewards keep their mix.
+	for player: AudioStreamPlayer in _pop_players:
+		player.volume_db = linear_to_db(maxf(0.0001, POP_HIT_GAIN * value))
+	if pop_launch != null:
+		pop_launch.volume_db = linear_to_db(maxf(0.0001, POP_LAUNCH_GAIN * value))
+	if match_voice_hit != null:
+		match_voice_hit.volume_db = linear_to_db(maxf(0.0001, MATCH_VOICE_HIT_GAIN * value))
+	if pip_reaction != null:
+		pip_reaction.volume_db = linear_to_db(maxf(0.0001, _pip_reaction_gain * value))
+	if value == 0.0:
+		stop_pop_sounds()
+		stop_match_voice_hit()
+		stop_pip_reaction()
+	return true
 
 
 func stop_pip_reaction() -> void:

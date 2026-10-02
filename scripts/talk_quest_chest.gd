@@ -42,6 +42,7 @@ var _frame_time: float = 0.0
 var _accent := Color("#e9b776")
 var _body := Color("#8cbabc")
 var _styles: Dictionary = {}
+var externally_driven: bool = false
 
 
 func _init() -> void:
@@ -65,7 +66,7 @@ func configure(chest_data: Dictionary) -> void:
 
 
 func play_open() -> void:
-	if mode == "opening":
+	if externally_driven or mode == "opening":
 		return
 	mode = "opening"
 	_elapsed = 0.0
@@ -90,6 +91,21 @@ func set_reduced_motion(value: bool) -> void:
 	queue_redraw()
 
 
+func set_external_control(enabled: bool) -> void:
+	# A shared ChestView supplies the timeline and effects for gameplay.
+	# Independent album previews retain their original drawing and timing.
+	externally_driven = enabled
+	reset_closed()
+	set_process(not enabled)
+
+
+func set_external_pose(amount: float) -> void:
+	if not externally_driven:
+		return
+	_open_amount = clampf(amount, 0.0, 1.0) if is_finite(amount) else 0.0
+	queue_redraw()
+
+
 func set_preview_time(seconds: float) -> void:
 	# Deterministic art inspection without emitting gameplay events.
 	mode = "preview"
@@ -105,7 +121,7 @@ func get_animation_state() -> Dictionary:
 
 
 func _process(delta: float) -> void:
-	if not is_visible_in_tree():
+	if externally_driven or not is_visible_in_tree():
 		return
 	if not reduced_motion:
 		_idle_time += delta
@@ -132,6 +148,8 @@ func _process(delta: float) -> void:
 
 
 func _update_pose() -> void:
+	if externally_driven:
+		return
 	if reduced_motion:
 		_open_amount = 1.0 if _elapsed >= RELEASE_SECONDS else 0.0
 	else:
@@ -144,12 +162,13 @@ func _draw() -> void:
 	var factor: float = minf(size.x / DESIGN_SIZE.x, size.y / DESIGN_SIZE.y)
 	var origin := (size - DESIGN_SIZE * factor) * 0.5
 	draw_set_transform(origin, 0.0, Vector2.ONE * factor)
-	_ellipse(Vector2(210, 316), Vector2(112, 18), Color(0.20, 0.24, 0.32, 0.10))
-	_ellipse(Vector2(210, 312), Vector2(86, 10), Color(0.20, 0.24, 0.32, 0.07))
-	_glow()
-	var bob: float = sin(_idle_time * 1.2) * 1.8 if not reduced_motion and mode == "closed" else 0.0
+	if not externally_driven:
+		_ellipse(Vector2(210, 316), Vector2(112, 18), Color(0.20, 0.24, 0.32, 0.10))
+		_ellipse(Vector2(210, 312), Vector2(86, 10), Color(0.20, 0.24, 0.32, 0.07))
+		_glow()
+	var bob: float = sin(_idle_time * 1.2) * 1.8 if not externally_driven and not reduced_motion and mode == "closed" else 0.0
 	var shake: float = 0.0
-	if mode == "opening" and _elapsed < HOLD_SECONDS and not reduced_motion:
+	if not externally_driven and mode == "opening" and _elapsed < HOLD_SECONDS and not reduced_motion:
 		shake = sin(_elapsed * 23.0) * smoothstep(0.0, HOLD_SECONDS, _elapsed) * 1.7
 	draw_set_transform(origin + Vector2(shake, bob) * factor, 0.0, Vector2.ONE * factor)
 	match chest_index:
@@ -174,9 +193,9 @@ func _draw() -> void:
 		19: _honeycomb()
 		20: _patchwork()
 	draw_set_transform(origin, 0.0, Vector2.ONE * factor)
-	if _elapsed >= RELEASE_SECONDS:
+	if not externally_driven and _elapsed >= RELEASE_SECONDS:
 		_reward()
-	if mode == "closed":
+	if not externally_driven and mode == "closed":
 		_glint(Vector2(279, 150), 7.5, Color(CREAM, 0.6 + sin(_idle_time) * 0.18))
 	draw_set_transform(Vector2.ZERO)
 

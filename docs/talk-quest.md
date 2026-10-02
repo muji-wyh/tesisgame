@@ -1,99 +1,160 @@
 # Talk Quest
 
-Talk Quest contains twelve everyday conversations, an eighteen-line birthday boss conversation, and a twenty-line cooperative toy workshop. Adam and Yoki are the only speakers. The campaign has 170 sentences and fourteen distinct approved creature assignments.
+Talk Quest is a fourteen-stage spoken-word adventure. Choose a destination,
+allow the microphone when prompted, and say a word as its picture flies into
+view. The matched word becomes a glowing projectile and strikes the monster
+for one health segment. The map shows destination landmarks without monster
+portraits or a scrolling container.
 
-Open the **Talk Quest** tab and choose the first unlocked adventure. Read both
-characters' turns. **Speak** starts browser recognition; the current prompt and
-recognized words stay visible together. **Hear line** stops the microphone and
-reads the prompt using the browser's English voice. Press **Speak** again when
-ready. **Type** offers the same sentence matching without a microphone; submit
-with **Say it** or Enter. There is no penalty for a mistaken sentence.
+The twelve ordinary stages and two boss stages retain their distinct scenes,
+approved animated creatures, and reward designs. The workshop finale now uses
+word combat too. Archived conversations remain in the content catalog for save
+migration; they do not control active play. There are no sentence, part-choice,
+Speak, Hear line, or Type controls.
 
-**Map** pauses the adventure. **Continue saved adventure** restores the exact
-line or unopened treasure, including after reloading. A pending victory or chest
-must be collected before starting another adventure. Browser backgrounding and
-mode changes stop listening, and resuming always waits for a new Speak gesture.
-The treasure shelf shows all twenty designs; repeat a completed adventure to
-earn the six additional designs. Saved progression is shared on this device.
+## Difficulty and finite attempts
 
-The workshop has no health, damage, attack, or defeat logic. Before each of its five repairs, choose the correct part from three illustrated options. The parts are a wheel, a wing, a ribbon, a screw, and a winding key. A wrong choice provides friendly feedback without a penalty. Each chosen part then enables four successful lines. The requester and helper exchange roles for each toy. Choosing a part, completing a repair, and completing the workshop are separate events.
+Every monster has N health segments. An attempt can launch at most N + m words,
+where m is the larger of three or one quarter of N rounded upward. Up to three
+words can be visible at once. Each matched word deals exactly one damage;
+expired words use up an opportunity without damaging the monster. Reaching
+zero health ends the battle immediately. Exhausting the entire word budget
+with health remaining leads to Retry.
 
-Runtime monsters use the acquired, rigged source assets documented in
-[the monster provenance](assets/talk-quest-monsters.md). Environments, treasure
-mechanisms, and part illustrations are original procedural art based on the
-reviewed plan. Hit and friendly defeat reactions are authored gameplay motion;
-they are not represented as source-pack animation clips.
+| Level | Destination | Health N | Extra words m | Word budget |
+| --- | --- | ---: | ---: | ---: |
+| 1 | At the Front Door | 5 | 3 | 8 |
+| 2 | Clean Hands | 6 | 3 | 9 |
+| 3 | Breakfast Time | 7 | 3 | 10 |
+| 4 | Getting Dressed | 8 | 3 | 11 |
+| 5 | Taking Turns | 9 | 3 | 12 |
+| 6 | Our Classroom Picture | 10 | 3 | 13 |
+| 7 | Fruit Shopping | 12 | 3 | 15 |
+| 8 | A Quiet Library | 14 | 4 | 18 |
+| 9 | A Day at the Zoo | 16 | 4 | 20 |
+| 10 | Riding the Bus | 18 | 5 | 23 |
+| 11 | A Sandcastle at the Beach | 20 | 5 | 25 |
+| 12 | Camping Under the Stars | 22 | 6 | 28 |
+| 13 | The Grand Birthday Party | 25 | 7 | 32 |
+| 14 | Magic Toy Workshop | 28 | 7 | 35 |
 
-## Content
+Vocabulary is selected from the existing validated GameData word catalog,
+including its pictures and audio. Each destination has a curated everyday word
+pool. Simultaneous targets cannot share an accepted speech form or a visually
+confusable noun. Launches favor less-used words in the pool.
 
-`talk_quest_data.gd` returns copied dictionaries through `level(number)`, `levels()`, `chest(id)`, `chests()`, and `repairs()`. Level numbers are one-based. Each level supplies:
+## Speech and presentation
 
-- `number`, `id`, `title`, `kind`, and `cooperative`.
-- `scene_id` and `scene` with `id`, `name`, `accent`, `description`, and `props`.
-- `monster_id`, `monster_name`, and `source_creature`.
-- `chest_id` and `lines`; each line has `id`, `uid`, `speaker`, and `text`.
-- Workshop lines additionally include `repair_id`, `repair_name`, `repair_index`, `repair_step`, and `role`.
+The browser receives all live word IDs, reviewed forms, and remaining flight
+times. It binds each recognition occurrence to the original visible flight and
+speech round. A recognized noun may match its reviewed plural, compound
+spelling, or homophone through the shared SpeechWords rules. Arbitrary
+substrings, extra nouns, or expired targets never score.
 
-The reviewed chest IDs are `chest-01` through `chest-20`. Their presentation duration is 5 seconds, with hold and reveal markers at 1.20 and 3.36 seconds. The first clear of each level uses its corresponding chest. The first six replays award designs 15 through 20; subsequent replays cycle through all twenty designs. The companion chest remains gated until the workshop has been completed.
+A matching interim or final occurrence can hit once. A final mismatch is
+consumed without damage, and an interim match cannot hit again when its final
+result arrives. Pause, resume, retry, and reload create new speech rounds.
+Pausing freezes target ages and launch timing; resuming continues the same
+flight windows instead of adding free words.
+
+The stage supplies the matched target's picture, word, position, and flight
+progress to the projectile effect. The monster retains its source idle motion,
+friendly hit reactions, final retreat, and victory sequence. Reduced motion
+retains readable hit feedback and the same combat rules.
+
+The presentation uses continuous 3D environments, a perspective camera, and
+framing that adapts to portrait and landscape play. Natural colors, layered
+outdoor terrain, room-specific furnishings, and subtle wood, stone, plaster,
+tile, and sand surfaces give each destination depth. Creature-specific material
+profiles and skeletal gestures supplement the source idle clips; attacks use
+weight-dependent anticipation and alternating recoil. A dark word arena keeps
+the flying picture cards distinct from the scene.
+
+Levels 1, 12 and 14 feature the acquired giants Stonewarden, Stormwing and
+Embermaw. Their original painted textures, distinct silhouettes and larger
+standing bodies use a low camera. Attack framing temporarily widens to retain
+lifted heads, wings and horns. Stormwing and Embermaw use imported skeletal
+attack, hit and defeat clips; Stonewarden uses verified game-authored skeletal
+motion. While an idle giant is in active play, a threat gesture begins after
+5.5 seconds and repeats no sooner than 7.5 seconds later. This gesture deals
+no damage and does not change the word budget. Pausing freezes it; reduced
+motion disables the periodic gesture and moving camera. The other eleven
+level creatures remain distinct. See [giant asset provenance](assets/talk-quest-giants.md).
+
+## Rewards
+
+First clears award chest-01 through chest-14. The first six replays award
+chest-15 through chest-20; later replays cycle through the established twenty
+designs. The companion chest remains gated until the final workshop monster
+has been defeated and its reward collected.
+
+Treasure uses Match mode's shared ChestView and ChestFeel sequence. Hold with
+touch, mouse, keyboard, or controller accept. Confirmation occurs at 1.2 seconds;
+physical release occurs at 3.36 seconds and opening completes at 5 seconds.
+Releasing before physical release cancels the gesture. Reduced motion completes
+after confirmation. Completion commits one reward and one clear; repeated
+callbacks cannot award it again.
 
 ## Model integration
 
-The pure `RefCounted` model emits `changed` for observable state changes. Its public state includes `phase`, `level_number`, `level`, `line_index`, `hp`, `max_hp`, `round_id`, `last_transcript`, `feedback`, `repaired_toys`, `selected_parts`, `completed_levels`, `unlocked_level`, `collected_chests`, `total_clears`, and `companion_unlocked`.
+The pure RefCounted model emits changed when observable gameplay state changes.
+The stage calls advance(delta) only while play is active. Flight ages update
+every frame without emitting a signal every frame.
 
-| Call | Behavior |
+| API or state | Purpose |
 | --- | --- |
-| `start_level(number) -> bool` | Starts or restarts an unlocked conversation. |
-| `current_prompt() -> Dictionary` | Returns the current line with `index`, `line_number`, and `total_lines`; empty after the last line. |
-| `speech_target() -> Dictionary` | Returns `round_id` and `target_uid`; target zero means listening must not score. |
-| `submit_speech_event(event) -> Dictionary` | Validates the original browser occurrence and prompt binding. |
-| `submit_transcript(text) -> Dictionary` | The explicit typed practice action; uses the same sentence validator. |
-| `pause()`, `resume() -> Dictionary` | Pause retains the previous stage. Resume returns that stage in `result.phase`. |
-| `finish_victory() -> Dictionary` | Moves from the final animation stage to the chest stage. |
-| `open_chest() -> Dictionary` | Commits one reward and one clear, then enters `complete`. |
-| `current_chest() -> Dictionary` | Returns the deterministic reward for the current attempt. |
-| `current_part_choices() -> Array[Dictionary]` | Returns the current workshop trio, each with `id`, `label`, and `shape`; empty outside an unfinished workshop. |
-| `choose_part(id) -> Dictionary` | Selects a shown part; `accepted` indicates a processed choice and `correct` indicates that the gate opened. |
-| `has_correct_part() -> bool` | Reports whether the current repair has its part; always true for ordinary conversations. |
-| `is_unlocked(number)`, `is_paused()`, `is_cooperative()` | Query helpers. |
-| `clear_count(number)`, `progress_ratio()` | Return a level's durable clear count and the current line progress. |
-| `stop()` | Abandons the in-memory attempt; pause and checkpoint first to preserve Continue Saved. |
+| start_level(number, seed_value = -1) | Start or retry an unlocked level and launch its first word. |
+| targets | Live flight dictionaries with uid, word, forms, age, lifetime, lane, x_start, x_end, peak, and spin. |
+| hp, max_hp, hits, misses, spawned, total_words | Health segments and finite launch accounting. |
+| advance(delta) | Process launch and expiry events in chronological order, including slow frames. |
+| speech_targets() | Return copied uid, text, forms, and remaining_ms descriptors for every live target. |
+| speech_target() | Return round_id and the oldest target_uid for single-target integrations. |
+| submit_speech_event(event) | Validate the original occurrence, round, target, and spoken noun. |
+| current_prompt() | Compatibility view of the oldest target's text and uid; empty between launches. |
+| submit_transcript(text) | Native test and accessibility helper using the same bound validator. |
+| pause(), resume(), stop() | Freeze, resume, or abandon an attempt. |
+| finish_victory(), open_chest() | Advance the guarded victory and durable reward stages. |
+| export_progress(), import_progress(value) | Serialize or restore validated progress. |
 
-The stage sequence is `ready -> playing -> victory -> chest -> complete`. `paused` retains `playing`, `victory`, or `chest` privately. Presentation code completes the monster's final animation before calling `finish_victory()`, and calls `open_chest()` at the reward reveal. Both stage actions are guarded against repeated calls. The workshop uses the `victory` stage for waking, stretching, waving, and celebrating without combat.
+An external event supplies event_id, round_id, target_uid, text, and stage
+(interim or final). Optional received_at_ms must be finite and nonnegative.
+The receipt includes accepted, matched, completed, damage, reason, phase,
+hp, hits, misses, spawned, and total_words. Successful hits also supply target,
+word, and target_uid. Only matched indicates damage; accepted can also mean a
+valid mismatch was processed. The host must acknowledge a scored occurrence
+using matched.
 
-## Speech events
+Stages are ready, playing, lost, victory, chest, complete, and paused. A paused
+attempt retains its prior playing, victory, or chest phase. Presentation waits
+for the final monster animation before finish_victory(), then commits the
+reward only when the chest completes.
 
-External speech must supply its original binding:
+## Checkpoints and migration
 
-```json
-{
-  "event_id": "recognition-occurrence-id",
-  "round_id": "round-captured-when-listening-began",
-  "target_uid": 1,
-  "text": "Knock, knock.",
-  "stage": "final"
-}
-```
+Version-two saves contain fourteen completion counters and an optional pending
+run: level number, hits, misses, spawned count, elapsed time, next launch delay,
+live flight descriptors, phase, clear number, and generated run ID. Word
+descriptors and speech forms are reconstructed from canonical IDs. Recognition
+text, event IDs, browser speech rounds, and recordings never enter the save.
 
-`stage` is `interim` or `final`. An optional `received_at_ms` must be a finite nonnegative number. The browser must retain the same occurrence ID and original prompt binding when an interim result becomes final. It must not rebind a delayed result to the currently visible prompt.
+A valid pending run restores paused, preserving target IDs and their remaining
+flight windows. Invalid counts, nonfinite coordinates, duplicate live IDs,
+inconsistent budgets, or stale pending reward counters discard the pending run
+without granting progress.
 
-Every result supplies `accepted`, `matched`, `completed`, `damage`, `repair_completed`, `reason`, `feedback`, `phase`, `line_index`, `hp`, and `cooperative`. `accepted` means valid input was processed; only `matched` advances a sentence. A successful match also supplies the completed `prompt`, its `target_uid`, and any `repair_id`. Typed practice adds `input: "practice"`.
-
-Interim results update the visible recognition without awarding progress. Final occurrences are consumed even when their sentences do not match. One occurrence cannot advance two lines. Pause, resume, a new attempt, and restoring a save invalidate previous speech round bindings. Wrong final answers show the whole sentence again and carry no penalty.
-
-The workshop also consumes but does not score final speech while its part gate is closed. A successful part selection creates a new `round_id`, invalidating speech captured before the choice. Stop existing recognition before selecting a part, then bind the next listening session to the new `speech_target()`. Part selection never advances a line or completes a toy by itself. Repeating an already successful selection is a no-op.
-
-Matching compares the entire sentence after lowercasing, punctuation and whitespace normalization, and a fixed list of explicit contraction expansions. All words, negation, numbers, and Unicode letters remain significant. There is no fuzzy, substring, noun-only, or homophone matching.
-
-## Checkpoints and privacy
-
-Save `export_progress()` after accepted lines and stage transitions, particularly after `open_chest()`. The desktop host stores this dictionary in `user://talk_quest.cfg`; the web host uses the local storage key `wordBuddies.talkQuest`.
-
-The save contains only a version, fourteen clear counters, and an optional unfinished run with its level, next line index, stage, next clear number, generated run ID, and `selected_parts`. The latter is an ordered prefix of canonical part IDs, such as `["wheel", "wing"]`. It never includes spoken input, transcripts, recognition event IDs, or recordings. The model derives health, completed repairs, collection IDs, total clears, and unlocks from the validated counters and line index.
-
-`import_progress(value) -> bool` rejects an unsupported save root, bounds counters, ignores unknown fields, and rejects inconsistent pending runs. It restores a valid pending conversation, victory, or chest as `paused`; `has_saved_run()` enables Continue Saved and `resume()` restores the saved stage. Recognition state is cleared and a new speech round is generated. A chest is committed atomically with its clear count, so a stale pending reward cannot be combined with committed progress and awarded again.
-
-Workshop saves preserve the difference between a part selected before a group's first sentence and a part not yet selected. Invalid IDs, missing required selections, or choices for future groups reject the pending run. Earlier version-one saves without the optional `selected_parts` field retain their spoken progress by inferring parts only for groups already begun.
+Version-one conversation saves retain validated completion counts, unlocked
+destinations, and earned chest designs. Unfinished conversations safely return
+to the map because their sentence indexes cannot describe finite word flights.
+Already completed pending victories or chests remain claimable exactly once.
 
 ## Verification
 
-The model suite is `tests/godot/talk_quest_model_tests.gd`. It covers the content catalog, complete-sentence matching, speech metadata and replay protection, pause/resume, part gates and their saved selections, all campaign health and repair transitions, twenty-design reward reachability, guarded reward commits, private checkpoints, and malformed saves. Run it through the project's serialized Godot test workflow; do not run imports or exports concurrently with other Godot processes for this project.
+tests/godot/talk_quest_model_tests.gd covers increasing health, curated words,
+bounded overlapping flights, frame-step equivalence, N + m budgets, m versus
+m + 1 misses, original speech bindings, reviewed forms, duplicate and stale
+callbacks, pause/resume, retries, all fourteen victories, twenty reward designs,
+private checkpoints, legacy migration, and malformed saves.
+
+Run the model, scene, map, reward, browser, and export checks through the
+project's serialized Godot workflow. Imports, exports, and native game tests
+must not run concurrently against this project.

@@ -10,6 +10,15 @@ const speechSource = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?
 assert.ok(questSource, 'The maintained shell exposes an isolated quest host');
 assert.ok(speechSource, 'The quest uses the maintained browser speech host');
 
+test('Talk Quest accessible help describes finite floating words and level-triggered capture', () => {
+  const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+  assert.match(help, /Choose a level[^.]*start the microphone/);
+  assert.match(help, /say the floating words/);
+  assert.match(help, /one health point/);
+  assert.match(help, /limited supply of words/);
+  assert.doesNotMatch(help, /Hear line|use Type|matching sentence|repair five toys/);
+});
+
 function element() {
   const handlers = {};
   return {
@@ -89,15 +98,26 @@ function speechFixture({ prefixed = false } = {}) {
     createLocalSpeechPreparation: () => ({ modeForNewRound: () => 'browser', setVisible() {},
       getState: () => ({ enabled: false, ready: false, capable: false, status: 'disabled', error: '' }) })
   });
-  host.observeQuestSpeech(json => {
+  host.observeQuestSpeech((json, receipt) => {
     assert.equal(typeof json, 'string', 'The Godot bridge receives one serialized event argument');
-    events.push(JSON.parse(json));
+    const event = JSON.parse(json);
+    events.push(event);
+    if (receipt) receipt.accepted = event.target_uid > 0;
   });
   host.observeSpeech((...args) => genericResults.push(args), (...args) => states.push(args));
   return { host, window, document, elements, instances, events, states, genericResults, advance,
     get starts() { return starts; }, get aborts() { return aborts; }, get latest() { return instances.at(-1); },
     listen(target = { round_id: 'quest-round-1', target_uid: 1 }) {
       assert.equal(host.questTarget(JSON.stringify(target)), true);
+      host.speechMode(true, 'quest');
+      advance();
+      instances.at(-1).capture();
+    },
+    publishWords(targets, round = 'quest-words-1') {
+      assert.equal(host.questTargets(JSON.stringify({ round_id: round, targets })), true);
+    },
+    listenWords(targets = [{ uid: 1, text: 'cat', forms: ['cat', 'cats'], remaining_ms: 10000 }], round = 'quest-words-1') {
+      this.publishWords(targets, round);
       host.speechMode(true, 'quest');
       advance();
       instances.at(-1).capture();
@@ -138,6 +158,71 @@ test('invalid progress and failed storage cannot report a successful checkpoint'
   assert.equal(f.writes.length, 1);
   f.readFails = true;
   assert.equal(f.host.questProgress(), false);
+});
+
+function wordCheckpoint() {
+  return { version: 2, completion_counts: Array(14).fill(0), run: {
+    level_number: 1, hits: 1, misses: 0, spawned: 2, elapsed: 2.8, next_spawn_in: 1.5,
+    phase: 'playing', clear_number: 1, run_id: 'tq-run-1-2-3', targets: [{ uid: 2, word_id: 'cat',
+      age: 0.65, lifetime: 6.8, lane: 0, x_start: 0.25, x_end: 0.48, peak: 0.22, spin: 0.05 }]
+  } };
+}
+
+test('version two quest progress retains finite flights while discarding speech and derived word data', () => {
+  const f = questFixture(), expected = wordCheckpoint(), candidate = structuredClone(expected);
+  Object.assign(candidate, { transcript: 'private utterance', audio: 'private audio' });
+  Object.assign(candidate.run, { line_index: 1, feedback: 'private utterance', selected_parts: ['wheel'] });
+  Object.assign(candidate.run.targets[0], { word: { text: 'private utterance' }, forms: ['private utterance'],
+    transcript: 'private utterance', event_id: 'speech-1', recording: 'audio', volley: false, x: 0.2, rotation: 0.1 });
+  assert.equal(f.host.saveQuestProgress(JSON.stringify(candidate)), true);
+  assert.deepEqual(JSON.parse(f.host.questProgress()), expected);
+  assert.doesNotMatch(f.host.questProgress(), /private|transcript|event_id|recording|forms|feedback|line_index|selected_parts/);
+  assert.equal(f.host.saveQuestProgress(JSON.stringify({ ...expected, run: {} })), true);
+  assert.deepEqual(JSON.parse(f.host.questProgress()).run, {});
+});
+
+test('actual exported Godot runs preserve signed instance IDs without blocking microphone startup', () => {
+  const f = questFixture();
+  // RefCounted IDs can occupy Godot's signed high bit in the Web export.
+  const payload = { completion_counts: Array(14).fill(0), version: 2, run: {
+    clear_number: 1, elapsed: 0, hits: 0, level_number: 1, misses: 0, next_spawn_in: 2.15,
+    phase: 'playing', run_id: 'tq-run--9223371976255469986-18431100-1', spawned: 1,
+    targets: [{ age: 0, drift: -0.00294307246804237, height: 0.322026461362839,
+      lane: 2, lifetime: 6.8, peak: 0.322026461362839, rotation: 0.0792519524693489,
+      spin: 0.0792519524693489, uid: 1, volley: false, word_id: 'door',
+      x: 0.753631644397974, x_end: 0.750688571929932, x_start: 0.753631644397974 }]
+  } };
+  assert.equal(f.host.saveQuestProgress(JSON.stringify(payload)), true);
+  const saved = JSON.parse(f.host.questProgress());
+  assert.equal(saved.run.run_id, payload.run.run_id);
+  assert.deepEqual(saved.run.targets, [{ age: 0, lane: 2, lifetime: 6.8, peak: 0.322026461362839,
+    spin: 0.0792519524693489, uid: 1, word_id: 'door', x_end: 0.750688571929932, x_start: 0.753631644397974 }]);
+});
+
+test('malformed version two checkpoints cannot replace valid saved finite flights', () => {
+  const f = questFixture(), original = wordCheckpoint();
+  assert.equal(f.host.saveQuestProgress(JSON.stringify(original)), true);
+  const serialized = f.host.questProgress();
+  const changes = [
+    value => { value.completion_counts[0] = 'private utterance'; },
+    value => { value.completion_counts = []; },
+    value => { value.run.hits = 'private utterance'; },
+    value => { value.run.elapsed = 3601; },
+    value => { value.run.next_spawn_in = -1; },
+    value => { value.run.run_id = 'private utterance'; },
+    value => { value.run.phase = 'private utterance'; },
+    value => { value.run.targets[0].age = 6.8; },
+    value => { value.run.targets[0].word_id = 'private utterance'; },
+    value => { value.run.targets[0].lane = 4; },
+    value => { value.run.targets[0].uid = 3; },
+    value => { value.run.targets = Array(4).fill(value.run.targets[0]); }
+  ];
+  for (const change of changes) {
+    const value = structuredClone(original);
+    change(value);
+    assert.equal(f.host.saveQuestProgress(JSON.stringify(value)), false);
+    assert.equal(f.host.questProgress(), serialized);
+  }
 });
 
 test('workshop persistence retains only the five known part IDs', () => {
@@ -293,4 +378,165 @@ test('quest recognition bounds forwarded text without splitting a sentence into 
   assert.equal(f.events[0].text.length, 2000);
   assert.equal(f.events[0].stage, 'final');
   assert.equal(f.events[0].target_uid, 1);
+});
+
+test('floating-word quest capture starts once and target refreshes keep the active session', () => {
+  for (const prefixed of [false, true]) {
+    const f = speechFixture({ prefixed });
+    const targets = [{ uid: 1, text: 'cat', forms: ['cat', 'cats'], remaining_ms: 10000 }];
+    f.publishWords(targets);
+    assert.equal(f.starts, 0, 'Publishing words alone never starts the microphone');
+    f.host.speechMode(true, 'quest');
+    f.advance();
+    assert.equal(f.states.at(-1)[1], false);
+    f.latest.capture();
+    f.publishWords(targets);
+    f.host.speechMode(true, 'quest');
+    assert.equal(f.starts, 1);
+    assert.equal(f.aborts, 0);
+    f.latest.result([['cat', false]]);
+    f.advance(149);
+    assert.equal(f.events.length, 0);
+    f.advance(1);
+    assert.equal(f.events.length, 1);
+    assert.equal(f.events[0].stage, 'interim');
+    assert.equal(f.events[0].text, 'cat');
+    assert.equal(f.events[0].target_uid, 1);
+    assert.equal(f.events[0].round_id, 'quest-words-1');
+    assert.equal(f.events[0].received_at_ms, 0);
+    f.latest.result([['cats', true]]);
+    f.latest.result([['cat', true]]);
+    assert.equal(f.events.length, 1, 'Acknowledged interim and rewritten final are the same consumed occurrence');
+  }
+});
+
+test('quest floating words share Pop token alignment, reviewed aliases and separate occurrence IDs', () => {
+  const f = speechFixture();
+  f.listenWords([
+    { uid: 11, text: 'cat', forms: ['cat', 'cats'], remaining_ms: 10000 },
+    { uid: 12, text: 'dog', forms: ['dog', 'dogs'], remaining_ms: 10000 }
+  ]);
+  f.latest.result([['cats', false]]);
+  f.advance(150);
+  f.latest.result([['a cats dogs', false]]);
+  f.advance(150);
+  f.latest.result([['a cats dogs', true]]);
+  assert.deepEqual(f.events.map(event => event.target_uid), [11, 12]);
+  assert.notEqual(f.events[0].event_id, f.events[1].event_id);
+  assert.deepEqual(f.events.map(event => event.text), ['cats', 'dogs']);
+});
+
+test('old quest speech cannot transfer to a newly spawned word with the same text', () => {
+  const f = speechFixture();
+  f.listenWords();
+  f.latest.result([['cat', false]]);
+  f.publishWords([{ uid: 2, text: 'cat', forms: ['cat', 'cats'], remaining_ms: 10000 }]);
+  f.advance(150);
+  f.latest.result([['cats', true]]);
+  assert.deepEqual(f.events, []);
+  f.latest.result([['cats', true], ['cat', true]], 1);
+  assert.equal(f.events.length, 1);
+  assert.equal(f.events[0].target_uid, 2);
+});
+
+test('quest word expiry blocks stable interims and final callbacks even before the next native publication', () => {
+  for (const remaining of [0, 100, 150]) {
+    const f = speechFixture();
+    f.listenWords([{ uid: 1, text: 'cat', remaining_ms: remaining }]);
+    f.latest.result([['cat', false]]);
+    f.advance(150);
+    f.latest.result([['cat', true]]);
+    assert.deepEqual(f.events, []);
+  }
+  const f = speechFixture();
+  f.listenWords([{ uid: 1, text: 'cat', remaining_ms: 100 }]);
+  f.latest.result([['cat', false]]);
+  f.advance(50);
+  f.publishWords([{ uid: 1, text: 'cat', remaining_ms: 10000 }]);
+  f.advance(100);
+  assert.deepEqual(f.events, [], 'A later publication cannot extend the first-observation binding');
+});
+
+test('quest exact words reject partial, possessive and unreviewed suffixes', () => {
+  const f = speechFixture();
+  f.listenWords();
+  const entries = [];
+  for (const word of ['caterpillar', "cat's", 'catlike', 'ca']) {
+    entries.push([word, true]);
+    f.latest.result(entries, entries.length - 1);
+  }
+  assert.ok(f.events.every(event => event.target_uid === 0));
+  entries.push(['CATS!', true]);
+  f.latest.result(entries, entries.length - 1);
+  assert.equal(f.events.at(-1).target_uid, 1);
+  assert.equal(f.events.at(-1).text, 'CATS');
+});
+
+test('quest candidates survive unrelated Pop status changes', () => {
+  const f = speechFixture();
+  f.listenWords();
+  f.latest.result([['cat', false]]);
+  assert.equal(f.host.popStatus(JSON.stringify({ round_id: 'pop-unrelated', phase: 'idle', targets: [] })), true);
+  f.advance(150);
+  assert.equal(f.events.length, 1);
+  assert.equal(f.events[0].round_id, 'quest-words-1');
+  assert.equal(f.events[0].target_uid, 1);
+});
+
+test('quest floating-word round changes invalidate pending candidates and every old callback', () => {
+  const f = speechFixture();
+  f.listenWords();
+  const old = f.latest;
+  old.result([['cat', false]]);
+  f.publishWords([{ uid: 1, text: 'cat', remaining_ms: 10000 }], 'quest-words-2');
+  assert.equal(f.aborts, 1);
+  old.capture();
+  old.result([['cat', true]]);
+  old.callbacks.error({ error: 'network' });
+  old.callbacks.end();
+  f.advance(1000);
+  assert.deepEqual(f.events, []);
+  assert.equal(f.starts, 1);
+  f.host.speechMode(true, 'quest');
+  f.advance();
+  f.latest.capture();
+  f.latest.result([['cat', true]]);
+  assert.equal(f.events.length, 1);
+  assert.equal(f.events[0].round_id, 'quest-words-2');
+});
+
+test('invalid floating-word bindings preserve capture and lifecycle stop cancels pending words', () => {
+  for (const stop of ['stop', 'hidden', 'pagehide']) {
+    const f = speechFixture();
+    f.listenWords();
+    for (const input of ['{', 'null', '[]', '{}', '{"round_id":"","targets":[]}',
+      '{"round_id":"quest-words-1","targets":{}}']) assert.equal(f.host.questTargets(input), false);
+    assert.equal(f.aborts, 0);
+    const old = f.latest;
+    old.result([['cat', false]]);
+    if (stop === 'stop') f.host.stopSpeech();
+    if (stop === 'hidden') { f.document.hidden = true; f.document.dispatch('visibilitychange'); }
+    if (stop === 'pagehide') f.window.dispatch('pagehide');
+    f.advance(1000);
+    old.result([['cat', true]]);
+    assert.deepEqual(f.events, []);
+    assert.equal(f.starts, 1);
+  }
+});
+
+test('quest candidate acknowledgements accept synchronous native receipts and direct fixture returns', () => {
+  for (const direct of [false, true]) {
+    const f = speechFixture();
+    const received = [];
+    f.host.observeQuestSpeech((json, receipt) => {
+      received.push(JSON.parse(json));
+      if (direct) return true;
+      receipt.accepted = true;
+    });
+    f.listenWords();
+    f.latest.result([['cat', false]]);
+    f.advance(150);
+    f.latest.result([['cats', true]]);
+    assert.equal(received.length, 1);
+  }
 });

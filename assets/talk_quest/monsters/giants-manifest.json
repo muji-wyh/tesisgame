@@ -1,0 +1,446 @@
+{
+  "version": 1,
+  "coordinates": "Godot Y-up, front +Z, standing floor y=0",
+  "source_manifest": "docs/assets/talk-quest-giants-sources.json",
+  "source_manifest_sha256": "3dc9fb200bfcc4c58e8a2aabed42b16cb65110a41bfd5326a7029644e584bc76",
+  "total_glb_bytes": 4656416,
+  "creatures": [
+    {
+      "id": "giant-rock-guardian",
+      "name": "Rock Guardian",
+      "blender": "5.2.2 LTS",
+      "source_path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Meshes\\Golem.fbx",
+      "source_sha256": "af06b3eabd7ce1489e2c006d95893386299af1b0019ef1b3e459d4354d8c6882",
+      "file": "giant-rock-guardian.glb",
+      "bytes": 1480944,
+      "sha256": "b958b05a5ce69d31e52bbc0d4292ea8240293b53868f4888f64cf00ba8b56679",
+      "rig_bones": 20,
+      "mesh_objects": 1,
+      "vertices": 384,
+      "triangles": 764,
+      "normalized_extent": 1.999999858124228,
+      "normalized_height": 1.7311720067872725,
+      "front_axis": "+Z",
+      "floor_y": -2.856323077365941e-11,
+      "bounds": {
+        "min": [
+          -1.113469526736896,
+          -0.0443922082205763,
+          -0.745381238559127
+        ],
+        "max": [
+          1.0421900788532428,
+          1.7392760221441732,
+          0.7545884445719072
+        ]
+      },
+      "rest_bounds": {
+        "min": [
+          -0.999999993702315,
+          -2.856323077365941e-11,
+          -0.6161040434675834
+        ],
+        "max": [
+          0.9999998644219131,
+          1.7311720067587093,
+          0.6161040638475078
+        ]
+      },
+      "source_basis": {
+        "right": [
+          1.0,
+          0.0,
+          -0.0
+        ],
+        "front": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "up": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "weights": {
+        "maximum_influences": 4,
+        "vertices_pruned": 73,
+        "normalized": true
+      },
+      "materials": [
+        {
+          "name": "HP_Golem",
+          "texture_source": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Textures\\HP_Golem.png",
+          "texture_sha256": "54fe35f495d8262c967177aa1f617fcd7a843a29d2e363d169a42810202807b6",
+          "original_size": [
+            2048,
+            2048
+          ],
+          "embedded_size": [
+            1024,
+            1024
+          ],
+          "uv_mapping": "Original Golem.fbx UVs",
+          "tint": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "bind_repair": {
+        "source_child_bind_offset_scale": 0.009999999776482582,
+        "pivot": "Hips",
+        "neutral_stance": "Publisher initial pose, baked after unit correction",
+        "original_weights_and_bone_hierarchy_preserved": true
+      },
+      "animations": {
+        "Idle": {
+          "export_name": "Idle",
+          "provenance": "Authored skeletal animation",
+          "source_animation": null,
+          "loop": true,
+          "frame_start": 0.0,
+          "frame_end": 60.0,
+          "duration_seconds": 2.0,
+          "sample_count": 13,
+          "max_vertex_motion": 0.056754869033583365,
+          "max_centered_vertex_deformation": 0.043692477158558674,
+          "max_extent": 2.039204748167885,
+          "moving_vertex_fraction": 1.0,
+          "loop_error": 0.0,
+          "bounds_blender": {
+            "min": [
+              -1.020076728882485,
+              -0.641053634188571,
+              -2.856323077365941e-11
+            ],
+            "max": [
+              1.0191280192854002,
+              0.6357881060994588,
+              1.7313527321351103
+            ]
+          },
+          "root_translation_animated": false,
+          "valid": true
+        },
+        "Attack": {
+          "export_name": "Attack",
+          "provenance": "Authored skeletal animation",
+          "source_animation": null,
+          "loop": false,
+          "frame_start": 0.0,
+          "frame_end": 36.0,
+          "duration_seconds": 1.2,
+          "sample_count": 13,
+          "max_vertex_motion": 1.4709663984013648,
+          "max_centered_vertex_deformation": 1.2995758393427865,
+          "max_extent": 2.155659605590139,
+          "moving_vertex_fraction": 1.0,
+          "loop_error": 0.0,
+          "bounds_blender": {
+            "min": [
+              -1.113469526736896,
+              -0.7545884445719072,
+              -0.0443922082205763
+            ],
+            "max": [
+              1.0421900788532428,
+              0.6815320939482866,
+              1.7392760221441732
+            ]
+          },
+          "root_translation_animated": false,
+          "valid": true
+        },
+        "Hit": {
+          "export_name": "Hit",
+          "provenance": "Authored skeletal animation",
+          "source_animation": null,
+          "loop": false,
+          "frame_start": 0.0,
+          "frame_end": 21.0,
+          "duration_seconds": 0.7,
+          "sample_count": 13,
+          "max_vertex_motion": 0.6917736023932874,
+          "max_centered_vertex_deformation": 0.685546953470088,
+          "max_extent": 2.1338268572369925,
+          "moving_vertex_fraction": 1.0,
+          "loop_error": 0.0,
+          "bounds_blender": {
+            "min": [
+              -1.1027558310550898,
+              -0.6574092875207329,
+              -2.856323077365941e-11
+            ],
+            "max": [
+              1.031071026181903,
+              0.745381238559127,
+              1.7311720067587093
+            ]
+          },
+          "root_translation_animated": false,
+          "valid": true
+        }
+      },
+      "glb": {
+        "animations": [
+          "Idle",
+          "Attack",
+          "Hit"
+        ],
+        "skins": 1,
+        "skin_joints": [
+          20
+        ],
+        "embedded_images": 1,
+        "animation_channels": {
+          "Idle": 60,
+          "Attack": 60,
+          "Hit": 60
+        }
+      },
+      "animation_note": "Authored on the original deforming rig. The FBX contains no actions; binary Unity humanoid muscle clips were not retargeted or represented as source animation.",
+      "unity_animation_sources": [
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Attack01.anim",
+          "sha256": "ea97ae9d550576ff8772aa59f7246cf5458f7d834e67929fd2436f1dbe9eee66",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Attack02.anim",
+          "sha256": "1a063f4f8075d8adc5dbbc03887a1b6c2cf1131ff18083d2aec67ed684bd93ca",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Die.anim",
+          "sha256": "f61330d5b2b70daaf69715a973e18904b556b563ab308a205dfff39caeebc607",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\GetHit.anim",
+          "sha256": "ac10922d5697071047cc7f90f621b215394d503b6b53f95b698549b5b76fe1cc",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Idle.anim",
+          "sha256": "ffe844c49d6b32e7c79c201a8822dcf42a5bc81b80886e22ed4162de1a5da477",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Victory.anim",
+          "sha256": "692b5db2a3a02b3b2d40944a9d664003f252f85bbfa86ec2ccfff2b09029fe7d",
+          "used": false
+        },
+        {
+          "path": "C:\\uworks\\TalkQuest\\sources\\mini-legion-rock-golem\\2bcdcd9755adeb1d\\tree\\Assets\\Mini Legion Rock Golem PBR HP Polyart\\Animations\\Walk.anim",
+          "sha256": "9997eddd03fdd4d55ac39c017b7b08afda611605b1c768af26016f900f04ef88",
+          "used": false
+        }
+      ],
+      "resource": "res://assets/talk_quest/monsters/giant-rock-guardian.glb",
+      "thumbnail": "res://assets/talk_quest/monsters/giant-rock-guardian.png",
+      "thumbnail_sha256": "97939f05f5c2afeec1e28b78498de1e19b0ea43fef49bccb81e1eff2502145a2"
+    },
+    {
+      "id": "giant-storm-dragon",
+      "name": "Stormwing",
+      "file": "giant-storm-dragon.glb",
+      "resource": "res://assets/talk_quest/monsters/giant-storm-dragon.glb",
+      "sha256": "97fb1d60979de9ac419cc8e397565de9051f2fffc51d8e75bb42a9d2263ab912",
+      "bytes": 1531012,
+      "source_path": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\ChaDragon.fbx",
+      "source_sha256": "5e34414fd4f64247d13b6d8924599a20460c4aa4724f55c77fa2134316a99ba0",
+      "source_texture": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\Textures\\Cha_Dragon.png",
+      "material": {
+        "source_texture_sha256": "85d1e0d18f598f8ba676be9f78e72d6b2f99e30398bc373b092daba4d3b682e7",
+        "source_dimensions": [
+          1024,
+          1024
+        ],
+        "export_dimensions": [
+          1024,
+          1024
+        ],
+        "mapping": "Original source UVs and albedo; opaque roughness 0.78"
+      },
+      "rig_bones": 53,
+      "mesh_objects": 1,
+      "vertices": 1535,
+      "triangles": 2888,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.1229955384880814,
+      "front_axis": "+Z",
+      "floor_y": 0,
+      "bounds": {
+        "min": [
+          -1.1919945752338201,
+          0.2528556530607196,
+          -0.9886789280196363
+        ],
+        "max": [
+          1.1475471252611764,
+          1.9180824886570245,
+          0.9955451353922088
+        ]
+      },
+      "animations": {
+        "Idle": {
+          "source_action": "Skeleton_Pelvis.001|Take 001|Layer 001",
+          "frame_start": 1.0,
+          "frame_end": 32.0,
+          "duration_seconds": 1.0333333333333334,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.5033859593485267,
+          "max_extent_ratio": 1.1697708502474982,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\Motions\\MotDragon_Wait.fbx",
+          "source_sha256": "7cfba76a80e61d573d7acaf62cd5b93c53289ab41a837b06a4a2bd6e789ef2b2",
+          "loop": true
+        },
+        "Attack": {
+          "source_action": "Skeleton_Pelvis.001|Take 001|Layer 001.001",
+          "frame_start": 1.0,
+          "frame_end": 32.0,
+          "duration_seconds": 1.0333333333333334,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.6272724844814284,
+          "max_extent_ratio": 1.1208392649235799,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\Motions\\MotDragon_Attack.fbx",
+          "source_sha256": "1133138084e0558796e6954fc66d194ef784fa3c7d689ad005c46baf03a3c82f",
+          "loop": false
+        },
+        "Hit": {
+          "source_action": "Skeleton_Pelvis.001|Take 001|Layer 001.002",
+          "frame_start": 1.0,
+          "frame_end": 16.0,
+          "duration_seconds": 0.5,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.5745082141930767,
+          "max_extent_ratio": 1.113768376255926,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\Motions\\MotDragon_Damage.fbx",
+          "source_sha256": "03d5963a65a4824327e0bb65aef662deb06401f29ba9d1548355d357ae056668",
+          "loop": false
+        },
+        "Defeat": {
+          "source_action": "Skeleton_Pelvis.001|Take 001|Layer 001.003",
+          "frame_start": 1.0,
+          "frame_end": 22.0,
+          "duration_seconds": 0.7,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.705459972568244,
+          "max_extent_ratio": 1.2339714963134456,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\Character_Witch_Dragon\\Models\\ChaDragon\\Motions\\MotDragon_Dead.fbx",
+          "source_sha256": "c55dde165ea53a65cad80f16f511168424c372e1223e689ad278f1b814afbe22",
+          "loop": false
+        }
+      },
+      "thumbnail": "res://assets/talk_quest/monsters/giant-storm-dragon.png",
+      "thumbnail_sha256": "c9d17fa749b934a528e54a3f79df0d0016c7f7d06fedcdfc6dd835caccfc9698"
+    },
+    {
+      "id": "giant-ember-golem",
+      "name": "Embermaw",
+      "file": "giant-ember-golem.glb",
+      "resource": "res://assets/talk_quest/monsters/giant-ember-golem.glb",
+      "sha256": "0bea7478858a8e9cda4801d2beb35f654e9332c6fa1e5fd893c617f2179dfbf6",
+      "bytes": 1644460,
+      "source_path": "Assets\\SiuniaevCharacters\\02_Golem\\Models\\FBX\\Golem.FBX",
+      "source_sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+      "source_texture": "Assets\\SiuniaevCharacters\\02_Golem\\Textures\\Golem.png",
+      "material": {
+        "source_texture_sha256": "1428a526d305e9ca34501e26475658d02f12aa914fd4edf6ded1f056caa7fa64",
+        "source_dimensions": [
+          2048,
+          2048
+        ],
+        "export_dimensions": [
+          1024,
+          1024
+        ],
+        "mapping": "Original source UVs and albedo; opaque roughness 0.78"
+      },
+      "rig_bones": 18,
+      "mesh_objects": 1,
+      "vertices": 1662,
+      "triangles": 3320,
+      "normalized_extent": 2.0,
+      "normalized_height": 1.791027941268517,
+      "front_axis": "+Z",
+      "floor_y": 0,
+      "bounds": {
+        "min": [
+          -1.0376067285830592,
+          -0.1330722937921237,
+          -1.035772176613565
+        ],
+        "max": [
+          1.251930471265056,
+          2.211278804999445,
+          1.8255367321876097
+        ]
+      },
+      "animations": {
+        "Idle": {
+          "source_action": "Armature|idle|BaseLayer",
+          "frame_start": 2.0,
+          "frame_end": 62.0,
+          "duration_seconds": 2.0,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.0404763048514717,
+          "max_extent_ratio": 1.0005561645802226,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\SiuniaevCharacters\\02_Golem\\Models\\FBX\\Golem.FBX",
+          "source_sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+          "loop": true
+        },
+        "Attack": {
+          "source_action": "Armature|hit|BaseLayer",
+          "frame_start": 281.0,
+          "frame_end": 299.0,
+          "duration_seconds": 0.6,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 0.6774780408859192,
+          "max_extent_ratio": 1.2558066530680798,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\SiuniaevCharacters\\02_Golem\\Models\\FBX\\Golem.FBX",
+          "source_sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+          "loop": false
+        },
+        "Hit": {
+          "source_action": "Armature|damage|BaseLayer",
+          "frame_start": 241.0,
+          "frame_end": 271.0,
+          "duration_seconds": 1.0,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 1.0701073865651207,
+          "max_extent_ratio": 1.1416266301523836,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\SiuniaevCharacters\\02_Golem\\Models\\FBX\\Golem.FBX",
+          "source_sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+          "loop": false
+        },
+        "Defeat": {
+          "source_action": "Armature|die|BaseLayer",
+          "frame_start": 311.0,
+          "frame_end": 333.0,
+          "duration_seconds": 0.7333333333333333,
+          "sample_count": 13,
+          "max_vertex_motion_normalized": 1.5609575825678017,
+          "max_extent_ratio": 1.427844367705291,
+          "provenance": "source skeletal animation",
+          "source_file": "Assets\\SiuniaevCharacters\\02_Golem\\Models\\FBX\\Golem.FBX",
+          "source_sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+          "loop": false
+        }
+      },
+      "thumbnail": "res://assets/talk_quest/monsters/giant-ember-golem.png",
+      "thumbnail_sha256": "13c904b3e857c8551db17176ce03b6b540c77dd26eaa0d42d89b1670cf808c30"
+    }
+  ]
+}

@@ -77,6 +77,11 @@ var _lid_edges: Array[Dictionary] = []
 var _surface_light_active: bool = false
 var _surprise := Surprise.new()
 var _surprise_shown: bool = false
+var _opening_frames: Array[Texture2D] = []
+var _opening_frame: int = 0
+var _frame_closed_bounds := Rect2()
+var _frame_motion_bounds := Rect2()
+var _frame_cavity := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -139,8 +144,12 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_lid_edges.clear()
 	_surface_light_active = false
 	_rigged = false
+	_opening_frames.clear()
+	_opening_frame = 0
 	var style: Dictionary = manifest.styles[_style]
-	if _style == "crystal":
+	if style.has("frames"):
+		_load_opening_frames(style)
+	elif _style == "crystal":
 		for part in style.parts:
 			var matrix: Array = part.transform
 			var pose := Transform2D(Vector2(matrix[0], matrix[1]), Vector2(matrix[2], matrix[3]), Vector2(matrix[4], matrix[5]))
@@ -155,6 +164,37 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_measure_motion_bounds()
 	_apply_pose(0.0)
 	_fit()
+
+
+func _load_opening_frames(style: Dictionary) -> void:
+	# A rendered model includes its opaque front wall. Keep the broad cavity
+	# light behind that wall; the shared shader supplies reflected interior light.
+	_cavity_light.z_index = -1
+	for path: String in style.frames:
+		_opening_frames.append(load("res://" + path))
+	_add_piece(style.frames[0], "body", Transform2D.IDENTITY, Vector2(0.5, 0.5))
+	var offset: Vector2 = -_opening_frames[0].get_size() * 0.5
+	var box: Array = style.closed_bounds
+	_frame_closed_bounds = Rect2(Vector2(box[0], box[1]) + offset,
+		Vector2(box[2] - box[0], box[3] - box[1]))
+	var motion_box: Array = style.motion_bounds
+	_frame_motion_bounds = Rect2(Vector2(motion_box[0], motion_box[1]) + offset,
+		Vector2(motion_box[2] - motion_box[0], motion_box[3] - motion_box[1]))
+	_frame_cavity = Vector2(style.cavity[0], style.cavity[1]) + offset
+	_set_opening_frame(0)
+
+
+func _set_opening_frame(index: int) -> void:
+	_opening_frame = index
+	var sprite: Sprite2D = _pieces[0].node
+	sprite.texture = _opening_frames[index]
+	var visible_bounds: Rect2 = _frame_closed_bounds if index == 0 else _frame_motion_bounds
+	# Crop only transparent padding. Preserve the model's original design-space
+	# position while fitting and measuring its visible silhouette.
+	sprite.region_enabled = true
+	sprite.region_filter_clip_enabled = true
+	sprite.region_rect = Rect2(visible_bounds.position + sprite.texture.get_size() * 0.5, visible_bounds.size)
+	sprite.offset = visible_bounds.position
 
 
 func _load_rig() -> bool:
@@ -232,6 +272,9 @@ func _measure_bounds() -> void:
 			_body_pivot = piece.rest * Vector2(body_rect.get_center().x, body_rect.end.y * 0.98 + body_rect.position.y * 0.02)
 			_body_floor = piece.rest * Vector2(body_rect.get_center().x, body_rect.end.y)
 			break
+	if not _opening_frames.is_empty():
+		_body_floor = Vector2(_frame_closed_bounds.get_center().x, _frame_closed_bounds.end.y)
+		_body_pivot = _body_floor - Vector2(0.0, _frame_closed_bounds.size.y * 0.02)
 
 
 func _measure_motion_bounds() -> void:
@@ -242,16 +285,23 @@ func _measure_motion_bounds() -> void:
 			var state: Dictionary = _piece_pose(index, time, true)
 			if float(state.alpha) <= 0.001:
 				continue
-			var rect: Rect2 = _pieces[index].node.get_rect()
+			var rect: Rect2 = _frame_motion_bounds if not _opening_frames.is_empty() else _pieces[index].node.get_rect()
 			for corner in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
 				_motion_bounds = _motion_bounds.expand(state.pose * corner)
 	# A fixed margin contains body recoil and Candy's elastic motion without
 	# asking the parent stage to stop clipping.
-	_motion_bounds = _motion_bounds.grow(maxf(_bounds.size.x, _bounds.size.y) * 0.065)
+	# The downloaded model envelope includes the complete open silhouette, plus
+	# room for Candy's elastic body during narrow layouts.
+	var margin: float = 0.12 if not _opening_frames.is_empty() else 0.065
+	_motion_bounds = _motion_bounds.grow(maxf(_bounds.size.x, _bounds.size.y) * margin)
+
+
+func _has_art() -> bool:
+	return not _pieces.is_empty()
 
 
 func _fit() -> void:
-	if _pieces.is_empty() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
+	if not _has_art() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return
 	_update_charge()
 	# Keep the same physical envelope throughout the progress effects and opening.
@@ -803,7 +853,8 @@ func hold_effect_snapshot() -> Dictionary:
 		"percent": percent,
 		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
-		"theme": theme_id, "material": _feel.material, "rigged": _rigged,
+		"theme": theme_id, "style": _style, "material": _feel.material, "rigged": _rigged,
+		"opening_frames": _opening_frames.size(), "opening_frame": _opening_frame,
 		"opening_time": _elapsed, "cancel_remaining": _cancel_remaining,
 		"animation_origin_frame": _animation_origin_frame,
 		"interior_open": _crystal_opening(),
@@ -877,6 +928,8 @@ func _opened_glow() -> float:
 
 
 func _cavity_origin_in_art() -> Vector2:
+	if not _opening_frames.is_empty():
+		return _frame_cavity
 	for piece in _pieces:
 		if piece.role == "interior":
 			var rect: Rect2 = piece.node.get_rect()
@@ -983,6 +1036,11 @@ func _cavity_glow_bounds() -> Rect2:
 
 
 func _seam_points() -> PackedVector2Array:
+	if not _opening_frames.is_empty():
+		var points := PackedVector2Array()
+		for ratio: Vector2 in [Vector2(0.10, 0.42), Vector2(0.56, 0.54), Vector2(0.94, 0.37)]:
+			points.append(_art.transform * (_frame_closed_bounds.position + _frame_closed_bounds.size * ratio))
+		return points
 	for piece in _pieces:
 		if piece.role in ["body", "chest"]:
 			var rect: Rect2 = piece.node.get_rect()
@@ -1369,6 +1427,17 @@ func _charged_piece_pose(index: int, pressure: float, progress: float, time: flo
 
 func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 	var piece: Dictionary = _pieces[index]
+	if not _opening_frames.is_empty():
+		# The original three-dimensional lid motion is baked into the texture;
+		# shared body pressure, release recoil and afterglow still run outside it.
+		var baked_pose: Transform2D = piece.rest
+		if opening_now and not reduced_motion:
+			# The final mechanical stop continues into a small planted reaction
+			# after the last sampled lid pose, keeping the release physically alive.
+			var baked_stop: float = Feel.stop_response(time)
+			baked_pose = Transform2D(baked_stop * 0.018, Vector2.ZERO)
+			baked_pose.origin = _body_pivot - baked_pose.basis_xform(_body_pivot) + Vector2(0.0, _bounds.size.y * baked_stop * 0.006)
+		return {"pose": baked_pose, "alpha": 1.0}
 	var hold: Vector2 = _hold_pose_state()
 	var charge_time: float = _pulse_clock()
 	var mechanism_time: float = Feel.anticipation_pose_time(time) if opening_now else time
@@ -1455,6 +1524,9 @@ func _piece_pose(index: int, time: float, opening_now: bool) -> Dictionary:
 
 
 func _apply_pose(_progress: float) -> void:
+	if not _opening_frames.is_empty():
+		var opening: float = Feel.opening(theme_id, _elapsed) if mode in ["opening", "opened"] else 0.0
+		_set_opening_frame(clampi(roundi(opening * (_opening_frames.size() - 1)), 0, _opening_frames.size() - 1))
 	var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 	for index in range(_pieces.size()):
 		var state: Dictionary = _piece_pose(index, _elapsed, mode in ["opening", "opened"])
@@ -1505,6 +1577,8 @@ func _update_surface_light() -> void:
 		var material: ShaderMaterial = sprite.material
 		var source: Vector2 = sprite.transform.affine_inverse() * origin
 		var uv: Vector2 = (source - sprite.offset) / sprite.texture.get_size()
+		if sprite.region_enabled:
+			uv += sprite.region_rect.position / sprite.texture.get_size()
 		if sprite.flip_h:
 			uv.x = 1.0 - uv.x
 		if sprite.flip_v:

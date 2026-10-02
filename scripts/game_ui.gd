@@ -2,6 +2,7 @@ extends Control
 
 const Model = preload("res://scripts/game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
+const SpeechWords = preload("res://scripts/speech_words.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
 const HintLink = preload("res://scripts/hint_link.gd")
@@ -15,6 +16,7 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
+const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const TalkQuest = preload("res://scripts/talk_quest.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
@@ -166,6 +168,10 @@ var _mode_row: HBoxContainer
 var _mode_buttons: Array[Button] = []
 var _memory: MemoryGarden
 var _pop: VoicePop
+var _pop_rewards: PopRewardRoom
+var _pop_rewards_shown: bool = false
+var pop_reward_save_path: String = "user://pop-rewards-v1.cfg"
+var _controller_holding_pop_chest: bool = false
 var _pop_speech_active: bool = false
 var _match_playfield: Control
 var _hint_link: HintLink
@@ -256,6 +262,7 @@ var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
 var _controller_repeat_elapsed: float = 0.0
 var _controller_holding_chest: bool = false
+var _controller_holding_quest_chest: bool = false
 var _controller_peeking: bool = false
 var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
@@ -271,10 +278,15 @@ var _motion_callback: JavaScriptObject
 var _input_cancel_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
+var _speech_debug_callback: JavaScriptObject
+var _speech_debug_active: bool = false
+var _speech_debug_tree_paused: bool = false
+var _speech_debug_audio_process_mode: ProcessMode = Node.PROCESS_MODE_INHERIT
 var _pop_result_callback: JavaScriptObject
 var leaderboard_state := LeaderboardState.new()
 var _leaderboard_round_id: String = ""
 var _leaderboard_result: Dictionary = {}
+var _leaderboard_saved_player_id: String = ""
 var _leaderboard_gate: String = ""
 var _pop_player_id: String = ""
 var _leaderboard_overlay: Panel
@@ -318,6 +330,8 @@ func _ready() -> void:
 	reduced_motion = DisplayServer.accessibility_should_reduce_animation() == 1
 	call_deferred("_sync_controller_accept_startup")
 	_connect_browser()
+	_pop_rewards.save_path = pop_reward_save_path
+	_pop_rewards.connect_storage(_host)
 	leaderboard_state.load_state()
 	_load_favorite_reward()
 	_refresh_favorite_reward()
@@ -482,21 +496,42 @@ func _build_controls() -> void:
 	_pop.launched.connect(_pop_launched)
 	_pop.missed.connect(_pop_missed)
 	_pop.round_finished.connect(_pop_finished)
+	_pop.chests_requested.connect(_show_pop_rewards)
+	_pop.chest_earned.connect(_pop_chest_earned)
 	_pop.hear_requested.connect(_pop_hear)
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
+	_pop_rewards = PopRewardRoom.new()
+	_pop_rewards.name = "PopRewardRoom"
+	_pop_rewards.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_pop_rewards.interaction_allowed = func() -> bool: return _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
+	_pop_rewards.exit_requested.connect(_hide_pop_rewards)
+	_pop_rewards.chest_audio_requested.connect(_pop_chest_audio)
+	_pop_rewards.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
+		if not _pop_rewards_shown or _page_hidden or collection_page.visible or _leaderboard_overlay.visible or _mode_id != "pop":
+			return
+		audio.chest_cue(theme_id, cue, step)
+		if _host != null:
+			_host.chestCue(theme_id, cue, step))
+	_pop_rewards.changed.connect(_publish_pop_rewards)
+	_pop_rewards.hide()
+	column.add_child(_pop_rewards)
 	_quest = TalkQuest.new()
 	_quest.name = "TalkQuest"
+	_quest.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
 	_quest.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_quest.exit_requested.connect(func() -> void: choose_mode("match"))
+	_quest.chest_audio_requested.connect(_quest_chest_audio)
+	_quest.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
+		if _page_hidden or collection_page.visible or _mode_id != "quest":
+			return
+		audio.chest_cue(theme_id, cue, step)
+		if _host != null:
+			_host.chestCue(theme_id, cue, step))
 	_quest.sound_requested.connect(func(kind: String) -> void:
 		if kind == "hit":
 			audio.play_match_voice_hit()
-		elif kind == "reward":
-			audio.chest_reward(model.theme_id)
-		elif kind == "open":
-			audio.chest_cue(model.theme_id, "release")
 		elif kind == "victory":
 			audio.chest_cue(model.theme_id, "unlock"))
 	_quest.hide()
@@ -737,7 +772,7 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_close.name = "LeaderboardClose"
 	_leaderboard_close.text = "Back"
 	_leaderboard_close.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	_leaderboard_close.pressed.connect(_hide_leaderboard)
+	_leaderboard_close.pressed.connect(_back_from_leaderboard)
 	column.add_child(_leaderboard_close)
 	var scroll := ScrollContainer.new()
 	scroll.name = "LeaderboardScroll"
@@ -752,6 +787,8 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_panel.changed.connect(_publish_leaderboards)
 	_leaderboard_panel.score_saved.connect(_leaderboard_score_saved)
 	_leaderboard_panel.player_confirmed.connect(_leaderboard_player_confirmed)
+	_leaderboard_panel.profile_updated.connect(_leaderboard_profile_updated)
+	_leaderboard_panel.profile_removed.connect(_leaderboard_profile_removed)
 	resized.connect(_layout_leaderboards)
 	_layout_leaderboards()
 	_leaderboard_overlay.hide()
@@ -774,6 +811,7 @@ func _show_result_leaderboard() -> void:
 func _show_leaderboard(view: String, include_round: bool) -> void:
 	if _leaderboard_overlay.visible:
 		return
+	_pop_rewards.pause()
 	_pop.cancel_result_input()
 	_cancel_chest_hold()
 	_finish_chest_drag()
@@ -787,7 +825,10 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 			_leaderboard_focus_modes[node] = node.focus_mode
 			node.focus_mode = Control.FOCUS_NONE
 	leaderboard_state.load_state()
+	_reconcile_round_identity()
+	include_round = include_round and not _leaderboard_result.is_empty()
 	_leaderboard_overlay.show()
+	_publish_pop_rewards(_pop_rewards.snapshot())
 	_leaderboard_close.visible = _leaderboard_gate != "onboarding"
 	_leaderboard_close.focus_mode = Control.FOCUS_ALL
 	_found_words_scroll.cancel_drag()
@@ -808,6 +849,11 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_publish_leaderboards()
 
 
+func _back_from_leaderboard() -> void:
+	if not _leaderboard_panel.cancel_management():
+		_hide_leaderboard()
+
+
 func _hide_leaderboard() -> void:
 	if _leaderboard_gate == "onboarding":
 		return
@@ -818,6 +864,8 @@ func _hide_leaderboard() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _leaderboard_focus_modes[control]
 	_leaderboard_focus_modes.clear()
+	if _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _page_hidden:
+		_pop_rewards.resume()
 	if _valid_focus(_leaderboard_focus):
 		_leaderboard_focus.grab_focus()
 	else:
@@ -832,6 +880,10 @@ func _hide_leaderboard() -> void:
 
 func _request_pop_player() -> void:
 	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+		return
+	if _pop_rewards.has_pending():
+		_show_pop_rewards()
+		_announce_status("Open your earned chests before starting another Voice Pop round.")
 		return
 	if not _stop_pop_listening():
 		return
@@ -863,6 +915,7 @@ func _leaderboard_player_confirmed(player_id: String) -> void:
 
 
 func _leaderboard_score_saved(outcome: Dictionary) -> void:
+	_leaderboard_saved_player_id = str(outcome.get("player_id", ""))
 	if not _page_hidden and not bool(outcome.get("duplicate", false)):
 		audio.interact(model.theme_id, false)
 		audio.cue("correct")
@@ -870,6 +923,64 @@ func _leaderboard_score_saved(outcome: Dictionary) -> void:
 	if bool(outcome.get("improved", false)):
 		message = "Rank up! From %d to %d. Score saved." % [int(outcome.get("old_rank", 0)), int(outcome.get("new_rank", 0))]
 	_announce_status(message)
+	_publish_leaderboards()
+
+
+func _leaderboard_profile_updated(profile: Dictionary) -> void:
+	if str(profile.get("id", "")) == _pop_player_id:
+		_pop.set_round_player(profile)
+	if is_instance_valid(_pop_leaderboard):
+		_pop_leaderboard.refresh_profiles()
+	_announce_status("Player updated. Your personal bests are unchanged.")
+	_publish_leaderboards()
+
+
+func _reconcile_round_identity() -> void:
+	if not leaderboard_state.ready:
+		return
+	if not _leaderboard_saved_player_id.is_empty() and not leaderboard_state.profiles.any(func(profile: Dictionary) -> bool: return str(profile.id) == _leaderboard_saved_player_id):
+		_leaderboard_result.clear()
+		_leaderboard_saved_player_id = ""
+		_result_board_button.hide()
+	if _pop_player_id.is_empty():
+		return
+	for profile in leaderboard_state.profiles:
+		if str(profile.id) == _pop_player_id:
+			_pop.set_round_player(profile)
+			return
+	_discard_removed_pop_round()
+
+
+func _discard_removed_pop_round() -> void:
+	if not _stop_pop_listening():
+		_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
+	audio.stop_pop_sounds()
+	_configure_pop()
+
+
+func _leaderboard_profile_removed(player_id: String) -> void:
+	if player_id == _pop_player_id:
+		_discard_removed_pop_round()
+	elif player_id == _leaderboard_saved_player_id:
+		# The receipt was deleted with its owner. Do not offer this old result
+		# to another player when its leaderboard is opened again.
+		_leaderboard_result.clear()
+		_leaderboard_saved_player_id = ""
+		_result_board_button.hide()
+	if is_instance_valid(_pop_leaderboard):
+		_pop_leaderboard.refresh_profiles()
+	if leaderboard_state.profiles.is_empty():
+		_leaderboard_gate = "onboarding"
+		_leaderboard_close.hide()
+		_leaderboard_panel.configure(leaderboard_state, "onboarding", _mode_id, "", {}, reduced_motion)
+		(_leaderboard_panel.get_parent() as ScrollContainer).scroll_vertical = 0
+		_layout_leaderboards()
+		var focus: Control = _leaderboard_panel.default_focus()
+		if is_instance_valid(focus):
+			focus.grab_focus()
+		_announce_status("Player removed. Create a new player to continue. Shared game progress and treasures are safe.")
+	else:
+		_announce_status("Player and their leaderboard scores removed. Shared game progress and treasures are safe.")
 	_publish_leaderboards()
 
 
@@ -1333,6 +1444,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if not _stop_pop_listening():
 		return false
 	_pop.stop()
+	_pop_rewards.pause()
+	_pop_rewards_shown = false
+	_controller_holding_pop_chest = false
 	if _mode_id == "quest":
 		_quest.pause()
 	_rebuilding = true
@@ -1365,6 +1479,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	_leaderboard_round_id = LeaderboardState.make_round_id()
 	_leaderboard_result.clear()
+	_leaderboard_saved_player_id = ""
 	_pop_player_id = ""
 	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
 		model.set_theme(_preferred_theme)
@@ -1419,6 +1534,7 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_pop_leaderboard = null
 	_leaderboard_round_id = LeaderboardState.make_round_id()
 	_leaderboard_result.clear()
+	_leaderboard_saved_player_id = ""
 	_pop_player_id = ""
 	var age: Dictionary = Data.age_band(playroom_state.age_band_id)
 	var pool: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= age.max_level)
@@ -1427,7 +1543,7 @@ func _configure_pop(seed_value: int = -1) -> void:
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+	if _mode_id != "pop" or _pop_rewards_shown or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
 		return
 	if _pop_player_id.is_empty() or _pop.game.phase == "finished":
 		_request_pop_player()
@@ -1500,6 +1616,8 @@ func _pop_finished(result: Dictionary) -> void:
 	if _mode_id != "pop" or not _leaderboard_result.is_empty():
 		return
 	_leaderboard_result = result.duplicate(true)
+	if int(result.get("chest_count", 0)) > 0:
+		_pop_rewards.configure(_leaderboard_round_id, int(result.chest_count), model.theme_id, data.chests, reduced_motion)
 	_pop_leaderboard = LeaderboardPanel.new()
 	_pop_leaderboard.name = "PopLeaderboard"
 	_pop.attach_leaderboard(_pop_leaderboard)
@@ -1513,6 +1631,70 @@ func _pop_finished(result: Dictionary) -> void:
 func _pop_status_changed(snapshot: Dictionary) -> void:
 	if _mode_id == "pop" and _host != null:
 		_host.popStatus(JSON.stringify(snapshot))
+
+
+func _pop_chest_earned(count: int) -> void:
+	if _mode_id != "pop" or collection_page.visible or _page_hidden:
+		return
+	audio.chest_cue(model.theme_id, "unlock")
+	_announce_status("Chest earned! %d of 3 chests." % count)
+
+
+func _show_pop_rewards() -> void:
+	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+		return
+	if not _stop_pop_listening():
+		return
+	if _pop.game.phase == "finished" and int(_leaderboard_result.get("chest_count", 0)) > 0:
+		_pop_rewards.configure(_leaderboard_round_id, int(_leaderboard_result.chest_count), model.theme_id, data.chests, reduced_motion)
+	else:
+		var restored: bool = _pop_rewards.configure_saved(data.chests, reduced_motion)
+		if not restored and not _pop_rewards.has_pending():
+			return
+	_pop.cancel_result_input()
+	audio.halt()
+	_pop_rewards_shown = true
+	_refresh()
+	_pop_rewards.resume()
+	_default_focus().grab_focus()
+	_publish_pop_rewards(_pop_rewards.snapshot())
+
+
+func _hide_pop_rewards() -> void:
+	_pop_rewards.pause()
+	_controller_holding_pop_chest = false
+	_pop_rewards_shown = false
+	if _pop.game.phase != "finished" or _leaderboard_result.is_empty():
+		choose_mode("match")
+	else:
+		_refresh()
+		_default_focus().grab_focus()
+	_publish_pop_rewards(_pop_rewards.snapshot())
+
+
+func _publish_pop_rewards(snapshot: Dictionary) -> void:
+	if _host != null:
+		var status: Dictionary = snapshot.duplicate(true)
+		status["visible"] = _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
+		_host.popRewardStatus(JSON.stringify(status))
+
+
+func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void:
+	if action == "stop":
+		audio.stop_chest_performance()
+	elif action in ["cancel", "release"]:
+		audio.stop_chest_charge()
+	elif action == "finish":
+		audio.finish_chest_motion()
+	elif _mode_id == "pop" and _pop_rewards_shown and not _page_hidden and not collection_page.visible and not _leaderboard_overlay.visible:
+		match action:
+			"prepare":
+				audio.interact(theme_id)
+				audio.stop_voice()
+				audio.prepare_chest(theme_id)
+			"charge": audio.set_chest_charge(progress)
+			"tension": audio.set_chest_tension(progress)
+			"reward": audio.chest_reward(theme_id, progress > 0.0)
 
 
 func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
@@ -1629,7 +1811,6 @@ func _refresh() -> void:
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
 	_new_adventure_button.visible = not _save_error
-	_result_board_button.visible = model.phase == "won" and _mode_id in ["match", "memory"]
 	_result_board_button.disabled = model.chest_state == "opening"
 	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
 	var progress_total: int = Model.MATCH_PAIR_COUNT if _mode_id == "match" else 5 if _mode_id == "memory" else 0
@@ -1655,7 +1836,8 @@ func _refresh() -> void:
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
 	_memory.visible = playing and _mode_id == "memory"
-	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible
+	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown
+	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_quest.visible = playing and _mode_id == "quest" and not collection_page.visible
 	_mistakes.visible = _success.visible
 	_message.hide()
@@ -1741,6 +1923,7 @@ func _refresh() -> void:
 				var action: Control = _default_focus()
 				action.focus_mode = Control.FOCUS_ALL
 				action.grab_focus()
+	_result_board_button.visible = model.phase == "won" and _mode_id in ["match", "memory"] and not _leaderboard_result.is_empty()
 	if _host != null:
 		_host.background("#" + palette.background.to_html(false), "#" + palette.accent.to_html(false), "#" + palette.light.to_html(false), model.theme_id)
 		_host.roundProgress(model.successes, model.mistakes)
@@ -2328,6 +2511,7 @@ func set_reduced_motion(value: bool) -> void:
 	_hint_link.set_reduced_motion(value)
 	_voice_match_link.set_reduced_motion(value)
 	_pop.set_reduced_motion(value)
+	_pop_rewards.set_reduced_motion(value)
 	_quest.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	for card in cards.values():
@@ -2347,6 +2531,32 @@ func set_reduced_motion(value: bool) -> void:
 		chest.finish_immediately()
 	if not data.words.is_empty():
 		_refresh()
+
+
+func _quest_chest_audio(action: String, theme_id: String, progress: float) -> void:
+	# Cleanup also runs while changing modes or backgrounding the page.
+	if action == "stop":
+		audio.stop_chest_performance()
+		return
+	if action == "cancel" or action == "release":
+		audio.stop_chest_charge()
+		return
+	if action == "finish":
+		audio.finish_chest_motion()
+		return
+	if _page_hidden or collection_page.visible or _mode_id != "quest":
+		return
+	match action:
+		"prepare":
+			audio.interact(theme_id)
+			audio.stop_voice()
+			audio.prepare_chest(theme_id)
+		"charge": audio.set_chest_charge(progress)
+		"tension": audio.set_chest_tension(progress)
+		"reward":
+			if progress > 0.0:
+				audio.interact(theme_id)
+			audio.chest_reward(theme_id, progress > 0.0)
 
 
 func _open_chest() -> void:
@@ -2474,8 +2684,15 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	if is_instance_valid(_pop_rewards):
+		_pop_rewards.pause()
 	if is_instance_valid(_quest):
 		_quest.pause()
+	if _speech_debug_active:
+		_page_hidden = true
+		audio.halt()
+		audio.set_speech_debug_mix(1.0)
+		return
 	for panel in [_leaderboard_panel, _pop_leaderboard]:
 		if is_instance_valid(panel):
 			panel.settle_animation()
@@ -2513,9 +2730,14 @@ func on_page_hidden() -> void:
 
 
 func on_page_visible() -> void:
+	if _speech_debug_active:
+		_page_hidden = false
+		return
 	var resume_music: bool = _page_hidden and _resume_music_after_background
 	_page_hidden = false
 	_resume_music_after_background = false
+	if _pop_rewards_shown and not collection_page.visible:
+		_pop_rewards.resume()
 	chest.set_idle_paused(false)
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
@@ -2590,6 +2812,14 @@ func _input(event: InputEvent) -> void:
 				_controller_accept_needs_release = false
 				_controller_holding_chest = false
 				_end_chest_hold()
+			elif _controller_holding_quest_chest:
+				_controller_accept_needs_release = false
+				_controller_holding_quest_chest = false
+				_quest.end_chest_hold()
+			elif _controller_holding_pop_chest:
+				_controller_accept_needs_release = false
+				_controller_holding_pop_chest = false
+				_pop_rewards.end_hold()
 			elif _controller_peeking:
 				_controller_accept_needs_release = false
 				_controller_peeking = false
@@ -2652,6 +2882,12 @@ func _stop_controller_actions() -> void:
 		_controller_holding_chest = false
 		_cancel_chest_hold()
 		_finish_chest_drag()
+	if _controller_holding_quest_chest:
+		_controller_holding_quest_chest = false
+		_quest.cancel_chest_input()
+	if _controller_holding_pop_chest:
+		_controller_holding_pop_chest = false
+		_pop_rewards.cancel_input()
 	if _controller_peeking:
 		_controller_peeking = false
 		_memory.end_peek()
@@ -2678,6 +2914,14 @@ func _sync_controller_accept_startup() -> void:
 
 func _controller_accept() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
+	if _pop_rewards_shown and _mode_id == "pop" and _valid_focus(focused) and _pop_rewards.is_chest_control(focused):
+		_controller_holding_pop_chest = true
+		_pop_rewards.begin_hold(focused)
+		return
+	if _mode_id == "quest" and _valid_focus(focused) and _quest.is_chest_control(focused):
+		_controller_holding_quest_chest = true
+		_quest.start_chest_hold()
+		return
 	if _mode_id == "memory" and focused == _memory.study_button and _valid_focus(focused):
 		_memory.begin_peek()
 		_controller_peeking = _memory.memory.studying
@@ -2694,7 +2938,17 @@ func _controller_accept() -> void:
 
 func _controller_back() -> void:
 	if _leaderboard_overlay.visible:
-		_hide_leaderboard()
+		_back_from_leaderboard()
+		return
+	if _controller_holding_pop_chest:
+		_controller_holding_pop_chest = false
+		_pop_rewards.cancel_input()
+		_controller_accept_needs_release = _controller_accept_is_pressed()
+		return
+	if _controller_holding_quest_chest:
+		_controller_holding_quest_chest = false
+		_quest.cancel_chest_input(true)
+		_controller_accept_needs_release = _controller_accept_is_pressed()
 		return
 	if _holding_chest:
 		_cancel_chest_hold()
@@ -2707,7 +2961,10 @@ func _controller_back() -> void:
 	elif _voice_mode:
 		_stop_voice()
 	elif _mode_id == "pop":
-		choose_mode("match")
+		if _pop_rewards_shown:
+			_hide_pop_rewards()
+		else:
+			choose_mode("match")
 	elif _mode_id == "quest":
 		_quest.back()
 	elif _mode_id == "match" and model.phase == "feedback":
@@ -2724,7 +2981,7 @@ func _controller_back() -> void:
 
 func _toggle_collection() -> void:
 	if _leaderboard_overlay.visible:
-		_hide_leaderboard()
+		_back_from_leaderboard()
 		return
 	if collection_page.visible:
 		_hide_collection()
@@ -2831,6 +3088,11 @@ func _default_focus() -> Control:
 		return _leaderboard_close
 	if collection_page.visible:
 		return _collection_back
+	if _mode_id == "pop" and _pop_rewards_shown:
+		for control in _pop_rewards.navigation_controls():
+			if _valid_focus(control):
+				return control
+		return collection_button
 	if _mode_id == "quest":
 		return _quest.default_focus()
 	if model.phase == "won":
@@ -2923,14 +3185,123 @@ func _connect_browser() -> void:
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
-	_pop_result_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> bool:
-		if _mode_id == "pop" and _pop_speech_active and not collection_page.visible \
-			and not _leaderboard_overlay.visible and not _page_hidden and arguments.size() == 1 \
-			and arguments[0] is String:
-			return _pop.receive_speech_event(arguments[0])
-		return false)
+	_host.configureSpeechLexicon(JSON.stringify(SpeechWords.browser_lexicon(data.words)))
+	_speech_debug_callback = JavaScriptBridge.create_callback(_dispatch_speech_debug)
+	_host.observeSpeechDebug(_speech_debug_callback)
+	_pop_result_callback = JavaScriptBridge.create_callback(_dispatch_pop_speech)
 	_host.observePopSpeech(_pop_result_callback)
 	_quest.connect_browser(_host)
+
+
+func _dispatch_pop_speech(arguments: Array) -> void:
+	if arguments.size() != 2 or not arguments[0] is String or not arguments[1] is JavaScriptObject:
+		return
+	var receipt: JavaScriptObject = arguments[1]
+	receipt.accepted = _accept_pop_speech(arguments[0])
+
+
+func _accept_pop_speech(json: String) -> bool:
+	if _speech_debug_active or _mode_id != "pop" or not _pop_speech_active \
+		or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+		return false
+	return _pop.receive_speech_event(json)
+
+
+func _dispatch_speech_debug(arguments: Array) -> void:
+	if arguments.size() != 3 or not arguments[2] is JavaScriptObject:
+		return
+	# JavaScriptBridge callbacks discard the Callable return value. An
+	# explicit response object acknowledges the action in this same call.
+	var reply: JavaScriptObject = arguments[2]
+	reply.accepted = _on_speech_debug(arguments.slice(0, 2))
+
+
+func _on_speech_debug(arguments: Array) -> bool:
+	if arguments.is_empty() or not arguments[0] is String:
+		return false
+	var action: String = arguments[0]
+	if action == "open":
+		return _open_speech_debug()
+	if action == "close":
+		# The diagnostic DOM listener can run before the host's hidden callback.
+		# Mark background exit first so closing never requests hidden playback.
+		if _speech_debug_active and arguments.size() == 2 and arguments[1] is bool and arguments[1]:
+			_page_hidden = true
+		return _close_speech_debug()
+	if not _speech_debug_active or _page_hidden or arguments.size() != 2:
+		return false
+	if action == "mix" and (arguments[1] is float or arguments[1] is int):
+		return audio.set_speech_debug_mix(float(arguments[1]))
+	if action != "cue" or not arguments[1] is String or arguments[1] not in ["launch", "slice", "miss", "match", "stop"]:
+		return false
+	if arguments[1] == "stop":
+		audio.stop_pop_sounds()
+		audio.stop_match_voice_hit()
+		audio.stop_pip_reaction()
+		return true
+	audio.interact(model.theme_id, false)
+	match arguments[1]:
+		"launch": audio.cue("pop-launch")
+		"slice": audio.cue("pop-slice")
+		"miss": audio.play_pip_reaction(false)
+		"match": audio.play_match_voice_hit()
+	return true
+
+
+func _open_speech_debug() -> bool:
+	if _speech_debug_active:
+		return not _page_hidden
+	if _page_hidden or (OS.has_feature("web") and not _loading_revealed) \
+		or _holding_chest or model.chest_state == "opening" or _save_error or not _pending_fragment.is_empty():
+		return false
+	# Stop the old recognizer before freezing the scene. A failed microphone
+	# stop must never overlap the isolated diagnostic recognizer.
+	if _mode_id == "pop":
+		# Do not catch up a nearly expired round into scoring or a report as
+		# a side effect of opening an unscored diagnostic session.
+		_pop._listening_tick_usec = -1
+	if _host != null and not bool(_host.stopSpeech()):
+		return false
+	if not _stop_pop_listening():
+		return false
+	_stop_voice()
+	if _mode_id == "pop":
+		_pop.pause()
+	_on_input_canceled()
+	if _mode_id == "quest":
+		_quest.pause()
+	_stop_controller_actions()
+	audio.halt()
+	duck.settle()
+	_speech_debug_tree_paused = get_tree().paused
+	_speech_debug_audio_process_mode = audio.process_mode
+	_speech_debug_active = true
+	audio.set_speech_debug_mix(1.0)
+	# Freeze gameplay, controller input and timers while real sound assets
+	# remain available to the isolated browser diagnostic controls.
+	audio.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().paused = true
+	return true
+
+
+func _close_speech_debug(restore_audio: bool = true) -> bool:
+	if not _speech_debug_active:
+		return true
+	audio.halt()
+	audio.set_speech_debug_mix(1.0)
+	audio.process_mode = _speech_debug_audio_process_mode
+	_speech_debug_active = false
+	get_tree().paused = _speech_debug_tree_paused
+	if restore_audio and _page_hidden:
+		on_page_hidden()
+		_resume_music_after_background = _mode_id != "pop" or collection_page.visible
+	elif restore_audio:
+		_restore_mode_music()
+	return true
+
+
+func _exit_tree() -> void:
+	_close_speech_debug(false)
 
 
 func _on_input_canceled(_arguments: Array = []) -> void:
@@ -2938,6 +3309,8 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_pointer_focus_active = false
 	_cancel_chest_hold()
 	_finish_chest_drag()
+	_quest.cancel_chest_input()
+	_pop_rewards.cancel_input()
 	duck.note_activity()
 	_found_words_scroll.cancel_drag()
 	_pop.cancel_result_input()
@@ -2973,6 +3346,8 @@ func _sync_voice_bounds() -> void:
 
 
 func _on_voice_state(arguments: Array) -> void:
+	if _speech_debug_active:
+		return
 	if _mode_id == "quest":
 		_quest.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
 		return
@@ -3018,6 +3393,8 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
+	if _speech_debug_active:
+		return
 	if _mode_id == "pop":
 		if not collection_page.visible:
 			_pop.show_transcript(str(arguments[0]), bool(arguments[1]))
@@ -3134,6 +3511,7 @@ func _end_chest_hold() -> void:
 
 
 func _cancel_chest_hold(animate_return: bool = false) -> void:
+	var was_holding: bool = _holding_chest
 	_holding_chest = false
 	_hold_elapsed = 0.0
 	_hold_origin_frame = -1
@@ -3150,7 +3528,9 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 			chest.cancel_hold()
 		else:
 			chest.set_hold_progress(0.0)
-	if audio != null:
+	# Global cancellation also runs while Quest owns the shared audio player.
+	# Inactive Match cleanup must leave a committed Quest opening audible.
+	if audio != null and (_mode_id == "match" or was_holding or was_opening):
 		if animate_return:
 			audio.stop_chest_charge()
 		else:
@@ -3333,6 +3713,8 @@ func _show_collection() -> void:
 		_quest.hide()
 	if _mode_id == "pop":
 		_pop.pause()
+		_pop_rewards.pause()
+		_pop_rewards.hide()
 		audio.stop_pop_sounds()
 	if not _stop_pop_listening():
 		return
@@ -3385,9 +3767,14 @@ func _hide_collection() -> void:
 	_collection_focus_modes.clear()
 	feedback_timer.paused = false
 	_memory.pause(false)
+	if _mode_id == "pop" and not _pop_player_id.is_empty():
+		leaderboard_state.load_state()
+		_reconcile_round_identity()
 	if _mode_id == "pop" and _pop.game.phase == "finished" and is_instance_valid(_pop_leaderboard):
 		_pop_leaderboard.refresh_profiles()
 	_refresh()
+	if _mode_id == "pop" and _pop_rewards_shown:
+		_pop_rewards.resume()
 	if _valid_focus(_focus_before_collection):
 		_focus_before_collection.grab_focus()
 	else:

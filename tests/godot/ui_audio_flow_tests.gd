@@ -234,6 +234,7 @@ func _run() -> void:
 	_check_pop_launch_audio(app)
 	await _check_pop_hit_audio(app)
 	await _check_pop_exit_audio(app)
+	await _check_speech_debug(app)
 	app.audio.halt()
 	_check_pop_slice_choices()
 	app.queue_free()
@@ -244,6 +245,105 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("UI audio flow: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_speech_debug(app) -> void:
+	app.new_round(97, true, "", "pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	app._on_voice_state([true, true, "Listening."])
+	var ledger: Array = [app.leaderboard_state._bests.duplicate(true),
+		app.leaderboard_state._receipts.duplicate(true), app.medal_progress.counts.duplicate(true)]
+	var hits: int = app._pop.game.hits
+	var score: int = app._pop.game.score
+	check(app._on_speech_debug(["open"]), "Diagnostics can pause a running Voice Pop round")
+	var remaining: float = app._pop.game.remaining
+	check(paused and app._speech_debug_active and app._pop.game.phase == "paused"
+		and not app._pop_speech_active and not app._voice_mode and not app.can_process(),
+		"Diagnostic entry pauses scene processing, native input and both game recognizers")
+	check(app._on_speech_debug(["open"]) and app._on_speech_debug(["mix", 0.35]),
+		"Repeated open is idempotent and the paused scene accepts the audio comparison")
+	for cue: String in ["launch", "slice", "miss", "match"]:
+		check(app._on_speech_debug(["cue", cue]), "The diagnostic bridge accepts the real " + cue + " cue")
+		var player: AudioStreamPlayer
+		match cue:
+			"launch": player = app.audio.pop_launch
+			"slice": player = app.audio.last_pop_player()
+			"miss": player = app.audio.pip_reaction
+			"match": player = app.audio.match_voice_hit
+		check(player.playing and app.audio.can_process(),
+			"The diagnostic " + cue + " remains playable while the scene is paused")
+	app._on_voice_result([str(app._pop.game.targets[0].word.text), true])
+	app._on_voice_state([true, true, "Late callback"])
+	await create_timer(0.15).timeout
+	check(app._pop.game.remaining == remaining and app._pop.game.hits == hits
+		and app._pop.game.score == score and not app._pop._listening,
+		"Elapsed diagnostic time and stale native callbacks cannot advance or score the paused game")
+	check(app._on_speech_debug(["cue", "stop"]) and app._speech_debug_active and paused
+		and not app.audio.pop_launch.playing and not app.audio.match_voice_hit.playing
+		and not app.audio.pip_reaction.playing,
+		"Stopping diagnostic cues keeps gameplay paused without retaining audio tails")
+	check(not app._on_speech_debug(["mix", 0.2]) and not app._on_speech_debug(["cue", "reward"]),
+		"The bridge rejects unknown mixes and non-diagnostic sounds")
+	check(app._on_speech_debug(["close"]) and not paused and not app._speech_debug_active
+		and app.audio.process_mode == Node.PROCESS_MODE_INHERIT
+		and is_equal_approx(app.audio._speech_debug_mix, 1.0)
+		and app._pop.game.phase == "paused" and not app._pop._listening,
+		"Closing restores scene and audio settings while Voice Pop waits for an explicit retry")
+	check(not app._on_speech_debug(["cue", "launch"])
+		and not app._on_speech_debug(["mix", 0.0]) and app._on_speech_debug(["close"]),
+		"Late diagnostic commands are harmless after an idempotent close")
+	check(ledger == [app.leaderboard_state._bests, app.leaderboard_state._receipts, app.medal_progress.counts],
+		"Diagnostic entry, cues and exit never write leaderboard results or rewards")
+	app.choose_mode("match")
+	check(app._on_speech_debug(["open"]), "Match can enter the same diagnostic pause")
+	app._on_speech_debug(["mix", 0.35])
+	app._on_speech_debug(["cue", "miss"])
+	app.on_page_hidden()
+	check(paused and app._speech_debug_active and not app.audio.pip_reaction.playing
+		and is_equal_approx(app.audio._speech_debug_mix, 1.0)
+		and not app._on_speech_debug(["cue", "launch"]),
+		"Backgrounding silences diagnostics and keeps the pause until microphone stop is confirmed")
+	app._on_speech_debug(["close"])
+	check(not paused and app._page_hidden and not app.audio.active,
+		"Confirmed background close releases only the diagnostic pause and remains silent")
+	app.on_page_visible()
+	check(not app._page_hidden and app.audio.music.playing and not app._voice_mode,
+		"Returning from background restores ordinary Match audio without opening its microphone")
+	check(app._on_speech_debug(["open"]), "Diagnostics can reopen for a DOM-first background exit")
+	app._on_speech_debug(["close", true])
+	check(not paused and app._page_hidden and not app.audio.active and not app.audio.music.playing,
+		"A DOM-first hidden close cannot briefly restart background music")
+	app.on_page_hidden()
+	app.on_page_visible()
+	check(app.audio.music.playing and not app._voice_mode,
+		"A later native hidden callback preserves the music recovery intent")
+	app.model.chest_state = "opening"
+	check(not app._on_speech_debug(["open"]) and not paused,
+		"An opening chest cannot be interrupted by diagnostic entry")
+	app.model.chest_state = "closed"
+	app._save_error = true
+	check(not app._on_speech_debug(["open"]) and not paused,
+		"A failed reward save must be resolved before diagnostic entry")
+	app._save_error = false
+	paused = true
+	check(app._on_speech_debug(["open"]) and app._on_speech_debug(["close"]) and paused,
+		"Diagnostics preserves an existing scene pause when it closes")
+	paused = false
+	app.new_round(119, true, "", "pop")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	app._on_voice_state([true, true, "Listening."])
+	app._pop_speech_active = true
+	app._pop._listening_tick_usec = -1
+	var target: Dictionary = app._pop.game.targets[0]
+	var event: Dictionary = {"event_id": "native-ack", "round_id": app._pop.snapshot().round_id,
+		"target_uid": target.uid, "text": target.word.text, "stage": "interim", "received_at_ms": 100.0}
+	check(app._accept_pop_speech(JSON.stringify(event)) and app._pop.game.hits == 1,
+		"The native acknowledgement path accepts a valid bound speech hit")
+	check(not app._accept_pop_speech(JSON.stringify(event)) and app._pop.game.hits == 1,
+		"The native acknowledgement rejects a duplicate without replaying a hit")
+	app._stop_pop_listening()
+	check(not app._accept_pop_speech(JSON.stringify(event)),
+		"A stopped round cannot acknowledge an old speech callback")
 
 
 func _check_pop_launch_audio(app) -> void:

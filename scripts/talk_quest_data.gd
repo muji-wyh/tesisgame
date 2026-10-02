@@ -1,5 +1,7 @@
 extends RefCounted
 
+const GameData = preload("res://scripts/game_data.gd")
+
 # Reviewed story content. Runtime callers receive copies of the catalog.
 const LEVEL_COUNT: int = 14
 const CHEST_COUNT: int = 20
@@ -7,6 +9,25 @@ const REPAIR_COUNT: int = 5
 const CHEST_DURATION: float = 5.0
 const CHEST_HOLD_TIME: float = 1.20
 const CHEST_REVEAL_TIME: float = 3.36
+const HEALTH: Array[int] = [5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 25, 28]
+const LEVEL_WORDS: Array = [
+	["door", "key", "bell", "lamp", "window", "chair", "flower", "cat"],
+	["soap", "towel", "brush", "mirror", "hand", "water", "comb", "tooth"],
+	["bread", "milk", "egg", "cup", "plate", "spoon", "apple", "bowl"],
+	["shirt", "sock", "shoe", "hat", "coat", "dress", "pants", "glove"],
+	["ball", "swing", "slide", "kite", "seesaw", "frisbee", "scooter", "bike"],
+	["book", "pen", "pencil", "crayons", "table", "chair", "clock", "abacus"],
+	["apple", "banana", "orange", "pear", "grape", "melon", "peach", "cherry", "mango", "plum"],
+	["book", "lamp", "chair", "window", "pencil", "owl", "bear", "rabbit", "fox", "tree"],
+	["lion", "tiger", "monkey", "panda", "zebra", "elephant", "giraffe", "penguin", "turtle", "parrot"],
+	["bus", "car", "train", "truck", "bike", "scooter", "taxi", "van", "wheel", "plane"],
+	["beach", "sand", "shell", "crab", "whale", "dolphin", "starfish", "seahorse", "boat", "sunglasses"],
+	["tent", "star", "moon", "tree", "forest", "rock", "river", "mountain", "owl", "pinecone"],
+	["cake", "balloon", "candy", "cookie", "plate", "cup", "crown", "bell", "drum", "guitar", "piano", "box"],
+	["robot", "doll", "car", "plane", "wheel", "key", "block", "puzzle", "yoyo", "drum", "box", "bear"]
+]
+
+static var _word_catalog: Dictionary = {}
 
 const REPAIRS: Array = [
 	{
@@ -53,7 +74,8 @@ const REPAIRS: Array = [
 
 const LEVEL_DEFINITIONS: Array = [
 	{
-		"title": "At the Front Door", "monster_name": "Knobble", "source_creature": "Goleing",
+		"title": "At the Front Door", "monster_name": "Stonewarden", "source_creature": "Rock Guardian",
+		"monster_id": "giant-rock-guardian",
 		"accent": "#ee9b79", "kind": "ordinary",
 		"description": "A peach porch with a broad front door, a doorbell, and welcoming plants.",
 		"props": ["front door", "doorbell", "doorstep", "potted plants"],
@@ -257,7 +279,8 @@ const LEVEL_DEFINITIONS: Array = [
 		]
 	},
 	{
-		"title": "Camping Under the Stars", "monster_name": "Twinkle", "source_creature": "Alpaking",
+		"title": "Camping Under the Stars", "monster_name": "Stormwing", "source_creature": "Storm Dragon",
+		"monster_id": "giant-storm-dragon",
 		"accent": "#9587cc", "kind": "ordinary",
 		"description": "An indigo campsite with a tent, lantern, sleeping bags, and a sky full of stars.",
 		"props": ["tent", "lantern", "sleeping bags", "trees", "stars"],
@@ -307,12 +330,13 @@ const LEVEL_DEFINITIONS: Array = [
 		]
 	},
 	{
-		"title": "Magic Toy Workshop", "monster_name": "Tinker", "source_creature": "Alien",
-		"accent": "#9c92e2", "kind": "cooperative",
-		"description": "A magical workshop where a sleeping purple friend wakes after five shared toy repairs.",
+		"title": "Magic Toy Workshop", "monster_name": "Embermaw", "source_creature": "Ember Golem",
+		"monster_id": "giant-ember-golem",
+		"accent": "#9c92e2", "kind": "boss",
+		"description": "A magical toy workshop with a workbench, bright toys, and the final friendly monster.",
 		"props": ["workbench", "toy car", "toy plane", "teddy bear", "toy robot", "music box"],
 		"dialogue": [
-			["Adam", "Tinker is sleeping. Can you help me fix this toy car?"],
+			["Adam", "Embermaw is sleeping. Can you help me fix this toy car?"],
 			["Yoki", "Of course. What does the little car need?"],
 			["Adam", "One wheel is loose. Please hold the car while I fix it."],
 			["Yoki", "I am holding it steady. Now all four wheels can roll."],
@@ -331,7 +355,7 @@ const LEVEL_DEFINITIONS: Array = [
 			["Adam", "The music box is quiet. Shall we try to fix it together?"],
 			["Yoki", "Yes. I will open the lid while you turn the winding key."],
 			["Adam", "I can hear the tune now. Let's close the lid very gently."],
-			["Yoki", "All five toys are ready. Wake up, Tinker, and celebrate with us!"]
+			["Yoki", "All five toys are ready. Wake up, Embermaw, and celebrate with us!"]
 		]
 	}
 ]
@@ -364,6 +388,8 @@ static func level(number: int) -> Dictionary:
 	if number < 1 or number > LEVEL_COUNT:
 		return {}
 	var source: Dictionary = LEVEL_DEFINITIONS[number - 1]
+	var health: int = HEALTH[number - 1]
+	var extra: int = maxi(3, ceili(float(health) / 4.0))
 	var result: Dictionary = {
 		"number": number, "id": "level-%02d" % number, "title": source.title,
 		"scene_id": "scene-%02d" % number,
@@ -371,10 +397,12 @@ static func level(number: int) -> Dictionary:
 			"id": "scene-%02d" % number, "name": source.title, "accent": source.accent,
 			"description": source.description, "props": source.props.duplicate()
 		},
-		"monster_id": "lpm-" + source.source_creature.to_lower(),
+		"monster_id": str(source.get("monster_id", "lpm-" + source.source_creature.to_lower())),
 		"monster_name": source.monster_name, "source_creature": source.source_creature,
-		"cooperative": source.kind == "cooperative", "kind": source.kind,
-		"chest_id": "chest-%02d" % number, "lines": []
+		"cooperative": false, "kind": source.kind,
+		"chest_id": "chest-%02d" % number, "lines": [],
+		"hp": health, "extra_words": extra, "word_budget": health + extra,
+		"words": _words_for_level(number)
 	}
 	for index in range(source.dialogue.size()):
 		var dialogue: Array = source.dialogue[index]
@@ -390,6 +418,24 @@ static func level(number: int) -> Dictionary:
 				"role": "requester" if index % 2 == 0 else "helper"
 			})
 		result.lines.append(line)
+	return result
+
+
+static func _words_for_level(number: int) -> Array[Dictionary]:
+	if _word_catalog.is_empty():
+		var loaded: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+		if not GameData.validate_words(loaded).is_empty():
+			return []
+		for word: Dictionary in loaded:
+			var entry: Dictionary = word.duplicate(true)
+			var imported: String = "assets/imported-unity/" + entry.id + ".png"
+			if ResourceLoader.exists("res://" + imported):
+				entry.image = imported
+			_word_catalog[entry.id] = entry
+	var result: Array[Dictionary] = []
+	for id: String in LEVEL_WORDS[number - 1]:
+		if _word_catalog.has(id):
+			result.append(_word_catalog[id].duplicate(true))
 	return result
 
 

@@ -128,7 +128,10 @@ func _result_lifecycle() -> void:
 		view._advance_game(view.game.remaining)
 		check(view.game.phase == "finished" and not app.audio.voice.playing,
 			"Returning from " + destination + " can complete another round without automatic speech")
+	app.audio.halt()
+	await process_frame
 	app.queue_free()
+	await process_frame
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)

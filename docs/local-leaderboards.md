@@ -6,6 +6,18 @@ The menu has **Players** and **Leaderboards** entries. Up to ten players can cho
 
 When entering from the loading screen for the first time, create a player before continuing to the game. The avatar and name must be saved successfully before the welcome flow completes. Existing players skip this step.
 
+## Editing and removing players
+
+Open **Players** in the menu. Each player has **Edit** and **Remove** actions.
+
+- **Edit** changes the name and emoji avatar. **Save changes** keeps the same player ID, creation order, personal bests, and round ownership. Editing remains available when all ten player spots are occupied.
+- **Remove** opens a confirmation naming the player. **Keep player** cancels; **Remove player** deletes that profile, its personal bests in every mode, and its round receipts. Removal cannot be undone and makes the player slot available again.
+- **Cancel**, the panel's **Back** button, Escape, or controller Back discard a pending edit or removal before leaving the Players screen. Failed writes retain the draft or confirmation for retry.
+
+Names and avatars update on leaderboards and the current Voice Pop result. Removing the current Voice Pop player discards their unfinished or completed round and requires a new player selection. A saved Match or Memory result belonging to a removed player cannot be reassigned to another player. Removing the last player immediately requires creating a new one.
+
+Talk Quest progress, medals, treasure collections, playroom state, and earned Match chests are shared on the device and survive profile removal. Editing a name on mobile uses the same native text input as player creation and retains its 16 CSS-pixel minimum font to prevent focus zoom.
+
 ## Ranking rules
 
 Each player has one personal best per mode. Boards combine completed rounds across themes and age selections.
@@ -62,6 +74,7 @@ Build before running the focused browser suite, and run Godot, export, and brows
 ```sh
 npm run build:web
 npx playwright test tests/browser/leaderboards.spec.cjs --project=desktop-chromium --project=iphone-webkit
+npx playwright test tests/browser/player-management.spec.cjs --project=desktop-chromium --project=iphone-webkit
 ```
 
-Coverage includes ties and all ranking rules, profile limits and validation, first-player onboarding, explicit Voice Pop player selection, automatic score attribution, failed saves and retry, corrupt save preservation, native recovery, repeated attribution, rank movement, browser reload, narrow layouts, and reduced motion. Browser microphone fixtures exercise the normal game result flow without recording a real voice. Real-device browser testing remains useful for keyboard behavior, touch scrolling, and rendering performance.
+Coverage includes ties and all ranking rules, profile limits and validation, editing and confirmed removal, first-player onboarding, explicit Voice Pop player selection, automatic score attribution, failed saves and retry, corrupt save preservation, native recovery, repeated attribution, rank movement, browser reload, narrow layouts, and reduced motion. Profile management also checks stale actions, removal of the current round's player, last-player onboarding, preservation of shared saves, and mobile editor zoom. Browser microphone fixtures exercise the normal game result flow without recording a real voice. Real-device browser testing remains useful for keyboard behavior, touch scrolling, and rendering performance.

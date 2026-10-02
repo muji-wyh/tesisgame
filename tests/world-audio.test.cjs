@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
+const { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const added = ['jungle', 'candy'];
@@ -14,7 +15,7 @@ function fixture(t) {
   return directory;
 }
 
-test('the new-world provenance preserves its history and pins all six active audio files', () => {
+test('the new-world provenance preserves superseded music history and pins four active original recordings', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jungle-candy-audio.json'), 'utf8'));
   const expected = added.flatMap(id => [
     `assets/audio/bgm/${id}.wav`,
@@ -22,8 +23,8 @@ test('the new-world provenance preserves its history and pins all six active aud
     ...['theme', 'arrive', 'open'].map(suffix => `assets/audio/voice/${id}-${suffix}.wav`)
   ]);
   assert.deepEqual(manifest.files.map(file => file.path), expected);
+  const superseded = added.map(id => `assets/audio/bgm/${id}.wav`);
   const active = added.flatMap(id => [
-    `assets/audio/bgm/${id}.wav`,
     `assets/audio/sfx/${id}-arrive.wav`,
     `assets/audio/voice/${id}-theme.wav`
   ]);
@@ -33,6 +34,13 @@ test('the new-world provenance preserves its history and pins all six active aud
     `assets/audio/voice/${id}-open.wav`
   ]);
   for (const file of manifest.files) {
+    if (superseded.includes(file.path)) {
+      // The active casual-music manifest owns the replacement recording's hash.
+      // The dated manifest continues to describe the original synthesized score.
+      assert.equal(file.kind, 'bgm');
+      assert.equal(fs.existsSync(path.join(root, file.path)), true, file.path);
+      continue;
+    }
     if (!active.includes(file.path)) {
       assert.ok(retired.includes(file.path), `Unclassified historical audio: ${file.path}`);
       assert.equal(fs.existsSync(path.join(root, file.path)), false,
@@ -68,8 +76,9 @@ test('missing-only SFX generation adds two arrival cues without rewriting effect
   assert.deepEqual(fs.readdirSync(output).sort(), active.map(id => `${id}.wav`).sort());
 });
 
-test('missing-only BGM generation preserves all existing tracks and adds playable jungle and candy tunes', (t) => {
+test('BGM generation defaults to preserving existing tracks and reproduces the historical jungle and candy scores', (t) => {
   const { soundtrack, generateWorldBgm } = require('../tools/generate-world-bgm.cjs');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jungle-candy-audio.json'), 'utf8'));
   const directory = fixture(t);
   const output = path.join(directory, 'assets/audio/bgm');
   fs.mkdirSync(output, { recursive: true });
@@ -77,7 +86,7 @@ test('missing-only BGM generation preserves all existing tracks and adds playabl
   for (const id of themes.filter(id => !added.includes(id))) {
     fs.writeFileSync(path.join(output, `${id}.wav`), original);
   }
-  assert.equal(generateWorldBgm({ root: directory, onlyMissing: true }), 2);
+  assert.equal(generateWorldBgm({ root: directory }), 2);
   for (const id of added) {
     const bytes = fs.readFileSync(path.join(output, `${id}.wav`));
     assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
@@ -86,14 +95,56 @@ test('missing-only BGM generation preserves all existing tracks and adds playabl
     assert.equal(bytes.readUInt32LE(24), 44100, `${id} uses the established BGM source rate`);
     assert.equal(bytes.readUInt16LE(34), 16, `${id} is PCM16`);
     assert.ok(soundtrack(id).duration >= 16 && soundtrack(id).duration <= 20);
-    assert.deepEqual(bytes, fs.readFileSync(path.join(root, 'assets/audio/bgm', `${id}.wav`)),
-      `${id} is exactly reproducible from its original score`);
+    const historical = manifest.files.find(file => file.path === `assets/audio/bgm/${id}.wav`);
+    assert.equal(bytes.length, historical.bytes, id);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), historical.sha256,
+      `${id} is exactly reproducible from its historical original score`);
   }
   assert.notDeepEqual(soundtrack('jungle').notes, soundtrack('candy').notes);
   for (const id of themes.filter(id => !added.includes(id))) {
     assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original);
   }
   assert.equal(generateWorldBgm({ root: directory, onlyMissing: true }), 0);
+});
+
+test('the BGM command preserves replacements by default and requires an explicit replace flag', (t) => {
+  const directory = fixture(t);
+  const output = path.join(directory, 'assets/audio/bgm');
+  const toolDirectory = path.join(directory, 'tools');
+  fs.mkdirSync(output, { recursive: true });
+  fs.mkdirSync(toolDirectory, { recursive: true });
+  for (const tool of ['generate-world-bgm.cjs', 'generate-sfx.cjs']) {
+    fs.copyFileSync(path.join(root, 'tools', tool), path.join(toolDirectory, tool));
+  }
+  const original = Buffer.from('A downloaded soundtrack must survive the legacy generator.');
+  for (const id of themes) fs.writeFileSync(path.join(output, `${id}.wav`), original);
+  const run = args => spawnSync(process.execPath, [path.join(toolDirectory, 'generate-world-bgm.cjs'), ...args], {
+    cwd: directory, encoding: 'utf8', windowsHide: true, timeout: 120000
+  });
+  for (const args of [[], ['--missing']]) {
+    const result = run(args);
+    assert.ifError(result.error);
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /Generated 0 original world soundtracks/);
+    for (const id of themes) assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original, id);
+  }
+  const conflicting = run(['--missing', '--replace']);
+  assert.ifError(conflicting.error);
+  assert.notEqual(conflicting.status, 0);
+  for (const id of themes) assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original, id);
+
+  const result = run(['--replace']);
+  assert.ifError(result.error);
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Generated 4 original world soundtracks/);
+  for (const id of ['ocean', 'space', 'jungle', 'candy']) {
+    const bytes = fs.readFileSync(path.join(output, `${id}.wav`));
+    assert.equal(bytes.toString('ascii', 0, 4), 'RIFF', id);
+    assert.notDeepEqual(bytes, original, id);
+  }
+  for (const id of ['spring', 'summer', 'autumn', 'winter']) {
+    assert.deepEqual(fs.readFileSync(path.join(output, `${id}.wav`)), original, id);
+  }
 });
 
 test('required bundled audio includes both new worlds and rejects missing or invalid imports', (t) => {

@@ -16,6 +16,7 @@ const GROUND_COLORS: Dictionary = {
 }
 
 var theme_id: String = "spring"
+var show_theme_name: bool = true
 var palette: Dictionary = {}
 var _sky := GradientTexture2D.new()
 var _theme_icon: Texture2D
@@ -72,7 +73,8 @@ func _draw() -> void:
 	# Keep those areas quiet, with only a soft landing beneath the chest.
 	_ellipse(_point(0.5, 0.875), Vector2(size.x * 0.31, size.y * 0.068), Color(ground.darkened(0.18), 0.10))
 	_ellipse(_point(0.5, 0.858), Vector2(size.x * 0.29, size.y * 0.052), Color(Color.WHITE, 0.28))
-	_draw_theme_name(edge)
+	if show_theme_name:
+		_draw_theme_name(edge)
 
 
 func _draw_spring(edge: float) -> void:

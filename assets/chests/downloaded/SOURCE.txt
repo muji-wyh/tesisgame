@@ -1,0 +1,51 @@
+Downloaded chest artwork for the shared reward presentation
+=========================================================
+
+Five source-derived designs extend the three original animated chest types.
+Each of the eight themes now has a distinct design:
+
+Spring: Royal (existing 2D rig)
+Summer: Energy (existing 2D rig)
+Autumn: Harvest Wood (Casual Chests, original CHEST_T3 and openT3 clip)
+Winter: Crystal (existing nine-part 2D rig)
+Ocean: Tide Blue (Low Poly Chest Animated, original blue chest/opening clip)
+Space: Nebula Vault (Stylized 3D Animated Chests, original Epic Chest)
+Jungle: Bramble Chest (POLY STYLE Fantasy Treasure Chest, Treasure_Chest_3a)
+Candy: Bonbon Barrel (POLY STYLE Fantasy Treasure Chest, Treasure_Chest_2a)
+
+Original source packages were downloaded to C:/uworks/TalkQuest/downloads.
+The adjacent manifest records their Unity Asset Store product IDs, publishers,
+versions and complete package SHA-256 values, plus export/frame checksums.
+The source packages remain outside the repository. The derived PNG frames and
+their import sidecars are private local build inputs excluded from Git. They
+ship as embedded game content under the Unity Asset Store Standard EULA, not a
+separate redistributable asset pack. Publisher scripts and controller behavior are not
+included or executed by this game.
+
+Geometry and materials came from the previously verified Unity prefab exports
+under C:/uworks/TalkQuest/asset-review/media. All five designs keep their source
+meshes, material colors, UVs and supported textures. Blender Principled shading,
+transparent background and consistent orthographic lighting approximate the
+Unity materials; custom publisher shaders and demo scene effects are not copied.
+
+Harvest uses all nine existing samples of the publisher's opening animation.
+Tide uses the first seven source samples, stopping in the open pose before the
+closing half of the publisher's open/close clip. Nebula has an authored magnetic
+lift of the separate source lid. Bramble and Bonbon have authored hinge rotation
+from closed to the publisher's 60-degree open pose using their source pivots.
+The latter three motions are game adaptations, not claims about supplied clips.
+
+Rebuild the three authored model sequences with Blender:
+  blender --background --factory-startup --disable-autoexec --python
+    tools/prepare-downloaded-chests.py -- --render
+
+Then pack the five designs and verify the source archives:
+  python tools/prepare-downloaded-chests.py --pack
+
+Both commands support --source-root to relocate the existing TalkQuest archive.
+The baker keeps its intermediate frames and review contact sheet in build/chest-bakes.
+The 43 runtime frames are lossless RGBA PNGs at 320 x 320, totaling under 3 MB.
+
+The game drives these opening poses with the same ChestView hold confirmation,
+release timing, sounds, body weight, light, cancellation, surprise and reduced
+motion behavior as the existing chest designs. There is no whole-frame dissolve.

@@ -4,6 +4,7 @@ const State = preload("res://scripts/leaderboard_state.gd")
 
 
 static func install(app, directory: String, filename: String = "leaderboards.cfg") -> void:
+	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
 	app.leaderboard_state = State.new(directory + "/" + filename)
 	assert(app.leaderboard_state.load_state())
 	assert(app.leaderboard_state.create_profile("Test player", "duck").ok)

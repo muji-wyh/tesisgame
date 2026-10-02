@@ -21,6 +21,8 @@ func _poses(chest) -> Array:
 	var values: Array = [chest._art.transform]
 	for piece in chest._pieces:
 		values.append(piece.node.transform)
+	if not chest._opening_frames.is_empty():
+		values.append(chest._opening_frame)
 	return values
 
 
@@ -85,8 +87,13 @@ func _run() -> void:
 		check(_poses(chest) != rest, theme + " responds in the press call before any frame or timer")
 		check(cues == [[theme, "press", 0]], theme + " emits a single contact beat")
 		chest.set_hold_progress(0.45)
-		check(_poses(chest).slice(1) != rest.slice(1),
-			theme + " builds pressure in its lock, core or facets as well as its body")
+		if chest._opening_frames.is_empty():
+			check(_poses(chest).slice(1) != rest.slice(1),
+				theme + " builds pressure in its lock, core or facets as well as its body")
+		else:
+			check(_poses(chest) != rest and chest._opening_frame == 0
+				and chest.hold_effect_snapshot().lid_pressure > 0.0 and chest.hold_effect_snapshot().buildup_glow > 0.0,
+				theme + " builds visible body pressure and surface light while the source lid stays sealed")
 		chest.begin_hold()
 		check(is_equal_approx(chest.hold_progress, 0.45), theme + " ignores duplicate hold starts")
 		chest.set_hold_progress(0.8)
@@ -159,7 +166,10 @@ func _run() -> void:
 		var poses: Array = _poses(chest)
 		check(not family_poses[style].has(poses), theme + " has distinct physical motion within its shared artwork family")
 		family_poses[style].append(poses)
-		if style != "crystal":
+		if not chest._opening_frames.is_empty():
+			check(chest._opening_frames.size() >= 6 and chest.hold_effect_snapshot().opening_frame > 0,
+				theme + " animates the downloaded model's lid with multiple source-derived poses")
+		elif style != "crystal":
 			check(chest.piece_count() >= 4, theme + " uses a layered body, interior, lid and lock")
 			check(not chest._pieces.any(func(piece): return piece.role in ["closed", "open"]),
 				theme + " moves real parts instead of dissolving between whole frames")
@@ -290,6 +300,7 @@ func _run() -> void:
 	_check_pressure_release(data)
 	_check_weighted_release(data)
 	_check_crystal_mechanism(data)
+	_check_downloaded_mechanisms(data)
 	_check_motion_bounds(data)
 	print("Chest feel: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -422,6 +433,10 @@ func _check_small_stage_pixels(data) -> void:
 
 
 func _lid_poses(chest) -> Array:
+	if not chest._opening_frames.is_empty():
+		# A baked source lid inherits the shared body's pressure/recoil while
+		# its actual opening changes the displayed source-geometry frame.
+		return [chest._art.transform, chest._opening_frame]
 	var poses: Array = []
 	for piece in chest._pieces:
 		if piece.role == "lid_outer" or (chest._style == "crystal" and piece.role not in ["chest", "01"]):
@@ -609,7 +624,9 @@ func _check_crystal_mechanism(data) -> void:
 	root.add_child(chest)
 	chest.set_process(false)
 	chest.size = Vector2(440, 360)
-	for theme in ["winter", "ocean", "candy"]:
+	for theme in data.THEMES:
+		if data.theme(theme).chest != "crystal":
+			continue
 		chest.clear()
 		chest.reduced_motion = false
 		chest.configure_skin(data.theme(theme), data.chests)
@@ -648,6 +665,52 @@ func _check_crystal_mechanism(data) -> void:
 		check(chest.hold_effect_snapshot().interior_open == 1.0, theme + " leaves an open interior after its panels release")
 		chest.clear()
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " removes interior depth when resetting the reward view")
+	chest.free()
+
+
+func _check_downloaded_mechanisms(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.set_process(false)
+	chest.size = Vector2(440, 360)
+	var unique_styles: Dictionary = {}
+	var downloaded_count: int = 0
+	for theme in data.THEMES:
+		chest.clear()
+		chest.configure_skin(data.theme(theme), data.chests)
+		var state: Dictionary = chest.hold_effect_snapshot()
+		check(not unique_styles.has(state.style), theme + " owns a distinct chest design")
+		unique_styles[state.style] = true
+		if state.opening_frames == 0:
+			continue
+		downloaded_count += 1
+		var closed_texture: Texture2D = chest._pieces[0].node.texture
+		var covers_source_pixels: bool = true
+		for index in range(chest._opening_frames.size()):
+			var texture: Texture2D = chest._opening_frames[index]
+			var alpha_rect: Rect2 = Rect2(texture.get_image().get_used_rect())
+			alpha_rect.position -= texture.get_size() * 0.5
+			var cropped_rect: Rect2 = chest._frame_closed_bounds if index == 0 else chest._frame_motion_bounds
+			covers_source_pixels = covers_source_pixels and cropped_rect.encloses(alpha_rect)
+		check(covers_source_pixels, theme + " crops transparent padding without removing any source pixels")
+		check(chest._bounds == chest._frame_closed_bounds
+			and chest._bounds.size.x < closed_texture.get_width() and chest._bounds.size.y < closed_texture.get_height(),
+			theme + " fits its visible closed model instead of the larger transparent render canvas")
+		chest.start_open(false)
+		chest._advance_animation(Feel.RELEASE_TIME - 0.001)
+		check(chest._opening_frame == 0 and chest._pieces[0].node.texture == closed_texture,
+			theme + " remains visibly closed throughout the shared buildup")
+		chest._advance_animation(0.18)
+		check(chest._opening_frame > 0 and chest._pieces[0].node.texture != closed_texture,
+			theme + " shows moving source geometry after the release cue")
+		chest.finish_immediately()
+		check(chest._opening_frame == state.opening_frames - 1,
+			theme + " leaves its real open model pose visible when complete")
+		chest.clear()
+		check(chest._opening_frame == 0 and chest._pieces[0].node.texture == closed_texture,
+			theme + " resets all visible geometry before the next chest")
+	check(unique_styles.size() == data.THEMES.size() and downloaded_count == 5,
+		"Eight themes have eight designs, including five downloaded chest types")
 	chest.free()
 
 

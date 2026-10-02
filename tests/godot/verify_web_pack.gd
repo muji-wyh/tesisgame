@@ -7,6 +7,31 @@ func _initialize() -> void:
 
 func _verify() -> void:
 	var failures := 0
+	var catalog = load("res://scripts/game_data.gd").new()
+	if not catalog.load_all():
+		printerr("The startup pack must contain every gameplay catalog: " + catalog.error)
+		quit(1)
+		return
+	var chest_frames: int = 0
+	for style in catalog.chests.styles.values():
+		for frame in style.get("frames", []):
+			var texture: Texture2D = load("res://" + str(frame))
+			if texture == null or texture.get_width() <= 0 or texture.get_height() <= 0:
+				printerr("A downloaded chest frame is missing from the startup pack: " + str(frame))
+				failures += 1
+			chest_frames += 1
+	print("Treasure: %d chest types and %d downloaded opening frames checked in the startup pack." % [catalog.chests.styles.size(), chest_frames])
+	var giant_manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/talk_quest/monsters/giants-manifest.json"))
+	if not giant_manifest is Dictionary or giant_manifest.get("creatures", []).size() != 3:
+		printerr("Talk Quest requires the three acquired giant creature records in its startup pack.")
+		failures += 1
+	else:
+		for creature: Dictionary in giant_manifest.creatures:
+			var packed: PackedScene = load(str(creature.resource)) as PackedScene
+			if packed == null:
+				printerr("A Talk Quest giant model is missing from the startup pack: " + str(creature.id))
+				failures += 1
+		print("Talk Quest: three giant creatures and their framing manifest checked in the startup pack.")
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
 		printerr("The startup pack must contain a playable vocabulary.")

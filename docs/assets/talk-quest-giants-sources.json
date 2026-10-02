@@ -1,0 +1,444 @@
+{
+  "version": 1,
+  "selection_status": "selected-for-integration",
+  "source_root": "C:/uworks/TalkQuest",
+  "path_convention": "All local path fields are relative to source_root and use forward slashes.",
+  "source_manifest": "asset-review/sources.large-monsters.json",
+  "source_manifest_updated": "2026-10-01T13:21:17.831773+00:00",
+  "acquisition_notes": "processing/LARGE_MONSTERS.md",
+  "scope": "Three distinct source designs replace levels 1, 12 and 14; the other eleven original level creatures remain active.",
+  "retained_original_ids": [
+    "lpm-squidle",
+    "lpm-mushroom",
+    "lpm-bunny",
+    "lpm-frog",
+    "lpm-armabee",
+    "lpm-cactoro",
+    "lpm-bird",
+    "lpm-dino",
+    "lpm-hywirl",
+    "lpm-glub",
+    "lpm-yeti"
+  ],
+  "verification_scope": "Selected source package, model, texture, material, prefab, import metadata, animation-file and preview hashes are checked against retained bytes. This is provenance, not a claim that converted output or game animation has passed validation.",
+  "creatures": [
+    {
+      "id": "giant-rock-guardian",
+      "name": "Rock Guardian",
+      "level": 1,
+      "replaces": "lpm-goleing",
+      "source_id": "mini-legion-rock-golem",
+      "product_url": "https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/mini-legion-rock-golem-pbr-hp-polyart-94707",
+      "license": {
+        "name": "Standard Unity Asset Store EULA",
+        "url": "https://unity.com/legal/as-terms",
+        "use": "Licensed game content; reusable source models and textures remain private build inputs."
+      },
+      "package": {
+        "path": "downloads/mini-legion-rock-golem/2bcdcd9755adeb1d.unitypackage",
+        "sha256": "2bcdcd9755adeb1de5ef5a82409d51c9b72670a8f8139a682127b7620396cd8a",
+        "bytes": 22327890,
+        "header": {
+          "link": {
+            "id": "94707",
+            "type": "content"
+          },
+          "unity_version": "2018.3.3f1",
+          "pubdate": "14 Jan 2020",
+          "version": "1.2",
+          "upload_id": "347235",
+          "version_id": "498617",
+          "category": {
+            "id": "10",
+            "label": "3D Models/Characters/Humanoids/Fantasy"
+          },
+          "id": "94707",
+          "title": "Mini Legion Rock Golem PBR HP Polyart",
+          "publisher": {
+            "id": "23554",
+            "label": "Dungeon Mason"
+          }
+        }
+      },
+      "acquisition": {
+        "workflow": "Official Unity Asset Store browser and Unity Package Manager download.",
+        "source_extracted_utc": "2026-10-01T13:02:14.379518+00:00",
+        "recorded_archive_verification": {
+          "status": "verified",
+          "product_id": "94707",
+          "package_sha256": "2bcdcd9755adeb1de5ef5a82409d51c9b72670a8f8139a682127b7620396cd8a",
+          "package_bytes": 22327890,
+          "gzip_expanded_bytes": 106669056,
+          "verification": "Product identity and full gzip CRC/length verified before safe TAR extraction."
+        },
+        "inventory": {
+          "path": "asset-review/media/downloaded/mini-legion-rock-golem/2bcdcd9755ad/inventory.json",
+          "sha256": "4e615af12d9f306a3e42c51254f42c1c784d176b071951edd0337743443443f0",
+          "bytes": 13411
+        },
+        "note": "Product identity, full gzip CRC/length and safe extraction were checked by the retained acquisition workflow. This document rechecks package and selected input SHA-256 values; it does not repeat archive extraction."
+      },
+      "inputs": {
+        "model": {
+          "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Meshes/Golem.fbx",
+          "sha256": "af06b3eabd7ce1489e2c006d95893386299af1b0019ef1b3e459d4354d8c6882",
+          "bytes": 101584
+        },
+        "texture": {
+          "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Textures/HP_Golem.png",
+          "sha256": "54fe35f495d8262c967177aa1f617fcd7a843a29d2e363d169a42810202807b6",
+          "bytes": 16798861,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        "material": {
+          "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Materials/HP_Golem.mat",
+          "sha256": "db3ab9772a9cd662c8f9c025aac192a500c7434e137903ce388e7c9b37c82758",
+          "bytes": 5108
+        },
+        "prefab": {
+          "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Prefabs/HP_Golem.prefab",
+          "sha256": "808547a544821dea66f177d8a52b2cd9ebf9302b3989c9cb52b1499468cbf720",
+          "bytes": 13336
+        },
+        "model_import_metadata": {
+          "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Meshes/Golem.fbx.meta",
+          "sha256": "deefc7bc3310ada5066883afb3dfad7975ca458ce88e12495a8bc0904621f0e9",
+          "bytes": 11835
+        },
+        "animation_files": [
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Idle.anim",
+            "sha256": "ffe844c49d6b32e7c79c201a8822dcf42a5bc81b80886e22ed4162de1a5da477",
+            "bytes": 76664
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Walk.anim",
+            "sha256": "9997eddd03fdd4d55ac39c017b7b08afda611605b1c768af26016f900f04ef88",
+            "bytes": 82124
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Attack01.anim",
+            "sha256": "ea97ae9d550576ff8772aa59f7246cf5458f7d834e67929fd2436f1dbe9eee66",
+            "bytes": 140688
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Attack02.anim",
+            "sha256": "1a063f4f8075d8adc5dbbc03887a1b6c2cf1131ff18083d2aec67ed684bd93ca",
+            "bytes": 111408
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/GetHit.anim",
+            "sha256": "ac10922d5697071047cc7f90f621b215394d503b6b53f95b698549b5b76fe1cc",
+            "bytes": 82128
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Die.anim",
+            "sha256": "f61330d5b2b70daaf69715a973e18904b556b563ab308a205dfff39caeebc607",
+            "bytes": 76268
+          },
+          {
+            "path": "sources/mini-legion-rock-golem/2bcdcd9755adeb1d/tree/Assets/Mini Legion Rock Golem PBR HP Polyart/Animations/Victory.anim",
+            "sha256": "692b5db2a3a02b3b2d40944a9d664003f252f85bbfa86ec2ccfff2b09029fe7d",
+            "bytes": 140688
+          }
+        ]
+      },
+      "review_preview": {
+        "path": "asset-review/media/large-monster-animations/mini-handpainted/poster.png",
+        "sha256": "dbf9616f51c352ff83e6cd1891067e4fb4fda47222e165718587fc414e0e81ed",
+        "bytes": 686028,
+        "dimensions": [
+          800,
+          800
+        ]
+      },
+      "animation": {
+        "source_rig": "Unity Humanoid; animationType 3 in model import metadata.",
+        "source_evidence": "Seven supplied Humanoid muscle clips were inventoried by Unity. Only the Polyart variant Idle was previously sampled for a review GIF; the selected HP poster is a rest pose.",
+        "runtime_strategy": "Use authored skeletal clips if the Humanoid muscle clips cannot be transferred safely. Authored motion must be identified separately from supplied publisher animation.",
+        "validation_status": "No target-game clip export or playback validation is asserted by this source manifest.",
+        "inventory": "asset-review/media/large-monster-animations/unity-animation-inventory.json",
+        "preview_handoff": "processing/large-monster-animations.json"
+      }
+    },
+    {
+      "id": "giant-storm-dragon",
+      "name": "Storm Dragon",
+      "level": 12,
+      "replaces": "lpm-alpaking",
+      "source_id": "witch-dragon",
+      "product_url": "https://assetstore.unity.com/packages/3d/characters/animated-witch-and-dragon-monster-49955",
+      "license": {
+        "name": "Standard Unity Asset Store EULA",
+        "url": "https://unity.com/legal/as-terms",
+        "use": "Licensed game content; reusable source models and textures remain private build inputs."
+      },
+      "package": {
+        "path": "downloads/witch-dragon/56f8af6fd6b89f4c.unitypackage",
+        "sha256": "56f8af6fd6b89f4c6ecfc366dd8ab903a24e98a1de0d2776ccb46c4039fc2ae8",
+        "bytes": 2427710,
+        "header": {
+          "link": {
+            "id": "49955",
+            "type": "content"
+          },
+          "unity_version": "5.2.2f1",
+          "pubdate": "24 Nov 2015",
+          "version": "1.1",
+          "description": "Includes a Witch model, and a Dragon monster model. Includes animations. <br><br>\n\nMotion List: <br>\n-Attack<br>\n-Damage<br>\n-Dead<br>\n-Wait <br>\n-Walk",
+          "upload_id": "91248",
+          "version_id": "149778",
+          "category": {
+            "id": "0",
+            "label": "3D Models"
+          },
+          "publishnotes": "First release",
+          "id": "49955",
+          "title": "Animated Witch and Dragon Monster",
+          "publisher": {
+            "id": "7784",
+            "label": "masatomo"
+          }
+        }
+      },
+      "acquisition": {
+        "workflow": "Official Unity Asset Store browser and Unity Package Manager download.",
+        "source_extracted_utc": "2026-10-01T13:04:47.377265+00:00",
+        "recorded_archive_verification": {
+          "status": "verified",
+          "product_id": "49955",
+          "package_sha256": "56f8af6fd6b89f4c6ecfc366dd8ab903a24e98a1de0d2776ccb46c4039fc2ae8",
+          "package_bytes": 2427710,
+          "gzip_expanded_bytes": 6942720,
+          "verification": "Product identity and full gzip CRC/length verified before safe TAR extraction."
+        },
+        "inventory": {
+          "path": "asset-review/media/downloaded/witch-dragon/56f8af6fd6b8/inventory.json",
+          "sha256": "f199e1e89fd43e4f40b0f66ab44576bb48021227ce3da5ed02c33808e1cb6da7",
+          "bytes": 10495
+        },
+        "note": "Product identity, full gzip CRC/length and safe extraction were checked by the retained acquisition workflow. This document rechecks package and selected input SHA-256 values; it does not repeat archive extraction."
+      },
+      "inputs": {
+        "model": {
+          "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/ChaDragon.fbx",
+          "sha256": "5e34414fd4f64247d13b6d8924599a20460c4aa4724f55c77fa2134316a99ba0",
+          "bytes": 233456
+        },
+        "texture": {
+          "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Textures/Cha_Dragon.png",
+          "sha256": "85d1e0d18f598f8ba676be9f78e72d6b2f99e30398bc373b092daba4d3b682e7",
+          "bytes": 829255,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        "material": {
+          "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Materials/Mat_Cha_Dragon.mat",
+          "sha256": "1455920bb0a86c8348c19393c867290114ae922b2eeec6cff827271ff772a029",
+          "bytes": 4900
+        },
+        "prefab": {
+          "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Prefabs/ChaDragon.prefab",
+          "sha256": "f36fa082745f8497a624931ddee00630539a237dcc5fa192f34e94d75e908fdb",
+          "bytes": 26732
+        },
+        "model_import_metadata": {
+          "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/ChaDragon.fbx.meta",
+          "sha256": "515d22ebf08e7b0f46df96475b081f4d95de139d70f72a200adbbc9cf455ce90",
+          "bytes": 5198
+        },
+        "animation_files": [
+          {
+            "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Motions/MotDragon_Wait.fbx",
+            "sha256": "7cfba76a80e61d573d7acaf62cd5b93c53289ab41a837b06a4a2bd6e789ef2b2",
+            "bytes": 500448
+          },
+          {
+            "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Motions/MotDragon_Attack.fbx",
+            "sha256": "1133138084e0558796e6954fc66d194ef784fa3c7d689ad005c46baf03a3c82f",
+            "bytes": 501584
+          },
+          {
+            "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Motions/MotDragon_Damage.fbx",
+            "sha256": "03d5963a65a4824327e0bb65aef662deb06401f29ba9d1548355d357ae056668",
+            "bytes": 580832
+          },
+          {
+            "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Motions/MotDragon_Dead.fbx",
+            "sha256": "c55dde165ea53a65cad80f16f511168424c372e1223e689ad278f1b814afbe22",
+            "bytes": 443984
+          },
+          {
+            "path": "sources/witch-dragon/56f8af6fd6b89f4c/tree/Assets/Character_Witch_Dragon/Models/ChaDragon/Motions/MotDragon_Move.fbx",
+            "sha256": "0be1f2261cd980a2225c9c4a9c5d3fccfc6f8eac7e42a06ab83e52b01af915e5",
+            "bytes": 500448
+          }
+        ]
+      },
+      "review_preview": {
+        "path": "asset-review/media/downloaded/witch-dragon/56f8af6fd6b8/model-db8b927f3205.png",
+        "sha256": "0ad1792630f15ddcba8625bf8e33678ffa7f421bed07d3975521aac52aa97a01",
+        "bytes": 203996,
+        "dimensions": [
+          640,
+          640
+        ]
+      },
+      "animation": {
+        "source_rig": "Unity Generic; animationType 2 in model import metadata.",
+        "source_evidence": "The model imports as a rigged mesh. Five separate animation-only FBX files were inventoried; all have the imported action name Skeleton_Pelvis|Take 001|Layer 001.",
+        "semantic_candidates": {
+          "Idle": "MotDragon_Wait.fbx",
+          "Attack": "MotDragon_Attack.fbx",
+          "Hit": "MotDragon_Damage.fbx",
+          "Defeat": "MotDragon_Dead.fbx",
+          "Move": "MotDragon_Move.fbx"
+        },
+        "runtime_strategy": "Bind each separate source motion to the matching dragon rig and derive semantic names from filenames. Validate actual mesh deformation after export.",
+        "validation_status": "Source animation inventory is available; target-game binding, export and playback are not asserted here.",
+        "inventory": "asset-review/media/downloaded/witch-dragon/56f8af6fd6b8/render-report.json"
+      },
+      "listing_version_comparison": {
+        "listing_and_unity_ui_version": "2.0",
+        "downloaded_header_version": "1.1",
+        "status": "version-discrepancy-retained",
+        "note": "Official download identity and archive integrity passed. No version substitution or redownload was performed."
+      }
+    },
+    {
+      "id": "giant-ember-golem",
+      "name": "Ember Golem",
+      "level": 14,
+      "replaces": "lpm-alien",
+      "source_id": "golem-monster",
+      "product_url": "https://assetstore.unity.com/packages/3d/characters/creatures/golemmonster-33260",
+      "license": {
+        "name": "Standard Unity Asset Store EULA",
+        "url": "https://unity.com/legal/as-terms",
+        "use": "Licensed game content; reusable source models and textures remain private build inputs."
+      },
+      "package": {
+        "path": "downloads/golem-monster/789bd21f6ab61a3b.unitypackage",
+        "sha256": "789bd21f6ab61a3baa0e9bf4f80a99614c0c2433b2a11d91883d92c08d59a54e",
+        "bytes": 5446117,
+        "header": {
+          "link": {
+            "id": "33260",
+            "type": "content"
+          },
+          "unity_version": "2020.3.22f1",
+          "pubdate": "12 Dec 2021",
+          "version": "2.0",
+          "description": "<strong>3d animated character optimized for mobile ready for your game!</strong><br><br>\nPolys: 3574<br>\nVertices: 1824<br>\n2048x diffuse texture<br>\n3dsMax source file with bones<br><br>\n14 Animations: Idle, idle_action, hit, hit2, damage, die, sleep_start, sleep, sleep_end, rage, walk, jump, fly, land\n<br>\n<br>",
+          "upload_id": "469289",
+          "version_id": "661485",
+          "category": {
+            "id": "18",
+            "label": "3D Models/Characters/Creatures"
+          },
+          "publishnotes": "Modified some animations",
+          "id": "33260",
+          "title": "Golem",
+          "publisher": {
+            "id": "8540",
+            "label": "Siuniaev"
+          }
+        }
+      },
+      "acquisition": {
+        "workflow": "Official Unity Asset Store browser and Unity Package Manager download.",
+        "source_extracted_utc": "2026-10-01T13:04:37.621900+00:00",
+        "recorded_archive_verification": {
+          "status": "verified",
+          "product_id": "33260",
+          "package_sha256": "789bd21f6ab61a3baa0e9bf4f80a99614c0c2433b2a11d91883d92c08d59a54e",
+          "package_bytes": 5446117,
+          "gzip_expanded_bytes": 7421440,
+          "verification": "Product identity and full gzip CRC/length verified before safe TAR extraction."
+        },
+        "inventory": {
+          "path": "asset-review/media/downloaded/golem-monster/789bd21f6ab6/inventory.json",
+          "sha256": "78d2ef77a3214c8579a05e057b2365808552155a4b0084d2c4807f48cce0af00",
+          "bytes": 4940
+        },
+        "note": "Product identity, full gzip CRC/length and safe extraction were checked by the retained acquisition workflow. This document rechecks package and selected input SHA-256 values; it does not repeat archive extraction."
+      },
+      "inputs": {
+        "model": {
+          "path": "sources/golem-monster/789bd21f6ab61a3b/tree/Assets/SiuniaevCharacters/02_Golem/Models/FBX/Golem.FBX",
+          "sha256": "08b637e5ce7f16c11bcd143e306c12cb473cdb2b98bcd1d6e731534c1823ae79",
+          "bytes": 2075248
+        },
+        "texture": {
+          "path": "sources/golem-monster/789bd21f6ab61a3b/tree/Assets/SiuniaevCharacters/02_Golem/Textures/Golem.png",
+          "sha256": "1428a526d305e9ca34501e26475658d02f12aa914fd4edf6ded1f056caa7fa64",
+          "bytes": 4221253,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        "material": {
+          "path": "sources/golem-monster/789bd21f6ab61a3b/tree/Assets/SiuniaevCharacters/02_Golem/Materials/Golem.mat",
+          "sha256": "e80f24ef126a503effe2cbb0f15840c8a36c6407b508052861bbefdcd6c6f68b",
+          "bytes": 2073
+        },
+        "prefab": {
+          "path": "sources/golem-monster/789bd21f6ab61a3b/tree/Assets/SiuniaevCharacters/02_Golem/Prefabs/GolemPrefab.prefab",
+          "sha256": "5ee7551603bc53385b900d62f3d4970cf3885a17596e16406c0b62e204094af6",
+          "bytes": 5986
+        },
+        "model_import_metadata": {
+          "path": "sources/golem-monster/789bd21f6ab61a3b/tree/Assets/SiuniaevCharacters/02_Golem/Models/FBX/Golem.FBX.meta",
+          "sha256": "2ac918686c12262273619b7017d3d84a177fc9d36318799d218573f195d2c1f0",
+          "bytes": 16619
+        },
+        "animation_files": []
+      },
+      "review_preview": {
+        "path": "asset-review/media/downloaded/golem-monster/789bd21f6ab6/model-d19f0e375a02.png",
+        "sha256": "9ed326a4390e1b3e283d90134f610b6fa143c5aa56f6fc08e250555a8ea835f9",
+        "bytes": 243969,
+        "dimensions": [
+          640,
+          640
+        ]
+      },
+      "animation": {
+        "source_rig": "Unity Generic; animationType 2 in model import metadata.",
+        "source_evidence": "Fourteen named actions were found in the single model FBX and its Unity clip definitions.",
+        "source_clip_names": [
+          "idle",
+          "idle_action",
+          "hit",
+          "hit2",
+          "damage",
+          "die",
+          "sleep_start",
+          "sleep",
+          "sleep_end",
+          "rage",
+          "walk",
+          "jump",
+          "fly",
+          "land"
+        ],
+        "semantic_candidates": {
+          "Idle": "idle",
+          "Attack": "hit",
+          "AlternateAttack": "hit2",
+          "Hit": "damage",
+          "Defeat": "die"
+        },
+        "runtime_strategy": "Export selected source skeletal actions from the model. Source hit and hit2 are attack actions; damage is the receive-hit action.",
+        "validation_status": "Source actions and source model rendering are documented; target-game deformation, export and playback are not asserted here.",
+        "inventory": "asset-review/media/downloaded/golem-monster/789bd21f6ab6/render-report.json"
+      }
+    }
+  ]
+}

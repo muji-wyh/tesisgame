@@ -5,8 +5,8 @@ const Model = preload("res://scripts/game_model.gd")
 const Progress = preload("res://scripts/medal_progress.gd")
 const RoomState = preload("res://scripts/playroom_state.gd")
 const NEW_WORLDS := [
-	{"id": "jungle", "name": "Jungle", "word": "monkey", "topic": "animal-friends", "chest": "royal"},
-	{"id": "candy", "name": "Candy", "word": "cake", "topic": "picnic-time", "chest": "crystal"}
+	{"id": "jungle", "name": "Jungle", "word": "monkey", "topic": "animal-friends", "chest": "bramble"},
+	{"id": "candy", "name": "Candy", "word": "cake", "topic": "picnic-time", "chest": "bonbon"}
 ]
 
 var checks: int = 0
@@ -208,8 +208,9 @@ func _check_chests(manifest: Dictionary) -> void:
 	for world in NEW_WORLDS:
 		var palette: Dictionary = Data.theme(world.id)
 		chest.configure_skin(palette, manifest)
-		check(chest.theme_id == world.id and chest.piece_count() == (9 if world.chest == "crystal" else 5),
-			"The new world renders a complete supported chest")
+		check(chest.theme_id == world.id and chest.piece_count() == 1
+			and chest.hold_effect_snapshot().opening_frames >= 6 and chest.hold_effect_snapshot().style == world.chest,
+			"The new world renders its own complete downloaded chest and opening sequence")
 		await process_frame
 	chest.queue_free()
 	await process_frame

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, waveDuration, expectRecording } = require('./bundled-audio.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, recordingTiming, expectRecording } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, pipHeaderRect, progressRegion, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState } = require('./game-ui.cjs');
@@ -1191,9 +1191,10 @@ test('losing offline stops music and plays the current bundled loss prompt', asy
     await loseWithTouch(page);
     if (await page.evaluate(() => window.audioObservation.available)) {
       await expectRecording(page, before, 'assets/audio/voice/loss.wav');
-      await expect.poll(() => page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
-        Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
-      waveDuration('assets/audio/bgm/' + theme + '.wav'))).toBe(false);
+      await expect.poll(() => page.evaluate(timing => window.audioObservation.playbacks.some(sound =>
+        Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate &&
+        sound.stoppedAt === undefined && sound.endedAt === undefined),
+      recordingTiming('assets/audio/bgm/' + theme + '.wav'))).toBe(false);
     }
     await expect(page.locator('#game-status')).toContainText('Good try!');
     await expect(page.locator('body')).toHaveAttribute('data-engine-ready', 'true');

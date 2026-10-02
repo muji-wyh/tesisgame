@@ -304,7 +304,10 @@ func _surface_light_snapshot(chest, state: Dictionary) -> Dictionary:
 			texture_position.x = 1.0 - texture_position.x
 		if sprite.flip_v:
 			texture_position.y = 1.0 - texture_position.y
-		var source: Vector2 = chest._art.transform * sprite.transform * (sprite.offset + texture_position * sprite.texture.get_size())
+		var local_source: Vector2 = sprite.offset + texture_position * sprite.texture.get_size()
+		if sprite.region_enabled:
+			local_source -= sprite.region_rect.position
+		var source: Vector2 = chest._art.transform * sprite.transform * local_source
 		if source.distance_to(cavity) > 0.02:
 			issues.append("%s light source is %.3f pixels from the cavity" % [piece.role, source.distance_to(cavity)])
 	return {"visible": visible, "minimum": minimum, "maximum": maximum,

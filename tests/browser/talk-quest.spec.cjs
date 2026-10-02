@@ -1,10 +1,16 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { enterGame, chooseMode, rendered, metrics, visibleColorCount } = require('./game-ui.cjs');
+const { enterGame, chooseMode, rendered, visibleColorCount } = require('./game-ui.cjs');
 
 async function installRecognition(page, prefixed) {
   await page.addInitScript(({ prefixed }) => {
-    const fixture = { instances: [], starts: 0, aborts: 0, spoken: [], cancellations: 0 };
+    const fixture = { instances: [], starts: 0, aborts: 0, spoken: [], cancellations: 0, events: [] };
+    const wordState = () => {
+      const state = JSON.parse(document.getElementById('quest-status')?.dataset.snapshot || '{}');
+      return { at: performance.now(), phase: state.phase, hp: state.hp, hits: state.hits,
+        misses: state.misses, spawned: state.spawned, listening: state.listening, save_failed: state.save_failed,
+        targets: state.targets?.map(target => ({ uid: target.uid, text: target.text, remaining_ms: target.remaining_ms })) };
+    };
     class Recognition {
       constructor() {
         this.results = [];
@@ -28,7 +34,11 @@ async function installRecognition(page, prefixed) {
       stop() { this.abort(); }
       revise(index, text, final = true) {
         this.results[index] = Object.assign([{ transcript: text, confidence: 0.95 }], { isFinal: final });
+        const event = { index, text, final, before: wordState() };
+        fixture.events.push(event);
         this.callbacks.result?.({ resultIndex: index, results: this.results });
+        event.after = wordState();
+        event.diagnostics = window.wordBuddiesHost?.speechDiagnostics();
       }
       emit(text, final = true) {
         const index = this.results.length && !this.results.at(-1).isFinal ? this.results.length - 1 : this.results.length;
@@ -49,6 +59,17 @@ async function installRecognition(page, prefixed) {
     };
   }, { prefixed });
 }
+
+test.afterEach(async ({ page }, info) => {
+  if (info.status === info.expectedStatus) return;
+  const diagnostic = await page.evaluate(() => ({
+    state: JSON.parse(document.getElementById('quest-status')?.dataset.snapshot || '{}'),
+    fixture: window.__questSpeech ? { starts: window.__questSpeech.starts, aborts: window.__questSpeech.aborts,
+      events: window.__questSpeech.events } : null,
+    host: window.wordBuddiesHost?.speechDiagnostics()
+  })).catch(error => ({ capture_error: error.message }));
+  fs.writeFileSync(info.outputPath('quest-failure-diagnostics.json'), JSON.stringify(diagnostic, null, 2));
+});
 
 function recordErrors(page) {
   const errors = [];
@@ -76,88 +97,161 @@ async function waitState(page, expected) {
   }
 }
 
-async function waitPrompt(page, level, index, listening = true) {
-  return waitState(page, { active: true, view: 'stage', phase: 'playing', level,
-    line_index: index, busy: false, listening });
+async function waitAdventure(page, level, listening = true) {
+  await rendered(page);
+  return waitState(page, { active: true, view: 'stage', phase: 'playing', level, listening });
 }
 
-async function tapRect(page, rect, name) {
+async function waitWord(page, level) {
+  let current;
+  await expect.poll(async () => {
+    current = await snapshot(page);
+    return current.level === level && current.phase === 'playing' && current.listening &&
+      current.targets?.some(target => target.remaining_ms > 1200 && hasFiniteRect(target.rect));
+  }, { intervals: [50, 100, 150], timeout: 10000 }).toBe(true);
+  return { state: current, target: current.targets.filter(target => target.remaining_ms > 1200)
+    .sort((a, b) => b.remaining_ms - a.remaining_ms)[0] };
+}
+
+async function emitVisibleWord(page, level, final = true) {
+  let delivered;
+  await expect.poll(async () => {
+    delivered = await page.evaluate(({ level, final }) => {
+      const state = JSON.parse(document.getElementById('quest-status')?.dataset.snapshot || '{}');
+      const recognition = window.__questSpeech.instances.at(-1);
+      if (state.level !== level || state.phase !== 'playing' || !state.listening || !recognition?.running) return null;
+      const target = state.targets.filter(target => target.remaining_ms > 1200)
+        .sort((a, b) => b.remaining_ms - a.remaining_ms)[0];
+      if (!target) return null;
+      // Select and speak in one browser task: transport time must not age an
+      // already selected flight before the mocked recognition callback runs.
+      recognition.emit(target.text, final);
+      return { state, target };
+    }, { level, final });
+    return delivered !== null;
+  }, { intervals: [50, 100, 150], timeout: 10000 }).toBe(true);
+  return delivered;
+}
+
+function hasFiniteRect(rect) {
+  return Boolean(rect && ['x', 'y', 'width', 'height'].every(key => Number.isFinite(rect[key])) &&
+    rect.width > 0 && rect.height > 0);
+}
+
+function overlapArea(first, second) {
+  return Math.max(0, Math.min(first.x + first.width, second.x + second.width) - Math.max(first.x, second.x)) *
+    Math.max(0, Math.min(first.y + first.height, second.y + second.height) - Math.max(first.y, second.y));
+}
+
+async function rectCenter(page, rect, name) {
   expect(rect.visible, `${name} is visible in the actual native interface`).toBe(true);
   expect(rect.disabled, `${name} is enabled`).toBe(false);
+  expect(hasFiniteRect(rect), `${name} has finite hit geometry`).toBe(true);
   const canvas = await page.locator('#canvas').boundingBox();
-  expect(canvas).toBeTruthy();
+  expect(hasFiniteRect(canvas), 'The canvas has finite hit geometry').toBe(true);
   const x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;
   expect(x, `${name} has an on-screen horizontal center`).toBeGreaterThan(0);
   expect(x).toBeLessThan(1);
   expect(y, `${name} has an on-screen vertical center`).toBeGreaterThan(0);
   expect(y).toBeLessThan(1);
-  await page.touchscreen.tap(canvas.x + x * canvas.width, canvas.y + y * canvas.height);
+  return { x: canvas.x + x * canvas.width, y: canvas.y + y * canvas.height };
 }
 
-async function revealQuestRect(page, select, name) {
-  for (let attempt = 0; attempt < 24; attempt++) {
-    const current = await snapshot(page), rect = select(current);
-    expect(rect?.visible, `${name} exists in the visible native interface`).toBe(true);
-    const area = current.controls.stage_scroll;
-    if (current.view !== 'stage' || !area?.visible) return rect;
-    const bottom = Math.min(1, area.y + area.height);
-    if (rect.y >= area.y - 0.002 && rect.y + rect.height <= bottom + 0.002) return rect;
-    const canvas = await page.locator('#canvas').boundingBox();
-    await page.mouse.move(canvas.x + (area.x + area.width * 0.5) * canvas.width,
-      canvas.y + (area.y + area.height * 0.5) * canvas.height);
-    const distance = rect.y + rect.height > bottom
-      ? (rect.y + rect.height - bottom) * canvas.height + 8 : (rect.y - area.y) * canvas.height - 8;
-    if (test.info().project.use.browserName === 'webkit' && test.info().project.use.isMobile) {
-      // Playwright mobile WebKit cannot send wheel events. Drag the visible
-      // native scrollbar instead; the game still owns its scrolling state.
-      const scale = (await metrics(page)).scale;
-      const height = area.height * canvas.height;
-      const maximum = current.scroll_max * scale;
-      const thumb = Math.max(10, height * height / (height + maximum));
-      const travel = height - thumb;
-      const offset = current.scroll_offset * scale;
-      const target = Math.max(0, Math.min(maximum, offset + distance));
-      // At this scale the scrollbar is only about four CSS pixels wide.
-      const x = canvas.x + (area.x + area.width) * canvas.width - 1;
-      const top = canvas.y + area.y * canvas.height + thumb / 2;
-      await page.mouse.move(x, top + offset / maximum * travel);
-      await page.mouse.down();
-      try { await page.mouse.move(x, top + target / maximum * travel, { steps: 6 }); }
-      finally { await page.mouse.up(); }
-    } else {
-      await page.mouse.wheel(0, Math.sign(distance) * Math.min(160, Math.max(24, Math.abs(distance))));
-    }
-    // Native geometry is republished every 200 ms. Read the real input result.
-    await page.waitForTimeout(220);
-  }
-  throw new Error(`${name} could not be reached by native scrolling: ${JSON.stringify(await snapshot(page))}`);
+async function tapRect(page, rect, name) {
+  const point = await rectCenter(page, rect, name);
+  await page.touchscreen.tap(point.x, point.y);
 }
 
 async function visibleQuestControl(page, name) {
-  const rect = await revealQuestRect(page, state => state.controls[name], name);
-  const current = await snapshot(page), area = current.controls.stage_scroll;
+  let rect;
+  await expect.poll(async () => {
+    rect = (await snapshot(page)).controls?.[name];
+    return rect?.visible && hasFiniteRect(rect);
+  }, { intervals: [50, 100, 200], timeout: 10000 }).toBe(true);
   expect(rect.x, `${name} stays inside the left edge`).toBeGreaterThanOrEqual(-0.002);
   expect(rect.x + rect.width, `${name} stays inside the right edge`).toBeLessThanOrEqual(1.002);
-  if (current.view === 'stage' && area?.visible) {
-    expect(rect.y, `${name} is not clipped above its scroll viewport`).toBeGreaterThanOrEqual(area.y - 0.002);
-    expect(rect.y + rect.height, `${name} is not clipped below its scroll viewport`)
-      .toBeLessThanOrEqual(Math.min(1, area.y + area.height) + 0.002);
-  }
+  expect(rect.y, `${name} stays above the bottom edge`).toBeGreaterThanOrEqual(-0.002);
+  expect(rect.y + rect.height, `${name} stays inside the bottom edge`).toBeLessThanOrEqual(1.002);
   return rect;
 }
 
-async function clickControl(page, name) {
+async function readyQuestControl(page, name) {
   await expect.poll(async () => {
     const control = (await snapshot(page)).controls?.[name];
-    return Boolean(control?.visible && !control.disabled && control.width > 0 && control.height > 0);
+    return Boolean(control?.visible && !control.disabled && hasFiniteRect(control));
   }, { intervals: [50, 100, 200], timeout: 10000 }).toBe(true);
-  await tapRect(page, await visibleQuestControl(page, name), name);
+  return visibleQuestControl(page, name);
+}
+
+async function clickControl(page, name) {
+  await tapRect(page, await readyQuestControl(page, name), name);
+}
+
+async function pressChest(page, milliseconds = null, { backgroundOnRelease = false } = {}) {
+  const point = await rectCenter(page, await readyQuestControl(page, 'open'), 'Chest surface');
+  // Observe native publications without advancing gameplay. A lifecycle case
+  // can hide the page at release before browser transport consumes its tail.
+  await page.evaluate(backgroundOnRelease => {
+    window.__questChestObserver?.disconnect();
+    window.__questChestHold = [];
+    window.__questChestBackground = null;
+    const status = document.getElementById('quest-status');
+    const observe = () => {
+      const value = JSON.parse(status.dataset.snapshot || '{}');
+      const state = {
+        at: performance.now(), phase: value.phase, busy: value.busy,
+        chest_phase: value.chest_phase, chest_progress: value.chest_progress,
+        chest_committed: value.chest_committed, holding_chest: value.holding_chest,
+        completed: value.completed, total_clears: value.total_clears, chests: value.chests,
+        saved: JSON.parse(window.wordBuddiesHost.questProgress())
+      };
+      window.__questChestHold.push(state);
+      if (backgroundOnRelease && value.chest_committed && !window.__questChestBackground) {
+        window.__questChestBackground = state;
+        Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+        document.dispatchEvent(new Event('visibilitychange'));
+      }
+    };
+    window.__questChestObserver = new MutationObserver(observe);
+    window.__questChestObserver.observe(status, { attributes: true, attributeFilter: ['data-snapshot'] });
+    observe();
+  }, backgroundOnRelease);
+  if (milliseconds !== null) {
+    await page.mouse.click(point.x, point.y, { delay: milliseconds });
+    return;
+  }
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.down();
+}
+
+async function waitChestRelease(page) {
+  await page.waitForFunction(() => window.__questChestHold.some(state => state.chest_committed),
+    null, { timeout: 10000 });
+  return page.evaluate(() => window.__questChestHold.find(state => state.chest_committed));
+}
+
+async function holdChestUntilRelease(page) {
+  await pressChest(page);
+  try {
+    return await waitChestRelease(page);
+  } finally {
+    await page.mouse.up();
+    await page.evaluate(() => window.__questChestObserver.disconnect());
+  }
+}
+
+async function setPageHidden(page, hidden) {
+  await page.evaluate(hidden => {
+    if (hidden) Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    else delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  }, hidden);
 }
 
 async function emit(page, text, final = true) {
   return page.evaluate(({ text, final }) => {
     const fixture = window.__questSpeech, recognition = fixture.instances.at(-1);
-    if (!recognition?.running) throw new Error('A real Speak gesture must start capture before delivering browser results');
+    if (!recognition?.running) throw new Error('A real level or retry gesture must start capture before delivering browser results');
     recognition.emit(text, final);
     return fixture.instances.length - 1;
   }, { text, final });
@@ -167,41 +261,26 @@ async function progress(page) {
   return page.evaluate(() => JSON.parse(window.wordBuddiesHost.questProgress()));
 }
 
-async function chooseRepairPart(page, index, verifyWrong = false) {
-  const expectedParts = ['wheel', 'wing', 'ribbon', 'screw', 'key'];
-  const part = expectedParts[Math.floor(index / 4)];
-  let current = await waitState(page, { level: 14, phase: 'playing', line_index: index,
-    part_required: true, busy: false });
-  expect(current).toMatchObject({ hp: 0, max_hp: 0, repairs: Math.floor(index / 4), listening: false });
-  expect(current.part_choices).toHaveLength(3);
-  expect(current.part_choices.every(choice => choice.id && choice.label)).toBe(true);
-  if (verifyWrong) {
-    const wrong = current.part_choices.find(choice => choice.id !== part);
-    const wrongRect = await revealQuestRect(page,
-      state => state.part_choices.find(choice => choice.id === wrong.id).rect, `Incorrect part: ${wrong.label}`);
-    await tapRect(page, wrongRect, `Incorrect part: ${wrong.label}`);
-    await expect.poll(async () => (await snapshot(page)).feedback, { intervals: [50] }).toContain('Try another shape');
-    current = await snapshot(page);
-    expect(current).toMatchObject({ line_index: index, hp: 0, repairs: Math.floor(index / 4), part_required: true });
-  }
-  const correct = current.part_choices.find(choice => choice.id === part);
-  expect(correct, `The real part choices include ${part}`).toBeTruthy();
-  const correctRect = await revealQuestRect(page,
-    state => state.part_choices.find(choice => choice.id === part).rect, `Correct part: ${correct.label}`);
-  await tapRect(page, correctRect, `Correct part: ${correct.label}`);
-  current = await waitState(page, { level: 14, line_index: index, part_required: false });
-  expect(current).toMatchObject({ hp: 0, repairs: Math.floor(index / 4), listening: false });
-  expect((await progress(page)).run.selected_parts).toEqual(expectedParts.slice(0, Math.floor(index / 4) + 1));
-  return current;
-}
-
 function expectPrivateProgress(saved) {
   expect(Object.keys(saved).sort()).toEqual(['completion_counts', 'run', 'version']);
-  expect(saved.version).toBe(1);
+  expect(saved.version).toBe(2);
   expect(saved.completion_counts).toHaveLength(14);
-  const allowed = ['clear_number', 'level_number', 'line_index', 'phase', 'run_id', 'selected_parts'];
+  const allowed = ['clear_number', 'level_number', 'hits', 'misses', 'spawned', 'elapsed',
+    'next_spawn_in', 'targets', 'phase', 'run_id'];
   expect(Object.keys(saved.run).every(key => allowed.includes(key))).toBe(true);
-  expect(JSON.stringify(saved)).not.toMatch(/transcript|event_id|recording|audio|feedback/);
+  const flightFields = ['uid', 'word_id', 'age', 'lifetime', 'lane', 'x_start', 'x_end', 'peak', 'spin'];
+  for (const target of saved.run.targets || []) {
+    expect(Object.keys(target).every(key => flightFields.includes(key))).toBe(true);
+  }
+  expect(JSON.stringify(saved)).not.toMatch(/transcript|event_id|recording|audio|feedback|forms/);
+}
+
+function expectWordInterface(current) {
+  for (const removed of ['speak', 'hear', 'type', 'input', 'submit', 'prompt']) {
+    expect(current.controls[removed], `${removed} is absent from the word-only interface`).toBeUndefined();
+  }
+  expect(current.scroll_max).toBe(0);
+  expect(current.scroll_offset).toBe(0);
 }
 
 async function openQuest(page, browserName) {
@@ -209,79 +288,160 @@ async function openQuest(page, browserName) {
   await page.goto('/');
   await enterGame(page);
   await chooseMode(page, 'quest');
+  await page.evaluate(() => window.wordBuddiesHost.setSpeechDiagnostics(true));
   return waitState(page, { active: true, view: 'map' });
 }
 
-test('Talk Quest completes all fourteen adventures through browser speech and restores saved progress', async ({ page, browserName }, info) => {
+async function openPendingChest(page, browserName, reducedMotion) {
+  await page.emulateMedia({ reducedMotion });
+  // Seed the current earned-chest checkpoint. Actual input and the normal
+  // Continue action still own the complete chest interaction.
+  await page.addInitScript(() => {
+    const key = 'wordBuddies.talkQuest';
+    if (localStorage.getItem(key) === null) localStorage.setItem(key, JSON.stringify({
+      version: 2, completion_counts: Array(14).fill(0),
+      run: { level_number: 1, hits: 5, misses: 0, spawned: 5, elapsed: 8.6,
+        next_spawn_in: 2.15, targets: [], phase: 'chest', clear_number: 1, run_id: 'tq-run-1-1-1' }
+    }));
+  });
+  const map = await openQuest(page, browserName);
+  expect(map.controls.continue.visible).toBe(true);
+  await clickControl(page, 'continue');
+  await rendered(page);
+  return waitState(page, { active: true, view: 'stage', level: 1, phase: 'chest',
+    busy: false, holding_chest: false, chest_committed: false, chest_progress: 0 });
+}
+
+test('Talk Quest first adventure launches word attacks and restores its earned chest exactly once', async ({ page, browserName }, info) => {
+  test.setTimeout(180000);
+  const errors = recordErrors(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const map = await openQuest(page, browserName);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
+  await tapRect(page, map.levels[0], 'First adventure');
+  let current = await waitAdventure(page, 1);
+  expectWordInterface(current);
+  expect(current.total_words).toBe(current.max_hp + 3);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
+  await page.evaluate(() => {
+    window.__questWordEvidence = [];
+    const status = document.getElementById('quest-status');
+    window.__questWordObserver = new MutationObserver(() => {
+      const value = JSON.parse(status.dataset.snapshot || '{}');
+      window.__questWordEvidence.push({ hp: value.hp, displayed_hp: value.displayed_hp,
+        hits: value.hits, projectiles: value.projectiles, phase: value.phase });
+    });
+    window.__questWordObserver.observe(status, { attributes: true, attributeFilter: ['data-snapshot'] });
+  });
+  const first = await emitVisibleWord(page, 1, false);
+  current = await waitState(page, { hp: first.state.hp - 1, hits: 1 });
+  await emit(page, first.target.text, true);
+  await page.waitForTimeout(250);
+  expect(await snapshot(page)).toMatchObject({ hp: first.state.hp - 1, hits: 1 });
+  await page.screenshot({ path: info.outputPath('talk-quest-first-word-flight.png') });
+  while (current.phase === 'playing') {
+    const { state } = await emitVisibleWord(page, 1);
+    current = await waitState(page, { hp: state.hp - 1, hits: state.hits + 1 });
+  }
+  const evidence = await page.evaluate(() => {
+    window.__questWordObserver.disconnect();
+    return window.__questWordEvidence;
+  });
+  expect(evidence.some(value => value.hp < value.displayed_hp && value.projectiles.length > 0)).toBe(true);
+  expect(current).toMatchObject({ hp: 0, phase: 'victory' });
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
+  await waitState(page, { phase: 'chest', busy: false });
+  const earned = await progress(page);
+  expectPrivateProgress(earned);
+  expect(earned.run).toMatchObject({ phase: 'chest', hits: first.state.max_hp });
+  expect(earned.run.targets).toEqual([]);
+  const speechEvidence = await page.evaluate(() => ({ events: window.__questSpeech.events,
+    host: window.wordBuddiesHost.speechDiagnostics() }));
+  fs.writeFileSync(info.outputPath('quest-speech-evidence.json'), JSON.stringify(speechEvidence, null, 2));
+  await page.reload();
+  await enterGame(page);
+  await chooseMode(page, 'quest');
+  await waitState(page, { active: true, view: 'map' });
+  await clickControl(page, 'continue');
+  await waitState(page, { view: 'stage', phase: 'chest', hp: 0, busy: false });
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
+  await holdChestUntilRelease(page);
+  await waitState(page, { phase: 'complete', busy: false, total_clears: 1 });
+  const awarded = await progress(page);
+  expectPrivateProgress(awarded);
+  expect(awarded.completion_counts).toEqual([1, ...Array(13).fill(0)]);
+  expect(awarded.run).toEqual({});
+  await page.screenshot({ path: info.outputPath('talk-quest-first-word-reward.png') });
+  await page.reload();
+  await enterGame(page);
+  await chooseMode(page, 'quest');
+  const reloaded = await waitState(page, { active: true, view: 'map', total_clears: 1 });
+  expect(reloaded).toMatchObject({ completed: [1], chests: ['chest-01'] });
+  expect(reloaded.controls.continue.visible).toBe(false);
+  expect(await progress(page)).toEqual(awarded);
+  expect(errors).toEqual([]);
+  await info.attach('talk-quest-first-word-evidence', {
+    body: JSON.stringify({ evidence, earned, awarded }, null, 2), contentType: 'application/json'
+  });
+});
+
+test('Talk Quest completes all fourteen adventures with floating-word speech and restores finite progress', async ({ page, browserName }, info) => {
   test.setTimeout(900000);
   const errors = recordErrors(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   const map = await openQuest(page, browserName);
   expect(map.completed).toEqual([]);
   expect(map.unlocked).toBe(1);
   expect(map.levels).toHaveLength(14);
   expect(map.levels.map(level => level.disabled)).toEqual([false, ...Array(13).fill(true)]);
+  expect(map.map_scroll_max).toBe(0);
   expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
   await tapRect(page, map.levels[0], 'First adventure');
-  let current = await waitPrompt(page, 1, 0, false);
-  expect(current.prompt).toMatchObject({ speaker: 'Adam', text: 'Knock, knock.', total_lines: 6 });
-  expect(current.hp).toBe(60);
-  await clickControl(page, 'speak');
-  current = await waitPrompt(page, 1, 0);
-
-  const firstRecognition = await emit(page, current.prompt.text, false);
-  await expect.poll(async () => (await snapshot(page)).transcript, { intervals: [50] }).toContain('Heard (listening)');
-  expect(await snapshot(page)).toMatchObject({ level: 1, line_index: 0, hp: 60 });
-  await emit(page, 'Knock, knock. Do not come in.');
-  await expect.poll(async () => (await snapshot(page)).feedback, { intervals: [50] }).toContain('whole sentence');
-  expect(await snapshot(page)).toMatchObject({ line_index: 0, hp: 60 });
-  await page.evaluate(({ index, text }) => window.__questSpeech.instances[index].revise(0, text),
-    { index: firstRecognition, text: current.prompt.text });
+  let current = await waitAdventure(page, 1);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
+  expectWordInterface(current);
+  await page.evaluate(() => {
+    window.__questWordEvidence = [];
+    const status = document.getElementById('quest-status');
+    window.__questWordObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.snapshot || '{}');
+      window.__questWordEvidence.push({ hp: state.hp, displayed_hp: state.displayed_hp,
+        hits: state.hits, projectiles: state.projectiles, phase: state.phase });
+    });
+    window.__questWordObserver.observe(status, { attributes: true, attributeFilter: ['data-snapshot'] });
+  });
+  const first = await emitVisibleWord(page, 1, false);
+  current = await waitState(page, { level: 1, hits: 1, hp: first.state.hp - 1 });
+  await emit(page, first.target.text, true);
   await page.waitForTimeout(250);
-  expect(await snapshot(page), 'Correcting an already-final wrong occurrence cannot score').toMatchObject({ line_index: 0, hp: 60 });
-  await emit(page, current.prompt.text);
-  current = await waitPrompt(page, 1, 1);
-  expect(current.hp).toBe(50);
-  await page.evaluate(({ index, text }) => window.__questSpeech.instances[index].revise(2, text),
-    { index: firstRecognition, text: current.prompt.text });
-  await page.waitForTimeout(250);
-  expect(await snapshot(page), 'A late callback from the previous turn cannot score the next sentence')
-    .toMatchObject({ line_index: 1, hp: 50 });
+  expect(await snapshot(page), 'The accepted interim and final revision cause only one hit').toMatchObject({ hits: 1, hp: first.state.hp - 1 });
+  await expect.poll(async () => (await snapshot(page)).displayed_hp, { intervals: [50] }).toBe(first.state.hp - 1);
+  const projectileEvidence = await page.evaluate(() => {
+    window.__questWordObserver.disconnect();
+    return window.__questWordEvidence;
+  });
+  expect(projectileEvidence.some(state => state.hp < state.displayed_hp && state.projectiles.length > 0),
+    'The word visibly travels before the health meter receives the impact').toBe(true);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
 
   const completedEvidence = [];
-  let restoredMidSentence = false;
+  let restoredFiniteFlight = false;
   for (let level = 1; level <= 14; level++) {
-    if (level > 1) {
-      current = await waitPrompt(page, level, 0, false);
-      expect(await page.evaluate(() => window.__questSpeech.instances.some(instance => instance.running))).toBe(false);
-      if (level === 14) {
-        await page.screenshot({ path: info.outputPath('talk-quest-workshop-parts.png') });
-        current = await chooseRepairPart(page, 0, true);
-      }
-      await clickControl(page, 'speak');
-      current = await waitPrompt(page, level, 0);
+    if (level > 1) current = await waitAdventure(page, level);
+    expectWordInterface(current);
+    expect(current.max_hp).toBeGreaterThan(0);
+    expect(current.total_words).toBe(current.max_hp + Math.max(3, Math.ceil(current.max_hp / 4)));
+    const maxHp = current.max_hp, totalWords = current.total_words;
+    if ([1, 8, 13, 14].includes(level)) {
+      await page.screenshot({ path: info.outputPath(`talk-quest-words-level-${level}.png`) });
     }
-    const lineCount = current.prompt.total_lines;
-    if ([1, 8, 13].includes(level)) {
-      await page.screenshot({ path: info.outputPath(`talk-quest-level-${level}.png`) });
-    }
-    expect(lineCount).toBeGreaterThanOrEqual(6);
-    expect(current.max_hp).toBe(level === 14 ? 0 : lineCount * 10);
-    if (level === 14) {
-      expect(current).toMatchObject({ hp: 0, max_hp: 0, repairs: 0 });
-      await page.screenshot({ path: info.outputPath('talk-quest-workshop-start.png') });
-    }
-    while (current.line_index < lineCount) {
-      if (level === 14 && current.line_index > 0 && current.line_index % 4 === 0) {
-        current = await chooseRepairPart(page, current.line_index);
-        await clickControl(page, 'speak');
-      }
-      current = await waitPrompt(page, level, current.line_index);
-      if (level === 2 && current.line_index === 2 && !restoredMidSentence) {
-        const checkpoint = { level: current.level, line_index: current.line_index, hp: current.hp,
-          prompt: current.prompt, completed: current.completed, chests: current.chests };
+    while (current.phase === 'playing') {
+      if (level === 2 && current.hits === 2 && !restoredFiniteFlight) {
+        await clickControl(page, 'map');
+        await waitState(page, { view: 'map', phase: 'paused', listening: false });
         const saved = await progress(page);
         expectPrivateProgress(saved);
-        expect(saved.run).toMatchObject({ level_number: 2, line_index: 2, phase: 'playing' });
+        expect(saved.run).toMatchObject({ level_number: 2, hits: 2, phase: 'playing' });
         await page.reload();
         await enterGame(page);
         await chooseMode(page, 'quest');
@@ -289,53 +449,41 @@ test('Talk Quest completes all fourteen adventures through browser speech and re
         expect(restoredMap.controls.continue.visible).toBe(true);
         expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
         await clickControl(page, 'continue');
-        current = await waitPrompt(page, 2, 2, false);
-        expect(current).toMatchObject(checkpoint);
-        expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
-        await clickControl(page, 'speak');
-        current = await waitPrompt(page, 2, 2);
-        restoredMidSentence = true;
+        current = await waitAdventure(page, 2);
+        expect(current).toMatchObject({ hits: saved.run.hits, hp: maxHp - saved.run.hits,
+          spawned: saved.run.spawned, misses: saved.run.misses });
+        expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
+        restoredFiniteFlight = true;
       }
-      const before = current;
-      await emit(page, before.prompt.text);
-      current = await waitState(page, { level, line_index: before.line_index + 1 });
+      const starts = await page.evaluate(() => window.__questSpeech.starts);
+      const { state: before } = await emitVisibleWord(page, level);
+      current = await waitState(page, { level, hits: before.hits + 1, hp: before.hp - 1 });
       expect(current.save_failed).toBe(false);
-      if (level === 14) {
-        expect(current.hp).toBe(0);
-        expect(current.max_hp).toBe(0);
-        expect(current.repairs).toBe(Math.floor(current.line_index / 4));
-      } else {
-        expect(current.hp, 'Each accepted whole sentence removes exactly ten HP').toBe(before.hp - 10);
-      }
+      expect(current.spawned).toBeLessThanOrEqual(totalWords);
+      expect(await page.evaluate(() => window.__questSpeech.starts),
+        'Publishing the remaining words never restarts capture').toBe(starts);
     }
     expect(current.phase).toBe('victory');
+    expect(current.hp).toBe(0);
     expect(current.completed).toHaveLength(level - 1);
-    expect(current.total_clears).toBe(level - 1);
-    if (level === 14) expect(current.repairs).toBe(5);
     current = await waitState(page, { level, phase: 'chest', busy: false });
-    expect(current.completed).toHaveLength(level - 1);
-    await clickControl(page, 'open');
-    await waitState(page, { level, phase: 'chest', busy: true });
-    if (level === 1) {
-      await page.waitForTimeout(750);
-      expect(await snapshot(page), 'The real chest presentation does not award treasure immediately')
-        .toMatchObject({ phase: 'chest', completed: [], total_clears: 0 });
-    }
-    current = await waitState(page, { level, phase: 'complete' });
+    expect(await page.evaluate(() => window.__questSpeech.instances.some(instance => instance.running))).toBe(false);
+    const released = await holdChestUntilRelease(page);
+    expect(released).toMatchObject({ phase: 'chest', busy: true, chest_committed: true, total_clears: level - 1 });
+    expect(released.saved.completion_counts.reduce((total, count) => total + count, 0)).toBe(level - 1);
+    current = await waitState(page, { level, phase: 'complete', busy: false });
     expect(current.completed).toEqual(Array.from({ length: level }, (_, index) => index + 1));
     expect(current.unlocked).toBe(Math.min(14, level + 1));
     expect(current.total_clears).toBe(level);
     expect(current.chests).toHaveLength(level);
-    expect(current.controls.next.disabled, 'The next adventure waits for the chest presentation to finish').toBe(true);
+    expect(current.controls.next.disabled).toBe(false);
     expectPrivateProgress(await progress(page));
-    completedEvidence.push({ level, lineCount, hp: current.hp, repairs: current.repairs,
-      completed: current.completed, chests: current.chests });
+    completedEvidence.push({ level, maxHp, totalWords, hits: current.hits, spawned: current.spawned,
+      misses: current.misses, completed: current.completed, chests: current.chests });
     await clickControl(page, 'next');
   }
-
-  expect(restoredMidSentence).toBe(true);
+  expect(restoredFiniteFlight).toBe(true);
   const finished = await waitState(page, { active: true, view: 'map', total_clears: 14 });
-  expect(finished.completed).toEqual(Array.from({ length: 14 }, (_, index) => index + 1));
   expect(finished.chests).toEqual(Array.from({ length: 14 }, (_, index) => `chest-${String(index + 1).padStart(2, '0')}`));
   expect(finished.levels.every(level => !level.disabled)).toBe(true);
   const saved = await progress(page);
@@ -351,62 +499,94 @@ test('Talk Quest completes all fourteen adventures through browser speech and re
   const reloaded = await waitState(page, { active: true, view: 'map', total_clears: 14 });
   expect(reloaded.completed).toEqual(finished.completed);
   expect(reloaded.chests).toEqual(finished.chests);
-  expect(reloaded.unlocked).toBe(14);
   expect(reloaded.controls.continue.visible).toBe(false);
   expect(await progress(page)).toEqual(saved);
   expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
   expect(errors).toEqual([]);
-  await info.attach('talk-quest-completion-evidence', { body: JSON.stringify({ completedEvidence, saved }, null, 2),
-    contentType: 'application/json' });
+  await info.attach('talk-quest-word-completion-evidence', {
+    body: JSON.stringify({ completedEvidence, projectileEvidence, saved }, null, 2), contentType: 'application/json'
+  });
 });
 
-test('Hear line and leaving an adventure stop capture without scoring or reopening the microphone', async ({ page, browserName }, info) => {
+test('Talk Quest level gestures own capture, stale callbacks cannot score, and microphone errors have a real retry', async ({ page, browserName }, info) => {
   const errors = recordErrors(page);
   const map = await openQuest(page, browserName);
   await tapRect(page, map.levels[0], 'First adventure');
-  const first = await waitPrompt(page, 1, 0, false);
-  await clickControl(page, 'speak');
-  await waitPrompt(page, 1, 0);
-  await clickControl(page, 'hear');
-  await waitPrompt(page, 1, 0, false);
-  await expect.poll(() => page.evaluate(() => window.__questSpeech.spoken.length), { intervals: [50] }).toBe(1);
-  expect(await page.evaluate(() => ({ text: window.__questSpeech.spoken[0].text,
-    lang: window.__questSpeech.spoken[0].lang, rate: window.__questSpeech.spoken[0].rate,
-    running: window.__questSpeech.instances.some(instance => instance.running) })))
-    .toEqual({ text: first.prompt.text, lang: 'en-US', rate: 0.85, running: false });
-  await page.evaluate(text => {
-    window.__questSpeech.instances[0].emit(text);
-    window.__questSpeech.spoken[0].onend?.();
-  }, first.prompt.text);
+  await waitAdventure(page, 1);
+  const first = await waitWord(page, 1);
+  expectWordInterface(first.state);
+  const oldSession = await emit(page, 'xylophonically');
+  await page.evaluate(({ index, word }) => window.__questSpeech.instances[index].revise(0, word),
+    { index: oldSession, word: first.target.text });
   await rendered(page);
-  expect(await snapshot(page)).toMatchObject({ hp: first.hp, line_index: 0, listening: false });
-  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(1);
-  await page.screenshot({ path: info.outputPath('talk-quest-first-adventure.png') });
-  await clickControl(page, 'speak');
-  await waitPrompt(page, 1, 0);
+  expect(await snapshot(page), 'A finalized wrong occurrence cannot be rewritten into a hit').toMatchObject({ hp: first.state.hp, hits: 0 });
   await clickControl(page, 'map');
-  await waitState(page, { view: 'map', listening: false });
-  await page.evaluate(text => window.__questSpeech.instances.at(-1).emit(text), first.prompt.text);
+  await waitState(page, { view: 'map', phase: 'paused', listening: false });
+  await page.evaluate(({ index, word }) => window.__questSpeech.instances[index].emit(word),
+    { index: oldSession, word: first.target.text });
   await rendered(page);
-  expect(await snapshot(page)).toMatchObject({ hp: first.hp, line_index: 0, total_clears: 0 });
+  expect(await snapshot(page)).toMatchObject({ hp: first.state.hp, hits: 0 });
   expect(await page.evaluate(() => window.__questSpeech.instances.some(instance => instance.running))).toBe(false);
   await clickControl(page, 'continue');
-  await waitPrompt(page, 1, 0, false);
+  await waitAdventure(page, 1);
   expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(2);
-  await clickControl(page, 'speak');
-  await waitPrompt(page, 1, 0);
+  try {
+    await setPageHidden(page, true);
+    await waitState(page, { phase: 'paused', listening: false });
+  } finally {
+    await setPageHidden(page, false);
+  }
+  await rendered(page);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(2);
+  await clickControl(page, 'resume');
+  await waitAdventure(page, 1);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(3);
+  await page.evaluate(() => window.__questSpeech.instances.at(-1).callbacks.error({ error: 'network' }));
+  await waitState(page, { listening: false });
+  await readyQuestControl(page, 'mic_retry');
+  await clickControl(page, 'mic_retry');
+  await waitAdventure(page, 1);
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(4);
+  const target = await waitWord(page, 1);
+  await emit(page, target.target.text);
+  await waitState(page, { hp: first.state.hp - 1, hits: 1 });
+  await page.screenshot({ path: info.outputPath('talk-quest-word-microphone-retry.png') });
   await chooseMode(page, 'match');
   await waitState(page, { active: false, listening: false });
-  await page.evaluate(text => window.__questSpeech.instances.at(-1).emit(text), first.prompt.text);
+  await page.evaluate(word => window.__questSpeech.instances.at(-1).emit(word), target.target.text);
   await rendered(page);
-  expect(await snapshot(page)).toMatchObject({ hp: first.hp, line_index: 0, total_clears: 0 });
+  expect(await snapshot(page)).toMatchObject({ hits: 1, total_clears: 0 });
   expect(await page.evaluate(() => window.__questSpeech.instances.some(instance => instance.running))).toBe(false);
   expectPrivateProgress(await progress(page));
   expect(errors).toEqual([]);
 });
 
-test('typing works without browser speech at phone sizes and a backgrounded chest keeps its one reward', async ({ page }, info) => {
-  test.setTimeout(150000);
+test('finite Talk Quest words finish a missed round and the visible retry creates a fresh encounter', async ({ page, browserName }) => {
+  const errors = recordErrors(page);
+  const map = await openQuest(page, browserName);
+  await tapRect(page, map.levels[0], 'First adventure');
+  const first = await waitAdventure(page, 1);
+  const oldSession = await page.evaluate(() => window.__questSpeech.instances.length - 1);
+  await expect.poll(async () => (await snapshot(page)).phase, { intervals: [250, 500], timeout: 40000 }).toBe('lost');
+  const lost = await snapshot(page);
+  expect(lost).toMatchObject({ hits: 0, hp: first.max_hp, spawned: first.total_words,
+    misses: first.total_words, targets: [], listening: false });
+  await readyQuestControl(page, 'retry');
+  await clickControl(page, 'retry');
+  const retry = await waitAdventure(page, 1);
+  expect(retry).toMatchObject({ hits: 0, misses: 0, spawned: 1, hp: first.max_hp });
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(2);
+  const live = await waitWord(page, 1);
+  await page.evaluate(({ index, word }) => window.__questSpeech.instances[index].emit(word),
+    { index: oldSession, word: live.target.text });
+  await rendered(page);
+  expect(await snapshot(page)).toMatchObject({ hits: 0, hp: first.max_hp });
+  await emit(page, live.target.text);
+  await waitState(page, { hits: 1, hp: first.max_hp - 1 });
+  expect(errors).toEqual([]);
+});
+
+test('Talk Quest phone layouts need no scrolling and unavailable speech exposes no typing controls', async ({ page }, info) => {
   const errors = recordErrors(page);
   await page.setViewportSize({ width: 320, height: 568 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -416,141 +596,244 @@ test('typing works without browser speech at phone sizes and a backgrounded ches
     Object.defineProperty(window, 'webkitSpeechRecognition', { configurable: true, value: undefined });
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => {
       window.__questNoSpeech.microphoneRequests++;
-      throw new Error('The typed fallback must not request a microphone');
+      throw new Error('Unavailable browser speech must not request a physical microphone');
     };
   });
-  const response = await page.goto('/');
-  expect(await response.text(), 'The actual export enables the mobile text-entry bridge')
-    .toMatch(/"experimentalVK"\s*:\s*true/);
+  await page.goto('/');
   await enterGame(page);
   await chooseMode(page, 'quest');
-  const map = await waitState(page, { active: true, view: 'map' });
-  await tapRect(page, map.levels[0], 'First adventure');
-  let current = await waitPrompt(page, 1, 0, false);
-  expect(current.reduced_motion).toBe(true);
-  expect(current.controls.speak.disabled).toBe(true);
-  expect(current.controls.type.disabled).toBe(false);
-  expect(await page.evaluate(() => window.wordBuddiesHost.speechAvailable())).toBe(false);
-
   const layouts = [];
-  async function inspectPrompt(label) {
-    const rect = await visibleQuestControl(page, 'prompt');
-    const canvas = await page.locator('#canvas').boundingBox();
-    const value = await snapshot(page);
-    expect(value.prompt.text.length).toBeGreaterThan(0);
-    expect(rect.width * canvas.width, 'The complete sentence has readable horizontal space').toBeGreaterThan(100);
-    expect(rect.height * canvas.height, 'The rendered sentence is not collapsed').toBeGreaterThan(30);
-    expect(value.reduced_motion).toBe(true);
-    const png = await page.screenshot({ path: info.outputPath(`talk-quest-typing-${label}.png`) });
+  for (const [label, width, height] of [['portrait', 320, 568], ['landscape', 568, 320], ['portrait-return', 320, 568]]) {
+    await page.setViewportSize({ width, height });
+    await rendered(page);
+    await page.waitForTimeout(250);
+    let map = await waitState(page, { active: true, view: 'map', map_scroll_max: 0 });
+    await visibleQuestControl(page, 'album');
+    await visibleQuestControl(page, 'map_previous');
+    await visibleQuestControl(page, 'map_next');
+    while (!map.controls.map_previous.disabled) {
+      const previous = map.map_chapter;
+      await clickControl(page, 'map_previous');
+      map = await waitState(page, { map_chapter: previous - 1 });
+    }
+    const chapters = [];
+    for (;;) {
+      const visible = map.levels.filter(level => level.visible);
+      const canvasBounds = await page.locator('#canvas').boundingBox();
+      expect(hasFiniteRect(canvasBounds)).toBe(true);
+      expect(visible.length).toBeGreaterThan(0);
+      for (const rect of visible) {
+        expect(hasFiniteRect(rect)).toBe(true);
+        expect(typeof rect.compact, 'Adventure geometry reports its artwork layout').toBe('boolean');
+        expect(rect.width * canvasBounds.width, 'Every adventure keeps a usable touch width').toBeGreaterThanOrEqual(44);
+        expect(rect.height * canvasBounds.height, 'Every adventure keeps a usable touch height').toBeGreaterThanOrEqual(44);
+        expect(rect.x).toBeGreaterThanOrEqual(-0.002);
+        expect(rect.y).toBeGreaterThanOrEqual(-0.002);
+        expect(rect.x + rect.width).toBeLessThanOrEqual(1.002);
+        expect(rect.y + rect.height).toBeLessThanOrEqual(1.002);
+        if (rect.compact) {
+          for (const key of ['caption', 'badge']) {
+            const paint = rect[key];
+            expect(hasFiniteRect(paint), `The compact adventure ${key} has visible painted bounds`).toBe(true);
+            expect(paint.x, `The compact adventure ${key} fits its left edge`).toBeGreaterThanOrEqual(rect.x - 0.002);
+            expect(paint.y, `The compact adventure ${key} fits its top edge`).toBeGreaterThanOrEqual(rect.y - 0.002);
+            expect(paint.x + paint.width, `The compact adventure ${key} fits its right edge`).toBeLessThanOrEqual(rect.x + rect.width + 0.002);
+            expect(paint.y + paint.height, `The compact adventure ${key} fits its bottom edge`).toBeLessThanOrEqual(rect.y + rect.height + 0.002);
+          }
+        }
+      }
+      chapters.push({ chapter: map.map_chapter, levels: visible });
+      await page.screenshot({ path: info.outputPath(`talk-quest-map-${label}-${map.map_chapter}.png`) });
+      const mapCanvas = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
+        requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
+      fs.writeFileSync(info.outputPath(`talk-quest-map-${label}-${map.map_chapter}-canvas.png`), Buffer.from(mapCanvas, 'base64'));
+      if (map.controls.map_next.disabled) break;
+      const previous = map.map_chapter;
+      await clickControl(page, 'map_next');
+      map = await waitState(page, { map_chapter: previous + 1 });
+    }
+    expect(chapters.flatMap(chapter => chapter.levels)).toHaveLength(14);
+    while (!map.controls.map_previous.disabled) {
+      const previous = map.map_chapter;
+      await clickControl(page, 'map_previous');
+      map = await waitState(page, { map_chapter: previous - 1 });
+    }
+    await tapRect(page, map.levels[0], 'First adventure');
+    const stage = await waitAdventure(page, 1, false);
+    expectWordInterface(stage);
+    expect(stage.reduced_motion).toBe(true);
+    expect(stage.feedback).toMatch(/unavailable/i);
+    await visibleQuestControl(page, 'map');
+    const arena = await visibleQuestControl(page, 'word_arena');
+    const retry = await visibleQuestControl(page, 'mic_retry');
+    const bounds = await page.locator('#canvas').boundingBox();
+    for (const target of (await snapshot(page)).targets) {
+      const rect = target.rect;
+      expect(rect.width * bounds.width, 'Word artwork and text keep readable space').toBeGreaterThanOrEqual(44);
+      expect(rect.height * bounds.height).toBeGreaterThanOrEqual(44);
+      expect(rect.x).toBeGreaterThanOrEqual(arena.x - 0.002);
+      expect(rect.y).toBeGreaterThanOrEqual(arena.y - 0.002);
+      expect(rect.x + rect.width).toBeLessThanOrEqual(arena.x + arena.width + 0.002);
+      expect(rect.y + rect.height).toBeLessThanOrEqual(arena.y + arena.height + 0.002);
+      expect(overlapArea(rect, retry), 'Retry microphone cannot cover a displayed word').toBe(0);
+    }
+    const png = await page.screenshot({ path: info.outputPath(`talk-quest-words-${label}.png`) });
     const raw = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
       requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
-    const canvasPng = Buffer.from(raw, 'base64');
-    fs.writeFileSync(info.outputPath(`talk-quest-typing-${label}-canvas.png`), canvasPng);
-    const pageColors = await visibleColorCount(page, png), canvasColors = await visibleColorCount(page, canvasPng);
-    expect(canvasColors, `${label}: the game continues drawing after a resize`).toBeGreaterThan(20);
-    if (label !== 'portrait' && pageColors === 1 && process.platform === 'win32' &&
-        info.project.use.browserName === 'webkit') {
+    const pageColors = await visibleColorCount(page, png);
+    const canvasPng = Buffer.from(raw, 'base64'), canvasColors = await visibleColorCount(page, canvasPng);
+    fs.writeFileSync(info.outputPath(`talk-quest-words-${label}-canvas.png`), canvasPng);
+    expect(canvasColors).toBeGreaterThan(20);
+    await info.attach(`talk-quest-words-${label}-canvas`, { body: canvasPng, contentType: 'image/png' });
+    if (label !== 'portrait' && pageColors === 1 && process.platform === 'win32' && info.project.use.browserName === 'webkit') {
       info.annotations.push({ type: 'rendering-limitation',
-        description: `${label}: existing Windows WebKit presentation/capture limitation after resize; the page PNG is blank while the raw canvas renders. Both retained.` });
-    } else {
-      expect(pageColors, `${label}: the page shows the rendered game`).toBeGreaterThan(20);
-    }
-    layouts.push({ label, viewport: page.viewportSize(), prompt: value.prompt, rect,
-      scroll_offset: value.scroll_offset, scroll_max: value.scroll_max, pageColors, canvasColors });
+        description: `${label}: Windows WebKit page capture is blank after resize while the native canvas continues rendering.` });
+    } else expect(pageColors).toBeGreaterThan(20);
+    layouts.push({ label, viewport: page.viewportSize(), chapters, stage, pageColors, canvasColors });
+    await clickControl(page, 'map');
+    await waitState(page, { view: 'map', listening: false });
   }
-  async function typeLine(text, submitWithEnter = false) {
-    if (!(await snapshot(page)).controls.input.visible) await clickControl(page, 'type');
-    await clickControl(page, 'input');
-    const editor = page.locator('input:focus, textarea:focus');
-    await expect(editor, 'Touching the real LineEdit focuses the exported native text-entry bridge').toHaveCount(1);
-    await expect(editor).toBeEditable();
-    await expect(editor).toBeVisible();
-    await editor.fill(text);
-    await expect(editor).toHaveValue(text);
-    await rendered(page);
-    if (submitWithEnter) await page.keyboard.press('Enter');
-    else await clickControl(page, 'submit');
-  }
-
-  await inspectPrompt('portrait');
-  await typeLine('Knock, knock. Do not come in.');
-  await expect.poll(async () => (await snapshot(page)).feedback, { intervals: [50] }).toContain('whole sentence');
-  expect(await snapshot(page), 'A typed mismatch has the same whole-sentence rule as speech')
-    .toMatchObject({ line_index: 0, hp: 60, total_clears: 0, listening: false });
-  await visibleQuestControl(page, 'feedback');
-  await typeLine(current.prompt.text);
-  current = await waitPrompt(page, 1, 1, false);
-  expect(current.hp).toBe(50);
-
-  await page.setViewportSize({ width: 568, height: 320 });
-  await rendered(page);
-  await page.waitForTimeout(250);
-  current = await waitPrompt(page, 1, 1, false);
-  expect(current.scroll_max, 'The landscape view keeps overflowing native content scrollable').toBeGreaterThan(0);
-  await inspectPrompt('landscape');
-  // A normal keyboard Enter reaches LineEdit.text_submitted through the same
-  // focused DOM editor used by a phone software keyboard.
-  await typeLine('WHO IS THAT?', true);
-  current = await waitPrompt(page, 1, 2, false);
-  expect(current.hp).toBe(40);
-  expect(current.prompt.text).toBe("It's me, Adam.");
-
-  await page.setViewportSize({ width: 320, height: 568 });
-  await rendered(page);
-  await page.waitForTimeout(250);
-  await inspectPrompt('portrait-return');
-  while (current.phase === 'playing') {
-    const before = await waitPrompt(page, 1, current.line_index, false);
-    await visibleQuestControl(page, 'prompt');
-    await typeLine(before.prompt.text, before.line_index % 2 === 0);
-    current = await waitState(page, { level: 1, line_index: before.line_index + 1 });
-    expect(current.hp).toBe(before.hp - 10);
-    expect(current.listening).toBe(false);
-  }
-  expect(current.phase).toBe('victory');
-  expect(current.completed).toEqual([]);
-  await waitState(page, { level: 1, phase: 'chest', busy: false });
-  await clickControl(page, 'open');
-  current = await waitState(page, { level: 1, phase: 'complete', busy: true });
-  expect(current.controls.next.disabled).toBe(true);
-  expect(current).toMatchObject({ completed: [1], total_clears: 1, chests: ['chest-01'] });
-  const awarded = await progress(page);
-  expectPrivateProgress(awarded);
-
-  try {
-    // Simulate only the browser lifecycle, as the existing browser suite does.
-    // The native quest receives its normal host callback and owns all pausing.
-    await page.evaluate(() => {
-      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-      document.dispatchEvent(new Event('visibilitychange'));
-    });
-    await expect.poll(async () => {
-      const value = await snapshot(page);
-      return value.controls.resume.visible && !value.controls.next.visible;
-    }, { intervals: [50, 100, 200], timeout: 10000 }).toBe(true);
-    await page.waitForTimeout(1900);
-    expect(await snapshot(page), 'The paused opening tail cannot award the same chest again')
-      .toMatchObject({ phase: 'complete', completed: [1], total_clears: 1, chests: ['chest-01'] });
-    expect(await progress(page)).toEqual(awarded);
-  } finally {
-    await page.evaluate(() => {
-      delete document.hidden;
-      document.dispatchEvent(new Event('visibilitychange'));
-    });
-  }
-  expect((await snapshot(page)).controls.resume.visible).toBe(true);
-  await clickControl(page, 'resume');
-  current = await waitState(page, { phase: 'complete', busy: false, total_clears: 1 });
-  expect(current.controls.next.disabled).toBe(false);
-  expect(current.controls.resume.visible).toBe(false);
-  expect(await progress(page)).toEqual(awarded);
-  await clickControl(page, 'next');
-  current = await waitPrompt(page, 2, 0, false);
-  expect(current.completed).toEqual([1]);
-  expect(current.controls.speak.disabled).toBe(true);
-  await inspectPrompt('next-adventure');
   expect(await page.evaluate(() => window.__questNoSpeech.microphoneRequests)).toBe(0);
   expect(errors).toEqual([]);
-  await info.attach('talk-quest-typing-layouts', { body: JSON.stringify({ layouts, awarded }, null, 2),
-    contentType: 'application/json' });
+  await info.attach('talk-quest-fixed-phone-layouts', { body: JSON.stringify(layouts, null, 2), contentType: 'application/json' });
+});
+
+test.describe('Talk Quest chest hold lifecycle', () => {
+  // Preserve phone geometry while reducing software-renderer fill cost around
+  // the short interval between visible release and completion.
+  test.use({ deviceScaleFactor: 1 });
+
+  test('release before confirmation or opening cancels, retry works, and backgrounding commits only after release',
+    async ({ page, browserName }, info) => {
+      test.setTimeout(150000);
+      const errors = recordErrors(page);
+      const initial = await openPendingChest(page, browserName, 'no-preference');
+      expect(initial).toMatchObject({ reduced_motion: false, completed: [], total_clears: 0, chests: [] });
+      const unopened = await progress(page);
+      expectPrivateProgress(unopened);
+      expect(unopened.run).toMatchObject({ level_number: 1, hits: 5, phase: 'chest' });
+
+      await pressChest(page, 250);
+      await waitState(page, { phase: 'chest', busy: false, holding_chest: false,
+        chest_phase: 'idle', chest_progress: 0, chest_committed: false });
+      const shortHold = await page.evaluate(() => window.__questChestHold);
+      expect(shortHold.some(state => state.holding_chest), 'A real pointer press starts the hold').toBe(true);
+      expect(shortHold.every(state => !state.chest_committed)).toBe(true);
+      await page.waitForTimeout(1350);
+      expect(await progress(page), 'Releasing before the 1.2-second confirmation cannot award treasure').toEqual(unopened);
+
+      await pressChest(page);
+      try {
+        await waitState(page, { phase: 'chest', busy: true, holding_chest: true,
+          chest_phase: 'gathering', chest_committed: false });
+      } finally {
+        await page.mouse.up();
+      }
+      await waitState(page, { phase: 'chest', busy: false, holding_chest: false,
+        chest_phase: 'idle', chest_progress: 0, chest_committed: false });
+      expect(await progress(page), 'Releasing after confirmation but before visible release still cancels').toEqual(unopened);
+
+      await pressChest(page);
+      try {
+        await waitState(page, { phase: 'chest', busy: true, chest_phase: 'gathering', chest_committed: false });
+        await setPageHidden(page, true);
+        const paused = await waitState(page, { phase: 'paused', paused: true, busy: false,
+          holding_chest: false, chest_committed: false, chest_progress: 0 });
+        expect(paused.controls.resume.visible).toBe(true);
+        await page.waitForTimeout(4100);
+        expect(await snapshot(page)).toMatchObject({ phase: 'paused', total_clears: 0, completed: [], chests: [] });
+        expect(await progress(page), 'Backgrounding before release cancels all pending reward work').toEqual(unopened);
+      } finally {
+        await page.mouse.up();
+        await setPageHidden(page, false);
+      }
+      await clickControl(page, 'resume');
+      await waitState(page, { phase: 'chest', paused: false, busy: false,
+        holding_chest: false, chest_committed: false, chest_progress: 0 });
+
+      let awarded;
+      await pressChest(page, null, { backgroundOnRelease: true });
+      try {
+        const released = await waitChestRelease(page);
+        expect(released).toMatchObject({ phase: 'chest', busy: true, holding_chest: false,
+          chest_committed: true, completed: [], total_clears: 0, chests: [] });
+        expect(released.saved, 'Visible release commits the opening before the normal completion saves its reward')
+          .toEqual(unopened);
+        expect(await page.evaluate(() => window.__questChestBackground),
+          'The page hides during the committed opening, before normal completion').toEqual(released);
+        const paused = await waitState(page, { phase: 'complete', paused: true, busy: false,
+          holding_chest: false, chest_committed: true, total_clears: 1 });
+        expect(paused).toMatchObject({ completed: [1], chests: ['chest-01'] });
+        expect(paused.controls.resume.visible).toBe(true);
+        expect(paused.controls.next.visible).toBe(false);
+        awarded = await progress(page);
+        expectPrivateProgress(awarded);
+        expect(awarded.completion_counts).toEqual([1, ...Array(13).fill(0)]);
+        expect(awarded.run).toEqual({});
+        await page.waitForTimeout(1900);
+        expect(await progress(page), 'Backgrounding after release settles the reward exactly once').toEqual(awarded);
+      } finally {
+        await page.mouse.up();
+        await setPageHidden(page, false);
+      }
+      await clickControl(page, 'resume');
+      const completed = await waitState(page, { phase: 'complete', paused: false, busy: false, total_clears: 1 });
+      expect(completed).toMatchObject({ completed: [1], chests: ['chest-01'] });
+      expect(completed.controls.next.disabled).toBe(false);
+      expect(await progress(page)).toEqual(awarded);
+      await rendered(page);
+      await page.screenshot({ path: info.outputPath('talk-quest-opened-chest.png'), scale: 'css' });
+      const acceptedHold = await page.evaluate(() => {
+        window.__questChestObserver.disconnect();
+        return window.__questChestHold;
+      });
+      expect(acceptedHold.some(state => state.chest_phase === 'holding' && state.chest_progress > 0 &&
+        state.chest_progress < 0.36), 'The retry visibly charges before opening').toBe(true);
+      expect(acceptedHold.some(state => state.chest_phase === 'gathering')).toBe(true);
+      await info.attach('talk-quest-chest-lifecycle', { body: JSON.stringify({ shortHold, acceptedHold, awarded }, null, 2),
+        contentType: 'application/json' });
+
+      await page.reload();
+      await enterGame(page);
+      await chooseMode(page, 'quest');
+      const reloaded = await waitState(page, { active: true, view: 'map', total_clears: 1 });
+      expect(reloaded).toMatchObject({ completed: [1], chests: ['chest-01'] });
+      expect(reloaded.controls.continue.visible).toBe(false);
+      expect(await progress(page), 'Reloading a settled chest cannot duplicate its reward').toEqual(awarded);
+      expect(errors).toEqual([]);
+    });
+
+  test('reduced motion still requires a hold and completes once at confirmation', async ({ page, browserName }, info) => {
+    test.setTimeout(90000);
+    const errors = recordErrors(page);
+    const initial = await openPendingChest(page, browserName, 'reduce');
+    expect(initial.reduced_motion).toBe(true);
+    const unopened = await progress(page);
+    await pressChest(page, 250);
+    await waitState(page, { phase: 'chest', busy: false, holding_chest: false,
+      chest_committed: false, chest_progress: 0 });
+    await page.waitForTimeout(1350);
+    expect(await progress(page), 'Reduced motion retains the intentional hold gate').toEqual(unopened);
+
+    const released = await holdChestUntilRelease(page);
+    expect(released, 'Reduced motion completes immediately at confirmation without an opening tail')
+      .toMatchObject({ phase: 'complete', busy: false, holding_chest: false,
+        chest_committed: true, total_clears: 1, completed: [1], chests: ['chest-01'] });
+    const held = await page.evaluate(() => window.__questChestHold.find(state => state.holding_chest));
+    expect(held).toBeTruthy();
+    expect(released.at - held.at, 'The reduced-motion reward still waits for the 1.2-second hold')
+      .toBeGreaterThanOrEqual(1100);
+    const completed = await waitState(page, { phase: 'complete', busy: false, total_clears: 1 });
+    expect(completed.controls.next.disabled).toBe(false);
+    const awarded = await progress(page);
+    expectPrivateProgress(awarded);
+    expect(awarded.completion_counts).toEqual([1, ...Array(13).fill(0)]);
+    expect(awarded.run).toEqual({});
+    await page.waitForTimeout(1900);
+    expect(await progress(page), 'Releasing after completion cannot replay a reduced-motion reward').toEqual(awarded);
+    await info.attach('talk-quest-reduced-chest-hold', {
+      body: JSON.stringify({ held, released, awarded }, null, 2), contentType: 'application/json'
+    });
+    expect(errors).toEqual([]);
+  });
 });

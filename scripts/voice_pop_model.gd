@@ -7,6 +7,8 @@ const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
 const BURST_WARMUP: float = 8.0
+const CHEST_SCORE_THRESHOLDS := [100, 200, 300]
+const MAX_CHESTS: int = 3
 const EPSILON: float = 0.000001
 const RECOGNITION_MESSAGES: Dictionary = {
 	"unclear_speech": "Say the word again, loud and clear.",
@@ -24,6 +26,7 @@ var misses: int = 0
 var combo: int = 0
 var best_combo: int = 0
 var score: int = 0
+var chest_count: int = 0
 var hit_words: Array[Dictionary] = []
 var missed_words: Array[Dictionary] = []
 var recognition_feedback: String = ""
@@ -144,7 +147,7 @@ func hit_transcript(text: String) -> Array[Dictionary]:
 	if phase != "running" or remaining <= 0.0:
 		return removed
 	var spoken: Dictionary = {}
-	for token in SpeechWords.tokens(text):
+	for token in SpeechWords.tokens(text, _active_forms()):
 		spoken[token] = true
 	for target in targets.duplicate():
 		if target.age + EPSILON >= target.lifetime:
@@ -180,7 +183,7 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 	if not is_finite(uid_number) or uid_number < 0.0 or uid_number != floor(uid_number) \
 		or not is_finite(received_at) or received_at < 0.0:
 		return removed
-	var spoken: Array[String] = SpeechWords.tokens(event.text)
+	var spoken: Array[String] = SpeechWords.tokens(event.text, _active_forms())
 	if uid_number == 0.0:
 		if event.stage == "final":
 			_set_recognition_feedback("unclear_speech" if spoken.is_empty() else "no_matching_target")
@@ -211,6 +214,12 @@ func _hit_target(target: Dictionary) -> Dictionary:
 	var hit: Dictionary = target.duplicate(true)
 	hit.points = points
 	hit.combo = combo
+	var previous_chests: int = chest_count
+	while chest_count < MAX_CHESTS and score >= int(CHEST_SCORE_THRESHOLDS[chest_count]):
+		chest_count += 1
+	hit.chest_awards = chest_count - previous_chests
+	hit.chest_awarded = hit.chest_awards > 0
+	hit.chest_count = chest_count
 	hit.time_bonus = 3 if combo == 2 else 5 if combo == 3 else 0
 	bonus_time += float(hit.time_bonus)
 	remaining = maxf(0.0, DURATION + bonus_time - elapsed)
@@ -233,10 +242,22 @@ func clear_recognition_feedback() -> void:
 func summary() -> Dictionary:
 	return {
 		"hits": hits, "misses": misses, "score": score, "best_combo": best_combo,
+		"chest_count": chest_count, "chest_thresholds": CHEST_SCORE_THRESHOLDS.duplicate(),
 		"hit_words": hit_words.duplicate(true),
 		"missed_words": missed_words.duplicate(true), "base_duration": DURATION,
 		"bonus_time": bonus_time, "duration": DURATION + bonus_time, "elapsed": elapsed
 	}
+
+
+func next_chest_score() -> int:
+	return int(CHEST_SCORE_THRESHOLDS[chest_count]) if chest_count < MAX_CHESTS else 0
+
+
+func chest_progress() -> float:
+	if chest_count >= MAX_CHESTS:
+		return 1.0
+	var previous_threshold: int = int(CHEST_SCORE_THRESHOLDS[chest_count - 1]) if chest_count > 0 else 0
+	return clampf(float(score - previous_threshold) / float(next_chest_score() - previous_threshold), 0.0, 1.0)
 
 
 func _reset_round(new_round: bool = true) -> void:
@@ -255,6 +276,7 @@ func _reset_round(new_round: bool = true) -> void:
 	combo = 0
 	best_combo = 0
 	score = 0
+	chest_count = 0
 	hit_words.clear()
 	missed_words.clear()
 	_spawn_counts.clear()
@@ -335,10 +357,19 @@ func _can_spawn(word: Dictionary) -> bool:
 	for target in targets:
 		if Data.confusable_words(word.id, target.word.id) or Data.confusable_words(word.text, target.word.text):
 			return false
+		if SpeechWords.compounds_conflict(word.text, target.word.text):
+			return false
 		for form in _aliases[word.id]:
 			if _aliases[target.word.id].has(form):
 				return false
 	return true
+
+
+func _active_forms() -> Array[String]:
+	var result: Array[String] = []
+	for target in targets:
+		result.append_array(_aliases.get(target.word.id, []))
+	return result
 
 
 func _expire_targets() -> void:

@@ -1,0 +1,49 @@
+# Voice Pop treasure
+
+Every round starts with zero chest opportunities. Accepted spoken hits keep the
+existing point and combo rules; crossing 100, 200, and 300 points awards one
+chest each, capped at three. The HUD shows points, the chest total, and the next
+milestone. Each award produces a gold badge, rays, and particles. Reduced motion
+keeps a readable stationary award message.
+
+The result screen offers **Open chests (N)** alongside Play again. The treasure
+page shows every earned chest together, with distinct styles selected once for
+the round. Desktop and short landscape layouts use columns; portrait phones
+use visible rows. Each
+chest uses the shared Match hold, cancellation, physical release, light, audio,
+and surprise sequence. Only one chest can open at a time. A released chest stays
+open while the remaining chests retain their own controls.
+
+The batch and opened flags are saved on this device under
+`wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Returning
+to the results, changing modes, or reloading keeps unopened rewards. Entering
+Voice Pop again resumes pending treasure before another round can start. A
+storage failure keeps the same selected designs and offers a retry. Pop chest
+surprises do not modify shared medal, toy, or Talk Quest progress.
+
+## Shared chest catalog
+
+The eight worlds now use eight different chest types in Match, Memory, and the
+Voice Pop treasure room. Talk Quest keeps its twenty reviewed mechanisms.
+
+| World | Chest type | Source |
+| --- | --- | --- |
+| Spring | Royal | Existing imported 2D rig |
+| Summer | Energy | Existing imported 2D rig |
+| Autumn | Harvest Wood | Downloaded Casual Game Asset Chest |
+| Winter | Crystal | Existing imported 2D rig |
+| Ocean | Tide Blue | Downloaded Low Poly Treasure Chest |
+| Space | Nebula Vault | Downloaded Stylized Epic Chest |
+| Jungle | Bramble Chest | Downloaded POLY chest model |
+| Candy | Bonbon Barrel | Downloaded POLY chest model |
+
+The five additional designs use transparent frames rendered from the downloaded
+meshes and materials. They retain the shared five-second performance and have
+different lid mechanisms. Their original package paths, hashes, license
+references, and render settings are recorded in
+`assets/chests/downloaded/SOURCE.txt` and its manifest.
+
+The PNG opening frames and their Godot import sidecars are private local build
+inputs excluded from Git. They ship inside the compiled game pack. Restore
+them from the retained licensed sources with `tools/prepare-downloaded-chests.py`
+before importing or building a fresh checkout.

@@ -87,7 +87,12 @@ test('mobile textures use high-quality WebP without reducing their source resolu
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  assert.equal(imports.length, 481); // Includes Pip's eight wardrobes, ten derived chest layers and six cosmetic surprises.
+  const chestManifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/downloaded/manifest.json'), 'utf8'));
+  const chestFrames = Object.values(chestManifest.styles).flatMap(style => style.frames);
+  assert.equal(new Set(chestFrames).size, 43, 'The five downloaded chest designs retain all opening frames');
+  const downloadedImports = imports.filter(filename => filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep));
+  assert.deepEqual(downloadedImports.sort(), chestFrames.map(filename => path.join(root, filename + '.import')).sort());
+  assert.equal(imports.length - downloadedImports.length, 481); // Original art, Pip wardrobes, derived chest layers and surprises.
   for (const filename of imports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -331,12 +336,24 @@ test('voice sources contain exactly 350 pronunciations and ten active prompts', 
 
 test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs', () => {
   const hashes = new Set();
+  const music = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/casual-bgm.json'), 'utf8'));
+  assert.deepEqual(music.files.map(track => track.theme), seasons.map(season => season.id));
   for (const season of seasons) {
     assert.equal(season.bgm, `assets/audio/bgm/${season.id}.wav`);
+    const track = music.files.find(item => item.theme === season.id);
+    assert.equal(sha256(fs.readFileSync(path.join(root, season.bgm))), track.sha256,
+      `${season.id} retains its reviewed music recording`);
     const wave = readWave(season.bgm);
     assert.equal(wave.channels, 2, season.id);
     assert.equal(wave.sampleRate, 44100, season.id);
-    assert.ok(pcmStats(wave.data).energy > 0, `Silent soundtrack: ${season.id}`);
+    const stats = pcmStats(wave.data);
+    assert.ok(stats.energy > 0, `Silent soundtrack: ${season.id}`);
+    assert.ok(stats.peak < 32768 * 10 ** (-3 / 20), `${season.id} retains playback headroom`);
+    for (let channel = 0; channel < 2; channel++) {
+      const first = wave.data.readInt16LE(channel * 2);
+      const last = wave.data.readInt16LE(wave.data.length - 4 + channel * 2);
+      assert.ok(Math.abs(last - first) < 32768 * 0.002, `${season.id} has no abrupt loop boundary`);
+    }
     hashes.add(sha256(wave.data));
   }
   assert.equal(hashes.size, 8);

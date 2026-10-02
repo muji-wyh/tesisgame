@@ -5,6 +5,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const shell = fs.readFileSync(path.join(__dirname, '..', 'web', 'shell.html'), 'utf8');
+const speechWordsSource = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'speech_words.gd'), 'utf8');
+const compoundParts = JSON.parse(speechWordsSource.match(/const COMPOUND_PARTS: Dictionary = (\{[\s\S]*?\n\})/)[1]);
 
 function speechEvent(entries, resultIndex = 0) {
   const results = entries.map(([transcript, isFinal]) => Object.assign(
@@ -113,6 +115,13 @@ function fixture({ api = 'standard', secure = true, autoStart = true, online = t
   const host = vm.runInNewContext(`(${block})()`, {
     window, document, createLocalSpeechPreparation: () => localPreparation
   });
+  host.configureSpeechLexicon(JSON.stringify({ compounds: compoundParts, words: [
+    { text: 'cat', forms: ['cat', 'cats'] }, { text: 'dog', forms: ['dog', 'dogs'] },
+    { text: 'sun', forms: ['sun', 'suns', 'son', 'sons'] }, { text: 'flower', forms: ['flower', 'flowers', 'flour'] },
+    { text: 'horse', forms: ['horse', 'horses', 'hoarse'] },
+    ...Object.keys(compoundParts).filter(word => !word.endsWith('s') || word === 'sunglasses')
+      .map(text => ({ text, forms: Object.keys(compoundParts).filter(form => form === text || form === text + 's') }))
+  ] }));
   let popState = { phase: 'running', round_id: 'round-1', vocabulary: ['cat', 'dog', 'sun'], targets: [
     { uid: 1, text: 'cat', forms: ['cat', 'cats'] },
     { uid: 2, text: 'dog', forms: ['dog', 'dogs'] },
@@ -779,6 +788,47 @@ test('native rejection leaves an occurrence unconsumed for a valid final acknowl
   assert.deepEqual(attempted.map(event => event.stage), ['interim', 'final']);
 });
 
+test('the Godot bridge acknowledges through a receipt when Callable return values are discarded', () => {
+  const f = fixture();
+  const attempted = [];
+  f.host.observePopSpeech((json, receipt) => {
+    attempted.push(JSON.parse(json));
+    assert.equal(receipt.accepted, false);
+    receipt.accepted = true;
+    // The actual Godot JavaScriptBridge callback returns undefined.
+  });
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(150);
+  f.publishPop({ targets: [{ uid: 9, text: 'cat' }, { uid: 10, text: 'dog' }] });
+  f.latest.result([['dog', true]]);
+  assert.equal(attempted.length, 1, 'Acknowledged speech stays consumed across a corrected final');
+  assert.equal(f.host.speechDiagnostics().counts.hit, 1);
+  assert.equal(f.host.speechDiagnostics().counts.game_rejected, undefined);
+  f.latest.result([['dog', true], ['cat', true]], 1);
+  assert.equal(attempted.length, 2);
+  assert.equal(attempted[1].target_uid, 9);
+});
+
+test('a rejected bridge receipt cannot consume speech and each retry receives a fresh receipt', () => {
+  const f = fixture();
+  const attempts = [], receipts = [];
+  f.host.observePopSpeech((json, receipt) => {
+    attempts.push(JSON.parse(json));
+    receipts.push(receipt);
+    receipt.accepted = attempts.length > 1;
+  });
+  f.listen('pop');
+  f.latest.result([['cat', false]]);
+  f.advance(150);
+  f.latest.result([['cat', true]]);
+  assert.equal(attempts.length, 2);
+  assert.equal(attempts[0].event_id, attempts[1].event_id);
+  assert.notEqual(receipts[0], receipts[1]);
+  assert.equal(f.host.speechDiagnostics().counts.game_rejected, 1);
+  assert.equal(f.host.speechDiagnostics().counts.hit, 1);
+});
+
 test('Pop joins a spoken yo yo before tokenization and preserves its original caption', () => {
   for (const text of ['yo yo', 'YO-YO', 'yo yos']) {
     const f = fixture();
@@ -1355,7 +1405,8 @@ test('Voice Pop defaults to system recognition without loading custom models or 
   assert.doesNotMatch(shell, /(?:src|href)="(?:multiplayer|voice-profiles)[^"]*"/);
   for (const api of ['standard', 'prefixed']) {
     const f = fixture({ api });
-    assert.deepEqual(Object.keys(f.host).sort(), ['observePopSpeech', 'observeQuestSpeech', 'observeSpeech', 'popStatus', 'questTarget',
+    assert.deepEqual(Object.keys(f.host).sort(), ['beginSpeechPractice', 'configureSpeechLexicon', 'endSpeechPractice',
+      'observePopSpeech', 'observeQuestSpeech', 'observeSpeech', 'popStatus', 'practiceTarget', 'practiceWords', 'questTarget', 'questTargets',
       'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech']);
     f.listen('pop');
     assert.equal(f.starts, 1);
@@ -1459,4 +1510,206 @@ test('a synchronous native stop during capture startup leaves no watchdog behind
   f.advance(8000);
   assert.equal(f.starts, 1);
   assert.equal(f.host.speechDiagnostics().counts.capture_timeout, undefined);
+});
+
+test('audio lifecycle and cancelled candidates carry session IDs only in opted-in diagnostics', () => {
+  const f = fixture({ captureEvents: true });
+  f.host.setSpeechDiagnostics(true);
+  f.listen('pop');
+  for (const name of ['audiostart', 'soundstart', 'speechstart', 'speechend', 'soundend', 'nomatch', 'audioend']) {
+    f.latest['on' + name]();
+  }
+  f.latest.result([['cat', false]]);
+  f.advance(149);
+  f.latest.end();
+  const records = f.host.speechDiagnostics().records;
+  for (const type of ['service_start', 'audiostart', 'soundstart', 'speechstart', 'speechend', 'soundend', 'nomatch',
+    'audioend', 'session_end']) assert.ok(records.some(record => record.type === type && record.session_id === 1), type);
+  assert.ok(records.some(record => record.type === 'candidate_cancelled' && record.reason === 'recognition_end'));
+  assert.deepEqual(f.popWords, []);
+});
+
+test('reviewed compound prefixes and joined/spaced revisions share one atomic hit', () => {
+  for (const [word, parts] of Object.entries(compoundParts)) {
+    const f = fixture();
+    f.publishPop({ targets: [{ uid: 90, text: word, forms: [word] }] });
+    f.listen('pop');
+    f.latest.result([[parts[0], false]]);
+    f.advance(200);
+    assert.deepEqual(f.popWords, [], word + ' prefix');
+    f.latest.result([[parts.join(' '), false]]);
+    f.advance(150);
+    assert.deepEqual(f.popWords, [word]);
+    f.publishPop({ targets: [{ uid: 91, text: word, forms: [word] }] });
+    f.latest.result([[word, false]]);
+    f.latest.result([[parts.join('-'), true]]);
+    assert.deepEqual(f.popWords, [word], word + ' revision');
+    f.latest.result([[parts.join('-'), true], [word, true]], 1);
+    assert.deepEqual(f.popEvents.filter(event => event.target_uid > 0).map(event => event.target_uid), [90, 91]);
+  }
+});
+
+test('compound completion cannot retarget old partial speech to a later spawn', () => {
+  for (const initial of ['sun', 'sun flo', 'sunflower']) {
+    const f = fixture();
+    f.publishPop({ targets: [] });
+    f.listen('pop');
+    f.latest.result([[initial, false]]);
+    f.publishPop({ targets: [{ uid: 91, text: 'sunflower' }] });
+    f.latest.result([['sun flower', true]]);
+    assert.equal(f.popEvents.filter(event => event.target_uid > 0).length, 0, initial);
+  }
+});
+
+test('a genuinely repeated compound in a growing segment keeps a separate target and occurrence', () => {
+  for (const word of ['sunflower', 'yoyo']) {
+    const f = fixture();
+    const phrase = compoundParts[word].join(' ');
+    f.publishPop({ targets: [{ uid: 1, text: word, forms: [word, word + 's'] }] });
+    f.listen('pop');
+    f.latest.result([[phrase, false]]);
+    f.advance(150);
+    f.publishPop({ targets: [{ uid: 2, text: word, forms: [word, word + 's'] }] });
+    f.latest.result([[`${word} ${phrase}`, false]]);
+    f.advance(150);
+    f.latest.result([[`${phrase} ${word}s`, true]]);
+    assert.deepEqual(f.popEvents.map(event => event.target_uid), [1, 2], word);
+    assert.equal(new Set(f.popEvents.map(event => event.event_id)).size, 2);
+  }
+});
+
+test('separate component words remain separate and a joined compound never hits components', () => {
+  const f = fixture();
+  f.publishPop({ targets: [{ uid: 1, text: 'sun' }, { uid: 2, text: 'flower' }] });
+  f.listen('pop');
+  f.latest.result([['sun flower', true]]);
+  assert.deepEqual(f.popWords, ['sun', 'flower']);
+  const joined = fixture();
+  joined.publishPop({ targets: [{ uid: 1, text: 'sun' }, { uid: 2, text: 'flower' }] });
+  joined.listen('pop');
+  joined.latest.result([['sunflower', false]]);
+  joined.advance(150);
+  joined.latest.result([['sun flower', true]]);
+  assert.equal(joined.popEvents.filter(event => event.target_uid > 0).length, 0);
+});
+
+test('compound spans cannot steal a consumed component or replay after shortening', () => {
+  const f = fixture();
+  f.publishPop({ targets: [{ uid: 1, text: 'horse' }] });
+  f.listen('pop');
+  f.latest.result([['horse', false]]);
+  f.advance(150);
+  f.publishPop({ targets: [{ uid: 2, text: 'seahorse' }] });
+  f.latest.result([['sea horse', true]]);
+  assert.deepEqual(f.popWords, ['horse']);
+  const joined = fixture();
+  joined.publishPop({ targets: [{ uid: 2, text: 'seahorse' }] });
+  joined.listen('pop');
+  joined.latest.result([['seahorse', false]]);
+  joined.advance(150);
+  joined.publishPop({ targets: [{ uid: 3, text: 'horse' }, { uid: 4, text: 'seahorse' }] });
+  joined.latest.result([['horse', false]]);
+  joined.latest.result([['sea horse', true]]);
+  assert.deepEqual(joined.popWords, ['seahorse']);
+});
+
+test('new members of a revised compound inherit consumed lineage through later splits', () => {
+  for (const correction of ['sunflower', 'sunflowers']) {
+    const f = fixture();
+    f.publishPop({ targets: [{ uid: 1, text: 'cat' }, { uid: 2, text: 'flower', forms: ['flower', 'flowers'] }] });
+    f.listen('pop');
+    f.latest.result([['cat', false]]);
+    f.advance(150);
+    f.latest.result([[correction, false]]);
+    f.latest.result([['sun', false]]);
+    f.latest.result([['flower', true]]);
+    assert.deepEqual(f.popWords, ['cat'], correction + ' cannot create an unconsumed sibling');
+    f.latest.result([['flower', true], ['flower', true]], 1);
+    assert.deepEqual(f.popWords, ['cat', 'flower'], 'A new utterance can still hit the existing flower');
+  }
+  const f = fixture();
+  f.publishPop({ targets: [{ uid: 1, text: 'sunflower' }] });
+  f.listen('pop');
+  f.latest.result([['sunflower', false]]);
+  f.advance(150);
+  f.publishPop({ targets: [{ uid: 2, text: 'sun' }, { uid: 3, text: 'flower' }] });
+  f.latest.result([['sun', false]]);
+  f.latest.result([['flower', true]]);
+  assert.deepEqual(f.popWords, ['sunflower']);
+});
+
+test('compound aliases respect phrase boundaries and do not perform arbitrary joining', () => {
+  for (const text of ['deep-sea-horse', "sea horse's", '_sea horse', 'sea horse2', 'sea, horse', 'sea\nhorse', 'sea hoarse']) {
+    const f = fixture();
+    f.publishPop({ targets: [{ uid: 1, text: 'seahorse' }] });
+    f.listen('pop');
+    f.latest.result([[text, true]]);
+    assert.equal(f.popEvents.filter(event => event.target_uid > 0).length, 0, text);
+  }
+});
+
+test('practice uses real recognition and shared matching without native callbacks or prompt replay', () => {
+  const f = fixture();
+  f.listen('pop');
+  const old = f.latest;
+  const hits = [], results = [], states = [], diagnostics = [];
+  assert.equal(f.host.beginSpeechPractice({ onHit: event => hits.push(event), onResult: (...args) => results.push(args),
+    onState: (...args) => states.push(args), onDiagnostic: record => diagnostics.push(record) }), true);
+  const nativeCounts = [f.popEvents.length, f.results.length, f.states.length];
+  assert.ok(f.host.practiceWords().some(word => word.text === 'seahorse'));
+  assert.equal(f.host.practiceTarget('unknown'), null);
+  const first = f.host.practiceTarget('sunflower');
+  f.advance();
+  const instance = f.latest;
+  old.result([['cat', true]]);
+  instance.result([['sun flower', false]]);
+  f.advance(150);
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].target_uid, first.uid);
+  const second = f.host.practiceTarget('sunflower');
+  assert.notEqual(second.uid, first.uid);
+  instance.result([['sunflower', true]]);
+  assert.equal(hits.length, 1, 'The old hypothesis cannot score the next prompt');
+  instance.result([['sunflower', true], ['sunflower', true]], 1);
+  assert.equal(hits.length, 2);
+  assert.equal(hits[1].target_uid, second.uid);
+  assert.equal(f.latest, instance, 'Changing prompts keeps the recognizer and occurrence ledger');
+  assert.equal(results[0][2][0].text, 'sun flower');
+  assert.ok(states.some(([, listening]) => listening));
+  assert.ok(diagnostics.some(record => record.type === 'hit'));
+  assert.deepEqual([f.popEvents.length, f.results.length, f.states.length], nativeCounts);
+  assert.equal(f.host.endSpeechPractice(), true);
+  assert.equal(f.host.speechDiagnostics().enabled, false);
+  assert.deepEqual(Array.from(f.host.speechDiagnostics().records), []);
+  f.listen('pop');
+  f.latest.result([['cat', true]]);
+  assert.deepEqual(f.popWords, ['cat']);
+});
+
+test('practice stop failure retains isolation until the microphone is safely stopped', () => {
+  const f = fixture();
+  const states = [];
+  assert.equal(f.host.beginSpeechPractice({ onState: (...args) => states.push(args) }), true);
+  f.host.practiceTarget('cat');
+  f.advance();
+  f.latest.abort = () => { throw new Error('abort failed'); };
+  f.latest.stop = () => { throw new Error('stop failed'); };
+  assert.equal(f.host.endSpeechPractice(), false);
+  assert.match(states.at(-1)[2], /close this tab/i);
+  assert.equal(f.host.popStatus(JSON.stringify({ phase: 'running', round_id: 'native-round' })), false);
+  f.latest.abort = () => {};
+  assert.equal(f.host.endSpeechPractice(), true);
+});
+
+test('practice keeps the ordinary browser baseline and bounds each diagnostic alternative', () => {
+  const f = fixture({ local: true });
+  const records = [];
+  f.host.beginSpeechPractice({ onDiagnostic: record => records.push(record) });
+  f.host.practiceTarget('cat');
+  f.advance();
+  assert.equal(f.latest.processLocally, undefined);
+  assert.equal(f.host.speechDiagnostics().mode, 'browser');
+  f.latest.result([['a'.repeat(10000), true]]);
+  assert.equal(records.find(record => record.type === 'result').alternatives[0].text.length, 2000);
+  f.host.endSpeechPractice();
 });

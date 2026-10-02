@@ -3,42 +3,41 @@ extends RefCounted
 signal changed
 
 const Data = preload("res://scripts/talk_quest_data.gd")
-const SAVE_VERSION: int = 1
-const DAMAGE_PER_LINE: int = 10
+const GameData = preload("res://scripts/game_data.gd")
+const SpeechWords = preload("res://scripts/speech_words.gd")
+const SAVE_VERSION: int = 2
+const DAMAGE_PER_WORD: int = 1
+const MAX_TARGETS: int = 3
 const MAX_TEXT_LENGTH: int = 512
 const MAX_EVENT_ID_LENGTH: int = 160
 const MAX_FINAL_EVENTS: int = 16384
 const MAX_LEVEL_CLEARS: int = 100000
+const EPSILON: float = 0.000001
 const ACTIVE_PHASES: Array[String] = ["playing", "victory", "chest"]
-const CONTRACTIONS: Dictionary = {
-	"who's": "who is", "what's": "what is", "where's": "where is",
-	"it's": "it is", "that's": "that is", "there's": "there is", "here's": "here is",
-	"i'm": "i am", "you're": "you are", "we're": "we are", "they're": "they are",
-	"let's": "let us", "can't": "can not", "cannot": "can not", "won't": "will not",
-	"don't": "do not", "doesn't": "does not", "didn't": "did not",
-	"isn't": "is not", "aren't": "are not", "wasn't": "was not", "weren't": "were not",
-	"couldn't": "could not", "wouldn't": "would not", "shouldn't": "should not",
-	"haven't": "have not", "hasn't": "has not", "hadn't": "had not",
-	"i'll": "i will", "you'll": "you will", "we'll": "we will", "they'll": "they will",
-	"i've": "i have", "you've": "you have", "we've": "we have", "they've": "they have"
-}
 
 var phase: String = "ready"
 var level_number: int = 1
 var level: Dictionary = {}
-var line_index: int = 0
 var hp: int = 0
 var max_hp: int = 0
+var total_words: int = 0
+var spawned: int = 0
+var hits: int = 0
+var misses: int = 0
+var elapsed: float = 0.0
+var targets: Array[Dictionary] = []
 var round_id: String = ""
 var last_transcript: String = ""
 var feedback: String = ""
-var repaired_toys: Array[String] = []
-var selected_parts: Array[String] = []
 var completed_levels: Array[int] = []
 var unlocked_level: int = 1
 var collected_chests: Array[String] = []
 var total_clears: int = 0
 var companion_unlocked: bool = false
+# Kept for older presentation diagnostics; sentences no longer drive combat.
+var line_index: int = 0
+var repaired_toys: Array[String] = []
+var selected_parts: Array[String] = []
 
 var _level_clears: Array[int] = []
 var _paused_phase: String = "playing"
@@ -50,27 +49,64 @@ var _run_id: String = ""
 var _run_clear_number: int = 0
 var _chest_id: String = ""
 var _reward_claimed: bool = false
+var _rng := RandomNumberGenerator.new()
+var _aliases: Dictionary = {}
+var _spawn_counts: Dictionary = {}
+var _next_spawn_at: float = 0.0
 
 
 func _init() -> void:
 	_level_clears.resize(Data.LEVEL_COUNT)
 	_level_clears.fill(0)
-	_set_level(1, 0)
+	_rng.randomize()
+	_set_level(1)
 	_new_round()
 
 
-func start_level(number: int) -> bool:
+func start_level(number: int, seed_value: int = -1) -> bool:
 	if not is_unlocked(number) or _level_clears[number - 1] >= MAX_LEVEL_CLEARS:
 		return false
 	_clear_active_run()
-	_set_level(number, 0)
+	_set_level(number)
+	if level.words.is_empty():
+		return false
+	if seed_value >= 0:
+		_rng.seed = seed_value
 	_run_serial += 1
 	_run_id = "tq-run-%d-%d-%d" % [get_instance_id(), Time.get_ticks_usec(), _run_serial]
 	_run_clear_number = _level_clears[number - 1] + 1
 	_chest_id = _select_chest(number)
 	phase = "playing"
+	_spawn()
+	_next_spawn_at = _spawn_interval()
 	changed.emit()
 	return true
+
+
+func advance(delta: float) -> void:
+	if phase != "playing" or not is_finite(delta) or delta <= 0.0:
+		return
+	var end_time: float = elapsed + delta
+	var previous_spawned: int = spawned
+	var previous_misses: int = misses
+	# Resolve launches and landings at their event time, including slow frames.
+	# A large delta cannot skip misses, exceed the word budget, or extend a flight.
+	while phase == "playing" and elapsed < end_time:
+		var event_time: float = minf(end_time, _next_spawn_at)
+		for target in targets:
+			event_time = minf(event_time, elapsed + maxf(0.0, target.lifetime - target.age))
+		var step: float = maxf(0.0, event_time - elapsed)
+		for target in targets:
+			target.age = minf(target.lifetime, target.age + step)
+		elapsed = event_time
+		_expire_targets()
+		if phase != "playing":
+			break
+		if _next_spawn_at <= elapsed + EPSILON:
+			_spawn()
+			_next_spawn_at = elapsed + _spawn_interval() if spawned < total_words else INF
+	if spawned != previous_spawned or misses != previous_misses:
+		changed.emit()
 
 
 func is_unlocked(number: int) -> bool:
@@ -82,25 +118,43 @@ func clear_count(number: int) -> int:
 
 
 func is_cooperative() -> bool:
-	return level.get("cooperative", false)
+	return false
 
 
 func progress_ratio() -> float:
-	return float(line_index) / float(level.lines.size()) if not level.is_empty() else 0.0
+	return float(hits) / float(max_hp) if max_hp > 0 else 0.0
 
 
 func current_prompt() -> Dictionary:
-	if phase not in ["playing", "paused"] or line_index >= level.lines.size():
+	if phase not in ["playing", "paused"] or targets.is_empty():
 		return {}
-	var prompt: Dictionary = level.lines[line_index].duplicate(true)
-	prompt.index = line_index
-	prompt.line_number = line_index + 1
-	prompt.total_lines = level.lines.size()
-	return prompt
+	var target: Dictionary = targets[0]
+	return {
+		"uid": target.uid, "id": target.word.id, "text": target.word.text,
+		"speaker": "", "index": hits, "line_number": hits + 1, "total_lines": max_hp
+	}
 
 
 func speech_target() -> Dictionary:
-	return {"round_id": round_id, "target_uid": line_index + 1 if phase == "playing" else 0}
+	return {"round_id": round_id, "target_uid": targets[0].uid if phase == "playing" and not targets.is_empty() else 0}
+
+
+func speech_targets() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if phase == "playing":
+		for target in targets:
+			result.append({
+				"uid": target.uid, "text": target.word.text, "forms": target.forms.duplicate(),
+				"remaining_ms": maxf(0.0, (target.lifetime - target.age) * 1000.0)
+			})
+	return result
+
+
+func vocabulary() -> Array[String]:
+	var result: Array[String] = []
+	for word: Dictionary in level.words:
+		result.append(word.text)
+	return result
 
 
 func current_chest() -> Dictionary:
@@ -108,65 +162,25 @@ func current_chest() -> Dictionary:
 
 
 func current_part_choices() -> Array[Dictionary]:
-	var choices: Array[Dictionary] = []
-	if not is_cooperative() or phase not in ["playing", "paused"] or line_index >= level.lines.size():
-		return choices
-	var repair_index: int = floori(float(line_index) / 4.0)
-	for choice: Dictionary in Data.REPAIRS[repair_index].choices:
-		choices.append(choice.duplicate(true))
-	return choices
+	return []
 
 
 func has_correct_part() -> bool:
-	if not is_cooperative():
-		return true
-	if line_index >= level.lines.size():
-		return selected_parts.size() == Data.REPAIR_COUNT
-	var repair_index: int = floori(float(line_index) / 4.0)
-	return selected_parts.size() > repair_index \
-		and selected_parts[repair_index] == Data.REPAIRS[repair_index].correct_part
+	return true
 
 
-func choose_part(id: String) -> Dictionary:
-	if phase != "playing" or not is_cooperative() or line_index >= level.lines.size():
-		return _part_result("not_choosing")
-	if has_correct_part():
-		return _part_result("part_already_selected")
-	var choices: Array[Dictionary] = current_part_choices()
-	var selected: Dictionary = {}
-	for choice in choices:
-		if choice.id == id:
-			selected = choice
-			break
-	if selected.is_empty():
-		return _part_result("invalid_part")
-	var repair_index: int = floori(float(line_index) / 4.0)
-	var repair: Dictionary = Data.REPAIRS[repair_index]
-	if id != repair.correct_part:
-		feedback = "That piece belongs to another toy. Try a different part."
-		changed.emit()
-		return _part_result("wrong_part", true)
-	selected_parts.append(id)
-	_clear_recognition()
-	# Speech captured before the gate opened cannot become a later line hit.
-	_new_round()
-	feedback = "The %s fits! Read the sentence together." % str(selected.label).to_lower()
-	var result: Dictionary = _part_result("part_selected", true, true)
-	result.part_id = id
-	result.repair_id = repair.id
-	changed.emit()
+func choose_part(_id: String) -> Dictionary:
+	var result: Dictionary = _result("not_choosing")
+	result.correct = false
 	return result
 
 
 func submit_transcript(text: String) -> Dictionary:
-	# The explicit practice action shares the sentence validator, but external
-	# microphone results must use submit_speech_event with their original binding.
+	# Native tests and accessibility integrations share the same bound validator.
+	# Browser speech must retain the original occurrence and target binding.
 	_manual_serial += 1
 	var event: Dictionary = speech_target()
-	event.merge({
-		"event_id": "practice-%d-%d" % [get_instance_id(), _manual_serial],
-		"text": text, "stage": "final"
-	})
+	event.merge({"event_id": "practice-%d-%d" % [get_instance_id(), _manual_serial], "text": text, "stage": "final"})
 	var result: Dictionary = submit_speech_event(event)
 	result.input = "practice"
 	return result
@@ -186,48 +200,44 @@ func submit_speech_event(event: Dictionary) -> Dictionary:
 		return _result("stale_round")
 	if _consumed_speech_events.has(event.event_id):
 		return _result("duplicate_event")
-	if not _is_bounded_integer(event.target_uid, 1, level.lines.size()):
+	if not _is_bounded_integer(event.target_uid, 1, total_words):
 		return _result("invalid_target")
-	if int(event.target_uid) != line_index + 1:
-		return _result("stale_target")
 	if event.has("received_at_ms") and not _is_nonnegative_number(event.received_at_ms):
 		return _result("invalid_timestamp")
-	if event.stage == "final" and _consumed_speech_events.size() >= MAX_FINAL_EVENTS:
+	if _consumed_speech_events.size() >= MAX_FINAL_EVENTS:
 		return _result("session_limit")
+	var target: Dictionary = {}
+	for active in targets:
+		if active.uid == int(event.target_uid) and active.age + EPSILON < active.lifetime:
+			target = active
+			break
+	if target.is_empty():
+		return _result("stale_target")
 	last_transcript = event.text.strip_edges()
-	if event.stage == "interim":
-		feedback = "Listening..."
+	var tokens: Array[String] = SpeechWords.tokens(last_transcript, target.forms)
+	var matches: bool = tokens.size() == 1 and target.forms.has(tokens[0])
+	if event.stage == "final" or matches:
+		_consumed_speech_events[event.event_id] = true
+	if not matches:
+		feedback = ""
 		changed.emit()
-		return _result("interim", true)
-	# Every final attempt is consumed, including a mismatch. A revised result
-	# cannot be rebound to another line or award the same line a second time.
-	_consumed_speech_events[event.event_id] = true
-	if not has_correct_part():
-		feedback = "Choose the piece that will help this toy first."
-		changed.emit()
-		return _result("part_required", true)
-	var prompt: Dictionary = current_prompt()
-	if not sentence_matches(last_transcript, prompt.text):
-		feedback = "Try the whole sentence: " + prompt.text if not last_transcript.is_empty() \
-			else "I did not catch that. Try saying: " + prompt.text
-		changed.emit()
-		return _result("sentence_mismatch", true)
-	line_index += 1
-	var damage: int = 0 if is_cooperative() else DAMAGE_PER_LINE
-	hp = maxi(0, hp - damage)
-	var repair_completed: bool = is_cooperative() and prompt.repair_step == 4
-	if repair_completed:
-		repaired_toys.append(prompt.repair_id)
-	feedback = "Great teamwork!" if is_cooperative() else "Great speaking!"
-	var completed: bool = line_index == level.lines.size()
-	if completed:
+		return _result("interim" if event.stage == "interim" else "word_mismatch", true)
+	var hit: Dictionary = target.duplicate(true)
+	targets.erase(target)
+	hits += 1
+	line_index = hits
+	hp = maxi(0, max_hp - hits)
+	feedback = ""
+	if hp == 0:
 		phase = "victory"
-		feedback = "All five toys are ready!" if is_cooperative() else "You did it!"
+		targets.clear()
+	elif targets.is_empty() and spawned < total_words:
+		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.45)
 	var result: Dictionary = _result("matched", true)
 	result.merge({
-		"matched": true, "completed": completed, "damage": damage,
-		"repair_completed": repair_completed, "repair_id": prompt.get("repair_id", ""),
-		"prompt": prompt, "target_uid": prompt.uid
+		"matched": true, "completed": phase == "victory", "damage": DAMAGE_PER_WORD,
+		"target": hit, "word": hit.word, "target_uid": hit.uid,
+		"prompt": {"uid": hit.uid, "id": hit.word.id, "text": hit.word.text, "speaker": ""}
 	}, true)
 	changed.emit()
 	return result
@@ -259,7 +269,6 @@ func is_paused() -> bool:
 
 
 func stop() -> void:
-	# A caller that wants Continue Saved should pause and checkpoint first.
 	_clear_active_run()
 	phase = "ready"
 	changed.emit()
@@ -276,7 +285,7 @@ func finish_victory() -> Dictionary:
 func open_chest() -> Dictionary:
 	if _reward_claimed or phase == "complete":
 		return _result("already_rewarded")
-	if phase != "chest" or line_index != level.lines.size():
+	if phase != "chest" or hp != 0 or hits != max_hp:
 		return _result("chest_not_ready")
 	if _run_clear_number != _level_clears[level_number - 1] + 1:
 		return _result("invalid_reward")
@@ -299,28 +308,30 @@ func open_chest() -> Dictionary:
 
 
 func has_saved_run() -> bool:
-	return not _reward_claimed and _run_clear_number > 0 \
-		and (phase in ACTIVE_PHASES or phase == "paused")
+	return not _reward_claimed and _run_clear_number > 0 and (phase in ACTIVE_PHASES or phase == "paused")
 
 
 func export_progress() -> Dictionary:
-	# Recognition text, event IDs, recordings, and transient feedback never enter
-	# persistent storage. HP, repairs, unlocks, and collections are derived.
-	var result: Dictionary = {
-		"version": SAVE_VERSION, "completion_counts": _level_clears.duplicate(), "run": {}
-	}
+	var result: Dictionary = {"version": SAVE_VERSION, "completion_counts": _level_clears.duplicate(), "run": {}}
 	if has_saved_run():
+		var saved_targets: Array[Dictionary] = []
+		for target in targets:
+			var saved: Dictionary = target.duplicate(true)
+			saved.word_id = target.word.id
+			saved.erase("word")
+			saved.erase("forms")
+			saved_targets.append(saved)
 		result.run = {
-			"level_number": level_number, "line_index": line_index,
-			"phase": _paused_phase if phase == "paused" else phase,
-			"clear_number": _run_clear_number, "run_id": _run_id,
-			"selected_parts": selected_parts.duplicate()
+			"level_number": level_number, "hits": hits, "misses": misses, "spawned": spawned,
+			"elapsed": elapsed, "next_spawn_in": maxf(0.0, _next_spawn_at - elapsed) if spawned < total_words else 0.0,
+			"targets": saved_targets, "phase": _paused_phase if phase == "paused" else phase,
+			"clear_number": _run_clear_number, "run_id": _run_id
 		}
 	return result
 
 
 func import_progress(progress: Variant) -> bool:
-	if not progress is Dictionary or progress.get("version") != SAVE_VERSION \
+	if not progress is Dictionary or not _is_bounded_integer(progress.get("version"), 1, SAVE_VERSION) \
 		or not progress.get("completion_counts") is Array:
 		return false
 	var counts: Array = progress.completion_counts
@@ -334,52 +345,107 @@ func import_progress(progress: Variant) -> bool:
 		_level_clears[index] = count
 	_rebuild_progress()
 	_clear_active_run()
-	_set_level(1, 0)
+	_set_level(1)
 	phase = "ready"
 	if progress.get("run") is Dictionary:
-		_restore_run(progress.run)
+		if progress.version == 1:
+			_restore_legacy_reward(progress.run)
+		else:
+			_restore_run(progress.run)
 	changed.emit()
 	return true
 
 
-static func normalize_sentence(text: String) -> String:
-	var cleaned: String = text.to_lower().replace("\u2019", "'").replace("\u2018", "'")
-	var pattern := RegEx.new()
-	# Preserve all words, numbers, Unicode letters, and internal apostrophes.
-	# Sentence punctuation may vary; extra words and negation cannot disappear.
-	pattern.compile("[\\p{L}\\p{N}_]+(?:'[\\p{L}\\p{N}_]+)*")
-	var words: Array[String] = []
-	for token in pattern.search_all(cleaned):
-		var word: String = token.get_string()
-		words.append(CONTRACTIONS.get(word, word))
-	return " ".join(words)
-
-
-static func sentence_matches(spoken: String, expected: String) -> bool:
-	if spoken.length() > MAX_TEXT_LENGTH or expected.is_empty():
-		return false
-	var normalized: String = normalize_sentence(spoken)
-	return not normalized.is_empty() and normalized == normalize_sentence(expected)
-
-
-func _set_level(number: int, completed_lines: int) -> void:
+func _set_level(number: int) -> void:
 	level_number = number
 	level = Data.level(number)
-	line_index = clampi(completed_lines, 0, level.lines.size())
-	max_hp = 0 if is_cooperative() else level.lines.size() * DAMAGE_PER_LINE
-	hp = 0 if is_cooperative() else max_hp - line_index * DAMAGE_PER_LINE
-	repaired_toys.clear()
-	if is_cooperative():
-		for index in range(line_index):
-			var prompt: Dictionary = level.lines[index]
-			if prompt.repair_step == 4:
-				repaired_toys.append(prompt.repair_id)
+	max_hp = level.hp
+	hp = max_hp
+	total_words = level.word_budget
+	line_index = 0
+	hits = 0
+	misses = 0
+	spawned = 0
+	elapsed = 0.0
+	targets.clear()
+	_spawn_counts.clear()
+	_aliases.clear()
+	_next_spawn_at = 0.0
+	for word: Dictionary in level.words:
+		_aliases[word.id] = SpeechWords.forms(word.text, true)
+
+
+func _spawn_interval() -> float:
+	return lerpf(2.15, 1.70, float(level_number - 1) / float(Data.LEVEL_COUNT - 1))
+
+
+func _flight_lifetime() -> float:
+	return lerpf(6.8, 5.8, float(level_number - 1) / float(Data.LEVEL_COUNT - 1))
+
+
+func _spawn() -> void:
+	if spawned >= total_words or targets.size() >= MAX_TARGETS:
+		return
+	var candidates: Array[Dictionary] = []
+	var fewest: int = 2147483647
+	for word: Dictionary in level.words:
+		if not _can_spawn(word):
+			continue
+		var count: int = _spawn_counts.get(word.id, 0)
+		if count < fewest:
+			fewest = count
+			candidates.clear()
+		if count == fewest:
+			candidates.append(word)
+	if candidates.is_empty():
+		return
+	var word: Dictionary = candidates[_rng.randi_range(0, candidates.size() - 1)]
+	var lanes: Array[int] = [0, 1, 2]
+	for target in targets:
+		lanes.erase(target.lane)
+	var lane: int = lanes[_rng.randi_range(0, lanes.size() - 1)]
+	var center: float = 0.23 + lane * 0.27
+	var x_start: float = center + _rng.randf_range(-0.02, 0.02)
+	var x_end: float = center + _rng.randf_range(-0.025, 0.025)
+	var peak: float = _rng.randf_range(0.18, 0.38)
+	var spin: float = _rng.randf_range(-0.12, 0.12)
+	spawned += 1
+	targets.append({
+		"uid": spawned, "word": word.duplicate(true), "forms": _aliases[word.id].duplicate(),
+		"age": 0.0, "lifetime": _flight_lifetime(), "lane": lane, "volley": false,
+		"x_start": x_start, "x_end": x_end, "peak": peak, "spin": spin,
+		"x": x_start, "drift": x_end - x_start, "height": peak, "rotation": spin
+	})
+	_spawn_counts[word.id] = fewest + 1
+
+
+func _can_spawn(word: Dictionary) -> bool:
+	for target in targets:
+		if GameData.confusable_words(word.id, target.word.id) or SpeechWords.compounds_conflict(word.text, target.word.text):
+			return false
+		for form: String in _aliases[word.id]:
+			if target.forms.has(form):
+				return false
+	return true
+
+
+func _expire_targets() -> void:
+	for target in targets.duplicate():
+		if target.age + EPSILON < target.lifetime:
+			continue
+		misses += 1
+		targets.erase(target)
+	if spawned == total_words and targets.is_empty() and hp > 0:
+		phase = "lost"
+		_clear_recognition()
 
 
 func _clear_active_run() -> void:
 	_clear_recognition()
 	_consumed_speech_events.clear()
+	targets.clear()
 	selected_parts.clear()
+	repaired_toys.clear()
 	_run_id = ""
 	_run_clear_number = 0
 	_chest_id = ""
@@ -406,7 +472,6 @@ func _select_chest(number: int) -> String:
 
 func _replay_chest(replay_index: int) -> String:
 	var number: int = replay_index + 15 if replay_index < 6 else (replay_index - 6) % Data.CHEST_COUNT + 1
-	# The companion is earned by completing all five workshop repairs.
 	if number == 14 and not companion_unlocked:
 		number = 15
 	return "chest-%02d" % number
@@ -423,8 +488,6 @@ func _rebuild_progress() -> void:
 			collected_chests.append("chest-%02d" % (index + 1))
 	unlocked_level = mini(Data.LEVEL_COUNT, completed_levels.size() + 1)
 	companion_unlocked = _level_clears[Data.LEVEL_COUNT - 1] > 0
-	# After six bonus rewards and one full cycle, every obtainable design has
-	# appeared. This bound also keeps loading a large valid counter inexpensive.
 	var replay_clears: int = total_clears - completed_levels.size()
 	for index in range(mini(replay_clears, Data.CHEST_COUNT + 6)):
 		var id: String = _replay_chest(index)
@@ -433,56 +496,108 @@ func _rebuild_progress() -> void:
 	collected_chests.sort()
 
 
+func _valid_run_header(saved: Dictionary) -> bool:
+	return _is_bounded_integer(saved.get("level_number"), 1, Data.LEVEL_COUNT) \
+		and is_unlocked(int(saved.level_number)) \
+		and _is_bounded_integer(saved.get("clear_number"), 1, MAX_LEVEL_CLEARS) \
+		and int(saved.clear_number) == _level_clears[int(saved.level_number) - 1] + 1 \
+		and saved.get("phase") is String and saved.phase in ACTIVE_PHASES
+
+
 func _restore_run(saved: Dictionary) -> void:
-	if not _is_bounded_integer(saved.get("level_number"), 1, Data.LEVEL_COUNT):
+	if not _valid_run_header(saved):
 		return
-	var number: int = int(saved.level_number)
-	if not is_unlocked(number) or _level_clears[number - 1] >= MAX_LEVEL_CLEARS:
+	var restored_level: Dictionary = Data.level(int(saved.level_number))
+	if not _is_bounded_integer(saved.get("hits"), 0, restored_level.hp) \
+		or not _is_bounded_integer(saved.get("misses"), 0, restored_level.word_budget) \
+		or not _is_bounded_integer(saved.get("spawned"), 1, restored_level.word_budget) \
+		or not _number_between(saved.get("elapsed"), 0.0, 3600.0) \
+		or not _number_between(saved.get("next_spawn_in"), 0.0, 3.0) \
+		or not saved.get("targets") is Array or saved.targets.size() > MAX_TARGETS:
 		return
-	if not _is_bounded_integer(saved.get("clear_number"), 1, MAX_LEVEL_CLEARS) \
-		or int(saved.clear_number) != _level_clears[number - 1] + 1:
+	var won: bool = int(saved.hits) == int(restored_level.hp)
+	if won != (saved.phase in ["victory", "chest"]):
 		return
-	var restored_level: Dictionary = Data.level(number)
-	if not _is_bounded_integer(saved.get("line_index"), 0, restored_level.lines.size()):
+	if won and (not saved.targets.is_empty() or int(saved.spawned) < int(saved.hits) + int(saved.misses)):
 		return
-	if not saved.get("phase") is String or saved.phase not in ACTIVE_PHASES:
+	if not won and (int(saved.spawned) != int(saved.hits) + int(saved.misses) + saved.targets.size() \
+		or (saved.targets.is_empty() and int(saved.spawned) == int(restored_level.word_budget))):
 		return
-	var completed_lines: int = int(saved.line_index)
-	var saved_phase: String = saved.phase
-	if completed_lines < restored_level.lines.size() and saved_phase != "playing":
-		return
-	if completed_lines == restored_level.lines.size() and saved_phase == "playing":
-		saved_phase = "victory"
-	var restored_parts: Array[String] = []
-	if restored_level.cooperative:
-		var minimum_parts: int = ceili(float(completed_lines) / 4.0)
-		var maximum_parts: int = mini(floori(float(completed_lines) / 4.0) + 1, Data.REPAIR_COUNT)
-		if saved.has("selected_parts"):
-			if not saved.selected_parts is Array or saved.selected_parts.size() < minimum_parts \
-				or saved.selected_parts.size() > maximum_parts:
+	var restored_targets: Array[Dictionary] = []
+	var seen_uids: Dictionary = {}
+	var seen_lanes: Dictionary = {}
+	var seen_forms: Array[String] = []
+	for entry: Variant in saved.targets:
+		if not entry is Dictionary or not _is_bounded_integer(entry.get("uid"), 1, int(saved.spawned)) \
+			or not _is_bounded_integer(entry.get("lane"), 0, MAX_TARGETS - 1) \
+			or not entry.get("word_id") is String or seen_uids.has(entry.uid) or seen_lanes.has(entry.lane) \
+			or not _number_between(entry.get("lifetime"), 5.8, 6.8) \
+			or not _number_between(entry.get("age"), 0.0, float(entry.lifetime) - EPSILON) \
+			or not _number_between(entry.get("x_start"), 0.15, 0.85) \
+			or not _number_between(entry.get("x_end"), 0.15, 0.85) \
+			or not _number_between(entry.get("peak"), 0.1, 0.5) \
+			or not _number_between(entry.get("spin"), -0.2, 0.2):
+			return
+		var word: Dictionary = {}
+		for candidate: Dictionary in restored_level.words:
+			if candidate.id == entry.word_id:
+				word = candidate
+				break
+		if word.is_empty():
+			return
+		var forms: Array[String] = SpeechWords.forms(word.text, true)
+		for form in forms:
+			if seen_forms.has(form):
 				return
-			for index in range(saved.selected_parts.size()):
-				if not saved.selected_parts[index] is String \
-					or saved.selected_parts[index] != Data.REPAIRS[index].correct_part:
-					return
-				restored_parts.append(saved.selected_parts[index])
-		else:
-			# Earlier version-one checkpoints predate the part gate. Retain their
-			# spoken progress, inferring a part only for a group already begun.
-			for index in range(minimum_parts):
-				restored_parts.append(Data.REPAIRS[index].correct_part)
-	_set_level(number, completed_lines)
-	selected_parts = restored_parts
+		seen_forms.append_array(forms)
+		seen_uids[entry.uid] = true
+		seen_lanes[entry.lane] = true
+		restored_targets.append({
+			"uid": int(entry.uid), "word": word.duplicate(true), "forms": forms,
+			"age": float(entry.age), "lifetime": float(entry.lifetime), "lane": int(entry.lane), "volley": false,
+			"x_start": float(entry.x_start), "x_end": float(entry.x_end), "peak": float(entry.peak), "spin": float(entry.spin),
+			"x": float(entry.x_start), "drift": float(entry.x_end) - float(entry.x_start),
+			"height": float(entry.peak), "rotation": float(entry.spin)
+		})
+	_set_level(int(saved.level_number))
+	hits = int(saved.hits)
+	line_index = hits
+	hp = max_hp - hits
+	misses = int(saved.misses)
+	spawned = int(saved.spawned)
+	elapsed = float(saved.elapsed)
+	targets = restored_targets
+	_next_spawn_at = elapsed + float(saved.next_spawn_in) if spawned < total_words else INF
+	_accept_restored_run(saved)
+
+
+func _restore_legacy_reward(saved: Dictionary) -> void:
+	# Sentence checkpoints cannot describe finite word flights. Keep earned
+	# progress and completed pending rewards, but restart unfinished battles.
+	if not _valid_run_header(saved) or saved.phase not in ["victory", "chest"]:
+		return
+	var old_level: Dictionary = Data.level(int(saved.level_number))
+	if not _is_bounded_integer(saved.get("line_index"), old_level.lines.size(), old_level.lines.size()):
+		return
+	_set_level(int(saved.level_number))
+	hits = max_hp
+	line_index = hits
+	hp = 0
+	spawned = hits
+	_accept_restored_run(saved)
+
+
+func _accept_restored_run(saved: Dictionary) -> void:
 	_run_clear_number = int(saved.clear_number)
 	_run_serial += 1
 	_run_id = "tq-run-%d-%d-%d" % [get_instance_id(), Time.get_ticks_usec(), _run_serial]
 	if saved.get("run_id") is String and saved.run_id.length() <= MAX_EVENT_ID_LENGTH:
-		var id_pattern := RegEx.new()
-		id_pattern.compile("^tq-run-[0-9]+-[0-9]+-[0-9]+$")
-		if id_pattern.search(saved.run_id) != null:
+		var pattern := RegEx.new()
+		pattern.compile("^tq-run--?[0-9]+-[0-9]+-[0-9]+$")
+		if pattern.search(saved.run_id) != null:
 			_run_id = saved.run_id
-	_chest_id = _select_chest(number)
-	_paused_phase = saved_phase
+	_chest_id = _select_chest(level_number)
+	_paused_phase = saved.phase
 	phase = "paused"
 
 
@@ -490,22 +605,17 @@ func _result(reason: String, accepted: bool = false) -> Dictionary:
 	return {
 		"accepted": accepted, "matched": false, "completed": false, "damage": 0,
 		"repair_completed": false, "reason": reason, "feedback": feedback,
-		"phase": phase, "line_index": line_index, "hp": hp,
-		"cooperative": is_cooperative()
+		"phase": phase, "line_index": line_index, "hp": hp, "hits": hits,
+		"misses": misses, "spawned": spawned, "total_words": total_words, "cooperative": false
 	}
 
 
-func _part_result(reason: String, accepted: bool = false, correct: bool = false) -> Dictionary:
-	var result: Dictionary = _result(reason, accepted)
-	result.correct = correct
-	return result
-
-
 static func _is_bounded_integer(value: Variant, minimum: int, maximum: int) -> bool:
-	if not (value is int or value is float):
-		return false
-	var number: float = float(value)
-	return is_finite(number) and number == floor(number) and number >= minimum and number <= maximum
+	return _number_between(value, float(minimum), float(maximum)) and float(value) == floor(float(value))
+
+
+static func _number_between(value: Variant, minimum: float, maximum: float) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and float(value) >= minimum and float(value) <= maximum
 
 
 static func _is_nonnegative_number(value: Variant) -> bool:

@@ -304,7 +304,7 @@ test('the manifest records exactly fourteen original paths, hashes and image dim
   }
 });
 
-test('only fourteen original PNGs and checksum-listed derived rig layers are present', () => {
+test('every chest PNG belongs to the base manifest, derived rigs or downloaded opening catalog', () => {
   const files = listFiles(chestRoot);
   const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
   assert.equal(rigs.version, 1);
@@ -320,10 +320,60 @@ test('only fourteen original PNGs and checksum-listed derived rig layers are pre
     assert.equal(image.width, part.width, part.texture);
     assert.equal(image.height, part.height, part.texture);
   }
+  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
   assert.deepEqual(files.filter((file) => /\.png$/i.test(file)).sort(), [
-    ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture)
+    ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture),
+    ...downloaded.files.map((file) => file.path)
   ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
+});
+
+test('five downloaded model designs have verified distinct opening frames and source provenance', () => {
+  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
+  assert.equal(downloaded.version, 1);
+  assert.deepEqual(Object.keys(downloaded.styles).sort(), ['bonbon', 'bramble', 'harvest', 'nebula', 'tide']);
+  const checksums = new Map(downloaded.files.map((file) => [file.path, file]));
+  assert.equal(checksums.size, downloaded.files.length, 'Every baked frame has one checksum');
+  let totalBytes = 0;
+  const closedHashes = new Set();
+  for (const [style, catalog] of Object.entries(downloaded.styles)) {
+    assert.ok(catalog.frames.length >= 6 && catalog.frames.length <= 12, style);
+    const hashes = [];
+    for (const filename of catalog.frames) {
+      assert.match(filename, new RegExp(`^assets/chests/downloaded/${style}/frame-\\d{2}\\.png$`));
+      const record = checksums.get(filename);
+      assert.ok(record, filename);
+      const image = readPng(filename);
+      assert.equal(record.sha256, sha256(image.bytes), filename);
+      assert.equal(record.bytes, image.bytes.length, filename);
+      assert.equal(image.width, 320);
+      assert.equal(image.height, 320);
+      assert.equal(record.width, image.width);
+      assert.equal(record.height, image.height);
+      hashes.push(record.sha256);
+      totalBytes += record.bytes;
+    }
+    assert.ok(new Set(hashes).size >= 5, `${style} needs actual model motion`);
+    assert.notEqual(hashes[0], hashes.at(-1), `${style} ends in the open pose`);
+    closedHashes.add(hashes[0]);
+    const source = downloaded.sources[catalog.source];
+    assert.ok(source.title && source.publisher && source.version);
+    assert.match(source.package_sha256, /^[a-f0-9]{64}$/);
+    assert.match(source.url, /^https:\/\/assetstore\.unity\.com\//);
+    assert.match(source.license, /embedded game artwork/);
+    assert.match(catalog.export_sha256, /^[a-f0-9]{64}$/);
+    assert.equal(catalog.closed_bounds.length, 4);
+    assert.ok(catalog.closed_bounds.every((value) => Number.isFinite(value) && value > 0 && value < 320));
+    assert.equal(catalog.cavity.length, 2);
+  }
+  assert.equal(closedHashes.size, 5, 'Each new design has different original artwork');
+  assert.ok(totalBytes < 3000000, 'The complete downloaded opening catalog stays below 3 MB');
+  const data = fs.readFileSync(absolute('scripts/game_data.gd'), 'utf8');
+  const themeSection = data.slice(data.indexOf('const THEMES:'), data.indexOf('const REWARD_NAMES:'));
+  const styles = [...themeSection.matchAll(/"chest": "([a-z]+)"/g)].map((match) => match[1]);
+  assert.equal(styles.length, 8);
+  assert.equal(new Set(styles).size, 8, 'All eight themes own a different chest type');
+  assert.ok(styles.every((style) => readManifest().styles[style] || downloaded.styles[style]));
 });
 
 test('derived rigs preserve original source hashes and share exact lid hinges', () => {

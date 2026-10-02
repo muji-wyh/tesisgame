@@ -164,7 +164,8 @@ func check_result_actions(view, dimensions: Vector2i, context: String) -> void:
 	if not view._review_buttons.is_empty():
 		check(view.replay_button.get_global_rect().end.y <= view._review_buttons[0].get_global_rect().position.y + 1.0,
 			"Play again remains above the word lists")
-	check(view.default_focus() == view.replay_button, "Results make Play again the default keyboard action")
+	check(view.default_focus() == (view.replay_button if view.chests_button.disabled else view.chests_button),
+		"Results focus earned chests first, or Play again when no chest was earned")
 
 
 func check_result_contents(view, summary: Dictionary) -> void:
@@ -180,9 +181,9 @@ func check_result_contents(view, summary: Dictionary) -> void:
 		check(view._results.find_child(node_name, true, false) == null,
 			"Results do not retain the removed " + node_name + " control")
 	for button in view._results.find_children("*", "Button", true, false):
-		check(button == view.replay_button or str(button.name).begins_with("Hear_")
+		check(button == view.replay_button or button == view.chests_button or str(button.name).begins_with("Hear_")
 			or str(button.name) in ["LeaderboardSaveScore", "LeaderboardRetryLoad"],
-			"Results offer only replay, word playback, and persistence recovery")
+			"Results offer earned chests, replay, word playback, and persistence recovery")
 	var listed_words: Array = summary.hit_words + summary.missed_words
 	check(view._review_buttons.size() == listed_words.size(), "Every recorded word remains available in its result list")
 	for button in view._review_buttons:
@@ -306,6 +307,9 @@ func begin_bonus_round(view, words: Array, reduced: bool = false) -> void:
 		and not view.snapshot().hud.bonus_effect.active and view.snapshot().hud.bonus_effect.serial == 0,
 		"A fresh round has no inherited combo reward or popup")
 	check(not view._time_bonus_badge.is_visible_in_tree(), "A fresh round does not show an unearned bonus badge")
+	view.set_listening(true, false, "Waiting for microphone audio...")
+	check(view.game.phase == "ready" and view.game.remaining == 50.0 and view._pending and view.retry_button.disabled,
+		"Waiting for actual audio is a transient gate and cannot advance a fresh round")
 	view.set_listening(true, true, "Listening.")
 	view.set_process(false)
 	view._listening_tick_usec = -1
@@ -408,6 +412,9 @@ func check_bonus_feedback(words: Array) -> void:
 	view.set_listening(true, false, "Listening paused. Continuing...")
 	check(view.snapshot().hud.bonus_effect == before_rollover and view.snapshot().hud.time_bonus.text == "+5s",
 		"A transient browser utterance rollover does not erase an earned timer reward")
+	view.set_listening(true, false, "Waiting for microphone audio...")
+	check(view._reconnecting and view.retry_button.disabled and view.snapshot().hud.bonus_effect == before_rollover,
+		"Capture startup during reconnection remains transient and preserves the earned bonus")
 	view.set_listening(true, true, "Listening.")
 	view.set_reduced_motion(true)
 	var static_position: Vector2 = view._time_bonus_badge.position
@@ -484,6 +491,14 @@ func check_homophone_feedback(words: Array) -> void:
 		view.receive_transcript(fixture[0])
 		check(view.game.hits == 1 and accepted.size() == 1,
 			"Repeating the canonical spelling cannot hit the removed target again")
+	for fixture in [["seahorse", "sea horse"], ["sunflower", "sun-flowers"], ["sunglasses", "sun glasses"],
+		["pinecone", "pine cones"], ["yoyo", "yo-yo"]]:
+		accepted.clear()
+		begin_bonus_round(view, words.filter(func(word: Dictionary) -> bool: return word.id == fixture[0]))
+		view.show_transcript(fixture[1], true)
+		view.receive_transcript(fixture[1])
+		check(accepted == [fixture[0]] and view._hud_transcript_hit and view.snapshot().transcript == fixture[1],
+			"A compound preserves its raw caption while celebrating the canonical hit: " + fixture[1])
 	view.free()
 
 

@@ -29,6 +29,10 @@ The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScri
 Default speech recognition needs no model preparation or additional game download.
 The opt-in `?speechLocal=1` experiment can prepare a browser-managed English
 language pack; see [speech matching](voice-matching.md).
+For an untimed, unscored real-device comparison, open with `?speechDebug=1`
+and choose **Speech check** after entering the game. The diagnostic panel can
+compare the actual game sounds at normal, reduced, and silent levels and
+copy an in-memory report; see the same speech guide for the test procedure.
 Rebuilding an older export removes its generated local speech models and retired
 multiplayer and voice-profile scripts while preserving unrelated output files.
 

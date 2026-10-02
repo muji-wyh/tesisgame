@@ -64,6 +64,9 @@
     }
     #game { position: relative; width: 100%; height: 100%; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: manipulation; }
+    /* Godot's native keyboard bridges need 16 CSS pixels to avoid iOS focus
+       zoom. Override the IME bridge's inline 1px font before it receives focus. */
+    #game > input, #game > textarea, #game > .ime { font-size: 16px !important; }
     #status {
       position: absolute; inset: 0; display: grid; place-items: center;
       padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
@@ -332,7 +335,7 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Talk Quest.
-        Talk Quest has fourteen everyday conversations with Adam and Yoki. Start on its map, then say the displayed sentence or use Type to enter it. Hear line reads it aloud with the microphone stopped. Only a completed matching sentence advances. Your last recognized sentence appears on screen but is never saved. Thirteen adventures have friendly monster reactions and treasure rewards. The final workshop asks you to choose parts and repair five toys together, without combat. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
+        Talk Quest has fourteen word adventures. Choose a level on the chapter map to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Your last recognized word appears briefly on screen and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
         Match: find five matching word and picture pairs.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -353,7 +356,8 @@
         Voice Pop is a single-player game using your browser's system speech recognition. Before each round, tap the player's avatar or name to start and request microphone access. Say the words you see to pop them. Each round starts with 50 seconds.
         The timer starts when the microphone is listening. The colored screen edges glow while listening.
         Words sometimes launch in groups of two or three. Say different displayed words for a combo. The second hit in a streak adds 3 seconds, and the third adds 5 seconds. A dropped word ends the streak.
-        After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar.
+        Voice Pop starts with zero chests. Reach 100, 200, and 300 points to earn one chest at each milestone, up to three per round. A golden burst announces each earned chest.
+        After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Open chests, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows all earned chests together, each with a different design. Hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a Match or Memory round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh Match game directly. Retry saving appears only if a reward could not be saved.
@@ -376,6 +380,7 @@
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="leaderboard-status" class="sr-only" role="status" aria-label="Local leaderboards" aria-live="polite" data-snapshot="{}"></p>
       <p id="quest-status" class="sr-only" role="status" aria-label="Talk Quest" aria-live="polite" data-snapshot="{}"></p>
+      <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
         data-phase="idle" data-remaining="50" data-base-duration="50" data-hits="0" data-score="0" data-combo="0" data-best-combo="0" data-bonus-time="0" data-targets="[]" data-controls="[]" data-hud="{}" data-results-hits="{}"></p>
@@ -1521,6 +1526,10 @@
         let onPopResult = null;
         let onQuestResult = null;
         let questTurn = { round_id: '', target_uid: '' };
+        let questWordsMode = false;
+        let questRoundId = '';
+        let questLiveTargets = [];
+        const questAliases = new Map();
         let onState = null;
         let enabled = false;
         let active = false;
@@ -1546,6 +1555,11 @@
         let browserFallbackRound = '';
         let recognitionSerial = 0;
         let captureTimer = 0;
+        let practice = null;
+        let practiceSerial = 0;
+        let practiceTargetSerial = 0;
+        let speechWords = [];
+        let compoundForms = new Map();
         let clearCandidates = () => {};
         let updatePhrases = () => {};
         let diagnosticsEnabled = false;
@@ -1555,23 +1569,64 @@
         function diagnose(type, detail = {}) {
           diagnosticCounts[type] = (diagnosticCounts[type] || 0) + 1;
           if (!diagnosticsEnabled) return;
-          diagnosticRecords.push({ type, received_at_ms: now(), mode: recognitionMode, ...detail });
+          const record = { type, received_at_ms: now(), mode: recognitionMode, session_id: recognitionSerial, ...detail };
+          diagnosticRecords.push(record);
           if (diagnosticRecords.length > 200) diagnosticRecords.shift();
+          practice?.callbacks.onDiagnostic?.({ ...record });
         }
         const localSpeech = createLocalSpeechPreparation({
           onDiagnostic: detail => diagnose(detail.event, detail)
         });
 
-        function lexicalWords(text) {
-          // Normalize compounds before splitting; keep the original caption intact.
-          const normalized = text.replace(/(?<![\p{L}\p{N}_'’-])yo[ -]yo(s)?(?![\p{L}\p{N}_'’-])/giu,
-            (_, plural) => 'yoyo' + (plural || ''));
-          return normalized.match(/[\p{L}\p{N}_]+(?:['’][\p{L}\p{N}_]+)*/gu) || [];
+        function wordKey(word) { return word.toLowerCase().replaceAll('’', "'"); }
+        function configureSpeechLexicon(json) {
+          let value;
+          try { value = typeof json === 'string' ? JSON.parse(json) : json; } catch { return false; }
+          if (!value || typeof value !== 'object' || !Array.isArray(value.words) ||
+              !value.compounds || typeof value.compounds !== 'object' || Array.isArray(value.compounds)) return false;
+          const validWord = word => typeof word === 'string' && /^[a-z]{1,32}$/i.test(word);
+          const words = value.words.filter(word => word && validWord(word.text)).map(word => ({
+            text: word.text.toLowerCase(), forms: [...new Set([word.text, ...(Array.isArray(word.forms) ? word.forms : [])]
+              .filter(validWord).map(word => word.toLowerCase()))]
+          }));
+          const compounds = Object.entries(value.compounds).filter(([word, parts]) => validWord(word) &&
+            Array.isArray(parts) && parts.length >= 2 && parts.length <= 4 && parts.every(validWord))
+            .map(([word, parts]) => [word.toLowerCase(), parts.map(word => word.toLowerCase())]);
+          speechWords = words;
+          compoundForms = new Map(compounds.sort((a, b) => b[1].length - a[1].length));
+          return true;
         }
 
-        function wordKey(word) { return word.toLowerCase().replaceAll('’', "'"); }
-        function equivalent(first, second) {
-          return first === second || (popAliases.get(first) || []).includes(second);
+        function lexicalWords(text) {
+          // Joined and spaced compounds share raw occurrence IDs. A joined word
+          // remains an indivisible span and can never score its component words.
+          const tokens = [];
+          for (const match of text.matchAll(/[\p{L}\p{N}_]+(?:['’][\p{L}\p{N}_]+)*/gu)) {
+            const key = wordKey(match[0]);
+            const parts = compoundForms.get(key);
+            for (const [part, index] of (parts || [match[0]]).map((part, index) => [part, index])) {
+              tokens.push({ text: part, key: wordKey(part), start: match.index, end: match.index + match[0].length,
+                joined: parts ? key : '', part: index, length: parts?.length || 1 });
+            }
+          }
+          return tokens;
+        }
+        function equivalent(first, second, aliases = popAliases) {
+          return first === second || (aliases.get(first) || []).includes(second);
+        }
+
+        function sendPopResult(event) {
+          // Godot's callback bridge discards Callable return values. Native code
+          // acknowledges synchronously through this JavaScript object instead.
+          const receipt = { accepted: false };
+          const direct = onPopResult?.(JSON.stringify(event), receipt);
+          return receipt.accepted === true || direct === true;
+        }
+
+        function sendQuestResult(event) {
+          const receipt = { accepted: false };
+          const direct = onQuestResult?.(JSON.stringify(event), receipt);
+          return receipt.accepted === true || direct === true;
         }
 
         function phraseList() {
@@ -1580,38 +1635,47 @@
           return [...words].sort().map(word => [word, activeWords.has(word) ? 4 : 1]);
         }
 
-        function createCandidates(valid, serial) {
+        function createCandidates(valid, serial, context = {}) {
+          const round = context.round || (() => popRoundId);
+          const targets = context.targets || (() => liveTargets);
+          const aliases = context.aliases || (() => popAliases);
+          const send = context.send || sendPopResult;
+          const expired = target => Number.isFinite(target.expires_at_ms) && now() >= target.expires_at_ms;
           const segments = new Map();
           let nextOccurrence = 1;
-          const cancel = slot => {
+          const cancel = (slot, reason = '') => {
+            if (slot.timer && reason) diagnose('candidate_cancelled', { event_id: slot.id, reason });
             window.clearTimeout(slot.timer);
             slot.timer = 0;
           };
-          const clear = () => {
-            for (const segment of segments.values()) for (const slot of segment.slots) cancel(slot);
+          const clear = (reason = 'session_replaced') => {
+            for (const segment of segments.values()) for (const slot of segment.slots) cancel(slot, reason);
             segments.clear();
           };
           const makeSlot = () => ({
             id: `${serial}:${nextOccurrence++}`, keys: new Set(), text: '', key: '', timer: 0,
-            round: popRoundId, targets: liveTargets.map(target => ({ ...target, forms: [...target.forms] })),
-            binding: null, consumed: false, present: false, observedAt: now()
+            round: round(), targets: targets().map(target => ({ ...target, forms: [...target.forms] })),
+            binding: null, consumed: false, present: false, observedAt: now(), compounds: new Set(),
+            members: [], owner: null, signature: '', matchKey: ''
           });
-          const matches = (slot, key) => [...slot.keys].some(previous => equivalent(previous, key));
+          const matches = (slot, key) => [...slot.keys].some(previous => equivalent(previous, key, aliases()));
 
           function commit(slot, stage) {
             cancel(slot);
-            if (!valid() || !slot.present || slot.consumed || slot.round !== popRoundId) return;
+            if (!valid() || !slot.present || slot.round !== round() || !slot.members.length ||
+                slot.members.some(member => !member.present || member.consumed || member.owner !== slot)) return;
             const target = slot.binding;
             if (!target) { diagnose('no_matching_target', { event_id: slot.id }); return; }
-            if (!liveTargets.some(item => item.uid === target.uid && item.forms.includes(slot.key))) {
+            if (expired(target) || slot.members.some(member => member.targets.some(item => item.uid === target.uid && expired(item))) ||
+                !targets().some(item => item.uid === target.uid && item.forms.includes(slot.matchKey) && !expired(item))) {
               diagnose('expired_target', { event_id: slot.id, target_uid: target.uid });
               return;
             }
             // A callback time is not a word's captured/audio timestamp.
             const event = { event_id: slot.id, round_id: slot.round, target_uid: target.uid,
               text: slot.text, stage, received_at_ms: slot.observedAt };
-            const accepted = onPopResult?.(JSON.stringify(event)) === true;
-            slot.consumed = accepted;
+            const accepted = send(event);
+            if (accepted) for (const member of slot.members) member.consumed = true;
             diagnose(accepted ? 'hit' : 'game_rejected', { event_id: slot.id, target_uid: target.uid });
           }
 
@@ -1624,7 +1688,7 @@
             }
             const words = lexicalWords(text);
             const retire = () => {
-              for (const slot of segment.slots) cancel(slot);
+              for (const slot of segment.slots) cancel(slot, 'segment_limit');
               segment.slots = [];
               segment.blocked = true;
               diagnose('segment_limit', { result_index: index });
@@ -1633,7 +1697,7 @@
             // Bound both live text and deleted revision history. Retiring instead
             // of trimming prevents old consumed occurrences from becoming new IDs.
             if (words.length > 256) { retire(); return; }
-            const keys = words.map(wordKey);
+            const keys = words.map(word => word.key);
             const previous = segment.slots;
             // Align against retained occurrences, including deleted tombstones. A prefix
             // insertion retains IDs, a substitution reuses an ID, and repetition adds one.
@@ -1657,7 +1721,7 @@
                 slot = previous[a++];
               } else if (a < previous.length && costs[a][b] === costs[a + 1][b] + 1) {
                 slot = previous[a++];
-                cancel(slot);
+                cancel(slot, 'revision_removed');
                 slot.present = false;
                 retained.push(slot);
                 continue;
@@ -1669,26 +1733,69 @@
                 else slot = makeSlot();
               }
               const changed = slot.key !== keys[b] || !slot.present;
-              if (changed) { cancel(slot); slot.observedAt = now(); }
+              if (changed) { cancel(slot, 'revision_changed'); slot.observedAt = now(); }
               slot.key = keys[b];
-              slot.text = words[b++];
+              slot.text = words[b++].text;
               slot.keys.add(slot.key);
               slot.present = true;
-              // The first-observation target snapshot fences all later hypotheses,
-              // including a correction from a partial/unrelated word into a target.
-              if (!slot.consumed) {
-                slot.binding = slot.targets.find(target => target.forms.includes(slot.key)) || null;
-              }
               retained.push(slot);
               current.push(slot);
-              if (!isFinal && !slot.consumed && slot.binding && !slot.timer) {
-                slot.timer = window.setTimeout(() => commit(slot, 'interim'), stabilityMs);
-              }
             }
             segment.slots = retained;
             if (retained.length > 512) { retire(); return; }
+            const candidates = [];
+            const boundary = character => !character || !/[\p{L}\p{N}_'’\-]/u.test(character);
+            for (let offset = 0; offset < current.length;) {
+              const first = current[offset], token = words[offset];
+              let key = first.key, length = 1;
+              if (token.joined) {
+                key = token.joined;
+                length = token.length;
+                first.compounds.add(key);
+              } else {
+                for (const [canonical, parts] of compoundForms) {
+                  if (offset + parts.length > current.length ||
+                      !parts.every((part, index) => words[offset + index].key === part && !words[offset + index].joined)) continue;
+                  const last = words[offset + parts.length - 1];
+                  if (!boundary(text[token.start - 1]) || !boundary(text[last.end]) ||
+                      parts.slice(1).some((_, index) => !/^[ -]+$/.test(text.slice(words[offset + index].end,
+                        words[offset + index + 1].start)))) continue;
+                  if (!first.compounds.has(canonical) && !first.targets.some(target => target.forms.includes(canonical))) continue;
+                  key = canonical;
+                  length = parts.length;
+                  first.compounds.add(key);
+                  break;
+                }
+              }
+              const members = current.slice(offset, offset + length);
+              // A joined/spaced revision can expand one consumed occurrence.
+              // Its new members inherit consumption so a later split cannot
+              // turn that same utterance into another component hit.
+              if (members.some(member => member.consumed)) {
+                for (const member of members) member.consumed = true;
+              }
+              const signature = key + ':' + members.map(member => member.id).join(',');
+              if (first.signature !== signature) cancel(first, 'span_changed');
+              first.signature = signature;
+              first.matchKey = key;
+              first.members = members;
+              first.text = length > 1 ? key : token.text;
+              for (const member of members) {
+                if (member !== first) cancel(member, 'compound_member');
+                member.owner = first;
+              }
+              // Every member must have observed this target. Prefix insertion or
+              // a later compound completion cannot move old speech to a fresh UID.
+              first.binding = first.targets.find(target => target.forms.includes(key) && members.every(member =>
+                member.targets.some(previous => previous.uid === target.uid && previous.forms.includes(key)))) || null;
+              candidates.push(first);
+              if (!isFinal && !members.some(member => member.consumed) && first.binding && !first.timer) {
+                first.timer = window.setTimeout(() => commit(first, 'interim'), stabilityMs);
+              }
+              offset += length;
+            }
             if (isFinal) {
-              for (const slot of current) {
+              for (const slot of candidates) {
                 if (!valid()) break;
                 commit(slot, 'final');
               }
@@ -1696,17 +1803,17 @@
               segments.delete(index);
               if (!words.length && valid()) {
                 diagnose('unclear_speech');
-                onPopResult?.(JSON.stringify({ event_id: `${serial}:empty:${index}`, round_id: popRoundId,
-                  target_uid: 0, text: '', stage: 'final', received_at_ms: now() }));
-              } else if (current.length && current.every(slot => !slot.binding && !slot.consumed) && valid()) {
-                onPopResult?.(JSON.stringify({ event_id: `${serial}:unmatched:${index}`, round_id: popRoundId,
-                  target_uid: 0, text, stage: 'final', received_at_ms: now() }));
+                send({ event_id: `${serial}:empty:${index}`, round_id: round(),
+                  target_uid: 0, text: '', stage: 'final', received_at_ms: now() });
+              } else if (candidates.length && candidates.every(slot => !slot.binding && !slot.members.some(member => member.consumed)) && valid()) {
+                send({ event_id: `${serial}:unmatched:${index}`, round_id: round(),
+                  target_uid: 0, text, stage: 'final', received_at_ms: now() });
               }
             }
           }
           function removeAfter(length) {
             for (const [index, segment] of segments) if (index >= length) {
-              for (const slot of segment.slots) { cancel(slot); slot.present = false; }
+              for (const slot of segment.slots) { cancel(slot, 'result_removed'); slot.present = false; }
             }
           }
           return { update, clear, removeAfter };
@@ -1738,10 +1845,11 @@
             'soundstart', 'soundend', 'speechstart', 'speechend', 'nomatch']) instance['on' + name] = null;
         }
 
-        function release() {
+        function release(reason = 'session_replaced') {
+          if (recognition) diagnose('session_stop', { reason });
           // Invalidate first: abort can itself deliver already queued browser events.
           generation++;
-          clearCandidates();
+          clearCandidates(reason);
           updatePhrases = () => {};
           active = false;
           listening = false;
@@ -1775,7 +1883,7 @@
 
         function closeSpeech(restoreFocus) {
           const wasEnabled = enabled;
-          if (!release()) {
+          if (!release('stopped')) {
             enabled = true;
             transcript.textContent = '';
             report();
@@ -1797,14 +1905,15 @@
           return closeSpeech(true);
         }
 
-        function speechMode(value, nextPresentation = 'match') {
+        function speechMode(value, nextPresentation = 'match', practiceActivation = false) {
+          if (practice && !practiceActivation) return;
           if (!value || document.hidden) { stopSpeech(); return; }
           nextPresentation = ['pop', 'quest'].includes(nextPresentation) ? nextPresentation : 'match';
           if (enabled) {
             if (presentation === nextPresentation || !closeSpeech(false)) return;
           }
           presentation = nextPresentation;
-          recognitionMode = presentation === 'pop' && browserFallbackRound !== popRoundId
+          recognitionMode = !practice && presentation === 'pop' && browserFallbackRound !== popRoundId
             ? localSpeech.modeForNewRound(popRoundId) : 'browser';
           silentRestarts = 0;
           enabled = true;
@@ -1845,7 +1954,7 @@
             offline: 'You are offline. Connect to the internet, then tap Retry.',
             'language-not-supported': 'English speech is unavailable in this browser. Choose another mode or a supported browser.'
           };
-          release();
+          release('error:' + code);
           transcript.textContent = '';
           report(presentation !== 'match'
             ? popErrors[code] || 'Listening stopped. Tap Retry to listen again, or choose another mode.'
@@ -1922,13 +2031,24 @@
             const hasCaptureEvents = 'onaudiostart' in current;
             let lastFinal = -1;
             let heardSpeech = false;
+            let lastError = '';
             const recognitionRound = popRoundId;
             const recognitionQuest = { ...questTurn };
+            const recognitionQuestWords = questWordsMode;
+            const recognitionQuestRound = questRoundId;
             const valid = () => token === generation && recognition === current &&
               enabled && active && !document.hidden && (presentation !== 'pop' || recognitionRound === popRoundId) &&
-              (presentation !== 'quest' || (recognitionQuest.round_id === questTurn.round_id && recognitionQuest.target_uid === questTurn.target_uid));
-            const candidates = createCandidates(() => valid() && listening, ++recognitionSerial);
+              (presentation !== 'quest' || (recognitionQuestWords === questWordsMode && (recognitionQuestWords
+                ? recognitionQuestRound === questRoundId
+                : recognitionQuest.round_id === questTurn.round_id && recognitionQuest.target_uid === questTurn.target_uid)));
+            const candidates = createCandidates(() => valid() && listening, ++recognitionSerial,
+              presentation === 'quest' && recognitionQuestWords ? {
+                round: () => questRoundId, targets: () => questLiveTargets,
+                aliases: () => questAliases, send: sendQuestResult
+              } : {});
             const questSession = recognitionSerial;
+            diagnose('session_start', { capture_events: hasCaptureEvents,
+              round_id: presentation === 'quest' ? (recognitionQuestWords ? recognitionQuestRound : recognitionQuest.round_id) : recognitionRound });
             clearCandidates = candidates.clear;
             updatePhrases = () => {
               if (!valid() || !usingPhrases) return;
@@ -1981,21 +2101,22 @@
                 if (isFinal && index <= lastFinal) continue;
                 const text = typeof result[0]?.transcript === 'string' ? result[0].transcript.trim() : '';
                 if (text) captureReady('result');
+                const alternatives = diagnosticsEnabled ? Array.from(result).slice(0, 3).map(alternative => ({
+                  text: String(alternative.transcript || '').slice(0, 2000),
+                  confidence: Number.isFinite(alternative.confidence) ? alternative.confidence : null
+                })) : undefined;
                 diagnose('result', { result_index: index, final: isFinal,
-                  alternatives: diagnosticsEnabled ? Array.from(result).slice(0, 3).map(alternative => ({
-                    text: String(alternative.transcript || ''),
-                    confidence: Number.isFinite(alternative.confidence) ? alternative.confidence : null
-                  })) : undefined });
+                  alternatives });
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
                 if (isFinal) lastFinal = index;
-                if (presentation === 'quest' && valid() && listening) {
+                if (presentation === 'quest' && !recognitionQuestWords && valid() && listening) {
                   onQuestResult?.(JSON.stringify({
                     ...recognitionQuest, event_id: `quest-${questSession}-${index}`,
                     text: text.slice(0, 2000), stage: isFinal ? 'final' : 'interim'
                   }));
                 }
-                if (presentation === 'pop' && popResultCurrent) {
+                if ((presentation === 'pop' || presentation === 'quest' && recognitionQuestWords) && popResultCurrent) {
                   candidates.update(index, text, isFinal);
                   if (!text && isFinal && valid()) onResult?.(text, true);
                 }
@@ -2010,12 +2131,16 @@
                     heardTimer = 0;
                     if (valid()) panel.setAttribute('data-heard', 'false');
                   }, 280);
-                  if (valid()) onResult?.(text, isFinal);
+                  if (valid()) {
+                    if (practice) onResult?.(text, isFinal, alternatives);
+                    else onResult?.(text, isFinal);
+                  }
                 }
               }
             };
             current.onerror = event => {
               if (!valid()) return;
+              lastError = event.error || '';
               diagnose('error', { code: event.error });
               if (usingPhrases && event.error === 'phrases-not-supported') retryWithoutPhrases();
               else if (event.error === 'language-not-supported' && retryBrowserBeforeRound()) return;
@@ -2024,9 +2149,10 @@
             };
             current.onend = () => {
               if (!valid()) return;
+              diagnose('session_end', { reason: lastError || 'browser_end', heard_speech: heardSpeech });
               window.clearTimeout(captureTimer);
               captureTimer = 0;
-              candidates.clear();
+              candidates.clear('recognition_end');
               recognition = null;
               detachRecognition(current);
               if (presentation !== 'match' && !heardSpeech) { retryPopSilence(); return; }
@@ -2048,7 +2174,70 @@
           }
         }
 
+        function beginSpeechPractice(callbacks = {}) {
+          if (practice) return true;
+          if (document.hidden) return false;
+          const saved = { onResult, onPopResult, onState, diagnosticsEnabled,
+            popRoundId, popPhase, liveTargets, popVocabulary, recognitionMode, browserFallbackRound, aliases: new Map(popAliases) };
+          if (!closeSpeech(false)) return false;
+          practice = { callbacks, saved, matched: false, target: null };
+          diagnosticsEnabled = true;
+          diagnosticRecords.length = 0;
+          popRoundId = 'practice-' + (++practiceSerial);
+          popPhase = 'ready';
+          liveTargets = [];
+          popVocabulary = speechWords.map(word => word.text);
+          onResult = (...values) => practice?.callbacks.onResult?.(...values);
+          onState = (...values) => practice?.callbacks.onState?.(...values);
+          onPopResult = json => {
+            const event = JSON.parse(json);
+            if (!practice || practice.matched || !practice.target || event.target_uid !== practice.target.uid ||
+                event.round_id !== popRoundId || !practice.target.forms.includes(wordKey(event.text))) return false;
+            practice.matched = true;
+            liveTargets = [];
+            updatePhrases();
+            practice.callbacks.onHit?.({ ...event, word: practice.target.text });
+            return true;
+          };
+          report();
+          return true;
+        }
+
+        function practiceTarget(word) {
+          if (!practice || typeof word !== 'string') return null;
+          const entry = speechWords.find(entry => entry.text === word.toLowerCase());
+          if (!entry) return null;
+          const target = { ...entry, forms: [...entry.forms], uid: ++practiceTargetSerial };
+          practice.target = target;
+          practice.matched = false;
+          liveTargets = [target];
+          for (const form of target.forms) popAliases.set(form, target.forms);
+          updatePhrases();
+          diagnose('practice_prompt', { target_uid: target.uid, word: target.text });
+          if (!active) {
+            if (enabled && !closeSpeech(false)) return null;
+            for (const form of target.forms) popAliases.set(form, target.forms);
+            speechMode(true, 'pop', true);
+          }
+          return { ...target, forms: [...target.forms] };
+        }
+
+        function endSpeechPractice() {
+          if (!practice) return true;
+          if (!closeSpeech(false)) return false;
+          const saved = practice.saved;
+          practice = null;
+          ({ onResult, onPopResult, onState, diagnosticsEnabled, popRoundId, popPhase, liveTargets, popVocabulary,
+            recognitionMode, browserFallbackRound } = saved);
+          popAliases.clear();
+          for (const [form, aliases] of saved.aliases) popAliases.set(form, aliases);
+          diagnosticRecords.length = 0;
+          report();
+          return true;
+        }
+
         function popStatus(json) {
+          if (practice) return false;
           let state;
           try { state = JSON.parse(json); } catch { return false; }
           if (!state || typeof state !== 'object' || Array.isArray(state) || !popStatusText) return false;
@@ -2057,7 +2246,7 @@
           const phase = typeof state.phase === 'string' ? state.phase : 'idle';
           const roundId = typeof state.round_id === 'string' ? state.round_id : '';
           if (roundId !== popRoundId) {
-            clearCandidates();
+            if (presentation === 'pop') clearCandidates('round_changed');
             popAliases.clear();
             popRoundId = roundId;
           }
@@ -2099,7 +2288,7 @@
           const hitEffect = hudState.hit_effect && typeof hudState.hit_effect === 'object' ? hudState.hit_effect : {};
           const bonusEffect = hudState.bonus_effect && typeof hudState.bonus_effect === 'object' && !Array.isArray(hudState.bonus_effect)
             ? hudState.bonus_effect : {};
-          const hud = Object.fromEntries(['time', 'hits', 'transcript', 'status', 'time_bonus', 'time_bonus_caption'].map(name => [name, hudRect(hudState[name])]));
+          const hud = Object.fromEntries(['time', 'hits', 'transcript', 'status', 'time_bonus', 'time_bonus_caption', 'score', 'chests', 'next_chest'].map(name => [name, hudRect(hudState[name])]));
           hud.hit_effect = { serial: Math.floor(number(hitEffect.serial)), active: hitEffect.active === true,
             amount: Math.floor(number(hitEffect.amount)), words: (Array.isArray(hitEffect.words) ? hitEffect.words : [])
               .filter(word => typeof word === 'string').map(word => word.slice(0, 2000)).slice(0, 32) };
@@ -2125,6 +2314,9 @@
             player, rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
           };
           for (const [name, value] of Object.entries({ phase, 'round-id': popRoundId, remaining, hits, score, combo, 'best-combo': bestCombo,
+            'chest-count': Math.min(3, Math.floor(number(state.chest_count))),
+            'chest-next-score': number(state.chest_next_score), 'chest-progress': Math.min(1, number(state.chest_progress)),
+            'chest-fx': JSON.stringify(state.chest_fx && typeof state.chest_fx === 'object' ? state.chest_fx : {}),
             'base-duration': baseDuration, 'bonus-time': bonusTime,
             targets: JSON.stringify(targets), controls: JSON.stringify(controls), hud: JSON.stringify(hud),
             transcript: typeof state.transcript === 'string' ? state.transcript : '',
@@ -2163,16 +2355,45 @@
         window.addEventListener('offline', () => { if (enabled && recognitionMode !== 'local') failedRecognition('offline'); });
 
         return {
-          speechAvailable, speechMode, stopSpeech, popStatus,
+          speechAvailable, speechMode, stopSpeech, popStatus, configureSpeechLexicon,
           observeQuestSpeech(callback) { onQuestResult = typeof callback === 'function' ? callback : null; },
+          questTargets(json) {
+            let next;
+            try { next = JSON.parse(json); } catch { return false; }
+            if (!next || typeof next.round_id !== 'string' || !next.round_id || !Array.isArray(next.targets)) return false;
+            const changed = !questWordsMode || next.round_id !== questRoundId;
+            if (changed && presentation === 'quest' && enabled && !closeSpeech(false)) return false;
+            if (changed) questAliases.clear();
+            questWordsMode = true;
+            questRoundId = next.round_id;
+            const publishedAt = now();
+            const seen = new Set();
+            questLiveTargets = next.targets.filter(target => target && Number.isInteger(target.uid) && target.uid > 0 &&
+              typeof target.text === 'string' && /^[a-z]{1,32}$/i.test(target.text) &&
+              Number.isFinite(target.remaining_ms) && target.remaining_ms >= 0).flatMap(target => {
+                if (seen.has(target.uid)) return [];
+                seen.add(target.uid);
+                const forms = [...new Set([target.text, ...(Array.isArray(target.forms) ? target.forms : [])]
+                  .filter(form => typeof form === 'string' && /^[a-z]{1,32}$/i.test(form)).map(form => form.toLowerCase()))];
+                for (const form of forms) questAliases.set(form, forms);
+                return [{ uid: target.uid, text: target.text.toLowerCase(), forms,
+                  expires_at_ms: publishedAt + target.remaining_ms }];
+              });
+            return true;
+          },
           questTarget(json) {
             let next;
             try { next = JSON.parse(json); } catch { return false; }
             if (!next || typeof next.round_id !== 'string' || !Number.isInteger(next.target_uid) || !next.round_id || next.target_uid < 1) return false;
             if (presentation === 'quest' && enabled && !closeSpeech(false)) return false;
+            questWordsMode = false;
+            questLiveTargets = [];
+            questAliases.clear();
             questTurn = { round_id: next.round_id, target_uid: next.target_uid };
             return true;
           },
+          beginSpeechPractice, practiceTarget, endSpeechPractice,
+          practiceWords() { return speechWords.map(word => ({ ...word, forms: [...word.forms] })); },
           speechDiagnostics() {
             return { enabled: diagnosticsEnabled, mode: recognitionMode, preparation: localSpeech.getState(),
               counts: { ...diagnosticCounts }, records: JSON.parse(JSON.stringify(diagnosticRecords)) };
@@ -2181,8 +2402,16 @@
             diagnosticsEnabled = value === true;
             diagnosticRecords.length = 0;
           },
-          observePopSpeech(callback) { onPopResult = typeof callback === 'function' ? callback : null; },
+          observePopSpeech(callback) {
+            if (practice) practice.saved.onPopResult = typeof callback === 'function' ? callback : null;
+            else onPopResult = typeof callback === 'function' ? callback : null;
+          },
           observeSpeech(resultCallback, stateCallback) {
+            if (practice) {
+              practice.saved.onResult = resultCallback;
+              practice.saved.onState = stateCallback;
+              return;
+            }
             onResult = resultCallback;
             onState = stateCallback;
             report(message);
@@ -2198,9 +2427,389 @@
           }
         };
       }
+      function createSpeechDebugPanel(host, nativeAction) {
+        if (new URLSearchParams(window.location?.search || '').get('speechDebug') !== '1') {
+          return { setAvailable() {} };
+        }
+        const words = ['cat', 'dog', 'sun', 'fish', 'bee', 'bear', 'pear', 'key', 'eye', 'rain',
+          'flower', 'plane', 'goat', 'boat', 'bed', 'bat', 'seahorse', 'sunflower', 'sunglasses',
+          'pinecone', 'yoyo', 'rainbow', 'starfish', 'watermelon'];
+        const clock = () => window.performance.now();
+        const node = (tag, text = '', parent) => {
+          const element = document.createElement(tag);
+          element.textContent = text;
+          if (parent) parent.append(element);
+          return element;
+        };
+        const button = (text, parent, action) => {
+          const element = node('button', text, parent);
+          element.type = 'button';
+          element.addEventListener('click', action);
+          return element;
+        };
+        const select = (label, choices, parent) => {
+          const wrapper = node('label', label, parent);
+          const element = node('select', '', wrapper);
+          for (const [value, caption] of choices) {
+            const option = node('option', caption, element);
+            option.value = value;
+          }
+          element.value = choices[0][0];
+          return element;
+        };
+        node('style', `
+          #speech-debug-launch { position:fixed; left:12px; bottom:max(12px,env(safe-area-inset-bottom));
+            z-index:120; border:1px solid #9cb5dc; background:#182a45; color:white; border-radius:12px; padding:10px 14px; }
+          #speech-debug { position:fixed; inset:0; z-index:500; overflow:auto; overscroll-behavior:contain;
+            padding:max(16px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom));
+            box-sizing:border-box; background:#101b30; color:#f1f6ff; font:16px/1.45 system-ui,sans-serif; }
+          #speech-debug[hidden], #speech-debug-launch[hidden] { display:none; }
+          #speech-debug .debug-content { max-width:680px; margin:auto; }
+          #speech-debug .debug-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:12px 0; }
+          #speech-debug h2 { margin:0; flex:1; font-size:22px; }
+          #speech-debug p { margin:10px 0; }
+          #speech-debug button, #speech-debug select, #speech-debug input, #speech-debug textarea {
+            box-sizing:border-box; min-height:44px; padding:10px 12px; border:1px solid #637a9f;
+            border-radius:10px; background:#223551; color:#f1f6ff; font:inherit; }
+          #speech-debug button { cursor:pointer; }
+          #speech-debug button:disabled { opacity:.5; cursor:default; }
+          #speech-debug button:focus-visible, #speech-debug select:focus-visible, #speech-debug input:focus-visible {
+            outline:3px solid #77e4d9; outline-offset:2px; }
+          #speech-debug .debug-primary { background:#77e4d9; color:#10263b; border-color:#77e4d9; font-weight:750; }
+          #speech-debug label { display:grid; gap:5px; flex:1; min-width:150px; }
+          #speech-debug-word { font-size:clamp(36px,9vw,58px); font-weight:800; letter-spacing:-.03em; margin:12px 0; }
+          #speech-debug-heard { background:#1a2b46; padding:16px; min-height:52px; border-radius:14px; overflow-wrap:anywhere; }
+          #speech-debug-alternatives { white-space:pre-wrap; overflow-wrap:anywhere; font-size:14px; color:#b7cce7; }
+          #speech-debug-report { width:100%; height:200px; font:12px/1.4 monospace; }
+          #speech-debug .debug-note { font-size:13px; color:#b7cce7; }
+        `, document.body);
+        const launch = button('Speech check', document.body, open);
+        launch.id = 'speech-debug-launch';
+        launch.hidden = true;
+        const panel = node('section', '', document.body);
+        panel.id = 'speech-debug';
+        panel.hidden = true;
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-labelledby', 'speech-debug-title');
+        const content = node('div', '', panel);
+        content.className = 'debug-content';
+        const heading = node('div', '', content);
+        heading.className = 'debug-row';
+        node('h2', 'Speech check', heading).id = 'speech-debug-title';
+        button('Close', heading, close);
+        node('p', 'Untimed practice. No scores or leaderboard changes. Keep the device volume and speaking distance the same between passes.', content);
+        const settings = node('div', '', content);
+        settings.className = 'debug-row';
+        const mix = select('Game sound level', [['1', 'Normal'], ['0.35', 'Reduced · 35%'], ['0', 'Silent']], settings);
+        const route = select('Audio output', [['speaker', 'Device speaker'], ['headphones', 'Headphones']], settings);
+        const metadata = node('details', '', content);
+        node('summary', 'Test details', metadata);
+        const detailsRow = node('div', '', metadata);
+        detailsRow.className = 'debug-row';
+        const speaker = select('Speaker', [['unspecified', 'Not specified'], ['adult', 'Adult'], ['child', 'Child']], detailsRow);
+        const deviceLabel = node('label', 'Device and OS version', detailsRow);
+        const device = node('input', '', deviceLabel);
+        device.placeholder = 'e.g. iPhone, iOS version';
+        device.maxLength = 120;
+        const intent = select('What you will say', [['target', 'The displayed word'], ['other', 'A different word (control)'],
+          ['silence', 'Nothing (control)']], metadata);
+        node('p', 'Control attempts help measure false hits. No microphone recording is saved.', metadata).className = 'debug-note';
+        const position = node('p', '', content);
+        const expected = node('div', words[0], content);
+        expected.id = 'speech-debug-word';
+        expected.setAttribute('aria-label', 'Expected word');
+        const status = node('p', 'Choose a sound level, then start listening.', content);
+        status.setAttribute('role', 'status');
+        const controls = node('div', '', content);
+        controls.className = 'debug-row';
+        const startButton = button('Start listening', controls, start);
+        startButton.className = 'debug-primary';
+        const stopButton = button('Stop listening', controls, stop);
+        stopButton.disabled = true;
+        const retryButton = button('Retry listening', controls, () => { if (stop()) start(); });
+        retryButton.hidden = true;
+        const heard = node('div', 'No text received yet.', content);
+        heard.id = 'speech-debug-heard';
+        heard.setAttribute('aria-live', 'polite');
+        const alternatives = node('pre', '', content);
+        alternatives.id = 'speech-debug-alternatives';
+        const match = node('p', 'No match yet.', content);
+        node('p', 'Did the recognized text represent what you said? Count homophones as correct. Your label advances to the next word.', content).className = 'debug-note';
+        const labels = node('div', '', content);
+        labels.className = 'debug-row';
+        const labelButtons = ['Correct', 'Wrong', 'No result'].map((caption, index) =>
+          button(caption, labels, () => label(['correct', 'wrong', 'no_result'][index])));
+        const summary = node('p', 'No reviewed attempts yet.', content);
+        const exportRow = node('div', '', content);
+        exportRow.className = 'debug-row';
+        button('Copy report', exportRow, copyReport);
+        button('Clear report', exportRow, () => {
+          if (!stop()) return;
+          exportGeneration++;
+          trials.length = 0;
+          events.length = 0;
+          trial = null;
+          heard.textContent = 'No text received yet.';
+          alternatives.textContent = '';
+          match.textContent = 'No match yet.';
+          exported.value = '';
+          exported.hidden = true;
+          updateControls();
+          updateSummary();
+        });
+        const exported = node('textarea', '', content);
+        exported.id = 'speech-debug-report';
+        exported.readOnly = true;
+        exported.hidden = true;
+        exported.setAttribute('aria-label', 'Diagnostic report for manual copying');
+        node('p', 'Reports stay in this tab until you copy them. They can include recognized text. Nothing is uploaded or stored by this page. Timings describe browser callbacks, not when you finished speaking.', content).className = 'debug-note';
+        let opened = false, active = false, listening = false, index = 0, session = 0, trial = null;
+        let previousInert = false, cueTimer = 0, cueIndex = 0, exportGeneration = 0;
+        const trials = [], events = [];
+        function updateControls() {
+          startButton.disabled = active;
+          stopButton.disabled = !active;
+          for (const field of [mix, route, speaker, device, intent]) field.disabled = active;
+          for (const field of labelButtons) field.disabled = !trial;
+          position.textContent = `Word ${index + 1} of ${words.length}`;
+        }
+        function stopCues() {
+          window.clearTimeout(cueTimer);
+          cueTimer = 0;
+          if (opened) nativeAction('cue', 'stop');
+        }
+        function scheduleCues() {
+          stopCues();
+          cueIndex = 0;
+          const tick = () => {
+            if (!opened || !active || !listening || document.hidden) return;
+            nativeAction('cue', ['launch', 'slice', 'miss', 'match'][cueIndex++ % 4]);
+            cueTimer = window.setTimeout(tick, 1250);
+          };
+          cueTimer = window.setTimeout(tick, 300);
+        }
+        function nextTarget() {
+          expected.textContent = words[index];
+          heard.textContent = 'No text received yet.';
+          alternatives.textContent = '';
+          match.textContent = 'No match yet.';
+          trial = { word: words[index], mix: Number(mix.value), output: route.value, speaker: speaker.value,
+            device: device.value.trim(), intent: intent.value, requested_at_ms: clock(), capture_ready_at_ms: listening ? clock() : null,
+            first_result_at_ms: null, revisions: [], hit: false, label: null };
+          const target = host.practiceTarget(words[index]);
+          if (!target) {
+            trial = null;
+            if (stop()) status.textContent = 'This word is unavailable. Close the check and reload the game.';
+          }
+          else trial.target_uid = target.uid;
+          updateControls();
+          if (listening) scheduleCues();
+        }
+        function start() {
+          if (!opened || active || document.hidden) return;
+          if (nativeAction('mix', Number(mix.value)) !== true) {
+            status.textContent = 'The sound comparison could not start. Close and reopen the check.';
+            return;
+          }
+          const token = ++session;
+          active = true;
+          const started = host.beginSpeechPractice({
+            onState(enabled, ready, message) {
+              if (!opened || token !== session) return;
+              listening = enabled && ready;
+              status.textContent = listening ? 'Listening. Say the displayed word.' : message || 'Opening microphone…';
+              if (listening) {
+                retryButton.hidden = true;
+                if (trial && trial.capture_ready_at_ms === null) trial.capture_ready_at_ms = clock();
+                scheduleCues();
+              } else stopCues();
+            },
+            onResult(text, final, candidates = []) {
+              if (!opened || token !== session || !trial) return;
+              const at = clock();
+              if (text && trial.first_result_at_ms === null) trial.first_result_at_ms = at;
+              const returned = candidates.slice(0, 3).map(value => ({
+                text: String(value.text ?? value.transcript ?? '').slice(0, 2000),
+                confidence: Number.isFinite(value.confidence) ? value.confidence : null
+              }));
+              trial.revisions.push({ at_ms: at, final, text: String(text).slice(0, 2000), alternatives: returned });
+              if (trial.revisions.length > 12) trial.revisions.shift();
+              heard.textContent = text || 'An empty result was returned.';
+              alternatives.textContent = returned.map((value, offset) => `${offset + 1}. ${value.text}`).join('\n');
+            },
+            onHit(event) {
+              if (!opened || token !== session || !trial || event.target_uid !== trial.target_uid) return;
+              trial.hit = true;
+              trial.hit_at_ms = clock();
+              match.textContent = `Matched: ${trial.word}`;
+            },
+            onDiagnostic(event) {
+              if (!opened || token !== session) return;
+              if (event.type === 'error' || event.type === 'capture_timeout') retryButton.hidden = false;
+              const bounded = Object.fromEntries(Object.entries(event).filter(([key, value]) =>
+                key !== 'alternatives' && ['string', 'number', 'boolean'].includes(typeof value))
+                .map(([key, value]) => [key, typeof value === 'string' ? value.slice(0, 2000) : value]));
+              if (Array.isArray(event.alternatives)) bounded.alternatives = event.alternatives.slice(0, 3).map(value => ({
+                text: String(value.text || '').slice(0, 2000),
+                confidence: Number.isFinite(value.confidence) ? value.confidence : null
+              }));
+              events.push({ ...bounded, practice_session: token, expected_word: trial?.word || '' });
+              if (events.length > 500) events.shift();
+            }
+          });
+          if (!started) {
+            active = false;
+            status.textContent = 'The microphone could not start. Stop listening or close this check before retrying.';
+            updateControls();
+            return;
+          }
+          nextTarget();
+        }
+        function stop() {
+          stopCues();
+          if (!active) return true;
+          if (host.endSpeechPractice() !== true) {
+            status.textContent = 'The microphone could not be stopped. Try Stop listening again, or close this browser tab.';
+            return false;
+          }
+          session++;
+          active = false;
+          listening = false;
+          retryButton.hidden = true;
+          status.textContent = 'Listening stopped. Review this attempt or change the sound level.';
+          updateControls();
+          return true;
+        }
+        function label(value) {
+          if (!trial) return;
+          trials.push({ ...trial, label: value });
+          if (trials.length > 120) trials.shift();
+          trial = null;
+          index++;
+          if (index >= words.length) {
+            index = 0;
+            if (stop()) status.textContent = 'Pass complete. Choose a sound level for another pass.';
+          } else if (active) nextTarget();
+          if (!trial) expected.textContent = words[index];
+          updateControls();
+          updateSummary();
+        }
+        function statistics(rows) {
+          const targets = rows.filter(value => value.intent === 'target');
+          const controls = rows.filter(value => value.intent !== 'target');
+          const ratio = (count, total) => total ? count / total : null;
+          return { reviewed: rows.length,
+            correct_text_rate: ratio(targets.filter(value => value.label === 'correct').length, targets.length),
+            no_result_rate: ratio(targets.filter(value => value.label === 'no_result').length, targets.length),
+            target_match_rate: ratio(targets.filter(value => value.hit).length, targets.length),
+            control_false_hit_rate: ratio(controls.filter(value => value.hit).length, controls.length),
+            target_attempts: targets.length, control_attempts: controls.length };
+        }
+        function updateSummary() {
+          const stats = statistics(trials);
+          summary.textContent = `${stats.reviewed} reviewed · ${trials.filter(value => value.label === 'correct').length} correct text · ${trials.filter(value => value.label === 'no_result').length} no result · ${trials.filter(value => value.hit).length} matched`;
+        }
+        async function copyReport() {
+          const request = ++exportGeneration;
+          const groups = [...new Set(trials.map(value => `${value.mix}/${value.output}/${value.speaker}`))];
+          const report = { version: 1, created_at: new Date().toISOString(), user_agent: window.navigator.userAgent,
+            timing_basis: 'Browser callback clock; not audio or word-end timestamps',
+            limits: { attempts: 120, revisions_per_attempt: 12, diagnostic_events: 500 },
+            statistics: statistics(trials), groups: groups.map(key => ({ condition: key,
+              ...statistics(trials.filter(value => `${value.mix}/${value.output}/${value.speaker}` === key)) })),
+            attempts: trials, current_attempt: trial, events };
+          const text = JSON.stringify(report, null, 2);
+          try {
+            await window.navigator.clipboard.writeText(text);
+            if (!opened || request !== exportGeneration) return;
+            status.textContent = 'Report copied. It contains recognized text; share it only when you intend to.';
+          } catch {
+            if (!opened || request !== exportGeneration) return;
+            exported.value = text;
+            exported.hidden = false;
+            exported.focus();
+            exported.select();
+            status.textContent = 'Copy is unavailable here. Select and copy the report below.';
+          }
+        }
+        function open() {
+          if (opened || document.hidden || launch.hidden) return;
+          if (nativeAction('open', 0) !== true) {
+            launch.textContent = 'Speech check · finish the current action first';
+            return;
+          }
+          opened = true;
+          const canvas = document.getElementById('canvas');
+          previousInert = canvas.inert;
+          canvas.inert = true;
+          panel.hidden = false;
+          launch.hidden = true;
+          updateControls();
+          startButton.focus();
+        }
+        function close(background = false) {
+          if (!opened || !stop()) return;
+          if (nativeAction('close', background === true || document.hidden) !== true) {
+            status.textContent = 'The game could not resume. Try Close again.';
+            return;
+          }
+          opened = false;
+          exportGeneration++;
+          trial = null;
+          panel.hidden = true;
+          launch.hidden = false;
+          launch.textContent = 'Speech check';
+          document.getElementById('canvas').inert = previousInert;
+          if (!document.hidden) launch.focus();
+        }
+        for (const type of ['keydown', 'keyup', 'pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'touchstart', 'touchend']) {
+          panel.addEventListener(type, event => {
+            event.stopPropagation();
+            if (type === 'keydown' && event.key === 'Escape') close();
+          });
+          launch.addEventListener(type, event => event.stopPropagation());
+        }
+        document.addEventListener('visibilitychange', () => { if (document.hidden) close(true); });
+        window.addEventListener('pagehide', () => close(true));
+        updateControls();
+        return { setAvailable(value) { if (!opened) launch.hidden = value !== true; } };
+      }
       function createQuestHost(speech) {
         let utterance = null;
         let speechGeneration = 0;
+        function finiteFields(source, schema) {
+          const result = {};
+          for (const [key, [minimum, maximum, integer]] of Object.entries(schema)) {
+            const value = source[key];
+            if (!Number.isFinite(value) || value < minimum || value > maximum || integer && !Number.isInteger(value)) return null;
+            result[key] = value;
+          }
+          return result;
+        }
+        function wordRun(source) {
+          if (!source || typeof source !== 'object' || Array.isArray(source)) return null;
+          if (!Object.keys(source).length) return {};
+          const run = finiteFields(source, { level_number: [1, 14, true], hits: [0, 100000, true],
+            misses: [0, 100000, true], spawned: [1, 100000, true], elapsed: [0, 3600],
+            next_spawn_in: [0, 3], clear_number: [1, 100000, true] });
+          if (!run || !['playing', 'victory', 'chest'].includes(source.phase) ||
+              typeof source.run_id !== 'string' || source.run_id.length > 160 || !/^tq-run--?\d+-\d+-\d+$/.test(source.run_id) ||
+              !Array.isArray(source.targets) || source.targets.length > 3) return null;
+          run.phase = source.phase;
+          run.run_id = source.run_id;
+          run.targets = [];
+          for (const target of source.targets) {
+            if (!target || typeof target !== 'object' || Array.isArray(target) ||
+                typeof target.word_id !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(target.word_id)) return null;
+            const saved = finiteFields(target, { uid: [1, source.spawned, true], age: [0, 6.8],
+              lifetime: [5.8, 6.8], lane: [0, 2, true], x_start: [0.15, 0.85], x_end: [0.15, 0.85],
+              peak: [0.1, 0.5], spin: [-0.2, 0.2] });
+            if (!saved || saved.age >= saved.lifetime) return null;
+            run.targets.push({ ...saved, word_id: target.word_id });
+          }
+          return run;
+        }
         function questCancelSpeak() {
           speechGeneration++;
           if (utterance) window.speechSynthesis?.cancel();
@@ -2216,16 +2825,18 @@
           saveQuestProgress(text) {
             try {
               const value = JSON.parse(text);
-              if (!value || value.version !== 1 || !Array.isArray(value.completion_counts)) return false;
+              if (!value || ![1, 2].includes(value.version) || !Array.isArray(value.completion_counts)) return false;
               // Persist only the progress schema. Recognized speech is ephemeral.
-              const run = value.run && typeof value.run === 'object' ? {
+              const run = value.version === 2 ? wordRun(value.run) : value.run && typeof value.run === 'object' ? {
                 level_number: value.run.level_number, line_index: value.run.line_index,
                 phase: value.run.phase, clear_number: value.run.clear_number, run_id: value.run.run_id
               } : {};
-              if (Array.isArray(value.run?.selected_parts)) run.selected_parts = value.run.selected_parts.filter(id =>
+              if (value.version === 2 && (run === null || value.completion_counts.length !== 14 ||
+                  value.completion_counts.some(count => !Number.isInteger(count) || count < 0 || count > 100000))) return false;
+              if (value.version === 1 && Array.isArray(value.run?.selected_parts)) run.selected_parts = value.run.selected_parts.filter(id =>
                 ['wheel', 'wing', 'ribbon', 'screw', 'key'].includes(id)).slice(0, 5);
               localStorage.setItem('wordBuddies.talkQuest', JSON.stringify({
-                version: 1, completion_counts: value.completion_counts, run
+                version: value.version, completion_counts: value.completion_counts, run
               }));
               return true;
             } catch { return false; }
@@ -2238,6 +2849,9 @@
             status.dataset.snapshot = JSON.stringify(value);
             const message = value.active ? (value.view === 'map' ?
               `Talk Quest. ${value.completed?.length || 0} of 14 adventures complete.` :
+              Array.isArray(value.targets) ? `Talk Quest. ${value.hp || 0} health remaining.` +
+                (value.targets.length ? ` Words: ${value.targets.map(target => target.text || '').join(', ')}.` : '') +
+                (value.transcript ? ` ${value.transcript}` : '') :
               `${value.prompt?.speaker || ''}: ${value.prompt?.text || value.phase}. ${value.transcript || ''}`) : '';
             if (status.textContent !== message) status.textContent = message;
           },
@@ -2260,6 +2874,13 @@
       }
       const speechHost = createSpeechHost();
       const questHost = createQuestHost(speechHost);
+      let onSpeechDebug = null;
+      const speechDebug = createSpeechDebugPanel(speechHost, (action, value) => {
+        // Godot callbacks discard return values; acknowledge through the shared object.
+        const reply = { accepted: false };
+        onSpeechDebug?.(action, value, reply);
+        return reply.accepted === true;
+      });
 
       function fail(reason) {
         gameAudioRecovery.stop();
@@ -2317,6 +2938,7 @@
         status.hidden = true;
         canvas.inert = false;
         canvas.focus({ preventScroll: true });
+        speechDebug.setAvailable(typeof onSpeechDebug === 'function');
       }
       enterButton.addEventListener('click', enterGame, loadingListener);
 
@@ -2324,6 +2946,10 @@
       window.wordBuddiesHost = Object.freeze({
         ...speechHost,
         ...questHost,
+        observeSpeechDebug(callback) {
+          onSpeechDebug = typeof callback === 'function' ? callback : null;
+          speechDebug.setAvailable(entered && onSpeechDebug !== null);
+        },
         attachAudioContext(context) {
           // Godot provides its existing playback context; the host never creates
           // a second engine, resumes a recording or replays an interrupted cue.
@@ -2375,6 +3001,20 @@
           try { value = JSON.parse(text); } catch { return; }
           if (!value || typeof value !== 'object' || Array.isArray(value)) return;
           document.getElementById('leaderboard-status').dataset.snapshot = JSON.stringify(value);
+        },
+        popRewardState() {
+          try { return localStorage.getItem('wordBuddies.popRewards'); }
+          catch { return false; }
+        },
+        savePopRewardState(text) {
+          try { localStorage.setItem('wordBuddies.popRewards', text); return true; }
+          catch { return false; }
+        },
+        popRewardStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+          document.getElementById('pop-reward-status').dataset.snapshot = JSON.stringify(value);
         },
         medalProgress() {
           try { return localStorage.getItem('wordBuddies.medalProgress'); }

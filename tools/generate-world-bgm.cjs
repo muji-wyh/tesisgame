@@ -61,7 +61,9 @@ function soundtrack(id) {
   return { duration: score.beat ? beat * 32 : 19.2, notes };
 }
 
-function generateWorldBgm({ root = path.resolve(__dirname, '..'), onlyMissing = false } = {}) {
+// Keep these original scores for provenance and missing-file recovery. Existing
+// downloaded soundtracks are preserved unless replacement is explicitly requested.
+function generateWorldBgm({ root = path.resolve(__dirname, '..'), onlyMissing = true } = {}) {
   const output = path.join(root, 'assets', 'audio', 'bgm');
   const ids = Object.keys(scores).filter(id => !onlyMissing || !fs.existsSync(path.join(output, `${id}.wav`)));
   if (!ids.length) return 0;
@@ -92,7 +94,12 @@ function generateWorldBgm({ root = path.resolve(__dirname, '..'), onlyMissing = 
 }
 
 if (require.main === module) {
-  const count = generateWorldBgm({ onlyMissing: process.argv.includes('--missing') });
+  const args = process.argv.slice(2);
+  if (args.some(arg => !['--missing', '--replace'].includes(arg)) ||
+      (args.includes('--missing') && args.includes('--replace'))) {
+    throw new Error('Usage: node tools/generate-world-bgm.cjs [--missing | --replace]');
+  }
+  const count = generateWorldBgm({ onlyMissing: !args.includes('--replace') });
   console.log(`Generated ${count} original world soundtracks (44100 Hz, PCM16 stereo).`);
 }
 module.exports = { soundtrack, generateWorldBgm };

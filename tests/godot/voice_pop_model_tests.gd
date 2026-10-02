@@ -27,6 +27,7 @@ func _run() -> void:
 	_test_recognition()
 	_test_bound_speech_events()
 	_test_homophones_vocabulary_and_feedback()
+	_test_compounds()
 	_test_form_snapshots()
 	_test_expiry_and_results()
 	_test_frame_independence()
@@ -45,6 +46,43 @@ func words(ids: Array) -> Array:
 func speech_event(game, target: Dictionary, id: String, text: String = "") -> Dictionary:
 	return {"event_id": id, "round_id": game.round_id, "target_uid": target.uid,
 		"text": target.word.text if text.is_empty() else text, "stage": "interim", "received_at_ms": 120.0}
+
+
+func _test_compounds() -> void:
+	for fixture in [["seahorse", "sea horse", "sea horses", "horse"], ["sunflower", "sun flower", "sun flowers", "sun"],
+		["sunglasses", "sun glasses", "sun glasses", "sun"], ["pinecone", "pine cone", "pine cones", "cone"],
+		["yoyo", "yo yo", "yo yos", "yo"]]:
+		for spelling in [fixture[1], str(fixture[1]).replace(" ", "-"), fixture[2], str(fixture[2]).replace(" ", "-")]:
+			var game := Model.new()
+			game.configure(words([fixture[0]]), 7)
+			game.start()
+			check(game.hit_transcript(spelling).size() == 1 and game.hit_words[0].id == fixture[0],
+				"Pop accepts a complete reviewed compound spelling: " + spelling)
+			game.configure(words([fixture[0]]), 7)
+			game.start()
+			check(game.hit_speech_event(speech_event(game, game.targets[0], "compound", spelling)).size() == 1,
+				"Bound events use the same compound normalization: " + spelling)
+		var game := Model.new()
+		game.configure(words([fixture[0]]), 7)
+		game.start()
+		check(not game._can_spawn({"id": fixture[3], "text": fixture[3]}),
+			"A live compound prevents its component from spawning: " + fixture[0])
+		var component: Dictionary = {"id": fixture[3], "text": fixture[3], "image": "component.svg", "audio": "component.wav"}
+		game.configure([component] + words([fixture[0]]), 7)
+		for seed_value in range(10):
+			game.configure([component] + words([fixture[0]]), seed_value)
+			game.start()
+			game.advance(4.0)
+			check(game.targets.size() == 1, "Compounds and components cannot coexist after either spawn order")
+	var game := Model.new()
+	game.configure(words(["sun", "flower"]), 7)
+	game.start()
+	game.advance(2.2)
+	check(game.targets.size() == 2 and game.hit_transcript("sun flower").size() == 2,
+		"Separate sun and flower targets remain valid without sunflower")
+	game.configure(words(["sun"]), 7)
+	game.start()
+	check(game.hit_transcript("sunflower").is_empty(), "An off-screen joined compound does not score its component")
 
 
 func _test_bound_speech_events() -> void:

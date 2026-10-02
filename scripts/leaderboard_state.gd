@@ -134,6 +134,63 @@ func create_profile(player_name: String, avatar: String) -> Dictionary:
 	return {"ok": true, "profile": profile.duplicate(true), "error": ""}
 
 
+func update_profile(player_id: String, player_name: String, avatar: String) -> Dictionary:
+	error = ""
+	if not ready:
+		return _failure("Load players and leaderboards successfully before editing a player.")
+	if not _valid_id(player_id):
+		return _failure("Choose a player saved on this device.")
+	var normalized := player_name.strip_edges()
+	if not _valid_name(normalized) or _has_controls(player_name):
+		return _failure("Enter a name with 1 to 20 characters and no control characters.")
+	if not AVATARS.has(avatar):
+		return _failure("Choose an available avatar.")
+	# Apply edits to the latest save without replacing other players or scores.
+	if not load_state():
+		return _failure(error)
+	for index in range(profiles.size()):
+		if profiles[index].id != player_id:
+			continue
+		var profile := {"id": player_id, "name": normalized, "avatar": avatar}
+		var next_profiles: Array[Dictionary] = profiles.duplicate(true)
+		next_profiles[index] = profile
+		if not _persist(next_profiles, _bests, _receipts):
+			return _failure(error)
+		profiles = next_profiles
+		return {"ok": true, "profile": profile.duplicate(true), "error": ""}
+	return _failure("This player is no longer saved on this device. Choose another player.")
+
+
+func remove_profile(player_id: String) -> Dictionary:
+	error = ""
+	if not ready:
+		return _failure("Load players and leaderboards successfully before removing a player.")
+	if not _valid_id(player_id):
+		return _failure("Choose a player saved on this device.")
+	if not load_state():
+		return _failure(error)
+	for index in range(profiles.size()):
+		if profiles[index].id != player_id:
+			continue
+		var profile: Dictionary = profiles[index].duplicate(true)
+		var next_profiles: Array[Dictionary] = profiles.duplicate(true)
+		next_profiles.remove_at(index)
+		var next_bests: Dictionary = _bests.duplicate(true)
+		for mode in MODES:
+			next_bests[mode].erase(player_id)
+		var next_receipts: Array[Dictionary] = []
+		for receipt in _receipts:
+			if receipt.player_id != player_id:
+				next_receipts.append(receipt.duplicate(true))
+		if not _persist(next_profiles, next_bests, next_receipts):
+			return _failure(error)
+		profiles = next_profiles
+		_bests = next_bests
+		_receipts = next_receipts
+		return {"ok": true, "profile": profile, "error": ""}
+	return _failure("This player is no longer saved on this device. Choose another player.")
+
+
 func board(mode: String) -> Array[Dictionary]:
 	return _board(mode, _bests)
 
@@ -343,7 +400,7 @@ func _discard_staged(path: String) -> void:
 
 func _failure(message: String) -> Dictionary:
 	error = message
-	return {"ok": false, "error": message, "duplicate": false, "improved": false}
+	return {"ok": false, "profile": {}, "error": message, "duplicate": false, "improved": false}
 
 
 func _fail(message: String) -> bool:

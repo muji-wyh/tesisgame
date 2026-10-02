@@ -3,6 +3,8 @@ extends VBoxContainer
 signal changed
 signal score_saved(outcome: Dictionary)
 signal player_confirmed(player_id: String)
+signal profile_updated(profile: Dictionary)
+signal profile_removed(player_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
 const NAVY := Color("#10172f")
@@ -37,6 +39,9 @@ var _selected: String = ""
 var _selected_avatar: String = "duck"
 var _draft_name: String = ""
 var _editor_open: bool = false
+var _editing_player: String = ""
+var _removing_player: String = ""
+var _retired_result: bool = false
 var _error: String = ""
 var _notice: String = ""
 var _rows_data: Array = []
@@ -57,6 +62,7 @@ var _ui_generation: int = 0
 var _textures: Dictionary = {}
 var _last_scale: float = -1.0
 var _rescale_pending: bool = false
+var _rescale_waiting_for_pointer: bool = false
 
 
 class RankRow extends PanelContainer:
@@ -158,6 +164,7 @@ func _ready() -> void:
 	resized.connect(_relayout_board)
 	visibility_changed.connect(_visibility_changed)
 	set_process(false)
+	set_process_input(false)
 
 
 func configure(store: RefCounted, view: String = "boards", mode: String = "pop", round_id: String = "", result: Dictionary = {}, reduced: bool = false, assigned_player_id: String = "") -> void:
@@ -177,6 +184,9 @@ func configure(store: RefCounted, view: String = "boards", mode: String = "pop",
 	_selected = _assigned_player_id
 	_selected_avatar = "duck"
 	_draft_name = ""
+	_editing_player = ""
+	_removing_player = ""
+	_retired_result = false
 	_error = ""
 	_notice = ""
 	_editor_open = _view in ["players", "onboarding"] or _profiles().is_empty()
@@ -201,7 +211,136 @@ func refresh_profiles() -> void:
 	_build()
 
 
+func _reconcile_profiles() -> void:
+	if _store == null or not _store.ready:
+		return
+	if (not _editing_player.is_empty() and _profile(_editing_player).is_empty()) or (not _removing_player.is_empty() and _profile(_removing_player).is_empty()):
+		_editing_player = ""
+		_removing_player = ""
+		_draft_name = ""
+		_selected_avatar = "duck"
+		_error = "This player has already been removed."
+	if not _assigned_player_id.is_empty() and _profile(_assigned_player_id).is_empty():
+		_retired_result = true
+	if not _selected.is_empty() and _profile(_selected).is_empty():
+		_retired_result = _retired_result or _submitted
+		_selected = ""
+	if _retired_result:
+		_notice = ""
+		_result.clear()
+
+
+func _edit_player(id: String, generation: int = -1) -> void:
+	if _view != "players" or not _accept_action(generation):
+		return
+	var profile: Dictionary = _profile(id)
+	if profile.is_empty():
+		return
+	_editing_player = id
+	_removing_player = ""
+	_draft_name = str(profile.name)
+	_selected_avatar = str(profile.avatar)
+	_error = ""
+	_notice = ""
+	_build()
+	_name_input.grab_focus()
+
+
+func _request_remove(id: String, generation: int = -1) -> void:
+	if _view != "players" or not _accept_action(generation) or _profile(id).is_empty():
+		return
+	_removing_player = id
+	_editing_player = ""
+	_draft_name = ""
+	_error = ""
+	_notice = ""
+	_build()
+	_focus_management_control("LeaderboardCancelRemove")
+
+
+func cancel_management() -> bool:
+	if _view != "players" or (_editing_player.is_empty() and _removing_player.is_empty()):
+		return false
+	var focus_name: String = "LeaderboardEdit_" + _editing_player if not _editing_player.is_empty() else "LeaderboardRemove_" + _removing_player
+	_editing_player = ""
+	_removing_player = ""
+	_draft_name = ""
+	_selected_avatar = "duck"
+	_error = ""
+	_build()
+	_focus_management_control(focus_name)
+	return true
+
+
+func _cancel_management_action(generation: int = -1) -> void:
+	if _accept_action(generation):
+		cancel_management()
+
+
+func _focus_management_control(control_name: String) -> void:
+	var control: Control = find_child(control_name, true, false) as Control if not control_name.is_empty() else null
+	if not is_instance_valid(control):
+		control = default_focus()
+	if is_instance_valid(control):
+		control.grab_focus()
+
+
+func _submit_profile(generation: int = -1) -> void:
+	if not _accept_action(generation):
+		return
+	if not _editing_player.is_empty():
+		_save_player(generation)
+	else:
+		_create_player(generation)
+
+
+func _save_player(generation: int = -1) -> void:
+	if _view != "players" or _editing_player.is_empty() or _store == null or not _accept_action(generation):
+		return
+	if not _store.ready and not _store.load_state():
+		_set_error(str(_store.error))
+		return
+	var outcome: Dictionary = _store.update_profile(_editing_player, _draft_name, _selected_avatar)
+	if not bool(outcome.get("ok", false)):
+		_set_error(str(outcome.get("error", "Could not save this player. Please try again.")))
+		return
+	var profile: Dictionary = outcome.profile
+	_editing_player = ""
+	_draft_name = ""
+	_selected_avatar = "duck"
+	_error = ""
+	_notice = "Player updated."
+	_build()
+	_focus_management_control("LeaderboardEdit_" + str(profile.id))
+	profile_updated.emit(profile.duplicate(true))
+
+
+func _remove_player(generation: int = -1) -> void:
+	if _view != "players" or _removing_player.is_empty() or _store == null or not _accept_action(generation):
+		return
+	if not _store.ready and not _store.load_state():
+		_set_error(str(_store.error))
+		return
+	var id: String = _removing_player
+	var outcome: Dictionary = _store.remove_profile(id)
+	if not bool(outcome.get("ok", false)):
+		_set_error(str(outcome.get("error", "Could not remove this player. Please try again.")))
+		return
+	_removing_player = ""
+	_editing_player = ""
+	_draft_name = ""
+	_selected_avatar = "duck"
+	_error = ""
+	_notice = "Player removed."
+	_build()
+	_focus_management_control("")
+	profile_removed.emit(id)
+
+
 func _build() -> void:
+	_reconcile_profiles()
+	_rescale_waiting_for_pointer = false
+	set_process_input(false)
 	_generation += 1
 	_ui_generation += 1
 	_last_scale = _scale()
@@ -255,8 +394,17 @@ func _build() -> void:
 		_publish_later()
 		return
 	if _view == "players":
-		_build_profiles(body, false)
-		_build_editor(body)
+		if not _notice.is_empty():
+			body.add_child(_label(_notice, 13, GOLD, true))
+		if not _removing_player.is_empty():
+			_build_remove_confirmation(body)
+		elif not _editing_player.is_empty():
+			body.add_child(_label("Edit player", 19, WHITE))
+			_build_editor(body)
+		else:
+			_build_profiles(body, false)
+			body.add_child(_label("Add a player", 19, WHITE))
+			_build_editor(body)
 		body.add_child(_label("Emoji artwork: Twemoji / CC BY 4.0", 10, SOFT))
 	elif _view == "onboarding":
 		if _profiles().is_empty():
@@ -286,6 +434,9 @@ func _build() -> void:
 
 
 func _build_attribution(body: VBoxContainer) -> void:
+	if _retired_result:
+		body.add_child(_label("This player's result has been removed.", 13, SOFT, true))
+		return
 	if _view == "result":
 		if not _submitted and not _assigned_player_id.is_empty():
 			_build_save_retry(body)
@@ -348,6 +499,30 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 	if profiles.is_empty():
 		body.add_child(_label("Your first player starts here.", 14, PURPLE, true))
 		return
+	if not selectable:
+		for profile in profiles:
+			var id: String = str(profile.id)
+			var row := HBoxContainer.new()
+			row.add_theme_constant_override("separation", _px(8))
+			row.add_child(_avatar(str(profile.avatar), 30))
+			var player_name := _label(str(profile.name), 16, WHITE)
+			player_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			player_name.custom_minimum_size.x = 16 / _scale()
+			player_name.clip_text = true
+			player_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			player_name.tooltip_text = str(profile.name)
+			row.add_child(player_name)
+			var edit := _button("Edit", "LeaderboardEdit_" + id)
+			edit.accessibility_name = "Edit " + str(profile.name)
+			edit.pressed.connect(_edit_player.bind(id, _ui_generation))
+			row.add_child(edit)
+			var remove := _button("Remove", "LeaderboardRemove_" + id)
+			remove.accessibility_name = "Remove " + str(profile.name)
+			remove.pressed.connect(_request_remove.bind(id, _ui_generation))
+			row.add_child(remove)
+			body.add_child(row)
+		body.add_child(_label("%d / 10 players" % profiles.size(), 12, SOFT))
+		return
 	var grid := HFlowContainer.new()
 	grid.name = "LeaderboardPlayerChoices"
 	grid.add_theme_constant_override("h_separation", _px(8))
@@ -376,7 +551,7 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 
 
 func _build_editor(body: VBoxContainer) -> void:
-	if _profiles().size() >= 10:
+	if _editing_player.is_empty() and _profiles().size() >= 10:
 		body.add_child(_label("All 10 player spots are in use.", 13, GOLD, true))
 		return
 	_form = VBoxContainer.new()
@@ -397,7 +572,7 @@ func _build_editor(body: VBoxContainer) -> void:
 		choice.tooltip_text = str(id).capitalize()
 		choice.toggle_mode = true
 		choice.button_pressed = id == _selected_avatar
-		choice.pressed.connect(_select_avatar.bind(id))
+		choice.pressed.connect(_select_avatar.bind(id, _ui_generation))
 		avatars.add_child(choice)
 	_form.add_child(avatars)
 	_name_input = LineEdit.new()
@@ -414,15 +589,34 @@ func _build_editor(body: VBoxContainer) -> void:
 	_name_input.add_theme_color_override("caret_color", GOLD)
 	_name_input.add_theme_stylebox_override("normal", Style.box(SURFACE, EDGE, _px(12), 1))
 	_name_input.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, GOLD, _px(12), 2))
-	_name_input.text_changed.connect(_name_changed)
+	_name_input.text_changed.connect(_name_changed.bind(_ui_generation))
 	var generation: int = _ui_generation
-	_name_input.text_submitted.connect(func(_text: String): _create_player(generation))
+	_name_input.text_submitted.connect(func(_text: String): _submit_profile(generation))
 	_name_input.focus_entered.connect(_ensure_visible.bind(_name_input))
+	_name_input.editing_toggled.connect(func(_editing: bool): _relayout_board())
 	_form.add_child(_name_input)
-	_create_button = _button("Create player & continue" if _view == "onboarding" else "Create player", "LeaderboardCreatePlayer", true)
+	var editing: bool = not _editing_player.is_empty()
+	_create_button = _button("Save changes" if editing else "Create player & continue" if _view == "onboarding" else "Create player", "LeaderboardSavePlayer" if editing else "LeaderboardCreatePlayer", true)
 	_create_button.disabled = _draft_name.strip_edges().is_empty()
-	_create_button.pressed.connect(_create_player.bind(_ui_generation))
+	_create_button.pressed.connect(_submit_profile.bind(_ui_generation))
 	_form.add_child(_create_button)
+	if editing:
+		var cancel := _button("Cancel", "LeaderboardCancelEdit")
+		cancel.pressed.connect(_cancel_management_action.bind(_ui_generation))
+		_form.add_child(cancel)
+
+
+func _build_remove_confirmation(body: VBoxContainer) -> void:
+	var profile: Dictionary = _profile(_removing_player)
+	body.add_child(_avatar(str(profile.get("avatar", "duck")), 56))
+	body.add_child(_label("Remove %s?" % str(profile.get("name", "this player")), 20, WHITE, true))
+	body.add_child(_label("This removes the player and their leaderboard scores from this device. Shared game progress and treasures will stay. This cannot be undone.", 14, SOFT, true))
+	var cancel := _button("Keep player", "LeaderboardCancelRemove", true)
+	cancel.pressed.connect(_cancel_management_action.bind(_ui_generation))
+	body.add_child(cancel)
+	var remove := _button("Remove player", "LeaderboardConfirmRemove")
+	remove.pressed.connect(_remove_player.bind(_ui_generation))
+	body.add_child(remove)
 
 
 func _build_mode_tabs(body: VBoxContainer) -> void:
@@ -502,7 +696,9 @@ func _select_player(id: String, generation: int = -1) -> void:
 	changed.emit()
 
 
-func _select_avatar(id: String) -> void:
+func _select_avatar(id: String, generation: int = -1) -> void:
+	if not id in AVATARS or not _accept_action(generation):
+		return
 	_selected_avatar = id
 	for control in controls():
 		if control is Button and str(control.name).begins_with("LeaderboardAvatar_"):
@@ -511,7 +707,9 @@ func _select_avatar(id: String) -> void:
 	changed.emit()
 
 
-func _name_changed(value: String) -> void:
+func _name_changed(value: String, generation: int = -1) -> void:
+	if not _accept_action(generation):
+		return
 	_draft_name = value
 	if is_instance_valid(_create_button):
 		_create_button.disabled = value.strip_edges().is_empty()
@@ -528,7 +726,7 @@ func _open_editor(generation: int = -1) -> void:
 
 
 func _create_player(generation: int = -1) -> void:
-	if _confirmed or not _assigned_player_id.is_empty() or _store == null or _draft_name.strip_edges().is_empty() or _profiles().size() >= 10 or not _accept_action(generation):
+	if _confirmed or not _editing_player.is_empty() or not _removing_player.is_empty() or not _assigned_player_id.is_empty() or _store == null or _draft_name.strip_edges().is_empty() or _profiles().size() >= 10 or not _accept_action(generation):
 		return
 	if not _store.ready and not _store.load_state():
 		_set_error(str(_store.error))
@@ -583,7 +781,7 @@ func save_assigned_score() -> void:
 
 
 func _save_score(generation: int = -1) -> void:
-	if _submitted or _selected.is_empty() or _round_id.is_empty() or _store == null or not _accept_action(generation):
+	if _retired_result or _submitted or _selected.is_empty() or _round_id.is_empty() or _store == null or not _accept_action(generation):
 		return
 	if not _store.ready and not _store.load_state():
 		_set_error(str(_store.error))
@@ -816,7 +1014,7 @@ func snapshot() -> Dictionary:
 	var rect := get_global_rect()
 	var surface := get_node_or_null("LeaderboardSurface") as Control
 	var surface_rect := surface.get_global_rect() if is_instance_valid(surface) else Rect2()
-	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "confirmed": _confirmed, "assigned_player": _assigned_player_id, "selected_player": _selected, "error": _error, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "surface_rect": [surface_rect.position.x, surface_rect.position.y, surface_rect.size.x, surface_rect.size.y], "controls": geometry}
+	return {"view": _view, "mode": _mode, "round_id": _round_id, "submitted": _submitted, "confirmed": _confirmed, "assigned_player": _assigned_player_id, "selected_player": _selected, "editing_player": _editing_player, "removing_player": _removing_player, "retired_result": _retired_result, "error": _error, "notice": _notice, "profiles": _profiles().duplicate(true), "rows": rows, "animation": animation, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "surface_rect": [surface_rect.position.x, surface_rect.position.y, surface_rect.size.x, surface_rect.size.y], "controls": geometry}
 
 
 func _set_error(message: String) -> void:
@@ -967,10 +1165,31 @@ func _pass_scroll_inputs(node: Node) -> void:
 		_pass_scroll_inputs(child)
 
 
+func _input(event: InputEvent) -> void:
+	if _rescale_waiting_for_pointer and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		_rescale_waiting_for_pointer = false
+		set_process_input(false)
+		# Defer until the current release reaches its pressed button.
+		_relayout_board()
+
+
 func _rescale() -> void:
 	_rescale_pending = false
 	if is_equal_approx(_last_scale, _scale()) or _store == null:
 		return
+	# A software keyboard can change the viewport scale. Rebuilding its live
+	# LineEdit would blur the native editor and close that keyboard again.
+	# Apply the pending scale when editing ends instead.
+	if is_instance_valid(_name_input) and _name_input.has_focus() and _name_input.is_editing():
+		return
+	# Moving focus to an action ends editing before that action's release.
+	# Keep its pressed control alive until the pointer gesture finishes.
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		_rescale_waiting_for_pointer = true
+		set_process_input(true)
+		return
+	_rescale_waiting_for_pointer = false
+	set_process_input(false)
 	var focused: Control = get_viewport().gui_get_focus_owner()
 	var focus_name: String = str(focused.name) if is_instance_valid(focused) and is_ancestor_of(focused) else ""
 	settle_animation()

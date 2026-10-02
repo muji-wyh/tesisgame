@@ -16,6 +16,9 @@ assets/talk_quest/monsters/*.glb
 assets/talk_quest/monsters/*.glb.import
 assets/talk_quest/monsters/*.png
 assets/talk_quest/monsters/*.png.import
+# Licensed chest render frames are private inputs embedded in the game pack.
+assets/chests/downloaded/*/*.png
+assets/chests/downloaded/*/*.png.import
 # User-provided audio ships in the game pack, not as public source assets.
 assets/imported-audio/
 *.unitypackage

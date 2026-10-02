@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { THEME_IDS, enterGame, openGame, chooseTheme, metrics, tap, boardPoint } = require('./game-ui.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, waveDuration } = require('./bundled-audio.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, waveDuration, recordingTiming } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 
 // Keep Chromium's normal autoplay policy. A trusted Enter/card gesture must
@@ -141,9 +141,10 @@ for (const event of ['visibilitychange', 'pageshow']) {
         if (event === 'visibilitychange') document.dispatchEvent(new Event('visibilitychange'));
         else window.dispatchEvent(new Event('pagehide'));
       }, event);
-      const seconds = waveDuration('assets/audio/bgm/space.wav');
-      await expect.poll(() => page.evaluate(seconds => window.audioObservation.playbacks.some(sound =>
-        Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined), seconds),
+      const timing = recordingTiming('assets/audio/bgm/space.wav');
+      await expect.poll(() => page.evaluate(timing => window.audioObservation.playbacks.some(sound =>
+        Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate &&
+        sound.stoppedAt === undefined && sound.endedAt === undefined), timing),
       { message: 'Backgrounding stops the previously playing music' }).toBe(false);
       await suspendGameAudio(page);
       const beforeVisible = await page.evaluate(() => window.audioObservation.playbacks.length);
@@ -157,7 +158,7 @@ for (const event of ['visibilitychange', 'pageshow']) {
         { message: 'Returning restores one background recording without replaying old speech' }).toBe(1);
       const restored = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeVisible);
       expect(restored).toHaveLength(1);
-      expect(Math.abs(restored[0].duration - seconds)).toBeLessThanOrEqual(1 / restored[0].sampleRate);
+      expect(Math.abs(restored[0].duration - timing.seconds)).toBeLessThanOrEqual(timing.importAllowance + 1 / restored[0].sampleRate);
       await expect.poll(() => page.evaluate(() => window.audioOutputObservation.resumes.length),
         { message: 'Foreground recovery actually asks the suspended context to resume' }).toBeGreaterThan(beforeResume);
       const resumeAttempts = await page.evaluate(from => window.audioOutputObservation.resumes.slice(from), beforeResume);
@@ -177,9 +178,10 @@ for (const event of ['visibilitychange', 'pageshow']) {
       }
       await expectOriginalContextsRunning(page);
       const output = await expectOutputEnergy(page);
-      const liveMusic = await page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).filter(sound =>
-        Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate && sound.stoppedAt === undefined && sound.endedAt === undefined),
-      { from: beforeVisible, seconds });
+      const liveMusic = await page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).filter(sound =>
+        Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate &&
+        sound.stoppedAt === undefined && sound.endedAt === undefined),
+      { from: beforeVisible, timing });
       expect(liveMusic, 'Recovery keeps exactly one live background recording').toHaveLength(1);
       expect(await page.evaluate(() => ({ origin: performance.timeOrigin, contexts: window.audioObservation.contexts.length }))).toEqual(identity);
       await expect(page.locator('#audio-status')).toBeEmpty();
