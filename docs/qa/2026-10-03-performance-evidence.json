@@ -1,0 +1,1319 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-03",
+  "collection": "native-stabilized-paired",
+  "result": {
+    "protocol": "main-scene-rendered-v1",
+    "primary_metric": "active rendered-frame wall time",
+    "baseline": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\summary.json",
+    "candidate": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\summary.json",
+    "repeats": 5,
+    "scenarios": [
+      {
+        "scenario": "match",
+        "baseline_mean_us": 6167.7733333333335,
+        "candidate_mean_us": 5964.163333333333,
+        "baseline_p95_us": 12372,
+        "candidate_p95_us": 12220,
+        "rendered_ratio": 0.9669880864623213,
+        "time_reduction_percent": 3.301191353767874,
+        "process_ratio": 0.9332669884886744
+      },
+      {
+        "scenario": "memory",
+        "baseline_mean_us": 6873.6175,
+        "candidate_mean_us": 6666.900833333333,
+        "baseline_p95_us": 9938,
+        "candidate_p95_us": 8960,
+        "rendered_ratio": 0.9699260736189252,
+        "time_reduction_percent": 3.0073926381074756,
+        "process_ratio": 0.8468617263628213
+      },
+      {
+        "scenario": "voice-pop",
+        "baseline_mean_us": 16218.754166666668,
+        "candidate_mean_us": 11262.6475,
+        "baseline_p95_us": 25563,
+        "candidate_p95_us": 18976,
+        "rendered_ratio": 0.6944212474190757,
+        "time_reduction_percent": 30.557875258092427,
+        "process_ratio": 0.2990342895077554
+      },
+      {
+        "scenario": "talk-quest",
+        "baseline_mean_us": 13074.674166666666,
+        "candidate_mean_us": 12350.138333333334,
+        "baseline_p95_us": 17771,
+        "candidate_p95_us": 16499,
+        "rendered_ratio": 0.944584788569301,
+        "time_reduction_percent": 5.541521143069906,
+        "process_ratio": 0.9478735930325919
+      },
+      {
+        "scenario": "room",
+        "baseline_mean_us": 9241.746666666666,
+        "candidate_mean_us": 6067.248333333333,
+        "baseline_p95_us": 13029,
+        "candidate_p95_us": 9459,
+        "rendered_ratio": 0.656504506363155,
+        "time_reduction_percent": 34.349549363684496,
+        "process_ratio": 1.0944421214260744
+      },
+      {
+        "scenario": "catalog",
+        "baseline_mean_us": 4226.680833333333,
+        "candidate_mean_us": 4072.0075,
+        "baseline_p95_us": 5124,
+        "candidate_p95_us": 4771,
+        "rendered_ratio": 0.9634054854311412,
+        "time_reduction_percent": 3.659451456885876,
+        "process_ratio": 0.9241217226749687
+      },
+      {
+        "scenario": "chest",
+        "baseline_mean_us": 16344.03,
+        "candidate_mean_us": 16319.925,
+        "baseline_p95_us": 31373,
+        "candidate_p95_us": 30749,
+        "rendered_ratio": 0.9985251495500191,
+        "time_reduction_percent": 0.1474850449980858,
+        "process_ratio": 1.0049863178312293
+      }
+    ],
+    "geometric_mean_ratio": 0.8736693037985754,
+    "time_reduction_percent": 12.633069620142457,
+    "throughput_equivalent_speedup_percent": 14.459784228673112,
+    "paired_repeat_ratios": [
+      0.8425045014635066,
+      0.8787543026597116,
+      0.8610538017366802,
+      0.9085121699827966,
+      0.8866680349725289
+    ],
+    "every_pair_improves": true,
+    "paired_bootstrap": {
+      "resampling_unit": "baseline/candidate repeat pair; never individual frames",
+      "method": "deterministic percentile bootstrap of the paired geometric mean",
+      "confidence": 0.95,
+      "iterations": 10000,
+      "seed": 1369950974,
+      "pairs": 5,
+      "point_ratio": 0.8752101726888081,
+      "ratio_ci95": [
+        0.8553107565400166,
+        0.8944513372755333
+      ],
+      "time_reduction_ci95_percent": [
+        10.554866272446672,
+        14.468924345998335
+      ]
+    },
+    "primary_profile": true,
+    "software_renderer": true,
+    "renderer": {
+      "adapter": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9278)",
+      "audio_driver": "Dummy",
+      "audio_muted": false,
+      "display_server": "Windows",
+      "first_process_priority": -1000000,
+      "last_process_priority": 1000000,
+      "max_fps": 60,
+      "microphone_network": false,
+      "reduced_motion": false,
+      "rendering_driver": "opengl3_angle",
+      "rendering_method": "gl_compatibility",
+      "sample_frames": 240,
+      "stretch_aspect": "expand",
+      "stretch_mode": "canvas_items",
+      "vsync": 0,
+      "warmup_frames": 90,
+      "window_size": [
+        390,
+        844
+      ]
+    },
+    "collection_order": [
+      {
+        "ordinal": 1,
+        "pair": 1,
+        "label": "native-stabilized-paired-baseline",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\repeat-01.json",
+        "started_at": "2026-10-02T16:03:47.720Z",
+        "completed_at": "2026-10-02T16:04:44.426Z"
+      },
+      {
+        "ordinal": 2,
+        "pair": 1,
+        "label": "native-stabilized-paired-candidate",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\repeat-01.json",
+        "started_at": "2026-10-02T16:04:44.582Z",
+        "completed_at": "2026-10-02T16:05:38.453Z"
+      },
+      {
+        "ordinal": 3,
+        "pair": 2,
+        "label": "native-stabilized-paired-candidate",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\repeat-02.json",
+        "started_at": "2026-10-02T16:05:38.618Z",
+        "completed_at": "2026-10-02T16:06:32.664Z"
+      },
+      {
+        "ordinal": 4,
+        "pair": 2,
+        "label": "native-stabilized-paired-baseline",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\repeat-02.json",
+        "started_at": "2026-10-02T16:06:32.824Z",
+        "completed_at": "2026-10-02T16:07:29.275Z"
+      },
+      {
+        "ordinal": 5,
+        "pair": 3,
+        "label": "native-stabilized-paired-baseline",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\repeat-03.json",
+        "started_at": "2026-10-02T16:07:29.446Z",
+        "completed_at": "2026-10-02T16:08:25.487Z"
+      },
+      {
+        "ordinal": 6,
+        "pair": 3,
+        "label": "native-stabilized-paired-candidate",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\repeat-03.json",
+        "started_at": "2026-10-02T16:08:25.643Z",
+        "completed_at": "2026-10-02T16:09:19.889Z"
+      },
+      {
+        "ordinal": 7,
+        "pair": 4,
+        "label": "native-stabilized-paired-candidate",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\repeat-04.json",
+        "started_at": "2026-10-02T16:09:20.056Z",
+        "completed_at": "2026-10-02T16:10:14.431Z"
+      },
+      {
+        "ordinal": 8,
+        "pair": 4,
+        "label": "native-stabilized-paired-baseline",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\repeat-04.json",
+        "started_at": "2026-10-02T16:10:14.601Z",
+        "completed_at": "2026-10-02T16:11:10.017Z"
+      },
+      {
+        "ordinal": 9,
+        "pair": 5,
+        "label": "native-stabilized-paired-baseline",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-baseline\\repeat-05.json",
+        "started_at": "2026-10-02T16:11:10.185Z",
+        "completed_at": "2026-10-02T16:12:05.464Z"
+      },
+      {
+        "ordinal": 10,
+        "pair": 5,
+        "label": "native-stabilized-paired-candidate",
+        "file": "C:\\uworks\\tesisgame\\build\\performance\\native-stabilized-paired-candidate\\repeat-05.json",
+        "started_at": "2026-10-02T16:12:05.620Z",
+        "completed_at": "2026-10-02T16:12:59.599Z"
+      }
+    ],
+    "mean_regressions_over_five_percent": [],
+    "target_met": true,
+    "scope": "Native GL Compatibility with a 60 Hz cap using a software graphics adapter. Main-scene updates, draw preparation, and render submission through frame_post_draw. Not GPU time, phone/Web FPS, or audio latency."
+  },
+  "identities": {
+    "baseline": {
+      "commit": "f7c3caf1806af8f6ca1b533f950347fb6e06b24c",
+      "runtime_sha256": "033cbf4605f267a48ef450225c1fddd03eede9141bf496e293c4d8f8b63801f1"
+    },
+    "candidate": {
+      "recorded_git_head": "f7c3caf1806af8f6ca1b533f950347fb6e06b24c",
+      "runtime_sha256": "5f995475ccc05ec474dbb05279a8b254a6b05e3908953b2c87498742ab756f19",
+      "note": "Candidate was an uncommitted working tree; content fingerprint is authoritative."
+    },
+    "harness_sha256": "5e486a3cd4055c2ccb59dd1cd89b644ff6855af9856853741bbf0398a1970cb1",
+    "harness_files": [
+      {
+        "path": "tests/performance/main_scene_benchmark.gd",
+        "sha256": "e033c18f3657a01bd00938d553106faba510f8cb08027244c9f56c8d280af399"
+      },
+      {
+        "path": "tests/godot/player_flow_fixture.gd",
+        "sha256": "9ea7fee0ae1ad0231e86afb0eb5e70a7b49538d8e8d241bf5ccbcc2575439bac"
+      }
+    ],
+    "frozen_baseline": {
+      "manifest": "build/performance/baseline-stabilized-project/baseline-source.json",
+      "commit": "f7c3caf1806af8f6ca1b533f950347fb6e06b24c",
+      "source_tree_sha256": "c1b13e6f8b35fcba206bcdf612d07532df104e1f5169cc49c3c3b24476588e05",
+      "changed_runtime_files": [
+        [
+          "scripts/duck_mascot.gd",
+          "8b80956bf2086d30d5048099bcdff0d4969f062c20e51d881093884ef7eda9d5"
+        ]
+      ],
+      "shared_directories": [
+        {
+          "name": "assets",
+          "target": "C:\\uworks\\tesisgame\\assets",
+          "resolved_target": "C:\\uworks\\tesisgame\\assets",
+          "link_kind": "junction",
+          "source": "current workspace; shared, not frozen from the selected commit",
+          "mutable": true,
+          "directory_modified_at": "2026-10-01T14:40:04.572Z"
+        },
+        {
+          "name": ".godot",
+          "target": "C:\\uworks\\tesisgame\\.godot",
+          "resolved_target": "C:\\uworks\\tesisgame\\.godot",
+          "link_kind": "junction",
+          "source": "current workspace; shared, not frozen from the selected commit",
+          "mutable": true,
+          "directory_modified_at": "2026-10-02T14:58:18.784Z"
+        },
+        {
+          "name": "tests",
+          "target": "C:\\uworks\\tesisgame\\tests",
+          "resolved_target": "C:\\uworks\\tesisgame\\tests",
+          "link_kind": "junction",
+          "source": "current workspace; shared, not frozen from the selected commit",
+          "mutable": true,
+          "directory_modified_at": "2026-10-02T15:37:00.545Z"
+        }
+      ]
+    },
+    "stabilization": {
+      "commit": "f7c3caf1806af8f6ca1b533f950347fb6e06b24c",
+      "patch": "docs/qa/2026-10-03-performance-baseline-sparkle.patch",
+      "patch_sha256": "b06487b57ddbe66d65b72ccd6baa535379aee21c34ee20ae6546fc0118c38ac9",
+      "changed_files": [
+        {
+          "path": "scripts/duck_mascot.gd",
+          "original_sha256": "6b89fe2ef166cb860af61b550284729dfffbb6bc89f9eec682cbf1aa6344f52a",
+          "stabilized_sha256": "8b80956bf2086d30d5048099bcdff0d4969f062c20e51d881093884ef7eda9d5"
+        }
+      ],
+      "reason": "Apply the same numerical sparkle triangulation repair to both versions; no performance optimizations enter the baseline."
+    }
+  },
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "cpu": "AMD EPYC 7763 64-Core Processor                ",
+    "logical_cpus": 16
+  },
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "configuration": {
+    "scenarios": [
+      "match",
+      "memory",
+      "voice-pop",
+      "talk-quest",
+      "room",
+      "catalog",
+      "chest"
+    ],
+    "width": 390,
+    "height": 844,
+    "warmup": 90,
+    "samples": 240,
+    "seed": 73021,
+    "fps": 60,
+    "vsync": false,
+    "renderer": "gl_compatibility",
+    "audio": "Dummy",
+    "reduced_motion": false
+  },
+  "audit": {
+    "same_protocol_configuration_host_engine_harness": true,
+    "all_raw_sample_counts_valid": true,
+    "all_runtime_source_identities_stable": true,
+    "paired_scheduled_actions": [
+      {
+        "pair": 1,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "same_actions": true
+          },
+          {
+            "scenario": "memory",
+            "same_actions": true
+          },
+          {
+            "scenario": "voice-pop",
+            "same_actions": true
+          },
+          {
+            "scenario": "talk-quest",
+            "same_actions": true
+          },
+          {
+            "scenario": "room",
+            "same_actions": true
+          },
+          {
+            "scenario": "catalog",
+            "same_actions": true
+          },
+          {
+            "scenario": "chest",
+            "same_actions": true
+          }
+        ]
+      },
+      {
+        "pair": 2,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "same_actions": true
+          },
+          {
+            "scenario": "memory",
+            "same_actions": true
+          },
+          {
+            "scenario": "voice-pop",
+            "same_actions": true
+          },
+          {
+            "scenario": "talk-quest",
+            "same_actions": true
+          },
+          {
+            "scenario": "room",
+            "same_actions": true
+          },
+          {
+            "scenario": "catalog",
+            "same_actions": true
+          },
+          {
+            "scenario": "chest",
+            "same_actions": true
+          }
+        ]
+      },
+      {
+        "pair": 3,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "same_actions": true
+          },
+          {
+            "scenario": "memory",
+            "same_actions": true
+          },
+          {
+            "scenario": "voice-pop",
+            "same_actions": true
+          },
+          {
+            "scenario": "talk-quest",
+            "same_actions": true
+          },
+          {
+            "scenario": "room",
+            "same_actions": true
+          },
+          {
+            "scenario": "catalog",
+            "same_actions": true
+          },
+          {
+            "scenario": "chest",
+            "same_actions": true
+          }
+        ]
+      },
+      {
+        "pair": 4,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "same_actions": true
+          },
+          {
+            "scenario": "memory",
+            "same_actions": true
+          },
+          {
+            "scenario": "voice-pop",
+            "same_actions": true
+          },
+          {
+            "scenario": "talk-quest",
+            "same_actions": true
+          },
+          {
+            "scenario": "room",
+            "same_actions": true
+          },
+          {
+            "scenario": "catalog",
+            "same_actions": true
+          },
+          {
+            "scenario": "chest",
+            "same_actions": true
+          }
+        ]
+      },
+      {
+        "pair": 5,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "same_actions": true
+          },
+          {
+            "scenario": "memory",
+            "same_actions": true
+          },
+          {
+            "scenario": "voice-pop",
+            "same_actions": true
+          },
+          {
+            "scenario": "talk-quest",
+            "same_actions": true
+          },
+          {
+            "scenario": "room",
+            "same_actions": true
+          },
+          {
+            "scenario": "catalog",
+            "same_actions": true
+          },
+          {
+            "scenario": "chest",
+            "same_actions": true
+          }
+        ]
+      }
+    ],
+    "chest_release_window": {
+      "baseline": [
+        {
+          "repeat": 1,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 2,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 3,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 4,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 5,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        }
+      ],
+      "candidate": [
+        {
+          "repeat": 1,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 2,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 3,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 4,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        },
+        {
+          "repeat": 5,
+          "before": "opening",
+          "before_release": false,
+          "after": "opened",
+          "after_release": true
+        }
+      ]
+    },
+    "final_log_errors": 0,
+    "final_log_warnings": [
+      {
+        "version": "baseline",
+        "repeat": 1,
+        "file": "build/performance/native-stabilized-paired-baseline/repeat-01.log",
+        "sha256": "7730149bab5ec483cc100e5ca928b5ca3405464fee7e19ea0a1dc8641f9d0c48",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "baseline",
+        "repeat": 2,
+        "file": "build/performance/native-stabilized-paired-baseline/repeat-02.log",
+        "sha256": "725055e73e957c7ca8153bfe4b06ad4bbad809e9336393193559321b02a4c187",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "baseline",
+        "repeat": 3,
+        "file": "build/performance/native-stabilized-paired-baseline/repeat-03.log",
+        "sha256": "ffdac62c14b769cdb208d50c72ab742be2054c1fc7c4fe16218915c638c938ea",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "baseline",
+        "repeat": 4,
+        "file": "build/performance/native-stabilized-paired-baseline/repeat-04.log",
+        "sha256": "40877660c83b7b243ef7b8f89d20580e262df21f51d69bbb1626e87d120259ae",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "baseline",
+        "repeat": 5,
+        "file": "build/performance/native-stabilized-paired-baseline/repeat-05.log",
+        "sha256": "49c5a07587e25935156977ebef8aa7d667b3cb5be3764f242ab9365ac107804e",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "candidate",
+        "repeat": 1,
+        "file": "build/performance/native-stabilized-paired-candidate/repeat-01.log",
+        "sha256": "ddc05fb4590273e5340505e34a23be0a617fb20ccec454c68044f3d9678eef35",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "candidate",
+        "repeat": 2,
+        "file": "build/performance/native-stabilized-paired-candidate/repeat-02.log",
+        "sha256": "c8ebd0ec5f8887135ef83b88e7e784d7f347a48de2cce2be3dddb2a85cc51b42",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE.",
+          "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ]
+      },
+      {
+        "version": "candidate",
+        "repeat": 3,
+        "file": "build/performance/native-stabilized-paired-candidate/repeat-03.log",
+        "sha256": "0ac14aa8b1c469417d66b11d36e2ff506c3b46e4bc22aaff3cfd9d12fe7a556f",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "candidate",
+        "repeat": 4,
+        "file": "build/performance/native-stabilized-paired-candidate/repeat-04.log",
+        "sha256": "842741ad44eeaf20e1cf14d2c2cd922028323a9a0b94a509a9e6069342d8e6e2",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      },
+      {
+        "version": "candidate",
+        "repeat": 5,
+        "file": "build/performance/native-stabilized-paired-candidate/repeat-05.log",
+        "sha256": "39a62275105d40892f88f7538b3f4d11f3bfe8128e2e70127ed995a1f1383fac",
+        "warnings": [
+          "WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE."
+        ]
+      }
+    ],
+    "physical_time_workload_identical": false,
+    "asset_content_hashed_by_runner": false,
+    "assets_note": "Assets and imported resources are shared junctions, not frozen or independently content-hashed in these reports.",
+    "warning_context": "The same two-object exit warning occurs in earlier original-baseline diagnostics; exact leaked types and root cause are not established."
+  },
+  "word_flight_workload": [
+    {
+      "scenario": "voice-pop",
+      "actions": [
+        {
+          "action": "pop_word",
+          "frame": 19,
+          "word": "swordfish"
+        },
+        {
+          "action": "pop_word",
+          "frame": 120,
+          "word": "bird"
+        },
+        {
+          "action": "pop_word",
+          "frame": 201,
+          "word": "coat"
+        }
+      ],
+      "pairs": [
+        {
+          "pair": 1,
+          "baseline": {
+            "before_elapsed_seconds": 1.555077,
+            "after_elapsed_seconds": 6.024985,
+            "measured_elapsed_seconds": 4.469908,
+            "frame_interval_mean_us": 18618.728033472802,
+            "target_present_frames": 167,
+            "drawn_target_present_frames": 167,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 14051.449101796406
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.528471,
+            "after_elapsed_seconds": 5.542146,
+            "measured_elapsed_seconds": 4.013675,
+            "frame_interval_mean_us": 16723.912133891212,
+            "target_present_frames": 144,
+            "drawn_target_present_frames": 144,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 0,
+            "target_present_rendered_mean_us": 8251.027777777777
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "before_elapsed_seconds": 1.553702,
+            "after_elapsed_seconds": 6.016528,
+            "measured_elapsed_seconds": 4.462826,
+            "frame_interval_mean_us": 18576.435146443513,
+            "target_present_frames": 167,
+            "drawn_target_present_frames": 167,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 14046.161676646707
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.563549,
+            "after_elapsed_seconds": 5.552492,
+            "measured_elapsed_seconds": 3.988943,
+            "frame_interval_mean_us": 16666.03347280335,
+            "target_present_frames": 146,
+            "drawn_target_present_frames": 146,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 0,
+            "target_present_rendered_mean_us": 8861.616438356165
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 3,
+          "baseline": {
+            "before_elapsed_seconds": 1.558745,
+            "after_elapsed_seconds": 6.049088,
+            "measured_elapsed_seconds": 4.490343,
+            "frame_interval_mean_us": 18729.937238493723,
+            "target_present_frames": 169,
+            "drawn_target_present_frames": 169,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 14372.461538461539
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.552168,
+            "after_elapsed_seconds": 5.552023,
+            "measured_elapsed_seconds": 3.999855,
+            "frame_interval_mean_us": 16621.414225941422,
+            "target_present_frames": 146,
+            "drawn_target_present_frames": 146,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 0,
+            "target_present_rendered_mean_us": 8314.650684931506
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 4,
+          "baseline": {
+            "before_elapsed_seconds": 1.568281,
+            "after_elapsed_seconds": 5.980626,
+            "measured_elapsed_seconds": 4.412345,
+            "frame_interval_mean_us": 18419.355648535566,
+            "target_present_frames": 166,
+            "drawn_target_present_frames": 166,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 13954.590361445784
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.555022,
+            "after_elapsed_seconds": 5.563201,
+            "measured_elapsed_seconds": 4.008179,
+            "frame_interval_mean_us": 16705.435146443513,
+            "target_present_frames": 144,
+            "drawn_target_present_frames": 144,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 0,
+            "target_present_rendered_mean_us": 8333.840277777777
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 5,
+          "baseline": {
+            "before_elapsed_seconds": 1.55678,
+            "after_elapsed_seconds": 5.955975,
+            "measured_elapsed_seconds": 4.399195,
+            "frame_interval_mean_us": 18360.117154811716,
+            "target_present_frames": 164,
+            "drawn_target_present_frames": 164,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 13901.908536585366
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.55461,
+            "after_elapsed_seconds": 5.559964,
+            "measured_elapsed_seconds": 4.005354,
+            "frame_interval_mean_us": 16695.57322175732,
+            "target_present_frames": 144,
+            "drawn_target_present_frames": 144,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 3,
+            "ending_targets": 0,
+            "target_present_rendered_mean_us": 8670.222222222223
+          },
+          "same_actions": true
+        }
+      ],
+      "conditional_diagnostic": {
+        "selection": "All timed frames with target_counts[index] > 0, pooled across repeats; not matched physical-time animation frames.",
+        "baseline_count": 833,
+        "candidate_count": 724,
+        "baseline_mean_us": 14066.773109243697,
+        "candidate_mean_us": 8486.834254143647,
+        "time_reduction_percent": 39.66751160174259
+      }
+    },
+    {
+      "scenario": "talk-quest",
+      "actions": [
+        {
+          "action": "quest_word",
+          "frame": 19,
+          "word": "flower"
+        },
+        {
+          "action": "quest_word",
+          "frame": 120,
+          "word": "chair"
+        }
+      ],
+      "pairs": [
+        {
+          "pair": 1,
+          "baseline": {
+            "before_elapsed_seconds": 1.63244144444444,
+            "after_elapsed_seconds": 5.72628922222221,
+            "measured_elapsed_seconds": 4.0938477777777695,
+            "frame_interval_mean_us": 17039.916317991632,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 16091.594059405941
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.639834,
+            "after_elapsed_seconds": 5.66034155555554,
+            "measured_elapsed_seconds": 4.02050755555554,
+            "frame_interval_mean_us": 16768.38912133891,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12966.074257425742
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "before_elapsed_seconds": 1.624559,
+            "after_elapsed_seconds": 5.65536399999999,
+            "measured_elapsed_seconds": 4.03080499999999,
+            "frame_interval_mean_us": 16780.02510460251,
+            "target_present_frames": 201,
+            "drawn_target_present_frames": 201,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12916.626865671642
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.64433333333333,
+            "after_elapsed_seconds": 5.66173799999999,
+            "measured_elapsed_seconds": 4.01740466666666,
+            "frame_interval_mean_us": 16739.63179916318,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12551.673267326732
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 3,
+          "baseline": {
+            "before_elapsed_seconds": 1.633922,
+            "after_elapsed_seconds": 5.65828333333332,
+            "measured_elapsed_seconds": 4.02436133333332,
+            "frame_interval_mean_us": 16800.15481171548,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12449.277227722772
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.63314177777778,
+            "after_elapsed_seconds": 5.64593099999999,
+            "measured_elapsed_seconds": 4.01278922222221,
+            "frame_interval_mean_us": 16733.581589958158,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12108.801980198019
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 4,
+          "baseline": {
+            "before_elapsed_seconds": 1.64360388888889,
+            "after_elapsed_seconds": 5.68065888888888,
+            "measured_elapsed_seconds": 4.03705499999999,
+            "frame_interval_mean_us": 16866.16317991632,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12522.762376237624
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.634945,
+            "after_elapsed_seconds": 5.65932533333333,
+            "measured_elapsed_seconds": 4.02438033333333,
+            "frame_interval_mean_us": 16768.648535564855,
+            "target_present_frames": 203,
+            "drawn_target_present_frames": 203,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12610.093596059114
+          },
+          "same_actions": true
+        },
+        {
+          "pair": 5,
+          "baseline": {
+            "before_elapsed_seconds": 1.65702533333333,
+            "after_elapsed_seconds": 5.68616888888888,
+            "measured_elapsed_seconds": 4.02914355555555,
+            "frame_interval_mean_us": 16804.20920502092,
+            "target_present_frames": 204,
+            "drawn_target_present_frames": 204,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12416.68137254902
+          },
+          "candidate": {
+            "before_elapsed_seconds": 1.638193,
+            "after_elapsed_seconds": 5.65212499999999,
+            "measured_elapsed_seconds": 4.01393199999999,
+            "frame_interval_mean_us": 16757.18828451883,
+            "target_present_frames": 202,
+            "drawn_target_present_frames": 202,
+            "total_frames": 240,
+            "peak_targets": 1,
+            "hits": 2,
+            "ending_targets": 1,
+            "target_present_rendered_mean_us": 12494.767326732674
+          },
+          "same_actions": true
+        }
+      ],
+      "conditional_diagnostic": {
+        "selection": "All timed frames with target_counts[index] > 0, pooled across repeats; not matched physical-time animation frames.",
+        "baseline_count": 1011,
+        "candidate_count": 1011,
+        "baseline_mean_us": 13278.040553907023,
+        "candidate_mean_us": 12546.345202769535,
+        "time_reduction_percent": 5.510567226895457
+      }
+    }
+  ],
+  "interrupted_collections": [
+    {
+      "label": "native-paired",
+      "stopped_at": "candidate repeat 4",
+      "reason": "Inherited tiny Pip star triangulation error; operator-reported rejected process.",
+      "raw_report": "build/performance/native-paired-candidate/repeat-04.json",
+      "accepted": false
+    },
+    {
+      "label": "native-verified-paired",
+      "stopped_at": "baseline repeat 1",
+      "reason": "The original baseline reproduced the same triangulation error after the candidate repair.",
+      "raw_report": "build/performance/native-verified-paired-baseline/repeat-01.json",
+      "accepted": false
+    }
+  ],
+  "artifacts": [
+    {
+      "version": "baseline",
+      "path": "2026-10-03-performance-baseline.json.gz",
+      "bytes": 84069,
+      "sha256": "807a0f823b8b6acb6e6e8118fbdc01c106cdc9acf2db084041007dee64fa43a8",
+      "uncompressed_source": "build/performance/native-stabilized-paired-baseline/summary.json",
+      "uncompressed_bytes": 620690,
+      "uncompressed_sha256": "cb31cbbdab31ad71b296f3e536a1dba7688336808179e01008f378addaec12a3"
+    },
+    {
+      "version": "candidate",
+      "path": "2026-10-03-performance-candidate.json.gz",
+      "bytes": 83300,
+      "sha256": "9e8d9ecca1c4d46af51ca8396d822d49c04332c6386114d5cad2d8880990a1e7",
+      "uncompressed_source": "build/performance/native-stabilized-paired-candidate/summary.json",
+      "uncompressed_bytes": 619206,
+      "uncompressed_sha256": "4c46b4d0394e024a58baf03b9571f843e4c8680f0d6b26178215b522bcc863df"
+    }
+  ],
+  "original_comparison_sha256": "200701a46ca0b05360f6fa020bc14208974e17951ac037ac2c9c040f4408951e",
+  "validation": {
+    "regressions": "54 Godot suites and 270 Node tests across 17 suites passed. Talk Quest: 14 Godot suites and 39 Node tests passed. Room cache: 13 headless and 77 native checks; all seven raster comparisons within 2/255 per channel.",
+    "build": "Passed Web export and receipt: 2317 source inputs, 16 output files, game pack 47710e658eb5a104, engine 9ce25b5d2f802dd7. All 68 measured runtime files remain byte-identical.",
+    "browser": "Local smoke at 942x949 and 390x844: Match pair, Memory reveal, room/toy/Pip reaction, world change, 350-word catalogue and scrolling, Voice Pop entry/player gate, Talk Quest map. No captured console warnings/errors. No live microphone or acoustic-latency test. Temporary viewport reset.",
+    "gift_regression": "130 checks passed after test-only on_page_visible restoration; six original failures reproduced on stabilized baseline.",
+    "room_navigation": "76 checks passed after test-only vocabulary catalogue Back transition update; two original failures reproduced on stabilized baseline."
+  },
+  "limits": [
+    "Native Windows software-rendered active frame duration, not hardware GPU or phone/Web FPS.",
+    "Bootstrap interval estimates the geometric mean of pair ratios; it is not the interval for the headline ratios-of-pooled-means estimator.",
+    "Voice Pop uses different wall-clock exposure at fixed frame counts; target-present conditional means remain descriptive.",
+    "Candidate repeat 2 reports two ObjectDB instances leaked at exit; not a warning-free run."
+  ],
+  "sensitivity": {
+    "note": "Descriptive sensitivity only; all five pairs remain in the primary result and acceptance matrix.",
+    "individual_pair_scenario_results": [
+      {
+        "pair": 1,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "ratio": 1.0240756401547184,
+            "time_reduction_percent": -2.4075640154718414
+          },
+          {
+            "scenario": "memory",
+            "ratio": 0.9682662228961689,
+            "time_reduction_percent": 3.1733777103831073
+          },
+          {
+            "scenario": "voice-pop",
+            "ratio": 0.6864808736414748,
+            "time_reduction_percent": 31.351912635852518
+          },
+          {
+            "scenario": "talk-quest",
+            "ratio": 0.8152477129214872,
+            "time_reduction_percent": 18.475228707851276
+          },
+          {
+            "scenario": "room",
+            "ratio": 0.5839199445333281,
+            "time_reduction_percent": 41.608005546667194
+          },
+          {
+            "scenario": "catalog",
+            "ratio": 0.9408300888743447,
+            "time_reduction_percent": 5.916991112565528
+          },
+          {
+            "scenario": "chest",
+            "ratio": 0.9883169724386425,
+            "time_reduction_percent": 1.1683027561357529
+          }
+        ]
+      },
+      {
+        "pair": 2,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "ratio": 0.9714041070106105,
+            "time_reduction_percent": 2.859589298938947
+          },
+          {
+            "scenario": "memory",
+            "ratio": 1.072912777839284,
+            "time_reduction_percent": -7.291277783928396
+          },
+          {
+            "scenario": "voice-pop",
+            "ratio": 0.7072318422841952,
+            "time_reduction_percent": 29.276815771580477
+          },
+          {
+            "scenario": "talk-quest",
+            "ratio": 0.9738414666773243,
+            "time_reduction_percent": 2.6158533322675703
+          },
+          {
+            "scenario": "room",
+            "ratio": 0.6493418036953075,
+            "time_reduction_percent": 35.06581963046925
+          },
+          {
+            "scenario": "catalog",
+            "ratio": 0.8796212977636755,
+            "time_reduction_percent": 12.037870223632453
+          },
+          {
+            "scenario": "chest",
+            "ratio": 0.9869354077210621,
+            "time_reduction_percent": 1.3064592278937859
+          }
+        ]
+      },
+      {
+        "pair": 3,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "ratio": 0.8759911472686425,
+            "time_reduction_percent": 12.400885273135753
+          },
+          {
+            "scenario": "memory",
+            "ratio": 0.8297198250139889,
+            "time_reduction_percent": 17.028017498601113
+          },
+          {
+            "scenario": "voice-pop",
+            "ratio": 0.6693590379260034,
+            "time_reduction_percent": 33.064096207399665
+          },
+          {
+            "scenario": "talk-quest",
+            "ratio": 0.9757532579231353,
+            "time_reduction_percent": 2.4246742076864725
+          },
+          {
+            "scenario": "room",
+            "ratio": 0.6837835794393594,
+            "time_reduction_percent": 31.621642056064058
+          },
+          {
+            "scenario": "catalog",
+            "ratio": 1.0352301016917804,
+            "time_reduction_percent": -3.5230101691780424
+          },
+          {
+            "scenario": "chest",
+            "ratio": 1.0443020608309865,
+            "time_reduction_percent": -4.430206083098653
+          }
+        ]
+      },
+      {
+        "pair": 4,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "ratio": 1.0155529945821358,
+            "time_reduction_percent": -1.555299458213577
+          },
+          {
+            "scenario": "memory",
+            "ratio": 1.0148932111907867,
+            "time_reduction_percent": -1.4893211190786682
+          },
+          {
+            "scenario": "voice-pop",
+            "ratio": 0.6929696282291681,
+            "time_reduction_percent": 30.703037177083193
+          },
+          {
+            "scenario": "talk-quest",
+            "ratio": 0.9988044149019393,
+            "time_reduction_percent": 0.11955850980607252
+          },
+          {
+            "scenario": "room",
+            "ratio": 0.710078973673863,
+            "time_reduction_percent": 28.992102632613705
+          },
+          {
+            "scenario": "catalog",
+            "ratio": 1.0139121581162254,
+            "time_reduction_percent": -1.391215811622537
+          },
+          {
+            "scenario": "chest",
+            "ratio": 0.9946966809010945,
+            "time_reduction_percent": 0.5303319098905468
+          }
+        ]
+      },
+      {
+        "pair": 5,
+        "scenarios": [
+          {
+            "scenario": "match",
+            "ratio": 0.9594468455499802,
+            "time_reduction_percent": 4.055315445001984
+          },
+          {
+            "scenario": "memory",
+            "ratio": 0.9978947235442926,
+            "time_reduction_percent": 0.210527645570735
+          },
+          {
+            "scenario": "voice-pop",
+            "ratio": 0.7165551767844244,
+            "time_reduction_percent": 28.344482321557564
+          },
+          {
+            "scenario": "talk-quest",
+            "ratio": 0.9968313812075172,
+            "time_reduction_percent": 0.3168618792482758
+          },
+          {
+            "scenario": "room",
+            "ratio": 0.6656432793203529,
+            "time_reduction_percent": 33.4356720679647
+          },
+          {
+            "scenario": "catalog",
+            "ratio": 0.9661375520304035,
+            "time_reduction_percent": 3.3862447969596476
+          },
+          {
+            "scenario": "chest",
+            "ratio": 0.9796475700117863,
+            "time_reduction_percent": 2.035242998821374
+          }
+        ]
+      }
+    ],
+    "leave_one_pair_out": [
+      {
+        "omitted_pair": 1,
+        "headline_ratio": 0.8825969735906372,
+        "time_reduction_percent": 11.740302640936285
+      },
+      {
+        "omitted_pair": 2,
+        "headline_ratio": 0.8727461206069557,
+        "time_reduction_percent": 12.725387939304433
+      },
+      {
+        "omitted_pair": 3,
+        "headline_ratio": 0.8776744152210432,
+        "time_reduction_percent": 12.232558477895683
+      },
+      {
+        "omitted_pair": 4,
+        "headline_ratio": 0.8654007425666435,
+        "time_reduction_percent": 13.459925743335655
+      },
+      {
+        "omitted_pair": 5,
+        "headline_ratio": 0.8705595406221186,
+        "time_reduction_percent": 12.94404593778814
+      }
+    ]
+  }
+}

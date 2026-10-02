@@ -51,6 +51,17 @@ var interaction_allowed: Callable
 
 var _words: Array = []
 var _textures: Dictionary = {}
+var _word_fits: Dictionary = {}
+var _draw_style_scale: float = -1.0
+var _backdrop_style: StyleBoxFlat
+var _hud_panel_style: StyleBoxFlat
+var _card_shadow_style: StyleBoxFlat
+var _card_glow_styles: Array[StyleBoxFlat] = []
+var _card_face_styles: Array[StyleBoxFlat] = []
+var _chest_panel_style: StyleBoxFlat
+var _chest_track_style: StyleBoxFlat
+var _chest_fill_style: StyleBoxFlat
+var _hud_palette_key: int = -1
 var _enabled: bool = false
 var _listening: bool = false
 var _listening_tick_usec: int = -1
@@ -149,6 +160,7 @@ func _build() -> void:
 	_hud = Control.new()
 	_hud.name = "ArenaHUD"
 	_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hud.visibility_changed.connect(queue_redraw)
 	add_child(_hud)
 	_hud_fx = Node2D.new()
 	_hud_fx.draw.connect(_draw_hud_feedback)
@@ -295,6 +307,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	cancel_result_input()
 	_round_player.clear()
 	_words = words.duplicate(true)
+	_word_fits.clear()
 	game.configure(_words, seed_value)
 	_enabled = false
 	_listening = false
@@ -604,8 +617,9 @@ func default_focus() -> Control:
 	return null
 
 
-func snapshot() -> Dictionary:
-	_refresh_targets()
+func snapshot(refresh_targets: bool = true) -> Dictionary:
+	if refresh_targets:
+		_refresh_targets()
 	var targets: Array[Dictionary] = []
 	for target in _draw_targets:
 		var rect: Rect2 = _global_target_rect(target)
@@ -681,14 +695,14 @@ func _chest_fx_snapshot() -> Dictionary:
 			and _chest_overlay.get_index() > _slice_clip.get_index()}
 
 
-func _publish(force: bool = false) -> void:
+func _publish(force: bool = false, targets_current: bool = false) -> void:
 	var ids: PackedStringArray = []
 	for target in game.targets:
 		ids.append(str(target.uid))
 	var key: String = "%s/%d/%d/%d/%s/%s/%s" % [game.phase, ceili(game.remaining), game.hits, game.score, ",".join(ids), _listening, _message]
 	if force or key != _publish_key:
 		_publish_key = key
-		status_changed.emit(snapshot())
+		status_changed.emit(snapshot(not targets_current))
 
 
 func _queue_geometry_publish() -> void:
@@ -716,19 +730,18 @@ func _process(delta: float) -> void:
 		_pending_left = maxf(0.0, _pending_left - delta)
 		if _pending_left <= 0.0:
 			set_listening(_enabled, false, "Still waiting for the microphone. Check the browser prompt, or retry.")
-	_sync_game_clock()
+	_sync_game_clock(false)
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
-	_advance_hud_feedback(delta)
+	var feedback_expired: bool = _advance_hud_feedback(delta, false)
 	_advance_result_feedback(delta)
 	_advance_slices(delta)
 	_refresh_targets()
 	_update_hud()
-	_publish()
-	queue_redraw()
+	_publish(feedback_expired, true)
 	_slice_canvas.queue_redraw()
 
 
-func _sync_game_clock() -> void:
+func _sync_game_clock(present: bool = true) -> void:
 	if not _listening or game.phase != "running":
 		_listening_tick_usec = -1
 		return
@@ -738,10 +751,10 @@ func _sync_game_clock() -> void:
 		return
 	var elapsed: float = maxf(0.0, float(now - _listening_tick_usec) / 1000000.0)
 	_listening_tick_usec = now
-	_advance_game(elapsed)
+	_advance_game(elapsed, present)
 
 
-func _advance_game(elapsed_seconds: float) -> void:
+func _advance_game(elapsed_seconds: float, present: bool = true) -> void:
 	# Keep simulation directly tickable in scene tests. Production supplies real
 	# monotonic time because Godot can clamp frame delta under slow Web rendering.
 	if not _listening or game.phase != "running":
@@ -754,11 +767,13 @@ func _advance_game(elapsed_seconds: float) -> void:
 		missed.emit(game.misses - previous_misses)
 	if game.phase == "finished" and not _finished_sent:
 		_finish()
-	_refresh_targets()
-	_update_hud()
-	_publish()
+	# Frame processing presents after advancing feedback. Recognition callbacks
+	# and direct scene ticks still receive their updated presentation immediately.
+	if present:
+		_refresh_targets()
+		_update_hud()
+		_publish(false, true)
 	_emit_launches()
-	queue_redraw()
 
 
 func _emit_launches() -> void:
@@ -798,7 +813,6 @@ func _update_hud() -> void:
 	if time_label == null:
 		return
 	time_label.text = "%02d" % ceili(maxf(0.0, game.remaining))
-	time_label.add_theme_color_override("font_color", PINK if game.remaining <= 5.0 else WHITE)
 	hits_label.text = str(game.hits)
 	_score_label.text = "%d POINTS" % game.score
 	_chest_count_label.text = "CHESTS %d / %d" % [game.chest_count, PopModel.MAX_CHESTS]
@@ -838,20 +852,23 @@ func _refresh_transcript_hit() -> void:
 		or (_hud_hit_pattern.is_valid() and _hud_hit_pattern.search(SpeechWords.normalize_text(_transcript, _hud_hit_forms)) != null))
 
 
-func _advance_hud_feedback(delta: float) -> void:
+func _advance_hud_feedback(delta: float, present: bool = true) -> bool:
 	if delta <= 0.0 or not is_finite(delta):
-		return
+		return false
 	var was_active: bool = _hud_hit_age < HUD_HIT_DURATION
 	var bonus_was_active: bool = _hud_bonus_age < HUD_BONUS_DURATION
 	var chest_was_active: bool = _chest_fx_age < CHEST_FX_DURATION
 	_hud_hit_age = minf(HUD_HIT_DURATION, _hud_hit_age + delta)
 	_hud_bonus_age = minf(HUD_BONUS_DURATION, _hud_bonus_age + delta)
 	_chest_fx_age = minf(CHEST_FX_DURATION, _chest_fx_age + delta)
-	_apply_hud_feedback()
-	if (was_active and _hud_hit_age >= HUD_HIT_DURATION) or (bonus_was_active and _hud_bonus_age >= HUD_BONUS_DURATION) \
-		or (chest_was_active and _chest_fx_age >= CHEST_FX_DURATION):
-		_update_hud()
-		_publish(true)
+	var expired: bool = (was_active and _hud_hit_age >= HUD_HIT_DURATION) or (bonus_was_active and _hud_bonus_age >= HUD_BONUS_DURATION) \
+		or (chest_was_active and _chest_fx_age >= CHEST_FX_DURATION)
+	if present:
+		_apply_hud_feedback()
+		if expired:
+			_update_hud()
+			_publish(true)
+	return expired
 
 
 func _apply_hud_feedback() -> void:
@@ -863,12 +880,7 @@ func _apply_hud_feedback() -> void:
 		pulse = sin(clampf(_hud_hit_age / 0.38, 0.0, 1.0) * PI) * 0.28
 	hits_label.pivot_offset = hits_label.size * 0.5
 	hits_label.scale = Vector2.ONE * (1.0 + pulse)
-	hits_label.add_theme_color_override("font_color", HIT_COLOR if active else WHITE)
-	_hits_caption.add_theme_color_override("font_color", HIT_COLOR if active else SOFT)
 	var highlight_words: bool = active and _hud_transcript_hit
-	transcript_label.add_theme_color_override("font_color", HIT_COLOR if highlight_words else WHITE)
-	transcript_label.add_theme_color_override("font_shadow_color", Color(HIT_COLOR, 0.55) if highlight_words else Color.TRANSPARENT)
-	transcript_label.add_theme_constant_override("shadow_outline_size", 4 if highlight_words else 0)
 	var bonus_active: bool = _hud_bonus_age < HUD_BONUS_DURATION and _hud.visible
 	var bonus_pulse: float = 0.0
 	if bonus_active and not reduced_motion:
@@ -876,9 +888,17 @@ func _apply_hud_feedback() -> void:
 		bonus_pulse += sin(clampf((_hud_bonus_age - 1.3) / 0.5, 0.0, 1.0) * PI) * 0.2
 	time_label.pivot_offset = time_label.size * 0.5
 	time_label.scale = Vector2.ONE * (1.0 + bonus_pulse)
-	time_label.add_theme_color_override("font_color", BONUS_COLOR if bonus_active else PINK if game.remaining <= 5.0 else WHITE)
-	time_label.add_theme_color_override("font_shadow_color", Color(BONUS_COLOR, 0.8) if bonus_active else Color.TRANSPARENT)
-	time_label.add_theme_constant_override("shadow_outline_size", 5 if bonus_active else 0)
+	var palette_key: int = int(active) | (int(highlight_words) << 1) | (int(bonus_active) << 2) | (int(game.remaining <= 5.0) << 3)
+	if palette_key != _hud_palette_key:
+		_hud_palette_key = palette_key
+		hits_label.add_theme_color_override("font_color", HIT_COLOR if active else WHITE)
+		_hits_caption.add_theme_color_override("font_color", HIT_COLOR if active else SOFT)
+		transcript_label.add_theme_color_override("font_color", HIT_COLOR if highlight_words else WHITE)
+		transcript_label.add_theme_color_override("font_shadow_color", Color(HIT_COLOR, 0.55) if highlight_words else Color.TRANSPARENT)
+		transcript_label.add_theme_constant_override("shadow_outline_size", 4 if highlight_words else 0)
+		time_label.add_theme_color_override("font_color", BONUS_COLOR if bonus_active else PINK if game.remaining <= 5.0 else WHITE)
+		time_label.add_theme_color_override("font_shadow_color", Color(BONUS_COLOR, 0.8) if bonus_active else Color.TRANSPARENT)
+		time_label.add_theme_constant_override("shadow_outline_size", 5 if bonus_active else 0)
 	_bonus_overlay.visible = bonus_active
 	_time_bonus_badge.visible = bonus_active
 	_time_bonus_label.visible = bonus_active
@@ -935,14 +955,15 @@ func _draw_chest_feedback() -> void:
 	if not _chest_overlay.visible:
 		return
 	var scale: float = Style.ui_scale(self)
+	_ensure_draw_styles(scale)
 	var status := Rect2(_reward_hud.position, _reward_hud.size)
-	_chest_fx.draw_style_box(Style.box(Color("#152039", 0.96), Color("#536485"), ceili(14.0 / scale), 1), status)
+	_chest_fx.draw_style_box(_chest_panel_style, status)
 	var meter := Rect2(status.position + Vector2(12.0, 43.0) / scale, Vector2(status.size.x - 24.0 / scale, 4.0 / scale))
-	_chest_fx.draw_style_box(Style.box(Color("#3d4a65"), Color.TRANSPARENT, ceili(2.0 / scale)), meter)
+	_chest_fx.draw_style_box(_chest_track_style, meter)
 	if game.chest_progress() > 0.0:
 		var filled: Rect2 = meter
 		filled.size.x *= game.chest_progress()
-		_chest_fx.draw_style_box(Style.box(CHEST_COLOR, Color.TRANSPARENT, ceili(2.0 / scale)), filled)
+		_chest_fx.draw_style_box(_chest_fill_style, filled)
 	if not _chest_badge.visible:
 		return
 	var alpha: float = _chest_badge.modulate.a
@@ -1222,12 +1243,47 @@ func _draw() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var scale: float = Style.ui_scale(self)
-	draw_style_box(Style.box(NAVY, Color("#28385d"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale))), Rect2(Vector2.ZERO, size))
+	_ensure_draw_styles(scale)
+	draw_style_box(_backdrop_style, Rect2(Vector2.ZERO, size))
 	_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
 		var side: float = time_label.size.x
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
-			draw_style_box(Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1), Rect2(x, 10.0 / scale, side, 52.0 / scale))
+			draw_style_box(_hud_panel_style, Rect2(x, 10.0 / scale, side, 52.0 / scale))
+
+
+func _ensure_draw_styles(scale: float) -> void:
+	if _draw_style_scale == scale:
+		return
+	_draw_style_scale = scale
+	_backdrop_style = Style.box(NAVY, Color("#28385d"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale)))
+	_hud_panel_style = Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1)
+	_card_shadow_style = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
+	_card_glow_styles.clear()
+	_card_face_styles.clear()
+	for accent: Color in CARD_COLORS:
+		_card_glow_styles.append(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))))
+		_card_face_styles.append(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))))
+	_chest_panel_style = Style.box(Color("#152039", 0.96), Color("#536485"), ceili(14.0 / scale), 1)
+	_chest_track_style = Style.box(Color("#3d4a65"), Color.TRANSPARENT, ceili(2.0 / scale))
+	_chest_fill_style = Style.box(CHEST_COLOR, Color.TRANSPARENT, ceili(2.0 / scale))
+
+
+func _fit_word(text: String, capsule_size: Vector2, scale: float) -> Dictionary:
+	var font: Font = ThemeDB.fallback_font
+	var cached: Dictionary = _word_fits.get(text, {})
+	if not cached.is_empty() and cached.size == capsule_size and cached.scale == scale and cached.font == font:
+		return cached
+	var font_size: int = ceili(clampf(capsule_size.x * scale * 0.17, 18.0, 26.0) / scale)
+	while font_size > ceili(13.0 / scale) and font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > capsule_size.x - 16.0 / scale:
+		font_size -= 1
+	var result: Dictionary = {"size": capsule_size, "scale": scale, "font": font,
+		"font_size": font_size, "width": font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x}
+	# Keep one fit per word, even when a resize leaves older slices on screen.
+	if _word_fits.size() >= 512 and not _word_fits.has(text):
+		_word_fits.clear()
+	_word_fits[text] = result
+	return result
 
 
 func _draw_flying_targets() -> void:
@@ -1260,12 +1316,12 @@ func _card_color(uid: int) -> Color:
 func _draw_capsule(target: Dictionary, scale: float) -> void:
 	var capsule_size: Vector2 = target.size
 	var rect := Rect2(-capsule_size * 0.5, capsule_size)
-	var accent: Color = _card_color(int(target.uid))
+	_ensure_draw_styles(scale)
+	var palette_index: int = (int(target.uid) - 1) % CARD_COLORS.size()
 	_target_canvas.draw_set_transform(target.center, target.rotation)
-	var shadow: StyleBoxFlat = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
-	_target_canvas.draw_style_box(shadow, Rect2(rect.position + Vector2(0, 6.0 / scale), capsule_size))
-	_target_canvas.draw_style_box(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))), rect.grow(4.0 / scale))
-	_target_canvas.draw_style_box(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))), rect)
+	_target_canvas.draw_style_box(_card_shadow_style, Rect2(rect.position + Vector2(0, 6.0 / scale), capsule_size))
+	_target_canvas.draw_style_box(_card_glow_styles[palette_index], rect.grow(4.0 / scale))
+	_target_canvas.draw_style_box(_card_face_styles[palette_index], rect)
 	_target_canvas.draw_line(rect.position + Vector2(19.0 / scale, 5.0 / scale), Vector2(rect.end.x - 19.0 / scale, rect.position.y + 5.0 / scale), Color(1, 1, 1, 0.65), 2.0 / scale, true)
 	var art_edge: float = minf(capsule_size.x - 28.0 / scale, capsule_size.y * 0.61)
 	var art_center := Vector2(0, rect.position.y + 10.0 / scale + art_edge * 0.5)
@@ -1277,12 +1333,9 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 		_target_canvas.draw_texture_rect(texture, Rect2(art_center - art_size * 0.5, art_size), false)
 	var word: String = str(target.word.get("text", ""))
 	var font: Font = ThemeDB.fallback_font
-	var font_size: int = ceili(clampf(capsule_size.x * scale * 0.17, 18.0, 26.0) / scale)
-	while font_size > ceili(13.0 / scale) and font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > capsule_size.x - 16.0 / scale:
-		font_size -= 1
-	var text_width: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var fitted: Dictionary = _fit_word(word, capsule_size, scale)
 	var baseline: float = rect.end.y - 11.0 / scale
-	_target_canvas.draw_string(font, Vector2(-text_width * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color("#243454"))
+	_target_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color("#243454"))
 	_target_canvas.draw_set_transform(Vector2.ZERO)
 
 
@@ -1397,12 +1450,9 @@ func _draw_slice_half(burst: Dictionary, center: Vector2, side: float, scale: fl
 func _draw_slice_word(burst: Dictionary, capsule_size: Vector2, scale: float, alpha: float) -> void:
 	var word: String = str(burst.word.text)
 	var font: Font = ThemeDB.fallback_font
-	var font_size: int = ceili(clampf(capsule_size.x * scale * 0.17, 18.0, 26.0) / scale)
-	while font_size > ceili(13.0 / scale) and font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > capsule_size.x - 16.0 / scale:
-		font_size -= 1
-	var width: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	_slice_canvas.draw_string(font, Vector2(-width * 0.5, capsule_size.y * 0.5 - 11.0 / scale), word,
-		HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, Color(Color("#243454"), alpha))
+	var fitted: Dictionary = _fit_word(word, capsule_size, scale)
+	_slice_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, capsule_size.y * 0.5 - 11.0 / scale), word,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color(Color("#243454"), alpha))
 
 
 func _draw_slice_splash(burst: Dictionary, center: Vector2, scale: float) -> void:

@@ -139,6 +139,7 @@ func _exercise(app, directory: String) -> void:
 	check(app._room.is_processing(), "Animated toy action starts during visible play")
 	app.on_page_hidden()
 	check(not app._room.is_processing(), "Browser lifecycle settles a running toy action")
+	app.on_page_visible()
 	_test_completed_goal_use(app, directory, storage, "toy-autumn", "toy-ball")
 	app._hide_collection()
 	app.medal_progress.counts["autumn-3"] = 3

@@ -1,0 +1,24 @@
+diff --git a/scripts/duck_mascot.gd b/scripts/duck_mascot.gd
+--- a/scripts/duck_mascot.gd
++++ b/scripts/duck_mascot.gd
+@@ -600,13 +600,15 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
+ 			_draw_gameplay_face(correct, progress)
+ 	draw_set_transform_matrix(base)
+ 	if correct:
+-		for index in range(3):
+-			var point := Vector2(13 + index * 47, 34 - (index % 2) * 21)
+-			var radius: float = 4.0 * envelope
++		var radius: float = 4.0 * envelope
++		if radius > 0.01:
++			# Triangulate at unit scale; tiny absolute-coordinate stars lose precision.
+ 			var rays := PackedVector2Array()
+ 			for ray in range(8):
+-				rays.append(point + Vector2.from_angle(ray * PI / 4.0) * (radius if ray % 2 == 0 else radius * 0.32))
+-			if radius > 0.01:
++				rays.append(Vector2.from_angle(ray * PI / 4.0) * (1.0 if ray % 2 == 0 else 0.32))
++			for index in range(3):
++				var point := Vector2(13 + index * 47, 34 - (index % 2) * 21)
++				draw_set_transform_matrix(base * Transform2D(Vector2(radius, 0), Vector2(0, radius), point))
+ 				draw_colored_polygon(rays, Color(Color("#f1b638"), envelope))
+ 	draw_set_transform(Vector2.ZERO)
+ 

@@ -3,6 +3,31 @@ extends SceneTree
 const PopView = preload("res://scripts/voice_pop.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 
+class FrameCountView:
+	extends "res://scripts/voice_pop.gd"
+
+	var geometry_updates: int = 0
+	var hud_updates: int = 0
+	var feedback_updates: int = 0
+
+	func _refresh_targets() -> void:
+		geometry_updates += 1
+		super._refresh_targets()
+
+	func _update_hud() -> void:
+		hud_updates += 1
+		super._update_hud()
+
+	func _apply_hud_feedback() -> void:
+		feedback_updates += 1
+		super._apply_hud_feedback()
+
+	func reset_counts() -> void:
+		geometry_updates = 0
+		hud_updates = 0
+		feedback_updates = 0
+
+
 var checks: int = 0
 var failures: int = 0
 
@@ -694,6 +719,91 @@ func check_volley_launches(words: Array) -> void:
 	view.free()
 
 
+func check_frame_presentation(words: Array) -> void:
+	var view = FrameCountView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	begin_bonus_round(view, words)
+	view.game._next_spawn_at = INF
+	var reports: Array[Dictionary] = []
+	view.status_changed.connect(func(report: Dictionary) -> void: reports.append(report))
+	var before: Vector2 = view._draw_targets[0].center
+	view._publish_key = ""
+	view._listening_tick_usec = maxi(0, Time.get_ticks_usec() - 16000)
+	view.reset_counts()
+	view._process(1.0 / 60.0)
+	check(view.geometry_updates == 1 and view.hud_updates == 1 and view.feedback_updates == 1,
+		"A running frame presents targets and HUD once, including its published geometry")
+	check(not view._draw_targets[0].center.is_equal_approx(before)
+		and is_equal_approx(float(view._draw_targets[0].age), float(view.game.targets[0].age))
+		and reports.size() == 1 and is_equal_approx(float(reports[0].targets[0].age), float(view.game.targets[0].age)),
+		"The single presentation pass moves the card and publishes the current model age")
+	view.reset_counts()
+	before = view._draw_targets[0].center
+	view._advance_game(0.125)
+	check(view.geometry_updates == 1 and view.hud_updates == 1 and view.feedback_updates == 1
+		and not view._draw_targets[0].center.is_equal_approx(before)
+		and view.time_label.text == "%02d" % ceili(view.game.remaining),
+		"A direct simulation tick still updates visual geometry and counters immediately")
+	view._hud_hit_age = PopView.HUD_HIT_DURATION - 0.01
+	view._hud_bonus_age = PopView.HUD_BONUS_DURATION - 0.01
+	view._chest_fx_age = PopView.CHEST_FX_DURATION - 0.01
+	view._apply_hud_feedback()
+	reports.clear()
+	view._listening_tick_usec = -1
+	view.reset_counts()
+	view._process(0.02)
+	check(view.geometry_updates == 1 and view.hud_updates == 1 and view.feedback_updates == 1,
+		"Expiring simultaneous hit, time and chest effects still presents one frame")
+	check(reports.size() == 1 and not reports[0].hud.hit_effect.active
+		and not reports[0].hud.bonus_effect.active and not reports[0].chest_fx.active
+		and not view._time_bonus_badge.visible and not view._chest_badge.visible,
+		"Feedback expiry publishes and clears all three effects even when score and target IDs are unchanged")
+	view.game.remaining = 4.5
+	view._update_hud()
+	check(view.time_label.get_theme_color("font_color") == PopView.PINK,
+		"The cached HUD palette enters the low-time warning")
+	view._hud_bonus_age = 0.0
+	view._apply_hud_feedback()
+	check(view.time_label.get_theme_color("font_color") == PopView.BONUS_COLOR,
+		"An earned bonus immediately overrides the cached low-time palette")
+	view._advance_hud_feedback(PopView.HUD_BONUS_DURATION)
+	check(view.time_label.get_theme_color("font_color") == PopView.PINK
+		and view.time_label.scale == Vector2.ONE,
+		"Direct feedback ticks restore the warning color and resting scale after the bonus")
+	view.free()
+
+
+func check_draw_caches() -> void:
+	var view = PopView.new()
+	view._ensure_draw_styles(1.0)
+	var first: StyleBoxFlat = view._card_face_styles[0]
+	var shadow: StyleBoxFlat = view._card_shadow_style
+	view._ensure_draw_styles(1.0)
+	check(view._card_face_styles[0] == first and view._card_shadow_style == shadow,
+		"Static card resources survive repeated draws at the same scale")
+	check(view._card_face_styles.size() == PopView.CARD_COLORS.size()
+		and view._card_glow_styles.size() == PopView.CARD_COLORS.size(),
+		"The style cache has one fixed entry per illustrated card palette")
+	view._ensure_draw_styles(2.0)
+	check(view._card_face_styles[0] != first and view._card_face_styles[0].corner_radius_top_left == 10
+		and view._card_face_styles[0].bg_color == first.bg_color,
+		"A changed UI scale replaces the radii without altering artwork colors")
+	var fit: Dictionary = view._fit_word("strawberry", Vector2(202, 162), 1.0)
+	var repeated: Dictionary = view._fit_word("strawberry", Vector2(202, 162), 1.0)
+	check(is_same(fit, repeated), "Unchanged word and card geometry reuse the text fit")
+	var smaller: Dictionary = view._fit_word("strawberry", Vector2(112, 96), 1.0)
+	check(not is_same(fit, smaller) and int(smaller.font_size) < int(fit.font_size)
+		and float(smaller.width) <= 96.0,
+		"A narrower card refits the same word without clipped text")
+	var scaled: Dictionary = view._fit_word("strawberry", Vector2(56, 48), 2.0)
+	check(not is_same(smaller, scaled) and float(scaled.width) <= 48.0,
+		"A changed UI scale refits the illustrated card word")
+	check(view._word_fits.size() == 1,
+		"Resizing and older slices replace a word's fit instead of accumulating cache entries")
+	view.free()
+
+
 func _run() -> void:
 	var directory: String = "user://voice-pop-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -980,6 +1090,8 @@ func _run() -> void:
 	check_independent_card_flight(app.data.words)
 	check_portrait_volley_flight(app.data.words)
 	check_volley_launches(app.data.words)
+	check_frame_presentation(app.data.words)
+	check_draw_caches()
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

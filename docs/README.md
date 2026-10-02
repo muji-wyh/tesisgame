@@ -12,6 +12,7 @@ commands, asset counts, and measurements may no longer describe the game.
 | [Talk Quest](talk-quest.md) | Fourteen word battles, finite health and word budgets, twenty treasures, and campaign saves | `scripts/talk_quest.gd`, `scripts/talk_quest_data.gd`, `scripts/talk_quest_model.gd` |
 | [Voice Pop treasure](voice-pop-treasure.md) | Score milestones, persistent chest batches, and the shared animated chest catalog | `scripts/pop_reward_state.gd`, `scripts/pop_reward_room.gd`, `scripts/chest_model_view.gd` |
 | [Development and deployment](development.md) | Build, hosting, embedding, and validation | `package.json`, `tools/build-web.cjs`, `tools/deploy-web.ps1` |
+| [Performance assessment](performance.md) | Reproducible rendered workloads, paired comparisons, acceptance criteria, and measurement limits | `tools/benchmark-performance.cjs`, `tests/performance/main_scene_benchmark.gd` |
 | [Local players and leaderboards](local-leaderboards.md) | Local profiles, result attribution, rankings, persistence | `scripts/leaderboard_state.gd` |
 | [Speech matching](voice-matching.md) | Homophones, interim stability, target binding, local experiment | `scripts/speech_words.gd`, `scripts/voice_pop_model.gd`, `web/shell.html` |
 | [Voice Pop slices](voice-pop-slice-feedback.md) | Cut presentation, audio integration, original release evidence | `scripts/voice_pop_slice.gd`, `scripts/game_audio.gd` |

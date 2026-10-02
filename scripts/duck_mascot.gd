@@ -332,7 +332,8 @@ func _advance_idle(delta: float) -> void:
 		_idle_left = _idle_duration()
 
 
-func _update_pose() -> void:
+func _update_pose(force_redraw: bool = true) -> void:
+	var previous_pose: int = pose
 	pose = 0
 	if not _gameplay_reaction.is_empty():
 		pose = 3 if _gameplay_reaction == "happy" else 2
@@ -355,7 +356,8 @@ func _update_pose() -> void:
 		pose = 3 if sin((1.0 - _idle_left / IDLE_SECONDS) * TAU * 2.0) > 0.0 else 0
 	elif not reduced_motion and fmod(_idle_time, 4.6) > 4.42:
 		pose = 2
-	queue_redraw()
+	if force_redraw or pose != previous_pose:
+		queue_redraw()
 
 
 func _trick_pose(kind: String, progress: float) -> int:
@@ -367,6 +369,7 @@ func _trick_pose(kind: String, progress: float) -> int:
 func _process(delta: float) -> void:
 	if _idle_paused or not is_visible_in_tree():
 		return
+	var was_animating: bool = _has_continuous_pose()
 	if _gameplay_left > 0.0:
 		_gameplay_left = maxf(0.0, _gameplay_left - delta)
 		if is_zero_approx(_gameplay_left):
@@ -392,7 +395,15 @@ func _process(delta: float) -> void:
 		if is_zero_approx(_trick_left):
 			_trick = ""
 	_advance_idle(delta)
-	_update_pose()
+	# Idle and speech use discrete sheet frames. Keep their draw commands until
+	# the pose changes, while every continuous motion and its final frame redraw.
+	_update_pose(was_animating or _has_continuous_pose())
+
+
+func _has_continuous_pose() -> bool:
+	return reaction_left > 0.0 or not _gameplay_reaction.is_empty() \
+		or not _idle_action.is_empty() or not _trick.is_empty() \
+		or not _room_motion.is_empty() or not _room_reaction.is_empty()
 
 
 func _draw() -> void:
@@ -600,13 +611,15 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
 			_draw_gameplay_face(correct, progress)
 	draw_set_transform_matrix(base)
 	if correct:
-		for index in range(3):
-			var point := Vector2(13 + index * 47, 34 - (index % 2) * 21)
-			var radius: float = 4.0 * envelope
+		var radius: float = 4.0 * envelope
+		if radius > 0.01:
+			# Triangulate at unit scale; tiny absolute-coordinate stars lose precision.
 			var rays := PackedVector2Array()
 			for ray in range(8):
-				rays.append(point + Vector2.from_angle(ray * PI / 4.0) * (radius if ray % 2 == 0 else radius * 0.32))
-			if radius > 0.01:
+				rays.append(Vector2.from_angle(ray * PI / 4.0) * (1.0 if ray % 2 == 0 else 0.32))
+			for index in range(3):
+				var point := Vector2(13 + index * 47, 34 - (index % 2) * 21)
+				draw_set_transform_matrix(base * Transform2D(Vector2(radius, 0), Vector2(0, radius), point))
 				draw_colored_polygon(rays, Color(Color("#f1b638"), envelope))
 	draw_set_transform(Vector2.ZERO)
 

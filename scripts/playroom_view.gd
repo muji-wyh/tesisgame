@@ -15,7 +15,7 @@ const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
 const ToyCard = preload("res://scripts/toy_card.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
-const Interior = preload("res://scripts/room_interior.gd")
+const RoomArchitecture = preload("res://scripts/room_architecture.gd")
 const GroundShadows = preload("res://scripts/room_ground_shadows.gd")
 const SUMMER_BALL_TINT := Color("#ffd16b")
 const ACTIONS := {
@@ -38,17 +38,6 @@ const OUTCOMES := {
 	"swing": ["The monkey swings through the jungle!", "The monkey waves to Pip!", "Pip and the monkey share a high five!"],
 	"decorate": ["A cake for Pip's party!", "A swirl of frosting on the cake!", "Sprinkles on the cake. Ready to celebrate!"]
 }
-
-class RoomArchitecture extends Control:
-	func _init() -> void:
-		mouse_filter = Control.MOUSE_FILTER_IGNORE
-		show_behind_parent = true
-		resized.connect(queue_redraw)
-
-	func _draw() -> void:
-		var room: Control = get_parent()
-		Interior.draw_room(self, room.palette, room.theme_id)
-
 
 class RoomScene extends Control:
 	var theme_id: String = "home"
@@ -489,7 +478,7 @@ func _refresh_room() -> void:
 	# The world picker owns the room's appearance; legacy backdrop choices remain save data.
 	_room.theme_id = str(_palette.get("id", "home"))
 	_room.palette = _palette
-	_room_interior.queue_redraw()
+	_room_interior.configure(_room.palette, _room.theme_id)
 	_room_title.text = str(_palette.get("name", "")) + " room" if _room.theme_id != "home" else "Pip's home"
 	_room.queue_redraw()
 	_toy_art = _art(_toy)

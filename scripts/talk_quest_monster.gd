@@ -76,6 +76,7 @@ var _bones: Dictionary = {}
 var _joint_base: Dictionary = {}
 var _materials: Array[StandardMaterial3D] = []
 var _material_base: Array[Dictionary] = []
+var _material_feedback := Vector2(-1.0, -1.0)
 var _clips: Dictionary = {}
 var _hit_side: float = 1.0
 var _is_giant: bool = false
@@ -116,6 +117,7 @@ func set_creature(id: String) -> bool:
 		_model.queue_free()
 	_materials.clear()
 	_material_base.clear()
+	_material_feedback = Vector2(-1.0, -1.0)
 	_clips.clear()
 	_bones.clear()
 	_player = null
@@ -621,10 +623,14 @@ func _apply_repair_glow() -> void:
 
 
 func _apply_material_feedback() -> void:
+	var glow: float = repair_fraction * 0.32 if cooperative_mode else 0.0
+	var feedback := Vector2(_flash, glow)
+	if _material_feedback == feedback:
+		return
+	_material_feedback = feedback
 	for index: int in range(_materials.size()):
 		var material: StandardMaterial3D = _materials[index]
 		var original: Dictionary = _material_base[index]
-		var glow: float = repair_fraction * 0.32 if cooperative_mode else 0.0
 		material.albedo_color = original.albedo.lerp(Color(1.0, 0.9, 0.62, original.albedo.a), _flash * 0.32)
 		material.emission_enabled = bool(original.enabled) or glow > 0.0 or _flash > 0.0
 		material.emission = Color(1.0, 0.72, 0.22) if _flash > 0.0 else Color(0.18, 0.58, 0.38) if glow > 0.0 else original.emission

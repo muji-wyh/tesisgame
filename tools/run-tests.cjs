@@ -5,7 +5,7 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const groups = {
   'talk-quest': {
-    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_pip_loss_tests', 'talk_quest_celebration_tests', 'talk_quest_victory_flow_tests', 'talk_quest_transcript_tests', 'talk_quest_audio_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
+    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'quest_presentation_cache_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_pip_loss_tests', 'talk_quest_celebration_tests', 'talk_quest_victory_flow_tests', 'talk_quest_transcript_tests', 'talk_quest_audio_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
     node: ['talk-quest-host', 'quest-audio-assets']
   },
   leaderboards: {
@@ -15,15 +15,15 @@ const groups = {
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
-      'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'playful_controls_tests',
-      'expansion_scene_tests', 'lesson_scene_tests', 'playroom_state_tests', 'playroom_view_tests',
+      'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
+      'expansion_scene_tests', 'lesson_scene_tests', 'playroom_state_tests', 'playroom_view_tests', 'room_render_cache_tests',
       'pip_playground_tests', 'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
       'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_recovery_tests',
       'collection_navigation_tests', 'gift_adventure_tests'
     ],
     node: [
       'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host',
-      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt'
+      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark'
     ]
   },
   'legacy-saves': { godot: ['legacy_playroom_scene_tests'] },

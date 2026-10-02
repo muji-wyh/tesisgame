@@ -108,6 +108,10 @@ func _run() -> void:
 	check(app.collection_page.visible and app.model.theme_id == "ocean"
 		and app.playroom_state.age_band_id == "4-6" and app.model.cards == cards,
 		"World and age selection preserve the active round and keep the room open")
+	check(app._age_catalog.visible, "Selecting an age opens its vocabulary catalogue")
+	app._controller_back()
+	check(app.collection_page.visible and not app._age_catalog.visible,
+		"Controller Back returns from the vocabulary catalogue to Pip's room")
 	app._play_duck()
 	check(app.duck.home_playground, "Pip retains room interaction after Medals is removed")
 	check(app.medal_progress.counts == initial_counts, "Room visits do not reset existing fragment progress")
