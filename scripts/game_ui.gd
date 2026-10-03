@@ -2600,6 +2600,8 @@ func _fit_mode_buttons() -> void:
 func _layout_game_heading() -> void:
 	if _mode_heading_button == null:
 		return
+	# Restyling can expand the button before its temporary minimum size is cleared.
+	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading_button.visible = _header_spacer.size.x * Style.ui_scale(self) >= 64 and model.phase in ["waiting", "matching", "feedback"]
 
 
