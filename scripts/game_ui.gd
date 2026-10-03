@@ -6,6 +6,7 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
 const HintLink = preload("res://scripts/hint_link.gd")
+const MatchConnections = preload("res://scripts/match_connections.gd")
 const Audio = preload("res://scripts/game_audio.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
@@ -186,6 +187,7 @@ var _controller_holding_pop_chest: bool = false
 var _pop_speech_active: bool = false
 var _match_playfield: Control
 var _hint_link: HintLink
+var _match_connections: MatchConnections
 var _voice_match_link: HintLink
 var _voice_match_ids: Array[String] = []
 var _voice_match_left: float = 0.0
@@ -453,6 +455,11 @@ func _build_controls() -> void:
 	_match_playfield.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_match_playfield.resized.connect(_fit_grid)
 	column.add_child(_match_playfield)
+	_match_connections = MatchConnections.new()
+	_match_connections.name = "MatchConnections"
+	_match_playfield.add_child(_match_connections)
+	_match_connections.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_match_connections.hide()
 	grid = GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -467,6 +474,7 @@ func _build_controls() -> void:
 	_hint_link.hide()
 	grid.sort_children.connect(func() -> void: _refresh_hint_link.call_deferred())
 	grid.visibility_changed.connect(_refresh_hint_link)
+	grid.sort_children.connect(func() -> void: _refresh_match_connections.call_deferred())
 	_voice_match_link = HintLink.new()
 	_voice_match_link.name = "VoiceMatchLink"
 	_match_playfield.add_child(_voice_match_link)
@@ -1752,6 +1760,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pop_player_id = ""
 	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
 		model.set_theme(_preferred_theme)
+	_match_connections.clear()
 	for button in cards.values():
 		grid.remove_child(button)
 		button.queue_free()
@@ -2288,15 +2297,40 @@ func _hear_word(word: Dictionary) -> void:
 func _refresh_match_cards() -> void:
 	var palette: Dictionary = _active_palette if not _active_palette.is_empty() else Data.theme(model.theme_id)
 	var locked: bool = not model.phase in ["waiting", "matching"] and not (_mode_id == "match" and model.phase == "feedback" and not _voice_mode)
+	_refresh_match_connections()
+	var pair_styles: Dictionary = {}
+	for pair in _match_connections.connections:
+		pair_styles[pair.id] = pair
 	for id in cards:
+		var word_id: String = str(cards[id].card_data.word.id)
+		var pair: Dictionary = pair_styles.get(word_id, {})
 		cards[id].refresh(palette, model.selected_id == id, model.matched_ids.has(id),
 			model.phase == "feedback" and not model.last_correct and model.feedback_ids.has(id),
-			locked, model.hint_ids.has(id))
+			locked, model.hint_ids.has(id), int(pair.get("lane", -1)), pair.get("color", Style.GOOD),
+			word_id == _match_connections.focused_id)
 		cards[id].disabled = locked
 		cards[id].picture.modulate.a = 1.0
 		cards[id].word_label.modulate.a = 1.0
 	_refresh_hint_link()
 	_refresh_voice_match_link()
+
+
+func _refresh_match_connections() -> void:
+	if _match_connections == null or _rebuilding:
+		return
+	var pairs: Array[Dictionary] = []
+	if _mode_id == "match":
+		var pictures: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "image")
+		for index in range(pictures.size()):
+			var picture: Dictionary = pictures[index]
+			if not model.matched_ids.has(picture.id):
+				continue
+			for word in model.cards:
+				if word.kind == "word" and word.word.id == picture.word.id and model.matched_ids.has(word.id):
+					pairs.append({"id": picture.word.id, "source": cards.get(picture.id),
+						"target": cards.get(word.id), "lane": index})
+					break
+	_match_connections.configure(pairs, grid.columns == Model.MATCH_PAIR_COUNT)
 
 
 func _refresh_hint_link() -> void:
@@ -2442,12 +2476,16 @@ func _fit_grid() -> void:
 	if grid == null or _rebuilding or cards.is_empty() or not grid.is_visible_in_tree():
 		return
 	var area: Vector2 = _match_playfield.size
-	grid.add_theme_constant_override("h_separation", 10)
 	grid.columns = Model.MATCH_PAIR_COUNT if area.x >= area.y or area.y < 318 else 2
+	var gutter: int = ceili(MatchConnections.GUTTER_PIXELS / Style.ui_scale(self))
+	var horizontal_gap: int = gutter if grid.columns == 2 else 10
+	var vertical_gap: int = 10 if grid.columns == 2 else gutter
+	grid.add_theme_constant_override("h_separation", horizontal_gap)
+	grid.add_theme_constant_override("v_separation", vertical_gap)
 	var rows := ceili(float(cards.size()) / grid.columns)
 	var cell_size := Vector2(
-		maxf(1, (area.x - (grid.columns - 1) * 10) / grid.columns),
-		maxf(1, (area.y - (rows - 1) * 10) / rows))
+		maxf(1, (area.x - (grid.columns - 1) * horizontal_gap) / grid.columns),
+		maxf(1, (area.y - (rows - 1) * vertical_gap) / rows))
 	for card in cards.values():
 		# The speech panel shares the playfield; let all five pairs fit its remaining space.
 		card.custom_minimum_size = Vector2(72, 72).min(cell_size)
@@ -2466,6 +2504,7 @@ func _fit_grid() -> void:
 		if grid.get_child(index) != button:
 			grid.move_child(button, index)
 	_refresh_hint_link.call_deferred()
+	_refresh_match_connections.call_deferred()
 
 
 func _fit_mode_buttons() -> void:
@@ -2721,9 +2760,11 @@ func _select_card(id: String) -> void:
 		return
 	if model.matched_ids.has(id):
 		if model.phase in ["waiting", "matching", "feedback"]:
-			cards[id].play_press()
 			var word: Dictionary = model.card_by_id(id).word
 			_hear_word(word)
+			_match_connections.focus_pair(str(word.id))
+			_refresh_match_cards()
+			cards[id].play_press()
 			cards[word.id + ":image"].play_word()
 		return
 	if model.phase == "feedback":

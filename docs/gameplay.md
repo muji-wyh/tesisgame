@@ -62,6 +62,12 @@ the same themed artwork, and the loader reads the saved world when available.
 
 Start in **Match**, with the matching board ready.
 Tap a word and its matching picture; completed cards remain available for pronunciation.
+Completed pairs share a numbered, colored badge on both cards. One smooth line
+highlights the most recent successful pair. Tap either completed card to focus
+its partner and connection while hearing the word again. The other pair badges
+remain visible without a bundle of crossing lines. The curve follows the space
+between the card groups, adapts to portrait and landscape, and clears with a
+new round; incorrect pairs never receive a connection.
 Use the arrow keys or Xbox D-pad/left stick to focus a card, and **Enter**,
 **Space**, or Xbox **A** to activate it.
 Six pictures also have short, noun-specific play reactions: the ball hops, bell

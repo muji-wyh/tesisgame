@@ -41,7 +41,7 @@ func check_feedback(app, ids: Array, correct: bool) -> void:
 	for id in ids:
 		var card: Button = app.cards[id]
 		var data: Dictionary = app.model.card_by_id(id)
-		check(card.get_theme_stylebox("normal").border_color == (app.Style.GOOD if correct else app.Style.WRONG),
+		check(card.get_theme_stylebox("normal").border_color == (card.match_mark.tint if correct else app.Style.WRONG),
 			"The board card itself marks the correct or incorrect answer: " + id)
 		check(card.picture.texture.resource_path == "res://" + data.word.image and card.word_label.text == data.word.text,
 			"Feedback preserves the card's original word and picture")

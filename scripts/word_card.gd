@@ -6,10 +6,22 @@ const CardMotion = preload("res://scripts/card_motion.gd")
 
 class MatchMark:
 	extends Control
+	var pair_number: int = 0
+	var tint: Color = Style.GOOD
+	var active: bool = false
 
 	func _draw() -> void:
 		var center := size * 0.5
 		var radius := minf(size.x, size.y) * 0.44
+		if pair_number > 0:
+			draw_circle(center, radius, tint if active else tint.lightened(0.10))
+			var font: Font = get_theme_default_font()
+			var font_size: int = roundi(radius * 1.35)
+			var text: String = str(pair_number)
+			var width: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+			draw_string(font, center + Vector2(-width * 0.5, (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5),
+				text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
+			return
 		Style.draw_match_badge(self, center, radius)
 
 
@@ -132,7 +144,8 @@ func setup(value: Dictionary) -> void:
 	_resize_face()
 
 
-func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false) -> void:
+func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, locked: bool, hinted: bool = false,
+		pair_index: int = -1, pair_tint: Color = Style.GOOD, pair_focused: bool = false) -> void:
 	stop_word_play()
 	if accent != palette.accent:
 		stop_press()
@@ -159,8 +172,8 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		fill = accent.lightened(0.86)
 		border = accent
 	elif matched:
-		fill = Color("#e7f5e9")
-		border = Style.GOOD
+		fill = pair_tint.lightened(0.85 if pair_focused else 0.96) if pair_index >= 0 else Color("#e7f5e9")
+		border = pair_tint if pair_index >= 0 else Style.GOOD
 	elif wrong:
 		fill = Color("#ffe8e2")
 		border = Style.WRONG
@@ -170,7 +183,10 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		border = hint_colors.border
 	var radius: int = ceili(14 / Style.ui_scale(self)) if _back != null else 20
 	var border_width: int = 2 if selected or matched or wrong or hinted else 1
-	var style_key: Array = [fill, border, accent, radius, border_width]
+	if matched and pair_index >= 0 and pair_focused:
+		border_width = 3
+	var interaction_tint: Color = pair_tint if matched and pair_index >= 0 else accent
+	var style_key: Array = [fill, border, accent, interaction_tint, radius, border_width]
 	# Most cards keep the same appearance when another card is selected.
 	# Reuse their resources without skipping feedback or input-state updates.
 	if _style_key != style_key:
@@ -181,10 +197,13 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		normal.shadow_offset = Vector2(0, 2)
 		add_theme_stylebox_override("normal", normal)
 		add_theme_stylebox_override("disabled", normal)
-		add_theme_stylebox_override("hover", Style.box(fill, accent, radius, 3))
-		add_theme_stylebox_override("pressed", Style.box(accent.lightened(0.8), accent, radius, 3))
-		add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, accent, radius, 4))
+		add_theme_stylebox_override("hover", Style.box(fill, interaction_tint, radius, 3))
+		add_theme_stylebox_override("pressed", Style.box(interaction_tint.lightened(0.8), interaction_tint, radius, 3))
+		add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, interaction_tint, radius, 4))
 	disabled = matched or locked
+	match_mark.pair_number = pair_index + 1 if matched else 0
+	match_mark.tint = pair_tint
+	match_mark.active = matched and pair_focused
 	match_mark.visible = matched
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.4 if matched else 1.0
