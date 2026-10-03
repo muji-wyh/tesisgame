@@ -3,7 +3,7 @@ extends Control
 const Style = preload("res://scripts/ui_style.gd")
 const GUTTER_PIXELS: float = 44.0
 const PAIR_COLORS: Array[Color] = [
-	Color("#31856a"), Color("#377eac"), Color("#8a66b0"), Color("#b48330"), Color("#2d9297")
+	Color("#31856a"), Color("#377eac"), Color("#8a66b0"), Color("#b48330"), Color("#b05d7b")
 ]
 
 var connections: Array[Dictionary] = []
@@ -64,7 +64,9 @@ func focus_pair(word_id: String) -> bool:
 
 
 func visible_connections() -> Array[Dictionary]:
-	return connections.filter(func(pair: Dictionary) -> bool: return pair.id == focused_id)
+	var ordered: Array[Dictionary] = connections.filter(func(pair: Dictionary) -> bool: return pair.id != focused_id)
+	ordered.append_array(connections.filter(func(pair: Dictionary) -> bool: return pair.id == focused_id))
+	return ordered
 
 
 func refresh_geometry() -> void:
@@ -90,9 +92,10 @@ func refresh_geometry() -> void:
 			end = Vector2(word.position.x + 2.0 * _pixel, word.get_center().y)
 			direction = Vector2.RIGHT
 			gap = end.x - start.x
-		# One unbroken curve identifies the focused pair without shared trunks or junctions.
-		var first_control: Vector2 = start + direction * gap * 0.78
-		var second_control: Vector2 = end - direction * gap * 0.78
+		# Stable control lanes keep accumulated curves apart without rerouting earlier pairs.
+		var lane_fraction: float = lerpf(0.15, 0.85, float(connection.lane) / float(PAIR_COLORS.size() - 1))
+		var first_control: Vector2 = start + direction * gap * lane_fraction
+		var second_control: Vector2 = end - direction * gap * (1.0 - lane_fraction)
 		var path := PackedVector2Array()
 		for step in range(49):
 			path.append(start.bezier_interpolate(first_control, second_control, end, float(step) / 48.0))
@@ -106,8 +109,10 @@ func _draw() -> void:
 		if path.size() < 2:
 			continue
 		var tint: Color = connection.color
-		draw_polyline(path, Color(tint, 0.10), 8.0 * _pixel, true)
-		draw_polyline(path, tint, 3.0 * _pixel, true)
+		var line_width: float = 3.0 if connection.id == focused_id else 2.25
+		# A light casing separates crossings so different pairs cannot read as one junction.
+		draw_polyline(path, Color.WHITE, (line_width + 2.5) * _pixel, true)
+		draw_polyline(path, tint, line_width * _pixel, true)
 		for contact in [path[0], path[path.size() - 1]]:
 			draw_circle(contact, 4.5 * _pixel, tint)
 			draw_circle(contact, 2.2 * _pixel, Color.WHITE)

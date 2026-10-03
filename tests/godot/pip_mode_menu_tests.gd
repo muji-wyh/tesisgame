@@ -168,13 +168,13 @@ func _check_dismissal_and_focus(app) -> void:
 	var before := _round_snapshot(app)
 	var card: Button
 	for candidate in app.cards.values():
-		if not app._mode_panel.get_global_rect().has_point(candidate.get_global_rect().get_center()):
+		if not app._mode_panel.get_global_rect().has_point(candidate.get_global_rect().position + Vector2(4, 4)):
 			card = candidate
 			break
 	check(card != null, "The outside-click fixture has a visible card behind the dismissal layer")
 	if card != null:
 		check(not app._valid_focus(card), "Covered gameplay cannot enter popover keyboard navigation")
-		await _tap(card.get_global_rect().get_center())
+		await _tap(card.get_global_rect().position + Vector2(4, 4))
 		check(not app._mode_menu.visible and _round_snapshot(app) == before,
 			"Clicking outside closes the menu without selecting the underlying card")
 		check(app.duck.has_focus(), "Outside dismissal restores focus to the Pip trigger")
@@ -245,13 +245,13 @@ func _check_paired_touches(app) -> void:
 			continue
 		var outside: Button
 		for candidate in app.cards.values():
-			if not app._mode_panel.get_global_rect().has_point(candidate.get_global_rect().get_center()):
+			if not app._mode_panel.get_global_rect().has_point(candidate.get_global_rect().position + Vector2(4, 4)):
 				outside = candidate
 				break
 		check(outside != null, "The paired-touch fixture has an underlying card outside the popover")
 		if outside == null:
 			continue
-		await _paired_tap(outside.get_global_rect().get_center(), touch_first)
+		await _paired_tap(outside.get_global_rect().position + Vector2(4, 4), touch_first)
 		check(not app._mode_menu.visible and _round_snapshot(app) == before,
 			"Paired outside releases dismiss once without activating the covered card: touch-first=%s" % touch_first)
 

@@ -7,7 +7,8 @@ async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
     const rect = canvas.getBoundingClientRect();
     const scale = Math.min(rect.width, rect.height) / 480;
-    return { x: rect.x, y: rect.y, width: rect.width / scale, height: rect.height / scale, scale };
+    return { x: rect.x, y: rect.y, width: rect.width / scale, height: rect.height / scale, scale,
+      library: JSON.parse(document.getElementById("game-status").dataset.library || "{}") };
   });
 }
 
@@ -28,24 +29,18 @@ function modeHeight(bounds) {
 function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop or quest.`);
-  const scale = uiScale(bounds), edge = Math.ceil(8 / scale), padding = Math.ceil(10 / scale);
-  const rowGap = Math.ceil(2 / scale), titleHeight = Math.ceil(28 / scale), titleGap = Math.ceil(4 / scale);
-  const panelWidth = Math.min(Math.ceil(248 / scale), bounds.width - edge * 2);
-  const panelHeight = padding * 2 + titleHeight + titleGap + MODES.length * modeHeight(bounds) + (MODES.length - 1) * rowGap;
-  const pip = pipHeaderRect(bounds);
-  const left = Math.max(edge, Math.min(pip.x, bounds.width - edge - panelWidth));
-  const top = Math.max(edge, Math.min(pip.y + pip.height + Math.ceil(6 / scale), bounds.height - edge - panelHeight));
-  return { x: left + padding, y: top + padding + titleHeight + titleGap + index * (modeHeight(bounds) + rowGap),
-    width: panelWidth - padding * 2, height: modeHeight(bounds) };
+  const control = bounds.library?.controls?.find(item => item.name === `Mode_${name}`);
+  if (!control) throw new Error(`Open the game library before locating ${name}.`);
+  const [x, y, width, height] = control.rect;
+  return { x, y, width, height };
 }
 
 async function openModeMenu(page) {
-  const status = page.locator('#game-status');
-  if (!/^Game mode\. .+ is selected\./.test(await status.textContent())) {
+  if (!(await metrics(page)).library?.visible) {
     const pip = headerPoint(await metrics(page), 'pip');
     await tap(page, pip.x, pip.y);
   }
-  await expect(status).toHaveText(/^Game mode\. .+ is selected\. Choose a game, or press Back to return\.$/);
+  await expect.poll(async () => (await metrics(page)).library?.visible).toBe(true);
   await rendered(page);
 }
 

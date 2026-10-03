@@ -9,7 +9,7 @@ const Pip = preload("res://scripts/duck_mascot.gd")
 const LOSS_SAD_SECONDS: float = 2.4
 const GOLD := Color("#edbd79")
 const LIGHT := Color("#fff2dc")
-const MUTED := Color("#b7c3d4")
+const MUTED := Color("#b7ccc3")
 
 var hits: int = 0
 var max_hp: int = 1
@@ -199,7 +199,7 @@ func _set_statistics(number: int, subject: String, earned: int, health: int, lef
 
 
 func _finish_presentation(blocked: bool) -> void:
-	_accent = Color("#a4d9e9") if pause_mode else GOLD
+	_accent = Color("#a7e4cf") if pause_mode else GOLD
 	_eyebrow.add_theme_color_override("font_color", _accent)
 	_hp_value.add_theme_color_override("font_color", _accent)
 	_sigil.pause_mode = pause_mode
@@ -252,8 +252,8 @@ func layout() -> void:
 	card = Rect2(origin / _scale, Vector2(card_width, card_height) / _scale)
 	hero_rect = Rect2(Vector2(4, 4) / _scale, Vector2(origin.x - 8, px.y - 8) / _scale) if split else Rect2(Vector2(4, 0) / _scale, Vector2(px.x - 8, maxf(40, origin.y + 12)) / _scale)
 	surface.size = card.size
-	var box := Style.box(Color("#152237f5"), Color(_accent, 0.55), ceili(22 / _scale), maxi(1, roundi(1 / _scale)))
-	box.shadow_color = Color("#05091380")
+	var box := Style.box(Color("#15322cf5"), Color(_accent, 0.55), ceili(22 / _scale), maxi(1, roundi(1 / _scale)))
+	box.shadow_color = Color("#081b1780")
 	box.shadow_size = ceili(16 / _scale)
 	box.shadow_offset = Vector2(0, 6 / _scale)
 	surface.add_theme_stylebox_override("panel", box)
@@ -296,14 +296,14 @@ func layout() -> void:
 	_track.size = Vector2(inner, 5) / _scale
 	_track.queue_redraw()
 	retry.configure(_accent if pause_mode else Color("#e6b16c"), true, reduced_motion)
-	map_button.configure(Color("#7690ae"), false, reduced_motion)
+	map_button.configure(Color("#739b89"), false, reduced_motion)
 	for state in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
-		retry.add_theme_color_override(state, Color("#272234"))
+		retry.add_theme_color_override(state, Color("#263e38"))
 		map_button.add_theme_color_override(state, LIGHT)
 	for key in ["normal", "hover", "pressed"]:
 		var quiet: StyleBoxFlat = map_button.get_theme_stylebox(key).duplicate()
-		quiet.bg_color = Color("#30425c") if key == "hover" else Color("#202e44")
-		quiet.border_color = Color("#51627c")
+		quiet.bg_color = Color("#34574a") if key == "hover" else Color("#203f35")
+		quiet.border_color = Color("#527461")
 		map_button.add_theme_stylebox_override(key, quiet)
 	for button in [retry, map_button]:
 		button.custom_minimum_size = Vector2(0, button_h / _scale)
@@ -359,7 +359,7 @@ func _draw_track() -> void:
 	for index in range(max_hp):
 		var rect := Rect2(index * (width + gap), 0, width, _track.size.y)
 		var earned: bool = index < hits
-		var color := _accent if earned else Color("#39475c")
+		var color := _accent if earned else Color("#395748")
 		if earned:
 			color.a = 0.4 + 0.6 * reveal
 		_track.draw_style_box(Style.box(color, Color.TRANSPARENT, ceili(2 / _scale), 0), rect)
@@ -369,7 +369,7 @@ func _draw() -> void:
 	if size.x <= 0:
 		return
 	# The curtain frames Pip on loss and the current encounter while paused.
-	draw_style_box(Style.box(Color("#0a1324a8"), Color.TRANSPARENT, ceili(20 / _scale), 0), Rect2(Vector2.ZERO, size))
+	draw_style_box(Style.box(Color("#0b241da8"), Color.TRANSPARENT, ceili(20 / _scale), 0), Rect2(Vector2.ZERO, size))
 	var center: Vector2 = hero_rect.get_center()
 	var radius: float = minf(hero_rect.size.x, hero_rect.size.y) * 0.39
 	if radius > 12:
@@ -393,10 +393,10 @@ class Sigil extends Control:
 		draw_set_transform(Vector2(size.x * 0.5, size.y * 0.5), 0, Vector2.ONE * s)
 		if pause_mode:
 			for ring in range(5, 0, -1):
-				draw_circle(Vector2.ZERO, 14 + ring * 2, Color("#a4d9e905"))
-			draw_circle(Vector2.ZERO, 20, Color("#a4d9e914"))
-			draw_arc(Vector2.ZERO, 22, -0.95, 0.80, 22, Color("#a4d9e966"), 1, true)
-			draw_arc(Vector2.ZERO, 22, 2.18, 3.9, 22, Color("#a4d9e966"), 1, true)
+				draw_circle(Vector2.ZERO, 14 + ring * 2, Color("#a7e4cf05"))
+			draw_circle(Vector2.ZERO, 20, Color("#a7e4cf14"))
+			draw_arc(Vector2.ZERO, 22, -0.95, 0.80, 22, Color("#a7e4cf66"), 1, true)
+			draw_arc(Vector2.ZERO, 22, 2.18, 3.9, 22, Color("#a7e4cf66"), 1, true)
 			for x in [-8, 3]:
 				draw_style_box(Style.box(Color("#e2f6ff"), Color.TRANSPARENT, 2, 0), Rect2(x, -10, 5, 20))
 			return

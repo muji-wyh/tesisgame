@@ -9,6 +9,7 @@ what ships. Private source packs remain subject to their own licenses.
 
 | Reference | Purpose |
 | --- | --- |
+| [Interface typography and library artwork](../../assets/fonts/SOURCE.md) | Acquired Nunito, font weights, and reused Twemoji / Kenney illustrations |
 | [Asset art direction](art-direction.md) | Required sourced artwork, no placeholder game art, and friendly large Talk Quest guardians |
 | [Guardian replacement review](talk-quest-monster-refresh.md) | Fourteen proposed friendly sources, acquisition status, and animation gaps; not shipped assets |
 | [Talk Quest chapter atlas](../../assets/talk_quest/map/SOURCE.md) | Acquired parchment maps, fourteen landmark illustrations, navigation artwork, and source credits |

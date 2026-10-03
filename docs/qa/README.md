@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Cross-page presentation](2026-10-03-game-taste.md) | Illustrated game library, shared typography and surfaces, persistent presentation settings, and responsive page review |
 | [Approved Ava voice](2026-10-03-ava-speech.md) | Full 360-recording migration, exact approved profile, provenance, preserved nonverbal audio, and playback regression checks |
 | [Native rendered-frame performance](2026-10-03-performance.md) | Five paired repeats over seven main-scene workloads; 12.63% lower aggregate active frame time on the Windows software renderer, with raw samples, source identities, exposure caveats, and a disclosed exit warning |
 | [Hidden scrollbars](2026-10-02-hidden-scrollbars.md) | Hidden native and Web rails, retained overflow gestures and focus navigation, and compact-screen regressions |

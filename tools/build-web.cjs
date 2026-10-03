@@ -33,5 +33,6 @@ process.stdout.write(verification.stdout);
 const downloadBytes = packageWebExport(output);
 fs.copyFileSync(path.join(root, 'web', 'staticwebapp.config.json'), path.join(output, 'staticwebapp.config.json'));
 fs.copyFileSync(path.join(root, 'web', 'map-credits.html'), path.join(output, 'map-credits.html'));
+fs.copyFileSync(path.join(root, 'assets', 'fonts', 'OFL.txt'), path.join(output, 'nunito-license.txt'));
 writeBuildReceipt(root, inputs);
 console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB startup; ${audio.length} music, prompt, chest and optional slice assets verified inside the game pack).`);

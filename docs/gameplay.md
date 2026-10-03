@@ -4,9 +4,14 @@ This is the detailed current gameplay reference. Start with the
 [project README](../README.md) for setup and the [documentation index](README.md)
 for implementation and asset references.
 
-The game uses compact square icon actions and a game-mode popover opened by
-Pip in the upper-left corner. Match and
-Memory keep the cards as the main focus. Pip and the success/mistake indicators form one compact status cluster;
+The game uses a shared warm paper palette, bundled Nunito typography, and compact
+icon actions. Pip and the current mode title open an illustrated game library.
+Each choice explains its core action and whether it uses a microphone. The library
+pauses play without changing progress, and Back, Escape, or an outside tap returns
+to the current round. It also exposes saved sound and motion preferences; motion
+follows the system until the player makes an explicit choice. These preferences
+also apply to the loading screen on the next visit. Match and Memory
+keep the cards as the main focus. Pip and the success/mistake indicators form one compact status cluster;
 Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
 The header keeps the playfield clear of persistent mode tabs.
@@ -62,12 +67,13 @@ the same themed artwork, and the loader reads the saved world when available.
 
 Start in **Match**, with the matching board ready.
 Tap a word and its matching picture; completed cards remain available for pronunciation.
-Completed pairs share a numbered, colored badge on both cards. One smooth line
-highlights the most recent successful pair. Tap either completed card to focus
-its partner and connection while hearing the word again. The other pair badges
-remain visible without a bundle of crossing lines. The curve follows the space
-between the card groups, adapts to portrait and landscape, and clears with a
-new round; incorrect pairs never receive a connection.
+Completed pairs share a numbered, colored badge on both cards. Every completed
+pair keeps its smooth connection until the round ends. The latest pair has a
+stronger line; tap either completed card to emphasize its partner and connection
+while hearing the word again. Earlier connections remain visible. Stable routes
+and light outlines separate crossings between the card groups. The curves adapt
+to portrait and landscape and clear with a new round; incorrect pairs never
+receive a connection.
 Use the arrow keys or Xbox D-pad/left stick to focus a card, and **Enter**,
 **Space**, or Xbox **A** to activate it.
 Six pictures also have short, noun-specific play reactions: the ball hops, bell
@@ -77,7 +83,7 @@ input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
 Tap the upper-left Pip to choose **Match**, **Memory**, **Voice Pop**, or
-**Talk Quest**. The current mode is marked in the popover. Selecting a mode
+**Talk Quest**. The current mode is marked in the library. Selecting a mode
 closes the menu; selecting the current mode keeps the round. Tap outside or use
 Escape / controller Back to dismiss it. Entry and reload select Match.
 

@@ -66,7 +66,7 @@ func _ready() -> void:
 	_back.name = "PopTreasureBack"
 	_back.text = "Back"
 	add_child(_back)
-	Style.action_button(_back, Color("#694a99"))
+	Style.action_button(_back, Style.GOOD)
 	_back.pressed.connect(func() -> void:
 		pause()
 		exit_requested.emit())
@@ -74,7 +74,7 @@ func _ready() -> void:
 	_retry.name = "PopTreasureRetry"
 	_retry.text = "Retry save"
 	add_child(_retry)
-	Style.action_button(_retry, Color("#694a99"), true)
+	Style.action_button(_retry, Style.GOOD, true)
 	_retry.pressed.connect(retry_save)
 	item_rect_changed.connect(_queue_layout)
 	get_viewport().size_changed.connect(_queue_layout)

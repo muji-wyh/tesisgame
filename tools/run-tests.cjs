@@ -31,7 +31,7 @@ const groups = {
     godot: [
       'steady_match_tests', 'layout_tests', 'three_mode_tests', 'layout_finish_tests',
       'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
-      'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
+      'presentation_tests', 'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
     ]
   },
   ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests', 'age_word_catalog_tests'] },

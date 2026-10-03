@@ -96,16 +96,28 @@ func _segment_enters(a: Vector2, b: Vector2, bounds: Rect2) -> bool:
 	return false
 
 
+func _check_visible_connections(app, expected_count: int, stage: String) -> void:
+	var layer = app._match_connections
+	var visible: Array = layer.visible_connections()
+	check(visible.size() == expected_count, stage + ": every completed pair retains its visible connection")
+	var visible_ids: Array[String] = []
+	for connection in visible:
+		check(layer.connections.has(connection) and not visible_ids.has(str(connection.id)),
+			stage + ": every painted connection is a unique completed pair")
+		visible_ids.append(str(connection.id))
+	for connection in layer.connections:
+		check(visible_ids.has(str(connection.id)), stage + ": an earlier completed connection is never filtered out")
+	if not visible.is_empty():
+		check(visible.back().id == layer.focused_id,
+			stage + ": the focused connection paints last while all earlier connections remain visible")
+
+
 func _check_geometry(app, expected_count: int, stage: String) -> void:
 	var layer = app._match_connections
 	check(layer.connections.size() == expected_count, stage + ": each completed pair owns exactly one connection")
 	check(layer.mouse_filter == Control.MOUSE_FILTER_IGNORE and not layer.is_processing(),
-		stage + ": the focused connector neither intercepts input nor keeps an idle animation loop running")
-	var visible: Array = layer.visible_connections()
-	check(visible.size() == mini(expected_count, 1), stage + ": at most one completed route is visible")
-	if not visible.is_empty():
-		check(visible[0].id == layer.focused_id and layer.connections.has(visible[0]),
-			stage + ": the visible route belongs to the focused completed pair")
+		stage + ": persistent connectors neither intercept input nor keep an idle animation loop running")
+	_check_visible_connections(app, expected_count, stage)
 	check(layer.vertical_pairs == (app.grid.columns == 5), stage + ": routing follows the actual grouped board orientation")
 	var board: Rect2 = app._match_playfield.get_global_rect()
 	var scale: float = app.Style.ui_scale(layer)
@@ -187,7 +199,8 @@ func _test_pointer_matches(app) -> void:
 	await settle()
 	check(_connection_snapshot(app) == first and app.model.feedback_ids.is_empty()
 		and app._match_connections.focused_id == words[0],
-		"The focused connection survives feedback resolution after temporary feedback IDs are cleared")
+		"The completed connection survives feedback resolution after temporary feedback IDs are cleared")
+	_check_visible_connections(app, 1, "First feedback resolved")
 	await _tap(app.cards[words[0] + ":image"])
 	check(app.model.successes == 1 and app.model.selected_id.is_empty() and _connection_snapshot(app) == first,
 		"A pointer tap on a connected card still replays its word without adding a duplicate or scoring")
@@ -196,10 +209,12 @@ func _test_pointer_matches(app) -> void:
 		app._select_card(words[index] + ":word")
 		check(app._match_connections.connections.size() == index + 1
 			and app._match_connections.focused_id == words[index]
-			and app._match_connections.visible_connections().size() == 1,
-			"Each later success focuses its own line while retaining earlier pairs without a line bundle")
+			and app._match_connections.visible_connections().size() == index + 1,
+			"Each later success emphasizes its own line without hiding any earlier matched line")
+		_check_visible_connections(app, index + 1, "Later success feedback")
 		app._resolve_feedback()
 		await settle()
+		_check_visible_connections(app, index + 1, "Later feedback resolved")
 		var current: Dictionary = _connection_snapshot(app)
 		check(current.get(words[0], {}) == first[words[0]],
 			"Adding another pair preserves the first pair's identity, appearance and exact route")
@@ -212,9 +227,9 @@ func _test_pointer_matches(app) -> void:
 		await _tap(app.cards[card_id])
 		var expected_id: String = str(app.model.card_by_id(card_id).word.id)
 		check(app._match_connections.focused_id == expected_id
-			and app._match_connections.visible_connections().size() == 1
-			and app._match_connections.visible_connections()[0].id == expected_id,
-			"Tapping either completed card switches the single visible connector to its own partner")
+			and app._match_connections.visible_connections().size() == 4
+			and app._match_connections.visible_connections().back().id == expected_id,
+			"Tapping either completed card emphasizes its own connection without hiding the other three")
 		check(app.model.successes == successes and app.model.mistakes == mistakes
 			and app.model.matched_ids == matched and app.model.selected_id.is_empty()
 			and _connection_snapshot(app) == accumulated,
@@ -225,6 +240,7 @@ func _test_pointer_matches(app) -> void:
 	check(app.model.selected_id == words[4] + ":image" and app.model.successes == successes
 		and app.model.mistakes == mistakes and app._match_connections.focused_id == words[2],
 		"Replaying a completed pair preserves an in-progress unmatched selection")
+	_check_visible_connections(app, 4, "Completed replay during an unmatched selection")
 	await _tap(app.cards[words[4] + ":image"])
 	var focus_before: String = app._match_connections.focused_id
 	check(not app._match_connections.focus_pair("missing-word")
@@ -267,23 +283,27 @@ func _test_responsive_and_lifecycle(app) -> void:
 	await settle()
 	check(_connection_snapshot(app) == before and app._match_connections.focused_id == focused,
 		"Closing the mode menu restores the same completed connections and focused pair")
+	_check_visible_connections(app, 4, "Pip menu closed")
 	app._show_collection()
 	app._hide_collection()
 	app.feedback_timer.paused = true
 	await settle()
 	check(_connection_snapshot(app) == before and app._match_connections.focused_id == focused,
 		"Returning from More preserves all completed connections and focused pair")
+	_check_visible_connections(app, 4, "More closed")
 	app.on_page_hidden()
 	app.on_page_visible()
 	app.feedback_timer.paused = true
 	await settle()
 	check(_connection_snapshot(app) == before and app._match_connections.focused_id == focused,
 		"A background and foreground cycle preserves the completed routes and focused pair")
+	_check_visible_connections(app, 4, "Page restored")
 	app.set_reduced_motion(false)
 	await settle()
 	check(not app._match_connections.is_processing() and _connection_snapshot(app) == before
 		and app._match_connections.focused_id == focused,
 		"Normal motion does not start a permanent animation loop or change the connection geometry")
+	_check_visible_connections(app, 4, "Normal motion restored")
 	app.set_reduced_motion(true)
 	var remaining: String = ""
 	for word_id in _words(app):
@@ -298,7 +318,7 @@ func _test_responsive_and_lifecycle(app) -> void:
 		app._resolve_feedback()
 		await settle()
 		check(app.model.phase == "won" and not app._match_connections.is_visible_in_tree(),
-			"The focused line and completed-pair badges leave with the board when the chest result takes over")
+			"Completed lines and pair badges leave with the board when the chest result takes over")
 	var old_cards: Array[WeakRef] = []
 	for card in app.cards.values():
 		old_cards.append(weakref(card))
@@ -324,24 +344,35 @@ func _test_responsive_and_lifecycle(app) -> void:
 
 func _test_voice_retention(app) -> void:
 	await _start(app)
-	var word_id: String = _words(app)[0]
+	var words: Array[String] = _words(app)
+	var prior_id: String = words[0]
+	app._select_card(prior_id + ":image")
+	app._select_card(prior_id + ":word")
+	app._resolve_feedback()
+	await settle()
+	var word_id: String = words[1]
 	var word: Dictionary = app.model.card_by_id(word_id + ":word").word
 	app._on_voice_state([true, true, "Listening"])
+	await settle()
+	var prior_connection: Dictionary = _connection_snapshot(app)[prior_id]
 	app._on_voice_result([word.text, true])
 	app.feedback_timer.paused = true
 	await settle()
-	check(app.model.successes == 1 and app._voice_match_link.active
-		and app._match_connections.connections.size() == 1 and app._match_connections.focused_id == word_id,
-		"A spoken success receives both its existing temporary electric effect and the focused connection")
+	check(app.model.successes == 2 and app._voice_match_link.active
+		and app._match_connections.connections.size() == 2 and app._match_connections.focused_id == word_id,
+		"A spoken success adds its connection and temporary electric effect beside the earlier completed line")
+	_check_visible_connections(app, 2, "Spoken success feedback")
 	app._advance_voice_match_feedback(1.01)
 	app._resolve_feedback()
 	await settle()
-	check(not app._voice_match_link.active and app._match_connections.connections.size() == 1
-		and app._match_connections.focused_id == word_id,
-		"The focused connection remains after the spoken match's temporary electric effect expires")
+	check(not app._voice_match_link.active and app._match_connections.connections.size() == 2
+		and app._match_connections.focused_id == word_id
+		and _connection_snapshot(app)[prior_id] == prior_connection,
+		"Both completed connections survive after the spoken match's temporary electric effect expires")
+	_check_visible_connections(app, 2, "Voice effect expired")
 	app._stop_voice()
 	await settle()
-	_check_geometry(app, 1, "Voice stopped after success")
+	_check_geometry(app, 2, "Voice stopped after success")
 
 
 func _test_default_card_badge(app) -> void:

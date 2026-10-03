@@ -166,8 +166,8 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 			set_process(true)
 	_feedback.accent = accent
 	_feedback.spark = palette.get("spark", accent.lightened(0.3))
-	var fill: Color = Color.WHITE.lerp(palette.get("light", Color.WHITE), 0.1)
-	var border: Color = accent.lightened(0.68)
+	var fill: Color = Color("#fffef9")
+	var border: Color = Style.EDGE
 	if selected:
 		fill = accent.lightened(0.86)
 		border = accent
@@ -192,9 +192,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	if _style_key != style_key:
 		_style_key = style_key
 		var normal: StyleBoxFlat = Style.box(fill, border, radius, border_width)
-		normal.shadow_color = Color(accent, 0.11)
-		normal.shadow_size = 3
-		normal.shadow_offset = Vector2(0, 2)
+		normal.shadow_color = Color(Style.INK, 0.10)
+		normal.shadow_size = 4
+		normal.shadow_offset = Vector2(0, 3)
 		add_theme_stylebox_override("normal", normal)
 		add_theme_stylebox_override("disabled", normal)
 		add_theme_stylebox_override("hover", Style.box(fill, interaction_tint, radius, 3))
@@ -206,8 +206,8 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	match_mark.active = matched and pair_focused
 	match_mark.visible = matched
 	match_mark.queue_redraw()
-	picture.modulate.a = 0.4 if matched else 1.0
-	word_label.modulate.a = 0.4 if matched else 1.0
+	picture.modulate.a = 0.68 if matched else 1.0
+	word_label.modulate.a = 0.75 if matched else 1.0
 
 
 func set_reduced_motion(value: bool) -> void:

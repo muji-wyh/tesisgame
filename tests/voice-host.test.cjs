@@ -1362,7 +1362,7 @@ test('the Pop glow covers the viewport edges, ignores input and respects reduced
   assert.match(activeRule, /visibility:\s*visible;/);
   assert.match(shell, /#pop-aura[^{}]*\{[^}]*animation-play-state:\s*paused;/);
   assert.match(shell, /#pop-aura\[data-listening="true"\][^{}]*\{[^}]*animation-play-state:\s*running;/);
-  assert.match(shell, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?#pop-aura[^{}]*\{[^}]*animation:\s*none;/);
+  assert.match(shell, /html\[data-reduced-motion="true"\] #pop-aura[^{}]*\{[^}]*animation:\s*none;/);
   const auraElement = shell.match(/<[^>]*\bid="pop-aura"[^>]*>/)?.[0];
   assert.ok(auraElement, 'The decorative aura is present in the document');
   assert.ok(shell.indexOf(auraElement) < shell.indexOf('function createSpeechHost()'), 'The aura exists before its host captures the element');

@@ -25,8 +25,8 @@ const WordField = preload("res://scripts/talk_quest_words.gd")
 const QuestResult = preload("res://scripts/talk_quest_result.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const INK := Color("#30405b")
-const ACCENT := Color("#7263c7")
+const INK := Style.INK
+const ACCENT := Style.GOOD
 
 var game = QuestModel.new()
 var save_path: String = "user://talk_quest.cfg"
@@ -163,7 +163,7 @@ func _style_button(item: Button, primary: bool = false) -> void:
 func _build_map() -> void:
 	_map = Control.new()
 	add_child(_map)
-	_map_heading = _label(_map, "Talk Quest", 30)
+	_map_heading = _label(_map, "Your journey", 30)
 	_map_note = _label(_map, "", 12)
 	_continue = _button(_map, "Continue", _continue_run)
 	_album_button = _button(_map, "Treasures", _show_album)
@@ -190,7 +190,7 @@ func _build_stage() -> void:
 	_stage.add_child(_backdrop)
 	_loss_backdrop = Panel.new()
 	_loss_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_loss_backdrop.add_theme_stylebox_override("panel", Style.box(Color("#101b2c"), Color.TRANSPARENT, 20, 0))
+	_loss_backdrop.add_theme_stylebox_override("panel", Style.box(Color("#102a2a"), Color.TRANSPARENT, 20, 0))
 	_loss_backdrop.hide()
 	_stage.add_child(_loss_backdrop)
 	_viewport_box = SubViewportContainer.new()
@@ -353,8 +353,8 @@ func _build_album() -> void:
 		var item := Panel.new()
 		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		item.focus_mode = Control.FOCUS_ALL
-		var normal := Style.box(Color("#fffefb"), Color("#e0dced"), 14, 1)
-		var focused := Style.box(Color("#fffefb"), Color("#6655b8"), 14, 3)
+		var normal := Style.box(Color("#fffefb"), Color("#dce2d7"), 14, 1)
+		var focused := Style.box(Color("#fffefb"), Color("#346953"), 14, 3)
 		item.add_theme_stylebox_override("panel", normal)
 		item.focus_entered.connect(func() -> void:
 			item.add_theme_stylebox_override("panel", focused)

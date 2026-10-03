@@ -59,7 +59,7 @@ func check_compact_result(panel: Node) -> void:
 		check(action(panel, "LeaderboardMode_" + mode) == null,
 			"The completed Voice Pop result omits the %s mode tab" % mode)
 	var copy := "\n".join(visible_labels(panel))
-	for removed in ["LOCAL LEADERBOARDS", "Meet the high scorers", "Personal bests on this device.", "Saved for", "Played by", "PERSONAL BEST", "Voice Pop", "Most hits wins."]:
+	for removed in ["LOCAL LEADERBOARDS", "Your best moments", "Personal bests on this device.", "Saved for", "Played by", "PERSONAL BEST", "Voice Pop", "Most hits wins."]:
 		check(not copy.contains(removed), "The compact result omits repeated copy: " + removed)
 
 
@@ -153,7 +153,7 @@ func _check_menu(app, state) -> void:
 	await settle()
 	var menu_copy := visible_labels(app._leaderboard_panel)
 	check(app.leaderboard_snapshot().view == "boards" and menu_copy.has("LOCAL LEADERBOARDS")
-		and menu_copy.has("Meet the high scorers") and menu_copy.has("PERSONAL BEST"),
+		and menu_copy.has("Your best moments") and menu_copy.has("PERSONAL BEST"),
 		"The standalone menu leaderboard retains its headings and ranking context")
 	for mode in ["pop", "match", "memory"]:
 		action(app._leaderboard_panel, "LeaderboardMode_" + mode).pressed.emit()

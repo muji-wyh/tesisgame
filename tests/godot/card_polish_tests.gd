@@ -204,9 +204,8 @@ func _test_card_style_reuse() -> void:
 	var before_light: Resource = card.get_theme_stylebox("normal")
 	palette.light = Color("#f2b1d2")
 	card.refresh(palette, false, false, false, false)
-	check(card.get_theme_stylebox("normal") != before_light
-		and card.get_theme_stylebox("normal").bg_color == Color.WHITE.lerp(palette.light, 0.1),
-		"A changed light color invalidates the surface even when the accent stays the same")
+	check(card.get_theme_stylebox("normal") == before_light,
+		"Changing an unused palette light keeps the shared paper surface cached")
 	var first_radius: int = card.get_theme_stylebox("normal").corner_radius_top_left
 	card.set_back(Control.new())
 	card.refresh(palette, false, false, false, false)

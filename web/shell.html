@@ -15,43 +15,47 @@
   </script>
   $GODOT_HEAD_INCLUDE
   <style>
+    @font-face { font-family: Nunito; font-style: normal; font-weight: 600;
+      font-display: swap; src: url("$INTERFACE_BODY_FONT_URI") format("truetype"); }
+    @font-face { font-family: Nunito; font-style: normal; font-weight: 800;
+      font-display: swap; src: url("$INTERFACE_HEADING_FONT_URI") format("truetype"); }
     :root {
       color-scheme: light;
-      --cp-bg: #f7f4ef;
+      --cp-bg: #fbf8f0;
       --cp-surface: #ffffff;
       --cp-surface-soft: #f5f5f5;
       --cp-border: #dedede;
-      --cp-text: #242424;
-      --cp-text-muted: #5c5c5c;
-      --cp-text-soft: #6f6f6f;
-      --cp-accent: #b11f4b;
-      --cp-accent-hover: #9a1a41;
-      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-text: #263e38;
+      --cp-text-muted: #64736b;
+      --cp-text-soft: #64736b;
+      --cp-accent: #346953;
+      --cp-accent-hover: #28513f;
+      --cp-accent-soft: rgba(52, 105, 83, 0.08);
       --cp-accent-fg: #ffffff;
       --cp-success: #16a34a;
       --cp-danger: #dc2626;
       --cp-warning: #f59e0b;
-      --cp-highlight: rgba(177, 31, 75, 0.12);
+      --cp-highlight: rgba(52, 105, 83, 0.12);
       --cp-tap-highlight: transparent;
       --pip-art: url("$PIP_MASCOT_URI");
     }
     html[data-theme="dark"] {
       color-scheme: dark;
-      --cp-bg: #3d3b3a;
-      --cp-surface: #292929;
-      --cp-surface-soft: #2e2e2e;
-      --cp-border: #474747;
+      --cp-bg: #152e29;
+      --cp-surface: #203d35;
+      --cp-surface-soft: #29453c;
+      --cp-border: #4a6559;
       --cp-text: #dedede;
       --cp-text-muted: #919191;
       --cp-text-soft: #b0b0b0;
-      --cp-accent: #fd8ea1;
-      --cp-accent-hover: #fb7b91;
-      --cp-accent-soft: rgba(253, 142, 161, 0.14);
-      --cp-accent-fg: #1a1a1a;
+      --cp-accent: #b7d6aa;
+      --cp-accent-hover: #c8e4bc;
+      --cp-accent-soft: rgba(183, 214, 170, 0.14);
+      --cp-accent-fg: #17342a;
       --cp-success: #4ade80;
       --cp-danger: #f87171;
       --cp-warning: #fbbf24;
-      --cp-highlight: rgba(253, 142, 161, 0.12);
+      --cp-highlight: rgba(183, 214, 170, 0.12);
     }
     /* Hide scrollbar chrome without changing scrolling or focus navigation. */
     * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
@@ -60,7 +64,7 @@
     #status, #loading-theme-options, #speech-transcript, #speech-notice,
     #speech-debug, #speech-debug textarea { -webkit-overflow-scrolling: touch; }
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--cp-bg); }
-    body { font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    body { font-family: Nunito, "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--cp-text); overscroll-behavior: none; }
     #safe-area {
       position: fixed; inset: 0;
@@ -80,6 +84,11 @@
     .loader-layout { display: grid; grid-template-areas: "heading" "themes" "toy" "download";
       gap: 24px; width: min(100%, 380px); }
     .loading-heading { grid-area: heading; }
+    .loading-eyebrow { color: var(--cp-accent); font-size: 10px; font-weight: 850; letter-spacing: .16em; margin-bottom: 8px; }
+    .loading-tagline { color: var(--cp-text-muted); font-size: 15px; }
+    #enter-game { box-shadow: 0 4px 0 color-mix(in srgb, var(--cp-accent), black 20%); border-radius: 16px; }
+    #enter-game:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 var(--cp-accent-hover); }
+    html[data-reduced-motion="true"] #enter-game:active:not(:disabled) { transform: none; }
     #loading-themes { grid-area: themes; min-width: 0; }
     .loading-theme-heading { display: flex; justify-content: space-between; align-items: center;
       gap: 8px; padding: 0 4px 6px; font-size: 14px; text-align: left; }
@@ -94,7 +103,7 @@
     .loading-theme[aria-pressed="true"] { border-color: var(--cp-accent); color: var(--cp-accent);
       background: var(--cp-accent-soft); box-shadow: 0 2px 0 var(--cp-accent); }
     .loading-theme:focus-visible { outline-offset: 1px; }
-    h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.025em; }
     p { margin: 0; line-height: 1.5; }
     #loading-play { grid-area: toy; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
     #loading-play, #loading-play * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
@@ -291,14 +300,14 @@
     @keyframes pip-nod { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(5px) rotate(3deg); } }
     @keyframes pip-wave { 0%, 100% { transform: rotate(0); } 40% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: rotate(5deg); } }
     @keyframes pip-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg) scale(1.04); } }
-    @media (prefers-reduced-motion: reduce) {
-      #pop-aura .pop-aura-edge { animation: none; opacity: 1; }
-      #pop-aura .pop-aura-flow::before { animation: none; transform: none; opacity: .3; }
-      #speech-buddy, #speech-meter i, .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
-      #speech-panel .speech-bubble { background: none !important; }
-      .duck-sprite { animation: none !important; }
-      #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0% !important; }
-    }
+    html[data-reduced-motion="true"] #pop-aura .pop-aura-edge { animation: none; opacity: 1; }
+    html[data-reduced-motion="true"] #pop-aura .pop-aura-flow::before { animation: none; transform: none; opacity: .3; }
+    html[data-reduced-motion="true"] #speech-buddy,
+    html[data-reduced-motion="true"] #speech-meter i,
+    html[data-reduced-motion="true"] .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
+    html[data-reduced-motion="true"] #speech-panel .speech-bubble { background: none !important; }
+    html[data-reduced-motion="true"] .duck-sprite { animation: none !important; }
+    html[data-reduced-motion="true"] #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0% !important; }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
     @media (max-height: 650px) {
@@ -317,6 +326,7 @@
     @media (max-height: 420px) and (max-width: 500px) {
       #status { padding: 12px; }
       .loader-layout, .loading-download { gap: 4px; }
+      .loading-eyebrow, .loading-tagline { display: none; }
       h1 { font-size: 28px; }
       .loading-theme-heading { display: none; }
       .loading-theme { min-height: 44px; padding-block: 8px; }
@@ -354,7 +364,7 @@
         Pip the duck is your guide. His beak moves with the game's spoken words. In his room, press him for a dance, snack, or bubbles.
         Before your first game, create a local player with a name and emoji avatar. The game opens in Match. Tap a word and its matching picture. Tap a completed card to hear its word again.
         Match and Memory practise the same five words. Tap Pip in the upper-left corner to open the game-mode menu and switch games. Tap outside the menu or press Escape to close it.
-        Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. One line highlights the latest successful pair. Tap a completed card to show its partner and connection and hear its word again.
+        Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
         Hold Space, Enter, or Xbox A on the eye for the same peek. Memory has no countdown or limit on attempts.
@@ -379,7 +389,7 @@
         Choosing a locked toy card keeps your scroll position. Keyboard focus reveals each toy or card. If a new toy choice cannot be saved, its play action waits and you can retry on the same toy.
         Toys have three steps you control, with a new result at each step and replay at the end.
         Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, launch a rocket, swing a monkey, or decorate a cake. Each toy says its word. Locked gifts show how many pieces you need.
-        Swipe the age, world, and toy strips horizontally without scrollbars. Motion follows your device's reduced-motion setting.</p>
+        Swipe the age, world, and toy strips horizontally without scrollbars. Open the game library with Pip or the mode title to adjust sound and motion. Motion follows your device's reduced-motion setting until you choose a preference.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <div id="chest-progress" class="sr-only" role="progressbar" aria-label="Treasure chest unlock progress"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
@@ -407,7 +417,9 @@
       <div id="status" role="region" aria-labelledby="loading-title">
         <div class="loader-layout">
           <header class="loading-heading">
+            <p class="loading-eyebrow">A WORLD OF LITTLE DISCOVERIES</p>
             <h1 id="loading-title">Pip and Words</h1>
+            <p class="loading-tagline">Play with words. Grow with Pip.</p>
           </header>
           <section id="loading-themes" aria-label="Choose a theme">
             <div class="loading-theme-heading">
@@ -548,6 +560,15 @@
       const enterButton = document.getElementById('enter-game');
       const enterController = document.getElementById('enter-game-controller');
       const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const loadingPreferences = (() => {
+        try {
+          const value = JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'));
+          return value && typeof value === 'object' ? value : {};
+        } catch { return {}; }
+      })();
+      const loadingMotionReduced = () => typeof loadingPreferences.reduced_motion === 'boolean'
+        ? loadingPreferences.reduced_motion : motion.matches;
+      document.documentElement.dataset.reducedMotion = String(loadingMotionReduced());
       const toy = document.getElementById('loading-toy');
       const chestArt = document.getElementById('chest-art');
       const chestLid = document.getElementById('chest-lid');
@@ -612,14 +633,14 @@
         const palette = loadingThemes[selectedTheme];
         const dark = document.documentElement.dataset.theme === 'dark';
         status.dataset.theme = selectedTheme;
-        status.style.setProperty('--cp-bg', dark ? '#3d3b3a' : palette.background);
+        status.style.setProperty('--cp-bg', dark ? '#152e29' : palette.background);
         status.style.setProperty('--cp-accent', dark ? palette.light : palette.accent);
         status.style.setProperty('--cp-accent-hover', dark ? palette.light : palette.accent);
         status.style.setProperty('--cp-accent-soft', dark ? `${palette.light}22` : `${palette.accent}12`);
         status.style.setProperty('--cp-highlight', `${palette.accent}22`);
         themeName.textContent = palette.name;
         setPipTheme(selectedTheme);
-        document.querySelector('meta[name="theme-color"]').content = dark ? '#3d3b3a' : palette.background;
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#152e29' : palette.background;
         for (const button of themeButtons) {
           const selected = button.dataset.theme === selectedTheme;
           button.setAttribute('aria-pressed', String(selected));
@@ -736,7 +757,7 @@
             }
             const next = Math.min(target, milestones.find(value => value > displayed));
             // Quick sweeps with a brief rest at each milestone; cap catch-up after a busy frame.
-            displayed = motion.matches ? next :
+            displayed = loadingMotionReduced() ? next :
               Math.min(next, displayed + Math.max(0, Math.min(now - lastFrame, 50)) * 0.002);
             if (displayed === next && milestones.includes(next)) pauseUntil = now + 140;
             paint();
@@ -820,7 +841,7 @@
         }
 
         function play(gestureAllowed) {
-          if (!gestureAllowed || !canPlayLoadingDance() || !players.length || activePlayer) return;
+          if (loadingPreferences.muted === true || !gestureAllowed || !canPlayLoadingDance() || !players.length || activePlayer) return;
           stop();
           if (!bag.length) {
             bag = players.map((_, index) => index);
@@ -924,7 +945,7 @@
         }
 
         function start(gestureAllowed) {
-          if (!gestureAllowed || document.hidden || loadingEvents.signal.aborted || context) return;
+          if (loadingPreferences.muted === true || !gestureAllowed || document.hidden || loadingEvents.signal.aborted || context) return;
           const Audio = window.AudioContext || window.webkitAudioContext;
           if (!Audio) return;
           const request = ++generation;
@@ -1011,7 +1032,7 @@
       }
 
       function startLoadingDance() {
-        if (!canPlayLoadingDance() || motion.matches || loadingDuck.dataset.activity === 'dancing') return;
+        if (!canPlayLoadingDance() || loadingMotionReduced() || loadingDuck.dataset.activity === 'dancing') return;
         clearLoadingDance();
         loadingDuck.dataset.activity = 'dancing';
         loadingDuck.dataset.pose = 'dance';
@@ -1083,7 +1104,7 @@
           clearLoadingDance();
           startLoadingDance();
         };
-        if (motion.matches) {
+        if (loadingMotionReduced()) {
           for (const [part, transform] of Object.entries(reaction.still)) danceParts[part].style.transform = transform;
           reactionTimer = window.setTimeout(finish, reaction.duration);
           return true;
@@ -1129,7 +1150,7 @@
         const reaction = (sparkleCount - 1) % reactions.length;
         hint.textContent = party ? 'High five! Star party!' : reactions[reaction];
         playWithDuck(gestureAllowed, false);
-        if (motion.matches) return;
+        if (loadingMotionReduced()) return;
         chestArt.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         score.getAnimations().forEach(animation => animation.cancel());
         const direction = sparkleCount % 2 === 0 ? 1 : -1;
@@ -1253,7 +1274,7 @@
         if (!gesture || event.pointerId !== gesture.id) return;
         const offset = event.clientX - gesture.x;
         gesture.distance = Math.max(gesture.distance, Math.abs(offset));
-        if (!motion.matches) chestArt.style.transform = `rotate(${Math.max(-9, Math.min(9, offset / 4))}deg)`;
+        if (!loadingMotionReduced()) chestArt.style.transform = `rotate(${Math.max(-9, Math.min(9, offset / 4))}deg)`;
       }, loadingListener);
       toy.addEventListener('pointerup', event => {
         if (!gesture || event.pointerId !== gesture.id) return;
@@ -1270,7 +1291,10 @@
       toy.addEventListener('lostpointercapture', event => {
         if (gesture?.id === event.pointerId) resetLoadingEffects();
       }, loadingListener);
-      motion.addEventListener('change', resetLoadingEffects, loadingListener);
+      motion.addEventListener('change', () => {
+        document.documentElement.dataset.reducedMotion = String(loadingMotionReduced());
+        resetLoadingEffects();
+      }, loadingListener);
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           clearLoadingEffects();
@@ -3030,6 +3054,15 @@
         saveLeaderboardState(text) {
           try { localStorage.setItem('wordBuddies.leaderboards', text); return true; }
           catch { return false; }
+        },
+        presentationSettings(reduced) {
+          document.documentElement.dataset.reducedMotion = String(Boolean(reduced));
+        },
+        libraryStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || !Array.isArray(value.controls)) return;
+          document.getElementById('game-status').dataset.library = JSON.stringify(value);
         },
         leaderboardStatus(text) {
           // Read-only diagnostics for the native player and ranking controls.

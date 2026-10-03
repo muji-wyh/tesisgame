@@ -26,6 +26,8 @@ const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
 const LeaderboardState = preload("res://scripts/leaderboard_state.gd")
 const LeaderboardPanel = preload("res://scripts/leaderboard_panel.gd")
+const GameLibrary = preload("res://scripts/game_library.gd")
+const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "quest": "Talk Quest"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
@@ -168,10 +170,15 @@ var _voice_style_scale: float = -1.0
 var _voice_space: Control
 var _voice_mode: bool = false
 var _mode_id: String = "match"
-var _mode_row: VBoxContainer
+var _mode_row: GridContainer
 var _mode_buttons: Array[Button] = []
 var _mode_menu: Control
-var _mode_panel: PanelContainer
+var _mode_panel: GameLibrary
+var _mode_heading_button: Button
+var _mode_heading: Label
+var _mode_subheading: Label
+var _presentation := PresentationPreferences.new()
+var _library_published := ""
 var _mode_menu_title: Label
 var _mode_menu_focus_modes: Dictionary = {}
 var _mode_menu_resume_voice: bool = false
@@ -328,6 +335,7 @@ func _ready() -> void:
 		await get_tree().process_frame
 	theme = Theme.new()
 	theme.default_font_size = 24
+	theme.default_font = Style.BODY_FONT
 	_build_controls()
 	if OS.has_feature("web"):
 		await get_tree().process_frame
@@ -342,7 +350,9 @@ func _ready() -> void:
 	resized.connect(_layout)
 	get_viewport().size_changed.connect(_layout)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
-	reduced_motion = DisplayServer.accessibility_should_reduce_animation() == 1
+	_presentation.load_preferences(DisplayServer.accessibility_should_reduce_animation() == 1)
+	reduced_motion = _presentation.reduced_motion
+	audio.set_muted(_presentation.muted)
 	call_deferred("_sync_controller_accept_startup")
 	_connect_browser()
 	_pop_rewards.save_path = pop_reward_save_path
@@ -410,6 +420,20 @@ func _build_controls() -> void:
 	_header_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_header_spacer)
+	_mode_heading_button = Button.new()
+	_mode_heading_button.name = "ChooseGame"
+	_mode_heading_button.tooltip_text = "Choose a game, adjust sound or motion"
+	_mode_heading_button.pressed.connect(_toggle_mode_menu)
+	_header_spacer.add_child(_mode_heading_button)
+	_header_spacer.resized.connect(_layout_game_heading)
+	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mode_heading = Style.label("Match", 22)
+	_mode_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_mode_heading_button.add_child(_mode_heading)
+	_mode_subheading = Style.label("PIP AND WORDS  /  CHOOSE A GAME", 10)
+	_mode_subheading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_mode_subheading.add_theme_color_override("font_color", Style.MUTED)
+	_mode_heading_button.add_child(_mode_subheading)
 	_success = ProgressBadges.new(ProgressBadges.SUCCESS)
 	_success.name = "MatchProgress"
 	_success.tooltip_text = "0 matches"
@@ -701,45 +725,51 @@ func _build_controls() -> void:
 func _build_mode_menu() -> void:
 	_mode_menu = Control.new()
 	_mode_menu.name = "GameModeMenu"
-	# The existing Pip artwork stays above this dismissal layer.
-	_mode_menu.z_index = 70
+	# The library also covers Pip when compact layouts reach the header.
+	_mode_menu.z_index = 100
 	_mode_menu.mouse_filter = Control.MOUSE_FILTER_STOP
 	_mode_menu.gui_input.connect(_mode_menu_input)
 	add_child(_mode_menu)
 	_mode_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_menu.hide()
-	_mode_panel = PanelContainer.new()
-	_mode_panel.name = "GameModePopover"
+	var shade := ColorRect.new()
+	shade.color = Color(Style.INK, 0.32)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mode_menu.add_child(shade)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mode_panel = GameLibrary.new()
 	_mode_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_mode_menu.add_child(_mode_panel)
-	var contents := VBoxContainer.new()
-	contents.name = "GameModeChoices"
-	contents.add_theme_constant_override("separation", 4)
-	_mode_panel.add_child(contents)
-	_mode_menu_title = Style.label("Game mode", 18)
-	contents.add_child(_mode_menu_title)
-	_mode_row = VBoxContainer.new()
-	_mode_row.name = "ModeOptions"
-	contents.add_child(_mode_row)
-	for id in MODES:
-		var button := Button.new()
-		button.name = "Mode_" + id
-		button.text = MODES[id]
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.toggle_mode = true
-		button.pressed.connect(_choose_mode_from_menu.bind(id))
-		_mode_row.add_child(button)
-		_mode_buttons.append(button)
-	for index in range(_mode_buttons.size()):
-		var button: Button = _mode_buttons[index]
-		var previous: Button = _mode_buttons[posmod(index - 1, _mode_buttons.size())]
-		var next: Button = _mode_buttons[(index + 1) % _mode_buttons.size()]
-		button.focus_previous = button.get_path_to(previous)
-		button.focus_next = button.get_path_to(next)
-		button.focus_neighbor_top = button.get_path_to(previous)
-		button.focus_neighbor_bottom = button.get_path_to(next)
-		button.focus_neighbor_left = button.get_path_to(button)
-		button.focus_neighbor_right = button.get_path_to(button)
+	_mode_menu_title = _mode_panel.heading
+	_mode_row = _mode_panel.grid
+	_mode_buttons = _mode_panel.buttons
+	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
+	_mode_panel.dismissed.connect(_hide_mode_menu)
+	_mode_panel.sound_toggled.connect(_toggle_library_sound)
+	_mode_panel.motion_toggled.connect(_toggle_library_motion)
+
+
+func _toggle_library_sound() -> void:
+	if not _mode_menu_open():
+		return
+	audio.set_muted(not audio.muted)
+	_presentation.muted = audio.muted
+	_save_presentation()
+
+
+func _toggle_library_motion() -> void:
+	if not _mode_menu_open():
+		return
+	set_reduced_motion(not reduced_motion)
+	_presentation.reduced_motion = reduced_motion
+	_presentation.has_motion_override = true
+	_save_presentation()
+
+
+func _save_presentation() -> void:
+	_mode_panel.configure(_mode_id, audio.muted, reduced_motion)
+	var saved: bool = _presentation.save_preferences()
+	_announce_status(("Sound off. " if audio.muted else "Sound on. ") + ("Reduced motion." if reduced_motion else "Full motion.") + ("" if saved else " Preferences could not be saved on this device. Your choices work for this visit."))
 
 
 func _mode_menu_open() -> bool:
@@ -796,7 +826,7 @@ func _show_mode_menu() -> void:
 	_mode_menu_focus_modes.clear()
 	for node in find_children("*", "Control", true, false):
 		var control := node as Control
-		if control != duck and not _mode_menu.is_ancestor_of(control):
+		if not _mode_menu.is_ancestor_of(control):
 			_mode_menu_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
 	_fit_mode_buttons()
@@ -813,6 +843,7 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 		if is_instance_valid(control):
 			control.focus_mode = _mode_menu_focus_modes[control]
 	_mode_menu_focus_modes.clear()
+	_publish_library.call_deferred()
 	var resume_voice: bool = _mode_menu_resume_voice
 	var resume_pop: bool = _mode_menu_resume_pop
 	var resume_quest: bool = _mode_menu_resume_quest
@@ -837,6 +868,8 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 	elif resume_voice:
 		_stop_voice()
 	_update_duck()
+	if resume_game and not audio.muted and not audio.active:
+		_restore_mode_music()
 	if restore_focus and _valid_focus(duck):
 		duck.grab_focus()
 	if restore_focus:
@@ -934,7 +967,7 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_overlay.name = "LeaderboardOverlay"
 	# Pip inherits the room's layer as well as its own elevated draw order.
 	_leaderboard_overlay.z_index = 200
-	_leaderboard_overlay.add_theme_stylebox_override("panel", Style.box(Color("#10182c"), Color.TRANSPARENT, 0, 0))
+	_leaderboard_overlay.add_theme_stylebox_override("panel", Style.box(Style.PAPER, Color.TRANSPARENT, 0, 0))
 	add_child(_leaderboard_overlay)
 	# GUI hit testing follows sibling order, independently of the draw layer.
 	move_child(_mode_menu, _leaderboard_overlay.get_index())
@@ -986,10 +1019,10 @@ func _layout_leaderboards() -> void:
 		_leaderboard_overlay.offset_top = header_end.y + ceilf(8 / scale)
 	_leaderboard_close.visible = _leaderboard_gate != "onboarding" and not picker
 	for edge in ["left", "right"]:
-		_leaderboard_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 660 / scale) * 0.5)))
+		_leaderboard_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 720 / scale) * 0.5)))
 	for edge in ["top", "bottom"]:
 		_leaderboard_margins.add_theme_constant_override("margin_" + edge, ceili(12 / scale))
-	Style.action_button(_leaderboard_close, Color("#c2afff"), true)
+	Style.action_button(_leaderboard_close, Style.GOOD)
 
 
 func _show_result_leaderboard() -> void:
@@ -1013,7 +1046,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_leaderboard_focus_modes.clear()
 	for node in find_children("*", "Control", true, false):
 		if view == "picker" and _leaderboard_gate == "pop" \
-			and (node in [duck, collection_button] or _mode_menu.is_ancestor_of(node)):
+			and (node in [duck, collection_button, _mode_heading_button] or _mode_menu.is_ancestor_of(node)):
 			continue
 		if not _leaderboard_overlay.is_ancestor_of(node):
 			_leaderboard_focus_modes[node] = node.focus_mode
@@ -2050,7 +2083,7 @@ func _refresh() -> void:
 		_active_palette = Data.theme(model.theme_id)
 		audio.prepare_chest(model.theme_id)
 	var palette: Dictionary = _active_palette
-	_background.color = palette.background.lightened(0.72)
+	_background.color = Style.PAPER.lerp(palette.background, 0.16)
 	if theme_changed:
 		collection_page.add_theme_stylebox_override("panel", Style.box(_background.color, Color.TRANSPARENT, 0, 0))
 	for index in range(theme_buttons.size()):
@@ -2480,6 +2513,9 @@ func _fit_grid() -> void:
 	var gutter: int = ceili(MatchConnections.GUTTER_PIXELS / Style.ui_scale(self))
 	var horizontal_gap: int = gutter if grid.columns == 2 else 10
 	var vertical_gap: int = 10 if grid.columns == 2 else gutter
+	if grid.columns == Model.MATCH_PAIR_COUNT:
+		# In short landscape speech layouts, protect the two 44-pixel card rows.
+		vertical_gap = mini(vertical_gap, maxi(10, floori(area.y - 88 / Style.ui_scale(self))))
 	grid.add_theme_constant_override("h_separation", horizontal_gap)
 	grid.add_theme_constant_override("v_separation", vertical_gap)
 	var rows := ceili(float(cards.size()) / grid.columns)
@@ -2529,47 +2565,59 @@ func _fit_mode_buttons() -> void:
 	_header_duck_slot.add_theme_stylebox_override("panel", Style.box(
 		Color(1, 1, 1, 0.75) if with_counts else Color.TRANSPARENT, Color.TRANSPARENT, ceili(12 / css_scale), 0))
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
-	var surface := Style.box(Color.WHITE, accent.lightened(0.56), ceili(18 / css_scale), maxi(1, roundi(1 / css_scale)))
-	surface.shadow_color = Color(Style.INK, 0.18)
-	surface.shadow_size = ceili(14 / css_scale)
-	surface.shadow_offset = Vector2(0, 6 / css_scale)
-	for edge in ["left", "top", "right", "bottom"]:
-		surface.set("content_margin_" + edge, ceilf(10 / css_scale))
-	_mode_panel.add_theme_stylebox_override("panel", surface)
-	(_mode_row.get_parent() as VBoxContainer).add_theme_constant_override("separation", ceili(4 / css_scale))
-	_mode_menu_title.custom_minimum_size.y = ceilf(28 / css_scale)
-	_mode_menu_title.add_theme_font_size_override("font_size", ceili(18 / css_scale))
-	_mode_row.add_theme_constant_override("separation", ceili(2 / css_scale))
-	for index in range(_mode_buttons.size()):
-		var button: Button = _mode_buttons[index]
-		var id: String = MODES.keys()[index]
-		Style.quiet_button(button, accent, 0)
-		button.custom_minimum_size = Vector2(0, ceilf(44 / css_scale))
-		button.add_theme_font_size_override("font_size", ceili(16 / css_scale))
-		button.button_pressed = id == _mode_id
-		button.text = str(MODES[id]) + (" (Current)" if id == _mode_id else "")
-		_set_accessibility_name(button, str(MODES[id]) + (", current game mode" if id == _mode_id else ", switch game mode"))
+	var heading_focus: int = _mode_heading_button.focus_mode
+	Style.quiet_button(_mode_heading_button, accent, 0)
+	_mode_heading_button.focus_mode = heading_focus
+	_mode_heading_button.custom_minimum_size = Vector2.ZERO
+	_mode_heading_button.set("accessibility_name", str(MODES[_mode_id]) + ". Choose a game")
+	_mode_heading.text = str(MODES[_mode_id]) + "  ›"
+	_mode_heading.add_theme_font_size_override("font_size", ceili((22 if size.x * css_scale >= 680 else 15) / css_scale))
+	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 else 0
+	_mode_subheading.visible = size.x * css_scale >= 680
+	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP", "quest": "LITTLE WORDS  /  A GRAND ADVENTURE"}.get(_mode_id, "PIP AND WORDS")
+	_mode_subheading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mode_subheading.offset_top = 32 / css_scale
+	_mode_subheading.add_theme_font_size_override("font_size", ceili(10 / css_scale))
+	_layout_game_heading()
+	_mode_panel.configure(_mode_id, audio.muted if audio != null else false, reduced_motion)
 	_layout_mode_menu()
 	_layout_mode_menu.call_deferred()
 	for button in [collection_button, hint_button, _memory.study_button]:
 		Style.square_icon_button(button, accent)
 	_style_voice_button()
-	_storage_retry_button.custom_minimum_size = Vector2(96, 44) / css_scale
+	var compact_retry: bool = size.x * css_scale < 360
+	_storage_retry_button.text = "Retry" if compact_retry else "Retry rewards" if _save_error else "Retry saving"
+	_set_accessibility_name(_storage_retry_button, "Retry rewards" if _save_error else "Retry saving")
+	_storage_retry_button.custom_minimum_size = Vector2(72 if compact_retry else 96, 44) / css_scale
 	_storage_retry_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_storage_retry_button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
 	_voice_space.custom_minimum_size.y = ceilf(112 / css_scale)
+	# Retry text and the Pip cluster can shrink after the header first expands.
+	_content_margins.queue_sort.call_deferred()
+
+
+func _layout_game_heading() -> void:
+	if _mode_heading_button == null:
+		return
+	_mode_heading_button.visible = _header_spacer.size.x * Style.ui_scale(self) >= 64 and model.phase in ["waiting", "matching", "feedback"]
 
 
 func _layout_mode_menu() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	var edge: float = ceilf(8 / css_scale)
-	var width: float = minf(ceilf(248 / css_scale), size.x - edge * 2.0)
-	_mode_panel.size = Vector2(width, _mode_panel.get_combined_minimum_size().y)
-	var anchor: Rect2 = _header_duck_art_slot.get_global_rect()
-	var local_anchor: Vector2 = get_global_transform().affine_inverse() * anchor.position
-	_mode_panel.position = Vector2(
-		clampf(local_anchor.x, edge, maxf(edge, size.x - edge - _mode_panel.size.x)),
-		clampf(local_anchor.y + anchor.size.y + ceilf(6 / css_scale), edge, maxf(edge, size.y - edge - _mode_panel.size.y)))
+	var edge: float = ceilf(12 / css_scale)
+	_mode_panel.fit(size - Vector2.ONE * edge * 2, css_scale)
+	_mode_panel.position = (size - _mode_panel.size) * 0.5
+	_publish_library.call_deferred()
+
+
+func _publish_library() -> void:
+	if _host == null:
+		return
+	var value := JSON.stringify(_mode_panel.snapshot())
+	if value != _library_published:
+		_library_published = value
+		_host.libraryStatus(value)
 
 
 func _style_voice_button() -> void:
@@ -2616,7 +2664,7 @@ func _layout_collection() -> void:
 	_leaderboard_menu.add_theme_constant_override("separation", gap)
 	for button in [_players_button, _leaderboards_button]:
 		var previous_focus: int = button.focus_mode
-		Style.action_button(button, _active_palette.get("accent", Style.GOOD), true)
+		Style.action_button(button, _active_palette.get("accent", Style.GOOD))
 		button.focus_mode = previous_focus
 		button.custom_minimum_size.y = ceilf(40 / scale)
 	_collection_header.add_theme_constant_override("separation", gap)
@@ -2828,6 +2876,8 @@ func choose_theme(id: String) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	if _host != null:
+		_host.presentationSettings(value)
 	for panel in [_leaderboard_panel, _pop_leaderboard]:
 		if is_instance_valid(panel):
 			panel.reduced_motion = value
@@ -3449,9 +3499,9 @@ func _valid_focus(control: Control) -> bool:
 		or (control is Button and (control as Button).disabled):
 		return false
 	if _mode_menu_open():
-		return control == duck or _mode_menu.is_ancestor_of(control)
+		return _mode_panel.is_ancestor_of(control)
 	if is_instance_valid(_leaderboard_overlay) and _leaderboard_overlay.visible and not _leaderboard_overlay.is_ancestor_of(control):
-		return _pop_picker_open() and control in [duck, collection_button]
+		return _pop_picker_open() and control in [duck, collection_button, _mode_heading_button]
 	if collection_page.visible and not _leaderboard_overlay.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
 		return false
 	return true
@@ -3564,9 +3614,12 @@ func _connect_browser() -> void:
 		return
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
 	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
-	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void: set_reduced_motion(bool(arguments[0])))
+	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
+		if not _presentation.has_motion_override:
+			set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback)
+	_host.presentationSettings(reduced_motion)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)

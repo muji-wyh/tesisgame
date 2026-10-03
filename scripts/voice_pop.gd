@@ -17,13 +17,13 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
-const NAVY := Color("#080e23")
-const SURFACE := Color("#16203c")
-const CYAN := Color("#57edff")
-const PINK := Color("#ff6cce")
-const VIOLET := Color("#a48aff")
-const WHITE := Color("#f5f7ff")
-const SOFT := Color("#a8b9dc")
+const NAVY := Color("#102a2a")
+const SURFACE := Color("#203f3e")
+const CYAN := Color("#a7e4cf")
+const PINK := Color("#edc186")
+const VIOLET := Color("#bdcdb8")
+const WHITE := Color("#faf7ed")
+const SOFT := Color("#b7ccc3")
 const LAUNCH_SOUND_WINDOW: float = 0.2
 const HUD_HIT_DURATION: float = 0.9
 const HUD_BONUS_DURATION: float = 1.8
@@ -122,6 +122,7 @@ var _gate_body: VBoxContainer
 var _gate_title: Label
 var _gate_copy: Label
 var _gate_note: Label
+var _gate_art: TextureRect
 var _gate_icon: Label
 var _gate_privacy: Label
 var _gate_actions: HBoxContainer
@@ -257,6 +258,13 @@ func _build() -> void:
 	_gate_body = VBoxContainer.new()
 	_gate_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_gate.add_child(_gate_body)
+	_gate_art = TextureRect.new()
+	_gate_art.name = "VoicePopRocket"
+	_gate_art.texture = preload("res://assets/avatars/rocket.svg")
+	_gate_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_gate_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_gate_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_gate_body.add_child(_gate_art)
 	_gate_icon = _label("VOICE POP", 15, CYAN)
 	_gate_title = _label("Ready to pop?", 30)
 	_gate_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1136,7 +1144,9 @@ func _layout() -> void:
 	_slice_clip.size = _arena.size
 	_slice_canvas.queue_redraw()
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
-	var gate_top: float = maxf(18.0 / scale, (size.y - 290.0 / scale) * 0.5)
+	_gate_art.visible = size.y * scale >= 540
+	_gate_art.custom_minimum_size.y = 88 / scale if _gate_art.visible else 0
+	var gate_top: float = maxf(18.0 / scale, (size.y - (420.0 if _gate_art.visible else 310.0) / scale) * 0.5)
 	_gate.position = Vector2((size.x - gate_width) * 0.5, gate_top)
 	_gate.size = Vector2(gate_width, maxf(48.0 / scale, size.y - gate_top - 18.0 / scale))
 	_gate_body.add_theme_constant_override("separation", ceili(10.0 / scale))
@@ -1256,16 +1266,16 @@ func _ensure_draw_styles(scale: float) -> void:
 	if _draw_style_scale == scale:
 		return
 	_draw_style_scale = scale
-	_backdrop_style = Style.box(NAVY, Color("#28385d"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale)))
-	_hud_panel_style = Style.box(SURFACE, Color("#2d3a5c"), ceili(13.0 / scale), 1)
+	_backdrop_style = Style.box(NAVY, Color("#45645b"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale)))
+	_hud_panel_style = Style.box(SURFACE, Color("#45645b"), ceili(13.0 / scale), 1)
 	_card_shadow_style = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
 	_card_glow_styles.clear()
 	_card_face_styles.clear()
 	for accent: Color in CARD_COLORS:
 		_card_glow_styles.append(Style.box(Color(accent, 0.10), Color(accent, 0.20), ceili(24.0 / scale), maxi(1, roundi(2.0 / scale))))
 		_card_face_styles.append(Style.box(accent, accent.lightened(0.45), ceili(19.0 / scale), maxi(1, roundi(2.0 / scale))))
-	_chest_panel_style = Style.box(Color("#152039", 0.96), Color("#536485"), ceili(14.0 / scale), 1)
-	_chest_track_style = Style.box(Color("#3d4a65"), Color.TRANSPARENT, ceili(2.0 / scale))
+	_chest_panel_style = Style.box(Color("#203f3e", 0.96), Color("#607e72"), ceili(14.0 / scale), 1)
+	_chest_track_style = Style.box(Color("#45645b"), Color.TRANSPARENT, ceili(2.0 / scale))
 	_chest_fill_style = Style.box(CHEST_COLOR, Color.TRANSPARENT, ceili(2.0 / scale))
 
 
@@ -1335,7 +1345,7 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 	var font: Font = ThemeDB.fallback_font
 	var fitted: Dictionary = _fit_word(word, capsule_size, scale)
 	var baseline: float = rect.end.y - 11.0 / scale
-	_target_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color("#243454"))
+	_target_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color("#263e38"))
 	_target_canvas.draw_set_transform(Vector2.ZERO)
 
 
@@ -1452,7 +1462,7 @@ func _draw_slice_word(burst: Dictionary, capsule_size: Vector2, scale: float, al
 	var font: Font = ThemeDB.fallback_font
 	var fitted: Dictionary = _fit_word(word, capsule_size, scale)
 	_slice_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, capsule_size.y * 0.5 - 11.0 / scale), word,
-		HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color(Color("#243454"), alpha))
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color(Color("#263e38"), alpha))
 
 
 func _draw_slice_splash(burst: Dictionary, center: Vector2, scale: float) -> void:
@@ -1761,7 +1771,7 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.tooltip_text = "Hear " + str(word.get("text", ""))
 		for state in ["normal", "hover", "pressed"]:
-			button.add_theme_stylebox_override(state, Style.box(Color("#f3f7ff") if state == "normal" else Color("#dcecff"), color.lightened(0.3), ceili(12.0 / scale), 1))
+			button.add_theme_stylebox_override(state, Style.box(Color("#fffdf7") if state == "normal" else Color("#e8f1e5"), color.lightened(0.3), ceili(12.0 / scale), 1))
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, color, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))
 		grid.add_child(button)
 		_review_buttons.append(button)
@@ -1900,12 +1910,12 @@ func _style_action(button: Button, primary: bool = false) -> void:
 	var scale: float = Style.ui_scale(self)
 	Style.action_button(button, CYAN, primary)
 	button.custom_minimum_size = Vector2(0, 48.0 / scale)
-	button.add_theme_font_size_override("font_size", ceili(14.0 / scale))
+	button.add_theme_font_size_override("font_size", ceili(15.0 / scale))
 	for state in ["normal", "hover", "pressed"]:
 		var fill: Color = CYAN if primary else SURFACE
 		if state != "normal":
 			fill = fill.lightened(0.12)
-		button.add_theme_stylebox_override(state, Style.box(fill, CYAN if primary else Color("#41557a"), ceili(13.0 / scale), 1))
+		button.add_theme_stylebox_override(state, Style.box(fill, CYAN if primary else Color("#607e72"), ceili(13.0 / scale), 1))
 	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, PINK, ceili(13.0 / scale), maxi(2, ceili(2.0 / scale))))
 	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_hover_pressed_color"]:
 		button.add_theme_color_override(key, NAVY if primary else WHITE)

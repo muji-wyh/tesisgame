@@ -47,7 +47,7 @@ func _build() -> void:
 	_heading = HBoxContainer.new()
 	_heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_heading)
-	title_label = Style.label("All words", 19)
+	title_label = Style.label("All words", 22)
 	title_label.name = "AgeWordTitle"
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.clip_text = true

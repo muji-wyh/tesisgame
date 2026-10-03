@@ -177,7 +177,7 @@ for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the saved ${the
   await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-full.png`), scale: 'css' });
 });
 
-test('loading keeps one visible progress readout and no extra slogan', async ({ page }) => {
+test('loading keeps one visible progress readout beneath its introduction', async ({ page }) => {
   await progressShell(page);
   await expect(page.locator('.loading-heading small')).toHaveCount(0);
   const score = await page.locator('#loading-score').boundingBox();
@@ -185,6 +185,25 @@ test('loading keeps one visible progress readout and no extra slogan', async ({ 
   await page.evaluate(() => window.reportDownload(50, 100));
   await expect(page.locator('#loading-percent')).toHaveText(/\d+%/);
   await expect(page.locator('#loading-hint')).toBeVisible();
+});
+
+for (const reduced of [true, false]) test(`loading respects saved sound and motion choices with reduced motion ${reduced}`, async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: reduced ? 'no-preference' : 'reduce' });
+  await page.addInitScript(value => localStorage.setItem('pipAndWords.presentation.v1',
+    JSON.stringify({ muted: true, reduced_motion: value })), reduced);
+  await observeLoadingAudio(page);
+  await controlPipMedia(page);
+  await progressShell(page);
+  const duck = page.locator('#loading-duck');
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', String(reduced));
+  if (reduced) await expect(duck).not.toHaveAttribute('data-activity', 'dancing');
+  else await expectAutomaticDance(page);
+  await duck.tap();
+  await reactionPose(page);
+  expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(0);
+  expect(await page.evaluate(() => loadingAudioProbe.notes.length)).toBe(0);
+  await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', String(reduced));
 });
 
 async function progressShell(page, engineScript = `window.Engine = class {

@@ -146,6 +146,11 @@ func _layout() -> void:
 	var title_height: float = title_label.get_theme_font("font").get_height(title_label.get_theme_font_size("font_size"))
 	title_label.position = Vector2(text_left, (14 if compact_shelf else 28) / scale)
 	title_label.size = Vector2(text_width, title_height)
+	detail_label.size.x = text_width
+	if detail_label.visible:
+		var detail_height: float = detail_label.get_minimum_size().y
+		title_label.position.y = minf(title_label.position.y,
+			maxf(6 / scale, (height - 10) / scale - title_height - detail_height))
 	detail_label.position = Vector2(text_left, title_label.position.y + title_height + 4 / scale)
 	detail_label.size = Vector2(text_width, maxf(0, (height - 6) / scale - detail_label.position.y))
 	var badge_width: float = maxf(48 / scale, badge.get_theme_font("font").get_string_size("Using", HORIZONTAL_ALIGNMENT_LEFT, -1, badge.get_theme_font_size("font_size")).x + 12 / scale)

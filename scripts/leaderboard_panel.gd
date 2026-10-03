@@ -7,13 +7,13 @@ signal profile_updated(profile: Dictionary)
 signal profile_removed(player_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
-const NAVY := Color("#10172f")
-const SURFACE := Color("#202b4c")
-const EDGE := Color("#3c4770")
-const WHITE := Color("#f6f7ff")
-const SOFT := Color("#b7c4e7")
-const GOLD := Color("#ffdc78")
-const PURPLE := Color("#b39cff")
+const PAPER := Color("#fffdf7")
+const SURFACE := Color("#f0f2e9")
+const EDGE := Color("#d5dfd4")
+const INK := Color("#263e38")
+const SOFT := Color("#627469")
+const ACCENT := Color("#346953")
+const FOCUS := Color("#507f6b")
 const AVATARS := ["duck", "cat", "dog", "fox", "panda", "frog", "unicorn", "rocket", "star", "rainbow", "bear", "rabbit"]
 const MODES := {"pop": "Voice Pop", "match": "Match", "memory": "Memory"}
 const RISE_DURATION := 1.65
@@ -79,7 +79,7 @@ class RankRow extends PanelContainer:
 		player_id = str(data.get("player_id", ""))
 		highlighted = highlight
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var surface := Style.box(Color("#352e4d") if highlight else SURFACE, GOLD if highlight else EDGE, ceili(15 / factor), 1)
+		var surface := Style.box(Color("#e7efe0") if highlight else SURFACE, ACCENT if highlight else EDGE, ceili(15 / factor), 1)
 		surface.content_margin_left = 12 / factor
 		surface.content_margin_right = 12 / factor
 		surface.content_margin_top = 8 / factor
@@ -90,7 +90,7 @@ class RankRow extends PanelContainer:
 		line.add_theme_constant_override("separation", ceili(10 / factor))
 		add_child(line)
 		rank_label = Style.label(str(data.get("rank", 0)), ceili(20 / factor))
-		rank_label.add_theme_color_override("font_color", GOLD if int(data.get("rank", 0)) <= 3 else SOFT)
+		rank_label.add_theme_color_override("font_color", ACCENT if int(data.get("rank", 0)) <= 3 else SOFT)
 		rank_label.custom_minimum_size.x = 26 / factor
 		rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		line.add_child(rank_label)
@@ -102,7 +102,7 @@ class RankRow extends PanelContainer:
 		avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		line.add_child(avatar)
 		name_label = Style.label(str(data.get("name", "Player")), ceili(18 / factor))
-		name_label.add_theme_color_override("font_color", WHITE)
+		name_label.add_theme_color_override("font_color", INK)
 		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		name_label.clip_text = true
 		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -114,7 +114,7 @@ class RankRow extends PanelContainer:
 		line.add_child(score)
 		metric_label = Style.label(str(data.get("metric", 0)), ceili(22 / factor))
 		metric_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		metric_label.add_theme_color_override("font_color", GOLD if highlight else WHITE)
+		metric_label.add_theme_color_override("font_color", ACCENT if highlight else INK)
 		score.add_child(metric_label)
 		var caption := Style.label(str(data.get("label", "hits")).trim_prefix(str(data.get("metric", 0)) + " "), ceili(10 / factor))
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -138,14 +138,14 @@ class RiseGlory extends Control:
 		var radius: float = row_rect.size.y * 0.42
 		var avatar_center := Vector2(row_rect.position.x + 70 / factor, center.y)
 		for layer in range(4, 0, -1):
-			var halo := Style.box(Color(GOLD, energy * 0.012 * (5 - layer)), Color(GOLD, energy * 0.032 * (5 - layer)), ceili((17 + layer * 3) / factor), maxi(1, ceili(layer / factor)))
+			var halo := Style.box(Color(ACCENT, energy * 0.012 * (5 - layer)), Color(ACCENT, energy * 0.032 * (5 - layer)), ceili((17 + layer * 3) / factor), maxi(1, ceili(layer / factor)))
 			draw_style_box(halo, row_rect.grow(layer * 4 / factor))
 		if rising:
 			for trail in range(7):
 				var offset := Vector2((trail - 3) * 8 / factor, row_rect.size.y * 0.45)
 				var end := offset + Vector2(sin(trail * 2.1 + progress * 9) * 5, 20 + 60 * energy) / factor
-				draw_line(avatar_center + offset, avatar_center + end, Color(GOLD, energy * (0.25 if trail % 2 else 0.52)), (2 if trail % 2 else 3) / factor, true)
-		draw_arc(avatar_center, radius + (5 + 8 * energy) / factor, progress * TAU, progress * TAU + PI * 1.55, 44, Color(GOLD, energy * 0.9), 2 / factor, true)
+				draw_line(avatar_center + offset, avatar_center + end, Color(ACCENT, energy * (0.25 if trail % 2 else 0.52)), (2 if trail % 2 else 3) / factor, true)
+		draw_arc(avatar_center, radius + (5 + 8 * energy) / factor, progress * TAU, progress * TAU + PI * 1.55, 44, Color(ACCENT, energy * 0.9), 2 / factor, true)
 		for spark in range(18):
 			var angle: float = spark * 2.39996 + progress * 0.55
 			var flight: float = fmod(progress * 1.8 + spark * 0.137, 1.0)
@@ -153,8 +153,8 @@ class RiseGlory extends Control:
 			var point := origin + Vector2(cos(angle), sin(angle)) * (18 + 58 * flight) / factor
 			var sparkle: float = (1.0 - flight) * energy
 			var length: float = (2 + 4 * sparkle) / factor
-			draw_line(point - Vector2(length, 0), point + Vector2(length, 0), Color(GOLD.lightened(0.4), sparkle), 1.5 / factor, true)
-			draw_line(point - Vector2(0, length), point + Vector2(0, length), Color(GOLD, sparkle), 1.5 / factor, true)
+			draw_line(point - Vector2(length, 0), point + Vector2(length, 0), Color(ACCENT.lightened(0.4), sparkle), 1.5 / factor, true)
+			draw_line(point - Vector2(0, length), point + Vector2(0, length), Color(ACCENT, sparkle), 1.5 / factor, true)
 
 
 func _ready() -> void:
@@ -363,9 +363,9 @@ func _build() -> void:
 	add_theme_constant_override("separation", _px(14))
 	var panel := PanelContainer.new()
 	panel.name = "LeaderboardSurface"
-	var surface := Style.box(NAVY, EDGE, _px(22), 1)
-	surface.content_margin_left = 16 / _scale()
-	surface.content_margin_right = 16 / _scale()
+	var surface := Style.box(PAPER, EDGE, _px(22), 1)
+	surface.content_margin_left = 24 / _scale()
+	surface.content_margin_right = 24 / _scale()
 	surface.content_margin_top = 18 / _scale()
 	surface.content_margin_bottom = 18 / _scale()
 	panel.add_theme_stylebox_override("panel", surface)
@@ -375,13 +375,13 @@ func _build() -> void:
 	panel.add_child(body)
 	if _view != "result":
 		var player_view: bool = _view in ["players", "onboarding", "picker"]
-		var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, GOLD)
+		var eyebrow := _label("YOUR LOCAL PLAYERS" if player_view else "LOCAL LEADERBOARDS", 11, ACCENT)
 		body.add_child(eyebrow)
-		var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Make it your game" if player_view else "Meet the high scorers"
-		var description: String = "Choose an emoji and a name to start your adventure." if _view == "onboarding" else "Tap your avatar to start this Voice Pop round. Your score will save automatically." if _view == "picker" else "Up to 10 players. Pick an emoji and a name." if player_view else "Personal bests on this device. Equal scores share a rank."
-		body.add_child(_label(heading, 24, WHITE, true))
+		var heading: String = "Create your first player" if _view == "onboarding" else "Who is playing?" if _view == "picker" else "Your playing crew" if player_view else "Your best moments"
+		var description: String = "Every adventure starts with you. Choose an avatar and a name." if _view == "onboarding" else "Tap your avatar to start this Voice Pop round. Your score will save automatically." if _view == "picker" else "A space for everyone. Keep up to 10 players on this device." if player_view else "Personal bests on this device. Equal scores share a rank."
+		body.add_child(_label(heading, 28, INK, true))
 		body.add_child(_label(description, 12, SOFT, true))
-	_error_label = _label(_error, 13, Color("#ffb8a9"), true)
+	_error_label = _label(_error, 13, Color("#a34335"), true)
 	_error_label.name = "LeaderboardError"
 	_error_label.visible = not _error.is_empty()
 	body.add_child(_error_label)
@@ -395,15 +395,15 @@ func _build() -> void:
 		return
 	if _view == "players":
 		if not _notice.is_empty():
-			body.add_child(_label(_notice, 13, GOLD, true))
+			body.add_child(_label(_notice, 13, ACCENT, true))
 		if not _removing_player.is_empty():
 			_build_remove_confirmation(body)
 		elif not _editing_player.is_empty():
-			body.add_child(_label("Edit player", 19, WHITE))
+			body.add_child(_label("Edit player", 19, INK))
 			_build_editor(body)
 		else:
 			_build_profiles(body, false)
-			body.add_child(_label("Add a player", 19, WHITE))
+			body.add_child(_label("Add a player", 19, INK))
 			_build_editor(body)
 		body.add_child(_label("Emoji artwork: Twemoji / CC BY 4.0", 10, SOFT))
 	elif _view == "onboarding":
@@ -415,7 +415,7 @@ func _build() -> void:
 			# the loading screen requested onboarding. Never require a duplicate.
 			_selected = str(_profiles()[0].get("id", ""))
 			_set_error("")
-			body.add_child(_label("Your player is ready. Welcome back!", 16, GOLD, true))
+			body.add_child(_label("Your player is ready. Welcome back!", 16, ACCENT, true))
 			_start_button = _button("Continue", "LeaderboardStartGame", true)
 			_start_button.disabled = _confirmed
 			_start_button.pressed.connect(_confirm_player.bind(_ui_generation))
@@ -449,14 +449,14 @@ func _build_attribution(body: VBoxContainer) -> void:
 		saved.add_child(icon)
 		var copy := VBoxContainer.new()
 		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		copy.add_child(_label(("Saved for " if _submitted else "Played by ") + str(profile.get("name", "your player")), 16, GOLD, true))
+		copy.add_child(_label(("Saved for " if _submitted else "Played by ") + str(profile.get("name", "your player")), 16, ACCENT, true))
 		copy.add_child(_label(_notice if not _notice.is_empty() else "Your personal best is on the board." if _submitted else "This round belongs to the player chosen before the game.", 12, SOFT, true))
 		saved.add_child(copy)
 		body.add_child(saved)
 		if not _submitted:
 			_build_save_retry(body)
 		return
-	body.add_child(_label("Who played this round?", 19, WHITE))
+	body.add_child(_label("Who played this round?", 19, INK))
 	body.add_child(_label("Choose a player to save this score, or play again without saving.", 12, SOFT, true))
 	_build_profiles(body, true)
 	if _profiles().size() < 10:
@@ -497,7 +497,7 @@ func _build_picker(body: VBoxContainer) -> void:
 func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 	var profiles := _profiles()
 	if profiles.is_empty():
-		body.add_child(_label("Your first player starts here.", 14, PURPLE, true))
+		body.add_child(_label("Your first player starts here.", 14, FOCUS, true))
 		return
 	if not selectable:
 		for profile in profiles:
@@ -505,7 +505,7 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 			var row := HBoxContainer.new()
 			row.add_theme_constant_override("separation", _px(8))
 			row.add_child(_avatar(str(profile.avatar), 30))
-			var player_name := _label(str(profile.name), 16, WHITE)
+			var player_name := _label(str(profile.name), 16, INK)
 			player_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			player_name.custom_minimum_size.x = 16 / _scale()
 			player_name.clip_text = true
@@ -523,7 +523,8 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 			body.add_child(row)
 		body.add_child(_label("%d / 10 players" % profiles.size(), 12, SOFT))
 		return
-	var grid := HFlowContainer.new()
+	var grid := GridContainer.new()
+	grid.columns = 2 if profiles.size() > 1 and get_viewport().get_visible_rect().size.x * _scale() >= 600 else 1
 	grid.name = "LeaderboardPlayerChoices"
 	grid.add_theme_constant_override("h_separation", _px(8))
 	grid.add_theme_constant_override("v_separation", _px(8))
@@ -533,7 +534,10 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 		choice.icon = _texture(str(profile.get("avatar", "duck")))
 		choice.expand_icon = true
 		choice.add_theme_constant_override("icon_max_width", _px(30))
-		choice.custom_minimum_size = Vector2(116, 48) / _scale()
+		choice.custom_minimum_size = Vector2(0, 60) / _scale()
+		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		choice.add_theme_font_size_override("font_size", _px(16))
 		choice.clip_text = true
 		choice.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		choice.tooltip_text = str(profile.get("name", "Player"))
@@ -552,14 +556,15 @@ func _build_profiles(body: VBoxContainer, selectable: bool) -> void:
 
 func _build_editor(body: VBoxContainer) -> void:
 	if _editing_player.is_empty() and _profiles().size() >= 10:
-		body.add_child(_label("All 10 player spots are in use.", 13, GOLD, true))
+		body.add_child(_label("All 10 player spots are in use.", 13, ACCENT, true))
 		return
 	_form = VBoxContainer.new()
 	_form.name = "LeaderboardPlayerEditor"
 	_form.add_theme_constant_override("separation", _px(10))
 	body.add_child(_form)
 	_form.add_child(_label("Choose your avatar", 13, SOFT))
-	var avatars := HFlowContainer.new()
+	var avatars := GridContainer.new()
+	avatars.columns = 6 if get_viewport().get_visible_rect().size.x * _scale() >= 600 else 4
 	avatars.add_theme_constant_override("h_separation", _px(6))
 	avatars.add_theme_constant_override("v_separation", _px(6))
 	for id in AVATARS:
@@ -584,11 +589,11 @@ func _build_editor(body: VBoxContainer) -> void:
 	_name_input.text = _draft_name
 	_name_input.custom_minimum_size.y = 48 / _scale()
 	_name_input.add_theme_font_size_override("font_size", _px(16))
-	_name_input.add_theme_color_override("font_color", WHITE)
+	_name_input.add_theme_color_override("font_color", INK)
 	_name_input.add_theme_color_override("font_placeholder_color", SOFT)
-	_name_input.add_theme_color_override("caret_color", GOLD)
+	_name_input.add_theme_color_override("caret_color", ACCENT)
 	_name_input.add_theme_stylebox_override("normal", Style.box(SURFACE, EDGE, _px(12), 1))
-	_name_input.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, GOLD, _px(12), 2))
+	_name_input.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, ACCENT, _px(12), 2))
 	_name_input.text_changed.connect(_name_changed.bind(_ui_generation))
 	var generation: int = _ui_generation
 	_name_input.text_submitted.connect(func(_text: String): _submit_profile(generation))
@@ -609,7 +614,7 @@ func _build_editor(body: VBoxContainer) -> void:
 func _build_remove_confirmation(body: VBoxContainer) -> void:
 	var profile: Dictionary = _profile(_removing_player)
 	body.add_child(_avatar(str(profile.get("avatar", "duck")), 56))
-	body.add_child(_label("Remove %s?" % str(profile.get("name", "this player")), 20, WHITE, true))
+	body.add_child(_label("Remove %s?" % str(profile.get("name", "this player")), 20, INK, true))
 	body.add_child(_label("This removes the player and their leaderboard scores from this device. Shared game progress and treasures will stay. This cannot be undone.", 14, SOFT, true))
 	var cancel := _button("Keep player", "LeaderboardCancelRemove", true)
 	cancel.pressed.connect(_cancel_management_action.bind(_ui_generation))
@@ -635,10 +640,10 @@ func _build_board(body: VBoxContainer) -> void:
 	_rows_data = _store.board(_mode)
 	if _view != "result":
 		var heading := HBoxContainer.new()
-		var title := _label(MODES.get(_mode, "Voice Pop"), 18, WHITE)
+		var title := _label(MODES.get(_mode, "Voice Pop"), 18, INK)
 		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		heading.add_child(title)
-		heading.add_child(_label("PERSONAL BEST", 10, PURPLE))
+		heading.add_child(_label("PERSONAL BEST", 10, FOCUS))
 		body.add_child(heading)
 		var rule: String = "Most hits wins."
 		if _mode == "match":
@@ -1048,6 +1053,7 @@ func _button(text: String, node_name: String, primary: bool = false) -> Button:
 	button.name = node_name
 	button.mouse_filter = Control.MOUSE_FILTER_PASS
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_override("font", Style.HEADING_FONT)
 	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size.y = 46 / _scale()
 	button.add_theme_font_size_override("font_size", _px(14))
@@ -1058,23 +1064,23 @@ func _button(text: String, node_name: String, primary: bool = false) -> Button:
 
 func _style_button(button: Button, primary: bool) -> void:
 	for state in ["normal", "hover", "pressed", "disabled"]:
-		var fill: Color = GOLD if primary else SURFACE
+		var fill: Color = ACCENT if primary else SURFACE
 		if state == "hover":
 			fill = fill.lightened(0.12)
 		elif state == "pressed":
 			fill = fill.darkened(0.10)
 		elif state == "disabled":
-			fill = Color("#28334f")
-		var surface := Style.box(fill, GOLD if primary and state != "disabled" else EDGE, _px(12), 1)
+			fill = Color("#e4e8df")
+		var surface := Style.box(fill, ACCENT if primary and state != "disabled" else EDGE, _px(12), 1)
 		surface.content_margin_left = 10 / _scale()
 		surface.content_margin_right = 10 / _scale()
 		surface.content_margin_top = 6 / _scale()
 		surface.content_margin_bottom = 6 / _scale()
 		button.add_theme_stylebox_override(state, surface)
 	for state in ["font_color", "font_focus_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
-		button.add_theme_color_override(state, NAVY if primary else WHITE)
+		button.add_theme_color_override(state, PAPER if primary else INK)
 	button.add_theme_color_override("font_disabled_color", SOFT)
-	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, PURPLE, _px(12), _px(2)))
+	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, FOCUS, _px(12), _px(2)))
 
 
 func _label(text: String, font_size: int, color: Color, wrap: bool = false) -> Label:
@@ -1123,7 +1129,8 @@ func _ensure_visible(control: Control) -> void:
 	_ensure_visible_now.call_deferred(control)
 
 
-func _ensure_visible_now(control: Control, padding: float = 0.0) -> void:
+# A queued focus target may be freed when its form is replaced before this runs.
+func _ensure_visible_now(control: Variant, padding: float = 0.0) -> void:
 	if not is_instance_valid(control) or not is_ancestor_of(control):
 		return
 	_scroll_rect_into_view(control.get_global_rect(), padding, false, false, true)

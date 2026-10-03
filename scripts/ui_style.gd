@@ -1,9 +1,13 @@
 extends RefCounted
 
-const INK := Color("#35415e")
-const MUTED := Color("#65708a")
-const GOOD := Color("#4e966a")
-const WRONG := Color("#c46a59")
+const INK := Color("#263e38")
+const MUTED := Color("#64736b")
+const GOOD := Color("#346953")
+const WRONG := Color("#b55646")
+const PAPER := Color("#fbf8f0")
+const EDGE := Color("#dce2d7")
+const BODY_FONT = preload("res://assets/fonts/body.tres")
+const HEADING_FONT = preload("res://assets/fonts/heading.tres")
 
 
 static func hint_palette(palette: Dictionary) -> Dictionary:
@@ -48,13 +52,14 @@ static func button(control: Button, accent: Color, minimum_width: float = 72.0) 
 	control.focus_mode = Control.FOCUS_ALL
 	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	control.add_theme_font_size_override("font_size", 20)
+	control.add_theme_font_override("font", HEADING_FONT)
 	control.add_theme_color_override("font_color", INK)
 	control.add_theme_color_override("font_focus_color", INK)
 	control.add_theme_color_override("font_hover_color", INK)
 	control.add_theme_color_override("font_pressed_color", INK)
 	control.add_theme_color_override("font_hover_pressed_color", INK)
 	control.add_theme_color_override("font_disabled_color", INK)
-	control.add_theme_stylebox_override("normal", box(Color.WHITE, accent.lightened(0.6)))
+	control.add_theme_stylebox_override("normal", box(PAPER.lightened(0.5), EDGE, 14, 1))
 	control.add_theme_stylebox_override("hover", box(accent.lightened(0.92), accent))
 	control.add_theme_stylebox_override("pressed", box(accent.lightened(0.8), accent, 16, 3))
 	control.add_theme_stylebox_override("disabled", box(Color("#edf0f1"), Color("#d8dde1")))
@@ -76,11 +81,11 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	var scale: float = ui_scale(control)
 	var radius: int = ceili(12 / scale)
 	var border: int = maxi(1, roundi(1 / scale))
-	var fill: Color = accent.lightened(0.84) if primary else Color.WHITE
-	var edge: Color = accent.lightened(0.45 if primary else 0.72)
+	var fill: Color = accent.darkened(0.12) if primary else PAPER.lightened(0.5)
+	var edge: Color = accent.darkened(0.12) if primary else EDGE
 	control.add_theme_stylebox_override("normal", box(fill, edge, radius, border))
-	control.add_theme_stylebox_override("hover", box(accent.lightened(0.9 if not primary else 0.77), accent.lightened(0.35), radius, border))
-	control.add_theme_stylebox_override("pressed", box(accent.lightened(0.66 if primary else 0.82), accent, radius, border))
+	control.add_theme_stylebox_override("hover", box(accent.darkened(0.04) if primary else accent.lightened(0.92), edge, radius, border))
+	control.add_theme_stylebox_override("pressed", box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent, radius, border))
 	control.add_theme_stylebox_override("disabled", box(Color("#edf0f1"), Color("#d8dde1"), radius, border))
 	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, radius, maxi(2, roundi(2 / scale))))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
@@ -92,6 +97,9 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	control.custom_minimum_size = Vector2(0, ceilf(48 / scale))
 	control.add_theme_font_size_override("font_size", ceili(14 / scale))
 	control.autowrap_mode = TextServer.AUTOWRAP_OFF
+	if primary:
+		for state in ["font_color", "font_focus_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
+			control.add_theme_color_override(state, Color.WHITE)
 
 
 static func prominent_action_button(control: Button, accent: Color) -> void:
@@ -140,7 +148,7 @@ static func square_icon_button(control: Button, accent: Color) -> void:
 	control.add_theme_font_size_override("font_size", ceili(14 / scale))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		var style := control.get_theme_stylebox(state) as StyleBoxFlat
-		style.set_corner_radius_all(maxi(1, roundi(4 / scale)))
+		style.set_corner_radius_all(maxi(1, roundi(12 / scale)))
 
 
 static func label(text: String, font_size: int = 24) -> Label:
@@ -148,6 +156,7 @@ static func label(text: String, font_size: int = 24) -> Label:
 	control.text = text
 	control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	control.add_theme_font_size_override("font_size", font_size)
+	control.add_theme_font_override("font", HEADING_FONT if font_size >= 19 else BODY_FONT)
 	control.add_theme_color_override("font_color", INK)
 	control.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return control

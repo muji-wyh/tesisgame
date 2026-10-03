@@ -34,17 +34,18 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
     await rendered(page);
     const bounds = await metrics(page);
     const modes = [['match', 'Match. Game mode menu closed.'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
-    const targets = modes.map(([name]) => modeRect(bounds, name));
+    const targets = [];
     for (const [index, [name, announcement]] of modes.entries()) {
       await openModeMenu(page);
-      const rect = targets[index];
+      const rect = modeRect(await metrics(page), name);
+      targets.push(rect);
       expect(rect.width * bounds.scale, `${name}: minimum touch width`).toBeGreaterThanOrEqual(44 - 0.01);
       expect(rect.height * bounds.scale, `${name}: minimum touch height`).toBeGreaterThanOrEqual(44 - 0.01);
       expect(bounds.x + rect.x * bounds.scale).toBeGreaterThanOrEqual(0);
       expect(bounds.x + (rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(viewport.width + 0.01);
       expect(bounds.y + rect.y * bounds.scale).toBeGreaterThanOrEqual(0);
       expect(bounds.y + (rect.y + rect.height) * bounds.scale).toBeLessThanOrEqual(viewport.height + 0.01);
-      if (index) expect(rect.y).toBeGreaterThanOrEqual(targets[index - 1].y + targets[index - 1].height);
+      if (index) expect(rect.x >= targets[index - 1].x + targets[index - 1].width - 1 || rect.y >= targets[index - 1].y + targets[index - 1].height - 1).toBe(true);
       await chooseMode(page, name);
       await expect(status).toContainText(announcement);
     }
