@@ -22,17 +22,24 @@ func settle() -> void:
 
 func check_catalog(app, age_id: String, expected_count: int) -> void:
 	var band: Dictionary = app.Data.age_band(age_id)
+	# Raw curriculum tiers are independent of the production age-level helper.
+	var levels := {"4-6": "basic", "7-9": "growing", "10-plus": "advanced"}
 	var expected: Array = app.data.words.filter(func(word: Dictionary) -> bool:
-		return app.Data.word_level(word) <= band.max_level).map(func(word: Dictionary) -> String: return word.id)
+		return age_id == "all" or word.level == levels[age_id]).map(func(word: Dictionary) -> String: return word.id)
 	var actual: Array = app._age_catalog.word_buttons.map(func(button: Button) -> String:
 		return str(button.get_meta("word_id")))
 	expected.sort()
 	actual.sort()
 	check(actual == expected and actual.size() == expected_count,
-		"The " + age_id + " catalogue includes every eligible word across all topics exactly once")
+		"The " + age_id + " catalogue includes exactly its own age range across all topics, without other tiers")
+	for sample: Dictionary in [
+		{"id": "cat", "age": "4-6"}, {"id": "acorn", "age": "7-9"}, {"id": "abacus", "age": "10-plus"}
+	]:
+		check(actual.has(sample.id) == (age_id == "all" or age_id == sample.age),
+			"The " + age_id + " catalogue includes " + sample.id + " only in its own range or All words")
 	check(app._age_catalog.title_label.text == band.name
 		and app._age_catalog.count_label.text == "%d words" % expected_count,
-		"The catalogue names the chosen age and its complete cumulative word count")
+		"The catalogue names the chosen age and its exact range's word count")
 	check(app.collection_page.visible and app._age_catalog.is_visible_in_tree()
 		and not app._collection_scroll.visible and not app._world_choices.visible
 		and not app._room.toy_shelf.visible and not app._leaderboard_menu.visible,
@@ -120,7 +127,7 @@ func _run() -> void:
 		app.model.successes, app.model.mistakes, app.model.streak]
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	var source_words: Array = app.data.words.duplicate(true)
-	var eligible_counts := {"all": 350, "4-6": 148, "7-9": 260, "10-plus": 350}
+	var eligible_counts := {"all": 350, "4-6": 148, "7-9": 112, "10-plus": 90}
 	app._show_collection()
 	for age_id in ["7-9", "10-plus", "all", "4-6"]:
 		await settle()
@@ -207,7 +214,7 @@ func _run() -> void:
 	check(app.playroom_state.age_band_id == "10-plus" and app._age_buttons["10-plus"].button_pressed
 		and app._age_notice.text.is_empty() and not app._age_notice.is_visible_in_tree()
 		and app.model.age_band_id == "4-6" and app.collection_page.visible and app._age_catalog.visible
-		and app._age_catalog.word_buttons.size() == 350,
+		and app._age_catalog.word_buttons.size() == 90,
 		"A successful retry opens the complete catalogue without changing the active lesson")
 	var reloaded = app.PlayroomState.new(saved_path)
 	check(reloaded.load_state() and reloaded.age_band_id == "10-plus", "The UI choice survives a storage reload")
@@ -216,7 +223,7 @@ func _run() -> void:
 	app._age_buttons["4-6"].pressed.emit()
 	await settle()
 	check(app.playroom_state.age_band_id == "10-plus" and app._age_catalog.visible
-		and app._age_catalog.word_buttons.size() == 350 and app._age_catalog.title_label.text == "Ages 10+"
+		and app._age_catalog.word_buttons.size() == 90 and app._age_catalog.title_label.text == "Ages 10+"
 		and app._age_notice.visible and FileAccess.get_file_as_string(saved_path) == confirmed_catalog_save,
 		"A failed age change keeps the previously confirmed catalogue and saved preference together")
 	app.playroom_state._save_path = saved_path

@@ -89,12 +89,12 @@ func _run() -> void:
 	app.choose_mode("match")
 	root.size = Vector2i(768, 1024)
 	await settle()
-	check(app._mode_row.get_parent() == app._header and app._match_playfield.global_position.y <= 80,
+	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 80,
 		"A wide viewport uses one compact header row")
 	root.size = Vector2i(390, 844)
 	await settle()
-	check(app._mode_row.get_parent() == app._main_column,
-		"Narrow phones keep a separate mode row instead of crowding the controls")
+	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 80,
+		"Narrow phones also use one compact header with modes inside Pip's popover")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

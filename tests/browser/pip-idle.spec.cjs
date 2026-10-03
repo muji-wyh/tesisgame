@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, openGame, contentBounds, headerPoint, pipHeaderRect,
-  memoryPoint, peekPoint } = require('./game-ui.cjs');
+  memoryPoint, peekPoint, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -27,6 +27,24 @@ async function gameState(page) {
     saves: ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward']
       .map(key => [key, localStorage.getItem(key)])
   }));
+}
+
+async function winMatch(page) {
+  const bounds = await metrics(page), cards = await discoverMatchCards(page);
+  const pairs = cards.filter(card => card.kind === 'Word').map(word =>
+    [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
+  ).filter(([, picture]) => picture);
+  expect(pairs).toHaveLength(5);
+  for (const [index, [word, picture]] of pairs.entries()) {
+    const written = boardPoint(bounds, word.index), pictured = boardPoint(bounds, picture.index);
+    await tap(page, written.x, written.y);
+    await expect(page.locator('#selection-status')).toHaveText(`Word: ${word.word}`);
+    await tap(page, pictured.x, pictured.y);
+    await expect(page.locator('#game-status')).toContainText('Great match!');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+  }
+  await rendered(page);
 }
 
 async function capture(page, clip) {
@@ -116,20 +134,25 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
 
   const pip = headerPoint(await metrics(page), 'pip');
   await tap(page, pip.x, pip.y);
-  await expect(page.locator('#game-status')).toContainText("Pip says hello! Pip's happy dance!", { timeout: 2000 });
+  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.', { timeout: 2000 });
   expect((await gameState(page)).saves).toEqual(state.saves);
+  expect((await gameState(page)).selection).toEqual(state.selection);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
+  await rendered(page);
   expect((await capture(page, area.lesson)).equals(lesson), 'Clicking Pip does not advance the lesson.').toBe(true);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  // The short greeting finishes before checking a stationary whole body.
+  // Let the menu-close focus feedback settle before checking the whole body.
   await page.waitForTimeout(1800);
   await expectStill(page, area.body);
   await page.screenshot({ path: testInfo.outputPath('pip-reduced-motion.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
 
-test('Pip offers six direct reactions without changing the lesson or saved progress', async ({ page }, testInfo) => {
+test('Pip offers six direct reactions on results without changing saved progress', async ({ page }, testInfo) => {
   const errors = await openGame(page);
+  await winMatch(page);
   const original = await gameState(page);
   const pip = headerPoint(await metrics(page), 'pip');
   const captions = ["Pip's happy dance!", 'Crunch! A carrot for Pip!', 'Pop! Bubble party!',

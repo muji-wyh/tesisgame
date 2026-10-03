@@ -59,6 +59,7 @@ func _run() -> void:
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 		app.playroom_save_path = directory + "/playroom.cfg"
 		app._mode_id = "match"
+		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 		# Godot consumes Escape to dismiss a hovered tooltip before scene input.
 		# Keep this keyboard fixture independent of the inherited pointer position.
 		var pointer := InputEventMouseMotion.new()
@@ -74,11 +75,29 @@ func _run() -> void:
 		var cards: Array = app.model.cards.duplicate(true)
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
-			"Playing with Pip never changes game progress")
+			"Opening Pip's game-mode menu never changes game progress")
+		check(app._mode_menu_open() and not app.audio.voice.playing and app.duck._trick.is_empty(),
+			"The header Pip opens game modes without starting a companion trick or greeting")
+		app._hide_mode_menu()
+		var playing_phase: String = app.model.phase
+		app.model.phase = "won"
+		app._refresh()
+		app._layout()
+		await process_frame
+		await process_frame
+		app.audio.halt()
+		app.duck.settle()
+		app.duck.pressed.emit()
+		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
+			"Playing with the result companion never changes earned game progress")
 		check(app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
 			"Pip's greeting plays one of the imported duck sounds")
-		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The game-header greeting still performs its original first trick")
+		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The result companion still performs its original first trick")
 		app.audio.halt()
+		app.duck.settle()
+		app.model.phase = playing_phase
+		app._refresh()
+		app._layout()
 		app.audio.interact(app.model.theme_id, false)
 		app.audio.cue("select")
 		app._update_duck()
@@ -124,11 +143,16 @@ func _run() -> void:
 		app._hide_collection()
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
-		check(not app.duck.visible, "Voice mode uses its HTML duck without a duplicate native mascot")
+		check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._header_duck_art_slot
+			and app.duck.tooltip_text == "Pip: change game mode"
+			and app.duck.get("accessibility_name") == "Pip: change game mode. Current mode: Match",
+			"Match voice input retains the visible, named Pip header trigger for game modes")
 		app._stop_voice()
 		app.audio.halt()
 		app._update_duck()
-		check(app.duck.visible and not app.duck.speaking, "Leaving voice mode returns the quiet board mascot")
+		check(app.duck.is_visible_in_tree() and not app.duck.speaking
+			and app.duck.tooltip_text == "Pip: change game mode",
+			"Leaving voice mode keeps the quiet Pip game-mode trigger available")
 		for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 			root.size = dimensions
 			await process_frame

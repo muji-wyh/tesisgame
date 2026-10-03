@@ -72,7 +72,7 @@ func check_review_modal_touch(app, mode: String) -> void:
 	touch.pressed = true
 	touch.position = rail.get_global_rect().get_center()
 	rail._input(touch)
-	check(rail._pointer == -1 and rail._touches.is_empty(),
+	check(not rail.is_pointer_active() and not rail.is_scrolling(),
 		"A touch over the covered %s review rail does not begin an underlying drag" % mode)
 
 

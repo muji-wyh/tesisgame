@@ -30,7 +30,7 @@ const groups = {
   flow: {
     godot: [
       'steady_match_tests', 'layout_tests', 'three_mode_tests', 'layout_finish_tests',
-      'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
+      'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
       'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
     ]
   },
@@ -45,7 +45,7 @@ const groups = {
     ]
   },
   'voice-pop': {
-    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'voice_pop_reward_tests', 'pop_reward_room_tests', 'pop_reward_flow_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_result_audio_tests'],
+    godot: ['voice_pop_model_tests', 'voice_pop_scene_tests', 'voice_pop_reward_tests', 'pop_reward_room_tests', 'pop_reward_flow_tests', 'pop_treasure_scroll_tests', 'result_scroll_tests', 'voice_pop_slice_tests', 'voice_pop_audio_tests', 'pop_result_audio_tests'],
     node: ['voice-host', 'local-speech-host', 'speech-debug-host', 'voice-pop-reference-assets', 'pop-reward-host']
   },
   'layout-release': { godot: ['layout_release_tests'] },

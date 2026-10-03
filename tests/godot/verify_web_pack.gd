@@ -48,20 +48,22 @@ func _verify() -> void:
 				printerr("A Talk Quest giant model is missing from the startup pack: " + str(creature.id))
 				failures += 1
 		print("Talk Quest: three giant creatures and their framing manifest checked in the startup pack.")
-	var map_art: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/talk_quest/map/manifest.json"))
-	if not map_art is Dictionary or map_art.get("backgrounds", []).size() != 3 or map_art.get("landmarks", []).size() != 14:
-		printerr("Talk Quest requires three sourced maps and fourteen destination illustrations in its startup pack.")
+	var map_art: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/talk_quest/map-dimensional/manifest.json"))
+	if not map_art is Dictionary or map_art.get("backgrounds", []).is_empty() or map_art.get("landmarks", []).size() != 14 \
+		or not map_art.get("decorations") is Dictionary or map_art.decorations.size() != 6:
+		printerr("Talk Quest requires a sourced sky, fourteen island dioramas, and six scenery layers in its startup pack.")
 		failures += 1
 	else:
 		var map_paths: Array = map_art.backgrounds.duplicate()
 		map_paths.append_array(map_art.landmarks)
+		map_paths.append_array(map_art.decorations.values())
 		map_paths.append_array(map_art.ui.values())
 		for path: String in map_paths:
 			var illustration: Texture2D = load(path) as Texture2D
 			if illustration == null or illustration.get_width() <= 0 or illustration.get_height() <= 0:
 				printerr("A sourced map illustration is missing from the startup pack: " + path)
 				failures += 1
-		print("Talk Quest: sourced chapter maps, landmarks, and navigation artwork checked in the startup pack.")
+		print("Talk Quest: sourced island dioramas, sky, scenery layers, and navigation artwork checked in the startup pack.")
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
 		printerr("The startup pack must contain a playable vocabulary.")

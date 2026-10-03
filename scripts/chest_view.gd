@@ -128,6 +128,7 @@ func _ready() -> void:
 func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	if theme_id == palette.id:
 		return
+	_surprise.clear()
 	stop_reaction()
 	theme_id = palette.id
 	_feel = Feel.profile(theme_id)
@@ -1430,7 +1431,7 @@ func _draw_details() -> void:
 
 
 func stop_reaction() -> void:
-	_surprise.clear()
+	# Stop the mechanical effects without dismissing an already revealed toy.
 	hold_progress = 0.0
 	_hold_active = false
 	_release_active = false
@@ -1742,6 +1743,7 @@ func show_surprise() -> void:
 
 
 func clear() -> void:
+	_surprise.clear()
 	stop_reaction()
 	_surprise_shown = false
 	mode = "closed"
@@ -1810,6 +1812,7 @@ func piece_count() -> int:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
+		_surprise.clear()
 		stop_reaction()
 	set_process(is_visible_in_tree() and not _idle_paused)
 	if is_instance_valid(_model_view):
@@ -1818,8 +1821,6 @@ func _visibility_changed() -> void:
 
 func set_idle_paused(value: bool) -> void:
 	_idle_paused = value
-	if value:
-		_surprise.clear()
 	set_process(is_visible_in_tree() and not _idle_paused)
 	if is_instance_valid(_model_view):
 		_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)

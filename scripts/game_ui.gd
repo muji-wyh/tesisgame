@@ -19,6 +19,7 @@ const VoicePop = preload("res://scripts/voice_pop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const TalkQuest = preload("res://scripts/talk_quest.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
+const ResultScroll = preload("res://scripts/result_scroll.gd")
 const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
 const PlayroomState = preload("res://scripts/playroom_state.gd")
 const PlayroomView = preload("res://scripts/playroom_view.gd")
@@ -166,8 +167,16 @@ var _voice_style_scale: float = -1.0
 var _voice_space: Control
 var _voice_mode: bool = false
 var _mode_id: String = "match"
-var _mode_row: HBoxContainer
+var _mode_row: VBoxContainer
 var _mode_buttons: Array[Button] = []
+var _mode_menu: Control
+var _mode_panel: PanelContainer
+var _mode_menu_title: Label
+var _mode_menu_focus_modes: Dictionary = {}
+var _mode_menu_resume_voice: bool = false
+var _mode_menu_resume_pop: bool = false
+var _mode_menu_resume_quest: bool = false
+var _mode_menu_resume_quest_listening: bool = false
 var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_rewards: PopRewardRoom
@@ -290,8 +299,10 @@ var _leaderboard_round_id: String = ""
 var _leaderboard_result: Dictionary = {}
 var _leaderboard_saved_player_id: String = ""
 var _leaderboard_gate: String = ""
+var _return_to_pop_picker: bool = false
 var _pop_player_id: String = ""
 var _leaderboard_overlay: Panel
+var _leaderboard_scroll: ResultScroll
 var _leaderboard_margins: MarginContainer
 var _leaderboard_panel: LeaderboardPanel
 var _pop_leaderboard: LeaderboardPanel
@@ -384,6 +395,7 @@ func _build_controls() -> void:
 	margins.add_child(column)
 	var header := HBoxContainer.new()
 	_header = header
+	header.item_rect_changed.connect(_layout_leaderboards.call_deferred)
 	header.add_theme_constant_override("separation", 8)
 	column.add_child(header)
 	_header_duck_slot = Panel.new()
@@ -428,21 +440,7 @@ func _build_controls() -> void:
 	_set_accessibility_name(collection_button, collection_button.tooltip_text)
 	collection_button.pressed.connect(_show_collection)
 	_toolbar.add_child(collection_button)
-	_mode_row = HBoxContainer.new()
-	_mode_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	_mode_row.add_theme_constant_override("separation", 8)
-	column.add_child(_mode_row)
-	for id in MODES:
-		var button := Button.new()
-		button.name = "Mode_" + id
-		button.text = MODES[id]
-		button.clip_text = true
-		button.toggle_mode = true
-		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		_set_accessibility_name(button, "Voice Pop: say the flying words. Start with %d seconds and earn streak time bonuses. Requests microphone access." % ceili(VoicePop.PopModel.DURATION) if id == "pop" else str(MODES[id]) + ": practise these same five words")
-		button.pressed.connect(choose_mode.bind(id))
-		_mode_row.add_child(button)
-		_mode_buttons.append(button)
+	_build_mode_menu()
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
 	_voice_space.custom_minimum_size = Vector2(0, 112)
@@ -490,7 +488,7 @@ func _build_controls() -> void:
 	_toolbar.move_child(_memory.study_button, 0)
 	_pop = VoicePop.new()
 	_pop.name = "VoicePop"
-	_pop.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
+	_pop.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
 	_pop.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_pop.request_listening.connect(_start_pop_listening)
 	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
@@ -507,7 +505,7 @@ func _build_controls() -> void:
 	_pop_rewards = PopRewardRoom.new()
 	_pop_rewards.name = "PopRewardRoom"
 	_pop_rewards.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_pop_rewards.interaction_allowed = func() -> bool: return _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
+	_pop_rewards.interaction_allowed = func() -> bool: return _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
 	_pop_rewards.exit_requested.connect(_hide_pop_rewards)
 	_pop_rewards.chest_audio_requested.connect(_pop_chest_audio)
 	_pop_rewards.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
@@ -521,7 +519,7 @@ func _build_controls() -> void:
 	column.add_child(_pop_rewards)
 	_quest = TalkQuest.new()
 	_quest.name = "TalkQuest"
-	_quest.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden
+	_quest.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
 	_quest.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_quest.exit_requested.connect(func() -> void: choose_mode("match"))
 	_quest.chest_audio_requested.connect(_quest_chest_audio)
@@ -610,7 +608,7 @@ func _build_controls() -> void:
 	_found_words.add_theme_constant_override("separation", 8)
 	_found_words_scroll = ReviewScroll.new()
 	_found_words_scroll.custom_minimum_size = Vector2(0, 88)
-	_found_words_scroll.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible
+	_found_words_scroll.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _mode_menu_open()
 	_result_text.add_child(_found_words_scroll)
 	_found_words_scroll.add_child(_found_words)
 	_result_footer = VBoxContainer.new()
@@ -692,6 +690,170 @@ func _build_controls() -> void:
 	add_child(observer)
 
 
+func _build_mode_menu() -> void:
+	_mode_menu = Control.new()
+	_mode_menu.name = "GameModeMenu"
+	# The existing Pip artwork stays above this dismissal layer.
+	_mode_menu.z_index = 70
+	_mode_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	_mode_menu.gui_input.connect(_mode_menu_input)
+	add_child(_mode_menu)
+	_mode_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mode_menu.hide()
+	_mode_panel = PanelContainer.new()
+	_mode_panel.name = "GameModePopover"
+	_mode_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_mode_menu.add_child(_mode_panel)
+	var contents := VBoxContainer.new()
+	contents.name = "GameModeChoices"
+	contents.add_theme_constant_override("separation", 4)
+	_mode_panel.add_child(contents)
+	_mode_menu_title = Style.label("Game mode", 18)
+	contents.add_child(_mode_menu_title)
+	_mode_row = VBoxContainer.new()
+	_mode_row.name = "ModeOptions"
+	contents.add_child(_mode_row)
+	for id in MODES:
+		var button := Button.new()
+		button.name = "Mode_" + id
+		button.text = MODES[id]
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.toggle_mode = true
+		button.pressed.connect(_choose_mode_from_menu.bind(id))
+		_mode_row.add_child(button)
+		_mode_buttons.append(button)
+	for index in range(_mode_buttons.size()):
+		var button: Button = _mode_buttons[index]
+		var previous: Button = _mode_buttons[posmod(index - 1, _mode_buttons.size())]
+		var next: Button = _mode_buttons[(index + 1) % _mode_buttons.size()]
+		button.focus_previous = button.get_path_to(previous)
+		button.focus_next = button.get_path_to(next)
+		button.focus_neighbor_top = button.get_path_to(previous)
+		button.focus_neighbor_bottom = button.get_path_to(next)
+		button.focus_neighbor_left = button.get_path_to(button)
+		button.focus_neighbor_right = button.get_path_to(button)
+
+
+func _mode_menu_open() -> bool:
+	return is_instance_valid(_mode_menu) and _mode_menu.visible
+
+
+func _toggle_mode_menu() -> void:
+	if _mode_menu_open():
+		_hide_mode_menu()
+	else:
+		_show_mode_menu()
+
+
+func _show_mode_menu() -> void:
+	if _mode_menu_open() or _page_hidden or collection_page.visible or (_leaderboard_overlay.visible and not _pop_picker_open()) \
+		or not model.phase in ["waiting", "matching", "feedback"] or model.chest_state == "opening" \
+		or (_save_error and not _pending_fragment.is_empty()):
+		return
+	_mode_menu_resume_voice = _voice_mode
+	if _mode_menu_resume_voice and _host != null and not bool(_host.suspendSpeechForMenu()):
+		_mode_menu_resume_voice = false
+		return
+	# Speech ownership can outlive a denied/failed microphone. Resume only a
+	# recognizer that was listening or connecting when the menu interrupted it.
+	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
+	_mode_menu_resume_quest = _mode_id == "quest" and _quest.view == "stage" \
+		and not _quest._suspended and _quest.game.phase != "paused"
+	_mode_menu_resume_quest_listening = _quest._listening or _quest._auto_listen
+	_mode_menu.show()
+	_on_input_canceled()
+	_stop_controller_actions()
+	if _mode_menu_resume_voice:
+		# Keep the reserved voice-panel bounds while the host hides its overlay.
+		_voice_listening = false
+		_voice_button.engaged = false
+		_speech_queue.clear()
+		_clear_voice_match_feedback()
+	else:
+		_stop_voice()
+	if _mode_id == "pop":
+		if _pop.game.phase in ["running", "finished"] or _mode_menu_resume_pop:
+			_pop.pause()
+		_pop_rewards.pause()
+		_stop_pop_listening()
+		audio.stop_pop_sounds()
+	if _mode_id == "quest":
+		_quest.pause()
+	feedback_timer.paused = true
+	_memory.pause(true)
+	_hint_link.set_paused(true)
+	audio.stop_voice()
+	audio.stop_pip_reaction()
+	duck.settle()
+	_mode_menu_focus_modes.clear()
+	for node in find_children("*", "Control", true, false):
+		var control := node as Control
+		if control != duck and not _mode_menu.is_ancestor_of(control):
+			_mode_menu_focus_modes[control] = control.focus_mode
+			control.focus_mode = Control.FOCUS_NONE
+	_fit_mode_buttons()
+	_update_duck()
+	_default_focus().grab_focus()
+	_announce_status("Game mode. %s is selected. Choose a game, or press Back to return." % MODES[_mode_id])
+
+
+func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> void:
+	if not _mode_menu_open():
+		return
+	_mode_menu.hide()
+	for control in _mode_menu_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = _mode_menu_focus_modes[control]
+	_mode_menu_focus_modes.clear()
+	var resume_voice: bool = _mode_menu_resume_voice
+	var resume_pop: bool = _mode_menu_resume_pop
+	var resume_quest: bool = _mode_menu_resume_quest
+	var resume_quest_listening: bool = _mode_menu_resume_quest_listening
+	_mode_menu_resume_voice = false
+	_mode_menu_resume_pop = false
+	_mode_menu_resume_quest = false
+	_mode_menu_resume_quest_listening = false
+	if resume_game and not _page_hidden and not collection_page.visible and not _leaderboard_overlay.visible:
+		feedback_timer.paused = false
+		_memory.pause(false)
+		_refresh_hint_link()
+		if resume_voice:
+			if _host != null:
+				_host.resumeSpeechFromMenu()
+		if resume_pop:
+			_start_pop_listening()
+		if resume_quest:
+			_quest._continue_run(resume_quest_listening)
+		if _pop_rewards_shown and _mode_id == "pop":
+			_pop_rewards.resume()
+	elif resume_voice:
+		_stop_voice()
+	_update_duck()
+	if restore_focus and _valid_focus(duck):
+		duck.grab_focus()
+	if restore_focus:
+		_announce_status("%s. Game mode menu closed." % MODES[_mode_id])
+
+
+func _choose_mode_from_menu(id: String) -> void:
+	if not _mode_menu_open() or not MODES.has(id):
+		return
+	if id == _mode_id:
+		_hide_mode_menu()
+		return
+	_hide_mode_menu(false, false)
+	choose_mode(id)
+
+
+func _mode_menu_input(event: InputEvent) -> void:
+	# Keep the blocker through the press and any emulated mouse press. Only
+	# dismiss on release, so the gesture cannot activate the board beneath it.
+	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed and not event.canceled) \
+		or (event is InputEventScreenTouch and not event.pressed and not event.canceled):
+		_mode_menu.accept_event()
+		_hide_mode_menu()
+
+
 func _build_collection_shell() -> void:
 	collection_page = Panel.new()
 	collection_page.name = "Collection"
@@ -766,6 +928,8 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_overlay.z_index = 200
 	_leaderboard_overlay.add_theme_stylebox_override("panel", Style.box(Color("#10182c"), Color.TRANSPARENT, 0, 0))
 	add_child(_leaderboard_overlay)
+	# GUI hit testing follows sibling order, independently of the draw layer.
+	move_child(_mode_menu, _leaderboard_overlay.get_index())
 	_leaderboard_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_leaderboard_margins = MarginContainer.new()
 	_leaderboard_overlay.add_child(_leaderboard_margins)
@@ -778,16 +942,15 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_close.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_leaderboard_close.pressed.connect(_back_from_leaderboard)
 	column.add_child(_leaderboard_close)
-	var scroll := ScrollContainer.new()
-	scroll.name = "LeaderboardScroll"
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.follow_focus = true
-	column.add_child(scroll)
+	_leaderboard_scroll = ResultScroll.new()
+	_leaderboard_scroll.name = "LeaderboardScroll"
+	_leaderboard_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_leaderboard_scroll.follow_focus = true
+	_leaderboard_scroll.interaction_allowed = func() -> bool: return not _page_hidden and not _mode_menu_open()
+	column.add_child(_leaderboard_scroll)
 	_leaderboard_panel = LeaderboardPanel.new()
 	_leaderboard_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(_leaderboard_panel)
+	_leaderboard_scroll.add_child(_leaderboard_panel)
 	_leaderboard_panel.changed.connect(_publish_leaderboards)
 	_leaderboard_panel.score_saved.connect(_leaderboard_score_saved)
 	_leaderboard_panel.player_confirmed.connect(_leaderboard_player_confirmed)
@@ -798,8 +961,22 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_overlay.hide()
 
 
+func _pop_picker_open() -> bool:
+	return _mode_id == "pop" and _leaderboard_gate == "pop" \
+		and is_instance_valid(_leaderboard_overlay) and _leaderboard_overlay.visible
+
+
 func _layout_leaderboards() -> void:
+	if not is_instance_valid(_leaderboard_margins):
+		return
 	var scale: float = Style.ui_scale(self)
+	var picker: bool = _pop_picker_open()
+	_leaderboard_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_leaderboard_overlay.z_index = 60 if picker else 200
+	if picker:
+		var header_end: Vector2 = get_global_transform().affine_inverse() * _header.get_global_rect().end
+		_leaderboard_overlay.offset_top = header_end.y + ceilf(8 / scale)
+	_leaderboard_close.visible = _leaderboard_gate != "onboarding" and not picker
 	for edge in ["left", "right"]:
 		_leaderboard_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 660 / scale) * 0.5)))
 	for edge in ["top", "bottom"]:
@@ -815,6 +992,7 @@ func _show_result_leaderboard() -> void:
 func _show_leaderboard(view: String, include_round: bool) -> void:
 	if _leaderboard_overlay.visible:
 		return
+	_hide_mode_menu(false, false)
 	_pop_rewards.pause()
 	_pop.cancel_result_input()
 	_quest.cancel_scroll_input()
@@ -826,6 +1004,9 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_leaderboard_focus = get_viewport().gui_get_focus_owner()
 	_leaderboard_focus_modes.clear()
 	for node in find_children("*", "Control", true, false):
+		if view == "picker" and _leaderboard_gate == "pop" \
+			and (node in [duck, collection_button] or _mode_menu.is_ancestor_of(node)):
+			continue
 		if not _leaderboard_overlay.is_ancestor_of(node):
 			_leaderboard_focus_modes[node] = node.focus_mode
 			node.focus_mode = Control.FOCUS_NONE
@@ -842,7 +1023,8 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 		_room.settle()
 	_update_duck()
 	_leaderboard_panel.configure(leaderboard_state, view, _mode_id, _leaderboard_round_id if include_round else "", _leaderboard_result if include_round else {}, reduced_motion)
-	(_leaderboard_panel.get_parent() as ScrollContainer).scroll_vertical = 0
+	_leaderboard_scroll.cancel_drag()
+	_leaderboard_scroll.scroll_vertical = 0
 	_layout_leaderboards()
 	_default_focus().grab_focus()
 	var announcement: String = "Players on this device." if view == "players" else "Local leaderboards. Personal bests; tied scores share a rank."
@@ -862,6 +1044,7 @@ func _back_from_leaderboard() -> void:
 func _hide_leaderboard() -> void:
 	if _leaderboard_gate == "onboarding":
 		return
+	_hide_mode_menu(false, false)
 	_leaderboard_gate = ""
 	_leaderboard_panel.settle_animation()
 	_leaderboard_overlay.hide()
@@ -897,7 +1080,7 @@ func _request_pop_player() -> void:
 
 
 func _leaderboard_player_confirmed(player_id: String) -> void:
-	if not _leaderboard_overlay.visible or _leaderboard_gate.is_empty():
+	if not _leaderboard_overlay.visible or _leaderboard_gate.is_empty() or _mode_menu_open() or _page_hidden:
 		return
 	if not leaderboard_state.ready or not leaderboard_state.profiles.any(func(profile: Dictionary) -> bool: return str(profile.id) == player_id):
 		_leaderboard_panel.refresh_profiles()
@@ -978,7 +1161,8 @@ func _leaderboard_profile_removed(player_id: String) -> void:
 		_leaderboard_gate = "onboarding"
 		_leaderboard_close.hide()
 		_leaderboard_panel.configure(leaderboard_state, "onboarding", _mode_id, "", {}, reduced_motion)
-		(_leaderboard_panel.get_parent() as ScrollContainer).scroll_vertical = 0
+		_leaderboard_scroll.cancel_drag()
+		_leaderboard_scroll.scroll_vertical = 0
 		_layout_leaderboards()
 		var focus: Control = _leaderboard_panel.default_focus()
 		if is_instance_valid(focus):
@@ -1040,7 +1224,7 @@ func _build_age_choices() -> void:
 		button.text = band.label
 		button.toggle_mode = true
 		button.tooltip_text = band.name + ": view words"
-		_set_accessibility_name(button, band.name + ". View all words and choose vocabulary for your next lesson.")
+		_set_accessibility_name(button, band.name + ". View this word list and choose vocabulary for your next lesson.")
 		button.pressed.connect(_choose_age_band.bind(band.id))
 		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		_age_row.add_child(button)
@@ -1083,8 +1267,9 @@ func _show_age_catalog() -> void:
 	_room.settle()
 	duck.settle()
 	var band: Dictionary = Data.age_band(playroom_state.age_band_id)
+	# Catalogue ranges are distinct; lesson selection can still review earlier levels.
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool:
-		return Data.word_level(word) <= int(band.max_level))
+		return band.id == "all" or Data.word_level(word) == int(band.max_level))
 	_age_buttons[band.id].grab_focus()
 	_age_catalog.configure(words, band, Data.theme(model.theme_id))
 	_age_catalog.show()
@@ -1116,7 +1301,7 @@ func _sync_collection_content() -> void:
 
 
 func _hear_catalog_word(word: Dictionary) -> void:
-	if not _can_browse_collection() or not _age_catalog.visible or _age_catalog.scroll.is_pointer_active():
+	if not _can_browse_collection() or not _age_catalog.visible or _age_catalog.scroll.is_scrolling():
 		return
 	audio.interact(model.theme_id, model.phase != "lost")
 	audio.say("res://" + str(word.audio))
@@ -1508,8 +1693,10 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
+	_hide_mode_menu(false, false)
 	if _leaderboard_gate == "onboarding":
 		return false
+	_return_to_pop_picker = false
 	if _leaderboard_overlay.visible:
 		_hide_leaderboard()
 	_settling_chest = true
@@ -1595,8 +1782,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 
 
 func choose_mode(id: String) -> void:
-	if not MODES.has(id) or collection_page.visible or _leaderboard_overlay.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
+	if not MODES.has(id) or collection_page.visible or (_leaderboard_overlay.visible and not _pop_picker_open()) or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
+	_hide_mode_menu(false, id == _mode_id)
 	if id == _mode_id and model.phase in ["waiting", "matching", "feedback"]:
 		_refresh()
 		return
@@ -1625,7 +1813,7 @@ func _configure_pop(seed_value: int = -1) -> void:
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or _pop_rewards_shown or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
+	if _mode_id != "pop" or _pop_rewards_shown or collection_page.visible or _leaderboard_overlay.visible or _page_hidden or _mode_menu_open():
 		return
 	if _pop_player_id.is_empty() or _pop.game.phase == "finished":
 		_request_pop_player()
@@ -1909,7 +2097,6 @@ func _refresh() -> void:
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
 	_refresh_age_choices()
 	_success.visible = playing and _mode_id in ["match", "memory"] and not _storage_retry_button.visible
-	_mode_row.visible = playing and not _voice_mode
 	_refresh_found_words(playing, palette.accent)
 	if not playing and _voice_mode:
 		_stop_voice()
@@ -2029,6 +2216,9 @@ func _refresh() -> void:
 	for control in blocked_controls:
 		if is_instance_valid(control):
 			control.focus_mode = Control.FOCUS_NONE
+	for control in _mode_menu_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = Control.FOCUS_NONE
 	_layout_result()
 	_fit_mode_buttons.call_deferred()
 	if theme_changed:
@@ -2051,7 +2241,10 @@ func _refresh_found_words(playing: bool, accent: Color) -> void:
 			button.size_flags_horizontal = Control.SIZE_FILL
 			_set_accessibility_name(button, "Hear %s again" % word.text)
 			button.pressed.connect(_replay_found_word.bind(word.id))
-			button.focus_entered.connect(func() -> void: _found_words_scroll.ensure_control_visible(button))
+			button.focus_entered.connect(func() -> void:
+				if not _found_words_scroll.is_pointer_active():
+					_found_words_scroll.cancel_drag()
+					_found_words_scroll.ensure_control_visible(button))
 			_found_words.add_child(button)
 			var picture := _picture(button)
 			picture.texture = load("res://" + word.image)
@@ -2116,7 +2309,7 @@ func _refresh_hint_link() -> void:
 		second = cards.get(model.hint_ids[1])
 	_hint_link.set_palette(Data.theme(model.theme_id))
 	_hint_link.configure(first, second, reduced_motion,
-		_page_hidden or collection_page.visible)
+		_page_hidden or collection_page.visible or _mode_menu_open())
 
 
 func _start_voice_match_feedback(ids: Array[String]) -> void:
@@ -2222,7 +2415,6 @@ func _layout() -> void:
 	_cancel_collection_rails()
 	_refresh_hint()
 	_fit_mode_buttons.call_deferred()
-	_mode_row.visible = model.phase in ["waiting", "matching", "feedback"] and not _voice_mode
 	_message.hide()
 	_stop_feedback_animations()
 	_cancel_loss_play()
@@ -2278,63 +2470,67 @@ func _fit_grid() -> void:
 
 func _fit_mode_buttons() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	var inline_modes: bool = size.x * css_scale >= 680
-	var mode_parent: Node = _header if inline_modes else _main_column
-	if _mode_row.get_parent() != mode_parent:
-		var focused: Control = get_viewport().gui_get_focus_owner()
-		var restore_focus: bool = focused != null and _mode_row.is_ancestor_of(focused)
-		_mode_row.reparent(mode_parent)
-		mode_parent.move_child(_mode_row, _header_duck_slot.get_index() + 1 if inline_modes else 1)
-		if restore_focus:
-			focused.grab_focus()
-	_mode_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_mode_row.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_header_spacer.visible = not inline_modes or not _mode_row.visible
+	_header_spacer.show()
 	var gap: int = ceili(8 / css_scale)
 	_main_column.add_theme_constant_override("separation", gap)
 	_header.add_theme_constant_override("separation", gap)
 	_header.custom_minimum_size.y = ceilf(56 / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
-	_toolbar.custom_minimum_size.x = 3 * ceilf(44 / css_scale) + 2 * gap if inline_modes else 0.0
-	var with_counts: bool = _mode_id in ["match", "memory"] and model.phase in ["waiting", "matching", "feedback"]
-	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts or inline_modes else 52) / css_scale), ceilf(56 / css_scale))
+	_toolbar.custom_minimum_size.x = 0.0
+	var with_counts: bool = _mode_id in ["match", "memory"] and model.phase in ["waiting", "matching", "feedback"] and not _storage_retry_button.visible
+	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts else 52) / css_scale), ceilf(56 / css_scale))
 	_header_duck_art_slot.position = Vector2(0, 2 / css_scale)
 	_header_duck_art_slot.size = Vector2.ONE * (52 / css_scale)
 	_success.position = Vector2(60, 5) / css_scale
 	_mistakes.position = Vector2(60, 30) / css_scale
+	_mistakes.visible = with_counts
 	for counter in [_success, _mistakes]:
 		counter.size = Vector2(70, 21) / css_scale
 		counter.queue_redraw()
 	_header_duck_slot.add_theme_stylebox_override("panel", Style.box(
 		Color(1, 1, 1, 0.75) if with_counts else Color.TRANSPARENT, Color.TRANSPARENT, ceili(12 / css_scale), 0))
-	var tab_gap: int = roundi(4 / css_scale)
-	_mode_row.add_theme_constant_override("separation", tab_gap)
-	var tab_count: int = _mode_buttons.size()
-	var tab_width: float = minf(ceilf(80 / css_scale), floorf((size.x - 2 * ceilf(12 / css_scale) - (tab_count - 1) * tab_gap) / tab_count))
-	var tab_font_size: int = ceili(14 / css_scale)
-	var tab_font: Font = _mode_buttons[0].get_theme_font("font")
-	# Keep every label fully readable at the same size, including Voice Pop.
-	while tab_font_size > ceili(11 / css_scale):
-		var longest: float = 0.0
-		for mode_label in MODES.values():
-			longest = maxf(longest, tab_font.get_string_size(str(mode_label), HORIZONTAL_ALIGNMENT_LEFT, -1, tab_font_size).x)
-		if longest <= tab_width - 8.0:
-			break
-		tab_font_size -= 1
-	for button in _mode_buttons:
-		button.custom_minimum_size = Vector2(tab_width, ceilf(44 / css_scale))
-		for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-			var box: StyleBox = button.get_theme_stylebox(state)
-			box.content_margin_left = 4
-			box.content_margin_right = 4
-		button.add_theme_font_size_override("font_size", tab_font_size)
+	var accent: Color = _active_palette.get("accent", Style.GOOD)
+	var surface := Style.box(Color.WHITE, accent.lightened(0.56), ceili(18 / css_scale), maxi(1, roundi(1 / css_scale)))
+	surface.shadow_color = Color(Style.INK, 0.18)
+	surface.shadow_size = ceili(14 / css_scale)
+	surface.shadow_offset = Vector2(0, 6 / css_scale)
+	for edge in ["left", "top", "right", "bottom"]:
+		surface.set("content_margin_" + edge, ceilf(10 / css_scale))
+	_mode_panel.add_theme_stylebox_override("panel", surface)
+	(_mode_row.get_parent() as VBoxContainer).add_theme_constant_override("separation", ceili(4 / css_scale))
+	_mode_menu_title.custom_minimum_size.y = ceilf(28 / css_scale)
+	_mode_menu_title.add_theme_font_size_override("font_size", ceili(18 / css_scale))
+	_mode_row.add_theme_constant_override("separation", ceili(2 / css_scale))
+	for index in range(_mode_buttons.size()):
+		var button: Button = _mode_buttons[index]
+		var id: String = MODES.keys()[index]
+		Style.quiet_button(button, accent, 0)
+		button.custom_minimum_size = Vector2(0, ceilf(44 / css_scale))
+		button.add_theme_font_size_override("font_size", ceili(16 / css_scale))
+		button.button_pressed = id == _mode_id
+		button.text = str(MODES[id]) + (" (Current)" if id == _mode_id else "")
+		_set_accessibility_name(button, str(MODES[id]) + (", current game mode" if id == _mode_id else ", switch game mode"))
+	_layout_mode_menu()
+	_layout_mode_menu.call_deferred()
 	for button in [collection_button, hint_button, _memory.study_button]:
-		Style.square_icon_button(button, _active_palette.get("accent", Style.GOOD))
+		Style.square_icon_button(button, accent)
 	_style_voice_button()
 	_storage_retry_button.custom_minimum_size = Vector2(96, 44) / css_scale
 	_storage_retry_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_storage_retry_button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
 	_voice_space.custom_minimum_size.y = ceilf(112 / css_scale)
+
+
+func _layout_mode_menu() -> void:
+	var css_scale: float = Style.ui_scale(self)
+	var edge: float = ceilf(8 / css_scale)
+	var width: float = minf(ceilf(248 / css_scale), size.x - edge * 2.0)
+	_mode_panel.size = Vector2(width, _mode_panel.get_combined_minimum_size().y)
+	var anchor: Rect2 = _header_duck_art_slot.get_global_rect()
+	var local_anchor: Vector2 = get_global_transform().affine_inverse() * anchor.position
+	_mode_panel.position = Vector2(
+		clampf(local_anchor.x, edge, maxf(edge, size.x - edge - _mode_panel.size.x)),
+		clampf(local_anchor.y + anchor.size.y + ceilf(6 / css_scale), edge, maxf(edge, size.y - edge - _mode_panel.size.y)))
 
 
 func _style_voice_button() -> void:
@@ -2503,7 +2699,7 @@ func _refresh_hint() -> void:
 
 
 func _request_hint() -> void:
-	if not _can_request_hint():
+	if _mode_menu_open() or not _can_request_hint():
 		return
 	if model.phase == "feedback":
 		_continue_match()
@@ -2519,7 +2715,7 @@ func _request_hint() -> void:
 
 
 func _select_card(id: String) -> void:
-	if _mode_id != "match" or collection_page.visible or _leaderboard_overlay.visible:
+	if _mode_id != "match" or collection_page.visible or _leaderboard_overlay.visible or _mode_menu_open():
 		return
 	if not cards.has(id) or model.card_by_id(id).is_empty():
 		return
@@ -2803,6 +2999,9 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	_hide_mode_menu(false, false)
+	if is_instance_valid(_leaderboard_scroll):
+		_leaderboard_scroll.cancel_drag()
 	if is_instance_valid(_pop_rewards):
 		_pop_rewards.pause()
 	if is_instance_valid(_quest):
@@ -2919,6 +3118,14 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _mode_menu_open():
+		if event.is_action_pressed("ui_cancel"):
+			_hide_mode_menu()
+			get_viewport().set_input_as_handled()
+			return
+		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]:
+			get_viewport().set_input_as_handled()
+			return
 	# Handle mapped controller events before GUI defaults can activate or move focus.
 	if event is InputEventJoypadButton:
 		if event.pressed:
@@ -3056,6 +3263,9 @@ func _controller_accept() -> void:
 
 
 func _controller_back() -> void:
+	if _mode_menu_open():
+		_hide_mode_menu()
+		return
 	if _leaderboard_overlay.visible:
 		_back_from_leaderboard()
 		return
@@ -3099,6 +3309,9 @@ func _controller_back() -> void:
 
 
 func _toggle_collection() -> void:
+	if _pop_picker_open():
+		_show_collection()
+		return
 	if _leaderboard_overlay.visible:
 		_back_from_leaderboard()
 		return
@@ -3191,14 +3404,21 @@ func _focus_candidates() -> Array[Control]:
 
 
 func _valid_focus(control: Control) -> bool:
-	if is_instance_valid(_leaderboard_overlay) and _leaderboard_overlay.visible and is_instance_valid(control) and not _leaderboard_overlay.is_ancestor_of(control):
+	if not is_instance_valid(control) or not control.is_visible_in_tree() or control.focus_mode == Control.FOCUS_NONE \
+		or (control is Button and (control as Button).disabled):
 		return false
+	if _mode_menu_open():
+		return control == duck or _mode_menu.is_ancestor_of(control)
+	if is_instance_valid(_leaderboard_overlay) and _leaderboard_overlay.visible and not _leaderboard_overlay.is_ancestor_of(control):
+		return _pop_picker_open() and control in [duck, collection_button]
 	if collection_page.visible and not _leaderboard_overlay.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
 		return false
-	return is_instance_valid(control) and control.visible and control.is_visible_in_tree() and control.focus_mode != Control.FOCUS_NONE and not (control is Button and (control as Button).disabled)
+	return true
 
 
 func _default_focus() -> Control:
+	if _mode_menu_open():
+		return _mode_buttons[MODES.keys().find(_mode_id)]
 	if _leaderboard_overlay.visible:
 		if not _leaderboard_close.visible:
 			for candidate in _leaderboard_panel.controls():
@@ -3241,7 +3461,7 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 		if control == duck:
 			# Keep tracking the focused duck while revealing its fixed input slot.
 			target = _collection_duck_slot
-		_reveal_room_control(target)
+		_reveal_room_control(target, true)
 		# Goal text and room controls can settle over multiple container passes.
 		for frame in range(3):
 			await get_tree().process_frame
@@ -3252,11 +3472,16 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 			_reveal_room_control(target)
 
 
-func _reveal_room_control(target: Control) -> void:
+func _reveal_room_control(target: Control, explicit_focus: bool = false) -> void:
 	for rail in _collection_rails():
-		if rail.is_ancestor_of(target) and rail._pointer == -1:
-			rail.ensure_control_visible(target)
+		if not rail.is_ancestor_of(target):
+			continue
+		if rail.is_pointer_active() or (rail.is_scrolling() and not explicit_focus):
 			return
+		if explicit_focus:
+			rail.cancel_drag()
+		rail.ensure_control_visible(target)
+		return
 
 
 func _audio_status(message: String) -> void:
@@ -3426,6 +3651,7 @@ func _exit_tree() -> void:
 func _on_input_canceled(_arguments: Array = []) -> void:
 	_proactive_touches.clear()
 	_pointer_focus_active = false
+	_leaderboard_scroll.cancel_drag()
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	_quest.cancel_chest_input()
@@ -3467,7 +3693,7 @@ func _sync_voice_bounds() -> void:
 
 
 func _on_voice_state(arguments: Array) -> void:
-	if _speech_debug_active:
+	if _speech_debug_active or _mode_menu_open():
 		return
 	if _mode_id == "quest":
 		_quest.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
@@ -3514,7 +3740,7 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
-	if _speech_debug_active or arguments.size() < 2:
+	if _speech_debug_active or _mode_menu_open() or arguments.size() < 2:
 		return
 	if _mode_id == "quest":
 		_quest.show_transcript(str(arguments[0]), bool(arguments[1]))
@@ -3830,8 +4056,12 @@ func _retry_storage() -> void:
 
 
 func _show_collection() -> void:
-	if _leaderboard_overlay.visible:
+	var from_picker: bool = _pop_picker_open()
+	if _leaderboard_overlay.visible and not from_picker:
 		return
+	if from_picker:
+		_hide_leaderboard()
+	_hide_mode_menu(false, false)
 	if _mode_id == "quest":
 		_quest.pause()
 		_quest.hide()
@@ -3867,6 +4097,7 @@ func _show_collection() -> void:
 		if control != duck and not collection_page.is_ancestor_of(control):
 			_collection_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
+	_return_to_pop_picker = from_picker
 	collection_page.show()
 	_hint_link.set_paused(true)
 	_memory.pause(true)
@@ -3877,6 +4108,8 @@ func _show_collection() -> void:
 
 
 func _hide_collection() -> void:
+	var restore_picker: bool = _return_to_pop_picker
+	_return_to_pop_picker = false
 	_hide_age_catalog()
 	audio.stop_voice()
 	audio.stop_pip_reaction()
@@ -3905,6 +4138,11 @@ func _hide_collection() -> void:
 		_focus_before_collection.grab_focus()
 	else:
 		_default_focus().grab_focus()
+	if restore_picker and _mode_id == "pop" and not _pop_rewards.has_pending() \
+			and (_pop_player_id.is_empty() or _pop.game.phase == "finished"):
+		_request_pop_player()
+		if _pop_picker_open():
+			return
 	_announce_status(_message.text if model.phase in ["waiting", "matching", "feedback"] else _title.text + " " + _caption.text)
 
 
@@ -3934,9 +4172,9 @@ func _load_collected_rewards() -> void:
 func _update_duck() -> void:
 	if duck == null or audio == null:
 		return
-	_header_duck_slot.visible = not _voice_mode and not _storage_retry_button.visible
+	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
-	var visible_here: bool = (in_collection or not _voice_mode) and not _leaderboard_overlay.visible
+	var visible_here: bool = not _leaderboard_overlay.visible or _pop_picker_open()
 	duck.set_outfit_theme(model.theme_id)
 	duck.set_reduced_motion(reduced_motion)
 	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
@@ -3949,7 +4187,7 @@ func _update_duck() -> void:
 	var microphone_busy: bool = _pop_speech_active or (_mode_id == "pop"
 		and (_pop._listening or _pop._pending or _pop._reconnecting))
 	var voice_busy: bool = audio.voice.playing
-	duck.set_proactive_allowed(visible_here and quiet_phase and not _voice_mode
+	duck.set_proactive_allowed(visible_here and quiet_phase and not _voice_mode and not _mode_menu_open()
 		and not microphone_busy and not voice_busy and not duck.speaking
 		and not _pointer_focus_active and _proactive_touches.is_empty()
 		and not _collection_dragging and _controller_last_direction == Vector2.ZERO
@@ -3973,7 +4211,9 @@ func _update_duck() -> void:
 		duck.hide()
 		return
 	duck.compact = false
-	duck.tooltip_text = "" if in_collection else "Pip the duck. Press for a hello!"
+	var opens_menu: bool = not in_collection and model.phase in ["waiting", "matching", "feedback"]
+	duck.tooltip_text = "" if in_collection else "Pip: change game mode" if opens_menu else "Pip the duck. Press for a hello!"
+	_set_accessibility_name(duck, "Pip: change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else "Pip the duck. Press to say hello.")
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
 	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
 	duck.size = rect.size
@@ -3985,10 +4225,13 @@ func _update_duck() -> void:
 
 
 func _play_duck() -> void:
-	if _page_hidden or _leaderboard_overlay.visible or not duck.is_visible_in_tree() or (collection_page.visible and _collection_dragged):
+	if _page_hidden or (_leaderboard_overlay.visible and not _pop_picker_open()) or not duck.is_visible_in_tree() or (collection_page.visible and _collection_dragged):
 		return
 	if collection_page.visible:
 		_room.playground.poke()
+		return
+	if model.phase in ["waiting", "matching", "feedback"]:
+		_toggle_mode_menu()
 		return
 	if duck.is_manual_action_busy() or audio.is_pip_busy():
 		return

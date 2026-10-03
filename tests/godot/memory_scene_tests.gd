@@ -159,6 +159,21 @@ func _run() -> void:
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "Memory grants one ordinary piece in the selected world")
+	var memory_gift: Dictionary = app.chest.hold_effect_snapshot().surprise
+	app.chest._advance_animation(60.0)
+	check(memory_gift.active and app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.kind == memory_gift.kind,
+		"The Memory result retains its revealed gift after the opening effects finish")
+	app.on_page_hidden()
+	app.chest._advance_animation(60.0)
+	check(app.chest.hold_effect_snapshot().surprise.active,
+		"Backgrounding Memory keeps its earned gift instead of clearing it")
+	app.on_page_visible()
+	app.chest._advance_animation(60.0)
+	check(app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.kind == memory_gift.kind
+		and app.chest.hold_effect_snapshot().surprise.play_count == memory_gift.play_count,
+		"Returning to Memory keeps the same gift without replaying its reveal")
 	view.continue_feedback()
 	view.round_finished.emit(true, lesson)
 	app._on_chest_opened()
@@ -167,6 +182,8 @@ func _run() -> void:
 	var reloaded = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(reloaded.load_progress() and reloaded.count_for("ocean-1") == 1, "Memory rewards survive storage reload")
 	check(app.new_round(-1, true), "A same-lesson internal reset prepares another Memory fixture")
+	check(not app.chest.hold_effect_snapshot().surprise.active,
+		"A new Memory round clears the previous result's gift")
 	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
 		"The internal Memory fixture reset preserves its mode, lesson, and world")
 	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")

@@ -431,9 +431,13 @@ func _run() -> void:
 		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind,
 		"A failed save retry does not reroll the visible decorative gift")
 	app.on_page_hidden()
-	check(not app.chest.hold_effect_snapshot().surprise.active
-		and str(app.chest.hold_effect_snapshot().surprise.kind).is_empty(),
-		"Backgrounding dismisses the decorative gift immediately")
+	app.chest._advance_animation(60.0)
+	check(app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind
+		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
+		and app.chest.hold_effect_snapshot().surprise.age == failed_save_surprise.age
+		and storage.writes == 0,
+		"Backgrounding freezes the revealed gift while the failed reward save remains pending")
 	app.on_page_visible()
 	app.audio.set_muted(true)
 	app.audio.set_muted(false)
@@ -441,9 +445,11 @@ func _run() -> void:
 	app._retry_reward_save()
 	check(storage.writes == 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
 		"An explicit successful retry after background/mute saves and announces the waiting reward once")
-	check(not app.chest.hold_effect_snapshot().surprise.active
+	app.chest._advance_animation(60.0)
+	check(app.chest.hold_effect_snapshot().surprise.active
+		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind
 		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count,
-		"A successful save retry cannot replay the dismissed decorative gift")
+		"A successful save retry retains the same gift without replaying its flight")
 	check(not app.audio._chest_seen.has("release0") and not app.audio._chest_seen.has("unlock0"),
 		"A successful retry after interruption never replays missed physical sounds")
 	app._retry_reward_save()
@@ -638,7 +644,7 @@ func _check_release_commitment(directory: String) -> void:
 		check(completed_surprise.active and not str(completed_surprise.kind).is_empty()
 			and completed_surprise.play_count == before_surprise.play_count + 1
 			and app.playroom_state.collected_word_ids == collected_words,
-			"Completion adds one temporary gift without collecting a sticker or another saved reward")
+			"Completion adds one displayed gift without collecting a sticker or another saved reward")
 		app.chest_button.button_up.emit()
 		app.chest.cancel_open(true)
 		app._on_chest_opened()
@@ -650,12 +656,33 @@ func _check_release_commitment(directory: String) -> void:
 		check(app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count
 			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind,
 			"Old release and completion callbacks preserve the same decorative gift")
-		app.chest._advance_animation(2.5)
-		check(not app.chest.hold_effect_snapshot().surprise.active
-			and str(app.chest.hold_effect_snapshot().surprise.kind).is_empty()
+		app.chest._advance_animation(60.0)
+		var retained_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
+		check(retained_surprise.active and retained_surprise.kind == completed_surprise.kind
+			and retained_surprise.play_count == completed_surprise.play_count
 			and _pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.playroom_state.collected_word_ids == collected_words,
-			"The decorative gift disappears without adding save writes, pieces or collected words")
+			"The settled gift stays visible without adding save writes, pieces or collected words")
+		var cue_count: int = cues.size()
+		app.on_page_hidden()
+		app.chest._advance_animation(60.0)
+		check(app.chest.hold_effect_snapshot().surprise == retained_surprise,
+			"Backgrounding freezes the earned gift instead of discarding it")
+		app.on_page_visible()
+		app.chest.set_process(false)
+		app.chest._advance_animation(60.0)
+		check(app.chest.hold_effect_snapshot().surprise.active
+			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind
+			and app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count
+			and cues.size() == cue_count and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
+			"Returning to the result preserves its gift without replaying chest cues or saving again")
+		app.set_reduced_motion(true)
+		app.chest._advance_animation(60.0)
+		check(app.chest.hold_effect_snapshot().surprise.active
+			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind
+			and app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count,
+			"Changing motion preference preserves the earned gift on the result")
+		app.set_reduced_motion(false)
 
 	for interruption in ["background", "More", "native focus"]:
 		seed_value += 1

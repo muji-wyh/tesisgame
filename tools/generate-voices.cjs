@@ -1,15 +1,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawnSync } = require('node:child_process');
-const { setTimeout: sleep } = require('node:timers/promises');
+const { createHash } = require('node:crypto');
+const { spawn, spawnSync } = require('node:child_process');
 
 const PROFILE = Object.freeze({
-  voice: 'en-US-JennyNeural',
-  style: 'friendly',
-  styleDegree: '1.15',
-  rate: '-8%',
-  format: 'riff-24khz-16bit-mono-pcm'
+  voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%'
 });
+const EDGE_TTS_VERSION = '7.2.8';
+const MANIFEST_PATH = 'docs/assets/ava-voice.json';
 const PROMPT_IDS = [
   'wrong', 'loss',
   ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`)
@@ -52,22 +50,13 @@ function messagesFor(root) {
   return messages;
 }
 
-function speechMarkup(text) {
+function speechText(text) {
   englishText(text);
   // Preserve the catalog's audited natural phrase when regenerating this clip.
-  const sentence = text === 'kite' ? 'A kite.' : /[.!?]$/.test(text) ? text : `${text}.`;
-  return `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US">
-  <voice name="${PROFILE.voice}">
-    <mstts:silence type="Leading-exact" value="60ms"/>
-    <mstts:silence type="Tailing-exact" value="100ms"/>
-    <mstts:express-as style="${PROFILE.style}" styledegree="${PROFILE.styleDegree}">
-      <prosody rate="${PROFILE.rate}"><s>${sentence}</s></prosody>
-    </mstts:express-as>
-  </voice>
-</speak>`;
+  return text === 'kite' ? 'A kite.' : /[.!?]$/.test(text) ? text : `${text}.`;
 }
 
-function assertWave(bytes, rate) {
+function assertWave(bytes, rate = 22050) {
   if (!Buffer.isBuffer(bytes) || bytes.length < 44 || bytes.length > 4 * 1024 * 1024 ||
       bytes.toString('ascii', 0, 4) !== 'RIFF' || bytes.toString('ascii', 8, 12) !== 'WAVE' ||
       bytes.readUInt32LE(4) !== bytes.length - 8) {
@@ -117,83 +106,204 @@ function ffmpeg(args, input) {
   if (result.status !== 0) throw new Error(`FFmpeg failed: ${result.stderr.trim()}`);
 }
 
-function convertVoice(bytes, destination, sourceRate = 24000) {
-  assertWave(bytes, sourceRate);
-  // Trim only the final pause, retaining quiet endings and pauses within sentences.
+function convertVoice(bytes, destination) {
+  // Decode and change the container/sample format only. Preserve the approved
+  // voice's pitch, timing, volume, pauses, and unprocessed delivery.
   ffmpeg([
     '-hide_banner', '-loglevel', 'error', '-nostdin', '-n', '-i', 'pipe:0',
-    '-af', 'areverse,silenceremove=start_periods=1:start_threshold=-65dB:start_silence=0.16:detection=peak,areverse',
     '-ac', '1', '-ar', '22050', '-c:a', 'pcm_s16le', '-map_metadata', '-1',
     '-fflags', '+bitexact', destination
   ], bytes);
-  assertWave(fs.readFileSync(destination), 22050);
+  assertWave(fs.readFileSync(destination));
+}
+
+function digest(bytes) {
+  return createHash('sha256').update(bytes).digest('hex');
+}
+
+function cacheIdentity(text, profile = PROFILE) {
+  return {
+    schema: 1, provider: 'Microsoft Edge TTS', edgeTtsVersion: EDGE_TTS_VERSION,
+    profile: { voice: profile.voice, rate: profile.rate, pitch: profile.pitch, volume: profile.volume },
+    text: speechText(text), output: '22050-hz-pcm16-mono-no-effects'
+  };
+}
+
+function cacheKey(text, profile = PROFILE) {
+  return digest(JSON.stringify(cacheIdentity(text, profile)));
+}
+
+function regularFile(filename) {
+  try { return fs.lstatSync(filename).isFile(); }
+  catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+}
+
+function cachedWave(entry) {
+  try {
+    if (!regularFile(entry.wave) || !regularFile(entry.metadata)) return null;
+    const metadata = JSON.parse(fs.readFileSync(entry.metadata, 'utf8'));
+    if (JSON.stringify(metadata.identity) !== JSON.stringify(entry.identity)) return null;
+    const bytes = fs.readFileSync(entry.wave);
+    if (metadata.sha256 !== digest(bytes)) return null;
+    assertWave(bytes);
+    return bytes;
+  } catch (error) {
+    if (error.code === 'EACCES' || error.code === 'EPERM') throw error;
+    return null;
+  }
+}
+
+async function runEdgeBatch({ manifestPath }) {
+  const python = process.env.PYTHON || 'python';
+  await new Promise((resolve, reject) => {
+    const child = spawn(python, [path.join(__dirname, 'edge-voice-batch.py'), '--manifest', manifestPath], {
+      stdio: 'inherit', windowsHide: true
+    });
+    child.once('error', error => reject(new Error(
+      `Could not start Python for Edge TTS. Set PYTHON to its executable: ${error.message}`)));
+    child.once('exit', (code, signal) => {
+      if (code === 0) resolve();
+      else reject(new Error(`Edge TTS batch failed (${signal || `exit ${code}`}). Existing recordings were not replaced; completed cache entries will resume next time.`));
+    });
+  });
+}
+
+function fileRecord(message, bytes) {
+  return { id: message.id, text: message.text, synthesisText: speechText(message.text),
+    path: `assets/audio/voice/${message.id}.wav`, bytes: bytes.length, sha256: digest(bytes) };
+}
+
+function retainedRecords(root, messages) {
+  let previous;
+  try { previous = JSON.parse(fs.readFileSync(path.join(root, MANIFEST_PATH), 'utf8')); }
+  catch { /* The complete replacement below is required for undocumented audio. */ }
+  const approved = previous?.provider === 'Microsoft Edge TTS' &&
+    previous.client?.name === 'edge-tts' && previous.client?.version === EDGE_TTS_VERSION &&
+    Object.entries(PROFILE).every(([key, value]) => previous.profile?.[key] === value) &&
+    Array.isArray(previous.files);
+  const retained = new Map();
+  for (const message of messages) {
+    const filename = path.join(root, 'assets', 'audio', 'voice', `${message.id}.wav`);
+    if (!regularFile(filename)) continue;
+    const bytes = fs.readFileSync(filename);
+    const record = fileRecord(message, bytes);
+    const matching = approved && previous.files.filter(file => file.id === message.id);
+    if (!matching || matching.length !== 1 ||
+        Object.entries(record).some(([key, value]) => matching[0][key] !== value)) {
+      throw new Error(`Cannot use --missing: ${message.id} is not documented with the approved Ava profile and current text/hash. Run a full generation without --missing.`);
+    }
+    assertWave(bytes);
+    retained.set(message.id, record);
+  }
+  return retained;
+}
+
+function publishBatch(publications, staging) {
+  const backups = path.join(staging, 'previous');
+  fs.mkdirSync(backups);
+  for (const [index, entry] of publications.entries()) {
+    fs.mkdirSync(path.dirname(entry.destination), { recursive: true });
+    entry.previous = regularFile(entry.destination) ? path.join(backups, `${index}.backup`) : null;
+    if (entry.previous) fs.copyFileSync(entry.destination, entry.previous);
+  }
+  const published = [];
+  try {
+    for (const entry of publications) {
+      fs.renameSync(entry.pending, entry.destination);
+      published.push(entry);
+    }
+  } catch (error) {
+    for (const entry of published.reverse()) {
+      if (entry.previous) fs.copyFileSync(entry.previous, entry.destination);
+      else fs.unlinkSync(entry.destination);
+    }
+    throw error;
+  }
 }
 
 async function generateVoices({
-  root = path.resolve(__dirname, '..'),
-  key = process.env.SPEECH_KEY,
-  region = process.env.SPEECH_REGION,
-  onlyMissing = false,
-  fetchImpl = fetch,
-  wait = sleep
+  root = path.resolve(__dirname, '..'), onlyMissing = false,
+  synthesizeBatch = runEdgeBatch, convert = convertVoice
 } = {}) {
-  if (typeof key !== 'string' || !key.trim()) throw new Error('Set SPEECH_KEY before generating speech.');
-  if (typeof region !== 'string' || !/^[a-z0-9]+$/.test(region)) {
-    throw new Error('Set SPEECH_REGION to an Azure Speech region such as eastasia.');
-  }
-  let messages = messagesFor(root);
+  root = path.resolve(root);
+  const catalog = messagesFor(root);
+  let messages = catalog;
   const output = path.join(root, 'assets', 'audio', 'voice');
   for (const { id } of messages) {
     const destination = path.join(output, `${id}.wav`);
-    if (fs.existsSync(destination) && !fs.lstatSync(destination).isFile()) {
+    if (fs.existsSync(destination) && !regularFile(destination)) {
       throw new Error(`Voice destination is not a regular file: ${destination}`);
     }
     if (fs.existsSync(path.join(output, `${id}.generating.wav`))) {
       throw new Error(`Unexplained pending voice output exists for ${id}; inspect it before regenerating.`);
     }
   }
-  if (onlyMissing) messages = messages.filter(({ id }) => !fs.existsSync(path.join(output, `${id}.wav`)));
+  const retained = onlyMissing ? retainedRecords(root, catalog) : new Map();
+  if (onlyMissing) messages = messages.filter(({ id }) => !retained.has(id));
   if (messages.length === 0) return 0;
-  ffmpeg(['-version']);
-  const base = `https://${region}.tts.speech.microsoft.com/cognitiveservices`;
-  const headers = { 'Ocp-Apim-Subscription-Key': key, 'User-Agent': 'WordBuddies-VoiceGenerator' };
-  async function request(url, options, label) {
-    const response = await fetchImpl(url, {
-      ...options, redirect: 'error', signal: AbortSignal.timeout(30000)
-    });
-    if (!response.ok) {
-      await response.body?.cancel();
-      throw new Error(`Speech request for ${label} failed (HTTP ${response.status}). Existing recordings were not replaced.`);
-    }
-    return response;
-  }
-  const voices = await (await request(`${base}/voices/list`, { headers }, 'voice availability')).json();
-  if (!Array.isArray(voices) || !voices.some(voice =>
-    voice.ShortName === PROFILE.voice && voice.VoiceType === 'Neural' &&
-    voice.Locale === 'en-US' && voice.StyleList?.includes(PROFILE.style))) {
-    throw new Error(`${PROFILE.voice} with the friendly style is unavailable in ${region}. No fallback voice will be used.`);
-  }
+  if (convert === convertVoice) ffmpeg(['-version']);
   const build = path.join(root, 'build');
-  fs.mkdirSync(build, { recursive: true });
+  const cacheDirectory = path.join(build, 'voice-cache');
+  fs.mkdirSync(cacheDirectory, { recursive: true });
   const staging = fs.mkdtempSync(path.join(build, 'voice-generation-'));
   try {
-    for (const message of messages) {
-      // F0 allows 20 transactions per minute; leave headroom for the voice-list request.
-      await wait(3200);
-      const response = await request(`${base}/v1`, {
-        method: 'POST',
-        headers: { ...headers, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': PROFILE.format },
-        body: speechMarkup(message.text)
-      }, message.id);
-      const bytes = Buffer.from(await response.arrayBuffer());
-      const pending = path.join(staging, `${message.id}.wav`);
-      convertVoice(bytes, pending);
+    const entries = messages.map(message => {
+      const key = cacheKey(message.text);
+      return { ...message, identity: cacheIdentity(message.text),
+        source: path.join(cacheDirectory, `${key}.mp3`),
+        wave: path.join(cacheDirectory, `${key}.wav`),
+        metadata: path.join(cacheDirectory, `${key}.json`),
+        pending: path.join(staging, `${message.id}.wav`) };
+    });
+    const requests = [];
+    for (const entry of entries) {
+      entry.cached = cachedWave(entry);
+      if (!entry.cached && !(regularFile(entry.source) && fs.statSync(entry.source).size > 0)) {
+        requests.push({ id: entry.id, text: entry.identity.text, output: entry.source });
+      }
     }
-    // Keep the old voice intact if any synthesis or conversion in the batch fails.
-    fs.mkdirSync(output, { recursive: true });
-    for (const { id } of messages) {
-      fs.renameSync(path.join(staging, `${id}.wav`), path.join(output, `${id}.wav`));
+    if (requests.length) {
+      const manifest = { edgeTtsVersion: EDGE_TTS_VERSION, profile: PROFILE, cacheDirectory, requests };
+      const manifestPath = path.join(staging, 'requests.json');
+      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
+      await synthesizeBatch({ manifest, manifestPath });
     }
+    for (const entry of entries) {
+      if (entry.cached) fs.writeFileSync(entry.pending, entry.cached);
+      else {
+        if (!regularFile(entry.source) || fs.statSync(entry.source).size === 0) {
+          throw new Error(`Edge TTS did not produce audio for ${entry.id}. Existing recordings were not replaced.`);
+        }
+        try {
+          await convert(fs.readFileSync(entry.source), entry.pending);
+          assertWave(fs.readFileSync(entry.pending));
+        } catch (error) {
+          // A damaged source cannot poison every subsequent resume attempt.
+          fs.unlinkSync(entry.source);
+          throw new Error(`Voice conversion failed for ${entry.id}: ${error.message}. Existing recordings were not replaced.`, { cause: error });
+        }
+        const bytes = fs.readFileSync(entry.pending);
+        const cachePending = path.join(staging, `${entry.id}.cache.wav`);
+        fs.writeFileSync(cachePending, bytes);
+        fs.renameSync(cachePending, entry.wave);
+        const metadataPending = path.join(staging, `${entry.id}.cache.json`);
+        fs.writeFileSync(metadataPending, JSON.stringify({ identity: entry.identity, sha256: digest(bytes) }, null, 2) + '\n');
+        fs.renameSync(metadataPending, entry.metadata);
+      }
+      retained.set(entry.id, fileRecord(entry, fs.readFileSync(entry.pending)));
+    }
+    const manifestPending = path.join(staging, 'ava-voice.json');
+    fs.writeFileSync(manifestPending, JSON.stringify({
+      provider: 'Microsoft Edge TTS', client: { name: 'edge-tts', version: EDGE_TTS_VERSION },
+      profile: PROFILE, format: { sampleRate: 22050, channels: 1, bitsPerSample: 16, encoding: 'PCM' },
+      postprocessing: 'None; MP3 decoded to the existing WAV format only.',
+      generatedAt: new Date().toISOString(), files: catalog.map(message => retained.get(message.id))
+    }, null, 2) + '\n');
+    // Synthesis, decoding, and validation must all succeed before publication.
+    publishBatch([
+      ...entries.map(entry => ({ pending: entry.pending, destination: path.join(output, `${entry.id}.wav`) })),
+      { pending: manifestPending, destination: path.join(root, MANIFEST_PATH) }
+    ], staging);
   } finally {
     fs.rmSync(staging, { recursive: true, force: true });
   }
@@ -201,12 +311,19 @@ async function generateVoices({
 }
 
 if (require.main === module) {
-  generateVoices({ onlyMissing: process.argv.includes('--missing') }).then(count => {
-    console.log(`Generated ${count} English recordings with ${PROFILE.voice}, ${PROFILE.style} style (${PROFILE.rate}, 22050 Hz PCM16 mono).`);
-  }).catch(error => {
-    console.error(error.message);
+  const args = process.argv.slice(2);
+  if (args.some(arg => arg !== '--missing')) {
+    console.error('Usage: node tools/generate-voices.cjs [--missing]');
     process.exitCode = 1;
-  });
+  } else {
+    generateVoices({ onlyMissing: args.includes('--missing') }).then(count => {
+      console.log(`Published ${count} English recordings with ${PROFILE.voice} (rate ${PROFILE.rate}, pitch ${PROFILE.pitch}, volume ${PROFILE.volume}; 22050 Hz PCM16 mono, no effects).`);
+    }).catch(error => {
+      console.error(error.message);
+      process.exitCode = 1;
+    });
+  }
 }
 
-module.exports = { PROFILE, speechMarkup, messagesFor, assertWave, convertVoice, generateVoices };
+module.exports = { PROFILE, EDGE_TTS_VERSION, MANIFEST_PATH, speechText, messagesFor, assertWave, convertVoice,
+  cacheIdentity, cacheKey, generateVoices };

@@ -15,7 +15,7 @@ function fixture(t) {
   return directory;
 }
 
-test('the new-world provenance preserves superseded music history and pins four active original recordings', () => {
+test('the new-world provenance preserves superseded music and speech while pinning the two retained effects', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jungle-candy-audio.json'), 'utf8'));
   const expected = added.flatMap(id => [
     `assets/audio/bgm/${id}.wav`,
@@ -23,11 +23,10 @@ test('the new-world provenance preserves superseded music history and pins four 
     ...['theme', 'arrive', 'open'].map(suffix => `assets/audio/voice/${id}-${suffix}.wav`)
   ]);
   assert.deepEqual(manifest.files.map(file => file.path), expected);
-  const superseded = added.map(id => `assets/audio/bgm/${id}.wav`);
-  const active = added.flatMap(id => [
-    `assets/audio/sfx/${id}-arrive.wav`,
-    `assets/audio/voice/${id}-theme.wav`
+  const superseded = added.flatMap(id => [
+    `assets/audio/bgm/${id}.wav`, `assets/audio/voice/${id}-theme.wav`
   ]);
+  const active = added.map(id => `assets/audio/sfx/${id}-arrive.wav`);
   const retired = added.flatMap(id => [
     `assets/audio/sfx/${id}-open.wav`,
     `assets/audio/voice/${id}-arrive.wav`,
@@ -35,9 +34,9 @@ test('the new-world provenance preserves superseded music history and pins four 
   ]);
   for (const file of manifest.files) {
     if (superseded.includes(file.path)) {
-      // The active casual-music manifest owns the replacement recording's hash.
-      // The dated manifest continues to describe the original synthesized score.
-      assert.equal(file.kind, 'bgm');
+      // Current music and Ava manifests own the replacement hashes. Preserve
+      // this dated record of the original synthesized score and Jenny voice.
+      assert.equal(file.kind, file.path.includes('/voice/') ? 'voice' : 'bgm');
       assert.equal(fs.existsSync(path.join(root, file.path)), true, file.path);
       continue;
     }

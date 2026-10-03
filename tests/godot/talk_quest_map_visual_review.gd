@@ -4,7 +4,7 @@ extends SceneTree
 
 const Atlas = preload("res://scripts/talk_quest_map.gd")
 const Data = preload("res://scripts/talk_quest_data.gd")
-const OUTPUT := "res://build/talk-quest-map-review"
+const OUTPUT := "res://build/talk-quest-horizontal-review"
 const LAYOUTS: Array = [
 	{"label": "phone", "size": Vector2i(390, 650)},
 	{"label": "small-phone", "size": Vector2i(320, 414)},
@@ -59,6 +59,12 @@ func _run() -> void:
 		for chapter in range(3):
 			atlas.set_chapter(chapter)
 			await _capture(atlas, "%s-chapter-%d" % [layout.label, chapter + 1])
+		atlas.show_level(14)
+		await _capture(atlas, "%s-final-island" % layout.label)
+		atlas.show_level(7)
+		await process_frame
+		atlas._scroll.scroll_horizontal += 130
+		await _capture(atlas, "%s-between-islands" % layout.label)
 	atlas.queue_free()
 	await process_frame
 	print("Talk Quest map review: %d captures, %d failures" % [captures, failures])

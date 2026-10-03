@@ -5,7 +5,7 @@ extends Node
 const SCRIPTS := [
 	"game_data", "ui_style", "icon_button", "game_model", "word_play", "card_motion", "word_card", "chest_sound_bank", "game_audio",
 	"chest_feel", "chest_view", "medal_view", "medal_progress", "pip_outfits", "duck_mascot",
-	"review_scroll", "memory_game_model", "memory_garden",
+	"scroll_momentum", "result_scroll", "review_scroll", "memory_game_model", "memory_garden",
 	"playroom_state", "toy_card", "playroom_view", "voice_pop_model", "voice_pop", "game_ui"
 ]
 

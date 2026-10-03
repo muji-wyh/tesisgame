@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { enterGame, chooseMode, rendered, metrics, tap, contentBounds,
+const { enterGame, chooseMode, rendered, metrics, tap, contentBounds, uiScale,
   leaderboardSnapshot } = require('./game-ui.cjs');
+const { roomState, scrollChestIntoView } = require('./pop-treasure-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.popRewards';
 
@@ -58,10 +59,6 @@ async function popState(page) {
     chestProgress: Number(element.dataset.chestProgress), chestFx: JSON.parse(element.dataset.chestFx || '{}'),
     hud: JSON.parse(element.dataset.hud || '{}'), controls: JSON.parse(element.dataset.controls || '[]')
   }));
-}
-
-async function roomState(page) {
-  return page.locator('#pop-reward-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
 }
 
 async function storedRewards(page) {
@@ -134,44 +131,65 @@ async function expectChestRoom(page, opened, expectedTypes) {
   expect(new Set(types).size, 'All three displayed chests have different actual styles').toBe(3);
   expect(types.every(type => typeof type === 'string' && type.length > 0)).toBe(true);
   if (expectedTypes) expect(types, 'Returning preserves the same three chest types').toEqual(expectedTypes);
+  const viewport = current.scroll_rect;
+  expect([viewport.x, viewport.y, viewport.width, viewport.height,
+    current.scroll_offset, current.scroll_max].every(Number.isFinite)).toBe(true);
+  expect(viewport.width).toBeGreaterThan(0);
+  expect(viewport.height).toBeGreaterThan(0);
+  expect(viewport.x).toBeGreaterThanOrEqual(field.x - 1);
+  expect(viewport.x + viewport.width).toBeLessThanOrEqual(field.x + field.width + 1);
+  expect(viewport.y).toBeGreaterThanOrEqual(field.top - 1);
+  expect(viewport.y + viewport.height).toBeLessThanOrEqual(bounds.height - field.padding + 1);
+  expect(current.scroll_max, 'Three large chests use a scrollable list').toBeGreaterThan(0);
+  expect(current.scroll_offset).toBeGreaterThanOrEqual(0);
+  expect(current.scroll_offset).toBeLessThanOrEqual(current.scroll_max + 1);
   for (const chest of current.chests) {
     const rect = chest.rect;
     expect([rect.x, rect.y, rect.width, rect.height].every(Number.isFinite)).toBe(true);
     expect(rect.width).toBeGreaterThan(0);
-    expect(rect.height).toBeGreaterThan(0);
-    expect(rect.x, 'Every chest is simultaneously visible at the left edge').toBeGreaterThanOrEqual(field.x - 1);
-    expect(rect.x + rect.width).toBeLessThanOrEqual(field.x + field.width + 1);
-    expect(rect.y).toBeGreaterThanOrEqual(field.top - 1);
-    expect(rect.y + rect.height, 'Every chest fits without scrolling').toBeLessThanOrEqual(bounds.height - field.padding + 1);
+    expect(rect.height * uiScale(bounds), 'Chest artwork keeps a generous size instead of shrinking to fit the batch').toBeGreaterThanOrEqual(319);
+    expect(rect.x).toBeGreaterThanOrEqual(viewport.x - 1);
+    expect(rect.x + rect.width).toBeLessThanOrEqual(viewport.x + viewport.width + 1);
+    expect(rect.y + current.scroll_offset).toBeGreaterThanOrEqual(viewport.y - 1);
+    expect(rect.y + current.scroll_offset + rect.height,
+      'Each chest stays inside the reachable scroll content').toBeLessThanOrEqual(viewport.y + viewport.height + current.scroll_max + 1);
     expect(chest.disabled, 'Only already opened chests are disabled between holds').toBe(chest.opened);
   }
   for (let first = 0; first < 3; first++) for (let second = first + 1; second < 3; second++) {
     const a = current.chests[first].rect, b = current.chests[second].rect;
     expect(a.x + a.width <= b.x + 1 || b.x + b.width <= a.x + 1 ||
       a.y + a.height <= b.y + 1 || b.y + b.height <= a.y + 1,
-    'Simultaneous chest controls never overlap').toBe(true);
+    'Chest controls never overlap inside the shared list').toBe(true);
+  }
+  if (bounds.width * bounds.scale < 600) {
+    expect(current.chests.every(chest => Math.abs(chest.rect.x - current.chests[0].rect.x) <= 1),
+      'Phone treasure uses one large chest per row').toBe(true);
+  } else if (bounds.width * bounds.scale >= 1100) {
+    expect(Math.abs(current.chests[0].rect.y - current.chests[1].rect.y), 'Desktop treasure has two large columns').toBeLessThanOrEqual(1);
+    expect(current.chests[1].rect.x).toBeGreaterThan(current.chests[0].rect.x);
   }
   return current;
 }
 
 async function pressChest(page, index) {
-  const current = await roomState(page), chest = current.chests[index];
+  const current = await scrollChestIntoView(page, index), chest = current.chests[index];
   expect(current.visible).toBe(true);
   expect(chest.opened).toBe(false);
   expect(chest.disabled).toBe(false);
   const bounds = await metrics(page), rect = chest.rect;
   await page.mouse.move(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
     bounds.y + (rect.y + rect.height / 2) * bounds.scale);
+  const pressedAt = Date.now();
   await page.mouse.down();
   await expect.poll(async () => {
     const value = await roomState(page);
     return { active: value.active, holding: value.holding };
   }, { intervals: [20, 50, 100] }).toEqual({ active: index, holding: true });
+  return pressedAt;
 }
 
 async function openChest(page, index, expectedOpened) {
-  const started = Date.now();
-  await pressChest(page, index);
+  const started = await pressChest(page, index);
   try {
     await expect.poll(async () => (await roomState(page)).chests[index].opened,
       { timeout: 12000, intervals: [50, 100, 200], message: 'The held chest reaches its real release and saves once' }).toBe(true);
@@ -232,7 +250,7 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   const types = room.chests.map(chest => chest.type), round = room.round_id;
   const unopened = await storedRewards(page);
   expect(unopened).toBeTruthy();
-  await page.screenshot({ path: info.outputPath('three-distinct-chests.png') });
+  await page.screenshot({ path: info.outputPath('large-treasure-list.png') });
 
   await pressChest(page, 0);
   await page.waitForTimeout(150);
@@ -280,7 +298,7 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   expect(room.pending).toBe(false);
   expect(room.chests.every(chest => chest.opened && chest.mode === 'opened')).toBe(true);
   const completed = await storedRewards(page);
-  await page.screenshot({ path: info.outputPath('all-three-chests-opened.png') });
+  await page.screenshot({ path: info.outputPath('completed-treasure-list.png') });
   await page.reload();
   await enterGame(page);
   expect(await storedRewards(page), 'Every opened flag and the completed-round receipt survive reload').toBe(completed);

@@ -3,7 +3,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
-const OUTPUT: String = "res://build/pop-treasure-review"
+const OUTPUT: String = "res://build/pop-treasure-large-review"
 
 var app
 var room
@@ -113,6 +113,9 @@ func _run() -> void:
 	await capture("desktop-three-chests")
 	await resize_to(Vector2i(390, 844))
 	await capture("phone-three-chests")
+	room._ensure_chest_visible(room._cards[2].button)
+	await capture("phone-last-chest")
+	room._ensure_chest_visible(room._cards[0].button)
 	await resize_to(Vector2i(320, 568))
 	await capture("small-three-chests")
 	await resize_to(Vector2i(844, 390))
@@ -130,6 +133,8 @@ func _run() -> void:
 	await capture("desktop-release")
 	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
 	await capture("desktop-opened")
+	room._cards[0].art._advance_animation(10.0)
+	await capture("desktop-retained-gift")
 	await resize_to(Vector2i(844, 390))
 	await capture("landscape-one-opened")
 	await resize_to(Vector2i(390, 844))
@@ -145,7 +150,17 @@ func _run() -> void:
 	room.set_reduced_motion(true)
 	room.begin_hold(room._cards[2].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
+	for card in room._cards:
+		card.art._advance_animation(30.0)
 	await capture("small-all-opened-reduced-motion")
+	await resize_to(Vector2i(390, 844))
+	await capture("phone-three-retained-gifts")
+	room._ensure_chest_visible(room._cards[0].button)
+	await capture("phone-first-retained-gift")
+	room._ensure_chest_visible(room._cards[2].button)
+	await capture("phone-last-retained-gift")
+	await resize_to(Vector2i(1366, 768))
+	await capture("desktop-three-retained-gifts")
 	await _cleanup()
 
 

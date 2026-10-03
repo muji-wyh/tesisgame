@@ -25,31 +25,32 @@ function modeHeight(bounds) {
   return Math.ceil(44 / uiScale(bounds));
 }
 
-function modeRect(bounds, name, { recovery = false } = {}) {
+function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop or quest.`);
-  const content = contentBounds(bounds);
-  const scale = uiScale(bounds), gap = Math.round(4 / scale);
-  const width = Math.min(Math.ceil(80 / scale), Math.floor((bounds.width - 2 * Math.ceil(12 / scale) - (MODES.length - 1) * gap) / MODES.length));
-  let rowX = content.x, rowWidth = content.width, y = content.padding + content.header + content.gap;
-  if (content.inlineModes) {
-    const pipWidth = Math.ceil(132 / scale);
-    const toolbarWidth = 3 * Math.ceil(44 / scale) + 2 * content.gap;
-    if (recovery) {
-      // Retry rewards and the mode row share the header's stretch width.
-      rowWidth = (rowWidth - toolbarWidth - content.gap * 2) / 2;
-      rowX += rowWidth + content.gap;
-    } else {
-      rowX += pipWidth + content.gap;
-      rowWidth -= pipWidth + toolbarWidth + content.gap * 2;
-    }
-    y = content.padding + (content.header - modeHeight(bounds)) / 2;
+  const scale = uiScale(bounds), edge = Math.ceil(8 / scale), padding = Math.ceil(10 / scale);
+  const rowGap = Math.ceil(2 / scale), titleHeight = Math.ceil(28 / scale), titleGap = Math.ceil(4 / scale);
+  const panelWidth = Math.min(Math.ceil(248 / scale), bounds.width - edge * 2);
+  const panelHeight = padding * 2 + titleHeight + titleGap + MODES.length * modeHeight(bounds) + (MODES.length - 1) * rowGap;
+  const pip = pipHeaderRect(bounds);
+  const left = Math.max(edge, Math.min(pip.x, bounds.width - edge - panelWidth));
+  const top = Math.max(edge, Math.min(pip.y + pip.height + Math.ceil(6 / scale), bounds.height - edge - panelHeight));
+  return { x: left + padding, y: top + padding + titleHeight + titleGap + index * (modeHeight(bounds) + rowGap),
+    width: panelWidth - padding * 2, height: modeHeight(bounds) };
+}
+
+async function openModeMenu(page) {
+  const status = page.locator('#game-status');
+  if (!/^Game mode\. .+ is selected\./.test(await status.textContent())) {
+    const pip = headerPoint(await metrics(page), 'pip');
+    await tap(page, pip.x, pip.y);
   }
-  const left = rowX + (rowWidth - MODES.length * width - (MODES.length - 1) * gap) / 2;
-  return { x: left + index * (width + gap), y, width, height: modeHeight(bounds) };
+  await expect(status).toHaveText(/^Game mode\. .+ is selected\. Choose a game, or press Back to return\.$/);
+  await rendered(page);
 }
 
 async function chooseMode(page, name, options = {}) {
+  await openModeMenu(page);
   const rect = modeRect(await metrics(page), name, options);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
@@ -74,7 +75,7 @@ function contentBounds(bounds) {
   const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
   const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
   const inlineModes = bounds.width * scale >= 680;
-  const top = padding + header + gap + (inlineModes ? 0 : gap + modeHeight(bounds));
+  const top = padding + header + gap;
   return { x, width, top, padding, gap, header, inlineModes };
 }
 
@@ -713,7 +714,7 @@ function resultPoint(bounds, key, { gift = false, message = false } = {}) {
     y: bounds.height - content.padding - 88 - textGap - actionHeight / 2 - extra };
 }
 
-module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

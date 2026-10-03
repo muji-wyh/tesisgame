@@ -115,10 +115,8 @@ func _run() -> void:
 			var end := point - Vector2(0, 50 * factor)
 			await pointer(end, false, touch_first)
 			await pointer(end, false, not touch_first)
-			var settled := scroll.scroll_vertical
 			await settle()
-			check(scroll.scroll_vertical == settled and not scroll.is_pointer_active(),
-				"Touch release stops without a second native inertial scroll")
+			check(not scroll.is_pointer_active(), "Touch release ends contact while momentum may continue")
 			check(_activations == activation_before, "A drag across a word card never activates it")
 			await _check_tap(scroll, body.get_child(0), touch_first)
 	scroll.scale = Vector2.ONE
@@ -134,6 +132,7 @@ func _run() -> void:
 
 
 func _check_tap(scroll: ResultScroll, button: Button, touch_first: bool) -> void:
+	scroll.cancel_drag()
 	scroll.scroll_vertical = 0
 	await settle()
 	var point: Vector2 = button.get_global_transform_with_canvas() * (button.size * 0.5)
@@ -149,6 +148,7 @@ func _check_tap(scroll: ResultScroll, button: Button, touch_first: bool) -> void
 
 
 func _check_cancellations(scroll: ResultScroll, button: Button) -> void:
+	scroll.cancel_drag()
 	scroll.scroll_vertical = 0
 	await settle()
 	var point: Vector2 = button.get_global_transform_with_canvas() * (button.size * 0.5)
@@ -181,6 +181,7 @@ func _check_cancellations(scroll: ResultScroll, button: Button) -> void:
 
 
 func _check_native_controls(scroll: ResultScroll, button: Button) -> void:
+	scroll.cancel_drag()
 	scroll.scroll_vertical = 0
 	await settle()
 	var wheel := InputEventMouseButton.new()
@@ -191,8 +192,9 @@ func _check_native_controls(scroll: ResultScroll, button: Button) -> void:
 	root.push_input(wheel, true)
 	await settle()
 	check(scroll.scroll_vertical > 0 and not scroll.is_pointer_active(),
-		"Desktop wheel input cancels an unfinished contact and still uses the native scroll path")
+		"Desktop wheel input cancels an unfinished contact and continues scrolling")
 	await pointer(wheel.position, false, true)
+	scroll.cancel_drag()
 	scroll.scroll_vertical = 0
 	await settle()
 	button.grab_focus()
@@ -208,6 +210,7 @@ func _check_native_controls(scroll: ResultScroll, button: Button) -> void:
 
 func _check_touch_only_exit(scroll: ResultScroll, probe: InputProbe) -> void:
 	for canceled in [false, true]:
+		scroll.cancel_drag()
 		scroll.scroll_vertical = 120
 		await settle()
 		var point: Vector2 = scroll.get_global_transform_with_canvas() * Vector2(160, 240)

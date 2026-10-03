@@ -361,6 +361,27 @@ test('voice sources contain exactly 350 pronunciations and ten active prompts', 
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
+test('every shipped spoken recording matches the approved Ava profile and source manifest', () => {
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/ava-voice.json'), 'utf8'));
+  for (const [key, value] of Object.entries({ voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%' })) {
+    assert.equal(manifest.profile[key], value, `Approved voice setting: ${key}`);
+  }
+  const expected = new Map([
+    ...Object.entries(expectedPrompts),
+    ...words.map(word => [`word-${word.id}`, word.text])
+  ]);
+  assert.equal(manifest.files.length, expected.size);
+  assert.equal(new Set(manifest.files.map(file => file.id)).size, expected.size);
+  for (const file of manifest.files) {
+    assert.ok(expected.has(file.id), `Unexpected spoken recording: ${file.id}`);
+    assert.equal(file.text, expected.get(file.id), file.id);
+    assert.equal(file.path, `assets/audio/voice/${file.id}.wav`, file.id);
+    const bytes = fs.readFileSync(path.join(root, file.path));
+    assert.equal(bytes.length, file.bytes, file.id);
+    assert.equal(sha256(bytes), file.sha256, `${file.id} uses its recorded Ava source`);
+  }
+});
+
 test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs', () => {
   const hashes = new Set();
   const music = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/casual-bgm.json'), 'utf8'));

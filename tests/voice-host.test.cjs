@@ -256,6 +256,90 @@ test('microphone cleanup falls back to stop without starting another recognizer'
   assert.equal(f.starts, 1);
 });
 
+test('the mode menu suspends active or pending speech and resumes it only once', () => {
+  for (const autoStart of [true, false]) {
+    const f = fixture({ autoStart });
+    f.host.speechBounds(0.1, 0.2, 0.8, 0.25);
+    f.listen();
+    const bounds = { ...f.panel.style };
+    const old = f.latest;
+    const reports = f.states.length;
+    assert.equal(f.host.suspendSpeechForMenu(), true);
+    assert.equal(f.host.suspendSpeechForMenu(), true);
+    assert.equal(f.aborts, 1, 'Repeated menu opens do not abort twice');
+    assert.equal(f.panel.hidden, true);
+    assert.deepEqual(f.panel.style, bounds, 'Suspension preserves the voice-panel layout');
+    assert.equal(f.aura.attributes['data-listening'], 'false');
+    old.result([['cat', true]]);
+    old.callbacks.start?.();
+    old.end();
+    f.advance(10000);
+    assert.equal(f.results.length, 0, 'Suspended callbacks cannot score or display old speech');
+    assert.equal(f.starts, 1);
+    assert.equal(f.pendingTimers, 0);
+    assert.equal(f.states.length, reports, 'Successful suspension does not change native voice-panel state or focus');
+    assert.equal(f.host.resumeSpeechFromMenu(), true);
+    assert.equal(f.host.resumeSpeechFromMenu(), true);
+    assert.equal(f.starts, 2, 'Only the first dismissal resumes the recognizer');
+    assert.equal(f.panel.hidden, false);
+    assert.deepEqual(f.panel.style, bounds);
+  }
+});
+
+test('the mode menu preserves failed Match speech without requesting the microphone again', () => {
+  for (const error of ['not-allowed', 'network', 'audio-capture']) {
+    const f = fixture();
+    f.listen();
+    f.latest.error(error);
+    const message = f.status.textContent;
+    const state = [...f.states.at(-1)];
+    assert.equal(f.panel.attributes['data-state'], 'error');
+    assert.equal(f.host.suspendSpeechForMenu(), true);
+    f.window.dispatch('offline');
+    f.advance(10000);
+    assert.equal(f.panel.hidden, true, 'An unrelated offline event cannot cover the menu with the speech panel');
+    assert.equal(f.host.resumeSpeechFromMenu(), true);
+    assert.equal(f.panel.hidden, false);
+    assert.equal(f.starts, 1, 'Dismissing the menu does not retry a failed microphone');
+    assert.equal(f.panel.attributes['data-state'], 'error');
+    assert.equal(f.status.textContent, message);
+    assert.deepEqual(f.states.at(-1), state);
+  }
+});
+
+test('leaving Match voice discards its menu suspension instead of reopening speech later', () => {
+  for (const exit of ['stop', 'hide', 'mode']) {
+    const f = fixture();
+    f.listen();
+    assert.equal(f.host.suspendSpeechForMenu(), true);
+    if (exit === 'stop') f.host.stopSpeech();
+    if (exit === 'hide') {
+      f.document.hidden = true;
+      f.document.dispatch('visibilitychange');
+      f.document.hidden = false;
+    }
+    if (exit === 'mode') f.host.speechMode(true, 'pop');
+    const starts = f.starts;
+    assert.equal(f.host.resumeSpeechFromMenu(), true);
+    f.advance(1000);
+    assert.equal(f.starts, starts, 'A discarded suspension never creates a second microphone');
+    assert.equal(f.panel.hidden, true);
+  }
+});
+
+test('a failed menu suspension keeps the microphone shutdown error visible', () => {
+  const f = fixture();
+  f.listen();
+  f.latest.abort = () => { throw new Error('abort failed'); };
+  f.latest.stop = () => { throw new Error('stop failed'); };
+  assert.equal(f.host.suspendSpeechForMenu(), false);
+  assert.equal(f.panel.hidden, false);
+  assert.equal(f.panel.attributes['data-state'], 'error');
+  assert.match(f.status.textContent, /close this tab/i);
+  assert.equal(f.host.resumeSpeechFromMenu(), true);
+  assert.equal(f.starts, 1, 'A failed shutdown never schedules another recognizer');
+});
+
 test('the accessible panel is hidden and the exact speech API joins the existing host', () => {
   for (const id of ['speech-panel', 'speech-status', 'speech-transcript', 'speech-notice']) {
     assert.match(shell, new RegExp(`id="${id}"`));
@@ -264,7 +348,7 @@ test('the accessible panel is hidden and the exact speech API joins the existing
   assert.match(shell, /id="speech-panel"[^>]*aria-describedby="speech-notice"/);
   assert.match(shell, /\.\.\.speechHost/);
   const f = fixture();
-  for (const method of ['speechAvailable', 'observeSpeech', 'speechMode', 'stopSpeech', 'speechBounds']) {
+  for (const method of ['speechAvailable', 'observeSpeech', 'speechMode', 'stopSpeech', 'speechBounds', 'suspendSpeechForMenu', 'resumeSpeechFromMenu']) {
     assert.equal(typeof f.host[method], 'function', method);
   }
   assert.equal(f.panel.hidden, true);
@@ -1449,7 +1533,8 @@ test('Voice Pop defaults to system recognition without loading custom models or 
     const f = fixture({ api });
     assert.deepEqual(Object.keys(f.host).sort(), ['beginSpeechPractice', 'configureSpeechLexicon', 'endSpeechPractice',
       'observePopSpeech', 'observeQuestSpeech', 'observeSpeech', 'popStatus', 'practiceTarget', 'practiceWords', 'questTarget', 'questTargets',
-      'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech']);
+      'resumeSpeechFromMenu', 'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech',
+      'suspendSpeechForMenu']);
     f.listen('pop');
     assert.equal(f.starts, 1);
     assert.equal(f.latest.lang, 'en-US');

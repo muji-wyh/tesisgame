@@ -39,8 +39,8 @@ func _run() -> void:
 	check(app.find_child("Mode_match", true, false).button_pressed and app.find_child("Mode_learn", true, false) == null
 		and app.cards.size() == 10 and app.model.hints_remaining == 3 and not app._voice_mode,
 		"Match starts selected with a ready board, three hints, and no microphone")
-	check(app._mode_buttons.map(func(button: Button) -> String: return button.text) == ["Match", "Memory", "Voice Pop", "Talk Quest"],
-		"The actual controls follow the requested tab order")
+	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop", "Mode_quest"],
+		"The actual mode choices preserve their requested order inside the popover")
 	app.model.phase = "lost"
 	app._refresh()
 	for dimensions in [Vector2i(320, 568), Vector2i(768, 1024), Vector2i(1366, 768)]:

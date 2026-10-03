@@ -1,8 +1,8 @@
 extends Node2D
 
-# A one-shot visual toy. Its private random stream never changes game rewards.
+# A revealed toy stays on display until its chest presentation is cleared.
+# Its private random stream never changes game rewards.
 const SECONDS: float = 2.4
-const STILL_SECONDS: float = 1.1
 const KINDS := ["star", "ball", "rocket", "kite", "robot", "doll"]
 const TEXTURES := [
 	preload("res://assets/chests/surprises/star.svg"),
@@ -43,7 +43,7 @@ func play(color: Color, reduce: bool = false) -> void:
 	_direction = -1.0 if _random.randf() < 0.5 else 1.0
 	_color = color
 	_reduced = reduce
-	_age = 0.0
+	_age = SECONDS if reduce else 0.0
 	_active = true
 	_play_count += 1
 	show()
@@ -60,13 +60,10 @@ func fit(stage_size: Vector2, origin: Vector2, pixel_scale: float) -> void:
 
 
 func advance(delta: float) -> void:
-	if not _active or delta <= 0.0 or not is_finite(delta):
+	if not _active or _age >= SECONDS or delta <= 0.0 or not is_finite(delta):
 		return
-	_age += delta
-	if _age >= (STILL_SECONDS if _reduced else SECONDS):
-		clear()
-	else:
-		queue_redraw()
+	_age = minf(SECONDS, _age + delta)
+	queue_redraw()
 
 
 func clear() -> void:
@@ -80,7 +77,7 @@ func reduce_motion() -> void:
 	if not _active or _reduced:
 		return
 	_reduced = true
-	_age = 0.0
+	_age = SECONDS
 	queue_redraw()
 
 
@@ -96,7 +93,7 @@ func _center(age: float) -> Vector2:
 	var flight: float = clampf(age / 0.86, 0.0, 1.0)
 	var point: Vector2 = start.lerp(target, 1.0 - pow(1.0 - flight, 3.0))
 	point.y -= sin(flight * PI) * _edge * 0.30
-	# A small landing bounce resolves before the toy dissolves into its light.
+	# A small landing bounce resolves into a lasting display above the chest.
 	var landing: float = clampf((age - 0.86) / 0.42, 0.0, 1.0)
 	point.y -= sin(landing * PI) * (1.0 - landing) * _edge * 0.10
 	return point.clamp(lower, upper)
@@ -108,6 +105,7 @@ func snapshot() -> Dictionary:
 	var bounds := Rect2(center - Vector2.ONE * extent, Vector2.ONE * extent * 2.0)
 	return {"active": _active and is_visible_in_tree(), "kind": KINDS[_index] if _active else "",
 		"age": _age, "play_count": _play_count, "reduced_motion": _reduced,
+		"settled": _active and _age >= SECONDS, "opacity": _opacity(),
 		"bounds": {"x": bounds.position.x, "y": bounds.position.y,
 			"width": bounds.size.x, "height": bounds.size.y}}
 
@@ -120,11 +118,16 @@ func _star(center: Vector2, radius: float, color: Color) -> void:
 	draw_colored_polygon(points, color)
 
 
+func _opacity() -> float:
+	return smoothstep(0.0, 0.12, _age) if _active else 0.0
+
+
 func _draw() -> void:
 	if not _active or _edge <= 0.0:
 		return
 	var center: Vector2 = _center(_age)
-	var alpha: float = 1.0 if _reduced else smoothstep(0.0, 0.12, _age) * (1.0 - smoothstep(1.65, SECONDS, _age))
+	var alpha: float = _opacity()
+	var sparkle_alpha: float = alpha * (1.0 - smoothstep(1.65, SECONDS, _age))
 	var flight: float = clampf(_age / 0.86, 0.0, 1.0)
 	var scale: float = 1.0 if _reduced else lerpf(0.35, 1.0, smoothstep(0.0, 0.46, _age)) + sin(flight * PI) * 0.12
 	for layer in range(4, 0, -1):
@@ -139,7 +142,7 @@ func _draw() -> void:
 			var reach: float = _edge * (0.55 + 0.30 * smoothstep(0.3, 1.8, _age))
 			var radius: float = _edge * 0.038 * (0.65 + sin(_age * 7.0 + index) * 0.35)
 			_star(center + Vector2.from_angle(angle) * reach, radius,
-				Color(_color.lightened(0.5) if index % 2 == 0 else Color.WHITE, alpha * 0.9))
+				Color(_color.lightened(0.5) if index % 2 == 0 else Color.WHITE, sparkle_alpha * 0.9))
 	var rotation: float = 0.0 if _reduced else _direction * (-0.35 + TAU * (1.0 - pow(1.0 - flight, 3.0)))
 	# A full turn resolves into a small tilt, without rotating back through 360 degrees.
 	if not _reduced and flight >= 1.0:

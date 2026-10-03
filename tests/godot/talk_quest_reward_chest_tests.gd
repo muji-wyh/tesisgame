@@ -126,7 +126,24 @@ func _check_lifecycle() -> void:
 	chest.finish_immediately()
 	chest._advance_animation(20.0)
 	check(events.opened == 1 and events.private == 0, "Duplicate commands cannot create another completion")
+	var retained: Dictionary = chest.hold_effect_snapshot().surprise
+	check(retained.active and retained.play_count == 1,
+		"The quest chest retains its completed gift after the flight settles")
+	chest.set_idle_paused(true)
+	chest._advance_animation(60.0)
+	check(chest.hold_effect_snapshot().surprise == retained,
+		"Pausing the quest chest freezes rather than clears its revealed gift")
+	chest.set_idle_paused(false)
+	chest.set_reduced_motion(true)
+	chest._advance_animation(60.0)
+	check(chest.hold_effect_snapshot().surprise.active
+		and chest.hold_effect_snapshot().surprise.kind == retained.kind
+		and chest.hold_effect_snapshot().surprise.play_count == retained.play_count,
+		"Reducing quest chest motion preserves the same earned gift")
+	chest.set_reduced_motion(false)
 	chest.reset_closed()
+	check(not chest.hold_effect_snapshot().surprise.active,
+		"Resetting a quest chest clears the previous result's gift")
 	_confirm(chest)
 	chest._advance_animation(20.0)
 	check(events.release == 2 and events.opened == 2, "A frame skipping the whole release still delivers both lifecycle boundaries once")

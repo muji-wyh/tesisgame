@@ -1,5 +1,5 @@
 extends Button
-## An accessible destination rendered from the acquired map artwork.
+## A tactile island destination rendered from acquired production models.
 
 var number: int = 1
 var title: String = ""
@@ -47,8 +47,8 @@ func configure(definition: Dictionary, artwork: Dictionary) -> void:
 	_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_caption.add_theme_color_override("font_color", Color("#3b2c23"))
-	_caption.add_theme_color_override("font_shadow_color", Color("#fff1cf"))
+	_caption.add_theme_color_override("font_color", Color("#fff5db"))
+	_caption.add_theme_color_override("font_shadow_color", Color("#183849"))
 	_caption.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(_caption)
 	update_accessibility()
@@ -58,7 +58,6 @@ func configure(definition: Dictionary, artwork: Dictionary) -> void:
 func update_accessibility() -> void:
 	var state: String = "Cleared" if cleared else "Ready to explore" if unlocked else "Locked"
 	accessibility_name = "Adventure %d: %s. %s." % [number, title, state]
-	tooltip_text = "Play " + title if unlocked else "Complete the previous adventure to unlock " + title
 
 
 func set_ui_scale(value: float) -> void:
@@ -73,22 +72,23 @@ func _layout_labels() -> void:
 	_caption.add_theme_font_size_override("font_size", ceili(12.0 * unit))
 	_caption.clip_text = true
 	if compact:
-		_caption.position = Vector2(39, 2) * unit
-		_caption.size = Vector2(maxf(1, size.x - 44 * unit), maxf(1, size.y - 4 * unit))
-		_art_rect = Rect2(Vector2(maxf(0, size.x - 55 * unit), 2 * unit), Vector2(52 * unit, maxf(1, size.y - 4 * unit)))
+		var art_width: float = minf(size.x * 0.52, size.y)
+		_caption.position = Vector2(art_width + 2 * unit, maxf(2 * unit, (size.y - 48 * unit) * 0.5))
+		_caption.size = Vector2(maxf(1, size.x - art_width - 6 * unit), minf(48 * unit, size.y - 4 * unit))
+		_art_rect = Rect2(Vector2(0, 0), Vector2(art_width, size.y - 4 * unit))
 	else:
 		# Two lines need room for the theme's line spacing as well as glyphs.
 		var caption_height: float = minf(size.y, 40.0 * unit)
 		_caption.position = Vector2(8.0 * unit, size.y - caption_height)
 		_caption.size = Vector2(maxf(1, size.x - 16.0 * unit), caption_height)
-		_art_rect = Rect2(Vector2(12 * unit, 4 * unit), Vector2(maxf(1, size.x - 24 * unit), maxf(1, _caption.position.y - 15 * unit)))
+		_art_rect = Rect2(Vector2(2 * unit, 4 * unit), Vector2(maxf(1, size.x - 4 * unit), maxf(1, _caption.position.y - 8 * unit)))
 	queue_redraw()
 
 
 func route_anchor() -> Vector2:
 	if compact:
-		return Vector2(20 / _ui_scale, size.y * 0.5)
-	return Vector2(size.x * 0.5, maxf(20 / _ui_scale, _caption.position.y - 10 / _ui_scale))
+		return Vector2(_art_rect.size.x * 0.5, size.y * 0.76)
+	return Vector2(size.x * 0.5, maxf(20 / _ui_scale, _caption.position.y - 22 / _ui_scale))
 
 
 func compact_badge_rect() -> Rect2:
@@ -123,27 +123,25 @@ func _draw() -> void:
 		return
 	var unit: float = 1.0 / _ui_scale
 	var focused: bool = not disabled and (is_hovered() or has_focus())
-	var lift: float = (2.0 if is_pressed() else -4.0 * _lift) * unit
+	var lift: float = (2.0 if is_pressed() else -5.0 * _lift) * unit
 	var art_rect: Rect2 = _art_rect
 	art_rect.position.y += lift
-	var paper_rect := Rect2(Vector2(unit, _caption.position.y), Vector2(maxf(1, size.x - 2 * unit), _caption.size.y))
-	if compact:
-		paper_rect = Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2 * unit)
-	_panel.modulate_color = Color("#fff7d9") if focused or current_stop else Color.WHITE
+	var paper_rect := Rect2(_caption.position - Vector2(3, 0) * unit, _caption.size + Vector2(6, 0) * unit)
+	_panel.modulate_color = Color("#477d83") if focused or current_stop else Color("#294d60")
 	draw_style_box(_panel, paper_rect)
-	_image(_landmark, art_rect, Color(1, 1, 1, 0.20 if compact else 1.0 if unlocked else 0.76))
+	_image(_landmark, art_rect, Color.WHITE if unlocked else Color(0.70, 0.80, 0.87, 0.9))
 	if current_stop and not compact:
-		var flag_size: float = minf(36 * unit, _art_rect.size.y * 0.38)
+		var flag_size: float = minf(38 * unit, _art_rect.size.y * 0.20)
 		var bob: float = 0 if reduced_motion else sin(_time * 2.6) * 2 * unit
-		var flag_rect := Rect2(Vector2(size.x * 0.67, maxf(0, _art_rect.position.y + bob)), Vector2(flag_size, flag_size))
-		_image(_ui.get("current"), flag_rect)
+		var flag_rect := Rect2(Vector2(size.x * 0.68, maxf(0, _art_rect.position.y + 12 * unit + bob)), Vector2(flag_size, flag_size))
+		_image(_ui.get("current"), flag_rect, Color("#ffd98a"))
 	var center: Vector2 = route_anchor()
-	var diameter: float = (28.0 if compact else 42.0) * unit
+	var diameter: float = (28.0 if compact else 44.0) * unit
 	var badge_area := Rect2(center - Vector2.ONE * diameter * 0.5, Vector2.ONE * diameter)
 	var pulse: float = 1.0 if reduced_motion or not current_stop else 1.0 + sin(_time * 2.4) * 0.045
 	if not compact:
 		badge_area = Rect2(center - badge_area.size * pulse * 0.5, badge_area.size * pulse)
-	_image(_ui.get("badge"), badge_area, Color("#ffe5a2") if current_stop else Color.WHITE)
+	_image(_ui.get("badge"), badge_area, Color("#ffcc62") if current_stop else Color("#d6eee9") if cleared else Color.WHITE)
 	var font: Font = get_theme_default_font()
 	var font_size: int = ceili((12.0 if compact else 17.0) * unit)
 	var number_text: String = str(number)

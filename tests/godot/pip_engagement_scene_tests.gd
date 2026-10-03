@@ -101,23 +101,37 @@ func _run() -> void:
 	check(not observe_idle(app, 20), "A held Memory Peek suppresses invitations")
 	app._memory.memory.studying = false
 	app._voice_mode = true
-	check(not observe_idle(app, 20) and not app.duck.visible, "Voice input never competes with proactive Pip")
+	check(not observe_idle(app, 20) and app.duck.is_visible_in_tree()
+		and app.duck.tooltip_text == "Pip: change game mode",
+		"Voice input suppresses Pip's invitations while keeping its game-mode trigger available")
 	app._voice_mode = false
 	app._update_duck()
 	_test_pop_and_audio_gates(app)
 	app._duck_trick_index = 3
 	app._play_duck()
-	check(app.duck._trick == "high-five", "Header Pip's tap cycle includes a new high five")
+	check(app._mode_menu_open() and app.duck._trick.is_empty() and app._duck_trick_index == 3,
+		"Header Pip opens the game-mode menu without advancing its companion trick cycle")
+	app._hide_mode_menu()
+	var playing_phase: String = app.model.phase
+	app.model.phase = "won"
+	app._refresh()
+	app._layout()
+	await settle()
+	app.duck.settle()
+	app._play_duck()
+	check(app.duck._trick == "high-five", "Result Pip's tap cycle includes a new high five")
 	app._play_duck()
 	check(app.duck._trick == "high-five" and app._duck_trick_index == 4,
-		"A repeated header activation preserves the current action and next trick index")
+		"A repeated result companion activation preserves the current action and next trick index")
 	app.duck._process(app.duck.TRICK_SECONDS)
 	app._play_duck()
-	check(app.duck._trick == "peekaboo", "The next header tap offers peekaboo")
+	check(app.duck._trick == "peekaboo", "The next result companion tap offers peekaboo")
 	app.duck._process(app.duck.TRICK_SECONDS)
 	app._play_duck()
-	check(app.duck._trick == "flutter", "The next header tap offers a flutter")
+	check(app.duck._trick == "flutter", "The next result companion tap offers a flutter")
 	app.duck.settle()
+	app.model.phase = playing_phase
+	app._refresh()
 	app._show_collection()
 	await settle()
 	app.duck.settle()

@@ -317,9 +317,8 @@ func check_high_flight(app, dimensions: Vector2i) -> void:
 		"A central throw reaches and may cover the field's transcript row at " + str(dimensions))
 	check(view.get_global_rect().grow(1.0).encloses(apex_rect),
 		"The high apex stays inside the clipped Voice Pop field at " + str(dimensions))
-	for button in app._mode_buttons:
-		check(view.get_global_rect().position.y >= button.get_global_rect().end.y - 1.0,
-			"The flight clipping boundary remains below global mode navigation at " + str(dimensions))
+	check(view.get_global_rect().position.y >= app._header.get_global_rect().end.y - 1.0,
+		"The flight clipping boundary remains below the compact Pip header at " + str(dimensions))
 	view.game.targets[0] = original
 	view.set_reduced_motion(was_reduced)
 
@@ -830,15 +829,13 @@ func _run() -> void:
 				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await settle()
 			var current_positions: Array[Vector2] = []
-			for button in app._mode_buttons:
-				current_positions.append(button.global_position)
-				check(Rect2(Vector2.ZERO, app.size).grow(1).encloses(button.get_global_rect()), "Every mode tab fits at %s in %s" % [dimensions, mode])
-				var label_width: float = button.get_theme_font("font").get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, button.get_theme_font_size("font_size")).x
-				check(label_width <= button.size.x - 8.0, "Mode label is fully readable at %s: %s" % [dimensions, button.text])
+			current_positions.append(app._header.global_position)
+			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+				"Mode choices stay hidden until Pip is opened at %s in %s" % [dimensions, mode])
 			if original_positions.is_empty():
 				original_positions = current_positions
 			else:
-				check(current_positions == original_positions, "Mode tabs stay in the same positions at %s in %s" % [dimensions, mode])
+				check(current_positions == original_positions, "The compact Pip header stays in the same position at %s in %s" % [dimensions, mode])
 		var view = app._pop
 		view.set_process(false)
 		check(view.find_child("ChoosePopMode", true, false) == null and view.find_child("MultiplayerStatus", true, false) == null,

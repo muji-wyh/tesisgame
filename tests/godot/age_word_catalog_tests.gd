@@ -87,18 +87,22 @@ func _run() -> void:
 
 
 func _check_content(catalog: Catalog, words: Array) -> void:
-	var counts := {"all": 350, "4-6": 148, "7-9": 260, "10-plus": 350}
+	var counts := {"all": 350, "4-6": 148, "7-9": 112, "10-plus": 90}
+	var levels := {"4-6": "basic", "7-9": "growing", "10-plus": "advanced"}
 	var english := RegEx.new()
 	english.compile("^[A-Za-z][A-Za-z '-]*$")
 	for band: Dictionary in Data.age_bands():
-		var eligible: Array = words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= band.max_level)
+		# Raw curriculum tiers are independent of the production age-level helper.
+		var eligible: Array = words.filter(func(word: Dictionary) -> bool:
+			return band.id == "all" or word.level == levels[band.id])
+		var expected: Array = eligible.map(func(word: Dictionary) -> String: return word.id)
 		eligible.reverse()
 		catalog.configure(eligible, band, Data.theme("spring"))
 		await settle()
 		check(catalog.snapshot().word_count == counts[band.id]
 			and catalog.title_label.text == band.name
 			and catalog.count_label.text == "%d words" % counts[band.id],
-			"Age " + band.id + " shows its complete cumulative word count with an English heading")
+			"Age " + band.id + " shows only its own range's word count with an English heading")
 		var seen: Dictionary = {}
 		var previous := ""
 		for button: Button in catalog.word_buttons:
@@ -114,9 +118,11 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 			check(picture.texture != null and picture.texture.resource_path == "res://" + word.image
 				and ResourceLoader.exists("res://" + word.audio),
 				"The catalogue retains the loaded illustration and recorded pronunciation: " + word.id)
+		check(seen.size() == expected.size() and expected.all(func(id: String) -> bool: return seen.has(id)),
+			"Age " + band.id + " contains its exact curriculum tier")
 		for topic: Dictionary in Data.ADVENTURES:
-			var expected: Array = eligible.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
-			check(not expected.is_empty() and expected.all(func(word: Dictionary) -> bool: return seen.has(word.id)),
+			var topic_words: Array = eligible.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
+			check(topic_words.all(func(word: Dictionary) -> bool: return seen.has(word.id)),
 				"Age " + band.id + " includes all eligible vocabulary from " + topic.name)
 		var last: Button = catalog.word_buttons.back()
 		check(catalog.focus_word(str(last.get_meta("word_id"))), "Words can be located through the public focus API")
@@ -127,6 +133,8 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 		check(catalog.word_buttons.back() == last and last.has_focus() and catalog.scroll.scroll_vertical == offset,
 			"Refreshing the selected age preserves focused words and reading position")
 	check(not catalog.focus_word("missing-word"), "Unknown word focus requests are rejected")
+	catalog.configure(words, Data.age_band("all"), Data.theme("spring"))
+	await settle()
 
 
 func _check_layout(catalog: Catalog) -> void:
@@ -167,6 +175,7 @@ func _check_layout(catalog: Catalog) -> void:
 func _check_input(catalog: Catalog) -> void:
 	var first: Button = catalog.word_buttons.front()
 	for touch_first in [false, true]:
+		catalog.scroll.cancel_drag()
 		catalog.scroll.scroll_vertical = 0
 		await settle()
 		var point: Vector2 = first.get_global_transform_with_canvas() * (first.size * 0.5)
@@ -184,10 +193,13 @@ func _check_input(catalog: Catalog) -> void:
 		await pointer(point, true, not touch_first)
 		await motion(point - Vector2(0, 100), touch_first)
 		await motion(point - Vector2(0, 100), not touch_first)
+		check(catalog.scroll.scroll_vertical == 100,
+			"The vocabulary follows held input once before its inertial release")
 		await pointer(point - Vector2(0, 100), false, touch_first)
 		await pointer(point - Vector2(0, 100), false, not touch_first)
-		check(heard.size() == before and catalog.scroll.scroll_vertical == 100,
-			"Dragging the vocabulary scrolls once and never pronounces a crossed word")
+		check(heard.size() == before,
+			"Dragging the vocabulary never pronounces a crossed word")
+	catalog.scroll.cancel_drag()
 	catalog.focus_word(str(first.get_meta("word_id")))
 	await settle()
 	var before := heard.size()
@@ -210,6 +222,7 @@ func _check_input(catalog: Catalog) -> void:
 func _check_cancellations(catalog: Catalog) -> void:
 	var first: Button = catalog.word_buttons.front()
 	for cause in ["cancel", "hide", "resize", "blocked"]:
+		catalog.scroll.cancel_drag()
 		catalog.scroll.scroll_vertical = 0
 		await settle()
 		var point: Vector2 = first.get_global_transform_with_canvas() * (first.size * 0.5)

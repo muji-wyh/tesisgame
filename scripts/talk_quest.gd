@@ -168,10 +168,12 @@ func _build_map() -> void:
 	_continue = _button(_map, "Continue", _continue_run)
 	_album_button = _button(_map, "Treasures", _show_album)
 	_atlas = Atlas.new()
+	_atlas.interaction_allowed = func() -> bool: return not interaction_allowed.is_valid() or interaction_allowed.call()
 	_map.add_child(_atlas)
 	_atlas.configure(QuestData.levels())
 	_atlas.level_selected.connect(start_level)
 	_level_buttons = _atlas.level_buttons
+	_atlas.changed.connect(_publish)
 
 
 func _build_stage() -> void:
@@ -372,6 +374,8 @@ func _build_album() -> void:
 
 
 func cancel_scroll_input() -> void:
+	if is_instance_valid(_atlas):
+		_atlas.cancel_input()
 	if is_instance_valid(_album_scroll):
 		_album_scroll.cancel_drag()
 
@@ -379,6 +383,7 @@ func cancel_scroll_input() -> void:
 func _ensure_album_item(item: Control) -> void:
 	if _album_scroll.is_pointer_active():
 		return
+	_album_scroll.cancel_drag()
 	# Hidden rails still reveal each treasure as keyboard focus moves through it.
 	var content_rect: Rect2 = _album_grid.get_global_transform().affine_inverse() * item.get_global_rect()
 	if content_rect.position.y < _album_scroll.scroll_vertical:
@@ -543,11 +548,9 @@ func _rebuild_map() -> void:
 	var pending_reward: bool = game.has_saved_run() and str(game.export_progress().get("run", {}).get("phase", "")) in ["victory", "chest"]
 	for index in range(_level_buttons.size()):
 		var button: Button = _level_buttons[index]
-		var level: Dictionary = QuestData.level(index + 1)
 		var locked: bool = index + 1 > game.unlocked_level
 		_atlas.set_level_state(index + 1, not locked, index + 1 in game.completed_levels)
 		button.disabled = locked or save_failed or pending_reward
-		button.tooltip_text = "Continue your saved adventure to collect its treasure." if pending_reward else ("Complete the previous adventure to unlock " if locked else "Play ") + str(level.title)
 	_album_button.text = "Treasures  %d / 20" % game.collected_chests.size()
 	_map_note.text = "%d / 14 complete" % game.completed_levels.size()
 
@@ -585,7 +588,7 @@ func pause() -> void:
 	_refresh()
 
 
-func _continue_run() -> void:
+func _continue_run(resume_listening: bool = true) -> void:
 	if save_failed or (not game.has_saved_run() and game.phase not in ["complete", "lost"]):
 		return
 	if view != "stage":
@@ -607,10 +610,11 @@ func _continue_run() -> void:
 	if game.phase == "complete":
 		_opening_finished = true
 		_opening = false
-		_chest.set_preview_time(ChestFeel.OPEN_SECONDS)
+		if _chest.mode != "opened":
+			_chest.set_preview_time(ChestFeel.OPEN_SECONDS)
 		_banner.text = str(game.current_chest().name)
 	_refresh()
-	if game.phase == "playing":
+	if game.phase == "playing" and resume_listening:
 		_start_listening()
 
 
@@ -627,7 +631,6 @@ func stop_speech() -> bool:
 	_listening = false
 	_clear_transcript()
 	if _host != null:
-		_host.questCancelSpeak()
 		return bool(_host.stopSpeech())
 	return true
 
@@ -1537,6 +1540,8 @@ func default_focus() -> Control:
 	if view == "map":
 		if _continue.visible:
 			return _continue
+		if _atlas._current_stop > 0 and not _level_buttons[_atlas._current_stop - 1].disabled:
+			return _level_buttons[_atlas._current_stop - 1]
 		for button in _atlas.visible_level_buttons():
 			if not button.disabled:
 				return button
@@ -1576,6 +1581,8 @@ func snapshot() -> Dictionary:
 	var levels: Array = []
 	for button in _level_buttons:
 		var entry: Dictionary = _rect(button)
+		entry.in_view = _atlas.level_in_view(button)
+		entry.visible = entry.visible and entry.in_view
 		entry.compact = button.compact
 		entry.caption = _rect(button._caption)
 		if button.compact:
@@ -1611,7 +1618,9 @@ func snapshot() -> Dictionary:
 		"pause_result": {"visible": _pause_card.is_visible_in_tree(), "context_phase": _pause_card.context_phase,
 			"hits": _pause_card.hits, "max_hp": _pause_card.max_hp, "remaining_hp": _pause_card.remaining_hp,
 			"reveal": _pause_card.reveal},
-		"controls": controls, "levels": levels, "map_chapter": _atlas.current_chapter, "map_scroll_max": 0,
+		"controls": controls, "levels": levels, "map_chapter": _atlas.current_chapter,
+		"map_scroll_max": _atlas._scroll._maximum(), "map_scroll_offset": _atlas._scroll.scroll_horizontal,
+		"map_scroll_rect": _rect(_atlas._scroll),
 		"reduced_motion": reduced_motion, "scroll_offset": 0,
 		"paused": _suspended or game.phase == "paused", "scroll_max": 0}
 

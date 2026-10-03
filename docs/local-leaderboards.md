@@ -32,9 +32,11 @@ Matching ranking values share a place, using competition ranks such as **1, 1, 3
 
 Before every Voice Pop round, tap a player's avatar or name to start immediately. **Add player** sits below the player-choice frame. Creating a player returns to the choices and focuses the new avatar; tap it to start. The round keeps that identity, and its finished score saves automatically before the leaderboard celebration. Voice Pop results do not ask for the player again. If saving fails, **Retry saving** keeps the same player and round.
 
+The Voice Pop player picker keeps the shared Pip header visible. Tap Pip to switch game modes or **More** to visit Pip's room; returning from the room restores the picker. The microphone stays off until a player is selected. First-player onboarding still requires creating a profile before continuing.
+
 The Voice Pop result places the player's avatar and name beside the hit total. Its embedded leaderboard shows the ranking rows directly, without introductory copy, repeated player attribution, mode tabs, or a personal-best heading. The menu's full leaderboard retains its mode selection and ranking explanations.
 
-Result-page touch scrolling follows the finger's distance at the current display scale. Dragging a word or Play again does not activate it, and a browser-canceled gesture cannot become a tap. Once the player scrolls during a rank celebration, that celebration stops moving the page automatically.
+Result-page touch scrolling follows the finger's distance at the current display scale and coasts to a stop after release. Player lists and full leaderboards use the same momentum. Dragging a word or Play again does not activate it, and a browser-canceled gesture cannot become a tap. Touching a moving list stops it before another tap can activate an item. Once the player scrolls during a rank celebration, that celebration stops moving the page automatically, including while the list is coasting. Name fields retain native text editing and mobile keyboard behavior.
 
 After a Match or Memory round, select who played and save the result. A saved round stays assigned to that player. The leaderboard appears with the result; the menu also provides access to every mode's board. Match and Memory players can still be created from their result screens when needed.
 

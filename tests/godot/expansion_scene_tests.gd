@@ -141,8 +141,8 @@ func _run() -> void:
 				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await process_frame
 			await process_frame
-			for button in app._mode_buttons:
-				check(app.get_global_rect().encloses(button.get_global_rect()), "Mode buttons fit " + str(dimensions))
+			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+				"Mode choices remain tucked away during play at " + str(dimensions))
 			var view: Control = app.grid if mode == "match" else app._memory if mode == "memory" else app._pop
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), mode + " fits " + str(dimensions))
 	app.on_page_hidden()

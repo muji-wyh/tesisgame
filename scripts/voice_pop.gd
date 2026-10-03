@@ -1798,14 +1798,14 @@ func cancel_result_input() -> void:
 
 
 func _ensure_result_control(control: Control) -> void:
-	if _results.is_pointer_active():
-		return
 	_ensure_scroll_control(_results, _result_body, control)
 
 
 func _ensure_scroll_control(scroll: ResultScroll, body: Control, control: Control) -> void:
 	if scroll.is_pointer_active():
 		return
+	# This callback follows an explicit focus change, not a passive layout pass.
+	scroll.cancel_drag()
 	# Godot's built-in focus scrolling checks scrollbar visibility. Our scrollbars
 	# are intentionally hidden, so reveal focused actions using container bounds.
 	# Work in content coordinates so repeated focus notifications before the

@@ -4,11 +4,12 @@ This is the detailed current gameplay reference. Start with the
 [project README](../README.md) for setup and the [documentation index](README.md)
 for implementation and asset references.
 
-The game uses compact square icon actions and four small mode tabs. Match and
+The game uses compact square icon actions and a game-mode popover opened by
+Pip in the upper-left corner. Match and
 Memory keep the cards as the main focus. Pip and the success/mistake indicators form one compact status cluster;
 Memory's marked pairs retain their progress. Card positions stay fixed
 through feedback. Main actions have filled buttons; secondary navigation stays quiet.
-On wider screens the mode tabs share the header row.
+The header keeps the playfield clear of persistent mode tabs.
 
 **More** opens **Pip's room**, with an icon to return. Age choices stay at the top,
 toys stay at the bottom, and the world strip sits
@@ -23,9 +24,20 @@ shows an in-page retry notice. Locked toy cards show gift progress below the roo
 Results keep the chest or bear, word review, and the next action without game-mode
 controls. Keyboard and controller focus remains visible across the available games.
 
+Scrollable lists and strips retain momentum after a swipe or mouse drag and
+settle gradually. Mouse-wheel scrolling also eases to a stop. This applies to
+age vocabulary, the age/world/toy strips, result word reviews, Voice Pop results
+and microphone prompts, player lists and leaderboards, and the Talk Quest
+treasure album. Touching a moving list stops it without activating a card;
+a stationary tap then selects the item. Keyboard and controller navigation
+stop momentum and reveal the focused control. Scrollbar rails stay hidden.
+Loading, speech diagnostics, live captions, and art credits use the browser's
+native touch momentum. Pip's playground and the Talk Quest map remain fixed.
+
 **Pip the duck** is the game's round, wide-eyed companion. He appears on the
 loading screen, board, results, playroom, and voice panel.
-Tap him to cycle through a dance, a crunchy carrot snack, a bubble party,
+The upper-left Pip opens the game-mode menu. In his room and other companion
+views, tap him to cycle through a dance, a crunchy carrot snack, a bubble party,
 a high five, peekaboo, and a fluttering hello; he also reacts to selections, matches, hints,
 season changes, and rewards. These reactions never change scoring or saved progress.
 
@@ -48,7 +60,7 @@ with hats following his head and clothes following his body. Dressing Pip does
 not require a purchase or a new reward. The loading and voice companions use
 the same themed artwork, and the loader reads the saved world when available.
 
-Start in **Match**, with its tab selected and the matching board ready.
+Start in **Match**, with the matching board ready.
 Tap a word and its matching picture; completed cards remain available for pronunciation.
 Use the arrow keys or Xbox D-pad/left stick to focus a card, and **Enter**,
 **Space**, or Xbox **A** to activate it.
@@ -58,7 +70,10 @@ existing keyboard/controller activation to replay them. The written word and
 input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
-The tabs are ordered **Match**, **Memory**, **Voice Pop**, **Talk Quest**; entry and reload select Match.
+Tap the upper-left Pip to choose **Match**, **Memory**, **Voice Pop**, or
+**Talk Quest**. The current mode is marked in the popover. Selecting a mode
+closes the menu; selecting the current mode keeps the round. Tap outside or use
+Escape / controller Back to dismiss it. Entry and reload select Match.
 
 ### Voice Pop
 
@@ -379,18 +394,19 @@ partners are not deliberately lined up. Resizing preserves the current round and
 
 Choose a vocabulary level using the four direct **Age** buttons in **More**:
 
-| Choice | Vocabulary |
-|---|---|
-| All | All 350 words, without a difficulty preference; the default for new and existing saves. |
-| Ages 4-6 | 148 basic picture words, such as cat, apple, ball, and rocket. |
-| Ages 7-9 | 260 basic and growing words; growing vocabulary such as helmet, pumpkin, and puzzle is preferred. |
-| Ages 10+ | All 350 words; advanced vocabulary such as helicopter, astronaut, and xylophone is preferred. |
+| Choice | Words shown in the catalogue | Vocabulary for the next lesson |
+|---|---|---|
+| All | All 350 words. | All 350 words, without a difficulty preference; the default for new and existing saves. |
+| Ages 4-6 | 148 basic picture words, such as cat, apple, ball, and rocket. | Basic words. |
+| Ages 7-9 | 112 growing words, such as helmet, pumpkin, and puzzle. | Basic and growing words, with growing vocabulary preferred. |
+| Ages 10+ | 90 advanced words, such as helicopter, astronaut, and xylophone. | All levels, with advanced vocabulary preferred. |
 
 The latest expansion adds 50 nouns to each level: basic words such as lemon, tent,
 and pencil; growing words such as butterfly, avocado, and backpack; and advanced
 words such as chameleon, glacier, and microscope. Each has an original picture and
-a prerecorded Jenny Neural pronunciation. The three levels contain 148 basic,
-112 growing, and 90 advanced words; higher ages retain earlier words for review.
+a prerecorded Ava Neural pronunciation using the approved sweet voice profile. The three levels contain 148 basic,
+112 growing, and 90 advanced words. Each age catalogue contains only its own
+level; lessons for higher ages retain earlier words for review.
 
 Age ranges are **suggested vocabulary guides, not reading-age assessments or restrictions**.
 Choose whichever level feels right; age selection does not collect a birthdate.
@@ -401,7 +417,9 @@ Match and Memory keeps the current five words and their active level. Changing
 the age never resets a round, its hints, medal pieces, or toys. An unsuccessful save
 keeps the confirmed selection and offers a visible tap-to-retry message.
 Tapping any age, including the selected age, opens its complete illustrated
-vocabulary across every topic in alphabetical order. The heading shows the word
+vocabulary across every topic in alphabetical order. Ages 7-9 excludes basic
+words, and Ages 10+ excludes basic and growing words. All includes every level.
+The heading shows the word
 count. Tap a picture to hear its recorded pronunciation; swipe vertically or use
 the mouse wheel to browse without a scrollbar. Keyboard and controller focus
 reveal offscreen cards. The age choices remain at the top for switching lists.

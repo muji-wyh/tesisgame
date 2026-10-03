@@ -37,7 +37,7 @@ func _run() -> void:
 	check(not quest._level_buttons[0].disabled and quest._level_buttons[1].disabled, "Only the first level starts unlocked")
 	check(not quest._level_buttons[0].has_meta("portrait"), "Map destinations do not expose monster portraits")
 	check(quest._atlas.get_parent() == quest._map and quest._atlas.custom_minimum_size == Vector2.ZERO,
-		"The map uses a bounded chapter atlas without a scroll container")
+		"The horizontally scrolling world stays inside a bounded map viewport")
 	for control_name in ["speak", "hear", "type", "submit", "input"]:
 		check(not quest._controls.has(control_name), "The word arena omits the old dialogue control: " + control_name)
 	quest.start_level(1)

@@ -11,6 +11,7 @@ const State = preload("res://scripts/pop_reward_state.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const Backdrop = preload("res://scripts/treasure_backdrop.gd")
+const TreasureScroll = preload("res://scripts/treasure_scroll.gd")
 
 var rewards := State.new()
 var save_path: String = "user://pop-rewards-v1.cfg"
@@ -33,8 +34,8 @@ var _pointer_origin: Vector2
 var _pointer_set: bool = false
 var _layout_pending: bool = false
 var _backdrop: Backdrop
-var _title: Label
-var _subtitle: Label
+var _scroll: TreasureScroll
+var _content: Control
 var _notice: Label
 var _back: Button
 var _retry: Button
@@ -45,10 +46,20 @@ func _ready() -> void:
 	_backdrop = Backdrop.new()
 	_backdrop.show_theme_name = false
 	add_child(_backdrop)
-	_title = _label("Your treasure", 30)
-	_title.autowrap_mode = TextServer.AUTOWRAP_OFF
-	_title.minimum_size_changed.connect(_queue_layout)
-	_subtitle = _label("Hold a chest to discover its surprise.", 16)
+	_scroll = TreasureScroll.new()
+	_scroll.name = "TreasureScroll"
+	_scroll.interaction_allowed = func() -> bool:
+		return not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call())
+	add_child(_scroll)
+	_scroll.hold_started.connect(begin_hold)
+	_scroll.hold_finished.connect(end_hold)
+	_scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void:
+		changed.emit(snapshot())
+		_queue_layout())
+	_content = Control.new()
+	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_content.mouse_filter = Control.MOUSE_FILTER_PASS
+	_scroll.add_child(_content)
 	_notice = _label("", 14)
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_back = Button.new()
@@ -168,6 +179,8 @@ static func _choose_themes(id: String, count: int, preferred: String) -> Array[S
 
 
 func _build_cards() -> void:
+	_scroll.cancel_drag()
+	_scroll.scroll_vertical = 0
 	for card in _cards:
 		card.panel.free()
 	_cards.clear()
@@ -183,21 +196,11 @@ func _build_cards() -> void:
 		var panel := Panel.new()
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_theme_stylebox_override("panel", Style.box(Color(1, 1, 1, 0.86), palette.light, 24, 2))
-		add_child(panel)
+		_content.add_child(panel)
 		var art := Chest.new()
 		panel.add_child(art)
 		art.configure_skin(palette, _manifest)
 		art.reduced_motion = reduced_motion
-		var heading := Style.label(str(palette.name) + " chest", 19)
-		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		heading.clip_text = true
-		panel.add_child(heading)
-		var caption := Style.label("Hold to open", 14)
-		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		caption.clip_text = true
-		panel.add_child(caption)
 		var button := Button.new()
 		button.name = "PopTreasureChest%d" % index
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -205,8 +208,9 @@ func _build_cards() -> void:
 			button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 24, 3))
 		panel.add_child(button)
-		_cards.append({"panel": panel, "art": art, "heading": heading, "caption": caption,
+		_cards.append({"panel": panel, "art": art,
 			"button": button, "theme": str(entry.theme), "opened": bool(entry.opened), "announced": bool(entry.opened)})
+		button.focus_entered.connect(_ensure_chest_visible.bind(button))
 		button.button_down.connect(begin_hold.bind(button))
 		button.button_up.connect(func() -> void:
 			if _active == index:
@@ -250,6 +254,7 @@ func begin_hold(control: Control) -> void:
 		return
 	if interaction_allowed.is_valid() and not interaction_allowed.call():
 		return
+	_ensure_chest_visible(control)
 	for index in range(_cards.size()):
 		if _cards[index].button == control:
 			_active = index
@@ -273,6 +278,8 @@ func end_hold() -> void:
 
 func cancel_input() -> void:
 	_cancel(false)
+	if is_instance_valid(_scroll):
+		_scroll.cancel_drag()
 
 
 func _cancel(animate: bool) -> void:
@@ -471,9 +478,7 @@ func _refresh_captions() -> void:
 			message = "Opened - retry save"
 		elif index == _active:
 			message = "You can let go!" if card.art.opening_committed() else "Keep holding. Release to cancel."
-		card.caption.text = message
-		card.button.tooltip_text = str(card.heading.text) + ". " + message
-		card.button.accessibility_name = card.button.tooltip_text
+		card.button.accessibility_name = str(Data.theme(card.theme).name) + " chest. " + message
 
 
 func _refresh() -> void:
@@ -487,12 +492,6 @@ func _refresh() -> void:
 	_retry.disabled = _opening
 	_notice.text = rewards.error if _save_failed else ""
 	_notice.visible = _save_failed
-	var opened: int = 0
-	for card in _cards:
-		opened += int(card.opened)
-	_subtitle.text = "%d of %d opened. Hold a chest to discover its surprise." % [opened, _cards.size()]
-	if opened == _cards.size() and opened > 0:
-		_subtitle.text = "Every surprise is yours. Great speaking!"
 	_refresh_captions()
 	_layout()
 	changed.emit(snapshot())
@@ -525,55 +524,33 @@ func _layout() -> void:
 	if w <= 0.0 or h <= 0.0:
 		return
 	var compact: bool = h * s < 430.0
-	var gap: float = 12 / s
-	var margin: float = 18 / s
+	var gap: float = 18 / s
+	var margin: float = 12 / s
 	_backdrop.size = size
-	var title_height: float = (34 if compact else 40) / s
-	var title_font_size: int = ceili((24 if compact else 28) / s)
-	var title_font: Font = _title.get_theme_font("font")
-	while title_font_size > 1 and title_font.get_height(title_font_size) > title_height:
-		title_font_size -= 1
-	_title.add_theme_font_size_override("font_size", title_font_size)
-	_title.position = Vector2(margin, (6 if compact else 12) / s)
-	_title.size = Vector2(w - margin * 2, title_height)
-	_subtitle.add_theme_font_size_override("font_size", ceili((14 if compact else 15) / s))
-	_subtitle.position = Vector2(margin, (40 if compact else 54) / s)
-	_subtitle.size = Vector2(w - margin * 2, (36 if compact else 48) / s)
-	var footer: float = (106 if _save_failed else 58 if compact else 62) / s
-	var top: float = (82 if compact else 112) / s
-	var area_h: float = maxf(64 / s, h - top - footer)
+	var footer: float = (110 if _save_failed else 62) / s
+	_scroll.position = Vector2(margin, 8 / s)
+	_scroll.size = Vector2(maxf(1, w - margin * 2), maxf(64 / s, h - footer - 8 / s))
 	var count: int = maxi(1, _cards.size())
-	var row_space: float = 60 * count / s + gap * (count - 1)
-	var stacked: bool = w * s < 680 and count > 1 and area_h >= row_space
-	var card_w: float = w - margin * 2 if stacked else (w - margin * 2 - gap * (count - 1)) / count
-	var card_h: float = (area_h - gap * (count - 1)) / count if stacked else area_h
-	var horizontal_art: bool = stacked or card_h * s < 185.0
+	var columns: int = 2 if count > 1 and (w * s >= 900 or (compact and w * s >= 600)) else 1
+	var card_w: float = minf(680 / s, (_scroll.size.x - gap * (columns - 1)) / columns)
+	var card_h: float = clampf(card_w * 1.10, 320 / s, 520 / s)
+	if compact:
+		card_h = maxf(200 / s, minf(card_h, _scroll.size.y))
+	var rows: int = ceili(float(count) / columns)
+	var content_height: float = card_h * rows + gap * (rows - 1)
+	# Let the viewport own width so a desktop layout can shrink to a phone.
+	_content.custom_minimum_size = Vector2(0, content_height)
+	_content.size = Vector2(_scroll.size.x, maxf(content_height, _scroll.size.y))
+	var left: float = (_scroll.size.x - card_w * columns - gap * (columns - 1)) * 0.5
 	for index in range(_cards.size()):
 		var card: Dictionary = _cards[index]
-		var heading_pixels: int = 15 if compact and not stacked and card_w * s < 220 else 16 if compact else 18
-		card.heading.add_theme_font_size_override("font_size", ceili(heading_pixels / s))
-		card.caption.add_theme_font_size_override("font_size", ceili((13 if compact else 14) / s))
-		card.panel.position = Vector2(margin + (0 if stacked else (card_w + gap) * index), top + ((card_h + gap) * index if stacked else 0))
+		card.panel.position = Vector2(left + (index % columns) * (card_w + gap), floori(float(index) / columns) * (card_h + gap))
 		card.panel.size = Vector2(card_w, card_h)
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
 		card.button.position = Vector2.ZERO
 		card.button.size = card.panel.size
-		if horizontal_art:
-			var art_share: float = 0.49 if stacked else 0.34 if card_w * s < 220 else 0.44
-			var art_w: float = minf(card_w * art_share, card_h * (1.32 if stacked else 1.05))
-			card.art.position = Vector2(6 / s, 4 / s)
-			card.art.size = Vector2(art_w, card_h - 8 / s)
-			card.heading.position = Vector2(art_w + 10 / s, card_h * 0.12)
-			card.heading.size = Vector2(card_w - art_w - 22 / s, card_h * 0.32)
-			card.caption.position = Vector2(art_w + 10 / s, card_h * 0.50)
-			card.caption.size = Vector2(card_w - art_w - 20 / s, card_h * 0.42)
-		else:
-			card.heading.position = Vector2(8 / s, 10 / s)
-			card.heading.size = Vector2(card_w - 16 / s, 42 / s)
-			card.art.position = Vector2(8 / s, 58 / s)
-			card.art.size = Vector2(card_w - 16 / s, maxf(32 / s, card_h - 122 / s))
-			card.caption.position = Vector2(8 / s, card_h - 60 / s)
-			card.caption.size = Vector2(card_w - 16 / s, 50 / s)
+		card.art.position = Vector2.ONE * (4 / s)
+		card.art.size = card.panel.size - Vector2.ONE * (8 / s)
 	var button_y: float = h - 54 / s
 	_back.position = Vector2(margin, button_y)
 	_back.size = Vector2((w - margin * 2 - gap) / 2 if _save_failed else w - margin * 2, 46 / s)
@@ -582,6 +559,37 @@ func _layout() -> void:
 	_notice.add_theme_font_size_override("font_size", ceili(14 / s))
 	_notice.position = Vector2(margin, button_y - 48 / s)
 	_notice.size = Vector2(w - margin * 2, 44 / s)
+	_update_navigation(columns)
+
+
+func _ensure_chest_visible(control: Control) -> void:
+	if _scroll.is_pointer_active():
+		return
+	_scroll.cancel_drag()
+	_scroll.ensure_control_visible(control)
+
+
+func _update_navigation(columns: int) -> void:
+	var controls: Array[Control] = navigation_controls()
+	for index in range(controls.size()):
+		var control: Control = controls[index]
+		var previous: Control = controls[posmod(index - 1, controls.size())]
+		var next: Control = controls[(index + 1) % controls.size()]
+		control.focus_previous = control.get_path_to(previous)
+		control.focus_next = control.get_path_to(next)
+		control.focus_neighbor_top = control.get_path_to(previous)
+		control.focus_neighbor_bottom = control.get_path_to(next)
+	for index in range(_cards.size()):
+		var button: Button = _cards[index].button
+		for direction in [Vector2i(-1, SIDE_LEFT), Vector2i(1, SIDE_RIGHT),
+			Vector2i(-columns, SIDE_TOP), Vector2i(columns, SIDE_BOTTOM)]:
+			var candidate: int = index + direction.x
+			var horizontal: bool = direction.y in [SIDE_LEFT, SIDE_RIGHT]
+			if candidate >= 0 and candidate < _cards.size() and not _cards[candidate].button.disabled \
+				and (not horizontal or floori(float(index) / columns) == floori(float(candidate) / columns)):
+				button.set_focus_neighbor(direction.y, button.get_path_to(_cards[candidate].button))
+			elif horizontal:
+				button.set_focus_neighbor(direction.y, button.get_path_to(button))
 
 
 func snapshot() -> Dictionary:
@@ -598,7 +606,12 @@ func snapshot() -> Dictionary:
 			"art_rect": {"x": art_rect.position.x, "y": art_rect.position.y,
 				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})
+	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
 	return {"round_id": _configured_id, "chest_count": _cards.size(), "opened_count": opened,
+		"scroll_rect": {"x": viewport_rect.position.x, "y": viewport_rect.position.y,
+			"width": viewport_rect.size.x, "height": viewport_rect.size.y},
+		"scroll_offset": _scroll.scroll_vertical if is_instance_valid(_scroll) else 0,
+		"scroll_max": _scroll._maximum() if is_instance_valid(_scroll) else 0.0,
 		"chests": entries, "active": _active, "holding": _holding, "opening": _opening,
 		"pending": _unsaved_index >= 0 or rewards.has_pending(), "save_failed": _save_failed,
 		"error": rewards.error if _save_failed else "", "paused": _paused}

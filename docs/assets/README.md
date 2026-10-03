@@ -13,6 +13,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Guardian replacement review](talk-quest-monster-refresh.md) | Fourteen proposed friendly sources, acquisition status, and animation gaps; not shipped assets |
 | [Talk Quest chapter atlas](../../assets/talk_quest/map/SOURCE.md) | Acquired parchment maps, fourteen landmark illustrations, navigation artwork, and source credits |
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
+| [Ava speech](ava-voice.md) | Approved voice profile, all 360 spoken recordings, generation, and source hashes |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |
@@ -20,7 +21,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Single-slice audio](voice-pop-sfx.md) | Earlier hit fallback and source-pack licensing |
 | [Pip sounds](pip-sounds.md) | Current calls and source CC0 attribution |
 | [Pip dance](pip-dance.md) | Atlas geometry and original-art derivation |
-| [Jungle and Candy audio](jungle-candy-audio.md) | Retained arrival effects and greetings, superseded music, and retired opening-clip provenance |
+| [Jungle and Candy audio](jungle-candy-audio.md) | Retained arrival effects, superseded music and greetings, and retired opening-clip provenance |
 | [Unity artwork](unity-art.md) | Optional local image import, licenses, and tracked fallbacks |
 | [Talk Quest monsters](talk-quest-monsters.md) | Fourteen licensed rigged characters, source colors and clips, conversion workflow, and provenance |
 | [Talk Quest scenes](../../assets/talk_quest/scenes/README.md) | Fourteen original procedural environments and their [art manifest](../../assets/talk_quest/scenes/manifest.json) |

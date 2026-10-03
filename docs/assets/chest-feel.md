@@ -108,15 +108,18 @@ release burst or larger post-opening medal celebration.
 
 After the full opening completes, one random cosmetic gift appears above the
 chest: a star, ball, rocket, kite, robot or doll. It follows an upward arc with
-rotation and sparkles, then fades within 2.4 seconds. Reduced motion shows the
-gift in a fixed position for 1.1 seconds instead of playing the flight.
+rotation and sparkles, then settles above the chest and remains visible until
+the reward view is left or reset. Only the sparkles fade within 2.4 seconds.
+Reduced motion shows the same lasting gift in its settled position immediately.
+Pausing and resuming preserves the gift without replaying its reveal.
 
 `assets/chests/surprises/` contains the six small transparent SVGs, derived from
 the existing hand-drawn word icons. They retain their outlines, colors and
 details; only the pale circular backplate and floor shadow are removed.
 
-This surprise is a temporary visual effect. It has no collectible album,
-progress counter or saved storage, and does not change rewards or ownership.
+This surprise is a cosmetic display for the current reward view. It has no
+collectible album, progress counter or saved storage, and does not change rewards
+or ownership.
 Existing toy unlocks and the **Try it with Pip** action remain independent.
 
 ## Original sound bank

@@ -77,25 +77,26 @@ func _check_effect_lifecycle() -> void:
 	check(reduced.active and reduced.reduced_motion and reduced.kind == initial.kind
 		and reduced.play_count == initial.play_count, "Enabling reduced motion keeps the same toy without another draw")
 	effect.advance(0.4)
-	check(effect.snapshot().bounds == reduced.bounds, "Reduced motion holds the toy in one static position")
+	check(effect.snapshot() == reduced and reduced.settled and reduced.opacity == 1.0,
+		"Reduced motion immediately displays the same opaque toy in a static settled pose")
 	effect.reduce_motion()
-	check(is_equal_approx(float(effect.snapshot().age), 0.4),
-		"Repeated reduced-motion updates cannot restart its display timer")
-	effect.advance(0.69)
-	check(effect.snapshot().active and effect.snapshot().bounds == reduced.bounds,
-		"The static surprise remains visible until its brief display duration completes")
-	effect.advance(0.02)
-	check(not effect.snapshot().active and not effect.visible and effect.snapshot().kind.is_empty(),
-		"The reduced-motion surprise clears after 1.1 seconds")
+	effect.advance(60.0)
+	check(effect.snapshot() == reduced and effect.visible,
+		"The reduced-motion toy remains visible beyond its old timeout without restarting")
 	effect.play(Color("#d6b8ff"), false)
 	effect.advance(2.39)
-	check(effect.snapshot().active, "Normal feedback preserves its complete 2.4-second appearance")
+	check(effect.snapshot().active and effect.snapshot().opacity == 1.0,
+		"The toy stays fully opaque while the surrounding sparkles finish")
 	effect.advance(0.02)
-	var expired: Dictionary = effect.snapshot()
-	check(not expired.active and not effect.visible and expired.play_count == 2,
-		"Normal feedback expires without replaying or creating another toy")
+	var settled: Dictionary = effect.snapshot()
+	check(settled.active and settled.settled and settled.opacity == 1.0 and effect.visible and settled.play_count == 2,
+		"The flight resolves into a visible settled toy without replaying or creating another toy")
 	effect.advance(100.0)
-	check(effect.snapshot() == expired, "An expired effect remains inert during later frames")
+	check(effect.snapshot() == settled, "The settled toy remains unchanged during later frames")
+	effect.fit(Vector2(180, 110), Vector2(90, 80), 1.25)
+	check(effect.snapshot().active and effect.snapshot().kind == settled.kind
+		and Rect2(Vector2.ZERO, Vector2(180, 110)).encloses(_rect(effect.snapshot())),
+		"A settled toy adapts to a smaller viewport without disappearing or changing kind")
 	effect.play(Color.WHITE)
 	effect.advance(0.2)
 	effect.clear()
@@ -175,9 +176,9 @@ func _check_layouts(data) -> void:
 					var outside: Array[String] = []
 					var changed_position: bool = false
 					var stayed_static: bool = true
-					var samples: Array = [0.0, 0.08, 0.24, 0.5, 0.86, 1.1, 1.45, 1.9, 2.39]
+					var samples: Array = [0.0, 0.08, 0.24, 0.5, 0.86, 1.1, 1.45, 1.9, 2.39, 10.0, 120.0]
 					if reduced:
-						samples = [0.0, 0.18, 0.56, 1.09]
+						samples = [0.0, 0.18, 0.56, 1.09, 10.0, 120.0]
 					for time in samples:
 						effect.advance(float(time) - previous_time)
 						previous_time = float(time)
@@ -249,13 +250,15 @@ func _check_chest_lifecycle(data) -> void:
 		"The next opening gets a fresh static surprise when reduced motion is enabled")
 	chest._advance_animation(0.3)
 	check(chest.hold_effect_snapshot().surprise.bounds == still.bounds, "Reduced-motion chest updates keep the surprise still")
+	var before_pause: Dictionary = chest.hold_effect_snapshot().surprise
 	chest.set_idle_paused(true)
+	chest.stop_reaction()
 	chest._advance_animation(0.3)
-	check(not chest.hold_effect_snapshot().surprise.active, "Background pause cancels an active surprise")
+	check(chest.hold_effect_snapshot().surprise == before_pause, "Background pause preserves the revealed toy")
 	chest.set_idle_paused(false)
 	chest.show_surprise()
-	check(not chest.hold_effect_snapshot().surprise.active and chest.hold_effect_snapshot().surprise.play_count == 2,
-		"Returning from the background cannot replay a consumed surprise")
+	check(chest.hold_effect_snapshot().surprise == before_pause,
+		"Returning from the background keeps the same toy without replaying its reveal")
 	chest.clear()
 	chest.configure_skin(data.theme("winter"), data.chests)
 	chest.start_open(false)
@@ -272,10 +275,11 @@ func _check_chest_lifecycle(data) -> void:
 	check(after_reduction.active and after_reduction.reduced_motion and after_reduction.kind == before_reduction.kind
 		and after_reduction.play_count == before_reduction.play_count,
 		"A live preference change makes the existing surprise static without rerolling it")
-	chest._advance_animation(1.1)
+	chest._advance_animation(120.0)
 	chest.show_surprise()
-	check(not chest.hold_effect_snapshot().surprise.active and chest.hold_effect_snapshot().surprise.play_count == 3,
-		"Natural expiry also preserves the once-per-opening guard")
+	check(chest.hold_effect_snapshot().surprise.active and chest.hold_effect_snapshot().surprise.opacity == 1.0
+		and chest.hold_effect_snapshot().surprise.play_count == 3,
+		"A lasting toy preserves the once-per-opening guard long after its flight ends")
 	chest.clear()
 	chest.configure_skin(data.theme("autumn"), data.chests)
 	chest.start_open(true)

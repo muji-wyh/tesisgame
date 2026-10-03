@@ -5,7 +5,7 @@ const { enterGame, openGame, openRewards, metrics, tap, rendered, ageControl, co
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const NAMES = { all: 'All words', '4-6': 'Ages 4-6', '7-9': 'Ages 7-9', '10-plus': 'Ages 10+' };
-const COUNTS = { all: 350, '4-6': 148, '7-9': 260, '10-plus': 350 };
+const COUNTS = { all: 350, '4-6': 148, '7-9': 112, '10-plus': 90 };
 const vocabulary = new Map(words.map(word => [word.id, word]));
 
 async function saved(page) {

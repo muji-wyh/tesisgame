@@ -31,7 +31,7 @@ func _run() -> void:
 	root.add_child(app)
 	await settle()
 	check(app.MODES.keys() == ["match", "memory", "pop", "quest"], "The available modes include Talk Quest after Match, Memory and Voice Pop")
-	check(app._mode_buttons.size() == 4, "Each of the four modes has one visible tab")
+	check(app._mode_buttons.size() == 4, "Each of the four modes has one popover choice")
 	check(app.find_child("Mode_learn", true, false) == null
 		and app.find_child("LearnWords", true, false) == null
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_lesson"),
@@ -41,9 +41,8 @@ func _run() -> void:
 		check(button.text.is_empty(), "The top-right actions use icons rather than text")
 		check(is_equal_approx(button.size.x, button.size.y) and button.size.x >= 44 and button.size.x <= 48,
 			"Toolbar actions are compact square touch targets")
-	check(app._mode_buttons.all(func(button: Button) -> bool:
-		return button.size.x >= 44 and button.size.x <= 96 and button.size.y >= 44 and button.size.y <= 48),
-		"Mode tabs have compact natural widths and accessible heights")
+	check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+		"Gameplay keeps the mode choices inside Pip's closed popover")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", app.model.adventure_name]),
 		"The play screen has no redundant brand or topic headings")

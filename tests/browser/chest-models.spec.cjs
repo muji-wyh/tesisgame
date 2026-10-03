@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { enterGame, chooseMode, rendered, metrics } = require('./game-ui.cjs');
+const { roomState, scrollChestIntoView, insideViewport } = require('./pop-treasure-ui.cjs');
 
 test.use({ trace: 'off', screenshot: 'off', video: 'off' });
 
@@ -35,34 +36,32 @@ async function seedPendingTreasure(page, batch) {
   return saved;
 }
 
-async function roomState(page) {
-  return page.locator('#pop-reward-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
-}
-
-async function captureModels(page, info, label, room) {
-  await rendered(page);
-  const bounds = await metrics(page);
-  const crops = room.chests.map(chest => {
+async function captureModels(page, info, label) {
+  const count = (await roomState(page)).chests.length;
+  const captures = [];
+  for (let index = 0; index < count; index++) {
+    const room = await scrollChestIntoView(page, index);
+    await rendered(page);
+    const bounds = await metrics(page), chest = room.chests[index];
     const rect = chest.art_rect;
     expect(rect, `${chest.type} exposes its actual artwork bounds`).toBeTruthy();
     expect(rect.width).toBeGreaterThan(30);
     expect(rect.height).toBeGreaterThan(30);
-    return { type: chest.type,
+    expect(insideViewport(rect, room.scroll_rect), `${chest.type} is entirely visible in the scroll viewport`).toBe(true);
+    const crop = { type: chest.type,
       x: bounds.x + rect.x * bounds.scale, y: bounds.y + rect.y * bounds.scale,
       width: rect.width * bounds.scale, height: rect.height * bounds.scale };
-  });
-  const screenshot = await page.screenshot({ path: info.outputPath(`${label}.png`), scale: 'css' });
-  // Inspect every model from one saved frame. This avoids taking separate
-  // screenshots that force expensive extra software-rendered game frames.
-  const pixels = await page.evaluate(async ({ png, crops }) => {
-    const image = new Image();
-    image.src = `data:image/png;base64,${png}`;
-    await image.decode();
-    const canvas = document.createElement('canvas');
-    canvas.width = image.width; canvas.height = image.height;
-    const context = canvas.getContext('2d');
-    context.drawImage(image, 0, 0);
-    return crops.map(crop => {
+    // Each model now has its own visible frame: offscreen cards are clipped
+    // by the list and must not be sampled from the initial viewport image.
+    const screenshot = await page.screenshot({ path: info.outputPath(`${label}-${index + 1}-${chest.type}.png`), scale: 'css' });
+    const pixels = await page.evaluate(async ({ png, crop }) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${png}`;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
       const x = Math.max(0, Math.ceil(crop.x + crop.width * 0.05));
       const y = Math.max(0, Math.ceil(crop.y + crop.height * 0.05));
       const width = Math.max(1, Math.min(Math.floor(crop.width * 0.9), canvas.width - x));
@@ -76,13 +75,12 @@ async function captureModels(page, info, label, room) {
         samples++;
       }
       return { type: crop.type, colors: colors.size, darkFraction: dark / samples, width, height };
-    });
-  }, { png: screenshot.toString('base64'), crops });
-  await info.attach(`${label}-model-pixels.json`, { body: JSON.stringify({ room, crops, pixels }, null, 2), contentType: 'application/json' });
-  for (const model of pixels) {
-    expect(model.colors, `${model.type} renders detailed material colors inside its artwork region`).toBeGreaterThan(24);
-    expect(model.darkFraction, `${model.type} contains visible solid artwork rather than an empty pale panel`).toBeGreaterThan(0.015);
+    }, { png: screenshot.toString('base64'), crop });
+    captures.push({ room, crop, pixels });
+    expect(pixels.colors, `${pixels.type} renders detailed material colors inside its artwork region`).toBeGreaterThan(24);
+    expect(pixels.darkFraction, `${pixels.type} contains visible solid artwork rather than an empty pale panel`).toBeGreaterThan(0.015);
   }
+  await info.attach(`${label}-model-pixels.json`, { body: JSON.stringify(captures, null, 2), contentType: 'application/json' });
 }
 
 async function openByHolding(page, info, index, saved) {
@@ -103,7 +101,7 @@ async function openByHolding(page, info, index, saved) {
     record();
     new MutationObserver(record).observe(element, { attributes: true, attributeFilter: ['data-snapshot'] });
   });
-  const room = await roomState(page), rect = room.chests[index].rect, bounds = await metrics(page);
+  const room = await scrollChestIntoView(page, index), rect = room.chests[index].rect, bounds = await metrics(page);
   await page.mouse.move(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
     bounds.y + (rect.y + rect.height / 2) * bounds.scale);
   await page.mouse.down();
@@ -149,10 +147,10 @@ for (const batch of BATCHES) {
     }, { timeout: 45000, intervals: [200, 300] }).toEqual({ visible: true, round: batch.id, opened: 0,
       types: batch.types, paused: false, failed: false });
     expect(await page.evaluate(key => localStorage.getItem(key), REWARD_KEY), 'Restoring does not replace the earned batch').toBe(saved);
-    await captureModels(page, info, `${batch.id}-closed`, await roomState(page));
+    await captureModels(page, info, `${batch.id}-closed`);
     if (batch.open !== undefined) {
       await openByHolding(page, info, batch.open, saved);
-      await captureModels(page, info, `${batch.id}-opened`, await roomState(page));
+      await captureModels(page, info, `${batch.id}-opened`);
     }
     expect(errors).toEqual([]);
   });

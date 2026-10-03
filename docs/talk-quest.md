@@ -3,20 +3,27 @@
 Talk Quest is a fourteen-stage spoken-word adventure. Choose a destination,
 allow the microphone when prompted, and say a word as its picture flies into
 view. The matched word becomes a glowing projectile and strikes the monster
-for one health segment. The map shows destination landmarks without monster
-portraits or a scrolling container.
+for one health segment. The map presents fourteen dimensional island
+destinations along one horizontal journey, without monster portraits.
 
-The chapter atlas uses acquired parchment, coastline, building, and navigation
-artwork instead of procedural landscape or landmark drawings. Three distinct
-map views carry fourteen engraved destinations. A floating flag marks the next
-adventure; seals and locks distinguish cleared and unavailable stops. Chapter
-changes dissolve between the source maps. Reduced motion freezes the flag and
-removes that transition. Compact landscape keeps the same accessible controls
-and uses smaller sourced landmarks behind their captions.
+Each destination uses a rendered diorama assembled from acquired building,
+landscape, and prop models. Warm village roofs, an art pavilion, market stalls,
+coastal scenery, and the final castle give the route distinct landmarks. A
+sourced sky, distant islands, and cloud layers add depth behind the route.
+The next adventure carries a floating flag; seals and locks distinguish cleared
+and unavailable stops.
 
-The [map source manifest](../assets/talk_quest/map/manifest.json) records the
-downloaded sources and adapted illustrations. The startup-pack verification
-loads every map texture so these assets are available offline after loading.
+Drag, swipe, use a trackpad, or turn the mouse wheel to travel across the map.
+Scrolling retains momentum with no visible scrollbar. The region arrows jump
+to the starts of the three regions, and keyboard focus reveals an offscreen
+unlocked destination. Compact landscape retains readable destination artwork
+and usable touch targets. Reduced motion removes ambient movement while
+preserving navigation.
+
+The [map source manifest](../assets/talk_quest/map-dimensional/manifest.json)
+records the downloaded sources, model usage, render process, and available
+animations. The startup-pack verification loads every map texture, including
+its scenery layers, so these assets remain available offline after loading.
 
 The twelve ordinary stages and two boss stages retain their distinct scenes,
 approved animated creatures, and reward designs. The workshop finale now uses

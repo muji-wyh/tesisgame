@@ -45,7 +45,9 @@ func _run() -> void:
 	_manifest = data.chests
 	_state_checks()
 	await _room_checks()
+	await _retained_rewards_checks()
 	await _failure_checks()
+	await _responsive_resize_checks()
 	await _deferred_layout_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -124,35 +126,46 @@ func _room_checks() -> void:
 	for width in [880, 480, 390]:
 		room.size = Vector2(width, 640)
 		room._layout()
+		for frame in range(4):
+			await process_frame
 		for index in range(3):
 			var card: Dictionary = room._cards[index]
 			var button: Control = room._cards[index].button
 			check(button.size.x * Style.ui_scale(room) >= 44 and button.size.y * Style.ui_scale(room) >= 44,
 				"Every desktop and portrait chest has a full touch target")
-			check(Rect2(Vector2.ZERO, room.size).encloses(room._cards[index].panel.get_rect()),
-				"All earned chests fit on screen without switching pages")
-			check(not card.art.get_rect().intersects(card.heading.get_rect())
-				and not card.art.get_rect().intersects(card.caption.get_rect())
-				and not card.heading.get_rect().intersects(card.caption.get_rect()),
-				"Desktop and portrait cards separate artwork from their title and hold instructions")
+			check(Rect2(Vector2.ZERO, room._content.size).encloses(card.panel.get_rect()),
+				"All earned chests belong to the same scrollable treasure stage: room=%s, viewport=%s, content=%s, card=%s, scale=%s" % [
+					room.size, room._scroll.size, room._content.size, card.panel.get_rect(), Style.ui_scale(room)])
+			check(card.art.size.x * Style.ui_scale(room) >= 220
+				and card.art.size.y * Style.ui_scale(room) >= 260,
+				"Desktop and portrait rewards keep the chest artwork large instead of shrinking the full batch")
+			check(button.tooltip_text.is_empty() and not button.accessibility_name.is_empty(),
+				"Artwork-only chests retain accessible instructions without visual tooltips")
+			check(not card.has("heading") and not card.has("caption"),
+				"Treasure cards reserve their space for artwork without title or hold labels")
+		check(room.snapshot().scroll_max > 0,
+			"A large three-chest batch can scroll instead of compressing every reward into the viewport")
 	room.size = Vector2(820, 250)
 	room._layout()
+	for frame in range(4):
+		await process_frame
 	for card in room._cards:
-		check(not card.art.get_rect().intersects(card.heading.get_rect())
-			and not card.art.get_rect().intersects(card.caption.get_rect())
-			and not card.heading.get_rect().intersects(card.caption.get_rect()),
-			"A short landscape room separates chest art, title, and hold instructions: art %s, heading %s, caption %s, scale %s" % [card.art.get_rect(), card.heading.get_rect(), card.caption.get_rect(), Style.ui_scale(room)])
+		check(card.art.size.x * Style.ui_scale(room) >= 220
+			and card.art.size.y * Style.ui_scale(room) >= 190,
+			"A short landscape room preserves large chest art and allows vertical scrolling")
 		check(card.button.size.y * Style.ui_scale(room) >= 44,
 			"Landscape rewards preserve the minimum touch target")
 	room.size = Vector2(640, 230) / Style.ui_scale(room)
 	room._layout()
+	for frame in range(4):
+		await process_frame
 	for index in range(room._cards.size()):
 		var card: Dictionary = room._cards[index]
 		check(card.button.size.y * Style.ui_scale(room) >= 44,
 			"Narrow landscape rewards preserve the minimum touch target")
 		for other_index in range(index + 1, room._cards.size()):
 			check(not card.button.get_global_rect().intersects(room._cards[other_index].button.get_global_rect()),
-				"Narrow landscape switches to columns before chest touch targets overlap")
+				"Scrollable landscape chest touch targets remain separate")
 	room.size = Vector2(390, 640)
 	room._layout()
 	_hold(room, 0, 0.4)
@@ -215,6 +228,58 @@ func _room_checks() -> void:
 	await process_frame
 
 
+func _retained_rewards_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_room(storage)
+	check(room.configure("retained-rewards", 3, "ocean", _manifest, false),
+		"Prepare three earned chances for simultaneous persistent gifts")
+	var reward_audio: Array[String] = []
+	room.chest_audio_requested.connect(func(action: String, theme_id: String, _progress: float) -> void:
+		if action == "reward":
+			reward_audio.append(theme_id))
+	var gifts: Array[Dictionary] = []
+	for index in range(3):
+		if index == 2:
+			room.set_reduced_motion(true)
+		_hold(room, index, Feel.HOLD_SECONDS)
+		room._cards[index].art._advance_animation(Feel.OPEN_SECONDS)
+		room._cards[index].art._advance_animation(0.2)
+		var flying: Dictionary = room._cards[index].art.hold_effect_snapshot().surprise
+		room.pause()
+		room._cards[index].art._advance_animation(60.0)
+		check(flying.active and room._cards[index].art.hold_effect_snapshot().surprise == flying,
+			"Pausing preserves the current gift and freezes its flight")
+		room.resume()
+		room._cards[index].art.set_process(false)
+		room._cards[index].art._advance_animation(60.0)
+		gifts.append(room._cards[index].art.hold_effect_snapshot().surprise)
+	check(room.snapshot().opened_count == 3 and storage.writes == 4 and reward_audio.size() == 3,
+		"Opening all three persistent gifts keeps one saved receipt and one success sound per chest")
+	for index in range(3):
+		var art = room._cards[index].art
+		art._advance_animation(600.0)
+		art.show_surprise()
+		var retained: Dictionary = art.hold_effect_snapshot().surprise
+		check(retained.active and retained.kind == gifts[index].kind
+			and retained.play_count == gifts[index].play_count,
+			"All three opened chests retain their own gifts together after later openings and long idle time")
+	check(storage.writes == 4 and reward_audio.size() == 3,
+		"Persistent gift display cannot replay reward audio or save additional receipts")
+	room.hide()
+	for card in room._cards:
+		check(not card.art.hold_effect_snapshot().surprise.active,
+			"Leaving the reward room removes each gift from its stage")
+	room.show()
+	room.resume()
+	for index in range(3):
+		room._cards[index].art.show_surprise()
+		check(not room._cards[index].art.hold_effect_snapshot().surprise.active
+			and room._cards[index].art.hold_effect_snapshot().surprise.play_count == gifts[index].play_count,
+			"Reentering an opened batch cannot reroll or replay gifts that were left behind")
+	room.queue_free()
+	await process_frame
+
+
 func _failure_checks() -> void:
 	var unreadable := Storage.new()
 	unreadable.readable = false
@@ -256,6 +321,62 @@ func _failure_checks() -> void:
 		"Retrying a released chest saves and celebrates exactly once")
 	check(storage.writes == 2, "Repeated retry cannot write a second receipt for one opening")
 	room.queue_free()
+	await process_frame
+
+
+func _responsive_resize_checks() -> void:
+	# Reuse the same stage across orientations so a previous desktop minimum
+	# cannot force an oversized scroll viewport on the next phone layout.
+	root.size = Vector2i(1366, 768)
+	await process_frame
+	var column := VBoxContainer.new()
+	root.add_child(column)
+	column.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var header := Control.new()
+	column.add_child(header)
+	var room := Room.new()
+	room.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(room)
+	room.connect_storage(Storage.new())
+	check(room.configure("responsive-treasure", 3, "spring", _manifest, false),
+		"Prepare one treasure stage for repeated desktop and phone resizing")
+	room.set_process(false)
+	var published: Array[Dictionary] = []
+	room.changed.connect(func(value: Dictionary) -> void: published.append(value.duplicate(true)))
+	for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(320, 568),
+		Vector2i(667, 375), Vector2i(375, 667), Vector2i(1366, 768)]:
+		published.clear()
+		root.size = dimensions
+		for frame in range(2):
+			await process_frame
+		header.custom_minimum_size.y = 72.0 / Style.ui_scale(room)
+		for frame in range(6):
+			await process_frame
+		var context := "resizing the same stage to %s" % dimensions
+		var room_global: Rect2 = room.get_global_rect()
+		var window_rect: Rect2 = root.get_visible_rect()
+		check(room_global.position.x >= window_rect.position.x - 1.0
+			and room_global.end.x <= window_rect.end.x + 1.0,
+			"The room itself follows the resized window width after " + context)
+		var viewport: Rect2 = room._scroll.get_rect()
+		check(viewport.position.x >= -1.0 and viewport.end.x <= room.size.x + 1.0,
+			"The scroll viewport stays within the room after " + context)
+		var viewport_global: Rect2 = room._scroll.get_global_rect()
+		var content_global: Rect2 = room._content.get_global_rect()
+		check(content_global.position.x >= viewport_global.position.x - 1.0
+			and content_global.end.x <= viewport_global.end.x + 1.0
+			and absf(content_global.size.x - viewport_global.size.x) <= 1.0,
+			"Treasure content fills the current viewport without retaining a previous wide minimum after " + context)
+		for card in room._cards:
+			var card_global: Rect2 = card.panel.get_global_rect()
+			check(card_global.position.x >= viewport_global.position.x - 1.0
+				and card_global.end.x <= viewport_global.end.x + 1.0,
+				"Every chest keeps its full width within the viewport after " + context)
+			if dimensions.x <= 390:
+				check(card.art.size.x >= room._scroll.size.x - 10.0 / Style.ui_scale(room),
+					"Phone treasure artwork uses the available stage width after " + context)
+		_check_settled_layout(room, published, context)
+	column.queue_free()
 	await process_frame
 
 
@@ -303,27 +424,24 @@ func _check_settled_layout(room, published: Array[Dictionary], context: String) 
 	if published.is_empty():
 		return
 	var current: Dictionary = published.back()
-	var first_top: float = room._cards[0].panel.position.y
-	check(room._title.get_rect().end.y <= room._subtitle.position.y
-		and room._subtitle.get_rect().end.y <= first_top,
-		"The room title and subtitle stay above the cards after " + context)
-	check(room._title.autowrap_mode == TextServer.AUTOWRAP_OFF
-		and room._title.get_theme_font("font").get_height(room._title.get_theme_font_size("font_size")) <= room._title.size.y
-		and room._title.get_visible_line_count() == 1,
-		"The fixed treasure title retains one visible line within its header slot after " + context)
+	check(Rect2(Vector2.ZERO, room.size).encloses(room._scroll.get_rect())
+		and not room._scroll.get_rect().intersects(room._back.get_rect()),
+		"The scrollable treasure stage fits above the fixed exit action after " + context)
+	check(room._scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
+		and room._scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED,
+		"Treasure scrolling keeps both scrollbars hidden after " + context)
 	for index in range(room._cards.size()):
 		var card: Dictionary = room._cards[index]
 		var actual: Rect2 = card.button.get_global_rect()
 		var recorded: Dictionary = current.chests[index].rect
 		check(actual.is_equal_approx(Rect2(recorded.x, recorded.y, recorded.width, recorded.height)),
 			"Published chest geometry matches its final container position after " + context)
-		check(Rect2(Vector2.ZERO, card.panel.size).encloses(card.heading.get_rect())
-			and Rect2(Vector2.ZERO, card.panel.size).encloses(card.caption.get_rect()),
-			"Deferred font shaping cannot inflate the title or hold instructions after " + context)
-		check(not card.art.get_rect().intersects(card.heading.get_rect())
-			and not card.art.get_rect().intersects(card.caption.get_rect())
-			and not card.heading.get_rect().intersects(card.caption.get_rect()),
-			"Settled artwork and labels remain separate after " + context)
+		check(Rect2(Vector2.ZERO, card.panel.size).encloses(card.art.get_rect()),
+			"Large chest artwork remains inside its own card after " + context)
+		var minimum_art_height: float = 190 if room.size.y * Style.ui_scale(room) < 430 else 260
+		check(card.art.size.x * Style.ui_scale(room) >= 220
+			and card.art.size.y * Style.ui_scale(room) >= minimum_art_height,
+			"Settled treasure art keeps its readable physical size after " + context)
 		for other_index in range(index + 1, room._cards.size()):
 			check(not actual.intersects(room._cards[other_index].button.get_global_rect()),
 				"Settled chest controls never overlap after " + context)

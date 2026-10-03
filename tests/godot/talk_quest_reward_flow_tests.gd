@@ -204,6 +204,23 @@ func _check_completion_and_audio(app) -> void:
 	check(quest.game.total_clears == 1 and _audio_events.count("reward") == reward_count + 1
 		and quest._chest.hold_effect_snapshot().surprise.play_count == surprise_count,
 		"Duplicate completion cannot repeat collection, sound, or the decorative surprise")
+	quest._chest._advance_animation(60.0)
+	var retained: Dictionary = quest._chest.hold_effect_snapshot().surprise
+	check(retained.active and retained.play_count == surprise_count,
+		"The completed quest keeps its flying gift visible after the opening effects finish")
+	quest.pause()
+	check(quest._chest.hold_effect_snapshot().surprise.active
+		and quest._chest.hold_effect_snapshot().surprise.kind == retained.kind,
+		"The quest pause view preserves its already revealed gift")
+	quest._continue_run()
+	quest.set_process(false)
+	quest._chest.set_process(false)
+	quest._chest._advance_animation(60.0)
+	check(quest.game.phase == "complete" and quest._chest.hold_effect_snapshot().surprise.active
+		and quest._chest.hold_effect_snapshot().surprise.kind == retained.kind
+		and quest._chest.hold_effect_snapshot().surprise.play_count == surprise_count
+		and quest.game.total_clears == 1 and _audio_events.count("reward") == reward_count + 1,
+		"Resuming the completed quest preserves the same gift without replaying rewards or sounds")
 
 
 func _check_save_retry(app) -> void:
@@ -257,6 +274,12 @@ func _check_reduced_motion(app) -> void:
 	check(quest.game.total_clears == before + 1 and quest._chest.mode == "opened"
 		and app.audio._chest_rewarded and not app.audio.chest_charge.playing,
 		"Reduced confirmation settles once with a saved success accent and no lingering tension bed")
+	var reduced_gift: Dictionary = quest._chest.hold_effect_snapshot().surprise
+	quest._chest._advance_animation(60.0)
+	check(reduced_gift.active and quest._chest.hold_effect_snapshot().surprise.active
+		and quest._chest.hold_effect_snapshot().surprise.kind == reduced_gift.kind
+		and quest._chest.hold_effect_snapshot().surprise.bounds == reduced_gift.bounds,
+		"Reduced-motion quest rewards retain the same static gift for the complete result view")
 	app.set_reduced_motion(false)
 	if not _earn_chest(app):
 		return

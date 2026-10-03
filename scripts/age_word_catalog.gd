@@ -146,7 +146,7 @@ func _rebuild_words() -> void:
 		button.set_meta("word_label", caption)
 		button.set_meta("word_column", column)
 		button.pressed.connect(_hear_word.bind(button))
-		button.focus_entered.connect(ensure_control_visible.bind(button))
+		button.focus_entered.connect(ensure_control_visible.bind(button, true))
 		word_buttons.append(button)
 		_by_id[id] = button
 	_styled_scale = -1.0
@@ -182,13 +182,17 @@ func focus_word(id: String) -> bool:
 	if button == null or not _can_interact():
 		return false
 	button.grab_focus()
-	ensure_control_visible(button)
+	ensure_control_visible(button, true)
 	return true
 
 
-func ensure_control_visible(control: Control) -> void:
-	if not is_instance_valid(scroll) or not is_instance_valid(control) or not grid.is_ancestor_of(control) or scroll.is_pointer_active():
+func ensure_control_visible(control: Control, explicit_focus: bool = false) -> void:
+	if not is_instance_valid(scroll) or not is_instance_valid(control) or not grid.is_ancestor_of(control):
 		return
+	if scroll.is_pointer_active() or (scroll.is_scrolling() and not explicit_focus):
+		return
+	if explicit_focus:
+		scroll.cancel_drag()
 	# A very short viewport can show a card's caption even when its whole image
 	# and label cannot fit together. All remaining content stays scrollable.
 	var target: Control = control

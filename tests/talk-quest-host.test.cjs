@@ -5,14 +5,14 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const shell = fs.readFileSync(path.join(__dirname, '../web/shell.html'), 'utf8');
-const questSource = shell.match(/      function createQuestHost\(speech\) \{[\s\S]*?\n      \}/)?.[0];
+const questSource = shell.match(/      function createQuestHost\(\) \{[\s\S]*?\n      \}/)?.[0];
 const speechSource = shell.match(/      function createSpeechHost\(\) \{[\s\S]*?\n      \}/)?.[0];
 assert.ok(questSource, 'The maintained shell exposes an isolated quest host');
 assert.ok(speechSource, 'The quest uses the maintained browser speech host');
 
 test('Talk Quest accessible help describes finite floating words and level-triggered capture', () => {
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /Choose a level[^.]*start the microphone/);
+  assert.match(help, /Scroll the island map and choose a level[^.]*start the microphone/);
   assert.match(help, /say the floating words/);
   assert.match(help, /one health point/);
   assert.match(help, /limited supply of words/);
@@ -33,28 +33,18 @@ function element() {
   };
 }
 
-function questFixture({ synthesis = true } = {}) {
+function questFixture() {
   const status = element();
   const document = Object.assign(element(), { getElementById: id => id === 'quest-status' ? status : null });
-  const window = element();
-  const values = new Map(), writes = [], calls = [], spoken = [];
-  let readFails = false, writeFails = false, canStop = true;
+  const values = new Map(), writes = [];
+  let readFails = false, writeFails = false;
   const localStorage = {
     getItem(key) { if (readFails) throw new Error('Storage unavailable'); return values.get(key) ?? null; },
     setItem(key, value) { if (writeFails) throw new Error('Storage full'); values.set(key, value); writes.push({ key, value }); }
   };
-  const speech = { stopSpeech() { calls.push('stop'); return canStop; } };
-  if (synthesis) {
-    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
-    window.speechSynthesis = {
-      speak(utterance) { calls.push('speak'); spoken.push(utterance); },
-      cancel() { calls.push('cancel'); }
-    };
-  }
-  const host = vm.runInNewContext(`(${questSource})(speech)`, { window, document, localStorage, speech });
-  return { host, window, document, status, values, writes, calls, spoken,
-    set readFails(value) { readFails = value; }, set writeFails(value) { writeFails = value; },
-    set canStop(value) { canStop = value; }
+  const host = vm.runInNewContext(`(${questSource})()`, { document, localStorage });
+  return { host, document, status, values, writes,
+    set readFails(value) { readFails = value; }, set writeFails(value) { writeFails = value; }
   };
 }
 
@@ -259,7 +249,6 @@ test('quest status is a read-only display snapshot and renders recognized text l
   assert.deepEqual(JSON.parse(f.status.dataset.snapshot), snapshot);
   assert.equal(f.status.textContent, 'Adam: Knock, knock.. <img src=x onerror=alert(1)>');
   assert.deepEqual(f.writes, []);
-  assert.deepEqual(f.calls, []);
   for (const invalid of ['{', 'null', '[]', 'true']) f.host.questStatus(invalid);
   assert.deepEqual(JSON.parse(f.status.dataset.snapshot), snapshot);
   f.host.questStatus(JSON.stringify({ active: true, view: 'map', completed: [1, 2] }));
@@ -267,7 +256,6 @@ test('quest status is a read-only display snapshot and renders recognized text l
   f.host.questStatus(JSON.stringify({ active: true, view: 'stage', phase: 'paused', targets: [],
     pause_result: { visible: true, context_phase: 'chest' } }));
   assert.equal(f.status.textContent, 'Talk Quest paused. Choose Continue to resume or Map to return to the adventures.');
-  assert.deepEqual(f.calls, [], 'Announcing a pause must not start the microphone or other host actions');
   f.host.questStatus(JSON.stringify({ active: false }));
   assert.equal(f.status.textContent, '');
 });
@@ -298,50 +286,12 @@ test('repeated Quest snapshots leave the DOM unchanged while geometry and lifecy
   assert.equal(snapshotWrites, states.length, 'New geometry still publishes even when readable words are unchanged');
   assert.equal(textWrites, states.length - 1, 'Moving a target does not repeat the live-region announcement');
   assert.equal(readable, '');
-  assert.deepEqual(f.calls, [], 'Snapshot updates never start speech or change its bindings');
 });
 
-test('Hear line stops capture before speaking and cannot be cleared by an old utterance callback', () => {
+test('the quest host exposes progress and status without a browser-default speech fallback', () => {
   const f = questFixture();
-  assert.equal(f.host.questSpeak('Knock, knock.'), true);
-  assert.deepEqual(f.calls, ['stop', 'speak']);
-  assert.equal(f.spoken[0].lang, 'en-US');
-  assert.equal(f.spoken[0].rate, 0.85);
-  assert.equal(f.host.questSpeak('x'.repeat(700)), true);
-  assert.equal(f.spoken[1].text.length, 512);
-  assert.deepEqual(f.calls, ['stop', 'speak', 'cancel', 'stop', 'speak']);
-  f.spoken[0].onend();
-  f.host.questCancelSpeak();
-  assert.equal(f.calls.at(-1), 'cancel', 'A late previous callback cannot orphan the current utterance');
-  const count = f.calls.length;
-  f.host.questCancelSpeak();
-  assert.equal(f.calls.length, count, 'Repeated cancellation is harmless');
-});
-
-test('Hear line fails safely for hidden pages, missing synthesis and failed microphone shutdown', () => {
-  const f = questFixture();
-  for (const value of ['', '  ', null, 42]) assert.equal(f.host.questSpeak(value), false);
-  f.document.hidden = true;
-  assert.equal(f.host.questSpeak('Hello.'), false);
-  f.document.hidden = false;
-  f.canStop = false;
-  assert.equal(f.host.questSpeak('Hello.'), false);
-  assert.deepEqual(f.spoken, []);
-  assert.deepEqual(f.calls, ['stop']);
-  assert.equal(questFixture({ synthesis: false }).host.questSpeak('Hello.'), false);
-  f.canStop = true;
-  f.window.speechSynthesis.speak = () => { throw new Error('Speech unavailable'); };
-  assert.equal(f.host.questSpeak('Hello.'), false);
-});
-
-test('hiding or leaving the page cancels spoken prompts without restarting the microphone', () => {
-  for (const type of ['visibilitychange', 'pagehide']) {
-    const f = questFixture();
-    f.host.questSpeak('Hello.');
-    if (type === 'visibilitychange') { f.document.hidden = true; f.document.dispatch(type); }
-    else f.window.dispatch(type);
-    assert.deepEqual(f.calls, ['stop', 'speak', 'cancel']);
-  }
+  assert.deepEqual(Object.keys(f.host).sort(), ['questProgress', 'questStatus', 'saveQuestProgress']);
+  assert.doesNotMatch(shell, /speechSynthesis|SpeechSynthesisUtterance|questSpeak|questCancelSpeak/);
 });
 
 test('quest recognition starts explicitly and binds interim and final revisions to one occurrence', () => {

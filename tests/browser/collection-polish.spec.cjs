@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { metrics, tap, modeRect, roomControl,
+const { metrics, tap, modeRect, openModeMenu, chooseMode, roomControl,
   enterGame, openGame, openRewards, rendered, visibleColorCount } = require('./game-ui.cjs');
 
 test('Match, Memory and Voice Pop fit compact and desktop screens with Match selected on entry and reload', async ({ page }, testInfo) => {
@@ -33,9 +33,10 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
     await page.setViewportSize(viewport);
     await rendered(page);
     const bounds = await metrics(page);
-    const modes = [['match', 'Find 5 word'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
+    const modes = [['match', 'Match. Game mode menu closed.'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
     const targets = modes.map(([name]) => modeRect(bounds, name));
     for (const [index, [name, announcement]] of modes.entries()) {
+      await openModeMenu(page);
       const rect = targets[index];
       expect(rect.width * bounds.scale, `${name}: minimum touch width`).toBeGreaterThanOrEqual(44 - 0.01);
       expect(rect.height * bounds.scale, `${name}: minimum touch height`).toBeGreaterThanOrEqual(44 - 0.01);
@@ -43,12 +44,11 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
       expect(bounds.x + (rect.x + rect.width) * bounds.scale).toBeLessThanOrEqual(viewport.width + 0.01);
       expect(bounds.y + rect.y * bounds.scale).toBeGreaterThanOrEqual(0);
       expect(bounds.y + (rect.y + rect.height) * bounds.scale).toBeLessThanOrEqual(viewport.height + 0.01);
-      if (index) expect(rect.x).toBeGreaterThanOrEqual(targets[index - 1].x + targets[index - 1].width);
-      await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
+      if (index) expect(rect.y).toBeGreaterThanOrEqual(targets[index - 1].y + targets[index - 1].height);
+      await chooseMode(page, name);
       await expect(status).toContainText(announcement);
     }
-    const match = targets[0];
-    await tap(page, match.x + match.width / 2, match.y + match.height / 2);
+    await chooseMode(page, 'match');
     await expect(status).toContainText('Find 5 word');
     await capture(`three-modes-${viewport.width}`, { afterResize: true });
   }

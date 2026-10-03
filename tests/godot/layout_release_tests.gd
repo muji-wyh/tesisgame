@@ -27,15 +27,18 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	app._show_mode_menu()
+	await settle()
 	var mode_button: Button = app._mode_buttons[1]
 	mode_button.grab_focus()
 	var original_cards: Array = app.model.cards.duplicate(true)
 	for dimensions in [Vector2i(680, 900), Vector2i(679, 900), Vector2i(1366, 900), Vector2i(320, 568)]:
 		root.size = dimensions
 		await settle()
-		check(root.gui_get_focus_owner() == mode_button, "Focused mode survives header reflow at " + str(dimensions))
+		check(root.gui_get_focus_owner() == mode_button, "Focused mode survives popover reflow at " + str(dimensions))
 		check(app.model.cards == original_cards, "Resize preserves the round at " + str(dimensions))
 		mode_button.grab_focus()
+	app._hide_mode_menu()
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 900)]:
 		root.size = dimensions
 		await settle()

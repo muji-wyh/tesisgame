@@ -37,7 +37,7 @@ func _run() -> void:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
 	check(app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "memory", "pop", "quest"],
-		"The centered mode switch contains all four games")
+		"Pip's mode switch contains all four games")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
 		root.size = dimensions
 		app.size = dimensions
@@ -46,14 +46,11 @@ func _run() -> void:
 			await settle()
 			var view: Control = app._match_playfield if mode == "match" else app._memory
 			var css_scale: float = app.Style.ui_scale(app)
-			var inline_modes: bool = dimensions.x * css_scale >= 680
-			var play_top: int = 76 if inline_modes else 128
+			var play_top: int = 76
 			check(absf(view.get_global_rect().position.y * css_scale - play_top) <= 2,
 				"%s %s: the responsive header leaves play at %d CSS pixels: %s" % [dimensions, mode, play_top, view.get_global_rect()])
-			if inline_modes:
-				check(app._header_duck_slot.get_global_rect().end.x <= app._mode_row.global_position.x
-					and app._mode_row.get_global_rect().end.x <= app._toolbar.global_position.x,
-					"Inline mode tabs sit between Pip on the left and the action icons on the right")
+			check(app._header_duck_slot.get_global_rect().end.x <= app._toolbar.global_position.x,
+				"Pip and the action icons share the compact header without permanent mode tabs")
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), "%s %s: the playfield fits the screen" % [dimensions, mode])
 			check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()), "World choices stay out of active play")
 			check(not app._room.is_visible_in_tree(), "The room does not take space above the game")
@@ -78,10 +75,8 @@ func _run() -> void:
 					check(control.text.is_empty() and is_equal_approx(control.size.x, control.size.y)
 						and control.get_parent() == app._toolbar and is_equal_approx(control.size.y, ceilf(44 / css_scale)),
 						"Header actions share one aligned row of 44 CSS-pixel square icons")
-			check(app._mode_buttons.all(func(button: Button) -> bool:
-				return button.size.x * css_scale < 90 and button.size.y * css_scale < 48),
-				"Mode buttons keep natural compact widths and heights at %s %s: %s CSS" % [
-					dimensions, mode, app._mode_buttons.map(func(button: Button) -> Vector2: return button.size * css_scale)])
+			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+				"Closed mode choices leave more space for gameplay at %s %s" % [dimensions, mode])
 			if mode == "match":
 				check(app.grid.get_rect().is_equal_approx(Rect2(Vector2.ZERO, app._match_playfield.size))
 					and not app._message.is_visible_in_tree(),

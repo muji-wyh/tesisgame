@@ -192,6 +192,62 @@ async function clickControl(page, name) {
   await tapRect(page, await readyQuestControl(page, name), name);
 }
 
+function insideMapViewport(rect, viewport, tolerance = 0.003) {
+  return hasFiniteRect(rect) && hasFiniteRect(viewport) &&
+    rect.x >= viewport.x - tolerance && rect.x + rect.width <= viewport.x + viewport.width + tolerance &&
+    rect.y >= viewport.y - tolerance && rect.y + rect.height <= viewport.y + viewport.height + tolerance;
+}
+
+async function settleMapScroll(page) {
+  const started = Date.now();
+  let previous, stableSince = started;
+  await expect.poll(async () => {
+    const offset = (await snapshot(page)).map_scroll_offset;
+    if (offset !== previous) {
+      previous = offset;
+      stableSince = Date.now();
+    }
+    return Number.isFinite(offset) && Date.now() - started >= 400 && Date.now() - stableSince >= 300;
+  }, { timeout: 10000, intervals: [100, 150], message: 'The map stops before the next destination gesture' }).toBe(true);
+}
+
+async function scrollMapLevelIntoView(page, index) {
+  let map = await snapshot(page);
+  expect(map.view, 'The destination journey is open before scrolling').toBe('map');
+  expect(map.levels[index], `Adventure ${index + 1} belongs to the journey`).toBeTruthy();
+  for (let attempt = 0; attempt < 32; attempt++) {
+    const rect = map.levels[index], viewport = map.map_scroll_rect;
+    if (rect.visible && insideMapViewport(rect, viewport)) return map;
+    expect(hasFiniteRect(viewport), 'The map publishes its actual clipped viewport').toBe(true);
+    const canvas = await page.locator('#canvas').boundingBox();
+    expect(hasFiniteRect(canvas)).toBe(true);
+    const distance = (rect.x + rect.width / 2 - viewport.x - viewport.width / 2) * canvas.width;
+    const travel = Math.sign(distance) * Math.min(Math.abs(distance), viewport.width * canvas.width * 0.65);
+    expect(Math.abs(travel), 'An offscreen destination can be reached by a horizontal drag').toBeGreaterThan(1);
+    const x = canvas.x + (viewport.x + viewport.width / 2) * canvas.width;
+    const y = canvas.y + (viewport.y + viewport.height / 2) * canvas.height;
+    await page.mouse.move(x + travel / 2, y);
+    await page.mouse.down();
+    try {
+      await page.mouse.move(x - travel / 2, y, { steps: 8 });
+      // A physical drag also works in mobile WebKit, which has no wheel API.
+      // Pause before release to inspect a middle destination without overshoot.
+      await page.waitForTimeout(180);
+    } finally {
+      await page.mouse.up();
+    }
+    await settleMapScroll(page);
+    const moved = await snapshot(page);
+    expect(moved.view, 'Dragging a destination must not enter its adventure').toBe('map');
+    expect(moved.listening, 'Map scrolling never starts microphone capture').toBe(false);
+    expect(moved.map_scroll_offset, 'A real pointer gesture moves the map').not.toBe(map.map_scroll_offset);
+    map = moved;
+  }
+  expect(map.levels[index].visible && insideMapViewport(map.levels[index], map.map_scroll_rect),
+    `Adventure ${index + 1} becomes fully visible through real scrolling`).toBe(true);
+  return map;
+}
+
 async function pressChest(page, milliseconds = null, { backgroundOnRelease = false } = {}) {
   const point = await rectCenter(page, await readyQuestControl(page, 'open'), 'Chest surface');
   // Observe native publications without advancing gameplay. A lifecycle case
@@ -507,7 +563,7 @@ test('Talk Quest completes all fourteen adventures with floating-word speech and
   expect(map.unlocked).toBe(1);
   expect(map.levels).toHaveLength(14);
   expect(map.levels.map(level => level.disabled)).toEqual([false, ...Array(13).fill(true)]);
-  expect(map.map_scroll_max).toBe(0);
+  expect(map.map_scroll_max, 'Fourteen destinations form one scrollable horizontal journey').toBeGreaterThan(0);
   expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
   await tapRect(page, map.levels[0], 'First adventure');
   let current = await waitAdventure(page, 1);
@@ -811,7 +867,8 @@ test('finite Talk Quest words finish a missed round and the visible retry create
 
 });
 
-test('Talk Quest phone layouts need no scrolling and unavailable speech exposes no typing controls', async ({ page }, info) => {
+test('Talk Quest phone maps scroll to all fourteen destinations and unavailable speech exposes no typing controls', async ({ page }, info) => {
+  test.setTimeout(240000);
   const errors = recordErrors(page);
   await page.setViewportSize({ width: 320, height: 568 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -832,17 +889,16 @@ test('Talk Quest phone layouts need no scrolling and unavailable speech exposes 
     await page.setViewportSize({ width, height });
     await rendered(page);
     await page.waitForTimeout(250);
-    let map = await waitState(page, { active: true, view: 'map', map_scroll_max: 0 });
+    let map = await waitState(page, { active: true, view: 'map' });
+    expect(map.map_scroll_max, 'The horizontal journey extends beyond the phone viewport').toBeGreaterThan(0);
+    expect(insideMapViewport(map.map_scroll_rect, { x: 0, y: 0, width: 1, height: 1 }),
+      'The scrolling region stays inside the actual canvas').toBe(true);
     await visibleQuestControl(page, 'album');
     await visibleQuestControl(page, 'map_previous');
     await visibleQuestControl(page, 'map_next');
-    while (!map.controls.map_previous.disabled) {
-      const previous = map.map_chapter;
-      await clickControl(page, 'map_previous');
-      map = await waitState(page, { map_chapter: previous - 1 });
-    }
-    const chapters = [];
-    for (;;) {
+    const stops = [], reached = new Set();
+    for (let index = 0; index < 14; index++) {
+      map = await scrollMapLevelIntoView(page, index);
       const visible = map.levels.filter(level => level.visible);
       const canvasBounds = await page.locator('#canvas').boundingBox();
       expect(hasFiniteRect(canvasBounds)).toBe(true);
@@ -856,6 +912,8 @@ test('Talk Quest phone layouts need no scrolling and unavailable speech exposes 
         expect(rect.y).toBeGreaterThanOrEqual(-0.002);
         expect(rect.x + rect.width).toBeLessThanOrEqual(1.002);
         expect(rect.y + rect.height).toBeLessThanOrEqual(1.002);
+        expect(insideMapViewport(rect, map.map_scroll_rect),
+          'Published visible adventures fit the clipped scroll region').toBe(true);
         if (rect.compact) {
           for (const key of ['caption', 'badge']) {
             const paint = rect[key];
@@ -867,22 +925,19 @@ test('Talk Quest phone layouts need no scrolling and unavailable speech exposes 
           }
         }
       }
-      chapters.push({ chapter: map.map_chapter, levels: visible });
-      await page.screenshot({ path: info.outputPath(`talk-quest-map-${label}-${map.map_chapter}.png`) });
-      const mapCanvas = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
-        requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
-      fs.writeFileSync(info.outputPath(`talk-quest-map-${label}-${map.map_chapter}-canvas.png`), Buffer.from(mapCanvas, 'base64'));
-      if (map.controls.map_next.disabled) break;
-      const previous = map.map_chapter;
-      await clickControl(page, 'map_next');
-      map = await waitState(page, { map_chapter: previous + 1 });
+      reached.add(index + 1);
+      stops.push({ level: index + 1, chapter: map.map_chapter, offset: map.map_scroll_offset,
+        viewport: map.map_scroll_rect, levels: visible });
+      if ([0, 4, 10, 13].includes(index)) {
+        await page.screenshot({ path: info.outputPath(`talk-quest-map-${label}-level-${index + 1}.png`) });
+        const mapCanvas = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
+          requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
+        fs.writeFileSync(info.outputPath(`talk-quest-map-${label}-level-${index + 1}-canvas.png`), Buffer.from(mapCanvas, 'base64'));
+      }
     }
-    expect(chapters.flatMap(chapter => chapter.levels)).toHaveLength(14);
-    while (!map.controls.map_previous.disabled) {
-      const previous = map.map_chapter;
-      await clickControl(page, 'map_previous');
-      map = await waitState(page, { map_chapter: previous - 1 });
-    }
+    expect([...reached]).toEqual(Array.from({ length: 14 }, (_, index) => index + 1));
+    expect(stops.at(-1).offset, 'The last destination lies beyond the first viewport').toBeGreaterThan(stops[0].offset);
+    map = await scrollMapLevelIntoView(page, 0);
     await tapRect(page, map.levels[0], 'First adventure');
     const stage = await waitAdventure(page, 1, false);
     expectWordInterface(stage);
@@ -914,7 +969,7 @@ test('Talk Quest phone layouts need no scrolling and unavailable speech exposes 
       info.annotations.push({ type: 'rendering-limitation',
         description: `${label}: Windows WebKit page capture is blank after resize while the native canvas continues rendering.` });
     } else expect(pageColors).toBeGreaterThan(20);
-    layouts.push({ label, viewport: page.viewportSize(), chapters, stage, pageColors, canvasColors });
+    layouts.push({ label, viewport: page.viewportSize(), stops, stage, pageColors, canvasColors });
     await clickControl(page, 'map');
     await waitState(page, { view: 'map', listening: false });
   }

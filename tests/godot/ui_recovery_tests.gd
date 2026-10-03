@@ -239,10 +239,16 @@ func _run() -> void:
 	var memory_mode: Button = app.find_child("Mode_memory", true, false)
 	var match_mode: Button = app.find_child("Mode_match", true, false)
 	check(not memory_mode.disabled and not match_mode.disabled, "Unavailable progress does not disable either card game")
-	memory_mode.pressed.emit()
+	app._show_mode_menu()
+	await process_frame
+	await process_frame
+	await _tap_control(memory_mode)
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree(), "Memory remains available during a storage failure")
-	match_mode.pressed.emit()
-	check(app._mode_id == "match" and not app.cards.is_empty(), "The Match tab remains usable after initial storage failure")
+	app._show_mode_menu()
+	await process_frame
+	await process_frame
+	await _tap_control(match_mode)
+	check(app._mode_id == "match" and not app.cards.is_empty(), "The Match popover choice remains usable after initial storage failure")
 	app.choose_theme("ocean")
 	check(app.model.theme_id == "ocean", "A progress read failure does not block choosing a practice theme")
 	app.choose_mode("memory")

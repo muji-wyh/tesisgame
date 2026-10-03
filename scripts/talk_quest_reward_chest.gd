@@ -141,6 +141,7 @@ func start_open(reduce: bool) -> void:
 func set_preview_time(seconds: float) -> void:
 	# Preview uses the shared opening clock (after the confirmation hold).
 	# It samples the same effects without emitting cues or gameplay events.
+	_surprise.clear()
 	stop_reaction()
 	_previewing = true
 	_elapsed = clampf(seconds, 0.0, OPEN_SECONDS) if is_finite(seconds) else 0.0

@@ -1126,22 +1126,27 @@ func _ensure_visible(control: Control) -> void:
 func _ensure_visible_now(control: Control, padding: float = 0.0) -> void:
 	if not is_instance_valid(control) or not is_ancestor_of(control):
 		return
-	_scroll_rect_into_view(control.get_global_rect(), padding)
+	_scroll_rect_into_view(control.get_global_rect(), padding, false, false, true)
 
 
-func _scroll_rect_into_view(global_rect: Rect2, padding: float = 0.0, require_fit: bool = false, animation_follow: bool = false) -> void:
+func _scroll_rect_into_view(global_rect: Rect2, padding: float = 0.0, require_fit: bool = false, animation_follow: bool = false, explicit_focus: bool = false) -> void:
 	if animation_follow and not bool(_animation.get("follow_scroll", true)):
 		return
 	var content: Control = self
 	var ancestor: Node = get_parent()
 	while ancestor != null:
 		if ancestor is ScrollContainer:
-			if ancestor.has_method("is_pointer_active") and ancestor.is_pointer_active():
-				# Once the player takes the page, finish this promotion in place.
-				# Keyboard focus reveal and later promotions remain independent.
-				if animation_follow:
-					_animation["follow_scroll"] = false
-				return
+			if ancestor.has_method("is_scrolling") and ancestor.is_scrolling():
+				if explicit_focus and not ancestor.is_pointer_active():
+					# A deliberate focus change takes over from coasting, while a
+					# held finger still owns the page until its gesture ends.
+					ancestor.cancel_drag()
+				else:
+					# Once the player takes the page, finish this promotion in place.
+					# Keyboard focus reveal and later promotions remain independent.
+					if animation_follow:
+						_animation["follow_scroll"] = false
+					return
 			# Hidden scrollbar rails must still scroll focused controls into view.
 			# Absolute content coordinates keep duplicate focus events idempotent.
 			var content_rect: Rect2 = content.get_global_transform().affine_inverse() * global_rect

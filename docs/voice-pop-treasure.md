@@ -7,12 +7,19 @@ milestone. Each award produces a gold badge, rays, and particles. Reduced motion
 keeps a readable stationary award message.
 
 The result screen offers **Open chests (N)** alongside Play again. The treasure
-page shows every earned chest together, with distinct styles selected once for
-the round. Desktop and short landscape layouts use columns; portrait phones
-use visible rows. Each
-chest uses the shared Match hold, cancellation, physical release, light, audio,
-and surprise sequence. Only one chest can open at a time. A released chest stays
-open while the remaining chests retain their own controls.
+page keeps every earned chest in one scrollable list, with distinct styles
+selected once for the round. Portrait phones show one large chest per row;
+wide desktop and short landscape layouts use two columns. Artwork fills each
+card without a title, name, or instruction label. Accessible names still explain
+how to open each chest. The Back action stays below the scrolling area.
+
+Touch dragging and mouse-wheel input scroll with momentum and no visible
+scrollbars. A swipe cancels an unfinished hold; touching a moving list first
+stops it. Keyboard and controller focus reveal offscreen chests. Each chest
+uses the shared Match hold, cancellation, physical release, light, audio, and
+surprise sequence. Only one chest can open at a time. A released chest stays
+open, and its surprise remains visible when scrolled away and back, while the
+remaining chests retain their own controls.
 
 The batch and opened flags are saved on this device under
 `wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Returning

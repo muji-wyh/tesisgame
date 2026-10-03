@@ -1,0 +1,374 @@
+{
+  "version": 1,
+  "backgrounds": [
+    "res://assets/talk_quest/map-dimensional/sky.png"
+  ],
+  "landmarks": [
+    "res://assets/talk_quest/map-dimensional/level-01.png",
+    "res://assets/talk_quest/map-dimensional/level-02.png",
+    "res://assets/talk_quest/map-dimensional/level-03.png",
+    "res://assets/talk_quest/map-dimensional/level-04.png",
+    "res://assets/talk_quest/map-dimensional/level-05.png",
+    "res://assets/talk_quest/map-dimensional/level-06.png",
+    "res://assets/talk_quest/map-dimensional/level-07.png",
+    "res://assets/talk_quest/map-dimensional/level-08.png",
+    "res://assets/talk_quest/map-dimensional/level-09.png",
+    "res://assets/talk_quest/map-dimensional/level-10.png",
+    "res://assets/talk_quest/map-dimensional/level-11.png",
+    "res://assets/talk_quest/map-dimensional/level-12.png",
+    "res://assets/talk_quest/map-dimensional/level-13.png",
+    "res://assets/talk_quest/map-dimensional/level-14.png"
+  ],
+  "landmarkSourceNames": [
+    "Front Door Cottage",
+    "Fountain Courtyard",
+    "Windmill Bakery",
+    "Village Wardrobe",
+    "Woodland Bridge",
+    "Art Pavilion",
+    "Harvest Market",
+    "Autumn Library",
+    "Canopy Garden",
+    "Coach Gateway",
+    "Seaside Citadel",
+    "Woodland Camp",
+    "Festival Plaza",
+    "Royal Toy Workshop"
+  ],
+  "ui": {
+    "panel": "res://assets/talk_quest/map/ui-panel.png",
+    "badge": "res://assets/talk_quest/map/ui-badge.png",
+    "cleared": "res://assets/talk_quest/map/ui-cleared.png",
+    "locked": "res://assets/talk_quest/map/ui-locked.png",
+    "current": "res://assets/talk_quest/map/ui-current.png",
+    "trail": "res://assets/talk_quest/map/ui-trail.png",
+    "previous": "res://assets/talk_quest/map/ui-previous.png",
+    "next": "res://assets/talk_quest/map/ui-next.png",
+    "compass": "res://assets/talk_quest/map/ui-compass.png",
+    "banner": "res://assets/talk_quest/map/ui-banner.png",
+    "button": "res://assets/talk_quest/map/ui-button.png",
+    "button_pressed": "res://assets/talk_quest/map/ui-button_pressed.png",
+    "frame": "res://assets/talk_quest/map/ui-frame.png"
+  },
+  "decorations": {
+    "distant_island": "res://assets/talk_quest/map-dimensional/decoration-distant-island.png",
+    "cloud": "res://assets/talk_quest/map-dimensional/decoration-cloud.png",
+    "bridge": "res://assets/talk_quest/map-dimensional/decoration-bridge.png",
+    "flag": "res://assets/talk_quest/map-dimensional/decoration-flag.png",
+    "trail": "res://assets/talk_quest/map-dimensional/decoration-trail.png",
+    "grove": "res://assets/talk_quest/map-dimensional/decoration-grove.png"
+  },
+  "sources": [
+    {
+      "id": "fantasy-town-kit",
+      "title": "Fantasy Town Kit 2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/fantasy-town-kit",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef",
+      "acquisitionStatus": "Downloaded original source and prepared for runtime integration",
+      "animations": "Static acquired artwork or original model geometry; no authored source animation clips"
+    },
+    {
+      "id": "castle-kit",
+      "title": "Castle Kit",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/castle-kit",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/castle-kit/a395102d20-1711543616/kenney_castle-kit.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "921f3f73927bb23106cae34bc21d5ab4b033a9fc120475e96f714a406e3169df",
+      "acquisitionStatus": "Downloaded original source and prepared for runtime integration",
+      "animations": "Static acquired artwork or original model geometry; no authored source animation clips"
+    },
+    {
+      "id": "nature-kit",
+      "title": "Nature Kit",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/nature-kit",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d",
+      "acquisitionStatus": "Downloaded original source and prepared for runtime integration",
+      "animations": "Static acquired artwork or original model geometry; no authored source animation clips"
+    },
+    {
+      "id": "background-elements",
+      "title": "Background Elements",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/background-elements",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/background-elements/b66a1ddec7-1677670395/kenney_background-elements.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "31ffecec57bd51263f68e96e288ad06ac28eb1dfb41edb06b006a1b42cc10e41",
+      "acquisitionStatus": "Downloaded original source and prepared for runtime integration",
+      "animations": "Static acquired artwork or original model geometry; no authored source animation clips"
+    },
+    {
+      "id": "kloofendal-cloudy",
+      "title": "Kloofendal 48d Partly Cloudy",
+      "creator": "Greg Zaal / Poly Haven",
+      "url": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy",
+      "downloadUrl": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/kloofendal_48d_partly_cloudy_2k.hdr",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "3fbd33f279f29bd64925c1dd3214fd46c627493d21f1100248b6b1098da4d06e",
+      "acquisitionStatus": "Downloaded original source and prepared for runtime integration",
+      "animations": "Static acquired artwork or original model geometry; no authored source animation clips"
+    },
+    {
+      "id": "yd-fantasy-world-map",
+      "title": "Fantasy World Map",
+      "creator": "yd",
+      "url": "https://opengameart.org/content/fantasy-world-map-0",
+      "downloadUrl": "https://opengameart.org/sites/default/files/FantasyWorldMap.xcf",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "da402c4e8e2b533a7a38ab093d9bc2ca510d7e06104fcdc316f68573db6220c7",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-cartography",
+      "title": "Cartography Pack",
+      "creator": "Kenney",
+      "url": "https://opengameart.org/content/cartography-pack",
+      "downloadUrl": "https://opengameart.org/sites/default/files/cartographypack.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "5e0c41c70a4bf54fb7607520efda9a1d03a92082e258ec83c6f95c6730b27d85",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-ui-rpg",
+      "title": "UI Pack: RPG Expansion",
+      "creator": "Kenney Vleugels",
+      "url": "https://kenney.nl/assets/ui-pack-rpg-expansion",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/ui-pack-rpg-expansion/7ec4a46657-1677661824/kenney_ui-pack-rpg-expansion.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c69c30c09d74df542842e4ec811735b6d260cd6c9e2ee261d7b894d259a6adb4",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    },
+    {
+      "id": "kenney-game-icons",
+      "title": "Game Icons",
+      "creator": "Kenney Vleugels",
+      "url": "https://kenney.nl/assets/game-icons",
+      "downloadUrl": "https://kenney.nl/media/pages/assets/game-icons/1ebf9c14af-1677661579/kenney_game-icons.zip",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "7a86d8d58e0b851e22004b3c70bf90b003632bbf9ac633424daa3bb17d9e7e4e",
+      "acquisitionStatus": "Downloaded and extracted from the original public asset source",
+      "animations": "Static artwork; no source animation"
+    }
+  ],
+  "preparation": "Fourteen miniature island scenes assembled from original acquired Kenney GLB geometry and palette textures, rendered at 768 pixels with consistent isometric view, warm area lights, ray-traced contact shadows, and transparent background. No replacement mesh primitives. Original irregular platform mesh is scaled into raised island terrain. Sky is a tone-mapped sky-only crop of Greg Zaal's acquired HDRI. Foreground cloud is an acquired Kenney PNG.",
+  "animation": "Source assets are static; scrolling, parallax, selection feedback, and ambient movement belong to the game presentation.",
+  "render": {
+    "engine": "Blender Cycles",
+    "samples": 64,
+    "resolution": [
+      768,
+      768
+    ],
+    "reproducibleTool": "tools/prepare-quest-dimensional-map.py",
+    "finishingTool": "tools/finish-quest-dimensional-map.py"
+  },
+  "assets": [
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-bridge.png",
+      "sha256": "0556ac814b3b282ec007646eb94e99d9dc23606600fa7a267fb033c53e4061f4",
+      "bytes": 381665,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-cloud.png",
+      "sha256": "32e0970b8cd9b984d5d7ea368bee306c39061e98265a3df7d2aea5ae46aecd18",
+      "bytes": 3780,
+      "size": [
+        228,
+        124
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-distant-island.png",
+      "sha256": "cd9bd163b6fde1201d1f8e3a1d8b4e2a2417ceb9b6f980aeec5c55f688df1a0c",
+      "bytes": 419383,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-flag.png",
+      "sha256": "226a8f7f7a5814241ef187591f8b7633fe99a26d1ce13081ce165ab63e70e648",
+      "bytes": 277014,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-grove.png",
+      "sha256": "5ff8126bfd6b302737e12f6c5df4c082199faa24f1ad7cd3b2eae8e20b9d5c26",
+      "bytes": 342230,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/decoration-trail.png",
+      "sha256": "bfdcc459a16f65f17add261260585ab116da8b3782eef37fabe03e20f3a04eac",
+      "bytes": 267179,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-01.png",
+      "sha256": "f7ab759edf6b93b976f4af817a0c1c306fa53e58db735bd327bc7643eda41e4c",
+      "bytes": 451456,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-02.png",
+      "sha256": "e5f0735b58c491fd642910be54b25abf21ae44636a2650e4bdeebfcc7c0d88a6",
+      "bytes": 485322,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-03.png",
+      "sha256": "e0b1d7df292cf5f2ab2c68dd5a5d0b745c304ace286dc607c321f8847ef5c56d",
+      "bytes": 497575,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-04.png",
+      "sha256": "04d9955eb5e6e52d8288bbeead637cd272575b0bcf6d30027f7a2fae8a8ec4a0",
+      "bytes": 487126,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-05.png",
+      "sha256": "c22b9b9c427f48e1c2c54b3e16b743706867c31154521e4c7e01fb1de5944dce",
+      "bytes": 483268,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-06.png",
+      "sha256": "51db30c806bf5d4b32895c06dd4f73a430cd0f4d40078ede235cc829ebb37770",
+      "bytes": 449671,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-07.png",
+      "sha256": "da2fefe2427deadda366034a2c23fb038064416729aa011c0e6cd64c4bb3d11e",
+      "bytes": 490780,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-08.png",
+      "sha256": "9b97399966c60a3738aa7ca83cd73c10ef4f9fc7198588bb70c3b51bf17f6943",
+      "bytes": 516059,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-09.png",
+      "sha256": "735f30a0564236837e67e469fd6a2ec5ab5f59a07c6b89dd8a996aa30f5d4548",
+      "bytes": 474963,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-10.png",
+      "sha256": "29498a4a75dc3bc2e9b91cd41f43f7b4002010a876ea785c448038a7b504e77e",
+      "bytes": 483046,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-11.png",
+      "sha256": "12181e264b7ce30b1fffafd5296d207fdc470e05a4de301ef2985f20bb7174f1",
+      "bytes": 483728,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-12.png",
+      "sha256": "76e46303a6e6cc0d9b5f3c47c16d16f9c277a1596296f39b5ee972c01aa83933",
+      "bytes": 463319,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-13.png",
+      "sha256": "c96a17217a5275d63e0042466954475dd63a5c60349fe56640c4d394241a41d1",
+      "bytes": 467408,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/level-14.png",
+      "sha256": "4d7cd2def3a8290db8ae2fded471aaaeeaa9f242dbbe80e47d51b6a65918b86d",
+      "bytes": 533143,
+      "size": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/sky.png",
+      "sha256": "1617271439ae06ac2ae4b4fe3e70aeb2f1b9ca7eb710ea25b36dc40747b88849",
+      "bytes": 1102369,
+      "size": [
+        2048,
+        768
+      ]
+    }
+  ]
+}

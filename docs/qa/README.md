@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Approved Ava voice](2026-10-03-ava-speech.md) | Full 360-recording migration, exact approved profile, provenance, preserved nonverbal audio, and playback regression checks |
 | [Native rendered-frame performance](2026-10-03-performance.md) | Five paired repeats over seven main-scene workloads; 12.63% lower aggregate active frame time on the Windows software renderer, with raw samples, source identities, exposure caveats, and a disclosed exit warning |
 | [Hidden scrollbars](2026-10-02-hidden-scrollbars.md) | Hidden native and Web rails, retained overflow gestures and focus navigation, and compact-screen regressions |
 | [Talk Quest victory and treasure room](2026-10-02-talk-quest-victory.md) | Pip dance and recorded cheers, sourced reward scenery, gesture/save regressions, and full-app responsive captures |

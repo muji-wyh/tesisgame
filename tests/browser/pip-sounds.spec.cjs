@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { openGame, enterGame, metrics, headerPoint, openRewards, roomControl, observeAudio } = require('./game-ui.cjs');
+const { openGame, enterGame, metrics, headerPoint, openRewards, roomControl, observeAudio,
+  tap, rendered, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
 
 function hash(source) {
   let value = 2166136261;
@@ -144,18 +145,38 @@ async function saves(page) {
     records: ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'].map(key => [key, localStorage.getItem(key)]) }));
 }
 
+async function winMatch(page) {
+  const bounds = await metrics(page), cards = await discoverMatchCards(page);
+  const pairs = cards.filter(card => card.kind === 'Word').map(word =>
+    [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]
+  ).filter(([, picture]) => picture);
+  expect(pairs).toHaveLength(5);
+  for (const [index, [word, picture]] of pairs.entries()) {
+    const written = boardPoint(bounds, word.index), pictured = boardPoint(bounds, picture.index);
+    await tap(page, written.x, written.y);
+    await expect(page.locator('#selection-status')).toHaveText(`Word: ${word.word}`);
+    await tap(page, pictured.x, pictured.y);
+    await expect(page.locator('#game-status')).toContainText('Great match!');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+  }
+  await rendered(page);
+}
+
 async function greetings(page) {
-  return page.evaluate(durations => audioObservation.playbacks.filter(sound => !sound.loop &&
+  // Gameplay reactions reuse these recordings at a different pitch.
+  return page.evaluate(durations => audioObservation.playbacks.filter(sound => !sound.loop && sound.playbackRate === 1 &&
     durations.some(duration => Math.abs(sound.duration - duration) <= 2 / sound.sampleRate)), samples.map(sample => sample.duration));
 }
 
-for (const reducedMotion of ['reduce', 'no-preference']) test(`native header and Home finish each Pip action and real greeting before another tap with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
+for (const reducedMotion of ['reduce', 'no-preference']) test(`native results and Home finish each Pip action and real greeting before another tap with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
   await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion });
   const available = await page.evaluate(() => audioObservation.available);
   if (browserName === 'chromium') expect(available, 'Chromium must exercise the real native audio path.').toBe(true);
   if (!available) testInfo.annotations.push({ type: 'audio capability', description: 'This WebKit runtime has no AudioContext; native direct input and progress checks still run, audible assertions are unavailable.' });
-  const original = await saves(page), bounds = await metrics(page), header = headerPoint(bounds, 'pip');
+  await winMatch(page);
+  const original = await saves(page), bounds = await metrics(page), companion = headerPoint(bounds, 'pip');
   const screen = point => ({ x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale });
   const click = (point, count = 1) => {
     const { x, y } = screen(point);
@@ -198,10 +219,10 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`native header and
     expect((await greetings(page)).length, 'Busy gestures are discarded instead of queued.').toBe(available ? before + 1 : before);
   }
   for (let index = 0; index < 4; index++) {
-    await expectGreetingAfter(() => burst(header), 1.8, () => click(header));
+    await expectGreetingAfter(() => burst(companion), 1.8, () => click(companion));
     await expect(page.locator('#game-status')).toContainText('Pip says hello!');
   }
-  await page.screenshot({ path: testInfo.outputPath('pip-random-sound-header.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('pip-random-sound-results.png'), scale: 'css' });
   await openRewards(page);
   const pip = await roomControl(page, 'pip');
   for (let index = 0; index < 2; index++) {
@@ -217,7 +238,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`native header and
     } finally { await page.mouse.up(); }
     // The normal action still owns this follow-up press. With reduced motion,
     // a driver round trip can outlast the complete short recording; atomic
-    // header and Home mouse bursts above verify the audio-only gate instead.
+    // result and Home mouse bursts above verify the audio-only gate instead.
     if (reducedMotion === 'no-preference') await click(pip);
   }, 1.2, () => click(pip));
   await expect(page.locator('#game-status')).toHaveText('Pip leans into your hand. Lovely!');

@@ -535,36 +535,39 @@ test('Pip follows the board, chest, room and loss pages without extra rewards', 
   await page.goto('/');
   await ready(page);
   const bounds = await canvasMetrics(page);
-  const scale = 390 / 480;
-  const greet = async (x, y, inRoom = false) => {
+  const greet = async (point, inRoom = false) => {
     await rendered(page);
-    await page.touchscreen.tap(bounds.x + x * scale, bounds.y + y * scale);
+    await tap(page, point.x, point.y);
     if (inRoom) {
       await expect(page.locator('#game-status')).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
     } else {
-      await expect(page.locator('#game-status')).toContainText('Pip says: duck!');
+      await expect(page.locator('#game-status')).toContainText('Pip says hello!');
     }
   };
-  await greet(40, 40);
+  const boardPip = headerPoint(await logicalMetrics(page), 'pip');
+  await tap(page, boardPip.x, boardPip.y);
+  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.screenshot({ path: testInfo.outputPath('pip-board.png'), scale: 'css' });
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
   await chooseSeason(page, 0);
   await winWithTouch(page);
-  await greet(40, 40);
+  await greet(headerPoint(await logicalMetrics(page), 'pip'));
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
   const earnedProgress = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await openRewards(page);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   const roomPip = await roomControl(page, 'pip');
-  await greet(roomPip.x, roomPip.y, true);
+  await greet(roomPip, true);
   await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(earnedProgress);
   await page.keyboard.press('Escape');
   await page.reload();
   await ready(page);
   await loseWithTouch(page);
-  await greet(40, 40);
+  await greet(headerPoint(await logicalMetrics(page), 'pip'));
   await page.screenshot({ path: testInfo.outputPath('pip-loss.png'), scale: 'css' });
   await openRewards(page);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");

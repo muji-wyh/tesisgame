@@ -130,6 +130,7 @@ func _check_strips(app) -> void:
 			"The narrow-phone fixture has real overflow to exercise: " + strip.name)
 		for touch in [false, true]:
 			for other: ScrollContainer in strips:
+				other.call("cancel_drag")
 				other.scroll_horizontal = 0
 			await settle()
 			var before: Array = [app.playroom_state.age_band_id, app.model.theme_id, app._room._preview_id]
@@ -152,6 +153,7 @@ func _check_strips(app) -> void:
 	var targets: Array = [app._age_buttons["10-plus"], app.theme_buttons.back(), app._room.item_buttons["toy-candy"]]
 	for index in range(strips.size()):
 		var strip: ScrollContainer = strips[index]
+		strip.call("cancel_drag")
 		strip.scroll_horizontal = 0
 		targets[index].grab_focus()
 		await settle()

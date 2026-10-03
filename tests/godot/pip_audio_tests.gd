@@ -105,7 +105,10 @@ func _check_bundled_greetings() -> void:
 	for repeated in range(5): audio.play_pip()
 	check(audio._pip_rng.state == state and audio._playback_requests.get(audio.voice, 0) == request,
 		"Repeated taps do not queue or replace an active greeting")
-	await create_timer(audio.voice.stream.get_length() + 0.2).timeout
+	# Scene timers can advance before the audio thread drains its final buffer.
+	var deadline := Time.get_ticks_msec() + ceili((audio.voice.stream.get_length() + 1.5) * 1000.0)
+	while (audio.voice.playing or audio.is_pip_busy()) and Time.get_ticks_msec() < deadline:
+		await create_timer(0.02).timeout
 	check(not audio.is_pip_busy() and not audio.voice.playing,
 		"The real recording's end releases the greeting gate")
 	audio.play_pip()
@@ -133,27 +136,45 @@ func _check_click_routes() -> void:
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
 	app._mode_id = "match"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await _settle()
 	app.set_reduced_motion(true)
 	app.audio.halt()
 	app.medal_progress.counts["spring-1"] = 1
 	app._refresh_collection()
+	# Refreshing reduced motion schedules container layout before Pip can be hit.
+	await _settle()
 	var saved: Dictionary = _saved_files(directory)
 	var progress: Array = _progress(app)
 	var players: Array[Node] = app.audio.get_children()
 	app._update_duck()
-	var before: int = _voice_requests(app)
+	check(not app._leaderboard_overlay.visible and app.duck.is_visible_in_tree(),
+		"The isolated player fixture exposes the gameplay header without onboarding")
+	var greeting_rng: int = app.audio._pip_rng.state
+	var last_greeting: String = app.audio._last_pip_path
+	var trick_index: int = app._duck_trick_index
 	await _tap(app.duck.get_global_rect().get_center())
-	_check_greeting(app, before, "A real header mouse click")
+	# Opening the menu invalidates voice requests when it cancels pronunciation.
+	# Greeting selection and its animation cycle distinguish playback from cancel.
+	check(app._mode_menu_open() and not app.audio.voice.playing and not app.audio.is_pip_busy()
+		and app.audio._pip_rng.state == greeting_rng and app.audio._last_pip_path == last_greeting
+		and app._duck_trick_index == trick_index,
+		"A real header mouse click opens game modes without starting a duck greeting")
+	app._hide_mode_menu()
+	var before: int
+	var playing_phase: String = app.model.phase
+	await _show_result_companion(app)
 	for guard in ["_voice_mode", "_pop_speech_active"]:
 		app.audio.halt()
 		var state: int = app.audio._pip_rng.state
 		app.set(guard, true)
 		app.duck.pressed.emit()
 		check(not app.audio.voice.playing and app.audio._pip_rng.state == state,
-			"Pip stays silent while " + guard + " owns the microphone")
+			"Result Pip stays silent while " + guard + " owns the microphone")
 		app.set(guard, false)
+	app.model.phase = playing_phase
+	app._refresh()
 	app._show_collection()
 	app._collection_scroll.scroll_vertical = 0
 	await _settle()
@@ -208,7 +229,10 @@ func _check_click_routes() -> void:
 	playground.poke()
 	check(not app.audio.voice.playing and app.audio._pip_rng.state == state,
 		"The hidden Home cannot greet during gameplay")
+	await _show_result_companion(app)
+	before = _voice_requests(app)
 	app.duck.pressed.emit()
+	_check_greeting(app, before, "The result companion before backgrounding")
 	app.on_page_hidden()
 	check(not app.audio.voice.playing and not app.audio.active,
 		"Backgrounding the page stops the imported Pip greeting")
@@ -217,6 +241,8 @@ func _check_click_routes() -> void:
 	check(app.audio.active and app.audio.music.playing and not app.audio.voice.playing
 		and not app.audio.effect.playing,
 		"Returning to the page restores background music without replaying a stale greeting")
+	app.model.phase = playing_phase
+	app._refresh()
 	await _check_serialized_routes(app)
 	check(app.audio.get_children() == players, "All native Pip click routes keep the same audio players")
 	check(_progress(app) == progress, "Pip sounds leave the lesson, cards, medals, toys, backdrop and reward goal unchanged")
@@ -232,12 +258,18 @@ func _check_click_routes() -> void:
 
 func _check_serialized_routes(app) -> void:
 	var cached: Dictionary = app.audio.cache.duplicate()
+	var playing_phase: String = app.model.phase
 	for in_home in [false, true]:
-		if in_home: app._show_collection()
-		else: app._hide_collection()
+		if in_home:
+			app.model.phase = playing_phase
+			app._refresh()
+			app._show_collection()
+		else:
+			app._hide_collection()
+			await _show_result_companion(app)
 		await _settle()
 		app._update_duck()
-		var context := "Home" if in_home else "Header"
+		var context := "Home" if in_home else "Result companion"
 		for sound_outlasts_motion in [false, true]:
 			app.audio.halt()
 			app.duck.settle()
@@ -317,8 +349,22 @@ func _check_serialized_routes(app) -> void:
 		app.duck.settle()
 	app.audio.cache = cached
 	app._hide_collection()
+	app.model.phase = playing_phase
+	app._refresh()
 	app.set_reduced_motion(true)
 	app._update_duck()
+
+
+func _show_result_companion(app) -> void:
+	app.model.phase = "won"
+	app._refresh()
+	app._layout()
+	await _settle()
+	app.audio.halt()
+	app.duck.settle()
+	app._update_duck()
+	check(app.duck.is_visible_in_tree() and not app._mode_menu_open(),
+		"The result fixture exposes Pip's companion interaction")
 
 
 func _silence(seconds: float) -> AudioStreamWAV:

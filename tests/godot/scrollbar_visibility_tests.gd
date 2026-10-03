@@ -106,8 +106,11 @@ func _check_touch_drag(scroll: ScrollContainer, target: Control, context: String
 		context + " continuously scrolls after focus settles: before=%d after=%d max=%.1f" % [before, scroll.scroll_vertical, _maximum(scroll)])
 	await _touch_pointer(point + Vector2(0, direction * distance), false)
 	check(_activations == activations_before, context + " never activates a dragged action")
-	# Stop native inertia before the next independent gesture fixture.
-	scroll.set_process_internal(false)
+	# Stop inertia before the next independent gesture fixture.
+	if scroll.has_method("cancel_drag"):
+		scroll.call("cancel_drag")
+	else:
+		scroll.set_process_internal(false)
 	Input.emulate_touch_from_mouse = original_hint
 	_check_bars(scroll, context)
 

@@ -138,6 +138,8 @@ func _run() -> void:
 		check(absi(review.scroll_horizontal - 24) <= 1, "Review words follow the held horizontal drag")
 		await pointer(point - Vector2(24, 0), false, touch)
 		check(taps == before, "Dragging the review strip never pronounces a word")
+		# The next assertion exercises a tap after scrolling has already stopped.
+		review.call("cancel_drag")
 		point = app._found_words.get_child(1).get_global_rect().get_center()
 		await pointer(point, true, touch)
 		await pointer(point, false, touch)

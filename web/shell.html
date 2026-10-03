@@ -56,6 +56,9 @@
     /* Hide scrollbar chrome without changing scrolling or focus navigation. */
     * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
     *::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    /* Let native browser scrollers retain touch momentum, including older iOS. */
+    #status, #loading-theme-options, #speech-transcript, #speech-notice,
+    #speech-debug, #speech-debug textarea { -webkit-overflow-scrolling: touch; }
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--cp-bg); }
     body { font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--cp-text); overscroll-behavior: none; }
@@ -337,7 +340,7 @@
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Talk Quest.
-        Talk Quest has fourteen word adventures. Choose a level on the chapter map to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Speech appears on screen in real time as recognition updates, including words that do not match a target, and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
+        Talk Quest has fourteen word adventures. Scroll the island map and choose a level to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Speech appears on screen in real time as recognition updates, including words that do not match a target, and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
         Match: find five matching word and picture pairs.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -348,9 +351,9 @@
         Browser speech may process audio remotely; the game saves no voice or transcripts.
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
-        Pip the duck is your guide. His beak moves with the game's spoken words. Press him for a dance, snack, or bubbles.
+        Pip the duck is your guide. His beak moves with the game's spoken words. In his room, press him for a dance, snack, or bubbles.
         Before your first game, create a local player with a name and emoji avatar. The game opens in Match. Tap a word and its matching picture. Tap a completed card to hear its word again.
-        Match and Memory practise the same five words. Choose a mode tab above to switch games.
+        Match and Memory practise the same five words. Tap Pip in the upper-left corner to open the game-mode menu and switch games. Tap outside the menu or press Escape to close it.
         Match feedback stays on the board and clears automatically. Tap any card, including a completed pair, to hear its word again.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
@@ -359,12 +362,12 @@
         The timer starts when the microphone is listening. The colored screen edges glow while listening.
         Words sometimes launch in groups of two or three. Say different displayed words for a combo. The second hit in a streak adds 3 seconds, and the third adds 5 seconds. A dropped word ends the streak.
         Voice Pop starts with zero chests. Reach 100, 200, and 300 points to earn one chest at each milestone, up to three per round. A golden burst announces each earned chest.
-        After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Open chests, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows all earned chests together, each with a different design. Hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
+        After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Open chests, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows large earned chests, each with a different design. Scroll to explore them and hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a Match or Memory round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh Match game directly. Retry saving appears only if a reward could not be saved.
         More opens Pip's room. Players manages up to ten local names and emoji avatars. Leaderboards shows separate Match, Memory, and Voice Pop rankings on this device. Talk Quest saves campaign progress and treasures on this device. The arrow icon returns to the game.
-        Tap an Age choice to view all its words across every topic, with pictures and a word count. Tap a picture to hear its word. Swipe the list vertically or use the mouse wheel without a scrollbar. Back returns to Pip's room. The saved age applies to the next lesson and keeps your current game unchanged.
+        Tap an Age choice to view only the words in that age range across every topic, with pictures and a word count. Ages 4-6 shows basic words, Ages 7-9 shows growing words, and Ages 10+ shows advanced words. All shows every word. Tap a picture to hear its word. Swipe the list vertically or use the mouse wheel without a scrollbar. Back returns to Pip's room. The saved age applies to the next lesson and keeps your current game unchanged.
         Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
         Locked toy cards show gift progress. Your chosen world is remembered as you explore vocabulary topics.
         Winning Match or Memory earns a chest. Hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
@@ -1542,6 +1545,7 @@
         let active = false;
         let listening = false;
         let message = '';
+        let menuSuspension = null;
         let generation = 0;
         let recognition = null;
         let restartTimer = 0;
@@ -1889,6 +1893,7 @@
         }
 
         function closeSpeech(restoreFocus) {
+          menuSuspension = null;
           const wasEnabled = enabled;
           if (!release('stopped')) {
             enabled = true;
@@ -1912,9 +1917,39 @@
           return closeSpeech(true);
         }
 
+        function suspendSpeechForMenu() {
+          if (menuSuspension) return true;
+          const saved = { enabled, active, presentation, message };
+          if (!release('game_mode_menu')) {
+            report();
+            return false;
+          }
+          menuSuspension = saved;
+          enabled = false;
+          panel.hidden = true;
+          return true;
+        }
+
+        function resumeSpeechFromMenu() {
+          if (!menuSuspension) return true;
+          const saved = menuSuspension;
+          menuSuspension = null;
+          if (document.hidden) return closeSpeech(false);
+          enabled = saved.enabled;
+          presentation = saved.presentation;
+          if (saved.enabled && saved.active) {
+            enabled = false;
+            speechMode(true, saved.presentation);
+          } else {
+            report(saved.message);
+          }
+          return true;
+        }
+
         function speechMode(value, nextPresentation = 'match', practiceActivation = false) {
           if (practice && !practiceActivation) return;
           if (!value || document.hidden) { stopSpeech(); return; }
+          if (menuSuspension) { menuSuspension = null; enabled = false; }
           nextPresentation = ['pop', 'quest'].includes(nextPresentation) ? nextPresentation : 'match';
           if (enabled) {
             if (presentation === nextPresentation || !closeSpeech(false)) return;
@@ -2377,7 +2412,7 @@
         window.addEventListener('offline', () => { if (enabled && recognitionMode !== 'local') failedRecognition('offline'); });
 
         return {
-          speechAvailable, speechMode, stopSpeech, popStatus, configureSpeechLexicon,
+          speechAvailable, speechMode, stopSpeech, suspendSpeechForMenu, resumeSpeechFromMenu, popStatus, configureSpeechLexicon,
           observeQuestSpeech(callback) { onQuestResult = typeof callback === 'function' ? callback : null; },
           questTargets(json) {
             let next;
@@ -2797,9 +2832,7 @@
         updateControls();
         return { setAvailable(value) { if (!opened) launch.hidden = value !== true; } };
       }
-      function createQuestHost(speech) {
-        let utterance = null;
-        let speechGeneration = 0;
+      function createQuestHost() {
         function finiteFields(source, schema) {
           const result = {};
           for (const [key, [minimum, maximum, integer]] of Object.entries(schema)) {
@@ -2833,13 +2866,6 @@
           }
           return run;
         }
-        function questCancelSpeak() {
-          speechGeneration++;
-          if (utterance) window.speechSynthesis?.cancel();
-          utterance = null;
-        }
-        document.addEventListener('visibilitychange', () => { if (document.hidden) questCancelSpeak(); });
-        window.addEventListener('pagehide', questCancelSpeak);
         return {
           questProgress() {
             try { return localStorage.getItem('wordBuddies.talkQuest'); }
@@ -2879,26 +2905,11 @@
                 (value.transcript ? ` ${value.transcript}` : '') :
               `${value.prompt?.speaker || ''}: ${value.prompt?.text || value.phase}. ${value.transcript || ''}`) : '';
             if (status.textContent !== message) status.textContent = message;
-          },
-          questCancelSpeak,
-          questSpeak(text) {
-            questCancelSpeak();
-            if (document.hidden || typeof text !== 'string' || !text.trim() ||
-                !window.SpeechSynthesisUtterance || !window.speechSynthesis || !speech.stopSpeech()) return false;
-            const generation = speechGeneration;
-            utterance = new window.SpeechSynthesisUtterance(text.slice(0, 512));
-            utterance.lang = 'en-US';
-            utterance.rate = 0.85;
-            utterance.onend = utterance.onerror = () => {
-              if (generation === speechGeneration) utterance = null;
-            };
-            try { window.speechSynthesis.speak(utterance); return true; }
-            catch { utterance = null; return false; }
           }
         };
       }
       const speechHost = createSpeechHost();
-      const questHost = createQuestHost(speechHost);
+      const questHost = createQuestHost();
       let onSpeechDebug = null;
       const speechDebug = createSpeechDebugPanel(speechHost, (action, value) => {
         // Godot callbacks discard return values; acknowledge through the shared object.

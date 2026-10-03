@@ -18,7 +18,7 @@ rename preserves existing native and browser saves.
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 | `level` | `basic`, `growing`, or `advanced`; explicitly authored for every catalogue entry. Older four-field callers default to `basic`; invalid supplied levels are rejected. |
 
-The 350 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses **Microsoft Jenny Neural (en-US)** with a warm, friendly delivery and a slightly slower pace. Azure Speech is used only to generate these source recordings; playback and ordinary builds need no speech credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
+The 350 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses the approved **Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged volume. Microsoft Edge online TTS generates these source recordings; playback and ordinary builds need no speech service or credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
 
 Pip's original pose, idle-action and dance-part sheets are maintained under
 `assets\images\mascots`. The regular sheet's four frames are idle, speaking,
@@ -65,36 +65,23 @@ history, and legacy sticker collections are preserved, including all 350 words.
 
 ### Regenerate natural speech
 
-Voice regeneration and its conversion tests additionally require **FFmpeg** on PATH.
-`tools\generate-voices.cjs` uses Jenny's `friendly` style at degree `1.15`, with an 8% slower
-speaking rate. A short leading pause keeps card pronunciation responsive. FFmpeg removes
-excess final silence while retaining a gentle 160 ms tail, quiet word endings, and pauses
-within sentences. It converts the service's 24 kHz output to the existing **22.05 kHz,
-PCM16 mono** asset format, preserving the mobile audio import settings.
-
-The personal Azure Speech resource is `tesisgame-speech`, **F0**, in `rg-footises`, East Asia.
-The generator spaces requests for that tier, checks that the selected neural style is
-available, and keeps existing recordings until the complete batch has been generated and
-validated. It fails explicitly rather than silently reverting to a desktop voice.
+Voice regeneration requires **Python**, **edge-tts 7.2.8**, and **FFmpeg** on PATH.
+`tools\generate-voices.cjs` uses the same Ava profile as the user-approved preview.
+FFmpeg decodes the service MP3 into the existing **22.05 kHz, PCM16 mono** asset
+format. It does not alter pitch, add effects, or trim the spoken delivery.
+The generator validates the complete batch before replacing any existing recording,
+and retains a profile/text-keyed cache under `build/voice-cache` for retries.
+It fails explicitly rather than substituting a different voice.
 
 ```powershell
-$env:SPEECH_REGION = "eastasia"
-$env:SPEECH_KEY = az cognitiveservices account keys list `
-    --subscription "Visual Studio Enterprise Subscription" `
-    --name tesisgame-speech --resource-group rg-footises `
-    --query key1 --output tsv
-if ($LASTEXITCODE -ne 0 -or !$env:SPEECH_KEY) { throw "Speech credentials unavailable." }
-try {
-    node tools\generate-voices.cjs
-    if ($LASTEXITCODE -ne 0) { throw "Voice generation failed." }
-} finally {
-    Remove-Item Env:\SPEECH_KEY
-    Remove-Item Env:\SPEECH_REGION
-}
+python -m pip install -r tools/voice-requirements.txt
+node tools/generate-voices.cjs
+npm run build:web
 ```
 
 The existing `tools\generate-voices.ps1` command forwards to the same generator.
-Keep keys in the process environment, never in source files or the Web export.
+Set `PYTHON` if a particular Python executable is required. Only generation uses
+the online service; the shipped game plays the committed recordings.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
 The game prompt catalog contains ten messages: wrong-answer and loss feedback,
 plus one greeting for each world. Together with the 350 word recordings, the
@@ -102,8 +89,8 @@ generator maintains 360 active files under `assets\audio\voice`. Retired
 arrival/opening recordings have been removed; historical provenance remains in
 the asset documentation. The retired Voice Pop report recordings and their
 generator are no longer shipped; [their provenance](pop-voice.md) remains historical.
-Source details, hashes and generation checks are in
-[Jungle and Candy audio](jungle-candy-audio.md).
+Current source details and hashes are in [Ava speech](ava-voice.md).
+[Jungle and Candy audio](jungle-candy-audio.md) preserves the superseded Jenny provenance.
 
 ## Chest artwork
 
@@ -153,7 +140,7 @@ notices, source downloads, processing, and restoration commands. The active
 The October 2, 2026 refresh replaces the earlier four seasonal recordings from
 the user-provided Casual Game Music Pack 1.4 and the four synthesized ocean,
 space, jungle, and candy scores. The dated [Jungle and Candy audio](jungle-candy-audio.md)
-provenance preserves the original music and the retained arrival effects and
+provenance preserves the original music, retained arrival effects, and superseded
 Jenny Neural greetings. `tools\generate-world-bgm.cjs` now preserves existing
 tracks by default; `--replace` explicitly regenerates the four historical scores.
 Restore current music with `tools\import-casual-bgm.py`.

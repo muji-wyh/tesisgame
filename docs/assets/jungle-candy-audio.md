@@ -4,11 +4,12 @@ The September 18, 2026 expansion supplied original jungle and candy music,
 arrival effects, and spoken prompts. On October 2, the two background tracks
 were replaced with Juhani Junkala's CC0 recordings as part of the
 [eight-theme casual BGM refresh](casual-bgm.md). The two original arrival effects
-and spoken theme greetings remain active. The dated
+remain active. On October 3, all spoken recordings, including the two theme
+greetings, were replaced by the approved [Ava voice](ava-voice.md). The dated
 [jungle-candy-audio.json](jungle-candy-audio.json) retains the original source
-paths, formats, durations, and SHA-256 hashes; its music hashes describe the
-superseded synthesized scores. [casual-bgm.json](casual-bgm.json) describes the
-current music at those same paths.
+paths, formats, durations, and SHA-256 hashes; its historical hashes describe the
+superseded synthesized scores and Jenny greetings. [casual-bgm.json](casual-bgm.json)
+and [ava-voice.json](ava-voice.json) describe the current music and speech at those paths.
 
 Chest interactions use the separate authored material bank described in
 [Chest feel](chest-feel.md). The original expansion also included arrival and
@@ -16,8 +17,8 @@ opening voice prompts and opening jingles. Those four recordings and two
 jingles are retired and removed from the active source assets.
 
 The original six spoken prompts used the existing Microsoft Azure Speech voice:
-`en-US-JennyNeural`, `friendly` style, degree `1.15`, rate `-8%`. Generation uses
-24 kHz PCM, then the existing FFmpeg conversion retains quiet word endings and a
+`en-US-JennyNeural`, `friendly` style, degree `1.15`, rate `-8%`. Generation used
+24 kHz PCM, then the former FFmpeg conversion retained quiet word endings and a
 gentle tail in 22.05 kHz PCM16 mono. The two active greetings remain in
 `voice-prompts.json`.
 Independent Azure speech recognition confirmed all six phrases. Five matched
@@ -31,8 +32,8 @@ progression. The retained effects have smooth attack/release envelopes and
 headroom. No Unity Store or other third-party recording was used for the twelve
 original September 18 source files.
 
-Generate missing voice and effect files with the existing authorized Azure
-configuration in the README, then verify the current music:
+Generate missing voices with the current [Ava workflow](ava-voice.md), retain the
+original effects, and verify the current music:
 
 ```powershell
 node tools/generate-voices.cjs --missing
@@ -47,7 +48,7 @@ previously existing WAV files remained byte for byte unchanged. The legacy
 explicit `--replace` option for reproducing the original scores. Restore the
 active downloaded tracks with the [casual BGM importer](casual-bgm.md).
 
-The replacement background tracks, two retained theme greetings, and two arrival
+The replacement background tracks, two Ava theme greetings, and two arrival
 effects, along with the current chest material bank, are bundled in the startup game pack.
 Packaging requires their Godot imports,
 so import the source WAVs through the normal build before validating the required
@@ -57,7 +58,7 @@ no audio download is needed after startup.
 The September 18 validation covered all eight BGM tracks, all twenty effects, 228 vocabulary and
 prompt recordings, six-prompt missing-only synthesis, old-file preservation,
 deterministic new music/effects and all eight original optional Web audio paths.
-The maintained tests pin the four retained original recordings, reproduce the
+The maintained tests pin the two retained original arrival effects, reproduce the
 superseded jungle and candy scores against their historical hashes, and verify
 the required current music and greeting paths inside the bundled-audio contract:
 

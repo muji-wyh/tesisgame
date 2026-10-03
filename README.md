@@ -130,9 +130,10 @@ iframe permissions, cache behavior, audio recovery, and detailed verification.
 
 ## Source and documentation
 
-`words.json` is the canonical vocabulary. Recorded pronunciations use Microsoft
-Jenny Neural; generating new recordings requires Azure Speech credentials and
-FFmpeg, while ordinary builds and playback do not. Some optional artwork and
+`words.json` is the canonical vocabulary. All 350 recorded pronunciations and ten
+spoken prompts use the approved Microsoft Ava Neural voice (`-15%` rate, `+8Hz`
+pitch). [Voice regeneration](docs/assets/ava-voice.md) uses Python, `edge-tts`,
+and FFmpeg; ordinary builds and playback use the bundled WAVs offline. Some optional artwork and
 sound overrides come from user-provided licensed sources and remain outside
 Git. Clean checkouts use the tracked fallbacks. Their rights are independent
 of the repository's code license.
