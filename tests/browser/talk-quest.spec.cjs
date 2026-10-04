@@ -978,6 +978,44 @@ test('Talk Quest phone maps scroll to all fourteen destinations and unavailable 
   await info.attach('talk-quest-fixed-phone-layouts', { body: JSON.stringify(layouts, null, 2), contentType: 'application/json' });
 });
 
+test('Talk Quest map returns to the current island without starting an adventure after resizing', async ({ page, browserName }, info) => {
+  const errors = recordErrors(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const initial = await openQuest(page, browserName);
+  for (const [label, width, height] of [['desktop', 1280, 800], ['phone', 390, 844], ['landscape', 844, 390]]) {
+    await page.setViewportSize({ width, height });
+    await rendered(page);
+    await clickControl(page, 'map_next');
+    await waitState(page, { view: 'map', map_chapter: 1 });
+    await clickControl(page, 'map_next');
+    let map = await waitState(page, { view: 'map', map_chapter: 2 });
+    if (label === 'landscape') {
+      expect(map.controls.map_current.visible, 'Short maps reserve height for island scenery').toBe(false);
+      await clickControl(page, 'map_previous');
+      await waitState(page, { map_chapter: 1 });
+      await clickControl(page, 'map_previous');
+    } else {
+      await clickControl(page, 'map_current');
+    }
+    map = await waitState(page, { view: 'map', map_chapter: 0, listening: false });
+    await expect.poll(async () => {
+      map = await snapshot(page);
+      return map.levels[0].visible && insideMapViewport(map.levels[0], map.map_scroll_rect);
+    }, { message: 'The current island is fully visible after the native scroll layout settles' }).toBe(true);
+    expect(map.completed).toEqual(initial.completed);
+    expect(map.unlocked).toBe(initial.unlocked);
+    expect(map.controls.continue.visible, 'Navigation never creates a saved adventure').toBe(false);
+    const raw = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
+      requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
+    const png = Buffer.from(raw, 'base64');
+    expect(await visibleColorCount(page, png)).toBeGreaterThan(20);
+    fs.writeFileSync(info.outputPath(`word-isles-${label}.png`), png);
+  }
+  expect(await page.evaluate(() => window.__questSpeech.starts)).toBe(0);
+  expect(errors).toEqual([]);
+});
+
 test.describe('Talk Quest chest hold lifecycle', () => {
   // Preserve phone geometry while reducing software-renderer fill cost around
   // the short interval between visible release and completion.

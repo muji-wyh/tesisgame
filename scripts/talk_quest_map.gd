@@ -8,10 +8,11 @@ signal changed
 const ART_MANIFEST := "res://assets/talk_quest/map-dimensional/manifest.json"
 const LandmarkButton = preload("res://scripts/talk_quest_map_stop.gd")
 const MapScroll = preload("res://scripts/review_scroll.gd")
+const Style = preload("res://scripts/ui_style.gd")
 const CHAPTERS: Array = [
-	{"title": "COZY BEGINNINGS", "first": 1, "count": 4},
-	{"title": "AROUND TOWN", "first": 5, "count": 6},
-	{"title": "BEYOND THE GARDEN", "first": 11, "count": 4}
+	{"title": "Cozy Beginnings", "note": "Little discoveries, close to home.", "first": 1, "count": 4},
+	{"title": "Around Town", "note": "Every corner has a story to tell.", "first": 5, "count": 6},
+	{"title": "Beyond the Garden", "note": "Follow your words a little further.", "first": 11, "count": 4}
 ]
 
 var level_buttons: Array[Button] = []
@@ -31,7 +32,12 @@ var _art: Dictionary = {}
 var _backgrounds: Array[Texture2D] = []
 var _ui: Dictionary = {}
 var _decorations: Dictionary = {}
-var _heading_panel: StyleBoxTexture
+var _heading_title: Label
+var _heading_note: Label
+var _chapter_kicker: Label
+var _home: Button
+var _footer_height: float = 0.0
+var _footer_panel: StyleBoxFlat
 var _layout_pending: bool = false
 var _layout_active: bool = false
 var _reveal_number: int = 1
@@ -58,12 +64,24 @@ func _init() -> void:
 	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_content)
 	_content.draw.connect(_draw_route)
-	_heading_panel = StyleBoxTexture.new()
-	_heading_panel.texture = _ui.get("panel")
-	_heading_panel.modulate_color = Color("#244b5b")
-	_heading_panel.set_texture_margin_all(10)
+	for item in [["_chapter_kicker", 10], ["_heading_title", 24], ["_heading_note", 12]]:
+		var label := Style.label("", int(item[1]))
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.clip_text = true
+		add_child(label)
+		set(str(item[0]), label)
+	_chapter_kicker.add_theme_color_override("font_color", Style.GOOD)
+	_heading_note.add_theme_color_override("font_color", Style.MUTED)
 	_previous = _chapter_button("Previous region", -1)
 	_next = _chapter_button("Next region", 1)
+	_home = Button.new()
+	_home.name = "FindIsland"
+	_home.tooltip_text = "Return to your next unfinished adventure"
+	_home.accessibility_name = "Find your next island"
+	_home.pressed.connect(func() -> void:
+		if _current_stop > 0 and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+			show_level(_current_stop))
+	add_child(_home)
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
@@ -79,14 +97,9 @@ func _chapter_button(accessible: String, direction: int) -> Button:
 	button.accessibility_name = accessible
 	button.tooltip_text = accessible
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.pressed.connect(func() -> void: set_chapter(current_chapter + direction))
-	for state in ["normal", "hover", "pressed", "disabled", "focus", "hover_pressed"]:
-		var box := StyleBoxTexture.new()
-		box.texture = _ui.get("panel")
-		box.modulate_color = Color("#7195a0") if state in ["hover", "focus"] else Color("#436879")
-		box.set_texture_margin_all(8)
-		box.set_content_margin_all(8)
-		button.add_theme_stylebox_override(state, box)
+	button.pressed.connect(func() -> void:
+		if not interaction_allowed.is_valid() or interaction_allowed.call():
+			set_chapter(current_chapter + direction))
 	button.add_theme_color_override("icon_disabled_color", Color(1, 1, 1, 0.3))
 	add_child(button)
 	return button
@@ -171,7 +184,7 @@ func visible_level_buttons() -> Array[Button]:
 
 func navigation_buttons() -> Array[Button]:
 	var result: Array[Button] = []
-	for button in [_previous, _next]:
+	for button in [_previous, _next, _home]:
 		if button.visible and not button.disabled:
 			result.append(button)
 	return result
@@ -208,6 +221,7 @@ func set_level_state(number: int, unlocked: bool, cleared: bool) -> void:
 		item.current_stop = item.unlocked and not item.cleared and next_stop == 0
 		if item.current_stop:
 			next_stop = item.number
+		item.update_accessibility()
 		item.queue_redraw()
 	if next_stop != _current_stop:
 		_current_stop = next_stop
@@ -215,6 +229,7 @@ func set_level_state(number: int, unlocked: bool, cleared: bool) -> void:
 			show_level(next_stop)
 	_update_navigation()
 	_content.queue_redraw()
+	queue_redraw()
 
 
 func _layout() -> void:
@@ -223,6 +238,8 @@ func _layout() -> void:
 	custom_minimum_size = Vector2.ZERO
 	_previous.visible = not level_buttons.is_empty()
 	_next.visible = not level_buttons.is_empty()
+	for control in [_heading_title, _heading_note, _chapter_kicker, _home]:
+		control.visible = not level_buttons.is_empty()
 	if size.x <= 0 or size.y <= 0 or level_buttons.is_empty():
 		queue_redraw()
 		return
@@ -230,14 +247,16 @@ func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
 	var old_max: float = _scroll._maximum()
 	var fraction: float = _scroll.scroll_horizontal / old_max if old_max > 0 else 0.0
-	_compact = size.y * _ui_scale < 250.0
-	_header_height = (44.0 if _compact else 54.0) * unit
+	# Reserve enough scene height for the island artwork below the chapter heading.
+	_compact = size.y * _ui_scale < 350.0
+	_header_height = (44.0 if _compact else 94.0) * unit
+	_footer_height = 0.0 if _compact else 70.0 * unit
 	_scroll.position = Vector2(0, _header_height)
-	_scroll.size = Vector2(size.x, maxf(1, size.y - _header_height))
-	var width: float = minf((220.0 if _compact else 310.0) * unit, size.x - 24 * unit)
-	var height: float = minf((108.0 if _compact else 350.0) * unit, _scroll.size.y - 8 * unit)
+	_scroll.size = Vector2(size.x, maxf(1, size.y - _header_height - _footer_height))
+	var width: float = minf((220.0 if _compact else 260.0) * unit, size.x - 36 * unit)
+	var height: float = minf((108.0 if _compact else 316.0) * unit, _scroll.size.y - 12 * unit)
 	height = maxf(44 * unit, height)
-	var spacing: float = width + (20.0 if _compact else 34.0) * unit
+	var spacing: float = width + (24.0 if _compact else 32.0) * unit
 	var inset: float = 24 * unit
 	var world_width: float = inset * 2 + width + spacing * (level_buttons.size() - 1)
 	_content.custom_minimum_size = Vector2(world_width, 0)
@@ -247,15 +266,38 @@ func _layout() -> void:
 	for index in range(level_buttons.size()):
 		var button: LandmarkButton = level_buttons[index]
 		button.compact = _compact
-		button.position = Vector2(inset + index * spacing, 4 * unit + room * [0.40, 0.74, 0.24, 0.57, 0.30, 0.69, 0.43][index % 7])
+		button.position = Vector2(inset + index * spacing, 4 * unit + room * [0.28, 0.86, 0.10, 0.66, 0.24, 0.80, 0.38][index % 7])
 		button.size = Vector2(width, height)
 		button.set_ui_scale(_ui_scale)
 		_route_points.append(button.position + button.route_anchor())
-	_previous.position = Vector2(8, 0 if _compact else 3) * unit
-	_next.position = Vector2(size.x - 52 * unit, (0 if _compact else 3) * unit)
+	_previous.position = Vector2(8, 0 if _compact else 20) * unit
+	_next.position = Vector2(size.x - 52 * unit, (0 if _compact else 20) * unit)
 	for button in [_previous, _next]:
+		Style.quiet_button(button, Style.GOOD, 0)
+		button.custom_minimum_size = Vector2.ONE * 44 * unit
 		button.size = Vector2.ONE * 44 * unit
 		button.add_theme_constant_override("icon_max_width", ceili(18 * unit))
+	var title_left: float = 60 * unit
+	var title_width: float = maxf(1, size.x - 120 * unit)
+	_chapter_kicker.position = Vector2(title_left, 0 if _compact else 8 * unit)
+	_chapter_kicker.size = Vector2(title_width, 16 * unit)
+	_chapter_kicker.add_theme_font_size_override("font_size", ceili((8 if _compact else 10) * unit))
+	_heading_title.position = Vector2(title_left, (14 if _compact else 25) * unit)
+	_heading_title.size = Vector2(title_width, (26 if _compact else 34) * unit)
+	_heading_note.visible = not _compact
+	_heading_note.position = Vector2(8, 62) * unit
+	_heading_note.size = Vector2(size.x - 16 * unit, 20 * unit)
+	_heading_note.add_theme_font_size_override("font_size", ceili(12 * unit))
+	Style.action_button(_home, Style.GOOD)
+	_home.add_theme_font_size_override("font_size", ceili(14 * unit))
+	_home.icon = _ui.get("compass")
+	_home.expand_icon = true
+	_home.add_theme_constant_override("icon_max_width", ceili(22 * unit))
+	_home.custom_minimum_size = Vector2(132, 44) * unit
+	_home.size = Vector2(132, 44) * unit
+	_home.position = Vector2(size.x - 144 * unit, size.y - 57 * unit)
+	_home.visible = not _compact
+	_footer_panel = Style.box(Color("#fbf8f0ed"), Color("#ffffff99"), ceili(18 * unit), ceili(unit))
 	_update_navigation()
 	if _reveal_number == 0:
 		_scroll.scroll_horizontal = roundi(fraction * maxf(0, world_width - _scroll.size.x))
@@ -297,12 +339,29 @@ func _update_navigation() -> void:
 		button.focus_next = button.get_path_to(next if index < available.size() - 1 else _next if current_chapter < 2 else _previous)
 	_previous.disabled = current_chapter == 0
 	_next.disabled = current_chapter == CHAPTERS.size() - 1
-	for button in [_previous, _next]:
+	_home.disabled = _current_stop == 0
+	_home.text = "Your island" if _current_stop > 0 else "All explored"
+	_chapter_kicker.text = "CHAPTER %02d  /  03" % (current_chapter + 1)
+	_heading_title.text = str(CHAPTERS[current_chapter].title)
+	_fit_chapter_title()
+	_heading_note.text = str(CHAPTERS[current_chapter].note)
+	for button in [_previous, _next, _home]:
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	if _previous.has_focus() and _previous.disabled:
 		_next.grab_focus()
 	elif _next.has_focus() and _next.disabled:
 		_previous.grab_focus()
+	elif _home.has_focus() and _home.disabled:
+		(_previous if not _previous.disabled else _next).grab_focus()
+
+
+func _fit_chapter_title() -> void:
+	var unit: float = 1.0 / _ui_scale
+	var font_size: int = ceili((13 if _compact else 18 if size.x * _ui_scale < 440 else 26) * unit)
+	var minimum: int = ceili((12 if _compact else 14) * unit)
+	while font_size > minimum and Style.HEADING_FONT.get_string_size(_heading_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > _heading_title.size.x:
+		font_size -= 1
+	_heading_title.add_theme_font_size_override("font_size", font_size)
 
 
 func _scrolled(_value: float) -> void:
@@ -367,13 +426,21 @@ func _draw() -> void:
 		return
 	_draw_background()
 	var unit: float = 1.0 / _ui_scale
-	var heading_width: float = maxf(1, minf(340 * unit, size.x - 116 * unit))
-	var left: float = (size.x - heading_width) * 0.5
-	draw_style_box(_heading_panel, Rect2(Vector2(left, (0 if _compact else 3) * unit), Vector2(heading_width, 44 * unit)))
-	var font: Font = get_theme_default_font()
-	var title_size: int = ceili((10.0 if size.x * _ui_scale < 360.0 else 12.0) * unit)
-	draw_string(font, Vector2(left + 6 * unit, 21 * unit), str(CHAPTERS[current_chapter].title), HORIZONTAL_ALIGNMENT_CENTER, heading_width - 12 * unit, title_size, Color("#fff7df"))
-	draw_string(font, Vector2(left + 6 * unit, 36 * unit), "%02d  /  03" % (current_chapter + 1), HORIZONTAL_ALIGNMENT_CENTER, heading_width - 12 * unit, ceili(9 * unit), Color("#d8c99f"))
+	if not _compact and _footer_panel != null:
+		draw_style_box(_footer_panel, Rect2(Vector2(4 * unit, size.y - _footer_height), Vector2(size.x - 8 * unit, _footer_height - 4 * unit)))
+		var complete: int = 0
+		for button in level_buttons:
+			if button.cleared:
+				complete += 1
+		var available_width: float = size.x - 164 * unit
+		draw_string(Style.HEADING_FONT, Vector2(16 * unit, size.y - 44 * unit), "%d of 14 explored" % complete, HORIZONTAL_ALIGNMENT_LEFT, available_width, ceili(12 * unit), Style.INK)
+		var spacing: float = minf(15 * unit, (available_width - 8 * unit) / 14.0)
+		for index in range(14):
+			var point := Vector2(19 * unit + index * spacing, size.y - 22 * unit)
+			var tint: Color = Style.GOOD if level_buttons[index].cleared else Color("#d7ba78") if index + 1 == _current_stop else Color("#cfdcd4")
+			draw_circle(point, 3.5 * unit, tint)
+			if index + 1 == _current_stop:
+				draw_arc(point, 6 * unit, 0, TAU, 24, Style.GOOD, unit, true)
 
 
 func _draw_background() -> void:
@@ -401,17 +468,17 @@ func _draw_background() -> void:
 	var distant_island: Texture2D = _decorations.get("distant_island")
 	if distant_island != null and not _compact:
 		for index in range(4):
-			var width: float = (120 + (index % 3) * 35) * unit
+			var width: float = (96 + (index % 3) * 30) * unit
 			var x: float = fposmod((index * 430 + 210) * unit - _scroll.scroll_horizontal * 0.28, size.x + 440 * unit) - 220 * unit
-			var y: float = size.y * (0.16 if index % 2 == 0 else 0.71)
-			draw_texture_rect(distant_island, Rect2(Vector2(x, y), Vector2(width, width * distant_island.get_height() / distant_island.get_width())), false, Color(0.82, 0.90, 0.96, 0.62))
+			var y: float = size.y * (0.24 if index % 2 == 0 else 0.58)
+			draw_texture_rect(distant_island, Rect2(Vector2(x, y), Vector2(width, width * distant_island.get_height() / distant_island.get_width())), false, Color(0.87, 0.96, 0.95, 0.28))
 	var cloud: Texture2D = _decorations.get("cloud")
 	if cloud != null and not _compact:
-		for index in range(3):
-			var width: float = (180 + index * 55) * unit
+		for index in range(5):
+			var width: float = (210 + index * 35) * unit
 			var x: float = fposmod(index * 380 * unit - _scroll.scroll_horizontal * 0.18 + _time * 2 * unit, size.x + width) - width
-			var y: float = size.y * (0.17 if index % 2 == 0 else 0.86)
-			draw_texture_rect(cloud, Rect2(Vector2(x, y), Vector2(width, width * cloud.get_height() / cloud.get_width())), false, Color(1, 1, 1, 0.28))
+			var y: float = size.y * (0.14 if index % 2 == 0 else 0.66)
+			draw_texture_rect(cloud, Rect2(Vector2(x, y), Vector2(width, width * cloud.get_height() / cloud.get_width())), false, Color(1, 0.99, 0.95, 0.48))
 
 
 func _draw_route() -> void:
@@ -422,13 +489,14 @@ func _draw_route() -> void:
 	for index in range(_route_points.size() - 1):
 		var start: Vector2 = _route_points[index]
 		var finish: Vector2 = _route_points[index + 1]
-		var first: Vector2 = start.lerp(finish, 0.35) + Vector2(0, 30 * unit)
-		var last: Vector2 = start.lerp(finish, 0.65) + Vector2(0, 30 * unit)
+		var bend: float = (16 if _compact else -38) * unit
+		var first: Vector2 = start.lerp(finish, 0.35) + Vector2(0, bend)
+		var last: Vector2 = start.lerp(finish, 0.65) + Vector2(0, bend)
 		var previous: Vector2 = start
 		for step in range(1, 61):
 			var point: Vector2 = start.bezier_interpolate(first, last, finish, float(step) / 60.0)
-			if point.distance_to(previous) < (24.0 if _compact else 34.0) * unit:
+			if point.distance_to(previous) < (24.0 if _compact else 28.0) * unit:
 				continue
-			var dimensions := Vector2.ONE * (24.0 if _compact else 38.0) * unit
-			_content.draw_texture_rect(trail, Rect2(point - dimensions * 0.5, dimensions), false, Color("#edcf88") if level_buttons[index].cleared else Color(0.87, 0.94, 1.0, 0.88))
+			var dimensions := Vector2.ONE * (24.0 if _compact else 34.0) * unit
+			_content.draw_texture_rect(trail, Rect2(point - dimensions * 0.5, dimensions), false, Color("#e2b968") if level_buttons[index].cleared else Color(0.73, 0.86, 0.86, 0.70))
 			previous = point

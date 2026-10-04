@@ -9,16 +9,21 @@ destinations along one horizontal journey, without monster portraits.
 Each destination uses a rendered diorama assembled from acquired building,
 landscape, and prop models. Warm village roofs, an art pavilion, market stalls,
 coastal scenery, and the final castle give the route distinct landmarks. A
-sourced sky, distant islands, and cloud layers add depth behind the route.
-The next adventure carries a floating flag; seals and locks distinguish cleared
-and unavailable stops.
+sourced sky, distant islands, and cloud layers add depth behind the winding route.
+The Word Isles has three softly graded chapter skies, native chapter headings,
+and paper destination plaques. The next adventure carries a blue flag and warm
+plaque; replay and prerequisite captions, seals, and locks distinguish cleared
+and unavailable stops. A journey footer shows the fourteen islands' progress.
 
 Drag, swipe, use a trackpad, or turn the mouse wheel to travel across the map.
 Scrolling retains momentum with no visible scrollbar. The region arrows jump
 to the starts of the three regions, and keyboard focus reveals an offscreen
-unlocked destination. Compact landscape retains readable destination artwork
-and usable touch targets. Reduced motion removes ambient movement while
-preserving navigation.
+unlocked destination. The footer's Your island action returns to the first
+unfinished unlocked destination without starting it or changing progress.
+It becomes unavailable once all islands have been explored. In short layouts,
+islands and labels sit side by side and the footer is hidden to preserve room
+for scenery and usable touch targets. Reduced motion removes ambient movement
+while preserving navigation.
 
 The [map source manifest](../assets/talk_quest/map-dimensional/manifest.json)
 records the downloaded sources, model usage, render process, and available

@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 
 import numpy as np
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 
 def read_hdr(path):
@@ -57,6 +57,16 @@ sky = ImageEnhance.Brightness(sky).enhance(1.32)
 sky = ImageEnhance.Contrast(sky).enhance(.82)
 sky.save(output / "sky.png", optimize=True)
 
+# Preserve the acquired cloud composition while softening photographic detail
+# and grading each region to the miniature islands' quiet material palette.
+cloud_values = ImageOps.autocontrast(ImageOps.grayscale(sky.filter(ImageFilter.GaussianBlur(14))), cutoff=1)
+for name, shade, light in [
+    ("dawn", "#9dcbd3", "#fff7e5"),
+    ("meadow", "#aacac0", "#fff2d7"),
+    ("dusk", "#b4bfd9", "#fff0dc"),
+]:
+    ImageOps.colorize(cloud_values, shade, light).save(output / f"sky-{name}.png", optimize=True)
+
 # The original source cloud shape remains intact in the drifting foreground art.
 cloud_source = source / "background-elements/PNG/cloud4.png"
 cloud = Image.open(cloud_source).convert("RGBA")
@@ -79,13 +89,14 @@ shutil.copyfile(output.parent / "map/licenses/cc0-1.0.txt", licenses / "cc0-1.0.
 landmark_titles = ["Front Door Cottage", "Fountain Courtyard", "Windmill Bakery", "Village Wardrobe", "Woodland Bridge", "Art Pavilion", "Harvest Market", "Autumn Library", "Canopy Garden", "Coach Gateway", "Seaside Citadel", "Woodland Camp", "Festival Plaza", "Royal Toy Workshop"]
 manifest = {
     "version": 1,
-    "backgrounds": ["res://assets/talk_quest/map-dimensional/sky.png"],
+    "backgrounds": [f"res://assets/talk_quest/map-dimensional/sky-{name}.png" for name in ("dawn", "meadow", "dusk")],
     "landmarks": [f"res://assets/talk_quest/map-dimensional/level-{i:02}.png" for i in range(1, 15)],
     "landmarkSourceNames": landmark_titles,
     "ui": old["ui"],
     "decorations": {name: f"res://assets/talk_quest/map-dimensional/decoration-{name.replace('_', '-')}.png" for name in ("distant_island", "cloud", "bridge", "flag", "trail", "grove")},
     "sources": sources,
     "preparation": "Fourteen miniature island scenes assembled from original acquired Kenney GLB geometry and palette textures, rendered at 768 pixels with consistent isometric view, warm area lights, ray-traced contact shadows, and transparent background. No replacement mesh primitives. Original irregular platform mesh is scaled into raised island terrain. Sky is a tone-mapped sky-only crop of Greg Zaal's acquired HDRI. Foreground cloud is an acquired Kenney PNG.",
+    "atmospherePreparation": "The source sky crop is softened with a 14-pixel Gaussian blur, converted to cloud luminance, and graded into dawn, meadow, and dusk palettes. Source cloud shapes are preserved; no generated replacement sky artwork is used.",
     "animation": "Source assets are static; scrolling, parallax, selection feedback, and ambient movement belong to the game presentation.",
     "render": {"engine": "Blender Cycles", "samples": 64, "resolution": [768, 768], "reproducibleTool": "tools/prepare-quest-dimensional-map.py", "finishingTool": "tools/finish-quest-dimensional-map.py"},
     "assets": [],

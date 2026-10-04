@@ -1,7 +1,9 @@
 {
   "version": 1,
   "backgrounds": [
-    "res://assets/talk_quest/map-dimensional/sky.png"
+    "res://assets/talk_quest/map-dimensional/sky-dawn.png",
+    "res://assets/talk_quest/map-dimensional/sky-meadow.png",
+    "res://assets/talk_quest/map-dimensional/sky-dusk.png"
   ],
   "landmarks": [
     "res://assets/talk_quest/map-dimensional/level-01.png",
@@ -169,6 +171,7 @@
     }
   ],
   "preparation": "Fourteen miniature island scenes assembled from original acquired Kenney GLB geometry and palette textures, rendered at 768 pixels with consistent isometric view, warm area lights, ray-traced contact shadows, and transparent background. No replacement mesh primitives. Original irregular platform mesh is scaled into raised island terrain. Sky is a tone-mapped sky-only crop of Greg Zaal's acquired HDRI. Foreground cloud is an acquired Kenney PNG.",
+  "atmospherePreparation": "The source sky crop is softened with a 14-pixel Gaussian blur, converted to cloud luminance, and graded into dawn, meadow, and dusk palettes. Source cloud shapes are preserved; no generated replacement sky artwork is used.",
   "animation": "Source assets are static; scrolling, parallax, selection feedback, and ambient movement belong to the game presentation.",
   "render": {
     "engine": "Blender Cycles",
@@ -358,6 +361,33 @@
       "bytes": 533143,
       "size": [
         768,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/sky-dawn.png",
+      "sha256": "a395cc61cd6a37c59739b752aaff962ce929a0b6db5eec0405b3fdfd667c79ee",
+      "bytes": 287115,
+      "size": [
+        2048,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/sky-dusk.png",
+      "sha256": "3254af2bd3605e99019eb93faf3fa0b599d8a27049774f5a349bea58e9581713",
+      "bytes": 246251,
+      "size": [
+        2048,
+        768
+      ]
+    },
+    {
+      "path": "res://assets/talk_quest/map-dimensional/sky-meadow.png",
+      "sha256": "dc357c318624840fe74c56821525067df0e9ff751e712193099e84aba0f5570f",
+      "bytes": 270970,
+      "size": [
+        2048,
         768
       ]
     },

@@ -7,6 +7,7 @@ var failures: int = 0
 var _selected: int = 0
 var _selections: int = 0
 var _geometry_changes: int = 0
+var _draws: int = 0
 
 
 func _initialize() -> void:
@@ -112,6 +113,7 @@ func _run() -> void:
 		_selected = number
 		_selections += 1)
 	atlas.changed.connect(func() -> void: _geometry_changes += 1)
+	atlas.draw.connect(func() -> void: _draws += 1)
 	await settle()
 	check(atlas.level_buttons.size() == 14, "All fourteen adventures retain accessible Button controls")
 	check(not contains_monster(atlas), "The atlas uses place landmarks without creature portraits")
@@ -136,6 +138,23 @@ func _run() -> void:
 	next_stop._process(1.0)
 	check(next_stop.reduced_motion and is_equal_approx(next_stop._time, previous_time),
 		"Reduced motion freezes the next-stop beacon clock")
+	atlas._home.grab_focus()
+	for number in range(1, 15):
+		atlas.set_level_state(number, true, true)
+	await settle()
+	check(atlas._current_stop == 0 and atlas._home.disabled and not atlas._home.has_focus(),
+		"A fully explored journey has no unfinished destination and releases the completed action's focus")
+	check(atlas.level_buttons.all(func(button: Button) -> bool: return not button.disabled),
+		"Every completed island remains available for replay")
+	atlas.show_level(14)
+	atlas.set_level_state(14, true, false)
+	await settle()
+	var offset_before: int = atlas._scroll.scroll_horizontal
+	var draws_before: int = _draws
+	atlas.set_level_state(14, true, true)
+	await settle()
+	check(atlas._scroll.scroll_horizontal == offset_before and _draws > draws_before,
+		"Progress redraws the journey footer without needing scrolling or ambient motion")
 	atlas.configure([])
 	await settle()
 	check(atlas.level_buttons.is_empty() and not atlas._next.visible,
@@ -155,6 +174,8 @@ func _check_layouts(atlas) -> void:
 		{"size": Vector2(296, 308), "scale": 1.0},
 		{"size": Vector2(320, 420), "scale": 1.0},
 		{"size": Vector2(844, 225), "scale": 1.0},
+		{"size": Vector2(796, 258), "scale": 1.0},
+		{"size": Vector2(296, 350), "scale": 1.0},
 		{"size": Vector2(544, 136), "scale": 1.0},
 		{"size": Vector2(544, 140) / 0.75, "scale": 0.75},
 		{"size": Vector2(320, 420) / 0.75, "scale": 0.75}
@@ -186,6 +207,8 @@ func _check_layouts(atlas) -> void:
 			target_rects.append(button.get_rect())
 			check(button.size.x * float(layout.scale) >= 44 and button.size.y * float(layout.scale) >= 44,
 				"Every destination keeps a usable physical touch target " + label)
+			check(minf(button._art_rect.size.x, button._art_rect.size.y) * float(layout.scale) >= 72,
+				"Island scenery stays visibly sized when the full-page layout has little height " + label)
 			var caption: Label = button._caption
 			check(Rect2(Vector2.ZERO, button.size).grow(1.0).encloses(caption.get_rect()),
 				"Scene captions fit inside their responsive landmarks " + label)
@@ -195,6 +218,10 @@ func _check_layouts(atlas) -> void:
 				"The complete scene title remains readable " + label + ", level %d" % button.number)
 			atlas.show_level(button.number)
 			await settle()
+			var heading: Label = atlas._heading_title
+			check(heading.get_theme_font("font").get_string_size(heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
+				heading.get_theme_font_size("font_size")).x <= heading.size.x + 1,
+				"Every chapter title fits after scrolling and resizing " + label)
 			check(atlas.level_in_view(button) and atlas._scroll.get_global_rect().grow(1.0).encloses(button.get_global_rect()),
 				"Every destination can be revealed completely " + label + ", level %d" % button.number)
 			check(atlas.visible_level_buttons().has(button), "Visible destination reporting follows horizontal scrolling")
@@ -221,6 +248,29 @@ func _check_progress_and_focus(atlas) -> void:
 	await settle()
 	check(atlas._scroll.scroll_horizontal == offset,
 		"Refreshing unchanged progress preserves a manually explored part of the map")
+	var selections_before: int = _selections
+	atlas._home.pressed.emit()
+	await settle()
+	check(atlas.level_in_view(atlas.level_buttons[10]) and atlas.current_chapter == 2,
+		"Your island returns to the first unfinished adventure after exploring another region")
+	check(_selections == selections_before and atlas._current_stop == 11 and atlas.level_buttons[9].cleared,
+		"Finding the current island neither starts a level nor changes progress")
+	atlas.interaction_allowed = func() -> bool: return false
+	offset = atlas._scroll.scroll_horizontal
+	atlas._previous.pressed.emit()
+	await settle()
+	check(atlas._scroll.scroll_horizontal == offset, "Blocked interaction prevents region navigation")
+	atlas.interaction_allowed = Callable()
+	atlas.show_level(2)
+	await settle()
+	atlas.interaction_allowed = func() -> bool: return false
+	offset = atlas._scroll.scroll_horizontal
+	atlas._home.pressed.emit()
+	atlas._next.pressed.emit()
+	await settle()
+	check(atlas._scroll.scroll_horizontal == offset and _selections == selections_before,
+		"Blocked interaction prevents both finding an island and advancing a region")
+	atlas.interaction_allowed = Callable()
 	atlas.show_level(7)
 	await settle()
 	check(atlas.current_chapter == 1 and atlas.level_in_view(atlas.level_buttons[6]),

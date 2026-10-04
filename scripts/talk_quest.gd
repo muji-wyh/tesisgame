@@ -163,7 +163,7 @@ func _style_button(item: Button, primary: bool = false) -> void:
 func _build_map() -> void:
 	_map = Control.new()
 	add_child(_map)
-	_map_heading = _label(_map, "Your journey", 30)
+	_map_heading = _label(_map, "The Word Isles", 30)
 	_map_note = _label(_map, "", 12)
 	_continue = _button(_map, "Continue", _continue_run)
 	_album_button = _button(_map, "Treasures", _show_album)
@@ -552,7 +552,7 @@ func _rebuild_map() -> void:
 		_atlas.set_level_state(index + 1, not locked, index + 1 in game.completed_levels)
 		button.disabled = locked or save_failed or pending_reward
 	_album_button.text = "Treasures  %d / 20" % game.collected_chests.size()
-	_map_note.text = "%d / 14 complete" % game.completed_levels.size()
+	_map_note.text = "Drag or swipe to explore"
 
 
 func pause() -> void:
@@ -1087,7 +1087,7 @@ func _refresh() -> void:
 	_continue.visible = game.has_saved_run()
 	_continue.disabled = save_failed
 	_save_retry.visible = save_failed
-	_map_note.text = "Progress could not be saved." if save_failed else "%d / 14 complete" % game.completed_levels.size()
+	_map_note.text = "Progress could not be saved." if save_failed else "Drag or swipe to explore"
 	_words.visible = game.phase == "playing" and not _suspended
 	_word_count.visible = _words.visible
 	_transcript.visible = _words.visible
@@ -1577,6 +1577,7 @@ func snapshot() -> Dictionary:
 		controls["map"] = _rect(_pause_card.map_button)
 	controls["map_previous"] = _rect(_atlas._previous)
 	controls["map_next"] = _rect(_atlas._next)
+	controls["map_current"] = _rect(_atlas._home)
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var levels: Array = []
 	for button in _level_buttons:

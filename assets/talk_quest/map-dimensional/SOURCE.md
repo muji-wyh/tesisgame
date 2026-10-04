@@ -46,6 +46,19 @@ restrains contrast to keep playable islands in the foreground. The source cloud 
 without drawing a replacement shape. Separate original-model renders provide
 a bridge, flag, stone route, grove, and distant island for parallax composition.
 
+The integrated chapter skies are three derivatives of that acquired sky crop:
+`sky-dawn.png`, `sky-meadow.png`, and `sky-dusk.png`. A 14-pixel Gaussian blur
+softens photographic detail before cloud luminance is graded into the chapter
+palettes. Scrolling blends those textures continuously. The original cloud
+shapes remain present; these are prepared source images, not generated skies.
+
+The runtime uses the distant island, original cloud, stone trail, and blue flag
+renders. The bridge and grove remain prepared assets and are not separate
+foreground decorations in this layout. Destination plaques and the progress
+panel use the game's shared typography and interface styling; sourced seals,
+locks, stars, compass, and arrows remain integrated. The plaques are interface
+layout, not replacement scene artwork.
+
 ```powershell
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python tools/prepare-quest-dimensional-map.py -- --levels all --size 768 --samples 64
 python tools/finish-quest-dimensional-map.py
