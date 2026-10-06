@@ -44,8 +44,8 @@ when restoring the files.
 The existing Godot imports convert these sources to mono 22.05 kHz compressed
 resources for the startup game pack. Playback loops the full imported recording.
 Runtime gain remains 0.12 normally and 0.04 under spoken prompts, with the existing
-chest ducking. Voice Pop and Talk Quest keep music silent during microphone
-recognition; their reward screens use the shared theme music and chest mix.
+chest ducking. Voice Pop keeps music silent during microphone recognition;
+its reward screens use the shared theme music and chest mix.
 
 Verify the active WAVs without changing them:
 

@@ -9,7 +9,6 @@ commands, asset counts, and measurements may no longer describe the game.
 | Reference | Scope | Primary implementation |
 | --- | --- | --- |
 | [Gameplay](gameplay.md) | Modes, controls, worlds, room, rewards, and accessibility | `scripts/game_ui.gd`, `scripts/voice_pop.gd`, `scripts/playroom_view.gd` |
-| [Talk Quest](talk-quest.md) | Fourteen word battles, finite health and word budgets, twenty treasures, and campaign saves | `scripts/talk_quest.gd`, `scripts/talk_quest_data.gd`, `scripts/talk_quest_model.gd` |
 | [Voice Pop treasure](voice-pop-treasure.md) | Score milestones, persistent chest batches, and the shared animated chest catalog | `scripts/pop_reward_state.gd`, `scripts/pop_reward_room.gd`, `scripts/chest_model_view.gd` |
 | [Development and deployment](development.md) | Build, hosting, embedding, and validation | `package.json`, `tools/build-web.cjs`, `tools/deploy-web.ps1` |
 | [Performance assessment](performance.md) | Reproducible rendered workloads, paired comparisons, acceptance criteria, and measurement limits | `tools/benchmark-performance.cjs`, `tests/performance/main_scene_benchmark.gd` |
@@ -26,11 +25,12 @@ Build outputs under `build/` are generated evidence, not editable source.
 
 - [QA index](qa/README.md): dated checks, removals, and validation limitations.
 - [Design archive](superpowers/README.md): previous plans and specifications.
+- [Retired Talk Quest reference](talk-quest.md): former campaign behavior and source provenance.
 - [Changelog](../changelog.md): events in chronological context.
 
-Current game modes are Match, Memory, single-player Voice Pop, and Talk Quest.
-Local names and avatars support leaderboards for the first three modes; Talk
-Quest keeps shared campaign progress on the device. Local profiles are not the
-retired enrolled voice profiles. The optional browser-managed local speech experiment is separate
+Current game modes are Match, Memory, and single-player Voice Pop.
+Local names and avatars support leaderboards for all three modes. Talk Quest
+was retired on 2026-10-06; its source records and dated QA remain historical.
+Local profiles are not the retired enrolled voice profiles. The optional browser-managed local speech experiment is separate
 from the removed sherpa-onnx multiplayer runtime. Old medal and sticker records
 remain relevant to save compatibility even though their collection UI is gone.

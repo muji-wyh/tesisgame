@@ -10,11 +10,11 @@ const { freezeBaseline } = require('../tools/freeze-performance-baseline.cjs');
 const resultsRoot = path.resolve(__dirname, '../build/performance');
 fs.mkdirSync(resultsRoot, { recursive: true });
 const fixtureDirectory = fs.mkdtempSync(path.join(resultsRoot, 'node-acceptance-'));
-const names = ['match', 'memory', 'voice-pop', 'talk-quest', 'room', 'catalog', 'chest'];
-const baseMeans = [1000, 2000, 50000, 12000, 500, 800, 10000];
+const names = ['match', 'memory', 'voice-pop', 'room', 'catalog', 'chest'];
+const baseMeans = [1000, 2000, 50000, 500, 800, 10000];
 let serial = 0;
 
-function report(factors = Array(7).fill(1), repeatFactors = Array(5).fill(1)) {
+function report(factors = Array(names.length).fill(1), repeatFactors = Array(5).fill(1)) {
   const configuration = {
     scenarios: names, width: 390, height: 844, warmup: 90, samples: 240, seed: 73021,
     fps: 60, vsync: false, renderer: 'gl_compatibility', audio: 'Dummy', reduced_motion: false
@@ -43,7 +43,7 @@ function report(factors = Array(7).fill(1), repeatFactors = Array(5).fill(1)) {
   };
 }
 
-function evaluate(baseline = report(), candidate = report(Array(7).fill(0.8))) {
+function evaluate(baseline = report(), candidate = report(Array(names.length).fill(0.8))) {
   const id = ++serial;
   const baselineFile = path.join(fixtureDirectory, `baseline-${id}.json`);
   const candidateFile = path.join(fixtureDirectory, `candidate-${id}.json`);
@@ -109,42 +109,42 @@ test('acceptance reports time reduction separately from throughput-equivalent sp
   assert.equal(result.repeats, 5);
   assert.equal(result.software_renderer, true);
   assert.match(result.scope, /software graphics adapter/);
-  assert.equal(result.scenarios.length, 7);
+  assert.equal(result.scenarios.length, names.length);
   assert.equal(result.scenarios[2].baseline_p95_us, 70000);
   assert.equal(result.scenarios[2].candidate_p95_us, 56000);
 });
 
-test('all seven scenarios have equal geometric weight even when one subsystem dominates wall time', () => {
-  const result = evaluate(report(), report([1, 1, 0.5, 1, 1, 1, 1]));
-  near(result.geometric_mean_ratio, Math.pow(0.5, 1 / 7));
+test('all six scenarios have equal geometric weight even when one subsystem dominates wall time', () => {
+  const result = evaluate(report(), report([1, 1, 0.6, 1, 1, 1]));
+  near(result.geometric_mean_ratio, Math.pow(0.6, 1 / names.length));
   assert(result.time_reduction_percent < 10);
   assert.equal(result.target_met, false, 'A large isolated hotspot win cannot substitute for the full target');
 });
 
 test('the ten-percent time-reduction boundary is inclusive and smaller reductions fail', () => {
-  const boundary = evaluate(report(), report(Array(7).fill(0.9)));
+  const boundary = evaluate(report(), report(Array(names.length).fill(0.9)));
   near(boundary.time_reduction_percent, 10);
   assert.equal(boundary.target_met, true);
-  const below = evaluate(report(), report(Array(7).fill(0.90001)));
+  const below = evaluate(report(), report(Array(names.length).fill(0.90001)));
   assert(below.time_reduction_percent < 10);
   assert.equal(below.target_met, false);
 });
 
 test('a mean regression above five percent rejects an otherwise large aggregate improvement', () => {
-  const result = evaluate(report(), report([1.0501, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]));
+  const result = evaluate(report(), report([1.0501, 0.6, 0.6, 0.6, 0.6, 0.6]));
   assert(result.time_reduction_percent > 10);
   assert.deepEqual(result.mean_regressions_over_five_percent, ['match']);
   assert.equal(result.target_met, false);
 });
 
 test('a five-percent mean regression is the documented inclusive boundary', () => {
-  const result = evaluate(report(), report([1.05, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]));
+  const result = evaluate(report(), report([1.05, 0.6, 0.6, 0.6, 0.6, 0.6]));
   assert.deepEqual(result.mean_regressions_over_five_percent, []);
   assert.equal(result.target_met, true);
 });
 
 test('every independent paired repeat must improve despite a favorable pooled average', () => {
-  const result = evaluate(report(), report(Array(7).fill(1), [0.7, 0.7, 0.7, 0.7, 1.02]));
+  const result = evaluate(report(), report(Array(names.length).fill(1), [0.7, 0.7, 0.7, 0.7, 1.02]));
   assert(result.time_reduction_percent > 10);
   assert(result.paired_repeat_ratios[4] > 1);
   assert.equal(result.every_pair_improves, false);
@@ -152,7 +152,7 @@ test('every independent paired repeat must improve despite a favorable pooled av
 });
 
 test('fewer than five repeats cannot establish acceptance', () => {
-  const result = evaluate(report(Array(7).fill(1), [1, 1, 1, 1]), report(Array(7).fill(0.8), [1, 1, 1, 1]));
+  const result = evaluate(report(Array(names.length).fill(1), [1, 1, 1, 1]), report(Array(names.length).fill(0.8), [1, 1, 1, 1]));
   assert.equal(result.repeats, 4);
   assert.equal(result.target_met, false);
 });
@@ -160,7 +160,7 @@ test('fewer than five repeats cannot establish acceptance', () => {
 test('diagnostic dimensions, warmup, sample count, and seed cannot be accepted as the primary profile', () => {
   for (const [key, value] of [['width', 960], ['height', 720], ['warmup', 30], ['samples', 60], ['seed', 5]]) {
     const baseline = report();
-    const candidate = report(Array(7).fill(0.8));
+    const candidate = report(Array(names.length).fill(0.8));
     baseline.configuration[key] = value;
     candidate.configuration[key] = value;
     const result = evaluate(baseline, candidate);
@@ -171,7 +171,7 @@ test('diagnostic dimensions, warmup, sample count, and seed cannot be accepted a
 
 test('removing a default scenario invalidates primary acceptance even if both reports omit it', () => {
   const baseline = report();
-  const candidate = report(Array(7).fill(0.8));
+  const candidate = report(Array(names.length).fill(0.8));
   for (const value of [baseline, candidate]) {
     value.scenarios = value.scenarios.filter(item => item.scenario !== 'chest');
     for (const run of value.runs) run.scenarios = run.scenarios.filter(item => item.scenario !== 'chest');
@@ -183,22 +183,22 @@ test('removing a default scenario invalidates primary acceptance even if both re
 
 test('comparison refuses mismatched requested configurations, harnesses, hosts, and protocols', () => {
   for (const key of ['configuration', 'harness_sha256', 'host', 'protocol']) {
-    const candidate = report(Array(7).fill(0.8));
+    const candidate = report(Array(names.length).fill(0.8));
     candidate[key] = key === 'configuration' ? { ...candidate.configuration, width: 480 } : 'different';
     assert.throws(() => evaluate(report(), candidate), /Noncomparable/, key);
   }
-  const candidate = report(Array(7).fill(0.8));
+  const candidate = report(Array(names.length).fill(0.8));
   candidate.runs.pop();
   assert.throws(() => evaluate(report(), candidate), /same number of repeats/);
 });
 
 test('actual engine, graphics adapter, renderer, audio and window settings are checked on every repeat', () => {
   for (const key of ['adapter', 'rendering_driver', 'audio_driver', 'window_size', 'vsync', 'reduced_motion']) {
-    const candidate = report(Array(7).fill(0.8));
+    const candidate = report(Array(names.length).fill(0.8));
     candidate.runs[3].configuration[key] = 'different';
     assert.throws(() => evaluate(report(), candidate), /Engine, display, renderer, audio/, key);
   }
-  const candidate = report(Array(7).fill(0.8));
+  const candidate = report(Array(names.length).fill(0.8));
   candidate.runs[4].engine.hash = 'different-engine';
   assert.throws(() => evaluate(report(), candidate), /Engine, display, renderer, audio/);
 });

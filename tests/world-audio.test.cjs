@@ -154,7 +154,6 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
-    ...['launch', 'impact', 'defeat'].map(id => `assets/audio/quest/${id}.wav`),
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
@@ -170,7 +169,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   }
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
-  assert.ok(audio.every(file => !file.source.includes('/audio/pop/')));
+  assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
   assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));

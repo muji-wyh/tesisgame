@@ -18,7 +18,6 @@ const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
-const TalkQuest = preload("res://scripts/talk_quest.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
@@ -28,7 +27,7 @@ const LeaderboardState = preload("res://scripts/leaderboard_state.gd")
 const LeaderboardPanel = preload("res://scripts/leaderboard_panel.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
-const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "quest": "Talk Quest"}
+const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
 const VOICE_MATCH_SECONDS: float = 1.0
@@ -130,7 +129,6 @@ class RewardSparkle:
 
 
 var model := Model.new()
-var _quest: TalkQuest
 var data := Data.new()
 var medal_progress := MedalProgress.new()
 var duck: Mascot
@@ -183,8 +181,6 @@ var _mode_menu_title: Label
 var _mode_menu_focus_modes: Dictionary = {}
 var _mode_menu_resume_voice: bool = false
 var _mode_menu_resume_pop: bool = false
-var _mode_menu_resume_quest: bool = false
-var _mode_menu_resume_quest_listening: bool = false
 var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_rewards: PopRewardRoom
@@ -282,7 +278,6 @@ var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
 var _controller_repeat_elapsed: float = 0.0
 var _controller_holding_chest: bool = false
-var _controller_holding_quest_chest: bool = false
 var _controller_peeking: bool = false
 var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
@@ -549,21 +544,6 @@ func _build_controls() -> void:
 	_pop_rewards.changed.connect(_publish_pop_rewards)
 	_pop_rewards.hide()
 	column.add_child(_pop_rewards)
-	_quest = TalkQuest.new()
-	_quest.name = "TalkQuest"
-	_quest.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
-	_quest.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_quest.exit_requested.connect(func() -> void: choose_mode("match"))
-	_quest.chest_audio_requested.connect(_quest_chest_audio)
-	_quest.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
-		if _page_hidden or collection_page.visible or _mode_id != "quest":
-			return
-		audio.chest_cue(theme_id, cue, step)
-		if _host != null:
-			_host.chestCue(theme_id, cue, step))
-	_quest.sound_requested.connect(_quest_sound)
-	_quest.hide()
-	column.add_child(_quest)
 	_outcome = Control.new()
 	_outcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_outcome.resized.connect(_layout_result)
@@ -795,9 +775,6 @@ func _show_mode_menu() -> void:
 	# Speech ownership can outlive a denied/failed microphone. Resume only a
 	# recognizer that was listening or connecting when the menu interrupted it.
 	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
-	_mode_menu_resume_quest = _mode_id == "quest" and _quest.view == "stage" \
-		and not _quest._suspended and _quest.game.phase != "paused"
-	_mode_menu_resume_quest_listening = _quest._listening or _quest._auto_listen
 	_mode_menu.show()
 	_on_input_canceled()
 	_stop_controller_actions()
@@ -815,8 +792,6 @@ func _show_mode_menu() -> void:
 		_pop_rewards.pause()
 		_stop_pop_listening()
 		audio.stop_pop_sounds()
-	if _mode_id == "quest":
-		_quest.pause()
 	feedback_timer.paused = true
 	_memory.pause(true)
 	_hint_link.set_paused(true)
@@ -846,12 +821,8 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 	_publish_library.call_deferred()
 	var resume_voice: bool = _mode_menu_resume_voice
 	var resume_pop: bool = _mode_menu_resume_pop
-	var resume_quest: bool = _mode_menu_resume_quest
-	var resume_quest_listening: bool = _mode_menu_resume_quest_listening
 	_mode_menu_resume_voice = false
 	_mode_menu_resume_pop = false
-	_mode_menu_resume_quest = false
-	_mode_menu_resume_quest_listening = false
 	if resume_game and not _page_hidden and not collection_page.visible and not _leaderboard_overlay.visible:
 		feedback_timer.paused = false
 		_memory.pause(false)
@@ -861,8 +832,6 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 				_host.resumeSpeechFromMenu()
 		if resume_pop:
 			_start_pop_listening()
-		if resume_quest:
-			_quest._continue_run(resume_quest_listening)
 		if _pop_rewards_shown and _mode_id == "pop":
 			_pop_rewards.resume()
 	elif resume_voice:
@@ -1036,7 +1005,6 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_hide_mode_menu(false, false)
 	_pop_rewards.pause()
 	_pop.cancel_result_input()
-	_quest.cancel_scroll_input()
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	audio.stop_voice()
@@ -1757,8 +1725,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pop_rewards.pause()
 	_pop_rewards_shown = false
 	_controller_holding_pop_chest = false
-	if _mode_id == "quest":
-		_quest.pause()
 	_rebuilding = true
 	if not next_mode.is_empty():
 		_mode_id = next_mode if MODES.has(next_mode) else "match"
@@ -1810,8 +1776,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_memory.start_round(model.lesson_words, Data.theme(model.theme_id), seed_value)
 	if _mode_id == "pop":
 		_configure_pop(seed_value)
-	if _mode_id == "quest":
-		_quest.enter()
 	_rebuilding = false
 	_refresh()
 	_layout()
@@ -1834,7 +1798,7 @@ func choose_mode(id: String) -> void:
 		_default_focus().grab_focus()
 		if id == "pop":
 			_start_pop_listening()
-		elif not _page_hidden and id != "quest":
+		elif not _page_hidden:
 			# The mode gesture restores playback after new_round silences the
 			# previous mode. Voice Pop stays quiet while its microphone is open.
 			audio.interact(model.theme_id)
@@ -2149,7 +2113,6 @@ func _refresh() -> void:
 	_memory.visible = playing and _mode_id == "memory"
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
-	_quest.visible = playing and _mode_id == "quest" and not collection_page.visible
 	_mistakes.visible = _success.visible
 	_message.hide()
 	_outcome.visible = not playing
@@ -2168,8 +2131,6 @@ func _refresh() -> void:
 		_message.text = _memory_status()
 	elif playing and _mode_id == "pop":
 		_message.text = "Voice Pop. Say the flying words. Start with %d seconds." % ceili(VoicePop.PopModel.DURATION)
-	elif playing and _mode_id == "quest":
-		_message.text = "Talk Quest. Speak with Adam and Yoki in fourteen adventures."
 	var won: bool = model.phase == "won"
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
 		and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after)
@@ -2575,7 +2536,7 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 else 0
 	_mode_subheading.visible = size.x * css_scale >= 680
-	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP", "quest": "LITTLE WORDS  /  A GRAND ADVENTURE"}.get(_mode_id, "PIP AND WORDS")
+	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP"}.get(_mode_id, "PIP AND WORDS")
 	_mode_subheading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_subheading.offset_top = 32 / css_scale
 	_mode_subheading.add_theme_font_size_override("font_size", ceili(10 / css_scale))
@@ -2889,7 +2850,6 @@ func set_reduced_motion(value: bool) -> void:
 	_voice_match_link.set_reduced_motion(value)
 	_pop.set_reduced_motion(value)
 	_pop_rewards.set_reduced_motion(value)
-	_quest.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
@@ -2908,63 +2868,6 @@ func set_reduced_motion(value: bool) -> void:
 		chest.finish_immediately()
 	if not data.words.is_empty():
 		_refresh()
-
-
-func _quest_sound(kind: String) -> void:
-	if kind == "pip_stop":
-		audio.stop_pip_reaction()
-		return
-	if kind == "stop":
-		audio.stop_quest_sounds()
-		audio.stop_pip_reaction()
-		return
-	if _mode_id != "quest" or _page_hidden \
-		or collection_page.visible or _leaderboard_overlay.visible or not _quest.is_visible_in_tree() \
-		or _quest.view != "stage" or _quest._suspended or _quest.game.phase == "paused":
-		return
-	if kind == "pip_loss":
-		if _quest.game.phase == "lost" and _quest._loss.is_visible_in_tree():
-			audio.interact(model.theme_id, false)
-			audio.play_pip_loss()
-		return
-	if kind == "pip_victory":
-		if _quest.game.phase == "victory":
-			audio.interact(model.theme_id, false)
-			audio.play_pip_victory()
-		return
-	if not audio.QUEST_SOUNDS.has(kind):
-		return
-	# Entering Quest halts the previous mode's audio. Accepted combat events
-	# reactivate effects without starting music over the speech recognizer.
-	# A reserved projectile may still land just after the last word expires.
-	audio.interact(model.theme_id, false)
-	audio.play_quest_sound(kind)
-
-
-func _quest_chest_audio(action: String, theme_id: String, progress: float) -> void:
-	# Cleanup also runs while changing modes or backgrounding the page.
-	if action == "stop":
-		audio.stop_chest_performance()
-		return
-	if action == "cancel" or action == "release":
-		audio.stop_chest_charge()
-		return
-	if action == "finish":
-		audio.finish_chest_motion()
-		return
-	if _page_hidden or collection_page.visible or _mode_id != "quest":
-		return
-	match action:
-		"prepare":
-			audio.interact(theme_id)
-			audio.stop_voice()
-			audio.prepare_chest(theme_id)
-		"charge": audio.set_chest_charge(progress)
-		"tension": audio.set_chest_tension(progress)
-		"reward":
-			if progress > 0.0:
-				audio.interact(theme_id)
-			audio.chest_reward(theme_id, progress > 0.0)
 
 
 func _open_chest() -> void:
@@ -3097,8 +3000,6 @@ func on_page_hidden() -> void:
 		_leaderboard_scroll.cancel_drag()
 	if is_instance_valid(_pop_rewards):
 		_pop_rewards.pause()
-	if is_instance_valid(_quest):
-		_quest.pause()
 	if _speech_debug_active:
 		_page_hidden = true
 		audio.halt()
@@ -3162,7 +3063,7 @@ func on_page_visible() -> void:
 func _restore_mode_music() -> void:
 	if _page_hidden or _voice_mode or _pop_speech_active or model.phase == "lost":
 		return
-	if _mode_id in ["pop", "quest"] and not collection_page.visible:
+	if _mode_id == "pop" and not collection_page.visible:
 		return
 	# Resume the current room's music only. Interrupted words, quacks and reward
 	# cues were cancelled on exit and must never replay when the page returns.
@@ -3231,10 +3132,6 @@ func _input(event: InputEvent) -> void:
 				_controller_accept_needs_release = false
 				_controller_holding_chest = false
 				_end_chest_hold()
-			elif _controller_holding_quest_chest:
-				_controller_accept_needs_release = false
-				_controller_holding_quest_chest = false
-				_quest.end_chest_hold()
 			elif _controller_holding_pop_chest:
 				_controller_accept_needs_release = false
 				_controller_holding_pop_chest = false
@@ -3301,9 +3198,6 @@ func _stop_controller_actions() -> void:
 		_controller_holding_chest = false
 		_cancel_chest_hold()
 		_finish_chest_drag()
-	if _controller_holding_quest_chest:
-		_controller_holding_quest_chest = false
-		_quest.cancel_chest_input()
 	if _controller_holding_pop_chest:
 		_controller_holding_pop_chest = false
 		_pop_rewards.cancel_input()
@@ -3337,10 +3231,6 @@ func _controller_accept() -> void:
 		_controller_holding_pop_chest = true
 		_pop_rewards.begin_hold(focused)
 		return
-	if _mode_id == "quest" and _valid_focus(focused) and _quest.is_chest_control(focused):
-		_controller_holding_quest_chest = true
-		_quest.start_chest_hold()
-		return
 	if _mode_id == "memory" and focused == _memory.study_button and _valid_focus(focused):
 		_memory.begin_peek()
 		_controller_peeking = _memory.memory.studying
@@ -3367,11 +3257,6 @@ func _controller_back() -> void:
 		_pop_rewards.cancel_input()
 		_controller_accept_needs_release = _controller_accept_is_pressed()
 		return
-	if _controller_holding_quest_chest:
-		_controller_holding_quest_chest = false
-		_quest.cancel_chest_input(true)
-		_controller_accept_needs_release = _controller_accept_is_pressed()
-		return
 	if _holding_chest:
 		_cancel_chest_hold()
 		_finish_chest_drag()
@@ -3387,8 +3272,6 @@ func _controller_back() -> void:
 			_hide_pop_rewards()
 		else:
 			choose_mode("match")
-	elif _mode_id == "quest":
-		_quest.back()
 	elif _mode_id == "match" and model.phase == "feedback":
 		_continue_match()
 	elif _mode_id == "memory":
@@ -3525,8 +3408,6 @@ func _default_focus() -> Control:
 			if _valid_focus(control):
 				return control
 		return collection_button
-	if _mode_id == "quest":
-		return _quest.default_focus()
 	if model.phase == "won":
 		if model.chest_state == "closed" and not _save_error:
 			return chest_button
@@ -3630,7 +3511,6 @@ func _connect_browser() -> void:
 	_host.observeSpeechDebug(_speech_debug_callback)
 	_pop_result_callback = JavaScriptBridge.create_callback(_dispatch_pop_speech)
 	_host.observePopSpeech(_pop_result_callback)
-	_quest.connect_browser(_host)
 
 
 func _dispatch_pop_speech(arguments: Array) -> void:
@@ -3708,8 +3588,6 @@ func _open_speech_debug() -> bool:
 	if _mode_id == "pop":
 		_pop.pause()
 	_on_input_canceled()
-	if _mode_id == "quest":
-		_quest.pause()
 	_stop_controller_actions()
 	audio.halt()
 	duck.settle()
@@ -3750,8 +3628,6 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_leaderboard_scroll.cancel_drag()
 	_cancel_chest_hold()
 	_finish_chest_drag()
-	_quest.cancel_chest_input()
-	_quest.cancel_scroll_input()
 	_pop_rewards.cancel_input()
 	duck.note_activity()
 	_found_words_scroll.cancel_drag()
@@ -3790,9 +3666,6 @@ func _sync_voice_bounds() -> void:
 
 func _on_voice_state(arguments: Array) -> void:
 	if _speech_debug_active or _mode_menu_open():
-		return
-	if _mode_id == "quest":
-		_quest.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
 		return
 	if _mode_id == "pop":
 		if _pop_player_id.is_empty() or _leaderboard_overlay.visible:
@@ -3837,9 +3710,6 @@ func _on_voice_state(arguments: Array) -> void:
 
 func _on_voice_result(arguments: Array) -> void:
 	if _speech_debug_active or _mode_menu_open() or arguments.size() < 2:
-		return
-	if _mode_id == "quest":
-		_quest.show_transcript(str(arguments[0]), bool(arguments[1]))
 		return
 	if _mode_id == "pop":
 		if not collection_page.visible:
@@ -3974,8 +3844,7 @@ func _cancel_chest_hold(animate_return: bool = false) -> void:
 			chest.cancel_hold()
 		else:
 			chest.set_hold_progress(0.0)
-	# Global cancellation also runs while Quest owns the shared audio player.
-	# Inactive Match cleanup must leave a committed Quest opening audible.
+	# Inactive Match cleanup must leave a committed Voice Pop opening audible.
 	if audio != null and (_mode_id == "match" or was_holding or was_opening):
 		if animate_return:
 			audio.stop_chest_charge()
@@ -4158,9 +4027,6 @@ func _show_collection() -> void:
 	if from_picker:
 		_hide_leaderboard()
 	_hide_mode_menu(false, false)
-	if _mode_id == "quest":
-		_quest.pause()
-		_quest.hide()
 	if _mode_id == "pop":
 		_pop.pause()
 		_pop_rewards.pause()

@@ -22,16 +22,13 @@ const RECEIPTS = [
 const PLAYER_FIXTURE = `[leaderboard]\nversion=1\nprofiles=${JSON.stringify(PROFILES)}\n` +
   `bests=${JSON.stringify(BESTS)}\nreceipts=${JSON.stringify(RECEIPTS)}\n`;
 const SHARED_KEYS = ['wordBuddies.medalProgress', 'wordBuddies.playroom',
-  'wordBuddies.favoriteReward', 'wordBuddies.talkQuest'];
+  'wordBuddies.favoriteReward'];
 
 async function installFixtures(page) {
   await page.addInitScript(({ key, seed }) => {
     if (localStorage.getItem(key) === null) {
       localStorage.setItem(key, seed);
       localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"spring-1":3,"ocean-1":1}\n');
-      localStorage.setItem('wordBuddies.talkQuest', JSON.stringify({
-        version: 1, completion_counts: [1, ...Array(13).fill(0)], run: {}
-      }));
     }
     window.__denyPlayerManagementSave = false;
     const setItem = Storage.prototype.setItem;
@@ -170,7 +167,7 @@ test('editing a local player preserves identity and scores, cancels drafts and s
   await expectKeyboardDismissed(page);
   await expectNarrowControls(page);
   await page.screenshot({ path: info.outputPath('modified-local-player.png') });
-  expect(await sharedProgress(page), 'Profile editing preserves shared medals, toys and Talk Quest progress').toEqual(shared);
+  expect(await sharedProgress(page), 'Profile editing preserves shared medals and toys').toEqual(shared);
 
   await page.reload();
   await enterGame(page, { onboarding: false });
@@ -235,7 +232,7 @@ test('removing players requires confirmation, retries a failed save and returns 
   await rendered(page);
   expect((await snapshot(page)).view, 'The final deletion cannot leave the game without a player').toBe('onboarding');
   expect(await storedPlayers(page)).not.toContain('player-b');
-  expect(await sharedProgress(page), 'Even the last profile removal retains medals, toys and Talk Quest progress').toEqual(shared);
+  expect(await sharedProgress(page), 'Even the last profile removal retains medals and toys').toEqual(shared);
   await page.screenshot({ path: info.outputPath('last-player-removed-onboarding.png') });
 
   await page.reload();

@@ -3,8 +3,6 @@ extends SceneTree
 const Model = preload("res://scripts/chest_model_view.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
-const QuestChest = preload("res://scripts/talk_quest_reward_chest.gd")
-const QuestData = preload("res://scripts/talk_quest_data.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -220,14 +218,6 @@ func _check_original_styles(data) -> void:
 		check(chest.hold_effect_snapshot().get("live_model", {}).is_empty() and chest.piece_count() >= 4,
 			theme + " preserves its original layered artwork")
 	chest.free()
-	var quest := QuestChest.new()
-	root.add_child(quest)
-	quest.size = Vector2(400, 360)
-	quest.configure(QuestData.chest("chest-14"))
-	quest.start_open(true)
-	check(quest.mode == "opened" and quest.hold_effect_snapshot().get("live_model", {}).is_empty()
-		and quest._artist.chest_id == "chest-14", "Talk Quest preserves its independent vector mechanism and shared opening lifecycle")
-	quest.free()
 
 
 func _check_independent_surfaces(data) -> void:

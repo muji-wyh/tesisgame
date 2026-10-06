@@ -2,8 +2,7 @@ extends SceneTree
 ## Rendered native benchmark. Never use the one-second TIME_PROCESS maximum as a frame sample.
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
-const SCENARIOS := ["match", "memory", "voice-pop", "talk-quest", "room", "catalog", "chest", "quest-map"]
+const SCENARIOS := ["match", "memory", "voice-pop", "room", "catalog", "chest"]
 const PROTOCOL := "main-scene-rendered-v1"
 
 class FrameStart extends Node:
@@ -66,7 +65,7 @@ func _run() -> void:
 	_sample_count = int(_options.get("samples", 240))
 	_warmup_count = int(_options.get("warmup", 90))
 	_seed = int(_options.get("seed", 73021))
-	var requested: PackedStringArray = str(_options.get("scenarios", "match,memory,voice-pop,talk-quest,room,catalog,chest")).split(",")
+	var requested: PackedStringArray = str(_options.get("scenarios", "match,memory,voice-pop,room,catalog,chest")).split(",")
 	if not _require(DisplayServer.get_name() != "headless", "A real native renderer is required"):
 		return
 	if not _require(_sample_count > 0 and _warmup_count >= 2 and _options.has("output"), "Invalid benchmark options"):
@@ -179,11 +178,9 @@ func _install_scene() -> void:
 	_app.medal_progress = load("res://scripts/medal_progress.gd").new(_directory + "/medals.cfg", _directory + "/legacy.cfg")
 	_app.playroom_save_path = _directory + "/room.cfg"
 	PlayerFixture.install(_app, _directory)
-	node_added.connect(_isolate_quest)
 	root.add_child(_app)
 	await process_frame
 	await process_frame
-	node_added.disconnect(_isolate_quest)
 	_app.set_reduced_motion(false)
 	_app.audio.set_muted(false)
 	# Pip uses a private RNG, independent of the seeded global gameplay generator.
@@ -193,16 +190,11 @@ func _install_scene() -> void:
 		"Native scene must be active, isolated, and free of onboarding")
 
 
-func _isolate_quest(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = _directory + "/quest.cfg"
-
-
 func _prepare_scenario() -> void:
 	_pairs.clear()
 	_chest_cues.clear()
-	var mode: String = {"voice-pop": "pop", "talk-quest": "quest", "quest-map": "quest"}.get(_scenario, _scenario)
-	if mode not in ["match", "memory", "pop", "quest"]:
+	var mode: String = {"voice-pop": "pop"}.get(_scenario, _scenario)
+	if mode not in ["match", "memory", "pop"]:
 		mode = "match"
 	if not _require(_app.new_round(_seed, false, "animal-friends", mode), "Deterministic round must start"):
 		return
@@ -228,12 +220,6 @@ func _prepare_scenario() -> void:
 		"voice-pop":
 			PlayerFixture.choose_pop_player(_app)
 			_app._on_voice_state([true, true, "Listening. Say an English word."])
-		"talk-quest":
-			_app._quest.game._rng.seed = _seed
-			_app._quest.start_level(1)
-			_app._quest.set_listening(true, true, "Listening")
-		"quest-map":
-			_app._quest.enter()
 		"room", "catalog":
 			_app._show_collection()
 			if _scenario == "catalog":
@@ -269,15 +255,9 @@ func _after_draw() -> void:
 	_rendered_samples.append(end_usec - _begin_usec)
 	# Collect evidence after capturing the endpoint, outside the timed span.
 	# A successful last hit may leave an empty screen between natural volleys.
-	if _scenario in ["voice-pop", "talk-quest"]:
-		var target_count: int = 0
-		var drawn_count: int = 0
-		if _scenario == "voice-pop":
-			target_count = _app._pop.game.targets.size()
-			drawn_count = _app._pop._draw_targets.size() if _visible_control(_app._pop) else 0
-		else:
-			target_count = _app._quest.game.targets.size()
-			drawn_count = _app._quest._words._geometry.size() if _visible_control(_app._quest._words) else 0
+	if _scenario == "voice-pop":
+		var target_count: int = _app._pop.game.targets.size()
+		var drawn_count: int = _app._pop._draw_targets.size() if _visible_control(_app._pop) else 0
 		_target_counts.append(target_count)
 		_drawn_target_counts.append(drawn_count)
 		_target_frame_count += 1 if target_count > 0 else 0
@@ -316,12 +296,6 @@ func _scheduled_input(frame: int) -> void:
 				_app._pop.show_transcript(word, true)
 				_app._pop.receive_transcript(word)
 				_actions.append({"frame": frame, "action": "pop_word", "word": word})
-		"talk-quest":
-			if frame in [early, middle]:
-				var prompt: Dictionary = _app._quest.game.current_prompt()
-				if not prompt.is_empty():
-					_app._quest._submit_text(str(prompt.text))
-					_actions.append({"frame": frame, "action": "quest_word", "word": str(prompt.text)})
 		"room":
 			if frame == early:
 				_app._room.playground.pet()
@@ -337,10 +311,6 @@ func _scheduled_input(frame: int) -> void:
 				_app._age_catalog.focus_word(str(button.get_meta("word_id")))
 				button.pressed.emit()
 				_actions.append({"frame": frame, "action": "catalog_word", "index": index})
-		"quest-map":
-			if frame in [early, middle, int(_sample_count * 0.84)]:
-				_app._quest._atlas.set_chapter(1 if frame == early else 2 if frame == middle else 0)
-				_actions.append({"frame": frame, "action": "map_chapter", "chapter": _app._quest._atlas.current_chapter})
 
 
 func _state() -> Dictionary:
@@ -348,15 +318,9 @@ func _state() -> Dictionary:
 		"match": return {"visible": _visible_control(_app.grid), "phase": _app.model.phase, "cards": _app.cards.size(), "matches": _app.model.successes}
 		"memory": return {"visible": _visible_control(_app._memory), "phase": _app._memory.memory.phase, "cards": _app._memory.card_buttons.size(), "matches": _app._memory.memory.matched_word_ids.size()}
 		"voice-pop": return {"visible": _visible_control(_app._pop), "hud_visible": _visible_control(_app._pop._hud), "phase": _app._pop.game.phase, "elapsed": _app._pop.game.elapsed, "targets": _app._pop.game.targets.size(), "draw_targets": _app._pop._draw_targets.size(), "hits": _app._pop.game.hits}
-		"talk-quest": return {"visible": _visible_control(_app._quest), "viewport_visible": _visible_control(_app._quest._viewport_box),
-			"viewport_update": _app._quest._viewport.render_target_update_mode, "monster_visible": _app._quest._monster.is_visible_in_tree(),
-			"model_loaded": is_instance_valid(_app._quest._monster._model), "words_visible": _visible_control(_app._quest._words),
-			"word_geometry": _app._quest._words.geometry().size(), "phase": _app._quest.game.phase, "elapsed": _app._quest.game.elapsed,
-			"targets": _app._quest.game.targets.size(), "hits": _app._quest.game.hits, "hp": _app._quest.game.hp}
 		"room": return {"visible": _visible_control(_app._room), "playground_visible": _visible_control(_app._room.playground), "pip_visible": _visible_control(_app.duck), "pet_count": _app._room.playground._pet_count, "toy_phase": _app._room.playground.toy_phase}
 		"catalog": return {"visible": _visible_control(_app._age_catalog), "words": _app._age_catalog.word_buttons.size(), "scroll": _app._age_catalog.scroll.scroll_vertical}
 		"chest": return {"visible": _visible_control(_app.chest), "phase": _app.model.phase, "chest_state": _app.model.chest_state, "cues": _chest_cues.duplicate()}
-		"quest-map": return {"visible": _visible_control(_app._quest._atlas), "view": _app._quest.view, "levels": _app._quest._atlas.level_buttons.size(), "chapter": _app._quest._atlas.current_chapter}
 	return {}
 
 
@@ -375,11 +339,9 @@ func _assert_workload(after: bool) -> bool:
 		"match": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
 		"memory": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
 		"voice-pop": valid = state.hud_visible and state.phase == "running" and state.elapsed > 0 and ((state.targets > 0 and state.draw_targets > 0) if not after else (state.hits == 3 and _target_workload_recorded()))
-		"talk-quest": valid = state.viewport_visible and state.viewport_update == SubViewport.UPDATE_ALWAYS and state.monster_visible and state.model_loaded and state.words_visible and state.phase == "playing" and state.elapsed > 0 and ((state.targets > 0 and state.word_geometry > 0) if not after else (state.hits == 2 and _target_workload_recorded()))
 		"room": valid = state.playground_visible and state.pip_visible and (not after or state.pet_count > 0)
 		"catalog": valid = state.visible and state.words == 350 and (not after or state.scroll > 0)
 		"chest": valid = state.phase == "won" and ((state.chest_state in ["closed", "opening"] and "release" not in state.cues) if not after else (state.chest_state in ["opening", "opened"] and "release" in state.cues))
-		"quest-map": valid = state.view == "map" and state.levels == 14
 	return _require(valid, "Inactive or incorrect workload for %s: %s" % [_scenario, JSON.stringify(state)])
 
 
@@ -416,8 +378,6 @@ func _clean_save_directory() -> void:
 func _shutdown(exit_code: int) -> void:
 	_sampling = false
 	_pending_draw = false
-	if node_added.is_connected(_isolate_quest):
-		node_added.disconnect(_isolate_quest)
 	if RenderingServer.frame_post_draw.is_connected(_after_draw):
 		RenderingServer.frame_post_draw.disconnect(_after_draw)
 	# Deferred shutdown avoids freeing a scene during its process traversal.

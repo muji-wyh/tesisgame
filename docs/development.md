@@ -7,18 +7,10 @@ repository root. See the [project README](../README.md) for the short setup path
 
 Development prerequisites: **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**. The `godot` executable must be on PATH; alternatively, set `GODOT_BIN` to its executable path.
 
-Restore the licensed [Talk Quest character build inputs](assets/talk-quest-monsters.md#provenance-and-reproducibility)
-and [animated chest inputs](voice-pop-treasure.md#shared-chest-catalog)
-before importing or building a fresh checkout. Their models and portraits remain
-local and are bundled into the compiled game; they are not stored in Git.
-
-The three Unity-derived treasure particles also remain private build inputs.
-Restore the prepared `halo.png`, `ray.png`, and `sparkle.png` files to
-`assets/talk_quest/treasure/` from the licensed local asset copy before import.
-The [treasure artwork record](../assets/talk_quest/treasure/SOURCE.md) identifies
-the acquired package, original texture paths, and preparation dimensions;
-`assets/talk_quest/treasure/manifest.json` records the expected prepared hashes.
-Godot regenerates their ignored import metadata when importing the project.
+Restore the licensed [animated chest inputs](voice-pop-treasure.md#shared-chest-catalog)
+before importing or building a fresh checkout. These models remain local and
+are bundled into the compiled game; they are not stored in Git. The retired
+Talk Quest characters, maps, and treasure particles are not build inputs.
 
 ```powershell
 npm ci
@@ -172,22 +164,12 @@ npm run test:all
 
 `npm test` imports resources and runs each native and Node suite once. Use
 `node tools/run-tests.cjs --list` to inspect the complete plan, or a focused
-command such as `npm run test:voice-pop`, `npm run test:talk-quest`, or `npm run test:pip-audio` during
+command such as `npm run test:voice-pop`, `npm run test:leaderboards`, or `npm run test:pip-audio` during
 development. Browser checks remain in `npm run test:browser`.
 
-For Talk Quest's model, character, scene, and browser-host tests, followed by its
-focused exported-game browser checks:
-
-```powershell
-npm run test:talk-quest
-npm run test:browser -- talk-quest.spec.cjs
-```
-
-The browser command rebuilds the Web export and runs the Talk Quest scenarios
+The browser command rebuilds the Web export and runs the maintained scenarios
 across the configured Chromium and WebKit profiles. Run imports, native tests,
-exports, and browser jobs sequentially against one checkout. The
-[Talk Quest reference](talk-quest.md) describes finite word encounters, speech
-attacks, reward commits, and private checkpoints covered by these suites.
+exports, and browser jobs sequentially against one checkout.
 
 The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 

@@ -26,7 +26,6 @@ for weight in (600, 800):
 ```
 
 The game library reuses acquired Twemoji cat, rainbow, and rocket artwork under
-the [existing CC BY 4.0 attribution](../avatars/ATTRIBUTION.md), and the acquired
-Kenney island render under the [existing CC0 source record](../talk_quest/map-dimensional/SOURCE.md).
-The original vector and rendered files are reused without modification. These
+the [existing CC BY 4.0 attribution](../avatars/ATTRIBUTION.md).
+The original vector files are reused without modification. These
 are integrated static illustrations; no character animation is claimed.

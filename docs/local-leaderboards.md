@@ -16,7 +16,7 @@ Open **Players** in the menu. Each player has **Edit** and **Remove** actions.
 
 Names and avatars update on leaderboards and the current Voice Pop result. Removing the current Voice Pop player discards their unfinished or completed round and requires a new player selection. A saved Match or Memory result belonging to a removed player cannot be reassigned to another player. Removing the last player immediately requires creating a new one.
 
-Talk Quest progress, medals, treasure collections, playroom state, and earned Match chests are shared on the device and survive profile removal. Editing a name on mobile uses the same native text input as player creation and retains its 16 CSS-pixel minimum font to prevent focus zoom.
+Medals, Voice Pop chest batches, playroom state, and earned Match chests are shared on the device and survive profile removal. Editing a name on mobile uses the same native text input as player creation and retains its 16 CSS-pixel minimum font to prevent focus zoom.
 
 ## Ranking rules
 

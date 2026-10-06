@@ -97,7 +97,6 @@ function collectRequiredAudio(root) {
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/sfx/match-voice-hit.wav',
-    ...['launch', 'impact', 'defeat'].map(id => `assets/audio/quest/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()

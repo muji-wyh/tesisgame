@@ -2,17 +2,12 @@ extends SceneTree
 ## Render every main page with isolated saves and the real production scene.
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
 const OUTPUT := "res://build/presentation-review"
 var directory := ""
 var captures := 0
 
 func _initialize() -> void:
 	_run.call_deferred()
-
-func _isolate(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = directory + "/quest.cfg"
 
 func capture(label: String) -> void:
 	for frame in range(8):
@@ -26,7 +21,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(OUTPUT)
 	directory = "user://presentation-review-%s" % Time.get_ticks_usec()
 	DirAccess.make_dir_recursive_absolute(directory)
-	node_added.connect(_isolate)
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for layout in [{"name": "desktop", "size": Vector2i(1280, 800)}, {"name": "phone", "size": Vector2i(390, 844)}]:
 		root.size = layout.size
@@ -86,31 +80,6 @@ func _run() -> void:
 		app._show_pop_rewards()
 		await capture(prefix + "voice-pop-treasures")
 		app._hide_pop_rewards()
-		app.choose_mode("quest")
-		await capture(prefix + "quest-map")
-		app._quest.start_level(1)
-		app._quest.set_process(false)
-		app._quest._process(0.8)
-		await capture(prefix + "quest-stage")
-		app._quest.pause()
-		await capture(prefix + "quest-pause")
-		app._quest._continue_run(false)
-		app._quest.game.phase = "lost"
-		app._quest._refresh()
-		await capture(prefix + "quest-retry")
-		app._quest.game.hp = 0
-		app._quest.game.hits = app._quest.game.max_hp
-		app._quest.game.phase = "victory"
-		app._quest.game.finish_victory()
-		app._quest._banner.text = app._quest.game.current_chest().name
-		app._quest._refresh()
-		await capture(prefix + "quest-reward")
-		app._quest.start_chest_hold()
-		app._quest._advance_chest_hold(app._quest.ChestFeel.HOLD_SECONDS)
-		await capture(prefix + "quest-complete")
-		app._quest.back()
-		app._quest._show_album()
-		await capture(prefix + "quest-treasures")
 		app.queue_free()
 		await process_frame
 	var library = load("res://scripts/game_library.gd").new()
@@ -126,7 +95,6 @@ func _run() -> void:
 		await capture(str(layout.name) + "-library")
 	library.queue_free()
 	await process_frame
-	node_added.disconnect(_isolate)
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)

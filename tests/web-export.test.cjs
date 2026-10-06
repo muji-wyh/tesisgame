@@ -101,6 +101,15 @@ test('accessible help describes the current controls rather than the removed mot
   assert.match(help, /device.*reduced-motion/i);
 });
 
+test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
+  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
+  const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+  assert.match(help, /Choose Match, Memory, or Voice Pop\./);
+  assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
+  assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
+    'Retired adventure progress stays on the device and is neither read nor erased');
+});
+
 function referenceBankFixture(t, populated = true) {
   const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'voice-pop-reference-export-'));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
@@ -159,7 +168,6 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   fixture.writeImport('assets/audio/sfx/match-voice-hit.wav');
-  for (const id of ['launch', 'impact', 'defeat']) fixture.writeImport(`assets/audio/quest/${id}.wav`);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -167,16 +175,14 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 105);
+  assert.equal(required.length, 102);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/match-voice-hit.wav'),
     'The successful voice-match cue ships in the startup pack without a later fetch');
-  for (const id of ['launch', 'impact', 'defeat']) {
-    assert.ok(required.some(asset => asset.source === `res://assets/audio/quest/${id}.wav`),
-      `Talk Quest ${id} ships in the startup pack without a later fetch`);
-  }
+  assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
+    'Retired adventure audio is no longer a required packaging input');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/pop/')),

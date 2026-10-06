@@ -68,10 +68,8 @@ The audited picture-naming phrase "A kite." is retained for `word-kite`.
 
 Match, Memory, Voice Pop, word lists, and results all play the same
 bundled pronunciation files through `GameAudio.say`. Eight world greetings,
-wrong-answer feedback, and loss encouragement use the same profile. The dormant
-browser-default Talk Quest narrator has been removed; current Talk Quest uses
-nonverbal effects and Pip calls. Gameplay never
-asks the operating system to choose a different speaking voice.
+wrong-answer feedback, and loss encouragement use the same profile. Gameplay
+never asks the operating system to choose a different speaking voice.
 
 Pip's duck calls, music, chest sounds, and other nonverbal sound effects remain
 their existing recordings. All speech stays in the startup game pack, so

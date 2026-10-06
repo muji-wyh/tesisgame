@@ -1,7 +1,6 @@
 extends SceneTree
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -22,11 +21,6 @@ func check(condition: bool, message: String) -> void:
 func settle() -> void:
 	for frame in range(6):
 		await process_frame
-
-
-func _isolate_quest(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = directory + "/quest.cfg"
 
 
 func _tap(control: Control) -> void:
@@ -399,7 +393,6 @@ func _run() -> void:
 	root.size = Vector2i(390, 844)
 	directory = "user://match-connections-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
-	node_added.connect(_isolate_quest)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
@@ -415,7 +408,6 @@ func _run() -> void:
 	await _test_default_card_badge(app)
 	app.queue_free()
 	await process_frame
-	node_added.disconnect(_isolate_quest)
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)

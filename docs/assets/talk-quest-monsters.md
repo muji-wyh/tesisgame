@@ -1,5 +1,11 @@
 # Talk Quest monster models
 
+> Archived on 2026-10-06. Talk Quest has been removed from the game. This
+> document preserves the former implementation, source provenance, and review
+> evidence. Its asset paths, interfaces, and commands describe that revision;
+> they are not current build prerequisites or instructions to restore the mode.
+> Retained manifests and license records do not mean the runtime assets ship.
+
 The original fourteen models in `assets/talk_quest/monsters` are complete rigged 3D
 characters from [Low Poly Monsters Pack, product 380750](https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750).
 They are licensed under the **Standard Unity Asset Store EULA** for use in the

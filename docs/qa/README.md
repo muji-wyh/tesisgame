@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Talk Quest retirement](2026-10-06-talk-quest-removal.md) | Complete mode and resource removal, three-mode library, 80 passing native suites, 295 Node tests, 11 browser passes, and explicit timeout/audio-runtime limits |
 | [Cross-page presentation](2026-10-03-game-taste.md) | Illustrated game library, shared typography and surfaces, persistent presentation settings, and responsive page review |
 | [Approved Ava voice](2026-10-03-ava-speech.md) | Full 360-recording migration, exact approved profile, provenance, preserved nonverbal audio, and playback regression checks |
 | [Native rendered-frame performance](2026-10-03-performance.md) | Five paired repeats over seven main-scene workloads; 12.63% lower aggregate active frame time on the Windows software renderer, with raw samples, source identities, exposure caveats, and a disclosed exit warning |
@@ -34,8 +35,10 @@ clean checkout, and historical export hashes must not be used as release targets
 The September 23–24 multiplayer, voice-user, identify-user, and speaker-accuracy
 records describe a removed prototype. Earlier Learn, Words album, Medals,
 30-second Voice Pop reports, and on-demand-audio records are also historical.
-Their sources, licensing notes, experiments, and migration evidence remain
-useful even though the corresponding UI or runtime no longer ships.
+Talk Quest was retired on 2026-10-06; its campaign, atlas, creatures, speech,
+and treasure-room reports also describe a removed mode. Their sources,
+licensing notes, experiments, and migration evidence remain useful even though
+the corresponding UI or runtime no longer ships.
 
 Browser speech fixtures simulate callbacks. WebKit emulation does not prove
 physical Safari audio or microphone behavior. Native/offline captures do not

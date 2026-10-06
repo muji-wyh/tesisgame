@@ -17,7 +17,10 @@ instead of filling it with placeholder art or claiming the element is finished.
 This requirement guides new work and replacements. It does not imply that
 all existing procedural artwork has already been replaced.
 
-## Talk Quest guardians
+## Archived Talk Quest guardian direction
+
+Talk Quest was retired on 2026-10-06. The following direction and source review
+are historical; they do not require new creatures or restore a game mode.
 
 Each of the fourteen levels needs its own distinct creature design. Favor
 beautiful fantasy guardians with large bodies, broad wings, flowing fins,

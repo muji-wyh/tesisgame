@@ -38,7 +38,7 @@ func _run() -> void:
 	var library := Library.new()
 	root.add_child(library)
 	library.configure("memory", true, true)
-	for dimensions in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1280, 800)]:
+	for dimensions in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(390, 420), Vector2i(390, 600), Vector2i(390, 640), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1280, 800)]:
 		root.size = dimensions
 		library.fit(Vector2(dimensions) - Vector2(24, 24), 1.0)
 		for frame in range(8):

@@ -10,8 +10,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const CATALOG := [
 	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/avatars/cat.svg", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/avatars/rainbow.svg", "tint": Color("#f2e9d8")},
-	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/avatars/rocket.svg", "tint": Color("#e3eef1")},
-	{"id": "quest", "title": "Talk Quest", "copy": "Little words.\nA grand adventure.", "detail": "14 ISLANDS · MIC", "art": "res://assets/talk_quest/map-dimensional/level-01.png", "tint": Color("#e8e6f0")}
+	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/avatars/rocket.svg", "tint": Color("#e3eef1")}
 ]
 
 var heading: Label
@@ -104,7 +103,7 @@ func _init() -> void:
 	motion_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	motion_button.pressed.connect(func() -> void: motion_toggled.emit())
 	_footer.add_child(motion_button)
-	_credit = Style.label("Art: Twemoji · CC BY 4.0 / Kenney · CC0", 10)
+	_credit = Style.label("Art: Twemoji · CC BY 4.0", 10)
 	_credit.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_credit)
 
@@ -121,10 +120,10 @@ func configure(current: String, muted: bool, reduced: bool) -> void:
 func fit(available: Vector2, factor: float) -> void:
 	_factor = factor
 	var css := available * factor
-	var short: bool = css.y < 560
-	var tiny: bool = css.y < 380
-	var wide: bool = css.x >= 660
-	grid.columns = 4 if wide else 2
+	var wide: bool = css.x >= 660 or (css.x >= 440 and css.x > css.y)
+	var short: bool = css.y < (560 if wide else 660)
+	var tiny: bool = css.y < (380 if wide else 440)
+	grid.columns = 3 if wide else 1
 	var padding: float = (16.0 if short or not wide else 28.0) / factor
 	var surface := Style.box(Style.PAPER, Style.EDGE, ceili(24 / factor), 1)
 	surface.set_content_margin_all(padding)
@@ -148,7 +147,7 @@ func fit(available: Vector2, factor: float) -> void:
 		Style.action_button(button, Style.GOOD)
 		button.custom_minimum_size = Vector2(0, 44 / factor)
 		button.add_theme_font_size_override("font_size", ceili(13 / factor))
-	var tile_height: float = (148.0 if short else 218.0) if wide else (68.0 if tiny else 124.0 if short else 200.0)
+	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (44.0 if tiny else 82.0 if short else 124.0)
 	for tile: Dictionary in _tiles:
 		tile.button.custom_minimum_size = Vector2(0, tile_height / factor)
 		for state in ["normal", "hover", "pressed", "hover_pressed"]:
@@ -167,12 +166,14 @@ func _layout_tile(tile: Dictionary) -> void:
 	var factor := _factor
 	var short: bool = area.y * factor < 170
 	var tiny: bool = area.y * factor < 105
+	var minimal: bool = area.y * factor < 60
 	var pad := 14 / factor
+	var horizontal: bool = grid.columns == 1 and short and not minimal
 	var art_height: float = maxf(0, area.y - 114 / factor)
-	tile.picture.visible = not short
+	tile.picture.visible = not short or horizontal
 	tile.picture.position = Vector2(pad, 8 / factor)
 	tile.picture.size = Vector2(area.x - pad * 2, art_height)
-	var y: float = pad if short else art_height + 14 / factor
+	var y: float = (area.y - 27 / factor) * 0.5 if minimal else pad if short else art_height + 14 / factor
 	tile.title.position = Vector2(pad, y)
 	tile.title.size = Vector2(area.x - pad * 2, 27 / factor)
 	tile.title.add_theme_font_size_override("font_size", ceili((17 if short else 21) / factor))
@@ -181,11 +182,26 @@ func _layout_tile(tile: Dictionary) -> void:
 	tile.copy.size = Vector2(area.x - pad * 2, 42 / factor)
 	tile.copy.add_theme_font_size_override("font_size", ceili(13 / factor))
 	tile.detail.position = Vector2(pad, area.y - 23 / factor)
+	tile.detail.visible = not minimal
 	tile.detail.size = Vector2(area.x - pad * 2, 14 / factor)
 	tile.detail.add_theme_font_size_override("font_size", ceili(9 / factor))
 	tile.current.position = Vector2(pad, 10 / factor)
 	tile.current.add_theme_font_size_override("font_size", ceili(9 / factor))
 	tile.current.visible = tile.entry.id == _current and not short
+	if horizontal:
+		var art_size: float = minf(area.y - pad * 2, 76 / factor)
+		var text_x: float = pad + art_size + 14 / factor
+		var text_width: float = maxf(0, area.x - text_x - pad)
+		var text_height: float = (45 if tiny else 90) / factor
+		var text_top: float = (area.y - text_height) * 0.5
+		tile.picture.position = Vector2(pad, (area.y - art_size) * 0.5)
+		tile.picture.size = Vector2.ONE * art_size
+		tile.title.position = Vector2(text_x, text_top)
+		tile.title.size.x = text_width
+		tile.copy.position = Vector2(text_x, text_top + 30 / factor)
+		tile.copy.size.x = text_width
+		tile.detail.position = Vector2(text_x, text_top + (31 if tiny else 76) / factor)
+		tile.detail.size.x = text_width
 
 func snapshot() -> Dictionary:
 	var controls: Array = []

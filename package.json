@@ -20,7 +20,6 @@
     "pretest": "npm run import",
     "test": "node tools/run-tests.cjs all",
     "test:voice-pop": "node tools/run-tests.cjs voice-pop",
-    "test:talk-quest": "node tools/run-tests.cjs talk-quest",
     "test:leaderboards": "node tools/run-tests.cjs leaderboards",
     "test:layout-release": "node tools/run-tests.cjs layout-release",
     "build:web": "node tools/build-web.cjs",

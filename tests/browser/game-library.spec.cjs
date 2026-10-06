@@ -15,17 +15,20 @@ test('the illustrated library fits, preserves play, and switches every game', as
   test.setTimeout(180000);
   await page.addInitScript(() => { window.SpeechRecognition = undefined; window.webkitSpeechRecognition = undefined; });
   const errors = await openGame(page);
-  for (const size of [{ width: 390, height: 844 }, { width: 320, height: 320 }, { width: 844, height: 390 }, { width: 1280, height: 800 }]) {
+  for (const size of [{ width: 390, height: 844 }, { width: 390, height: 420 }, { width: 390, height: 600 },
+    { width: 390, height: 640 }, { width: 320, height: 320 }, { width: 844, height: 390 }, { width: 1280, height: 800 }]) {
     await page.setViewportSize(size);
     await openModeMenu(page);
+    expect((await metrics(page)).library.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
+      'The library exposes only the three supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop']);
     await expect.poll(async () => {
       const bounds = await metrics(page);
       return bounds.library.controls.every(({ rect: [x, y, w, h] }) => x >= 0 && y >= 0 && x + w <= bounds.width + 1 && y + h <= bounds.height + 1 && h * bounds.scale >= 43);
     }).toBe(true);
-    const png = await page.screenshot({ path: testInfo.outputPath(`library-${size.width}.png`), scale: 'css' });
+    const png = await page.screenshot({ path: testInfo.outputPath(`library-${size.width}x${size.height}.png`), scale: 'css' });
     const raw = await page.locator('#canvas').evaluate(canvas => canvas.toDataURL('image/png').split(',')[1]);
     const canvasPng = Buffer.from(raw, 'base64');
-    fs.writeFileSync(testInfo.outputPath(`library-${size.width}-canvas.png`), canvasPng);
+    fs.writeFileSync(testInfo.outputPath(`library-${size.width}x${size.height}-canvas.png`), canvasPng);
     expect(await visibleColorCount(page, canvasPng), 'The native game renders after resizing').toBeGreaterThan(20);
     const colors = await visibleColorCount(page, png);
     if (colors === 1 && process.platform === 'win32' && testInfo.project.use.browserName === 'webkit') {
@@ -34,7 +37,7 @@ test('the illustrated library fits, preserves play, and switches every game', as
     await activate(page, 'LibraryClose');
     await expect(page.locator('#game-status')).toContainText('Game mode menu closed');
   }
-  for (const mode of ['memory', 'pop', 'quest', 'match']) {
+  for (const mode of ['memory', 'pop', 'match']) {
     await chooseMode(page, mode);
     await openModeMenu(page);
     expect((await metrics(page)).library.current).toBe(mode);

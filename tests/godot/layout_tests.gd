@@ -36,8 +36,8 @@ func _run() -> void:
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
-	check(app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "memory", "pop", "quest"],
-		"Pip's mode switch contains all four games")
+	check(app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "memory", "pop"],
+		"Pip's mode switch contains all three games")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
 		root.size = dimensions
 		app.size = dimensions

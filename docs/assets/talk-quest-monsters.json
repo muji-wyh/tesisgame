@@ -1,4 +1,9 @@
 {
+  "archive": {
+    "status": "archived",
+    "retired_on": "2026-10-06",
+    "note": "Talk Quest is removed. This manifest retains historical provenance; its assets, paths, and former integration status are not current build requirements."
+  },
   "version": 1,
   "source": {
     "url": "https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750",

@@ -1,5 +1,11 @@
 # Talk Quest giant creature sources
 
+> Archived on 2026-10-06. Talk Quest has been removed from the game. This
+> document preserves the former implementation, source provenance, and review
+> evidence. Its asset paths, interfaces, and commands describe that revision;
+> they are not current build prerequisites or instructions to restore the mode.
+> Retained manifests and license records do not mean the runtime assets ship.
+
 The selected refresh replaces three level creatures with distinct, imposing
 source models. These are new character designs rather than scaled versions of
 the existing cute roster. The other eleven original level creatures remain

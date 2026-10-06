@@ -1532,7 +1532,7 @@ test('Voice Pop defaults to system recognition without loading custom models or 
   for (const api of ['standard', 'prefixed']) {
     const f = fixture({ api });
     assert.deepEqual(Object.keys(f.host).sort(), ['beginSpeechPractice', 'configureSpeechLexicon', 'endSpeechPractice',
-      'observePopSpeech', 'observeQuestSpeech', 'observeSpeech', 'popStatus', 'practiceTarget', 'practiceWords', 'questTarget', 'questTargets',
+      'observePopSpeech', 'observeSpeech', 'popStatus', 'practiceTarget', 'practiceWords',
       'resumeSpeechFromMenu', 'setSpeechDiagnostics', 'speechAvailable', 'speechBounds', 'speechDiagnostics', 'speechMode', 'stopSpeech',
       'suspendSpeechForMenu']);
     f.listen('pop');

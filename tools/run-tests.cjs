@@ -4,10 +4,6 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
-  'talk-quest': {
-    godot: ['talk_quest_model_tests', 'talk_quest_monster_tests', 'talk_quest_giant_tests', 'quest_presentation_cache_tests', 'talk_quest_map_tests', 'talk_quest_compact_layout_tests', 'talk_quest_scene_tests', 'talk_quest_pip_loss_tests', 'talk_quest_celebration_tests', 'talk_quest_victory_flow_tests', 'talk_quest_transcript_tests', 'talk_quest_audio_tests', 'talk_quest_reward_chest_tests', 'talk_quest_reward_flow_tests'],
-    node: ['talk-quest-host', 'quest-audio-assets']
-  },
   leaderboards: {
     godot: ['leaderboard_state_tests', 'leaderboard_scene_tests', 'player_management_tests'],
     node: ['leaderboard-host', 'virtual-keyboard-host']

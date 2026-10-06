@@ -5,6 +5,14 @@ Notable changes to Pip and Words (formerly Word Buddies), grouped by date with t
 Entries describe behavior at their recorded revision, including features later
 removed. Use the [documentation index](docs/README.md) for current guidance.
 
+## 2026-10-06
+
+- Retired Talk Quest, including its library entry, campaign, map, speech bridge,
+  dedicated runtime assets, audio, and preparation tools. Existing saved data is
+  left untouched; historical source and license records remain archived.
+- Reflowed the library around Match, Memory, and Voice Pop with illustrated
+  phone cards and compact layouts. Web exports exclude all retired Quest assets.
+
 ## 2026-10-01
 
 - Retired the unused Voice Pop spoken-report subsystem and its dedicated

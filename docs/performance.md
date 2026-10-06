@@ -38,31 +38,29 @@ Each scenario creates a fresh full main scene and isolated save files, uses seed
 private Pip idle generator is also seeded after the scene is ready. The
 scene is never manually advanced, frozen, stripped of artwork, or given reduced
 motion. Startup/loading and result-file serialization are outside measurement.
-The seven default scenarios receive equal weight:
+The six default scenarios receive equal weight:
 
 | Scenario | Presentation and scheduled input |
 | --- | --- |
 | Match | Ten cards from Animal Friends, Spring theme; two successful word-picture pairs at 8% and 50% of the measured interval. |
 | Memory | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
 | Voice Pop | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
-| Talk Quest | Level 1, normal animated creature and environment, live word movement, and two word attacks. |
 | Room | Pip's room with normal idle motion, one pet gesture, then the room's toy button. |
 | All words | The complete 350-word age catalogue; focus, scroll, and pronunciation at the first, middle, and last card. |
 | Chest | A real Match win and continuous chest hold; the hold begins during the final 60 warmup frames so measurement includes charge, release, and reward presentation. |
 
-The optional `quest-map` diagnostic changes all three atlas chapters. It is not
-part of the seven-scenario acceptance matrix unless both baseline and candidate
-are explicitly run with the same expanded set before evaluation.
+Talk Quest and its map diagnostic were retired on 2026-10-06. The current
+six-scenario matrix must be used for both baseline and candidate. Archived
+seven-scenario results remain evidence for their original revision and cannot
+be compared directly with the current aggregate.
 
 State assertions reject hidden onboarding, a paused page, inactive gameplay,
 missing word hits, incomplete card boards, an incomplete catalogue, and a chest
 that has already opened or reached its release cue before measurement, or never
 reaches release during measurement. Voice Pop requires exactly three hits after
 measurement, including diagnostic runs. Visible controls must retain nonzero layout;
-Talk Quest must retain a visible loaded creature, an updating real SubViewport,
-and visible word artwork. Voice Pop must retain its visible HUD and start with
-live drawn targets. For both word-flight modes, raw live-target and drawn-target
-counts are recorded alongside every timed sample, with total active-frame counts
+Voice Pop must retain its visible HUD and start with live drawn targets. Its
+raw live-target and drawn-target counts are recorded alongside every timed sample, with total active-frame counts
 and peak counts. At least one quarter of measured frames must contain live and
 drawn targets; successful hits must also be recorded. This allows a legitimate
 empty interval between volleys at the end of measurement. The room must retain
@@ -73,8 +71,7 @@ backend, display size, and pacing settings. All save paths are assigned before
 the corresponding scene's `_ready`; run-owned files are removed afterward.
 
 The fixed frame count does not guarantee identical wall-clock exposure. Voice Pop
-uses the wall clock for target motion, Talk Quest advances with live delta, and
-inputs are scheduled by frame index. A baseline that misses the 60 Hz cap can
+uses the wall clock for target motion, and inputs are scheduled by frame index. A baseline that misses the 60 Hz cap can
 take longer than the candidate to render the same 240 measured frames. Targets
 can then occupy different positions or remain visible for different numbers of
 frames, and animation phases can differ even when the hit words and scheduled
@@ -97,7 +94,7 @@ but is not an acceptance result.
 First freeze the chosen source commit into a new directory:
 
 ```powershell
-node tools/freeze-performance-baseline.cjs --ref f7c3caf --output build/performance/baseline-project
+node tools/freeze-performance-baseline.cjs --ref HEAD --output build/performance/baseline-project
 ```
 
 The tool defaults to `HEAD` and an output name containing its resolved commit.
@@ -163,7 +160,11 @@ fingerprints. Runtime source and harness fingerprints are checked again after
 collection. A copied baseline can reside inside another Git checkout, so the
 content fingerprint is authoritative and the nearby Git HEAD is informational.
 
-### Baseline stabilization on 2026-10-03
+### Historical baseline stabilization on 2026-10-03
+
+This subsection records the former seven-scenario comparison. Reproducing it
+requires its original runtime, assets, and harness from that revision; these
+commands are not the current six-scenario setup.
 
 The first `native-paired` collection stopped during candidate repeat 4 because
 Pip's tiny reaction stars triggered an inherited polygon-triangulation error.
@@ -196,15 +197,15 @@ fix**, not against the untouched commit or the interrupted collections.
 
 For each scenario, pool all measured frames across repeats, then calculate the
 candidate mean divided by the baseline mean. The headline aggregate is the
-equal-weight geometric mean of those seven ratios of pooled means. Report
+equal-weight geometric mean of those six ratios of pooled means. Report
 `100 * (1 - aggregate)` as the reduction in active rendered-frame wall time.
 The throughput-equivalent speedup is a different number and is reported
 separately. A successful target requires at least five repeats, the complete
-seven-scenario matrix, a reduction of at least 10%, and no individual scenario's
+six-scenario matrix, a reduction of at least 10%, and no individual scenario's
 mean regressing by more than 5%. Every paired repeat must improve.
 
 The interval describes a separate estimator: first calculate the equal-weight
-geometric mean of the seven scenario ratios within each repeat pair, then take
+geometric mean of the six scenario ratios within each repeat pair, then take
 the geometric mean across pairs. This paired estimator generally differs from
 the headline aggregate of ratios of pooled means. A deterministic 10,000-resample
 percentile bootstrap computes its 95% interval by resampling whole independent

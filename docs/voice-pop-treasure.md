@@ -26,12 +26,12 @@ The batch and opened flags are saved on this device under
 to the results, changing modes, or reloading keeps unopened rewards. Entering
 Voice Pop again resumes pending treasure before another round can start. A
 storage failure keeps the same selected designs and offers a retry. Pop chest
-surprises do not modify shared medal, toy, or Talk Quest progress.
+surprises do not modify shared medal or toy progress.
 
 ## Shared chest catalog
 
 The eight worlds now use eight different chest types in Match, Memory, and the
-Voice Pop treasure room. Talk Quest keeps its twenty reviewed mechanisms.
+Voice Pop treasure room.
 
 | World | Chest type | Source |
 | --- | --- | --- |

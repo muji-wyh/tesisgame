@@ -1,5 +1,11 @@
 # Talk Quest
 
+> Archived on 2026-10-06. Talk Quest has been removed from the game. This
+> document preserves the former implementation, source provenance, and review
+> evidence. Its asset paths, interfaces, and commands describe that revision;
+> they are not current build prerequisites or instructions to restore the mode.
+> Retained manifests and license records do not mean the runtime assets ship.
+
 Talk Quest is a fourteen-stage spoken-word adventure. Choose a destination,
 allow the microphone when prompted, and say a word as its picture flies into
 view. The matched word becomes a glowing projectile and strikes the monster

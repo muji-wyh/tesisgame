@@ -11,7 +11,7 @@ build/*
 !build/.gdignore
 # Licensed Unity Store textures are shipped only inside the compiled game.
 assets/imported-unity/
-# Licensed Talk Quest characters ship inside the compiled game, not as source packs.
+# Retired licensed Talk Quest sources remain private and are excluded from the game.
 assets/talk_quest/monsters/*.glb
 assets/talk_quest/monsters/*.glb.import
 assets/talk_quest/monsters/*.png
@@ -21,7 +21,7 @@ assets/chests/downloaded/*/*.png
 assets/chests/downloaded/*/*.png.import
 # Licensed chest models and their source maps remain private build inputs.
 assets/chests/models/
-# Licensed treasure-stage particles remain private build inputs.
+# Retired treasure-stage particles remain private archived inputs.
 assets/talk_quest/treasure/halo.png
 assets/talk_quest/treasure/halo.png.import
 assets/talk_quest/treasure/ray.png

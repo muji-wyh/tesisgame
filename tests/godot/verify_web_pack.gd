@@ -37,33 +37,7 @@ func _verify() -> void:
 		printerr("The startup pack must preserve the three original chest styles and five distinct live models.")
 		failures += 1
 	print("Treasure: %d chest types and %d live animated models checked in the startup pack." % [catalog.chests.styles.size(), chest_models])
-	var giant_manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/talk_quest/monsters/giants-manifest.json"))
-	if not giant_manifest is Dictionary or giant_manifest.get("creatures", []).size() != 3:
-		printerr("Talk Quest requires the three acquired giant creature records in its startup pack.")
-		failures += 1
-	else:
-		for creature: Dictionary in giant_manifest.creatures:
-			var packed: PackedScene = load(str(creature.resource)) as PackedScene
-			if packed == null:
-				printerr("A Talk Quest giant model is missing from the startup pack: " + str(creature.id))
-				failures += 1
-		print("Talk Quest: three giant creatures and their framing manifest checked in the startup pack.")
-	var map_art: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/talk_quest/map-dimensional/manifest.json"))
-	if not map_art is Dictionary or map_art.get("backgrounds", []).is_empty() or map_art.get("landmarks", []).size() != 14 \
-		or not map_art.get("decorations") is Dictionary or map_art.decorations.size() != 6:
-		printerr("Talk Quest requires a sourced sky, fourteen island dioramas, and six scenery layers in its startup pack.")
-		failures += 1
-	else:
-		var map_paths: Array = map_art.backgrounds.duplicate()
-		map_paths.append_array(map_art.landmarks)
-		map_paths.append_array(map_art.decorations.values())
-		map_paths.append_array(map_art.ui.values())
-		for path: String in map_paths:
-			var illustration: Texture2D = load(path) as Texture2D
-			if illustration == null or illustration.get_width() <= 0 or illustration.get_height() <= 0:
-				printerr("A sourced map illustration is missing from the startup pack: " + path)
-				failures += 1
-		print("Talk Quest: sourced island dioramas, sky, scenery layers, and navigation artwork checked in the startup pack.")
+	failures += _verify_retired_content_absent()
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
 		printerr("The startup pack must contain a playable vocabulary.")
@@ -159,17 +133,6 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired Voice Pop report is still bundled: " + path)
 			failures += 1
-	var treasure_manifest_path := "res://assets/talk_quest/treasure/manifest.json"
-	var treasure_manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(treasure_manifest_path))
-	if not treasure_manifest is Dictionary or not treasure_manifest.get("runtimeFiles") is Array or treasure_manifest.runtimeFiles.size() != 7:
-		printerr("The sourced Talk Quest treasure-room inventory is missing from the startup pack.")
-		failures += 1
-	else:
-		for entry: Dictionary in treasure_manifest.runtimeFiles:
-			var art: Texture2D = load(str(entry.file)) as Texture2D
-			if art == null or art.get_width() <= 0 or art.get_height() <= 0:
-				printerr("Treasure-room art is missing from the startup pack: " + str(entry.file))
-				failures += 1
 	for path in ["res://scripts/celebration.gd", "res://assets/chests/particles/ring.png",
 		"res://assets/chests/particles/sparkle3.png", "res://assets/chests/particles/lightray1.png",
 		"res://assets/chests/particles/explosion_spike01.png", "res://assets/chests/particles/magic_orb2.png"]:
@@ -178,3 +141,25 @@ func _verify() -> void:
 			failures += 1
 	print("Startup pack: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
 	quit(1 if failures else 0)
+
+
+func _verify_retired_content_absent() -> int:
+	var failures := 0
+	var pending: Array[String] = ["res://"]
+	while not pending.is_empty():
+		var directory: String = pending.pop_back()
+		var access := DirAccess.open(directory)
+		if access == null:
+			printerr("Could not inspect the startup pack directory: " + directory)
+			failures += 1
+			continue
+		access.include_hidden = true
+		for file: String in access.get_files():
+			var path := directory.path_join(file)
+			if path.contains("talk_quest") or path.contains("assets/audio/quest/"):
+				printerr("Retired Talk Quest content is still bundled: " + path)
+				failures += 1
+		for child: String in access.get_directories():
+			pending.append(directory.path_join(child))
+	print("Retired mode: complete startup pack inventory checked, %d remaining resources." % failures)
+	return failures

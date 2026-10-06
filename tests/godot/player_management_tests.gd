@@ -3,7 +3,6 @@ extends SceneTree
 const State = preload("res://scripts/leaderboard_state.gd")
 const PlayerPanel = preload("res://scripts/leaderboard_panel.gd")
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -70,11 +69,6 @@ func profile(state, id: String) -> Dictionary:
 		if str(entry.id) == id:
 			return entry
 	return {}
-
-
-func _isolate_quest(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = _directory + "/quest.cfg"
 
 
 func _run() -> void:
@@ -477,7 +471,7 @@ func _edit_player(app, id: String, new_name: String, avatar: String) -> void:
 
 
 func _remove_player(app, id: String) -> void:
-	var shared_paths: Array[String] = [app._quest.save_path, app.medal_progress._save_path, app.playroom_state._save_path]
+	var shared_paths: Array[String] = [app.medal_progress._save_path, app.playroom_state._save_path]
 	var shared_bytes: Array[String] = []
 	for path in shared_paths:
 		shared_bytes.append(FileAccess.get_file_as_string(path))
@@ -502,21 +496,12 @@ func _check_app_management() -> void:
 	var second_id: String = str(state.profiles[1].id)
 	var third_id: String = str(state.profiles[2].id)
 	var memory_id: String = str(state.profiles[3].id)
-	node_added.connect(_isolate_quest)
 	root.add_child(app)
 	# Profile checks do not need the host's audio device or playback resources.
 	app.audio.muted = true
 	await settle()
-	node_added.disconnect(_isolate_quest)
 	app.set_reduced_motion(true)
 	app._on_loading_finished([])
-	check(app._quest.save_path == _directory + "/quest.cfg", "Profile integration never reads or changes the user's Quest checkpoint")
-	var quest_progress: Dictionary = app._quest.game.export_progress()
-	quest_progress.completion_counts[0] = 2
-	quest_progress.completion_counts[1] = 1
-	check(app._quest.game.import_progress(quest_progress) and app._quest._save_progress(),
-		"Seed durable shared Quest treasure and level progress")
-	var quest_bytes: String = FileAccess.get_file_as_string(app._quest.save_path)
 	await _open_players(app)
 	press(app._leaderboard_panel, "LeaderboardEdit_" + first_id)
 	enter_name(app._leaderboard_panel, "Canceled edit")
@@ -625,10 +610,9 @@ func _check_app_management() -> void:
 		"Controller Back cannot bypass the empty-profile onboarding gate")
 	check(app.model.phase == "won" and app.model.chest_state == "closed" and app.model.cards == lesson,
 		"Removing all profiles preserves the earned Match chest and prepared lesson")
-	check(FileAccess.get_file_as_string(app._quest.save_path) == quest_bytes
-		and FileAccess.get_file_as_string(app.medal_progress._save_path) == medal_bytes
+	check(FileAccess.get_file_as_string(app.medal_progress._save_path) == medal_bytes
 		and FileAccess.get_file_as_string(app.playroom_state._save_path) == room_bytes,
-		"Player deletion leaves shared Quest, collectibles and room saves unchanged")
+		"Player deletion leaves shared collectibles and room saves unchanged")
 	enter_name(app._leaderboard_panel, "New beginning")
 	press(app._leaderboard_panel, "LeaderboardCreatePlayer")
 	await settle()

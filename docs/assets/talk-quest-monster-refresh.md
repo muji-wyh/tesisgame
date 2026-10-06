@@ -1,5 +1,11 @@
 # Talk Quest guardian replacement review
 
+> Archived on 2026-10-06. Talk Quest has been removed from the game. This
+> document preserves the former implementation, source provenance, and review
+> evidence. Its asset paths, interfaces, and commands describe that revision;
+> they are not current build prerequisites or instructions to restore the mode.
+> Retained manifests and license records do not mean the runtime assets ship.
+
 Reviewed on October 2, 2026. This is a source shortlist, not the active game
 roster. The new direction is large, attractive, friendly fantasy guardians.
 The earlier frightening creature shortlist was rejected.

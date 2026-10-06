@@ -2,7 +2,6 @@ extends SceneTree
 ## Hidden native scrollbar rails must preserve the content's input paths.
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
 const Style = preload("res://scripts/ui_style.gd")
 
 var checks: int = 0
@@ -28,11 +27,6 @@ func settle() -> void:
 		await process_frame
 
 
-func _isolate_quest(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = _directory + "/quest.cfg"
-
-
 func _check_bars(node: Node, context: String) -> void:
 	if node is ScrollBar:
 		check(not node.is_visible_in_tree(), context + " never displays " + str(node.get_path()))
@@ -47,18 +41,6 @@ func _maximum(scroll: ScrollContainer) -> float:
 
 func _record_activation() -> void:
 	_activations += 1
-
-
-func _wheel(point: Vector2) -> void:
-	for down in [true, false]:
-		var event := InputEventMouseButton.new()
-		event.position = point
-		event.global_position = point
-		event.button_index = MOUSE_BUTTON_WHEEL_DOWN
-		event.pressed = down
-		root.push_input(event, true)
-		await process_frame
-	await settle()
 
 
 func _touch_pointer(point: Vector2, down: bool) -> void:
@@ -113,52 +95,6 @@ func _check_touch_drag(scroll: ScrollContainer, target: Control, context: String
 		scroll.set_process_internal(false)
 	Input.emulate_touch_from_mouse = original_hint
 	_check_bars(scroll, context)
-
-
-func _check_album(quest, context: String) -> void:
-	quest._show_album()
-	await settle()
-	var scroll: ScrollContainer = quest._album_scroll
-	var tiles: Array = quest._album_grid.get_children()
-	check(tiles.size() == 20 and _maximum(scroll) > 0, context + " exercises the complete overflowing treasure shelf")
-	check(scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER,
-		context + " hides the album rail while retaining vertical scrolling")
-	for item: Control in tiles:
-		check(item.focus_mode == Control.FOCUS_ALL, context + " keeps each treasure reachable by keyboard")
-	var last: Control = tiles.back()
-	scroll.scroll_vertical = 0
-	last.grab_focus()
-	await settle()
-	check(last.has_focus() and scroll.scroll_vertical > 0,
-		context + " reaches the final treasure through keyboard focus")
-	if last.size.y <= scroll.size.y:
-		check(scroll.get_global_rect().grow(1).encloses(last.get_global_rect()),
-			context + " fully reveals the final treasure when its tile fits the viewport: scroll_rect=%s tile_rect=%s grid_rect=%s grid_min=%s tile_min=%s scroll=%d max=%.3f page=%.3f columns=%d scale=%.5f" % [
-				scroll.get_global_rect(), last.get_global_rect(), quest._album_grid.get_global_rect(),
-				quest._album_grid.get_combined_minimum_size(), last.get_combined_minimum_size(),
-				scroll.scroll_vertical, _maximum(scroll), scroll.get_v_scroll_bar().page,
-				quest._album_grid.columns, Style.ui_scale(quest)])
-	var last_label: Label = last.get_meta("label")
-	check(scroll.get_global_rect().grow(1).encloses(last_label.get_global_rect()),
-		context + " exposes the final treasure's name and collection status")
-	root.gui_release_focus()
-	scroll.scroll_vertical = 0
-	await settle()
-	var first: Control = tiles[0]
-	var art: Control = first.get_meta("art")
-	var art_point := art.get_global_rect().intersection(scroll.get_global_rect()).get_center()
-	await _wheel(art_point)
-	check(scroll.scroll_vertical > 0, context + " scrolls the hidden album rail with the mouse wheel")
-	for key in ["art", "label"]:
-		root.gui_release_focus()
-		var target: Control = first.get_meta(key)
-		var content_rect: Rect2 = quest._album_grid.get_global_transform().affine_inverse() * target.get_global_rect()
-		scroll.scroll_vertical = clampi(roundi(content_rect.get_center().y - scroll.size.y * 0.5), 0, floori(_maximum(scroll)))
-		await settle()
-		await _check_touch_drag(scroll, target, context + " album " + key)
-	_check_bars(quest, context + " album")
-	quest._show_map()
-	await settle()
 
 
 func _check_gate(app, context: String) -> void:
@@ -221,14 +157,6 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 		_check_bars(app, context + " " + view)
 		app._hide_leaderboard()
 	app._hide_collection()
-	app.choose_mode("quest")
-	await settle()
-	_check_bars(app, context + " Talk Quest map")
-	app._quest.start_level(1)
-	app._quest.set_process(false)
-	await settle()
-	_check_bars(app, context + " Talk Quest stage")
-	await _check_album(app._quest, context)
 	await _check_gate(app, context)
 
 
@@ -243,13 +171,10 @@ func _run() -> void:
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(_directory + "/medals.cfg", _directory + "/legacy.cfg")
 	app.playroom_save_path = _directory + "/room.cfg"
 	PlayerFixture.install(app, _directory)
-	node_added.connect(_isolate_quest)
 	root.add_child(app)
 	await settle()
-	node_added.disconnect(_isolate_quest)
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	check(app._quest.save_path == _directory + "/quest.cfg", "Quest uses the isolated save before entering the scene")
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390)]:
 		await _check_surfaces(app, dimensions)
 	check(_gate_overflow_seen, "The compact viewport exercises actual microphone-gate overflow")

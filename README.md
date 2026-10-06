@@ -14,15 +14,11 @@ handles loading, accessibility, audio recovery, and speech recognition.
   50-second round. The second consecutive hit adds 3 seconds; the third adds
   5 seconds. Occasional volleys throw several words together. Scores of 100,
   200, and 300 each earn one chest, with up to three distinct chests shown together.
-- **Talk Quest:** fourteen word-combat adventures with distinct animated
-  monsters and twenty collectible treasure designs. Speak a flying picture's
-  word to launch it at the monster. Later stages increase monster health and
-  the finite word budget. Progress and unfinished adventures resume on this device.
 - **Players and leaderboards:** up to ten names and emoji avatars on the current
   device. First-time entry requires creating a player. Voice Pop selects the
   player before each round and saves the result automatically; Match and Memory
   attribute results afterward. Personal bests rank separately for Match, Memory,
-  and Voice Pop. Talk Quest saves shared campaign progress for this device.
+  and Voice Pop.
 - **Eight worlds and 350 words:** choose a theme during loading or in Pip's room.
   Age preferences guide the vocabulary; they do not collect a birthdate.
 - **Chests and toys:** winning Match or Memory advances saved gift progress.
@@ -47,7 +43,6 @@ feedback. Touch, keyboard, and Xbox controller input share the game controls.
 Detailed rules and behavior:
 
 - [Gameplay reference](docs/gameplay.md)
-- [Talk Quest campaign, speech, and saves](docs/talk-quest.md)
 - [Voice Pop treasure and shared chest models](docs/voice-pop-treasure.md)
 - [Local players and leaderboards](docs/local-leaderboards.md)
 - [Speech matching and the local experiment](docs/voice-matching.md)
@@ -60,9 +55,8 @@ Install **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**
 Put `godot` on PATH or set `GODOT_BIN` to the executable path.
 
 Before building a fresh checkout, restore the licensed
-[Talk Quest character inputs](docs/assets/talk-quest-monsters.md#provenance-and-reproducibility)
-and [animated chest inputs](docs/voice-pop-treasure.md#shared-chest-catalog).
-The models and portraits stay local and ship inside the compiled game pack.
+[animated chest inputs](docs/voice-pop-treasure.md#shared-chest-catalog).
+These models stay local and ship inside the compiled game pack.
 
 ```powershell
 npm ci
@@ -144,8 +138,8 @@ of the repository's code license.
 - [Historical plans](docs/superpowers/README.md): prior designs, including removed features.
 - [Changelog](changelog.md): historical changes, not a list of current features.
 
-Medals and Words collection pages, Learn/Sky/Listen modes, speaker enrollment,
-and multiplayer recognition have been retired. Saved reward, toy, and legacy
+Talk Quest, Medals and Words collection pages, Learn/Sky/Listen modes, speaker
+enrollment, and multiplayer recognition have been retired. Saved reward, toy, and legacy
 preference data remain for compatibility; local player profiles do not store
 voiceprints. Historical documents must not be used as instructions to restore
 retired features.

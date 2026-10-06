@@ -1,7 +1,6 @@
 extends SceneTree
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const Quest = preload("res://scripts/talk_quest.gd")
 
 var checks := 0
 var failures := 0
@@ -22,11 +21,6 @@ func check(condition: bool, message: String) -> void:
 func settle() -> void:
 	for frame in range(8):
 		await process_frame
-
-
-func _isolate_quest(node: Node) -> void:
-	if node.get_script() == Quest:
-		node.save_path = directory + "/quest.cfg"
 
 
 func _tap(point: Vector2) -> void:
@@ -104,7 +98,6 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	directory = "user://pip-mode-menu-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
-	node_added.connect(_isolate_quest)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
@@ -131,7 +124,6 @@ func _run() -> void:
 	app.queue_free()
 	await process_frame
 	await _check_onboarding_header()
-	node_added.disconnect(_isolate_quest)
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)
@@ -200,7 +192,7 @@ func _check_dismissal_and_focus(app) -> void:
 
 func _check_mode_selection(app) -> void:
 	var lesson: Array = app.model.lesson_words.duplicate(true)
-	for id in ["memory", "pop", "quest", "match"]:
+	for id in ["memory", "pop", "match"]:
 		await _tap(app.duck.get_global_rect().get_center())
 		check(app._mode_menu.visible, "Pip opens the chooser from " + app._mode_id)
 		await _tap(_choice(app, id).get_global_rect().get_center())
@@ -229,8 +221,6 @@ func _check_mode_selection(app) -> void:
 			check(_pop_ready_snapshot(app) == ready_before,
 				"Opening and dismissing modes preserves the ready Voice Pop gate, retry action, clock, and speech state exactly")
 			await _check_pop_error_gate(app)
-		elif id == "quest":
-			await _check_quest_error_gate(app)
 
 
 func _check_paired_touches(app) -> void:
@@ -277,33 +267,6 @@ func _check_pop_error_gate(app) -> void:
 	check(_pop_ready_snapshot(app) == before
 		and [pop.game.score, pop.game.hits, pop._enabled, pop._reconnecting] == progress,
 		"Dismissing the menu preserves a paused hard error and its Retry action without retrying speech")
-
-
-func _quest_progress(quest) -> Array:
-	return [quest.game.level_number, quest.game.hp, quest.game.hits, quest.game.misses,
-		quest.game.elapsed, quest.game.targets.duplicate(true)]
-
-
-func _check_quest_error_gate(app) -> void:
-	var quest = app._quest
-	quest.start_level(1)
-	var processing: bool = quest.is_processing()
-	quest.set_process(false)
-	var error := "Speech network error. Check your internet connection, then tap Retry."
-	quest.set_listening(true, false, error)
-	check(quest.game.phase == "playing" and not quest._listening and not quest._auto_listen,
-		"The Quest hard-error fixture has an active stage with a failed microphone")
-	var before := _quest_progress(quest)
-	app._show_mode_menu()
-	quest._process(0.5)
-	check(quest.game.phase == "paused" and _quest_progress(quest) == before,
-		"The mode popover pauses Quest without aging targets or changing combat progress")
-	app._hide_mode_menu()
-	await settle()
-	check(quest.game.phase == "playing" and _quest_progress(quest) == before
-		and quest._feedback.text == error and not quest._listening and not quest._auto_listen,
-		"Dismissing modes resumes the same Quest stage without clearing or retrying a failed microphone")
-	quest.set_process(processing)
 
 
 func _check_lifecycle(app) -> void:
@@ -357,7 +320,7 @@ func _check_lifecycle(app) -> void:
 
 
 func _check_layout(app) -> void:
-	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 900)]:
+	for dimensions in [Vector2i(320, 320), Vector2i(390, 420), Vector2i(390, 600), Vector2i(390, 640), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 900)]:
 		root.size = dimensions
 		await settle()
 		check(not app._mode_row.is_visible_in_tree(), "Mode choices reserve no closed-menu row at " + str(dimensions))

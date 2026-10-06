@@ -7,7 +7,7 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const resultsRoot = path.join(root, 'build', 'performance');
-const scenarios = ['match', 'memory', 'voice-pop', 'talk-quest', 'room', 'catalog', 'chest'];
+const scenarios = ['match', 'memory', 'voice-pop', 'room', 'catalog', 'chest'];
 const protocol = 'main-scene-rendered-v1';
 
 function parse(args) {
@@ -212,7 +212,7 @@ function capture(context, index, order) {
       || item.process_us.some((value, position) => !Number.isFinite(value) || value <= 0 || value > item.rendered_us[position])) {
       throw new Error(`Invalid raw samples: ${item.scenario}`);
     }
-    if (['voice-pop', 'talk-quest'].includes(item.scenario)) {
+    if (item.scenario === 'voice-pop') {
       for (const [countsKey, framesKey, peakKey] of [['target_counts', 'target_frame_count', 'target_peak'], ['drawn_target_counts', 'drawn_target_frame_count', 'drawn_target_peak']]) {
         const counts = item[countsKey];
         if (!Array.isArray(counts) || counts.length !== configuration.samples || counts.some(value => !Number.isSafeInteger(value) || value < 0)
@@ -269,7 +269,7 @@ function main() {
   if (!/^[a-z0-9][a-z0-9_-]*$/i.test(label)) throw new Error('Label must contain only letters, digits, underscores, and hyphens');
   const project = path.resolve(options.project || root);
   const selected = options.scenarios ? options.scenarios.split(',') : scenarios;
-  if (new Set(selected).size !== selected.length || selected.some(name => ![...scenarios, 'quest-map'].includes(name))) throw new Error('Invalid scenario list');
+  if (new Set(selected).size !== selected.length || selected.some(name => !scenarios.includes(name))) throw new Error('Invalid scenario list');
   const configuration = {
     scenarios: selected, width: integer(options.width, 390), height: integer(options.height, 844),
     warmup: integer(options.warmup, 90, 2), samples: integer(options.samples, 240), seed: integer(options.seed, 73021, 0),

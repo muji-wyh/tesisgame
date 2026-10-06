@@ -349,8 +349,7 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Pip and Words word game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Talk Quest.
-        Talk Quest has fourteen word adventures. Scroll the island map and choose a level to start the microphone, then say the floating words before they leave the screen. Each matched word flies toward the friendly monster and removes one health point when it lands. Each adventure has a limited supply of words plus a few spare chances. Defeat the monster to hold and open its treasure chest. If the words run out, choose Try again. Speech appears on screen in real time as recognition updates, including words that do not match a target, and is never saved. Use Map to pause and Continue saved adventure to resume. Replay completed adventures to collect all twenty treasures. Progress stays on this device.
+      <p id="help" class="sr-only">Choose Match, Memory, or Voice Pop.
         Match: find five matching word and picture pairs.
         Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -376,7 +375,7 @@
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a Match or Memory round, swipe or drag the scrollbar-free word strip, with missed words first. Tap a word to hear it.
         New adventure on the result screen starts a fresh Match game directly. Retry saving appears only if a reward could not be saved.
-        More opens Pip's room. Players manages up to ten local names and emoji avatars. Leaderboards shows separate Match, Memory, and Voice Pop rankings on this device. Talk Quest saves campaign progress and treasures on this device. The arrow icon returns to the game.
+        More opens Pip's room. Players manages up to ten local names and emoji avatars. Leaderboards shows separate Match, Memory, and Voice Pop rankings on this device. The arrow icon returns to the game.
         Tap an Age choice to view only the words in that age range across every topic, with pictures and a word count. Ages 4-6 shows basic words, Ages 7-9 shows growing words, and Ages 10+ shows advanced words. All shows every word. Tap a picture to hear its word. Swipe the list vertically or use the mouse wheel without a scrollbar. Back returns to Pip's room. The saved age applies to the next lesson and keeps your current game unchanged.
         Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
         Locked toy cards show gift progress. Your chosen world is remembered as you explore vocabulary topics.
@@ -395,7 +394,6 @@
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="leaderboard-status" class="sr-only" role="status" aria-label="Local leaderboards" aria-live="polite" data-snapshot="{}"></p>
-      <p id="quest-status" class="sr-only" role="status" aria-label="Talk Quest" aria-live="polite" data-snapshot="{}"></p>
       <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
@@ -1558,12 +1556,6 @@
         const privacy = 'Browser speech may process audio remotely. Game stores no voice or transcripts.';
         let onResult = null;
         let onPopResult = null;
-        let onQuestResult = null;
-        let questTurn = { round_id: '', target_uid: '' };
-        let questWordsMode = false;
-        let questRoundId = '';
-        let questLiveTargets = [];
-        const questAliases = new Map();
         let onState = null;
         let enabled = false;
         let active = false;
@@ -1658,24 +1650,13 @@
           return receipt.accepted === true || direct === true;
         }
 
-        function sendQuestResult(event) {
-          const receipt = { accepted: false };
-          const direct = onQuestResult?.(JSON.stringify(event), receipt);
-          return receipt.accepted === true || direct === true;
-        }
-
         function phraseList() {
           const activeWords = new Set(liveTargets.map(target => target.text.toLowerCase()));
           const words = new Set([...popVocabulary, ...activeWords]);
           return [...words].sort().map(word => [word, activeWords.has(word) ? 4 : 1]);
         }
 
-        function createCandidates(valid, serial, context = {}) {
-          const round = context.round || (() => popRoundId);
-          const targets = context.targets || (() => liveTargets);
-          const aliases = context.aliases || (() => popAliases);
-          const send = context.send || sendPopResult;
-          const expired = target => Number.isFinite(target.expires_at_ms) && now() >= target.expires_at_ms;
+        function createCandidates(valid, serial) {
           const segments = new Map();
           let nextOccurrence = 1;
           const cancel = (slot, reason = '') => {
@@ -1689,27 +1670,26 @@
           };
           const makeSlot = () => ({
             id: `${serial}:${nextOccurrence++}`, keys: new Set(), text: '', key: '', timer: 0,
-            round: round(), targets: targets().map(target => ({ ...target, forms: [...target.forms] })),
+            round: popRoundId, targets: liveTargets.map(target => ({ ...target, forms: [...target.forms] })),
             binding: null, consumed: false, present: false, observedAt: now(), compounds: new Set(),
             members: [], owner: null, signature: '', matchKey: ''
           });
-          const matches = (slot, key) => [...slot.keys].some(previous => equivalent(previous, key, aliases()));
+          const matches = (slot, key) => [...slot.keys].some(previous => equivalent(previous, key));
 
           function commit(slot, stage) {
             cancel(slot);
-            if (!valid() || !slot.present || slot.round !== round() || !slot.members.length ||
+            if (!valid() || !slot.present || slot.round !== popRoundId || !slot.members.length ||
                 slot.members.some(member => !member.present || member.consumed || member.owner !== slot)) return;
             const target = slot.binding;
             if (!target) { diagnose('no_matching_target', { event_id: slot.id }); return; }
-            if (expired(target) || slot.members.some(member => member.targets.some(item => item.uid === target.uid && expired(item))) ||
-                !targets().some(item => item.uid === target.uid && item.forms.includes(slot.matchKey) && !expired(item))) {
+            if (!liveTargets.some(item => item.uid === target.uid && item.forms.includes(slot.matchKey))) {
               diagnose('expired_target', { event_id: slot.id, target_uid: target.uid });
               return;
             }
             // A callback time is not a word's captured/audio timestamp.
             const event = { event_id: slot.id, round_id: slot.round, target_uid: target.uid,
               text: slot.text, stage, received_at_ms: slot.observedAt };
-            const accepted = send(event);
+            const accepted = sendPopResult(event);
             if (accepted) for (const member of slot.members) member.consumed = true;
             diagnose(accepted ? 'hit' : 'game_rejected', { event_id: slot.id, target_uid: target.uid });
           }
@@ -1838,10 +1818,10 @@
               segments.delete(index);
               if (!words.length && valid()) {
                 diagnose('unclear_speech');
-                send({ event_id: `${serial}:empty:${index}`, round_id: round(),
+                sendPopResult({ event_id: `${serial}:empty:${index}`, round_id: popRoundId,
                   target_uid: 0, text: '', stage: 'final', received_at_ms: now() });
               } else if (candidates.length && candidates.every(slot => !slot.binding && !slot.members.some(member => member.consumed)) && valid()) {
-                send({ event_id: `${serial}:unmatched:${index}`, round_id: round(),
+                sendPopResult({ event_id: `${serial}:unmatched:${index}`, round_id: popRoundId,
                   target_uid: 0, text, stage: 'final', received_at_ms: now() });
               }
             }
@@ -1974,7 +1954,7 @@
           if (practice && !practiceActivation) return;
           if (!value || document.hidden) { stopSpeech(); return; }
           if (menuSuspension) { menuSuspension = null; enabled = false; }
-          nextPresentation = ['pop', 'quest'].includes(nextPresentation) ? nextPresentation : 'match';
+          nextPresentation = nextPresentation === 'pop' ? 'pop' : 'match';
           if (enabled) {
             if (presentation === nextPresentation || !closeSpeech(false)) return;
           }
@@ -1996,7 +1976,7 @@
           }
           active = true;
           const token = ++generation;
-          report(presentation === 'pop' ? 'Allow microphone access if your browser asks. The round starts when listening begins.' : presentation === 'quest' ? 'Allow microphone access if your browser asks. Listen for the microphone indicator.' : 'Starting microphone...');
+          report(presentation === 'pop' ? 'Allow microphone access if your browser asks. The round starts when listening begins.' : 'Starting microphone...');
           startRecognition(token);
         }
 
@@ -2099,22 +2079,11 @@
             let heardSpeech = false;
             let lastError = '';
             const recognitionRound = popRoundId;
-            const recognitionQuest = { ...questTurn };
-            const recognitionQuestWords = questWordsMode;
-            const recognitionQuestRound = questRoundId;
             const valid = () => token === generation && recognition === current &&
-              enabled && active && !document.hidden && (presentation !== 'pop' || recognitionRound === popRoundId) &&
-              (presentation !== 'quest' || (recognitionQuestWords === questWordsMode && (recognitionQuestWords
-                ? recognitionQuestRound === questRoundId
-                : recognitionQuest.round_id === questTurn.round_id && recognitionQuest.target_uid === questTurn.target_uid)));
-            const candidates = createCandidates(() => valid() && listening, ++recognitionSerial,
-              presentation === 'quest' && recognitionQuestWords ? {
-                round: () => questRoundId, targets: () => questLiveTargets,
-                aliases: () => questAliases, send: sendQuestResult
-              } : {});
-            const questSession = recognitionSerial;
+              enabled && active && !document.hidden && (presentation !== 'pop' || recognitionRound === popRoundId);
+            const candidates = createCandidates(() => valid() && listening, ++recognitionSerial);
             diagnose('session_start', { capture_events: hasCaptureEvents,
-              round_id: presentation === 'quest' ? (recognitionQuestWords ? recognitionQuestRound : recognitionQuest.round_id) : recognitionRound });
+              round_id: recognitionRound });
             clearCandidates = candidates.clear;
             updatePhrases = () => {
               if (!valid() || !usingPhrases) return;
@@ -2164,8 +2133,7 @@
                 const result = event.results[index];
                 const isFinal = result.isFinal === true;
                 const popResultCurrent = index > lastFinal;
-                const questTranscript = presentation === 'quest';
-                if (isFinal && index <= lastFinal && !questTranscript) continue;
+                if (isFinal && index <= lastFinal) continue;
                 const text = typeof result[0]?.transcript === 'string' ? result[0].transcript.trim() : '';
                 if (text) captureReady('result');
                 const alternatives = diagnosticsEnabled ? Array.from(result).slice(0, 3).map(alternative => ({
@@ -2176,24 +2144,10 @@
                   alternatives });
                 transcript.textContent = text;
                 transcript.scrollTop = transcript.scrollHeight;
-                // Quest displays the whole live hypothesis before word scoring,
-                // including mismatches, withdrawn interims and revised finals.
-                if (questTranscript) {
-                  if (!valid()) break;
-                  onResult?.(text, isFinal);
-                  if (!valid()) break;
-                }
-                if (isFinal && index <= lastFinal) continue;
                 if (isFinal) lastFinal = index;
-                if (presentation === 'quest' && !recognitionQuestWords && valid() && listening) {
-                  onQuestResult?.(JSON.stringify({
-                    ...recognitionQuest, event_id: `quest-${questSession}-${index}`,
-                    text: text.slice(0, 2000), stage: isFinal ? 'final' : 'interim'
-                  }));
-                }
-                if ((presentation === 'pop' || presentation === 'quest' && recognitionQuestWords) && popResultCurrent) {
+                if (presentation === 'pop' && popResultCurrent) {
                   candidates.update(index, text, isFinal);
-                  if (!text && isFinal && valid() && !questTranscript) onResult?.(text, true);
+                  if (!text && isFinal && valid()) onResult?.(text, true);
                 }
                 if (text) {
                   heardSpeech = true;
@@ -2206,7 +2160,7 @@
                     heardTimer = 0;
                     if (valid()) panel.setAttribute('data-heard', 'false');
                   }, 280);
-                  if (valid() && !questTranscript) {
+                  if (valid()) {
                     if (practice) onResult?.(text, isFinal, alternatives);
                     else onResult?.(text, isFinal);
                   }
@@ -2437,42 +2391,6 @@
 
         return {
           speechAvailable, speechMode, stopSpeech, suspendSpeechForMenu, resumeSpeechFromMenu, popStatus, configureSpeechLexicon,
-          observeQuestSpeech(callback) { onQuestResult = typeof callback === 'function' ? callback : null; },
-          questTargets(json) {
-            let next;
-            try { next = JSON.parse(json); } catch { return false; }
-            if (!next || typeof next.round_id !== 'string' || !next.round_id || !Array.isArray(next.targets)) return false;
-            const changed = !questWordsMode || next.round_id !== questRoundId;
-            if (changed && presentation === 'quest' && enabled && !closeSpeech(false)) return false;
-            if (changed) questAliases.clear();
-            questWordsMode = true;
-            questRoundId = next.round_id;
-            const publishedAt = now();
-            const seen = new Set();
-            questLiveTargets = next.targets.filter(target => target && Number.isInteger(target.uid) && target.uid > 0 &&
-              typeof target.text === 'string' && /^[a-z]{1,32}$/i.test(target.text) &&
-              Number.isFinite(target.remaining_ms) && target.remaining_ms >= 0).flatMap(target => {
-                if (seen.has(target.uid)) return [];
-                seen.add(target.uid);
-                const forms = [...new Set([target.text, ...(Array.isArray(target.forms) ? target.forms : [])]
-                  .filter(form => typeof form === 'string' && /^[a-z]{1,32}$/i.test(form)).map(form => form.toLowerCase()))];
-                for (const form of forms) questAliases.set(form, forms);
-                return [{ uid: target.uid, text: target.text.toLowerCase(), forms,
-                  expires_at_ms: publishedAt + target.remaining_ms }];
-              });
-            return true;
-          },
-          questTarget(json) {
-            let next;
-            try { next = JSON.parse(json); } catch { return false; }
-            if (!next || typeof next.round_id !== 'string' || !Number.isInteger(next.target_uid) || !next.round_id || next.target_uid < 1) return false;
-            if (presentation === 'quest' && enabled && !closeSpeech(false)) return false;
-            questWordsMode = false;
-            questLiveTargets = [];
-            questAliases.clear();
-            questTurn = { round_id: next.round_id, target_uid: next.target_uid };
-            return true;
-          },
           beginSpeechPractice, practiceTarget, endSpeechPractice,
           practiceWords() { return speechWords.map(word => ({ ...word, forms: [...word.forms] })); },
           speechDiagnostics() {
@@ -2856,84 +2774,7 @@
         updateControls();
         return { setAvailable(value) { if (!opened) launch.hidden = value !== true; } };
       }
-      function createQuestHost() {
-        function finiteFields(source, schema) {
-          const result = {};
-          for (const [key, [minimum, maximum, integer]] of Object.entries(schema)) {
-            const value = source[key];
-            if (!Number.isFinite(value) || value < minimum || value > maximum || integer && !Number.isInteger(value)) return null;
-            result[key] = value;
-          }
-          return result;
-        }
-        function wordRun(source) {
-          if (!source || typeof source !== 'object' || Array.isArray(source)) return null;
-          if (!Object.keys(source).length) return {};
-          const run = finiteFields(source, { level_number: [1, 14, true], hits: [0, 100000, true],
-            misses: [0, 100000, true], spawned: [1, 100000, true], elapsed: [0, 3600],
-            next_spawn_in: [0, 3], clear_number: [1, 100000, true] });
-          if (!run || !['playing', 'victory', 'chest'].includes(source.phase) ||
-              typeof source.run_id !== 'string' || source.run_id.length > 160 || !/^tq-run--?\d+-\d+-\d+$/.test(source.run_id) ||
-              !Array.isArray(source.targets) || source.targets.length > 3) return null;
-          run.phase = source.phase;
-          run.run_id = source.run_id;
-          run.targets = [];
-          for (const target of source.targets) {
-            if (!target || typeof target !== 'object' || Array.isArray(target) ||
-                typeof target.word_id !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(target.word_id)) return null;
-            const saved = finiteFields(target, { uid: [1, source.spawned, true], age: [0, 10],
-              lifetime: [5.8, 10], lane: [0, 2, true], x_start: [0.15, 0.85], x_end: [0.15, 0.85],
-              peak: [0.1, 0.5], spin: [-0.2, 0.2] });
-            // Preserve legacy flight windows alongside the fixed ten-second rule.
-            if (!saved || saved.age >= saved.lifetime || (saved.lifetime > 6.8 && saved.lifetime !== 10)) return null;
-            run.targets.push({ ...saved, word_id: target.word_id });
-          }
-          return run;
-        }
-        return {
-          questProgress() {
-            try { return localStorage.getItem('wordBuddies.talkQuest'); }
-            catch { return false; }
-          },
-          saveQuestProgress(text) {
-            try {
-              const value = JSON.parse(text);
-              if (!value || ![1, 2].includes(value.version) || !Array.isArray(value.completion_counts)) return false;
-              // Persist only the progress schema. Recognized speech is ephemeral.
-              const run = value.version === 2 ? wordRun(value.run) : value.run && typeof value.run === 'object' ? {
-                level_number: value.run.level_number, line_index: value.run.line_index,
-                phase: value.run.phase, clear_number: value.run.clear_number, run_id: value.run.run_id
-              } : {};
-              if (value.version === 2 && (run === null || value.completion_counts.length !== 14 ||
-                  value.completion_counts.some(count => !Number.isInteger(count) || count < 0 || count > 100000))) return false;
-              if (value.version === 1 && Array.isArray(value.run?.selected_parts)) run.selected_parts = value.run.selected_parts.filter(id =>
-                ['wheel', 'wing', 'ribbon', 'screw', 'key'].includes(id)).slice(0, 5);
-              localStorage.setItem('wordBuddies.talkQuest', JSON.stringify({
-                version: value.version, completion_counts: value.completion_counts, run
-              }));
-              return true;
-            } catch { return false; }
-          },
-          questStatus(text) {
-            let value;
-            try { value = JSON.parse(text); } catch { return; }
-            if (!value || typeof value !== 'object' || Array.isArray(value)) return;
-            const status = document.getElementById('quest-status');
-            const snapshot = JSON.stringify(value);
-            if (status.dataset.snapshot !== snapshot) status.dataset.snapshot = snapshot;
-            const message = value.active ? (value.view === 'map' ?
-              `Talk Quest. ${value.completed?.length || 0} of 14 adventures complete.` :
-              value.pause_result?.visible ? 'Talk Quest paused. Choose Continue to resume or Map to return to the adventures.' :
-              Array.isArray(value.targets) ? `Talk Quest. ${value.hp || 0} health remaining.` +
-                (value.targets.length ? ` Words: ${value.targets.map(target => target.text || '').join(', ')}.` : '') +
-                (value.transcript ? ` ${value.transcript}` : '') :
-              `${value.prompt?.speaker || ''}: ${value.prompt?.text || value.phase}. ${value.transcript || ''}`) : '';
-            if (status.textContent !== message) status.textContent = message;
-          }
-        };
-      }
       const speechHost = createSpeechHost();
-      const questHost = createQuestHost();
       let onSpeechDebug = null;
       const speechDebug = createSpeechDebugPanel(speechHost, (action, value) => {
         // Godot callbacks discard return values; acknowledge through the shared object.
@@ -3005,7 +2846,6 @@
       // Host lifecycle and controller state, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ...speechHost,
-        ...questHost,
         observeSpeechDebug(callback) {
           onSpeechDebug = typeof callback === 'function' ? callback : null;
           speechDebug.setAvailable(entered && onSpeechDebug !== null);

@@ -32,12 +32,11 @@ controls. Keyboard and controller focus remains visible across the available gam
 Scrollable lists and strips retain momentum after a swipe or mouse drag and
 settle gradually. Mouse-wheel scrolling also eases to a stop. This applies to
 age vocabulary, the age/world/toy strips, result word reviews, Voice Pop results
-and microphone prompts, player lists and leaderboards, and the Talk Quest
-treasure album. Touching a moving list stops it without activating a card;
+and microphone prompts, player lists and leaderboards. Touching a moving list stops it without activating a card;
 a stationary tap then selects the item. Keyboard and controller navigation
 stop momentum and reveal the focused control. Scrollbar rails stay hidden.
 Loading, speech diagnostics, live captions, and art credits use the browser's
-native touch momentum. Pip's playground and the Talk Quest map remain fixed.
+native touch momentum. Pip's playground remains fixed.
 
 **Pip the duck** is the game's round, wide-eyed companion. He appears on the
 loading screen, board, results, playroom, and voice panel.
@@ -82,8 +81,7 @@ existing keyboard/controller activation to replay them. The written word and
 input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
-Tap the upper-left Pip to choose **Match**, **Memory**, **Voice Pop**, or
-**Talk Quest**. The current mode is marked in the library. Selecting a mode
+Tap the upper-left Pip to choose **Match**, **Memory**, or **Voice Pop**. The current mode is marked in the library. Selecting a mode
 closes the menu; selecting the current mode keeps the round. Tap outside or use
 Escape / controller Back to dismiss it. Entry and reload select Match.
 
@@ -163,28 +161,6 @@ round, with a visible award effect. **Open chests (N)** on the result page shows
 all earned chests together in different styles. Their hold-to-open interaction
 matches Match mode, and unopened rewards survive leaving or reloading. See
 [Voice Pop treasure](voice-pop-treasure.md) for persistence and the shared catalog.
-
-### Talk Quest
-
-Talk Quest has fourteen word-combat adventures: twelve everyday destinations
-and two special stages. Its chapter map shows landmarks without monster
-portraits or a scrollbar. Every stage has its own environment and animated
-creature, including three large acquired giants.
-
-Say a flying picture's word to turn it into a glowing projectile. Its launch
-and impact sounds accompany one segment of monster damage. A monster with N
-health receives at most N + m word opportunities, where m is at least three.
-Later stages increase N. Missing too many words leads to a rematch; defeating
-the monster leads to the shared hold-to-open treasure sequence. Twenty treasure
-designs can be collected across first clears and replays. Sentence prompts,
-part selection, and the Speak, Hear line, and Type buttons are retired.
-
-**Map** pauses the adventure. **Continue saved adventure** restores a paused
-battle with its remaining word flights, or its pending treasure, after a reload.
-Pause freezes monster motion and game timing until an explicit Continue action.
-Campaign progress is shared on this device and has no player leaderboard.
-Audio and recognized transcripts are not saved. See [Talk Quest](talk-quest.md)
-for difficulty, speech rules, checkpoints, and implementation interfaces.
 
 ### Match and Memory
 
