@@ -37,7 +37,12 @@ func _verify() -> void:
 		printerr("The startup pack must preserve the three original chest styles and five distinct live models.")
 		failures += 1
 	print("Treasure: %d chest types and %d live animated models checked in the startup pack." % [catalog.chests.styles.size(), chest_models])
-	failures += _verify_retired_content_absent()
+	failures += _verify_excluded_content_absent()
+	for name in ["body", "heading"]:
+		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
+		if font == null or font.get_string_size("Pip and Words").x <= 0.0:
+			printerr("An active interface font is missing from the startup pack: " + name)
+			failures += 1
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
 		printerr("The startup pack must contain a playable vocabulary.")
@@ -160,8 +165,11 @@ func _verify() -> void:
 	quit(1 if failures else 0)
 
 
-func _verify_retired_content_absent() -> int:
+func _verify_excluded_content_absent() -> int:
 	var failures := 0
+	var build_only_sources := ["res://assets/fonts/Nunito-600.ttf", "res://assets/fonts/Nunito-800.ttf",
+		"res://assets/images/mascots/outfits/wardrobe.svg"]
+	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-"]
 	var pending: Array[String] = ["res://"]
 	while not pending.is_empty():
 		var directory: String = pending.pop_back()
@@ -176,7 +184,14 @@ func _verify_retired_content_absent() -> int:
 			if path.contains("talk_quest") or path.contains("assets/audio/quest/"):
 				printerr("Retired Talk Quest content is still bundled: " + path)
 				failures += 1
+			var build_only: bool = build_only_sources.has(path.trim_suffix(".import"))
+			if directory == "res://.godot/imported":
+				for prefix: String in build_only_imports:
+					build_only = build_only or file.begins_with(prefix)
+			if build_only:
+				printerr("A build-only source or imported copy is still bundled: " + path)
+				failures += 1
 		for child: String in access.get_directories():
 			pending.append(directory.path_join(child))
-	print("Retired mode: complete startup pack inventory checked, %d remaining resources." % failures)
+	print("Excluded content: complete startup pack inventory checked, %d remaining resources." % failures)
 	return failures

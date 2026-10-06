@@ -56,7 +56,6 @@ func _run() -> void:
 	check(app.model.phase == "feedback" and app.model.feedback_ids == [wrong[0].id, wrong[1].id]
 		and not app._message.is_visible_in_tree(), "Wrong Match marks the chosen cards without adding another association panel")
 	check(not app.feedback_timer.is_stopped(), "Manual Match feedback starts its automatic transition")
-	check(app.model.missed_word_ids.has(wrong[0].word.id) and app.model.missed_word_ids.has(wrong[1].word.id), "Both mixed-up words enter review")
 	app._show_collection()
 	app.cards[wrong[0].id].pressed.emit()
 	check(app.model.phase == "feedback", "A covered card cannot advance the challenge")
@@ -67,8 +66,7 @@ func _run() -> void:
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()
-	check(app.model.review_words().size() == 5, "The lesson retains all five practised words")
-	check(app.model.review_words()[0].id == wrong[0].word.id, "The lesson retains missed-word ordering without a result word strip")
+	check(app.model.lesson_words == lesson, "The opened chest retains the current lesson until New adventure")
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != lesson,
 		"New adventure leaves the opened chest for a fresh Match board")
@@ -94,14 +92,12 @@ func _run() -> void:
 	check(app.audio.voice.playing, "Audio recovery restores word pronunciation")
 	app.audio.status_changed.emit("Sound could not load. You can keep playing. Tap a card to try again.")
 	check(app.audio.voice.playing, "Optional music failure does not disable bundled word pronunciation")
-	var word_failures: Array[bool] = []
 	var audio_statuses: Array[String] = []
-	app.audio.word_failed.connect(func() -> void: word_failures.append(true))
 	app.audio.status_changed.connect(func(message: String) -> void: audio_statuses.append(message))
 	var missing_word: Dictionary = current.duplicate()
 	missing_word.audio = "assets/audio/voice/word-missing-test.wav"
 	app._hear_word(missing_word)
-	check(word_failures.size() == 1 and not app.audio.voice.playing
+	check(not app.audio.voice.playing
 		and audio_statuses.any(func(message: String) -> bool: return message.contains("could not load")),
 		"Actual pronunciation failure stops playback and reports the missing audio")
 	check(app.model.selected_id == current.id + ":word" and current_card.word_label.text == current.text

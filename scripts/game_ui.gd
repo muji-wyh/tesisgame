@@ -168,7 +168,6 @@ var _mode_heading: Label
 var _mode_subheading: Label
 var _presentation := PresentationPreferences.new()
 var _library_published := ""
-var _mode_menu_title: Label
 var _mode_menu_focus_modes: Dictionary = {}
 var _mode_menu_resume_voice: bool = false
 var _mode_menu_resume_pop: bool = false
@@ -662,7 +661,6 @@ func _build_mode_menu() -> void:
 	_mode_panel = GameLibrary.new()
 	_mode_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_mode_menu.add_child(_mode_panel)
-	_mode_menu_title = _mode_panel.heading
 	_mode_row = _mode_panel.grid
 	_mode_buttons = _mode_panel.buttons
 	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
@@ -1629,16 +1627,6 @@ func _cancel_collection_rails() -> void:
 		rail.cancel_drag()
 	if is_instance_valid(_age_catalog):
 		_age_catalog.cancel_input()
-
-
-func _picture(parent: Node) -> TextureRect:
-	var picture := TextureRect.new()
-	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	parent.add_child(picture)
-	picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	return picture
 
 
 func _set_accessibility_name(control: Control, label: String) -> void:

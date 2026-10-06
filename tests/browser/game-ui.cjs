@@ -22,10 +22,6 @@ function uiScale(bounds) {
   return Math.max(2 / 3, bounds.scale);
 }
 
-function modeHeight(bounds) {
-  return Math.ceil(44 / uiScale(bounds));
-}
-
 function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory or pop.`);
@@ -69,9 +65,8 @@ async function chooseTheme(page, index) {
 function contentBounds(bounds) {
   const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
   const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
-  const inlineModes = bounds.width * scale >= 680;
   const top = padding + header + gap;
-  return { x, width, top, padding, gap, header, inlineModes };
+  return { x, width, top, padding, gap, header };
 }
 
 function collectionBounds(bounds, { shelf = true } = {}) {
@@ -707,7 +702,7 @@ function resultPoint(bounds, key) {
     y: content.top + height - inset - actionHeight / 2 };
 }
 
-module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };

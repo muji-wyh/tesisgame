@@ -189,8 +189,13 @@ func _check_progress_and_room() -> void:
 				"A new toy unlocks exactly when its first medal is complete")
 		check(progress.completed_count(world.id) == 6 and progress.next_fragment(world.id).is_empty(),
 			"Eighteen pieces complete the six-medal world without duplicate rewards")
-		check(state.select_item(toy_id, progress.counts) and state.select_item("backdrop-" + world.id, progress.counts)
-			and state.set_favorite(world.id + "-6"), "Earned new toys, legacy-compatible rooms and favorites can be saved")
+		var archived := ConfigFile.new()
+		check(archived.parse(storage.room) == OK, "The current browser record can seed an archived favorite")
+		archived.set_value("playroom", "favorite", world.id + "-6")
+		storage.room = archived.encode_to_text()
+		check(state.load_state() and state.select_item(toy_id, progress.counts)
+			and state.select_item("backdrop-" + world.id, progress.counts),
+			"Earned new toys and legacy-compatible rooms preserve a saved favorite")
 		var reloaded := RoomState.new(fixture + "-room.cfg", storage)
 		check(reloaded.load_state() and reloaded.toy_id == toy_id and reloaded.backdrop_id == "backdrop-" + world.id
 			and reloaded.favorite_id == world.id + "-6" and reloaded.preferred_theme_id == world.id,

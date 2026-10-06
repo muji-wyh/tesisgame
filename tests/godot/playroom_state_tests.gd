@@ -62,12 +62,9 @@ func _run() -> void:
 					_test_journey_memory()
 					_test_invalid_journey()
 					_test_journey_failures()
-				var stickers_ready: bool = _script.new().has_method("collect_words") and _script.new().has_method("display_word")
-				check(stickers_ready, "PlayroomState exposes sticker collection and display")
-				if stickers_ready:
-					_test_sticker_memory()
-					_test_invalid_stickers()
-					_test_sticker_failures()
+				_test_sticker_memory()
+				_test_invalid_stickers()
+				_test_sticker_failures()
 				var goals_ready: bool = _script.new().has_method("set_goal") and _script.new().has_method("selected_goal")
 				check(goals_ready, "PlayroomState exposes saved gift selection and derived goal progress")
 				if goals_ready:
@@ -167,7 +164,7 @@ func _test_catalog() -> void:
 func _test_selection_and_reload() -> void:
 	var fixture := _fixture("selection")
 	var state = fixture.state
-	check(not state.select_item("toy-ball", {}) and not state.set_favorite("spring-1"), "Loading must succeed before any selection can write")
+	check(not state.select_item("toy-ball", {}) and not state.prefer_theme("spring"), "Loading must succeed before any selection can write")
 	if not _load(state, "spring-1"):
 		return
 	check(state.toy_id == "toy-ball" and state.backdrop_id == "backdrop-home", "A fresh playroom starts with playable default selections")
@@ -182,14 +179,11 @@ func _test_selection_and_reload() -> void:
 	check(state.backdrop_id == "backdrop-home", "Equipping a toy preserves the backdrop")
 	check(state.select_item("backdrop-spring", counts) and state.backdrop_id == "backdrop-spring", "An earned backdrop can be equipped")
 	check(state.toy_id == "toy-spring" and counts == before, "Customization does not spend or change medal pieces")
-	check(state.set_favorite("winter-10"), "A known archived favorite remains supported")
 	var reloaded = _script.new(fixture.path)
 	if _load(reloaded, "invalid-old-favorite"):
-		check(reloaded.toy_id == "toy-spring" and reloaded.backdrop_id == "backdrop-spring" and reloaded.favorite_id == "winter-10", "All three preferences survive native reload; new state takes precedence over legacy")
-	check(not state.set_favorite("unknown") and state.favorite_id == "winter-10", "Unknown favorites are rejected without losing the prior display")
-	check(state.set_favorite("") and state.favorite_id.is_empty(), "The favorite display can be cleared")
+		check(reloaded.toy_id == "toy-spring" and reloaded.backdrop_id == "backdrop-spring" and reloaded.favorite_id == "spring-1", "Toy, backdrop, and archived favorite survive native reload; saved state takes precedence over legacy")
 	_directory(fixture.path + ".pending")
-	check(state.select_item("toy-spring", counts) and state.set_favorite(""), "Repeated selections are idempotent without another write")
+	check(state.select_item("toy-spring", counts) and state.select_item("backdrop-spring", counts), "Repeated selections are idempotent without another write")
 	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known write blocker")
 
 
@@ -200,7 +194,7 @@ func _test_invalid_records() -> void:
 		_write(fixture.path, invalid[index])
 		var state = fixture.state
 		check(not _corrupt_load(state) and not state.error.is_empty(), "Invalid or unsupported playroom records fail explicitly")
-		check(not state.select_item("toy-ball", {}) and not state.set_favorite("spring-1"), "A failed load blocks later overwrites")
+		check(not state.select_item("toy-ball", {}) and not state.prefer_theme("spring"), "A failed load blocks later overwrites")
 		check(FileAccess.get_file_as_string(fixture.path) == invalid[index], "Invalid source bytes are preserved")
 	var directory := _fixture("directory_record")
 	_directory(directory.path)
@@ -227,10 +221,10 @@ func _test_native_failures() -> void:
 		var locked := FileAccess.open(fixture.path, FileAccess.READ)
 		check(locked != null, "Hold only this fixture's native save open")
 		if locked != null:
-			check(not state.set_favorite("winter-10"), "A locked previous save blocks replacement")
-			check(state.favorite_id == "spring-7" and FileAccess.get_file_as_string(fixture.path) == original, "Failed replacement cannot delete the old file or expose new state")
+			check(not state.prefer_theme("winter"), "A locked previous save blocks replacement")
+			check(state.preferred_theme_id.is_empty() and state.favorite_id == "spring-7" and FileAccess.get_file_as_string(fixture.path) == original, "Failed replacement cannot delete the old file or expose new state")
 			locked.close()
-			check(state.set_favorite("winter-10"), "The favorite retries after the native lock is released")
+			check(state.prefer_theme("winter"), "The world preference retries after the native lock is released")
 	_write(fixture.path, _text(2))
 	check(not state.load_state() and state.toy_id == "toy-spring", "A failed reload preserves the previous in-memory room")
 	check(not state.select_item("toy-ball", {}) and FileAccess.get_file_as_string(fixture.path) == _text(2), "A failed reload disables writes to unsupported data")
@@ -265,13 +259,13 @@ func _test_browser_storage() -> void:
 		check(storage.writes == writes, "Loading an existing browser record never rewrites it")
 	storage.writable = false
 	var original: String = storage.text
-	check(not reloaded.set_favorite("winter-10") and reloaded.favorite_id == "spring-7", "A browser write failure preserves the old visible favorite")
+	check(not reloaded.prefer_theme("winter") and reloaded.preferred_theme_id.is_empty() and reloaded.favorite_id == "spring-7", "A browser write failure preserves the confirmed world and archived favorite")
 	check(storage.text == original, "A blocked write preserves durable browser bytes")
 	storage.writable = true
-	check(reloaded.set_favorite("winter-10"), "Browser preference writes recover on retry")
+	check(reloaded.prefer_theme("winter"), "Browser preference writes recover on retry")
 	storage.readable = false
 	original = storage.text
-	check(not reloaded.load_state() and reloaded.favorite_id == "winter-10", "Blocked browser reload preserves the previous in-memory room")
+	check(not reloaded.load_state() and reloaded.preferred_theme_id == "winter" and reloaded.favorite_id == "spring-7", "Blocked browser reload preserves the previous in-memory room")
 	check(not reloaded.select_item("toy-ball", {}) and storage.text == original, "A blocked browser reload disables writes")
 	storage.readable = true
 	check(_load(reloaded) and reloaded.select_item("toy-ball", {}), "A repaired browser read permits editing again")
@@ -279,7 +273,7 @@ func _test_browser_storage() -> void:
 		storage.text = value
 		writes = storage.writes
 		check(not _corrupt_load(reloaded), "Invalid browser storage never falls back to filesystem state")
-		check(not reloaded.set_favorite("spring-1") and storage.text == value and storage.writes == writes, "Invalid browser data is preserved without a write")
+		check(not reloaded.prefer_theme("spring") and storage.text == value and storage.writes == writes, "Invalid browser data is preserved without a write")
 	var migrating_storage := BrowserStorage.new()
 	var migration := _fixture("browser_migration", migrating_storage)
 	_write(migration.path, _text(1, "toy-winter", "backdrop-home", "winter-10"))
@@ -330,12 +324,12 @@ func _test_journey_memory() -> void:
 	check(state.prefer_theme("ocean"), "A known preferred theme can be stored")
 	var counts := {"spring-1": 3, "winter-3": 3}
 	var before := counts.duplicate(true)
-	check(state.select_item("backdrop-winter", counts) and state.set_favorite("winter-10"), "Room changes can be interleaved with journey memory")
+	check(state.select_item("backdrop-winter", counts) and state.set_age_band("7-9"), "Room and age changes can be interleaved with journey memory")
 	check(state.remember_visit(topics[1]) and state.select_item("toy-ball", counts), "Later journey and room changes both save")
 	var reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.recent_topic_ids == [topics[1], topics[0], topics[2]] and reloaded.preferred_theme_id == "ocean", "Room and favorite writes preserve every journey field")
-		check(reloaded.toy_id == "toy-ball" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10", "Journey writes preserve every room field")
+		check(reloaded.recent_topic_ids == [topics[1], topics[0], topics[2]] and reloaded.preferred_theme_id == "ocean", "Room and age writes preserve every journey field")
+		check(reloaded.toy_id == "toy-ball" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "spring-7" and reloaded.age_band_id == "7-9", "Journey writes preserve room, age, and archived favorite fields")
 	check(counts == before, "Journey and customization never mutate medal counts")
 	for id in topics:
 		check(state.remember_visit(id), "Every known topic can be visited")
@@ -373,7 +367,7 @@ func _test_invalid_journey() -> void:
 		_write(fixture.path, invalid[index])
 		check(not _corrupt_load(state), "Invalid present journey fields fail closed")
 		check(state.recent_topic_ids == [topics[0]] and state.preferred_theme_id == "ocean" and state.toy_id == "toy-spring", "A failed journey reload preserves the last confirmed memory and room")
-		check(not state.remember_visit(topics[1]) and not state.prefer_theme("winter") and not state.select_item("toy-ball", {}) and not state.set_favorite(""), "Invalid journey data blocks all record writes")
+		check(not state.remember_visit(topics[1]) and not state.prefer_theme("winter") and not state.select_item("toy-ball", {}) and not state.set_age_band("7-9"), "Invalid journey data blocks active preference writes")
 		check(FileAccess.get_file_as_string(fixture.path) == invalid[index], "Invalid journey bytes remain unchanged")
 
 
@@ -408,20 +402,14 @@ func _test_journey_failures() -> void:
 	storage.writable = true
 	check(not state.remember_visit(topics[3]) and not state.prefer_theme("autumn") and storage.text == original, "An unsuccessful read blocks journey writes even after writes become available")
 	storage.readable = true
-	check(_load(state) and state.remember_visit(topics[3]) and state.set_favorite("winter-10"), "Browser journey and favorite writes recover through reload")
+	check(_load(state) and state.remember_visit(topics[3]) and state.set_age_band("7-9"), "Browser journey and age writes recover through reload")
 	var reloaded = _script.new(browser.path, storage)
 	if _load(reloaded):
-		check(reloaded.recent_topic_ids == [topics[3], topics[2]] and reloaded.preferred_theme_id == "space" and reloaded.favorite_id == "winter-10", "Browser reload retains interleaved history and favorite changes")
+		check(reloaded.recent_topic_ids == [topics[3], topics[2]] and reloaded.preferred_theme_id == "space" and reloaded.favorite_id == "spring-7" and reloaded.age_band_id == "7-9", "Browser reload retains interleaved history and age changes without losing the archived favorite")
 	storage.text = _journey_text(["unknown"], "space")
 	var writes := storage.writes
 	check(not _corrupt_load(reloaded) and not reloaded.remember_visit(topics[0]) and storage.writes == writes, "Invalid browser journey data fails closed without falling back or writing")
 	check(storage.text == _journey_text(["unknown"], "space"), "Invalid browser journey bytes are preserved")
-
-
-func _collect(state, ids: Array) -> bool:
-	var words: Array[String] = []
-	words.assign(ids)
-	return state.collect_words(words)
 
 
 func _sticker_text(words: Variant, displayed: Variant) -> String:
@@ -435,45 +423,47 @@ func _sticker_text(words: Variant, displayed: Variant) -> String:
 func _test_sticker_memory() -> void:
 	var fixture := _fixture("sticker_memory")
 	var state = fixture.state
-	check(not _collect(state, ["cat"]) and not state.display_word(""), "Sticker writes require a successful load")
 	var original := _journey_text(["animal-friends"], "ocean")
 	_write(fixture.path, original)
 	if not _load(state):
 		return
-	check(state.collected_word_ids.is_empty() and state.displayed_word_id.is_empty(), "An old room and journey record starts with no collected or displayed stickers")
+	check(state.collected_word_ids.is_empty() and state.displayed_word_id.is_empty(), "A pre-sticker save defaults to no collected or displayed words")
 	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading a pre-sticker save preserves its original bytes")
-	check(not state.display_word("cat") and not _collect(state, ["dog", "unknown"]), "Uncollected displays and partly invalid collection batches are rejected")
-	check(state.collected_word_ids.is_empty() and FileAccess.get_file_as_string(fixture.path) == original, "Rejected sticker changes do not partially collect a batch")
-	check(_collect(state, ["cat", "dog", "cat"]) and state.collected_word_ids == ["cat", "dog"], "A collection batch appends each valid discovery once in discovery order")
-	check(state.display_word("cat") and state.displayed_word_id == "cat", "A collected word can be displayed")
+	original = _sticker_text(["cat", "dog", "bell"], "cat")
+	_write(fixture.path, original)
+	if not _load(state):
+		return
+	check(state.collected_word_ids == ["cat", "dog", "bell"] and state.displayed_word_id == "cat", "Archived stickers retain their discovery order and displayed word")
+	check(FileAccess.get_file_as_string(fixture.path) == original, "Reading archived stickers never rewrites them")
 	var counts := {"winter-1": 3, "winter-3": 3}
 	var before := counts.duplicate(true)
-	check(state.select_item("toy-winter", counts) and state.select_item("backdrop-winter", counts), "Toy and room changes coexist with stickers")
-	check(state.set_favorite("winter-10") and state.remember_visit("music-makers") and state.prefer_theme("space"), "Favorite and journey changes coexist with stickers")
-	check(_collect(state, ["bell", "cat"]) and state.collected_word_ids == ["cat", "dog", "bell"], "Later discoveries preserve prior sticker order and display")
+	check(state.select_item("toy-winter", counts) and state.select_item("backdrop-winter", counts), "Toy and room changes preserve archived stickers")
+	check(state.remember_visit("music-makers") and state.prefer_theme("space") and state.set_age_band("7-9"), "Journey and age changes preserve archived stickers")
 	var reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids == ["cat", "dog", "bell"] and reloaded.displayed_word_id == "cat", "All existing room and journey operations preserve sticker collection and display through reload")
-		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10", "Sticker writes preserve toy, backdrop and favorite")
-		check(reloaded.recent_topic_ids == ["music-makers", "animal-friends"] and reloaded.preferred_theme_id == "space", "Sticker writes preserve journey history and preferred world")
-	check(counts == before, "Collecting and displaying words never changes medal counts")
+		check(reloaded.collected_word_ids == ["cat", "dog", "bell"] and reloaded.displayed_word_id == "cat", "Active preference writes preserve the exact legacy collection and display through reload")
+		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "spring-7", "Active writes retain the archived favorite alongside room choices")
+		check(reloaded.recent_topic_ids == ["music-makers", "animal-friends"] and reloaded.preferred_theme_id == "space" and reloaded.age_band_id == "7-9", "Journey and age choices survive interleaved saves")
+	check(counts == before, "Preference writes never change medal counts")
 	_directory(fixture.path + ".pending")
-	check(_collect(state, []) and _collect(state, ["bell", "cat", "bell"]) and state.display_word("cat"), "Empty and repeated sticker operations succeed without a storage write")
-	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known sticker write blocker")
-	check(state.display_word("") and state.displayed_word_id.is_empty() and state.collected_word_ids == ["cat", "dog", "bell"], "Clearing the displayed word retains the collection")
+	check(state.select_item("toy-winter", counts) and state.remember_visit("music-makers") and state.prefer_theme("space") and state.set_age_band("7-9"), "Repeated active preferences succeed without a storage write")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known legacy-preservation write blocker")
 	var ids: Array[String] = []
 	for topic in load("res://scripts/game_data.gd").adventures():
 		for id in topic.words:
-			check(not ids.has(id), "Adventure vocabulary gives each sticker one canonical ID")
+			check(not ids.has(id), "Adventure vocabulary gives each archived sticker one canonical ID")
 			ids.append(id)
-	check(ids.size() == 1250 and state.collect_words(ids), "All 1,250 vocabulary words can be collected")
-	ids.clear()
-	check(state.collected_word_ids.size() == 1250, "Collection storage does not retain the caller's mutable input array")
+	check(ids.size() == 1250, "The archive validator recognizes all 1,250 vocabulary IDs")
+	_write(fixture.path, _sticker_text(ids, ""))
+	if not _load(state):
+		return
+	check(state.collected_word_ids == ids and state.displayed_word_id.is_empty(), "A complete archived collection with an empty display remains readable")
+	check(state.set_age_band("10-plus"), "An active preference can be saved beside a complete archive")
 	reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids.size() == 1250 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
+		check(reloaded.collected_word_ids == ids and reloaded.displayed_word_id.is_empty(), "The complete archived collection and empty display survive an active write and reload")
 	var persisted := ConfigFile.new()
-	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Sticker persistence retains playroom save version one")
+	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Preserving archived stickers retains save version one")
 
 
 func _test_invalid_stickers() -> void:
@@ -499,7 +489,7 @@ func _test_invalid_stickers() -> void:
 		_write(fixture.path, invalid[index])
 		check(not _corrupt_load(state) and not state.error.is_empty(), "Malformed present sticker sections fail explicitly")
 		check(state.collected_word_ids == ["cat"] and state.displayed_word_id == "cat" and state.recent_topic_ids == ["animal-friends"] and state.toy_id == "toy-spring", "A failed sticker reload preserves the last confirmed collection and room")
-		check(not _collect(state, ["dog"]) and not state.display_word("") and not state.select_item("toy-ball", {}) and not state.set_favorite("") and not state.remember_visit("music-makers") and not state.prefer_theme("winter"), "Invalid sticker data prevents every API from overwriting the record")
+		check(not state.select_item("toy-ball", {}) and not state.remember_visit("music-makers") and not state.prefer_theme("winter") and not state.set_age_band("7-9") and not state.set_goal("toy-space", {}), "Invalid sticker data prevents every API from overwriting the record")
 		check(FileAccess.get_file_as_string(fixture.path) == invalid[index], "Malformed sticker bytes remain unchanged")
 
 
@@ -511,51 +501,51 @@ func _test_sticker_failures() -> void:
 		return
 	var original := FileAccess.get_file_as_string(fixture.path)
 	_directory(fixture.path + ".pending")
-	check(not _collect(state, ["bell"]) and not state.display_word("dog"), "Failed native staging rejects collection and display changes")
-	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and FileAccess.get_file_as_string(fixture.path) == original, "Failed native sticker writes preserve confirmed memory and durable bytes")
-	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove native sticker staging blocker")
-	check(_collect(state, ["bell"]) and state.display_word("dog"), "The same sticker changes can retry without reloading after storage recovers")
+	check(not state.prefer_theme("winter") and not state.set_age_band("7-9"), "Failed native staging rejects active preference changes beside archived stickers")
+	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and FileAccess.get_file_as_string(fixture.path) == original, "Failed native saves preserve archived stickers and durable bytes")
+	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove native staging blocker")
+	check(state.prefer_theme("winter") and state.set_age_band("7-9"), "The same preferences retry without reloading after storage recovers")
 	original = FileAccess.get_file_as_string(fixture.path)
 	if OS.get_name() == "Windows":
 		var locked := FileAccess.open(fixture.path, FileAccess.READ)
-		check(locked != null, "Hold only this fixture's sticker record open")
+		check(locked != null, "Hold only this fixture's archived record open")
 		if locked != null:
-			check(not _collect(state, ["apple"]) and not state.display_word("bell"), "A native replacement lock rejects both sticker operations")
-			check(state.collected_word_ids == ["cat", "dog", "bell"] and state.displayed_word_id == "dog" and FileAccess.get_file_as_string(fixture.path) == original, "Failed replacement cannot remove stickers or expose unsaved display changes")
+			check(not state.prefer_theme("space") and not state.set_age_band("10-plus"), "A native replacement lock rejects active preference writes")
+			check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and state.preferred_theme_id == "winter" and state.age_band_id == "7-9" and FileAccess.get_file_as_string(fixture.path) == original, "Failed replacement preserves archived fields and confirmed preferences")
 			locked.close()
 	var interrupted := _fixture("sticker_interrupted")
 	_write(interrupted.path + ".previous", original)
 	_write(interrupted.path + ".pending", _sticker_text(["apple"], "apple"))
 	if _load(interrupted.state):
-		check(interrupted.state.collected_word_ids == ["cat", "dog", "bell"] and interrupted.state.displayed_word_id == "dog", "Interrupted replacement restores the committed stickers rather than the staged collection")
+		check(interrupted.state.collected_word_ids == ["cat", "dog"] and interrupted.state.displayed_word_id == "cat", "Interrupted replacement restores committed archived stickers rather than the staged collection")
 	var storage := BrowserStorage.new()
-	storage.text = _journey_text(["animal-friends"], "ocean")
+	storage.text = _sticker_text(["cat", "dog"], "cat")
 	var browser := _fixture("sticker_browser", storage)
 	state = browser.state
 	if not _load(state):
 		return
-	check(state.collected_word_ids.is_empty() and state.displayed_word_id.is_empty() and storage.writes == 0, "Old browser records acquire empty sticker defaults without a migration write")
-	check(_collect(state, ["cat", "dog"]) and state.display_word("cat"), "Browser sticker changes save synchronously through the existing host")
+	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and storage.writes == 0, "Browser loading preserves archived stickers without a migration write")
+	check(state.prefer_theme("winter") and state.set_age_band("7-9"), "Active browser preferences save synchronously beside archived stickers")
 	var writes := storage.writes
-	check(_collect(state, ["dog", "cat"]) and state.display_word("cat") and storage.writes == writes, "Repeated browser stickers do not write or reorder the saved collection")
+	check(state.prefer_theme("winter") and state.set_age_band("7-9") and storage.writes == writes, "Repeated browser preferences do not rewrite the archived collection")
 	original = storage.text
 	storage.writable = false
-	check(not _collect(state, ["bell", "cat"]) and not state.display_word("dog"), "Browser write failures reject sticker changes")
-	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and storage.text == original, "Failed browser saves retain confirmed sticker IDs, display and bytes")
+	check(not state.prefer_theme("space") and not state.set_age_band("10-plus"), "Browser write failures reject preference changes")
+	check(state.collected_word_ids == ["cat", "dog"] and state.displayed_word_id == "cat" and storage.text == original, "Failed browser saves retain exact archived sticker IDs, display and bytes")
 	storage.writable = true
-	check(_collect(state, ["bell", "cat"]) and state.display_word("dog"), "A pending browser batch retries once without duplicating its existing word")
+	check(state.prefer_theme("space") and state.set_age_band("10-plus"), "Browser preferences retry after storage recovers")
 	var reloaded = _script.new(browser.path, storage)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids == ["cat", "dog", "bell"] and reloaded.displayed_word_id == "dog", "Immediate browser reload retains saved stickers")
+		check(reloaded.collected_word_ids == ["cat", "dog"] and reloaded.displayed_word_id == "cat" and reloaded.preferred_theme_id == "space" and reloaded.age_band_id == "10-plus", "Immediate browser reload retains archived stickers and retried preferences")
 	original = storage.text
 	storage.readable = false
-	check(not reloaded.load_state() and reloaded.collected_word_ids == ["cat", "dog", "bell"], "Failed browser reads retain confirmed sticker memory")
-	check(not _collect(reloaded, ["apple"]) and not reloaded.display_word("") and storage.text == original, "A failed read blocks sticker writes until a successful reload")
+	check(not reloaded.load_state() and reloaded.collected_word_ids == ["cat", "dog"], "Failed browser reads retain confirmed sticker memory")
+	check(not reloaded.prefer_theme("spring") and not reloaded.set_age_band("all") and storage.text == original, "A failed read blocks preference writes until a successful reload")
 	storage.readable = true
-	check(_load(reloaded) and _collect(reloaded, ["apple"]), "Sticker writes recover after a readable record is loaded")
+	check(_load(reloaded) and reloaded.prefer_theme("spring"), "Preference writes recover after a readable record is loaded")
 	storage.text = _sticker_text(["cat"], "dog")
 	writes = storage.writes
-	check(not _corrupt_load(reloaded) and not _collect(reloaded, ["bell"]) and storage.writes == writes and storage.text == _sticker_text(["cat"], "dog"), "Malformed browser stickers cannot fall back to or overwrite another store")
+	check(not _corrupt_load(reloaded) and not reloaded.set_age_band("all") and storage.writes == writes and storage.text == _sticker_text(["cat"], "dog"), "Malformed browser stickers cannot fall back to or overwrite another store")
 	var migration_storage := BrowserStorage.new()
 	var migration := _fixture("sticker_browser_migration", migration_storage)
 	_write(migration.path, _sticker_text(["cat"], "cat"))
@@ -578,7 +568,7 @@ func _test_age_memory() -> void:
 	var fixture := _fixture("age_memory")
 	var state = fixture.state
 	check(not state.set_age_band("4-6"), "Age selection requires a successful load")
-	var original := _text()
+	var original := _sticker_text(["sunflower"], "sunflower")
 	_write(fixture.path, original)
 	if not _load(state):
 		return
@@ -595,14 +585,13 @@ func _test_age_memory() -> void:
 	var counts := {"winter-1": 3, "winter-3": 3}
 	var before := counts.duplicate(true)
 	check(state.select_item("toy-winter", counts) and state.select_item("backdrop-winter", counts)
-		and state.set_favorite("winter-10") and state.remember_visit("music-makers")
-		and state.prefer_theme("space") and _collect(state, ["sunflower"])
-		and state.display_word("sunflower") and state.set_goal("toy-ocean", counts),
-		"All existing preference setters remain available with an age level")
+		and state.remember_visit("music-makers") and state.prefer_theme("space")
+		and state.set_goal("toy-ocean", counts),
+		"Active preference setters remain available with an age level and archived stickers")
 	var reloaded = _script.new(fixture.path)
 	if _load(reloaded):
 		check(reloaded.age_band_id == "7-9" and reloaded.toy_id == "toy-winter"
-			and reloaded.favorite_id == "winter-10" and reloaded.displayed_word_id == "sunflower"
+			and reloaded.favorite_id == "spring-7" and reloaded.displayed_word_id == "sunflower"
 			and reloaded.goal_item_id == "toy-ocean" and counts == before,
 			"Interleaved saves preserve age, earned items, stickers and medal counts")
 	_directory(fixture.path + ".pending")
@@ -729,13 +718,13 @@ func _test_selected_goal() -> void:
 	check(counts == before, "Goal selection and progress reads never change medal counts")
 	goal.name = "Changed by caller"
 	check(state.selected_goal(counts).name != goal.name, "Goal metadata cannot mutate the catalog")
-	check(state.select_item("toy-winter", {"winter-1": 3}) and state.select_item("backdrop-winter", {"winter-3": 3}) and state.set_favorite("winter-10"), "Room writes coexist with a selected goal")
-	check(state.remember_visit("music-makers") and state.prefer_theme("space") and _collect(state, ["bell"]) and state.display_word("bell"), "Journey and sticker writes coexist with a selected goal")
+	check(state.select_item("toy-winter", {"winter-1": 3}) and state.select_item("backdrop-winter", {"winter-3": 3}), "Room writes coexist with a selected goal")
+	check(state.remember_visit("music-makers") and state.prefer_theme("space") and state.set_age_band("7-9"), "Journey and age writes coexist with a selected goal")
 	var reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.goal_item_id == "backdrop-ocean" and reloaded.selected_goal(counts).remaining_pieces == 4, "Every room, journey and sticker write preserves the selected goal across reload")
-		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "winter-10" and reloaded.preferred_theme_id == "space", "The saved goal preserves independent room and world choices")
-		check(reloaded.collected_word_ids == ["cat", "bell"] and reloaded.displayed_word_id == "bell" and reloaded.recent_topic_ids == ["music-makers", "animal-friends"], "The saved goal preserves stickers and adventure history")
+		check(reloaded.goal_item_id == "backdrop-ocean" and reloaded.selected_goal(counts).remaining_pieces == 4, "Every room, journey and age write preserves the selected goal across reload")
+		check(reloaded.toy_id == "toy-winter" and reloaded.backdrop_id == "backdrop-winter" and reloaded.favorite_id == "spring-7" and reloaded.preferred_theme_id == "space", "The saved goal preserves independent room, world, and archived favorite choices")
+		check(reloaded.collected_word_ids == ["cat"] and reloaded.displayed_word_id == "cat" and reloaded.recent_topic_ids == ["music-makers", "animal-friends"] and reloaded.age_band_id == "7-9", "The saved goal preserves archived stickers, adventure history, and age")
 	check(state.set_goal("backdrop-ocean", counts) and state.preferred_theme_id == "ocean", "The compatibility API preserves a legacy goal's world without requiring a visible Rooms route")
 	_directory(fixture.path + ".pending")
 	check(state.set_goal("backdrop-ocean", counts), "Repeating a goal with the same world is idempotent without a storage write")
@@ -756,7 +745,7 @@ func _test_invalid_goal() -> void:
 		var original: String = storage.text
 		check(not _corrupt_load(state) and not state.error.is_empty(), "Present invalid goal values are rejected")
 		check(state.goal_item_id == "toy-ocean" and state.preferred_theme_id == "ocean" and state.toy_id == "toy-spring" and state.collected_word_ids == ["cat"], "A failed goal reload preserves the last confirmed goal, room, world and stickers")
-		check(not state.set_goal("toy-space", {}) and not state.select_item("toy-ball", {}) and not state.set_favorite("") and not state.prefer_theme("winter") and not state.remember_visit("music-makers") and not _collect(state, ["bell"]) and not state.display_word(""), "An invalid goal blocks all record writes")
+		check(not state.set_goal("toy-space", {}) and not state.select_item("toy-ball", {}) and not state.prefer_theme("winter") and not state.remember_visit("music-makers") and not state.set_age_band("7-9"), "An invalid goal blocks all record writes")
 		check(storage.text == original and storage.writes == 0, "Invalid goal bytes remain untouched")
 	var empty := _fixture("empty_goal")
 	_write(empty.path, _goal_text(""))

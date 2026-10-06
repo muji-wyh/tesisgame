@@ -118,7 +118,7 @@ func _run() -> void:
 		await process_frame
 		check(view.card_buttons.all(func(card: Button) -> bool: return card.is_visible_in_tree()), "The real scene keeps every remembered card visible during feedback")
 		check(view.get_global_rect() == field_rect and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == target_rects, "Feedback does not resize or move the host board")
-		check(app.model.phase != "lost" and app.model.missed_word_ids.is_empty(), "Memory exploration never marks vocabulary missed or ends the game")
+		check(app.model.phase != "lost", "Memory exploration never ends the game after a mismatch")
 		check(view.controls().has(app._default_focus()), "Feedback focus stays on an available board control")
 		app._show_collection()
 		view.continue_feedback()

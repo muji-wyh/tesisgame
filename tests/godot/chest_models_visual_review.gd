@@ -3,7 +3,6 @@ extends SceneTree
 
 const Data = preload("res://scripts/game_data.gd")
 const Chest = preload("res://scripts/chest_view.gd")
-const Feel = preload("res://scripts/chest_feel.gd")
 const OUTPUT := "res://build/chest-quality/game-review"
 const THEMES := ["autumn", "ocean", "space", "jungle", "candy"]
 const LABELS := ["Harvest Ironwood", "Tide Captain", "Nebula Crown", "Bramble Relic", "Bonbon Gold"]

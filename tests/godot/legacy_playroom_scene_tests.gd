@@ -37,14 +37,16 @@ func _run() -> void:
 	var directory := "user://legacy-playroom-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	state_path = directory + "/room-v2.cfg"
-	var legacy = State.new(state_path)
-	var ids: Array[String] = ["cat", "bell"]
-	check(legacy.load_state() and legacy.collect_words(ids) and legacy.display_word("bell"),
-		"The fixture starts with a previously saved collection and displayed word")
-	check(legacy.select_item("backdrop-spring", {"spring-3": 3}),
-		"The compatibility state API seeds a previously saved backdrop without a Rooms chooser")
-	check(legacy.set_favorite("spring-1"), "The fixture retains a previously saved favorite medal")
-	check(legacy.prefer_theme("autumn"), "The legacy fixture has Autumn selected independently of its saved Spring backdrop")
+	var legacy := ConfigFile.new()
+	legacy.set_value("playroom", "version", 1)
+	legacy.set_value("playroom", "toy", "toy-ball")
+	legacy.set_value("playroom", "backdrop", "backdrop-spring")
+	legacy.set_value("playroom", "favorite", "spring-1")
+	legacy.set_value("journey", "recent_topic_ids", [])
+	legacy.set_value("journey", "preferred_theme_id", "autumn")
+	legacy.set_value("stickers", "word_ids", LEGACY_IDS)
+	legacy.set_value("stickers", "display_word_id", "bell")
+	check(legacy.save(state_path) == OK, "Seed an archived save with stickers, a favorite, and independent world and backdrop choices")
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
@@ -198,9 +200,9 @@ func _pairs(app) -> Array:
 
 func _check_legacy(app, context: String, storage: BrowserStorage = null) -> void:
 	check(app.playroom_state.collected_word_ids == LEGACY_IDS and app.playroom_state.displayed_word_id == "bell"
-		and app.playroom_state.backdrop_id == "backdrop-spring",
-		context + " preserves saved word data and the existing backdrop")
+		and app.playroom_state.backdrop_id == "backdrop-spring" and app.playroom_state.favorite_id == "spring-1",
+		context + " preserves saved word data, backdrop, and favorite")
 	var restored = State.new(state_path, storage)
 	check(restored.load_state() and restored.collected_word_ids == LEGACY_IDS and restored.displayed_word_id == "bell"
-		and restored.backdrop_id == "backdrop-spring",
-		context + " preserves legacy word and backdrop fields through a fresh storage reload")
+		and restored.backdrop_id == "backdrop-spring" and restored.favorite_id == "spring-1",
+		context + " preserves legacy word, backdrop, and favorite fields through a fresh storage reload")

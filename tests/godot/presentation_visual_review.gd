@@ -60,12 +60,6 @@ func _run() -> void:
 			app.model.resolve_feedback()
 		await capture(prefix + "match-reward")
 		app.new_round(105)
-		for attempt in range(3):
-			app.model.select(str(app.model.lesson_words[0].id) + ":word")
-			app.model.select(str(app.model.lesson_words[1].id) + ":image")
-			app.model.resolve_feedback()
-		await capture(prefix + "match-retry")
-		app.new_round(105)
 		app.choose_mode("pop")
 		await capture(prefix + "player-picker")
 		Fixture.choose_pop_player(app)

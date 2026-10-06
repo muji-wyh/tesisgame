@@ -89,6 +89,33 @@ test('the export shell hosts the engine and fits a safe-area container without d
   assert.doesNotMatch(shell, /speechSynthesis|SpeechSynthesisUtterance|speakPopSummary/);
 });
 
+test('build-only typography and wardrobe sources stay reproducible without duplicate pack resources', () => {
+  const preset = fs.readFileSync(path.join(root, 'export_presets.cfg'), 'utf8');
+  const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
+  for (const source of ['assets/fonts/Nunito-600.ttf', 'assets/fonts/Nunito-800.ttf',
+    'assets/images/mascots/outfits/wardrobe.svg']) {
+    assert.ok(fs.statSync(path.join(root, source)).size > 0, `Keep the reproducible build input: ${source}`);
+    assert.ok(excluded.includes(source), `Exclude only the unused pack copy: ${source}`);
+  }
+  const shell = require('../tools/prepare-godot.cjs').inlineMascot(
+    '$PIP_MASCOT_URI $INTERFACE_BODY_FONT_URI $INTERFACE_HEADING_FONT_URI');
+  const fonts = [...shell.matchAll(/data:font\/ttf;base64,([A-Za-z0-9+/=]+)/g)];
+  assert.equal(fonts.length, 2, 'The browser shell must still embed both static fonts');
+  for (const [index, name] of ['Nunito-600.ttf', 'Nunito-800.ttf'].entries()) {
+    assert.deepEqual(Buffer.from(fonts[index][1], 'base64'), fs.readFileSync(path.join(root, 'assets/fonts', name)));
+  }
+  for (const name of ['body', 'heading']) {
+    assert.match(fs.readFileSync(path.join(root, `assets/fonts/${name}.tres`), 'utf8'),
+      /path="res:\/\/assets\/fonts\/Nunito\.ttf"/);
+  }
+  for (const source of ['assets/fonts/Nunito.ttf', 'assets/fonts/body.tres', 'assets/fonts/heading.tres',
+    ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].flatMap(theme =>
+      ['', '-idle', '-parts'].map(suffix => `assets/images/mascots/outfits/pip-${theme}${suffix}.svg`))]) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
+      `Keep the runtime font and outfit resources: ${source}`);
+  }
+});
+
 test('the Godot command runner waits for the engine and propagates its real failure status', () => {
   const filename = path.join(root, 'tools', 'run-godot.cjs');
   assert.ok(fs.existsSync(filename), 'The Godot process runner is missing');

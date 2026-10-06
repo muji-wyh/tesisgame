@@ -77,7 +77,8 @@ async function foregroundDifference(page, first, second, firstColor, secondColor
 }
 
 test('all eight theme choices give Pip different visible outfits in the header and room', async ({ page }, testInfo) => {
-  test.setTimeout(150000);
+  // Eight full room captures need enough time on software WebGL runners.
+  test.setTimeout(240000);
   // Keep the fixed room and both horizontal rails in one visual artifact.
   await page.setViewportSize({ width: 390, height: 1560 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });

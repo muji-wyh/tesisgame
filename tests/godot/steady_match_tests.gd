@@ -73,6 +73,8 @@ func _run() -> void:
 		app.size = dimensions
 		app.new_round(21, true)
 		await settle()
+		# Internal resets bypass the public New adventure focus handoff.
+		app._default_focus().grab_focus()
 		var before: Dictionary = board_state(app)
 		var pairs: Array = []
 		for card in app.model.cards:
@@ -203,8 +205,6 @@ func _run() -> void:
 		app.cards[first.id].pressed.emit()
 		app.cards[second.id].pressed.emit()
 		await settle()
-		check(app.model.missed_word_ids.has(first.word.id) and app.model.missed_word_ids.has(second.word.id),
-			"Both words in a mismatched pair remain in missed-first result review")
 		check_feedback(app, [first.id, second.id], false)
 		check_board(app, before_mismatch, "Mismatched " + kind)
 		var feedback_ids: Array = app.model.feedback_ids.duplicate()

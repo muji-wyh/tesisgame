@@ -208,13 +208,6 @@ static func adventures(vocabulary: Array = []) -> Array[Dictionary]:
 	return result
 
 
-static func normalize_spoken_text(text: String) -> String:
-	# Speech engines commonly separate this compound into two tokens.
-	var compound := RegEx.new()
-	compound.compile("(?<![\\w'-])yo[ -]yo(s)?(?![\\w'-])")
-	return compound.sub(text.to_lower(), "yoyo$1", true)
-
-
 static func confusable_words(first: String, second: String) -> bool:
 	return (first == second or CONFUSABLE_WORDS.get(first, []).has(second)
 		or CONFUSABLE_WORDS.get(second, []).has(first))

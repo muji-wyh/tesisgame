@@ -23,6 +23,12 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/playroom.cfg"
+	var legacy := ConfigFile.new()
+	legacy.set_value("playroom", "version", 1)
+	legacy.set_value("playroom", "toy", "toy-ball")
+	legacy.set_value("playroom", "backdrop", "backdrop-home")
+	legacy.set_value("playroom", "favorite", "ocean-1")
+	check(legacy.save(directory + "/playroom-v2.cfg") == OK, "Seed an archived favorite before loading the scene")
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
@@ -99,8 +105,7 @@ func _run() -> void:
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")
 	app._show_collection()
-	check(app.playroom_state.set_favorite("ocean-1"), "The compatibility state API retains a legacy favorite")
-	app._favorite_reward_id = app.playroom_state.favorite_id
+	check(app.playroom_state.favorite_id == "ocean-1", "Ordinary gameplay preserves the archived favorite")
 	app._refresh_collection()
 	check(app._playroom_medal.visible and app._favorite_reward_id == "ocean-1",
 		"An existing earned favorite remains a room decoration")

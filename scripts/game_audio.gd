@@ -38,7 +38,6 @@ const ChestFeel = preload("res://scripts/chest_feel.gd")
 const CHEST_EVENT_CHANNELS := 3
 
 signal status_changed(message: String)
-signal word_failed
 
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
@@ -623,8 +622,6 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 			current_theme = ""
 			_music_error = true
 		status_changed.emit("Sound could not load. You can keep playing. Tap a card to try again.")
-		if player == voice and path.get_file().begins_with("word-"):
-			word_failed.emit()
 		return
 	player.stream = stream
 	if player == music:

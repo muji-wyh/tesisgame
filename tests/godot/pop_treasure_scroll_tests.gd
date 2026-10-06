@@ -3,6 +3,7 @@ extends SceneTree
 const Data = preload("res://scripts/game_data.gd")
 const Room = preload("res://scripts/pop_reward_room.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const Style = preload("res://scripts/ui_style.gd")
 
 class Storage extends RefCounted:
 	var text: Variant = null
@@ -106,6 +107,7 @@ func _run() -> void:
 	await _check_retained_reward(room, storage)
 	room.queue_free()
 	await process_frame
+	await _check_scaled_restored_geometry(data.chests)
 	print("Pop treasure scrolling: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -289,3 +291,92 @@ func _check_retained_reward(room, storage: Storage) -> void:
 	check(retained.active and retained.kind == gift.kind and retained.play_count == gift.play_count
 		and storage.writes == 2,
 		"Scrolling an opened chest out of view and back preserves its gift without replay or duplicate save")
+
+
+func _check_scaled_restored_geometry(manifest: Dictionary) -> void:
+	var previous_mode: int = root.content_scale_mode
+	var previous_aspect: int = root.content_scale_aspect
+	var previous_scale_size: Vector2i = root.content_scale_size
+	var previous_size: Vector2i = root.size
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.content_scale_size = Vector2i(480, 480)
+	root.size = Vector2i(1366, 768)
+	await settle()
+	var record := ConfigFile.new()
+	record.set_value("treasure", "version", 1)
+	record.set_value("treasure", "round_id", "restored-desktop-scroll")
+	record.set_value("treasure", "entries", [
+		{"theme": "autumn", "opened": false},
+		{"theme": "ocean", "opened": false},
+		{"theme": "space", "opened": false}
+	])
+	record.set_value("treasure", "receipts", [])
+	var storage := Storage.new()
+	storage.text = record.encode_to_text()
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 0)
+	root.add_child(column)
+	var scale: float = Style.ui_scale(column)
+	column.position = Vector2(163, 0) / scale
+	column.size = Vector2(1040, 754) / scale
+	var header := Control.new()
+	header.custom_minimum_size = Vector2(0, 76 / scale)
+	column.add_child(header)
+	var room := Room.new()
+	room.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room.hide()
+	column.add_child(room)
+	var published: Array[Dictionary] = []
+	room.changed.connect(func(value: Dictionary) -> void: published.append(value.duplicate(true)))
+	check(room.connect_storage(storage) and room.configure_saved(manifest, false),
+		"Restore three different saved chests at the scaled desktop layout")
+	room.show()
+	room.resume()
+	if not room.navigation_controls().is_empty():
+		room.navigation_controls()[0].grab_focus()
+	room.set_process(false)
+	await settle()
+	var maximum: float = room._scroll._maximum()
+	check(maximum > 0 and room._scroll.scroll_vertical == 0,
+		"The restored desktop list starts at zero with enough content to scroll")
+	check(not published.is_empty(), "Restoring the list publishes its initial geometry")
+	if not published.is_empty():
+		var initial: Dictionary = published.back()
+		check(is_equal_approx(float(initial.scroll_max), maximum) and initial.scroll_offset == 0,
+			"Initial published scroll limits match the settled container before any gesture: published %s, actual %s" %
+			[initial.scroll_max, maximum])
+	if room._cards.size() == 3:
+		var wheel := InputEventMouseButton.new()
+		wheel.position = room._scroll.get_global_rect().get_center()
+		wheel.global_position = wheel.position
+		wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+		wheel.factor = 100.0
+		wheel.pressed = true
+		published.clear()
+		root.push_input(wheel, true)
+		await settle()
+		var last: Button = room._cards[2].button
+		var viewport: Rect2 = room._scroll.get_global_rect()
+		check(room._scroll.scroll_vertical == roundi(maximum) and not room._scroll.is_coasting(),
+			"A desktop wheel gesture reaches the list endpoint and stops")
+		check(viewport.grow(1.0).encloses(last.get_global_rect()),
+			"The final restored chest fits the actual viewport at the wheel endpoint")
+		check(not published.is_empty(), "The wheel endpoint publishes updated chest geometry")
+		if not published.is_empty():
+			var endpoint: Dictionary = published.back()
+			var recorded: Dictionary = endpoint.chests[2].rect
+			var rect := Rect2(recorded.x, recorded.y, recorded.width, recorded.height)
+			check(endpoint.scroll_offset == room._scroll.scroll_vertical
+				and is_equal_approx(float(endpoint.scroll_max), maximum)
+				and rect.is_equal_approx(last.get_global_rect()) and viewport.grow(1.0).encloses(rect),
+				"Published endpoint bounds match the fully visible final chest: published %s, actual %s, viewport %s" %
+				[rect, last.get_global_rect(), viewport])
+	check(storage.writes == 0, "Restoring and scrolling never rewrite or award the saved chests")
+	column.queue_free()
+	await process_frame
+	root.content_scale_mode = previous_mode
+	root.content_scale_aspect = previous_aspect
+	root.content_scale_size = previous_scale_size
+	root.size = previous_size
+	await settle()

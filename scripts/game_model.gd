@@ -10,7 +10,6 @@ const MATCH_PAIR_COUNT: int = 5
 
 var cards: Array[Dictionary] = []
 var lesson_words: Array = []
-var missed_word_ids: Array[String] = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
@@ -132,7 +131,6 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
 	if repeat_lesson:
 		theme_id = saved_theme
-	missed_word_ids.clear()
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
@@ -285,25 +283,10 @@ func select(id: String, notify: bool = true) -> String:
 				result = "correct"
 			else:
 				mistakes += 1
-				for word_id in [previous.word.id, card.word.id]:
-					if not missed_word_ids.has(word_id):
-						missed_word_ids.append(word_id)
 				result = "wrong"
 	if notify:
 		changed.emit()
 	return result
-
-
-func review_words() -> Array:
-	var review: Array = []
-	for id in missed_word_ids:
-		for word in lesson_words:
-			if word.id == id:
-				review.append(word)
-	for word in lesson_words:
-		if not missed_word_ids.has(word.id):
-			review.append(word)
-	return review
 
 
 func resolve_feedback() -> void:

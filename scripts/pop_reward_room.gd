@@ -109,12 +109,6 @@ func has_pending() -> bool:
 	return _save_failed or _unsaved_index >= 0 or rewards.has_pending()
 
 
-func has_batch() -> bool:
-	if not rewards.ready:
-		rewards.load_state()
-	return not rewards.entries.is_empty()
-
-
 func configure(id: String, chest_count: int, preferred_theme: String, manifest: Dictionary, reduce: bool) -> bool:
 	_manifest = manifest
 	reduced_motion = reduce
@@ -513,9 +507,14 @@ func _settle_layout() -> void:
 	if not is_inside_tree():
 		return
 	_layout()
-	# Containers can assign the room's final position after configure/resume.
-	# Publish those settled rectangles for input and accessibility consumers.
-	changed.emit(snapshot())
+	# Layout queues a ScrollContainer sort. Publish after it has assigned child
+	# positions and scroll limits, including when a restored room first appears.
+	_publish_layout.call_deferred()
+
+
+func _publish_layout() -> void:
+	if is_inside_tree():
+		changed.emit(snapshot())
 
 
 func _layout() -> void:

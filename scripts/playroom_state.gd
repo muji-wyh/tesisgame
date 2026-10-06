@@ -243,52 +243,6 @@ func select_item(id: String, counts: Dictionary) -> bool:
 	return true
 
 
-func set_favorite(id: String) -> bool:
-	error = ""
-	if not _loaded:
-		return _fail("Load playroom choices successfully before choosing a favorite.")
-	if not id.is_empty() and Data.reward(id).is_empty():
-		return _fail("Choose a known reward for Pip's favorite.")
-	if favorite_id == id:
-		return true
-	if not _persist(toy_id, backdrop_id, id, recent_topic_ids, preferred_theme_id, collected_word_ids, displayed_word_id, goal_item_id):
-		return false
-	favorite_id = id
-	return true
-
-
-func collect_words(ids: Array[String]) -> bool:
-	error = ""
-	if not _loaded:
-		return _fail("Load playroom choices successfully before collecting words.")
-	var next_collected: Array[String] = collected_word_ids.duplicate()
-	for id in ids:
-		if not _known_word(id):
-			return _fail("Choose known vocabulary words to collect.")
-		if not next_collected.has(id):
-			next_collected.append(id)
-	if next_collected == collected_word_ids:
-		return true
-	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, next_collected, displayed_word_id, goal_item_id):
-		return false
-	collected_word_ids = next_collected
-	return true
-
-
-func display_word(id: String) -> bool:
-	error = ""
-	if not _loaded:
-		return _fail("Load playroom choices successfully before displaying a word.")
-	if not id.is_empty() and not collected_word_ids.has(id):
-		return _fail("Collect a word before displaying its sticker.")
-	if displayed_word_id == id:
-		return true
-	if not _persist(toy_id, backdrop_id, favorite_id, recent_topic_ids, preferred_theme_id, collected_word_ids, id, goal_item_id):
-		return false
-	displayed_word_id = id
-	return true
-
-
 static func _known_word(id: String) -> bool:
 	for topic in Data.adventures():
 		if topic.words.has(id):

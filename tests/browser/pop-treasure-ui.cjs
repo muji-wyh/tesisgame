@@ -37,7 +37,14 @@ async function scrollChestIntoView(page, index) {
     const desired = Math.max(0, Math.min(room.scroll_max,
       room.scroll_offset + rect.y + rect.height / 2 - viewport.y - viewport.height / 2));
     const distance = desired - room.scroll_offset;
-    expect(Math.abs(distance), 'An offscreen chest can be reached through the shared scroll area').toBeGreaterThan(0);
+    if (distance === 0) {
+      await test.info().attach('unreachable-chest.png', {
+        body: await page.screenshot({ scale: 'css' }), contentType: 'image/png'
+      });
+    }
+    expect(Math.abs(distance), `An offscreen chest can be reached through the shared scroll area: ${JSON.stringify({
+      index, rect, viewport, offset: room.scroll_offset, max: room.scroll_max, desired, bounds
+    })}`).toBeGreaterThan(0);
     const x = bounds.x + (viewport.x + viewport.width / 2) * bounds.scale;
     const centerY = bounds.y + (viewport.y + viewport.height / 2) * bounds.scale;
     const mobileWebKit = page.context().browser().browserType().name() === 'webkit' &&

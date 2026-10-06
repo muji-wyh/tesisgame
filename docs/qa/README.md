@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Repository cleanup](2026-10-07-repository-cleanup.md) | Unused runtime helpers, retired chest and save-mutation paths, and source-only asset copies removed from the pack |
 | [Vocabulary expansion](2026-10-07-vocabulary-expansion.md) | 300 additions per age tier, sourced illustrations and Ava pronunciation, non-noun speech handling, paginated catalogs, and responsive word layout |
 | [Talk Quest retirement](2026-10-06-talk-quest-removal.md) | Complete mode and resource removal, three-mode library, 80 passing native suites, 295 Node tests, 11 browser passes, and explicit timeout/audio-runtime limits |
 | [Cross-page presentation](2026-10-03-game-taste.md) | Illustrated game library, shared typography and surfaces, persistent presentation settings, and responsive page review |
