@@ -380,7 +380,36 @@ test('Memory held peek is cancelled by More and page lifecycle without changing 
   expect(errors).toEqual([]);
 });
 
-test('Memory trusted touch holds the eye and touchcancel restores all backs', async ({ page, browserName }, testInfo) => {
+test('Memory mouse release closes the eye while the pointer stays over it', async ({ page }, testInfo) => {
+  const { errors, bounds } = await beginMemory(page);
+  const eye = peekPoint(bounds);
+  const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
+  await page.mouse.move(point.x, point.y);
+  for (let index = 0; index < 2; index++) {
+    await page.mouse.down();
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    if (index === 1) await page.evaluate(() => document.getElementById('canvas').addEventListener('mouseup',
+      event => event.stopImmediatePropagation(), { capture: true, once: true }));
+    await page.mouse.up();
+    await expect(page.locator('#game-status'), 'Mouse-up closes the eye without moving the pointer or blurring it.').toContainText(READY);
+  }
+  await screenshot(page, testInfo, 'memory-eye-mouse-released', { held: true });
+  expect(errors).toEqual([]);
+});
+
+test('Memory eye touch taps never leave the cards revealed', async ({ page }, testInfo) => {
+  const { errors, bounds } = await beginMemory(page, { reducedMotion: 'no-preference' });
+  const eye = peekPoint(bounds);
+  for (let index = 0; index < 3; index++) {
+    await page.touchscreen.tap(bounds.x + eye.x * bounds.scale, bounds.y + eye.y * bounds.scale);
+    await expect(page.locator('#game-status')).toContainText(READY);
+  }
+  await screenshot(page, testInfo, 'memory-eye-touch-released', { held: true });
+  expect(errors).toEqual([]);
+});
+
+test('Memory trusted touch holds the eye and release or cancellation restores all backs', async ({ page, browserName }, testInfo) => {
+  test.setTimeout(180000);
   test.skip(browserName !== 'chromium', 'Trusted touch hold/cancel uses Chromium CDP.');
   const { errors, bounds } = await beginMemory(page);
   const saved = await medalRecord(page), eye = peekPoint(bounds);
@@ -394,17 +423,38 @@ test('Memory trusted touch holds the eye and touchcancel restores all backs', as
     await expect(page.locator('#game-status')).toContainText(PEEK);
     const fronts = await screenshot(page, testInfo, 'memory-trusted-eye-held', { held: true });
     expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005)).toBe(true);
+    await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    held = false;
+    await expect(page.locator('#game-status'), 'Lifting the owning finger closes the eye without another screen interaction.').toContainText(READY);
+    await rendered(page);
+    const released = await screenshot(page, testInfo, 'memory-trusted-eye-released', { held: true });
+    // Fractional mobile display scales can rerasterize a few text-edge pixels.
+    expect((await cardChanges(page, bounds, backs, released)).every(value => value < 0.005)).toBe(true);
+    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
+    held = true;
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    await page.evaluate(() => document.getElementById('canvas').addEventListener('touchend',
+      event => event.stopImmediatePropagation(), { capture: true, once: true }));
+    await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    held = false;
+    await expect(page.locator('#game-status'), 'The page-level release still closes the eye when canvas delivery is interrupted.').toContainText(READY);
+    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
+    held = true;
+    await expect(page.locator('#game-status')).toContainText(PEEK);
     const card = memoryPoint(bounds, 0);
     await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point },
       { id: 2, x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale }] });
     await rendered(page);
     await expect(page.locator('#game-status')).toContainText(PEEK);
     await expect(page.locator('#selection-status')).toBeEmpty();
+    // CDP touchEnd lifts every point; update the active set to lift only finger 2.
+    await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...point }] });
+    await expect(page.locator('#game-status'), 'Lifting the second finger cannot release the first finger\'s eye.').toContainText(PEEK);
     await client.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
     held = false;
     await expect(page.locator('#game-status')).toContainText(READY);
     const returned = await screenshot(page, testInfo, 'memory-trusted-eye-cancelled');
-    expect(await cardChanges(page, bounds, backs, returned)).toEqual(Array(10).fill(0));
+    expect((await cardChanges(page, bounds, backs, returned)).every(value => value < 0.005)).toBe(true);
     expect(await medalRecord(page)).toBe(saved);
     expect(errors).toEqual([]);
   } finally {

@@ -345,6 +345,17 @@ func end_peek() -> void:
 		prompt_ready.emit()
 
 
+func release_peek_pointer(touch_index: int) -> void:
+	# The browser also observes releases before canvas handlers can consume them.
+	# Only the finger or mouse that began this peek may finish it.
+	if (touch_index >= 0 and touch_index == _peek_touch) or (touch_index < 0 and _mouse_peek):
+		end_peek()
+		if is_instance_valid(study_button) and study_button.button_pressed and study_button.has_focus():
+			# Focus exit also clears BaseButton's native press and captured touch.
+			study_button.release_focus()
+			study_button.grab_focus()
+
+
 func _can_play() -> bool:
 	return not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
 
@@ -360,6 +371,12 @@ func _study_input(event: InputEvent) -> void:
 			begin_peek()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		_mouse_peek = event.pressed and not event.canceled
+	elif event is InputEventScreenTouch:
+		# Keep ownership when the native button receives the press through GUI input.
+		if event.pressed and not event.canceled and _peek_touch < 0:
+			_peek_touch = event.index
+		elif not event.pressed or event.canceled:
+			release_peek_pointer(event.index)
 
 
 func _study_mouse_exited() -> void:

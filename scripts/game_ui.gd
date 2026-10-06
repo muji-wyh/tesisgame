@@ -281,6 +281,7 @@ var _hidden_callback: JavaScriptObject
 var _visible_callback: JavaScriptObject
 var _motion_callback: JavaScriptObject
 var _input_cancel_callback: JavaScriptObject
+var _pointer_release_callback: JavaScriptObject
 var _speech_result_callback: JavaScriptObject
 var _speech_state_callback: JavaScriptObject
 var _speech_debug_callback: JavaScriptObject
@@ -3476,7 +3477,9 @@ func _connect_browser() -> void:
 		if not _presentation.has_motion_override:
 			set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
-	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback)
+	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
+		_memory.release_peek_pointer(int(arguments[0])))
+	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback, _pointer_release_callback)
 	_host.presentationSettings(reduced_motion, audio.muted)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)

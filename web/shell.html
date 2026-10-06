@@ -3061,7 +3061,15 @@
             setPipTheme(theme);
           }
         },
-        observe(onHidden, onMotion, onVisible, onInputCanceled) {
+        observe(onHidden, onMotion, onVisible, onInputCanceled, onPointerReleased) {
+          // A held Memory eye must close even if its canvas loses the release.
+          // Capture at the window before canvas handlers; preserve finger identity.
+          window.addEventListener('touchend', event => {
+            if (event.isTrusted) for (const touch of event.changedTouches) onPointerReleased(touch.identifier);
+          }, { capture: true });
+          window.addEventListener('mouseup', event => {
+            if (event.isTrusted && event.button === 0) onPointerReleased(-1);
+          }, { capture: true });
           // Godot Web translates touchcancel into an ordinary release.
           for (const type of ['touchcancel', 'pointercancel']) {
             canvas.addEventListener(type, () => onInputCanceled(), { capture: true });

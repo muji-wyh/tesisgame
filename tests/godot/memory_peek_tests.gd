@@ -173,11 +173,122 @@ func _test_hold_inputs(view) -> void:
 	await process_frame
 	check(_all_hidden(view), "Dragging the owning touch out cancels its peek")
 	await _touch(6, outside, false)
+	await _test_touch_release(view)
+	await _test_release_fallback(view)
 	view.begin_peek()
 	view.study_button.release_focus()
 	check(_all_hidden(view), "Losing eye focus releases a held reveal")
 	check(view.memory.cards == board and _rects(view) == positions and view.memory.attempts == 0 and view.memory.selected_indices.is_empty(),
 		"All physical hold/cancel paths preserve identity, score and input geometry")
+
+
+func _test_touch_release(view) -> void:
+	var center: Vector2 = view.study_button.get_global_rect().get_center()
+	await _touch(20, center, true)
+	check(view.memory.studying and view.study_button.engaged,
+		"A stationary finger opens the eye before any release")
+	await _touch(20, center, false)
+	check(_all_hidden(view) and not view.study_button.engaged and view._peek_touch == -1,
+		"Lifting the stationary owning finger closes the eye without another pointer event")
+	await process_frame
+	check(_all_hidden(view), "An ordinary touch release stays closed on the next idle frame")
+	for touch_first: bool in [true, false]:
+		for release_touch_first: bool in [true, false]:
+			var before_peeks: int = view.memory.peeks
+			var label := "touch-first=%s release-touch-first=%s" % [touch_first, release_touch_first]
+			for touch: bool in [touch_first, not touch_first]:
+				if touch:
+					await _touch(21, center, true)
+				else:
+					await _mouse(center, true, false, InputEvent.DEVICE_ID_EMULATION)
+			check(view.memory.studying and view._peek_touch == 21 and view.memory.peeks == before_peeks + 1,
+				"Paired touch and mouse emulation open one owned peek: " + label)
+			for touch: bool in [release_touch_first, not release_touch_first]:
+				if touch:
+					await _touch(21, center, false)
+					check(_all_hidden(view) and not view.study_button.engaged,
+						"The actual touch release closes before any following emulated event: " + label)
+				else:
+					await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
+					if not release_touch_first:
+						check(view.memory.studying and view._peek_touch == 21,
+							"An early emulated mouse release preserves the owning finger: " + label)
+			check(_all_hidden(view) and not view.study_button.engaged and view.memory.peeks == before_peeks + 1,
+				"A completed paired release cannot reopen or count another peek: " + label)
+	await _touch(22, center, true)
+	await _touch(23, center, true)
+	await _touch(23, center, false)
+	check(view.memory.studying and view._peek_touch == 22,
+		"Lifting a second finger keeps the original finger's eye open")
+	await _touch(22, center, false)
+	check(_all_hidden(view) and not view.study_button.engaged,
+		"Lifting the original finger closes the eye after a second finger has left")
+	var rapid_peeks: int = view.memory.peeks
+	for tap in range(3):
+		root.push_input(_touch_event(24, center, true), true)
+		check(view.memory.studying, "A rapid tap opens immediately on press: %d" % tap)
+		root.push_input(_touch_event(24, center, false), true)
+		check(_all_hidden(view) and not view.study_button.engaged,
+			"A rapid tap closes immediately before the next frame: %d" % tap)
+	await process_frame
+	check(_all_hidden(view) and view.memory.peeks == rapid_peeks + 3,
+		"Three rapid touch taps settle closed and count only their three holds")
+
+
+func _test_release_fallback(view) -> void:
+	var center: Vector2 = view.study_button.get_global_rect().get_center()
+	await _touch(30, center, true)
+	await _touch(31, center, true)
+	view.release_peek_pointer(31)
+	view.release_peek_pointer(-1)
+	check(view.memory.studying and view._peek_touch == 30,
+		"Browser releases from another finger or mouse cannot close the owning touch")
+	await _touch(31, center, false)
+	view.release_peek_pointer(30)
+	check(_all_hidden(view) and not view.study_button.engaged,
+		"The browser owning-finger release closes before its canvas event arrives")
+	await _touch(30, center, false)
+	check(_all_hidden(view), "A late canvas touch release keeps the fallback-closed eye shut")
+	await _mouse(center, true)
+	check(view.memory.studying and view._mouse_peek and view.study_button.button_pressed,
+		"A real mouse hold records pointer ownership and the native pressed state")
+	view.release_peek_pointer(30)
+	check(view.memory.studying, "A browser touch release cannot cancel a mouse-owned peek")
+	view.release_peek_pointer(-1)
+	check(_all_hidden(view) and not view.study_button.engaged and not view.study_button.button_pressed
+		and view.study_button.has_focus(),
+		"The browser mouse release clears both the reveal and native press while preserving eye focus")
+	await _mouse(center, false)
+	view.study_button.grab_focus()
+	await _key(KEY_SPACE, true)
+	view.release_peek_pointer(30)
+	view.release_peek_pointer(-1)
+	check(view.memory.studying, "Browser pointer releases leave a keyboard-owned hold open")
+	await _key(KEY_SPACE, false)
+	view.begin_peek()
+	view.release_peek_pointer(30)
+	view.release_peek_pointer(-1)
+	check(view.memory.studying and view._peek_touch == -1 and not view._mouse_peek,
+		"Browser pointer releases leave the controller's explicit begin_peek hold open")
+	view.end_peek()
+	# Bypass the view's global input handler to exercise the native Button GUI path.
+	view.set_process_input(false)
+	await _touch(32, center, true)
+	check(view.memory.studying and view._peek_touch == 32 and view.study_button.button_pressed,
+		"Native GUI touch input records the same finger ownership before button-down reveals cards")
+	view.release_peek_pointer(33)
+	check(view.memory.studying, "An unrelated browser release cannot finish a native GUI touch")
+	view.release_peek_pointer(32)
+	check(_all_hidden(view) and not view.study_button.button_pressed and view.study_button.has_focus(),
+		"A fallback release clears native GUI touch state and preserves eye focus")
+	await _touch(32, center, false)
+	await _touch(33, center, true)
+	check(view.memory.studying and view._peek_touch == 33,
+		"A new native GUI finger can hold the eye after fallback released its predecessor")
+	await _touch(33, center, false)
+	check(_all_hidden(view) and not view.study_button.button_pressed,
+		"Native GUI touch release closes the eye without waiting for another screen interaction")
+	view.set_process_input(true)
 
 
 func _test_cancel_and_reverse(view) -> void:
@@ -391,8 +502,9 @@ func _key(code: Key, pressed: bool, echo: bool = false) -> void:
 	await process_frame
 
 
-func _mouse(point: Vector2, pressed: bool, canceled: bool = false) -> void:
+func _mouse(point: Vector2, pressed: bool, canceled: bool = false, device: int = 0) -> void:
 	var event := InputEventMouseButton.new()
+	event.device = device
 	event.position = point
 	event.global_position = point
 	event.button_index = MOUSE_BUTTON_LEFT
@@ -413,10 +525,14 @@ func _motion(point: Vector2, mask: int) -> void:
 
 
 func _touch(index: int, point: Vector2, pressed: bool, canceled: bool = false) -> void:
+	root.push_input(_touch_event(index, point, pressed, canceled), true)
+	await process_frame
+
+
+func _touch_event(index: int, point: Vector2, pressed: bool, canceled: bool = false) -> InputEventScreenTouch:
 	var event := InputEventScreenTouch.new()
 	event.index = index
 	event.position = point
 	event.pressed = pressed
 	event.canceled = canceled
-	root.push_input(event, true)
-	await process_frame
+	return event
