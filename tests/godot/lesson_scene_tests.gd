@@ -39,7 +39,7 @@ func _run() -> void:
 		if mode == "pop":
 			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		check(app.model.lesson_words == lesson and app.model.theme_id == world, "Mode " + mode + " retains the exact lesson and world")
-		check(app.model.successes == 0 and app.model.mistakes == 0, "Mode change resets only the attempt")
+		check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0, "Mode change resets only the attempt")
 		if mode == "memory":
 			check(app._memory.memory.cards.all(func(card: Dictionary) -> bool: return lesson.has(card.word)),
 				"Memory questions use exactly the learned words")
@@ -64,7 +64,8 @@ func _run() -> void:
 	app.cards[wrong[0].id].pressed.emit()
 	check(app.model.phase == "matching" and app.model.selected_id == wrong[0].id,
 		"The next card resumes the same challenge without a separate Continue")
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	check(app._found_words.get_child_count() == 5, "Review includes all five lesson words")
 	check(app._found_words.get_child(0).get_meta("word_id") == wrong[0].word.id, "Review presents missed words first")
@@ -78,7 +79,7 @@ func _run() -> void:
 	var current_card: Button = app.cards[current.id + ":word"]
 	var picture_card: Button = app.cards[current.id + ":image"]
 	current_card.pressed.emit()
-	check(app.model.successes == 0 and app.medal_progress.counts.is_empty(), "Selecting one Match word never scores or awards pieces")
+	check((app.model.matched_ids.size() / 2) == 0 and app.medal_progress.counts.is_empty(), "Selecting one Match word never scores or awards pieces")
 	check(not app.audio.voice.playing and current_card.word_label.visible and picture_card.picture.visible,
 		"Muted Match keeps the written word and matching picture readable")
 	app.audio.available = false
@@ -112,7 +113,7 @@ func _run() -> void:
 	current_card.pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + current.audio),
 		"Retrying the visible bundled word restores its actual pronunciation")
-	check(app.model.successes == 0 and app.model.mistakes == 0 and app.model.hints_remaining == 3
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app.model.hints_remaining == 3
 		and app.medal_progress.counts.is_empty(), "Audio recovery neither scores nor spends or awards progress")
 	var stopped_playbacks: Array[WeakRef] = []
 	for player in [app.audio.music, app.audio.voice]:

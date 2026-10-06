@@ -463,7 +463,7 @@ func _is_empty_floor(app, point: Vector2) -> bool:
 
 func _progress(app) -> Array:
 	var state = app.playroom_state
-	return [app.model.phase, app.model.successes, app.model.mistakes, app.model.lesson_words.duplicate(true), app.medal_progress.counts.duplicate(true), state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id, state.recent_topic_ids.duplicate(), state.collected_word_ids.duplicate(), state.displayed_word_id]
+	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.lesson_words.duplicate(true), app.medal_progress.counts.duplicate(true), state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id, state.recent_topic_ids.duplicate(), state.collected_word_ids.duplicate(), state.displayed_word_id]
 
 
 func _saved_files(directory: String) -> Dictionary:

@@ -20,22 +20,6 @@
   "generatedAt": "2026-10-03T02:26:07.675Z",
   "files": [
     {
-      "id": "wrong",
-      "text": "Not quite. Let's try another one!",
-      "synthesisText": "Not quite. Let's try another one!",
-      "path": "assets/audio/voice/wrong.wav",
-      "bytes": 140810,
-      "sha256": "a5669449ae8292e49b112aba6ea1379e2d5cd0f05c97dcc45c81d8eaf5006910"
-    },
-    {
-      "id": "loss",
-      "text": "Good try! Let's play again!",
-      "synthesisText": "Good try! Let's play again!",
-      "path": "assets/audio/voice/loss.wav",
-      "bytes": 127052,
-      "sha256": "24e101b22ea0f726fddafb0c4aee29fef6307f96ca8012951168abaf7c6c632f"
-    },
-    {
       "id": "spring-theme",
       "text": "Welcome to spring!",
       "synthesisText": "Welcome to spring!",

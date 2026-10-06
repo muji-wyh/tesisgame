@@ -26,7 +26,7 @@ Its architecture redraws on resize or a world change; play effects remain separa
 Choosing a world keeps the current page open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
 shows an in-page retry notice. Locked toy cards show gift progress below the room.
-Results keep the chest or bear, word review, and the next action without game-mode
+Results keep the chest, word review, and the next action without game-mode
 controls. Keyboard and controller focus remains visible across the available games.
 
 Scrollable lists and strips retain momentum after a swipe or mouse drag and
@@ -307,7 +307,12 @@ Godot and the inline HTML mascot use the same wardrobe sources. The build embeds
 the loader's themed poses and dance parts, so its companion needs no additional
 image request.
 
-Find five matching word/picture pairs among **ten cards**. Every word has a matching picture. Five correct matches win; three mistakes end the round. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Illustrated green match badges and gentle coral mismatch badges show progress in the top-left. Matched cards stay available for pronunciation, not for scoring again.
+Find five matching word/picture pairs among **ten cards**. Every word has a matching picture. The round finishes when every pair is matched, with unlimited retries. Clicking another card of the same kind changes the selection without a penalty. Clicking the selected card cancels it. Match has no correct-answer counter or mistake-limit badges. Matched cards stay available for pronunciation without changing completion.
+Match and Memory use the right/wrong sound effects extracted from the supplied
+reference video. Wrong answers have no spoken correction, and Pip reacts visually
+without a duck call in either mode. Both sounds keep their natural tails when the
+brief card feedback clears; a new selection, hint, or replay replaces the previous
+answer sound. Muting, leaving the board, or hiding the page stops it.
 
 Each round is a small **word adventure**: Animal friends, Picnic time, Great outdoors,
 Dress up, On the move, Play time, At home, Head to toe, Ocean discovery, Space trip,
@@ -316,7 +321,7 @@ belong to its topic. New adventure chooses a different available topic and fresh
 Custom word lists with too few related words use a mixed Word explorers board; seeded
 rounds remain reproducible. Changing the season keeps the current adventure.
 
-After a round, the review shelf shows all five words, even if the round ended with mistakes.
+After completing a round, the review shelf shows all five words.
 Tap a word's picture, or focus it and press Enter/Xbox A, to hear it again and make Pip
 react. These word buttons never spend a hint or grant another reward.
 
@@ -343,10 +348,9 @@ Cancelling selection, completing a match, or changing seasons does not refill th
 still tap both cards to make the match. Hints move focus to the next suggested card,
 so keyboard and controller players can continue with **Enter** or **A**.
 
-Correct matches now make small star bursts. Consecutive matches grow the celebration
-and show **2 in a row!** or **3 in a row!** beside the match badges, without a countdown.
-Mistakes reset the streak, not earned matches; hints do not break it. Reduced motion
-keeps the encouragement and a static electric connection without moving particles.
+Correct matches make a small star burst. Match has no streak or score counter;
+the matched cards show which pairs are complete. Reduced motion keeps a static
+electric connection without moving particles.
 
 Rounds start with a random **Spring**, **Summer**, **Autumn**, **Winter**, **Ocean**,
 **Space**, **Jungle** or **Candy** theme until you choose one. Your chosen world is
@@ -500,11 +504,8 @@ A won reward is still revealed immediately after the required hold.
 **New adventure** starts a fresh round, avoiding the previous board's words when at least
 five unused words are available. Small vocabularies still produce a complete board;
 explicit seeds remain reproducible. Audio starts with normal game interaction and stops on
-hiding, loss or reset; returning from a hidden page does not force autoplay. The loss screen
-uses the encouraging bear, a gentle effect and prerecorded English speech. Tap the bear
-or focus it and press Xbox A for a happy wiggle, little hearts and rotating encouragement.
-Bear play never restarts lost-round music or changes the result. Reduced motion keeps the
-encouragement without movement, and New adventure remains the initial controller action.
+hiding or reset; returning from a hidden page does not force autoplay. Match has no
+failure screen: every board remains playable until all pairs are complete.
 
 ### Match voice play
 
@@ -525,12 +526,12 @@ Matching is case-insensitive and uses whole English words: `doll` does not match
 `dollars`. Distractors, unrelated speech, and already matched words do not score
 or cost a mistake. A sentence containing several available words is resolved
 through the same match-feedback sequence, once per pair.
-Each accepted voice match plays a short bundled electric cue and connects its
+Each accepted voice match plays the same sourced right sound as touch matching and connects its
 picture and word with themed lightning for one second. Queued words receive
 their own full second before the next match, including the last pair before
 the result screen. Reduced motion uses a static bolt with the same duration.
 
-Click **Voice** again to exit. Winning, losing, replaying, opening a
+Click **Voice** again to exit. Completing a board, replaying, opening a
 playroom, or hiding the page also stops listening. Game music and spoken
 prompts are quiet while voice mode is enabled so the game cannot match its own
 audio. Touch matching remains available.

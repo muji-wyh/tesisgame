@@ -23,7 +23,7 @@ func settle() -> void:
 func state(app) -> Array:
 	return [app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
 		app.model.selected_id, app.model.matched_ids.duplicate(), app.model.hint_ids.duplicate(),
-		app.model.hints_remaining, app.model.successes, app.model.mistakes, app.model.phase,
+		app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.phase,
 		app.model.age_band_id, app.model.theme_id]
 
 
@@ -95,7 +95,7 @@ func _run() -> void:
 				"Directional navigation crosses naturally from the picture group to the word group")
 			app.cards[first].grab_focus()
 		app.cards[partner].pressed.emit()
-		check(app.model.successes == 1 and app.model.mistakes == 0, "A cross-group match still scores exactly once")
+		check((app.model.matched_ids.size() / 2) == 1 and app.model.mistakes == 0, "A cross-group match still scores exactly once")
 		app._resolve_feedback()
 		var picture: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
 			return card.kind == "image" and not app.model.matched_ids.has(card.id))[0]
@@ -103,7 +103,7 @@ func _run() -> void:
 			return card.kind == "word" and card.word.id != picture.word.id and not app.model.matched_ids.has(card.id))[0]
 		app.cards[picture.id].pressed.emit()
 		app.cards[word.id].pressed.emit()
-		check(app.model.mistakes == 1 and app.model.successes == 1, "Wrong cross-group pairs retain normal feedback and scoring")
+		check(app.model.mistakes == 1 and (app.model.matched_ids.size() / 2) == 1, "Wrong cross-group pairs retain normal feedback and scoring")
 		app._resolve_feedback()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app.choose_mode("memory")

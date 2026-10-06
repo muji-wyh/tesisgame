@@ -270,7 +270,7 @@ func _test_required_repeats(model, words: Array) -> void:
 func _round_snapshot(model) -> Dictionary:
 	var snapshot: Dictionary = {}
 	for property in ["cards", "lesson_words", "missed_word_ids", "matched_ids", "feedback_ids", "hint_ids", "hints_remaining",
-		"selected_id", "successes", "mistakes", "streak", "phase", "theme_id", "adventure_id", "adventure_name",
+		"selected_id", "mistakes", "phase", "theme_id", "adventure_id", "adventure_name",
 		"chest_state", "reward_theme", "reward_id", "last_correct"]:
 		snapshot[property] = model.get(property)
 	return snapshot.duplicate(true)

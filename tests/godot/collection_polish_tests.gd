@@ -41,7 +41,8 @@ func _run() -> void:
 		"Match starts selected with a ready board, three hints, and no microphone")
 	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop"],
 		"The actual mode choices preserve their requested order inside the popover")
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	for dimensions in [Vector2i(320, 568), Vector2i(768, 1024), Vector2i(1366, 768)]:
 		root.size = dimensions
@@ -54,7 +55,7 @@ func _run() -> void:
 			var inactive: Button = app._new_adventure_button if save_error else app._result_retry_button
 			check(button.is_visible_in_tree() and not inactive.is_visible_in_tree(),
 				"Results show one normal New adventure action or one conditional save retry")
-			check(app._default_focus() == button, "The active result action is the default loss-screen focus")
+			check(app._default_focus() == button, "The active result action is the default completed-result focus")
 			var minimum_height: float = 48.0 if save_error else 64.0
 			var maximum_width: float = 180.0 if save_error else minf(324.0, app._result_text.size.x * scale + 4.0)
 			check(button.size.y * scale >= minimum_height and button.size.y * scale <= minimum_height + 4,

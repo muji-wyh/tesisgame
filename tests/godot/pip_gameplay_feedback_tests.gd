@@ -17,6 +17,7 @@ func check(condition: bool, message: String) -> void:
 
 
 func _run() -> void:
+	await _check_pair_audio()
 	var directory := "user://pip-gameplay-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
@@ -31,6 +32,9 @@ func _run() -> void:
 	app.audio.set_muted(false)
 	app._pop.missed.connect(func(count: int) -> void: missed_batches.append(count))
 	_check_match(app)
+	_check_match_voice_answers(app)
+	await _check_match_voice_final_tail(app)
+	await _check_match_audio_tail(app)
 	_check_memory(app)
 	_check_pop(app)
 	_check_preferences(app)
@@ -110,12 +114,16 @@ func _check_match(app) -> void:
 		app._controller_back()
 		var word: Dictionary = _match_answer(app, correct)
 		var context: String = "A correct Match pair" if correct else "A wrong Match pair"
-		_expect_reaction(app, correct, context)
-		check(app.model.successes == (1 if correct else 0) and app.model.mistakes == (0 if correct else 1),
+		_expect_reaction(app, correct, context, false)
+		check((app.model.matched_ids.size() / 2) == (1 if correct else 0) and app.model.mistakes == (0 if correct else 1),
 			context + " changes the existing score exactly once")
-		var speech: String = "res://" + word.audio if correct else "res://assets/audio/voice/wrong.wav"
-		check(app.audio.voice.playing and app.audio.voice.stream == load(speech),
-			context + " preserves the existing word or correction recording alongside the call")
+		if correct:
+			check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + word.audio),
+				context + " preserves its vocabulary pronunciation")
+		else:
+			check(not app.audio.voice.playing, context + " has no spoken correction")
+		check(app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(
+			app.audio.PAIR_FEEDBACK_PATHS[correct]), context + " uses the supplied answer effect")
 		app._update_duck()
 		check(app.duck._gameplay_reaction == ("happy" if correct else "sad"),
 			context + " remains expressive while speech updates Pip's beak")
@@ -126,7 +134,7 @@ func _check_memory(app) -> void:
 		_start(app, "memory")
 		var word: Dictionary = _memory_answer(app, correct)
 		var context: String = "A correct Memory pair" if correct else "A wrong Memory pair"
-		_expect_reaction(app, correct, context)
+		_expect_reaction(app, correct, context, false)
 		check(app._memory.memory.attempts == 1 and app._memory.memory.mistakes == (0 if correct else 1)
 			and app._memory.memory.matched_word_ids.size() == (1 if correct else 0),
 			context + " preserves the original pair scoring")
@@ -194,10 +202,10 @@ func _check_preferences(app) -> void:
 		check(app.duck._gameplay_reaction == "happy" and app.duck.scale == Vector2.ONE
 			and is_zero_approx(app.duck.rotation),
 			"Muted reduced-motion " + mode + " still shows the successful emotion without moving the input target")
-		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing
+		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.pair_feedback.playing
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			"Muted " + mode + " suppresses the call and existing effects")
-		check((app._pop.game.hits if mode == "pop" else app.model.successes) == 1,
+		check((app._pop.game.hits if mode == "pop" else app._memory.memory.matched_word_ids.size() if mode == "memory" else app.model.matched_ids.size() / 2) == 1,
 			"Accessibility settings do not change " + mode + " scoring")
 		app.audio.set_muted(false)
 		check(not _reaction_playing(app), "Unmuting " + mode + " does not replay the suppressed call")
@@ -240,3 +248,113 @@ func _check_lifecycle(app) -> void:
 		check(not _reaction_playing(app)
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			transition + " does not replay old feedback on return")
+
+
+func _check_pair_audio() -> void:
+	var audio = load("res://scripts/game_audio.gd").new()
+	root.add_child(audio)
+	var players: Array[Node] = audio.get_children()
+	for correct in [true, false]:
+		var path: String = audio.PAIR_FEEDBACK_PATHS[correct]
+		var clip: AudioStreamWAV = load(path)
+		check(clip != null and clip.mix_rate == 44100 and clip.format == AudioStreamWAV.FORMAT_16_BITS
+			and clip.loop_mode == AudioStreamWAV.LOOP_DISABLED and clip.get_length() > 0.7 and clip.get_length() < 1.0,
+			"Each supplied answer effect retains a complete, nonlooping recording")
+		audio.interact("spring", false)
+		audio.play_pair_feedback(correct)
+		check(audio.pair_feedback.playing and audio.pair_feedback.stream == clip
+			and is_equal_approx(audio.pair_feedback.pitch_scale, 1.0)
+			and is_equal_approx(db_to_linear(audio.pair_feedback.volume_db), audio.PAIR_FEEDBACK_GAIN),
+			"Pair feedback plays its supplied clip at the authored pitch and bounded gain")
+		check(not audio.voice.playing and audio.pip_reaction == null and audio.get_children() == players,
+			"Pair feedback adds no spoken prompt, quack or dynamically allocated player")
+		audio.halt(true)
+		check(audio.pair_feedback.playing, "Speech rollover preserves the current answer effect")
+		audio.halt()
+		check(not audio.pair_feedback.playing and audio.pair_feedback.stream == null,
+			"Ordinary lifecycle cleanup stops and releases the answer effect")
+	for blocked in ["inactive", "muted", "unavailable"]:
+		audio.active = blocked != "inactive"
+		audio.muted = blocked == "muted"
+		audio.available = blocked != "unavailable"
+		audio.play_pair_feedback(false)
+		check(not audio.pair_feedback.playing, "An " + blocked + " answer effect stays silent")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_match_audio_tail(app) -> void:
+	for correct in [true, false]:
+		_start(app, "match")
+		_match_answer(app, correct)
+		app.feedback_timer.paused = true
+		app._resolve_feedback()
+		check(app.model.phase == "waiting" and app.audio.pair_feedback.playing,
+			"Automatic Match resolution preserves the complete supplied answer tail")
+		if correct:
+			var next: String = ""
+			for card in app.model.cards:
+				if not app.model.matched_ids.has(card.id):
+					next = card.id
+					break
+			app.cards[next].pressed.emit()
+		else:
+			app._request_hint()
+		check(not app.audio.pair_feedback.playing,
+			"The next deliberate card or hint stops the previous answer tail")
+	_start(app, "match")
+	for card in app.model.cards:
+		if card.kind != "word":
+			continue
+		app.cards[card.id].pressed.emit()
+		app.cards[card.word.id + ":image"].pressed.emit()
+		app.feedback_timer.paused = true
+		app._resolve_feedback()
+	check(app.model.phase == "won" and app.audio.pair_feedback.playing,
+		"The final pair's supplied right effect survives the transition to results")
+	await create_timer(1.0).timeout
+	check(not app.audio.pair_feedback.playing,
+		"The supplied right effect ends naturally without looping on the win screen")
+
+
+func _check_match_voice_answers(app) -> void:
+	for correct in [true, false]:
+		_start(app, "match")
+		app._on_voice_state([true, true, "Listening."])
+		_match_answer(app, correct)
+		check(app.model.phase == "feedback" and app.audio.pair_feedback.playing
+			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[correct])
+			and not app.audio.voice.playing and not _reaction_playing(app) and not app.audio.music.playing,
+			"A tapped answer while listening plays its supplied effect without speech or quacks")
+		var request: int = app.audio._playback_requests.get(app.audio.pair_feedback, 0)
+		app._on_voice_state([true, false, "Listening paused. Continuing..."])
+		check(app.audio.pair_feedback.playing and app.audio._playback_requests.get(app.audio.pair_feedback, 0) == request,
+			"Recognizer rollover preserves a tapped answer effect without replaying it")
+		app._stop_voice()
+		check(not app.audio.pair_feedback.playing, "Stopping speech input cancels the answer tail")
+
+
+func _check_match_voice_final_tail(app) -> void:
+	_start(app, "match")
+	app._on_voice_state([true, true, "Listening."])
+	var words: Array = app.model.cards.filter(func(card: Dictionary) -> bool: return card.kind == "word")
+	for card in words.slice(0, words.size() - 1):
+		app.cards[card.id].pressed.emit()
+		app.cards[card.word.id + ":image"].pressed.emit()
+		app.feedback_timer.paused = true
+		app._resolve_feedback()
+	var finished_phases: Array[String] = []
+	var on_finished := func() -> void: finished_phases.append(app.model.phase)
+	app.audio.pair_feedback.finished.connect(on_finished)
+	app.feedback_timer.paused = false
+	var final_card: Dictionary = words.back()
+	app.cards[final_card.id].pressed.emit()
+	app.cards[final_card.word.id + ":image"].pressed.emit()
+	check(is_equal_approx(app.feedback_timer.wait_time, app.VOICE_MATCH_SECONDS)
+		and app.feedback_timer.wait_time >= app.audio.pair_feedback.stream.get_length(),
+		"A final tapped pair while listening leaves time for the supplied right effect before stopping speech")
+	await create_timer(app.VOICE_MATCH_SECONDS + 0.2).timeout
+	check(finished_phases == ["feedback"] and app.model.phase == "won" and not app._voice_mode
+		and not app.audio.pair_feedback.playing,
+		"The final tapped right clip finishes naturally before the win screen retires listening")
+	app.audio.pair_feedback.finished.disconnect(on_finished)

@@ -55,7 +55,8 @@ func _run() -> void:
 	app._new_adventure_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "An invisible result action cannot replace the current lesson")
 	app.choose_theme("space")
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app.collection_page.visible,
@@ -64,7 +65,7 @@ func _run() -> void:
 	lesson = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "A repeated result click cannot start another lesson")
-	check(app.model.successes == 0 and app.model.hints_remaining == 3 and app.medal_progress.counts.is_empty(),
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3 and app.medal_progress.counts.is_empty(),
 		"Starting a lesson grants no rewards and initializes a normal attempt")
 	var storage := BrowserStorage.new()
 	var state = load("res://scripts/playroom_state.gd").new(directory + "/mock.cfg", storage)

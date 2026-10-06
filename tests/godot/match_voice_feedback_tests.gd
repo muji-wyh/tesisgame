@@ -52,11 +52,11 @@ func _listen(app) -> void:
 
 
 func _sound_playing(app) -> bool:
-	return app.audio.match_voice_hit != null and app.audio.match_voice_hit.playing
+	return app.audio.pair_feedback != null and app.audio.pair_feedback.playing
 
 
 func _sound_request(app) -> int:
-	return int(app.audio._playback_requests.get(app.audio.match_voice_hit, -1))
+	return int(app.audio._playback_requests.get(app.audio.pair_feedback, -1))
 
 
 func _path_global(link) -> PackedVector2Array:
@@ -96,23 +96,23 @@ func _check_contacts(app, word: Dictionary, context: String) -> void:
 func _check_cleared(app, context: String) -> void:
 	check(not app._voice_match_link.active and not app._voice_match_link.visible
 		and is_zero_approx(app._voice_match_left), context + ": the timed arc is fully cleared")
-	check(not _sound_playing(app), context + ": the dedicated electrical cue has stopped")
+	check(not _sound_playing(app), context + ": the dedicated supplied right cue has stopped")
 
 
 func _test_callback_and_ignored_results(app) -> void:
 	await _new_round(app)
 	var word: Dictionary = _words(app)[0]
 	app._on_voice_result([word.text, true])
-	check(app.model.successes == 0 and not app._voice_match_link.active,
+	check((app.model.matched_ids.size() / 2) == 0 and not app._voice_match_link.active,
 		"A final result before listening cannot score or start an arc")
 	app._on_voice_state([true, false, "Starting"])
 	app._on_voice_result([word.text, true])
-	check(app.model.successes == 0 and not _sound_playing(app),
+	check((app.model.matched_ids.size() / 2) == 0 and not _sound_playing(app),
 		"A final result while the microphone is not listening stays silent")
 	_listen(app)
 	for result in [[word.text, false], ["unrecognizedword", true], ["", true]]:
 		app._on_voice_result(result)
-		check(app.model.successes == 0 and app.model.phase == "waiting"
+		check((app.model.matched_ids.size() / 2) == 0 and app.model.phase == "waiting"
 			and app._speech_queue.is_empty() and not app._voice_match_link.active and not _sound_playing(app),
 			"Interim, unknown and empty results cannot create scoring or feedback")
 	app._request_hint()
@@ -120,15 +120,15 @@ func _test_callback_and_ignored_results(app) -> void:
 	check(hints_left == 2 and app._hint_link.active, "A real paid hint is active before the spoken success")
 	app._on_voice_result(["I see a " + str(word.text), true])
 	app.feedback_timer.paused = true
-	check(app.model.successes == 1 and app.model.mistakes == 0 and app.model.phase == "feedback"
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.mistakes == 0 and app.model.phase == "feedback"
 		and app.model.feedback_ids == [str(word.id) + ":word", str(word.id) + ":image"],
 		"The browser's final callback scores exactly its real word-picture pair")
 	check(is_equal_approx(app._voice_match_left, 1.0) and is_equal_approx(app.feedback_timer.wait_time, 1.0)
 		and not app.feedback_timer.is_stopped(), "Spoken success starts a full one-second effect and feedback Timer")
 	check(app.model.hints_remaining == hints_left and app.model.hint_ids.is_empty() and not app._hint_link.active,
 		"A success clears the old hint without spending or refunding another hint")
-	check(_sound_playing(app) and app.audio.match_voice_hit.stream == load(Audio.MATCH_VOICE_HIT_PATH),
-		"The electrical cue starts with the actual successful final callback")
+	check(_sound_playing(app) and app.audio.pair_feedback.stream == load(Audio.PAIR_FEEDBACK_PATHS[true]),
+		"The supplied right cue starts with the actual successful final callback")
 	check(not app.audio.music.playing and not app.audio.voice.playing,
 		"Electrical feedback keeps music and spoken playback quiet while the microphone is active")
 	await _settle()
@@ -142,7 +142,7 @@ func _test_callback_and_ignored_results(app) -> void:
 			"Recognizer rollover preserves the already accepted match's arc and cue")
 	for result in [[word.text, true], [str(word.text) + " " + str(word.text), true], [word.text, false], ["unrecognizedword", true]]:
 		app._on_voice_result(result)
-		check(app.model.successes == 1 and app._speech_queue.is_empty() and _sound_request(app) == request
+		check((app.model.matched_ids.size() / 2) == 1 and app._speech_queue.is_empty() and _sound_request(app) == request
 			and is_equal_approx(app._voice_match_left, 0.6),
 			"Duplicate or irrelevant recognition cannot replay the cue, extend the arc or score again")
 	app._advance_voice_match_feedback(0.59)
@@ -150,7 +150,7 @@ func _test_callback_and_ignored_results(app) -> void:
 	app._advance_voice_match_feedback(0.02)
 	_check_cleared(app, "One-second expiry")
 	app._resolve_feedback()
-	check(app.model.phase == "waiting" and app.model.successes == 1, "The completed feedback resolves its single match normally")
+	check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 1, "The completed feedback resolves its single match normally")
 
 
 func _test_resize_and_reduced_motion(app) -> void:
@@ -183,7 +183,7 @@ func _test_resize_and_reduced_motion(app) -> void:
 	app._advance_voice_match_feedback(0.51)
 	_check_cleared(app, "Reduced-motion expiry")
 	app._resolve_feedback()
-	check(app.model.phase == "waiting" and app.model.successes == 1,
+	check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 1,
 		"Reduced motion still completes the successful pair after its full display interval")
 	root.size = Vector2i(480, 900)
 
@@ -206,10 +206,10 @@ func _test_lifecycle_cancellation(app) -> void:
 			"menu": app._show_collection()
 		_check_cleared(app, action)
 		check(app._speech_queue.is_empty(), action + ": leaving recognition discards queued pairs")
-		var successes: int = app.model.successes
+		var successes: int = (app.model.matched_ids.size() / 2)
 		app._on_voice_result([words[1].text, true])
 		app._advance_voice_match_feedback(2.0)
-		check(app.model.successes == successes and not app._voice_match_link.active and not _sound_playing(app),
+		check((app.model.matched_ids.size() / 2) == successes and not app._voice_match_link.active and not _sound_playing(app),
 			action + ": a late callback or animation tick cannot revive the effect or consume stale speech")
 		if action == "background":
 			app.on_page_visible()
@@ -224,11 +224,13 @@ func _test_manual_timing(app) -> void:
 	app._select_card(str(word.id) + ":word")
 	app._select_card(str(word.id) + ":image")
 	app.feedback_timer.paused = true
-	check(app.model.phase == "feedback" and app.model.successes == 1
+	check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1
 		and is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual matching retains its existing 0.7-second feedback interval")
-	_check_cleared(app, "Manual success")
+	check(not app._voice_match_link.active and _sound_playing(app)
+		and app.audio.pair_feedback.stream == load(Audio.PAIR_FEEDBACK_PATHS[true]),
+		"Manual success plays the same supplied right effect without a speech arc")
 	app._resolve_feedback()
-	check(app.model.phase == "waiting" and app.model.successes == 1, "Manual success still resolves through the existing path")
+	check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 1, "Manual success still resolves through the existing path")
 
 
 func _test_queued_pairs_and_final_timer(app) -> void:
@@ -242,14 +244,14 @@ func _test_queued_pairs_and_final_timer(app) -> void:
 	app.feedback_timer.paused = true
 	for index in range(words.size()):
 		var word: Dictionary = words[index]
-		check(app.model.phase == "feedback" and app.model.successes == index + 1
+		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == index + 1
 			and app.model.feedback_ids == [str(word.id) + ":word", str(word.id) + ":image"]
 			and app._speech_queue.size() == words.size() - index - 1,
 			"Queued pair %d scores once and preserves transcript order" % (index + 1))
 		check(is_equal_approx(app._voice_match_left, 1.0) and is_equal_approx(app.feedback_timer.wait_time, 1.0),
 			"Queued pair %d receives a fresh full second" % (index + 1))
 		_check_contacts(app, word, "Queued pair %d" % (index + 1))
-		check(_sound_playing(app), "Queued pair %d begins its own electrical cue" % (index + 1))
+		check(_sound_playing(app), "Queued pair %d begins its own supplied right cue" % (index + 1))
 		var request: int = _sound_request(app)
 		var pending: Array = app._speech_queue.duplicate()
 		app._on_voice_result([" ".join(transcript), true])
@@ -258,7 +260,7 @@ func _test_queued_pairs_and_final_timer(app) -> void:
 		if index == words.size() - 1:
 			break
 		app._advance_voice_match_feedback(0.99)
-		check(app._voice_match_link.active and app.model.successes == index + 1,
+		check(app._voice_match_link.active and (app.model.matched_ids.size() / 2) == index + 1,
 			"The next queued pair waits while the current arc completes its second")
 		app._advance_voice_match_feedback(0.02)
 		_check_cleared(app, "Queued pair %d expiry" % (index + 1))
@@ -273,14 +275,14 @@ func _test_queued_pairs_and_final_timer(app) -> void:
 		and app.grid.is_visible_in_tree() and not app._outcome.visible,
 		"The last recognized pair stays visible beyond the old 0.7-second feedback interval")
 	check(await _until(func() -> bool: return app.model.phase == "won"), "The last pair's real Timer eventually presents the win")
-	check(Time.get_ticks_msec() - started >= 940 and app.model.successes == 5 and app.model.mistakes == 0,
+	check(Time.get_ticks_msec() - started >= 940 and (app.model.matched_ids.size() / 2) == 5 and app.model.mistakes == 0,
 		"The final pair receives its full second before exactly five successes win the round")
 	_check_cleared(app, "Final win")
 	check(not app._voice_mode and app._speech_queue.is_empty() and app.feedback_timer.is_stopped(),
 		"Winning retires listening, pending feedback and the speech queue")
 	app._on_voice_result([" ".join(transcript), true])
 	app._resolve_feedback()
-	check(app.model.phase == "won" and app.model.successes == 5 and not app._voice_match_link.active,
+	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5 and not app._voice_match_link.active,
 		"Late final callbacks and duplicate completion cannot replay feedback or change the finished score")
 
 

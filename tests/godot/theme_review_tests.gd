@@ -114,12 +114,13 @@ func _run() -> void:
 	app._hide_collection()
 	await _check_treasure_themes(app)
 	root.size = Vector2i(320, 568)
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
 	var treasure: Control = app.get("_treasure_backdrop")
-	check(treasure != null and not treasure.visible and not treasure.is_visible_in_tree(),
-		"The encouragement result hides the treasure world's scene and theme badge")
+	check(treasure != null and treasure.is_visible_in_tree(),
+		"The completed result retains the treasure world scene")
 	var review: ScrollContainer = app._found_words_scroll
 	check(review.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 		and not review.get_h_scroll_bar().visible, "Review words scroll without a visible scrollbar")
@@ -193,7 +194,7 @@ func _run() -> void:
 	mouse.pressed = false
 	root.push_input(mouse, true)
 	await process_frame
-	check(outside_releases == 1 and taps == before and app.model.phase == "lost",
+	check(outside_releases == 1 and taps == before and app.model.phase == "won",
 		"A touch begun outside the strip keeps its own emulated mouse release: releases=%d taps=%d/%d phase=%s outside=%s review=%s" % [
 			outside_releases, taps, before, app.model.phase, outside, review.get_global_rect()])
 	var word_button: Button = app._found_words.get_child(1)
@@ -247,7 +248,7 @@ func _check_loading_theme(directory: String) -> void:
 			"Loading entry applies only a valid latest theme before resuming the game")
 		check(app.duck.theme_id == expected and app._active_palette.id == expected,
 			"Pip and the native scene use the loading theme on the first revealed frame")
-		check(app.model.cards == cards and app.model.phase == "waiting" and app.model.successes == 0
+		check(app.model.cards == cards and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
 			and app.model.mistakes == 0 and app.model.hints_remaining == 3
 			and app.playroom_state.recent_topic_ids == journey and app.medal_progress.counts == counts,
 			"Loading theme handoff preserves the prepared lesson, journey and reward progress")

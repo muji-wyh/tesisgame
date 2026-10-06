@@ -250,26 +250,6 @@ function collectibleShapes(season, index) {
     </g>`;
 }
 
-const bearArt = `
-    <ellipse cx="60" cy="108" rx="35" ry="5" fill="#eadbc5" stroke="none"/>
-    <path d="M34 106 Q30 89 44 84 H76 Q90 89 86 106Z" fill="#9ac9bb"/>
-    <ellipse cx="25" cy="83" rx="11" ry="14" transform="rotate(20 25 83)" fill="#c9956e"/>
-    <ellipse cx="94" cy="77" rx="11" ry="15" transform="rotate(-22 94 77)" fill="#c9956e"/>
-    <ellipse cx="94" cy="79" rx="5" ry="6" fill="#e7bc97" stroke="none"/>
-    <circle cx="33" cy="35" r="14" fill="#c9956e"/>
-    <circle cx="87" cy="35" r="14" fill="#c9956e"/>
-    <circle cx="33" cy="35" r="7" fill="#edc8a4" stroke="none"/>
-    <circle cx="87" cy="35" r="7" fill="#edc8a4" stroke="none"/>
-    <ellipse cx="60" cy="62" rx="33" ry="32" fill="#d5a57d"/>
-    <ellipse cx="60" cy="75" rx="19" ry="14" fill="#fae7ca" stroke="none"/>
-    <circle cx="46" cy="57" r="3.5" fill="${outline}" stroke="none"/>
-    <circle cx="74" cy="57" r="3.5" fill="${outline}" stroke="none"/>
-    <ellipse cx="39" cy="68" rx="5" ry="3" fill="#e9b19c" stroke="none"/>
-    <ellipse cx="81" cy="68" rx="5" ry="3" fill="#e9b19c" stroke="none"/>
-    <path d="M54 69 Q60 66 66 69 Q66 75 60 76 Q54 75 54 69Z" fill="${outline}" stroke="none"/>
-    <path d="M60 76V79 M51 79 Q60 90 69 79" stroke-width="2.5"/>
-    <path d="M101 54 104 49 M107 62 112 60" stroke="#bd9b71" stroke-width="3"/>`;
-
 function makeSvg(title, shapes, background = '#fff8eb') {
   const safeTitle = title.replace(/[&<>"']/g, (character) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'
@@ -310,7 +290,6 @@ function generateImages() {
     }
   }
   outputs.push(...require('./reward-art/jungle-candy.cjs').createRewardImages());
-  outputs.push(['assets/images/scenes/try-again.svg', makeSvg('A friendly bear waving encouragement', bearArt)]);
 
   for (const [relativePath, svg] of outputs) {
     const filename = path.join(root, relativePath);

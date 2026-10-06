@@ -89,7 +89,7 @@ func check_link(app, image_id: String, word_id: String, columns: int, stage: Str
 func round_state(app) -> Array:
 	return [app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
 		app.model.hint_ids.duplicate(), app.model.hints_remaining, app.model.phase, app.model.selected_id,
-		app.model.matched_ids.duplicate(), app.model.successes, app.model.mistakes, app.model.streak]
+		app.model.matched_ids.duplicate(), (app.model.matched_ids.size() / 2), app.model.mistakes]
 
 
 func card_appearance(card) -> Array:

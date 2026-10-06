@@ -22,12 +22,6 @@ const sounds = {
   }),
   correct: melody([523.25, 659.25, 783.99], {
     step: 0.15, noteDuration: 0.28, gain: 0.12, release: 0.16, decay: 0.8
-  }),
-  wrong: melody([349.23, 293.66], {
-    step: 0.23, noteDuration: 0.33, timbre: 'autumn', gain: 0.09, release: 0.20
-  }),
-  loss: melody([392, 329.63, 261.63], {
-    step: 0.24, noteDuration: 0.42, timbre: 'autumn', gain: 0.09, attack: 0.03, release: 0.27
   })
 };
 

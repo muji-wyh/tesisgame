@@ -95,10 +95,10 @@ test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS
   assert.throws(() => speechText('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 350 words and ten prompts from maintained catalogs', () => {
+test('voice generation derives exactly 350 words and eight prompts from maintained catalogs', () => {
   const messages = messagesFor(root);
-  assert.equal(messages.length, 360);
-  assert.equal(new Set(messages.map(message => message.id)).size, 360);
+  assert.equal(messages.length, 358);
+  assert.equal(new Set(messages.map(message => message.id)).size, 358);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
@@ -169,7 +169,7 @@ test('the complete batch is validated before publishing audio and its truthful p
       convert(bytes, destination);
     }
   });
-  assert.equal(count, 11);
+  assert.equal(count, Object.keys(prompts).length + 1);
   assert.equal(converted, count);
   const manifest = manifestFor(directory);
   assert.deepEqual(manifest.profile, PROFILE);
@@ -205,7 +205,7 @@ test('a failed synthesis preserves all originals and resumes only uncached reque
       requested = manifest.requests.map(request => request.id);
       await synthesize({ manifest });
     }
-  }), 11);
+  }), Object.keys(prompts).length + 1);
   assert.deepEqual(requested, messagesFor(directory).slice(2).map(message => message.id));
 });
 
@@ -231,7 +231,7 @@ test('a failed conversion preserves originals, retains validated cache entries, 
     convert: (bytes, destination) => { converted += 1; convert(bytes, destination); }
   });
   assert.deepEqual(requested, [third.id]);
-  assert.equal(converted, 9, 'The first two validated WAVs resume without another decode.');
+  assert.equal(converted, Object.keys(prompts).length - 1, 'The first two validated WAVs resume without another decode.');
 });
 
 test('cache keys include every voice setting, the final spoken text, client, and output format', () => {
@@ -256,7 +256,7 @@ test('a completed cache avoids requests and conversion, while changed text regen
     convert: () => assert.fail('Validated cache must avoid conversion.')
   });
   for (const [name, hash] of before) assert.equal(digest(fs.readFileSync(path.join(output, name))), hash);
-  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, wrong: 'Try once more!' }));
+  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, 'spring-theme': 'Hello, spring!' }));
   let requested;
   await generate(directory, {
     synthesizeBatch: async ({ manifest }) => {
@@ -265,9 +265,9 @@ test('a completed cache avoids requests and conversion, while changed text regen
     }
   });
   assert.equal(requested.length, 1);
-  assert.equal(requested[0].id, 'wrong');
-  assert.equal(requested[0].text, 'Try once more!');
-  assert.equal(manifestFor(directory).files.find(file => file.id === 'wrong').synthesisText, 'Try once more!');
+  assert.equal(requested[0].id, 'spring-theme');
+  assert.equal(requested[0].text, 'Hello, spring!');
+  assert.equal(manifestFor(directory).files.find(file => file.id === 'spring-theme').synthesisText, 'Hello, spring!');
 });
 
 test('corrupted WAV cache data and changed profile metadata cannot be reused as approved audio', async t => {
@@ -320,7 +320,7 @@ test('missing-only generation preserves documented Ava files and requests only a
   }), 2);
   assert.deepEqual(requested, missing);
   for (const [name, bytes] of before) assert.deepEqual(fs.readFileSync(path.join(output, name)), bytes);
-  assert.equal(manifestFor(directory).files.length, 11);
+  assert.equal(manifestFor(directory).files.length, Object.keys(prompts).length + 1);
   assert.equal(await generate(directory, {
     onlyMissing: true,
     synthesizeBatch: () => assert.fail('Complete approved catalog makes no requests.'),
@@ -338,9 +338,9 @@ test('missing-only generation rejects mismatching profile, text, or file hashes 
   fs.writeFileSync(manifestPath, JSON.stringify(manifest));
   await assert.rejects(generate(directory, { onlyMissing: true }), /full generation/);
   fs.writeFileSync(manifestPath, approvedManifest);
-  fs.writeFileSync(path.join(output, 'wrong.wav'), wave(22050, 0, 9000));
-  await assert.rejects(generate(directory, { onlyMissing: true }), /wrong.*full generation/);
+  fs.writeFileSync(path.join(output, 'spring-theme.wav'), wave(22050, 0, 9000));
+  await assert.rejects(generate(directory, { onlyMissing: true }), /spring-theme.*full generation/);
   await generate(directory);
-  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, wrong: 'A new prompt.' }));
-  await assert.rejects(generate(directory, { onlyMissing: true }), /wrong.*full generation/);
+  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, 'spring-theme': 'A new greeting.' }));
+  await assert.rejects(generate(directory, { onlyMissing: true }), /spring-theme.*full generation/);
 });

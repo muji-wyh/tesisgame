@@ -51,9 +51,10 @@ func _run() -> void:
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + first.word.audio),
 		"Selecting a Match word pronounces that exact card")
 	app._select_card(other.id)
-	check(app.model.phase == "feedback" and app.audio.voice.playing
-		and app.audio.voice.stream == load("res://assets/audio/voice/wrong.wav"),
-		"Wrong Match gives its existing audio cue while the chosen cards show the feedback")
+	check(app.model.phase == "feedback" and not app.audio.voice.playing
+		and app.audio.pair_feedback.playing
+		and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/wrong.wav"),
+		"Wrong Match plays the supplied effect without spoken correction")
 	app._controller_back()
 	check(not app.audio.voice.playing, "Back stops answer speech when returning to the board")
 	app._select_card(first.id)
@@ -200,7 +201,7 @@ func _run() -> void:
 				next_id = id
 				break
 		app.cards[next_id].pressed.emit()
-		check(app.cards[next_id].disabled and app.model.phase == "feedback" and app.model.successes == 1,
+		check(app.cards[next_id].disabled and app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1,
 			"Card input cannot skip automatic voice feedback")
 		match exit_path:
 			"stop": app._stop_voice()
@@ -211,7 +212,7 @@ func _run() -> void:
 		if exit_path in ["rewards", "hidden"]:
 			check(app.feedback_timer.paused, exit_path + " pauses the pending transition while play is covered")
 			await create_timer(0.8).timeout
-			check(app.model.phase == "feedback" and app.model.successes == 1,
+			check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1,
 				exit_path + " cannot advance a covered board")
 			if exit_path == "rewards":
 				app._hide_collection()
@@ -220,7 +221,7 @@ func _run() -> void:
 		check(not app.feedback_timer.paused, exit_path + " resumes automatic progress without a footer action")
 		check(not app.cards[next_id].disabled, exit_path + " immediately restores card input without another refresh")
 		await create_timer(0.8).timeout
-		check(app.model.phase == "waiting" and app.model.successes == 1 and app.feedback_timer.is_stopped(),
+		check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 1 and app.feedback_timer.is_stopped(),
 			exit_path + " automatically clears feedback exactly once")
 		app.cards[next_id].pressed.emit()
 		check(app.model.phase == "matching" and app.model.selected_id == next_id,
@@ -231,7 +232,7 @@ func _run() -> void:
 		app._stop_voice()
 		app.cards[next_id].pressed.emit()
 		check(app.model.phase == "matching" and app.model.selected_id == next_id
-			and app.model.successes == 1 and app.feedback_timer.is_stopped(),
+			and (app.model.matched_ids.size() / 2) == 1 and app.feedback_timer.is_stopped(),
 			"Stopping Voice also permits the immediate next-card shortcut before its timer expires")
 	_check_pop_launch_audio(app)
 	await _check_pop_hit_audio(app)
@@ -276,6 +277,7 @@ func _check_match_prompt_audio(app) -> void:
 	var observer := func() -> void:
 		notices.append({"phase": app.model.phase, "selected": app.model.selected_id,
 			"effect": app.audio.effect.stream.resource_path if app.audio.effect.playing else "",
+			"pair": app.audio.pair_feedback.stream.resource_path if app.audio.pair_feedback.playing else "",
 			"voice": app.audio.voice.stream.resource_path if app.audio.voice.playing else ""})
 	app.model.changed.connect(observer)
 	_observe_match_tap(app, notices, first.id)
@@ -299,10 +301,10 @@ func _check_match_prompt_audio(app) -> void:
 	_observe_match_tap(app, notices, first.id)
 	_observe_match_tap(app, notices, other.word.id + ":image")
 	check(notices.size() == 1 and notices[0].phase == "feedback"
-		and notices[0].effect == "res://assets/audio/sfx/wrong.wav"
-		and notices[0].voice == "res://assets/audio/voice/wrong.wav"
+		and notices[0].pair == "res://assets/imported-audio/pair-feedback/wrong.wav"
+		and notices[0].voice.is_empty()
 		and not app.feedback_timer.is_stopped(),
-		"A wrong pair starts both answer sounds before its single refresh and retains automatic feedback")
+		"A wrong pair starts its sound without a spoken correction before its single refresh and retains automatic feedback")
 	_observe_match_tap(app, notices, first.id)
 	check(notices.size() == 2 and notices[0].phase == "waiting" and notices[1].phase == "matching"
 		and notices[1].effect == "res://assets/audio/sfx/select.wav"
@@ -310,8 +312,8 @@ func _check_match_prompt_audio(app) -> void:
 		"The feedback shortcut resolves the old pair once and starts the tapped word before its new refresh")
 	_observe_match_tap(app, notices, first.word.id + ":image")
 	check(notices.size() == 1 and notices[0].phase == "feedback"
-		and notices[0].effect == "res://assets/audio/sfx/correct.wav"
-		and notices[0].voice == "res://" + first.word.audio and app.model.successes == 1,
+		and notices[0].pair == "res://assets/imported-audio/pair-feedback/right.wav"
+		and notices[0].voice == "res://" + first.word.audio and (app.model.matched_ids.size() / 2) == 1,
 		"A correct pair starts its cue and word before refresh without scoring twice")
 	_observe_match_tap(app, notices, first.id)
 	check(notices.is_empty() and app.audio.voice.playing
@@ -395,7 +397,7 @@ func _check_memory_prompt_audio(app) -> void:
 	check(events.map(func(event: Dictionary) -> String: return event.event) == ["reveal", "answer", "progress", "prompt"]
 		and not events[0].face_up and not events[1].face_up and events[2].face_up
 		and events[0].voice == other_audio and events[1].voice == other_audio
-		and events[1].effect == "res://assets/audio/sfx/wrong.wav"
+		and events[1].pair == "res://assets/imported-audio/pair-feedback/wrong.wav"
 		and view.memory.attempts == 1 and not view._feedback_timer.is_stopped(),
 		"A mismatch pronounces the second Memory word and starts its answer cue before rendering or publishing progress")
 	events.clear()
@@ -408,8 +410,8 @@ func _check_memory_prompt_audio(app) -> void:
 	events.clear()
 	view.card_buttons[partner].pressed.emit()
 	check(events.size() == 4 and events[1].event == "answer" and not events[1].face_up
-		and events[1].effect == "res://assets/audio/sfx/correct.wav" and events[1].voice == first_audio
-		and events[2].face_up and app.model.successes == 1 and view.memory.attempts == 2,
+		and events[1].pair == "res://assets/imported-audio/pair-feedback/right.wav" and events[1].voice == first_audio
+		and events[2].face_up and view.memory.matched_word_ids.size() == 1 and view.memory.attempts == 2,
 		"A correct Memory answer starts before the planted face refresh while progress still publishes once")
 	events.clear()
 	view.card_buttons[first].pressed.emit()
@@ -452,6 +454,7 @@ func _memory_audio_snapshot(app, event: String, index: int) -> Dictionary:
 	return {"event": event, "phase": app._memory.memory.phase,
 		"face_up": app._memory.card_buttons[index].face_up if index >= 0 else false,
 		"effect": app.audio.effect.stream.resource_path if app.audio.effect.playing else "",
+		"pair": app.audio.pair_feedback.stream.resource_path if app.audio.pair_feedback.playing else "",
 		"voice": app.audio.voice.stream.resource_path if app.audio.voice.playing else ""}
 
 
@@ -484,7 +487,7 @@ func _check_speech_debug(app) -> void:
 			"launch": player = app.audio.pop_launch
 			"slice": player = app.audio.last_pop_player()
 			"miss": player = app.audio.pip_reaction
-			"match": player = app.audio.match_voice_hit
+			"match": player = app.audio.pair_feedback
 		check(player.playing and app.audio.can_process(),
 			"The diagnostic " + cue + " remains playable while the scene is paused")
 	app._on_voice_result([str(app._pop.game.targets[0].word.text), true])
@@ -494,7 +497,7 @@ func _check_speech_debug(app) -> void:
 		and app._pop.game.score == score and not app._pop._listening,
 		"Elapsed diagnostic time and stale native callbacks cannot advance or score the paused game")
 	check(app._on_speech_debug(["cue", "stop"]) and app._speech_debug_active and paused
-		and not app.audio.pop_launch.playing and not app.audio.match_voice_hit.playing
+		and not app.audio.pop_launch.playing and not app.audio.pair_feedback.playing
 		and not app.audio.pip_reaction.playing,
 		"Stopping diagnostic cues keeps gameplay paused without retaining audio tails")
 	check(not app._on_speech_debug(["mix", 0.2]) and not app._on_speech_debug(["cue", "reward"]),
@@ -513,9 +516,12 @@ func _check_speech_debug(app) -> void:
 	check(app._on_speech_debug(["open"]), "Match can enter the same diagnostic pause")
 	app._on_speech_debug(["mix", 0.35])
 	app._on_speech_debug(["cue", "miss"])
+	check(app.audio.pair_feedback.playing and not app.audio.pip_reaction.playing
+		and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
+		"Match diagnostics use the supplied wrong effect without a Pip quack")
 	app.on_page_hidden()
 	check(paused and app._speech_debug_active and not app.audio.pip_reaction.playing
-		and is_equal_approx(app.audio._speech_debug_mix, 1.0)
+		and not app.audio.pair_feedback.playing and is_equal_approx(app.audio._speech_debug_mix, 1.0)
 		and not app._on_speech_debug(["cue", "launch"]),
 		"Backgrounding silences diagnostics and keeps the pause until microphone stop is confirmed")
 	app._on_speech_debug(["close"])
@@ -808,7 +814,7 @@ func _check_pop_slice_choices() -> void:
 	var pool: Array[String] = audio._pop_slice_paths.duplicate()
 	if pool.size() < 2:
 		pool.clear()
-		for name in ["select", "correct", "wrong", "loss", "spring-arrive", "summer-arrive", "autumn-arrive", "winter-arrive"]:
+		for name in ["select", "correct", "spring-arrive", "summer-arrive", "autumn-arrive", "winter-arrive"]:
 			pool.append("res://assets/audio/sfx/" + name + ".wav")
 	audio._pop_slice_paths = pool.duplicate()
 	audio.interact("spring", false)
@@ -901,8 +907,8 @@ func _pop_hit_visible_word(app, elapsed: float = 0.0) -> bool:
 
 
 func _match_progress(app) -> Array:
-	return [app.model.phase, app.model.successes, app.model.mistakes, app.model.hints_remaining,
-		app.model.streak, app.model.selected_id, app.model.matched_ids.duplicate(),
+	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining,
+		app.model.selected_id, app.model.matched_ids.duplicate(),
 		app.medal_progress.counts.duplicate(), app.playroom_state.collected_word_ids.duplicate()]
 
 

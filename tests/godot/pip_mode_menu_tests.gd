@@ -83,7 +83,7 @@ func _choice(app, id: String) -> Button:
 
 func _round_snapshot(app) -> Array:
 	return [app._mode_id, app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
-		app.model.selected_id, app.model.phase, app.model.successes, app.model.mistakes, app.model.hints_remaining]
+		app.model.selected_id, app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining]
 
 
 func _pop_ready_snapshot(app) -> Array:

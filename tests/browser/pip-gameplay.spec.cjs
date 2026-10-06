@@ -1,26 +1,11 @@
 const { test, expect } = require('@playwright/test');
-const fs = require('node:fs');
-const path = require('node:path');
 const { openGame, metrics, memoryMetrics, tap, boardPoint, memoryPoint, rendered, observeAudio } = require('./game-ui.cjs');
 const catalog = require('../../words.json');
+const { expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 
-function wavDuration(relative) {
-  const bytes = fs.readFileSync(path.resolve(__dirname, '../..', relative));
-  let byteRate, dataSize;
-  for (let offset = 12; offset + 8 <= bytes.length;) {
-    const id = bytes.toString('ascii', offset, offset + 4), size = bytes.readUInt32LE(offset + 4);
-    if (id === 'fmt ') byteRate = bytes.readUInt32LE(offset + 16);
-    if (id === 'data') dataSize = size;
-    offset += 8 + size + (size % 2);
-  }
-  if (!byteRate || !dataSize) throw new Error(`Invalid WAV: ${relative}`);
-  return dataSize / byteRate;
-}
-
-const happyCall = { duration: wavDuration('assets/audio/pip/duck_double_01_bouncy.wav'), rate: 1.12 };
-const sadCall = { duration: wavDuration('assets/audio/pip/duck_quack_innocent_deep_short_04.wav'), rate: 0.8 };
-const matchesCall = (sound, expected) => Math.abs(sound.duration - expected.duration) <= 1 / sound.sampleRate &&
-  Math.abs(sound.playbackRate - expected.rate) < 0.001;
+const duckRecordings = require('../../docs/assets/pip-sounds.json').assets.map(asset => recordingTiming(asset.file));
+const isDuckCall = sound => duckRecordings.some(timing =>
+  Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
 
 async function discoverCards(page, mode) {
   const bounds = mode === 'memory' ? await memoryMetrics(page) : await metrics(page);
@@ -42,7 +27,7 @@ async function discoverCards(page, mode) {
 }
 
 for (const mode of ['match', 'memory']) {
-  test(`${mode} outcomes give Pip distinct calls while retaining card speech`, async ({ page, browserName }, info) => {
+  test(`${mode} outcomes play the reference effects without Pip calls or spoken corrections`, async ({ page, browserName }, info) => {
     test.setTimeout(120000);
     await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
     const errors = await openGame(page, { mode, reducedMotion: 'no-preference' });
@@ -64,30 +49,34 @@ for (const mode of ['match', 'memory']) {
       await tap(page, second.point.x, second.point.y);
       await expect(page.locator('#game-status')).toContainText(mode === 'memory'
         ? (correct ? 'A new flower!' : 'Try another pair.') : (correct ? 'Great match!' : 'Not quite.'));
-      const expected = correct ? happyCall : sadCall;
       const outcomeSounds = () => page.evaluate(start => audioObservation.playbacks.slice(start), from);
       if (audioAvailable) {
-        await expect.poll(async () => (await outcomeSounds()).filter(sound => matchesCall(sound, expected)).length,
-          { message: 'One real duck recording accompanies this pair result.' }).toBe(1);
-        const sound = (await outcomeSounds()).find(item => matchesCall(item, expected));
+        const sound = await expectRecording(page, from, `assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`);
         expect(sound.contextState).toBe('running');
         expect(sound.fingerprint).toBeTruthy();
         expect(sound.peak).toBeGreaterThan(0.01);
         expect(sound.loop).toBe(false);
-        const recording = mode === 'match' && !correct ? 'assets/audio/voice/wrong.wav'
-          : catalog.find(word => word.text === second.word)?.audio;
-        expect(recording, 'The revealed word resolves to its real vocabulary recording').toBeTruthy();
-        const seconds = wavDuration(recording);
-        await expect.poll(async () => (await outcomeSounds()).some(item => item.playbackRate === 1 &&
-          Math.abs(item.duration - seconds) <= 1 / item.sampleRate),
-        { message: 'The duck call leaves the existing word or correction recording audible.' }).toBe(true);
+        expect(sound.playbackRate).toBe(1);
+        if (mode === 'memory' || correct) {
+          const recording = catalog.find(word => word.text === second.word)?.audio;
+          expect(recording, 'The revealed word resolves to its vocabulary recording').toBeTruthy();
+          await expectRecording(page, from, recording);
+        } else {
+          expect((await outcomeSounds()).filter(item => !item.loop),
+            'A wrong Match pair plays only its sound effect, without spoken correction.').toHaveLength(1);
+        }
       }
       await page.screenshot({ path: info.outputPath(`${mode}-${correct ? 'happy' : 'sad'}.png`), scale: 'css' });
       evidence.push({ correct, word: second.word, audio: await outcomeSounds() });
       await expect(page.locator('#selection-status')).toBeEmpty();
       await page.waitForTimeout(100);
-      if (audioAvailable) expect((await outcomeSounds()).filter(sound => matchesCall(sound, expected)).length,
-        'Feedback completion cannot replay the duck call.').toBe(1);
+      if (audioAvailable) {
+        const sounds = await outcomeSounds();
+        expect(sounds.filter(isDuckCall), 'Match and Memory feedback never plays a duck call.').toEqual([]);
+        const timing = recordingTiming(`assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`);
+        expect(sounds.filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate),
+          'Each outcome plays its reference recording exactly once.').toHaveLength(1);
+      }
     }
     if (mode === 'memory') await expect(page.locator('#game-status')).toContainText('1 of 5 pairs grown. 2 attempts.');
     await info.attach(`${mode}-pip-gameplay-audio.json`, { body: JSON.stringify({ audioAvailable, evidence }), contentType: 'application/json' });

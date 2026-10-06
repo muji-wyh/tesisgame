@@ -16,9 +16,8 @@ var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
 var hints_remaining: int = MAX_HINTS
 var selected_id: String = ""
-var successes: int = 0
+# Optional leaderboard ranking only; mistakes never end a round.
 var mistakes: int = 0
-var streak: int = 0
 var phase: String = "waiting"
 var theme_id: String = "spring"
 var adventure_id: String = ""
@@ -139,9 +138,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	hint_ids.clear()
 	hints_remaining = MAX_HINTS
 	selected_id = ""
-	successes = 0
 	mistakes = 0
-	streak = 0
 	phase = "waiting"
 	chest_state = "closed"
 	reward_theme = ""
@@ -182,7 +179,7 @@ func card_by_id(id: String) -> Dictionary:
 
 func spoken_matches(transcript: String) -> Array[String]:
 	var matches: Array[String] = []
-	if phase in ["won", "lost"]:
+	if phase == "won":
 		return matches
 	var accepted_forms: Array[String] = []
 	for card in cards:
@@ -282,13 +279,10 @@ func select(id: String, notify: bool = true) -> String:
 			selected_id = ""
 			phase = "feedback"
 			if last_correct:
-				successes += 1
-				streak += 1
 				matched_ids.append_array(feedback_ids)
 				result = "correct"
 			else:
 				mistakes += 1
-				streak = 0
 				for word_id in [previous.word.id, card.word.id]:
 					if not missed_word_ids.has(word_id):
 						missed_word_ids.append(word_id)
@@ -315,10 +309,8 @@ func resolve_feedback() -> void:
 		return
 	feedback_ids.clear()
 	selected_id = ""
-	if successes >= MATCH_PAIR_COUNT:
+	if not cards.is_empty() and cards.all(func(card: Dictionary) -> bool: return matched_ids.has(card.id)):
 		phase = "won"
-	elif mistakes >= 3:
-		phase = "lost"
 	else:
 		phase = "waiting"
 	changed.emit()

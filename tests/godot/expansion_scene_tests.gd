@@ -51,7 +51,7 @@ func _run() -> void:
 	app._show_collection()
 	app._memory.card_buttons[(word_index + 1) % app._memory.card_buttons.size()].pressed.emit()
 	app._memory.study_button.button_down.emit()
-	check(app.model.successes == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
 	app._room.toy_button.pressed.emit()
 	check(app._room.feedback_text.to_lower().contains("ball"), "The room toy action gives named accessibility feedback")
@@ -82,7 +82,7 @@ func _run() -> void:
 	app._show_collection()
 	app._hide_collection()
 	app._controller_accept()
-	check(app._mode_id == "match" and app.model.successes == 1, "Closing More during feedback cannot turn A into a mode change or a duplicate score")
+	check(app._mode_id == "match" and (app.model.matched_ids.size() / 2) == 1, "Closing More during feedback cannot turn A into a mode change or a duplicate score")
 	app._continue_match()
 	check(app.cards.values().has(root.gui_get_focus_owner())
 		and not app.model.matched_ids.has(root.gui_get_focus_owner().card_data.id),
@@ -91,7 +91,7 @@ func _run() -> void:
 		app.cards[word_id + ":word"].pressed.emit()
 		app.cards[word_id + ":image"].pressed.emit()
 		app._continue_match()
-	check(app.model.phase == "won" and app.model.successes == 5, "Five Match pairs enter the shared win screen")
+	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5, "Five Match pairs enter the shared win screen")
 	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
 	app._open_chest()
 	app.chest.finish_immediately()
@@ -109,7 +109,7 @@ func _run() -> void:
 	app._hide_collection()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "match" and app.model.phase == "waiting" and app.model.successes == 0
+	check(app._mode_id == "match" and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
 		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
 		"New adventure starts a fresh Match board with a normal new attempt")
 	check(app.model.theme_id == "ocean" and app._favorite_reward_id == "ocean-1"
@@ -123,14 +123,14 @@ func _run() -> void:
 			wrong.append(card)
 		if wrong.size() == 2:
 			break
-	for attempt in range(3):
+	for attempt in range(5):
 		app.cards[wrong[0].id].pressed.emit()
 		app.cards[wrong[1].id].pressed.emit()
 		app._continue_match()
-	check(app.model.phase == "lost" and app.model.mistakes == 3, "Three incorrect pairs enter the shared encouragement screen")
+	check(app.model.phase == "waiting" and app.model.mistakes == 5 and app.grid.visible, "Five incorrect pairs keep the original board playable")
 	app.choose_mode("match")
 	check(app.grid.visible and app.model.cards.size() == 10 and not app._pop.visible and not app._memory.visible,
-		"Returning from loss restores the ten-card game")
+		"Selecting the active Match mode retains the ten-card game")
 	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 		root.size = dimensions
 		await process_frame

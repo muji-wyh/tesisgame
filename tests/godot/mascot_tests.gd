@@ -74,7 +74,7 @@ func _run() -> void:
 		_check_quiet_side_effects(app, directory)
 		var cards: Array = app.model.cards.duplicate(true)
 		app.duck.pressed.emit()
-		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
+		check(app.model.cards == cards and (app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3,
 			"Opening Pip's game-mode menu never changes game progress")
 		check(app._mode_menu_open() and not app.audio.voice.playing and app.duck._trick.is_empty(),
 			"The header Pip opens game modes without starting a companion trick or greeting")
@@ -88,10 +88,10 @@ func _run() -> void:
 		app.audio.halt()
 		app.duck.settle()
 		app.duck.pressed.emit()
-		check(app.model.cards == cards and app.model.successes == 0 and app.model.hints_remaining == 3,
+		check(app.model.cards == cards and (app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3,
 			"Playing with the result companion never changes earned game progress")
-		check(app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
-			"Pip's greeting plays one of the imported duck sounds")
+		check(not app.audio.voice.playing and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing),
+			"Match result Pip performs its visual trick without a duck sound")
 		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The result companion still performs its original first trick")
 		app.audio.halt()
 		app.duck.settle()
@@ -472,7 +472,7 @@ func _check_quiet_side_effects(app, directory: String) -> void:
 func _quiet_state(app) -> Array:
 	var room = app._room
 	var state = app.playroom_state
-	return [app.model.cards.duplicate(true), app.model.phase, app.model.successes, app.model.mistakes,
+	return [app.model.cards.duplicate(true), app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes,
 		app.model.hints_remaining, app.medal_progress.counts.duplicate(true),
 		state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id,
 		state.collected_word_ids.duplicate(), state.displayed_word_id, state.recent_topic_ids.duplicate(),

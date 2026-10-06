@@ -37,7 +37,7 @@ func _run() -> void:
 	_test_rounds(model_script, words)
 	_test_fresh_rounds(model_script, words)
 	_test_matching(model_script, words)
-	_test_hints_and_streaks(model_script, words)
+	_test_hints(model_script, words)
 	_test_results(model_script, words)
 	_test_data(words)
 	_test_controls()
@@ -175,7 +175,7 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		check(counts.values().count(2) == 5, "Every word has exactly one matching picture")
 		check(kinds.word == 5 and kinds.image == 5, "The board balances five words and five pictures")
 		check(model.phase == "waiting", "Rounds start waiting")
-		check(model.successes == 0 and model.mistakes == 0, "Counters reset")
+		check((model.matched_ids.size() / 2) == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
 	check(seen_themes.size() == 8, "New rounds can choose each theme")
 	# Larger topic pools need a proportional sampling budget to visit every word.
@@ -241,7 +241,7 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	var wrong: Array = wrong_pair_for(model)
 	model.select(wrong[0])
 	check(model.select(wrong[1]) == "wrong", "Unrelated opposite kinds are incorrect")
-	check(model.mistakes == 1 and model.successes == 0, "Wrong pair increments only mistakes")
+	check(model.mistakes == 1 and (model.matched_ids.size() / 2) == 0, "Wrong pair increments only mistakes")
 	check(model.phase == "feedback", "Wrong feedback locks the round")
 	check(model.select(wrong[0]) == "ignored", "Cards cannot be selected during feedback")
 	model.resolve_feedback()
@@ -249,18 +249,18 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	var pair: Array = pairs_for(model)[0]
 	model.select(pair[0])
 	check(model.select(pair[1]) == "correct", "Matching opposite kinds are correct")
-	check(model.successes == 1 and model.mistakes == 1, "Both counters accumulate independently")
+	check((model.matched_ids.size() / 2) == 1 and model.mistakes == 1, "A completed pair retains the earlier mistake record")
 	model.resolve_feedback()
 	check(model.matched_ids.size() == 2, "Both matched cards are retained as matched")
 	check(model.select(pair[0]) == "ignored", "Matched cards cannot score twice")
 
 
-func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
+func _test_hints(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	check(model.has_method("request_hint") and has_property(model, "hint_ids")
-		and has_property(model, "hints_remaining") and has_property(model, "streak"),
-		"The model supports three helpful hints and consecutive matches")
-	if not model.has_method("request_hint") or not has_property(model, "hints_remaining") or not has_property(model, "streak"):
+		and has_property(model, "hints_remaining"),
+		"The model supports three helpful hints without success or streak counters")
+	if not model.has_method("request_hint") or not has_property(model, "hints_remaining"):
 		return
 	model.reset(words, 6)
 	var deck: Array = model.cards.duplicate(true)
@@ -269,20 +269,20 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	model.select(pairs[1][1])
 	check(model.request_hint() and model.hint_ids.has(pairs[1][0]) and model.hint_ids.has(pairs[1][1]),
 		"A hint prefers the selected card's real partner")
-	check(model.hints_remaining == 2 and model.selected_id == pairs[1][1] and model.successes == 0 and model.mistakes == 0,
+	check(model.hints_remaining == 2 and model.selected_id == pairs[1][1] and (model.matched_ids.size() / 2) == 0 and model.mistakes == 0,
 		"Hints preserve a useful selection without scoring or penalizing")
 	check(not model.request_hint() and model.hints_remaining == 2,
 		"An active hint cannot spend another allowance")
-	check(model.cards == deck and model.streak == 0, "Repeated hints never shuffle or score the board")
+	check(model.cards == deck, "Repeated hints never shuffle or score the board")
 	model.set_theme("winter")
 	check(model.hint_ids.size() == 2 and model.hints_remaining == 2,
 		"Changing seasons preserves the active hint and remaining allowance")
 	model.select(pairs[1][0])
-	check(model.hint_ids.is_empty() and model.streak == 1, "Matching clears the hint and starts a streak")
+	check(model.hint_ids.is_empty(), "Matching clears the hint and records the actual pair")
 	check(not model.request_hint() and model.hints_remaining == 2,
 		"Hints cannot interrupt feedback or spend an allowance")
 	model.resolve_feedback()
-	check(model.select(pairs[1][0]) == "ignored" and model.streak == 1, "Matched cards cannot inflate a streak")
+	check(model.select(pairs[1][0]) == "ignored", "Matched cards cannot match twice")
 	check(model.request_hint() and model.hints_remaining == 1,
 		"Completing a hinted match leaves the second hint available")
 	var second_hint: Array = model.hint_ids.duplicate()
@@ -303,11 +303,11 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 		model.select(pair[0])
 		model.select(pair[1])
 		model.resolve_feedback()
-	check(model.streak == 5 and model.phase == "won" and not model.request_hint(),
-		"A five-match streak wins normally and closes hint input")
+	check(model.phase == "won" and not model.request_hint(),
+		"Completing all five pairs wins and closes hint input")
 	model.reset(words, 6)
-	check(model.streak == 0 and model.hint_ids.is_empty() and model.hints_remaining == 3,
-		"A new model round clears streaks and restores all three hints")
+	check(model.hint_ids.is_empty() and model.hints_remaining == 3,
+		"A new model round clears matched cards and restores all three hints")
 	model.select(pairs[0][0])
 	model.select(pairs[0][1])
 	check(not model.request_hint() and model.hints_remaining == 3,
@@ -332,15 +332,15 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 	var remaining: Array = pairs.slice(1)
 	model.select(remaining[0][0])
 	model.select(remaining[1][1])
-	check(model.streak == 0 and model.successes == 1 and model.mistakes == 1,
-		"A mistake resets only the streak, never earned matches")
+	check((model.matched_ids.size() / 2) == 1 and model.mistakes == 1,
+		"A mistake preserves every earned match")
 	model.resolve_feedback()
 	for count in range(2):
 		model.select(remaining[0][0])
 		model.select(remaining[1][1])
 		model.resolve_feedback()
-	check(model.phase == "lost" and model.hints_remaining == 1 and not model.request_hint(),
-		"Hints cannot revive a lost round or spend the remaining allowance")
+	check(model.phase == "waiting" and model.hints_remaining == 1 and model.request_hint()
+		and model.hints_remaining == 0, "Hints remain usable after three incorrect pairs")
 	model.reset(words, 6)
 	check(model.hints_remaining == 3 and model.request_hint() and model.hints_remaining == 2,
 		"Starting a new round restores all three hints")
@@ -349,14 +349,14 @@ func _test_hints_and_streaks(model_script: GDScript, words: Array) -> void:
 func _test_results(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	check(not model.has_method("set_practice") and not has_property(model, "practice_mode"),
-		"There is no unlimited-attempt mode or method to bypass the loss threshold")
+		"Unlimited attempts are the standard rules without a separate practice toggle")
 	model.reset(words, 27)
 	var pairs: Array = pairs_for(model)
 	for index in range(pairs.size()):
 		var pair: Array = pairs[index]
 		model.select(pair[0])
 		model.select(pair[1])
-		check(model.phase == "feedback" and model.successes == index + 1,
+		check(model.phase == "feedback" and (model.matched_ids.size() / 2) == index + 1,
 			"Every correct pair waits for feedback before a possible result")
 		model.resolve_feedback()
 		if index in [2, 3]:
@@ -365,7 +365,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 		if index == 2:
 			check(model.request_hint() and model.hints_remaining == 2 and model.hint_ids.size() == 2,
 				"A remaining hint is still available after the third match")
-	check(model.phase == "won" and model.successes == 5, "Only the fifth resolved success wins")
+	check(model.phase == "won" and (model.matched_ids.size() / 2) == 5, "Only the fifth resolved success wins")
 	check(model.select(model.cards[0].id) == "ignored", "Winning locks the board")
 	check(model.set_theme("spring"), "A closed chest follows theme selection")
 	check(has_property(model, "reward_id"), "The model stores the selected reward variant")
@@ -393,29 +393,44 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 		"A new model round clears the previous earned reward")
 	check(not model.finish_open(), "A stale opening cannot reward the new round")
 	var wrong: Array = wrong_pair_for(model)
-	for count in range(3):
+	for count in range(7):
 		model.select(wrong[0])
 		model.select(wrong[1])
 		model.resolve_feedback()
-	check(model.phase == "lost" and model.mistakes == 3, "Three mistakes lose")
-	check(not model.begin_open(), "Losing cannot grant a chest")
+	check(model.phase == "waiting" and model.mistakes == 7 and model.matched_ids.is_empty(),
+		"Seven mistakes leave the same Match board playable")
+	check(not model.begin_open(), "An incomplete board cannot grant a chest")
 	model.reset(words, 12)
 	var pair: Array = pairs_for(model)[0]
 	model.select(pair[0])
 	model.select(pair[1])
 	model.resolve_feedback()
 	wrong = wrong_pair_for(model)
-	# Use unmatched cards so the independent loss threshold is exercised.
+	# Retry unmatched cards repeatedly while preserving the earned pair.
 	for card in model.cards:
 		for other in model.cards:
 			if not card.id in model.matched_ids and not other.id in model.matched_ids:
 				if card.kind != other.kind and card.word.id != other.word.id:
 					wrong = [card.id, other.id]
-	for count in range(3):
+	for count in range(7):
 		model.select(wrong[0])
 		model.select(wrong[1])
 		model.resolve_feedback()
-	check(model.phase == "lost" and model.successes == 1, "Success does not erase earlier/later mistakes")
+	check(model.phase == "waiting" and model.matched_ids.size() == 2 and model.mistakes == 7,
+		"Seven later mistakes preserve the earned pair without ending the round")
+	check(model.request_hint(), "A hint remains available after seven mistakes")
+	for remaining_pair in pairs_for(model):
+		if model.matched_ids.has(remaining_pair[0]):
+			continue
+		model.select(remaining_pair[0])
+		model.select(remaining_pair[1])
+		model.resolve_feedback()
+	check(model.phase == "won" and model.matched_ids.size() == model.cards.size(),
+		"Matching every real card wins after unlimited retries")
+	check(model.begin_open("spring-1") and model.finish_open() and not model.finish_open(),
+		"A win after repeated mistakes earns exactly one chest")
+	check(not has_property(model, "successes") and not has_property(model, "streak"),
+		"Match stores completed cards without redundant correct or streak counters")
 
 
 func _test_data(words: Array) -> void:
@@ -581,7 +596,7 @@ func _test_audio() -> void:
 	check(controller.music.playing, "A gesture starts native background music")
 	check(controller.music.stream.loop_mode == AudioStreamWAV.LOOP_FORWARD, "Background music loops")
 	check(controller.music.stream != original and original.loop_mode == original_loop, "Loop setup does not mutate the shared WAV")
-	controller.cue("select", "wrong")
+	controller.cue("select", "spring-theme")
 	check(controller.effect.playing and controller.voice.playing, "Effects and voice use independent native channels")
 	check(is_equal_approx(db_to_linear(controller.music.volume_db), 0.04), "Speech ducks background music")
 	check(is_equal_approx(db_to_linear(controller.effect.volume_db), 0.24), "Effects have a bounded gain")
@@ -658,9 +673,8 @@ func _test_play_improvements(app) -> void:
 			and is_equal_approx(link.phase, still_phase),
 			"Reduced motion keeps the connecting arc visible and still")
 		app.set_reduced_motion(previous_reduced_motion)
-		check(app._success.is_visible_in_tree() and app._success.filled_count == 0
-			and app._success.get_parent() == app._header_duck_slot,
-			"A hint keeps ordinary progress beside Pip without adding an instruction row")
+		check(not app._success.is_visible_in_tree() and not app._mistakes.is_visible_in_tree(),
+			"A hint keeps Match free of success and mistake counters")
 		app._show_collection()
 		check(link.paused and link.active and not link.is_processing(), "Opening rewards pauses the connecting hint arc")
 		var previous_hint: Array = hinted.duplicate()
@@ -701,7 +715,7 @@ func _test_play_improvements(app) -> void:
 		if app.model.selected_id != third_hint[0]:
 			app.cards[third_hint[0]].pressed.emit()
 		app.cards[third_hint[1]].pressed.emit()
-		check(app.model.successes == 1, "Completing a hint uses an already selected card instead of cancelling it")
+		check((app.model.matched_ids.size() / 2) == 1, "Completing a hint uses an already selected card instead of cancelling it")
 		check(not link.active and not link.is_processing()
 			and app.cards[third_hint[0]].match_mark.visible and app.cards[third_hint[1]].match_mark.visible,
 			"Matching the hinted pair removes the arc and shows success badges only on the completed cards")
@@ -716,18 +730,16 @@ func _test_play_improvements(app) -> void:
 			var sparkle: Control = app.cards[pair[0]].get_node_or_null("MatchSparkle")
 			check(sparkle != null and sparkle.particle_count <= 6,
 				"Each correct card gets a small, bounded star celebration")
-			var expected_feedback: String = "%d in a row!" % app.model.streak if app.model.streak > 1 else "Great match!"
-			check(app._status_announcement.contains(expected_feedback),
-				"Correct feedback retains its accessible match or streak encouragement: streak=%d phase=%s announcement=%s message=%s save_error=%s" % [
-					app.model.streak, app.model.phase, app._status_announcement, app._message.text, app._save_error])
+			check(app._status_announcement.contains("Great match!"),
+				"Correct feedback encourages matching without a numbered streak")
 			app.feedback_timer.timeout.emit()
-		check(app.model.streak == 5 and app._success.filled_count == 5, "Consecutive matches retain their streak and exact progress")
+		check(app.model.matched_ids.size() == 10 and not app._success.is_visible_in_tree(), "Every completed pair remains matched without a score display")
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 0 and app.hint_button.disabled,
 			"Xbox X cannot exceed the three shared hints")
 		app.set_reduced_motion(true)
-		check(app.model.streak == 5 and app._success.filled_count == 5, "Reduced motion preserves the completed streak and progress")
+		check(app.model.matched_ids.size() == 10 and not app._success.is_visible_in_tree(), "Reduced motion preserves all completed cards")
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
@@ -746,7 +758,7 @@ func _test_play_improvements(app) -> void:
 		check(app.feedback_timer.paused, "Hiding the page pauses the pending automatic match transition")
 		app.on_page_visible()
 		app.feedback_timer.timeout.emit()
-		check(app.model.successes == 1, "Cancelling cosmetic feedback preserves the earned match")
+		check((app.model.matched_ids.size() / 2) == 1, "Cancelling cosmetic feedback preserves the earned match")
 	var saved_rewards: Dictionary = app.collected_rewards.duplicate()
 	var data_script: GDScript = load("res://scripts/game_data.gd")
 	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
@@ -856,15 +868,15 @@ func _test_scene() -> void:
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
 	app.choose_mode("pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
-	check(app._success.total_count == 0 and app._pop.is_visible_in_tree(),
+	check(not app._success.is_visible_in_tree() and app._pop.is_visible_in_tree(),
 		"Voice Pop shows its speaking game without card-pair progress")
 	app.choose_mode("memory")
 	check(app._success.total_count == 5 and app._mistakes.total_count == 0
 		and app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree(),
 		"Memory groups five-pair progress and an unbounded mistake count beside Pip")
 	app.choose_mode("match")
-	check(app._success.total_count == 5,
-		"Match displays its five-pair progress")
+	check(not app._success.is_visible_in_tree() and not app._mistakes.is_visible_in_tree(),
+		"Match keeps both progress counters hidden")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
@@ -1036,10 +1048,10 @@ func _test_scene() -> void:
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Matching cards keep their scale while local badges celebrate the answer")
 	if app._success.has_method("set_filled_count"):
-		check(app._success.filled_count == 1 and app._success.total_count == 5,
-			"A match fills exactly one friendly success badge")
+		check(not app._success.is_visible_in_tree() and app.model.matched_ids.size() == 2,
+			"A match records its actual cards without a score badge")
 	else:
-		check(false, "A match fills exactly one friendly success badge")
+		check(false, "A match records its actual cards without a score badge")
 	app.set_reduced_motion(true)
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Enabling reduced motion immediately stops active card animation")
@@ -1280,78 +1292,23 @@ func _test_scene() -> void:
 	app.cards[wrong[1]].pressed.emit()
 	check(app.cards[wrong[0]].rotation == 0.0 and app.cards[wrong[0]].position == wrong_start,
 		"Wrong cards keep their position and use color feedback instead of shaking")
-	if app._mistakes.has_method("set_filled_count"):
-		check(app._mistakes.filled_count == 1 and app._mistakes.total_count == 3,
-			"A mismatch fills exactly one gentle retry badge")
-	else:
-		check(false, "A mismatch fills exactly one gentle retry badge")
+	check(not app._mistakes.is_visible_in_tree() and not app._success.is_visible_in_tree(),
+		"A mismatch never introduces a retry limit or score display")
 	app.feedback_timer.timeout.emit()
-	for count in range(2):
+	var retry_cards: Array = app.model.cards.duplicate(true)
+	for count in range(6):
 		app.cards[wrong[0]].pressed.emit()
 		app.cards[wrong[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	check(app.model.phase == "lost" and app.failure_image.visible, "Failure displays the encouraging picture")
-	await process_frame
-	await process_frame
-	for result_control in [app._title, app._caption, app._new_adventure_button]:
-		check(result_control.is_visible_in_tree() and root.get_visible_rect().encloses(result_control.get_global_rect()),
-			"Loss result controls stay inside the viewport: %s %s" % [result_control.name, result_control.get_global_rect()])
-	check(app._new_adventure_button.has_focus(), "Controller focus moves to New adventure after losing")
-	check(not app.audio.music.playing, "Loss stops background music")
-	check(app.has_method("_play_loss_bear") and has_property(app, "failure_button"),
-		"The loss-screen bear is an interactive target")
-	if app.has_method("_play_loss_bear") and has_property(app, "failure_button"):
-		var loss_cards: Array = app.model.cards.duplicate(true)
-		var loss_rewards: Dictionary = app.collected_rewards.duplicate()
-		check(app.failure_button.visible and not app.failure_button.disabled,
-			"The bear can be played with only on the loss screen")
-		check(not app.collection_page.visible,
-			"The loss-screen interaction fixture is not covered by a modal")
-		app.failure_button.grab_focus()
-		check(app.failure_button.has_focus() and not app._controller_accept_needs_release,
-			"The bear has focus and controller accepts are armed before the tap")
-		joy_tap(JOY_BUTTON_A)
-		await process_frame
-		check(app._failure_tween != null and app._failure_tween.is_valid(),
-			"Controller A starts a gentle bear reaction")
-		check(app._status_announcement.contains("High five!"), "The bear gives an encouraging reaction")
-		var previous_loss_tween: Tween = app._failure_tween
-		for tap in range(5):
-			app.failure_button.pressed.emit()
-		check(previous_loss_tween != null and not previous_loss_tween.is_valid(),
-			"Rapid bear taps replace, rather than stack, animations")
-		check(app.model.phase == "lost" and app.model.mistakes == 3 and app.model.cards == loss_cards
-			and app.collected_rewards == loss_rewards, "Bear play never changes the result or grants rewards")
-		if app._failure_tween != null:
-			app._failure_tween.pause()
-			app._failure_tween.custom_step(1.0)
-		check(app._failure_tween == null and app.failure_image.scale == Vector2.ONE
-			and is_zero_approx(app.failure_image.rotation) and not app._failure_sparkle.visible,
-			"The finite bear reaction returns to its resting state")
-		app.set_reduced_motion(true)
-		check(app.failure_button.has_focus(), "Motion changes preserve the focused bear action")
-		app.failure_button.pressed.emit()
-		check(app._failure_tween == null and app.failure_image.scale == Vector2.ONE
-			and not app._failure_sparkle.visible, "Reduced motion keeps bear feedback static")
-		check(not app.audio.music.playing, "Playing with the bear never restarts lost-round music")
-		app.set_reduced_motion(false)
-		app._play_loss_bear()
-		app._show_collection()
-		check(app._failure_tween == null and not app._failure_sparkle.visible,
-			"Opening My Rewards cancels the bear's reaction")
-		app._hide_collection()
-		app._play_loss_bear()
-		app.on_page_hidden()
-		check(app._failure_tween == null and app.model.phase == "lost" and not app.audio.active,
-			"Hiding the page cancels bear play without changing the result")
-		app._play_loss_bear()
-		app.on_page_visible()
+	check(app.model.phase == "waiting" and app.model.mistakes == 7 and app.model.cards == retry_cards
+		and app.grid.is_visible_in_tree() and not app._outcome.is_visible_in_tree(),
+		"Seven incorrect pairs retain the original active board")
+	check(not has_property(app, "failure_button") and not has_property(app, "failure_image")
+		and not app.has_method("_play_loss_bear"), "Retired Match failure controls and behavior are removed")
+	win_round(app)
+	check(app.model.phase == "won" and app.model.matched_ids.size() == app.model.cards.size(),
+		"The same board completes normally after seven mistakes")
 	app.new_round(92)
-	if app.has_method("_play_loss_bear"):
-		check(not app.failure_button.visible and app._failure_tween == null,
-			"A new fixture round removes loss-screen interaction and effects")
-		app._play_loss_bear()
-		check(app._failure_tween == null, "The bear cannot react outside the loss screen")
 	var first: String = app.model.cards[0].id
 	app.cards[first].pressed.emit()
 	var second: String = wrong_pair_for(app.model)[0]

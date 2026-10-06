@@ -315,7 +315,7 @@ func _scheduled_input(frame: int) -> void:
 
 func _state() -> Dictionary:
 	match _scenario:
-		"match": return {"visible": _visible_control(_app.grid), "phase": _app.model.phase, "cards": _app.cards.size(), "matches": _app.model.successes}
+		"match": return {"visible": _visible_control(_app.grid), "phase": _app.model.phase, "cards": _app.cards.size(), "matched_cards": _app.model.matched_ids.size()}
 		"memory": return {"visible": _visible_control(_app._memory), "phase": _app._memory.memory.phase, "cards": _app._memory.card_buttons.size(), "matches": _app._memory.memory.matched_word_ids.size()}
 		"voice-pop": return {"visible": _visible_control(_app._pop), "hud_visible": _visible_control(_app._pop._hud), "phase": _app._pop.game.phase, "elapsed": _app._pop.game.elapsed, "targets": _app._pop.game.targets.size(), "draw_targets": _app._pop._draw_targets.size(), "hits": _app._pop.game.hits}
 		"room": return {"visible": _visible_control(_app._room), "playground_visible": _visible_control(_app._room.playground), "pip_visible": _visible_control(_app.duck), "pet_count": _app._room.playground._pet_count, "toy_phase": _app._room.playground.toy_phase}

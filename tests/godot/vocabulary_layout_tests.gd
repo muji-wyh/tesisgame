@@ -64,7 +64,7 @@ func _run() -> void:
 				check_label(word_cards[0].word_label, word, "Memory", dimensions)
 				check(app._memory.get_global_rect().grow(1).encloses(word_cards[0].get_global_rect()), "Memory keeps new words inside its five-pair board")
 			app.choose_mode("match")
-			for phase in ["lost", "won"]:
+			for phase in ["won"]:
 				app.model.phase = phase
 				app._refresh()
 				await settle()

@@ -184,7 +184,7 @@ func _test_pointer_matches(app) -> void:
 	app._resolve_feedback()
 	await _tap(app.cards[words[0] + ":word"])
 	await _tap(app.cards[words[0] + ":image"])
-	check(app.model.phase == "feedback" and app.model.successes == 1
+	check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1
 		and app._match_connections.connections.size() == 1 and app._match_connections.focused_id == words[0],
 		"A successful real pointer pair is connected during its immediate feedback")
 	_check_geometry(app, 1, "First success")
@@ -196,7 +196,7 @@ func _test_pointer_matches(app) -> void:
 		"The completed connection survives feedback resolution after temporary feedback IDs are cleared")
 	_check_visible_connections(app, 1, "First feedback resolved")
 	await _tap(app.cards[words[0] + ":image"])
-	check(app.model.successes == 1 and app.model.selected_id.is_empty() and _connection_snapshot(app) == first,
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.selected_id.is_empty() and _connection_snapshot(app) == first,
 		"A pointer tap on a connected card still replays its word without adding a duplicate or scoring")
 	for index in range(1, 4):
 		app._select_card(words[index] + ":image")
@@ -214,7 +214,7 @@ func _test_pointer_matches(app) -> void:
 			"Adding another pair preserves the first pair's identity, appearance and exact route")
 	_check_geometry(app, 4, "Four accumulated successes")
 	var accumulated: Dictionary = _connection_snapshot(app)
-	var successes: int = app.model.successes
+	var successes: int = (app.model.matched_ids.size() / 2)
 	var mistakes: int = app.model.mistakes
 	var matched: Array = app.model.matched_ids.duplicate()
 	for card_id in [words[0] + ":image", words[2] + ":word", words[0] + ":word", words[1] + ":image"]:
@@ -224,14 +224,14 @@ func _test_pointer_matches(app) -> void:
 			and app._match_connections.visible_connections().size() == 4
 			and app._match_connections.visible_connections().back().id == expected_id,
 			"Tapping either completed card emphasizes its own connection without hiding the other three")
-		check(app.model.successes == successes and app.model.mistakes == mistakes
+		check((app.model.matched_ids.size() / 2) == successes and app.model.mistakes == mistakes
 			and app.model.matched_ids == matched and app.model.selected_id.is_empty()
 			and _connection_snapshot(app) == accumulated,
 			"Changing completed-pair focus neither scores, selects a card nor changes any saved pairing")
 		_check_geometry(app, 4, "Completed-card pointer replay")
 	await _tap(app.cards[words[4] + ":image"])
 	await _tap(app.cards[words[2] + ":word"])
-	check(app.model.selected_id == words[4] + ":image" and app.model.successes == successes
+	check(app.model.selected_id == words[4] + ":image" and (app.model.matched_ids.size() / 2) == successes
 		and app.model.mistakes == mistakes and app._match_connections.focused_id == words[2],
 		"Replaying a completed pair preserves an in-progress unmatched selection")
 	_check_visible_connections(app, 4, "Completed replay during an unmatched selection")
@@ -255,7 +255,7 @@ func _test_responsive_and_lifecycle(app) -> void:
 		for id in before:
 			preserved = preserved and current.has(id) and current[id].lane == before[id].lane \
 				and current[id].source == before[id].source and current[id].target == before[id].target
-		check(preserved and app.model.matched_ids == matched and app.model.successes == 4
+		check(preserved and app.model.matched_ids == matched and (app.model.matched_ids.size() / 2) == 4
 			and app._match_connections.focused_id == focused,
 			"Resize reroutes the same four pairs without rebuilding cards, changing focus or altering progress")
 	root.size = Vector2i(390, 844)
@@ -352,7 +352,7 @@ func _test_voice_retention(app) -> void:
 	app._on_voice_result([word.text, true])
 	app.feedback_timer.paused = true
 	await settle()
-	check(app.model.successes == 2 and app._voice_match_link.active
+	check((app.model.matched_ids.size() / 2) == 2 and app._voice_match_link.active
 		and app._match_connections.connections.size() == 2 and app._match_connections.focused_id == word_id,
 		"A spoken success adds its connection and temporary electric effect beside the earlier completed line")
 	_check_visible_connections(app, 2, "Spoken success feedback")

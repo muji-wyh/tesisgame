@@ -66,7 +66,7 @@ func _test_candidates(model_script: GDScript, words: Array) -> void:
 		"Defensive candidate checks reject incomplete pairs without scoring")
 	check(model.spoken_matches("nothing relevant") == [], "Unrelated speech has no candidates")
 	check(model.spoken_matches("") == [], "Empty speech has no candidates")
-	check(model.successes == 0 and model.mistakes == 0 and model.phase == "waiting",
+	check((model.matched_ids.size() / 2) == 0 and model.mistakes == 0 and model.phase == "waiting",
 		"Candidate discovery never changes scoring or phase")
 	check(signals[0] == 0 and model.selected_id.is_empty() and model.matched_ids.is_empty(),
 		"Candidate discovery is read-only and emits no gameplay changes")
@@ -110,10 +110,10 @@ func _test_homophones(model_script: GDScript, words: Array) -> void:
 				"Numbers, possessives, and larger Unicode tokens cannot manufacture the alias " + alternative)
 			check(model.spoken_matches(alternative + " " + word.text + " " + alternative) == [word.id],
 				"Repeated equivalent spellings queue the illustrated pair only once: " + word.text)
-		check(model.successes == 0 and model.matched_ids.is_empty(), "Alias discovery stays read-only for " + word.text)
+		check((model.matched_ids.size() / 2) == 0 and model.matched_ids.is_empty(), "Alias discovery stays read-only for " + word.text)
 		var candidates: Array = model.spoken_matches(fixture[1])
 		check(candidates.size() == 1 and model.match_spoken_word(candidates[0]) == "correct"
-			and model.successes == 1 and model.matched_ids == [word.id + ":word", word.id + ":image"],
+			and (model.matched_ids.size() / 2) == 1 and model.matched_ids == [word.id + ":word", word.id + ":image"],
 			"Homophone scoring uses the real pair and canonical ID: " + word.text)
 		check(model.spoken_matches(fixture[1]).is_empty(), "Matched pairs cannot be queued again through an alias")
 	for fixture in [
@@ -205,7 +205,7 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 	check(model.match_spoken_word("doll") == "correct", "A spoken word matches its real pair")
 	check(changes == ["matching", "feedback"], "Voice matching routes through both select calls")
 	model.changed.disconnect(observe_changes)
-	check(model.successes == 1 and model.streak == 1 and model.mistakes == 0,
+	check((model.matched_ids.size() / 2) == 1 and model.mistakes == 0,
 		"Clearing the unrelated manual selection causes no mistake")
 	check(model.selected_id.is_empty() and model.feedback_ids == ["doll:word", "doll:image"],
 		"Spoken matches use normal pair feedback and clear manual selection")
@@ -213,37 +213,37 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 		"Normal select scoring records the actual matched cards")
 	check(model.hints_remaining == 2 and model.hint_ids.is_empty() and not model.request_hint(),
 		"Voice feedback neither refills nor spends another hint")
-	check(model.match_spoken_word("cat") == "ignored" and model.successes == 1,
+	check(model.match_spoken_word("cat") == "ignored" and (model.matched_ids.size() / 2) == 1,
 		"Feedback locks spoken scoring")
 	model.resolve_feedback()
 	check(model.request_hint() and model.hints_remaining == 1,
 		"Voice and manual play share the second hint")
 	model.select(model.hint_ids[0])
 	model.select(model.hint_ids[0])
-	check(model.match_spoken_word("doll") == "ignored" and model.successes == 1,
+	check(model.match_spoken_word("doll") == "ignored" and (model.matched_ids.size() / 2) == 1,
 		"A repeated spoken word cannot score twice")
 	model.select("cat:image")
-	check(model.match_spoken_word("cat") == "correct" and model.streak == 2,
+	check(model.match_spoken_word("cat") == "correct",
 		"Selecting one half manually still permits exactly one spoken match")
 	model.resolve_feedback()
 	check(model.match_spoken_word("sun") == "correct" and model.phase == "feedback",
 		"The third spoken match still waits for feedback resolution")
-	check(model.successes == 3 and model.streak == 3 and model.mistakes == 0,
-		"Three spoken matches retain the existing success and streak rules")
+	check((model.matched_ids.size() / 2) == 3 and model.mistakes == 0,
+		"Three spoken matches retain six completed cards without mistakes")
 	model.resolve_feedback()
-	check(model.phase == "waiting" and model.successes == 3,
+	check(model.phase == "waiting" and (model.matched_ids.size() / 2) == 3,
 		"The third spoken match leaves the round active")
-	check(model.match_spoken_word("dog") == "correct" and model.successes == 4, "The fourth lesson word scores through speech")
+	check(model.match_spoken_word("dog") == "correct" and (model.matched_ids.size() / 2) == 4, "The fourth lesson word scores through speech")
 	model.resolve_feedback()
-	check(model.phase == "waiting" and model.successes == 4,
+	check(model.phase == "waiting" and (model.matched_ids.size() / 2) == 4,
 		"The fourth spoken match leaves one real pair available")
-	check(model.match_spoken_word("boat") == "correct" and model.phase == "feedback" and model.successes == 5,
+	check(model.match_spoken_word("boat") == "correct" and model.phase == "feedback" and (model.matched_ids.size() / 2) == 5,
 		"The fifth spoken match waits for normal feedback")
 	model.resolve_feedback()
 	check(model.phase == "won", "Resolving the fifth spoken match wins the round")
 	check(model.spoken_matches("doll cat sun boat dog") == [],
 		"Late recognition candidates are ignored after winning")
-	check(model.match_spoken_word("cat") == "ignored" and model.successes == 5,
+	check(model.match_spoken_word("cat") == "ignored" and (model.matched_ids.size() / 2) == 5,
 		"Late spoken scoring cannot change a won round")
 	check(model.hints_remaining == 1 and not model.request_hint(),
 		"Winning through speech cannot refill or spend the remaining hint")
@@ -251,23 +251,24 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 
 func _test_locks(model_script: GDScript, words: Array) -> void:
 	var model = _board(model_script, words)
-	for attempt in range(3):
+	for attempt in range(7):
 		model.select("boat:word")
 		model.select("dog:image")
 		check(model.match_spoken_word("doll") == "ignored",
 			"Spoken scoring cannot skip a wrong-feedback lock")
 		model.resolve_feedback()
-	check(model.phase == "lost" and model.mistakes == 3, "Three mistakes still end voice rounds")
-	check(model.spoken_matches("I see a doll") == [],
-		"Late recognition candidates are ignored after losing")
-	check(model.match_spoken_word("doll") == "ignored" and model.successes == 0 and model.mistakes == 3,
-		"Voice matching cannot revive a lost round or reset mistakes")
+	check(model.phase == "waiting" and model.mistakes == 7,
+		"Seven mistakes leave spoken Match available")
+	check(model.spoken_matches("I see a doll") == ["doll"],
+		"Recognition still finds unmatched words after repeated mistakes")
+	check(model.match_spoken_word("doll") == "correct" and model.matched_ids.size() == 2 and model.mistakes == 7,
+		"Spoken matching completes its real pair without resetting earlier mistakes")
 	model = _board(model_script, words)
 	model.select("boat:word")
 	model.select("dog:image")
 	model.resolve_feedback()
-	check(model.match_spoken_word("doll") == "correct" and model.mistakes == 1 and model.streak == 1,
-		"A later spoken match preserves prior mistakes and starts the normal streak")
+	check(model.match_spoken_word("doll") == "correct" and model.mistakes == 1,
+		"A later spoken match preserves prior mistakes and records its pair")
 
 
 func _test_vocabulary(model_script: GDScript, words: Array) -> void:

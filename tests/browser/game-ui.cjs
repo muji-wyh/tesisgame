@@ -182,8 +182,8 @@ function pipHeaderRect(bounds) {
   return { x: content.x, y: content.padding + 2 / scale, width: 52 / scale, height: 52 / scale };
 }
 
-function progressRegion(bounds, mode = 'match') {
-  if (!['match', 'memory'].includes(mode)) throw new Error('Only Match and Memory have header score badges.');
+function progressRegion(bounds, mode = 'memory') {
+  if (mode !== 'memory') throw new Error('Only Memory has header progress badges.');
   const { x, padding } = contentBounds(bounds), scale = uiScale(bounds);
   return { x: x + 60 / scale, y: padding + 5 / scale, width: 70 / scale, height: 46 / scale };
 }

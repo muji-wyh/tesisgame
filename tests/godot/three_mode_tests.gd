@@ -68,13 +68,13 @@ func _run() -> void:
 	app.cards[pairs[0] + ":word"].pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + word.audio),
 		"A matched card pronounces its exact word")
-	check(app.model.successes == 1 and app.model.hints_remaining == hints, "Replaying a matched card cannot score or spend hints")
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.hints_remaining == hints, "Replaying a matched card cannot score or spend hints")
 	app._show_collection()
 	await create_timer(0.8).timeout
-	check(app.model.phase == "feedback" and app.model.successes == 1, "More pauses automatic Match feedback")
+	check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1, "More pauses automatic Match feedback")
 	app._hide_collection()
 	await create_timer(0.8).timeout
-	check(app.model.phase == "waiting" and app.model.successes == 1, "The next pair is ready without extra confirmation")
+	check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 1, "The next pair is ready without extra confirmation")
 	app.cards[pairs[1] + ":word"].pressed.emit()
 	app.cards[pairs[2] + ":image"].pressed.emit()
 	check(not app.feedback_timer.is_stopped() and not app._message.is_visible_in_tree(), "Wrong feedback also stays on the board")

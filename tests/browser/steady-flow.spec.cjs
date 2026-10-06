@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint,
-  memoryMetrics, memoryPoint, resultPoint, progressRegion, visibleColorCount } = require('./game-ui.cjs');
+  memoryMetrics, memoryPoint, resultPoint, visibleColorCount } = require('./game-ui.cjs');
 
 async function click(page, point) {
   await tap(page, point.x, point.y);
@@ -22,11 +22,6 @@ async function patch(page, point, width = 48, height = 28) {
     x: bounds.x + (point.x - width / 2) * bounds.scale, y: bounds.y + (point.y - height / 2) * bounds.scale,
     width: width * bounds.scale, height: height * bounds.scale
   } });
-}
-
-async function progressPatch(page, bounds) {
-  const region = progressRegion(bounds);
-  return patch(page, { x: region.x + region.width / 2, y: region.y + region.height / 2 }, region.width, region.height);
 }
 
 async function shot(page, testInfo, name) {
@@ -144,34 +139,26 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
   await chooseMode(page, 'match');
   const beforeGeometry = await geometry(page), bounds = await metrics(page);
   const { cards, pairs } = await matchCards(page, bounds);
-  const progress = () => progressPatch(page, bounds);
   await click(page, pairs[0][0].point);
   await click(page, pairs[1][1].point);
   await expect(page.locator('#game-status')).toContainText('Not quite.');
-  const afterWrong = await progress();
   await shot(page, testInfo, 'responsive-match-wrong');
   await click(page, pairs[2][0].point);
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[2][0].word}`);
   await expect(page.locator('#game-status')).toContainText('Now find its match!');
-  expect((await progress()).equals(afterWrong), 'Selecting a card to leave feedback cannot change either score.').toBe(true);
   await shot(page, testInfo, 'responsive-match-selected-from-wrong');
   await page.keyboard.press('Space');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.keyboard.press('Enter');
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[2][0].word}`);
-  expect((await progress()).equals(afterWrong)).toBe(true);
   await click(page, pairs[2][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');
-  const afterCorrect = await progress();
-  expect(afterCorrect.equals(afterWrong), 'An actual correct answer changes the success badges.').toBe(false);
   await shot(page, testInfo, 'responsive-match-correct');
   await click(page, pairs[2][0].point);
   await expect(page.locator('#game-status')).toHaveText(`${pairs[2][0].word}. Look at the picture and say the word.`);
   await expect(page.locator('#selection-status')).toBeEmpty();
-  expect((await progress()).equals(afterCorrect), 'Replaying a matched card cannot count another pair.').toBe(true);
   await click(page, pairs[0][0].point);
   await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0].word}`);
-  expect((await progress()).equals(afterCorrect)).toBe(true);
   await shot(page, testInfo, 'responsive-match-selected-from-correct');
   await click(page, pairs[0][1].point);
   await expect(page.locator('#game-status')).toContainText('Great match!');

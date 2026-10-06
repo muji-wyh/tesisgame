@@ -42,7 +42,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const source of [
     'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
-    'assets/audio/voice/wrong.wav', 'assets/audio/voice/loss.wav'
+    'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav'
   ]) {
     assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
       `Active audio must be included in the game pack: ${source}`);
@@ -99,6 +99,8 @@ test('accessible help describes the current controls rather than the removed mot
   assert.ok(help, 'The canvas needs accessible gameplay instructions.');
   assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button/i);
   assert.match(help, /device.*reduced-motion/i);
+  assert.match(help, /Keep trying until every pair is matched/);
+  assert.doesNotMatch(shell, /speech-successes|speech-mistakes|speech-score|roundProgress|Three mistakes/);
 });
 
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
@@ -167,7 +169,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   assert.ok(reference.every(asset => asset.imported.startsWith('res://.godot/imported/') && asset.bytes.length > 4));
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
-  fixture.writeImport('assets/audio/sfx/match-voice-hit.wav');
+  require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -175,18 +177,45 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 102);
+  assert.equal(required.length, 103);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
-  assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/match-voice-hit.wav'),
-    'The successful voice-match cue ships in the startup pack without a later fetch');
+  for (const id of ['right', 'wrong']) {
+    assert.ok(required.some(asset => asset.source === `res://assets/imported-audio/pair-feedback/${id}.wav`),
+      'Pair feedback ships in the startup pack without a later fetch');
+  }
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
     'Retired adventure audio is no longer a required packaging input');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),
     'Reference slices remain required pack resources without an HTTP audio map');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/pop/')),
     'Retired report narration is not a required packaging input');
+});
+
+test('pair feedback is required and rejects missing, extra, tampered, and malformed recordings', t => {
+  const fixture = referenceBankFixture(t, false);
+  const { collectPairFeedbackAudio } = require('../tools/package-web.cjs');
+  assert.throws(() => collectPairFeedbackAudio(fixture.directory), /ENOENT/);
+  const pair = require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
+  assert.deepEqual(collectPairFeedbackAudio(fixture.directory).map(asset => asset.source),
+    pair.assets.map(asset => `res://${asset.destination}`));
+  const filename = path.join(fixture.directory, pair.assets[0].destination);
+  const original = fs.readFileSync(filename);
+  fs.unlinkSync(filename);
+  assert.throws(() => collectPairFeedbackAudio(fixture.directory), /requires exactly/);
+  fs.writeFileSync(filename, original);
+  const extra = path.join(path.dirname(filename), 'extra.wav');
+  fs.writeFileSync(extra, original);
+  assert.throws(() => collectPairFeedbackAudio(fixture.directory), /requires exactly/);
+  fs.unlinkSync(extra);
+  const invalid = Buffer.from(original);
+  invalid.writeUInt16LE(2, 22);
+  fs.writeFileSync(filename, invalid);
+  assert.throws(() => collectPairFeedbackAudio(fixture.directory), /hash mismatch/);
+  pair.assets[0].sha256 = require('node:crypto').createHash('sha256').update(invalid).digest('hex');
+  pair.writeManifest();
+  assert.throws(() => collectPairFeedbackAudio(fixture.directory), /Invalid mono PCM16/);
 });
 
 test('a partial or ambiguous Voice Pop reference bank fails instead of shipping mixed fallback audio', t => {
@@ -269,7 +298,7 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     for (const [name, bytes] of Object.entries(files)) fs.writeFileSync(path.join(directory, name), bytes);
     fs.writeFileSync(path.join(directory, 'index.html'),
       `<script src="index.js"></script><script>const config = ${JSON.stringify({
-        executable: 'index', args: [], audioAssets: { 'res://assets/audio/voice/wrong.wav': 'retired.sample' }, fileSizes: {
+        executable: 'index', args: [], audioAssets: { 'res://assets/audio/voice/spring-theme.wav': 'retired.sample' }, fileSizes: {
           'index.wasm': files['index.wasm'].length,
           'index.pck': files['index.pck'].length
         }

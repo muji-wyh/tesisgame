@@ -68,10 +68,10 @@ func _run() -> void:
 	app._update_duck()
 	check(app.duck._proactive_allowed, "Normal play explicitly enables Pip's quiet invitations")
 	var original: Array = [app.model.cards.duplicate(true), app.model.hints_remaining,
-		app.model.successes, app.model.mistakes, app._status_announcement, app.playroom_state.toy_id]
+		(app.model.matched_ids.size() / 2), app.model.mistakes, app._status_announcement, app.playroom_state.toy_id]
 	check(not observe_idle(app, 5.5) and observe_idle(app, 3.6)
 		and app.duck._idle_action == "dance-wave", "Pip's first quiet invitation is a dance within 6–9 seconds")
-	check([app.model.cards, app.model.hints_remaining, app.model.successes, app.model.mistakes,
+	check([app.model.cards, app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes,
 		app._status_announcement, app.playroom_state.toy_id] == original and not app.audio.voice.playing,
 		"Invitations never change the game, choices, status or audio")
 	app.duck._idle_action = "wave"
@@ -88,7 +88,7 @@ func _run() -> void:
 	check(not observe_idle(app, 20), "A second held finger keeps Pip quiet after the first finger lifts")
 	touch(app, 1, false)
 	check(not observe_idle(app, 5.5) and observe_idle(app, 4), "Releasing the final pointer starts a new invitation interval")
-	for phase in ["feedback", "won", "lost"]:
+	for phase in ["feedback", "won"]:
 		app.model.phase = phase
 		check(not observe_idle(app, 20), "Pip does not interrupt " + phase + " with an unsolicited invitation")
 	app.model.phase = "waiting"

@@ -11,8 +11,11 @@ const POP_HIT_GAIN := 0.24
 const POP_LAUNCH_PATH := "res://assets/imported-audio/pop-reference/launch.wav"
 const POP_LAUNCH_FALLBACK := "res://assets/audio/sfx/pop-launch.wav"
 const POP_LAUNCH_GAIN := 0.16
-const MATCH_VOICE_HIT_PATH := "res://assets/audio/sfx/match-voice-hit.wav"
-const MATCH_VOICE_HIT_GAIN := 0.48
+const PAIR_FEEDBACK_PATHS := {
+	true: "res://assets/imported-audio/pair-feedback/right.wav",
+	false: "res://assets/imported-audio/pair-feedback/wrong.wav",
+}
+const PAIR_FEEDBACK_GAIN := 0.48
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -40,7 +43,7 @@ var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var pip_reaction: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
-var match_voice_hit: AudioStreamPlayer
+var pair_feedback: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var muted: bool = false
 var active: bool = false
@@ -105,8 +108,9 @@ func _ready() -> void:
 		_pop_launch_path = POP_LAUNCH_PATH
 		cache[POP_LAUNCH_PATH] = launch_stream
 	_stream(_pop_launch_path)
-	match_voice_hit = _player(MATCH_VOICE_HIT_GAIN)
-	_stream(MATCH_VOICE_HIT_PATH)
+	pair_feedback = _player(PAIR_FEEDBACK_GAIN)
+	for path: String in PAIR_FEEDBACK_PATHS.values():
+		_stream(path)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -166,14 +170,15 @@ func _play_pop_slice() -> void:
 	_play(player, _next_pop_slice())
 
 
-func play_match_voice_hit() -> void:
+func play_pair_feedback(correct: bool) -> void:
 	if not muted and active and available and _speech_debug_mix > 0.0:
-		_play(match_voice_hit, MATCH_VOICE_HIT_PATH)
+		_play(pair_feedback, PAIR_FEEDBACK_PATHS[correct])
 
 
-func stop_match_voice_hit() -> void:
-	if match_voice_hit != null:
-		_stop(match_voice_hit)
+func stop_pair_feedback() -> void:
+	if pair_feedback != null:
+		_stop(pair_feedback)
+		pair_feedback.stream = null
 
 
 func last_pop_player() -> AudioStreamPlayer:
@@ -257,13 +262,13 @@ func set_speech_debug_mix(value: float) -> bool:
 		player.volume_db = linear_to_db(maxf(0.0001, POP_HIT_GAIN * value))
 	if pop_launch != null:
 		pop_launch.volume_db = linear_to_db(maxf(0.0001, POP_LAUNCH_GAIN * value))
-	if match_voice_hit != null:
-		match_voice_hit.volume_db = linear_to_db(maxf(0.0001, MATCH_VOICE_HIT_GAIN * value))
+	if pair_feedback != null:
+		pair_feedback.volume_db = linear_to_db(maxf(0.0001, PAIR_FEEDBACK_GAIN * value))
 	if pip_reaction != null:
 		pip_reaction.volume_db = linear_to_db(maxf(0.0001, _pip_reaction_gain * value))
 	if value == 0.0:
 		stop_pop_sounds()
-		stop_match_voice_hit()
+		stop_pair_feedback()
 		stop_pip_reaction()
 	return true
 
@@ -666,10 +671,10 @@ func stop_voice() -> void:
 		_stop(voice)
 
 
-func halt(keep_match_voice_hit: bool = false) -> void:
+func halt(keep_pair_feedback: bool = false) -> void:
 	active = false
-	if not keep_match_voice_hit:
-		stop_match_voice_hit()
+	if not keep_pair_feedback:
+		stop_pair_feedback()
 	stop_pop_sounds()
 	stop_pip_reaction()
 	stop_chest_performance()

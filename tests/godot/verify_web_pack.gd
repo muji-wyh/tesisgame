@@ -54,7 +54,7 @@ func _verify() -> void:
 			failures += 1
 	var required := OS.get_cmdline_user_args()
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
-	var effects := ["select", "correct", "wrong", "loss"]
+	var effects := ["select", "correct"]
 	for theme in themes:
 		effects.append(theme + "-arrive")
 	for effect in effects:
@@ -62,6 +62,17 @@ func _verify() -> void:
 		var stream: AudioStream = load(path) if ResourceLoader.exists(path) else null
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("A game effect is missing or invalid in the startup pack: " + path)
+			failures += 1
+	for path: String in load("res://scripts/game_audio.gd").PAIR_FEEDBACK_PATHS.values():
+		var stream: AudioStreamWAV = load(path) if ResourceLoader.exists(path) else null
+		if stream == null or stream.mix_rate != 44100 or stream.format != AudioStreamWAV.FORMAT_16_BITS \
+			or stream.loop_mode != AudioStreamWAV.LOOP_DISABLED or stream.get_length() < 0.7 or stream.get_length() > 1.0:
+			printerr("A supplied pair feedback effect is missing or invalid in the startup pack: " + path)
+			failures += 1
+	for path in ["res://assets/audio/voice/wrong.wav", "res://assets/audio/voice/loss.wav",
+		"res://assets/audio/sfx/wrong.wav", "res://assets/audio/sfx/loss.wav", "res://assets/audio/sfx/match-voice-hit.wav"]:
+		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
+			printerr("A retired Match sound is still bundled: " + path)
 			failures += 1
 	for path in load("res://scripts/game_audio.gd").PIP_SOUND_PATHS:
 		var greeting: AudioStream = load(path) if ResourceLoader.exists(path) else null

@@ -121,7 +121,7 @@ func _check_audio_recovery(app) -> void:
 	app.on_page_visible()
 	check(not app.audio.active and not app.audio.music.playing,
 		"A page that was silent before hiding does not acquire new playback on return")
-	for guard in ["muted", "unavailable", "voice", "pop", "lost"]:
+	for guard in ["muted", "unavailable", "voice", "pop"]:
 		app.audio.available = true
 		app.audio.set_muted(false)
 		app.audio.interact(app.model.theme_id)
@@ -132,7 +132,6 @@ func _check_audio_recovery(app) -> void:
 			"unavailable": app.audio.available = false
 			"voice": app._voice_mode = true
 			"pop": app._pop_speech_active = true
-			"lost": app.model.phase = "lost"
 		app.on_page_visible()
 		check(not app.audio.active and not app.audio.music.playing,
 			"Foreground recovery respects the " + guard + " playback guard")

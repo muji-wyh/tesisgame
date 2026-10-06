@@ -1,0 +1,57 @@
+{
+  "source": {
+    "file": "right_and_wrong.mp4",
+    "suppliedPath": "C:/uworks/right_and_wrong.mp4",
+    "sha256": "51807fedc4d376ef328570e067ce4f14571ef0e1316dc29278f3592cddb5a48f",
+    "seconds": 7.166667,
+    "sampleRate": 44100,
+    "channels": 1,
+    "codec": "AAC LC",
+    "creator": "Duolingo as identified in the supplied screen recording; original sound designer unknown",
+    "license": "Not supplied. User explicitly requested extraction and use in this game; no independent redistribution license is asserted.",
+    "status": "Acquired from the user and extracted locally; shipped inside the compiled game pack only"
+  },
+  "processing": {
+    "decoder": "FFmpeg floating-point AAC decode",
+    "gain": 1.5,
+    "attackSeconds": 0.002,
+    "releaseSeconds": 0.02,
+    "runtimeGain": 0.48,
+    "runtimePlaybackRate": 1,
+    "maxSimultaneousAnswers": 1
+  },
+  "assets": [
+    {
+      "id": "right",
+      "destination": "assets/imported-audio/pair-feedback/right.wav",
+      "sha256": "3ba79c5371fcf20564de7c558f1131e63a5b0058204234364f6206e5274a3f44",
+      "seconds": 0.82,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -3.6142,
+      "rmsDbfs": -22.7019,
+      "window": {
+        "id": "right",
+        "start": 4.32,
+        "seconds": 0.82
+      }
+    },
+    {
+      "id": "wrong",
+      "destination": "assets/imported-audio/pair-feedback/wrong.wav",
+      "sha256": "0834c76d9b0a14195b573b3da90133b3ad6d0db3058d9d09c8f7d3cb618749d4",
+      "seconds": 0.86,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -6.2962,
+      "rmsDbfs": -26.6494,
+      "window": {
+        "id": "wrong",
+        "start": 2.122,
+        "seconds": 0.86
+      }
+    }
+  ]
+}

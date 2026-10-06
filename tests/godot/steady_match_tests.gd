@@ -102,7 +102,7 @@ func _run() -> void:
 		check(app.model.phase == "waiting", "Back dismisses feedback without selecting or scoring a card")
 		await settle()
 		check_board(app, before, "Back after correct")
-		check(app.model.successes == 1 and app.model.mistakes == 1, "Exactly one match and mistake recorded")
+		check((app.model.matched_ids.size() / 2) == 1 and app.model.mistakes == 1, "Exactly one match and mistake recorded")
 		app.cards[pairs[1] + ":word"].pressed.emit()
 		app.cards[pairs[2] + ":image"].pressed.emit()
 		var next: String = pairs[2] + ":word"
@@ -115,7 +115,7 @@ func _run() -> void:
 		app._hide_collection()
 		app.cards[next].pressed.emit()
 		check(app.model.phase == "matching" and app.model.selected_id == next, "The first tap after a mistake selects that exact card")
-		check(app.model.mistakes == 2 and app.model.successes == 1, "Continuing by card does not score another attempt")
+		check(app.model.mistakes == 2 and (app.model.matched_ids.size() / 2) == 1, "Continuing by card does not score another attempt")
 		check(app.model.feedback_ids.is_empty() and root.gui_get_focus_owner() == app.cards[next],
 			"The tapped card clears old feedback and owns visible selection and keyboard focus")
 		app._continue_match()
@@ -128,12 +128,12 @@ func _run() -> void:
 		app.cards[pairs[1] + ":image"].pressed.emit()
 		app.cards[pairs[1] + ":word"].pressed.emit()
 		check(app.model.phase == "feedback" and not app.cards[pairs[1] + ":word"].disabled
-			and app.model.successes == 2 and app.model.selected_id.is_empty(),
+			and (app.model.matched_ids.size() / 2) == 2 and app.model.selected_id.is_empty(),
 			"Replaying a completed card cannot dismiss feedback, select it, or score twice")
 		app.cards[next].pressed.emit()
-		check(app.model.selected_id == next and app.model.successes == 2, "Correct feedback also accepts the first tap on another card")
+		check(app.model.selected_id == next and (app.model.matched_ids.size() / 2) == 2, "Correct feedback also accepts the first tap on another card")
 		app.cards[pairs[2] + ":image"].pressed.emit()
-		check(app.model.phase == "feedback" and app.model.successes == 3, "The third pair scores exactly once without ending play")
+		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 3, "The third pair scores exactly once without ending play")
 		check_feedback(app, [next, pairs[2] + ":image"], true)
 		app._continue_match()
 		check(app.model.phase == "waiting" and not app.hint_button.disabled,
@@ -147,19 +147,19 @@ func _run() -> void:
 			app.cards[hinted[0]].pressed.emit()
 		app.cards[hinted[1]].pressed.emit()
 		app._continue_match()
-		check(app.model.phase == "waiting" and app.model.successes == 4 and app.grid.is_visible_in_tree(),
+		check(app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 4 and app.grid.is_visible_in_tree(),
 			"The fourth match leaves the final pair playable without showing the chest")
 		var final_word: String = pairs.filter(func(id: String) -> bool: return not app.model.matched_ids.has(id + ":word"))[0]
 		app.cards[final_word + ":word"].pressed.emit()
 		app.cards[final_word + ":image"].pressed.emit()
-		check(app.model.phase == "feedback" and app.model.successes == 5, "The fifth pair scores exactly once before the result")
+		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 5, "The fifth pair scores exactly once before the result")
 		var final_hints: int = app.model.hints_remaining
 		app._request_hint()
 		check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_remaining == final_hints,
 			"Hint cannot bypass the terminal feedback timer or spend unused allowance")
 		var completed_card: String = final_word + ":word"
 		app.cards[completed_card].pressed.emit()
-		check(app.model.phase == "feedback" and app.model.successes == 5 and app.model.selected_id.is_empty(),
+		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 5 and app.model.selected_id.is_empty(),
 			"Tapping a completed card during final feedback neither rescores nor starts another selection")
 		await create_timer(0.8).timeout
 		check(app.model.phase == "won" and app.model.selected_id.is_empty(),
@@ -167,7 +167,7 @@ func _run() -> void:
 		check(root.gui_get_focus_owner() == app.chest_button, "The winning result keeps chest focus")
 		app.cards[completed_card].pressed.emit()
 		app._continue_match()
-		check(app.model.phase == "won" and app.model.successes == 5 and app.model.mistakes == 2, "Repeated result input neither restarts nor scores")
+		check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5 and app.model.mistakes == 2, "Repeated result input neither restarts nor scores")
 	app.new_round(21, true)
 	var wrong: Array = []
 	for card in app.model.cards:
@@ -175,17 +175,17 @@ func _run() -> void:
 			wrong.append(card)
 		if wrong.size() == 2:
 			break
-	for attempt in range(3):
+	for attempt in range(5):
 		app.cards[wrong[0].id].pressed.emit()
 		app.cards[wrong[1].id].pressed.emit()
-		if attempt < 2:
+		if attempt < 4:
 			app._continue_match()
 	check(app.model.phase == "feedback" and not app.feedback_timer.is_stopped(),
-		"The third mistake retains its brief on-board feedback")
+		"The fifth mistake retains its brief on-board feedback")
 	await create_timer(0.8).timeout
-	check(app.model.phase == "lost" and app.model.selected_id.is_empty() and app.model.mistakes == 3,
-		"The third mistake automatically advances to loss without another attempt")
-	check(root.gui_get_focus_owner() == app._new_adventure_button, "The losing result focuses New adventure")
+	check(app.model.phase == "waiting" and app.model.selected_id.is_empty() and app.model.mistakes == 5,
+		"The fifth mistake automatically returns to the playable board")
+	check(app.cards.values().has(root.gui_get_focus_owner()), "Repeated mistakes keep focus on the board")
 	app.new_round(21, true)
 	await settle()
 	var before_mismatch: Dictionary = board_state(app)
@@ -256,7 +256,7 @@ func check_feedback_hints(app) -> void:
 		check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL
 			and app.hint_button.count == 2,
 			"Both correct and wrong nonfinal feedback keep two hints available")
-		var successes: int = app.model.successes
+		var successes: int = (app.model.matched_ids.size() / 2)
 		var mistakes: int = app.model.mistakes
 		app._show_collection()
 		app._layout()
@@ -269,7 +269,7 @@ func check_feedback_hints(app) -> void:
 		app.hint_button.pressed.emit()
 		check(app.model.phase == "waiting" and app.model.hints_remaining == 1 and app.model.hint_ids.size() == 2,
 			"One Hint press acknowledges feedback and highlights a remaining pair")
-		check(app.model.successes == successes and app.model.mistakes == mistakes,
+		check((app.model.matched_ids.size() / 2) == successes and app.model.mistakes == mistakes,
 			"Hint never scores an extra match or mistake")
 		check(app.model.feedback_ids.is_empty() and app.model.hint_ids.all(
 			func(id: String) -> bool: return not app.model.matched_ids.has(id)),
@@ -292,12 +292,12 @@ func check_feedback_hints(app) -> void:
 	check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL,
 		"Stopping voice immediately restores the manual feedback Hint")
 	app._request_hint()
-	check(app.model.hints_remaining == 1 and app.model.successes == 1,
+	check(app.model.hints_remaining == 1 and (app.model.matched_ids.size() / 2) == 1,
 		"Hint after leaving voice continues manually without scoring twice")
 	app.new_round(21, true)
 	app._request_hint()
 	var pair: Array = app.model.hint_ids.duplicate()
-	for attempt in range(3):
+	for attempt in range(5):
 		app.cards[pair[0]].pressed.emit()
 		var wrong: String = ""
 		for card in app.model.cards:
@@ -305,8 +305,8 @@ func check_feedback_hints(app) -> void:
 				wrong = card.id
 				break
 		app.cards[wrong].pressed.emit()
-		if attempt < 2:
+		if attempt < 4:
 			app._continue_match()
 	app._request_hint()
-	check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_remaining == 2,
-		"Hint cannot skip the third-mistake result or consume remaining allowance")
+	check(app.model.phase == "waiting" and app.model.hints_remaining == 1 and app.model.hint_ids.size() == 2,
+		"Hint clears fifth-mistake feedback and spends one remaining allowance")

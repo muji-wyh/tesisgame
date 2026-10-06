@@ -90,7 +90,7 @@ func _run() -> void:
 	app.audio.set_muted(false)
 	app._select_card("ball:word")
 	app._select_card("ball:image")
-	check(app.model.successes == 1 and app.model.phase == "feedback",
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.phase == "feedback",
 		"Picture play preserves normal matching")
 	check(app.audio.voice.stream == load("res://assets/audio/voice/word-ball.wav"),
 		"Correct Match repeats its actual noun instead of generic praise")
@@ -99,11 +99,11 @@ func _run() -> void:
 	if picture_card.get("_word_play") != null:
 		check(picture_card._word_play.get("_tween") != null, "A successful pair plays its picture")
 		app._continue_match()
-		var snapshot: Array = [app.model.successes, app.model.mistakes, app.model.hints_remaining, app.model.selected_id]
+		var snapshot: Array = [(app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining, app.model.selected_id]
 		app._select_card("ball:word")
 		check(picture_card._word_play.get("_tween") != null,
 			"Replaying the completed word reacts on the matching picture")
-		check(snapshot == [app.model.successes, app.model.mistakes, app.model.hints_remaining, app.model.selected_id],
+		check(snapshot == [(app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining, app.model.selected_id],
 			"Matched replay does not rescore, spend hints, or change selection")
 		app._show_collection()
 		check(picture_card._word_play.get("_tween") == null, "Covering a board stops its picture reactions")

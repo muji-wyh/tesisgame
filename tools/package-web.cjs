@@ -90,18 +90,52 @@ function collectPopReferenceAudio(root) {
   });
 }
 
+function collectPairFeedbackAudio(root) {
+  const directory = path.join(root, 'assets/imported-audio/pair-feedback');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/pair-feedback-audio.json'), 'utf8'));
+  const ids = ['right', 'wrong'];
+  if (!Array.isArray(manifest.assets) || manifest.assets.length !== ids.length) {
+    throw new Error('Pair feedback must declare the required right and wrong recordings.');
+  }
+  const present = fs.readdirSync(directory).filter(name => name.toLowerCase().endsWith('.wav')).sort();
+  if (JSON.stringify(present) !== JSON.stringify(ids.map(id => `${id}.wav`))) {
+    throw new Error('Pair feedback requires exactly the right and wrong recordings.');
+  }
+  return manifest.assets.map((asset, index) => {
+    const id = ids[index], source = `assets/imported-audio/pair-feedback/${id}.wav`;
+    if (!asset || asset.id !== id || asset.destination !== source || !/^[a-f0-9]{64}$/.test(asset.sha256) ||
+        asset.sampleRate !== 44100 || asset.channels !== 1 || asset.bitDepth !== 16 ||
+        !Number.isFinite(asset.seconds) || asset.seconds < 0.2 || asset.seconds > 2) {
+      throw new Error(`Invalid pair feedback manifest entry: ${id}`);
+    }
+    const bytes = fs.readFileSync(path.join(root, source));
+    if (createHash('sha256').update(bytes).digest('hex') !== asset.sha256) {
+      throw new Error(`Pair feedback audio hash mismatch: ${source}`);
+    }
+    if (bytes.length < 44 || bytes.toString('ascii', 0, 4) !== 'RIFF' ||
+        bytes.readUInt32LE(4) !== bytes.length - 8 || bytes.toString('ascii', 8, 16) !== 'WAVEfmt ' ||
+        bytes.readUInt32LE(16) !== 16 || bytes.readUInt16LE(20) !== 1 || bytes.readUInt16LE(22) !== 1 ||
+        bytes.readUInt32LE(24) !== 44100 || bytes.readUInt32LE(28) !== 88200 ||
+        bytes.readUInt16LE(32) !== 2 || bytes.readUInt16LE(34) !== 16 ||
+        bytes.toString('ascii', 36, 40) !== 'data' || bytes.readUInt32LE(40) !== bytes.length - 44 ||
+        (bytes.length - 44) % 2 || Math.abs((bytes.length - 44) / 88200 - asset.seconds) > 1 / 44100) {
+      throw new Error(`Invalid mono PCM16 pair feedback WAV: ${source}`);
+    }
+    return importedAudio(root, source);
+  });
+}
+
 // These formerly separate downloads are required resources in the game pack.
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
 function collectRequiredAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
-    'assets/audio/sfx/match-voice-hit.wav',
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
-  return [...sources.map(source => importedAudio(root, source)), ...collectPopReferenceAudio(root)];
+  return [...sources.map(source => importedAudio(root, source)), ...collectPairFeedbackAudio(root), ...collectPopReferenceAudio(root)];
 }
 
 function removeRetiredVoiceAssets(directory) {
@@ -184,4 +218,4 @@ function packageWebExport(directory) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, compressWebAsset };
+module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, collectPairFeedbackAudio, compressWebAsset };

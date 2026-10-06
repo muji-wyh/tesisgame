@@ -184,17 +184,17 @@ func _run() -> void:
 		check(root.get_visible_rect().grow(0.5).encloses(card.get_global_rect()),
 			"Voice mode keeps all cards on a short portrait screen")
 	app._on_voice_result(["I see " + spoken[0], false])
-	check(app.model.successes == 0, "Interim speech is displayed without committing a match")
+	check((app.model.matched_ids.size() / 2) == 0, "Interim speech is displayed without committing a match")
 	app._on_voice_result(["I see " + spoken[0], true])
-	check(app.model.successes == 1 and app.model.phase == "feedback",
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.phase == "feedback",
 		"A final spoken board word uses the normal matching feedback")
 	app._on_voice_result([" and ".join(spoken), true])
 	for step in range(spoken.size()):
 		app.feedback_timer.timeout.emit()
-	check(app.model.phase == "won" and app.model.successes == 5 and not app._voice_mode
+	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5 and not app._voice_mode
 		and app._speech_queue.is_empty(), "Distinct spoken words queue safely and winning exits voice mode")
 	app._on_voice_result([spoken[0], true])
-	check(app.model.successes == 5, "Late voice callbacks cannot change a completed round")
+	check((app.model.matched_ids.size() / 2) == 5, "Late voice callbacks cannot change a completed round")
 	app.new_round(13)
 	app._on_voice_state([true, true, "Listening"])
 	app._show_collection()

@@ -128,8 +128,8 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		check(view.get_global_rect() == field_rect and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == target_rects, "Continue retains the original host card targets")
-	check(view.memory.attempts == 4 and view.memory.mistakes == 4 and app.model.mistakes == view.memory.mistakes and app.model.phase != "lost",
-		"Root mirrors Memory mistakes for Pip without imposing a three-strike loss")
+	check(view.memory.attempts == 4 and view.memory.mistakes == 4 and app._mistakes.filled_count == view.memory.mistakes and app.model.mistakes == 0 and app.model.phase != "lost",
+		"Memory owns its mistakes and HUD without changing the Match model")
 	for word in lesson:
 		for index in range(board.size()):
 			if board[index].word.id == word.id:
@@ -154,7 +154,7 @@ func _run() -> void:
 		else:
 			check(view.controls().has(root.gui_get_focus_owner()), "A judged nonfinal pair keeps actual focus on playable cards")
 			view.continue_feedback()
-	check(app.model.phase == "won" and app.model.successes == 5, "Five completed pairs enter the ordinary victory screen")
+	check(app.model.phase == "won" and view.memory.matched_word_ids.size() == 5, "Five completed pairs enter the ordinary victory screen")
 	check(not view.visible and app._found_words.get_child_count() == 5, "The result reviews all five practised words")
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
 	app._open_chest()
@@ -235,7 +235,7 @@ func _check_feedback_shortcut_focus(app) -> void:
 					target = index
 			view.card_buttons[first].pressed.emit()
 			view.card_buttons[second].pressed.emit()
-			var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), app.model.successes, app.medal_progress.counts.duplicate(true)]
+			var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), view.memory.matched_word_ids.size(), app.medal_progress.counts.duplicate(true)]
 			var board: Array = view.memory.cards.duplicate(true)
 			var positions: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
 			check(view.controls().has(root.gui_get_focus_owner()) and view.controls().has(app._default_focus()), "Wrong and correct feedback keep focus on the board")
@@ -252,7 +252,7 @@ func _check_feedback_shortcut_focus(app) -> void:
 				await _mouse_control(view.study_button, false)
 				check(not view.memory.studying and view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button,
 					"Eye up restores concealed play and retains eye focus")
-			check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, app.model.successes, app.medal_progress.counts] == score, "First-tap feedback shortcuts preserve host score and rewards")
+			check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, view.memory.matched_word_ids.size(), app.medal_progress.counts] == score, "First-tap feedback shortcuts preserve host score and rewards")
 			check(view.memory.cards == board and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == positions, "First-tap feedback shortcuts keep the host board stationary")
 
 

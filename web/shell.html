@@ -168,12 +168,6 @@
       background: var(--cp-surface); color: var(--cp-text); }
     #speech-buddy { position: relative; grid-row: 1 / 3; align-self: center; width: 80px; height: 80px;
       transform-origin: 50% 70%; transition: transform 160ms ease-out; }
-    .speech-score { position: absolute; bottom: -4px; left: 0; width: 80px; display: flex;
-      justify-content: space-evenly; padding: 2px 0; border-radius: 8px; background: var(--cp-surface-soft);
-      color: var(--cp-text); font-size: 11px; font-variant-numeric: tabular-nums; }
-    .speech-score span::before { content: ''; display: inline-block; width: 5px; height: 5px;
-      margin-right: 3px; border-radius: 50%; background: var(--cp-success); }
-    #speech-mistakes::before { background: var(--cp-danger); }
     #speech-buddy .duck-sprite { height: auto; }
     #speech-panel[data-state="listening"] .duck-sprite { animation: pip-blink 4600ms steps(1) infinite; }
     #speech-panel[data-state="listening"][data-heard="false"] #speech-buddy { animation: pip-listen 2800ms ease-in-out infinite; }
@@ -351,7 +345,7 @@
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, or Voice Pop.
         Match: find five matching word and picture pairs.
-        Three mistakes end a Match round. Each Match round allows three hints, shared by touch, keyboard, and controller.
+        Keep trying until every pair is matched. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
         A to choose or hold the chest, B to go back, X for a hint, LB and RB to change seasons, and Y or Menu for More.
         Hint marks a matching pair with stars and speaks its word, without a penalty.
@@ -401,7 +395,6 @@
       <section id="speech-panel" hidden data-state="off" data-heard="false" aria-label="Voice play" aria-describedby="speech-notice">
         <div id="speech-buddy" aria-hidden="true">
           <span class="duck-sprite"></span>
-          <div class="speech-score"><span id="speech-successes">0/5</span><span id="speech-mistakes">0/3</span></div>
         </div>
         <div class="speech-bubble">
           <div class="speech-heading">
@@ -2977,10 +2970,6 @@
             document.querySelector('meta[name="theme-color"]').content = color;
             setPipTheme(theme);
           }
-        },
-        roundProgress(successes, mistakes) {
-          document.getElementById('speech-successes').textContent = `${successes}/5`;
-          document.getElementById('speech-mistakes').textContent = `${mistakes}/3`;
         },
         observe(onHidden, onMotion, onVisible, onInputCanceled) {
           // Godot Web translates touchcancel into an ordinary release.

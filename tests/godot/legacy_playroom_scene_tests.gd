@@ -80,7 +80,7 @@ func _run() -> void:
 		app.cards[word.id + ":image"].pressed.emit()
 		_check_legacy(app, "Correct Match and matched-card replay for " + word.id)
 		app._continue_match()
-	check(app.model.phase == "won" and app.model.successes == 5 and app.medal_progress.counts == initial_medals,
+	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5 and app.medal_progress.counts == initial_medals,
 		"Matching still wins normally without collecting words or claiming unopened medals")
 	app._open_chest()
 	app.chest.finish_immediately()
@@ -100,14 +100,14 @@ func _run() -> void:
 			if memory.memory.cards[index].word.id == word.id:
 				memory.card_buttons[index].pressed.emit()
 		memory.continue_feedback()
-	check(app.model.phase == "won" and app.model.successes == 5, "All five Memory pairs still complete the game")
+	check(app.model.phase == "won" and app._memory.memory.matched_word_ids.size() == 5, "All five Memory pairs still complete the game")
 	_check_legacy(app, "Completing every Memory pair")
 	app.new_round(333, false, "music-makers", "match")
 	var spoken_words: Array = _pairs(app).filter(func(word: Dictionary) -> bool: return not LEGACY_IDS.has(word.id))
 	check(not spoken_words.is_empty(), "The speech fixture uses a word absent from the legacy collection")
 	app._on_voice_state([true, true, "Listening"])
 	app._on_voice_result([spoken_words[0].text, true])
-	check(app.model.successes == 1 and app.model.phase == "feedback", "Spoken Match still grades its real target")
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.phase == "feedback", "Spoken Match still grades its real target")
 	app._stop_voice()
 	app._continue_match()
 	_check_legacy(app, "Spoken Match")

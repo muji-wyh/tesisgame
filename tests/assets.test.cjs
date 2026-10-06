@@ -14,8 +14,6 @@ const rewardSymbols = seasons.flatMap(({ id }) =>
 );
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedPrompts = {
-  wrong: "Not quite. Let's try another one!",
-  loss: "Good try! Let's play again!",
   'spring-theme': 'Welcome to spring!',
   'summer-theme': 'Welcome to summer!',
   'autumn-theme': 'Welcome to autumn!',
@@ -36,7 +34,7 @@ const expectedRewardColors = {
   candy: ['#fff0f7', '#765445', '#f5c8da']
 };
 const sfxIds = [
-  'select', 'correct', 'wrong', 'loss',
+  'select', 'correct',
   ...seasons.map(({ id }) => `${id}-arrive`)
 ];
 
@@ -119,7 +117,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 481); // Original art, Pip wardrobes, derived chest layers and surprises.
+  assert.equal(textureImports.length, 480); // Original art, Pip wardrobes, derived chest layers and surprises.
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -306,17 +304,12 @@ test('seasonal reward SVGs use the requested seasonal palette', () => {
   }
 });
 
-test('the encouraging try-again scene is a standalone SVG', () => {
-  readSvg(path.join('assets', 'images', 'scenes', 'try-again.svg'));
-});
-
-test('the generated image directories contain exactly the 423 named SVGs', () => {
+test('the generated image directories contain exactly the 422 named SVGs', () => {
   const expected = [
     ['words', words.map(({ id }) => `${id}.svg`)],
-    ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]],
-    ['scenes', ['try-again.svg']]
+    ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]]
   ];
-  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 423);
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 422);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
@@ -324,7 +317,7 @@ test('the generated image directories contain exactly the 423 named SVGs', () =>
   }
 });
 
-test('voice prompts contain exactly the ten specified English messages', () => {
+test('voice prompts contain exactly the eight world greetings', () => {
   const filename = path.join(root, 'voice-prompts.json');
   assert.ok(fs.existsSync(filename), 'Missing voice-prompts.json');
   const prompts = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -335,7 +328,7 @@ test('voice prompts contain exactly the ten specified English messages', () => {
   }
 });
 
-test('all ten English prompts have nonempty prerecorded mono voice WAVs', () => {
+test('all eight English prompts have nonempty prerecorded mono voice WAVs', () => {
   for (const id of Object.keys(expectedPrompts)) {
     assertVoice(path.join('assets', 'audio', 'voice', `${id}.wav`));
   }
@@ -350,14 +343,14 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice sources contain exactly 350 pronunciations and ten active prompts', () => {
+test('voice sources contain exactly 350 pronunciations and eight active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
-  assert.equal(expected.length, 360);
+  assert.equal(expected.length, 358);
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
@@ -411,7 +404,7 @@ test('all eight themed background tracks are distinct, audible PCM16 stereo WAVs
   );
 });
 
-test('the twelve melody effects have gentle, non-silent PCM samples and smooth endpoints', () => {
+test('the ten melody effects have gentle, non-silent PCM samples and smooth endpoints', () => {
   for (const id of sfxIds) {
     const wave = readWave(path.join('assets', 'audio', 'sfx', `${id}.wav`));
     assert.equal(wave.sampleRate, 22050, id);
@@ -425,35 +418,8 @@ test('the twelve melody effects have gentle, non-silent PCM samples and smooth e
   }
   assert.deepEqual(
     assetFiles(path.join(root, 'assets', 'audio', 'sfx')),
-    [...sfxIds, 'pop-launch', 'match-voice-hit'].map((id) => `${id}.wav`).sort()
+    [...sfxIds, 'pop-launch'].map((id) => `${id}.wav`).sort()
   );
-});
-
-test('the original voice-match zap has a fast electric attack and a short resolving tail', () => {
-  const { DESTINATION, SECONDS, RUNTIME_GAIN, renderMatchVoiceHit } = require('../tools/generate-match-voice-hit.cjs');
-  const wave = readWave(DESTINATION);
-  assert.deepEqual(wave.bytes, renderMatchVoiceHit(), 'The tracked cue is reproducible from local seeded synthesis');
-  assert.equal(wave.sampleRate, 44100);
-  assert.equal(wave.channels, 1);
-  assert.equal(wave.data.length / wave.byteRate, SECONDS);
-  assert.equal(SECONDS, 0.46);
-  const samples = Array.from({ length: wave.data.length / 2 }, (_, index) => wave.data.readInt16LE(index * 2) / 32768);
-  const rms = values => Math.sqrt(values.reduce((sum, sample) => sum + sample * sample, 0) / values.length);
-  const section = (start, end) => samples.slice(Math.round(start * wave.sampleRate), Math.round(end * wave.sampleRate));
-  const peak = Math.max(...samples.map(Math.abs));
-  assert.ok(peak > 0.35 && peak <= 0.60, 'The transient retains mixing headroom');
-  assert.ok(rms(samples) > 0.085 && rms(samples) <= 0.121, 'The cue has a short audible body');
-  assert.ok(rms(section(0, 0.015)) > 0.04, 'The zap answers promptly in its first fifteen milliseconds');
-  assert.ok(rms(section(0.13, 0.26)) > 0.025, 'The initial strike resolves into an audible tonal tail');
-  assert.ok(rms(section(0.40, 0.46)) < rms(section(0.13, 0.26)) * 0.1, 'The tail releases smoothly into silence');
-  assert.equal(samples[0], 0);
-  assert.equal(samples.at(-1), 0);
-  assert.ok(Math.abs(samples.reduce((sum, sample) => sum + sample, 0) / samples.length) < 0.001, 'No audible DC offset');
-  assert.ok(peak * RUNTIME_GAIN < 0.30, 'The recommended single-channel gain leaves room for music and Pip');
-  const metadata = fs.readFileSync(path.join(root, DESTINATION + '.import'), 'utf8');
-  for (const setting of ['edit/trim=false', 'edit/normalize=false', 'edit/loop_mode=0', 'compress/mode=0']) {
-    assert.ok(metadata.includes(setting), `Godot preserves the authored envelope: ${setting}`);
-  }
 });
 
 test('the SFX generator exactly reproduces its named files and rejects excessive float peaks', () => {

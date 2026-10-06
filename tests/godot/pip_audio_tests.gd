@@ -163,7 +163,22 @@ func _check_click_routes() -> void:
 		"A real header mouse click opens game modes without starting a duck greeting")
 	app._hide_mode_menu()
 	var before: int
+	var original_mode: String = app._mode_id
 	var playing_phase: String = app.model.phase
+	for mode in ["match", "memory"]:
+		app._mode_id = mode
+		await _show_result_companion(app)
+		app.set_reduced_motion(false)
+		before = _voice_requests(app)
+		var rng: int = app.audio._pip_rng.state
+		app.duck.pressed.emit()
+		check(app.duck.is_manual_action_busy() and not app.audio.voice.playing
+			and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing) and _voice_requests(app) == before
+			and app.audio._pip_rng.state == rng,
+			mode + " result Pip keeps its visual trick without a quack")
+		app.duck.settle()
+	app._mode_id = original_mode
+	app.set_reduced_motion(true)
 	await _show_result_companion(app)
 	for guard in ["_voice_mode", "_pop_speech_active"]:
 		app.audio.halt()
@@ -232,7 +247,7 @@ func _check_click_routes() -> void:
 	await _show_result_companion(app)
 	before = _voice_requests(app)
 	app.duck.pressed.emit()
-	_check_greeting(app, before, "The result companion before backgrounding")
+	check(not app.audio.voice.playing and _voice_requests(app) == before, "Match result Pip reacts without a greeting")
 	app.on_page_hidden()
 	check(not app.audio.voice.playing and not app.audio.active,
 		"Backgrounding the page stops the imported Pip greeting")
@@ -259,94 +274,87 @@ func _check_click_routes() -> void:
 func _check_serialized_routes(app) -> void:
 	var cached: Dictionary = app.audio.cache.duplicate()
 	var playing_phase: String = app.model.phase
-	for in_home in [false, true]:
-		if in_home:
-			app.model.phase = playing_phase
-			app._refresh()
-			app._show_collection()
-		else:
-			app._hide_collection()
-			await _show_result_companion(app)
-		await _settle()
-		app._update_duck()
-		var context := "Home" if in_home else "Result companion"
-		for sound_outlasts_motion in [false, true]:
-			app.audio.halt()
-			app.duck.settle()
-			app.set_reduced_motion(false)
-			for path in PIP_PATHS:
-				app.audio.cache[path] = _silence(1.5 if sound_outlasts_motion else 0.1)
-			var before: int = _voice_requests(app)
-			app.duck.pressed.emit()
-			app.duck.set_process(false)
-			check(app.audio.is_pip_busy() and app.duck.is_manual_action_busy(),
-				context + " activation starts both the action and its greeting")
-			var caption: String = app._status_announcement
-			var index: int = app._duck_trick_index
-			var rng: int = app.audio._pip_rng.state
-			for repeated in range(4): app.duck.pressed.emit()
-			await _tap(app.duck.get_global_rect().get_center())
-			check(_voice_requests(app) == before + 1 and app.audio._pip_rng.state == rng
-				and app._status_announcement == caption and app._duck_trick_index == index,
-				context + " repeated button and pointer activations do not restart audio, advance actions or change feedback")
-			if sound_outlasts_motion:
-				app.duck._process(4.0)
-				app.duck.set_process(false)
-				check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy(),
-					context + " test reaches finished motion while the longer real audio is still playing")
-			else:
-				await _wait_for_voice(app.audio)
-				check(app.duck.is_manual_action_busy() and not app.audio.is_pip_busy(),
-					context + " test reaches finished audio while its longer motion is still running")
-			app.duck.pressed.emit()
-			await _tap(app.duck.get_global_rect().get_center())
-			check(_voice_requests(app) == before + 1 and app._status_announcement == caption
-				and app._duck_trick_index == index,
-				context + " continues rejecting taps until both motion and sound have finished")
-			app.duck._process(4.0)
-			app.duck.set_process(false)
-			await _wait_for_voice(app.audio)
-			check(not app.duck.is_manual_action_busy() and not app.audio.is_pip_busy()
-				and _voice_requests(app) == before + 1,
-				context + " becomes idle without replaying any ignored tap")
-			app.duck.pressed.emit()
-			check(_voice_requests(app) == before + 2,
-				context + " accepts the next deliberate gesture after both channels finish")
+	app._show_collection()
+	await _settle()
+	app._update_duck()
+	var context := "Home"
+	for sound_outlasts_motion in [false, true]:
 		app.audio.halt()
 		app.duck.settle()
-		app.set_reduced_motion(true)
-		for path in PIP_PATHS: app.audio.cache[path] = _silence(0.2)
+		app.set_reduced_motion(false)
+		for path in PIP_PATHS:
+			app.audio.cache[path] = _silence(1.5 if sound_outlasts_motion else 0.1)
 		var before: int = _voice_requests(app)
 		app.duck.pressed.emit()
+		app.duck.set_process(false)
+		check(app.audio.is_pip_busy() and app.duck.is_manual_action_busy(),
+			context + " activation starts both the action and its greeting")
+		var caption: String = app._status_announcement
+		var index: int = app._duck_trick_index
+		var rng: int = app.audio._pip_rng.state
+		for repeated in range(4): app.duck.pressed.emit()
+		await _tap(app.duck.get_global_rect().get_center())
+		check(_voice_requests(app) == before + 1 and app.audio._pip_rng.state == rng
+			and app._status_announcement == caption and app._duck_trick_index == index,
+			context + " repeated button and pointer activations do not restart audio, advance actions or change feedback")
+		if sound_outlasts_motion:
+			app.duck._process(4.0)
+			app.duck.set_process(false)
+			check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy(),
+				context + " test reaches finished motion while the longer real audio is still playing")
+		else:
+			await _wait_for_voice(app.audio)
+			check(app.duck.is_manual_action_busy() and not app.audio.is_pip_busy(),
+				context + " test reaches finished audio while its longer motion is still running")
 		app.duck.pressed.emit()
-		check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy() and _voice_requests(app) == before + 1,
-			context + " reduced motion keeps a static pose while its real greeting blocks repeats")
+		await _tap(app.duck.get_global_rect().get_center())
+		check(_voice_requests(app) == before + 1 and app._status_announcement == caption
+			and app._duck_trick_index == index,
+			context + " continues rejecting taps until both motion and sound have finished")
+		app.duck._process(4.0)
+		app.duck.set_process(false)
 		await _wait_for_voice(app.audio)
+		check(not app.duck.is_manual_action_busy() and not app.audio.is_pip_busy()
+			and _voice_requests(app) == before + 1,
+			context + " becomes idle without replaying any ignored tap")
 		app.duck.pressed.emit()
 		check(_voice_requests(app) == before + 2,
-			context + " static reduced-motion artwork does not lock input after sound completion")
-		app.on_page_hidden()
-		check(not app.audio.is_pip_busy() and not app.duck.is_manual_action_busy(),
-			context + " background cleanup cancels both manual action owners")
-		app.on_page_visible()
-		await _settle()
-		before = _voice_requests(app)
-		app.duck.pressed.emit()
-		check(_voice_requests(app) == before + 1,
-			context + " accepts a new gesture after foreground recovery")
-		app.audio.halt()
-		app.duck.settle()
-		app.audio.available = false
-		app.duck.pressed.emit()
-		check(not app.audio.is_pip_busy() and not app.audio.voice.playing,
-			context + " unavailable audio cannot leave a phantom sound owner")
-		var unavailable_caption: String = app._status_announcement
-		app.duck.pressed.emit()
-		check(app._status_announcement != unavailable_caption,
-			context + " remains usable with static reduced-motion feedback and unavailable audio")
-		app.audio.available = true
-		app.audio.halt()
-		app.duck.settle()
+			context + " accepts the next deliberate gesture after both channels finish")
+	app.audio.halt()
+	app.duck.settle()
+	app.set_reduced_motion(true)
+	for path in PIP_PATHS: app.audio.cache[path] = _silence(0.2)
+	var before: int = _voice_requests(app)
+	app.duck.pressed.emit()
+	app.duck.pressed.emit()
+	check(not app.duck.is_manual_action_busy() and app.audio.is_pip_busy() and _voice_requests(app) == before + 1,
+		context + " reduced motion keeps a static pose while its real greeting blocks repeats")
+	await _wait_for_voice(app.audio)
+	app.duck.pressed.emit()
+	check(_voice_requests(app) == before + 2,
+		context + " static reduced-motion artwork does not lock input after sound completion")
+	app.on_page_hidden()
+	check(not app.audio.is_pip_busy() and not app.duck.is_manual_action_busy(),
+		context + " background cleanup cancels both manual action owners")
+	app.on_page_visible()
+	await _settle()
+	before = _voice_requests(app)
+	app.duck.pressed.emit()
+	check(_voice_requests(app) == before + 1,
+		context + " accepts a new gesture after foreground recovery")
+	app.audio.halt()
+	app.duck.settle()
+	app.audio.available = false
+	app.duck.pressed.emit()
+	check(not app.audio.is_pip_busy() and not app.audio.voice.playing,
+		context + " unavailable audio cannot leave a phantom sound owner")
+	var unavailable_caption: String = app._status_announcement
+	app.duck.pressed.emit()
+	check(app._status_announcement != unavailable_caption,
+		context + " remains usable with static reduced-motion feedback and unavailable audio")
+	app.audio.available = true
+	app.audio.halt()
+	app.duck.settle()
 	app.audio.cache = cached
 	app._hide_collection()
 	app.model.phase = playing_phase
@@ -399,7 +407,7 @@ func _voice_requests(app) -> int:
 
 func _progress(app) -> Array:
 	var state = app.playroom_state
-	return [app.model.phase, app.model.successes, app.model.mistakes, app.model.hints_remaining,
+	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining,
 		app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true), app.medal_progress.counts.duplicate(true),
 		state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id, state.recent_topic_ids.duplicate(),
 		state.collected_word_ids.duplicate(), state.displayed_word_id]

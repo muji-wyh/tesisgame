@@ -45,8 +45,8 @@ func _check_debug_mix() -> void:
 				player = audio.last_pop_player()
 				gain = 0.24
 			"match":
-				audio.play_match_voice_hit()
-				player = audio.match_voice_hit
+				audio.play_pair_feedback(true)
+				player = audio.pair_feedback
 				gain = 0.48
 			"miss":
 				audio.play_pip_reaction(false)
@@ -64,19 +64,19 @@ func _check_debug_mix() -> void:
 	check(audio.set_speech_debug_mix(0.0), "The silent diagnostic mix is accepted")
 	audio.cue("pop-launch")
 	audio.cue("pop-slice")
-	audio.play_match_voice_hit()
+	audio.play_pair_feedback(true)
 	audio.play_pip_reaction(false)
 	check(not audio.pop_launch.playing and audio.last_pop_player() == null
-		and not audio.match_voice_hit.playing and not audio.pip_reaction.playing,
+		and not audio.pair_feedback.playing and not audio.pip_reaction.playing,
 		"The silent mix stops current tails and starts no competing audio")
 	check(audio.set_speech_debug_mix(1.0), "Ending diagnostics restores the authored mix")
 	audio.cue("pop-launch")
 	audio.cue("pop-slice")
-	audio.play_match_voice_hit()
+	audio.play_pair_feedback(true)
 	audio.play_pip_reaction(true)
 	check(is_equal_approx(db_to_linear(audio.pop_launch.volume_db), 0.16)
 		and is_equal_approx(db_to_linear(audio.last_pop_player().volume_db), 0.24)
-		and is_equal_approx(db_to_linear(audio.match_voice_hit.volume_db), 0.48)
+		and is_equal_approx(db_to_linear(audio.pair_feedback.volume_db), 0.48)
 		and is_equal_approx(db_to_linear(audio.pip_reaction.volume_db), 0.68),
 		"Normal launch, slice, Match and Pip playback regain their original volume")
 	audio.queue_free()

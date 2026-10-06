@@ -37,7 +37,8 @@ func _run() -> void:
 	check(not app.has_method("_replay")
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "replay_button"),
 		"The Repeat lesson handler and control are removed")
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
 	var actions: Array = app._result_footer.find_children("*", "Button", true, false).filter(
@@ -56,12 +57,12 @@ func _run() -> void:
 		var words: Array = app.model.lesson_words.duplicate(true)
 		retry.grab_focus()
 		retry.pressed.emit()
-		check(not app._save_error and app.model.phase == "lost" and app.model.lesson_words == words,
+		check(not app._save_error and app.model.phase == "won" and app.model.lesson_words == words,
 			"Retrying storage does not repeat or replace the lesson")
 		check(root.gui_get_focus_owner() == app._new_adventure_button,
 			"A successful retry restores keyboard focus to the remaining result action")
 		retry.pressed.emit()
-		check(app.model.phase == "lost" and app.model.lesson_words == words,
+		check(app.model.phase == "won" and app.model.lesson_words == words,
 			"An inactive retry action cannot restart play")
 	app._progress_ready = true
 	app._save_error = false

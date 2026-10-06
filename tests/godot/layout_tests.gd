@@ -61,10 +61,12 @@ func _run() -> void:
 					check(counter.get_parent() == app._header_duck_slot
 						and app._header_duck_slot.get_global_rect().grow(1).encloses(counter.get_global_rect()),
 						"Numeric progress stays grouped inside Pip's header panel")
-			check(app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree()
-				and app._success.total_count == 5
-				and app._mistakes.total_count == (0 if mode == "memory" else 3),
-				"Match and Memory keep their own correct totals and mistake policy beside Pip")
+			check(app._success.is_visible_in_tree() == (mode == "memory")
+				and app._mistakes.is_visible_in_tree() == (mode == "memory"),
+				"Only Memory shows its existing progress and mistake counters")
+			if mode == "memory":
+				check(app._success.total_count == 5 and app._mistakes.total_count == 0,
+					"Memory keeps five-pair progress and an unbounded mistake count")
 			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button] + app._mode_buttons:
 				if control.is_visible_in_tree():
 					check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "Navigation fits the viewport")
@@ -92,7 +94,7 @@ func _run() -> void:
 	var selected: String = app.model.selected_id
 	var hints_remaining: int = app.model.hints_remaining
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
-	var progress_before: Array = [app.model.phase, app.model.successes, app.model.mistakes, app.model.streak]
+	var progress_before: Array = [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes]
 	check(not selected.is_empty(), "The world-change fixture contains a real selected card")
 	for world_id in ["ocean", "space"]:
 		if not app.collection_page.visible:
@@ -108,7 +110,7 @@ func _run() -> void:
 			"Choosing a world saves the preference and keeps Pip's room open")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
 			and app.model.hints_remaining == hints_remaining and app.model.lesson_words == lesson_before
-			and [app.model.phase, app.model.successes, app.model.mistakes, app.model.streak] == progress_before,
+			and [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes] == progress_before,
 			"Changing a world preserves the exact round, cards, selection, and hints")
 	root.size = Vector2i(480, 900)
 	app.size = Vector2(480, 900)
@@ -156,7 +158,8 @@ func _run() -> void:
 		check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "A saving problem does not push game controls off the screen")
 	app._progress_ready = true
 	app._save_error = false
-	app.model.phase = "lost"
+	app.model.phase = "won"
+	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
 	check(not app._mode_row.is_visible_in_tree() and not app._success.is_visible_in_tree(), "Results do not repeat gameplay navigation and counters")

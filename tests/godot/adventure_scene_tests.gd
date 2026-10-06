@@ -116,36 +116,33 @@ func _run() -> void:
 	check(app.medal_progress.completed_count("winter") == 6, "A completed season retains six earned medals")
 	app.new_round(19)
 	words = _pairs(app)
-	if not words.is_empty():
-		_match(app, words[0])
-		check(not app._found_words.is_visible_in_tree(), "Matched words stay off the active board")
-		_lose(app)
-		check(app.model.phase == "lost" and app.model.successes == 1,
-			"A round can end with one learned word and three mistakes")
-		_check_shelf(app)
-		check(app._default_focus() == app._new_adventure_button and app._new_adventure_button.has_focus(),
-			"New adventure is the primary controller action after losing")
-		_check_replay(app)
-		root.size = Vector2i(320, 320)
-		await process_frame
-		await process_frame
-		await _check_result_bounds(app)
+	_match(app, words[0])
+	_retry_mismatches(app)
+	check(app.model.phase == "waiting" and app.model.matched_ids.size() == 2
+		and not app._found_words.is_visible_in_tree(),
+		"Repeated mismatches preserve the learned pair and active board")
+	for word in words.slice(1):
+		_match(app, word)
+	_check_shelf(app)
+	_check_replay(app)
+	root.size = Vector2i(320, 320)
+	await process_frame
+	await process_frame
+	await _check_result_bounds(app)
 	app.audio.set_muted(true)
 	app.new_round(20)
-	_lose(app)
-	check(app.model.phase == "lost" and app.model.successes == 0
-		and app._found_words.is_visible_in_tree() and app._found_words.get_child_count() == 5,
-		"A loss without matches still offers all five words for learning without awarding successes")
-	_check_shelf(app)
+	_retry_mismatches(app)
+	check(app.model.phase == "waiting" and app.model.matched_ids.is_empty()
+		and not app._found_words.is_visible_in_tree(),
+		"Repeated mistakes without matches never replace the board with results")
 	app.new_round(21)
 	words = _pairs(app)
 	app._on_voice_state([true, true, "Listening"])
-	if not words.is_empty():
-		app._on_voice_result(["I see " + words[0].text, true])
+	for word in words:
+		app._on_voice_result([word.text, true])
 		app.feedback_timer.timeout.emit()
-		_lose(app)
-		_check_shelf(app)
-		check(not app._voice_mode, "Voice-earned words use the same result shelf and exit listening")
+	_check_shelf(app)
+	check(not app._voice_mode, "Voice-earned words use the same result shelf and exit listening")
 	app.new_round(22)
 	words = _pairs(app)
 	for word in words.slice(0, 4):
@@ -191,7 +188,7 @@ func _match(app, word: Dictionary) -> void:
 	app._continue_match()
 
 
-func _lose(app) -> void:
+func _retry_mismatches(app) -> void:
 	var wrong: Array[String] = []
 	for card in app.model.cards:
 		if app.model.matched_ids.has(card.id):
@@ -200,10 +197,10 @@ func _lose(app) -> void:
 			wrong.append(card.id)
 		if wrong.size() == 2:
 			break
-	check(wrong.size() == 2, "The loss fixture uses a real unmatched word and a different picture")
+	check(wrong.size() == 2, "The retry fixture uses a real unmatched word and a different picture")
 	if wrong.size() != 2:
 		return
-	for attempt in range(3):
+	for attempt in range(5):
 		app.cards[wrong[0]].pressed.emit()
 		app.cards[wrong[1]].pressed.emit()
 		app._continue_match()
@@ -244,8 +241,8 @@ func _check_shelf(app) -> void:
 
 
 func _state(app) -> Dictionary:
-	return {"successes": app.model.successes, "mistakes": app.model.mistakes,
-		"phase": app.model.phase, "streak": app.model.streak, "hints": app.model.hints_remaining,
+	return {"successes": (app.model.matched_ids.size() / 2), "mistakes": app.model.mistakes,
+		"phase": app.model.phase, "hints": app.model.hints_remaining,
 		"chest": app.model.chest_state, "reward": app.model.reward_id,
 		"matched": app.model.matched_ids.duplicate(), "pending": app._pending_fragment.duplicate(true),
 		"medals": app.medal_progress.counts.duplicate(), "collected": app.collected_rewards.duplicate()}
@@ -268,9 +265,6 @@ func _check_replay(app) -> void:
 			"Tapping a found word replays that word's bundled pronunciation")
 		check(app.duck.reaction_left > 0.0, "Pip reacts when a found word is replayed")
 		check(_state(app) == before, "Repeated word taps preserve scoring, chest, pending piece, and saved progress")
-		if app.model.phase == "lost":
-			check(not app.audio.music.playing,
-				"Replaying a word after loss never restarts background music")
 
 
 func _check_result_bounds(app) -> void:

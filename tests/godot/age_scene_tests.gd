@@ -124,7 +124,7 @@ func _run() -> void:
 	var cards: Array = app.model.cards.duplicate(true)
 	var words: Array = app.model.lesson_words.duplicate(true)
 	var progress: Array = [app.model.selected_id, app.model.hints_remaining, app.model.phase,
-		app.model.successes, app.model.mistakes, app.model.streak]
+		(app.model.matched_ids.size() / 2), app.model.mistakes]
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	var source_words: Array = app.data.words.duplicate(true)
 	var eligible_counts := {"all": 350, "4-6": 148, "7-9": 112, "10-plus": 90}
@@ -142,7 +142,7 @@ func _run() -> void:
 			"Opening the catalogue keeps focus on the chosen age without moving the age rail")
 		check(app.model.cards == cards and app.model.lesson_words == words and app.model.age_band_id == "all"
 			and [app.model.selected_id, app.model.hints_remaining, app.model.phase,
-				app.model.successes, app.model.mistakes, app.model.streak] == progress,
+				(app.model.matched_ids.size() / 2), app.model.mistakes] == progress,
 			"Age selection preserves the exact active round, selection and hints")
 		check(app._age_notice.text.is_empty() and not app._age_notice.is_visible_in_tree()
 			and app._age_buttons.values().filter(func(choice: Button) -> bool: return choice.button_pressed).size() == 1

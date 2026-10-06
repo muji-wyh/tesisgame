@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, openRewards, roomPoint } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
-const voiceHitRecording = 'assets/audio/sfx/match-voice-hit.wav';
+const voiceHitRecording = 'assets/imported-audio/pair-feedback/right.wav';
 
 async function voiceMatchLink(page) {
   return page.locator('#game-status').evaluate(element => JSON.parse(element.dataset.voiceMatchLink || '{"active":false}'));
@@ -369,7 +369,7 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   const from = await page.evaluate(() => window.audioObservation.playbacks.length);
   const hitSeconds = waveDuration(voiceHitRecording);
   const soundsSince = () => page.evaluate(from => window.audioObservation.playbacks.slice(from), from);
-  const isElectricHit = sound => Math.abs(sound.duration - hitSeconds) <= 1 / sound.sampleRate && sound.playbackRate === 1;
+  const isRightSound = sound => Math.abs(sound.duration - hitSeconds) <= 1 / sound.sampleRate && sound.playbackRate === 1;
   const waiting = await page.locator('#game-status').textContent();
   const first = pairs[0][0];
   await page.evaluate(word => window.speechFixture.emit(`I see a ${word}`, false), first);
@@ -377,13 +377,13 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await page.waitForTimeout(300);
   await expect(page.locator('#game-status')).toHaveText(waiting);
   expect((await voiceMatchLink(page)).active, 'Interim speech cannot reveal the pair link.').toBe(false);
-  expect(await soundsSince(), 'Interim speech cannot trigger the electric hit or spoken feedback.').toEqual([]);
+  expect(await soundsSince(), 'Interim speech cannot trigger the right sound or spoken feedback.').toEqual([]);
   await page.evaluate(() => window.speechFixture.emit('zzzzzz', true));
   await page.waitForTimeout(200);
   expect((await voiceMatchLink(page)).active, 'Unknown words cannot reveal the pair link.').toBe(false);
   expect(await soundsSince(), 'Unknown words keep the listening game quiet.').toEqual([]);
   // Collect the short sound inside the page before triggering it. Remote
-  // assertion roundtrips must not miss a 460 ms sample or a one-second bolt.
+  // assertion roundtrips must not miss the short answer sample or a one-second bolt.
   const { link, bounds } = await page.evaluate(word => new Promise(resolve => {
     const evidence = window.voiceMatchEvidence;
     evidence.sampler = setInterval(() => evidence.energy.push(...window.audioOutputObservation.read()), 10);
@@ -415,9 +415,9 @@ test('interim speech does not score; final sentences queue distinct real pairs a
     'Both ends of the lightning touch the scored pair.').toBe(true);
   if (audioAvailable) {
     const sound = await expectRecording(page, from, voiceHitRecording);
-    expect(isElectricHit(sound)).toBe(true);
+    expect(isRightSound(sound)).toBe(true);
     expect(sound.loop).toBe(false);
-    expect(sound.fingerprint, 'The electric cue contains a real decoded PCM buffer.').toBeTruthy();
+    expect(sound.fingerprint, 'The right sound contains a real decoded PCM buffer.').toBeTruthy();
     expect(sound.peak).toBeGreaterThan(0.01);
     expect(sound.contextState).toBe('running');
   }
@@ -437,10 +437,10 @@ test('interim speech does not score; final sentences queue distinct real pairs a
       return evidence.energy.filter(sample => sample.at >= evidence.emittedAt && sample.at <= until + 50);
     }, ended.at);
     expect(Math.max(0, ...energy.map(sample => sample.rms)),
-      'The electric cue produces real destination output during the recorded feedback interval.').toBeGreaterThan(0.00001);
+      'The right sound produces real destination output during the recorded feedback interval.').toBeGreaterThan(0.00001);
     const sounds = await soundsSince();
     expect(sounds).toHaveLength(1);
-    expect(sounds.every(isElectricHit), 'Only the nonverbal electric cue plays while Voice listens.').toBe(true);
+    expect(sounds.every(isRightSound), 'Only the nonverbal right sound plays while Voice listens.').toBe(true);
   }
   await page.evaluate(word => window.speechFixture.emit(`${word} ${word}`, true), first);
   await page.waitForTimeout(250);
@@ -458,7 +458,7 @@ test('interim speech does not score; final sentences queue distinct real pairs a
     expect(hits[index].at - hits[index - 1].at, 'Queued words each keep their own one-second electric connection.').toBeGreaterThanOrEqual(850);
   }
   expect((await voiceMatchLink(page)).active).toBe(false);
-  if (audioAvailable) expect((await soundsSince()).filter(isElectricHit), 'Each of the five scored pairs plays one bundled electric hit.').toHaveLength(5);
+  if (audioAvailable) expect((await soundsSince()).filter(isRightSound), 'Each of the five scored pairs plays one bundled right sound.').toHaveLength(5);
   await expect(page.locator('#speech-panel')).toBeHidden();
   await expectSpeechAura(page, false);
   await expect(page.locator('#speech-transcript')).toBeEmpty();
@@ -471,7 +471,7 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   await page.waitForTimeout(800);
   await expect(page.locator('#game-status')).toHaveText(won);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
-  if (audioAvailable) expect((await soundsSince()).filter(isElectricHit), 'Late recognition callbacks cannot replay the hit cue.').toHaveLength(5);
+  if (audioAvailable) expect((await soundsSince()).filter(isRightSound), 'Late recognition callbacks cannot replay the hit cue.').toHaveLength(5);
   expect(audioRequests, 'The hit sound is bundled and never depends on an audio download.').toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -496,22 +496,22 @@ test('Match homophones score the canonical flower once with its voice hit feedba
   expect(pairs.some(([word]) => word === 'flower'), 'The gift lesson supplies a real flower pair').toBe(true);
   await listen(page);
   await observeVoiceMatchLinks(page);
-  await expect(page.locator('#speech-successes')).toHaveText('0/5');
+  await expect(page.locator('#speech-successes')).toHaveCount(0);
   const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
   await page.evaluate(() => window.speechFixture.emit('flour', false));
   await expect(page.locator('#speech-transcript')).toHaveText('flour');
   await rendered(page);
-  await expect(page.locator('#speech-successes')).toHaveText('0/5');
+  await expect(page.locator('#speech-successes')).toHaveCount(0);
   expect((await voiceMatchLink(page)).active, 'Match still waits for a final result').toBe(false);
   for (const text of ['flours', 'floury']) {
     await page.evaluate(text => window.speechFixture.emit(text, true), text);
     await rendered(page);
-    await expect(page.locator('#speech-successes')).toHaveText('0/5');
+    expect((await voiceMatchLink(page)).active, 'Similar unrecognized words cannot match the flower pair.').toBe(false);
   }
   const recognized = 'The FLOUR!';
   await page.evaluate(text => window.speechFixture.emit(text, true), recognized);
   await expect(page.locator('#speech-transcript')).toHaveText(recognized);
-  await expect(page.locator('#speech-successes')).toHaveText('1/5');
+  await expect(page.locator('#speech-successes')).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.voiceMatchLinks.filter(link => link.active).length)).toBe(1);
   const link = await page.evaluate(() => window.voiceMatchLinks.find(link => link.active));
   expect(link.source.id).toBe('flower:image');
@@ -523,10 +523,10 @@ test('Match homophones score the canonical flower once with its voice hit feedba
   await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await page.evaluate(() => window.speechFixture.emit('flower flour flower', true));
   await rendered(page);
-  await expect(page.locator('#speech-successes')).toHaveText('1/5');
+  await expect(page.locator('#speech-successes')).toHaveCount(0);
   expect((await voiceMatchLink(page)).serial, 'Equivalent spellings cannot replay the scored pair').toBe(link.serial);
   const playbacks = await page.evaluate(from => window.audioObservation.playbacks.slice(from), audioFrom);
-  if (audioAvailable) expect(playbacks, 'The canonical and homophone spellings share one electric hit').toHaveLength(1);
+  if (audioAvailable) expect(playbacks, 'The canonical and homophone spellings share one right sound').toHaveLength(1);
   await testInfo.attach('match-homophone-feedback', {
     body: JSON.stringify({ recognized, canonical: 'flower', link, playbacks }), contentType: 'application/json'
   });
@@ -576,43 +576,28 @@ test('matched cards stay quiet and cannot rescore while Voice is listening', asy
   expect(errors).toEqual([]);
 });
 
-test('Voice Pip displays the real round progress supplied by the native game', async ({ page }, testInfo) => {
+test('Voice Pip keeps its listening companion without Match score or mistake counters', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  expect(await page.evaluate(() => typeof window.wordBuddiesHost.roundProgress)).toBe('function');
+  expect(await page.evaluate(() => typeof window.wordBuddiesHost.roundProgress)).toBe('undefined');
   const { pairs, bounds } = await discoverBoard(page);
   const word = cardPoint(bounds, pairs[0][1].Word), wrong = cardPoint(bounds, pairs[1][1].Picture);
-  await page.touchscreen.tap(word.x, word.y);
-  await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0]}`);
-  await page.touchscreen.tap(wrong.x, wrong.y);
-  await expect(page.locator('#game-status')).toContainText('Not quite.');
-  await expect(page.locator('#game-status')).toContainText('Find 5 word');
-  await listen(page);
-  await expect(page.locator('#speech-successes')).toHaveText('0/5');
-  await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
-  await expect(page.locator('#speech-successes')).toBeVisible();
-  await expect(page.locator('#speech-mistakes')).toBeVisible();
-  const buddy = await page.locator('#speech-buddy').boundingBox();
-  const panel = await page.locator('#speech-panel').boundingBox();
-  for (const selector of ['#speech-successes', '#speech-mistakes']) {
-    const count = await page.locator(selector).boundingBox();
-    expect(count.x).toBeGreaterThanOrEqual(buddy.x);
-    expect(count.x + count.width).toBeLessThanOrEqual(buddy.x + buddy.width + 1);
-    expect(count.y).toBeGreaterThanOrEqual(panel.y);
-    expect(count.y + count.height).toBeLessThanOrEqual(panel.y + panel.height);
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await page.touchscreen.tap(word.x, word.y);
+    await expect(page.locator('#selection-status')).toHaveText(`Word: ${pairs[0][0]}`);
+    await page.touchscreen.tap(wrong.x, wrong.y);
+    await expect(page.locator('#game-status')).toContainText('Not quite.');
+    await expect(page.locator('#game-status')).toContainText('Find 5 word');
   }
-  const before = await page.locator('.speech-score').screenshot({ scale: 'css' });
+  await listen(page);
+  await expect(page.locator('#speech-successes, #speech-mistakes, .speech-score')).toHaveCount(0);
+  await expect(page.locator('#speech-buddy')).toBeVisible();
   await page.evaluate(word => window.speechFixture.emit(word), pairs[0][0]);
   await expect(page.locator('#game-status')).toContainText('Great match!');
   await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await expect(page.locator('#speech-panel')).toHaveAttribute('data-heard', 'false');
-  await expect(page.locator('#speech-successes')).toHaveText('1/5');
-  await expect(page.locator('#speech-mistakes')).toHaveText('1/3');
-  await rendered(page);
-  const after = await page.locator('.speech-score').screenshot({ scale: 'css' });
-  expect(after.equals(before), 'The visible Pip cluster must reflect a real score change, not only a host callback.').toBe(false);
-  await page.screenshot({ path: testInfo.outputPath('voice-native-progress.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('voice-without-match-counters.png'), scale: 'css' });
   await toggleVoice(page);
   expect(errors).toEqual([]);
 });

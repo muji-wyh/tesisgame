@@ -58,7 +58,7 @@ test('missing-only SFX generation adds two arrival cues without rewriting effect
   const output = path.join(directory, 'assets/audio/sfx');
   fs.mkdirSync(output, { recursive: true });
   const ids = added.map(id => `${id}-arrive`);
-  const active = ['select', 'correct', 'wrong', 'loss', ...themes.map(id => `${id}-arrive`)];
+  const active = ['select', 'correct', ...themes.map(id => `${id}-arrive`)];
   assert.deepEqual(Object.keys(sounds).sort(), [...active].sort());
   const original = Buffer.from('An existing effect must remain byte-for-byte unchanged.');
   const retained = active.filter(id => !ids.includes(id));
@@ -153,7 +153,6 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
-    'assets/audio/sfx/match-voice-hit.wav',
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
@@ -167,6 +166,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     fs.writeFileSync(metadata, `path="res://.godot/imported/${index}.sample"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', `${index}.sample`), `RSRCfixture-${index}`);
   }
+  const pair = require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(directory, source => {
+    const metadata = path.join(directory, `${source}.import`), imported = path.basename(source) + '.sample';
+    fs.writeFileSync(metadata, `path="res://.godot/imported/${imported}"\n`);
+    fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC pair fixture');
+  });
+  expected.push(...pair.assets.map(asset => asset.destination));
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
@@ -179,12 +184,13 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));
     assert.ok(sources.includes(`res://assets/audio/voice/${id}-theme.wav`));
   }
-  const lastImport = path.join(directory, `${expected.at(-1)}.import`);
+  const source = 'assets/audio/chests/winter-unlock.wav';
+  const lastImport = path.join(directory, `${source}.import`);
   const original = fs.readFileSync(lastImport);
   fs.writeFileSync(lastImport, 'path="res://missing-resource"\n');
   assert.throws(() => collectRequiredAudio(directory), /before packaging required audio/);
   fs.writeFileSync(lastImport, original);
-  const lastResource = path.join(directory, '.godot/imported', `${expected.length - 1}.sample`);
+  const lastResource = path.join(directory, original.toString().match(/path="res:\/\/([^"]+)/)[1]);
   fs.writeFileSync(lastResource, 'invalid resource');
   assert.throws(() => collectRequiredAudio(directory), /Expected an imported Godot audio resource/);
   fs.writeFileSync(lastResource, 'RSRC restored fixture');

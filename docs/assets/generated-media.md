@@ -18,7 +18,7 @@ rename preserves existing native and browser saves.
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 | `level` | `basic`, `growing`, or `advanced`; explicitly authored for every catalogue entry. Older four-field callers default to `basic`; invalid supplied levels are rejected. |
 
-The 350 word pictures live together in `assets\images\words`. Word/reward/bear SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses the approved **Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged volume. Microsoft Edge online TTS generates these source recordings; playback and ordinary builds need no speech service or credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
+The 350 word pictures live together in `assets\images\words`. Word/reward SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses the approved **Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged volume. Microsoft Edge online TTS generates these source recordings; playback and ordinary builds need no speech service or credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
 
 Pip's original pose, idle-action and dance-part sheets are maintained under
 `assets\images\mascots`. The regular sheet's four frames are idle, speaking,
@@ -83,10 +83,9 @@ The existing `tools\generate-voices.ps1` command forwards to the same generator.
 Set `PYTHON` if a particular Python executable is required. Only generation uses
 the online service; the shipped game plays the committed recordings.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
-The game prompt catalog contains ten messages: wrong-answer and loss feedback,
-plus one greeting for each world. Together with the 350 word recordings, the
-generator maintains 360 active files under `assets\audio\voice`. Retired
-arrival/opening recordings have been removed; historical provenance remains in
+The game prompt catalog contains eight messages: one greeting for each world.
+Together with the 350 word recordings, the generator maintains 358 active files under `assets\audio\voice`. Retired
+arrival/opening recordings and Match wrong-answer/loss prompts have been removed; historical provenance remains in
 the asset documentation. The retired Voice Pop report recordings and their
 generator are no longer shipped; [their provenance](pop-voice.md) remains historical.
 Current source details and hashes are in [Ava speech](ava-voice.md).

@@ -107,7 +107,7 @@ func _check_game_models(words: Array) -> void:
 		for word in model.lesson_words:
 			check(model.match_spoken_word(word.id) == "correct", "The new world keeps normal pair scoring")
 			model.resolve_feedback()
-		check(model.phase == "won" and model.successes == 5, "Five correct pairs win in the new world")
+		check(model.phase == "won" and (model.matched_ids.size() / 2) == 5, "Five correct pairs win in the new world")
 		check(model.begin_open(world.id + "-1") and model.reward_theme == world.id,
 			"Winning captures the new world's reward identity")
 		check(not model.set_theme("spring") and model.finish_open() and model.reward_id == world.id + "-1",

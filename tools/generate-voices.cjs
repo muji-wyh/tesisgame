@@ -9,7 +9,6 @@ const PROFILE = Object.freeze({
 const EDGE_TTS_VERSION = '7.2.8';
 const MANIFEST_PATH = 'docs/assets/ava-voice.json';
 const PROMPT_IDS = [
-  'wrong', 'loss',
   ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`)
 ];
 

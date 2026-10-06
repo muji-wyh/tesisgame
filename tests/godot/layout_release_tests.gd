@@ -49,7 +49,7 @@ func _run() -> void:
 		for control in [app._storage_retry_button, app.collection_button, app.hint_button, app._voice_button]:
 			if control.is_visible_in_tree():
 				check(viewport.encloses(control.get_global_rect()), "Storage failure keeps header control on screen at %s: %s" % [dimensions, control.name])
-		for phase in ["won", "lost"]:
+		for phase in ["won"]:
 			app.model.phase = phase
 			app._refresh()
 			await settle()

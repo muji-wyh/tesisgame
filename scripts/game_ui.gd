@@ -31,7 +31,6 @@ const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
 const VOICE_MATCH_SECONDS: float = 1.0
-const LOSS_REACTIONS := ["High five! Let's try again!", "A big bear hug for you!", "You kept trying. Well done!"]
 
 class InputActivityObserver extends Node:
 	signal observed(event: InputEvent)
@@ -47,14 +46,14 @@ class ProgressBadges:
 	const RETRY := 1
 
 	var filled_count: int = 0
-	var total_count: int = 3
+	var total_count: int = 5
 	var badge_kind: int = SUCCESS
 
 	func _init(kind: int = SUCCESS) -> void:
 		badge_kind = kind
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	func set_filled_count(value: int, total: int = 3) -> void:
+	func set_filled_count(value: int, total: int) -> void:
 		total_count = maxi(0, total)
 		filled_count = clampi(value, 0, total_count) if total_count > 0 else maxi(0, value)
 		queue_redraw()
@@ -82,12 +81,9 @@ class ProgressBadges:
 class RewardSparkle:
 	extends Control
 
-	enum Shape { HEART, STAR }
-
 	var progress: float = 0.0
 	var accent: Color = Style.GOOD
-	var shape_kind: Shape = Shape.HEART
-	var particle_count: int = 8
+	var particle_count: int = 4
 
 	func set_progress(value: float) -> void:
 		progress = clampf(value, 0.0, 1.0)
@@ -112,14 +108,8 @@ class RewardSparkle:
 	func _draw_symbol(point: Vector2, radius: float, rotation_angle: float, tint: Color) -> void:
 		var stroke := Color(accent.r, accent.g, accent.b, tint.a)
 		var vertices: Array[Vector2] = []
-		match shape_kind:
-			Shape.HEART:
-				vertices = [Vector2(0, 1), Vector2(-0.9, 0.1), Vector2(-0.8, -0.6),
-					Vector2(-0.4, -0.8), Vector2(0, -0.4), Vector2(0.4, -0.8),
-					Vector2(0.8, -0.6), Vector2(0.9, 0.1)]
-			Shape.STAR:
-				for index in range(10):
-					vertices.append(Vector2.UP.rotated(PI * float(index) / 5.0) * (1.0 if index % 2 == 0 else 0.45))
+		for index in range(10):
+			vertices.append(Vector2.UP.rotated(PI * float(index) / 5.0) * (1.0 if index % 2 == 0 else 0.45))
 		var outline := PackedVector2Array()
 		for vertex in vertices:
 			outline.append(point + vertex.rotated(rotation_angle) * radius)
@@ -213,8 +203,6 @@ var collection_page: Panel
 var collected_rewards: Dictionary = {}
 var _result_retry_button: Button
 var chest_button: Button
-var failure_image: TextureRect
-var failure_button: Button
 var reduced_motion: bool = false
 var _page_hidden: bool = false
 var _resume_music_after_background: bool = false
@@ -246,9 +234,6 @@ var _playroom_medal: Medal
 var _favorite_reward_id: String = ""
 var playroom_save_path: String = "user://playroom.cfg"
 var _duck_trick_index: int = 0
-var _failure_sparkle: RewardSparkle
-var _failure_tween: Tween
-var _loss_reaction_index: int = 0
 var _last_phase: String = ""
 var _rebuilding: bool = false
 var _feedback_tweens: Array[Tween] = []
@@ -430,11 +415,11 @@ func _build_controls() -> void:
 	_mode_subheading.add_theme_color_override("font_color", Style.MUTED)
 	_mode_heading_button.add_child(_mode_subheading)
 	_success = ProgressBadges.new(ProgressBadges.SUCCESS)
-	_success.name = "MatchProgress"
+	_success.name = "MemoryProgress"
 	_success.tooltip_text = "0 matches"
 	_header_duck_slot.add_child(_success)
 	_mistakes = ProgressBadges.new(ProgressBadges.RETRY)
-	_mistakes.name = "RetryProgress"
+	_mistakes.name = "MemoryMistakes"
 	_mistakes.tooltip_text = "0 mistakes"
 	_header_duck_slot.add_child(_mistakes)
 	_toolbar = HBoxContainer.new()
@@ -576,28 +561,6 @@ func _build_controls() -> void:
 	chest_button.button_down.connect(_start_chest_hold)
 	chest_button.button_up.connect(_end_chest_hold)
 	chest_button.gui_input.connect(_chest_input)
-	failure_image = _picture(_stage)
-	failure_image.texture = load("res://assets/images/scenes/try-again.svg")
-	failure_image.offset_left = 20
-	failure_image.offset_top = 20
-	failure_image.offset_right = -20
-	failure_image.offset_bottom = -20
-	_failure_sparkle = RewardSparkle.new()
-	_failure_sparkle.shape_kind = RewardSparkle.Shape.HEART
-	_failure_sparkle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_failure_sparkle.hide()
-	_stage.add_child(_failure_sparkle)
-	_failure_sparkle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	failure_button = Button.new()
-	failure_button.name = "PlayWithBear"
-	failure_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	_set_accessibility_name(failure_button, "Play with the bear")
-	for style_name in ["normal", "hover", "pressed", "disabled"]:
-		failure_button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
-	failure_button.pressed.connect(_play_loss_bear)
-	_stage.add_child(failure_button)
-	failure_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	failure_button.hide()
 	_result_text = VBoxContainer.new()
 	_result_text.alignment = BoxContainer.ALIGNMENT_END
 	_result_text.add_theme_constant_override("separation", 10)
@@ -1008,6 +971,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_cancel_chest_hold()
 	_finish_chest_drag()
 	audio.stop_voice()
+	audio.stop_pair_feedback()
 	audio.stop_pip_reaction()
 	duck.settle()
 	_leaderboard_focus = get_viewport().gui_get_focus_owner()
@@ -1312,7 +1276,7 @@ func _sync_collection_content() -> void:
 func _hear_catalog_word(word: Dictionary) -> void:
 	if not _can_browse_collection() or not _age_catalog.visible or _age_catalog.scroll.is_scrolling():
 		return
-	audio.interact(model.theme_id, model.phase != "lost")
+	audio.interact(model.theme_id)
 	audio.say("res://" + str(word.audio))
 	_announce_status(str(word.text))
 
@@ -1478,7 +1442,7 @@ func _room_word(id: String) -> void:
 		return
 	for word in data.words:
 		if word.id == id:
-			audio.interact(model.theme_id, model.phase != "lost")
+			audio.interact(model.theme_id)
 			audio.say("res://" + word.audio)
 			return
 
@@ -1497,7 +1461,7 @@ func _room_pip_interaction(kind: String, message: String) -> void:
 	if not _can_use_room():
 		return
 	if kind in ["poke", "pet", "catch", "fetch"]:
-		audio.interact(model.theme_id, model.phase != "lost")
+		audio.interact(model.theme_id)
 		if kind in ["poke", "pet"]:
 			audio.play_pip()
 		else:
@@ -1566,42 +1530,6 @@ func _refresh_collection() -> void:
 			_room.show_item_error(playroom_state.toy_id, "Could not load\nTap to retry", _room.feedback_text)
 	_sync_collection_content()
 	_layout_collection()
-
-
-func _play_loss_bear() -> void:
-	if model.phase != "lost" or collection_page.visible:
-		return
-	_cancel_loss_play()
-	audio.interact(model.theme_id, false)
-	audio.cue("select")
-	var direction: float = -1.0 if _loss_reaction_index % 2 == 0 else 1.0
-	_caption.text = LOSS_REACTIONS[_loss_reaction_index]
-	_loss_reaction_index = (_loss_reaction_index + 1) % LOSS_REACTIONS.size()
-	_announce_status("Good try! " + _caption.text)
-	if reduced_motion:
-		return
-	failure_image.pivot_offset = failure_image.size * 0.5
-	_failure_sparkle.show()
-	_failure_tween = create_tween()
-	_failure_tween.tween_property(failure_image, "scale", Vector2(1.05, 1.03), 0.12).set_trans(Tween.TRANS_SINE)
-	_failure_tween.parallel().tween_property(failure_image, "rotation", direction * 0.05, 0.12)
-	_failure_tween.tween_property(failure_image, "rotation", -direction * 0.04, 0.12)
-	_failure_tween.parallel().tween_method(_failure_sparkle.set_progress, 0.0, 1.0, 0.35)
-	_failure_tween.tween_property(failure_image, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_SINE)
-	_failure_tween.parallel().tween_property(failure_image, "rotation", 0.0, 0.18)
-	_failure_tween.tween_callback(_cancel_loss_play)
-
-
-func _cancel_loss_play() -> void:
-	if _failure_tween != null:
-		_failure_tween.kill()
-	_failure_tween = null
-	if failure_image != null:
-		failure_image.scale = Vector2.ONE
-		failure_image.rotation = 0.0
-	if _failure_sparkle != null:
-		_failure_sparkle.set_progress(0.0)
-		_failure_sparkle.hide()
 
 
 func _collection_scroll_input(event: InputEvent, source: Control) -> void:
@@ -1742,8 +1670,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_finish_chest_drag()
 	_end_collection_drag()
 	audio.halt()
-	_cancel_loss_play()
-	_loss_reaction_index = 0
 	_stop_feedback_animations()
 	_last_phase = ""
 	for button in _found_words.get_children():
@@ -1871,7 +1797,7 @@ func _react_to_gameplay(correct: bool) -> void:
 	if collection_page.visible or _page_hidden:
 		return
 	duck.react_gameplay(correct)
-	if not _voice_mode:
+	if _mode_id == "pop" and not _voice_mode:
 		audio.play_pip_reaction(correct)
 
 
@@ -1977,6 +1903,7 @@ func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
 	if _mode_id != "memory" or collection_page.visible:
 		return
 	audio.interact(model.theme_id)
+	audio.stop_pair_feedback()
 	audio.cue("select")
 	audio.say("res://" + word.audio)
 	duck.react("curious")
@@ -1986,20 +1913,18 @@ func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
 func _memory_answer(_words: Array, correct: bool) -> void:
 	if _mode_id != "memory" or collection_page.visible:
 		return
-	audio.cue("correct" if correct else "wrong")
+	audio.play_pair_feedback(correct)
 	_react_to_gameplay(correct)
 
 
 func _memory_progress(successes: int, _attempts: int) -> void:
 	if _mode_id != "memory":
 		return
-	model.successes = successes
-	model.mistakes = _memory.memory.mistakes
 	if not _rebuilding:
 		_success.set_filled_count(successes, 5)
-		_mistakes.set_filled_count(model.mistakes, 0)
-		if _host != null:
-			_host.roundProgress(model.successes, model.mistakes)
+		_success.tooltip_text = "%d matches" % successes
+		_mistakes.set_filled_count(_memory.memory.mistakes, 0)
+		_mistakes.tooltip_text = "%d mistakes" % _memory.memory.mistakes
 
 
 func _memory_finished(won: bool, found: Array) -> void:
@@ -2011,7 +1936,7 @@ func _memory_finished(won: bool, found: Array) -> void:
 
 
 func _memory_status() -> String:
-	return "Memory. %d of 5 pairs grown. %d attempts. %s" % [model.successes, _memory.memory.attempts, _memory.status_label.text]
+	return "Memory. %d of 5 pairs grown. %d attempts. %s" % [_memory.memory.matched_word_ids.size(), _memory.memory.attempts, _memory.status_label.text]
 
 
 func _sync_memory_selection() -> void:
@@ -2089,11 +2014,8 @@ func _refresh() -> void:
 	_new_adventure_button.visible = not _save_error
 	_result_board_button.disabled = model.chest_state == "opening"
 	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
-	var progress_total: int = Model.MATCH_PAIR_COUNT if _mode_id == "match" else 5 if _mode_id == "memory" else 0
-	_success.set_filled_count(model.successes, progress_total)
-	_success.tooltip_text = "%d matches" % model.successes if progress_total > 0 else ""
-	_mistakes.set_filled_count(model.mistakes, 0 if _mode_id == "memory" else 3)
-	_mistakes.tooltip_text = "%d mistakes" % model.mistakes
+	if _mode_id == "memory":
+		_memory_progress(_memory.memory.matched_word_ids.size(), _memory.memory.attempts)
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
 	_storage_retry_button.add_theme_font_size_override("font_size", 16)
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
@@ -2102,7 +2024,7 @@ func _refresh() -> void:
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
 	_refresh_age_choices()
-	_success.visible = playing and _mode_id in ["match", "memory"] and not _storage_retry_button.visible
+	_success.visible = playing and _mode_id == "memory" and not _storage_retry_button.visible
 	_refresh_found_words(playing, palette.accent)
 	if not playing and _voice_mode:
 		_stop_voice()
@@ -2123,8 +2045,6 @@ func _refresh() -> void:
 		_message.text = "Now find its match!"
 	elif model.phase == "feedback":
 		_message.text = "Great match!" if model.last_correct else "Not quite. Try another one!"
-		if model.streak > 1:
-			_message.text += " %d in a row!" % model.streak
 	else:
 		_message.text = "Find %d word–picture pairs." % Model.MATCH_PAIR_COUNT
 	if playing and _mode_id == "memory":
@@ -2142,10 +2062,6 @@ func _refresh() -> void:
 		_treasure_backdrop.configure(palette)
 	chest.visible = won
 	chest_button.visible = won
-	failure_image.visible = model.phase == "lost"
-	failure_button.visible = model.phase == "lost"
-	failure_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 26, 3))
-	_failure_sparkle.accent = palette.accent
 	chest_button.disabled = model.chest_state == "opened" or chest.opening_committed() or _save_error
 	chest_button.tooltip_text = "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
@@ -2171,10 +2087,6 @@ func _refresh() -> void:
 		elif not _unlocked_gift.is_empty():
 			_title.text = "A gift for Pip!"
 			_caption.text = str(_unlocked_gift.name) + " unlocked!"
-	elif model.phase == "lost":
-		_title.text = "Good try!"
-		_caption.text = "Tap the bear to play!"
-		_stage.add_theme_stylebox_override("panel", Style.box(Color.WHITE, palette.accent.lightened(0.7), 26))
 	if _last_phase != model.phase:
 		_last_phase = model.phase
 		if won:
@@ -2187,18 +2099,9 @@ func _refresh() -> void:
 			if _controller_mode and not collection_page.visible:
 				chest_button.focus_mode = Control.FOCUS_ALL
 				_default_focus().grab_focus()
-		elif model.phase == "lost":
-			duck.react("curious")
-			audio.stop_music()
-			audio.cue("loss", "loss")
-			if _controller_mode and not collection_page.visible:
-				var action: Control = _default_focus()
-				action.focus_mode = Control.FOCUS_ALL
-				action.grab_focus()
 	_result_board_button.visible = model.phase == "won" and _mode_id in ["match", "memory"] and not _leaderboard_result.is_empty()
 	if _host != null:
 		_host.background("#" + palette.background.to_html(false), "#" + palette.accent.to_html(false), "#" + palette.light.to_html(false), model.theme_id)
-		_host.roundProgress(model.successes, model.mistakes)
 	if _save_error:
 		_message.text = "Rewards are unavailable. You can keep practising." if playing else "Reward progress: " + medal_progress.error
 	elif _journey_save_failed and playing:
@@ -2271,7 +2174,7 @@ func _refresh_found_words(playing: bool, accent: Color) -> void:
 
 
 func _replay_found_word(word_id: String) -> void:
-	if collection_page.visible or not model.phase in ["won", "lost"]:
+	if collection_page.visible or model.phase != "won":
 		return
 	for word in model.lesson_words:
 		if word.id == word_id:
@@ -2282,7 +2185,8 @@ func _replay_found_word(word_id: String) -> void:
 func _hear_word(word: Dictionary) -> void:
 	if collection_page.visible or _voice_mode:
 		return
-	audio.interact(model.theme_id, model.phase != "lost")
+	audio.interact(model.theme_id)
+	audio.stop_pair_feedback()
 	audio.say("res://" + word.audio)
 	duck.react("curious")
 	_announce_status(str(word.text) + ". Look at the picture and say the word.")
@@ -2349,18 +2253,18 @@ func _start_voice_match_feedback(ids: Array[String]) -> void:
 	_voice_match_serial += 1
 	_voice_match_origin_frame = Engine.get_process_frames()
 	_refresh_voice_match_link()
-	# A short nonverbal cue is safe beside the microphone; keep music and words quiet.
+	# The dedicated answer channel continues through recognizer rollover while music and words stay quiet.
 	audio.interact(model.theme_id, false)
-	audio.play_match_voice_hit()
+	audio.play_pair_feedback(true)
 
 
-func _clear_voice_match_feedback() -> void:
+func _clear_voice_match_feedback(stop_sound: bool = true) -> void:
 	_voice_match_left = 0.0
 	_voice_match_ids.clear()
 	if _voice_match_link != null:
 		_voice_match_link.configure(null, null, reduced_motion, false)
-	if audio != null:
-		audio.stop_match_voice_hit()
+	if audio != null and stop_sound:
+		audio.stop_pair_feedback()
 	_publish_voice_match_feedback()
 
 
@@ -2417,6 +2321,7 @@ func _continue_match() -> void:
 	if collection_page.visible or _mode_id != "match" or model.phase != "feedback":
 		return
 	audio.stop_voice()
+	audio.stop_pair_feedback()
 	_resolve_feedback()
 	_default_focus().grab_focus()
 
@@ -2427,10 +2332,6 @@ func _refresh_controller_focus() -> void:
 	if model.phase == "won" and model.chest_state == "closed" and not _save_error:
 		chest_button.focus_mode = Control.FOCUS_ALL
 		chest_button.grab_focus()
-	elif model.phase == "lost" and not _valid_focus(get_viewport().gui_get_focus_owner()):
-		var action: Control = _default_focus()
-		action.focus_mode = Control.FOCUS_ALL
-		action.grab_focus()
 	elif not _valid_focus(get_viewport().gui_get_focus_owner()):
 		_default_focus().grab_focus()
 
@@ -2445,7 +2346,6 @@ func _layout() -> void:
 	_fit_mode_buttons.call_deferred()
 	_message.hide()
 	_stop_feedback_animations()
-	_cancel_loss_play()
 	_end_collection_drag()
 	_fit_grid.call_deferred()
 	_layout_collection()
@@ -2513,7 +2413,7 @@ func _fit_mode_buttons() -> void:
 	_header.custom_minimum_size.y = ceilf(56 / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	var with_counts: bool = _mode_id in ["match", "memory"] and model.phase in ["waiting", "matching", "feedback"] and not _storage_retry_button.visible
+	var with_counts: bool = _mode_id == "memory" and model.phase in ["waiting", "matching", "feedback"] and not _storage_retry_button.visible
 	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts else 52) / css_scale), ceilf(56 / css_scale))
 	_header_duck_art_slot.position = Vector2(0, 2 / css_scale)
 	_header_duck_art_slot.size = Vector2.ONE * (52 / css_scale)
@@ -2726,7 +2626,7 @@ func _can_request_hint() -> bool:
 	if _mode_id != "match" or model.hints_remaining <= 0 or not model.hint_ids.is_empty() or not model.error.is_empty():
 		return false
 	if model.phase == "feedback":
-		return not _voice_mode and model.successes < Model.MATCH_PAIR_COUNT and model.mistakes < 3
+		return not _voice_mode and model.matched_ids.size() < model.cards.size()
 	return model.phase in ["waiting", "matching"]
 
 
@@ -2737,7 +2637,7 @@ func _refresh_hint() -> void:
 	hint_button.count = model.hints_remaining
 	if model.hints_remaining <= 0:
 		hint_button.tooltip_text = "No hints left. Start a new round for three more."
-	elif model.successes >= Model.MATCH_PAIR_COUNT or model.mistakes >= 3:
+	elif model.phase == "won" or model.matched_ids.size() == model.cards.size():
 		hint_button.tooltip_text = "Round finished. View your result."
 	elif _voice_mode and model.phase == "feedback":
 		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
@@ -2756,6 +2656,7 @@ func _request_hint() -> void:
 	if not model.request_hint():
 		return
 	duck.react("happy")
+	audio.stop_pair_feedback()
 	if not _voice_mode:
 		audio.interact(model.theme_id)
 		audio.cue("select")
@@ -2788,33 +2689,38 @@ func _select_card(id: String) -> void:
 	if not model.phase in ["waiting", "matching"]:
 		return
 	if not _voice_mode:
-		audio.interact(model.theme_id, model.phase != "lost")
+		audio.interact(model.theme_id)
 	# Start the accepted tap's sound before the full board refresh and its
 	# browser status updates. The model still validates every selection first.
 	var result: String = model.select(id, false)
 	if result == "ignored":
 		return
-	if not _voice_mode:
-		if result in ["selected", "reselected"]:
+	if result in ["selected", "reselected"]:
+		audio.stop_pair_feedback()
+		if not _voice_mode:
 			audio.cue("select")
 			audio.say("res://" + model.card_by_id(id).word.audio)
-		elif result in ["correct", "wrong"]:
-			audio.cue(result, "wrong" if result == "wrong" else "")
-			if result == "correct":
-				audio.say("res://" + model.card_by_id(id).word.audio)
+	if result in ["correct", "wrong"]:
+		audio.stop_voice()
+		if _voice_mode:
+			audio.interact(model.theme_id, false)
+		audio.play_pair_feedback(result == "correct")
+		if result == "correct" and not _voice_mode:
+			audio.say("res://" + model.card_by_id(id).word.audio)
 	model.changed.emit()
 	if result in ["selected", "reselected"] and not _voice_mode:
 		duck.react("curious")
 	elif result in ["correct", "wrong"]:
 		_animate_feedback(model.feedback_ids, result == "correct")
-		feedback_timer.start(MATCH_FEEDBACK_SECONDS)
+		feedback_timer.start(VOICE_MATCH_SECONDS if _voice_mode else MATCH_FEEDBACK_SECONDS)
 	cards[id].play_press()
 
 
 func _resolve_feedback() -> void:
 	feedback_timer.stop()
 	feedback_timer.wait_time = MATCH_FEEDBACK_SECONDS
-	_clear_voice_match_feedback()
+	# The board is ready before the reference clips finish; let their tails decay naturally.
+	_clear_voice_match_feedback(false)
 	_stop_feedback_animations()
 	model.resolve_feedback()
 	_consume_spoken_word()
@@ -2833,7 +2739,7 @@ func choose_theme(id: String) -> void:
 		_announce_collection_state()
 	duck.react("happy")
 	if not _voice_mode and not _pop_speech_active:
-		audio.interact(model.theme_id, model.phase != "lost")
+		audio.interact(model.theme_id)
 		audio.cue("", model.theme_id + "-theme")
 
 
@@ -2864,7 +2770,6 @@ func set_reduced_motion(value: bool) -> void:
 			chest.begin_hold()
 			chest.set_hold_progress(_hold_elapsed / HOLD_SECONDS)
 		_stop_feedback_animations()
-		_cancel_loss_play()
 		chest.finish_immediately()
 	if not data.words.is_empty():
 		_refresh()
@@ -3026,7 +2931,6 @@ func on_page_hidden() -> void:
 	_memory.pause(true)
 	_stop_controller_actions()
 	_stop_feedback_animations()
-	_cancel_loss_play()
 	_cancel_chest_hold()
 	_settle_released_chest()
 	_finish_chest_drag()
@@ -3061,7 +2965,7 @@ func on_page_visible() -> void:
 
 
 func _restore_mode_music() -> void:
-	if _page_hidden or _voice_mode or _pop_speech_active or model.phase == "lost":
+	if _page_hidden or _voice_mode or _pop_speech_active:
 		return
 	if _mode_id == "pop" and not collection_page.visible:
 		return
@@ -3412,8 +3316,6 @@ func _default_focus() -> Control:
 		if model.chest_state == "closed" and not _save_error:
 			return chest_button
 		return _result_retry_button if _save_error else _new_adventure_button
-	if model.phase == "lost":
-		return _result_retry_button if _save_error else _new_adventure_button
 	if _mode_id == "pop":
 		var pop_focus: Control = _pop.default_focus()
 		return pop_focus if _valid_focus(pop_focus) else collection_button
@@ -3556,15 +3458,19 @@ func _on_speech_debug(arguments: Array) -> bool:
 		return false
 	if arguments[1] == "stop":
 		audio.stop_pop_sounds()
-		audio.stop_match_voice_hit()
+		audio.stop_pair_feedback()
 		audio.stop_pip_reaction()
 		return true
 	audio.interact(model.theme_id, false)
 	match arguments[1]:
 		"launch": audio.cue("pop-launch")
 		"slice": audio.cue("pop-slice")
-		"miss": audio.play_pip_reaction(false)
-		"match": audio.play_match_voice_hit()
+		"miss":
+			if _mode_id == "pop":
+				audio.play_pip_reaction(false)
+			else:
+				audio.play_pair_feedback(false)
+		"match": audio.play_pair_feedback(true)
 	return true
 
 
@@ -3679,7 +3585,7 @@ func _on_voice_state(arguments: Array) -> void:
 			duck.settle()
 		return
 	var enabled: bool = bool(arguments[0])
-	if enabled and model.phase in ["won", "lost"]:
+	if enabled and model.phase == "won":
 		_stop_voice()
 		return
 	var layout_changed: bool = _voice_mode != enabled
@@ -3692,8 +3598,8 @@ func _on_voice_state(arguments: Array) -> void:
 		_refresh_match_cards()
 		_layout()
 	if enabled:
-		# Automatic recognizer rollover must not cut off a just-earned zap.
-		audio.halt(_voice_match_left > 0.0)
+		# Automatic recognizer rollover must not cut off the current answer sound.
+		audio.halt(audio.pair_feedback.playing)
 	else:
 		_clear_voice_match_feedback()
 		_speech_queue.clear()
@@ -3775,8 +3681,6 @@ func _animate_feedback(ids: Array[String], correct: bool) -> void:
 			var sparkle := RewardSparkle.new()
 			sparkle.name = "MatchSparkle"
 			sparkle.accent = Data.theme(model.theme_id).accent
-			sparkle.shape_kind = RewardSparkle.Shape.STAR
-			sparkle.particle_count = mini(2 + model.streak, 6)
 			sparkle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			card.add_child(sparkle)
 			sparkle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -3959,7 +3863,7 @@ func _chest_input(event: InputEvent) -> void:
 
 
 func _new_adventure() -> void:
-	if collection_page.visible or not model.phase in ["won", "lost"] or model.chest_state == "opening":
+	if collection_page.visible or model.phase != "won" or model.chest_state == "opening":
 		return
 	if new_round(-1, false, "", "match"):
 		_default_focus().grab_focus()
@@ -4045,7 +3949,6 @@ func _show_collection() -> void:
 	_stop_voice()
 	feedback_timer.paused = true
 	_stop_feedback_animations()
-	_cancel_loss_play()
 	_cancel_chest_hold()
 	_settle_released_chest()
 	_finish_chest_drag()
@@ -4204,6 +4107,7 @@ func _play_duck() -> void:
 	_duck_trick_index += 1
 	if _voice_mode or _pop_speech_active:
 		return
-	audio.interact(model.theme_id, model.phase != "lost")
-	audio.play_pip()
+	audio.interact(model.theme_id)
+	if _mode_id == "pop":
+		audio.play_pip()
 	_announce_status("Pip says hello! " + caption)

@@ -164,12 +164,12 @@ async function winMatch(page) {
 }
 
 async function greetings(page) {
-  // Gameplay reactions reuse these recordings at a different pitch.
+  // Voice Pop reactions reuse these recordings at a different pitch.
   return page.evaluate(durations => audioObservation.playbacks.filter(sound => !sound.loop && sound.playbackRate === 1 &&
     durations.some(duration => Math.abs(sound.duration - duration) <= 2 / sound.sampleRate)), samples.map(sample => sample.duration));
 }
 
-for (const reducedMotion of ['reduce', 'no-preference']) test(`native results and Home finish each Pip action and real greeting before another tap with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
+for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip stays quiet and Home finishes each real greeting with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
   await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion });
   const available = await page.evaluate(() => audioObservation.available);
@@ -219,10 +219,22 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`native results an
     expect((await greetings(page)).length, 'Busy gestures are discarded instead of queued.').toBe(available ? before + 1 : before);
   }
   for (let index = 0; index < 4; index++) {
-    await expectGreetingAfter(() => burst(companion), 1.8, () => click(companion));
+    const before = await page.evaluate(() => audioObservation.playbacks.length);
+    const startedAt = Date.now();
+    await click(companion, reducedMotion === 'reduce' ? 1 : 3);
     await expect(page.locator('#game-status')).toContainText('Pip says hello!');
+    const caption = await page.locator('#game-status').textContent();
+    if (reducedMotion === 'no-preference') {
+      await click(companion);
+      await expect(page.locator('#game-status'), 'A busy visual trick still ignores repeated taps.').toHaveText(caption);
+      await page.waitForTimeout(Math.max(0, 1920 - (Date.now() - startedAt)));
+    }
+    await rendered(page);
+    expect(await page.evaluate(from => audioObservation.playbacks.slice(from).filter(sound => !sound.loop), before),
+      'Match result gestures remain silent and never queue a later call.').toEqual([]);
   }
-  await page.screenshot({ path: testInfo.outputPath('pip-random-sound-results.png'), scale: 'css' });
+  expect(await greetings(page), 'Match gameplay and results do not play any Pip greeting.').toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('pip-silent-match-results.png'), scale: 'css' });
   await openRewards(page);
   const pip = await roomControl(page, 'pip');
   for (let index = 0; index < 2; index++) {
@@ -238,14 +250,14 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`native results an
     } finally { await page.mouse.up(); }
     // The normal action still owns this follow-up press. With reduced motion,
     // a driver round trip can outlast the complete short recording; atomic
-    // result and Home mouse bursts above verify the audio-only gate instead.
+    // Home mouse bursts above verify the audio-only gate instead.
     if (reducedMotion === 'no-preference') await click(pip);
   }, 1.2, () => click(pip));
   await expect(page.locator('#game-status')).toHaveText('Pip leans into your hand. Lovely!');
   expect(await saves(page)).toEqual(original);
   const played = await greetings(page);
   if (available) {
-    expect(played).toHaveLength(7);
+    expect(played).toHaveLength(3);
     expect(new Set(played.map(sound => sound.fingerprint)).size).toBeGreaterThan(1);
     for (let index = 1; index < played.length; index++) expect(played[index].fingerprint).not.toBe(played[index - 1].fingerprint);
   }

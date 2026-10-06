@@ -11,6 +11,8 @@ Restore the licensed [animated chest inputs](voice-pop-treasure.md#shared-chest-
 before importing or building a fresh checkout. These models remain local and
 are bundled into the compiled game; they are not stored in Git. The retired
 Talk Quest characters, maps, and treasure particles are not build inputs.
+Restore the [reference pair-feedback audio](assets/pair-feedback-audio.md) with
+its importer as well; these required local excerpts are also bundled in the PCK.
 
 ```powershell
 npm ci
@@ -85,8 +87,8 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
-game effects, Pip sounds, eight background tracks, ten game prompts and
-88 themed chest cues. Retired Voice Pop report recordings are excluded.
+game effects, Pip sounds, eight background tracks, eight world greetings, the two reference pair-feedback clips and
+88 themed chest cues. Retired Voice Pop reports and Match correction/loss recordings are excluded.
 Once startup finishes, playback needs no further audio downloads. The build opens the actual exported
 PCK and loads the required audio resources to verify that they are present and
 playable. Retired arrival and opening voice prompts remain excluded.
@@ -171,7 +173,7 @@ The browser command rebuilds the Web export and runs the maintained scenarios
 across the configured Chromium and WebKit profiles. Run imports, native tests,
 exports, and browser jobs sequentially against one checkout.
 
-The native suite exercises actual GDScript state transitions, distractors, independent thresholds, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
+The native suite exercises actual GDScript state transitions, distractors, unlimited Match retries and board completion, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 
 The [historical design index](superpowers/README.md) preserves earlier
 research, plans, and decisions, including retired modes and collectible UI.

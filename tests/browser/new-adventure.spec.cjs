@@ -25,33 +25,27 @@ async function pieceCount(page) {
   return [...counts.matchAll(/:\s*(\d+)/g)].reduce((total, match) => total + Number(match[1]), 0);
 }
 
-async function finishMatch(page, won) {
+async function finishMatch(page, knownCards = null) {
   await chooseMode(page, 'match');
-  await expect(page.locator('#game-status')).toContainText('Find 5 word');
+  await expect.poll(async () => (await metrics(page)).library?.visible).toBe(false);
   const bounds = await metrics(page), cards = new Map();
-  for (let index = 0; index < 10; index++) {
-    const point = boardPoint(bounds, index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
+  for (const { index, kind, word } of knownCards || await discoverMatchCards(page)) {
     if (!cards.has(word)) cards.set(word, {});
     cards.get(word)[kind] = index;
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
   expect(pairs).toHaveLength(5);
-  const attempts = won ? pairs.length : 3;
+  const attempts = pairs.length;
   for (let index = 0; index < attempts; index++) {
-    const [word, pair] = won ? pairs[index] : pairs[0];
+    const [word, pair] = pairs[index];
     const written = boardPoint(bounds, pair.Word);
-    const pictured = boardPoint(bounds, won ? pair.Picture : pairs[1][1].Picture);
+    const pictured = boardPoint(bounds, pair.Picture);
     await tap(page, written.x, written.y);
     await expect(page.locator('#selection-status')).toHaveText(`Word: ${word}`);
     await tap(page, pictured.x, pictured.y);
-    await expect(page.locator('#game-status')).toContainText(won ? 'Great match!' : 'Not quite.');
+    await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === attempts - 1 ? (won ? 'You did it!' : 'Good try!') : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === attempts - 1 ? 'You did it!' : 'Find 5 word');
   }
   return [...cards.keys()];
 }
@@ -61,8 +55,8 @@ test(`result review words support ${input} swiping without a scrollbar or accide
   test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch dragging uses Chromium CDP.');
   await page.setViewportSize({ width: 960, height: 720 });
   const errors = await openGame(page, { mode: 'match' });
-  await finishMatch(page, false);
-  const bounds = await metrics(page), review = resultPoint(bounds, 'review', { message: true });
+  await finishMatch(page);
+  const bounds = await metrics(page), review = resultPoint(bounds, 'review');
   const point = { x: bounds.x + (review.x + 80) * bounds.scale, y: bounds.y + review.y * bounds.scale };
   await page.touchscreen.tap(point.x, point.y);
   const status = page.locator('#game-status');
@@ -99,31 +93,30 @@ test(`result review words support ${input} swiping without a scrollbar or accide
 });
 }
 
-for (const won of [true, false]) {
-test(`New adventure starts Match directly after a ${won ? 'win' : 'loss'}`, async ({ page }, testInfo) => {
+test('New adventure starts Match directly after completing the board', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 5);
   const world = await page.locator('meta[name="theme-color"]').getAttribute('content');
-  const originalWords = await matchWords(page), pieces = await pieceCount(page);
-  expect((await finishMatch(page, won)).sort()).toEqual([...originalWords].sort());
+  const originalCards = await discoverMatchCards(page), pieces = await pieceCount(page);
+  const originalWords = [...new Set(originalCards.map(card => card.word))];
+  expect((await finishMatch(page, originalCards)).sort()).toEqual([...originalWords].sort());
   const saved = await record(page), previousTopic = visits(saved)[0];
-  await page.screenshot({ path: testInfo.outputPath(`result-actions-${won ? 'win' : 'loss'}.png`), scale: 'css' });
-  const next = resultPoint(await metrics(page), 'newAdventure', { message: !won });
+  await page.screenshot({ path: testInfo.outputPath('result-actions-complete.png'), scale: 'css' });
+  const next = resultPoint(await metrics(page), 'newAdventure');
   await tap(page, next.x, next.y);
   await expect(page.locator('#game-status')).toHaveText(INTRO);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', world);
   await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath(`direct-next-lesson-${won ? 'win' : 'loss'}.png`), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('direct-next-lesson-complete.png'), scale: 'css' });
   const nextWords = await matchWords(page);
   expect(nextWords.filter(word => originalWords.includes(word)), 'A direct New adventure rotates the five-word topic without a picker.').toEqual([]);
   const changed = await record(page);
   expect(visits(changed)[0]).not.toBe(previousTopic);
   expect(roomFields(changed), 'Starting a lesson preserves existing room, sticker and gift choices.').toEqual(roomFields(saved));
-  expect(await pieceCount(page), 'A win keeps its protected unopened piece; a loss awards nothing.').toBe(pieces + Number(won));
+  expect(await pieceCount(page), 'Completing the board keeps its protected unopened piece.').toBe(pieces + 1);
   expect(errors).toEqual([]);
 });
-}
 
 test('Pip room and Back preserve the Match board and selected card', async ({ page }, testInfo) => {
   const errors = await openGame(page);

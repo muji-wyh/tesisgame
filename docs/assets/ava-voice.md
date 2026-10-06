@@ -1,6 +1,6 @@
 # Ava speech
 
-All 350 vocabulary pronunciations and ten active spoken prompts use the user's
+All 350 vocabulary pronunciations and eight active world greetings use the user's
 approved **Ava Sweet** profile. This replaces the Jenny recordings on October 3,
 2026. The approved preview says "Hello, how are you?"; the same voice settings
 apply to the game catalog without changing its words or prompts.
@@ -67,8 +67,8 @@ The audited picture-naming phrase "A kite." is retained for `word-kite`.
 ## Runtime coverage
 
 Match, Memory, Voice Pop, word lists, and results all play the same
-bundled pronunciation files through `GameAudio.say`. Eight world greetings,
-wrong-answer feedback, and loss encouragement use the same profile. Gameplay
+bundled pronunciation files through `GameAudio.say`. Eight world greetings use the same profile. Match no longer includes spoken
+wrong-answer feedback or a loss prompt. Gameplay
 never asks the operating system to choose a different speaking voice.
 
 Pip's duck calls, music, chest sounds, and other nonverbal sound effects remain

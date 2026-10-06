@@ -492,6 +492,14 @@ func _check_pop(app, state, storage, player_id: String) -> void:
 func _check_match(app, state, player_id: String) -> void:
 	app.new_round(42, true)
 	await settle()
+	var first_id: String = app.model.lesson_words[0].id
+	var other_id: String = app.model.lesson_words[1].id
+	for attempt in range(7):
+		app._select_card(first_id + ":word")
+		app._select_card(other_id + ":image")
+		app._continue_match()
+	check(app.model.phase == "waiting" and app.model.mistakes == 7,
+		"A leaderboard-eligible Match round stays playable after seven misses")
 	app._request_hint()
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
@@ -510,7 +518,7 @@ func _check_match(app, state, player_id: String) -> void:
 	action(app._leaderboard_panel, "LeaderboardPlayer_" + player_id).pressed.emit()
 	action(app._leaderboard_panel, "LeaderboardSaveScore").pressed.emit()
 	await settle()
-	check(state.board("match").size() == 1 and state.board("match")[0].result == {"won": true, "mistakes": 0, "hints_used": 1},
+	check(state.board("match").size() == 1 and state.board("match")[0].result == {"won": true, "mistakes": 7, "hints_used": 1},
 		"Match ranks the completed round's misses and consumed hints")
 	check(app.model.chest_state == "closed" and app.medal_progress.counts == reward_before,
 		"Leaderboard submission does not open a chest or duplicate its reward")

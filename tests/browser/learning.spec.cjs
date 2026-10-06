@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint, memoryPoint,
-  progressRegion, headerIconRect, openRewards, observeAudio, visibleColorCount } = require('./game-ui.cjs');
+  headerIconRect, openRewards, observeAudio, visibleColorCount } = require('./game-ui.cjs');
 
 const READY = 'Find 5 word';
 
@@ -75,7 +75,7 @@ test('five words survive switching between Match and Memory', async ({ page }, t
   expect(errors).toEqual([]);
 });
 
-test('matched word and picture taps pronounce without changing scores, hints or selection', async ({ page }, testInfo) => {
+test('matched word and picture taps pronounce without changing completion, hints or selection', async ({ page }, testInfo) => {
   await observeAudio(page);
   const errors = await openGame(page);
   await chooseMode(page, 'match');
@@ -86,7 +86,6 @@ test('matched word and picture taps pronounce without changing scores, hints or 
   await expect(page.locator('#game-status')).toContainText('Great match!');
   await expect(page.locator('#game-status')).toContainText(READY);
   const saved = await savedState(page);
-  const score = await patch(page, bounds, progressRegion(bounds));
   const hints = await patch(page, bounds, headerIconRect(bounds, 'hint'));
   for (const index of [pair.Word, pair.Picture, pair.Word]) {
     const starts = await page.evaluate(() => window.audioObservation.starts);
@@ -96,7 +95,6 @@ test('matched word and picture taps pronounce without changing scores, hints or 
       await expect.poll(() => page.evaluate(() => window.audioObservation.starts)).toBeGreaterThan(starts);
     }
     await expect(page.locator('#selection-status')).toBeEmpty();
-    expect((await patch(page, bounds, progressRegion(bounds))).equals(score), 'Replaying an earned pair cannot add another success or mistake.').toBe(true);
     expect((await patch(page, bounds, headerIconRect(bounds, 'hint'))).equals(hints), 'Replaying cannot spend or replenish the hint badge.').toBe(true);
     expect(await savedState(page)).toEqual(saved);
   }
@@ -106,7 +104,6 @@ test('matched word and picture taps pronounce without changing scores, hints or 
   await cardTap(page, pair.Picture);
   await expect(page.locator('#game-status')).toHaveText(`${word}. Look at the picture and say the word.`);
   await expect(page.locator('#selection-status'), 'A replay does not replace an already selected unmatched card.').toHaveText(`Word: ${nextWord}`);
-  expect((await patch(page, bounds, progressRegion(bounds))).equals(score)).toBe(true);
   expect(await savedState(page)).toEqual(saved);
   const png = await page.screenshot({ path: testInfo.outputPath('matched-card-replay-full-board.png'), scale: 'css' });
   expect(await visibleColorCount(page, png)).toBeGreaterThan(20);

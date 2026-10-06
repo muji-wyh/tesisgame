@@ -87,7 +87,7 @@ test('Memory reveals start their cue and word before selection publication, incl
     await reveal(first.index);
     const beforeWrong = await page.evaluate(() => window.audioObservation.playbacks.length);
     await reveal(wrong.index);
-    await expectRecording(page, beforeWrong, 'assets/audio/sfx/wrong.wav');
+    await expectRecording(page, beforeWrong, 'assets/imported-audio/pair-feedback/wrong.wav');
     expect(await page.evaluate(() => window.memoryAudioTiming.statuses.some(status => status.text.includes('Try another pair.')))).toBe(true);
     await expect(page.locator('#selection-status')).toBeEmpty();
     await expect(page.locator('#game-status')).toContainText('1 attempts.');
