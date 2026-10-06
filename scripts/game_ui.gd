@@ -27,6 +27,7 @@ const LeaderboardState = preload("res://scripts/leaderboard_state.gd")
 const LeaderboardPanel = preload("res://scripts/leaderboard_panel.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
@@ -171,6 +172,10 @@ var _mode_menu_title: Label
 var _mode_menu_focus_modes: Dictionary = {}
 var _mode_menu_resume_voice: bool = false
 var _mode_menu_resume_pop: bool = false
+var _mode_menu_pointer: int = -2
+var _mode_menu_origin := Vector2.ZERO
+var _mode_menu_dragged: bool = false
+var _mode_menu_mouse_emulated: bool = false
 var _memory: MemoryGarden
 var _pop: VoicePop
 var _pop_rewards: PopRewardRoom
@@ -430,6 +435,7 @@ func _build_controls() -> void:
 	_voice_button.name = "Voice"
 	_voice_button.symbol = Icons.Symbol.VOICE
 	_voice_button.toggle_mode = true
+	UiClick.bind_button(_voice_button)
 	_voice_button.pressed.connect(_toggle_voice)
 	_toolbar.add_child(_voice_button)
 	hint_button = Icons.new()
@@ -444,6 +450,7 @@ func _build_controls() -> void:
 	collection_button.symbol = Icons.Symbol.MORE
 	collection_button.tooltip_text = "More: Pip's room, players and leaderboards"
 	_set_accessibility_name(collection_button, collection_button.tooltip_text)
+	UiClick.bind_button(collection_button)
 	collection_button.pressed.connect(_show_collection)
 	_toolbar.add_child(collection_button)
 	_build_mode_menu()
@@ -601,6 +608,7 @@ func _build_controls() -> void:
 	_result_retry_button.name = "RetryRewardSave"
 	_result_retry_button.text = "Retry saving"
 	_result_retry_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	UiClick.bind_button(_result_retry_button)
 	_result_retry_button.pressed.connect(_retry_reward_save)
 	_result_retry_button.hide()
 	result_actions.add_child(_result_retry_button)
@@ -608,6 +616,7 @@ func _build_controls() -> void:
 	_new_adventure_button.name = "NewAdventure"
 	_new_adventure_button.text = "New adventure"
 	_new_adventure_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	UiClick.bind_button(_new_adventure_button)
 	_new_adventure_button.pressed.connect(_new_adventure)
 	result_actions.add_child(_new_adventure_button)
 	_result_board_button = Button.new()
@@ -615,12 +624,14 @@ func _build_controls() -> void:
 	_result_board_button.text = "Leaderboard"
 	_result_board_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_result_board_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	UiClick.bind_button(_result_board_button)
 	_result_board_button.pressed.connect(_show_result_leaderboard)
 	_toolbar.add_child(_result_board_button)
 	_toolbar.move_child(_result_board_button, collection_button.get_index())
 	_try_gift_button = Button.new()
 	_try_gift_button.text = "Try it with Pip"
 	_try_gift_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	UiClick.bind_button(_try_gift_button)
 	_try_gift_button.pressed.connect(_try_unlocked_gift)
 	_try_gift_button.hide()
 	_result_footer.add_child(_try_gift_button)
@@ -633,6 +644,7 @@ func _build_controls() -> void:
 	_storage_retry_button.name = "RetryRewards"
 	_storage_retry_button.text = "Retry rewards"
 	_storage_retry_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiClick.bind_button(_storage_retry_button)
 	_storage_retry_button.pressed.connect(_retry_storage)
 	_storage_retry_button.hide()
 	header.add_child(_storage_retry_button)
@@ -696,6 +708,7 @@ func _toggle_library_sound() -> void:
 	if not _mode_menu_open():
 		return
 	audio.set_muted(not audio.muted)
+	_play_ui_click()
 	_presentation.muted = audio.muted
 	_save_presentation()
 
@@ -711,6 +724,8 @@ func _toggle_library_motion() -> void:
 
 func _save_presentation() -> void:
 	_mode_panel.configure(_mode_id, audio.muted, reduced_motion)
+	if _host != null:
+		_host.presentationSettings(reduced_motion, audio.muted)
 	var saved: bool = _presentation.save_preferences()
 	_announce_status(("Sound off. " if audio.muted else "Sound on. ") + ("Reduced motion." if reduced_motion else "Full motion.") + ("" if saved else " Preferences could not be saved on this device. Your choices work for this visit."))
 
@@ -720,10 +735,24 @@ func _mode_menu_open() -> bool:
 
 
 func _toggle_mode_menu() -> void:
+	var was_open: bool = _mode_menu_open()
 	if _mode_menu_open():
 		_hide_mode_menu()
 	else:
 		_show_mode_menu()
+	if was_open != _mode_menu_open():
+		_play_ui_click()
+
+
+func _play_ui_click(source: Control = null) -> void:
+	if _page_hidden or _speech_debug_active or not is_instance_valid(audio):
+		return
+	if source != null and (not _valid_focus(source) or source.is_queued_for_deletion()):
+		return
+	if source != null and collection_page.is_ancestor_of(source) \
+		and (_collection_dragged or _collection_multi_touch):
+		return
+	audio.play_ui_click()
 
 
 func _show_mode_menu() -> void:
@@ -776,6 +805,7 @@ func _show_mode_menu() -> void:
 func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> void:
 	if not _mode_menu_open():
 		return
+	_mode_menu_pointer = -2
 	_mode_menu.hide()
 	for control in _mode_menu_focus_modes:
 		if is_instance_valid(control):
@@ -819,12 +849,39 @@ func _choose_mode_from_menu(id: String) -> void:
 
 
 func _mode_menu_input(event: InputEvent) -> void:
-	# Keep the blocker through the press and any emulated mouse press. Only
-	# dismiss on release, so the gesture cannot activate the board beneath it.
-	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed and not event.canceled) \
-		or (event is InputEventScreenTouch and not event.pressed and not event.canceled):
-		_mode_menu.accept_event()
-		_hide_mode_menu()
+	# A backdrop tap is an action; drags, canceled presses, and synthesized
+	# duplicate mouse releases must not dismiss the menu or play another cue.
+	if event is InputEventMouseMotion and _mode_menu_pointer == -1:
+		_mode_menu_dragged = _mode_menu_dragged or event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) > 8
+		return
+	if event is InputEventScreenDrag and event.index == _mode_menu_pointer:
+		_mode_menu_dragged = _mode_menu_dragged or event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) > 8
+		return
+	if not event is InputEventScreenTouch and not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
+		return
+	var pointer: int = event.index if event is InputEventScreenTouch else -1
+	if event.pressed:
+		if _mode_menu_pointer == -2:
+			_mode_menu_pointer = pointer
+			_mode_menu_origin = event.position
+			_mode_menu_dragged = false
+			_mode_menu_mouse_emulated = event is InputEventMouseButton and event.device == InputEvent.DEVICE_ID_EMULATION
+		elif _mode_menu_pointer == -1 and _mode_menu_mouse_emulated and pointer >= 0 \
+			and event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) <= 8:
+			# Some browsers deliver the emulated mouse press before its touch.
+			# Transfer ownership to that touch, retaining its release blocker.
+			_mode_menu_pointer = pointer
+		elif pointer != -1:
+			_mode_menu_dragged = true
+		return
+	if pointer != _mode_menu_pointer:
+		return
+	var tapped: bool = not event.canceled and not _mode_menu_dragged \
+		and event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) <= 8
+	_mode_menu_pointer = -2
+	_mode_menu.accept_event()
+	if tapped:
+		_mode_panel.close_button.pressed.emit()
 
 
 func _build_collection_shell() -> void:
@@ -857,6 +914,7 @@ func _build_collection_shell() -> void:
 	_collection_back.symbol = Icons.Symbol.BACK
 	_collection_back.tooltip_text = "Back to game"
 	_set_accessibility_name(_collection_back, "Back to game")
+	UiClick.bind_button(_collection_back)
 	_collection_back.pressed.connect(_back_from_collection)
 	header.add_child(_collection_back)
 	_leaderboard_menu = HBoxContainer.new()
@@ -866,12 +924,14 @@ func _build_collection_shell() -> void:
 	_players_button.name = "MenuPlayers"
 	_players_button.text = "Players"
 	_players_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiClick.bind_button(_players_button)
 	_players_button.pressed.connect(_show_leaderboard.bind("players", false))
 	_leaderboard_menu.add_child(_players_button)
 	_leaderboards_button = Button.new()
 	_leaderboards_button.name = "MenuLeaderboards"
 	_leaderboards_button.text = "Leaderboards"
 	_leaderboards_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiClick.bind_button(_leaderboards_button)
 	_leaderboards_button.pressed.connect(_show_leaderboard.bind("boards", false))
 	_leaderboard_menu.add_child(_leaderboards_button)
 	_collection_scroll = ScrollContainer.new()
@@ -913,6 +973,7 @@ func _build_leaderboard_overlay() -> void:
 	_leaderboard_close.name = "LeaderboardClose"
 	_leaderboard_close.text = "Back"
 	_leaderboard_close.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	UiClick.bind_button(_leaderboard_close)
 	_leaderboard_close.pressed.connect(_back_from_leaderboard)
 	column.add_child(_leaderboard_close)
 	_leaderboard_scroll = ResultScroll.new()
@@ -1009,8 +1070,13 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_publish_leaderboards()
 
 
-func _back_from_leaderboard() -> void:
-	if not _leaderboard_panel.cancel_management():
+func _back_from_leaderboard(play_click: bool = false) -> void:
+	if _leaderboard_panel.cancel_management():
+		if play_click:
+			_play_ui_click()
+	elif _leaderboard_gate != "onboarding" and _leaderboard_overlay.visible:
+		if play_click:
+			_play_ui_click()
 		_hide_leaderboard()
 
 
@@ -1198,6 +1264,7 @@ func _build_age_choices() -> void:
 		button.toggle_mode = true
 		button.tooltip_text = band.name + ": view words"
 		_set_accessibility_name(button, band.name + ". View this word list and choose vocabulary for your next lesson.")
+		UiClick.bind_button(button)
 		button.pressed.connect(_choose_age_band.bind(band.id))
 		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		_age_row.add_child(button)
@@ -1353,6 +1420,7 @@ func _build_world_choices() -> void:
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		_set_accessibility_name(button, palette.name)
+		UiClick.bind_button(button)
 		button.pressed.connect(_choose_world.bind(id))
 		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
 		worlds.add_child(button)
@@ -1405,6 +1473,7 @@ func _build_playroom() -> void:
 func _room_previewed(message: String) -> void:
 	if not _can_use_room():
 		return
+	_play_ui_click()
 	audio.stop_voice()
 	_end_collection_drag()
 	_announce_status(message)
@@ -2746,7 +2815,7 @@ func choose_theme(id: String) -> void:
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if _host != null:
-		_host.presentationSettings(value)
+		_host.presentationSettings(value, audio.muted)
 	for panel in [_leaderboard_panel, _pop_leaderboard]:
 		if is_instance_valid(panel):
 			panel.reduced_motion = value
@@ -2900,6 +2969,7 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	audio.stop_ui_click()
 	_hide_mode_menu(false, false)
 	if is_instance_valid(_leaderboard_scroll):
 		_leaderboard_scroll.cancel_drag()
@@ -3018,7 +3088,7 @@ func _observe_activity(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if _mode_menu_open():
 		if event.is_action_pressed("ui_cancel"):
-			_hide_mode_menu()
+			_mode_panel.close_button.pressed.emit()
 			get_viewport().set_input_as_handled()
 			return
 		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]:
@@ -3151,10 +3221,10 @@ func _controller_accept() -> void:
 
 func _controller_back() -> void:
 	if _mode_menu_open():
-		_hide_mode_menu()
+		_mode_panel.close_button.pressed.emit()
 		return
 	if _leaderboard_overlay.visible:
-		_back_from_leaderboard()
+		_back_from_leaderboard(true)
 		return
 	if _controller_holding_pop_chest:
 		_controller_holding_pop_chest = false
@@ -3168,13 +3238,15 @@ func _controller_back() -> void:
 		_controller_accept_needs_release = _controller_accept_is_pressed()
 		return
 	if collection_page.visible:
-		_back_from_collection()
+		_collection_back.pressed.emit()
 	elif _voice_mode:
+		_play_ui_click()
 		_stop_voice()
 	elif _mode_id == "pop":
 		if _pop_rewards_shown:
-			_hide_pop_rewards()
+			_pop_rewards._back.pressed.emit()
 		else:
+			_play_ui_click()
 			choose_mode("match")
 	elif _mode_id == "match" and model.phase == "feedback":
 		_continue_match()
@@ -3190,15 +3262,15 @@ func _controller_back() -> void:
 
 func _toggle_collection() -> void:
 	if _pop_picker_open():
-		_show_collection()
+		collection_button.pressed.emit()
 		return
 	if _leaderboard_overlay.visible:
-		_back_from_leaderboard()
+		_back_from_leaderboard(true)
 		return
 	if collection_page.visible:
-		_back_from_collection()
+		_collection_back.pressed.emit()
 	else:
-		_show_collection()
+		collection_button.pressed.emit()
 
 
 func _cycle_theme(step: int) -> void:
@@ -3207,6 +3279,7 @@ func _cycle_theme(step: int) -> void:
 	var index: int = Model.THEMES.find(model.theme_id)
 	if index < 0:
 		index = 0
+	_play_ui_click()
 	choose_theme(Model.THEMES[posmod(index + step, Model.THEMES.size())])
 
 
@@ -3404,7 +3477,7 @@ func _connect_browser() -> void:
 			set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback)
-	_host.presentationSettings(reduced_motion)
+	_host.presentationSettings(reduced_motion, audio.muted)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
 	_speech_state_callback = JavaScriptBridge.create_callback(_on_voice_state)
 	_host.observeSpeech(_speech_result_callback, _speech_state_callback)
@@ -3529,6 +3602,7 @@ func _exit_tree() -> void:
 
 
 func _on_input_canceled(_arguments: Array = []) -> void:
+	_mode_menu_pointer = -2
 	_proactive_touches.clear()
 	_pointer_focus_active = false
 	_leaderboard_scroll.cancel_drag()

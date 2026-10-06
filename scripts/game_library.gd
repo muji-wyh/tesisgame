@@ -7,6 +7,7 @@ signal sound_toggled
 signal motion_toggled
 
 const Style = preload("res://scripts/ui_style.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const CATALOG := [
 	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/avatars/cat.svg", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/avatars/rainbow.svg", "tint": Color("#f2e9d8")},
@@ -46,6 +47,7 @@ func _init() -> void:
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	titles.add_child(heading)
 	close_button = Button.new()
+	UiClick.bind_button(close_button)
 	close_button.name = "LibraryClose"
 	close_button.text = "Back"
 	close_button.tooltip_text = "Return to your game (Escape)"
@@ -62,6 +64,7 @@ func _init() -> void:
 	_body.add_child(grid)
 	for entry: Dictionary in CATALOG:
 		var tile := Button.new()
+		UiClick.bind_button(tile)
 		tile.name = "Mode_" + str(entry.id)
 		tile.tooltip_text = str(entry.title) + ". " + str(entry.copy).replace("\n", " ") + " " + str(entry.detail)
 		tile.toggle_mode = true
@@ -99,6 +102,7 @@ func _init() -> void:
 	sound_button.pressed.connect(func() -> void: sound_toggled.emit())
 	_footer.add_child(sound_button)
 	motion_button = Button.new()
+	UiClick.bind_button(motion_button)
 	motion_button.name = "LibraryMotion"
 	motion_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	motion_button.pressed.connect(func() -> void: motion_toggled.emit())

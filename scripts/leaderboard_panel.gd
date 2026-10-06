@@ -7,6 +7,7 @@ signal profile_updated(profile: Dictionary)
 signal profile_removed(player_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const PAPER := Color("#fffdf7")
 const SURFACE := Color("#f0f2e9")
 const EDGE := Color("#d5dfd4")
@@ -596,7 +597,9 @@ func _build_editor(body: VBoxContainer) -> void:
 	_name_input.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, ACCENT, _px(12), 2))
 	_name_input.text_changed.connect(_name_changed.bind(_ui_generation))
 	var generation: int = _ui_generation
-	_name_input.text_submitted.connect(func(_text: String): _submit_profile(generation))
+	_name_input.text_submitted.connect(func(_text: String):
+		if _accept_action(generation) and is_instance_valid(_create_button) and not _create_button.disabled:
+			_create_button.pressed.emit())
 	_name_input.focus_entered.connect(_ensure_visible.bind(_name_input))
 	_name_input.editing_toggled.connect(func(_editing: bool): _relayout_board())
 	_form.add_child(_name_input)
@@ -1049,6 +1052,7 @@ func _profiles() -> Array:
 
 func _button(text: String, node_name: String, primary: bool = false) -> Button:
 	var button := Button.new()
+	UiClick.bind_button(button)
 	button.text = text
 	button.name = node_name
 	button.mouse_filter = Control.MOUSE_FILTER_PASS

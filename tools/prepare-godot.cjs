@@ -16,6 +16,10 @@ function inlineMascot(html) {
   if (!html.includes('$PIP_MASCOT_URI')) throw new Error('The web shell is missing the Pip mascot placeholder.');
   const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'mascots', 'pip.svg'));
   html = html.replaceAll('$PIP_MASCOT_URI', `data:image/svg+xml;base64,${svg.toString('base64')}`);
+  if (html.includes('$UI_CLICK_URI')) {
+    const { bytes } = require('./ui-click-audio.cjs').readUiClickAudio(root);
+    html = html.replaceAll('$UI_CLICK_URI', `data:audio/wav;base64,${bytes.toString('base64')}`);
+  }
   for (const [token, filename] of [['$INTERFACE_BODY_FONT_URI', 'Nunito-600.ttf'], ['$INTERFACE_HEADING_FONT_URI', 'Nunito-800.ttf']]) {
     if (!html.includes(token)) continue;
     const font = fs.readFileSync(path.join(root, 'assets', 'fonts', filename));

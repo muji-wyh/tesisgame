@@ -24,7 +24,7 @@ const samples = ['duck_double_01_bouncy.wav', 'duck_double_03_derpy.wav', 'duck_
 });
 
 async function observeLoaderSounds(page) {
-  await page.addInitScript(() => {
+  await page.addInitScript(hashes => {
     const probe = window.pipMediaObservation = { players: [], events: [], maxPlaying: 0 };
     const latest = new WeakMap(), originalPlay = HTMLMediaElement.prototype.play;
     const sampleConcurrency = () => {
@@ -33,6 +33,9 @@ async function observeLoaderSounds(page) {
     HTMLMediaElement.prototype.play = function (...args) {
       const source = this.src;
       if (!source.startsWith('data:audio/wav;base64,')) return originalPlay.apply(this, args);
+      let hash = 2166136261;
+      for (let index = 0; index < source.length; index++) hash = Math.imul(hash ^ source.charCodeAt(index), 16777619) >>> 0;
+      if (!hashes.includes(hash.toString(16))) return originalPlay.apply(this, args);
       if (!probe.players.includes(this)) {
         probe.players.push(this);
         for (const name of ['playing', 'timeupdate', 'pause', 'ended']) this.addEventListener(name, () => {
@@ -44,8 +47,6 @@ async function observeLoaderSounds(page) {
           sampleConcurrency();
         });
       }
-      let hash = 2166136261;
-      for (let index = 0; index < source.length; index++) hash = Math.imul(hash ^ source.charCodeAt(index), 16777619) >>> 0;
       const event = { hash: hash.toString(16), playing: false, ended: false, maxTime: 0, volume: this.volume, muted: this.muted };
       latest.set(this, event);
       probe.events.push(event);
@@ -55,7 +56,7 @@ async function observeLoaderSounds(page) {
       sampleConcurrency();
       return result;
     };
-  });
+  }, samples.map(sample => sample.hash));
 }
 
 function errorsFrom(page) {

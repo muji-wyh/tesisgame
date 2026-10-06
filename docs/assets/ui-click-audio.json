@@ -1,0 +1,41 @@
+{
+  "source": {
+    "file": "sound_effect-select.mp4",
+    "suppliedPath": "C:/uworks/sound_effect-select.mp4",
+    "sha256": "31cf2565a5670c1e91e598c98ecd6d8da701184211478fe37d12951f5ec1c62d",
+    "seconds": 7.966667,
+    "sampleRate": 44100,
+    "channels": 1,
+    "codec": "AAC LC",
+    "creator": "Duolingo as identified in the supplied screen recording; original sound designer unknown",
+    "license": "Not supplied. User requested this recording as the game button-click reference; no independent redistribution license is asserted.",
+    "status": "Acquired from the user and extracted locally; compiled into the game pack and embedded in the loading page",
+    "animations": "Not applicable to this audio asset"
+  },
+  "processing": {
+    "decoder": "FFmpeg floating-point AAC decode",
+    "gain": 8,
+    "attackSeconds": 0.0005,
+    "releaseSeconds": 0.005,
+    "runtimeGain": 0.48,
+    "runtimePlaybackRate": 1,
+    "maxSimultaneousUiClicksPerRuntime": 1
+  },
+  "assets": [
+    {
+      "id": "select",
+      "destination": "assets/imported-audio/ui-click/select.wav",
+      "sha256": "84387d97d7236f45656488de02548ce7703f243b47c5c8fd94a461fc546d7fe5",
+      "seconds": 0.08,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -6.6,
+      "rmsDbfs": -23.9952,
+      "window": {
+        "start": 2.19,
+        "seconds": 0.08
+      }
+    }
+  ]
+}

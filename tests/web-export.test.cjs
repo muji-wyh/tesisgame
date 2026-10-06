@@ -42,7 +42,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const source of [
     'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
-    'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav'
+    'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
+    'assets/imported-audio/ui-click/select.wav'
   ]) {
     assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
       `Active audio must be included in the game pack: ${source}`);
@@ -170,6 +171,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
+  require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
@@ -177,7 +179,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 103);
+  assert.equal(required.length, 104);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
@@ -185,6 +187,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     assert.ok(required.some(asset => asset.source === `res://assets/imported-audio/pair-feedback/${id}.wav`),
       'Pair feedback ships in the startup pack without a later fetch');
   }
+  assert.ok(required.some(asset => asset.source === 'res://assets/imported-audio/ui-click/select.wav'),
+    'Native menu feedback ships in the startup pack without a later fetch');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
     'Retired adventure audio is no longer a required packaging input');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),

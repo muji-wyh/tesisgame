@@ -10,6 +10,7 @@ signal background_input(event: InputEvent, source: Control)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const Medal = preload("res://scripts/medal_view.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const Playground = preload("res://scripts/pip_playground.gd")
@@ -199,6 +200,7 @@ func _build() -> void:
 	goal_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	goal_label.hide()
 	goal_button = Icons.new()
+	UiClick.bind_button(goal_button)
 	goal_button.symbol = Icons.Symbol.NEXT
 	goal_button.name = "RoomGiftGoal"
 	Style.square_icon_button(goal_button, Style.GOOD)

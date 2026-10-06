@@ -3,6 +3,7 @@ const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { brotliCompressSync, brotliDecompressSync, constants } = require('node:zlib');
 const { patchWebEngine } = require('./patch-web-engine.cjs');
+const { readUiClickAudio } = require('./ui-click-audio.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const CHEST_CUES = ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward'];
@@ -135,7 +136,9 @@ function collectRequiredAudio(root) {
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
-  return [...sources.map(source => importedAudio(root, source)), ...collectPairFeedbackAudio(root), ...collectPopReferenceAudio(root)];
+  const uiClick = readUiClickAudio(root);
+  return [...sources.map(source => importedAudio(root, source)), importedAudio(root, uiClick.asset.destination),
+    ...collectPairFeedbackAudio(root), ...collectPopReferenceAudio(root)];
 }
 
 function removeRetiredVoiceAssets(directory) {

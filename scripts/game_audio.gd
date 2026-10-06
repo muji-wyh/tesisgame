@@ -16,6 +16,8 @@ const PAIR_FEEDBACK_PATHS := {
 	false: "res://assets/imported-audio/pair-feedback/wrong.wav",
 }
 const PAIR_FEEDBACK_GAIN := 0.48
+const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
+const UI_CLICK_GAIN := 0.48
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -44,6 +46,7 @@ var voice: AudioStreamPlayer
 var pip_reaction: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
 var pair_feedback: AudioStreamPlayer
+var ui_click: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var muted: bool = false
 var active: bool = false
@@ -111,6 +114,8 @@ func _ready() -> void:
 	pair_feedback = _player(PAIR_FEEDBACK_GAIN)
 	for path: String in PAIR_FEEDBACK_PATHS.values():
 		_stream(path)
+	ui_click = _player(UI_CLICK_GAIN)
+	_stream(UI_CLICK_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -179,6 +184,18 @@ func stop_pair_feedback() -> void:
 	if pair_feedback != null:
 		_stop(pair_feedback)
 		pair_feedback.stream = null
+
+
+func play_ui_click() -> void:
+	# Navigation can run while gameplay audio is inactive or the microphone is on.
+	if not muted and available and _speech_debug_mix > 0.0:
+		_play(ui_click, UI_CLICK_PATH)
+
+
+func stop_ui_click() -> void:
+	if ui_click != null:
+		_stop(ui_click)
+		ui_click.stream = null
 
 
 func last_pop_player() -> AudioStreamPlayer:
@@ -264,9 +281,12 @@ func set_speech_debug_mix(value: float) -> bool:
 		pop_launch.volume_db = linear_to_db(maxf(0.0001, POP_LAUNCH_GAIN * value))
 	if pair_feedback != null:
 		pair_feedback.volume_db = linear_to_db(maxf(0.0001, PAIR_FEEDBACK_GAIN * value))
+	if ui_click != null:
+		ui_click.volume_db = linear_to_db(maxf(0.0001, UI_CLICK_GAIN * value))
 	if pip_reaction != null:
 		pip_reaction.volume_db = linear_to_db(maxf(0.0001, _pip_reaction_gain * value))
 	if value == 0.0:
+		stop_ui_click()
 		stop_pop_sounds()
 		stop_pair_feedback()
 		stop_pip_reaction()
@@ -592,7 +612,7 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 		_pip_voice_request = request_id
 	var stream: AudioStream = await _stream(path, loop)
 	# State callbacks may cancel or replace this request during preparation.
-	if request_id != _playback_requests[player] or not active or muted or not available:
+	if request_id != _playback_requests[player] or (not active and player != ui_click) or muted or not available:
 		if player == voice and _pip_voice_request == request_id:
 			_pip_voice_request = -1
 		return
@@ -657,6 +677,7 @@ func _update_music_gain() -> void:
 func set_muted(value: bool) -> void:
 	muted = value
 	if muted:
+		stop_ui_click()
 		halt()
 	status_changed.emit("")
 
@@ -672,6 +693,8 @@ func stop_voice() -> void:
 
 
 func halt(keep_pair_feedback: bool = false) -> void:
+	# Screen changes silence gameplay, while their short UI acknowledgement finishes.
+	# Muting, backgrounding and shutdown explicitly stop the UI channel too.
 	active = false
 	if not keep_pair_feedback:
 		stop_pair_feedback()
@@ -686,4 +709,5 @@ func halt(keep_pair_feedback: bool = false) -> void:
 
 
 func _exit_tree() -> void:
+	stop_ui_click()
 	halt()

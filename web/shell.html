@@ -560,6 +560,88 @@
       const loadingMotionReduced = () => typeof loadingPreferences.reduced_motion === 'boolean'
         ? loadingPreferences.reduced_motion : motion.matches;
       document.documentElement.dataset.reducedMotion = String(loadingMotionReduced());
+      function createInterfaceClickSound() {
+        let player = null;
+        let muted = loadingPreferences.muted === true;
+        let mix = 1;
+        let finish = () => {};
+        let generation = 0;
+        let playing = false;
+        try {
+          if (typeof window.Audio === 'function') {
+            player = new Audio('$UI_CLICK_URI');
+            player.preload = 'auto';
+            player.volume = .48;
+          }
+        } catch { /* Interface actions remain available without browser audio. */ }
+
+        function stop() {
+          generation++;
+          playing = false;
+          finish(false);
+          if (!player) return;
+          player.pause();
+          try { player.currentTime = 0; } catch { /* Metadata may still be loading. */ }
+        }
+
+        function play(gestureAllowed) {
+          if (!gestureAllowed || muted || mix <= 0 || document.hidden || !player) return Promise.resolve(false);
+          stop();
+          const request = generation;
+          playing = true;
+          player.volume = .48 * mix;
+          return new Promise(resolve => {
+            let timer = 0;
+            const ended = () => complete(true);
+            const error = () => complete(false);
+            const complete = value => {
+              if (request !== generation && finish !== complete) return;
+              window.clearTimeout(timer);
+              player.removeEventListener('ended', ended);
+              player.removeEventListener('error', error);
+              if (finish === complete) finish = () => {};
+              if (request === generation) playing = false;
+              resolve(value);
+            };
+            finish = complete;
+            player.addEventListener('ended', ended);
+            player.addEventListener('error', error);
+            // A reload must still work if a media backend never settles play().
+            timer = window.setTimeout(() => { if (request === generation) stop(); }, 1500);
+            try {
+              Promise.resolve(player.play()).then(() => {
+                // A pending browser resume cannot resurrect a hidden-page cue.
+                if (request !== generation && !playing) player.pause();
+              }).catch(error);
+            } catch { error(); }
+          });
+        }
+
+        document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+        window.addEventListener('pagehide', stop);
+        return {
+          play, stop,
+          setMuted(value) { muted = value === true; if (muted) stop(); },
+          setMix(value) {
+            mix = Math.max(0, Math.min(1, Number(value) || 0));
+            if (player) player.volume = .48 * mix;
+            if (mix === 0) stop();
+          }
+        };
+      }
+      const interfaceClickSound = createInterfaceClickSound();
+      function installInterfaceClickFeedback(sound) {
+        // Native click covers pointer, touch, Enter and Space exactly once.
+        // Capture also reaches diagnostics that isolate their events from Godot.
+        document.addEventListener('click', event => {
+          const control = event.target.closest?.('button, input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], summary, [role="button"]');
+          if (!event.isTrusted || event.defaultPrevented || !control || control.matches(':disabled') ||
+              control.closest('[hidden], [inert], [aria-disabled="true"]') || !control.getClientRects().length ||
+              ['loading-toy', 'loading-duck', 'enter-game', 'retry'].includes(control.id)) return;
+          void sound.play(true);
+        }, { capture: true });
+      }
+      installInterfaceClickFeedback(interfaceClickSound);
       const toy = document.getElementById('loading-toy');
       const chestArt = document.getElementById('chest-art');
       const chestLid = document.getElementById('chest-lid');
@@ -701,6 +783,7 @@
             ArrowRight: (index + 1) % themeIds.length, Home: 0, End: themeIds.length - 1 }[event.key];
           if (next === undefined) return;
           event.preventDefault();
+          void interfaceClickSound.play(event.isTrusted);
           selectLoadingTheme(themeIds[next], true);
         }, loadingListener);
       });
@@ -1222,13 +1305,14 @@
           - Number(pads.some(pad => pad.buttons[4]?.pressed));
         if (themeDirection && themeDirection !== gamepadThemeDirection) {
           const next = (themeIds.indexOf(selectedTheme) + themeDirection + themeIds.length) % themeIds.length;
+          void interfaceClickSound.play(true);
           selectLoadingTheme(themeIds[next]);
         }
         gamepadThemeDirection = themeDirection;
         const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
         if (startPressed && !gamepadStartPressed) enterOnStartRelease = !enterButton.disabled;
         // Enter on release so the same Start press cannot open Pip's room in Godot.
-        if (!startPressed && gamepadStartPressed && enterOnStartRelease) { enterGame(); return; }
+        if (!startPressed && gamepadStartPressed && enterOnStartRelease) { enterGame(true); return; }
         gamepadStartPressed = startPressed;
         gamepadFrame = window.requestAnimationFrame(pollLoadingGamepad);
       }
@@ -2773,6 +2857,10 @@
         // Godot callbacks discard return values; acknowledge through the shared object.
         const reply = { accepted: false };
         onSpeechDebug?.(action, value, reply);
+        if (reply.accepted === true) {
+          if (action === 'mix') interfaceClickSound.setMix(value);
+          else if (action === 'close') interfaceClickSound.setMix(1);
+        }
         return reply.accepted === true;
       });
 
@@ -2815,8 +2903,9 @@
             reason instanceof WebAssembly.RuntimeError || downloadFailed) startupFailure(reason);
       }
 
-      function enterGame() {
+      function enterGame(gestureAllowed = false) {
         if (failed || entered || enterButton.disabled || document.hidden) return;
+        void interfaceClickSound.play(gestureAllowed === true);
         entered = true;
         gameAudioRecovery.enter();
         enterButton.disabled = true;
@@ -2834,7 +2923,7 @@
         canvas.focus({ preventScroll: true });
         speechDebug.setAvailable(typeof onSpeechDebug === 'function');
       }
-      enterButton.addEventListener('click', enterGame, loadingListener);
+      enterButton.addEventListener('click', event => enterGame(event.isTrusted), loadingListener);
 
       // Host lifecycle and controller state, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
@@ -2888,8 +2977,9 @@
           try { localStorage.setItem('wordBuddies.leaderboards', text); return true; }
           catch { return false; }
         },
-        presentationSettings(reduced) {
+        presentationSettings(reduced, muted) {
           document.documentElement.dataset.reducedMotion = String(Boolean(reduced));
+          if (typeof muted === 'boolean') interfaceClickSound.setMuted(muted);
         },
         libraryStatus(text) {
           let value;
@@ -3001,7 +3091,11 @@
       window.addEventListener('resize', resize);
       if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
       resize();
-      retry.addEventListener('click', () => window.location.reload());
+      retry.addEventListener('click', event => {
+        if (retry.disabled || retry.hidden) return;
+        retry.disabled = true;
+        void interfaceClickSound.play(event.isTrusted).then(() => window.location.reload());
+      });
       canvas.addEventListener('webglcontextlost', event => {
         // Godot 4.7's handler only opens a blocking reload alert; it cannot recover
         // this renderer. Use the existing accessible failure screen and stop input.

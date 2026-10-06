@@ -16,6 +16,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |
 | [Reference pair feedback](pair-feedback-audio.md) | Match and Memory right/wrong excerpts, source provenance, extraction and required build assets |
+| [Reference menu click](ui-click-audio.md) | Shared native and loading-screen selection cue, source provenance, extraction, and required build asset |
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |
 | [Fruit-slice audio](voice-pop-random-slices.md) | Second-choice hit bank and unchanged source hashes |
 | [Single-slice audio](voice-pop-sfx.md) | Earlier hit fallback and source-pack licensing |

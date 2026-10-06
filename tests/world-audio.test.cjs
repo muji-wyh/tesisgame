@@ -171,7 +171,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     fs.writeFileSync(metadata, `path="res://.godot/imported/${imported}"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC pair fixture');
   });
-  expected.push(...pair.assets.map(asset => asset.destination));
+  const click = require('./helpers/ui-click-assets.cjs').uiClickFixture(directory, source => {
+    const imported = 'ui-click-select.sample';
+    fs.writeFileSync(path.join(directory, `${source}.import`), `path="res://.godot/imported/${imported}"\n`);
+    fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC UI click fixture');
+  });
+  expected.push(click.asset.destination, ...pair.assets.map(asset => asset.destination));
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
@@ -179,6 +184,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
   assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/winter-step-roll.wav')));
+  const clickImport = path.join(directory, `${click.asset.destination}.import`);
+  const clickMetadata = fs.readFileSync(clickImport);
+  fs.unlinkSync(clickImport);
+  assert.throws(() => collectRequiredAudio(directory), /ui-click.*select\.wav\.import/,
+    'The new menu cue cannot disappear silently from the startup pack');
+  fs.writeFileSync(clickImport, clickMetadata);
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));

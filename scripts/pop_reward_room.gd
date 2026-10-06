@@ -7,6 +7,7 @@ signal chest_cue_requested(theme_id: String, cue: String, step: int)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const State = preload("res://scripts/pop_reward_state.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
@@ -63,6 +64,7 @@ func _ready() -> void:
 	_notice = _label("", 14)
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_back = Button.new()
+	UiClick.bind_button(_back)
 	_back.name = "PopTreasureBack"
 	_back.text = "Back"
 	add_child(_back)
@@ -71,6 +73,7 @@ func _ready() -> void:
 		pause()
 		exit_requested.emit())
 	_retry = Button.new()
+	UiClick.bind_button(_retry)
 	_retry.name = "PopTreasureRetry"
 	_retry.text = "Retry save"
 	add_child(_retry)

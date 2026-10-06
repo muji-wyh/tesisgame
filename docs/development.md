@@ -173,6 +173,11 @@ The browser command rebuilds the Web export and runs the maintained scenarios
 across the configured Chromium and WebKit profiles. Run imports, native tests,
 exports, and browser jobs sequentially against one checkout.
 
+The sourced [menu click](assets/ui-click-audio.md) is a required build input.
+Import the supplied reference before packaging; source hashes, PCM format,
+duration, Godot imports, and the startup pack are checked. The loading shell
+embeds the same recording for immediate feedback before the engine is ready.
+
 The native suite exercises actual GDScript state transitions, distractors, unlimited Match retries and board completion, reward locking and persistence, audio lifecycle, resource loading, seasonal palettes, responsive Control bounds and scene wiring. Node tests cover generated media, texture import settings, imported chest files, Web-export contracts and deployment-script failure handling. Playwright runs the **exported Godot engine**, including touch input, resizing, browser audio, bundled playback without further audio downloads, stale-playback suppression, the interactive loader, interrupted downloads, loading errors and iframe embedding.
 
 The [historical design index](superpowers/README.md) preserves earlier

@@ -12,6 +12,7 @@ signal hear_requested(word: Dictionary)
 signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
@@ -1898,6 +1899,7 @@ func _place_label(label: Label, rect: Rect2, font_size: int) -> void:
 
 func _action(text: String, primary: bool = false) -> Button:
 	var button := Button.new()
+	UiClick.bind_button(button)
 	button.text = text
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_style_action(button, primary)

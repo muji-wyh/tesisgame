@@ -14,12 +14,12 @@ const groups = {
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests', 'playroom_state_tests', 'playroom_view_tests', 'room_render_cache_tests',
       'pip_playground_tests', 'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
-      'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_recovery_tests',
+      'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests',
       'collection_navigation_tests', 'gift_adventure_tests'
     ],
     node: [
       'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host',
-      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark'
+      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark', 'ui-click-assets', 'interface-click-host'
     ]
   },
   'legacy-saves': { godot: ['legacy_playroom_scene_tests'] },

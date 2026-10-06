@@ -57,6 +57,17 @@ test('edits to private assets, new scripts and deleted runtime inputs reject an 
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*game\.gd/);
 });
 
+test('changing the sourced menu cue contract rejects an older export', t => {
+  const { root, write, record } = fixture(t);
+  write('docs/assets/ui-click-audio.json', '{"assets":[{"seconds":0.08}]}');
+  record();
+  write('docs/assets/ui-click-audio.json', '{"assets":[{"seconds":0.09}]}');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*ui-click-audio\.json/);
+  record();
+  write('tools/ui-click-audio.cjs', 'module.exports = {};');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*ui-click-audio\.cjs/);
+});
+
 test('changed or missing deployed files fail verification even when source inputs are unchanged', t => {
   const { root, write, record } = fixture(t);
   record();

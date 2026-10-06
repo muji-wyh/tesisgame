@@ -69,6 +69,12 @@ func _verify() -> void:
 			or stream.loop_mode != AudioStreamWAV.LOOP_DISABLED or stream.get_length() < 0.7 or stream.get_length() > 1.0:
 			printerr("A supplied pair feedback effect is missing or invalid in the startup pack: " + path)
 			failures += 1
+	var ui_click_path := "res://assets/imported-audio/ui-click/select.wav"
+	var ui_click: AudioStreamWAV = load(ui_click_path) if ResourceLoader.exists(ui_click_path) else null
+	if ui_click == null or ui_click.stereo or ui_click.mix_rate != 44100 or ui_click.format != AudioStreamWAV.FORMAT_16_BITS \
+		or ui_click.loop_mode != AudioStreamWAV.LOOP_DISABLED or ui_click.get_length() < 0.03 or ui_click.get_length() > 0.15:
+		printerr("The supplied menu click is missing or invalid in the startup pack: " + ui_click_path)
+		failures += 1
 	for path in ["res://assets/audio/voice/wrong.wav", "res://assets/audio/voice/loss.wav",
 		"res://assets/audio/sfx/wrong.wav", "res://assets/audio/sfx/loss.wav", "res://assets/audio/sfx/match-voice-hit.wav"]:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
