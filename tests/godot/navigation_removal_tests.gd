@@ -41,8 +41,8 @@ func _run() -> void:
 	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
-	var actions: Array = app._result_footer.find_children("*", "Button", true, false).filter(
-		func(button: Button) -> bool: return button.is_visible_in_tree())
+	var actions: Array = app._outcome.find_children("*", "Button", true, false).filter(
+		func(button: Button) -> bool: return button.is_visible_in_tree() and not button.disabled)
 	check(actions == [app._new_adventure_button] and app._default_focus() == app._new_adventure_button,
 		"New adventure is the only normal result action and the default focus")
 	var retry: Button = app.get("_result_retry_button")

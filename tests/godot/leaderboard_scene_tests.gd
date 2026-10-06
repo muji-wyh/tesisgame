@@ -63,17 +63,19 @@ func check_compact_result(panel: Node) -> void:
 		check(not copy.contains(removed), "The compact result omits repeated copy: " + removed)
 
 
-func check_review_modal_touch(app, mode: String) -> void:
-	var rail = app._found_words_scroll
-	check(not rail.interaction_allowed.call(),
-		"The covered %s review rail cannot consume leaderboard form touches" % mode)
+func check_result_modal_touch(app, mode: String) -> void:
 	var touch := InputEventScreenTouch.new()
 	touch.index = 0
 	touch.pressed = true
-	touch.position = rail.get_global_rect().get_center()
-	rail._input(touch)
-	check(not rail.is_pointer_active() and not rail.is_scrolling(),
-		"A touch over the covered %s review rail does not begin an underlying drag" % mode)
+	touch.position = app.chest_button.get_global_rect().get_center()
+	app._chest_input(touch)
+	check(not app._holding_chest and not app._dragging_chest and app.model.chest_state == "closed",
+		"A touch over the covered %s chest cannot start an underlying hold or drag" % mode)
+	touch.pressed = false
+	app._chest_input(touch)
+	for candidate in app._focus_candidates():
+		check(app._leaderboard_overlay.is_ancestor_of(candidate),
+			"The %s result modal keeps focus away from the covered chest" % mode)
 
 
 func _run() -> void:
@@ -514,7 +516,7 @@ func _check_match(app, state, player_id: String) -> void:
 	await settle()
 	check(app.leaderboard_snapshot().mode == "match" and app.leaderboard_snapshot().round_id == round_id,
 		"Match opens the current completed result")
-	check_review_modal_touch(app, "Match")
+	check_result_modal_touch(app, "Match")
 	action(app._leaderboard_panel, "LeaderboardPlayer_" + player_id).pressed.emit()
 	action(app._leaderboard_panel, "LeaderboardSaveScore").pressed.emit()
 	await settle()
@@ -548,7 +550,7 @@ func _check_memory(app, state, player_id: String) -> void:
 		"Memory completes five actual pairs and counts the earlier peek")
 	app._result_board_button.pressed.emit()
 	await settle()
-	check_review_modal_touch(app, "Memory")
+	check_result_modal_touch(app, "Memory")
 	action(app._leaderboard_panel, "LeaderboardPlayer_" + player_id).pressed.emit()
 	action(app._leaderboard_panel, "LeaderboardSaveScore").pressed.emit()
 	await settle()

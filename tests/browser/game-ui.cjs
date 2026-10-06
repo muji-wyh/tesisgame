@@ -686,27 +686,16 @@ async function withMemoryPeek(page, held) {
   await rendered(page);
 }
 
-function resultPoint(bounds, key, { gift = false, message = false } = {}) {
-  if (!['chest', 'review', 'gift', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
-  gift ||= key === 'gift';
-  message ||= gift || key === 'retry';
-  const content = contentBounds(bounds);
-  const scale = uiScale(bounds), actionHeight = Math.ceil((key === 'retry' ? 48 : 64) / scale);
-  const secondaryHeight = Math.ceil(48 / scale), actionGap = Math.ceil(8 / scale);
-  const top = content.padding + content.header + content.gap;
-  const extra = gift ? secondaryHeight + actionGap : 0;
-  const availableHeight = bounds.height - content.padding - top;
-  const textGap = Math.ceil((availableHeight < 340 ? 8 : 14) / scale);
-  const minimumTextHeight = actionHeight + extra + 88 + textGap + (message ? 72 + textGap * 2 : 0);
-  const landscape = (message && bounds.width >= bounds.height) || availableHeight < minimumTextHeight + 82;
-  const actionWidth = Math.min((key === 'retry' ? 176 : 320) / scale, content.width);
-  const textWidth = landscape ? Math.max(actionWidth, 232, (content.width - 16) * 0.39) : content.width;
-  const left = content.x + content.width - textWidth;
-  if (key === 'chest') return { x: content.x + 36, y: top + 116 };
-  if (key === 'gift') return { x: left + textWidth / 2, y: bounds.height - content.padding - 88 - textGap - secondaryHeight / 2 };
-  if (key === 'review') return { x: left + 36, y: bounds.height - content.padding - 44 };
-  return { x: left + textWidth / 2,
-    y: bounds.height - content.padding - 88 - textGap - actionHeight / 2 - extra };
+function resultPoint(bounds, key) {
+  if (!['chest', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
+  const content = contentBounds(bounds), scale = uiScale(bounds);
+  const height = bounds.height - content.padding - content.top;
+  if (key === 'chest') return { x: content.x + content.width / 2, y: content.top + height / 2 };
+  const inset = Math.min(16 / scale, content.width / 4, height / 4);
+  const actionWidth = Math.min((key === 'retry' ? 176 : 240) / scale, content.width - inset * 2);
+  const actionHeight = Math.min((key === 'retry' ? 48 : 56) / scale, height - inset * 2);
+  return { x: content.x + content.width - inset - actionWidth / 2,
+    y: content.top + height - inset - actionHeight / 2 };
 }
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeHeight, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,

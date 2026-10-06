@@ -120,9 +120,10 @@ func _exercise(app, directory: String) -> void:
 	check(state.selected_goal(app.medal_progress.counts).remaining_pieces == 1, "Only one ordinary piece remains before the toy unlock")
 	_win_match_and_open(app)
 	check(app.medal_progress.count_for("autumn-1") == 3, "The normal chest grants exactly the final piece")
-	check(state.selected_goal(app.medal_progress.counts).remaining_pieces == 0 and app._try_gift_button.visible, "The completed goal exposes the existing Try gift action")
-	app._try_gift_button.pressed.emit()
-	check(app._room.is_visible_in_tree() and state.toy_id == "toy-autumn", "Try gift saves and equips the earned toy in Pip's room")
+	check(state.selected_goal(app.medal_progress.counts).remaining_pieces == 0 and app._new_adventure_button.visible, "The completed goal preserves the single result action")
+	app._show_collection()
+	app._room.item_buttons["toy-autumn"].pressed.emit()
+	check(app._room.is_visible_in_tree() and state.toy_id == "toy-autumn", "The collection card saves and equips the earned toy in Pip's room")
 	var earned: Dictionary = app.medal_progress.counts.duplicate(true)
 	var stickers: Array = state.collected_word_ids.duplicate()
 	for step in range(4):
@@ -183,7 +184,7 @@ func _exercise(app, directory: String) -> void:
 	_win_match_and_open(app)
 	check(app.medal_progress.counts == expected_counts and app.playroom_state.selected_goal(app.medal_progress.counts).remaining_pieces == 0,
 		"A real Match still grants exactly one ordinary third-medal piece")
-	check(not app._try_gift_button.visible and app._unlocked_gift.is_empty(),
+	check(app._unlocked_gift.is_empty() and app._new_adventure_button.visible,
 		"Finishing a legacy backdrop requirement creates no new room-gift CTA")
 	check(app.playroom_state.backdrop_id == "backdrop-autumn", "An earned third medal never auto-equips a new backdrop")
 	app._show_collection()

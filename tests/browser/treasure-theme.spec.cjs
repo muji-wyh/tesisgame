@@ -73,7 +73,7 @@ async function captureStage(page, testInfo, theme, phase) {
   const full = await page.screenshot({ path: testInfo.outputPath(`treasure-${phase}-${theme}.png`), fullPage: true, scale: 'css' });
   expect(await visibleColorCount(page, full), `${phase}/${theme}: evidence contains the rendered game.`).toBeGreaterThan(20);
   // The full screenshots retain the theme badge, distinctive scenery, chest
-  // and review controls for visual inspection at each real device size.
+  // and floating action for visual inspection at each real device size.
   return { theme, png: edge.toString('base64') };
 }
 

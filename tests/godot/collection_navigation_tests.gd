@@ -69,13 +69,14 @@ func _run() -> void:
 	app._hide_collection()
 	check(app.playroom_state.set_goal("toy-spring", app.medal_progress.counts), "An unfinished gift can be selected before its final piece")
 	app.medal_progress.counts["spring-1"] = 3
-	app._unlocked_gift = load("res://scripts/playroom_state.gd").item("toy-spring")
-	app._try_unlocked_gift()
+	app._show_collection()
+	app._room.item_buttons["toy-spring"].grab_focus()
+	app._room.item_buttons["toy-spring"].pressed.emit()
 	for frame in range(5):
 		await process_frame
-	check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "Try it with Pip reopens the room with the earned gift")
+	check(app._room.is_visible_in_tree() and app.playroom_state.toy_id == "toy-spring", "The owned collection card equips the earned gift")
 	check(root.gui_get_focus_owner() == app._room.toy_button and app._collection_scroll.get_global_rect().encloses(app._room.toy_button.get_global_rect()),
-		"Try gift focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d" % [
+		"Choosing the earned card focuses the visible toy after the completed-goal layout settles: viewport=%s toy=%s scroll=%d" % [
 			app._collection_scroll.get_global_rect(), app._room.toy_button.get_global_rect(),
 			app._collection_scroll.scroll_vertical])
 	await _check_owned_display_navigation(app)

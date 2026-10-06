@@ -234,11 +234,16 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	await process_frame
 	await process_frame
 	check(app.model.phase == "won" and app.audio.click_count == count, "Completing a real Match board adds no UI clicks")
-	if app._found_words.get_child_count() > 0:
-		app._found_words.get_child(0).pressed.emit()
-	check(app.audio.click_count == count, "Result vocabulary replay remains a content-audio action")
+	check(not app._new_adventure_button.visible, "An unopened chest has no New adventure action")
 	_click(app, app._result_board_button, "The result Leaderboard button")
 	app._controller_back()
+	count = app.audio.click_count
+	app._open_chest()
+	await process_frame
+	await process_frame
+	check(app.model.chest_state == "opened" and app._new_adventure_button.is_visible_in_tree(),
+		"Opening and saving the chest reveals the result New adventure action")
+	check(app.audio.click_count == count, "Opening the chest keeps its gameplay sounds without a UI click")
 	await create_timer(0.12).timeout
 	var request: int = app.audio._playback_requests.get(app.audio.ui_click, 0)
 	var completions: Array[bool] = []

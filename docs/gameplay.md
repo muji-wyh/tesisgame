@@ -31,7 +31,7 @@ controls. Keyboard and controller focus remains visible across the available gam
 
 Scrollable lists and strips retain momentum after a swipe or mouse drag and
 settle gradually. Mouse-wheel scrolling also eases to a stop. This applies to
-age vocabulary, the age/world/toy strips, result word reviews, Voice Pop results
+age vocabulary, the age/world/toy strips, Voice Pop results
 and microphone prompts, player lists and leaderboards. Touching a moving list stops it without activating a card;
 a stationary tap then selects the item. Keyboard and controller navigation
 stop momentum and reveal the focused control. Scrollbar rails stay hidden.
@@ -187,24 +187,22 @@ can hold A on the eye. Feedback stays on the board and clears automatically,
 without a bottom panel. There is no countdown or three-mistake loss, and exploratory
 misses do not enter the missed-word list. Completing
 all five pairs opens the normal chest for one saved step of gift progress.
-**New adventure** is the normal result action; **Repeat lesson** has been removed.
+**New adventure** appears only after the chest opens and its reward saves.
+It floats at the bottom-right without reserving space or moving the chest.
+**Repeat lesson** has been removed.
 **Retry saving** appears only if reward storage needs recovery, without restarting play.
 **New adventure** on
 results starts a fresh Match game with five vocabulary words. The manual Explore
 picker has been removed. Existing room choices, world preferences, and journey
 metadata are preserved; a failed write keeps play available and offers
 **Retry saving** in the header without resetting the current word.
-The result shelf reviews all five words, with missed words first. The row is
-centered when it fits. Swipe or drag overflowing rows horizontally without a
-scrollbar; a stationary tap replays a word.
-Keyboard and controller focus still scroll the final word into view. Drags,
-cancelled gestures, and multiple touches never trigger pronunciation or rewards.
-Result actions stay compact and centered rather than stretching across the page.
-Save retries and newly unlocked toy actions use the same styling.
+The result word strip has been removed. The chest fills the result area before,
+during and after opening. Save recovery uses a floating **Retry saving** button
+and a visible status message, preserving the same chest framing.
 
 The **Medals** page, tab, and reward preview have been removed. Ordinary chest
-results show the chest, review cards and next action. A toy unlock shows
-**A gift for Pip!** with **Try it with Pip**.
+results show only the chest until the next action becomes available. Toy unlocks
+are announced to assistive technology and can be selected from the playroom.
 Chest rewards, piece progress, toy unlocks, and existing saves remain available.
 More opens the playroom directly, with age choices at the top and worlds above
 the bottom toy strip.
@@ -272,7 +270,7 @@ Every step shows and pronounces its noun; tap the toy after the last step to res
 for another round. Step feedback remains available to assistive technology.
 Toy play is temporary and never grants extra medals. Reduced motion
 shows each stage's static result. The next gift shows its name and
-remaining pieces. Newly unlocked gifts offer **Try it with Pip** after the reward saves.
+remaining pieces. Newly unlocked gifts become available in the playroom after the reward saves.
 Previously saved favorite medals remain displayed in the playroom.
 Toy, legacy backdrop, and favorite data save together immediately in browser storage, or in
 `user://playroom-v2.cfg` in native builds. The earlier favorite is migrated, and medal
@@ -464,13 +462,12 @@ Each win earns **one fragment**. **Three fragments complete a medal**, and each
 season has **six medals**. The next piece always advances the first unfinished
 medal in that season; there are no duplicate fragments or rare missing pieces.
 These records support gift progress without a post-opening collectible display.
-Ordinary chest results omit the victory title, instruction and review heading;
-the cards sit directly below the chest when vertical space permits. Hold
+Ordinary chest results omit the victory title, instruction and word list. Hold
 instructions and completion announcements remain accessible to screen readers.
 The chest's local flash and twelve radial light streaks accompany release;
 theme decorations remain around the chest. Save notices remain visible.
-A newly unlocked toy instead shows **A gift for Pip!** with **Try it with Pip**
-directly. There is no medal badge, piece assembly, tap-to-place action, toolbar
+A newly unlocked toy is announced as **A gift for Pip!** and is available in the
+playroom. There is no medal badge, piece assembly, tap-to-place action, toolbar
 flight or larger medal-completion celebration. A complete season keeps its
 saved progress when future chests open.
 

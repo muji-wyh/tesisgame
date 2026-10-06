@@ -19,6 +19,17 @@ async function resultTap(page, key) {
   await rendered(page);
 }
 
+async function openChest(page, expected = 'Chest opened! Ready for another adventure?') {
+  const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
+  await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
+  await page.mouse.down();
+  try {
+    await expect(page.locator('#game-status')).toContainText(expected, { timeout: 15000 });
+  } finally {
+    await page.mouse.up();
+  }
+}
+
 async function winMatch(page) {
   const bounds = await metrics(page);
   const cards = new Map();
@@ -86,17 +97,20 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   expect(errors).toEqual([]);
 });
 
-test('New adventure preserves unopened victory pieces across reload', async ({ page }, testInfo) => {
+test('New adventure preserves opened victory pieces across reload', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
   const errors = await openGame(page);
   await chooseTheme(page, 0);
   await chooseMode(page, 'match');
   await winMatch(page);
   expect(await pieceCount(page)).toBe(0);
+  await openChest(page);
   await resultTap(page, 'newAdventure');
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
   await chooseMode(page, 'match');
   await winMatch(page);
+  await openChest(page);
   await resultTap(page, 'newAdventure');
   await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
@@ -104,7 +118,7 @@ test('New adventure preserves unopened victory pieces across reload', async ({ p
   await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(2);
-  await page.screenshot({ path: testInfo.outputPath('unopened-pieces-restored.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('opened-pieces-restored.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
 
@@ -122,7 +136,7 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
     };
     window.restoreRewardSave = () => { Storage.prototype.setItem = save; };
   });
-  await resultTap(page, 'newAdventure');
+  await openChest(page, 'Choose Retry saving.');
   await expect(page.locator('#game-status')).toContainText('Choose Retry saving.');
   expect(await medalRecord(page)).toBe(before);
   // A separate retry action replaces navigation until the reward is safe.

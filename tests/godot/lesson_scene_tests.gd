@@ -67,11 +67,11 @@ func _run() -> void:
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()
-	check(app._found_words.get_child_count() == 5, "Review includes all five lesson words")
-	check(app._found_words.get_child(0).get_meta("word_id") == wrong[0].word.id, "Review presents missed words first")
+	check(app.model.review_words().size() == 5, "The lesson retains all five practised words")
+	check(app.model.review_words()[0].id == wrong[0].word.id, "The lesson retains missed-word ordering without a result word strip")
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != lesson,
-		"New adventure leaves result review for a fresh Match board")
+		"New adventure leaves the opened chest for a fresh Match board")
 	check(app.model.lesson_words.size() == 5 and app.model.theme_id == world and app.model.hints_remaining == 3,
 		"The fresh lesson preserves the world and renews the normal hint allowance")
 	var current: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:

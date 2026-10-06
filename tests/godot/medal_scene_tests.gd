@@ -112,8 +112,8 @@ func _run() -> void:
 	app.chest.finish_immediately()
 	check(app.medal_progress.completed_count("spring") == 1, "The third piece completes one medal")
 	check(app.chest.mode == "opened" and app._title.text == "A gift for Pip!"
-		and app._try_gift_button.visible,
-		"Completing saved progress offers the unlocked toy without a collectible celebration")
+		and not app._title.is_visible_in_tree() and app._new_adventure_button.visible,
+		"Completing saved progress announces the unlocked toy without adding another result panel")
 	check_no_collectible_presentation(app, "A toy unlock")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 3, "A repeated completion cannot add progress")

@@ -63,18 +63,6 @@ func _run() -> void:
 			if word_cards.size() == 1:
 				check_label(word_cards[0].word_label, word, "Memory", dimensions)
 				check(app._memory.get_global_rect().grow(1).encloses(word_cards[0].get_global_rect()), "Memory keeps new words inside its five-pair board")
-			app.choose_mode("match")
-			for phase in ["won"]:
-				app.model.phase = phase
-				app._refresh()
-				await settle()
-				for review in app._found_words.get_children():
-					var label: Label = review.get_child(1)
-					var font: Font = label.get_theme_font("font")
-					var width: float = font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size")).x
-					check(width <= label.size.x - 8 and review.size.x >= 72,
-						"%s %s review shows the full spelling of %s: text=%s label=%s" % [dimensions, phase, label.text, width, label.size.x])
-				app.model.phase = "waiting"
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

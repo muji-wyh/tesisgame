@@ -92,12 +92,12 @@ cannot grant or announce another piece. New-round auto-claims save the earned
 piece silently. Reduced motion skips physical beats and displays the saved result
 directly after its shorter hold.
 
-Ordinary chest results show the chest, review cards and next action without a
-victory title, instruction or review heading. When vertical space permits, cards
-sit below the chest with only their height reserved. Hold instructions and
-completion status remain available to screen readers; pending-save and
-failed-save messages remain visible.
-A toy unlock instead shows **A gift for Pip!** with **Try it with Pip** directly.
+Ordinary chest results show only the chest until opening and saving complete.
+Then **New adventure** appears as a bottom-right overlay without shifting or
+shrinking the chest. The word review strip and result toy action are removed.
+Hold instructions, completion status and toy unlocks remain available to screen
+readers; pending-save and failed-save messages remain visible. Save recovery
+uses a floating **Retry saving** button. Unlocked toys remain in the playroom.
 Piece counts and medal records still drive persistence and gift requirements,
 but the result has no collectible badge, assembly, tap-to-place interaction or
 flight to the toolbar. The view owns the release flash and twelve radial light
@@ -120,7 +120,7 @@ details; only the pale circular backplate and floor shadow are removed.
 This surprise is a cosmetic display for the current reward view. It has no
 collectible album, progress counter or saved storage, and does not change rewards
 or ownership.
-Existing toy unlocks and the **Try it with Pip** action remain independent.
+Existing toy unlocks and playroom selection remain independent.
 
 ## Original sound bank
 

@@ -421,11 +421,6 @@ async function continueMatch(page, correct = true) {
   await page.keyboard.press('Escape');
 }
 
-async function resultTap(page, key, options = {}) {
-  const point = resultPoint(await logicalMetrics(page), key, options);
-  await tap(page, point.x, point.y);
-}
-
 async function holdChestUntilOpen(page, point) {
   await page.mouse.move(point.x, point.y);
   await page.mouse.down();
@@ -470,7 +465,7 @@ function rewardPieceTotal(saved) {
     .reduce((total, [, , count]) => total + Number(count), 0);
 }
 
-test('new adventures rotate and all five review words replay without opening or awarding the chest', async ({ page }, testInfo) => {
+test('new adventures rotate after the chest is opened and room navigation preserves its claim', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   const catalog = fs.readFileSync(path.join(__dirname, '..', '..', 'scripts', 'game_data.gd'), 'utf8');
   const adventures = JSON.parse(catalog.match(/const ADVENTURES: Array\[Dictionary\] = (\[[\s\S]*?\r?\n\])/)[1]);
@@ -487,35 +482,20 @@ test('new adventures rotate and all five review words replay without opening or 
   expect(words.every(word => topics[adventure].includes(word))).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('word-adventure.png'), scale: 'css' });
   await winWithTouch(page, board);
-  await page.screenshot({ path: testInfo.outputPath('found-word-shelf.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('chest-before-opening.png'), scale: 'css' });
 
   const { metrics } = board;
-  const reviewed = [];
-  // Winning focuses the chest; skip the primary action to reach the word review.
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
-  for (let index = 0; index < 5; index++) {
-    if (index) {
-      await page.keyboard.press('Tab');
-      await page.keyboard.press('Enter');
-      await expect(page.locator('#game-status')).not.toHaveText(`${reviewed[index - 1]}. Look at the picture and say the word.`);
-    }
-    await expect(page.locator('#game-status')).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
-    reviewed.push((await page.locator('#game-status').textContent()).split('.')[0]);
-  }
-  expect([...reviewed].sort()).toEqual([...words].sort());
+  const unopened = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.evaluate(() => window.gamepadFixture.connect());
-  await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toHaveText(`${reviewed[4]}. Look at the picture and say the word.`);
   await pressGamepad(page, 3);
   await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-  // Back restores the found-word focus; deliberately press inside the chest stage.
+  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(unopened);
   await holdChestUntilOpen(page, resultScreenPoint(metrics));
   await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
-  await resultTap(page, 'newAdventure');
+  await page.screenshot({ path: testInfo.outputPath('chest-after-opening.png'), scale: 'css' });
+  await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
   await ready(page);
   const nextBoard = await discoverCards(page);
@@ -1089,7 +1069,7 @@ test('dragging the reward chest cancels hold-open without losing pointer control
   expect(errors).toEqual([]);
 });
 
-test('completed Match visibly renders New adventure above the word review on a phone', async ({ page }, testInfo) => {
+test('completed Match visibly reveals a bottom-right New adventure after opening the chest on a phone', async ({ page }, testInfo) => {
     const errors = watchErrors(page);
     await page.setViewportSize({ width: 390, height: 650 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1097,6 +1077,8 @@ test('completed Match visibly renders New adventure above the word review on a p
     await ready(page);
     await chooseSeason(page, 1);
     await winWithTouch(page);
+    await page.screenshot({ path: testInfo.outputPath('result-match-closed-phone.png'), scale: 'css' });
+    await holdChestUntilOpen(page, resultScreenPoint(await canvasMetrics(page)));
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const metrics = await canvasMetrics(page);
     const scale = Math.min(metrics.width, metrics.height) / 480;

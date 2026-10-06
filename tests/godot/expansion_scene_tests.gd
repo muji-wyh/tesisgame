@@ -92,7 +92,7 @@ func _run() -> void:
 		app.cards[word_id + ":image"].pressed.emit()
 		app._continue_match()
 	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5, "Five Match pairs enter the shared win screen")
-	check(app._found_words.get_child_count() == 5, "All five learned words are available for replay")
+	check(app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "Completing the lesson presents only the unopened chest")
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match win earns one ordinary medal piece")

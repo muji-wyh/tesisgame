@@ -196,7 +196,6 @@ var _content_margins: MarginContainer
 var _new_adventure_button: Button
 var _journey_save_failed: bool = false
 var _pending_visit_id: String = ""
-var _try_gift_button: Button
 var _unlocked_gift: Dictionary = {}
 var playroom_state := PlayroomState.new()
 var _playroom_ready: bool = false
@@ -214,16 +213,12 @@ var _resume_music_after_background: bool = false
 var _background: ColorRect
 var _success: ProgressBadges
 var _mistakes: ProgressBadges
-var _found_words: HBoxContainer
-var _found_words_scroll: ReviewScroll
 var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
 var _stage: Panel
 var _treasure_backdrop: TreasureBackdrop
 var _result_text: VBoxContainer
-var _result_footer: VBoxContainer
-var _result_actions: HBoxContainer
 var _result_action_scale: float = -1.0
 var _title: Label
 var _caption: Label
@@ -570,41 +565,18 @@ func _build_controls() -> void:
 	chest_button.button_up.connect(_end_chest_hold)
 	chest_button.gui_input.connect(_chest_input)
 	_result_text = VBoxContainer.new()
-	_result_text.alignment = BoxContainer.ALIGNMENT_END
+	_result_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_result_text.add_theme_constant_override("separation", 10)
 	_outcome.add_child(_result_text)
 	_result_text.minimum_size_changed.connect(_layout_result)
 	_title = Style.label("You did it!", 34)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_title.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_title)
 	_caption = Style.label("Hold to open your chest!", 22)
 	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_caption.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_result_text.add_child(_caption)
-	_found_words = HBoxContainer.new()
-	_found_words.name = "FoundWords"
-	_found_words.alignment = BoxContainer.ALIGNMENT_CENTER
-	_found_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_found_words.add_theme_constant_override("separation", 8)
-	_found_words_scroll = ReviewScroll.new()
-	_found_words_scroll.custom_minimum_size = Vector2(0, 88)
-	_found_words_scroll.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _mode_menu_open()
-	_result_text.add_child(_found_words_scroll)
-	_found_words_scroll.add_child(_found_words)
-	_result_footer = VBoxContainer.new()
-	_result_footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_footer.minimum_size_changed.connect(_layout_result)
-	_result_text.add_child(_result_footer)
-	_result_text.move_child(_result_footer, _found_words_scroll.get_index())
-	var result_actions := HBoxContainer.new()
-	_result_actions = result_actions
-	result_actions.alignment = BoxContainer.ALIGNMENT_CENTER
-	result_actions.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	result_actions.add_theme_constant_override("separation", 8)
-	_result_footer.add_child(result_actions)
 	_result_retry_button = Button.new()
 	_result_retry_button.name = "RetryRewardSave"
 	_result_retry_button.text = "Retry saving"
@@ -612,14 +584,15 @@ func _build_controls() -> void:
 	UiClick.bind_button(_result_retry_button)
 	_result_retry_button.pressed.connect(_retry_reward_save)
 	_result_retry_button.hide()
-	result_actions.add_child(_result_retry_button)
+	_outcome.add_child(_result_retry_button)
 	_new_adventure_button = Button.new()
 	_new_adventure_button.name = "NewAdventure"
 	_new_adventure_button.text = "New adventure"
 	_new_adventure_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	UiClick.bind_button(_new_adventure_button)
 	_new_adventure_button.pressed.connect(_new_adventure)
-	result_actions.add_child(_new_adventure_button)
+	_new_adventure_button.hide()
+	_outcome.add_child(_new_adventure_button)
 	_result_board_button = Button.new()
 	_result_board_button.name = "ResultLeaderboard"
 	_result_board_button.text = "Leaderboard"
@@ -629,13 +602,6 @@ func _build_controls() -> void:
 	_result_board_button.pressed.connect(_show_result_leaderboard)
 	_toolbar.add_child(_result_board_button)
 	_toolbar.move_child(_result_board_button, collection_button.get_index())
-	_try_gift_button = Button.new()
-	_try_gift_button.text = "Try it with Pip"
-	_try_gift_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	UiClick.bind_button(_try_gift_button)
-	_try_gift_button.pressed.connect(_try_unlocked_gift)
-	_try_gift_button.hide()
-	_result_footer.add_child(_try_gift_button)
 	_message = Style.label("", 16)
 	_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1052,7 +1018,6 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_publish_pop_rewards(_pop_rewards.snapshot())
 	_leaderboard_close.visible = _leaderboard_gate != "onboarding"
 	_leaderboard_close.focus_mode = Control.FOCUS_ALL
-	_found_words_scroll.cancel_drag()
 	_cancel_collection_rails()
 	if collection_page.visible:
 		_room.settle()
@@ -1539,22 +1504,6 @@ func _room_pip_interaction(kind: String, message: String) -> void:
 	_announce_status(message)
 
 
-func _try_unlocked_gift() -> void:
-	if _unlocked_gift.is_empty() or _save_error:
-		return
-	_show_collection()
-	if not _select_room_item(_unlocked_gift.id):
-		_room.item_buttons[_unlocked_gift.id].grab_focus()
-		_ensure_collection_focus_visible.call_deferred(_room.item_buttons[_unlocked_gift.id])
-		return
-	_collection_scroll.scroll_vertical = 0
-	_room.toy_button.grab_focus()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	if collection_page.visible and _room.toy_button.has_focus():
-		_ensure_collection_focus_visible(_room.toy_button)
-
-
 func _load_favorite_reward() -> void:
 	var value: Variant = _host.favoriteReward() if _host != null else ""
 	var config := ConfigFile.new()
@@ -1742,9 +1691,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	audio.halt()
 	_stop_feedback_animations()
 	_last_phase = ""
-	for button in _found_words.get_children():
-		_found_words.remove_child(button)
-		button.queue_free()
 	if not model.reset(data.words, seed_value, repeat_lesson, adventure_id, required_word_id, playroom_state.age_band_id):
 		_rebuilding = false
 		_show_error(model.error)
@@ -2081,9 +2027,7 @@ func _refresh() -> void:
 	_style_voice_button()
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
-	_new_adventure_button.visible = not _save_error
 	_result_board_button.disabled = model.chest_state == "opening"
-	_try_gift_button.visible = not _unlocked_gift.is_empty() and not _save_error
 	if _mode_id == "memory":
 		_memory_progress(_memory.memory.matched_word_ids.size(), _memory.memory.attempts)
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
@@ -2095,7 +2039,6 @@ func _refresh() -> void:
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
 	_refresh_age_choices()
 	_success.visible = playing and _mode_id == "memory" and not _storage_retry_button.visible
-	_refresh_found_words(playing, palette.accent)
 	if not playing and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = playing and _mode_id == "match"
@@ -2124,10 +2067,14 @@ func _refresh() -> void:
 	var won: bool = model.phase == "won"
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
 		and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after)
-	var show_result_message: bool = not won or _save_error or saving_reward or not _unlocked_gift.is_empty()
+	_new_adventure_button.visible = won and model.chest_state == "opened" and not _save_error and not saving_reward
+	var show_result_message: bool = not won or _save_error or saving_reward
+	_result_text.visible = show_result_message
 	_title.visible = show_result_message
 	_caption.visible = show_result_message
 	_treasure_backdrop.visible = won
+	_treasure_backdrop.show_theme_name = not show_result_message
+	_treasure_backdrop.queue_redraw()
 	if won:
 		_treasure_backdrop.configure(palette)
 	chest.visible = won
@@ -2201,55 +2148,6 @@ func _refresh() -> void:
 		_layout_collection.call_deferred()
 	_update_duck()
 	_refresh_controller_focus()
-
-
-func _refresh_found_words(playing: bool, accent: Color) -> void:
-	var show_words: bool = not playing and not model.lesson_words.is_empty()
-	_found_words.visible = show_words
-	_found_words_scroll.visible = show_words
-	if not show_words or collection_page.visible:
-		return
-	if _found_words.get_child_count() == 0:
-		for word in model.review_words():
-			var button := Button.new()
-			button.name = "Found_" + word.id
-			button.set_meta("word_id", word.id)
-			button.size_flags_horizontal = Control.SIZE_FILL
-			_set_accessibility_name(button, "Hear %s again" % word.text)
-			button.pressed.connect(_replay_found_word.bind(word.id))
-			button.focus_entered.connect(func() -> void:
-				if not _found_words_scroll.is_pointer_active():
-					_found_words_scroll.cancel_drag()
-					_found_words_scroll.ensure_control_visible(button))
-			_found_words.add_child(button)
-			var picture := _picture(button)
-			picture.texture = load("res://" + word.image)
-			picture.offset_left = 8
-			picture.offset_top = 6
-			picture.offset_right = -8
-			picture.offset_bottom = -26
-			var label := Style.label(word.text, 16)
-			label.name = "ReviewWord"
-			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			label.clip_text = true
-			button.add_child(label)
-			label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-			label.offset_top = -26
-			label.offset_bottom = -4
-	for button in _found_words.get_children():
-		var label: Label = button.get_node("ReviewWord")
-		var font: Font = label.get_theme_font("font")
-		var text_width: float = font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size")).x
-		Style.button(button, accent, maxf(72, ceilf(text_width + 16)))
-
-
-func _replay_found_word(word_id: String) -> void:
-	if collection_page.visible or model.phase != "won":
-		return
-	for word in model.lesson_words:
-		if word.id == word_id:
-			_hear_word(word)
-			return
 
 
 func _hear_word(word: Dictionary) -> void:
@@ -2399,6 +2297,9 @@ func _continue_match() -> void:
 func _refresh_controller_focus() -> void:
 	if not _controller_mode or collection_page.visible:
 		return
+	if model.phase == "won" and model.chest_state == "opening":
+		# Keep the handoff pending until the next result action is available.
+		return
 	if model.phase == "won" and model.chest_state == "closed" and not _save_error:
 		chest_button.focus_mode = Control.FOCUS_ALL
 		chest_button.grab_focus()
@@ -2409,8 +2310,6 @@ func _refresh_controller_focus() -> void:
 func _layout() -> void:
 	if grid == null:
 		return
-	if _found_words_scroll != null:
-		_found_words_scroll.cancel_drag()
 	_cancel_collection_rails()
 	_refresh_hint()
 	_fit_mode_buttons.call_deferred()
@@ -2644,7 +2543,6 @@ func _style_result_actions(accent: Color) -> void:
 	_result_action_scale = Style.ui_scale(self)
 	Style.action_button(_result_retry_button, accent, true)
 	Style.prominent_action_button(_new_adventure_button, accent)
-	Style.action_button(_try_gift_button, accent)
 	Style.action_button(_result_board_button, accent)
 	_result_board_button.add_theme_font_size_override("font_size", ceili(12 / _result_action_scale))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
@@ -2654,40 +2552,28 @@ func _style_result_actions(accent: Color) -> void:
 
 
 func _layout_result() -> void:
-	if _outcome == null or _stage == null or _result_text == null or _try_gift_button == null:
+	if _outcome == null or _stage == null or _new_adventure_button == null:
 		return
 	var dimensions: Vector2 = _outcome.size
 	var scale: float = Style.ui_scale(self)
 	if not is_equal_approx(scale, _result_action_scale):
 		_style_result_actions(_active_palette.get("accent", Style.GOOD))
-	var gap: int = ceili(8 / scale)
-	_result_footer.add_theme_constant_override("separation", gap)
-	_result_actions.add_theme_constant_override("separation", gap)
-	var width: float = minf(176 / scale, maxf(0, dimensions.x))
-	for button in [_result_retry_button, _try_gift_button]:
-		button.custom_minimum_size.x = width
-	var short_result: bool = dimensions.y * scale < 260.0 and (_title.visible or _caption.visible)
-	_new_adventure_button.add_theme_font_size_override("font_size", ceili((18 if short_result else 24) / scale))
-	_new_adventure_button.custom_minimum_size.x = minf(320 / scale, maxf(0, dimensions.x - (88.0 if short_result else 0.0)))
-	var compact: bool = dimensions.y < 340.0 and _found_words.visible
-	_result_text.add_theme_constant_override("separation", ceili((8 if compact else 14) / scale))
-	_title.add_theme_font_size_override("font_size", 28 if compact else 34)
-	_caption.add_theme_font_size_override("font_size", 18 if compact else 22)
-	var minimum_text: Vector2 = _result_text.get_combined_minimum_size()
-	var show_message: bool = _title.visible or _caption.visible
-	if (show_message and size.x >= size.y) or dimensions.y < minimum_text.y + 82.0:
-		var text_width: float = maxf(maxf(minimum_text.x, 232.0 if _found_words.visible else 0.0), (dimensions.x - 16.0) * 0.39)
-		var stage_width: float = maxf(72.0, dimensions.x - 16.0 - text_width)
-		_stage.position = Vector2.ZERO
-		_stage.size = Vector2(stage_width, dimensions.y)
-		_result_text.position = Vector2(stage_width + 16.0, 0)
-		_result_text.size = Vector2(maxf(0.0, dimensions.x - stage_width - 16.0), dimensions.y)
-	else:
-		var text_height: float = maxf(170.0 if show_message else 0.0, minimum_text.y)
-		_stage.position = Vector2.ZERO
-		_stage.size = Vector2(dimensions.x, maxf(72.0, dimensions.y - text_height - 10.0))
-		_result_text.position = Vector2(0, _stage.size.y + 10.0)
-		_result_text.size = Vector2(dimensions.x, text_height)
+	# Overlay actions never change the chest's framing, including during recovery.
+	_stage.position = Vector2.ZERO
+	_stage.size = dimensions
+	var inset: float = 16 / scale
+	var available_width: float = maxf(0.0, dimensions.x - inset * 2)
+	_new_adventure_button.add_theme_font_size_override("font_size", ceili(20 / scale))
+	for button in [_new_adventure_button, _result_retry_button]:
+		var primary: bool = button == _new_adventure_button
+		button.custom_minimum_size = Vector2(minf((240 if primary else 176) / scale, available_width), ceilf((56 if primary else 48) / scale))
+		button.size = button.get_combined_minimum_size()
+		button.position = dimensions - button.size - Vector2(inset, inset)
+	_result_text.add_theme_constant_override("separation", ceili(4 / scale))
+	_title.add_theme_font_size_override("font_size", ceili(22 / scale))
+	_caption.add_theme_font_size_override("font_size", ceili(16 / scale))
+	_result_text.position = Vector2(inset, inset)
+	_result_text.size = Vector2(available_width, _result_text.get_combined_minimum_size().y)
 
 
 func _can_request_hint() -> bool:
@@ -2920,6 +2806,9 @@ func _on_chest_opened() -> void:
 	audio.finish_chest_motion()
 	_publish_chest_charge()
 	_commit_fragment()
+	if _controller_mode and not _settling_chest and not _page_hidden \
+		and not collection_page.visible and not _leaderboard_overlay.visible and not _mode_menu_open():
+		_default_focus().grab_focus()
 
 
 func _settle_released_chest() -> void:
@@ -2996,7 +2885,6 @@ func on_page_hidden() -> void:
 	_proactive_touches.clear()
 	_collection_multi_touch = false
 	_cancel_collection_rails()
-	_found_words_scroll.cancel_drag()
 	_stop_voice()
 	feedback_timer.paused = true
 	_memory.pause(true)
@@ -3387,9 +3275,11 @@ func _default_focus() -> Control:
 				return control
 		return collection_button
 	if model.phase == "won":
-		if model.chest_state == "closed" and not _save_error:
+		if _valid_focus(chest_button):
 			return chest_button
-		return _result_retry_button if _save_error else _new_adventure_button
+		if _valid_focus(_result_retry_button):
+			return _result_retry_button
+		return _new_adventure_button if _valid_focus(_new_adventure_button) else collection_button
 	if _mode_id == "pop":
 		var pop_focus: Control = _pop.default_focus()
 		return pop_focus if _valid_focus(pop_focus) else collection_button
@@ -3613,7 +3503,6 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_finish_chest_drag()
 	_pop_rewards.cancel_input()
 	duck.note_activity()
-	_found_words_scroll.cancel_drag()
 	_pop.cancel_result_input()
 	_memory.end_peek()
 	_room.playground.cancel()
@@ -3940,7 +3829,9 @@ func _chest_input(event: InputEvent) -> void:
 
 
 func _new_adventure() -> void:
-	if collection_page.visible or model.phase != "won" or model.chest_state == "opening":
+	if collection_page.visible or model.phase != "won" or model.chest_state != "opened" or _save_error:
+		return
+	if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
 		return
 	if new_round(-1, false, "", "match"):
 		_default_focus().grab_focus()

@@ -1,10 +1,14 @@
+const fs = require('node:fs');
+const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, enterGame, openGame, boardPoint, matchWords, discoverMatchCards,
   resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomState, roomControl } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const PICNIC = 'apple banana orange pear grape cherry melon carrot tomato corn peas egg bread cake cookie cheese milk water juice rice pumpkin coconut pineapple watermelon strawberry'.split(' ');
+const catalog = fs.readFileSync(path.join(__dirname, '..', '..', 'scripts', 'game_data.gd'), 'utf8');
+const adventures = JSON.parse(catalog.match(/const ADVENTURES: Array\[Dictionary\] = (\[[\s\S]*?\r?\n\])/)[1]);
+const PICNIC = new Set(adventures.find(adventure => adventure.id === 'picnic-time').words);
 const APPLE_STAGES = [
   '1/3 · An apple for Pip!',
   '2/3 · Pip nibbles the apple. Crunch!',
@@ -48,18 +52,12 @@ async function requestPreviewGoal(page) {
   await page.keyboard.press('Enter');
 }
 
-async function winMatch(page) {
+async function winMatch(page, knownCards = null) {
   const bounds = await metrics(page);
   const cards = new Map();
-  for (let index = 0; index < 10; index++) {
-    const point = boardPoint(bounds, index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
+  for (const { index, kind, word } of knownCards || await discoverMatchCards(page)) {
     if (!cards.has(word)) cards.set(word, {});
     cards.get(word)[kind] = index;
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
   }
   const pairs = [...cards.entries()].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
   expect(pairs).toHaveLength(5);
@@ -90,20 +88,19 @@ async function claimChest(page) {
 }
 
 async function tryGift(page) {
-  const point = resultPoint(await metrics(page), 'gift');
+  await openRoom(page);
+  const point = await roomControl(page, 'autumn');
   await tap(page, point.x, point.y);
-  await expect(page.locator('#game-status')).toContainText('Offer the apple');
+  await expect(page.locator('#game-status')).toHaveText(APPLE_STAGES[0]);
   expect(await record(page)).toContain('toy="toy-autumn"');
   await rendered(page);
 }
 
-async function playAppleStages(page, testInfo, prefix, { firstTouch = false, alreadyStarted = false } = {}) {
-  const toy = alreadyStarted ? null : await roomControl(page, 'toy');
+async function playAppleStages(page, testInfo, prefix, { alreadyStarted = false } = {}) {
+  if (!alreadyStarted) await roomControl(page, 'toy');
   for (let index = 0; index < APPLE_STAGES.length; index++) {
     if (index === 0 && alreadyStarted) {
       // Selecting an owned floor toy has already played this stage.
-    } else if (index === 0 && firstTouch) {
-      await tap(page, toy.x, toy.y);
     } else {
       await page.keyboard.press('Enter');
     }
@@ -118,6 +115,7 @@ async function playAppleStages(page, testInfo, prefix, { firstTouch = false, alr
 }
 
 test('a chosen gift teaches its noun, earns one normal piece and plays three stages after reload', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
   await seedAppleGift(page);
   const errors = await openGame(page);
   const initialStickers = stickerIds(await record(page));
@@ -132,13 +130,14 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   const goalSave = await record(page);
   expect(goalSave).toContain('goal_item_id="toy-autumn"');
   expect(goalSave).toContain('preferred_theme_id="autumn"');
-  const words = await matchWords(page);
+  const cards = await discoverMatchCards(page);
+  const words = [...new Set(cards.map(card => card.word))];
   expect(words).toContain('apple');
-  expect(words.every(word => PICNIC.includes(word))).toBe(true);
+  expect(words.filter(word => !PICNIC.has(word)), 'The gift lesson stays within the current Picnic time catalog.').toEqual([]);
   expect(await pieceCount(page)).toBe(2);
   expect(stickerIds(await record(page))).toEqual(initialStickers);
   await page.screenshot({ path: testInfo.outputPath('gift-apple-lesson.png'), scale: 'css' });
-  await winMatch(page);
+  await winMatch(page, cards);
   expect(await pieceCount(page)).toBe(2);
   await claimChest(page);
   expect(await pieceCount(page)).toBe(3);
@@ -146,7 +145,7 @@ test('a chosen gift teaches its noun, earns one normal piece and plays three sta
   await tryGift(page);
   const earnedStickers = stickerIds(await record(page));
   await page.screenshot({ path: testInfo.outputPath('gift-apple-ready.png'), scale: 'css' });
-  await playAppleStages(page, testInfo, 'gift-apple-stage', { firstTouch: true });
+  await playAppleStages(page, testInfo, 'gift-apple-stage', { alreadyStarted: true });
   expect(await pieceCount(page)).toBe(3);
   expect(stickerIds(await record(page))).toEqual(earnedStickers);
   await page.reload();

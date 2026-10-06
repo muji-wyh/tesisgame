@@ -204,9 +204,9 @@ async function winGiftMatch(page) {
 }
 
 for (const gift of [
-  { world: 'jungle', word: 'monkey', name: 'Jungle monkey', medal: 'Monkey', topic: 'Animal friends', firstAction: 'Swing the monkey',
+  { world: 'jungle', word: 'monkey', name: 'Jungle monkey', medal: 'Monkey', topic: 'Animal friends',
     outcomes: ['1/3 · The monkey swings through the jungle!', '2/3 · The monkey waves to Pip!', '3/3 · Pip and the monkey share a high five!'] },
-  { world: 'candy', word: 'cake', name: 'Candy cake', medal: 'Party Cake', topic: 'Picnic time', firstAction: 'Set the cake',
+  { world: 'candy', word: 'cake', name: 'Candy cake', medal: 'Party Cake', topic: 'Picnic time',
     outcomes: ["1/3 · A cake for Pip's party!", '2/3 · A swirl of frosting on the cake!', '3/3 · Sprinkles on the cake. Ready to celebrate!'] }
 ]) {
   test(`${gift.world} ages 4-6 prior-save fixture earns its last toy piece through the real lesson and preserves old medals`, async ({ page }, testInfo) => {
@@ -249,13 +249,13 @@ for (const gift of [
     const earnedCounts = { ...OLD_COUNTS, [`${gift.world}-1`]: 3 };
     expect(await counts(page), 'Only the earned new-world fragment changes; every old medal count remains intact.').toEqual(earnedCounts);
     await page.screenshot({ path: testInfo.outputPath(`${gift.world}-earned-toy.png`), scale: 'css' });
-    const useGift = resultPoint(await metrics(page), 'gift');
+    await openRewards(page);
+    const useGift = await roomControl(page, gift.world);
     await tap(page, useGift.x, useGift.y);
-    await expect(page.locator('#game-status')).toContainText(gift.firstAction);
+    await expect(page.locator('#game-status')).toHaveText(gift.outcomes[0]);
     expect(await record(page)).toContain(`toy="toy-${gift.world}"`);
-    await roomControl(page, 'toy');
     for (const [index, outcome] of gift.outcomes.entries()) {
-      await page.keyboard.press('Enter');
+      if (index > 0) await page.keyboard.press('Enter');
       await expect(page.locator('#game-status')).toHaveText(outcome);
       await rendered(page);
       await page.screenshot({ path: testInfo.outputPath(`${gift.world}-toy-stage-${index + 1}.png`), scale: 'css' });

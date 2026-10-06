@@ -266,6 +266,11 @@ test('five Memory pairs earn one saved piece and New adventure refreshes the les
     await waitFeedback(page, true, index === 4);
     expect(await medalRecord(page), 'Matching does not bypass the chest claim.').toBe(before);
   }
+  await screenshot(page, testInfo, 'memory-chest-closed');
+  const beforeNext = resultPoint(await metrics(page), 'newAdventure');
+  await tap(page, beforeNext.x, beforeNext.y);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  expect(await medalRecord(page), 'A hidden next-adventure action cannot claim or leave the chest.').toBe(before);
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();

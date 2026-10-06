@@ -50,59 +50,32 @@ async function finishMatch(page, knownCards = null) {
   return [...cards.keys()];
 }
 
-for (const input of ['mouse', 'touch']) {
-test(`result review words support ${input} swiping without a scrollbar or accidental speech`, async ({ page, browserName }, testInfo) => {
-  test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch dragging uses Chromium CDP.');
-  await page.setViewportSize({ width: 960, height: 720 });
-  const errors = await openGame(page, { mode: 'match' });
-  await finishMatch(page);
-  const bounds = await metrics(page), review = resultPoint(bounds, 'review');
-  const point = { x: bounds.x + (review.x + 80) * bounds.scale, y: bounds.y + review.y * bounds.scale };
-  await page.touchscreen.tap(point.x, point.y);
-  const status = page.locator('#game-status');
-  await expect(status).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
-  const spoken = await status.textContent(), saved = await record(page, MEDAL_KEY);
-  const before = await page.screenshot({ scale: 'css' });
-  const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
-  try {
-    if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
-    else { await page.mouse.move(point.x, point.y); await page.mouse.down(); }
-    for (let step = 1; step <= 5; step++) {
-      const x = point.x - 80 * bounds.scale * step / 5;
-      if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x, y: point.y }] });
-      else await page.mouse.move(x, point.y);
-      await rendered(page);
-    }
-    if (input === 'mouse') await page.waitForTimeout(1200);
-    await expect(status).toHaveText(spoken);
-    const moved = await page.screenshot({ path: testInfo.outputPath(`review-held-${input}.png`), scale: 'css' });
-    expect(moved.equals(before)).toBe(false);
-  } finally {
-    if (client) {
-      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await client.detach();
-    } else await page.mouse.up();
-  }
-  await expect(status).toHaveText(spoken);
-  await page.touchscreen.tap(point.x, point.y);
-  await expect(status).toHaveText(/^[a-z]+\. Look at the picture and say the word\.$/);
-  await expect(status).not.toHaveText(spoken);
-  expect(await record(page, MEDAL_KEY)).toBe(saved);
-  await page.screenshot({ path: testInfo.outputPath(`review-after-${input}.png`), scale: 'css' });
-  expect(errors).toEqual([]);
-});
-}
-
-test('New adventure starts Match directly after completing the board', async ({ page }, testInfo) => {
+test('New adventure appears at the bottom-right after opening the chest and starts Match directly', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 5);
   const world = await page.locator('meta[name="theme-color"]').getAttribute('content');
   const originalCards = await discoverMatchCards(page), pieces = await pieceCount(page);
   const originalWords = [...new Set(originalCards.map(card => card.word))];
   expect((await finishMatch(page, originalCards)).sort()).toEqual([...originalWords].sort());
-  const saved = await record(page), previousTopic = visits(saved)[0];
-  await page.screenshot({ path: testInfo.outputPath('result-actions-complete.png'), scale: 'css' });
+  const previousTopic = visits(await record(page))[0];
+  await page.screenshot({ path: testInfo.outputPath('result-chest-closed.png'), scale: 'css' });
   const next = resultPoint(await metrics(page), 'newAdventure');
+  await tap(page, next.x, next.y);
+  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  expect(await pieceCount(page), 'The future floating-button area cannot skip an unopened chest.').toBe(pieces);
+  const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
+  await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
+  await page.mouse.down();
+  try {
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+  } finally {
+    await page.mouse.up();
+  }
+  expect(await pieceCount(page)).toBe(pieces + 1);
+  const saved = await record(page);
+  await page.mouse.move(0, 0);
+  await rendered(page);
+  await page.screenshot({ path: testInfo.outputPath('result-chest-open-floating-adventure.png'), scale: 'css' });
   await tap(page, next.x, next.y);
   await expect(page.locator('#game-status')).toHaveText(INTRO);
   await expect(page.locator('#selection-status')).toBeEmpty();
@@ -114,7 +87,7 @@ test('New adventure starts Match directly after completing the board', async ({ 
   const changed = await record(page);
   expect(visits(changed)[0]).not.toBe(previousTopic);
   expect(roomFields(changed), 'Starting a lesson preserves existing room, sticker and gift choices.').toEqual(roomFields(saved));
-  expect(await pieceCount(page), 'Completing the board keeps its protected unopened piece.').toBe(pieces + 1);
+  expect(await pieceCount(page), 'Starting the next lesson cannot award the opened chest again.').toBe(pieces + 1);
   expect(errors).toEqual([]);
 });
 

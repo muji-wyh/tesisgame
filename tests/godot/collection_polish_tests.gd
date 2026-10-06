@@ -56,24 +56,39 @@ func _run() -> void:
 			check(button.is_visible_in_tree() and not inactive.is_visible_in_tree(),
 				"Results show one normal New adventure action or one conditional save retry")
 			check(app._default_focus() == button, "The active result action is the default completed-result focus")
-			var minimum_height: float = 48.0 if save_error else 64.0
-			var maximum_width: float = 180.0 if save_error else minf(324.0, app._result_text.size.x * scale + 4.0)
+			var minimum_height: float = 48.0 if save_error else 56.0
+			var expected_width: float = 176.0 if save_error else 240.0
 			check(button.size.y * scale >= minimum_height and button.size.y * scale <= minimum_height + 4,
 				"Retry stays compact and New adventure has a prominent touch target at %s" % dimensions)
-			check(button.size.x * scale <= maximum_width and (save_error or button.size.x * scale >= minf(320.0, app._result_text.size.x * scale) - 4.0),
-				"Result action width reflects its intended emphasis within the available column at %s" % dimensions)
+			check(button.size.x * scale >= expected_width and button.size.x * scale <= expected_width + 4.0,
+				"The floating result action preserves its compact width at %s" % dimensions)
 			check(app.get_global_rect().encloses(button.get_global_rect()),
 				"Result actions stay inside the viewport at %s" % dimensions)
-			var minimum_font_size: float = 14.0 if save_error else 24.0
+			var minimum_font_size: float = 14.0 if save_error else 20.0
 			check(button.get_theme_font_size("font_size") * scale >= minimum_font_size
 				and button.get_theme_font_size("font_size") * scale < minimum_font_size + 2,
 				"Retry labels stay readable and New adventure uses larger primary-action text")
-			check(absf(button.get_global_rect().get_center().x - app._result_footer.get_global_rect().get_center().x) <= 0.5,
-				"The sole result action stays centered in its footer at %s: %s in %s" % [dimensions, button.get_global_rect(), app._result_footer.get_global_rect()])
+			var inset: Vector2 = (app._outcome.get_global_rect().end - button.get_global_rect().end) * scale
+			check(button.get_parent() == app._outcome and inset.x >= 15.0 and inset.x <= 17.0
+				and inset.y >= 15.0 and inset.y <= 17.0,
+				"The result action floats at the bottom-right with a safe inset at %s" % dimensions)
+			check(app._stage.get_global_rect().is_equal_approx(app._outcome.get_global_rect()),
+				"Both normal and retry actions leave the chest stage at full size")
+			check(app._treasure_backdrop.show_theme_name == not save_error,
+				"Save notices replace the world badge so their text cannot overlap on phones")
 			var surface: StyleBoxFlat = button.get_theme_stylebox("normal")
 			check(surface.bg_color.a > 0.9 and surface.border_width_top > 0,
 				"The active result action has a real button surface rather than floating text")
 	app._save_error = false
+	app._pending_fragment = {"medal_id": "spring-1", "after": 1}
+	app._refresh()
+	check(not app._new_adventure_button.visible and not app._result_retry_button.visible
+		and app._valid_focus(app._default_focus()), "Pending reward persistence keeps New adventure hidden with a valid fallback focus")
+	var pending_lesson: Array = app.model.lesson_words.duplicate(true)
+	app._new_adventure_button.pressed.emit()
+	check(app.model.phase == "won" and app.model.lesson_words == pending_lesson,
+		"A stale action cannot leave while the opened reward is still awaiting persistence")
+	app._pending_fragment.clear()
 	app._refresh()
 	root.size = Vector2i(768, 1024)
 	app._show_collection()

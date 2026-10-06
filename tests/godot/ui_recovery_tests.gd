@@ -278,7 +278,13 @@ func _run() -> void:
 		var before := _total(app)
 		var completed_lesson: Array = app.model.lesson_words.duplicate(true)
 		app._new_adventure_button.pressed.emit()
-		check(_total(app) == before + 1, "New adventure after %s saves the unopened victory's piece" % mode)
+		check(_total(app) == before and app.model.phase == "won" and app.model.chest_state == "closed"
+			and not app._new_adventure_button.visible, "The hidden New adventure action cannot skip the unopened %s chest" % mode)
+		app._open_chest()
+		app.chest.finish_immediately()
+		check(app._new_adventure_button.visible, "Saving the opened %s chest exposes New adventure" % mode)
+		app._new_adventure_button.pressed.emit()
+		check(_total(app) == before + 1, "New adventure after %s preserves the opened chest's saved piece" % mode)
 		check(app.model.phase == "waiting" and app._mode_id == "match" and app.model.lesson_words.size() == 5
 			and app.model.lesson_words != completed_lesson and app.model.hints_remaining == 3,
 			"Successful reward preservation starts a fresh five-word Match round with three hints")
@@ -293,9 +299,11 @@ func _run() -> void:
 	var before := _total(app)
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	storage.fail_write = true
+	app._open_chest()
+	app.chest.finish_immediately()
 	app._new_adventure_button.pressed.emit()
-	check(app._mode_id == "memory" and app.model.phase == "won", "A failed New adventure save keeps the completed Memory game")
-	check(app._save_error and not app._pending_fragment.is_empty() and _total(app) == before, "Failed departure retains one pending piece without inflating progress")
+	check(app._mode_id == "memory" and app.model.phase == "won", "A failed opened-chest save keeps the completed Memory game")
+	check(app._save_error and not app._pending_fragment.is_empty() and _total(app) == before, "A failed chest save retains one pending piece without inflating progress")
 	check(not app._message.is_visible_in_tree(), "A saving error does not add duplicate text below the result actions")
 	check(app._result_retry_button.is_visible_in_tree() and app._result_retry_button.text == "Retry saving"
 		and not app._new_adventure_button.is_visible_in_tree() and app._default_focus() == app._result_retry_button,

@@ -133,9 +133,10 @@ func _run() -> void:
 		and app.find_child("MedalFragment", true, false) == null
 		and app.find_child("RewardFlight", true, false) == null,
 		"The chest still saves progress without collectible assembly or flight")
-	check(app._unlocked_gift.get("id", "") == "toy-spring" and app._try_gift_button.visible,
-		"Completing the existing reward unlocks its toy and offers Try it with Pip")
-	app._try_gift_button.pressed.emit()
+	check(app._unlocked_gift.get("id", "") == "toy-spring" and app._new_adventure_button.visible,
+		"Completing the existing reward unlocks its toy while keeping one result action")
+	app._show_collection()
+	app._room.item_buttons["toy-spring"].pressed.emit()
 	await settle()
 	check(app.collection_page.visible and app.playroom_state.toy_id == "toy-spring"
 		and app._room.playground != null, "The newly unlocked toy opens and plays in Pip's room")

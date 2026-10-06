@@ -2,9 +2,6 @@ extends SceneTree
 
 var checks := 0
 var failures := 0
-var taps := 0
-var outside_releases := 0
-var emulated_presses := 0
 
 
 func _initialize() -> void:
@@ -113,111 +110,12 @@ func _run() -> void:
 			"Theme choices stay between the playground and bottom toys at every width")
 	app._hide_collection()
 	await _check_treasure_themes(app)
-	root.size = Vector2i(320, 568)
-	app.model.phase = "won"
-	app.model.chest_state = "opened"
-	app._refresh()
-	await settle()
-	var treasure: Control = app.get("_treasure_backdrop")
-	check(treasure != null and treasure.is_visible_in_tree(),
-		"The completed result retains the treasure world scene")
-	var review: ScrollContainer = app._found_words_scroll
-	check(review.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
-		and not review.get_h_scroll_bar().visible, "Review words scroll without a visible scrollbar")
-	for button in app._found_words.get_children():
-		check(button.tooltip_text.is_empty() and str(button.get("accessibility_name")).begins_with("Hear "),
-			"Review guidance stays accessible without a tooltip obscuring held drags")
-		button.pressed.connect(func() -> void: taps += 1)
-	for touch in [false, true]:
-		review.scroll_horizontal = 0
-		await settle()
-		var point: Vector2 = app._found_words.get_child(1).get_global_rect().get_center()
-		var before: int = taps
-		await pointer(point, true, touch)
-		await motion(point - Vector2(12, 0), touch)
-		await motion(point - Vector2(24, 0), touch)
-		check(absi(review.scroll_horizontal - 24) <= 1, "Review words follow the held horizontal drag")
-		await pointer(point - Vector2(24, 0), false, touch)
-		check(taps == before, "Dragging the review strip never pronounces a word")
-		# The next assertion exercises a tap after scrolling has already stopped.
-		review.call("cancel_drag")
-		point = app._found_words.get_child(1).get_global_rect().get_center()
-		await pointer(point, true, touch)
-		await pointer(point, false, touch)
-		check(taps == before + 1, "A review word still responds to a stationary tap")
-	var last: Button = app._found_words.get_children().back()
-	last.grab_focus()
-	await settle()
-	check(review.get_global_rect().grow(1).encloses(last.get_global_rect()),
-		"Keyboard and controller focus can still reveal the final word")
-	review.scroll_horizontal = 0
-	await settle()
-	var point: Vector2 = app._found_words.get_child(1).get_global_rect().get_center()
-	var before: int = taps
-	await pointer(point, true)
-	app._show_collection()
-	await pointer(point, false)
-	app._hide_collection()
-	check(taps == before, "Opening More cancels a pending review tap")
-	await pointer(point, true, true)
-	var second := InputEventScreenTouch.new()
-	second.index = 1
-	second.position = point + Vector2(20, 0)
-	second.pressed = true
-	root.push_input(second, true)
-	await pointer(point, false, true)
-	second.pressed = false
-	root.push_input(second, true)
-	await process_frame
-	check(taps == before, "Multiple touches cannot pronounce a review word")
-	var outside: Vector2 = app._new_adventure_button.get_global_rect().get_center()
-	check(not review.get_global_rect().has_point(outside), "The external-gesture fixture starts outside the review strip")
-	app._new_adventure_button.button_up.connect(func() -> void: outside_releases += 1)
-	await pointer(outside, true, true)
-	var mouse := InputEventMouseButton.new()
-	mouse.button_index = MOUSE_BUTTON_LEFT
-	mouse.button_mask = MOUSE_BUTTON_MASK_LEFT
-	mouse.device = InputEvent.DEVICE_ID_EMULATION
-	mouse.position = outside
-	mouse.pressed = true
-	root.push_input(mouse, true)
-	await motion(point, true)
-	var move := InputEventMouseMotion.new()
-	move.device = InputEvent.DEVICE_ID_EMULATION
-	move.position = point
-	move.relative = point - outside
-	move.button_mask = MOUSE_BUTTON_MASK_LEFT
-	root.push_input(move, true)
-	await pointer(point, false, true)
-	mouse.button_mask = 0
-	mouse.position = point
-	mouse.pressed = false
-	root.push_input(mouse, true)
-	await process_frame
-	check(outside_releases == 1 and taps == before and app.model.phase == "won",
-		"A touch begun outside the strip keeps its own emulated mouse release: releases=%d taps=%d/%d phase=%s outside=%s review=%s" % [
-			outside_releases, taps, before, app.model.phase, outside, review.get_global_rect()])
-	var word_button: Button = app._found_words.get_child(1)
-	point = word_button.get_global_rect().get_center()
-	word_button.button_down.connect(func() -> void: emulated_presses += 1)
-	mouse.position = point
-	mouse.pressed = true
-	mouse.button_mask = MOUSE_BUTTON_MASK_LEFT
-	root.push_input(mouse, true)
-	await pointer(point, true, true)
-	await pointer(point, false, true)
-	mouse.pressed = false
-	mouse.button_mask = 0
-	root.push_input(mouse, true)
-	await process_frame
-	check(emulated_presses == 0 and taps == before + 1,
-		"Mouse-first touch emulation cannot leave a native button press behind")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)
-	print("Theme and review: %d checks, %d failures" % [checks, failures])
+	print("Theme and treasure: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
 

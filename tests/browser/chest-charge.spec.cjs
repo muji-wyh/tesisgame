@@ -115,11 +115,10 @@ async function screenshot(page, testInfo, phase) {
 async function openedChestFrame(page, testInfo, name) {
   const bounds = await metrics(page), content = contentBounds(bounds), scale = uiScale(bounds);
   const top = content.padding + content.header + content.gap;
-  // These rounds award the first piece, so no toy-unlock message changes the
-  // full-width stage. Exclude the header mascot and the New adventure button.
+  // The stage fills the outcome. Exclude the header mascot and the lower band
+  // containing the floating New adventure button when measuring chest motion.
   const availableHeight = bounds.height - content.padding - top;
-  const textGap = Math.ceil((availableHeight < 340 ? 8 : 14) / scale);
-  const height = availableHeight - Math.ceil(64 / scale) - 88 - textGap - 10;
+  const height = availableHeight - Math.ceil(72 / scale) - 10;
   const frame = await page.screenshot({ scale: 'css', clip: {
     x: bounds.x + (content.x + 4) * bounds.scale, y: bounds.y + (top + 4) * bounds.scale,
     width: (content.width - 8) * bounds.scale, height: (height - 8) * bounds.scale
