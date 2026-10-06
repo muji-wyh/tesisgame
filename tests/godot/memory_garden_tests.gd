@@ -375,7 +375,7 @@ func _check_layout(view) -> void:
 	var bounds: Rect2 = view.get_global_rect().grow(0.5)
 	var ui_scale: float = Style.ui_scale(view)
 	var gap: float = ceilf(8 / ui_scale)
-	var columns: int = 2 if view.size.x < view.size.y else 5
+	var columns: int = Style.word_board_columns(view._board.size, ui_scale, Vector2.ONE * gap)
 	var rows: int = 10 / columns
 	var cell := Vector2((view.size.x - gap * (columns - 1)) / columns, (view._board.size.y - gap * (rows - 1)) / rows)
 	check(is_equal_approx(view.study_button.size.x, view.study_button.size.y), "The eye keeps a square hitbox")
@@ -402,25 +402,38 @@ func _check_layout(view) -> void:
 
 func _check_catalog_text(view) -> void:
 	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	for dimensions in [Vector2(456, 200), Vector2(456, 216), Vector2(400, 200), Vector2(456, 480), Vector2(288, 600)]:
-		view.size = dimensions
-		for start in range(0, catalog.size(), 5):
-			view.start_round(catalog.slice(start, start + 5), Data.theme("spring"), 71)
-			await _settle()
-			var positions := _positions(view)
-			view.begin_peek()
-			for card in view.card_buttons:
-				check(card.size.x >= 44 and card.size.y >= 44, "Catalog cards keep usable targets")
-				if card.card_data.kind != "word":
-					continue
-				var label: Label = card.word_label
+	var legacy: Array = catalog.filter(func(word: Dictionary) -> bool: return not word.has("part_of_speech"))
+	check(legacy.size() == 350, "Synthetic tiny component fixtures retain the complete legacy vocabulary")
+	var lesson: Array = catalog.filter(func(word: Dictionary) -> bool: return word.id in ["cat", "dog", "fish", "duck", "cow"])
+	# The tiny standalone fixtures predate the expanded vocabulary and are not
+	# produced by the game host. Keep their original 350-word regression coverage;
+	# the full vocabulary also runs in six real viewports in vocabulary_layout_tests.
+	for fixture in [[Vector2(456, 200), legacy], [Vector2(456, 216), legacy], [Vector2(400, 200), legacy],
+		[Vector2(456, 480), catalog], [Vector2(288, 600), catalog],
+		[Vector2(456, 392), catalog], [Vector2(820, 302), catalog]]:
+		view.size = fixture[0]
+		view.start_round(lesson, Data.theme("spring"), 71)
+		await _settle()
+		var positions := _positions(view)
+		view.begin_peek()
+		for card in view.card_buttons:
+			check(card.size.x >= 44 and card.size.y >= 44, "Catalog cards keep usable targets")
+			if card.card_data.kind != "word":
+				continue
+			var label: Label = card.word_label
+			var original: String = label.text
+			for word: Dictionary in fixture[1]:
+				label.text = word.text
+				card._fit_text()
 				var font_size: int = label.get_theme_font_size("font_size")
 				var font: Font = label.get_theme_font("font")
 				check(font_size >= 12 and font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x,
-					"The full catalog word fits its Memory card: " + label.text)
+					"The catalog word fits its Memory card: " + label.text)
 				check(font.get_height(font_size) <= label.size.y, "The complete word height fits its card")
-			check(_positions(view) == positions, "Revealing catalog words never changes card geometry")
-			view.end_peek()
+			label.text = original
+			card._fit_text()
+		check(_positions(view) == positions, "Revealing catalog words never changes card geometry")
+		view.end_peek()
 
 
 func _mouse(control: Control, pressed: bool) -> void:

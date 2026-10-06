@@ -1,11 +1,13 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const { enterGame, openGame, openRewards, metrics, tap, rendered, ageControl, collectionHeaderRect,
-  boardPoint, chooseMode, matchWords, memoryPoint, roomControl, withMemoryPeek } = require('./game-ui.cjs');
+  boardPoint, chooseMode, matchWords, memoryPoint, roomControl, withMemoryPeek,
+  collectionBounds, uiScale, observeAudio } = require('./game-ui.cjs');
+const { watchAudioRequests, expectRecording } = require('./bundled-audio.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const NAMES = { all: 'All words', '4-6': 'Ages 4-6', '7-9': 'Ages 7-9', '10-plus': 'Ages 10+' };
-const COUNTS = { all: 350, '4-6': 148, '7-9': 112, '10-plus': 90 };
+const COUNTS = { all: 1250, '4-6': 448, '7-9': 412, '10-plus': 390 };
 const vocabulary = new Map(words.map(word => [word.id, word]));
 
 async function saved(page) {
@@ -40,13 +42,14 @@ async function returnToRoom(page) {
 }
 
 async function matchCards(page) {
+  // Board scans do not resize the canvas; reuse its measured geometry.
   const bounds = await metrics(page), cards = [];
   for (let index = 0; index < 10; index++) {
     const point = boardPoint(bounds, index);
-    await tap(page, point.x, point.y);
+    await tap(page, point.x, point.y, bounds);
     await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
     cards.push(await page.locator('#selection-status').textContent());
-    await tap(page, point.x, point.y);
+    await tap(page, point.x, point.y, bounds);
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   return cards;
@@ -56,10 +59,10 @@ async function memoryWords(page) {
   const bounds = await metrics(page), result = [];
   for (let index = 0; index < 10; index++) {
     const point = memoryPoint(bounds, index);
-    await tap(page, point.x, point.y);
+    await tap(page, point.x, point.y, bounds);
     await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
     result.push((await page.locator('#selection-status').textContent()).match(/: ([a-z]+)\.$/)[1]);
-    await tap(page, point.x, point.y);
+    await tap(page, point.x, point.y, bounds);
     await expect(page.locator('#selection-status')).toBeEmpty();
   }
   return result;
@@ -192,4 +195,73 @@ test('a new gift lesson uses advanced vocabulary across Match and Memory', async
   });
   expect(await saved(page)).toContain('age_band="10-plus"');
   expect(errors).toEqual([]);
+});
+
+test('expanded vocabulary pages show new artwork, meanings and bundled pronunciations', async ({ page, browserName }, testInfo) => {
+  test.setTimeout(120000);
+  await page.setViewportSize({ width: 480, height: 480 });
+  const requests = watchAudioRequests(page);
+  await observeAudio(page);
+  const errors = await openGame(page);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(audioAvailable, 'Chromium exercises the real word recording').toBe(true);
+  await openRewards(page);
+  await age(page, '4-6');
+  await expectCatalog(page, '4-6');
+  const ageSave = await saved(page);
+  const ordered = words.filter(word => word.level === 'basic').sort((a, b) => a.text.localeCompare(b.text));
+  const first = ordered[0], secondPage = ordered[60];
+  expect([first.id, secondPage.id]).toEqual(['above', 'bring']);
+  expect([first.part_of_speech, secondPage.part_of_speech]).toEqual(['preposition', 'verb']);
+  for (const word of [first, secondPage]) {
+    expect(word.image).toMatch(/\.png$/);
+    expect(word.meaning.length).toBeGreaterThan(10);
+  }
+
+  // These are normal visible canvas controls. Their positions follow the
+  // public collection layout, without invoking native methods or test hooks.
+  const bounds = await metrics(page), layout = collectionBounds(bounds), scale = uiScale(bounds);
+  const inset = Math.ceil(3 / scale), gap = Math.ceil(8 / scale), sectionGap = Math.ceil(6 / scale);
+  const columns = Math.floor((layout.width - inset * 2 + gap) / (124 / scale + gap));
+  const cardWidth = (layout.width - inset * 2 - (columns - 1) * gap) / columns;
+  const firstPoint = {
+    x: layout.x + inset + cardWidth / 2,
+    y: layout.padding + layout.headerHeight + layout.gap + Math.ceil(30 / scale)
+      + sectionGap + Math.ceil(34 / scale) + sectionGap + inset + Math.ceil(126 / scale) / 2
+  };
+  const nextPoint = { x: layout.x + layout.width - 40 / scale,
+    y: bounds.height - layout.padding - 24 / scale };
+  async function pronounce(word) {
+    const from = await page.evaluate(() => window.audioObservation.playbacks.length);
+    await tap(page, firstPoint.x, firstPoint.y);
+    await expect(page.locator('#game-status')).toHaveText(`${word.text}. ${word.meaning}`);
+    await rendered(page);
+    return audioAvailable ? expectRecording(page, from, word.audio) : null;
+  }
+
+  const firstSound = await pronounce(first);
+  await tap(page, nextPoint.x, nextPoint.y);
+  await rendered(page);
+  const secondSound = await pronounce(secondPage);
+  const screenshot = testInfo.outputPath('expanded-vocabulary-page-two-480.png');
+  await page.screenshot({ path: screenshot, scale: 'css' });
+  await testInfo.attach('New verb and adjective artwork with a visible meaning', { path: screenshot, contentType: 'image/png' });
+
+  // Focus Next with a cancelled mouse press, then reach Previous by keyboard.
+  await page.mouse.move(bounds.x + nextPoint.x * bounds.scale, bounds.y + nextPoint.y * bounds.scale);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + bounds.width * bounds.scale / 2,
+    bounds.y + nextPoint.y * bounds.scale);
+  await page.mouse.up();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Enter');
+  await rendered(page);
+  await pronounce(first);
+  expect(await saved(page), 'Browsing pages and pronunciations does not alter saved progress').toBe(ageSave);
+  expect(requests, 'New pronunciation recordings remain inside the game pack').toEqual([]);
+  expect(errors).toEqual([]);
+  await testInfo.attach('expanded-vocabulary-playback.json', {
+    body: JSON.stringify({ viewport: [480, 480], words: [first.id, secondPage.id], firstSound, secondSound }),
+    contentType: 'application/json'
+  });
 });

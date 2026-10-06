@@ -265,12 +265,13 @@ function makeSvg(title, shapes, background = '#fff8eb') {
 
 function generateImages() {
   const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
-  if (!Array.isArray(words) || words.length !== Object.keys(wordArt).length) {
-    throw new Error('words.json must describe every supported word illustration exactly once.');
-  }
+  if (!Array.isArray(words)) throw new Error('words.json must contain a vocabulary array.');
+  const sourced = new Set(require('./import-vocabulary.cjs').additions().map(word => word.id));
+  require('./import-vocabulary.cjs').check();
   const seen = new Set();
   const outputs = [];
   for (const word of words) {
+    if (sourced.has(word.id)) continue;
     if (!word || !Object.hasOwn(wordArt, word.id) || seen.has(word.id) ||
         word.image !== `assets/images/words/${word.id}.svg` ||
         typeof word.text !== 'string' || !word.text.trim()) {
@@ -278,6 +279,9 @@ function generateImages() {
     }
     seen.add(word.id);
     outputs.push([word.image, makeSvg(word.text, wordArt[word.id])]);
+  }
+  if (seen.size !== Object.keys(wordArt).length) {
+    throw new Error('The legacy catalog must describe every original illustration exactly once.');
   }
   for (const [season, art] of Object.entries(rewardArt)) {
     outputs.push([`assets/images/rewards/${season}.svg`, makeSvg(art.title, art.shapes, art.background)]);

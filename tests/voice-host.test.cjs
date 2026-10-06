@@ -1401,10 +1401,10 @@ test('local Voice Pop weights live targets above the complete lesson vocabulary'
   assert.deepEqual(Array.from(f.latest.phrases, value => value.phrase), ['pear'], 'A new lesson replaces old hints');
 });
 
-test('local phrase hints include every eligible word in the real 148, 260 and 350 word pools', () => {
+test('local phrase hints include every eligible word in the real 448, 860 and 1250 word pools', () => {
   const words = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'words.json'), 'utf8'));
   const levels = { basic: 1, growing: 2, advanced: 3 };
-  for (const [maximum, expected] of [[1, 148], [2, 260], [3, 350]]) {
+  for (const [maximum, expected] of [[1, 448], [2, 860], [3, 1250]]) {
     const f = fixture({ local: true });
     enablePhraseHints(f);
     const vocabulary = words.filter(word => levels[word.level] <= maximum).map(word => word.text);

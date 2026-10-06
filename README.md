@@ -19,7 +19,7 @@ handles loading, accessibility, audio recovery, and speech recognition.
   player before each round and saves the result automatically; Match and Memory
   attribute results afterward. Personal bests rank separately for Match, Memory,
   and Voice Pop.
-- **Eight worlds and 350 words:** choose a theme during loading or in Pip's room.
+- **Eight worlds and 1,250 words:** choose a theme during loading or in Pip's room.
   Age preferences guide the vocabulary; they do not collect a birthdate.
 - **Chests and toys:** winning Match or Memory advances saved gift progress.
   The chest has a five-second performance; releasing before the visible lid
@@ -124,7 +124,7 @@ iframe permissions, cache behavior, audio recovery, and detailed verification.
 
 ## Source and documentation
 
-`words.json` is the canonical vocabulary. All 350 recorded pronunciations and ten
+`words.json` is the canonical vocabulary. All 1,250 recorded pronunciations and eight
 spoken prompts use the approved Microsoft Ava Neural voice (`-15%` rate, `+8Hz`
 pitch). [Voice regeneration](docs/assets/ava-voice.md) uses Python, `edge-tts`,
 and FFmpeg; ordinary builds and playback use the bundled WAVs offline. Some optional artwork and

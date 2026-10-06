@@ -1,0 +1,2870 @@
+[
+  {
+    "id": "answer",
+    "text": "answer",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "answer.svg",
+    "meaning": "Give a reply to a question"
+  },
+  {
+    "id": "collect",
+    "text": "collect",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "collect_,_to.svg",
+    "meaning": "Gather several things together",
+    "confusable": [
+      "give",
+      "receive"
+    ]
+  },
+  {
+    "id": "copy",
+    "text": "copy",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "copy_,_to.svg",
+    "meaning": "Make something the same again",
+    "confusable": [
+      "write"
+    ]
+  },
+  {
+    "id": "decorate",
+    "text": "decorate",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "decorate_,_to.svg",
+    "meaning": "Make something look more beautiful"
+  },
+  {
+    "id": "deliver",
+    "text": "deliver",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "deliver_,_to.svg",
+    "meaning": "Take something to its destination"
+  },
+  {
+    "id": "dive",
+    "text": "dive",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dive_,_to.svg",
+    "meaning": "Jump headfirst into water"
+  },
+  {
+    "id": "drip",
+    "text": "drip",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "drip_,_to.svg",
+    "meaning": "Fall in small liquid drops"
+  },
+  {
+    "id": "fasten",
+    "text": "fasten",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "fasten_,_to.svg",
+    "meaning": "Close or secure something firmly"
+  },
+  {
+    "id": "fry",
+    "text": "fry",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "fry_,_to.svg",
+    "meaning": "Cook food in hot oil"
+  },
+  {
+    "id": "grab",
+    "text": "grab",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "grab_,_to.svg",
+    "meaning": "Take hold of something quickly"
+  },
+  {
+    "id": "grate",
+    "text": "grate",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "grate_,_to.svg",
+    "meaning": "Shred food into tiny pieces"
+  },
+  {
+    "id": "grill",
+    "text": "grill",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "grill_,_to.svg",
+    "meaning": "Cook food over strong heat"
+  },
+  {
+    "id": "guess",
+    "text": "guess",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "guess_,_to.svg",
+    "meaning": "Try an answer without certainty"
+  },
+  {
+    "id": "heat",
+    "text": "heat",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "heat_,_to.svg",
+    "meaning": "Make something become warmer"
+  },
+  {
+    "id": "hike",
+    "text": "hike",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "hike_,_to.svg",
+    "meaning": "Walk a long outdoor trail"
+  },
+  {
+    "id": "insert",
+    "text": "insert",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "insert_,_to.svg",
+    "meaning": "Put something into an opening"
+  },
+  {
+    "id": "jog",
+    "text": "jog",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "jog_,_to.svg",
+    "meaning": "Run at a gentle pace",
+    "confusable": [
+      "run"
+    ]
+  },
+  {
+    "id": "join",
+    "text": "join",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "join_,_to.svg",
+    "meaning": "Become part of a group"
+  },
+  {
+    "id": "knit",
+    "text": "knit",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "knit_,_to.svg",
+    "meaning": "Make fabric from loops of yarn"
+  },
+  {
+    "id": "mash",
+    "text": "mash",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "mash_,_to.svg",
+    "meaning": "Press food into a soft mixture",
+    "confusable": [
+      "crush",
+      "squash"
+    ]
+  },
+  {
+    "id": "melt",
+    "text": "melt",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "melt_,_to.svg",
+    "meaning": "Become liquid because of heat"
+  },
+  {
+    "id": "mend",
+    "text": "mend",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "mend.svg",
+    "meaning": "Repair something that is broken"
+  },
+  {
+    "id": "pack",
+    "text": "pack",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "pack_suitcase_,_to.svg",
+    "meaning": "Put belongings into a suitcase"
+  },
+  {
+    "id": "peel",
+    "text": "peel",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "peel_,_to.svg",
+    "meaning": "Remove the skin from food"
+  },
+  {
+    "id": "recycle",
+    "text": "recycle",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "recycle_logo.svg",
+    "meaning": "Turn used materials into useful things"
+  },
+  {
+    "id": "protect",
+    "text": "protect",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "protect_,_to.svg",
+    "meaning": "Keep someone or something safe"
+  },
+  {
+    "id": "queue",
+    "text": "queue",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "queue_,_to.svg",
+    "meaning": "Wait in a line of people"
+  },
+  {
+    "id": "receive",
+    "text": "receive",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "receive_,_to.svg",
+    "meaning": "Get something another person gives",
+    "confusable": [
+      "collect",
+      "give"
+    ]
+  },
+  {
+    "id": "relax",
+    "text": "relax",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "relax_,_to.svg",
+    "meaning": "Rest and let tension ease",
+    "confusable": [
+      "rest"
+    ]
+  },
+  {
+    "id": "remove",
+    "text": "remove",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "remove_,_to.svg",
+    "meaning": "Take something away from its place"
+  },
+  {
+    "id": "return",
+    "text": "return",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "return_,_to.svg",
+    "meaning": "Go back to an earlier place"
+  },
+  {
+    "id": "rinse",
+    "text": "rinse",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "rinse_,_to.svg",
+    "meaning": "Wash briefly with clean water"
+  },
+  {
+    "id": "scoop",
+    "text": "scoop",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "scoop_,_to.svg",
+    "meaning": "Lift something with a curved utensil"
+  },
+  {
+    "id": "scrub",
+    "text": "scrub",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "scrub_,_to.svg",
+    "meaning": "Clean by rubbing with a brush"
+  },
+  {
+    "id": "separate",
+    "text": "separate",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "separate_,_to.svg",
+    "meaning": "Move things apart from each other"
+  },
+  {
+    "id": "serve",
+    "text": "serve",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "serve_,_to.svg",
+    "meaning": "Give food to someone to eat"
+  },
+  {
+    "id": "sew",
+    "text": "sew",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sew_,_to.svg",
+    "meaning": "Join fabric with needle and thread"
+  },
+  {
+    "id": "sharpen",
+    "text": "sharpen",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sharpen_,_to.svg",
+    "meaning": "Make a point or edge sharper"
+  },
+  {
+    "id": "sieve",
+    "text": "sieve",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sieve_,_to.svg",
+    "meaning": "Pass ingredients through fine mesh"
+  },
+  {
+    "id": "skate",
+    "text": "skate",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "skate_,_to.svg",
+    "meaning": "Glide on skates across a smooth surface"
+  },
+  {
+    "id": "ski",
+    "text": "ski",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "ski_,_to.svg",
+    "meaning": "Slide over snow on long runners"
+  },
+  {
+    "id": "sneak",
+    "text": "sneak",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sneak_,_to.svg",
+    "meaning": "Move quietly without being noticed"
+  },
+  {
+    "id": "sort",
+    "text": "sort",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sort_,_to.svg",
+    "meaning": "Put things into matching groups"
+  },
+  {
+    "id": "spill",
+    "text": "spill",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "spill_,_to.svg",
+    "meaning": "Let liquid fall out accidentally"
+  },
+  {
+    "id": "spray",
+    "text": "spray",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "spray_,_to.svg",
+    "meaning": "Send liquid out in tiny drops",
+    "confusable": [
+      "squirt"
+    ]
+  },
+  {
+    "id": "spread",
+    "text": "spread",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "spread_,_to.svg",
+    "meaning": "Cover a surface with a layer"
+  },
+  {
+    "id": "sprinkle",
+    "text": "sprinkle",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sprinkle_,_to.svg",
+    "meaning": "Scatter small pieces over something"
+  },
+  {
+    "id": "squash",
+    "text": "squash",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "squash_,_to.svg",
+    "meaning": "Press something until it becomes flat",
+    "confusable": [
+      "crush",
+      "mash"
+    ]
+  },
+  {
+    "id": "staple",
+    "text": "staple",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "staple_,_to.svg",
+    "meaning": "Join papers with small metal fasteners"
+  },
+  {
+    "id": "study",
+    "text": "study",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "study_,_to.svg",
+    "meaning": "Spend time learning about something"
+  },
+  {
+    "id": "subtract",
+    "text": "subtract",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "subtract.svg",
+    "meaning": "Take one number away from another"
+  },
+  {
+    "id": "tear",
+    "text": "tear",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "tear_,_to.svg",
+    "meaning": "Pull something apart into pieces"
+  },
+  {
+    "id": "tighten",
+    "text": "tighten",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "tighten_,_to.svg",
+    "meaning": "Make something more firmly attached"
+  },
+  {
+    "id": "trace",
+    "text": "trace",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "trace_,_to.svg",
+    "meaning": "Follow a line with a pencil"
+  },
+  {
+    "id": "trim",
+    "text": "trim",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "trim_,_to.svg",
+    "meaning": "Cut away a small amount"
+  },
+  {
+    "id": "type",
+    "text": "type",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "type_,_to.svg",
+    "meaning": "Write by pressing keyboard keys"
+  },
+  {
+    "id": "unbuckle",
+    "text": "unbuckle",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "unbuckle_,_to.svg",
+    "meaning": "Open a buckle to release it"
+  },
+  {
+    "id": "unbutton",
+    "text": "unbutton",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "unbutton_,_to.svg",
+    "meaning": "Undo buttons on clothing"
+  },
+  {
+    "id": "unlock",
+    "text": "unlock",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "unlock_,_to.svg",
+    "meaning": "Open a lock with a key"
+  },
+  {
+    "id": "untie",
+    "text": "untie",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "untie_,_to.svg",
+    "meaning": "Undo a knot or bow"
+  },
+  {
+    "id": "visit",
+    "text": "visit",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "visit_,_to.svg",
+    "meaning": "Go to see a person"
+  },
+  {
+    "id": "weigh",
+    "text": "weigh",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "weigh_,_to.svg",
+    "meaning": "Measure how heavy something is"
+  },
+  {
+    "id": "whisk",
+    "text": "whisk",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "whisk_,_to.svg",
+    "meaning": "Beat ingredients together with a whisk"
+  },
+  {
+    "id": "wiggle",
+    "text": "wiggle",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wiggle_,_to.svg",
+    "meaning": "Move with small twisting movements"
+  },
+  {
+    "id": "wrap",
+    "text": "wrap",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wrap_,_to.svg",
+    "meaning": "Cover something with paper or fabric"
+  },
+  {
+    "id": "zoom",
+    "text": "zoom",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "zoom_,_to.svg",
+    "meaning": "Make an image appear closer"
+  },
+  {
+    "id": "confused",
+    "text": "confused",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "confused_lady.svg",
+    "meaning": "Unsure what something means",
+    "confusable": [
+      "worried"
+    ]
+  },
+  {
+    "id": "jealous",
+    "text": "jealous",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "jealous_man.svg",
+    "meaning": "Wanting what someone else has"
+  },
+  {
+    "id": "worried",
+    "text": "worried",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "worried_lady.svg",
+    "meaning": "Feeling troubled about something uncertain",
+    "confusable": [
+      "confused"
+    ]
+  },
+  {
+    "id": "surprised",
+    "text": "surprised",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "surprised_man.svg",
+    "meaning": "Feeling amazed by something unexpected"
+  },
+  {
+    "id": "healthy",
+    "text": "healthy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "healthy.svg",
+    "meaning": "Well and in good health"
+  },
+  {
+    "id": "lucky",
+    "text": "lucky",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "lucky.svg",
+    "meaning": "Having something good happen by chance"
+  },
+  {
+    "id": "absent",
+    "text": "absent",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "absent.svg",
+    "meaning": "Not present at the usual place"
+  },
+  {
+    "id": "bumpy",
+    "text": "bumpy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "bumpy.svg",
+    "meaning": "Having an uneven raised surface",
+    "confusable": [
+      "wavy"
+    ]
+  },
+  {
+    "id": "crooked",
+    "text": "crooked",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "crooked.svg",
+    "meaning": "Bent instead of being straight"
+  },
+  {
+    "id": "crunchy",
+    "text": "crunchy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "crunchy.svg",
+    "meaning": "Making a crisp sound when bitten"
+  },
+  {
+    "id": "curly",
+    "text": "curly",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "curly.svg",
+    "meaning": "Forming loops or tight bends"
+  },
+  {
+    "id": "delicious",
+    "text": "delicious",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "delicious_food.svg",
+    "meaning": "Very pleasant to eat"
+  },
+  {
+    "id": "flat",
+    "text": "flat",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "flat.svg",
+    "meaning": "Having a level smooth surface",
+    "confusable": [
+      "horizontal",
+      "straight"
+    ]
+  },
+  {
+    "id": "fuzzy",
+    "text": "fuzzy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "fuzzy.svg",
+    "meaning": "Unclear or difficult to see sharply"
+  },
+  {
+    "id": "hollow",
+    "text": "hollow",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "hollow.svg",
+    "meaning": "Having an empty space inside"
+  },
+  {
+    "id": "lost",
+    "text": "lost",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "lost.svg",
+    "meaning": "Unable to find the right way"
+  },
+  {
+    "id": "magnetic",
+    "text": "magnetic",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "magnetic.svg",
+    "meaning": "Able to attract certain metals",
+    "confusable": [
+      "magnet"
+    ]
+  },
+  {
+    "id": "noisy",
+    "text": "noisy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "noisy.svg",
+    "meaning": "Making a lot of sound",
+    "confusable": [
+      "loud"
+    ]
+  },
+  {
+    "id": "shiny",
+    "text": "shiny",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "shiny.svg",
+    "meaning": "Reflecting light from a bright surface"
+  },
+  {
+    "id": "slippery",
+    "text": "slippery",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "slippery.svg",
+    "meaning": "Easy to slide or slip on"
+  },
+  {
+    "id": "smooth",
+    "text": "smooth",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "smooth.svg",
+    "meaning": "Even to touch without rough bumps"
+  },
+  {
+    "id": "spicy",
+    "text": "spicy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "spicy.svg",
+    "meaning": "Having a strong hot taste"
+  },
+  {
+    "id": "spotty",
+    "text": "spotty",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "spotty.svg",
+    "meaning": "Covered with many small spots"
+  },
+  {
+    "id": "sticky",
+    "text": "sticky",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "sticky.svg",
+    "meaning": "Able to cling to other things"
+  },
+  {
+    "id": "striped",
+    "text": "striped",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "striped.svg",
+    "meaning": "Decorated with long narrow bands"
+  },
+  {
+    "id": "strong",
+    "text": "strong",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "strong.svg",
+    "meaning": "Able to lift something heavy"
+  },
+  {
+    "id": "waterproof",
+    "text": "waterproof",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "waterproof.svg",
+    "meaning": "Keeping water from passing through"
+  },
+  {
+    "id": "wavy",
+    "text": "wavy",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "wavy.svg",
+    "meaning": "Forming curves like small waves",
+    "confusable": [
+      "bumpy"
+    ]
+  },
+  {
+    "id": "weak",
+    "text": "weak",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "weak_link.svg",
+    "meaning": "Not strong enough to hold"
+  },
+  {
+    "id": "wrinkled",
+    "text": "wrinkled",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "wrinkled.svg",
+    "meaning": "Covered with small lines or folds",
+    "confusable": [
+      "old"
+    ]
+  },
+  {
+    "id": "correct",
+    "text": "correct",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "correct.svg",
+    "meaning": "Right and free from mistakes"
+  },
+  {
+    "id": "ready",
+    "text": "ready",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "ready.svg",
+    "meaning": "Prepared for something to begin"
+  },
+  {
+    "id": "whole",
+    "text": "whole",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "whole.svg",
+    "meaning": "Complete with no part missing"
+  },
+  {
+    "id": "badger",
+    "text": "badger",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "badger.svg",
+    "meaning": "A burrowing animal with striped face"
+  },
+  {
+    "id": "buffalo",
+    "text": "buffalo",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "buffalo.svg",
+    "meaning": "A large hoofed animal with horns"
+  },
+  {
+    "id": "cheetah",
+    "text": "cheetah",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "cheetah.svg",
+    "meaning": "A spotted cat that runs fast"
+  },
+  {
+    "id": "chimpanzee",
+    "text": "chimpanzee",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "chimpanzee.svg",
+    "meaning": "An intelligent ape with long arms",
+    "confusable": [
+      "gorilla",
+      "monkey"
+    ]
+  },
+  {
+    "id": "chipmunk",
+    "text": "chipmunk",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "chipmunk.svg",
+    "meaning": "A small striped woodland rodent"
+  },
+  {
+    "id": "cockatiel",
+    "text": "cockatiel",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "cockatiel.svg",
+    "meaning": "A pet bird with feather crest",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "dove",
+    "text": "dove",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "dove.svg",
+    "meaning": "A gentle bird with rounded body",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "earwig",
+    "text": "earwig",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "earwig.svg",
+    "meaning": "A small insect with tail pincers"
+  },
+  {
+    "id": "ferret",
+    "text": "ferret",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "ferret.svg",
+    "meaning": "A long slender playful mammal"
+  },
+  {
+    "id": "gnat",
+    "text": "gnat",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "gnat.svg",
+    "meaning": "A very small flying insect"
+  },
+  {
+    "id": "gorilla",
+    "text": "gorilla",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "gorilla.svg",
+    "meaning": "A large powerful forest ape",
+    "confusable": [
+      "chimpanzee",
+      "monkey"
+    ]
+  },
+  {
+    "id": "hare",
+    "text": "hare",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "hare.svg",
+    "meaning": "A fast animal with long ears",
+    "confusable": [
+      "rabbit"
+    ]
+  },
+  {
+    "id": "heron",
+    "text": "heron",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "heron.svg",
+    "meaning": "A long legged bird near water",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "hippopotamus",
+    "text": "hippopotamus",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "hippopotamus.svg",
+    "meaning": "A huge animal that lives near rivers"
+  },
+  {
+    "id": "leopard",
+    "text": "leopard",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "leopard.svg",
+    "meaning": "A wild cat with spotted fur"
+  },
+  {
+    "id": "mole",
+    "text": "mole",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "mole.svg",
+    "meaning": "A small dark spot on the skin"
+  },
+  {
+    "id": "moth",
+    "text": "moth",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "moth.svg",
+    "meaning": "An insect often active at night"
+  },
+  {
+    "id": "ostrich",
+    "text": "ostrich",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "ostrich.svg",
+    "meaning": "A large flightless bird with long legs",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "puffin",
+    "text": "puffin",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "puffin.svg",
+    "meaning": "A seabird with a colorful beak",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "quail",
+    "text": "quail",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "quail.svg",
+    "meaning": "A small ground dwelling bird",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "reindeer",
+    "text": "reindeer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "reindeer.svg",
+    "meaning": "A deer that lives in cold regions",
+    "confusable": [
+      "deer",
+      "stag"
+    ]
+  },
+  {
+    "id": "robin",
+    "text": "robin",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "robin.svg",
+    "meaning": "A small bird with reddish breast",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "seagull",
+    "text": "seagull",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "seagull.svg",
+    "meaning": "A coastal bird with long wings",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "shrew",
+    "text": "shrew",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "shrew.svg",
+    "meaning": "A tiny mammal with pointed snout"
+  },
+  {
+    "id": "shrimp",
+    "text": "shrimp",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "shrimp.svg",
+    "meaning": "A small edible shellfish with a curved body"
+  },
+  {
+    "id": "skunk",
+    "text": "skunk",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "skunk.svg",
+    "meaning": "A striped mammal with strong smelling spray"
+  },
+  {
+    "id": "slug",
+    "text": "slug",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "slug.svg",
+    "meaning": "A soft crawling animal without shell"
+  },
+  {
+    "id": "stag",
+    "text": "stag",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "stag.svg",
+    "meaning": "An adult male deer with antlers",
+    "confusable": [
+      "deer",
+      "reindeer"
+    ]
+  },
+  {
+    "id": "stoat",
+    "text": "stoat",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "stoat.svg",
+    "meaning": "A slender mammal with a long body"
+  },
+  {
+    "id": "swan",
+    "text": "swan",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "swan.svg",
+    "meaning": "A large waterbird with long neck",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "toad",
+    "text": "toad",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "toad.svg",
+    "meaning": "A frog relative with bumpy skin"
+  },
+  {
+    "id": "vulture",
+    "text": "vulture",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "vulture.svg",
+    "meaning": "A large bird that eats carrion",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "walrus",
+    "text": "walrus",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "walrus.svg",
+    "meaning": "A large sea mammal with tusks"
+  },
+  {
+    "id": "wasp",
+    "text": "wasp",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "wasp.svg",
+    "meaning": "A narrow waisted stinging insect"
+  },
+  {
+    "id": "wolf",
+    "text": "wolf",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "wolf.svg",
+    "meaning": "A wild dog that lives in packs"
+  },
+  {
+    "id": "beehive",
+    "text": "beehive",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "beehive.svg",
+    "meaning": "A home where honeybees live"
+  },
+  {
+    "id": "clover",
+    "text": "clover",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "clover.svg",
+    "meaning": "A low plant with rounded clustered leaflets",
+    "confusable": [
+      "leaf"
+    ]
+  },
+  {
+    "id": "daffodil",
+    "text": "daffodil",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "daffodil.svg",
+    "meaning": "A spring flower with trumpet center",
+    "confusable": [
+      "flower"
+    ]
+  },
+  {
+    "id": "holly",
+    "text": "holly",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "holly.svg",
+    "meaning": "A shrub with prickly evergreen leaves"
+  },
+  {
+    "id": "ivy",
+    "text": "ivy",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "ivy.svg",
+    "meaning": "A climbing plant with evergreen leaves",
+    "confusable": [
+      "leaf"
+    ]
+  },
+  {
+    "id": "lily",
+    "text": "lily",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "lily.svg",
+    "meaning": "A flower with large showy petals",
+    "confusable": [
+      "flower"
+    ]
+  },
+  {
+    "id": "petal",
+    "text": "petal",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "petal.svg",
+    "meaning": "One colored part of a flower"
+  },
+  {
+    "id": "seedling",
+    "text": "seedling",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "seedling.svg",
+    "meaning": "A young plant grown from seed"
+  },
+  {
+    "id": "vine",
+    "text": "vine",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "vine.svg",
+    "meaning": "A plant that climbs or trails"
+  },
+  {
+    "id": "fin",
+    "text": "fin",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "fin.svg",
+    "meaning": "A flat body part used for swimming"
+  },
+  {
+    "id": "hoof",
+    "text": "hoof",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "hoof.svg",
+    "meaning": "A hard covering on an animal foot"
+  },
+  {
+    "id": "whiskers",
+    "text": "whiskers",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "whiskers.svg",
+    "meaning": "Long sensitive hairs on an animal face"
+  },
+  {
+    "id": "prickles",
+    "text": "prickles",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "prickles.svg",
+    "meaning": "Small sharp points on a surface"
+  },
+  {
+    "id": "hedge",
+    "text": "hedge",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "hedge.svg",
+    "meaning": "A row of closely growing bushes"
+  },
+  {
+    "id": "wood",
+    "text": "wood",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "wood.svg",
+    "meaning": "The hard material inside a tree",
+    "confusable": [
+      "log"
+    ]
+  },
+  {
+    "id": "wool",
+    "text": "wool",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "wool.svg",
+    "meaning": "Soft fiber from a sheep coat"
+  },
+  {
+    "id": "almond",
+    "text": "almond",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "almond.svg",
+    "meaning": "An oval nut with brown skin",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "apricot",
+    "text": "apricot",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "apricot.svg",
+    "meaning": "A small soft orange fruit"
+  },
+  {
+    "id": "bacon",
+    "text": "bacon",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "bacon.svg",
+    "meaning": "Thin slices of cured pork"
+  },
+  {
+    "id": "bagel",
+    "text": "bagel",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "bagel.svg",
+    "meaning": "A firm bread roll with a hole"
+  },
+  {
+    "id": "beetroot",
+    "text": "beetroot",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "beetroot.svg",
+    "meaning": "A dark red edible root"
+  },
+  {
+    "id": "blackberry",
+    "text": "blackberry",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "blackberry.svg",
+    "meaning": "A dark juicy fruit with small bumps"
+  },
+  {
+    "id": "blackcurrant",
+    "text": "blackcurrant",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "blackcurrants.svg",
+    "meaning": "A small dark purple berry"
+  },
+  {
+    "id": "butter",
+    "text": "butter",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "butter.svg",
+    "meaning": "A spread made from milk cream",
+    "confusable": [
+      "dairy",
+      "fat",
+      "ingredients"
+    ]
+  },
+  {
+    "id": "cabbage",
+    "text": "cabbage",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cabbage.svg",
+    "meaning": "A vegetable with tightly packed leaves"
+  },
+  {
+    "id": "cashew",
+    "text": "cashew",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cashew.svg",
+    "meaning": "A curved creamy colored nut",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "casserole",
+    "text": "casserole",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "casserole.svg",
+    "meaning": "A deep dish used for slow cooking",
+    "confusable": [
+      "pot",
+      "saucepan"
+    ]
+  },
+  {
+    "id": "cauliflower",
+    "text": "cauliflower",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cauliflower.svg",
+    "meaning": "A vegetable with clustered white florets"
+  },
+  {
+    "id": "celery",
+    "text": "celery",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "celery.svg",
+    "meaning": "A vegetable with crisp green stalks"
+  },
+  {
+    "id": "chapati",
+    "text": "chapati",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chapatti.svg",
+    "meaning": "A thin round unleavened flatbread"
+  },
+  {
+    "id": "croissant",
+    "text": "croissant",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "croissant.svg",
+    "meaning": "A flaky crescent shaped bread"
+  },
+  {
+    "id": "currant",
+    "text": "currant",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "currants.svg",
+    "meaning": "A small dried grape used in baking",
+    "confusable": [
+      "raisin"
+    ]
+  },
+  {
+    "id": "fennel",
+    "text": "fennel",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fennel.svg",
+    "meaning": "A vegetable with feathery leaves"
+  },
+  {
+    "id": "fig",
+    "text": "fig",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fig.svg",
+    "meaning": "A soft fruit containing tiny seeds"
+  },
+  {
+    "id": "garlic",
+    "text": "garlic",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "garlic.svg",
+    "meaning": "A strong flavored bulb used in cooking"
+  },
+  {
+    "id": "gooseberry",
+    "text": "gooseberry",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "gooseberry.svg",
+    "meaning": "A small round fruit with tart flavor"
+  },
+  {
+    "id": "kiwi",
+    "text": "kiwi",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "kiwi.svg",
+    "meaning": "A fuzzy brown fruit with green flesh"
+  },
+  {
+    "id": "leek",
+    "text": "leek",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "leek.svg",
+    "meaning": "A vegetable with long layered leaves"
+  },
+  {
+    "id": "lentil",
+    "text": "lentil",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lentils.svg",
+    "meaning": "A small flat seed used in soups"
+  },
+  {
+    "id": "lime",
+    "text": "lime",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lime.svg",
+    "meaning": "A small green citrus fruit"
+  },
+  {
+    "id": "marshmallow",
+    "text": "marshmallow",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "marshmallows.svg",
+    "meaning": "A soft airy sweet treat"
+  },
+  {
+    "id": "noodles",
+    "text": "noodles",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "noodles.svg",
+    "meaning": "Long thin strips of cooked dough"
+  },
+  {
+    "id": "olive",
+    "text": "olive",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "olives.svg",
+    "meaning": "A small fruit used to make oil"
+  },
+  {
+    "id": "omelet",
+    "text": "omelet",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "omelette.svg",
+    "meaning": "Beaten eggs cooked in a pan"
+  },
+  {
+    "id": "parsnip",
+    "text": "parsnip",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "parsnip.svg",
+    "meaning": "A pale root vegetable like a carrot"
+  },
+  {
+    "id": "pecan",
+    "text": "pecan",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pecan.svg",
+    "meaning": "A nut with a ridged brown shell",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "porridge",
+    "text": "porridge",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "porridge.svg",
+    "meaning": "A warm cereal cooked until soft"
+  },
+  {
+    "id": "raisin",
+    "text": "raisin",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "raisin.svg",
+    "meaning": "A dried sweet grape",
+    "confusable": [
+      "currant"
+    ]
+  },
+  {
+    "id": "ravioli",
+    "text": "ravioli",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "ravioli.svg",
+    "meaning": "Small pasta pockets filled with food"
+  },
+  {
+    "id": "rhubarb",
+    "text": "rhubarb",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "rhubarb.svg",
+    "meaning": "A plant with tart edible stalks"
+  },
+  {
+    "id": "salami",
+    "text": "salami",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "salami_sausage.svg",
+    "meaning": "A firm seasoned sliced sausage"
+  },
+  {
+    "id": "satsuma",
+    "text": "satsuma",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "satsuma.svg",
+    "meaning": "A small citrus fruit easy to peel"
+  },
+  {
+    "id": "spinach",
+    "text": "spinach",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "spinach.svg",
+    "meaning": "A vegetable with dark green leaves"
+  },
+  {
+    "id": "turnip",
+    "text": "turnip",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "turnip.svg",
+    "meaning": "A round root vegetable with pale flesh"
+  },
+  {
+    "id": "vinegar",
+    "text": "vinegar",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "vinegar.svg",
+    "meaning": "A sour liquid used in cooking"
+  },
+  {
+    "id": "walnut",
+    "text": "walnut",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "walnut.svg",
+    "meaning": "A nut with a wrinkled shell",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "wafer",
+    "text": "wafer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wafer.svg",
+    "meaning": "A thin crisp sweet biscuit"
+  },
+  {
+    "id": "blouse",
+    "text": "blouse",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "blouse.svg",
+    "meaning": "A loose shirt often with buttons",
+    "confusable": [
+      "shirt",
+      "sweater",
+      "sweatshirt"
+    ]
+  },
+  {
+    "id": "brooch",
+    "text": "brooch",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "brooch.svg",
+    "meaning": "A decorative pin worn on clothing"
+  },
+  {
+    "id": "buckle",
+    "text": "buckle",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "buckle.svg",
+    "meaning": "A fastener for a belt or strap"
+  },
+  {
+    "id": "curtains",
+    "text": "curtains",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "curtains.svg",
+    "meaning": "Hanging fabric that covers a window"
+  },
+  {
+    "id": "dishwasher",
+    "text": "dishwasher",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dishwasher.svg",
+    "meaning": "A machine that washes dishes"
+  },
+  {
+    "id": "lampshade",
+    "text": "lampshade",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lampshade.svg",
+    "meaning": "A cover that softens lamp light"
+  },
+  {
+    "id": "lantern",
+    "text": "lantern",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lantern.svg",
+    "meaning": "A portable light inside a protective case"
+  },
+  {
+    "id": "cushion",
+    "text": "cushion",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cushion_2.svg",
+    "meaning": "A soft pad for sitting comfortably"
+  },
+  {
+    "id": "fabric",
+    "text": "fabric",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fabric.svg",
+    "meaning": "Cloth made by weaving or knitting"
+  },
+  {
+    "id": "furniture",
+    "text": "furniture",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "furniture.svg",
+    "meaning": "Movable objects that furnish a room",
+    "confusable": [
+      "armchair",
+      "bed",
+      "bench",
+      "bookcase",
+      "chair",
+      "cupboard",
+      "dresser",
+      "sofa",
+      "stool",
+      "table",
+      "wardrobe"
+    ]
+  },
+  {
+    "id": "ladle",
+    "text": "ladle",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "ladle.svg",
+    "meaning": "A deep spoon used for soup"
+  },
+  {
+    "id": "colander",
+    "text": "colander",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "colander.svg",
+    "meaning": "A bowl with holes for draining food"
+  },
+  {
+    "id": "spatula",
+    "text": "spatula",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "spatula.svg",
+    "meaning": "A flat tool for lifting food"
+  },
+  {
+    "id": "tongs",
+    "text": "tongs",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tongs.svg",
+    "meaning": "A tool that grips and lifts food"
+  },
+  {
+    "id": "saucer",
+    "text": "saucer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "saucer.svg",
+    "meaning": "A small plate placed beneath a cup"
+  },
+  {
+    "id": "vase",
+    "text": "vase",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "vase.svg",
+    "meaning": "A container used to display flowers"
+  },
+  {
+    "id": "suitcase",
+    "text": "suitcase",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "suitcase_1.svg",
+    "meaning": "A handled case for carrying clothes"
+  },
+  {
+    "id": "wallet",
+    "text": "wallet",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wallet.svg",
+    "meaning": "A small folding holder for money"
+  },
+  {
+    "id": "purse",
+    "text": "purse",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "purse.svg",
+    "meaning": "A small bag for money"
+  },
+  {
+    "id": "stool",
+    "text": "stool",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "stool.svg",
+    "meaning": "A seat with no back",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "bolt",
+    "text": "bolt",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "bolt.svg",
+    "meaning": "A threaded fastener used with a nut"
+  },
+  {
+    "id": "screw",
+    "text": "screw",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "screw.svg",
+    "meaning": "A pointed threaded metal fastener"
+  },
+  {
+    "id": "screwdriver",
+    "text": "screwdriver",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "screwdriver.svg",
+    "meaning": "A tool for turning screws"
+  },
+  {
+    "id": "wrench",
+    "text": "wrench",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wrench.svg",
+    "meaning": "A tool for tightening metal nuts"
+  },
+  {
+    "id": "pliers",
+    "text": "pliers",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pliers.svg",
+    "meaning": "A gripping tool with two handles"
+  },
+  {
+    "id": "hammer",
+    "text": "hammer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "hammer.svg",
+    "meaning": "A tool used to strike nails"
+  },
+  {
+    "id": "sandpaper",
+    "text": "sandpaper",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sandpaper.svg",
+    "meaning": "Rough paper used to smooth wood"
+  },
+  {
+    "id": "calculator",
+    "text": "calculator",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "calculator.svg",
+    "meaning": "A device that works out numbers"
+  },
+  {
+    "id": "cardboard",
+    "text": "cardboard",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "cardboard.svg",
+    "meaning": "Thick stiff paper used for boxes"
+  },
+  {
+    "id": "certificate",
+    "text": "certificate",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "certificate.svg",
+    "meaning": "A document showing an achievement"
+  },
+  {
+    "id": "clipboard",
+    "text": "clipboard",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "clipboard.svg",
+    "meaning": "A board with a clip for papers"
+  },
+  {
+    "id": "dictionary",
+    "text": "dictionary",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "dictionary.svg",
+    "meaning": "A book explaining what words mean"
+  },
+  {
+    "id": "envelope",
+    "text": "envelope",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "envelope.svg",
+    "meaning": "A paper cover for sending letters"
+  },
+  {
+    "id": "glitter",
+    "text": "glitter",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "glitter.svg",
+    "meaning": "Tiny shiny pieces used for decoration"
+  },
+  {
+    "id": "globe",
+    "text": "globe",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "globe.svg",
+    "meaning": "A round model of the Earth"
+  },
+  {
+    "id": "headphones",
+    "text": "headphones",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "headphones.svg",
+    "meaning": "A device worn to hear sound"
+  },
+  {
+    "id": "laptop",
+    "text": "laptop",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "laptop.svg",
+    "meaning": "A portable computer with folding screen"
+  },
+  {
+    "id": "locker",
+    "text": "locker",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "locker.svg",
+    "meaning": "A small lockable storage cabinet"
+  },
+  {
+    "id": "medal",
+    "text": "medal",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "medal.svg",
+    "meaning": "A metal award worn on a ribbon"
+  },
+  {
+    "id": "paperclip",
+    "text": "paperclip",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "paperclip.svg",
+    "meaning": "A small bent wire holding papers"
+  },
+  {
+    "id": "printer",
+    "text": "printer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "printer.svg",
+    "meaning": "A machine that puts text on paper"
+  },
+  {
+    "id": "ribbon",
+    "text": "ribbon",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "ribbon.svg",
+    "meaning": "A narrow strip of decorative fabric"
+  },
+  {
+    "id": "stapler",
+    "text": "stapler",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "stapler.svg",
+    "meaning": "A device that fastens papers together"
+  },
+  {
+    "id": "worksheet",
+    "text": "worksheet",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "worksheet.svg",
+    "meaning": "A page of exercises for learning"
+  },
+  {
+    "id": "badminton",
+    "text": "badminton",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "badminton.svg",
+    "meaning": "A game hitting a shuttlecock over net"
+  },
+  {
+    "id": "baseball",
+    "text": "baseball",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "baseball_game.svg",
+    "meaning": "A team game with bat and ball"
+  },
+  {
+    "id": "basketball",
+    "text": "basketball",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "basketball_game.svg",
+    "meaning": "A game scoring in a high hoop"
+  },
+  {
+    "id": "bowling",
+    "text": "bowling",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "bowling.svg",
+    "meaning": "A game rolling balls at pins"
+  },
+  {
+    "id": "cricket",
+    "text": "cricket",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "cricket.svg",
+    "meaning": "A bat and ball team sport"
+  },
+  {
+    "id": "golf",
+    "text": "golf",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "golf.svg",
+    "meaning": "A sport hitting balls into holes"
+  },
+  {
+    "id": "tennis",
+    "text": "tennis",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "tennis.svg",
+    "meaning": "A game hitting a ball over net"
+  },
+  {
+    "id": "volleyball",
+    "text": "volleyball",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "volleyball.svg",
+    "meaning": "A team game batting over a net"
+  },
+  {
+    "id": "archery",
+    "text": "archery",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "archery.svg",
+    "meaning": "A sport shooting arrows at targets"
+  },
+  {
+    "id": "pottery",
+    "text": "pottery",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "pottery.svg",
+    "meaning": "Making objects by shaping and firing clay"
+  },
+  {
+    "id": "drama",
+    "text": "drama",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "drama.svg",
+    "meaning": "Stories acted out by performers"
+  },
+  {
+    "id": "gym",
+    "text": "gym",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "gym_1.svg",
+    "meaning": "A room for exercise and sports"
+  },
+  {
+    "id": "parachute",
+    "text": "parachute",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "parachute.svg",
+    "meaning": "A canopy that slows a falling person"
+  },
+  {
+    "id": "ramp",
+    "text": "ramp",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "ramp.svg",
+    "meaning": "A sloping surface joining different heights"
+  },
+  {
+    "id": "saddle",
+    "text": "saddle",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "saddle.svg",
+    "meaning": "A seat used for riding a horse"
+  },
+  {
+    "id": "shuttlecock",
+    "text": "shuttlecock",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "shuttlecock.svg",
+    "meaning": "A feathered object used in badminton"
+  },
+  {
+    "id": "calendar",
+    "text": "calendar",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "calendar.svg",
+    "meaning": "A chart showing days and months"
+  },
+  {
+    "id": "caravan",
+    "text": "caravan",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "caravan.svg",
+    "meaning": "A wheeled home towed by a vehicle"
+  },
+  {
+    "id": "castle",
+    "text": "castle",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "castle.svg",
+    "meaning": "A large fortified historic home"
+  },
+  {
+    "id": "escalator",
+    "text": "escalator",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "escalator.svg",
+    "meaning": "A moving staircase carrying people"
+  },
+  {
+    "id": "garage",
+    "text": "garage",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "garage.svg",
+    "meaning": "A building where vehicles are kept"
+  },
+  {
+    "id": "hangar",
+    "text": "hangar",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "hangar.svg",
+    "meaning": "A large building for storing aircraft"
+  },
+  {
+    "id": "road",
+    "text": "road",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "road.svg",
+    "meaning": "A paved route used by vehicles"
+  },
+  {
+    "id": "signpost",
+    "text": "signpost",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "signpost.svg",
+    "meaning": "A sign showing directions to places"
+  },
+  {
+    "id": "weekend",
+    "text": "weekend",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "weekend.svg",
+    "meaning": "The days at the end of a week"
+  },
+  {
+    "id": "minute",
+    "text": "minute",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "minute.svg",
+    "meaning": "A unit equal to sixty seconds"
+  },
+  {
+    "id": "baker",
+    "text": "baker",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "baker_1a.svg",
+    "meaning": "A person who makes bread and cakes"
+  },
+  {
+    "id": "carpenter",
+    "text": "carpenter",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "carpenter_1a.svg",
+    "meaning": "A person who builds with wood"
+  },
+  {
+    "id": "dentist",
+    "text": "dentist",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "dentist_1a.svg",
+    "meaning": "A person who looks after teeth"
+  },
+  {
+    "id": "florist",
+    "text": "florist",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "florist_1a.svg",
+    "meaning": "A person who sells flowers"
+  },
+  {
+    "id": "gardener",
+    "text": "gardener",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "gardener_1a.svg",
+    "meaning": "A person who tends plants and gardens"
+  },
+  {
+    "id": "musician",
+    "text": "musician",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "musician_1a.svg",
+    "meaning": "A person who makes music"
+  },
+  {
+    "id": "pilot",
+    "text": "pilot",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "pilot_1a.svg",
+    "meaning": "A person who flies an aircraft"
+  },
+  {
+    "id": "sailor",
+    "text": "sailor",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "sailor_1a.svg",
+    "meaning": "A person who works on a ship"
+  },
+  {
+    "id": "singer",
+    "text": "singer",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "singer_1a.svg",
+    "meaning": "A person who performs songs"
+  },
+  {
+    "id": "pupil",
+    "text": "pupil",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "pupil.svg",
+    "meaning": "The dark opening in the center of an eye"
+  },
+  {
+    "id": "add",
+    "text": "add",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "add.svg",
+    "meaning": "Combine numbers to find a total"
+  },
+  {
+    "id": "divide",
+    "text": "divide",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "divide.svg",
+    "meaning": "Split a number into equal groups"
+  },
+  {
+    "id": "multiply",
+    "text": "multiply",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "multiply.svg",
+    "meaning": "Add equal groups to find a total"
+  },
+  {
+    "id": "print",
+    "text": "print",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "print.svg",
+    "meaning": "Put text or pictures onto paper"
+  },
+  {
+    "id": "half",
+    "text": "half",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "half.svg",
+    "meaning": "One of two equal parts"
+  },
+  {
+    "id": "quarter",
+    "text": "quarter",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "quarter.svg",
+    "meaning": "One of four equal parts"
+  },
+  {
+    "id": "assembly",
+    "text": "assembly",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "assembly.svg",
+    "meaning": "A gathering of pupils at school"
+  },
+  {
+    "id": "first",
+    "text": "first",
+    "level": "growing",
+    "part_of_speech": "number",
+    "topic": "places-and-time",
+    "source": "first.svg",
+    "meaning": "Coming before all the others"
+  },
+  {
+    "id": "second",
+    "text": "second",
+    "level": "growing",
+    "part_of_speech": "number",
+    "topic": "places-and-time",
+    "source": "second_3.svg",
+    "meaning": "Coming just after the first"
+  },
+  {
+    "id": "last",
+    "text": "last",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "places-and-time",
+    "source": "last.svg",
+    "meaning": "Coming after all the others"
+  },
+  {
+    "id": "next",
+    "text": "next",
+    "level": "growing",
+    "part_of_speech": "adjective",
+    "topic": "places-and-time",
+    "source": "next.svg",
+    "meaning": "Coming immediately after this one"
+  },
+  {
+    "id": "ahead",
+    "text": "ahead",
+    "level": "growing",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "ahead.svg",
+    "meaning": "In front or further forward"
+  },
+  {
+    "id": "against",
+    "text": "against",
+    "level": "growing",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "against.svg",
+    "meaning": "Touching and leaning on something"
+  },
+  {
+    "id": "opposite",
+    "text": "opposite",
+    "level": "growing",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "opposite.svg",
+    "meaning": "On the other side facing something"
+  },
+  {
+    "id": "middle",
+    "text": "middle",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "middle.svg",
+    "meaning": "The point equally far from both ends"
+  },
+  {
+    "id": "bank",
+    "text": "bank",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "bank.svg",
+    "meaning": "A place that looks after money"
+  },
+  {
+    "id": "cafe",
+    "text": "cafe",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "cafe.svg",
+    "meaning": "A small place serving drinks and food"
+  },
+  {
+    "id": "exercise",
+    "text": "exercise",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "exercise_,_to.svg",
+    "meaning": "Move the body to improve fitness"
+  },
+  {
+    "id": "enter",
+    "text": "enter",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "enter_,_to.svg",
+    "meaning": "Go into a room or place"
+  },
+  {
+    "id": "exit",
+    "text": "exit",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "exit_,_to.svg",
+    "meaning": "Go out of a room"
+  },
+  {
+    "id": "travel",
+    "text": "travel",
+    "level": "growing",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "travel.svg",
+    "meaning": "Go from one place to another"
+  },
+  {
+    "id": "beaker",
+    "text": "beaker",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "beaker_2.svg",
+    "meaning": "A wide mouthed container used in science"
+  },
+  {
+    "id": "carton",
+    "text": "carton",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "carton_1.svg",
+    "meaning": "A cardboard container for food or drinks"
+  },
+  {
+    "id": "crane",
+    "text": "crane",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "crane.svg",
+    "meaning": "A tall machine for lifting heavy loads"
+  },
+  {
+    "id": "engine",
+    "text": "engine",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "engine.svg",
+    "meaning": "A machine that provides power for movement"
+  },
+  {
+    "id": "funnel",
+    "text": "funnel",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "funnel.svg",
+    "meaning": "A cone used to pour into bottles"
+  },
+  {
+    "id": "lawnmower",
+    "text": "lawnmower",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lawnmower.svg",
+    "meaning": "A machine that cuts grass evenly"
+  },
+  {
+    "id": "crutches",
+    "text": "crutches",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "crutches.svg",
+    "meaning": "Supports used for walking with an injury"
+  },
+  {
+    "id": "raincoat",
+    "text": "raincoat",
+    "level": "growing",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "raincoat.svg",
+    "meaning": "A coat that keeps rain off",
+    "confusable": [
+      "coat"
+    ]
+  }
+]

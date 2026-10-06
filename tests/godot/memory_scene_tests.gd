@@ -298,7 +298,7 @@ func _check_host_layout(app) -> void:
 		check(is_equal_approx(view._board.position.y + view._board.size.y, view.size.y),
 			"The Memory board reaches the bottom of its real host view without a footer")
 		check(view._board.position == Vector2.ZERO, "Root's toolbar eye reserves no Memory header")
-		var columns: int = 2 if view.size.x < view.size.y else 5
+		var columns: int = 2
 		var rows: int = 10 / columns
 		var gap: float = ceilf(8 / load("res://scripts/ui_style.gd").ui_scale(view))
 		var cell := Vector2((view.size.x - gap * (columns - 1)) / columns, (view.size.y - gap * (rows - 1)) / rows)

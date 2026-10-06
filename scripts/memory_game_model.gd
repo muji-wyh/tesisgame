@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
+const SpeechWords = preload("res://scripts/speech_words.gd")
 
 var cards: Array[Dictionary] = []
 var selected_indices: Array[int] = []
@@ -30,8 +31,8 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 		return false
 	for index in range(words.size()):
 		for other in range(index):
-			if Data.confusable_words(words[index].id, words[other].id) \
-				or Data.confusable_words(words[index].text, words[other].text):
+			if Data.word_pair_conflicts(words[index], words[other]) \
+				or SpeechWords.words_conflict(words[index], words[other]):
 				error = "Memory needs five clearly different words and pictures."
 				return false
 	var next_cards: Array[Dictionary] = []

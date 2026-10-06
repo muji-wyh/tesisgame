@@ -39,13 +39,13 @@ var _rng := RandomNumberGenerator.new()
 var _next_uid: int = 1
 var _next_spawn_at: float = 0.0
 var _next_burst_at: float = INF
-var _noun := RegEx.new()
+var _word_pattern := RegEx.new()
 var _round_serial: int = 0
 var _consumed_speech_events: Dictionary = {}
 
 
 func _init() -> void:
-	_noun.compile("^[a-z]+$")
+	_word_pattern.compile("^[a-z]{2,14}$")
 
 
 func configure(words: Array, seed_value: int = -1) -> bool:
@@ -63,12 +63,12 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 		if not valid:
 			continue
 		var text: String = entry.text.strip_edges().to_lower()
-		if _noun.search(text) == null or seen_ids.has(entry.id) or seen_texts.has(text):
+		if _word_pattern.search(text) == null or seen_ids.has(entry.id) or seen_texts.has(text):
 			continue
 		var word: Dictionary = entry.duplicate(true)
 		word.text = text
 		_words.append(word)
-		_aliases[word.id] = SpeechWords.forms(text, true)
+		_aliases[word.id] = SpeechWords.word_forms(word, true)
 		seen_ids[word.id] = true
 		seen_texts[text] = true
 	if seed_value < 0:
@@ -355,7 +355,7 @@ func _spawn_target(lifetime: float) -> bool:
 
 func _can_spawn(word: Dictionary) -> bool:
 	for target in targets:
-		if Data.confusable_words(word.id, target.word.id) or Data.confusable_words(word.text, target.word.text):
+		if Data.word_pair_conflicts(word, target.word):
 			return false
 		if SpeechWords.compounds_conflict(word.text, target.word.text):
 			return false

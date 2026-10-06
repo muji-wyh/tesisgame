@@ -34,3 +34,6 @@ texture={
 "compress/lossy_quality": 0.85,
 "svg/scale": 3.0
 }
+wav={
+"compress/mode": 2
+}

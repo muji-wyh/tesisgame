@@ -73,6 +73,20 @@ const ADVENTURES: Array[Dictionary] = [
 		"trumpet", "saxophone", "xylophone", "cymbal", "microphone",
 		"accordion", "clarinet", "trombone", "tambourine", "metronome", "harmonica"]}
 ]
+const EXPANDED_TOPICS: Dictionary = {
+	"actions-and-routines": "Actions and routines",
+	"feelings-and-people": "Feelings and people",
+	"describe-and-compare": "Describe and compare",
+	"places-and-time": "Places and time",
+	"nature-and-science": "Nature and science",
+	"food-and-home": "Food and home",
+	"school-and-play": "School and play"
+}
+const PARTS_OF_SPEECH: Array[String] = [
+	"noun", "verb", "adjective", "adverb", "preposition", "pronoun",
+	"determiner", "numeral", "number", "conjunction", "interjection"
+]
+static var _catalog_adventures: Array[Dictionary] = []
 const CONFUSABLE_WORDS: Dictionary = {
 	"earth": ["planet"],
 	"acorn": ["seed"],
@@ -176,6 +190,24 @@ static func word_level(word: Dictionary) -> int:
 	return 0
 
 
+static func adventures(vocabulary: Array = []) -> Array[Dictionary]:
+	if vocabulary.is_empty():
+		if _catalog_adventures.is_empty():
+			var supplied: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+			if supplied is Array and not supplied.is_empty():
+				_catalog_adventures = adventures(supplied)
+		return _catalog_adventures.duplicate(true)
+	var result: Array[Dictionary] = ADVENTURES.duplicate(true)
+	for topic: String in EXPANDED_TOPICS:
+		var ids: Array[String] = []
+		for word: Dictionary in vocabulary:
+			if word.get("topic", "") == topic:
+				ids.append(str(word.id))
+		if not ids.is_empty():
+			result.append({"id": topic, "name": EXPANDED_TOPICS[topic], "words": ids})
+	return result
+
+
 static func normalize_spoken_text(text: String) -> String:
 	# Speech engines commonly separate this compound into two tokens.
 	var compound := RegEx.new()
@@ -186,6 +218,16 @@ static func normalize_spoken_text(text: String) -> String:
 static func confusable_words(first: String, second: String) -> bool:
 	return (first == second or CONFUSABLE_WORDS.get(first, []).has(second)
 		or CONFUSABLE_WORDS.get(second, []).has(first))
+
+
+static func word_pair_conflicts(first: Dictionary, second: Dictionary) -> bool:
+	if confusable_words(str(first.id), str(second.id)) or confusable_words(str(first.text), str(second.text)):
+		return true
+	if first.get("confusable", []).has(second.id) or second.get("confusable", []).has(first.id):
+		return true
+	var first_source: String = str(first.get("art_key", ""))
+	var second_source: String = str(second.get("art_key", ""))
+	return not first_source.is_empty() and first_source == second_source
 
 
 static func theme(id: String) -> Dictionary:
@@ -238,7 +280,7 @@ static func validate_words(value: Variant) -> String:
 	var id_pattern := RegEx.new()
 	var text_pattern := RegEx.new()
 	id_pattern.compile("^[a-z][a-z0-9-]*$")
-	text_pattern.compile("^[a-z]{2,10}$")
+	text_pattern.compile("^[a-z]{2,14}$")
 	for entry in value:
 		if not entry is Dictionary:
 			return "Each word must have an id, text, image and audio."
@@ -246,9 +288,16 @@ static func validate_words(value: Variant) -> String:
 			if not entry.has(key) or not entry[key] is String:
 				return "Each word must have an id, text, image and audio."
 		if id_pattern.search(entry.id) == null or text_pattern.search(entry.text) == null:
-			return "Use a unique word ID and a lowercase English word with 2 to 10 letters."
+			return "Use a unique word ID and a lowercase English word with 2 to 14 letters."
 		if word_level(entry) == 0:
 			return "Word levels must be basic, growing or advanced."
+		if entry.has("part_of_speech") and entry.part_of_speech not in PARTS_OF_SPEECH:
+			return "Use a supported English part of speech."
+		if entry.has("topic") and not EXPANDED_TOPICS.has(entry.topic):
+			return "Use an available vocabulary topic."
+		if entry.has("confusable"):
+			if not entry.confusable is Array or not entry.confusable.all(func(id: Variant) -> bool: return id is String and id_pattern.search(id) != null):
+				return "Confusable vocabulary must list valid word IDs."
 		if ids.has(entry.id) or texts.has(entry.text) or images.has(entry.image):
 			return "Word IDs, words and pictures must be unique."
 		if not _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"]):

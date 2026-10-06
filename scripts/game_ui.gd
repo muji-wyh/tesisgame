@@ -1311,7 +1311,7 @@ func _hear_catalog_word(word: Dictionary) -> void:
 		return
 	audio.interact(model.theme_id)
 	audio.say("res://" + str(word.audio))
-	_announce_status(str(word.text))
+	_announce_status(str(word.text) + (". " + str(word.meaning) if word.has("meaning") else ""))
 
 
 func _back_from_collection() -> void:
@@ -2339,8 +2339,9 @@ func _fit_grid() -> void:
 	if grid == null or _rebuilding or cards.is_empty() or not grid.is_visible_in_tree():
 		return
 	var area: Vector2 = _match_playfield.size
-	grid.columns = Model.MATCH_PAIR_COUNT if area.x >= area.y or area.y < 318 else 2
-	var gutter: int = ceili(MatchConnections.GUTTER_PIXELS / Style.ui_scale(self))
+	var css_scale: float = Style.ui_scale(self)
+	grid.columns = Style.word_board_columns(area, css_scale, Vector2(10, 10))
+	var gutter: int = ceili(MatchConnections.GUTTER_PIXELS / css_scale)
 	var horizontal_gap: int = gutter if grid.columns == 2 else 10
 	var vertical_gap: int = 10 if grid.columns == 2 else gutter
 	if grid.columns == Model.MATCH_PAIR_COUNT:
@@ -3982,7 +3983,7 @@ func _hide_collection() -> void:
 func _announce_collection_state() -> void:
 	if _age_catalog.visible:
 		var message: String = "%s. %d words. Tap a picture to hear its word. Back returns to Pip's room." % [
-			_age_catalog.title_label.text, _age_catalog.word_buttons.size()]
+			_age_catalog.title_label.text, _age_catalog.word_count()]
 		if _age_save_failed:
 			message += " " + _age_notice.text
 		_announce_status(message)

@@ -39,6 +39,12 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /html\/experimental_virtual_keyboard=true/,
     'Touch devices need the native DOM input bridge to open their software keyboard');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
+  for (const word of JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))) {
+    for (const source of [word.image, word.audio]) {
+      assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
+        `Every vocabulary picture and recording must survive export: ${source}`);
+    }
+  }
   for (const source of [
     'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',

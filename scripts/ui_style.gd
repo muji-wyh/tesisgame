@@ -137,6 +137,16 @@ static func ui_scale(control: Control) -> float:
 	return maxf(value, 2.0 / 3.0)
 
 
+static func word_board_columns(area: Vector2, scale: float, gaps: Vector2) -> int:
+	var wide_card_width: float = (area.x - 4 * gaps.x) / 5
+	var tall_card_height: float = (area.y - 4 * gaps.y) / 5
+	# Square and narrow playfields need wide cards for complete vocabulary words.
+	# A short landscape board still needs two rows to preserve touch targets.
+	if tall_card_height * scale >= 44 and (area.x < area.y or wide_card_width * scale < 112):
+		return 2
+	return 5
+
+
 static func square_icon_button(control: Button, accent: Color) -> void:
 	var focus: int = control.focus_mode
 	quiet_button(control, accent, 0)

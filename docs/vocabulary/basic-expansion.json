@@ -1,0 +1,2877 @@
+[
+  {
+    "id": "ask",
+    "text": "ask",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "ask_,_to.svg",
+    "meaning": "Use words to request something"
+  },
+  {
+    "id": "bake",
+    "text": "bake",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "bake_,_to.svg",
+    "meaning": "Cook food in an oven"
+  },
+  {
+    "id": "bend",
+    "text": "bend",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "bend_,_to.svg",
+    "meaning": "Move your body into a curve"
+  },
+  {
+    "id": "bite",
+    "text": "bite",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "bite_,_to.svg",
+    "meaning": "Cut food with your teeth"
+  },
+  {
+    "id": "blink",
+    "text": "blink",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "blink_,_to.svg",
+    "meaning": "Close and open your eyes"
+  },
+  {
+    "id": "blow",
+    "text": "blow",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "blow_,_to.svg",
+    "meaning": "Push air out through your mouth"
+  },
+  {
+    "id": "bounce",
+    "text": "bounce",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "bounce_ball_,_to.svg",
+    "meaning": "Make a ball spring back up"
+  },
+  {
+    "id": "bring",
+    "text": "bring",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "bring_,_to.svg",
+    "meaning": "Carry something toward a person"
+  },
+  {
+    "id": "build",
+    "text": "build",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "build_,_to.svg",
+    "meaning": "Put parts together to make something"
+  },
+  {
+    "id": "carry",
+    "text": "carry",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "carry_,_to.svg",
+    "meaning": "Hold something while moving"
+  },
+  {
+    "id": "catch",
+    "text": "catch",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "catch_,_to.svg",
+    "meaning": "Stop a moving ball with your hands"
+  },
+  {
+    "id": "chew",
+    "text": "chew",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "chew_,_to.svg",
+    "meaning": "Break food down with your teeth"
+  },
+  {
+    "id": "clap",
+    "text": "clap",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "clap_hands_,_to.svg",
+    "meaning": "Bring your hands together to make sound"
+  },
+  {
+    "id": "climb",
+    "text": "climb",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "climb_tree_,_to.svg",
+    "meaning": "Move upward using hands and feet"
+  },
+  {
+    "id": "close",
+    "text": "close",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "close_door_,_to.svg",
+    "meaning": "Move a door until it is shut"
+  },
+  {
+    "id": "come",
+    "text": "come",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "come_,_to.svg",
+    "meaning": "Move toward the person calling"
+  },
+  {
+    "id": "cook",
+    "text": "cook",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "cook_,_to.svg",
+    "meaning": "Prepare food using heat"
+  },
+  {
+    "id": "count",
+    "text": "count",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "count_,_to.svg",
+    "meaning": "Find how many things there are"
+  },
+  {
+    "id": "crawl",
+    "text": "crawl",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "crawl_,_to.svg",
+    "meaning": "Move on hands and knees"
+  },
+  {
+    "id": "cut",
+    "text": "cut",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "cut_with_scissors_,_to.svg",
+    "meaning": "Divide something using scissors"
+  },
+  {
+    "id": "dance",
+    "text": "dance",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "dance_,_to.svg",
+    "meaning": "Move your body to music"
+  },
+  {
+    "id": "dig",
+    "text": "dig",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dig_,_to.svg",
+    "meaning": "Make a hole in the ground"
+  },
+  {
+    "id": "drink",
+    "text": "drink",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "drink_,_to.svg",
+    "meaning": "Take liquid into your mouth"
+  },
+  {
+    "id": "draw",
+    "text": "draw",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "draw_,_to.svg",
+    "meaning": "Make a picture with a pencil"
+  },
+  {
+    "id": "dream",
+    "text": "dream",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dream_,_to.svg",
+    "meaning": "See stories in your mind while sleeping"
+  },
+  {
+    "id": "eat",
+    "text": "eat",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "eat_,_to.svg",
+    "meaning": "Put food in your mouth and swallow"
+  },
+  {
+    "id": "feed",
+    "text": "feed",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "feed_dog_,_to.svg",
+    "meaning": "Give food to an animal"
+  },
+  {
+    "id": "fill",
+    "text": "fill",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "fill_2_,_to.svg",
+    "meaning": "Put something into an empty container"
+  },
+  {
+    "id": "find",
+    "text": "find",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "find_,_to.svg",
+    "meaning": "Discover where something is"
+  },
+  {
+    "id": "float",
+    "text": "float",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "float.svg",
+    "meaning": "Stay on top of water"
+  },
+  {
+    "id": "fold",
+    "text": "fold",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "fold_clothes_,_to.svg",
+    "meaning": "Bend clothes neatly over themselves"
+  },
+  {
+    "id": "give",
+    "text": "give",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "give_,_to.svg",
+    "meaning": "Hand something to another person",
+    "confusable": [
+      "collect",
+      "receive"
+    ]
+  },
+  {
+    "id": "go",
+    "text": "go",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "go_,_to.svg",
+    "meaning": "Move away to another place"
+  },
+  {
+    "id": "grow",
+    "text": "grow",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "source": "grow_,_to.svg",
+    "meaning": "Become bigger over time"
+  },
+  {
+    "id": "hear",
+    "text": "hear",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "hear_,_to.svg",
+    "meaning": "Notice a sound with your ears"
+  },
+  {
+    "id": "help",
+    "text": "help",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "help_,_to.svg",
+    "meaning": "Make a task easier for someone"
+  },
+  {
+    "id": "hold",
+    "text": "hold",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "hold_,_to.svg",
+    "meaning": "Keep something in your hands"
+  },
+  {
+    "id": "hop",
+    "text": "hop",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "hop_,_to.svg",
+    "meaning": "Jump using just one foot"
+  },
+  {
+    "id": "hug",
+    "text": "hug",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "hug_,_to.svg",
+    "meaning": "Put your arms gently around someone"
+  },
+  {
+    "id": "jump",
+    "text": "jump",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "jump_,_to.svg",
+    "meaning": "Push yourself up off the ground"
+  },
+  {
+    "id": "kick",
+    "text": "kick",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "kick_ball_,_to.svg",
+    "meaning": "Hit a ball with your foot"
+  },
+  {
+    "id": "knock",
+    "text": "knock",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "knock_,_to.svg",
+    "meaning": "Tap a door to make a sound"
+  },
+  {
+    "id": "laugh",
+    "text": "laugh",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "laughing_lady.svg",
+    "meaning": "Make happy sounds when amused",
+    "confusable": [
+      "excited",
+      "funny",
+      "happy",
+      "serene",
+      "smile"
+    ]
+  },
+  {
+    "id": "look",
+    "text": "look",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "look_,_to.svg",
+    "meaning": "Use your eyes to see something"
+  },
+  {
+    "id": "mix",
+    "text": "mix",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stir_mix_,_to.svg",
+    "meaning": "Put things together and stir",
+    "confusable": [
+      "stir"
+    ]
+  },
+  {
+    "id": "move",
+    "text": "move",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "move_,_to.svg",
+    "meaning": "Change where something is"
+  },
+  {
+    "id": "nod",
+    "text": "nod",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "nod_,_to.svg",
+    "meaning": "Move your head up and down"
+  },
+  {
+    "id": "open",
+    "text": "open",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "open_door_,_to.svg",
+    "meaning": "Move a door so you can enter"
+  },
+  {
+    "id": "paint",
+    "text": "paint",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "paint_,_to.svg",
+    "meaning": "Make a picture using paint"
+  },
+  {
+    "id": "pick",
+    "text": "pick",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "pick_,_to.svg",
+    "meaning": "Choose one thing from a group"
+  },
+  {
+    "id": "play",
+    "text": "play",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "play_,_to.svg",
+    "meaning": "Enjoy a game or activity"
+  },
+  {
+    "id": "point",
+    "text": "point",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "point_,_to.svg",
+    "meaning": "Show something with your finger"
+  },
+  {
+    "id": "pour",
+    "text": "pour",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "pour_,_to.svg",
+    "meaning": "Tip liquid from a container"
+  },
+  {
+    "id": "pull",
+    "text": "pull",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "pull_,_to.svg",
+    "meaning": "Move something closer using your hands"
+  },
+  {
+    "id": "push",
+    "text": "push",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "push_,_to.svg",
+    "meaning": "Move something away using your hands"
+  },
+  {
+    "id": "read",
+    "text": "read",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "read_book_,_to.svg",
+    "meaning": "Look at words and understand them"
+  },
+  {
+    "id": "rest",
+    "text": "rest",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "rest_,_to.svg",
+    "meaning": "Stop working and relax your body",
+    "confusable": [
+      "relax"
+    ]
+  },
+  {
+    "id": "ride",
+    "text": "ride",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "ride_horse_,_to.svg",
+    "meaning": "Travel while sitting on a horse"
+  },
+  {
+    "id": "rub",
+    "text": "rub",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "rub_,_to.svg",
+    "meaning": "Move your hand over a surface"
+  },
+  {
+    "id": "run",
+    "text": "run",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "run_,_to.svg",
+    "meaning": "Move quickly on your feet",
+    "confusable": [
+      "jog"
+    ]
+  },
+  {
+    "id": "share",
+    "text": "share",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "share_,_to.svg",
+    "meaning": "Let others use something with you"
+  },
+  {
+    "id": "shout",
+    "text": "shout",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "shout_,_to.svg",
+    "meaning": "Speak with a very loud voice"
+  },
+  {
+    "id": "sing",
+    "text": "sing",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "sing_,_to.svg",
+    "meaning": "Make music with your voice"
+  },
+  {
+    "id": "sit",
+    "text": "sit",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sit_,_to.svg",
+    "meaning": "Rest your bottom on a seat"
+  },
+  {
+    "id": "skip",
+    "text": "skip",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "skip_,_to.svg",
+    "meaning": "Jump over a turning rope"
+  },
+  {
+    "id": "sleep",
+    "text": "sleep",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sleep_female_,_to.svg",
+    "meaning": "Rest with your eyes closed"
+  },
+  {
+    "id": "smile",
+    "text": "smile",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "smile_,_to.svg",
+    "meaning": "Turn your mouth upward when happy",
+    "confusable": [
+      "excited",
+      "funny",
+      "happy",
+      "laugh",
+      "serene"
+    ]
+  },
+  {
+    "id": "sneeze",
+    "text": "sneeze",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sneeze_cold.svg",
+    "meaning": "Suddenly blow air from your nose"
+  },
+  {
+    "id": "spell",
+    "text": "spell",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "spell_,_to.svg",
+    "meaning": "Say the letters of a word"
+  },
+  {
+    "id": "spin",
+    "text": "spin",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "spin_,_to.svg",
+    "meaning": "Turn around and around"
+  },
+  {
+    "id": "squeeze",
+    "text": "squeeze",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "squeeze_,_to.svg",
+    "meaning": "Press something firmly with your hand"
+  },
+  {
+    "id": "stand",
+    "text": "stand",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stand_,_to.svg",
+    "meaning": "Be upright on your feet"
+  },
+  {
+    "id": "stir",
+    "text": "stir",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stir_,_to.svg",
+    "meaning": "Move a spoon around in food",
+    "confusable": [
+      "mix"
+    ]
+  },
+  {
+    "id": "stretch",
+    "text": "stretch",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stretch_,_to.svg",
+    "meaning": "Pull something to make it longer"
+  },
+  {
+    "id": "swim",
+    "text": "swim",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "swim_,_to.svg",
+    "meaning": "Move through water with your body"
+  },
+  {
+    "id": "talk",
+    "text": "talk",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "talk_1_,_to.svg",
+    "meaning": "Use words to speak with someone"
+  },
+  {
+    "id": "taste",
+    "text": "taste",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "taste_,_to.svg",
+    "meaning": "Try food with your tongue"
+  },
+  {
+    "id": "think",
+    "text": "think",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "think_,_to.svg",
+    "meaning": "Use your mind to consider something"
+  },
+  {
+    "id": "tickle",
+    "text": "tickle",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "tickle_,_to.svg",
+    "meaning": "Touch lightly to make someone laugh"
+  },
+  {
+    "id": "touch",
+    "text": "touch",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "touch_,_to.svg",
+    "meaning": "Feel something with your hand"
+  },
+  {
+    "id": "turn",
+    "text": "turn",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "turn_,_to.svg",
+    "meaning": "Move to face a different direction"
+  },
+  {
+    "id": "wait",
+    "text": "wait",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wait_,_to.svg",
+    "meaning": "Stay until something happens"
+  },
+  {
+    "id": "wake",
+    "text": "wake",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wake_up_,_to.svg",
+    "meaning": "Stop sleeping and open your eyes"
+  },
+  {
+    "id": "walk",
+    "text": "walk",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "walk_,_to.svg",
+    "meaning": "Move forward by taking steps"
+  },
+  {
+    "id": "wash",
+    "text": "wash",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wash_hands_,_to.svg",
+    "meaning": "Clean your hands with soap and water"
+  },
+  {
+    "id": "whisper",
+    "text": "whisper",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "source": "whisper_,_to.svg",
+    "meaning": "Speak in a very soft voice"
+  },
+  {
+    "id": "wipe",
+    "text": "wipe",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "wipe_table_,_to.svg",
+    "meaning": "Clean a surface with a cloth"
+  },
+  {
+    "id": "write",
+    "text": "write",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "source": "write_,_to.svg",
+    "meaning": "Make letters and words on paper",
+    "confusable": [
+      "copy"
+    ]
+  },
+  {
+    "id": "yawn",
+    "text": "yawn",
+    "level": "basic",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "yawn_,_to.svg",
+    "meaning": "Open your mouth wide when sleepy"
+  },
+  {
+    "id": "happy",
+    "text": "happy",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "happy_man.svg",
+    "meaning": "Feeling pleased and full of joy",
+    "confusable": [
+      "excited",
+      "funny",
+      "laugh",
+      "serene",
+      "smile"
+    ]
+  },
+  {
+    "id": "sad",
+    "text": "sad",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "sad_lady.svg",
+    "meaning": "Feeling unhappy or upset"
+  },
+  {
+    "id": "angry",
+    "text": "angry",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "angry_man.svg",
+    "meaning": "Feeling upset and cross"
+  },
+  {
+    "id": "afraid",
+    "text": "afraid",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "afraid_lady.svg",
+    "meaning": "Feeling worried about something scary"
+  },
+  {
+    "id": "hungry",
+    "text": "hungry",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "hungry.svg",
+    "meaning": "Wanting some food to eat"
+  },
+  {
+    "id": "thirsty",
+    "text": "thirsty",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "thirsty.svg",
+    "meaning": "Wanting something to drink"
+  },
+  {
+    "id": "awake",
+    "text": "awake",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "awake.svg",
+    "meaning": "Having stopped sleeping and feeling alert"
+  },
+  {
+    "id": "funny",
+    "text": "funny",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "funny_laugh.svg",
+    "meaning": "Making people want to laugh",
+    "confusable": [
+      "excited",
+      "happy",
+      "laugh",
+      "serene",
+      "smile"
+    ]
+  },
+  {
+    "id": "quiet",
+    "text": "quiet",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "quiet.svg",
+    "meaning": "Making very little sound"
+  },
+  {
+    "id": "loud",
+    "text": "loud",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "loud.svg",
+    "meaning": "Making a strong sound",
+    "confusable": [
+      "noisy"
+    ]
+  },
+  {
+    "id": "fast",
+    "text": "fast",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "fast_2.svg",
+    "meaning": "Moving at great speed"
+  },
+  {
+    "id": "high",
+    "text": "high",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "high.svg",
+    "meaning": "Far above the ground",
+    "confusable": [
+      "tall"
+    ]
+  },
+  {
+    "id": "long",
+    "text": "long",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "long.svg",
+    "meaning": "Measuring a great distance from end to end"
+  },
+  {
+    "id": "short",
+    "text": "short",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "short.svg",
+    "meaning": "Having less height than another person"
+  },
+  {
+    "id": "tall",
+    "text": "tall",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "tall.svg",
+    "meaning": "Reaching a long way upward",
+    "confusable": [
+      "high"
+    ]
+  },
+  {
+    "id": "big",
+    "text": "big",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "large.svg",
+    "meaning": "Taking up a lot of space"
+  },
+  {
+    "id": "small",
+    "text": "small",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "little.svg",
+    "meaning": "Taking up very little space"
+  },
+  {
+    "id": "warm",
+    "text": "warm",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "warm_clothes.svg",
+    "meaning": "Having a comfortable amount of heat"
+  },
+  {
+    "id": "hot",
+    "text": "hot",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "hot.svg",
+    "meaning": "Having a lot of heat"
+  },
+  {
+    "id": "cold",
+    "text": "cold",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "drink_cold.svg",
+    "meaning": "Having very little heat",
+    "confusable": [
+      "frozen"
+    ]
+  },
+  {
+    "id": "dry",
+    "text": "dry",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "dry.svg",
+    "meaning": "Having no water on it"
+  },
+  {
+    "id": "wet",
+    "text": "wet",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "wet.svg",
+    "meaning": "Covered with water or liquid"
+  },
+  {
+    "id": "soft",
+    "text": "soft",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "soft.svg",
+    "meaning": "Easy to press or bend"
+  },
+  {
+    "id": "hard",
+    "text": "hard",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "hard.svg",
+    "meaning": "Firm and difficult to press"
+  },
+  {
+    "id": "clean",
+    "text": "clean",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "clean_hands.svg",
+    "meaning": "Having no dirt on it"
+  },
+  {
+    "id": "dirty",
+    "text": "dirty",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "dirty.svg",
+    "meaning": "Covered with dirt or marks"
+  },
+  {
+    "id": "full",
+    "text": "full",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "full.svg",
+    "meaning": "Holding as much as possible"
+  },
+  {
+    "id": "empty",
+    "text": "empty",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "empty.svg",
+    "meaning": "Having nothing inside it"
+  },
+  {
+    "id": "good",
+    "text": "good",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "good.svg",
+    "meaning": "Doing what is right or helpful"
+  },
+  {
+    "id": "bad",
+    "text": "bad",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "bad.svg",
+    "meaning": "Doing something wrong or unkind"
+  },
+  {
+    "id": "same",
+    "text": "same",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "same.svg",
+    "meaning": "Exactly like each other"
+  },
+  {
+    "id": "young",
+    "text": "young",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "young.svg",
+    "meaning": "Having lived for a short time"
+  },
+  {
+    "id": "old",
+    "text": "old",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "old_person_1.svg",
+    "meaning": "Having lived for many years",
+    "confusable": [
+      "wrinkled"
+    ]
+  },
+  {
+    "id": "sweet",
+    "text": "sweet",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "sweet.svg",
+    "meaning": "Tasting like sugar or honey",
+    "confusable": [
+      "candy"
+    ]
+  },
+  {
+    "id": "sour",
+    "text": "sour",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "sour.svg",
+    "meaning": "Having a sharp taste like lemon"
+  },
+  {
+    "id": "heavy",
+    "text": "heavy",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "heavy.svg",
+    "meaning": "Weighing a lot to lift"
+  },
+  {
+    "id": "light",
+    "text": "light",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "light.svg",
+    "meaning": "Easy to lift because of little weight"
+  },
+  {
+    "id": "red",
+    "text": "red",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "red.svg",
+    "meaning": "The color of ripe strawberries"
+  },
+  {
+    "id": "blue",
+    "text": "blue",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "blue.svg",
+    "meaning": "The color of a clear sky"
+  },
+  {
+    "id": "green",
+    "text": "green",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "green.svg",
+    "meaning": "The color of fresh grass"
+  },
+  {
+    "id": "yellow",
+    "text": "yellow",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "yellow.svg",
+    "meaning": "The color of a ripe banana"
+  },
+  {
+    "id": "purple",
+    "text": "purple",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "purple.svg",
+    "meaning": "A color made from red and blue"
+  },
+  {
+    "id": "pink",
+    "text": "pink",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "pink.svg",
+    "meaning": "A light color made with red"
+  },
+  {
+    "id": "white",
+    "text": "white",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "white.svg",
+    "meaning": "The color of fresh snow"
+  },
+  {
+    "id": "black",
+    "text": "black",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "black.svg",
+    "meaning": "The darkest color you can see"
+  },
+  {
+    "id": "brown",
+    "text": "brown",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "brown.svg",
+    "meaning": "The color of wood and chocolate"
+  },
+  {
+    "id": "gray",
+    "text": "gray",
+    "level": "basic",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "grey_light.svg",
+    "meaning": "A color between black and white"
+  },
+  {
+    "id": "above",
+    "text": "above",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "above.svg",
+    "meaning": "In a higher place than something",
+    "confusable": [
+      "over"
+    ]
+  },
+  {
+    "id": "below",
+    "text": "below",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "below.svg",
+    "meaning": "In a lower place than something",
+    "confusable": [
+      "under"
+    ]
+  },
+  {
+    "id": "behind",
+    "text": "behind",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "behind.svg",
+    "meaning": "At the back of something"
+  },
+  {
+    "id": "beside",
+    "text": "beside",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "beside_next_to.svg",
+    "meaning": "At the side of something"
+  },
+  {
+    "id": "between",
+    "text": "between",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "between.svg",
+    "meaning": "In the space separating two things"
+  },
+  {
+    "id": "in",
+    "text": "in",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "in.svg",
+    "meaning": "Within a place or container",
+    "confusable": [
+      "inside"
+    ]
+  },
+  {
+    "id": "on",
+    "text": "on",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "on.svg",
+    "meaning": "Resting on top of a surface"
+  },
+  {
+    "id": "under",
+    "text": "under",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "under_1.svg",
+    "meaning": "Directly below another thing",
+    "confusable": [
+      "below"
+    ]
+  },
+  {
+    "id": "over",
+    "text": "over",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "over.svg",
+    "meaning": "Moving above and across something",
+    "confusable": [
+      "above"
+    ]
+  },
+  {
+    "id": "near",
+    "text": "near",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "near.svg",
+    "meaning": "A short distance from something"
+  },
+  {
+    "id": "through",
+    "text": "through",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "through.svg",
+    "meaning": "From one side to the other"
+  },
+  {
+    "id": "across",
+    "text": "across",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "across.svg",
+    "meaning": "From one side of something to another"
+  },
+  {
+    "id": "around",
+    "text": "around",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "around.svg",
+    "meaning": "Following the outside of something"
+  },
+  {
+    "id": "up",
+    "text": "up",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "up.svg",
+    "meaning": "Toward a higher place"
+  },
+  {
+    "id": "down",
+    "text": "down",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "down.svg",
+    "meaning": "Toward a lower place"
+  },
+  {
+    "id": "inside",
+    "text": "inside",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "inside_room.svg",
+    "meaning": "Within a room or building",
+    "confusable": [
+      "in"
+    ]
+  },
+  {
+    "id": "outside",
+    "text": "outside",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "outside.svg",
+    "meaning": "In the open air"
+  },
+  {
+    "id": "away",
+    "text": "away",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "away.svg",
+    "meaning": "Farther from a person or place"
+  },
+  {
+    "id": "forward",
+    "text": "forward",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "forwards.svg",
+    "meaning": "Toward the front of you"
+  },
+  {
+    "id": "backward",
+    "text": "backward",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "backwards.svg",
+    "meaning": "Toward the back of you"
+  },
+  {
+    "id": "before",
+    "text": "before",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "before.svg",
+    "meaning": "Earlier than another event"
+  },
+  {
+    "id": "after",
+    "text": "after",
+    "level": "basic",
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "source": "after.svg",
+    "meaning": "Later than another event"
+  },
+  {
+    "id": "zero",
+    "text": "zero",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "Zero.svg",
+    "meaning": "The number showing none"
+  },
+  {
+    "id": "one",
+    "text": "one",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "one_dot.svg",
+    "meaning": "A group with a single thing"
+  },
+  {
+    "id": "two",
+    "text": "two",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "two_dots.svg",
+    "meaning": "The number after one"
+  },
+  {
+    "id": "three",
+    "text": "three",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "three_dots.svg",
+    "meaning": "The number after two"
+  },
+  {
+    "id": "four",
+    "text": "four",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "four_dots.svg",
+    "meaning": "The number after three"
+  },
+  {
+    "id": "five",
+    "text": "five",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "five_dots.svg",
+    "meaning": "The number after four"
+  },
+  {
+    "id": "six",
+    "text": "six",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "six_dots.svg",
+    "meaning": "The number after five"
+  },
+  {
+    "id": "seven",
+    "text": "seven",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "seven_dots.svg",
+    "meaning": "The number after six"
+  },
+  {
+    "id": "eight",
+    "text": "eight",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "eight_dots.svg",
+    "meaning": "The number after seven"
+  },
+  {
+    "id": "nine",
+    "text": "nine",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "nine_dots.svg",
+    "meaning": "The number after eight"
+  },
+  {
+    "id": "ten",
+    "text": "ten",
+    "level": "basic",
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "source": "ten.svg",
+    "meaning": "The number after nine"
+  },
+  {
+    "id": "house",
+    "text": "house",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "house.svg",
+    "meaning": "A building where people live"
+  },
+  {
+    "id": "room",
+    "text": "room",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "room.svg",
+    "meaning": "A space inside a building"
+  },
+  {
+    "id": "floor",
+    "text": "floor",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "floor.svg",
+    "meaning": "The surface you stand on indoors"
+  },
+  {
+    "id": "wall",
+    "text": "wall",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wall.svg",
+    "meaning": "An upright side of a room"
+  },
+  {
+    "id": "stairs",
+    "text": "stairs",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "stairs.svg",
+    "meaning": "Steps connecting different floors"
+  },
+  {
+    "id": "bath",
+    "text": "bath",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "bath.svg",
+    "meaning": "A large tub for washing yourself"
+  },
+  {
+    "id": "shower",
+    "text": "shower",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "shower.svg",
+    "meaning": "A spray of water for washing"
+  },
+  {
+    "id": "sink",
+    "text": "sink",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sink.svg",
+    "meaning": "A basin used for washing things"
+  },
+  {
+    "id": "toilet",
+    "text": "toilet",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "toilet.svg",
+    "meaning": "A seat used when you need to go"
+  },
+  {
+    "id": "drawer",
+    "text": "drawer",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "drawer.svg",
+    "meaning": "A sliding box inside furniture"
+  },
+  {
+    "id": "shelf",
+    "text": "shelf",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "book_shelf.svg",
+    "meaning": "A flat board for storing things"
+  },
+  {
+    "id": "cupboard",
+    "text": "cupboard",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cupboard.svg",
+    "meaning": "A cabinet with doors for storage",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "wardrobe",
+    "text": "wardrobe",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wardrobe.svg",
+    "meaning": "A tall cupboard for hanging clothes",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "fridge",
+    "text": "fridge",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fridge.svg",
+    "meaning": "A machine that keeps food cold"
+  },
+  {
+    "id": "freezer",
+    "text": "freezer",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "freezer.svg",
+    "meaning": "A machine that keeps food frozen"
+  },
+  {
+    "id": "stove",
+    "text": "stove",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cooker.svg",
+    "meaning": "A machine used to cook food"
+  },
+  {
+    "id": "microwave",
+    "text": "microwave",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "microwave.svg",
+    "meaning": "A machine that heats food quickly"
+  },
+  {
+    "id": "basket",
+    "text": "basket",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "basket.svg",
+    "meaning": "A woven container for carrying things"
+  },
+  {
+    "id": "jar",
+    "text": "jar",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "jar.svg",
+    "meaning": "A wide glass container with a lid"
+  },
+  {
+    "id": "bottle",
+    "text": "bottle",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "milk_bottle.svg",
+    "meaning": "A container with a narrow opening",
+    "confusable": [
+      "milk"
+    ]
+  },
+  {
+    "id": "mug",
+    "text": "mug",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "mug_2.svg",
+    "meaning": "A drinking cup with a handle",
+    "confusable": [
+      "cup",
+      "glass"
+    ]
+  },
+  {
+    "id": "glass",
+    "text": "glass",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "glass_,_drinking.svg",
+    "meaning": "A clear container for a drink",
+    "confusable": [
+      "cup",
+      "mug"
+    ]
+  },
+  {
+    "id": "dish",
+    "text": "dish",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dish.svg",
+    "meaning": "A container for serving food",
+    "confusable": [
+      "plate"
+    ]
+  },
+  {
+    "id": "tray",
+    "text": "tray",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tray.svg",
+    "meaning": "A flat surface for carrying dishes"
+  },
+  {
+    "id": "lid",
+    "text": "lid",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lid.svg",
+    "meaning": "The cover on a container"
+  },
+  {
+    "id": "straw",
+    "text": "straw",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "straw.svg",
+    "meaning": "A thin tube for drinking"
+  },
+  {
+    "id": "napkin",
+    "text": "napkin",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "serviette.svg",
+    "meaning": "A small cloth for wiping your mouth"
+  },
+  {
+    "id": "tissue",
+    "text": "tissue",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tissues.svg",
+    "meaning": "Soft paper for wiping your nose"
+  },
+  {
+    "id": "sponge",
+    "text": "sponge",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sponge.svg",
+    "meaning": "A soft item that soaks up water"
+  },
+  {
+    "id": "toothbrush",
+    "text": "toothbrush",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "toothbrush.svg",
+    "meaning": "A small brush for cleaning teeth"
+  },
+  {
+    "id": "toothpaste",
+    "text": "toothpaste",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "toothpaste.svg",
+    "meaning": "A paste used for cleaning teeth"
+  },
+  {
+    "id": "shampoo",
+    "text": "shampoo",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "shampoo.svg",
+    "meaning": "A liquid used to wash hair"
+  },
+  {
+    "id": "hairbrush",
+    "text": "hairbrush",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "hairbrush.svg",
+    "meaning": "A brush for smoothing your hair"
+  },
+  {
+    "id": "hairdryer",
+    "text": "hairdryer",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "hairdryer.svg",
+    "meaning": "A tool that blows warm air"
+  },
+  {
+    "id": "hanger",
+    "text": "hanger",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "clothes_hanger.svg",
+    "meaning": "A shaped frame for hanging clothes"
+  },
+  {
+    "id": "button",
+    "text": "button",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "button.svg",
+    "meaning": "A small fastener on clothes"
+  },
+  {
+    "id": "pocket",
+    "text": "pocket",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pocket.svg",
+    "meaning": "A small cloth pouch in clothing"
+  },
+  {
+    "id": "zipper",
+    "text": "zipper",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "zip.svg",
+    "meaning": "A fastener with two joining rows"
+  },
+  {
+    "id": "umbrella",
+    "text": "umbrella",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "umbrella.svg",
+    "meaning": "A cover held above you in rain"
+  },
+  {
+    "id": "school",
+    "text": "school",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "school.svg",
+    "meaning": "A place where children learn"
+  },
+  {
+    "id": "classroom",
+    "text": "classroom",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "class_room.svg",
+    "meaning": "A room where students learn together"
+  },
+  {
+    "id": "desk",
+    "text": "desk",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "desk.svg",
+    "meaning": "A table for reading and writing"
+  },
+  {
+    "id": "paper",
+    "text": "paper",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "paper.svg",
+    "meaning": "Thin sheets for writing and drawing"
+  },
+  {
+    "id": "notebook",
+    "text": "notebook",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "notebook.svg",
+    "meaning": "A book with pages for writing"
+  },
+  {
+    "id": "chalk",
+    "text": "chalk",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "chalk.svg",
+    "meaning": "A soft stick used for drawing"
+  },
+  {
+    "id": "glue",
+    "text": "glue",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "glue.svg",
+    "meaning": "A sticky substance that joins things"
+  },
+  {
+    "id": "scissors",
+    "text": "scissors",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "scissors.svg",
+    "meaning": "A tool with two cutting blades"
+  },
+  {
+    "id": "sticker",
+    "text": "sticker",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "stickers.svg",
+    "meaning": "A picture with a sticky back"
+  },
+  {
+    "id": "puppet",
+    "text": "puppet",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "puppet.svg",
+    "meaning": "A toy figure moved by a hand"
+  },
+  {
+    "id": "teddy",
+    "text": "teddy",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "teddy_bear.svg",
+    "meaning": "A soft toy shaped like a bear",
+    "confusable": [
+      "bear"
+    ]
+  },
+  {
+    "id": "toy",
+    "text": "toy",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "toys.svg",
+    "meaning": "Something children use for play",
+    "confusable": [
+      "doll"
+    ]
+  },
+  {
+    "id": "present",
+    "text": "present",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "present.svg",
+    "meaning": "Something wrapped and given as a gift"
+  },
+  {
+    "id": "birthday",
+    "text": "birthday",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "birthday_cake.svg",
+    "meaning": "The yearly day someone was born"
+  },
+  {
+    "id": "party",
+    "text": "party",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "party_celebration.svg",
+    "meaning": "A gathering to celebrate together"
+  },
+  {
+    "id": "picnic",
+    "text": "picnic",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "picnic.svg",
+    "meaning": "A meal eaten outdoors"
+  },
+  {
+    "id": "sandbox",
+    "text": "sandbox",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "sand_pit.svg",
+    "meaning": "A play area filled with sand"
+  },
+  {
+    "id": "trampoline",
+    "text": "trampoline",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "trampoline.svg",
+    "meaning": "A stretchy surface used for bouncing"
+  },
+  {
+    "id": "playground",
+    "text": "playground",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "play_area.svg",
+    "meaning": "An outdoor place with play equipment"
+  },
+  {
+    "id": "music",
+    "text": "music",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "music.svg",
+    "meaning": "Sounds arranged to make tunes"
+  },
+  {
+    "id": "art",
+    "text": "art",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "art.svg",
+    "meaning": "Pictures and objects made creatively"
+  },
+  {
+    "id": "circle",
+    "text": "circle",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "circle.svg",
+    "meaning": "A round shape with no corners"
+  },
+  {
+    "id": "square",
+    "text": "square",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "square.svg",
+    "meaning": "A shape with four equal sides",
+    "confusable": [
+      "diamond",
+      "parallelogram",
+      "quadrilateral",
+      "rectangle",
+      "rhombus"
+    ]
+  },
+  {
+    "id": "triangle",
+    "text": "triangle",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "triangle_equilateral.svg",
+    "meaning": "A shape with three sides",
+    "confusable": [
+      "acute",
+      "isosceles",
+      "obtuse",
+      "scalene"
+    ]
+  },
+  {
+    "id": "rectangle",
+    "text": "rectangle",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "rectangle.svg",
+    "meaning": "A shape with four square corners",
+    "confusable": [
+      "diamond",
+      "parallelogram",
+      "quadrilateral",
+      "rhombus",
+      "square"
+    ]
+  },
+  {
+    "id": "oval",
+    "text": "oval",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "oval.svg",
+    "meaning": "A rounded shape like an egg"
+  },
+  {
+    "id": "heart",
+    "text": "heart",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "heart_shape.svg",
+    "meaning": "A shape used to show love"
+  },
+  {
+    "id": "diamond",
+    "text": "diamond",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "diamond.svg",
+    "meaning": "A pointed shape with four equal sides",
+    "confusable": [
+      "parallelogram",
+      "quadrilateral",
+      "rectangle",
+      "rhombus",
+      "square"
+    ]
+  },
+  {
+    "id": "baby",
+    "text": "baby",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "baby.svg",
+    "meaning": "A very young child"
+  },
+  {
+    "id": "family",
+    "text": "family",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "family.svg",
+    "meaning": "People related to and caring for each other"
+  },
+  {
+    "id": "mother",
+    "text": "mother",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "mum_parent.svg",
+    "meaning": "A parent who is a woman"
+  },
+  {
+    "id": "father",
+    "text": "father",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "dad_parent.svg",
+    "meaning": "A parent who is a man"
+  },
+  {
+    "id": "brother",
+    "text": "brother",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "brother.svg",
+    "meaning": "A boy with the same parent"
+  },
+  {
+    "id": "sister",
+    "text": "sister",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "sister.svg",
+    "meaning": "A girl with the same parent"
+  },
+  {
+    "id": "grandmother",
+    "text": "grandmother",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "grandmother.svg",
+    "meaning": "The mother of your parent"
+  },
+  {
+    "id": "grandfather",
+    "text": "grandfather",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "grandfather.svg",
+    "meaning": "The father of your parent"
+  },
+  {
+    "id": "face",
+    "text": "face",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "face_neutral_3.svg",
+    "meaning": "The front part of your head",
+    "confusable": [
+      "head"
+    ]
+  },
+  {
+    "id": "chin",
+    "text": "chin",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "chin.svg",
+    "meaning": "The part below your mouth"
+  },
+  {
+    "id": "cheek",
+    "text": "cheek",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "cheek.svg",
+    "meaning": "The soft side of your face"
+  },
+  {
+    "id": "lips",
+    "text": "lips",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "lips_1.svg",
+    "meaning": "The soft edges of your mouth"
+  },
+  {
+    "id": "tongue",
+    "text": "tongue",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "tongue.svg",
+    "meaning": "The moving part inside your mouth"
+  },
+  {
+    "id": "shoulder",
+    "text": "shoulder",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "shoulder.svg",
+    "meaning": "The body part joining arm and neck"
+  },
+  {
+    "id": "skin",
+    "text": "skin",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "skin.svg",
+    "meaning": "The covering on your body"
+  },
+  {
+    "id": "wrist",
+    "text": "wrist",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "wrist.svg",
+    "meaning": "The joint between hand and arm"
+  },
+  {
+    "id": "lamb",
+    "text": "lamb",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "lamb_2.svg",
+    "meaning": "A young sheep on a farm",
+    "confusable": [
+      "sheep"
+    ]
+  },
+  {
+    "id": "caterpillar",
+    "text": "caterpillar",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "caterpillar.svg",
+    "meaning": "A young insect that becomes a butterfly"
+  },
+  {
+    "id": "piglet",
+    "text": "piglet",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "piglet.svg",
+    "meaning": "A young pig on a farm",
+    "confusable": [
+      "pig"
+    ]
+  },
+  {
+    "id": "goose",
+    "text": "goose",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "goose.svg",
+    "meaning": "A waterbird that makes a honking sound",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "lizard",
+    "text": "lizard",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "lizard.svg",
+    "meaning": "A reptile with scales and a long tail"
+  },
+  {
+    "id": "fly",
+    "text": "fly",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "fly.svg",
+    "meaning": "A small insect with two wings"
+  },
+  {
+    "id": "nest",
+    "text": "nest",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "nest.svg",
+    "meaning": "A bird home made for its eggs"
+  },
+  {
+    "id": "beak",
+    "text": "beak",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "beak.svg",
+    "meaning": "The hard pointed mouth of a bird"
+  },
+  {
+    "id": "wing",
+    "text": "wing",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "wing.svg",
+    "meaning": "The body part a bird uses to fly"
+  },
+  {
+    "id": "paw",
+    "text": "paw",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "paw.svg",
+    "meaning": "The foot of an animal"
+  },
+  {
+    "id": "feather",
+    "text": "feather",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "feather.svg",
+    "meaning": "A light covering on a bird"
+  },
+  {
+    "id": "bud",
+    "text": "bud",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "bud.svg",
+    "meaning": "A small flower before it opens"
+  },
+  {
+    "id": "bush",
+    "text": "bush",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "bush.svg",
+    "meaning": "A low plant with many branches"
+  },
+  {
+    "id": "branch",
+    "text": "branch",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "branch.svg",
+    "meaning": "A woody arm growing from a tree",
+    "confusable": [
+      "stick"
+    ]
+  },
+  {
+    "id": "log",
+    "text": "log",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "log.svg",
+    "meaning": "A thick piece cut from a tree",
+    "confusable": [
+      "wood"
+    ]
+  },
+  {
+    "id": "stick",
+    "text": "stick",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "stick.svg",
+    "meaning": "A thin piece of wood",
+    "confusable": [
+      "branch"
+    ]
+  },
+  {
+    "id": "fruit",
+    "text": "fruit",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fruit.svg",
+    "meaning": "Sweet plant foods with seeds"
+  },
+  {
+    "id": "food",
+    "text": "food",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "food.svg",
+    "meaning": "Things people eat to grow"
+  },
+  {
+    "id": "vegetable",
+    "text": "vegetable",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "vegetables.svg",
+    "meaning": "An edible plant or plant part"
+  },
+  {
+    "id": "toast",
+    "text": "toast",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "toast.svg",
+    "meaning": "Bread made crisp with heat"
+  },
+  {
+    "id": "cereal",
+    "text": "cereal",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cereal.svg",
+    "meaning": "A grain food often eaten for breakfast"
+  },
+  {
+    "id": "yogurt",
+    "text": "yogurt",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "yogurt.svg",
+    "meaning": "A thick creamy food made from milk"
+  },
+  {
+    "id": "pizza",
+    "text": "pizza",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pizza.svg",
+    "meaning": "Flat bread with cheese and toppings"
+  },
+  {
+    "id": "pie",
+    "text": "pie",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pie.svg",
+    "meaning": "Pastry with a sweet or savory filling",
+    "confusable": [
+      "carbohydrate",
+      "dessert"
+    ]
+  },
+  {
+    "id": "sausage",
+    "text": "sausage",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sausages.svg",
+    "meaning": "Meat shaped into a long roll"
+  },
+  {
+    "id": "ham",
+    "text": "ham",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "ham.svg",
+    "meaning": "Cooked meat often used in sandwiches"
+  },
+  {
+    "id": "chocolate",
+    "text": "chocolate",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chocolate.svg",
+    "meaning": "A sweet food made from cocoa"
+  },
+  {
+    "id": "jelly",
+    "text": "jelly",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "jelly.svg",
+    "meaning": "A sweet dessert that wobbles"
+  },
+  {
+    "id": "spaghetti",
+    "text": "spaghetti",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "spaghetti.svg",
+    "meaning": "Pasta shaped into long thin strands",
+    "confusable": [
+      "pasta"
+    ]
+  },
+  {
+    "id": "sugar",
+    "text": "sugar",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sugar_white.svg",
+    "meaning": "Sweet grains added to food"
+  },
+  {
+    "id": "salt",
+    "text": "salt",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "salt.svg",
+    "meaning": "Small white grains used in cooking"
+  },
+  {
+    "id": "flour",
+    "text": "flour",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "flour_plain.svg",
+    "meaning": "Fine powder used to make bread",
+    "confusable": [
+      "carbohydrate",
+      "grain",
+      "ingredients"
+    ]
+  },
+  {
+    "id": "lemonade",
+    "text": "lemonade",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "lemonade.svg",
+    "meaning": "A sweet drink made with lemons"
+  },
+  {
+    "id": "milkshake",
+    "text": "milkshake",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "milkshake.svg",
+    "meaning": "A sweet drink made with milk"
+  },
+  {
+    "id": "breakfast",
+    "text": "breakfast",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "breakfast_1.svg",
+    "meaning": "The first meal of the day"
+  },
+  {
+    "id": "lunch",
+    "text": "lunch",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "lunch_1.svg",
+    "meaning": "A meal eaten around midday"
+  },
+  {
+    "id": "dinner",
+    "text": "dinner",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "dinner.svg",
+    "meaning": "The main meal in the evening"
+  },
+  {
+    "id": "day",
+    "text": "day",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "day.svg",
+    "meaning": "The time when the sun is up"
+  },
+  {
+    "id": "night",
+    "text": "night",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "night.svg",
+    "meaning": "The dark time after sunset"
+  },
+  {
+    "id": "morning",
+    "text": "morning",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "morning.svg",
+    "meaning": "The early part of the day",
+    "confusable": [
+      "day"
+    ]
+  },
+  {
+    "id": "bench",
+    "text": "bench",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "bench.svg",
+    "meaning": "A long seat for several people",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "spring",
+    "text": "spring",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "spring.svg",
+    "meaning": "The season when many flowers grow"
+  },
+  {
+    "id": "summer",
+    "text": "summer",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "summer.svg",
+    "meaning": "The warmest season of the year"
+  },
+  {
+    "id": "autumn",
+    "text": "autumn",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "autumn.svg",
+    "meaning": "The season when many leaves fall"
+  },
+  {
+    "id": "winter",
+    "text": "winter",
+    "level": "basic",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "winter.svg",
+    "meaning": "The coldest season of the year"
+  },
+  {
+    "id": "today",
+    "text": "today",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "today.svg",
+    "meaning": "On this very day"
+  },
+  {
+    "id": "tomorrow",
+    "text": "tomorrow",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "tomorrow.svg",
+    "meaning": "On the day after today"
+  },
+  {
+    "id": "yesterday",
+    "text": "yesterday",
+    "level": "basic",
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "source": "yesterday.svg",
+    "meaning": "On the day before today"
+  }
+]

@@ -51,7 +51,15 @@ func speech_event(game, target: Dictionary, id: String, text: String = "") -> Di
 func _test_compounds() -> void:
 	for fixture in [["seahorse", "sea horse", "sea horses", "horse"], ["sunflower", "sun flower", "sun flowers", "sun"],
 		["sunglasses", "sun glasses", "sun glasses", "sun"], ["pinecone", "pine cone", "pine cones", "cone"],
-		["yoyo", "yo yo", "yo yos", "yo"]]:
+		["yoyo", "yo yo", "yo yos", "yo"],
+		["grandmother", "grand mother", "grand mothers", "mother"], ["grandfather", "grand father", "grand fathers", "father"],
+		["milkshake", "milk shake", "milk shakes", "milk"], ["paperclip", "paper clip", "paper clips", "paper"],
+		["whiteboard", "white board", "white boards", "white"], ["blackboard", "black board", "black boards", "black"],
+		["raincoat", "rain coat", "rain coats", "rain"], ["wheelbarrow", "wheel barrow", "wheel barrows", "wheel"],
+		["lawnmower", "lawn mower", "lawn mowers", "lawn"], ["hairdryer", "hair dryer", "hair dryers", "hair"],
+		["beansprout", "bean sprout", "bean sprouts", "bean"], ["homepage", "home page", "home pages", "home"],
+		["tablecloth", "table cloth", "table cloths", "table"], ["headband", "head band", "head bands", "head"],
+		["playdough", "play dough", "play dough", "play"]]:
 		for spelling in [fixture[1], str(fixture[1]).replace(" ", "-"), fixture[2], str(fixture[2]).replace(" ", "-")]:
 			var game := Model.new()
 			game.configure(words([fixture[0]]), 7)
@@ -651,7 +659,7 @@ func _test_late_throws() -> void:
 func _test_complete_catalog() -> void:
 	for word in catalog:
 		var game := Model.new()
-		check(game.configure([word], 1) and game.start(), "Each of the 350 illustrated lesson words is eligible: " + word.id)
+		check(game.configure([word], 1) and game.start(), "Each illustrated lesson word is eligible: " + word.id)
 		check(game.hit_transcript(word.text).size() == 1, "Each displayed label is recognized exactly: " + word.text)
 	for max_level in [1, 2, 3]:
 		var pool: Array = catalog.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= max_level)

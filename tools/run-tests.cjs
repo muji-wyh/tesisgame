@@ -74,7 +74,7 @@ function createPlan(names = ['all']) {
 function runTests(plan) {
   for (const [index, suite] of plan.godot.entries()) {
     console.log(`\n[Godot ${index + 1}/${plan.godot.length}] ${suite.file}`);
-    // The full vocabulary layout matrix renders 150 additions at six sizes.
+    // The vocabulary layout suite checks all 1,250 labels and representative scenes at six sizes.
     const timeout = suite.file.endsWith('/vocabulary_layout_tests.gd') ? 600000 : 180000;
     const result = runGodot(['--headless', ...suite.options, '--path', '.', '--script', `res://${suite.file}`], { timeout });
     process.stdout.write(result.stdout || '');

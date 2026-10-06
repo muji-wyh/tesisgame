@@ -33,7 +33,7 @@ function messagesFor(root) {
   const messages = Object.entries(prompts).map(([id, text]) => ({ id, text }));
   for (const word of words) {
     if (!word || typeof word.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(word.id) ||
-        typeof word.text !== 'string' || !/^[a-z]{2,10}$/.test(word.text)) {
+        typeof word.text !== 'string' || !/^[a-z]{2,14}$/.test(word.text)) {
       throw new Error('Vocabulary entries need a lowercase ID and a short English word.');
     }
     const id = `word-${word.id}`;
@@ -51,8 +51,12 @@ function messagesFor(root) {
 
 function speechText(text) {
   englishText(text);
-  // Preserve the catalog's audited natural phrase when regenerating this clip.
-  return text === 'kite' ? 'A kite.' : /[.!?]$/.test(text) ? text : `${text}.`;
+  // Short grammatical contexts disambiguate words with multiple pronunciations.
+  // Keep the original kite clip's audited picture-naming phrase unchanged.
+  const contexts = { kite: 'A kite.', close: 'To close.', read: 'To read.', tear: 'To tear.',
+    polish: 'To polish.', separate: 'To separate.', concentrate: 'To concentrate.',
+    present: 'A present.', minute: 'One minute.' };
+  return contexts[text] || (/[.!?]$/.test(text) ? text : `${text}.`);
 }
 
 function assertWave(bytes, rate = 22050) {

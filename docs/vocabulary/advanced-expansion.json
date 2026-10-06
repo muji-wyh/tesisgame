@@ -1,0 +1,2881 @@
+[
+  {
+    "id": "communicate",
+    "text": "communicate",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "communicate_,_to.svg",
+    "meaning": "Share ideas or information with others"
+  },
+  {
+    "id": "attract",
+    "text": "attract",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "attract_,_to.svg",
+    "meaning": "Draw someone closer or get their attention"
+  },
+  {
+    "id": "celebrate",
+    "text": "celebrate",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "celebrate_1_,_to.svg",
+    "meaning": "Do something special for a happy occasion"
+  },
+  {
+    "id": "crumple",
+    "text": "crumple",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "crumple_paper_,_to.svg",
+    "meaning": "Crush paper into a wrinkled shape"
+  },
+  {
+    "id": "crush",
+    "text": "crush",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "crush_,_to.svg",
+    "meaning": "Press something until it breaks down",
+    "confusable": [
+      "mash",
+      "squash"
+    ]
+  },
+  {
+    "id": "crouch",
+    "text": "crouch",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "crouch_,_to.svg",
+    "meaning": "Bend low with knees close together"
+  },
+  {
+    "id": "daydream",
+    "text": "daydream",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "daydream_,_to.svg",
+    "meaning": "Imagine pleasant things while awake"
+  },
+  {
+    "id": "escape",
+    "text": "escape",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "escape_,_to.svg",
+    "meaning": "Get out of a confined place"
+  },
+  {
+    "id": "flip",
+    "text": "flip",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "flip_,_to.svg",
+    "meaning": "Turn something over with a quick movement",
+    "confusable": [
+      "toss"
+    ]
+  },
+  {
+    "id": "hatch",
+    "text": "hatch",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "hatch_,_to.svg",
+    "meaning": "Come out of an egg"
+  },
+  {
+    "id": "order",
+    "text": "order",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "order_1_,_to.svg",
+    "meaning": "Place a request for goods or food"
+  },
+  {
+    "id": "plow",
+    "text": "plow",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "plough_,_to.svg",
+    "meaning": "Turn over soil ready for planting"
+  },
+  {
+    "id": "polish",
+    "text": "polish",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "polish_nails_,_to.svg",
+    "meaning": "Apply a shiny coating to nails"
+  },
+  {
+    "id": "prop",
+    "text": "prop",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "prop_up_,_to.svg",
+    "meaning": "Support something to hold it up"
+  },
+  {
+    "id": "refrigerate",
+    "text": "refrigerate",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "refridgerate_,_to.svg",
+    "meaning": "Keep food cold in a refrigerator"
+  },
+  {
+    "id": "smear",
+    "text": "smear",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "smear_,_to.svg",
+    "meaning": "Spread a substance unevenly over something"
+  },
+  {
+    "id": "squeak",
+    "text": "squeak",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "squeak_,_to.svg",
+    "meaning": "Make a short high pitched sound"
+  },
+  {
+    "id": "squirt",
+    "text": "squirt",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "squirt_,_to.svg",
+    "meaning": "Force liquid out in a thin stream",
+    "confusable": [
+      "spray"
+    ]
+  },
+  {
+    "id": "strain",
+    "text": "strain",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "strain_,_to.svg",
+    "meaning": "Separate liquid from solids with a sieve"
+  },
+  {
+    "id": "transport",
+    "text": "transport",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "transport_car_,_to.svg",
+    "meaning": "Carry people or goods between places"
+  },
+  {
+    "id": "vote",
+    "text": "vote",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "vote_,_to.svg",
+    "meaning": "Choose something by marking a ballot"
+  },
+  {
+    "id": "carve",
+    "text": "carve",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "carve_wood_,_to.svg",
+    "meaning": "Cut wood carefully to make a shape"
+  },
+  {
+    "id": "chop",
+    "text": "chop",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "chop_,_to.svg",
+    "meaning": "Cut food into smaller pieces"
+  },
+  {
+    "id": "dip",
+    "text": "dip",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dip_food_,_to.svg",
+    "meaning": "Put food briefly into a liquid"
+  },
+  {
+    "id": "dribble",
+    "text": "dribble",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dribble_football_,_to.svg",
+    "meaning": "Move a ball with small repeated kicks"
+  },
+  {
+    "id": "download",
+    "text": "download",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "download_,_to.svg",
+    "meaning": "Receive a file onto your computer"
+  },
+  {
+    "id": "drive",
+    "text": "drive",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "drive_,_to.svg",
+    "meaning": "Control the movement of a vehicle"
+  },
+  {
+    "id": "dust",
+    "text": "dust",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "dust_,_to.svg",
+    "meaning": "Remove fine dirt from a surface"
+  },
+  {
+    "id": "iron",
+    "text": "iron",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "iron_,_to.svg",
+    "meaning": "Smooth clothing with a heated tool"
+  },
+  {
+    "id": "meet",
+    "text": "meet",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "meet_,_to.svg",
+    "meaning": "Come together with another person"
+  },
+  {
+    "id": "park",
+    "text": "park",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "park_,_to.svg",
+    "meaning": "Leave a vehicle in a chosen space"
+  },
+  {
+    "id": "plant",
+    "text": "plant",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "plant_,_to.svg",
+    "meaning": "Place something in soil to grow"
+  },
+  {
+    "id": "raise",
+    "text": "raise",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "raise_head_,_to.svg",
+    "meaning": "Lift something to a higher position"
+  },
+  {
+    "id": "reach",
+    "text": "reach",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "reach_for_,_to.svg",
+    "meaning": "Stretch out a hand toward something"
+  },
+  {
+    "id": "retire",
+    "text": "retire",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "retire_,_to.svg",
+    "meaning": "Stop working after a long career"
+  },
+  {
+    "id": "rewind",
+    "text": "rewind",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "rewind.svg",
+    "meaning": "Move a recording back toward its beginning"
+  },
+  {
+    "id": "sign",
+    "text": "sign",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "sign_,_to.svg",
+    "meaning": "Use hand movements to communicate ideas"
+  },
+  {
+    "id": "skid",
+    "text": "skid",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "skid_,_to.svg",
+    "meaning": "Slide sideways without control"
+  },
+  {
+    "id": "stamp",
+    "text": "stamp",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stamp_,_to.svg",
+    "meaning": "Bring a foot down firmly"
+  },
+  {
+    "id": "stroke",
+    "text": "stroke",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "stroke_,_to.svg",
+    "meaning": "Move a hand gently over something"
+  },
+  {
+    "id": "text",
+    "text": "text",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "text_mobile_message_,_to.svg",
+    "meaning": "Send a written message by phone"
+  },
+  {
+    "id": "toss",
+    "text": "toss",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "toss_pancake_,_to.svg",
+    "meaning": "Throw something lightly into the air",
+    "confusable": [
+      "flip"
+    ]
+  },
+  {
+    "id": "work",
+    "text": "work",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "work_,_to.svg",
+    "meaning": "Spend effort doing a useful task"
+  },
+  {
+    "id": "concentrate",
+    "text": "concentrate",
+    "level": "advanced",
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "source": "concentrating_lady.svg",
+    "meaning": "Give your full attention to something"
+  },
+  {
+    "id": "permeable",
+    "text": "permeable",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "permeable.svg",
+    "meaning": "Allowing water to pass through"
+  },
+  {
+    "id": "opaque",
+    "text": "opaque",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "opaque.svg",
+    "meaning": "Not allowing light to pass through"
+  },
+  {
+    "id": "transparent",
+    "text": "transparent",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "transparent.svg",
+    "meaning": "Clear enough to see through"
+  },
+  {
+    "id": "diagonal",
+    "text": "diagonal",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "line_diagonal.svg",
+    "meaning": "Slanting between horizontal and vertical directions"
+  },
+  {
+    "id": "horizontal",
+    "text": "horizontal",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "line_horizontal.svg",
+    "meaning": "Running level from side to side",
+    "confusable": [
+      "flat",
+      "straight"
+    ]
+  },
+  {
+    "id": "parallel",
+    "text": "parallel",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "line_parallel.svg",
+    "meaning": "Always the same distance apart"
+  },
+  {
+    "id": "vertical",
+    "text": "vertical",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "line_vertical.svg",
+    "meaning": "Going straight up and down"
+  },
+  {
+    "id": "acute",
+    "text": "acute",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "triangle_acute.svg",
+    "meaning": "Having angles smaller than a right angle",
+    "confusable": [
+      "isosceles",
+      "obtuse",
+      "scalene",
+      "triangle"
+    ]
+  },
+  {
+    "id": "obtuse",
+    "text": "obtuse",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "triangle_obtuse.svg",
+    "meaning": "Having an angle larger than ninety degrees",
+    "confusable": [
+      "acute",
+      "isosceles",
+      "scalene",
+      "triangle"
+    ]
+  },
+  {
+    "id": "isosceles",
+    "text": "isosceles",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "triangle_isosceles.svg",
+    "meaning": "Having two sides of equal length",
+    "confusable": [
+      "acute",
+      "obtuse",
+      "scalene",
+      "triangle"
+    ]
+  },
+  {
+    "id": "scalene",
+    "text": "scalene",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "triangle_scalene.svg",
+    "meaning": "Having three sides of different lengths",
+    "confusable": [
+      "acute",
+      "isosceles",
+      "obtuse",
+      "triangle"
+    ]
+  },
+  {
+    "id": "flexible",
+    "text": "flexible",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "bendy.svg",
+    "meaning": "Able to bend without breaking"
+  },
+  {
+    "id": "bright",
+    "text": "bright",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "bright.svg",
+    "meaning": "Giving out or reflecting strong light"
+  },
+  {
+    "id": "broken",
+    "text": "broken",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "broken.svg",
+    "meaning": "Damaged so it no longer works"
+  },
+  {
+    "id": "deep",
+    "text": "deep",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "deep.svg",
+    "meaning": "Extending far down from the surface"
+  },
+  {
+    "id": "shallow",
+    "text": "shallow",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "shallow.svg",
+    "meaning": "Having only a small depth"
+  },
+  {
+    "id": "thick",
+    "text": "thick",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "thick.svg",
+    "meaning": "Wide from one surface to another"
+  },
+  {
+    "id": "thin",
+    "text": "thin",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "thin.svg",
+    "meaning": "Having little width or thickness"
+  },
+  {
+    "id": "straight",
+    "text": "straight",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "straight.svg",
+    "meaning": "Continuing without a curve or bend",
+    "confusable": [
+      "flat",
+      "horizontal"
+    ]
+  },
+  {
+    "id": "pointed",
+    "text": "pointed",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "pointed.svg",
+    "meaning": "Ending in a sharp tip"
+  },
+  {
+    "id": "salty",
+    "text": "salty",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "salty.svg",
+    "meaning": "Tasting strongly of salt"
+  },
+  {
+    "id": "messy",
+    "text": "messy",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "messy_room.svg",
+    "meaning": "Untidy with things scattered about"
+  },
+  {
+    "id": "fancy",
+    "text": "fancy",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "fancy.svg",
+    "meaning": "Decorative rather than plain or simple"
+  },
+  {
+    "id": "favorite",
+    "text": "favorite",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "favourite.svg",
+    "meaning": "Liked more than the other choices"
+  },
+  {
+    "id": "frozen",
+    "text": "frozen",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "frozen_food_box.svg",
+    "meaning": "Made solid or very cold by freezing",
+    "confusable": [
+      "cold"
+    ]
+  },
+  {
+    "id": "extra",
+    "text": "extra",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "source": "extra.svg",
+    "meaning": "More than the usual amount"
+  },
+  {
+    "id": "serene",
+    "text": "serene",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "serene_lady.svg",
+    "meaning": "Calm and peaceful in mind",
+    "confusable": [
+      "excited",
+      "funny",
+      "happy",
+      "laugh",
+      "smile"
+    ]
+  },
+  {
+    "id": "disgusted",
+    "text": "disgusted",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "disgusted_man.svg",
+    "meaning": "Feeling a strong dislike for something"
+  },
+  {
+    "id": "excited",
+    "text": "excited",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "excited_lady.svg",
+    "meaning": "Very happy about something happening",
+    "confusable": [
+      "funny",
+      "happy",
+      "laugh",
+      "serene",
+      "smile"
+    ]
+  },
+  {
+    "id": "busy",
+    "text": "busy",
+    "level": "advanced",
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "source": "busy.svg",
+    "meaning": "Having many things to do"
+  },
+  {
+    "id": "atom",
+    "text": "atom",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "atom.svg",
+    "meaning": "A tiny building block of matter"
+  },
+  {
+    "id": "atmosphere",
+    "text": "atmosphere",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "Earths_atmosphere.svg",
+    "meaning": "The layer of gases around Earth"
+  },
+  {
+    "id": "crust",
+    "text": "crust",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "Earth_crust.svg",
+    "meaning": "The hard outer layer of Earth"
+  },
+  {
+    "id": "mantle",
+    "text": "mantle",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "Earth_mantle.svg",
+    "meaning": "The thick layer beneath Earth's crust"
+  },
+  {
+    "id": "core",
+    "text": "core",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "Earth_inner_core.svg",
+    "meaning": "The innermost part of Earth"
+  },
+  {
+    "id": "ozone",
+    "text": "ozone",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "ozone_layer.svg",
+    "meaning": "A gas helping block harmful sunlight"
+  },
+  {
+    "id": "bedrock",
+    "text": "bedrock",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "base_rock.svg",
+    "meaning": "The solid rock beneath loose soil"
+  },
+  {
+    "id": "subsoil",
+    "text": "subsoil",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "subsoil.svg",
+    "meaning": "The layer of earth beneath topsoil"
+  },
+  {
+    "id": "topsoil",
+    "text": "topsoil",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "topsoil.svg",
+    "meaning": "The upper layer where many plants grow"
+  },
+  {
+    "id": "friction",
+    "text": "friction",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "friction.svg",
+    "meaning": "A force resisting surfaces sliding together"
+  },
+  {
+    "id": "gravity",
+    "text": "gravity",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "gravity.svg",
+    "meaning": "The force pulling objects toward Earth"
+  },
+  {
+    "id": "magnet",
+    "text": "magnet",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "magnet.svg",
+    "meaning": "An object that attracts certain metals",
+    "confusable": [
+      "magnetic"
+    ]
+  },
+  {
+    "id": "circuit",
+    "text": "circuit",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "circuit.svg",
+    "meaning": "A complete path for electric current"
+  },
+  {
+    "id": "battery",
+    "text": "battery",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "battery_1.svg",
+    "meaning": "A device that stores electrical energy"
+  },
+  {
+    "id": "lens",
+    "text": "lens",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "lens.svg",
+    "meaning": "A curved piece that bends light"
+  },
+  {
+    "id": "pipette",
+    "text": "pipette",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "dropper_pipette.svg",
+    "meaning": "A narrow tube for moving liquid drops"
+  },
+  {
+    "id": "flask",
+    "text": "flask",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "conical_flask.svg",
+    "meaning": "A narrow necked container used in laboratories"
+  },
+  {
+    "id": "thermometer",
+    "text": "thermometer",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "thermometer.svg",
+    "meaning": "An instrument that measures temperature"
+  },
+  {
+    "id": "tripod",
+    "text": "tripod",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "tripod.svg",
+    "meaning": "A support with three legs"
+  },
+  {
+    "id": "scales",
+    "text": "scales",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "scales.svg",
+    "meaning": "An instrument for measuring weight"
+  },
+  {
+    "id": "science",
+    "text": "science",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "science.svg",
+    "meaning": "The study of the natural world"
+  },
+  {
+    "id": "protein",
+    "text": "protein",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "protein.svg",
+    "meaning": "A nutrient the body needs for growth",
+    "confusable": [
+      "cheese",
+      "milk",
+      "steak"
+    ]
+  },
+  {
+    "id": "carbohydrate",
+    "text": "carbohydrate",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "carbohydrates.svg",
+    "meaning": "A nutrient that supplies the body energy",
+    "confusable": [
+      "bread",
+      "flour",
+      "pasta",
+      "pie"
+    ]
+  },
+  {
+    "id": "fat",
+    "text": "fat",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "fats.svg",
+    "meaning": "A nutrient that stores energy",
+    "confusable": [
+      "butter",
+      "cheese"
+    ]
+  },
+  {
+    "id": "grain",
+    "text": "grain",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "grains.svg",
+    "meaning": "A small hard seed grown for food",
+    "confusable": [
+      "bread",
+      "flour"
+    ]
+  },
+  {
+    "id": "poultry",
+    "text": "poultry",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "poultry.svg",
+    "meaning": "Farm birds raised for meat or eggs"
+  },
+  {
+    "id": "brain",
+    "text": "brain",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "brain.svg",
+    "meaning": "The organ that controls thought and movement"
+  },
+  {
+    "id": "bladder",
+    "text": "bladder",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "bladder.svg",
+    "meaning": "The organ that stores urine"
+  },
+  {
+    "id": "kidney",
+    "text": "kidney",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "kidneys.svg",
+    "meaning": "An organ that filters the blood"
+  },
+  {
+    "id": "lungs",
+    "text": "lungs",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "lungs.svg",
+    "meaning": "Organs used to breathe air"
+  },
+  {
+    "id": "muscle",
+    "text": "muscle",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "muscles.svg",
+    "meaning": "Body tissue that makes movement possible"
+  },
+  {
+    "id": "spine",
+    "text": "spine",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "spine.svg",
+    "meaning": "The backbone supporting the body"
+  },
+  {
+    "id": "trachea",
+    "text": "trachea",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "trachea.svg",
+    "meaning": "The tube carrying air toward the lungs"
+  },
+  {
+    "id": "intestine",
+    "text": "intestine",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "intestine.svg",
+    "meaning": "A long tube that digests food"
+  },
+  {
+    "id": "forearm",
+    "text": "forearm",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "forearm.svg",
+    "meaning": "The arm between elbow and wrist"
+  },
+  {
+    "id": "fingernail",
+    "text": "fingernail",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "fingernail.svg",
+    "meaning": "The hard covering on a fingertip"
+  },
+  {
+    "id": "nostril",
+    "text": "nostril",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "nostril.svg",
+    "meaning": "One of the two nose openings"
+  },
+  {
+    "id": "shin",
+    "text": "shin",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "shin.svg",
+    "meaning": "The front of the lower leg"
+  },
+  {
+    "id": "thigh",
+    "text": "thigh",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "thigh.svg",
+    "meaning": "The leg between hip and knee"
+  },
+  {
+    "id": "throat",
+    "text": "throat",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "throat.svg",
+    "meaning": "The passage inside the neck"
+  },
+  {
+    "id": "eyebrow",
+    "text": "eyebrow",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "eyebrow.svg",
+    "meaning": "Hair growing above an eye"
+  },
+  {
+    "id": "eyelash",
+    "text": "eyelash",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "eyelash.svg",
+    "meaning": "A hair growing along an eyelid"
+  },
+  {
+    "id": "freckles",
+    "text": "freckles",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "freckles.svg",
+    "meaning": "Small brown spots on the skin"
+  },
+  {
+    "id": "antelope",
+    "text": "antelope",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "antelope.svg",
+    "meaning": "A swift hoofed animal with horns"
+  },
+  {
+    "id": "anteater",
+    "text": "anteater",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "ant_eater.svg",
+    "meaning": "A mammal with a long narrow snout"
+  },
+  {
+    "id": "budgie",
+    "text": "budgie",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "budgie.svg",
+    "meaning": "A small colorful parakeet",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "goldfish",
+    "text": "goldfish",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "goldfish.svg",
+    "meaning": "A small orange fish often kept as pet",
+    "confusable": [
+      "fish"
+    ]
+  },
+  {
+    "id": "hamster",
+    "text": "hamster",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "hamster.svg",
+    "meaning": "A small rodent with roomy cheek pouches"
+  },
+  {
+    "id": "mussel",
+    "text": "mussel",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "mussel.svg",
+    "meaning": "A shellfish with two long dark shells"
+  },
+  {
+    "id": "oyster",
+    "text": "oyster",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "oyster.svg",
+    "meaning": "A shellfish with a rough uneven shell"
+  },
+  {
+    "id": "rat",
+    "text": "rat",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "rat.svg",
+    "meaning": "A rodent with a long bare tail"
+  },
+  {
+    "id": "rattlesnake",
+    "text": "rattlesnake",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "rattle_snake.svg",
+    "meaning": "A snake with a rattling tail tip"
+  },
+  {
+    "id": "tortoise",
+    "text": "tortoise",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "tortoise.svg",
+    "meaning": "A land reptile with a domed shell",
+    "confusable": [
+      "turtle"
+    ]
+  },
+  {
+    "id": "tuna",
+    "text": "tuna",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "tuna.svg",
+    "meaning": "A large ocean fish often sold canned",
+    "confusable": [
+      "fish"
+    ]
+  },
+  {
+    "id": "turkey",
+    "text": "turkey",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "turkey.svg",
+    "meaning": "A large bird with a fanned tail",
+    "confusable": [
+      "bird"
+    ]
+  },
+  {
+    "id": "claw",
+    "text": "claw",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "claw.svg",
+    "meaning": "A curved pointed nail on an animal"
+  },
+  {
+    "id": "flipper",
+    "text": "flipper",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "flipper.svg",
+    "meaning": "A broad limb used for swimming"
+  },
+  {
+    "id": "horns",
+    "text": "horns",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "horns.svg",
+    "meaning": "Hard pointed growths on an animal head"
+  },
+  {
+    "id": "scarecrow",
+    "text": "scarecrow",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "scarecrow.svg",
+    "meaning": "A figure that keeps birds from crops"
+  },
+  {
+    "id": "mistletoe",
+    "text": "mistletoe",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "mistletoe.svg",
+    "meaning": "A plant with paired leaves and pale berries"
+  },
+  {
+    "id": "harvest",
+    "text": "harvest",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "harvest.svg",
+    "meaning": "The gathering of fully grown crops"
+  },
+  {
+    "id": "weed",
+    "text": "weed",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "source": "weeds.svg",
+    "meaning": "A plant growing where it is unwanted"
+  },
+  {
+    "id": "algebra",
+    "text": "algebra",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "algebra_formula.svg",
+    "meaning": "Mathematics using letters to stand for numbers"
+  },
+  {
+    "id": "geography",
+    "text": "geography",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "geography.svg",
+    "meaning": "The study of places and the Earth"
+  },
+  {
+    "id": "history",
+    "text": "history",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "history.svg",
+    "meaning": "The study of events in the past"
+  },
+  {
+    "id": "technology",
+    "text": "technology",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "technology.svg",
+    "meaning": "Tools and methods created to solve problems"
+  },
+  {
+    "id": "hexagon",
+    "text": "hexagon",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "hexagon.svg",
+    "meaning": "A shape with six straight sides"
+  },
+  {
+    "id": "heptagon",
+    "text": "heptagon",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "heptagon.svg",
+    "meaning": "A shape with seven straight sides"
+  },
+  {
+    "id": "octagon",
+    "text": "octagon",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "octagon.svg",
+    "meaning": "A shape with eight straight sides"
+  },
+  {
+    "id": "pentagon",
+    "text": "pentagon",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "pentagon.svg",
+    "meaning": "A shape with five straight sides"
+  },
+  {
+    "id": "quadrilateral",
+    "text": "quadrilateral",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "quadrilateral.svg",
+    "meaning": "A shape with four straight sides",
+    "confusable": [
+      "diamond",
+      "parallelogram",
+      "rectangle",
+      "rhombus",
+      "square"
+    ]
+  },
+  {
+    "id": "rhombus",
+    "text": "rhombus",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "rhombus.svg",
+    "meaning": "A quadrilateral with four equal sides",
+    "confusable": [
+      "diamond",
+      "parallelogram",
+      "quadrilateral",
+      "rectangle",
+      "square"
+    ]
+  },
+  {
+    "id": "parallelogram",
+    "text": "parallelogram",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "parallelogram.svg",
+    "meaning": "A quadrilateral with two parallel side pairs",
+    "confusable": [
+      "diamond",
+      "quadrilateral",
+      "rectangle",
+      "rhombus",
+      "square"
+    ]
+  },
+  {
+    "id": "trapezoid",
+    "text": "trapezoid",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "trapezium.svg",
+    "meaning": "A quadrilateral with a parallel side pair"
+  },
+  {
+    "id": "pyramid",
+    "text": "pyramid",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "pyramid_square_base.svg",
+    "meaning": "A solid with sides meeting at a point"
+  },
+  {
+    "id": "prism",
+    "text": "prism",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "prism_triangular.svg",
+    "meaning": "A solid with matching parallel end faces"
+  },
+  {
+    "id": "percent",
+    "text": "percent",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "percent.svg",
+    "meaning": "An amount measured out of one hundred"
+  },
+  {
+    "id": "fraction",
+    "text": "fraction",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "two_thirds.svg",
+    "meaning": "A number representing part of a whole"
+  },
+  {
+    "id": "address",
+    "text": "address",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "web_address.svg",
+    "meaning": "The location of a page on the internet"
+  },
+  {
+    "id": "graph",
+    "text": "graph",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "graph_column.svg",
+    "meaning": "A diagram used to compare amounts"
+  },
+  {
+    "id": "palette",
+    "text": "palette",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "artist_palette.svg",
+    "meaning": "A board used for mixing paint"
+  },
+  {
+    "id": "vacuum",
+    "text": "vacuum",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "vacuum_cleaner_1.svg",
+    "meaning": "A machine that sucks up dust and dirt"
+  },
+  {
+    "id": "whiteboard",
+    "text": "whiteboard",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "whiteboard.svg",
+    "meaning": "A smooth white surface for erasable writing"
+  },
+  {
+    "id": "blackboard",
+    "text": "blackboard",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "blackboard.svg",
+    "meaning": "A dark board used for chalk writing"
+  },
+  {
+    "id": "binder",
+    "text": "binder",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "ring_binder.svg",
+    "meaning": "A cover with rings holding punched pages"
+  },
+  {
+    "id": "folder",
+    "text": "folder",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "computer_folder.svg",
+    "meaning": "A place for grouping files"
+  },
+  {
+    "id": "photocopier",
+    "text": "photocopier",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "photocopier.svg",
+    "meaning": "A machine that makes copies of documents"
+  },
+  {
+    "id": "joystick",
+    "text": "joystick",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "joystick_PennyGiles.svg",
+    "meaning": "A lever used to control games"
+  },
+  {
+    "id": "bingo",
+    "text": "bingo",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "bingo.svg",
+    "meaning": "A game matching called numbers"
+  },
+  {
+    "id": "boccia",
+    "text": "boccia",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "boccia.svg",
+    "meaning": "A game throwing balls near a target"
+  },
+  {
+    "id": "darts",
+    "text": "darts",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "darts.svg",
+    "meaning": "A game throwing pointed pieces at targets"
+  },
+  {
+    "id": "judo",
+    "text": "judo",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "judo.svg",
+    "meaning": "A sport using throws and controlled holds"
+  },
+  {
+    "id": "rugby",
+    "text": "rugby",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "rugby_ball.svg",
+    "meaning": "A team sport with an oval ball"
+  },
+  {
+    "id": "athletics",
+    "text": "athletics",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "race_athletics.svg",
+    "meaning": "Sports including running and jumping"
+  },
+  {
+    "id": "rosette",
+    "text": "rosette",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "rosette.svg",
+    "meaning": "A ribbon decoration given as an award"
+  },
+  {
+    "id": "stirrups",
+    "text": "stirrups",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "stirrups.svg",
+    "meaning": "Foot supports attached to a riding saddle"
+  },
+  {
+    "id": "bridle",
+    "text": "bridle",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "bridle.svg",
+    "meaning": "Straps used to guide a horse"
+  },
+  {
+    "id": "playdough",
+    "text": "playdough",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "playdough.svg",
+    "meaning": "Soft modeling material used for creative play"
+  },
+  {
+    "id": "beansprout",
+    "text": "beansprout",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "beansprouts.svg",
+    "meaning": "A newly sprouted bean eaten as food"
+  },
+  {
+    "id": "celeriac",
+    "text": "celeriac",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "celeriac.svg",
+    "meaning": "A knobbly root vegetable related to celery"
+  },
+  {
+    "id": "chestnut",
+    "text": "chestnut",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chestnuts.svg",
+    "meaning": "A glossy brown nut with a pointed end",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "chili",
+    "text": "chili",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chilli_pepper.svg",
+    "meaning": "A small pepper with a hot flavor"
+  },
+  {
+    "id": "cranberry",
+    "text": "cranberry",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "cranberries.svg",
+    "meaning": "A small tart red fruit"
+  },
+  {
+    "id": "cable",
+    "text": "cable",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "computer_cable.svg",
+    "meaning": "Insulated wires carrying electricity or information"
+  },
+  {
+    "id": "curry",
+    "text": "curry",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "curry.svg",
+    "meaning": "A dish cooked with a spiced sauce"
+  },
+  {
+    "id": "date",
+    "text": "date",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dates.svg",
+    "meaning": "A sweet fruit grown on palm trees"
+  },
+  {
+    "id": "dessert",
+    "text": "dessert",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dessert.svg",
+    "meaning": "A sweet dish served after a meal",
+    "confusable": [
+      "cake",
+      "cookie",
+      "meringue",
+      "pie",
+      "tart"
+    ]
+  },
+  {
+    "id": "macadamia",
+    "text": "macadamia",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "macadamias.svg",
+    "meaning": "A round creamy nut with a hard shell",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "macaroni",
+    "text": "macaroni",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "macaroni.svg",
+    "meaning": "Pasta shaped like short curved tubes"
+  },
+  {
+    "id": "margarine",
+    "text": "margarine",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "margarine.svg",
+    "meaning": "A buttery spread made from vegetable oils"
+  },
+  {
+    "id": "mayonnaise",
+    "text": "mayonnaise",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "mayonnaise.svg",
+    "meaning": "A thick sauce made with oil and eggs"
+  },
+  {
+    "id": "meringue",
+    "text": "meringue",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "meringues.svg",
+    "meaning": "A crisp sweet made with whipped egg whites",
+    "confusable": [
+      "dessert"
+    ]
+  },
+  {
+    "id": "muesli",
+    "text": "muesli",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "muesli.svg",
+    "meaning": "A cereal mixture of oats fruit and nuts"
+  },
+  {
+    "id": "kebab",
+    "text": "kebab",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "kebab.svg",
+    "meaning": "Pieces of food cooked on a skewer"
+  },
+  {
+    "id": "pastry",
+    "text": "pastry",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "pastry.svg",
+    "meaning": "Dough used to make pies and tarts"
+  },
+  {
+    "id": "peanut",
+    "text": "peanut",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "peanut.svg",
+    "meaning": "A nutlike seed growing in underground pods",
+    "confusable": [
+      "nut"
+    ]
+  },
+  {
+    "id": "quiche",
+    "text": "quiche",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "quiche_flan.svg",
+    "meaning": "A savory pastry filled with eggs"
+  },
+  {
+    "id": "recipe",
+    "text": "recipe",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "recipe.svg",
+    "meaning": "Instructions for preparing a dish"
+  },
+  {
+    "id": "salad",
+    "text": "salad",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "salad_plate.svg",
+    "meaning": "A dish of mixed fresh vegetables"
+  },
+  {
+    "id": "steak",
+    "text": "steak",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "steak.svg",
+    "meaning": "A thick slice of meat for cooking",
+    "confusable": [
+      "protein"
+    ]
+  },
+  {
+    "id": "stuffing",
+    "text": "stuffing",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "stuffing.svg",
+    "meaning": "A seasoned mixture cooked inside food"
+  },
+  {
+    "id": "swede",
+    "text": "swede",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "swede.svg",
+    "meaning": "A root vegetable with yellow flesh"
+  },
+  {
+    "id": "tart",
+    "text": "tart",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tart.svg",
+    "meaning": "An open pastry holding a filling",
+    "confusable": [
+      "dessert"
+    ]
+  },
+  {
+    "id": "dairy",
+    "text": "dairy",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dairy_products.svg",
+    "meaning": "Foods made from animal milk",
+    "confusable": [
+      "butter",
+      "cheese",
+      "milk"
+    ]
+  },
+  {
+    "id": "ingredients",
+    "text": "ingredients",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "ingredients.svg",
+    "meaning": "The foods used to make a dish",
+    "confusable": [
+      "butter",
+      "egg",
+      "flour"
+    ]
+  },
+  {
+    "id": "barbecue",
+    "text": "barbecue",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "barbeque.svg",
+    "meaning": "An outdoor cooker using glowing coals"
+  },
+  {
+    "id": "blender",
+    "text": "blender",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "food_blender.svg",
+    "meaning": "A machine that chops and mixes food"
+  },
+  {
+    "id": "grater",
+    "text": "grater",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "grater.svg",
+    "meaning": "A tool that shreds food into pieces"
+  },
+  {
+    "id": "masher",
+    "text": "masher",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "masher.svg",
+    "meaning": "A tool for crushing cooked food"
+  },
+  {
+    "id": "peeler",
+    "text": "peeler",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "peeler.svg",
+    "meaning": "A tool that removes thin vegetable skins"
+  },
+  {
+    "id": "saucepan",
+    "text": "saucepan",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "saucepan.svg",
+    "meaning": "A deep cooking pan with a handle",
+    "confusable": [
+      "casserole",
+      "pot"
+    ]
+  },
+  {
+    "id": "steamer",
+    "text": "steamer",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "steamer.svg",
+    "meaning": "A cooker that uses hot water vapor"
+  },
+  {
+    "id": "tablecloth",
+    "text": "tablecloth",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tablecloth.svg",
+    "meaning": "A cloth that covers a table"
+  },
+  {
+    "id": "chandelier",
+    "text": "chandelier",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chandelier.svg",
+    "meaning": "A decorative hanging light with several lamps"
+  },
+  {
+    "id": "chimney",
+    "text": "chimney",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chimney.svg",
+    "meaning": "A passage carrying smoke out of buildings"
+  },
+  {
+    "id": "ceiling",
+    "text": "ceiling",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "ceiling.svg",
+    "meaning": "The upper inside surface of a room"
+  },
+  {
+    "id": "dresser",
+    "text": "dresser",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "dresser.svg",
+    "meaning": "A storage cabinet with drawers or shelves",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "armchair",
+    "text": "armchair",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "arm_chair.svg",
+    "meaning": "A comfortable chair with side supports",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "bookcase",
+    "text": "bookcase",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "bookcase.svg",
+    "meaning": "A piece of furniture with shelves for books",
+    "confusable": [
+      "furniture"
+    ]
+  },
+  {
+    "id": "blinds",
+    "text": "blinds",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "blinds.svg",
+    "meaning": "Adjustable strips that cover a window"
+  },
+  {
+    "id": "headboard",
+    "text": "headboard",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "headboard.svg",
+    "meaning": "A board standing at the head of bed"
+  },
+  {
+    "id": "fireplace",
+    "text": "fireplace",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "fireplace.svg",
+    "meaning": "A space in a wall for fire"
+  },
+  {
+    "id": "briefcase",
+    "text": "briefcase",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "briefcase_1.svg",
+    "meaning": "A handled case for carrying documents"
+  },
+  {
+    "id": "clamp",
+    "text": "clamp",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "clamp.svg",
+    "meaning": "A tool that holds things tightly together"
+  },
+  {
+    "id": "chisel",
+    "text": "chisel",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "chisel.svg",
+    "meaning": "A sharp edged tool for shaping wood"
+  },
+  {
+    "id": "drill",
+    "text": "drill",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "drill_electric.svg",
+    "meaning": "A powered tool that makes holes"
+  },
+  {
+    "id": "hoe",
+    "text": "hoe",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "hoe.svg",
+    "meaning": "A garden tool for loosening soil"
+  },
+  {
+    "id": "rake",
+    "text": "rake",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "rake.svg",
+    "meaning": "A toothed tool for gathering leaves"
+  },
+  {
+    "id": "saw",
+    "text": "saw",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "saw.svg",
+    "meaning": "A toothed tool that cuts wood"
+  },
+  {
+    "id": "spade",
+    "text": "spade",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "spade.svg",
+    "meaning": "A tool for digging and moving soil"
+  },
+  {
+    "id": "trowel",
+    "text": "trowel",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "trowel.svg",
+    "meaning": "A small tool for planting and digging"
+  },
+  {
+    "id": "wheelbarrow",
+    "text": "wheelbarrow",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "wheelbarrow.svg",
+    "meaning": "A small wheeled cart pushed by hand"
+  },
+  {
+    "id": "varnish",
+    "text": "varnish",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "varnish.svg",
+    "meaning": "A clear coating that protects wood"
+  },
+  {
+    "id": "string",
+    "text": "string",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "string.svg",
+    "meaning": "A thin cord used for tying"
+  },
+  {
+    "id": "nail",
+    "text": "nail",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "nail.svg",
+    "meaning": "A pointed metal pin used for fastening"
+  },
+  {
+    "id": "hose",
+    "text": "hose",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "hose.svg",
+    "meaning": "A flexible tube that carries water"
+  },
+  {
+    "id": "sunscreen",
+    "text": "sunscreen",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sunscreen.svg",
+    "meaning": "A cream that protects skin from sunlight"
+  },
+  {
+    "id": "goggles",
+    "text": "goggles",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "safety_goggles.svg",
+    "meaning": "Protective glasses that shield the eyes"
+  },
+  {
+    "id": "visor",
+    "text": "visor",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "visor.svg",
+    "meaning": "A shield or brim protecting the face"
+  },
+  {
+    "id": "tracksuit",
+    "text": "tracksuit",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "tracksuit.svg",
+    "meaning": "A matching jacket and pants for exercise"
+  },
+  {
+    "id": "petticoat",
+    "text": "petticoat",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "petticoat.svg",
+    "meaning": "An underskirt worn beneath a dress"
+  },
+  {
+    "id": "sweatshirt",
+    "text": "sweatshirt",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sweatshirt.svg",
+    "meaning": "A warm casual long sleeved top",
+    "confusable": [
+      "blouse",
+      "shirt",
+      "sweater"
+    ]
+  },
+  {
+    "id": "sandals",
+    "text": "sandals",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "sandals.svg",
+    "meaning": "Open shoes fastened with straps",
+    "confusable": [
+      "shoe"
+    ]
+  },
+  {
+    "id": "headband",
+    "text": "headband",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "headband.svg",
+    "meaning": "A strip worn around the head"
+  },
+  {
+    "id": "earrings",
+    "text": "earrings",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "source": "earrings.svg",
+    "meaning": "Small ornaments worn on the ears"
+  },
+  {
+    "id": "paramedic",
+    "text": "paramedic",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "paramedic_1a.svg",
+    "meaning": "A medical worker giving emergency care"
+  },
+  {
+    "id": "therapist",
+    "text": "therapist",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "speech_language_therapist_1a.svg",
+    "meaning": "A specialist helping people develop communication skills"
+  },
+  {
+    "id": "secretary",
+    "text": "secretary",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "secretary_1a.svg",
+    "meaning": "A worker who organizes office information"
+  },
+  {
+    "id": "caretaker",
+    "text": "caretaker",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "caretaker_1a.svg",
+    "meaning": "A person who looks after a building"
+  },
+  {
+    "id": "mechanic",
+    "text": "mechanic",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "car_mechanic_1a.svg",
+    "meaning": "A person who repairs vehicles"
+  },
+  {
+    "id": "greengrocer",
+    "text": "greengrocer",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "greengrocer_1a.svg",
+    "meaning": "A person who sells fruit and vegetables"
+  },
+  {
+    "id": "porter",
+    "text": "porter",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "porter_hospital_1a.svg",
+    "meaning": "A hospital worker who moves equipment"
+  },
+  {
+    "id": "shepherd",
+    "text": "shepherd",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "shepherd_1a.svg",
+    "meaning": "A person who looks after sheep"
+  },
+  {
+    "id": "principal",
+    "text": "principal",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "head_teacher_1a.svg",
+    "meaning": "The person in charge of a school"
+  },
+  {
+    "id": "chef",
+    "text": "chef",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "cook_chef_1a.svg",
+    "meaning": "A professional cook who prepares meals"
+  },
+  {
+    "id": "nurse",
+    "text": "nurse",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "nurse_1a.svg",
+    "meaning": "A person trained to care for patients"
+  },
+  {
+    "id": "visitor",
+    "text": "visitor",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "visitor_1a.svg",
+    "meaning": "A person who comes to see someone"
+  },
+  {
+    "id": "aunt",
+    "text": "aunt",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "aunt_maternal.svg",
+    "meaning": "A sister of one of your parents"
+  },
+  {
+    "id": "medicine",
+    "text": "medicine",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "medicine.svg",
+    "meaning": "A substance used to treat illness"
+  },
+  {
+    "id": "inhaler",
+    "text": "inhaler",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "inhaler.svg",
+    "meaning": "A device that delivers medicine for breathing"
+  },
+  {
+    "id": "stethoscope",
+    "text": "stethoscope",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "stethoscope.svg",
+    "meaning": "An instrument for listening inside the body"
+  },
+  {
+    "id": "syringe",
+    "text": "syringe",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "syringe.svg",
+    "meaning": "A tube used to measure or inject liquid"
+  },
+  {
+    "id": "plaster",
+    "text": "plaster",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "plaster.svg",
+    "meaning": "A small sticky covering for a wound"
+  },
+  {
+    "id": "sling",
+    "text": "sling",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "sling.svg",
+    "meaning": "A support for an injured arm"
+  },
+  {
+    "id": "rash",
+    "text": "rash",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "rash.svg",
+    "meaning": "An irritated patch on the skin"
+  },
+  {
+    "id": "scar",
+    "text": "scar",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "scar.svg",
+    "meaning": "A mark left after a wound heals"
+  },
+  {
+    "id": "headache",
+    "text": "headache",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "headache.svg",
+    "meaning": "Pain felt inside the head"
+  },
+  {
+    "id": "toothache",
+    "text": "toothache",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "toothache.svg",
+    "meaning": "Pain in or around a tooth"
+  },
+  {
+    "id": "wheelchair",
+    "text": "wheelchair",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "source": "wheelchair.svg",
+    "meaning": "A wheeled chair used for moving around"
+  },
+  {
+    "id": "future",
+    "text": "future",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "future.svg",
+    "meaning": "The time that has not happened yet"
+  },
+  {
+    "id": "past",
+    "text": "past",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "past.svg",
+    "meaning": "The time before the present"
+  },
+  {
+    "id": "east",
+    "text": "east",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "east.svg",
+    "meaning": "The direction where the sun rises"
+  },
+  {
+    "id": "west",
+    "text": "west",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "west.svg",
+    "meaning": "The direction where the sun sets"
+  },
+  {
+    "id": "north",
+    "text": "north",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "north.svg",
+    "meaning": "The direction toward the North Pole"
+  },
+  {
+    "id": "south",
+    "text": "south",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "south.svg",
+    "meaning": "The direction toward the South Pole"
+  },
+  {
+    "id": "northeast",
+    "text": "northeast",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "north_east.svg",
+    "meaning": "The direction between north and east"
+  },
+  {
+    "id": "northwest",
+    "text": "northwest",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "north_west.svg",
+    "meaning": "The direction between north and west"
+  },
+  {
+    "id": "southeast",
+    "text": "southeast",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "south_east.svg",
+    "meaning": "The direction between south and east"
+  },
+  {
+    "id": "southwest",
+    "text": "southwest",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "south_west.svg",
+    "meaning": "The direction between south and west"
+  },
+  {
+    "id": "hour",
+    "text": "hour",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "one_hour.svg",
+    "meaning": "A period lasting sixty minutes"
+  },
+  {
+    "id": "month",
+    "text": "month",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "calendar_month.svg",
+    "meaning": "One of twelve parts of a year"
+  },
+  {
+    "id": "week",
+    "text": "week",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "week_1.svg",
+    "meaning": "A period lasting seven days"
+  },
+  {
+    "id": "aquarium",
+    "text": "aquarium",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "aquarium.svg",
+    "meaning": "A tank or building displaying aquatic animals"
+  },
+  {
+    "id": "stable",
+    "text": "stable",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "stable.svg",
+    "meaning": "A building where horses are kept"
+  },
+  {
+    "id": "kennel",
+    "text": "kennel",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "kennel.svg",
+    "meaning": "A shelter or boarding place for dogs"
+  },
+  {
+    "id": "passport",
+    "text": "passport",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "passport.svg",
+    "meaning": "An official document used for international travel"
+  },
+  {
+    "id": "parade",
+    "text": "parade",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "parade_1.svg",
+    "meaning": "An organized procession through public streets"
+  },
+  {
+    "id": "motorcycle",
+    "text": "motorcycle",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "motorcycle.svg",
+    "meaning": "A motor vehicle with two wheels"
+  },
+  {
+    "id": "moped",
+    "text": "moped",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "moped.svg",
+    "meaning": "A small light motorcycle"
+  },
+  {
+    "id": "coach",
+    "text": "coach",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "coach.svg",
+    "meaning": "A bus used for longer journeys",
+    "confusable": [
+      "bus"
+    ]
+  },
+  {
+    "id": "lift",
+    "text": "lift",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "source": "lift.svg",
+    "meaning": "A machine carrying people between floors"
+  },
+  {
+    "id": "internet",
+    "text": "internet",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "internet.svg",
+    "meaning": "A worldwide network connecting computers"
+  },
+  {
+    "id": "email",
+    "text": "email",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "email.svg",
+    "meaning": "A message sent over computer networks"
+  },
+  {
+    "id": "attachment",
+    "text": "attachment",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "email_attachment.svg",
+    "meaning": "A file sent with an email"
+  },
+  {
+    "id": "homepage",
+    "text": "homepage",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "homepage.svg",
+    "meaning": "The main page of a website"
+  },
+  {
+    "id": "inbox",
+    "text": "inbox",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "inbox.svg",
+    "meaning": "A place where incoming messages are stored"
+  },
+  {
+    "id": "outbox",
+    "text": "outbox",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "outbox.svg",
+    "meaning": "A place holding messages waiting to send"
+  },
+  {
+    "id": "webcam",
+    "text": "webcam",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "webcam.svg",
+    "meaning": "A camera that sends video through computers"
+  },
+  {
+    "id": "keyboard",
+    "text": "keyboard",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "computer_keyboard.svg",
+    "meaning": "Keys used for entering computer information"
+  },
+  {
+    "id": "monitor",
+    "text": "monitor",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "computer_monitor.svg",
+    "meaning": "A screen that displays computer information"
+  },
+  {
+    "id": "software",
+    "text": "software",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "computer_programme.svg",
+    "meaning": "Programs that tell a computer what to do"
+  },
+  {
+    "id": "network",
+    "text": "network",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "networked_computers.svg",
+    "meaning": "Connected computers that can share information"
+  },
+  {
+    "id": "charger",
+    "text": "charger",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "charger_electric.svg",
+    "meaning": "A device that supplies power to batteries"
+  },
+  {
+    "id": "socket",
+    "text": "socket",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "mains_socket.svg",
+    "meaning": "A connection point for an electrical plug"
+  },
+  {
+    "id": "stereo",
+    "text": "stereo",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "stereo.svg",
+    "meaning": "An audio system with separated sound channels"
+  },
+  {
+    "id": "camera",
+    "text": "camera",
+    "level": "advanced",
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "source": "camera.svg",
+    "meaning": "A device for taking photographs"
+  }
+]

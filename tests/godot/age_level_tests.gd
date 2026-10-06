@@ -15,7 +15,7 @@ func _initialize() -> void:
 	var Data = load("res://scripts/game_data.gd")
 	var Model = load("res://scripts/game_model.gd")
 	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	check(words.size() == 350, "The expanded catalogue contains 350 illustrated words")
+	check(words.size() == 1250, "The expanded catalogue contains 1,250 illustrated words")
 	check(Data.has_method("age_bands") and Data.has_method("word_level"), "Age levels expose one shared selection contract")
 	if failures:
 		quit(1)
@@ -33,17 +33,23 @@ func _initialize() -> void:
 		check(word.has("level") and word.level in ["basic", "growing", "advanced"],
 			"Every authored word has an explicit reviewed level: " + word.id)
 		level_counts[Data.word_level(word)] += 1
-	check(level_counts == {1: 148, 2: 112, 3: 90}, "Each level adds fifty words while preserving all previous vocabulary")
+	check(level_counts == {1: 448, 2: 412, 3: 390}, "Each level adds 300 words while preserving all previous vocabulary")
+	var additions: Array = words.slice(350)
+	check(additions.size() == 900, "The new expansion preserves the 350-word prefix")
+	for level in ["basic", "growing", "advanced"]:
+		var added: Array = additions.filter(func(word: Dictionary) -> bool: return word.level == level)
+		check(added.size() == 300 and added.any(func(word: Dictionary) -> bool: return word.part_of_speech != "noun"),
+			"Every tier adds exactly 300 words and includes language beyond objects")
 	for band in bands:
 		var eligible: Array = words.filter(func(word: Dictionary) -> bool: return Data.word_level(word) <= band.max_level)
-		var expected_sizes: Dictionary = {"all": 350, "4-6": 148, "7-9": 260, "10-plus": 350}
+		var expected_sizes: Dictionary = {"all": 1250, "4-6": 448, "7-9": 860, "10-plus": 1250}
 		check(eligible.size() == expected_sizes[band.id], "The " + band.id + " pool retains cumulative review words")
 	for pair in [["bird", "parrot"], ["nut", "hazelnut"], ["boat", "sailboat"],
 		["beach", "sand"], ["foot", "toe"], ["galaxy", "universe"], ["kettle", "teapot"]]:
 		check(Data.confusable_words(pair[0], pair[1]) and Data.confusable_words(pair[1], pair[0]),
 			"New overlapping picture meanings stay out of the same lesson: " + str(pair))
 	for band in bands:
-		for topic in Data.ADVENTURES:
+		for topic in Data.adventures(words):
 			var highest_level := 0
 			for word in words:
 				if topic.words.has(word.id) and Data.word_level(word) <= band.max_level:
@@ -66,7 +72,7 @@ func _initialize() -> void:
 						"Higher available levels lead; earlier vocabulary remains review")
 				for first in range(5):
 					for second in range(first + 1, 5):
-						check(not Data.confusable_words(model.lesson_words[first].id, model.lesson_words[second].id),
+						check(not Data.word_pair_conflicts(model.lesson_words[first], model.lesson_words[second]),
 							"Age filtering never introduces ambiguous partners")
 	var model = Model.new()
 	check(model.reset(words, 17, false, "", "", "4-6"), "A basic lesson starts")
@@ -107,8 +113,26 @@ func _initialize() -> void:
 		check(not model.reset(invalid, 1) and not model.error.is_empty() and model.cards == previous,
 			"Invalid supplied levels cannot silently filter or replace the active lesson")
 	var invalid: Array = words.duplicate(true)
-	invalid[0].text = "extraordinary"
+	invalid[0].text = "incomprehensible"
 	check(not Data.validate_words(invalid).is_empty(), "The expanded word-length limit stays bounded")
+	var bounded: Array = words.slice(0, 5).duplicate(true)
+	bounded[0].text = "responsibility"
+	check(Data.validate_words(bounded).is_empty(), "Fourteen-letter vocabulary can use the shared catalog")
+	for metadata in [{"part_of_speech": "unknown"}, {"topic": "missing-topic"}, {"confusable": "happy"}, {"confusable": [false]}]:
+		var malformed: Array = words.slice(0, 5).duplicate(true)
+		malformed[0].merge(metadata, true)
+		check(not Data.validate_words(malformed).is_empty(), "Invalid learning metadata is rejected")
+	var first: Dictionary = {"id": "happy", "text": "happy", "art_key": "mulberry/happy.svg", "confusable": ["glad"]}
+	var second: Dictionary = {"id": "glad", "text": "glad", "art_key": "mulberry/glad.svg"}
+	check(Data.word_pair_conflicts(first, second) and Data.word_pair_conflicts(second, first),
+		"Reviewed similar meanings cannot share a board in either order")
+	first.erase("confusable")
+	second.art_key = first.art_key
+	check(Data.word_pair_conflicts(first, second), "Shared artwork cannot create two correct picture answers")
+	second.art_key = "mulberry/glad.svg"
+	check(not Data.word_pair_conflicts(first, second), "Distinct artwork remains eligible without an authored conflict")
+	check(Model.new()._distinct_words([first, {"id": "blue", "text": "blue"}, second]).size() == 3,
+		"Unrelated language categories can share a complete lesson")
 	var legacy: Array = words.slice(0, 5).duplicate(true)
 	for word in legacy:
 		word.erase("level")

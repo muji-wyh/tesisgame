@@ -13,12 +13,23 @@ rename preserves existing native and browser saves.
 | Field | Purpose |
 |---|---|
 | `id` | Unique stable lowercase identifier. |
-| `text` | Unique lowercase English word, 2-10 letters. |
+| `text` | Unique lowercase English word, 2-14 letters. |
 | `image` | Unique local picture under `assets/images/words/`. |
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 | `level` | `basic`, `growing`, or `advanced`; explicitly authored for every catalogue entry. Older four-field callers default to `basic`; invalid supplied levels are rejected. |
 
-The 350 word pictures live together in `assets\images\words`. Word/reward SVGs, English prompt scripts and synthesized SFX were generated for this project. Prerecorded speech uses the approved **Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged volume. Microsoft Edge online TTS generates these source recordings; playback and ordinary builds need no speech service or credentials. Optional microphone recognition is a separate browser-provided service. All 350 word recordings, background music, active prompts and sound effects are included in the startup PCK.
+The 1,250 word pictures live together in `assets\images\words`: 350 legacy SVGs and
+900 sourced Mulberry PNGs. The [source manifest and import guide](mulberry-vocabulary.md)
+describe their distinct origins and licenses. Prerecorded speech uses the approved
+**Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged
+volume. Microsoft Edge online TTS generates these source recordings; playback and
+ordinary builds need no speech service or credentials. Optional microphone recognition
+is a separate browser-provided service. All 1,250 word recordings, background music,
+active prompts and sound effects are included in the startup PCK.
+
+The 900 new entries also include `part_of_speech`, `meaning`, `topic`, `art_key`,
+and optional `confusable` IDs. These preserve the intended sense, prevent invalid
+noun endings for other parts of speech, and keep confusing answers apart.
 
 Pip's original pose, idle-action and dance-part sheets are maintained under
 `assets\images\mascots`. The regular sheet's four frames are idle, speaking,
@@ -29,7 +40,7 @@ check that committed sheets match their sources. Native `duck_mascot.gd` loads
 the selected costume's pose, idle and dance sheets; the Web build embeds the
 themed regular poses and dance parts for the loading and voice companions.
 
-The collection keeps words to 2-10 lowercase letters across twelve picture-word topics:
+The 350 legacy entries retain their twelve picture-word topics:
 
 | Topic | Words |
 |---|---:|
@@ -56,12 +67,22 @@ python tools\import-casual-bgm.py --check
 node tools\generate-sfx.cjs
 ```
 
-Edit `voice-prompts.json` to change the spoken prompts. Active prompt IDs must have valid Godot imports and remain included in the Web preset; the build rejects required audio missing from the PCK. When adding a word, add its image-generation definition, level-tagged JSON entry, topic membership in `game_data.gd`, and pronunciation recording. Keep at least five non-confusable eligible words per topic at every level. Run `npm run test:ages` and `npm run build:web` afterward: the vocabulary and all active audio are packaged into Godot's PCK. There is no second runtime word-record list.
+The 900 additions belong to seven new topics: actions and routines, feelings and
+people, describe and compare, places and time, nature and science, food and home,
+and school and play. Runtime topic membership is derived from each entry's `topic`.
+
+Edit `voice-prompts.json` to change the spoken prompts. Active prompt IDs must have
+valid Godot imports and remain included in the Web preset; the build rejects required
+audio missing from the PCK. When adding a word, provide its sourced illustration and
+provenance, level, topic, intended meaning, part of speech, and pronunciation. Keep at
+least five non-confusable eligible words per topic at every level. Run
+`npm run test:ages` and `npm run build:web` afterward. There is no second runtime
+word-record list. The legacy image generator preserves and validates sourced additions.
 
 The compatible version-one playroom save has an optional `[learning] age_band`
 key (`all`, `4-6`, `7-9`, or `10-plus`). Missing keys retain all words; invalid
 IDs fail visibly rather than overwriting choices. Existing rewards, journey
-history, and legacy sticker collections are preserved, including all 350 words.
+history, and legacy sticker collections are preserved, including all 350 earlier words.
 
 ### Regenerate natural speech
 
@@ -84,7 +105,7 @@ Set `PYTHON` if a particular Python executable is required. Only generation uses
 the online service; the shipped game plays the committed recordings.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
 The game prompt catalog contains eight messages: one greeting for each world.
-Together with the 350 word recordings, the generator maintains 358 active files under `assets\audio\voice`. Retired
+Together with the 1,250 word recordings, the generator maintains 1,258 active files under `assets\audio\voice`. Retired
 arrival/opening recordings and Match wrong-answer/loss prompts have been removed; historical provenance remains in
 the asset documentation. The retired Voice Pop report recordings and their
 generator are no longer shipped; [their provenance](pop-voice.md) remains historical.

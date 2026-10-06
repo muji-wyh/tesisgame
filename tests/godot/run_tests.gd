@@ -157,7 +157,6 @@ func joy_axis(axis: int, value: float) -> void:
 func _test_rounds(model_script: GDScript, words: Array) -> void:
 	var model = model_script.new()
 	var seen_themes: Dictionary = {}
-	var seen_words: Dictionary = {}
 	for seed_value in range(80):
 		check(model.reset(words, seed_value), "A valid vocabulary starts a round")
 		check(model.cards.size() == 10, "There are ten cards")
@@ -166,7 +165,6 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		var counts: Dictionary = {}
 		var kinds: Dictionary = {"word": 0, "image": 0}
 		for card in model.cards:
-			seen_words[card.word.id] = true
 			ids[card.id] = true
 			counts[card.word.id] = counts.get(card.word.id, 0) + 1
 			kinds[card.kind] += 1
@@ -178,21 +176,68 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 		check((model.matched_ids.size() / 2) == 0 and model.mistakes == 0, "Counters reset")
 		seen_themes[model.theme_id] = true
 	check(seen_themes.size() == 8, "New rounds can choose each theme")
-	# Larger topic pools need a proportional sampling budget to visit every word.
-	for seed_value in range(80, words.size() * 10):
-		if seen_words.size() == words.size():
-			break
-		model.reset(words, seed_value)
-		for card in model.cards:
-			seen_words[card.word.id] = true
-	var unseen: Array = words.filter(func(word: Dictionary) -> bool: return not seen_words.has(word.id))
-	check(unseen.is_empty(), "Every word can appear across seeded rounds; missing: " + str(unseen.map(func(word: Dictionary) -> String: return word.id)))
 	model.reset(words, 17)
 	var deck: Array = model.cards.duplicate(true)
 	var season: String = model.theme_id
 	model.reset(words, 17)
 	check(model.cards == deck and model.theme_id == season, "Seeded rounds are reproducible")
 	check(not model.reset(words.slice(0, 4), 1), "Fewer than five words cannot start a round")
+	_test_word_reachability(model, words)
+
+
+func _test_word_reachability(model, words: Array) -> void:
+	var data: GDScript = load("res://scripts/game_data.gd")
+	var speech: GDScript = load("res://scripts/speech_words.gd")
+	var topics: Array = data.adventures(words)
+	var topic_for_word: Dictionary = {}
+	# Keep ordinary randomized topic selection covered without waiting for a
+	# global coupon-collector lottery to happen to draw all 1,250 words.
+	for topic: Dictionary in topics:
+		var pool: Array = words.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
+		var lessons: Dictionary = {}
+		for word: Dictionary in pool:
+			if not topic_for_word.has(word.id):
+				topic_for_word[word.id] = topic
+		for seed_value in range(8):
+			check(model.reset(pool, seed_value, false, topic.id), "Each real topic supports ordinary seeded lessons: " + topic.id)
+			check(model.adventure_id == topic.id and model.cards.size() == 10 and pairs_for(model).size() == 5
+				and model.lesson_words.all(func(word: Dictionary) -> bool: return topic.words.has(word.id)),
+				"Topic sampling keeps five complete related pairs: " + topic.id)
+			var ids: Array = model.lesson_words.map(func(word: Dictionary) -> String: return word.id)
+			ids.sort()
+			lessons["|".join(ids)] = true
+		check(lessons.size() > 1, "Ordinary seeds select different word sets within " + topic.id)
+	var reached: Dictionary = {}
+	var bands := {"basic": "4-6", "growing": "7-9", "advanced": "10-plus"}
+	for index in range(words.size()):
+		var word: Dictionary = words[index]
+		check(topic_for_word.has(word.id), "Every word has an actual gameplay topic: " + word.id)
+		if not topic_for_word.has(word.id):
+			continue
+		var topic: Dictionary = topic_for_word[word.id]
+		# The public required-word path proves reachability deterministically from
+		# the full production catalog, using this word's real topic and age range.
+		var started: bool = model.reset(words, index, false, topic.id, word.id, bands[word.level])
+		check(started, "The full catalog can deal each word at its own age level: " + word.id)
+		if not started:
+			continue
+		var target_pair: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.word.id == word.id)
+		check(model.adventure_id == topic.id and model.lesson_words[0].id == word.id
+			and model.cards.size() == 10 and pairs_for(model).size() == 5
+			and target_pair.size() == 2 and target_pair[0].kind != target_pair[1].kind,
+			"Every catalog word becomes one playable picture and word pair: " + word.id)
+		check(model.lesson_words.all(func(other: Dictionary) -> bool:
+			return topic.words.has(other.id) and data.word_level(other) <= data.word_level(word)),
+			"Reachable lessons retain their topic and age boundaries: " + word.id)
+		for first in range(5):
+			for second in range(first + 1, 5):
+				check(not data.word_pair_conflicts(model.lesson_words[first], model.lesson_words[second])
+					and not speech.words_conflict(model.lesson_words[first], model.lesson_words[second]),
+					"Every reachable word has unambiguous lesson partners: " + word.id)
+		if target_pair.size() == 2:
+			reached[word.id] = true
+	check(reached.size() == words.size(), "Every production word is reachable as a real playable pair")
+	print("Round reachability: %d words verified across %d topics" % [reached.size(), topics.size()])
 
 
 func _test_fresh_rounds(model_script: GDScript, words: Array) -> void:
@@ -434,7 +479,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 
 
 func _test_data(words: Array) -> void:
-	check(words.size() == 350, "The game includes 350 age-graded picture words")
+	check(words.size() == 1250, "The game includes 1,250 age-graded picture words")
 	var path := "res://scripts/game_data.gd"
 	check(FileAccess.file_exists(path), "The native data loader exists")
 	if not FileAccess.file_exists(path):
@@ -460,7 +505,7 @@ func _test_data(words: Array) -> void:
 	duplicate = words.duplicate(true)
 	duplicate[1].image = duplicate[0].image
 	check(data_script.validate_words(duplicate) != "", "Duplicate images are rejected")
-	for bad_text in ["CAT", "a", "toolongword", "two words", "123"]:
+	for bad_text in ["CAT", "a", "incomprehensible", "two words", "123"]:
 		duplicate = words.duplicate(true)
 		duplicate[0].text = bad_text
 		check(data_script.validate_words(duplicate) != "", "Only short lowercase English words are accepted")

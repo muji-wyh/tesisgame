@@ -46,7 +46,7 @@ The six default scenarios receive equal weight:
 | Memory | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
 | Voice Pop | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
 | Room | Pip's room with normal idle motion, one pet gesture, then the room's toy button. |
-| All words | The complete 350-word age catalogue; focus, scroll, and pronunciation at the first, middle, and last card. |
+| All words | The complete 1,250-word age catalogue in 60-word pages; focus, scroll, pagination, and pronunciation at the first, middle, and last card. |
 | Chest | A real Match win and continuous chest hold; the hold begins during the final 60 warmup frames so measurement includes charge, release, and reward presentation. |
 
 Talk Quest and its map diagnostic were retired on 2026-10-06. The current

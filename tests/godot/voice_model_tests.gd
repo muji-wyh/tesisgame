@@ -29,6 +29,7 @@ func _run() -> void:
 		_test_candidates(model_script, words)
 		_test_homophones(model_script, words)
 		_test_compounds(model_script, words)
+		_test_parts_of_speech(model_script)
 		_test_matching(model_script, words)
 		_test_locks(model_script, words)
 		_test_vocabulary(model_script, words)
@@ -152,7 +153,15 @@ func _test_homophones(model_script: GDScript, words: Array) -> void:
 func _test_compounds(model_script: GDScript, words: Array) -> void:
 	var speech: GDScript = load("res://scripts/speech_words.gd")
 	for fixture in [["seahorse", "sea horse", "horse"], ["sunflower", "sun flower", "sun"],
-		["sunglasses", "sun glasses", "sun"], ["pinecone", "pine cone", "cone"], ["yoyo", "yo yo", "yo"]]:
+		["sunglasses", "sun glasses", "sun"], ["pinecone", "pine cone", "cone"], ["yoyo", "yo yo", "yo"],
+		["grandmother", "grand mother", "mother"], ["grandfather", "grand father", "father"],
+		["milkshake", "milk shake", "milk"], ["paperclip", "paper clip", "paper"],
+		["whiteboard", "white board", "white"], ["blackboard", "black board", "black"],
+		["raincoat", "rain coat", "rain"], ["wheelbarrow", "wheel barrow", "wheel"],
+		["lawnmower", "lawn mower", "lawn"], ["hairdryer", "hair dryer", "hair"],
+		["beansprout", "bean sprout", "bean"], ["homepage", "home page", "home"],
+		["tablecloth", "table cloth", "table"], ["headband", "head band", "head"],
+		["playdough", "play dough", "play"]]:
 		var model = model_script.new()
 		for noun in [fixture[0], fixture[2]]:
 			var word: Dictionary = {"id": noun, "text": noun}
@@ -168,25 +177,82 @@ func _test_compounds(model_script: GDScript, words: Array) -> void:
 		check(model._distinct_words(candidates).size() == 1, "Match dealing excludes compound/component pairs")
 		candidates.reverse()
 		check(model._distinct_words(candidates).size() == 1, "Deal exclusion does not depend on shuffle order")
-	var model = model_script.new()
-	for noun in ["sun", "flower"]:
-		var word: Dictionary = {"id": noun, "text": noun}
-		model.cards.append({"id": noun + ":word", "kind": "word", "word": word})
-		model.cards.append({"id": noun + ":image", "kind": "image", "word": word})
-	check(model.spoken_matches("sun flower") == ["sun", "flower"], "Two intended nouns remain separate without a compound target")
-	check(model.spoken_matches("sunflower").is_empty(), "A joined off-board compound never splits into component hits")
-	check(not speech.compounds_conflict("sun", "flower"), "Component nouns can be dealt together without their compound")
-	for text in ["sea horse2", "_sea horse", "sea horse's", "sea horse’s", "deep-sea-horse", "sea, horse"]:
-		check(not speech.tokens(text, ["seahorse"]).has("seahorse"), "Compound aliases preserve token boundaries: " + text)
+	for parts in [["sun", "flower"], ["paper", "clip"], ["milk", "shake"]]:
+		var model = model_script.new()
+		for noun in parts:
+			var word: Dictionary = {"id": noun, "text": noun}
+			model.cards.append({"id": noun + ":word", "kind": "word", "word": word})
+			model.cards.append({"id": noun + ":image", "kind": "image", "word": word})
+		check(model.spoken_matches(" ".join(parts)) == parts,
+			"Two intended nouns remain separate without a compound target: " + " ".join(parts))
+		check(model.spoken_matches("".join(parts)).is_empty(), "A joined off-board compound never splits into component hits")
+		check(not speech.compounds_conflict(parts[0], parts[1]), "Component nouns can be dealt together without their compound")
+	for fixture in [["seahorse", "sea horse", "sea-horse"], ["paperclip", "paper clip", "paper-clip"],
+		["grandmother", "grand mother", "grand-mother"], ["playdough", "play dough", "play-dough"]]:
+		for text in [fixture[1] + "2", "_" + fixture[1], fixture[1] + "'s", fixture[1] + "’s",
+			"deep-" + fixture[2], str(fixture[1]).replace(" ", ", ")]:
+			check(not speech.tokens(text, [fixture[0]]).has(fixture[0]), "Compound aliases preserve token boundaries: " + text)
 	check(speech.tokens("pine cones sea horses sun flowers yo yos", ["pinecones", "seahorses", "sunflowers", "yoyos"])
 		== ["pinecones", "seahorses", "sunflowers", "yoyos"], "Reviewed plural compound spellings normalize as complete spans")
+	check(speech.tokens("grand mothers grand fathers milk shakes paper clips white boards black boards rain coats wheel barrows play dough",
+		["grandmothers", "grandfathers", "milkshakes", "paperclips", "whiteboards", "blackboards", "raincoats", "wheelbarrows", "playdough"])
+		== ["grandmothers", "grandfathers", "milkshakes", "paperclips", "whiteboards", "blackboards", "raincoats", "wheelbarrows", "playdough"],
+		"Expanded compound plurals normalize while playdough remains a mass noun")
+	check(speech.tokens("lawn mowers hair dryers bean sprouts home pages table cloths head bands",
+		["lawnmowers", "hairdryers", "beansprouts", "homepages", "tablecloths", "headbands"])
+		== ["lawnmowers", "hairdryers", "beansprouts", "homepages", "tablecloths", "headbands"],
+		"Common household compound plurals normalize as complete spans")
+	check(speech.word_forms({"text": "playdough", "part_of_speech": "noun"}, true) == ["playdough"]
+		and speech.tokens("play doughs", ["playdough"]) == ["play", "doughs"],
+		"Playdough never accepts an invented plural")
 	var lexicon: Dictionary = speech.browser_lexicon(words)
 	check(lexicon.words.size() == words.size() and lexicon.compounds.seahorse == ["sea", "horse"],
 		"The browser receives the complete catalog and shared compound definitions")
 	for entry in lexicon.words:
-		check(entry.forms == speech.forms(entry.text, true), "Browser accepted forms match native Pop rules: " + entry.text)
+		var authored: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.text == entry.text)[0]
+		check(entry.forms == speech.word_forms(authored, true), "Browser accepted forms match native Pop rules: " + entry.text)
 	lexicon.compounds.seahorse[0] = "changed"
 	check(speech.browser_lexicon(words).compounds.seahorse[0] == "sea", "Browser transport cannot mutate the shared alias source")
+
+
+func _test_parts_of_speech(model_script: GDScript) -> void:
+	var speech: GDScript = load("res://scripts/speech_words.gd")
+	var pop_script: GDScript = load("res://scripts/voice_pop_model.gd")
+	for fixture in [["happy", "adjective", "happies"], ["close", "verb", "closes"],
+		["quickly", "adverb", "quicklies"], ["under", "preposition", "unders"], ["three", "number", "threes"]]:
+		var word: Dictionary = {"id": fixture[0], "text": fixture[0], "part_of_speech": fixture[1],
+			"image": "assets/images/words/" + fixture[0] + ".svg", "audio": "assets/audio/voice/word-" + fixture[0] + ".wav"}
+		check(speech.word_forms(word, true) == [fixture[0]], "Non-nouns retain their authored form: " + fixture[0])
+		var browser: Dictionary = speech.browser_lexicon([word])
+		check(browser.words[0].forms == [fixture[0]], "Browser recognition does not invent a noun plural: " + fixture[0])
+		var pop = pop_script.new()
+		check(pop.configure([word], 7) and pop.start(), "Voice Pop supports " + fixture[1] + " vocabulary")
+		check(pop.hit_transcript(fixture[2]).is_empty() and pop.targets.size() == 1,
+			"An invented ending cannot remove a non-noun target: " + fixture[2])
+		check(pop.hit_transcript(fixture[0]).size() == 1, "The exact non-noun word still scores")
+		var model = model_script.new()
+		model.cards.assign([{"id": word.id + ":word", "kind": "word", "word": word},
+			{"id": word.id + ":image", "kind": "image", "word": word}])
+		check(model.spoken_matches(fixture[0]) == [word.id] and model.spoken_matches(fixture[2]).is_empty(),
+			"Match uses the same exact non-noun vocabulary")
+	var noun: Dictionary = {"text": "teacher", "part_of_speech": "noun"}
+	check(speech.word_forms(noun, true) == ["teacher", "teachers"]
+		and speech.word_forms({"text": "teacher"}, true) == ["teacher", "teachers"],
+		"Noun plurals and legacy noun records keep their existing behavior")
+	var copied: Array = speech.word_forms(noun, true)
+	copied.append("changed")
+	check(not speech.word_forms(noun, true).has("changed"), "Callers cannot mutate cached speech forms")
+	for fixture in [["goose", "geese"], ["calf", "calves"], ["wolf", "wolves"], ["shelf", "shelves"], ["half", "halves"]]:
+		check(speech.word_forms({"text": fixture[0], "part_of_speech": "noun"}, true).has(fixture[1]),
+			"New irregular noun forms remain recognizable: " + fixture[0])
+	for text in ["furniture", "scissors", "toothpaste", "crutches"]:
+		check(speech.word_forms({"text": text, "part_of_speech": "noun"}, true) == [text],
+			"Mass and plural-only nouns do not receive invalid extra endings: " + text)
+	for fixture in [["one", "won"], ["two", "to"], ["four", "for"], ["blue", "blew"], ["right", "write"], ["see", "sea"]]:
+		var first: Dictionary = {"id": fixture[0], "text": fixture[0], "part_of_speech": "adjective"}
+		var second: Dictionary = {"id": fixture[1], "text": fixture[1], "part_of_speech": "noun"}
+		check(speech.word_forms(first).has(fixture[1]) and speech.words_conflict(first, second),
+			"Reviewed homophones work without being dealt as two competing answers: " + fixture[0])
 
 
 func _test_matching(model_script: GDScript, words: Array) -> void:
@@ -272,7 +338,7 @@ func _test_locks(model_script: GDScript, words: Array) -> void:
 
 
 func _test_vocabulary(model_script: GDScript, words: Array) -> void:
-	check(words.size() == 350, "Voice tests cover the game's current 350-word vocabulary")
+	check(words.size() == 1250, "Voice tests cover the game's complete 1,250-word vocabulary")
 	for word in words:
 		var model = model_script.new()
 		model.cards.assign([

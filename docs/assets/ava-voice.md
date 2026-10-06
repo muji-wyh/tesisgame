@@ -1,6 +1,6 @@
 # Ava speech
 
-All 350 vocabulary pronunciations and eight active world greetings use the user's
+All 1,250 vocabulary pronunciations and eight active world greetings use the user's
 approved **Ava Sweet** profile. This replaces the Jenny recordings on October 3,
 2026. The approved preview says "Hello, how are you?"; the same voice settings
 apply to the game catalog without changing its words or prompts.
@@ -63,6 +63,9 @@ voices or failed synthesis produce an explicit error; there is no alternate
 voice fallback. FFmpeg only decodes and resamples to the existing mobile format.
 It does not apply the former Jenny style, EQ, pitch shifting, or silence trimming.
 The audited picture-naming phrase "A kite." is retained for `word-kite`.
+New heteronyms use a short grammatical context, such as "To tear.", "To close.",
+"A present.", and "One minute.", to convey the authored sense. These exact
+synthesis scripts are recorded in the manifest; no audio editing is applied.
 
 ## Runtime coverage
 

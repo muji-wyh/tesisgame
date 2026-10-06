@@ -12,8 +12,8 @@ async function metrics(page) {
   });
 }
 
-async function tap(page, x, y) {
-  const bounds = await metrics(page);
+async function tap(page, x, y, bounds) {
+  bounds ||= await metrics(page);
   await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
 }
 
@@ -610,12 +610,15 @@ function boardPoint(bounds, index, { top: overrideTop } = {}) {
   const top = overrideTop === undefined ? normalTop : overrideTop;
   if (!Number.isFinite(top) || top < 0 || top >= bounds.height) throw new Error('Invalid Match playfield top.');
   const areaHeight = bounds.height - top - contentBounds(bounds).padding;
-  const columns = areaWidth >= areaHeight || areaHeight < 318 ? 5 : 2;
+  const scale = uiScale(bounds);
+  const columns = wordBoardColumns(areaWidth, areaHeight, scale, 10, 10);
   const rows = 10 / columns;
-  const width = (areaWidth - (columns - 1) * 10) / columns;
-  const cellHeight = (areaHeight - (rows - 1) * 10) / rows;
-  return { x: x + (index % columns) * (width + 10) + width / 2,
-    y: top + Math.floor(index / columns) * (cellHeight + 10) + cellHeight / 2 };
+  const gutter = Math.ceil(44 / scale), horizontalGap = columns === 2 ? gutter : 10;
+  const verticalGap = columns === 2 ? 10 : Math.min(gutter, Math.max(10, Math.floor(areaHeight - 88 / scale)));
+  const width = (areaWidth - (columns - 1) * horizontalGap) / columns;
+  const cellHeight = (areaHeight - (rows - 1) * verticalGap) / rows;
+  return { x: x + (index % columns) * (width + horizontalGap) + width / 2,
+    y: top + Math.floor(index / columns) * (cellHeight + verticalGap) + cellHeight / 2 };
 }
 
 async function discoverMatchCards(page) {
@@ -645,10 +648,16 @@ async function memoryMetrics(page) {
   return metrics(page);
 }
 
+function wordBoardColumns(width, height, scale, columnGap, rowGap) {
+  const tallCardHeight = (height - rowGap * 4) / 5;
+  const wideCardWidth = (width - columnGap * 4) / 5;
+  return tallCardHeight * scale >= 44 && (width < height || wideCardWidth * scale < 112) ? 2 : 5;
+}
+
 function memoryLayout(bounds) {
   const { top, x, width, padding } = contentBounds(bounds), scale = uiScale(bounds);
   const gap = Math.ceil(8 / scale), height = bounds.height - top - padding;
-  const columns = width < height ? 2 : 5, rows = 10 / columns;
+  const columns = wordBoardColumns(width, height, scale, gap, gap), rows = 10 / columns;
   return { top, x, width, height, boardTop: top, gap, columns,
     cardWidth: (width - gap * (columns - 1)) / columns,
     cardHeight: (height - gap * (rows - 1)) / rows, eye: headerIconRect(bounds, 'eye') };

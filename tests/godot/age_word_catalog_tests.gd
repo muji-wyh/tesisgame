@@ -73,6 +73,7 @@ func _run() -> void:
 	root.add_child(catalog)
 	await settle()
 	await _check_content(catalog, data.words)
+	await _check_paging(catalog, data.words)
 	await _check_layout(catalog)
 	root.size = Vector2i(640, 800)
 	catalog.size = Vector2(616, 680)
@@ -87,7 +88,7 @@ func _run() -> void:
 
 
 func _check_content(catalog: Catalog, words: Array) -> void:
-	var counts := {"all": 350, "4-6": 148, "7-9": 112, "10-plus": 90}
+	var counts := {"all": 1250, "4-6": 448, "7-9": 412, "10-plus": 390}
 	var levels := {"4-6": "basic", "7-9": "growing", "10-plus": "advanced"}
 	var english := RegEx.new()
 	english.compile("^[A-Za-z][A-Za-z '-]*$")
@@ -105,22 +106,32 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 			"Age " + band.id + " shows only its own range's word count with an English heading")
 		var seen: Dictionary = {}
 		var previous := ""
-		for button: Button in catalog.word_buttons:
-			var word: Dictionary = button.get_meta("word")
-			var picture: TextureRect = button.get_meta("word_art")
-			var caption: Label = button.get_meta("word_label")
-			check(not seen.has(word.id) and eligible.has(word), "Each eligible word appears exactly once: " + word.id)
-			seen[word.id] = true
-			check(english.search(caption.text) != null and caption.text == word.text
-				and previous.naturalnocasecmp_to(caption.text) <= 0,
-				"English word labels are alphabetically ordered: " + word.id)
-			previous = caption.text
-			check(picture.texture != null and picture.texture.resource_path == "res://" + word.image
-				and ResourceLoader.exists("res://" + word.audio),
-				"The catalogue retains the loaded illustration and recorded pronunciation: " + word.id)
+		check(catalog.snapshot().page == 1 and catalog.previous_button.disabled, "A new age starts on its first page")
+		for page in range(catalog.snapshot().page_count):
+			if page > 0:
+				catalog.next_button.pressed.emit()
+				await settle()
+			check(catalog.word_buttons.size() <= Catalog.PAGE_SIZE and catalog._textures.size() <= Catalog.PAGE_SIZE,
+				"A page bounds both live controls and retained picture resources")
+			check(catalog.scroll.scroll_vertical == 0 and catalog.snapshot().page == page + 1,
+				"Every page starts at its top without changing the total count")
+			for button: Button in catalog.word_buttons:
+				var word: Dictionary = button.get_meta("word")
+				var picture: TextureRect = button.get_meta("word_art")
+				var caption: Label = button.get_meta("word_label")
+				check(not seen.has(word.id) and eligible.has(word), "Each eligible word appears exactly once: " + word.id)
+				seen[word.id] = true
+				check(english.search(caption.text) != null and caption.text == word.text
+					and previous.naturalnocasecmp_to(caption.text) <= 0,
+					"English word labels are alphabetically ordered across page boundaries: " + word.id)
+				previous = caption.text
+				check(picture.texture != null and picture.texture.resource_path == "res://" + word.image
+					and ResourceLoader.exists("res://" + word.audio),
+					"The catalogue retains the loaded illustration and recorded pronunciation: " + word.id)
+		check(catalog.next_button.disabled, "The final page cannot advance past the catalog")
 		check(seen.size() == expected.size() and expected.all(func(id: String) -> bool: return seen.has(id)),
 			"Age " + band.id + " contains its exact curriculum tier")
-		for topic: Dictionary in Data.ADVENTURES:
+		for topic: Dictionary in Data.adventures(words):
 			var topic_words: Array = eligible.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
 			check(topic_words.all(func(word: Dictionary) -> bool: return seen.has(word.id)),
 				"Age " + band.id + " includes all eligible vocabulary from " + topic.name)
@@ -133,6 +144,53 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 		check(catalog.word_buttons.back() == last and last.has_focus() and catalog.scroll.scroll_vertical == offset,
 			"Refreshing the selected age preserves focused words and reading position")
 	check(not catalog.focus_word("missing-word"), "Unknown word focus requests are rejected")
+	catalog.configure(words, Data.age_band("all"), Data.theme("spring"))
+	await settle()
+
+
+func _check_paging(catalog: Catalog, words: Array) -> void:
+	var before := heard.size()
+	var button: Button = catalog.next_button
+	var point: Vector2 = button.get_global_transform_with_canvas() * (button.size * 0.5)
+	await pointer(point, true, true)
+	await pointer(point, true, false)
+	await pointer(point, false, true)
+	await pointer(point, false, false)
+	await settle()
+	check(catalog.snapshot().page == 2 and heard.size() == before, "Touch pagination changes one page without pronouncing a word")
+	catalog.previous_button.grab_focus()
+	for down in [true, false]:
+		var event := InputEventAction.new()
+		event.action = "ui_accept"
+		event.pressed = down
+		root.push_input(event, true)
+		await process_frame
+	await settle()
+	check(catalog.snapshot().page == 1 and catalog.previous_button.disabled and catalog.next_button.has_focus(),
+		"Keyboard pagination returns to the first page and leaves focus on an available control")
+	var last_id: String = catalog.snapshot().word_ids.back()
+	check(catalog.focus_word(last_id), "Global word focus can navigate directly to the final page")
+	await settle()
+	check(catalog.snapshot().page == catalog.snapshot().page_count and catalog.word_buttons.back().has_focus(),
+		"Cross-page focus reveals the requested final word")
+	var described: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.has("meaning"))[0]
+	catalog.focus_word(described.id)
+	await settle()
+	var described_button: Button = root.gui_get_focus_owner()
+	described_button.pressed.emit()
+	await settle()
+	check(catalog.meaning_label.text.contains(described.meaning) and heard.back().id == described.id,
+		"Selecting a new word displays its meaning and plays its pronunciation")
+	check(catalog.get_global_rect().encloses(catalog.meaning_label.get_global_rect()), "The definition is visible within the catalog")
+	catalog._change_page(1)
+	await settle()
+	check(catalog.meaning_label.text == "Tap a word to hear it.", "Changing a page clears the previous word's definition")
+	catalog.focus_word(str(catalog.snapshot().word_ids.front()))
+	await settle()
+	catalog.configure(words, Data.age_band("4-6"), Data.theme("spring"))
+	await settle()
+	check(catalog.snapshot().page == 1 and catalog.meaning_label.text == "Tap a word to hear it.",
+		"Changing the age resets pagination and the selected definition")
 	catalog.configure(words, Data.age_band("all"), Data.theme("spring"))
 	await settle()
 
@@ -167,9 +225,18 @@ func _check_layout(catalog: Catalog) -> void:
 		check(last.has_focus() and catalog.scroll.scroll_vertical > 0
 			and bounds.encloses(last_label.get_global_rect()),
 			"Keyboard focus reveals the last word with hidden scrollbars" + suffix)
-		catalog.focus_word(str(catalog.word_buttons.front().get_meta("word_id")))
+		var first: Button = catalog.word_buttons.front()
+		catalog.focus_word(str(first.get_meta("word_id")))
 		await settle()
-		check(catalog.scroll.scroll_vertical <= 4, "Keyboard focus returns to the first word" + suffix)
+		var first_label: Label = first.get_meta("word_label")
+		# The meaning and page controls can leave less than one full card of
+		# space. In that case, returning to the first word reveals its caption.
+		var focus_target: Control = first_label if first.size.y > catalog.scroll.size.y else first
+		var target_rect: Rect2 = catalog._content.get_global_transform().affine_inverse() * focus_target.get_global_rect()
+		var first_word_limit: int = ceili(target_rect.position.y)
+		check(first.has_focus() and bounds.encloses(first_label.get_global_rect())
+			and catalog.scroll.scroll_vertical <= first_word_limit + 1,
+			"Keyboard focus returns to the first word's visible caption" + suffix)
 
 
 func _check_input(catalog: Catalog) -> void:
@@ -257,9 +324,12 @@ func _check_stretched_resize(catalog: Catalog) -> void:
 	root.content_scale_size = Vector2i(480, 480)
 	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	# New alphabetical entries move fixed words such as ant several rows down.
+	# The first actual entry keeps this regression about runaway early focus.
+	var early_id: String = catalog.snapshot().word_ids.front()
 	for dimensions in [Vector2i(960, 720), Vector2i(390, 844), Vector2i(557, 1206),
 		Vector2i(844, 390), Vector2i(1206, 557), Vector2i(390, 844)]:
-		catalog.focus_word("ant")
+		catalog.focus_word(early_id)
 		await settle()
 		root.size = dimensions
 		await process_frame
@@ -272,7 +342,7 @@ func _check_stretched_resize(catalog: Catalog) -> void:
 			await process_frame
 			largest_offset = maxi(largest_offset, catalog.scroll.scroll_vertical)
 		var focused: Control = root.gui_get_focus_owner()
-		check(is_instance_valid(focused) and focused.get_meta("word_id", "") == "ant"
+		check(is_instance_valid(focused) and focused.get_meta("word_id", "") == early_id
 			and catalog.scroll.get_global_rect().encloses(focused.get_global_rect()),
 			"Canvas-items resize keeps the early focused word visible at %dx%d" % [dimensions.x, dimensions.y])
 		check(largest_offset < catalog.scroll.size.y and catalog.scroll.scroll_vertical < catalog.snapshot().scroll_max,

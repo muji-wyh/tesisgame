@@ -298,7 +298,7 @@ func _test_browser_storage() -> void:
 
 func _topic_ids() -> Array[String]:
 	var result: Array[String] = []
-	for topic in load("res://scripts/game_data.gd").ADVENTURES:
+	for topic in load("res://scripts/game_data.gd").adventures():
 		result.append(topic.id)
 	return result
 
@@ -462,16 +462,16 @@ func _test_sticker_memory() -> void:
 	check(DirAccess.remove_absolute(fixture.path + ".pending") == OK, "Remove the known sticker write blocker")
 	check(state.display_word("") and state.displayed_word_id.is_empty() and state.collected_word_ids == ["cat", "dog", "bell"], "Clearing the displayed word retains the collection")
 	var ids: Array[String] = []
-	for topic in load("res://scripts/game_data.gd").ADVENTURES:
+	for topic in load("res://scripts/game_data.gd").adventures():
 		for id in topic.words:
 			check(not ids.has(id), "Adventure vocabulary gives each sticker one canonical ID")
 			ids.append(id)
-	check(ids.size() == 350 and state.collect_words(ids), "All 350 vocabulary words can be collected")
+	check(ids.size() == 1250 and state.collect_words(ids), "All 1,250 vocabulary words can be collected")
 	ids.clear()
-	check(state.collected_word_ids.size() == 350, "Collection storage does not retain the caller's mutable input array")
+	check(state.collected_word_ids.size() == 1250, "Collection storage does not retain the caller's mutable input array")
 	reloaded = _script.new(fixture.path)
 	if _load(reloaded):
-		check(reloaded.collected_word_ids.size() == 350 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
+		check(reloaded.collected_word_ids.size() == 1250 and reloaded.displayed_word_id.is_empty(), "The complete collection and cleared display survive native reload")
 	var persisted := ConfigFile.new()
 	check(persisted.load(fixture.path) == OK and persisted.get_value("playroom", "version") == 1, "Sticker persistence retains playroom save version one")
 

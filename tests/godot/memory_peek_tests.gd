@@ -464,7 +464,7 @@ func _test_external_toolbar() -> void:
 
 func _check_external_grid(view) -> void:
 	var gap: float = ceilf(8 / Style.ui_scale(view))
-	var columns: int = 2 if view.size.x < view.size.y else 5
+	var columns: int = Style.word_board_columns(view._board.size, Style.ui_scale(view), Vector2.ONE * gap)
 	var rows: int = 10 / columns
 	var cell := Vector2((view.size.x - gap * (columns - 1)) / columns, (view.size.y - gap * (rows - 1)) / rows)
 	check(view._board.position == Vector2.ZERO and view._board.size == view.size, "External-toolbar cards fill the whole view with no reserved header or footer")

@@ -117,7 +117,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 480); // Original art, Pip wardrobes, derived chest layers and surprises.
+  assert.equal(textureImports.length, 1380); // Original art, Pip wardrobes, derived chest layers and surprises.
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -216,23 +216,71 @@ function assertVoice(relativePath) {
   return wave;
 }
 
-test('all 350 leveled vocabulary words have distinct illustrations in one directory', () => {
-  assert.equal(words.length, 350);
-  assert.equal(new Set(words.map(word => word.id)).size, 350);
-  assert.equal(new Set(words.map(word => word.text)).size, 350);
+test('all 1250 leveled vocabulary words have distinct illustrations in one directory', () => {
+  assert.equal(words.length, 1250);
+  assert.equal(new Set(words.map(word => word.id)).size, 1250);
+  assert.equal(new Set(words.map(word => word.text)).size, 1250);
   for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
     assert.ok(words.some(word => word.id === original && word.text === original));
   }
   const digests = new Set();
   for (const word of words) {
-    assert.match(word.text, /^[a-z]{2,10}$/);
+    assert.match(word.text, /^[a-z]{2,14}$/);
     assert.ok(['basic', 'growing', 'advanced'].includes(word.level), `${word.id} needs an explicit level`);
     assert.equal(word.id, word.text);
     assert.equal(path.dirname(path.normalize(word.image)), path.join('assets', 'images', 'words'));
-    assert.equal(path.basename(word.image), `${word.id}.svg`);
-    digests.add(sha256(readSvg(word.image).replace(/<title\b[^>]*>[\s\S]*?<\/title>/g, '')));
+    if (word.art_key?.startsWith('mulberry/')) {
+      assert.equal(path.basename(word.image), `${word.id}.png`);
+      const png = fs.readFileSync(path.join(root, word.image));
+      assert.deepEqual(require('../tools/import-vocabulary.cjs').pngDimensions(png), {width: 192, height: 192}, word.id);
+      digests.add(sha256(png));
+    } else {
+      assert.equal(path.basename(word.image), `${word.id}.svg`);
+      digests.add(sha256(readSvg(word.image).replace(/<title\b[^>]*>[\s\S]*?<\/title>/g, '')));
+    }
   }
   assert.equal(digests.size, words.length);
+});
+
+test('each age tier gains 300 sourced words spanning actions, qualities, people and everyday topics', () => {
+  const importer = require('../tools/import-vocabulary.cjs');
+  const additions = importer.additions();
+  assert.equal(additions.length, 900);
+  assert.deepEqual(words.slice(350).map(word => word.id), additions.map(word => word.id),
+    'The sourced additions follow the preserved original 350 entries');
+  assert.deepEqual(words.reduce((counts, word) => {
+    counts[word.level] = (counts[word.level] || 0) + 1;
+    return counts;
+  }, {}), {basic: 448, growing: 412, advanced: 390});
+  for (const level of ['basic', 'growing', 'advanced']) {
+    const tier = additions.filter(word => word.level === level);
+    assert.equal(tier.length, 300, level);
+    assert.ok(tier.filter(word => word.part_of_speech === 'verb').length >= 30, `${level} includes everyday actions`);
+    assert.ok(tier.filter(word => word.part_of_speech === 'adjective').length >= 25, `${level} includes qualities and feelings`);
+    for (const topic of ['actions-and-routines', 'feelings-and-people', 'describe-and-compare',
+      'places-and-time', 'nature-and-science', 'food-and-home', 'school-and-play']) {
+      assert.ok(tier.filter(word => word.topic === topic).length >= 5, `${level}: ${topic}`);
+    }
+  }
+});
+
+test('sourced vocabulary PNGs preserve pinned provenance and a consistent production renderer', () => {
+  const importer = require('../tools/import-vocabulary.cjs');
+  assert.doesNotThrow(() => importer.check());
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/mulberry-vocabulary.json')));
+  assert.equal(manifest.provider, 'Mulberry Symbols');
+  assert.ok(manifest.creator.length > 0);
+  assert.equal(manifest.source, 'https://github.com/mulberrysymbols/mulberry-symbols');
+  assert.equal(manifest.licenseUrl, 'https://creativecommons.org/licenses/by-sa/4.0/');
+  assert.equal(manifest.status, 'Downloaded and integrated');
+  assert.equal(manifest.animations, 'None; static illustrations');
+  assert.match(manifest.modifications, /rasterized.*192 by 192 PNGs/);
+  assert.equal(manifest.renderer.name, 'sharp');
+  assert.match(manifest.renderer.version, /^\d+\.\d+\.\d+/);
+  assert.equal(manifest.renderer.fit, 'contain');
+  assert.equal(manifest.renderer.background, 'transparent');
+  assert.equal(new Set(manifest.files.map(file => file.sourceSha256)).size, 900,
+    'Every word has a separate original source illustration');
 });
 
 test('the sixty-word age expansion has its own reproducible original art module', () => {
@@ -255,7 +303,7 @@ test('each age tier gains fifty unique illustrated nouns without replacing earli
     counts[word.level] = (counts[word.level] || 0) + 1;
     return counts;
   }, {}), { basic: 98, growing: 62, advanced: 40 });
-  const added = words.slice(200);
+  const added = words.slice(200, 350);
   assert.equal(added.length, 150);
   for (const level of ['basic', 'growing', 'advanced']) {
     const additions = added.filter(word => word.level === level);
@@ -304,12 +352,12 @@ test('seasonal reward SVGs use the requested seasonal palette', () => {
   }
 });
 
-test('the generated image directories contain exactly the 422 named SVGs', () => {
+test('the image directories contain exactly the 1322 named vocabulary and reward assets', () => {
   const expected = [
-    ['words', words.map(({ id }) => `${id}.svg`)],
+    ['words', words.map(({ image }) => path.basename(image))],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]]
   ];
-  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 422);
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 1322);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
@@ -339,18 +387,22 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   for (const word of words) {
     assert.equal(word.audio, `assets/audio/voice/word-${word.id}.wav`);
     recordings.add(sha256(assertVoice(word.audio).data));
+    if (word.art_key?.startsWith('mulberry/')) {
+      const imported = fs.readFileSync(path.join(root, word.audio + '.import'), 'utf8');
+      assert.match(imported, /^compress\/mode=2$/m, `${word.id} uses the compact QOA playback format`);
+    }
   }
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice sources contain exactly 350 pronunciations and eight active prompts', () => {
+test('voice sources contain exactly 1250 pronunciations and eight active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
     ...words.map(({ id }) => `word-${id}.wav`)
   ];
-  assert.equal(expected.length, 358);
+  assert.equal(expected.length, 1258);
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 

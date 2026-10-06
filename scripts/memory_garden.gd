@@ -497,7 +497,7 @@ func _layout() -> void:
 		header = target
 	_board.position = Vector2(0, header)
 	_board.size = Vector2(size.x, maxf(0, size.y - _board.position.y))
-	var columns: int = 2 if size.x < size.y else 5
+	var columns: int = Style.word_board_columns(_board.size, ui_scale, Vector2.ONE * gap)
 	var rows: int = 10 / columns
 	var card_size := Vector2((_board.size.x - gap * (columns - 1)) / columns, (_board.size.y - gap * (rows - 1)) / rows)
 	for index in range(card_buttons.size()):

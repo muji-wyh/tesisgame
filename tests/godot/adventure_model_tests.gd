@@ -18,7 +18,7 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	var model_script: GDScript = load("res://scripts/game_model.gd")
 	var data_script: GDScript = load("res://scripts/game_data.gd")
-	var adventures: Array = data_script.get_script_constant_map().get("ADVENTURES", [])
+	var adventures: Array = data_script.adventures()
 	var model = model_script.new()
 	var properties: Array = model.get_property_list().map(func(value: Dictionary) -> String: return value.name)
 	check(not adventures.is_empty(), "The vocabulary offers themed word adventures")
@@ -47,7 +47,7 @@ func _run() -> void:
 
 
 func _test_catalog(adventures: Array, words: Array) -> void:
-	check(words.size() == 350 and adventures.size() == 12, "The expanded catalog contains 350 words in twelve adventures")
+	check(words.size() == 1250 and adventures.size() == 19, "The expanded catalog contains 1,250 words in nineteen adventures")
 	var all_ids: Array = words.map(func(word: Dictionary) -> String: return word.id)
 	var included: Dictionary = {}
 	var adventure_ids: Dictionary = {}

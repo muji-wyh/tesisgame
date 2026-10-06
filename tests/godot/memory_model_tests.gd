@@ -247,6 +247,13 @@ func _test_rejected_resets(model) -> void:
 	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"],
 		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
 		invalid.append(_words(pair + ["cat", "dog", "ball"]))
+	var same_art: Array = _words()
+	same_art[0].art_key = "mulberry/shared-picture.svg"
+	same_art[1].art_key = same_art[0].art_key
+	invalid.append(same_art)
+	var same_meaning: Array = _words()
+	same_meaning[0].confusable = [same_meaning[1].id]
+	invalid.append(same_meaning)
 	var aliases: Array = _words(["earth", "planet", "cat", "dog", "ball"])
 	aliases[0].id = "our-earth"
 	aliases[1].id = "our-planet"

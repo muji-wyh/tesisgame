@@ -95,24 +95,24 @@ test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS
   assert.throws(() => speechText('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 350 words and eight prompts from maintained catalogs', () => {
+test('voice generation derives exactly 1250 words and eight prompts from maintained catalogs', () => {
   const messages = messagesFor(root);
-  assert.equal(messages.length, 358);
-  assert.equal(new Set(messages.map(message => message.id)).size, 358);
+  assert.equal(messages.length, 1258);
+  assert.equal(new Set(messages.map(message => message.id)).size, 1258);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
   }
 });
 
-test('catalog validation supports two-to-ten-letter words and rejects malformed text, paths, and prompts', t => {
+test('catalog validation supports two-to-fourteen-letter words and rejects malformed text, paths, and prompts', t => {
   const { directory } = fixture(t);
-  const vocabulary = ['ox', 'sweater', 'elephant', 'pineapple', 'microphone'].map(text => ({
+  const vocabulary = ['ox', 'sweater', 'elephant', 'pineapple', 'microphone', 'quadrilateral', 'representation'].map(text => ({
     id: text, text, audio: `assets/audio/voice/word-${text}.wav`
   }));
   fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify(vocabulary));
   assert.equal(messagesFor(directory).length, Object.keys(prompts).length + vocabulary.length);
-  for (const text of ['', 'a', 'watermelons', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
+  for (const text of ['', 'a', 'representations', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
     fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([{ id: 'invalid', text, audio: 'assets/audio/voice/word-invalid.wav' }]));
     assert.throws(() => messagesFor(directory), /short English word/, JSON.stringify(text));
   }
@@ -122,6 +122,15 @@ test('catalog validation supports two-to-ten-letter words and rejects malformed 
   assert.throws(() => messagesFor(directory), /unique/);
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, extra: 'Hello!' }));
   assert.throws(() => messagesFor(directory), /required prompt IDs/);
+});
+
+test('heteronym recordings use short contexts for their authored sense', () => {
+  for (const word of ['close', 'read', 'tear', 'polish', 'separate', 'concentrate']) {
+    assert.equal(speechText(word), `To ${word}.`);
+  }
+  assert.equal(speechText('present'), 'A present.');
+  assert.equal(speechText('minute'), 'One minute.');
+  assert.equal(speechText('second'), 'second.');
 });
 
 test('voice WAV validation rejects corruption, incompatible formats, silence, and isolated clicks', () => {

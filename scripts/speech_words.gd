@@ -7,7 +7,22 @@ const COMPOUND_PARTS: Dictionary = {
 	"sunflower": ["sun", "flower"], "sunflowers": ["sun", "flowers"],
 	"sunglasses": ["sun", "glasses"],
 	"pinecone": ["pine", "cone"], "pinecones": ["pine", "cones"],
-	"yoyo": ["yo", "yo"], "yoyos": ["yo", "yos"]
+	"yoyo": ["yo", "yo"], "yoyos": ["yo", "yos"],
+	"grandmother": ["grand", "mother"], "grandmothers": ["grand", "mothers"],
+	"grandfather": ["grand", "father"], "grandfathers": ["grand", "fathers"],
+	"milkshake": ["milk", "shake"], "milkshakes": ["milk", "shakes"],
+	"paperclip": ["paper", "clip"], "paperclips": ["paper", "clips"],
+	"whiteboard": ["white", "board"], "whiteboards": ["white", "boards"],
+	"blackboard": ["black", "board"], "blackboards": ["black", "boards"],
+	"raincoat": ["rain", "coat"], "raincoats": ["rain", "coats"],
+	"wheelbarrow": ["wheel", "barrow"], "wheelbarrows": ["wheel", "barrows"],
+	"lawnmower": ["lawn", "mower"], "lawnmowers": ["lawn", "mowers"],
+	"hairdryer": ["hair", "dryer"], "hairdryers": ["hair", "dryers"],
+	"beansprout": ["bean", "sprout"], "beansprouts": ["bean", "sprouts"],
+	"homepage": ["home", "page"], "homepages": ["home", "pages"],
+	"tablecloth": ["table", "cloth"], "tablecloths": ["table", "cloths"],
+	"headband": ["head", "band"], "headbands": ["head", "bands"],
+	"playdough": ["play", "dough"]
 }
 
 # Exact sound equivalents, including common English pronunciation variants.
@@ -46,7 +61,20 @@ const HOMOPHONE_GROUPS: Array = [
 	["beach", "beech"], ["beaches", "beeches"],
 	["toe", "tow"], ["toes", "tows"],
 	["beetle", "beatle"], ["beetles", "beatles"],
-	["ferry", "fairy", "faery"], ["ferries", "fairies", "faeries"]
+	["ferry", "fairy", "faery"], ["ferries", "fairies", "faeries"],
+	["one", "won"], ["two", "to", "too"], ["four", "for", "fore"], ["eight", "ate"],
+	["blue", "blew"], ["right", "write", "rite"],
+	["night", "knight"], ["nights", "knights"],
+	["week", "weak"], ["here", "hear"], ["meet", "meat"], ["new", "knew"],
+	["whole", "hole"], ["peace", "piece"],
+	["sea", "see"], ["seas", "sees"],
+	["hair", "hare"], ["hairs", "hares"],
+	["sale", "sail"], ["sales", "sails"],
+	["wait", "weight"], ["wear", "where"], ["wood", "would"],
+	["male", "mail"], ["fair", "fare"], ["break", "brake"],
+	["weigh", "way", "whey"], ["sew", "so", "sow"], ["queue", "cue"],
+	["hour", "our"], ["hours", "ours"], ["steak", "stake"], ["steaks", "stakes"],
+	["principal", "principle"], ["principals", "principles"]
 ]
 
 # Preserve Voice Pop's noun forms without stripping suffixes from transcripts.
@@ -55,15 +83,31 @@ const UNCHANGED_PLURALS: Array[String] = [
 	"rain", "snow", "grass", "pants", "sunglasses", "coral", "squid", "jellyfish", "starfish", "bamboo",
 	"deer", "honey", "pasta", "sand", "mud", "ice", "wind", "shorts", "dice",
 	"broccoli", "lettuce", "slippers", "earmuffs", "crayons", "asparagus", "cinnamon",
-	"plankton", "swordfish", "binoculars"
+	"plankton", "swordfish", "binoculars",
+	"stairs", "toothpaste", "shampoo", "chalk", "glue", "scissors", "music", "art",
+	"lips", "skin", "food", "toast", "cereal", "yogurt", "ham", "chocolate", "jelly",
+	"spaghetti", "sugar", "salt", "flour", "lemonade", "reindeer", "shrimp", "holly", "ivy",
+	"whiskers", "prickles", "wood", "wool", "bacon", "butter", "celery", "garlic",
+	"noodles", "porridge", "ravioli", "rhubarb", "salami", "spinach", "vinegar",
+	"curtains", "fabric", "furniture", "tongs", "pliers", "sandpaper", "cardboard",
+	"glitter", "headphones", "badminton", "baseball", "basketball", "bowling", "cricket",
+	"golf", "tennis", "volleyball", "archery", "pottery", "drama", "crutches",
+	"ozone", "bedrock", "subsoil", "topsoil", "friction", "gravity", "scales", "science",
+	"poultry", "lungs", "freckles", "goldfish", "tuna", "horns", "mistletoe", "algebra",
+	"geography", "technology", "clay", "bingo", "boccia", "darts", "judo", "rugby",
+	"athletics", "stirrups", "playdough", "cream", "macaroni", "margarine", "mayonnaise",
+	"muesli", "pate", "stuffing", "dairy", "ingredients", "blinds", "varnish", "sunscreen",
+	"goggles", "sandals", "earrings", "software"
 ]
 const SPECIAL_PLURALS: Dictionary = {
 	"mouse": ["mice"], "foot": ["feet"], "tooth": ["teeth"], "leaf": ["leaves"],
 	"scarf": ["scarves", "scarfs"], "tomato": ["tomatoes"], "octopus": ["octopuses", "octopi"],
 	"cactus": ["cacti", "cactuses"], "mango": ["mangoes", "mangos"],
 	"potato": ["potatoes"], "volcano": ["volcanoes", "volcanos"],
-	"domino": ["dominoes", "dominos"]
+	"domino": ["dominoes", "dominos"], "shelf": ["shelves"], "calf": ["calves"],
+	"goose": ["geese"], "wolf": ["wolves"], "hoof": ["hooves", "hoofs"], "half": ["halves"]
 }
+static var _word_form_cache: Dictionary = {}
 
 
 static func normalize_text(text: String, accepted_forms: Array = []) -> String:
@@ -109,12 +153,30 @@ static func browser_lexicon(words: Array) -> Dictionary:
 	for word in words:
 		if not word is Dictionary or not word.get("text") is String:
 			continue
-		var noun: String = word.text.strip_edges().to_lower()
-		if noun.is_empty() or seen.has(noun):
+		var text: String = word.text.strip_edges().to_lower()
+		if text.is_empty() or seen.has(text):
 			continue
-		seen[noun] = true
-		entries.append({"text": noun, "forms": forms(noun, true)})
+		seen[text] = true
+		entries.append({"text": text, "forms": word_forms(word, true)})
 	return {"compounds": COMPOUND_PARTS.duplicate(true), "words": entries}
+
+
+static func word_forms(word: Dictionary, include_plurals: bool = false) -> Array[String]:
+	# Old four-field fixtures remain nouns; authored actions and descriptions
+	# keep their exact word instead of receiving invented noun endings.
+	var text: String = str(word.text).strip_edges().to_lower()
+	var noun_plurals: bool = include_plurals and word.get("part_of_speech", "noun") == "noun"
+	var key: String = text + (":plural" if noun_plurals else ":exact")
+	if not _word_form_cache.has(key):
+		_word_form_cache[key] = forms(text, noun_plurals)
+	return _word_form_cache[key].duplicate()
+
+
+static func words_conflict(first: Dictionary, second: Dictionary) -> bool:
+	if compounds_conflict(str(first.text), str(second.text)):
+		return true
+	var second_forms: Array[String] = word_forms(second)
+	return word_forms(first).any(func(form: String) -> bool: return second_forms.has(form))
 
 
 static func forms(noun: String, include_plurals: bool = false) -> Array[String]:

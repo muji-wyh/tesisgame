@@ -41,7 +41,7 @@ explicit authorization, and Editor Package Manager downloaded the package.
 The source package, isolated Unity project, generated import evidence and PNG
 overrides are ignored by Git. They are not distributed as a public asset library.
 Selected licensed textures ship inside the compiled game after verified import;
-the repository retains its original SVG fallback for every word. Obtain the
+the repository retains its original SVG fallback for each of these 19 mapped legacy words. Obtain the
 asset through the publisher's authorized Unity Store workflow and use it subject
 to its license. A clean checkout without the ignored overrides uses the original
 art; publishing imported art requires the verified local files at build time.

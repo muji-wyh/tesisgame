@@ -41,12 +41,12 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 			if not word is Dictionary or Data.word_level(word) == 0:
 				error = "Word levels must be basic, growing or advanced."
 				return false
-		# Gift lessons keep their requested noun; every other word stays within the age band.
+		# Gift lessons keep their requested word; every other word stays within the age band.
 		words = words.filter(func(word: Dictionary) -> bool:
 			return Data.word_level(word) <= band.max_level or (not required_word_id.is_empty() and word.id == required_word_id))
 	var requested_adventure: Dictionary = {}
 	if not requested_adventure_id.is_empty():
-		for adventure in Data.ADVENTURES:
+		for adventure in Data.adventures(words):
 			if adventure.id == requested_adventure_id:
 				requested_adventure = adventure
 				break
@@ -94,14 +94,14 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		# ponytail: only the previous board; a learner profile needs separate evidence and design.
 		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
 		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id or not previous.has(word.id))
-		if fresh.size() >= 5 and (requested_adventure.is_empty() or _distinct_words(fresh).size() >= 5):
+		if fresh.size() >= 5 and (requested_adventure.is_empty() or _distinct_words(fresh, MATCH_PAIR_COUNT).size() >= 5):
 			pool = fresh
 	var next_adventure: Dictionary = requested_adventure
 	if requested_adventure.is_empty() or repeating:
 		var adventures: Array[Dictionary] = []
-		for adventure in Data.ADVENTURES:
+		for adventure in Data.adventures(words):
 			var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-			if _distinct_words(related).size() >= 5:
+			if _distinct_words(related, MATCH_PAIR_COUNT).size() >= 5:
 				adventures.append(adventure)
 		if seed_value < 0 and adventures.size() > 1:
 			adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
@@ -115,7 +115,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		next_adventure_id = saved_adventure
 		next_adventure_name = saved_name
 	else:
-		var distinct: Array = _distinct_words(pool)
+		var distinct: Array = _distinct_words(pool, MATCH_PAIR_COUNT)
 		if distinct.size() < 5:
 			error = "This lesson needs five clearly different words."
 			return false
@@ -149,12 +149,14 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	return true
 
 
-func _distinct_words(words: Array) -> Array:
+func _distinct_words(words: Array, limit: int = 0) -> Array:
 	var distinct: Array = []
 	for word in words:
 		if not distinct.any(func(other: Dictionary) -> bool:
-			return Data.confusable_words(word.id, other.id) or SpeechWords.compounds_conflict(word.text, other.text)):
+			return Data.word_pair_conflicts(word, other) or SpeechWords.words_conflict(word, other)):
 			distinct.append(word)
+			if limit > 0 and distinct.size() >= limit:
+				break
 	return distinct
 
 
@@ -184,7 +186,7 @@ func spoken_matches(transcript: String) -> Array[String]:
 	var accepted_forms: Array[String] = []
 	for card in cards:
 		if card.kind == "word" and not _spoken_pair(card.word.id).is_empty():
-			accepted_forms.append_array(SpeechWords.forms(card.word.text))
+			accepted_forms.append_array(SpeechWords.word_forms(card.word))
 	for token in SpeechWords.tokens(transcript, accepted_forms):
 		var candidate: String = ""
 		for card in cards:
@@ -196,7 +198,7 @@ func spoken_matches(transcript: String) -> Array[String]:
 			if card.word.text == token:
 				candidate = word_id
 				break
-			if candidate.is_empty() and SpeechWords.forms(card.word.text).has(token):
+			if candidate.is_empty() and SpeechWords.word_forms(card.word).has(token):
 				candidate = word_id
 		if not candidate.is_empty() and not matches.has(candidate):
 			matches.append(candidate)

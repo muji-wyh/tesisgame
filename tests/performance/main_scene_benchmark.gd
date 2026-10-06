@@ -36,6 +36,9 @@ var _target_peak: int = 0
 var _drawn_target_peak: int = 0
 var _actions: Array[Dictionary] = []
 var _pairs: Array = []
+var _catalog_word_ids: Array[String] = []
+var _catalog_card_peak: int = 0
+var _catalog_texture_peak: int = 0
 var _chest_cues: Array[String] = []
 var _draws: int = 0
 var _sample_count: int = 240
@@ -136,6 +139,9 @@ func _run() -> void:
 			"frame_interval": _statistics(_interval_samples),
 			"node_count": get_node_count(), "object_count": int(Performance.get_monitor(Performance.OBJECT_COUNT))
 		}
+		if scenario == "catalog":
+			result["catalog_card_peak"] = _catalog_card_peak
+			result["catalog_texture_peak"] = _catalog_texture_peak
 		scenarios.append(result)
 		print("BENCHMARK %s rendered_mean_us=%.2f process_mean_us=%.2f" % [scenario, result.rendered.mean, result.process.mean])
 		_app.free()
@@ -192,6 +198,9 @@ func _install_scene() -> void:
 
 func _prepare_scenario() -> void:
 	_pairs.clear()
+	_catalog_word_ids.clear()
+	_catalog_card_peak = 0
+	_catalog_texture_peak = 0
 	_chest_cues.clear()
 	var mode: String = {"voice-pop": "pop"}.get(_scenario, _scenario)
 	if mode not in ["match", "memory", "pop"]:
@@ -224,6 +233,9 @@ func _prepare_scenario() -> void:
 			_app._show_collection()
 			if _scenario == "catalog":
 				_app._age_buttons["all"].pressed.emit()
+				# Capture the complete ordered catalogue before timing; rendered cards
+				# contain only the current page and cannot select a distant word.
+				_catalog_word_ids.assign(_app._age_catalog.snapshot().word_ids)
 
 
 func _begin_frame(_delta: float) -> void:
@@ -264,6 +276,9 @@ func _after_draw() -> void:
 		_drawn_target_frame_count += 1 if drawn_count > 0 else 0
 		_target_peak = maxi(_target_peak, target_count)
 		_drawn_target_peak = maxi(_drawn_target_peak, drawn_count)
+	elif _scenario == "catalog":
+		_catalog_card_peak = maxi(_catalog_card_peak, _app._age_catalog.word_buttons.size())
+		_catalog_texture_peak = maxi(_catalog_texture_peak, _app._age_catalog._textures.size())
 	_pending_draw = false
 	if _rendered_samples.size() >= _sample_count:
 		_sampling = false
@@ -305,12 +320,17 @@ func _scheduled_input(frame: int) -> void:
 				_actions.append({"frame": frame, "action": "room_toy"})
 		"catalog":
 			if frame in [early, middle, int(_sample_count * 0.84)]:
-				var buttons: Array[Button] = _app._age_catalog.word_buttons
-				var index: int = 0 if frame == early else buttons.size() / 2 if frame == middle else buttons.size() - 1
-				var button: Button = buttons[index]
-				_app._age_catalog.focus_word(str(button.get_meta("word_id")))
+				var index: int = 0 if frame == early else _catalog_word_ids.size() / 2 if frame == middle else _catalog_word_ids.size() - 1
+				var id: String = _catalog_word_ids[index]
+				if not _require(_app._age_catalog.focus_word(id), "Catalogue word must be reachable across pages: " + id):
+					return
+				var button := _app.get_viewport().gui_get_focus_owner() as Button
+				if not _require(button != null and str(button.get_meta("word_id", "")) == id,
+					"Catalogue focus must reach the requested word: " + id):
+					return
 				button.pressed.emit()
-				_actions.append({"frame": frame, "action": "catalog_word", "index": index})
+				_actions.append({"frame": frame, "action": "catalog_word", "index": index,
+					"word_id": id, "page": _app._age_catalog._page_index + 1})
 
 
 func _state() -> Dictionary:
@@ -319,7 +339,12 @@ func _state() -> Dictionary:
 		"memory": return {"visible": _visible_control(_app._memory), "phase": _app._memory.memory.phase, "cards": _app._memory.card_buttons.size(), "matches": _app._memory.memory.matched_word_ids.size()}
 		"voice-pop": return {"visible": _visible_control(_app._pop), "hud_visible": _visible_control(_app._pop._hud), "phase": _app._pop.game.phase, "elapsed": _app._pop.game.elapsed, "targets": _app._pop.game.targets.size(), "draw_targets": _app._pop._draw_targets.size(), "hits": _app._pop.game.hits}
 		"room": return {"visible": _visible_control(_app._room), "playground_visible": _visible_control(_app._room.playground), "pip_visible": _visible_control(_app.duck), "pet_count": _app._room.playground._pet_count, "toy_phase": _app._room.playground.toy_phase}
-		"catalog": return {"visible": _visible_control(_app._age_catalog), "words": _app._age_catalog.word_buttons.size(), "scroll": _app._age_catalog.scroll.scroll_vertical}
+		"catalog":
+			var catalog: Dictionary = _app._age_catalog.snapshot()
+			return {"visible": _visible_control(_app._age_catalog), "word_count": catalog.word_count,
+				"page": catalog.page, "page_count": catalog.page_count, "page_size": _app._age_catalog.PAGE_SIZE,
+				"cards": _app._age_catalog.word_buttons.size(), "textures": _app._age_catalog._textures.size(),
+				"scroll": catalog.scroll_offset}
 		"chest": return {"visible": _visible_control(_app.chest), "phase": _app.model.phase, "chest_state": _app.model.chest_state, "cues": _chest_cues.duplicate()}
 	return {}
 
@@ -336,13 +361,35 @@ func _assert_workload(after: bool) -> bool:
 		return false
 	var valid := false
 	match _scenario:
-		"match": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
+		"match": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matched_cards >= 4)
 		"memory": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
 		"voice-pop": valid = state.hud_visible and state.phase == "running" and state.elapsed > 0 and ((state.targets > 0 and state.draw_targets > 0) if not after else (state.hits == 3 and _target_workload_recorded()))
 		"room": valid = state.playground_visible and state.pip_visible and (not after or state.pet_count > 0)
-		"catalog": valid = state.visible and state.words == 350 and (not after or state.scroll > 0)
+		"catalog":
+			var expected_cards: int = mini(state.page_size, state.word_count - (state.page - 1) * state.page_size)
+			valid = state.word_count == 1250 and _catalog_word_ids.size() == state.word_count \
+				and state.page_size == 60 and state.page_count == 21 and state.page >= 1 and state.page <= state.page_count \
+				and state.cards == expected_cards and state.cards > 0 and state.cards <= state.page_size \
+				and state.textures == state.cards \
+				and ((state.page == 1) if not after else (state.page == state.page_count and state.scroll > 0 \
+					and _catalog_card_peak > 0 and _catalog_card_peak <= state.page_size \
+					and _catalog_texture_peak > 0 and _catalog_texture_peak <= state.page_size and _catalog_inputs_recorded()))
 		"chest": valid = state.phase == "won" and ((state.chest_state in ["closed", "opening"] and "release" not in state.cues) if not after else (state.chest_state in ["opening", "opened"] and "release" in state.cues))
 	return _require(valid, "Inactive or incorrect workload for %s: %s" % [_scenario, JSON.stringify(state)])
+
+
+func _catalog_inputs_recorded() -> bool:
+	var selected: Array[Dictionary] = _actions.filter(func(action: Dictionary) -> bool: return action.action == "catalog_word")
+	var indices: Array[int] = [0, _catalog_word_ids.size() / 2, _catalog_word_ids.size() - 1]
+	if selected.size() != indices.size():
+		return false
+	for index in range(indices.size()):
+		var expected_index: int = indices[index]
+		var expected_page: int = expected_index / _app._age_catalog.PAGE_SIZE + 1
+		if selected[index].index != expected_index or selected[index].word_id != _catalog_word_ids[expected_index] \
+			or selected[index].page != expected_page:
+			return false
+	return true
 
 
 func _target_workload_recorded() -> bool:

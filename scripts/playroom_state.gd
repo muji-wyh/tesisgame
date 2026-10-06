@@ -290,14 +290,14 @@ func display_word(id: String) -> bool:
 
 
 static func _known_word(id: String) -> bool:
-	for topic in Data.ADVENTURES:
+	for topic in Data.adventures():
 		if topic.words.has(id):
 			return true
 	return false
 
 
 static func _known_topic(id: String) -> bool:
-	for topic in Data.ADVENTURES:
+	for topic in Data.adventures():
 		if topic.id == id:
 			return true
 	return false

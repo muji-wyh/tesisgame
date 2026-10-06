@@ -5,21 +5,30 @@ signal hear_requested(word: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
+const PAGE_SIZE: int = 60
 
 var scroll: ResultScroll
 var grid: GridContainer
 var word_buttons: Array[Button] = []
 var title_label: Label
 var count_label: Label
+var meaning_label: Label
+var previous_button: Button
+var next_button: Button
+var page_label: Label
 var interaction_allowed: Callable
 
 var _heading: HBoxContainer
 var _content: MarginContainer
+var _navigation: HBoxContainer
 var _words: Array = []
 var _band: Dictionary = {}
 var _palette: Dictionary = {}
 var _textures: Dictionary = {}
 var _by_id: Dictionary = {}
+var _word_indices: Dictionary = {}
+var _page_index: int = 0
 var _styled_scale: float = -1.0
 var _styled_accent: Color = Color.TRANSPARENT
 
@@ -57,6 +66,12 @@ func _build() -> void:
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count_label.add_theme_color_override("font_color", Style.MUTED)
 	_heading.add_child(count_label)
+	meaning_label = Style.label("Tap a word to hear it.", 13)
+	meaning_label.name = "AgeWordMeaning"
+	meaning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	meaning_label.add_theme_color_override("font_color", Style.MUTED)
+	meaning_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(meaning_label)
 	scroll = ResultScroll.new()
 	scroll.name = "AgeWordScroll"
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -75,6 +90,28 @@ func _build() -> void:
 	_content.add_child(grid)
 	grid.resized.connect(_reveal_focused_word)
 	scroll.resized.connect(_layout)
+	_navigation = HBoxContainer.new()
+	_navigation.name = "AgeWordPages"
+	_navigation.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(_navigation)
+	previous_button = Button.new()
+	previous_button.name = "AgeWordPrevious"
+	previous_button.text = "Previous"
+	UiClick.bind_button(previous_button)
+	previous_button.pressed.connect(_change_page.bind(-1))
+	_navigation.add_child(previous_button)
+	page_label = Style.label("Page 1 of 1", 13)
+	page_label.name = "AgeWordPage"
+	page_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_navigation.add_child(page_label)
+	next_button = Button.new()
+	next_button.name = "AgeWordNext"
+	next_button.text = "Next"
+	UiClick.bind_button(next_button)
+	next_button.pressed.connect(_change_page.bind(1))
+	_navigation.add_child(next_button)
+	_update_navigation()
 
 
 func configure(words: Array, band: Dictionary, palette: Dictionary) -> void:
@@ -94,8 +131,13 @@ func configure(words: Array, band: Dictionary, palette: Dictionary) -> void:
 		cancel_input()
 	if words_changed:
 		_words = ordered
-		_rebuild_words()
+		_word_indices.clear()
+		for index in range(_words.size()):
+			_word_indices[str(_words[index].id)] = index
 	if words_changed or band_changed:
+		_page_index = 0
+		meaning_label.text = "Tap a word to hear it."
+		_rebuild_words()
 		scroll.scroll_vertical = 0
 	# Refreshing identical data must not jump back to a card the player focused
 	# before scrolling elsewhere. Geometry changes handle their own focus reveal.
@@ -108,7 +150,9 @@ func _rebuild_words() -> void:
 		button.queue_free()
 	word_buttons.clear()
 	_by_id.clear()
-	for word: Dictionary in _words:
+	# Keep only the current page's image resources alive.
+	_textures.clear()
+	for word: Dictionary in _words.slice(_page_index * PAGE_SIZE, (_page_index + 1) * PAGE_SIZE):
 		var button := Button.new()
 		var id: String = str(word.get("id", word.get("text", "")))
 		button.name = "AgeWord_" + id
@@ -120,7 +164,8 @@ func _rebuild_words() -> void:
 		button.set_meta("word_id", id)
 		for property: Dictionary in button.get_property_list():
 			if property.name == "accessibility_name":
-				button.set("accessibility_name", "Hear " + str(word.get("text", "")))
+				button.set("accessibility_name", "Hear " + str(word.get("text", ""))
+					+ (". " + str(word.meaning) if word.has("meaning") else ""))
 				break
 		grid.add_child(button)
 		var column := VBoxContainer.new()
@@ -150,6 +195,47 @@ func _rebuild_words() -> void:
 		word_buttons.append(button)
 		_by_id[id] = button
 	_styled_scale = -1.0
+	_update_navigation()
+
+
+func word_count() -> int:
+	return _words.size()
+
+
+func _page_count() -> int:
+	return maxi(1, ceili(float(_words.size()) / PAGE_SIZE))
+
+
+func _update_navigation() -> void:
+	if previous_button == null:
+		return
+	previous_button.disabled = _page_index == 0
+	next_button.disabled = _page_index >= _page_count() - 1
+	page_label.text = "Page %d of %d" % [_page_index + 1, _page_count()]
+
+
+func _change_page(direction: int) -> void:
+	if not _can_interact():
+		return
+	var focus_previous: bool = previous_button.has_focus()
+	var focus_next: bool = next_button.has_focus()
+	_set_page(_page_index + direction)
+	if focus_previous and previous_button.disabled and not next_button.disabled:
+		next_button.grab_focus()
+	elif focus_next and next_button.disabled and not previous_button.disabled:
+		previous_button.grab_focus()
+
+
+func _set_page(index: int) -> void:
+	var next_page: int = clampi(index, 0, _page_count() - 1)
+	if next_page == _page_index:
+		return
+	cancel_input()
+	_page_index = next_page
+	meaning_label.text = "Tap a word to hear it."
+	_rebuild_words()
+	scroll.scroll_vertical = 0
+	_layout(false)
 
 
 func _word_texture(source: String) -> Texture2D:
@@ -169,6 +255,7 @@ func _hear_word(button: Button) -> void:
 	if not _can_interact() or not is_instance_valid(button) or not word_buttons.has(button):
 		return
 	var word: Dictionary = button.get_meta("word")
+	meaning_label.text = str(word.text).capitalize() + (": " + str(word.meaning) if word.has("meaning") else "")
 	hear_requested.emit(word.duplicate(true))
 
 
@@ -178,9 +265,10 @@ func cancel_input() -> void:
 
 
 func focus_word(id: String) -> bool:
-	var button: Button = _by_id.get(id)
-	if button == null or not _can_interact():
+	if not _word_indices.has(id) or not _can_interact():
 		return false
+	_set_page(int(_word_indices[id]) / PAGE_SIZE)
+	var button: Button = _by_id.get(id)
 	button.grab_focus()
 	ensure_control_visible(button, true)
 	return true
@@ -214,7 +302,7 @@ func _reveal_focused_word() -> void:
 
 
 func _layout(reveal_focus: bool = true) -> void:
-	if scroll == null or size.x <= 0:
+	if scroll == null or _navigation == null or size.x <= 0:
 		return
 	var scale: float = Style.ui_scale(self)
 	var gap: int = ceili(8.0 / scale)
@@ -224,6 +312,10 @@ func _layout(reveal_focus: bool = true) -> void:
 	_heading.custom_minimum_size.y = ceilf(30.0 / scale)
 	title_label.add_theme_font_size_override("font_size", ceili(19.0 / scale))
 	count_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
+	meaning_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
+	meaning_label.custom_minimum_size.y = ceilf(34.0 / scale)
+	_navigation.add_theme_constant_override("separation", gap)
+	page_label.add_theme_font_size_override("font_size", ceili(12.0 / scale))
 	for edge in ["left", "right", "top", "bottom"]:
 		_content.add_theme_constant_override("margin_" + edge, inset)
 	var available: float = maxf(1.0, size.x - inset * 2.0)
@@ -232,6 +324,13 @@ func _layout(reveal_focus: bool = true) -> void:
 	grid.add_theme_constant_override("v_separation", gap)
 	var accent: Color = _palette.get("accent", Style.GOOD)
 	var restyle: bool = not is_equal_approx(_styled_scale, scale) or _styled_accent != accent
+	for button: Button in [previous_button, next_button]:
+		if restyle:
+			var previous_focus: int = button.focus_mode
+			Style.action_button(button, accent)
+			button.focus_mode = previous_focus
+		button.custom_minimum_size = Vector2(80.0, 48.0) / scale
+		button.add_theme_font_size_override("font_size", ceili(13.0 / scale))
 	for button: Button in word_buttons:
 		if restyle:
 			var previous_focus: int = button.focus_mode
@@ -258,10 +357,14 @@ func _layout(reveal_focus: bool = true) -> void:
 
 func snapshot() -> Dictionary:
 	var ids: Array[String] = []
+	for word: Dictionary in _words:
+		ids.append(str(word.id))
+	var visible_ids: Array[String] = []
 	for button: Button in word_buttons:
-		ids.append(str(button.get_meta("word_id")))
+		visible_ids.append(str(button.get_meta("word_id")))
 	return {"visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
-		"word_count": word_buttons.size(), "word_ids": ids,
+		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids,
+		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text,
 		"columns": grid.columns if grid != null else 0,
 		"scroll_offset": scroll.scroll_vertical if scroll != null else 0,
 		"scroll_max": maxf(0.0, scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page) if scroll != null else 0.0}
