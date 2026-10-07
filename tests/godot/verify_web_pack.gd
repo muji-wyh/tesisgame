@@ -57,6 +57,7 @@ func _verify() -> void:
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
 			failures += 1
+	failures += _verify_phrases(words)
 	var required := OS.get_cmdline_user_args()
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 	var effects := ["select", "correct"]
@@ -163,6 +164,51 @@ func _verify() -> void:
 			failures += 1
 	print("Startup pack: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
 	quit(1 if failures else 0)
+
+
+func _verify_phrases(words: Array) -> int:
+	var failures := 0
+	var phrase_data = load("res://scripts/phrase_data.gd")
+	var game_data = load("res://scripts/game_data.gd")
+	if phrase_data == null or not FileAccess.file_exists("res://phrases.json"):
+		printerr("The startup pack must contain the Phrase Builder catalog and loader.")
+		return 1
+	var phrases: Array[Dictionary] = phrase_data.entries()
+	for age_band in ["4-6", "7-9", "10-plus"]:
+		if phrase_data.for_age(age_band).size() < 3:
+			printerr("The startup pack needs at least three valid phrases for age level " + age_band + ".")
+			failures += 1
+	var vocabulary: Dictionary = {}
+	for word: Dictionary in words:
+		vocabulary[str(word.id)] = word
+	for phrase: Dictionary in phrases:
+		var phrase_words: PackedStringArray = []
+		for word_id: String in phrase.words:
+			if not vocabulary.has(word_id):
+				printerr("A phrase references a word missing from the startup pack: " + phrase.id + " / " + word_id)
+				failures += 1
+				continue
+			var word: Dictionary = vocabulary[word_id]
+			phrase_words.append(str(word.text))
+			if game_data.word_level(word) > game_data.word_level(phrase):
+				printerr("A phrase exceeds its vocabulary age level: " + phrase.id + " / " + word_id)
+				failures += 1
+		if " ".join(phrase_words) != phrase.text or not vocabulary.has(phrase.picture_id):
+			printerr("A phrase has inconsistent text or a missing picture reference: " + phrase.id)
+			failures += 1
+		var audio_path: String = "res://" + str(phrase.audio)
+		var stream: AudioStream = load(audio_path) if ResourceLoader.exists(audio_path) else null
+		if stream == null or stream.get_length() <= 0.0:
+			printerr("A whole-phrase recording is missing or invalid in the startup pack: " + audio_path)
+			failures += 1
+	for cue in ["intro", "try-again", "complete"]:
+		var audio_path: String = "res://assets/audio/voice/phrase-" + cue + ".wav"
+		var stream: AudioStream = load(audio_path) if ResourceLoader.exists(audio_path) else null
+		if stream == null or stream.get_length() <= 0.0:
+			printerr("A Phrase Builder prompt is missing or invalid in the startup pack: " + audio_path)
+			failures += 1
+	print("Phrase Builder: %d phrases, vocabulary references, age levels, and three spoken cues checked in the startup pack." % phrases.size())
+	return failures
 
 
 func _verify_excluded_content_absent() -> int:

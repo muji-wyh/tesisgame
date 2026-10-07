@@ -68,6 +68,19 @@ test('changing the sourced menu cue contract rejects an older export', t => {
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*ui-click-audio\.cjs/);
 });
 
+test('editing or deleting the phrase catalog rejects an older export', t => {
+  const { root, write, record } = fixture(t);
+  write('phrases.json', '[{"id":"red-apple","text":"red apple"}]');
+  const receipt = record();
+  assert.ok(receipt.sources.some(file => file.path === 'phrases.json'),
+    'The raw phrase catalog participates in the exact source inventory');
+  write('phrases.json', '[{"id":"green-apple","text":"green apple"}]');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*phrases\.json/);
+  record();
+  fs.unlinkSync(path.join(root, 'phrases.json'));
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*phrases\.json/);
+});
+
 test('changed or missing deployed files fail verification even when source inputs are unchanged', t => {
   const { root, write, record } = fixture(t);
   record();

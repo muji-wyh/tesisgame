@@ -1,0 +1,405 @@
+[
+  {
+    "id": "red-apple",
+    "text": "red apple",
+    "level": "basic",
+    "words": [
+      "red",
+      "apple"
+    ],
+    "picture_id": "apple",
+    "audio": "assets/audio/voice/phrase-red-apple.wav"
+  },
+  {
+    "id": "big-red-ball",
+    "text": "big red ball",
+    "level": "basic",
+    "words": [
+      "big",
+      "red",
+      "ball"
+    ],
+    "picture_id": "ball",
+    "audio": "assets/audio/voice/phrase-big-red-ball.wav"
+  },
+  {
+    "id": "soft-toy",
+    "text": "soft toy",
+    "level": "basic",
+    "words": [
+      "soft",
+      "toy"
+    ],
+    "picture_id": "toy",
+    "audio": "assets/audio/voice/phrase-soft-toy.wav"
+  },
+  {
+    "id": "happy-baby",
+    "text": "happy baby",
+    "level": "basic",
+    "words": [
+      "happy",
+      "baby"
+    ],
+    "picture_id": "baby",
+    "audio": "assets/audio/voice/phrase-happy-baby.wav"
+  },
+  {
+    "id": "warm-milk",
+    "text": "warm milk",
+    "level": "basic",
+    "words": [
+      "warm",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-warm-milk.wav"
+  },
+  {
+    "id": "sweet-corn",
+    "text": "sweet corn",
+    "level": "basic",
+    "words": [
+      "sweet",
+      "corn"
+    ],
+    "picture_id": "corn",
+    "audio": "assets/audio/voice/phrase-sweet-corn.wav"
+  },
+  {
+    "id": "jump-up",
+    "text": "jump up",
+    "level": "basic",
+    "words": [
+      "jump",
+      "up"
+    ],
+    "picture_id": "jump",
+    "audio": "assets/audio/voice/phrase-jump-up.wav"
+  },
+  {
+    "id": "sit-down",
+    "text": "sit down",
+    "level": "basic",
+    "words": [
+      "sit",
+      "down"
+    ],
+    "picture_id": "sit",
+    "audio": "assets/audio/voice/phrase-sit-down.wav"
+  },
+  {
+    "id": "go-outside",
+    "text": "go outside",
+    "level": "basic",
+    "words": [
+      "go",
+      "outside"
+    ],
+    "picture_id": "outside",
+    "audio": "assets/audio/voice/phrase-go-outside.wav"
+  },
+  {
+    "id": "drink-water",
+    "text": "drink water",
+    "level": "basic",
+    "words": [
+      "drink",
+      "water"
+    ],
+    "picture_id": "drink",
+    "audio": "assets/audio/voice/phrase-drink-water.wav"
+  },
+  {
+    "id": "eat-breakfast",
+    "text": "eat breakfast",
+    "level": "basic",
+    "words": [
+      "eat",
+      "breakfast"
+    ],
+    "picture_id": "breakfast",
+    "audio": "assets/audio/voice/phrase-eat-breakfast.wav"
+  },
+  {
+    "id": "cook-rice",
+    "text": "cook rice",
+    "level": "basic",
+    "words": [
+      "cook",
+      "rice"
+    ],
+    "picture_id": "rice",
+    "audio": "assets/audio/voice/phrase-cook-rice.wav"
+  },
+  {
+    "id": "shiny-shell",
+    "text": "shiny shell",
+    "level": "growing",
+    "words": [
+      "shiny",
+      "shell"
+    ],
+    "picture_id": "shell",
+    "audio": "assets/audio/voice/phrase-shiny-shell.wav"
+  },
+  {
+    "id": "crunchy-carrot",
+    "text": "crunchy carrot",
+    "level": "growing",
+    "words": [
+      "crunchy",
+      "carrot"
+    ],
+    "picture_id": "carrot",
+    "audio": "assets/audio/voice/phrase-crunchy-carrot.wav"
+  },
+  {
+    "id": "healthy-breakfast",
+    "text": "healthy breakfast",
+    "level": "growing",
+    "words": [
+      "healthy",
+      "breakfast"
+    ],
+    "picture_id": "breakfast",
+    "audio": "assets/audio/voice/phrase-healthy-breakfast.wav"
+  },
+  {
+    "id": "striped-scarf",
+    "text": "striped scarf",
+    "level": "growing",
+    "words": [
+      "striped",
+      "scarf"
+    ],
+    "picture_id": "scarf",
+    "audio": "assets/audio/voice/phrase-striped-scarf.wav"
+  },
+  {
+    "id": "waterproof-jacket",
+    "text": "waterproof jacket",
+    "level": "growing",
+    "words": [
+      "waterproof",
+      "jacket"
+    ],
+    "picture_id": "jacket",
+    "audio": "assets/audio/voice/phrase-waterproof-jacket.wav"
+  },
+  {
+    "id": "delicious-soup",
+    "text": "delicious soup",
+    "level": "growing",
+    "words": [
+      "delicious",
+      "soup"
+    ],
+    "picture_id": "soup",
+    "audio": "assets/audio/voice/phrase-delicious-soup.wav"
+  },
+  {
+    "id": "collect-wood",
+    "text": "collect wood",
+    "level": "growing",
+    "words": [
+      "collect",
+      "wood"
+    ],
+    "picture_id": "wood",
+    "audio": "assets/audio/voice/phrase-collect-wood.wav"
+  },
+  {
+    "id": "recycle-paper",
+    "text": "recycle paper",
+    "level": "growing",
+    "words": [
+      "recycle",
+      "paper"
+    ],
+    "picture_id": "recycle",
+    "audio": "assets/audio/voice/phrase-recycle-paper.wav"
+  },
+  {
+    "id": "play-tennis",
+    "text": "play tennis",
+    "level": "growing",
+    "words": [
+      "play",
+      "tennis"
+    ],
+    "picture_id": "tennis",
+    "audio": "assets/audio/voice/phrase-play-tennis.wav"
+  },
+  {
+    "id": "warm-wool-blanket",
+    "text": "warm wool blanket",
+    "level": "growing",
+    "words": [
+      "warm",
+      "wool",
+      "blanket"
+    ],
+    "picture_id": "blanket",
+    "audio": "assets/audio/voice/phrase-warm-wool-blanket.wav"
+  },
+  {
+    "id": "sprinkle-glitter",
+    "text": "sprinkle glitter",
+    "level": "growing",
+    "words": [
+      "sprinkle",
+      "glitter"
+    ],
+    "picture_id": "glitter",
+    "audio": "assets/audio/voice/phrase-sprinkle-glitter.wav"
+  },
+  {
+    "id": "serve-hot-soup",
+    "text": "serve hot soup",
+    "level": "growing",
+    "words": [
+      "serve",
+      "hot",
+      "soup"
+    ],
+    "picture_id": "soup",
+    "audio": "assets/audio/voice/phrase-serve-hot-soup.wav"
+  },
+  {
+    "id": "bright-red-birthday-balloon",
+    "text": "bright red birthday balloon",
+    "level": "advanced",
+    "words": [
+      "bright",
+      "red",
+      "birthday",
+      "balloon"
+    ],
+    "picture_id": "balloon",
+    "audio": "assets/audio/voice/phrase-bright-red-birthday-balloon.wav"
+  },
+  {
+    "id": "deep-blue-lake",
+    "text": "deep blue lake",
+    "level": "advanced",
+    "words": [
+      "deep",
+      "blue",
+      "lake"
+    ],
+    "picture_id": "lake",
+    "audio": "assets/audio/voice/phrase-deep-blue-lake.wav"
+  },
+  {
+    "id": "frozen-strawberry-dessert",
+    "text": "frozen strawberry dessert",
+    "level": "advanced",
+    "words": [
+      "frozen",
+      "strawberry",
+      "dessert"
+    ],
+    "picture_id": "dessert",
+    "audio": "assets/audio/voice/phrase-frozen-strawberry-dessert.wav"
+  },
+  {
+    "id": "transparent-glass",
+    "text": "transparent glass",
+    "level": "advanced",
+    "words": [
+      "transparent",
+      "glass"
+    ],
+    "picture_id": "glass",
+    "audio": "assets/audio/voice/phrase-transparent-glass.wav"
+  },
+  {
+    "id": "flexible-spine",
+    "text": "flexible spine",
+    "level": "advanced",
+    "words": [
+      "flexible",
+      "spine"
+    ],
+    "picture_id": "spine",
+    "audio": "assets/audio/voice/phrase-flexible-spine.wav"
+  },
+  {
+    "id": "favorite-music",
+    "text": "favorite music",
+    "level": "advanced",
+    "words": [
+      "favorite",
+      "music"
+    ],
+    "picture_id": "music",
+    "audio": "assets/audio/voice/phrase-favorite-music.wav"
+  },
+  {
+    "id": "celebrate-today",
+    "text": "celebrate today",
+    "level": "advanced",
+    "words": [
+      "celebrate",
+      "today"
+    ],
+    "picture_id": "celebrate",
+    "audio": "assets/audio/voice/phrase-celebrate-today.wav"
+  },
+  {
+    "id": "travel-north",
+    "text": "travel north",
+    "level": "advanced",
+    "words": [
+      "travel",
+      "north"
+    ],
+    "picture_id": "north",
+    "audio": "assets/audio/voice/phrase-travel-north.wav"
+  },
+  {
+    "id": "chop-wood",
+    "text": "chop wood",
+    "level": "advanced",
+    "words": [
+      "chop",
+      "wood"
+    ],
+    "picture_id": "chop",
+    "audio": "assets/audio/voice/phrase-chop-wood.wav"
+  },
+  {
+    "id": "plant-grass",
+    "text": "plant grass",
+    "level": "advanced",
+    "words": [
+      "plant",
+      "grass"
+    ],
+    "picture_id": "plant",
+    "audio": "assets/audio/voice/phrase-plant-grass.wav"
+  },
+  {
+    "id": "transport-food",
+    "text": "transport food",
+    "level": "advanced",
+    "words": [
+      "transport",
+      "food"
+    ],
+    "picture_id": "transport",
+    "audio": "assets/audio/voice/phrase-transport-food.wav"
+  },
+  {
+    "id": "refrigerate-food",
+    "text": "refrigerate food",
+    "level": "advanced",
+    "words": [
+      "refrigerate",
+      "food"
+    ],
+    "picture_id": "refrigerate",
+    "audio": "assets/audio/voice/phrase-refrigerate-food.wav"
+  }
+]

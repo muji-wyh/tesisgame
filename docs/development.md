@@ -87,8 +87,9 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
-game effects, Pip sounds, eight background tracks, eight world greetings, the two reference pair-feedback clips and
-88 themed chest cues. Retired Voice Pop reports and Match correction/loss recordings are excluded.
+game effects, Pip sounds, eight background tracks, eight world greetings, 36 whole-phrase
+recordings, three Phrase Builder prompts, the two reference pair-feedback clips, and 88 themed
+chest cues. Retired Voice Pop reports and Match correction/loss recordings are excluded.
 Once startup finishes, playback needs no further audio downloads. The build opens the actual exported
 PCK and loads the required audio resources to verify that they are present and
 playable. Retired arrival and opening voice prompts remain excluded.

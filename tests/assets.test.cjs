@@ -6,6 +6,7 @@ const crypto = require('node:crypto');
 const { readModelContainer, embeddedModelImages, imageDimensions } = require('./helpers/chest-model-assets.cjs');
 const root = path.resolve(__dirname, '..');
 const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
+const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
 const seasons = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map((id) => ({
   id, symbol: `assets/images/rewards/${id}.svg`, bgm: `assets/audio/bgm/${id}.wav`
 }));
@@ -21,7 +22,10 @@ const expectedPrompts = {
   'ocean-theme': 'Welcome to the ocean!',
   'space-theme': 'Welcome to space!',
   'jungle-theme': 'Welcome to the jungle!',
-  'candy-theme': 'Welcome to candy land!'
+  'candy-theme': 'Welcome to candy land!',
+  'phrase-intro': 'Listen to Pip. Put the words in order.',
+  'phrase-try-again': 'Try a different order. You can do it!',
+  'phrase-complete': 'Three phrases complete! Your treasure is ready.'
 };
 const expectedRewardColors = {
   spring: ['#edf8ec', '#438363', '#8ecf6b'],
@@ -365,7 +369,7 @@ test('the image directories contain exactly the 1322 named vocabulary and reward
   }
 });
 
-test('voice prompts contain exactly the eight world greetings', () => {
+test('voice prompts contain eight world greetings and three Phrase Builder cues', () => {
   const filename = path.join(root, 'voice-prompts.json');
   assert.ok(fs.existsSync(filename), 'Missing voice-prompts.json');
   const prompts = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -376,7 +380,7 @@ test('voice prompts contain exactly the eight world greetings', () => {
   }
 });
 
-test('all eight English prompts have nonempty prerecorded mono voice WAVs', () => {
+test('all eleven English prompts have nonempty prerecorded mono voice WAVs', () => {
   for (const id of Object.keys(expectedPrompts)) {
     assertVoice(path.join('assets', 'audio', 'voice', `${id}.wav`));
   }
@@ -395,14 +399,24 @@ test('every vocabulary entry has its own prerecorded English pronunciation', () 
   assert.equal(recordings.size, words.length, 'Different words must not reuse a recording.');
 });
 
-test('voice sources contain exactly 1250 pronunciations and eight active prompts', () => {
+test('every phrase has a distinct prerecorded whole-phrase pronunciation', () => {
+  const recordings = new Set();
+  for (const phrase of phrases) {
+    assert.equal(phrase.audio, `assets/audio/voice/phrase-${phrase.id}.wav`);
+    recordings.add(sha256(assertVoice(phrase.audio).data));
+  }
+  assert.equal(recordings.size, phrases.length, 'Different phrases must not reuse a recording.');
+});
+
+test('voice sources contain exactly 1250 words, 36 phrases, and eleven active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
     ...Object.keys(expectedPrompts).map((id) => `${id}.wav`),
-    ...words.map(({ id }) => `word-${id}.wav`)
+    ...words.map(({ id }) => `word-${id}.wav`),
+    ...phrases.map(({ id }) => `phrase-${id}.wav`)
   ];
-  assert.equal(expected.length, 1258);
+  assert.equal(expected.length, 1297);
   assert.deepEqual(assetFiles(directory), expected.sort());
 });
 
@@ -413,7 +427,8 @@ test('every shipped spoken recording matches the approved Ava profile and source
   }
   const expected = new Map([
     ...Object.entries(expectedPrompts),
-    ...words.map(word => [`word-${word.id}`, word.text])
+    ...words.map(word => [`word-${word.id}`, word.text]),
+    ...phrases.map(phrase => [`phrase-${phrase.id}`, phrase.text])
   ]);
   assert.equal(manifest.files.length, expected.size);
   assert.equal(new Set(manifest.files.map(file => file.id)).size, expected.size);

@@ -4,7 +4,7 @@ const { createHash } = require('node:crypto');
 
 const INPUTS = [
   'assets', 'scenes', 'scripts', 'web', 'project.godot', 'export_presets.cfg',
-  'package.json', 'package-lock.json', 'words.json', 'voice-prompts.json',
+  'package.json', 'package-lock.json', 'words.json', 'phrases.json', 'voice-prompts.json',
   'docs/assets/voice-pop-reference-audio.json', 'docs/assets/pair-feedback-audio.json',
   'docs/assets/ui-click-audio.json',
   'tests/godot/verify_web_pack.gd',

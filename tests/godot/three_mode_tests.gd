@@ -23,15 +23,15 @@ func settle() -> void:
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 800)
-	var directory := "user://three-modes-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	var directory := "user://four-modes-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
-	check(app.MODES.keys() == ["match", "memory", "pop"], "The available modes are Match, Memory and Voice Pop")
-	check(app._mode_buttons.size() == 3, "Each of the three modes has one popover choice")
+	check(app.MODES.keys() == ["match", "memory", "pop", "phrase"], "The available modes are Match, Memory, Voice Pop, and Phrase Builder")
+	check(app._mode_buttons.size() == 4, "Each of the four modes has one popover choice")
 	check(app.find_child("Mode_quest", true, false) == null
 		and app.find_child("TalkQuest", true, false) == null
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_quest"),
@@ -122,5 +122,5 @@ func _run() -> void:
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)
-	print("Three-mode game: %d checks, %d failures" % [checks, failures])
+	print("Four-mode game: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

@@ -26,8 +26,9 @@ Its architecture redraws on resize or a world change; play effects remain separa
 Choosing a world keeps the current page open while changing the
 look and sound, without resetting the game, selection, or hints. An unsaved change
 shows an in-page retry notice. Locked toy cards show gift progress below the room.
-Results keep the chest, word review, and the next action without game-mode
-controls. Keyboard and controller focus remains visible across the available games.
+Match, Memory, and Phrase Builder results show the chest, with New adventure
+appearing after its reward saves. Keyboard and controller focus remains visible
+across the available games.
 
 Scrollable lists and strips retain momentum after a swipe or mouse drag and
 settle gradually. Mouse-wheel scrolling also eases to a stop. This applies to
@@ -81,9 +82,39 @@ existing keyboard/controller activation to replay them. The written word and
 input target stay still; new input cancels old motion, and nothing is queued.
 These reactions also work without sound. Reduced motion keeps the original
 static picture and normal pronunciation instead.
-Tap the upper-left Pip to choose **Match**, **Memory**, or **Voice Pop**. The current mode is marked in the library. Selecting a mode
+Tap the upper-left Pip to choose **Match**, **Memory**, **Voice Pop**, or **Phrase Builder**. The current mode is marked in the library. Selecting a mode
 closes the menu; selecting the current mode keeps the round. Tap outside or use
 Escape / controller Back to dismiss it. Entry and reload select Match.
+
+### Phrase Builder
+
+Pip says a short English phrase. Tap word-bank tiles in order, then choose
+**Check answer**. A selected tile can be tapped to return it to the bank, and
+**Clear** returns the entire answer. Incorrect answers stay editable with no
+timer, lives, or limit on retries. Correct answers offer **Continue**; the third
+offers **Open chest**, which enters the shared treasure screen. Only opening
+and saving the chest awards gift progress. **New adventure** starts another
+Phrase Builder round.
+
+Every round selects three distinct phrases from `phrases.json`. Its 36 entries
+contain 12 basic, 12 growing, and 12 advanced phrases built from existing word
+IDs. Two extra word choices make each puzzle a selection and ordering task.
+The saved age range chooses the next round's phrases; changing it during a
+round preserves the current questions and answers.
+
+**Listen** repeats the full recording, selecting a word plays its pronunciation,
+and correct/incorrect checks use the shared reference feedback sounds. Recorded
+instructions, encouragement, and completion cues use the approved
+[Ava voice](assets/ava-voice.md). **Show phrase** reveals the written prompt;
+muting audio reveals it automatically. Opening menus, Pip's room, diagnostics,
+or backgrounding the page cancels speech and pauses input. Returning preserves
+the puzzle without replaying interrupted speech. Reduced motion keeps Pip's
+feedback readable, and all choices support keyboard and controller input.
+
+The character reuses the integrated original Pip artwork and themed
+[animation parts](assets/pip-dance.md); picture clues use the existing vocabulary
+illustrations and retain their recorded licenses. No artwork from the gameplay
+reference video is copied. Phrase Builder does not add a competitive leaderboard.
 
 ### Voice Pop
 
@@ -191,8 +222,9 @@ all five pairs opens the normal chest for one saved step of gift progress.
 It floats at the bottom-right without reserving space or moving the chest.
 **Repeat lesson** has been removed.
 **Retry saving** appears only if reward storage needs recovery, without restarting play.
-**New adventure** on
-results starts a fresh Match game with five vocabulary words. The manual Explore
+**New adventure** on card-game
+results starts a fresh Match game with five vocabulary words; Phrase Builder
+results continue with three new phrases. The manual Explore
 picker has been removed. Existing room choices, world preferences, and journey
 metadata are preserved; a failed write keeps play available and offers
 **Retry saving** in the header without resetting the current word.
@@ -322,7 +354,7 @@ board belong to its topic. New adventure chooses a different available topic and
 Custom word lists with too few related words use a mixed Word explorers board; seeded
 rounds remain reproducible. Changing the season keeps the current adventure.
 
-After winning Match or Memory, the treasure chest fills the result stage. Once the
+After winning Match, Memory, or Phrase Builder, the treasure chest fills the result stage. Once the
 chest opens and its reward is saved, **New adventure** appears as a floating button
 in the bottom-right corner, without taking space away from the chest.
 
@@ -503,7 +535,7 @@ whole-page scrolling. Keyboard and controller focus reveal offscreen choices.
 Pip and earned toys remain inside the fixed playground during play and resizing.
 A won reward is still revealed immediately after the required hold.
 
-**New adventure** starts a fresh round, avoiding the previous board's words when at least
+In Match, **New adventure** starts a fresh round, avoiding the previous board's words when at least
 five unused words are available. Small vocabularies still produce a complete board;
 explicit seeds remain reproducible. Audio starts with normal game interaction and stops on
 hiding or reset; returning from a hidden page does not force autoplay. Match has no

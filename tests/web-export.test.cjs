@@ -33,6 +33,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /variant\/thread_support=false/);
   assert.match(preset, /variant\/extensions_support=false/);
   assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/manifest\.json/);
+  assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('phrases.json'),
+    'The raw phrase catalog must be available to the exported native game');
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
@@ -49,7 +51,9 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
-    'assets/imported-audio/ui-click/select.wav'
+    'assets/imported-audio/ui-click/select.wav',
+    ...JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8')).map(phrase => phrase.audio),
+    ...['intro', 'try-again', 'complete'].map(cue => `assets/audio/voice/phrase-${cue}.wav`)
   ]) {
     assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
       `Active audio must be included in the game pack: ${source}`);
@@ -140,7 +144,7 @@ test('accessible help describes the current controls rather than the removed mot
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /Choose Match, Memory, or Voice Pop\./);
+  assert.match(help, /Choose Match, Memory, Voice Pop, or Phrase Builder\./);
   assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
   assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
     'Retired adventure progress stays on the device and is neither read nor erased');
@@ -202,6 +206,9 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   assert.deepEqual(reference.map(asset => asset.source), [...fixture.assets, fixture.launch].map(asset => `res://${asset.destination}`));
   assert.ok(reference.every(asset => asset.imported.startsWith('res://.godot/imported/') && asset.bytes.length > 4));
   fs.writeFileSync(path.join(fixture.directory, 'voice-prompts.json'), '{}');
+  const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
+  fs.writeFileSync(path.join(fixture.directory, 'phrases.json'), JSON.stringify(phrases));
+  for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -212,7 +219,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 104);
+  assert.equal(required.length, 140);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
@@ -222,6 +229,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   }
   assert.ok(required.some(asset => asset.source === 'res://assets/imported-audio/ui-click/select.wav'),
     'Native menu feedback ships in the startup pack without a later fetch');
+  assert.deepEqual(required.filter(asset => asset.source.includes('/voice/phrase-')).map(asset => asset.source),
+    phrases.map(phrase => `res://${phrase.audio}`), 'Every whole-phrase recording is verified as a required resource');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
     'Retired adventure audio is no longer a required packaging input');
   assert.ok(required.every(asset => asset.source.startsWith('res://') && asset.imported.startsWith('res://')),

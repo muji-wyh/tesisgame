@@ -1,9 +1,10 @@
 # Ava speech
 
-All 1,250 vocabulary pronunciations and eight active world greetings use the user's
-approved **Ava Sweet** profile. This replaces the Jenny recordings on October 3,
-2026. The approved preview says "Hello, how are you?"; the same voice settings
-apply to the game catalog without changing its words or prompts.
+All 1,250 vocabulary pronunciations, 36 whole-phrase recordings, eight world
+greetings, and three Phrase Builder cues use the user's approved **Ava Sweet**
+profile. The original vocabulary and greetings replaced Jenny on October 3, 2026;
+Phrase Builder adds 39 recordings on October 7. The approved preview says
+"Hello, how are you?"; its voice settings apply throughout the game catalog.
 
 | Setting | Value |
 | --- | --- |
@@ -27,8 +28,9 @@ apply to the game catalog without changing its words or prompts.
   The client library's LGPL license and this repository's code license do not
   grant additional rights to Microsoft's voice service. The response supplies
   no separate CC0 or stock-audio license.
-- **Scripts:** Original English game text from `words.json` and
-  `voice-prompts.json`.
+- **Scripts:** Original English game text from `words.json`, `phrases.json`, and
+  `voice-prompts.json`. Phrases reuse existing words and receive complete spoken
+  recordings, preserving natural phrase rhythm instead of concatenating word clips.
 - **Acquisition status:** The selected voice was first generated as local
   previews and approved by the user. The full catalog is generated, validated,
   and integrated as repository WAV recordings, not as remote previews.
@@ -56,6 +58,10 @@ dependencies. `tools/generate-voices.ps1` calls the same generator.
 Use `--missing` only to add absent recordings to an already migrated catalog.
 Use full generation when changing the voice profile or spoken text.
 
+The Phrase Builder batch was acquired with `node tools/generate-voices.cjs --missing`.
+Only its 39 absent files were published; all 1,258 existing recordings retained
+their documented bytes. The manifest contains 1,297 active recordings.
+
 The generator uses at most two concurrent synthesis requests, bounded retries,
 and a resumable cache keyed by the profile and spoken text in `build/voice-cache`.
 It validates every result before replacing the existing batch. Unavailable
@@ -69,8 +75,10 @@ synthesis scripts are recorded in the manifest; no audio editing is applied.
 
 ## Runtime coverage
 
-Match, Memory, Voice Pop, word lists, and results all play the same
-bundled pronunciation files through `GameAudio.say`. Eight world greetings use the same profile. Match no longer includes spoken
+Match, Memory, Voice Pop, Phrase Builder, and the vocabulary library play bundled
+pronunciations through `GameAudio.say`. Phrase Builder also has its own spoken
+introduction, gentle retry guidance, completion cue, and 36 whole-phrase clips.
+Eight world greetings use the same profile. Match no longer includes spoken
 wrong-answer feedback or a loss prompt. Gameplay
 never asks the operating system to choose a different speaking voice.
 

@@ -130,10 +130,24 @@ function collectPairFeedbackAudio(root) {
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
 function collectRequiredAudio(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
+  const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
+  if (!Array.isArray(phrases) || !phrases.length) {
+    throw new Error('The required phrase audio catalog must be a nonempty array.');
+  }
+  const phrasePaths = new Set();
+  for (const phrase of phrases) {
+    if (!phrase || typeof phrase.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(phrase.id) ||
+        phrase.audio !== `assets/audio/voice/phrase-${phrase.id}.wav` || phrasePaths.has(phrase.audio) ||
+        Object.hasOwn(prompts, `phrase-${phrase.id}`)) {
+      throw new Error('Each phrase needs a unique catalog ID and its own in-pack voice path.');
+    }
+    phrasePaths.add(phrase.audio);
+  }
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
+    ...phrasePaths,
     ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
   ];
   const uiClick = readUiClickAudio(root);

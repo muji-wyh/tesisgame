@@ -94,6 +94,21 @@ func _memory_answer(app, correct: bool) -> Dictionary:
 	return memory.memory.cards[second].word
 
 
+func _phrase_answer(app) -> void:
+	var view = app._phrase
+	for id in view.game.current_question().words:
+		var option_index: int = -1
+		for index in range(view.game.options.size()):
+			if view.game.options[index].id == id:
+				option_index = index
+				break
+		check(option_index >= 0, "The phrase fixture contains each requested word")
+		if option_index < 0:
+			return
+		view.option_buttons[option_index].pressed.emit()
+	view.action_button.pressed.emit()
+
+
 func _reaction_playing(app) -> bool:
 	return app.audio.pip_reaction != null and app.audio.pip_reaction.playing
 
@@ -189,7 +204,7 @@ func _check_pop(app) -> void:
 
 
 func _check_preferences(app) -> void:
-	for mode in ["match", "memory", "pop"]:
+	for mode in ["match", "memory", "pop", "phrase"]:
 		_start(app, mode)
 		app.set_reduced_motion(true)
 		app.audio.set_muted(true)
@@ -197,15 +212,19 @@ func _check_preferences(app) -> void:
 			_match_answer(app, true)
 		elif mode == "memory":
 			_memory_answer(app, true)
+		elif mode == "phrase":
+			_phrase_answer(app)
 		else:
 			app._pop.receive_transcript(app._pop.game.targets[0].word.text)
-		check(app.duck._gameplay_reaction == "happy" and app.duck.scale == Vector2.ONE
-			and is_zero_approx(app.duck.rotation),
+		var mascot = app._phrase.pip if mode == "phrase" else app.duck
+		check(mascot._gameplay_reaction == "happy" and mascot.scale == Vector2.ONE
+			and is_zero_approx(mascot.rotation),
 			"Muted reduced-motion " + mode + " still shows the successful emotion without moving the input target")
 		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.pair_feedback.playing
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			"Muted " + mode + " suppresses the call and existing effects")
-		check((app._pop.game.hits if mode == "pop" else app._memory.memory.matched_word_ids.size() if mode == "memory" else app.model.matched_ids.size() / 2) == 1,
+		var completed: int = app._pop.game.hits if mode == "pop" else app._memory.memory.matched_word_ids.size() if mode == "memory" else app._phrase.game.completed if mode == "phrase" else app.model.matched_ids.size() / 2
+		check(completed == 1,
 			"Accessibility settings do not change " + mode + " scoring")
 		app.audio.set_muted(false)
 		check(not _reaction_playing(app), "Unmuting " + mode + " does not replay the suppressed call")

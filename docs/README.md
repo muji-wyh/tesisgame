@@ -28,8 +28,8 @@ Build outputs under `build/` are generated evidence, not editable source.
 - [Retired Talk Quest reference](talk-quest.md): former campaign behavior and source provenance.
 - [Changelog](../changelog.md): events in chronological context.
 
-Current game modes are Match, Memory, and single-player Voice Pop.
-Local names and avatars support leaderboards for all three modes. Talk Quest
+Current game modes are Match, Memory, single-player Voice Pop, and Phrase Builder.
+Local names and avatars support leaderboards for Match, Memory, and Voice Pop. Talk Quest
 was retired on 2026-10-06; its source records and dated QA remain historical.
 Local profiles are not the retired enrolled voice profiles. The optional browser-managed local speech experiment is separate
 from the removed sherpa-onnx multiplayer runtime. Old medal and sticker records

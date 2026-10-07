@@ -343,7 +343,7 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Pip and Words word game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Choose Match, Memory, or Voice Pop.
+      <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Phrase Builder.
         Match: find five matching word and picture pairs.
         Keep trying until every pair is matched. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -357,6 +357,9 @@
         Pip the duck is your guide. His beak moves with the game's spoken words. In his room, press him for a dance, snack, or bubbles.
         Before your first game, create a local player with a name and emoji avatar. The game opens in Match. Tap a word and its matching picture. Tap a completed card to hear its word again.
         Match and Memory practise the same five words. Tap Pip in the upper-left corner to open the game-mode menu and switch games. Tap outside the menu or press Escape to close it.
+        In Phrase Builder, listen to Pip and tap words in order to build a short phrase. Listen replays the phrase, and Show phrase reveals its text. Muting sound also reveals the text.
+        Tap a selected word to return it to the word bank, or use Clear to start again. Check answer when every slot is filled. Wrong answers stay editable with unlimited retries.
+        Complete three phrases, then choose Open chest to collect your gift. New adventure starts another three phrases. Phrase difficulty follows the selected age range.
         Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
@@ -367,13 +370,13 @@
         Voice Pop starts with zero chests. Reach 100, 200, and 300 points to earn one chest at each milestone, up to three per round. A golden burst announces each earned chest.
         After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Open chests, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows large earned chests, each with a different design. Scroll to explore them and hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
-        After a Match or Memory round, the chest fills the result area. Open it to save your gift progress.
-        New adventure appears at the bottom-right after the chest opens and saves, and starts a fresh Match game directly. Retry saving appears only if a reward could not be saved.
+        After a Match, Memory, or Phrase Builder round, the chest fills the result area. Open it to save your gift progress.
+        New adventure appears at the bottom-right after the chest opens and saves. It starts another Phrase Builder round after that game, or a fresh Match round after the card games. Retry saving appears only if a reward could not be saved.
         More opens Pip's room. Players manages up to ten local names and emoji avatars. Leaderboards shows separate Match, Memory, and Voice Pop rankings on this device. The arrow icon returns to the game.
         Tap an Age choice to view only the words in that age range across every topic, with pictures and a word count. Ages 4-6 shows basic words, Ages 7-9 shows growing words, and Ages 10+ shows advanced words. All shows every word. Tap a picture to hear its word. Swipe the list vertically or use the mouse wheel without a scrollbar. Back returns to Pip's room. The saved age applies to the next lesson and keeps your current game unchanged.
         Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
         Locked toy cards show gift progress. Your chosen world is remembered as you explore vocabulary topics.
-        Winning Match or Memory earns a chest. Hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
+        Winning Match, Memory, or Phrase Builder earns a chest. Hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
         Pip's playroom starts with a ball. The first three saved chests in each world unlock its toy. Find newly unlocked gifts in Pip's room.
         All earned toys are together on the floor inside Pip's home. Tap a toy to play with it immediately; choosing a different toy starts its first step in that same tap. Drag any earned toy to toss it to Pip. Other toys stay visible and playable.
         Only toys still to unlock appear below the room; new gifts move into the home automatically.
@@ -2986,6 +2989,12 @@
           try { value = JSON.parse(text); } catch { return; }
           if (!value || typeof value !== 'object' || !Array.isArray(value.controls)) return;
           document.getElementById('game-status').dataset.library = JSON.stringify(value);
+        },
+        phraseStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value) || !Array.isArray(value.options)) return;
+          document.getElementById('game-status').dataset.phrase = JSON.stringify(value);
         },
         leaderboardStatus(text) {
           // Read-only diagnostics for the native player and ranking controls.

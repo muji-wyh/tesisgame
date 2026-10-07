@@ -17,7 +17,7 @@
     "encoding": "PCM"
   },
   "postprocessing": "None; MP3 decoded to the existing WAV format only.",
-  "generatedAt": "2026-10-06T18:21:53.399Z",
+  "generatedAt": "2026-10-07T07:56:54.863Z",
   "files": [
     {
       "id": "spring-theme",
@@ -82,6 +82,30 @@
       "path": "assets/audio/voice/candy-theme.wav",
       "bytes": 96360,
       "sha256": "1da4cd3cf2c672823c82cd03f76571ee3ac94d1b7094f869d70e3a7e7af65f86"
+    },
+    {
+      "id": "phrase-intro",
+      "text": "Listen to Pip. Put the words in order.",
+      "synthesisText": "Listen to Pip. Put the words in order.",
+      "path": "assets/audio/voice/phrase-intro.wav",
+      "bytes": 147162,
+      "sha256": "87f5737390bddae12d089244e5e05807d69d0ccc7e13d50da9443e8200b68bf8"
+    },
+    {
+      "id": "phrase-try-again",
+      "text": "Try a different order. You can do it!",
+      "synthesisText": "Try a different order. You can do it!",
+      "path": "assets/audio/voice/phrase-try-again.wav",
+      "bytes": 143988,
+      "sha256": "ba36d1a84c993b7b62563e01db8f529c6f148de0e842232e46839bab7a67e29a"
+    },
+    {
+      "id": "phrase-complete",
+      "text": "Three phrases complete! Your treasure is ready.",
+      "synthesisText": "Three phrases complete! Your treasure is ready.",
+      "path": "assets/audio/voice/phrase-complete.wav",
+      "bytes": 179972,
+      "sha256": "58973f894b185df921658e1db0468e2f6ae5bab97ace32bb740e70f31337f2a6"
     },
     {
       "id": "word-cat",
@@ -10082,6 +10106,294 @@
       "path": "assets/audio/voice/word-camera.wav",
       "bytes": 82598,
       "sha256": "9ec2b53f74687c9635e88cdf531833b7f18fd2eadee93c7066efbfe20c8d81e9"
+    },
+    {
+      "id": "phrase-red-apple",
+      "text": "red apple",
+      "synthesisText": "red apple.",
+      "path": "assets/audio/voice/phrase-red-apple.wav",
+      "bytes": 82598,
+      "sha256": "f69a9ea17209966bb6d154c62f2c22fd797795f23f879008bb6a9709cd28ded3"
+    },
+    {
+      "id": "phrase-big-red-ball",
+      "text": "big red ball",
+      "synthesisText": "big red ball.",
+      "path": "assets/audio/voice/phrase-big-red-ball.wav",
+      "bytes": 82598,
+      "sha256": "c2274ae22575458d18e2c540e6b498dcbb317d944efc09fcc3d3f8010873c9bc"
+    },
+    {
+      "id": "phrase-soft-toy",
+      "text": "soft toy",
+      "synthesisText": "soft toy.",
+      "path": "assets/audio/voice/phrase-soft-toy.wav",
+      "bytes": 82598,
+      "sha256": "226149466f58ff4e4ad8e81d7cb86e7323abeb0e02c683a7770a16d644274e30"
+    },
+    {
+      "id": "phrase-happy-baby",
+      "text": "happy baby",
+      "synthesisText": "happy baby.",
+      "path": "assets/audio/voice/phrase-happy-baby.wav",
+      "bytes": 82598,
+      "sha256": "452e4b4105a2794848f0621504801e8660719db8315d0001439efcc9b4e231c4"
+    },
+    {
+      "id": "phrase-warm-milk",
+      "text": "warm milk",
+      "synthesisText": "warm milk.",
+      "path": "assets/audio/voice/phrase-warm-milk.wav",
+      "bytes": 82598,
+      "sha256": "404d5554f9029abab1586ce500e04752ac9778a53b924dfbe13f4dc26998e79a"
+    },
+    {
+      "id": "phrase-sweet-corn",
+      "text": "sweet corn",
+      "synthesisText": "sweet corn.",
+      "path": "assets/audio/voice/phrase-sweet-corn.wav",
+      "bytes": 82598,
+      "sha256": "8a91baadbb4f1994286a39d9353d21659a24c75a353e70b79bece28a0d099c2a"
+    },
+    {
+      "id": "phrase-jump-up",
+      "text": "jump up",
+      "synthesisText": "jump up.",
+      "path": "assets/audio/voice/phrase-jump-up.wav",
+      "bytes": 82598,
+      "sha256": "70502916e5899a78f380c542ca3ed2fc2720aa979bdd9fa9dfc8df150922abe1"
+    },
+    {
+      "id": "phrase-sit-down",
+      "text": "sit down",
+      "synthesisText": "sit down.",
+      "path": "assets/audio/voice/phrase-sit-down.wav",
+      "bytes": 82598,
+      "sha256": "796d7faa23fa79c9dca5d92bed7d46f8b5ef05a8479fb99d495fe025bfbe4c23"
+    },
+    {
+      "id": "phrase-go-outside",
+      "text": "go outside",
+      "synthesisText": "go outside.",
+      "path": "assets/audio/voice/phrase-go-outside.wav",
+      "bytes": 82598,
+      "sha256": "b4192db9ac2ee8b5cf7b8fe241a395163ca416a5a602e47935471b597fc497a0"
+    },
+    {
+      "id": "phrase-drink-water",
+      "text": "drink water",
+      "synthesisText": "drink water.",
+      "path": "assets/audio/voice/phrase-drink-water.wav",
+      "bytes": 82598,
+      "sha256": "76a1c29b84ef9b0f821eb2e3c8ced39f02ff75c55d21b23e695f589d8ecc6f77"
+    },
+    {
+      "id": "phrase-eat-breakfast",
+      "text": "eat breakfast",
+      "synthesisText": "eat breakfast.",
+      "path": "assets/audio/voice/phrase-eat-breakfast.wav",
+      "bytes": 82598,
+      "sha256": "faf8710fb1abbf9dab9234f976178e11168b6c726b409d486630a546a93fc026"
+    },
+    {
+      "id": "phrase-cook-rice",
+      "text": "cook rice",
+      "synthesisText": "cook rice.",
+      "path": "assets/audio/voice/phrase-cook-rice.wav",
+      "bytes": 82598,
+      "sha256": "67fb67a7476a2514a1f35819d8eaec35283fbfeeeb2fd53562aaa1b788f7b96b"
+    },
+    {
+      "id": "phrase-shiny-shell",
+      "text": "shiny shell",
+      "synthesisText": "shiny shell.",
+      "path": "assets/audio/voice/phrase-shiny-shell.wav",
+      "bytes": 82598,
+      "sha256": "7b76f786702ea9ab96a7baea93984788693c0ba48c93a547aa197d0bbf27fc35"
+    },
+    {
+      "id": "phrase-crunchy-carrot",
+      "text": "crunchy carrot",
+      "synthesisText": "crunchy carrot.",
+      "path": "assets/audio/voice/phrase-crunchy-carrot.wav",
+      "bytes": 82598,
+      "sha256": "b7639729e2fa73da9aa554cff6227da2d05849c7c9f713f527d421cf55cb95a5"
+    },
+    {
+      "id": "phrase-healthy-breakfast",
+      "text": "healthy breakfast",
+      "synthesisText": "healthy breakfast.",
+      "path": "assets/audio/voice/phrase-healthy-breakfast.wav",
+      "bytes": 82598,
+      "sha256": "a6ec848faa1ad0d2289f65594b4fc048c7e22ef8d77af4c2db17ebe956c5b268"
+    },
+    {
+      "id": "phrase-striped-scarf",
+      "text": "striped scarf",
+      "synthesisText": "striped scarf.",
+      "path": "assets/audio/voice/phrase-striped-scarf.wav",
+      "bytes": 82598,
+      "sha256": "e0cef2dd43c90c2f6eafdb8c08866a1877e305b469311abed78a18927df2f79c"
+    },
+    {
+      "id": "phrase-waterproof-jacket",
+      "text": "waterproof jacket",
+      "synthesisText": "waterproof jacket.",
+      "path": "assets/audio/voice/phrase-waterproof-jacket.wav",
+      "bytes": 90008,
+      "sha256": "c24fad87a203b041d9da76d0d634152e8606077f8e37994f2596022ba700b9e9"
+    },
+    {
+      "id": "phrase-delicious-soup",
+      "text": "delicious soup",
+      "synthesisText": "delicious soup.",
+      "path": "assets/audio/voice/phrase-delicious-soup.wav",
+      "bytes": 82598,
+      "sha256": "cf2bdb72ee6ce567e7fb89d36f98452548a2abc7e4d9c14be07dc2a4105a6046"
+    },
+    {
+      "id": "phrase-collect-wood",
+      "text": "collect wood",
+      "synthesisText": "collect wood.",
+      "path": "assets/audio/voice/phrase-collect-wood.wav",
+      "bytes": 82598,
+      "sha256": "f185424aefafa943fa10085ed13b8b8eebe0710ed930e423f2bbe1a8df4a9bbd"
+    },
+    {
+      "id": "phrase-recycle-paper",
+      "text": "recycle paper",
+      "synthesisText": "recycle paper.",
+      "path": "assets/audio/voice/phrase-recycle-paper.wav",
+      "bytes": 86834,
+      "sha256": "6a6b1babd0553b68fb46ecc70be64af8d60ba450eb707620ab824519206ab0af"
+    },
+    {
+      "id": "phrase-play-tennis",
+      "text": "play tennis",
+      "synthesisText": "play tennis.",
+      "path": "assets/audio/voice/phrase-play-tennis.wav",
+      "bytes": 82598,
+      "sha256": "44f69307857690ce47bc98c9bcc0b672c750b86dad7365ea3eac35b7c0eea7b0"
+    },
+    {
+      "id": "phrase-warm-wool-blanket",
+      "text": "warm wool blanket",
+      "synthesisText": "warm wool blanket.",
+      "path": "assets/audio/voice/phrase-warm-wool-blanket.wav",
+      "bytes": 85776,
+      "sha256": "a102c92ec2408c481073882963732a674012923739ea2843c5d7487f51b67ae1"
+    },
+    {
+      "id": "phrase-sprinkle-glitter",
+      "text": "sprinkle glitter",
+      "synthesisText": "sprinkle glitter.",
+      "path": "assets/audio/voice/phrase-sprinkle-glitter.wav",
+      "bytes": 82598,
+      "sha256": "4003194909e09bf36c9e240ac5d6aaeb8031eac11ee284cc29f1694863aefb75"
+    },
+    {
+      "id": "phrase-serve-hot-soup",
+      "text": "serve hot soup",
+      "synthesisText": "serve hot soup.",
+      "path": "assets/audio/voice/phrase-serve-hot-soup.wav",
+      "bytes": 82598,
+      "sha256": "1f7c45fb733bb4f3946cad71d169225eea90a674720728ab6d96155637c1c745"
+    },
+    {
+      "id": "phrase-bright-red-birthday-balloon",
+      "text": "bright red birthday balloon",
+      "synthesisText": "bright red birthday balloon.",
+      "path": "assets/audio/voice/phrase-bright-red-birthday-balloon.wav",
+      "bytes": 108002,
+      "sha256": "f3bde4411b47969e12e98d39f3deb7311c04926ab2350a1fb7be0da7af35e028"
+    },
+    {
+      "id": "phrase-deep-blue-lake",
+      "text": "deep blue lake",
+      "synthesisText": "deep blue lake.",
+      "path": "assets/audio/voice/phrase-deep-blue-lake.wav",
+      "bytes": 82598,
+      "sha256": "e22396b79828823d81af6be4662dcfd6a0aa20b14a17bc32b3e337ce36022c0d"
+    },
+    {
+      "id": "phrase-frozen-strawberry-dessert",
+      "text": "frozen strawberry dessert",
+      "synthesisText": "frozen strawberry dessert.",
+      "path": "assets/audio/voice/phrase-frozen-strawberry-dessert.wav",
+      "bytes": 110118,
+      "sha256": "af4b3d362d3686ecf10101d2161f030f327abdde6139b7663306e3449e7cfa60"
+    },
+    {
+      "id": "phrase-transparent-glass",
+      "text": "transparent glass",
+      "synthesisText": "transparent glass.",
+      "path": "assets/audio/voice/phrase-transparent-glass.wav",
+      "bytes": 93182,
+      "sha256": "9f2e296a51882f4ef17153e5b1b450d9e4485aa22e727a4202f145b7815c5c11"
+    },
+    {
+      "id": "phrase-flexible-spine",
+      "text": "flexible spine",
+      "synthesisText": "flexible spine.",
+      "path": "assets/audio/voice/phrase-flexible-spine.wav",
+      "bytes": 84716,
+      "sha256": "39e8a595f7ff84e39cb0e8e0a21a02088870fb6ed5e18e26c9a4758df378ee47"
+    },
+    {
+      "id": "phrase-favorite-music",
+      "text": "favorite music",
+      "synthesisText": "favorite music.",
+      "path": "assets/audio/voice/phrase-favorite-music.wav",
+      "bytes": 82598,
+      "sha256": "f2c9633861d2e5c5f518a3ce7f607b93fb662bd888ba80649cd982a489cf1314"
+    },
+    {
+      "id": "phrase-celebrate-today",
+      "text": "celebrate today",
+      "synthesisText": "celebrate today.",
+      "path": "assets/audio/voice/phrase-celebrate-today.wav",
+      "bytes": 82598,
+      "sha256": "05be318a3cf5fcb8e9d789ca38360b6578fc2cdcd686db79f005cfa998b293b9"
+    },
+    {
+      "id": "phrase-travel-north",
+      "text": "travel north",
+      "synthesisText": "travel north.",
+      "path": "assets/audio/voice/phrase-travel-north.wav",
+      "bytes": 82598,
+      "sha256": "838c5662367ebf74632226035cd3100db524d2f1496c24e3ed659d0fd31ac311"
+    },
+    {
+      "id": "phrase-chop-wood",
+      "text": "chop wood",
+      "synthesisText": "chop wood.",
+      "path": "assets/audio/voice/phrase-chop-wood.wav",
+      "bytes": 82598,
+      "sha256": "9492b2ee59ed363456d6e46c81d2e9771e3d6de3fb3bd69d3e7af6151147ae9e"
+    },
+    {
+      "id": "phrase-plant-grass",
+      "text": "plant grass",
+      "synthesisText": "plant grass.",
+      "path": "assets/audio/voice/phrase-plant-grass.wav",
+      "bytes": 82598,
+      "sha256": "fbd818838ff58c811b53178f424775d7c7bf5f4c6d02edcbc4417b44cbeb6961"
+    },
+    {
+      "id": "phrase-transport-food",
+      "text": "transport food",
+      "synthesisText": "transport food.",
+      "path": "assets/audio/voice/phrase-transport-food.wav",
+      "bytes": 82598,
+      "sha256": "0a447cdeb3d9d6e40ca86e548a34fb878009753bb5a62dba6183e643d759a20c"
+    },
+    {
+      "id": "phrase-refrigerate-food",
+      "text": "refrigerate food",
+      "synthesisText": "refrigerate food.",
+      "path": "assets/audio/voice/phrase-refrigerate-food.wav",
+      "bytes": 82598,
+      "sha256": "b58f36c382d21eb5a4359d8a61f1ebdc638f4bb601815898cb215dae6ca584cc"
     }
   ]
 }

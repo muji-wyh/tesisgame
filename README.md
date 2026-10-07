@@ -10,6 +10,9 @@ handles loading, accessibility, audio recovery, and speech recognition.
 
 - **Match:** five word-picture pairs, three hints, and optional spoken answers.
 - **Memory:** five hidden pairs, with a hold-to-peek control and no countdown.
+- **Phrase Builder:** listen to Pip, arrange word tiles, and complete three short
+  phrases to earn a chest. Answers stay editable with unlimited retries. Includes
+  36 recorded phrases across three age levels, replay, and optional written help.
 - **Voice Pop:** select a local player, then speak visible words during a
   50-second round. The second consecutive hit adds 3 seconds; the third adds
   5 seconds. Occasional volleys throw several words together. Scores of 100,
@@ -21,7 +24,7 @@ handles loading, accessibility, audio recovery, and speech recognition.
   and Voice Pop.
 - **Eight worlds and 1,250 words:** choose a theme during loading or in Pip's room.
   Age preferences guide the vocabulary; they do not collect a birthdate.
-- **Chests and toys:** winning Match or Memory advances saved gift progress.
+- **Chests and toys:** winning Match, Memory, or Phrase Builder advances saved gift progress.
   The chest has a five-second performance; releasing before the visible lid
   release cancels it. A temporary flying gift is cosmetic. Earned toys remain
   playable in Pip's room.

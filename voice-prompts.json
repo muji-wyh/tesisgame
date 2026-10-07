@@ -6,5 +6,8 @@
   "ocean-theme": "Welcome to the ocean!",
   "space-theme": "Welcome to space!",
   "jungle-theme": "Welcome to the jungle!",
-  "candy-theme": "Welcome to candy land!"
+  "candy-theme": "Welcome to candy land!",
+  "phrase-intro": "Listen to Pip. Put the words in order.",
+  "phrase-try-again": "Try a different order. You can do it!",
+  "phrase-complete": "Three phrases complete! Your treasure is ready."
 }

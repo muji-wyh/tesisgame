@@ -150,11 +150,14 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   const { collectRequiredAudio } = require('../tools/package-web.cjs');
   const directory = fixture(t);
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
+  const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
+  fs.writeFileSync(path.join(directory, 'phrases.json'), JSON.stringify(phrases));
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
+    ...phrases.map(phrase => phrase.audio),
     ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
       .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
   ];
@@ -182,8 +185,38 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
+  assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 39);
   assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/winter-step-roll.wav')));
+  const phraseCatalog = path.join(directory, 'phrases.json');
+  for (const invalid of [[], {}, null]) {
+    fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));
+    assert.throws(() => collectRequiredAudio(directory), /phrase audio catalog must be a nonempty array/);
+  }
+  for (const invalid of [
+    [{ ...phrases[0], audio: '../outside.wav' }],
+    [{ ...phrases[0], id: '../outside' }],
+    [{ ...phrases[0], id: 'intro', audio: 'assets/audio/voice/phrase-intro.wav' }],
+    [phrases[0], phrases[0]]
+  ]) {
+    fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));
+    assert.throws(() => collectRequiredAudio(directory), /unique catalog ID and its own in-pack voice path/);
+  }
+  fs.writeFileSync(phraseCatalog, JSON.stringify(phrases));
+  const phraseImport = path.join(directory, `${phrases[0].audio}.import`);
+  const phraseMetadata = fs.readFileSync(phraseImport);
+  fs.unlinkSync(phraseImport);
+  assert.throws(() => collectRequiredAudio(directory), /phrase-red-apple\.wav\.import/,
+    'A whole-phrase recording cannot silently disappear from the required bundle');
+  fs.writeFileSync(phraseImport, phraseMetadata);
+  for (const cue of ['intro', 'try-again', 'complete']) {
+    const cueImport = path.join(directory, `assets/audio/voice/phrase-${cue}.wav.import`);
+    const metadata = fs.readFileSync(cueImport);
+    fs.unlinkSync(cueImport);
+    assert.throws(() => collectRequiredAudio(directory), new RegExp(`phrase-${cue}\\.wav\\.import`),
+      'Every Phrase Builder spoken cue must remain in the startup pack');
+    fs.writeFileSync(cueImport, metadata);
+  }
   const clickImport = path.join(directory, `${click.asset.destination}.import`);
   const clickMetadata = fs.readFileSync(clickImport);
   fs.unlinkSync(clickImport);

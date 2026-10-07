@@ -40,8 +40,8 @@ func _run() -> void:
 	if view.memory.cards.size() != 10:
 		await _finish(app, directory)
 		return
-	check(view.is_visible_in_tree() and app._mode_buttons.size() == 3 and app.MODES.keys() == ["match", "memory", "pop"],
-		"Memory remains available alongside Match and Voice Pop")
+	check(view.is_visible_in_tree() and app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "memory", "pop", "phrase"],
+		"Memory remains available alongside Match, Voice Pop, and Phrase Builder")
 	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
 		"Root owns the eye while Memory cards fill their entire assigned view")
 	check(not view.status_label.visible and view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
@@ -190,11 +190,11 @@ func _run() -> void:
 	app.choose_mode("match")
 	view.round_finished.emit(true, lesson)
 	check(app.model.phase != "won" and view.memory.phase == "stopped", "Leaving Memory blocks stale completion")
-	for mode in ["match", "memory", "pop"]:
+	for mode in ["match", "memory", "pop", "phrase"]:
 		app.choose_mode(mode)
 		if mode == "pop":
 			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
-		check(app._mode_id == mode and app.model.lesson_words == lesson, "Existing " + mode + " mode remains reachable with the same lesson")
+		check(app._mode_id == mode and app.model.lesson_words == lesson, "The " + mode + " mode remains reachable with the same shared lesson")
 	await _check_feedback_shortcut_focus(app)
 	await _check_host_layout(app)
 	if "--screenshots" in OS.get_cmdline_user_args():

@@ -6,6 +6,7 @@ const { createHash } = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
 const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
+const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
 const { PROFILE, EDGE_TTS_VERSION, MANIFEST_PATH, speechText, messagesFor, assertWave,
   convertVoice, cacheIdentity, cacheKey, generateVoices } = require('../tools/generate-voices.cjs');
 
@@ -49,11 +50,12 @@ function fixture(t) {
   const directory = fs.mkdtempSync(path.join(build, 'word-buddies-voice-test-'));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
   fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([words[0]]));
+  fs.writeFileSync(path.join(directory, 'phrases.json'), JSON.stringify([phrases[0]]));
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
   const output = path.join(directory, 'assets', 'audio', 'voice');
   fs.mkdirSync(output, { recursive: true });
   const original = Buffer.from('Keep the existing recording until the complete batch succeeds.');
-  for (const id of [...Object.keys(prompts), `word-${words[0].id}`]) {
+  for (const id of [...Object.keys(prompts), `word-${words[0].id}`, `phrase-${phrases[0].id}`]) {
     fs.writeFileSync(path.join(output, `${id}.wav`), original);
   }
   return { directory, output, original };
@@ -95,13 +97,18 @@ test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS
   assert.throws(() => speechText('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives exactly 1250 words and eight prompts from maintained catalogs', () => {
+test('voice generation derives 1250 words, 36 phrases, and eleven prompts from maintained catalogs', () => {
   const messages = messagesFor(root);
-  assert.equal(messages.length, 1258);
-  assert.equal(new Set(messages.map(message => message.id)).size, 1258);
+  assert.equal(messages.length, 1297);
+  assert.equal(new Set(messages.map(message => message.id)).size, 1297);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
+  }
+  for (const phrase of phrases) {
+    assert.deepEqual(messages.find(message => message.id === `phrase-${phrase.id}`),
+      { id: `phrase-${phrase.id}`, text: phrase.text });
+    assert.equal(speechText(phrase.text), `${phrase.text}.`);
   }
 });
 
@@ -111,7 +118,7 @@ test('catalog validation supports two-to-fourteen-letter words and rejects malfo
     id: text, text, audio: `assets/audio/voice/word-${text}.wav`
   }));
   fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify(vocabulary));
-  assert.equal(messagesFor(directory).length, Object.keys(prompts).length + vocabulary.length);
+  assert.equal(messagesFor(directory).length, Object.keys(prompts).length + vocabulary.length + 1);
   for (const text of ['', 'a', 'representations', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
     fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([{ id: 'invalid', text, audio: 'assets/audio/voice/word-invalid.wav' }]));
     assert.throws(() => messagesFor(directory), /short English word/, JSON.stringify(text));
@@ -122,6 +129,28 @@ test('catalog validation supports two-to-fourteen-letter words and rejects malfo
   assert.throws(() => messagesFor(directory), /unique/);
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, extra: 'Hello!' }));
   assert.throws(() => messagesFor(directory), /required prompt IDs/);
+});
+
+test('phrase recordings reject malformed English, redirected paths, and duplicate voice IDs', t => {
+  const { directory } = fixture(t);
+  const catalogPath = path.join(directory, 'phrases.json');
+  for (const invalid of [{}, [], null]) {
+    fs.writeFileSync(catalogPath, JSON.stringify(invalid));
+    assert.throws(() => messagesFor(directory), /nonempty phrase array/);
+  }
+  for (const text of ['', 'apple', 'a red apple', 'Red apple', 'red  apple', 'red apple\n',
+    'red apple!', 'red apple orange green blue', 'café milk', null]) {
+    fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], text }]));
+    assert.throws(() => messagesFor(directory), /two to four short English words/, JSON.stringify(text));
+  }
+  fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], id: '../outside' }]));
+  assert.throws(() => messagesFor(directory), /lowercase ID/);
+  fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], audio: '../outside.wav' }]));
+  assert.throws(() => messagesFor(directory), /audio path for phrase/);
+  fs.writeFileSync(catalogPath, JSON.stringify([phrases[0], phrases[0]]));
+  assert.throws(() => messagesFor(directory), /unique/);
+  fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], id: 'intro', audio: 'assets/audio/voice/phrase-intro.wav' }]));
+  assert.throws(() => messagesFor(directory), /unique/);
 });
 
 test('heteronym recordings use short contexts for their authored sense', () => {
@@ -178,7 +207,7 @@ test('the complete batch is validated before publishing audio and its truthful p
       convert(bytes, destination);
     }
   });
-  assert.equal(count, Object.keys(prompts).length + 1);
+  assert.equal(count, Object.keys(prompts).length + 2);
   assert.equal(converted, count);
   const manifest = manifestFor(directory);
   assert.deepEqual(manifest.profile, PROFILE);
@@ -214,7 +243,7 @@ test('a failed synthesis preserves all originals and resumes only uncached reque
       requested = manifest.requests.map(request => request.id);
       await synthesize({ manifest });
     }
-  }), Object.keys(prompts).length + 1);
+  }), Object.keys(prompts).length + 2);
   assert.deepEqual(requested, messagesFor(directory).slice(2).map(message => message.id));
 });
 
@@ -240,7 +269,7 @@ test('a failed conversion preserves originals, retains validated cache entries, 
     convert: (bytes, destination) => { converted += 1; convert(bytes, destination); }
   });
   assert.deepEqual(requested, [third.id]);
-  assert.equal(converted, Object.keys(prompts).length - 1, 'The first two validated WAVs resume without another decode.');
+  assert.equal(converted, Object.keys(prompts).length, 'The first two validated WAVs resume without another decode.');
 });
 
 test('cache keys include every voice setting, the final spoken text, client, and output format', () => {
@@ -312,10 +341,10 @@ test('missing-only generation rejects undocumented previous voices instead of re
 test('missing-only generation preserves documented Ava files and requests only absent recordings', async t => {
   const { directory, output } = fixture(t);
   await generate(directory);
-  const missing = ['jungle-theme', 'candy-theme'];
+  const missing = ['phrase-intro', `phrase-${phrases[0].id}`];
   for (const id of missing) {
     fs.unlinkSync(path.join(output, `${id}.wav`));
-    removeCached(directory, prompts[id]);
+    removeCached(directory, messagesFor(directory).find(message => message.id === id).text);
   }
   const before = new Map(fs.readdirSync(output).map(name => [name, fs.readFileSync(path.join(output, name))]));
   let requested;
@@ -329,7 +358,7 @@ test('missing-only generation preserves documented Ava files and requests only a
   }), 2);
   assert.deepEqual(requested, missing);
   for (const [name, bytes] of before) assert.deepEqual(fs.readFileSync(path.join(output, name)), bytes);
-  assert.equal(manifestFor(directory).files.length, Object.keys(prompts).length + 1);
+  assert.equal(manifestFor(directory).files.length, Object.keys(prompts).length + 2);
   assert.equal(await generate(directory, {
     onlyMissing: true,
     synthesizeBatch: () => assert.fail('Complete approved catalog makes no requests.'),

@@ -16,6 +16,7 @@ const MedalProgress = preload("res://scripts/medal_progress.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
+const PhraseGame = preload("res://scripts/phrase_game.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
@@ -28,7 +29,7 @@ const LeaderboardPanel = preload("res://scripts/leaderboard_panel.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
-const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop"}
+const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "phrase": "Phrase Builder"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
 const VOICE_MATCH_SECONDS: float = 1.0
@@ -176,6 +177,9 @@ var _mode_menu_origin := Vector2.ZERO
 var _mode_menu_dragged: bool = false
 var _mode_menu_mouse_emulated: bool = false
 var _memory: MemoryGarden
+var _phrase: PhraseGame
+var _phrase_voice_queue: Array[String] = []
+var _phrase_published: String = ""
 var _pop: VoicePop
 var _pop_rewards: PopRewardRoom
 var _pop_rewards_shown: bool = false
@@ -500,6 +504,15 @@ func _build_controls() -> void:
 	column.add_child(_memory)
 	_memory.study_button.reparent(_toolbar)
 	_toolbar.move_child(_memory.study_button, 0)
+	_phrase = PhraseGame.new()
+	_phrase.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_phrase.interaction_allowed = _phrase_interaction_allowed
+	_phrase.finished.connect(_phrase_finished)
+	_phrase.status_changed.connect(_phrase_status_changed)
+	_phrase.audio_requested.connect(_phrase_audio_requested)
+	_phrase.changed.connect(_publish_phrase)
+	_phrase.hide()
+	column.add_child(_phrase)
 	_pop = VoicePop.new()
 	_pop.name = "VoicePop"
 	_pop.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
@@ -620,6 +633,7 @@ func _build_controls() -> void:
 	audio = Audio.new()
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
+	audio.voice.finished.connect(_advance_phrase_voice)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
 	feedback_timer.wait_time = MATCH_FEEDBACK_SECONDS
@@ -673,6 +687,8 @@ func _toggle_library_sound() -> void:
 	if not _mode_menu_open():
 		return
 	audio.set_muted(not audio.muted)
+	_phrase_voice_queue.clear()
+	_phrase.set_muted(audio.muted or not audio.available)
 	_play_ui_click()
 	_presentation.muted = audio.muted
 	_save_presentation()
@@ -751,6 +767,7 @@ func _show_mode_menu() -> void:
 		audio.stop_pop_sounds()
 	feedback_timer.paused = true
 	_memory.pause(true)
+	_pause_phrase()
 	_hint_link.set_paused(true)
 	audio.stop_voice()
 	audio.stop_pip_reaction()
@@ -784,6 +801,7 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 	if resume_game and not _page_hidden and not collection_page.visible and not _leaderboard_overlay.visible:
 		feedback_timer.paused = false
 		_memory.pause(false)
+		_resume_phrase()
 		_refresh_hint_link()
 		if resume_voice:
 			if _host != null:
@@ -1013,6 +1031,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_reconcile_round_identity()
 	include_round = include_round and not _leaderboard_result.is_empty()
 	_leaderboard_overlay.show()
+	_pause_phrase()
 	_publish_pop_rewards(_pop_rewards.snapshot())
 	_leaderboard_close.visible = _leaderboard_gate != "onboarding"
 	_leaderboard_close.focus_mode = Control.FOCUS_ALL
@@ -1055,6 +1074,7 @@ func _hide_leaderboard() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _leaderboard_focus_modes[control]
 	_leaderboard_focus_modes.clear()
+	_resume_phrase()
 	if _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _page_hidden:
 		_pop_rewards.resume()
 	if _valid_focus(_leaderboard_focus):
@@ -1666,6 +1686,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	elif not MODES.has(_mode_id):
 		_mode_id = "match"
 	_memory.stop()
+	_phrase.stop()
+	_phrase_voice_queue.clear()
 	duck.settle()
 	_pending_fragment.clear()
 	_unlocked_gift.clear()
@@ -1704,6 +1726,13 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _mode_id == "memory":
 		_memory.set_reduced_motion(reduced_motion)
 		_memory.start_round(model.lesson_words, Data.theme(model.theme_id), seed_value)
+	if _mode_id == "phrase":
+		_phrase.set_reduced_motion(reduced_motion)
+		_phrase.set_muted(audio.muted or not audio.available)
+		if not _phrase.configure(data.words, playroom_state.age_band_id, model.theme_id, seed_value):
+			_rebuilding = false
+			_show_error(_phrase.game.error)
+			return false
 	if _mode_id == "pop":
 		_configure_pop(seed_value)
 	_rebuilding = false
@@ -1732,6 +1761,8 @@ func choose_mode(id: String) -> void:
 			# The mode gesture restores playback after new_round silences the
 			# previous mode. Voice Pop stays quiet while its microphone is open.
 			audio.interact(model.theme_id)
+			if id == "phrase":
+				_start_phrase_prompt()
 
 
 func _configure_pop(seed_value: int = -1) -> void:
@@ -1903,6 +1934,102 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 			"reward": audio.chest_reward(theme_id, progress > 0.0)
 
 
+func _phrase_interaction_allowed() -> bool:
+	return _mode_id == "phrase" and model.phase in ["waiting", "matching", "feedback"] \
+		and not _rebuilding and not _page_hidden and not _speech_debug_active and not collection_page.visible \
+		and not _leaderboard_overlay.visible and not _mode_menu_open()
+
+
+func _pause_phrase() -> void:
+	_phrase_voice_queue.clear()
+	_phrase.pause()
+	if _mode_id == "phrase":
+		audio.stop_voice()
+		audio.stop_pair_feedback()
+
+
+func _resume_phrase() -> void:
+	_phrase.set_muted(audio.muted or not audio.available)
+	if _phrase_interaction_allowed():
+		_phrase.resume()
+	else:
+		_phrase.pause()
+	_publish_phrase(_phrase.snapshot())
+
+
+func _start_phrase_prompt() -> void:
+	if not _phrase_interaction_allowed():
+		return
+	_phrase_voice_queue.clear()
+	if audio.muted or not audio.available:
+		return
+	audio.interact(model.theme_id)
+	_phrase_voice_queue.append("res://" + str(_phrase.game.current_question().audio))
+	audio.cue("", "phrase-intro")
+
+
+func _advance_phrase_voice() -> void:
+	if not _phrase_interaction_allowed() or audio.muted or _phrase_voice_queue.is_empty():
+		_phrase_voice_queue.clear()
+		return
+	audio.say(_phrase_voice_queue.pop_front())
+
+
+func _phrase_audio_requested(kind: String, value: String) -> void:
+	if not _phrase_interaction_allowed():
+		return
+	_phrase_voice_queue.clear()
+	audio.interact(model.theme_id)
+	match kind:
+		"select":
+			audio.stop_pair_feedback()
+			audio.play_ui_click()
+		"word":
+			for word: Dictionary in data.words:
+				if word.id == value:
+					audio.say("res://" + str(word.audio))
+					break
+		"phrase":
+			var question: Dictionary = _phrase.game.current_question()
+			if str(question.get("id", "")) == value:
+				audio.say("res://" + str(question.audio))
+		"feedback":
+			audio.stop_voice()
+			audio.play_pair_feedback(value == "correct")
+		"prompt":
+			if value in ["phrase-intro", "phrase-try-again"]:
+				audio.cue("", value)
+
+
+func _phrase_status_changed(message: String) -> void:
+	if _phrase_interaction_allowed():
+		_message.text = message
+		_announce_status(message)
+
+
+func _phrase_finished() -> void:
+	if not _phrase_interaction_allowed() or _phrase.game.phase != "finished" or _phrase.game.completed != 3:
+		return
+	_phrase_voice_queue.clear()
+	audio.stop_voice()
+	model.phase = "won"
+	_refresh()
+	_layout()
+	audio.cue("", "phrase-complete")
+	_default_focus().grab_focus()
+
+
+func _publish_phrase(state: Dictionary) -> void:
+	if _host == null or (_mode_id != "phrase" and _phrase_published.is_empty()):
+		return
+	var value: Dictionary = state.duplicate(true)
+	value["visible"] = _phrase_interaction_allowed() and _phrase.is_visible_in_tree()
+	var serialized := JSON.stringify(value)
+	if serialized != _phrase_published:
+		_phrase_published = serialized
+		_host.phraseStatus(serialized)
+
+
 func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
 	if _mode_id != "memory" or collection_page.visible:
 		return
@@ -1997,6 +2124,7 @@ func _refresh() -> void:
 		_fit_mode_buttons()
 	if theme_changed:
 		_memory.set_palette(palette)
+		_phrase.apply_theme(palette, model.theme_id)
 		for button in [collection_button, hint_button]:
 			Style.square_icon_button(button, palette.accent)
 		Style.square_icon_button(_collection_back, palette.accent)
@@ -2034,6 +2162,8 @@ func _refresh() -> void:
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
 	_memory.visible = playing and _mode_id == "memory"
+	_phrase.visible = playing and _mode_id == "phrase" and not collection_page.visible
+	_resume_phrase()
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_mistakes.visible = _success.visible
@@ -2050,6 +2180,8 @@ func _refresh() -> void:
 		_message.text = "Find %d word–picture pairs." % Model.MATCH_PAIR_COUNT
 	if playing and _mode_id == "memory":
 		_message.text = _memory_status()
+	elif playing and _mode_id == "phrase":
+		_message.text = "Phrase Builder. %d of 3 phrases complete. Listen to Pip and put the words in order." % _phrase.game.completed
 	elif playing and _mode_id == "pop":
 		_message.text = "Voice Pop. Say the flying words. Start with %d seconds." % ceili(VoicePop.PopModel.DURATION)
 	var won: bool = model.phase == "won"
@@ -2394,7 +2526,7 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 else 0
 	_mode_subheading.visible = size.x * css_scale >= 680
-	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP"}.get(_mode_id, "PIP AND WORDS")
+	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP", "phrase": "LISTEN AND BUILD  /  3 PHRASES"}.get(_mode_id, "PIP AND WORDS")
 	_mode_subheading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_subheading.offset_top = 32 / css_scale
 	_mode_subheading.add_theme_font_size_override("font_size", ceili(10 / css_scale))
@@ -2678,6 +2810,7 @@ func choose_theme(id: String) -> void:
 		_cancel_chest_hold()
 		_finish_chest_drag()
 	_preferred_theme = id
+	_phrase_voice_queue.clear()
 	_save_journey()
 	if collection_page.visible:
 		_refresh_collection()
@@ -2702,6 +2835,7 @@ func set_reduced_motion(value: bool) -> void:
 	_pop.set_reduced_motion(value)
 	_pop_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
+	_phrase.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
 	if duck != null:
@@ -2877,6 +3011,7 @@ func on_page_hidden() -> void:
 	_stop_voice()
 	feedback_timer.paused = true
 	_memory.pause(true)
+	_pause_phrase()
 	_stop_controller_actions()
 	_stop_feedback_animations()
 	_cancel_chest_hold()
@@ -2908,6 +3043,7 @@ func on_page_visible() -> void:
 	_room.playground.pause(_age_catalog.visible)
 	feedback_timer.paused = collection_page.visible
 	_memory.pause(collection_page.visible)
+	_resume_phrase()
 	if resume_music:
 		_restore_mode_music()
 
@@ -3277,6 +3413,9 @@ func _default_focus() -> Control:
 			return _memory.study_button
 		var memory_controls: Array[Control] = _memory.controls()
 		return memory_controls[0] if not memory_controls.is_empty() else collection_button
+	if _mode_id == "phrase":
+		var phrase_focus: Control = _phrase.default_focus()
+		return phrase_focus if _valid_focus(phrase_focus) else collection_button
 	for kind in ["image", "word"]:
 		for card in model.cards:
 			if card.kind == kind and not model.matched_ids.has(card.id) and _valid_focus(cards[card.id]):
@@ -3326,6 +3465,7 @@ func _announce_status(message: String) -> void:
 
 func _show_error(message: String) -> void:
 	_memory.hide()
+	_phrase.hide()
 	_pop.hide()
 	_outcome.hide()
 	_match_playfield.show()
@@ -3455,6 +3595,7 @@ func _open_speech_debug() -> bool:
 	_speech_debug_tree_paused = get_tree().paused
 	_speech_debug_audio_process_mode = audio.process_mode
 	_speech_debug_active = true
+	_pause_phrase()
 	audio.set_speech_debug_mix(1.0)
 	# Freeze gameplay, controller input and timers while real sound assets
 	# remain available to the isolated browser diagnostic controls.
@@ -3475,6 +3616,7 @@ func _close_speech_debug(restore_audio: bool = true) -> bool:
 		on_page_hidden()
 		_resume_music_after_background = _mode_id != "pop" or collection_page.visible
 	elif restore_audio:
+		_resume_phrase()
 		_restore_mode_music()
 	return true
 
@@ -3494,6 +3636,7 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	duck.note_activity()
 	_pop.cancel_result_input()
 	_memory.end_peek()
+	_phrase.cancel_input()
 	_room.playground.cancel()
 	_cancel_collection_rails()
 	_end_collection_drag()
@@ -3822,8 +3965,10 @@ func _new_adventure() -> void:
 		return
 	if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
 		return
-	if new_round(-1, false, "", "match"):
+	if new_round(-1, false, "", "phrase" if _mode_id == "phrase" else "match"):
 		_default_focus().grab_focus()
+		if _mode_id == "phrase":
+			_start_phrase_prompt()
 
 
 func _start_gift_adventure(id: String) -> void:
@@ -3923,6 +4068,7 @@ func _show_collection() -> void:
 	collection_page.show()
 	_hint_link.set_paused(true)
 	_memory.pause(true)
+	_pause_phrase()
 	_collection_back.grab_focus()
 	_update_duck()
 	duck.react("happy")
@@ -3997,9 +4143,11 @@ func _update_duck() -> void:
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
 	var visible_here: bool = not _leaderboard_overlay.visible or _pop_picker_open()
+	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
+	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
 	duck.set_reduced_motion(reduced_motion)
-	duck.set_speaking(visible_here and audio.available and audio.active and not audio.muted and audio.voice.playing)
+	duck.set_speaking(visible_here and not phrase_speaking and audio.available and audio.active and not audio.muted and audio.voice.playing)
 	duck.set_home_playground(in_collection)
 	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
 	if _mode_id == "pop":
@@ -4010,6 +4158,7 @@ func _update_duck() -> void:
 		and (_pop._listening or _pop._pending or _pop._reconnecting))
 	var voice_busy: bool = audio.voice.playing
 	duck.set_proactive_allowed(visible_here and quiet_phase and not _voice_mode and not _mode_menu_open()
+		and (_mode_id != "phrase" or in_collection)
 		and not microphone_busy and not voice_busy and not duck.speaking
 		and not _pointer_focus_active and _proactive_touches.is_empty()
 		and not _collection_dragging and _controller_last_direction == Vector2.ZERO

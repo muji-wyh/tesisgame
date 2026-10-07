@@ -9,7 +9,8 @@ const PROFILE = Object.freeze({
 const EDGE_TTS_VERSION = '7.2.8';
 const MANIFEST_PATH = 'docs/assets/ava-voice.json';
 const PROMPT_IDS = [
-  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`)
+  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`),
+  'phrase-intro', 'phrase-try-again', 'phrase-complete'
 ];
 
 function englishText(text) {
@@ -22,6 +23,7 @@ function englishText(text) {
 function messagesFor(root) {
   const prompts = JSON.parse(fs.readFileSync(path.join(root, 'voice-prompts.json'), 'utf8'));
   const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'));
+  const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'));
   if (!prompts || Array.isArray(prompts) || typeof prompts !== 'object' ||
       Object.keys(prompts).length !== PROMPT_IDS.length ||
       PROMPT_IDS.some(id => !Object.hasOwn(prompts, id))) {
@@ -29,6 +31,9 @@ function messagesFor(root) {
   }
   if (!Array.isArray(words) || words.length === 0) {
     throw new Error('words.json must contain a nonempty vocabulary array.');
+  }
+  if (!Array.isArray(phrases) || phrases.length === 0) {
+    throw new Error('phrases.json must contain a nonempty phrase array.');
   }
   const messages = Object.entries(prompts).map(([id, text]) => ({ id, text }));
   for (const word of words) {
@@ -41,6 +46,17 @@ function messagesFor(root) {
       throw new Error(`Unexpected audio path for vocabulary '${word.id}'.`);
     }
     messages.push({ id, text: word.text });
+  }
+  for (const phrase of phrases) {
+    if (!phrase || typeof phrase.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(phrase.id) ||
+        typeof phrase.text !== 'string' || !/^[a-z]{2,14}(?: [a-z]{2,14}){1,3}$/.test(phrase.text)) {
+      throw new Error('Phrase entries need a lowercase ID and two to four short English words.');
+    }
+    const id = `phrase-${phrase.id}`;
+    if (phrase.audio !== `assets/audio/voice/${id}.wav`) {
+      throw new Error(`Unexpected audio path for phrase '${phrase.id}'.`);
+    }
+    messages.push({ id, text: phrase.text });
   }
   if (new Set(messages.map(message => message.id)).size !== messages.length) {
     throw new Error('Voice IDs must be unique.');

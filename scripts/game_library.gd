@@ -11,7 +11,8 @@ const UiClick = preload("res://scripts/ui_click.gd")
 const CATALOG := [
 	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/avatars/cat.svg", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/avatars/rainbow.svg", "tint": Color("#f2e9d8")},
-	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/avatars/rocket.svg", "tint": Color("#e3eef1")}
+	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/avatars/rocket.svg", "tint": Color("#e3eef1")},
+	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen to Pip.\nBuild a little phrase.", "detail": "3 PHRASES · KEEP TRYING", "art": "res://assets/images/mascots/pip.svg", "tint": Color("#f5ebce")}
 ]
 
 var heading: Label
@@ -76,11 +77,18 @@ func _init() -> void:
 		buttons.append(tile)
 		var picture := TextureRect.new()
 		picture.texture = load(entry.art)
+		if entry.id == "phrase":
+			var portrait := AtlasTexture.new()
+			portrait.atlas = picture.texture
+			var frame_side: float = picture.texture.get_height()
+			portrait.region = Rect2(0, 0, frame_side, frame_side)
+			picture.texture = portrait
 		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tile.add_child(picture)
 		var title := Style.label(entry.title, 22)
+		title.clip_text = true
 		tile.add_child(title)
 		var copy := Style.label(entry.copy, 14)
 		copy.add_theme_color_override("font_color", Style.MUTED)
@@ -107,7 +115,7 @@ func _init() -> void:
 	motion_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	motion_button.pressed.connect(func() -> void: motion_toggled.emit())
 	_footer.add_child(motion_button)
-	_credit = Style.label("Art: Twemoji · CC BY 4.0", 10)
+	_credit = Style.label("Pip: original game art · Twemoji: CC BY 4.0", 10)
 	_credit.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_credit)
 
@@ -124,20 +132,21 @@ func configure(current: String, muted: bool, reduced: bool) -> void:
 func fit(available: Vector2, factor: float) -> void:
 	_factor = factor
 	var css := available * factor
-	var wide: bool = css.x >= 660 or (css.x >= 440 and css.x > css.y)
-	var short: bool = css.y < (560 if wide else 660)
-	var tiny: bool = css.y < (380 if wide else 440)
-	grid.columns = 3 if wide else 1
-	var padding: float = (16.0 if short or not wide else 28.0) / factor
+	var wide: bool = css.x >= 800
+	var compact_grid: bool = not wide and (css.x >= 440 or css.y < 440)
+	var short: bool = css.y < (560 if wide else 700)
+	var tiny: bool = css.y < 380
+	grid.columns = 4 if wide else 2 if compact_grid else 1
+	var padding: float = (12.0 if tiny else 16.0 if short or not wide else 28.0) / factor
 	var surface := Style.box(Style.PAPER, Style.EDGE, ceili(24 / factor), 1)
 	surface.set_content_margin_all(padding)
 	surface.shadow_color = Color(Style.INK, 0.2)
 	surface.shadow_size = ceili(30 / factor)
 	surface.shadow_offset = Vector2(0, 12 / factor)
 	add_theme_stylebox_override("panel", surface)
-	_body.add_theme_constant_override("separation", ceili((10 if short else 16) / factor))
-	grid.add_theme_constant_override("h_separation", ceili(12 / factor))
-	grid.add_theme_constant_override("v_separation", ceili(12 / factor))
+	_body.add_theme_constant_override("separation", ceili((8 if tiny else 10 if short else 16) / factor))
+	grid.add_theme_constant_override("h_separation", ceili((8 if compact_grid else 12) / factor))
+	grid.add_theme_constant_override("v_separation", ceili((8 if compact_grid else 12) / factor))
 	_footer.add_theme_constant_override("separation", ceili(8 / factor))
 	heading.text = "Let's play" if tiny else "Choose your adventure" if not wide else "A little play. A big discovery."
 	_eyebrow.visible = not tiny
@@ -151,7 +160,7 @@ func fit(available: Vector2, factor: float) -> void:
 		Style.action_button(button, Style.GOOD)
 		button.custom_minimum_size = Vector2(0, 44 / factor)
 		button.add_theme_font_size_override("font_size", ceili(13 / factor))
-	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (44.0 if tiny else 82.0 if short else 124.0)
+	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (64.0 if tiny else 90.0 if short else 164.0) if compact_grid else (76.0 if short else 108.0)
 	for tile: Dictionary in _tiles:
 		tile.button.custom_minimum_size = Vector2(0, tile_height / factor)
 		for state in ["normal", "hover", "pressed", "hover_pressed"]:
@@ -171,7 +180,7 @@ func _layout_tile(tile: Dictionary) -> void:
 	var short: bool = area.y * factor < 170
 	var tiny: bool = area.y * factor < 105
 	var minimal: bool = area.y * factor < 60
-	var pad := 14 / factor
+	var pad := (10 if grid.columns == 2 else 14) / factor
 	var horizontal: bool = grid.columns == 1 and short and not minimal
 	var art_height: float = maxf(0, area.y - 114 / factor)
 	tile.picture.visible = not short or horizontal
@@ -180,7 +189,11 @@ func _layout_tile(tile: Dictionary) -> void:
 	var y: float = (area.y - 27 / factor) * 0.5 if minimal else pad if short else art_height + 14 / factor
 	tile.title.position = Vector2(pad, y)
 	tile.title.size = Vector2(area.x - pad * 2, 27 / factor)
-	tile.title.add_theme_font_size_override("font_size", ceili((17 if short else 21) / factor))
+	var title_size: int = ceili((17 if short else 21) / factor)
+	var title_font: Font = tile.title.get_theme_font("font")
+	while title_size > ceili(13 / factor) and title_font.get_string_size(tile.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_size).x > area.x - pad * 2:
+		title_size -= 1
+	tile.title.add_theme_font_size_override("font_size", title_size)
 	tile.copy.visible = not tiny
 	tile.copy.position = Vector2(pad, y + 30 / factor)
 	tile.copy.size = Vector2(area.x - pad * 2, 42 / factor)
@@ -188,7 +201,8 @@ func _layout_tile(tile: Dictionary) -> void:
 	tile.detail.position = Vector2(pad, area.y - 23 / factor)
 	tile.detail.visible = not minimal
 	tile.detail.size = Vector2(area.x - pad * 2, 14 / factor)
-	tile.detail.add_theme_font_size_override("font_size", ceili(9 / factor))
+	tile.detail.add_theme_font_size_override("font_size", ceili((8 if grid.columns == 2 else 9) / factor))
+	tile.detail.clip_text = true
 	tile.current.position = Vector2(pad, 10 / factor)
 	tile.current.add_theme_font_size_override("font_size", ceili(9 / factor))
 	tile.current.visible = tile.entry.id == _current and not short
