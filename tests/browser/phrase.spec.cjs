@@ -29,6 +29,10 @@ async function press(page, control) {
 }
 
 async function pressAction(page) {
+  await expect.poll(async () => {
+    const action = (await phraseState(page)).action;
+    return Boolean(action?.visible && !action.disabled);
+  }, { message: 'The phrase action is available after any Pip celebration' }).toBe(true);
   await press(page, (await phraseState(page)).action);
 }
 
@@ -96,6 +100,60 @@ async function capture(page, info, name, { afterResize = false } = {}) {
   if (afterResize && colors === 1 && process.platform === 'win32' && info.project.use.browserName === 'webkit') {
     info.annotations.push({ type: 'rendering-limitation', description: `${name}: Windows WebKit presents a blank page after resizing while the raw canvas renders; both captures retained.` });
   } else expect(colors, `${name} is visible on the page`).toBeGreaterThan(20);
+}
+
+async function observeCelebration(page) {
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status'), canvas = document.getElementById('canvas');
+    const observation = { started: null, finished: null, frame: null };
+    window.phraseCelebrationObservation = observation;
+    const readState = () => JSON.parse(status.dataset.phrase || '{}');
+    let frameRequest = 0;
+    const observer = new MutationObserver(() => {
+      const state = readState();
+      if (!observation.started && state.celebrating) {
+        observation.started = state;
+        // Sample a rendered frame in the page before browser-control latency can miss it.
+        frameRequest = requestAnimationFrame(() => {
+          frameRequest = requestAnimationFrame(() => {
+            const frameState = readState();
+            if (frameState.celebrating && frameState.id === observation.started.id) {
+              observation.frame = { state: frameState, raw: canvas.toDataURL('image/png').split(',')[1] };
+            }
+          });
+        });
+      } else if (observation.started && !state.celebrating) {
+        observation.finished = state;
+        cancelAnimationFrame(frameRequest);
+        observer.disconnect();
+      }
+    });
+    observer.observe(status, { attributes: true, attributeFilter: ['data-phrase'] });
+  });
+}
+
+async function expectCelebration(page, info, name, actionText) {
+  await expect.poll(() => page.evaluate(() => Boolean(window.phraseCelebrationObservation?.finished)),
+    { message: 'The in-page observer records Pip finishing the happy reaction naturally' }).toBe(true);
+  const { started, finished, frame } = await page.evaluate(() => window.phraseCelebrationObservation);
+  expect(started, `${actionText} waits for Pip's celebration`).toMatchObject({
+    phase: 'correct', celebrating: true, action: { text: actionText, disabled: true }
+  });
+  expect(finished, `Pip's natural completion enables ${actionText}`).toMatchObject({
+    phase: 'correct', celebrating: false, action: { text: actionText, disabled: false }
+  });
+  expect(progress(finished), 'Completing the celebration cannot advance the question').toEqual(progress(started));
+  expect(frame, 'The in-page observer captures a rendered celebration frame').toBeTruthy();
+  expect(frame.state).toMatchObject({
+    id: started.id, phase: 'correct', celebrating: true, action: { text: actionText, disabled: true }
+  });
+  const canvasPng = Buffer.from(frame.raw, 'base64');
+  fs.writeFileSync(info.outputPath(`${name}-canvas.png`), canvasPng);
+  fs.writeFileSync(info.outputPath(`${name}-state.json`), JSON.stringify(frame.state, null, 2));
+  fs.writeFileSync(info.outputPath(`${name}-lifecycle.json`), JSON.stringify({ started, finished }, null, 2));
+  expect(await visibleColorCount(page, canvasPng), `${name} renders the actual game`).toBeGreaterThan(20);
+  expect(progress(await phraseState(page)), 'The correct answer still waits for an explicit action').toEqual(progress(finished));
+  return finished;
 }
 
 function center([x, y, width, height]) {
@@ -225,10 +283,10 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   }
   await selectWords(page, target.slice(1));
   const correctedFrom = await audioMark();
+  await observeCelebration(page);
   await pressAction(page);
-  await expect.poll(async () => (await phraseState(page)).phase).toBe('correct');
-  state = await phraseState(page);
-  expect(state).toMatchObject({ completed: 1, question_index: 0, action: { text: 'Continue' } });
+  state = await expectCelebration(page, info, 'phrase-pip-celebration', 'Continue');
+  expect(state).toMatchObject({ completed: 1, question_index: 0 });
   expect(state.transcript.disabled, 'The completed phrase has no ineffective transcript toggle').toBe(true);
   expect(state.transcript.text, 'The written-phrase helper uses an eye icon').toBe('');
   expect(state.transcript_visible).toBe(true);
@@ -257,9 +315,10 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   state = await phraseState(page);
   questionIds.push(state.id);
   expect(new Set(questionIds).size, 'A round asks three distinct questions').toBe(3);
+  await observeCelebration(page);
   await solve(page);
-  state = await phraseState(page);
-  expect(state).toMatchObject({ phase: 'correct', completed: 3, action: { text: 'Open chest' } });
+  state = await expectCelebration(page, info, 'phrase-pip-final-celebration', 'Open chest');
+  expect(state).toMatchObject({ phase: 'correct', completed: 3 });
   expect(await savedMedals(page), 'The third answer waits for the explicit chest transition').toBe(saved);
   await capture(page, info, 'phrase-three-complete');
   await pressAction(page);

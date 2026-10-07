@@ -30,6 +30,7 @@ var _palette: Dictionary = {}
 var _theme_id: String = "spring"
 var _paused: bool = false
 var _finished_emitted: bool = false
+var _celebrating: bool = false
 var _configured: bool = false
 var _muted: bool = false
 var _show_phrase: bool = false
@@ -58,6 +59,7 @@ func _init() -> void:
 	pip.focus_mode = Control.FOCUS_NONE
 	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pip.set_proactive_allowed(false)
+	pip.gameplay_reaction_finished.connect(_on_pip_reaction_finished)
 	add_child(pip)
 	_heading = _label("Build the phrase", 26)
 	_heading.add_theme_font_override("font", Style.HEADING_FONT)
@@ -110,6 +112,7 @@ func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value
 	cancel_input()
 	_paused = false
 	_finished_emitted = false
+	_celebrating = false
 	_question_id = ""
 	_show_phrase = _muted
 	_configured = game.reset(vocabulary, age_band, seed_value)
@@ -163,6 +166,7 @@ func pause(value: bool = true) -> void:
 	if value:
 		cancel_input()
 		pip.set_speaking(false)
+		_celebrating = false
 	pip.set_idle_paused(value)
 	_refresh()
 
@@ -173,6 +177,7 @@ func resume() -> void:
 
 func stop() -> void:
 	_paused = true
+	_celebrating = false
 	cancel_input()
 	pip.settle()
 	pip.set_idle_paused(true)
@@ -210,8 +215,12 @@ func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		cancel_input()
 		pip.set_speaking(false)
+		_celebrating = false
 	pip.set_idle_paused(_paused or not is_visible_in_tree())
-	_publish.call_deferred()
+	if _configured and is_visible_in_tree():
+		_refresh()
+	else:
+		_publish.call_deferred()
 
 
 func _can_interact() -> bool:
@@ -258,7 +267,7 @@ func _remove(index: int) -> void:
 
 
 func _activate() -> void:
-	if not _can_interact() or _pointer != -2:
+	if not _can_interact() or _pointer != -2 or _celebrating:
 		return
 	cancel_input()
 	if game.phase == "correct":
@@ -279,17 +288,26 @@ func _activate() -> void:
 	if not result in ["correct", "wrong"]:
 		return
 	var correct: bool = result == "correct"
+	_celebrating = correct
 	pip.react_gameplay(correct)
 	audio_requested.emit("feedback", result)
 	if correct:
 		audio_requested.emit("phrase", str(game.current_question().id))
 	_refresh()
 	if correct:
-		action_button.grab_focus()
+		_restore_focus()
 	elif not answer_buttons.is_empty() and not answer_buttons[0].disabled:
 		answer_buttons[0].grab_focus()
 	else:
 		_restore_focus()
+
+
+func _on_pip_reaction_finished(correct: bool) -> void:
+	if not correct or not _celebrating or game.phase != "correct" or not _can_interact():
+		return
+	_celebrating = false
+	_refresh()
+	action_button.grab_focus()
 
 
 func _input(event: InputEvent) -> void:
@@ -494,7 +512,7 @@ func _refresh() -> void:
 		button.set("accessibility_name", "Word %d: %s" % [index + 1, button.text] + (". Press to return this word." if occupied and not correct else ""))
 	listen_button.disabled = _paused or question.is_empty() or game.phase == "finished"
 	action_button.text = "Open chest" if correct and game.completed == 3 else "Continue" if correct else "Check answer"
-	action_button.disabled = _paused or question.is_empty() or game.phase == "finished" \
+	action_button.disabled = _paused or _celebrating or question.is_empty() or game.phase == "finished" \
 		or (game.phase == "building" and game.answer.size() != question.get("words", []).size())
 	transcript_button.disabled = _paused or question.is_empty() or game.phase != "building"
 	transcript_button.engaged = _show_phrase or correct
@@ -693,6 +711,7 @@ func snapshot() -> Dictionary:
 	var result: Dictionary = game.snapshot()
 	result["visible"] = is_visible_in_tree()
 	result["paused"] = _paused
+	result["celebrating"] = _celebrating
 	result["options"] = []
 	result["answers"] = []
 	for index in range(option_buttons.size()):

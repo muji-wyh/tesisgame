@@ -99,6 +99,8 @@ func _run() -> void:
 			"Wrong attempt %d remains editable without a life limit or reward" % (attempt + 1))
 		check(view.answer_buttons.all(func(button: Button) -> bool: return not button.disabled),
 			"Wrong feedback leaves every chosen word available for correction")
+		check(not view.snapshot().celebrating and not view.action_button.disabled,
+			"Wrong answers can be retried immediately without a celebration gate")
 	check(view.game.mistakes == 4 and app.audio.pair_feedback.playing
 		and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/wrong.wav")
 		and not app.audio.voice.playing,
@@ -109,6 +111,7 @@ func _run() -> void:
 		"Answer buttons can remove misplaced words while keeping the correctly positioned word")
 	_select_words(view, target.slice(1))
 	view.action_button.pressed.emit()
+	view.pip.set_process(false)
 	check(view.game.phase == "correct" and view.game.completed == 1 and view.action_button.text == "Continue",
 		"A repaired phrase offers an explicit Continue action")
 	check(view.transcript_button.disabled and view.transcript_button.text.is_empty()
@@ -122,6 +125,7 @@ func _run() -> void:
 		and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
 		"Correct feedback plays the right sound and repeats the completed phrase")
 	check(app.model.phase != "won" and _pieces(app) == 0, "The first correct phrase does not unlock a chest")
+	await _check_celebration_gate(app, "The first corrected phrase")
 	await _settle()
 	check(view.game.question_index == 0, "Correct feedback waits for Continue instead of advancing on a timer")
 	view.action_button.pressed.emit()
@@ -133,14 +137,17 @@ func _run() -> void:
 	view.transcript_button.pressed.emit()
 	check(view.snapshot().transcript_visible != transcript_shown, "The restored transcript button changes the next question's written hint")
 	view.transcript_button.pressed.emit()
+	app.set_reduced_motion(false)
 	_solve(view)
 	check(view.game.completed == 2 and app.model.phase != "won" and _pieces(app) == 0,
 		"Two correct phrases still leave the reward locked")
+	await _check_celebration_gate(app, "The second phrase")
 	view.action_button.pressed.emit()
 	_solve(view)
 	check(view.game.completed == 3 and view.game.phase == "correct" and view.action_button.text == "Open chest"
 		and app.model.phase != "won" and _pieces(app) == 0,
 		"The third correct phrase offers Open chest without claiming a reward early")
+	await _check_celebration_gate(app, "The third phrase before its chest")
 	view.action_button.pressed.emit()
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
 		and app.chest_button.is_visible_in_tree() and not view.visible and not app._new_adventure_button.visible,
@@ -150,6 +157,7 @@ func _run() -> void:
 	view.action_button.pressed.emit()
 	check(_pieces(app) == 0 and app.model.chest_state == "closed", "Duplicate phrase completion cannot award a treasure")
 	await _check_chest_and_new_adventure(app, directory, progress_script)
+	await _check_celebration_interruptions(app)
 	await _check_layout(app)
 	var stopped: Dictionary = view.game.snapshot()
 	await _choose_mode(app, "match")
@@ -160,6 +168,119 @@ func _run() -> void:
 	check(app._mode_id == "match" and app.model.phase != "won" and view.game.snapshot() == stopped and _pieces(app) == 1,
 		"Leaving Phrase Builder rejects stale tiles, audio and completion callbacks")
 	await _finish(app, directory)
+
+
+func _check_celebration_gate(app, context: String) -> void:
+	var view = app._phrase
+	view.pip.set_process(false)
+	var before: Dictionary = view.game.snapshot()
+	var pieces_before: int = _pieces(app)
+	var completions: Array[bool] = []
+	var record := func(correct: bool) -> void: completions.append(correct)
+	view.pip.gameplay_reaction_finished.connect(record)
+	check(view.snapshot().celebrating and view.action_button.disabled
+		and not view.navigation_controls().has(view.action_button),
+		context + " reserves time for Pip before exposing the next action")
+	check(view.pip._gameplay_reaction == "happy" and view.pip.pose == 3
+		and is_equal_approx(view.pip._gameplay_left, view.pip.GAMEPLAY_HAPPY_SECONDS),
+		context + " starts the full 1.25-second happy reaction")
+	for attempt in range(6):
+		view.action_button.pressed.emit()
+		view.finished.emit()
+	app._controller_accept()
+	await _enter_key()
+	check(view.snapshot().celebrating and view.game.snapshot() == before and app.model.phase != "won"
+		and _pieces(app) == pieces_before,
+		context + " cannot be skipped by rapid callbacks, keyboard, controller or early completion")
+	view.pip.gameplay_reaction_finished.emit(false)
+	check(view.snapshot().celebrating and view.action_button.disabled,
+		context + " ignores an unrelated sad-reaction completion")
+	completions.clear()
+	view.pip._process(view.pip.GAMEPLAY_HAPPY_SECONDS - 0.01)
+	view.action_button.pressed.emit()
+	check(view.snapshot().celebrating and view.action_button.disabled and view.game.snapshot() == before
+		and view.pip._gameplay_reaction == "happy" and completions.is_empty(),
+		context + " stays locked immediately before the happy reaction ends")
+	if view.reduced_motion:
+		check(view.pip.reduced_motion and view.pip.pose == 3,
+			"Reduced motion keeps a static happy Pip for the same brief celebration interval")
+	view.pip._process(0.02)
+	check(not view.snapshot().celebrating and not view.action_button.disabled
+		and view.navigation_controls().has(view.action_button) and completions == [true],
+		context + " enables its explicit next action on exactly one natural completion")
+	check(view.game.snapshot() == before and app.model.phase != "won" and _pieces(app) == pieces_before,
+		context + " finishing Pip's reaction neither advances the question nor opens a chest automatically")
+	view.pip._process(2.0)
+	check(completions == [true] and view.game.snapshot() == before,
+		context + " does not emit repeated completion when more time passes")
+	view.pip.gameplay_reaction_finished.disconnect(record)
+	view.listen_button.pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
+		context + " still lets the learner replay the phrase after celebrating")
+
+
+func _check_celebration_interruptions(app) -> void:
+	var view = app._phrase
+	var pieces_before: int = _pieces(app)
+	app.set_reduced_motion(false)
+	for interruption in ["menu", "room", "background", "hidden", "stop"]:
+		check(app.new_round(73, false, "", "phrase"), "A fresh phrase round starts for celebration interruption: " + interruption)
+		await _settle()
+		_solve(view)
+		var before: Dictionary = view.game.snapshot()
+		var completions: Array[bool] = []
+		var record := func(correct: bool) -> void: completions.append(correct)
+		view.pip.gameplay_reaction_finished.connect(record)
+		check(view.snapshot().celebrating and view.action_button.disabled,
+			"Pip is celebrating before " + interruption)
+		if interruption == "menu":
+			app._mode_heading_button.pressed.emit()
+		elif interruption == "room":
+			app.collection_button.pressed.emit()
+		elif interruption == "background":
+			app.on_page_hidden()
+		elif interruption == "hidden":
+			view.hide()
+		else:
+			view.stop()
+		view.pip._process(2.0)
+		check(not view.snapshot().celebrating and view.pip._gameplay_reaction.is_empty()
+			and completions.is_empty() and view.game.snapshot() == before,
+			"Opening " + interruption + " cancels the celebration without emitting natural completion")
+		view.pip.gameplay_reaction_finished.emit(true)
+		check(view.game.snapshot() == before and app.model.phase != "won" and _pieces(app) == pieces_before,
+			"A stale Pip completion cannot advance the covered phrase behind " + interruption)
+		view.pip.gameplay_reaction_finished.disconnect(record)
+		if interruption == "menu":
+			app._mode_panel.close_button.pressed.emit()
+		elif interruption == "room":
+			app._collection_back.pressed.emit()
+		elif interruption == "background":
+			app.on_page_visible()
+		elif interruption == "hidden":
+			view.show()
+		else:
+			app._resume_phrase()
+		await _settle()
+		check(not view.snapshot().celebrating and not view.action_button.disabled and view.game.snapshot() == before,
+			"Returning from " + interruption + " preserves the solved phrase with Continue ready")
+		view.pip.gameplay_reaction_finished.emit(true)
+		check(view.game.snapshot() == before and _pieces(app) == pieces_before,
+			"A duplicate interrupted completion never advances the resumed phrase")
+	check(app.new_round(91, false, "", "phrase"), "A fresh round starts before checking stale celebration across reconfiguration")
+	await _settle()
+	_solve(view)
+	check(view.snapshot().celebrating, "The outgoing round has an unfinished celebration")
+	check(app.new_round(92, false, "", "phrase"), "Reconfiguration replaces an actively celebrating round")
+	await _settle()
+	var replacement: Dictionary = view.game.snapshot()
+	view.pip.gameplay_reaction_finished.emit(true)
+	view.pip.gameplay_reaction_finished.emit(false)
+	view.pip._process(2.0)
+	check(not view.snapshot().celebrating and view.game.phase == "building" and view.game.completed == 0
+		and view.action_button.disabled and view.game.snapshot() == replacement and _pieces(app) == pieces_before,
+		"Late reaction callbacks cannot unlock or advance a new unanswered round")
+	app.set_reduced_motion(true)
 
 
 func _check_controller_and_keyboard(app) -> void:
@@ -610,6 +731,7 @@ func _select_words(view, ids: Array) -> void:
 func _solve(view) -> void:
 	_select_words(view, view.game.current_question().words)
 	view.action_button.pressed.emit()
+	view.pip.set_process(false)
 	check(view.game.phase == "correct", "The actual Check answer button accepts the assembled phrase")
 
 

@@ -1,5 +1,7 @@
 extends Button
 
+signal gameplay_reaction_finished(correct: bool)
+
 const SHEET = preload("res://assets/images/mascots/pip.svg")
 const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
@@ -373,11 +375,13 @@ func _process(delta: float) -> void:
 	if _gameplay_left > 0.0:
 		_gameplay_left = maxf(0.0, _gameplay_left - delta)
 		if is_zero_approx(_gameplay_left):
+			var correct: bool = _gameplay_reaction == "happy"
 			_gameplay_reaction = ""
 			_reset_idle()
 			if reduced_motion:
 				set_process(false)
-				_update_pose()
+			_update_pose(true)
+			gameplay_reaction_finished.emit(correct)
 	if reduced_motion:
 		return
 	_idle_time += delta
