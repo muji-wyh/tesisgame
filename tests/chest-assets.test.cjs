@@ -44,11 +44,11 @@ function soundEnergy(samples, rate) {
   return { rms: Math.sqrt(total / samples.length), bodyRatio: body / total, phoneRatio: phone / total };
 }
 
-test('all 88 authored chest cues reproduce exactly and stay within the bundled audio budget', () => {
+test('all 48 retained original chest cues reproduce exactly without the replaced theme copies', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const files = fs.readdirSync(absolute('assets/audio/chests')).filter(name => name.endsWith('.wav'));
   const expected = audio.THEMES.flatMap(theme => Object.keys(audio.CUES).map(cue => `${theme}-${cue}.wav`));
-  assert.equal(expected.length, 88);
+  assert.equal(expected.length, 48);
   assert.deepEqual(files.sort(), expected.sort());
   let bytes = 0;
   for (const theme of audio.THEMES) for (const cue of Object.keys(audio.CUES)) {
@@ -56,10 +56,10 @@ test('all 88 authored chest cues reproduce exactly and stay within the bundled a
     assert.deepEqual(authored, audio.wav(audio.render(theme, cue)), `${theme}/${cue} is reproducible`);
     bytes += authored.length;
   }
-  assert.ok(bytes < 1600000, 'The complete layered bank stays below 1.6 MB');
+  assert.ok(bytes < 800000, 'The retained original bank stays below 0.8 MB');
 });
 
-test('the final chest breath brakes into a quiet hold before the unchanged release', () => {
+test('the final chest breath brakes into a quiet hold before the shared recorded release', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   for (const theme of audio.THEMES) {
     const breath = audio.render(theme, 'opening');
@@ -78,72 +78,58 @@ test('the final chest breath brakes into a quiet hold before the unchanged relea
   }
 });
 
-test('chest strikes rise into a weighted release with audible bloom and a compact material stop', () => {
+test('retained chest settle cues preserve a compact material stop', () => {
   const audio = require('../tools/generate-chest-audio.cjs');
   const window = (samples, start, end) => samples.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE));
   for (const theme of audio.THEMES) {
-    const strikes = ['step', 'step-detail', 'step-roll'].map(cue => soundEnergy(audio.render(theme, cue), audio.RATE));
-    assert.ok(strikes.every(strike => strike.bodyRatio > 0.60), `${theme} keeps low body in every strike texture`);
-    assert.ok(strikes[0].bodyRatio > strikes[1].bodyRatio && strikes[1].bodyRatio > strikes[2].bodyRatio,
-      `${theme} grows upper detail through three textures instead of only changing identical-click volume`);
-    assert.ok(strikes[0].bodyRatio - strikes[2].bodyRatio > 0.12, `${theme} has a substantial timbral progression`);
-    const release = audio.render(theme, 'release');
-    const contact = soundEnergy(window(release, 0, 0.04), audio.RATE).rms;
-    let strongest = 0, strongestTime = 0;
-    for (let start = 0; start < 0.25; start += 0.005) {
-      const energy = soundEnergy(window(release, start, start + 0.02), audio.RATE).rms;
-      if (energy > strongest) { strongest = energy; strongestTime = start + 0.01; }
-    }
-    assert.ok(contact > 0.30 && strongestTime >= 0.01 && strongestTime <= 0.045,
-      `${theme} loads its main release inside the first 45 ms`);
-    assert.equal(release.length, Math.round(0.68 * audio.RATE), `${theme} keeps the physical release duration`);
-    assert.ok(soundEnergy(window(release, 0.15, 0.30), audio.RATE).rms > 0.075,
-      `${theme} retains a resonating cavity after contact`);
-    const bloom = soundEnergy(window(release, 0.30, 0.50), audio.RATE).rms;
-    assert.ok(bloom > 0.035 && bloom < contact * 0.30,
-      `${theme} expands into an audible bloom without a second louder impact`);
-    assert.ok(soundEnergy(window(release, 0.62, audio.CUES.release), audio.RATE).rms < bloom * 0.15,
-      `${theme} damps the bloom before the physical sample ends`);
-    const material = soundEnergy(release, audio.RATE);
-    assert.ok(soundEnergy(window(release, 0, 0.12), audio.RATE).bodyRatio > 0.60 && material.phoneRatio > 0.18,
-      `${theme} keeps its initial cavity weight and phone-audible harmonics beneath the bloom`);
-    assert.ok(release.every(sample => Math.abs(sample) < 0.79), `${theme} leaves unclipped mixing headroom`);
     const settle = audio.render(theme, 'settle');
     const landing = soundEnergy(settle, audio.RATE);
-    assert.ok(landing.rms < material.rms * 0.65 && landing.bodyRatio > 0.65 && landing.phoneRatio > 0.20,
-      `${theme} has a quieter but tangible material stop`);
+    assert.ok(landing.rms > 0.07 && landing.rms < 0.10 && landing.bodyRatio > 0.65 && landing.phoneRatio > 0.20,
+      `${theme} preserves its tangible material stop`);
     assert.ok(soundEnergy(window(settle, 0.18, 0.4), audio.RATE).rms <
       soundEnergy(window(settle, 0, 0.04), audio.RATE).rms * 0.02,
     `${theme} stops ringing after its compact rebound`);
     assert.ok(settle.every(sample => Math.abs(sample) < 0.79), `${theme} landing stays unclipped`);
-    const settleAt = Math.round(0.42 * audio.RATE);
-    let mixedPeak = 0;
-    for (let index = 0; index < Math.max(release.length, settleAt + settle.length); index++) {
-      const mixed = (release[index] || 0) * 0.86 + (settle[index - settleAt] || 0) * 0.42;
-      mixedPeak = Math.max(mixedPeak, Math.abs(mixed));
-    }
-    assert.ok(mixedPeak < 0.85, `${theme} leaves music headroom while release and landing overlap`);
   }
 });
 
-test('saved reward accents resolve audibly at an even level across all eight themes', () => {
-  const audio = require('../tools/generate-chest-audio.cjs');
-  const levels = [];
-  for (const theme of audio.THEMES) {
-    const reward = audio.render(theme, 'reward');
-    const window = (start, end) => soundEnergy(reward.slice(Math.round(start * audio.RATE), Math.round(end * audio.RATE)), audio.RATE).rms;
-    const level = soundEnergy(reward, audio.RATE).rms;
-    levels.push(level);
-    assert.equal(reward.length, Math.round(0.74 * audio.RATE), `${theme} keeps the saved receipt duration`);
-    assert.ok(level > 0.10 && level < 0.14, `${theme} plays a substantial saved reward accent`);
-    const resolving = window(0.30, 0.50);
-    assert.ok(resolving > 0.08, `${theme} sustains its resolving phrase beyond the initial contact`);
-    assert.ok(window(0.62, audio.CUES.reward) < resolving * 0.25, `${theme} fades its reward cleanly after resolving`);
-    assert.ok(reward.every(sample => Math.abs(sample) < 0.79), `${theme} reward retains mixing headroom`);
-    assert.ok(reward[0] === 0 && reward.at(-1) === 0, `${theme} reward has clean sample boundaries`);
+test('five shared chest reference excerpts have verified PCM, unique content and clean signal boundaries', t => {
+  const manifest = require('../docs/assets/chest-reference-audio.json');
+  const { SOURCE_SHA256, WINDOWS } = require('../tools/import-chest-reference.cjs');
+  assert.equal(manifest.source.sha256, SOURCE_SHA256);
+  assert.deepEqual(manifest.assets.map(asset => ({ id: asset.id, ...asset.window, ...asset.processing })), WINDOWS);
+  assert.ok(WINDOWS.every(window => window.start >= 33 && window.start + window.seconds <= 47));
+  if (!fs.existsSync(absolute('assets/imported-audio/chest-reference'))) {
+    return t.skip('Import the private chest reference before building the game.');
   }
-  assert.ok(Math.max(...levels) / Math.min(...levels) < 1.15,
-    'Every theme acknowledges a saved reward at a comparable audible level');
+  const entries = require('../tools/chest-reference-audio.cjs').readChestReferenceAudio(root);
+  assert.equal(new Set(entries.map(({ asset }) => asset.sha256)).size, 5);
+  assert.equal(entries.reduce((total, { bytes }) => total + bytes.length, 0), 301864);
+  for (const { asset, bytes } of entries) {
+    const samples = Array.from({ length: (bytes.length - 44) / 2 }, (_, index) => bytes.readInt16LE(44 + index * 2) / 32767);
+    const peak = samples.reduce((maximum, sample) => Math.max(maximum, Math.abs(sample)), 0);
+    const rms = Math.sqrt(samples.reduce((total, sample) => total + sample * sample, 0) / samples.length);
+    assert.ok(peak < 0.85 && rms > 0.005, `${asset.id} has unclipped, non-silent audio`);
+    assert.ok(Math.abs(20 * Math.log10(peak) - asset.peakDbfs) < 0.01, `${asset.id} peak matches its provenance`);
+    assert.ok(Math.abs(20 * Math.log10(rms) - asset.rmsDbfs) < 0.01, `${asset.id} energy matches its provenance`);
+    assert.equal(samples[0], 0, `${asset.id} starts at zero`);
+    assert.equal(samples.at(-1), 0, `${asset.id} ends at zero`);
+  }
+});
+
+test('the chest reference importer preserves installed files when the supplied video hash does not match', t => {
+  const temporary = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'chest-source-check-'));
+  t.after(() => fs.rmSync(temporary, { recursive: true, force: true }));
+  const fixture = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(temporary);
+  const before = fixture.assets.map(asset => fs.readFileSync(path.join(temporary, asset.destination)));
+  const manifest = fs.readFileSync(fixture.manifestPath);
+  const source = path.join(temporary, 'unreviewed.mp4');
+  fs.writeFileSync(source, 'Not the supplied recording');
+  assert.throws(() => require('../tools/import-chest-reference.cjs').importChestReference({
+    source, root: temporary, ffmpeg: 'must-not-run'
+  }), /does not match the reviewed chest-opening reference/);
+  assert.deepEqual(fs.readFileSync(fixture.manifestPath), manifest);
+  fixture.assets.forEach((asset, index) => assert.deepEqual(fs.readFileSync(path.join(temporary, asset.destination)), before[index]));
 });
 
 function readManifest() {

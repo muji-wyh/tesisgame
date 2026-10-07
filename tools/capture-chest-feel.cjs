@@ -61,7 +61,7 @@ function run(binary, args) {
 
 function provenance() {
   const files = ['scripts/chest_view.gd', 'scripts/chest_surface.gdshader', 'scripts/chest_feel.gd', 'scripts/game_audio.gd',
-    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/rigs.json'];
+    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/rigs.json', 'docs/assets/chest-reference-audio.json'];
   return Object.fromEntries(files.map(file => [file,
     crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
 }
@@ -271,7 +271,7 @@ footer{margin:28px 0;color:#68757e;font-size:13px}a{color:#236c76}@media(max-wid
 </style><main><header><h1>Chest motion and sound review</h1>
 <p class="measure">Rhythm ${rhythmVersion} · 5 holding beats + 15 opening beats · 5-second reward sequence</p>
 <p>${reports.length} ${reports.length === 1 ? 'representative theme' : reports.length === themes.length ? 'themes' : 'representative themes'} at the same size. Each recording includes a short cancelled press followed by the complete five-second reward sequence: keep holding as five grounded recoils grow into fifteen increasingly strong opening beats. Let go when the lid releases; the remaining animation completes automatically.</p>
-<p>The first holding beat begins at 80 milliseconds. Grounded impacts gain detail and brightness as the rhythm tightens. The final roll brakes over 60 milliseconds, then holds the loaded chest for 160 milliseconds with a quiet breath. Progress continues through the pause. A dry crack and weighty impact release the tension immediately, driving the base into its contact shadow as the lid accelerates upward. The lid meets its mechanical stop 420 milliseconds after release, then quickly damps its return. Progress stars fade into a broad theme-colored bloom and outward light wave.</p>
+<p>The first holding beat begins at 80 milliseconds. Three recorded attack textures follow the tightening rhythm. The final roll brakes over 60 milliseconds, then holds the loaded chest for 160 milliseconds with a quiet breath. Progress continues through the pause. The reference opening cue begins as the lid releases and preserves its 1.5-second tail through the remaining motion. The lid meets its mechanical stop 420 milliseconds after release, with its quieter support cue beneath that tail. The separate 1.2-second reward recording follows completion.</p>
 <p>A theme-colored flash peaks 45 milliseconds after release, then opens into a broad beam and afterglow. The lid, light and release sound share the same cue.</p>
 <p>The soundtrack is the engine's recorded game audio, with its original mix preserved. Hide names to compare the motion without theme labels.</p></header>
 <div class="toolbar"><label><input id="hide" type="checkbox">Hide theme names</label><label><input id="mute" type="checkbox">Mute all previews</label></div>

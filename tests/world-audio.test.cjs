@@ -158,7 +158,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...phrases.map(phrase => phrase.audio),
-    ...themes.flatMap(id => ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']
+    ...themes.flatMap(id => ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle']
       .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
   ];
   fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
@@ -179,15 +179,23 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     fs.writeFileSync(path.join(directory, `${source}.import`), `path="res://.godot/imported/${imported}"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC UI click fixture');
   });
-  expected.push(click.asset.destination, ...pair.assets.map(asset => asset.destination));
+  const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(directory, source => {
+    const imported = `chest-reference-${path.basename(source)}.sample`;
+    fs.writeFileSync(path.join(directory, `${source}.import`), `path="res://.godot/imported/${imported}"\n`);
+    fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC chest reference fixture');
+  });
+  expected.push(click.asset.destination, ...pair.assets.map(asset => asset.destination), ...chest.assets.map(asset => asset.destination));
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
-  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
+  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 48);
+  assert.equal(audio.filter(file => file.source.includes('/chest-reference/')).length, 5);
   assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 36);
-  assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));
-  assert.ok(audio.some(file => file.source.endsWith('/winter-step-roll.wav')));
+  assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-detail.wav')));
+  assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
+  assert.ok(audio.every(file => !/\/chests\/[^/]+-(?:step(?:-detail|-roll)?|release|reward)\.wav$/.test(file.source)),
+    'Replaced theme copies never re-enter the required inventory');
   const phraseCatalog = path.join(directory, 'phrases.json');
   for (const invalid of [[], {}, null]) {
     fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));
@@ -220,6 +228,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.throws(() => collectRequiredAudio(directory), /ui-click.*select\.wav\.import/,
     'The new menu cue cannot disappear silently from the startup pack');
   fs.writeFileSync(clickImport, clickMetadata);
+  const chestImport = path.join(directory, `${chest.assets[3].destination}.import`);
+  const chestMetadata = fs.readFileSync(chestImport);
+  fs.unlinkSync(chestImport);
+  assert.throws(() => collectRequiredAudio(directory), /chest-reference.*release\.wav\.import/,
+    'The shared chest release cannot disappear silently from the startup pack');
+  fs.writeFileSync(chestImport, chestMetadata);
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));

@@ -1001,7 +1001,7 @@ test('Xbox chest opening cancels on disconnect and works again after reconnect',
 
 test('completes matches and opens a one-shot reward with bundled audio offline', async ({ page, context }) => {
   const errors = watchErrors(page), requests = watchAudioRequests(page);
-  await observeAudio(page, { fingerprintBuffers: true });
+  await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2 });
   await page.goto('/');
   await ready(page);
   await context.setOffline(true);
@@ -1030,8 +1030,7 @@ test('completes matches and opens a one-shot reward with bundled audio offline',
     await expect(page.locator('#game-status')).toHaveText(earned);
     expect((await roomState(page)).medals).toBe(saved);
     if (await page.evaluate(() => window.audioObservation.available)) {
-      const theme = await page.locator('html').getAttribute('data-pip-theme');
-      const reward = await expectRecording(page, beforeChest, 'assets/audio/chests/' + theme + '-reward.wav');
+      const reward = await expectRecording(page, beforeChest, 'assets/imported-audio/chest-reference/reward.wav');
       expect(reward.peak).toBeGreaterThan(0.01);
       await expect(page.locator('#audio-status')).toBeEmpty();
     }

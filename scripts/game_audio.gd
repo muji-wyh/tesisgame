@@ -313,9 +313,11 @@ func _chest_stream(theme: String, cue_name: String) -> AudioStreamWAV:
 	var stream: AudioStream = _stream(path, cue_name == "charge")
 	if stream is AudioStreamWAV:
 		return stream
-	if not _chest_fallbacks.has(path):
-		_chest_fallbacks[path] = ChestSoundBank.fallback(theme, cue_name)
-	return _chest_fallbacks[path]
+	# Recorded cues are shared; their emergency material textures are themed.
+	var fallback_key: String = "%s/%s" % [ChestSoundBank.theme_id(theme), cue_name]
+	if not _chest_fallbacks.has(fallback_key):
+		_chest_fallbacks[fallback_key] = ChestSoundBank.fallback(theme, cue_name)
+	return _chest_fallbacks[fallback_key]
 
 
 func _ensure_chest_players() -> void:
@@ -441,11 +443,8 @@ func chest_cue(theme_id: String, cue_name: String, step: int = 0) -> void:
 
 
 func _play_chest_pulse(energy: float) -> void:
-	# Clear material attacks carry the rhythm from the first held beat onward.
-	# Keep headroom for the final release instead of making the pressure hum loud.
-	# Retain the cavity's low body instead of pitching the whole chest upward.
-	# Successive textures add material detail and a broad air edge, alongside
-	# cadence and the separate pressure texture, without transposing the body.
+	# Three short recorded attacks follow the shared physical beat sequence.
+	# Preserve their pitch and leave headroom for the longer opening flourish.
 	_play_chest_event(ChestSoundBank.pulse_cue(energy), lerpf(0.30, 0.56, energy), 1.0)
 
 

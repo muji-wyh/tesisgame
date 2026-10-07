@@ -6,9 +6,9 @@ const INPUTS = [
   'assets', 'scenes', 'scripts', 'web', 'project.godot', 'export_presets.cfg',
   'package.json', 'package-lock.json', 'words.json', 'phrases.json', 'voice-prompts.json',
   'docs/assets/voice-pop-reference-audio.json', 'docs/assets/pair-feedback-audio.json',
-  'docs/assets/ui-click-audio.json',
+  'docs/assets/ui-click-audio.json', 'docs/assets/chest-reference-audio.json',
   'tests/godot/verify_web_pack.gd',
-  ...['build-web', 'package-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'web-build-receipt']
+  ...['build-web', 'package-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'web-build-receipt']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');

@@ -49,7 +49,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   }
   for (const source of [
     'assets/audio/bgm/spring.wav',
-    'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
+    'assets/audio/chests/spring-settle.wav', 'assets/audio/voice/spring-theme.wav',
+    ...['step', 'step-detail', 'step-roll', 'release', 'reward'].map(cue => `assets/imported-audio/chest-reference/${cue}.wav`),
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
     'assets/imported-audio/ui-click/select.wav',
     ...JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8')).map(phrase => phrase.audio)
@@ -211,14 +212,15 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
+  const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
-    for (const cue of ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward']) {
+    for (const cue of ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle']) {
       fixture.writeImport(`assets/audio/chests/${theme}-${cue}.wav`);
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 140);
+  assert.equal(required.length, 105);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
@@ -228,6 +230,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   }
   assert.ok(required.some(asset => asset.source === 'res://assets/imported-audio/ui-click/select.wav'),
     'Native menu feedback ships in the startup pack without a later fetch');
+  assert.deepEqual(required.filter(asset => asset.source.includes('/chest-reference/')).map(asset => asset.source),
+    chest.assets.map(asset => `res://${asset.destination}`), 'Five shared chest recordings each ship once in the pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/voice/phrase-')).map(asset => asset.source),
     phrases.map(phrase => `res://${phrase.audio}`), 'Every whole-phrase recording is verified as a required resource');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
@@ -261,6 +265,58 @@ test('pair feedback is required and rejects missing, extra, tampered, and malfor
   pair.assets[0].sha256 = require('node:crypto').createHash('sha256').update(invalid).digest('hex');
   pair.writeManifest();
   assert.throws(() => collectPairFeedbackAudio(fixture.directory), /Invalid mono PCM16/);
+});
+
+test('shared chest recordings are required and reject incomplete, extra, tampered or malformed banks', t => {
+  const fixture = referenceBankFixture(t, false);
+  const { collectChestReferenceAudio } = require('../tools/package-web.cjs');
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /ENOENT/);
+  const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
+  assert.deepEqual(collectChestReferenceAudio(fixture.directory).map(asset => asset.source),
+    chest.assets.map(asset => `res://${asset.destination}`));
+  const filename = path.join(fixture.directory, chest.assets[0].destination);
+  const original = fs.readFileSync(filename);
+  fs.unlinkSync(filename);
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /requires exactly/);
+  fs.writeFileSync(filename, original);
+  const extra = path.join(path.dirname(filename), 'extra.wav');
+  fs.writeFileSync(extra, original);
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /requires exactly/);
+  fs.unlinkSync(extra);
+  const invalid = Buffer.from(original);
+  invalid.writeUInt16LE(2, 22);
+  fs.writeFileSync(filename, invalid);
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /hash mismatch/);
+  chest.assets[0].sha256 = require('node:crypto').createHash('sha256').update(invalid).digest('hex');
+  chest.writeManifest();
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /Invalid mono PCM16/);
+});
+
+test('shared chest metadata cannot redirect, truncate or ambiguously declare the required recordings', t => {
+  const fixture = referenceBankFixture(t, false);
+  const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
+  const { collectChestReferenceAudio } = require('../tools/package-web.cjs');
+  for (const change of [
+    { id: 'other' }, { destination: '../outside.wav' }, { seconds: 0.20 }, { seconds: null },
+    { channels: 2 }, { sampleRate: 48000 }, { bitDepth: 8 }, { sha256: 'invalid' }
+  ]) {
+    fs.writeFileSync(chest.manifestPath, JSON.stringify({ assets: [{ ...chest.assets[0], ...change }, ...chest.assets.slice(1)] }));
+    assert.throws(() => collectChestReferenceAudio(fixture.directory), /Invalid chest reference manifest entry/);
+  }
+  for (const assets of [[], [...chest.assets, chest.assets[0]], [...chest.assets].reverse()]) {
+    fs.writeFileSync(chest.manifestPath, JSON.stringify({ assets }));
+    assert.throws(() => collectChestReferenceAudio(fixture.directory));
+  }
+  chest.writeManifest();
+  const filename = path.join(fixture.directory, chest.assets[3].destination);
+  const truncated = fs.readFileSync(filename).subarray(0, 44 + 44100);
+  truncated.writeUInt32LE(truncated.length - 8, 4);
+  truncated.writeUInt32LE(truncated.length - 44, 40);
+  fs.writeFileSync(filename, truncated);
+  chest.assets[3].sha256 = require('node:crypto').createHash('sha256').update(truncated).digest('hex');
+  chest.writeManifest();
+  assert.throws(() => collectChestReferenceAudio(fixture.directory), /Invalid mono PCM16/,
+    'A valid WAV header and matching hash cannot hide a truncated release');
 });
 
 test('a partial or ambiguous Voice Pop reference bank fails instead of shipping mixed fallback audio', t => {

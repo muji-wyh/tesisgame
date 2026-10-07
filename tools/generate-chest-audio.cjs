@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-// Original procedural Foley. Every noise source is seeded, and each material
+// Remaining original procedural Foley. Every noise source is seeded, and each material
 // has its own resonant modes, friction, air and contact layers. No recordings
 // or third-party samples are used. Regenerate with node tools/generate-chest-audio.cjs.
 const fs = require('node:fs');
@@ -12,28 +12,18 @@ const crypto = require('node:crypto');
 const RATE = 22050;
 const TAU = Math.PI * 2;
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const CUES = { press: 0.19, charge: 0.8, step: 0.24, 'step-detail': 0.24, 'step-roll': 0.24, cancel: 0.22, opening: 0.24, unlock: 0.31, release: 0.68, settle: 0.48, reward: 0.74 };
+const CUES = { press: 0.19, charge: 0.8, cancel: 0.22, opening: 0.24, unlock: 0.31, settle: 0.48 };
 const MATERIALS = {
   spring: 'Hollow wood, dry leaf movement and a soft flower bell',
-  summer: 'Warm airflow, a cork-like pop and a bright rounded release',
+  summer: 'Warm airflow and cork-like contact',
   autumn: 'Heavy wood, a metal latch, a strained hinge and a settled lid',
   winter: 'Glass contact and inharmonic crystal resonance',
-  ocean: 'Muffled pressure, rising bubbles and a receding wave',
-  space: 'A small servo, magnetic latch and a filtered airlock release',
+  ocean: 'Muffled pressure and rising bubbles',
+  space: 'A small servo, magnetic latch and a held pressure texture',
   jungle: 'Tensioned vine creak, hollow wood and coarse leaves',
   candy: 'Elastic squash, a soft pop and scattered sugar grains'
 };
 const BODY_FREQUENCIES = { spring: 112, summer: 98, autumn: 82, winter: 128, ocean: 78, space: 90, jungle: 102, candy: 118 };
-const PAYOFF_PROFILES = {
-  spring: { note: 523.25, air: 0.46, cutoff: 3600, shimmer: 0.15, spread: 0.006 },
-  summer: { note: 587.33, air: 0.76, cutoff: 4600, shimmer: 0.13, spread: 0.008 },
-  autumn: { note: 392.00, air: 0.40, cutoff: 2700, shimmer: 0.12, spread: 0.014 },
-  winter: { note: 783.99, air: 0.42, cutoff: 5200, shimmer: 0.21, spread: 0.004 },
-  ocean: { note: 392.00, air: 0.62, cutoff: 1800, shimmer: 0.17, spread: 0.010 },
-  space: { note: 440.00, air: 0.69, cutoff: 4100, shimmer: 0.16, spread: 0.012 },
-  jungle: { note: 493.88, air: 0.57, cutoff: 2900, shimmer: 0.12, spread: 0.016 },
-  candy: { note: 659.25, air: 0.39, cutoff: 3800, shimmer: 0.20, spread: 0.008 }
-};
 
 function random(seed) {
   let state = 2166136261;
@@ -95,11 +85,8 @@ function render(theme, cue) {
   const duration = CUES[cue];
   const samples = new Float64Array(Math.round(RATE * duration));
   const rng = random(`${theme}/${cue}/v1`);
-  const strike = cue.startsWith('step');
-  const strikeStage = ['step', 'step-detail', 'step-roll'].indexOf(cue);
-  const force = { press: 0.62, charge: 0.45, step: 0.62, cancel: 0.42, opening: 0.45, unlock: 0.9, release: 0.82, settle: 0.63, reward: 0.75 }[strike ? 'step' : cue];
-  const opening = ['opening', 'release', 'charge'].includes(cue);
-  const reward = cue === 'reward';
+  const force = { press: 0.62, cancel: 0.42, opening: 0.45, unlock: 0.9, settle: 0.63 }[cue];
+  const opening = cue === 'opening';
   const settle = cue === 'settle' || cue === 'cancel';
 
   function layer(start, seconds, gain, signal) {
@@ -138,20 +125,8 @@ function render(theme, cue) {
     noise(start, 0.023, gain * 0.8, 5400, 0.001, 5);
   }
   function bells(base, gain) {
-    for (let i = 0; i < (reward ? 3 : 1); i++) {
-      const start = reward ? 0.045 + i * 0.13 : 0.008;
-      modes(start, duration - start, [base * [1, 1.25, 1.5][i], base * [2.76, 3.42, 4.17][i]], gain, 3.5);
-    }
-  }
-  function bodyImpact(base, gain) {
-    const seconds = 0.19;
-    layer(0, seconds, gain, (t) => {
-      const pressure = Math.min(1, t / 0.018) * Math.exp(-t / 0.041);
-      const phase = TAU * base * t;
-      // Low-mid harmonics retain physical weight on small phone speakers.
-      const body = Math.sin(phase) + 0.55 * Math.sin(phase * 2.03) + 0.22 * Math.sin(phase * 3.81);
-      return body * pressure * Math.min(1, t / 0.002) * Math.min(1, (seconds - t) / 0.045);
-    });
+    const start = 0.008;
+    modes(start, duration - start, [base, base * 2.76], gain, 3.5);
   }
   function weightedContact(start, seconds, base, gain, decay) {
     layer(start, seconds, gain, (t) => {
@@ -162,39 +137,6 @@ function render(theme, cue) {
         + 0.38 * Math.sin(phase * 3.97) + 0.15 * Math.sin(phase * 6.13);
       const pressure = Math.min(1, t / 0.004) * Math.exp(-t / decay);
       return body * pressure * Math.min(1, (seconds - t) / 0.045);
-    });
-  }
-
-  function bloom(start, seconds, gain, cutoff) {
-    // A broad expanding pressure cloud gives the contact room to open into.
-    // Its soft front avoids introducing a second strike after the latch crack.
-    let low = 0;
-    let dark = 0;
-    const alpha = 1 - Math.exp(-TAU * cutoff / RATE);
-    const darkAlpha = 1 - Math.exp(-TAU * 360 / RATE);
-    layer(start, seconds, gain, (t) => {
-      const white = rng() * 2 - 1;
-      low += alpha * (white - low);
-      dark += darkAlpha * (low - dark);
-      const swell = (1 - Math.exp(-t / 0.028)) * Math.exp(-t / 0.20);
-      return (low - dark * 0.72) * swell * Math.min(1, (seconds - t) / 0.085);
-    });
-  }
-
-  function shimmer(start, seconds, base, gain, spread, attack = 0.022) {
-    // Detuned modal clusters sound like resonant material catching the light,
-    // not a sustained oscillator or a sequence of electronic notification beeps.
-    const ratios = [1, 1.498, 2.008, 2.756, 3.73];
-    const phases = ratios.map(() => rng() * TAU);
-    layer(start, seconds, gain, (t) => {
-      let sound = 0;
-      for (let index = 0; index < ratios.length; index++) {
-        const phase = TAU * base * ratios[index] * t + phases[index];
-        const cluster = Math.sin(phase) + 0.38 * Math.sin(phase * (1 + spread));
-        sound += cluster * Math.exp(-t * index * 1.7) / (1 + index * 1.8);
-      }
-      const swell = (1 - Math.exp(-t / attack)) * Math.exp(-t / 0.25);
-      return sound * swell * Math.min(1, (seconds - t) / 0.095);
     });
   }
 
@@ -219,12 +161,11 @@ function render(theme, cue) {
     case 'spring':
       wood(settle ? 174 : 246, settle ? 0.44 : 0.32);
       leaves(0.025, duration * 0.7, opening ? 0.34 : 0.19, opening ? 8 : 4);
-      if (reward || cue === 'unlock') bells(1046.5, reward ? 0.2 : 0.11);
+      if (cue === 'unlock') bells(1046.5, 0.11);
       break;
     case 'summer':
       noise(0, duration * 0.94, opening ? 0.66 : 0.29, 2200, opening ? 0.04 : 0.008, 2.4);
       sweep(0.006, Math.min(duration, 0.19), 0.44, settle ? 300 : 540, settle ? 100 : 155, 6);
-      if (reward) bells(784, 0.19);
       break;
     case 'autumn':
       wood(settle ? 102 : 154, 0.6);
@@ -232,96 +173,51 @@ function render(theme, cue) {
         sweep(0.026, duration * 0.8, 0.16, 310, 180, 1.9, 1.6);
         noise(0.012, duration * 0.86, 0.36, 1600, 0.024, 2, 0.9);
       }
-      if (cue === 'unlock' || strike || reward) metal(680, 0.2);
+      if (cue === 'unlock') metal(680, 0.2);
       if (settle) modes(0.065, duration - 0.065, [92, 221, 511], 0.21, 8);
-      if (reward) bells(523.25, 0.11);
       break;
     case 'winter':
       metal(settle ? 980 : 1370, 0.25, duration * 0.9);
       modes(0.005, duration - 0.005, [510, 1445, 2339, 3721], 0.22, 2.1);
       noise(0, Math.min(0.11, duration), 0.15, 5600, 0.002, 5);
       if (opening) noise(0.024, duration * 0.83, 0.13, 3100, 0.04, 1.9);
-      if (reward) bells(1046.5, 0.16);
       break;
     case 'ocean':
       noise(0, duration * 0.98, opening ? 0.75 : 0.42, 380, 0.018, 2);
       modes(0.003, Math.min(0.3, duration), [78, 153, 256], 0.35, 4);
-      for (let i = 0; i < (opening || reward ? 4 : 2); i++) {
+      for (let i = 0; i < (opening ? 4 : 2); i++) {
         const start = 0.018 + i * duration * 0.13;
         sweep(start, Math.min(0.15, duration - start), 0.16, 290 + i * 65, 730 + i * 100, 5);
       }
-      if (reward) modes(0.13, duration - 0.13, [392, 587.33], 0.11, 3);
       break;
     case 'space':
       modes(0.003, Math.min(duration, 0.14), [122, 399, 820], 0.33, 9);
-      if (opening || reward) {
+      if (opening) {
         // Motor teeth and a filtered pressure hiss, not an electronic melody.
         layer(0.016, duration * 0.85, 0.2, (t) => (Math.sin(TAU * (115 * t + 110 * t * t)) + 0.22 * Math.sin(TAU * 710 * t)) *
           (0.65 + 0.35 * Math.sin(TAU * 47 * t)) * envelope(t, duration * 0.85, 0.026, 1.8));
-        noise(0.014, duration * 0.9, cue === 'release' ? 0.61 : 0.25, 1750, 0.026, 2.4);
+        noise(0.014, duration * 0.9, 0.25, 1750, 0.026, 2.4);
       }
-      if (cue === 'unlock' || strike) metal(890, 0.22, 0.08);
-      if (reward) modes(0.23, duration - 0.23, [330, 495], 0.14, 4);
+      if (cue === 'unlock') metal(890, 0.22, 0.08);
       break;
     case 'jungle':
       wood(settle ? 113 : 193, 0.5);
       sweep(0.017, duration * 0.8, opening ? 0.21 : 0.12, 245, settle ? 103 : 410, 2.8, 2.2);
       noise(0.025, duration * 0.8, 0.29, 1300, 0.016, 2.8, 0.9);
       leaves(0.013, duration * 0.68, 0.34, opening ? 8 : 3);
-      if (reward) modes(0.2, duration - 0.2, [392, 786, 1780], 0.19, 5);
       break;
     case 'candy':
       sweep(0.004, Math.min(duration, 0.25), 0.43, settle ? 370 : 185, settle ? 95 : 480, 3, 0.3);
       noise(0.01, Math.min(duration, 0.17), 0.28, 950, 0.009, 3);
-      if (cue === 'release' || cue === 'unlock' || reward) {
+      if (cue === 'unlock') {
         sweep(0.055, 0.14, 0.3, 650, 140, 8);
         leaves(0.1, duration * 0.7, 0.19, 12);
       }
-      if (reward) bells(830.61, 0.13);
       break;
   }
 
-  if (strike) {
-    // Layer in rim resonance, strained material and a brighter air edge as
-    // tension grows. Every stage retains the same grounded body frequency.
-    for (let i = 0; i < samples.length; i++) {
-      const tail = ['winter', 'ocean', 'candy'].includes(theme)
-        ? Math.exp(-Math.max(0, i / RATE - 0.018) * 26) : 1;
-      samples[i] *= [0.38, 0.52, 0.58][strikeStage] * tail;
-    }
-    bodyImpact(BODY_FREQUENCIES[theme], strikeStage === 2 ? 0.91 : 0.82);
-    noise(0, 0.025, 0.12, 2000, 0.001, 5);
-    if (strikeStage >= 1) {
-      modes(0.007, 0.125, [BODY_FREQUENCIES[theme] * 3.1, BODY_FREQUENCIES[theme] * 6.4], 0.17, 3.4);
-      noise(0.012, 0.13, 0.32, 3200, 0.012, 3.0, 0.35);
-    }
-    if (strikeStage === 2) {
-      noise(0.002, 0.145, 0.65, 5700, 0.010, 2.7);
-      modes(0.010, 0.13, [BODY_FREQUENCIES[theme] * 8.3, BODY_FREQUENCIES[theme] * 13.7], 0.13, 3.5);
-    }
-  } else if (cue === 'opening') {
+  if (cue === 'opening') {
     heldBreath();
-  } else if (cue === 'release') {
-    // Keep the loaded contact, then open its sound into air and material light.
-    // The body lands first; the 0.5-second bloom is its expanding payoff.
-    const payoff = PAYOFF_PROFILES[theme];
-    for (let i = 0; i < samples.length; i++) samples[i] *= 0.42;
-    const base = Math.max(86, BODY_FREQUENCIES[theme]);
-    weightedContact(0, 0.36, base, 1.10, 0.085);
-    noise(0, 0.024, 0.60, theme === 'ocean' ? 2900 : 5200, 0.0008, 5.0);
-    modes(0.006, 0.20, [base * 3.1, base * 5.97, base * 9.04], 0.22, 4.0);
-    bloom(0.014, 0.57, payoff.air * 1.9, payoff.cutoff);
-    shimmer(0.018, 0.58, payoff.note, payoff.shimmer * 1.85, payoff.spread);
-  } else if (reward) {
-    // A short resolving gesture is reserved for the saved reward. Staggered
-    // material overtones bloom into a consonant fifth, rather than another hit.
-    const payoff = PAYOFF_PROFILES[theme];
-    for (let i = 0; i < samples.length; i++) samples[i] *= 0.48;
-    modes(0.002, 0.13, [payoff.note * 0.5, payoff.note * 1.007], 0.15, 4.0);
-    bloom(0.012, 0.37, payoff.air * 0.18, payoff.cutoff);
-    shimmer(0.008, 0.57, payoff.note, 0.28, payoff.spread, 0.009);
-    shimmer(0.105, 0.56, payoff.note * 1.25, 0.18, payoff.spread, 0.012);
-    shimmer(0.205, 0.50, payoff.note * 1.5, 0.30, payoff.spread, 0.015);
   } else if (cue === 'settle') {
     // A quieter mechanical stop and a small damped return anchor the lid.
     // Keep theme detail, but avoid a second long release or reward-like chime.
@@ -332,8 +228,8 @@ function render(theme, cue) {
     noise(0, 0.019, 0.18, 2400, 0.001, 6.0);
   }
 
-  if (cue === 'release' || cue === 'settle' || reward) {
-    // Gentle saturation leaves headroom for the contact and resolving layers.
+  if (cue === 'settle') {
+    // Gentle saturation leaves headroom for the contact layers.
     for (let i = 0; i < samples.length; i++) samples[i] = 0.8 * Math.tanh(samples[i] / 0.8);
   }
   // Remove any DC bias and taper both boundaries. A looping charge asset has
@@ -346,11 +242,10 @@ function render(theme, cue) {
     maximum = Math.max(maximum, Math.abs(samples[i]));
   }
   if (maximum > 0.78) for (let i = 0; i < samples.length; i++) samples[i] *= 0.78 / maximum;
-  if (strike || cue === 'release' || cue === 'settle' || cue === 'opening' || reward) {
-    // Equal material-strike energy lets the shared crescendo read on every
-    // theme, including the otherwise very quiet magnetic and flower locks.
+  if (cue === 'settle' || cue === 'opening') {
+    // Keep the stop and held breath at an even level across every theme.
     const rms = Math.sqrt(samples.reduce((sum, sample) => sum + sample * sample, 0) / samples.length);
-    const target = cue === 'release' ? 0.17 : reward ? 0.12 : cue === 'settle' ? 0.085 : cue === 'opening' ? 0.055 : [0.07, 0.075, 0.082][strikeStage];
+    const target = cue === 'settle' ? 0.085 : 0.055;
     const gain = Math.min(target / rms, 0.78 / Math.min(maximum, 0.78));
     for (let i = 0; i < samples.length; i++) samples[i] *= gain;
   }

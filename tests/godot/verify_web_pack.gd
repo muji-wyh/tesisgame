@@ -60,6 +60,21 @@ func _verify() -> void:
 	failures += _verify_phrases(words)
 	var required := OS.get_cmdline_user_args()
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
+	var chest_bank = load("res://scripts/chest_sound_bank.gd")
+	for cue: String in chest_bank.REFERENCE_CUES:
+		var cue_path: String = chest_bank.path_for("spring", cue)
+		var cue_stream: AudioStreamWAV = load(cue_path) if ResourceLoader.exists(cue_path) else null
+		var cue_seconds: float = 1.5 if cue == "release" else (1.2 if cue == "reward" else 0.24)
+		if cue_stream == null or cue_stream.stereo or cue_stream.mix_rate != 44100 \
+			or cue_stream.format != AudioStreamWAV.FORMAT_16_BITS or cue_stream.loop_mode != AudioStreamWAV.LOOP_DISABLED \
+			or absf(cue_stream.get_length() - cue_seconds) > 1.0 / 44100.0:
+			printerr("A supplied chest recording is missing or invalid in the startup pack: " + cue_path)
+			failures += 1
+		for theme: String in themes:
+			var retired_path: String = "res://assets/audio/chests/%s-%s.wav" % [theme, cue]
+			if ResourceLoader.exists(retired_path) or FileAccess.file_exists(retired_path):
+				printerr("A replaced chest sound is still bundled: " + retired_path)
+				failures += 1
 	var effects := ["select", "correct"]
 	for theme in themes:
 		effects.append(theme + "-arrive")

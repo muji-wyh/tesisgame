@@ -2,6 +2,7 @@ extends SceneTree
 
 const Bank = preload("res://scripts/chest_sound_bank.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const REFERENCE_DURATIONS := {"step": 0.24, "step-detail": 0.24, "step-roll": 0.24, "release": 1.5, "reward": 1.2}
 
 var checks := 0
 var failures := 0
@@ -109,7 +110,7 @@ func _check_held_breath(source: PackedByteArray, sample_rate: int, label: String
 		label + " has clean sample boundaries")
 
 
-func _check_reward_sound(source: PackedByteArray, sample_rate: int, label: String) -> float:
+func _check_fallback_reward_sound(source: PackedByteArray, sample_rate: int, label: String) -> float:
 	var level: float = _rms(source, 0, source.size())
 	check(level > 0.10 and level < 0.14, label + " plays a substantial saved reward accent")
 	var resolving: float = _rms(source, roundi(0.300 * sample_rate) * 2, roundi(0.500 * sample_rate) * 2)
@@ -125,6 +126,36 @@ func _check_reward_sound(source: PackedByteArray, sample_rate: int, label: Strin
 	check(absi(source.size() - roundi(sample_rate * 0.74) * 2) <= 2,
 		label + " keeps the saved receipt duration")
 	return level
+
+
+func _check_reference_recording(source: PackedByteArray, sample_rate: int, cue: String) -> void:
+	var label := "Reference " + cue
+	var duration: float = REFERENCE_DURATIONS[cue]
+	check(absi(source.size() - roundi(sample_rate * duration) * 2) <= 2,
+		label + " retains its complete recorded duration")
+	var level: float = _rms(source, 0, source.size())
+	var peak: float = 0.0
+	var onset: int = -1
+	for offset in range(0, source.size(), 2):
+		var sample: float = absf(float(source.decode_s16(offset)) / 32768.0)
+		peak = maxf(peak, sample)
+		if onset < 0 and sample > 0.0005:
+			onset = offset / 2
+	check(level > 0.005 and peak > 0.04 and peak < 0.85,
+		label + " contains audible recorded content with unclipped mixing headroom")
+	check(onset >= 0 and float(onset) / sample_rate < 0.040,
+		label + " starts near its physical cue without leading silence")
+	check(source.decode_s16(0) == 0 and source.decode_s16(source.size() - 2) == 0,
+		label + " has click-free faded sample boundaries")
+	var tail: float = _rms(source, roundi((duration - 0.005) * sample_rate) * 2, source.size())
+	check(tail < level * 0.5, label + " tapers its final boundary without an abrupt cutoff")
+	if cue in ["release", "reward"]:
+		check(_rms(source, roundi(duration * 0.55 * sample_rate) * 2,
+			roundi(duration * 0.85 * sample_rate) * 2) > 0.002,
+			label + " preserves the recorded phrase beyond its initial onset")
+	if cue == "release":
+		check(duration < Feel.OPEN_SECONDS - Feel.RELEASE_TIME,
+			"The complete reference shimmer ends before physical completion can stop chest audio")
 
 
 func _run() -> void:
@@ -150,8 +181,9 @@ func _check_material_assets() -> void:
 	root.add_child(audio)
 	var initial_channels: int = audio.get_child_count()
 	var fingerprints: Dictionary = {}
+	var sources: Dictionary = {}
+	var reference_streams: Dictionary = {}
 	var total_bytes: int = 0
-	var reward_levels: Array[float] = []
 	var fallback_reward_levels: Array[float] = []
 	check(Bank.pulse_cue(0.0) == "step" and Bank.pulse_cue(0.559) == "step"
 		and Bank.pulse_cue(0.56) == "step-detail" and Bank.pulse_cue(0.819) == "step-detail"
@@ -161,26 +193,51 @@ func _check_material_assets() -> void:
 		audio.prepare_chest(theme)
 		for cue_name: String in Bank.CUES:
 			var path: String = Bank.path_for(theme, cue_name)
+			var reference: bool = REFERENCE_DURATIONS.has(cue_name)
+			var sample_rate: int = 44100 if reference else 22050
+			var expected_path: String = "res://assets/imported-audio/chest-reference/%s.wav" % cue_name if reference \
+				else "res://assets/audio/chests/%s-%s.wav" % [theme, cue_name]
+			check(path == expected_path, "The runtime loads the intended recording: " + theme + "/" + cue_name)
 			var source: PackedByteArray = FileAccess.get_file_as_bytes(path)
-			total_bytes += source.size()
-			check(source.size() > 44 and source.slice(0, 4).get_string_from_ascii() == "RIFF", "Real WAV: " + theme + "/" + cue_name)
+			check(source.size() > 44, "A local WAV exists: " + theme + "/" + cue_name)
+			if source.size() <= 44:
+				continue
+			check(source.slice(0, 4).get_string_from_ascii() == "RIFF"
+				and source.decode_u32(4) == source.size() - 8
+				and source.slice(8, 12).get_string_from_ascii() == "WAVE"
+				and source.slice(12, 16).get_string_from_ascii() == "fmt "
+				and source.decode_u32(16) == 16 and source.decode_u16(20) == 1
+				and source.decode_u16(22) == 1 and source.decode_u32(24) == sample_rate
+				and source.decode_u32(28) == sample_rate * 2 and source.decode_u16(32) == 2
+				and source.decode_u16(34) == 16 and source.slice(36, 40).get_string_from_ascii() == "data"
+				and source.decode_u32(40) == source.size() - 44,
+				"The source is complete mono PCM16 at its authored sample rate: " + theme + "/" + cue_name)
 			var stream: AudioStreamWAV = audio.cache.get(path)
-			check(stream != null and not stream.stereo and stream.mix_rate == 22050
-				and stream.get_length() <= (0.81 if cue_name == "charge" else 0.75),
-				"A short mono clip preloads: " + theme + "/" + cue_name)
+			check(stream != null and not stream.stereo and stream.mix_rate == sample_rate,
+				"The mono recording preloads at its authored sample rate: " + theme + "/" + cue_name)
 			if stream == null:
 				continue
+			if reference:
+				check(absf(stream.get_length() - float(REFERENCE_DURATIONS[cue_name])) < 0.001,
+					"The imported reference retains its full duration: " + cue_name)
+				if reference_streams.has(cue_name):
+					check(stream == reference_streams[cue_name], "Themes reuse the same loaded reference: " + cue_name)
+				else:
+					reference_streams[cue_name] = stream
+			else:
+				check(stream.get_length() <= (0.81 if cue_name == "charge" else 0.75),
+					"The supporting themed material remains short: " + theme + "/" + cue_name)
 			check((stream.loop_mode == AudioStreamWAV.LOOP_FORWARD) == (cue_name == "charge"), "Only charge loops: " + theme + "/" + cue_name)
 			var maximum: int = 0
 			# Inspect the authored PCM, since Godot may compress imported streams.
 			for offset in range(44, source.size(), 2):
 				maximum = maxi(maximum, absi(source.decode_s16(offset)))
-			check(maximum > 1000 and maximum < 27000, "Audible unclipped material energy: " + theme + "/" + cue_name)
+			check(maximum > 1000 and maximum < (27853 if reference else 27000), "Audible unclipped material energy: " + theme + "/" + cue_name)
 			check(source.decode_s16(44) == 0 and source.decode_s16(source.size() - 2) == 0, "Clean sample boundaries: " + theme + "/" + cue_name)
-			if cue_name.begins_with("step") or cue_name in ["release", "settle"]:
+			if reference and not sources.has(path):
+				_check_reference_recording(source.slice(44), sample_rate, cue_name)
+			if cue_name == "settle":
 				_check_grounded_impact(source.slice(44), 22050, cue_name, theme + "/" + cue_name)
-			if cue_name == "reward":
-				reward_levels.append(_check_reward_sound(source.slice(44), 22050, theme + "/reward"))
 			if cue_name == "opening":
 				_check_held_breath(source.slice(44), 22050, theme + "/opening")
 			if cue_name == "charge":
@@ -192,8 +249,13 @@ func _check_material_assets() -> void:
 				check(texture_energy.min() > 0.07 and texture_energy.max() / texture_energy.min() < 1.6,
 					"The %s tension texture stays audible without an independent decaying beat" % theme)
 			var fingerprint: String = str(hash(source))
-			check(not fingerprints.has(fingerprint), "Every material and action has distinct PCM")
-			fingerprints[fingerprint] = true
+			if not sources.has(path):
+				total_bytes += source.size()
+				check(not fingerprints.has(fingerprint), "Every separate asset has distinct PCM: " + path)
+				fingerprints[fingerprint] = true
+				sources[path] = fingerprint
+			else:
+				check(sources[path] == fingerprint, "Shared recordings retain identical PCM across themes")
 		var fallback: AudioStreamWAV = Bank.fallback(theme, "charge")
 		check(fallback.loop_mode == AudioStreamWAV.LOOP_FORWARD and fallback.data == Bank.fallback(theme, "charge").data,
 			"The " + theme + " fallback is deterministic and loopable")
@@ -206,17 +268,33 @@ func _check_material_assets() -> void:
 		fallback = Bank.fallback(theme, "reward")
 		check(fallback.data == Bank.fallback(theme, "reward").data,
 			"The " + theme + " saved reward fallback is deterministic")
-		fallback_reward_levels.append(_check_reward_sound(fallback.data, Bank.SAMPLE_RATE, theme + "/reward fallback"))
+		fallback_reward_levels.append(_check_fallback_reward_sound(fallback.data, Bank.SAMPLE_RATE, theme + "/reward fallback"))
 		fallback = Bank.fallback(theme, "opening")
 		check(fallback.get_length() >= Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME
 			and fallback.data == Bank.fallback(theme, "opening").data,
 			"The " + theme + " fallback breath is deterministic and covers the final brake and hold")
 		_check_held_breath(fallback.data, Bank.SAMPLE_RATE, theme + "/opening fallback")
-	check(total_bytes < 1600000 and fingerprints.size() == 88, "All eight complete material banks with three strike textures fit within 1.6 MB")
-	check(reward_levels.size() == Bank.THEMES.size() and reward_levels.max() / reward_levels.min() < 1.15,
-		"Every theme acknowledges a saved reward at a comparable authored level")
+	check(total_bytes < 1200000 and sources.size() == 53 and fingerprints.size() == sources.size(),
+		"Five shared recordings and 48 themed support clips fit within 1.2 MB without duplicate assets")
+	check(reference_streams.size() == REFERENCE_DURATIONS.size(),
+		"All themes share the same five prepared reference recordings")
 	check(fallback_reward_levels.size() == Bank.THEMES.size() and fallback_reward_levels.max() / fallback_reward_levels.min() < 1.15,
 		"Every theme acknowledges a saved reward at a comparable fallback level")
+	for cue: String in Bank.REFERENCE_CUES:
+		var shared_path: String = Bank.path_for("autumn", cue)
+		var recording: AudioStreamWAV = audio.cache[shared_path]
+		# Simulate an unavailable shared recording without altering local files.
+		audio.cache[shared_path] = null
+		var autumn: AudioStreamWAV = audio._chest_stream("autumn", cue)
+		var winter: AudioStreamWAV = audio._chest_stream("winter", cue)
+		check(autumn.data == Bank.fallback("autumn", cue).data
+			and winter.data == Bank.fallback("winter", cue).data and autumn.data != winter.data,
+			"Missing shared " + cue + " retains each world's fallback regardless of navigation order")
+		check(audio._chest_stream("winter", cue) == winter and audio._chest_stream("autumn", cue) == autumn,
+			"Repeated missing-source requests reuse the correct world's material resource")
+		audio.cache[shared_path] = recording
+		check(audio._chest_stream("winter", cue) == recording,
+			"An available shared recording still takes precedence over cached emergency audio")
 	check(audio.get_child_count() == initial_channels and _playing(audio) == 0, "Preparing themes never allocates playback channels or makes a sound")
 	audio.queue_free()
 	await process_frame
@@ -891,8 +969,8 @@ func _check_bundled_preparation() -> void:
 		await process_frame
 		check(_playing(audio) == 0 and audio.chest_charge.stream == null,
 			"Background cancellation stops every chest channel with no delayed playback")
-	check(audio.cache.size() - initial_cached == Bank.THEMES.size() * Bank.CUES.size(),
-		"Every theme is cached locally without allocating network requests")
+	check(audio.cache.size() - initial_cached == 53,
+		"The 48 themed clips and five shared references are cached once without network requests")
 	audio.queue_free()
 	await process_frame
 

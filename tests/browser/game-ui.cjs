@@ -473,14 +473,14 @@ async function chooseRoundPlayer(scope, { playerId } = {}) {
     { message: 'One player gesture starts the round without another confirmation' }).not.toBe('picker');
 }
 
-async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = '', trackSourceLifecycle = false } = {}) {
-  await page.addInitScript(({ fingerprintBuffers, phaseSelector, trackSourceLifecycle }) => {
+async function observeAudio(page, { fingerprintBuffers = false, fingerprintMaxDuration = 1, phaseSelector = '', trackSourceLifecycle = false } = {}) {
+  await page.addInitScript(({ fingerprintBuffers, fingerprintMaxDuration, phaseSelector, trackSourceLifecycle }) => {
     const NativeContext = window.AudioContext || window.webkitAudioContext;
     window.audioObservation = { available: Boolean(NativeContext), contexts: [], starts: 0, playbacks: [] };
     if (!NativeContext) return;
     const fingerprints = new WeakMap();
     function fingerprint(buffer) {
-      if (!fingerprintBuffers || buffer.duration > 1) return undefined;
+      if (!fingerprintBuffers || buffer.duration > fingerprintMaxDuration) return undefined;
       if (fingerprints.has(buffer)) return fingerprints.get(buffer);
       // Equal-length clips still need content identity: six fruit slices last 270 ms.
       let hash = 2166136261, peak = 0;
@@ -547,7 +547,7 @@ async function observeAudio(page, { fingerprintBuffers = false, phaseSelector = 
     });
     if (window.AudioContext) window.AudioContext = WrappedContext;
     else window.webkitAudioContext = WrappedContext;
-  }, { fingerprintBuffers, phaseSelector, trackSourceLifecycle });
+  }, { fingerprintBuffers, fingerprintMaxDuration, phaseSelector, trackSourceLifecycle });
 }
 
 async function visibleColorCount(page, png) {

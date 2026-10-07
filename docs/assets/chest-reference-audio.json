@@ -1,0 +1,129 @@
+{
+  "source": {
+    "file": "sound_effect-chest_openning.mp4",
+    "suppliedPath": "C:/uworks/sound_effect-chest_openning.mp4",
+    "sha256": "e7bfa745776943120f9e7ead27883258eaf511c88f266ca1d62cfce9fa743f0d",
+    "seconds": 53.066667,
+    "audioSeconds": 53.038345,
+    "sampleRate": 44100,
+    "channels": 1,
+    "codec": "AAC LC",
+    "reviewedWindow": {
+      "start": 33,
+      "end": 47
+    },
+    "creator": "Duolingo as identified in the supplied screen recording; original sound designer unknown",
+    "license": "Not supplied. User supplied the reference for a requested chest-audio adaptation; no independent redistribution license is asserted.",
+    "status": "Acquired from the user and extracted locally; shipped inside the compiled game pack only"
+  },
+  "processing": {
+    "decoder": "FFmpeg floating-point AAC decode",
+    "pitchShift": 0,
+    "timeStretch": 1,
+    "normalization": false,
+    "compression": false,
+    "looping": false
+  },
+  "assets": [
+    {
+      "id": "step",
+      "destination": "assets/imported-audio/chest-reference/step.wav",
+      "sha256": "0e3a4c555ff7a5bb2d3605d2d47084cf47be7bb16b6e564fb29892caa49a3d5e",
+      "seconds": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -9.083,
+      "rmsDbfs": -23.0471,
+      "window": {
+        "start": 34.215,
+        "seconds": 0.24
+      },
+      "processing": {
+        "gain": 1.2,
+        "attackSeconds": 0.002,
+        "releaseSeconds": 0.02
+      }
+    },
+    {
+      "id": "step-detail",
+      "destination": "assets/imported-audio/chest-reference/step-detail.wav",
+      "sha256": "db48f9d4e4db123ce4eec18832d1573442f6df47d53618dd9b458cddc26c8ee8",
+      "seconds": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -5.2634,
+      "rmsDbfs": -23.9083,
+      "window": {
+        "start": 36.28,
+        "seconds": 0.24
+      },
+      "processing": {
+        "gain": 1.2,
+        "attackSeconds": 0.002,
+        "releaseSeconds": 0.02
+      }
+    },
+    {
+      "id": "step-roll",
+      "destination": "assets/imported-audio/chest-reference/step-roll.wav",
+      "sha256": "29a991744fc722e9515cf59dd56c6e35c0af3bfd0ff38dbe8fed2b771749c601",
+      "seconds": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.9914,
+      "rmsDbfs": -23.8348,
+      "window": {
+        "start": 38.03,
+        "seconds": 0.24
+      },
+      "processing": {
+        "gain": 1.2,
+        "attackSeconds": 0.002,
+        "releaseSeconds": 0.02
+      }
+    },
+    {
+      "id": "release",
+      "destination": "assets/imported-audio/chest-reference/release.wav",
+      "sha256": "28dfc9a0fbc102d8185a396fc87316908e8de93201b6bdde801b1869e56d5718",
+      "seconds": 1.5,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -2.5543,
+      "rmsDbfs": -18.9581,
+      "window": {
+        "start": 43.95,
+        "seconds": 1.5
+      },
+      "processing": {
+        "gain": 2.2,
+        "attackSeconds": 0.002,
+        "releaseSeconds": 0.05
+      }
+    },
+    {
+      "id": "reward",
+      "destination": "assets/imported-audio/chest-reference/reward.wav",
+      "sha256": "faf1aa0ef63fa35be41a76d6f986c8191429e6d4808aae641169a41d1ff5cac8",
+      "seconds": 1.2,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -3.7363,
+      "rmsDbfs": -22.8368,
+      "window": {
+        "start": 45.58,
+        "seconds": 1.2
+      },
+      "processing": {
+        "gain": 2.2,
+        "attackSeconds": 0.005,
+        "releaseSeconds": 0.08
+      }
+    }
+  ]
+}

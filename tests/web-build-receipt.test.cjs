@@ -68,6 +68,17 @@ test('changing the sourced menu cue contract rejects an older export', t => {
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*ui-click-audio\.cjs/);
 });
 
+test('changing the shared chest audio contract or validator rejects an older export', t => {
+  const { root, write, record } = fixture(t);
+  write('docs/assets/chest-reference-audio.json', '{"assets":[{"id":"release","seconds":1.5}]}');
+  record();
+  write('docs/assets/chest-reference-audio.json', '{"assets":[{"id":"release","seconds":1.4}]}');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*chest-reference-audio\.json/);
+  record();
+  write('tools/chest-reference-audio.cjs', 'module.exports = {};');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*chest-reference-audio\.cjs/);
+});
+
 test('editing or deleting the phrase catalog rejects an older export', t => {
   const { root, write, record } = fixture(t);
   write('phrases.json', '[{"id":"red-apple","text":"red apple"}]');

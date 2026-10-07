@@ -2,6 +2,7 @@ extends RefCounted
 
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const CUES := ["press", "charge", "step", "step-detail", "step-roll", "cancel", "opening", "unlock", "release", "settle", "reward"]
+const REFERENCE_CUES := ["step", "step-detail", "step-roll", "release", "reward"]
 const SAMPLE_RATE := 11025
 const BODY_FREQUENCIES := {
 	"spring": 112.0, "summer": 98.0, "autumn": 82.0, "winter": 128.0,
@@ -42,6 +43,8 @@ static func theme_id(value: String) -> String:
 static func path_for(theme: String, cue: String) -> String:
 	if cue not in CUES:
 		return ""
+	if cue in REFERENCE_CUES:
+		return "res://assets/imported-audio/chest-reference/%s.wav" % cue
 	return "res://assets/audio/chests/%s-%s.wav" % [theme_id(theme), cue]
 
 

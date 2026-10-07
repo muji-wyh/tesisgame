@@ -4,9 +4,10 @@ const { createHash } = require('node:crypto');
 const { brotliCompressSync, brotliDecompressSync, constants } = require('node:zlib');
 const { patchWebEngine } = require('./patch-web-engine.cjs');
 const { readUiClickAudio } = require('./ui-click-audio.cjs');
+const { readChestReferenceAudio } = require('./chest-reference-audio.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const CHEST_CUES = ['press', 'charge', 'step', 'step-detail', 'step-roll', 'cancel', 'opening', 'unlock', 'release', 'settle', 'reward'];
+const CHEST_CUES = ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle'];
 const POP_REFERENCE_IDS = ['quick', 'juicy', 'crisp'];
 
 function compressWebAsset(bytes, candidates = []) {
@@ -126,6 +127,10 @@ function collectPairFeedbackAudio(root) {
   });
 }
 
+function collectChestReferenceAudio(root) {
+  return readChestReferenceAudio(root).map(({ asset }) => importedAudio(root, asset.destination));
+}
+
 // These formerly separate downloads are required resources in the game pack.
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
 function collectRequiredAudio(root) {
@@ -152,7 +157,7 @@ function collectRequiredAudio(root) {
   ];
   const uiClick = readUiClickAudio(root);
   return [...sources.map(source => importedAudio(root, source)), importedAudio(root, uiClick.asset.destination),
-    ...collectPairFeedbackAudio(root), ...collectPopReferenceAudio(root)];
+    ...collectPairFeedbackAudio(root), ...collectChestReferenceAudio(root), ...collectPopReferenceAudio(root)];
 }
 
 function removeRetiredVoiceAssets(directory) {
@@ -235,4 +240,4 @@ function packageWebExport(directory) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, collectPairFeedbackAudio, compressWebAsset };
+module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, collectPairFeedbackAudio, collectChestReferenceAudio, compressWebAsset };
