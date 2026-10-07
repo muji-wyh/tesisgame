@@ -72,12 +72,20 @@ async function revealOption(page, wordId) {
     if (x >= left - 0.5 && x + width <= left + bankWidth + 0.5) return option;
     const direction = x < left ? -1 : 1;
     const bounds = await metrics(page);
-    await page.mouse.move(bounds.x + (left + bankWidth / 2) * bounds.scale,
-      bounds.y + (top + bankHeight / 2) * bounds.scale);
-    await page.mouse.wheel(0, direction * 80);
+    const centerX = bounds.x + (left + bankWidth / 2) * bounds.scale;
+    const centerY = bounds.y + (top + bankHeight / 2) * bounds.scale;
+    await page.mouse.move(centerX, centerY);
+    if (page.context().browser().browserType().name() === 'webkit') {
+      // Mobile WebKit has no wheel automation; exercise the bank's drag gesture.
+      await page.mouse.down();
+      try { await page.mouse.move(centerX - direction * 80, centerY, { steps: 6 }); }
+      finally { await page.mouse.up(); }
+    } else {
+      await page.mouse.wheel(0, direction * 80);
+    }
     await rendered(page);
   }
-  throw new Error(`Mouse-wheel scrolling could not reveal candidate ${wordId}`);
+  throw new Error(`Scrolling could not reveal candidate ${wordId}`);
 }
 
 async function pressAction(page) {

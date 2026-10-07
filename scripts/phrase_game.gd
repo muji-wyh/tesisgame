@@ -499,7 +499,9 @@ func _move_word(point: Vector2) -> void:
 		_source.set_pressed_no_signal(false)
 		_source.modulate.a = 0.25
 		_preview.text = str(game.options[_drag_word].text)
-		_style_tile(_preview, true, false, false, s, _drag_word, _source.size.x)
+		_preview.icon = _source.icon
+		_style_tile(_preview, true, false, false, s, _drag_word, _source.size.x,
+			_source.get_theme_constant("icon_max_width") if _source.icon != null else 0)
 		_preview.size = _source.size
 		var lifted := _preview.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
 		lifted.shadow_color = Color(Style.INK, 0.20)
@@ -693,6 +695,8 @@ func _rebuild_buttons() -> void:
 	answer_buttons.clear()
 	for index in range(game.options.size()):
 		var button := _button(str(game.options[index].text), "PhraseOption_%d" % index, _choose.bind(index))
+		button.icon = load("res://" + str(game.options[index].image))
+		button.expand_icon = true
 		button.reparent(_bank_content)
 		button.focus_entered.connect(scroll_bank_to.bind(index))
 		button.tooltip_text = "Drag or tap to add " + button.text
@@ -746,7 +750,7 @@ func _place(control: Control, rect: Rect2) -> void:
 	control.size = rect.size.max(Vector2.ZERO) / s
 
 
-func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: float, color_index: int, tile_width: float) -> void:
+func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: float, color_index: int, tile_width: float, icon_width: float = 0) -> void:
 	if not filled:
 		for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 			button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
@@ -767,8 +771,15 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 		button.add_theme_color_override(color, Style.INK)
 	button.custom_minimum_size = Vector2.ZERO
 	button.clip_text = true
+	button.expand_icon = true
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_constant_override("icon_max_width", ceili(icon_width))
+	button.add_theme_constant_override("h_separation", ceili(8 / s))
+	var text_width: float = tile_width - 14 / s
+	if button.icon != null:
+		text_width -= icon_width + 8 / s
 	var font_size: int = ceili(18 / s)
-	while font_size > ceili(12 / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > tile_width - 14 / s:
+	while font_size > ceili(12 / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > text_width:
 		font_size -= 1
 	button.add_theme_font_size_override("font_size", font_size)
 
@@ -821,14 +832,15 @@ func _layout() -> void:
 	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
 	var bank_y: float = answer_y + answer_h + gap
 	_place(_bank_clip, Rect2(x, bank_y, inner_w, tile_h))
+	var picture_w: float = 28 if compact else 40
 	var cursor: float = 0
 	for index in range(option_buttons.size()):
 		var button: Button = option_buttons[index]
 		if not button.visible:
 			continue
-		var word_w: float = maxf(64, Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x * s + 30)
+		var word_w: float = maxf(64, Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x * s + 30) + picture_w + 8
 		# Finalize font and style minimums before assigning the rail's exact card size.
-		_style_tile(button, true, false, false, s, index, word_w / s)
+		_style_tile(button, true, false, false, s, index, word_w / s, picture_w / s)
 		_place(button, Rect2(cursor, 0, word_w, tile_h))
 		cursor += word_w + 10
 	var content_w: float = maxf(inner_w, cursor - 10)
