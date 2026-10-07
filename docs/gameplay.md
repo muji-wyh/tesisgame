@@ -93,11 +93,14 @@ drag placed tiles to reorder them, then choose **Check answer**. Tapping a bank
 tile also adds it; tapping a placed tile or dragging it back to the bank returns
 that word. Dropping outside or interrupting a drag leaves the answer unchanged.
 Incorrect answers stay editable with no
-timer, lives, or limit on retries. Pip gives a brief happy celebration for each
-correct answer before **Continue** becomes available; the third answer unlocks
-**Open chest** after the same celebration. Repeated taps cannot skip this pause,
-and the question never advances automatically. **Open chest** enters the shared
-treasure screen. Only opening and saving the chest awards gift progress.
+timer, lives, or limit on retries. Pip gives a brief happy celebration after the
+first two correct answers before **Continue** becomes available. Repeated taps
+cannot skip this pause, and these questions wait for the learner to continue.
+The third correct answer replaces the tiles and controls with a centered,
+larger Pip, **You did it!**, and **3 phrases complete**. Pip celebrates for
+2.6 seconds; the final phrase recording also finishes before the game enters
+the shared treasure screen automatically. No extra confirmation is needed.
+Only opening and saving the chest awards gift progress.
 **New adventure** starts another Phrase Builder round.
 
 Every round selects three distinct phrases from `phrases.json`. Its 36 entries
@@ -111,10 +114,13 @@ and correct/incorrect checks use the shared reference feedback sounds. Phrase
 and word recordings use the approved [Ava voice](assets/ava-voice.md), with no
 spoken guide narration. The **eye** button reveals the written prompt;
 muting audio reveals it automatically. Opening menus, Pip's room, diagnostics,
-or backgrounding the page cancels speech and Pip's celebration and pauses input.
-Returning preserves the puzzle without replaying interrupted speech; a correct
-answer is ready to continue. Reduced motion shows a static happy pose for the
-same brief celebration. All choices support keyboard and controller input.
+or backgrounding the page cancels speech and pauses input. Returning preserves
+the puzzle without replaying interrupted speech; an individually correct
+answer is ready to continue. Interrupting the final round celebration keeps
+the completed round pending and restarts its full celebration on return,
+before entering the chest. Starting another round cancels that pending
+transition. Reduced motion shows a static happy pose for the same celebration
+interval. All choices support keyboard and controller input.
 
 The character reuses the integrated original Pip artwork and themed
 [animation parts](assets/pip-dance.md). The compact prompt, word tiles and one

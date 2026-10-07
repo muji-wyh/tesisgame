@@ -144,20 +144,20 @@ func _run() -> void:
 	await _check_celebration_gate(app, "The second phrase")
 	view.action_button.pressed.emit()
 	_solve(view)
-	check(view.game.completed == 3 and view.game.phase == "correct" and view.action_button.text == "Open chest"
+	check(view.game.completed == 3 and view.game.phase == "correct" and view.snapshot().round_celebrating
 		and app.model.phase != "won" and _pieces(app) == 0,
-		"The third correct phrase offers Open chest without claiming a reward early")
-	await _check_celebration_gate(app, "The third phrase before its chest")
-	view.action_button.pressed.emit()
+		"The third correct phrase starts a distinct round celebration without claiming a reward early")
+	await _check_round_celebration(app)
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
 		and app.chest_button.is_visible_in_tree() and not view.visible and not app._new_adventure_button.visible,
-		"Open chest enters the existing unopened-chest result screen")
+		"Completing the celebration automatically enters the existing unopened-chest result screen")
 	check(not app.audio.voice.playing, "The chest transition does not play spoken completion instructions")
 	view.finished.emit()
 	view.action_button.pressed.emit()
 	check(_pieces(app) == 0 and app.model.chest_state == "closed", "Duplicate phrase completion cannot award a treasure")
 	await _check_chest_and_new_adventure(app, directory, progress_script)
 	await _check_celebration_interruptions(app)
+	await _check_round_celebration_interruptions(app)
 	await _check_layout(app)
 	var stopped: Dictionary = view.game.snapshot()
 	await _choose_mode(app, "match")
@@ -217,6 +217,170 @@ func _check_celebration_gate(app, context: String) -> void:
 	view.listen_button.pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
 		context + " still lets the learner replay the phrase after celebrating")
+
+
+func _check_round_celebration(app) -> void:
+	var view = app._phrase
+	var before: Dictionary = view.game.snapshot()
+	var pieces_before: int = _pieces(app)
+	var audio_gate: Callable = view.completion_audio_playing
+	var narration_pending: Array[bool] = [true]
+	view.completion_audio_playing = func() -> bool: return narration_pending[0]
+	var completions: Array[bool] = []
+	var record := func() -> void: completions.append(true)
+	view.finished.connect(record)
+	check(view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
+		and is_equal_approx(view.pip._gameplay_left, view.ROUND_CELEBRATION_SECONDS),
+		"Finishing the third phrase reserves the full round celebration interval")
+	check(view._heading.text == "You did it!" and view._feedback.text == "3 phrases complete"
+		and view._heading.is_visible_in_tree() and view._feedback.is_visible_in_tree(),
+		"The completion stage clearly distinguishes the round win from an individual correct answer")
+	_check_round_controls_hidden(view)
+	for attempt in range(6):
+		view.action_button.pressed.emit()
+		view.listen_button.pressed.emit()
+		view.transcript_button.pressed.emit()
+		view.finished.emit()
+		app.chest_button.button_down.emit()
+	root.gui_release_focus()
+	app._controller_accept()
+	root.gui_release_focus()
+	await _enter_key()
+	check(view.game.snapshot() == before and app.model.phase != "won" and not app._holding_chest
+		and not app.chest_button.is_visible_in_tree() and _pieces(app) == pieces_before,
+		"Repeated actions, keyboard, controller and early chest presses cannot skip the round celebration")
+	completions.clear()
+	view.pip.gameplay_reaction_finished.emit(false)
+	check(not view.snapshot().completion_animation_done, "An unrelated sad reaction cannot finish the round celebration")
+	view.pip._process(view.ROUND_CELEBRATION_SECONDS - 0.01)
+	check(view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
+		and view.game.snapshot() == before and app.model.phase != "won",
+		"The round celebration remains visible immediately before Pip finishes")
+	view.pip._process(0.02)
+	await _settle()
+	check(view.snapshot().round_celebrating and view.snapshot().completion_animation_done
+		and view.game.snapshot() == before and app.model.phase != "won" and completions.is_empty(),
+		"Natural animation completion waits for the final phrase recording before entering the chest")
+	narration_pending[0] = false
+	app.audio.stop_voice()
+	await _settle()
+	check(view.game.phase == "finished" and app.model.phase == "won" and completions == [true]
+		and not view.snapshot().round_celebrating and _pieces(app) == pieces_before,
+		"The stopped recording allows exactly one automatic transition without awarding the unopened chest")
+	view.action_button.pressed.emit()
+	view.pip.gameplay_reaction_finished.emit(true)
+	view.pip._process(4.0)
+	await _settle()
+	check(completions == [true] and _pieces(app) == pieces_before,
+		"Late animation callbacks and extra time cannot repeat round completion")
+	view.finished.disconnect(record)
+	view.completion_audio_playing = audio_gate
+
+
+func _check_round_controls_hidden(view) -> void:
+	for button: Button in view.option_buttons + view.answer_buttons \
+		+ [view.listen_button, view.transcript_button, view.action_button]:
+		check(not button.is_visible_in_tree() and button.disabled,
+			"The completion stage hides and disables " + str(button.name))
+	check(not view._progress.is_visible_in_tree() and view.navigation_controls().is_empty(),
+		"The completion stage has no redundant progress count or hidden navigable controls")
+
+
+func _start_round_celebration(app, seed_value: int) -> void:
+	check(app.new_round(seed_value, false, "", "phrase"), "A fresh round starts for final celebration coverage")
+	await _settle()
+	var view = app._phrase
+	for question in range(3):
+		_solve(view)
+		if question < 2:
+			view.pip._process(view.pip.GAMEPLAY_HAPPY_SECONDS + 0.01)
+			view.action_button.pressed.emit()
+	check(view.snapshot().round_celebrating and view.game.completed == 3,
+		"Solving all three real questions enters the final celebration fixture")
+
+
+func _check_round_celebration_interruptions(app) -> void:
+	var view = app._phrase
+	var pieces_before: int = _pieces(app)
+	var audio_gate: Callable = view.completion_audio_playing
+	view.completion_audio_playing = func() -> bool: return true
+	for interruption in ["menu", "room", "background", "hidden"]:
+		app.set_reduced_motion(interruption == "background")
+		await _start_round_celebration(app, 108)
+		var before: Dictionary = view.game.snapshot()
+		view.pip._process(0.8)
+		if interruption == "menu":
+			app._mode_heading_button.pressed.emit()
+		elif interruption == "room":
+			app.collection_button.pressed.emit()
+		elif interruption == "background":
+			app.on_page_hidden()
+		else:
+			view.hide()
+		view.pip._process(4.0)
+		view.pip.gameplay_reaction_finished.emit(true)
+		view.finished.emit()
+		check(view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
+			and view.pip._gameplay_reaction.is_empty() and view.game.snapshot() == before
+			and app.model.phase != "won" and _pieces(app) == pieces_before,
+			"Opening " + interruption + " preserves a pending win without finishing it offscreen")
+		if interruption == "menu":
+			app._mode_panel.close_button.pressed.emit()
+		elif interruption == "room":
+			app._collection_back.pressed.emit()
+		elif interruption == "background":
+			app.on_page_visible()
+		else:
+			view.show()
+		await _settle()
+		view.pip.set_process(false)
+		check(view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
+			and view.pip._gameplay_reaction == "happy"
+			and view.pip._gameplay_left > view.ROUND_CELEBRATION_SECONDS - 0.25
+			and view.pip._gameplay_left <= view.ROUND_CELEBRATION_SECONDS
+			and view.game.snapshot() == before,
+			"Returning from " + interruption + " restarts the full completion celebration")
+		_check_round_controls_hidden(view)
+		if view.reduced_motion:
+			check(view.pip.pose == 3 and view.pip.reduced_motion,
+				"Reduced motion keeps the completion scene readable with a static happy Pip")
+		view.pip._process(view.ROUND_CELEBRATION_SECONDS + 0.01)
+		await _settle()
+		check(view.snapshot().completion_animation_done and app.model.phase != "won"
+			and _pieces(app) == pieces_before,
+			"The resumed completion still obeys the final recording gate after " + interruption)
+	await _start_round_celebration(app, 109)
+	view.stop()
+	app._resume_phrase()
+	view.pip.gameplay_reaction_finished.emit(true)
+	view.pip._process(4.0)
+	await _settle()
+	check(not view.snapshot().round_celebrating and app.model.phase != "won" and _pieces(app) == pieces_before,
+		"Stopping cancels the pending round completion even if its old callback arrives after resume")
+	await _start_round_celebration(app, 110)
+	for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(844, 390), Vector2i(320, 320)]:
+		root.size = dimensions
+		await _settle()
+		var bounds: Rect2 = view.get_global_rect().grow(0.75)
+		for control: Control in [view.pip, view._heading, view._feedback]:
+			check(control.is_visible_in_tree() and bounds.encloses(control.get_global_rect()),
+				"The completion " + str(control.name) + " stays on screen at " + str(dimensions))
+		check(not view.pip.get_global_rect().grow(-0.75).intersects(view._heading.get_global_rect())
+			and not view._heading.get_global_rect().grow(-0.75).intersects(view._feedback.get_global_rect()),
+			"Pip and completion text remain separate at %s: Pip %s, heading %s, caption %s" % [
+				dimensions, view.pip.get_global_rect(), view._heading.get_global_rect(), view._feedback.get_global_rect()])
+	check(app.new_round(111, false, "", "phrase"), "Reconfiguration replaces an unfinished completion stage")
+	await _settle()
+	var replacement: Dictionary = view.game.snapshot()
+	view.completion_audio_playing = audio_gate
+	view.pip.gameplay_reaction_finished.emit(true)
+	view.pip._process(4.0)
+	await _settle()
+	check(not view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
+		and view.game.snapshot() == replacement and view.game.completed == 0 and app.model.phase != "won"
+		and _pieces(app) == pieces_before,
+		"Late final-celebration events cannot advance a replacement round or award its old win")
+	app.set_reduced_motion(true)
 
 
 func _check_celebration_interruptions(app) -> void:

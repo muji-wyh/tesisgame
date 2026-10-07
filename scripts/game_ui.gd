@@ -506,6 +506,7 @@ func _build_controls() -> void:
 	_phrase = PhraseGame.new()
 	_phrase.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_phrase.interaction_allowed = _phrase_interaction_allowed
+	_phrase.completion_audio_playing = func() -> bool: return audio.voice.playing
 	_phrase.finished.connect(_phrase_finished)
 	_phrase.status_changed.connect(_phrase_status_changed)
 	_phrase.audio_requested.connect(_phrase_audio_requested)
