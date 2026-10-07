@@ -121,6 +121,28 @@ async function beginMemory(page, options) {
   return { errors, bounds: await memoryMetrics(page) };
 }
 
+async function dispatchMemoryTouches(page, type, active, changed) {
+  return page.evaluate(({ type, active, changed }) => {
+    const canvas = document.getElementById('canvas');
+    const contacts = new Map();
+    for (const { id, x, y } of [...active, ...changed]) {
+      const touch = typeof document.createTouch === 'function'
+        ? document.createTouch(window, canvas, id, x + scrollX, y + scrollY, x, y)
+        : new Touch({ identifier: id, target: canvas, clientX: x, clientY: y,
+          pageX: x + scrollX, pageY: y + scrollY, screenX: x, screenY: y,
+          radiusX: 1, radiusY: 1, rotationAngle: 0, force: type === 'touchend' || type === 'touchcancel' ? 0 : 1 });
+      contacts.set(id, touch);
+    }
+    // Older WebKit requires TouchList values. Both paths reach Godot's canvas handler.
+    const list = items => typeof document.createTouchList === 'function' ? document.createTouchList(...items) : items;
+    const touches = list(active.map(({ id }) => contacts.get(id)));
+    const event = new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
+      touches, targetTouches: touches, changedTouches: list(changed.map(({ id }) => contacts.get(id))) });
+    canvas.dispatchEvent(event);
+    return Array.from(event.changedTouches, touch => touch.identifier);
+  }, { type, active, changed });
+}
+
 test('Memory discoveries survive automatic mistakes, held peek, worlds and More', async ({ page }, testInfo) => {
   const { errors } = await beginMemory(page);
   const saved = await medalRecord(page), board = await discoverBoard(page);
@@ -410,6 +432,66 @@ test('Memory eye touch taps never leave the cards revealed', async ({ page }, te
     await expect(page.locator('#game-status')).toContainText(READY);
   }
   await screenshot(page, testInfo, 'memory-eye-touch-released', { held: true });
+  expect(errors).toEqual([]);
+});
+
+test('Memory eye releases opaque signed and high-bit touch identifiers without another input', async ({ page }, testInfo) => {
+  const { errors, bounds } = await beginMemory(page);
+  const saved = await medalRecord(page), eye = peekPoint(bounds);
+  const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
+  const backs = await screenshot(page, testInfo, 'memory-before-opaque-touch', { held: true });
+  // These synthetic events cover each browser's Touch conversion and the real engine handler.
+  // Trusted browser release fallback is covered separately by the CDP hold test below.
+  let capturedFronts = false;
+  for (const id of [-1, -2, -2147483648, 0x80000001, 0xffffffff, 0]) {
+    const contact = { id, ...point };
+    for (let repeat = 0; repeat < 2; repeat++) {
+      const identifiers = await dispatchMemoryTouches(page, 'touchstart', [contact], [contact]);
+      expect(identifiers.map(value => value | 0), 'The browser preserves the requested signed 32-bit touch identity.').toEqual([id | 0]);
+      await expect(page.locator('#game-status'), `Identifier ${id}, hold ${repeat + 1} opens the eye.`).toContainText(PEEK);
+      if (!capturedFronts) {
+        const fronts = await screenshot(page, testInfo, 'memory-opaque-touch-held', { held: true });
+        expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005)).toBe(true);
+        capturedFronts = true;
+      }
+      await dispatchMemoryTouches(page, 'touchend', [], [contact]);
+      await expect(page.locator('#game-status'), `Identifier ${id} closes at the same position without a tap, mouse move or blur.`)
+        .toContainText(READY);
+      await page.waitForTimeout(160);
+      await expect(page.locator('#game-status'), 'The released eye stays closed while no input is sent.').toContainText(READY);
+    }
+  }
+  const released = await screenshot(page, testInfo, 'memory-opaque-touch-released', { held: true });
+  expect((await cardChanges(page, bounds, backs, released)).every(value => value < 0.005)).toBe(true);
+  await expect(page.locator('#selection-status')).toBeEmpty();
+  expect(await medalRecord(page)).toBe(saved);
+  expect(errors).toEqual([]);
+});
+
+test('Memory signed touch ownership survives another finger and ends on cancel or leaving the eye', async ({ page }, testInfo) => {
+  const { errors, bounds } = await beginMemory(page);
+  const eye = peekPoint(bounds), card = memoryPoint(bounds, 0);
+  const owner = { id: -1, x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
+  const second = { ...owner, id: -2 };
+  const outside = { ...owner, x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale };
+  await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
+  await expect(page.locator('#game-status')).toContainText(PEEK);
+  await dispatchMemoryTouches(page, 'touchstart', [owner, second], [second]);
+  await dispatchMemoryTouches(page, 'touchend', [owner], [second]);
+  await expect(page.locator('#game-status'), 'Lifting another signed touch cannot release the owning finger.').toContainText(PEEK);
+  await dispatchMemoryTouches(page, 'touchend', [], [owner]);
+  await expect(page.locator('#game-status'), 'The original signed owner still closes on release.').toContainText(READY);
+  for (const type of ['touchcancel', 'touchmove']) {
+    await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    await dispatchMemoryTouches(page, type, type === 'touchmove' ? [outside] : [], [type === 'touchmove' ? outside : owner]);
+    await expect(page.locator('#game-status'), `${type} closes the signed owning finger's eye.`).toContainText(READY);
+    await page.waitForTimeout(160);
+    await expect(page.locator('#game-status')).toContainText(READY);
+    if (type === 'touchmove') await dispatchMemoryTouches(page, 'touchend', [], [outside]);
+  }
+  await screenshot(page, testInfo, 'memory-signed-touch-cancelled', { held: true });
+  await expect(page.locator('#selection-status')).toBeEmpty();
   expect(errors).toEqual([]);
 });
 

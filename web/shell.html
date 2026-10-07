@@ -3091,10 +3091,12 @@
           // A held Memory eye must close even if its canvas loses the release.
           // Capture at the window before canvas handlers; preserve finger identity.
           window.addEventListener('touchend', event => {
-            if (event.isTrusted) for (const touch of event.changedTouches) onPointerReleased(touch.identifier);
+            // Godot stores browser touch IDs as signed i32 values. A negative
+            // identifier is still a finger, so carry the input source separately.
+            if (event.isTrusted) for (const touch of event.changedTouches) onPointerReleased(touch.identifier | 0, true);
           }, { capture: true });
           window.addEventListener('mouseup', event => {
-            if (event.isTrusted && event.button === 0) onPointerReleased(-1);
+            if (event.isTrusted && event.button === 0) onPointerReleased(-1, false);
           }, { capture: true });
           // Godot Web translates touchcancel into an ordinary release.
           for (const type of ['touchcancel', 'pointercancel']) {

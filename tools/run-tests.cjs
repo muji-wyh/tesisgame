@@ -18,7 +18,7 @@ const groups = {
       'collection_navigation_tests', 'gift_adventure_tests', 'phrase_model_tests', 'phrase_scene_tests'
     ],
     node: [
-      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host',
+      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host', 'memory-input-host',
       'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark', 'ui-click-assets', 'interface-click-host'
     ]
   },

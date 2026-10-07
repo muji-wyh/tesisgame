@@ -174,6 +174,7 @@ func _test_hold_inputs(view) -> void:
 	check(_all_hidden(view), "Dragging the owning touch out cancels its peek")
 	await _touch(6, outside, false)
 	await _test_touch_release(view)
+	await _test_signed_touch_identifiers(view)
 	await _test_release_fallback(view)
 	view.begin_peek()
 	view.study_button.release_focus()
@@ -235,12 +236,49 @@ func _test_touch_release(view) -> void:
 		"Three rapid touch taps settle closed and count only their three holds")
 
 
+func _test_signed_touch_identifiers(view) -> void:
+	var center: Vector2 = view.study_button.get_global_rect().get_center()
+	for identifier in [-1, -2, -2147483648, 2147483647]:
+		var before_peeks: int = view.memory.peeks
+		await _touch(identifier, center, true)
+		check(view.memory.studying and view.study_button.engaged and view._peek_touch_active,
+			"An opaque signed touch identifier opens the eye: %d" % identifier)
+		await _touch(-1234, center, true)
+		await _touch(-1234, center, false)
+		view.release_peek_pointer(-1234, true)
+		view.release_peek_pointer(-1, false)
+		await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
+		check(view.memory.studying and view._peek_touch == identifier,
+			"Another finger or mouse cannot release a signed touch owner: %d" % identifier)
+		await _touch(identifier, center, false)
+		check(_all_hidden(view) and not view.study_button.engaged and not view._peek_touch_active,
+			"The same signed touch identifier closes on release without another input: %d" % identifier)
+		await _touch(identifier, center, true)
+		view.release_peek_pointer(identifier, true)
+		check(_all_hidden(view) and not view._peek_touch_active,
+			"The browser fallback closes a signed touch owner before the native release: %d" % identifier)
+		await _touch(identifier, center, false)
+		check(_all_hidden(view) and view.memory.peeks == before_peeks + 2,
+			"A late native release stays closed and does not add another peek: %d" % identifier)
+	await _touch(-2, center, true)
+	await _touch(-2, center, false, true)
+	check(_all_hidden(view) and not view._peek_touch_active, "Cancelling a negative touch owner closes the eye")
+	await _touch(-1, center, true)
+	var drag := InputEventScreenDrag.new()
+	drag.index = -1
+	drag.position = view.get_global_rect().end + Vector2(30, 30)
+	root.push_input(drag, true)
+	await process_frame
+	check(_all_hidden(view) and not view._peek_touch_active, "Dragging a negative touch owner off the eye closes it")
+	await _touch(-1, drag.position, false)
+
+
 func _test_release_fallback(view) -> void:
 	var center: Vector2 = view.study_button.get_global_rect().get_center()
 	await _touch(30, center, true)
 	await _touch(31, center, true)
 	view.release_peek_pointer(31)
-	view.release_peek_pointer(-1)
+	view.release_peek_pointer(-1, false)
 	check(view.memory.studying and view._peek_touch == 30,
 		"Browser releases from another finger or mouse cannot close the owning touch")
 	await _touch(31, center, false)
@@ -254,7 +292,7 @@ func _test_release_fallback(view) -> void:
 		"A real mouse hold records pointer ownership and the native pressed state")
 	view.release_peek_pointer(30)
 	check(view.memory.studying, "A browser touch release cannot cancel a mouse-owned peek")
-	view.release_peek_pointer(-1)
+	view.release_peek_pointer(-1, false)
 	check(_all_hidden(view) and not view.study_button.engaged and not view.study_button.button_pressed
 		and view.study_button.has_focus(),
 		"The browser mouse release clears both the reveal and native press while preserving eye focus")
@@ -262,12 +300,12 @@ func _test_release_fallback(view) -> void:
 	view.study_button.grab_focus()
 	await _key(KEY_SPACE, true)
 	view.release_peek_pointer(30)
-	view.release_peek_pointer(-1)
+	view.release_peek_pointer(-1, false)
 	check(view.memory.studying, "Browser pointer releases leave a keyboard-owned hold open")
 	await _key(KEY_SPACE, false)
 	view.begin_peek()
 	view.release_peek_pointer(30)
-	view.release_peek_pointer(-1)
+	view.release_peek_pointer(-1, false)
 	check(view.memory.studying and view._peek_touch == -1 and not view._mouse_peek,
 		"Browser pointer releases leave the controller's explicit begin_peek hold open")
 	view.end_peek()

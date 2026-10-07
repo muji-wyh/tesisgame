@@ -3477,7 +3477,7 @@ func _connect_browser() -> void:
 			set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		_memory.release_peek_pointer(int(arguments[0]))
+		_memory.release_peek_pointer(int(arguments[0]), bool(arguments[1]))
 		_phrase.release_pointer(int(arguments[0])))
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback, _pointer_release_callback)
 	_host.presentationSettings(reduced_motion, audio.muted)

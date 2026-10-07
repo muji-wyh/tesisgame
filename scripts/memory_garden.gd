@@ -144,6 +144,7 @@ var _paused: bool = false
 var _board: Control
 var _feedback_timer: Timer
 var _peek_touch: int = -1
+var _peek_touch_active: bool = false
 var _mouse_peek: bool = false
 
 
@@ -193,6 +194,7 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 	memory.stop()
 	_feedback_timer.stop()
 	_peek_touch = -1
+	_peek_touch_active = false
 	_mouse_peek = false
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
@@ -242,6 +244,7 @@ func stop() -> void:
 	if _feedback_timer != null:
 		_feedback_timer.stop()
 	_peek_touch = -1
+	_peek_touch_active = false
 	_mouse_peek = false
 	_paused = false
 	for button in card_buttons:
@@ -337,6 +340,7 @@ func begin_peek() -> void:
 
 func end_peek() -> void:
 	_peek_touch = -1
+	_peek_touch_active = false
 	_mouse_peek = false
 	if memory.set_study(false):
 		if is_instance_valid(study_button):
@@ -345,10 +349,11 @@ func end_peek() -> void:
 		prompt_ready.emit()
 
 
-func release_peek_pointer(touch_index: int) -> void:
+func release_peek_pointer(touch_index: int, is_touch: bool = true) -> void:
 	# The browser also observes releases before canvas handlers can consume them.
-	# Only the finger or mouse that began this peek may finish it.
-	if (touch_index >= 0 and touch_index == _peek_touch) or (touch_index < 0 and _mouse_peek):
+	# Touch identifiers are opaque signed integers, including -1; source and
+	# ownership must stay separate from their numeric value.
+	if (is_touch and _peek_touch_active and touch_index == _peek_touch) or (not is_touch and _mouse_peek):
 		end_peek()
 		if is_instance_valid(study_button) and study_button.button_pressed and study_button.has_focus():
 			# Focus exit also clears BaseButton's native press and captured touch.
@@ -373,8 +378,9 @@ func _study_input(event: InputEvent) -> void:
 		_mouse_peek = event.pressed and not event.canceled
 	elif event is InputEventScreenTouch:
 		# Keep ownership when the native button receives the press through GUI input.
-		if event.pressed and not event.canceled and _peek_touch < 0:
+		if event.pressed and not event.canceled and not _peek_touch_active:
 			_peek_touch = event.index
+			_peek_touch_active = true
 		elif not event.pressed or event.canceled:
 			release_peek_pointer(event.index)
 
@@ -396,7 +402,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch or event is InputEventScreenDrag:
 		var inside: bool = study_button.get_global_rect().has_point(event.position)
-		if _peek_touch >= 0:
+		if _peek_touch_active:
 			get_viewport().set_input_as_handled()
 			if event.index == _peek_touch and (not inside or (event is InputEventScreenTouch and (event.canceled or not event.pressed))):
 				end_peek()
@@ -405,9 +411,10 @@ func _input(event: InputEvent) -> void:
 			begin_peek()
 			if memory.studying:
 				_peek_touch = event.index
+				_peek_touch_active = true
 		return
 	if event is InputEventMouseButton or event is InputEventMouseMotion:
-		if event.device == InputEvent.DEVICE_ID_EMULATION and (_peek_touch >= 0 or study_button.get_global_rect().has_point(event.position)):
+		if event.device == InputEvent.DEVICE_ID_EMULATION and (_peek_touch_active or study_button.get_global_rect().has_point(event.position)):
 			get_viewport().set_input_as_handled()
 			return
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and (not event.pressed or event.canceled):
