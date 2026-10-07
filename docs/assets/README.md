@@ -12,7 +12,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Interface typography and library artwork](../../assets/fonts/SOURCE.md) | Acquired Nunito, font weights, and reused Twemoji illustrations |
 | [Asset art direction](art-direction.md) | Required sourced artwork, inspection, license records, and honest integration status |
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
-| [Ava speech](ava-voice.md) | Approved voice profile, all 1,297 spoken recordings, generation, and source hashes |
+| [Ava speech](ava-voice.md) | Approved voice profile, all 1,294 spoken recordings, generation, and source hashes |
 | [Expanded vocabulary artwork](mulberry-vocabulary.md) | 900 sourced Mulberry illustrations, license, curriculum manifests, and reproducible import |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |

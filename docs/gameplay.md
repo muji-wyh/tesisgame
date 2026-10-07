@@ -88,9 +88,11 @@ Escape / controller Back to dismiss it. Entry and reload select Match.
 
 ### Phrase Builder
 
-Pip says a short English phrase. Tap word-bank tiles in order, then choose
-**Check answer**. A selected tile can be tapped to return it to the bank, and
-**Clear** returns the entire answer. Incorrect answers stay editable with no
+Pip says a short English phrase. Drag word-bank tiles into the answer slots and
+drag placed tiles to reorder them, then choose **Check answer**. Tapping a bank
+tile also adds it; tapping a placed tile or dragging it back to the bank returns
+that word. Dropping outside or interrupting a drag leaves the answer unchanged.
+Incorrect answers stay editable with no
 timer, lives, or limit on retries. Correct answers offer **Continue**; the third
 offers **Open chest**, which enters the shared treasure screen. Only opening
 and saving the chest awards gift progress. **New adventure** starts another
@@ -103,17 +105,17 @@ The saved age range chooses the next round's phrases; changing it during a
 round preserves the current questions and answers.
 
 **Listen** repeats the full recording, selecting a word plays its pronunciation,
-and correct/incorrect checks use the shared reference feedback sounds. Recorded
-instructions, encouragement, and completion cues use the approved
-[Ava voice](assets/ava-voice.md). **Show phrase** reveals the written prompt;
+and correct/incorrect checks use the shared reference feedback sounds. Phrase
+and word recordings use the approved [Ava voice](assets/ava-voice.md), with no
+spoken guide narration. The **eye** button reveals the written prompt;
 muting audio reveals it automatically. Opening menus, Pip's room, diagnostics,
 or backgrounding the page cancels speech and pauses input. Returning preserves
 the puzzle without replaying interrupted speech. Reduced motion keeps Pip's
 feedback readable, and all choices support keyboard and controller input.
 
 The character reuses the integrated original Pip artwork and themed
-[animation parts](assets/pip-dance.md); picture clues use the existing vocabulary
-illustrations and retain their recorded licenses. No artwork from the gameplay
+[animation parts](assets/pip-dance.md). The compact prompt, word tiles and one
+progress count keep the answer area clear. No artwork from the gameplay
 reference video is copied. Phrase Builder does not add a competitive leaderboard.
 
 ### Voice Pop

@@ -86,11 +86,28 @@ func current_question() -> Dictionary:
 
 
 func select(index: int) -> bool:
-	if phase != "building" or index < 0 or index >= options.size() or answer.has(index):
+	if answer.has(index):
 		return false
-	if answer.size() >= current_question().get("words", []).size():
+	return place(index, answer.size())
+
+
+# The destination is the tile's final zero-based position, not a pre-removal gap.
+# answer.size() also means append when moving a tile already in the answer.
+func place(option_index: int, answer_position: int) -> bool:
+	if phase != "building" or option_index < 0 or option_index >= options.size():
 		return false
-	answer.append(index)
+	if answer_position < 0 or answer_position > answer.size():
+		return false
+	var old_position: int = answer.find(option_index)
+	if old_position < 0 and answer.size() >= current_question().get("words", []).size():
+		return false
+	var next_answer: Array[int] = answer.duplicate()
+	if old_position >= 0:
+		next_answer.remove_at(old_position)
+	next_answer.insert(mini(answer_position, next_answer.size()), option_index)
+	if next_answer == answer:
+		return false
+	answer.assign(next_answer)
 	feedback = ""
 	changed.emit()
 	return true

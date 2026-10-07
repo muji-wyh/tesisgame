@@ -22,7 +22,7 @@ checks share one bounded feedback player at gain 0.48. A new selection, hint or 
 mute, navigation and round reset stop it. Speech recognizer rollover preserves
 an answer that has already started. Visual Pip reactions remain, while these
 three modes do not play Pip calls. Word and phrase pronunciations stay on their
-own channel; Phrase Builder also uses its separate Ava retry guidance.
+own channel.
 
 Reproduce the private build inputs with FFmpeg installed:
 

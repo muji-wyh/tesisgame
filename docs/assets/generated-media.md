@@ -104,9 +104,9 @@ The existing `tools\generate-voices.ps1` command forwards to the same generator.
 Set `PYTHON` if a particular Python executable is required. Only generation uses
 the online service; the shipped game plays the committed recordings.
 Use `node tools\generate-voices.cjs --missing` to add only absent recordings.
-The game prompt catalog contains eleven messages: one greeting for each world
-and three Phrase Builder cues. Together with the 1,250 word pronunciations and
-36 whole-phrase recordings from `phrases.json`, the generator maintains 1,297
+The game prompt catalog contains eight messages: one greeting for each world.
+Together with the 1,250 word pronunciations and 36 whole-phrase recordings from
+`phrases.json`, the generator maintains 1,294
 active files under `assets\audio\voice`. Retired
 arrival/opening recordings and Match wrong-answer/loss prompts have been removed; historical provenance remains in
 the asset documentation. The retired Voice Pop report recordings and their

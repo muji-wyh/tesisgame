@@ -97,10 +97,10 @@ test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS
   assert.throws(() => speechText('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives 1250 words, 36 phrases, and eleven prompts from maintained catalogs', () => {
+test('voice generation derives 1250 words, 36 phrases, and eight prompts from maintained catalogs', () => {
   const messages = messagesFor(root);
-  assert.equal(messages.length, 1297);
-  assert.equal(new Set(messages.map(message => message.id)).size, 1297);
+  assert.equal(messages.length, 1294);
+  assert.equal(new Set(messages.map(message => message.id)).size, 1294);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
@@ -148,8 +148,6 @@ test('phrase recordings reject malformed English, redirected paths, and duplicat
   fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], audio: '../outside.wav' }]));
   assert.throws(() => messagesFor(directory), /audio path for phrase/);
   fs.writeFileSync(catalogPath, JSON.stringify([phrases[0], phrases[0]]));
-  assert.throws(() => messagesFor(directory), /unique/);
-  fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], id: 'intro', audio: 'assets/audio/voice/phrase-intro.wav' }]));
   assert.throws(() => messagesFor(directory), /unique/);
 });
 
@@ -341,7 +339,7 @@ test('missing-only generation rejects undocumented previous voices instead of re
 test('missing-only generation preserves documented Ava files and requests only absent recordings', async t => {
   const { directory, output } = fixture(t);
   await generate(directory);
-  const missing = ['phrase-intro', `phrase-${phrases[0].id}`];
+  const missing = ['jungle-theme', `phrase-${phrases[0].id}`];
   for (const id of missing) {
     fs.unlinkSync(path.join(output, `${id}.wav`));
     removeCached(directory, messagesFor(directory).find(message => message.id === id).text);

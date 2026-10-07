@@ -22,10 +22,7 @@ const expectedPrompts = {
   'ocean-theme': 'Welcome to the ocean!',
   'space-theme': 'Welcome to space!',
   'jungle-theme': 'Welcome to the jungle!',
-  'candy-theme': 'Welcome to candy land!',
-  'phrase-intro': 'Listen to Pip. Put the words in order.',
-  'phrase-try-again': 'Try a different order. You can do it!',
-  'phrase-complete': 'Three phrases complete! Your treasure is ready.'
+  'candy-theme': 'Welcome to candy land!'
 };
 const expectedRewardColors = {
   spring: ['#edf8ec', '#438363', '#8ecf6b'],
@@ -369,7 +366,7 @@ test('the image directories contain exactly the 1322 named vocabulary and reward
   }
 });
 
-test('voice prompts contain eight world greetings and three Phrase Builder cues', () => {
+test('voice prompts contain exactly eight world greetings', () => {
   const filename = path.join(root, 'voice-prompts.json');
   assert.ok(fs.existsSync(filename), 'Missing voice-prompts.json');
   const prompts = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -380,7 +377,7 @@ test('voice prompts contain eight world greetings and three Phrase Builder cues'
   }
 });
 
-test('all eleven English prompts have nonempty prerecorded mono voice WAVs', () => {
+test('all eight English prompts have nonempty prerecorded mono voice WAVs', () => {
   for (const id of Object.keys(expectedPrompts)) {
     assertVoice(path.join('assets', 'audio', 'voice', `${id}.wav`));
   }
@@ -408,7 +405,7 @@ test('every phrase has a distinct prerecorded whole-phrase pronunciation', () =>
   assert.equal(recordings.size, phrases.length, 'Different phrases must not reuse a recording.');
 });
 
-test('voice sources contain exactly 1250 words, 36 phrases, and eleven active prompts', () => {
+test('voice sources contain exactly 1250 words, 36 phrases, and eight active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
@@ -416,8 +413,12 @@ test('voice sources contain exactly 1250 words, 36 phrases, and eleven active pr
     ...words.map(({ id }) => `word-${id}.wav`),
     ...phrases.map(({ id }) => `phrase-${id}.wav`)
   ];
-  assert.equal(expected.length, 1297);
+  assert.equal(expected.length, 1294);
   assert.deepEqual(assetFiles(directory), expected.sort());
+  for (const cue of ['intro', 'try-again', 'complete']) {
+    assert.equal(fs.existsSync(path.join(directory, `phrase-${cue}.wav.import`)), false,
+      'Retired Phrase Builder guide narration must not leave import metadata behind.');
+  }
 });
 
 test('every shipped spoken recording matches the approved Ava profile and source manifest', () => {

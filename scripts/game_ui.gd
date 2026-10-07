@@ -178,7 +178,6 @@ var _mode_menu_dragged: bool = false
 var _mode_menu_mouse_emulated: bool = false
 var _memory: MemoryGarden
 var _phrase: PhraseGame
-var _phrase_voice_queue: Array[String] = []
 var _phrase_published: String = ""
 var _pop: VoicePop
 var _pop_rewards: PopRewardRoom
@@ -633,7 +632,6 @@ func _build_controls() -> void:
 	audio = Audio.new()
 	add_child(audio)
 	audio.status_changed.connect(_audio_status)
-	audio.voice.finished.connect(_advance_phrase_voice)
 	feedback_timer = Timer.new()
 	feedback_timer.one_shot = true
 	feedback_timer.wait_time = MATCH_FEEDBACK_SECONDS
@@ -687,7 +685,6 @@ func _toggle_library_sound() -> void:
 	if not _mode_menu_open():
 		return
 	audio.set_muted(not audio.muted)
-	_phrase_voice_queue.clear()
 	_phrase.set_muted(audio.muted or not audio.available)
 	_play_ui_click()
 	_presentation.muted = audio.muted
@@ -1687,7 +1684,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_mode_id = "match"
 	_memory.stop()
 	_phrase.stop()
-	_phrase_voice_queue.clear()
 	duck.settle()
 	_pending_fragment.clear()
 	_unlocked_gift.clear()
@@ -1941,7 +1937,6 @@ func _phrase_interaction_allowed() -> bool:
 
 
 func _pause_phrase() -> void:
-	_phrase_voice_queue.clear()
 	_phrase.pause()
 	if _mode_id == "phrase":
 		audio.stop_voice()
@@ -1960,25 +1955,15 @@ func _resume_phrase() -> void:
 func _start_phrase_prompt() -> void:
 	if not _phrase_interaction_allowed():
 		return
-	_phrase_voice_queue.clear()
 	if audio.muted or not audio.available:
 		return
 	audio.interact(model.theme_id)
-	_phrase_voice_queue.append("res://" + str(_phrase.game.current_question().audio))
-	audio.cue("", "phrase-intro")
-
-
-func _advance_phrase_voice() -> void:
-	if not _phrase_interaction_allowed() or audio.muted or _phrase_voice_queue.is_empty():
-		_phrase_voice_queue.clear()
-		return
-	audio.say(_phrase_voice_queue.pop_front())
+	_phrase.play_prompt()
 
 
 func _phrase_audio_requested(kind: String, value: String) -> void:
 	if not _phrase_interaction_allowed():
 		return
-	_phrase_voice_queue.clear()
 	audio.interact(model.theme_id)
 	match kind:
 		"select":
@@ -1996,9 +1981,6 @@ func _phrase_audio_requested(kind: String, value: String) -> void:
 		"feedback":
 			audio.stop_voice()
 			audio.play_pair_feedback(value == "correct")
-		"prompt":
-			if value in ["phrase-intro", "phrase-try-again"]:
-				audio.cue("", value)
 
 
 func _phrase_status_changed(message: String) -> void:
@@ -2010,12 +1992,10 @@ func _phrase_status_changed(message: String) -> void:
 func _phrase_finished() -> void:
 	if not _phrase_interaction_allowed() or _phrase.game.phase != "finished" or _phrase.game.completed != 3:
 		return
-	_phrase_voice_queue.clear()
 	audio.stop_voice()
 	model.phase = "won"
 	_refresh()
 	_layout()
-	audio.cue("", "phrase-complete")
 	_default_focus().grab_focus()
 
 
@@ -2810,7 +2790,6 @@ func choose_theme(id: String) -> void:
 		_cancel_chest_hold()
 		_finish_chest_drag()
 	_preferred_theme = id
-	_phrase_voice_queue.clear()
 	_save_journey()
 	if collection_page.visible:
 		_refresh_collection()
@@ -3497,7 +3476,8 @@ func _connect_browser() -> void:
 			set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		_memory.release_peek_pointer(int(arguments[0])))
+		_memory.release_peek_pointer(int(arguments[0]))
+		_phrase.release_pointer(int(arguments[0])))
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback, _pointer_release_callback)
 	_host.presentationSettings(reduced_motion, audio.muted)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)

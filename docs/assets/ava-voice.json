@@ -84,30 +84,6 @@
       "sha256": "1da4cd3cf2c672823c82cd03f76571ee3ac94d1b7094f869d70e3a7e7af65f86"
     },
     {
-      "id": "phrase-intro",
-      "text": "Listen to Pip. Put the words in order.",
-      "synthesisText": "Listen to Pip. Put the words in order.",
-      "path": "assets/audio/voice/phrase-intro.wav",
-      "bytes": 147162,
-      "sha256": "87f5737390bddae12d089244e5e05807d69d0ccc7e13d50da9443e8200b68bf8"
-    },
-    {
-      "id": "phrase-try-again",
-      "text": "Try a different order. You can do it!",
-      "synthesisText": "Try a different order. You can do it!",
-      "path": "assets/audio/voice/phrase-try-again.wav",
-      "bytes": 143988,
-      "sha256": "ba36d1a84c993b7b62563e01db8f529c6f148de0e842232e46839bab7a67e29a"
-    },
-    {
-      "id": "phrase-complete",
-      "text": "Three phrases complete! Your treasure is ready.",
-      "synthesisText": "Three phrases complete! Your treasure is ready.",
-      "path": "assets/audio/voice/phrase-complete.wav",
-      "bytes": 179972,
-      "sha256": "58973f894b185df921658e1db0468e2f6ae5bab97ace32bb740e70f31337f2a6"
-    },
-    {
       "id": "word-cat",
       "text": "cat",
       "synthesisText": "cat.",

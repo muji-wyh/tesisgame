@@ -201,13 +201,7 @@ func _verify_phrases(words: Array) -> int:
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("A whole-phrase recording is missing or invalid in the startup pack: " + audio_path)
 			failures += 1
-	for cue in ["intro", "try-again", "complete"]:
-		var audio_path: String = "res://assets/audio/voice/phrase-" + cue + ".wav"
-		var stream: AudioStream = load(audio_path) if ResourceLoader.exists(audio_path) else null
-		if stream == null or stream.get_length() <= 0.0:
-			printerr("A Phrase Builder prompt is missing or invalid in the startup pack: " + audio_path)
-			failures += 1
-	print("Phrase Builder: %d phrases, vocabulary references, age levels, and three spoken cues checked in the startup pack." % phrases.size())
+	print("Phrase Builder: %d phrases, vocabulary references, age levels, and whole-phrase recordings checked in the startup pack." % phrases.size())
 	return failures
 
 
@@ -216,6 +210,7 @@ func _verify_excluded_content_absent() -> int:
 	var build_only_sources := ["res://assets/fonts/Nunito-600.ttf", "res://assets/fonts/Nunito-800.ttf",
 		"res://assets/images/mascots/outfits/wardrobe.svg"]
 	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-"]
+	var retired_phrase_audio := ["phrase-intro.wav", "phrase-try-again.wav", "phrase-complete.wav"]
 	var pending: Array[String] = ["res://"]
 	while not pending.is_empty():
 		var directory: String = pending.pop_back()
@@ -237,6 +232,13 @@ func _verify_excluded_content_absent() -> int:
 			if build_only:
 				printerr("A build-only source or imported copy is still bundled: " + path)
 				failures += 1
+			for filename: String in retired_phrase_audio:
+				var retired: bool = path.trim_suffix(".import") == "res://assets/audio/voice/" + filename
+				if directory == "res://.godot/imported":
+					retired = retired or file.begins_with(filename + "-")
+				if retired:
+					printerr("Retired Phrase Builder guide narration is still bundled: " + path)
+					failures += 1
 		for child: String in access.get_directories():
 			pending.append(directory.path_join(child))
 	print("Excluded content: complete startup pack inventory checked, %d remaining resources." % failures)

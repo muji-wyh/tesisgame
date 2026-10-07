@@ -52,8 +52,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'assets/audio/chests/spring-release.wav', 'assets/audio/voice/spring-theme.wav',
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
     'assets/imported-audio/ui-click/select.wav',
-    ...JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8')).map(phrase => phrase.audio),
-    ...['intro', 'try-again', 'complete'].map(cue => `assets/audio/voice/phrase-${cue}.wav`)
+    ...JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8')).map(phrase => phrase.audio)
   ]) {
     assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
       `Active audio must be included in the game pack: ${source}`);

@@ -185,7 +185,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 88);
-  assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 39);
+  assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 36);
   assert.ok(audio.some(file => file.source.endsWith('/summer-step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/winter-step-roll.wav')));
   const phraseCatalog = path.join(directory, 'phrases.json');
@@ -196,27 +196,24 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   for (const invalid of [
     [{ ...phrases[0], audio: '../outside.wav' }],
     [{ ...phrases[0], id: '../outside' }],
-    [{ ...phrases[0], id: 'intro', audio: 'assets/audio/voice/phrase-intro.wav' }],
     [phrases[0], phrases[0]]
   ]) {
     fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));
     assert.throws(() => collectRequiredAudio(directory), /unique catalog ID and its own in-pack voice path/);
   }
   fs.writeFileSync(phraseCatalog, JSON.stringify(phrases));
+  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({
+    ...prompts, [`phrase-${phrases[0].id}`]: phrases[0].text
+  }));
+  assert.throws(() => collectRequiredAudio(directory), /unique catalog ID and its own in-pack voice path/,
+    'Prompt IDs must not collide with whole-phrase recordings.');
+  fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify(prompts));
   const phraseImport = path.join(directory, `${phrases[0].audio}.import`);
   const phraseMetadata = fs.readFileSync(phraseImport);
   fs.unlinkSync(phraseImport);
   assert.throws(() => collectRequiredAudio(directory), /phrase-red-apple\.wav\.import/,
     'A whole-phrase recording cannot silently disappear from the required bundle');
   fs.writeFileSync(phraseImport, phraseMetadata);
-  for (const cue of ['intro', 'try-again', 'complete']) {
-    const cueImport = path.join(directory, `assets/audio/voice/phrase-${cue}.wav.import`);
-    const metadata = fs.readFileSync(cueImport);
-    fs.unlinkSync(cueImport);
-    assert.throws(() => collectRequiredAudio(directory), new RegExp(`phrase-${cue}\\.wav\\.import`),
-      'Every Phrase Builder spoken cue must remain in the startup pack');
-    fs.writeFileSync(cueImport, metadata);
-  }
   const clickImport = path.join(directory, `${click.asset.destination}.import`);
   const clickMetadata = fs.readFileSync(clickImport);
   fs.unlinkSync(clickImport);

@@ -8,10 +8,8 @@ const PROFILE = Object.freeze({
 });
 const EDGE_TTS_VERSION = '7.2.8';
 const MANIFEST_PATH = 'docs/assets/ava-voice.json';
-const PROMPT_IDS = [
-  ...['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(season => `${season}-theme`),
-  'phrase-intro', 'phrase-try-again', 'phrase-complete'
-];
+const PROMPT_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']
+  .map(season => `${season}-theme`);
 
 function englishText(text) {
   if (typeof text !== 'string' || text.length > 500 ||

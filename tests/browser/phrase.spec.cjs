@@ -98,6 +98,77 @@ async function capture(page, info, name, { afterResize = false } = {}) {
   } else expect(colors, `${name} is visible on the page`).toBeGreaterThan(20);
 }
 
+function center([x, y, width, height]) {
+  return { x: x + width / 2, y: y + height / 2 };
+}
+
+async function cardPointer(page, input) {
+  const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
+  let held = false, position;
+  const cssPoint = async point => {
+    const bounds = await metrics(page);
+    return { x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale };
+  };
+  return {
+    async down(point) {
+      position = await cssPoint(point);
+      if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...position }] });
+      else { await page.mouse.move(position.x, position.y); await page.mouse.down(); }
+      held = true;
+      await rendered(page);
+    },
+    async move(point) {
+      const destination = await cssPoint(point), start = position;
+      for (let step = 1; step <= 4; step++) {
+        position = { x: start.x + (destination.x - start.x) * step / 4, y: start.y + (destination.y - start.y) * step / 4 };
+        if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...position }] });
+        else await page.mouse.move(position.x, position.y);
+        await rendered(page);
+      }
+    },
+    async up({ cancel = false } = {}) {
+      if (!held) return;
+      if (client) await client.send('Input.dispatchTouchEvent', { type: cancel ? 'touchCancel' : 'touchEnd', touchPoints: [] });
+      else await page.mouse.up();
+      held = false;
+      await rendered(page);
+    },
+    async dispose() {
+      if (held) {
+        if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+        else await page.mouse.up();
+      }
+      if (client) await client.detach();
+    }
+  };
+}
+
+async function dragCard(page, pointer, source, destination, { dropKind, dropIndex, cancel = false } = {}) {
+  const before = progress(await phraseState(page));
+  await pointer.down(center(source.rect));
+  expect((await phraseState(page)).dragging, 'Pressing a card waits for motion before dragging').toBe(false);
+  await pointer.move(destination);
+  await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
+  let state = await phraseState(page);
+  expect(state.drag_word).toBeTruthy();
+  expect(progress(state), 'A drag preview cannot commit or remove a word before release').toEqual(before);
+  if (dropKind !== undefined) expect(state.drop_kind).toBe(dropKind);
+  if (dropIndex !== undefined) expect(state.drop_index).toBe(dropIndex);
+  await pointer.up({ cancel });
+  await expect.poll(async () => (await phraseState(page)).dragging).toBe(false);
+  state = await phraseState(page);
+  expect(state.drag_word, 'Releasing clears the dragged card preview').toBe('');
+  return state;
+}
+
+async function setDocumentHidden(page, hidden) {
+  await page.evaluate(hidden => {
+    if (hidden) Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    else delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  }, hidden);
+}
+
 test('Phrase Builder corrects unlimited mistakes, finishes three phrases and opens one saved chest', async ({ page, browserName }, info) => {
   test.setTimeout(240000);
   const requests = watchAudioRequests(page);
@@ -116,10 +187,13 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect(state.question.level).toBe('basic');
   expect(state.target_ids.length).toBeGreaterThanOrEqual(2);
   expect(state.options).toHaveLength(state.target_ids.length + 2);
+  expect(state.transcript_visible, 'Unavailable audio reveals the written phrase automatically').toBe(!audioAvailable);
+  expect(state.transcript).toMatchObject({
+    text: '', accessibility_name: audioAvailable ? 'Show the written phrase' : 'Hide the written phrase'
+  });
   const saved = await savedMedals(page), baseline = await pieceCount(page);
   const questionIds = [state.id];
   if (audioAvailable) {
-    await expectRecording(page, introFrom, 'assets/audio/voice/phrase-intro.wav');
     await expectRecording(page, introFrom, state.audio);
   }
   await capture(page, info, 'phrase-first-question');
@@ -141,7 +215,6 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
     expect(await savedMedals(page), 'Wrong answers cannot claim or change rewards').toBe(saved);
     if (audioAvailable && attempt === 4) {
       await expectRecording(page, from, 'assets/imported-audio/pair-feedback/wrong.wav');
-      await expectRecording(page, from, 'assets/audio/voice/phrase-try-again.wav');
     }
   }
   await capture(page, info, 'phrase-four-wrong-attempts');
@@ -157,7 +230,8 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   state = await phraseState(page);
   expect(state).toMatchObject({ completed: 1, question_index: 0, action: { text: 'Continue' } });
   expect(state.transcript.disabled, 'The completed phrase has no ineffective transcript toggle').toBe(true);
-  expect(state.transcript.text).toMatch(/^(Phrase shown|Shown)$/);
+  expect(state.transcript.text, 'The written-phrase helper uses an eye icon').toBe('');
+  expect(state.transcript_visible).toBe(true);
   if (audioAvailable) {
     await expectRecording(page, correctedFrom, 'assets/imported-audio/pair-feedback/right.wav');
     await expectRecording(page, correctedFrom, state.audio);
@@ -173,6 +247,7 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   const nextTranscript = state.transcript_visible;
   await press(page, state.transcript);
   await expect.poll(async () => (await phraseState(page)).transcript_visible).toBe(!nextTranscript);
+  expect((await phraseState(page)).transcript.accessibility_name).toBe(nextTranscript ? 'Show the written phrase' : 'Hide the written phrase');
   await press(page, (await phraseState(page)).transcript);
   await expect.poll(async () => (await phraseState(page)).transcript_visible).toBe(nextTranscript);
   await solve(page);
@@ -187,11 +262,9 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect(state).toMatchObject({ phase: 'correct', completed: 3, action: { text: 'Open chest' } });
   expect(await savedMedals(page), 'The third answer waits for the explicit chest transition').toBe(saved);
   await capture(page, info, 'phrase-three-complete');
-  const completionFrom = await audioMark();
   await pressAction(page);
   await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(false);
-  if (audioAvailable) await expectRecording(page, completionFrom, 'assets/audio/voice/phrase-complete.wav');
   await capture(page, info, 'phrase-earned-chest');
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   const x = bounds.x + chest.x * bounds.scale, y = bounds.y + chest.y * bounds.scale;
@@ -250,19 +323,19 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   });
   await expect.poll(async () => (await phraseState(page)).paused).toBe(false);
   expect(progress(await phraseState(page))).toEqual(selected);
-  for (const size of [{ width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 320, height: 320 }]) {
+  for (const size of [{ width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 390, height: 500 }, { width: 390, height: 540 }, { width: 844, height: 390 }, { width: 320, height: 568 }, { width: 320, height: 320 }]) {
     await page.setViewportSize(size);
     await expect.poll(async () => {
       const bounds = await metrics(page), current = await phraseState(page);
-      const controls = [...(current.options || []), ...(current.answers || []), current.listen, current.action, current.clear, current.transcript].filter(control => control?.visible);
-      return controls.length >= 9 && controls.every(({ rect: [x, y, width, height] }) =>
+      const controls = [...(current.options || []), ...(current.answers || []), current.listen, current.action, current.transcript].filter(control => control?.visible);
+      return controls.length >= 7 && controls.every(({ rect: [x, y, width, height] }) =>
         x >= -1 && y >= -1 && x + width <= bounds.width + 1 && y + height <= bounds.height + 1 &&
         width * bounds.scale >= 43.5 && height * bounds.scale >= 43.5);
     }, { message: `Every phrase target fits and remains at least 44 CSS pixels at ${size.width}x${size.height}` }).toBe(true);
     state = await phraseState(page);
     expect(progress(state), 'Resizing preserves the phrase and its partially assembled answer').toEqual(selected);
     expect(state.transcript_visible, 'Muted learners can read the target phrase at every size').toBe(true);
-    const visible = [...state.options, ...state.answers, state.listen, state.action, state.clear, state.transcript].filter(control => control.visible);
+    const visible = [...state.options, ...state.answers, state.listen, state.action, state.transcript].filter(control => control.visible);
     for (let first = 0; first < visible.length; first++) for (let second = 0; second < first; second++) {
       const [ax, ay, aw, ah] = visible[first].rect, [bx, by, bw, bh] = visible[second].rect;
       const overlap = Math.min(ax + aw, bx + bw) - Math.max(ax, bx) > 1 && Math.min(ay + ah, by + bh) - Math.max(ay, by) > 1;
@@ -279,8 +352,89 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   await pressAction(page);
   await expect.poll(async () => (await phraseState(page)).phase).toBe('correct');
   expect((await phraseState(page)).action.text).toBe('Continue');
-  expect((await phraseState(page)).transcript).toMatchObject({ disabled: true, text: 'Shown' });
+  expect((await phraseState(page)).transcript).toMatchObject({ disabled: true, text: '' });
   await capture(page, info, 'phrase-320x320-correct', { afterResize: true });
   expect(await savedMedals(page)).toBe(saved);
   expect(errors).toEqual([]);
+});
+
+for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags insert, reorder, return and cancel cards without extra clicks`, async ({ page, browserName }, info) => {
+  test.setTimeout(180000);
+  test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion and cancellation use Chromium CDP.');
+  const errors = await openGame(page);
+  await chooseAge(page, '10-plus');
+  await chooseMode(page, 'phrase');
+  await expect.poll(async () => (await phraseState(page)).visible).toBe(true);
+  const pointer = await cardPointer(page, input);
+  const saved = await savedMedals(page);
+  let state = await phraseState(page);
+  const before = progress(state);
+  try {
+    state = await dragCard(page, pointer, state.options[0], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
+    expect(state.answer, 'A released bank card appears in the answer exactly once').toEqual([0]);
+    expect(state.options[0].visible, 'The used bank card leaves its original position').toBe(false);
+    state = await dragCard(page, pointer, state.options[1], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
+    expect(state.answer, 'Dropping on an occupied slot inserts before its word').toEqual([1, 0]);
+    state = await dragCard(page, pointer, state.answers[1], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
+    expect(state.answer, 'A selected card can move to an earlier position').toEqual([0, 1]);
+    const [x, y, width, height] = state.answer_drop;
+    state = await dragCard(page, pointer, state.answers[0], { x: x + width - 2, y: y + height / 2 }, { dropKind: 'answer' });
+    expect(state.answer, 'The answer area edge moves a card to the end').toEqual([1, 0]);
+    state = await dragCard(page, pointer, state.answers[1], center(state.bank_drop), { dropKind: 'bank' });
+    expect(state.answer, 'Returning a card to the bank cannot select it again on release').toEqual([1]);
+    expect(state.options[0].visible).toBe(true);
+    const partial = progress(state);
+    state = await dragCard(page, pointer, state.answers[0], { x: 2, y: 2 }, { dropKind: '' });
+    expect(progress(state), 'Dropping outside keeps the selected card in place').toEqual(partial);
+    state = await dragCard(page, pointer, state.options[2], { x: 2, y: 2 }, { dropKind: '' });
+    expect(progress(state), 'An invalid drop leaves its bank card available').toEqual(partial);
+    expect(state.options[2].visible).toBe(true);
+    if (input === 'touch') {
+      state = await dragCard(page, pointer, state.options[2], center(state.answers[1].rect), { dropKind: 'answer', dropIndex: 1, cancel: true });
+      expect(progress(state), 'Touch cancellation never commits the visible drop preview').toEqual(partial);
+    }
+    await pointer.down(center(state.options[2].rect));
+    await pointer.move(center(state.answers[1].rect));
+    await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
+    await page.evaluate(type => document.getElementById('canvas').addEventListener(type,
+      event => event.stopImmediatePropagation(), { capture: true, once: true }), input === 'touch' ? 'touchend' : 'mouseup');
+    await pointer.up();
+    await expect.poll(async () => (await phraseState(page)).dragging,
+      { message: 'The window release fallback clears a drag when canvas delivery is interrupted' }).toBe(false);
+    state = await phraseState(page);
+    expect(progress(state), 'A missing canvas release cancels the preview instead of committing an unobserved drop').toEqual(partial);
+    await pointer.down(center(state.options[2].rect));
+    await pointer.move(center(state.answers[1].rect));
+    await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
+    await setDocumentHidden(page, true);
+    await expect.poll(async () => (await phraseState(page)).paused).toBe(true);
+    expect((await phraseState(page)).dragging, 'Backgrounding clears an active drag').toBe(false);
+    await pointer.up();
+    expect(progress(await phraseState(page)), 'A release while hidden cannot place the card').toEqual(partial);
+    await setDocumentHidden(page, false);
+    await expect.poll(async () => (await phraseState(page)).paused).toBe(false);
+    state = await phraseState(page);
+    expect(progress(state)).toEqual(partial);
+    await pointer.down(center(state.options[2].rect));
+    await pointer.move(center(state.answers[1].rect));
+    await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(async () => (await phraseState(page)).dragging).toBe(false);
+    await pointer.up();
+    state = await phraseState(page);
+    expect(progress(state), 'Resizing cancels a preview without changing the partially assembled phrase').toEqual(partial);
+    state = await dragCard(page, pointer, state.answers[0], center(state.bank_drop), { dropKind: 'bank' });
+    expect(progress(state)).toEqual(before);
+    await press(page, state.options[0]);
+    await expect.poll(async () => (await phraseState(page)).answer).toEqual([0]);
+    await press(page, (await phraseState(page)).answers[0]);
+    await expect.poll(async () => (await phraseState(page)).answer).toEqual([]);
+    expect(progress(await phraseState(page)), 'Tap editing remains available after successful and canceled drags').toEqual(before);
+    expect(await savedMedals(page), 'Editing cards cannot unlock or award a chest').toBe(saved);
+    await capture(page, info, `phrase-${input}-drag-edited`, { afterResize: true });
+    expect(errors).toEqual([]);
+  } finally {
+    await pointer.dispose();
+    await setDocumentHidden(page, false);
+  }
 });

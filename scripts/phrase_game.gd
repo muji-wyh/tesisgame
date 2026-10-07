@@ -1,5 +1,5 @@
 extends Control
-## Listen, assemble a short phrase, and keep correcting until it sounds right.
+## Listen, drag words into a phrase, and keep correcting until it is right.
 
 signal finished
 signal status_changed(message: String)
@@ -10,6 +10,7 @@ const PhraseGameModel = preload("res://scripts/phrase_game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
+const Icons = preload("res://scripts/icon_button.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 
 var game := PhraseGameModel.new()
@@ -19,20 +20,12 @@ var option_buttons: Array[Button] = []
 var answer_buttons: Array[Button] = []
 var listen_button: Button
 var action_button: Button
-var clear_button: Button
-var transcript_button: Button
+var transcript_button: Icons
 var reduced_motion: bool = false
-var _hero: Panel
-var _puzzle: Panel
 var _heading: Label
-var _instruction: Label
 var _progress: Label
 var _feedback: Label
-var _answer_caption: Label
-var _bank_caption: Label
-var _clue: TextureRect
-var _steps: Array[Label] = []
-var _vocabulary: Dictionary = {}
+var _preview: Button
 var _palette: Dictionary = {}
 var _theme_id: String = "spring"
 var _paused: bool = false
@@ -41,54 +34,56 @@ var _configured: bool = false
 var _muted: bool = false
 var _show_phrase: bool = false
 var _question_id: String = ""
+var _answer_drop: Rect2
+var _bank_drop: Rect2
+var _pointer: int = -2
+var _gesture_serial: int = 0
+var _source: Button
+var _source_kind: String = ""
+var _source_index: int = -1
+var _drag_word: int = -1
+var _press_point: Vector2
+var _drag_offset: Vector2
+var _dragging: bool = false
+var _drop_kind: String = ""
+var _drop_index: int = -1
+var _settle_tween: Tween
 
 
 func _init() -> void:
 	name = "PhraseBuilder"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_hero = Panel.new()
-	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_hero)
-	_puzzle = Panel.new()
-	_puzzle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_puzzle)
 	pip = Mascot.new()
 	pip.name = "PhrasePip"
 	pip.focus_mode = Control.FOCUS_NONE
 	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pip.set_proactive_allowed(false)
 	add_child(pip)
-	_clue = TextureRect.new()
-	_clue.name = "PhrasePictureClue"
-	_clue.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_clue.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_clue.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_clue)
-	_heading = _label("Build what you hear", 28)
+	_heading = _label("Build the phrase", 26)
 	_heading.add_theme_font_override("font", Style.HEADING_FONT)
-	_instruction = _label("Listen to Pip. Pick the words in order.", 15)
-	_instruction.add_theme_color_override("font_color", Style.MUTED)
-	_progress = _label("PHRASE 1 OF 3", 11)
+	_progress = _label("1 / 3", 13)
+	_progress.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_progress.add_theme_color_override("font_color", Style.MUTED)
-	_feedback = _label("", 14)
+	_feedback = _label("Drag words into place.", 14)
 	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_answer_caption = _label("YOUR PHRASE", 11)
-	_bank_caption = _label("WORD BANK", 11)
-	for caption in [_answer_caption, _bank_caption]:
-		caption.add_theme_color_override("font_color", Style.MUTED)
-	for index in range(3):
-		var step := _label(str(index + 1), 11)
-		step.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_steps.append(step)
-	listen_button = _button("Listen", "PhraseListen", _listen)
+	listen_button = _button("Listen", "PhraseListen", play_prompt)
 	listen_button.tooltip_text = "Hear Pip say the phrase again"
 	UiClick.bind_button(listen_button)
-	action_button = _button("Check answer", "PhraseAction", _activate)
-	clear_button = _button("Clear", "PhraseClear", _clear)
-	clear_button.tooltip_text = "Return all your words to the word bank"
-	transcript_button = _button("Show phrase", "PhraseTranscript", _toggle_transcript)
+	transcript_button = Icons.new()
+	transcript_button.name = "PhraseTranscript"
+	transcript_button.symbol = Icons.Symbol.EYE
+	transcript_button.pressed.connect(_toggle_transcript)
+	add_child(transcript_button)
 	UiClick.bind_button(transcript_button)
-	resized.connect(_layout)
+	action_button = _button("Check answer", "PhraseAction", _activate)
+	_preview = Button.new()
+	_preview.name = "DraggedPhraseWord"
+	_preview.focus_mode = Control.FOCUS_NONE
+	_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_preview.z_index = 100
+	_preview.hide()
+	add_child(_preview)
+	resized.connect(_on_resized)
 	visibility_changed.connect(_visibility_changed)
 	apply_theme(Data.theme(_theme_id), _theme_id)
 
@@ -113,9 +108,6 @@ func _button(text: String, node_name: String, callback: Callable) -> Button:
 
 func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value: int = -1) -> bool:
 	cancel_input()
-	_vocabulary.clear()
-	for word: Dictionary in vocabulary:
-		_vocabulary[str(word.id)] = word
 	_paused = false
 	_finished_emitted = false
 	_question_id = ""
@@ -188,11 +180,30 @@ func stop() -> void:
 
 
 func cancel_input() -> void:
+	_pointer = -2
+	_dragging = false
+	_source = null
+	_source_kind = ""
+	_source_index = -1
+	_drag_word = -1
+	_drop_kind = ""
+	_drop_index = -1
+	if is_instance_valid(_settle_tween):
+		_settle_tween.kill()
+	if is_instance_valid(_preview):
+		_preview.hide()
 	for button in option_buttons + answer_buttons:
-		button.scale = Vector2.ONE
-	for button in option_buttons + answer_buttons + [listen_button, action_button, clear_button, transcript_button]:
+		button.modulate = Color.WHITE
+	for button in option_buttons + answer_buttons + [listen_button, action_button, transcript_button]:
 		if is_instance_valid(button):
 			button.set_pressed_no_signal(false)
+	queue_redraw()
+	_publish.call_deferred()
+
+
+func _on_resized() -> void:
+	cancel_input()
+	_layout()
 
 
 func _visibility_changed() -> void:
@@ -208,18 +219,29 @@ func _can_interact() -> bool:
 		and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 
+func release_pointer(pointer: int) -> void:
+	# Window capture can observe release before Godot's canvas handler. Give the
+	# regular drop first refusal, then cancel only a gesture that never received it.
+	_cancel_unreleased_pointer.call_deferred(pointer, _gesture_serial)
+
+
+func _cancel_unreleased_pointer(pointer: int, serial: int) -> void:
+	if _pointer == pointer and _gesture_serial == serial:
+		cancel_input()
+
+
 func play_prompt() -> void:
 	if _can_interact() and not game.current_question().is_empty():
 		audio_requested.emit("phrase", str(game.current_question().id))
 
 
-func _listen() -> void:
-	play_prompt()
-
-
 func _choose(index: int) -> void:
-	if not _can_interact() or game.phase != "building" or not game.select(index):
+	if not _can_interact() or _pointer != -2 or game.phase != "building" or not game.select(index):
 		return
+	_word_placed(index)
+
+
+func _word_placed(index: int) -> void:
 	audio_requested.emit("select", "")
 	audio_requested.emit("word", str(game.options[index].id))
 	pip.react("curious")
@@ -228,25 +250,17 @@ func _choose(index: int) -> void:
 
 
 func _remove(index: int) -> void:
-	if not _can_interact() or game.phase != "building" or not game.remove(index):
+	if not _can_interact() or _pointer != -2 or game.phase != "building" or not game.remove(index):
 		return
-	audio_requested.emit("select", "")
-	_refresh()
-	_restore_focus()
-
-
-func _clear() -> void:
-	if not _can_interact() or game.phase != "building" or game.answer.is_empty():
-		return
-	game.clear()
 	audio_requested.emit("select", "")
 	_refresh()
 	_restore_focus()
 
 
 func _activate() -> void:
-	if not _can_interact():
+	if not _can_interact() or _pointer != -2:
 		return
+	cancel_input()
 	if game.phase == "correct":
 		audio_requested.emit("select", "")
 		if game.advance():
@@ -269,8 +283,6 @@ func _activate() -> void:
 	audio_requested.emit("feedback", result)
 	if correct:
 		audio_requested.emit("phrase", str(game.current_question().id))
-	else:
-		audio_requested.emit("prompt", "phrase-try-again")
 	_refresh()
 	if correct:
 		action_button.grab_focus()
@@ -280,54 +292,219 @@ func _activate() -> void:
 		_restore_focus()
 
 
+func _input(event: InputEvent) -> void:
+	if _pointer != -2 and event.is_action_pressed("ui_cancel"):
+		cancel_input()
+		get_viewport().set_input_as_handled()
+		return
+	if not _can_interact() or game.phase != "building":
+		return
+	# Touch owns its gesture; Godot's synthetic mouse must never commit it twice.
+	if (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	var consumed: bool = false
+	if event is InputEventScreenTouch:
+		if event.canceled and event.index == _pointer:
+			cancel_input()
+			consumed = true
+		elif event.pressed:
+			consumed = _press_word(event.index, event.position)
+		elif event.index == _pointer:
+			_release_word(event.position)
+			consumed = true
+	elif event is InputEventScreenDrag and event.index == _pointer:
+		_move_word(event.position)
+		consumed = true
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.canceled and _pointer == -1:
+			cancel_input()
+			consumed = true
+		elif event.pressed:
+			consumed = _press_word(-1, event.position)
+		elif _pointer == -1:
+			_release_word(event.position)
+			consumed = true
+	elif event is InputEventMouseMotion and _pointer == -1:
+		if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			_move_word(event.position)
+		else:
+			cancel_input()
+		consumed = true
+	if consumed:
+		get_viewport().set_input_as_handled()
+
+
+func _press_word(pointer: int, point: Vector2) -> bool:
+	if _pointer != -2:
+		return true
+	var button: Button
+	var kind: String = ""
+	var index: int = -1
+	for candidate in answer_buttons + option_buttons:
+		if candidate.is_visible_in_tree() and not candidate.disabled and candidate.get_global_rect().has_point(point):
+			button = candidate
+			index = answer_buttons.find(candidate)
+			kind = "answer" if index >= 0 else "bank"
+			if index < 0:
+				index = option_buttons.find(candidate)
+			break
+	if button == null:
+		return false
+	cancel_input()
+	_gesture_serial += 1
+	_pointer = pointer
+	_source = button
+	_source_kind = kind
+	_source_index = index
+	_drag_word = game.answer[index] if kind == "answer" else index
+	_press_point = point
+	_drag_offset = get_global_transform().affine_inverse() * point - button.position
+	button.grab_focus()
+	button.set_pressed_no_signal(true)
+	return true
+
+
+func _move_word(point: Vector2) -> void:
+	var s: float = Style.ui_scale(self)
+	if not _dragging and point.distance_to(_press_point) * s < 8:
+		return
+	if not _dragging:
+		_dragging = true
+		_source.set_pressed_no_signal(false)
+		_source.modulate.a = 0.25
+		_preview.text = str(game.options[_drag_word].text)
+		_preview.size = _source.size
+		_style_tile(_preview, true, false, false, s)
+		var lifted := _preview.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
+		lifted.shadow_color = Color(Style.INK, 0.20)
+		lifted.shadow_size = ceili(12 / s)
+		lifted.shadow_offset = Vector2(0, 5 / s)
+		_preview.add_theme_stylebox_override("normal", lifted)
+		_preview.show()
+	var local: Vector2 = get_global_transform().affine_inverse() * point
+	_preview.position = local - _drag_offset - Vector2(0, (30 if _pointer >= 0 else 4) / s)
+	_update_drop(local)
+	queue_redraw()
+	_publish.call_deferred()
+
+
+func _update_drop(point: Vector2) -> void:
+	_drop_kind = ""
+	_drop_index = -1
+	if _answer_drop.has_point(point) and (game.answer.has(_drag_word) or game.answer.size() < answer_buttons.size()):
+		_drop_kind = "answer"
+		_drop_index = game.answer.size()
+		for index in range(answer_buttons.size()):
+			var button: Button = answer_buttons[index]
+			if point.x < button.position.x + button.size.x:
+				_drop_index = mini(index, game.answer.size())
+				break
+	elif _bank_drop.has_point(point) and game.answer.has(_drag_word):
+		_drop_kind = "bank"
+
+
+func _release_word(point: Vector2) -> void:
+	var kind: String = _source_kind
+	var source_index: int = _source_index
+	var option_index: int = _drag_word
+	var dragged: bool = _dragging
+	var tap_inside: bool = is_instance_valid(_source) and _source.get_global_rect().has_point(point)
+	var from: Rect2 = Rect2(_preview.position, _preview.size)
+	if dragged:
+		_update_drop(get_global_transform().affine_inverse() * point)
+	var destination: String = _drop_kind
+	var target_index: int = _drop_index
+	cancel_input()
+	if not _can_interact() or game.phase != "building":
+		return
+	if not dragged:
+		if tap_inside:
+			if kind == "bank":
+				_choose(source_index)
+			else:
+				_remove(source_index)
+		return
+	var edited: bool = false
+	if destination == "answer":
+		edited = game.place(option_index, target_index)
+		if edited:
+			_word_placed(option_index)
+	elif destination == "bank":
+		edited = game.remove(game.answer.find(option_index))
+		if edited:
+			audio_requested.emit("select", "")
+			_refresh()
+			_restore_focus()
+	if edited and not reduced_motion:
+		var target: Button = answer_buttons[game.answer.find(option_index)] if destination == "answer" else option_buttons[option_index]
+		_settle_word(from, target)
+
+
+func _settle_word(from: Rect2, target: Button) -> void:
+	_preview.text = target.text
+	_preview.position = from.position
+	_preview.size = from.size
+	_preview.show()
+	target.modulate.a = 0.0
+	_settle_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_settle_tween.tween_property(_preview, "position", target.position, 0.12)
+	_settle_tween.tween_property(_preview, "size", target.size, 0.12)
+	_settle_tween.chain().tween_callback(func() -> void:
+		_preview.hide()
+		if is_instance_valid(target):
+			target.modulate = Color.WHITE
+	)
+
+
+func _draw() -> void:
+	if not _dragging or _drop_kind.is_empty():
+		return
+	var s: float = Style.ui_scale(self)
+	var accent: Color = _palette.get("accent", Style.GOOD)
+	var rect: Rect2 = _bank_drop if _drop_kind == "bank" else Rect2(answer_buttons[mini(_drop_index, answer_buttons.size() - 1)].position, answer_buttons[mini(_drop_index, answer_buttons.size() - 1)].size)
+	var surface := Style.box(Color(accent, 0.08), accent, ceili(14 / s), ceili(2 / s))
+	surface.draw(get_canvas_item(), rect.grow(3 / s))
+
+
 func _refresh() -> void:
 	var question: Dictionary = game.current_question()
-	var new_question: bool = str(question.get("id", "")) != _question_id
-	if new_question:
+	if str(question.get("id", "")) != _question_id:
+		cancel_input()
 		_question_id = str(question.get("id", ""))
 		_show_phrase = _muted
 		_rebuild_buttons()
-		var picture: Dictionary = _vocabulary.get(str(question.get("picture_id", "")), {})
-		var path: String = str(picture.get("image", ""))
-		_clue.texture = load("res://" + path) if not path.is_empty() and ResourceLoader.exists("res://" + path) else null
 	var correct: bool = game.phase == "correct"
 	var wrong: bool = str(game.feedback) == "wrong"
-	_progress.text = "PHRASE %d OF 3" % mini(game.question_index + 1, 3)
-	_heading.text = str(question.get("text", "")) if _show_phrase or correct else "Build what you hear"
-	_instruction.text = "Three phrases, one lovely treasure." if correct else "Listen to Pip. Pick the words in order."
-	_feedback.text = "That's it! " + str(question.get("text", "")) if correct else "Try again. Tap a selected word to change it." if wrong else "Pick your first word." if game.answer.is_empty() else "Tap a selected word to change it."
+	_progress.text = "%d / 3" % mini(game.question_index + 1, 3)
+	_heading.text = str(question.get("text", "")) if _show_phrase or correct else "Try another order" if wrong else "Build the phrase"
+	_feedback.text = "Well done!" if correct else "Try another order." if wrong else "Drag words into place. Tap to add or return."
 	_feedback.add_theme_color_override("font_color", Style.GOOD if correct else Style.WRONG if wrong else Style.MUTED)
-	for index in range(_steps.size()):
-		var step: Label = _steps[index]
-		step.text = "✓" if index < game.completed else str(index + 1)
-		step.add_theme_color_override("font_color", Color.WHITE if index < game.completed else Style.INK)
 	for index in range(option_buttons.size()):
 		var button: Button = option_buttons[index]
-		button.disabled = _paused or not game.phase == "building" or game.answer.has(index)
-		button.modulate.a = 0.35 if game.answer.has(index) else 1.0
+		button.visible = not game.answer.has(index)
+		button.disabled = _paused or game.phase != "building" or game.answer.has(index)
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
 		var occupied: bool = index < game.answer.size()
 		button.text = str(game.options[game.answer[index]].text) if occupied else str(index + 1)
-		button.disabled = _paused or not occupied or not game.phase == "building"
+		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
-		button.tooltip_text = "Remove " + button.text if occupied else "Word %d" % (index + 1)
+		button.tooltip_text = "Drag to reorder or tap to return " + button.text if occupied else "Word %d" % (index + 1)
 		button.set("accessibility_name", "Word %d: %s" % [index + 1, button.text] + (". Press to return this word." if occupied and not correct else ""))
 	listen_button.disabled = _paused or question.is_empty() or game.phase == "finished"
-	action_button.text = "Open chest" if correct and game.completed == 3 else "Continue" if correct else "Try again" if wrong else "Check answer"
+	action_button.text = "Open chest" if correct and game.completed == 3 else "Continue" if correct else "Check answer"
 	action_button.disabled = _paused or question.is_empty() or game.phase == "finished" \
 		or (game.phase == "building" and game.answer.size() != question.get("words", []).size())
-	clear_button.disabled = _paused or game.phase != "building" or game.answer.is_empty()
 	transcript_button.disabled = _paused or question.is_empty() or game.phase != "building"
-	transcript_button.tooltip_text = "The completed phrase is shown." if correct else "Hide the written phrase" if _show_phrase else "Show the written phrase. You can use this help anytime."
+	transcript_button.engaged = _show_phrase or correct
+	transcript_button.tooltip_text = "The completed phrase is shown." if correct else "Hide the written phrase" if _show_phrase else "Show the written phrase"
 	transcript_button.set("accessibility_name", transcript_button.tooltip_text)
-	for button in [listen_button, action_button, clear_button, transcript_button]:
+	for button in [listen_button, action_button, transcript_button]:
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	_layout()
 	if _configured and game.phase != "finished":
-		var message: String = "Phrase Builder. Phrase %d of 3. %s" % [mini(game.question_index + 1, 3), _feedback.text if correct or wrong else "Listen to Pip, then choose the words in order."]
-		status_changed.emit(message)
+		status_changed.emit("Phrase Builder. Phrase %d of 3. %s" % [mini(game.question_index + 1, 3), _feedback.text])
 	_publish.call_deferred()
 
 
@@ -339,11 +516,16 @@ func _rebuild_buttons() -> void:
 	answer_buttons.clear()
 	for index in range(game.options.size()):
 		var button := _button(str(game.options[index].text), "PhraseOption_%d" % index, _choose.bind(index))
-		button.tooltip_text = "Add " + button.text
-		button.set("accessibility_name", button.text + ". Add this word to your phrase.")
+		button.tooltip_text = "Drag or tap to add " + button.text
+		button.mouse_default_cursor_shape = Control.CURSOR_DRAG
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.set("accessibility_name", button.text + ". Drag or press to add this word.")
 		option_buttons.append(button)
 	for index in range(game.current_question().get("words", []).size()):
-		answer_buttons.append(_button(str(index + 1), "PhraseAnswer_%d" % index, _remove.bind(index)))
+		var button := _button(str(index + 1), "PhraseAnswer_%d" % index, _remove.bind(index))
+		button.mouse_default_cursor_shape = Control.CURSOR_DRAG
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		answer_buttons.append(button)
 
 
 func _restore_focus() -> void:
@@ -362,7 +544,7 @@ func default_focus() -> Control:
 	if not action_button.disabled and (game.phase == "correct" or game.answer.size() == answer_buttons.size()):
 		return action_button
 	for button in option_buttons:
-		if not button.disabled:
+		if button.is_visible_in_tree() and not button.disabled:
 			return button
 	return action_button if not action_button.disabled else listen_button
 
@@ -371,7 +553,7 @@ func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
 	if not _can_interact():
 		return controls
-	for button in [listen_button, transcript_button] + answer_buttons + option_buttons + [clear_button, action_button]:
+	for button in [listen_button, transcript_button] + answer_buttons + option_buttons + [action_button]:
 		if button.is_visible_in_tree() and not button.disabled:
 			controls.append(button)
 	return controls
@@ -383,23 +565,25 @@ func _place(control: Control, rect: Rect2) -> void:
 	control.size = rect.size.max(Vector2.ZERO) / s
 
 
-func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, scale_factor: float) -> void:
+func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: float) -> void:
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	var edge: Color = Style.GOOD if correct else Style.WRONG if wrong and filled else accent if filled else Style.EDGE
-	var fill: Color = Color("#e8f2e7") if correct else Color("#fbede5") if wrong and filled else Color.WHITE if filled else Color("#f4f2e9")
+	var edge: Color = Style.GOOD if correct else Style.WRONG if wrong and filled else Style.EDGE
+	var fill: Color = Color("#e8f2e7") if correct else Color("#fbede5") if wrong and filled else Color.WHITE if filled else Color("#f1eee4")
 	for state in ["normal", "hover", "pressed", "disabled"]:
-		var surface := Style.box(fill.darkened(0.04) if state == "pressed" else fill, edge, ceili(12 / scale_factor), maxi(1, roundi(1 / scale_factor)))
-		surface.set_content_margin_all(3 / scale_factor)
+		var surface := Style.box(fill.darkened(0.04) if state == "pressed" else fill, accent if state == "hover" and filled else edge, ceili(12 / s), maxi(1, roundi(1 / s)))
+		surface.set_content_margin_all(3 / s)
+		if filled:
+			surface.border_width_bottom = ceili((1 if state == "pressed" else 3) / s)
 		button.add_theme_stylebox_override(state, surface)
-	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, ceili(12 / scale_factor), ceili(2 / scale_factor)))
+	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, ceili(12 / s), ceili(2 / s)))
 	button.add_theme_font_override("font", Style.HEADING_FONT)
 	for color in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color"]:
 		button.add_theme_color_override(color, Style.INK if filled else Style.MUTED)
 	button.custom_minimum_size = Vector2.ZERO
 	button.clip_text = true
-	var font_size: int = ceili(19 / scale_factor)
+	var font_size: int = ceili(20 / s)
 	var font: Font = button.get_theme_font("font")
-	while font_size > ceili(12 / scale_factor) and font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > button.size.x - 8 / scale_factor:
+	while font_size > ceili(12 / s) and font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > button.size.x - 8 / s:
 		font_size -= 1
 	button.add_theme_font_size_override("font_size", font_size)
 
@@ -410,144 +594,99 @@ func _layout() -> void:
 	var s: float = Style.ui_scale(self)
 	var w: float = size.x * s
 	var h: float = size.y * s
-	var compact: bool = h < 330
-	var split: bool = w >= 650 and not compact
-	var accent: Color = _palette.get("accent", Style.GOOD)
-	var gap: float = 4 if h < 470 else 10
-	var padding: float = 0 if compact else 18 if split else 8
-	var puzzle_x: float = w * 0.34 + gap if split else 0.0
-	var hero_h: float = 30 if compact else h if split else clampf(h * 0.25, 64, 170)
-	var puzzle_y: float = 0 if split or compact else hero_h + gap
-	var puzzle_w: float = w - puzzle_x
-	var puzzle_h: float = h - puzzle_y
-	_place(_hero, Rect2(0, 0, puzzle_x - gap if split else w, hero_h))
-	_place(_puzzle, Rect2(puzzle_x, puzzle_y, puzzle_w, puzzle_h))
-	_hero.visible = not compact
-	_puzzle.visible = not compact
-	_hero.add_theme_stylebox_override("panel", Style.box(_palette.get("light", Color("#edf2e4")).lightened(0.35), Color.TRANSPARENT, ceili(24 / s), 0))
-	_puzzle.add_theme_stylebox_override("panel", Style.box(Color(1, 1, 1, 0.72), Style.EDGE, ceili(24 / s), 1))
-	var inner_x: float = puzzle_x + padding
-	var inner_w: float = puzzle_w - padding * 2
-	var top: float = puzzle_y + padding
-	var show_heading: bool = puzzle_h >= 290
-	var show_instruction: bool = puzzle_h >= 410
-	var show_transcript: bool = _show_phrase or game.phase == "correct"
-	var title_h: float = 24 + (34 if show_heading else 0) + (24 if show_instruction else 0)
+	var compact: bool = h < 420
+	var inner_w: float = minf(w, 800)
+	var x: float = (w - inner_w) * 0.5
+	var gap: float = 6 if compact else 10
+	var columns: int = 3 if compact or w >= 480 else 2
+	var rows: int = maxi(1, ceili(game.options.size() / float(columns)))
 	var footer_h: float = 44 if compact else 50
-	var label_h: float = 16 if not compact and puzzle_h >= 360 else 0
-	var feedback_h: float = 24 if not compact and puzzle_h >= 410 else 0
-	var rows: int = ceili(game.options.size() / 3.0)
-	rows = maxi(1, rows)
-	var usable: float = puzzle_h - padding * 2 - title_h - footer_h - label_h * 2 - feedback_h - gap * (rows + 3)
-	var tile_h: float = clampf(usable / (rows + 1), 44, 70)
-	var answer_y: float = top + title_h + gap + label_h
-	var bank_y: float = answer_y + tile_h + gap + label_h
-	var footer_y: float = h - padding - footer_h
+	var helper_h: float = 26 if h >= 460 else 0
+	var hero_h: float = clampf(h * 0.21, 104, 148)
+	var tile_h: float
+	var top: float = 0
+	var answer_y: float
+	var bank_y: float
+	var footer_y: float
 	if compact:
-		# Keep every answer, word-bank tile and footer action at least 44 CSS px.
-		title_h = maxf(16, h - (rows + 2) * 44 - gap * (rows + 2))
 		tile_h = 44
-		answer_y = title_h + gap
+		hero_h = maxf(24, h - (rows + 2) * tile_h - gap * (rows + 2))
+		answer_y = hero_h + gap
 		bank_y = answer_y + tile_h + gap
 		footer_y = h - footer_h
-	var compact_pip_side: float = minf(title_h, 74)
-	var compact_text_x: float = compact_pip_side + 8
-	var title_center_y: float = top + (title_h - 24) * 0.5 if compact else top
-	_heading.visible = (not compact and show_heading) or show_transcript
-	_instruction.visible = not compact and show_instruction
-	_feedback.visible = feedback_h > 0
-	_answer_caption.visible = label_h > 0
-	_bank_caption.visible = label_h > 0
-	_clue.visible = _clue.texture != null and not compact and (not split or h >= 540)
-	clear_button.visible = not compact
-	_progress.visible = not show_transcript or (not compact and show_heading)
-	_progress.add_theme_font_size_override("font_size", ceili((10 if compact else 11) / s))
-	_place(_progress, Rect2(inner_x + (compact_text_x if compact else 0), title_center_y, inner_w - 110 - (compact_text_x if compact else 0), 24))
-	for index in range(_steps.size()):
-		var step: Label = _steps[index]
-		step.visible = _progress.visible
-		var step_side: float = 20 if compact else 24
-		_place(step, Rect2(inner_x + inner_w - (3 - index) * (step_side + 5), top + (title_h - step_side) * 0.5 if compact else top + 1, step_side, step_side))
-		step.add_theme_font_size_override("font_size", ceili(11 / s))
-		step.add_theme_stylebox_override("normal", Style.box(Style.GOOD if index < game.completed else Color.WHITE, accent if index == game.question_index else Style.EDGE, ceili(12 / s), 1))
-	var heading_x: float = inner_x + (compact_text_x if compact else 0)
-	var heading_height: float = minf(32, title_h)
-	var heading_y: float = top + (title_h - heading_height) * 0.5 if compact else top + (26 if show_heading else 0)
-	var heading_width: float = inner_w - (compact_text_x if compact else 0)
-	var heading_font: int = ceili((26 if split else 20 if not compact else 15) / s)
-	while heading_font > ceili(12 / s) and Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_font).x > heading_width / s:
-		heading_font -= 1
-	_heading.add_theme_font_size_override("font_size", heading_font)
-	_place(_heading, Rect2(heading_x, heading_y, heading_width, heading_height))
-	_instruction.add_theme_font_size_override("font_size", ceili(13 / s))
-	_place(_instruction, Rect2(inner_x, top + 58, inner_w, 22))
-	for caption in [_answer_caption, _bank_caption]:
-		caption.add_theme_font_size_override("font_size", ceili(10 / s))
-	_place(_answer_caption, Rect2(inner_x, answer_y - label_h, inner_w, label_h))
-	_place(_bank_caption, Rect2(inner_x, bank_y - label_h, inner_w, label_h))
+	else:
+		var fixed_height: float = hero_h + 16 + 16 + 20 + helper_h + footer_h + gap * (rows - 1)
+		tile_h = clampf((h - fixed_height) / (rows + 1), 44, 70)
+		var total_h: float = fixed_height + tile_h * (rows + 1)
+		top = maxf(0, (h - total_h) * 0.3)
+		answer_y = top + hero_h + 16
+		bank_y = answer_y + tile_h + 16
+		footer_y = bank_y + rows * tile_h + gap * (rows - 1) + 20 + helper_h
+	var pip_side: float = minf(hero_h, 64) if compact or w < 360 else minf(hero_h, inner_w * 0.30)
+	pip.custom_minimum_size = Vector2.ZERO
+	_place(pip, Rect2(x, top + (hero_h - pip_side) * 0.5, pip_side, pip_side))
+	var heading_x: float = x + pip_side + (8 if compact else 18)
+	var heading_w: float = inner_w - (heading_x - x) - 44
+	var heading_h: float = minf(34, hero_h)
+	_place(_heading, Rect2(heading_x, top + (hero_h - heading_h) * 0.5 if compact else top + hero_h * 0.15, heading_w, heading_h))
+	var font_size: int = ceili((16 if compact else 22 if w < 480 else 28) / s)
+	while font_size > ceili(12 / s) and Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > _heading.size.x:
+		font_size -= 1
+	_heading.add_theme_font_size_override("font_size", font_size)
+	_progress.add_theme_font_size_override("font_size", ceili(12 / s))
+	_place(_progress, Rect2(x + inner_w - 40, top + (hero_h - 24) * 0.5 if compact else top + hero_h * 0.15 + 5, 40, 24))
 	var answer_w: float = (inner_w - gap * maxi(0, answer_buttons.size() - 1)) / maxi(1, answer_buttons.size())
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
-		_place(button, Rect2(inner_x + index * (answer_w + gap), answer_y, answer_w, tile_h))
+		_place(button, Rect2(x + index * (answer_w + gap), answer_y, answer_w, tile_h))
 		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s)
-	var columns: int = mini(3, maxi(1, option_buttons.size()))
+	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, tile_h) / s).grow(3 / s)
 	var option_w: float = (inner_w - gap * (columns - 1)) / columns
-	for index in range(option_buttons.size()):
-		var button: Button = option_buttons[index]
-		_place(button, Rect2(inner_x + (index % columns) * (option_w + gap), bank_y + floori(index / float(columns)) * (tile_h + gap), option_w, tile_h))
+	var visible_index: int = 0
+	for button in option_buttons:
+		if not button.visible:
+			continue
+		_place(button, Rect2(x + (visible_index % columns) * (option_w + gap), bank_y + floori(visible_index / float(columns)) * (tile_h + gap), option_w, tile_h))
 		_style_tile(button, true, false, false, s)
-	_feedback.add_theme_font_size_override("font_size", ceili(12 / s))
-	_place(_feedback, Rect2(inner_x, footer_y - feedback_h - 4, inner_w, feedback_h))
-	for button in [listen_button, clear_button, action_button, transcript_button]:
+		visible_index += 1
+	_bank_drop = Rect2(Vector2(x, bank_y) / s, Vector2(inner_w, rows * tile_h + gap * (rows - 1)) / s).grow(3 / s)
+	_feedback.visible = helper_h > 0
+	_feedback.add_theme_font_size_override("font_size", ceili(13 / s))
+	_place(_feedback, Rect2(x, footer_y - helper_h - 6, inner_w, helper_h))
+	var accent: Color = _palette.get("accent", Style.GOOD)
+	for button in [listen_button, action_button]:
 		Style.action_button(button, Style.GOOD if game.phase == "correct" else accent, button == action_button)
 		button.custom_minimum_size = Vector2.ZERO
 		button.clip_text = true
-		button.add_theme_font_size_override("font_size", ceili((14 if compact else 15) / s))
-	for button in [listen_button, clear_button, transcript_button]:
+		button.add_theme_font_size_override("font_size", ceili((14 if compact else 16) / s))
 		for state in ["normal", "hover", "pressed", "disabled"]:
 			var surface: StyleBox = button.get_theme_stylebox(state)
 			surface.content_margin_left = 4 / s
 			surface.content_margin_right = 4 / s
-	if not split:
-		transcript_button.add_theme_font_size_override("font_size", floori(13 / s))
+	Style.square_icon_button(transcript_button, accent)
+	transcript_button.custom_minimum_size = Vector2.ZERO
 	if compact:
-		transcript_button.text = "Shown" if game.phase == "correct" else "Hide" if _show_phrase else "Text"
-		pip.custom_minimum_size = Vector2.ZERO
-		_place(pip, Rect2(0, maxf(0, (title_h - compact_pip_side) * 0.5), compact_pip_side, compact_pip_side))
-		_place(listen_button, Rect2(inner_x, footer_y, 64, footer_h))
-		_place(transcript_button, Rect2(inner_x + 64 + gap, footer_y, 54, footer_h))
-		_place(action_button, Rect2(inner_x + 118 + gap * 2, footer_y, inner_w - 118 - gap * 2, footer_h))
-	elif split:
-		transcript_button.text = "Phrase shown" if game.phase == "correct" else "Hide phrase" if _show_phrase else "Show phrase"
-		var hero_w: float = puzzle_x - gap
-		var pip_side: float = minf(hero_w - 28, h * 0.43)
-		pip.custom_minimum_size = Vector2.ZERO
-		_place(pip, Rect2((hero_w - pip_side) * 0.5, maxf(16, h * 0.12), pip_side, pip_side))
-		var clue_side: float = minf(100, h * 0.17)
-		_place(_clue, Rect2((hero_w - clue_side) * 0.5, h * 0.59, clue_side, clue_side))
-		_place(listen_button, Rect2(18, h - 128, hero_w - 36, 50))
-		_place(transcript_button, Rect2(18, h - 70, hero_w - 36, 50))
-		_place(clear_button, Rect2(inner_x, footer_y, 78, footer_h))
-		_place(action_button, Rect2(inner_x + 78 + gap, footer_y, inner_w - 78 - gap, footer_h))
+		if game.phase == "building":
+			action_button.text = "Check"
+		_place(listen_button, Rect2(x, footer_y, 64, footer_h))
+		_place(transcript_button, Rect2(x + 64 + gap, footer_y, 44, footer_h))
+		_place(action_button, Rect2(x + 108 + gap * 2, footer_y, inner_w - 108 - gap * 2, footer_h))
 	else:
-		transcript_button.text = "Shown" if game.phase == "correct" else "Hide" if _show_phrase else "Text"
-		var pip_side: float = minf(hero_h - 12, w * 0.44)
-		pip.custom_minimum_size = Vector2.ZERO
-		_place(pip, Rect2(12, (hero_h - pip_side) * 0.5, pip_side, pip_side))
-		var right_x: float = pip_side + 28
-		var right_w: float = w - right_x - 14
-		var clue_side: float = minf(hero_h - 62, 82)
-		_place(_clue, Rect2(right_x + (right_w - clue_side) * 0.5, 6, clue_side, clue_side))
-		_place(listen_button, Rect2(right_x, hero_h - 52, right_w - 56 - gap, 44))
-		_place(transcript_button, Rect2(right_x + right_w - 56, hero_h - 52, 56, 44))
-		_place(clear_button, Rect2(inner_x, footer_y, 64, footer_h))
-		_place(action_button, Rect2(inner_x + 64 + gap, footer_y, inner_w - 64 - gap, footer_h))
+		var controls_y: float = top + hero_h - 48
+		_place(listen_button, Rect2(heading_x, controls_y, 104, 44))
+		_place(transcript_button, Rect2(heading_x + 112, controls_y, 44, 44))
+		var action_w: float = minf(340, inner_w)
+		_place(action_button, Rect2(x + (inner_w - action_w) * 0.5, footer_y, action_w, footer_h))
+	queue_redraw()
 	_publish.call_deferred()
 
 
+func _rect_snapshot(rect: Rect2) -> Array:
+	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+
+
 func _control_snapshot(button: Button) -> Dictionary:
-	var rect: Rect2 = button.get_global_rect()
-	return {"name": str(button.name), "text": button.text, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y], "disabled": button.disabled, "visible": button.is_visible_in_tree()}
+	return {"name": str(button.name), "text": button.text, "rect": _rect_snapshot(button.get_global_rect()), "disabled": button.disabled, "visible": button.is_visible_in_tree(), "accessibility_name": button.get("accessibility_name")}
 
 
 func snapshot() -> Dictionary:
@@ -567,9 +706,14 @@ func snapshot() -> Dictionary:
 		result.answers.append(item)
 	result["listen"] = _control_snapshot(listen_button)
 	result["action"] = _control_snapshot(action_button)
-	result["clear"] = _control_snapshot(clear_button)
 	result["transcript"] = _control_snapshot(transcript_button)
 	result["transcript_visible"] = _show_phrase or game.phase == "correct"
+	result["answer_drop"] = _rect_snapshot(Rect2(_answer_drop.position + global_position, _answer_drop.size))
+	result["bank_drop"] = _rect_snapshot(Rect2(_bank_drop.position + global_position, _bank_drop.size))
+	result["dragging"] = _dragging
+	result["drag_word"] = str(game.options[_drag_word].id) if _drag_word >= 0 and _drag_word < game.options.size() else ""
+	result["drop_kind"] = _drop_kind
+	result["drop_index"] = _drop_index
 	return result
 
 

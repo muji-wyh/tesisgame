@@ -1,9 +1,9 @@
 # Ava speech
 
-All 1,250 vocabulary pronunciations, 36 whole-phrase recordings, eight world
-greetings, and three Phrase Builder cues use the user's approved **Ava Sweet**
-profile. The original vocabulary and greetings replaced Jenny on October 3, 2026;
-Phrase Builder adds 39 recordings on October 7. The approved preview says
+All 1,250 vocabulary pronunciations, 36 whole-phrase recordings, and eight world
+greetings use the user's approved **Ava Sweet** profile. The original vocabulary
+and greetings replaced Jenny on October 3, 2026; Phrase Builder's recordings
+were added on October 7. The approved preview says
 "Hello, how are you?"; its voice settings apply throughout the game catalog.
 
 | Setting | Value |
@@ -59,8 +59,9 @@ Use `--missing` only to add absent recordings to an already migrated catalog.
 Use full generation when changing the voice profile or spoken text.
 
 The Phrase Builder batch was acquired with `node tools/generate-voices.cjs --missing`.
-Only its 39 absent files were published; all 1,258 existing recordings retained
-their documented bytes. The manifest contains 1,297 active recordings.
+All 1,258 existing recordings retained their documented bytes. Its 36 phrase
+recordings remain active; three initial guide narration clips were retired.
+The manifest contains 1,294 active recordings.
 
 The generator uses at most two concurrent synthesis requests, bounded retries,
 and a resumable cache keyed by the profile and spoken text in `build/voice-cache`.
@@ -76,8 +77,8 @@ synthesis scripts are recorded in the manifest; no audio editing is applied.
 ## Runtime coverage
 
 Match, Memory, Voice Pop, Phrase Builder, and the vocabulary library play bundled
-pronunciations through `GameAudio.say`. Phrase Builder also has its own spoken
-introduction, gentle retry guidance, completion cue, and 36 whole-phrase clips.
+pronunciations through `GameAudio.say`. Phrase Builder plays its 36 whole-phrase
+clips and individual word pronunciations without spoken guide narration.
 Eight world greetings use the same profile. Match no longer includes spoken
 wrong-answer feedback or a loss prompt. Gameplay
 never asks the operating system to choose a different speaking voice.

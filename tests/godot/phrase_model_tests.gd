@@ -24,6 +24,7 @@ func _run() -> void:
 	_test_catalog(vocabulary)
 	_test_rounds(vocabulary)
 	_test_editing_and_completion(vocabulary)
+	_test_placement(vocabulary)
 	_test_invalid_input(vocabulary)
 	print("Phrase model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -180,6 +181,98 @@ func _test_editing_and_completion(vocabulary: Array) -> void:
 	check(model.check_answer() == "correct" and model.completed == 3, "Rechecking a finished round does not repeat completion")
 	check(model.reset(vocabulary, "7-9", 48), "A new adventure starts after completion")
 	check(model.phase == "building" and model.completed == 0 and model.mistakes == 0 and model.question_index == 0, "Reset clears every previous round counter")
+
+
+func _test_placement(vocabulary: Array) -> void:
+	var model = PhraseModel.new()
+	var found: bool = false
+	for seed_value in range(128):
+		if model.reset(vocabulary, "10-plus", seed_value) and model.current_question().words.size() == 4:
+			found = true
+			break
+	check(found, "Placement tests use a real four-word phrase")
+	if not found:
+		return
+	var original_options: Array = model.options.duplicate(true)
+	var observed_answers: Array = []
+	var live_answer: Array = model.answer
+	model.changed.connect(func() -> void: observed_answers.append(live_answer.duplicate()))
+	_expect_ignored_place(model, -1, 0, observed_answers)
+	_expect_ignored_place(model, model.options.size(), 0, observed_answers)
+	_expect_ignored_place(model, 0, -1, observed_answers)
+	_expect_ignored_place(model, 0, 1, observed_answers)
+	_expect_place(model, 0, 0, [0], observed_answers)
+	_expect_place(model, 2, 1, [0, 2], observed_answers)
+	_expect_place(model, 1, 1, [0, 1, 2], observed_answers)
+	check(not model.select(1), "The append-only selection API still rejects a tile already in the answer")
+	check(model.check_answer() == "incomplete", "Placement does not submit an incomplete phrase automatically")
+	_expect_ignored_place(model, 1, 1, observed_answers)
+	_expect_ignored_place(model, 2, 3, observed_answers)
+	check(model.feedback == "incomplete", "Dropping a tile in its current position preserves existing feedback")
+	_expect_place(model, 0, 1, [1, 0, 2], observed_answers)
+	check(model.feedback.is_empty(), "A successful move clears incomplete feedback")
+	_expect_place(model, 2, 0, [2, 1, 0], observed_answers)
+	_expect_place(model, 2, 3, [1, 0, 2], observed_answers)
+	_expect_place(model, 3, 0, [3, 1, 0, 2], observed_answers)
+	_expect_place(model, 3, 1, [1, 3, 0, 2], observed_answers)
+	_expect_ignored_place(model, 4, 0, observed_answers)
+	_expect_ignored_place(model, 4, 4, observed_answers)
+	_expect_ignored_place(model, 1, 5, observed_answers)
+	_expect_ignored_place(model, 1, -1, observed_answers)
+	_expect_ignored_place(model, 2, 4, observed_answers)
+	_expect_place(model, 1, 3, [3, 0, 2, 1], observed_answers)
+	check(model.answer.size() == 4 and model.answer.count(1) == 1,
+		"A full answer can reorder an existing word without duplicating it or consuming another slot")
+	check(model.remove(1) and not model.answer.has(0), "Removing a placed tile returns that word to the bank")
+	_expect_place(model, 0, 1, [3, 0, 2, 1], observed_answers)
+	check(model.options == original_options and model.completed == 0 and model.mistakes == 0 and model.question_index == 0,
+		"Inserting and reordering preserve the bank, questions and progress counters")
+	check(model.clear(), "The reorder fixture can return every tile to the bank")
+	var target: Array = model.current_question().words
+	var rotated: Array = target.slice(1)
+	rotated.append(target[0])
+	for id in rotated:
+		check(model.place(_option_index(model, id), model.answer.size()), "A bank drop can append each word of a complete answer")
+	check(model.check_answer() == "wrong" and model.mistakes == 1, "A misplaced complete phrase remains editable after submission")
+	var first_option: int = _option_index(model, target[0])
+	_expect_ignored_place(model, first_option, model.answer.size(), observed_answers)
+	check(model.feedback == "wrong", "A no-op drop preserves wrong feedback and its mistake count")
+	var correct_order: Array = []
+	for id in target:
+		correct_order.append(_option_index(model, id))
+	_expect_place(model, first_option, 0, correct_order, observed_answers)
+	check(model.phase == "building" and model.feedback.is_empty() and model.mistakes == 1 and model.completed == 0,
+		"Reordering corrects the full answer without submitting it or adding a mistake")
+	check(model.check_answer() == "correct" and model.completed == 1, "The repaired word order still uses normal explicit checking")
+	_expect_ignored_place(model, first_option, 1, observed_answers)
+	_expect_ignored_place(model, _distractor_index(model), 0, observed_answers)
+	check(model.advance(), "A solved placed phrase advances normally")
+	for remaining in range(2):
+		_solve(model)
+		check(model.advance(), "Placement preserves the ordinary three-question flow")
+	_expect_ignored_place(model, 0, 0, observed_answers)
+	check(model.phase == "finished" and model.completed == 3 and model.mistakes == 1,
+		"Placement leaves the existing completion and unlimited-retry rules intact")
+	check(not model.reset([], "all", 2), "An unavailable new round still fails safely")
+	_expect_ignored_place(model, 0, 0, observed_answers)
+
+
+func _expect_place(model, option_index: int, answer_position: int, expected: Array, observed_answers: Array) -> void:
+	var notifications: int = observed_answers.size()
+	check(model.place(option_index, answer_position), "A valid placement changes the answer")
+	check(model.answer == expected, "Placement uses the requested final position: " + str(expected))
+	check(observed_answers.size() == notifications + 1 and observed_answers.back() == expected,
+		"A placement publishes its complete new order exactly once")
+	for index in model.answer:
+		check(model.answer.count(index) == 1, "A moved or inserted option occupies only one answer slot")
+
+
+func _expect_ignored_place(model, option_index: int, answer_position: int, observed_answers: Array) -> void:
+	var before: Dictionary = model.snapshot()
+	var notifications: int = observed_answers.size()
+	check(not model.place(option_index, answer_position), "Invalid, blocked or unchanged placements return false")
+	check(model.snapshot() == before and observed_answers.size() == notifications,
+		"Rejected placements preserve the answer, feedback, progress and notification count")
 
 
 func _test_invalid_input(vocabulary: Array) -> void:
