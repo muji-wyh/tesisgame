@@ -687,6 +687,7 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 		check(preview.drop_kind == drop_kind, method + " identifies the expected drop destination: " + drop_kind)
 	if drop_index >= 0:
 		check(preview.drop_index == drop_index, method + " previews the final word position")
+	var landing: Rect2 = _snapshot_rect(preview.drop_rect) if preview.drop_kind == "answer" else Rect2()
 	if method == "touch":
 		await _pointer_button(end, true, "emulated")
 		await _pointer_button(end, false, "emulated")
@@ -696,6 +697,13 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	await _settle()
 	check(not view.snapshot().dragging and view.snapshot().drag_word.is_empty(),
 		method + " release clears the drag preview")
+	if landing.has_area() and not canceled:
+		var placed: int = -1
+		for index in range(view.game.answer.size()):
+			if view.game.options[view.game.answer[index]].id == preview.drag_word:
+				placed = index
+		check(placed >= 0 and landing.is_equal_approx(view.answer_buttons[placed].get_global_rect()),
+			method + " landing highlight matches the word's final compact position and size")
 
 
 func _snapshot_rect(values: Array) -> Rect2:
@@ -903,6 +911,26 @@ func _check_layout(app) -> void:
 			check(bank_rect.grow(0.75).encloses(button.get_global_rect()),
 				"Keyboard or controller focus reveals the complete candidate " + button.text + " at " + str(dimensions))
 		check(view.navigation_controls().has(app._default_focus()), "The host default focus belongs to a playable phrase control")
+		_select_words(view, view.game.current_question().words)
+		await _settle()
+		for index in range(view.game.answer.size()):
+			var button: Button = view.answer_buttons[index]
+			check(bounds.encloses(button.get_global_rect()) and button.size.x * scale_factor >= 43.9,
+				"A complete four-word answer fits with usable targets at " + str(dimensions))
+			_check_button_text_fit(button, str(dimensions) + ", full answer")
+			var text_width: float = button.get_theme_font("font").get_string_size(button.text,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, button.get_theme_font_size("font_size")).x * scale_factor
+			check(button.size.x * scale_factor <= maxf(44, text_width + 32),
+				"Answer word " + button.text + " keeps content-sized padding at " + str(dimensions))
+			if index > 0:
+				var space: float = (button.position.x - view.answer_buttons[index - 1].get_rect().end.x) * scale_factor
+				check(space >= 5.9 and space <= 10.1,
+					"Selected answer words stay closely spaced at " + str(dimensions))
+		while not view.game.answer.is_empty():
+			view.answer_buttons[0].pressed.emit()
+		if dimensions == Vector2i(320, 320):
+			_check_long_answer_words(view, app.data.words)
+		root.gui_release_focus()
 	await _check_bank_scroll(app)
 	_solve(app._phrase)
 	await _settle()
@@ -914,6 +942,29 @@ func _check_layout(app) -> void:
 		if button.is_visible_in_tree():
 			_check_button_text_fit(button, "(320, 320), correct feedback")
 	await _check_compact_long_prompts(app._phrase)
+
+
+func _check_long_answer_words(view, vocabulary: Array) -> void:
+	var original: Array[Dictionary] = view.game.options.duplicate(true)
+	var words: Array[String] = ["hippopotamus", "parallelogram", "birthday", "balloon"]
+	# A wrong answer may include both long distractors and the longest target words.
+	for index in range(words.size()):
+		for word: Dictionary in vocabulary:
+			if word.text == words[index]:
+				view.game.options[index] = word.duplicate(true)
+				break
+	view._rebuild_buttons()
+	view._refresh()
+	for index in range(words.size()):
+		view.option_buttons[index].pressed.emit()
+	for button: Button in view.answer_buttons:
+		check(root.get_visible_rect().grow(0.75).encloses(button.get_global_rect()),
+			"Long distractors remain on screen together in a narrow answer")
+		_check_button_text_fit(button, "(320, 320), two long distractors")
+	view.game.clear()
+	view.game.options.assign(original)
+	view._rebuild_buttons()
+	view._refresh()
 
 
 func _check_bank_scroll(app) -> void:

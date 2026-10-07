@@ -522,7 +522,7 @@ func _update_drop(point: Vector2) -> void:
 	if _answer_drop.has_point(point) and (game.answer.has(_drag_word) or game.answer.size() < answer_buttons.size()):
 		_drop_kind = "answer"
 		_drop_index = game.answer.size()
-		for index in range(answer_buttons.size()):
+		for index in range(game.answer.size()):
 			var button: Button = answer_buttons[index]
 			if point.x < button.position.x + button.size.x:
 				_drop_index = mini(index, game.answer.size())
@@ -632,9 +632,57 @@ func _draw() -> void:
 		draw_line(Vector2(left, rail_y), Vector2(left + thumb, rail_y), accent.lightened(0.35), 3 / s, true)
 	if not _dragging or _drop_kind.is_empty():
 		return
-	var rect: Rect2 = _bank_drop if _drop_kind == "bank" else Rect2(answer_buttons[mini(_drop_index, answer_buttons.size() - 1)].position, answer_buttons[mini(_drop_index, answer_buttons.size() - 1)].size)
+	var rect: Rect2 = _drop_rect()
 	var surface := Style.box(Color(accent, 0.08), accent, ceili(14 / s), ceili(2 / s))
 	surface.draw(get_canvas_item(), rect.grow(3 / s))
+
+
+func _answer_rects(order: Array[int]) -> Array[Rect2]:
+	var s: float = Style.ui_scale(self)
+	var gap: float = (6 if size.y * s < 360 or _answer_drop.size.x * s < 400 else 10) / s
+	var widths: Array[float] = []
+	var minimums: Array[float] = []
+	var natural_total: float = 0.0
+	var minimum_total: float = 0.0
+	for index in range(answer_buttons.size()):
+		var text: String = str(game.options[order[index]].text) if index < order.size() else ""
+		var natural: float = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s)
+		var minimum: float = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12 / s)).x + 14 / s)
+		widths.append(natural)
+		minimums.append(minimum)
+		natural_total += natural
+		minimum_total += minimum
+	var available: float = _answer_drop.size.x - gap * maxi(0, widths.size() - 1)
+	# Only compress when necessary; spare line space never stretches the words.
+	if natural_total > available:
+		if minimum_total > available:
+			minimum_total = 0.0
+			for index in range(minimums.size()):
+				var text: String = str(game.options[order[index]].text) if index < order.size() else ""
+				minimums[index] = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(10 / s)).x + 8 / s)
+				minimum_total += minimums[index]
+		var fit: float = clampf((available - minimum_total) / maxf(1, natural_total - minimum_total), 0, 1)
+		for index in range(widths.size()):
+			widths[index] = lerpf(minimums[index], widths[index], fit)
+	var result: Array[Rect2] = []
+	var cursor: float = _answer_drop.position.x
+	for width in widths:
+		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_drop.size.y - 4 / s))
+		cursor += width + gap
+	return result
+
+
+func _drop_rect() -> Rect2:
+	if _drop_kind == "bank":
+		return _bank_drop
+	if _drop_kind != "answer":
+		return Rect2()
+	# Match the model's final index after removing an already selected word.
+	var order: Array[int] = game.answer.duplicate()
+	order.erase(_drag_word)
+	var index: int = mini(_drop_index, order.size())
+	order.insert(index, _drag_word)
+	return _answer_rects(order)[index]
 
 
 func _refresh() -> void:
@@ -758,9 +806,14 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 		return
 	var fill: Color = Color("#e1f0de") if correct else Color("#f9e0d7") if wrong else TILE_COLORS[posmod(color_index, TILE_COLORS.size())]
 	var edge: Color = Style.GOOD if correct else Style.WRONG if wrong else fill.darkened(0.18)
+	var dense_word: bool = button.icon == null and Style.HEADING_FONT.get_string_size(button.text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12 / s)).x + 14 / s > tile_width
 	for state in ["normal", "hover", "pressed", "disabled"]:
 		var surface := Style.box(fill.darkened(0.04) if state == "pressed" else fill, edge, ceili(14 / s), maxi(1, roundi(1 / s)))
 		surface.set_content_margin_all(6 / s)
+		if dense_word:
+			surface.content_margin_left = 4 / s
+			surface.content_margin_right = 4 / s
 		surface.border_width_bottom = ceili((1 if state == "pressed" else 3) / s)
 		if state == "hover":
 			surface.border_color = edge.darkened(0.15)
@@ -775,11 +828,11 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_constant_override("icon_max_width", ceili(icon_width))
 	button.add_theme_constant_override("h_separation", ceili(8 / s))
-	var text_width: float = tile_width - 14 / s
+	var text_width: float = tile_width - (8 if dense_word else 14) / s
 	if button.icon != null:
 		text_width -= icon_width + 8 / s
 	var font_size: int = ceili(18 / s)
-	while font_size > ceili(12 / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > text_width:
+	while font_size > ceili((10 if dense_word else 12) / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > text_width:
 		font_size -= 1
 	button.add_theme_font_size_override("font_size", font_size)
 
@@ -823,13 +876,14 @@ func _layout() -> void:
 	var audio_h: float = minf(80, hero_h)
 	_place(listen_button, Rect2(audio_x, hero_y + (hero_h - audio_h) * 0.5, inner_w - pip_side - 12, audio_h))
 	var answer_y: float = hero_y + hero_h + gap
-	var slot_gap: float = 6 if compact else 10
-	var answer_w: float = (inner_w - slot_gap * maxi(0, answer_buttons.size() - 1)) / maxi(1, answer_buttons.size())
+	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
+	var answer_rects: Array[Rect2] = _answer_rects(game.answer)
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
-		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s, game.answer[index] if index < game.answer.size() else 0, answer_w / s)
-		_place(button, Rect2(x + index * (answer_w + slot_gap), answer_y, answer_w, tile_h))
-	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
+		var rect: Rect2 = answer_rects[index]
+		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s, game.answer[index] if index < game.answer.size() else 0, rect.size.x)
+		button.position = rect.position
+		button.size = rect.size
 	var bank_y: float = answer_y + answer_h + gap
 	_place(_bank_clip, Rect2(x, bank_y, inner_w, tile_h))
 	var picture_w: float = 28 if compact else 40
@@ -923,6 +977,8 @@ func snapshot() -> Dictionary:
 	result["drag_word"] = str(game.options[_drag_word].id) if _drag_word >= 0 and _drag_word < game.options.size() else ""
 	result["drop_kind"] = _drop_kind
 	result["drop_index"] = _drop_index
+	var landing: Rect2 = _drop_rect()
+	result["drop_rect"] = _rect_snapshot(Rect2(landing.position + global_position, landing.size)) if landing.has_area() else []
 	return result
 
 

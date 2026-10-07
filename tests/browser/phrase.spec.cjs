@@ -147,8 +147,8 @@ async function pieceCount(page) {
   return [...saved.matchAll(/"[a-z]+-\d+"\s*:\s*(\d+)/g)].reduce((total, match) => total + Number(match[1]), 0);
 }
 
-async function capture(page, info, name, { afterResize = false } = {}) {
-  await page.mouse.move(0, 0);
+async function capture(page, info, name, { afterResize = false, keepPointer = false } = {}) {
+  if (!keepPointer) await page.mouse.move(0, 0);
   await rendered(page);
   expectPromptFullyVisible(await phraseState(page));
   const pagePng = await page.screenshot({ path: info.outputPath(`${name}.png`), scale: 'css' });
@@ -326,7 +326,7 @@ async function liftBankCard(page, pointer, wordId) {
   await pointer.move({ x: start.x, y: start.y - 24 });
 }
 
-async function dragCard(page, pointer, source, destination, { dropKind, dropIndex, cancel = false } = {}) {
+async function dragCard(page, pointer, source, destination, { dropKind, dropIndex, cancel = false, captureInfo } = {}) {
   const before = progress(await phraseState(page));
   if (source.word_id) source = await revealOption(page, source.word_id);
   await pointer.down(center(source.rect));
@@ -342,10 +342,24 @@ async function dragCard(page, pointer, source, destination, { dropKind, dropInde
   expect(progress(state), 'A drag preview cannot commit or remove a word before release').toEqual(before);
   if (dropKind !== undefined) expect(state.drop_kind).toBe(dropKind);
   if (dropIndex !== undefined) expect(state.drop_index).toBe(dropIndex);
+  const landing = state.drop_kind === 'answer' && !cancel
+    ? { rect: state.drop_rect, wordId: state.drag_word } : null;
+  if (landing) expect(landing.rect, 'A valid answer drop exposes the word-sized landing target').toHaveLength(4);
+  if (captureInfo) await capture(page, captureInfo, 'phrase-word-sized-drop-preview', { keepPointer: true });
   await pointer.up({ cancel });
   await expect.poll(async () => (await phraseState(page)).dragging).toBe(false);
   state = await phraseState(page);
   expect(state.drag_word, 'Releasing clears the dragged card preview').toBe('');
+  if (landing) {
+    const option = state.options.find(item => item.word_id === landing.wordId);
+    const placed = state.answers[state.answer.indexOf(option.index)];
+    expect(placed, 'The previewed word occupies the released answer position').toBeTruthy();
+    for (const [index, dimension] of ['left', 'top', 'width', 'height'].entries()) {
+      expect(Math.abs(placed.rect[index] - landing.rect[index]), `The landing preview matches the placed card's ${dimension}`)
+        .toBeLessThanOrEqual(1);
+    }
+  }
+  if (captureInfo) await capture(page, captureInfo, 'phrase-word-sized-answer');
   return state;
 }
 
@@ -593,11 +607,19 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
   expectFirstCandidateRow(state);
   const before = progress(state);
   try {
-    state = await dragCard(page, pointer, state.options[0], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
+    state = await dragCard(page, pointer, state.options[0], center(state.answers[0].rect), {
+      dropKind: 'answer', dropIndex: 0, captureInfo: info.project.name === 'desktop-chromium' && input === 'mouse' ? info : undefined
+    });
     expect(state.answer, 'A released bank card appears in the answer exactly once').toEqual([0]);
     expect(state.options[0].visible, 'The used bank card leaves its original position').toBe(false);
+    const bounds = await metrics(page);
+    expect(state.answers[0].rect[2] * bounds.scale, 'The text-only answer remains smaller than its illustrated candidate')
+      .toBeLessThanOrEqual(state.options[0].rect[2] * bounds.scale - 28);
     state = await dragCard(page, pointer, state.options[1], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
     expect(state.answer, 'Dropping on an occupied slot inserts before its word').toEqual([1, 0]);
+    const answerGap = (state.answers[1].rect[0] - state.answers[0].rect[0] - state.answers[0].rect[2]) * bounds.scale;
+    expect(answerGap, 'Placed words retain a small visible gap').toBeGreaterThanOrEqual(4);
+    expect(answerGap, 'Placed words pack together without spreading across the answer line').toBeLessThanOrEqual(12);
     state = await dragCard(page, pointer, state.answers[1], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
     expect(state.answer, 'A selected card can move to an earlier position').toEqual([0, 1]);
     const [x, y, width, height] = state.answer_drop;
