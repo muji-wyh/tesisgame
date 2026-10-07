@@ -252,6 +252,114 @@ func _test_bonus_layout(dimensions: Vector2i, field: Vector2) -> void:
 	await settle()
 
 
+func _reward_rect(values: Array) -> Rect2:
+	return Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
+
+
+func _expected_reward_title(earned: int) -> String:
+	if earned == 0:
+		return "Your next treasure"
+	if earned == 3:
+		return "All 3 chests earned"
+	return "%d chest%s earned" % [earned, "" if earned == 1 else "s"]
+
+
+func _test_result_reward_ladder(dimensions: Vector2i, field: Vector2) -> void:
+	root.size = dimensions
+	var view := PopView.new()
+	root.add_child(view)
+	var scale: float = PopView.Style.ui_scale(view)
+	view.size = field / scale
+	view.configure(WORDS, true, 8)
+	view.set_listening(true, true, "Listening.")
+	view.set_process(false)
+	view._advance_game(view.game.remaining + 1.0)
+	await settle()
+	var actual_round: Dictionary = view.game.summary()
+	var awards: Array[int] = []
+	view.chest_earned.connect(func(count: int) -> void: awards.append(count))
+	for score in [0, 90, 100, 150, 200, 299, 300, 480]:
+		var earned: int = mini(3, floori(score / 100.0))
+		var summary: Dictionary = actual_round.duplicate(true)
+		summary.score = score
+		summary.chest_count = earned
+		view._build_results(summary)
+		var leaderboard := Control.new()
+		leaderboard.name = "RewardLayoutLeaderboard"
+		leaderboard.custom_minimum_size.y = 180.0 / scale
+		view.attach_leaderboard(leaderboard)
+		view._results.scroll_vertical = 0
+		await settle()
+		var context: String = "%s, score %d" % [dimensions, score]
+		var snapshot: Dictionary = view.snapshot()
+		var rewards: Dictionary = snapshot.get("results_rewards", {})
+		check(not rewards.is_empty(), "Finished results publish the reward ladder: " + context)
+		if rewards.is_empty():
+			continue
+		check(rewards.visible and rewards.score == score and rewards.earned == earned
+			and rewards.title == _expected_reward_title(earned),
+			"The reward summary distinguishes earned chests from the next goal: " + context)
+		check(rewards.rows.size() == 3, "Results always show exactly three cumulative score milestones: " + context)
+		var rewards_rect: Rect2 = _reward_rect(rewards.rect)
+		var viewport: Rect2 = view._results.get_global_rect()
+		check(rewards_rect.size.x > 0 and rewards_rect.size.y > 0
+			and rewards_rect.position.x >= viewport.position.x - 0.5
+			and rewards_rect.end.x <= viewport.end.x + 0.5,
+			"The reward ladder has no horizontal overflow: " + context)
+		check(view._result_body.get_global_rect().grow(0.5).encloses(rewards_rect),
+			"The full reward ladder belongs to the scrollable result content: " + context)
+		var previous_row := Rect2()
+		for index in range(rewards.rows.size()):
+			var row: Dictionary = rewards.rows[index]
+			var threshold: int = (index + 1) * 100
+			var value: int = mini(score, threshold)
+			check(row.threshold == threshold and row.value == value
+				and is_equal_approx(float(row.progress), float(value) / threshold)
+				and bool(row.earned) == (score >= threshold),
+				"Each milestone uses total score, caps its numerator, and earns only at its threshold: " + context)
+			check(row.label == "%d points" % threshold and row.progress_text == "%d / %d" % [value, threshold],
+				"Every progress bar states the same earned points and goal that it displays: " + context)
+			var row_rect: Rect2 = _reward_rect(row.rect)
+			var bar_rect: Rect2 = _reward_rect(row.bar_rect)
+			var chest_rect: Rect2 = _reward_rect(row.chest_rect)
+			check(rewards_rect.grow(0.5).encloses(row_rect) and row_rect.size.y > 0,
+				"Every milestone row fits inside the reward panel: " + context)
+			check(bar_rect.size.x > 0 and bar_rect.size.y > 0 and chest_rect.size.x > 0 and chest_rect.size.y > 0
+				and row_rect.grow(0.5).encloses(bar_rect) and row_rect.grow(0.5).encloses(chest_rect)
+				and not bar_rect.grow(-0.25).intersects(chest_rect.grow(-0.25)),
+				"The chest thumbnail and progress bar fit their row without covering each other: " + context)
+			if index > 0:
+				check(previous_row.end.y <= row_rect.position.y + 0.5,
+					"Adjacent score milestones do not overlap: " + context)
+			previous_row = row_rect
+		for button: Button in [view.chests_button, view.replay_button]:
+			check(viewport.grow(0.5).encloses(button.get_global_rect()),
+				"Both result actions remain immediately visible before scrolling: " + context)
+		check(view.chests_button.disabled == (earned == 0)
+			and view.chests_button.text == "Open chests (%d)" % earned,
+			"Chest navigation agrees with the earned count in the ladder: " + context)
+		check(not rewards_rect.grow(-0.25).intersects(view._result_actions.get_global_rect().grow(-0.25))
+			and leaderboard.get_global_rect().position.y >= maxf(rewards_rect.end.y, view._result_actions.get_global_rect().end.y) - 0.5,
+			"The leaderboard follows the separate rewards and actions: " + context)
+		if field.y > 380:
+			check(viewport.grow(0.5).encloses(rewards_rect),
+				"Portrait and desktop results reveal every chest milestone without initial scrolling: " + context)
+		else:
+			view._results.scroll_vertical = maxi(0, roundi(rewards_rect.position.y - viewport.position.y))
+			await settle()
+			var scrolled: Dictionary = view.snapshot().results_rewards
+			for row: Dictionary in scrolled.rows:
+				check(viewport.grow(0.5).encloses(_reward_rect(row.rect)),
+					"Short landscape can scroll every complete chest milestone into view: " + context)
+		check(view.game.summary() == actual_round and awards.is_empty(),
+			"Rendering result fixtures never scores or awards another chest: " + context)
+	view.hide()
+	await settle()
+	check(not view.snapshot().results_rewards.visible, "A hidden result never reports a visible chest ladder")
+	view.queue_free()
+	await settle()
+
+
 func _run() -> void:
 	_test_model()
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
@@ -266,5 +374,12 @@ func _run() -> void:
 		[Vector2i(1366, 768), Vector2(1342, 680)],
 	]:
 		await _test_bonus_layout(layout[0], layout[1])
+	for layout in [
+		[Vector2i(320, 568), Vector2(296, 428)],
+		[Vector2i(390, 844), Vector2(366, 704)],
+		[Vector2i(844, 390), Vector2(820, 302)],
+		[Vector2i(1366, 768), Vector2(1342, 680)],
+	]:
+		await _test_result_reward_ladder(layout[0], layout[1])
 	print("Voice Pop rewards: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

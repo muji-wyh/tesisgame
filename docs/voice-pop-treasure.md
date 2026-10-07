@@ -6,6 +6,23 @@ chest each, capped at three. The HUD shows points, the chest total, and the next
 milestone. Each award produces a gold badge, rays, and particles. Reduced motion
 keeps a readable stationary award message.
 
+The result screen shows the round's points and three gold progress bars for
+100, 200, and 300 points. Each row shows cumulative points toward its goal
+(150 points gives 100/100, 150/200, and 150/300), an earned or remaining label,
+and a chest icon. The reward summary does not create or consume rewards, and
+scores above 300 keep all three bars full. Zero-score results retain the goals
+without claiming a chest. The compact layout keeps the actions visible on small
+phones; short landscape screens put them before the scrollable reward rows.
+
+The icons reuse the integrated Royal closed pose from **Modern 2D Animated
+Chests Pack FREE Demo 1.0.2**, by **Bobardo**, Unity Asset Store product **360538**,
+under the **Standard Unity Asset Store EULA**. The original source mapping and
+hash are in `assets/chests/SOURCE.txt` and `assets/chests/manifest.json`; the
+acquired artwork is already a production asset. A cropped atlas removes its
+transparent margins without changing the source image. These static icons
+represent earned opportunities, not the randomly selected reward-room designs
+or their opened state; the existing rig still handles actual chest animation.
+
 The result screen offers **Open chests (N)** alongside Play again. The treasure
 page keeps every earned chest in one scrollable list, with distinct styles
 selected once for the round. Portrait phones show one large chest per row;

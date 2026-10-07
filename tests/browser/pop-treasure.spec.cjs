@@ -57,8 +57,56 @@ async function popState(page) {
     phase: element.dataset.phase, score: Number(element.dataset.score), hits: Number(element.dataset.hits),
     chestCount: Number(element.dataset.chestCount), chestNextScore: Number(element.dataset.chestNextScore),
     chestProgress: Number(element.dataset.chestProgress), chestFx: JSON.parse(element.dataset.chestFx || '{}'),
+    resultsRewards: JSON.parse(element.dataset.resultsRewards || '{}'),
     hud: JSON.parse(element.dataset.hud || '{}'), controls: JSON.parse(element.dataset.controls || '[]')
   }));
+}
+
+function expectEarnedResultLadder(current, bounds) {
+  const rewards = current.resultsRewards;
+  expect(current.phase).toBe('finished');
+  expect(current.score).toBeGreaterThanOrEqual(300);
+  expect(rewards).toMatchObject({ visible: true, score: current.score, earned: current.chestCount,
+    title: 'All 3 chests earned' });
+  expect(rewards.earned).toBe(3);
+  expect(rewards.rows.map(row => row.threshold)).toEqual([100, 200, 300]);
+  const expectRect = (rect, parent, message) => {
+    expect(rect, message).toHaveLength(4);
+    expect(rect.every(Number.isFinite), message).toBe(true);
+    expect(rect[2], message).toBeGreaterThan(0);
+    expect(rect[3], message).toBeGreaterThan(0);
+    if (!parent) return;
+    expect(rect[0], message).toBeGreaterThanOrEqual(parent[0] - 1);
+    expect(rect[1], message).toBeGreaterThanOrEqual(parent[1] - 1);
+    expect(rect[0] + rect[2], message).toBeLessThanOrEqual(parent[0] + parent[2] + 1);
+    expect(rect[1] + rect[3], message).toBeLessThanOrEqual(parent[1] + parent[3] + 1);
+  };
+  const separate = (a, b) => a[0] + a[2] <= b[0] + 1 || b[0] + b[2] <= a[0] + 1 ||
+    a[1] + a[3] <= b[1] + 1 || b[1] + b[3] <= a[1] + 1;
+  expectRect(rewards.rect, null, 'The completed reward ladder has finite, nonempty bounds');
+  expect(rewards.rect[0], 'Reward rows fit the canvas horizontally').toBeGreaterThanOrEqual(-1);
+  expect(rewards.rect[0] + rewards.rect[2], 'Reward rows fit the canvas horizontally').toBeLessThanOrEqual(bounds.width + 1);
+  for (const [index, row] of rewards.rows.entries()) {
+    expect(row, 'A score above 300 fills each cumulative goal without overflow').toMatchObject({
+      value: row.threshold, progress: 1, earned: true,
+      label: `${row.threshold} points`, progress_text: `${row.threshold} / ${row.threshold}`
+    });
+    expectRect(row.rect, rewards.rect, 'Each earned threshold stays inside the ladder');
+    expectRect(row.bar_rect, row.rect, 'Each full bar stays inside its row');
+    expectRect(row.chest_rect, row.rect, 'Each earned chest stays inside its row');
+    expect(separate(row.bar_rect, row.chest_rect), 'Full bars do not overlap chest artwork').toBe(true);
+    if (index) expect(rewards.rows[index - 1].rect[1] + rewards.rows[index - 1].rect[3],
+      'Earned rows remain in order without overlap').toBeLessThanOrEqual(row.rect[1] + 1);
+  }
+  // Short screens may scroll some rows below the fold; the actions retain their
+  // own space and must be visible before the existing open-chests gesture.
+  const actions = current.controls.filter(control => /^(OpenChests|Replay)$/.test(control.name));
+  expect(actions.map(action => action.name).sort()).toEqual(['OpenChests', 'Replay']);
+  for (const action of actions) {
+    const rect = [action.x, action.y, action.width, action.height];
+    expectRect(rect, [0, 0, bounds.width, bounds.height], 'Earned-chest result actions are immediately reachable');
+    expect(separate(rewards.rect, rect), 'Result actions do not overlap the reward ladder').toBe(true);
+  }
 }
 
 async function storedRewards(page) {
@@ -115,11 +163,15 @@ async function tapPopAction(page, name) {
 }
 
 async function expectChestRoom(page, opened, expectedTypes) {
+  // Windows WebKit can block while warming the three live chest models.
+  // Keep the saved-batch checks intact while allowing that first render to finish.
   await expect.poll(async () => {
     const current = await roomState(page);
     return { visible: current.visible, count: current.chest_count,
       opened: current.opened_count, paused: current.paused, failed: current.save_failed };
-  }, { intervals: [50, 100, 200] }).toEqual({ visible: true, count: 3, opened, paused: false, failed: false });
+  }, { timeout: 45000, intervals: [50, 100, 200],
+    message: 'The rendered treasure room exposes the complete saved chest batch' })
+    .toEqual({ visible: true, count: 3, opened, paused: false, failed: false });
   await rendered(page);
   const current = await roomState(page), bounds = await metrics(page), field = contentBounds(bounds);
   await test.info().attach('treasure-room-layout.json', {
@@ -212,7 +264,8 @@ async function setHidden(page, hidden) {
 }
 
 test('earned Voice Pop chests stay distinct, cancel safely, and survive return and reload', async ({ page }, info) => {
-  test.setTimeout(240000);
+  // Include the real round, live-model warmup, three openings, and two reloads.
+  test.setTimeout(360000);
   const reduced = info.project.name.includes('iphone');
   await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
   await installRecognition(page);
@@ -244,7 +297,12 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   for (const milestone of milestones) expect(milestone.score).toBeGreaterThanOrEqual(milestone.count * 100);
   await info.attach('earned-chest-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 65000 });
-  expect((await popState(page)).chestCount).toBe(3);
+  await rendered(page);
+  const finishedRound = await popState(page);
+  expect(finishedRound.chestCount).toBe(3);
+  expectEarnedResultLadder(finishedRound, await metrics(page));
+  await info.attach('earned-chest-result-ladder.json', { body: JSON.stringify(finishedRound.resultsRewards, null, 2), contentType: 'application/json' });
+  await page.screenshot({ path: info.outputPath('earned-chest-results.png') });
   await tapPopAction(page, 'OpenChests');
   let room = await expectChestRoom(page, 0);
   const types = room.chests.map(chest => chest.type), round = room.round_id;
@@ -277,6 +335,10 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   expect(partiallyOpened).not.toBe(unopened);
   await page.locator('#canvas').press('Escape');
   await expect.poll(async () => (await roomState(page)).visible).toBe(false);
+  await rendered(page);
+  const returnedResult = await popState(page);
+  expect(returnedResult.score, 'Returning from a partially opened batch preserves the scored round').toBe(finishedRound.score);
+  expectEarnedResultLadder(returnedResult, await metrics(page));
   await tapPopAction(page, 'OpenChests');
   room = await expectChestRoom(page, 1, types);
   expect(room.round_id).toBe(round);

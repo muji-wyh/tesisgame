@@ -18,6 +18,7 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
+const ResultRewards = preload("res://scripts/voice_pop_result_rewards.gd")
 const NAVY := Color("#102a2a")
 const SURFACE := Color("#203f3e")
 const CYAN := Color("#a7e4cf")
@@ -142,6 +143,7 @@ var _result_hit_total: int = 0
 var _result_hit_age: float = RESULT_HIT_DURATION
 var _result_idle_time: float = 0.0
 var _result_actions: HBoxContainer
+var _result_rewards: ResultRewards
 var _review_grids: Array[GridContainer] = []
 var _review_buttons: Array[Button] = []
 
@@ -650,10 +652,8 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 			continue
 		var visible_text: String = str(control.text) if control is Button else ""
 		if visible_text.is_empty() and str(control.name).begins_with("Hear_"):
-			var words := PackedStringArray()
-			for label in control.find_children("*", "Label", true, false):
-				words.append(label.text)
-			visible_text = " ".join(words)
+			# Hover tooltips create descendant labels; they are not part of the word.
+			visible_text = str(control.get_meta("pop_word_text", ""))
 		actions.append({"name": str(control.name), "text": visible_text,
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
@@ -670,6 +670,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
 		"transcript": _transcript, "transcript_final": _transcript_final,
 		"results_hits": _result_hits_snapshot(),
+		"results_rewards": _result_rewards.snapshot() if is_instance_valid(_result_rewards) and not _stopped and game.phase == "finished" and _results.visible else {},
 		"results_scroll": _results.scroll_vertical,
 		"results_scroll_max": maxf(0.0, _results.get_v_scroll_bar().max_value - _results.get_v_scroll_bar().page),
 		"results_scrollbar_visible": _results.get_v_scroll_bar().is_visible_in_tree()}
@@ -1169,10 +1170,15 @@ func _layout() -> void:
 	_results.size = Vector2(result_width, maxf(0.0, size.y - edge * 2.0))
 	_result_body.add_theme_constant_override("separation", ceili(8.0 / scale))
 	if is_instance_valid(_result_hero):
-		var compact: bool = size.y * scale < 350.0
-		_result_hero.custom_minimum_size.y = (104.0 if compact else 156.0) / scale
+		var compact: bool = size.y * scale < 520.0
+		_result_hero.custom_minimum_size.y = (96.0 if compact else 156.0) / scale
 		_layout_result_hits()
+	if is_instance_valid(_result_rewards):
+		_result_rewards.set_compact(size.y * scale < 520.0)
 	if is_instance_valid(_result_actions):
+		# On short landscape screens keep the actions above the scrolling ladder.
+		_result_body.move_child(_result_actions, 1 if size.y * scale < 380.0 else 2)
+		_result_body.move_child(_result_rewards, 2 if size.y * scale < 380.0 else 1)
 		_result_actions.add_theme_constant_override("separation", ceili(8.0 / scale))
 		_style_action(chests_button, not chests_button.disabled)
 		_style_action(replay_button, chests_button.disabled)
@@ -1579,6 +1585,9 @@ func _build_results(summary: Dictionary) -> void:
 	_result_hits_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_result_hero.add_child(_result_hits_caption)
 	_result_hero.resized.connect(_layout_result_hits)
+	_result_rewards = ResultRewards.new()
+	_result_body.add_child(_result_rewards)
+	_result_rewards.configure(int(summary.get("score", 0)), int(summary.get("chest_count", 0)))
 	_result_actions = HBoxContainer.new()
 	_result_body.add_child(_result_actions)
 	var earned_chests: int = clampi(int(summary.get("chest_count", 0)), 0, PopModel.MAX_CHESTS)
@@ -1613,7 +1622,7 @@ func attach_leaderboard(panel: Control) -> void:
 		panel.queue_free()
 		return
 	_result_body.add_child(panel)
-	_result_body.move_child(panel, 2)
+	_result_body.move_child(panel, maxi(_result_actions.get_index(), _result_rewards.get_index()) + 1)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.minimum_size_changed.connect(_layout)
 	_layout()
@@ -1659,9 +1668,9 @@ func _layout_result_hits() -> void:
 	if not is_instance_valid(_result_hero) or not is_instance_valid(_result_hits):
 		return
 	var scale: float = Style.ui_scale(self)
-	var compact: bool = size.y * scale < 350.0
-	var number_height: float = (68.0 if compact else 96.0) / scale
-	var top: float = (6.0 if compact else 18.0) / scale
+	var compact: bool = size.y * scale < 520.0
+	var number_height: float = (62.0 if compact else 96.0) / scale
+	var top: float = (2.0 if compact else 18.0) / scale
 	var score_left: float = 0.0
 	var score_width: float = _result_hero.size.x
 	if not _round_player.is_empty():
@@ -1771,6 +1780,7 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 		button.custom_minimum_size = Vector2(0, 66.0 / scale)
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.tooltip_text = "Hear " + str(word.get("text", ""))
+		button.set_meta("pop_word_text", str(word.get("text", "")))
 		for state in ["normal", "hover", "pressed"]:
 			button.add_theme_stylebox_override(state, Style.box(Color("#fffdf7") if state == "normal" else Color("#e8f1e5"), color.lightened(0.3), ceili(12.0 / scale), 1))
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, color, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))

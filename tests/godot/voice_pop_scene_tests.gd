@@ -223,6 +223,36 @@ func check_result_contents(view, summary: Dictionary) -> void:
 			"Missed words retain their practice group caption")
 
 
+func check_result_word_snapshot_ignores_tooltip(view, word: Dictionary) -> void:
+	var button: Button = view._review_buttons[0]
+	var before: Dictionary = view.game.summary()
+	var original_scroll: int = view._results.scroll_vertical
+	var original_size: Vector2 = button.size
+	var tooltip := Control.new()
+	tooltip.name = "ReviewTooltipFixture"
+	tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tooltip.hide()
+	var tooltip_label := Label.new()
+	tooltip_label.text = "Hear " + str(word.text)
+	tooltip.add_child(tooltip_label)
+	button.add_child(tooltip)
+	view._ensure_result_control(button)
+	await settle()
+	check(button.find_children("*", "Label", true, false).size() >= 2,
+		"The tooltip fixture adds a second descendant label to a real review card")
+	check(view._results.get_global_rect().grow(0.5).encloses(button.get_global_rect()),
+		"The tooltip regression inspects a review card that is actually visible after scrolling")
+	var matching_controls: Array = view.snapshot().controls.filter(
+		func(control: Dictionary) -> bool: return control.name == str(button.name))
+	check(matching_controls.size() == 1 and matching_controls[0].text == str(word.text),
+		"A review snapshot reports the vocabulary word once without appending its hover tooltip")
+	tooltip.free()
+	view._results.scroll_vertical = original_scroll
+	await settle()
+	check(button.size.is_equal_approx(original_size) and view.game.summary() == before,
+		"Inspecting tooltip descendants preserves the real card layout and earned round")
+
+
 func check_result_player(view, profile: Dictionary, dimensions: Vector2i) -> void:
 	var snapshot: Dictionary = view.snapshot().results_hits
 	var player: Dictionary = snapshot.player
@@ -971,6 +1001,7 @@ func _run() -> void:
 		check_result_actions(view, dimensions, "Completed round")
 		check_result_feedback(view, int(result.hits))
 		check_result_player(view, app.leaderboard_state.profiles[0], dimensions)
+		await check_result_word_snapshot_ignores_tooltip(view, result.hit_words[0])
 		check(not app.audio.voice.playing,
 			"Finishing Voice Pop does not request or play a removed Pip report")
 		var heard: Array[Dictionary] = []

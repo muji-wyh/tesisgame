@@ -2422,6 +2422,21 @@
             total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true,
             player, rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
           };
+          const rewardState = state.results_rewards;
+          const resultsRewards = phase === 'finished' && rewardState && rewardState.visible === true ? {
+            visible: true, score: Math.floor(number(rewardState.score)),
+            earned: Math.min(3, Math.floor(number(rewardState.earned))),
+            title: typeof rewardState.title === 'string' ? rewardState.title.slice(0, 80) : '',
+            rect: resultRect(rewardState.rect),
+            rows: (Array.isArray(rewardState.rows) ? rewardState.rows : []).slice(0, 3)
+              .filter(row => row && typeof row === 'object').map(row => ({
+                threshold: Math.floor(number(row.threshold)), value: Math.floor(number(row.value)),
+                progress: Math.min(1, number(row.progress)), earned: row.earned === true,
+                label: typeof row.label === 'string' ? row.label.slice(0, 80) : '',
+                progress_text: typeof row.progress_text === 'string' ? row.progress_text.slice(0, 40) : '',
+                rect: resultRect(row.rect), bar_rect: resultRect(row.bar_rect), chest_rect: resultRect(row.chest_rect)
+              }))
+          } : {};
           for (const [name, value] of Object.entries({ phase, 'round-id': popRoundId, remaining, hits, score, combo, 'best-combo': bestCombo,
             'chest-count': Math.min(3, Math.floor(number(state.chest_count))),
             'chest-next-score': number(state.chest_next_score), 'chest-progress': Math.min(1, number(state.chest_progress)),
@@ -2433,6 +2448,7 @@
             'recognition-feedback': typeof state.recognition_feedback === 'string' ? state.recognition_feedback : '',
             'recognition-message': typeof state.recognition_message === 'string' ? state.recognition_message : '',
             'results-hits': JSON.stringify(resultsHits),
+            'results-rewards': JSON.stringify(resultsRewards),
             'results-scroll': number(state.results_scroll), 'results-scroll-max': number(state.results_scroll_max),
             'results-scrollbar-visible': state.results_scrollbar_visible === true })) {
             // Geometry arrives frequently; unchanged fields must not generate
@@ -2445,7 +2461,7 @@
           }
           const message = typeof state.message === 'string' ? state.message : '';
           const readable = phase === 'idle' ? '' : phase === 'finished'
-            ? `${message ? message + ' ' : ''}Voice Pop. ${player.name ? player.name + '. ' : ''}${hits} hits.`
+            ? `${message ? message + ' ' : ''}Voice Pop. ${player.name ? player.name + '. ' : ''}${hits} hits. ${score} points.${resultsRewards.title ? ' ' + resultsRewards.title + '.' : ''}`
             : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${bestCombo}.` +
             (targets.length ? ' Words: ' + targets.map(target => target.text).join(', ') + '.' : '');
           if (popStatusText.textContent !== readable) popStatusText.textContent = readable;

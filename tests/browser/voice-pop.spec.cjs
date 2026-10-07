@@ -205,10 +205,11 @@ async function state(page) {
     sampledAt: performance.now(),
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining),
     combo: Number(element.dataset.combo), bonusTime: Number(element.dataset.bonusTime),
-    hits: Number(element.dataset.hits), score: Number(element.dataset.score),
+    hits: Number(element.dataset.hits), score: Number(element.dataset.score), chestCount: Number(element.dataset.chestCount),
     bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
     recognitionFeedback: element.dataset.recognitionFeedback || '', recognitionMessage: element.dataset.recognitionMessage || '',
     transcriptFinal: element.dataset.transcriptFinal === 'true', resultsHits: JSON.parse(element.dataset.resultsHits || '{}'),
+    resultsRewards: JSON.parse(element.dataset.resultsRewards || '{}'),
     resultsScroll: Number(element.dataset.resultsScroll),
     resultsScrollMax: Number(element.dataset.resultsScrollMax), resultsScrollbarVisible: element.dataset.resultsScrollbarVisible === 'true',
     targets: JSON.parse(element.dataset.targets || '[]'), controls: JSON.parse(element.dataset.controls || '[]'),
@@ -234,9 +235,61 @@ async function observeResultHits(page) {
   });
 }
 
-function expectSimpleResults(current) {
+function expectRewardRect(rect, parent, message) {
+  expect(rect, message).toHaveLength(4);
+  expect(rect.every(Number.isFinite), message).toBe(true);
+  expect(rect[2], message).toBeGreaterThan(0);
+  expect(rect[3], message).toBeGreaterThan(0);
+  if (!parent) return;
+  expect(rect[0], message).toBeGreaterThanOrEqual(parent[0] - 1);
+  expect(rect[1], message).toBeGreaterThanOrEqual(parent[1] - 1);
+  expect(rect[0] + rect[2], message).toBeLessThanOrEqual(parent[0] + parent[2] + 1);
+  expect(rect[1] + rect[3], message).toBeLessThanOrEqual(parent[1] + parent[3] + 1);
+}
+
+function rewardRectsSeparate(a, b) {
+  return a[0] + a[2] <= b[0] + 1 || b[0] + b[2] <= a[0] + 1 ||
+    a[1] + a[3] <= b[1] + 1 || b[1] + b[3] <= a[1] + 1;
+}
+
+function expectRewardLadder(current, bounds) {
+  const rewards = current.resultsRewards, thresholds = [100, 200, 300];
+  const earned = thresholds.filter(threshold => current.score >= threshold).length;
+  expect(rewards).toMatchObject({ visible: true, score: current.score, earned });
+  expect(rewards.earned, 'The result displays the round model\'s earned chests').toBe(current.chestCount);
+  expect(rewards.title).toBe(['Your next treasure', '1 chest earned', '2 chests earned', 'All 3 chests earned'][earned]);
+  expect(rewards.rows.map(row => row.threshold)).toEqual(thresholds);
+  expectRewardRect(rewards.rect, null, 'The result reward ladder has finite, nonempty bounds');
+  if (bounds) {
+    expect(rewards.rect[0], 'The reward ladder fits horizontally').toBeGreaterThanOrEqual(-1);
+    expect(rewards.rect[0] + rewards.rect[2], 'The reward ladder fits horizontally').toBeLessThanOrEqual(bounds.width + 1);
+  }
+  for (const [index, row] of rewards.rows.entries()) {
+    const value = Math.min(current.score, row.threshold);
+    expect(row).toMatchObject({ value, earned: current.score >= row.threshold,
+      label: `${row.threshold} points`, progress_text: `${value} / ${row.threshold}` });
+    expect(row.progress, 'Each bar uses cumulative round points').toBeCloseTo(Math.min(1, current.score / row.threshold), 5);
+    expect(row.progress).toBeGreaterThanOrEqual(0);
+    expect(row.progress).toBeLessThanOrEqual(1);
+    expectRewardRect(row.rect, rewards.rect, 'Each threshold row stays inside the reward ladder');
+    expectRewardRect(row.bar_rect, row.rect, 'The progress track stays inside its row');
+    expectRewardRect(row.chest_rect, row.rect, 'The chest artwork stays inside its row');
+    expect(rewardRectsSeparate(row.bar_rect, row.chest_rect), 'The progress track cannot overlap its chest').toBe(true);
+    if (index) expect(rewards.rows[index - 1].rect[1] + rewards.rows[index - 1].rect[3],
+      'Threshold rows remain in order without overlap').toBeLessThanOrEqual(row.rect[1] + 1);
+  }
+  // A short landscape screen scrolls the ladder; its rows need not all be in
+  // view at once. Result actions still occupy their own reachable space.
+  for (const action of current.controls.filter(control => /^(OpenChests|Replay)$/.test(control.name))) {
+    expect(rewardRectsSeparate(rewards.rect, [action.x, action.y, action.width, action.height]),
+      'The reward ladder cannot overlap the result actions').toBe(true);
+  }
+}
+
+function expectSimpleResults(current, bounds) {
   expect(current.phase).toBe('finished');
   expect(current.resultsHits.total).toBe(current.hits);
+  expectRewardLadder(current, bounds);
   expect(current.resultsScrollbarVisible).toBe(false);
   expect(current.transcript).toBe('');
   const player = current.resultsHits.player;
@@ -310,28 +363,38 @@ async function dispatchResultTouch(page, type, x, y) {
 
 async function scrollResults(page, delta) {
   const before = await state(page);
-  const bounds = await metrics(page), content = contentBounds(bounds);
-  const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
-  // Start inside a visible result control's vertical band so touch drags reach
-  // the result scroller on every viewport.
-  const firstResult = before.controls.filter(control =>
-    /^(Replay|Hear_)/.test(control.name))
-    .sort((a, b) => a.y - b.y)[0];
-  const top = bounds.y + (firstResult ? firstResult.y + Math.min(firstResult.height / 2, 10) : content.top) * bounds.scale + 10;
-  const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 30;
+  const swipeBand = async current => {
+    const bounds = await metrics(page), content = contentBounds(bounds);
+    const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
+    // PopResults is inset 16 CSS pixels from the playfield. Stay farther inside
+    // when the reward ladder leaves no fully visible Replay or Hear control.
+    const interiorTop = bounds.y + content.top * bounds.scale + 32;
+    const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 32;
+    const firstResult = current.controls.filter(control => /^(Replay|Hear_)/.test(control.name))
+      .sort((a, b) => a.y - b.y)[0];
+    const preferredTop = firstResult
+      ? bounds.y + (firstResult.y + Math.min(firstResult.height / 2, 10)) * bounds.scale + 10
+      : interiorTop;
+    // A low visible word must not leave a gesture too short to cross the drag threshold.
+    const top = Math.max(interiorTop, Math.min(preferredTop, bottom - 48));
+    expect(bottom - top, 'A result swipe starts and ends inside the scroller with room to drag').toBeGreaterThan(16);
+    return { x, top, bottom };
+  };
   if (page.context().browser().browserType().name() === 'chromium') {
+    const { x, top, bottom } = await swipeBand(before);
     await page.mouse.move(x, (top + bottom) / 2);
     await page.mouse.wheel(0, delta);
   } else {
     // Mobile WebKit has no wheel API; dispatch a complete touch gesture to the canvas.
     // Its mouse API does not produce the touch input consumed by ScrollContainer.
-    const distance = Math.min(Math.abs(delta), bottom - top);
     const swipes = Math.abs(delta) >= 10000 ? 8 : 1;
     for (let swipe = 0; swipe < swipes; swipe++) {
       const current = await state(page);
       if (delta < 0 ? current.resultsScroll === 0 : resultsAtEnd(current)) break;
+      const { x, top, bottom } = await swipeBand(current);
+      const distance = Math.min(Math.abs(delta), bottom - top);
       const start = delta < 0 ? top : bottom;
-      const end = start - Math.sign(delta) * distance;
+      const end = Math.max(top, Math.min(bottom, start - Math.sign(delta) * distance));
       const dispatch = (type, y) => dispatchResultTouch(page, type, x, y);
       let firstMoveScroll, lastMoveScroll;
       await dispatch('touchstart', start);
@@ -1453,7 +1516,10 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   const round = await state(page);
   expect(round.hits).toBe(2);
-  expectSimpleResults(round);
+  expect(round.score, 'Result bars retain exactly the points earned by the two accepted hits').toBe(after.score);
+  expect(round.score).toBeGreaterThan(0);
+  expect(round.score).toBeLessThan(100);
+  expectSimpleResults(round, await metrics(page));
   expect(round.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
   await page.screenshot({ path: info.outputPath('results-hit-animation.png') });
   await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ text: '2', total: 2, active: false });
@@ -1500,6 +1566,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect((await state(page)).hits).toBe(0);
   expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false, player: {} });
   expect((await state(page)).resultsHits.player).toEqual({});
+  expect((await state(page)).resultsRewards, 'A new round clears the previous reward ladder').toEqual({});
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
@@ -1522,7 +1589,9 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   const zero = await state(page);
   expect(zero.hits).toBe(0);
   expect(zero.score).toBe(0);
-  expectSimpleResults(zero);
+  expectSimpleResults(zero, await metrics(page));
+  expect(zero.resultsRewards.rows.every(row => row.value === 0 && row.progress === 0 && !row.earned),
+    'Zero-hit results keep all three chest bars empty').toBe(true);
   expect(zero.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
   expect(await page.evaluate(() => window.__resultHitFrames.every(frame => frame.text === '0' && frame.total === 0))).toBe(true);
   expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
@@ -1581,7 +1650,7 @@ test('Voice Pop result swipes follow the pointer at each display scale without a
     await rendered(page);
     await scrollResults(page, -10000);
     await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
-    expectSimpleResults(await state(page));
+    expectSimpleResults(await state(page), await metrics(page));
     await visibleAction(page, /^Replay /);
     observations.push(await expectDirectResultSwipe(page, /^Replay$/));
     observations.push(await expectDirectResultSwipe(page, /^Hear_/));
@@ -1603,7 +1672,7 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
   const word = await popOne(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
   const results = await state(page);
-  expectSimpleResults(results);
+  expectSimpleResults(results, await metrics(page));
   expect(results.hits).toBe(1);
   expect(results.resultsHits).toMatchObject({ text: '1', total: 1, active: false });
   await page.waitForTimeout(1400);
