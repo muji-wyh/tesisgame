@@ -48,6 +48,7 @@ func _run() -> void:
 	app.choose_theme("spring")
 	await _choose_mode(app, "phrase")
 	var view = app._phrase
+	_check_first_candidate_row(view)
 	check(app._mode_id == "phrase" and app.MODES.has("phrase") and app._mode_buttons.size() == 4,
 		"The library launches Phrase Builder alongside all three existing modes")
 	check(view.is_visible_in_tree() and not app.grid.visible and not app._memory.visible and not app._pop.visible,
@@ -63,8 +64,14 @@ func _run() -> void:
 		"The new game uses the existing animated Pip character")
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
 		"Entering the mode reads the current phrase immediately without a spoken guide")
-	check(view.transcript_button.text.is_empty() and view.transcript_button.get("accessibility_name") == "Show the written phrase",
-		"The eye helper has an accessible name without a visible text label")
+	check(view.listen_button.is_visible_in_tree() and not view._heading.is_visible_in_tree()
+		and not view.snapshot().has("transcript") and not view.snapshot().prompt_text_visible,
+		"One waveform control presents the spoken prompt without a separate heading or eye helper")
+	check(view._progress is ProgressBar and view.snapshot().progress.value == 0
+		and view.snapshot().progress.total == 3 and view.snapshot().progress.visible,
+		"The visible progress bar starts with none of the three phrases completed")
+	check(view.answer_buttons.all(func(button: Button) -> bool: return button.text.is_empty()),
+		"The unanswered phrase uses an answer line without numbered placeholders")
 	view.finished.emit()
 	app.chest_button.button_down.emit()
 	check(app.model.phase != "won" and not app._holding_chest and _pieces(app) == 0,
@@ -114,12 +121,9 @@ func _run() -> void:
 	view.pip.set_process(false)
 	check(view.game.phase == "correct" and view.game.completed == 1 and view.action_button.text == "Continue",
 		"A repaired phrase offers an explicit Continue action")
-	check(view.transcript_button.disabled and view.transcript_button.text.is_empty()
-		and not view.navigation_controls().has(view.transcript_button),
-		"Correct feedback shows the phrase and removes its inactive eye toggle from navigation")
-	view.transcript_button.pressed.emit()
-	check(view.snapshot().transcript_visible and view.game.phase == "correct",
-		"An old transcript signal cannot hide the completed phrase")
+	check(view.snapshot().prompt_text_visible and not view._heading.is_visible_in_tree()
+		and view.snapshot().progress.value == 1,
+		"Correct feedback reveals the completed phrase in the waveform and advances progress once")
 	check(app.audio.pair_feedback.playing
 		and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/right.wav")
 		and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
@@ -131,12 +135,11 @@ func _run() -> void:
 	view.action_button.pressed.emit()
 	check(view.game.question_index == 1 and view.game.phase == "building" and view.game.answer.is_empty(),
 		"Continue starts a clean second question")
-	check(not view.transcript_button.disabled and view.navigation_controls().has(view.transcript_button),
-		"The next question restores the actionable transcript helper")
-	var transcript_shown: bool = view.snapshot().transcript_visible
-	view.transcript_button.pressed.emit()
-	check(view.snapshot().transcript_visible != transcript_shown, "The restored transcript button changes the next question's written hint")
-	view.transcript_button.pressed.emit()
+	check(not view.snapshot().prompt_text_visible and view.snapshot().progress.value == 1,
+		"The next spoken question preserves progress and clears the previous written phrase")
+	view.listen_button.pressed.emit()
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + view.game.current_question().audio),
+		"The unified waveform replays the next question's phrase")
 	app.set_reduced_motion(false)
 	_solve(view)
 	check(view.game.completed == 2 and app.model.phase != "won" and _pieces(app) == 0,
@@ -150,7 +153,7 @@ func _run() -> void:
 	await _check_round_celebration(app)
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
 		and app.chest_button.is_visible_in_tree() and not view.visible and not app._new_adventure_button.visible,
-		"Completing the celebration automatically enters the existing unopened-chest result screen")
+		"Choosing Open chest after celebrating enters the existing unopened-chest result screen")
 	check(not app.audio.voice.playing, "The chest transition does not play spoken completion instructions")
 	view.finished.emit()
 	view.action_button.pressed.emit()
@@ -232,14 +235,13 @@ func _check_round_celebration(app) -> void:
 	check(view.snapshot().round_celebrating and not view.snapshot().completion_animation_done
 		and is_equal_approx(view.pip._gameplay_left, view.ROUND_CELEBRATION_SECONDS),
 		"Finishing the third phrase reserves the full round celebration interval")
-	check(view._heading.text == "You did it!" and view._feedback.text == "3 phrases complete"
+	check(view._heading.text == "You did it!" and view._feedback.text == "You earned a treasure chest!"
 		and view._heading.is_visible_in_tree() and view._feedback.is_visible_in_tree(),
 		"The completion stage clearly distinguishes the round win from an individual correct answer")
 	_check_round_controls_hidden(view)
 	for attempt in range(6):
 		view.action_button.pressed.emit()
 		view.listen_button.pressed.emit()
-		view.transcript_button.pressed.emit()
 		view.finished.emit()
 		app.chest_button.button_down.emit()
 	root.gui_release_focus()
@@ -260,13 +262,23 @@ func _check_round_celebration(app) -> void:
 	await _settle()
 	check(view.snapshot().round_celebrating and view.snapshot().completion_animation_done
 		and view.game.snapshot() == before and app.model.phase != "won" and completions.is_empty(),
-		"Natural animation completion waits for the final phrase recording before entering the chest")
+		"Natural animation completion waits for the final phrase recording before enabling Open chest")
 	narration_pending[0] = false
 	app.audio.stop_voice()
 	await _settle()
+	check(view.game.phase == "correct" and app.model.phase != "won" and completions.is_empty()
+		and view.snapshot().round_celebrating and view.snapshot().completion_ready
+		and not view.snapshot().celebrating and not view.action_button.disabled
+		and view.navigation_controls() == [view.action_button] and _pieces(app) == pieces_before,
+		"Finishing Pip and the recording enables Open chest while preserving the earned-chest invitation")
+	view.pip._process(4.0)
+	await _settle()
+	check(view.game.snapshot() == before and app.model.phase != "won" and completions.is_empty(),
+		"Waiting on the ready completion screen never enters the chest automatically")
+	view.action_button.pressed.emit()
 	check(view.game.phase == "finished" and app.model.phase == "won" and completions == [true]
 		and not view.snapshot().round_celebrating and _pieces(app) == pieces_before,
-		"The stopped recording allows exactly one automatic transition without awarding the unopened chest")
+		"The explicit Open chest action enters the unopened chest exactly once")
 	view.action_button.pressed.emit()
 	view.pip.gameplay_reaction_finished.emit(true)
 	view.pip._process(4.0)
@@ -279,11 +291,14 @@ func _check_round_celebration(app) -> void:
 
 func _check_round_controls_hidden(view) -> void:
 	for button: Button in view.option_buttons + view.answer_buttons \
-		+ [view.listen_button, view.transcript_button, view.action_button]:
+		+ [view.listen_button]:
 		check(not button.is_visible_in_tree() and button.disabled,
 			"The completion stage hides and disables " + str(button.name))
 	check(not view._progress.is_visible_in_tree() and view.navigation_controls().is_empty(),
 		"The completion stage has no redundant progress count or hidden navigable controls")
+	check(view.action_button.is_visible_in_tree() and view.action_button.disabled
+		and view.action_button.text == "Open chest",
+		"The completion stage shows its earned-chest action while Pip celebrates")
 
 
 func _start_round_celebration(app, seed_value: int) -> void:
@@ -303,8 +318,10 @@ func _check_round_celebration_interruptions(app) -> void:
 	var view = app._phrase
 	var pieces_before: int = _pieces(app)
 	var audio_gate: Callable = view.completion_audio_playing
-	view.completion_audio_playing = func() -> bool: return true
+	var narration_pending: Array[bool] = [true]
+	view.completion_audio_playing = func() -> bool: return narration_pending[0]
 	for interruption in ["menu", "room", "background", "hidden"]:
+		narration_pending[0] = true
 		app.set_reduced_motion(interruption == "background")
 		await _start_round_celebration(app, 108)
 		var before: Dictionary = view.game.snapshot()
@@ -349,6 +366,33 @@ func _check_round_celebration_interruptions(app) -> void:
 		check(view.snapshot().completion_animation_done and app.model.phase != "won"
 			and _pieces(app) == pieces_before,
 			"The resumed completion still obeys the final recording gate after " + interruption)
+		narration_pending[0] = false
+		await _settle()
+		check(view.snapshot().completion_ready and not view.action_button.disabled,
+			"The earned-chest invitation becomes actionable once both completion gates finish")
+		if interruption == "menu":
+			app._mode_heading_button.pressed.emit()
+		elif interruption == "room":
+			app.collection_button.pressed.emit()
+		elif interruption == "background":
+			app.on_page_hidden()
+		else:
+			view.hide()
+		view.action_button.pressed.emit()
+		if interruption == "menu":
+			app._mode_panel.close_button.pressed.emit()
+		elif interruption == "room":
+			app._collection_back.pressed.emit()
+		elif interruption == "background":
+			app.on_page_visible()
+		else:
+			view.show()
+		await _settle()
+		check(view.snapshot().completion_ready and not view.snapshot().celebrating
+			and not view.action_button.disabled and view.game.snapshot() == before
+			and app.model.phase != "won" and _pieces(app) == pieces_before,
+			"Returning from " + interruption + " preserves the ready invitation without restarting or entering the chest")
+	narration_pending[0] = true
 	await _start_round_celebration(app, 109)
 	view.stop()
 	app._resume_phrase()
@@ -362,7 +406,7 @@ func _check_round_celebration_interruptions(app) -> void:
 		root.size = dimensions
 		await _settle()
 		var bounds: Rect2 = view.get_global_rect().grow(0.75)
-		for control: Control in [view.pip, view._heading, view._feedback]:
+		for control: Control in [view.pip, view._heading, view._feedback, view.action_button]:
 			check(control.is_visible_in_tree() and bounds.encloses(control.get_global_rect()),
 				"The completion " + str(control.name) + " stays on screen at " + str(dimensions))
 		check(not view.pip.get_global_rect().grow(-0.75).intersects(view._heading.get_global_rect())
@@ -633,6 +677,8 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	var before: Dictionary = view.game.snapshot()
 	await _pointer_button(start, true, method)
 	check(not view.snapshot().dragging, method + " waits for movement before starting a card drag")
+	if _snapshot_rect(view.snapshot().bank.rect).has_point(start):
+		await _pointer_motion(start + Vector2(0, -24), Vector2(0, -24), method)
 	await _pointer_motion(end, end - start, method)
 	var preview: Dictionary = view.snapshot()
 	check(preview.dragging and not preview.drag_word.is_empty() and view.game.snapshot() == before,
@@ -712,7 +758,7 @@ func _check_interruptions(app) -> void:
 			app.on_page_hidden()
 		check(view.snapshot().paused and view.navigation_controls().is_empty() and not app.audio.voice.playing,
 			"Opening " + interruption + " pauses phrase interaction and stops speech")
-		for button in view.option_buttons + view.answer_buttons + [view.action_button, view.listen_button, view.transcript_button]:
+		for button in view.option_buttons + view.answer_buttons + [view.action_button, view.listen_button]:
 			button.pressed.emit()
 		view.finished.emit()
 		app.audio.voice.finished.emit()
@@ -736,8 +782,9 @@ func _check_muted_help(app) -> void:
 	app._mode_panel.sound_button.pressed.emit()
 	app._mode_panel.close_button.pressed.emit()
 	await _settle()
-	check(app.audio.muted and view.snapshot().transcript_visible and view._heading.is_visible_in_tree()
-		and view._heading.text == view.game.current_question().text,
+	check(app.audio.muted and view.snapshot().prompt_text_visible and view.listen_button.is_visible_in_tree()
+		and not view._heading.is_visible_in_tree()
+		and view.listen_button._caption.text == view.game.current_question().text,
 		"Sound off automatically exposes the written phrase so the game remains playable")
 	view.listen_button.pressed.emit()
 	check(not app.audio.voice.playing, "Listen respects the shared sound-off setting")
@@ -788,6 +835,22 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 		"A new phrase round keeps saved progress and clears the previous displayed gift")
 
 
+func _check_first_candidate_row(view) -> void:
+	var bank_rect: Rect2 = _snapshot_rect(view.snapshot().bank.rect)
+	var previous: Button
+	for button: Button in view.option_buttons:
+		if not button.is_visible_in_tree():
+			continue
+		var rect: Rect2 = button.get_global_rect()
+		check(rect.position.y >= bank_rect.position.y - 0.5 and rect.end.y <= bank_rect.end.y + 0.5,
+			"The first-render candidate " + button.text + " fits vertically inside the bank without a resize or interaction")
+		if previous != null:
+			check(previous.get_global_rect().end.x <= rect.position.x - 0.5,
+				"First-render candidates " + previous.text + " and " + button.text + " have a visible gap without overlapping")
+		_check_button_text_fit(button, "first question before interaction")
+		previous = button
+
+
 func _check_layout(app) -> void:
 	var probe = PhraseModel.new()
 	var layout_seed: int = -1
@@ -806,7 +869,7 @@ func _check_layout(app) -> void:
 		var scale_factor: float = app.Style.ui_scale(view)
 		check(bounds.encloses(view.get_global_rect()), "Phrase Builder stays within the host at " + str(dimensions))
 		check(view.answer_buttons.size() == 4 and view.option_buttons.size() == 6, "The hardest phrase retains every answer slot and choice")
-		var buttons: Array = view.answer_buttons + view.option_buttons + [view.listen_button, view.action_button, view.transcript_button]
+		var buttons: Array = view.answer_buttons + [view.listen_button, view.action_button]
 		var visible_buttons: Array[Button] = []
 		for button: Button in buttons:
 			if not button.is_visible_in_tree():
@@ -820,35 +883,126 @@ func _check_layout(app) -> void:
 			for second in range(first):
 				check(not visible_buttons[first].get_global_rect().grow(-0.75).intersects(visible_buttons[second].get_global_rect().grow(-0.75)),
 					"Phrase controls do not overlap at " + str(dimensions) + ": " + str(visible_buttons[first].name) + "/" + str(visible_buttons[second].name))
-		check(view.snapshot().transcript_visible and view._heading.is_visible_in_tree()
-			and bounds.encloses(view._heading.get_global_rect()), "Muted phrase text stays visible at " + str(dimensions))
-		_check_phrase_heading(view, str(dimensions))
-		for helper: Button in [view.listen_button, view.transcript_button]:
-			check(not view._heading.get_global_rect().grow(-0.5).intersects(helper.get_global_rect().grow(-0.5)),
-				"The target phrase and " + str(helper.name) + " do not overlap at " + str(dimensions))
+		check(view.snapshot().prompt_text_visible and view.listen_button.is_visible_in_tree()
+			and not view._heading.is_visible_in_tree(), "Muted phrase text stays inside the waveform at " + str(dimensions))
+		_check_waveform_text_fit(view, str(dimensions))
+		check(view.snapshot().progress.visible and bounds.encloses(view._progress.get_global_rect()),
+			"The three-question progress bar remains visible at " + str(dimensions))
+		var bank_rect: Rect2 = _snapshot_rect(view.snapshot().bank.rect)
+		check(bounds.encloses(bank_rect), "The horizontally clipped bank stays on screen at " + str(dimensions))
+		check(absf(view.action_button.get_global_rect().end.x - bank_rect.end.x) <= 1.0,
+			"Check answer aligns with the right edge of the play area at " + str(dimensions))
+		var row_y: float = view.option_buttons[0].global_position.y
+		for button: Button in view.option_buttons:
+			check(is_equal_approx(button.global_position.y, row_y), "Candidate words never wrap to another row at " + str(dimensions))
+			check(button.size.x * scale_factor >= 43.9 and button.size.y * scale_factor >= 43.9,
+				"Scrollable candidate targets retain their touch size at " + str(dimensions))
+			_check_button_text_fit(button, str(dimensions))
+			button.grab_focus()
+			await _settle()
+			check(bank_rect.grow(0.75).encloses(button.get_global_rect()),
+				"Keyboard or controller focus reveals the complete candidate " + button.text + " at " + str(dimensions))
 		check(view.navigation_controls().has(app._default_focus()), "The host default focus belongs to a playable phrase control")
+	await _check_bank_scroll(app)
 	_solve(app._phrase)
 	await _settle()
-	check(app._phrase.transcript_button.disabled and app._phrase.transcript_button.text.is_empty()
-		and app._phrase.snapshot().transcript_visible,
-		"The smallest viewport retains the completed phrase and inactive eye helper")
-	_check_phrase_heading(app._phrase, "(320, 320), correct feedback")
+	check(app._phrase.snapshot().prompt_text_visible and app._phrase.snapshot().progress.value == 1,
+		"The smallest viewport retains the completed phrase and updated progress")
+	_check_waveform_text_fit(app._phrase, "(320, 320), correct feedback")
 	for button: Button in app._phrase.answer_buttons + app._phrase.option_buttons \
-		+ [app._phrase.listen_button, app._phrase.action_button, app._phrase.transcript_button]:
+		+ [app._phrase.listen_button, app._phrase.action_button]:
 		if button.is_visible_in_tree():
 			_check_button_text_fit(button, "(320, 320), correct feedback")
+	await _check_compact_long_prompts(app._phrase)
 
 
-func _check_phrase_heading(view, context: String) -> void:
-	var heading: Label = view._heading
-	var font: Font = heading.get_theme_font("font")
-	var font_size: int = heading.get_theme_font_size("font_size")
-	var text_width: float = font.get_string_size(heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	check(heading.text == view.game.current_question().text and text_width <= heading.size.x + 0.5,
-		"The complete revealed phrase '%s' fits at %s: text %.2f <= width %.2f" % [
-			heading.text, context, text_width, heading.size.x])
-	check(not heading.get_global_rect().grow(-0.5).intersects(view._progress.get_global_rect().grow(-0.5)),
-		"The revealed phrase and question progress do not overlap at " + context)
+func _check_bank_scroll(app) -> void:
+	var view = app._phrase
+	var before: Dictionary = view.game.snapshot()
+	check(view.snapshot().bank.max_scroll > 0, "Narrow screens provide horizontal overflow for the full candidate row")
+	view.option_buttons[0].grab_focus()
+	await _settle()
+	var bank_rect: Rect2 = _snapshot_rect(view.snapshot().bank.rect)
+	var wheel := InputEventMouseButton.new()
+	wheel.position = bank_rect.get_center()
+	wheel.global_position = wheel.position
+	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	wheel.pressed = true
+	root.push_input(wheel, true)
+	await _settle()
+	check(view.snapshot().bank.scroll > 0 and view.game.snapshot() == before,
+		"A real mouse wheel reveals later candidate words without changing the answer")
+	root.gui_release_focus()
+	view.option_buttons[0].grab_focus()
+	await _settle()
+	var scroll_before: float = view.snapshot().bank.scroll
+	var start: Vector2 = bank_rect.get_center()
+	await _pointer_button(start, true, "touch")
+	await _pointer_motion(start + Vector2(-64, 1), Vector2(-64, 1), "touch")
+	await _pointer_button(start + Vector2(-64, 1), false, "touch")
+	check(view.snapshot().bank.scroll > scroll_before and not view.snapshot().dragging
+		and view.game.snapshot() == before,
+		"A horizontal finger swipe scrolls candidates without selecting or dropping a card")
+	var last: Button = view.option_buttons.back()
+	last.grab_focus()
+	await _settle()
+	await _enter_key()
+	check(view.game.answer == [view.option_buttons.size() - 1],
+		"Keyboard can select a candidate that began outside the clipped row")
+	view.answer_buttons[0].pressed.emit()
+	check(view.game.snapshot() == before, "Returning the scrolled candidate preserves question progress")
+
+
+func _check_compact_long_prompts(view) -> void:
+	check(root.size == Vector2i(320, 320), "Long phrase regressions use the smallest supported square viewport")
+	var original: Dictionary = view.game.current_question().duplicate(true)
+	var prompts: Array[String] = [
+		"bright red birthday balloon",
+		"frozen strawberry dessert",
+		"transparent glass",
+		"beautiful yellow spring butterfly",
+		"fresh strawberry breakfast smoothie"
+	]
+	for phrase_text in prompts:
+		view.listen_button.configure({"text": phrase_text}, true, view._palette.accent)
+		await _settle()
+		_check_waveform_text_fit(view, "(320, 320), long prompt: " + phrase_text, phrase_text)
+	view.listen_button.configure(original, true, view._palette.accent)
+	await _settle()
+	_check_waveform_text_fit(view, "(320, 320), restored actual phrase")
+
+
+func _check_waveform_text_fit(view, context: String, expected_text: String = "") -> void:
+	var caption: Label = view.listen_button._caption
+	if expected_text.is_empty():
+		expected_text = view.game.current_question().text
+	check(caption.text == expected_text and caption.is_visible_in_tree()
+		and view.listen_button.get_global_rect().grow(0.75).encloses(caption.get_global_rect()),
+		"The waveform contains the complete written phrase at " + context)
+	var font: Font = caption.get_theme_font("font")
+	var font_size: int = caption.get_theme_font_size("font_size")
+	var measurement := Label.new()
+	measurement.text = expected_text
+	measurement.autowrap_mode = caption.autowrap_mode
+	measurement.max_lines_visible = -1
+	measurement.clip_text = true
+	measurement.add_theme_font_override("font", font)
+	measurement.add_theme_font_size_override("font_size", font_size)
+	measurement.add_theme_constant_override("line_spacing", caption.get_theme_constant("line_spacing"))
+	measurement.size = caption.size
+	measurement.hide()
+	view.add_child(measurement)
+	var complete_line_count: int = measurement.get_line_count()
+	check(complete_line_count >= 1 and complete_line_count <= 2
+		and caption.get_line_count() == complete_line_count
+		and caption.get_visible_line_count() == complete_line_count,
+		"Every line of the unclamped full phrase is visible, including its final word, at " + context)
+	measurement.free()
+	check(caption.get_line_count() * caption.get_line_height() <= caption.size.y + 0.5,
+		"Every wrapped line of the written phrase fits vertically at " + context)
+	for word in caption.text.split(" "):
+		check(font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= caption.size.x + 0.5,
+			"The waveform keeps each word readable without clipping at " + context)
 
 
 func _check_button_text_fit(button: Button, context: String) -> void:

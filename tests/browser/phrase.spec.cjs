@@ -19,13 +19,65 @@ function progress(state) {
   };
 }
 
+function expectFirstCandidateRow(state) {
+  const [, top, , bankHeight] = state.bank.rect;
+  const candidates = state.options.filter(option => option.visible);
+  expect(candidates.length, 'The untouched first question has available candidates').toBeGreaterThan(0);
+  for (let index = 0; index < candidates.length; index++) {
+    const option = candidates[index], [x, y, , height] = option.rect;
+    expect(y, `First-render ${option.text} begins inside the bank`).toBeGreaterThanOrEqual(top - 0.5);
+    expect(y + height, `First-render ${option.text} is not clipped below the bank`).toBeLessThanOrEqual(top + bankHeight + 0.5);
+    if (index > 0) {
+      const previous = candidates[index - 1];
+      expect(previous.rect[0] + previous.rect[2], `First-render ${previous.text} and ${option.text} have a visible gap`)
+        .toBeLessThanOrEqual(x - 0.5);
+    }
+  }
+}
+
+function promptFullyVisible(state) {
+  if (!state.visible || !state.prompt_text_visible || !state.listen?.visible) return true;
+  const layout = state.prompt_layout;
+  return Boolean(layout?.shown && layout.text === state.text && layout.line_count >= 1 && layout.line_count <= 2 &&
+    layout.visible_line_count === layout.line_count);
+}
+
+function expectPromptFullyVisible(state) {
+  if (!state.visible || !state.prompt_text_visible || !state.listen?.visible) return;
+  expect(state.prompt_layout, 'The full prompt has measured layout information').toBeTruthy();
+  expect(state.prompt_layout.shown).toBe(true);
+  expect(state.prompt_layout.text, 'The displayed prompt retains the full target phrase').toBe(state.text);
+  expect(state.prompt_layout.line_count, 'The prompt occupies at least one line').toBeGreaterThanOrEqual(1);
+  expect(state.prompt_layout.line_count, 'The compact prompt fits at most two lines').toBeLessThanOrEqual(2);
+  expect(state.prompt_layout.visible_line_count, 'Every line, including the final word, is actually visible')
+    .toBe(state.prompt_layout.line_count);
+}
+
 async function press(page, control) {
   expect(control, 'The game publishes the requested control').toBeTruthy();
   expect(control.visible, `${control.name} is visible`).toBe(true);
   expect(control.disabled, `${control.name} accepts input`).toBe(false);
+  if (control.word_id) control = await revealOption(page, control.word_id);
   const [x, y, width, height] = control.rect;
   await tap(page, x + width / 2, y + height / 2);
   await rendered(page);
+}
+
+async function revealOption(page, wordId) {
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const state = await phraseState(page);
+    const option = state.options.find(item => item.word_id === wordId);
+    expect(option?.visible, `Candidate ${wordId} remains available`).toBe(true);
+    const [x, , width] = option.rect, [left, top, bankWidth, bankHeight] = state.bank.rect;
+    if (x >= left - 0.5 && x + width <= left + bankWidth + 0.5) return option;
+    const direction = x < left ? -1 : 1;
+    const bounds = await metrics(page);
+    await page.mouse.move(bounds.x + (left + bankWidth / 2) * bounds.scale,
+      bounds.y + (top + bankHeight / 2) * bounds.scale);
+    await page.mouse.wheel(0, direction * 80);
+    await rendered(page);
+  }
+  throw new Error(`Mouse-wheel scrolling could not reveal candidate ${wordId}`);
 }
 
 async function pressAction(page) {
@@ -90,6 +142,7 @@ async function pieceCount(page) {
 async function capture(page, info, name, { afterResize = false } = {}) {
   await page.mouse.move(0, 0);
   await rendered(page);
+  expectPromptFullyVisible(await phraseState(page));
   const pagePng = await page.screenshot({ path: info.outputPath(`${name}.png`), scale: 'css' });
   const raw = await page.locator('#canvas').evaluate(canvas => canvas.toDataURL('image/png').split(',')[1]);
   const canvasPng = Buffer.from(raw, 'base64');
@@ -179,7 +232,7 @@ async function observeRoundCelebration(page) {
       if (observation.started && observation.chestAt === null && status.textContent.includes('Hold to open your chest')) {
         observation.chestAt = performance.now();
       }
-      if (observation.started && state.phase === 'finished' && !state.round_celebrating) {
+      if (observation.started && state.completion_ready) {
         observation.finished = state;
         observation.finishedAt = performance.now();
         observer.disconnect();
@@ -191,17 +244,18 @@ async function observeRoundCelebration(page) {
 
 async function expectRoundCelebration(page, info, name) {
   await expect.poll(() => page.evaluate(() => Boolean(window.phraseRoundCelebrationObservation?.finished)),
-    { message: 'The final celebration enters the chest automatically after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
+    { message: 'The final celebration enables Open chest after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
   const observation = await page.evaluate(() => window.phraseRoundCelebrationObservation);
   const { started, finished, frame, startedAt, finishedAt, chestAt } = observation;
   expect(started).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true, completion_animation_done: false });
-  expect(finished).toMatchObject({ phase: 'finished', completed: 3, round_celebrating: false });
+  expect(finished).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true,
+    completion_ready: true, celebrating: false, action: { text: 'Open chest', visible: true, disabled: false } });
   expect(finishedAt - startedAt, 'The round celebration has its own readable interval').toBeGreaterThanOrEqual(2450);
-  if (chestAt !== null) expect(chestAt - startedAt, 'The chest is not exposed before the celebration').toBeGreaterThanOrEqual(2450);
+  expect(chestAt, 'The chest cannot open before the learner accepts the invitation').toBeNull();
   expect(frame, 'The in-page observer captures the distinct completion stage').toBeTruthy();
   expect(frame.state).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true });
-  expect(frame.status).toContain('All 3 phrases complete');
-  for (const control of [...frame.state.options, ...frame.state.answers, frame.state.listen, frame.state.transcript, frame.state.action]) {
+  expect(frame.state.action).toMatchObject({ text: 'Open chest', visible: true, disabled: true });
+  for (const control of [...frame.state.options, ...frame.state.answers, frame.state.listen]) {
     expect(control.visible, `Completion hides ${control.name}`).toBe(false);
     expect(control.disabled, `Completion disables ${control.name}`).toBe(true);
   }
@@ -258,10 +312,21 @@ async function cardPointer(page, input) {
   };
 }
 
+async function liftBankCard(page, pointer, wordId) {
+  const source = await revealOption(page, wordId), start = center(source.rect);
+  await pointer.down(start);
+  await pointer.move({ x: start.x, y: start.y - 24 });
+}
+
 async function dragCard(page, pointer, source, destination, { dropKind, dropIndex, cancel = false } = {}) {
   const before = progress(await phraseState(page));
+  if (source.word_id) source = await revealOption(page, source.word_id);
   await pointer.down(center(source.rect));
   expect((await phraseState(page)).dragging, 'Pressing a card waits for motion before dragging').toBe(false);
+  if (source.word_id) {
+    const start = center(source.rect);
+    await pointer.move({ x: start.x, y: start.y - 24 });
+  }
   await pointer.move(destination);
   await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
   let state = await phraseState(page);
@@ -298,14 +363,18 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   await chooseMode(page, 'phrase');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(true);
   let state = await phraseState(page);
+  expectFirstCandidateRow(state);
   expect(state).toMatchObject({ phase: 'building', completed: 0, question_index: 0 });
   expect(state.question.level).toBe('basic');
   expect(state.target_ids.length).toBeGreaterThanOrEqual(2);
   expect(state.options).toHaveLength(state.target_ids.length + 2);
-  expect(state.transcript_visible, 'Unavailable audio reveals the written phrase automatically').toBe(!audioAvailable);
-  expect(state.transcript).toMatchObject({
-    text: '', accessibility_name: audioAvailable ? 'Show the written phrase' : 'Hide the written phrase'
-  });
+  expect(state.prompt_text_visible, 'Unavailable audio reveals the written phrase in the waveform automatically').toBe(!audioAvailable);
+  expect(state.transcript, 'The waveform replaces the separate eye control').toBeUndefined();
+  expect(state.progress).toMatchObject({ value: 0, total: 3, visible: true });
+  expect(state.answers.every(answer => answer.text === ''), 'The answer line has no numbered placeholders').toBe(true);
+  const replayFrom = await audioMark();
+  await press(page, state.listen);
+  if (audioAvailable) await expectRecording(page, replayFrom, state.audio);
   const saved = await savedMedals(page), baseline = await pieceCount(page);
   const questionIds = [state.id];
   if (audioAvailable) {
@@ -344,9 +413,8 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   await pressAction(page);
   state = await expectCelebration(page, info, 'phrase-pip-celebration', 'Continue');
   expect(state).toMatchObject({ completed: 1, question_index: 0 });
-  expect(state.transcript.disabled, 'The completed phrase has no ineffective transcript toggle').toBe(true);
-  expect(state.transcript.text, 'The written-phrase helper uses an eye icon').toBe('');
-  expect(state.transcript_visible).toBe(true);
+  expect(state.prompt_text_visible, 'The completed phrase appears inside the waveform').toBe(true);
+  expect(state.progress).toMatchObject({ value: 1, total: 3, visible: true });
   if (audioAvailable) {
     await expectRecording(page, correctedFrom, 'assets/imported-audio/pair-feedback/right.wav');
     await expectRecording(page, correctedFrom, state.audio);
@@ -358,13 +426,11 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   state = await phraseState(page);
   questionIds.push(state.id);
   expect(state.answer).toEqual([]);
-  expect(state.transcript.disabled, 'The next question restores the transcript helper').toBe(false);
-  const nextTranscript = state.transcript_visible;
-  await press(page, state.transcript);
-  await expect.poll(async () => (await phraseState(page)).transcript_visible).toBe(!nextTranscript);
-  expect((await phraseState(page)).transcript.accessibility_name).toBe(nextTranscript ? 'Show the written phrase' : 'Hide the written phrase');
-  await press(page, (await phraseState(page)).transcript);
-  await expect.poll(async () => (await phraseState(page)).transcript_visible).toBe(nextTranscript);
+  expect(state.prompt_text_visible).toBe(!audioAvailable);
+  expect(state.progress.value).toBe(1);
+  const nextReplayFrom = await audioMark();
+  await press(page, state.listen);
+  if (audioAvailable) await expectRecording(page, nextReplayFrom, state.audio);
   await solve(page);
   expect(await savedMedals(page), 'Two phrases still leave the reward unclaimed').toBe(saved);
   await pressAction(page);
@@ -380,13 +446,21 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect(await savedMedals(page), 'Completing all three phrases and celebrating leave the chest unclaimed').toBe(saved);
   if (audioAvailable) {
     const recording = await expectRecording(page, finalFrom, finalPhraseAudio);
-    expect(completion.finishedAt - recording.at, 'The final phrase finishes before entering the chest')
+    expect(completion.finishedAt - recording.at, 'The final phrase finishes before enabling Open chest')
       .toBeGreaterThanOrEqual(recording.duration * 1000 - 100);
     if (recording.stopContextTime !== undefined) {
       expect(recording.stopContextTime - recording.scheduledAt, 'The final reading is not cut off by the transition')
         .toBeGreaterThanOrEqual(recording.duration - 0.1);
     }
   }
+  expect(progress(await phraseState(page))).toEqual(progress(completion.finished));
+  await capture(page, info, 'phrase-earned-chest-invitation');
+  await openModeMenu(page);
+  await libraryAction(page, 'LibraryClose');
+  await expect.poll(async () => (await phraseState(page)).completion_ready).toBe(true);
+  expect((await phraseState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
+  expect(progress(await phraseState(page)), 'Closing a menu preserves the ready invitation').toEqual(progress(completion.finished));
+  await pressAction(page);
   await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(false);
   await capture(page, info, 'phrase-earned-chest');
@@ -418,6 +492,7 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   await chooseMode(page, 'phrase');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(true);
   let state = await phraseState(page);
+  expectFirstCandidateRow(state);
   expect(state.question.level).toBe('advanced');
   await selectWords(page, [state.target_ids[0]]);
   const selected = progress(await phraseState(page));
@@ -428,7 +503,7 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   await libraryAction(page, 'LibrarySound');
   await libraryAction(page, 'LibraryClose');
   await expect.poll(async () => (await phraseState(page)).paused).toBe(false);
-  await expect.poll(async () => (await phraseState(page)).transcript_visible).toBe(true);
+  await expect.poll(async () => (await phraseState(page)).prompt_text_visible).toBe(true);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).muted)).toBe(true);
   await openRewards(page);
   await expect.poll(async () => (await phraseState(page)).paused).toBe(true);
@@ -451,15 +526,29 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
     await page.setViewportSize(size);
     await expect.poll(async () => {
       const bounds = await metrics(page), current = await phraseState(page);
-      const controls = [...(current.options || []), ...(current.answers || []), current.listen, current.action, current.transcript].filter(control => control?.visible);
-      return controls.length >= 7 && controls.every(({ rect: [x, y, width, height] }) =>
+      const controls = [...(current.answers || []), current.listen, current.action].filter(control => control?.visible);
+      return promptFullyVisible(current) && controls.length >= 4 && controls.every(({ rect: [x, y, width, height] }) =>
         x >= -1 && y >= -1 && x + width <= bounds.width + 1 && y + height <= bounds.height + 1 &&
         width * bounds.scale >= 43.5 && height * bounds.scale >= 43.5);
     }, { message: `Every phrase target fits and remains at least 44 CSS pixels at ${size.width}x${size.height}` }).toBe(true);
     state = await phraseState(page);
+    expectPromptFullyVisible(state);
     expect(progress(state), 'Resizing preserves the phrase and its partially assembled answer').toEqual(selected);
-    expect(state.transcript_visible, 'Muted learners can read the target phrase at every size').toBe(true);
-    const visible = [...state.options, ...state.answers, state.listen, state.action, state.transcript].filter(control => control.visible);
+    expect(state.prompt_text_visible, 'Muted learners can read the target phrase at every size').toBe(true);
+    const visible = [...state.options, ...state.answers, state.listen, state.action].filter(control => control.visible);
+    expect(state.progress).toMatchObject({ value: 0, total: 3, visible: true });
+    const [bankX, bankY, bankWidth, bankHeight] = state.bank.rect;
+    const bounds = await metrics(page);
+    expect(bankX).toBeGreaterThanOrEqual(-1);
+    expect(bankX + bankWidth).toBeLessThanOrEqual(bounds.width + 1);
+    expect(bankY + bankHeight).toBeLessThanOrEqual(bounds.height + 1);
+    expect(Math.abs(state.action.rect[0] + state.action.rect[2] - bankX - bankWidth), 'Check answer aligns with the right edge').toBeLessThanOrEqual(1);
+    const candidates = state.options.filter(control => control.visible);
+    expect(new Set(candidates.map(control => control.rect[1])).size, 'Candidates stay on a single row').toBe(1);
+    for (const option of candidates) {
+      expect(option.rect[2] * bounds.scale).toBeGreaterThanOrEqual(43.5);
+      expect(option.rect[3] * bounds.scale).toBeGreaterThanOrEqual(43.5);
+    }
     for (let first = 0; first < visible.length; first++) for (let second = 0; second < first; second++) {
       const [ax, ay, aw, ah] = visible[first].rect, [bx, by, bw, bh] = visible[second].rect;
       const overlap = Math.min(ax + aw, bx + bw) - Math.max(ax, bx) > 1 && Math.min(ay + ah, by + bh) - Math.max(ay, by) > 1;
@@ -476,14 +565,15 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   await pressAction(page);
   await expect.poll(async () => (await phraseState(page)).phase).toBe('correct');
   expect((await phraseState(page)).action.text).toBe('Continue');
-  expect((await phraseState(page)).transcript).toMatchObject({ disabled: true, text: '' });
+  expect((await phraseState(page)).prompt_text_visible).toBe(true);
+  expect((await phraseState(page)).progress.value).toBe(1);
   await capture(page, info, 'phrase-320x320-correct', { afterResize: true });
   expect(await savedMedals(page)).toBe(saved);
   expect(errors).toEqual([]);
 });
 
 for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags insert, reorder, return and cancel cards without extra clicks`, async ({ page, browserName }, info) => {
-  test.setTimeout(180000);
+  test.setTimeout(300000);
   test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion and cancellation use Chromium CDP.');
   const errors = await openGame(page);
   await chooseAge(page, '10-plus');
@@ -492,6 +582,7 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
   const pointer = await cardPointer(page, input);
   const saved = await savedMedals(page);
   let state = await phraseState(page);
+  expectFirstCandidateRow(state);
   const before = progress(state);
   try {
     state = await dragCard(page, pointer, state.options[0], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
@@ -517,7 +608,7 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
       state = await dragCard(page, pointer, state.options[2], center(state.answers[1].rect), { dropKind: 'answer', dropIndex: 1, cancel: true });
       expect(progress(state), 'Touch cancellation never commits the visible drop preview').toEqual(partial);
     }
-    await pointer.down(center(state.options[2].rect));
+    await liftBankCard(page, pointer, state.options[2].word_id);
     await pointer.move(center(state.answers[1].rect));
     await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
     await page.evaluate(type => document.getElementById('canvas').addEventListener(type,
@@ -527,7 +618,7 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
       { message: 'The window release fallback clears a drag when canvas delivery is interrupted' }).toBe(false);
     state = await phraseState(page);
     expect(progress(state), 'A missing canvas release cancels the preview instead of committing an unobserved drop').toEqual(partial);
-    await pointer.down(center(state.options[2].rect));
+    await liftBankCard(page, pointer, state.options[2].word_id);
     await pointer.move(center(state.answers[1].rect));
     await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
     await setDocumentHidden(page, true);
@@ -539,7 +630,7 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
     await expect.poll(async () => (await phraseState(page)).paused).toBe(false);
     state = await phraseState(page);
     expect(progress(state)).toEqual(partial);
-    await pointer.down(center(state.options[2].rect));
+    await liftBankCard(page, pointer, state.options[2].word_id);
     await pointer.move(center(state.answers[1].rect));
     await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
     await page.setViewportSize({ width: 390, height: 844 });
@@ -554,11 +645,31 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
     await press(page, (await phraseState(page)).answers[0]);
     await expect.poll(async () => (await phraseState(page)).answer).toEqual([]);
     expect(progress(await phraseState(page)), 'Tap editing remains available after successful and canceled drags').toEqual(before);
+    state = await phraseState(page);
+    if (state.bank.max_scroll > 0) {
+      await revealOption(page, state.options[0].word_id);
+      state = await phraseState(page);
+      const scrollBefore = state.bank.scroll, bank = center(state.bank.rect);
+      await pointer.down(bank);
+      await pointer.move({ x: bank.x - 72, y: bank.y + 1 });
+      await pointer.up();
+      state = await phraseState(page);
+      expect(state.bank.scroll, 'A horizontal swipe reveals later candidates').toBeGreaterThan(scrollBefore);
+      expect(state.dragging).toBe(false);
+      expect(progress(state), 'Swiping the candidate strip never selects a word').toEqual(before);
+      const last = state.options.at(-1);
+      await press(page, last);
+      await expect.poll(async () => (await phraseState(page)).answer).toEqual([last.index]);
+      await press(page, (await phraseState(page)).answers[0]);
+      expect(progress(await phraseState(page)), 'An offscreen candidate remains selectable after scrolling').toEqual(before);
+    }
     expect(await savedMedals(page), 'Editing cards cannot unlock or award a chest').toBe(saved);
     await capture(page, info, `phrase-${input}-drag-edited`, { afterResize: true });
     expect(errors).toEqual([]);
   } finally {
-    await pointer.dispose();
-    await setDocumentHidden(page, false);
+    if (!page.isClosed()) {
+      await pointer.dispose();
+      if (!page.isClosed()) await setDocumentHidden(page, false);
+    }
   }
 });
