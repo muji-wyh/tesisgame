@@ -36,8 +36,9 @@ func _run() -> void:
 	await settle()
 	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y, 40),
 		"The header centers its actions in a 56px row")
-	check(app._header_duck_slot.is_ancestor_of(app._success) and app._header_duck_slot.is_ancestor_of(app._mistakes),
-		"Both counters belong to Pip's status cluster")
+	check(is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / app.Style.ui_scale(app)))
+		and app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
+		"Pip's compact header has no retained Memory counters")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Find 3 pairs", "Find a pair.", "Release to hide."]),
 		"Unneeded play instructions are not visible")

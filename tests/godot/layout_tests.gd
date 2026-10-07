@@ -55,18 +55,11 @@ func _run() -> void:
 			check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()), "World choices stay out of active play")
 			check(not app._room.is_visible_in_tree(), "The room does not take space above the game")
 			check(app.duck.is_visible_in_tree(), "Pip remains a visible guide")
-			for counter in [app._success, app._mistakes]:
-				if counter.is_visible_in_tree():
-					check(not counter.get_global_rect().intersects(app.duck.get_global_rect()), "Pip cannot cover game progress")
-					check(counter.get_parent() == app._header_duck_slot
-						and app._header_duck_slot.get_global_rect().grow(1).encloses(counter.get_global_rect()),
-						"Numeric progress stays grouped inside Pip's header panel")
-			check(app._success.is_visible_in_tree() == (mode == "memory")
-				and app._mistakes.is_visible_in_tree() == (mode == "memory"),
-				"Only Memory shows its existing progress and mistake counters")
-			if mode == "memory":
-				check(app._success.total_count == 5 and app._mistakes.total_count == 0,
-					"Memory keeps five-pair progress and an unbounded mistake count")
+			check(is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / css_scale))
+				and app._header_duck_slot.get_theme_stylebox("panel") is StyleBoxEmpty,
+				"Every mode keeps Pip in a compact transparent header slot")
+			check(app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
+				"Changing game modes cannot recreate the removed Memory counters")
 			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button] + app._mode_buttons:
 				if control.is_visible_in_tree():
 					check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "Navigation fits the viewport")
@@ -162,7 +155,7 @@ func _run() -> void:
 	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and not app._success.is_visible_in_tree(), "Results do not repeat gameplay navigation and counters")
+	check(not app._mode_row.is_visible_in_tree(), "Results do not repeat gameplay navigation")
 	check(app._outcome.get_global_rect().position.y <= 100, "The result gets the space below one simple header")
 	var old_lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()

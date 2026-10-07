@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, openRewards,
   memoryMetrics, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek,
-  progressRegion, resultPoint, visibleColorCount } = require('./game-ui.cjs');
+  resultPoint, visibleColorCount } = require('./game-ui.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -51,15 +51,6 @@ function pairFor(board, word) {
 
 async function medalRecord(page) {
   return page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
-}
-
-async function counterSnapshot(page, bounds) {
-  const region = progressRegion(bounds, 'memory');
-  await rendered(page);
-  return page.screenshot({ scale: 'css', clip: {
-    x: bounds.x + region.x * bounds.scale, y: bounds.y + region.y * bounds.scale,
-    width: region.width * bounds.scale, height: region.height * bounds.scale
-  } });
 }
 
 async function waitFeedback(page, correct, final = false) {
@@ -183,7 +174,6 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
   const saved = await medalRecord(page), board = await discoverBoard(page);
   const words = board.filter(card => card.kind === 'Word').map(card => card.word);
   const matched = words.slice(0, 2).flatMap(word => pairFor(board, word));
-  const emptyCounters = await counterSnapshot(page, bounds);
   for (let index = 0; index < 2; index++) {
     const [word, picture] = pairFor(board, words[index]);
     await reveal(page, word);
@@ -191,12 +181,9 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
     await waitFeedback(page, true);
   }
   await progress(page, 2, 2);
-  const grownCounters = await counterSnapshot(page, bounds);
-  expect(grownCounters.equals(emptyCounters), 'The numeric progress beside Pip reflects earned Memory matches.').toBe(false);
   const matchedFaces = await screenshot(page, testInfo, 'memory-two-pairs-face-up', { verifyRendering: true });
   await withMemoryPeek(page, async () => {
     await progress(page, 2, 2);
-    expect((await counterSnapshot(page, bounds)).equals(grownCounters), 'Holding the eye cannot reset the visible progress cluster.').toBe(true);
     await expect(page.locator('#selection-status')).toBeEmpty();
     await page.waitForTimeout(300);
     const fronts = await screenshot(page, testInfo, 'memory-all-ten-held', { held: true });
@@ -211,7 +198,6 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
   });
   await expect(page.locator('#game-status')).toContainText(READY);
   await progress(page, 2, 2);
-  expect((await counterSnapshot(page, bounds)).equals(grownCounters)).toBe(true);
   await page.waitForTimeout(300);
   const released = await screenshot(page, testInfo, 'memory-matched-faces-after-release');
   expect(await cardChanges(page, bounds, matchedFaces, released), 'Releasing Peek hides only unmatched faces.').toEqual(Array(10).fill(0));

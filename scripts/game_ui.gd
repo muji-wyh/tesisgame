@@ -41,45 +41,6 @@ class InputActivityObserver extends Node:
 		observed.emit(event)
 
 
-class ProgressBadges:
-	extends Control
-
-	const SUCCESS := 0
-	const RETRY := 1
-
-	var filled_count: int = 0
-	var total_count: int = 5
-	var badge_kind: int = SUCCESS
-
-	func _init(kind: int = SUCCESS) -> void:
-		badge_kind = kind
-		mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	func set_filled_count(value: int, total: int) -> void:
-		total_count = maxi(0, total)
-		filled_count = clampi(value, 0, total_count) if total_count > 0 else maxi(0, value)
-		queue_redraw()
-
-	func _draw() -> void:
-		if size.y <= 0:
-			return
-		var scale: float = Style.ui_scale(self)
-		var radius: float = 6 / scale
-		var center := Vector2(7 / scale, size.y * 0.5)
-		draw_circle(center, radius, Style.GOOD if badge_kind == SUCCESS else Style.WRONG)
-		if badge_kind == SUCCESS:
-			draw_polyline(PackedVector2Array([
-				center + Vector2(-radius * 0.5, 0),
-				center + Vector2(-radius * 0.1, radius * 0.4),
-				center + Vector2(radius * 0.5, -radius * 0.4)
-			]), Color.WHITE, 1.5 / scale, true)
-		else:
-			for side in [-1, 1]:
-				draw_line(center + Vector2(-radius * 0.4, side * radius * 0.4), center + Vector2(radius * 0.4, -side * radius * 0.4), Color.WHITE, 1.5 / scale, true)
-		var text: String = "%d/%d" % [filled_count, total_count] if total_count > 0 else str(filled_count)
-		draw_string(get_theme_font("font"), Vector2(20 / scale, center.y + 5 / scale), text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(13 / scale), Style.INK)
-
-
 class RewardSparkle:
 	extends Control
 
@@ -213,8 +174,6 @@ var reduced_motion: bool = false
 var _page_hidden: bool = false
 var _resume_music_after_background: bool = false
 var _background: ColorRect
-var _success: ProgressBadges
-var _mistakes: ProgressBadges
 var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
@@ -417,14 +376,6 @@ func _build_controls() -> void:
 	_mode_subheading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_mode_subheading.add_theme_color_override("font_color", Style.MUTED)
 	_mode_heading_button.add_child(_mode_subheading)
-	_success = ProgressBadges.new(ProgressBadges.SUCCESS)
-	_success.name = "MemoryProgress"
-	_success.tooltip_text = "0 matches"
-	_header_duck_slot.add_child(_success)
-	_mistakes = ProgressBadges.new(ProgressBadges.RETRY)
-	_mistakes.name = "MemoryMistakes"
-	_mistakes.tooltip_text = "0 mistakes"
-	_header_duck_slot.add_child(_mistakes)
 	_toolbar = HBoxContainer.new()
 	_toolbar.alignment = BoxContainer.ALIGNMENT_END
 	_toolbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -496,7 +447,6 @@ func _build_controls() -> void:
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_memory.card_revealed.connect(_memory_revealed)
 	_memory.answer_chosen.connect(_memory_answer)
-	_memory.progress_changed.connect(_memory_progress)
 	_memory.round_finished.connect(_memory_finished)
 	_memory.prompt_ready.connect(_memory_prompt)
 	_memory.hide()
@@ -2029,16 +1979,6 @@ func _memory_answer(_words: Array, correct: bool) -> void:
 	_react_to_gameplay(correct)
 
 
-func _memory_progress(successes: int, _attempts: int) -> void:
-	if _mode_id != "memory":
-		return
-	if not _rebuilding:
-		_success.set_filled_count(successes, 5)
-		_success.tooltip_text = "%d matches" % successes
-		_mistakes.set_filled_count(_memory.memory.mistakes, 0)
-		_mistakes.tooltip_text = "%d mistakes" % _memory.memory.mistakes
-
-
 func _memory_finished(won: bool, found: Array) -> void:
 	if _mode_id != "memory" or model.phase == "won" or not won or _memory.memory.phase != "won" or found.size() != 5:
 		return
@@ -2125,8 +2065,6 @@ func _refresh() -> void:
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
 	_result_board_button.disabled = model.chest_state == "opening"
-	if _mode_id == "memory":
-		_memory_progress(_memory.memory.matched_word_ids.size(), _memory.memory.attempts)
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
 	_storage_retry_button.add_theme_font_size_override("font_size", 16)
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
@@ -2135,7 +2073,6 @@ func _refresh() -> void:
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = playroom_state.error if _journey_save_failed else ""
 	_refresh_age_choices()
-	_success.visible = playing and _mode_id == "memory" and not _storage_retry_button.visible
 	if not playing and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = playing and _mode_id == "match"
@@ -2147,7 +2084,6 @@ func _refresh() -> void:
 	_resume_phrase()
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
-	_mistakes.visible = _success.visible
 	_message.hide()
 	_outcome.visible = not playing
 	_refresh_match_cards()
@@ -2484,18 +2420,10 @@ func _fit_mode_buttons() -> void:
 	_header.custom_minimum_size.y = ceilf(56 / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	var with_counts: bool = _mode_id == "memory" and model.phase in ["waiting", "matching", "feedback"] and not _storage_retry_button.visible
-	_header_duck_slot.custom_minimum_size = Vector2(ceilf((132 if with_counts else 52) / css_scale), ceilf(56 / css_scale))
+	_header_duck_slot.custom_minimum_size = Vector2(ceilf(52 / css_scale), ceilf(56 / css_scale))
 	_header_duck_art_slot.position = Vector2(0, 2 / css_scale)
 	_header_duck_art_slot.size = Vector2.ONE * (52 / css_scale)
-	_success.position = Vector2(60, 5) / css_scale
-	_mistakes.position = Vector2(60, 30) / css_scale
-	_mistakes.visible = with_counts
-	for counter in [_success, _mistakes]:
-		counter.size = Vector2(70, 21) / css_scale
-		counter.queue_redraw()
-	_header_duck_slot.add_theme_stylebox_override("panel", Style.box(
-		Color(1, 1, 1, 0.75) if with_counts else Color.TRANSPARENT, Color.TRANSPARENT, ceili(12 / css_scale), 0))
+	_header_duck_slot.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
 	var heading_focus: int = _mode_heading_button.focus_mode
 	Style.quiet_button(_mode_heading_button, accent, 0)

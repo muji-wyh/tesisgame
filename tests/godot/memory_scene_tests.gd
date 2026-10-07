@@ -45,11 +45,12 @@ func _run() -> void:
 	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
 		"Root owns the eye while Memory cards fill their entire assigned view")
 	check(not view.status_label.visible and view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
-		"The Memory scene leaves visible progress to Root's Pip cluster")
+		"The Memory board has no redundant instruction or progress row")
 	check(app.model.lesson_words == lesson and app.model.theme_id == "spring", "Memory retains the lesson and selected world")
 	check(not app.grid.visible and not app._pop.visible, "Memory hides the other mode boards")
-	check(app._success.visible and app._mistakes.visible and app._success.get_parent() == app._header_duck_slot
-		and app._mistakes.get_parent() == app._header_duck_slot, "Memory progress appears only in Root's shared Pip cluster")
+	check(app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null
+		and is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / app.Style.ui_scale(app))),
+		"Memory keeps Pip's compact header without progress or mistake counters")
 	check(app._status_announcement.contains("Memory") and app._status_announcement.contains("0 of 5"), "Memory announces its own goal and progress")
 	var board: Array = view.memory.cards.duplicate(true)
 	var target_rects: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
@@ -128,8 +129,8 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		check(view.get_global_rect() == field_rect and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == target_rects, "Continue retains the original host card targets")
-	check(view.memory.attempts == 4 and view.memory.mistakes == 4 and app._mistakes.filled_count == view.memory.mistakes and app.model.mistakes == 0 and app.model.phase != "lost",
-		"Memory owns its mistakes and HUD without changing the Match model")
+	check(view.memory.attempts == 4 and view.memory.mistakes == 4 and app.model.mistakes == 0 and app.model.phase != "lost",
+		"Memory retains attempt and mistake records without changing the Match model or limiting retries")
 	for word in lesson:
 		for index in range(board.size()):
 			if board[index].word.id == word.id:

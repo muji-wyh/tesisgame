@@ -669,8 +669,9 @@ func _test_audio() -> void:
 
 
 func _test_play_improvements(app) -> void:
-	check(has_property(app, "hint_button") and has_property(app, "_success") and not has_property(app, "_match_caption"),
-		"The board has a reachable hint and compact progress without a redundant caption")
+	check(has_property(app, "hint_button") and not has_property(app, "_success")
+		and not has_property(app, "_mistakes") and not has_property(app, "_match_caption"),
+		"The board has a reachable hint without retained counters or a redundant caption")
 	if has_property(app, "hint_button") and app.model.has_method("request_hint"):
 		app.new_round(6)
 		check(app.hint_button.text.is_empty() and app.hint_button.count == 3 and not app.hint_button.disabled,
@@ -718,8 +719,6 @@ func _test_play_improvements(app) -> void:
 			and is_equal_approx(link.phase, still_phase),
 			"Reduced motion keeps the connecting arc visible and still")
 		app.set_reduced_motion(previous_reduced_motion)
-		check(not app._success.is_visible_in_tree() and not app._mistakes.is_visible_in_tree(),
-			"A hint keeps Match free of success and mistake counters")
 		app._show_collection()
 		check(link.paused and link.active and not link.is_processing(), "Opening rewards pauses the connecting hint arc")
 		var previous_hint: Array = hinted.duplicate()
@@ -778,13 +777,13 @@ func _test_play_improvements(app) -> void:
 			check(app._status_announcement.contains("Great match!"),
 				"Correct feedback encourages matching without a numbered streak")
 			app.feedback_timer.timeout.emit()
-		check(app.model.matched_ids.size() == 10 and not app._success.is_visible_in_tree(), "Every completed pair remains matched without a score display")
+		check(app.model.matched_ids.size() == 10, "Every completed pair remains matched")
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 0 and app.hint_button.disabled,
 			"Xbox X cannot exceed the three shared hints")
 		app.set_reduced_motion(true)
-		check(app.model.matched_ids.size() == 10 and not app._success.is_visible_in_tree(), "Reduced motion preserves all completed cards")
+		check(app.model.matched_ids.size() == 10, "Reduced motion preserves all completed cards")
 		check(not app.hint_button.visible, "Finished rounds hide the hint action")
 		app.set_reduced_motion(false)
 		app.new_round(6)
@@ -887,8 +886,8 @@ func _test_scene() -> void:
 	app.audio.set_muted(true)
 	await _test_play_improvements(app)
 	_test_season_progress(app)
-	check(app.find_child("Practice", true, false) == null and app._mistakes.get_parent() == app._header_duck_slot,
-		"Mistake badges are passive counters, not an unlimited-attempt toggle")
+	check(app.find_child("Practice", true, false) == null,
+		"Unlimited attempts do not require a practice toggle")
 	check(app._voice_button.disabled and app._voice_button.focus_mode == Control.FOCUS_NONE,
 		"Keyboard navigation skips Voice when recognition is unavailable")
 	check(app.cards.size() == 10, "The scene creates ten native card buttons")
@@ -913,15 +912,13 @@ func _test_scene() -> void:
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
 	app.choose_mode("pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
-	check(not app._success.is_visible_in_tree() and app._pop.is_visible_in_tree(),
-		"Voice Pop shows its speaking game without card-pair progress")
+	check(app._pop.is_visible_in_tree(), "Voice Pop shows its speaking game")
 	app.choose_mode("memory")
-	check(app._success.total_count == 5 and app._mistakes.total_count == 0
-		and app._success.is_visible_in_tree() and app._mistakes.is_visible_in_tree(),
-		"Memory groups five-pair progress and an unbounded mistake count beside Pip")
+	check(app._memory.is_visible_in_tree() and app._memory.memory.cards.size() == 10
+		and app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
+		"Memory retains its five-pair board without creating progress or mistake counters")
 	app.choose_mode("match")
-	check(not app._success.is_visible_in_tree() and not app._mistakes.is_visible_in_tree(),
-		"Match keeps both progress counters hidden")
+	check(app.grid.is_visible_in_tree(), "Returning to Match restores its board")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
 	check(has_property(app, "collection_page") and app.collection_page != null,
@@ -994,10 +991,6 @@ func _test_scene() -> void:
 		app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")
-	check(not (app._success is Label) and not (app._mistakes is Label),
-		"Progress is drawn with friendly native badges instead of text characters")
-	check(app._success.has_method("set_filled_count") and app._mistakes.has_method("set_filled_count"),
-		"Progress indicators expose filled token counts")
 	var dimensions: Array[Vector2i] = [
 		Vector2i(320, 320), Vector2i(375, 667), Vector2i(390, 844),
 		Vector2i(430, 932), Vector2i(844, 390), Vector2i(768, 1024),
@@ -1092,11 +1085,7 @@ func _test_scene() -> void:
 	app.cards[first_pair[1]].pressed.emit()
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Matching cards keep their scale while local badges celebrate the answer")
-	if app._success.has_method("set_filled_count"):
-		check(not app._success.is_visible_in_tree() and app.model.matched_ids.size() == 2,
-			"A match records its actual cards without a score badge")
-	else:
-		check(false, "A match records its actual cards without a score badge")
+	check(app.model.matched_ids.size() == 2, "A match records its actual cards")
 	app.set_reduced_motion(true)
 	check(app.cards[first_pair[0]].scale == Vector2.ONE and app.cards[first_pair[1]].scale == Vector2.ONE,
 		"Enabling reduced motion immediately stops active card animation")
@@ -1337,8 +1326,6 @@ func _test_scene() -> void:
 	app.cards[wrong[1]].pressed.emit()
 	check(app.cards[wrong[0]].rotation == 0.0 and app.cards[wrong[0]].position == wrong_start,
 		"Wrong cards keep their position and use color feedback instead of shaking")
-	check(not app._mistakes.is_visible_in_tree() and not app._success.is_visible_in_tree(),
-		"A mismatch never introduces a retry limit or score display")
 	app.feedback_timer.timeout.emit()
 	var retry_cards: Array = app.model.cards.duplicate(true)
 	for count in range(6):

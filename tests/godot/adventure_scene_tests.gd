@@ -54,8 +54,8 @@ func _run() -> void:
 	app._controller_mode = true
 	for word in words:
 		_match(app, word)
-	check(app.model.phase == "won" and app._outcome.is_visible_in_tree() and not app._success.is_visible_in_tree(),
-		"Winning replaces gameplay counters with the result")
+	check(app.model.phase == "won" and app._outcome.is_visible_in_tree(),
+		"Winning presents the result")
 	check(app._default_focus() == app.chest_button and app.chest_button.has_focus(),
 		"The chest remains the primary controller action after winning")
 	check(not app._new_adventure_button.visible, "A closed chest has no New adventure action")

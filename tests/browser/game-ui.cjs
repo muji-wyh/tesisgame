@@ -177,12 +177,6 @@ function pipHeaderRect(bounds) {
   return { x: content.x, y: content.padding + 2 / scale, width: 52 / scale, height: 52 / scale };
 }
 
-function progressRegion(bounds, mode = 'memory') {
-  if (mode !== 'memory') throw new Error('Only Memory has header progress badges.');
-  const { x, padding } = contentBounds(bounds), scale = uiScale(bounds);
-  return { x: x + 60 / scale, y: padding + 5 / scale, width: 70 / scale, height: 46 / scale };
-}
-
 async function openRewards(page) {
   const point = headerPoint(await metrics(page));
   await tap(page, point.x, point.y);
@@ -703,6 +697,6 @@ function resultPoint(bounds, key) {
 }
 
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
-  progressRegion, openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
+  openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };
