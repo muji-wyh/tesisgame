@@ -52,6 +52,9 @@ func _run() -> void:
 		"The finished score publishes all three earned opportunities")
 	check(app._pop_rewards.has_pending() and FileAccess.file_exists(app.pop_reward_save_path),
 		"Finished-round treasure is saved before the result action")
+	check(app._round_celebration.is_active() and not app._pop.visible,
+		"The shared celebration covers the saved Pop result until its performance ends")
+	Fixture.finish_celebration(app)
 	check(not app._pop_rewards_shown and app._pop.visible, "Statistics remain visible before choosing treasure")
 	app._pop.chests_button.pressed.emit()
 	await process_frame

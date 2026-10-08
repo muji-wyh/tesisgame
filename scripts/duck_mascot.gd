@@ -17,12 +17,32 @@ const TRICK_SECONDS: float = 1.8
 const ROOM_REACTION_SECONDS: float = 1.1
 const GAMEPLAY_HAPPY_SECONDS: float = 1.25
 const GAMEPLAY_SAD_SECONDS: float = 1.35
+const CELEBRATION_SECONDS: float = 3.0
 const EXPRESSION_NAMES := ["neutral", "listening", "thinking", "delighted", "proud",
 	"encourage", "surprised", "sleepy", "wink", "blink"]
 const HAPPY_EXPRESSIONS := ["delighted", "wink", "proud"]
 const GAMEPLAY_PIVOTS := [Vector2(61, 98), Vector2(61, 72), Vector2(33, 78),
 	Vector2(88, 78), Vector2(40, 103), Vector2(80, 103)]
 const SOCIAL_TRICKS := ["high-five", "peekaboo", "flutter"]
+const CELEBRATION_POSES := {
+	"rest": [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO],
+	"left": [Vector3(-4, 3, -4), Vector3(-5, 1, 4), Vector3(-4, 2, 78), Vector3(-4, 2, -22), Vector3.ZERO, Vector3(0, -5, 9)],
+	"right": [Vector3(4, 3, 4), Vector3(5, 0, -5), Vector3(4, 2, 24), Vector3(4, 2, -88), Vector3(0, -5, -9), Vector3.ZERO],
+	"crouch": [Vector3(0, 5, 0), Vector3(0, 7, 0), Vector3(0, 4, -14), Vector3(0, 4, 14), Vector3.ZERO, Vector3.ZERO],
+	"push-off": [Vector3(0, -2, 0), Vector3(0, 0, 0), Vector3(0, -1, 40), Vector3(0, -1, -40), Vector3.ZERO, Vector3.ZERO],
+	"leap": [Vector3(0, -23, -3), Vector3(0, -25, 3), Vector3(0, -23, 100), Vector3(0, -23, -100), Vector3(-2, -23, -17), Vector3(2, -23, 17)],
+	"touchdown": [Vector3(0, -5, -1), Vector3(0, -9, 2), Vector3(0, -5, 72), Vector3(0, -5, -80), Vector3.ZERO, Vector3.ZERO],
+	"land": [Vector3(0, 4, 0), Vector3(0, 5, -2), Vector3(0, 2, 52), Vector3(0, 2, -64), Vector3.ZERO, Vector3.ZERO],
+	"recover": [Vector3.ZERO, Vector3(0, 1, 0), Vector3(0, 0, 32), Vector3(0, 0, -38), Vector3.ZERO, Vector3.ZERO],
+	"present-reach": [Vector3(-3, -1, -3), Vector3(1, -3, 7), Vector3(-3, -1, 34), Vector3(-1, -3, -91), Vector3.ZERO, Vector3.ZERO],
+	"present": [Vector3(-2, 0, -2), Vector3(0, -2, 4), Vector3(-2, 0, 27), Vector3(-1, -2, -77), Vector3.ZERO, Vector3.ZERO],
+}
+# Push-off and compressed landing share the presentation's two contact cues.
+# Feet touch first; the body and head absorb the landing before either step.
+const CELEBRATION_BEATS := [[0.0, "rest"], [0.18, "crouch"], [0.25, "push-off"],
+	[0.52, "leap"], [0.82, "touchdown"], [0.9, "land"], [0.99, "recover"],
+	[1.15, "left"], [1.31, "recover"], [1.5, "right"], [1.65, "recover"],
+	[1.85, "present-reach"], [2.4, "present"], [3.0, "present"]]
 const TRICK_CAPTIONS := {
 	"dance": "Pip's happy dance!", "snack": "Crunch! A carrot for Pip!", "bubbles": "Pop! Bubble party!",
 	"high-five": "High five, friend!", "peekaboo": "Peekaboo! Here is Pip!", "flutter": "Flutter, flutter! Hello!"
@@ -67,6 +87,8 @@ var _room_reaction_left: float = 0.0
 var _gameplay_reaction: String = ""
 var _gameplay_left: float = 0.0
 var _gameplay_seconds: float = GAMEPLAY_SAD_SECONDS
+var _celebration_progress: float = -1.0
+var _celebration_rest: float = 0.0
 
 
 func _ready() -> void:
@@ -146,7 +168,7 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func react(kind: String = "happy") -> void:
-	if not _gameplay_reaction.is_empty() or _idle_paused or not is_visible_in_tree():
+	if _celebration_progress >= 0.0 or not _gameplay_reaction.is_empty() or _idle_paused or not is_visible_in_tree():
 		return
 	if not kind in ["happy", "curious"] and not kind in EXPRESSION_NAMES:
 		return
@@ -162,7 +184,7 @@ func react(kind: String = "happy") -> void:
 
 
 func react_gameplay(correct: bool, duration: float = 0.0) -> void:
-	if _idle_paused or not is_visible_in_tree():
+	if _celebration_progress >= 0.0 or _idle_paused or not is_visible_in_tree():
 		return
 	clear_room_interaction()
 	_reset_idle()
@@ -195,6 +217,8 @@ func _gameplay_duration() -> float:
 
 
 func settle() -> void:
+	_celebration_progress = -1.0
+	_celebration_rest = 0.0
 	clear_gameplay_reaction()
 	clear_room_interaction()
 	_reset_idle()
@@ -208,8 +232,28 @@ func settle() -> void:
 	_update_pose()
 
 
+func set_celebration_progress(progress: float, rest_seconds: float = 0.0) -> void:
+	if not is_finite(progress) or not is_finite(rest_seconds):
+		return
+	if _celebration_progress < 0.0:
+		settle()
+	_celebration_progress = clampf(progress, 0.0, 1.0)
+	_celebration_rest = maxf(0.0, rest_seconds)
+	# The presentation owns this clock. Idle, speech and reactions cannot advance it.
+	set_process(false)
+	_update_pose()
+
+
+func clear_celebration() -> void:
+	if _celebration_progress < 0.0:
+		return
+	_celebration_progress = -1.0
+	_visibility_changed()
+	_update_pose()
+
+
 func perform_trick(kind: String) -> String:
-	if not TRICK_CAPTIONS.has(kind) or not _gameplay_reaction.is_empty():
+	if _celebration_progress >= 0.0 or not TRICK_CAPTIONS.has(kind) or not _gameplay_reaction.is_empty():
 		return ""
 	_reset_idle()
 	_trick = kind
@@ -290,7 +334,7 @@ func _visibility_changed() -> void:
 		_reaction_face = ""
 		_attention = ""
 		clear_trick()
-	set_process(is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0 or reaction_left > 0.0) and not _idle_paused)
+	set_process(_celebration_progress < 0.0 and is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0 or reaction_left > 0.0) and not _idle_paused)
 
 
 func set_idle_paused(value: bool) -> void:
@@ -380,7 +424,9 @@ func _update_pose(force_redraw: bool = true) -> void:
 	var previous_pose: int = pose
 	var previous_face: String = _face_name
 	pose = 0
-	if not _gameplay_reaction.is_empty():
+	if _celebration_progress >= 0.0:
+		pose = 3
+	elif not _gameplay_reaction.is_empty():
 		pose = 3 if _gameplay_reaction == "happy" else 2
 	elif speaking:
 		pose = 1 if reduced_motion else 1 - int(_speech_time * 8.0) % 2
@@ -407,6 +453,19 @@ func _update_pose(force_redraw: bool = true) -> void:
 
 
 func _select_expression() -> String:
+	if _celebration_progress >= 0.0:
+		if reduced_motion:
+			return "proud"
+		if _celebration_progress >= 1.0 and fmod(_celebration_rest, 4.6) > 4.42:
+			return "blink"
+		var seconds: float = _celebration_progress * CELEBRATION_SECONDS
+		if seconds < 0.25:
+			return "surprised"
+		if seconds >= 1.23 and seconds < 1.39:
+			return "wink"
+		if seconds < 1.65:
+			return "delighted"
+		return "proud"
 	if not _gameplay_reaction.is_empty():
 		var correct: bool = _gameplay_reaction == "happy"
 		if reduced_motion:
@@ -465,7 +524,7 @@ func _trick_pose(kind: String, progress: float) -> int:
 
 
 func _process(delta: float) -> void:
-	if _idle_paused or not is_visible_in_tree():
+	if _celebration_progress >= 0.0 or _idle_paused or not is_visible_in_tree():
 		return
 	var was_animating: bool = _has_continuous_pose()
 	if reaction_left > 0.0:
@@ -516,6 +575,9 @@ func _has_continuous_pose() -> bool:
 func _draw() -> void:
 	var edge: float = 54.0 if compact else minf(size.x, size.y)
 	var origin := Vector2(0, -2) if compact else (size - Vector2.ONE * edge) * 0.5
+	if _celebration_progress >= 0.0:
+		_draw_celebration(origin, edge)
+		return
 	if not _gameplay_reaction.is_empty():
 		_draw_gameplay_reaction(origin, edge)
 		return
@@ -694,6 +756,52 @@ static func _gameplay_part_transform(index: int, translation: Vector2, angle: fl
 	var transform := Transform2D(angle, stretch, 0.0, Vector2.ZERO)
 	transform.origin = pivot + translation - transform * pivot
 	return transform
+
+
+static func _celebration_transforms(progress: float, reduced: bool = false, rest_seconds: float = 0.0) -> Array[Transform2D]:
+	var seconds: float = CELEBRATION_SECONDS if reduced else clampf(progress, 0.0, 1.0) * CELEBRATION_SECONDS
+	var first: String = "present"
+	var last: String = "present"
+	var blend: float = 1.0
+	for index in range(1, CELEBRATION_BEATS.size()):
+		var end: float = float(CELEBRATION_BEATS[index][0])
+		if seconds <= end:
+			var start: float = float(CELEBRATION_BEATS[index - 1][0])
+			first = str(CELEBRATION_BEATS[index - 1][1])
+			last = str(CELEBRATION_BEATS[index][1])
+			blend = smoothstep(0.0, 1.0, (seconds - start) / (end - start))
+			break
+	var result: Array[Transform2D] = []
+	for index in range(6):
+		var source: Vector3 = CELEBRATION_POSES[first][index]
+		var target: Vector3 = CELEBRATION_POSES[last][index]
+		var part: Vector3 = source.lerp(target, blend)
+		if progress >= 1.0 and not reduced and index < 4:
+			part.y += sin(rest_seconds * TAU / 3.6) * (0.32 if index == 1 else 0.22)
+		var stretch := Vector2.ONE
+		if index == 0:
+			var start_scale := Vector2(1.08, 0.91) if first in ["crouch", "land"] else Vector2.ONE
+			var end_scale := Vector2(1.08, 0.91) if last in ["crouch", "land"] else Vector2.ONE
+			stretch = start_scale.lerp(end_scale, blend)
+		result.append(_gameplay_part_transform(index, Vector2(part.x, part.y), deg_to_rad(part.z), stretch))
+	return result
+
+
+func _draw_celebration(origin: Vector2, edge: float) -> void:
+	var transforms: Array[Transform2D] = _celebration_transforms(_celebration_progress, reduced_motion, _celebration_rest)
+	var unit: float = edge * 0.82 / 120.0
+	var base_origin := origin + Vector2(edge * 0.09, edge * 0.18 * 112.0 / 120.0)
+	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
+	var lift: float = maxf(0.0, 98.0 - (transforms[0] * GAMEPLAY_PIVOTS[0]).y) / 23.0
+	draw_set_transform(base_origin + Vector2(61, 112) * unit, 0.0,
+		Vector2(37.0 - lift * 10.0, 4.2 - lift) * unit)
+	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.15 - lift * 0.06))
+	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
+	var source_edge: float = outfit.get_height()
+	for index in [4, 5, 0, 1, 2, 3]:
+		draw_set_transform_matrix(base * transforms[index])
+		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
+	draw_set_transform(Vector2.ZERO)
 
 
 func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:

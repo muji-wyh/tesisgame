@@ -3006,6 +3006,12 @@
           if (!value || typeof value !== 'object' || !Array.isArray(value.controls)) return;
           document.getElementById('game-status').dataset.library = JSON.stringify(value);
         },
+        celebrationStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+          document.getElementById('game-status').dataset.celebration = JSON.stringify(value);
+        },
         phraseStatus(text) {
           let value;
           try { value = JSON.parse(text); } catch { return; }

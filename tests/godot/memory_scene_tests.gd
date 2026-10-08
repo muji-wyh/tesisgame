@@ -156,6 +156,9 @@ func _run() -> void:
 			check(view.controls().has(root.gui_get_focus_owner()), "A judged nonfinal pair keeps actual focus on playable cards")
 			view.continue_feedback()
 	check(app.model.phase == "won" and view.memory.matched_word_ids.size() == 5, "Five completed pairs enter the ordinary victory screen")
+	check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(),
+		"The completed Memory round presents the shared celebration before its unopened chest")
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	check(not view.visible and app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "The completed Memory board presents its unopened chest")
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
 	app._open_chest()

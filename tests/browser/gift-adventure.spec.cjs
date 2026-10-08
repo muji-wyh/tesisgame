@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, enterGame, openGame, boardPoint, matchWords, discoverMatchCards,
-  resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomState, roomControl } = require('./game-ui.cjs');
+  resultPoint, collectionBounds, openRewards: openRoom, roomPoint, roomState, roomControl, acceptCelebration } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -71,6 +71,7 @@ async function winMatch(page, knownCards = null) {
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
+  await acceptCelebration(page);
 }
 
 async function claimChest(page) {

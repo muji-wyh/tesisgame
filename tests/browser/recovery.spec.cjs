@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, rendered, enterGame, openGame, boardPoint,
-  resultPoint, headerPoint, memoryPoint } = require('./game-ui.cjs');
+  resultPoint, headerPoint, memoryPoint, acceptCelebration } = require('./game-ui.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 
@@ -55,6 +55,7 @@ async function winMatch(page) {
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
   await expect(page.locator('#game-status')).toContainText('You did it!');
+  await acceptCelebration(page);
 }
 
 test('unavailable rewards leave practice usable and a visible retry preserves the current card', async ({ page }, testInfo) => {

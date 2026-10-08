@@ -78,6 +78,8 @@ func _win(app) -> void:
 				app.cards[card.word.id + ":image"].pressed.emit()
 				app._continue_match()
 	check(app.model.phase == "won" and app.model.chest_state == "closed", "A completed %s round has an unopened reward" % app._mode_id)
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+
 
 func _total(app) -> int:
 	var count: int = 0

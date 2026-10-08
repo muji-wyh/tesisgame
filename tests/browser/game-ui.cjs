@@ -633,6 +633,22 @@ async function matchWords(page) {
   return [...new Set((await discoverMatchCards(page)).map(card => card.word))];
 }
 
+async function celebrationState(page) {
+  return page.locator('#game-status').evaluate(element => JSON.parse(element.dataset.celebration || '{}'));
+}
+
+async function acceptCelebration(page) {
+  await expect.poll(async () => {
+    const current = await celebrationState(page);
+    return Boolean(current.active && current.ready && current.action?.visible && !current.action.disabled);
+  }, { timeout: 15000, message: 'The shared celebration finishes before the explicit Open chest action' }).toBe(true);
+  const { action } = await celebrationState(page);
+  const [x, y, width, height] = action.rect;
+  await tap(page, x + width / 2, y + height / 2);
+  await expect.poll(async () => (await celebrationState(page)).active).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
+}
+
 async function memoryMetrics(page) {
   return metrics(page);
 }
@@ -699,4 +715,5 @@ function resultPoint(bounds, key) {
 module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
-  memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount };
+  memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount,
+  celebrationState, acceptCelebration };

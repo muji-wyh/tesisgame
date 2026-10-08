@@ -18,6 +18,15 @@ const PAIR_FEEDBACK_PATHS := {
 const PAIR_FEEDBACK_GAIN := 0.48
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
+const ROUND_CELEBRATION_PATHS := {
+	"step": "res://assets/imported-audio/chest-reference/step.wav",
+	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
+	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
+}
+const ROUND_CELEBRATION_GAINS := {"step": 0.32, "step-detail": 0.28, "reward": 0.44}
+const ROUND_CELEBRATION_CHANNELS := 2
+const ROUND_CELEBRATION_MUSIC_DB := -6.0
+const ROUND_CELEBRATION_SPEECH_DB := -8.0
 const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/apple.wav",
 	"res://assets/imported-audio/pop-slices/orange.wav",
@@ -82,9 +91,15 @@ var _chest_rewarded: bool = false
 var _chest_players: Array[AudioStreamPlayer] = []
 var _chest_next_player: int = 0
 var _chest_fallbacks: Dictionary = {}
+var _round_celebration_id: String = ""
+var _round_celebration_seen: Dictionary = {}
+var _round_celebration_players: Array[AudioStreamPlayer] = []
+var _round_celebration_gains: Dictionary = {}
+var _round_celebration_next_player: int = 0
 
 
 func _ready() -> void:
+	set_process(false)
 	_pop_slice_rng.randomize()
 	_pip_rng.randomize()
 	for path in POP_SLICE_PATHS:
@@ -135,6 +150,7 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 		return
 	if not available:
 		active = false
+		stop_round_celebration()
 		status_changed.emit("Sound is not available in this browser.")
 		return
 	active = true
@@ -195,6 +211,79 @@ func stop_ui_click() -> void:
 	if ui_click != null:
 		_stop(ui_click)
 		ui_click.stream = null
+
+
+func begin_round_celebration(round_id: String) -> void:
+	if round_id.is_empty() or muted or not active or not available:
+		stop_round_celebration()
+		return
+	if _round_celebration_id == round_id:
+		return
+	stop_round_celebration()
+	_round_celebration_id = round_id
+	for path: String in ROUND_CELEBRATION_PATHS.values():
+		_stream(path)
+	_update_music_gain()
+	set_process(true)
+
+
+func play_round_celebration_cue(round_id: String, cue_name: String) -> void:
+	if muted or not active or not available:
+		stop_round_celebration()
+		return
+	if round_id.is_empty() or round_id != _round_celebration_id \
+		or not ROUND_CELEBRATION_PATHS.has(cue_name) or _round_celebration_seen.has(cue_name):
+		return
+	# These are presentation beats, independent of opening or saving a chest.
+	# A missing recording consumes its cue without delaying the visual timeline.
+	_round_celebration_seen[cue_name] = true
+	if _round_celebration_players.is_empty():
+		for index in range(ROUND_CELEBRATION_CHANNELS):
+			var channel: AudioStreamPlayer = _player(1.0)
+			channel.finished.connect(_round_celebration_event_finished.bind(channel))
+			_round_celebration_players.append(channel)
+	var player: AudioStreamPlayer = _round_celebration_players[_round_celebration_next_player]
+	_round_celebration_next_player = (_round_celebration_next_player + 1) % ROUND_CELEBRATION_CHANNELS
+	_round_celebration_gains[player] = float(ROUND_CELEBRATION_GAINS[cue_name])
+	player.pitch_scale = 1.0
+	_update_round_celebration_gain()
+	player.stream = null
+	_play(player, ROUND_CELEBRATION_PATHS[cue_name])
+
+
+func _round_celebration_event_finished(player: AudioStreamPlayer) -> void:
+	if not player.playing:
+		player.stream = null
+
+
+func stop_round_celebration() -> void:
+	_round_celebration_id = ""
+	_round_celebration_seen.clear()
+	_round_celebration_next_player = 0
+	for player: AudioStreamPlayer in _round_celebration_players:
+		_stop(player)
+		player.stream = null
+		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
+	set_process(false)
+	_update_music_gain()
+
+
+func _update_round_celebration_gain() -> void:
+	var speaking: bool = voice != null and voice.playing
+	var duck: float = ROUND_CELEBRATION_SPEECH_DB if speaking and not _round_celebration_id.is_empty() else 0.0
+	for player: AudioStreamPlayer in _round_celebration_players:
+		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0))) + duck
+
+
+func _process(_delta: float) -> void:
+	if _round_celebration_id.is_empty():
+		set_process(false)
+		return
+	if muted or not active or not available:
+		stop_round_celebration()
+		return
+	# Actual playback, including a natural word ending, controls the cue mix.
+	_update_round_celebration_gain()
 
 
 func last_pop_player() -> AudioStreamPlayer:
@@ -667,7 +756,9 @@ func _voice_finished() -> void:
 func _update_music_gain() -> void:
 	if music != null:
 		var speaking: bool = voice != null and voice.playing
-		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck)
+		var celebration_db: float = ROUND_CELEBRATION_MUSIC_DB if not _round_celebration_id.is_empty() else 0.0
+		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
+	_update_round_celebration_gain()
 
 
 func set_muted(value: bool) -> void:
@@ -696,6 +787,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 		stop_pair_feedback()
 	stop_pop_sounds()
 	stop_pip_reaction()
+	stop_round_celebration()
 	stop_chest_performance()
 	if music != null:
 		stop_music()

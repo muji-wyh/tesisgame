@@ -20,3 +20,16 @@ static func choose_pop_player(app) -> void:
 	assert(panel.find_child("LeaderboardStartGame", true, false) == null)
 	choice.pressed.emit()
 	assert(app._pop_player_id == id and not app._leaderboard_overlay.visible)
+
+
+static func finish_celebration(app) -> void:
+	# Chest/result-focused suites explicitly cross the shared presentation gate.
+	# Dedicated celebration suites exercise real timing, narration and cancellation.
+	if not app._round_celebration.is_active():
+		return
+	app.audio.stop_voice()
+	app._round_celebration.set_narration_playing(false)
+	app._round_celebration.advance(3.01)
+	if app._round_celebration.is_active():
+		assert(app._round_celebration.is_ready())
+		app._round_celebration.action_button.pressed.emit()

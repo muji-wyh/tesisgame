@@ -21,6 +21,7 @@ func win(app) -> void:
 			app.cards[card.id].pressed.emit()
 			app.cards[card.word.id + ":image"].pressed.emit()
 			app.feedback_timer.timeout.emit()
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 
 
 func check_no_collectible_presentation(app, phase: String) -> void:

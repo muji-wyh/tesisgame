@@ -2,6 +2,7 @@ extends Control
 ## Listen, drag words into a phrase, and keep correcting until it is right.
 
 signal finished
+signal completion_requested
 signal status_changed(message: String)
 signal audio_requested(kind: String, value: String)
 signal changed(snapshot: Dictionary)
@@ -12,19 +13,16 @@ const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const AudioBar = preload("res://scripts/phrase_audio_bar.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
-const ROUND_CELEBRATION_SECONDS: float = 2.6
 const TILE_COLORS := [Color("#e1edf9"), Color("#f8e4cc"), Color("#ebe3f7"), Color("#dff0df"), Color("#f6dfdf"), Color("#f6edbf")]
 
 var game := PhraseGameModel.new()
 var interaction_allowed: Callable
-var completion_audio_playing: Callable
 var pip: Mascot
 var option_buttons: Array[Button] = []
 var answer_buttons: Array[Button] = []
 var listen_button: AudioBar
 var action_button: Button
 var reduced_motion: bool = false
-var _heading: Label
 var _progress: ProgressBar
 var _progress_caption: Label
 var _bank_clip: Control
@@ -44,9 +42,7 @@ var _theme_id: String = "spring"
 var _paused: bool = false
 var _finished_emitted: bool = false
 var _celebrating: bool = false
-var _round_celebrating: bool = false
-var _completion_animation_done: bool = false
-var _completion_ready: bool = false
+var completion_pending: bool = false
 var _configured: bool = false
 var _muted: bool = false
 var _question_id: String = ""
@@ -77,8 +73,6 @@ func _init() -> void:
 	pip.set_proactive_allowed(false)
 	pip.gameplay_reaction_finished.connect(_on_pip_reaction_finished)
 	add_child(pip)
-	_heading = _label("You did it!", 36)
-	_heading.add_theme_font_override("font", Style.HEADING_FONT)
 	_progress = ProgressBar.new()
 	_progress.name = "PhraseProgress"
 	_progress.max_value = PhraseGameModel.QUESTION_COUNT
@@ -148,9 +142,7 @@ func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value
 	_paused = false
 	_finished_emitted = false
 	_celebrating = false
-	_round_celebrating = false
-	_completion_animation_done = false
-	_completion_ready = false
+	completion_pending = false
 	_question_id = ""
 	_bank_scroll = 0.0
 	_configured = game.reset(vocabulary, age_band, seed_value)
@@ -181,8 +173,6 @@ func set_reduced_motion(value: bool) -> void:
 func set_speaking(value: bool) -> void:
 	pip.set_speaking(value and not _paused and is_visible_in_tree())
 	listen_button.set_speaking(value and not _paused and is_visible_in_tree())
-	if _round_celebrating and _completion_animation_done and not _completion_ready:
-		_unlock_chest_if_ready.call_deferred()
 
 
 func set_muted(value: bool) -> void:
@@ -200,12 +190,8 @@ func pause(value: bool = true) -> void:
 		cancel_input()
 		pip.set_speaking(false)
 		_celebrating = false
-		if not _completion_ready:
-			_completion_animation_done = false
 	pip.set_idle_paused(value)
 	listen_button.set_paused(value)
-	if not value:
-		_resume_round_celebration()
 	_refresh()
 
 
@@ -216,9 +202,7 @@ func resume() -> void:
 func stop() -> void:
 	_paused = true
 	_celebrating = false
-	_round_celebrating = false
-	_completion_animation_done = false
-	_completion_ready = false
+	completion_pending = false
 	cancel_input()
 	pip.settle()
 	pip.set_idle_paused(true)
@@ -260,12 +244,8 @@ func _visibility_changed() -> void:
 		cancel_input()
 		pip.set_speaking(false)
 		_celebrating = false
-		if not _completion_ready:
-			_completion_animation_done = false
 	pip.set_idle_paused(_paused or not is_visible_in_tree())
 	if _configured and is_visible_in_tree():
-		# Children receive their visibility change after the parent does.
-		_resume_round_celebration.call_deferred()
 		_refresh()
 	else:
 		_publish.call_deferred()
@@ -288,7 +268,7 @@ func _cancel_unreleased_pointer(pointer: int, serial: int) -> void:
 
 
 func play_prompt() -> void:
-	if _can_interact() and not _round_celebrating and not game.current_question().is_empty():
+	if _can_interact() and not completion_pending and not game.current_question().is_empty():
 		audio_requested.emit("phrase", str(game.current_question().id))
 
 
@@ -320,10 +300,7 @@ func _remove(index: int) -> void:
 func _activate() -> void:
 	if not _can_interact() or _pointer != -2:
 		return
-	if _round_celebrating:
-		if _completion_ready:
-			audio_requested.emit("select", "")
-			_finish_round()
+	if completion_pending:
 		return
 	if _celebrating:
 		return
@@ -347,15 +324,16 @@ func _activate() -> void:
 		return
 	var correct: bool = result == "correct"
 	_celebrating = correct
-	_round_celebrating = correct and game.completed == PhraseGameModel.QUESTION_COUNT
-	_completion_animation_done = false
-	_completion_ready = false
-	pip.react_gameplay(correct, ROUND_CELEBRATION_SECONDS if _round_celebrating else 0.0)
+	completion_pending = correct and game.completed == PhraseGameModel.QUESTION_COUNT
+	if not completion_pending:
+		pip.react_gameplay(correct)
 	audio_requested.emit("feedback", result)
 	if correct:
 		audio_requested.emit("phrase", str(game.current_question().id))
 	_refresh()
-	if correct:
+	if completion_pending:
+		completion_requested.emit()
+	elif correct:
 		_restore_focus()
 	elif not answer_buttons.is_empty() and not answer_buttons[0].disabled:
 		answer_buttons[0].grab_focus()
@@ -366,45 +344,18 @@ func _activate() -> void:
 func _on_pip_reaction_finished(correct: bool) -> void:
 	if not correct or not _celebrating or game.phase != "correct" or not _can_interact():
 		return
-	if _round_celebrating:
-		_completion_animation_done = true
-		pip.react("happy")
-		_publish.call_deferred()
-		_unlock_chest_if_ready.call_deferred()
-		return
 	_celebrating = false
 	_refresh()
 	action_button.grab_focus()
 
 
-func _resume_round_celebration() -> void:
-	if not _round_celebrating or _celebrating or _completion_ready or not _can_interact():
-		return
-	_celebrating = true
-	_completion_animation_done = false
-	pip.react_gameplay(true, ROUND_CELEBRATION_SECONDS)
-	_publish.call_deferred()
-
-
-func _unlock_chest_if_ready() -> void:
-	if not _round_celebrating or not _completion_animation_done or _completion_ready or not _can_interact():
-		return
-	# The final pronunciation may outlast Pip's animation, especially for older ages.
-	if completion_audio_playing.is_valid() and bool(completion_audio_playing.call()):
-		return
-	_completion_ready = true
-	_celebrating = false
-	_refresh()
-	action_button.grab_focus()
-
-
-func _finish_round() -> void:
-	if not _completion_ready or not _round_celebrating or not _can_interact() or _finished_emitted:
+func accept_completion() -> void:
+	# Only the host's shared invitation may accept a completed round.
+	if not completion_pending or _finished_emitted or game.phase != "correct" or game.completed != PhraseGameModel.QUESTION_COUNT:
 		return
 	if not game.advance() or game.phase != "finished":
 		return
-	_round_celebrating = false
-	_completion_ready = false
+	completion_pending = false
 	_celebrating = false
 	_finished_emitted = true
 	_refresh()
@@ -416,7 +367,7 @@ func _input(event: InputEvent) -> void:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
-	if not _can_interact() or _round_celebrating:
+	if not _can_interact() or completion_pending:
 		return
 	if event is InputEventKey and event.pressed:
 		var direction := Vector2.LEFT if event.is_action_pressed("ui_left") else Vector2.RIGHT if event.is_action_pressed("ui_right") else Vector2.ZERO
@@ -695,7 +646,7 @@ func scroll_bank_to(index: int) -> void:
 
 
 func _draw() -> void:
-	if _round_celebrating or not _configured:
+	if completion_pending or not _configured:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
@@ -766,43 +717,41 @@ func _refresh() -> void:
 	pip.set_attention("thinking" if _can_interact() and game.phase == "building" and not game.answer.is_empty() else "")
 	var accent: Color = _palette.get("accent", Style.GOOD)
 	for control in [listen_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
-		control.visible = not _round_celebrating
-	_heading.visible = _round_celebrating
-	_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		control.visible = not completion_pending
 	_progress.value = game.completed
 	_progress.tooltip_text = "%d of 3 phrases complete" % game.completed
 	_progress.set("accessibility_name", _progress.tooltip_text)
 	_progress_caption.text = "%d / 3" % mini(game.question_index + 1, 3)
-	_feedback.text = "You earned a treasure chest!" if _round_celebrating else "Well done!" if correct else "Try again." if wrong else "Drag words onto the line."
-	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _round_celebrating else HORIZONTAL_ALIGNMENT_LEFT
+	_feedback.text = "Well done!" if correct else "Try again." if wrong else "Drag words onto the line."
+	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_feedback.add_theme_color_override("font_color", Style.GOOD if correct else Style.WRONG if wrong else Style.MUTED)
 	for index in range(option_buttons.size()):
 		var button: Button = option_buttons[index]
-		button.visible = not _round_celebrating and not game.answer.has(index)
+		button.visible = not completion_pending and not game.answer.has(index)
 		button.disabled = _paused or game.phase != "building" or game.answer.has(index)
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
 		var occupied: bool = index < game.answer.size()
-		button.visible = not _round_celebrating and occupied
+		button.visible = not completion_pending and occupied
 		button.text = str(game.options[game.answer[index]].text) if occupied else ""
 		button.icon = option_buttons[game.answer[index]].icon if occupied else null
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.tooltip_text = "Drag to reorder or tap to return " + button.text if occupied else "Place a word on the answer line"
 		button.set("accessibility_name", "Word %d: %s" % [index + 1, button.text] if occupied else "Empty answer position %d" % (index + 1))
-	listen_button.disabled = _paused or _round_celebrating or question.is_empty() or game.phase == "finished"
+	listen_button.disabled = _paused or completion_pending or question.is_empty() or game.phase == "finished"
 	listen_button.configure(question, _muted or correct, accent)
 	listen_button.set_paused(_paused)
-	action_button.show()
-	action_button.text = "Open chest" if _round_celebrating else "Continue" if correct else "Check answer"
+	action_button.visible = not completion_pending
+	action_button.text = "Continue" if correct else "Check answer"
 	action_button.disabled = _paused or question.is_empty() or game.phase == "finished" \
-		or (not _completion_ready if _round_celebrating else _celebrating or (game.phase == "building" and game.answer.size() != question.get("words", []).size()))
+		or (completion_pending or _celebrating or (game.phase == "building" and game.answer.size() != question.get("words", []).size()))
 	for button in [listen_button, action_button]:
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	_layout()
 	if _configured and game.phase != "finished":
-		status_changed.emit("You did it! All 3 phrases complete. You earned a treasure chest! " + ("Choose Open chest." if _completion_ready else "Pip is celebrating.") if _round_celebrating else "Phrase Builder. Phrase %d of 3. %s" % [mini(game.question_index + 1, 3), _feedback.text])
+		status_changed.emit("Phrase Builder. Phrase %d of 3. %s" % [mini(game.question_index + 1, 3), _feedback.text])
 	_publish.call_deferred()
 
 
@@ -845,8 +794,8 @@ func _restore_focus() -> void:
 
 
 func default_focus() -> Control:
-	if _round_celebrating:
-		return action_button if _completion_ready and not action_button.disabled else null
+	if completion_pending:
+		return null
 	if not action_button.disabled and (game.phase == "correct" or game.answer.size() == answer_buttons.size()):
 		return action_button
 	for button in option_buttons:
@@ -917,9 +866,6 @@ func _layout() -> void:
 	Style.action_button(action_button, Style.GOOD if game.phase == "correct" else accent, true)
 	action_button.custom_minimum_size = Vector2.ZERO
 	action_button.add_theme_font_size_override("font_size", ceili(16 / s))
-	if _round_celebrating:
-		_layout_round_celebration(w, h, s)
-		return
 	var compact: bool = h < 360
 	var inner_w: float = minf(w, 820)
 	var x: float = (w - inner_w) * 0.5
@@ -990,31 +936,6 @@ func _layout() -> void:
 	_publish.call_deferred()
 
 
-func _layout_round_celebration(w: float, h: float, s: float) -> void:
-	var compact: bool = h < 320
-	var title_h: float = 52
-	var caption_h: float = 28
-	var button_h: float = 44 if compact else 50
-	var gap: float = 6 if compact else 16
-	var side: float = minf(280, minf(w * 0.82, maxf(40, h - title_h - caption_h - button_h - gap * 3)))
-	var total: float = title_h + caption_h + button_h + side + gap * 3
-	var top: float = maxf(0, (h - total) * 0.40)
-	pip.custom_minimum_size = Vector2.ZERO
-	_heading.add_theme_font_size_override("font_size", ceili((26 if compact else 36) / s))
-	_place(_heading, Rect2(0, top, w, title_h))
-	_place(pip, Rect2((w - side) * 0.5, top + title_h + gap, side, side))
-	_feedback.visible = true
-	_feedback.add_theme_font_size_override("font_size", ceili((14 if compact else 16) / s))
-	var caption_y: float = top + title_h + side + gap * 2
-	_place(_feedback, Rect2(0, caption_y, w, caption_h))
-	var button_w: float = minf(250, w)
-	_place(action_button, Rect2((w - button_w) * 0.5, caption_y + caption_h + gap, button_w, button_h))
-	_answer_drop = Rect2()
-	_bank_drop = Rect2()
-	queue_redraw()
-	_publish.call_deferred()
-
-
 func _rect_snapshot(rect: Rect2) -> Array:
 	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
 
@@ -1028,9 +949,7 @@ func snapshot() -> Dictionary:
 	result["visible"] = is_visible_in_tree()
 	result["paused"] = _paused
 	result["celebrating"] = _celebrating
-	result["round_celebrating"] = _round_celebrating
-	result["completion_animation_done"] = _completion_animation_done
-	result["completion_ready"] = _completion_ready
+	result["completion_pending"] = completion_pending
 	result["options"] = []
 	result["answers"] = []
 	for index in range(option_buttons.size()):
@@ -1044,7 +963,7 @@ func snapshot() -> Dictionary:
 		result.answers.append(item)
 	result["listen"] = _control_snapshot(listen_button)
 	result["action"] = _control_snapshot(action_button)
-	result["prompt_text_visible"] = not _round_celebrating and (_muted or game.phase == "correct")
+	result["prompt_text_visible"] = not completion_pending and (_muted or game.phase == "correct")
 	result["prompt_layout"] = listen_button.transcript_layout()
 	result["progress"] = {"value": game.completed, "total": PhraseGameModel.QUESTION_COUNT, "rect": _rect_snapshot(_progress.get_global_rect()), "visible": _progress.is_visible_in_tree()}
 	result["bank"] = {"rect": _rect_snapshot(_bank_clip.get_global_rect()), "scroll": _bank_scroll, "max_scroll": _bank_max_scroll}

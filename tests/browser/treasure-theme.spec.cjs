@@ -47,6 +47,7 @@ async function winMatch(page) {
     await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
+  await acceptCelebration(page);
 }
 
 function sceneryClip(bounds) {

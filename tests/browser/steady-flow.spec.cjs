@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint,
-  memoryMetrics, memoryPoint, resultPoint, visibleColorCount } = require('./game-ui.cjs');
+  memoryMetrics, memoryPoint, resultPoint, visibleColorCount, acceptCelebration } = require('./game-ui.cjs');
 
 async function click(page, point) {
   await tap(page, point.x, point.y);
@@ -80,6 +80,7 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
     }
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
+  await acceptCelebration(page);
   const chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();

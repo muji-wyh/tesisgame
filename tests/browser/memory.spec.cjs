@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, openRewards,
   memoryMetrics, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek,
-  resultPoint, visibleColorCount } = require('./game-ui.cjs');
+  resultPoint, visibleColorCount, acceptCelebration } = require('./game-ui.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -57,6 +57,7 @@ async function waitFeedback(page, correct, final = false) {
   await expect(page.locator('#game-status')).toContainText(correct ? 'A new flower!' : 'Try another pair.');
   await expect(page.locator('#game-status')).toContainText(final ? 'You did it!' : READY, { timeout: 2500 });
   await expect(page.locator('#selection-status')).toBeEmpty();
+  if (final) await acceptCelebration(page);
 }
 
 async function screenshot(page, testInfo, name, { verifyRendering = false, afterResize = false, held = false } = {}) {

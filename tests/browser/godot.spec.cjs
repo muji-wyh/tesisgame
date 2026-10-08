@@ -5,7 +5,7 @@ const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState } = require('./game-ui.cjs');
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState, acceptCelebration } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -445,6 +445,7 @@ async function winWithTouch(page, board) {
     await continueMatch(page);
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
   }
+  await acceptCelebration(page);
   return metrics;
 }
 

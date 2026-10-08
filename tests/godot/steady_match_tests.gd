@@ -165,7 +165,10 @@ func _run() -> void:
 			"Tapping a completed card during final feedback neither rescores nor starts another selection")
 		await create_timer(0.8).timeout
 		check(app.model.phase == "won" and app.model.selected_id.is_empty(),
-			"The fifth pair automatically enters the result without another button")
+			"The fifth pair automatically completes the game without another answer")
+		check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(),
+			"The winning Match round celebrates before accepting its chest invitation")
+		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 		check(root.gui_get_focus_owner() == app.chest_button, "The winning result keeps chest focus")
 		app.cards[completed_card].pressed.emit()
 		app._continue_match()

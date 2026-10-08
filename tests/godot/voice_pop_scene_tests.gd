@@ -984,6 +984,7 @@ func _run() -> void:
 		app.on_page_visible()
 		app._on_voice_state([true, true, "Listening."])
 		view._advance_game(view.game.remaining + 1.0)
+		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 		await settle()
 		check(view.game.phase == "finished" and view.game.remaining == 0.0, "The view reaches results at its earned deadline")
 		var result: Dictionary = view.game.summary()

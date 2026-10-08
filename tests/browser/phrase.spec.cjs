@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const {
   openGame, chooseMode, openModeMenu, openRewards, metrics, tap, rendered,
-  ageControl, collectionHeaderRect, resultPoint, visibleColorCount
+  ageControl, collectionHeaderRect, resultPoint, visibleColorCount, celebrationState, acceptCelebration
 } = require('./game-ui.cjs');
 const { observeOutputAudio, watchAudioRequests, expectRecording } = require('./bundled-audio.cjs');
 
@@ -259,16 +259,16 @@ async function observeRoundCelebration(page) {
     const status = document.getElementById('game-status'), canvas = document.getElementById('canvas');
     const observation = { started: null, finished: null, frame: null, startedAt: null, finishedAt: null, chestAt: null };
     window.phraseRoundCelebrationObservation = observation;
-    const readState = () => JSON.parse(status.dataset.phrase || '{}');
+    const readState = () => ({ ...JSON.parse(status.dataset.phrase || '{}'),
+      celebration: JSON.parse(status.dataset.celebration || '{}') });
     const observer = new MutationObserver(() => {
       const state = readState();
-      if (!observation.started && state.round_celebrating) {
+      if (!observation.started && state.celebration.active) {
         observation.started = state;
         observation.startedAt = performance.now();
-        // Capture the large Pip in motion inside the page, independent of driver latency.
         setTimeout(() => requestAnimationFrame(() => {
           const frameState = readState();
-          if (frameState.round_celebrating && frameState.id === observation.started.id) {
+          if (frameState.celebration.active && frameState.id === observation.started.id) {
             observation.frame = { state: frameState, status: status.textContent,
               raw: canvas.toDataURL('image/png').split(',')[1] };
           }
@@ -277,29 +277,31 @@ async function observeRoundCelebration(page) {
       if (observation.started && observation.chestAt === null && status.textContent.includes('Hold to open your chest')) {
         observation.chestAt = performance.now();
       }
-      if (observation.started && state.completion_ready) {
+      if (observation.started && state.celebration.ready) {
         observation.finished = state;
         observation.finishedAt = performance.now();
         observer.disconnect();
       }
     });
-    observer.observe(status, { attributes: true, attributeFilter: ['data-phrase'], childList: true, characterData: true, subtree: true });
+    observer.observe(status, { attributes: true, attributeFilter: ['data-phrase', 'data-celebration'],
+      childList: true, characterData: true, subtree: true });
   });
 }
 
 async function expectRoundCelebration(page, info, name) {
   await expect.poll(() => page.evaluate(() => Boolean(window.phraseRoundCelebrationObservation?.finished)),
-    { message: 'The final celebration enables Open chest after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
+    { message: 'The shared celebration enables Open chest after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
   const observation = await page.evaluate(() => window.phraseRoundCelebrationObservation);
   const { started, finished, frame, startedAt, finishedAt, chestAt } = observation;
-  expect(started).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true, completion_animation_done: false });
-  expect(finished).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true,
-    completion_ready: true, celebrating: false, action: { text: 'Open chest', visible: true, disabled: false } });
-  expect(finishedAt - startedAt, 'The round celebration has its own readable interval').toBeGreaterThanOrEqual(2450);
+  expect(started.celebration).toMatchObject({ active: true, ready: false, chest_count: 1, mode: 'phrase' });
+  expect(finished).toMatchObject({ phase: 'correct', completed: 3, completion_pending: true,
+    celebration: { active: true, ready: true, action: { text: 'Open chest', visible: true, disabled: false } } });
+  expect(finishedAt - startedAt, 'The shared celebration has its own readable interval').toBeGreaterThanOrEqual(2850);
   expect(chestAt, 'The chest cannot open before the learner accepts the invitation').toBeNull();
-  expect(frame, 'The in-page observer captures the distinct completion stage').toBeTruthy();
-  expect(frame.state).toMatchObject({ phase: 'correct', completed: 3, round_celebrating: true });
-  expect(frame.state.action).toMatchObject({ text: 'Open chest', visible: true, disabled: true });
+  expect(frame, 'The in-page observer captures the shared completion stage').toBeTruthy();
+  expect(frame.state).toMatchObject({ phase: 'correct', completed: 3, completion_pending: true,
+    celebration: { active: true, ready: false } });
+  expect(frame.state.celebration.action).toMatchObject({ text: 'Open chest', visible: false, disabled: true });
   for (const control of [...frame.state.options, ...frame.state.answers, frame.state.listen]) {
     expect(control.visible, `Completion hides ${control.name}`).toBe(false);
     expect(control.disabled, `Completion disables ${control.name}`).toBe(true);
@@ -552,10 +554,10 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   await capture(page, info, 'phrase-earned-chest-invitation');
   await openModeMenu(page);
   await libraryAction(page, 'LibraryClose');
-  await expect.poll(async () => (await phraseState(page)).completion_ready).toBe(true);
-  expect((await phraseState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
+  await expect.poll(async () => (await celebrationState(page)).ready).toBe(true);
+  expect((await celebrationState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
   expect(progress(await phraseState(page)), 'Closing a menu preserves the ready invitation').toEqual(progress(completion.finished));
-  await pressAction(page);
+  await acceptCelebration(page);
   await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(false);
   await capture(page, info, 'phrase-earned-chest');

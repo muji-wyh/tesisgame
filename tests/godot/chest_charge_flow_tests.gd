@@ -54,6 +54,7 @@ func _win(app, seed_value: int) -> void:
 			app._continue_match()
 	check(app.model.phase == "won" and app.model.chest_state == "closed",
 		"Five real word-picture matches earn a closed chest")
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 
 
 func _begin(app) -> void:

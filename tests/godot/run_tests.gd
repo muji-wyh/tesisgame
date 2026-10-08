@@ -71,6 +71,7 @@ func win_round(app) -> void:
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 
 
 func set_completed_rewards(app, rewards: Dictionary) -> void:
@@ -1102,6 +1103,7 @@ func _test_scene() -> void:
 			and not app._message.is_visible_in_tree(), "Match feedback stays on the board until its automatic transition")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	await process_frame
 	await process_frame
 	check(app.chest_button.has_focus(), "Controller focus moves to the chest after winning")
@@ -1171,10 +1173,7 @@ func _test_scene() -> void:
 		"An internal fixture reset clears the reward and chest performance")
 	check(app.feedback_timer.is_stopped(), "An internal fixture reset cancels the feedback timer")
 	app.set_reduced_motion(false)
-	for pair in pairs_for(app.model):
-		app.cards[pair[0]].pressed.emit()
-		app.cards[pair[1]].pressed.emit()
-		app.feedback_timer.timeout.emit()
+	win_round(app)
 	prepare_completion(app)
 	app.chest_button.grab_focus()
 	joy_button(JOY_BUTTON_A, true)
@@ -1216,10 +1215,7 @@ func _test_scene() -> void:
 		"Presentation changes do not duplicate the saved collection entry")
 	app.new_round(90)
 	check_no_collectible_presentation(app, "Starting a new round leaves no reward flight behind")
-	for pair in pairs_for(app.model):
-		app.cards[pair[0]].pressed.emit()
-		app.cards[pair[1]].pressed.emit()
-		app.feedback_timer.timeout.emit()
+	win_round(app)
 	var drag_press := InputEventMouseButton.new()
 	drag_press.button_index = MOUSE_BUTTON_LEFT
 	drag_press.pressed = true

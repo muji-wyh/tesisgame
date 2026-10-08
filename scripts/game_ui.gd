@@ -17,6 +17,7 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const PhraseGame = preload("res://scripts/phrase_game.gd")
+const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
@@ -138,6 +139,11 @@ var _mode_menu_origin := Vector2.ZERO
 var _mode_menu_dragged: bool = false
 var _mode_menu_mouse_emulated: bool = false
 var _memory: MemoryGarden
+var _round_celebration: RoundCelebration
+var _celebration_seen_id: String = ""
+var _celebration_suspended: bool = false
+var _celebration_published: String = ""
+var _celebration_publish_left: float = 0.0
 var _phrase: PhraseGame
 var _phrase_published: String = ""
 var _pop: VoicePop
@@ -457,7 +463,7 @@ func _build_controls() -> void:
 	_phrase = PhraseGame.new()
 	_phrase.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_phrase.interaction_allowed = _phrase_interaction_allowed
-	_phrase.completion_audio_playing = func() -> bool: return audio.voice.playing
+	_phrase.completion_requested.connect(_phrase_completion_requested)
 	_phrase.finished.connect(_phrase_finished)
 	_phrase.status_changed.connect(_phrase_status_changed)
 	_phrase.audio_requested.connect(_phrase_audio_requested)
@@ -466,7 +472,7 @@ func _build_controls() -> void:
 	column.add_child(_phrase)
 	_pop = VoicePop.new()
 	_pop.name = "VoicePop"
-	_pop.interaction_allowed = func() -> bool: return not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
+	_pop.interaction_allowed = func() -> bool: return not _round_celebration_active() and not collection_page.visible and not _leaderboard_overlay.visible and not _page_hidden and not _mode_menu_open()
 	_pop.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_pop.request_listening.connect(_start_pop_listening)
 	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
@@ -495,6 +501,13 @@ func _build_controls() -> void:
 	_pop_rewards.changed.connect(_publish_pop_rewards)
 	_pop_rewards.hide()
 	column.add_child(_pop_rewards)
+	_round_celebration = RoundCelebration.new()
+	_round_celebration.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_round_celebration.performance_finished.connect(_on_round_celebration_finished)
+	_round_celebration.open_requested.connect(_accept_round_chest)
+	_round_celebration.cue_requested.connect(_round_celebration_cue)
+	column.add_child(_round_celebration)
+	_round_celebration.hide()
 	_outcome = Control.new()
 	_outcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_outcome.resized.connect(_layout_result)
@@ -617,6 +630,7 @@ func _build_mode_menu() -> void:
 	add_child(_mode_menu)
 	_mode_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_menu.hide()
+	_sync_round_celebration()
 	var shade := ColorRect.new()
 	shade.color = Color(Style.INK, 0.32)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -687,7 +701,7 @@ func _play_ui_click(source: Control = null) -> void:
 
 func _show_mode_menu() -> void:
 	if _mode_menu_open() or _page_hidden or collection_page.visible or (_leaderboard_overlay.visible and not _pop_picker_open()) \
-		or not model.phase in ["waiting", "matching", "feedback"] or model.chest_state == "opening" \
+		or (not model.phase in ["waiting", "matching", "feedback"] and not _round_celebration_active()) or model.chest_state == "opening" \
 		or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_mode_menu_resume_voice = _voice_mode
@@ -698,6 +712,7 @@ func _show_mode_menu() -> void:
 	# recognizer that was listening or connecting when the menu interrupted it.
 	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
 	_mode_menu.show()
+	_sync_round_celebration()
 	_on_input_canceled()
 	_stop_controller_actions()
 	if _mode_menu_resume_voice:
@@ -885,6 +900,7 @@ func _build_collection_shell() -> void:
 	column.add_child(_age_catalog)
 	_age_catalog.hide()
 	collection_page.hide()
+	_sync_round_celebration()
 
 
 func _build_leaderboard_overlay() -> void:
@@ -926,6 +942,7 @@ func _build_leaderboard_overlay() -> void:
 	resized.connect(_layout_leaderboards)
 	_layout_leaderboards()
 	_leaderboard_overlay.hide()
+	_sync_round_celebration()
 
 
 func _pop_picker_open() -> bool:
@@ -981,6 +998,7 @@ func _show_leaderboard(view: String, include_round: bool) -> void:
 	_reconcile_round_identity()
 	include_round = include_round and not _leaderboard_result.is_empty()
 	_leaderboard_overlay.show()
+	_sync_round_celebration()
 	_pause_phrase()
 	_publish_pop_rewards(_pop_rewards.snapshot())
 	_leaderboard_close.visible = _leaderboard_gate != "onboarding"
@@ -1610,9 +1628,12 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_hide_mode_menu(false, false)
 	if _leaderboard_gate == "onboarding":
 		return false
+	if not _stop_pop_listening():
+		return false
 	_return_to_pop_picker = false
 	if _leaderboard_overlay.visible:
 		_hide_leaderboard()
+	_stop_round_celebration()
 	_settling_chest = true
 	audio.stop_chest_performance()
 	if model.phase == "won" and model.chest_state == "closed":
@@ -1624,8 +1645,6 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
 		return false
 	_stop_voice()
-	if not _stop_pop_listening():
-		return false
 	_pop.stop()
 	_pop_rewards.pause()
 	_pop_rewards_shown = false
@@ -1655,6 +1674,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_show_error(model.error)
 		return false
 	_leaderboard_round_id = LeaderboardState.make_round_id()
+	_celebration_seen_id = ""
 	_leaderboard_result.clear()
 	_leaderboard_saved_player_id = ""
 	_pop_player_id = ""
@@ -1715,6 +1735,8 @@ func choose_mode(id: String) -> void:
 
 
 func _configure_pop(seed_value: int = -1) -> void:
+	_stop_round_celebration()
+	_celebration_seen_id = ""
 	if is_instance_valid(_pop_leaderboard):
 		_pop_leaderboard.settle_animation()
 	_pop_leaderboard = null
@@ -1812,6 +1834,9 @@ func _pop_finished(result: Dictionary) -> void:
 	_pop_leaderboard.configure(leaderboard_state, "result", "pop", _leaderboard_round_id, _leaderboard_result, reduced_motion, _pop_player_id)
 	_pop_leaderboard.save_assigned_score()
 	_publish_leaderboards()
+	if int(result.get("chest_count", 0)) > 0:
+		_begin_round_celebration(int(result.chest_count))
+		_refresh()
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -1827,6 +1852,8 @@ func _pop_chest_earned(count: int) -> void:
 
 
 func _show_pop_rewards() -> void:
+	if _round_celebration_active():
+		return
 	if _mode_id != "pop" or collection_page.visible or _leaderboard_overlay.visible or _page_hidden:
 		return
 	if not _stop_pop_listening():
@@ -1883,8 +1910,127 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 			"reward": audio.chest_reward(theme_id, progress > 0.0)
 
 
+func _round_celebration_active() -> bool:
+	return is_instance_valid(_round_celebration) and _round_celebration.is_active()
+
+
+func _round_celebration_allowed() -> bool:
+	return _round_celebration_active() and not _page_hidden and not _rebuilding \
+		and not _speech_debug_active and not collection_page.visible \
+		and not _leaderboard_overlay.visible and not _mode_menu_open()
+
+
+func _begin_round_celebration(chest_count: int) -> void:
+	if chest_count <= 0 or _leaderboard_round_id.is_empty() or _celebration_seen_id == _leaderboard_round_id:
+		return
+	_celebration_seen_id = _leaderboard_round_id
+	_celebration_suspended = false
+	_stop_controller_actions()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+	duck.settle()
+	_round_celebration.begin(_leaderboard_round_id, model.theme_id, data.chests, chest_count, reduced_motion, _mode_id == "pop")
+	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
+	if _round_celebration_allowed():
+		_start_round_celebration_audio()
+		_announce_status("You did it! Pip is celebrating. You earned %d treasure chest%s." % [chest_count, "" if chest_count == 1 else "s"])
+	_sync_round_celebration()
+	_publish_round_celebration()
+
+
+func _start_round_celebration_audio() -> void:
+	# Pop's microphone must be released before output audio resumes.
+	if _page_hidden or (_mode_id == "pop" and _pop_speech_active):
+		return
+	audio.interact(model.theme_id, _mode_id != "pop")
+	audio.begin_round_celebration(_leaderboard_round_id)
+
+
+func _sync_round_celebration() -> void:
+	if not _round_celebration_active():
+		return
+	var allowed: bool = _round_celebration_allowed()
+	if not allowed and not _celebration_suspended:
+		_celebration_suspended = true
+		_round_celebration.pause()
+		audio.stop_round_celebration()
+	elif allowed and _celebration_suspended:
+		_celebration_suspended = false
+		_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
+		_round_celebration.resume()
+		if not _round_celebration.is_ready():
+			_start_round_celebration_audio()
+	_round_celebration.visible = allowed
+	if allowed:
+		_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
+
+
+func _stop_round_celebration() -> void:
+	if is_instance_valid(_round_celebration):
+		_round_celebration.stop()
+		_round_celebration.hide()
+	_celebration_suspended = false
+	if is_instance_valid(audio):
+		audio.stop_round_celebration()
+	_publish_round_celebration()
+
+
+func _round_celebration_cue(round_id: String, cue: String) -> void:
+	if round_id != _leaderboard_round_id or not _round_celebration_allowed():
+		return
+	audio.play_round_celebration_cue(round_id, cue)
+
+
+func _on_round_celebration_finished(round_id: String) -> void:
+	if round_id != _leaderboard_round_id or not _round_celebration_allowed():
+		return
+	audio.stop_round_celebration()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+	if _mode_id == "pop":
+		_stop_round_celebration()
+		_refresh()
+		_announce_status("Round complete. View your results or open your earned chests.")
+	else:
+		_announce_status("You earned a treasure chest! Choose Open chest.")
+	var target: Control = _default_focus()
+	if _valid_focus(target):
+		target.grab_focus()
+	_publish_round_celebration()
+
+
+func _accept_round_chest(round_id: String) -> void:
+	if round_id != _leaderboard_round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id == "pop":
+		return
+	_play_ui_click()
+	_stop_round_celebration()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+	if _mode_id == "phrase":
+		_phrase.accept_completion()
+	else:
+		_refresh()
+	_layout()
+	_default_focus().grab_focus()
+
+
+func _phrase_completion_requested() -> void:
+	if not _phrase_interaction_allowed() or not _phrase.completion_pending:
+		return
+	_begin_round_celebration(1)
+	_refresh()
+
+
+func _publish_round_celebration() -> void:
+	if _host == null or not is_instance_valid(_round_celebration):
+		return
+	var state: Dictionary = _round_celebration.snapshot()
+	state["mode"] = _mode_id
+	var serialized: String = JSON.stringify(state)
+	if serialized != _celebration_published:
+		_celebration_published = serialized
+		_host.celebrationStatus(serialized)
+
+
 func _phrase_interaction_allowed() -> bool:
-	return _mode_id == "phrase" and model.phase in ["waiting", "matching", "feedback"] \
+	return _mode_id == "phrase" and not _round_celebration_active() and model.phase in ["waiting", "matching", "feedback"] \
 		and not _rebuilding and not _page_hidden and not _speech_debug_active and not collection_page.visible \
 		and not _leaderboard_overlay.visible and not _mode_menu_open()
 
@@ -2021,10 +2167,16 @@ func _memory_prompt() -> void:
 func _refresh() -> void:
 	if _rebuilding:
 		return
+	if _mode_id in ["match", "memory"] and model.phase == "won" and model.chest_state == "closed" and not _settling_chest:
+		_begin_round_celebration(1)
+	var celebrating: bool = _round_celebration_active()
 	var theme_changed: bool = str(_active_palette.get("id", "")) != model.theme_id
 	if theme_changed:
 		_active_palette = Data.theme(model.theme_id)
 		audio.prepare_chest(model.theme_id)
+		# Voice Pop keeps the theme of its already saved reward batch.
+		if _round_celebration_active() and _mode_id != "pop":
+			_round_celebration.apply_theme(model.theme_id, data.chests)
 	var palette: Dictionary = _active_palette
 	_background.color = Style.PAPER.lerp(palette.background, 0.16)
 	if theme_changed:
@@ -2082,12 +2234,13 @@ func _refresh() -> void:
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
 	_memory.visible = playing and _mode_id == "memory"
-	_phrase.visible = playing and _mode_id == "phrase" and not collection_page.visible
+	_phrase.visible = playing and _mode_id == "phrase" and not collection_page.visible and not celebrating
 	_resume_phrase()
-	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown
+	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown and not celebrating
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_message.hide()
-	_outcome.visible = not playing
+	_outcome.visible = not playing and not celebrating
+	_sync_round_celebration()
 	_refresh_match_cards()
 	if not model.hint_ids.is_empty():
 		_message.text = "Hint: match the %s cards." % model.card_by_id(model.hint_ids[0]).word.text
@@ -2150,8 +2303,9 @@ func _refresh() -> void:
 				_leaderboard_result = {"won": true, "mistakes": model.mistakes, "hints_used": Model.MAX_HINTS - model.hints_remaining}
 			elif _mode_id == "memory":
 				_leaderboard_result = {"won": true, "attempts": _memory.memory.attempts, "peeks": _memory.memory.peeks}
-			duck.react("happy")
-			audio.cue(model.theme_id + "-arrive")
+			if not celebrating:
+				duck.react("happy")
+				audio.cue(model.theme_id + "-arrive")
 			if _controller_mode and not collection_page.visible:
 				chest_button.focus_mode = Control.FOCUS_ALL
 				_default_focus().grab_focus()
@@ -2164,7 +2318,7 @@ func _refresh() -> void:
 		_message.text = "Room choices could not be remembered. You can keep practising. Choose Retry saving."
 	if collection_page.visible:
 		_announce_collection_state()
-	else:
+	elif not celebrating:
 		_announce_status(_message.text if playing else _title.text + " " + _caption.text)
 	if _host != null and _mode_id == "memory":
 		_sync_memory_selection()
@@ -2336,6 +2490,12 @@ func _continue_match() -> void:
 func _refresh_controller_focus() -> void:
 	if not _controller_mode or collection_page.visible:
 		return
+	if _round_celebration_active():
+		if not _valid_focus(get_viewport().gui_get_focus_owner()):
+			var target: Control = _default_focus()
+			if _valid_focus(target):
+				target.grab_focus()
+		return
 	if model.phase == "won" and model.chest_state == "opening":
 		# Keep the handoff pending until the next result action is available.
 		return
@@ -2464,7 +2624,7 @@ func _layout_game_heading() -> void:
 		return
 	# Restyling can expand the button before its temporary minimum size is cleared.
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_mode_heading_button.visible = _header_spacer.size.x * Style.ui_scale(self) >= 64 and model.phase in ["waiting", "matching", "feedback"]
+	_mode_heading_button.visible = _header_spacer.size.x * Style.ui_scale(self) >= 64 and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
 
 
 func _layout_mode_menu() -> void:
@@ -2746,6 +2906,7 @@ func set_reduced_motion(value: bool) -> void:
 	_pop_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_phrase.set_reduced_motion(value)
+	_round_celebration.set_reduced_motion(value)
 	for card in cards.values():
 		card.set_reduced_motion(value)
 	if duck != null:
@@ -2765,6 +2926,8 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func _open_chest() -> void:
+	if _round_celebration_active() and not _settling_chest:
+		return
 	if model.phase != "won" or model.chest_state != "closed":
 		return
 	if not _progress_ready:
@@ -2910,6 +3073,7 @@ func on_page_hidden() -> void:
 		_resume_music_after_background = audio.active and audio.music.playing and not audio.muted
 	_page_hidden = true
 	chest.set_idle_paused(true)
+	_sync_round_celebration()
 	_hint_link.set_paused(true)
 	if _mode_id == "pop":
 		_pop.pause()
@@ -2945,6 +3109,7 @@ func on_page_visible() -> void:
 	var resume_music: bool = _page_hidden and _resume_music_after_background
 	_page_hidden = false
 	_resume_music_after_background = false
+	_sync_round_celebration()
 	if _pop_rewards_shown and not collection_page.visible:
 		_pop_rewards.resume()
 	chest.set_idle_paused(false)
@@ -3292,6 +3457,8 @@ func _valid_focus(control: Control) -> bool:
 		return _pop_picker_open() and control in [duck, collection_button, _mode_heading_button]
 	if collection_page.visible and not _leaderboard_overlay.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
 		return false
+	if _round_celebration_active() and not collection_page.visible and not _leaderboard_overlay.visible:
+		return _round_celebration.is_ancestor_of(control) or _header.is_ancestor_of(control)
 	return true
 
 
@@ -3306,6 +3473,9 @@ func _default_focus() -> Control:
 		return _leaderboard_close
 	if collection_page.visible:
 		return _collection_back
+	if _round_celebration_active():
+		var target: Control = _round_celebration.default_focus()
+		return target if _valid_focus(target) else collection_button
 	if _mode_id == "pop" and _pop_rewards_shown:
 		for control in _pop_rewards.navigation_controls():
 			if _valid_focus(control):
@@ -3508,6 +3678,7 @@ func _open_speech_debug() -> bool:
 	_speech_debug_tree_paused = get_tree().paused
 	_speech_debug_audio_process_mode = audio.process_mode
 	_speech_debug_active = true
+	_sync_round_celebration()
 	_pause_phrase()
 	audio.set_speech_debug_mix(1.0)
 	# Freeze gameplay, controller input and timers while real sound assets
@@ -3531,10 +3702,12 @@ func _close_speech_debug(restore_audio: bool = true) -> bool:
 	elif restore_audio:
 		_resume_phrase()
 		_restore_mode_music()
+		_sync_round_celebration()
 	return true
 
 
 func _exit_tree() -> void:
+	_stop_round_celebration()
 	_close_speech_debug(false)
 
 
@@ -3717,6 +3890,8 @@ func _stop_feedback_animations() -> void:
 
 
 func _start_chest_hold() -> void:
+	if _round_celebration_active():
+		return
 	if _leaderboard_overlay.visible:
 		return
 	if _holding_chest or _page_hidden or collection_page.visible or _save_error \
@@ -3802,6 +3977,11 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	_sync_round_celebration()
+	_celebration_publish_left -= delta
+	if _celebration_publish_left <= 0.0:
+		_celebration_publish_left = 0.05
+		_publish_round_celebration()
 	_leaderboard_publish_left -= delta
 	if _leaderboard_publish_left <= 0.0:
 		_leaderboard_publish_left = 0.1
@@ -3981,6 +4161,7 @@ func _show_collection() -> void:
 			control.focus_mode = Control.FOCUS_NONE
 	_return_to_pop_picker = from_picker
 	collection_page.show()
+	_sync_round_celebration()
 	_hint_link.set_paused(true)
 	_memory.pause(true)
 	_pause_phrase()
@@ -4062,7 +4243,7 @@ func _update_duck() -> void:
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
 	duck.set_reduced_motion(reduced_motion)
-	duck.set_speaking(visible_here and not phrase_speaking and audio.available and audio.active and not audio.muted and audio.voice.playing)
+	duck.set_speaking(visible_here and not _round_celebration_active() and not phrase_speaking and audio.available and audio.active and not audio.muted and audio.voice.playing)
 	duck.set_home_playground(in_collection)
 	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
 	if _mode_id == "pop":
@@ -4097,7 +4278,7 @@ func _update_duck() -> void:
 		duck.hide()
 		return
 	duck.compact = false
-	var opens_menu: bool = not in_collection and model.phase in ["waiting", "matching", "feedback"]
+	var opens_menu: bool = not in_collection and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
 	duck.tooltip_text = "" if in_collection else "Pip: change game mode" if opens_menu else "Pip the duck. Press for a hello!"
 	_set_accessibility_name(duck, "Pip: change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else "Pip the duck. Press to say hello.")
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
@@ -4131,7 +4312,7 @@ func _play_duck() -> void:
 	if collection_page.visible:
 		_room.playground.poke()
 		return
-	if model.phase in ["waiting", "matching", "feedback"]:
+	if model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active():
 		_toggle_mode_menu()
 		return
 	if duck.is_manual_action_busy() or audio.is_pip_busy():

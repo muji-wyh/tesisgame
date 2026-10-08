@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy } = require('./bundled-audio.cjs');
 const {
   openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, resultPoint,
-  openRewards, visibleColorCount, observeAudio, chooseTheme, contentBounds, uiScale
+  openRewards, visibleColorCount, observeAudio, chooseTheme, contentBounds, uiScale, acceptCelebration
 } = require('./game-ui.cjs');
 
 // Keep mobile CSS geometry while isolating cadence from software-renderer fill
@@ -94,6 +94,7 @@ async function winMatch(page) {
     await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
+  await acceptCelebration(page);
 }
 
 async function pressChest(page, holdMilliseconds = null) {
