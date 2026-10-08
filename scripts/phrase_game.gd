@@ -924,7 +924,7 @@ func _layout() -> void:
 	var x: float = (w - inner_w) * 0.5
 	var gap: float = 6 if compact else 24
 	var progress_h: float = 14 if compact else 24
-	var hero_h: float = 48 if compact else minf(112, h * 0.18)
+	var hero_h: float = 48 if compact else minf(64 if w < 400 else 112, h * 0.18)
 	var tile_h: float = 44 if compact else 58
 	var answer_h: float = tile_h + 4
 	var footer_h: float = 44 if compact else 50
@@ -942,8 +942,9 @@ func _layout() -> void:
 	pip.custom_minimum_size = Vector2.ZERO
 	_place(pip, Rect2(x, hero_y + (hero_h - pip_side) * 0.5, pip_side, pip_side))
 	var audio_x: float = x + pip_side + 12
-	var audio_h: float = minf(80, hero_h)
-	_place(listen_button, Rect2(audio_x, hero_y + (hero_h - audio_h) * 0.5, inner_w - pip_side - 12, audio_h))
+	var audio_h: float = minf(56, hero_h)
+	var audio_w: float = minf(360, inner_w - pip_side - 12)
+	_place(listen_button, Rect2(audio_x, hero_y + (hero_h - audio_h) * 0.5, audio_w, audio_h))
 	var answer_y: float = hero_y + hero_h + gap
 	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
 	_place(_answer_clip, Rect2(x, answer_y, inner_w, tile_h))
