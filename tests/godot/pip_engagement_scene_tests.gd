@@ -148,6 +148,7 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	check(not observe_idle(app, 20), "Reduced motion suppresses unsolicited visual movement")
 	await _test_consumed_touches(app)
+	_test_contextual_attention(app)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
@@ -280,10 +281,108 @@ func _test_consumed_touches(app) -> void:
 		check(app._memory.memory.studying, "The real second touch holds Memory Peek")
 		viewport_touch(0, card_point, false, cancel_first)
 		check(not observe_idle(app, 18), "A remaining Peek touch keeps Pip quiet")
+		check(app.duck._attention == "thinking", "Pip studies with the held Memory Peek")
 		viewport_touch(1, eye_point, false)
 		await settle()
 		check(not app._memory.memory.studying and app._proactive_touches.is_empty()
 			and not app._pointer_focus_active,
 			"Consumed touch releases/cancels clear every tracked pointer through real viewport dispatch")
+		check(app.duck._attention.is_empty(), "Releasing Peek clears Pip's studying expression")
 		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
 			"Pip resumes only after a fresh quiet interval once both fingers lift")
+
+
+func _test_contextual_attention(app) -> void:
+	app.audio.set_muted(true)
+	app.set_reduced_motion(false)
+	var saved_rewards: Dictionary = app.medal_progress.counts.duplicate(true)
+	check(app.new_round(84, true, "", "match"), "A fresh Match round starts for contextual expressions")
+	app.duck.settle()
+	app._select_card(app.model.cards[0].id)
+	app._update_duck()
+	check(app.duck._attention == "thinking" and app.duck._gameplay_reaction.is_empty(),
+		"One selected Match card invites thought without judging an unfinished pair")
+	var remaining: float = app.duck.reaction_left
+	for index in range(8):
+		app._update_duck()
+	check(is_equal_approx(app.duck.reaction_left, remaining) and app.model.phase == "matching",
+		"Repeated context synchronization never restarts selection feedback or advances the game")
+	app.duck._process(0.7)
+	check(app.duck.expression_name() == "thinking", "A partial Match pair remains thoughtful after its selection reaction")
+	app._controller_back()
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "Canceling the selected Match card clears its context")
+	for state in [[false, "Starting microphone..."], [true, "Listening."], [false, "Listening paused. Continuing..."]]:
+		app._on_voice_state([true, state[0], state[1]])
+		app._update_duck()
+		check(app.duck._attention == "listening", "Match microphone opening, listening and rollover retain attention")
+	app._on_voice_state([true, false, "Microphone permission was denied. Allow it in browser settings, or tap cards."])
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "A failed Match microphone never pretends to keep listening")
+	app._stop_voice()
+
+	check(app.new_round(84, true, "", "memory"), "A fresh Memory round starts for contextual expressions")
+	app._memory.card_buttons[0].pressed.emit()
+	app._update_duck()
+	check(app.duck._attention == "thinking" and app.duck._gameplay_reaction.is_empty(),
+		"A single revealed Memory card has a thoughtful, unjudged context")
+	app._show_mode_menu()
+	check(app.duck._attention.is_empty(), "The game menu clears the covered board's expression")
+	app._hide_mode_menu()
+	check(app.duck._attention == "thinking", "Returning to the selected Memory card restores its real context")
+	app._show_collection()
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "Pip's room never inherits the covered Memory board's expression")
+	app._hide_collection()
+	app._memory.card_buttons[0].pressed.emit()
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "Covering the selected Memory card clears its expression")
+
+	check(app.new_round(84, true, "", "pop"), "A fresh Voice Pop round starts for contextual expressions")
+	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	app._pop.set_process(false)
+	for state in [[false, "Starting microphone..."], [true, "Listening."], [false, "Listening paused. Continuing..."]]:
+		app._on_voice_state([true, state[0], state[1]])
+		app._update_duck()
+		check(app.duck._attention == "listening", "Voice Pop microphone opening, listening and rollover retain attention")
+	app._on_voice_state([true, false, "Speech network error. Check your internet connection, then tap Retry."])
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "A stopped Voice Pop microphone clears attention while preserving the round")
+	app._pop.game.phase = "finished"
+	app._pop._listening = true
+	app._update_duck()
+	check(app.duck._attention.is_empty(), "A completed Voice Pop round ignores a stale microphone flag")
+	app._pop.stop()
+
+	check(app.new_round(84, true, "", "phrase"), "A fresh Phrase Builder round starts for contextual expressions")
+	var view = app._phrase
+	view.option_buttons[0].pressed.emit()
+	var partial: Dictionary = view.game.snapshot()
+	check(view.pip._attention == "thinking" and view.pip._gameplay_reaction.is_empty()
+		and view.game.completed == 0 and view.game.mistakes == 0,
+		"A placed phrase word invites thought without judging an incomplete answer")
+	view.pause()
+	check(view.pip._attention.is_empty(), "Pausing Phrase Builder clears its separate Pip's context")
+	view.resume()
+	check(view.pip._attention == "thinking" and view.game.snapshot() == partial,
+		"Resuming a partial phrase restores its context without changing the answer")
+	app.on_page_hidden()
+	app._update_duck()
+	check(view.pip._attention.is_empty() and app.duck._attention.is_empty(), "A hidden page clears both companions' contexts")
+	app.on_page_visible()
+	view._refresh()
+	check(view.pip._attention == "thinking", "The visible partial phrase restores only its current context")
+	view.answer_buttons[0].pressed.emit()
+	check(view.pip._attention.is_empty(), "Removing the final phrase word clears its context")
+	for word_id in view.game.current_question().words:
+		for index in range(view.game.options.size()):
+			if view.game.options[index].id == word_id:
+				view.option_buttons[index].pressed.emit()
+				break
+	view.action_button.pressed.emit()
+	check(view.pip._attention.is_empty() and view.pip._gameplay_reaction == "happy"
+		and is_equal_approx(view.pip._gameplay_left, view.pip.GAMEPLAY_HAPPY_SECONDS),
+		"A correct phrase clears thought and retains the existing celebration deadline")
+	view.stop()
+	check(view.pip._attention.is_empty() and app.medal_progress.counts == saved_rewards,
+		"Stopping contextual expressions leaves no stale state or extra rewards")

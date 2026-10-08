@@ -15,3 +15,11 @@ static func load_sheets(value: String) -> Array[Texture2D]:
 	for suffix in ["", "-idle", "-parts"]:
 		result.append(load(DIRECTORY + "pip-" + chosen + suffix + ".svg") as Texture2D)
 	return result
+
+
+static func load_expression_sheets(value: String) -> Array[Texture2D]:
+	var chosen := normalize_theme(value)
+	var result: Array[Texture2D] = []
+	for suffix in ["-expressions", "-expression-heads"]:
+		result.append(load(DIRECTORY + "pip-" + chosen + suffix + ".svg") as Texture2D)
+	return result

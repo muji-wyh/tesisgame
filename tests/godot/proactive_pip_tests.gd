@@ -247,10 +247,18 @@ func _check_activity_preemption(duck) -> void:
 		"Activity preserves unrelated ordinary feedback and its remaining duration")
 	duck.set_reduced_motion(true)
 	duck.react("happy")
+	var face: String = duck.expression_name()
+	remaining = duck.reaction_left
 	duck.note_activity()
 	duck.set_proactive_allowed(true)
-	check(duck.pose == 3 and not duck.is_processing(),
-		"Activity and allowance changes preserve static reduced-motion feedback")
+	check(duck.pose == 3 and duck.expression_name() == face and duck.reaction_left == remaining,
+		"Activity and allowance changes preserve the static reduced-motion face and its deadline")
+	duck._process(0.3)
+	check(duck.pose == 3 and duck.expression_name() == face and duck.reaction_left > 0.0,
+		"Reduced-motion greeting feedback keeps one still expression during its finite interval")
+	duck._process(remaining)
+	check(is_zero_approx(duck.reaction_left) and duck.expression_name() == "neutral" and not duck.is_processing(),
+		"The reduced-motion greeting expires without leaving stale artwork or a processing loop")
 	duck.set_reduced_motion(false)
 	for kind in REACTIONS:
 		_start_invitation(duck)

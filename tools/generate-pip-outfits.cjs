@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+const EXPRESSIONS = ['neutral', 'listening', 'thinking', 'delighted', 'proud', 'encourage', 'surprised', 'sleepy', 'wink', 'blink'];
 const ROOT = path.resolve(__dirname, '..');
 const MASCOTS = 'assets/images/mascots';
 
@@ -58,10 +59,37 @@ function serialize(node, depth = 0) {
 function readSources(root = ROOT) {
   const read = file => fs.readFileSync(path.join(root, MASCOTS, file), 'utf8');
   return { wardrobe: read('outfits/wardrobe.svg'), regular: read('pip.svg'),
-    idle: read('pip-idle-actions.svg'), parts: read('pip-dance-parts.svg') };
+    idle: read('pip-idle-actions.svg'), parts: read('pip-dance-parts.svg'),
+    expressionHeads: read('pip-expression-heads.svg') };
+}
+
+function buildExpressionSheet(sources) {
+  const sheet = parseSvg(sources.expressionHeads);
+  const group = sheet.children.find(child => child.tag === 'g');
+  const heads = group?.children;
+  if (!heads || heads.length !== EXPRESSIONS.length ||
+      heads.some((frame, index) => frame.attributes.id !== `pip-face-${EXPRESSIONS[index]}`)) {
+    throw new Error('Pip expression heads must retain the documented ten-frame order');
+  }
+  const originalPoses = parseSvg(sources.regular).children.find(child => child.tag === 'g').children;
+  const originalHead = parseSvg(sources.parts).children.find(child => child.tag === 'g').children[1];
+  group.children = heads.map((head, index) => {
+    const original = originalPoses[['delighted', 'proud', 'wink'].includes(EXPRESSIONS[index]) ? 3 : 0];
+    const start = original.children.findIndex(child => child.attributes?.d?.startsWith('M23 39'));
+    if (start < 0) throw new Error('Missing the original Pip head');
+    const before = original.children.slice(0, start);
+    const after = original.children.slice(start + originalHead.children.length);
+    return {
+      tag: 'g', attributes: { id: `pip-expression-${EXPRESSIONS[index]}`, transform: `translate(${index * 120} 0)` },
+      children: structuredClone([...before, ...head.children, ...after])
+    };
+  });
+  sheet.children.find(child => child.tag === 'title').children = ['Pip expression poses; derived from the original resting and waving bodies and pip-expression-heads.svg'];
+  return serialize(sheet) + '\n';
 }
 
 function buildOutfits(sources) {
+  sources = { ...sources, expressions: buildExpressionSheet(sources) };
   const wardrobe = parseSvg(sources.wardrobe);
   const definitions = wardrobe.children.find(child => child.tag === 'defs');
   if (!definitions) throw new Error('The wardrobe source needs editable body/head definitions');
@@ -78,7 +106,8 @@ function buildOutfits(sources) {
   };
   const result = {};
   for (const theme of THEMES) {
-    for (const [kind, suffix, count] of [['regular', '', 4], ['idle', '-idle', 4], ['parts', '-parts', 6]]) {
+    for (const [kind, suffix, count] of [['regular', '', 4], ['idle', '-idle', 4], ['parts', '-parts', 6],
+      ['expressions', '-expressions', EXPRESSIONS.length], ['expressionHeads', '-expression-heads', EXPRESSIONS.length]]) {
       const sheet = parseSvg(sources[kind]);
       sheet.children = sheet.children.filter(child => child.tag !== 'title');
       sheet.children.unshift({ tag: 'title', attributes: {}, children: [
@@ -92,6 +121,8 @@ function buildOutfits(sources) {
         clearBellyHighlight(frames[0]);
         frames[0].children.push(layer(theme, 'body'));
         frames[1].children.push(layer(theme, 'head'));
+      } else if (kind === 'expressionHeads') {
+        for (const frame of frames) frame.children.push(layer(theme, 'head'));
       } else {
         for (const frame of frames) {
           clearBellyHighlight(frame);
@@ -111,13 +142,19 @@ function buildOutfits(sources) {
 
 function generate(root = ROOT, { check = false } = {}) {
   const output = path.join(root, MASCOTS, 'outfits');
-  const sheets = buildOutfits(readSources(root));
+  const sources = readSources(root);
+  const sheets = buildOutfits(sources);
+  const expressionSheet = buildExpressionSheet(sources);
+  const expressionTarget = path.join(root, MASCOTS, 'pip-expressions.svg');
   const stale = [];
+  if (check) {
+    if (!fs.existsSync(expressionTarget) || fs.readFileSync(expressionTarget, 'utf8').replaceAll('\r\n', '\n') !== expressionSheet) stale.push('pip-expressions.svg');
+  } else fs.writeFileSync(expressionTarget, expressionSheet);
   for (const [name, svg] of Object.entries(sheets)) {
     const target = path.join(output, name);
     if (check) {
       if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8').replaceAll('\r\n', '\n') !== svg) stale.push(name);
-    } else {
+    } else if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8').replaceAll('\r\n', '\n') !== svg) {
       fs.writeFileSync(target, svg);
     }
   }
@@ -130,4 +167,4 @@ if (require.main === module) {
   console.log(`${check ? 'Verified' : 'Generated'} ${generate(ROOT, { check })} complete Pip wardrobe sheets.`);
 }
 
-module.exports = { THEMES, readSources, buildOutfits, generate };
+module.exports = { THEMES, EXPRESSIONS, readSources, buildExpressionSheet, buildOutfits, generate };

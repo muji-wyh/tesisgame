@@ -763,6 +763,7 @@ func _refresh() -> void:
 		_rebuild_buttons()
 	var correct: bool = game.phase == "correct"
 	var wrong: bool = str(game.feedback) == "wrong"
+	pip.set_attention("thinking" if _can_interact() and game.phase == "building" and not game.answer.is_empty() else "")
 	var accent: Color = _palette.get("accent", Style.GOOD)
 	for control in [listen_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
 		control.visible = not _round_celebrating

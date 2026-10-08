@@ -17,6 +17,9 @@ const TRICK_SECONDS: float = 1.8
 const ROOM_REACTION_SECONDS: float = 1.1
 const GAMEPLAY_HAPPY_SECONDS: float = 1.25
 const GAMEPLAY_SAD_SECONDS: float = 1.35
+const EXPRESSION_NAMES := ["neutral", "listening", "thinking", "delighted", "proud",
+	"encourage", "surprised", "sleepy", "wink", "blink"]
+const HAPPY_EXPRESSIONS := ["delighted", "wink", "proud"]
 const GAMEPLAY_PIVOTS := [Vector2(61, 98), Vector2(61, 72), Vector2(33, 78),
 	Vector2(88, 78), Vector2(40, 103), Vector2(80, 103)]
 const SOCIAL_TRICKS := ["high-five", "peekaboo", "flutter"]
@@ -36,6 +39,14 @@ var theme_id: String = "spring"
 var _outfit_sheet: Texture2D
 var _outfit_idle_sheet: Texture2D
 var _outfit_dance_sheet: Texture2D
+var _expression_sheet: Texture2D
+var _expression_heads: Texture2D
+var _attention: String = ""
+var _face_name: String = ""
+var _reaction_face: String = ""
+var _greeting_cycle: int = 0
+var _success_cycle: int = 0
+var _gameplay_variant: int = 0
 var _reaction: String = ""
 var _idle_time: float = 0.0
 var _speech_time: float = 0.0
@@ -84,6 +95,9 @@ func set_outfit_theme(value: String) -> void:
 	_outfit_sheet = sheets[0]
 	_outfit_idle_sheet = sheets[1]
 	_outfit_dance_sheet = sheets[2]
+	var expressions: Array[Texture2D] = Outfits.load_expression_sheets(chosen)
+	_expression_sheet = expressions[0]
+	_expression_heads = expressions[1]
 	# A wardrobe change is visual only: preserve speech, gestures and quiet timing.
 	queue_redraw()
 
@@ -97,13 +111,28 @@ func set_speaking(value: bool) -> void:
 	_update_pose()
 
 
+func set_attention(kind: String) -> void:
+	if not kind in ["", "listening", "thinking"] or _attention == kind:
+		return
+	if not kind.is_empty() and (_idle_paused or not is_visible_in_tree()):
+		return
+	_attention = kind
+	_reset_idle()
+	_update_pose()
+
+
+func expression_name() -> String:
+	if not _face_name.is_empty():
+		return _face_name
+	return "speaking" if speaking else "blink" if pose == 2 else "neutral"
+
+
 func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
 	reduced_motion = value
 	_reset_idle()
 	if value:
-		reaction_left = 0.0
 		_trick_left = 0.0
 		_room_reaction_left = 0.0
 	elif is_zero_approx(_trick_left):
@@ -117,15 +146,18 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func react(kind: String = "happy") -> void:
-	if not _gameplay_reaction.is_empty():
+	if not _gameplay_reaction.is_empty() or _idle_paused or not is_visible_in_tree():
+		return
+	if not kind in ["happy", "curious"] and not kind in EXPRESSION_NAMES:
 		return
 	_reset_idle()
 	_reaction = kind
-	reaction_left = 0.0 if reduced_motion else 0.65
-	if reduced_motion:
-		pose = 1 if speaking else 3 if kind == "happy" else 0
-		queue_redraw()
-		return
+	_reaction_face = "thinking" if kind == "curious" else kind
+	if kind == "happy":
+		_reaction_face = HAPPY_EXPRESSIONS[_greeting_cycle % HAPPY_EXPRESSIONS.size()]
+		_greeting_cycle += 1
+	reaction_left = 0.65
+	set_process(true)
 	_update_pose()
 
 
@@ -139,6 +171,9 @@ func react_gameplay(correct: bool, duration: float = 0.0) -> void:
 	reaction_left = 0.0
 	_reaction = ""
 	_gameplay_reaction = "happy" if correct else "sad"
+	if correct:
+		_gameplay_variant = _success_cycle % HAPPY_EXPRESSIONS.size()
+		_success_cycle += 1
 	_gameplay_seconds = GAMEPLAY_HAPPY_SECONDS if correct else GAMEPLAY_SAD_SECONDS
 	if is_finite(duration) and duration > 0.0:
 		_gameplay_seconds = clampf(duration, 0.5, 4.0)
@@ -151,7 +186,7 @@ func clear_gameplay_reaction() -> void:
 	_gameplay_reaction = ""
 	_gameplay_left = 0.0
 	if reduced_motion:
-		set_process(false)
+		set_process(reaction_left > 0.0 and not _idle_paused and is_visible_in_tree())
 	_update_pose()
 
 
@@ -165,6 +200,8 @@ func settle() -> void:
 	_reset_idle()
 	reaction_left = 0.0
 	_reaction = ""
+	_reaction_face = ""
+	_attention = ""
 	_idle_time = 0.0
 	clear_trick()
 	set_speaking(false)
@@ -245,13 +282,15 @@ func clear_room_interaction() -> void:
 
 
 func _visibility_changed() -> void:
-	set_process(is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0) and not _idle_paused)
 	if not is_visible_in_tree():
 		clear_gameplay_reaction()
 		clear_room_interaction()
 		_reset_idle()
 		reaction_left = 0.0
+		_reaction_face = ""
+		_attention = ""
 		clear_trick()
+	set_process(is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0 or reaction_left > 0.0) and not _idle_paused)
 
 
 func set_idle_paused(value: bool) -> void:
@@ -261,6 +300,9 @@ func set_idle_paused(value: bool) -> void:
 	if value:
 		clear_gameplay_reaction()
 		clear_room_interaction()
+		reaction_left = 0.0
+		_reaction_face = ""
+		_attention = ""
 	_reset_idle()
 	_visibility_changed()
 	_update_pose()
@@ -309,7 +351,7 @@ func _advance_idle(delta: float) -> void:
 	if delta > 0.5:
 		_reset_idle()
 		return
-	if not _proactive_allowed or speaking or not _gameplay_reaction.is_empty() or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
+	if not _proactive_allowed or speaking or not _attention.is_empty() or not _gameplay_reaction.is_empty() or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
 		return
 	if home_playground:
 		if _idle_action == "home-dance":
@@ -336,6 +378,7 @@ func _advance_idle(delta: float) -> void:
 
 func _update_pose(force_redraw: bool = true) -> void:
 	var previous_pose: int = pose
+	var previous_face: String = _face_name
 	pose = 0
 	if not _gameplay_reaction.is_empty():
 		pose = 3 if _gameplay_reaction == "happy" else 2
@@ -358,8 +401,61 @@ func _update_pose(force_redraw: bool = true) -> void:
 		pose = 3 if sin((1.0 - _idle_left / IDLE_SECONDS) * TAU * 2.0) > 0.0 else 0
 	elif not reduced_motion and fmod(_idle_time, 4.6) > 4.42:
 		pose = 2
-	if force_redraw or pose != previous_pose:
+	_face_name = _select_expression()
+	if force_redraw or pose != previous_pose or _face_name != previous_face:
 		queue_redraw()
+
+
+func _select_expression() -> String:
+	if not _gameplay_reaction.is_empty():
+		var correct: bool = _gameplay_reaction == "happy"
+		if reduced_motion:
+			return "delighted" if correct else "encourage"
+		var progress: float = 1.0 - _gameplay_left / _gameplay_duration()
+		if not correct:
+			return "thinking" if progress < 0.42 else "encourage"
+		if progress < 0.14:
+			return "surprised"
+		return HAPPY_EXPRESSIONS[_gameplay_variant] if progress < 0.82 else "proud"
+	if not _room_reaction.is_empty():
+		var progress: float = 0.45 if reduced_motion else 1.0 - _room_reaction_left / _room_reaction_duration()
+		match _room_reaction:
+			"pet": return "proud"
+			"poke": return "surprised" if progress < 0.55 else "wink"
+			"catch", "high-five": return "delighted"
+			"jump": return "surprised" if progress < 0.18 else "delighted"
+			"shy": return "blink" if progress < 0.28 else "proud"
+			"bonk": return "surprised" if progress < 0.6 else "encourage"
+			"peekaboo": return "blink" if progress < 0.55 else "delighted"
+			"flutter": return ""
+	if speaking:
+		return ""
+	if not _room_motion.is_empty():
+		return ""
+	if not _trick.is_empty():
+		var progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
+		if _trick == "peekaboo":
+			return "blink" if progress < 0.55 else "delighted"
+		return "" if _trick in ["snack", "flutter"] else "delighted"
+	if reaction_left > 0.0:
+		return _reaction_face
+	if not _attention.is_empty():
+		return _attention
+	if _idle_action == "home-dance":
+		var progress: float = 1.0 - _idle_left / _idle_duration()
+		return "wink" if progress > 0.7 and progress < 0.85 else "delighted"
+	if _idle_action in IDLE_DANCES:
+		var progress: float = 1.0 - _idle_left / DANCE_SECONDS
+		return "delighted" if progress > 0.12 and progress < 0.76 else "wink" if progress >= 0.76 and progress < 0.9 else ""
+	if _idle_action in ["wave", "hop", "high-five"]:
+		return "wink" if _idle_action == "wave" else "delighted"
+	if _idle_action == "peekaboo":
+		return "blink" if pose == 2 else "delighted"
+	if _proactive_allowed and not reduced_motion and _idle_action.is_empty() and _room_motion.is_empty():
+		var quiet_time: float = fmod(_idle_time, 18.0)
+		if quiet_time > 13.9 and quiet_time < 14.65:
+			return "sleepy"
+	return ""
 
 
 func _trick_pose(kind: String, progress: float) -> int:
@@ -372,6 +468,12 @@ func _process(delta: float) -> void:
 	if _idle_paused or not is_visible_in_tree():
 		return
 	var was_animating: bool = _has_continuous_pose()
+	if reaction_left > 0.0:
+		reaction_left = maxf(0.0, reaction_left - delta)
+		if is_zero_approx(reaction_left):
+			_reaction_face = ""
+			_reaction = ""
+			_update_pose()
 	if _gameplay_left > 0.0:
 		_gameplay_left = maxf(0.0, _gameplay_left - delta)
 		if is_zero_approx(_gameplay_left):
@@ -379,14 +481,15 @@ func _process(delta: float) -> void:
 			_gameplay_reaction = ""
 			_reset_idle()
 			if reduced_motion:
-				set_process(false)
+				set_process(reaction_left > 0.0)
 			_update_pose(true)
 			gameplay_reaction_finished.emit(correct)
 	if reduced_motion:
+		if is_zero_approx(_gameplay_left) and is_zero_approx(reaction_left):
+			set_process(false)
 		return
 	_idle_time += delta
 	_speech_time += delta
-	reaction_left = maxf(0.0, reaction_left - delta)
 	if not _room_motion.is_empty():
 		_room_step += minf(delta, 0.1) * (4.2 if _room_motion == "run" else 2.3)
 	if _room_reaction_left > 0.0:
@@ -420,7 +523,7 @@ func _draw() -> void:
 	if _room_reaction in LoadingMoves.REACTIONS or (not speaking and _idle_action == "home-dance"):
 		_draw_loading_moves(origin, edge)
 		return
-	var wave: float = sin((1.0 - reaction_left / 0.65) * PI) if reaction_left > 0.0 else 0.0
+	var wave: float = sin((1.0 - reaction_left / 0.65) * PI) if reaction_left > 0.0 and not reduced_motion else 0.0
 	var turn: float = (-0.07 if _reaction == "curious" else 0.07) * wave
 	var trick_progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
 	var bounce: float = -wave * edge * 0.07
@@ -516,6 +619,9 @@ func _draw() -> void:
 		var outfit: Texture2D = _outfit_idle_sheet if sheet == IDLE_SHEET else _outfit_sheet
 		if outfit == null:
 			outfit = sheet
+		if not _face_name.is_empty() and _expression_sheet != null:
+			outfit = _expression_sheet
+			frame = EXPRESSION_NAMES.find(_face_name)
 		var source_edge: float = outfit.get_height()
 		draw_texture_rect_region(outfit, Rect2(origin - center, Vector2.ONE * edge),
 			Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
@@ -609,10 +715,7 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
 	var source_edge: float = outfit.get_height()
 	for index in [4, 5, 0, 1, 2, 3]:
 		draw_set_transform_matrix(base * transforms[index])
-		draw_texture_rect_region(outfit, Rect2(Vector2.ZERO, Vector2(120, 120)),
-			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
-		if index == 1:
-			_draw_gameplay_face(correct, progress)
+		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform_matrix(base)
 	if correct:
 		var radius: float = 4.0 * envelope
@@ -628,46 +731,16 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-func _draw_gameplay_face(correct: bool, progress: float) -> void:
-	# Paint inside the original eye outlines so hats and helmet rims continue
-	# to travel with the same head layer, retaining every theme's wardrobe.
-	for index in range(2):
-		var center := Vector2(42, 46) if index == 0 else Vector2(77, 44)
-		_draw_gameplay_oval(center, Vector2(9.8, 12.8) if index == 0 else Vector2(8.8, 11.8), Color("#fffef4"))
-		if correct:
-			var smile := PackedVector2Array()
-			for step in range(13):
-				var amount: float = float(step) / 6.0 - 1.0
-				smile.append(center + Vector2(amount * 7.0, -3.0 + amount * amount * 6.0))
-			draw_polyline(smile, Color("#4e473e"), 3.2, true)
-		else:
-			var direction: float = 1.0 if index == 0 else -1.0
-			draw_line(center + Vector2(-8, -3 + direction * 3), center + Vector2(8, -3 - direction * 3), Color("#785d3e"), 3.0, true)
-			draw_circle(center + Vector2(direction * 2.0, 5.0), 3.4, Color("#4e473e"))
-			draw_circle(center + Vector2(direction * 2.0 - 0.8, 3.8), 1.2, Color.WHITE)
-			var fall: float = 0.3 if reduced_motion else fposmod(maxf(0.0, progress - 0.12) * 2.4 + index * 0.36, 1.0)
-			var tear := center + Vector2(direction * 8.0, 15.0 + fall * 9.0)
-			var fade: float = 1.0 if reduced_motion else smoothstep(0.0, 0.12, progress) * (1.0 - smoothstep(0.78, 1.0, progress))
-			draw_colored_polygon(PackedVector2Array([tear + Vector2(0, -7), tear + Vector2(-3.2, 0), tear + Vector2(3.2, 0)]), Color(Color("#73bce9"), fade))
-			draw_circle(tear, 3.2, Color(Color("#73bce9"), fade))
-			draw_circle(tear + Vector2(-0.9, -0.7), 1.0, Color(1, 1, 1, fade * 0.8))
-	_draw_gameplay_oval(Vector2(62, 69), Vector2(20, 4.2), Color("#f5b06d"))
-	if correct:
-		_draw_gameplay_oval(Vector2(62, 69), Vector2(11.0, 7.0), Color("#895732"))
-		_draw_gameplay_oval(Vector2(62, 73), Vector2(6.5, 2.6), Color("#ed9c82"))
+func _draw_articulated_part(outfit: Texture2D, index: int, destination: Rect2, source_edge: float) -> void:
+	# Swap the whole authored head, including its wardrobe, under the same joint.
+	# Face masks would paint over the transparent space helmet and hat brim.
+	if index == 1 and not _face_name.is_empty() and _expression_heads != null:
+		var head_edge: float = _expression_heads.get_height()
+		draw_texture_rect_region(_expression_heads, destination,
+			Rect2(Vector2(EXPRESSION_NAMES.find(_face_name) * head_edge, 0), Vector2.ONE * head_edge))
 	else:
-		var frown := PackedVector2Array()
-		for step in range(13):
-			var amount: float = float(step) / 6.0 - 1.0
-			frown.append(Vector2(62 + amount * 15.0, 67.5 + amount * amount * 4.0))
-		draw_polyline(frown, Color("#ad793e"), 2.3, true)
-
-
-func _draw_gameplay_oval(center: Vector2, radii: Vector2, tint: Color) -> void:
-	var points := PackedVector2Array()
-	for index in range(32):
-		points.append(center + Vector2.from_angle(index * TAU / 32.0) * radii)
-	draw_colored_polygon(points, tint)
+		draw_texture_rect_region(outfit, destination,
+			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
 
 
 func _draw_loading_moves(origin: Vector2, edge: float) -> void:
@@ -684,14 +757,9 @@ func _draw_loading_moves(origin: Vector2, edge: float) -> void:
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14))
 	for index in [4, 5, 0, 1, 2, 3]:
 		draw_set_transform_matrix(base * transforms[index])
-		draw_texture_rect_region(outfit, Rect2(Vector2.ZERO, Vector2(120, 120)),
-			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
+		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 		if index == 1 and reacting:
-			if _room_reaction == "shy":
-				for cheek in [Vector2(31, 62), Vector2(91, 59)]:
-					draw_set_transform_matrix(base * transforms[1] * Transform2D(Vector2(8, 0), Vector2(0, 5), cheek))
-					draw_circle(Vector2.ZERO, 1.0, Color(0.93, 0.55, 0.61, 0.8))
-			elif _room_reaction == "bonk":
+			if _room_reaction == "bonk":
 				# Keep the stars inside the floor even when Pip stands at its edge.
 				for center in [Vector2(20, 20), Vector2(94, 12)]:
 					var points := PackedVector2Array()
@@ -749,8 +817,7 @@ func _draw_dance_part(index: int, origin: Vector2, unit: float, joint: Vector2, 
 	draw_set_transform(origin + (joint + offset) * unit, angle, Vector2.ONE * unit)
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
-	draw_texture_rect_region(outfit, Rect2(-joint, Vector2(120, 120)),
-		Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
+	_draw_articulated_part(outfit, index, Rect2(-joint, Vector2(120, 120)), source_edge)
 
 
 func _draw_room_effects(origin: Vector2, edge: float) -> void:

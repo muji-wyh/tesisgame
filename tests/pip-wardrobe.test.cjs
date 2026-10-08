@@ -2,15 +2,47 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { THEMES, readSources, buildOutfits } = require('../tools/generate-pip-outfits.cjs');
+const { THEMES, EXPRESSIONS, readSources, buildExpressionSheet, buildOutfits } = require('../tools/generate-pip-outfits.cjs');
 const { inlineMascot } = require('../tools/prepare-godot.cjs');
 const root = path.resolve(__dirname, '..');
 
 test('all shipped Pip sheets reproduce exactly from their editable wardrobe designs', () => {
   const built = buildOutfits(readSources(root));
-  assert.equal(Object.keys(built).length, 24);
+  assert.equal(Object.keys(built).length, 40);
   for (const [name, svg] of Object.entries(built)) {
     assert.equal(fs.readFileSync(path.join(root, 'assets/images/mascots/outfits', name), 'utf8').replaceAll('\r\n', '\n'), svg, name);
+  }
+});
+
+test('full expression poses reproduce their original bodies and retain the head atlas frame order', () => {
+  const sources = readSources(root);
+  const full = buildExpressionSheet(sources);
+  assert.equal(fs.readFileSync(path.join(root, 'assets/images/mascots/pip-expressions.svg'), 'utf8').replaceAll('\r\n', '\n'), full);
+  assert.deepEqual(EXPRESSIONS, ['neutral', 'listening', 'thinking', 'delighted', 'proud', 'encourage', 'surprised', 'sleepy', 'wink', 'blink']);
+  assert.deepEqual([...sources.expressionHeads.matchAll(/id="pip-face-([^"]+)"/g)].map(match => match[1]), EXPRESSIONS);
+  assert.deepEqual([...full.matchAll(/id="pip-expression-([^"]+)"/g)].map(match => match[1]), EXPRESSIONS);
+  for (const svg of [sources.expressionHeads, full]) {
+    assert.match(svg, /width="1200" height="120" viewBox="0 0 1200 120"/);
+    assert.equal((svg.match(/d="M23 39Q21 12 54 13/g) || []).length, EXPRESSIONS.length, 'Every face keeps the original Pip head contour');
+  }
+  assert.equal((full.match(/fill="#F6D36E"/g) || []).length, EXPRESSIONS.length, 'Every pose keeps one resting body');
+  assert.equal((full.match(/M86 74Q97 62 100 48/g) || []).length, 3, 'Delighted, proud and wink poses keep the original raised greeting wing');
+  assert.equal((sources.expressionHeads.match(/fill="#F6D36E"/g) || []).length, 0, 'Articulated heads contain no duplicated bodies');
+  assert.throws(() => buildExpressionSheet({ ...sources, expressionHeads: sources.expressionHeads.replace('id="pip-face-neutral"', 'id="pip-face-listening"') }), /frame order/);
+});
+
+test('every expression has both a clothed full pose and a matching clothed head in each world', () => {
+  const built = buildOutfits(readSources(root));
+  for (const theme of THEMES) {
+    const full = built[`pip-${theme}-expressions.svg`];
+    const heads = built[`pip-${theme}-expression-heads.svg`];
+    for (const svg of [full, heads]) {
+      assert.match(svg, /width="1200" height="120" viewBox="0 0 1200 120"/);
+      for (const expression of EXPRESSIONS) assert.ok(svg.includes(`id="pip-${svg === heads ? 'face' : 'expression'}-${expression}"`));
+      assert.equal((svg.match(/d="M23 39Q21 12 54 13/g) || []).length, EXPRESSIONS.length);
+    }
+    assert.equal((full.match(/fill="#F6D36E"/g) || []).length, EXPRESSIONS.length);
+    assert.equal((heads.match(/fill="#F6D36E"/g) || []).length, 0);
   }
 });
 

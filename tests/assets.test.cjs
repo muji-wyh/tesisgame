@@ -118,7 +118,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 1380); // Original art, Pip wardrobes, derived chest layers and surprises.
+  assert.equal(textureImports.length, 1398); // Original art, Pip wardrobes and expressions, derived chest layers and surprises.
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);

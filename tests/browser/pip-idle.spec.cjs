@@ -104,7 +104,18 @@ async function expectStill(page, clip) {
 
 test('Pip gestures autonomously while the lesson stays unchanged and its button remains responsive', async ({ page }, testInfo) => {
   const errors = await openGame(page);
+  // Closing the library restores keyboard focus to Pip. Use that same focus
+  // owner in both lesson captures, rather than comparing a card's focus ring.
+  const initialPip = headerPoint(await metrics(page), 'pip');
+  await tap(page, initialPip.x, initialPip.y);
+  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
+  await page.waitForTimeout(750); // Let the finite focus expression finish.
   await page.mouse.move(0, 0);
+  // Changing the motion setting republishes the current lesson announcement.
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
   await rendered(page);
   const area = await clips(page);
   const state = await gameState(page);
@@ -112,7 +123,6 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
   const resting = await capture(page, area.body);
   await page.screenshot({ path: testInfo.outputPath('pip-resting-match.png'), scale: 'css' });
 
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await expectGesture(page, area.body, resting, testInfo, 'pip-autonomous-body-gesture');
   const danceFrames = [await capture(page, area.body)];
   // Watch a real idle routine evolve, rather than accepting one changed pose.

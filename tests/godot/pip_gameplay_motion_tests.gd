@@ -200,6 +200,7 @@ func _check_rendered_faces(duck) -> void:
 				var time: float = [0.05, 0.31, 0.695, 0.15, 0.4, 0.7][column]
 				duck.react_gameplay(correct)
 				duck._gameplay_left = duck._gameplay_duration() * (1.0 - time)
+				duck._update_pose()
 				var frame: Image = await _capture(viewport, duck)
 				frame.convert(Image.FORMAT_RGBA8)
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, theme_index * cell))

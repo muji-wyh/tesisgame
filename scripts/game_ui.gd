@@ -164,6 +164,7 @@ var playroom_state := PlayroomState.new()
 var _playroom_ready: bool = false
 var _room: PlayroomView
 var _voice_listening: bool = false
+var _voice_attention_active: bool = false
 var _speech_queue: Array[String] = []
 var collection_button: Icons
 var collection_page: Panel
@@ -702,6 +703,7 @@ func _show_mode_menu() -> void:
 	if _mode_menu_resume_voice:
 		# Keep the reserved voice-panel bounds while the host hides its overlay.
 		_voice_listening = false
+		_voice_attention_active = false
 		_voice_button.engaged = false
 		_speech_queue.clear()
 		_clear_voice_match_feedback()
@@ -3600,6 +3602,7 @@ func _on_voice_state(arguments: Array) -> void:
 	var layout_changed: bool = _voice_mode != enabled
 	_voice_mode = enabled
 	_voice_listening = enabled and bool(arguments[1])
+	_voice_attention_active = enabled and (_voice_listening or _pop._pending_message(str(arguments[2])))
 	_voice_button.button_pressed = enabled
 	_voice_button.engaged = _voice_listening
 	_voice_space.visible = enabled
@@ -3657,6 +3660,7 @@ func _stop_voice() -> void:
 	var was_enabled: bool = _voice_mode
 	_voice_mode = false
 	_voice_listening = false
+	_voice_attention_active = false
 	_speech_queue.clear()
 	if was_enabled and feedback_timer != null and model.phase == "feedback":
 		feedback_timer.start(MATCH_FEEDBACK_SECONDS)
@@ -4100,6 +4104,21 @@ func _update_duck() -> void:
 	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
 	duck.size = rect.size
 	duck.show()
+	var attention := ""
+	if not in_collection and not _page_hidden and not _leaderboard_overlay.visible \
+		and not _mode_menu_open() and not _speech_debug_active and not _rebuilding:
+		if _mode_id == "pop" and not _pop._stopped and active_phase in ["ready", "running", "paused"] \
+			and (_pop._listening or _pop._pending or _pop._reconnecting):
+			attention = "listening"
+		elif _mode_id == "match" and active_phase in ["waiting", "matching", "feedback"] \
+			and _voice_mode and _voice_attention_active:
+			attention = "listening"
+		elif _mode_id == "memory" and active_phase in ["waiting", "matching"] \
+			and (_memory.memory.studying or _memory.memory.selected_indices.size() == 1):
+			attention = "thinking"
+		elif _mode_id == "match" and active_phase == "matching" and not model.selected_id.is_empty():
+			attention = "thinking"
+	duck.set_attention(attention)
 	var accent: Color = Data.THEMES[model.theme_id].accent
 	if duck.accent != accent:
 		duck.accent = accent
