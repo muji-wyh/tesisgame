@@ -716,7 +716,7 @@ func _answer_rects(order: Array[int]) -> Array[Rect2]:
 	for index in range(answer_buttons.size()):
 		var text: String = str(game.options[order[index]].text) if index < order.size() else ""
 		var width: float = maxf(64 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s) + picture + 8 / s if index < order.size() else 44 / s
-		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_drop.size.y - 4 / s))
+		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_clip.size.y))
 		cursor += width + gap
 	return result
 
@@ -942,7 +942,7 @@ func _layout() -> void:
 	var progress_h: float = 14 if compact else 24
 	var hero_h: float = 48 if compact else minf(64 if w < 400 else 112, h * 0.18)
 	var tile_h: float = 44 if compact else 58
-	var answer_h: float = tile_h + 4
+	var answer_h: float = tile_h + (8 if compact else 12)
 	var footer_h: float = 44 if compact else 50
 	var total_h: float = progress_h + hero_h + answer_h + tile_h + 8 + footer_h + gap * 4
 	var top: float = maxf(0, (h - total_h) * 0.38)
