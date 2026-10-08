@@ -677,12 +677,13 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	var before: Dictionary = view.game.snapshot()
 	await _pointer_button(start, true, method)
 	check(not view.snapshot().dragging, method + " waits for movement before starting a card drag")
-	if _snapshot_rect(view.snapshot().bank.rect).has_point(start):
-		await _pointer_motion(start + Vector2(0, -24), Vector2(0, -24), method)
+	await _pointer_motion(start + Vector2(0, -24), Vector2(0, -24), method)
 	await _pointer_motion(end, end - start, method)
 	var preview: Dictionary = view.snapshot()
 	check(preview.dragging and not preview.drag_word.is_empty() and view.game.snapshot() == before,
 		method + " shows a drag preview while preserving the answer until release")
+	check(view._preview.icon != null and view._preview.icon == view._source.icon,
+		method + " retains the selected word's picture while dragging")
 	if drop_kind != "*":
 		check(preview.drop_kind == drop_kind, method + " identifies the expected drop destination: " + drop_kind)
 	if drop_index >= 0:
@@ -697,6 +698,7 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	await _settle()
 	check(not view.snapshot().dragging and view.snapshot().drag_word.is_empty(),
 		method + " release clears the drag preview")
+	_check_answer_pictures(view)
 	if landing.has_area() and not canceled:
 		var placed: int = -1
 		for index in range(view.game.answer.size()):
@@ -708,6 +710,17 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 
 func _snapshot_rect(values: Array) -> Rect2:
 	return Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
+
+
+func _check_answer_pictures(view) -> void:
+	for index in range(view.answer_buttons.size()):
+		var button: Button = view.answer_buttons[index]
+		if index < view.game.answer.size():
+			check(button.icon != null and button.icon == view.option_buttons[view.game.answer[index]].icon,
+				"The placed word retains its matching candidate picture after editing")
+		else:
+			check(button.icon == null and not button.visible,
+				"Unused answer positions clear their old pictures")
 
 
 func _pointer_button(point: Vector2, pressed: bool, method: String, canceled: bool = false) -> void:
@@ -915,33 +928,61 @@ func _check_layout(app) -> void:
 		await _settle()
 		for index in range(view.game.answer.size()):
 			var button: Button = view.answer_buttons[index]
-			check(bounds.encloses(button.get_global_rect()) and button.size.x * scale_factor >= 43.9,
-				"A complete four-word answer fits with usable targets at " + str(dimensions))
+			button.grab_focus()
+			await _settle()
+			check(view._answer_clip.get_global_rect().grow(0.75).encloses(button.get_global_rect()) and button.size.x * scale_factor >= 43.9,
+				"Every illustrated answer can be revealed at " + str(dimensions))
 			_check_button_text_fit(button, str(dimensions) + ", full answer")
 			var text_width: float = button.get_theme_font("font").get_string_size(button.text,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, button.get_theme_font_size("font_size")).x * scale_factor
-			check(button.size.x * scale_factor <= maxf(44, text_width + 32),
+			var picture_width: float = (button.get_theme_constant("icon_max_width") + button.get_theme_constant("h_separation")) * scale_factor
+			check(button.size.x * scale_factor <= maxf(64, text_width + 32) + picture_width,
 				"Answer word " + button.text + " keeps content-sized padding at " + str(dimensions))
 			if index > 0:
 				var space: float = (button.position.x - view.answer_buttons[index - 1].get_rect().end.x) * scale_factor
 				check(space >= 5.9 and space <= 10.1,
 					"Selected answer words stay closely spaced at " + str(dimensions))
+		_check_answer_pictures(view)
 		while not view.game.answer.is_empty():
 			view.answer_buttons[0].pressed.emit()
 		if dimensions == Vector2i(320, 320):
-			_check_long_answer_words(view, app.data.words)
+			await _check_long_answer_words(view, app.data.words)
 		root.gui_release_focus()
 	await _check_bank_scroll(app)
 	_solve(app._phrase)
 	await _settle()
 	check(app._phrase.snapshot().prompt_text_visible and app._phrase.snapshot().progress.value == 1,
 		"The smallest viewport retains the completed phrase and updated progress")
+	await _check_completed_answer_navigation(app)
 	_check_waveform_text_fit(app._phrase, "(320, 320), correct feedback")
 	for button: Button in app._phrase.answer_buttons + app._phrase.option_buttons \
 		+ [app._phrase.listen_button, app._phrase.action_button]:
 		if button.is_visible_in_tree():
 			_check_button_text_fit(button, "(320, 320), correct feedback")
 	await _check_compact_long_prompts(app._phrase)
+
+
+func _check_completed_answer_navigation(app) -> void:
+	var view = app._phrase
+	var before: Dictionary = view.game.snapshot()
+	check(view.snapshot().answer_rail.max_scroll > 0 and view.navigation_controls().has(view._answer_clip),
+		"A completed overflowing phrase exposes its answer line to keyboard and controller navigation")
+	view._answer_clip.grab_focus()
+	view._scroll_answer(0)
+	app._move_focus(Vector2.RIGHT)
+	check(view.snapshot().answer_rail.scroll > 0 and view._answer_clip.has_focus(),
+		"Controller right scrolls the completed illustrated answer")
+	for pressed in [true, false]:
+		var event := InputEventKey.new()
+		event.keycode = KEY_LEFT
+		event.pressed = pressed
+		root.push_input(event, true)
+		await process_frame
+	check(is_zero_approx(view.snapshot().answer_rail.scroll) and view.game.snapshot() == before,
+		"Keyboard left reviews the completed pictures without changing the answer")
+	app._move_focus(Vector2.UP)
+	check(not view._answer_clip.has_focus() and app._valid_focus(root.gui_get_focus_owner()),
+		"Controller up leaves the read-only answer line while Continue is waiting for Pip")
 
 
 func _check_long_answer_words(view, vocabulary: Array) -> void:
@@ -958,9 +999,39 @@ func _check_long_answer_words(view, vocabulary: Array) -> void:
 	for index in range(words.size()):
 		view.option_buttons[index].pressed.emit()
 	for button: Button in view.answer_buttons:
-		check(root.get_visible_rect().grow(0.75).encloses(button.get_global_rect()),
-			"Long distractors remain on screen together in a narrow answer")
+		button.grab_focus()
+		await _settle()
+		check(view._answer_clip.get_global_rect().grow(0.75).encloses(button.get_global_rect()),
+			"Long illustrated distractors are fully revealed in a narrow answer")
 		_check_button_text_fit(button, "(320, 320), two long distractors")
+	_check_answer_pictures(view)
+	for dimensions in [Vector2i(390, 500), Vector2i(320, 320)]:
+		root.size = dimensions
+		await _settle()
+		check(view.answer_buttons.back().has_focus() and view._answer_clip.get_global_rect().grow(0.75).encloses(view.answer_buttons.back().get_global_rect()),
+			"Resizing keeps the focused illustrated answer fully visible")
+	var before: Dictionary = view.game.snapshot()
+	view.scroll_answer_to(0)
+	var start: Vector2 = view._answer_clip.get_global_rect().get_center()
+	await _pointer_button(start, true, "touch")
+	await _pointer_motion(start + Vector2(-90, 0), Vector2(-90, 0), "touch")
+	await _pointer_button(start + Vector2(-90, 0), false, "touch")
+	check(view.snapshot().answer_rail.scroll > 0 and not view.snapshot().dragging and view.game.snapshot() == before,
+		"A horizontal swipe reveals illustrated answers without changing their order")
+	_check_answer_pictures(view)
+	view.scroll_answer_to(0)
+	start = view.answer_buttons[0].get_global_rect().get_center()
+	await _pointer_button(start, true, "touch")
+	await _pointer_motion(start + Vector2(0, -24), Vector2(0, -24), "touch")
+	var edge: Vector2 = view._answer_clip.get_global_rect().get_center()
+	edge.x = view._answer_clip.get_global_rect().end.x - 3
+	await _pointer_motion(edge, edge - start, "touch")
+	view._process(3)
+	check(view.snapshot().answer_rail.scroll > 0 and view.snapshot().dragging,
+		"A lifted answer scrolls at the edge to reach words outside the viewport")
+	await _pointer_button(edge, false, "touch")
+	check(view.game.answer == [1, 2, 3, 0], "An illustrated answer can be reordered to the far end of an overflowing row")
+	_check_answer_pictures(view)
 	view.game.clear()
 	view.game.options.assign(original)
 	view._rebuild_buttons()
@@ -1061,6 +1132,8 @@ func _check_button_text_fit(button: Button, context: String) -> void:
 	var font_size: int = button.get_theme_font_size("font_size")
 	var text_width: float = font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	var horizontal_padding: float = button.get_theme_stylebox("normal").get_minimum_size().x
+	if button.icon != null:
+		horizontal_padding += button.get_theme_constant("icon_max_width") + button.get_theme_constant("h_separation")
 	check(text_width + horizontal_padding <= button.size.x + 0.5,
 		"The %s label '%s' fits at %s: text %.2f + style %.2f <= width %.2f" % [
 			button.name, button.text, context, text_width, horizontal_padding, button.size.x])

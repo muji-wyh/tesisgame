@@ -3223,6 +3223,8 @@ func _update_controller_navigation() -> void:
 
 
 func _move_focus(direction: Vector2) -> void:
+	if _mode_id == "phrase" and _phrase.scroll_focused_answer(direction):
+		return
 	var candidates: Array[Control] = _focus_candidates()
 	if candidates.is_empty():
 		return

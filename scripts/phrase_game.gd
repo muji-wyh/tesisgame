@@ -29,10 +29,14 @@ var _progress: ProgressBar
 var _progress_caption: Label
 var _bank_clip: Control
 var _bank_content: Control
+var _answer_clip: Control
+var _answer_content: Control
+var _answer_scroll: float = 0.0
+var _answer_max_scroll: float = 0.0
 var _bank_scroll: float = 0.0
 var _bank_max_scroll: float = 0.0
-var _bank_start_scroll: float = 0.0
-var _bank_swiping: bool = false
+var _scroll_start: float = 0.0
+var _rail_swiping: bool = false
 var _feedback: Label
 var _preview: Button
 var _palette: Dictionary = {}
@@ -56,6 +60,7 @@ var _source_index: int = -1
 var _drag_word: int = -1
 var _press_point: Vector2
 var _drag_offset: Vector2
+var _drag_point: Vector2
 var _dragging: bool = false
 var _drop_kind: String = ""
 var _drop_index: int = -1
@@ -88,6 +93,17 @@ func _init() -> void:
 	listen_button.pressed.connect(play_prompt)
 	add_child(listen_button)
 	UiClick.bind_button(listen_button)
+	_answer_clip = Control.new()
+	_answer_clip.name = "PhraseAnswerRail"
+	_answer_clip.clip_contents = true
+	_answer_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_answer_clip.set("accessibility_name", "Answer words. Use Left and Right to scroll.")
+	_answer_clip.focus_entered.connect(queue_redraw)
+	_answer_clip.focus_exited.connect(queue_redraw)
+	add_child(_answer_clip)
+	_answer_content = Control.new()
+	_answer_content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_answer_clip.add_child(_answer_content)
 	_bank_clip = Control.new()
 	_bank_clip.name = "PhraseWordBank"
 	_bank_clip.clip_contents = true
@@ -212,7 +228,7 @@ func stop() -> void:
 func cancel_input() -> void:
 	_pointer = -2
 	_dragging = false
-	_bank_swiping = false
+	_rail_swiping = false
 	_source = null
 	_source_kind = ""
 	_source_index = -1
@@ -235,6 +251,8 @@ func cancel_input() -> void:
 func _on_resized() -> void:
 	cancel_input()
 	_layout()
+	if is_inside_tree():
+		scroll_answer_to(answer_buttons.find(get_viewport().gui_get_focus_owner()))
 
 
 func _visibility_changed() -> void:
@@ -286,6 +304,7 @@ func _word_placed(index: int) -> void:
 	pip.react("curious")
 	_refresh()
 	_restore_focus()
+	scroll_answer_to(game.answer.find(index))
 
 
 func _remove(index: int) -> void:
@@ -397,12 +416,20 @@ func _input(event: InputEvent) -> void:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
-	if not _can_interact() or game.phase != "building":
+	if not _can_interact() or _round_celebrating:
 		return
-	if event is InputEventMouseButton and event.pressed and _bank_clip.get_global_rect().has_point(event.position):
+	if event is InputEventKey and event.pressed:
+		var direction := Vector2.LEFT if event.is_action_pressed("ui_left") else Vector2.RIGHT if event.is_action_pressed("ui_right") else Vector2.ZERO
+		if scroll_focused_answer(direction):
+			get_viewport().set_input_as_handled()
+			return
+	if event is InputEventMouseButton and event.pressed and (_bank_clip.get_global_rect().has_point(event.position) or _answer_clip.get_global_rect().has_point(event.position)):
 		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN, MOUSE_BUTTON_WHEEL_LEFT, MOUSE_BUTTON_WHEEL_RIGHT]:
 			var direction: float = -1.0 if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_LEFT] else 1.0
-			_scroll_bank(_bank_scroll + direction * 96)
+			if _answer_clip.get_global_rect().has_point(event.position):
+				_scroll_answer(_answer_scroll + direction * 96)
+			else:
+				_scroll_bank(_bank_scroll + direction * 96)
 			get_viewport().set_input_as_handled()
 			return
 	# Touch owns its gesture; Godot's synthetic mouse must never commit it twice.
@@ -449,6 +476,8 @@ func _press_word(pointer: int, point: Vector2) -> bool:
 	for candidate in answer_buttons + option_buttons:
 		if option_buttons.has(candidate) and not _bank_clip.get_global_rect().has_point(point):
 			continue
+		if answer_buttons.has(candidate) and not _answer_clip.get_global_rect().has_point(point):
+			continue
 		if candidate.is_visible_in_tree() and not candidate.disabled and candidate.get_global_rect().has_point(point):
 			button = candidate
 			index = answer_buttons.find(candidate)
@@ -457,13 +486,14 @@ func _press_word(pointer: int, point: Vector2) -> bool:
 				index = option_buttons.find(candidate)
 			break
 	if button == null:
-		if _bank_max_scroll > 0 and _bank_clip.get_global_rect().has_point(point):
+		var answer_pan: bool = _answer_max_scroll > 0 and _answer_clip.get_global_rect().has_point(point)
+		if answer_pan or (_bank_max_scroll > 0 and _bank_clip.get_global_rect().has_point(point)):
 			cancel_input()
 			_pointer = pointer
 			_gesture_serial += 1
-			_source_kind = "bank-scroll"
-			_bank_swiping = true
-			_bank_start_scroll = _bank_scroll
+			_source_kind = "answer-scroll" if answer_pan else "bank-scroll"
+			_rail_swiping = true
+			_scroll_start = _answer_scroll if answer_pan else _bank_scroll
 			_press_point = point
 			return true
 		return false
@@ -475,7 +505,7 @@ func _press_word(pointer: int, point: Vector2) -> bool:
 	_source_index = index
 	_drag_word = game.answer[index] if kind == "answer" else index
 	_press_point = point
-	_bank_start_scroll = _bank_scroll
+	_scroll_start = _answer_scroll if kind == "answer" else _bank_scroll
 	_drag_offset = get_global_transform().affine_inverse() * point - _local_rect(button).position
 	button.grab_focus()
 	button.set_pressed_no_signal(true)
@@ -485,12 +515,17 @@ func _press_word(pointer: int, point: Vector2) -> bool:
 func _move_word(point: Vector2) -> void:
 	var s: float = Style.ui_scale(self)
 	var movement: Vector2 = (point - _press_point) * s
-	if not _dragging and not _bank_swiping and _source_kind == "bank" and _bank_max_scroll > 0 \
+	var answer_source: bool = _source_kind.begins_with("answer")
+	var overflow: float = _answer_max_scroll if answer_source else _bank_max_scroll
+	if not _dragging and not _rail_swiping and overflow > 0 \
 		and absf(movement.x) > 8 and absf(movement.x) > absf(movement.y) * 1.2:
-		_bank_swiping = true
+		_rail_swiping = true
 		_source.set_pressed_no_signal(false)
-	if _bank_swiping:
-		_scroll_bank(_bank_start_scroll - movement.x)
+	if _rail_swiping:
+		if answer_source:
+			_scroll_answer(_scroll_start - movement.x)
+		else:
+			_scroll_bank(_scroll_start - movement.x)
 		return
 	if not _dragging and point.distance_to(_press_point) * s < 8:
 		return
@@ -510,10 +545,21 @@ func _move_word(point: Vector2) -> void:
 		_preview.add_theme_stylebox_override("normal", lifted)
 		_preview.show()
 	var local: Vector2 = get_global_transform().affine_inverse() * point
+	_drag_point = local
 	_preview.position = local - _drag_offset - Vector2(0, (30 if _pointer >= 0 else 4) / s)
 	_update_drop(local)
 	queue_redraw()
 	_publish.call_deferred()
+
+
+func _process(delta: float) -> void:
+	if not _dragging or _answer_max_scroll <= 0 or not _answer_drop.has_point(_drag_point):
+		return
+	var edge: float = 28 / Style.ui_scale(self)
+	var direction: float = -1 if _drag_point.x < _answer_drop.position.x + edge else 1 if _drag_point.x > _answer_drop.end.x - edge else 0
+	if direction != 0:
+		_scroll_answer(_answer_scroll + direction * 220 * delta)
+		_update_drop(_drag_point)
 
 
 func _update_drop(point: Vector2) -> void:
@@ -524,7 +570,7 @@ func _update_drop(point: Vector2) -> void:
 		_drop_index = game.answer.size()
 		for index in range(game.answer.size()):
 			var button: Button = answer_buttons[index]
-			if point.x < button.position.x + button.size.x:
+			if point.x < _local_rect(button).end.x:
 				_drop_index = mini(index, game.answer.size())
 				break
 	elif _bank_drop.has_point(point) and game.answer.has(_drag_word):
@@ -532,7 +578,7 @@ func _update_drop(point: Vector2) -> void:
 
 
 func _release_word(point: Vector2) -> void:
-	if _bank_swiping:
+	if _rail_swiping:
 		cancel_input()
 		return
 	var kind: String = _source_kind
@@ -540,7 +586,7 @@ func _release_word(point: Vector2) -> void:
 	var option_index: int = _drag_word
 	var dragged: bool = _dragging
 	var tap_inside: bool = is_instance_valid(_source) and _source.get_global_rect().has_point(point) \
-		and (_source_kind != "bank" or _bank_clip.get_global_rect().has_point(point))
+		and (_bank_clip.get_global_rect().has_point(point) if _source_kind == "bank" else _answer_clip.get_global_rect().has_point(point))
 	var from: Rect2 = Rect2(_preview.position, _preview.size)
 	if dragged:
 		_update_drop(get_global_transform().affine_inverse() * point)
@@ -575,6 +621,10 @@ func _release_word(point: Vector2) -> void:
 
 func _settle_word(from: Rect2, target: Button) -> void:
 	_preview.text = target.text
+	_preview.icon = target.icon
+	var word_index: int = game.answer[answer_buttons.find(target)] if answer_buttons.has(target) else option_buttons.find(target)
+	_style_tile(_preview, true, false, false, Style.ui_scale(self), word_index,
+		target.size.x, target.get_theme_constant("icon_max_width"))
 	_preview.position = from.position
 	_preview.size = from.size
 	_preview.show()
@@ -600,6 +650,34 @@ func _scroll_bank(value: float) -> void:
 	_publish.call_deferred()
 
 
+func _scroll_answer(value: float) -> void:
+	_answer_scroll = clampf(value, 0.0, _answer_max_scroll)
+	_answer_content.position.x = -_answer_scroll / Style.ui_scale(self)
+	queue_redraw()
+	_publish.call_deferred()
+
+
+func _answer_reveal_scroll(rect: Rect2, maximum: float) -> float:
+	var s: float = Style.ui_scale(self)
+	var left: float = (rect.position.x - _answer_drop.position.x) * s
+	var right: float = left + rect.size.x * s
+	var width: float = _answer_drop.size.x * s
+	return clampf(minf(left, maxf(_answer_scroll, right - width)), 0, maximum)
+
+
+func scroll_answer_to(index: int) -> void:
+	if index < 0 or index >= game.answer.size() or _pointer != -2:
+		return
+	_scroll_answer(_answer_reveal_scroll(_answer_rects(game.answer)[index], _answer_max_scroll))
+
+
+func scroll_focused_answer(direction: Vector2) -> bool:
+	if not _can_interact() or not _answer_clip.has_focus() or is_zero_approx(direction.x):
+		return false
+	_scroll_answer(_answer_scroll + direction.x * 96)
+	return true
+
+
 func scroll_bank_to(index: int) -> void:
 	if index < 0 or index >= option_buttons.size() or _pointer != -2:
 		return
@@ -621,9 +699,16 @@ func _draw() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
+	if _answer_clip.has_focus():
+		var focus := Style.box(Color.TRANSPARENT, Style.INK, ceili(14 / s), ceili(2 / s))
+		focus.draw(get_canvas_item(), _local_rect(_answer_clip).grow(2 / s))
 	var line_y: float = _answer_drop.end.y - 2 / s
 	draw_line(Vector2(_answer_drop.position.x, line_y), Vector2(_answer_drop.end.x, line_y),
 		accent if _drop_kind == "answer" else Style.GOOD if game.phase == "correct" else Color("#b9cbbf"), 2 / s, true)
+	if _answer_max_scroll > 0:
+		var thumb: float = _answer_drop.size.x * _answer_drop.size.x / (_answer_drop.size.x + _answer_max_scroll / s)
+		var left: float = _answer_drop.position.x + (_answer_drop.size.x - thumb) * _answer_scroll / _answer_max_scroll
+		draw_line(Vector2(left, line_y), Vector2(left + thumb, line_y), accent, 3 / s, true)
 	if _bank_max_scroll > 0:
 		var rail_y: float = _bank_drop.end.y + 5 / s
 		draw_line(Vector2(_bank_drop.position.x, rail_y), Vector2(_bank_drop.end.x, rail_y), Color("#e2e8de"), 3 / s, true)
@@ -640,33 +725,12 @@ func _draw() -> void:
 func _answer_rects(order: Array[int]) -> Array[Rect2]:
 	var s: float = Style.ui_scale(self)
 	var gap: float = (6 if size.y * s < 360 or _answer_drop.size.x * s < 400 else 10) / s
-	var widths: Array[float] = []
-	var minimums: Array[float] = []
-	var natural_total: float = 0.0
-	var minimum_total: float = 0.0
-	for index in range(answer_buttons.size()):
-		var text: String = str(game.options[order[index]].text) if index < order.size() else ""
-		var natural: float = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s)
-		var minimum: float = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12 / s)).x + 14 / s)
-		widths.append(natural)
-		minimums.append(minimum)
-		natural_total += natural
-		minimum_total += minimum
-	var available: float = _answer_drop.size.x - gap * maxi(0, widths.size() - 1)
-	# Only compress when necessary; spare line space never stretches the words.
-	if natural_total > available:
-		if minimum_total > available:
-			minimum_total = 0.0
-			for index in range(minimums.size()):
-				var text: String = str(game.options[order[index]].text) if index < order.size() else ""
-				minimums[index] = maxf(44 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(10 / s)).x + 8 / s)
-				minimum_total += minimums[index]
-		var fit: float = clampf((available - minimum_total) / maxf(1, natural_total - minimum_total), 0, 1)
-		for index in range(widths.size()):
-			widths[index] = lerpf(minimums[index], widths[index], fit)
+	var picture: float = (28 if size.y * s < 360 else 40) / s
 	var result: Array[Rect2] = []
 	var cursor: float = _answer_drop.position.x
-	for width in widths:
+	for index in range(answer_buttons.size()):
+		var text: String = str(game.options[order[index]].text) if index < order.size() else ""
+		var width: float = maxf(64 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s) + picture + 8 / s if index < order.size() else 44 / s
 		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_drop.size.y - 4 / s))
 		cursor += width + gap
 	return result
@@ -682,7 +746,11 @@ func _drop_rect() -> Rect2:
 	order.erase(_drag_word)
 	var index: int = mini(_drop_index, order.size())
 	order.insert(index, _drag_word)
-	return _answer_rects(order)[index]
+	var rects: Array[Rect2] = _answer_rects(order)
+	var maximum: float = maxf(0, rects[order.size() - 1].end.x - _answer_drop.end.x) * Style.ui_scale(self)
+	var result: Rect2 = rects[index]
+	result.position.x -= _answer_reveal_scroll(result, maximum) / Style.ui_scale(self)
+	return result
 
 
 func _refresh() -> void:
@@ -691,11 +759,12 @@ func _refresh() -> void:
 		cancel_input()
 		_question_id = str(question.get("id", ""))
 		_bank_scroll = 0.0
+		_answer_scroll = 0.0
 		_rebuild_buttons()
 	var correct: bool = game.phase == "correct"
 	var wrong: bool = str(game.feedback) == "wrong"
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	for control in [listen_button, _progress, _progress_caption, _bank_clip]:
+	for control in [listen_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
 		control.visible = not _round_celebrating
 	_heading.visible = _round_celebrating
 	_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -713,9 +782,10 @@ func _refresh() -> void:
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
-		button.visible = not _round_celebrating
 		var occupied: bool = index < game.answer.size()
+		button.visible = not _round_celebrating and occupied
 		button.text = str(game.options[game.answer[index]].text) if occupied else ""
+		button.icon = option_buttons[game.answer[index]].icon if occupied else null
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.tooltip_text = "Drag to reorder or tap to return " + button.text if occupied else "Place a word on the answer line"
@@ -754,6 +824,8 @@ func _rebuild_buttons() -> void:
 		option_buttons.append(button)
 	for index in range(game.current_question().get("words", []).size()):
 		var button := _button("", "PhraseAnswer_%d" % index, _remove.bind(index))
+		button.reparent(_answer_content)
+		button.focus_entered.connect(scroll_answer_to.bind(index))
 		button.mouse_default_cursor_shape = Control.CURSOR_DRAG
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		answer_buttons.append(button)
@@ -789,6 +861,8 @@ func navigation_controls() -> Array[Control]:
 	for button in [listen_button] + answer_buttons + option_buttons + [action_button]:
 		if button.is_visible_in_tree() and not button.disabled:
 			controls.append(button)
+	if _answer_clip.is_visible_in_tree() and _answer_clip.focus_mode == Control.FOCUS_ALL:
+		controls.append(_answer_clip)
 	return controls
 
 
@@ -806,14 +880,9 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 		return
 	var fill: Color = Color("#e1f0de") if correct else Color("#f9e0d7") if wrong else TILE_COLORS[posmod(color_index, TILE_COLORS.size())]
 	var edge: Color = Style.GOOD if correct else Style.WRONG if wrong else fill.darkened(0.18)
-	var dense_word: bool = button.icon == null and Style.HEADING_FONT.get_string_size(button.text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12 / s)).x + 14 / s > tile_width
 	for state in ["normal", "hover", "pressed", "disabled"]:
 		var surface := Style.box(fill.darkened(0.04) if state == "pressed" else fill, edge, ceili(14 / s), maxi(1, roundi(1 / s)))
 		surface.set_content_margin_all(6 / s)
-		if dense_word:
-			surface.content_margin_left = 4 / s
-			surface.content_margin_right = 4 / s
 		surface.border_width_bottom = ceili((1 if state == "pressed" else 3) / s)
 		if state == "hover":
 			surface.border_color = edge.darkened(0.15)
@@ -828,11 +897,11 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_constant_override("icon_max_width", ceili(icon_width))
 	button.add_theme_constant_override("h_separation", ceili(8 / s))
-	var text_width: float = tile_width - (8 if dense_word else 14) / s
+	var text_width: float = tile_width - 14 / s
 	if button.icon != null:
 		text_width -= icon_width + 8 / s
 	var font_size: int = ceili(18 / s)
-	while font_size > ceili((10 if dense_word else 12) / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > text_width:
+	while font_size > ceili(12 / s) and Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > text_width:
 		font_size -= 1
 	button.add_theme_font_size_override("font_size", font_size)
 
@@ -877,16 +946,22 @@ func _layout() -> void:
 	_place(listen_button, Rect2(audio_x, hero_y + (hero_h - audio_h) * 0.5, inner_w - pip_side - 12, audio_h))
 	var answer_y: float = hero_y + hero_h + gap
 	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
+	_place(_answer_clip, Rect2(x, answer_y, inner_w, tile_h))
+	var picture_w: float = 28 if compact else 40
 	var answer_rects: Array[Rect2] = _answer_rects(game.answer)
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
 		var rect: Rect2 = answer_rects[index]
-		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s, game.answer[index] if index < game.answer.size() else 0, rect.size.x)
-		button.position = rect.position
+		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s, game.answer[index] if index < game.answer.size() else 0, rect.size.x, picture_w / s)
+		button.position = rect.position - _answer_drop.position
 		button.size = rect.size
+	var answer_content_w: float = maxf(inner_w, (answer_rects[game.answer.size() - 1].end.x - _answer_drop.position.x) * s) if not game.answer.is_empty() else inner_w
+	_answer_max_scroll = maxf(0, answer_content_w - inner_w)
+	_answer_clip.focus_mode = Control.FOCUS_ALL if game.phase == "correct" and not _paused and _answer_max_scroll > 0 else Control.FOCUS_NONE
+	_answer_content.size = Vector2(answer_content_w, tile_h) / s
+	_scroll_answer(_answer_scroll)
 	var bank_y: float = answer_y + answer_h + gap
 	_place(_bank_clip, Rect2(x, bank_y, inner_w, tile_h))
-	var picture_w: float = 28 if compact else 40
 	var cursor: float = 0
 	for index in range(option_buttons.size()):
 		var button: Button = option_buttons[index]
@@ -943,7 +1018,7 @@ func _rect_snapshot(rect: Rect2) -> Array:
 
 
 func _control_snapshot(button: Button) -> Dictionary:
-	return {"name": str(button.name), "text": button.text, "rect": _rect_snapshot(button.get_global_rect()), "disabled": button.disabled, "visible": button.is_visible_in_tree(), "accessibility_name": button.get("accessibility_name")}
+	return {"name": str(button.name), "text": button.text, "icon": button.icon.resource_path if button.icon != null else "", "rect": _rect_snapshot(button.get_global_rect()), "disabled": button.disabled, "visible": button.is_visible_in_tree(), "accessibility_name": button.get("accessibility_name")}
 
 
 func snapshot() -> Dictionary:
@@ -971,6 +1046,7 @@ func snapshot() -> Dictionary:
 	result["prompt_layout"] = listen_button.transcript_layout()
 	result["progress"] = {"value": game.completed, "total": PhraseGameModel.QUESTION_COUNT, "rect": _rect_snapshot(_progress.get_global_rect()), "visible": _progress.is_visible_in_tree()}
 	result["bank"] = {"rect": _rect_snapshot(_bank_clip.get_global_rect()), "scroll": _bank_scroll, "max_scroll": _bank_max_scroll}
+	result["answer_rail"] = {"rect": _rect_snapshot(_answer_clip.get_global_rect()), "scroll": _answer_scroll, "max_scroll": _answer_max_scroll}
 	result["answer_drop"] = _rect_snapshot(Rect2(_answer_drop.position + global_position, _answer_drop.size))
 	result["bank_drop"] = _rect_snapshot(Rect2(_bank_drop.position + global_position, _bank_drop.size))
 	result["dragging"] = _dragging

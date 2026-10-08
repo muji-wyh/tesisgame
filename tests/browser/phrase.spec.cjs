@@ -35,6 +35,19 @@ function expectFirstCandidateRow(state) {
   }
 }
 
+function expectAnswerPictures(state) {
+  for (let index = 0; index < state.answers.length; index++) {
+    const answer = state.answers[index];
+    if (index < state.answer.length) {
+      const candidate = state.options[state.answer[index]];
+      expect(candidate.icon, `Candidate ${candidate.text} supplies a picture`).toBeTruthy();
+      expect(answer.icon, `Selected ${answer.text} retains its candidate picture`).toBe(candidate.icon);
+    } else {
+      expect(answer.icon, 'An empty answer position cannot retain a previous word picture').toBe('');
+    }
+  }
+}
+
 function promptFullyVisible(state) {
   if (!state.visible || !state.prompt_text_visible || !state.listen?.visible) return true;
   const layout = state.prompt_layout;
@@ -58,6 +71,7 @@ async function press(page, control) {
   expect(control.visible, `${control.name} is visible`).toBe(true);
   expect(control.disabled, `${control.name} accepts input`).toBe(false);
   if (control.word_id) control = await revealOption(page, control.word_id);
+  else if (control.name.startsWith('PhraseAnswer_')) control = await revealAnswer(page, control.index);
   const [x, y, width, height] = control.rect;
   await tap(page, x + width / 2, y + height / 2);
   await rendered(page);
@@ -86,6 +100,29 @@ async function revealOption(page, wordId) {
     await rendered(page);
   }
   throw new Error(`Scrolling could not reveal candidate ${wordId}`);
+}
+
+async function revealAnswer(page, index) {
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const state = await phraseState(page), answer = state.answers[index];
+    expect(answer?.visible, `Answer position ${index + 1} contains a word`).toBe(true);
+    const [x, , width] = answer.rect, [left, top, railWidth, railHeight] = state.answer_rail.rect;
+    if (x >= left - 0.5 && x + width <= left + railWidth + 0.5) return answer;
+    const direction = x < left ? -1 : 1;
+    const bounds = await metrics(page);
+    const centerX = bounds.x + (left + railWidth / 2) * bounds.scale;
+    const centerY = bounds.y + (top + railHeight / 2) * bounds.scale;
+    await page.mouse.move(centerX, centerY);
+    if (page.context().browser().browserType().name() === 'webkit') {
+      await page.mouse.down();
+      try { await page.mouse.move(centerX - direction * 80, centerY, { steps: 6 }); }
+      finally { await page.mouse.up(); }
+    } else {
+      await page.mouse.wheel(0, direction * 80);
+    }
+    await rendered(page);
+  }
+  throw new Error(`Scrolling could not reveal answer position ${index + 1}`);
 }
 
 async function pressAction(page) {
@@ -327,13 +364,48 @@ async function liftBankCard(page, pointer, wordId) {
 }
 
 async function dragCard(page, pointer, source, destination, { dropKind, dropIndex, cancel = false, captureInfo } = {}) {
-  const before = progress(await phraseState(page));
+  const original = await phraseState(page), before = progress(original);
+  const answerTarget = original.answers.findIndex(answer => {
+    const point = center(answer.rect);
+    return Math.abs(point.x - destination.x) < 0.5 && Math.abs(point.y - destination.y) < 0.5;
+  });
+  const [answerLeft, answerTop, answerWidth, answerHeight] = original.answer_drop;
+  const appendAtEdge = dropKind === 'answer' && Math.abs(destination.x - answerLeft - answerWidth + 2) < 0.5 &&
+    destination.y >= answerTop && destination.y <= answerTop + answerHeight;
   if (source.word_id) source = await revealOption(page, source.word_id);
+  else source = await revealAnswer(page, source.index);
   await pointer.down(center(source.rect));
   expect((await phraseState(page)).dragging, 'Pressing a card waits for motion before dragging').toBe(false);
-  if (source.word_id) {
-    const start = center(source.rect);
-    await pointer.move({ x: start.x, y: start.y - 24 });
+  const start = center(source.rect);
+  await pointer.move({ x: start.x, y: start.y - 24 });
+  if (answerTarget >= 0) {
+    let current = await phraseState(page), target = current.answers[answerTarget];
+    const [left, top, width, height] = current.answer_rail.rect;
+    const empty = answerTarget >= current.answer.length;
+    if (empty && target.rect[0] + target.rect[2] > left + width) {
+      destination = { x: left + width - 2, y: top + height / 2 };
+      await pointer.move(destination);
+      await expect.poll(async () => {
+        const rail = (await phraseState(page)).answer_rail;
+        return rail.scroll >= rail.max_scroll - 0.5;
+      }, { message: 'An empty answer position remains reachable at the end of the rail' }).toBe(true);
+    } else if (target.rect[0] < left || target.rect[0] + target.rect[2] > left + width) {
+      await pointer.move({ x: target.rect[0] < left ? left + 2 : left + width - 2, y: top + height / 2 });
+      await expect.poll(async () => {
+        current = await phraseState(page);
+        target = current.answers[answerTarget];
+        return target.rect[0] >= left - 0.5 && target.rect[0] + target.rect[2] <= left + width + 0.5;
+      }, { message: 'Dragging at the answer edge reveals the destination card' }).toBe(true);
+      destination = center(target.rect);
+    } else {
+      destination = center(target.rect);
+    }
+  } else if (appendAtEdge) {
+    await pointer.move(destination);
+    await expect.poll(async () => {
+      const rail = (await phraseState(page)).answer_rail;
+      return rail.scroll >= rail.max_scroll - 0.5;
+    }, { message: 'Holding a dragged word at the right edge reveals the end of the answer' }).toBe(true);
   }
   await pointer.move(destination);
   await expect.poll(async () => (await phraseState(page)).dragging).toBe(true);
@@ -350,6 +422,7 @@ async function dragCard(page, pointer, source, destination, { dropKind, dropInde
   await expect.poll(async () => (await phraseState(page)).dragging).toBe(false);
   state = await phraseState(page);
   expect(state.drag_word, 'Releasing clears the dragged card preview').toBe('');
+  expectAnswerPictures(state);
   if (landing) {
     const option = state.options.find(item => item.word_id === landing.wordId);
     const placed = state.answers[state.answer.indexOf(option.index)];
@@ -549,12 +622,13 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
     await expect.poll(async () => {
       const bounds = await metrics(page), current = await phraseState(page);
       const controls = [...(current.answers || []), current.listen, current.action].filter(control => control?.visible);
-      return promptFullyVisible(current) && controls.length >= 4 && controls.every(({ rect: [x, y, width, height] }) =>
+      return promptFullyVisible(current) && controls.length >= 3 && controls.every(({ rect: [x, y, width, height] }) =>
         x >= -1 && y >= -1 && x + width <= bounds.width + 1 && y + height <= bounds.height + 1 &&
         width * bounds.scale >= 43.5 && height * bounds.scale >= 43.5);
     }, { message: `Every phrase target fits and remains at least 44 CSS pixels at ${size.width}x${size.height}` }).toBe(true);
     state = await phraseState(page);
     expectPromptFullyVisible(state);
+    expectAnswerPictures(state);
     expect(progress(state), 'Resizing preserves the phrase and its partially assembled answer').toEqual(selected);
     expect(state.prompt_text_visible, 'Muted learners can read the target phrase at every size').toBe(true);
     const visible = [...state.options, ...state.answers, state.listen, state.action].filter(control => control.visible);
@@ -613,8 +687,8 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
     expect(state.answer, 'A released bank card appears in the answer exactly once').toEqual([0]);
     expect(state.options[0].visible, 'The used bank card leaves its original position').toBe(false);
     const bounds = await metrics(page);
-    expect(state.answers[0].rect[2] * bounds.scale, 'The text-only answer remains smaller than its illustrated candidate')
-      .toBeLessThanOrEqual(state.options[0].rect[2] * bounds.scale - 28);
+    expect(state.answers[0].rect[2] * bounds.scale, 'An illustrated answer keeps its candidate-sized width')
+      .toBeLessThanOrEqual(state.options[0].rect[2] * bounds.scale + 1);
     state = await dragCard(page, pointer, state.options[1], center(state.answers[0].rect), { dropKind: 'answer', dropIndex: 0 });
     expect(state.answer, 'Dropping on an occupied slot inserts before its word').toEqual([1, 0]);
     const answerGap = (state.answers[1].rect[0] - state.answers[0].rect[0] - state.answers[0].rect[2]) * bounds.scale;
@@ -693,6 +767,41 @@ for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags inse
       await press(page, (await phraseState(page)).answers[0]);
       expect(progress(await phraseState(page)), 'An offscreen candidate remains selectable after scrolling').toEqual(before);
     }
+    await page.setViewportSize({ width: 320, height: 568 });
+    await rendered(page);
+    state = await phraseState(page);
+    const longest = [...state.options].sort((first, second) => second.rect[2] - first.rect[2])
+      .slice(0, state.answers.length).map(option => option.word_id);
+    await selectWords(page, longest);
+    state = await phraseState(page);
+    expectAnswerPictures(state);
+    if (state.answer_rail.max_scroll > 0) {
+      await revealAnswer(page, 0);
+      state = await phraseState(page);
+      const assembled = progress(state), scrollBefore = state.answer_rail.scroll;
+      const answerRail = center(state.answer_rail.rect);
+      await pointer.down(answerRail);
+      await pointer.move({ x: answerRail.x - 72, y: answerRail.y + 1 });
+      await pointer.up();
+      state = await phraseState(page);
+      expect(state.answer_rail.scroll, 'A horizontal swipe reveals more illustrated answer words').toBeGreaterThan(scrollBefore);
+      expect(state.dragging, 'A horizontal answer swipe does not begin a reorder').toBe(false);
+      expect(progress(state), 'Scrolling the answer preserves every selected word and its order').toEqual(assembled);
+      expectAnswerPictures(state);
+      await capture(page, info, `phrase-${input}-illustrated-answer-rail`, { afterResize: true });
+      const lastIndex = state.answer.length - 1, lastWord = state.answer[lastIndex];
+      state = await dragCard(page, pointer, state.answers[lastIndex], center(state.answers[0].rect), {
+        dropKind: 'answer', dropIndex: 0
+      });
+      expect(state.answer, 'A lifted word can cross a scrolling answer rail and move to the beginning')
+        .toEqual([lastWord, ...assembled.answer.slice(0, -1)]);
+    }
+    while ((await phraseState(page)).answer.length) {
+      await press(page, (await phraseState(page)).answers[0]);
+    }
+    state = await phraseState(page);
+    expectAnswerPictures(state);
+    expect(progress(state), 'Returning illustrated words clears the answer without losing candidates').toEqual(before);
     expect(await savedMedals(page), 'Editing cards cannot unlock or award a chest').toBe(saved);
     await capture(page, info, `phrase-${input}-drag-edited`, { afterResize: true });
     expect(errors).toEqual([]);
