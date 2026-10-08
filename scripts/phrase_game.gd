@@ -61,6 +61,7 @@ var _dragging: bool = false
 var _drop_kind: String = ""
 var _drop_index: int = -1
 var _settle_tween: Tween
+var _reorder_tween: Tween
 
 
 func _init() -> void:
@@ -210,6 +211,7 @@ func stop() -> void:
 
 
 func cancel_input() -> void:
+	var restore_answer: bool = _dragging
 	_pointer = -2
 	_dragging = false
 	_rail_swiping = false
@@ -228,6 +230,8 @@ func cancel_input() -> void:
 	for button in option_buttons + answer_buttons + [listen_button, action_button]:
 		if is_instance_valid(button):
 			button.set_pressed_no_signal(false)
+	if restore_answer:
+		_layout_answer()
 	queue_redraw()
 	_publish.call_deferred()
 
@@ -483,7 +487,7 @@ func _move_word(point: Vector2) -> void:
 	if not _dragging:
 		_dragging = true
 		_source.set_pressed_no_signal(false)
-		_source.modulate.a = 0.25
+		_source.modulate.a = 0.0 if _source_kind == "answer" else 0.25
 		_preview.text = str(game.options[_drag_word].text)
 		_preview.icon = _source.icon
 		_style_tile(_preview, true, false, false, s, _drag_word, _source.size.x,
@@ -514,18 +518,44 @@ func _process(delta: float) -> void:
 
 
 func _update_drop(point: Vector2) -> void:
+	var previous_kind: String = _drop_kind
+	var previous_index: int = _drop_index
 	_drop_kind = ""
 	_drop_index = -1
 	if _answer_drop.has_point(point) and (game.answer.has(_drag_word) or game.answer.size() < answer_buttons.size()):
 		_drop_kind = "answer"
-		_drop_index = game.answer.size()
-		for index in range(game.answer.size()):
-			var button: Button = answer_buttons[index]
-			if point.x < _local_rect(button).end.x:
-				_drop_index = mini(index, game.answer.size())
-				break
+		var order: Array[int] = game.answer.duplicate()
+		order.erase(_drag_word)
+		var x: float = point.x + _answer_scroll / Style.ui_scale(self)
+		_drop_index = previous_index if previous_kind == "answer" else game.answer.find(_drag_word)
+		if _drop_index < 0:
+			# A new bank card opens a gap at the first word's midpoint it reaches.
+			_drop_index = order.size()
+			var rects: Array[Rect2] = _answer_rects(order)
+			for index in range(order.size()):
+				if x <= rects[index].get_center().x + 0.5:
+					_drop_index = index
+					break
+		else:
+			# Compare against target positions, never the moving buttons. The gap
+			# creates hysteresis so a stationary pointer cannot toggle the order.
+			_drop_index = mini(_drop_index, order.size())
+			while _drop_index < order.size():
+				var rects: Array[Rect2] = _answer_rects(_answer_order())
+				if x < rects[_drop_index + 1].get_center().x - 0.5:
+					break
+				_drop_index += 1
+			while _drop_index > 0:
+				var rects: Array[Rect2] = _answer_rects(_answer_order())
+				if x > rects[_drop_index - 1].get_center().x + 0.5:
+					break
+				_drop_index -= 1
 	elif _bank_drop.has_point(point) and game.answer.has(_drag_word):
 		_drop_kind = "bank"
+	if previous_kind != _drop_kind or previous_index != _drop_index:
+		_layout_answer(true)
+		queue_redraw()
+		_publish.call_deferred()
 
 
 func _release_word(point: Vector2) -> void:
@@ -669,6 +699,10 @@ func _draw() -> void:
 	if not _dragging or _drop_kind.is_empty():
 		return
 	var rect: Rect2 = _drop_rect()
+	if _drop_kind == "answer":
+		rect = rect.intersection(_answer_drop)
+	if not rect.has_area():
+		return
 	var surface := Style.box(Color(accent, 0.08), accent, ceili(14 / s), ceili(2 / s))
 	surface.draw(get_canvas_item(), rect.grow(3 / s))
 
@@ -687,21 +721,23 @@ func _answer_rects(order: Array[int]) -> Array[Rect2]:
 	return result
 
 
+func _answer_order() -> Array[int]:
+	# Keep edits transactional while the visible row previews their final order.
+	var order: Array[int] = game.answer.duplicate()
+	if _dragging and _drop_kind == "answer":
+		order.erase(_drag_word)
+		order.insert(mini(_drop_index, order.size()), _drag_word)
+	return order
+
+
 func _drop_rect() -> Rect2:
 	if _drop_kind == "bank":
 		return _bank_drop
 	if _drop_kind != "answer":
 		return Rect2()
-	# Match the model's final index after removing an already selected word.
-	var order: Array[int] = game.answer.duplicate()
-	order.erase(_drag_word)
-	var index: int = mini(_drop_index, order.size())
-	order.insert(index, _drag_word)
-	var rects: Array[Rect2] = _answer_rects(order)
-	var maximum: float = maxf(0, rects[order.size() - 1].end.x - _answer_drop.end.x) * Style.ui_scale(self)
-	var result: Rect2 = rects[index]
-	result.position.x -= _answer_reveal_scroll(result, maximum) / Style.ui_scale(self)
-	return result
+	var rect: Rect2 = _answer_rects(_answer_order())[_drop_index]
+	rect.position.x -= _answer_scroll / Style.ui_scale(self)
+	return rect
 
 
 func _refresh() -> void:
@@ -856,6 +892,39 @@ func _style_tile(button: Button, filled: bool, correct: bool, wrong: bool, s: fl
 	button.add_theme_font_size_override("font_size", font_size)
 
 
+func _layout_answer(animate: bool = false) -> void:
+	if not _answer_drop.has_area():
+		return
+	if is_instance_valid(_reorder_tween):
+		_reorder_tween.kill()
+	var s: float = Style.ui_scale(self)
+	var order: Array[int] = _answer_order()
+	var rects: Array[Rect2] = _answer_rects(order)
+	var picture_w: float = (28 if size.y * s < 360 else 40) / s
+	for index in range(answer_buttons.size()):
+		var button: Button = answer_buttons[index]
+		var occupied: bool = index < game.answer.size()
+		var slot: int = order.find(game.answer[index]) if occupied else index
+		var rect: Rect2 = rects[slot]
+		_style_tile(button, occupied, game.phase == "correct", str(game.feedback) == "wrong", s,
+			game.answer[index] if occupied else 0, rect.size.x, picture_w)
+		var target: Vector2 = rect.position - _answer_drop.position
+		if animate and not reduced_motion and occupied and button != _source and not button.position.is_equal_approx(target):
+			if not is_instance_valid(_reorder_tween) or not _reorder_tween.is_valid():
+				_reorder_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			_reorder_tween.tween_property(button, "position", target, 0.12)
+		else:
+			button.position = target
+		button.size = rect.size
+	if is_instance_valid(_reorder_tween) and _reorder_tween.is_valid():
+		_reorder_tween.chain().tween_callback(_publish)
+	var content_w: float = maxf(_answer_drop.size.x, rects[order.size() - 1].end.x - _answer_drop.position.x) if not order.is_empty() else _answer_drop.size.x
+	_answer_max_scroll = maxf(0, content_w - _answer_drop.size.x) * s
+	_answer_clip.focus_mode = Control.FOCUS_ALL if game.phase == "correct" and not _paused and _answer_max_scroll > 0 else Control.FOCUS_NONE
+	_answer_content.size = Vector2(content_w, _answer_clip.size.y)
+	_scroll_answer(_answer_scroll)
+
+
 func _layout() -> void:
 	if not is_instance_valid(action_button) or size.x <= 0 or size.y <= 0:
 		return
@@ -896,18 +965,7 @@ func _layout() -> void:
 	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
 	_place(_answer_clip, Rect2(x, answer_y, inner_w, tile_h))
 	var picture_w: float = 28 if compact else 40
-	var answer_rects: Array[Rect2] = _answer_rects(game.answer)
-	for index in range(answer_buttons.size()):
-		var button: Button = answer_buttons[index]
-		var rect: Rect2 = answer_rects[index]
-		_style_tile(button, index < game.answer.size(), game.phase == "correct", str(game.feedback) == "wrong", s, game.answer[index] if index < game.answer.size() else 0, rect.size.x, picture_w / s)
-		button.position = rect.position - _answer_drop.position
-		button.size = rect.size
-	var answer_content_w: float = maxf(inner_w, (answer_rects[game.answer.size() - 1].end.x - _answer_drop.position.x) * s) if not game.answer.is_empty() else inner_w
-	_answer_max_scroll = maxf(0, answer_content_w - inner_w)
-	_answer_clip.focus_mode = Control.FOCUS_ALL if game.phase == "correct" and not _paused and _answer_max_scroll > 0 else Control.FOCUS_NONE
-	_answer_content.size = Vector2(answer_content_w, tile_h) / s
-	_scroll_answer(_answer_scroll)
+	_layout_answer()
 	var bank_y: float = answer_y + answer_h + gap
 	_place(_bank_clip, Rect2(x, bank_y, inner_w, tile_h))
 	var cursor: float = 0

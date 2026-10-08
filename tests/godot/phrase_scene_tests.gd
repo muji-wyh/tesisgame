@@ -523,6 +523,9 @@ func _check_drag_interruptions(app, method: String) -> void:
 func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: String,
 		drop_index: int = -1, canceled: bool = false) -> void:
 	var before: Dictionary = view.game.snapshot()
+	var original_rects: Array[Rect2] = []
+	for button: Button in view.answer_buttons:
+		original_rects.append(button.get_global_rect())
 	await _pointer_button(start, true, method)
 	check(not view.snapshot().dragging, method + " waits for movement before starting a card drag")
 	await _pointer_motion(start + Vector2(0, -24), Vector2(0, -24), method)
@@ -536,6 +539,8 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 		check(preview.drop_kind == drop_kind, method + " identifies the expected drop destination: " + drop_kind)
 	if drop_index >= 0:
 		check(preview.drop_index == drop_index, method + " previews the final word position")
+	if preview.drop_kind == "answer":
+		await _check_live_reflow(view, before, original_rects, end, method)
 	var landing: Rect2 = _snapshot_rect(preview.drop_rect) if preview.drop_kind == "answer" else Rect2()
 	if method == "touch":
 		await _pointer_button(end, true, "emulated")
@@ -547,6 +552,10 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	check(not view.snapshot().dragging and view.snapshot().drag_word.is_empty(),
 		method + " release clears the drag preview")
 	_check_answer_pictures(view)
+	if canceled and is_zero_approx(view.snapshot().answer_rail.max_scroll):
+		for index in range(before.answer.size()):
+			check(view.answer_buttons[index].get_global_rect().is_equal_approx(original_rects[index]),
+				method + " cancel restores each word's position after live reordering")
 	if landing.has_area() and not canceled:
 		var placed: int = -1
 		for index in range(view.game.answer.size()):
@@ -554,6 +563,36 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 				placed = index
 		check(placed >= 0 and landing.is_equal_approx(view.answer_buttons[placed].get_global_rect()),
 			method + " landing highlight matches the word's final compact position and size")
+
+
+func _check_live_reflow(view, before: Dictionary, original_rects: Array[Rect2], point: Vector2, method: String) -> void:
+	await create_timer(0.15).timeout
+	var held: Dictionary = view.snapshot()
+	var dragged: int = before.option_ids.find(held.drag_word)
+	var order: Array = before.answer.duplicate()
+	order.erase(dragged)
+	order.insert(mini(held.drop_index, order.size()), dragged)
+	var previous_end: float = -INF
+	for word: int in order:
+		var index: int = before.answer.find(word)
+		var rect: Rect2 = _snapshot_rect(held.drop_rect) if word == dragged else view.answer_buttons[index].get_global_rect()
+		check(rect.position.x >= previous_end, method + " held cards already leave a non-overlapping gap at the new position")
+		previous_end = rect.end.x
+		if word != dragged and order.find(word) != index and is_zero_approx(held.answer_rail.max_scroll):
+			check(not is_equal_approx(rect.position.x, original_rects[index].position.x),
+				method + " neighboring words visibly move before the pointer is released")
+	if before.answer.has(dragged):
+		check(is_zero_approx(view._source.modulate.a), method + " lifted answer has one visible card instead of a duplicate")
+	var held_rects: Array[Rect2] = []
+	for button: Button in view.answer_buttons:
+		held_rects.append(button.get_global_rect())
+	for repeat in range(3):
+		await _pointer_motion(point, Vector2.ZERO, method)
+		check(view.snapshot().drop_index == held.drop_index and view.game.snapshot() == before,
+			method + " repeated hovering cannot oscillate the preview or commit the answer")
+		for index in range(before.answer.size()):
+			check(view.answer_buttons[index].get_global_rect().is_equal_approx(held_rects[index]),
+				method + " stationary drag keeps neighboring cards stable")
 
 
 func _snapshot_rect(values: Array) -> Rect2:
