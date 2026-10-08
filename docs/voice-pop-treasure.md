@@ -54,22 +54,24 @@ Voice Pop treasure room.
 | --- | --- | --- |
 | Spring | Royal | Existing imported 2D rig |
 | Summer | Energy | Existing imported 2D rig |
-| Autumn | Harvest Ironwood | Casual Chests CHEST_2_T3, live model |
+| Autumn | Harvest Keepsake | POLY STYLE Treasure_Chest_4a, live model |
 | Winter | Crystal | Existing imported 2D rig |
-| Ocean | Tide Captain | Stylized Sea Chest, live model |
-| Space | Nebula Crown | Stylized Crowned Chest, live model |
-| Jungle | Bramble Relic | POLY STYLE family 5a, live model |
-| Candy | Bonbon Gold | Animated Cartoon Treasure Chest, live model |
+| Ocean | Lagoon Pearl | POLY STYLE Treasure_Chest_1a, live model |
+| Space | Moonstone Vault | Bobardo Epic Chest, live model |
+| Jungle | Meadow Explorer | Ekrem Low Poly Chest Animated, live model |
+| Candy | Strawberry Bonbon | POLY STYLE Treasure_Chest_2a, live model |
 
 The five additional designs render real meshes into transparent, adaptive
-512-1024 pixel viewports. The sea chest retains 2K runtime maps derived from its
-4K source maps; the hand-painted chest keeps its original 512 pixel atlas.
-The remaining designs use modeled trim and adapted materials. Source clips or
-authored hinges animate continuously, with independent hardware pressure and
-real interior lighting. They retain the shared five-second performance,
-cancellation, reduced motion, and exactly-once rewards. Source package hashes,
+512-1024 pixel viewports. Moonstone remaps the original 1024 pixel Epic atlas
+and retains its source ambient occlusion. The remaining designs use source
+geometry and UVs with adapted pastel, wood and pearl material colors. Four
+game-authored hinges and Moonstone's magnetic cover lift animate continuously,
+with pressure feedback and real interior lighting. They retain the shared
+five-second performance, cancellation, reduced motion, and exactly-once rewards. Source package hashes,
 license references, and motion provenance are recorded in
-`assets/chests/downloaded/SOURCE.txt` and its manifest.
+`assets/chests/downloaded/SOURCE.txt` and its manifest. Exact source designs,
+geometry adaptations and available source animations are documented in
+[the chest asset record](assets/chest-refresh.md).
 
 The GLB files and their Godot import sidecars are private local build inputs
 excluded from Git. They ship inside the compiled game pack. Restore them with

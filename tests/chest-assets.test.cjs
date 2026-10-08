@@ -339,8 +339,11 @@ test('five detailed chest models have distinct geometry, continuous articulation
   const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
   assert.equal(downloaded.version, 2);
   assert.deepEqual(Object.keys(downloaded.styles).sort(), ['bonbon', 'bramble', 'harvest', 'nebula', 'tide']);
-  assert.equal(new Set(Object.values(downloaded.styles).map(style => style.source)).size, 5,
-    'Each replacement comes from a different source design');
+  const designReferences = Object.values(downloaded.styles).map(style => style.design_reference);
+  assert.ok(designReferences.every(reference => typeof reference === 'string' && reference.trim().length > 0),
+    'Each replacement identifies its exact source design or prefab');
+  assert.equal(new Set(designReferences).size, 5,
+    'Each replacement comes from a different source design; a licensed collection can supply multiple designs');
   const checksums = new Map(downloaded.assets.map((file) => [file.path, file]));
   assert.equal(checksums.size, 5, 'Every model has one checksum');
   assert.equal(downloaded.assets.length, 5);
@@ -401,7 +404,9 @@ test('five detailed chest models have distinct geometry, continuous articulation
           `${style}/${gltf.nodes[channel.target.node].name} interpolates genuinely moving geometry`);
       }
     } else {
-      assert.ok(parts.some(part => Math.abs(part.angle) > 0.5), `${style} supplies a full authored lid hinge`);
+      assert.ok(parts.some(part => part.role === 'lid'
+        && (Math.abs(part.angle) > 0.5 || (part.lift && Math.hypot(...part.lift) > 0.25))),
+        `${style} supplies a substantial authored lid rotation or lift`);
     }
     for (const property of ['closed_bounds_3d', 'motion_bounds_3d']) {
       vec3(catalog[property]?.min, `${style}/${property} minimum`);

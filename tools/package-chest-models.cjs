@@ -8,11 +8,11 @@ const root = path.resolve(__dirname, '..');
 const sourceRoot = path.resolve(process.argv[2] || 'C:/uworks/TalkQuest');
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
 const definitions = {
-  harvest: ['iron-wood', 'casual-chests', 'Harvest Ironwood'],
-  tide: ['sea', 'stylized-sea-chest', 'Tide Captain'],
-  nebula: ['crowned', 'stylized-chests', 'Nebula Crown'],
-  bramble: ['skull', 'poly-style-fantasy-chest', 'Bramble Relic'],
-  bonbon: ['painted-gold', 'cartoon-treasure-chest', 'Bonbon Gold']
+  harvest: ['harvest-keepsake', 'poly-style-fantasy-chest', 'Harvest Keepsake'],
+  tide: ['lagoon-pearl', 'poly-style-fantasy-chest', 'Lagoon Pearl'],
+  nebula: ['moonstone-vault', 'stylized-chests', 'Moonstone Vault'],
+  bramble: ['meadow-explorer', 'low-poly-chest-animated', 'Meadow Explorer'],
+  bonbon: ['strawberry-bonbon', 'poly-style-fantasy-chest', 'Strawberry Bonbon']
 };
 const catalog = new Map();
 for (const filename of ['sources.downloaded.json', 'sources.chests.json', 'sources.additional-chests.json']) {
@@ -39,7 +39,8 @@ for (const [style, [id, source, name]] of Object.entries(definitions)) {
   };
   const skin = { name, source, model: modelPath };
   for (const key of ['open_animation', 'open_start', 'open_end', 'model_parts', 'camera_direction',
-    'closed_bounds_3d', 'motion_bounds_3d', 'cavity_3d', 'seam_3d', 'vertex_count', 'triangle_count']) skin[key] = model[key];
+    'closed_bounds_3d', 'motion_bounds_3d', 'cavity_3d', 'seam_3d', 'vertex_count', 'triangle_count',
+    'design_reference', 'source_design_sha256']) skin[key] = model[key];
   skin.motion = model.motion.method;
   skin.materials = model.materials.mapping;
   skin.source_model_sha256 = model.source_sha256;

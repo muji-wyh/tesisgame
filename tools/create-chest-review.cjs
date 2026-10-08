@@ -4,11 +4,11 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'build/chest-quality/game-review');
 const items = [
-  ['autumn', 'Harvest Ironwood', 'Iron bands, modeled rivets, and a heavy wooden lid.'],
-  ['ocean', 'Tide Captain', 'Painted wood, an anchor lock, and moving side handles.'],
-  ['space', 'Nebula Crown', 'A silver crown, amethyst panels, and a jeweled clasp.'],
-  ['jungle', 'Bramble Relic', 'A carved forest relic with layered ornamental trim.'],
-  ['candy', 'Bonbon Gold', 'Hand-painted wood, golden bands, and a star-shaped lock.']
+  ['autumn', 'Harvest Keepsake', 'Amber wood, champagne trim, and a gently rounded lid.'],
+  ['ocean', 'Lagoon Pearl', 'Teal panels, pale aqua details, and pearl framing.'],
+  ['space', 'Moonstone Vault', 'Lilac enamel, pearl framing, and a gemstone cover that lifts open.'],
+  ['jungle', 'Meadow Explorer', 'Warm wood and leafy green framing with softened edges.'],
+  ['candy', 'Strawberry Bonbon', 'A strawberry rose barrel with vanilla bands and shallow fittings.']
 ];
 for (const [id] of items) for (const pose of ['closed', 'opened']) {
   if (!fs.existsSync(path.join(output, `${id}-${pose}.png`))) throw new Error(`Missing real-game capture: ${id}/${pose}`);
@@ -32,11 +32,11 @@ button[aria-pressed=true]{background:#f2d397;color:#19232d;border-color:#f2d397}
 @media(max-width:650px){main{padding:24px 16px 40px}header{align-items:flex-start}.pill{font-size:12px;padding:8px 12px}.grid{grid-template-columns:1fr}.film{margin:25px 0 34px}}
 </style>
 <main><header><div><div class="eyebrow">Word Buddies · Asset review</div><h1>Treasure collection</h1></div><a class="pill" href="http://127.0.0.1:41773/" target="_blank" rel="noopener">Open game ↗</a></header>
-<p class="intro">Five replacement designs with continuous lid movement, moving hardware, and light that follows the actual chest.</p>
+<p class="intro">Five replacement designs with continuous lid movement, pressure feedback, and light that follows the actual chest.</p>
 <section class="film" aria-label="Actual game animation"><video controls autoplay muted loop playsinline poster="collection-closed.png" src="opening.mp4"></video><p>Press Play to watch the opening. Captured from the shared in-game chest view; the preview is muted.</p></section>
 <section aria-labelledby="designs"><div class="toolbar"><h2 id="designs">Inspect each design</h2><div class="switch" aria-label="Chest pose"><button aria-pressed="true" data-pose="closed">Closed</button><button aria-pressed="false" data-pose="opened">Opened</button></div></div>
 <div class="grid">${items.map(([id, name, description], index) => `<article class="card"><img src="${id}-closed.png" data-chest="${id}" alt="${name}, closed, rendered inside the game" loading="lazy"><div class="copy"><span class="index">0${index + 1}</span><h3>${name}</h3><p>${description}</p></div></article>`).join('')}</div></section>
-<section class="details"><h2>Source detail</h2><p>These are five different models from retained free Unity Asset Store packages. The sea chest uses 2K runtime textures derived from its 4K source maps. Bonbon retains its original hand-painted 512px atlas; the other designs use modeled detail and adapted materials. The game renders their geometry at an adaptive 512–1024px surface size.</p><p>Spring, Summer, and Winter keep their original chest designs. Hold timing, cancellation, rewards, and reduced motion remain shared with the existing game.</p></section></main>
+<section class="details"><h2>Source detail</h2><p>These are five distinct designs from acquired Unity Asset Store packages by Batata Studio, Bobardo, and Ekrem C. Moonstone remaps its original 1024px Epic atlas and retains source ambient occlusion; the other designs use source geometry and UVs with adapted pastel, wood, and pearl material colors. Four game-authored hinges and Moonstone's magnetic cover lift provide continuous opening motion. The game renders their geometry at an adaptive 512–1024px surface size.</p><p>Spring, Summer, and Winter keep their original chest designs. Hold timing, cancellation, rewards, and reduced motion remain shared with the existing game.</p></section></main>
 <script>
 for(const button of document.querySelectorAll('[data-pose]'))button.addEventListener('click',()=>{
 for(const item of document.querySelectorAll('[data-pose]'))item.setAttribute('aria-pressed',String(item===button));

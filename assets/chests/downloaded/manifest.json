@@ -3,22 +3,13 @@
   "renderer": "live-model",
   "design_size": 1024,
   "sources": {
-    "casual-chests": {
-      "title": "Lowpoly Casual Chests - Free",
-      "publisher": "Aztech Games",
-      "version": "1.0",
-      "product_id": "321819",
-      "url": "https://assetstore.unity.com/packages/slug/321819",
-      "package_sha256": "9fcd03e6b357a72c414d6fde2219e7dd7e99cecef7ba331aaf73e7dd7ac69ce4",
-      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
-    },
-    "stylized-sea-chest": {
-      "title": "Stylized Sea Chest",
-      "publisher": "Project Zima",
-      "version": "1.0",
-      "product_id": "289856",
-      "url": "https://assetstore.unity.com/packages/3d/props/stylized-sea-chest-289856",
-      "package_sha256": "db68bc113a8e0820c3d48b8cafd95cb65a7870cedd30d351c5b518ef29520f62",
+    "poly-style-fantasy-chest": {
+      "title": "POLY STYLE - Fantasy Treasure Chest",
+      "publisher": "Batata Studio",
+      "version": "1.15",
+      "product_id": "280107",
+      "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
+      "package_sha256": "ca35e6d033bf29cf3b247d866d8b3db0b4a8800e691a97bbc31002712ac0b75e",
       "license": "Unity Asset Store Standard EULA; embedded game artwork only"
     },
     "stylized-chests": {
@@ -30,30 +21,21 @@
       "package_sha256": "2356a6173afd53692fec5fb0360fbfcb9eb3f73549d13600e5446d66c8f18375",
       "license": "Unity Asset Store Standard EULA; embedded game artwork only"
     },
-    "poly-style-fantasy-chest": {
-      "title": "POLY STYLE - Fantasy Treasure Chest",
-      "publisher": "Batata Studio",
-      "version": "1.15",
-      "product_id": "280107",
-      "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
-      "package_sha256": "ca35e6d033bf29cf3b247d866d8b3db0b4a8800e691a97bbc31002712ac0b75e",
-      "license": "Unity Asset Store Standard EULA; embedded game artwork only"
-    },
-    "cartoon-treasure-chest": {
-      "title": "Animated Cartoon Treasure Chest",
-      "publisher": "Flying Saci Game Studio",
+    "low-poly-chest-animated": {
+      "title": "Low Poly Chest Animated",
+      "publisher": "Ekrem C.",
       "version": "1.0",
-      "product_id": "146757",
-      "url": "https://assetstore.unity.com/packages/3d/environments/fantasy/animated-cartoon-treasure-chest-146757",
-      "package_sha256": "7ee9dc8327e27214852a8b5b67369ef592a9f5368f99755b8ddfd3612f5095a7",
+      "product_id": "247127",
+      "url": "https://assetstore.unity.com/packages/3d/props/low-poly-chest-animated-247127",
+      "package_sha256": "a0022b1fbe2f1762114774f10a2ecdacf2db169f9c01d51dbe42497213fd8397",
       "license": "Unity Asset Store Standard EULA; embedded game artwork only"
     }
   },
   "styles": {
     "harvest": {
-      "name": "Harvest Ironwood",
-      "source": "casual-chests",
-      "model": "assets/chests/models/iron-wood.glb",
+      "name": "Harvest Keepsake",
+      "source": "poly-style-fantasy-chest",
+      "model": "assets/chests/models/harvest-keepsake.glb",
       "open_animation": "Open",
       "open_start": 0,
       "open_end": 1,
@@ -66,7 +48,7 @@
             0,
             0
           ],
-          "angle": -1.3089969389957472
+          "angle": 1.6057029118347832
         }
       ],
       "camera_direction": [
@@ -76,196 +58,58 @@
       ],
       "closed_bounds_3d": {
         "min": [
-          -1.000000038919893,
-          -2.4016344468691386e-12,
-          -0.771986445503785
+          -0.9999999499122499,
+          -2.4316881841457416e-11,
+          -0.7378557247303001
         ],
         "max": [
-          1.000000038919893,
-          1.6805727721272206,
-          0.7719864379430135
+          0.9999999406638505,
+          1.4892101524232615,
+          0.7378557247303001
         ]
       },
       "motion_bounds_3d": {
         "min": [
-          -1.000000038919893,
-          -2.4016344468691386e-12,
-          -1.2567886941196367
+          -0.9999999499122499,
+          -2.4316881841457416e-11,
+          -1.1728058888829715
         ],
         "max": [
-          1.000000038919893,
-          2.283125677648071,
-          0.7755749907989973
+          0.9999999406638505,
+          1.936030261359729,
+          0.7378557247303001
         ]
       },
       "cavity_3d": [
         0,
-        0.8753787473858665,
+        0.8493056297302246,
         0
       ],
       "seam_3d": [
         [
-          -0.83,
-          0.8753787473858665,
-          0.6947877941487122
+          -0.7724548667101443,
+          0.8493056297302246,
+          0.5407183766365051
         ],
         [
-          0.83,
-          0.8753787473858665,
-          0.6947877941487122
+          0.7724548667101443,
+          0.8493056297302246,
+          0.5407183766365051
         ]
       ],
-      "vertex_count": 16093,
-      "triangle_count": 31838,
-      "motion": "Game-authored continuous eased hinge using the original separate lid and source hinge",
-      "materials": "Game-authored 1K walnut grain, forged iron and brass surfaces on the original source material slots; source had flat colors.",
-      "source_model_sha256": "52eab6604627117aa4bb4eb049b73bbc427c66c0a4c4984593c97bd0576db3f1",
+      "vertex_count": 23068,
+      "triangle_count": 46068,
+      "design_reference": "Assets/POLY STYLE - Fantasy Treasure Chest/Fantasy Treasure Chest_URP/Prefabs/Chest/Treasure_Chest_4a.prefab",
+      "source_design_sha256": "02d9c2cb262a308e3e4272da0d227ab62887b327857813f1bb12f47744002183",
+      "motion": "Game-authored continuous hinge on the original separate lid and hinge pivot",
+      "materials": "Source geometry and UVs; game-authored pastel enamel, warm wood and pearl material colors. Original source material slots preserved; missing review slots deliberately mapped to theme inset material.",
+      "source_model_sha256": "28dcb0b0f6cd52e776fb84c3c7ea3f11425d738769405f545e454865731ad04f",
       "texture_sizes": []
     },
     "tide": {
-      "name": "Tide Captain",
-      "source": "stylized-sea-chest",
-      "model": "assets/chests/models/sea.glb",
-      "open_animation": "Open",
-      "open_start": 2.1666666666666665,
-      "open_end": 3,
-      "model_parts": [
-        {
-          "node": "Skeleton3D",
-          "bone": "Top_bone",
-          "role": "lid",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": -2.0943951023931953
-        },
-        {
-          "node": "Skeleton3D",
-          "bone": "Lock_bone",
-          "role": "lock",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": 0.1
-        },
-        {
-          "node": "Skeleton3D",
-          "bone": "Handle_1_bone",
-          "role": "handle",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": 0.1
-        },
-        {
-          "node": "Skeleton3D",
-          "bone": "Handle_2_bone",
-          "role": "handle",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": 0.1
-        }
-      ],
-      "camera_direction": [
-        0.56,
-        0.46,
-        1
-      ],
-      "closed_bounds_3d": {
-        "min": [
-          -0.9999999881494759,
-          2.812769360062108e-15,
-          -0.5460310388767532
-        ],
-        "max": [
-          0.9999999881494759,
-          1.6074241643267735,
-          0.5460310383561228
-        ]
-      },
-      "motion_bounds_3d": {
-        "min": [
-          -0.9999999881494759,
-          2.812769360062108e-15,
-          -1.5432275996491853
-        ],
-        "max": [
-          0.9999999881494759,
-          1.8889609781661463,
-          0.5460310383561228
-        ]
-      },
-      "cavity_3d": [
-        0,
-        0.8196194941043867,
-        0
-      ],
-      "seam_3d": [
-        [
-          -0.83,
-          0.8196194941043867,
-          0.4914279345205105
-        ],
-        [
-          0.83,
-          0.8196194941043867,
-          0.4914279345205105
-        ]
-      ],
-      "vertex_count": 14928,
-      "triangle_count": 28155,
-      "motion": "Retained source 60 Hz quaternion keys on the original skeletal bones",
-      "materials": "Original UVs, base and normal maps. Source PBR green is roughness; blue is metallic. Custom Unity color/dirt modifiers are not reproduced.",
-      "source_model_sha256": "fc02d8960d0f1bfae36449c2d8f0ffb96f3df3c459e92a6eb47d2b1290deabd2",
-      "texture_sizes": [
-        {
-          "source": [
-            4096,
-            4096
-          ],
-          "runtime": [
-            2048,
-            2048
-          ],
-          "sha256": "d18ee8fe2cfd8f37175100c1d8dbc561bface1b48375a147a5f060d02c9fcb94"
-        },
-        {
-          "source": [
-            4096,
-            4096
-          ],
-          "runtime": [
-            2048,
-            2048
-          ],
-          "sha256": "712ec3c3d4ceb9060f82d188c9de1dfa0c33d1ebe786fd1c55f8d955e7b6101d"
-        },
-        {
-          "source": [
-            4096,
-            4096
-          ],
-          "runtime": [
-            2048,
-            2048
-          ],
-          "sha256": "323c466cdb68579da503ac705761b686f5e70eb4f85b0c6bd8febdbbb1a4e02a"
-        }
-      ]
-    },
-    "nebula": {
-      "name": "Nebula Crown",
-      "source": "stylized-chests",
-      "model": "assets/chests/models/crowned.glb",
+      "name": "Lagoon Pearl",
+      "source": "poly-style-fantasy-chest",
+      "model": "assets/chests/models/lagoon-pearl.glb",
       "open_animation": "Open",
       "open_start": 0,
       "open_end": 1,
@@ -278,7 +122,7 @@
             0,
             0
           ],
-          "angle": 1.4835298641951802
+          "angle": 1.6057029118347832
         }
       ],
       "camera_direction": [
@@ -288,50 +132,131 @@
       ],
       "closed_bounds_3d": {
         "min": [
-          -1.000000029601955,
-          -2.162695023066874e-10,
-          -0.6814655334786368
+          -0.9999999866520625,
+          -6.426473242449049e-11,
+          -0.5849159867090736
         ],
         "max": [
-          0.9999999326852977,
-          1.7812648557617194,
-          0.6814655610081033
+          0.9999999899255372,
+          1.4526822954051397,
+          0.5849158527281502
         ]
       },
       "motion_bounds_3d": {
         "min": [
-          -1.0000000384380328,
-          -2.162695023066874e-10,
-          -1.6850740601403729
+          -1.0000000959425723,
+          -6.426473242449049e-11,
+          -1.3366202314978841
         ],
         "max": [
-          0.9999999326852977,
-          2.18502683901297,
-          0.6945524032555688
+          0.9999999899255372,
+          1.798913538122053,
+          0.5849158527281502
         ]
       },
       "cavity_3d": [
         0,
-        0.7228765891028388,
+        0.675826370716095,
         0
       ],
       "seam_3d": [
         [
-          -0.83,
-          0.7228765891028388,
-          0.613319004907293
+          -0.5578153814403464,
+          0.675826370716095,
+          0.5279249548912048
         ],
         [
-          0.83,
-          0.7228765891028388,
-          0.613319004907293
+          0.5578153814403464,
+          0.675826370716095,
+          0.5279249548912048
         ]
       ],
-      "vertex_count": 2720,
-      "triangle_count": 5428,
-      "motion": "Game-authored continuous eased hinge using the original separate lid and source hinge",
-      "materials": "Original 1K UV layout and AO retained; game-authored amethyst enamel, dark silver and rose crystal palette with separate metal/roughness response.",
-      "source_model_sha256": "bff341390c8b0f218698312e0342424dbe8a76875fb448eaaa8b60a4e31611e4",
+      "vertex_count": 13244,
+      "triangle_count": 26354,
+      "design_reference": "Assets/POLY STYLE - Fantasy Treasure Chest/Fantasy Treasure Chest_URP/Prefabs/Chest/Treasure_Chest_1a.prefab",
+      "source_design_sha256": "ac30644421cfd148e2a3a10d47840e46105a5921342c2a5aa3127b9185d03533",
+      "motion": "Game-authored continuous hinge on the original separate lid and hinge pivot",
+      "materials": "Source geometry and UVs; game-authored pastel enamel, warm wood and pearl material colors. Original source material slots preserved; missing review slots deliberately mapped to theme inset material.",
+      "source_model_sha256": "28dcb0b0f6cd52e776fb84c3c7ea3f11425d738769405f545e454865731ad04f",
+      "texture_sizes": []
+    },
+    "nebula": {
+      "name": "Moonstone Vault",
+      "source": "stylized-chests",
+      "model": "assets/chests/models/moonstone-vault.glb",
+      "open_animation": "Open",
+      "open_start": 0,
+      "open_end": 1,
+      "model_parts": [
+        {
+          "node": "Lid",
+          "role": "lid",
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "angle": 0,
+          "lift": [
+            0,
+            0.7069644018023594,
+            0
+          ]
+        }
+      ],
+      "camera_direction": [
+        0.56,
+        0.46,
+        1
+      ],
+      "closed_bounds_3d": {
+        "min": [
+          -1.0000000026035392,
+          -9.486961216609302e-11,
+          -0.7315019342324833
+        ],
+        "max": [
+          1.0000000026861693,
+          2.206833895515487,
+          0.7315018727587765
+        ]
+      },
+      "motion_bounds_3d": {
+        "min": [
+          -1.0000000026035392,
+          -9.486961216609302e-11,
+          -0.7315019342324833
+        ],
+        "max": [
+          1.0000000026861693,
+          2.9137982942497587,
+          0.7315018727587765
+        ]
+      },
+      "cavity_3d": [
+        0,
+        1.0152580839607452,
+        0
+      ],
+      "seam_3d": [
+        [
+          -0.7607510341506329,
+          1.0152580839607452,
+          0.49221892865445904
+        ],
+        [
+          0.7607510341506329,
+          1.0152580839607452,
+          0.49221892865445904
+        ]
+      ],
+      "vertex_count": 5096,
+      "triangle_count": 10180,
+      "design_reference": "Assets/Stylized 3D Animated Chests – FREE Demo/BIRP/Chsets/Epic Chest/EpicChest_PF_BIRP.prefab",
+      "source_design_sha256": "b06a825b9b8e93f1383c8f8230ab8f9ee01d721a411c12d63cd6431f23ef7110",
+      "motion": "Game-authored continuous magnetic lift on the original separate cover",
+      "materials": "Source geometry and UVs; game-authored pastel enamel, warm wood and pearl material colors. Source atlas regions recolored with retained source ambient occlusion.",
+      "source_model_sha256": "8360de0fe1c6d756e2a4aba1e5facd884778c9f6b916d6b3b0c9da1cce0b0650",
       "texture_sizes": [
         {
           "source": [
@@ -342,7 +267,7 @@
             1024,
             1024
           ],
-          "sha256": "1c4d53b0e57fae59ec559def4d60883a98b6d0f8efc2769de382f0581a5f8ae0"
+          "sha256": "07282c83221da18b83d7de4718c022ee692d35347a8738fc5fa28472cc267c2d"
         },
         {
           "source": [
@@ -353,14 +278,14 @@
             1024,
             1024
           ],
-          "sha256": "696baa2f45c9d80785c46f0578121d7a376ef7cde84e8ad78f604fd12c3351d8"
+          "sha256": "5bc9c856044c040faaeda5164b06ba809476fe3995aae85eb4fcf7a7ad1a757f"
         }
       ]
     },
     "bramble": {
-      "name": "Bramble Relic",
-      "source": "poly-style-fantasy-chest",
-      "model": "assets/chests/models/skull.glb",
+      "name": "Meadow Explorer",
+      "source": "low-poly-chest-animated",
+      "model": "assets/chests/models/meadow-explorer.glb",
       "open_animation": "Open",
       "open_start": 0,
       "open_end": 1,
@@ -373,7 +298,7 @@
             0,
             0
           ],
-          "angle": 1.4835298641951802
+          "angle": 1.6057029118347832
         }
       ],
       "camera_direction": [
@@ -383,59 +308,61 @@
       ],
       "closed_bounds_3d": {
         "min": [
-          -0.999999919963027,
-          7.01767532973463e-10,
-          -0.7333863587007056
+          -1.0000000114348528,
+          -2.4868887331386258e-17,
+          -0.7139286635108208
         ],
         "max": [
-          1.0000000468320605,
-          1.36038346252829,
-          0.7333865056793214
+          1.0000000188007314,
+          1.851594826466382,
+          0.7139286292908095
         ]
       },
       "motion_bounds_3d": {
         "min": [
-          -0.999999919963027,
-          7.01767532973463e-10,
-          -1.0772514716521906
+          -1.0000000114348528,
+          -2.4868887331386258e-17,
+          -1.3730576318033805
         ],
         "max": [
-          1.0000000468320605,
-          1.8851298319742922,
-          0.7333865056793214
+          1.0000000188007314,
+          2.5590283172791937,
+          0.7139286292908095
         ]
       },
       "cavity_3d": [
         0,
-        0.7001113018502281,
+        1.1837102174758911,
         0
       ],
       "seam_3d": [
         [
-          -0.83,
-          0.7001113018502281,
-          0.6600478551113893
+          -0.7755650909596887,
+          1.1837102174758911,
+          0.6950302720069885
         ],
         [
-          0.83,
-          0.7001113018502281,
-          0.6600478551113893
+          0.7755650909596887,
+          1.1837102174758911,
+          0.6950302720069885
         ]
       ],
-      "vertex_count": 11041,
-      "triangle_count": 21986,
-      "motion": "Game-authored continuous eased hinge using the original separate lid and source hinge",
-      "materials": "Game-authored 1K forest wood, aged bronze, ivory and jade surfaces on original source material slots; source had flat pastel colors.",
-      "source_model_sha256": "28dcb0b0f6cd52e776fb84c3c7ea3f11425d738769405f545e454865731ad04f",
+      "vertex_count": 14257,
+      "triangle_count": 27274,
+      "design_reference": "Assets/Low Poly Chest Animated/Prefabs/Chest_Green.prefab",
+      "source_design_sha256": "d6f7a1790b0a899b045f413a3507b2534cd2fc9d5571cfaf30c92c93af3951ad",
+      "motion": "Game-authored continuous hinge on the original separate lid and hinge pivot",
+      "materials": "Source geometry and UVs; game-authored pastel enamel, warm wood and pearl material colors. Original source material slots preserved; missing review slots deliberately mapped to theme inset material.",
+      "source_model_sha256": "a4f95f4512cb378e137c6a212b1cc78de620e672820ea6afb470d0a7fbbdc77c",
       "texture_sizes": []
     },
     "bonbon": {
-      "name": "Bonbon Gold",
-      "source": "cartoon-treasure-chest",
-      "model": "assets/chests/models/painted-gold.glb",
+      "name": "Strawberry Bonbon",
+      "source": "poly-style-fantasy-chest",
+      "model": "assets/chests/models/strawberry-bonbon.glb",
       "open_animation": "Open",
       "open_start": 0,
-      "open_end": 0.5,
+      "open_end": 1,
       "model_parts": [
         {
           "node": "Lid",
@@ -445,27 +372,7 @@
             0,
             0
           ],
-          "angle": -1.2217304763960306
-        },
-        {
-          "node": "RingLeft",
-          "role": "handle",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": 0.1
-        },
-        {
-          "node": "RingRight",
-          "role": "handle",
-          "axis": [
-            1,
-            0,
-            0
-          ],
-          "angle": 0.1
+          "angle": 1.6057029118347832
         }
       ],
       "camera_direction": [
@@ -475,90 +382,80 @@
       ],
       "closed_bounds_3d": {
         "min": [
-          -0.9999998568618449,
-          -1.0546745699002713e-9,
-          -0.672041142030731
+          -1.00000004619441,
+          9.808964751556459e-11,
+          -0.703820140082616
         ],
         "max": [
-          0.9999998182951917,
-          1.5717894981307132,
-          0.6720411239530175
+          1.0000000500908224,
+          1.0473878071515088,
+          0.7038201168502289
         ]
       },
       "motion_bounds_3d": {
         "min": [
-          -0.9999998568618449,
-          -1.0546745699002713e-9,
-          -0.9394949497554657
+          -1.0000000612766082,
+          9.808964751556459e-11,
+          -1.147521307647343
         ],
         "max": [
-          0.9999998182951917,
-          2.2040338476667394,
-          0.6720411239530175
+          1.0000000500908224,
+          1.8532738975294751,
+          0.7038602197412558
         ]
       },
       "cavity_3d": [
         0,
-        0.9484710028369745,
+        0.5388209223747253,
         0
       ],
       "seam_3d": [
         [
-          -0.83,
-          0.9484710028369745,
-          0.5914109861556524
+          -0.8898792456783239,
+          0.5388209223747253,
+          0.6446040868759155
         ],
         [
-          0.83,
-          0.9484710028369745,
-          0.5914109861556524
+          0.8898792456783239,
+          0.5388209223747253,
+          0.6446040868759155
         ]
       ],
-      "vertex_count": 493,
-      "triangle_count": 918,
-      "motion": "Original embedded Open take sampled across all four animated source objects",
-      "materials": "Original painted 512px albedo and UVs without upscaling. Source gold metal response, lower wood metallic response.",
-      "source_model_sha256": "5a72fccdb1f935d1e0ec9122c28af31479b38f575c13e378040bb4a10ea33b54",
-      "texture_sizes": [
-        {
-          "source": [
-            512,
-            512
-          ],
-          "runtime": [
-            512,
-            512
-          ],
-          "sha256": "126ce39cb457eee05cfdd1d04b16897a317afd767b32b59a7b46be6e4f68ec3b"
-        }
-      ]
+      "vertex_count": 12062,
+      "triangle_count": 24078,
+      "design_reference": "Assets/POLY STYLE - Fantasy Treasure Chest/Fantasy Treasure Chest_URP/Prefabs/Chest/Treasure_Chest_2a.prefab",
+      "source_design_sha256": "e930656c2735f68cde1ffb9c98c38ddfff034674eea9fa65452a59974d5496c5",
+      "motion": "Game-authored continuous hinge on the original separate lid and hinge pivot",
+      "materials": "Source geometry and UVs; game-authored pastel enamel, warm wood and pearl material colors. Original source material slots preserved; missing review slots deliberately mapped to theme inset material.",
+      "source_model_sha256": "28dcb0b0f6cd52e776fb84c3c7ea3f11425d738769405f545e454865731ad04f",
+      "texture_sizes": []
     }
   },
   "assets": [
     {
-      "path": "assets/chests/models/iron-wood.glb",
-      "bytes": 1782284,
-      "sha256": "4e850f6d090bad154904efb868154846b6a4e65ffb2a2d61e96e89b627cdd69a"
+      "path": "assets/chests/models/harvest-keepsake.glb",
+      "bytes": 1167920,
+      "sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec"
     },
     {
-      "path": "assets/chests/models/sea.glb",
-      "bytes": 3917940,
-      "sha256": "2849b1146d2cec3e93237d8b9549c68cc404646492abc2fa150beef2211f1638"
+      "path": "assets/chests/models/lagoon-pearl.glb",
+      "bytes": 708056,
+      "sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9"
     },
     {
-      "path": "assets/chests/models/crowned.glb",
-      "bytes": 271828,
-      "sha256": "1ab03458e6c251449afe03b8286059e6e6de186a27a37b80af626168d7747d10"
+      "path": "assets/chests/models/moonstone-vault.glb",
+      "bytes": 400140,
+      "sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911"
     },
     {
-      "path": "assets/chests/models/skull.glb",
-      "bytes": 2152876,
-      "sha256": "e4a590738287ee14c6b16b1b6e64a5a236176796c24f24f71289817964dcabc7"
+      "path": "assets/chests/models/meadow-explorer.glb",
+      "bytes": 666448,
+      "sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79"
     },
     {
-      "path": "assets/chests/models/painted-gold.glb",
-      "bytes": 385800,
-      "sha256": "0d305d2a95f4a04313da9f4650a287e8c7c391beb5e2cd23d93dd63548ad7f8e"
+      "path": "assets/chests/models/strawberry-bonbon.glb",
+      "bytes": 619736,
+      "sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c"
     }
   ]
 }

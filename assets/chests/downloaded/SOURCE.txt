@@ -1,53 +1,65 @@
 Animated model artwork for the shared reward presentation
 ========================================================
 
-Five distinct source models replace the former 320 x 320 opening sequences:
+Five distinct acquired source designs are converted into private runtime GLBs:
 
-Autumn: Harvest Ironwood - Casual Chests, CHEST_2_T3 (Aztech Games)
-Ocean: Tide Captain - Stylized Sea Chest (Project Zima)
-Space: Nebula Crown - Stylized 3D Animated Chests, Crowned Chest (Bobardo)
-Jungle: Bramble Relic - POLY STYLE Fantasy Treasure Chest, family 5a (Batata Studio)
-Candy: Bonbon Gold - Animated Cartoon Treasure Chest (Flying Saci Game Studio)
+Autumn: Harvest Keepsake - POLY STYLE, Treasure_Chest_4a (Batata Studio)
+Ocean: Lagoon Pearl - POLY STYLE, Treasure_Chest_1a (Batata Studio)
+Space: Moonstone Vault - Stylized 3D Animated Chests, Epic Chest (Bobardo)
+Jungle: Meadow Explorer - Low Poly Chest Animated (Ekrem C.)
+Candy: Strawberry Bonbon - POLY STYLE, Treasure_Chest_2a (Batata Studio)
 
 Spring Royal, Summer Energy, and Winter Crystal retain their original 2D rigs.
-The Talk Quest reward subclass retains its separately authored mechanisms.
+These five replacements also appear as closed chests in round celebrations.
 
-The models come from acquired free packages retained under C:/uworks/TalkQuest.
-The adjacent version 2 manifest records each publisher, original package hash,
-source-model hash, source/runtime texture sizes, converted GLB hash, and the
-motion/material adaptation. The source Unity packages remain outside this
-repository. Licensed GLBs and their import sidecars are ignored private build
-inputs and ship only inside the compiled game pack under the Unity Asset Store
-Standard EULA. They are not distributed as a reusable asset library. Publisher
-scripts, controllers, and demo scene behaviors are not imported or executed.
+The free source packages were acquired and retained under C:/uworks/TalkQuest.
+The adjacent manifest records publisher, version, original product URL, package
+hash, source-model and design hashes, texture sizes, and converted GLB hashes.
+Acquisition evidence and exact source/export paths are documented in
+docs/assets/chest-refresh.md. Marketplace previews are not runtime assets.
 
-Sea Chest preserves its original UVs and base/normal/PBR detail, with 4K source
-maps reduced to 2K runtime maps. Its shader graph maps green to roughness and
-blue to metallic. The source quaternion animation opens its lid and moves its
-lock and handles. Custom Unity color/dirt modifiers remain approximate.
+All three source packages use the Unity Asset Store Standard EULA. The source
+Unity packages remain outside the repository. Licensed GLBs and their import
+sidecars are ignored private build inputs and ship only inside the compiled
+game pack, not as a reusable asset library. Publisher scripts, controllers,
+and demo behaviors are not imported or executed.
 
-The Cartoon chest preserves its original hand-painted 512 pixel atlas without
-upscaling. Its embedded Open take supplies the continuous opening motion.
-The three other designs preserve their source silhouettes with adapted material
-response and edge treatment. Their per-design motion provenance is in the
-manifest; authored hinge motion is identified separately from source clips.
+The original body designs, UVs, separate lids, and material slots are retained.
+Autumn keeps the largest connected lid shell and removes the source skull/bone
+clasp and six pointed ornaments. Candy's integral stud tops are lowered into
+shallow fittings. Per-design rim anchors exclude decorative handles, wings,
+and chains so the opening light follows the actual cavity. The game adds
+pastel enamel, warm wood and pearl colors, material response, and a
+three-segment edge bevel at 0.28 percent of source width. No procedural grain
+is added. Moonstone remaps the original Epic atlas and retains its source
+ambient occlusion. POLY's missing review material slots are deliberately mapped
+to a theme inset material; this is an adaptation, not original shader fidelity.
+Meadow uses the verified blue-prefab geometry export, the same source model as
+the green prefab, with an authored green palette. A green source render is not
+claimed.
 
-ChestModelView renders the real geometry with studio reflections, shadows, and
-an interior light into an adaptive 512-1024 square viewport. ChestView places
-this texture using stable 1024-unit design coordinates. There are no sparse
-opening-frame swaps. The caller controls animation sampling, so visibility,
-pause, cancellation, and reduced motion use the same reward lifecycle as the
-original chests. Viewports stop updating while hidden or paused.
+Every runtime Open take is game-authored and continuously sampled: four lids
+rotate 92 degrees around their source pivots, while Moonstone's separate cover
+lifts 1.16 source units before normalization. POLY supplies static open/closed
+parts without chest animation clips. Bobardo supplies Intro, Idle, Open, and
+Pickup; Ekrem supplies Open_Close, Rotation, and Shake. Those available source
+clips are not the motion shipped by this conversion.
 
-Rebuild all five private models using Blender 5.2:
+ChestModelView renders the geometry into an adaptive 512-1024 square viewport.
+ChestView uses stable 1024-unit design coordinates. Caller-controlled sampling
+preserves the existing opening cues, pause, cancellation, and reduced motion.
+Viewports stop updating while hidden or paused.
+
+Rebuild all five private models using Blender 5.2, from the repository root:
   blender --background --factory-startup --disable-autoexec --python tools/prepare-chest-models.py --
   python tools/prepare-chest-models.py --optimize
   node tools/package-chest-models.cjs
   npm run import
 
-The converter accepts --source-root, --output, and --work. The packager accepts
-the TalkQuest root as its first positional argument. Previews and intermediate
-maps stay under the ignored build/chest-quality directory. Run
-tests/godot/chest_models_visual_review.gd with a graphics renderer and
---audio-driver Dummy for silent in-game close-ups and animation captures;
-it never touches player saves.
+The converter's --source-root points to C:/uworks/TalkQuest/sources, with the
+verified exports in its sibling asset-review/media directory. --output and
+--work relocate generated files. The packager accepts C:/uworks/TalkQuest as its
+first positional argument. Run the complete five-model conversion before
+packaging. Previews and intermediate files stay in ignored build/chest-quality.
+tests/godot/chest_models_visual_review.gd supports silent in-game captures with
+a graphics renderer and --audio-driver Dummy; it does not touch player saves.

@@ -69,14 +69,14 @@ func _init() -> void:
 	environment.background_mode = Environment.BG_CLEAR_COLOR
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("#dce5f0")
-	environment.ambient_light_energy = 0.62
+	environment.ambient_light_energy = 0.42
 	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	environment.sky = _get_studio_sky()
 	studio.environment = environment
 	_world.add_child(studio)
-	_add_light("Key", Vector3(-42.0, -36.0, 0.0), Color("#fff3db"), 1.9, true)
-	_add_light("Fill", Vector3(-20.0, 138.0, 0.0), Color("#bfd6ff"), 0.65, false)
-	_add_light("Rim", Vector3(-32.0, 208.0, 0.0), Color("#fff2dd"), 1.0, false)
+	_add_light("Key", Vector3(-42.0, -36.0, 0.0), Color("#fff3db"), 0.85, true)
+	_add_light("Fill", Vector3(-20.0, 138.0, 0.0), Color("#bfd6ff"), 0.28, false)
+	_add_light("Rim", Vector3(-32.0, 208.0, 0.0), Color("#fff2dd"), 0.40, false)
 	_world.add_child(_interior_light)
 	_interior_light.name = "TreasureLight"
 	_interior_light.light_energy = 0.0
@@ -317,7 +317,11 @@ func _pose_mechanism(amount: float, pressure: float, pulse: float, clock: float,
 			if role == "lid":
 				# Tension pushes into the closed stop. It must not reveal a cavity
 				# or expose the reward before the shared mechanical release.
-				angle += float(part.press_direction) * (pressure * 0.006 + absf(pulse) * 0.004) * (1.0 - amount)
+				var compression: float = (pressure * 0.006 + absf(pulse) * 0.004) * (1.0 - amount)
+				if is_zero_approx(float(part.angle)) and part.lift.length() > 0.01:
+					lift -= part.lift.normalized() * compression
+				else:
+					angle += float(part.press_direction) * compression
 				angle += sin(clock * 1.2) * 0.003 * amount
 			elif role == "lock":
 				angle += pulse * 0.14 + sin(clock * 1.8) * 0.012 * (1.0 - pressure)

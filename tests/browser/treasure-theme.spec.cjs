@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, enterGame,
   chooseTheme, openRewards, collectionHeaderRect,
-  contentBounds, discoverMatchCards, boardPoint, resultPoint, visibleColorCount
+  contentBounds, discoverMatchCards, boardPoint, resultPoint, visibleColorCount, acceptCelebration
 } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';

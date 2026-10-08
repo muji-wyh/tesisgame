@@ -81,7 +81,8 @@ func _check_model(id: String, style: Dictionary) -> void:
 		id + " samples absolute poses without accumulating lock, handle or bone offsets")
 	model.set_pose(1, 0, 0, 0, 1, Color.WHITE, false)
 	var open_parts: Array = model.snapshot().parts.duplicate(true)
-	check(_maximum_angle(rest, open_parts, "lid") > 0.5,
+	check(_maximum_angle(rest, open_parts, "lid") > 0.5
+		or _maximum_displacement(rest, open_parts, "lid") > 0.25,
 		id + " has a substantial real lid opening, not only whole-body shaking")
 	model.set_pose(1, 0.8, 0.7, 9, 1, Color.WHITE, true)
 	var reduced: Dictionary = model.snapshot()
@@ -99,11 +100,22 @@ func _check_model(id: String, style: Dictionary) -> void:
 func _maximum_angle(first: Array, second: Array, role: String = "") -> float:
 	var distance: float = 0.0
 	for index in range(mini(first.size(), second.size())):
-		if not role.is_empty() and first[index].role != role:
+		if not role.is_empty() and (first[index].role != role or second[index].role != role):
 			continue
 		var a: Quaternion = first[index].rotation
 		var b: Quaternion = second[index].rotation
 		distance = maxf(distance, a.angle_to(b))
+	return distance
+
+
+func _maximum_displacement(first: Array, second: Array, role: String) -> float:
+	var distance: float = 0.0
+	for index in range(mini(first.size(), second.size())):
+		if first[index].role != role or second[index].role != role:
+			continue
+		var a: Vector3 = first[index].position
+		var b: Vector3 = second[index].position
+		distance = maxf(distance, a.distance_to(b))
 	return distance
 
 
@@ -121,7 +133,7 @@ func _check_release_arrival(data) -> void:
 		chest._advance_animation(0.050)
 		var before_stop: float = chest.hold_effect_snapshot().live_model.open_amount
 		check(late > 0.0 and before_stop > late and before_stop < 1.0,
-			theme + " keeps moving its rigid lid through the final approach to the mechanical stop")
+			theme + " keeps moving its lid through the final approach to its open position")
 		chest._advance_animation(Feel.SETTLE_TIME - chest._elapsed)
 		check(is_equal_approx(chest.hold_effect_snapshot().live_model.open_amount, 1.0)
 			and chest.mode == "opening",
