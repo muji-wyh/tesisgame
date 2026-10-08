@@ -181,19 +181,15 @@ func _layout_tile(tile: Dictionary) -> void:
 	var tiny: bool = area.y * factor < 105
 	var minimal: bool = area.y * factor < 60
 	var pad := (10 if grid.columns == 2 else 14) / factor
-	var horizontal: bool = grid.columns == 1 and short and not minimal
+	var horizontal: bool = area.y * factor < 140
 	var art_height: float = maxf(0, area.y - 114 / factor)
-	tile.picture.visible = not short or horizontal
+	tile.picture.visible = true
 	tile.picture.position = Vector2(pad, 8 / factor)
 	tile.picture.size = Vector2(area.x - pad * 2, art_height)
-	var y: float = (area.y - 27 / factor) * 0.5 if minimal else pad if short else art_height + 14 / factor
+	var y: float = art_height + 14 / factor
 	tile.title.position = Vector2(pad, y)
 	tile.title.size = Vector2(area.x - pad * 2, 27 / factor)
-	var title_size: int = ceili((17 if short else 21) / factor)
-	var title_font: Font = tile.title.get_theme_font("font")
-	while title_size > ceili(13 / factor) and title_font.get_string_size(tile.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_size).x > area.x - pad * 2:
-		title_size -= 1
-	tile.title.add_theme_font_size_override("font_size", title_size)
+	tile.title.autowrap_mode = TextServer.AUTOWRAP_OFF
 	tile.copy.visible = not tiny
 	tile.copy.position = Vector2(pad, y + 30 / factor)
 	tile.copy.size = Vector2(area.x - pad * 2, 42 / factor)
@@ -207,19 +203,28 @@ func _layout_tile(tile: Dictionary) -> void:
 	tile.current.add_theme_font_size_override("font_size", ceili(9 / factor))
 	tile.current.visible = tile.entry.id == _current and not short
 	if horizontal:
-		var art_size: float = minf(area.y - pad * 2, 76 / factor)
-		var text_x: float = pad + art_size + 14 / factor
+		var art_size: float = minf(minf(area.y - pad * 2, 76 / factor), area.x * 0.28)
+		var text_x: float = pad + art_size + 10 / factor
 		var text_width: float = maxf(0, area.x - text_x - pad)
-		var text_height: float = (45 if tiny else 90) / factor
+		tile.copy.visible = not tiny and text_width * factor >= 145
+		tile.detail.visible = not minimal and text_width * factor >= 128
+		var title_height: float = (24 if tile.detail.visible else 44) / factor
+		var text_height: float = title_height + (46 / factor if tile.copy.visible else 0.0) + (18 / factor if tile.detail.visible else 0.0)
 		var text_top: float = (area.y - text_height) * 0.5
 		tile.picture.position = Vector2(pad, (area.y - art_size) * 0.5)
 		tile.picture.size = Vector2.ONE * art_size
 		tile.title.position = Vector2(text_x, text_top)
-		tile.title.size.x = text_width
-		tile.copy.position = Vector2(text_x, text_top + 30 / factor)
+		tile.title.size = Vector2(text_width, title_height)
+		tile.title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		tile.copy.position = Vector2(text_x, text_top + title_height + 4 / factor)
 		tile.copy.size.x = text_width
-		tile.detail.position = Vector2(text_x, text_top + (31 if tiny else 76) / factor)
+		tile.detail.position = Vector2(text_x, text_top + text_height - 14 / factor)
 		tile.detail.size.x = text_width
+	var title_size: int = ceili((17 if short else 21) / factor)
+	var title_font: Font = tile.title.get_theme_font("font")
+	while title_size > ceili(13 / factor) and title_font.get_string_size(tile.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_size).x > tile.title.size.x:
+		title_size -= 1
+	tile.title.add_theme_font_size_override("font_size", title_size)
 
 func snapshot() -> Dictionary:
 	var controls: Array = []
