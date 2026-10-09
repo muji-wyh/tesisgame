@@ -42,6 +42,10 @@ func _run() -> void:
 	_check_layout(view)
 	_check_pictures(view)
 	await _check_pointer_ownership(view)
+	_check_pointer_feedback(view)
+	_check_drag_replaces_selection(view)
+	_check_keyboard_feedback(view)
+	_check_feedback_lifecycle(view)
 	_check_wrong_drop(view)
 	_check_fusion(view)
 	_check_close_drop_contact(view)
@@ -152,6 +156,148 @@ func _check_wrong_drop(view) -> void:
 	view._process(0.25)
 	check(view._snapbacks.is_empty() and view._tiles[first].position == view._tile_rect(view._cell(first)).position,
 		"Snapback settles into the original slot")
+
+
+func _lift_stopped(tile) -> bool:
+	return tile._lift == null or not tile._lift.is_valid() or not tile._lift.is_running()
+
+
+func _check_feedback_cleared(tile, reason: String) -> void:
+	check(not tile.selected and not tile.highlighted and is_zero_approx(float(tile._gel.get_shader_parameter("rim_strength"))),
+		"%s clears selection and contact contours" % reason)
+	check(tile._visual.position.is_zero_approx() and _lift_stopped(tile),
+		"%s immediately resets and stops the selection lift" % reason)
+
+
+func _check_pointer_feedback(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	var tile = view._tiles[pair[0]]
+	view._tiles[pair[1]].grab_focus()
+	view._press(2, _center(view, pair[0]))
+	view._release(_center(view, pair[0]))
+	check(tile.selected and not view._tiles.values().has(root.gui_get_focus_owner()),
+		"Pointer selection clears an earlier tile focus instead of creating a second selection cue")
+	check(float(tile._gel.get_shader_parameter("rim_strength")) > 0.0 and tile._lift != null,
+		"A pointer tap uses the gel contour and starts the selection lift")
+	if tile._lift != null and tile._lift.is_valid():
+		tile._lift.custom_step(0.12)
+	check(tile._visual.position.y < 0.0, "A selected jelly visibly rises before a retap")
+	view._press(2, _center(view, pair[0]))
+	view._release(_center(view, pair[0]))
+	_check_feedback_cleared(tile, "Retapping the selected jelly")
+	check(int(view.snapshot().drag.selected) == -1 and not tile.has_focus(),
+		"Retapping leaves neither logical selection nor pointer-created keyboard focus")
+	view.finish_button.grab_focus()
+	view._press(2, _center(view, pair[0]))
+	check(view.finish_button.has_focus(), "Tile pointer input leaves the separately focused Finish control alone")
+	view.cancel_input()
+	view.finish_button.release_focus()
+
+
+func _check_drag_replaces_selection(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	var previous: int = -1
+	for cell: Dictionary in view.game.cells:
+		if not pair.has(int(cell.id)):
+			previous = int(cell.id)
+			break
+	view._press(2, _center(view, previous))
+	view._release(_center(view, previous))
+	view._press(2, _center(view, pair[0]))
+	view._move(_center(view, pair[1]))
+	view._sync_positions()
+	_check_feedback_cleared(view._tiles[previous], "Dragging a different jelly")
+	var source = view._tiles[pair[0]]
+	var target = view._tiles[pair[1]]
+	check(source.selected and target.highlighted and not target.selected,
+		"The held jelly and prospective partner have distinct selection and contact states")
+	check(source._gel.get_shader_parameter("rim_color") != target._gel.get_shader_parameter("rim_color")
+		and target._surface.scale != Vector2.ONE,
+		"The contact partner uses its own warm contour and soft surface response")
+	view.cancel_input()
+	_check_feedback_cleared(source, "Cancelling the dragged source")
+	_check_feedback_cleared(target, "Cancelling the prospective partner")
+	check(source._surface.scale == Vector2.ONE and target._surface.scale == Vector2.ONE,
+		"Cancellation clears contact squash without waiting for the next frame")
+
+
+func _check_keyboard_feedback(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	var first = view._tiles[pair[0]]
+	var second = view._tiles[pair[1]]
+	first.grab_focus()
+	var focus_strength: float = float(first._gel.get_shader_parameter("rim_strength"))
+	var focus_width: float = float(first._gel.get_shader_parameter("rim_width"))
+	check(first.has_focus() and not first.selected and focus_strength > 0.0
+		and first._visual.position.is_zero_approx() and _lift_stopped(first),
+		"Keyboard focus is visible without selecting or lifting a jelly")
+	first.pressed.emit()
+	check(first.selected and float(first._gel.get_shader_parameter("rim_strength")) > focus_strength
+		and float(first._gel.get_shader_parameter("rim_width")) > focus_width,
+		"Keyboard confirmation strengthens the contour separately from focus")
+	if first._lift != null and first._lift.is_valid():
+		first._lift.custom_step(0.12)
+	second.grab_focus()
+	check(first.selected and not first.has_focus() and second.has_focus() and not second.selected
+		and is_equal_approx(float(second._gel.get_shader_parameter("rim_strength")), focus_strength),
+		"Moving keyboard focus preserves the chosen jelly and gives its partner only a focus cue")
+	second.pressed.emit()
+	check(not view.game.fusion.is_empty() and view._focus_after_fusion,
+		"Keyboard matching remembers to restore navigation after fusion")
+	_check_feedback_cleared(first, "Starting keyboard fusion on its first frame")
+	_check_feedback_cleared(second, "Starting keyboard fusion on its focused partner")
+	for delta: float in [0.4, 0.4, 0.25]:
+		view._process(delta)
+	var focused = root.gui_get_focus_owner()
+	check(view._tiles.values().has(focused) and not view._focus_after_fusion,
+		"Completed keyboard fusion restores focus to a remaining playable jelly")
+	if view._tiles.values().has(focused):
+		check(not focused.selected and float(focused._gel.get_shader_parameter("rim_strength")) > 0.0
+			and focused._visual.position.is_zero_approx() and _lift_stopped(focused),
+			"Restored navigation has a focus contour without a stale selection or lift")
+
+
+func _check_feedback_lifecycle(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	var tile = view._tiles[pair[0]]
+	tile.grab_focus()
+	tile.pressed.emit()
+	if tile._lift != null and tile._lift.is_valid():
+		tile._lift.custom_step(0.12)
+	view.set_reduced_motion(true)
+	check(tile.selected and int(view.snapshot().drag.selected) == pair[0]
+		and float(tile._gel.get_shader_parameter("rim_strength")) > 0.0,
+		"Enabling reduced motion preserves the player's chosen jelly and static contour")
+	check(tile._visual.position.is_zero_approx() and _lift_stopped(tile),
+		"Enabling reduced motion immediately ends an in-flight lift")
+	view.cancel_input()
+	check(not tile.selected and tile.has_focus() and float(tile._gel.get_shader_parameter("rim_strength")) > 0.0
+		and tile._visual.position.is_zero_approx(),
+		"Cancelling keyboard selection preserves only its independent focus cue")
+	view.pause(true)
+	_check_feedback_cleared(tile, "Pausing keyboard navigation")
+	view.pause(false)
+	view.set_reduced_motion(false)
+	view._press(2, _center(view, pair[0]))
+	view._move(_center(view, pair[1]))
+	view._sync_positions()
+	if tile._lift != null and tile._lift.is_valid():
+		tile._lift.custom_step(0.12)
+	view.pause(true)
+	_check_feedback_cleared(tile, "Pausing an active drag")
+	_check_feedback_cleared(view._tiles[pair[1]], "Pausing a highlighted partner")
+	check(tile._surface.scale == Vector2.ONE and view._tiles[pair[1]]._surface.scale == Vector2.ONE,
+		"Pause removes drag stretch and contact squash immediately")
+	view.pause(false)
+	view._press(2, _center(view, pair[0]))
+	view._release(_center(view, pair[0]))
+	view.hide()
+	_check_feedback_cleared(tile, "Hiding the mode")
+	view.show()
 
 
 func _check_fusion(view) -> void:
@@ -309,9 +455,20 @@ func _check_close_drop_contact(view) -> void:
 	_reset(view)
 	var pair: Array[int] = _pair(view)
 	var target: Vector2 = _center(view, pair[1])
+	var source_tile = view._tiles[pair[0]]
+	var target_tile = view._tiles[pair[1]]
 	view._press(-1, _center(view, pair[0]))
+	if source_tile._lift != null and source_tile._lift.is_valid():
+		source_tile._lift.custom_step(0.12)
 	view._move(target)
+	view._sync_positions()
 	view._release(target)
+	_check_feedback_cleared(source_tile, "Starting pointer fusion on its first frame")
+	_check_feedback_cleared(target_tile, "Starting pointer fusion on its contact partner")
+	check(source_tile._surface.scale == Vector2.ONE and target_tile._surface.scale == Vector2.ONE,
+		"Pointer fusion starts without stale held stretch or target squash")
+	check(not view._focus_after_fusion and not view._tiles.values().has(root.gui_get_focus_owner()),
+		"Pointer fusion does not request keyboard focus restoration")
 	view._process(0.01)
 	check(not view.game.fusion.is_empty() and _center(view, pair[0]).distance_to(target) < view._pitch * 0.05,
 		"A center-to-center drop begins at its actual dropped position")
@@ -320,6 +477,10 @@ func _check_close_drop_contact(view) -> void:
 		"Close drops express two elastic contact lobes before uniting")
 	check(attempts.is_empty() and view._tiles[pair[0]].visible and view._tiles[pair[1]].visible,
 		"The close-drop contact is presentation only and earns nothing early")
+	for delta: float in [0.4, 0.4, 0.14]:
+		view._process(delta)
+	check(view.game.fusion.is_empty() and not view._tiles.values().has(root.gui_get_focus_owner()),
+		"Completing a pointer fusion leaves the remaining board without a phantom focus contour")
 
 
 func _check_signal_reentry(view) -> void:

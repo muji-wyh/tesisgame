@@ -293,8 +293,8 @@ func cancel_input() -> void:
 	_selected = -1
 	_dragging = false
 	_gesture_serial += 1
-	_sync_positions()
 	_refresh_marks()
+	_sync_positions()
 	_refresh_fusion()
 	_publish()
 
@@ -380,7 +380,9 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_drag_point = point
 	_drag_offset = point - _tiles[id].position
 	_dragging = false
-	_tiles[id].grab_focus()
+	var focused: Control = get_viewport().gui_get_focus_owner()
+	if _tiles.values().has(focused):
+		focused.release_focus()
 	var generation: int = _generation
 	word_requested.emit(_cell(id).word.duplicate(true))
 	if generation != _generation or not _can_play():
@@ -399,6 +401,7 @@ func _move(global_point: Vector2) -> void:
 		_dragging = true
 	if not _dragging:
 		return
+	_selected = -1
 	_tiles[_source].position = point - _drag_offset
 	_tiles[_source].z_index = 40
 	_target = _tile_at(point, _source)
@@ -461,10 +464,10 @@ func _merge(first: int, second: int, from: Vector2) -> void:
 		_fusion_direction = (_tile_rect(game.fusion.b).get_center() - _tile_rect(game.fusion.a).get_center()).normalized()
 		_focus_after_fusion = _tiles.values().has(get_viewport().gui_get_focus_owner())
 		_snapbacks.clear()
-		_refresh_fusion()
 	else:
 		_snap_back(first, from)
 	_sync_tiles()
+	_refresh_fusion()
 	_refresh_hud()
 
 func _snap_back(id: int, from: Vector2) -> void:
@@ -524,8 +527,8 @@ func _sync_tiles() -> void:
 			_tiles[id].queue_free()
 			_tiles.erase(id)
 			_snapbacks.erase(id)
-	_sync_positions()
 	_refresh_marks()
+	_sync_positions()
 	_refresh_controls()
 	if _focus_after_fusion and game.fusion.is_empty() and _can_play():
 		_focus_after_fusion = false
@@ -562,8 +565,9 @@ func _sync_positions() -> void:
 		tile.visible = not _result_visible
 
 func _refresh_marks() -> void:
+	var feedback_enabled: bool = _can_play()
 	for id in _tiles:
-		_tiles[id].set_marked(int(id) == _target, int(id) == _selected or int(id) == _source)
+		_tiles[id].set_marked(int(id) == _target, int(id) == _selected or int(id) == _source, feedback_enabled, reduced_motion)
 
 func _process(delta: float) -> void:
 	for id in _chest_cache:

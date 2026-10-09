@@ -17,6 +17,10 @@ var _label: Label
 var _badge: TextureRect
 var _gel: ShaderMaterial
 var _accent := Color("#357d70")
+var _feedback_enabled: bool = true
+var _reduced_motion: bool = false
+var _mark: int = 0
+var _lift: Tween
 
 func _init() -> void:
 	text = ""
@@ -44,8 +48,8 @@ func _init() -> void:
 	_visual.add_child(_label)
 	_badge = _texture()
 	resized.connect(_layout)
-	focus_entered.connect(queue_redraw)
-	focus_exited.connect(queue_redraw)
+	focus_entered.connect(_refresh_feedback)
+	focus_exited.connect(_refresh_feedback)
 
 func _texture() -> TextureRect:
 	var image := TextureRect.new()
@@ -65,18 +69,40 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	_badge.texture = chest
 	_badge.visible = bool(cell.get("chest", false)) and not combined
 	_accent = accent
+	_refresh_feedback()
 	_label.text = str(word.text)
 	set("accessibility_name", "%s %s%s. Press to select, then choose its matching partner." % [
 		"Picture of" if kind == "picture" else "Word", str(word.text), ". Treasure jelly" if _badge.visible else ""])
 	tooltip_text = str(word.text)
 	_layout()
 
-func set_marked(value: bool, picked: bool = false) -> void:
-	if highlighted == value and selected == picked:
+func set_marked(value: bool, picked: bool = false, enabled: bool = true, reduced: bool = false) -> void:
+	if highlighted == value and selected == picked and _feedback_enabled == enabled and _reduced_motion == reduced:
 		return
 	highlighted = value
 	selected = picked
-	queue_redraw()
+	_feedback_enabled = enabled
+	var motion_changed: bool = _reduced_motion != reduced
+	_reduced_motion = reduced
+	_refresh_feedback(motion_changed)
+
+func _refresh_feedback(reset_motion: bool = false) -> void:
+	# Pointer selection, drop contact and keyboard focus have separate weights.
+	var mark: int = (3 if highlighted else 2 if selected else 1 if has_focus() else 0) if _feedback_enabled else 0
+	_gel.set_shader_parameter("rim_color", Color("#ae702b") if mark == 3 else _accent)
+	_gel.set_shader_parameter("rim_strength", 1.0 if mark >= 2 else 0.85 if mark == 1 else 0.0)
+	_gel.set_shader_parameter("rim_width", 1.0 if mark >= 2 else 0.8)
+	if mark == _mark and not reset_motion:
+		return
+	_mark = mark
+	if _lift != null:
+		_lift.kill()
+	_visual.position = Vector2.ZERO
+	if mark == 2 and not _reduced_motion and is_inside_tree():
+		var rise: float = minf(size.y * 0.035, 3.0 / Style.ui_scale(self))
+		_lift = create_tween()
+		_lift.tween_property(_visual, "position:y", -rise * 1.2, 0.09).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		_lift.tween_property(_visual, "position:y", -rise, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func set_chest_texture(texture: Texture2D) -> void:
 	_badge.texture = texture
@@ -85,13 +111,15 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	_gel.set_shader_parameter("bend", amount)
 	_gel.set_shader_parameter("beat", beat)
 	_surface.pivot_offset = size * Vector2(0.5, 0.78)
-	_surface.scale = stretch
+	_surface.scale = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
 
 func _layout() -> void:
 	if _visual == null:
 		return
 	_visual.size = size
 	_surface.size = size
+	# Stay within the artwork's transparent margin, including tiny landscape tiles.
+	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
 	_picture.visible = kind == "picture" or combined
 	_label.visible = kind == "word" or combined
 	_picture.position = size * (Vector2(0.31, 0.25) if combined else Vector2(0.25, 0.29))
@@ -105,11 +133,3 @@ func _layout() -> void:
 	_label.add_theme_font_size_override("font_size", font_size)
 	_badge.position = size * Vector2(0.59, 0.56)
 	_badge.size = size * 0.42
-	queue_redraw()
-
-func _draw() -> void:
-	if not highlighted and not selected and not has_focus():
-		return
-	var color: Color = _accent.lightened(0.15) if highlighted else _accent
-	var border := Style.box(Color.TRANSPARENT, color, maxi(6, int(size.x * 0.2)), 3)
-	draw_style_box(border, Rect2(Vector2.ONE * 2, size - Vector2.ONE * 4))
