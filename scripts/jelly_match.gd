@@ -12,6 +12,7 @@ signal changed(state: Dictionary)
 
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
 const Tile = preload("res://scripts/jelly_tile.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const Chest = preload("res://scripts/chest_view.gd")
@@ -70,6 +71,7 @@ var _last_published: String = ""
 var _publish_elapsed: float = 0.0
 var _chest_cache: Dictionary = {}
 var _chest_texture: Texture2D
+var _landing_cooldown: float = 0.0
 
 func _init() -> void:
 	name = "JellyMatch"
@@ -84,7 +86,7 @@ func _init() -> void:
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
-	_pace = _label(self, "New pair", 12)
+	_pace = _label(self, "Next pair", 12)
 	_pace.add_theme_color_override("font_color", Style.MUTED)
 	_next_pair = ProgressBar.new()
 	_next_pair.show_percentage = false
@@ -159,6 +161,7 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 	_result_transition = false
 	_result_elapsed = 0.0
 	_publish_elapsed = 0.0
+	_landing_cooldown = 0.0
 	_focus_after_fusion = false
 	_paused = false
 	apply_theme(theme, chests)
@@ -484,7 +487,7 @@ func _cell(id: int) -> Dictionary:
 	return {}
 
 func _settled(cell: Dictionary) -> bool:
-	return not cell.is_empty() and float(cell.get("age", 0.0)) >= 0.45
+	return game.is_settled(cell)
 
 func _tile_at(point: Vector2, except_id: int = -1) -> int:
 	if not _board.has_point(point):
@@ -547,21 +550,20 @@ func _sync_positions() -> void:
 		var rect: Rect2 = _tile_rect(cell)
 		tile.size = rect.size
 		tile.z_index = 40 if id == _source and _dragging else 1
-		var drop: float = clampf(float(cell.get("age", 1.0)) / 0.45, 0.0, 1.0)
-		var fall: float = minf(1.0, drop / 0.82)
+		var pose: Dictionary = Motion.sample(cell)
+		var dragging: bool = id == _source and _dragging
 		if id != _source or not _dragging:
 			tile.position = rect.position
 			if _snapbacks.has(id):
 				var p: float = clampf(float(_snapbacks[id].elapsed) / 0.24, 0.0, 1.0)
 				tile.position = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
-			elif not reduced_motion and drop < 1.0:
-				var distance: float = minf(float(cell.get("falling_rows", int(cell.row) + 1)) * _pitch, rect.position.y - _board.position.y)
-				tile.position.y -= (1.0 - fall * fall) * distance
-		var landing: float = clampf((drop - 0.82) / 0.18, 0.0, 1.0)
-		var bounce: float = sin(landing * PI * 2.0) * (1.0 - landing) * 0.12 if not reduced_motion and drop < 1.0 else 0.0
-		var lifted: float = 1.045 if id == _source and _dragging and not reduced_motion else 1.0
-		tile.deform(absf(bounce) * 0.2, drop * TAU, Vector2(lifted + bounce, lifted - bounce))
-		tile.modulate.a = smoothstep(0.0, 0.12, drop) if not reduced_motion and drop < 0.12 else 1.0
+			elif not reduced_motion:
+				tile.position.y -= float(pose.lift_rows) * _pitch
+		var stretch: Vector2 = Vector2.ONE if reduced_motion else Vector2(0.985, 1.06) if dragging else Vector2(pose.stretch)
+		tile.deform(0.0 if reduced_motion or dragging else float(pose.bend), float(pose.beat), stretch)
+		var lift: float = 6.0 / Style.ui_scale(self) if dragging else maxf(0.0, rect.position.y - tile.position.y)
+		tile.set_support(lift, 0.0 if reduced_motion or dragging else float(pose.compression))
+		tile.modulate.a = 1.0 if reduced_motion else float(pose.opacity)
 		tile.visible = not _result_visible
 
 func _refresh_marks() -> void:
@@ -583,6 +585,10 @@ func _process(delta: float) -> void:
 			cancel_input()
 		return
 	var generation: int = _generation
+	var previous_ages: Dictionary = {}
+	for cell: Dictionary in game.cells:
+		previous_ages[int(cell.id)] = float(cell.age)
+	_landing_cooldown = maxf(0.0, _landing_cooldown - delta)
 	if game.phase == "playing":
 		game.step(delta)
 	if generation != _generation or not _allowed():
@@ -604,6 +610,14 @@ func _process(delta: float) -> void:
 	_publish_elapsed += delta
 	if _publish_elapsed >= 0.1:
 		_publish()
+	if generation == _generation and _can_play() and game.full_elapsed < 0.0 and _landing_cooldown <= 0.0:
+		for cell: Dictionary in game.cells:
+			var contact: float = Motion.contact_at(cell)
+			if float(previous_ages.get(int(cell.id), 0.0)) < contact and float(cell.age) >= contact:
+				# Adjacent bodies land as one quiet group, never a stack of impacts.
+				_landing_cooldown = 0.12
+				audio_requested.emit("land")
+				break
 
 func _refresh_fusion() -> void:
 	if game.fusion.is_empty() or _result_visible:
@@ -628,6 +642,7 @@ func _refresh_fusion() -> void:
 		if not _tiles.has(int(cell.id)):
 			continue
 		var droplet: Tile = _tiles[int(cell.id)]
+		droplet.set_support(0.0, 0.0, false)
 		droplet.visible = not reduced_motion and p < 0.38
 		droplet.modulate.a = 1.0 - union
 		droplet.z_index = 22 if int(cell.id) == int(a.id) else 21
@@ -650,6 +665,7 @@ func _refresh_fusion() -> void:
 	_merged.position = destination - _merged.size * 0.5
 	_merged.modulate.a = opacity
 	_merged.deform(0.0 if reduced_motion else 0.018 * sin(p * PI), p * TAU * 2.0, stretch)
+	_merged.set_support(0.0, maxf(0.0, 1.0 - stretch.y))
 	_merged.show()
 	_merged.visible = reduced_motion or union > 0.0
 

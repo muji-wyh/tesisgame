@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "acquired_on": "2026-10-09",
   "license": "CC0-1.0",
   "image_source": {
@@ -9,7 +9,7 @@
     "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
     "license_page": "https://www.gameart2d.com/license.html",
     "archive_sha256": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
-    "status": "Downloaded and inspected; four adapted PNG surfaces integrated",
+    "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
     "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."
   },
   "audio_source": {
@@ -23,12 +23,13 @@
   "image_processing": {
     "tool": "Pillow",
     "version": "12.2.0",
-    "description": "Hue adaptation and 46 percent white mix of acquired blank Jelly 3; source shading/alpha preserved; transparent square padding only."
+    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 40 percent center to 24 percent contour white mix. Original silhouette, painted detail and alpha preserved. Separate contact shadow copied unchanged."
   },
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral.png",
-      "sha256": "c824eb814df410de592922b8c0a328502ab665eb12de896a18da41daa5f4d765",
+      "kind": "gel_surface",
+      "sha256": "faf99e7056b6283c5bb415f367e071ffce6f41e016a1a93a7818c6fdd37d46a9",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -42,11 +43,26 @@
         251
       ],
       "hue_shift_turns": 0.0,
-      "white_mix": 0.46
+      "saturation_scale": 0.88,
+      "white_mix": {
+        "center": 0.4,
+        "contour": 0.24,
+        "horizontal_transition": [
+          0.08,
+          0.28
+        ],
+        "foot_transition": [
+          0.8,
+          0.99
+        ],
+        "interpolation": "smoothstep",
+        "coordinates": "Normalized source artwork before transparent padding"
+      }
     },
     {
       "path": "assets/images/jelly-match/gel-mint.png",
-      "sha256": "5859980b6fa672737010b11bde1bf829460f8dbafcb4383c6feac3d3b4e73f0e",
+      "kind": "gel_surface",
+      "sha256": "f14382fff28b91ee53b547d62b85d5aa0d1df0dfd8a71be8bcbf40b30dd78827",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -60,11 +76,26 @@
         251
       ],
       "hue_shift_turns": 0.34,
-      "white_mix": 0.46
+      "saturation_scale": 0.78,
+      "white_mix": {
+        "center": 0.4,
+        "contour": 0.24,
+        "horizontal_transition": [
+          0.08,
+          0.28
+        ],
+        "foot_transition": [
+          0.8,
+          0.99
+        ],
+        "interpolation": "smoothstep",
+        "coordinates": "Normalized source artwork before transparent padding"
+      }
     },
     {
       "path": "assets/images/jelly-match/gel-sky.png",
-      "sha256": "163c373129c5b8765e12f9a23bfa73e9c84697bc3db68b5ddd90586ce24cbec1",
+      "kind": "gel_surface",
+      "sha256": "e6540fc21927449c74f8791e9ce6167695632ffb0cabe27888c6ffc2221beb17",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -78,11 +109,26 @@
         251
       ],
       "hue_shift_turns": 0.5,
-      "white_mix": 0.46
+      "saturation_scale": 0.88,
+      "white_mix": {
+        "center": 0.4,
+        "contour": 0.24,
+        "horizontal_transition": [
+          0.08,
+          0.28
+        ],
+        "foot_transition": [
+          0.8,
+          0.99
+        ],
+        "interpolation": "smoothstep",
+        "coordinates": "Normalized source artwork before transparent padding"
+      }
     },
     {
       "path": "assets/images/jelly-match/gel-lilac.png",
-      "sha256": "e9a50d27468d95e09d7d2ad4edf956ee5296172f5c65f78fa3a14de64513ad19",
+      "kind": "gel_surface",
+      "sha256": "d2c8211a58ad86190a9485061db18883b0fedda72014fae7a316d875beca1b2d",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -96,7 +142,34 @@
         251
       ],
       "hue_shift_turns": 0.72,
-      "white_mix": 0.46
+      "saturation_scale": 0.88,
+      "white_mix": {
+        "center": 0.4,
+        "contour": 0.24,
+        "horizontal_transition": [
+          0.08,
+          0.28
+        ],
+        "foot_transition": [
+          0.8,
+          0.99
+        ],
+        "interpolation": "smoothstep",
+        "coordinates": "Normalized source artwork before transparent padding"
+      }
+    },
+    {
+      "path": "assets/images/jelly-match/contact-shadow.png",
+      "kind": "contact_shadow",
+      "sha256": "59edb08b941e93cd12b32318b65bf325e6df1488af9fb00088f70bfb06036703",
+      "source": "png/separate/Shadow.png",
+      "source_sha256": "59edb08b941e93cd12b32318b65bf325e6df1488af9fb00088f70bfb06036703",
+      "size": [
+        334,
+        150
+      ],
+      "processing": "Unmodified original PNG; runtime placement, tint and opacity only",
+      "maximum_alpha": 26
     }
   ],
   "audio": [
@@ -167,6 +240,11 @@
   "reuse": {
     "chest_reward": "assets/imported-audio/chest-reference/reward.wav",
     "provenance": "docs/assets/chest-reference-audio.json",
+    "landing": {
+      "path": "assets/imported-audio/chest-reference/step-detail.wav",
+      "provenance": "docs/assets/chest-reference-audio.json",
+      "use": "Soft contact once per landing group, at low gain with the existing speech ducking and interruption lifecycle; no duplicate WAV"
+    },
     "chest_art": "Use the current theme's real closed chest through the existing chest renderer; archived rejected skins are not replacements."
   }
 }

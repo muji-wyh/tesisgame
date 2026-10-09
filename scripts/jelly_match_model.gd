@@ -8,11 +8,12 @@ signal cue_requested(cue: String)
 signal chest_awarded(count: int)
 signal finished(result: Dictionary)
 
+const Motion = preload("res://scripts/jelly_motion.gd")
 const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
 const INITIAL_PAIRS: int = 4
-const SETTLE_SECONDS: float = 0.45
+const SETTLE_SECONDS: float = Motion.MAX_SETTLE_SECONDS
 # Leave time to listen, find the picture, and drag before the next pair arrives.
 const INITIAL_SPAWN_INTERVAL: float = 7.0
 const MIN_SPAWN_INTERVAL: float = 3.5
@@ -162,7 +163,7 @@ func try_merge(a_id: int, b_id: int) -> String:
 		return "ignored"
 	var a: Dictionary = cells[a_index]
 	var b: Dictionary = cells[b_index]
-	if float(a.age) + EPSILON < SETTLE_SECONDS or float(b.age) + EPSILON < SETTLE_SECONDS:
+	if not is_settled(a) or not is_settled(b):
 		return "ignored"
 	_attempt_count += 1
 	var attempt_id: String = "jelly-%d" % _attempt_count
@@ -196,6 +197,10 @@ func set_paused(value: bool) -> void:
 		return
 	paused = value
 	changed.emit()
+
+
+func is_settled(cell: Dictionary) -> bool:
+	return not cell.is_empty() and float(cell.get("age", 0.0)) + EPSILON >= Motion.ready_at(cell)
 
 
 func tile_by_id(tile_id: int) -> Dictionary:

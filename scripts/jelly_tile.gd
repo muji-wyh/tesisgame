@@ -3,6 +3,8 @@ extends Button
 
 const Style = preload("res://scripts/ui_style.gd")
 const Surface = preload("res://scripts/jelly_surface.gdshader")
+const Motion = preload("res://scripts/jelly_motion.gd")
+const CONTACT_SHADOW = preload("res://assets/images/jelly-match/contact-shadow.png")
 
 var tile_id: int = -1
 var word: Dictionary = {}
@@ -11,6 +13,7 @@ var highlighted: bool = false
 var selected: bool = false
 var combined: bool = false
 var _visual: Control
+var _shadow: TextureRect
 var _surface: TextureRect
 var _picture: TextureRect
 var _label: Label
@@ -29,6 +32,13 @@ func _init() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	_shadow = TextureRect.new()
+	_shadow.texture = CONTACT_SHADOW
+	_shadow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_shadow.stretch_mode = TextureRect.STRETCH_SCALE
+	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_shadow.z_index = -1
+	add_child(_shadow)
 	_visual = Control.new()
 	_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_visual)
@@ -110,8 +120,17 @@ func set_chest_texture(texture: Texture2D) -> void:
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	_gel.set_shader_parameter("bend", amount)
 	_gel.set_shader_parameter("beat", beat)
-	_surface.pivot_offset = size * Vector2(0.5, 0.78)
+	_surface.pivot_offset = size * Vector2(0.5, Motion.FOOT_Y)
 	_surface.scale = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
+
+
+func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bool = true) -> void:
+	# The source-painted shadow stays on the support while the body descends.
+	var distance: float = clampf(lift / maxf(1.0, size.y * 2.0), 0.0, 1.0)
+	_shadow.visible = visible_shadow
+	_shadow.size = size * Vector2(lerpf(0.68, 0.94, distance) + compression * 0.07, lerpf(0.095, 0.19, distance))
+	_shadow.position = Vector2((size.x - _shadow.size.x) * 0.5, size.y * Motion.FOOT_Y + lift - _shadow.size.y * 0.6)
+	_shadow.modulate.a = lerpf(0.6, 0.12, distance)
 
 func _layout() -> void:
 	if _visual == null:
@@ -133,3 +152,4 @@ func _layout() -> void:
 	_label.add_theme_font_size_override("font_size", font_size)
 	_badge.position = size * Vector2(0.59, 0.56)
 	_badge.size = size * 0.42
+	set_support()

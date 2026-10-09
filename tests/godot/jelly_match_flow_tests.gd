@@ -50,7 +50,7 @@ func _run() -> void:
 	await settle()
 	check(app._jelly.visible and not app._phrase.visible and not app._pop.visible, "Jelly owns the play surface")
 	var game = app._jelly.game
-	game.step(0.5)
+	game.step(game.SETTLE_SECONDS)
 	var chosen := pair(game, true)
 	check(chosen.size() == 2, "The initial board contains a reachable marked pair")
 	if chosen.size() != 2:
@@ -126,7 +126,7 @@ func _run() -> void:
 	check(app.new_round(54, false, "", "jelly"), "A zero-loot result can replay")
 	app._jelly.set_process(false)
 	game = app._jelly.game
-	game.step(0.5)
+	game.step(game.SETTLE_SECONDS)
 	chosen = pair(game, true)
 	game.try_merge(chosen[0].id, chosen[1].id)
 	game.step(1.05)
@@ -333,7 +333,7 @@ func _reward_conflict_checks(directory: String) -> void:
 		app._jelly.set_process(false)
 		app.choose_theme("ocean")
 		var game = app._jelly.game
-		game.step(0.5)
+		game.step(game.SETTLE_SECONDS)
 		var chosen := pair(game, true)
 		check(chosen.size() == 2, "The conflict fixture has an earned chest pair")
 		if chosen.size() != 2:

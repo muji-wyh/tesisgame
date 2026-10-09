@@ -2,6 +2,7 @@ extends SceneTree
 
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -41,6 +42,8 @@ func _run() -> void:
 	_reset(view)
 	_check_layout(view)
 	_check_pictures(view)
+	_check_landing_presentation(view)
+	_check_landing_lifecycle(view)
 	await _check_pointer_ownership(view)
 	_check_pointer_feedback(view)
 	_check_drag_replaces_selection(view)
@@ -64,10 +67,11 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
-func _reset(view, reduced: bool = false) -> void:
+func _reset(view, reduced: bool = false, settled: bool = true) -> void:
 	check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "Jelly Match configures with the current curriculum")
 	view.set_process(false)
-	view.game.step(0.45)
+	if settled:
+		view.game.step(view.game.SETTLE_SECONDS)
 	view._sync_tiles()
 	view._refresh_hud()
 	view._layout()
@@ -116,6 +120,79 @@ func _check_pictures(view) -> void:
 		tile.deform(0.02, 0.5, Vector2(1.1, 0.9))
 		check(tile._visual.scale == Vector2.ONE and tile._surface.scale != Vector2.ONE,
 			"Soft gel deforms independently of the readable learning content")
+
+
+func _check_landing_presentation(view) -> void:
+	_reset(view, false, false)
+	var cell: Dictionary = view.game.cells[0]
+	var tile = view._tiles[int(cell.id)]
+	var target: Rect2 = view._tile_rect(cell)
+	var support: Vector2 = view.get_global_transform() * (target.position + tile.size * Vector2(0.5, Motion.FOOT_Y))
+	view._process(0.2)
+	var shadow_before: float = tile._shadow.modulate.a
+	check(tile.position.y < target.position.y and tile.disabled and not view._settled(cell),
+		"A descending jelly remains above its support and cannot be selected")
+	check((tile._shadow.get_global_transform() * (tile._shadow.size * 0.5)).distance_to(support) < tile.size.y * 0.025,
+		"The contact shadow stays grounded while its body descends")
+	view._process(Motion.contact_at(cell) - float(cell.age) + 0.001)
+	check(cues.count("land") == 1 and tile.position.is_equal_approx(target.position),
+		"Neighboring contacts emit one impact as the visible bodies reach their support")
+	view._process(Motion.COMPRESSION_SECONDS - 0.001)
+	check(tile._surface.scale.y < 0.9 and tile._surface.scale.x > 1.0
+		and (tile._surface.get_global_transform() * (tile.size * Vector2(0.5, Motion.FOOT_Y))).is_equal_approx(support),
+		"Compression widens the acquired body around a planted foot")
+	check(tile._shadow.modulate.a > shadow_before and tile._label.scale == Vector2.ONE
+		and tile._picture.scale == Vector2.ONE and tile._visual.scale == Vector2.ONE,
+		"Contact strengthens the separate shadow while word and picture stay undistorted")
+	view._process(Motion.ready_at(cell) - float(cell.age) + 0.001)
+	check(view._settled(cell) and not tile.disabled and tile._surface.scale.is_equal_approx(Vector2.ONE),
+		"The visual body settles at the same boundary that enables input")
+	view._layout()
+	view._sync_positions()
+	view.apply_theme(Data.theme("spring"), data.chests)
+	check(cues.count("land") == 1, "Layout, position and theme refreshes never replay an impact")
+
+
+func _check_landing_lifecycle(view) -> void:
+	_reset(view, false, false)
+	view._process(0.3)
+	view.pause(true)
+	view._process(0.4)
+	check(cues.is_empty() and is_equal_approx(float(view.game.cells[0].age), 0.3),
+		"Pausing before contact freezes the fall and does not emit a landing")
+	view.pause(false)
+	view._process(0.05)
+	view._process(0.05)
+	view._process(0.25)
+	check(cues.count("land") == 1, "Resume completes one grouped impact without replaying neighboring contacts")
+	_reset(view, false, false)
+	view.hide()
+	view._process(0.4)
+	view.show()
+	check(cues.is_empty(), "A hidden board cannot emit landing feedback")
+	view._process(0.4)
+	check(cues.count("land") == 1, "A new round owns its fresh contact without the old cooldown")
+	_reset(view, true, false)
+	var cell: Dictionary = view.game.cells[0]
+	var tile = view._tiles[int(cell.id)]
+	check(tile.position == view._tile_rect(cell).position and tile._surface.scale == Vector2.ONE and not view._settled(cell),
+		"Reduced motion presents a static body without skipping the input gate")
+	view._process(0.4)
+	view._process(0.25)
+	check(view._settled(cell) and tile._surface.scale == Vector2.ONE and cues.count("land") == 1,
+		"Reduced motion retains the shared ready time and a single quiet contact cue")
+	_reset(view)
+	view.game.step(view.game.spawn_interval - view.game.spawn_elapsed)
+	view._sync_tiles()
+	var pair: Array[int] = _pair(view)
+	view._activate(pair[0])
+	view._activate(pair[1])
+	view._process(0.4)
+	check(not view.game.fusion.is_empty() and not cues.has("land"),
+		"Other falling tiles cannot add impact sounds over an active fusion")
+	view.stop()
+	view._process(0.4)
+	check(not cues.has("land"), "Stopping the mode cannot revive a pending landing")
 
 
 func _check_pointer_ownership(view) -> void:
@@ -332,6 +409,7 @@ func _check_danger_clock(view) -> void:
 	check(cues.count("danger") == 1 and not cues.has("tick"),
 		"Filling the board starts one warning sound without a second overlapping cue")
 	var start: Dictionary = view.danger_feedback()
+	var landed_before: int = cues.count("land")
 	check(bool(start.active) and is_equal_approx(float(start.strength), 1.0),
 		"The warning starts at full brightness with its first sound")
 	view._refresh_hud()
@@ -344,6 +422,7 @@ func _check_danger_clock(view) -> void:
 	var early_fade: float = float(view.danger_feedback().strength)
 	view._process(0.125)
 	var late_fade: float = float(view.danger_feedback().strength)
+	check(cues.count("land") == landed_before, "Fresh top-row contacts cannot cover the full-board warning")
 	check(early_fade > late_fade and late_fade > 0.0 and early_fade < 1.0,
 		"The warning fades smoothly after its bright interval")
 	view._process(0.25)

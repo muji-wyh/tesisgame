@@ -45,6 +45,8 @@ func _exercise() -> void:
 		check(player.playing, "The %s recording starts on its timeline event" % cue)
 	check(audio._jelly_players.size() == 3, "Frequent effects reuse a bounded voice pool")
 	_check_warning_cancellation(audio)
+	_check_landing_audio(audio)
+	audio.interact("spring", false)
 	audio.say("res://assets/audio/voice/word-cat.wav")
 	audio.play_jelly_cue("merge")
 	var speaking_player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
@@ -76,6 +78,38 @@ func _exercise() -> void:
 		check(not player.playing and player.stream == null, "Leaving a mode cancels reward tails")
 	audio.queue_free()
 	await create_timer(0.15).timeout
+
+
+func _check_landing_audio(audio) -> void:
+	audio.stop_jelly_sounds()
+	for cue: String in ["danger", "pop", "reward"]:
+		audio.play_jelly_cue(cue)
+	var occupied: Dictionary = audio._jelly_cues.duplicate()
+	audio.play_jelly_cue("land")
+	check(audio._jelly_cues == occupied and audio._jelly_players.size() == 3,
+		"Landing feedback cannot steal a warning, answer or reward channel when the pool is busy")
+	for player: AudioStreamPlayer in audio._jelly_players:
+		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS[occupied[player]],
+			"The original foreground cue remains audible when an impact is skipped")
+	audio.stop_jelly_sounds()
+	audio.play_jelly_cue("danger")
+	var warning: AudioStreamPlayer = audio._jelly_players[0]
+	audio.say("res://assets/audio/voice/word-cat.wav")
+	audio.play_jelly_cue("land")
+	var landing: AudioStreamPlayer = audio._jelly_players[1]
+	check(warning.playing and landing.playing and landing.stream.resource_path == Audio.JELLY_PATHS.land
+		and is_equal_approx(landing.volume_db, linear_to_db(Audio.JELLY_GAINS.land) - 12.0),
+		"A quiet impact uses an idle channel and ducks beneath pronunciation without cutting the warning")
+	audio.stop_voice()
+	audio._process(0.01)
+	check(is_equal_approx(landing.volume_db, linear_to_db(Audio.JELLY_GAINS.land)),
+		"Landing returns to its quiet baseline after pronunciation")
+	audio.set_muted(true)
+	audio.play_jelly_cue("land")
+	audio.set_muted(false)
+	check(not landing.playing and landing.stream == null and audio._jelly_cues.is_empty(),
+		"Mute cancels impact tails and unmute cannot replay a suppressed landing")
+	audio.stop_jelly_sounds()
 
 
 func _check_warning_cancellation(audio) -> void:

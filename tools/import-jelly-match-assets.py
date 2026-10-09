@@ -22,6 +22,10 @@ ARCHIVES = {
     "kenney-interface-sounds.zip": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
 }
 PALETTES = {"coral": 0.0, "mint": 0.34, "sky": 0.50, "lilac": 0.72}
+WHITE_CENTER = 0.40
+WHITE_CONTOUR = 0.24
+SATURATION_SCALE = 0.88
+MINT_SATURATION_SCALE = 0.78
 SOUNDS = {
     "merge": ("drop_002.ogg", -8.0),
     "clear": ("pluck_002.ogg", -6.0),
@@ -50,6 +54,11 @@ def extract_verified(source_dir, name, destination):
         bundle.extractall(destination)
 
 
+def smoothstep(low, high, value):
+    amount = min(1.0, max(0.0, (value - low) / (high - low)))
+    return amount * amount * (3.0 - 2.0 * amount)
+
+
 def prepare_images(source):
     original = Image.open(source).convert("RGBA")
     if original.size != (297, 251):
@@ -58,23 +67,46 @@ def prepare_images(source):
     output.mkdir(parents=True, exist_ok=True)
     records = []
     for color, hue_shift in PALETTES.items():
+        saturation_scale = MINT_SATURATION_SCALE if color == "mint" else SATURATION_SCALE
         pixels = []
-        for red, green, blue, alpha in original.get_flattened_data():
+        for index, (red, green, blue, alpha) in enumerate(original.get_flattened_data()):
             hue, saturation, value = colorsys.rgb_to_hsv(red / 255, green / 255, blue / 255)
-            channels = colorsys.hsv_to_rgb((hue + hue_shift) % 1, saturation, value)
-            # Lighten the acquired painting for picture/word legibility; retain
-            # every original highlight, shaded contour, and alpha edge.
-            pixels.append(tuple(round((channel * 0.54 + 0.46) * 255) for channel in channels) + (alpha,))
+            channels = colorsys.hsv_to_rgb((hue + hue_shift) % 1, saturation * saturation_scale, value)
+            x = (index % original.width) / (original.width - 1)
+            y = (index // original.width) / (original.height - 1)
+            # Preserve a light reading area while recovering the source's outer
+            # contour and foot. Continuous transitions retain the painted detail.
+            center = smoothstep(0.08, 0.28, x) * smoothstep(0.08, 0.28, 1.0 - x)
+            center *= 1.0 - smoothstep(0.80, 0.99, y)
+            white_mix = WHITE_CONTOUR + (WHITE_CENTER - WHITE_CONTOUR) * center
+            pixels.append(tuple(round((channel * (1.0 - white_mix) + white_mix) * 255)
+                                for channel in channels) + (alpha,))
         recolored = Image.new("RGBA", original.size)
         recolored.putdata(pixels)
         canvas = Image.new("RGBA", (320, 320))
         canvas.paste(recolored, (11, 34))
         destination = output / f"gel-{color}.png"
         canvas.save(destination, optimize=True)
-        records.append({"path": relative(destination), "sha256": sha256(destination),
+        records.append({"path": relative(destination), "kind": "gel_surface", "sha256": sha256(destination),
                         "source": "png/separate/Jellies/Blank/Jelly (3).png", "source_sha256": sha256(source),
                         "size": [320, 320], "art_bounds": [11, 34, 297, 251],
-                        "hue_shift_turns": hue_shift, "white_mix": 0.46})
+                        "hue_shift_turns": hue_shift, "saturation_scale": saturation_scale,
+                        "white_mix": {"center": WHITE_CENTER, "contour": WHITE_CONTOUR,
+                                      "horizontal_transition": [0.08, 0.28],
+                                      "foot_transition": [0.80, 0.99],
+                                      "interpolation": "smoothstep",
+                                      "coordinates": "Normalized source artwork before transparent padding"}})
+    shadow_source = source.parents[2] / "Shadow.png"
+    shadow = Image.open(shadow_source)
+    if shadow.mode != "RGBA" or shadow.size != (334, 150):
+        raise ValueError("The contact shadow must be the acquired separate/Shadow.png")
+    shadow_destination = output / "contact-shadow.png"
+    shutil.copyfile(shadow_source, shadow_destination)
+    records.append({"path": relative(shadow_destination), "kind": "contact_shadow",
+                    "sha256": sha256(shadow_destination), "source": "png/separate/Shadow.png",
+                    "source_sha256": sha256(shadow_source), "size": [334, 150],
+                    "processing": "Unmodified original PNG; runtime placement, tint and opacity only",
+                    "maximum_alpha": shadow.getchannel("A").getextrema()[1]})
     shutil.copyfile(ROOT / "assets/talk_quest/map/licenses/cc0-1.0.txt", output / "LICENSE-CC0.txt")
     return records
 
@@ -124,8 +156,11 @@ def verify():
             raise ValueError(f"Asset differs from its provenance record: {record['path']}")
     for record in manifest["images"]:
         image = Image.open(ROOT / record["path"])
-        if image.mode != "RGBA" or image.size != (320, 320):
-            raise ValueError(f"Invalid gel surface: {record['path']}")
+        expected_size = (334, 150) if record["kind"] == "contact_shadow" else (320, 320)
+        if image.mode != "RGBA" or image.size != expected_size or list(image.size) != record["size"]:
+            raise ValueError(f"Invalid jelly artwork: {record['path']}")
+        if record["kind"] == "contact_shadow" and record["sha256"] != record["source_sha256"]:
+            raise ValueError("The acquired contact shadow must remain unmodified")
     for record in manifest["audio"]:
         with wave.open(str(ROOT / record["path"]), "rb") as recording:
             if (recording.getnchannels(), recording.getsampwidth(), recording.getframerate()) != (1, 2, 44100):
@@ -134,27 +169,30 @@ def verify():
             values.frombytes(recording.readframes(recording.getnframes()))
             if not values or values[0] != 0 or values[-1] != 0 or max(map(abs, values)) >= 32767:
                 raise ValueError(f"Clipped or discontinuous cue: {record['path']}")
-    print(f"Jelly Match assets verified: {len(manifest['images'])} sourced gel surfaces and {len(manifest['audio'])} non-clipping recorded cues.")
+    print(f"Jelly Match assets verified: {len(manifest['images'])} sourced artwork textures and {len(manifest['audio'])} non-clipping recorded cues.")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=ROOT / "build/jelly-match-sources")
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--images-only", action="store_true", help="Regenerate artwork while retaining existing audio files and provenance")
     options = parser.parse_args()
     if options.check:
         verify()
         return
     source_dir = options.source_dir.resolve()
     extract_verified(source_dir, "jelly.zip", source_dir / "jelly")
-    extract_verified(source_dir, "kenney-interface-sounds.zip", source_dir / "kenney-interface-sounds")
+    if not options.images_only:
+        extract_verified(source_dir, "kenney-interface-sounds.zip", source_dir / "kenney-interface-sounds")
+    existing = json.loads(MANIFEST.read_text(encoding="utf-8")) if options.images_only else {}
     manifest = {
-        "version": 1, "acquired_on": "2026-10-09", "license": "CC0-1.0",
+        "version": 2, "acquired_on": "2026-10-09", "license": "CC0-1.0",
         "image_source": {"creator": "Zuhria Alfitra (pzUH), GameArt2D", "title": "Jelly Squash Free Sprites",
                          "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
                          "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
                          "license_page": "https://www.gameart2d.com/license.html", "archive_sha256": ARCHIVES["jelly.zip"],
-                         "status": "Downloaded and inspected; four adapted PNG surfaces integrated",
+                         "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
                          "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."},
         "audio_source": {"creator": "Kenney", "title": "Interface Sounds 1.0",
                          "page": "https://kenney.nl/assets/interface-sounds",
@@ -162,11 +200,14 @@ def main():
                          "archive_sha256": ARCHIVES["kenney-interface-sounds.zip"],
                          "status": "Downloaded, decoded and integrated; subjective listening approval remains separate"},
         "image_processing": {"tool": "Pillow", "version": pillow_version,
-                             "description": "Hue adaptation and 46 percent white mix of acquired blank Jelly 3; source shading/alpha preserved; transparent square padding only."},
+                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 40 percent center to 24 percent contour white mix. Original silhouette, painted detail and alpha preserved. Separate contact shadow copied unchanged."},
         "images": prepare_images(source_dir / "jelly/png/separate/Jellies/Blank/Jelly (3).png"),
-        "audio": prepare_sounds(source_dir / "kenney-interface-sounds"),
+        "audio": existing["audio"] if options.images_only else prepare_sounds(source_dir / "kenney-interface-sounds"),
         "reuse": {"chest_reward": "assets/imported-audio/chest-reference/reward.wav",
                   "provenance": "docs/assets/chest-reference-audio.json",
+                  "landing": {"path": "assets/imported-audio/chest-reference/step-detail.wav",
+                              "provenance": "docs/assets/chest-reference-audio.json",
+                              "use": "Soft contact once per landing group, at low gain with the existing speech ducking and interruption lifecycle; no duplicate WAV"},
                   "chest_art": "Use the current theme's real closed chest through the existing chest renderer; archived rejected skins are not replacements."},
     }
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

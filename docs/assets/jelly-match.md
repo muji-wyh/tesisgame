@@ -11,9 +11,11 @@ deforms that illustration rather than replacing it with flat geometry.
 | Material | Creator and original source | License and status | Available animation |
 | --- | --- | --- | --- |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
+| Contact shadow | Same acquired Jelly Squash pack, `png/separate/Shadow.png` | Same CC0 1.0 license. Inspected and copied byte-for-byte to `assets/images/jelly-match/contact-shadow.png`; source and output hashes are identical. | Static 334 × 150 RGBA texture, maximum alpha 26/255. Runtime placement, tint and opacity establish contact independently of the moving gel. The pack's `WithShadow` bodies include faces and are not used. |
 | Merge, clear and countdown warning cues | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; three selected OGG recordings decoded, adapted and integrated as WAVs. The original pack license is retained. | One-shot recordings; no loops. |
 | Word artwork and pronunciation | Existing Grow with Pip vocabulary | Reused unchanged, with existing [vocabulary](growth-vocabulary.md), [Mulberry](mulberry-vocabulary.md) and [Ava](ava-voice.md) provenance. | Existing pronunciation playback; artwork is static. |
 | Earned chest cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/reward.wav` without a duplicate. Its existing user-supplied source and embedded-game restrictions remain in force; it is not relabeled CC0. | Existing one-shot reward cue. |
+| Landing contact cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/step-detail.wav` without a duplicate; the same user-supplied source and embedded-game restrictions apply. | Existing short one-shot, triggered once per landing group at low gain with speech ducking and the established interruption lifecycle. No new recording is acquired. |
 | Chest artwork | Existing current theme chest manifest and renderer | Reused under the recorded [chest asset rights](chest-feel.md). Royal and Energy have closed PNG artwork; the five newer modeled skins require the actual current renderer or a cached still of that renderer. | Use a closed pose for gameplay badges. Archived renders of replaced chest designs must not substitute for the current theme. |
 
 The creator identifies himself on [GameArt2D's about page](https://www.gameart2d.com/about.html).
@@ -35,10 +37,20 @@ The four production textures are:
 Each is a 320 × 320 RGBA image. The original 297 × 251 illustration occupies
 `x=11, y=34, width=297, height=251`; surrounding pixels are transparent. The source
 aspect ratio and every alpha edge, highlight and shaded contour are retained.
-The adaptation changes hue and mixes 46% white into RGB to support dark word
-labels and colorful vocabulary pictures. It does not redraw the source silhouette
-or add a face. The source's other bodies have protruding ears or bubble clusters;
-those are intentionally not included in the gameplay set.
+The adaptation changes hue while retaining 88% of the source HSV saturation
+(78% for mint to restrain its bright green contour). It mixes 40% white into the
+central reading area and 24% into the outer contour and lower foot. This retains
+the source's material contrast without making the word area dark. It does not
+redraw the source silhouette or add a face. The source's other bodies have
+protruding ears or bubble clusters; those are intentionally not included in the
+gameplay set.
+
+Processing uses normalized coordinates within the unpadded source. The horizontal
+center weight is `smoothstep(0.08, 0.28, x) * smoothstep(0.08, 0.28, 1 - x)`;
+the foot weight is `1 - smoothstep(0.80, 0.99, y)`. The product interpolates the
+white mix from 0.24 to 0.40. Each smoothstep uses the cubic `t * t * (3 - 2 * t)`
+after clamping `t` to 0–1. Hue offsets are unchanged and every source alpha value
+is retained. The manifest records these constants for each color.
 
 Content should stay near the center, approximately `x=80..240, y=110..235` in
 texture coordinates. Keep label layout and hit bounds stable while deforming the
@@ -46,11 +58,28 @@ gel. Reserve transparent margins for motion; a shader or mesh may use the textur
 own alpha silhouette for a smooth merge. Reduced motion can retain the same
 acquired surface while omitting elastic deformation.
 
+The settled foot lies at `y=285/320` of the padded texture. Squash and recovery
+should pivot there so the underside keeps contact. The separately acquired shadow
+is not baked into the gel; its support position can remain fixed while the body
+falls, compresses or lifts. This avoids moving a ground shadow through the air.
+The shared motion clock accelerates descent over `0.16 * sqrt(max(1, travel_rows))`
+seconds, then allows 65 ms for compression, 120 ms for rebound and 95 ms to settle.
+Only the painted body deforms; the learning picture, label and hit bounds retain
+their layout. Input becomes available after the same clock completes.
+
 The adapted surfaces were inspected at full size and in an 86 px tile sample
 with 14 px dark labels and existing word pictures. Source and adapted contact
 sheets are `jelly-source-contact.png` and `integrated-gel-contact.png` under the
 ignored source directory. These are asset composition checks, not screenshots of
 the finished game's responsive layout.
+
+The refined colors were compared against the prior production PNGs at 320 px and
+86 px with dark learning words. The ignored `gel-refinement-320.png` and
+`gel-refinement-86.png` sheets document that asset comparison. Native captures at
+1366 x 768, 390 x 844 and 844 x 390 were inspected for label fit, contact shadows,
+dragging and reduced motion. Before/after descent frames use the same seeded
+board and 60 Hz timeline; these rendered checks do not establish subjective
+sound quality or performance on a physical phone.
 
 ## Cue contract and mix
 
@@ -88,6 +117,10 @@ uses a steady warning outline. A matching contact immediately stops warning
 audio and removes the border flash; pause, exit and expiry stop the warning too.
 Tap pronunciation remains the primary learning sound. While a word plays,
 duck Jelly Match effects by about 12 dB and use a small bounded voice pool.
+The quiet landing cue uses the existing `step-detail.wav` source once per contact
+group, following the same pronunciation priority; overlapping tiles must not
+multiply the transient. Its audible weight and comfort require runtime listening,
+and are not established by the reuse record or waveform measurements.
 Mute, pause, backgrounding and leaving the mode must stop pending and playing
 Jelly cues. Reuse the existing chest reward gain and lifecycle for earned chests.
 
@@ -100,14 +133,17 @@ and FFmpeg available:
 
 ```powershell
 python tools/import-jelly-match-assets.py
+python tools/import-jelly-match-assets.py --images-only
 python tools/import-jelly-match-assets.py --check
 ```
 
 The importer rejects different source archive hashes, extracts only into its
-source directory, and reproduces the four PNGs, three WAVs and manifest. The check
-mode only reads files and verifies hashes, texture format, PCM format, zero edges
-and headroom. Normal game builds use the acquired files and need no asset service
-or network synthesis.
+source directory, and reproduces four adapted gel PNGs, the unchanged source
+shadow PNG, three WAVs and the manifest. `--images-only` retains existing audio
+files and their provenance records while regenerating artwork. The check mode
+only reads files and verifies hashes, texture format, PCM format, zero edges and
+headroom; it also verifies the shadow matches its original source hash. Normal
+game builds use the acquired files and need no asset service or network synthesis.
 
 FFprobe/FFmpeg decoding and sample checks passed. This task's tool channel could
 not present audio to the reviewing model, so no subjective listening approval is

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Model = preload("res://scripts/jelly_match_model.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -20,6 +21,7 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	_test_configuration()
 	_test_supply_and_gravity()
+	_test_landing_timeline()
 	_test_fusion_timeline()
 	_test_wrong_and_ignored_attempts()
 	_test_full_board_timeout()
@@ -68,8 +70,7 @@ func _pair(model, require_settled: bool = true, chest_only: bool = false) -> Arr
 		for b in model.cells:
 			if int(a.id) == int(b.id) or a.word.id != b.word.id or a.kind == b.kind:
 				continue
-			if require_settled and (float(a.age) + Model.EPSILON < Model.SETTLE_SECONDS
-				or float(b.age) + Model.EPSILON < Model.SETTLE_SECONDS):
+			if require_settled and (not model.is_settled(a) or not model.is_settled(b)):
 				continue
 			if chest_only and not bool(a.chest) and not bool(b.chest):
 				continue
@@ -180,7 +181,7 @@ func _test_supply_and_gravity() -> void:
 		for cell in model.cells:
 			chest_tiles += 1 if cell.chest else 0
 		check(chest_tiles == 4, "Every third generated pair supplies exactly one chest tile")
-		model.step(0.45)
+		model.step(Model.SETTLE_SECONDS)
 		var pair: Array[int] = _pair(model)
 		var previous_rows: Dictionary = {}
 		for cell in model.cells:
@@ -193,6 +194,31 @@ func _test_supply_and_gravity() -> void:
 				check(int(cell.falling_rows) == int(cell.row) - int(previous_rows[cell.id]) and cell.age == 0.0,
 					"Gravity restarts falling only across the newly cleared local row distance")
 		_assert_board(model, "Gravity after a clear")
+
+
+func _test_landing_timeline() -> void:
+	var short_drop: Dictionary = {"row": 4, "falling_rows": 1, "age": 0.0}
+	var long_drop: Dictionary = {"row": 5, "falling_rows": 6, "age": 0.0}
+	check(Motion.travel_rows(short_drop) == 1.0 and Motion.travel_rows(long_drop) == 5.0
+		and Motion.contact_at(short_drop) < Motion.contact_at(long_drop)
+		and Motion.ready_at(short_drop) < Motion.ready_at(long_drop) and Motion.ready_at(long_drop) <= Model.SETTLE_SECONDS,
+		"Local gravity lands sooner than a full descent, and both share the bounded input timeline")
+	long_drop.age = Motion.contact_at(long_drop)
+	check(is_zero_approx(Motion.sample(long_drop).lift_rows), "Contact reaches its support without sinking below it")
+	long_drop.age += Motion.COMPRESSION_SECONDS
+	var compressed: Dictionary = Motion.sample(long_drop)
+	check(compressed.stretch.y < 0.9 and compressed.stretch.x > 1.0 and compressed.compression > 0.99,
+		"The planted contact visibly compresses before recovery")
+	long_drop.age = Motion.ready_at(long_drop)
+	check(Motion.sample(long_drop).stretch.is_equal_approx(Vector2.ONE) and is_zero_approx(Motion.sample(long_drop).bend),
+		"Input readiness coincides with the settled, undeformed body")
+	var model = Model.new()
+	model.configure(_vocabulary(), 3, 8)
+	var pair: Array[int] = _pair(model, false)
+	model.step(Motion.ready_at(model.tile_by_id(pair[0])) - 0.001)
+	check(model.try_merge(pair[0], pair[1]) == "ignored", "A recovering jelly cannot match just before its ready boundary")
+	model.step(0.001)
+	check(model.try_merge(pair[0], pair[1]) == "correct", "The exact shared ready boundary enables a matching pair")
 
 
 func _test_fusion_timeline() -> void:
