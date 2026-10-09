@@ -27,6 +27,7 @@ var reduced_motion: bool = false
 var replay_button: Button
 var chests_button: Button
 var finish_button: Button
+var drop_button: Button
 
 var _configured: bool = false
 var _generation: int = 0
@@ -41,6 +42,9 @@ var _ghosts: Dictionary = {}
 var _preview_tiles: Array[Tile] = []
 var _preview_origins: Array[Vector2] = []
 var _preview_rect := Rect2()
+var _preview_first_id: int = -1
+var _preview_canceled: bool = false
+var _preview_pressed: bool = false
 var _board := Rect2()
 var _pitch: float = 0.0
 var _gap: float = 0.0
@@ -96,6 +100,14 @@ func _init() -> void:
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
+	drop_button = Button.new()
+	drop_button.name = "JellyDropNow"
+	drop_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	drop_button.focus_mode = Control.FOCUS_ALL
+	drop_button.set("accessibility_name", "Drop the next jellies")
+	drop_button.tooltip_text = "Drop the next jellies"
+	drop_button.pressed.connect(_drop_next)
+	add_child(drop_button)
 	for index in range(JellyMatchModel.UPCOMING_COUNT):
 		var preview := Tile.new()
 		preview.name = "UpcomingJelly%d" % (index + 1)
@@ -312,6 +324,9 @@ func stop() -> void:
 
 func cancel_input() -> void:
 	_pointer = NO_POINTER
+	_preview_first_id = -1
+	_preview_canceled = false
+	_set_preview_pressed(false)
 	_source = -1
 	_target = -1
 	_dragging = false
@@ -396,6 +411,17 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	if _pointer != NO_POINTER or not _can_play():
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
+	if _preview_rect.has_point(point):
+		if not game.can_drop_now():
+			return false
+		_pointer = pointer
+		_gesture_serial += 1
+		_preview_first_id = int(game.upcoming[0].id)
+		_preview_canceled = false
+		_press_point = point
+		_set_preview_pressed(true)
+		_publish()
+		return true
 	var id: int = _tile_at(point)
 	if id < 0:
 		return false
@@ -424,6 +450,12 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	return true
 
 func _move(global_point: Vector2) -> void:
+	if _preview_first_id >= 0:
+		var point: Vector2 = get_global_transform().affine_inverse() * global_point
+		_preview_canceled = _preview_canceled or not _preview_rect.has_point(point) \
+			or point.distance_to(_press_point) * Style.ui_scale(self) > 12.0
+		_set_preview_pressed(not _preview_canceled and game.can_drop_now() and int(game.upcoming[0].id) == _preview_first_id)
+		return
 	if _source < 0 or not _tiles.has(_source):
 		cancel_input()
 		return
@@ -445,6 +477,16 @@ func _move(global_point: Vector2) -> void:
 	_publish()
 
 func _release(global_point: Vector2) -> void:
+	if _preview_first_id >= 0:
+		var expected_id: int = _preview_first_id
+		var generation: int = _generation
+		var point: Vector2 = get_global_transform().affine_inverse() * global_point
+		var accepted: bool = not _preview_canceled and _preview_rect.has_point(point) \
+			and point.distance_to(_press_point) * Style.ui_scale(self) <= 12.0
+		cancel_input()
+		if accepted and generation == _generation:
+			_drop_next(expected_id)
+		return
 	if not _can_play() or _source < 0:
 		cancel_input()
 		return
@@ -470,6 +512,21 @@ func _release(global_point: Vector2) -> void:
 		return
 	_refresh_marks()
 	_publish()
+
+func _drop_next(expected_first_id: int = -1) -> void:
+	if not _can_play() or _pointer != NO_POINTER:
+		return
+	var generation: int = _generation
+	if not game.drop_now(expected_first_id):
+		return
+	if generation != _generation or not _can_play():
+		return
+	_sync_tiles()
+	_refresh_hud()
+	queue_redraw()
+	_publish()
+	if generation == _generation and _can_play():
+		audio_requested.emit("pick")
 
 func _activate(id: int) -> void:
 	# Keyboard/controller activation is pronunciation only. Pointer presses
@@ -967,6 +1024,10 @@ func _refresh_controls() -> void:
 	replay_button.disabled = not _allowed() or _result_transition
 	finish_button.visible = _configured and game.phase == "playing" and not _result_visible
 	finish_button.disabled = not _can_play() or not game.fusions.is_empty() or _pointer != NO_POINTER
+	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
+	drop_button.disabled = not _can_play() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
+	if drop_button.disabled:
+		_set_preview_pressed(false)
 
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
@@ -982,6 +1043,8 @@ func navigation_controls() -> Array[Control]:
 		for cell: Dictionary in ordered:
 			if _settled(cell) and _tiles.has(int(cell.id)):
 				controls.append(_tiles[int(cell.id)])
+		if not drop_button.disabled:
+			controls.append(drop_button)
 		if not finish_button.disabled:
 			controls.append(finish_button)
 	return controls
@@ -989,6 +1052,27 @@ func navigation_controls() -> Array[Control]:
 func default_focus() -> Control:
 	var controls: Array[Control] = navigation_controls()
 	return controls[0] if not controls.is_empty() else self
+
+func _style_drop_button() -> void:
+	var s: float = Style.ui_scale(self)
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		var pressed: bool = state == "pressed"
+		var surface := Style.box(Color("#e7f4df", 0.94) if pressed else Color("#fffdf5", 0.78),
+			Color("#578f69", 0.72) if pressed else Color("#78a995", 0.30), ceili(12.0 / s), maxi(1, roundi(1.0 / s)))
+		drop_button.add_theme_stylebox_override(state, surface)
+	var focus := Style.box(Color.TRANSPARENT, Style.GOOD, ceili(12.0 / s), maxi(2, roundi(2.0 / s)))
+	focus.set_expand_margin_all(2.0 / s)
+	drop_button.add_theme_stylebox_override("focus", focus)
+	drop_button.add_theme_stylebox_override("hover_pressed", drop_button.get_theme_stylebox("pressed"))
+	_set_preview_pressed(_preview_pressed, true)
+
+func _set_preview_pressed(value: bool, force: bool = false) -> void:
+	if value == _preview_pressed and not force:
+		return
+	_preview_pressed = value
+	# Pointer ownership lives in _input, so paint momentary feedback explicitly.
+	# BaseButton.set_pressed_no_signal only applies to toggle buttons.
+	drop_button.add_theme_stylebox_override("normal", drop_button.get_theme_stylebox("pressed" if value else "disabled"))
 
 func _style_finish_button() -> void:
 	var s: float = Style.ui_scale(self)
@@ -1069,6 +1153,9 @@ func _layout() -> void:
 		preview_size = minf(preview_size, _pitch * 0.88)
 	var preview_height: float = preview_size * 2.0 + preview_gap + padding * 2.0 if wide else preview_size + padding * 2.0
 	_preview_rect = Rect2(Vector2(preview_x, preview_y), Vector2(preview_width, preview_height))
+	drop_button.position = _preview_rect.position
+	drop_button.size = _preview_rect.size
+	_style_drop_button()
 	var inset: float = (preview_width - preview_columns * preview_size - (preview_columns - 1) * preview_gap) * 0.5
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
@@ -1164,7 +1251,6 @@ func _draw() -> void:
 	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
 	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
 	draw_style_box(well, _board.grow(2.0))
-	draw_style_box(Style.box(Color("#fffdf5", 0.78), Color("#78a995", 0.30), 12, 1), _preview_rect)
 	var warning: Dictionary = danger_feedback()
 	if float(warning.strength) > 0.0:
 		var edge := Color(Color("#c65c35"), float(warning.strength))
@@ -1207,7 +1293,9 @@ func snapshot() -> Dictionary:
 			"rect": _rect(visual.merged.get_global_rect()) if visual.merged.visible else []})
 	var first_effect: Dictionary = result.fusion_effects[0] if not result.fusion_effects.is_empty() else {}
 	result["fusion_effect"] = {"visible": first_effect.get("visible", false), "stage": first_effect.get("stage", "none")}
-	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible, "rect": _rect(_global_rect(_preview_rect)), "slots": []}
+	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible,
+		"enabled": _can_play() and game.can_drop_now() and _pointer == NO_POINTER,
+		"control": _control(drop_button), "rect": _rect(_global_rect(_preview_rect)), "slots": []}
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		var pose: Dictionary = _preview_pose(index)

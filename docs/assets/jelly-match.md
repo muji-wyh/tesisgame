@@ -93,6 +93,30 @@ arrivals above one another if fewer columns have space. A nearly full board
 accepts only the remaining capacity and preserves the unused preview entries.
 The bounded supply bags preserve a possible match on every full board.
 
+The entire upcoming area also acts as a manual drop control. A tap or click
+releases the displayed batch immediately when the round is active, every board
+tile has settled, no pair is fusing and the well has room. It uses the same
+four-tile dispatch, column selection, gravity and landing projections as a timed
+drop; a nearly full board still accepts only its remaining capacity. The supply
+clock resets after an accepted manual drop, so the next timed batch receives a
+full interval. Dropping a batch does not score a point, award treasure or record
+a learning attempt.
+
+The control has the accessible name and tooltip `Drop the next jellies`, while
+the visible layout retains its four previews without a `Next` label or progress
+bar. Keyboard and controller users can focus the whole area and activate it.
+The individual preview tiles remain decorative and cannot be dragged or matched.
+A pointer gesture belongs to the batch displayed when it began; if natural
+supply advances before release, the old gesture cannot drop the replacement
+batch. Moving more than 12 screen pixels cancels the tap. Pause, leaving the
+page and starting a new round discard pending taps, and a board drag blocks
+manual supply activation.
+
+An accepted manual drop plays the existing brief pick cue once. The falling
+batch then uses the existing soft landing feedback at contact. Manual supply
+introduces no new artwork or audio assets, and preserves the current mute,
+pronunciation priority and interruption behavior.
+
 Upcoming bodies wobble on the actual supply clock, with frequency rising from
 1 to 4.5 Hz and lateral travel from 0.6% to 5.2% of tile width. A curved buildup
 reserves the strongest motion for the end of the interval; slot phase offsets

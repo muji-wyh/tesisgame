@@ -183,6 +183,10 @@ function separate(a, b) {
 
 function expectPreviewLayout(state, bounds) {
   expect(state.preview.visible, 'The upcoming four tiles are visible outside the well').toBe(true);
+  expect(state.preview.control.visible, 'The complete preview region exposes its dispatch control').toBe(true);
+  expect(state.preview.control.rect.every((value, index) => Math.abs(value - state.preview.rect[index]) < 0.01),
+    'Preview art and background share one hit region within subpixel transform precision').toBe(true);
+  expect(state.preview.control.disabled).toBe(!state.preview.enabled);
   expect(state.upcoming).toHaveLength(4);
   expect(state.preview.slots).toHaveLength(4);
   expectInCanvas(state.preview.rect, bounds, 'The complete four-tile preview fits the screen');
@@ -229,9 +233,10 @@ async function observeSupply(page) {
       const tile = item => ({ id: item.id, word: item.word.id, kind: item.kind, chest: item.chest,
         rect: item.rect, visible: item.visible, settled: item.settled,
         age: item.age, fallingRows: item.falling_rows });
-      window.jellySupplyTimeline.push({ at: performance.now(), generated: state.generated_tiles,
+      window.jellySupplyTimeline.push({ at: performance.now(), roundId: state.round_id, generated: state.generated_tiles,
         spawnElapsed: state.spawn_elapsed, spawnInterval: state.spawn_interval, paused: state.paused,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
+        previewEnabled: state.preview?.enabled, previewControl: state.preview?.control, drag: state.drag,
         preview: state.preview?.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion })),
         tiles: state.tiles.map(tile), upcoming: (state.upcoming || []).map(tile),
         ghosts: state.landing_ghosts, board: state.board_rect });
@@ -265,27 +270,6 @@ test('four previews predict simultaneous batches and the final partial batch wit
   const starting = await jelly(page);
   expectPreviewLayout(starting, await metrics(page));
   await page.screenshot({ path: info.outputPath('jelly-four-previews-and-falling-batch.png'), scale: 'css' });
-
-  // These are real pointer gestures on the display-only queue. Its contents
-  // may naturally advance, but they cannot become a selected gameplay tile.
-  for (const slot of (await jelly(page)).preview.slots) {
-    await pressRect(page, slot.rect);
-    const state = await jelly(page);
-    expect(state.drag.source).toBe(-1);
-    expect(state.drag.selected).toBe(-1);
-    expect(state.cleared_pairs).toBe(0);
-  }
-  const slot = (await jelly(page)).preview.slots[0];
-  const point = center(slot.rect, await metrics(page));
-  await page.mouse.move(point.x, point.y);
-  await page.mouse.down();
-  try {
-    await page.mouse.move(point.x + 20, point.y + 12, { steps: 4 });
-    expect((await jelly(page)).drag.active, 'The upcoming preview cannot be dragged into the game').toBe(false);
-    expect((await jelly(page)).drag.source).toBe(-1);
-  } finally {
-    await page.mouse.up();
-  }
 
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -363,6 +347,153 @@ test('four previews predict simultaneous batches and the final partial batch wit
   expect(errors).toEqual([]);
 });
 
+test.describe('manual jelly supply', () => {
+  // Keep mobile CSS geometry while avoiding high-DPR software-renderer stalls
+  // in the brief falling interval that must reject repeated dispatch taps.
+  test.use({ deviceScaleFactor: 1 });
+
+  for (const pointer of ['mouse', 'touch']) {
+    test(`tapping preview tiles and background drops one queued batch with ${pointer}`, async ({ page }, info) => {
+      test.setTimeout(90000);
+      const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+      await observeSupply(page);
+      const savedGrowth = await growthSave(page), requests = [];
+      const press = async point => {
+        if (pointer === 'touch') await page.touchscreen.tap(point.x, point.y);
+        else await page.mouse.click(point.x, point.y);
+      };
+      try {
+        for (const [index, area] of ['tile', 'background'].entries()) {
+          if (index > 0) {
+            const previous = await jelly(page);
+            if (previous.phase === 'playing') await pressControl(page, previous.finish);
+            await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+            await pressControl(page, (await jelly(page)).result.replay);
+            await expect.poll(async () => (await jelly(page)).round_id).not.toBe(previous.round_id);
+          }
+          const bounds = await metrics(page);
+          let before;
+          await expect.poll(async () => {
+            before = await jelly(page);
+            return before.preview.enabled && before.spawn_elapsed < 2;
+          }, { intervals: [50], timeout: 12000,
+            message: 'Each area is tested early in a ready dispatch cycle, before the automatic deadline' }).toBe(true);
+          const ids = before.upcoming.map(tile => tile.id);
+          let point;
+          if (area === 'tile') point = center(before.preview.slots[0].rect, bounds);
+          else {
+            const [x, y, width, height] = before.preview.rect;
+            const candidates = [[x + width / 2, y + 3], [x + 3, y + height / 2],
+              [x + width - 3, y + height / 2], [x + width / 2, y + height - 3]];
+            const background = candidates.find(([px, py]) => before.preview.slots.every(slot => {
+              const [sx, sy, sw, sh] = slot.rect;
+              return px < sx || px > sx + sw || py < sy || py > sy + sh;
+            }));
+            expect(background, 'The preview has tappable background outside all decorative tiles').toBeTruthy();
+            point = center([...background, 0, 0], bounds);
+          }
+          requests.push({ area, point, before: { roundId: before.round_id, generated: before.generated_tiles,
+            spawnElapsed: before.spawn_elapsed, ids } });
+          await press(point);
+          // Two more actual releases arrive while the first batch is airborne.
+          await press(point);
+          await press(point);
+          await expect.poll(async () => (await jelly(page)).generated_tiles,
+            { intervals: [30], message: 'One manual request consumes exactly the current four previews' })
+            .toBe(before.generated_tiles + 4);
+          await expect.poll(async () => {
+            const state = await jelly(page);
+            return state.preview.enabled && ids.every(id => state.tiles.some(tile => tile.id === id && tile.settled));
+          }, { intervals: [50], message: 'The manually requested batch falls naturally and enables the next request only after landing' }).toBe(true);
+          const after = await jelly(page);
+          expectPreviewLayout(after, bounds);
+          expect(after.generated_tiles, 'Repeated taps during the fall cannot queue another batch').toBe(before.generated_tiles + 4);
+          expect(after.upcoming.map(tile => tile.id), 'The displayed queue advances after a manual drop').not.toEqual(ids);
+          expect(after.drag).toMatchObject({ active: false, source: -1, target: -1, selected: -1 });
+          expect(after.cleared_pairs).toBe(before.cleared_pairs);
+          expect(after.chest_count).toBe(before.chest_count);
+          expect(await growthSave(page), 'Requesting supply never submits a learning attempt').toBe(savedGrowth);
+          const frames = (await page.evaluate(() => window.jellySupplyTimeline))
+            .filter(frame => frame.roundId === before.round_id && frame.generated === before.generated_tiles + 4);
+          expect(frames[0].spawnElapsed, 'Manual dispatch restarts the supply clock').toBeLessThan(0.5);
+          const falling = frames.filter(frame => ids.some(id => frame.tiles.some(tile => tile.id === id && !tile.settled)));
+          expect(falling.length, 'Manual dispatch exposes multiple falling poses rather than teleporting tiles').toBeGreaterThanOrEqual(2);
+          for (const frame of falling) {
+            expect(frame.previewEnabled).toBe(false);
+            expect(frame.previewControl.disabled).toBe(true);
+            expect(frame.drag.source, 'Decorative preview tiles never become held board tiles').toBe(-1);
+          }
+          for (const id of ids) {
+            const airborne = falling.filter(frame => frame.ghosts.some(ghost => ghost.visible && ghost.id === id));
+            expect(airborne.length, 'Each incoming jelly has its own landing shadow').toBeGreaterThanOrEqual(1);
+            expect(new Set(airborne.map(frame => Math.round(frame.tiles.find(tile => tile.id === id).rect[1]))).size,
+              'Each manually requested jelly travels through distinct falling positions').toBeGreaterThanOrEqual(2);
+          }
+        }
+
+        const tiles = await availablePair(page), beforeFusion = await jelly(page);
+        const previewPoint = center(beforeFusion.preview.rect, await metrics(page));
+        await page.evaluate(({ point, pointerKind }) => {
+          window.jellyManualPreviewEvents = [];
+          const types = pointerKind === 'touch' ? ['touchstart', 'touchend'] : ['pointerdown', 'pointerup'];
+          const record = event => {
+            const contact = event.changedTouches?.[0] || event;
+            if (Math.abs(contact.clientX - point.x) > 2 || Math.abs(contact.clientY - point.y) > 2) return;
+            const state = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
+            window.jellyManualPreviewEvents.push({ at: performance.now(), type: event.type,
+              trusted: event.isTrusted, point: [contact.clientX, contact.clientY],
+              fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
+              generated: state.generated_tiles, spawnElapsed: state.spawn_elapsed,
+              previewEnabled: state.preview?.enabled });
+          };
+          for (const type of types) window.addEventListener(type, record, { capture: true, passive: true });
+        }, { point: previewPoint, pointerKind: pointer });
+        await dragPair(page, tiles);
+        await expect.poll(async () => (await jelly(page)).fusions.length,
+          { intervals: [30], timeout: 2000, message: 'The real drag commits and publishes its fusion before testing the disabled preview' }).toBe(1);
+        await press(previewPoint);
+        await expectClear(page, beforeFusion.cleared_pairs + 1, tiles);
+        const fusionFrames = (await page.evaluate(() => window.jellySupplyTimeline)).filter(frame => frame.fusion);
+        expect(fusionFrames.length).toBeGreaterThan(0);
+        const committed = fusionFrames[0];
+        const previewEvents = await page.evaluate(() => window.jellyManualPreviewEvents);
+        expect(previewEvents.map(event => event.type), 'The test observes the real preview press and release')
+          .toEqual(pointer === 'touch' ? ['touchstart', 'touchend'] : ['pointerdown', 'pointerup']);
+        for (const event of previewEvents) {
+          expect(event.trusted).toBe(true);
+          expect(event.fusion, 'Both preview input events occur during the committed fusion, not after it').toBe(true);
+          expect(event.previewEnabled).toBe(false);
+          expect(event.generated).toBe(committed.generated);
+          expect(event.spawnElapsed).toBe(committed.spawnElapsed);
+        }
+        for (const frame of fusionFrames) {
+          expect(frame.previewEnabled).toBe(false);
+          expect(frame.generated, 'A preview press during fusion cannot dispatch another batch').toBe(committed.generated);
+          expect(frame.spawnElapsed, 'A rejected preview press cannot restart the paused supply clock').toBe(committed.spawnElapsed);
+        }
+
+        await openModeMenu(page);
+        await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+        const paused = await jelly(page);
+        expect(paused.preview.enabled).toBe(false);
+        expect(paused.preview.control.disabled).toBe(true);
+        await page.waitForTimeout(250);
+        expect((await jelly(page)).generated_tiles).toBe(paused.generated_tiles);
+        await libraryControl(page, 'LibraryClose');
+        await expect.poll(async () => (await jelly(page)).preview.enabled).toBe(true);
+        await page.screenshot({ path: info.outputPath(`jelly-manual-${pointer}-settled.png`), scale: 'css' });
+      } finally {
+        const timeline = await page.evaluate(() => window.jellySupplyTimeline || []);
+        const previewEvents = await page.evaluate(() => window.jellyManualPreviewEvents || []);
+        const timelinePath = info.outputPath(`jelly-manual-${pointer}-supply.json`);
+        fs.writeFileSync(timelinePath, JSON.stringify({ pointer, requests, previewEvents, timeline }, null, 2));
+        await info.attach(`jelly-manual-${pointer}-supply`, { path: timelinePath, contentType: 'application/json' });
+      }
+      expect(errors).toEqual([]);
+    });
+  }
+});
+
 test('preview wobble builds with the dispatch clock and freezes during menus and fusion', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
@@ -389,6 +520,8 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const paused = await jelly(page);
+  expect(paused.preview.enabled, 'The menu disables manual dispatch').toBe(false);
+  expect(paused.preview.control.disabled).toBe(true);
   await page.waitForTimeout(450);
   const stillPaused = await jelly(page);
   expect(stillPaused.spawn_elapsed, 'The menu freezes the actual supply clock').toBe(paused.spawn_elapsed);
@@ -408,6 +541,8 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
   for (const frame of fusion) {
     expect(frame.spawnElapsed, 'A committed fusion freezes the dispatch clock').toBe(fusion[0].spawnElapsed);
     expect(frame.preview, 'Preview poses stay still throughout the matching animation').toEqual(fusion[0].preview);
+    expect(frame.previewEnabled, 'Fusion disables manual dispatch until every animation finishes').toBe(false);
+    expect(frame.previewControl.disabled).toBe(true);
   }
   await info.attach('jelly-preview-motion.json', { body: Buffer.from(JSON.stringify({
     early: { elapsed: early.spawn_elapsed, slots: poses(early) },

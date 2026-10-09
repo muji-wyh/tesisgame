@@ -184,6 +184,25 @@ func step(delta: float) -> void:
 		changed.emit()
 
 
+func can_drop_now() -> bool:
+	return phase == "playing" and not paused and fusions.is_empty() \
+		and cells.size() < CAPACITY and not upcoming.is_empty() \
+		and _settling_remaining() <= EPSILON
+
+
+func drop_now(expected_first_id: int = -1) -> bool:
+	if not can_drop_now():
+		return false
+	if expected_first_id != -1 and expected_first_id != int(upcoming[0].id):
+		return false
+	# Dispatch the advertised batch without advancing any existing tile or clock.
+	# The next automatic batch receives its full interval after this release.
+	spawn_elapsed = 0.0
+	_spawn_drop()
+	changed.emit()
+	return true
+
+
 func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	if paused or phase != "playing" or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"

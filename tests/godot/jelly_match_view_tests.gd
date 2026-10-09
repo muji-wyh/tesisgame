@@ -44,6 +44,10 @@ func _run() -> void:
 	_check_layout(view)
 	_check_pictures(view)
 	_check_supply_preview(view)
+	_check_manual_preview_drop(view)
+	_check_preview_cancel_and_rollover(view)
+	_check_preview_lifecycle_gates(view)
+	_check_preview_controller(view)
 	_check_preview_motion(view)
 	_check_drop_projection(view)
 	_check_landing_presentation(view)
@@ -249,14 +253,14 @@ func _check_supply_preview(view) -> void:
 			and preview._badge.visible == bool(supply[index].chest),
 			"Preview slot %d retains the queued learning artwork, word kind and treasure marker" % (index + 1))
 		check(preview.disabled and preview.focus_mode == Control.FOCUS_NONE and preview.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-			"Upcoming tile %d remains display-only for every input route" % (index + 1))
-		check(not view._press(4, _rect(slot.rect).get_center()), "An upcoming tile cannot start a board drag")
+			"Upcoming artwork %d stays decorative inside its shared release control" % (index + 1))
+		check(not view._press(4, _rect(slot.rect).get_center()), "An airborne wave keeps preview presses disabled")
 		view._activate(int(slot.id))
 	check(heard.is_empty() and cues.is_empty() and attempts.is_empty() and int(view.snapshot().drag.selected) == -1,
-		"Preview interaction cannot pronounce, select, answer or consume a queued tile")
+		"Disabled preview interaction cannot pronounce, select, answer, or release another wave")
 	for control: Control in view.navigation_controls():
 		check(not control.get_global_rect().intersects(_rect(before.preview.rect)),
-			"Keyboard navigation excludes the read-only supply preview")
+			"Keyboard navigation excludes the preview while an existing wave is airborne")
 	view._layout()
 	view.apply_theme(Data.theme("spring"), data.chests)
 	view._refresh_hud()
@@ -301,6 +305,162 @@ func _check_supply_preview(view) -> void:
 	view.stop()
 	check(not bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty(),
 		"Stopping the mode leaves no visible supply or ghost")
+	_reset(view)
+
+
+func _check_manual_preview_drop(view) -> void:
+	for pointer: int in [-1, 4]:
+		_reset(view)
+		var state: Dictionary = view.snapshot()
+		var preview_rect: Rect2 = _rect(state.preview.rect)
+		var point: Vector2 = preview_rect.get_center() if pointer == -1 else preview_rect.position + Vector2(4.0, 4.0)
+		var advertised: Array = state.upcoming.duplicate(true)
+		var count: int = view.game.cells.size()
+		check(bool(state.preview.enabled) and not view.drop_button.disabled
+			and view.drop_button.focus_mode == Control.FOCUS_ALL and view.navigation_controls().has(view.drop_button)
+			and _rect(state.preview.control.rect).is_equal_approx(preview_rect),
+			"A settled board exposes the whole supply area as one accessible release control")
+		check(view._press(pointer, point) and view.game.cells.size() == count
+			and view.game.upcoming == advertised and heard.is_empty() and cues.is_empty()
+			and not view.snapshot().drag.active,
+			"Pressing a preview tile or its surrounding padding waits for release without starting a board drag")
+		_advance(view, 0.5)
+		check(view.game.cells.size() == count and view.game.upcoming == advertised and cues.is_empty(),
+			"Holding the preview does not repeatedly dispatch supply or play feedback")
+		view.drop_button.pressed.emit()
+		check(view.game.cells.size() == count and cues.is_empty(),
+			"Controller activation cannot steal a held preview gesture")
+		var before_release: Array = view.game.cells.duplicate(true)
+		var release: Vector2 = point + Vector2(5.0, 0.0)
+		view._move(release)
+		view._release(release)
+		check(view.game.cells.size() == count + 4 and view.game.cells.slice(0, count) == before_release
+			and view.game.spawn_elapsed == 0.0 and cues == ["pick"]
+			and heard.is_empty() and attempts.is_empty() and view.game.chest_count == 0,
+			"A valid preview release dispatches one exact batch with one tactile cue and no learning or time skip")
+		for index in range(advertised.size()):
+			var arrival: Dictionary = view._cell(int(advertised[index].id))
+			check(not arrival.is_empty() and arrival.word == advertised[index].word
+				and arrival.kind == advertised[index].kind and arrival.chest == advertised[index].chest
+				and arrival.age == 0.0 and not view._settled(arrival)
+				and view._tiles.has(int(arrival.id)) and not _ghost(view, int(arrival.id)).is_empty(),
+				"A manually released jelly immediately renders its advertised content, normal descent, and landing shadow")
+		check(not bool(view.snapshot().preview.enabled) and view.drop_button.disabled
+			and not view.navigation_controls().has(view.drop_button)
+			and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER,
+			"The released wave returns pointer ownership and temporarily disables another release")
+		var dispatched: Dictionary = view.game.snapshot()
+		view._release(release)
+		view.drop_button.pressed.emit()
+		check(view.game.snapshot() == dispatched and cues == ["pick"],
+			"Repeated release or controller events cannot stack another falling wave")
+	_reset(view)
+
+
+func _check_preview_cancel_and_rollover(view) -> void:
+	for action: String in ["outside", "motion", "cancel", "pause", "hide", "blur", "new-round", "stop"]:
+		_reset(view)
+		var preview_rect: Rect2 = _rect(view.snapshot().preview.rect)
+		var point: Vector2 = preview_rect.get_center()
+		check(view._press(4, point), "The preview accepts a fresh gesture before %s" % action)
+		match action:
+			"outside":
+				view._move(preview_rect.end + Vector2(10.0, 10.0))
+				view._move(point)
+			"motion":
+				view._move(point + Vector2(20.0 / Style.ui_scale(view), 0.0))
+				view._move(point)
+			"cancel":
+				view.cancel_input()
+			"pause":
+				view.pause(true)
+				view.pause(false)
+			"hide":
+				view.hide()
+				view.show()
+			"blur":
+				view.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+			"new-round":
+				_reset(view)
+			"stop":
+				view.stop()
+		var stopped: Dictionary = view.game.snapshot()
+		var before_cues: Array[String] = cues.duplicate()
+		view._release(point)
+		check(view.game.snapshot() == stopped and cues == before_cues
+			and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER,
+			"%s prevents the old preview release from consuming a batch or playing feedback" % action)
+	_reset(view)
+	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed - 0.02)
+	var point: Vector2 = _rect(view.snapshot().preview.rect).get_center()
+	var old_preview: Array = view.game.upcoming.duplicate(true)
+	var count: int = view.game.generated_tiles
+	check(view._press(-1, point), "A preview press just before the natural beat retains its current batch identity")
+	_advance(view, 0.03 + view.game.SETTLE_SECONDS)
+	check(view.game.generated_tiles == count + 4 and view.game.upcoming != old_preview,
+		"The normal supply beat can pass while the preview pointer remains held")
+	var after_beat: Dictionary = view.game.snapshot()
+	view._release(point)
+	check(view.game.snapshot() == after_beat and cues.count("pick") == 0,
+		"Releasing a stale preview press never dispatches the replacement batch after its predecessor lands")
+	_reset(view)
+
+
+func _check_preview_lifecycle_gates(view) -> void:
+	for state: String in ["airborne", "paused", "hidden", "fusion", "disappearance", "full", "results", "stopped", "drag"]:
+		_reset(view, false, state != "airborne")
+		var point: Vector2 = _rect(view.snapshot().preview.rect).get_center()
+		match state:
+			"paused":
+				view.pause(true)
+			"hidden":
+				view.hide()
+			"fusion", "disappearance":
+				var pair: Array[int] = _pair(view)
+				_drag_pair(view, pair[0], pair[1])
+				if state == "disappearance":
+					_advance(view, 0.8)
+			"full":
+				view.game.step(4.0 * view.game.spawn_interval)
+				view._sync_tiles()
+				view._refresh_hud()
+				check(view.game.cells.size() == view.game.CAPACITY and view.game.phase == "playing",
+					"The manual-release guard is exercised on a live full board")
+			"results":
+				view.game.finish_round()
+				view.result_reveal()
+			"stopped":
+				view.stop()
+			"drag":
+				var source: Vector2 = _center(view, int(view.game.cells[0].id))
+				view._press(4, source)
+				view._move(source + Vector2(20.0, 0.0))
+		var before: Dictionary = view.game.snapshot()
+		var before_cues: Array[String] = cues.duplicate()
+		check(not view._press(8, point), "%s blocks a new preview gesture" % state)
+		view.drop_button.pressed.emit()
+		check(view.game.snapshot() == before and cues == before_cues,
+			"%s cannot bypass release eligibility by directly emitting the controller action" % state)
+		view.cancel_input()
+		view.show()
+	_reset(view)
+
+
+func _check_preview_controller(view) -> void:
+	_reset(view)
+	var advertised: Array = view.game.upcoming.duplicate(true)
+	var count: int = view.game.generated_tiles
+	check(view.navigation_controls().has(view.drop_button), "A ready supply area is reachable by keyboard and controller")
+	view.drop_button.grab_focus()
+	view.drop_button.pressed.emit()
+	check(view.game.generated_tiles == count + 4 and cues == ["pick"] and heard.is_empty() and attempts.is_empty(),
+		"Controller activation releases one complete batch without pronouncing preview content")
+	for tile: Dictionary in advertised:
+		check(not view._cell(int(tile.id)).is_empty(), "Controller release uses the same committed preview as pointer release")
+	for index in range(8):
+		view.drop_button.pressed.emit()
+	check(view.game.generated_tiles == count + 4 and cues == ["pick"],
+		"Repeated controller signals cannot bypass the airborne-wave gate or duplicate its cue")
 	_reset(view)
 
 

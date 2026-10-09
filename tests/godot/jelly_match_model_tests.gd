@@ -23,6 +23,9 @@ func _run() -> void:
 	_test_configuration()
 	_test_supply_and_gravity()
 	_test_queue_contract()
+	_test_manual_drop()
+	_test_manual_drop_guards()
+	_test_manual_drop_partial_batch()
 	_test_partial_and_stacked_drops()
 	_test_supply_fairness()
 	_test_fall_physics()
@@ -301,6 +304,116 @@ func _test_queue_contract() -> void:
 			cell.age = snappedf(float(cell.age), 0.000001)
 	check(single_snapshot == split_snapshot,
 		"Equivalent elapsed time reproduces the same four-tile drops, queue, board, ages, and counters")
+
+
+func _test_manual_drop() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(), 3, 73)
+	model.step(2.0)
+	var existing: Array = model.cells.duplicate(true)
+	var advertised: Array = model.upcoming.duplicate(true)
+	var change_count: Array[int] = [0]
+	model.changed.connect(func() -> void: change_count[0] += 1)
+	check(model.can_drop_now() and model.drop_now(int(advertised[0].id)),
+		"A ready board can release its advertised four-tile batch immediately")
+	check(model.cells.size() == INITIAL_COUNT + Model.DROP_COUNT
+		and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT
+		and model.cells.slice(0, INITIAL_COUNT) == existing and model.spawn_elapsed == 0.0,
+		"Manual dispatch resets only the supply clock without fast-forwarding existing tiles")
+	check(change_count[0] == 1 and events.attempts.is_empty() and events.chests.is_empty()
+		and events.cues.is_empty() and model.cleared_pairs == 0 and model.chest_count == 0,
+		"Manual dispatch publishes its state once without learning, score, or rewards")
+	for index in range(Model.DROP_COUNT):
+		var arrival: Dictionary = model.cells[INITIAL_COUNT + index]
+		check(arrival.id == advertised[index].id and arrival.word == advertised[index].word
+			and arrival.kind == advertised[index].kind and arrival.chest == advertised[index].chest
+			and arrival.age == 0.0 and arrival.arrival,
+			"Manual dispatch preserves every advertised identity and starts its ordinary fall at zero")
+	var dispatched: Dictionary = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now()
+		and model.snapshot() == dispatched and change_count[0] == 1,
+		"Repeated clicks cannot stack another airborne wave or publish a change")
+	model.step(Model.INITIAL_SPAWN_INTERVAL - 0.001)
+	check(model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT and model.can_drop_now(),
+		"The automatic cadence restarts with a full interval after an early manual batch")
+	model.step(0.001)
+	check(model.generated_tiles == INITIAL_COUNT + 2 * Model.DROP_COUNT and model.spawn_elapsed == 0.0,
+		"The next automatic drop arrives exactly at its reset interval")
+	_assert_board(model, "Manual dispatch and resumed cadence")
+
+
+func _test_manual_drop_guards() -> void:
+	var model = Model.new()
+	model.configure(_vocabulary(), 3, 73)
+	var blocked: Dictionary = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"Initial airborne tiles block manual release without changing the board")
+	model.step(Model.SETTLE_SECONDS)
+	model.set_paused(true)
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"A paused round rejects manual release without changing its timer or queue")
+	model.set_paused(false)
+	var pair: Array[int] = _pair(model)
+	model.try_merge(pair[0], pair[1])
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"An active fusion retains its supply pause when the preview is clicked")
+	model.step(0.8)
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"Disappearance also blocks manual release through the end of the fusion")
+	model.finish_round()
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"A finished round cannot consume upcoming tiles")
+	model.configure(_vocabulary(), 3, 73)
+	model.step(_danger_start_seconds())
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"A full board rejects manual release without resetting danger")
+	model.configure(_vocabulary(), 3, 73)
+	model.step(Model.INITIAL_SPAWN_INTERVAL - 0.01)
+	var pressed_id: int = int(model.upcoming[0].id)
+	model.step(0.01)
+	model.step(_settle_remaining(model))
+	blocked = model.snapshot()
+	check(model.can_drop_now() and not model.drop_now(pressed_id) and model.snapshot() == blocked,
+		"A naturally dispatched preview invalidates an older press token even after its wave lands")
+	check(model.drop_now(int(model.upcoming[0].id)), "A fresh preview token releases the current committed batch")
+	model.configure(_vocabulary(), 3, 73)
+	model.step(Model.SETTLE_SECONDS)
+	model.upcoming.clear()
+	blocked = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
+		"An empty preview cannot produce a partial or fabricated manual batch")
+
+
+func _test_manual_drop_partial_batch() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(), 3, 73)
+	model.step(3.0 * Model.INITIAL_SPAWN_INTERVAL + Model.SETTLE_SECONDS)
+	check(model.cells.size() == Model.CAPACITY - 2 and model.can_drop_now(),
+		"Two remaining board slots still allow a manual preview release")
+	var existing: Array = model.cells.duplicate(true)
+	var advertised: Array = model.upcoming.duplicate(true)
+	check(model.drop_now(), "Manual release can consume only the prefix that fits on a nearly full board")
+	check(model.cells.size() == Model.CAPACITY and model.generated_tiles == Model.CAPACITY
+		and model.cells.slice(0, existing.size()) == existing and model.full_elapsed == -1.0,
+		"A partial manual batch preserves existing tiles and waits for landing before danger")
+	for index in range(2):
+		check(model.cells[existing.size() + index].id == advertised[index].id
+			and model.cells[existing.size() + index].age == 0.0,
+			"A partial batch starts the exact fitting advertised tiles at the normal entry height")
+		check(model.upcoming[index] == advertised[index + 2],
+			"A partial batch preserves its unconsumed advertised suffix in order")
+	model.step(_settle_remaining(model))
+	check(model.full_elapsed == 0.0 and events.cues == ["danger"]
+		and events.attempts.is_empty() and events.chests.is_empty(),
+		"A manually completed board starts the ordinary full countdown only after all arrivals settle")
+	_assert_board(model, "Partial manual dispatch")
 
 
 func _test_partial_and_stacked_drops() -> void:
