@@ -4,7 +4,7 @@ const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const scopes = ['scripts', 'scenes', 'project.godot', 'words.json', 'voice-prompts.json'];
+const scopes = ['scripts', 'scenes', 'data', 'project.godot', 'words.json', 'phrases.json', 'curriculum.json', 'voice-prompts.json'];
 const sharedDirectories = ['assets', '.godot', 'tests'];
 
 function digest(buffer) {

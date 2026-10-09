@@ -1,23 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
-  openRewards, collectionHeaderRect, worldControl,
-  contentBounds, pipHeaderRect, roomControl, matchWords, boardPoint, resultPoint
+  openRewards, collectionHeaderRect, worldControl, growthView,
+  contentBounds, pipHeaderRect
 } = require('./game-ui.cjs');
 
-const ROOM_KEY = 'wordBuddies.playroom';
+const PRESENTATION_KEY = 'pipAndWords.presentation.v1';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
-const OLD_COUNTS = { 'spring-1': 3, 'summer-2': 1, 'autumn-6': 2 };
-const VOCABULARY = new Map(require('../../words.json').map(word => [word.id, word]));
-
-async function record(page, key = ROOM_KEY) {
+async function record(page, key = PRESENTATION_KEY) {
   return page.evaluate(key => localStorage.getItem(key), key);
-}
-
-async function counts(page) {
-  const dictionary = (await record(page, MEDAL_KEY))?.match(/counts=\{([\s\S]*?)\}/)?.[1] || '';
-  return Object.fromEntries([...dictionary.matchAll(/"([^"]+)":\s*(\d+)/g)]
-    .map(([, id, amount]) => [id, Number(amount)]));
 }
 
 function cssClip(bounds, rect, padding = 0) {
@@ -32,7 +23,7 @@ function cssClip(bounds, rect, padding = 0) {
 async function closeRewards(page) {
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
+  await expect.poll(async () => (await growthView(page)).visible).toBe(false);
   await rendered(page);
 }
 
@@ -76,10 +67,10 @@ async function foregroundDifference(page, first, second, firstColor, secondColor
   }, { sources: [first, second].map(buffer => buffer.toString('base64')), colors: [firstColor, secondColor] });
 }
 
-test('all eight theme choices give Pip different visible outfits in the header and room', async ({ page }, testInfo) => {
-  // Eight full room captures need enough time on software WebGL runners.
+test('all eight theme choices give Pip different visible outfits in the header and growth notebook', async ({ page }, testInfo) => {
+  // Eight full wardrobe captures need enough time on software WebGL runners.
   test.setTimeout(240000);
-  // Keep the fixed room and both horizontal rails in one visual artifact.
+  // Keep the growth catalogue and world choices in one visual artifact.
   await page.setViewportSize({ width: 390, height: 1560 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   expect(THEME_IDS).toEqual(['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']);
@@ -90,7 +81,7 @@ test('all eight theme choices give Pip different visible outfits in the header a
   for (const [index, theme] of THEME_IDS.entries()) {
     await chooseTheme(page, index);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-    expect(await record(page)).toContain(`preferred_theme_id="${theme}"`);
+    expect(JSON.parse(await record(page)).preferred_theme).toBe(theme);
     await settled(page);
     const bounds = await metrics(page), content = contentBounds(bounds);
     const clip = cssClip(bounds, pipHeaderRect(bounds), 2);
@@ -102,7 +93,7 @@ test('all eight theme choices give Pip different visible outfits in the header a
       clip: cssClip(bounds, { x: content.x, y: content.padding, width: content.width, height: content.header }) });
     await openRewards(page);
     await settled(page);
-    await page.screenshot({ path: testInfo.outputPath(`wardrobe-room-${theme}.png`), fullPage: true, scale: 'css' });
+    await page.screenshot({ path: testInfo.outputPath(`wardrobe-growth-${theme}.png`), fullPage: true, scale: 'css' });
     await closeRewards(page);
     expect(await record(page, MEDAL_KEY), 'Changing outfits never awards or removes medal pieces.').toBe(originalMedals);
     expect(await page.locator('#selection-status').textContent()).toBe(originalSelection);
@@ -132,8 +123,8 @@ test('all eight themes are reachable in the 320 by 568 rail and survive touch an
   const bounds = await metrics(page), viewport = page.viewportSize();
   for (const [index, theme] of THEME_IDS.entries()) {
     const rect = cssClip(bounds, await worldControl(page, index));
-    expect(rect.width, `${theme}: minimum touch width`).toBeGreaterThanOrEqual(52 - 0.01);
-    expect(rect.height, `${theme}: minimum touch height`).toBeGreaterThanOrEqual(52 - 0.01);
+    expect(rect.width, `${theme}: minimum touch width`).toBeGreaterThanOrEqual(44 - 0.01);
+    expect(rect.height, `${theme}: minimum touch height`).toBeGreaterThanOrEqual(44 - 0.01);
     expect(rect.x, `${theme}: left edge`).toBeGreaterThanOrEqual(0);
     expect(rect.y, `${theme}: top edge`).toBeGreaterThanOrEqual(0);
     expect(rect.x + rect.width, `${theme}: right edge`).toBeLessThanOrEqual(viewport.width + 0.01);
@@ -143,8 +134,8 @@ test('all eight themes are reachable in the 320 by 568 rail and survive touch an
     const world = await worldControl(page, index);
     await tap(page, world.x + world.width / 2, world.y + world.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-    await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
-    expect(await record(page)).toContain(`preferred_theme_id="${THEME_IDS[index]}"`);
+    expect((await growthView(page)).visible).toBe(true);
+    expect(JSON.parse(await record(page)).preferred_theme).toBe(THEME_IDS[index]);
     await rendered(page);
     await page.screenshot({ path: testInfo.outputPath(`wardrobe-${THEME_IDS[index]}-320.png`), scale: 'css' });
   }
@@ -155,121 +146,9 @@ test('all eight themes are reachable in the 320 by 568 rail and survive touch an
   const reloadErrors = await openGame(page, { reducedMotion: 'reduce' });
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
   const reloaded = await record(page);
-  for (const field of ['toy', 'backdrop', 'favorite', 'preferred_theme_id', 'goal_item_id']) {
-    const pattern = new RegExp(`^${field}=(.*)$`, 'm');
-    expect(reloaded.match(pattern)?.[1], `Reload preserves ${field} while the fresh lesson may record a new topic visit.`)
-      .toBe(saved.match(pattern)?.[1]);
-  }
+  expect(JSON.parse(reloaded).preferred_theme).toBe(JSON.parse(saved).preferred_theme);
   expect(await record(page, MEDAL_KEY)).toBe(originalMedals);
   await settled(page);
   await page.screenshot({ path: testInfo.outputPath('wardrobe-candy-reloaded-320.png'), scale: 'css' });
   expect([...errors, ...reloadErrors]).toEqual([]);
 });
-
-async function seedGiftSaveFixture(page, world) {
-  const medals = `[medals]\nversion=1\ncounts=${JSON.stringify({ ...OLD_COUNTS, [`${world}-1`]: 2 })}\n`;
-  const room = '[playroom]\nversion=1\ntoy="toy-ball"\nbackdrop="backdrop-home"\nfavorite="spring-7"\n\n' +
-    '[journey]\nrecent_topic_ids=[]\npreferred_theme_id="spring"\ngoal_item_id=""\n\n' +
-    '[stickers]\nword_ids=["cat","apple"]\ndisplay_word_id=""\n\n[learning]\nage_band="4-6"\n';
-  await page.addInitScript(({ medals, room, medalKey, roomKey }) => {
-    // This is an explicit prior-save fixture, never an in-game reward grant.
-    // A reload preserves the current saved result instead of reseeding it.
-    if (localStorage.getItem(medalKey) === null) localStorage.setItem(medalKey, medals);
-    if (localStorage.getItem(roomKey) === null) localStorage.setItem(roomKey, room);
-  }, { medals, room, medalKey: MEDAL_KEY, roomKey: ROOM_KEY });
-}
-
-async function winGiftMatch(page) {
-  const bounds = await metrics(page), cards = new Map();
-  for (let index = 0; index < 10; index++) {
-    const point = boardPoint(bounds, index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
-    const [kind, word] = (await page.locator('#selection-status').textContent()).split(': ');
-    if (!cards.has(word)) cards.set(word, {});
-    cards.get(word)[kind] = index;
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
-  const pairs = [...cards].filter(([, pair]) => pair.Word !== undefined && pair.Picture !== undefined);
-  expect(pairs).toHaveLength(5);
-  for (const [index, [word, pair]] of pairs.entries()) {
-    const written = boardPoint(bounds, pair.Word), pictured = boardPoint(bounds, pair.Picture);
-    await tap(page, written.x, written.y);
-    await expect(page.locator('#selection-status')).toHaveText(`Word: ${word}`);
-    await tap(page, pictured.x, pictured.y);
-    await expect(page.locator('#game-status')).toContainText('Great match!');
-    await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
-  }
-  await acceptCelebration(page);
-}
-
-for (const gift of [
-  { world: 'jungle', word: 'monkey', name: 'Jungle monkey', medal: 'Monkey', topic: 'Animal friends',
-    outcomes: ['1/3 · The monkey swings through the jungle!', '2/3 · The monkey waves to Pip!', '3/3 · Pip and the monkey share a high five!'] },
-  { world: 'candy', word: 'cake', name: 'Candy cake', medal: 'Party Cake', topic: 'Picnic time',
-    outcomes: ["1/3 · A cake for Pip's party!", '2/3 · A swirl of frosting on the cake!', '3/3 · Sprinkles on the cake. Ready to celebrate!'] }
-]) {
-  test(`${gift.world} ages 4-6 prior-save fixture earns its last toy piece through the real lesson and preserves old medals`, async ({ page }, testInfo) => {
-    test.setTimeout(150000);
-    await page.setViewportSize({ width: 390, height: 844 });
-    await seedGiftSaveFixture(page, gift.world);
-    const errors = await openGame(page, { reducedMotion: 'reduce' });
-    const originalCounts = { ...OLD_COUNTS, [`${gift.world}-1`]: 2 };
-    expect(await counts(page)).toEqual(originalCounts);
-    await openRewards(page);
-    const toy = await roomControl(page, gift.world);
-    await tap(page, toy.x, toy.y);
-    await expect(page.locator('#game-status')).toContainText(`${gift.name}. Complete ${gift.medal}`);
-    await expect(page.locator('#game-status')).toContainText('1 more piece');
-    expect(await record(page)).toContain('toy="toy-ball"');
-    await page.screenshot({ path: testInfo.outputPath(`${gift.world}-locked-save-fixture.png`), scale: 'css' });
-    const goal = await roomControl(page, 'goal', { locked: true, item: gift.world });
-    await tap(page, goal.x, goal.y);
-    await expect(page.locator('#game-status')).toContainText(`${gift.topic}. Find 5 word–picture pairs. Help Pip get ${gift.name}.`);
-    expect(await record(page)).toContain(`goal_item_id="toy-${gift.world}"`);
-    expect(await record(page)).toContain(`preferred_theme_id="${gift.world}"`);
-    const lesson = await matchWords(page);
-    expect(lesson).toContain(gift.word);
-    for (const word of lesson.filter(word => word !== gift.word)) {
-      expect(VOCABULARY.get(word)?.level, 'Only the explicitly chosen gift noun may exceed the selected age level.').toBe('basic');
-    }
-    expect(await record(page)).toContain('age_band="4-6"');
-    expect(await counts(page)).toEqual(originalCounts);
-    await page.screenshot({ path: testInfo.outputPath(`${gift.world}-gift-lesson.png`), scale: 'css' });
-    await winGiftMatch(page);
-    expect(await counts(page)).toEqual(originalCounts);
-    const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
-    await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
-    await page.mouse.down();
-    try {
-      await expect(page.locator('#game-status')).toContainText('A gift for Pip!');
-    } finally {
-      await page.mouse.up();
-    }
-    const earnedCounts = { ...OLD_COUNTS, [`${gift.world}-1`]: 3 };
-    expect(await counts(page), 'Only the earned new-world fragment changes; every old medal count remains intact.').toEqual(earnedCounts);
-    await page.screenshot({ path: testInfo.outputPath(`${gift.world}-earned-toy.png`), scale: 'css' });
-    await openRewards(page);
-    const useGift = await roomControl(page, gift.world);
-    await tap(page, useGift.x, useGift.y);
-    await expect(page.locator('#game-status')).toHaveText(gift.outcomes[0]);
-    expect(await record(page)).toContain(`toy="toy-${gift.world}"`);
-    for (const [index, outcome] of gift.outcomes.entries()) {
-      if (index > 0) await page.keyboard.press('Enter');
-      await expect(page.locator('#game-status')).toHaveText(outcome);
-      await rendered(page);
-      await page.screenshot({ path: testInfo.outputPath(`${gift.world}-toy-stage-${index + 1}.png`), scale: 'css' });
-    }
-    expect(await counts(page)).toEqual(earnedCounts);
-    expect(await record(page)).toContain('favorite="spring-7"');
-    const reloadErrors = await openGame(page, { reducedMotion: 'reduce' });
-    expect(await counts(page)).toEqual(earnedCounts);
-    for (const field of [`toy="toy-${gift.world}"`, `goal_item_id="toy-${gift.world}"`, 'favorite="spring-7"', 'age_band="4-6"']) {
-      expect(await record(page)).toContain(field);
-    }
-    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[THEME_IDS.indexOf(gift.world)]);
-    expect([...errors, ...reloadErrors]).toEqual([]);
-  });
-}

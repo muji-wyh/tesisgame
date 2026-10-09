@@ -25,7 +25,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -53,7 +52,7 @@ func _run() -> void:
 				"Pip and the action icons share the compact header without permanent mode tabs")
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), "%s %s: the playfield fits the screen" % [dimensions, mode])
 			check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()), "World choices stay out of active play")
-			check(not app._room.is_visible_in_tree(), "The room does not take space above the game")
+			check(not app.collection_page.is_visible_in_tree(), "The room does not take space above the game")
 			check(app.duck.is_visible_in_tree(), "Pip remains a visible guide")
 			check(is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / css_scale))
 				and app._header_duck_slot.get_theme_stylebox("panel") is StyleBoxEmpty,
@@ -98,9 +97,9 @@ func _run() -> void:
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All eight worlds remain selectable")
 		app._world_grid.get_node(app.Data.theme(world_id).name).pressed.emit()
 		await settle()
-		check(app.model.theme_id == world_id and app.collection_page.visible and app._room.is_visible_in_tree()
-			and app.playroom_state.preferred_theme_id == world_id,
-			"Choosing a world saves the preference and keeps Pip's room open")
+		check(app.model.theme_id == world_id and app.collection_page.visible and app._age_catalog.is_visible_in_tree()
+			and app._presentation.preferred_theme == world_id,
+			"Choosing a world saves the preference and keeps the growth catalog open")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
 			and app.model.hints_remaining == hints_remaining and app.model.lesson_words == lesson_before
 			and [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes] == progress_before,
@@ -110,12 +109,10 @@ func _run() -> void:
 	if not app.collection_page.visible:
 		app._show_collection()
 	await settle()
-	check(app._room._room.get_global_rect().position.y - app._collection_scroll.global_position.y <= 8,
-		"Pip's playable scene starts immediately below the persistent More controls, without repeated headings or goals")
-	check(not app._room.goal_label.is_visible_in_tree() and not app._room.goal_button.is_visible_in_tree(),
-		"Unselected gifts do not create a standalone status or action row")
-	check(app._collection_title.text == "Pip" and not app.has_method("_show_reward_section"),
-		"More keeps a single room and the shared World strip without retired navigation")
+	check(app._age_catalog.is_visible_in_tree() and app._growth_summary.is_visible_in_tree(),
+		"Growth presents progress and a vocabulary catalog without the retired room")
+	check(app._collection_title.text == "Grow with Pip" and not app.has_method("_show_reward_section"),
+		"The growth notebook preserves a single title and world settings")
 	for dimensions in [Vector2i(480, 900), Vector2i(1040, 900)]:
 		root.size = dimensions
 		app.size = dimensions
@@ -126,7 +123,7 @@ func _run() -> void:
 			"More uses a compact Back icon without losing its target size at %s: size=%s scale=%s minimum=%s header=%s" % [
 				dimensions, app._collection_back.size, scale, app._collection_back.get_combined_minimum_size(), app._collection_header.size])
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"World choices remain available below Pip's room")
+			"World choices remain available below the growth catalogue")
 		check(app._world_grid is HBoxContainer, "World choices remain in one horizontally scrollable row at every width")
 		check(app._world_grid.get_theme_constant("separation") == roundi(6 / scale),
 			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")

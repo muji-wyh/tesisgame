@@ -1,6 +1,7 @@
 extends RefCounted
 
 signal changed
+signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
@@ -15,122 +16,88 @@ var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
 var hints_remaining: int = MAX_HINTS
 var selected_id: String = ""
-# Optional leaderboard ranking only; mistakes never end a round.
+# Mistakes provide feedback and never end a round.
 var mistakes: int = 0
 var phase: String = "waiting"
 var theme_id: String = "spring"
 var adventure_id: String = ""
 var adventure_name: String = "Word explorers"
-var age_band_id: String = "all"
+var age_band_id: String = "3"
 var chest_state: String = "closed"
 var reward_theme: String = ""
 var reward_id: String = ""
 var error: String = ""
 var last_correct: bool = false
+var _attempt_sequence: int = 0
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "all") -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "3") -> bool:
 	var band: Dictionary = Data.age_band(requested_age_band_id)
 	if band.is_empty():
 		error = "Please choose an available age level."
 		return false
-	var repeating: bool = repeat_lesson and lesson_words.size() == 5
-	if not repeating:
-		for word in words:
-			if not word is Dictionary or Data.word_level(word) == 0:
-				error = "Word levels must be basic, growing or advanced."
-				return false
-		# Gift lessons keep their requested word; every other word stays within the age band.
-		words = words.filter(func(word: Dictionary) -> bool:
-			return Data.word_level(word) <= band.max_level or (not required_word_id.is_empty() and word.id == required_word_id))
-	var requested_adventure: Dictionary = {}
-	if not requested_adventure_id.is_empty():
-		for adventure in Data.adventures(words):
-			if adventure.id == requested_adventure_id:
-				requested_adventure = adventure
-				break
-		if requested_adventure.is_empty():
-			error = "Please choose an available adventure."
+	var maximum_age: int = int(band.get("max_age", 3))
+	var eligible: Array = []
+	for word in words:
+		if not word is Dictionary or not word.has_all(["id", "min_age", "image"]):
+			error = "Learning words need an ID, a minimum age and a picture."
 			return false
-	var required_word: Dictionary = {}
-	if not required_word_id.is_empty():
-		if requested_adventure.is_empty() or not requested_adventure.words.has(required_word_id):
-			error = "Choose a gift word from the requested adventure."
-			return false
-		for word in words:
-			if word.id == required_word_id:
-				required_word = word
-				break
-		if required_word.is_empty():
-			error = "The gift word is unavailable in this vocabulary."
-			return false
-	var saved_adventure := adventure_id
-	var saved_name := adventure_name
-	var saved_theme := theme_id
+		if int(word.min_age) <= maximum_age and "match" in word.get("practice_modes", ["match", "memory"]):
+			eligible.append(word)
+	var saved_theme: String = theme_id
+	var repeating: bool = repeat_lesson and lesson_words.size() == MATCH_PAIR_COUNT and age_band_id == requested_age_band_id
 	if repeating:
-		words = lesson_words
-	elif not requested_adventure.is_empty():
-		words = words.filter(func(word: Dictionary) -> bool: return requested_adventure.words.has(word.id))
-	if words.size() < 5:
-		error = "At least five words are needed to play."
-		return false
+		for previous in lesson_words:
+			if not eligible.any(func(word: Dictionary) -> bool: return word.id == previous.id):
+				repeating = false
 	var rng := RandomNumberGenerator.new()
 	if seed_value < 0:
 		rng.randomize()
 	else:
 		rng.seed = seed_value
-	var pool: Array = words.duplicate(true)
+	var pool: Array = eligible.duplicate(true)
 	_shuffle(pool, rng)
-	if not repeating and requested_age_band_id != "all":
-		var prioritized: Array = []
-		for level in range(band.max_level, 0, -1):
-			prioritized.append_array(pool.filter(func(word: Dictionary) -> bool: return Data.word_level(word) == level))
-		pool = prioritized
-	if not required_word.is_empty() and not repeating:
-		pool.erase(required_word)
-		pool.push_front(required_word.duplicate(true))
-	if not repeating and seed_value < 0 and not cards.is_empty():
-		# ponytail: only the previous board; a learner profile needs separate evidence and design.
-		var previous: Array = cards.map(func(card: Dictionary) -> String: return card.word.id)
-		var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id or not previous.has(word.id))
-		if fresh.size() >= 5 and (requested_adventure.is_empty() or _distinct_words(fresh, MATCH_PAIR_COUNT).size() >= 5):
-			pool = fresh
-	var next_adventure: Dictionary = requested_adventure
-	if requested_adventure.is_empty() or repeating:
-		var adventures: Array[Dictionary] = []
-		for adventure in Data.adventures(words):
-			var related: Array = pool.filter(func(word: Dictionary) -> bool: return adventure.words.has(word.id))
-			if _distinct_words(related, MATCH_PAIR_COUNT).size() >= 5:
-				adventures.append(adventure)
-		if seed_value < 0 and adventures.size() > 1:
-			adventures = adventures.filter(func(adventure: Dictionary) -> bool: return adventure.id != adventure_id)
-		next_adventure = {} if adventures.is_empty() else adventures[rng.randi_range(0, adventures.size() - 1)]
-	var next_adventure_id: String = next_adventure.get("id", "")
-	var next_adventure_name: String = next_adventure.get("name", "Word explorers")
-	if not next_adventure.is_empty():
-		pool = pool.filter(func(word: Dictionary) -> bool: return next_adventure.words.has(word.id))
-	if repeating:
-		pool = lesson_words.duplicate()
-		next_adventure_id = saved_adventure
-		next_adventure_name = saved_name
-	else:
-		var distinct: Array = _distinct_words(pool, MATCH_PAIR_COUNT)
-		if distinct.size() < 5:
-			error = "This lesson needs five clearly different words."
+	# Every required pictured word must remain reachable. Theme/adventure names
+	# do not randomly narrow this pool to a topic that can starve another word.
+	var previous_ids: Array = lesson_words.map(func(word: Dictionary) -> String: return str(word.id)) if seed_value < 0 else []
+	var prioritized: Array = []
+	for priority in range(2, -1, -1):
+		var cohort: Array = pool.filter(func(word: Dictionary) -> bool: return clampi(int(word.get("_growth_priority", 0)), 0, 2) == priority)
+		prioritized.append_array(cohort.filter(func(word: Dictionary) -> bool: return not previous_ids.has(word.id)))
+		prioritized.append_array(cohort.filter(func(word: Dictionary) -> bool: return previous_ids.has(word.id)))
+	pool = prioritized
+	if not requested_adventure_id.is_empty() and not repeating:
+		var requested: Dictionary = {}
+		for adventure in Data.adventures(eligible):
+			if adventure.id == requested_adventure_id:
+				requested = adventure
+				break
+		if requested.is_empty():
+			error = "Please choose an available adventure."
 			return false
-		lesson_words = distinct.slice(0, 5)
+		pool = pool.filter(func(word: Dictionary) -> bool: return requested.words.has(word.id))
+	if not required_word_id.is_empty() and not repeating:
+		var requested_words: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id)
+		if requested_words.is_empty():
+			error = "The requested word is unavailable at this learning level."
+			return false
+		pool.erase(requested_words[0])
+		pool.push_front(requested_words[0])
+	if not repeating:
+		var distinct: Array = _distinct_words(pool, MATCH_PAIR_COUNT)
+		if distinct.size() < MATCH_PAIR_COUNT:
+			error = "This lesson needs five clearly different pictured words."
+			return false
+		lesson_words = distinct.slice(0, MATCH_PAIR_COUNT)
 		age_band_id = requested_age_band_id
-		pool = lesson_words
-	adventure_id = next_adventure_id
-	adventure_name = next_adventure_name
+		adventure_id = requested_adventure_id
+		adventure_name = "Your learning path"
 	cards.clear()
-	for index in range(MATCH_PAIR_COUNT):
-		_add_card(pool[index], "word")
-		_add_card(pool[index], "image")
+	for word in lesson_words:
+		_add_card(word, "word")
+		_add_card(word, "image")
 	_shuffle(cards, rng)
-	theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
-	if repeat_lesson:
-		theme_id = saved_theme
+	theme_id = saved_theme if repeat_lesson else THEMES[rng.randi_range(0, THEMES.size() - 1)]
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
@@ -143,6 +110,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	reward_id = ""
 	error = ""
 	last_correct = false
+	_attempt_sequence = 0
 	changed.emit()
 	return true
 
@@ -284,6 +252,11 @@ func select(id: String, notify: bool = true) -> String:
 			else:
 				mistakes += 1
 				result = "wrong"
+			_attempt_sequence += 1
+			var involved: Array[String] = [str(previous.word.id)]
+			if not involved.has(str(card.word.id)):
+				involved.append(str(card.word.id))
+			word_attempted.emit("match-%d" % _attempt_sequence, involved, last_correct)
 	if notify:
 		changed.emit()
 	return result

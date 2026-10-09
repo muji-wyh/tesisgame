@@ -164,7 +164,7 @@ for (const batch of BATCHES) {
     const saved = await seedPendingTreasure(page, batch);
     await page.goto('/');
     await enterGame(page, { onboarding: false });
-    await chooseMode(page, 'pop', { choosePlayer: false });
+    await chooseMode(page, 'pop');
     await expect.poll(async () => {
       const room = await roomState(page);
       return { visible: room.visible, round: room.round_id, opened: room.opened_count,

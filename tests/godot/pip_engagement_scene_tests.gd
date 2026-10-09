@@ -58,7 +58,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
@@ -68,11 +67,11 @@ func _run() -> void:
 	app._update_duck()
 	check(app.duck._proactive_allowed, "Normal play explicitly enables Pip's quiet invitations")
 	var original: Array = [app.model.cards.duplicate(true), app.model.hints_remaining,
-		(app.model.matched_ids.size() / 2), app.model.mistakes, app._status_announcement, app.playroom_state.toy_id]
+		(app.model.matched_ids.size() / 2), app.model.mistakes, app._status_announcement, app.growth.snapshot()]
 	check(not observe_idle(app, 5.5) and observe_idle(app, 3.6)
-		and app.duck._idle_action == "dance-wave", "Pip's first quiet invitation is a dance within 6–9 seconds")
+		and app.duck._idle_action == "wave", "Lv3 Pip offers its unlocked wave within 6–9 quiet seconds")
 	check([app.model.cards, app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes,
-		app._status_announcement, app.playroom_state.toy_id] == original and not app.audio.voice.playing,
+		app._status_announcement, app.growth.snapshot()] == original and not app.audio.voice.playing,
 		"Invitations never change the game, choices, status or audio")
 	app.duck._idle_action = "wave"
 	app.duck._idle_left = 1.0
@@ -109,42 +108,43 @@ func _run() -> void:
 	_test_pop_and_audio_gates(app)
 	app._duck_trick_index = 3
 	app._play_duck()
-	check(app._mode_menu_open() and app.duck._trick.is_empty() and app._duck_trick_index == 3,
+	check(app._mode_menu_open() and not app.duck._growth_action_manual and app._duck_trick_index == 3,
 		"Header Pip opens the game-mode menu without advancing its companion trick cycle")
 	app._hide_mode_menu()
 	var playing_phase: String = app.model.phase
 	app.model.phase = "won"
 	app._refresh()
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	app._layout()
 	await settle()
 	app.duck.settle()
 	app._play_duck()
-	check(app.duck._trick == "high-five", "Result Pip's tap cycle includes a new high five")
+	check(app.duck._idle_action == "wave", "The Lv3 result companion offers its unlocked wave")
 	app._play_duck()
-	check(app.duck._trick == "high-five" and app._duck_trick_index == 4,
+	check(app.duck._idle_action == "wave" and app._duck_trick_index == 4,
 		"A repeated result companion activation preserves the current action and next trick index")
-	app.duck._process(app.duck.TRICK_SECONDS)
+	app.duck._process(3.3)
 	app._play_duck()
-	check(app.duck._trick == "peekaboo", "The next result companion tap offers peekaboo")
-	app.duck._process(app.duck.TRICK_SECONDS)
+	check(app.duck._idle_action == "wave" and app._duck_trick_index == 5, "A completed wave releases the next deliberate Lv3 interaction")
+	app.duck._process(3.3)
 	app._play_duck()
-	check(app.duck._trick == "flutter", "The next result companion tap offers a flutter")
+	check(app.duck._idle_action == "wave" and app._duck_trick_index == 6, "Repeated completed interactions never offer a locked action")
 	app.duck.settle()
 	app.model.phase = playing_phase
 	app._refresh()
 	app._show_collection()
 	await settle()
 	app.duck.settle()
-	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3)
-		and app.duck.home_playground and app.duck._idle_action == "home-dance",
-		"Entering Home starts the loading-page dance within half a second without a tap")
-	_test_home_gates(app)
+	check(not app.duck.is_visible_in_tree() and not observe_idle(app, 20),
+		"The word catalog keeps the covered gameplay companion hidden and quiet")
 	app.on_page_hidden()
 	check(not observe_idle(app, 20), "Page lifecycle keeps the separate idle pause effective")
 	app.on_page_visible()
-	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3) and app.duck._idle_action == "home-dance",
-		"Returning to Home waits a short quiet beat before its dance resumes")
-	await _test_home_focus_headroom(app)
+	check(not app.duck.is_visible_in_tree() and not observe_idle(app, 20),
+		"Returning to the catalog cannot revive its covered companion")
+	app._hide_collection()
+	check(not observe_idle(app, 5.5) and observe_idle(app, 4),
+		"Returning to gameplay restarts a full quiet interval before Pip waves")
 	app.set_reduced_motion(true)
 	check(not observe_idle(app, 20), "Reduced motion suppresses unsolicited visual movement")
 	await _test_consumed_touches(app)
@@ -156,66 +156,6 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Pip engagement UI: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
-
-
-func _test_home_focus_headroom(app) -> void:
-	var original_size: Vector2i = root.size
-	var original_scroll: int = app._collection_scroll.scroll_vertical
-	var saved_toy: String = app.playroom_state.toy_id
-	var saved_medals: Dictionary = app.medal_progress.counts.duplicate(true)
-
-	for dimensions in [Vector2i(390, 568), Vector2i(960, 600)]:
-		root.size = dimensions
-		await settle()
-		app._collection_back.grab_focus()
-		var before_scroll: int = app._collection_scroll.scroll_vertical
-		check(before_scroll == 0 and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
-			"The fixed Home viewport keeps Pip visible at " + str(dimensions))
-		app.duck.grab_focus()
-		await settle()
-		var viewport_bounds: Rect2 = app._collection_scroll.get_global_rect()
-		var slot_bounds: Rect2 = app._collection_duck_slot.get_global_rect()
-		var jump_bounds := Rect2(slot_bounds.position - Vector2(0, 16), slot_bounds.size + Vector2(0, 16))
-		check(app.duck.has_focus() and app._collection_scroll.scroll_vertical == before_scroll
-			and slot_bounds.position.y - viewport_bounds.position.y >= 15.5
-			and viewport_bounds.grow(0.5).encloses(jump_bounds),
-			"Focusing Pip preserves its whole slot plus 16 logical pixels above the head at %s: viewport=%s slot=%s scroll=%d -> %d" % [
-				dimensions, viewport_bounds, slot_bounds, before_scroll, app._collection_scroll.scroll_vertical])
-		app.duck.react_in_room("jump")
-		app.duck._process(0.425)
-		check(app.duck._room_reaction == "jump" and app._collection_duck_slot.get_global_rect() == slot_bounds
-			and app._collection_scroll.get_global_rect().grow(0.5).encloses(jump_bounds),
-			"A jump at its peak keeps the revealed headroom and stable focus target at " + str(dimensions))
-		app.duck.settle()
-	check(app.playroom_state.toy_id == saved_toy and app.medal_progress.counts == saved_medals,
-		"Revealing and jumping with focused Pip changes no equipment or earned progress")
-	app._collection_back.grab_focus()
-	root.size = original_size
-	await settle()
-	app._collection_scroll.scroll_vertical = original_scroll
-
-
-func _test_home_gates(app) -> void:
-	var before: Array = [app.model.cards.duplicate(true), app.medal_progress.counts.duplicate(true),
-		app.playroom_state.toy_id, app._status_announcement, app._room.toy_button.position,
-		app._room.playground.duck_position]
-	check(observe_idle(app, 16) and app.duck._idle_action == "home-dance"
-		and [app.model.cards, app.medal_progress.counts, app.playroom_state.toy_id,
-			app._status_announcement, app._room.toy_button.position, app._room.playground.duck_position] == before
-		and not app.audio.voice.playing,
-		"Repeated Home dance loops change no game state, toy positions, announcements or speech")
-	play_looping_voice(app)
-	check(app.audio.voice.playing and not observe_idle(app, 12), "Home dancing yields while a word is playing")
-	app.audio.stop_voice()
-	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3) and app.duck._idle_action == "home-dance",
-		"Home dancing resumes after word playback ends and a short quiet beat")
-	touch(app, 0, true)
-	touch(app, 1, true)
-	touch(app, 0, false)
-	check(not observe_idle(app, 12), "Home dancing remains paused while the second finger is still down")
-	touch(app, 1, false)
-	check(not observe_idle(app, 0.2) and observe_idle(app, 0.3) and app.duck._idle_action == "home-dance",
-		"Lifting the final Home pointer restarts the dance after a short quiet beat")
 
 
 func _test_pop_and_audio_gates(app) -> void:
@@ -332,7 +272,7 @@ func _test_contextual_attention(app) -> void:
 	check(app.duck._attention == "thinking", "Returning to the selected Memory card restores its real context")
 	app._show_collection()
 	app._update_duck()
-	check(app.duck._attention.is_empty(), "Pip's room never inherits the covered Memory board's expression")
+	check(not app.duck.is_visible_in_tree() and app.duck._attention.is_empty(), "The word catalog hides and clears the covered Memory companion")
 	app._hide_collection()
 	app._memory.card_buttons[0].pressed.emit()
 	app._update_duck()

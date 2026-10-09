@@ -27,7 +27,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
 	check(app.MODES.keys() == ["match", "memory", "pop", "phrase"], "The available modes are Match, Memory, Voice Pop, and Phrase Builder")

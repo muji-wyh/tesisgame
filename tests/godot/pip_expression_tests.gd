@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Mascot = preload("res://scripts/duck_mascot.gd")
-const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
+const LEVELS := [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 const FACES := ["neutral", "listening", "thinking", "delighted", "proud", "encourage", "surprised", "sleepy", "wink", "blink"]
 const HAPPY_FACES := ["delighted", "wink", "proud"]
 const RUNTIME_CASES := ["neutral", "listening", "thinking", "curious", "greeting", "hit-start", "hit-middle", "hit-tail", "miss-start", "miss-tail"]
@@ -56,8 +56,7 @@ func _activity(duck) -> Array:
 	return [duck.pose, duck.speaking, duck.reduced_motion, duck.is_processing(),
 		duck._attention, duck.reaction_left, duck._reaction,
 		duck._idle_time, duck._speech_time, duck._idle_action, duck._idle_left,
-		duck._idle_wait, duck._idle_index, duck._trick, duck._trick_left,
-		duck._room_motion, duck._room_step, duck._room_reaction, duck._room_reaction_left,
+		duck._idle_wait, duck._idle_index,
 		duck._gameplay_reaction, duck._gameplay_left, duck._gameplay_seconds,
 		duck.expression_name()]
 
@@ -109,33 +108,19 @@ func _check_attention_and_priority(duck) -> void:
 		"Changing attention never restarts pronunciation or covers its speaking face")
 	duck.set_speaking(false)
 	check(duck.expression_name() == "listening", "Finishing pronunciation returns to the active attention face")
-	for motion in ["walk", "run"]:
-		duck.set_room_motion(motion)
-		duck._process(0.15)
-		var room_step: float = duck._room_step
+	duck.set_growth_level(12)
+	for action in ["peekaboo", "high-five", "dance-wave"]:
+		duck.settle()
 		duck.set_attention("listening")
-		check(duck._room_motion == motion and is_equal_approx(duck._room_step, room_step)
-			and duck.expression_name() != "listening",
-			"Explicit " + motion + " motion keeps its face and stride over passive attention")
-		duck.set_room_motion("")
-		check(duck.expression_name() == "listening" and duck._attention == "listening",
-			"Stopping " + motion + " restores the current attention expression")
-	for action in ["peekaboo", "high-five", "snack"]:
 		duck.perform_trick(action)
 		duck._process(0.15)
-		var remaining_trick: float = duck._trick_left
+		var remaining_action: float = duck._idle_left
 		duck.set_attention("thinking")
-		check(duck._trick == action and is_equal_approx(duck._trick_left, remaining_trick)
-			and duck.expression_name() != "thinking",
-			"An explicit " + action + " keeps its face and deadline over attention updates")
-		duck.clear_trick()
-	duck.react_in_room("pet")
-	duck._process(0.15)
-	var room_time: float = duck._room_reaction_left
-	duck.set_attention("listening")
-	check(duck._room_reaction == "pet" and is_equal_approx(duck._room_reaction_left, room_time)
-		and duck.expression_name() != "listening", "Direct petting retains priority over passive attention")
-	duck.clear_room_interaction()
+		check(duck._idle_action == action and is_equal_approx(duck._idle_left, remaining_action)
+			and duck.expression_name() != "thinking", "A manual " + action + " retains its face and deadline over passive attention")
+		duck._process(3.0)
+		check(duck._idle_action.is_empty() and duck.expression_name() == "thinking", "An explicit gesture finishes and returns to the latest attention context")
+		duck.settle()
 	duck.set_attention("")
 	check(duck._attention.is_empty() and duck.expression_name() == "neutral",
 		"Clearing attention returns to the ordinary resting face")
@@ -163,7 +148,7 @@ func _check_gameplay_expressions(duck) -> void:
 	duck.set_speaking(false)
 	duck.note_activity()
 	check(duck.expression_name() == current_face and is_equal_approx(duck._gameplay_left, remaining)
-		and duck.perform_trick("snack").is_empty(),
+		and duck.perform_trick("wave").is_empty(),
 		"Attention, hover, speech and greeting input cannot replace the winning result")
 	duck._process(1.25 * 0.47)
 	check(duck.expression_name() == "proud" and duck._gameplay_reaction == "happy",
@@ -243,17 +228,18 @@ func _check_wardrobes_and_bounds(duck) -> void:
 	duck.pressed.connect(record)
 	for scenario in ["listening", "thinking", "curious", "greeting", "hit-middle", "miss-tail"]:
 		_select_runtime_case(duck, scenario)
-		var before := _activity(duck)
-		for theme in THEMES:
-			duck.set_outfit_theme(theme)
-			check(_activity(duck) == before and duck.theme_id == theme,
+		var before := [duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()]
+		for level in LEVELS:
+			var theme := "Lv%d" % level
+			duck.set_growth_level(level)
+			check([duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()] == before and duck.growth_level == level,
 				"The " + theme + " wardrobe keeps the current " + scenario + " expression and its timing")
 			var sheets: Array[Texture2D] = [duck._expression_sheet, duck._expression_heads]
 			check(sheets.all(func(sheet: Texture2D) -> bool: return (sheet != null
 				and sheet.get_height() > 0 and sheet.get_width() == sheet.get_height() * FACES.size())),
 				"The " + theme + " wardrobe supplies ten aligned full-body and articulated-head cells")
-			duck.set_outfit_theme(theme)
-			check(sheets == [duck._expression_sheet, duck._expression_heads] and _activity(duck) == before,
+			duck.set_growth_level(level)
+			check(sheets == [duck._expression_sheet, duck._expression_heads] and [duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()] == before,
 				"Refreshing an unchanged wardrobe retains its expression resources and every deadline")
 			check(duck.get_rect() == bounds and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
 				"Facial expression updates retain Pip's exact input bounds")
@@ -315,7 +301,7 @@ func _check_rendered_faces(duck) -> void:
 	artwork.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	artwork.position = Vector2(PADDING, PADDING)
 	viewport.add_child(artwork)
-	var metadata := {"rows": THEMES, "atlas_columns": FACES, "runtime_columns": RUNTIME_CASES}
+	var metadata := {"rows": LEVELS, "atlas_columns": FACES, "runtime_columns": RUNTIME_CASES}
 	var manifest := FileAccess.open(directory + "/contact-sheets.json", FileAccess.WRITE)
 	check(manifest != null, "The expression contact sheets have an English row and column key")
 	if manifest != null:
@@ -329,10 +315,10 @@ func _check_rendered_faces(duck) -> void:
 		await _render_atlases(viewport, duck, artwork, edge, directory)
 		artwork.hide()
 		duck.show()
-		var montage := Image.create(cell * RUNTIME_CASES.size(), cell * THEMES.size(), false, Image.FORMAT_RGBA8)
+		var montage := Image.create(cell * RUNTIME_CASES.size(), cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
-		for row in range(THEMES.size()):
-			duck.set_outfit_theme(THEMES[row])
+		for row in range(LEVELS.size()):
+			duck.set_growth_level(LEVELS[row])
 			var frames: Array[PackedByteArray] = []
 			for column in range(RUNTIME_CASES.size()):
 				_select_runtime_case(duck, RUNTIME_CASES[column])
@@ -340,13 +326,13 @@ func _check_rendered_faces(duck) -> void:
 				frame.convert(Image.FORMAT_RGBA8)
 				var used: Rect2i = _visible_bounds(frame)
 				check(used.has_area() and Rect2i(1, 1, cell - 2, cell - 2).encloses(used),
-					"The actual " + THEMES[row] + " " + RUNTIME_CASES[column] + " mascot is complete at %d pixels" % edge)
+					"The actual " + ("Lv%d" % LEVELS[row]) + " " + RUNTIME_CASES[column] + " mascot is complete at %d pixels" % edge)
 				frames.append(frame.get_data())
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, row * cell))
 			check(frames[0] != frames[1] and frames[0] != frames[2] and frames[1] != frames[2],
-				"Rest, listening and thinking render distinct actual pixels in " + THEMES[row] + " at %d pixels" % edge)
+				"Rest, listening and thinking render distinct actual pixels in " + ("Lv%d" % LEVELS[row]) + " at %d pixels" % edge)
 			check(frames[5] != frames[6] and frames[6] != frames[7] and frames[8] != frames[9],
-				"Result faces visibly progress through their authored phases in " + THEMES[row] + " at %d pixels" % edge)
+				"Result faces visibly progress through their authored phases in " + ("Lv%d" % LEVELS[row]) + " at %d pixels" % edge)
 			await _check_rendered_reduced_motion(viewport, duck, edge)
 		check(montage.save_png(directory + "/runtime-%d.png" % edge) == OK,
 			"Actual %d-pixel expressions are saved for independent visual review" % edge)
@@ -361,10 +347,10 @@ func _render_atlases(viewport: SubViewport, duck, artwork: TextureRect, edge: in
 	duck.hide()
 	artwork.show()
 	for part in ["full", "heads"]:
-		var montage := Image.create(cell * FACES.size(), cell * THEMES.size(), false, Image.FORMAT_RGBA8)
+		var montage := Image.create(cell * FACES.size(), cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
-		for row in range(THEMES.size()):
-			duck.set_outfit_theme(THEMES[row])
+		for row in range(LEVELS.size()):
+			duck.set_growth_level(LEVELS[row])
 			var sheet: Texture2D = duck._expression_sheet if part == "full" else duck._expression_heads
 			var source_edge: float = sheet.get_height()
 			var frames: Array[PackedByteArray] = []
@@ -378,14 +364,14 @@ func _render_atlases(viewport: SubViewport, duck, artwork: TextureRect, edge: in
 				frame.convert(Image.FORMAT_RGBA8)
 				var used: Rect2i = _visible_bounds(frame)
 				check(used.has_area() and Rect2i(PADDING, PADDING, edge, edge).encloses(used),
-					"The " + THEMES[row] + " " + FACES[column] + " " + part + " atlas cell has isolated, visible artwork at %d pixels" % edge)
+					"The " + ("Lv%d" % LEVELS[row]) + " " + FACES[column] + " " + part + " atlas cell has isolated, visible artwork at %d pixels" % edge)
 				var pixels: PackedByteArray = frame.get_data()
-				check(not frames.has(pixels), "The " + THEMES[row] + " " + FACES[column] + " " + part
+				check(not frames.has(pixels), "The " + ("Lv%d" % LEVELS[row]) + " " + FACES[column] + " " + part
 					+ " expression has its own rendered pixels at %d pixels" % edge)
 				frames.append(pixels)
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, row * cell))
 		check(montage.save_png(directory + "/atlas-%s-%d.png" % [part, edge]) == OK,
-			"All ten " + part + " expressions and eight outfits are saved at %d pixels" % edge)
+			"All ten " + part + " expressions and ten growth appearances are saved at %d pixels" % edge)
 
 
 func _check_rendered_reduced_motion(viewport: SubViewport, duck, edge: int) -> void:

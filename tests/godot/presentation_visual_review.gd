@@ -27,7 +27,6 @@ func _run() -> void:
 		var app = load("res://scenes/main.tscn").instantiate()
 		Fixture.install(app, directory, str(layout.name) + ".cfg")
 		app.pop_reward_save_path = directory + "/" + str(layout.name) + "-pop-rewards.cfg"
-		app.playroom_save_path = directory + "/room.cfg"
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 		root.add_child(app)
 		app.audio.set_muted(true)
@@ -42,16 +41,7 @@ func _run() -> void:
 		app.choose_mode("memory")
 		await capture(prefix + "memory")
 		app._show_collection()
-		await capture(prefix + "room")
-		app._show_age_catalog()
-		await capture(prefix + "vocabulary")
-		app._hide_age_catalog()
-		app._show_leaderboard("players", false)
-		await capture(prefix + "players")
-		app._hide_leaderboard()
-		app._show_leaderboard("boards", false)
-		await capture(prefix + "leaderboard")
-		app._hide_leaderboard()
+		await capture(prefix + "growth")
 		app._hide_collection()
 		app.choose_mode("match")
 		for word: Dictionary in app.model.lesson_words:
@@ -61,7 +51,6 @@ func _run() -> void:
 		await capture(prefix + "match-reward")
 		app.new_round(105)
 		app.choose_mode("pop")
-		await capture(prefix + "player-picker")
 		Fixture.choose_pop_player(app)
 		await capture(prefix + "microphone")
 		app._pop.set_listening(true, true, "Listening.")
@@ -70,7 +59,7 @@ func _run() -> void:
 		await capture(prefix + "voice-pop")
 		app._pop._advance_game(app._pop.game.remaining + 1)
 		await capture(prefix + "voice-pop-result")
-		app._leaderboard_result["chest_count"] = 2
+		app._round_result["chest_count"] = 2
 		app._show_pop_rewards()
 		await capture(prefix + "voice-pop-treasures")
 		app._hide_pop_rewards()

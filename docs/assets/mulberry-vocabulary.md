@@ -1,9 +1,13 @@
-# Expanded vocabulary artwork
+# Expanded vocabulary artwork: original 900-word batch
 
 The October 2026 expansion adds 300 words to each existing age level. All 350
 earlier entries retain their IDs, levels, pictures, and recordings. The resulting
 catalog contains 448 basic, 412 growing, and 390 advanced words (1,250 total).
-The age bands are editorial guides, not a standardized proficiency assessment.
+The age bands were editorial guides, not a standardized proficiency assessment.
+The subsequent [growth curriculum](../vocabulary/growth-curriculum.md) reorganizes
+all entries into ten tiers and adds 300 more words. This document and its manifest
+remain the source record for the original 900-picture batch; the additional 35
+pictures have a [separate source record](growth-vocabulary.md).
 
 ## Sources and license
 

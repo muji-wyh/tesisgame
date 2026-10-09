@@ -6,6 +6,20 @@ const Style = preload("res://scripts/ui_style.gd")
 var failures := 0
 var checks := 0
 
+class Storage extends RefCounted:
+	var text: Variant = null
+	var readable: bool = true
+	var writable: bool = true
+
+	func presentationState() -> Variant:
+		return text if readable else false
+
+	func savePresentationState(value: String) -> bool:
+		if not writable:
+			return false
+		text = value
+		return true
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -16,6 +30,7 @@ func check(value: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 func _run() -> void:
+	_test_host_preferences()
 	var directory := "user://presentation-test-%s" % Time.get_ticks_usec()
 	DirAccess.make_dir_recursive_absolute(directory)
 	var preferences := Preferences.new()
@@ -55,3 +70,35 @@ func _run() -> void:
 	await process_frame
 	print("Presentation: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+func _test_host_preferences() -> void:
+	var storage := Storage.new()
+	var preferences := Preferences.new(storage)
+	preferences.load_preferences(true)
+	check(preferences.reduced_motion and not preferences.has_motion_override,
+		"Missing browser preferences keep the system motion default")
+	preferences.preferred_theme = "candy"
+	preferences.muted = true
+	check(preferences.save_preferences(), "A verified host write reports successful preference persistence")
+	var decoded: Dictionary = JSON.parse_string(storage.text)
+	check(decoded.preferred_theme == "candy" and decoded.muted and not decoded.has("reduced_motion"),
+		"Browser saves preserve the theme and mute state without inventing a motion override")
+	preferences.reduced_motion = false
+	preferences.has_motion_override = true
+	check(preferences.save_preferences(), "Explicit browser motion preference can be saved")
+	var restored := Preferences.new(storage)
+	restored.load_preferences(true)
+	check(restored.preferred_theme == "candy" and restored.muted and restored.has_motion_override and not restored.reduced_motion,
+		"Theme, mute and explicit motion preferences survive a host-backed reload")
+	var previous: String = storage.text
+	storage.writable = false
+	restored.preferred_theme = "space"
+	check(not restored.save_preferences() and storage.text == previous,
+		"Failed host persistence leaves earlier preferences intact and reports failure")
+	storage.writable = true
+	check(restored.save_preferences(), "The same in-memory choices can be retried after storage recovers")
+	storage.readable = false
+	var unavailable := Preferences.new(storage)
+	unavailable.load_preferences(true)
+	check(unavailable.reduced_motion and not unavailable.has_motion_override and unavailable.preferred_theme.is_empty(),
+		"Unreadable browser preferences use presentation defaults without inventing an override")

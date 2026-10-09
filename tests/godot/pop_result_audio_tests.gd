@@ -37,7 +37,6 @@ func _result_lifecycle() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(390, 844)
 	root.add_child(app)

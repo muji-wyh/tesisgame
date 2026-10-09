@@ -192,7 +192,7 @@ const patches = [
     callback(error,result);
   }
   req.onblocked=()=>{
-    var error=new Error("Close other Pip and Words game tabs, then try again to open your saved progress.");
+    var error=new Error("Close other Grow with Pip game tabs, then try again to open your saved progress.");
     error.name="StorageBlockedError";
     finish(error);
   };

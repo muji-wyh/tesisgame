@@ -29,7 +29,6 @@ func _run() -> void:
 	_check_idle_actions(duck)
 	if DisplayServer.get_name() != "headless":
 		await _check_drawn_idle_dances(duck)
-	_check_room_actions(duck)
 	duck.set_speaking(true)
 	check(duck.pose == 1, "Actual speech opens Pip's beak immediately")
 	duck._process(0.15)
@@ -57,7 +56,6 @@ func _run() -> void:
 		var directory := "user://duck-test-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 		DirAccess.make_dir_recursive_absolute(directory)
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-		app.playroom_save_path = directory + "/playroom.cfg"
 		app._mode_id = "match"
 		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 		# Godot consumes Escape to dismiss a hovered tooltip before scene input.
@@ -76,12 +74,13 @@ func _run() -> void:
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and (app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3,
 			"Opening Pip's game-mode menu never changes game progress")
-		check(app._mode_menu_open() and not app.audio.voice.playing and app.duck._trick.is_empty(),
+		check(app._mode_menu_open() and not app.audio.voice.playing,
 			"The header Pip opens game modes without starting a companion trick or greeting")
 		app._hide_mode_menu()
 		var playing_phase: String = app.model.phase
 		app.model.phase = "won"
 		app._refresh()
+		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 		app._layout()
 		await process_frame
 		await process_frame
@@ -92,7 +91,7 @@ func _run() -> void:
 			"Playing with the result companion never changes earned game progress")
 		check(not app.audio.voice.playing and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing),
 			"Match result Pip performs its visual trick without a duck sound")
-		check(app.duck._trick == "dance" and app.duck._room_reaction.is_empty(), "The result companion still performs its original first trick")
+		check(app.duck._idle_action == "wave", "The Lv3 result companion performs its unlocked greeting")
 		app.audio.halt()
 		app.duck.settle()
 		app.model.phase = playing_phase
@@ -119,27 +118,25 @@ func _run() -> void:
 		app._show_collection()
 		await process_frame
 		app._update_duck()
-		check(app.duck.visible and not app.duck.speaking and app.duck.get_global_rect().intersects(app._collection_duck_slot.get_global_rect()),
-			"The collection duck stops speaking about the covered game picture")
+		check(not app.duck.is_visible_in_tree() and not app.duck.speaking,
+			"The word catalog hides the covered game's companion and stops its speech")
 		app.duck.pressed.emit()
 		app._update_duck()
-		check(app._room.playground.interaction_kind == "poke" and app.duck._room_reaction in ["jump", "shy", "bonk"]
-			and app.duck.pose != 0 and app.duck._trick.is_empty() and app.duck.speaking
-			and app.audio.voice.playing and app.audio.voice.stream.resource_path.begins_with("res://assets/audio/pip/"),
-			"The room duck keeps its loading-page response and Poke event while speaking the imported greeting")
+		check(app.duck._idle_action.is_empty() and not app.audio.voice.playing,
+			"A hidden companion cannot start an action or greeting over the word catalog")
 		app.on_page_hidden()
 		check(not app.duck.speaking, "Hiding the page silences Pip along with the audio")
 		if app.duck.has_method("set_idle_paused"):
 			check(not app.duck.is_processing(), "Background pages stop Pip's idle animation loop")
 			app.on_page_visible()
-			check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._collection_duck_slot
+			check(not app.duck.is_visible_in_tree()
 				and not app.duck.speaking and app.audio.active and app.audio.music.playing
 				and not app.audio.voice.playing and not app.audio.effect.playing,
-				"Returning to Pip's room restores its mascot and music without replaying old speech or effects")
+				"Returning to the catalog restores music without revealing Pip or replaying old speech")
 			await process_frame
 			await process_frame
-			check(app.duck.is_processing() and app.audio.music.playing and not app.audio.voice.playing,
-				"Returning to the visible room resumes mascot activity and music without another greeting")
+			check(not app.duck.is_processing() and app.audio.music.playing and not app.audio.voice.playing,
+				"The catalog keeps its covered companion suspended after foreground recovery")
 		app._hide_collection()
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
@@ -186,18 +183,19 @@ func _check_idle_actions(duck: Button) -> void:
 	var children: int = duck.get_child_count()
 	var stable_bounds := true
 	var gestures: Array[String] = []
+	var previous := ""
 	for step in range(1800):
 		duck._process(0.1)
 		stable_bounds = stable_bounds and duck.get_rect() == original_rect and duck.scale == Vector2.ONE \
 			and is_zero_approx(duck.rotation) and duck.get_child_count() == children
 		var action: String = duck._idle_action
-		if not action.is_empty() and (gestures.is_empty() or gestures.back() != action):
+		if not action.is_empty() and previous.is_empty():
 			gestures.append(action)
-		if gestures.size() == 14:
+		previous = action
+		if gestures.size() == 4:
 			break
-	check(gestures.size() == 14 and ["look", "stretch", "wave", "preen", "hop", "high-five", "peekaboo",
-		"dance-wave", "dance-sway", "dance-hop"].all(func(action: String) -> bool: return gestures.has(action)),
-		"Fourteen quiet invitations cover the three dances and every existing small gesture")
+	check(gestures == ["wave", "wave", "wave", "wave"],
+		"The initial companion offers only the first unlocked greeting during quiet intervals")
 	check(stable_bounds, "Autonomous motion preserves the button hit target and creates no effect or audio nodes")
 	duck.set_speaking(true)
 	check(duck._idle_action.is_empty(), "Pronunciation immediately interrupts idle gestures")
@@ -207,9 +205,9 @@ func _check_idle_actions(duck: Button) -> void:
 	duck.set_speaking(false)
 	duck.react("happy")
 	check(duck._idle_action.is_empty() and duck.pose == 3, "Player feedback takes priority over autonomous animation")
-	duck.perform_trick("snack")
+	duck.perform_trick("wave")
 	duck._process(0.3)
-	check(duck._idle_action.is_empty() and duck._trick == "snack", "An explicit trick stays in charge")
+	check(duck._idle_action == "wave" and duck._growth_action_manual, "An explicit trick stays in charge")
 	duck.settle()
 	duck._process(0.2)
 	check(duck._idle_action.is_empty(), "Reset leaves a quiet interval before the next autonomous action")
@@ -276,20 +274,15 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 	duck.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	duck.settle()
 	duck.set_proactive_allowed(true)
+	duck.set_growth_level(12)
 	var resting_image: Image = await _capture_dance(viewport, duck)
 	check(resting_image.save_png(evidence_directory + "/idle.png") == OK, "The original resting mascot is saved for visual comparison")
 	var resting: PackedByteArray = resting_image.get_data()
 	var original_rect: Rect2 = duck.get_rect()
 	var seen: Array[String] = []
-	for invitation in range(14):
-		duck.note_activity()
-		for step in range(200):
-			duck._process(0.05)
-			if not duck._idle_action.is_empty():
-				break
-		var kind: String = duck._idle_action
-		if not kind.begins_with("dance-") or seen.has(kind):
-			continue
+	for kind in ["dance-wave", "dance-sway", "dance-hop"]:
+		duck.settle()
+		check(duck.perform_growth_action(kind), kind + " is unlocked for the mature companion")
 		seen.append(kind)
 		# The first real rendered frame must retain Pip's complete resting shape.
 		# Tolerate small layering/filtering differences, but reject atlas crop/scale errors.
@@ -321,12 +314,12 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 		check(frames.size() >= 3 and not frames.has(resting), kind + " renders several distinct moving poses throughout its phrase")
 		check(lower_frames.size() >= 3, kind + " visibly moves wings, body or feet rather than only blinking")
 		check(bounds_stable, kind + " keeps the input bounds fixed throughout actual rendered motion")
-		duck.note_activity()
+		duck.settle()
 		check((await _capture_dance(viewport, duck)).get_data() == resting,
-			"Meaningful activity removes every " + kind + " layer from the rendered mascot")
+			"Explicit cleanup removes every " + kind + " layer from the rendered mascot")
 		if seen.size() == 3:
 			break
-	check(seen.size() == 3, "Actual rendered frames cover all three scheduled dances")
+	check(seen.size() == 3, "Actual rendered frames cover all three retained articulated dances")
 	duck.set_reduced_motion(true)
 	var still: PackedByteArray = (await _capture_dance(viewport, duck)).get_data()
 	for step in range(240):
@@ -335,6 +328,7 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 		"Reduced motion keeps the actual mascot pixels still beyond the next invitation interval")
 	duck.set_reduced_motion(false)
 	duck.settle()
+	duck.set_growth_level(3)
 	duck.reparent(root)
 	duck.position = original_position
 	duck.size = original_size
@@ -342,82 +336,6 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 	duck.set_process(original_processing)
 	viewport.queue_free()
 	await process_frame
-
-
-func _check_room_actions(duck: Button) -> void:
-	var methods := ["set_room_motion", "react_in_room", "clear_room_interaction"]
-	for method in methods:
-		check(duck.has_method(method), "Pip supports the room interaction API: " + method)
-	if not methods.all(func(method: String) -> bool: return duck.has_method(method)):
-		return
-	var original_rect: Rect2 = duck.get_rect()
-	duck.set_room_motion("walk", -1.0)
-	duck._process(0.2)
-	var walking_step: float = duck._room_step
-	check(walking_step > 0.0 and duck._room_direction < 0.0, "Walking advances visible footsteps in the requested direction")
-	duck.clear_room_interaction()
-	duck.set_room_motion("run", 1.0)
-	duck._process(0.2)
-	check(duck._room_step > walking_step and duck._room_direction > 0.0, "Running has a faster step cadence and can turn right")
-	var running_step: float = duck._room_step
-	duck.set_room_motion("run", -1.0)
-	check(duck._room_step == running_step and duck._room_direction < 0.0, "Repeated movement updates keep the current stride while turning")
-	duck.set_room_motion("unknown")
-	check(duck._room_motion == "run", "Unknown motion cannot interrupt a valid room movement")
-	for step in range(150):
-		duck._process(0.1)
-	check(duck._idle_action.is_empty() and duck._room_motion == "run", "Room locomotion keeps autonomous gestures out of the way")
-	duck.set_room_motion("")
-	check(duck._room_motion.is_empty(), "Stopping the room path stops the walking pose")
-	for kind in ["pet", "poke", "catch"]:
-		duck.set_room_motion("walk")
-		duck.react_in_room(kind)
-		var expected_pose: int = 2 if kind == "pet" else 1 if kind == "poke" else 3
-		check(duck.pose == expected_pose and duck._room_reaction == kind, kind + " immediately has its own readable expression")
-		check(duck._room_motion.is_empty() and duck._idle_action.is_empty(), kind + " takes priority over walking and idle gestures")
-		duck._process(0.1)
-		check(duck._room_reaction == kind and duck.pose == expected_pose, kind + " stays visible long enough to understand")
-		for press in range(20):
-			duck.react_in_room(kind)
-		for step in range(30):
-			duck._process(0.1)
-		check(duck._room_reaction.is_empty() and duck._idle_action.is_empty(), kind + " repeated input replaces one short reaction and then rests")
-	duck.react_in_room("pet")
-	duck.react_in_room("unknown")
-	check(duck._room_reaction == "pet", "Unknown reactions leave the current readable feedback intact")
-	duck.set_reduced_motion(true)
-	for kind in ["pet", "poke", "catch"]:
-		duck.react_in_room(kind)
-		var expected_pose: int = 2 if kind == "pet" else 1 if kind == "poke" else 3
-		for step in range(20):
-			duck._process(0.1)
-		check(duck.pose == expected_pose and duck._room_reaction == kind and not duck.is_processing(), kind + " reduced motion keeps a distinct static response without an animation loop")
-	duck.clear_room_interaction()
-	check(duck.pose == 0 and duck._room_motion.is_empty() and duck._room_reaction.is_empty(), "Leaving a reduced-motion room restores the plain header mascot")
-	duck.react_in_room("pet")
-	duck.set_reduced_motion(false)
-	check(duck._room_reaction.is_empty(), "Turning animation back on cannot leave a timeless reduced-motion reaction blocking idle")
-	for cleanup in ["clear", "settle", "hidden", "paused"]:
-		duck.set_room_motion("run")
-		duck.react_in_room("catch")
-		match cleanup:
-			"clear": duck.clear_room_interaction()
-			"settle": duck.settle()
-			"hidden": duck.hide()
-			"paused": duck.set_idle_paused(true)
-		check(duck._room_motion.is_empty() and duck._room_reaction.is_empty(), cleanup + " clears room activity before returning to the header")
-		if cleanup in ["hidden", "paused"]:
-			duck.set_room_motion("run")
-			duck.react_in_room("poke")
-			check(duck._room_motion.is_empty() and duck._room_reaction.is_empty(), cleanup + " rejects late room input until the mascot is active again")
-		if cleanup == "hidden": duck.show()
-		if cleanup == "paused": duck.set_idle_paused(false)
-		duck._process(0.1)
-		check(duck.pose == 0 and duck._idle_action.is_empty(), cleanup + " resumes quietly without replaying the room response")
-	check(duck.get_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation), "Room drawing never moves, rotates or scales the actual mascot hit target")
-	duck.react("happy")
-	check(duck.pose == 3 and duck.reaction_left > 0.0, "The ordinary game greeting still works after all room interactions")
-	duck.settle()
 
 
 func _check_quiet_side_effects(app, directory: String) -> void:
@@ -432,51 +350,37 @@ func _check_quiet_side_effects(app, directory: String) -> void:
 	var files_before := _saved_files(directory)
 	var events: Array[String] = []
 	var record_press := func() -> void: events.append("pressed")
-	var record_room := func(_kind: String, _message: String) -> void: events.append("interaction")
-	var record_start := func() -> void: events.append("interaction_started")
-	var record_toy := func() -> void: events.append("toy_tapped")
 	app.duck.pressed.connect(record_press)
-	var playground = app._room.playground
-	playground.interaction.connect(record_room)
-	playground.interaction_started.connect(record_start)
-	playground.toy_tapped.connect(record_toy)
 	app.duck.settle()
 	app.duck.set_proactive_allowed(true)
 	app.duck.note_activity()
 	var invitations := 0
-	var dances: Array[String] = []
+	var offered: Array[String] = []
 	var previous := ""
 	for step in range(1000):
 		app.duck._process(0.1)
 		if not app.duck._idle_action.is_empty() and previous.is_empty():
 			invitations += 1
-			if app.duck._idle_action.begins_with("dance-") and not dances.has(app.duck._idle_action):
-				dances.append(app.duck._idle_action)
+			if not offered.has(app.duck._idle_action):
+				offered.append(app.duck._idle_action)
 		previous = app.duck._idle_action
-	check(invitations >= 5 and dances.size() == 3, "The integrated mascot actually performs all three dances among its quiet invitations")
+	check(invitations >= 5 and offered == ["wave"], "The integrated Lv3 mascot repeatedly offers only its unlocked greeting")
 	check(_quiet_state(app) == state_before and _saved_files(directory) == files_before,
-		"Quiet invitations never alter progress, hints, toy stages, user choices or saved files")
+		"Quiet invitations never alter learning progress, hints, rewards or saved files")
 	check(events.is_empty() and labels.map(func(label: Label) -> String: return label.text) == text_before,
-		"Quiet invitations emit no action, room message, status caption or toy activation")
+		"Quiet invitations emit no button activation or status caption")
 	check(not app.audio.active and not app.duck.speaking
 		and players.map(func(player: AudioStreamPlayer) -> Array: return [player.playing, player.stream]) == audio_before,
 		"Quiet invitations never start audio, speech or a pronunciation")
 	app.duck.pressed.disconnect(record_press)
-	playground.interaction.disconnect(record_room)
-	playground.interaction_started.disconnect(record_start)
-	playground.toy_tapped.disconnect(record_toy)
 	app.duck.note_activity()
 	app.duck.set_proactive_allowed(allowed_before)
 
 
 func _quiet_state(app) -> Array:
-	var room = app._room
-	var state = app.playroom_state
 	return [app.model.cards.duplicate(true), app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes,
 		app.model.hints_remaining, app.medal_progress.counts.duplicate(true),
-		state.toy_id, state.backdrop_id, state.favorite_id, state.goal_item_id,
-		state.collected_word_ids.duplicate(), state.displayed_word_id, state.recent_topic_ids.duplicate(),
-		room._stage, room.playground.duck_position, room.playground.toy_phase]
+		app.growth.snapshot(), app.growth._streaks.duplicate(true)]
 
 
 func _saved_files(directory: String) -> Dictionary:

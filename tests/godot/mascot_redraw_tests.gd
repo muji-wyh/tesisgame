@@ -37,7 +37,6 @@ func reset() -> void:
 	duck.set_idle_paused(false)
 	duck.set_reduced_motion(false)
 	duck.set_proactive_allowed(false)
-	duck.set_home_playground(false)
 	duck.settle()
 	await settle()
 
@@ -50,6 +49,7 @@ func _run() -> void:
 	duck.draw.connect(func() -> void: draws += 1)
 	root.add_child(duck)
 	duck.size = Vector2(112, 112)
+	duck.set_growth_level(12)
 	await reset()
 	check(draws > 0, "The fixture observes real CanvasItem redraws")
 	await _check_discrete_frames()
@@ -85,16 +85,13 @@ func _check_discrete_frames() -> void:
 
 
 func _check_continuous_frames() -> void:
-	for action in ["curious", "happy", "dance", "bubbles", "walk", "pet", "bonk", "success", "miss", "idle", "home"]:
+	for action in ["curious", "happy", "wave", "peekaboo", "high-five", "dance-wave", "dance-hop", "success", "miss", "idle"]:
 		await reset()
 		match action:
 			"curious", "happy": duck.react(action)
-			"dance", "bubbles": duck.perform_trick(action)
-			"walk": duck.set_room_motion("walk")
-			"pet", "bonk": duck.react_in_room(action)
+			"wave", "peekaboo", "high-five", "dance-wave", "dance-hop": duck.perform_trick(action)
 			"success", "miss": duck.react_gameplay(action == "success")
-			"idle", "home":
-				duck.set_home_playground(action == "home")
+			"idle":
 				duck.set_proactive_allowed(true)
 				duck._idle_wait = 0.01
 				await tick(0.02)
@@ -111,19 +108,19 @@ func _check_continuous_frames() -> void:
 		"A reaction's final clearing frame redraws even when the sheet pose stays unchanged")
 	check(await tick(0.02) == 0, "The cleared reaction returns to cached idle drawing")
 	await reset()
-	duck.perform_trick("bubbles")
+	duck.perform_trick("wave")
 	await settle()
-	duck._trick_left = 0.001
-	check(await tick(0.02) > 0 and duck._trick.is_empty(), "The final trick frame removes every transient effect")
+	duck._idle_left = 0.001
+	check(await tick(0.02) > 0 and duck._idle_action.is_empty(), "The final trick frame removes every transient effect")
 	check(await tick(0.02) == 0, "A completed trick no longer causes continuous redraws")
 
 
 func _check_explicit_changes() -> void:
 	await reset()
 	var before: int = draws
-	duck.set_outfit_theme("winter")
+	duck.set_growth_level(11)
 	await settle()
-	check(draws > before, "An explicit wardrobe change redraws a quiet mascot")
+	check(draws > before, "An earned growth appearance change redraws a quiet mascot")
 	before = draws
 	duck.size += Vector2(12, 12)
 	await settle()

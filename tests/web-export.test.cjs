@@ -5,11 +5,11 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 
-test('Pip and Words branding keeps the existing internal save identity', () => {
+test('Grow with Pip branding keeps the existing internal save identity', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
-  assert.match(shell, /<title>Pip and Words<\/title>/);
-  assert.match(shell, /id="loading-title">Pip and Words<\/h1>/);
-  assert.match(shell, /aria-label="Pip and Words word game"/);
+  assert.match(shell, /<title>Grow with Pip<\/title>/);
+  assert.match(shell, /id="loading-title">Grow with Pip<\/h1>/);
+  assert.match(shell, /aria-label="Grow with Pip word game"/);
   const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
   assert.match(project, /^config\/name="Word Buddies"$/m);
   assert.match(shell, /wordBuddies\.medalProgress/);
@@ -38,8 +38,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
-  assert.match(preset, /html\/experimental_virtual_keyboard=true/,
-    'Touch devices need the native DOM input bridge to open their software keyboard');
+  assert.match(preset, /html\/experimental_virtual_keyboard=false/,
+    'The removed profile editor no longer requires the native keyboard bridge');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
   for (const word of JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))) {
     for (const source of [word.image, word.audio]) {
@@ -220,7 +220,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 105);
+  assert.equal(required.length, 399);
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');
@@ -451,9 +451,9 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   assert.equal(fs.readFileSync(path.join(directory, 'keep.txt'), 'utf8'), 'unrelated file');
   files['index.js'] = Buffer.from('changed Godot template');
   writeExport();
-  const beforeFailure = new Map(fs.readdirSync(directory).map(name => [name, fs.readFileSync(path.join(directory, name))]));
+  const beforeFailure = new Map(fs.readdirSync(directory, { recursive: true }).filter(name => fs.statSync(path.join(directory, name)).isFile()).map(name => [name, fs.readFileSync(path.join(directory, name))]));
   assert.throws(() => packageWebExport(directory), /Godot Web startup patch/);
-  assert.deepEqual(new Map(fs.readdirSync(directory).map(name => [name, fs.readFileSync(path.join(directory, name))])), beforeFailure,
+  assert.deepEqual(new Map(fs.readdirSync(directory, { recursive: true }).filter(name => fs.statSync(path.join(directory, name)).isFile()).map(name => [name, fs.readFileSync(path.join(directory, name))])), beforeFailure,
     'An unknown engine must fail before overwriting or deleting any export file');
   const config = JSON.parse(fs.readFileSync(path.join(root, 'web', 'staticwebapp.config.json'), 'utf8'));
   assert.equal(config.globalHeaders['Cache-Control'], 'no-cache', 'HTML must discover updated asset names');
@@ -461,6 +461,55 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   for (const route of ['/engine-*', '/game-*']) {
     assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
       'public, max-age=31536000, immutable');
+  }
+});
+
+test('Pip growth preview packaging preserves real assets and excludes source caches and stale review helpers', t => {
+  const fixture = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'pip-growth-export-'));
+  t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
+  const source = path.join(fixture, 'web/preview/pip-growth');
+  const directory = path.join(fixture, 'build/web');
+  const output = path.join(directory, 'preview/pip-growth');
+  const original = path.join(root, 'web/preview/pip-growth');
+  const write = (base, name, bytes) => {
+    const filename = path.join(base, name);
+    fs.mkdirSync(path.dirname(filename), { recursive: true });
+    fs.writeFileSync(filename, bytes);
+  };
+  // Keep all cache and stale-output fixtures outside the real source and export.
+  for (const name of ['package-web.cjs', 'patch-web-engine.cjs', 'ui-click-audio.cjs', 'chest-reference-audio.cjs']) {
+    write(fixture, `tools/${name}`, fs.readFileSync(path.join(root, 'tools', name)));
+  }
+  const catalog = JSON.parse(fs.readFileSync(path.join(original, 'stages.json'), 'utf8'));
+  assert.equal(catalog.stages.length, 10);
+  const shipped = ['index.html', 'preview.js', 'preview.css', 'stages.json',
+    'Nunito-600.ttf', 'Nunito-800.ttf', 'FONT-LICENSE.txt', 'audio/manifest.json',
+    ...catalog.stages.flatMap(stage => [...Object.values(stage.previewArt), stage.newVoice.previewPath])].sort();
+  for (const name of shipped) write(source, name, fs.readFileSync(path.join(original, name)));
+  const helpers = ['.gitignore', 'generate.cjs', 'verify.cjs', 'review.cjs'];
+  for (const name of helpers) {
+    write(source, name, fs.readFileSync(path.join(original, name)));
+    write(output, name, 'stale helper from a previous export');
+  }
+  write(source, '.voice-cache/recording.mp3', 'private voice generation cache');
+  write(source, 'review-output/desktop.png', 'local review capture');
+  write(directory, 'index.html', '<script src="index.js"></script><script>const config = {};</script>');
+  for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
+    write(directory, `index.${suffix}`, suffix === 'js' ? startupFixture : suffix);
+  }
+
+  require(path.join(fixture, 'tools/package-web.cjs')).packageWebExport(directory);
+
+  const actual = fs.readdirSync(output, { recursive: true })
+    .filter(name => fs.statSync(path.join(output, name)).isFile())
+    .map(name => name.split(path.sep).join('/')).sort();
+  assert.deepEqual(actual, shipped, 'Only preview pages, artwork, voices and their source notices should ship');
+  for (const name of shipped) {
+    assert.deepEqual(fs.readFileSync(path.join(output, name)), fs.readFileSync(path.join(original, name)),
+      `Keep the real preview asset unchanged: ${name}`);
+  }
+  for (const name of [...helpers, '.voice-cache', 'review-output']) {
+    assert.equal(fs.existsSync(path.join(output, name)), false, `Do not publish ${name}`);
   }
 });
 

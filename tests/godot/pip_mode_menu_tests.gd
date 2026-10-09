@@ -100,7 +100,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	PlayerFixture.install(app, directory)
 	root.add_child(app)
 	await settle()
@@ -118,12 +117,10 @@ func _run() -> void:
 	await _check_mode_selection(app)
 	await _check_lifecycle(app)
 	await _check_layout(app)
-	await _check_pop_picker_header(app)
-	await _check_finished_picker_room_return(app)
+	await _check_direct_pop_entry(app)
 	app.audio.halt()
 	app.queue_free()
 	await process_frame
-	await _check_onboarding_header()
 	for filename in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory + "/" + filename)
 	DirAccess.remove_absolute(directory)
@@ -197,8 +194,8 @@ func _check_mode_selection(app) -> void:
 		check(app._mode_menu.visible, "Pip opens the chooser from " + app._mode_id)
 		await _tap(_choice(app, id).get_global_rect().get_center())
 		if id == "pop":
-			check(not app._mode_menu.visible and app._leaderboard_overlay.visible,
-				"Voice Pop closes its chooser before presenting the existing player selection")
+			check(not app._mode_menu.visible and app._pop.is_visible_in_tree(),
+				"Voice Pop closes its chooser and opens the microphone gate directly")
 			PlayerFixture.choose_pop_player(app)
 			await settle()
 		check(app._mode_id == id and not app._mode_menu.visible,
@@ -301,7 +298,7 @@ func _check_lifecycle(app) -> void:
 	app._show_collection()
 	await settle()
 	check(app.collection_page.visible and not app._mode_menu.visible,
-		"Opening Pip's room closes its gameplay mode popover")
+		"Opening the growth notebook closes the gameplay mode popover")
 	app._show_mode_menu()
 	check(not app._mode_menu.visible, "The room cannot open a second gameplay menu behind itself")
 	app._hide_collection()
@@ -345,168 +342,28 @@ func _check_layout(app) -> void:
 		await settle()
 
 
-func _picker_player(app) -> Button:
-	var player_id: String = str(app.leaderboard_state.profiles[0].id)
-	return app._leaderboard_panel.find_child("LeaderboardPlayer_" + player_id, true, false) as Button
-
-
-func _check_pop_picker_header(app) -> void:
-	for dimensions in [Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 900), Vector2i(320, 320)]:
+func _check_direct_pop_entry(app) -> void:
+	for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 900)]:
 		root.size = dimensions
+		app.choose_mode("match")
+		app.choose_mode("pop")
 		await settle()
-		var match_header: Rect2 = app._header.get_global_rect()
-		var match_pip: Rect2 = app.duck.get_global_rect()
-		var match_more: Rect2 = app.collection_button.get_global_rect()
-		await _tap(match_pip.get_center())
-		await _tap(_choice(app, "pop").get_global_rect().get_center())
-		check(app._pop_picker_open() and not app._mode_menu_open(),
-			"Selecting Voice Pop opens its player picker beneath the shared header at " + str(dimensions))
-		var viewport: Rect2 = app.get_global_rect()
-		var picker: Rect2 = app._leaderboard_overlay.get_global_rect()
-		var scroll: Rect2 = app._leaderboard_scroll.get_global_rect()
-		var scale: float = app.Style.ui_scale(app)
-		check(app._header.get_global_rect().is_equal_approx(match_header)
-			and app.duck.get_global_rect().is_equal_approx(match_pip)
-			and app.collection_button.get_global_rect().is_equal_approx(match_more),
-			"Voice Pop player selection retains Match's exact Pip and More header placement at " + str(dimensions))
-		check(app.duck.is_visible_in_tree() and app._valid_focus(app.duck)
-			and app.collection_button.is_visible_in_tree() and app._valid_focus(app.collection_button),
-			"Pip and More remain visible and keyboard reachable before choosing a player at " + str(dimensions))
-		check(viewport.grow(1).encloses(picker) and picker.position.y >= match_header.end.y - 1
-			and picker.size.y > 0 and not picker.intersects(match_pip) and not picker.intersects(match_more),
-			"The player picker occupies the body without covering the shared header at " + str(dimensions))
-		check(picker.grow(1).encloses(scroll) and scroll.size.x > 0 and scroll.size.y > 0
-			and not app._leaderboard_close.is_visible_in_tree(),
-			"The player list keeps a usable scroll viewport without a duplicate Back header at " + str(dimensions))
-		check(not app._pop.interaction_allowed.call() and not app._valid_focus(app._pop.retry_button),
-			"Keeping header navigation available does not expose underlying Voice Pop gameplay")
-		var player := _picker_player(app)
-		check(is_instance_valid(player) and app._valid_focus(player)
-			and player.size.x * scale >= 44 and player.size.y * scale >= 44,
-			"The player avatar remains a focusable touch target at " + str(dimensions))
-		if is_instance_valid(player):
-			player.grab_focus()
-			app._leaderboard_scroll.ensure_control_visible(player)
-			await settle()
-			check(app._leaderboard_scroll.get_global_rect().grow(1).encloses(player.get_global_rect()),
-				"Keyboard focus can reveal the complete player avatar in the picker body at " + str(dimensions))
 		var ready: Array = _pop_ready_snapshot(app)
-		var round_id: String = app._leaderboard_round_id
-		await _tap(app.duck.get_global_rect().get_center())
-		check(app._mode_menu_open() and app._pop_picker_open() and _choice(app, "pop").has_focus()
-			and app._valid_focus(_choice(app, "pop")),
-			"Pip opens and focuses the game-mode popover above the player picker")
-		check(not app._leaderboard_scroll.interaction_allowed.call() and not app._valid_focus(player),
-			"The mode popover suspends picker scrolling and player focus")
-		for step in range(5):
-			app._move_focus(Vector2.DOWN)
-			check(app._mode_panel.is_ancestor_of(root.gui_get_focus_owner()),
-				"Controller navigation stays inside the mode popover over the player picker")
-		await _escape()
-		check(not app._mode_menu_open() and app._pop_picker_open() and app.duck.has_focus()
-			and _pop_ready_snapshot(app) == ready and app._leaderboard_round_id == round_id
-			and app._pop_player_id.is_empty(),
-			"Dismissing modes restores the unchanged player picker without assigning a player or starting speech")
-		await _tap(app.duck.get_global_rect().get_center())
-		await _tap(_choice(app, "pop").get_global_rect().get_center())
-		check(app._pop_picker_open() and not app._mode_menu_open()
-			and _pop_ready_snapshot(app) == ready and app._leaderboard_round_id == round_id,
-			"Choosing the current Voice Pop mode keeps the same unstarted player selection")
-		await _tap(app.collection_button.get_global_rect().get_center())
-		check(app.collection_page.visible and not app._leaderboard_overlay.visible
-			and not app._mode_menu_open() and app._pop_player_id.is_empty() and not app._pop_speech_active,
-			"More opens Pip's room directly from player selection without starting a round")
-		await _tap(app._collection_back.get_global_rect().get_center())
-		check(not app.collection_page.visible and app._pop_picker_open() and app.duck.is_visible_in_tree()
-			and app._pop_player_id.is_empty() and not app._pop_speech_active
-			and not app._pop._listening and not app._pop._pending
-			and app._leaderboard_round_id == round_id and app._pop.game.remaining == float(ready[1]),
-			"Leaving Pip's room restores player selection and its unchanged round without a microphone request")
-		await _tap(app.duck.get_global_rect().get_center())
-		await _tap(_choice(app, "match").get_global_rect().get_center())
-		check(app._mode_id == "match" and not app._leaderboard_overlay.visible
-			and not app._mode_menu_open() and app._leaderboard_gate.is_empty()
-			and app._pop_player_id.is_empty() and not app._pop_speech_active,
-			"The shared Pip header can leave Voice Pop before a player is selected")
-		check(app._valid_focus(app.duck) and app._valid_focus(app.collection_button)
-			and app._valid_focus(app._default_focus()),
-			"Leaving player selection restores the normal Match focus controls")
-	await _tap(app.collection_button.get_global_rect().get_center())
-	await _tap(app._collection_back.get_global_rect().get_center())
-	check(app._mode_id == "match" and not app._leaderboard_overlay.visible,
-		"A later Match room visit cannot restore an abandoned Voice Pop picker")
-	await _tap(app.duck.get_global_rect().get_center())
-	await _tap(_choice(app, "pop").get_global_rect().get_center())
-	var player := _picker_player(app)
-	if is_instance_valid(player):
-		player.grab_focus()
-		app._leaderboard_scroll.ensure_control_visible(player)
+		var round_id: String = app._round_id
+		check(app._pop.is_visible_in_tree() and app._pop.game.phase == "ready"
+			and not app.has_method("_show_leaderboard"),
+			"Voice Pop opens directly without a profile gate at " + str(dimensions))
+		app._show_mode_menu()
 		await settle()
-		await _tap(player.get_global_rect().get_center())
-		check(app._pop_player_id == str(app.leaderboard_state.profiles[0].id)
-			and not app._leaderboard_overlay.visible and app._leaderboard_gate.is_empty(),
-			"The visible player avatar still starts its assigned round through a real pointer click")
-	else:
-		check(false, "Returning to Voice Pop recreates a usable player avatar")
-
-
-func _check_finished_picker_room_return(app) -> void:
-	root.size = Vector2i(390, 844)
-	await settle()
-	var player_id: String = app._pop_player_id
-	check(not player_id.is_empty(), "The replay picker fixture starts with an assigned player")
-	if player_id.is_empty():
-		return
-	app._on_voice_state([true, true, "Listening"])
-	app._pop._advance_game(60.0)
-	await settle()
-	check(app._pop.game.phase == "finished" and not app._pop_rewards.has_pending(),
-		"The replay picker fixture finishes a real zero-hit round without pending treasure")
-	var round_id: String = app._leaderboard_round_id
-	app._pop.replay_button.grab_focus()
-	await settle()
-	await _tap(app._pop.replay_button.get_global_rect().get_center())
-	check(app._pop_picker_open() and app._pop_player_id == player_id,
-		"Play again opens player selection while preserving the completed round's owner")
-	await _tap(app.collection_button.get_global_rect().get_center())
-	check(app.collection_page.visible and not app._leaderboard_overlay.visible,
-		"More opens Pip's room from the replay player picker")
-	await _tap(app._collection_back.get_global_rect().get_center())
-	check(app._pop_picker_open() and not app.collection_page.visible
-		and app.duck.is_visible_in_tree() and app._valid_focus(app.duck)
-		and app._pop_player_id == player_id and app._leaderboard_round_id == round_id
-		and app._pop.game.phase == "finished" and not app._pop_speech_active
-		and not app._pop._listening and not app._pop._pending and not app._pop._reconnecting,
-		"Returning from More restores the replay picker, Pip, and finished round with the microphone stopped")
-
-
-func _check_onboarding_header() -> void:
-	root.size = Vector2i(390, 844)
-	var app = load("res://scenes/main.tscn").instantiate()
-	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/onboarding-medals.cfg", directory + "/onboarding-legacy.cfg")
-	app.playroom_save_path = directory + "/onboarding-room.cfg"
-	app.pop_reward_save_path = directory + "/onboarding-pop-rewards.cfg"
-	app.leaderboard_state = load("res://scripts/leaderboard_state.gd").new(directory + "/onboarding-players.cfg")
-	root.add_child(app)
-	await settle()
-	app.audio.set_muted(true)
-	app.set_reduced_motion(true)
-	app._on_loading_finished(["summer"])
-	await settle()
-	check(app._leaderboard_gate == "onboarding" and app._leaderboard_overlay.visible
-		and not app._pop_picker_open() and app._leaderboard_overlay.z_index >= 200
-		and app._leaderboard_overlay.get_global_rect().is_equal_approx(app.get_global_rect()),
-		"First-player onboarding retains its full-screen modal presentation")
-	check(not app.duck.is_visible_in_tree() and not app._valid_focus(app.collection_button)
-		and not app._leaderboard_close.is_visible_in_tree(),
-		"Mandatory onboarding exposes no Pip, More, or Back escape")
-	await _tap(app._header_duck_art_slot.get_global_rect().get_center())
-	await _tap(app.collection_button.get_global_rect().get_center())
-	app._show_mode_menu()
-	app.choose_mode("pop")
-	check(app._leaderboard_gate == "onboarding" and app._leaderboard_overlay.visible
-		and app._mode_id == "match" and not app._mode_menu_open() and not app.collection_page.visible,
-		"Covered header gestures and mode actions cannot bypass first-player creation")
-	app.audio.halt()
-	app.queue_free()
-	await process_frame
+		check(app._mode_menu_open() and not app._pop.interaction_allowed.call(),
+			"The mode menu blocks microphone input at " + str(dimensions))
+		app._hide_mode_menu()
+		app._show_collection()
+		check(app.collection_page.visible and not app._pop.interaction_allowed.call(),
+			"The growth catalog covers the microphone gate")
+		app._hide_collection()
+		check(_pop_ready_snapshot(app) == ready and app._round_id == round_id,
+			"Closing growth preserves the prepared round without opening a microphone")
+		app.choose_mode("match")
+		check(app._mode_id == "match" and not app._mode_menu_open(),
+			"The player can leave a ready microphone gate using the mode menu")

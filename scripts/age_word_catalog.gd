@@ -29,6 +29,7 @@ var _textures: Dictionary = {}
 var _by_id: Dictionary = {}
 var _word_indices: Dictionary = {}
 var _page_index: int = 0
+var _growth: Dictionary = {}
 var _styled_scale: float = -1.0
 var _styled_accent: Color = Color.TRANSPARENT
 
@@ -114,14 +115,15 @@ func _build() -> void:
 	_update_navigation()
 
 
-func configure(words: Array, band: Dictionary, palette: Dictionary) -> void:
+func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Dictionary = {}) -> void:
 	_build()
 	var ordered: Array = words.duplicate(true)
 	ordered.sort_custom(func(first: Dictionary, second: Dictionary) -> bool:
 		var first_text: String = str(first.get("text", "")).to_lower()
 		var second_text: String = str(second.get("text", "")).to_lower()
 		return str(first.get("id", "")) < str(second.get("id", "")) if first_text == second_text else first_text.naturalnocasecmp_to(second_text) < 0)
-	var words_changed: bool = ordered != _words
+	var words_changed: bool = ordered != _words or progress != _growth
+	_growth = progress.duplicate(true)
 	var band_changed: bool = str(band.get("id", "")) != str(_band.get("id", ""))
 	_band = band.duplicate(true)
 	_palette = palette.duplicate(true)
@@ -165,7 +167,7 @@ func _rebuild_words() -> void:
 		for property: Dictionary in button.get_property_list():
 			if property.name == "accessibility_name":
 				button.set("accessibility_name", "Hear " + str(word.get("text", ""))
-					+ (". " + str(word.meaning) if word.has("meaning") else ""))
+					+ (". " + str(word.meaning) if word.has("meaning") else "") + _practice_hint(word))
 				break
 		grid.add_child(button)
 		var column := VBoxContainer.new()
@@ -181,12 +183,25 @@ func _rebuild_words() -> void:
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		picture.texture = _word_texture(str(word.get("image", "")))
 		column.add_child(picture)
-		var caption := Style.label(str(word.get("text", "")), 14)
+		picture.visible = picture.texture != null
+		var caption := Style.label(str(word.get("display_text", word.get("text", ""))), 14)
 		caption.name = "WordLabel"
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		caption.add_theme_constant_override("line_spacing", 0)
+		caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		if picture.texture == null:
+			column.alignment = BoxContainer.ALIGNMENT_CENTER
+		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		column.add_child(caption)
+		var streak: int = int(_growth.get("streaks", {}).get(id, 0))
+		var mastered: bool = streak >= 6
+		var progress_label := Style.label("Mastered" if mastered else "%d / 6" % streak, 12)
+		progress_label.name = "WordMastery"
+		progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		progress_label.add_theme_color_override("font_color", Style.GOOD if mastered else Style.MUTED)
+		column.add_child(progress_label)
+		button.set_meta("mastery_label", progress_label)
 		button.set_meta("word_art", picture)
 		button.set_meta("word_label", caption)
 		button.set_meta("word_column", column)
@@ -255,8 +270,13 @@ func _hear_word(button: Button) -> void:
 	if not _can_interact() or not is_instance_valid(button) or not word_buttons.has(button):
 		return
 	var word: Dictionary = button.get_meta("word")
-	meaning_label.text = str(word.text).capitalize() + (": " + str(word.meaning) if word.has("meaning") else "")
+	meaning_label.show()
+	meaning_label.text = (str(word.get("display_text", word.text)).capitalize() + (": " + str(word.meaning) if word.has("meaning") else "")).trim_suffix(".") + _practice_hint(word)
 	hear_requested.emit(word.duplicate(true))
+
+
+func _practice_hint(word: Dictionary) -> String:
+	return ". Practice in Phrase Builder." if str(word.get("image", "")).is_empty() and word.get("practice_modes", []) == ["phrase"] else ""
 
 
 func cancel_input() -> void:
@@ -337,13 +357,15 @@ func _layout(reveal_focus: bool = true) -> void:
 			Style.action_button(button, accent)
 			button.focus_mode = previous_focus
 			button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))
-		button.custom_minimum_size = Vector2(0, ceilf(126.0 / scale))
+		button.custom_minimum_size = Vector2(0, ceilf(146.0 / scale))
 		var column: VBoxContainer = button.get_meta("word_column")
 		column.offset_left = 8.0 / scale
 		column.offset_right = -8.0 / scale
 		column.offset_top = 8.0 / scale
 		column.offset_bottom = -8.0 / scale
 		column.add_theme_constant_override("separation", ceili(4.0 / scale))
+		var progress_label: Label = button.get_meta("mastery_label")
+		progress_label.add_theme_font_size_override("font_size", ceili(12 / scale))
 		var picture: TextureRect = button.get_meta("word_art")
 		picture.custom_minimum_size.y = ceilf(70.0 / scale)
 		var caption: Label = button.get_meta("word_label")
@@ -362,7 +384,7 @@ func snapshot() -> Dictionary:
 	var visible_ids: Array[String] = []
 	for button: Button in word_buttons:
 		visible_ids.append(str(button.get_meta("word_id")))
-	return {"visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
+	return {"growth": _growth, "visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
 		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids,
 		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text,
 		"columns": grid.columns if grid != null else 0,

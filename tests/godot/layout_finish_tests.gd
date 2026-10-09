@@ -27,7 +27,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -48,16 +47,15 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_title.text == "Pip" and app.theme_buttons.size() == 8
+	check(app._collection_title.text == "Grow with Pip" and app.theme_buttons.size() == 8
 		and app._world_scroll.is_ancestor_of(app._world_grid),
-		"More keeps a single Pip title plus a persistent World strip")
+		"Growth keeps a single title plus a persistent World strip")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
 		"The shared strip has no retained World heading or tagline fields")
 	var css_scale: float = app.Style.ui_scale(app)
-	check(app._age_choices.get_global_rect().end.y <= app._collection_scroll.global_position.y
-		and app._collection_scroll.get_global_rect().end.y <= app._world_scroll.global_position.y
-		and app._world_scroll.get_global_rect().end.y <= app._room.toy_shelf.global_position.y,
-		"Age stays above the fixed playground, with worlds immediately above the bottom toy strip")
+	check(app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y
+		and app._age_catalog.get_global_rect().end.y <= app._world_scroll.global_position.y,
+		"Age choices precede the word catalog and world settings follow it")
 	check(app._world_grid is HBoxContainer and app._world_grid.get_theme_constant("separation") == roundi(6 / css_scale),
 		"Eight World icons form one row with six CSS-pixel gaps")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")
@@ -72,9 +70,8 @@ func _run() -> void:
 			"Each named World icon has a 52 CSS-pixel square target and 36 CSS-pixel artwork")
 	check(not app.has_method("_show_reward_section") and app.find_child("Rewards_medals", true, false) == null,
 		"Obsolete collection routes and Medals navigation are removed")
-	check(app._room.is_visible_in_tree() and app._collection_grid.get_children().all(
-		func(child: Node) -> bool: return child == app._room),
-		"The center contains only the expanding playground while settings and toys have fixed strips")
+	check(app._age_catalog.is_visible_in_tree() and app.find_child("PipRoom", true, false) == null,
+		"The central area contains the vocabulary catalog without a playground")
 	app._hide_collection()
 	check(is_equal_approx(app.grid.global_position.y * app.Style.ui_scale(app), game_top),
 		"Adding the More strip does not move the game's header or playfield")

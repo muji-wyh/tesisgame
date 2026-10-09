@@ -1,0 +1,83 @@
+{
+  "provider": "Microsoft Edge online TTS",
+  "client": "edge-tts 7.2.8",
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%"
+  },
+  "postprocessing": "None; original response MP3 bytes.",
+  "files": [
+    {
+      "id": "pip-growth-sprout",
+      "text": "Hello! I'm Pip.",
+      "path": "assets/audio/pip-growth/sprout.mp3",
+      "bytes": 14544,
+      "sha256": "a037175b8486bdd87c54b2016c86eecd3b9ed8403098095be4d12b2af89bca94"
+    },
+    {
+      "id": "pip-growth-little-helper",
+      "text": "Let's grow together.",
+      "path": "assets/audio/pip-growth/little-helper.mp3",
+      "bytes": 11232,
+      "sha256": "f446a022dc954fd4719bbb6641854a7d27f376c0ef94c6b0a271d9450c7718bd"
+    },
+    {
+      "id": "pip-growth-curious-scout",
+      "text": "I wonder what we will find.",
+      "path": "assets/audio/pip-growth/curious-scout.mp3",
+      "bytes": 13968,
+      "sha256": "1a31531420e02390c3915bf26023b8f5d73ad219969a440c55965ce7e3797729"
+    },
+    {
+      "id": "pip-growth-story-finder",
+      "text": "Every word can tell a story.",
+      "path": "assets/audio/pip-growth/story-finder.mp3",
+      "bytes": 15264,
+      "sha256": "38a5500bce5f0bc6f7c074f3ffb65a48e9461487cff2e858123f812a6787a79b"
+    },
+    {
+      "id": "pip-growth-trail-buddy",
+      "text": "A little practice goes a long way.",
+      "path": "assets/audio/pip-growth/trail-buddy.mp3",
+      "bytes": 17280,
+      "sha256": "31f74dc953016d41e7115099321a9bc83d946e66665fe5aa4ecb7da177ee7e39"
+    },
+    {
+      "id": "pip-growth-wayfinder",
+      "text": "We can find a new way together.",
+      "path": "assets/audio/pip-growth/wayfinder.mp3",
+      "bytes": 13392,
+      "sha256": "3f8abacb07ffc7d8d7677990f9f66fe7cad2fc279c71c0ca69cbb2fa712f4a3f"
+    },
+    {
+      "id": "pip-growth-word-maker",
+      "text": "Let's make something with our words.",
+      "path": "assets/audio/pip-growth/word-maker.mp3",
+      "bytes": 15120,
+      "sha256": "b3b2bd411bca3f5e1a9e61a4df95a8e4a77cfb0e8b3c0b3a0a5a9a9efccd48bd"
+    },
+    {
+      "id": "pip-growth-sky-explorer",
+      "text": "There is a whole world to explore.",
+      "path": "assets/audio/pip-growth/sky-explorer.mp3",
+      "bytes": 15840,
+      "sha256": "3d8500305314e38e45e792c4939a1a2f9c2e9f2a477e71d10c75d8dae594534b"
+    },
+    {
+      "id": "pip-growth-bright-navigator",
+      "text": "We are learning more, one word at a time.",
+      "path": "assets/audio/pip-growth/bright-navigator.mp3",
+      "bytes": 21600,
+      "sha256": "03b19cd12eddacdb2a1e815df9fad837bcf570f825f061b6e6d3d295943b3477"
+    },
+    {
+      "id": "pip-growth-kind-guide",
+      "text": "Look how far we have come. Keep being curious!",
+      "path": "assets/audio/pip-growth/kind-guide.mp3",
+      "bytes": 23040,
+      "sha256": "52b4c1f9cca9e0e7b1a9d392913caf279d643fbe8cb78479f04b5717731a2726"
+    }
+  ]
+}

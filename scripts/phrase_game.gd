@@ -6,6 +6,7 @@ signal completion_requested
 signal status_changed(message: String)
 signal audio_requested(kind: String, value: String)
 signal changed(snapshot: Dictionary)
+signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 
 const PhraseGameModel = preload("res://scripts/phrase_game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
@@ -44,6 +45,7 @@ var _finished_emitted: bool = false
 var _celebrating: bool = false
 var completion_pending: bool = false
 var _configured: bool = false
+var _attempt_sequence: int = 0
 var _muted: bool = false
 var _question_id: String = ""
 var _answer_drop: Rect2
@@ -140,6 +142,7 @@ func _button(text: String, node_name: String, callback: Callable) -> Button:
 
 func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value: int = -1) -> bool:
 	cancel_input()
+	_attempt_sequence = 0
 	_paused = false
 	_finished_emitted = false
 	_celebrating = false
@@ -327,6 +330,19 @@ func _activate() -> void:
 	if not result in ["correct", "wrong"]:
 		return
 	var correct: bool = result == "correct"
+	var involved: Array[String] = []
+	for id in game.current_question().words:
+		if not involved.has(str(id)):
+			involved.append(str(id))
+	if not correct:
+		for index in game.answer:
+			if index < 0 or index >= game.options.size():
+				continue
+			var id: String = str(game.options[index].id)
+			if not involved.has(id):
+				involved.append(id)
+	_attempt_sequence += 1
+	word_attempted.emit("phrase-%d" % _attempt_sequence, involved, correct)
 	_celebrating = correct
 	completion_pending = correct and game.completed == PhraseGameModel.QUESTION_COUNT
 	if not completion_pending:
@@ -488,7 +504,7 @@ func _move_word(point: Vector2) -> void:
 		_dragging = true
 		_source.set_pressed_no_signal(false)
 		_source.modulate.a = 0.0 if _source_kind == "answer" else 0.25
-		_preview.text = str(game.options[_drag_word].text)
+		_preview.text = Data.display_word(game.options[_drag_word])
 		_preview.icon = _source.icon
 		_style_tile(_preview, true, false, false, s, _drag_word, _source.size.x,
 			_source.get_theme_constant("icon_max_width") if _source.icon != null else 0)
@@ -714,8 +730,9 @@ func _answer_rects(order: Array[int]) -> Array[Rect2]:
 	var result: Array[Rect2] = []
 	var cursor: float = _answer_drop.position.x
 	for index in range(answer_buttons.size()):
-		var text: String = str(game.options[order[index]].text) if index < order.size() else ""
-		var width: float = maxf(64 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s) + picture + 8 / s if index < order.size() else 44 / s
+		var text: String = Data.display_word(game.options[order[index]]) if index < order.size() else ""
+		var art_width: float = picture + 8 / s if index < order.size() and not str(game.options[order[index]].image).is_empty() else 0.0
+		var width: float = maxf(64 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s) + art_width if index < order.size() else 44 / s
 		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_clip.size.y))
 		cursor += width + gap
 	return result
@@ -770,7 +787,7 @@ func _refresh() -> void:
 		var button: Button = answer_buttons[index]
 		var occupied: bool = index < game.answer.size()
 		button.visible = not completion_pending and occupied
-		button.text = str(game.options[game.answer[index]].text) if occupied else ""
+		button.text = Data.display_word(game.options[game.answer[index]]) if occupied else ""
 		button.icon = option_buttons[game.answer[index]].icon if occupied else null
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
@@ -798,8 +815,8 @@ func _rebuild_buttons() -> void:
 	option_buttons.clear()
 	answer_buttons.clear()
 	for index in range(game.options.size()):
-		var button := _button(str(game.options[index].text), "PhraseOption_%d" % index, _choose.bind(index))
-		button.icon = load("res://" + str(game.options[index].image))
+		var button := _button(Data.display_word(game.options[index]), "PhraseOption_%d" % index, _choose.bind(index))
+		button.icon = load("res://" + str(game.options[index].image)) if not str(game.options[index].image).is_empty() else null
 		button.expand_icon = true
 		button.reparent(_bank_content)
 		button.focus_entered.connect(scroll_bank_to.bind(index))
@@ -936,11 +953,12 @@ func _layout() -> void:
 	action_button.custom_minimum_size = Vector2.ZERO
 	action_button.add_theme_font_size_override("font_size", ceili(16 / s))
 	var compact: bool = h < 360
+	var short: bool = h < 234
 	var inner_w: float = minf(w, 820)
 	var x: float = (w - inner_w) * 0.5
-	var gap: float = 6 if compact else 24
-	var progress_h: float = 14 if compact else 24
-	var hero_h: float = 48 if compact else minf(64 if w < 400 else 112, h * 0.18)
+	var gap: float = 3 if short else 6 if compact else 24
+	var progress_h: float = 10 if short else 14 if compact else 24
+	var hero_h: float = 44 if short else 48 if compact else minf(64 if w < 400 else 112, h * 0.18)
 	var tile_h: float = 44 if compact else 58
 	var answer_h: float = tile_h + (8 if compact else 12)
 	var footer_h: float = 44 if compact else 50
@@ -973,7 +991,7 @@ func _layout() -> void:
 		var button: Button = option_buttons[index]
 		if not button.visible:
 			continue
-		var word_w: float = maxf(64, Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x * s + 30) + picture_w + 8
+		var word_w: float = maxf(64, Style.HEADING_FONT.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x * s + 30) + (picture_w + 8 if button.icon != null else 0)
 		# Finalize font and style minimums before assigning the rail's exact card size.
 		_style_tile(button, true, false, false, s, index, word_w / s, picture_w / s)
 		_place(button, Rect2(cursor, 0, word_w, tile_h))

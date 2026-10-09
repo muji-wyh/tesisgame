@@ -55,7 +55,8 @@ func _run() -> void:
 	await _check_loading_theme(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
+	app._presentation.path = directory + "/presentation.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -70,22 +71,22 @@ func _run() -> void:
 		var scroll: int = app._world_scroll.scroll_horizontal
 		button.pressed.emit()
 		await settle()
-		check(app.collection_page.visible and app._room.is_visible_in_tree(),
-			"Choosing a theme keeps Pip's room open")
+		check(app.collection_page.visible and app._age_catalog.is_visible_in_tree(),
+			"Choosing a theme keeps the growth catalog open")
 		check(app._world_scroll.scroll_horizontal == scroll and button.has_focus(),
 			"Theme selection preserves scroll and control focus")
 		check(app.model.cards == cards and app.model.hints_remaining == 3,
 			"The current game is not reset by a theme choice")
 		if not app.collection_page.visible:
 			app._show_collection()
-	var save_path: String = app.playroom_state._save_path
-	app.playroom_state._save_path = directory + "/missing/room.cfg"
+	var save_path: String = app._presentation.path
+	app._presentation.path = directory + "/missing/presentation.cfg"
 	app.theme_buttons[5].pressed.emit()
 	await settle()
 	var notice: Label = app.get("_world_save_notice")
 	check(app._journey_save_failed and notice != null and notice.is_visible_in_tree(),
 		"A theme save failure stays visibly recoverable in the open page")
-	app.playroom_state._save_path = save_path
+	app._presentation.path = save_path
 	app.theme_buttons[5].pressed.emit()
 	await settle()
 	check(not app._journey_save_failed and app.collection_page.visible
@@ -105,9 +106,9 @@ func _run() -> void:
 				and button.get_theme_constant("icon_max_width") * scale >= 36,
 				"Inner padding leaves room for the larger theme artwork")
 			check(app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()), "Focus reveals theme choices in their horizontal strip")
-		check(app._world_scroll.get_global_rect().position.y >= app._room._room.get_global_rect().end.y
-			and app._world_scroll.get_global_rect().end.y <= app._room.toy_shelf.global_position.y,
-			"Theme choices stay between the playground and bottom toys at every width")
+		check(app._world_scroll.get_global_rect().position.y >= app._age_catalog.get_global_rect().end.y
+			and app.collection_page.get_global_rect().grow(1).encloses(app._world_scroll.get_global_rect()),
+			"Theme choices stay below the word catalog inside the page at every width")
 	app._hide_collection()
 	await _check_treasure_themes(app)
 	app.queue_free()
@@ -125,20 +126,20 @@ func _check_loading_theme(directory: String) -> void:
 		var app = load("res://scenes/main.tscn").instantiate()
 		var prefix: String = directory + "/loading-%d" % index
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(prefix + "-medals.cfg", prefix + "-legacy.cfg")
-		app.playroom_save_path = prefix + "-room.cfg"
-		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory, "loading-%d-leaderboards.cfg" % index)
+		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory, "loading-%d-growth.cfg" % index)
+		app._presentation.path = prefix + "-presentation.cfg"
 		root.add_child(app)
 		await settle()
 		app._preferred_theme = "autumn"
 		app.model.set_theme("autumn")
 		app._save_journey()
 		var cards: Array = app.model.cards.duplicate(true)
-		var journey: Array = app.playroom_state.recent_topic_ids.duplicate()
+		var mastery: Dictionary = app.growth.snapshot().streaks.duplicate()
 		var counts: Dictionary = app.medal_progress.counts.duplicate(true)
-		var save_path: String = app.playroom_state._save_path
+		var save_path: String = app._presentation.path
 		var save_fails: bool = index == cases.size() - 1
 		if save_fails:
-			app.playroom_state._save_path = directory + "/missing/room.cfg"
+			app._presentation.path = directory + "/missing/presentation.cfg"
 		paused = true
 		app._on_loading_finished(cases[index])
 		var expected: String = "space" if index == 0 else ("candy" if save_fails else "autumn")
@@ -148,23 +149,25 @@ func _check_loading_theme(directory: String) -> void:
 			"Pip and the native scene use the loading theme on the first revealed frame")
 		check(app.model.cards == cards and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
 			and app.model.mistakes == 0 and app.model.hints_remaining == 3
-			and app.playroom_state.recent_topic_ids == journey and app.medal_progress.counts == counts,
-			"Loading theme handoff preserves the prepared lesson, journey and reward progress")
+			and app.growth.snapshot().streaks == mastery and app.medal_progress.counts == counts,
+			"Loading theme handoff preserves the prepared lesson, mastery and reward progress")
 		check(app.audio.active and app.audio.music.playing
 			and app.audio.music.stream is AudioStreamWAV
 			and app.audio.music.stream.data == load("res://assets/audio/bgm/" + expected + ".wav").data,
 			"Loading entry starts the selected world's music without an extra gameplay gesture")
-		check(not app.audio.voice.playing and not app.audio.is_pip_busy(),
+		check(not app.audio.voice.playing,
 			"Loading theme handoff does not start narration or another Pip sound")
 		if save_fails:
 			check(app._journey_save_failed and app._storage_retry_button.visible,
 				"A failed loading theme save still enters the chosen world with a visible retry")
-			app.playroom_state._save_path = save_path
+			app._presentation.path = save_path
 			app._retry_storage()
 			check(not app._journey_save_failed, "Loading theme persistence recovers through the normal save retry")
-		var reloaded = load("res://scripts/playroom_state.gd").new(save_path)
-		check(reloaded.load_state() and reloaded.preferred_theme_id == expected,
-			"The loading theme is remembered through the existing playroom save")
+		var reloaded = load("res://scripts/presentation_preferences.gd").new()
+		reloaded.path = save_path
+		reloaded.load_preferences(false)
+		check(reloaded.preferred_theme == expected,
+			"The loading theme is remembered independently of retired room data")
 		paused = true
 		app._on_loading_finished(["winter"])
 		check(paused and app.model.theme_id == expected,

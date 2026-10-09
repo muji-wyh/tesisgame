@@ -132,10 +132,6 @@ var _gate_back: Button
 var _results: ResultScroll
 var _result_body: VBoxContainer
 var _result_hero: Control
-var _round_player: Dictionary = {}
-var _result_player: HBoxContainer
-var _result_avatar: TextureRect
-var _result_name: Label
 var _result_hits: Label
 var _result_hits_caption: Label
 var _result_hit_fx: Node2D
@@ -263,7 +259,7 @@ func _build() -> void:
 	_gate.add_child(_gate_body)
 	_gate_art = TextureRect.new()
 	_gate_art.name = "VoicePopRocket"
-	_gate_art.texture = preload("res://assets/avatars/rocket.svg")
+	_gate_art.texture = preload("res://assets/images/ui/modes/rocket.svg")
 	_gate_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_gate_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_gate_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -316,7 +312,6 @@ func _build() -> void:
 func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1) -> void:
 	_build()
 	cancel_result_input()
-	_round_player.clear()
 	_words = words.duplicate(true)
 	_word_fits.clear()
 	game.configure(_words, seed_value)
@@ -1555,25 +1550,6 @@ func _build_results(summary: Dictionary) -> void:
 	_result_hit_fx = Node2D.new()
 	_result_hit_fx.draw.connect(_draw_result_feedback)
 	_result_hero.add_child(_result_hit_fx)
-	_result_player = HBoxContainer.new()
-	_result_player.name = "ResultPlayer"
-	_result_player.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_hero.add_child(_result_player)
-	_result_avatar = TextureRect.new()
-	_result_avatar.name = "PlayerAvatar"
-	_result_avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_avatar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_result_avatar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_result_player.add_child(_result_avatar)
-	_result_name = _label("", 22)
-	_result_name.name = "PlayerName"
-	_result_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_result_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_result_name.clip_text = true
-	_result_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_result_player.add_child(_result_name)
-	_refresh_result_player()
 	_result_hits = _label("0", 68, CYAN)
 	_result_hits.name = "HitTotal"
 	_result_hits.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1617,34 +1593,6 @@ func _build_results(summary: Dictionary) -> void:
 	_apply_result_feedback()
 
 
-func attach_leaderboard(panel: Control) -> void:
-	if game.phase != "finished":
-		panel.queue_free()
-		return
-	_result_body.add_child(panel)
-	_result_body.move_child(panel, maxi(_result_actions.get_index(), _result_rewards.get_index()) + 1)
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.minimum_size_changed.connect(_layout)
-	_layout()
-
-
-func set_round_player(profile: Dictionary) -> void:
-	_round_player = profile.duplicate(true)
-	_refresh_result_player()
-	_layout_result_hits()
-	_queue_geometry_publish()
-
-
-func _refresh_result_player() -> void:
-	if not is_instance_valid(_result_player):
-		return
-	_result_player.visible = not _round_player.is_empty()
-	_result_name.text = str(_round_player.get("name", ""))
-	_result_name.tooltip_text = _result_name.text
-	var path: String = "res://assets/avatars/" + str(_round_player.get("avatar", "duck")) + ".svg"
-	_result_avatar.texture = load(path) if ResourceLoader.exists(path) else null
-
-
 func _result_rect(control: Control) -> Array:
 	var rect: Rect2 = control.get_global_rect()
 	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
@@ -1652,15 +1600,9 @@ func _result_rect(control: Control) -> Array:
 
 func _result_hits_snapshot() -> Dictionary:
 	var visible_result: bool = not _stopped and game.phase == "finished" and _results.visible
-	var player: Dictionary = {}
-	if visible_result and not _round_player.is_empty() and is_instance_valid(_result_player):
-		player = _round_player.duplicate(true)
-		player["rect"] = _result_rect(_result_player)
-		player["avatar_rect"] = _result_rect(_result_avatar)
-		player["name_rect"] = _result_rect(_result_name)
 	return {"text": _result_hits.text if visible_result and is_instance_valid(_result_hits) else "",
 		"total": _result_hit_total if visible_result else 0,
-		"player": player, "rect": _result_rect(_result_hits) if visible_result and is_instance_valid(_result_hits) else [],
+		"rect": _result_rect(_result_hits) if visible_result and is_instance_valid(_result_hits) else [],
 		"active": visible_result and not reduced_motion and _result_hit_age < RESULT_HIT_DURATION}
 
 
@@ -1673,17 +1615,6 @@ func _layout_result_hits() -> void:
 	var top: float = (2.0 if compact else 18.0) / scale
 	var score_left: float = 0.0
 	var score_width: float = _result_hero.size.x
-	if not _round_player.is_empty():
-		var group_width: float = minf(_result_hero.size.x, 480.0 / scale)
-		var group_left: float = (_result_hero.size.x - group_width) * 0.5
-		score_width = minf(160.0 / scale, group_width * 0.38)
-		score_left = group_left + group_width - score_width
-		var avatar_edge: float = (44.0 if compact else 56.0) / scale
-		_result_player.position = Vector2(group_left, top + (number_height - avatar_edge) * 0.5)
-		_result_player.size = Vector2(group_width - score_width - 16.0 / scale, avatar_edge)
-		_result_player.add_theme_constant_override("separation", ceili(10.0 / scale))
-		_result_avatar.custom_minimum_size = Vector2.ONE * avatar_edge
-		_result_name.add_theme_font_size_override("font_size", ceili((18.0 if group_width * scale < 360.0 else 24.0) / scale))
 	var number_font: int = 52 if compact else 76
 	var text_width: float = _result_hits.get_theme_font("font").get_string_size(str(_result_hit_total), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(number_font / scale)).x
 	if text_width > score_width:
@@ -1737,7 +1668,7 @@ func _draw_result_feedback() -> void:
 	for layer in range(5, 0, -1):
 		_result_hit_fx.draw_circle(center, radius * (0.75 + float(layer) * 0.16), Color(CYAN, 0.025 * breath))
 	var span: float = minf(_result_hero.size.x * 0.30, 150.0 / scale)
-	for direction in ([-1.0, 1.0] if _round_player.is_empty() else []):
+	for direction in [-1.0, 1.0]:
 		var first: Vector2 = center + Vector2(direction * radius * 1.4, 0)
 		var last: Vector2 = center + Vector2(direction * span, 0)
 		_result_hit_fx.draw_line(first, last, Color(CYAN, 0.26 * breath), 2.0 / scale, true)

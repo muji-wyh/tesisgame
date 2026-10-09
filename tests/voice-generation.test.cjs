@@ -97,10 +97,10 @@ test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS
   assert.throws(() => speechText('<audio src="https://example.com"/>'), /English/);
 });
 
-test('voice generation derives 1250 words, 36 phrases, and eight prompts from maintained catalogs', () => {
+test('voice generation derives 1550 words, 330 phrases, and eight prompts from maintained catalogs', () => {
   const messages = messagesFor(root);
-  assert.equal(messages.length, 1294);
-  assert.equal(new Set(messages.map(message => message.id)).size, 1294);
+  assert.equal(messages.length, 1888);
+  assert.equal(new Set(messages.map(message => message.id)).size, 1888);
   for (const word of words) {
     assert.deepEqual(messages.find(message => message.id === `word-${word.id}`),
       { id: `word-${word.id}`, text: word.text });
@@ -112,14 +112,14 @@ test('voice generation derives 1250 words, 36 phrases, and eight prompts from ma
   }
 });
 
-test('catalog validation supports two-to-fourteen-letter words and rejects malformed text, paths, and prompts', t => {
+test('catalog validation supports one-to-fourteen-letter words and rejects malformed text, paths, and prompts', t => {
   const { directory } = fixture(t);
-  const vocabulary = ['ox', 'sweater', 'elephant', 'pineapple', 'microphone', 'quadrilateral', 'representation'].map(text => ({
+  const vocabulary = ['a', 'i', 'ox', 'sweater', 'elephant', 'pineapple', 'microphone', 'quadrilateral', 'representation'].map(text => ({
     id: text, text, audio: `assets/audio/voice/word-${text}.wav`
   }));
   fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify(vocabulary));
   assert.equal(messagesFor(directory).length, Object.keys(prompts).length + vocabulary.length + 1);
-  for (const text of ['', 'a', 'representations', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
+  for (const text of ['', 'representations', 'Microphone', 'ice-cream', 'two words', 'café', 'kiwi\n', 'robot!', 'robot2', null]) {
     fs.writeFileSync(path.join(directory, 'words.json'), JSON.stringify([{ id: 'invalid', text, audio: 'assets/audio/voice/word-invalid.wav' }]));
     assert.throws(() => messagesFor(directory), /short English word/, JSON.stringify(text));
   }
@@ -138,10 +138,14 @@ test('phrase recordings reject malformed English, redirected paths, and duplicat
     fs.writeFileSync(catalogPath, JSON.stringify(invalid));
     assert.throws(() => messagesFor(directory), /nonempty phrase array/);
   }
-  for (const text of ['', 'apple', 'a red apple', 'Red apple', 'red  apple', 'red apple\n',
-    'red apple!', 'red apple orange green blue', 'café milk', null]) {
+  for (const text of ['a red apple', 'i can see a red apple']) {
     fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], text }]));
-    assert.throws(() => messagesFor(directory), /two to four short English words/, JSON.stringify(text));
+    assert.doesNotThrow(() => messagesFor(directory));
+  }
+  for (const text of ['', 'apple', 'Red apple', 'red  apple', 'red apple\n',
+    'red apple!', 'one two three four five six seven', 'café milk', null]) {
+    fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], text }]));
+    assert.throws(() => messagesFor(directory), /two to six short English words/, JSON.stringify(text));
   }
   fs.writeFileSync(catalogPath, JSON.stringify([{ ...phrases[0], id: '../outside' }]));
   assert.throws(() => messagesFor(directory), /lowercase ID/);

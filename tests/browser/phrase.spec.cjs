@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const {
   openGame, chooseMode, openModeMenu, openRewards, metrics, tap, rendered,
-  ageControl, collectionHeaderRect, resultPoint, visibleColorCount, celebrationState, acceptCelebration
+  ageControl, collectionHeaderRect, growthView, seedGrowth, resultPoint, visibleColorCount, celebrationState, acceptCelebration
 } = require('./game-ui.cjs');
 const { observeOutputAudio, watchAudioRequests, expectRecording } = require('./bundled-audio.cjs');
 
@@ -169,9 +169,7 @@ async function chooseAge(page, id) {
   await openRewards(page);
   const rect = await ageControl(page, id);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
-  await expect(page.locator('#game-status')).toContainText(id === '4-6' ? 'Ages 4-6.' : 'Ages 10+.');
-  await roomBack(page);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  await expect.poll(async () => (await growthView(page)).catalog.age_band).toBe(String(id));
   await roomBack(page);
 }
 
@@ -527,7 +525,7 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   const requests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
-  await chooseAge(page, '4-6');
+  await chooseAge(page, '3');
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(audioAvailable, 'Chromium provides the actual WebAudio playback path').toBe(true);
   if (!audioAvailable) info.annotations.push({ type: 'audio-limitation', description: 'This browser runtime has no WebAudio; native audio tests and Chromium verify the recordings. Gameplay and muted text fallback remain covered here.' });
@@ -660,13 +658,14 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
 
 test('Phrase Builder preserves its answer through overlays, mute, background and responsive layouts', async ({ page }, info) => {
   test.setTimeout(180000);
+  await seedGrowth(page, 12);
   const errors = await openGame(page);
-  await chooseAge(page, '10-plus');
+  await chooseAge(page, '12');
   await chooseMode(page, 'phrase');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(true);
   let state = await phraseState(page);
   expectFirstCandidateRow(state);
-  expect(state.question.level).toBe('advanced');
+  expect(state.target_ids.some(id => require('../../words.json').find(word => word.id === id).min_age === 12)).toBe(true);
   await selectWords(page, [state.target_ids[0]]);
   const selected = progress(await phraseState(page));
   const saved = await savedMedals(page);
@@ -749,8 +748,9 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
 for (const input of ['mouse', 'touch']) test(`Phrase Builder ${input} drags insert, reorder, return and cancel cards without extra clicks`, async ({ page, browserName }, info) => {
   test.setTimeout(300000);
   test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion and cancellation use Chromium CDP.');
+  await seedGrowth(page, 12);
   const errors = await openGame(page, { reducedMotion: input === 'mouse' ? 'no-preference' : 'reduce' });
-  await chooseAge(page, '10-plus');
+  await chooseAge(page, '12');
   await chooseMode(page, 'phrase');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(true);
   const pointer = await cardPointer(page, input);

@@ -1,5 +1,7 @@
 extends RefCounted
 
+signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
+
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 
@@ -42,6 +44,7 @@ var _next_burst_at: float = INF
 var _word_pattern := RegEx.new()
 var _round_serial: int = 0
 var _consumed_speech_events: Dictionary = {}
+var _attempt_sequence: int = 0
 
 
 func _init() -> void:
@@ -196,6 +199,12 @@ func hit_speech_event(event: Dictionary) -> Array[Dictionary]:
 		if float(target.uid) != uid_number or target.age + EPSILON >= target.lifetime:
 			continue
 		if not _aliases.get(target.word.id, []).has(spoken[0]):
+			# An explicit final answer tied to a live target is attributable.
+			# Unbound speech, silence and unattended expiry are not wrong answers.
+			if event.stage == "final":
+				_consumed_speech_events[event.event_id] = true
+				_record_word_attempt(str(target.word.id), false)
+				_set_recognition_feedback("no_matching_target")
 			return removed
 		_consumed_speech_events[event.event_id] = true
 		removed.append(_hit_target(target))
@@ -224,9 +233,16 @@ func _hit_target(target: Dictionary) -> Dictionary:
 	bonus_time += float(hit.time_bonus)
 	remaining = maxf(0.0, DURATION + bonus_time - elapsed)
 	targets.erase(target)
+	_record_word_attempt(str(target.word.id), true)
 	if targets.is_empty():
 		_next_spawn_at = minf(_next_spawn_at, elapsed + 0.65)
 	return hit
+
+
+func _record_word_attempt(word_id: String, correct: bool) -> void:
+	_attempt_sequence += 1
+	var involved: Array[String] = [word_id]
+	word_attempted.emit("pop-%d" % _attempt_sequence, involved, correct)
 
 
 func _set_recognition_feedback(code: String) -> void:
@@ -265,6 +281,7 @@ func _reset_round(new_round: bool = true) -> void:
 		_round_serial += 1
 		round_id = "pop-%d-%d" % [get_instance_id(), _round_serial]
 	_consumed_speech_events.clear()
+	_attempt_sequence = 0
 	recognition_feedback = ""
 	recognition_message = ""
 	elapsed = 0.0

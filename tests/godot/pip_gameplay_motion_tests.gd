@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Mascot = preload("res://scripts/duck_mascot.gd")
-const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
+const LEVELS := [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 var checks := 0
 var failures := 0
@@ -79,16 +79,16 @@ func _check_priority_and_lifecycle(duck) -> void:
 	var rect: Rect2 = duck.get_rect()
 	var children: int = duck.get_child_count()
 	duck.set_proactive_allowed(true)
-	duck.perform_trick("dance")
+	duck.perform_trick("wave")
 	duck.set_speaking(true)
 	duck.react_gameplay(true)
-	check(duck._gameplay_reaction == "happy" and duck.pose == 3 and duck._trick.is_empty(),
+	check(duck._gameplay_reaction == "happy" and duck.pose == 3 and duck._idle_action.is_empty(),
 		"A game result immediately overrides the speaking pose and an existing greeting")
 	duck.react("curious")
 	duck.set_speaking(false)
 	duck.set_speaking(true)
 	duck.note_activity()
-	check(duck._gameplay_reaction == "happy" and duck.pose == 3 and duck.perform_trick("snack").is_empty(),
+	check(duck._gameplay_reaction == "happy" and duck.pose == 3 and duck.perform_trick("wave").is_empty(),
 		"Hover, speech changes, activity and greeting attempts cannot replace an active result")
 	duck._process(0.45)
 	duck.react_gameplay(false)
@@ -190,10 +190,10 @@ func _check_rendered_faces(duck) -> void:
 		duck.size = Vector2(edge, edge)
 		duck.position = Vector2(12, 12)
 		var cell: int = edge + 24
-		var montage := Image.create(cell * 6, cell * THEMES.size(), false, Image.FORMAT_RGBA8)
+		var montage := Image.create(cell * 6, cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
-		for theme_index in range(THEMES.size()):
-			duck.set_outfit_theme(THEMES[theme_index])
+		for theme_index in range(LEVELS.size()):
+			duck.set_growth_level(LEVELS[theme_index])
 			var frames: Array[PackedByteArray] = []
 			for column in range(6):
 				var correct: bool = column < 3
@@ -206,7 +206,7 @@ func _check_rendered_faces(duck) -> void:
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, theme_index * cell))
 				frames.append(frame.get_data())
 			check(frames[0] != frames[1] and frames[1] != frames[2] and frames[3] != frames[4] and frames[4] != frames[5],
-				THEMES[theme_index] + " renders distinct happy and sad phases at %d pixels" % edge)
+				"Lv%d" % LEVELS[theme_index] + " renders distinct happy and sad phases at %d pixels" % edge)
 		check(montage.save_png(directory + "/reactions-%d.png" % edge) == OK, "Actual %d-pixel gameplay poses are saved for visual review" % edge)
 		duck.set_reduced_motion(true)
 		duck.react_gameplay(false)

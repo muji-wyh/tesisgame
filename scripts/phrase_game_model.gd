@@ -30,7 +30,7 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 	options.clear()
 	feedback = ""
 	error = ""
-	var band: Dictionary = Data.age_band("10-plus" if age_band == "10+" else age_band)
+	var band: Dictionary = Data.age_band(age_band)
 	if band.is_empty():
 		return _fail("Please choose an available age level.")
 	var by_id: Dictionary = {}
@@ -44,7 +44,7 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 			return _fail("Phrase play needs distinct words.")
 		by_id[word.id] = word.duplicate(true)
 		seen_text[normalized] = true
-		if Data.word_level(word) <= int(band.max_level):
+		if Data.word_age(word) <= int(band.max_age):
 			eligible_words.append(word.duplicate(true))
 	var available: Array[Dictionary] = []
 	for phrase in PhraseData.for_age(age_band):
@@ -58,6 +58,9 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 	else:
 		rng.seed = seed_value
 	_shuffle(available, rng)
+	# Shuffle ties, then prioritize phrases containing the least-practised tier.
+	available.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return _learning_priority(a, by_id) > _learning_priority(b, by_id))
 	questions.assign(available.slice(0, QUESTION_COUNT))
 	for question in questions:
 		var bank: Array[Dictionary] = []
@@ -203,7 +206,7 @@ func _fail(message: String) -> bool:
 
 
 func _valid_word(word: Dictionary) -> bool:
-	for key in ["id", "text", "image", "audio", "level"]:
+	for key in ["id", "text", "audio", "level"]:
 		if not word.get(key) is String or String(word[key]).strip_edges().is_empty():
 			return false
 	return Data.word_level(word) > 0
@@ -212,10 +215,10 @@ func _valid_word(word: Dictionary) -> bool:
 func _phrase_available(phrase: Dictionary, by_id: Dictionary) -> bool:
 	var text: PackedStringArray = []
 	for id in phrase.words:
-		if not by_id.has(id) or Data.word_level(by_id[id]) > Data.word_level(phrase):
+		if not by_id.has(id) or Data.word_age(by_id[id]) > Data.word_age(phrase):
 			return false
 		text.append(by_id[id].text)
-	return " ".join(text) == phrase.text and by_id.has(phrase.picture_id)
+	return " ".join(text) == phrase.text and (phrase.picture_id.is_empty() or by_id.has(phrase.picture_id))
 
 
 func _shuffle(items: Array, rng: RandomNumberGenerator) -> void:
@@ -237,3 +240,10 @@ func _avoid_ordered_targets(bank: Array[Dictionary], target: Array) -> void:
 		var first: Dictionary = bank[target_positions[0]]
 		bank[target_positions[0]] = bank[target_positions[1]]
 		bank[target_positions[1]] = first
+
+
+func _learning_priority(phrase: Dictionary, by_id: Dictionary) -> int:
+	var score: int = 0
+	for id in phrase.words:
+		score += int(by_id[id].get("_growth_priority", 0))
+	return score

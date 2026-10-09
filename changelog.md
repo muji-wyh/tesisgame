@@ -1,9 +1,23 @@
 # Changelog
 
-Notable changes to Pip and Words (formerly Word Buddies), grouped by date with the newest changes first.
+Notable changes to Grow with Pip (formerly Pip and Words and Word Buddies), grouped by date with the newest changes first.
 
 Entries describe behavior at their recorded revision, including features later
 removed. Use the [documentation index](docs/README.md) for current guidance.
+
+## 2026-10-09
+
+- Renamed the game Grow with Pip and added shared word mastery across Match,
+  Memory, Phrase Builder and Voice Pop. Six consecutive correct answers master
+  a word; mistakes reset the word, while earned levels never decrease.
+- Added ten age-labelled ESL cohorts from Lv3 to Lv12+, a persistent progress
+  bar and a complete word notebook. Expanded the catalog to 1,550 words and
+  330 phrases with approved Ava recordings, researched curriculum notes,
+  sourced pictures and contextual vocabulary.
+- Added ten earned Pip appearances with cumulative gestures and a standalone
+  interactive action/voice review page at `/preview/pip-growth/`.
+- Retired Pip's room, identity avatars, usernames and leaderboards, including
+  exclusive runtime code and assets. Existing chest and reward saves remain.
 
 ## 2026-10-06
 

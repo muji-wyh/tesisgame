@@ -97,7 +97,8 @@ Then **New adventure** appears as a bottom-right overlay without shifting or
 shrinking the chest. The word review strip and result toy action are removed.
 Hold instructions, completion status and toy unlocks remain available to screen
 readers; pending-save and failed-save messages remain visible. Save recovery
-uses a floating **Retry saving** button. Unlocked toys remain in the playroom.
+uses a floating **Retry saving** button. Pip's room is retired; legacy gift
+accounting remains only for save compatibility.
 Piece counts and medal records still drive persistence and gift requirements,
 but the result has no collectible badge, assembly, tap-to-place interaction or
 flight to the toolbar. The view owns the release flash and twelve radial light
@@ -120,7 +121,7 @@ details; only the pale circular backplate and floor shadow are removed.
 This surprise is a cosmetic display for the current reward view. It has no
 collectible album, progress counter or saved storage, and does not change rewards
 or ownership.
-Existing toy unlocks and playroom selection remain independent.
+Existing reward records remain independent from word mastery and Pip levels.
 
 ## Sound bank
 

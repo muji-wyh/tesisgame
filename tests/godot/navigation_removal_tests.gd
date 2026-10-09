@@ -27,7 +27,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -67,25 +67,15 @@ func _run() -> void:
 	app._progress_ready = true
 	app._save_error = false
 	app.medal_progress.counts = {"spring-3": 3}
-	check(app.playroom_state.select_item("backdrop-spring", app.medal_progress.counts),
-		"Existing backdrop selections remain valid saved data")
 	app._show_collection()
 	await settle()
-	check(app._room.item_buttons.size() == 9 and app._room.item_buttons.keys().all(
-		func(id: String) -> bool: return id.begins_with("toy-")), "Rewards offers toys, not hidden backdrop choices")
-	check(app.find_child("RoomCategory_backdrop", true, false) == null and not app._room.has_method("_show_category"),
-		"The Rooms category and its switching route are removed")
-	check(app.playroom_state.backdrop_id == "backdrop-spring" and app._room._room.theme_id == app.model.theme_id,
-		"The current world's room preserves the legacy backdrop field without restoring its chooser")
 	var before_words: Array = app.model.lesson_words.duplicate(true)
-	var before_goal: String = app.playroom_state.goal_item_id
-	app._start_gift_adventure("backdrop-space")
-	check(app.collection_page.visible and app.model.lesson_words == before_words
-		and app.playroom_state.goal_item_id == before_goal, "Old room-gift entry points cannot start or save a new adventure")
-	check(not app.has_method("_show_reward_section") and app._collection_title.text == "Pip",
-		"World selection has no separate navigation tab or retained section route")
+	check(app._age_catalog.is_visible_in_tree() and app._collection_title.text == "Grow with Pip",
+		"The growth catalog replaces the retired Pip room")
+	for retired in ["_start_gift_adventure", "_show_leaderboard", "_select_room_item"]:
+		check(not app.has_method(retired), "Retired navigation cannot be invoked: " + retired)
 	check(app._world_choices.is_visible_in_tree() and app._world_scroll.is_ancestor_of(app._world_grid),
-		"The world choices are directly available in Pip's room")
+		"The world choices are directly available below learning progress")
 	for width in [320, 768]:
 		root.size = Vector2i(width, 1024)
 		await settle()
@@ -104,7 +94,7 @@ func _run() -> void:
 	var cards: Array = app.model.cards.duplicate(true)
 	var hints: int = app.model.hints_remaining
 	app.theme_buttons[4].pressed.emit()
-	check(app.collection_page.visible and app._room.is_visible_in_tree() and app.model.theme_id == "ocean"
+	check(app.collection_page.visible and app._age_catalog.is_visible_in_tree() and app.model.theme_id == "ocean"
 		and app.model.cards == cards and app.model.hints_remaining == hints,
 		"A direct world choice keeps the page open and preserves the current game")
 	app._hide_collection()

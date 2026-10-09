@@ -36,7 +36,7 @@ function messagesFor(root) {
   const messages = Object.entries(prompts).map(([id, text]) => ({ id, text }));
   for (const word of words) {
     if (!word || typeof word.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(word.id) ||
-        typeof word.text !== 'string' || !/^[a-z]{2,14}$/.test(word.text)) {
+        typeof word.text !== 'string' || !/^[a-z]{1,14}$/.test(word.text)) {
       throw new Error('Vocabulary entries need a lowercase ID and a short English word.');
     }
     const id = `word-${word.id}`;
@@ -47,8 +47,8 @@ function messagesFor(root) {
   }
   for (const phrase of phrases) {
     if (!phrase || typeof phrase.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(phrase.id) ||
-        typeof phrase.text !== 'string' || !/^[a-z]{2,14}(?: [a-z]{2,14}){1,3}$/.test(phrase.text)) {
-      throw new Error('Phrase entries need a lowercase ID and two to four short English words.');
+        typeof phrase.text !== 'string' || !/^[a-z]{1,14}(?: [a-z]{1,14}){1,5}$/.test(phrase.text)) {
+      throw new Error('Phrase entries need a lowercase ID and two to six short English words.');
     }
     const id = `phrase-${phrase.id}`;
     if (phrase.audio !== `assets/audio/voice/${id}.wav`) {

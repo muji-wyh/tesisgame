@@ -17,7 +17,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/playroom.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
@@ -171,19 +170,12 @@ func _run() -> void:
 	app.cards[app.model.cards[0].id].pressed.emit()
 	app._show_collection()
 	check(not app.audio.voice.playing, "Opening rewards stops speech about a now-covered picture")
-	app.medal_progress.counts["spring-1"] = 3
-	app._refresh_collection()
-	app._select_room_item("toy-ball")
-	app._room.toy_button.pressed.emit()
-	check(app.audio.voice.playing, "The current room toy pronounces its word")
-	app._room.item_buttons["toy-spring"].pressed.emit()
-	check(app._room._toy.word_id == "flower" and app._room._stage == 1 and app.audio.voice.playing
-		and app.audio.voice.stream == load("res://assets/audio/voice/word-flower.wav"),
-		"The first tap on an owned floor toy replaces the previous word with its own pronunciation and action")
-	app._room.toy_button.pressed.emit()
-	check(app.audio.voice.playing, "The replacement toy can pronounce its word")
+	var catalog_word: Dictionary = app.data.words.filter(func(word: Dictionary) -> bool: return word.id == "cat")[0]
+	app._hear_catalog_word(catalog_word)
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(catalog_word.audio)),
+		"A growth catalog word plays its own pronunciation")
 	app._hide_collection()
-	check(not app.audio.voice.playing, "Leaving the room stops the hidden toy's word")
+	check(not app.audio.voice.playing, "Leaving the catalog stops the hidden word's pronunciation")
 	app.choose_mode("match")
 	for exit_path in ["stop", "speech_end", "rewards", "hidden"]:
 		app.new_round(21, true)
@@ -469,8 +461,8 @@ func _check_speech_debug(app) -> void:
 	app.new_round(97, true, "", "pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	app._on_voice_state([true, true, "Listening."])
-	var ledger: Array = [app.leaderboard_state._bests.duplicate(true),
-		app.leaderboard_state._receipts.duplicate(true), app.medal_progress.counts.duplicate(true)]
+	var ledger: Array = [app.growth.snapshot().streaks.duplicate(true),
+		app.growth.snapshot().level, app.medal_progress.counts.duplicate(true)]
 	var hits: int = app._pop.game.hits
 	var score: int = app._pop.game.score
 	check(app._on_speech_debug(["open"]), "Diagnostics can pause a running Voice Pop round")
@@ -510,8 +502,8 @@ func _check_speech_debug(app) -> void:
 	check(not app._on_speech_debug(["cue", "launch"])
 		and not app._on_speech_debug(["mix", 0.0]) and app._on_speech_debug(["close"]),
 		"Late diagnostic commands are harmless after an idempotent close")
-	check(ledger == [app.leaderboard_state._bests, app.leaderboard_state._receipts, app.medal_progress.counts],
-		"Diagnostic entry, cues and exit never write leaderboard results or rewards")
+	check(ledger == [app.growth.snapshot().streaks, app.growth.snapshot().level, app.medal_progress.counts],
+		"Diagnostic entry, cues and exit never write growth progress or rewards")
 	app.choose_mode("match")
 	check(app._on_speech_debug(["open"]), "Match can enter the same diagnostic pause")
 	app._on_speech_debug(["mix", 0.35])
@@ -909,7 +901,7 @@ func _pop_hit_visible_word(app, elapsed: float = 0.0) -> bool:
 func _match_progress(app) -> Array:
 	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining,
 		app.model.selected_id, app.model.matched_ids.duplicate(),
-		app.medal_progress.counts.duplicate(), app.playroom_state.collected_word_ids.duplicate()]
+		app.medal_progress.counts.duplicate(), app.growth.snapshot().streaks.duplicate()]
 
 
 func _tap_control(control: Control) -> void:

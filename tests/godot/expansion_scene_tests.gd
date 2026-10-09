@@ -22,13 +22,6 @@ func _run() -> void:
 	var directory := "user://expansion-%d" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/playroom.cfg"
-	var legacy := ConfigFile.new()
-	legacy.set_value("playroom", "version", 1)
-	legacy.set_value("playroom", "toy", "toy-ball")
-	legacy.set_value("playroom", "backdrop", "backdrop-home")
-	legacy.set_value("playroom", "favorite", "ocean-1")
-	check(legacy.save(directory + "/playroom-v2.cfg") == OK, "Seed an archived favorite before loading the scene")
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
@@ -59,21 +52,6 @@ func _run() -> void:
 	app._memory.study_button.button_down.emit()
 	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
-	app._room.toy_button.pressed.emit()
-	check(app._room.feedback_text.to_lower().contains("ball"), "The room toy action gives named accessibility feedback")
-	app.duck.grab_focus()
-	await process_frame
-	await process_frame
-	check(app._collection_scroll.scroll_vertical == 0
-		and app._collection_scroll.get_global_rect().encloses(app.duck.get_global_rect()),
-		"Keyboard focus keeps Pip visible in the fixed playground")
-	var scroll_before: int = app._collection_scroll.scroll_vertical
-	var trick_before: int = app._duck_trick_index
-	await _stroke_duck(app.duck)
-	check(app._collection_scroll.scroll_vertical == scroll_before, "Stroking Pip belongs to the playground and does not scroll the reward room")
-	var has_playground: bool = app._room.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "playground")
-	check(has_playground and app._room.playground.interaction_kind == "pet", "A real stroke gives Pip a petting reaction")
-	check(app._duck_trick_index == trick_before, "Finishing a petting stroke does not also trigger the old Pip trick")
 	app._hide_collection()
 	app._controller_mode = true
 	app.choose_mode("match")
@@ -98,28 +76,21 @@ func _run() -> void:
 		app.cards[word_id + ":image"].pressed.emit()
 		app._continue_match()
 	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5, "Five Match pairs enter the shared win screen")
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	check(app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "Completing the lesson presents only the unopened chest")
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match win earns one ordinary medal piece")
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")
-	app._show_collection()
-	check(app.playroom_state.favorite_id == "ocean-1", "Ordinary gameplay preserves the archived favorite")
-	app._refresh_collection()
-	check(app._playroom_medal.visible and app._favorite_reward_id == "ocean-1",
-		"An existing earned favorite remains a room decoration")
-	var saved := ConfigFile.new()
-	check(saved.load(app.playroom_save_path.get_basename() + "-v2.cfg") == OK and saved.get_value("playroom", "favorite", "") == "ocean-1", "The existing favorite survives reload")
-	app._hide_collection()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
 		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
 		"New adventure starts a fresh Match board with a normal new attempt")
-	check(app.model.theme_id == "ocean" and app._favorite_reward_id == "ocean-1"
+	check(app.model.theme_id == "ocean"
 		and app.medal_progress.count_for("ocean-1") == 1,
-		"A fresh adventure preserves the selected world, favorite, and earned piece")
+		"A fresh adventure preserves the selected world and earned piece")
 	app.choose_mode("match")
 	app.audio.set_muted(false)
 	var wrong: Array = []
@@ -159,25 +130,3 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Expansion scene: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
-
-
-func _stroke_duck(duck: Control) -> void:
-	var start: Vector2 = duck.get_global_rect().get_center() - Vector2(20, 0)
-	for pressed in [true, false]:
-		var event := InputEventMouseButton.new()
-		event.position = start if pressed else start + Vector2(44, 0)
-		event.global_position = event.position
-		event.button_index = MOUSE_BUTTON_LEFT
-		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
-		event.pressed = pressed
-		root.push_input(event, true)
-		await process_frame
-		if pressed:
-			for step in range(1, 5):
-				var motion := InputEventMouseMotion.new()
-				motion.position = start + Vector2(step * 11, 0)
-				motion.global_position = motion.position
-				motion.relative = Vector2(11, 0)
-				motion.button_mask = MOUSE_BUTTON_MASK_LEFT
-				root.push_input(motion, true)
-				await process_frame

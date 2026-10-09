@@ -101,7 +101,6 @@ func _run() -> void:
 	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -584,7 +583,6 @@ func _check_release_commitment(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(
 		directory + "/committed.cfg", directory + "/committed-legacy.cfg", storage)
-	app.playroom_save_path = directory + "/committed-room.cfg"
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -636,7 +634,7 @@ func _check_release_commitment(directory: String) -> void:
 			"Letting go does not shorten the five-second opening performance")
 		var before_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 		check(not before_surprise.active, "The decorative gift waits until the entire opening is complete")
-		var collected_words: Array = app.playroom_state.collected_word_ids.duplicate()
+		var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate()
 		app.chest._advance_animation(0.002)
 		var completed_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 		check(app.model.chest_state == "opened" and _pieces(app) == pieces + 1 and storage.writes == writes + 1
@@ -644,7 +642,7 @@ func _check_release_commitment(directory: String) -> void:
 			"The released opening saves once at its original deadline and keeps its themed glow")
 		check(completed_surprise.active and not str(completed_surprise.kind).is_empty()
 			and completed_surprise.play_count == before_surprise.play_count + 1
-			and app.playroom_state.collected_word_ids == collected_words,
+			and app.growth.snapshot().streaks == growth_before,
 			"Completion adds one displayed gift without collecting a sticker or another saved reward")
 		app.chest_button.button_up.emit()
 		app.chest.cancel_open(true)
@@ -662,7 +660,7 @@ func _check_release_commitment(directory: String) -> void:
 		check(retained_surprise.active and retained_surprise.kind == completed_surprise.kind
 			and retained_surprise.play_count == completed_surprise.play_count
 			and _pieces(app) == pieces + 1 and storage.writes == writes + 1
-			and app.playroom_state.collected_word_ids == collected_words,
+			and app.growth.snapshot().streaks == growth_before,
 			"The settled gift stays visible without adding save writes, pieces or collected words")
 		var cue_count: int = cues.size()
 		app.on_page_hidden()
@@ -845,7 +843,6 @@ func _motion_window(trace: Array, start: float, end: float) -> Dictionary:
 func _check_gameplay_pixels(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/visible.cfg", directory + "/visible-legacy.cfg")
-	app.playroom_save_path = directory + "/visible-room.cfg"
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	root.content_scale_size = Vector2i(480, 480)

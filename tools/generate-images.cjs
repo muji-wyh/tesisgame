@@ -268,6 +268,11 @@ function generateImages() {
   if (!Array.isArray(words)) throw new Error('words.json must contain a vocabulary array.');
   const sourced = new Set(require('./import-vocabulary.cjs').additions().map(word => word.id));
   require('./import-vocabulary.cjs').check();
+  if (fs.existsSync(path.join(root, 'curriculum.json'))) {
+    require('./import-growth-vocabulary.cjs').check();
+    const growthWords = JSON.parse(fs.readFileSync(path.join(root, 'docs/vocabulary/growth-additions.json'), 'utf8'));
+    for (const word of growthWords) sourced.add(word.id);
+  }
   const seen = new Set();
   const outputs = [];
   for (const word of words) {

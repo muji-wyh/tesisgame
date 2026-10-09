@@ -924,7 +924,7 @@ func _check_cancellation_and_guards() -> void:
 			"Late hold progress or beats after " + reason + " cannot restart performance")
 		audio.stop_chest_performance()
 		check(audio._chest_last_hold_pulse == 0, "Stopping the " + reason + " performance resets its held-beat ordinal")
-	audio.play_pip()
+	audio.say("res://assets/audio/voice/word-duck.wav")
 	var greeting: AudioStream = audio.voice.stream
 	audio.cue("select")
 	var effect: AudioStream = audio.effect.stream

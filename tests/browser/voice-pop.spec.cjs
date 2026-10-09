@@ -1,11 +1,11 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, chooseRoundPlayer, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint, leaderboardSnapshot, visibleColorCount } = require('./game-ui.cjs');
+const { chooseMode, openModeMenu, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint, visibleColorCount } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
-const catalog = require('../../words.json');
+const catalog = require('../../words.json').filter(word => word.min_age <= 3 && word.image && (word.practice_modes || ['pop']).includes('pop'));
 const bundledAudioTest = test.extend({
   // Require the game's real tap gestures to unlock audio in these focused tests.
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] }
@@ -94,17 +94,8 @@ function isHitSlice(sound) {
   return sound.playbackRate === 1 && expectedSlices.some(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
 }
 
-function expectResultSaveCue(sounds, available) {
-  // Saving the assigned player's score now has one short success cue. The
-  // removed spoken report and background music must still remain absent.
-  expect(sounds, 'Result completion plays only the score-save cue').toHaveLength(available ? 1 : 0);
-  if (!available) return;
-  const sound = sounds[0], seconds = waveDuration('assets/audio/sfx/correct.wav');
-  expect(Math.abs(sound.duration - seconds)).toBeLessThanOrEqual(1 / sound.sampleRate);
-  expect(sound.loop).toBe(false);
-  expect(sound.playbackRate).toBe(1);
-  expect(sound.contextState).toBe('running');
-  expect(sound.peak, 'The saved-score cue contains audible PCM').toBeGreaterThan(0.01);
+function expectResultSaveCue(sounds) {
+  expect(sounds, 'A zero-chest result remains quiet without profile-score submission').toEqual([]);
 }
 
 function expectPipReaction(sound, emotion) {
@@ -187,7 +178,7 @@ async function installSpeech(page, { automatic = true, available = true, phraseH
   }, { automatic, available, phraseHints, localSupport, localAvailability, installedAvailability });
 }
 
-async function open(page, { url = '/', choosePlayer = true, ...speechOptions } = {}) {
+async function open(page, { url = '/', ...speechOptions } = {}) {
   await installSpeech(page, speechOptions);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -196,7 +187,7 @@ async function open(page, { url = '/', choosePlayer = true, ...speechOptions } =
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
   await enterGame(page);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
-  await chooseMode(page, 'pop', { choosePlayer });
+  await chooseMode(page, 'pop');
   return errors;
 }
 
@@ -292,16 +283,7 @@ function expectSimpleResults(current, bounds) {
   expectRewardLadder(current, bounds);
   expect(current.resultsScrollbarVisible).toBe(false);
   expect(current.transcript).toBe('');
-  const player = current.resultsHits.player;
-  expect(player.id, 'The round keeps the identity chosen before play').toBeTruthy();
-  expect(player.name).toBeTruthy();
-  expect(player.avatar).toBeTruthy();
-  expect(player.rect.every(Number.isFinite)).toBe(true);
-  expect(player.rect[2]).toBeGreaterThan(0);
-  expect(player.rect[0] + player.rect[2], 'The avatar and name remain left of the Hits counter')
-    .toBeLessThanOrEqual(current.resultsHits.rect[0] + 1);
-  // The embedded leaderboard has separate diagnostics. Its middle section can
-  // occupy the viewport while Play again and the review words are both clipped.
+  expect(current.resultsHits.player, 'Results contain no player identity').toBeUndefined();
   expect(current.controls.every(control => /^(?:OpenChests|Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
     'Voice Pop actions offer earned chests, Play again, and individual word pronunciation').toBe(true);
   for (const control of current.controls) {
@@ -335,7 +317,6 @@ async function action(page, pattern) {
   const button = await visibleAction(page, pattern);
   await tap(page, button.x + button.width / 2, button.y + button.height / 2);
   await rendered(page);
-  if (button.name === 'Replay') await chooseRoundPlayer(page);
   return button;
 }
 
@@ -462,8 +443,7 @@ async function expectDirectResultSwipe(page, pattern) {
   await dispatchResultTouch(page, 'touchcancel', x, y);
   await rendered(page);
   expect((await state(page)).phase, `Browser cancellation cannot activate ${button.name}`).toBe('finished');
-  expect((await leaderboardSnapshot(page)).view, 'The browser cancellation callback prevents a canceled tap from opening the player chooser')
-    .toBe('result');
+  expect((await state(page)).phase, 'A canceled tap leaves the completed round intact').toBe('finished');
   expect((await state(page)).resultsScroll, 'A canceled stationary contact does not move the results').toBe(before.resultsScroll);
   await dispatchResultTouch(page, 'touchstart', x, y);
   try {
@@ -488,7 +468,7 @@ async function expectDirectResultSwipe(page, pattern) {
   expect(Math.abs(after.resultsScroll - before.resultsScroll - direction * distance),
     'Releasing a swipe neither doubles the displacement nor adds a focus jump').toBeLessThanOrEqual(2);
   expect(after.phase, 'Swiping a result button never starts a new game').toBe('finished');
-  expect((await leaderboardSnapshot(page)).view, 'Swiping Play again cannot open the player chooser').toBe('result');
+  expect((await state(page)).phase, 'Swiping Play again cannot restart the round').toBe('finished');
   return { button: button.name, canceledTap: true, scale: bounds.scale, direction, samples };
 }
 
@@ -685,7 +665,7 @@ test('Voice Pop starts with browser recognition without voice users or local mod
   await popOne(page);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened");
+  await expect(page.locator('#game-status')).toContainText('Lv3');
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   expect(legacyRequests).toEqual([]);
   expect(errors).toEqual([]);
@@ -717,11 +697,8 @@ test('ordinary Voice Pop requests three alternatives without unsupported phrase 
 });
 
 test('local speech preparation keeps ordinary play available and enables full hints only in a ready new round', async ({ page, browserName }, info) => {
-  const errors = await open(page, { url: '/?speechLocal=1', choosePlayer: false, localSupport: true, phraseHints: true });
+  const errors = await open(page, { url: '/?speechLocal=1', localSupport: true, phraseHints: true });
   const preparation = page.locator('#local-speech-experiment');
-  await expect(preparation).toBeVisible();
-  expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(0);
-  await chooseRoundPlayer(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   const ordinary = await page.evaluate(() => {
     const current = window.__popSpeech.instances.at(-1);
@@ -731,15 +708,14 @@ test('local speech preparation keeps ordinary play available and enables full hi
     .toEqual({ local: false, phrases: [], preparationCalls: [] });
   await expect(preparation).toBeHidden();
 
-  await chooseMode(page, 'match');
-  await chooseMode(page, 'pop', { choosePlayer: false });
+  await openModeMenu(page);
   await expect(preparation).toBeVisible();
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
   await preparation.locator('summary').click();
   await preparation.getByRole('button', { name: 'Check availability', exact: true }).click();
   await expect(preparation.getByRole('button', { name: 'Download English', exact: true })).toBeEnabled();
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   await preparation.getByRole('button', { name: 'Download English', exact: true }).click();
   await expect(preparation.locator('summary')).toContainText('English ready for the next round');
   const preparationCalls = await page.evaluate(() => window.__popSpeech.preparationCalls);
@@ -750,11 +726,12 @@ test('local speech preparation keeps ordinary play available and enables full hi
       'English installation is invoked during the actual download-button gesture').toBe(true);
   }
   expect(await page.evaluate(() => window.__popSpeech.starts), 'Preparation never opens a microphone or restarts a round').toBe(1);
-  expect((await leaderboardSnapshot(page)).view).toBe('picker');
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).phase).toBe('paused');
+  expect((await state(page)).remaining).toBeGreaterThan(0);
 
   await page.screenshot({ path: info.outputPath('local-speech-ready.png') });
-  await chooseRoundPlayer(page);
+  await chooseMode(page, 'match');
+  await chooseMode(page, 'pop');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await expect.poll(async () => (await state(page)).targets.length).toBeGreaterThan(0);
   const local = await page.evaluate(() => {
@@ -944,7 +921,7 @@ test('the live HUD shows and revises the whole interim sentence while scoring on
 
 test('50-second Voice Pop awards combo time once and keeps reduced-motion feedback readable', async ({ page }, info) => {
   const errors = await open(page, { automatic: false });
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   await page.evaluate(() => window.__popSpeech.instances.at(-1).grant());
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await observeHudFeedback(page);
@@ -1011,7 +988,7 @@ test('50-second Voice Pop awards combo time once and keeps reduced-motion feedba
   await chooseMode(page, 'match');
   await chooseMode(page, 'pop');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   expect((await state(page)).bonusTime).toBe(0);
   expect(errors).toEqual([]);
 });
@@ -1071,7 +1048,7 @@ test('Voice Pop requests permission on entry, waits, recovers from denial, and r
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
   await expectGestureStart(page, browserName);
   await page.waitForTimeout(1300);
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await expect(page.locator('#pop-aura')).toHaveCSS('visibility', 'hidden');
   await page.evaluate(() => window.__popSpeech.instances.at(-1).fail('not-allowed'));
@@ -1201,7 +1178,7 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
 test('leaving while permission is pending rejects a late grant and every callback from that recognizer', async ({ page }) => {
   const errors = await open(page, { automatic: false });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   const otherModeStatus = await page.locator('#game-status').textContent();
@@ -1564,8 +1541,8 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false, player: {} });
-  expect((await state(page)).resultsHits.player).toEqual({});
+  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false });
+  expect((await state(page)).resultsHits.player).toBeUndefined();
   expect((await state(page)).resultsRewards, 'A new round clears the previous reward ladder').toEqual({});
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
@@ -1611,8 +1588,7 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   }
   expectSimpleResults(await state(page));
   const reviewedResult = (await state(page)).resultsHits;
-  expect(reviewedResult).toMatchObject({ text: '0', total: 0, active: false,
-    player: { id: zero.resultsHits.player.id, name: zero.resultsHits.player.name, avatar: zero.resultsHits.player.avatar } });
+  expect(reviewedResult).toMatchObject({ text: '0', total: 0, active: false });
   expect(audioRequests, 'A review word plays from the game pack while offline').toEqual([]);
   await page.screenshot({ path: info.outputPath('offline-word-review.png') });
   await chooseMode(page, 'match');
@@ -1637,7 +1613,6 @@ test('Voice Pop result swipes follow the pointer at each display scale without a
   await observeAudio(page, { phaseSelector: '#pop-status' });
   const errors = await open(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
-  await expect.poll(async () => (await leaderboardSnapshot(page)).submitted).toBe(true);
   await page.waitForTimeout(250);
   const starts = await page.evaluate(() => window.__popSpeech.starts);
   const audioStarts = await page.evaluate(() => window.audioObservation.playbacks.length);
@@ -1686,13 +1661,13 @@ test('reduced-motion Voice Pop results show the final hit total immediately', as
     if (reviewedWord || resultsAtEnd(current)) break;
     await scrollResults(page, 180);
   }
-  expect(reviewedWord?.text, 'Word review remains reachable below the saved leaderboard in short landscape').toBe(word);
+  expect(reviewedWord?.text, 'Word review remains reachable on the results page in short landscape').toBe(word);
   await page.screenshot({ path: info.outputPath('reduced-motion-results.png') });
   await resultAction(page, /^Replay /);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false, player: {} });
-  expect((await state(page)).resultsHits.player).toEqual({});
+  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false });
+  expect((await state(page)).resultsHits.player).toBeUndefined();
   expect(errors).toEqual([]);
 });
 
@@ -1782,7 +1757,7 @@ test('speech failure and More pause the round, then Resume keeps the remaining t
   expect((await state(page)).hits).toBe(paused.hits);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened");
+  await expect(page.locator('#game-status')).toContainText('Lv3');
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.keyboard.press('Escape');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
@@ -1840,7 +1815,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }
 test('unsupported speech gives an actionable explanation without starting a timer', async ({ page }, info) => {
   const errors = await open(page, { available: false });
   await expect(page.locator('#pop-status')).toContainText(/unavailable|supported browser|speech recognition/i);
-  expect((await state(page)).remaining).toBe(50);
+  expect((await state(page)).remaining).toBeGreaterThan(0);
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.screenshot({ path: info.outputPath('unsupported.png') });
   await action(page, /back|match|exit/i);

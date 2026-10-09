@@ -47,7 +47,6 @@ func _start() -> void:
 	DirAccess.make_dir_recursive_absolute(isolated)
 	app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = Progress.new(isolated + "/medals.cfg", isolated + "/legacy.cfg")
-	app.playroom_save_path = isolated + "/room.cfg"
 	root.add_child(app)
 	for frame in range(8):
 		await process_frame

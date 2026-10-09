@@ -74,6 +74,7 @@ func _run() -> void:
 	await settle()
 	await _check_content(catalog, data.words)
 	await _check_paging(catalog, data.words)
+	await _check_contextual_guidance(catalog, data.words)
 	await _check_layout(catalog)
 	root.size = Vector2i(640, 800)
 	catalog.size = Vector2(616, 680)
@@ -88,17 +89,20 @@ func _run() -> void:
 
 
 func _check_content(catalog: Catalog, words: Array) -> void:
-	var counts := {"all": 1250, "4-6": 448, "7-9": 412, "10-plus": 390}
-	var levels := {"4-6": "basic", "7-9": "growing", "10-plus": "advanced"}
+	var curriculum: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://curriculum.json"))
+	var counts: Dictionary = {}
+	for tier: Dictionary in curriculum.tiers:
+		counts[tier.id] = int(tier.count)
 	var english := RegEx.new()
 	english.compile("^[A-Za-z][A-Za-z '-]*$")
 	for band: Dictionary in Data.age_bands():
-		# Raw curriculum tiers are independent of the production age-level helper.
+		# Authored minimum ages are checked independently of the UI filtering helper.
 		var eligible: Array = words.filter(func(word: Dictionary) -> bool:
-			return band.id == "all" or word.level == levels[band.id])
+			return int(word.min_age) == int(band.id))
 		var expected: Array = eligible.map(func(word: Dictionary) -> String: return word.id)
 		eligible.reverse()
-		catalog.configure(eligible, band, Data.theme("spring"))
+		var progress := {"level": int(band.id), "streaks": {eligible[0].id: 6, eligible[1].id: 3}}
+		catalog.configure(eligible, band, Data.theme("spring"), progress)
 		await settle()
 		check(catalog.snapshot().word_count == counts[band.id]
 			and catalog.title_label.text == band.name
@@ -121,13 +125,18 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 				var caption: Label = button.get_meta("word_label")
 				check(not seen.has(word.id) and eligible.has(word), "Each eligible word appears exactly once: " + word.id)
 				seen[word.id] = true
-				check(english.search(caption.text) != null and caption.text == word.text
+				check(english.search(caption.text) != null and caption.text == Data.display_word(word)
 					and previous.naturalnocasecmp_to(caption.text) <= 0,
 					"English word labels are alphabetically ordered across page boundaries: " + word.id)
 				previous = caption.text
-				check(picture.texture != null and picture.texture.resource_path == "res://" + word.image
-					and ResourceLoader.exists("res://" + word.audio),
-					"The catalogue retains the loaded illustration and recorded pronunciation: " + word.id)
+				check(ResourceLoader.exists("res://" + word.audio), "Every pictured or contextual word retains a bundled pronunciation: " + word.id)
+				if word.image.is_empty():
+					check(picture.texture == null and not picture.visible and word.practice_modes == ["phrase"], "Contextual words remain readable without invented pictures: " + word.id)
+				else:
+					check(picture.texture != null and picture.texture.resource_path == "res://" + word.image, "The catalogue retains its production illustration: " + word.id)
+				var mastery: Label = button.get_meta("mastery_label")
+				var streak: int = int(progress.streaks.get(word.id, 0))
+				check(mastery.text == ("Mastered" if streak == 6 else "%d / 6" % streak), "Mastered and learning words expose their exact streak: " + word.id)
 		check(catalog.next_button.disabled, "The final page cannot advance past the catalog")
 		check(seen.size() == expected.size() and expected.all(func(id: String) -> bool: return seen.has(id)),
 			"Age " + band.id + " contains its exact curriculum tier")
@@ -139,12 +148,12 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 		check(catalog.focus_word(str(last.get_meta("word_id"))), "Words can be located through the public focus API")
 		await settle()
 		var offset: int = catalog.scroll.scroll_vertical
-		catalog.configure(eligible, band, Data.theme("spring"))
+		catalog.configure(eligible, band, Data.theme("spring"), progress)
 		await settle()
 		check(catalog.word_buttons.back() == last and last.has_focus() and catalog.scroll.scroll_vertical == offset,
 			"Refreshing the selected age preserves focused words and reading position")
 	check(not catalog.focus_word("missing-word"), "Unknown word focus requests are rejected")
-	catalog.configure(words, Data.age_band("all"), Data.theme("spring"))
+	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
 	await settle()
 
 
@@ -187,11 +196,40 @@ func _check_paging(catalog: Catalog, words: Array) -> void:
 	check(catalog.meaning_label.text == "Tap a word to hear it.", "Changing a page clears the previous word's definition")
 	catalog.focus_word(str(catalog.snapshot().word_ids.front()))
 	await settle()
-	catalog.configure(words, Data.age_band("4-6"), Data.theme("spring"))
+	catalog.configure(words, Data.age_band("3"), Data.theme("spring"))
 	await settle()
 	check(catalog.snapshot().page == 1 and catalog.meaning_label.text == "Tap a word to hear it.",
 		"Changing the age resets pagination and the selected definition")
-	catalog.configure(words, Data.age_band("all"), Data.theme("spring"))
+	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	await settle()
+
+
+func _check_contextual_guidance(catalog: Catalog, words: Array) -> void:
+	var contextual: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.id == "i")[0]
+	for dimensions in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(844, 390)]:
+		root.size = dimensions
+		catalog.size = Vector2(dimensions.x - 24, dimensions.y - 120)
+		await settle()
+		check(catalog.focus_word(contextual.id), "Contextual grammar remains reachable in the complete notebook")
+		await settle()
+		var button: Button = root.gui_get_focus_owner()
+		var before := heard.size()
+		button.pressed.emit()
+		await settle()
+		check(heard.size() == before + 1 and heard.back().id == contextual.id
+			and catalog.meaning_label.text.contains("Practice in Phrase Builder.")
+			and str(button.get("accessibility_name")).contains("Practice in Phrase Builder."),
+			"A context word explains its practice route while requesting only its own pronunciation")
+		check(catalog.get_global_rect().encloses(catalog.meaning_label.get_global_rect())
+			and catalog.scroll.size.y >= 20, "Contextual guidance fits and leaves usable word scrolling at " + str(dimensions))
+		catalog.focus_word(contextual.id)
+		await settle()
+		var caption: Label = button.get_meta("word_label")
+		check(catalog.scroll.get_global_rect().grow(1).encloses(caption.get_global_rect()), "The context word stays readable below its practice guidance")
+	root.size = Vector2i(640, 800)
+	catalog.size = Vector2(616, 680)
+	catalog.configure(words, Data.age_band("3"), Data.theme("spring"))
+	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
 	await settle()
 
 
@@ -236,7 +274,7 @@ func _check_layout(catalog: Catalog) -> void:
 		var first_word_limit: int = ceili(target_rect.position.y)
 		check(first.has_focus() and bounds.encloses(first_label.get_global_rect())
 			and catalog.scroll.scroll_vertical <= first_word_limit + 1,
-			"Keyboard focus returns to the first word's visible caption" + suffix)
+			"Keyboard focus returns to the first word caption%s: bounds=%s label=%s offset=%s limit=%s" % [suffix, bounds, first_label.get_global_rect(), catalog.scroll.scroll_vertical, first_word_limit])
 
 
 func _check_input(catalog: Catalog) -> void:
@@ -342,9 +380,12 @@ func _check_stretched_resize(catalog: Catalog) -> void:
 			await process_frame
 			largest_offset = maxi(largest_offset, catalog.scroll.scroll_vertical)
 		var focused: Control = root.gui_get_focus_owner()
+		var focus_target: Control = focused
+		if is_instance_valid(focused) and focused.size.y > catalog.scroll.size.y:
+			focus_target = focused.get_meta("word_label")
 		check(is_instance_valid(focused) and focused.get_meta("word_id", "") == early_id
-			and catalog.scroll.get_global_rect().encloses(focused.get_global_rect()),
-			"Canvas-items resize keeps the early focused word visible at %dx%d" % [dimensions.x, dimensions.y])
+			and catalog.scroll.get_global_rect().encloses(focus_target.get_global_rect()),
+			"Canvas-items resize keeps the early focused word visible at %dx%d: bounds=%s focus=%s" % [dimensions.x, dimensions.y, catalog.scroll.get_global_rect(), focused.get_global_rect() if is_instance_valid(focused) else Rect2()])
 		check(largest_offset < catalog.scroll.size.y and catalog.scroll.scroll_vertical < catalog.snapshot().scroll_max,
 			"Canvas-items resize does not run away to the vocabulary end at %dx%d (largest offset %d)" % [dimensions.x, dimensions.y, largest_offset])
 		var offset: int = catalog.scroll.scroll_vertical

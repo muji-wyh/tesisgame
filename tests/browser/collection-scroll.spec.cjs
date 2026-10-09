@@ -9,7 +9,7 @@ function railClip(bounds, name) {
 
 async function savedState(page) {
   return page.evaluate(() => ({ status: document.getElementById('game-status').textContent,
-    room: localStorage.getItem('wordBuddies.playroom'), medals: localStorage.getItem('wordBuddies.medalProgress'),
+    growth: localStorage.getItem('growWithPip.growth.v1'), medals: localStorage.getItem('wordBuddies.medalProgress'),
     theme: document.querySelector('meta[name="theme-color"]').content }));
 }
 
@@ -35,7 +35,7 @@ async function horizontalShift(page, before, after) {
   }, [before, after].map(png => png.toString('base64')));
 }
 
-for (const ratio of [1, 2, 3]) test.describe(`horizontal room rails at DPR ${ratio}`, () => {
+for (const ratio of [1, 2, 3]) test.describe(`horizontal growth rails at DPR ${ratio}`, () => {
   test.use({ viewport: { width: 390, height: 650 }, deviceScaleFactor: ratio, hasTouch: true, reducedMotion: 'reduce' });
   test('theme rail tracks finger pixels without changing the world or moving the page', async ({ page, browserName }, testInfo) => {
     test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
@@ -60,23 +60,18 @@ for (const ratio of [1, 2, 3]) test.describe(`horizontal room rails at DPR ${rat
     expect(await savedState(page)).toEqual(saved);
     expect(await page.evaluate(() => [scrollX, scrollY])).toEqual([0, 0]);
     await testInfo.attach('horizontal-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
-    await page.screenshot({ path: testInfo.outputPath('fixed-room-after-theme-swipe.png'), scale: 'css' });
+    await page.screenshot({ path: testInfo.outputPath('growth-after-theme-swipe.png'), scale: 'css' });
   });
 });
 
-for (const input of ['mouse', 'touch']) for (const name of ['theme', 'shelf']) {
-  test(`${input} ${name} rail swipe leaves the playground and other controls fixed without activation`, async ({ page, browserName }, testInfo) => {
+for (const input of ['mouse', 'touch']) for (const name of ['theme']) {
+  test(`${input} ${name} rail swipe leaves the growth header fixed without activation`, async ({ page, browserName }, testInfo) => {
     test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
     await page.setViewportSize({ width: 390, height: 650 }); await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/'); await enterGame(page); await openRewards(page);
     const bounds = await metrics(page), c = collectionBounds(bounds), clip = railClip(bounds, name);
     const stationaryClip = { x: bounds.x + c.x * bounds.scale, y: bounds.y + c.padding * bounds.scale,
       width: c.width * bounds.scale, height: (c.top + 36 - c.padding) * bounds.scale };
-    const otherClip = railClip(bounds, name === 'theme' ? 'shelf' : 'theme');
-    // A neighboring theme tooltip can cast its shadow over the strip's outer edge.
-    // Compare the card content to measure movement independently of that hover overlay.
-    otherClip.y += 8;
-    otherClip.height -= 16;
     const start = { x: clip.x + 240, y: clip.y + clip.height / 2 }, saved = await savedState(page);
     const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
     try {
@@ -85,7 +80,6 @@ for (const input of ['mouse', 'touch']) for (const name of ['theme', 'shelf']) {
       await rendered(page);
       const before = await page.screenshot({ clip, scale: 'css' });
       const stationary = await page.screenshot({ clip: stationaryClip, scale: 'css' });
-      const other = await page.screenshot({ clip: otherClip, scale: 'css' });
       for (let step = 1; step <= 5; step++) {
         const point = { x: start.x - step * 12, y: start.y };
         if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...point }] });
@@ -93,13 +87,8 @@ for (const input of ['mouse', 'touch']) for (const name of ['theme', 'shelf']) {
         await rendered(page);
       }
       expect((await horizontalShift(page, before, await page.screenshot({ clip, scale: 'css' }))).pixels).toBeGreaterThanOrEqual(58);
-      expect((await page.screenshot({ clip: stationaryClip, scale: 'css' })).equals(stationary), 'The header and room title stay fixed.').toBe(true);
-      const otherAfter = await page.screenshot({ clip: otherClip, scale: 'css' });
-      if (!otherAfter.equals(other)) {
-        await testInfo.attach('stationary-rail-before', { body: other, contentType: 'image/png' });
-        await testInfo.attach('stationary-rail-after', { body: otherAfter, contentType: 'image/png' });
-      }
-      expect(otherAfter.equals(other), 'Only the dragged rail moves.').toBe(true);
+      expect((await page.screenshot({ clip: stationaryClip, scale: 'css' })).equals(stationary), 'The growth header stays fixed.').toBe(true);
+
     } finally {
       if (client) { await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await client.detach(); }
       else await page.mouse.up();
@@ -108,20 +97,3 @@ for (const input of ['mouse', 'touch']) for (const name of ['theme', 'shelf']) {
     await page.screenshot({ path: testInfo.outputPath(`${name}-${input}-swipe.png`), scale: 'css' });
   });
 }
-
-test('vertical dragging cannot scroll the fixed room page', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 320, height: 568 }); await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/'); await enterGame(page); await openRewards(page);
-  const bounds = await metrics(page), c = collectionBounds(bounds);
-  const start = { x: bounds.x + (c.x + c.width / 2) * bounds.scale, y: bounds.y + (c.top + 80) * bounds.scale };
-  const saved = await savedState(page);
-  await page.mouse.move(start.x, start.y);
-  const before = await page.screenshot({ scale: 'css' });
-  await page.mouse.down(); await page.mouse.move(start.x, start.y - 60, { steps: 6 }); await page.mouse.up(); await rendered(page);
-  expect((await page.screenshot({ scale: 'css' })).equals(before), 'A vertical drag leaves the fixed room layout unchanged.').toBe(true);
-  expect(await savedState(page)).toEqual(saved);
-  expect(await page.evaluate(() => ({ x: scrollX, y: scrollY,
-    fits: document.documentElement.scrollHeight <= innerHeight && document.documentElement.scrollWidth <= innerWidth })))
-    .toEqual({ x: 0, y: 0, fits: true });
-  await page.screenshot({ path: testInfo.outputPath('fixed-room-320.png'), scale: 'css' });
-});

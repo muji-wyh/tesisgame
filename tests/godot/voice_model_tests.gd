@@ -338,7 +338,7 @@ func _test_locks(model_script: GDScript, words: Array) -> void:
 
 
 func _test_vocabulary(model_script: GDScript, words: Array) -> void:
-	check(words.size() == 1250, "Voice tests cover the game's complete 1,250-word vocabulary")
+	check(words.size() == 1550, "Voice tests cover the game's complete 1,550-word vocabulary")
 	for word in words:
 		var model = model_script.new()
 		model.cards.assign([

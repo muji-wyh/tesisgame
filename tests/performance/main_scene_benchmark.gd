@@ -2,8 +2,8 @@ extends SceneTree
 ## Rendered native benchmark. Never use the one-second TIME_PROCESS maximum as a frame sample.
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
-const SCENARIOS := ["match", "memory", "voice-pop", "room", "catalog", "chest"]
-const PROTOCOL := "main-scene-rendered-v1"
+const SCENARIOS := ["match", "memory", "voice-pop", "growth", "catalog", "chest"]
+const PROTOCOL := "main-scene-rendered-v2"
 
 class FrameStart extends Node:
 	var bench
@@ -37,6 +37,7 @@ var _drawn_target_peak: int = 0
 var _actions: Array[Dictionary] = []
 var _pairs: Array = []
 var _catalog_word_ids: Array[String] = []
+var _growth_before: Dictionary = {}
 var _catalog_card_peak: int = 0
 var _catalog_texture_peak: int = 0
 var _chest_cues: Array[String] = []
@@ -68,7 +69,7 @@ func _run() -> void:
 	_sample_count = int(_options.get("samples", 240))
 	_warmup_count = int(_options.get("warmup", 90))
 	_seed = int(_options.get("seed", 73021))
-	var requested: PackedStringArray = str(_options.get("scenarios", "match,memory,voice-pop,room,catalog,chest")).split(",")
+	var requested: PackedStringArray = str(_options.get("scenarios", ",".join(SCENARIOS))).split(",")
 	if not _require(DisplayServer.get_name() != "headless", "A real native renderer is required"):
 		return
 	if not _require(_sample_count > 0 and _warmup_count >= 2 and _options.has("output"), "Invalid benchmark options"):
@@ -182,7 +183,6 @@ func _install_scene() -> void:
 		return
 	_app = load("res://scenes/main.tscn").instantiate()
 	_app.medal_progress = load("res://scripts/medal_progress.gd").new(_directory + "/medals.cfg", _directory + "/legacy.cfg")
-	_app.playroom_save_path = _directory + "/room.cfg"
 	PlayerFixture.install(_app, _directory)
 	root.add_child(_app)
 	await process_frame
@@ -192,8 +192,8 @@ func _install_scene() -> void:
 	# Pip uses a private RNG, independent of the seeded global gameplay generator.
 	_app.duck._idle_rng.seed = _seed
 	_app.duck.note_activity()
-	_require(_app._host == null and not _app._page_hidden and not _app._leaderboard_overlay.visible,
-		"Native scene must be active, isolated, and free of onboarding")
+	_require(_app._host == null and not _app._page_hidden and not _app._mode_menu_open(),
+		"Native scene must be active, isolated, and ready for gameplay")
 
 
 func _prepare_scenario() -> void:
@@ -205,7 +205,7 @@ func _prepare_scenario() -> void:
 	var mode: String = {"voice-pop": "pop"}.get(_scenario, _scenario)
 	if mode not in ["match", "memory", "pop"]:
 		mode = "match"
-	if not _require(_app.new_round(_seed, false, "animal-friends", mode), "Deterministic round must start"):
+	if not _require(_app.new_round(_seed, false, "", mode), "Deterministic curriculum round must start"):
 		return
 	_app.choose_theme("spring")
 	match _scenario:
@@ -218,6 +218,7 @@ func _prepare_scenario() -> void:
 					_app.cards[pair[0]].pressed.emit()
 					_app.cards[pair[1]].pressed.emit()
 					_app._continue_match()
+				PlayerFixture.finish_celebration(_app)
 				_app.chest.cue_requested.connect(func(_theme: String, cue: String, _step: int) -> void: _chest_cues.append(cue))
 		"memory":
 			var board: Array = _app._memory.memory.cards
@@ -229,11 +230,12 @@ func _prepare_scenario() -> void:
 		"voice-pop":
 			PlayerFixture.choose_pop_player(_app)
 			_app._on_voice_state([true, true, "Listening. Say an English word."])
-		"room", "catalog":
+		"growth", "catalog":
 			_app._show_collection()
+			_growth_before = _app.growth.snapshot()
 			if _scenario == "catalog":
-				_app._age_buttons["all"].pressed.emit()
-				# Capture the complete ordered catalogue before timing; rendered cards
+				_app._age_buttons["7"].pressed.emit()
+				# Capture the complete ordered age-seven cohort before timing; rendered cards
 				# contain only the current page and cannot select a distant word.
 				_catalog_word_ids.assign(_app._age_catalog.snapshot().word_ids)
 
@@ -311,13 +313,15 @@ func _scheduled_input(frame: int) -> void:
 				_app._pop.show_transcript(word, true)
 				_app._pop.receive_transcript(word)
 				_actions.append({"frame": frame, "action": "pop_word", "word": word})
-		"room":
-			if frame == early:
-				_app._room.playground.pet()
-				_actions.append({"frame": frame, "action": "pet_pip"})
-			if frame == int(_sample_count * 0.70):
-				_app._room.toy_button.pressed.emit()
-				_actions.append({"frame": frame, "action": "room_toy"})
+		"growth":
+			if frame in [early, middle]:
+				var age: String = "4" if frame == early else "3"
+				_app._age_buttons[age].pressed.emit()
+				_actions.append({"frame": frame, "action": "browse_age", "age": int(age)})
+			if frame == int(_sample_count * 0.84):
+				var button: Button = _app._age_catalog.word_buttons[0]
+				button.pressed.emit()
+				_actions.append({"frame": frame, "action": "growth_word", "word_id": str(button.get_meta("word_id"))})
 		"catalog":
 			if frame in [early, middle, int(_sample_count * 0.84)]:
 				var index: int = 0 if frame == early else _catalog_word_ids.size() / 2 if frame == middle else _catalog_word_ids.size() - 1
@@ -338,13 +342,21 @@ func _state() -> Dictionary:
 		"match": return {"visible": _visible_control(_app.grid), "phase": _app.model.phase, "cards": _app.cards.size(), "matched_cards": _app.model.matched_ids.size()}
 		"memory": return {"visible": _visible_control(_app._memory), "phase": _app._memory.memory.phase, "cards": _app._memory.card_buttons.size(), "matches": _app._memory.memory.matched_word_ids.size()}
 		"voice-pop": return {"visible": _visible_control(_app._pop), "hud_visible": _visible_control(_app._pop._hud), "phase": _app._pop.game.phase, "elapsed": _app._pop.game.elapsed, "targets": _app._pop.game.targets.size(), "draw_targets": _app._pop._draw_targets.size(), "hits": _app._pop.game.hits}
-		"room": return {"visible": _visible_control(_app._room), "playground_visible": _visible_control(_app._room.playground), "pip_visible": _visible_control(_app.duck), "pet_count": _app._room.playground._pet_count, "toy_phase": _app._room.playground.toy_phase}
+		"growth": return {"visible": _visible_control(_app.collection_page), "catalog_visible": _visible_control(_app._age_catalog),
+			"age": _app._catalog_age, "level": _app.growth.level, "word_count": _app._age_catalog.word_count(),
+			"summary": _app._growth_summary.text, "progress_unchanged": _app.growth.snapshot() == _growth_before}
 		"catalog":
 			var catalog: Dictionary = _app._age_catalog.snapshot()
+			var pictured_paths: Dictionary = {}
+			for button: Button in _app._age_catalog.word_buttons:
+				var source: String = str(button.get_meta("word").get("image", ""))
+				if not source.is_empty():
+					pictured_paths[source] = true
 			return {"visible": _visible_control(_app._age_catalog), "word_count": catalog.word_count,
+				"age": _app._catalog_age, "expected_textures": pictured_paths.size(),
 				"page": catalog.page, "page_count": catalog.page_count, "page_size": _app._age_catalog.PAGE_SIZE,
 				"cards": _app._age_catalog.word_buttons.size(), "textures": _app._age_catalog._textures.size(),
-				"scroll": catalog.scroll_offset}
+				"scroll": catalog.scroll_offset, "progress_unchanged": _app.growth.snapshot() == _growth_before}
 		"chest": return {"visible": _visible_control(_app.chest), "phase": _app.model.phase, "chest_state": _app.model.chest_state, "cues": _chest_cues.duplicate()}
 	return {}
 
@@ -357,20 +369,23 @@ func _assert_workload(after: bool) -> bool:
 	var state: Dictionary = _state()
 	if not _require(bool(state.get("visible", false)), "Workload must remain visible with nonzero layout: " + _scenario):
 		return false
-	if not _require(not _app.reduced_motion and not _app._page_hidden and not _app._leaderboard_overlay.visible, "Scene must retain normal motion and active input"):
+	if not _require(not _app.reduced_motion and not _app._page_hidden and not _app._mode_menu_open(), "Scene must retain normal motion and active input"):
 		return false
 	var valid := false
 	match _scenario:
 		"match": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matched_cards >= 4)
 		"memory": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
 		"voice-pop": valid = state.hud_visible and state.phase == "running" and state.elapsed > 0 and ((state.targets > 0 and state.draw_targets > 0) if not after else (state.hits == 3 and _target_workload_recorded()))
-		"room": valid = state.playground_visible and state.pip_visible and (not after or state.pet_count > 0)
+		"growth": valid = state.catalog_visible and state.age == 3 and state.level == 3 and state.word_count == 80 \
+			and state.summary.begins_with("Lv3") and state.progress_unchanged \
+			and (not after or (_actions.size() == 3 and _actions[0].action == "browse_age" and _actions[0].age == 4 \
+				and _actions[1].action == "browse_age" and _actions[1].age == 3 and _actions[2].action == "growth_word"))
 		"catalog":
 			var expected_cards: int = mini(state.page_size, state.word_count - (state.page - 1) * state.page_size)
-			valid = state.word_count == 1250 and _catalog_word_ids.size() == state.word_count \
-				and state.page_size == 60 and state.page_count == 21 and state.page >= 1 and state.page <= state.page_count \
+			valid = state.age == 7 and state.word_count == 284 and _catalog_word_ids.size() == state.word_count \
+				and state.page_size == 60 and state.page_count == 5 and state.page >= 1 and state.page <= state.page_count \
 				and state.cards == expected_cards and state.cards > 0 and state.cards <= state.page_size \
-				and state.textures == state.cards \
+				and state.textures == state.expected_textures and state.progress_unchanged \
 				and ((state.page == 1) if not after else (state.page == state.page_count and state.scroll > 0 \
 					and _catalog_card_peak > 0 and _catalog_card_peak <= state.page_size \
 					and _catalog_texture_peak > 0 and _catalog_texture_peak <= state.page_size and _catalog_inputs_recorded()))

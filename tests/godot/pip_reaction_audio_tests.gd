@@ -40,7 +40,6 @@ func _check_reaction_channel() -> void:
 	var effect_stream: AudioStream = audio.effect.stream
 	var word_request: int = audio._playback_requests[audio.voice]
 	var effect_request: int = audio._playback_requests[audio.effect]
-	var pip_state: int = audio._pip_rng.state
 	var pop_state: int = audio._pop_slice_rng.state
 	seed(84063)
 	var expected_random: int = randi()
@@ -65,7 +64,7 @@ func _check_reaction_channel() -> void:
 		"Rapid results replace one bounded reaction channel with the latest emotion")
 	check(audio.pip_reaction.pitch_scale < 1.0 and audio.pip_reaction.volume_db < happy_gain,
 		"A missed result has a lower, softer quack than the happy reaction")
-	check(randi() == expected_random and audio._pip_rng.state == pip_state and audio._pop_slice_rng.state == pop_state,
+	check(randi() == expected_random and audio._pop_slice_rng.state == pop_state,
 		"Emotional quacks do not consume greeting, fruit sound or gameplay randomness")
 	var reaction_request: int = audio._playback_requests[audio.pip_reaction]
 	audio.say("res://assets/audio/voice/word-banana.wav")

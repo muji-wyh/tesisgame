@@ -53,7 +53,6 @@ func _run() -> void:
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/old.cfg")
 	app._mode_id = "match"
-	app.playroom_save_path = directory + "/playroom.cfg"
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -119,8 +118,8 @@ func _run() -> void:
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 3, "A repeated completion cannot add progress")
 	app._show_collection()
-	check(app._room.item_buttons["toy-spring"].get_parent() == app._room.owned_toys,
-		"Completing the first medal unlocks the Spring toy in Pip's room")
+	check(app._age_catalog.is_visible_in_tree() and app.medal_progress.count_for("spring-1") == 3,
+		"The growth catalog preserves chest progress independently of retired room toys")
 	app._hide_collection()
 	app.new_round(9)
 	app.choose_theme("spring")
@@ -216,8 +215,8 @@ func _run() -> void:
 	app.medal_progress.counts["spring-1"] = 3
 	app._refresh_collection()
 	app._refresh()
-	check(app._room.item_buttons["toy-spring"].focus_mode == Control.FOCUS_ALL,
-		"Newly earned toys become keyboard-reachable after refreshing the room")
+	check(app._age_catalog.word_buttons.all(func(control: Control) -> bool: return app._valid_focus(control)),
+		"Refreshing earned progress preserves keyboard navigation in the word catalog")
 	app._hide_collection()
 	root.size = Vector2i(390, 844)
 	app.new_round(6)
@@ -247,7 +246,6 @@ func _run() -> void:
 	check(legacy.save(directory + "/legacy.cfg") == OK, "An old-reward archive fixture is saved")
 	var archive_app = load("res://scenes/main.tscn").instantiate()
 	archive_app.medal_progress = progress_script.new(directory + "/archive.cfg", directory + "/legacy.cfg")
-	archive_app.playroom_save_path = directory + "/archive-playroom.cfg"
 	root.add_child(archive_app)
 	await process_frame
 	await process_frame

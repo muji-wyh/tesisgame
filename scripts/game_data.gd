@@ -1,12 +1,18 @@
 extends RefCounted
 
-const GAME_NAME: String = "Pip and Words"
+const GAME_NAME: String = "Grow with Pip"
 const PIECES_PER_MEDAL: int = 3
 const AGE_BANDS: Array[Dictionary] = [
-	{"id": "all", "name": "All words", "label": "All", "max_level": 3},
-	{"id": "4-6", "name": "Ages 4-6", "label": "4-6", "max_level": 1},
-	{"id": "7-9", "name": "Ages 7-9", "label": "7-9", "max_level": 2},
-	{"id": "10-plus", "name": "Ages 10+", "label": "10+", "max_level": 3}
+	{"id": "3", "name": "Age 3 words", "label": "3", "max_age": 3},
+	{"id": "4", "name": "Age 4 words", "label": "4", "max_age": 4},
+	{"id": "5", "name": "Age 5 words", "label": "5", "max_age": 5},
+	{"id": "6", "name": "Age 6 words", "label": "6", "max_age": 6},
+	{"id": "7", "name": "Age 7 words", "label": "7", "max_age": 7},
+	{"id": "8", "name": "Age 8 words", "label": "8", "max_age": 8},
+	{"id": "9", "name": "Age 9 words", "label": "9", "max_age": 9},
+	{"id": "10", "name": "Age 10 words", "label": "10", "max_age": 10},
+	{"id": "11", "name": "Age 11 words", "label": "11", "max_age": 11},
+	{"id": "12", "name": "Age 12+ words", "label": "12+", "max_age": 12}
 ]
 const ADVENTURES: Array[Dictionary] = [
 	{"id": "animal-friends", "name": "Animal friends", "words": [
@@ -182,6 +188,18 @@ static func age_band(id: String) -> Dictionary:
 	return {}
 
 
+static func display_word(word: Dictionary) -> String:
+	return str(word.get("display_text", word.text))
+
+
+static func word_age(word: Dictionary) -> int:
+	return int(word.get("min_age", 3))
+
+
+static func supports_mode(word: Dictionary, mode: String) -> bool:
+	return word.get("practice_modes", ["match", "memory", "pop", "phrase"]).has(mode) and (mode == "phrase" or not str(word.get("image", "")).is_empty())
+
+
 static func word_level(word: Dictionary) -> int:
 	match word.get("level", "basic"):
 		"basic": return 1
@@ -273,7 +291,7 @@ static func validate_words(value: Variant) -> String:
 	var id_pattern := RegEx.new()
 	var text_pattern := RegEx.new()
 	id_pattern.compile("^[a-z][a-z0-9-]*$")
-	text_pattern.compile("^[a-z]{2,14}$")
+	text_pattern.compile("^[A-Za-z]{1,24}$")
 	for entry in value:
 		if not entry is Dictionary:
 			return "Each word must have an id, text, image and audio."
@@ -281,7 +299,7 @@ static func validate_words(value: Variant) -> String:
 			if not entry.has(key) or not entry[key] is String:
 				return "Each word must have an id, text, image and audio."
 		if id_pattern.search(entry.id) == null or text_pattern.search(entry.text) == null:
-			return "Use a unique word ID and a lowercase English word with 2 to 14 letters."
+			return "Use a unique word ID and an English word with 1 to 24 letters."
 		if word_level(entry) == 0:
 			return "Word levels must be basic, growing or advanced."
 		if entry.has("part_of_speech") and entry.part_of_speech not in PARTS_OF_SPEECH:
@@ -291,15 +309,25 @@ static func validate_words(value: Variant) -> String:
 		if entry.has("confusable"):
 			if not entry.confusable is Array or not entry.confusable.all(func(id: Variant) -> bool: return id is String and id_pattern.search(id) != null):
 				return "Confusable vocabulary must list valid word IDs."
-		if ids.has(entry.id) or texts.has(entry.text) or images.has(entry.image):
+		if ids.has(entry.id) or texts.has(entry.text.to_lower()) or (not entry.image.is_empty() and images.has(entry.image)):
 			return "Word IDs, words and pictures must be unique."
-		if not _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"]):
+		if not entry.image.is_empty() and not _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"]):
 			return "Keep word pictures together in assets/images/words."
 		if not _local_path(entry.audio, "assets/audio/voice/", ["wav", "ogg"]):
 			return "Keep word recordings in assets/audio/voice."
 		ids[entry.id] = true
-		texts[entry.text] = true
-		images[entry.image] = true
+		texts[entry.text.to_lower()] = true
+		if not entry.get("min_age") is float and not entry.get("min_age") is int:
+			return "Every word needs a curriculum age."
+		if float(entry.min_age) != floorf(float(entry.min_age)) or int(entry.min_age) < 3 or int(entry.min_age) > 12:
+			return "Curriculum ages must be whole numbers from 3 to 12."
+		if not entry.get("practice_modes") is Array or entry.practice_modes.is_empty():
+			return "Every word needs at least one practice mode."
+		for mode in entry.practice_modes:
+			if mode not in ["match", "memory", "pop", "phrase"] or (mode != "phrase" and entry.image.is_empty()):
+				return "Picture modes need a picture; contextual words belong in Phrase Builder."
+		if not entry.image.is_empty():
+			images[entry.image] = true
 	return ""
 
 
@@ -321,7 +349,7 @@ func load_all() -> bool:
 		return false
 	words = value
 	for word in words:
-		if not ResourceLoader.exists("res://" + word.image):
+		if not word.image.is_empty() and not ResourceLoader.exists("res://" + word.image):
 			error = "Could not load the picture for " + word.text + ". Please rebuild the game."
 			return false
 		var imported_image: String = "assets/imported-unity/" + word.id + ".png"

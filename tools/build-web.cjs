@@ -21,13 +21,16 @@ for (const filename of ['index.html', 'index.js', 'index.wasm', 'index.pck']) {
 const output = path.join(root, 'build', 'web');
 const htmlPath = path.join(output, 'index.html');
 fs.writeFileSync(htmlPath, inlineMascot(fs.readFileSync(htmlPath, 'utf8')));
+// The expanded phrase bank exceeds Windows' command-line limit as path pairs.
+const audioManifest = path.join(root, 'build', 'required-web-audio.json');
+fs.writeFileSync(audioManifest, JSON.stringify(audio.flatMap(file => [file.source, file.imported])));
 const verification = runGodot([
   '--headless', '--path', output, '--main-pack', path.join(output, 'index.pck'),
   '--script', path.join(root, 'tests', 'godot', 'verify_web_pack.gd'), '--',
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slice.wav')) ? ['--require-pop-slice'] : []),
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slices')) ? ['--require-pop-slices'] : []),
   ...(audio.some(file => file.source.startsWith('res://assets/imported-audio/pop-reference/')) ? ['--require-pop-reference'] : []),
-  ...audio.flatMap(file => [file.source, file.imported])
+  '--audio-manifest', audioManifest
 ]);
 process.stdout.write(verification.stdout);
 const downloadBytes = packageWebExport(output);

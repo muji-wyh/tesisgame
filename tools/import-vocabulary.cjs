@@ -68,7 +68,7 @@ function check() {
   const entries = additions();
   const manifest = JSON.parse(fs.readFileSync(manifestPath));
   const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json')));
-  if (manifest.revision !== revision || manifest.files.length !== 900 || words.length !== 1250 ||
+  if (manifest.revision !== revision || manifest.files.length !== 900 || words.length < 1250 ||
       manifest.license !== 'CC-BY-SA-4.0' || manifest.renderer?.width !== imageSize ||
       manifest.renderer?.height !== imageSize) {
     throw new Error('Vocabulary or provenance count mismatch.');
@@ -98,6 +98,9 @@ function check() {
 }
 
 async function importVocabulary(sourceDirectory, sharpModule = 'sharp') {
+  if (fs.existsSync(path.join(root, 'curriculum.json'))) {
+    throw new Error('The growth curriculum is already integrated. Use --check for this historical batch and import-growth-vocabulary.cjs for its additional artwork.');
+  }
   sourceDirectory = path.resolve(sourceDirectory);
   const actual = execFileSync('git', ['-C', sourceDirectory, 'rev-parse', 'HEAD'], {encoding: 'utf8', windowsHide: true}).trim();
   if (actual !== revision) throw new Error(`Expected Mulberry revision ${revision}.`);

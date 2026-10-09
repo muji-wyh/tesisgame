@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { metrics, tap, modeRect, openModeMenu, chooseMode, roomControl,
+const { metrics, tap, modeRect, openModeMenu, chooseMode,
   enterGame, openGame, openRewards, rendered, visibleColorCount } = require('./game-ui.cjs');
 
 test('Match, Memory and Voice Pop fit compact and desktop screens with Match selected on entry and reload', async ({ page }, testInfo) => {
@@ -59,28 +59,5 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('#speech-panel')).toBeHidden();
   await capture('match-default-entry');
-  expect(errors).toEqual([]);
-});
-
-test('Pip and earned toys remain interactive without changing reward progress', async ({ page }, testInfo) => {
-  await page.addInitScript(() => {
-    localStorage.setItem('wordBuddies.medalProgress', '[medals]\nversion=1\ncounts={"spring-1":3,"spring-2":1}\n');
-  });
-  const errors = await openGame(page);
-  await openRewards(page);
-  const status = page.locator('#game-status');
-  await expect(status).toContainText("Pip's room opened. 2 toys in Pip's home.");
-  const saved = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
-  await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath('playful-room.png'), scale: 'css' });
-  const pip = await roomControl(page, 'pip');
-  await tap(page, pip.x, pip.y);
-  await expect(status).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
-  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
-  await roomControl(page, 'spring');
-  await page.keyboard.press('Enter');
-  await expect(status).toContainText('1/3 · A drink for the flower!');
-  await page.screenshot({ path: testInfo.outputPath('earned-flower-play.png'), scale: 'css' });
-  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
   expect(errors).toEqual([]);
 });

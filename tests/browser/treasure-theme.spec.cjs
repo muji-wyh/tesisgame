@@ -122,7 +122,7 @@ async function compareScenery(page, testInfo, phase, samples) {
 async function closeRewards(page) {
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
+  await expect(page.locator('#game-status')).not.toContainText('Lv3');
   await rendered(page);
 }
 
@@ -145,7 +145,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
   for (const [index, theme] of THEME_IDS.entries()) {
     await chooseTheme(page, index);
     await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-    expect(await record(page)).toContain(`preferred_theme_id="${theme}"`);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme)).toBe(theme);
     expect(await record(page, MEDAL_KEY), `${theme}: browsing closed stages never awards a piece.`).toBe(beforeClaim);
     closed.push(await captureStage(page, testInfo, theme, 'closed'));
   }
@@ -179,7 +179,7 @@ test('all eight treasure stages follow the selected world while a real chest cla
     await chooseTheme(page, index);
     await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
     await expect(page.locator('#game-status')).not.toContainText(/Party Cake|Piece \d of 3|Medal|Tap to place!/);
-    expect(await record(page)).toContain(`preferred_theme_id="${theme}"`);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme)).toBe(theme);
     expect(await record(page, MEDAL_KEY), `${theme}: changing the open stage never moves or duplicates its Candy piece.`).toBe(earnedSave);
     opened.push(await captureStage(page, testInfo, theme, 'opened'));
   }

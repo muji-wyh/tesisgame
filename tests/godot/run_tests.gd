@@ -103,10 +103,7 @@ func check_no_collectible_presentation(app, message: String) -> void:
 
 
 func collection_scroll(app) -> ScrollContainer:
-	if has_property(app, "_collection_scroll"):
-		return app._collection_scroll as ScrollContainer
-	var scrolls: Array = app.collection_page.find_children("*", "ScrollContainer", true, false)
-	return scrolls[0] as ScrollContainer if not scrolls.is_empty() else null
+	return app._age_catalog.scroll
 
 
 func local_mouse_event(source: Control, event: InputEventMouse, global_position: Vector2) -> InputEventMouse:
@@ -189,47 +186,22 @@ func _test_rounds(model_script: GDScript, words: Array) -> void:
 func _test_word_reachability(model, words: Array) -> void:
 	var data: GDScript = load("res://scripts/game_data.gd")
 	var speech: GDScript = load("res://scripts/speech_words.gd")
-	var topics: Array = data.adventures(words)
-	var topic_for_word: Dictionary = {}
-	# Keep ordinary randomized topic selection covered without waiting for a
-	# global coupon-collector lottery to happen to draw all 1,250 words.
-	for topic: Dictionary in topics:
-		var pool: Array = words.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
-		var lessons: Dictionary = {}
-		for word: Dictionary in pool:
-			if not topic_for_word.has(word.id):
-				topic_for_word[word.id] = topic
-		for seed_value in range(8):
-			check(model.reset(pool, seed_value, false, topic.id), "Each real topic supports ordinary seeded lessons: " + topic.id)
-			check(model.adventure_id == topic.id and model.cards.size() == 10 and pairs_for(model).size() == 5
-				and model.lesson_words.all(func(word: Dictionary) -> bool: return topic.words.has(word.id)),
-				"Topic sampling keeps five complete related pairs: " + topic.id)
-			var ids: Array = model.lesson_words.map(func(word: Dictionary) -> String: return word.id)
-			ids.sort()
-			lessons["|".join(ids)] = true
-		check(lessons.size() > 1, "Ordinary seeds select different word sets within " + topic.id)
+	var pictured: Array = words.filter(func(word: Dictionary) -> bool: return data.supports_mode(word, "match"))
 	var reached: Dictionary = {}
-	var bands := {"basic": "4-6", "growing": "7-9", "advanced": "10-plus"}
-	for index in range(words.size()):
-		var word: Dictionary = words[index]
-		check(topic_for_word.has(word.id), "Every word has an actual gameplay topic: " + word.id)
-		if not topic_for_word.has(word.id):
-			continue
-		var topic: Dictionary = topic_for_word[word.id]
-		# The public required-word path proves reachability deterministically from
-		# the full production catalog, using this word's real topic and age range.
-		var started: bool = model.reset(words, index, false, topic.id, word.id, bands[word.level])
-		check(started, "The full catalog can deal each word at its own age level: " + word.id)
+	for index in range(pictured.size()):
+		var word: Dictionary = pictured[index]
+		var started: bool = model.reset(words, index, false, "", word.id, str(data.word_age(word)))
+		check(started, "The full catalog can deal each pictured word at its own growth level: " + word.id)
 		if not started:
 			continue
 		var target_pair: Array = model.cards.filter(func(card: Dictionary) -> bool: return card.word.id == word.id)
-		check(model.adventure_id == topic.id and model.lesson_words[0].id == word.id
-			and model.cards.size() == 10 and pairs_for(model).size() == 5
-			and target_pair.size() == 2 and target_pair[0].kind != target_pair[1].kind,
-			"Every catalog word becomes one playable picture and word pair: " + word.id)
+		check(model.lesson_words[0].id == word.id and model.cards.size() == 10
+			and pairs_for(model).size() == 5 and target_pair.size() == 2
+			and target_pair[0].kind != target_pair[1].kind,
+			"Every pictured word becomes one playable picture and word pair: " + word.id)
 		check(model.lesson_words.all(func(other: Dictionary) -> bool:
-			return topic.words.has(other.id) and data.word_level(other) <= data.word_level(word)),
-			"Reachable lessons retain their topic and age boundaries: " + word.id)
+			return data.word_age(other) <= data.word_age(word) and data.supports_mode(other, "match")),
+			"Reachable lessons retain their unlocked vocabulary boundaries: " + word.id)
 		for first in range(5):
 			for second in range(first + 1, 5):
 				check(not data.word_pair_conflicts(model.lesson_words[first], model.lesson_words[second])
@@ -237,8 +209,9 @@ func _test_word_reachability(model, words: Array) -> void:
 					"Every reachable word has unambiguous lesson partners: " + word.id)
 		if target_pair.size() == 2:
 			reached[word.id] = true
-	check(reached.size() == words.size(), "Every production word is reachable as a real playable pair")
-	print("Round reachability: %d words verified across %d topics" % [reached.size(), topics.size()])
+	check(reached.size() == 1285 and reached.size() == pictured.size(),
+		"Every production picture word is reachable as a real playable pair")
+	print("Round reachability: %d pictured words verified" % reached.size())
 
 
 func _test_fresh_rounds(model_script: GDScript, words: Array) -> void:
@@ -480,7 +453,7 @@ func _test_results(model_script: GDScript, words: Array) -> void:
 
 
 func _test_data(words: Array) -> void:
-	check(words.size() == 1250, "The game includes 1,250 age-graded picture words")
+	check(words.size() == 1550, "The game includes 1,550 growth vocabulary entries")
 	var path := "res://scripts/game_data.gd"
 	check(FileAccess.file_exists(path), "The native data loader exists")
 	if not FileAccess.file_exists(path):
@@ -506,10 +479,13 @@ func _test_data(words: Array) -> void:
 	duplicate = words.duplicate(true)
 	duplicate[1].image = duplicate[0].image
 	check(data_script.validate_words(duplicate) != "", "Duplicate images are rejected")
-	for bad_text in ["CAT", "a", "incomprehensible", "two words", "123"]:
+	for bad_text in ["", "abcdefghijklmnopqrstuvwxyz", "two words", "123", "word!"]:
 		duplicate = words.duplicate(true)
 		duplicate[0].text = bad_text
-		check(data_script.validate_words(duplicate) != "", "Only short lowercase English words are accepted")
+		check(data_script.validate_words(duplicate) != "", "Vocabulary text needs one English word with 1 to 24 letters")
+	duplicate = words.duplicate(true)
+	duplicate[0].text = duplicate[0].text.to_upper()
+	check(data_script.validate_words(duplicate) == "", "English capitalization remains valid with case-insensitive uniqueness")
 	for bad_path in ["https://example.invalid/cat.svg", "assets/images/words/../cat.svg", "C:\\cat.svg"]:
 		duplicate = words.duplicate(true)
 		duplicate[0].image = bad_path
@@ -726,7 +702,7 @@ func _test_play_improvements(app) -> void:
 		joy_tap(JOY_BUTTON_X)
 		await process_frame
 		check(app.model.hint_ids == previous_hint and app.model.hints_remaining == 2
-			and app._status_announcement.begins_with("Pip's room"),
+			and app.collection_page.visible,
 			"Xbox X cannot trigger hints behind a modal")
 		app._hide_collection()
 		app.on_page_hidden()
@@ -873,7 +849,6 @@ func _test_scene() -> void:
 	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = packed.instantiate()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/playroom.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
@@ -925,11 +900,11 @@ func _test_scene() -> void:
 	check(has_property(app, "collection_page") and app.collection_page != null,
 		"The rewards collection has an in-game page")
 	var collection_scroll := collection_scroll(app)
-	check(collection_scroll != null, "The room has a fixed native viewport")
+	check(collection_scroll != null, "The vocabulary catalog has a native viewport")
 	if collection_scroll != null:
-		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED
+		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED,
-			"The playground viewport disables whole-page scrolling on both axes")
+			"The catalog scrolls vertically without visible scrollbar chrome")
 	check(app._stage.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	if app.has_method("_show_collection"):
@@ -937,16 +912,17 @@ func _test_scene() -> void:
 		app._show_collection()
 		check(app._collection_back.has_focus() if has_property(app, "_collection_back") else false,
 			"Opening rewards moves keyboard focus to Back")
-		check(has_property(app, "_status_announcement") and app._status_announcement.begins_with("Pip's room opened"),
-			"Opening rewards announces the collection modal state")
+		check(has_property(app, "_status_announcement") and app._status_announcement.contains("Lv3"),
+			"Opening growth announces the current learning level")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"Opening More exposes all eight persistent world choices")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree())
+			or app._compact_world.is_visible_in_tree(),
+			"Opening growth exposes the world rail or its compact cycling control")
 		var original_theme: String = app.model.theme_id
 		app.choose_theme("ocean")
-		check(app._room._palette.id == "ocean",
-			"Choosing a world inside My rewards refreshes the visible room immediately")
+		check(app._age_catalog._palette.id == "ocean",
+			"Choosing a world refreshes the visible word catalog immediately")
 		app.choose_theme(original_theme)
 		if app.has_method("_hide_collection"):
 			app._hide_collection()
@@ -955,41 +931,27 @@ func _test_scene() -> void:
 		check(app.collection_button.focus_mode == Control.FOCUS_ALL,
 			"Closing rewards restores underlying keyboard focus")
 	set_completed_rewards(app, {"spring-1": true})
-	var room_toy: Button = app._room.item_buttons["toy-spring"]
-	var selected_toy: String = app.playroom_state.toy_id
-	if collection_scroll != null and room_toy != null:
-		app._show_collection()
-		root.size = Vector2i(320, 320)
-		await process_frame
-		await process_frame
-		var point := room_toy.get_global_rect().get_center()
-		var stage_bounds: Rect2 = app._room._room.get_global_rect()
-		emit_scroll_press(room_toy, point, true)
-		emit_scroll_motion(room_toy, point + Vector2(0, -43), Vector2(0, -43))
-		emit_scroll_motion(collection_scroll, point + Vector2(0, -43), Vector2(0, -43))
-		emit_scroll_press(room_toy, point + Vector2(0, -43), false)
-		check(collection_scroll.scroll_vertical == 0 and app._room._room.get_global_rect() == stage_bounds,
-			"A vertical gesture does not move the fixed room viewport")
-		emit_scroll_wheel(collection_scroll, point, MOUSE_BUTTON_WHEEL_DOWN)
-		check(collection_scroll.scroll_vertical == 0, "Wheel input cannot move the whole room page")
-		app.set_reduced_motion(true)
-		check(app.collection_button.focus_mode == Control.FOCUS_NONE
-			and app._focus_candidates().all(func(control: Control) -> bool: return app.collection_page.is_ancestor_of(control)),
-			"Restyling after a motion change preserves the room's keyboard focus boundary")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return app._valid_focus(button)),
-			"The World strip stays keyboard-accessible inside the open room")
-		room_toy.grab_focus()
-		await process_frame
-		await process_frame
-		check(room_toy.has_focus() and collection_scroll.get_global_rect().grow(1).encloses(room_toy.get_global_rect()),
-			"Keyboard focus reaches an earned floor toy without scrolling the page")
-		check(app.playroom_state.toy_id == selected_toy, "Room gestures and focus do not change the selected toy")
-		app.on_page_hidden()
-		check(not app._collection_dragging and app._collection_drag_pointer == -1,
-			"Hiding the page ends the room gesture")
-		app.on_page_visible()
-		app.set_reduced_motion(false)
-		app._hide_collection()
+	app._show_collection()
+	var mastery_before: Dictionary = app.growth.snapshot().streaks.duplicate()
+	app.set_reduced_motion(true)
+	check(app.collection_button.focus_mode == Control.FOCUS_NONE
+		and app._focus_candidates().all(func(control: Control) -> bool: return app.collection_page.is_ancestor_of(control)),
+		"Restyling preserves the growth page's keyboard focus boundary")
+	var catalog_word: Button = app._age_catalog.word_buttons[0]
+	catalog_word.grab_focus()
+	await process_frame
+	await process_frame
+	var catalog_focus_target: Control = catalog_word.get_meta("word_label") if catalog_word.size.y > collection_scroll.size.y else catalog_word
+	check(catalog_word.has_focus() and collection_scroll.get_global_rect().grow(1).encloses(catalog_focus_target.get_global_rect()),
+		"Keyboard focus reveals the vocabulary card or its caption in a short viewport")
+	check(app.growth.snapshot().streaks == mastery_before, "Browsing and focus cannot change mastery")
+	app.on_page_hidden()
+	check(not collection_scroll.is_scrolling()
+		and app._collection_rails().all(func(rail: Control) -> bool: return not rail.is_scrolling()),
+		"Hiding the page cancels catalog and growth-rail contact state")
+	app.on_page_visible()
+	app.set_reduced_motion(false)
+	app._hide_collection()
 	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")
 	var dimensions: Array[Vector2i] = [
@@ -1073,7 +1035,7 @@ func _test_scene() -> void:
 	check(app.collection_page.visible and app._collection_back.has_focus(),
 		"Controller Y opens My Rewards without restarting the round")
 	app.set_reduced_motion(true)
-	check(app._status_announcement.begins_with("Pip's room opened"),
+	check(app._status_announcement.contains("Lv3"),
 		"Changing motion preference preserves the collection announcement")
 	app.set_reduced_motion(false)
 	joy_tap(JOY_BUTTON_B)
@@ -1293,10 +1255,10 @@ func _test_scene() -> void:
 		app._advance_ui(1.21)
 	app.chest.finish_immediately()
 	app.chest_button.button_up.emit()
-	check_no_collectible_presentation(app, "A completed chest has no collectible delivery before visiting the room")
+	check_no_collectible_presentation(app, "A completed chest has no collectible delivery before visiting the growth notebook")
 	app._show_collection()
-	check_no_collectible_presentation(app, "Opening Pip's room cannot reveal a hidden collectible flight")
-	check(app.collection_button.scale == Vector2.ONE, "Opening Pip's room keeps its entry at its normal scale")
+	check_no_collectible_presentation(app, "Opening the growth notebook cannot reveal a hidden collectible flight")
+	check(app.collection_button.scale == Vector2.ONE, "Opening the growth notebook keeps its entry at its normal scale")
 	app._hide_collection()
 	app.new_round(91)
 	win_round(app)
@@ -1351,7 +1313,6 @@ func _test_scene() -> void:
 	joy_button(JOY_BUTTON_A, true)
 	var held_app = packed.instantiate()
 	held_app.medal_progress = progress_script.new(directory + "/held.cfg", directory + "/legacy.cfg")
-	held_app.playroom_save_path = directory + "/held-playroom.cfg"
 	held_app._mode_id = "match"
 	root.add_child(held_app)
 	await process_frame

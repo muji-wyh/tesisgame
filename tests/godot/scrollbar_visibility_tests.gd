@@ -152,11 +152,6 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 	app._show_collection()
 	await settle()
 	_check_bars(app, context + " More and room rails")
-	for view in ["players", "boards"]:
-		app._show_leaderboard(view, false)
-		await settle()
-		_check_bars(app, context + " " + view)
-		app._hide_leaderboard()
 	app._hide_collection()
 	await _check_gate(app, context)
 
@@ -170,7 +165,6 @@ func _run() -> void:
 	root.size = Vector2i(320, 568)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(_directory + "/medals.cfg", _directory + "/legacy.cfg")
-	app.playroom_save_path = _directory + "/room.cfg"
 	PlayerFixture.install(app, _directory)
 	root.add_child(app)
 	await settle()

@@ -61,7 +61,6 @@ func _check_independent_presentation() -> void:
 	var answer_request: int = audio._playback_requests[audio.pair_feedback]
 	var original_music_gain: float = audio.music.volume_db
 	var original_chest_state: Array = _chest_state(audio)
-	var pip_random: int = audio._pip_rng.state
 	var pop_random: int = audio._pop_slice_rng.state
 	var initial_channels: int = audio.get_child_count()
 	audio.begin_round_celebration("round-a")
@@ -82,7 +81,7 @@ func _check_independent_presentation() -> void:
 		and audio._playback_requests[audio.pair_feedback] == answer_request,
 		"Celebration does not replace a card effect or the final correct-answer acknowledgement")
 	check(audio.pip_reaction == null and not audio.voice.playing
-		and audio._pip_rng.state == pip_random and audio._pop_slice_rng.state == pop_random,
+		and audio._pop_slice_rng.state == pop_random,
 		"Celebration introduces no quack or narration and consumes no gameplay sound randomness")
 	check(_chest_state(audio) == original_chest_state and audio._chest_players.is_empty(),
 		"The earned-chest cue cannot open a chest, acknowledge a save or allocate chest sound channels")

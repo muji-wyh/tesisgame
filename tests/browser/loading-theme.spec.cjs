@@ -213,8 +213,9 @@ test('the real game adopts the final loading theme and remembers it without losi
     await enterGame(page);
     await expect.poll(() => page.evaluate(() => nativeThemes.at(-1))).toBe('summer');
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[1]);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme)).toBe('summer');
     const saved = await page.evaluate(key => localStorage.getItem(key), ROOM_KEY);
-    for (const field of ['preferred_theme_id="summer"', 'toy="toy-autumn"', 'backdrop="backdrop-spring"',
+    for (const field of ['preferred_theme_id="autumn"', 'toy="toy-autumn"', 'backdrop="backdrop-spring"',
       'favorite="spring-1"', 'goal_item_id="toy-space"', 'age_band="7-9"', 'display_word_id="apple"']) {
       expect(saved).toContain(field);
     }

@@ -15,7 +15,7 @@ for (const [id] of items) for (const pose of ['closed', 'opened']) {
 }
 fs.writeFileSync(path.join(output, 'index.html'), `<!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chest review · Word Buddies</title>
+<title>Chest review · Grow with Pip</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#142130;color:#f7f0e5;font:16px/1.6 system-ui,sans-serif}
 main{max-width:1220px;margin:auto;padding:38px 28px 70px}header{display:flex;justify-content:space-between;align-items:center;gap:20px}
@@ -31,7 +31,7 @@ button[aria-pressed=true]{background:#f2d397;color:#19232d;border-color:#f2d397}
 .index{float:right;color:#e7c88b;font-size:12px;letter-spacing:.12em}.details{border-top:1px solid #405460;padding-top:24px;margin-top:40px;color:#aebfc7;font-size:14px}.details p{max-width:900px}
 @media(max-width:650px){main{padding:24px 16px 40px}header{align-items:flex-start}.pill{font-size:12px;padding:8px 12px}.grid{grid-template-columns:1fr}.film{margin:25px 0 34px}}
 </style>
-<main><header><div><div class="eyebrow">Word Buddies · Asset review</div><h1>Treasure collection</h1></div><a class="pill" href="http://127.0.0.1:41773/" target="_blank" rel="noopener">Open game ↗</a></header>
+<main><header><div><div class="eyebrow">Grow with Pip · Asset review</div><h1>Treasure collection</h1></div><a class="pill" href="http://127.0.0.1:41773/" target="_blank" rel="noopener">Open game ↗</a></header>
 <p class="intro">Five replacement designs with continuous lid movement, pressure feedback, and light that follows the actual chest.</p>
 <section class="film" aria-label="Actual game animation"><video controls autoplay muted loop playsinline poster="collection-closed.png" src="opening.mp4"></video><p>Press Play to watch the opening. Captured from the shared in-game chest view; the preview is muted.</p></section>
 <section aria-labelledby="designs"><div class="toolbar"><h2 id="designs">Inspect each design</h2><div class="switch" aria-label="Chest pose"><button aria-pressed="true" data-pose="closed">Closed</button><button aria-pressed="false" data-pose="opened">Opened</button></div></div>

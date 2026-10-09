@@ -99,13 +99,13 @@ func check_result_input_cancellation(app) -> void:
 					"background":
 						app.on_page_hidden()
 					"modal":
-						app._show_leaderboard("boards", false)
+						app._show_collection()
 				check(not view._results.is_pointer_active() and button.self_modulate.is_equal_approx(Color.WHITE),
 					"%s immediately clears the completed result's pending tap and press tint" % cause)
 				if cause == "background":
 					app.on_page_visible()
 				elif cause == "modal":
-					app._hide_leaderboard()
+					app._hide_collection()
 				# Release only after the page/modal has returned: stale releases
 				# must stay canceled even when result interaction is allowed again.
 				if touch_first:
@@ -114,7 +114,7 @@ func check_result_input_cancellation(app) -> void:
 				else:
 					await result_pointer(point, false)
 					await result_touch(point, false)
-				check(activations.size() == before and not app._leaderboard_overlay.visible
+				check(activations.size() == before and not app.collection_page.visible
 					and view.game.phase == "finished" and view.game.summary() == summary,
 					"An ordinary late release cannot activate %s after %s (touch first=%s)" % [button.name, cause, touch_first])
 	view.request_listening.disconnect(on_replay)
@@ -253,30 +253,11 @@ func check_result_word_snapshot_ignores_tooltip(view, word: Dictionary) -> void:
 		"Inspecting tooltip descendants preserves the real card layout and earned round")
 
 
-func check_result_player(view, profile: Dictionary, dimensions: Vector2i) -> void:
-	var snapshot: Dictionary = view.snapshot().results_hits
-	var player: Dictionary = snapshot.player
-	check(player.get("id") == profile.id and player.get("name") == profile.name and player.get("avatar") == profile.avatar,
-		"The result preserves the selected player's exact identity at " + str(dimensions))
-	if player.is_empty():
-		return
-	var bounds: Rect2 = view._result_hero.get_global_rect()
-	var group := Rect2(Vector2(player.rect[0], player.rect[1]), Vector2(player.rect[2], player.rect[3]))
-	var avatar := Rect2(Vector2(player.avatar_rect[0], player.avatar_rect[1]), Vector2(player.avatar_rect[2], player.avatar_rect[3]))
-	var name_rect := Rect2(Vector2(player.name_rect[0], player.name_rect[1]), Vector2(player.name_rect[2], player.name_rect[3]))
-	var score := Rect2(Vector2(snapshot.rect[0], snapshot.rect[1]), Vector2(snapshot.rect[2], snapshot.rect[3]))
-	check(bounds.grow(1).encloses(group) and bounds.grow(1).encloses(score)
-		and group.end.x <= score.position.x + 1.0,
-		"The avatar/name group stays to the left of the visible hit total at " + str(dimensions))
-	check(group.grow(1).encloses(avatar) and group.grow(1).encloses(name_rect)
-		and avatar.end.x <= name_rect.position.x + 1.0 and name_rect.size.x > 0.0,
-		"The avatar and name share one bounded row without overlap at " + str(dimensions))
-	check(view._result_name.text == profile.name and view._result_name.tooltip_text == profile.name
-		and view._result_name.clip_text and view._result_name.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
-		"Long player names retain their full identity while fitting the allotted space")
-	check(view._result_avatar.texture != null
-		and view._result_avatar.texture.resource_path == "res://assets/avatars/" + str(profile.avatar) + ".svg",
-		"The result displays the chosen player's actual avatar")
+func check_result_identity_removed(view, dimensions: Vector2i) -> void:
+	check(not view.snapshot().results_hits.has("player")
+		and view.find_child("PlayerAvatar", true, false) == null
+		and view.find_child("PlayerName", true, false) == null,
+		"Results have no retired profile identity at " + str(dimensions))
 
 
 func check_result_feedback(view, total: int) -> void:
@@ -838,7 +819,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(390, 844)
 	root.add_child(app)
@@ -1001,7 +981,7 @@ func _run() -> void:
 		check_result_contents(view, result)
 		check_result_actions(view, dimensions, "Completed round")
 		check_result_feedback(view, int(result.hits))
-		check_result_player(view, app.leaderboard_state.profiles[0], dimensions)
+		check_result_identity_removed(view, dimensions)
 		await check_result_word_snapshot_ignores_tooltip(view, result.hit_words[0])
 		check(not app.audio.voice.playing,
 			"Finishing Voice Pop does not request or play a removed Pip report")
@@ -1047,11 +1027,11 @@ func _run() -> void:
 			"Leaving Voice Pop retains no active result celebration")
 		view.set_process(true)
 	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
-	app.playroom_state.age_band_id = "4-6"
+	app.growth.level = 3
 	app.choose_mode("pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
-	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_level(word) == 1),
-		"Voice Pop uses only the selected age group's vocabulary")
+	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_age(word) <= app.growth.level),
+		"Voice Pop uses only unlocked vocabulary")
 	app._pop.set_process(false)
 	app._on_voice_state([true, true, "Listening."])
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
@@ -1070,10 +1050,6 @@ func _run() -> void:
 	check(app._pop.game.summary() == empty_round, "Zero-hit presentation preserves the actual round result")
 	var long_words: Array = app.data.words.duplicate(true)
 	long_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.text).length() > str(b.text).length())
-	var long_profile: Dictionary = {"id": "long-name-layout-player", "name": "WWWWWWWWWWWWWWWWWWWW", "avatar": "unicorn"}
-	var assigned_profile: Dictionary = long_profile.duplicate(true)
-	app._pop.set_round_player(assigned_profile)
-	assigned_profile.name = "Changed outside the round"
 	var layout_viewport_size: Vector2i = root.size
 	for count in [20, 21, 123]:
 		var long_result: Dictionary = empty_round.duplicate(true)
@@ -1094,7 +1070,7 @@ func _run() -> void:
 			root.size = dimensions
 			await settle()
 			check_result_actions(app._pop, dimensions, "Long words, %d hits" % count)
-			check_result_player(app._pop, long_profile, dimensions)
+			check_result_identity_removed(app._pop, dimensions)
 			var counter: Label = app._pop._result_hits
 			var text_width: float = counter.get_theme_font("font").get_string_size(counter.text,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, counter.get_theme_font_size("font_size")).x
@@ -1111,8 +1087,8 @@ func _run() -> void:
 	await settle()
 	check(app._pop.game.summary() == empty_round, "Result-only layout fixtures never alter the underlying scored round")
 	app._pop.configure(app.data.words, true, 42)
-	check(app._pop._round_player.is_empty() and app._pop.snapshot().results_hits.player.is_empty(),
-		"Preparing a new round clears the previous result identity")
+	check(not app._pop.snapshot().results_hits.has("player"),
+		"Preparing a new round never restores retired profile identity")
 	check_bonus_feedback(app.data.words)
 	check_homophone_feedback(app.data.words)
 	check_bound_speech_events(app.data.words)

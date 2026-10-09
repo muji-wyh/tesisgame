@@ -49,7 +49,6 @@ func _run() -> void:
 	# native microphone failure is injected at its existing boundary.
 	app.set_script(StopFailureApp)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	app._presentation.path = directory + "/presentation.cfg"
 	Fixture.install(app, directory)
 	root.add_child(app)
@@ -63,7 +62,6 @@ func _run() -> void:
 	await check_exit_settlement(app)
 	for chest_count in range(4):
 		await check_pop_result(app, chest_count)
-	await check_removed_pop_player(app)
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -192,7 +190,7 @@ func cover(app, kind: String, enabled: bool) -> void:
 			app._mode_heading_button.pressed.emit()
 		else:
 			app._mode_panel.close_button.pressed.emit()
-	elif kind == "room":
+	elif kind == "growth":
 		if enabled:
 			app.collection_button.pressed.emit()
 		else:
@@ -205,7 +203,7 @@ func cover(app, kind: String, enabled: bool) -> void:
 
 
 func check_interruption_and_replacement(app) -> void:
-	for kind in ["menu", "room", "background"]:
+	for kind in ["menu", "growth", "background"]:
 		await start_manual(app, "phrase")
 		var view = app._round_celebration
 		var identity: String = view.snapshot().round_id
@@ -249,7 +247,7 @@ func check_exit_settlement(app) -> void:
 
 func check_pop_result(app, chest_count: int) -> void:
 	check(app.new_round(820 + chest_count, false, "", "pop"), "A Pop score fixture starts cleanly")
-	Fixture.choose_pop_player(app)
+	app._start_pop_listening()
 	app._pop.set_listening(true, true, "Listening.")
 	app._pop.set_process(false)
 	var iterations: int = 0
@@ -263,9 +261,11 @@ func check_pop_result(app, chest_count: int) -> void:
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	app._round_celebration.set_process(false)
 	var summary: Dictionary = app._pop.game.summary().duplicate(true)
-	var saved_result: Dictionary = app._leaderboard_result.duplicate(true)
+	check(app.find_child("PlayerAvatar", true, false) == null and app.find_child("PlayerName", true, false) == null,
+		"Voice Pop results are available without identity or profile controls")
+	var saved_result: Dictionary = app._round_result.duplicate(true)
 	check(app._pop.game.phase == "finished" and int(saved_result.chest_count) == chest_count,
-		"Pop finishes and persists its actual %d-chest score before celebration" % chest_count)
+		"Pop finishes and retains its actual %d-chest result before celebration" % chest_count)
 	if chest_count == 0:
 		check(not app._round_celebration.snapshot().active and app._pop.is_visible_in_tree(),
 			"A zero-chest Pop result skips celebration and immediately presents the complete result")
@@ -284,13 +284,13 @@ func check_pop_result(app, chest_count: int) -> void:
 		var earned_theme: String = app._pop_rewards._draft_themes[0]
 		var saved_batch: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
 		view.advance(0.7)
-		await cover(app, "room", true)
+		await cover(app, "growth", true)
 		app.choose_theme("ocean" if earned_theme != "ocean" else "spring")
-		await cover(app, "room", false)
+		await cover(app, "growth", false)
 		view.set_process(false)
 		check(app.model.theme_id != earned_theme and view.chest.theme_id == earned_theme
 			and app._pop_rewards._draft_themes[0] == earned_theme,
-			"Changing the room world keeps Pop's preview aligned with its already earned first chest")
+			"Changing the selected world keeps Pop's preview aligned with its already earned first chest")
 		check(FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_batch,
 			"Changing the presentation world never rewrites the fixed Pop reward batch")
 	app._pop.chests_button.pressed.emit()
@@ -301,12 +301,12 @@ func check_pop_result(app, chest_count: int) -> void:
 	view.advance(3.1)
 	check(not view.snapshot().active and app._pop.is_visible_in_tree() and not app._pop_rewards_shown,
 		"Pop automatically returns to its full result after the shared performance")
-	check(app._pop.game.summary() == summary and app._leaderboard_result == saved_result
+	check(app._pop.game.summary() == summary and app._round_result == saved_result
 		and app._pop._review_buttons.size() == summary.hit_words.size() + summary.missed_words.size(),
-		"Pop preserves score, word review, and its saved leaderboard result across the performance")
+		"Pop preserves score, word review, and its saved round result across the performance")
 	view.performance_finished.emit(identity)
 	view.open_requested.emit(identity)
-	check(app._pop.is_visible_in_tree() and not app._pop_rewards_shown and app._leaderboard_result == saved_result,
+	check(app._pop.is_visible_in_tree() and not app._pop_rewards_shown and app._round_result == saved_result,
 		"Late automatic-performance events cannot bypass the original Pop result action")
 	app._pop.chests_button.pressed.emit()
 	check(app._pop_rewards_shown and app._pop_rewards.snapshot().chest_count == chest_count,
@@ -319,62 +319,3 @@ func check_pop_result(app, chest_count: int) -> void:
 		"The saved Pop batch is opened once before starting the next score fixture")
 	app._hide_pop_rewards()
 	app.set_reduced_motion(false)
-
-
-func check_removed_pop_player(app) -> void:
-	check(app.leaderboard_state.create_profile("Remaining player", "cat").ok,
-		"Player-removal coverage keeps a surviving profile")
-	check(app.new_round(907, false, "", "pop"), "A removable player's earned Pop round starts")
-	Fixture.choose_pop_player(app)
-	app._pop.set_listening(true, true, "Listening.")
-	app._pop.set_process(false)
-	for attempt in range(8):
-		if app._pop.game.chest_count > 0:
-			break
-		if app._pop.game.targets.is_empty():
-			app._pop._advance_game(0.66)
-		if not app._pop.game.targets.is_empty():
-			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
-	app._pop._advance_game(app._pop.game.remaining + 1.0)
-	var view = app._round_celebration
-	view.set_process(false)
-	check(view.is_active() and app._pop.game.chest_count == 1,
-		"The removable player reaches an actual earned-chest performance")
-	var old_id: String = view.current_round_id()
-	var player_id: String = app._pop_player_id
-	var saved_batch: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
-	view.advance(0.6)
-	app._show_collection()
-	var players := app.find_child("MenuPlayers", true, false) as Button
-	check(players != null, "Pip's room exposes player management during a performance")
-	if players == null:
-		return
-	players.pressed.emit()
-	await settle()
-	var remove := app._leaderboard_panel.find_child("LeaderboardRemove_" + player_id, true, false) as Button
-	check(remove != null, "The active Pop player has an explicit removal action")
-	if remove == null:
-		return
-	remove.pressed.emit()
-	var confirm := app._leaderboard_panel.find_child("LeaderboardConfirmRemove", true, false) as Button
-	check(confirm != null, "Player removal requires its existing confirmation")
-	if confirm == null:
-		return
-	confirm.pressed.emit()
-	await settle()
-	check(not view.is_active() and app._leaderboard_round_id != old_id and app._pop_player_id.is_empty()
-		and app._pop.game.phase == "ready",
-		"Deleting the celebrating player cancels the old presenter and resets the Pop round identity")
-	app._controller_back()
-	if app.collection_page.visible:
-		app._hide_collection()
-	await settle()
-	var replacement_id: String = app._leaderboard_round_id
-	view.open_requested.emit(old_id)
-	view.performance_finished.emit(old_id)
-	view.cue_requested.emit(old_id, "reward")
-	check(app._pop.is_visible_in_tree() and not view.is_active() and app._pop.game.phase == "ready"
-		and app._leaderboard_round_id == replacement_id,
-		"Returning from player management reveals the new Pop view and ignores the old finale callbacks")
-	check(FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_batch,
-		"Removing a player preserves the shared treasure that was saved before celebration")

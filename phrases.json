@@ -8,7 +8,11 @@
       "apple"
     ],
     "picture_id": "apple",
-    "audio": "assets/audio/voice/phrase-red-apple.wav"
+    "audio": "assets/audio/voice/phrase-red-apple.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "big-red-ball",
@@ -20,7 +24,11 @@
       "ball"
     ],
     "picture_id": "ball",
-    "audio": "assets/audio/voice/phrase-big-red-ball.wav"
+    "audio": "assets/audio/voice/phrase-big-red-ball.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "soft-toy",
@@ -31,7 +39,11 @@
       "toy"
     ],
     "picture_id": "toy",
-    "audio": "assets/audio/voice/phrase-soft-toy.wav"
+    "audio": "assets/audio/voice/phrase-soft-toy.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "happy-baby",
@@ -42,7 +54,11 @@
       "baby"
     ],
     "picture_id": "baby",
-    "audio": "assets/audio/voice/phrase-happy-baby.wav"
+    "audio": "assets/audio/voice/phrase-happy-baby.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "warm-milk",
@@ -53,7 +69,11 @@
       "milk"
     ],
     "picture_id": "milk",
-    "audio": "assets/audio/voice/phrase-warm-milk.wav"
+    "audio": "assets/audio/voice/phrase-warm-milk.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "sweet-corn",
@@ -64,7 +84,11 @@
       "corn"
     ],
     "picture_id": "corn",
-    "audio": "assets/audio/voice/phrase-sweet-corn.wav"
+    "audio": "assets/audio/voice/phrase-sweet-corn.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "jump-up",
@@ -75,7 +99,11 @@
       "up"
     ],
     "picture_id": "jump",
-    "audio": "assets/audio/voice/phrase-jump-up.wav"
+    "audio": "assets/audio/voice/phrase-jump-up.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "sit-down",
@@ -86,7 +114,11 @@
       "down"
     ],
     "picture_id": "sit",
-    "audio": "assets/audio/voice/phrase-sit-down.wav"
+    "audio": "assets/audio/voice/phrase-sit-down.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "go-outside",
@@ -97,7 +129,11 @@
       "outside"
     ],
     "picture_id": "outside",
-    "audio": "assets/audio/voice/phrase-go-outside.wav"
+    "audio": "assets/audio/voice/phrase-go-outside.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "drink-water",
@@ -108,7 +144,11 @@
       "water"
     ],
     "picture_id": "drink",
-    "audio": "assets/audio/voice/phrase-drink-water.wav"
+    "audio": "assets/audio/voice/phrase-drink-water.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "eat-breakfast",
@@ -119,7 +159,11 @@
       "breakfast"
     ],
     "picture_id": "breakfast",
-    "audio": "assets/audio/voice/phrase-eat-breakfast.wav"
+    "audio": "assets/audio/voice/phrase-eat-breakfast.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "cook-rice",
@@ -130,7 +174,11 @@
       "rice"
     ],
     "picture_id": "rice",
-    "audio": "assets/audio/voice/phrase-cook-rice.wav"
+    "audio": "assets/audio/voice/phrase-cook-rice.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "shiny-shell",
@@ -141,7 +189,11 @@
       "shell"
     ],
     "picture_id": "shell",
-    "audio": "assets/audio/voice/phrase-shiny-shell.wav"
+    "audio": "assets/audio/voice/phrase-shiny-shell.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "crunchy-carrot",
@@ -152,7 +204,11 @@
       "carrot"
     ],
     "picture_id": "carrot",
-    "audio": "assets/audio/voice/phrase-crunchy-carrot.wav"
+    "audio": "assets/audio/voice/phrase-crunchy-carrot.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "healthy-breakfast",
@@ -163,7 +219,11 @@
       "breakfast"
     ],
     "picture_id": "breakfast",
-    "audio": "assets/audio/voice/phrase-healthy-breakfast.wav"
+    "audio": "assets/audio/voice/phrase-healthy-breakfast.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "striped-scarf",
@@ -174,7 +234,11 @@
       "scarf"
     ],
     "picture_id": "scarf",
-    "audio": "assets/audio/voice/phrase-striped-scarf.wav"
+    "audio": "assets/audio/voice/phrase-striped-scarf.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "waterproof-jacket",
@@ -185,7 +249,11 @@
       "jacket"
     ],
     "picture_id": "jacket",
-    "audio": "assets/audio/voice/phrase-waterproof-jacket.wav"
+    "audio": "assets/audio/voice/phrase-waterproof-jacket.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "delicious-soup",
@@ -196,7 +264,11 @@
       "soup"
     ],
     "picture_id": "soup",
-    "audio": "assets/audio/voice/phrase-delicious-soup.wav"
+    "audio": "assets/audio/voice/phrase-delicious-soup.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "collect-wood",
@@ -207,7 +279,11 @@
       "wood"
     ],
     "picture_id": "wood",
-    "audio": "assets/audio/voice/phrase-collect-wood.wav"
+    "audio": "assets/audio/voice/phrase-collect-wood.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "recycle-paper",
@@ -218,7 +294,11 @@
       "paper"
     ],
     "picture_id": "recycle",
-    "audio": "assets/audio/voice/phrase-recycle-paper.wav"
+    "audio": "assets/audio/voice/phrase-recycle-paper.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "play-tennis",
@@ -229,7 +309,11 @@
       "tennis"
     ],
     "picture_id": "tennis",
-    "audio": "assets/audio/voice/phrase-play-tennis.wav"
+    "audio": "assets/audio/voice/phrase-play-tennis.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "warm-wool-blanket",
@@ -241,7 +325,11 @@
       "blanket"
     ],
     "picture_id": "blanket",
-    "audio": "assets/audio/voice/phrase-warm-wool-blanket.wav"
+    "audio": "assets/audio/voice/phrase-warm-wool-blanket.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "sprinkle-glitter",
@@ -252,7 +340,11 @@
       "glitter"
     ],
     "picture_id": "glitter",
-    "audio": "assets/audio/voice/phrase-sprinkle-glitter.wav"
+    "audio": "assets/audio/voice/phrase-sprinkle-glitter.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "serve-hot-soup",
@@ -264,7 +356,11 @@
       "soup"
     ],
     "picture_id": "soup",
-    "audio": "assets/audio/voice/phrase-serve-hot-soup.wav"
+    "audio": "assets/audio/voice/phrase-serve-hot-soup.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "bright-red-birthday-balloon",
@@ -277,7 +373,11 @@
       "balloon"
     ],
     "picture_id": "balloon",
-    "audio": "assets/audio/voice/phrase-bright-red-birthday-balloon.wav"
+    "audio": "assets/audio/voice/phrase-bright-red-birthday-balloon.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "deep-blue-lake",
@@ -289,7 +389,11 @@
       "lake"
     ],
     "picture_id": "lake",
-    "audio": "assets/audio/voice/phrase-deep-blue-lake.wav"
+    "audio": "assets/audio/voice/phrase-deep-blue-lake.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "frozen-strawberry-dessert",
@@ -301,7 +405,11 @@
       "dessert"
     ],
     "picture_id": "dessert",
-    "audio": "assets/audio/voice/phrase-frozen-strawberry-dessert.wav"
+    "audio": "assets/audio/voice/phrase-frozen-strawberry-dessert.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "transparent-glass",
@@ -312,7 +420,11 @@
       "glass"
     ],
     "picture_id": "glass",
-    "audio": "assets/audio/voice/phrase-transparent-glass.wav"
+    "audio": "assets/audio/voice/phrase-transparent-glass.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "flexible-spine",
@@ -323,7 +435,11 @@
       "spine"
     ],
     "picture_id": "spine",
-    "audio": "assets/audio/voice/phrase-flexible-spine.wav"
+    "audio": "assets/audio/voice/phrase-flexible-spine.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "favorite-music",
@@ -334,7 +450,11 @@
       "music"
     ],
     "picture_id": "music",
-    "audio": "assets/audio/voice/phrase-favorite-music.wav"
+    "audio": "assets/audio/voice/phrase-favorite-music.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "celebrate-today",
@@ -345,7 +465,11 @@
       "today"
     ],
     "picture_id": "celebrate",
-    "audio": "assets/audio/voice/phrase-celebrate-today.wav"
+    "audio": "assets/audio/voice/phrase-celebrate-today.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "travel-north",
@@ -356,7 +480,11 @@
       "north"
     ],
     "picture_id": "north",
-    "audio": "assets/audio/voice/phrase-travel-north.wav"
+    "audio": "assets/audio/voice/phrase-travel-north.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "chop-wood",
@@ -367,7 +495,11 @@
       "wood"
     ],
     "picture_id": "chop",
-    "audio": "assets/audio/voice/phrase-chop-wood.wav"
+    "audio": "assets/audio/voice/phrase-chop-wood.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "plant-grass",
@@ -378,7 +510,11 @@
       "grass"
     ],
     "picture_id": "plant",
-    "audio": "assets/audio/voice/phrase-plant-grass.wav"
+    "audio": "assets/audio/voice/phrase-plant-grass.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "transport-food",
@@ -389,7 +525,11 @@
       "food"
     ],
     "picture_id": "transport",
-    "audio": "assets/audio/voice/phrase-transport-food.wav"
+    "audio": "assets/audio/voice/phrase-transport-food.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
   },
   {
     "id": "refrigerate-food",
@@ -400,6 +540,4762 @@
       "food"
     ],
     "picture_id": "refrigerate",
-    "audio": "assets/audio/voice/phrase-refrigerate-food.wav"
+    "audio": "assets/audio/voice/phrase-refrigerate-food.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-can-jump",
+    "text": "i can jump",
+    "level": "basic",
+    "words": [
+      "i",
+      "can",
+      "jump"
+    ],
+    "picture_id": "jump",
+    "audio": "assets/audio/voice/phrase-i-can-jump.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "you-can-clap",
+    "text": "you can clap",
+    "level": "basic",
+    "words": [
+      "you",
+      "can",
+      "clap"
+    ],
+    "picture_id": "clap",
+    "audio": "assets/audio/voice/phrase-you-can-clap.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "my-red-ball",
+    "text": "my red ball",
+    "level": "basic",
+    "words": [
+      "my",
+      "red",
+      "ball"
+    ],
+    "picture_id": "ball",
+    "audio": "assets/audio/voice/phrase-my-red-ball.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-big-dog",
+    "text": "a big dog",
+    "level": "basic",
+    "words": [
+      "a",
+      "big",
+      "dog"
+    ],
+    "picture_id": "dog",
+    "audio": "assets/audio/voice/phrase-a-big-dog.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-cat-is-happy",
+    "text": "a cat is happy",
+    "level": "basic",
+    "words": [
+      "a",
+      "cat",
+      "is",
+      "happy"
+    ],
+    "picture_id": "cat",
+    "audio": "assets/audio/voice/phrase-a-cat-is-happy.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-can-run",
+    "text": "i can run",
+    "level": "basic",
+    "words": [
+      "i",
+      "can",
+      "run"
+    ],
+    "picture_id": "run",
+    "audio": "assets/audio/voice/phrase-i-can-run.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "yes-please",
+    "text": "yes please",
+    "level": "basic",
+    "words": [
+      "yes",
+      "please"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-yes-please.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "no-milk",
+    "text": "no milk",
+    "level": "basic",
+    "words": [
+      "no",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-no-milk.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "help-me-please",
+    "text": "help me please",
+    "level": "basic",
+    "words": [
+      "help",
+      "me",
+      "please"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-help-me-please.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "hello-my-friend",
+    "text": "hello my friend",
+    "level": "basic",
+    "words": [
+      "hello",
+      "my",
+      "friend"
+    ],
+    "picture_id": "hello",
+    "audio": "assets/audio/voice/phrase-hello-my-friend.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "we-can-play",
+    "text": "we can play",
+    "level": "basic",
+    "words": [
+      "we",
+      "can",
+      "play"
+    ],
+    "picture_id": "play",
+    "audio": "assets/audio/voice/phrase-we-can-play.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "he-can-run",
+    "text": "he can run",
+    "level": "basic",
+    "words": [
+      "he",
+      "can",
+      "run"
+    ],
+    "picture_id": "run",
+    "audio": "assets/audio/voice/phrase-he-can-run.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "she-can-sing",
+    "text": "she can sing",
+    "level": "basic",
+    "words": [
+      "she",
+      "can",
+      "sing"
+    ],
+    "picture_id": "sing",
+    "audio": "assets/audio/voice/phrase-she-can-sing.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "it-is-hot",
+    "text": "it is hot",
+    "level": "basic",
+    "words": [
+      "it",
+      "is",
+      "hot"
+    ],
+    "picture_id": "hot",
+    "audio": "assets/audio/voice/phrase-it-is-hot.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "they-can-dance",
+    "text": "they can dance",
+    "level": "basic",
+    "words": [
+      "they",
+      "can",
+      "dance"
+    ],
+    "picture_id": "dance",
+    "audio": "assets/audio/voice/phrase-they-can-dance.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "help-us-please",
+    "text": "help us please",
+    "level": "basic",
+    "words": [
+      "help",
+      "us",
+      "please"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-help-us-please.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "give-them-water",
+    "text": "give them water",
+    "level": "basic",
+    "words": [
+      "give",
+      "them",
+      "water"
+    ],
+    "picture_id": "water",
+    "audio": "assets/audio/voice/phrase-give-them-water.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "give-him-milk",
+    "text": "give him milk",
+    "level": "basic",
+    "words": [
+      "give",
+      "him",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-give-him-milk.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "give-her-water",
+    "text": "give her water",
+    "level": "basic",
+    "words": [
+      "give",
+      "her",
+      "water"
+    ],
+    "picture_id": "water",
+    "audio": "assets/audio/voice/phrase-give-her-water.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "your-blue-hat",
+    "text": "your blue hat",
+    "level": "basic",
+    "words": [
+      "your",
+      "blue",
+      "hat"
+    ],
+    "picture_id": "hat",
+    "audio": "assets/audio/voice/phrase-your-blue-hat.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "his-green-coat",
+    "text": "his green coat",
+    "level": "basic",
+    "words": [
+      "his",
+      "green",
+      "coat"
+    ],
+    "picture_id": "coat",
+    "audio": "assets/audio/voice/phrase-his-green-coat.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "our-little-house",
+    "text": "our little house",
+    "level": "basic",
+    "words": [
+      "our",
+      "little",
+      "house"
+    ],
+    "picture_id": "house",
+    "audio": "assets/audio/voice/phrase-our-little-house.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "their-school-is-near",
+    "text": "their school is near",
+    "level": "basic",
+    "words": [
+      "their",
+      "school",
+      "is",
+      "near"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-their-school-is-near.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-orange",
+    "text": "an orange",
+    "level": "basic",
+    "words": [
+      "an",
+      "orange"
+    ],
+    "picture_id": "orange",
+    "audio": "assets/audio/voice/phrase-an-orange.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "the-little-cat",
+    "text": "the little cat",
+    "level": "basic",
+    "words": [
+      "the",
+      "little",
+      "cat"
+    ],
+    "picture_id": "cat",
+    "audio": "assets/audio/voice/phrase-the-little-cat.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "milk-and-bread",
+    "text": "milk and bread",
+    "level": "basic",
+    "words": [
+      "milk",
+      "and",
+      "bread"
+    ],
+    "picture_id": "bread",
+    "audio": "assets/audio/voice/phrase-milk-and-bread.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "water-or-milk",
+    "text": "water or milk",
+    "level": "basic",
+    "words": [
+      "water",
+      "or",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-water-or-milk.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "small-but-heavy",
+    "text": "small but heavy",
+    "level": "basic",
+    "words": [
+      "small",
+      "but",
+      "heavy"
+    ],
+    "picture_id": "small",
+    "audio": "assets/audio/voice/phrase-small-but-heavy.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "happy-because-we-can-play",
+    "text": "happy because we can play",
+    "level": "growing",
+    "words": [
+      "happy",
+      "because",
+      "we",
+      "can",
+      "play"
+    ],
+    "picture_id": "happy",
+    "audio": "assets/audio/voice/phrase-happy-because-we-can-play.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "come-if-you-can",
+    "text": "come if you can",
+    "level": "growing",
+    "words": [
+      "come",
+      "if",
+      "you",
+      "can"
+    ],
+    "picture_id": "come",
+    "audio": "assets/audio/voice/phrase-come-if-you-can.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "it-is-cold-so-rest",
+    "text": "it is cold so rest",
+    "level": "growing",
+    "words": [
+      "it",
+      "is",
+      "cold",
+      "so",
+      "rest"
+    ],
+    "picture_id": "cold",
+    "audio": "assets/audio/voice/phrase-it-is-cold-so-rest.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "this-red-apple",
+    "text": "this red apple",
+    "level": "basic",
+    "words": [
+      "this",
+      "red",
+      "apple"
+    ],
+    "picture_id": "apple",
+    "audio": "assets/audio/voice/phrase-this-red-apple.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "that-big-tree",
+    "text": "that big tree",
+    "level": "basic",
+    "words": [
+      "that",
+      "big",
+      "tree"
+    ],
+    "picture_id": "tree",
+    "audio": "assets/audio/voice/phrase-that-big-tree.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "these-are-my-sheep",
+    "text": "these are my sheep",
+    "level": "basic",
+    "words": [
+      "these",
+      "are",
+      "my",
+      "sheep"
+    ],
+    "picture_id": "sheep",
+    "audio": "assets/audio/voice/phrase-these-are-my-sheep.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "those-are-your-fish",
+    "text": "those are your fish",
+    "level": "basic",
+    "words": [
+      "those",
+      "are",
+      "your",
+      "fish"
+    ],
+    "picture_id": "fish",
+    "audio": "assets/audio/voice/phrase-those-are-your-fish.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "who-can-help",
+    "text": "who can help",
+    "level": "basic",
+    "words": [
+      "who",
+      "can",
+      "help"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-who-can-help.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "what-is-this",
+    "text": "what is this",
+    "level": "basic",
+    "words": [
+      "what",
+      "is",
+      "this"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-what-is-this.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "where-is-my-hat",
+    "text": "where is my hat",
+    "level": "basic",
+    "words": [
+      "where",
+      "is",
+      "my",
+      "hat"
+    ],
+    "picture_id": "hat",
+    "audio": "assets/audio/voice/phrase-where-is-my-hat.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "when-can-we-play",
+    "text": "when can we play",
+    "level": "basic",
+    "words": [
+      "when",
+      "can",
+      "we",
+      "play"
+    ],
+    "picture_id": "play",
+    "audio": "assets/audio/voice/phrase-when-can-we-play.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "why-is-it-wet",
+    "text": "why is it wet",
+    "level": "basic",
+    "words": [
+      "why",
+      "is",
+      "it",
+      "wet"
+    ],
+    "picture_id": "wet",
+    "audio": "assets/audio/voice/phrase-why-is-it-wet.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "how-are-you",
+    "text": "how are you",
+    "level": "basic",
+    "words": [
+      "how",
+      "are",
+      "you"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-how-are-you.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-am-happy",
+    "text": "i am happy",
+    "level": "basic",
+    "words": [
+      "i",
+      "am",
+      "happy"
+    ],
+    "picture_id": "happy",
+    "audio": "assets/audio/voice/phrase-i-am-happy.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "we-are-happy",
+    "text": "we are happy",
+    "level": "basic",
+    "words": [
+      "we",
+      "are",
+      "happy"
+    ],
+    "picture_id": "happy",
+    "audio": "assets/audio/voice/phrase-we-are-happy.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "be-kind",
+    "text": "be kind",
+    "level": "basic",
+    "words": [
+      "be",
+      "kind"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-be-kind.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "do-it-again",
+    "text": "do it again",
+    "level": "basic",
+    "words": [
+      "do",
+      "it",
+      "again"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-do-it-again.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-have-a-ball",
+    "text": "i have a ball",
+    "level": "basic",
+    "words": [
+      "i",
+      "have",
+      "a",
+      "ball"
+    ],
+    "picture_id": "ball",
+    "audio": "assets/audio/voice/phrase-i-have-a-ball.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "she-has-a-book",
+    "text": "she has a book",
+    "level": "basic",
+    "words": [
+      "she",
+      "has",
+      "a",
+      "book"
+    ],
+    "picture_id": "book",
+    "audio": "assets/audio/voice/phrase-she-has-a-book.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "it-is-not-cold",
+    "text": "it is not cold",
+    "level": "basic",
+    "words": [
+      "it",
+      "is",
+      "not",
+      "cold"
+    ],
+    "picture_id": "cold",
+    "audio": "assets/audio/voice/phrase-it-is-not-cold.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-very-big-tree",
+    "text": "a very big tree",
+    "level": "basic",
+    "words": [
+      "a",
+      "very",
+      "big",
+      "tree"
+    ],
+    "picture_id": "tree",
+    "audio": "assets/audio/voice/phrase-a-very-big-tree.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "too-hot-to-drink",
+    "text": "too hot to drink",
+    "level": "basic",
+    "words": [
+      "too",
+      "hot",
+      "to",
+      "drink"
+    ],
+    "picture_id": "hot",
+    "audio": "assets/audio/voice/phrase-too-hot-to-drink.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "go-to-school",
+    "text": "go to school",
+    "level": "basic",
+    "words": [
+      "go",
+      "to",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-go-to-school.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-cup-of-water",
+    "text": "a cup of water",
+    "level": "basic",
+    "words": [
+      "a",
+      "cup",
+      "of",
+      "water"
+    ],
+    "picture_id": "water",
+    "audio": "assets/audio/voice/phrase-a-cup-of-water.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-present-for-you",
+    "text": "a present for you",
+    "level": "basic",
+    "words": [
+      "a",
+      "present",
+      "for",
+      "you"
+    ],
+    "picture_id": "present",
+    "audio": "assets/audio/voice/phrase-a-present-for-you.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "play-with-me",
+    "text": "play with me",
+    "level": "basic",
+    "words": [
+      "play",
+      "with",
+      "me"
+    ],
+    "picture_id": "play",
+    "audio": "assets/audio/voice/phrase-play-with-me.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-letter-from-my-friend",
+    "text": "a letter from my friend",
+    "level": "basic",
+    "words": [
+      "a",
+      "letter",
+      "from",
+      "my",
+      "friend"
+    ],
+    "picture_id": "letter",
+    "audio": "assets/audio/voice/phrase-a-letter-from-my-friend.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at-the-school",
+    "text": "at the school",
+    "level": "basic",
+    "words": [
+      "at",
+      "the",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-at-the-school.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "wait-until-morning",
+    "text": "wait until morning",
+    "level": "growing",
+    "words": [
+      "wait",
+      "until",
+      "morning"
+    ],
+    "picture_id": "morning",
+    "audio": "assets/audio/voice/phrase-wait-until-morning.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "during-the-summer",
+    "text": "during the summer",
+    "level": "growing",
+    "words": [
+      "during",
+      "the",
+      "summer"
+    ],
+    "picture_id": "summer",
+    "audio": "assets/audio/voice/phrase-during-the-summer.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "sing-while-you-cook",
+    "text": "sing while you cook",
+    "level": "growing",
+    "words": [
+      "sing",
+      "while",
+      "you",
+      "cook"
+    ],
+    "picture_id": "sing",
+    "audio": "assets/audio/voice/phrase-sing-while-you-cook.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-also-like-music",
+    "text": "i also like music",
+    "level": "growing",
+    "words": [
+      "i",
+      "also",
+      "like",
+      "music"
+    ],
+    "picture_id": "music",
+    "audio": "assets/audio/voice/phrase-i-also-like-music.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "wash-then-eat",
+    "text": "wash then eat",
+    "level": "basic",
+    "words": [
+      "wash",
+      "then",
+      "eat"
+    ],
+    "picture_id": "wash",
+    "audio": "assets/audio/voice/phrase-wash-then-eat.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "the-cat-is-still-here",
+    "text": "the cat is still here",
+    "level": "growing",
+    "words": [
+      "the",
+      "cat",
+      "is",
+      "still",
+      "here"
+    ],
+    "picture_id": "cat",
+    "audio": "assets/audio/voice/phrase-the-cat-is-still-here.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "almost-ready",
+    "text": "almost ready",
+    "level": "growing",
+    "words": [
+      "almost",
+      "ready"
+    ],
+    "picture_id": "ready",
+    "audio": "assets/audio/voice/phrase-almost-ready.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "always-wash-your-face",
+    "text": "always wash your face",
+    "level": "growing",
+    "words": [
+      "always",
+      "wash",
+      "your",
+      "face"
+    ],
+    "picture_id": "face",
+    "audio": "assets/audio/voice/phrase-always-wash-your-face.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "sometimes-we-eat-outside",
+    "text": "sometimes we eat outside",
+    "level": "growing",
+    "words": [
+      "sometimes",
+      "we",
+      "eat",
+      "outside"
+    ],
+    "picture_id": "eat",
+    "audio": "assets/audio/voice/phrase-sometimes-we-eat-outside.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "never-give-up",
+    "text": "never give up",
+    "level": "growing",
+    "words": [
+      "never",
+      "give",
+      "up"
+    ],
+    "picture_id": "give",
+    "audio": "assets/audio/voice/phrase-never-give-up.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "try-again",
+    "text": "try again",
+    "level": "basic",
+    "words": [
+      "try",
+      "again"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-try-again.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-soon",
+    "text": "see you soon",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "soon"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-see-you-soon.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-later",
+    "text": "see you later",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "later"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-see-you-later.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "come-here-please",
+    "text": "come here please",
+    "level": "basic",
+    "words": [
+      "come",
+      "here",
+      "please"
+    ],
+    "picture_id": "come",
+    "audio": "assets/audio/voice/phrase-come-here-please.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "put-it-there",
+    "text": "put it there",
+    "level": "basic",
+    "words": [
+      "put",
+      "it",
+      "there"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-put-it-there.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "goodbye-my-friend",
+    "text": "goodbye my friend",
+    "level": "basic",
+    "words": [
+      "goodbye",
+      "my",
+      "friend"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-goodbye-my-friend.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "yes-thanks",
+    "text": "yes thanks",
+    "level": "basic",
+    "words": [
+      "yes",
+      "thanks"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-yes-thanks.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-am-sorry",
+    "text": "i am sorry",
+    "level": "basic",
+    "words": [
+      "i",
+      "am",
+      "sorry"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-am-sorry.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "welcome-to-our-school",
+    "text": "welcome to our school",
+    "level": "basic",
+    "words": [
+      "welcome",
+      "to",
+      "our",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-welcome-to-our-school.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-want-water",
+    "text": "i want water",
+    "level": "basic",
+    "words": [
+      "i",
+      "want",
+      "water"
+    ],
+    "picture_id": "water",
+    "audio": "assets/audio/voice/phrase-i-want-water.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-like-milk",
+    "text": "i like milk",
+    "level": "basic",
+    "words": [
+      "i",
+      "like",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-i-like-milk.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-love-my-family",
+    "text": "i love my family",
+    "level": "basic",
+    "words": [
+      "i",
+      "love",
+      "my",
+      "family"
+    ],
+    "picture_id": "family",
+    "audio": "assets/audio/voice/phrase-i-love-my-family.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "we-need-help",
+    "text": "we need help",
+    "level": "basic",
+    "words": [
+      "we",
+      "need",
+      "help"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-we-need-help.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-can-see-you",
+    "text": "i can see you",
+    "level": "basic",
+    "words": [
+      "i",
+      "can",
+      "see",
+      "you"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-can-see-you.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-feel-happy",
+    "text": "i feel happy",
+    "level": "basic",
+    "words": [
+      "i",
+      "feel",
+      "happy"
+    ],
+    "picture_id": "happy",
+    "audio": "assets/audio/voice/phrase-i-feel-happy.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-know-your-name",
+    "text": "i know your name",
+    "level": "basic",
+    "words": [
+      "i",
+      "know",
+      "your",
+      "name"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-know-your-name.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-understand-the-question",
+    "text": "i understand the question",
+    "level": "growing",
+    "words": [
+      "i",
+      "understand",
+      "the",
+      "question"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-understand-the-question.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "remember-your-book",
+    "text": "remember your book",
+    "level": "growing",
+    "words": [
+      "remember",
+      "your",
+      "book"
+    ],
+    "picture_id": "book",
+    "audio": "assets/audio/voice/phrase-remember-your-book.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "do-not-forget",
+    "text": "do not forget",
+    "level": "growing",
+    "words": [
+      "do",
+      "not",
+      "forget"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-do-not-forget.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "learn-a-new-word",
+    "text": "learn a new word",
+    "level": "basic",
+    "words": [
+      "learn",
+      "a",
+      "new",
+      "word"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-learn-a-new-word.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "listen-please",
+    "text": "listen please",
+    "level": "basic",
+    "words": [
+      "listen",
+      "please"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-listen-please.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "say-hello",
+    "text": "say hello",
+    "level": "basic",
+    "words": [
+      "say",
+      "hello"
+    ],
+    "picture_id": "hello",
+    "audio": "assets/audio/voice/phrase-say-hello.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "tell-me-a-story",
+    "text": "tell me a story",
+    "level": "basic",
+    "words": [
+      "tell",
+      "me",
+      "a",
+      "story"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-tell-me-a-story.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "use-a-pencil",
+    "text": "use a pencil",
+    "level": "basic",
+    "words": [
+      "use",
+      "a",
+      "pencil"
+    ],
+    "picture_id": "pencil",
+    "audio": "assets/audio/voice/phrase-use-a-pencil.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "make-a-cake",
+    "text": "make a cake",
+    "level": "basic",
+    "words": [
+      "make",
+      "a",
+      "cake"
+    ],
+    "picture_id": "cake",
+    "audio": "assets/audio/voice/phrase-make-a-cake.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "put-it-here",
+    "text": "put it here",
+    "level": "basic",
+    "words": [
+      "put",
+      "it",
+      "here"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-put-it-here.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "choose-a-book",
+    "text": "choose a book",
+    "level": "basic",
+    "words": [
+      "choose",
+      "a",
+      "book"
+    ],
+    "picture_id": "book",
+    "audio": "assets/audio/voice/phrase-choose-a-book.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "enjoy-your-lunch",
+    "text": "enjoy your lunch",
+    "level": "basic",
+    "words": [
+      "enjoy",
+      "your",
+      "lunch"
+    ],
+    "picture_id": "lunch",
+    "audio": "assets/audio/voice/phrase-enjoy-your-lunch.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "hope-for-a-warm-day",
+    "text": "hope for a warm day",
+    "level": "growing",
+    "words": [
+      "hope",
+      "for",
+      "a",
+      "warm",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-hope-for-a-warm-day.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-believe-you",
+    "text": "i believe you",
+    "level": "growing",
+    "words": [
+      "i",
+      "believe",
+      "you"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-believe-you.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-agree-with-you",
+    "text": "i agree with you",
+    "level": "growing",
+    "words": [
+      "i",
+      "agree",
+      "with",
+      "you"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-i-agree-with-you.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "decide-what-to-cook",
+    "text": "decide what to cook",
+    "level": "growing",
+    "words": [
+      "decide",
+      "what",
+      "to",
+      "cook"
+    ],
+    "picture_id": "cook",
+    "audio": "assets/audio/voice/phrase-decide-what-to-cook.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "imagine-a-purple-cat",
+    "text": "imagine a purple cat",
+    "level": "growing",
+    "words": [
+      "imagine",
+      "a",
+      "purple",
+      "cat"
+    ],
+    "picture_id": "cat",
+    "audio": "assets/audio/voice/phrase-imagine-a-purple-cat.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "notice-the-little-bird",
+    "text": "notice the little bird",
+    "level": "growing",
+    "words": [
+      "notice",
+      "the",
+      "little",
+      "bird"
+    ],
+    "picture_id": "bird",
+    "audio": "assets/audio/voice/phrase-notice-the-little-bird.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explain-your-answer",
+    "text": "explain your answer",
+    "level": "growing",
+    "words": [
+      "explain",
+      "your",
+      "answer"
+    ],
+    "picture_id": "answer",
+    "audio": "assets/audio/voice/phrase-explain-your-answer.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "describe-your-picture",
+    "text": "describe your picture",
+    "level": "growing",
+    "words": [
+      "describe",
+      "your",
+      "picture"
+    ],
+    "picture_id": "picture",
+    "audio": "assets/audio/voice/phrase-describe-your-picture.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "compare-the-two-fish",
+    "text": "compare the two fish",
+    "level": "growing",
+    "words": [
+      "compare",
+      "the",
+      "two",
+      "fish"
+    ],
+    "picture_id": "fish",
+    "audio": "assets/audio/voice/phrase-compare-the-two-fish.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "predict-the-weather",
+    "text": "predict the weather",
+    "level": "growing",
+    "words": [
+      "predict",
+      "the",
+      "weather"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-predict-the-weather.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "observe-a-green-leaf",
+    "text": "observe a green leaf",
+    "level": "growing",
+    "words": [
+      "observe",
+      "a",
+      "green",
+      "leaf"
+    ],
+    "picture_id": "leaf",
+    "audio": "assets/audio/voice/phrase-observe-a-green-leaf.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "investigate-the-problem",
+    "text": "investigate the problem",
+    "level": "advanced",
+    "words": [
+      "investigate",
+      "the",
+      "problem"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-investigate-the-problem.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "discover-a-new-planet",
+    "text": "discover a new planet",
+    "level": "growing",
+    "words": [
+      "discover",
+      "a",
+      "new",
+      "planet"
+    ],
+    "picture_id": "planet",
+    "audio": "assets/audio/voice/phrase-discover-a-new-planet.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explore-the-forest",
+    "text": "explore the forest",
+    "level": "growing",
+    "words": [
+      "explore",
+      "the",
+      "forest"
+    ],
+    "picture_id": "forest",
+    "audio": "assets/audio/voice/phrase-explore-the-forest.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "create-a-new-pattern",
+    "text": "create a new pattern",
+    "level": "growing",
+    "words": [
+      "create",
+      "a",
+      "new",
+      "pattern"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-create-a-new-pattern.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "design-a-safe-house",
+    "text": "design a safe house",
+    "level": "growing",
+    "words": [
+      "design",
+      "a",
+      "safe",
+      "house"
+    ],
+    "picture_id": "house",
+    "audio": "assets/audio/voice/phrase-design-a-safe-house.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "improve-your-work",
+    "text": "improve your work",
+    "level": "growing",
+    "words": [
+      "improve",
+      "your",
+      "work"
+    ],
+    "picture_id": "work",
+    "audio": "assets/audio/voice/phrase-improve-your-work.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "practice-every-day",
+    "text": "practice every day",
+    "level": "basic",
+    "words": [
+      "practice",
+      "every",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-practice-every-day.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "solve-the-puzzle",
+    "text": "solve the puzzle",
+    "level": "growing",
+    "words": [
+      "solve",
+      "the",
+      "puzzle"
+    ],
+    "picture_id": "puzzle",
+    "audio": "assets/audio/voice/phrase-solve-the-puzzle.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "check-your-answer",
+    "text": "check your answer",
+    "level": "growing",
+    "words": [
+      "check",
+      "your",
+      "answer"
+    ],
+    "picture_id": "answer",
+    "audio": "assets/audio/voice/phrase-check-your-answer.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "measure-the-long-leaf",
+    "text": "measure the long leaf",
+    "level": "growing",
+    "words": [
+      "measure",
+      "the",
+      "long",
+      "leaf"
+    ],
+    "picture_id": "leaf",
+    "audio": "assets/audio/voice/phrase-measure-the-long-leaf.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "estimate-the-number",
+    "text": "estimate the number",
+    "level": "advanced",
+    "words": [
+      "estimate",
+      "the",
+      "number"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-estimate-the-number.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "identify-the-bird",
+    "text": "identify the bird",
+    "level": "growing",
+    "words": [
+      "identify",
+      "the",
+      "bird"
+    ],
+    "picture_id": "bird",
+    "audio": "assets/audio/voice/phrase-identify-the-bird.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "classify-different-food",
+    "text": "classify different food",
+    "level": "advanced",
+    "words": [
+      "classify",
+      "different",
+      "food"
+    ],
+    "picture_id": "food",
+    "audio": "assets/audio/voice/phrase-classify-different-food.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "connect-with-your-friend",
+    "text": "connect with your friend",
+    "level": "growing",
+    "words": [
+      "connect",
+      "with",
+      "your",
+      "friend"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-connect-with-your-friend.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "include-your-name",
+    "text": "include your name",
+    "level": "growing",
+    "words": [
+      "include",
+      "your",
+      "name"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-include-your-name.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "support-your-idea",
+    "text": "support your idea",
+    "level": "advanced",
+    "words": [
+      "support",
+      "your",
+      "idea"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-support-your-idea.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "suggest-a-new-plan",
+    "text": "suggest a new plan",
+    "level": "growing",
+    "words": [
+      "suggest",
+      "a",
+      "new",
+      "plan"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-suggest-a-new-plan.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "i-prefer-warm-milk",
+    "text": "i prefer warm milk",
+    "level": "growing",
+    "words": [
+      "i",
+      "prefer",
+      "warm",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-i-prefer-warm-milk.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "expect-a-different-result",
+    "text": "expect a different result",
+    "level": "growing",
+    "words": [
+      "expect",
+      "a",
+      "different",
+      "result"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-expect-a-different-result.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "achieve-your-goal",
+    "text": "achieve your goal",
+    "level": "advanced",
+    "words": [
+      "achieve",
+      "your",
+      "goal"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-achieve-your-goal.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reduce-plastic",
+    "text": "reduce plastic",
+    "level": "advanced",
+    "words": [
+      "reduce",
+      "plastic"
+    ],
+    "picture_id": "plastic",
+    "audio": "assets/audio/voice/phrase-reduce-plastic.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "increase-the-temperature",
+    "text": "increase the temperature",
+    "level": "advanced",
+    "words": [
+      "increase",
+      "the",
+      "temperature"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-increase-the-temperature.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reuse-a-paper-bag",
+    "text": "reuse a paper bag",
+    "level": "growing",
+    "words": [
+      "reuse",
+      "a",
+      "paper",
+      "bag"
+    ],
+    "picture_id": "bag",
+    "audio": "assets/audio/voice/phrase-reuse-a-paper-bag.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "adapt-to-a-new-school",
+    "text": "adapt to a new school",
+    "level": "advanced",
+    "words": [
+      "adapt",
+      "to",
+      "a",
+      "new",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-adapt-to-a-new-school.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reflect-on-your-work",
+    "text": "reflect on your work",
+    "level": "advanced",
+    "words": [
+      "reflect",
+      "on",
+      "your",
+      "work"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-reflect-on-your-work.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "evaluate-the-evidence",
+    "text": "evaluate the evidence",
+    "level": "advanced",
+    "words": [
+      "evaluate",
+      "the",
+      "evidence"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-evaluate-the-evidence.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "justify-your-opinion",
+    "text": "justify your opinion",
+    "level": "advanced",
+    "words": [
+      "justify",
+      "your",
+      "opinion"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-justify-your-opinion.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "summarize-the-story",
+    "text": "summarize the story",
+    "level": "advanced",
+    "words": [
+      "summarize",
+      "the",
+      "story"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-summarize-the-story.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "analyze-the-result",
+    "text": "analyze the result",
+    "level": "advanced",
+    "words": [
+      "analyze",
+      "the",
+      "result"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-analyze-the-result.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-kind-friend",
+    "text": "a kind friend",
+    "level": "basic",
+    "words": [
+      "a",
+      "kind",
+      "friend"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-kind-friend.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-little-bird",
+    "text": "a little bird",
+    "level": "basic",
+    "words": [
+      "a",
+      "little",
+      "bird"
+    ],
+    "picture_id": "bird",
+    "audio": "assets/audio/voice/phrase-a-little-bird.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-new-toy",
+    "text": "a new toy",
+    "level": "basic",
+    "words": [
+      "a",
+      "new",
+      "toy"
+    ],
+    "picture_id": "toy",
+    "audio": "assets/audio/voice/phrase-a-new-toy.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-nice-day",
+    "text": "a nice day",
+    "level": "basic",
+    "words": [
+      "a",
+      "nice",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-nice-day.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-brave-child",
+    "text": "a brave child",
+    "level": "basic",
+    "words": [
+      "a",
+      "brave",
+      "child"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-brave-child.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "be-careful",
+    "text": "be careful",
+    "level": "basic",
+    "words": [
+      "be",
+      "careful"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-be-careful.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-safe-school",
+    "text": "a safe school",
+    "level": "basic",
+    "words": [
+      "a",
+      "safe",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-a-safe-school.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-easy-puzzle",
+    "text": "an easy puzzle",
+    "level": "basic",
+    "words": [
+      "an",
+      "easy",
+      "puzzle"
+    ],
+    "picture_id": "puzzle",
+    "audio": "assets/audio/voice/phrase-an-easy-puzzle.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-difficult-question",
+    "text": "a difficult question",
+    "level": "growing",
+    "words": [
+      "a",
+      "difficult",
+      "question"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-difficult-question.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "two-different-sheep",
+    "text": "two different sheep",
+    "level": "basic",
+    "words": [
+      "two",
+      "different",
+      "sheep"
+    ],
+    "picture_id": "sheep",
+    "audio": "assets/audio/voice/phrase-two-different-sheep.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-important-word",
+    "text": "an important word",
+    "level": "growing",
+    "words": [
+      "an",
+      "important",
+      "word"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-an-important-word.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-possible-solution",
+    "text": "a possible solution",
+    "level": "growing",
+    "words": [
+      "a",
+      "possible",
+      "solution"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-possible-solution.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-useful-book",
+    "text": "a useful book",
+    "level": "growing",
+    "words": [
+      "a",
+      "useful",
+      "book"
+    ],
+    "picture_id": "book",
+    "audio": "assets/audio/voice/phrase-a-useful-book.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-special-present",
+    "text": "a special present",
+    "level": "basic",
+    "words": [
+      "a",
+      "special",
+      "present"
+    ],
+    "picture_id": "present",
+    "audio": "assets/audio/voice/phrase-a-special-present.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "fair-to-you",
+    "text": "fair to you",
+    "level": "growing",
+    "words": [
+      "fair",
+      "to",
+      "you"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-fair-to-you.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-honest-answer",
+    "text": "an honest answer",
+    "level": "growing",
+    "words": [
+      "an",
+      "honest",
+      "answer"
+    ],
+    "picture_id": "answer",
+    "audio": "assets/audio/voice/phrase-an-honest-answer.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "be-patient",
+    "text": "be patient",
+    "level": "growing",
+    "words": [
+      "be",
+      "patient"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-be-patient.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "proud-of-your-work",
+    "text": "proud of your work",
+    "level": "growing",
+    "words": [
+      "proud",
+      "of",
+      "your",
+      "work"
+    ],
+    "picture_id": "work",
+    "audio": "assets/audio/voice/phrase-proud-of-your-work.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-curious-child",
+    "text": "a curious child",
+    "level": "growing",
+    "words": [
+      "a",
+      "curious",
+      "child"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-curious-child.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-friendly-dog",
+    "text": "a friendly dog",
+    "level": "basic",
+    "words": [
+      "a",
+      "friendly",
+      "dog"
+    ],
+    "picture_id": "dog",
+    "audio": "assets/audio/voice/phrase-a-friendly-dog.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "be-gentle",
+    "text": "be gentle",
+    "level": "basic",
+    "words": [
+      "be",
+      "gentle"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-be-gentle.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-calm-cat",
+    "text": "a calm cat",
+    "level": "basic",
+    "words": [
+      "a",
+      "calm",
+      "cat"
+    ],
+    "picture_id": "cat",
+    "audio": "assets/audio/voice/phrase-a-calm-cat.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-lonely-child",
+    "text": "a lonely child",
+    "level": "growing",
+    "words": [
+      "a",
+      "lonely",
+      "child"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-lonely-child.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "disappointed-with-the-result",
+    "text": "disappointed with the result",
+    "level": "growing",
+    "words": [
+      "disappointed",
+      "with",
+      "the",
+      "result"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-disappointed-with-the-result.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "confident-in-your-work",
+    "text": "confident in your work",
+    "level": "growing",
+    "words": [
+      "confident",
+      "in",
+      "your",
+      "work"
+    ],
+    "picture_id": "in",
+    "audio": "assets/audio/voice/phrase-confident-in-your-work.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-responsible-choice",
+    "text": "a responsible choice",
+    "level": "advanced",
+    "words": [
+      "a",
+      "responsible",
+      "choice"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-responsible-choice.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "independent-work",
+    "text": "independent work",
+    "level": "advanced",
+    "words": [
+      "independent",
+      "work"
+    ],
+    "picture_id": "work",
+    "audio": "assets/audio/voice/phrase-independent-work.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-creative-idea",
+    "text": "a creative idea",
+    "level": "growing",
+    "words": [
+      "a",
+      "creative",
+      "idea"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-creative-idea.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-reliable-source",
+    "text": "a reliable source",
+    "level": "advanced",
+    "words": [
+      "a",
+      "reliable",
+      "source"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-reliable-source.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-accurate-answer",
+    "text": "an accurate answer",
+    "level": "advanced",
+    "words": [
+      "an",
+      "accurate",
+      "answer"
+    ],
+    "picture_id": "answer",
+    "audio": "assets/audio/voice/phrase-an-accurate-answer.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "two-similar-fish",
+    "text": "two similar fish",
+    "level": "growing",
+    "words": [
+      "two",
+      "similar",
+      "fish"
+    ],
+    "picture_id": "fish",
+    "audio": "assets/audio/voice/phrase-two-similar-fish.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "equal-to-one",
+    "text": "equal to one",
+    "level": "growing",
+    "words": [
+      "equal",
+      "to",
+      "one"
+    ],
+    "picture_id": "one",
+    "audio": "assets/audio/voice/phrase-equal-to-one.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-common-bird",
+    "text": "a common bird",
+    "level": "growing",
+    "words": [
+      "a",
+      "common",
+      "bird"
+    ],
+    "picture_id": "bird",
+    "audio": "assets/audio/voice/phrase-a-common-bird.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-rare-bird",
+    "text": "a rare bird",
+    "level": "growing",
+    "words": [
+      "a",
+      "rare",
+      "bird"
+    ],
+    "picture_id": "bird",
+    "audio": "assets/audio/voice/phrase-a-rare-bird.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-natural-material",
+    "text": "a natural material",
+    "level": "growing",
+    "words": [
+      "a",
+      "natural",
+      "material"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-natural-material.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "our-local-school",
+    "text": "our local school",
+    "level": "growing",
+    "words": [
+      "our",
+      "local",
+      "school"
+    ],
+    "picture_id": "school",
+    "audio": "assets/audio/voice/phrase-our-local-school.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-global-problem",
+    "text": "a global problem",
+    "level": "advanced",
+    "words": [
+      "a",
+      "global",
+      "problem"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-global-problem.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-sustainable-future",
+    "text": "a sustainable future",
+    "level": "advanced",
+    "words": [
+      "a",
+      "sustainable",
+      "future"
+    ],
+    "picture_id": "future",
+    "audio": "assets/audio/voice/phrase-a-sustainable-future.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "look-for-evidence",
+    "text": "look for evidence",
+    "level": "advanced",
+    "words": [
+      "look",
+      "for",
+      "evidence"
+    ],
+    "picture_id": "look",
+    "audio": "assets/audio/voice/phrase-look-for-evidence.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "give-a-reason",
+    "text": "give a reason",
+    "level": "growing",
+    "words": [
+      "give",
+      "a",
+      "reason"
+    ],
+    "picture_id": "give",
+    "audio": "assets/audio/voice/phrase-give-a-reason.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "find-a-solution",
+    "text": "find a solution",
+    "level": "growing",
+    "words": [
+      "find",
+      "a",
+      "solution"
+    ],
+    "picture_id": "find",
+    "audio": "assets/audio/voice/phrase-find-a-solution.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-different-result",
+    "text": "a different result",
+    "level": "growing",
+    "words": [
+      "a",
+      "different",
+      "result"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-different-result.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "share-your-opinion",
+    "text": "share your opinion",
+    "level": "growing",
+    "words": [
+      "share",
+      "your",
+      "opinion"
+    ],
+    "picture_id": "share",
+    "audio": "assets/audio/voice/phrase-share-your-opinion.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-fact-from-science",
+    "text": "a fact from science",
+    "level": "growing",
+    "words": [
+      "a",
+      "fact",
+      "from",
+      "science"
+    ],
+    "picture_id": "science",
+    "audio": "assets/audio/voice/phrase-a-fact-from-science.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "cause-and-effect",
+    "text": "cause and effect",
+    "level": "growing",
+    "words": [
+      "cause",
+      "and",
+      "effect"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-cause-and-effect.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "research-a-topic",
+    "text": "research a topic",
+    "level": "advanced",
+    "words": [
+      "research",
+      "a",
+      "topic"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-research-a-topic.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "protect-the-environment",
+    "text": "protect the environment",
+    "level": "growing",
+    "words": [
+      "protect",
+      "the",
+      "environment"
+    ],
+    "picture_id": "protect",
+    "audio": "assets/audio/voice/phrase-protect-the-environment.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "help-our-community",
+    "text": "help our community",
+    "level": "growing",
+    "words": [
+      "help",
+      "our",
+      "community"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-help-our-community.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "learn-from-a-different-culture",
+    "text": "learn from a different culture",
+    "level": "advanced",
+    "words": [
+      "learn",
+      "from",
+      "a",
+      "different",
+      "culture"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-learn-from-a-different-culture.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-family-tradition",
+    "text": "a family tradition",
+    "level": "advanced",
+    "words": [
+      "a",
+      "family",
+      "tradition"
+    ],
+    "picture_id": "family",
+    "audio": "assets/audio/voice/phrase-a-family-tradition.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-good-idea",
+    "text": "a good idea",
+    "level": "basic",
+    "words": [
+      "a",
+      "good",
+      "idea"
+    ],
+    "picture_id": "good",
+    "audio": "assets/audio/voice/phrase-a-good-idea.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-difficult-problem",
+    "text": "a difficult problem",
+    "level": "growing",
+    "words": [
+      "a",
+      "difficult",
+      "problem"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-difficult-problem.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "make-a-plan",
+    "text": "make a plan",
+    "level": "growing",
+    "words": [
+      "make",
+      "a",
+      "plan"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-make-a-plan.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "ask-a-question",
+    "text": "ask a question",
+    "level": "basic",
+    "words": [
+      "ask",
+      "a",
+      "question"
+    ],
+    "picture_id": "ask",
+    "audio": "assets/audio/voice/phrase-ask-a-question.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "tell-a-story",
+    "text": "tell a story",
+    "level": "basic",
+    "words": [
+      "tell",
+      "a",
+      "story"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-tell-a-story.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "tell-me-your-name",
+    "text": "tell me your name",
+    "level": "basic",
+    "words": [
+      "tell",
+      "me",
+      "your",
+      "name"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-tell-me-your-name.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "my-good-friend",
+    "text": "my good friend",
+    "level": "basic",
+    "words": [
+      "my",
+      "good",
+      "friend"
+    ],
+    "picture_id": "good",
+    "audio": "assets/audio/voice/phrase-my-good-friend.wav",
+    "min_age": 3,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-happy-child",
+    "text": "a happy child",
+    "level": "basic",
+    "words": [
+      "a",
+      "happy",
+      "child"
+    ],
+    "picture_id": "happy",
+    "audio": "assets/audio/voice/phrase-a-happy-child.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "help-your-team",
+    "text": "help your team",
+    "level": "growing",
+    "words": [
+      "help",
+      "your",
+      "team"
+    ],
+    "picture_id": "help",
+    "audio": "assets/audio/voice/phrase-help-your-team.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-careful-choice",
+    "text": "a careful choice",
+    "level": "growing",
+    "words": [
+      "a",
+      "careful",
+      "choice"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-careful-choice.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reach-your-goal",
+    "text": "reach your goal",
+    "level": "growing",
+    "words": [
+      "reach",
+      "your",
+      "goal"
+    ],
+    "picture_id": "reach",
+    "audio": "assets/audio/voice/phrase-reach-your-goal.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "make-a-pattern",
+    "text": "make a pattern",
+    "level": "growing",
+    "words": [
+      "make",
+      "a",
+      "pattern"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-make-a-pattern.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "choose-a-topic",
+    "text": "choose a topic",
+    "level": "growing",
+    "words": [
+      "choose",
+      "a",
+      "topic"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-choose-a-topic.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "notice-every-detail",
+    "text": "notice every detail",
+    "level": "growing",
+    "words": [
+      "notice",
+      "every",
+      "detail"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-notice-every-detail.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-example-from-history",
+    "text": "an example from history",
+    "level": "growing",
+    "words": [
+      "an",
+      "example",
+      "from",
+      "history"
+    ],
+    "picture_id": "history",
+    "audio": "assets/audio/voice/phrase-an-example-from-history.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "find-useful-information",
+    "text": "find useful information",
+    "level": "advanced",
+    "words": [
+      "find",
+      "useful",
+      "information"
+    ],
+    "picture_id": "find",
+    "audio": "assets/audio/voice/phrase-find-useful-information.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "share-your-knowledge",
+    "text": "share your knowledge",
+    "level": "advanced",
+    "words": [
+      "share",
+      "your",
+      "knowledge"
+    ],
+    "picture_id": "share",
+    "audio": "assets/audio/voice/phrase-share-your-knowledge.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "energy-from-the-sun",
+    "text": "energy from the sun",
+    "level": "growing",
+    "words": [
+      "energy",
+      "from",
+      "the",
+      "sun"
+    ],
+    "picture_id": "sun",
+    "audio": "assets/audio/voice/phrase-energy-from-the-sun.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-soft-material",
+    "text": "a soft material",
+    "level": "growing",
+    "words": [
+      "a",
+      "soft",
+      "material"
+    ],
+    "picture_id": "soft",
+    "audio": "assets/audio/voice/phrase-a-soft-material.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-natural-resource",
+    "text": "a natural resource",
+    "level": "advanced",
+    "words": [
+      "a",
+      "natural",
+      "resource"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-natural-resource.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "protect-the-forest-habitat",
+    "text": "protect the forest habitat",
+    "level": "growing",
+    "words": [
+      "protect",
+      "the",
+      "forest",
+      "habitat"
+    ],
+    "picture_id": "forest",
+    "audio": "assets/audio/voice/phrase-protect-the-forest-habitat.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-warm-climate",
+    "text": "a warm climate",
+    "level": "advanced",
+    "words": [
+      "a",
+      "warm",
+      "climate"
+    ],
+    "picture_id": "warm",
+    "audio": "assets/audio/voice/phrase-a-warm-climate.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "cold-winter-weather",
+    "text": "cold winter weather",
+    "level": "basic",
+    "words": [
+      "cold",
+      "winter",
+      "weather"
+    ],
+    "picture_id": "winter",
+    "audio": "assets/audio/voice/phrase-cold-winter-weather.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "measure-the-temperature",
+    "text": "measure the temperature",
+    "level": "growing",
+    "words": [
+      "measure",
+      "the",
+      "temperature"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-measure-the-temperature.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-science-experiment",
+    "text": "a science experiment",
+    "level": "growing",
+    "words": [
+      "a",
+      "science",
+      "experiment"
+    ],
+    "picture_id": "science",
+    "audio": "assets/audio/voice/phrase-a-science-experiment.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "try-a-different-method",
+    "text": "try a different method",
+    "level": "advanced",
+    "words": [
+      "try",
+      "a",
+      "different",
+      "method"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-try-a-different-method.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explain-the-process",
+    "text": "explain the process",
+    "level": "advanced",
+    "words": [
+      "explain",
+      "the",
+      "process"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-explain-the-process.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "collect-the-data",
+    "text": "collect the data",
+    "level": "advanced",
+    "words": [
+      "collect",
+      "the",
+      "data"
+    ],
+    "picture_id": "collect",
+    "audio": "assets/audio/voice/phrase-collect-the-data.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explain-your-conclusion",
+    "text": "explain your conclusion",
+    "level": "advanced",
+    "words": [
+      "explain",
+      "your",
+      "conclusion"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-explain-your-conclusion.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-new-challenge",
+    "text": "a new challenge",
+    "level": "advanced",
+    "words": [
+      "a",
+      "new",
+      "challenge"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-new-challenge.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "choose-a-useful-strategy",
+    "text": "choose a useful strategy",
+    "level": "advanced",
+    "words": [
+      "choose",
+      "a",
+      "useful",
+      "strategy"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-choose-a-useful-strategy.wav",
+    "min_age": 12,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "make-good-progress",
+    "text": "make good progress",
+    "level": "growing",
+    "words": [
+      "make",
+      "good",
+      "progress"
+    ],
+    "picture_id": "good",
+    "audio": "assets/audio/voice/phrase-make-good-progress.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-good-effort",
+    "text": "a good effort",
+    "level": "growing",
+    "words": [
+      "a",
+      "good",
+      "effort"
+    ],
+    "picture_id": "good",
+    "audio": "assets/audio/voice/phrase-a-good-effort.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "respect-your-friend",
+    "text": "respect your friend",
+    "level": "growing",
+    "words": [
+      "respect",
+      "your",
+      "friend"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-respect-your-friend.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "empathy-for-a-sad-friend",
+    "text": "empathy for a sad friend",
+    "level": "advanced",
+    "words": [
+      "empathy",
+      "for",
+      "a",
+      "sad",
+      "friend"
+    ],
+    "picture_id": "sad",
+    "audio": "assets/audio/voice/phrase-empathy-for-a-sad-friend.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "share-responsibility",
+    "text": "share responsibility",
+    "level": "advanced",
+    "words": [
+      "share",
+      "responsibility"
+    ],
+    "picture_id": "share",
+    "audio": "assets/audio/voice/phrase-share-responsibility.wav",
+    "min_age": 11,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "curiosity-and-imagination",
+    "text": "curiosity and imagination",
+    "level": "advanced",
+    "words": [
+      "curiosity",
+      "and",
+      "imagination"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-curiosity-and-imagination.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "use-your-imagination",
+    "text": "use your imagination",
+    "level": "growing",
+    "words": [
+      "use",
+      "your",
+      "imagination"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-use-your-imagination.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "good-communication",
+    "text": "good communication",
+    "level": "advanced",
+    "words": [
+      "good",
+      "communication"
+    ],
+    "picture_id": "good",
+    "audio": "assets/audio/voice/phrase-good-communication.wav",
+    "min_age": 10,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-happy-celebration",
+    "text": "a happy celebration",
+    "level": "basic",
+    "words": [
+      "a",
+      "happy",
+      "celebration"
+    ],
+    "picture_id": "celebration",
+    "audio": "assets/audio/voice/phrase-a-happy-celebration.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "this-afternoon",
+    "text": "this afternoon",
+    "level": "basic",
+    "words": [
+      "this",
+      "afternoon"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-this-afternoon.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-quiet-evening",
+    "text": "a quiet evening",
+    "level": "basic",
+    "words": [
+      "a",
+      "quiet",
+      "evening"
+    ],
+    "picture_id": "quiet",
+    "audio": "assets/audio/voice/phrase-a-quiet-evening.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-new-year",
+    "text": "a new year",
+    "level": "basic",
+    "words": [
+      "a",
+      "new",
+      "year"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-new-year.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-monday",
+    "text": "see you on monday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "monday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-monday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-tuesday",
+    "text": "see you on tuesday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "tuesday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-tuesday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-wednesday",
+    "text": "see you on wednesday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "wednesday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-wednesday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-thursday",
+    "text": "see you on thursday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "thursday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-thursday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-friday",
+    "text": "see you on friday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "friday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-friday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-saturday",
+    "text": "see you on saturday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "saturday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-saturday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see-you-on-sunday",
+    "text": "see you on sunday",
+    "level": "basic",
+    "words": [
+      "see",
+      "you",
+      "on",
+      "sunday"
+    ],
+    "picture_id": "on",
+    "audio": "assets/audio/voice/phrase-see-you-on-sunday.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-cold-january-day",
+    "text": "a cold january day",
+    "level": "growing",
+    "words": [
+      "a",
+      "cold",
+      "january",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-cold-january-day.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-february-morning",
+    "text": "a february morning",
+    "level": "growing",
+    "words": [
+      "a",
+      "february",
+      "morning"
+    ],
+    "picture_id": "morning",
+    "audio": "assets/audio/voice/phrase-a-february-morning.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-wet-march-day",
+    "text": "a wet march day",
+    "level": "growing",
+    "words": [
+      "a",
+      "wet",
+      "march",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-wet-march-day.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-april-shower",
+    "text": "an april shower",
+    "level": "growing",
+    "words": [
+      "an",
+      "april",
+      "shower"
+    ],
+    "picture_id": "shower",
+    "audio": "assets/audio/voice/phrase-an-april-shower.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-warm-may-day",
+    "text": "a warm may day",
+    "level": "growing",
+    "words": [
+      "a",
+      "warm",
+      "may",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-warm-may-day.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-warm-june-day",
+    "text": "a warm june day",
+    "level": "growing",
+    "words": [
+      "a",
+      "warm",
+      "june",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-warm-june-day.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-hot-july-afternoon",
+    "text": "a hot july afternoon",
+    "level": "growing",
+    "words": [
+      "a",
+      "hot",
+      "july",
+      "afternoon"
+    ],
+    "picture_id": "hot",
+    "audio": "assets/audio/voice/phrase-a-hot-july-afternoon.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-august-evening",
+    "text": "an august evening",
+    "level": "growing",
+    "words": [
+      "an",
+      "august",
+      "evening"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-an-august-evening.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-september-morning",
+    "text": "a september morning",
+    "level": "growing",
+    "words": [
+      "a",
+      "september",
+      "morning"
+    ],
+    "picture_id": "morning",
+    "audio": "assets/audio/voice/phrase-a-september-morning.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an-october-afternoon",
+    "text": "an october afternoon",
+    "level": "growing",
+    "words": [
+      "an",
+      "october",
+      "afternoon"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-an-october-afternoon.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-november-evening",
+    "text": "a november evening",
+    "level": "growing",
+    "words": [
+      "a",
+      "november",
+      "evening"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-a-november-evening.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-december-night",
+    "text": "a december night",
+    "level": "growing",
+    "words": [
+      "a",
+      "december",
+      "night"
+    ],
+    "picture_id": "night",
+    "audio": "assets/audio/voice/phrase-a-december-night.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-eleven",
+    "text": "number eleven",
+    "level": "basic",
+    "words": [
+      "number",
+      "eleven"
+    ],
+    "picture_id": "eleven",
+    "audio": "assets/audio/voice/phrase-number-eleven.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-twelve",
+    "text": "number twelve",
+    "level": "basic",
+    "words": [
+      "number",
+      "twelve"
+    ],
+    "picture_id": "twelve",
+    "audio": "assets/audio/voice/phrase-number-twelve.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-thirteen",
+    "text": "number thirteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "thirteen"
+    ],
+    "picture_id": "thirteen",
+    "audio": "assets/audio/voice/phrase-number-thirteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-fourteen",
+    "text": "number fourteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "fourteen"
+    ],
+    "picture_id": "fourteen",
+    "audio": "assets/audio/voice/phrase-number-fourteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-fifteen",
+    "text": "number fifteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "fifteen"
+    ],
+    "picture_id": "fifteen",
+    "audio": "assets/audio/voice/phrase-number-fifteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-sixteen",
+    "text": "number sixteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "sixteen"
+    ],
+    "picture_id": "sixteen",
+    "audio": "assets/audio/voice/phrase-number-sixteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-seventeen",
+    "text": "number seventeen",
+    "level": "basic",
+    "words": [
+      "number",
+      "seventeen"
+    ],
+    "picture_id": "seventeen",
+    "audio": "assets/audio/voice/phrase-number-seventeen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-eighteen",
+    "text": "number eighteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "eighteen"
+    ],
+    "picture_id": "eighteen",
+    "audio": "assets/audio/voice/phrase-number-eighteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-nineteen",
+    "text": "number nineteen",
+    "level": "basic",
+    "words": [
+      "number",
+      "nineteen"
+    ],
+    "picture_id": "nineteen",
+    "audio": "assets/audio/voice/phrase-number-nineteen.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number-twenty",
+    "text": "number twenty",
+    "level": "basic",
+    "words": [
+      "number",
+      "twenty"
+    ],
+    "picture_id": "twenty",
+    "audio": "assets/audio/voice/phrase-number-twenty.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "one-hundred",
+    "text": "one hundred",
+    "level": "growing",
+    "words": [
+      "one",
+      "hundred"
+    ],
+    "picture_id": "one",
+    "audio": "assets/audio/voice/phrase-one-hundred.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "one-thousand",
+    "text": "one thousand",
+    "level": "growing",
+    "words": [
+      "one",
+      "thousand"
+    ],
+    "picture_id": "one",
+    "audio": "assets/audio/voice/phrase-one-thousand.wav",
+    "min_age": 9,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "more-warm-milk",
+    "text": "more warm milk",
+    "level": "basic",
+    "words": [
+      "more",
+      "warm",
+      "milk"
+    ],
+    "picture_id": "milk",
+    "audio": "assets/audio/voice/phrase-more-warm-milk.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "some-cold-water",
+    "text": "some cold water",
+    "level": "basic",
+    "words": [
+      "some",
+      "cold",
+      "water"
+    ],
+    "picture_id": "water",
+    "audio": "assets/audio/voice/phrase-some-cold-water.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "both-are-blue",
+    "text": "both are blue",
+    "level": "basic",
+    "words": [
+      "both",
+      "are",
+      "blue"
+    ],
+    "picture_id": "blue",
+    "audio": "assets/audio/voice/phrase-both-are-blue.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "enough-food-for-us",
+    "text": "enough food for us",
+    "level": "growing",
+    "words": [
+      "enough",
+      "food",
+      "for",
+      "us"
+    ],
+    "picture_id": "food",
+    "audio": "assets/audio/voice/phrase-enough-food-for-us.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "eat-now",
+    "text": "eat now",
+    "level": "basic",
+    "words": [
+      "eat",
+      "now"
+    ],
+    "picture_id": "eat",
+    "audio": "assets/audio/voice/phrase-eat-now.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "off-the-table",
+    "text": "off the table",
+    "level": "basic",
+    "words": [
+      "off",
+      "the",
+      "table"
+    ],
+    "picture_id": "table",
+    "audio": "assets/audio/voice/phrase-off-the-table.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "go-out-and-play",
+    "text": "go out and play",
+    "level": "basic",
+    "words": [
+      "go",
+      "out",
+      "and",
+      "play"
+    ],
+    "picture_id": "go",
+    "audio": "assets/audio/voice/phrase-go-out-and-play.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "turn-left",
+    "text": "turn left",
+    "level": "basic",
+    "words": [
+      "turn",
+      "left"
+    ],
+    "picture_id": "turn",
+    "audio": "assets/audio/voice/phrase-turn-left.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "turn-right",
+    "text": "turn right",
+    "level": "basic",
+    "words": [
+      "turn",
+      "right"
+    ],
+    "picture_id": "turn",
+    "audio": "assets/audio/voice/phrase-turn-right.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at-the-front",
+    "text": "at the front",
+    "level": "basic",
+    "words": [
+      "at",
+      "the",
+      "front"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-at-the-front.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at-the-back",
+    "text": "at the back",
+    "level": "basic",
+    "words": [
+      "at",
+      "the",
+      "back"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-at-the-back.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at-the-top",
+    "text": "at the top",
+    "level": "basic",
+    "words": [
+      "at",
+      "the",
+      "top"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-at-the-top.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at-the-bottom",
+    "text": "at the bottom",
+    "level": "basic",
+    "words": [
+      "at",
+      "the",
+      "bottom"
+    ],
+    "picture_id": "",
+    "audio": "assets/audio/voice/phrase-at-the-bottom.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-closed-door",
+    "text": "a closed door",
+    "level": "basic",
+    "words": [
+      "a",
+      "closed",
+      "door"
+    ],
+    "picture_id": "door",
+    "audio": "assets/audio/voice/phrase-a-closed-door.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-cloudy-day",
+    "text": "a cloudy day",
+    "level": "basic",
+    "words": [
+      "a",
+      "cloudy",
+      "day"
+    ],
+    "picture_id": "day",
+    "audio": "assets/audio/voice/phrase-a-cloudy-day.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-sharp-pencil",
+    "text": "a sharp pencil",
+    "level": "growing",
+    "words": [
+      "a",
+      "sharp",
+      "pencil"
+    ],
+    "picture_id": "pencil",
+    "audio": "assets/audio/voice/phrase-a-sharp-pencil.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-strong-bone",
+    "text": "a strong bone",
+    "level": "growing",
+    "words": [
+      "a",
+      "strong",
+      "bone"
+    ],
+    "picture_id": "bone",
+    "audio": "assets/audio/voice/phrase-a-strong-bone.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "my-stomach-is-full",
+    "text": "my stomach is full",
+    "level": "basic",
+    "words": [
+      "my",
+      "stomach",
+      "is",
+      "full"
+    ],
+    "picture_id": "stomach",
+    "audio": "assets/audio/voice/phrase-my-stomach-is-full.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-big-dinosaur",
+    "text": "a big dinosaur",
+    "level": "basic",
+    "words": [
+      "a",
+      "big",
+      "dinosaur"
+    ],
+    "picture_id": "dinosaur",
+    "audio": "assets/audio/voice/phrase-a-big-dinosaur.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "rice-and-chicken",
+    "text": "rice and chicken",
+    "level": "basic",
+    "words": [
+      "rice",
+      "and",
+      "chicken"
+    ],
+    "picture_id": "chicken",
+    "audio": "assets/audio/voice/phrase-rice-and-chicken.wav",
+    "min_age": 4,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "cook-the-meat",
+    "text": "cook the meat",
+    "level": "basic",
+    "words": [
+      "cook",
+      "the",
+      "meat"
+    ],
+    "picture_id": "meat",
+    "audio": "assets/audio/voice/phrase-cook-the-meat.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-pink-lollipop",
+    "text": "a pink lollipop",
+    "level": "basic",
+    "words": [
+      "a",
+      "pink",
+      "lollipop"
+    ],
+    "picture_id": "lollipop",
+    "audio": "assets/audio/voice/phrase-a-pink-lollipop.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "warm-tea",
+    "text": "warm tea",
+    "level": "basic",
+    "words": [
+      "warm",
+      "tea"
+    ],
+    "picture_id": "tea",
+    "audio": "assets/audio/voice/phrase-warm-tea.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "read-the-menu",
+    "text": "read the menu",
+    "level": "growing",
+    "words": [
+      "read",
+      "the",
+      "menu"
+    ],
+    "picture_id": "menu",
+    "audio": "assets/audio/voice/phrase-read-the-menu.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "use-your-money",
+    "text": "use your money",
+    "level": "growing",
+    "words": [
+      "use",
+      "your",
+      "money"
+    ],
+    "picture_id": "money",
+    "audio": "assets/audio/voice/phrase-use-your-money.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "soft-clay",
+    "text": "soft clay",
+    "level": "basic",
+    "words": [
+      "soft",
+      "clay"
+    ],
+    "picture_id": "clay",
+    "audio": "assets/audio/voice/phrase-soft-clay.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-birthday-card",
+    "text": "a birthday card",
+    "level": "growing",
+    "words": [
+      "a",
+      "birthday",
+      "card"
+    ],
+    "picture_id": "card",
+    "audio": "assets/audio/voice/phrase-a-birthday-card.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "draw-a-picture",
+    "text": "draw a picture",
+    "level": "basic",
+    "words": [
+      "draw",
+      "a",
+      "picture"
+    ],
+    "picture_id": "picture",
+    "audio": "assets/audio/voice/phrase-draw-a-picture.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "write-a-letter",
+    "text": "write a letter",
+    "level": "basic",
+    "words": [
+      "write",
+      "a",
+      "letter"
+    ],
+    "picture_id": "letter",
+    "audio": "assets/audio/voice/phrase-write-a-letter.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "read-the-newspaper",
+    "text": "read the newspaper",
+    "level": "growing",
+    "words": [
+      "read",
+      "the",
+      "newspaper"
+    ],
+    "picture_id": "newspaper",
+    "audio": "assets/audio/voice/phrase-read-the-newspaper.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "recycle-plastic",
+    "text": "recycle plastic",
+    "level": "growing",
+    "words": [
+      "recycle",
+      "plastic"
+    ],
+    "picture_id": "plastic",
+    "audio": "assets/audio/voice/phrase-recycle-plastic.wav",
+    "min_age": 8,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explore-the-world",
+    "text": "explore the world",
+    "level": "growing",
+    "words": [
+      "explore",
+      "the",
+      "world"
+    ],
+    "picture_id": "world",
+    "audio": "assets/audio/voice/phrase-explore-the-world.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-happy-winner",
+    "text": "a happy winner",
+    "level": "growing",
+    "words": [
+      "a",
+      "happy",
+      "winner"
+    ],
+    "picture_id": "winner",
+    "audio": "assets/audio/voice/phrase-a-happy-winner.wav",
+    "min_age": 7,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "finish-your-lunch",
+    "text": "finish your lunch",
+    "level": "basic",
+    "words": [
+      "finish",
+      "your",
+      "lunch"
+    ],
+    "picture_id": "lunch",
+    "audio": "assets/audio/voice/phrase-finish-your-lunch.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "change-your-shirt",
+    "text": "change your shirt",
+    "level": "basic",
+    "words": [
+      "change",
+      "your",
+      "shirt"
+    ],
+    "picture_id": "shirt",
+    "audio": "assets/audio/voice/phrase-change-your-shirt.wav",
+    "min_age": 6,
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a-small-number",
+    "text": "a small number",
+    "level": "basic",
+    "words": [
+      "a",
+      "small",
+      "number"
+    ],
+    "picture_id": "small",
+    "audio": "assets/audio/voice/phrase-a-small-number.wav",
+    "min_age": 5,
+    "practice_modes": [
+      "phrase"
+    ]
   }
 ]

@@ -1,0 +1,316 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="120" viewBox="0 0 1200 120">
+  <title>Pip level 11 Bright Navigator expressionHeads; derived from wardrobe.svg and the original Pip artwork</title>
+  <g stroke="#785D3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <g id="pip-face-neutral" transform="translate(0 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 29Q38 26 44 29M72 27Q79 26 84 30" fill="none" stroke-width="2" />
+      <ellipse cx="42" cy="46" rx="12" ry="15" fill="#FFFEF4" stroke-width="2.5" />
+      <ellipse cx="77" cy="44" rx="11" ry="14" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="47" cy="49" r="3.5" />
+        <circle cx="73" cy="47" r="3.3" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="48" cy="47" r="1" />
+        <circle cx="74" cy="45" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".65" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M40 68Q61 74 84 66" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-listening" transform="translate(120 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M31 28Q38 23 45 27M71 26Q78 21 86 26" fill="none" stroke-width="2" />
+      <ellipse cx="42" cy="46" rx="12" ry="15" fill="#FFFEF4" stroke-width="2.5" />
+      <ellipse cx="77" cy="44" rx="11" ry="14" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="48" cy="43" r="4" />
+        <circle cx="83" cy="41" r="3.8" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="49" cy="41" r="1" />
+        <circle cx="84" cy="39" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".65" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M41 68Q61 75 84 66" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-thinking" transform="translate(240 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M31 29Q38 25 45 29M71 25Q79 19 86 24" fill="none" stroke-width="2" />
+      <path d="M30 44C30 27 53 27 54 43L54 49Q51 60 42 61Q32 60 30 49Z" fill="#FFFEF4" stroke-width="2.5" />
+      <ellipse cx="77" cy="44" rx="11" ry="14" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="47" cy="38" r="3.5" />
+        <circle cx="82" cy="37" r="3.3" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="48" cy="36" r="1" />
+        <circle cx="83" cy="35" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".55" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M43 68Q55 72 64 70Q74 67 83 68" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-delighted" transform="translate(360 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 29Q38 24 44 28M72 27Q79 23 85 28" fill="none" stroke-width="2" />
+      <path d="M31 47Q42 33 54 47M66 45Q77 32 88 45" fill="none" stroke-width="3.5" />
+      <g fill="#F3B39B" opacity=".85" stroke="none">
+        <ellipse cx="31" cy="61" rx="7" ry="4" />
+        <ellipse cx="91" cy="58" rx="7" ry="4" />
+      </g>
+      <path d="M42 66Q60 63 85 65L80 78Q68 89 53 82Q44 78 42 66Z" fill="#F0A865" />
+      <path d="M46 67Q62 65 82 66L77 77Q63 83 50 75Z" fill="#85553E" stroke-width="2" />
+      <ellipse cx="66" cy="77" rx="8" ry="3" fill="#EFAB9D" stroke="none" />
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q91 67 83 70Q61 74 40 70Q35 68 39 63Z" fill="#F5B06D" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-proud" transform="translate(480 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 29Q38 26 44 29M72 27Q79 24 85 28" fill="none" stroke-width="2" />
+      <path d="M31 47Q42 35 54 47M66 45Q77 33 88 45" fill="none" stroke-width="3.5" />
+      <g fill="#F3B39B" opacity=".78" stroke="none">
+        <ellipse cx="31" cy="61" rx="7" ry="4" />
+        <ellipse cx="91" cy="58" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M40 66Q61 80 85 65" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-encourage" transform="translate(600 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M31 31Q37 26 45 25M71 23Q79 24 85 29" fill="none" stroke-width="2" />
+      <ellipse cx="42" cy="46" rx="12" ry="15" fill="#FFFEF4" stroke-width="2.5" />
+      <ellipse cx="77" cy="44" rx="11" ry="14" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="43" cy="48" r="4" />
+        <circle cx="76" cy="46" r="3.8" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="44" cy="46" r="1" />
+        <circle cx="77" cy="44" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".75" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M42 68Q61 78 83 67" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-surprised" transform="translate(720 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M30 27Q38 20 46 25M70 25Q79 18 87 24" fill="none" stroke-width="2" />
+      <ellipse cx="42" cy="45" rx="12" ry="16" fill="#FFFEF4" stroke-width="2.5" />
+      <ellipse cx="77" cy="43" rx="11" ry="15" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="44" cy="44" r="4.1" />
+        <circle cx="76" cy="42" r="3.9" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="45" cy="42" r="1" />
+        <circle cx="77" cy="40" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".6" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M45 65Q61 60 81 64L78 77Q74 86 64 86Q53 85 48 77Z" fill="#F0A865" />
+      <path d="M56 68C57 62 72 62 74 69L73 77Q66 85 59 78Z" fill="#85553E" stroke-width="2" />
+      <path d="M61 78Q66 75 71 78Q67 82 61 78Z" fill="#EFAB9D" stroke="none" />
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q91 66 82 69Q61 73 40 69Q35 67 39 63Z" fill="#F5B06D" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-sleepy" transform="translate(840 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 31Q38 30 44 31M72 29Q79 28 84 30" fill="none" stroke-width="2" />
+      <path d="M30 46Q42 45 54 46Q54 61 42 61Q31 61 30 46Z" fill="#FFFEF4" stroke-width="2.5" />
+      <path d="M66 44Q77 43 88 44Q88 59 77 59Q67 59 66 44Z" fill="#FFFEF4" stroke-width="2.5" />
+      <g fill="#4E473E" stroke="none">
+        <circle cx="43" cy="54" r="3.4" />
+        <circle cx="76" cy="52" r="3.2" />
+      </g>
+      <g fill="#FFF" stroke="none">
+        <circle cx="44" cy="52" r="1" />
+        <circle cx="77" cy="50" r="1" />
+      </g>
+      <g fill="#F3B39B" opacity=".55" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M43 69Q61 74 82 68" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-wink" transform="translate(960 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 28Q38 24 45 28M71 29Q78 25 85 29" fill="none" stroke-width="2" />
+      <ellipse cx="42" cy="46" rx="12" ry="15" fill="#FFFEF4" stroke-width="2.5" />
+      <circle cx="44" cy="45" r="4" fill="#4E473E" stroke="none" />
+      <circle cx="45" cy="43" r="1.2" fill="#FFF" stroke="none" />
+      <path d="M66 46Q77 34 88 46" fill="none" stroke-width="3.5" />
+      <g fill="#F3B39B" opacity=".8" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M40 67Q61 79 85 65" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+    <g id="pip-face-blink" transform="translate(1080 0)">
+      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E" />
+      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E" />
+      <path d="M32 31Q38 28 44 31M72 29Q79 28 84 32" fill="none" stroke-width="2" />
+      <path d="M31 48Q42 40 54 48M66 46Q77 39 88 46" fill="none" stroke-width="3.5" />
+      <g fill="#F3B39B" opacity=".65" stroke="none">
+        <ellipse cx="31" cy="62" rx="7" ry="4" />
+        <ellipse cx="91" cy="59" rx="7" ry="4" />
+      </g>
+      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D" />
+      <path d="M40 68Q61 74 84 66" fill="none" stroke="#AD793E" stroke-width="2" />
+      <g fill="#B37C40" stroke="none">
+        <circle cx="56" cy="63" r="1.3" />
+        <circle cx="69" cy="62" r="1.3" />
+      </g>
+      <g stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M29 15L42 7Q62 3 81 8L94 15L87 25H36Z" fill="#F5F8ED" />
+        <path d="M35 21Q62 18 88 22L86 29Q61 26 36 29Z" fill="#5A88A2" />
+        <path d="M43 23H80" stroke="#D8EDF0" stroke-width="1.5" />
+        <g fill="none" stroke="#8B7246" stroke-width="2">
+          <circle cx="61" cy="12" r="1.5" />
+          <path d="M61 14V20M56 17Q61 23 66 17M57 15H65" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -5,7 +5,7 @@ const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, rendered, observeAudio, boardPoint, resultPoint, roomControl, roomState, acceptCelebration } = require('./game-ui.cjs');
+  contentBounds, headerPoint, headerIconRect, pipHeaderRect, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -155,12 +155,12 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   await pressGamepad(page, 5);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  await expect(page.locator('#game-status')).toContainText('Lv3');
   await pressGamepad(page, 9);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  await expect(page.locator('#game-status')).toContainText('Lv3');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await pressGamepad(page, 1);
@@ -352,7 +352,7 @@ test('the exported game runs inside a normal website iframe', async ({ page }) =
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>html,body{margin:0;width:100%;height:100%;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0}</style>' +
-      '</head><body><iframe title="Pip and Words" src="/" allow="autoplay; fullscreen"></iframe></body></html>'
+      '</head><body><iframe title="Grow with Pip" src="/" allow="autoplay; fullscreen"></iframe></body></html>'
   }));
   await page.goto('/embed-test.html');
   const frame = page.frameLocator('iframe');
@@ -379,7 +379,7 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>body{margin:0}section{height:150vh}iframe{display:block;width:100%;height:700px;border:0}</style>' +
-      '</head><body><section>Content above the game</section><iframe title="Pip and Words" src="/" allow="autoplay"></iframe></body></html>'
+      '</head><body><section>Content above the game</section><iframe title="Grow with Pip" src="/" allow="autoplay"></iframe></body></html>'
   }));
   await page.goto('/below-fold.html');
   const frame = page.frameLocator('iframe');
@@ -466,21 +466,16 @@ function rewardPieceTotal(saved) {
     .reduce((total, [, , count]) => total + Number(count), 0);
 }
 
-test('new adventures rotate after the chest is opened and room navigation preserves its claim', async ({ page }, testInfo) => {
+test('new adventures rotate after the chest is opened and growth navigation preserves its claim', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
-  const catalog = fs.readFileSync(path.join(__dirname, '..', '..', 'scripts', 'game_data.gd'), 'utf8');
-  const adventures = JSON.parse(catalog.match(/const ADVENTURES: Array\[Dictionary\] = (\[[\s\S]*?\r?\n\])/)[1]);
-  const topics = Object.fromEntries(adventures.map(({ name, words }) => [name, words]));
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
   const board = await discoverCards(page);
   const words = [...board.discovered.keys()];
-  const adventure = Object.keys(topics).find(name => words.every(word => topics[name].includes(word)));
-  expect(adventure, 'The five lesson words share a concrete adventure topic.').toBeTruthy();
   expect(words).toHaveLength(5);
-  expect(words.every(word => topics[adventure].includes(word))).toBe(true);
+  expect(words.every(text => catalog.find(word => word.text === text)?.min_age === 3)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('word-adventure.png'), scale: 'css' });
   await winWithTouch(page, board);
   await page.screenshot({ path: testInfo.outputPath('chest-before-opening.png'), scale: 'css' });
@@ -489,7 +484,7 @@ test('new adventures rotate after the chest is opened and room navigation preser
   const unopened = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  await expect(page.locator('#game-status')).toContainText('Lv3');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(unopened);
@@ -501,29 +496,22 @@ test('new adventures rotate after the chest is opened and room navigation preser
   await ready(page);
   const nextBoard = await discoverCards(page);
   const nextWords = [...nextBoard.discovered.keys()];
-  const nextAdventure = Object.keys(topics).find(name => nextWords.every(word => topics[name].includes(word)));
-  expect(nextAdventure).toBeTruthy();
-  expect(nextAdventure).not.toBe(adventure);
   expect([...nextBoard.discovered.keys()].filter(word => words.includes(word))).toEqual([]);
   await assertFits(page);
   expect(errors).toEqual([]);
 });
 
-test('Pip follows the board, chest and room without extra rewards', async ({ page }, testInfo) => {
+test('Pip follows the board and chest while growth preserves rewards without extra rewards', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await page.setViewportSize({ width: 390, height: 650 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
   const bounds = await canvasMetrics(page);
-  const greet = async (point, inRoom = false) => {
+  const greet = async point => {
     await rendered(page);
     await tap(page, point.x, point.y);
-    if (inRoom) {
-      await expect(page.locator('#game-status')).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
-    } else {
-      await expect(page.locator('#game-status')).toContainText('Pip says hello!');
-    }
+    await expect(page.locator('#game-status')).toContainText('Pip says hello!');
   };
   const boardPip = headerPoint(await logicalMetrics(page), 'pip');
   await tap(page, boardPip.x, boardPip.y);
@@ -539,10 +527,8 @@ test('Pip follows the board, chest and room without extra rewards', async ({ pag
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
   const earnedProgress = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
-  const roomPip = await roomControl(page, 'pip');
-  await greet(roomPip, true);
-  await page.screenshot({ path: testInfo.outputPath('pip-collection.png'), scale: 'css' });
+  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await page.screenshot({ path: testInfo.outputPath('pip-growth.png'), scale: 'css' });
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(earnedProgress);
   await page.keyboard.press('Escape');
   expect(errors).toEqual([]);
@@ -725,7 +711,7 @@ test(`Hint remains available after ${correct ? 'correct' : 'wrong'} feedback`, a
     await page.touchscreen.tap(point.x, point.y);
   }
   await expect(page.locator('#game-status')).toContainText(correct ? 'Great match!' : 'Not quite.');
-  const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')]);
+  const saved = await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('growWithPip.growth.v1')]);
   if (correct) {
     await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   } else {
@@ -738,7 +724,7 @@ test(`Hint remains available after ${correct ? 'correct' : 'wrong'} feedback`, a
   if (correct) expect(hinted).not.toBe(`Hint: match the ${word} cards.`);
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(hinted);
-  expect(await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('wordBuddies.playroom')])).toEqual(saved);
+  expect(await page.evaluate(() => [localStorage.getItem('wordBuddies.medalProgress'), localStorage.getItem('growWithPip.growth.v1')])).toEqual(saved);
   await page.screenshot({ path: testInfo.outputPath('next-hint-1.png'), scale: 'css' });
   await page.keyboard.press('Enter');
   const nextWord = hinted.match(/^Hint: match the ([a-z]+) cards\.$/)[1];
@@ -801,7 +787,7 @@ test('Match keeps the same board after repeated mistakes and finishes only when 
   }
 });
 
-test('fresh adventures save chest progress, unlock a toy and preserve progress', async ({ page }, testInfo) => {
+test('fresh adventures save exactly one chest reward per round and preserve progress', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -819,17 +805,10 @@ test('fresh adventures save chest progress, unlock a toy and preserve progress',
     previousWords = words;
     await winWithTouch(page, board);
     await holdControllerChest(page);
-    if (round === 2) {
-      await expect(page.locator('#game-status')).toContainText('A gift for Pip!');
-      await expect(page.locator('#game-status')).toContainText('Spring flower unlocked!');
-    } else {
-      await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
-    }
+    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
     await pressGamepad(page, 3);
-    const completed = Math.floor((round + 1) / 3);
-    await expect(page.locator('#game-status')).toContainText(`Pip's room opened. ${completed + 1} toys in Pip's home.`);
-    const progress = await roomState(page);
-    expect(progress.owned.includes('spring')).toBe(round >= 2);
+    expect((await growthView(page)).visible).toBe(true);
+    const progress = await rewardState(page);
     expect(progress.medals).toMatch(new RegExp(`"spring-1"\\s*:\\s*${Math.min(round + 1, 3)}`));
     if (round === 3) expect(progress.medals).toMatch(/"spring-2"\s*:\s*1/);
     await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
@@ -844,15 +823,12 @@ test('fresh adventures save chest progress, unlock a toy and preserve progress',
   await chooseSeason(page, 0);
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened. 2 toys in Pip's home.");
-  const restored = await roomState(page);
-  expect(restored.owned).toContain('spring');
+  expect((await growthView(page)).visible).toBe(true);
+  const restored = await rewardState(page);
   expect(restored.medals).toMatch(/"spring-1"\s*:\s*3/);
   expect(restored.medals).toMatch(/"spring-2"\s*:\s*1/);
-  await roomControl(page, 'spring');
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('1/3 · A drink for the flower!');
-  expect((await roomState(page)).medals).toBe(restored.medals);
+  await activateGrowthControl(page, 'GrowthAge4');
+  expect((await rewardState(page)).medals).toBe(restored.medals);
   expect(errors).toEqual([]);
 });
 
@@ -865,7 +841,7 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
     await ready(page);
     await winWithTouch(page);
     if (controller) await page.evaluate(() => window.gamepadFixture.connect());
-    const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+    const before = (await rewardState(page)).medals, progress = page.locator('#chest-progress');
     const hold = () => controller
       ? page.evaluate(() => window.gamepadFixture.button(0, true)) : page.keyboard.down(input);
     const release = () => controller
@@ -881,13 +857,13 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
     await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-    expect((await roomState(page)).medals).toBe(before);
+    expect((await rewardState(page)).medals).toBe(before);
     // Cross the original completion deadline before starting another attempt.
     await page.waitForTimeout(4100);
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
     await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-    expect((await roomState(page)).medals).toBe(before);
+    expect((await rewardState(page)).medals).toBe(before);
 
     await hold();
     try {
@@ -895,13 +871,13 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
     } finally {
       await release();
     }
-    expect((await roomState(page)).medals, 'Releasing at the flash precedes the final reward save').toBe(before);
+    expect((await rewardState(page)).medals, 'Releasing at the flash precedes the final reward save').toBe(before);
     await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
-    const saved = (await roomState(page)).medals;
+    const saved = (await rewardState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
     await page.waitForTimeout(300);
-    expect((await roomState(page)).medals).toBe(saved);
+    expect((await rewardState(page)).medals).toBe(saved);
     expect(errors).toEqual([]);
   });
 }
@@ -913,7 +889,7 @@ test('held touch cancels before the flash and releasing at the flash saves one p
   await page.goto('/');
   await ready(page);
   const chest = resultScreenPoint(await winWithTouch(page));
-  const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+  const before = (await rewardState(page)).medals, progress = page.locator('#chest-progress');
   await page.evaluate(() => {
     window.chestTouchReleases = [];
     window.addEventListener('touchend', event => {
@@ -939,12 +915,12 @@ test('held touch cancels before the flash and releasing at the flash saves one p
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
     await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-    expect((await roomState(page)).medals).toBe(before);
+    expect((await rewardState(page)).medals).toBe(before);
     await page.waitForTimeout(4100);
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
     await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-    expect((await roomState(page)).medals).toBe(before);
+    expect((await rewardState(page)).medals).toBe(before);
 
     await hold();
     try {
@@ -958,11 +934,11 @@ test('held touch cancels before the flash and releasing at the flash saves one p
       trusted: true, phase: 'release', saved: before
     });
     await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
-    const saved = (await roomState(page)).medals;
+    const saved = (await rewardState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
     await page.waitForTimeout(300);
-    expect((await roomState(page)).medals).toBe(saved);
+    expect((await rewardState(page)).medals).toBe(saved);
     expect(errors).toEqual([]);
   } finally {
     await client.detach();
@@ -976,7 +952,7 @@ test('Xbox chest opening cancels on disconnect and works again after reconnect',
   await page.goto('/');
   await ready(page);
   await winWithTouch(page);
-  const before = (await roomState(page)).medals, progress = page.locator('#chest-progress');
+  const before = (await rewardState(page)).medals, progress = page.locator('#chest-progress');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
@@ -986,17 +962,17 @@ test('Xbox chest opening cancels on disconnect and works again after reconnect',
   await expect(progress).toHaveAttribute('hidden', '');
   await expect(progress).toHaveAttribute('aria-valuenow', '0');
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-  expect((await roomState(page)).medals).toBe(before);
+  expect((await rewardState(page)).medals).toBe(before);
   await page.waitForTimeout(4100);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-  expect((await roomState(page)).medals).toBe(before);
+  expect((await rewardState(page)).medals).toBe(before);
   await page.evaluate(() => window.gamepadFixture.connect());
   await holdControllerChest(page);
-  const saved = (await roomState(page)).medals;
+  const saved = (await rewardState(page)).medals;
   expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  expect((await roomState(page)).medals).toBe(saved);
+  expect((await rewardState(page)).medals).toBe(saved);
   expect(errors).toEqual([]);
 });
 
@@ -1007,7 +983,7 @@ test('completes matches and opens a one-shot reward with bundled audio offline',
   await ready(page);
   await context.setOffline(true);
   try {
-    const beforeReward = rewardPieceTotal((await roomState(page)).medals);
+    const beforeReward = rewardPieceTotal((await rewardState(page)).medals);
     const { metrics, discovered } = await discoverCards(page);
     const pairs = [...discovered.values()].filter((pair) => pair.Word !== undefined && pair.Picture !== undefined);
     expect(pairs).toHaveLength(5);
@@ -1023,13 +999,13 @@ test('completes matches and opens a one-shot reward with bundled audio offline',
     const beforeChest = await page.evaluate(() => window.audioObservation.playbacks.length);
     await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
-    const saved = (await roomState(page)).medals;
+    const saved = (await rewardState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(beforeReward + 1);
     await page.mouse.down();
     await page.waitForTimeout(1300);
     await page.mouse.up();
     await expect(page.locator('#game-status')).toHaveText(earned);
-    expect((await roomState(page)).medals).toBe(saved);
+    expect((await rewardState(page)).medals).toBe(saved);
     if (await page.evaluate(() => window.audioObservation.available)) {
       const reward = await expectRecording(page, beforeChest, 'assets/imported-audio/chest-reference/reward.wav');
       expect(reward.peak).toBeGreaterThan(0.01);

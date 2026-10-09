@@ -18,11 +18,11 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	var duck = load("res://scripts/duck_mascot.gd").new()
 	var card = load("res://scripts/word_card.gd").new()
-	check(duck.has_method("perform_trick") and duck.has_method("clear_trick"),
+	check(duck.has_method("perform_trick") and duck.has_method("settle"),
 		"Pip offers repeatable tricks with an explicit reset")
 	check(card.has_method("set_reduced_motion") and card.has_method("clear_feedback"),
 		"Cards expose motion preference and feedback cleanup")
-	if duck.has_method("perform_trick") and duck.has_method("clear_trick"):
+	if duck.has_method("perform_trick") and duck.has_method("settle"):
 		root.add_child(duck)
 		duck.size = Vector2(160, 160)
 		_test_duck(duck)
@@ -39,51 +39,49 @@ func _run() -> void:
 
 
 func _test_duck(duck) -> void:
+	duck.set_growth_level(12)
+	duck.set_proactive_allowed(false)
 	var original_children: int = duck.get_child_count()
 	var captions: Array[String] = []
-	for kind in ["dance", "snack", "bubbles"]:
+	for kind in duck.growth_actions():
+		duck.settle()
 		var caption: String = duck.perform_trick(kind)
-		check(not caption.is_empty() and not captions.has(caption), "Each Pip trick supplies a distinct caption")
+		check(not caption.is_empty() and not captions.has(caption), "Each unlocked growth action supplies a distinct caption")
 		captions.append(caption)
-		check(duck.get("_trick") == kind and duck.get("_trick_left") > 0.0,
-			"The selected Pip trick begins immediately")
-		var duration: float = duck.get("_trick_left")
+		check(duck._idle_action == kind and duck._idle_left > 0.0, "The selected growth action begins immediately")
+		var duration: float = duck._idle_left
 		duck._process(0.2)
-		check(duck.get("_trick_left") < duration, "A trick advances toward its finite end")
+		check(duck._idle_left < duration, "A growth action advances toward its finite end")
+		var remaining: float = duck._idle_left
 		for tap in range(25):
 			duck.perform_trick(kind)
-		check(duck.get("_trick_left") <= duration and duration <= 2.5,
-			"Rapid trick taps replace a short animation without stacking")
-		check(duck.get_child_count() == original_children and duck.scale == Vector2.ONE
-			and is_zero_approx(duck.rotation), "Tricks keep one stable hit target and allocate no particles or players")
-		duck._process(3.0)
-		check(duck.get("_trick") == "" and is_zero_approx(duck.get("_trick_left")),
-			"A completed trick removes its transient artwork")
-	duck.perform_trick("dance")
+		check(duck._idle_left <= remaining and duration <= 3.2, "Rapid taps cannot extend a bounded action or create a queue")
+		check(duck.get_child_count() == original_children and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
+			"Growth actions keep one stable hit target and allocate no particles or players")
+		duck._process(duration + 0.1)
+		check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left), "A completed growth action removes its transient pose")
+	duck.perform_trick("wave")
 	duck.set_speaking(true)
-	check(duck.pose == 1, "Real speech retains control of Pip's beak during a trick")
+	check(duck.pose == 1 and duck._idle_action.is_empty(), "Real pronunciation takes control of the beak and cancels an unfinished gesture")
 	duck.settle()
-	check(not duck.speaking and duck.get("_trick") == "" and is_zero_approx(duck.reaction_left),
-		"Settling Pip clears speech, ordinary reactions, and tricks")
-	check(duck.perform_trick("unknown") == "" and duck.get("_trick") == "",
-		"Unknown trick names do not leave an active animation")
+	check(not duck.speaking and duck._idle_action.is_empty() and is_zero_approx(duck.reaction_left), "Settling clears speech, reactions and growth gestures")
+	check(duck.perform_trick("unknown").is_empty() and duck._idle_action.is_empty(), "Unknown action names cannot start an animation")
 	duck.set_reduced_motion(true)
-	for kind in ["dance", "snack", "bubbles"]:
+	for kind in duck.growth_actions():
+		duck.settle()
 		duck.perform_trick(kind)
 		var pose: int = duck.pose
 		duck._process(3.0)
-		check(duck.get("_trick") == kind and is_zero_approx(duck.get("_trick_left"))
-			and duck.pose == pose and not duck.is_processing(),
-			"Reduced motion keeps each trick as a stable illustration")
-	duck.clear_trick()
-	check(duck.get("_trick") == "", "Reduced-motion trick artwork can be cleared explicitly")
+		check(duck._idle_action == kind and is_zero_approx(duck._idle_left) and duck.pose == pose and not duck.is_processing(),
+			"Reduced motion presents each unlocked action as a stable illustration")
+	duck.settle()
+	check(duck._idle_action.is_empty(), "Reduced-motion artwork can be explicitly cleared")
 	duck.set_reduced_motion(false)
-	duck.perform_trick("bubbles")
+	duck.perform_trick("dance-wave")
 	duck.hide()
-	check(duck.get("_trick") == "" and not duck.is_processing(),
-		"Hiding Pip clears tricks and stops processing")
+	check(duck._idle_action.is_empty() and not duck.is_processing(), "Hiding Pip cancels gestures and stops processing")
 	duck.show()
-	check(duck.get("_trick") == "", "Showing Pip does not restart a hidden trick")
+	check(duck._idle_action.is_empty(), "Showing Pip never replays a hidden gesture")
 
 
 func _test_card(card) -> void:

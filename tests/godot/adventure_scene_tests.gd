@@ -25,7 +25,6 @@ func _run() -> void:
 	var directory := "user://adventure-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "The adventure fixture has isolated storage")
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/playroom.cfg"
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -43,7 +42,7 @@ func _run() -> void:
 	check(not properties.has("_match_caption"), "Match has no separate Find 3 pairs caption")
 	check(not app._new_adventure_button.is_visible_in_tree(), "The active board has no result action")
 	app._show_collection()
-	check(app._room.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
+	check(app._age_catalog.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
 		"More opens Pip with every world choice available")
 	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)

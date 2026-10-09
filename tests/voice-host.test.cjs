@@ -1295,7 +1295,7 @@ test('Pop snapshots expose full live speech and result state without repeating i
   f.host.popStatus(JSON.stringify(state));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true, player: {}, rect: [] });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true, rect: [] });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
   assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
@@ -1309,7 +1309,7 @@ test('Pop snapshots expose full live speech and result state without repeating i
   f.host.popStatus(JSON.stringify({ phase: 'idle' }));
   assert.equal(f.popStatus.attributes['data-transcript'], '');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, player: {}, rect: [] });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, rect: [] });
   assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
   assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
 });
@@ -1320,34 +1320,33 @@ test('Pop result snapshots sanitize the hit animation and announce only the fina
     message: 'Round complete. Tap a word to hear it, or play again.',
     results_hits: { text: '4', total: 4.9, active: true, private: 'discard' } };
   f.host.popStatus(JSON.stringify(result));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true, player: {}, rect: [] });
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true, rect: [] });
   assert.match(f.popStatus.textContent, /Round complete.*Voice Pop\. 4 hits\./);
   assert.doesNotMatch(f.popStatus.textContent, /Score|combo|seconds/);
   assert.equal(Object.keys(f.popStatus.attributes).some(name => name.startsWith('data-report')), false);
   for (const malformed of [null, [], '4', { text: '<script>', total: 'Infinity', active: 'true' },
     { text: '1'.repeat(17), total: -5, active: 1 }]) {
     f.host.popStatus(JSON.stringify({ ...result, results_hits: malformed }));
-    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, player: {}, rect: [] });
+    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, rect: [] });
   }
 });
 
-test('Pop results preserve the chosen player and layout while clearing stale identity on replay', () => {
+test('Pop results discard retired player identity while preserving result layout', () => {
   const f = fixture();
-  const player = { id: 'player-a', name: 'Avery', avatar: 'fox', rect: [20, 40, 180, 56],
-    avatar_rect: [20, 40, 56, 56], name_rect: [86, 40, 114, 56] };
   const results_hits = { text: '8', total: 8, active: false, rect: [220, 20, 120, 96],
-    player: { ...player, private: 'discard' } };
+    player: { id: 'player-a', name: 'Avery', avatar: 'fox', private: 'discard' } };
   f.host.popStatus(JSON.stringify({ phase: 'finished', hits: 8, results_hits }));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { ...results_hits, player });
-  assert.match(f.popStatus.textContent, /Voice Pop\. Avery\. 8 hits\./);
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']),
+    { text: '8', total: 8, active: false, rect: [220, 20, 120, 96] });
+  assert.match(f.popStatus.textContent, /Voice Pop\. 8 hits\./);
+  assert.doesNotMatch(f.popStatus.textContent, /Avery/);
   f.host.popStatus(JSON.stringify({ phase: 'running', results_hits }));
   const replay = JSON.parse(f.popStatus.attributes['data-results-hits']);
-  assert.deepEqual(replay.player, {});
+  assert.equal(Object.hasOwn(replay, 'player'), false);
   assert.deepEqual(replay.rect, []);
-  assert.doesNotMatch(f.popStatus.textContent, /Avery/);
-  for (const invalid of [null, [], 'Avery', { id: 'a', name: 2, avatar: 'fox' }]) {
-    f.host.popStatus(JSON.stringify({ phase: 'finished', results_hits: { ...results_hits, player: invalid } }));
-    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']).player, {});
+  for (const identity of [null, [], 'Avery', { id: 'a', name: 2, avatar: 'fox' }]) {
+    f.host.popStatus(JSON.stringify({ phase: 'finished', results_hits: { ...results_hits, player: identity } }));
+    assert.equal(Object.hasOwn(JSON.parse(f.popStatus.attributes['data-results-hits']), 'player'), false);
   }
 });
 
@@ -1401,14 +1400,15 @@ test('local Voice Pop weights live targets above the complete lesson vocabulary'
   assert.deepEqual(Array.from(f.latest.phrases, value => value.phrase), ['pear'], 'A new lesson replaces old hints');
 });
 
-test('local phrase hints include every eligible word in the real 448, 860 and 1250 word pools', () => {
+test('local phrase hints include all unlocked pictured words across the ten growth levels', () => {
   const words = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'words.json'), 'utf8'));
-  const levels = { basic: 1, growing: 2, advanced: 3 };
-  for (const [maximum, expected] of [[1, 448], [2, 860], [3, 1250]]) {
+  for (const maximum of [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
     const f = fixture({ local: true });
     enablePhraseHints(f);
-    const vocabulary = words.filter(word => levels[word.level] <= maximum).map(word => word.text);
-    assert.equal(vocabulary.length, expected);
+    const vocabulary = words.filter(word => word.min_age <= maximum && word.practice_modes.includes('pop')).map(word => word.text);
+    const expected = vocabulary.length;
+    assert.ok(expected >= 60);
+    if (maximum === 12) assert.equal(expected, 1285);
     const last = vocabulary.at(-1);
     f.publishPop({ vocabulary, targets: [{ uid: 10, text: last }] });
     f.listen('pop');

@@ -40,7 +40,7 @@ func _verify() -> void:
 	failures += _verify_excluded_content_absent()
 	for name in ["body", "heading"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
-		if font == null or font.get_string_size("Pip and Words").x <= 0.0:
+		if font == null or font.get_string_size("Grow with Pip").x <= 0.0:
 			printerr("An active interface font is missing from the startup pack: " + name)
 			failures += 1
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
@@ -49,16 +49,33 @@ func _verify() -> void:
 		quit(1)
 		return
 	for word in words:
-		var picture: Texture2D = load("res://" + word.image)
-		if picture == null or picture.get_width() <= 0 or picture.get_height() <= 0:
-			printerr("Word picture is missing from the startup pack: " + word.image)
-			failures += 1
+		if not str(word.image).is_empty():
+			var picture: Texture2D = load("res://" + word.image)
+			if picture == null or picture.get_width() <= 0 or picture.get_height() <= 0:
+				printerr("Word picture is missing from the startup pack: " + word.image)
+				failures += 1
 		var stream: AudioStream = load("res://" + word.audio)
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
 			failures += 1
 	failures += _verify_phrases(words)
+	failures += _verify_growth()
 	var required := OS.get_cmdline_user_args()
+	if required.has("--audio-manifest"):
+		var manifest_index: int = required.find("--audio-manifest")
+		if manifest_index + 1 >= required.size():
+			printerr("Required audio verification needs a manifest path.")
+			quit(1)
+			return
+		var paths: Variant = JSON.parse_string(FileAccess.get_file_as_string(required[manifest_index + 1]))
+		required.remove_at(manifest_index + 1)
+		required.remove_at(manifest_index)
+		if not paths is Array or paths.is_empty() or paths.any(func(value: Variant) -> bool: return not value is String):
+			printerr("Required audio verification needs a nonempty list of resource paths.")
+			quit(1)
+			return
+		for path: String in paths:
+			required.append(path)
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 	var chest_bank = load("res://scripts/chest_sound_bank.gd")
 	for cue: String in chest_bank.REFERENCE_CUES:
@@ -101,7 +118,7 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired Match sound is still bundled: " + path)
 			failures += 1
-	for path in load("res://scripts/game_audio.gd").PIP_SOUND_PATHS:
+	for path in load("res://scripts/game_audio.gd").PIP_REACTION_PATHS.values():
 		var greeting: AudioStream = load(path) if ResourceLoader.exists(path) else null
 		if greeting == null or greeting.get_length() < 0.1 or greeting.get_length() > 0.6:
 			printerr("A Pip greeting is missing or invalid in the startup pack: " + path)
@@ -189,7 +206,8 @@ func _verify_phrases(words: Array) -> int:
 		printerr("The startup pack must contain the Phrase Builder catalog and loader.")
 		return 1
 	var phrases: Array[Dictionary] = phrase_data.entries()
-	for age_band in ["4-6", "7-9", "10-plus"]:
+	for age in range(3, 13):
+		var age_band: String = str(age)
 		if phrase_data.for_age(age_band).size() < 3:
 			printerr("The startup pack needs at least three valid phrases for age level " + age_band + ".")
 			failures += 1
@@ -205,10 +223,10 @@ func _verify_phrases(words: Array) -> int:
 				continue
 			var word: Dictionary = vocabulary[word_id]
 			phrase_words.append(str(word.text))
-			if game_data.word_level(word) > game_data.word_level(phrase):
+			if game_data.word_age(word) > game_data.word_age(phrase):
 				printerr("A phrase exceeds its vocabulary age level: " + phrase.id + " / " + word_id)
 				failures += 1
-		if " ".join(phrase_words) != phrase.text or not vocabulary.has(phrase.picture_id):
+		if " ".join(phrase_words) != phrase.text or (not phrase.picture_id.is_empty() and not vocabulary.has(phrase.picture_id)):
 			printerr("A phrase has inconsistent text or a missing picture reference: " + phrase.id)
 			failures += 1
 		var audio_path: String = "res://" + str(phrase.audio)
@@ -226,6 +244,12 @@ func _verify_excluded_content_absent() -> int:
 		"res://assets/images/mascots/outfits/wardrobe.svg"]
 	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-"]
 	var retired_phrase_audio := ["phrase-intro.wav", "phrase-try-again.wav", "phrase-complete.wav"]
+	# A curriculum phrase can reuse a former prompt filename (for example "try again").
+	# Its new recording is checked against the active phrase catalog, not used as guidance.
+	var active_phrases: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://phrases.json"))
+	if active_phrases is Array:
+		for phrase: Dictionary in active_phrases:
+			retired_phrase_audio.erase(str(phrase.get("audio", "")).get_file())
 	var pending: Array[String] = ["res://"]
 	while not pending.is_empty():
 		var directory: String = pending.pop_back()
@@ -257,4 +281,21 @@ func _verify_excluded_content_absent() -> int:
 		for child: String in access.get_directories():
 			pending.append(directory.path_join(child))
 	print("Excluded content: complete startup pack inventory checked, %d remaining resources." % failures)
+	return failures
+
+
+func _verify_growth() -> int:
+	var failures: int = 0
+	var stages: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/pip-growth-stages.json"))
+	if not stages is Dictionary or not stages.get("stages") is Array or stages.stages.size() != 10:
+		printerr("All ten Pip growth stages must ship in the game pack.")
+		return 1
+	for stage: Dictionary in stages.stages:
+		for source in stage.art.values():
+			if not ResourceLoader.exists("res://" + str(source)):
+				printerr("Missing Pip growth art: " + str(source))
+				failures += 1
+		if not ResourceLoader.exists("res://" + str(stage.newVoice.path)):
+			printerr("Missing Pip growth voice: " + str(stage.newVoice.path))
+			failures += 1
 	return failures

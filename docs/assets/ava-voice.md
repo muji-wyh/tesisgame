@@ -1,9 +1,9 @@
 # Ava speech
 
-All 1,250 vocabulary pronunciations, 36 whole-phrase recordings, and eight world
+All 1,550 vocabulary pronunciations, 330 whole-phrase recordings, and eight world
 greetings use the user's approved **Ava Sweet** profile. The original vocabulary
-and greetings replaced Jenny on October 3, 2026; Phrase Builder's recordings
-were added on October 7. The approved preview says
+and greetings replaced Jenny on October 3, 2026; Phrase Builder's first 36 recordings
+were added on October 7 and expanded to 330 on October 9. The approved preview says
 "Hello, how are you?"; its voice settings apply throughout the game catalog.
 
 | Setting | Value |
@@ -61,7 +61,12 @@ Use full generation when changing the voice profile or spoken text.
 The Phrase Builder batch was acquired with `node tools/generate-voices.cjs --missing`.
 All 1,258 existing recordings retained their documented bytes. Its 36 phrase
 recordings remain active; three initial guide narration clips were retired.
-The manifest contains 1,294 active recordings.
+The October 9 growth curriculum adds 300 word recordings and 294 whole phrases.
+All 1,294 earlier recordings retain their exact documented bytes. The active
+manifest now contains 1,888 recordings, acquired with the same `--missing` batch
+workflow and approved voice settings. Every published WAV was checked for its
+PCM format, audible samples and SHA-256 hash. This is technical validation, not
+a claim of subjective listening review of every recording.
 
 The generator uses at most two concurrent synthesis requests, bounded retries,
 and a resumable cache keyed by the profile and spoken text in `build/voice-cache`.
@@ -77,7 +82,7 @@ synthesis scripts are recorded in the manifest; no audio editing is applied.
 ## Runtime coverage
 
 Match, Memory, Voice Pop, Phrase Builder, and the vocabulary library play bundled
-pronunciations through `GameAudio.say`. Phrase Builder plays its 36 whole-phrase
+pronunciations through `GameAudio.say`. Phrase Builder plays its 330 whole-phrase
 clips and individual word pronunciations without spoken guide narration.
 Eight world greetings use the same profile. Match no longer includes spoken
 wrong-answer feedback or a loss prompt. Gameplay

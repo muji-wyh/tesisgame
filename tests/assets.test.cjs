@@ -118,7 +118,7 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 1398); // Original art, Pip wardrobes and expressions, derived chest layers and surprises.
+  assert.equal(textureImports.length, 1486); // Existing artwork, 35 new word symbols, ten Pip stages, and three mode illustrations.
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, filename);
@@ -217,16 +217,21 @@ function assertVoice(relativePath) {
   return wave;
 }
 
-test('all 1250 leveled vocabulary words have distinct illustrations in one directory', () => {
-  assert.equal(words.length, 1250);
-  assert.equal(new Set(words.map(word => word.id)).size, 1250);
-  assert.equal(new Set(words.map(word => word.text)).size, 1250);
+test('1550 growth vocabulary entries use distinct real illustrations or explicitly contextual practice', () => {
+  assert.equal(words.length, 1550);
+  assert.equal(new Set(words.map(word => word.id)).size, 1550);
+  assert.equal(new Set(words.map(word => word.text)).size, 1550);
   for (const original of ['cat', 'dog', 'sun', 'ball', 'car', 'apple', 'fish', 'duck']) {
     assert.ok(words.some(word => word.id === original && word.text === original));
   }
   const digests = new Set();
   for (const word of words) {
-    assert.match(word.text, /^[a-z]{2,14}$/);
+    assert.match(word.text, /^[a-z]{1,14}$/);
+    assert.ok(Number.isInteger(word.min_age) && word.min_age >= 3 && word.min_age <= 12, word.id);
+    if (!word.image) {
+      assert.deepEqual(word.practice_modes, ['phrase'], `${word.id} needs contextual phrase practice`);
+      continue;
+    }
     assert.ok(['basic', 'growing', 'advanced'].includes(word.level), `${word.id} needs an explicit level`);
     assert.equal(word.id, word.text);
     assert.equal(path.dirname(path.normalize(word.image)), path.join('assets', 'images', 'words'));
@@ -240,16 +245,17 @@ test('all 1250 leveled vocabulary words have distinct illustrations in one direc
       digests.add(sha256(readSvg(word.image).replace(/<title\b[^>]*>[\s\S]*?<\/title>/g, '')));
     }
   }
-  assert.equal(digests.size, words.length);
+  assert.equal(digests.size, 1285);
+  assert.equal(words.filter(word => !word.image).length, 265);
 });
 
 test('each age tier gains 300 sourced words spanning actions, qualities, people and everyday topics', () => {
   const importer = require('../tools/import-vocabulary.cjs');
   const additions = importer.additions();
   assert.equal(additions.length, 900);
-  assert.deepEqual(words.slice(350).map(word => word.id), additions.map(word => word.id),
+  assert.deepEqual(words.slice(350, 1250).map(word => word.id), additions.map(word => word.id),
     'The sourced additions follow the preserved original 350 entries');
-  assert.deepEqual(words.reduce((counts, word) => {
+  assert.deepEqual(words.slice(0, 1250).reduce((counts, word) => {
     counts[word.level] = (counts[word.level] || 0) + 1;
     return counts;
   }, {}), {basic: 448, growing: 412, advanced: 390});
@@ -353,12 +359,12 @@ test('seasonal reward SVGs use the requested seasonal palette', () => {
   }
 });
 
-test('the image directories contain exactly the 1322 named vocabulary and reward assets', () => {
+test('the image directories contain exactly the 1357 pictured vocabulary and reward assets', () => {
   const expected = [
-    ['words', words.map(({ image }) => path.basename(image))],
+    ['words', words.filter(word => word.image).map(({ image }) => path.basename(image))],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]]
   ];
-  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 1322);
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 1357);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
@@ -405,7 +411,7 @@ test('every phrase has a distinct prerecorded whole-phrase pronunciation', () =>
   assert.equal(recordings.size, phrases.length, 'Different phrases must not reuse a recording.');
 });
 
-test('voice sources contain exactly 1250 words, 36 phrases, and eight active prompts', () => {
+test('voice sources contain exactly 1550 words, 330 phrases, and eight active prompts', () => {
   const directory = path.join(root, 'assets', 'audio', 'voice');
   assert.ok(fs.existsSync(directory), 'Missing voice directory');
   const expected = [
@@ -413,9 +419,11 @@ test('voice sources contain exactly 1250 words, 36 phrases, and eight active pro
     ...words.map(({ id }) => `word-${id}.wav`),
     ...phrases.map(({ id }) => `phrase-${id}.wav`)
   ];
-  assert.equal(expected.length, 1294);
+  assert.equal(words.length, 1550);
+  assert.equal(phrases.length, 330);
+  assert.equal(expected.length, 1888);
   assert.deepEqual(assetFiles(directory), expected.sort());
-  for (const cue of ['intro', 'try-again', 'complete']) {
+  for (const cue of ['intro', 'try-again', 'complete'].filter(id => !phrases.some(phrase => phrase.id === id))) {
     assert.equal(fs.existsSync(path.join(directory, `phrase-${cue}.wav.import`)), false,
       'Retired Phrase Builder guide narration must not leave import metadata behind.');
   }

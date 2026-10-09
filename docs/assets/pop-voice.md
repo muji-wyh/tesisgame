@@ -4,8 +4,7 @@ This is historical provenance for the retired spoken-report subsystem. Its
 51 recordings, prompt catalog, dedicated generator, and runtime narration code
 have been removed from the repository and export. The hashes below remain to
 identify the original assets in Git history; they are not required build inputs.
-See [local leaderboards](../local-leaderboards.md) and the
-[gameplay reference](../gameplay.md) for the current result view, which replays
+See the [gameplay reference](../gameplay.md) for the current result view, which replays
 individual vocabulary words but has no spoken report.
 
 The retired report used prerecorded Microsoft Azure Speech **en-US-JennyNeural**

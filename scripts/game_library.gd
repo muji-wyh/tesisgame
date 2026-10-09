@@ -9,9 +9,9 @@ signal motion_toggled
 const Style = preload("res://scripts/ui_style.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const CATALOG := [
-	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/avatars/cat.svg", "tint": Color("#e6efe3")},
-	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/avatars/rainbow.svg", "tint": Color("#f2e9d8")},
-	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/avatars/rocket.svg", "tint": Color("#e3eef1")},
+	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/images/ui/modes/cat.svg", "tint": Color("#e6efe3")},
+	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/images/ui/modes/rainbow.svg", "tint": Color("#f2e9d8")},
+	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/images/ui/modes/rocket.svg", "tint": Color("#e3eef1")},
 	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen to Pip.\nBuild a little phrase.", "detail": "3 PHRASES · KEEP TRYING", "art": "res://assets/images/mascots/pip.svg", "tint": Color("#f5ebce")}
 ]
 
@@ -41,7 +41,7 @@ func _init() -> void:
 	titles.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	titles.add_theme_constant_override("separation", 2)
 	top.add_child(titles)
-	_eyebrow = Style.label("PIP AND WORDS", 11)
+	_eyebrow = Style.label("GROW WITH PIP", 11)
 	_eyebrow.add_theme_color_override("font_color", Style.MUTED)
 	titles.add_child(_eyebrow)
 	heading = Style.label("A little play. A big discovery.", 28)
@@ -55,7 +55,7 @@ func _init() -> void:
 	close_button.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	close_button.pressed.connect(func() -> void: dismissed.emit())
 	top.add_child(close_button)
-	_intro = Style.label("Choose a game. Your treasures and best scores stay saved.", 14)
+	_intro = Style.label("Play, practise, and help Pip grow. Every word counts.", 14)
 	_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_intro.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_intro)

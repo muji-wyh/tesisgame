@@ -37,14 +37,13 @@ func _run() -> void:
 		return
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/playroom.cfg"
 	app._presentation.path = directory + "/presentation.cfg"
 	PlayerFixture.install(app, directory)
 	root.add_child(app)
 	await _settle()
 	app.set_reduced_motion(true)
 	app.audio.set_muted(false)
-	await _choose_age(app, "4-6")
+	await _choose_age(app, "3")
 	app.choose_theme("spring")
 	await _choose_mode(app, "phrase")
 	var view = app._phrase
@@ -87,10 +86,10 @@ func _run() -> void:
 	await _check_muted_help(app)
 	var questions_before_age: Array = view.game.questions.duplicate(true)
 	var answer_before_age: Array = view.game.answer.duplicate()
-	await _choose_age(app, "10-plus")
-	check(app.playroom_state.age_band_id == "10-plus" and view.game.questions == questions_before_age
+	await _choose_age(app, "12")
+	check(app._catalog_age == 12 and app.growth.level == 3 and view.game.questions == questions_before_age
 		and view.game.answer == answer_before_age,
-		"Changing age in Pip's room preserves the current phrase and applies to the next round")
+		"Previewing a future age preserves the current phrase and cannot unlock words")
 	view.answer_buttons[0].pressed.emit()
 	check(view.game.answer.is_empty(), "Tapping the chosen word returns it to the bank")
 	await _check_controller_and_keyboard(app)
@@ -160,7 +159,7 @@ func _run() -> void:
 	check(_pieces(app) == 0 and app.model.chest_state == "closed", "Duplicate phrase completion cannot award a treasure")
 	await _check_chest_and_new_adventure(app, directory, progress_script)
 	await _check_celebration_interruptions(app)
-	await _check_layout(app)
+	await _check_layout(app, directory)
 	var stopped: Dictionary = view.game.snapshot()
 	await _choose_mode(app, "match")
 	view.option_buttons[0].pressed.emit()
@@ -279,7 +278,7 @@ func _check_celebration_interruptions(app) -> void:
 	var view = app._phrase
 	var pieces_before: int = _pieces(app)
 	app.set_reduced_motion(false)
-	for interruption in ["menu", "room", "background", "hidden", "stop"]:
+	for interruption in ["menu", "growth", "background", "hidden", "stop"]:
 		check(app.new_round(73, false, "", "phrase"), "A fresh phrase round starts for celebration interruption: " + interruption)
 		await _settle()
 		_solve(view)
@@ -291,7 +290,7 @@ func _check_celebration_interruptions(app) -> void:
 			"Pip is celebrating before " + interruption)
 		if interruption == "menu":
 			app._mode_heading_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app.collection_button.pressed.emit()
 		elif interruption == "background":
 			app.on_page_hidden()
@@ -309,7 +308,7 @@ func _check_celebration_interruptions(app) -> void:
 		view.pip.gameplay_reaction_finished.disconnect(record)
 		if interruption == "menu":
 			app._mode_panel.close_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		elif interruption == "background":
 			app.on_page_visible()
@@ -486,7 +485,7 @@ func _check_pointer_release_fallback(app, method: String) -> void:
 
 func _check_drag_interruptions(app, method: String) -> void:
 	var view = app._phrase
-	for interruption in ["menu", "room", "background", "resize"]:
+	for interruption in ["menu", "growth", "background", "resize"]:
 		var before: Dictionary = view.game.snapshot()
 		var start: Vector2 = view.option_buttons[0].get_global_rect().get_center()
 		var end: Vector2 = view.answer_buttons[0].get_global_rect().get_center()
@@ -496,7 +495,7 @@ func _check_drag_interruptions(app, method: String) -> void:
 			method + " has an uncommitted drag before " + interruption)
 		if interruption == "menu":
 			app._mode_heading_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app.collection_button.pressed.emit()
 		elif interruption == "background":
 			app.on_page_hidden()
@@ -509,7 +508,7 @@ func _check_drag_interruptions(app, method: String) -> void:
 		check(view.game.snapshot() == before, method + " late release cannot commit behind " + interruption)
 		if interruption == "menu":
 			app._mode_panel.close_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		elif interruption == "background":
 			app.on_page_visible()
@@ -533,8 +532,8 @@ func _drag_card(view, start: Vector2, end: Vector2, method: String, drop_kind: S
 	var preview: Dictionary = view.snapshot()
 	check(preview.dragging and not preview.drag_word.is_empty() and view.game.snapshot() == before,
 		method + " shows a drag preview while preserving the answer until release")
-	check(view._preview.icon != null and view._preview.icon == view._source.icon,
-		method + " retains the selected word's picture while dragging")
+	check(view._preview.icon == view._source.icon,
+		method + " retains the selected word's picture or contextual text presentation while dragging")
 	if drop_kind != "*":
 		check(preview.drop_kind == drop_kind, method + " identifies the expected drop destination: " + drop_kind)
 	if drop_index >= 0:
@@ -603,8 +602,11 @@ func _check_answer_pictures(view) -> void:
 	for index in range(view.answer_buttons.size()):
 		var button: Button = view.answer_buttons[index]
 		if index < view.game.answer.size():
-			check(button.icon != null and button.icon == view.option_buttons[view.game.answer[index]].icon,
-				"The placed word retains its matching candidate picture after editing")
+			var option_index: int = view.game.answer[index]
+			var picture_path: String = str(view.game.options[option_index].image)
+			var expected: Texture2D = load("res://" + picture_path) if not picture_path.is_empty() else null
+			check(button.icon == expected and button.icon == view.option_buttons[option_index].icon,
+				"The placed word retains its source picture or contextual text presentation after editing")
 		else:
 			check(button.icon == null and not button.visible,
 				"Unused answer positions clear their old pictures")
@@ -654,13 +656,13 @@ func _pointer_motion(point: Vector2, relative: Vector2, method: String) -> void:
 
 func _check_interruptions(app) -> void:
 	var view = app._phrase
-	for interruption in ["menu", "room", "background"]:
+	for interruption in ["menu", "growth", "background"]:
 		view.listen_button.pressed.emit()
 		check(app.audio.voice.playing, "Listen plays the phrase before opening " + interruption)
 		var before: Dictionary = view.game.snapshot()
 		if interruption == "menu":
 			app._mode_heading_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app.collection_button.pressed.emit()
 		else:
 			app.on_page_hidden()
@@ -674,7 +676,7 @@ func _check_interruptions(app) -> void:
 			"Covered phrase controls and stale audio callbacks cannot mutate the game behind " + interruption)
 		if interruption == "menu":
 			app._mode_panel.close_button.pressed.emit()
-		elif interruption == "room":
+		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		else:
 			app.on_page_visible()
@@ -736,8 +738,8 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	check(app._mode_id == "phrase" and app._phrase.is_visible_in_tree() and app._phrase.game.questions.size() == 3
 		and app._phrase.game.phase == "building" and app._phrase.game.completed == 0 and app._phrase.game.mistakes == 0,
 		"Public New adventure starts another fresh three-question Phrase Builder round")
-	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return question.level == "advanced"),
-		"The next Phrase Builder round applies the age chosen in Pip's room")
+	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) <= app.growth.level),
+		"The next Phrase Builder round uses the earned level rather than a future catalogue preview")
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().surprise.active,
 		"A new phrase round keeps saved progress and clears the previous displayed gift")
 
@@ -758,11 +760,20 @@ func _check_first_candidate_row(view) -> void:
 		previous = button
 
 
-func _check_layout(app) -> void:
+func _check_layout(app, directory: String) -> void:
+	# Advanced layout fixtures load a legitimately unlocked save; browsing future
+	# age previews earlier in this suite must not unlock playable vocabulary.
+	var saved := ConfigFile.new()
+	var growth_path: String = directory + "/growth.cfg"
+	check(saved.load(growth_path) == OK, "The advanced layout fixture starts from the saved learning state")
+	saved.set_value("growth", "level", 12)
+	check(saved.save(growth_path) == OK and app.growth.load_state() and app.growth.level == 12,
+		"The advanced layout fixture loads an earned Lv12+ state")
+	app._refresh_growth()
 	var probe = PhraseModel.new()
 	var layout_seed: int = -1
 	for seed_value in range(128):
-		if probe.reset(app.data.words, "10-plus", seed_value) and probe.current_question().words.size() == 4:
+		if probe.reset(app._learning_words(), str(app.growth.level), seed_value) and probe.current_question().words.size() == 4:
 			layout_seed = seed_value
 			break
 	check(layout_seed >= 0 and app.new_round(layout_seed, false, "", "phrase"), "A four-word, six-choice fixture starts through the real round API")
@@ -775,7 +786,7 @@ func _check_layout(app) -> void:
 		var bounds: Rect2 = root.get_visible_rect().grow(0.75)
 		var scale_factor: float = app.Style.ui_scale(view)
 		check(bounds.encloses(view.get_global_rect()), "Phrase Builder stays within the host at " + str(dimensions))
-		check(view.answer_buttons.size() == 4 and view.option_buttons.size() == 6, "The hardest phrase retains every answer slot and choice")
+		check(view.answer_buttons.size() == 4 and view.option_buttons.size() == 6, "The advanced phrase retains every answer slot and choice")
 		var buttons: Array = view.answer_buttons + [view.listen_button, view.action_button]
 		var visible_buttons: Array[Button] = []
 		for button: Button in buttons:
@@ -1037,8 +1048,7 @@ func _choose_age(app, id: String) -> void:
 	app.collection_button.pressed.emit()
 	app._age_buttons[id].pressed.emit()
 	await _settle()
-	check(app.playroom_state.age_band_id == id and app._age_catalog.visible, "The real age button saves " + id)
-	app._collection_back.pressed.emit()
+	check(app._catalog_age == int(id) and app._age_catalog.visible, "The real age button previews " + id)
 	app._collection_back.pressed.emit()
 	await _settle()
 	check(not app.collection_page.visible, "Back returns from age vocabulary to the game")

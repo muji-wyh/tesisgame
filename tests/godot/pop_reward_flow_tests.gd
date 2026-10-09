@@ -30,7 +30,6 @@ func _run() -> void:
 	root.size = Vector2i(390, 844)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	Fixture.install(app, directory)
 	root.add_child(app)
 	app.audio.muted = true
@@ -48,7 +47,7 @@ func _run() -> void:
 			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	await process_frame
-	check(app._pop.game.chest_count == 3 and app._leaderboard_result.chest_count == 3,
+	check(app._pop.game.chest_count == 3 and app._round_result.chest_count == 3,
 		"The finished score publishes all three earned opportunities")
 	check(app._pop_rewards.has_pending() and FileAccess.file_exists(app.pop_reward_save_path),
 		"Finished-round treasure is saved before the result action")
@@ -91,15 +90,15 @@ func _run() -> void:
 	app._hide_pop_rewards()
 	check(app._pop.visible and app._pop.game.chest_count == 3, "Back retains the scored result")
 	app._start_pop_listening()
-	check(app._pop_rewards_shown and not app._leaderboard_overlay.visible,
-		"Replay returns to unopened earned treasure before selecting another player")
+	check(app._pop_rewards_shown,
+		"Replay returns to unopened earned treasure before starting another round")
 	room.begin_hold(room._cards[1].button)
 	room.advance_hold(0.4)
-	app._show_leaderboard("boards", false)
+	app._show_collection()
 	check(room.snapshot().paused and not room.snapshot().holding and room.snapshot().opened_count == 1,
-		"A covering leaderboard cancels an unfinished chest gesture")
-	app._hide_leaderboard()
-	check(not room.snapshot().paused, "Closing the leaderboard restores unopened reward controls")
+		"The growth catalog cancels an unfinished chest gesture")
+	app._hide_collection()
+	check(not room.snapshot().paused, "Closing the growth catalog restores unopened reward controls")
 	app.set_reduced_motion(true)
 	for index in [1, 2]:
 		room.begin_hold(room._cards[index].button)
@@ -107,9 +106,8 @@ func _run() -> void:
 	check(room.snapshot().opened_count == 3 and not room.has_pending(), "All chests can be opened independently")
 	app._hide_pop_rewards()
 	app._start_pop_listening()
-	check(app._leaderboard_gate == "pop" and app._leaderboard_overlay.visible,
-		"After opening every chest the next player can start a fresh round")
-	Fixture.choose_pop_player(app)
+	check(app._pop.game.phase == "ready" and not app._pop_rewards_shown,
+		"After opening every chest a fresh round waits for microphone permission")
 	check(app._pop.game.chest_count == 0, "The next round does not inherit the previous reward count")
 	app.audio.halt()
 	app.queue_free()

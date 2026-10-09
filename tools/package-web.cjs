@@ -237,6 +237,17 @@ function packageWebExport(directory) {
     }
   }
   removeRetiredVoiceAssets(directory);
+  const previewSource = path.resolve(__dirname, '../web/preview/pip-growth');
+  if (fs.existsSync(previewSource)) {
+    const previewOutput = path.join(directory, 'preview/pip-growth');
+    for (const file of ['.gitignore', 'generate.cjs', 'verify.cjs', 'review.cjs']) {
+      fs.rmSync(path.join(previewOutput, file), { force: true });
+    }
+    fs.cpSync(previewSource, previewOutput, {
+      recursive: true,
+      filter: source => !/(?:^|[\\/])(?:\.voice-cache|review-output|\.gitignore|(?:generate|verify|review)\.cjs)(?:[\\/]|$)/.test(source)
+    });
+  }
   return downloadBytes;
 }
 

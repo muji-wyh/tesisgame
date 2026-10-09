@@ -38,7 +38,6 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	app._presentation.path = directory + "/presentation.cfg"
 	PlayerFixture.install(app, directory)
 	root.size = Vector2i(960, 900)
@@ -53,11 +52,13 @@ func _run() -> void:
 	app.audio.set_muted(false)
 	app.set_reduced_motion(true)
 	await _check_library(app)
-	await _check_collection_and_profiles(app)
+	await _check_growth_navigation(app)
 	await _check_gameplay_exclusions_and_results(app)
 	await _check_lifecycle(app)
 	app.audio.halt()
 	app.audio.stop_ui_click()
+	# Let the audio mixer release its final stopped playback before teardown.
+	await create_timer(0.12).timeout
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
@@ -152,59 +153,26 @@ func _check_backdrop(app) -> void:
 			"Paired touch and emulated mouse events dismiss with one click: touch-first=%s" % touch_first)
 
 
-func _check_collection_and_profiles(app) -> void:
-	_click(app, app.collection_button, "The room navigation button")
-	_click(app, app._age_buttons["all"], "The vocabulary age selector")
-	_click(app, app._collection_back, "The vocabulary catalog Back action")
+func _check_growth_navigation(app) -> void:
+	_click(app, app.collection_button, "The growth navigation button")
+	_click(app, app._age_buttons["4"], "A preview age selector")
+	check(app.growth.level == 3, "Previewing a future tier cannot unlock it")
+	_click(app, app._age_buttons["3"], "The current vocabulary age selector")
 	_click(app, app.theme_buttons[1], "The world selector")
 	var count: int = app.audio.click_count
-	app._collection_dragged = true
-	app._age_buttons["all"].pressed.emit()
-	check(app.audio.click_count == count, "A canceled collection swipe cannot trigger an age click")
-	app._collection_dragged = false
-	_click(app, app._players_button, "The Players menu")
-	await process_frame
-	await process_frame
-	var panel = app._leaderboard_panel
-	var create: Button = panel.find_child("LeaderboardCreatePlayer", true, false)
-	count = app.audio.click_count
-	create.pressed.emit()
-	check(create.disabled and app.audio.click_count == count, "Disabled player actions remain silent")
-	_click(app, panel.find_child("LeaderboardAvatar_cat", true, false), "A dynamically created avatar button")
-	var field: LineEdit = panel.find_child("LeaderboardName", true, false)
-	field.text = "Click tester"
-	field.text_changed.emit(field.text)
-	count = app.audio.click_count
-	field.text_submitted.emit(field.text)
-	check(app.leaderboard_state.profiles.size() == 2 and app.audio.click_count == count + 1,
-		"Submitting a name with Enter shares the enabled Create player's single click")
-	await process_frame
-	var profile_id: String = app.leaderboard_state.profiles[1].id
-	_click(app, panel.find_child("LeaderboardEdit_" + profile_id, true, false), "A rebuilt Edit player action")
-	_click(app, panel.find_child("LeaderboardCancelEdit", true, false), "The player editor Cancel action")
-	_click(app, panel.find_child("LeaderboardRemove_" + profile_id, true, false), "The player removal prompt")
-	_click(app, panel.find_child("LeaderboardCancelRemove", true, false), "The Keep player action")
-	await process_frame
-	await process_frame
-	count = app.audio.click_count
-	var scroll = app._leaderboard_scroll
-	var avatar: Button = panel.find_child("LeaderboardAvatar_cat", true, false)
-	var point := avatar.get_global_rect().get_center()
-	scroll._begin(point, scroll.MOUSE_POINTER)
-	scroll._move(point + Vector2(0, -80))
-	scroll._finish(point + Vector2(0, -80))
-	check(app.audio.click_count == count, "Dragging a player list does not play a button click")
-	scroll.cancel_drag()
-	app._controller_back()
-	check(not app._leaderboard_overlay.visible and app.audio.click_count == count + 1,
-		"Controller Back closes the player dialog with one click")
-	_click(app, app._leaderboards_button, "The Leaderboards menu")
-	_click(app, panel.find_child("LeaderboardMode_memory", true, false), "A dynamic leaderboard mode tab")
-	app._controller_back()
+	app._collection_multi_touch = true
+	app._age_buttons["4"].pressed.emit()
+	check(app._catalog_age == 3 and app.audio.click_count == count,
+		"Canceled multi-touch navigation cannot change the preview or click")
+	app._collection_multi_touch = false
+	_click(app, app._collection_back, "The growth catalog Back action")
 	count = app.audio.click_count
 	app._toggle_collection()
-	check(not app.collection_page.visible and app.audio.click_count == count + 1,
-		"The controller's room shortcut plays one navigation click")
+	check(app.collection_page.visible and app.audio.click_count == count + 1,
+		"The controller's growth shortcut plays one navigation click")
+	app._controller_back()
+	check(not app.collection_page.visible and app.audio.click_count == count + 2,
+		"Controller Back leaves the catalog with one click")
 	app._mode_heading_button.grab_focus()
 	count = app.audio.click_count
 	app._controller_accept()
@@ -235,8 +203,7 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	await process_frame
 	check(app.model.phase == "won" and app.audio.click_count == count, "Completing a real Match board adds no UI clicks")
 	check(not app._new_adventure_button.visible, "An unopened chest has no New adventure action")
-	_click(app, app._result_board_button, "The result Leaderboard button")
-	app._controller_back()
+	PlayerFixture.finish_celebration(app)
 	count = app.audio.click_count
 	app._open_chest()
 	await process_frame
@@ -254,8 +221,6 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	await create_timer(0.2).timeout
 	check(completions.size() == 1, "New adventure lets its click reach a natural finish")
 	app.choose_mode("pop")
-	_click(app, app._leaderboard_panel.find_child("LeaderboardPlayer_" + str(app.leaderboard_state.profiles[0].id), true, false),
-		"The Voice Pop player choice")
 	app._pop.set_process(false)
 	app._on_voice_state([false, false, "Microphone is unavailable."])
 	_click(app, app._pop._gate_back, "The Voice Pop Back action")

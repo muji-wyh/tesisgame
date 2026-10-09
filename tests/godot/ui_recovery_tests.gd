@@ -33,7 +33,6 @@ func check(value: bool, message: String) -> void:
 func _app(storage: BrowserStorage):
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg", storage)
-	app.playroom_save_path = directory + "/room.cfg"
 	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
 	root.add_child(app)
 	await process_frame
@@ -109,7 +108,7 @@ func _check_audio_recovery(app) -> void:
 		check(app.audio.active and app.audio.music.playing and app.audio.current_theme == app.model.theme_id,
 			location + " resumes its current background music without a refresh")
 		check(not app.audio.voice.playing and not app.audio.effect.playing
-			and not app.audio.pip_reaction.playing and not app.audio.is_pip_busy(),
+			and not app.audio.pip_reaction.playing,
 			location + " cannot replay cancelled words, reports, effects or Pip calls")
 		var request: int = app.audio._playback_requests.get(app.audio.music, 0)
 		app.on_page_visible()
@@ -188,7 +187,6 @@ func _check_background_collection_close(app) -> void:
 		await create_timer(0.85).timeout
 		check(state.phase == "waiting", mode + " feedback finishes normally after the page is visible again")
 	app.new_round(43, true, "", "pop")
-	app._hide_leaderboard()
 	check(app._pop_rewards.configure("background-close", 1, "spring", app.data.chests, true),
 		"The background-close fixture has one real saved treasure chest")
 	app._show_pop_rewards()

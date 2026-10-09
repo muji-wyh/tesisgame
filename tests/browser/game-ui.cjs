@@ -1,6 +1,7 @@
 const { expect } = require('@playwright/test');
 const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
+const THEME_NAMES = THEME_IDS.map(id => id[0].toUpperCase() + id.slice(1));
 const MODES = ['match', 'memory', 'pop', 'phrase'];
 
 async function metrics(page) {
@@ -8,7 +9,8 @@ async function metrics(page) {
     const rect = canvas.getBoundingClientRect();
     const scale = Math.min(rect.width, rect.height) / 480;
     return { x: rect.x, y: rect.y, width: rect.width / scale, height: rect.height / scale, scale,
-      library: JSON.parse(document.getElementById("game-status").dataset.library || "{}") };
+      library: JSON.parse(document.getElementById("game-status").dataset.library || "{}"),
+      growth: JSON.parse(document.getElementById("growth-status").dataset.view || "{}") };
   });
 }
 
@@ -45,116 +47,127 @@ async function chooseMode(page, name, options = {}) {
   const rect = modeRect(await metrics(page), name, options);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await rendered(page);
-  if (name === 'pop' && options.choosePlayer !== false) await chooseRoundPlayer(page);
 }
 
 async function chooseTheme(page, index) {
   if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
-  const more = headerPoint(await metrics(page));
-  await tap(page, more.x, more.y);
+  await openRewards(page);
   const world = await worldControl(page, index);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
-  const back = collectionHeaderRect(await metrics(page), 'back');
-  await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText("Pip's room opened.");
-  await rendered(page);
+  await activateGrowthControl(page, 'GrowthBack');
+  await expect.poll(async () => (await growthView(page)).visible).toBe(false);
 }
 
 function contentBounds(bounds) {
   const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
   const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
-  const top = padding + header + gap;
+  const top = padding + header + gap + Math.ceil(44 / scale) + gap;
   return { x, width, top, padding, gap, header };
 }
 
-function collectionBounds(bounds, { shelf = true } = {}) {
-  const scale = uiScale(bounds), compact = bounds.height * bounds.scale < 500;
-  const padding = Math.ceil((compact ? 8 : 12) / scale), gap = Math.ceil((compact ? 6 : 8) / scale);
-  const x = Math.max(padding, Math.round((bounds.width - 960 / scale) / 2)), width = bounds.width - x * 2;
-  const headerHeight = Math.ceil(48 / scale), ageHeight = headerHeight, ageTop = padding;
-  const ageX = x + Math.ceil(40 / scale) + gap;
-  const ageWidth = width - Math.ceil(40 / scale) - Math.ceil(44 / scale) - gap * 2;
-  const themeHeight = Math.ceil((compact ? 44 : 52) / scale);
-  const shelfHeight = shelf ? (compact ? 76 : 104) / scale : 0, shelfItemWidth = 216 / scale;
-  const shelfTop = bounds.height - padding - shelfHeight, themeTop = shelfTop - (shelf ? gap : 0) - themeHeight;
-  const playerMenuHeight = Math.ceil(40 / scale);
-  const top = padding + headerHeight + gap + playerMenuHeight + gap, roomHeight = Math.max(0, themeTop - gap - top);
-  return { x, width, top, padding, gap, compact, headerHeight, ageTop, ageHeight, ageX, ageWidth,
-    themeTop, themeHeight, shelfTop, shelfHeight, shelfItemWidth, roomHeight,
-    worldSide: themeHeight, worldGap: Math.round(6 / scale) };
+function growthRect(bounds, name) {
+  const item = bounds.growth?.controls?.find(control => control.name === name && control.visible);
+  if (!item) throw new Error(`Growth control is not visible: ${name}`);
+  const [x, y, width, height] = item.rect;
+  return { x, y, width, height };
 }
 
-function ageButtonRect(bounds, id, scroll = 0) {
-  const index = ['all', '4-6', '7-9', '10-plus'].indexOf(id);
-  if (index < 0) throw new Error(`Unknown age level: ${id}`);
-  const { ageX, ageWidth, ageTop } = collectionBounds(bounds), scale = uiScale(bounds);
-  const labelWidth = Math.ceil(30 / scale), buttonWidth = Math.ceil(52 / scale), gap = Math.round(6 / scale);
-  const rowWidth = labelWidth + 4 * (buttonWidth + gap);
-  return { x: ageX + Math.max(0, (ageWidth - rowWidth) / 2) + labelWidth + gap + index * (buttonWidth + gap) - scroll,
-    y: ageTop, width: buttonWidth, height: Math.ceil(48 / scale) };
+async function growthView(page) {
+  return page.locator('#growth-status').evaluate(element => JSON.parse(element.dataset.view || '{}'));
+}
+
+async function seedGrowth(page, level, { unmastered = null } = {}) {
+  const words = require('../../words.json');
+  const streaks = Object.fromEntries(words.filter(word => word.min_age <= level &&
+    (unmastered ? !unmastered.includes(word.id) : word.min_age < level)).map(word => [word.id, 6]));
+  await page.addInitScript(({ level, streaks }) => {
+    const key = 'growWithPip.growth.v1';
+    if (!localStorage.getItem(key)) localStorage.setItem(key,
+      `[growth]\nversion=1\nlevel=${level}\nstreaks=${JSON.stringify(streaks)}\nreceipts=[]\n`);
+  }, { level, streaks });
+}
+
+async function growthState(page) {
+  return page.locator('#growth-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
+}
+
+async function growthControl(page, name) {
+  await expect.poll(async () => (await growthView(page)).controls?.some(item => item.name === name && item.visible),
+    { message: `${name} is exposed by the growth interface` }).toBe(true);
+  const visibleTarget = (item, state, bounds) => {
+    if (!item) return null;
+    const [left, top, width, height] = item.rect;
+    const clip = name.startsWith('AgeWord_') && state.catalog?.viewport_rect || [0, 0, bounds.width, bounds.height];
+    const [x, y, w, h] = clip;
+    if (left < x - 1 || left + width > x + w + 1) return null;
+    if (top >= y - 1 && top + height <= y + h + 1) return item;
+    if (height > h && item.focused) {
+      const upper = Math.max(top, y), bottom = Math.min(top + height, y + h);
+      if (bottom - upper >= Math.min(44 / bounds.scale, h)) return { ...item, rect: [left, upper, width, bottom - upper] };
+    }
+    return null;
+  };
+  let state = await growthView(page), item = state.controls.find(entry => entry.name === name);
+  let target = visibleTarget(item, state, await metrics(page));
+  if (target) return target;
+  for (let step = 0; step < 100; step++) {
+    await page.locator('#canvas').press('Tab');
+    await rendered(page);
+    state = await growthView(page);
+    item = state.controls.find(entry => entry.name === name);
+    target = visibleTarget(item, state, await metrics(page));
+    if (item?.focused && target) return target;
+  }
+  throw new Error(`Could not reveal growth control: ${name}`);
+}
+
+async function activateGrowthControl(page, name) {
+  const item = await growthControl(page, name), bounds = await metrics(page);
+  expect(item.disabled, `${name} is enabled`).toBe(false);
+  const [x, y, width, height] = item.rect;
+  if (page.touchscreen) await tap(page, x + width / 2, y + height / 2, bounds);
+  else await page.locator('#canvas').click({ position: { x: (x + width / 2) * bounds.scale, y: (y + height / 2) * bounds.scale } });
+  await rendered(page);
+}
+
+function collectionBounds(bounds) {
+  const back = growthRect(bounds, 'GrowthBack');
+  const controls = bounds.growth.controls.filter(item => item.visible && THEME_NAMES.includes(item.name));
+  const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale);
+  const x = Math.max(padding, Math.round((bounds.width - 960 / scale) / 2));
+  const world = controls[0]?.rect;
+  return { x, width: bounds.width - x * 2, padding, gap, headerHeight: back.height,
+    top: back.y + back.height + gap, themeTop: world?.[1] || 0, themeHeight: world?.[3] || 0,
+    worldSide: world?.[3] || 0, worldGap: Math.round(6 / scale) };
+}
+
+function ageButtonRect(bounds, id) {
+  if (!/^([3-9]|1[0-2])$/.test(String(id))) throw new Error(`Unknown age stage: ${id}`);
+  return growthRect(bounds, `GrowthAge${id}`);
 }
 
 function collectionHeaderRect(bounds, section) {
-  const { x, width, padding, headerHeight } = collectionBounds(bounds), scale = uiScale(bounds);
-  const height = Math.ceil(44 / scale);
-  const y = padding + (headerHeight - height) / 2;
-  if (section === 'back') return { x: x + width - height, y, width: height, height };
-  if (section !== 'room') throw new Error(`Unknown room header item: ${section}`);
-  return { x, y, width: Math.ceil(40 / scale), height };
+  if (section !== 'back') throw new Error(`Unknown growth header item: ${section}`);
+  return growthRect(bounds, 'GrowthBack');
 }
 
-function worldIconRect(bounds, index, scroll = 0, options = {}) {
+function worldIconRect(bounds, index) {
   if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
-  const { x, width, themeTop, worldSide: side, worldGap: spacing } = collectionBounds(bounds, options);
-  const left = x + Math.max(0, (width - side * THEME_IDS.length - spacing * (THEME_IDS.length - 1)) / 2);
-  return { x: left + index * (side + spacing) - scroll, y: themeTop, width: side, height: side };
-}
-
-async function focusRoomBack(page, bounds = null) {
-  bounds ||= await metrics(page);
-  const back = collectionHeaderRect(bounds, 'back'), title = collectionHeaderRect(bounds, 'room');
-  await page.mouse.move(bounds.x + (back.x + back.width / 2) * bounds.scale,
-    bounds.y + (back.y + back.height / 2) * bounds.scale);
-  await page.mouse.down();
-  await page.mouse.move(bounds.x + (title.x + title.width / 2) * bounds.scale,
-    bounds.y + (title.y + title.height / 2) * bounds.scale);
-  await page.mouse.up();
+  return growthRect(bounds, THEME_NAMES[index]);
 }
 
 async function ageControl(page, id) {
-  const index = ['all', '4-6', '7-9', '10-plus'].indexOf(id);
-  if (index < 0) throw new Error(`Unknown age level: ${id}`);
-  const bounds = await metrics(page), collection = collectionBounds(bounds);
-  await focusRoomBack(page, bounds);
-  // Visit the last and first choices so their focus visibility resets any prior swipe.
-  for (let step = 0; step < 4; step++) { await page.keyboard.press('Shift+Tab'); await rendered(page); }
-  const first = ageButtonRect(bounds, 'all'), last = ageButtonRect(bounds, '10-plus');
-  const maximum = Math.max(0, last.x + last.width - collection.ageX - collection.ageWidth);
-  let scroll = Math.min(maximum, first.x - collection.ageX);
-  for (let step = 0; step < index; step++) { await page.keyboard.press('Tab'); await rendered(page); }
-  const target = ageButtonRect(bounds, id);
-  scroll = Math.max(scroll, target.x + target.width - collection.ageX - collection.ageWidth);
-  return ageButtonRect(bounds, id, scroll);
+  const item = await growthControl(page, `GrowthAge${id}`);
+  const [x, y, width, height] = item.rect;
+  return { x, y, width, height };
 }
 
 async function worldControl(page, index) {
-  const bounds = await metrics(page), state = await roomState(page);
-  const controls = roomFocusOrder(bounds, state);
-  await focusRoomBack(page, bounds);
-  for (let step = 0; step <= controls.indexOf(`world-${index}`); step++) {
-    await page.keyboard.press('Tab'); await rendered(page);
-  }
-  const options = { shelf: roomLayout(bounds, state.owned).locked.length > 0 };
-  const rect = worldIconRect(bounds, index, 0, options), collection = collectionBounds(bounds, options);
-  const visible = worldIconRect(bounds, index, Math.max(0, rect.x + rect.width - collection.x - collection.width), options);
-  if ((await page.locator('#game-status').textContent()).includes('Changes not saved.')) {
-    // The retry notice lifts the bottom strip. Aim within the overlap with its usual row,
-    // avoiding dependence on the platform's exact font height for the notice.
-    visible.y -= visible.height / 2;
-  }
-  return visible;
+  if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
+  const item = await growthControl(page, THEME_NAMES[index]);
+  const [x, y, width, height] = item.rect;
+  return { x, y, width, height };
 }
 
 function headerIconRect(bounds, key = 'rewards') {
@@ -178,299 +191,21 @@ function pipHeaderRect(bounds) {
 }
 
 async function openRewards(page) {
-  const point = headerPoint(await metrics(page));
-  await tap(page, point.x, point.y);
-  await expect(page.locator('#game-status')).toContainText("Pip's room opened.");
+  if (!(await growthView(page)).visible) await activateGrowthControl(page, 'GrowthProgressButton');
+  await expect.poll(async () => (await growthView(page)).visible).toBe(true);
   await rendered(page);
 }
 
-function roomLayout(bounds, owned = ['ball']) {
-  const toys = ['ball', ...THEME_IDS];
-  owned = toys.filter(toy => toy === 'ball' || owned.includes(toy));
-  const locked = toys.filter(toy => !owned.includes(toy));
-  const { x, width, top, padding, gap, roomHeight: homeHeight } = collectionBounds(bounds, { shelf: locked.length > 0 });
-  const scale = uiScale(bounds), homes = {}, count = owned.length;
-  const left = Math.min(120, width * 0.32), areaWidth = Math.max(1, width - left - 12), areaHeight = Math.max(1, homeHeight - 24);
-  let columns = 1, tileSize = 0;
-  for (let candidate = 1; candidate <= count; candidate++) {
-    const rows = Math.ceil(count / candidate);
-    const size = Math.min(64, (areaWidth - (candidate - 1) * 10) / candidate, (areaHeight - (rows - 1) * 10) / rows - 24);
-    if (size >= tileSize) { columns = candidate; tileSize = size; }
-  }
-  tileSize = Math.max(16, tileSize);
-  const rows = Math.ceil(count / columns), cellWidth = areaWidth / columns;
-  const gridTop = Math.max(12, homeHeight - 12 - rows * (tileSize + 24) - (rows - 1) * 10);
-  for (const [index, toy] of owned.entries()) {
-    homes[toy] = count === 1 ? { x: width - Math.min(66, width * 0.23), y: homeHeight - tileSize / 2 - 36 }
-      : { x: left + cellWidth * (index % columns + 0.5), y: gridTop + Math.floor(index / columns) * (tileSize + 34) + tileSize / 2 };
-  }
-  const duckScale = Math.min(1, Math.max(0.25, homeHeight / 160));
-  const halfDuck = Math.min(48 * duckScale + 4, width / 2), bottom = Math.max(0, homeHeight - 12);
-  const pipX = Math.max(halfDuck, Math.min(Math.min(88, width * 0.16), width - halfDuck));
-  const duckEdge = 96 * duckScale, feetInset = (112 * duckScale - duckEdge) / 2 + duckEdge * 8 / 120;
-  const floorYAt = x => homeHeight * (0.70 - 0.13 * Math.max(0, Math.min(1, Math.min(x, width - x) / Math.max(1, Math.min(width * 0.13, 92)))));
-  const floorTop = Math.min(bottom, Math.max(112 * duckScale + 4,
-    Math.max(floorYAt(pipX - duckEdge * 0.33), floorYAt(pipX + duckEdge * 0.33)) + feetInset + 4));
-  const pipFoot = { x: pipX,
-    y: Math.max(floorTop, Math.min(homeHeight - 32, bottom)) };
-  return { x, width, top, padding, gap, scale, owned, locked, homes, homeHeight, tileSize, duckScale, pipFoot };
-}
-
-async function roomState(page) {
-  const records = await page.evaluate(() => {
-    const read = key => {
-      try { return localStorage.getItem(key) || ''; }
-      catch (error) {
-        if (error.name !== 'SecurityError') throw error;
-        return '';
-      }
-    };
-    return { saved: read('wordBuddies.playroom'), medals: read('wordBuddies.medalProgress') };
+async function rewardState(page) {
+  const medals = await page.evaluate(() => {
+    try { return localStorage.getItem('wordBuddies.medalProgress') || ''; }
+    catch (error) { if (error.name !== 'SecurityError') throw error; return ''; }
   });
-  const counts = Object.fromEntries([...records.medals.matchAll(/"([a-z]+-\d+)"\s*:\s*(\d+)/g)]
-    .map(([, id, count]) => [id, Number(count)]));
-  return { ...records,
-    owned: ['ball', ...THEME_IDS.filter(theme => counts[`${theme}-1`] >= 3)],
-    selected: records.saved.match(/^goal_item_id="toy-([^"]+)"/m)?.[1] || '',
-    equipped: records.saved.match(/^toy="toy-([^"]+)"/m)?.[1] || 'ball'
-  };
-}
-
-function roomPoint(bounds, name, { item = '', owned = ['ball'], equipped = 'ball' } = {}) {
-  const layout = roomLayout(bounds, owned);
-  const { x, width, top, scale, gap } = layout;
-  if (name === 'pip') return { x: x + layout.pipFoot.x, y: top + layout.pipFoot.y - 56 * layout.duckScale };
-  if (name === 'toy') name = layout.owned.includes(equipped) ? equipped : 'ball';
-  if (name === 'goal') {
-    if (!item) throw new Error('The inline goal control needs its toy card name.');
-    if (layout.owned.includes(item)) throw new Error('Earned toys are selected directly in Pip\'s home.');
-    const card = roomPoint(bounds, item, { owned });
-    return { x: card.x + card.width / 2 - 30 / scale, y: card.y };
-  }
-  const inHome = layout.owned.includes(name);
-  if (inHome) return { x: x + layout.homes[name].x,
-    y: top + layout.homes[name].y, width: layout.tileSize, height: layout.tileSize, inHome: true };
-  const index = layout.locked.indexOf(name);
-  if (index < 0) throw new Error(`Unknown room control: ${name}`);
-  const { shelfTop, shelfHeight: height, shelfItemWidth: cell } = collectionBounds(bounds);
-  const left = index * (cell + gap), scroll = Math.max(0, left + cell - width);
-  return {
-    x: x + left - scroll + cell / 2, y: shelfTop + height / 2,
-    width: cell, height, inHome
-  };
-}
-
-async function roomControl(page, name, { locked = false, item = '' } = {}) {
-  const bounds = await metrics(page);
-  const state = await roomState(page), layout = roomLayout(bounds, state.owned);
-  const active = locked ? item : state.selected;
-  const equipped = layout.owned.includes(state.equipped) ? state.equipped : 'ball';
-  const target = name === 'toy' ? equipped : name;
-  if (name === 'toy' && locked) throw new Error('A locked preview has no active playable toy; select an owned object.');
-  await focusRoomBack(page, bounds);
-  const beforeFocus = target === 'pip' ? await page.screenshot({ scale: 'css' }) : null;
-  const controls = roomFocusOrder(bounds, state, { locked, item });
-  if (!controls.includes(target)) throw new Error(`Unavailable room control: ${name}`);
-  for (let index = 0; index <= controls.indexOf(target); index++) {
-    await page.keyboard.press('Tab');
-    await rendered(page);
-  }
-  if (beforeFocus) {
-    // Pip can retain a position after a resize. Find its visible focus response
-    // instead of treating the nominal home coordinate as the current actor position.
-    const afterFocus = await page.screenshot({ scale: 'css' });
-    const center = await page.evaluate(async ({ before, after, bounds, layout }) => {
-      const images = await Promise.all([before, after].map(async png => {
-        const image = new Image();
-        image.src = 'data:image/png;base64,' + png;
-        await image.decode();
-        return image;
-      }));
-      const canvas = document.createElement('canvas');
-      canvas.width = images[0].width; canvas.height = images[0].height;
-      const context = canvas.getContext('2d');
-      const frames = images.map(image => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, 0, 0);
-        return context.getImageData(0, 0, canvas.width, canvas.height).data;
-      });
-      let left = canvas.width, top = canvas.height, right = -1, bottom = -1;
-      const startX = Math.max(0, Math.ceil(bounds.x + layout.x * bounds.scale));
-      const startY = Math.max(0, Math.ceil(bounds.y + layout.top * bounds.scale));
-      const endX = Math.min(canvas.width, Math.floor(bounds.x + (layout.x + layout.width) * bounds.scale));
-      const endY = Math.min(canvas.height, Math.floor(bounds.y + (layout.top + layout.homeHeight) * bounds.scale));
-      for (let y = startY; y < endY; y++) {
-        for (let x = startX; x < endX; x++) {
-          const offset = (y * canvas.width + x) * 4;
-          if ([0, 1, 2].every(channel => Math.abs(frames[0][offset + channel] - frames[1][offset + channel]) < 24)) continue;
-          left = Math.min(left, x); right = Math.max(right, x);
-          top = Math.min(top, y); bottom = Math.max(bottom, y);
-        }
-      }
-      return right > left && bottom > top ? {
-        x: ((left + right) / 2 - bounds.x) / bounds.scale,
-        y: ((top + bottom) / 2 - bounds.y) / bounds.scale
-      } : null;
-    }, { before: beforeFocus.toString('base64'), after: afterFocus.toString('base64'), bounds, layout });
-    expect(center, 'The real room must visibly focus Pip before a pointer interaction.').not.toBeNull();
-    return center;
-  }
-  return roomPoint(bounds, target, { item: active, owned: layout.owned, equipped });
-}
-
-function roomFocusOrder(bounds, state, { locked = false, item = '' } = {}) {
-  const layout = roomLayout(bounds, state.owned), active = locked ? item : state.selected;
-  const equipped = layout.owned.includes(state.equipped) ? state.equipped : 'ball';
-  const controls = ['players', 'leaderboards', 'pip', ...(locked ? [] : [equipped]), ...layout.owned.filter(toy => locked || toy !== equipped),
-    ...THEME_IDS.map((_, index) => `world-${index}`)];
-  for (const toy of layout.locked) {
-    controls.push(toy);
-    if (toy === active) controls.push('goal');
-  }
-  return controls;
-}
-
-async function leaveRoomPreview(page, { item = '' } = {}) {
-  const { equipped } = await roomState(page);
-  await roomControl(page, equipped, { locked: true, item });
-  await page.keyboard.press('Enter');
-  await rendered(page);
-}
-
-async function dragRoomToy(page, name, input = 'mouse') {
-  if (!['mouse', 'touch'].includes(input)) throw new Error(`Unknown toy drag input: ${input}`);
-  const toy = await roomControl(page, name), bounds = await metrics(page);
-  const points = [0, 20, 44].map(offset => ({
-    x: bounds.x + (toy.x - offset) * bounds.scale,
-    y: bounds.y + (toy.y - offset) * bounds.scale
-  }));
-  if (input === 'mouse') {
-    await page.mouse.move(points[0].x, points[0].y);
-    await page.mouse.down();
-    try {
-      for (const point of points.slice(1)) {
-        await page.mouse.move(point.x, point.y, { steps: 3 });
-        await rendered(page);
-      }
-    } finally {
-      await page.mouse.up();
-    }
-  } else {
-    const client = await page.context().newCDPSession(page);
-    let pressed = false;
-    try {
-      for (const [index, point] of points.entries()) {
-        await client.send('Input.dispatchTouchEvent', {
-          type: index === 0 ? 'touchStart' : 'touchMove', touchPoints: [{ id: 1, ...point }]
-        });
-        pressed = true;
-        await rendered(page);
-      }
-    } finally {
-      if (pressed) await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await client.detach();
-    }
-  }
-  await rendered(page);
-  return points;
+  return { medals };
 }
 
 async function rendered(page) {
   await page.locator('#canvas').evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-}
-
-async function leaderboardSnapshot(scope) {
-  return scope.locator('#leaderboard-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
-}
-
-async function leaderboardControl(scope, name) {
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).controls?.some(item => item.name === name),
-    { message: `${name} is exposed by the visible interface` }).toBe(true);
-  return (await leaderboardSnapshot(scope)).controls.find(item => item.name === name);
-}
-
-async function focusLeaderboardControl(scope, name) {
-  for (let attempt = 0; attempt < 55; attempt++) {
-    const current = await leaderboardSnapshot(scope);
-    const target = current.controls?.find(item => item.name === name);
-    if (target?.focused) return target;
-    await scope.locator('#canvas').press('Tab');
-    // Focus diagnostics are sampled every 100 ms, including within an iframe.
-    await scope.locator('#canvas').evaluate(() => new Promise(resolve => setTimeout(resolve, 130)));
-  }
-  throw new Error(`Keyboard navigation did not reach ${name}: ${JSON.stringify(await leaderboardSnapshot(scope))}`);
-}
-
-async function activateLeaderboardControl(scope, name) {
-  let item = await leaderboardControl(scope, name);
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).controls.find(entry => entry.name === name)?.disabled,
-    { message: `${name} is available` }).toBe(false);
-  const bounds = await metrics(scope), current = await leaderboardSnapshot(scope);
-  item = current.controls.find(entry => entry.name === name);
-  const back = current.controls.find(entry => entry.name === 'LeaderboardClose');
-  const content = contentBounds(bounds), inset = 16 / uiScale(bounds);
-  const insidePanel = current.visible && name !== 'LeaderboardClose';
-  const top = insidePanel ? current.modal ? back ? back.rect[1] + back.rect[3] : content.padding : content.top + inset : 0;
-  const bottom = insidePanel ? bounds.height - content.padding - (current.modal ? 0 : inset) : bounds.height;
-  const fitsViewport = ([left, upper, width, height]) => left >= 0 && upper >= top &&
-    left + width <= bounds.width + 1 && upper + height <= bottom + 1;
-  if (!fitsViewport(item.rect)) {
-    // Refocusing also reveals a button displaced by a newly inserted save error.
-    if (item.focused) {
-      await scope.locator('#canvas').press('Shift+Tab');
-      await scope.locator('#canvas').evaluate(() => new Promise(resolve => setTimeout(resolve, 130)));
-    }
-    item = await focusLeaderboardControl(scope, name);
-    await expect.poll(async () => {
-      item = (await leaderboardSnapshot(scope)).controls.find(entry => entry.name === name);
-      return fitsViewport(item.rect);
-    }, { message: `${name} is fully inside its scroll viewport` }).toBe(true);
-  }
-  const [x, y, width, height] = item.rect;
-  expect(width, `${name} has a nonempty target`).toBeGreaterThan(0);
-  expect(height, `${name} has a nonempty target`).toBeGreaterThan(0);
-  if (scope.touchscreen) {
-    await tap(scope, x + width / 2, y + height / 2);
-  } else {
-    // A locator-relative pointer gesture also works in embedded game frames.
-    await scope.locator('#canvas').click({ position: { x: (x + width / 2) * bounds.scale, y: (y + height / 2) * bounds.scale } });
-  }
-  await rendered(scope);
-}
-
-async function typeLeaderboardName(scope, name) {
-  await activateLeaderboardControl(scope, 'LeaderboardName');
-  const nativeEditor = scope.locator('input:focus, textarea:focus');
-  if (await nativeEditor.count()) {
-    // Keep focus on the mobile DOM bridge so software-keyboard input reaches
-    // Godot. Focusing the canvas here would bypass the path real phones use.
-    await nativeEditor.fill(name);
-  } else {
-    await scope.locator('#canvas').pressSequentially(name);
-  }
-  await rendered(scope);
-}
-
-async function finishOnboarding(scope, { name = 'Test player', avatar = 'fox' } = {}) {
-  await expect.poll(async () => typeof (await leaderboardSnapshot(scope)).visible,
-    { message: 'The first-entry player gate is initialized' }).toBe('boolean');
-  if ((await leaderboardSnapshot(scope)).view !== 'onboarding') return;
-  await activateLeaderboardControl(scope, `LeaderboardAvatar_${avatar}`);
-  await typeLeaderboardName(scope, name);
-  await activateLeaderboardControl(scope, 'LeaderboardCreatePlayer');
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '',
-    { message: 'A durable first player unlocks entry to the game' }).not.toBe('onboarding');
-}
-
-async function chooseRoundPlayer(scope, { playerId } = {}) {
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).view,
-    { message: 'Every fresh Voice Pop round requires a player before it starts' }).toBe('picker');
-  const current = await leaderboardSnapshot(scope);
-  const chosen = playerId || current.profiles[0]?.id;
-  expect(chosen, 'A registered player is available before starting Voice Pop').toBeTruthy();
-  await activateLeaderboardControl(scope, `LeaderboardPlayer_${chosen}`);
-  await expect.poll(async () => (await leaderboardSnapshot(scope)).view || '',
-    { message: 'One player gesture starts the round without another confirmation' }).not.toBe('picker');
 }
 
 async function observeAudio(page, { fingerprintBuffers = false, fingerprintMaxDuration = 1, phaseSelector = '', trackSourceLifecycle = false } = {}) {
@@ -569,7 +304,7 @@ async function visibleColorCount(page, png) {
   }, png.toString('base64'));
 }
 
-async function enterGame(scope, { onboarding = true } = {}) {
+async function enterGame(scope) {
   await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
   const enter = scope.locator('#enter-game');
   await expect(enter).toBeVisible();
@@ -578,7 +313,6 @@ async function enterGame(scope, { onboarding = true } = {}) {
   await enter.click();
   await expect(scope.locator('body')).toHaveAttribute('data-engine-ready', 'true');
   await expect(scope.locator('#status')).toBeHidden();
-  if (onboarding) await finishOnboarding(scope);
 }
 
 async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.' } = {}) {
@@ -712,8 +446,7 @@ function resultPoint(bounds, key) {
     y: content.top + height - inset - actionHeight / 2 };
 }
 
-module.exports = { THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
-  openRewards, roomLayout, roomState, roomPoint, roomControl, leaveRoomPreview, dragRoomToy, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
-  leaderboardSnapshot, leaderboardControl, focusLeaderboardControl, activateLeaderboardControl, typeLeaderboardName, finishOnboarding, chooseRoundPlayer,
+module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
+  openRewards, rewardState, growthView, growthState, seedGrowth, growthControl, activateGrowthControl, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount,
   celebrationState, acceptCelebration };

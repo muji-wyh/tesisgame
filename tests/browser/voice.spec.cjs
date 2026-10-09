@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, openRewards, roomPoint } = require('./game-ui.cjs');
+const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, seedGrowth } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const voiceHitRecording = 'assets/imported-audio/pair-feedback/right.wav';
@@ -478,22 +478,11 @@ test('interim speech does not score; final sentences queue distinct real pairs a
 
 test('Match homophones score the canonical flower once with its voice hit feedback', async ({ page }, testInfo) => {
   await observeAudio(page);
+  const otherWords = catalog.filter(word => word.min_age === 4 && word.image && word.id !== 'flower').slice(0, 4).map(word => word.id);
+  await seedGrowth(page, 4, { unmastered: ['flower', ...otherWords] });
   const errors = await openGame(page);
-  // The real Spring toy goal starts a lesson that must contain flower, so this
-  // check never depends on the randomized opening topic or five-word selection.
-  await openRewards(page);
-  // Spring is the first visible locked toy in a fresh profile. Use its real
-  // touch controls instead of traversing the whole room's keyboard focus order
-  // twice; the latter spends this speech test's budget on slow mobile frames.
-  const roomBounds = await logicalMetrics(page);
-  const spring = roomPoint(roomBounds, 'spring');
-  await tap(page, spring.x, spring.y);
-  await expect(page.locator('#game-status')).toContainText('Preview only. Spring flower.');
-  const goal = roomPoint(roomBounds, 'goal', { item: 'spring' });
-  await tap(page, goal.x, goal.y);
-  await expect(page.locator('#game-status')).toContainText('Find 5 word');
   const { pairs } = await discoverBoard(page);
-  expect(pairs.some(([word]) => word === 'flower'), 'The gift lesson supplies a real flower pair').toBe(true);
+  expect(pairs.some(([word]) => word === 'flower'), 'The saved learning priorities supply a real flower pair').toBe(true);
   await listen(page);
   await observeVoiceMatchLinks(page);
   await expect(page.locator('#speech-successes')).toHaveCount(0);

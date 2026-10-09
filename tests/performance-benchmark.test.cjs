@@ -10,7 +10,7 @@ const { freezeBaseline } = require('../tools/freeze-performance-baseline.cjs');
 const resultsRoot = path.resolve(__dirname, '../build/performance');
 fs.mkdirSync(resultsRoot, { recursive: true });
 const fixtureDirectory = fs.mkdtempSync(path.join(resultsRoot, 'node-acceptance-'));
-const names = ['match', 'memory', 'voice-pop', 'room', 'catalog', 'chest'];
+const names = ['match', 'memory', 'voice-pop', 'growth', 'catalog', 'chest'];
 const baseMeans = [1000, 2000, 50000, 500, 800, 10000];
 let serial = 0;
 
@@ -33,7 +33,7 @@ function report(factors = Array(names.length).fill(1), repeatFactors = Array(5).
     }))
   }));
   return {
-    protocol: 'main-scene-rendered-v1', configuration, harness_sha256: 'fixture-harness',
+    protocol: 'main-scene-rendered-v2', configuration, harness_sha256: 'fixture-harness',
     host: { platform: 'win32', release: 'fixture-os', cpu: 'fixture-cpu', logical_cpus: 8 }, runs,
     scenarios: names.map((scenario, index) => ({
       scenario,
@@ -223,16 +223,19 @@ test('baseline snapshots preserve committed bytes and refuse existing or escapin
   fs.mkdirSync(repository);
   const git = args => execFileSync('git', args, { cwd: repository, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
   git(['init', '--quiet']);
-  for (const directory of ['scripts', 'scenes', 'assets', '.godot', 'tests/performance', 'tests/godot']) fs.mkdirSync(path.join(repository, directory), { recursive: true });
+  for (const directory of ['scripts', 'scenes', 'data', 'assets', '.godot', 'tests/performance', 'tests/godot']) fs.mkdirSync(path.join(repository, directory), { recursive: true });
   const bytes = Buffer.from([0, 13, 10, 0xff, 0x80, 0x41]);
   fs.writeFileSync(path.join(repository, 'scripts/code.gd'), 'extends Node\n');
   fs.writeFileSync(path.join(repository, 'scenes/raw.bin'), bytes);
   fs.writeFileSync(path.join(repository, 'project.godot'), 'config_version=5\n');
   fs.writeFileSync(path.join(repository, 'words.json'), '[]\n');
+  fs.writeFileSync(path.join(repository, 'phrases.json'), '[]\n');
+  fs.writeFileSync(path.join(repository, 'curriculum.json'), '{"tiers":[]}\n');
+  fs.writeFileSync(path.join(repository, 'data/pip-growth-stages.json'), '{"stages":[]}\n');
   fs.writeFileSync(path.join(repository, 'voice-prompts.json'), '{}\n');
   fs.writeFileSync(path.join(repository, 'tests/performance/main_scene_benchmark.gd'), 'extends SceneTree\n');
   fs.writeFileSync(path.join(repository, 'tests/godot/player_flow_fixture.gd'), 'extends RefCounted\n');
-  git(['add', 'scripts', 'scenes', 'project.godot', 'words.json', 'voice-prompts.json']);
+  git(['add', 'scripts', 'scenes', 'data', 'project.godot', 'words.json', 'phrases.json', 'curriculum.json', 'voice-prompts.json']);
   const commitOptions = ['-c', 'user.name=Benchmark Fixture', '-c', 'user.email=benchmark-fixture@example.invalid',
     '-c', 'commit.gpgsign=false', '-c', `core.hooksPath=${path.join(repository, 'no-test-hooks')}`];
   git([...commitOptions, 'commit', '--quiet', '-m', 'Create snapshot fixture']);
@@ -242,6 +245,10 @@ test('baseline snapshots preserve committed bytes and refuse existing or escapin
   assert.equal(manifest.commit, commit);
   assert.deepEqual(fs.readFileSync(path.join(manifest.snapshot_directory, 'scenes/raw.bin')), bytes);
   assert.equal(fs.readFileSync(path.join(manifest.snapshot_directory, 'scripts/code.gd'), 'utf8'), 'extends Node\n');
+  for (const relative of ['phrases.json', 'curriculum.json', 'data/pip-growth-stages.json']) {
+    assert.deepEqual(fs.readFileSync(path.join(manifest.snapshot_directory, relative)), fs.readFileSync(path.join(repository, relative)));
+    assert(manifest.files.some(file => file.path === relative), `The frozen curriculum must include ${relative}`);
+  }
   assert.equal(manifest.files.find(file => file.path === 'scenes/raw.bin').sha256, crypto.createHash('sha256').update(bytes).digest('hex'));
   for (const name of ['assets', '.godot', 'tests']) {
     assert.equal(fs.realpathSync(path.join(manifest.snapshot_directory, name)), fs.realpathSync(path.join(repository, name)));

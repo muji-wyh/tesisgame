@@ -7,10 +7,10 @@ class BrowserStorage extends RefCounted:
 	var text: Variant = null
 	var writable := true
 	var readable := true
-	func playroomState() -> Variant:
+	func growthState() -> Variant:
 		return text if readable else false
-	func savePlayroomState(value: String) -> bool:
-		if not writable:
+	func saveGrowthState(value: String, expected_text: Variant) -> bool:
+		if not writable or text != expected_text:
 			return false
 		text = value
 		return true
@@ -32,7 +32,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
@@ -68,34 +68,35 @@ func _run() -> void:
 	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3 and app.medal_progress.counts.is_empty(),
 		"Starting a lesson grants no rewards and initializes a normal attempt")
 	var storage := BrowserStorage.new()
-	var state = load("res://scripts/playroom_state.gd").new(directory + "/mock.cfg", storage)
-	check(state.load_state(), "The isolated saved-choice fixture loads")
-	app.playroom_state = state
-	app._playroom_ready = true
+	var state = load("res://scripts/growth_state.gd").new(directory + "/mock.cfg", storage)
+	check(state.configure(app.data.words) and state.load_state(), "The isolated growth fixture loads")
+	app.growth = state
 	storage.writable = false
-	app.new_round(-1, false, "space-trip", "match")
-	check(app._journey_save_failed and state.recent_topic_ids.is_empty(), "Failed writes do not fabricate remembered visits")
-	check(app._storage_retry_button.visible and app._status_announcement.contains("Retry saving"),
-		"Removing Explore leaves a visible retry for saved-choice failures")
+	app._record_growth("pending-navigation", ["cat"], true)
+	app._refresh()
+	check(app._growth_save_failed and state.streak("cat") == 0 and state.snapshot().pending_count == 1,
+		"Failed writes retain one pending attempt without presenting it as durable mastery")
+	check(app._storage_retry_button.visible, "A failed growth write leaves a visible retry action")
 	app.cards[app.model.cards[0].id].pressed.emit()
 	selected_id = app.model.selected_id
 	lesson = app.model.lesson_words.duplicate(true)
 	storage.writable = true
 	app._storage_retry_button.pressed.emit()
-	check(not app._journey_save_failed and state.recent_topic_ids == ["space-trip"], "Retry saves the pending visit")
-	check(app.model.lesson_words == lesson and app.model.selected_id == selected_id, "Retry never restarts the active Match attempt")
-	check(not app._storage_retry_button.visible and state.preferred_theme_id == "space", "Recovery keeps the selected world and clears the retry")
+	check(not app._growth_save_failed and state.streak("cat") == 1,
+		"Retry saves the pending learning attempt once")
+	check(app.model.lesson_words == lesson and app.model.selected_id == selected_id,
+		"Retry never restarts the active Match attempt")
+	check(not app._storage_retry_button.visible, "Successful recovery clears the retry action")
 	storage.readable = false
-	app.playroom_state = load("res://scripts/playroom_state.gd").new(directory + "/retry.cfg", storage)
-	app._playroom_ready = false
-	app._preferred_theme = ""
-	app._pending_visit_id = "music-makers"
-	app._save_journey()
-	check(app._journey_save_failed, "Unavailable saved choices stay explicit")
+	app.growth = load("res://scripts/growth_state.gd").new(directory + "/retry.cfg", storage)
+	app.growth.configure(app.data.words)
+	app._growth_save_failed = not app.growth.load_state()
+	app._refresh()
+	check(app._growth_save_failed, "Unavailable learning progress stays explicit")
 	storage.readable = true
 	app._storage_retry_button.pressed.emit()
-	check(not app._journey_save_failed and app._preferred_theme == "space"
-		and app.playroom_state.recent_topic_ids[0] == "music-makers", "Retry recovers prior choices and the pending visit")
+	check(not app._growth_save_failed and app.growth.streak("cat") == 1,
+		"Retry recovers earlier learning progress without losing a saved attempt")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

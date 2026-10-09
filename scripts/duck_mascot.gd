@@ -3,18 +3,19 @@ extends Button
 signal gameplay_reaction_finished(correct: bool)
 
 const SHEET = preload("res://assets/images/mascots/pip.svg")
-const IDLE_SHEET = preload("res://assets/images/mascots/pip-idle-actions.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
 const Outfits = preload("res://scripts/pip_outfits.gd")
-const LoadingMoves = preload("res://scripts/pip_loading_moves.gd")
+const GROWTH_CATALOG_PATH := "res://data/pip-growth-stages.json"
 const Style = preload("res://scripts/ui_style.gd")
-const IDLE_ACTIONS := ["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"]
-const IDLE_DANCES := ["dance-wave", "dance-sway", "dance-hop"]
+const GROWTH_ACTION_SECONDS := {"wave": 1.8, "look": 1.9, "high-five": 1.7,
+	"peekaboo": 2.1, "stretch": 2.2, "hop": 1.7, "dance-sway": 2.8,
+	"flutter": 1.9, "dance-wave": 2.9, "dance-hop": 3.2}
+const GROWTH_ACTION_CAPTIONS := {"wave": "Hello from Pip!", "look": "Pip is curious!",
+	"high-five": "High five!", "peekaboo": "Peekaboo!", "stretch": "A little stretch!",
+	"hop": "A happy little hop!", "dance-sway": "Sway with Pip!", "flutter": "Flutter, flutter!",
+	"dance-wave": "Pip's two-step wave!", "dance-hop": "Pip's celebration dance!"}
 const IDLE_SECONDS: float = 1.8
-const DANCE_SECONDS: float = 3.2
 const PROACTIVE_IDLE_SECONDS: float = 6.0
-const TRICK_SECONDS: float = 1.8
-const ROOM_REACTION_SECONDS: float = 1.1
 const GAMEPLAY_HAPPY_SECONDS: float = 1.25
 const GAMEPLAY_SAD_SECONDS: float = 1.35
 const CELEBRATION_SECONDS: float = 3.0
@@ -23,7 +24,6 @@ const EXPRESSION_NAMES := ["neutral", "listening", "thinking", "delighted", "pro
 const HAPPY_EXPRESSIONS := ["delighted", "wink", "proud"]
 const GAMEPLAY_PIVOTS := [Vector2(61, 98), Vector2(61, 72), Vector2(33, 78),
 	Vector2(88, 78), Vector2(40, 103), Vector2(80, 103)]
-const SOCIAL_TRICKS := ["high-five", "peekaboo", "flutter"]
 const CELEBRATION_POSES := {
 	"rest": [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO],
 	"left": [Vector3(-4, 3, -4), Vector3(-5, 1, 4), Vector3(-4, 2, 78), Vector3(-4, 2, -22), Vector3.ZERO, Vector3(0, -5, 9)],
@@ -43,19 +43,17 @@ const CELEBRATION_BEATS := [[0.0, "rest"], [0.18, "crouch"], [0.25, "push-off"],
 	[0.52, "leap"], [0.82, "touchdown"], [0.9, "land"], [0.99, "recover"],
 	[1.15, "left"], [1.31, "recover"], [1.5, "right"], [1.65, "recover"],
 	[1.85, "present-reach"], [2.4, "present"], [3.0, "present"]]
-const TRICK_CAPTIONS := {
-	"dance": "Pip's happy dance!", "snack": "Crunch! A carrot for Pip!", "bubbles": "Pop! Bubble party!",
-	"high-five": "High five, friend!", "peekaboo": "Peekaboo! Here is Pip!", "flutter": "Flutter, flutter! Hello!"
-}
 
 var speaking: bool = false
 var reduced_motion: bool = false
 var compact: bool = false
-var home_playground: bool = false
 var pose: int = 0
 var reaction_left: float = 0.0
 var accent: Color = Style.GOOD
 var theme_id: String = "spring"
+var growth_level: int = 3
+var _growth_stage: Dictionary = {}
+static var _growth_definitions: Array = []
 var _outfit_sheet: Texture2D
 var _outfit_idle_sheet: Texture2D
 var _outfit_dance_sheet: Texture2D
@@ -70,20 +68,14 @@ var _gameplay_variant: int = 0
 var _reaction: String = ""
 var _idle_time: float = 0.0
 var _speech_time: float = 0.0
-var _trick: String = ""
-var _trick_left: float = 0.0
 var _idle_action: String = ""
+var _growth_action_manual: bool = false
 var _idle_left: float = 0.0
 var _idle_wait: float = PROACTIVE_IDLE_SECONDS
 var _idle_index: int = 0
 var _idle_paused: bool = false
 var _proactive_allowed: bool = false
 var _idle_rng := RandomNumberGenerator.new()
-var _room_motion: String = ""
-var _room_direction: float = 1.0
-var _room_step: float = 0.0
-var _room_reaction: String = ""
-var _room_reaction_left: float = 0.0
 var _gameplay_reaction: String = ""
 var _gameplay_left: float = 0.0
 var _gameplay_seconds: float = GAMEPLAY_SAD_SECONDS
@@ -93,6 +85,7 @@ var _celebration_rest: float = 0.0
 
 func _ready() -> void:
 	_idle_rng.randomize()
+	set_growth_level(growth_level)
 	set_outfit_theme(theme_id)
 	name = "Pip"
 	custom_minimum_size = Vector2(72, 72)
@@ -110,6 +103,11 @@ func _ready() -> void:
 
 func set_outfit_theme(value: String) -> void:
 	var chosen := Outfits.normalize_theme(value)
+	if not _growth_stage.is_empty():
+		# World colors remain independent from Pip's earned growth appearance.
+		theme_id = chosen
+		queue_redraw()
+		return
 	if theme_id == chosen and _outfit_sheet != null:
 		return
 	var sheets: Array[Texture2D] = Outfits.load_sheets(chosen)
@@ -122,6 +120,75 @@ func set_outfit_theme(value: String) -> void:
 	_expression_heads = expressions[1]
 	# A wardrobe change is visual only: preserve speech, gestures and quiet timing.
 	queue_redraw()
+
+
+func set_growth_level(value: int) -> void:
+	var chosen: int = clampi(value, 3, 12)
+	if growth_level == chosen and not _growth_stage.is_empty():
+		return
+	if _growth_definitions.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(GROWTH_CATALOG_PATH))
+		if parsed is Dictionary and parsed.get("stages") is Array:
+			_growth_definitions = parsed.stages
+	var stage: Dictionary = {}
+	for definition in _growth_definitions:
+		if definition is Dictionary and int(definition.get("level", 0)) == chosen:
+			stage = definition
+			break
+	if stage.is_empty():
+		push_error("Missing Pip growth stage for level %d." % chosen)
+		return
+	var art: Dictionary = stage.get("art", {})
+	var sheets: Array[Texture2D] = []
+	for kind in ["regular", "idle", "parts", "expressions", "expressionHeads"]:
+		var asset_path: String = "res://" + str(art.get(kind, ""))
+		var texture: Texture2D = load(asset_path) as Texture2D
+		if texture == null:
+			push_error("Missing Pip growth artwork: " + asset_path)
+			return
+		sheets.append(texture)
+	growth_level = chosen
+	_growth_stage = stage.duplicate(true)
+	_outfit_sheet = sheets[0]
+	_outfit_idle_sheet = sheets[1]
+	_outfit_dance_sheet = sheets[2]
+	_expression_sheet = sheets[3]
+	_expression_heads = sheets[4]
+	_reset_idle()
+	# Keep final-answer reactions and shared celebration on their original clock.
+	_update_pose()
+
+
+func growth_actions() -> Array[String]:
+	var result: Array[String] = []
+	for action in _growth_stage.get("actions", ["wave"]):
+		result.append(str(action))
+	return result
+
+
+func growth_voice_path() -> String:
+	var voice: Dictionary = _growth_stage.get("newVoice", {})
+	return "res://" + str(voice.get("path", "")) if voice.has("path") else ""
+
+
+func perform_growth_action(kind: String = "") -> bool:
+	if _celebration_progress >= 0.0 or not _gameplay_reaction.is_empty() or _idle_paused or speaking or not is_visible_in_tree() or is_manual_action_busy():
+		return false
+	var available: Array[String] = growth_actions()
+	if available.is_empty():
+		return false
+	var chosen: String = available[_idle_index % available.size()] if kind.is_empty() else kind
+	if not chosen in available:
+		return false
+	_reset_idle()
+	_idle_action = chosen
+	_growth_action_manual = true
+	_idle_index += 1
+	_idle_left = 0.0 if reduced_motion else _idle_duration()
+	reaction_left = 0.0
+	set_process(not reduced_motion)
+	_update_pose()
+	return true
 
 
 func set_speaking(value: bool) -> void:
@@ -139,7 +206,8 @@ func set_attention(kind: String) -> void:
 	if not kind.is_empty() and (_idle_paused or not is_visible_in_tree()):
 		return
 	_attention = kind
-	_reset_idle()
+	if not _growth_action_manual:
+		_reset_idle()
 	_update_pose()
 
 
@@ -154,21 +222,13 @@ func set_reduced_motion(value: bool) -> void:
 		return
 	reduced_motion = value
 	_reset_idle()
-	if value:
-		_trick_left = 0.0
-		_room_reaction_left = 0.0
-	elif is_zero_approx(_trick_left):
-		_trick = ""
-	if not value and is_zero_approx(_room_reaction_left):
-		_room_reaction = ""
 	if not value and is_zero_approx(_gameplay_left):
 		_gameplay_reaction = ""
 	_visibility_changed()
 	_update_pose()
 
-
 func react(kind: String = "happy") -> void:
-	if _celebration_progress >= 0.0 or not _gameplay_reaction.is_empty() or _idle_paused or not is_visible_in_tree():
+	if _celebration_progress >= 0.0 or not _gameplay_reaction.is_empty() or _growth_action_manual or _idle_paused or not is_visible_in_tree():
 		return
 	if not kind in ["happy", "curious"] and not kind in EXPRESSION_NAMES:
 		return
@@ -186,10 +246,7 @@ func react(kind: String = "happy") -> void:
 func react_gameplay(correct: bool, duration: float = 0.0) -> void:
 	if _celebration_progress >= 0.0 or _idle_paused or not is_visible_in_tree():
 		return
-	clear_room_interaction()
 	_reset_idle()
-	_trick = ""
-	_trick_left = 0.0
 	reaction_left = 0.0
 	_reaction = ""
 	_gameplay_reaction = "happy" if correct else "sad"
@@ -220,14 +277,12 @@ func settle() -> void:
 	_celebration_progress = -1.0
 	_celebration_rest = 0.0
 	clear_gameplay_reaction()
-	clear_room_interaction()
 	_reset_idle()
 	reaction_left = 0.0
 	_reaction = ""
 	_reaction_face = ""
 	_attention = ""
 	_idle_time = 0.0
-	clear_trick()
 	set_speaking(false)
 	_update_pose()
 
@@ -253,88 +308,21 @@ func clear_celebration() -> void:
 
 
 func perform_trick(kind: String) -> String:
-	if _celebration_progress >= 0.0 or not TRICK_CAPTIONS.has(kind) or not _gameplay_reaction.is_empty():
-		return ""
-	_reset_idle()
-	_trick = kind
-	_trick_left = 0.0 if reduced_motion else TRICK_SECONDS
-	reaction_left = 0.0
-	_update_pose()
-	return TRICK_CAPTIONS[kind]
-
+	return str(GROWTH_ACTION_CAPTIONS.get(kind, "")) if perform_growth_action(kind) else ""
 
 func is_manual_action_busy() -> bool:
 	# Static reduced-motion poses have no remaining animation to wait for.
-	return _trick_left > 0.0 or _room_reaction_left > 0.0 or _gameplay_left > 0.0
-
-
-func clear_trick() -> void:
-	_trick = ""
-	_trick_left = 0.0
-	_update_pose()
-
-
-func set_room_motion(kind: String, direction: float = 1.0) -> void:
-	if not kind in ["", "walk", "run"]:
-		return
-	if not kind.is_empty() and (_idle_paused or not is_visible_in_tree()):
-		return
-	if not kind.is_empty():
-		clear_gameplay_reaction()
-	_room_direction = -1.0 if direction < 0.0 else 1.0
-	if _room_motion == kind:
-		queue_redraw()
-		return
-	_reset_idle()
-	_room_motion = kind
-	_room_step = 0.0
-	if not kind.is_empty():
-		_room_reaction = ""
-		_room_reaction_left = 0.0
-		reaction_left = 0.0
-		clear_trick()
-	_update_pose()
-
-
-func react_in_room(kind: String) -> void:
-	if (not kind in ["pet", "poke", "catch"] and not kind in SOCIAL_TRICKS and not kind in LoadingMoves.REACTIONS) or _idle_paused or not is_visible_in_tree():
-		return
-	clear_gameplay_reaction()
-	_reset_idle()
-	_room_motion = ""
-	_room_step = 0.0
-	_room_reaction = kind
-	_room_reaction_left = 0.0 if reduced_motion else _room_reaction_duration()
-	reaction_left = 0.0
-	clear_trick()
-	_update_pose()
-
-
-func clear_room_interaction() -> void:
-	if _room_motion.is_empty() and _room_reaction.is_empty():
-		return
-	_room_motion = ""
-	_room_reaction = ""
-	_room_reaction_left = 0.0
-	_room_step = 0.0
-	_room_direction = 1.0
-	_idle_time = 0.0
-	reaction_left = 0.0
-	_reaction = ""
-	_reset_idle()
-	_update_pose()
-
+	return _gameplay_left > 0.0 or (_growth_action_manual and _idle_left > 0.0)
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		clear_gameplay_reaction()
-		clear_room_interaction()
 		_reset_idle()
 		reaction_left = 0.0
 		_reaction_face = ""
 		_attention = ""
-		clear_trick()
 	set_process(_celebration_progress < 0.0 and is_visible_in_tree() and (not reduced_motion or _gameplay_left > 0.0 or reaction_left > 0.0) and not _idle_paused)
+	_update_pose()
 
 
 func set_idle_paused(value: bool) -> void:
@@ -343,7 +331,6 @@ func set_idle_paused(value: bool) -> void:
 	_idle_paused = value
 	if value:
 		clear_gameplay_reaction()
-		clear_room_interaction()
 		reaction_left = 0.0
 		_reaction_face = ""
 		_attention = ""
@@ -353,6 +340,8 @@ func set_idle_paused(value: bool) -> void:
 
 
 func note_activity() -> void:
+	if _growth_action_manual:
+		return
 	var interrupted: bool = not _idle_action.is_empty()
 	_reset_idle()
 	if interrupted:
@@ -367,44 +356,27 @@ func set_proactive_allowed(value: bool) -> void:
 	note_activity()
 
 
-func set_home_playground(value: bool) -> void:
-	if home_playground == value:
-		return
-	home_playground = value
-	_reset_idle()
-	queue_redraw()
-
-
-func _room_reaction_duration() -> float:
-	return LoadingMoves.duration(_room_reaction) if _room_reaction in LoadingMoves.REACTIONS else ROOM_REACTION_SECONDS
-
-
 func _reset_idle() -> void:
 	_idle_action = ""
+	_growth_action_manual = false
 	_idle_left = 0.0
-	_idle_wait = 0.35 if home_playground else _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 3.0)
+	_idle_wait = _idle_rng.randf_range(PROACTIVE_IDLE_SECONDS, PROACTIVE_IDLE_SECONDS + 3.0)
 
 
 func _idle_duration() -> float:
-	if _idle_action == "home-dance": return LoadingMoves.DANCE_SECONDS
-	return DANCE_SECONDS if _idle_action in IDLE_DANCES else IDLE_SECONDS
-
+	return float(GROWTH_ACTION_SECONDS.get(_idle_action, IDLE_SECONDS))
 
 func _advance_idle(delta: float) -> void:
+	if _growth_action_manual:
+		_idle_left = maxf(0.0, _idle_left - delta)
+		if is_zero_approx(_idle_left):
+			_reset_idle()
+		return
 	# A resumed tab or a long engine frame must not catch up missed gestures.
 	if delta > 0.5:
 		_reset_idle()
 		return
-	if not _proactive_allowed or speaking or not _attention.is_empty() or not _gameplay_reaction.is_empty() or reaction_left > 0.0 or not _trick.is_empty() or not _room_motion.is_empty() or not _room_reaction.is_empty():
-		return
-	if home_playground:
-		if _idle_action == "home-dance":
-			_idle_left = fposmod(_idle_left - delta, LoadingMoves.DANCE_SECONDS)
-		else:
-			_idle_wait -= delta
-			if _idle_wait <= 0.0:
-				_idle_action = "home-dance"
-				_idle_left = LoadingMoves.DANCE_SECONDS
+	if (not _proactive_allowed and _idle_action.is_empty()) or speaking or not _attention.is_empty() or not _gameplay_reaction.is_empty() or reaction_left > 0.0:
 		return
 	if not _idle_action.is_empty():
 		_idle_left = maxf(0.0, _idle_left - delta)
@@ -413,9 +385,8 @@ func _advance_idle(delta: float) -> void:
 		return
 	_idle_wait -= delta
 	if _idle_wait <= 0.0:
-		# Lead with a dance, then alternate full routines with smaller greetings.
-		var cycle: int = int(_idle_index / 2)
-		_idle_action = IDLE_DANCES[cycle % IDLE_DANCES.size()] if _idle_index % 2 == 0 else IDLE_ACTIONS[cycle % IDLE_ACTIONS.size()]
+		var available: Array[String] = growth_actions()
+		_idle_action = available[_idle_index % available.size()]
 		_idle_index += 1
 		_idle_left = _idle_duration()
 
@@ -430,21 +401,10 @@ func _update_pose(force_redraw: bool = true) -> void:
 		pose = 3 if _gameplay_reaction == "happy" else 2
 	elif speaking:
 		pose = 1 if reduced_motion else 1 - int(_speech_time * 8.0) % 2
-	elif not _room_reaction.is_empty():
-		if _room_reaction in SOCIAL_TRICKS:
-			pose = _trick_pose(_room_reaction, 0.45 if reduced_motion else 1.0 - _room_reaction_left / ROOM_REACTION_SECONDS)
-		else:
-			pose = 2 if _room_reaction == "pet" else 1 if _room_reaction == "poke" else 3
-	elif not _room_motion.is_empty():
-		pose = 3 if _room_motion == "run" else 0
-	elif not _trick.is_empty():
-		pose = _trick_pose(_trick, 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS)
 	elif reaction_left > 0.0 and _reaction == "happy":
 		pose = 3
-	elif _idle_action in ["high-five", "peekaboo"]:
-		pose = _trick_pose(_idle_action, 1.0 - _idle_left / IDLE_SECONDS)
-	elif _idle_action == "wave" or _idle_action == "hop":
-		pose = 3 if sin((1.0 - _idle_left / IDLE_SECONDS) * TAU * 2.0) > 0.0 else 0
+	elif not _idle_action.is_empty():
+		pose = 3
 	elif not reduced_motion and fmod(_idle_time, 4.6) > 4.42:
 		pose = 2
 	_face_name = _select_expression()
@@ -476,51 +436,20 @@ func _select_expression() -> String:
 		if progress < 0.14:
 			return "surprised"
 		return HAPPY_EXPRESSIONS[_gameplay_variant] if progress < 0.82 else "proud"
-	if not _room_reaction.is_empty():
-		var progress: float = 0.45 if reduced_motion else 1.0 - _room_reaction_left / _room_reaction_duration()
-		match _room_reaction:
-			"pet": return "proud"
-			"poke": return "surprised" if progress < 0.55 else "wink"
-			"catch", "high-five": return "delighted"
-			"jump": return "surprised" if progress < 0.18 else "delighted"
-			"shy": return "blink" if progress < 0.28 else "proud"
-			"bonk": return "surprised" if progress < 0.6 else "encourage"
-			"peekaboo": return "blink" if progress < 0.55 else "delighted"
-			"flutter": return ""
 	if speaking:
 		return ""
-	if not _room_motion.is_empty():
-		return ""
-	if not _trick.is_empty():
-		var progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
-		if _trick == "peekaboo":
-			return "blink" if progress < 0.55 else "delighted"
-		return "" if _trick in ["snack", "flutter"] else "delighted"
 	if reaction_left > 0.0:
 		return _reaction_face
+	if not _growth_stage.is_empty() and not _idle_action.is_empty():
+		var progress: float = 1.0 if reduced_motion else 1.0 - _idle_left / _idle_duration()
+		return str(_growth_action_pose(_idle_action, progress, reduced_motion).face)
 	if not _attention.is_empty():
 		return _attention
-	if _idle_action == "home-dance":
-		var progress: float = 1.0 - _idle_left / _idle_duration()
-		return "wink" if progress > 0.7 and progress < 0.85 else "delighted"
-	if _idle_action in IDLE_DANCES:
-		var progress: float = 1.0 - _idle_left / DANCE_SECONDS
-		return "delighted" if progress > 0.12 and progress < 0.76 else "wink" if progress >= 0.76 and progress < 0.9 else ""
-	if _idle_action in ["wave", "hop", "high-five"]:
-		return "wink" if _idle_action == "wave" else "delighted"
-	if _idle_action == "peekaboo":
-		return "blink" if pose == 2 else "delighted"
-	if _proactive_allowed and not reduced_motion and _idle_action.is_empty() and _room_motion.is_empty():
+	if _proactive_allowed and not reduced_motion and _idle_action.is_empty():
 		var quiet_time: float = fmod(_idle_time, 18.0)
 		if quiet_time > 13.9 and quiet_time < 14.65:
 			return "sleepy"
 	return ""
-
-
-func _trick_pose(kind: String, progress: float) -> int:
-	if kind == "peekaboo":
-		return 2 if progress < 0.55 else 3
-	return 3 if kind in ["dance", "high-five", "flutter"] else 1
 
 
 func _process(delta: float) -> void:
@@ -549,17 +478,6 @@ func _process(delta: float) -> void:
 		return
 	_idle_time += delta
 	_speech_time += delta
-	if not _room_motion.is_empty():
-		_room_step += minf(delta, 0.1) * (4.2 if _room_motion == "run" else 2.3)
-	if _room_reaction_left > 0.0:
-		_room_reaction_left = maxf(0.0, _room_reaction_left - delta)
-		if is_zero_approx(_room_reaction_left):
-			_room_reaction = ""
-			_reset_idle()
-	if _trick_left > 0.0:
-		_trick_left = maxf(0.0, _trick_left - delta)
-		if is_zero_approx(_trick_left):
-			_trick = ""
 	_advance_idle(delta)
 	# Idle and speech use discrete sheet frames. Keep their draw commands until
 	# the pose changes, while every continuous motion and its final frame redraw.
@@ -567,10 +485,7 @@ func _process(delta: float) -> void:
 
 
 func _has_continuous_pose() -> bool:
-	return reaction_left > 0.0 or not _gameplay_reaction.is_empty() \
-		or not _idle_action.is_empty() or not _trick.is_empty() \
-		or not _room_motion.is_empty() or not _room_reaction.is_empty()
-
+	return reaction_left > 0.0 or not _gameplay_reaction.is_empty() or not _idle_action.is_empty()
 
 func _draw() -> void:
 	var edge: float = 54.0 if compact else minf(size.x, size.y)
@@ -581,122 +496,122 @@ func _draw() -> void:
 	if not _gameplay_reaction.is_empty():
 		_draw_gameplay_reaction(origin, edge)
 		return
-	# Explicit tap feedback wins even while a previous word finishes speaking.
-	if _room_reaction in LoadingMoves.REACTIONS or (not speaking and _idle_action == "home-dance"):
-		_draw_loading_moves(origin, edge)
+	if not _growth_stage.is_empty() and not speaking and not _idle_action.is_empty():
+		_draw_growth_action(origin, edge)
 		return
 	var wave: float = sin((1.0 - reaction_left / 0.65) * PI) if reaction_left > 0.0 and not reduced_motion else 0.0
 	var turn: float = (-0.07 if _reaction == "curious" else 0.07) * wave
-	var trick_progress: float = 0.45 if reduced_motion else 1.0 - _trick_left / TRICK_SECONDS
 	var bounce: float = -wave * edge * 0.07
 	var stretch := Vector2(1 + wave * 0.04, 1 - wave * 0.03)
-	var sheet: Texture2D = SHEET
+	var center := origin + Vector2(edge * 0.5, edge * 0.75)
+	draw_set_transform(center + Vector2(0, bounce), turn, stretch)
+	var outfit: Texture2D = _outfit_sheet if _outfit_sheet != null else SHEET
 	var frame: int = pose
-	var social_action: String = _trick
-	var social_progress: float = trick_progress
-	if not _idle_action.is_empty():
-		var progress: float = 1.0 - _idle_left / _idle_duration()
-		var envelope: float = sin(progress * PI)
-		if _idle_action in ["high-five", "peekaboo"]:
-			social_action = _idle_action
-			social_progress = progress
-		match _idle_action:
-			"look":
-				sheet = IDLE_SHEET
-				frame = 0 if progress < 0.5 else 1
-				turn = sin(progress * TAU) * 0.09
-			"stretch":
-				sheet = IDLE_SHEET
-				frame = 2
-				stretch = Vector2(1.0 - envelope * 0.05, 1.0 + envelope * 0.06)
-			"preen":
-				sheet = IDLE_SHEET
-				frame = 3
-				turn = envelope * 0.09 + sin(progress * TAU * 2.0) * 0.025
-			"wave":
-				turn = sin(progress * TAU * 2.0) * 0.08
-			"hop":
-				var lift: float = absf(sin(progress * TAU))
-				bounce = -lift * edge * 0.07
-				stretch = Vector2(1.0 - lift * 0.025, 1.0 + lift * 0.035)
-	if _room_reaction in SOCIAL_TRICKS:
-		social_action = _room_reaction
-		social_progress = 0.45 if reduced_motion else 1.0 - _room_reaction_left / ROOM_REACTION_SECONDS
-	if _trick == "dance" and not reduced_motion:
-		turn += sin(trick_progress * TAU * 3.0) * 0.13
-		bounce -= absf(sin(trick_progress * TAU * 3.0)) * edge * 0.055
-	elif _trick == "snack" and not reduced_motion:
-		turn += sin(trick_progress * TAU * 2.0) * 0.045
-	elif social_action == "high-five":
-		var reach: float = 0.7 if reduced_motion else sin(social_progress * PI)
-		turn = -reach * 0.085
-		stretch = Vector2(1.0, 1.0 + reach * 0.035)
-	elif social_action == "peekaboo":
-		var peek: float = 0.7 if reduced_motion else sin(social_progress * PI)
-		turn = (-0.065 if social_progress < 0.55 else 0.045) * peek
-		bounce = edge * 0.025 * peek
-	elif social_action == "flutter":
-		var flap: float = 0.7 if reduced_motion else sin(social_progress * TAU * 4.0)
-		turn = 0.0 if reduced_motion else flap * 0.045
-		bounce = 0.0 if reduced_motion else -absf(flap) * edge * 0.06
-		stretch = Vector2(1.0 + absf(flap) * 0.035, 1.0 - absf(flap) * 0.025)
-		if not speaking and flap > 0.0:
-			sheet = IDLE_SHEET
-			frame = 2
-	if not _room_motion.is_empty():
-		var running: bool = _room_motion == "run"
-		var stride: float = 0.0 if reduced_motion else sin(_room_step * TAU)
-		turn = _room_direction * (0.12 if running else 0.055) + stride * (0.07 if running else 0.04)
-		bounce = -absf(stride) * edge * (0.065 if running else 0.025)
-		stretch = Vector2(1.0 + absf(stride) * 0.025, 1.0 - absf(stride) * 0.02)
-		if not speaking:
-			sheet = SHEET if running and stride > 0.0 else IDLE_SHEET
-			frame = 3 if sheet == SHEET else 0 if _room_direction < 0.0 else 1
-	if not _room_reaction.is_empty():
-		var progress: float = 0.4 if reduced_motion else 1.0 - _room_reaction_left / ROOM_REACTION_SECONDS
-		var pulse: float = 0.7 if reduced_motion else sin(progress * PI)
-		match _room_reaction:
-			"pet":
-				turn = -0.1 * pulse
-				stretch = Vector2.ONE * (1.0 + pulse * 0.035)
-				bounce = 0.0
-			"poke":
-				turn = 0.0
-				bounce = 0.0 if reduced_motion else -absf(sin(minf(progress * 2.0, 1.0) * PI)) * edge * 0.1
-				stretch = Vector2(0.96, 1.04)
-			"catch":
-				turn = 0.0 if reduced_motion else sin(progress * TAU * 2.0) * 0.06
-				bounce = 0.0 if reduced_motion else -pulse * edge * 0.055
-				if not speaking:
-					sheet = IDLE_SHEET
-					frame = 2
-	var dancing: bool = not reduced_motion and not speaking and (_idle_action in IDLE_DANCES or _trick == "dance")
-	if dancing:
-		var routine: String = _idle_action if _idle_action in IDLE_DANCES else "dance-wave"
-		var progress: float = 1.0 - _idle_left / DANCE_SECONDS if _idle_action in IDLE_DANCES else trick_progress
-		_draw_dance(origin, edge, routine, progress)
-	else:
-		var center := origin + Vector2(edge * 0.5, edge * 0.75)
-		draw_set_transform(center + Vector2(0, bounce), turn, stretch)
-		var outfit: Texture2D = _outfit_idle_sheet if sheet == IDLE_SHEET else _outfit_sheet
-		if outfit == null:
-			outfit = sheet
-		if not _face_name.is_empty() and _expression_sheet != null:
-			outfit = _expression_sheet
-			frame = EXPRESSION_NAMES.find(_face_name)
-		var source_edge: float = outfit.get_height()
-		draw_texture_rect_region(outfit, Rect2(origin - center, Vector2.ONE * edge),
-			Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
-		draw_set_transform(Vector2.ZERO)
-	_draw_room_effects(origin, edge)
-	if not _trick.is_empty():
-		_draw_trick(origin, edge, trick_progress)
-	elif _idle_action in ["high-five", "peekaboo"]:
-		_draw_trick(origin, edge, social_progress, _idle_action)
+	if not _face_name.is_empty() and _expression_sheet != null:
+		outfit = _expression_sheet
+		frame = EXPRESSION_NAMES.find(_face_name)
+	var source_edge: float = outfit.get_height()
+	draw_texture_rect_region(outfit, Rect2(origin - center, Vector2.ONE * edge),
+		Rect2(Vector2(float(frame) * source_edge, 0), Vector2.ONE * source_edge))
+	draw_set_transform(Vector2.ZERO)
 	if speaking:
 		for index in range(2):
 			draw_arc(origin + Vector2(edge * 0.8, edge * 0.55), edge * (0.08 + index * 0.06),
 				-0.75, 0.75, 12, accent, 1.6, true)
+
+static func _growth_action_pose(kind: String, progress: float, reduced: bool = false) -> Dictionary:
+	var parts: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO,
+		Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+	if reduced:
+		return {"parts": parts, "face": "delighted"}
+	var p: float = clampf(progress, 0.0, 1.0)
+	var envelope: float = smoothstep(0.0, 0.14, p) * (1.0 - smoothstep(0.82, 1.0, p))
+	var beat: float = sin(p * PI * 4.0)
+	var face: String = "proud"
+	match kind:
+		"wave":
+			parts[2].z = (79.0 + sin(p * PI * 6.0) * 15.0) * envelope
+			parts[1].z = 4.0 * envelope
+			face = "wink" if p > 0.45 and p < 0.58 else "encourage"
+		"look":
+			var direction: float = sin(p * TAU)
+			parts[1] = Vector3(direction * 2.8, -0.7, direction * 8.0) * envelope
+			parts[0].z = direction * 2.0 * envelope
+			face = "thinking"
+		"high-five":
+			parts[3] = Vector3(0.0, -1.2, -82.0) * envelope
+			parts[1] = Vector3(2.0, -1.2, -4.0) * envelope
+			parts[0].z = 2.0 * envelope
+			face = "delighted"
+		"peekaboo":
+			var hiding: float = smoothstep(0.0, 0.16, p) * (1.0 - smoothstep(0.43, 0.59, p))
+			parts[2].z = 126.0 * hiding + 58.0 * envelope * (1.0 - hiding)
+			parts[3].z = -parts[2].z
+			parts[1].y = 2.5 * hiding
+			face = "blink" if p < 0.48 else "surprised" if p < 0.63 else "delighted"
+		"stretch":
+			parts[2].z = 66.0 * envelope
+			parts[3].z = -66.0 * envelope
+			parts[0].y = -2.0 * envelope
+			parts[1].y = -3.5 * envelope
+			face = "blink" if p < 0.5 else "proud"
+		"hop":
+			var jump: float = maxf(0.0, sin((p - 0.18) / 0.47 * PI)) if p > 0.18 and p < 0.65 else 0.0
+			var crouch: float = sin(p / 0.18 * PI) * 4.0 if p < 0.18 else 0.0
+			var settle: float = sin((p - 0.65) / 0.2 * PI) * 3.0 if p > 0.65 and p < 0.85 else 0.0
+			for index in range(parts.size()):
+				parts[index].y = -17.0 * jump
+			parts[0].y += crouch + settle
+			parts[1].y += crouch * 1.3 + settle * 1.5
+			parts[2].z = 82.0 * envelope
+			parts[3].z = -82.0 * envelope
+			parts[4].z = -12.0 * jump
+			parts[5].z = 12.0 * jump
+			face = "surprised" if p < 0.18 else "delighted"
+		"flutter":
+			parts[2].z = (76.0 + sin(p * PI * 15.0) * 18.0) * envelope
+			parts[3].z = -parts[2].z
+			parts[1].z = 4.0 * envelope
+			face = "delighted"
+		"dance-sway", "dance-wave", "dance-hop":
+			var left: float = maxf(0.0, beat) * envelope
+			var right: float = maxf(0.0, -beat) * envelope
+			var sway: bool = kind == "dance-sway"
+			var hop: bool = kind == "dance-hop"
+			var lift: float = absf(sin(p * PI * 3.0)) * 12.0 * envelope if hop else absf(beat) * 1.6 * envelope
+			var hips: float = beat * (6.0 if sway else 3.0) * envelope
+			parts[0] = Vector3(hips, -lift, (-5.0 if sway else 3.0) * beat * envelope)
+			parts[1] = Vector3(hips * 0.5, -lift, (4.0 if sway else -2.0) * beat * envelope)
+			parts[2] = Vector3(hips, -lift, 85.0 * envelope if hop else 35.0 * envelope + 32.0 * left if sway else 96.0 * left)
+			parts[3] = Vector3(hips, -lift, -85.0 * envelope if hop else -35.0 * envelope - 32.0 * right if sway else -96.0 * right)
+			parts[4] = Vector3(hips * 0.2, -lift if hop else -4.0 * right, -7.0 * left)
+			parts[5] = Vector3(hips * 0.2, -lift if hop else -4.0 * left, 7.0 * right)
+			face = "blink" if p > 0.45 and p < 0.5 else "proud" if p > 0.83 else "delighted"
+	return {"parts": parts, "face": face}
+
+
+func _draw_growth_action(origin: Vector2, edge: float) -> void:
+	var progress: float = 1.0 if reduced_motion else 1.0 - _idle_left / _idle_duration()
+	var action: Dictionary = _growth_action_pose(_idle_action, progress, reduced_motion)
+	var parts: Array = action.parts
+	# Add headroom gradually around the planted baseline; no size jump at rest.
+	var envelope: float = 0.0 if reduced_motion else smoothstep(0.0, 0.14, progress) * (1.0 - smoothstep(0.82, 1.0, progress))
+	var inset: float = 1.0 - 0.18 * envelope
+	var unit: float = edge * inset / 120.0
+	var base_origin := origin + Vector2(edge * (1.0 - inset) * 0.5, edge * (1.0 - inset) * 112.0 / 120.0)
+	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
+	var lift: float = maxf(0.0, -float(parts[0].y)) / 23.0
+	draw_set_transform(base_origin + Vector2(61, 112) * unit, 0.0,
+		Vector2(39.0 - lift * 9.0, 5.0) * unit)
+	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14 - lift * 0.05))
+	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
+	var source_edge: float = outfit.get_height()
+	for index in [4, 5, 0, 1, 2, 3]:
+		var part: Vector3 = parts[index]
+		var transform: Transform2D = _gameplay_part_transform(index, Vector2(part.x, part.y), deg_to_rad(part.z))
+		draw_set_transform_matrix(base * transform)
+		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
+	draw_set_transform(Vector2.ZERO)
 
 
 static func _gameplay_arc(progress: float, start: float, finish: float) -> float:
@@ -849,182 +764,3 @@ func _draw_articulated_part(outfit: Texture2D, index: int, destination: Rect2, s
 	else:
 		draw_texture_rect_region(outfit, destination,
 			Rect2(Vector2(index * source_edge, 0), Vector2.ONE * source_edge))
-
-
-func _draw_loading_moves(origin: Vector2, edge: float) -> void:
-	var reacting: bool = _room_reaction in LoadingMoves.REACTIONS
-	var progress: float = 0.45 if reduced_motion else 1.0 - _room_reaction_left / _room_reaction_duration()
-	var transforms: Array[Transform2D] = LoadingMoves.reaction(_room_reaction, progress, reduced_motion) if reacting else LoadingMoves.dance(LoadingMoves.DANCE_SECONDS - _idle_left)
-	# Keep planted toes at the ordinary mascot baseline. The existing room slot
-	# has headroom for a jump without resizing or moving its touch target.
-	var unit: float = edge / 120.0
-	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), origin)
-	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
-	var source_edge: float = outfit.get_height()
-	draw_set_transform(origin + Vector2(61, 112) * unit, 0.0, Vector2(39, 5) * unit)
-	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14))
-	for index in [4, 5, 0, 1, 2, 3]:
-		draw_set_transform_matrix(base * transforms[index])
-		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
-		if index == 1 and reacting:
-			if _room_reaction == "bonk":
-				# Keep the stars inside the floor even when Pip stands at its edge.
-				for center in [Vector2(20, 20), Vector2(94, 12)]:
-					var points := PackedVector2Array()
-					for ray in range(8):
-						points.append(center + Vector2.from_angle(ray * PI / 4.0) * (7.0 if ray % 2 == 0 else 2.5))
-					draw_colored_polygon(points, Color("#ffd979"))
-	draw_set_transform(Vector2.ZERO)
-
-
-func _draw_dance(origin: Vector2, edge: float, routine: String, progress: float) -> void:
-	# Art moves within the original button; the hit area never follows a limb.
-	var envelope: float = smoothstep(0.0, 0.12, progress) * (1.0 - smoothstep(0.88, 1.0, progress))
-	var beat: float = sin(progress * TAU * 2.0)
-	var left: float = maxf(0.0, beat) * envelope
-	var right: float = maxf(0.0, -beat) * envelope
-	var hips := Vector2(beat * 3.0, -absf(beat) * 2.0) * envelope
-	var tilt: float = beat * 0.045 * envelope
-	var head_tilt: float = -tilt * 0.7
-	var left_wing: float = left * 1.9
-	var right_wing: float = -right * 1.9
-	var left_step: float = right * 3.0
-	var right_step: float = left * 3.0
-	if routine == "dance-sway":
-		hips = Vector2(beat * 8.0, -absf(beat) * 1.5) * envelope
-		tilt = -beat * 0.09 * envelope
-		head_tilt = beat * 0.08 * envelope
-		left_wing = (0.55 + left * 0.5) * envelope
-		right_wing = -(0.55 + right * 0.5) * envelope
-		left_step = left * 4.0
-		right_step = right * 4.0
-	elif routine == "dance-hop":
-		var hop: float = absf(sin(progress * PI * 3.0)) * envelope
-		hips = Vector2(0, -hop * 6.0)
-		tilt = beat * 0.035 * envelope
-		head_tilt = -tilt
-		left_wing = hop * 1.65
-		right_wing = -left_wing
-		left_step = hop * 2.0
-		right_step = left_step
-	# Ease the small inset in and out, leaving breathing room for raised wings.
-	var unit: float = edge / 120.0 * (1.0 - 0.035 * envelope)
-	var base := origin + Vector2(edge - unit * 120.0, edge - unit * 120.0) * 0.5
-	draw_set_transform(base + Vector2(61, 112) * unit, 0.0, Vector2(39, 5) * unit)
-	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14))
-	_draw_dance_part(4, base, unit, Vector2(40, 103), Vector2(hips.x * 0.3, hips.y - left_step), left * 0.16)
-	_draw_dance_part(5, base, unit, Vector2(80, 103), Vector2(hips.x * 0.3, hips.y - right_step), -right * 0.16)
-	_draw_dance_part(0, base, unit, Vector2(61, 98), hips, tilt)
-	_draw_dance_part(1, base, unit, Vector2(61, 72), Vector2(hips.x * 0.5, hips.y), head_tilt)
-	_draw_dance_part(2, base, unit, Vector2(33, 78), hips, left_wing + tilt)
-	_draw_dance_part(3, base, unit, Vector2(88, 78), hips, right_wing + tilt)
-	draw_set_transform(Vector2.ZERO)
-
-
-func _draw_dance_part(index: int, origin: Vector2, unit: float, joint: Vector2, offset: Vector2, angle: float) -> void:
-	draw_set_transform(origin + (joint + offset) * unit, angle, Vector2.ONE * unit)
-	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
-	var source_edge: float = outfit.get_height()
-	_draw_articulated_part(outfit, index, Rect2(-joint, Vector2(120, 120)), source_edge)
-
-
-func _draw_room_effects(origin: Vector2, edge: float) -> void:
-	if not _room_motion.is_empty():
-		for index in range(3):
-			var step: float = float(index) / 3.0 if reduced_motion else fmod(_room_step + float(index) / 3.0, 1.0)
-			var point := origin + Vector2(edge * (0.5 - _room_direction * (0.16 + step * 0.3)), edge * (0.9 + float(index % 2) * 0.05))
-			var tint := Color(Color("#a4784b"), (1.0 - step) * 0.5)
-			for toe in range(3):
-				draw_line(point, point + Vector2(_room_direction * edge * 0.025, (toe - 1) * edge * 0.022), tint, maxf(1.5, edge * 0.01), true)
-	if _room_reaction.is_empty():
-		return
-	var progress: float = 0.4 if reduced_motion else 1.0 - _room_reaction_left / ROOM_REACTION_SECONDS
-	if _room_reaction in SOCIAL_TRICKS:
-		_draw_trick(origin, edge, progress, _room_reaction)
-		return
-	var fade: float = 1.0 if reduced_motion else minf(1.0, (1.0 - progress) * 4.0)
-	if _room_reaction == "pet":
-		for index in range(3):
-			var point := origin + Vector2(edge * (0.12 + index * 0.37), edge * (0.24 - progress * 0.12 + float(index % 2) * 0.06))
-			var radius: float = edge * 0.032
-			var tint := Color(Color("#ec7b97"), fade)
-			draw_circle(point + Vector2(-radius * 0.6, 0), radius, tint)
-			draw_circle(point + Vector2(radius * 0.6, 0), radius, tint)
-			draw_colored_polygon(PackedVector2Array([point + Vector2(-radius * 1.5, radius * 0.3), point + Vector2(radius * 1.5, radius * 0.3), point + Vector2(0, radius * 2.0)]), tint)
-	elif _room_reaction == "poke":
-		var point := origin + Vector2(edge * 0.85, edge * 0.25)
-		draw_arc(point, edge * (0.055 + progress * 0.12), 0.0, TAU, 24, Color(accent, fade * 0.7), maxf(1.5, edge * 0.014), true)
-		draw_line(point + Vector2(0, -edge * 0.025), point + Vector2(0, edge * 0.025), Color(Style.INK, fade), maxf(2.0, edge * 0.017), true)
-		draw_circle(point + Vector2(0, edge * 0.055), edge * 0.012, Color(Style.INK, fade))
-	elif _room_reaction == "catch":
-		for index in range(5):
-			var point := origin + Vector2(edge * (0.1 + index * 0.2), edge * (0.18 + float(index % 2) * 0.13 - progress * 0.08))
-			var radius: float = edge * 0.024
-			var tint := Color(Color("#e0a52e"), fade)
-			draw_line(point - Vector2(radius, 0), point + Vector2(radius, 0), tint, maxf(2.0, edge * 0.012), true)
-			draw_line(point - Vector2(0, radius), point + Vector2(0, radius), tint, maxf(2.0, edge * 0.012), true)
-
-
-func _draw_trick(origin: Vector2, edge: float, progress: float, kind: String = "") -> void:
-	if kind.is_empty():
-		kind = _trick
-	var fade: float = 1.0 if reduced_motion else clampf((1.0 - progress) * 5.0, 0.0, 1.0)
-	if kind == "dance":
-		for index in range(3):
-			var beat: float = 0.0 if reduced_motion else sin(progress * TAU * 3.0 + index)
-			var point := origin + Vector2(edge * (0.16 + index * 0.32), edge * (0.15 - beat * 0.04))
-			var tint := Color(accent, fade)
-			draw_circle(point, edge * 0.025, tint)
-			draw_line(point, point + Vector2(0, -edge * 0.07), tint, 2.0, true)
-			draw_line(point + Vector2(0, -edge * 0.07), point + Vector2(edge * 0.035, -edge * 0.05), tint, 2.0, true)
-	elif kind == "snack":
-		var bite: float = 1.0 if reduced_motion else 1.0 - floorf(progress * 3.0) * 0.16
-		var point := origin + Vector2(edge * 0.79, edge * 0.68)
-		var carrot := PackedVector2Array([point + Vector2(-edge * 0.045, -edge * 0.08),
-			point + Vector2(edge * 0.07, -edge * 0.04), point + Vector2(-edge * 0.03, edge * 0.12 * bite)])
-		draw_colored_polygon(carrot, Color(Color("#f09b42"), fade))
-		for index in range(3):
-			var top := point + Vector2(edge * 0.01, -edge * 0.065)
-			draw_line(top, top + Vector2((index - 1) * edge * 0.045, -edge * 0.08),
-				Color(Style.GOOD, fade), maxf(2.0, edge * 0.022), true)
-		for index in range(3):
-			var fall: float = 0.3 if reduced_motion else fmod(progress * 2.0 + index * 0.3, 1.0)
-			var crumb := point + Vector2((index - 1) * edge * 0.055, edge * (0.1 + fall * 0.13))
-			draw_circle(crumb, maxf(1.0, edge * 0.012), Color(Color("#f09b42"), fade))
-	elif kind == "bubbles":
-		for index in range(6):
-			var rise: float = float(index % 3) / 3.0 if reduced_motion else fmod(progress * 1.4 + index * 0.17, 1.0)
-			var radius: float = edge * (0.04 + float(index % 3) * 0.012)
-			var point := origin + Vector2(edge * (0.11 if index % 2 == 0 else 0.89), edge * (0.83 - rise * 0.65))
-			var alpha: float = fade if reduced_motion else fade * sin(rise * PI)
-			draw_circle(point, radius, Color(0.65, 0.86, 1.0, alpha * 0.24))
-			draw_arc(point, radius, 0.0, TAU, 20, Color(accent.lightened(0.3), alpha), 1.8, true)
-			draw_circle(point + Vector2(-radius * 0.3, -radius * 0.3), maxf(1.0, radius * 0.18), Color(1, 1, 1, alpha))
-	elif kind == "high-five":
-		var point := origin + Vector2(edge * 0.84, edge * 0.36)
-		var reach: float = 0.7 if reduced_motion else sin(progress * PI)
-		var tint := Color(accent, fade)
-		draw_arc(point, edge * (0.07 + reach * 0.035), -1.6, 0.7, 16, tint, maxf(1.8, edge * 0.016), true)
-		for index in range(3):
-			var direction := Vector2.from_angle(-1.45 + index * 0.85)
-			draw_line(point + direction * edge * 0.13, point + direction * edge * (0.15 + reach * 0.02),
-				tint, maxf(1.8, edge * 0.017), true)
-	elif kind == "peekaboo":
-		var cover: float = 0.85 if reduced_motion else 1.0 - smoothstep(0.25, 0.6, progress)
-		for side in [-1, 1]:
-			var point := origin + Vector2(edge * (0.51 + side * (0.15 + (1.0 - cover) * 0.13)),
-				edge * (0.41 + (1.0 - cover) * 0.28))
-			draw_set_transform(point, side * (0.3 + (1.0 - cover) * 0.45), Vector2(1.0, 0.58))
-			draw_circle(Vector2.ZERO, edge * 0.155, Color(Color("#ffde7f"), fade))
-			draw_arc(Vector2.ZERO, edge * 0.155, 0.0, TAU, 24,
-				Color(Color("#785d3e"), fade), maxf(1.5, edge * 0.018), true)
-		draw_set_transform(Vector2.ZERO)
-	elif kind == "flutter":
-		for side in [-1, 1]:
-			for index in range(2):
-				var flutter: float = 0.5 if reduced_motion else absf(sin(progress * TAU * 4.0))
-				var point := origin + Vector2(edge * (0.5 + side * (0.36 + index * 0.045)),
-					edge * (0.73 + flutter * 0.08))
-				draw_arc(point, edge * (0.08 + index * 0.035),
-					0.3 if side > 0 else PI - 1.2, 1.2 if side > 0 else PI - 0.3, 12,
-					Color(accent, fade * 0.75), maxf(1.5, edge * 0.014), true)

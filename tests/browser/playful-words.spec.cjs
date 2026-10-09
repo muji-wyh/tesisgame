@@ -1,16 +1,12 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openRewards, roomControl, metrics, tap,
+const { openGame, metrics, tap,
   rendered, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
 
 async function wordMatch(page, item, word) {
   const errors = await openGame(page, { reducedMotion: 'reduce' });
-  await openRewards(page);
-  await roomControl(page, item);
-  await page.keyboard.press('Enter');
-  await roomControl(page, 'goal', { locked: true, item });
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  const cards = (await discoverMatchCards(page)).filter(card => card.word === word);
+  const board = await discoverMatchCards(page);
+  word = board[0].word;
+  const cards = board.filter(card => card.word === word);
   expect(cards.map(card => card.kind).sort()).toEqual(['Picture', 'Word']);
   const bounds = await metrics(page);
   const pair = Object.fromEntries(cards.map(card => [card.kind, boardPoint(bounds, card.index)]));
@@ -19,17 +15,17 @@ async function wordMatch(page, item, word) {
   await expect(page.locator('#game-status')).toContainText('Find 5 word');
   await expect(page.locator('#selection-status')).toBeEmpty();
   await rendered(page);
-  return { errors, pair, bounds };
+  return { errors, pair, bounds, word };
 }
 
 async function savedState(page) {
-  return page.evaluate(() => ['wordBuddies.medalProgress', 'wordBuddies.playroom']
+  return page.evaluate(() => ['wordBuddies.medalProgress', 'growWithPip.growth.v1']
     .map(key => localStorage.getItem(key)));
 }
 
-for (const [item, word] of [['summer', 'ball'], ['winter', 'bell'], ['space', 'rocket']]) {
-  test(`replaying the matched ${word} word or picture animates its picture without scoring again`, async ({ page }, testInfo) => {
-    const { errors, pair, bounds } = await wordMatch(page, item, word);
+for (const attempt of [1, 2, 3]) {
+  test(`replaying a matched word or picture animates its picture without scoring again (${attempt})`, async ({ page }, testInfo) => {
+    const { errors, pair, bounds, word } = await wordMatch(page);
     // Compare the picture itself so the card's temporary tap feedback cannot
     // stand in for movement of the illustrated object.
     const size = Math.min(80, bounds.scale * 60);

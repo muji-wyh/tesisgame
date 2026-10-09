@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="">
-  <title>Pip and Words</title>
+  <title>Grow with Pip</title>
   <script>
     (() => {
       const param = new URLSearchParams(window.location.search).get("scoutTheme");
@@ -73,9 +73,6 @@
     }
     #game { position: relative; width: 100%; height: 100%; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: manipulation; }
-    /* Godot's native keyboard bridges need 16 CSS pixels to avoid iOS focus
-       zoom. Override the IME bridge's inline 1px font before it receives focus. */
-    #game > input, #game > textarea, #game > .ime { font-size: 16px !important; }
     #status {
       position: absolute; inset: 0; display: grid; place-items: center;
       padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
@@ -340,7 +337,7 @@
 <body>
   <div id="safe-area">
     <div id="game">
-      <canvas id="canvas" tabindex="0" inert aria-label="Pip and Words word game" aria-describedby="help selection-status">
+      <canvas id="canvas" tabindex="0" inert aria-label="Grow with Pip word game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
       <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Phrase Builder.
@@ -354,43 +351,39 @@
         Browser speech may process audio remotely; the game saves no voice or transcripts.
         Say an English word or a sentence such as “I see a doll”.
         Live words appear as you speak; only completed speech can match cards. You can still tap cards.
-        Pip the duck is your guide. His beak moves with the game's spoken words. In his room, press him for a dance, snack, or bubbles.
-        Before your first game, create a local player with a name and emoji avatar. The game opens in Match. Tap a word and its matching picture. Tap a completed card to hear its word again.
+        Pip the duck grows with your learning. His beak moves with spoken words. The game opens in Match. Tap a word and its matching picture. Tap a completed card to hear its word again.
         Match and Memory practise the same five words. Tap Pip in the upper-left corner to open the game-mode menu and switch games. Tap outside the menu or press Escape to close it.
         In Phrase Builder, listen to Pip and drag words onto the answer line. Lift a card upward, then drag it to reorder or return it to the word bank. Tapping also adds or returns a word. Swipe either word row sideways to reveal more words. While dragging, hold at an answer edge to scroll farther. After checking, focus the answer line and use Left or Right to review long phrases. The waveform bar replays the phrase and displays its text when muted. The progress bar tracks completed phrases.
         Check your answer when every slot is filled. Wrong answers stay editable with unlimited retries.
-        Complete three phrases, then choose Open chest to collect your gift. New adventure starts another three phrases. Phrase difficulty follows the selected age range.
+        Complete three phrases, then choose Open chest to collect your gift. New adventure starts another three phrases. Phrase difficulty follows your unlocked learning level.
         Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
         Hold Space, Enter, or Xbox A on the eye for the same peek. Memory has no countdown or limit on attempts.
-        Voice Pop is a single-player game using your browser's system speech recognition. Before each round, tap the player's avatar or name to start and request microphone access. Say the words you see to pop them. Each round starts with 50 seconds.
+        Voice Pop is a single-player game using your browser's system speech recognition. Tap to start and request microphone access. Say the words you see to pop them. Each round starts with 50 seconds.
         The timer starts when the microphone is listening. The colored screen edges glow while listening.
         Words sometimes launch in groups of two or three. Say different displayed words for a combo. The second hit in a streak adds 3 seconds, and the third adds 5 seconds. A dropped word ends the streak.
         Voice Pop starts with zero chests. Reach 100, 200, and 300 points to earn one chest at each milestone, up to three per round. A golden burst announces each earned chest.
-        After time runs out, Voice Pop shows the selected player's avatar and name beside the hit total, Open chests, Play again, a compact leaderboard, and lists of popped and missed words. The score is saved automatically for that player. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows large earned chests, each with a different design. Scroll to explore them and hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
+        After time runs out, Voice Pop shows your hit total, Open chests, Play again, and lists of popped and missed words. Tap a word to hear it. Scroll the result without a scrollbar. Open chests shows large earned chests, each with a different design. Scroll to explore them and hold each chest until it opens. Unopened chests remain on this device when you leave; open them before starting another Voice Pop round.
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         After a Match, Memory, or Phrase Builder round, the chest fills the result area. Open it to save your gift progress.
         New adventure appears at the bottom-right after the chest opens and saves. It starts another Phrase Builder round after that game, or a fresh Match round after the card games. Retry saving appears only if a reward could not be saved.
-        More opens Pip's room. Players manages up to ten local names and emoji avatars. Leaderboards shows separate Match, Memory, and Voice Pop rankings on this device. The arrow icon returns to the game.
-        Tap an Age choice to view only the words in that age range across every topic, with pictures and a word count. Ages 4-6 shows basic words, Ages 7-9 shows growing words, and Ages 10+ shows advanced words. All shows every word. Tap a picture to hear its word. Swipe the list vertically or use the mouse wheel without a scrollbar. Back returns to Pip's room. The saved age applies to the next lesson and keeps your current game unchanged.
-        Eight larger world icons offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Choosing one keeps this page open and preserves your game. Pip wears a different outfit in each world.
-        Locked toy cards show gift progress. Your chosen world is remembered as you explore vocabulary topics.
+        Your learning journey starts at Lv3. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
+        In any game, correctly completing an activity involving a word adds one to that word's streak. A wrong answer resets its streak. Six consecutive correct answers mark the word as mastered. Replaying audio, peeking, and moving cards do not count as answers.
+        Voice Pop credits each accepted spoken target once. Unrecognized speech, silence, and unattended words do not count as wrong answers.
+        Master every word at your current level to unlock the next. An earned level never goes down, even if a mastered word later needs more practice. Lv12+ is the final level.
+        Open your learning progress to browse the words at each age, see mastered words and practice streaks, and hear their pronunciation. Future levels are available to review; gameplay uses your unlocked vocabulary.
+        Review all ten Pip stages on the <a href="./preview/pip-growth/">Pip growth preview</a> page. Your progress stays on this device without a player name or profile. An unsaved progress message lets you retry a failed save.
+        Eight worlds offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Your chosen world is remembered.
         Winning Match, Memory, or Phrase Builder earns a chest. Hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
-        Pip's playroom starts with a ball. The first three saved chests in each world unlock its toy. Find newly unlocked gifts in Pip's room.
-        All earned toys are together on the floor inside Pip's home. Tap a toy to play with it immediately; choosing a different toy starts its first step in that same tap. Drag any earned toy to toss it to Pip. Other toys stay visible and playable.
-        Only toys still to unlock appear below the room; new gifts move into the home automatically.
-        Pip's playground fills the space between the top age choices and the bottom world and toy strips. The page stays fixed. A floor tap calls Pip; duck and unlocked-toy gestures still play.
-        A locked toy's card shows its progress and an arrow to start or continue a related lesson.
-        Choosing a locked toy card keeps your scroll position. Keyboard focus reveals each toy or card. If a new toy choice cannot be saved, its play action waits and you can retry on the same toy.
-        Toys have three steps you control, with a new result at each step and replay at the end.
-        Water a flower, roll a ball, share an apple, ring a bell, listen to a shell, launch a rocket, swing a monkey, or decorate a cake. Each toy says its word. Locked gifts show how many pieces you need.
-        Swipe the age, world, and toy strips horizontally without scrollbars. Open the game library with Pip or the mode title to adjust sound and motion. Motion follows your device's reduced-motion setting until you choose a preference.</p>
+        Open the game library with Pip or the mode title to adjust sound and motion. Motion follows your device's reduced-motion setting until you choose a preference.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <div id="chest-progress" class="sr-only" role="progressbar" aria-label="Treasure chest unlock progress"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
-      <p id="leaderboard-status" class="sr-only" role="status" aria-label="Local leaderboards" aria-live="polite" data-snapshot="{}"></p>
+      <p id="growth-status" class="sr-only" role="status" aria-label="Learning progress" aria-live="polite" data-snapshot="{}"></p>
+      <div id="learning-progress" class="sr-only" role="progressbar" aria-label="Level vocabulary mastery"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
       <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
@@ -412,7 +405,7 @@
         <div class="loader-layout">
           <header class="loading-heading">
             <p class="loading-eyebrow">A WORLD OF LITTLE DISCOVERIES</p>
-            <h1 id="loading-title">Pip and Words</h1>
+            <h1 id="loading-title">Grow with Pip</h1>
             <p class="loading-tagline">Play with words. Grow with Pip.</p>
           </header>
           <section id="loading-themes" aria-label="Choose a theme">
@@ -519,34 +512,6 @@
       'use strict';
       const canvas = document.getElementById('canvas');
       const container = document.getElementById('game');
-      function connectVirtualKeyboardNavigation() {
-        // Godot inserts these two native editors before its canvas. Its Web
-        // keyboard forwards Enter, but leaves Tab and Escape in the browser.
-        const textarea = canvas.previousElementSibling;
-        const input = textarea?.previousElementSibling;
-        if (input?.tagName !== 'INPUT' || textarea?.tagName !== 'TEXTAREA') return;
-        const editors = [input, textarea];
-        if (!editors.every(editor => editor.parentElement === canvas.parentElement &&
-            editor.style.position === 'absolute' && editor.style.zIndex === '-1')) return;
-        for (const editor of editors) {
-          let composing = false;
-          editor.addEventListener('compositionstart', () => { composing = true; });
-          editor.addEventListener('compositionend', () => { composing = false; });
-          editor.addEventListener('blur', () => { composing = false; });
-          editor.addEventListener('keydown', event => {
-            if (event.target !== editor || document.activeElement !== editor || !editor.isConnected ||
-                editor.disabled || canvas.inert || composing || event.isComposing || event.keyCode === 229 ||
-                event.altKey || event.ctrlKey || event.metaKey || !['Tab', 'Escape'].includes(event.key)) return;
-            event.preventDefault();
-            event.stopPropagation();
-            canvas.focus({ preventScroll: true });
-            canvas.dispatchEvent(new KeyboardEvent('keydown', {
-              key: event.key, code: event.code || event.key, shiftKey: event.shiftKey,
-              repeat: event.repeat, bubbles: true, cancelable: true
-            }));
-          });
-        }
-      }
       const status = document.getElementById('status');
       const message = document.getElementById('message');
       const progress = document.getElementById('progress');
@@ -687,7 +652,7 @@
       const themeIds = Object.keys(loadingThemes);
       let selectedTheme = 'spring';
       try {
-        selectedTheme = (localStorage.getItem('wordBuddies.playroom') || '')
+        selectedTheme = loadingPreferences.preferred_theme || (localStorage.getItem('wordBuddies.playroom') || '')
           .match(/(?:^|\n)preferred_theme_id="([a-z]+)"/)?.[1] || 'spring';
       } catch {}
       const themeButtons = themeIds.map(id => {
@@ -1314,7 +1279,7 @@
         gamepadThemeDirection = themeDirection;
         const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
         if (startPressed && !gamepadStartPressed) enterOnStartRelease = !enterButton.disabled;
-        // Enter on release so the same Start press cannot open Pip's room in Godot.
+        // Enter on release so the same Start press cannot open an overlay in Godot.
         if (!startPressed && gamepadStartPressed && enterOnStartRelease) { enterGame(true); return; }
         gamepadStartPressed = startPressed;
         gamepadFrame = window.requestAnimationFrame(pollLoadingGamepad);
@@ -2411,16 +2376,10 @@
             ? state.results_hits : {};
           const resultRect = value => Array.isArray(value) && value.length === 4
             ? [coordinate(value[0]), coordinate(value[1]), number(value[2]), number(value[3])] : [];
-          const resultPlayer = resultsHitState.player;
-          const player = phase === 'finished' && resultPlayer && typeof resultPlayer === 'object' &&
-            !Array.isArray(resultPlayer) && typeof resultPlayer.id === 'string' && resultPlayer.id &&
-            typeof resultPlayer.name === 'string' && typeof resultPlayer.avatar === 'string'
-            ? { id: resultPlayer.id.slice(0, 80), name: resultPlayer.name.slice(0, 80), avatar: resultPlayer.avatar.slice(0, 40),
-              rect: resultRect(resultPlayer.rect), avatar_rect: resultRect(resultPlayer.avatar_rect), name_rect: resultRect(resultPlayer.name_rect) } : {};
           const resultsHits = {
             text: typeof resultsHitState.text === 'string' && /^\d{1,16}$/.test(resultsHitState.text) ? resultsHitState.text : '',
             total: Math.floor(number(resultsHitState.total)), active: resultsHitState.active === true,
-            player, rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
+            rect: phase === 'finished' ? resultRect(resultsHitState.rect) : []
           };
           const rewardState = state.results_rewards;
           const resultsRewards = phase === 'finished' && rewardState && rewardState.visible === true ? {
@@ -2461,7 +2420,7 @@
           }
           const message = typeof state.message === 'string' ? state.message : '';
           const readable = phase === 'idle' ? '' : phase === 'finished'
-            ? `${message ? message + ' ' : ''}Voice Pop. ${player.name ? player.name + '. ' : ''}${hits} hits. ${score} points.${resultsRewards.title ? ' ' + resultsRewards.title + '.' : ''}`
+            ? `${message ? message + ' ' : ''}Voice Pop. ${hits} hits. ${score} points.${resultsRewards.title ? ' ' + resultsRewards.title + '.' : ''}`
             : `${message ? message + ' ' : ''}Voice Pop. ${remaining} seconds. ${hits} hits. Score ${score}. Best combo ${bestCombo}.` +
             (targets.length ? ' Words: ' + targets.map(target => target.text).join(', ') + '.' : '');
           if (popStatusText.textContent !== readable) popStatusText.textContent = readable;
@@ -2593,7 +2552,7 @@
         heading.className = 'debug-row';
         node('h2', 'Speech check', heading).id = 'speech-debug-title';
         button('Close', heading, close);
-        node('p', 'Untimed practice. No scores or leaderboard changes. Keep the device volume and speaking distance the same between passes.', content);
+        node('p', 'Untimed practice. Your saved learning progress stays unchanged. Keep the device volume and speaking distance the same between passes.', content);
         const settings = node('div', '', content);
         settings.className = 'debug-row';
         const mix = select('Game sound level', [['1', 'Normal'], ['0.35', 'Reduced · 35%'], ['0', 'Silent']], settings);
@@ -2959,7 +2918,6 @@
         ready(onReveal) {
           if (failed || readyReceived) return;
           readyReceived = true;
-          connectVirtualKeyboardNavigation();
           revealGame = onReveal;
           window.clearTimeout(slowNotice);
           loadingNote.hidden = true;
@@ -2976,25 +2934,29 @@
         loadingTheme() {
           return selectedTheme;
         },
-        favoriteReward() {
-          try { return localStorage.getItem('wordBuddies.favoriteReward') || ''; }
-          catch { return ''; }
-        },
-        playroomState() {
-          try { return localStorage.getItem('wordBuddies.playroom'); }
+        growthState() {
+          try { return localStorage.getItem('growWithPip.growth.v1'); }
           catch { return false; }
         },
-        savePlayroomState(text) {
-          try { localStorage.setItem('wordBuddies.playroom', text); return true; }
+        saveGrowthState(text, expectedText) {
+          if (typeof text !== 'string' || !text.length || text.length > 2 * 1024 * 1024) return false;
+          if (expectedText !== null && typeof expectedText !== 'string') return false;
+          try {
+            if (localStorage.getItem('growWithPip.growth.v1') !== expectedText) return false;
+            localStorage.setItem('growWithPip.growth.v1', text);
+            return localStorage.getItem('growWithPip.growth.v1') === text;
+          } catch { return false; }
+        },
+        presentationState() {
+          try { return localStorage.getItem('pipAndWords.presentation.v1'); }
           catch { return false; }
         },
-        leaderboardState() {
-          try { return localStorage.getItem('wordBuddies.leaderboards'); }
-          catch { return false; }
-        },
-        saveLeaderboardState(text) {
-          try { localStorage.setItem('wordBuddies.leaderboards', text); return true; }
-          catch { return false; }
+        savePresentationState(text) {
+          if (typeof text !== 'string' || !text.length || text.length > 64 * 1024) return false;
+          try {
+            localStorage.setItem('pipAndWords.presentation.v1', text);
+            return localStorage.getItem('pipAndWords.presentation.v1') === text;
+          } catch { return false; }
         },
         presentationSettings(reduced, muted) {
           document.documentElement.dataset.reducedMotion = String(Boolean(reduced));
@@ -3019,12 +2981,30 @@
           document.getElementById('game-status').dataset.phrase = JSON.stringify(value);
           canvas.style.touchAction = value.visible ? 'pinch-zoom' : 'manipulation';
         },
-        leaderboardStatus(text) {
-          // Read-only diagnostics for the native player and ranking controls.
+        growthView(text) {
           let value;
           try { value = JSON.parse(text); } catch { return; }
-          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
-          document.getElementById('leaderboard-status').dataset.snapshot = JSON.stringify(value);
+          if (!value || typeof value !== 'object' || !Array.isArray(value.controls)) return;
+          document.getElementById('growth-status').dataset.view = JSON.stringify(value);
+        },
+        growthStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value) ||
+              !Number.isInteger(value.level) || value.level < 3 || value.level > 12 ||
+              !Number.isInteger(value.mastered) || !Number.isInteger(value.total) ||
+              value.mastered < 0 || value.total < value.mastered) return;
+          const status = document.getElementById('growth-status');
+          status.dataset.snapshot = JSON.stringify(value);
+          const level = value.level === 12 ? 'Lv12+' : `Lv${value.level}`;
+          const message = `${level}. ${value.mastered} of ${value.total} words mastered.` +
+            (value.completed ? ' You mastered the final level!' : '') +
+            (value.ready === false ? ' Learning progress could not be loaded. Retry before you play.' :
+              value.save_ok === false ? ' Learning progress is waiting to be saved. Please retry.' : '');
+          if (status.textContent !== message) status.textContent = message;
+          const progress = document.getElementById('learning-progress');
+          progress.setAttribute('aria-valuenow', String(value.total ? Math.round(value.mastered / value.total * 100) : 0));
+          progress.setAttribute('aria-valuetext', message);
         },
         popRewardState() {
           try { return localStorage.getItem('wordBuddies.popRewards'); }

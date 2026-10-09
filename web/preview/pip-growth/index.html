@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Pip's growth journey · Grow with Pip</title>
+  <link rel="stylesheet" href="preview.css">
+  <script src="preview.js" defer></script>
+</head>
+<body>
+  <header class="page-header">
+    <a class="brand" href="/">Grow with Pip <span>Character preview</span></a>
+    <a class="back-link" href="/">Back to game <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <div class="introduction">
+      <p class="eyebrow">A little more curious. A little more confident.</p>
+      <h1>Pip grows with you.</h1>
+      <p>Ten familiar faces for a growing world of words. Choose a level to meet Pip, try a new move, and hear a little hello.</p>
+    </div>
+    <nav class="level-picker" aria-label="Choose Pip's level" id="level-picker"></nav>
+    <section class="stage-review" aria-label="Selected growth stage" id="stage-review">
+      <div class="character-panel">
+        <div class="character-toolbar">
+          <span class="stage-counter" id="stage-counter">01 / 10</span>
+          <button class="quiet-button" id="motion-toggle" type="button" aria-pressed="false">Reduce motion</button>
+        </div>
+        <div class="character-art" id="character-art" role="img" aria-label="Pip in a growth outfit"></div>
+        <p class="pose-caption" id="pose-caption" aria-live="polite">Ready to say hello.</p>
+        <div class="stage-paging">
+          <button id="previous-stage" class="circle-button" type="button" aria-label="Previous level">←</button>
+          <span id="stage-name-small"></span>
+          <button id="next-stage" class="circle-button" type="button" aria-label="Next level">→</button>
+        </div>
+      </div>
+      <div class="stage-details">
+        <p class="level-label" id="level-label">Lv 3</p>
+        <h2 id="stage-name">Sprout</h2>
+        <p class="stage-description" id="stage-description"></p>
+        <div class="new-move">
+          <div><span class="field-label">New at this level</span><strong id="new-move-name">Hello wave</strong></div>
+          <button class="primary-button" id="play-new-move" type="button"><span aria-hidden="true">▶</span> Try this move</button>
+        </div>
+        <div class="repertoire-heading"><h3>Moves to try</h3><span id="move-count"></span></div>
+        <div class="action-list" id="action-list"></div>
+        <div class="voice-panel">
+          <div class="repertoire-heading"><h3>A little hello</h3><span id="voice-count"></span></div>
+          <label class="visually-hidden" for="voice-select">Choose a voice line</label>
+          <select id="voice-select"></select>
+          <div class="voice-row">
+            <p id="voice-text"></p>
+            <button class="voice-button" id="play-voice" type="button" aria-label="Play voice line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4m4-7v10m4-14v18m4-15v12m4-9v6"/></svg><span>Listen</span></button>
+          </div>
+          <p class="voice-note" id="voice-note">Ava's gentle voice · plays only when you tap</p>
+        </div>
+      </div>
+    </section>
+    <section class="whole-journey" aria-labelledby="journey-title">
+      <div class="section-heading"><div><p class="eyebrow">The whole journey</p><h2 id="journey-title">Always Pip. More to discover.</h2></div><p>Every level keeps the moves and hellos learned before.</p></div>
+      <div class="journey-grid" id="journey-grid"></div>
+    </section>
+    <footer class="review-note">
+      <p><strong>Stage compositions for review.</strong> These designs reuse Pip's original layered production artwork, with new clothing combinations and a shared palette. The expressions and articulated moves shown here are working previews.</p>
+      <p>Levels describe a learning journey, not a child's ability or physical age. Pip stays kind, recognizable, and child-friendly throughout.</p>
+      <details><summary>Artwork and voice sources</summary><p>Character: original integrated Pip artwork and wardrobe layers from this game. Individual illustrator is not identified in the existing asset record. Voice: Microsoft Edge TTS, en-US-AvaNeural, rate −15%, pitch +8 Hz, volume +0%, with no postprocessing. Nunito: The Nunito Project Authors, SIL Open Font License. Full acquisition and derivation details are recorded in <code>docs/assets/pip-growth.md</code>.</p></details>
+    </footer>
+    <p id="load-error" class="load-error" hidden></p>
+  </main>
+</body>
+</html>

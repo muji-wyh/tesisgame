@@ -1,12 +1,6 @@
 extends SceneTree
 
 const REACTIONS := ["high-five", "peekaboo", "flutter"]
-const HOME_REACTIONS := ["jump", "shy", "bonk"]
-const DANCES := ["dance-wave", "dance-sway", "dance-hop"]
-const IDLE_SEQUENCE := [
-	"dance-wave", "wave", "dance-sway", "high-five", "dance-hop", "peekaboo",
-	"dance-wave", "look", "dance-sway", "stretch", "dance-hop", "preen", "dance-wave", "hop"
-]
 
 var checks := 0
 var failures := 0
@@ -40,11 +34,8 @@ func _run() -> void:
 		_check_idle_suppression(duck)
 	if DisplayServer.get_name() != "headless":
 		await _check_drawn_reactions(duck)
-		await _check_drawn_room_reactions(duck)
 		if proactive_ready:
 			await _check_drawn_invitations(duck)
-	if proactive_ready:
-		_check_playground(duck)
 	duck.free()
 	print("Proactive Pip: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -56,6 +47,7 @@ func _advance(duck, seconds: float) -> void:
 
 
 func _check_direct_reactions(duck) -> void:
+	duck.set_growth_level(12)
 	var original_rect: Rect2 = duck.get_global_rect()
 	var children: int = duck.get_child_count()
 	var captions: Array[String] = []
@@ -65,44 +57,46 @@ func _check_direct_reactions(duck) -> void:
 		check(not caption.is_empty() and caption.length() < 65 and not captions.has(caption),
 			kind + " returns its own short English caption")
 		captions.append(caption)
-		check(duck._trick == kind and duck._trick_left > 0.0 and duck._trick_left <= 2.5,
+		check(duck._idle_action == kind and duck._idle_left > 0.0 and duck._idle_left <= 2.5,
 			kind + " immediately begins one finite intentional visual reaction")
 		check(duck.pose != 0, kind + " has a readable non-resting expression immediately")
-		var duration: float = duck._trick_left
+		var duration: float = duck._idle_left
 		duck._process(0.2)
-		check(duck._trick == kind and duck._trick_left < duration,
+		check(duck._idle_action == kind and duck._idle_left < duration,
 			kind + " visibly persists while advancing toward its end")
 		for press in range(24):
 			duck.perform_trick(kind)
-		check(duck._trick_left <= duration, kind + " repeated taps replace rather than stack")
+		check(duck._idle_left <= duration, kind + " repeated taps preserve the current action without stacking")
 		var stable_bounds := true
 		for step in range(52):
 			duck._process(0.05)
 			stable_bounds = stable_bounds and duck.get_global_rect() == original_rect
 			stable_bounds = stable_bounds and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation)
 			stable_bounds = stable_bounds and duck.get_child_count() == children
-		check(duck._trick.is_empty() and is_zero_approx(duck._trick_left),
+		check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left),
 			kind + " removes transient artwork by itself")
 		check(stable_bounds,
 			kind + " never moves the Button bounds or creates effect/audio nodes")
+	duck.settle()
 	duck.perform_trick("high-five")
-	check(duck.perform_trick("unknown") == "" and duck._trick == "high-five",
+	check(duck.perform_trick("unknown") == "" and duck._idle_action == "high-five",
 		"An unknown reaction cannot interrupt a valid explicit high five")
 	duck.set_reduced_motion(true)
 	for kind in REACTIONS:
 		var caption: String = duck.perform_trick(kind)
 		var initial_pose: int = duck.pose
 		_advance(duck, 20.0)
-		check(not caption.is_empty() and duck._trick == kind and duck.pose == initial_pose
-			and duck.pose != 0 and is_zero_approx(duck._trick_left) and not duck.is_processing(),
+		check(not caption.is_empty() and duck._idle_action == kind and duck.pose == initial_pose
+			and duck.pose != 0 and is_zero_approx(duck._idle_left) and not duck.is_processing(),
 			kind + " remains an intentional static pose and caption under reduced motion")
-	duck.clear_trick()
-	check(duck._trick.is_empty(), "Reduced-motion new trick artwork still supports explicit cleanup")
+	duck.settle()
+	check(duck._idle_action.is_empty(), "Reduced-motion new trick artwork still supports explicit cleanup")
 	duck.set_reduced_motion(false)
 	duck.settle()
 
 
 func _check_proactive_contract(duck) -> bool:
+	duck.set_growth_level(3)
 	duck.settle()
 	check(not _observe_idle(duck, 40.0), "Unsolicited invitations are disabled by default")
 	check(duck.has_method("note_activity"), "Pip exposes note_activity for meaningful user input")
@@ -157,16 +151,6 @@ func _start_invitation(duck) -> void:
 	check(_is_quiet_interval(_wait_for_invitation(duck)), "A fresh invitation waits six to nine quiet seconds")
 
 
-func _start_home_dance(duck) -> void:
-	duck.settle()
-	duck.set_home_playground(true)
-	duck.set_proactive_allowed(true)
-	duck.note_activity()
-	var waited: float = _wait_for_invitation(duck)
-	check(waited >= 0.3 and waited <= 0.5 and duck._idle_action == "home-dance",
-		"Home starts its loading-page dance after a short quiet beat")
-
-
 func _check_idle_timing(duck) -> void:
 	var original_rect: Rect2 = duck.get_global_rect()
 	var children: int = duck.get_child_count()
@@ -189,7 +173,7 @@ func _check_idle_timing(duck) -> void:
 		"Unchanged frame-by-frame setters do not restart or advance the idle interval")
 	duck.note_activity()
 	var gestures: Array[String] = []
-	for invitation in range(14):
+	for invitation in range(4):
 		var waited := _wait_for_invitation(duck)
 		check(_is_quiet_interval(waited),
 			"Invitation %d starts after six to nine quiet seconds, including after the previous one ends" % invitation)
@@ -197,21 +181,16 @@ func _check_idle_timing(duck) -> void:
 			break
 		var kind: String = duck._idle_action
 		gestures.append(kind)
-		check(duck._trick.is_empty() and duck._room_reaction.is_empty()
+		check(not duck._growth_action_manual
 			and is_zero_approx(duck.reaction_left) and not duck.speaking,
 			"An invitation stays separate from intentional feedback and speaking")
 		var duration := _finish_invitation(duck)
-		var expected_seconds := 3.2 if kind in DANCES else 1.8
+		var expected_seconds := 1.8
 		check(absf(duration - expected_seconds) <= 0.051
 			and duck._idle_wait >= 6.0 and duck._idle_wait <= 9.0,
 			kind + " completes its bounded routine, then starts a fresh six to nine second cooldown")
-	check(gestures == IDLE_SEQUENCE,
-		"Fourteen invitations lead with a dance and alternate all three dances with the seven familiar gestures")
-	check(["wave", "high-five", "peekaboo", "look", "stretch", "preen", "hop"].all(
-		func(kind: String) -> bool: return gestures.has(kind)),
-		"The extended quiet cycle retains Pip's complete existing idle repertoire")
-	check(DANCES.all(func(kind: String) -> bool: return gestures.has(kind)),
-		"The quiet cycle performs the wave, sway and hop dance routines")
+	check(gestures == ["wave", "wave", "wave", "wave"],
+		"The initial companion repeats only its first unlocked wave")
 	check(events.is_empty() and duck.get_child_count() == children,
 		"Idle activity emits no activation and creates no audio, speech or effect nodes")
 	check(duck.get_global_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
@@ -225,21 +204,22 @@ func _check_idle_timing(duck) -> void:
 
 
 func _check_activity_preemption(duck) -> void:
+	duck.set_growth_level(12)
 	_start_invitation(duck)
 	duck.note_activity()
 	check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left) and duck.pose == 0
 		and duck._idle_wait >= 6.0 and duck._idle_wait <= 9.0,
 		"Meaningful activity immediately cancels and settles an invitation")
 	check(_is_quiet_interval(_wait_for_invitation(duck)), "Activity restarts a full quiet interval")
-	duck.perform_trick("snack")
-	var remaining: float = duck._trick_left
+	duck.perform_trick("wave")
+	var remaining: float = duck._idle_left
 	duck.note_activity()
-	check(duck._idle_action.is_empty() and duck._trick == "snack" and duck._trick_left == remaining,
+	check(duck._growth_action_manual and duck._idle_action == "wave" and duck._idle_left == remaining,
 		"Activity never cancels or restarts a user-requested trick")
 	duck.set_proactive_allowed(false)
-	check(duck._trick == "snack" and duck._trick_left == remaining,
+	check(duck._idle_action == "wave" and duck._idle_left == remaining,
 		"Closing the proactive gate cannot cancel unrelated explicit artwork")
-	duck.clear_trick()
+	duck.settle()
 	duck.react("happy")
 	remaining = duck.reaction_left
 	duck.note_activity()
@@ -263,15 +243,15 @@ func _check_activity_preemption(duck) -> void:
 	for kind in REACTIONS:
 		_start_invitation(duck)
 		duck.perform_trick(kind)
-		check(duck._idle_action.is_empty() and duck._trick == kind,
+		check(duck._growth_action_manual and duck._idle_action == kind,
 			kind + " immediately replaces an invitation with an intentional reaction")
 		duck.note_activity()
-		check(duck._trick == kind, kind + " survives input notification after the deliberate action")
+		check(duck._idle_action == kind, kind + " survives input notification after the deliberate action")
 	duck.settle()
 
 
 func _check_idle_suppression(duck) -> void:
-	for reason in ["disallowed", "paused", "hidden", "speaking", "reduced", "walking"]:
+	for reason in ["disallowed", "paused", "hidden", "speaking", "reduced"]:
 		_start_invitation(duck)
 		match reason:
 			"disallowed": duck.set_proactive_allowed(false)
@@ -279,7 +259,6 @@ func _check_idle_suppression(duck) -> void:
 			"hidden": duck.hide()
 			"speaking": duck.set_speaking(true)
 			"reduced": duck.set_reduced_motion(true)
-			"walking": duck.set_room_motion("walk")
 		check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left),
 			reason + " immediately removes unsolicited motion and overlays")
 		check(not _observe_idle(duck, 40.0), reason + " cannot accumulate or perform invitations")
@@ -289,7 +268,6 @@ func _check_idle_suppression(duck) -> void:
 			"hidden": duck.show()
 			"speaking": duck.set_speaking(false)
 			"reduced": duck.set_reduced_motion(false)
-			"walking": duck.clear_room_interaction()
 		check(_is_quiet_interval(_wait_for_invitation(duck)), reason + " resumes with a fresh quiet interval")
 	_start_invitation(duck)
 	duck.react("happy")
@@ -298,10 +276,6 @@ func _check_idle_suppression(duck) -> void:
 	duck._process(0.2)
 	check(duck._idle_action.is_empty() and duck.reaction_left > 0.0,
 		"Feedback never overlaps an invitation")
-	_start_invitation(duck)
-	duck.react_in_room("pet")
-	check(duck._idle_action.is_empty() and duck._room_reaction == "pet" and duck.pose == 2,
-		"A room interaction immediately settles an invitation")
 	duck.settle()
 	duck.set_proactive_allowed(false)
 
@@ -327,14 +301,14 @@ func _check_drawn_reactions(duck) -> void:
 		drawings.append(early)
 		_advance(duck, 0.68)
 		check(await _capture(duck) != early, kind + " has an actual bounded visual progression")
-		duck.clear_trick()
+		duck.settle()
 	duck.set_reduced_motion(true)
 	drawings.clear()
 	for kind in REACTIONS:
 		duck.perform_trick(kind)
 		var image: PackedByteArray = await _capture(duck)
-		check(image != resting and not drawings.has(image),
-			kind + " has its own reduced-motion illustration")
+		check(image != resting,
+			kind + " uses the calm happy reduced-motion illustration")
 		drawings.append(image)
 		_advance(duck, 4.0)
 		check(await _capture(duck) == image, kind + " reduced-motion artwork does not animate")
@@ -343,203 +317,30 @@ func _check_drawn_reactions(duck) -> void:
 
 
 func _check_drawn_invitations(duck) -> void:
+	duck.set_growth_level(12)
 	duck.settle()
 	var resting: PackedByteArray = await _capture(duck)
 	var seen: Array[String] = []
-	for invitation in range(14):
+	var actions: Array[String] = duck.growth_actions()
+	for invitation in range(actions.size()):
 		_start_invitation(duck)
 		var kind: String = duck._idle_action
-		duck._process(0.25)
+		var duration: float = duck._idle_duration()
+		_advance(duck, duration * 0.25)
 		var pixels: PackedByteArray = await _capture(duck)
-		if kind in ["wave", "high-five", "peekaboo"] or kind in DANCES:
-			if not seen.has(kind):
-				seen.append(kind)
-			check(not pixels.is_empty() and pixels != resting,
-				kind + " invitation uses real sprite/overlay artwork")
-		if kind in DANCES:
-			var frames: Array[PackedByteArray] = [pixels]
-			for span in [0.55, 0.5, 0.6, 0.6]:
-				_advance(duck, span)
-				var next_frame: PackedByteArray = await _capture(duck)
-				check(duck._idle_action == kind and not next_frame.is_empty()
-					and next_frame != resting and not frames.has(next_frame),
-					kind + " visibly changes throughout its multi-step dance, including beyond a short greeting")
-				frames.append(next_frame)
+		check(not pixels.is_empty() and pixels != resting,
+			kind + " invitation uses the growth stage's real articulated artwork")
+		seen.append(kind)
+		var frames: Array[PackedByteArray] = [pixels]
+		for sample in range(2):
+			_advance(duck, duration * 0.2)
+			var next_frame: PackedByteArray = await _capture(duck)
+			check(duck._idle_action == kind and not next_frame.is_empty()
+				and next_frame != resting and not frames.has(next_frame),
+				kind + " visibly advances throughout its finite invitation")
+			frames.append(next_frame)
 		duck.note_activity()
-		check(await _capture(duck) == resting, "Activity removes all unsolicited " + kind + " pixels immediately")
-	check(seen.size() == 6 and DANCES.all(func(kind: String) -> bool: return seen.has(kind)),
-		"Rendered validation covers all three legacy greeting illustrations and all three native dances")
+		check(await _capture(duck) == resting, "Activity removes unsolicited " + kind + " artwork immediately")
+	check(actions.all(func(kind: String) -> bool: return seen.has(kind)),
+		"Rendered validation covers every unlocked action at the final growth stage")
 	duck.set_proactive_allowed(false)
-
-
-func _check_drawn_room_reactions(duck) -> void:
-	duck.settle()
-	var resting: PackedByteArray = await _capture(duck)
-	for reduced in [false, true]:
-		duck.set_reduced_motion(reduced)
-		var drawings: Array[PackedByteArray] = []
-		for kind in REACTIONS:
-			duck.react_in_room(kind)
-			duck._process(0.19)
-			var early: PackedByteArray = await _capture(duck)
-			check(early != resting and not drawings.has(early),
-				kind + " room feedback has distinct real artwork with reduced motion " + str(reduced))
-			drawings.append(early)
-			_advance(duck, 0.5)
-			var later: PackedByteArray = await _capture(duck)
-			check(later == early if reduced else later != early,
-				kind + " room artwork respects the selected motion preference")
-			duck.clear_room_interaction()
-			check(await _capture(duck) == resting, kind + " room artwork is completely removed by cleanup")
-	duck.set_reduced_motion(false)
-	duck.settle()
-
-
-func _check_playground(duck) -> void:
-	var stage := Control.new()
-	stage.size = Vector2(360, 300)
-	root.add_child(stage)
-	var slot := Control.new()
-	stage.add_child(slot)
-	var toy := Button.new()
-	stage.add_child(toy)
-	var label := Label.new()
-	label.text = "ball"
-	stage.add_child(label)
-	var playground = load("res://scripts/pip_playground.gd").new()
-	stage.add_child(playground)
-	playground.setup(slot, toy, label)
-	playground.set_duck(duck)
-	duck.set_home_playground(true)
-	duck.reparent(slot)
-	duck.position = Vector2.ZERO
-	duck.size = Vector2(96, 96)
-	playground.layout_room(stage.size)
-	var reports: Array[String] = []
-	var captions: Array[String] = []
-	var starts: Array[bool] = []
-	var toy_taps: Array[bool] = []
-	playground.interaction.connect(func(kind: String, message: String) -> void:
-		reports.append(kind)
-		captions.append(message))
-	playground.interaction_started.connect(func() -> void: starts.append(true))
-	playground.toy_tapped.connect(func() -> void: toy_taps.append(true))
-	var bounds: Rect2 = duck.get_global_rect()
-	var reactions: Array[String] = []
-	for tap in range(12):
-		var count_before := reports.size()
-		playground.poke()
-		var expected: String = duck._room_reaction
-		check(reports.slice(count_before) == ["poke"] and playground.interaction_kind == "poke"
-			and expected in HOME_REACTIONS and duck._trick.is_empty() and duck.pose != 0,
-			"Room tap %d keeps the Poke event contract while visibly responding with %s" % [tap + 1, expected])
-		check(is_equal_approx(duck._room_reaction_left, 1.15 if expected == "shy" else 0.85),
-			expected + " runs its complete loading-page response duration")
-		check(reactions.is_empty() or expected != reactions.back(), "A new shuffled Home response never repeats its immediate predecessor")
-		reactions.append(expected)
-		_advance(duck, 2.0)
-		check(duck._room_reaction.is_empty(), expected + " room artwork cleans itself up")
-	for start in range(0, 12, 3):
-		var bag: Array[String] = reactions.slice(start, start + 3)
-		var bag_captions: Array[String] = captions.slice(start, start + 3)
-		check(HOME_REACTIONS.all(func(kind: String) -> bool: return bag.has(kind))
-			and bag_captions.all(func(message: String) -> bool: return not message.is_empty() and bag_captions.count(message) == 1),
-			"Each shuffled three-tap bag includes jumping, shy head-scratching and bonking with distinct captions")
-	check(duck.get_global_rect() == bounds and playground.toy_phase == "idle",
-		"Poke variation never moves the hit target or starts a toy sequence")
-	for reduced in [false, true]:
-		duck.set_reduced_motion(reduced)
-		playground.configure("ball", false, reduced, duck.accent)
-		for kind in REACTIONS:
-			duck.react_in_room(kind)
-			var initial_pose: int = duck.pose
-			duck.note_activity()
-			check(duck._room_reaction == kind and duck.pose == initial_pose and duck.pose != 0,
-				kind + " room feedback survives meaningful activity notification")
-			if reduced:
-				_advance(duck, 20.0)
-				check(duck._room_reaction == kind and is_zero_approx(duck._room_reaction_left)
-					and duck.pose == initial_pose and not duck.is_processing(),
-					kind + " room response remains static under reduced motion")
-			playground.cancel()
-			check(duck._room_reaction.is_empty() and duck._trick.is_empty(),
-				"Cancel fully clears the room-owned " + kind + " illustration")
-	duck.set_reduced_motion(false)
-	playground.configure("ball", false, false, duck.accent)
-	_check_held_room_gestures(duck, playground, slot, toy)
-	playground.cancel()
-	playground.configure("ball", true, false, duck.accent)
-	var report_count := reports.size()
-	var start_count := starts.size()
-	var toy_count := toy_taps.size()
-	var room_state: Array = [playground.duck_position, playground.target_position,
-		playground.toy_phase, toy.position, toy.scale, toy.rotation, label.text]
-	_room_press(playground, toy.get_global_rect().get_center(), true)
-	_room_drag(playground, toy.get_global_rect().get_center() - Vector2(70, 25))
-	_room_press(playground, toy.get_global_rect().get_center() - Vector2(70, 25), false)
-	check(not playground.flight_active and playground.toy_phase == "idle"
-		and reports.size() == report_count and starts.size() == start_count and toy_taps.size() == toy_count,
-		"A pointer gesture cannot activate a locked toy")
-	playground.cancel()
-	_start_home_dance(duck)
-	_advance(duck, 90.0)
-	check(reports.size() == report_count and starts.size() == start_count and toy_taps.size() == toy_count
-		and room_state == [playground.duck_position, playground.target_position,
-			playground.toy_phase, toy.position, toy.scale, toy.rotation, label.text],
-		"Proactive room activity emits no interaction/status/toy signal and changes no room state or labels")
-	playground.configure("ball", false, false, duck.accent)
-	playground.pet()
-	check(playground.interaction_kind == "pet" and duck._room_reaction == "pet",
-		"Pet remains available after richer room pokes")
-	playground.cancel()
-	duck.set_home_playground(false)
-	duck.reparent(root)
-	stage.free()
-
-
-func _room_press(playground, point: Vector2, pressed: bool) -> void:
-	var event := InputEventMouseButton.new()
-	event.position = point
-	event.global_position = point
-	event.button_index = MOUSE_BUTTON_LEFT
-	event.pressed = pressed
-	playground._input(event)
-
-
-func _room_drag(playground, point: Vector2) -> void:
-	var event := InputEventMouseMotion.new()
-	event.position = point
-	event.global_position = point
-	event.button_mask = MOUSE_BUTTON_MASK_LEFT
-	playground._input(event)
-
-
-func _check_held_room_gestures(duck, playground, slot: Control, toy: Button) -> void:
-	for held in ["duck", "toy", "floor"]:
-		playground.cancel()
-		_start_home_dance(duck)
-		var point: Vector2 = slot.get_global_rect().get_center() if held == "duck" else toy.get_global_rect().get_center() if held == "toy" else Vector2(180, 284)
-		_room_press(playground, point, true)
-		check(duck._idle_action.is_empty() and playground.is_processing(),
-			"Pressing the " + held + " immediately preempts an invitation and observes the held gesture")
-		var invited_while_held := false
-		for step in range(500):
-			if playground.is_processing():
-				playground._process(0.05)
-			duck._process(0.05)
-			invited_while_held = invited_while_held or not duck._idle_action.is_empty()
-		check(not invited_while_held, "Holding the " + held + " cannot trigger an unsolicited invitation")
-		_room_press(playground, point, false)
-		playground.cancel()
-		check(not playground.is_processing() and playground._pointer == -1,
-			"Releasing/canceling the " + held + " removes the temporary gesture processing")
-		var waited: float = _wait_for_invitation(duck)
-		check(waited >= 0.3 and waited <= 0.5 and duck._idle_action == "home-dance",
-			"After the " + held + " gesture Pip resumes the Home dance after a short quiet beat")
-	playground.cancel()
-	duck.note_activity()
-	var waiting: float = duck._idle_wait
-	var hover := InputEventMouseMotion.new()
-	hover.position = Vector2(180, 270)
-	playground._input(hover)
-	check(duck._idle_wait == waiting, "Uncaptured hover motion is not meaningful room activity")

@@ -87,7 +87,7 @@ Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
 All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
-game effects, Pip sounds, eight background tracks, eight world greetings, 36 whole-phrase
+game effects, Pip sounds, eight background tracks, eight world greetings, 330 whole-phrase
 recordings, the two reference pair-feedback clips, and 88 themed
 chest cues. Retired Voice Pop reports and Match correction/loss recordings are excluded.
 Once startup finishes, playback needs no further audio downloads. The build opens the actual exported
@@ -149,7 +149,7 @@ Upload the export together under a path such as `/games/word-buddies/`, then emb
 ```html
 <iframe
   src="/games/word-buddies/index.html"
-  title="Pip and Words"
+  title="Grow with Pip"
   allow="autoplay; fullscreen; gamepad; microphone"
   style="display:block;width:100%;height:100dvh;border:0">
 </iframe>
@@ -167,7 +167,7 @@ npm run test:all
 
 `npm test` imports resources and runs each native and Node suite once. Use
 `node tools/run-tests.cjs --list` to inspect the complete plan, or a focused
-command such as `npm run test:voice-pop`, `npm run test:leaderboards`, or `npm run test:pip-audio` during
+command such as `npm run test:voice-pop`, `npm run test:growth`, or `npm run test:pip-audio` during
 development. Browser checks remain in `npm run test:browser`.
 
 The browser command rebuilds the Web export and runs the maintained scenarios

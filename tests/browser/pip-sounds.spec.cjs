@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { openGame, enterGame, metrics, headerPoint, openRewards, roomControl, observeAudio,
-  tap, rendered, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
+const { openGame, enterGame, metrics, headerPoint, openRewards, growthView, activateGrowthControl, observeAudio,
+  tap, rendered, discoverMatchCards, boardPoint, acceptCelebration } = require('./game-ui.cjs');
 
 function hash(source) {
   let value = 2166136261;
@@ -143,7 +143,7 @@ test('loading Pip plays the three supplied recordings without repeats or overlap
 
 async function saves(page) {
   return page.evaluate(() => ({ selection: document.getElementById('selection-status').textContent,
-    records: ['wordBuddies.medalProgress', 'wordBuddies.playroom', 'wordBuddies.favoriteReward'].map(key => [key, localStorage.getItem(key)]) }));
+    records: ['wordBuddies.medalProgress', 'growWithPip.growth.v1'].map(key => [key, localStorage.getItem(key)]) }));
 }
 
 async function winMatch(page) {
@@ -161,6 +161,7 @@ async function winMatch(page) {
     await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
   }
+  await acceptCelebration(page);
   await rendered(page);
 }
 
@@ -170,7 +171,7 @@ async function greetings(page) {
     durations.some(duration => Math.abs(sound.duration - duration) <= 2 / sound.sampleRate)), samples.map(sample => sample.duration));
 }
 
-for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip stays quiet and Home finishes each real greeting with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
+for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip and growth navigation stay quiet with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
   await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion });
   const available = await page.evaluate(() => audioObservation.available);
@@ -183,42 +184,6 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip 
     const { x, y } = screen(point);
     return page.mouse.click(x, y, { clickCount: count, delay: 0 });
   };
-  async function burst(point, input = 'mouse') {
-    const count = available || reducedMotion === 'no-preference' ? 3 : 1;
-    if (input === 'mouse') return click(point, count);
-    const { x, y } = screen(point);
-    // Real touch acceptance is separate from the atomic mouse burst: traced
-    // driver round trips can outlast a complete short quack between touch calls.
-    await page.touchscreen.tap(x, y);
-  }
-  async function expectGreetingAfter(action, motionSeconds, repeat) {
-    const before = (await greetings(page)).length;
-    const startedAt = Date.now();
-    await action();
-    if (available) {
-      await expect.poll(async () => (await greetings(page)).length).toBe(before + 1);
-      const sound = (await greetings(page)).at(-1);
-      expect(sound.contextState).toBe('running');
-      expect(sound.playbackRate).toBe(1);
-      // Godot's Web sample driver can expand the mono resource to stereo.
-      expect([1, 2]).toContain(sound.channels);
-      expect(sound.peak, 'The native player submits audible PCM, not a silent placeholder.').toBeGreaterThan(0.01);
-      expect(sound.fingerprint).toBeTruthy();
-      const caption = await page.locator('#game-status').textContent();
-      expect((await greetings(page)).length, 'The trusted burst starts only one complete quack.').toBe(before + 1);
-      await expect.poll(async () => (await greetings(page))[before]?.endedAt,
-        { message: 'The actual audio source finishes before the next independent greeting.' }).toBeTruthy();
-      const completed = (await greetings(page))[before];
-      expect((completed.endedAt - completed.at) / 1000, 'An ignored repeat never truncates the recording.').toBeGreaterThan(sound.duration - 0.06);
-      if (reducedMotion === 'no-preference' && Date.now() - startedAt < motionSeconds * 1000 - 200) {
-        await repeat();
-        expect((await greetings(page)).length, 'A finished quack still waits for its longer action.').toBe(before + 1);
-        await expect(page.locator('#game-status')).toHaveText(caption);
-      }
-    }
-    if (reducedMotion === 'no-preference') await page.waitForTimeout(Math.max(0, motionSeconds * 1000 + 120 - (Date.now() - startedAt)));
-    expect((await greetings(page)).length, 'Busy gestures are discarded instead of queued.').toBe(available ? before + 1 : before);
-  }
   for (let index = 0; index < 4; index++) {
     const before = await page.evaluate(() => audioObservation.playbacks.length);
     const startedAt = Date.now();
@@ -237,32 +202,9 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip 
   expect(await greetings(page), 'Match gameplay and results do not play any Pip greeting.').toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('pip-silent-match-results.png'), scale: 'css' });
   await openRewards(page);
-  const pip = await roomControl(page, 'pip');
-  for (let index = 0; index < 2; index++) {
-    await expectGreetingAfter(() => burst(pip, index ? 'touch' : 'mouse'), 1.15, () => click(pip));
-    await expect(page.locator('#game-status')).toHaveText(/^(Boing! Pip jumps for you!|Aww! Pip feels shy!|Boop! Pip bounces right back!)$/);
-  }
-  await expectGreetingAfter(async () => {
-    const x = bounds.x + pip.x * bounds.scale, y = bounds.y + (pip.y - 18) * bounds.scale;
-    await page.mouse.move(x, y);
-    await page.mouse.down();
-    try {
-      for (const offset of [23, -23, 0]) await page.mouse.move(x + offset * bounds.scale, y, { steps: 3 });
-    } finally { await page.mouse.up(); }
-    // The normal action still owns this follow-up press. With reduced motion,
-    // a driver round trip can outlast the complete short recording; atomic
-    // Home mouse bursts above verify the audio-only gate instead.
-    if (reducedMotion === 'no-preference') await click(pip);
-  }, 1.2, () => click(pip));
-  await expect(page.locator('#game-status')).toHaveText('Pip leans into your hand. Lovely!');
+  expect((await growthView(page)).visible).toBe(true);
+  await activateGrowthControl(page, 'GrowthBack');
   expect(await saves(page)).toEqual(original);
-  const played = await greetings(page);
-  if (available) {
-    expect(played).toHaveLength(3);
-    expect(new Set(played.map(sound => sound.fingerprint)).size).toBeGreaterThan(1);
-    for (let index = 1; index < played.length; index++) expect(played[index].fingerprint).not.toBe(played[index - 1].fingerprint);
-  }
-  await page.screenshot({ path: testInfo.outputPath('pip-random-sound-home.png'), scale: 'css' });
-  await testInfo.attach('native-pip-real-playback.json', { body: JSON.stringify({ available, played }, null, 2), contentType: 'application/json' });
+  expect(await greetings(page)).toEqual([]);
   expect(errors).toEqual([]);
 });

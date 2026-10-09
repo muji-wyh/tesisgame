@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { enterGame, chooseMode, rendered, metrics, tap, contentBounds, uiScale,
-  leaderboardSnapshot } = require('./game-ui.cjs');
+const { enterGame, chooseMode, rendered, metrics, tap, contentBounds, uiScale } = require('./game-ui.cjs');
 const { roomState, scrollChestIntoView } = require('./pop-treasure-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.popRewards';
@@ -347,11 +346,11 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
 
   await page.reload();
   await enterGame(page);
-  await chooseMode(page, 'pop', { choosePlayer: false });
+  await chooseMode(page, 'pop');
   room = await expectChestRoom(page, 1, types);
   expect(room.round_id).toBe(round);
   expect(room.chests.map(chest => chest.opened)).toEqual([true, false, false]);
-  expect((await leaderboardSnapshot(page)).view, 'Pending treasure is restored before a fresh player selection').not.toBe('picker');
+  expect((await roomState(page)).visible, 'Pending treasure is restored before a fresh round').toBe(true);
   expect(await storedRewards(page), 'Reload preserves the exact partial batch').toBe(partiallyOpened);
   await page.screenshot({ path: info.outputPath('saved-chests-restored.png') });
   await openChest(page, 1, 2);
@@ -364,9 +363,8 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   await page.reload();
   await enterGame(page);
   expect(await storedRewards(page), 'Every opened flag and the completed-round receipt survive reload').toBe(completed);
-  await chooseMode(page, 'pop', { choosePlayer: false });
-  await expect.poll(async () => (await leaderboardSnapshot(page)).view,
-    { message: 'Opening the last pending chest allows the next round player selection' }).toBe('picker');
-  expect(await storedRewards(page), 'Starting player selection cannot duplicate the completed reward batch').toBe(completed);
+  await chooseMode(page, 'pop');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  expect(await storedRewards(page), 'Starting a fresh round cannot duplicate the completed reward batch').toBe(completed);
   expect(errors).toEqual([]);
 });

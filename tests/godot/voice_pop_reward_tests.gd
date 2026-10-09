@@ -284,10 +284,6 @@ func _test_result_reward_ladder(dimensions: Vector2i, field: Vector2) -> void:
 		summary.score = score
 		summary.chest_count = earned
 		view._build_results(summary)
-		var leaderboard := Control.new()
-		leaderboard.name = "RewardLayoutLeaderboard"
-		leaderboard.custom_minimum_size.y = 180.0 / scale
-		view.attach_leaderboard(leaderboard)
 		view._results.scroll_vertical = 0
 		await settle()
 		var context: String = "%s, score %d" % [dimensions, score]
@@ -338,9 +334,12 @@ func _test_result_reward_ladder(dimensions: Vector2i, field: Vector2) -> void:
 		check(view.chests_button.disabled == (earned == 0)
 			and view.chests_button.text == "Open chests (%d)" % earned,
 			"Chest navigation agrees with the earned count in the ladder: " + context)
-		check(not rewards_rect.grow(-0.25).intersects(view._result_actions.get_global_rect().grow(-0.25))
-			and leaderboard.get_global_rect().position.y >= maxf(rewards_rect.end.y, view._result_actions.get_global_rect().end.y) - 0.5,
-			"The leaderboard follows the separate rewards and actions: " + context)
+		check(not rewards_rect.grow(-0.25).intersects(view._result_actions.get_global_rect().grow(-0.25)),
+			"Rewards and result actions remain separate: " + context)
+		check(view.find_child("PlayerLeaderboard", true, false) == null
+			and view.find_child("PlayerAvatar", true, false) == null
+			and view.find_child("PlayerName", true, false) == null,
+			"Single-player results have no retired identity or ranking controls: " + context)
 		if field.y > 380:
 			check(viewport.grow(0.5).encloses(rewards_rect),
 				"Portrait and desktop results reveal every chest milestone without initial scrolling: " + context)

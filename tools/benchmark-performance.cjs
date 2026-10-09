@@ -7,8 +7,8 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const resultsRoot = path.join(root, 'build', 'performance');
-const scenarios = ['match', 'memory', 'voice-pop', 'room', 'catalog', 'chest'];
-const protocol = 'main-scene-rendered-v1';
+const scenarios = ['match', 'memory', 'voice-pop', 'growth', 'catalog', 'chest'];
+const protocol = 'main-scene-rendered-v2';
 
 function parse(args) {
   const result = {};
@@ -56,8 +56,8 @@ function sourceIdentity(project) {
       else if (!entry.name.endsWith('.uid')) files.push([path.relative(project, filename).replaceAll('\\', '/'), hash(filename)]);
     }
   }
-  for (const directory of ['scripts', 'scenes']) visit(path.join(project, directory));
-  for (const file of ['project.godot', 'words.json', 'voice-prompts.json']) {
+  for (const directory of ['scripts', 'scenes', 'data']) visit(path.join(project, directory));
+  for (const file of ['project.godot', 'words.json', 'phrases.json', 'curriculum.json', 'voice-prompts.json']) {
     const filename = path.join(project, file);
     if (fs.existsSync(filename)) files.push([file, hash(filename)]);
   }

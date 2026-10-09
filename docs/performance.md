@@ -1,5 +1,9 @@
 # Rendered main-scene performance protocol
 
+The current protocol is `main-scene-rendered-v2`. It covers the Grow with Pip
+curriculum and growth notebook; no v2 timing or performance improvement is claimed
+by the workload migration itself.
+
 The benchmark runs the actual main scene in a native Godot window using the GL
 Compatibility renderer. The primary profile is a 390 by 844 phone-shaped window,
 with the production `canvas_items` / `expand` stretch configuration, normal motion,
@@ -37,24 +41,27 @@ Each scenario creates a fresh full main scene and isolated save files, uses seed
 73021, then allows 90 warmup frames before recording 240 rendered frames. The
 private Pip idle generator is also seeded after the scene is ready. The
 scene is never manually advanced, frozen, stripped of artwork, or given reduced
-motion. Startup/loading and result-file serialization are outside measurement.
+motion during warmup or measurement. The chest fixture crosses the shared
+celebration gate before warmup; chest charge and release then use their real
+clocks. Startup/loading and result-file serialization are outside measurement.
 The six default scenarios receive equal weight:
 
 | Scenario | Presentation and scheduled input |
 | --- | --- |
-| Match | Ten cards from Animal Friends, Spring theme; two successful word-picture pairs at 8% and 50% of the measured interval. |
-| Memory | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
-| Voice Pop | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
-| Room | Pip's room with normal idle motion, one pet gesture, then the room's toy button. |
-| All words | The complete 1,250-word age catalogue in 60-word pages; focus, scroll, pagination, and pronunciation at the first, middle, and last card. |
-| Chest | A real Match win and continuous chest hold; the hold begins during the final 60 warmup frames so measurement includes charge, release, and reward presentation. |
+| Match (`match`) | Ten cards from the seeded Lv3 curriculum, Spring theme; two successful word-picture pairs at 8% and 50% of the measured interval. |
+| Memory (`memory`) | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
+| Voice Pop (`voice-pop`) | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
+| Growth notebook (`growth`) | The 80-word Lv3 cohort; browse age 4, return to age 3, then hear its first card. Browsing and listening must leave learning progress unchanged. |
+| Age catalogue (`catalog`) | The 284-word age-7 preview cohort in five pages of at most 60 cards; focus, scroll, pagination, and pronunciation at the first, middle, and last card. Only pictured words retain image textures. |
+| Chest (`chest`) | A real Match win and continuous chest hold after the celebration gate; the hold begins during the final 60 warmup frames so measurement includes charge, release, and reward presentation. |
 
-Talk Quest and its map diagnostic were retired on 2026-10-06. The current
-six-scenario matrix must be used for both baseline and candidate. Archived
-seven-scenario results remain evidence for their original revision and cannot
-be compared directly with the current aggregate.
+Talk Quest and its map diagnostic were retired on 2026-10-06. Protocol v2 replaces
+the retired room scenario with the growth notebook and the full-library catalogue
+with an explicit age cohort. The current six-scenario matrix must be used for
+both baseline and candidate. Archived v1 and seven-scenario results remain evidence
+for their original revisions and cannot be compared directly with this aggregate.
 
-State assertions reject hidden onboarding, a paused page, inactive gameplay,
+State assertions reject an open game menu, a paused page, inactive gameplay,
 missing word hits, incomplete card boards, an incomplete catalogue, and a chest
 that has already opened or reached its release cue before measurement, or never
 reaches release during measurement. Voice Pop requires exactly three hits after
@@ -63,8 +70,10 @@ Voice Pop must retain its visible HUD and start with live drawn targets. Its
 raw live-target and drawn-target counts are recorded alongside every timed sample, with total active-frame counts
 and peak counts. At least one quarter of measured frames must contain live and
 drawn targets; successful hits must also be recorded. This allows a legitimate
-empty interval between volleys at the end of measurement. The room must retain
-visible Pip and playground controls. Evidence collection occurs after the timing
+empty interval between volleys at the end of measurement. The growth notebook
+must retain its catalogue, Lv3 summary, expected cohort, and unchanged progress.
+Age-catalogue assertions verify all 284 words, pagination, actual pictured-resource
+counts, and unchanged progress. Evidence collection occurs after the timing
 endpoint; workload assertions run outside measurement. The JSON records state before and after,
 scheduled actions, node/object counts, engine version, graphics adapter, render
 backend, display size, and pacing settings. All save paths are assigned before
@@ -91,6 +100,16 @@ Do not interact with the benchmark window during collection. Run five repeats
 for each version; a one-repeat diagnostic is useful for validating the harness
 but is not an acceptance result.
 
+Run a single diagnostic with all six workloads and the full timing window:
+
+```powershell
+node tools/benchmark-performance.cjs --label growth-v2-diagnostic --repeats 1
+```
+
+Use a fresh label for later runs to preserve earlier diagnostic files. Keep the
+default 90 warmup and 240 sample frames for this smoke check; a shorter chest
+sample can end before the real release cue and correctly fail its assertion.
+
 First freeze the chosen source commit into a new directory:
 
 ```powershell
@@ -98,8 +117,9 @@ node tools/freeze-performance-baseline.cjs --ref HEAD --output build/performance
 ```
 
 The tool defaults to `HEAD` and an output name containing its resolved commit.
-It copies tracked `scripts`, `scenes`, `project.godot`, `words.json`, and
-`voice-prompts.json` directly from Git blobs as buffers, preserving committed
+It copies tracked `scripts`, `scenes`, `data`, `project.godot`, `words.json`,
+`phrases.json`, `curriculum.json`, and `voice-prompts.json` directly from Git
+blobs as buffers, preserving committed
 bytes and excluding uncommitted runtime changes. `baseline-source.json` records
 the exact commit, original Git blob IDs, per-file SHA-256 hashes, and a source
 tree fingerprint. It always refuses an existing destination, an output outside
@@ -143,7 +163,8 @@ Do not edit either measured runtime or the harness during a run. The runner
 verifies the actual selected project's `tests/performance/main_scene_benchmark.gd`
 and `tests/godot/player_flow_fixture.gd` against the root project's copies, then
 freezes a combined fingerprint of both files. This also detects changes to
-shared junction targets after collection starts. Runtime and protocol hashes
+shared junction targets after collection starts. Runtime hashes include the
+curriculum, phrase library, and Pip growth-stage data. Runtime and protocol hashes
 are checked before and after every engine process, as well as before summaries
 are written. Summaries retain both the combined harness hash and per-file hashes.
 

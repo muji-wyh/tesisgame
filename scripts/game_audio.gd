@@ -37,11 +37,10 @@ const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/peach.wav",
 	"res://assets/imported-audio/pop-slices/coconut.wav",
 ]
-const PIP_SOUND_PATHS := [
-	"res://assets/audio/pip/duck_double_01_bouncy.wav",
-	"res://assets/audio/pip/duck_double_03_derpy.wav",
-	"res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
-]
+const PIP_REACTION_PATHS := {
+	true: "res://assets/audio/pip/duck_double_01_bouncy.wav",
+	false: "res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
+}
 const ChestSoundBank = preload("res://scripts/chest_sound_bank.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
 const CHEST_EVENT_CHANNELS := 3
@@ -70,9 +69,6 @@ var _pop_players: Array[AudioStreamPlayer] = []
 var _pop_next_player: int = 0
 var _pop_last_player: AudioStreamPlayer
 var _pop_launch_path: String = POP_LAUNCH_FALLBACK
-var _pip_rng := RandomNumberGenerator.new()
-var _last_pip_path: String = ""
-var _pip_voice_request: int = -1
 var _speech_debug_mix: float = 1.0
 var _pip_reaction_gain: float = 0.68
 var _chest_charge_active: bool = false
@@ -101,7 +97,6 @@ var _round_celebration_next_player: int = 0
 func _ready() -> void:
 	set_process(false)
 	_pop_slice_rng.randomize()
-	_pip_rng.randomize()
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
@@ -317,30 +312,8 @@ func _next_pop_slice() -> String:
 	return _last_pop_slice_path
 
 
-func next_pip_sound() -> String:
-	# Keep mascot sounds independent from cards, rewards and other random effects.
-	var choices: Array = PIP_SOUND_PATHS.duplicate()
-	choices.erase(_last_pip_path)
-	_last_pip_path = choices[_pip_rng.randi_range(0, choices.size() - 1)]
-	return _last_pip_path
-
-
-func play_pip() -> void:
-	if muted or not active or not available or is_pip_busy():
-		return
-	# Ignore repeated greetings while their voice is still active.
-	# The shared channel keeps existing mute, page and microphone cleanup.
-	say(next_pip_sound())
-
-
-func is_pip_busy() -> bool:
-	if not active or muted or not available:
-		return false
-	return _pip_voice_request >= 0 and _pip_voice_request == _playback_requests.get(voice, -1)
-
-
 func play_pip_reaction(correct: bool) -> void:
-	_play_pip_call(PIP_SOUND_PATHS[0] if correct else PIP_SOUND_PATHS[2],
+	_play_pip_call(PIP_REACTION_PATHS[correct],
 		1.12 if correct else 0.80, 0.68 if correct else 0.54)
 
 
@@ -695,17 +668,11 @@ func say(path: String) -> void:
 func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 	_stop(player)
 	var request_id: int = _playback_requests[player]
-	if player == voice and path in PIP_SOUND_PATHS:
-		_pip_voice_request = request_id
 	var stream: AudioStream = await _stream(path, loop)
 	# State callbacks may cancel or replace this request during preparation.
 	if request_id != _playback_requests[player] or (not active and player != ui_click) or muted or not available:
-		if player == voice and _pip_voice_request == request_id:
-			_pip_voice_request = -1
 		return
 	if stream == null:
-		if player == voice and _pip_voice_request == request_id:
-			_pip_voice_request = -1
 		if player == music:
 			current_theme = ""
 			_music_error = true
@@ -749,7 +716,6 @@ func _stop(player: AudioStreamPlayer) -> void:
 
 
 func _voice_finished() -> void:
-	_pip_voice_request = -1
 	_update_music_gain()
 
 

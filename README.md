@@ -1,4 +1,4 @@
-# Pip and Words
+# Grow with Pip
 
 A Godot game delivered as a static website for early English learners. Gameplay,
 audio, animations, and local progress run on the device. The browser shell
@@ -8,26 +8,14 @@ handles loading, accessibility, audio recovery, and speech recognition.
 
 ## Current game
 
-- **Match:** five word-picture pairs, three hints, and optional spoken answers.
+- **Match:** five word-picture pairs, three hints, optional spoken answers and unlimited retries.
 - **Memory:** five hidden pairs, with a hold-to-peek control and no countdown.
-- **Phrase Builder:** listen to Pip, arrange word tiles, and complete three short
-  phrases to earn a chest. Answers stay editable with unlimited retries. Includes
-  36 recorded phrases across three age levels, replay, and optional written help.
-- **Voice Pop:** select a local player, then speak visible words during a
-  50-second round. The second consecutive hit adds 3 seconds; the third adds
-  5 seconds. Occasional volleys throw several words together. Scores of 100,
-  200, and 300 each earn one chest, with up to three distinct chests shown together.
-- **Players and leaderboards:** up to ten names and emoji avatars on the current
-  device. First-time entry requires creating a player. Voice Pop selects the
-  player before each round and saves the result automatically; Match and Memory
-  attribute results afterward. Personal bests rank separately for Match, Memory,
-  and Voice Pop.
-- **Eight worlds and 1,250 words:** choose a theme during loading or in Pip's room.
-  Age preferences guide the vocabulary; they do not collect a birthdate.
-- **Chests and toys:** winning Match, Memory, or Phrase Builder advances saved gift progress.
-  The chest has a five-second performance; releasing before the visible lid
-  release cancels it. A temporary flying gift is cosmetic. Earned toys remain
-  playable in Pip's room.
+- **Phrase Builder:** listen, drag pictured or contextual word tiles into order, and complete three phrases to earn a chest. The catalog contains 330 recorded phrases with unlimited retries.
+- **Voice Pop:** speak visible words during a 50-second round. Scores of 100, 200, and 300 each earn a chest. Results retain scores, chest progress and word review.
+- **Growth:** everyone starts at Lv3. Each word needs six consecutive correct answers in any applicable mode. A wrong answer resets the involved words. Master the entire current cohort to unlock the next level, up to Lv12+. Earned levels never decrease.
+- **Vocabulary notebook:** the progress bar opens all words in a selected age cohort, including saved mastery and pronunciation. Later levels can be previewed but cannot be selected to skip progression. The 1,550-word curriculum is an editorial English-as-a-second-language sequence, not a developmental assessment.
+- **Pip:** ten stage appearances and cumulative action repertoires accompany growth. [Review all stages, moves and voices](https://gentle-forest-02ff42900.3.azurestaticapps.net/preview/pip-growth/).
+- **Eight worlds and treasure:** theme choices, three-second round celebrations and existing chest rewards remain available. Usernames, identity avatars, leaderboards and Pip's room have been retired.
 
 Voice Pop uses `SpeechRecognition` or `webkitSpeechRecognition` by default.
 Browser support, a secure page, microphone permission, and a functioning speech
@@ -40,14 +28,15 @@ speech model. Automated speech tests do not establish acoustic accuracy.
 
 All game audio ships in the initial game pack. Browsers still require a trusted
 interaction to enable playback. Pip ignores another manual tap until the
-current action and call finish. Reduced motion keeps readable state and simpler
+current gesture finishes. Reduced motion keeps readable state and simpler
 feedback. Touch, keyboard, and Xbox controller input share the game controls.
 
 Detailed rules and behavior:
 
 - [Gameplay reference](docs/gameplay.md)
 - [Voice Pop treasure and shared chest models](docs/voice-pop-treasure.md)
-- [Local players and leaderboards](docs/local-leaderboards.md)
+- [Growth rules and persistence](docs/growth-system.md)
+- [Pip stage art and voices](docs/assets/pip-growth.md)
 - [Speech matching and the local experiment](docs/voice-matching.md)
 - [Voice Pop slice feedback](docs/voice-pop-slice-feedback.md)
 - [Chest timing, sound, and input handling](docs/assets/chest-feel.md)
@@ -99,7 +88,7 @@ focused suites:
 ```powershell
 node tools/run-tests.cjs --list
 npm run test:voice-pop
-npm run test:leaderboards
+node tools/run-tests.cjs growth
 npm run test:chest-charge
 ```
 
@@ -127,7 +116,7 @@ iframe permissions, cache behavior, audio recovery, and detailed verification.
 
 ## Source and documentation
 
-`words.json` is the canonical vocabulary. All 1,250 recorded pronunciations and eight
+`words.json` is the canonical vocabulary. All 1,550 recorded pronunciations and eight
 spoken prompts use the approved Microsoft Ava Neural voice (`-15%` rate, `+8Hz`
 pitch). [Voice regeneration](docs/assets/ava-voice.md) uses Python, `edge-tts`,
 and FFmpeg; ordinary builds and playback use the bundled WAVs offline. Some optional artwork and
@@ -142,7 +131,7 @@ of the repository's code license.
 - [Changelog](changelog.md): historical changes, not a list of current features.
 
 Talk Quest, Medals and Words collection pages, Learn/Sky/Listen modes, speaker
-enrollment, and multiplayer recognition have been retired. Saved reward, toy, and legacy
+enrollment, and multiplayer recognition have been retired. Saved reward and legacy
 preference data remain for compatibility; local player profiles do not store
 voiceprints. Historical documents must not be used as instructions to restore
 retired features.

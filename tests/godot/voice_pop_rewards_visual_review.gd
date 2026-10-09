@@ -39,7 +39,6 @@ func _run() -> void:
 	root.size = Vector2i(1366, 768)
 	app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
 	Fixture.install(app, directory)
 	root.add_child(app)
 	app.audio.muted = true

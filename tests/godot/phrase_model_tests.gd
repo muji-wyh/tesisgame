@@ -32,12 +32,12 @@ func _run() -> void:
 
 func _test_catalog(vocabulary: Array) -> void:
 	var phrases: Array[Dictionary] = PhraseData.entries()
-	check(phrases.size() == 36, "The catalog has 36 phrases")
-	check(PhraseData.for_age("4-6").size() == 12, "Young learners have 12 phrases")
-	check(PhraseData.for_age("7-9").size() == 12, "Growing learners have 12 phrases")
-	check(PhraseData.for_age("10-plus").size() == 12, "Advanced learners have 12 phrases")
-	check(PhraseData.for_age("10+") == PhraseData.for_age("10-plus"), "Both advanced age identifiers select the same phrases")
-	check(PhraseData.for_age("all").size() == 36, "All words includes every phrase")
+	check(phrases.size() == 330, "The curriculum contains 330 complete phrases")
+	for age in range(3, 13):
+		var eligible: Array = PhraseData.for_age(str(age))
+		check(eligible.size() >= 3 and eligible.all(func(phrase: Dictionary) -> bool: return int(phrase.min_age) <= age),
+			"Every age has a complete cumulative phrase pool")
+	check(PhraseData.for_age("12").size() == phrases.size(), "Lv12+ exposes the complete phrase curriculum")
 	check(PhraseData.for_age("unknown").is_empty(), "Unknown age levels do not leak a default catalog")
 	var by_id: Dictionary = {}
 	for word in vocabulary:
@@ -53,7 +53,7 @@ func _test_catalog(vocabulary: Array) -> void:
 		seen_ids[phrase.id] = true
 		seen_text[phrase.text] = true
 		lengths[phrase.words.size()] = true
-		check(phrase.words.size() >= 2 and phrase.words.size() <= 4, "Phrases fit two to four answer slots")
+		check(phrase.words.size() >= 2 and phrase.words.size() <= 5, "Phrases fit two to five answer slots")
 		var target_ids: Dictionary = {}
 		var text: PackedStringArray = []
 		for id in phrase.words:
@@ -63,24 +63,25 @@ func _test_catalog(vocabulary: Array) -> void:
 			check(not target_ids.has(id), "No phrase requires the same word tile twice")
 			target_ids[id] = true
 			text.append(by_id[id].text)
-			check(Data.word_level(by_id[id]) <= Data.word_level(phrase), "Phrase targets fit their age level")
+			check(Data.word_age(by_id[id]) <= int(phrase.min_age), "Phrase targets fit their age level")
 		check(" ".join(text) == phrase.text, "Spoken phrase text matches its target tiles")
-		check(target_ids.has(phrase.picture_id), "Each illustration cue belongs to its phrase")
+		check(phrase.picture_id.is_empty() or (target_ids.has(phrase.picture_id)
+			and not str(by_id[phrase.picture_id].image).is_empty()),
+			"A phrase uses a pictured target as its cue or presents contextual words without one")
 		check(phrase.audio == "assets/audio/voice/phrase-%s.wav" % phrase.id, "Phrase audio has a stable path")
 		if by_id.has(phrase.words[0]):
 			has_action = has_action or by_id[phrase.words[0]].get("part_of_speech") == "verb"
 			has_description = has_description or by_id[phrase.words[0]].get("part_of_speech") == "adjective"
-	check(lengths.has(2) and lengths.has(3) and lengths.has(4), "The catalog includes two-, three- and four-word phrases")
+	check(lengths.has(2) and lengths.has(3) and lengths.has(4) and lengths.has(5), "The catalog includes two-, three-, four- and five-word phrases")
 	check(has_action and has_description, "Phrases include actions as well as descriptions")
 	phrases[0].words.clear()
 	check(not PhraseData.entries()[0].words.is_empty(), "Catalog consumers cannot mutate later loads")
 
 
 func _test_rounds(vocabulary: Array) -> void:
-	var levels: Dictionary = {"4-6": "basic", "7-9": "growing", "10-plus": "advanced", "10+": "advanced", "all": ""}
 	var distinct_orders: Dictionary = {}
-	for age_band in levels:
-		var max_level: int = 3 if age_band in ["all", "10-plus", "10+"] else (1 if age_band == "4-6" else 2)
+	for age in range(3, 13):
+		var age_band: String = str(age)
 		for seed_value in range(12):
 			var model = PhraseModel.new()
 			check(model.reset(vocabulary, age_band, seed_value), "Every age level starts a three-question round")
@@ -90,7 +91,7 @@ func _test_rounds(vocabulary: Array) -> void:
 				var question: Dictionary = model.current_question()
 				check(not seen_questions.has(question.id), "Round questions never repeat")
 				seen_questions[question.id] = true
-				check(age_band == "all" or question.level == levels[age_band], "Questions use the selected age band")
+				check(int(question.min_age) <= age, "Questions use the selected age band")
 				check(model.options.size() == question.words.size() + 2, "Every bank includes two distractors")
 				var ids: Dictionary = {}
 				var texts: Dictionary = {}
@@ -101,7 +102,7 @@ func _test_rounds(vocabulary: Array) -> void:
 					check(not texts.has(option.text.to_lower()), "Option text is distinct")
 					ids[option.id] = true
 					texts[option.text.to_lower()] = true
-					check(Data.word_level(option) <= max_level, "Distractors and targets stay within the age level")
+					check(Data.word_age(option) <= age, "Distractors and targets stay within the age level")
 					if question.words.has(option.id):
 						visible_targets.append(option.id)
 					else:
@@ -117,7 +118,7 @@ func _test_rounds(vocabulary: Array) -> void:
 	check(distinct_orders.size() > 30, "Seeded rounds vary their phrases and choices")
 	var first = PhraseModel.new()
 	var second = PhraseModel.new()
-	check(first.reset(vocabulary, "all", 7481) and second.reset(vocabulary, "all", 7481), "Deterministic fixtures start")
+	check(first.reset(vocabulary, "12", 7481) and second.reset(vocabulary, "12", 7481), "Deterministic fixtures start")
 	check(first.questions == second.questions and first.snapshot() == second.snapshot(), "Equal seeds reproduce questions and choice order")
 	var snapshot: Dictionary = first.snapshot()
 	snapshot.question.words.clear()
@@ -132,7 +133,7 @@ func _test_editing_and_completion(vocabulary: Array) -> void:
 	var model = PhraseModel.new()
 	var notifications: Array[int] = [0]
 	model.changed.connect(func() -> void: notifications[0] += 1)
-	check(model.reset(vocabulary, "4-6", 47), "An editable round starts")
+	check(model.reset(vocabulary, "3", 47), "An editable round starts")
 	check(notifications[0] == 1, "Reset publishes the initial round")
 	check(model.check_answer() == "incomplete", "An empty answer is incomplete")
 	check(model.completed == 0 and model.mistakes == 0, "Incomplete answers do not count as mistakes or progress")
@@ -179,7 +180,7 @@ func _test_editing_and_completion(vocabulary: Array) -> void:
 	check(model.current_question().is_empty() and model.options.is_empty() and model.answer.is_empty(), "Completed rounds expose no playable question")
 	check(not model.advance() and not model.select(0), "A finished round cannot advance or accept tiles")
 	check(model.check_answer() == "correct" and model.completed == 3, "Rechecking a finished round does not repeat completion")
-	check(model.reset(vocabulary, "7-9", 48), "A new adventure starts after completion")
+	check(model.reset(vocabulary, "7", 48), "A new adventure starts after completion")
 	check(model.phase == "building" and model.completed == 0 and model.mistakes == 0 and model.question_index == 0, "Reset clears every previous round counter")
 
 
@@ -187,7 +188,7 @@ func _test_placement(vocabulary: Array) -> void:
 	var model = PhraseModel.new()
 	var found: bool = false
 	for seed_value in range(128):
-		if model.reset(vocabulary, "10-plus", seed_value) and model.current_question().words.size() == 4:
+		if model.reset(vocabulary, "12", seed_value) and model.current_question().words.size() == 4:
 			found = true
 			break
 	check(found, "Placement tests use a real four-word phrase")
@@ -253,7 +254,7 @@ func _test_placement(vocabulary: Array) -> void:
 	_expect_ignored_place(model, 0, 0, observed_answers)
 	check(model.phase == "finished" and model.completed == 3 and model.mistakes == 1,
 		"Placement leaves the existing completion and unlimited-retry rules intact")
-	check(not model.reset([], "all", 2), "An unavailable new round still fails safely")
+	check(not model.reset([], "12", 2), "An unavailable new round still fails safely")
 	_expect_ignored_place(model, 0, 0, observed_answers)
 
 
@@ -277,27 +278,27 @@ func _expect_ignored_place(model, option_index: int, answer_position: int, obser
 
 func _test_invalid_input(vocabulary: Array) -> void:
 	var model = PhraseModel.new()
-	check(not model.reset([], "4-6", 1), "An empty vocabulary fails safely")
+	check(not model.reset([], "3", 1), "An empty vocabulary fails safely")
 	check(not model.error.is_empty() and model.phase == "finished" and model.options.is_empty(), "Unavailable content cannot leave a playable partial round")
 	check(not model.reset(vocabulary, "unknown", 1), "Unsupported age bands fail safely")
-	check(not model.reset(["invalid"], "all", 1), "Non-dictionary vocabulary fails safely")
+	check(not model.reset(["invalid"], "12", 1), "Non-dictionary vocabulary fails safely")
 	var duplicate: Array = vocabulary.duplicate(true)
 	duplicate.append(vocabulary[0].duplicate(true))
-	check(not model.reset(duplicate, "all", 1), "Duplicate word IDs are rejected")
+	check(not model.reset(duplicate, "12", 1), "Duplicate word IDs are rejected")
 	duplicate[-1].id = "duplicate-display-word"
 	duplicate[-1].text = duplicate[-1].text.to_upper()
-	check(not model.reset(duplicate, "all", 1), "Duplicate display words are rejected case-insensitively")
+	check(not model.reset(duplicate, "12", 1), "Duplicate display words are rejected case-insensitively")
 	var malformed: Array = vocabulary.duplicate(true)
 	malformed[0].level = "unavailable"
-	check(not model.reset(malformed, "all", 1), "Invalid vocabulary levels are rejected")
+	check(not model.reset(malformed, "12", 1), "Invalid vocabulary levels are rejected")
 	malformed = vocabulary.duplicate(true)
 	malformed[0].erase("audio")
-	check(not model.reset(malformed, "all", 1), "Words without their voice metadata are rejected")
+	check(not model.reset(malformed, "12", 1), "Words without their voice metadata are rejected")
 	var small_vocabulary: Array = vocabulary.filter(func(word: Dictionary) -> bool:
 		return word.id in ["red", "apple", "big", "ball", "soft", "toy"])
-	check(model.reset(small_vocabulary, "4-6", 1), "A complete three-phrase subset is playable")
+	check(model.reset(small_vocabulary, "4", 1), "A complete three-phrase subset is playable")
 	check(model.questions.size() == 3, "Missing catalog words are excluded before choosing questions")
-	check(not model.reset([], "all", 2), "A failed reset after play is reported")
+	check(not model.reset([], "12", 2), "A failed reset after play is reported")
 	check(model.questions.is_empty() and model.answer.is_empty() and model.options.is_empty(), "A failed reset clears stale questions and answers")
 	check(not model.select(0) and not model.advance() and model.check_answer() == "incomplete", "Failed rounds cannot produce progress")
 

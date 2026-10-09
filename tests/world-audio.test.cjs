@@ -191,7 +191,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 48);
   assert.equal(audio.filter(file => file.source.includes('/chest-reference/')).length, 5);
-  assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 36);
+  assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 330);
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
   assert.ok(audio.every(file => !/\/chests\/[^/]+-(?:step(?:-detail|-roll)?|release|reward)\.wav$/.test(file.source)),

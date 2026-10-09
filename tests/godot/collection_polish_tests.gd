@@ -27,7 +27,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	app.playroom_save_path = directory + "/room.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -93,8 +93,8 @@ func _run() -> void:
 	root.size = Vector2i(768, 1024)
 	app._show_collection()
 	await settle()
-	check(app.duck.is_visible_in_tree() and app._room.is_ancestor_of(app.duck),
-		"Pip remains present in the room")
+	check(app._age_catalog.is_visible_in_tree() and app._growth_summary.is_visible_in_tree(),
+		"The growth page presents mastery progress and the word catalog")
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	app._play_duck()
 	check(app.medal_progress.counts == counts, "Playing with Pip does not grant a reward")

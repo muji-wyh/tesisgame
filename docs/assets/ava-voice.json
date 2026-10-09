@@ -17,7 +17,7 @@
     "encoding": "PCM"
   },
   "postprocessing": "None; MP3 decoded to the existing WAV format only.",
-  "generatedAt": "2026-10-07T07:56:54.863Z",
+  "generatedAt": "2026-10-09T02:25:40.748Z",
   "files": [
     {
       "id": "spring-theme",
@@ -10084,6 +10084,2406 @@
       "sha256": "9ec2b53f74687c9635e88cdf531833b7f18fd2eadee93c7066efbfe20c8d81e9"
     },
     {
+      "id": "word-i",
+      "text": "i",
+      "synthesisText": "i.",
+      "path": "assets/audio/voice/word-i.wav",
+      "bytes": 82598,
+      "sha256": "316a55ffd9538eafae063a03c3b2228353b3b3c405c0871ffc1e153fc23e2505"
+    },
+    {
+      "id": "word-you",
+      "text": "you",
+      "synthesisText": "you.",
+      "path": "assets/audio/voice/word-you.wav",
+      "bytes": 52964,
+      "sha256": "f53598ba6acd2a767e60e9dffc2234be11bff3b0c9d4c3834abeb687cf3ce164"
+    },
+    {
+      "id": "word-my",
+      "text": "my",
+      "synthesisText": "my.",
+      "path": "assets/audio/voice/word-my.wav",
+      "bytes": 82598,
+      "sha256": "7136b8a741e164b10abdf17262ea27246a00a57abfb5633e642418dc31c15f44"
+    },
+    {
+      "id": "word-a",
+      "text": "a",
+      "synthesisText": "a.",
+      "path": "assets/audio/voice/word-a.wav",
+      "bytes": 82598,
+      "sha256": "b357d3ce38beb1dd63aa427e31b2ee15771f51bb74ff2054a1ecb7dc76586f8d"
+    },
+    {
+      "id": "word-is",
+      "text": "is",
+      "synthesisText": "is.",
+      "path": "assets/audio/voice/word-is.wav",
+      "bytes": 50846,
+      "sha256": "9af87dc4f1cb6fa5729fbd6ccac5930b5264cced7c00589aaba20715f28ff082"
+    },
+    {
+      "id": "word-can",
+      "text": "can",
+      "synthesisText": "can.",
+      "path": "assets/audio/voice/word-can.wav",
+      "bytes": 82598,
+      "sha256": "700cbcef9263ee05a1897b99ac503cbb1d6ea7149bc07ac61e64f8ff693b5ef0"
+    },
+    {
+      "id": "word-yes",
+      "text": "yes",
+      "synthesisText": "yes.",
+      "path": "assets/audio/voice/word-yes.wav",
+      "bytes": 82598,
+      "sha256": "86f831fedf185fab2fc7952551cb2cf76dd45062e31d12e2bade4bb4d5c81394"
+    },
+    {
+      "id": "word-no",
+      "text": "no",
+      "synthesisText": "no.",
+      "path": "assets/audio/voice/word-no.wav",
+      "bytes": 82598,
+      "sha256": "9088d12c70700f5a09f2df5c8ea66306f306ec6d9cbc4b9eabe4dcac65200470"
+    },
+    {
+      "id": "word-please",
+      "text": "please",
+      "synthesisText": "please.",
+      "path": "assets/audio/voice/word-please.wav",
+      "bytes": 82598,
+      "sha256": "b2cfbaed9e783460dd8f75f48644f8f28b64b0e33ae1b3449e99fce68a2c51ba"
+    },
+    {
+      "id": "word-hello",
+      "text": "hello",
+      "synthesisText": "hello.",
+      "path": "assets/audio/voice/word-hello.wav",
+      "bytes": 82598,
+      "sha256": "f2d6423eebd49a04ce56ea9d628028b6312522682acc56ab9d658213d395bf46"
+    },
+    {
+      "id": "word-me",
+      "text": "me",
+      "synthesisText": "me.",
+      "path": "assets/audio/voice/word-me.wav",
+      "bytes": 82598,
+      "sha256": "e0459b20dacdf8cb4eb9c40632aeecbeb3f4b00838cf4b73e8702afe729089aa"
+    },
+    {
+      "id": "word-we",
+      "text": "we",
+      "synthesisText": "we.",
+      "path": "assets/audio/voice/word-we.wav",
+      "bytes": 82598,
+      "sha256": "7000aaa4997d790cb22b7cf885816bd0c49d4ec25977bd4c27b6122886a92eb8"
+    },
+    {
+      "id": "word-he",
+      "text": "he",
+      "synthesisText": "he.",
+      "path": "assets/audio/voice/word-he.wav",
+      "bytes": 82598,
+      "sha256": "d942e8d0ec5321d87a7b709c349e615f1b712a4732d52626f3bdf07abd3e43cd"
+    },
+    {
+      "id": "word-she",
+      "text": "she",
+      "synthesisText": "she.",
+      "path": "assets/audio/voice/word-she.wav",
+      "bytes": 82598,
+      "sha256": "c818b7330f9ac25975b5113188a8852b502bc8f9977b93eaead95fd4c2ff00be"
+    },
+    {
+      "id": "word-it",
+      "text": "it",
+      "synthesisText": "it.",
+      "path": "assets/audio/voice/word-it.wav",
+      "bytes": 82598,
+      "sha256": "b802670732883a11850cda7eeecbb52f8cc262e073c5ec3cfd8f60046ba34cbe"
+    },
+    {
+      "id": "word-they",
+      "text": "they",
+      "synthesisText": "they.",
+      "path": "assets/audio/voice/word-they.wav",
+      "bytes": 82598,
+      "sha256": "c2aceb26765c0e77cfcf38dc8ce9b06c31345159a2967868c975e09066750d74"
+    },
+    {
+      "id": "word-us",
+      "text": "us",
+      "synthesisText": "us.",
+      "path": "assets/audio/voice/word-us.wav",
+      "bytes": 82598,
+      "sha256": "42f77dcdacccc9dc65b0bddc27865aa69a2e05a3674d714b3fd5a02bf455c289"
+    },
+    {
+      "id": "word-them",
+      "text": "them",
+      "synthesisText": "them.",
+      "path": "assets/audio/voice/word-them.wav",
+      "bytes": 82598,
+      "sha256": "1d908f25136e5ab239fbb66e1d0a6fddc4d8f7c5ef76b3891dfbca45bd67c457"
+    },
+    {
+      "id": "word-him",
+      "text": "him",
+      "synthesisText": "him.",
+      "path": "assets/audio/voice/word-him.wav",
+      "bytes": 82598,
+      "sha256": "0034fd745b9f0d574bc4d3dbed9cd8eca907154695fe2f6f9ac0f5e81c2ab56e"
+    },
+    {
+      "id": "word-her",
+      "text": "her",
+      "synthesisText": "her.",
+      "path": "assets/audio/voice/word-her.wav",
+      "bytes": 82598,
+      "sha256": "8a24a2f727947ada0c22c89fb34b21c7a54de449907ff29b7f2464856ed9b06d"
+    },
+    {
+      "id": "word-your",
+      "text": "your",
+      "synthesisText": "your.",
+      "path": "assets/audio/voice/word-your.wav",
+      "bytes": 82598,
+      "sha256": "094c0474f24e28ecbe8a001a2417a1a0e27fa38b1309ae5484da41eab7385045"
+    },
+    {
+      "id": "word-his",
+      "text": "his",
+      "synthesisText": "his.",
+      "path": "assets/audio/voice/word-his.wav",
+      "bytes": 82598,
+      "sha256": "2eb6615526b517b344a8e5d38ccfb2e6243b142df7e3675af65747ab6b7b52a7"
+    },
+    {
+      "id": "word-our",
+      "text": "our",
+      "synthesisText": "our.",
+      "path": "assets/audio/voice/word-our.wav",
+      "bytes": 82598,
+      "sha256": "757ae733e6dda9cca2ead80554d170a7ebfa89335f1532d159a70ff33dd34f87"
+    },
+    {
+      "id": "word-their",
+      "text": "their",
+      "synthesisText": "their.",
+      "path": "assets/audio/voice/word-their.wav",
+      "bytes": 82598,
+      "sha256": "800d0deeb81d0cc540b4360db3757ae0156f08a47ea3c13013d80d1f3ecbdc52"
+    },
+    {
+      "id": "word-an",
+      "text": "an",
+      "synthesisText": "an.",
+      "path": "assets/audio/voice/word-an.wav",
+      "bytes": 82598,
+      "sha256": "5cf62b0bf7fb7e2fa8532b61f2d6a59e2e951bc975ab8e955dbe92f90c767797"
+    },
+    {
+      "id": "word-the",
+      "text": "the",
+      "synthesisText": "the.",
+      "path": "assets/audio/voice/word-the.wav",
+      "bytes": 82598,
+      "sha256": "ef7a767b0f5cbab384c411294a3cf4d03c613047f3176a6269d55886a24af266"
+    },
+    {
+      "id": "word-and",
+      "text": "and",
+      "synthesisText": "and.",
+      "path": "assets/audio/voice/word-and.wav",
+      "bytes": 82598,
+      "sha256": "39e7fa9298d61ccdd803ff90c40c5c5868ba898c6d3cb852db1a71edf0d8bf49"
+    },
+    {
+      "id": "word-or",
+      "text": "or",
+      "synthesisText": "or.",
+      "path": "assets/audio/voice/word-or.wav",
+      "bytes": 82598,
+      "sha256": "93b6744c5ab1f4feeb21e79102656442c32123d0056d26a6cc4faf23dcada42b"
+    },
+    {
+      "id": "word-but",
+      "text": "but",
+      "synthesisText": "but.",
+      "path": "assets/audio/voice/word-but.wav",
+      "bytes": 82598,
+      "sha256": "e9a7a97c3850b8385442b159ab4e15611d72995e378fbc8bece40eb6786b41ed"
+    },
+    {
+      "id": "word-because",
+      "text": "because",
+      "synthesisText": "because.",
+      "path": "assets/audio/voice/word-because.wav",
+      "bytes": 82598,
+      "sha256": "6abc16e05f33e8e19bbcb4f85b12752a95a2afd0041a2406ea0315c12bdbe3c8"
+    },
+    {
+      "id": "word-if",
+      "text": "if",
+      "synthesisText": "if.",
+      "path": "assets/audio/voice/word-if.wav",
+      "bytes": 82598,
+      "sha256": "cb8da794f192e50868344981693709871203d6cb00131eb3d4c9702814a94d85"
+    },
+    {
+      "id": "word-so",
+      "text": "so",
+      "synthesisText": "so.",
+      "path": "assets/audio/voice/word-so.wav",
+      "bytes": 82598,
+      "sha256": "cf5fcc1dfede93496273548b1eadc29ba45f539b902c228bc0056376d3409bda"
+    },
+    {
+      "id": "word-this",
+      "text": "this",
+      "synthesisText": "this.",
+      "path": "assets/audio/voice/word-this.wav",
+      "bytes": 82598,
+      "sha256": "9bfcc569b8db8a2399c45e27a1837049f92a809a1c4300b9d055d2df210f9cb4"
+    },
+    {
+      "id": "word-that",
+      "text": "that",
+      "synthesisText": "that.",
+      "path": "assets/audio/voice/word-that.wav",
+      "bytes": 82598,
+      "sha256": "a3eb6c8cdd65cda09e41c70a0c6d9748e6d4df5f425f518d84b370f13ae90aa6"
+    },
+    {
+      "id": "word-these",
+      "text": "these",
+      "synthesisText": "these.",
+      "path": "assets/audio/voice/word-these.wav",
+      "bytes": 82598,
+      "sha256": "1aa5fb2e189691e2295966b7e105c47eeac419b727f46468427f862f64ceec30"
+    },
+    {
+      "id": "word-those",
+      "text": "those",
+      "synthesisText": "those.",
+      "path": "assets/audio/voice/word-those.wav",
+      "bytes": 82598,
+      "sha256": "18022234a6151538c999e27330bef7f12f112254e51bd23e2246d9b066e743af"
+    },
+    {
+      "id": "word-who",
+      "text": "who",
+      "synthesisText": "who.",
+      "path": "assets/audio/voice/word-who.wav",
+      "bytes": 82598,
+      "sha256": "387c9f12906e929dff391b2ac0e06505f69755f3b8703b3a665c0a4e6948fb76"
+    },
+    {
+      "id": "word-what",
+      "text": "what",
+      "synthesisText": "what.",
+      "path": "assets/audio/voice/word-what.wav",
+      "bytes": 82598,
+      "sha256": "959ed9990a5ded95fa48b3cf00d173308695c1a567ddd4bd83c9c03f6db23ddb"
+    },
+    {
+      "id": "word-where",
+      "text": "where",
+      "synthesisText": "where.",
+      "path": "assets/audio/voice/word-where.wav",
+      "bytes": 82598,
+      "sha256": "15450def09a15bea0b779b79444c7dc521bcd3945462a5ce5a7af832bd90d2b7"
+    },
+    {
+      "id": "word-when",
+      "text": "when",
+      "synthesisText": "when.",
+      "path": "assets/audio/voice/word-when.wav",
+      "bytes": 82598,
+      "sha256": "8289e152cae9ff8e8af8c64cabe05f6c66c3e3ca4b44ee17bb5bdb438b223749"
+    },
+    {
+      "id": "word-why",
+      "text": "why",
+      "synthesisText": "why.",
+      "path": "assets/audio/voice/word-why.wav",
+      "bytes": 52964,
+      "sha256": "c8825cec22231c32a24e9df47ae5a669fe0d348294d0d4c9b24a15b6d74bff79"
+    },
+    {
+      "id": "word-how",
+      "text": "how",
+      "synthesisText": "how.",
+      "path": "assets/audio/voice/word-how.wav",
+      "bytes": 82598,
+      "sha256": "8f52559bda73c4ac5734ee0be6e98a3924eb24ec6bd74407671c16e7bd0e7687"
+    },
+    {
+      "id": "word-am",
+      "text": "am",
+      "synthesisText": "am.",
+      "path": "assets/audio/voice/word-am.wav",
+      "bytes": 82598,
+      "sha256": "744450406d312e994bff8e86ffda6ca08962dbcea654473b9ee36fbf530a52a8"
+    },
+    {
+      "id": "word-are",
+      "text": "are",
+      "synthesisText": "are.",
+      "path": "assets/audio/voice/word-are.wav",
+      "bytes": 82598,
+      "sha256": "51752601c303b01c0a3fe7fbd8313bd2737b6f159afa98da9d11087f2d6647b6"
+    },
+    {
+      "id": "word-be",
+      "text": "be",
+      "synthesisText": "be.",
+      "path": "assets/audio/voice/word-be.wav",
+      "bytes": 82598,
+      "sha256": "a88f030812173e175dc31887644184c49103ae00ff4edf45e534beee12b813fb"
+    },
+    {
+      "id": "word-do",
+      "text": "do",
+      "synthesisText": "do.",
+      "path": "assets/audio/voice/word-do.wav",
+      "bytes": 82598,
+      "sha256": "6f4ab483bea6b17bcddac3e7064a8dcfe27b83afa6bf31d1c2311b79e7173c5e"
+    },
+    {
+      "id": "word-have",
+      "text": "have",
+      "synthesisText": "have.",
+      "path": "assets/audio/voice/word-have.wav",
+      "bytes": 82598,
+      "sha256": "0a3af3b92dac0757ab0656e2a8c9ae5ede79e563f73daef4f72eff11d072ed03"
+    },
+    {
+      "id": "word-has",
+      "text": "has",
+      "synthesisText": "has.",
+      "path": "assets/audio/voice/word-has.wav",
+      "bytes": 82598,
+      "sha256": "d4c410739ea8796a3f831dd6ecc0224a776de02111f5996a3809dfd7906402b5"
+    },
+    {
+      "id": "word-not",
+      "text": "not",
+      "synthesisText": "not.",
+      "path": "assets/audio/voice/word-not.wav",
+      "bytes": 82598,
+      "sha256": "1b542cb3430618dc36e626e3e13a570f2f33f2db85ce863e0bb47e76fbede660"
+    },
+    {
+      "id": "word-very",
+      "text": "very",
+      "synthesisText": "very.",
+      "path": "assets/audio/voice/word-very.wav",
+      "bytes": 82598,
+      "sha256": "1dbcc91a105eb9d369c9cc84bf00656ea8148a2b0e0a781ff62dc3e541c5597e"
+    },
+    {
+      "id": "word-too",
+      "text": "too",
+      "synthesisText": "too.",
+      "path": "assets/audio/voice/word-too.wav",
+      "bytes": 82598,
+      "sha256": "5d4ff6f3b3e305f7a450be46c348b13c05cc60096f5e842ebf3cc17d0907019e"
+    },
+    {
+      "id": "word-to",
+      "text": "to",
+      "synthesisText": "to.",
+      "path": "assets/audio/voice/word-to.wav",
+      "bytes": 82598,
+      "sha256": "90eebcf4e09c7ffa21c248ec90dc47cffc5e3e40d29f694c27cad58c10339ed4"
+    },
+    {
+      "id": "word-of",
+      "text": "of",
+      "synthesisText": "of.",
+      "path": "assets/audio/voice/word-of.wav",
+      "bytes": 82598,
+      "sha256": "1c725e4fa290eb5404dbf6bef8fc566641fc643d2be9b28c7da688be3a77de7e"
+    },
+    {
+      "id": "word-for",
+      "text": "for",
+      "synthesisText": "for.",
+      "path": "assets/audio/voice/word-for.wav",
+      "bytes": 82598,
+      "sha256": "90d1f0d859dfb50c96246bc03cca5cf2803514968bbedfb3baa182ff72951b0e"
+    },
+    {
+      "id": "word-with",
+      "text": "with",
+      "synthesisText": "with.",
+      "path": "assets/audio/voice/word-with.wav",
+      "bytes": 82598,
+      "sha256": "ce8f28faf94e272c5b67536a436f623f6eabb334691cf87058287c2e36012709"
+    },
+    {
+      "id": "word-from",
+      "text": "from",
+      "synthesisText": "from.",
+      "path": "assets/audio/voice/word-from.wav",
+      "bytes": 82598,
+      "sha256": "adf6ef2033d402594cf6310ca06413553a2892249b8a431ce44b7dcffbfc16e7"
+    },
+    {
+      "id": "word-at",
+      "text": "at",
+      "synthesisText": "at.",
+      "path": "assets/audio/voice/word-at.wav",
+      "bytes": 82598,
+      "sha256": "1e3607aa0db53dfa4bf8629c99931949bb1c206466d5088380a7a02c0fbab463"
+    },
+    {
+      "id": "word-until",
+      "text": "until",
+      "synthesisText": "until.",
+      "path": "assets/audio/voice/word-until.wav",
+      "bytes": 82598,
+      "sha256": "2bf2d5452ec550a9596168d6773adb06326863b1c6884052f19281b8020587cf"
+    },
+    {
+      "id": "word-during",
+      "text": "during",
+      "synthesisText": "during.",
+      "path": "assets/audio/voice/word-during.wav",
+      "bytes": 82598,
+      "sha256": "efd29e70c53ab08331dc909a6f62eb9c42fc66d3c1f63f8deb5d041a25b2928c"
+    },
+    {
+      "id": "word-while",
+      "text": "while",
+      "synthesisText": "while.",
+      "path": "assets/audio/voice/word-while.wav",
+      "bytes": 82598,
+      "sha256": "71b518c5d0424baa0a1a2d143239f595f61111d6bbba5a3e1447be77d694d5db"
+    },
+    {
+      "id": "word-also",
+      "text": "also",
+      "synthesisText": "also.",
+      "path": "assets/audio/voice/word-also.wav",
+      "bytes": 82598,
+      "sha256": "61874aa2c76f62c26d17362a3257792ea04f473dd906183fa281b3d8a58f5813"
+    },
+    {
+      "id": "word-then",
+      "text": "then",
+      "synthesisText": "then.",
+      "path": "assets/audio/voice/word-then.wav",
+      "bytes": 82598,
+      "sha256": "599df1a7da1e2caa77a4177bc1dfa09f28affe3d2ae301530b4be4f50ba5846e"
+    },
+    {
+      "id": "word-still",
+      "text": "still",
+      "synthesisText": "still.",
+      "path": "assets/audio/voice/word-still.wav",
+      "bytes": 82598,
+      "sha256": "6bedcf70b29dbe45f98704e166c1595ce19edd044b8faad19d650d1ec227f3b5"
+    },
+    {
+      "id": "word-almost",
+      "text": "almost",
+      "synthesisText": "almost.",
+      "path": "assets/audio/voice/word-almost.wav",
+      "bytes": 82598,
+      "sha256": "11443e9a4a4c3e6026515271eacea1ab59c268553d44834a94dae9d4c3e22bbd"
+    },
+    {
+      "id": "word-always",
+      "text": "always",
+      "synthesisText": "always.",
+      "path": "assets/audio/voice/word-always.wav",
+      "bytes": 82598,
+      "sha256": "b63a747de34ed020d24a8bff9c462cfc5f784f0b71b70dd23bb5aa7434d96db6"
+    },
+    {
+      "id": "word-sometimes",
+      "text": "sometimes",
+      "synthesisText": "sometimes.",
+      "path": "assets/audio/voice/word-sometimes.wav",
+      "bytes": 82598,
+      "sha256": "47a73a1f95abee62b912a6abec953862ef51fa87268555fe507c37d6fe8dd11f"
+    },
+    {
+      "id": "word-never",
+      "text": "never",
+      "synthesisText": "never.",
+      "path": "assets/audio/voice/word-never.wav",
+      "bytes": 82598,
+      "sha256": "ba1cb6505e333249196cd1a6d82a76d5773993cec7aa9164dab4d20029745f69"
+    },
+    {
+      "id": "word-again",
+      "text": "again",
+      "synthesisText": "again.",
+      "path": "assets/audio/voice/word-again.wav",
+      "bytes": 82598,
+      "sha256": "84f3494f0076ed72d50d8d95450a4896d19e1deb30d8eafa7ea7ffe0bbdaee92"
+    },
+    {
+      "id": "word-soon",
+      "text": "soon",
+      "synthesisText": "soon.",
+      "path": "assets/audio/voice/word-soon.wav",
+      "bytes": 82598,
+      "sha256": "c42b0f9161cd0fc753187ab7d0209006815efc000c9aaa6e7e3636496448cf91"
+    },
+    {
+      "id": "word-later",
+      "text": "later",
+      "synthesisText": "later.",
+      "path": "assets/audio/voice/word-later.wav",
+      "bytes": 82598,
+      "sha256": "b76ac1530016882f1f17ec38c5e29124f59501527c7c4423405ad31668458424"
+    },
+    {
+      "id": "word-here",
+      "text": "here",
+      "synthesisText": "here.",
+      "path": "assets/audio/voice/word-here.wav",
+      "bytes": 82598,
+      "sha256": "ea1c5b3c13834a6e9837bc44d0b6f718de3f731b03a9dc9c6c31bc37a60ab34e"
+    },
+    {
+      "id": "word-there",
+      "text": "there",
+      "synthesisText": "there.",
+      "path": "assets/audio/voice/word-there.wav",
+      "bytes": 82598,
+      "sha256": "8d231ebe3911f07359a246f2949d786740c15d3f60f9817f2d7250e75ac5b093"
+    },
+    {
+      "id": "word-goodbye",
+      "text": "goodbye",
+      "synthesisText": "goodbye.",
+      "path": "assets/audio/voice/word-goodbye.wav",
+      "bytes": 82598,
+      "sha256": "c51e65908a45a15ace2edf1d3a1b3693e309460e90a5f3ae115d18e15b1595b0"
+    },
+    {
+      "id": "word-thanks",
+      "text": "thanks",
+      "synthesisText": "thanks.",
+      "path": "assets/audio/voice/word-thanks.wav",
+      "bytes": 82598,
+      "sha256": "037a008a96d67b82f1461d925865720dee045692538f1f65f46764f0127c97bc"
+    },
+    {
+      "id": "word-sorry",
+      "text": "sorry",
+      "synthesisText": "sorry.",
+      "path": "assets/audio/voice/word-sorry.wav",
+      "bytes": 82598,
+      "sha256": "00b93192ae550a84a6549638b013d5ac8d44fae531f80c2c00b453390a8a19a4"
+    },
+    {
+      "id": "word-welcome",
+      "text": "welcome",
+      "synthesisText": "welcome.",
+      "path": "assets/audio/voice/word-welcome.wav",
+      "bytes": 82598,
+      "sha256": "b184b40b828e16010e14df4a9aaafea7c93dea9cae4cac941b0b72d6aa99617d"
+    },
+    {
+      "id": "word-want",
+      "text": "want",
+      "synthesisText": "want.",
+      "path": "assets/audio/voice/word-want.wav",
+      "bytes": 82598,
+      "sha256": "bc91e160e3f88b30c63cb8b52a0bfede7b1d409a27d9bcfc0515e2e2c066ea56"
+    },
+    {
+      "id": "word-like",
+      "text": "like",
+      "synthesisText": "like.",
+      "path": "assets/audio/voice/word-like.wav",
+      "bytes": 82598,
+      "sha256": "faa2b4dfec8fa125dd559d6f2477c077fd544f1d8c486c42f11ddfdaad847b1e"
+    },
+    {
+      "id": "word-love",
+      "text": "love",
+      "synthesisText": "love.",
+      "path": "assets/audio/voice/word-love.wav",
+      "bytes": 82598,
+      "sha256": "5c71b18556a5a37b5be595d7fa10e0520f1cfec12d8c2a61619e22477fd708c5"
+    },
+    {
+      "id": "word-need",
+      "text": "need",
+      "synthesisText": "need.",
+      "path": "assets/audio/voice/word-need.wav",
+      "bytes": 82598,
+      "sha256": "518a7b625357204597b50e7d1565d8ee465f63ad3096ab14a252c8cdbe9030dc"
+    },
+    {
+      "id": "word-see",
+      "text": "see",
+      "synthesisText": "see.",
+      "path": "assets/audio/voice/word-see.wav",
+      "bytes": 82598,
+      "sha256": "045d4fa65dc0025da8203119c394ad78bb39b56a83a427f55b3434ca473f828b"
+    },
+    {
+      "id": "word-feel",
+      "text": "feel",
+      "synthesisText": "feel.",
+      "path": "assets/audio/voice/word-feel.wav",
+      "bytes": 82598,
+      "sha256": "f3c77a8f9af46e46136afd4b352082dd1b8bafbba7670a267bedf420cb7dfd35"
+    },
+    {
+      "id": "word-know",
+      "text": "know",
+      "synthesisText": "know.",
+      "path": "assets/audio/voice/word-know.wav",
+      "bytes": 82598,
+      "sha256": "d7433c1379cd4565d1308a0e1c70a11b9b33f1917e202471c32ee3d33a4ace7e"
+    },
+    {
+      "id": "word-understand",
+      "text": "understand",
+      "synthesisText": "understand.",
+      "path": "assets/audio/voice/word-understand.wav",
+      "bytes": 82598,
+      "sha256": "21ad631f070aab29f647dfdb5da3d5e2855a81c582b336e7f0e5fa77ce688637"
+    },
+    {
+      "id": "word-remember",
+      "text": "remember",
+      "synthesisText": "remember.",
+      "path": "assets/audio/voice/word-remember.wav",
+      "bytes": 82598,
+      "sha256": "d5416a4e300af23c0bde8b543fc0fdcb05d41a854e153254db2ed7868305bd37"
+    },
+    {
+      "id": "word-forget",
+      "text": "forget",
+      "synthesisText": "forget.",
+      "path": "assets/audio/voice/word-forget.wav",
+      "bytes": 82598,
+      "sha256": "7296ac10e7d2a63225483dd0383a171e169e0f8c8cd33e6379af9b6520139094"
+    },
+    {
+      "id": "word-learn",
+      "text": "learn",
+      "synthesisText": "learn.",
+      "path": "assets/audio/voice/word-learn.wav",
+      "bytes": 82598,
+      "sha256": "574e75db89a2aa813338e3a30bf18c380d89162e42c3fb0a6c43e3c9521a8ab3"
+    },
+    {
+      "id": "word-listen",
+      "text": "listen",
+      "synthesisText": "listen.",
+      "path": "assets/audio/voice/word-listen.wav",
+      "bytes": 82598,
+      "sha256": "d433581bc1e9731a9caa98ba0b0f120e45198bd3af000556ddb6f9fa6ce462f9"
+    },
+    {
+      "id": "word-say",
+      "text": "say",
+      "synthesisText": "say.",
+      "path": "assets/audio/voice/word-say.wav",
+      "bytes": 52964,
+      "sha256": "0513389a44df937b815006c224dce5a06e90cdfb9041ba57753e8cdf35407536"
+    },
+    {
+      "id": "word-tell",
+      "text": "tell",
+      "synthesisText": "tell.",
+      "path": "assets/audio/voice/word-tell.wav",
+      "bytes": 82598,
+      "sha256": "21ca6e29291c75bf49cff892be00d6c4e2b2f5803117d4cefb289f01d97acc70"
+    },
+    {
+      "id": "word-use",
+      "text": "use",
+      "synthesisText": "use.",
+      "path": "assets/audio/voice/word-use.wav",
+      "bytes": 82598,
+      "sha256": "fe652f8718cf221c74c3c3b0af411fbed6570a83497baa8f2d64e34d6f0d92a6"
+    },
+    {
+      "id": "word-make",
+      "text": "make",
+      "synthesisText": "make.",
+      "path": "assets/audio/voice/word-make.wav",
+      "bytes": 82598,
+      "sha256": "348d119c13801361439e9778ce7bf896f02f49d7649103c143c530ebef0e46e9"
+    },
+    {
+      "id": "word-put",
+      "text": "put",
+      "synthesisText": "put.",
+      "path": "assets/audio/voice/word-put.wav",
+      "bytes": 45554,
+      "sha256": "847f7cd99495901b4d20140337703e0883e2c6da554e02c2c55c4a10349bafa3"
+    },
+    {
+      "id": "word-try",
+      "text": "try",
+      "synthesisText": "try.",
+      "path": "assets/audio/voice/word-try.wav",
+      "bytes": 51906,
+      "sha256": "8cc8861157c45561a5849135e7309d124e723b288f59e581018c7830fb357f2a"
+    },
+    {
+      "id": "word-choose",
+      "text": "choose",
+      "synthesisText": "choose.",
+      "path": "assets/audio/voice/word-choose.wav",
+      "bytes": 82598,
+      "sha256": "180fedc0edc1b7ba71558f069bfd2019ad2cd25b179c2882d2b827a4878df78c"
+    },
+    {
+      "id": "word-enjoy",
+      "text": "enjoy",
+      "synthesisText": "enjoy.",
+      "path": "assets/audio/voice/word-enjoy.wav",
+      "bytes": 82598,
+      "sha256": "631a632936b4adf35992b5786ab1c77c360a34d81a1f95819c2bcd59ef1f5bb1"
+    },
+    {
+      "id": "word-hope",
+      "text": "hope",
+      "synthesisText": "hope.",
+      "path": "assets/audio/voice/word-hope.wav",
+      "bytes": 82598,
+      "sha256": "dc1a32ca3cd645fbaf3f20558955dee94491d2cb330b3b54c885f9a29c1ec0a1"
+    },
+    {
+      "id": "word-believe",
+      "text": "believe",
+      "synthesisText": "believe.",
+      "path": "assets/audio/voice/word-believe.wav",
+      "bytes": 82598,
+      "sha256": "44689a3a5e7e89ce7a2ad78ddee5d1b6e293d82a03275ce6e6cd5f6d1c6215c8"
+    },
+    {
+      "id": "word-agree",
+      "text": "agree",
+      "synthesisText": "agree.",
+      "path": "assets/audio/voice/word-agree.wav",
+      "bytes": 82598,
+      "sha256": "6033bdb48666bb9f9d21390b56f7fc41cc6cfb42bac3ee175e076d7a0411b15a"
+    },
+    {
+      "id": "word-decide",
+      "text": "decide",
+      "synthesisText": "decide.",
+      "path": "assets/audio/voice/word-decide.wav",
+      "bytes": 82598,
+      "sha256": "513a9433f29594004560de883ec5ce39d2403be20c0931efa201f1d722fa5692"
+    },
+    {
+      "id": "word-imagine",
+      "text": "imagine",
+      "synthesisText": "imagine.",
+      "path": "assets/audio/voice/word-imagine.wav",
+      "bytes": 82598,
+      "sha256": "7e4f73dfc141a6669db7a48328d06ce4cb60f1a02b5d1ceb352a43808b98e520"
+    },
+    {
+      "id": "word-notice",
+      "text": "notice",
+      "synthesisText": "notice.",
+      "path": "assets/audio/voice/word-notice.wav",
+      "bytes": 82598,
+      "sha256": "348789a6736a429aecc9b82fa6faf1246614b23243a5a7ed93d32982e0676873"
+    },
+    {
+      "id": "word-explain",
+      "text": "explain",
+      "synthesisText": "explain.",
+      "path": "assets/audio/voice/word-explain.wav",
+      "bytes": 82598,
+      "sha256": "51f0028e25a77df58cc07a669960cb593079ba849fbaf109092ebea3dd5c6863"
+    },
+    {
+      "id": "word-describe",
+      "text": "describe",
+      "synthesisText": "describe.",
+      "path": "assets/audio/voice/word-describe.wav",
+      "bytes": 82598,
+      "sha256": "487462223941186f8a87d62f0ad5f6c7dadd7b00e6b40e406ef415d2ce964dcc"
+    },
+    {
+      "id": "word-compare",
+      "text": "compare",
+      "synthesisText": "compare.",
+      "path": "assets/audio/voice/word-compare.wav",
+      "bytes": 82598,
+      "sha256": "02d0e9170043fe350d8406b1b53b550ccb49c48b4ba44f60c5ad0fe4b7576c87"
+    },
+    {
+      "id": "word-predict",
+      "text": "predict",
+      "synthesisText": "predict.",
+      "path": "assets/audio/voice/word-predict.wav",
+      "bytes": 82598,
+      "sha256": "2519c3c972e1156442d4b7b5d090d18b7798e377f9f387f3cff7f211da4c00ba"
+    },
+    {
+      "id": "word-observe",
+      "text": "observe",
+      "synthesisText": "observe.",
+      "path": "assets/audio/voice/word-observe.wav",
+      "bytes": 82598,
+      "sha256": "b2dca7033589a27d87a3d6c09b0a4d79e6e17eb4b96cc0ea077278a5728e34e7"
+    },
+    {
+      "id": "word-investigate",
+      "text": "investigate",
+      "synthesisText": "investigate.",
+      "path": "assets/audio/voice/word-investigate.wav",
+      "bytes": 82598,
+      "sha256": "2d38c70eafb8591c9ef4e6054472f19d87a6a0e3cb74ae7a76e9eb0aa17368bf"
+    },
+    {
+      "id": "word-discover",
+      "text": "discover",
+      "synthesisText": "discover.",
+      "path": "assets/audio/voice/word-discover.wav",
+      "bytes": 82598,
+      "sha256": "0ed46f875aff2b77447cdc99ee2907a78d45c5b5e0bbbe0bf750b9b934aedaf0"
+    },
+    {
+      "id": "word-explore",
+      "text": "explore",
+      "synthesisText": "explore.",
+      "path": "assets/audio/voice/word-explore.wav",
+      "bytes": 82598,
+      "sha256": "2f967c9d720e988e60b2b1bb1d7c8bb1318717b2748ccb220b30e23a547b42e6"
+    },
+    {
+      "id": "word-create",
+      "text": "create",
+      "synthesisText": "create.",
+      "path": "assets/audio/voice/word-create.wav",
+      "bytes": 82598,
+      "sha256": "b5c63282eb28a6fcaa47e2faeab4a10ccfd216a1653c392474d031f4d128395e"
+    },
+    {
+      "id": "word-design",
+      "text": "design",
+      "synthesisText": "design.",
+      "path": "assets/audio/voice/word-design.wav",
+      "bytes": 82598,
+      "sha256": "fd9e20c186d7bf1fb560a9eb7ca14617567f988b2fd05eda69b930fd4f412a38"
+    },
+    {
+      "id": "word-improve",
+      "text": "improve",
+      "synthesisText": "improve.",
+      "path": "assets/audio/voice/word-improve.wav",
+      "bytes": 82598,
+      "sha256": "45f59ac1d9cbf32976d2b857ea231a0be10e2790310d941f4dc5ef6241dd412a"
+    },
+    {
+      "id": "word-practice",
+      "text": "practice",
+      "synthesisText": "practice.",
+      "path": "assets/audio/voice/word-practice.wav",
+      "bytes": 82598,
+      "sha256": "4f9d024157643823eeca4c95aed3e34746ba4edb6dfa0ac42d119a491ca2e936"
+    },
+    {
+      "id": "word-solve",
+      "text": "solve",
+      "synthesisText": "solve.",
+      "path": "assets/audio/voice/word-solve.wav",
+      "bytes": 82598,
+      "sha256": "79536a5a9b4440b04ebae65620ec081067cde15c76a07e95fafe8416eccc6eb0"
+    },
+    {
+      "id": "word-check",
+      "text": "check",
+      "synthesisText": "check.",
+      "path": "assets/audio/voice/word-check.wav",
+      "bytes": 82598,
+      "sha256": "9d0041ad1c0cf58b4460605cd606c30032a9d28e6913836391c269b1f073390a"
+    },
+    {
+      "id": "word-measure",
+      "text": "measure",
+      "synthesisText": "measure.",
+      "path": "assets/audio/voice/word-measure.wav",
+      "bytes": 82598,
+      "sha256": "539bae8d2cccec70a9a190bd1e3855e6bf0bf869b2a56c3f79b12325d88d5b11"
+    },
+    {
+      "id": "word-estimate",
+      "text": "estimate",
+      "synthesisText": "estimate.",
+      "path": "assets/audio/voice/word-estimate.wav",
+      "bytes": 82598,
+      "sha256": "15bc15b05826a9af536902427d572e92c848d94f17c34c5ca5f30e280dceabbc"
+    },
+    {
+      "id": "word-identify",
+      "text": "identify",
+      "synthesisText": "identify.",
+      "path": "assets/audio/voice/word-identify.wav",
+      "bytes": 82598,
+      "sha256": "6e98a83f597f7b9e085a30593c86febdb2332881bf9916051a52e2ac5f2b7232"
+    },
+    {
+      "id": "word-classify",
+      "text": "classify",
+      "synthesisText": "classify.",
+      "path": "assets/audio/voice/word-classify.wav",
+      "bytes": 82598,
+      "sha256": "e78c01c4a224da415d7bb3924fe93b40306957443ac6b6b57c6bbe9dbe4cbd70"
+    },
+    {
+      "id": "word-connect",
+      "text": "connect",
+      "synthesisText": "connect.",
+      "path": "assets/audio/voice/word-connect.wav",
+      "bytes": 82598,
+      "sha256": "066da43ef9bf3809450d95c816a5a5ae0167096e0ca9a46602590a0586fba589"
+    },
+    {
+      "id": "word-include",
+      "text": "include",
+      "synthesisText": "include.",
+      "path": "assets/audio/voice/word-include.wav",
+      "bytes": 82598,
+      "sha256": "94a410d2a351d18eabb6267d8cf5ea9a403aaceee28be1b02341b940ff6895af"
+    },
+    {
+      "id": "word-support",
+      "text": "support",
+      "synthesisText": "support.",
+      "path": "assets/audio/voice/word-support.wav",
+      "bytes": 82598,
+      "sha256": "38ac94675426a0ee2b28539951482ccea7b4474a927a2bf422b2aec6472c0805"
+    },
+    {
+      "id": "word-suggest",
+      "text": "suggest",
+      "synthesisText": "suggest.",
+      "path": "assets/audio/voice/word-suggest.wav",
+      "bytes": 82598,
+      "sha256": "ef621a52e339423015515275a20834fff33fef0812d91c54159a73ece483bddd"
+    },
+    {
+      "id": "word-prefer",
+      "text": "prefer",
+      "synthesisText": "prefer.",
+      "path": "assets/audio/voice/word-prefer.wav",
+      "bytes": 82598,
+      "sha256": "44c597b40864f9e3a0813f5c1aaec8098071fdab2a13ee2b6c1f0b93fe5a2525"
+    },
+    {
+      "id": "word-expect",
+      "text": "expect",
+      "synthesisText": "expect.",
+      "path": "assets/audio/voice/word-expect.wav",
+      "bytes": 82598,
+      "sha256": "9dd3081d1c119ab934d61242199cf89b5ff1c5b6d687f0182b4a006a3bdb025b"
+    },
+    {
+      "id": "word-achieve",
+      "text": "achieve",
+      "synthesisText": "achieve.",
+      "path": "assets/audio/voice/word-achieve.wav",
+      "bytes": 82598,
+      "sha256": "53f8b0cba90995dbd0fc85eaf0117ebfdcdb4a115d8593e7b32ef8253f46d0af"
+    },
+    {
+      "id": "word-reduce",
+      "text": "reduce",
+      "synthesisText": "reduce.",
+      "path": "assets/audio/voice/word-reduce.wav",
+      "bytes": 82598,
+      "sha256": "27b4479699b14bb474845c5a6861e3e1a42051c9cfbaf3e235c137343d2d8e2f"
+    },
+    {
+      "id": "word-increase",
+      "text": "increase",
+      "synthesisText": "increase.",
+      "path": "assets/audio/voice/word-increase.wav",
+      "bytes": 82598,
+      "sha256": "35d017a313631765d659c94b415add5e619283d767781776b302ca1a2ce25613"
+    },
+    {
+      "id": "word-reuse",
+      "text": "reuse",
+      "synthesisText": "reuse.",
+      "path": "assets/audio/voice/word-reuse.wav",
+      "bytes": 82598,
+      "sha256": "1f14d3afb1191db76044719bed205f6903fce26bd0b3bc52ec6cd12a63e87e13"
+    },
+    {
+      "id": "word-adapt",
+      "text": "adapt",
+      "synthesisText": "adapt.",
+      "path": "assets/audio/voice/word-adapt.wav",
+      "bytes": 82598,
+      "sha256": "6b0fd7b958dacfd896dc46982d82b2150866ec0a268cd21746a0dbff2db79573"
+    },
+    {
+      "id": "word-reflect",
+      "text": "reflect",
+      "synthesisText": "reflect.",
+      "path": "assets/audio/voice/word-reflect.wav",
+      "bytes": 82598,
+      "sha256": "02d649521d38df787ece533cabcf66ef071f9d66d0e63e7bce4f67020b53639e"
+    },
+    {
+      "id": "word-evaluate",
+      "text": "evaluate",
+      "synthesisText": "evaluate.",
+      "path": "assets/audio/voice/word-evaluate.wav",
+      "bytes": 82598,
+      "sha256": "225ecf7c5e49fe2c68e041fb268acd8f9da6d7d7ed6003702775f66f20906f30"
+    },
+    {
+      "id": "word-justify",
+      "text": "justify",
+      "synthesisText": "justify.",
+      "path": "assets/audio/voice/word-justify.wav",
+      "bytes": 82598,
+      "sha256": "ab0fa75f78cd647355301491aaf6480051d95307261af88a87cc980c824e9871"
+    },
+    {
+      "id": "word-summarize",
+      "text": "summarize",
+      "synthesisText": "summarize.",
+      "path": "assets/audio/voice/word-summarize.wav",
+      "bytes": 82598,
+      "sha256": "84b9eef03a806e06f0403eca39f95f289fd2720aff5ed10a77e74c0ed9a12fa0"
+    },
+    {
+      "id": "word-analyze",
+      "text": "analyze",
+      "synthesisText": "analyze.",
+      "path": "assets/audio/voice/word-analyze.wav",
+      "bytes": 82598,
+      "sha256": "7e05d611a4a3a83112d456756de99ad230583de4d5f2e06db678c834474f4a63"
+    },
+    {
+      "id": "word-kind",
+      "text": "kind",
+      "synthesisText": "kind.",
+      "path": "assets/audio/voice/word-kind.wav",
+      "bytes": 82598,
+      "sha256": "980e7431d0e5be8b23ecb4f439fa64f5e48799ae8724ef1ceb3777ed8b1c6845"
+    },
+    {
+      "id": "word-little",
+      "text": "little",
+      "synthesisText": "little.",
+      "path": "assets/audio/voice/word-little.wav",
+      "bytes": 82598,
+      "sha256": "c1cf946ff0c2918346f78f77d99791009c5418cf9f3296a08a9bd4b9191ac98a"
+    },
+    {
+      "id": "word-new",
+      "text": "new",
+      "synthesisText": "new.",
+      "path": "assets/audio/voice/word-new.wav",
+      "bytes": 82598,
+      "sha256": "9ac802c797723c0572e18a38300035068385b79e3d79047901578a5bd702b461"
+    },
+    {
+      "id": "word-nice",
+      "text": "nice",
+      "synthesisText": "nice.",
+      "path": "assets/audio/voice/word-nice.wav",
+      "bytes": 82598,
+      "sha256": "f4ba21005bd644a9d463a109071439a20711cfee2f5434e3ac654f2c875e82e1"
+    },
+    {
+      "id": "word-brave",
+      "text": "brave",
+      "synthesisText": "brave.",
+      "path": "assets/audio/voice/word-brave.wav",
+      "bytes": 82598,
+      "sha256": "01040015ce97c931d26c4f1d0307b3a8aca4187a6395e787594a3082ddfc99be"
+    },
+    {
+      "id": "word-careful",
+      "text": "careful",
+      "synthesisText": "careful.",
+      "path": "assets/audio/voice/word-careful.wav",
+      "bytes": 82598,
+      "sha256": "69e2cc536126472734b39da5d92fcf8f6c9a45b40cf6173f194b8e5eb2dd6d29"
+    },
+    {
+      "id": "word-safe",
+      "text": "safe",
+      "synthesisText": "safe.",
+      "path": "assets/audio/voice/word-safe.wav",
+      "bytes": 82598,
+      "sha256": "9ac89e7b4c33cb6b1d1adc804dab5472617ac91862d605587260fb9a0d41d2b1"
+    },
+    {
+      "id": "word-easy",
+      "text": "easy",
+      "synthesisText": "easy.",
+      "path": "assets/audio/voice/word-easy.wav",
+      "bytes": 82598,
+      "sha256": "5e17111dc238d1dded58d07de143eaa566e785d1f92364a5543d7ff0ed535f71"
+    },
+    {
+      "id": "word-difficult",
+      "text": "difficult",
+      "synthesisText": "difficult.",
+      "path": "assets/audio/voice/word-difficult.wav",
+      "bytes": 82598,
+      "sha256": "1273d4ece414a2d017e1cae6e4dd515b4046fdc5c6308af84c691798f3f9e775"
+    },
+    {
+      "id": "word-different",
+      "text": "different",
+      "synthesisText": "different.",
+      "path": "assets/audio/voice/word-different.wav",
+      "bytes": 82598,
+      "sha256": "8f7ffcbecfa72051bc3f72f5223adc9e7e81cbdddda75b160ca91bbc6bd031fd"
+    },
+    {
+      "id": "word-important",
+      "text": "important",
+      "synthesisText": "important.",
+      "path": "assets/audio/voice/word-important.wav",
+      "bytes": 82598,
+      "sha256": "fc9a96fac90f3bbecf0dfe505b8136147425c71427bbe8b8457cab4a5b1fa067"
+    },
+    {
+      "id": "word-possible",
+      "text": "possible",
+      "synthesisText": "possible.",
+      "path": "assets/audio/voice/word-possible.wav",
+      "bytes": 82598,
+      "sha256": "b65c15a8fe01d1a2a872cbb90b8c45936aff8e8f8e401ddfc0072c969b96ad32"
+    },
+    {
+      "id": "word-useful",
+      "text": "useful",
+      "synthesisText": "useful.",
+      "path": "assets/audio/voice/word-useful.wav",
+      "bytes": 82598,
+      "sha256": "f1e93ab27a4eba3228c257ca4d065fc6c45d60589c76ada1144a67f6596824f3"
+    },
+    {
+      "id": "word-special",
+      "text": "special",
+      "synthesisText": "special.",
+      "path": "assets/audio/voice/word-special.wav",
+      "bytes": 82598,
+      "sha256": "f3243cc658537cca15b4b7ab77420a7357b85e0d72bab8ba93a397fed879d299"
+    },
+    {
+      "id": "word-fair",
+      "text": "fair",
+      "synthesisText": "fair.",
+      "path": "assets/audio/voice/word-fair.wav",
+      "bytes": 82598,
+      "sha256": "b051c243f34ba5232c7089e903752f76abc72fdd354961c3ea39f9957c011662"
+    },
+    {
+      "id": "word-honest",
+      "text": "honest",
+      "synthesisText": "honest.",
+      "path": "assets/audio/voice/word-honest.wav",
+      "bytes": 82598,
+      "sha256": "da99b10b176389d34e8fa32d06b526536220f596002c3f9b003833d310039380"
+    },
+    {
+      "id": "word-patient",
+      "text": "patient",
+      "synthesisText": "patient.",
+      "path": "assets/audio/voice/word-patient.wav",
+      "bytes": 82598,
+      "sha256": "a334e4aae242e8fc689de98eb7851c486d3723d13ca2a8f41809e8cb6d238b43"
+    },
+    {
+      "id": "word-proud",
+      "text": "proud",
+      "synthesisText": "proud.",
+      "path": "assets/audio/voice/word-proud.wav",
+      "bytes": 82598,
+      "sha256": "893fccf8ed42e36d076c5ca03ec619f942186e2f3e2b0e121aa76407164bc25f"
+    },
+    {
+      "id": "word-curious",
+      "text": "curious",
+      "synthesisText": "curious.",
+      "path": "assets/audio/voice/word-curious.wav",
+      "bytes": 82598,
+      "sha256": "ce9f6dbd92196700664701e9d80994e0ac24ef117a6899dba2ce70c21ae37a11"
+    },
+    {
+      "id": "word-friendly",
+      "text": "friendly",
+      "synthesisText": "friendly.",
+      "path": "assets/audio/voice/word-friendly.wav",
+      "bytes": 82598,
+      "sha256": "1f9b3220582b4d6434beda4b12f34f4f5704ff5af6ccae86ed7752c7a3d4f77d"
+    },
+    {
+      "id": "word-gentle",
+      "text": "gentle",
+      "synthesisText": "gentle.",
+      "path": "assets/audio/voice/word-gentle.wav",
+      "bytes": 82598,
+      "sha256": "776819f338f1afac7e153f1502f08c4e457c0e35a5dd80c9907d78d063247108"
+    },
+    {
+      "id": "word-calm",
+      "text": "calm",
+      "synthesisText": "calm.",
+      "path": "assets/audio/voice/word-calm.wav",
+      "bytes": 82598,
+      "sha256": "b63592c59d3275f4cc21e90d349e6155bd27da04991cb628b4258644f0a23b75"
+    },
+    {
+      "id": "word-lonely",
+      "text": "lonely",
+      "synthesisText": "lonely.",
+      "path": "assets/audio/voice/word-lonely.wav",
+      "bytes": 82598,
+      "sha256": "c86a970543fb665daff1711674a43ad871b2bd2626fb7f3c3f545c6be21632db"
+    },
+    {
+      "id": "word-disappointed",
+      "text": "disappointed",
+      "synthesisText": "disappointed.",
+      "path": "assets/audio/voice/word-disappointed.wav",
+      "bytes": 82598,
+      "sha256": "09d71ddc44b60e1a0b48ecd1a26294ee437f1898fa7b80fde105f1bb211434b3"
+    },
+    {
+      "id": "word-confident",
+      "text": "confident",
+      "synthesisText": "confident.",
+      "path": "assets/audio/voice/word-confident.wav",
+      "bytes": 82598,
+      "sha256": "ae782f6c62eb9bda84d790ef1362f7256ac2046f39d8b469235ef5acd6e2df3c"
+    },
+    {
+      "id": "word-responsible",
+      "text": "responsible",
+      "synthesisText": "responsible.",
+      "path": "assets/audio/voice/word-responsible.wav",
+      "bytes": 82598,
+      "sha256": "9ed9328371d8ce55a9fe392e9a56d79be3d7411100411d70a5d68cb3aa72d2a0"
+    },
+    {
+      "id": "word-independent",
+      "text": "independent",
+      "synthesisText": "independent.",
+      "path": "assets/audio/voice/word-independent.wav",
+      "bytes": 82598,
+      "sha256": "8080ad13d256433e0277860900177d32c3ef8e3aed6acecd8ea739381bfea297"
+    },
+    {
+      "id": "word-creative",
+      "text": "creative",
+      "synthesisText": "creative.",
+      "path": "assets/audio/voice/word-creative.wav",
+      "bytes": 82598,
+      "sha256": "ddb8d812aebc0f271564847d01159173c61f0f1b48fbabc6319493206be5d9b7"
+    },
+    {
+      "id": "word-reliable",
+      "text": "reliable",
+      "synthesisText": "reliable.",
+      "path": "assets/audio/voice/word-reliable.wav",
+      "bytes": 82598,
+      "sha256": "d173b60cf7b9e31d6c5340a20674f6a73eedd3a68d7b86062d565c989db536ed"
+    },
+    {
+      "id": "word-accurate",
+      "text": "accurate",
+      "synthesisText": "accurate.",
+      "path": "assets/audio/voice/word-accurate.wav",
+      "bytes": 82598,
+      "sha256": "23bed6cb1ddf8d0bab81cf7eef9905f258b5e02325863474f1aaec161f1af2cc"
+    },
+    {
+      "id": "word-similar",
+      "text": "similar",
+      "synthesisText": "similar.",
+      "path": "assets/audio/voice/word-similar.wav",
+      "bytes": 82598,
+      "sha256": "9075b6809bc4a1f1ed58da2b436c85a188cb6665c0761be1e5d4b16e7a86a8dc"
+    },
+    {
+      "id": "word-equal",
+      "text": "equal",
+      "synthesisText": "equal.",
+      "path": "assets/audio/voice/word-equal.wav",
+      "bytes": 82598,
+      "sha256": "390a0fb360a7b45c5f7cce9661360680a2c1e878c544e9d19cda779244be36b5"
+    },
+    {
+      "id": "word-common",
+      "text": "common",
+      "synthesisText": "common.",
+      "path": "assets/audio/voice/word-common.wav",
+      "bytes": 82598,
+      "sha256": "17e232f9d4620bf4248a096c3af47e6d9ba6699b8f6e49127f5f31d74d98ded9"
+    },
+    {
+      "id": "word-rare",
+      "text": "rare",
+      "synthesisText": "rare.",
+      "path": "assets/audio/voice/word-rare.wav",
+      "bytes": 82598,
+      "sha256": "8b2501ea81947c003815d772af75928ee5daa032b381c2dceba96cee4dc62cae"
+    },
+    {
+      "id": "word-natural",
+      "text": "natural",
+      "synthesisText": "natural.",
+      "path": "assets/audio/voice/word-natural.wav",
+      "bytes": 82598,
+      "sha256": "5a9ba86f4d92c37bc4e336496eb5cd675436e76ebdaf3cd4265b2e5cb1fed258"
+    },
+    {
+      "id": "word-local",
+      "text": "local",
+      "synthesisText": "local.",
+      "path": "assets/audio/voice/word-local.wav",
+      "bytes": 82598,
+      "sha256": "86bd89135c2f2e31f2a1bee1ad3a9660126c8f5e10da4a700d4963192dd8ad28"
+    },
+    {
+      "id": "word-global",
+      "text": "global",
+      "synthesisText": "global.",
+      "path": "assets/audio/voice/word-global.wav",
+      "bytes": 82598,
+      "sha256": "0dbed04930d62baa5e8351d07a30fecf91c4ab81847a0efff460f355b0f55b5b"
+    },
+    {
+      "id": "word-sustainable",
+      "text": "sustainable",
+      "synthesisText": "sustainable.",
+      "path": "assets/audio/voice/word-sustainable.wav",
+      "bytes": 82598,
+      "sha256": "a403d0182c3fed94bf7bc127e27343c495c4dc3b37b4d872b63bd267b8757085"
+    },
+    {
+      "id": "word-evidence",
+      "text": "evidence",
+      "synthesisText": "evidence.",
+      "path": "assets/audio/voice/word-evidence.wav",
+      "bytes": 82598,
+      "sha256": "0daa89e642f5d84c6711b77f0258adba1c404c3e8e63c5d68b92c1fa332cc5a9"
+    },
+    {
+      "id": "word-reason",
+      "text": "reason",
+      "synthesisText": "reason.",
+      "path": "assets/audio/voice/word-reason.wav",
+      "bytes": 82598,
+      "sha256": "fb2bd39292932b2fcf30e5163a447469e4ae9905ef955defe044a2b8bba6b5eb"
+    },
+    {
+      "id": "word-solution",
+      "text": "solution",
+      "synthesisText": "solution.",
+      "path": "assets/audio/voice/word-solution.wav",
+      "bytes": 82598,
+      "sha256": "2ab21879037cf2feeb26da953a6c16288600c549de17e9107d82c4c468b56464"
+    },
+    {
+      "id": "word-result",
+      "text": "result",
+      "synthesisText": "result.",
+      "path": "assets/audio/voice/word-result.wav",
+      "bytes": 82598,
+      "sha256": "fd1ccb30759abbadd7b8544b6ac7ad8799558706dd89082e17c5da6a0d9bf121"
+    },
+    {
+      "id": "word-opinion",
+      "text": "opinion",
+      "synthesisText": "opinion.",
+      "path": "assets/audio/voice/word-opinion.wav",
+      "bytes": 82598,
+      "sha256": "092ed97296c0c8d1d7309bacd29de30011b1b2061afd466e276d34bef24c9da8"
+    },
+    {
+      "id": "word-fact",
+      "text": "fact",
+      "synthesisText": "fact.",
+      "path": "assets/audio/voice/word-fact.wav",
+      "bytes": 82598,
+      "sha256": "e0e4fdb11f80b176d63a8741396ff600dac722a25be88eae705dbbad32585c5b"
+    },
+    {
+      "id": "word-cause",
+      "text": "cause",
+      "synthesisText": "cause.",
+      "path": "assets/audio/voice/word-cause.wav",
+      "bytes": 82598,
+      "sha256": "4cfce4aaf437cf5ebb5495c23bd7c1bd4029426b87c4f8e9e2ddfa20d221bb44"
+    },
+    {
+      "id": "word-effect",
+      "text": "effect",
+      "synthesisText": "effect.",
+      "path": "assets/audio/voice/word-effect.wav",
+      "bytes": 82598,
+      "sha256": "c47ae097b7713fac9b6524fc7b93e2426b7b9c3c74438f42a5a22d1265c5ed3d"
+    },
+    {
+      "id": "word-research",
+      "text": "research",
+      "synthesisText": "research.",
+      "path": "assets/audio/voice/word-research.wav",
+      "bytes": 82598,
+      "sha256": "555239371e0cd8ac81b4be0d8dce98fd7270b1d57a02001636d0f11e6f12acdf"
+    },
+    {
+      "id": "word-source",
+      "text": "source",
+      "synthesisText": "source.",
+      "path": "assets/audio/voice/word-source.wav",
+      "bytes": 82598,
+      "sha256": "d9ee46922193f7048a565b71e99b4a9f592c00b2979a51e309d871f51d0fe287"
+    },
+    {
+      "id": "word-environment",
+      "text": "environment",
+      "synthesisText": "environment.",
+      "path": "assets/audio/voice/word-environment.wav",
+      "bytes": 82598,
+      "sha256": "b4e0721370a7de1be0c3539780bf423e63c6dced699b2eaad3f8dc1a95bb4269"
+    },
+    {
+      "id": "word-community",
+      "text": "community",
+      "synthesisText": "community.",
+      "path": "assets/audio/voice/word-community.wav",
+      "bytes": 82598,
+      "sha256": "b03da134140b231237d5488963c7a0b6872b5bce8df63563a10a337bc4334529"
+    },
+    {
+      "id": "word-culture",
+      "text": "culture",
+      "synthesisText": "culture.",
+      "path": "assets/audio/voice/word-culture.wav",
+      "bytes": 82598,
+      "sha256": "2a6fc10963eb24d4ee7b3fe45dfc585fd93a8102007e11c065944b6447941af6"
+    },
+    {
+      "id": "word-tradition",
+      "text": "tradition",
+      "synthesisText": "tradition.",
+      "path": "assets/audio/voice/word-tradition.wav",
+      "bytes": 82598,
+      "sha256": "7dd716539a48ed3bd94b9aae081b18d23859018ceef6253cff80b994ac3256e9"
+    },
+    {
+      "id": "word-idea",
+      "text": "idea",
+      "synthesisText": "idea.",
+      "path": "assets/audio/voice/word-idea.wav",
+      "bytes": 82598,
+      "sha256": "463cfc8903a2fe64d02415a7c917d5fddaf69f3483dd82d9f6b3b59fc0d01a9f"
+    },
+    {
+      "id": "word-problem",
+      "text": "problem",
+      "synthesisText": "problem.",
+      "path": "assets/audio/voice/word-problem.wav",
+      "bytes": 82598,
+      "sha256": "6fd02ee78d9cc86399a406027c15720a9ff0dd34cf7a4ca7ae4741d067389e01"
+    },
+    {
+      "id": "word-plan",
+      "text": "plan",
+      "synthesisText": "plan.",
+      "path": "assets/audio/voice/word-plan.wav",
+      "bytes": 82598,
+      "sha256": "7d70c3783ce790b7ed4cd359fb80bb120d966f490aae28bf8c8cd544dce6a48a"
+    },
+    {
+      "id": "word-question",
+      "text": "question",
+      "synthesisText": "question.",
+      "path": "assets/audio/voice/word-question.wav",
+      "bytes": 82598,
+      "sha256": "e381783c18f98624bd61254f574b396a8d8282fcf689895b3f7aea6cbfcb4e9c"
+    },
+    {
+      "id": "word-story",
+      "text": "story",
+      "synthesisText": "story.",
+      "path": "assets/audio/voice/word-story.wav",
+      "bytes": 82598,
+      "sha256": "0c4274c8ef7406e3a2f14f6301993104ea438741b51d2e41611adda6f131d53f"
+    },
+    {
+      "id": "word-word",
+      "text": "word",
+      "synthesisText": "word.",
+      "path": "assets/audio/voice/word-word.wav",
+      "bytes": 82598,
+      "sha256": "6b4d7a5042dbdf9577762d4ac8edf9bada0156551f9f63389f3842a95a4c72d6"
+    },
+    {
+      "id": "word-name",
+      "text": "name",
+      "synthesisText": "name.",
+      "path": "assets/audio/voice/word-name.wav",
+      "bytes": 82598,
+      "sha256": "c9bc8117b5a4ffa537e031eb9e5b8380b7ce17c51f9807460ed2e289ab57adb4"
+    },
+    {
+      "id": "word-friend",
+      "text": "friend",
+      "synthesisText": "friend.",
+      "path": "assets/audio/voice/word-friend.wav",
+      "bytes": 82598,
+      "sha256": "c4162a6ac8e0446d3d14fd0c8642591db3f1315910018d0e781d00a32db7b60c"
+    },
+    {
+      "id": "word-child",
+      "text": "child",
+      "synthesisText": "child.",
+      "path": "assets/audio/voice/word-child.wav",
+      "bytes": 82598,
+      "sha256": "0d2173e2848b5f791bfef7bdd0e0b75594f6ce246a0dc93db11d2e944520ac38"
+    },
+    {
+      "id": "word-team",
+      "text": "team",
+      "synthesisText": "team.",
+      "path": "assets/audio/voice/word-team.wav",
+      "bytes": 82598,
+      "sha256": "f91a1df48d370364c1a6f779e61155588bd4b89faa7fa829a692f14b52e749c1"
+    },
+    {
+      "id": "word-choice",
+      "text": "choice",
+      "synthesisText": "choice.",
+      "path": "assets/audio/voice/word-choice.wav",
+      "bytes": 82598,
+      "sha256": "4fd6d540c166a1126e6b83db89cc9b6eee3f02cc62d2e08fc4c5a5212b856e01"
+    },
+    {
+      "id": "word-goal",
+      "text": "goal",
+      "synthesisText": "goal.",
+      "path": "assets/audio/voice/word-goal.wav",
+      "bytes": 82598,
+      "sha256": "5792ce85e13b80c92055967b865ebbcf6a62072ff0530ec282bfaeecc9054398"
+    },
+    {
+      "id": "word-pattern",
+      "text": "pattern",
+      "synthesisText": "pattern.",
+      "path": "assets/audio/voice/word-pattern.wav",
+      "bytes": 82598,
+      "sha256": "85f6954110cd1c877753097e152b8f0f18e33e434ba29ff4e5101b1384f89982"
+    },
+    {
+      "id": "word-topic",
+      "text": "topic",
+      "synthesisText": "topic.",
+      "path": "assets/audio/voice/word-topic.wav",
+      "bytes": 82598,
+      "sha256": "f7fcf4662f2c3657e527e00a5075aff04b920acb2f5f911b676f8784f569130a"
+    },
+    {
+      "id": "word-detail",
+      "text": "detail",
+      "synthesisText": "detail.",
+      "path": "assets/audio/voice/word-detail.wav",
+      "bytes": 82598,
+      "sha256": "5e720beb319d9f34d7d76bd79bfde6b5740b896ed31fa33b0b9c976126c331b5"
+    },
+    {
+      "id": "word-example",
+      "text": "example",
+      "synthesisText": "example.",
+      "path": "assets/audio/voice/word-example.wav",
+      "bytes": 82598,
+      "sha256": "a472172bec7b5d252a67f6cdc035d341b113a78ef7df2911f601bcc43faeae52"
+    },
+    {
+      "id": "word-information",
+      "text": "information",
+      "synthesisText": "information.",
+      "path": "assets/audio/voice/word-information.wav",
+      "bytes": 82598,
+      "sha256": "a260f1fd3bd521746079b5b4f769d9d410abd45f6bd056c7795b76c5f21c3c69"
+    },
+    {
+      "id": "word-knowledge",
+      "text": "knowledge",
+      "synthesisText": "knowledge.",
+      "path": "assets/audio/voice/word-knowledge.wav",
+      "bytes": 82598,
+      "sha256": "53f46791579ef3c27b6ae149454acf0e69c126de62b06f1a34f64e8dbc34f895"
+    },
+    {
+      "id": "word-energy",
+      "text": "energy",
+      "synthesisText": "energy.",
+      "path": "assets/audio/voice/word-energy.wav",
+      "bytes": 82598,
+      "sha256": "4edb2111a7849de0249748abfb556461eca90cc590ae8c71aea8042fb6a927b3"
+    },
+    {
+      "id": "word-material",
+      "text": "material",
+      "synthesisText": "material.",
+      "path": "assets/audio/voice/word-material.wav",
+      "bytes": 82598,
+      "sha256": "281a0279f614b3a6a47ee4e3fbd35cd51cf9c42fc996b8b897684cadc3646275"
+    },
+    {
+      "id": "word-resource",
+      "text": "resource",
+      "synthesisText": "resource.",
+      "path": "assets/audio/voice/word-resource.wav",
+      "bytes": 82598,
+      "sha256": "234b16a4b1960885b862b3a1f6da4c543f7ded4a5456f68860a2f8f68f450e57"
+    },
+    {
+      "id": "word-habitat",
+      "text": "habitat",
+      "synthesisText": "habitat.",
+      "path": "assets/audio/voice/word-habitat.wav",
+      "bytes": 82598,
+      "sha256": "c166e8c67622621db0f0be9f8f38b12ad7c7dca3878c61cf58860f953911c456"
+    },
+    {
+      "id": "word-climate",
+      "text": "climate",
+      "synthesisText": "climate.",
+      "path": "assets/audio/voice/word-climate.wav",
+      "bytes": 82598,
+      "sha256": "5fcb0b9a1686e3a4dd44a740a79a71f12f247906b27293ffca132c42177ca086"
+    },
+    {
+      "id": "word-weather",
+      "text": "weather",
+      "synthesisText": "weather.",
+      "path": "assets/audio/voice/word-weather.wav",
+      "bytes": 52964,
+      "sha256": "60b10dea1b46d38fcbc4521c76290e411a5cdd6d6ab3a61b8ca9c05cd2f800c7"
+    },
+    {
+      "id": "word-temperature",
+      "text": "temperature",
+      "synthesisText": "temperature.",
+      "path": "assets/audio/voice/word-temperature.wav",
+      "bytes": 82598,
+      "sha256": "c44ddc7470cfeda2f4f33a37017fc374078978a7074cebac5074def1ac38dead"
+    },
+    {
+      "id": "word-experiment",
+      "text": "experiment",
+      "synthesisText": "experiment.",
+      "path": "assets/audio/voice/word-experiment.wav",
+      "bytes": 82598,
+      "sha256": "c40027d3e7b78c451d90b686c64ca2d23643218a7925c4c60dba9dbff1a859f2"
+    },
+    {
+      "id": "word-method",
+      "text": "method",
+      "synthesisText": "method.",
+      "path": "assets/audio/voice/word-method.wav",
+      "bytes": 82598,
+      "sha256": "0ca4bce4cf0fda9fb2db911be1b6838b67bff66fd5ac1127f6eff15902a09930"
+    },
+    {
+      "id": "word-process",
+      "text": "process",
+      "synthesisText": "process.",
+      "path": "assets/audio/voice/word-process.wav",
+      "bytes": 82598,
+      "sha256": "5c08a259e7a6dedfd7b4aa4727df36dbac8584348a52e7f21728a4470c363410"
+    },
+    {
+      "id": "word-data",
+      "text": "data",
+      "synthesisText": "data.",
+      "path": "assets/audio/voice/word-data.wav",
+      "bytes": 82598,
+      "sha256": "136f3b92439ed2095a64a58db2cf05166f3d16217e1149383eeaae2f02c72d98"
+    },
+    {
+      "id": "word-conclusion",
+      "text": "conclusion",
+      "synthesisText": "conclusion.",
+      "path": "assets/audio/voice/word-conclusion.wav",
+      "bytes": 82598,
+      "sha256": "264fae56daaf87721af354da259facd12616df5ad9387c79350cb9b68fd6c0ab"
+    },
+    {
+      "id": "word-challenge",
+      "text": "challenge",
+      "synthesisText": "challenge.",
+      "path": "assets/audio/voice/word-challenge.wav",
+      "bytes": 82598,
+      "sha256": "721c8eab26b0e2bbb10e77816c78fb9feb06b346e57ad1ca8d5b1dffd844e287"
+    },
+    {
+      "id": "word-strategy",
+      "text": "strategy",
+      "synthesisText": "strategy.",
+      "path": "assets/audio/voice/word-strategy.wav",
+      "bytes": 82598,
+      "sha256": "c38461e41ff967cab7860f40159ceb2f4cdf3da2949151982c9a5ae3ea49f5be"
+    },
+    {
+      "id": "word-progress",
+      "text": "progress",
+      "synthesisText": "progress.",
+      "path": "assets/audio/voice/word-progress.wav",
+      "bytes": 82598,
+      "sha256": "b8290241126c0414d62f1d07dc7d5a4e6d3c6e5250da5a56dca38c4a43e9680f"
+    },
+    {
+      "id": "word-effort",
+      "text": "effort",
+      "synthesisText": "effort.",
+      "path": "assets/audio/voice/word-effort.wav",
+      "bytes": 82598,
+      "sha256": "ccac5baddf140fdaee825af428639f9c0aa37b892cf58d586085d571a41ccc43"
+    },
+    {
+      "id": "word-respect",
+      "text": "respect",
+      "synthesisText": "respect.",
+      "path": "assets/audio/voice/word-respect.wav",
+      "bytes": 82598,
+      "sha256": "39c06558b0d3aecd05b57b559d0568e8454e2d4868ef12f96f2de7eba8abcc24"
+    },
+    {
+      "id": "word-empathy",
+      "text": "empathy",
+      "synthesisText": "empathy.",
+      "path": "assets/audio/voice/word-empathy.wav",
+      "bytes": 82598,
+      "sha256": "c639583d054029108ad0a6d4ac99482977dba0b47e6b0f9cb5dc7365a4a93ef3"
+    },
+    {
+      "id": "word-responsibility",
+      "text": "responsibility",
+      "synthesisText": "responsibility.",
+      "path": "assets/audio/voice/word-responsibility.wav",
+      "bytes": 82598,
+      "sha256": "1decce437aee48d296fd6333d27e1a7718387f1967e1857153004d1dc4a1226c"
+    },
+    {
+      "id": "word-curiosity",
+      "text": "curiosity",
+      "synthesisText": "curiosity.",
+      "path": "assets/audio/voice/word-curiosity.wav",
+      "bytes": 82598,
+      "sha256": "71aa4c91d0824a8a137bffd81c34bc09cee36fe30db4a7107490c32298e2dc24"
+    },
+    {
+      "id": "word-imagination",
+      "text": "imagination",
+      "synthesisText": "imagination.",
+      "path": "assets/audio/voice/word-imagination.wav",
+      "bytes": 82598,
+      "sha256": "36366caa5c8ff21d97fe00d118745ee6da011e31fdd99c77f9cf06cd7c37db71"
+    },
+    {
+      "id": "word-communication",
+      "text": "communication",
+      "synthesisText": "communication.",
+      "path": "assets/audio/voice/word-communication.wav",
+      "bytes": 82598,
+      "sha256": "c325be66387869f331eae8a43645274e073c6569bd2c13d2eae8ef7b527049e4"
+    },
+    {
+      "id": "word-celebration",
+      "text": "celebration",
+      "synthesisText": "celebration.",
+      "path": "assets/audio/voice/word-celebration.wav",
+      "bytes": 82598,
+      "sha256": "64a9d3762905b73975f34e609355b20e755c239716169939792f7def00215b89"
+    },
+    {
+      "id": "word-afternoon",
+      "text": "afternoon",
+      "synthesisText": "afternoon.",
+      "path": "assets/audio/voice/word-afternoon.wav",
+      "bytes": 82598,
+      "sha256": "2bc9b683a5cf6ce9914d25a6d23de1a45d43eb456f7994bac28f9bbf5a1c0069"
+    },
+    {
+      "id": "word-evening",
+      "text": "evening",
+      "synthesisText": "evening.",
+      "path": "assets/audio/voice/word-evening.wav",
+      "bytes": 82598,
+      "sha256": "fc93bb642b65d0bf60d5a230d7b99180fbd6c9f5fc6d7757a53e613a96721bd4"
+    },
+    {
+      "id": "word-year",
+      "text": "year",
+      "synthesisText": "year.",
+      "path": "assets/audio/voice/word-year.wav",
+      "bytes": 82598,
+      "sha256": "e61f96f7fcc5e7d89e914eea729e4cd7caeacd1680fd555c2bf778c947eba0be"
+    },
+    {
+      "id": "word-monday",
+      "text": "monday",
+      "synthesisText": "monday.",
+      "path": "assets/audio/voice/word-monday.wav",
+      "bytes": 82598,
+      "sha256": "bcdee0da1d210f543db38a2971f254fb9f246347935f8f0ad8800660a9fb80ef"
+    },
+    {
+      "id": "word-tuesday",
+      "text": "tuesday",
+      "synthesisText": "tuesday.",
+      "path": "assets/audio/voice/word-tuesday.wav",
+      "bytes": 82598,
+      "sha256": "b2bc10fb36f76dc99b476ab4a9c2c071dd9ba20f941f5f06e92f3e48464dd4af"
+    },
+    {
+      "id": "word-wednesday",
+      "text": "wednesday",
+      "synthesisText": "wednesday.",
+      "path": "assets/audio/voice/word-wednesday.wav",
+      "bytes": 82598,
+      "sha256": "2c19a58c8f58f9d6ba79d354462e6ab9927a15417bdad11518e0c34862b8522b"
+    },
+    {
+      "id": "word-thursday",
+      "text": "thursday",
+      "synthesisText": "thursday.",
+      "path": "assets/audio/voice/word-thursday.wav",
+      "bytes": 82598,
+      "sha256": "7a5eb9ee6e77f7b516f0098a9f048f38c1b9649f5d4fd625482c093819052c64"
+    },
+    {
+      "id": "word-friday",
+      "text": "friday",
+      "synthesisText": "friday.",
+      "path": "assets/audio/voice/word-friday.wav",
+      "bytes": 82598,
+      "sha256": "4e2a0b863928084fca64689bd12ad57a8a285c0e7c3a26d45190fc4bf0ee6b7a"
+    },
+    {
+      "id": "word-saturday",
+      "text": "saturday",
+      "synthesisText": "saturday.",
+      "path": "assets/audio/voice/word-saturday.wav",
+      "bytes": 82598,
+      "sha256": "34c3f04b2e168cc715204d4bc5b03250d28caa514eead93eef3796ddcdb32f81"
+    },
+    {
+      "id": "word-sunday",
+      "text": "sunday",
+      "synthesisText": "sunday.",
+      "path": "assets/audio/voice/word-sunday.wav",
+      "bytes": 82598,
+      "sha256": "8057373f8ab70062b842cd8bf69d8120b822fb33eca6f8536365a682fd57f914"
+    },
+    {
+      "id": "word-january",
+      "text": "january",
+      "synthesisText": "january.",
+      "path": "assets/audio/voice/word-january.wav",
+      "bytes": 82598,
+      "sha256": "e46eaf5606103dc44a102b43b5b3758daa8281d6b147fbaefd4191426de78bf9"
+    },
+    {
+      "id": "word-february",
+      "text": "february",
+      "synthesisText": "february.",
+      "path": "assets/audio/voice/word-february.wav",
+      "bytes": 82598,
+      "sha256": "0c4e1bde0537c3e06f5fc576e1e635fb079c929fbec5aaab3f5f3e10c71fca94"
+    },
+    {
+      "id": "word-march",
+      "text": "march",
+      "synthesisText": "march.",
+      "path": "assets/audio/voice/word-march.wav",
+      "bytes": 82598,
+      "sha256": "9673b3b8f4de5a37d7b61666f3d4f5348603d855042105296a54f265ea855c63"
+    },
+    {
+      "id": "word-april",
+      "text": "april",
+      "synthesisText": "april.",
+      "path": "assets/audio/voice/word-april.wav",
+      "bytes": 82598,
+      "sha256": "fea7bbc09340cf6b31e126f95b99add5db8edf46265ab9b4e42e6c0e07848e7b"
+    },
+    {
+      "id": "word-may",
+      "text": "may",
+      "synthesisText": "may.",
+      "path": "assets/audio/voice/word-may.wav",
+      "bytes": 82598,
+      "sha256": "cf25228e606167a52f4cf191e83642229f777c4eb8de405d8c080ef582e4e190"
+    },
+    {
+      "id": "word-june",
+      "text": "june",
+      "synthesisText": "june.",
+      "path": "assets/audio/voice/word-june.wav",
+      "bytes": 82598,
+      "sha256": "dbe799e0abf293e2672c3f108490d7d45d5e209acbab6a63ee7acdaa7773ee67"
+    },
+    {
+      "id": "word-july",
+      "text": "july",
+      "synthesisText": "july.",
+      "path": "assets/audio/voice/word-july.wav",
+      "bytes": 82598,
+      "sha256": "22369d3776d686c27f172c20601cb6fc124017c4cea71af878324371370f1feb"
+    },
+    {
+      "id": "word-august",
+      "text": "august",
+      "synthesisText": "august.",
+      "path": "assets/audio/voice/word-august.wav",
+      "bytes": 82598,
+      "sha256": "53eb5adc3a5a9512b14d102d5efb70b13996a6805e47f188b3deefa30d60ef31"
+    },
+    {
+      "id": "word-september",
+      "text": "september",
+      "synthesisText": "september.",
+      "path": "assets/audio/voice/word-september.wav",
+      "bytes": 82598,
+      "sha256": "0c5b8ab2cbb349b71ae5e2085df75e34f3a5e7addd767dc903675a82b3b17952"
+    },
+    {
+      "id": "word-october",
+      "text": "october",
+      "synthesisText": "october.",
+      "path": "assets/audio/voice/word-october.wav",
+      "bytes": 82598,
+      "sha256": "bf378ffc7d13852ccf857c7d395d6d11c7aa5a490474f01dbba9e8fa139fa29f"
+    },
+    {
+      "id": "word-november",
+      "text": "november",
+      "synthesisText": "november.",
+      "path": "assets/audio/voice/word-november.wav",
+      "bytes": 82598,
+      "sha256": "abb490713ea37bc361f3e4e6f496a1a3f7c008ec9d5edd2f34fb4abad3e5f32f"
+    },
+    {
+      "id": "word-december",
+      "text": "december",
+      "synthesisText": "december.",
+      "path": "assets/audio/voice/word-december.wav",
+      "bytes": 82598,
+      "sha256": "474af15ff54ab0d01998976a4d5690387cd92e5f2c004fab157d23018c1f323a"
+    },
+    {
+      "id": "word-eleven",
+      "text": "eleven",
+      "synthesisText": "eleven.",
+      "path": "assets/audio/voice/word-eleven.wav",
+      "bytes": 82598,
+      "sha256": "6e9a6374ad1f9430717f9e675f5bc00c8e32bc71e96abddc9e1a8ae070e6e6e7"
+    },
+    {
+      "id": "word-twelve",
+      "text": "twelve",
+      "synthesisText": "twelve.",
+      "path": "assets/audio/voice/word-twelve.wav",
+      "bytes": 82598,
+      "sha256": "d10408f5875b55ca79b2ea33deff2204294ab352892a882aa1cab9268feb97cb"
+    },
+    {
+      "id": "word-thirteen",
+      "text": "thirteen",
+      "synthesisText": "thirteen.",
+      "path": "assets/audio/voice/word-thirteen.wav",
+      "bytes": 82598,
+      "sha256": "effd0e7644abcc1d03b20952f521bb27111ff36ecf5f25b150468f8b803b1d7c"
+    },
+    {
+      "id": "word-fourteen",
+      "text": "fourteen",
+      "synthesisText": "fourteen.",
+      "path": "assets/audio/voice/word-fourteen.wav",
+      "bytes": 82598,
+      "sha256": "59a1fe80e240dbe2d3cd7568615f6454fd34b8ae7ceed84886af0fd042a221b3"
+    },
+    {
+      "id": "word-fifteen",
+      "text": "fifteen",
+      "synthesisText": "fifteen.",
+      "path": "assets/audio/voice/word-fifteen.wav",
+      "bytes": 82598,
+      "sha256": "44013286619cacf7546d509bab17008d601b76612989be9aa1ad5245da77e583"
+    },
+    {
+      "id": "word-sixteen",
+      "text": "sixteen",
+      "synthesisText": "sixteen.",
+      "path": "assets/audio/voice/word-sixteen.wav",
+      "bytes": 82598,
+      "sha256": "41e52115afcd3b55783a3becb75b07345d0ae6937374b47c4311f64a7ac97bff"
+    },
+    {
+      "id": "word-seventeen",
+      "text": "seventeen",
+      "synthesisText": "seventeen.",
+      "path": "assets/audio/voice/word-seventeen.wav",
+      "bytes": 82598,
+      "sha256": "4fc41683dad1ced8600af988ea50bd0aa1940cf200633197d4d808a3fb05fe0b"
+    },
+    {
+      "id": "word-eighteen",
+      "text": "eighteen",
+      "synthesisText": "eighteen.",
+      "path": "assets/audio/voice/word-eighteen.wav",
+      "bytes": 82598,
+      "sha256": "161bd2ca857918e077f47a9e626be79b0775521e1030e9472981428016343d04"
+    },
+    {
+      "id": "word-nineteen",
+      "text": "nineteen",
+      "synthesisText": "nineteen.",
+      "path": "assets/audio/voice/word-nineteen.wav",
+      "bytes": 82598,
+      "sha256": "cebb05d3f155350901a6eb41c5b08ee0a5c5151ce14fbdf4c3411c99be577937"
+    },
+    {
+      "id": "word-twenty",
+      "text": "twenty",
+      "synthesisText": "twenty.",
+      "path": "assets/audio/voice/word-twenty.wav",
+      "bytes": 82598,
+      "sha256": "87f73921a17b56b85f7f7a07aec9454a6884b2828295ecc0bdfd56a242f5bd8a"
+    },
+    {
+      "id": "word-hundred",
+      "text": "hundred",
+      "synthesisText": "hundred.",
+      "path": "assets/audio/voice/word-hundred.wav",
+      "bytes": 52964,
+      "sha256": "f4168de20db4eabc25a1a7e0b207bf21f9d59a2417ef6fee36b940eea9792d3c"
+    },
+    {
+      "id": "word-thousand",
+      "text": "thousand",
+      "synthesisText": "thousand.",
+      "path": "assets/audio/voice/word-thousand.wav",
+      "bytes": 82598,
+      "sha256": "67379ed13f94a6b458d12d95934b8035e3c8f5a6a8f0f17b073135e7a5710f37"
+    },
+    {
+      "id": "word-more",
+      "text": "more",
+      "synthesisText": "more.",
+      "path": "assets/audio/voice/word-more.wav",
+      "bytes": 82598,
+      "sha256": "f39a0363951a74045522df859d22841d0de6f58b8926c5e842f01a87a10182b2"
+    },
+    {
+      "id": "word-some",
+      "text": "some",
+      "synthesisText": "some.",
+      "path": "assets/audio/voice/word-some.wav",
+      "bytes": 82598,
+      "sha256": "71812ff26bd4a33bd611c6258fc442a0854b39e4cbc62bb9878ddcb34e97c4d2"
+    },
+    {
+      "id": "word-both",
+      "text": "both",
+      "synthesisText": "both.",
+      "path": "assets/audio/voice/word-both.wav",
+      "bytes": 82598,
+      "sha256": "3ab025c9993ae4b77c307d82b50ecc42f0e6b975147d17f32dc649b93f7e5704"
+    },
+    {
+      "id": "word-every",
+      "text": "every",
+      "synthesisText": "every.",
+      "path": "assets/audio/voice/word-every.wav",
+      "bytes": 82598,
+      "sha256": "89c621640b42291bb3d5a1fb2e2a1e02596ad31780d21ed7285aded58a5fc600"
+    },
+    {
+      "id": "word-enough",
+      "text": "enough",
+      "synthesisText": "enough.",
+      "path": "assets/audio/voice/word-enough.wav",
+      "bytes": 82598,
+      "sha256": "74da41da1ffbd168bb9c963c05640a40d3a7a98b17606ee468ba660d9085e865"
+    },
+    {
+      "id": "word-now",
+      "text": "now",
+      "synthesisText": "now.",
+      "path": "assets/audio/voice/word-now.wav",
+      "bytes": 82598,
+      "sha256": "169bbd6b7fb1fee22579dcf169da91804fb489fd4288aa81cd3d12a947ff479a"
+    },
+    {
+      "id": "word-off",
+      "text": "off",
+      "synthesisText": "off.",
+      "path": "assets/audio/voice/word-off.wav",
+      "bytes": 82598,
+      "sha256": "95a80d6cf53095a907f7f2531716347e56ecdf999508699b87a4a2435dc5b160"
+    },
+    {
+      "id": "word-out",
+      "text": "out",
+      "synthesisText": "out.",
+      "path": "assets/audio/voice/word-out.wav",
+      "bytes": 82598,
+      "sha256": "2589783c85ca2a0c77133536f47890f3082031d7836a11dde99a7612caddb608"
+    },
+    {
+      "id": "word-left",
+      "text": "left",
+      "synthesisText": "left.",
+      "path": "assets/audio/voice/word-left.wav",
+      "bytes": 82598,
+      "sha256": "f1fefbcd7cd5963d7ee95747a5ca20cbf9885ebb45b4b26c217dcea62563e8ee"
+    },
+    {
+      "id": "word-right",
+      "text": "right",
+      "synthesisText": "right.",
+      "path": "assets/audio/voice/word-right.wav",
+      "bytes": 82598,
+      "sha256": "261f59e545729cb3e8b58429f9aa7aec0dea6c8cce0d2e95fa758c7c19679064"
+    },
+    {
+      "id": "word-front",
+      "text": "front",
+      "synthesisText": "front.",
+      "path": "assets/audio/voice/word-front.wav",
+      "bytes": 82598,
+      "sha256": "d5c636f93aafc75d0eb51a2dfba7aff213f8684751eabbb066c0beb4abbddde0"
+    },
+    {
+      "id": "word-back",
+      "text": "back",
+      "synthesisText": "back.",
+      "path": "assets/audio/voice/word-back.wav",
+      "bytes": 82598,
+      "sha256": "d1d1e7412cb02c9d2522a857fb7a96f9e384714c50f1a76fe87bfb1c773bc437"
+    },
+    {
+      "id": "word-top",
+      "text": "top",
+      "synthesisText": "top.",
+      "path": "assets/audio/voice/word-top.wav",
+      "bytes": 82598,
+      "sha256": "1ba179fe75894400834dc3fe700c7c4bcad6481bf457e88127001535bafb5ec8"
+    },
+    {
+      "id": "word-bottom",
+      "text": "bottom",
+      "synthesisText": "bottom.",
+      "path": "assets/audio/voice/word-bottom.wav",
+      "bytes": 82598,
+      "sha256": "60ad98cb873752e4bf4e4949070ad459effa7235329d68db5a9bc71037baf207"
+    },
+    {
+      "id": "word-closed",
+      "text": "closed",
+      "synthesisText": "closed.",
+      "path": "assets/audio/voice/word-closed.wav",
+      "bytes": 82598,
+      "sha256": "544206f6fb8798479c3e7d1cd3da736c2c57a27dab15d25286dfc40344ae3e79"
+    },
+    {
+      "id": "word-cloudy",
+      "text": "cloudy",
+      "synthesisText": "cloudy.",
+      "path": "assets/audio/voice/word-cloudy.wav",
+      "bytes": 82598,
+      "sha256": "f41bcbbf045dda63c317cff196f2f0064e9fe81572a5a3a0078391935422ac06"
+    },
+    {
+      "id": "word-sharp",
+      "text": "sharp",
+      "synthesisText": "sharp.",
+      "path": "assets/audio/voice/word-sharp.wav",
+      "bytes": 82598,
+      "sha256": "53633f10cd5bec155550c911e30724fe3223680cbeb2c4c087d1a68711d47e38"
+    },
+    {
+      "id": "word-bone",
+      "text": "bone",
+      "synthesisText": "bone.",
+      "path": "assets/audio/voice/word-bone.wav",
+      "bytes": 82598,
+      "sha256": "27eb9105284b170f6829df71dbb82bf6b7303b1c215b96d3f10792e301923707"
+    },
+    {
+      "id": "word-stomach",
+      "text": "stomach",
+      "synthesisText": "stomach.",
+      "path": "assets/audio/voice/word-stomach.wav",
+      "bytes": 82598,
+      "sha256": "c36d4a74201aed8192a48ece24f2f59120fe343325cb42130e75e454a5d3900a"
+    },
+    {
+      "id": "word-dinosaur",
+      "text": "dinosaur",
+      "synthesisText": "dinosaur.",
+      "path": "assets/audio/voice/word-dinosaur.wav",
+      "bytes": 82598,
+      "sha256": "f1edbfeff52288e0b169bbd60b55255accfd4dd9fa569dccf5d85d3843ecd7b1"
+    },
+    {
+      "id": "word-chicken",
+      "text": "chicken",
+      "synthesisText": "chicken.",
+      "path": "assets/audio/voice/word-chicken.wav",
+      "bytes": 82598,
+      "sha256": "c169e81b181caa0f7e85ed69b7e5ba42a97e55a16832a364cfe00a4180324fd0"
+    },
+    {
+      "id": "word-meat",
+      "text": "meat",
+      "synthesisText": "meat.",
+      "path": "assets/audio/voice/word-meat.wav",
+      "bytes": 82598,
+      "sha256": "6cebb2bb6c40c7ca14d1fc5257b1e36403ee1812937797fbe24618fced6c680e"
+    },
+    {
+      "id": "word-lollipop",
+      "text": "lollipop",
+      "synthesisText": "lollipop.",
+      "path": "assets/audio/voice/word-lollipop.wav",
+      "bytes": 82598,
+      "sha256": "45f233173681a8b63dc770cf5f329bcc241193116d77450754ac413d2f150adf"
+    },
+    {
+      "id": "word-tea",
+      "text": "tea",
+      "synthesisText": "tea.",
+      "path": "assets/audio/voice/word-tea.wav",
+      "bytes": 82598,
+      "sha256": "07e06265dbebfe0c8f92227301501513f97704db89cbfaa46f6a322510495900"
+    },
+    {
+      "id": "word-menu",
+      "text": "menu",
+      "synthesisText": "menu.",
+      "path": "assets/audio/voice/word-menu.wav",
+      "bytes": 82598,
+      "sha256": "77a41bc09833fe21a4f0c4ef29b788ce8fe8158da08bae871a2a9899e6c4eb33"
+    },
+    {
+      "id": "word-money",
+      "text": "money",
+      "synthesisText": "money.",
+      "path": "assets/audio/voice/word-money.wav",
+      "bytes": 50846,
+      "sha256": "5352b89edec4743f1b7f9602dd90beffacf7ce669e693e2d16ce6c55d0587c4e"
+    },
+    {
+      "id": "word-clay",
+      "text": "clay",
+      "synthesisText": "clay.",
+      "path": "assets/audio/voice/word-clay.wav",
+      "bytes": 82598,
+      "sha256": "9b65069a0ce8b1144ccbf077dd1069621aa6f1a5e5411906fb5844dd2c887bff"
+    },
+    {
+      "id": "word-card",
+      "text": "card",
+      "synthesisText": "card.",
+      "path": "assets/audio/voice/word-card.wav",
+      "bytes": 82598,
+      "sha256": "2a78960f328fb4064c25119e1d6967019cdffacc1ee39ac10a4a6ae08d01864f"
+    },
+    {
+      "id": "word-picture",
+      "text": "picture",
+      "synthesisText": "picture.",
+      "path": "assets/audio/voice/word-picture.wav",
+      "bytes": 82598,
+      "sha256": "6e7ee72a1a8779c7efc522311b9726402c8c2c88b6281b73b74877d75cf9aec0"
+    },
+    {
+      "id": "word-letter",
+      "text": "letter",
+      "synthesisText": "letter.",
+      "path": "assets/audio/voice/word-letter.wav",
+      "bytes": 82598,
+      "sha256": "fcf15099dda92a3b068f1469976f35c6ac4eb984699700b5257fb2a33f82f5e4"
+    },
+    {
+      "id": "word-newspaper",
+      "text": "newspaper",
+      "synthesisText": "newspaper.",
+      "path": "assets/audio/voice/word-newspaper.wav",
+      "bytes": 82598,
+      "sha256": "49ba399a15b4ee632a6245448015afb85079c77bd18957220d0bc15a59189ceb"
+    },
+    {
+      "id": "word-plastic",
+      "text": "plastic",
+      "synthesisText": "plastic.",
+      "path": "assets/audio/voice/word-plastic.wav",
+      "bytes": 82598,
+      "sha256": "4611d4dde38ad383324c05617e6e4c0764f260644de5c13e29555b398a74a8f7"
+    },
+    {
+      "id": "word-world",
+      "text": "world",
+      "synthesisText": "world.",
+      "path": "assets/audio/voice/word-world.wav",
+      "bytes": 82598,
+      "sha256": "77c753300f5a058e29402cf31e49b919a119f2cce97fe1f060952e1866be976e"
+    },
+    {
+      "id": "word-winner",
+      "text": "winner",
+      "synthesisText": "winner.",
+      "path": "assets/audio/voice/word-winner.wav",
+      "bytes": 82598,
+      "sha256": "f059f4b450644f45bab32b359718da7df665a3511ded20ee7883f430f001fcbe"
+    },
+    {
+      "id": "word-finish",
+      "text": "finish",
+      "synthesisText": "finish.",
+      "path": "assets/audio/voice/word-finish.wav",
+      "bytes": 82598,
+      "sha256": "2206ebec8e289463bfda98be5769e8a91231c0bfcf846ff1f2044a6cce564cdc"
+    },
+    {
+      "id": "word-change",
+      "text": "change",
+      "synthesisText": "change.",
+      "path": "assets/audio/voice/word-change.wav",
+      "bytes": 82598,
+      "sha256": "32d4f12655ad2b3a466588a89c6f6211c076f2adce80413663d818081cee2f1f"
+    },
+    {
+      "id": "word-number",
+      "text": "number",
+      "synthesisText": "number.",
+      "path": "assets/audio/voice/word-number.wav",
+      "bytes": 82598,
+      "sha256": "ed680ad578584207884db705ed549df45ca3dcfd31a04fdada9a282ebbaf5186"
+    },
+    {
       "id": "phrase-red-apple",
       "text": "red apple",
       "synthesisText": "red apple.",
@@ -10370,6 +12770,2358 @@
       "path": "assets/audio/voice/phrase-refrigerate-food.wav",
       "bytes": 82598,
       "sha256": "b58f36c382d21eb5a4359d8a61f1ebdc638f4bb601815898cb215dae6ca584cc"
+    },
+    {
+      "id": "phrase-i-can-jump",
+      "text": "i can jump",
+      "synthesisText": "i can jump.",
+      "path": "assets/audio/voice/phrase-i-can-jump.wav",
+      "bytes": 82598,
+      "sha256": "d370e0affaeebf7ceeb008b6cede2d460a65e8c5fec00a5692a291d17ce8db9d"
+    },
+    {
+      "id": "phrase-you-can-clap",
+      "text": "you can clap",
+      "synthesisText": "you can clap.",
+      "path": "assets/audio/voice/phrase-you-can-clap.wav",
+      "bytes": 82598,
+      "sha256": "ffb4cf770aed44d8eb75c0954205b50cd07f16cdd26ed882f5d7aa77e1d0c542"
+    },
+    {
+      "id": "phrase-my-red-ball",
+      "text": "my red ball",
+      "synthesisText": "my red ball.",
+      "path": "assets/audio/voice/phrase-my-red-ball.wav",
+      "bytes": 82598,
+      "sha256": "002d1e84d4834f1a05fbd1cfa91059a777ed2a3acac4992af88c14e0f519c696"
+    },
+    {
+      "id": "phrase-a-big-dog",
+      "text": "a big dog",
+      "synthesisText": "a big dog.",
+      "path": "assets/audio/voice/phrase-a-big-dog.wav",
+      "bytes": 82598,
+      "sha256": "a29b745947af19fc340f704b3fffc30d20c1659353c7d0dd2337b2c098d8e53c"
+    },
+    {
+      "id": "phrase-a-cat-is-happy",
+      "text": "a cat is happy",
+      "synthesisText": "a cat is happy.",
+      "path": "assets/audio/voice/phrase-a-cat-is-happy.wav",
+      "bytes": 84716,
+      "sha256": "68ca22272bea68e12adfdff7a13c321a16d268b551455ec279e12afc9b5ac99b"
+    },
+    {
+      "id": "phrase-i-can-run",
+      "text": "i can run",
+      "synthesisText": "i can run.",
+      "path": "assets/audio/voice/phrase-i-can-run.wav",
+      "bytes": 82598,
+      "sha256": "1223e63c4a487b5e242c207a2ec102692aaf8d52ef000675a657238c65e71663"
+    },
+    {
+      "id": "phrase-yes-please",
+      "text": "yes please",
+      "synthesisText": "yes please.",
+      "path": "assets/audio/voice/phrase-yes-please.wav",
+      "bytes": 82598,
+      "sha256": "57dfb97fcb98f4d1d68d23dd85710d2c3f67c20d3eac8fba10e40b2a1ec67250"
+    },
+    {
+      "id": "phrase-no-milk",
+      "text": "no milk",
+      "synthesisText": "no milk.",
+      "path": "assets/audio/voice/phrase-no-milk.wav",
+      "bytes": 82598,
+      "sha256": "ec01e6d0c7e72206a2c857213bb6f54dfcf195b29798acb6bcd323a9ab2a7d7d"
+    },
+    {
+      "id": "phrase-help-me-please",
+      "text": "help me please",
+      "synthesisText": "help me please.",
+      "path": "assets/audio/voice/phrase-help-me-please.wav",
+      "bytes": 82598,
+      "sha256": "f4de8264ef88a20c2e5f4c0966a6b96f232a9f8bc89331735a421fd8b1c08e69"
+    },
+    {
+      "id": "phrase-hello-my-friend",
+      "text": "hello my friend",
+      "synthesisText": "hello my friend.",
+      "path": "assets/audio/voice/phrase-hello-my-friend.wav",
+      "bytes": 82598,
+      "sha256": "bf2291a18325f5b7767a82306062f7beb3b1b6a771840def89dd762bc8483228"
+    },
+    {
+      "id": "phrase-we-can-play",
+      "text": "we can play",
+      "synthesisText": "we can play.",
+      "path": "assets/audio/voice/phrase-we-can-play.wav",
+      "bytes": 82598,
+      "sha256": "c136265ff2e0901e54a7cfac03b497cf9feea83614561482b4544791ef136187"
+    },
+    {
+      "id": "phrase-he-can-run",
+      "text": "he can run",
+      "synthesisText": "he can run.",
+      "path": "assets/audio/voice/phrase-he-can-run.wav",
+      "bytes": 82598,
+      "sha256": "3c9a0f2dcb930435f8df00775c5ada402c76757e3830c38a8c52923a384a9e3a"
+    },
+    {
+      "id": "phrase-she-can-sing",
+      "text": "she can sing",
+      "synthesisText": "she can sing.",
+      "path": "assets/audio/voice/phrase-she-can-sing.wav",
+      "bytes": 82598,
+      "sha256": "bc7b650682b2c020cdbf4d7359861a78570a977538eb79d21433e684977102bc"
+    },
+    {
+      "id": "phrase-it-is-hot",
+      "text": "it is hot",
+      "synthesisText": "it is hot.",
+      "path": "assets/audio/voice/phrase-it-is-hot.wav",
+      "bytes": 82598,
+      "sha256": "699c39b6e21881be7c31c96dae76d9e8168d8dbf834533848c09ac250191467e"
+    },
+    {
+      "id": "phrase-they-can-dance",
+      "text": "they can dance",
+      "synthesisText": "they can dance.",
+      "path": "assets/audio/voice/phrase-they-can-dance.wav",
+      "bytes": 82598,
+      "sha256": "a38e3ebcecbd9754709f6136d73562b117b07541e1300e6cc7590a730ccb588e"
+    },
+    {
+      "id": "phrase-help-us-please",
+      "text": "help us please",
+      "synthesisText": "help us please.",
+      "path": "assets/audio/voice/phrase-help-us-please.wav",
+      "bytes": 82598,
+      "sha256": "36be88a8bb52d7a9e459e8cf808aafff53864bd9ffc71beca5862c4a25fcdcec"
+    },
+    {
+      "id": "phrase-give-them-water",
+      "text": "give them water",
+      "synthesisText": "give them water.",
+      "path": "assets/audio/voice/phrase-give-them-water.wav",
+      "bytes": 82598,
+      "sha256": "57301a4ed770e3b2414b3b8ef7b2f1e69c477fc067f3b3fd9e61770b97b34c84"
+    },
+    {
+      "id": "phrase-give-him-milk",
+      "text": "give him milk",
+      "synthesisText": "give him milk.",
+      "path": "assets/audio/voice/phrase-give-him-milk.wav",
+      "bytes": 82598,
+      "sha256": "15b4c652cb092fd2b1d454679e44eda6c421805b0afa3d6158fdd4582052424b"
+    },
+    {
+      "id": "phrase-give-her-water",
+      "text": "give her water",
+      "synthesisText": "give her water.",
+      "path": "assets/audio/voice/phrase-give-her-water.wav",
+      "bytes": 82598,
+      "sha256": "f5f79827f8224292baaba14c3c47a89e61583b3d67f972b5e11781a1c1956257"
+    },
+    {
+      "id": "phrase-your-blue-hat",
+      "text": "your blue hat",
+      "synthesisText": "your blue hat.",
+      "path": "assets/audio/voice/phrase-your-blue-hat.wav",
+      "bytes": 82598,
+      "sha256": "5354f66215b7746c5b5808dba572c58458f2512ab95bbf644269ed74d3a99ca0"
+    },
+    {
+      "id": "phrase-his-green-coat",
+      "text": "his green coat",
+      "synthesisText": "his green coat.",
+      "path": "assets/audio/voice/phrase-his-green-coat.wav",
+      "bytes": 82598,
+      "sha256": "80873417377d072e5b5ef3797cdd11056cfdc884db9226c90da3e35310ae7051"
+    },
+    {
+      "id": "phrase-our-little-house",
+      "text": "our little house",
+      "synthesisText": "our little house.",
+      "path": "assets/audio/voice/phrase-our-little-house.wav",
+      "bytes": 82598,
+      "sha256": "58acca8ff60c9885d9f9da85e738d49d6b5ec7e1d889b6180a7bd0391a22f60a"
+    },
+    {
+      "id": "phrase-their-school-is-near",
+      "text": "their school is near",
+      "synthesisText": "their school is near.",
+      "path": "assets/audio/voice/phrase-their-school-is-near.wav",
+      "bytes": 83658,
+      "sha256": "581a8341108b4c0d43857b48983e569796e9b84264e7d049042de38296618557"
+    },
+    {
+      "id": "phrase-an-orange",
+      "text": "an orange",
+      "synthesisText": "an orange.",
+      "path": "assets/audio/voice/phrase-an-orange.wav",
+      "bytes": 82598,
+      "sha256": "0f4760e95fb733e61ad323abc10884ad68a88638a2e46afad407739e213c8c0e"
+    },
+    {
+      "id": "phrase-the-little-cat",
+      "text": "the little cat",
+      "synthesisText": "the little cat.",
+      "path": "assets/audio/voice/phrase-the-little-cat.wav",
+      "bytes": 82598,
+      "sha256": "059799a83dd46d632bd9eb2dd9b6a457e29de4ea03a0cf9f7cad2c2f046d66d6"
+    },
+    {
+      "id": "phrase-milk-and-bread",
+      "text": "milk and bread",
+      "synthesisText": "milk and bread.",
+      "path": "assets/audio/voice/phrase-milk-and-bread.wav",
+      "bytes": 82598,
+      "sha256": "f4aae60e191fecd506099c28ba904ff086aaf8a2c2fe7730ae40664782116fda"
+    },
+    {
+      "id": "phrase-water-or-milk",
+      "text": "water or milk",
+      "synthesisText": "water or milk.",
+      "path": "assets/audio/voice/phrase-water-or-milk.wav",
+      "bytes": 84716,
+      "sha256": "58af7b2d53ce825993f7cb1e21ee3ed59a0360e27d27ee052adc91f2649ce6c7"
+    },
+    {
+      "id": "phrase-small-but-heavy",
+      "text": "small but heavy",
+      "synthesisText": "small but heavy.",
+      "path": "assets/audio/voice/phrase-small-but-heavy.wav",
+      "bytes": 82598,
+      "sha256": "357577017d5860f034dacdd345587c1f71d9a2e6aef2481b08c0fdb162199944"
+    },
+    {
+      "id": "phrase-happy-because-we-can-play",
+      "text": "happy because we can play",
+      "synthesisText": "happy because we can play.",
+      "path": "assets/audio/voice/phrase-happy-because-we-can-play.wav",
+      "bytes": 98474,
+      "sha256": "e60b9fc8fed369dec56279d28d859826b20300ef10ba4835d7fd3df2031ce581"
+    },
+    {
+      "id": "phrase-come-if-you-can",
+      "text": "come if you can",
+      "synthesisText": "come if you can.",
+      "path": "assets/audio/voice/phrase-come-if-you-can.wav",
+      "bytes": 82598,
+      "sha256": "0908027896dcb377adfec1cea6f0d361904e27caec591546e964a84cd0f47708"
+    },
+    {
+      "id": "phrase-it-is-cold-so-rest",
+      "text": "it is cold so rest",
+      "synthesisText": "it is cold so rest.",
+      "path": "assets/audio/voice/phrase-it-is-cold-so-rest.wav",
+      "bytes": 92126,
+      "sha256": "dcf86134623a8f5d19107587f792eaf80e069d8c7ad87eadada02c6b02d0360a"
+    },
+    {
+      "id": "phrase-this-red-apple",
+      "text": "this red apple",
+      "synthesisText": "this red apple.",
+      "path": "assets/audio/voice/phrase-this-red-apple.wav",
+      "bytes": 82598,
+      "sha256": "7c60bd45e1d4b64e2d04a92d3c2a7d9db48cee59056dceee3d89fedca8e7b4c1"
+    },
+    {
+      "id": "phrase-that-big-tree",
+      "text": "that big tree",
+      "synthesisText": "that big tree.",
+      "path": "assets/audio/voice/phrase-that-big-tree.wav",
+      "bytes": 82598,
+      "sha256": "88b7bbef95d1e7adf3991431b7651b1d2479d18c4991da3dbda2b22fb361fac2"
+    },
+    {
+      "id": "phrase-these-are-my-sheep",
+      "text": "these are my sheep",
+      "synthesisText": "these are my sheep.",
+      "path": "assets/audio/voice/phrase-these-are-my-sheep.wav",
+      "bytes": 82598,
+      "sha256": "4c7e8187564e3fd02e12bbb3f992d5b42e160c4b30413a51652ec3c41c9617b5"
+    },
+    {
+      "id": "phrase-those-are-your-fish",
+      "text": "those are your fish",
+      "synthesisText": "those are your fish.",
+      "path": "assets/audio/voice/phrase-those-are-your-fish.wav",
+      "bytes": 82598,
+      "sha256": "731d7b2b005ad1e206fde00d1219c5382790161917c90afdac51a8b2c4c2b36e"
+    },
+    {
+      "id": "phrase-who-can-help",
+      "text": "who can help",
+      "synthesisText": "who can help.",
+      "path": "assets/audio/voice/phrase-who-can-help.wav",
+      "bytes": 82598,
+      "sha256": "ec871b23654b3824640418fbd134ab6dfb67ac78df52408212204e85f59c908a"
+    },
+    {
+      "id": "phrase-what-is-this",
+      "text": "what is this",
+      "synthesisText": "what is this.",
+      "path": "assets/audio/voice/phrase-what-is-this.wav",
+      "bytes": 82598,
+      "sha256": "903fa181efacaffd4893f08d17fac44f185833c4338511b567989d693f0b6548"
+    },
+    {
+      "id": "phrase-where-is-my-hat",
+      "text": "where is my hat",
+      "synthesisText": "where is my hat.",
+      "path": "assets/audio/voice/phrase-where-is-my-hat.wav",
+      "bytes": 82598,
+      "sha256": "7cb8ee175a65f9c19a982b7f070eaadc3342371132ebbeb741ba8710b59cf085"
+    },
+    {
+      "id": "phrase-when-can-we-play",
+      "text": "when can we play",
+      "synthesisText": "when can we play.",
+      "path": "assets/audio/voice/phrase-when-can-we-play.wav",
+      "bytes": 82598,
+      "sha256": "0a6f90461a35ebb70e3eddb057ab5d34dc969ce8dcfdd2a730e7d7e90c8bda9c"
+    },
+    {
+      "id": "phrase-why-is-it-wet",
+      "text": "why is it wet",
+      "synthesisText": "why is it wet.",
+      "path": "assets/audio/voice/phrase-why-is-it-wet.wav",
+      "bytes": 82598,
+      "sha256": "1962ba8e1b3c99a9e2848e448fcb89223b867489ed64b93400434b64c4918528"
+    },
+    {
+      "id": "phrase-how-are-you",
+      "text": "how are you",
+      "synthesisText": "how are you.",
+      "path": "assets/audio/voice/phrase-how-are-you.wav",
+      "bytes": 82598,
+      "sha256": "1fc534df0cba47fe3e75b4f4e1625ba4f6ad631903898fa8aa19a06e08e97274"
+    },
+    {
+      "id": "phrase-i-am-happy",
+      "text": "i am happy",
+      "synthesisText": "i am happy.",
+      "path": "assets/audio/voice/phrase-i-am-happy.wav",
+      "bytes": 82598,
+      "sha256": "26801fbd836f9074969a7edced39ddb70393a51b91d166a46a548028f3612dc9"
+    },
+    {
+      "id": "phrase-we-are-happy",
+      "text": "we are happy",
+      "synthesisText": "we are happy.",
+      "path": "assets/audio/voice/phrase-we-are-happy.wav",
+      "bytes": 82598,
+      "sha256": "1f94798c07950ac1b542478635951797b2da0674bfd5f11f26a568c31852e660"
+    },
+    {
+      "id": "phrase-be-kind",
+      "text": "be kind",
+      "synthesisText": "be kind.",
+      "path": "assets/audio/voice/phrase-be-kind.wav",
+      "bytes": 82598,
+      "sha256": "7dff8e88931554cee45196ca7ab3f56f839530e453eb382a625d957c6e17c03a"
+    },
+    {
+      "id": "phrase-do-it-again",
+      "text": "do it again",
+      "synthesisText": "do it again.",
+      "path": "assets/audio/voice/phrase-do-it-again.wav",
+      "bytes": 82598,
+      "sha256": "b032bac8e248a5bed82858393e9cadc60de230a48366276792efde33e6858268"
+    },
+    {
+      "id": "phrase-i-have-a-ball",
+      "text": "i have a ball",
+      "synthesisText": "i have a ball.",
+      "path": "assets/audio/voice/phrase-i-have-a-ball.wav",
+      "bytes": 82598,
+      "sha256": "64b71c5a486d5f4e4f9c433155c9b7f13c962ddecc827d01ed8108cb1e6dc7b2"
+    },
+    {
+      "id": "phrase-she-has-a-book",
+      "text": "she has a book",
+      "synthesisText": "she has a book.",
+      "path": "assets/audio/voice/phrase-she-has-a-book.wav",
+      "bytes": 82598,
+      "sha256": "8645b7b9974f479b886aa36400c0d10bb8dbe06e16f280d3ecd54b42db057080"
+    },
+    {
+      "id": "phrase-it-is-not-cold",
+      "text": "it is not cold",
+      "synthesisText": "it is not cold.",
+      "path": "assets/audio/voice/phrase-it-is-not-cold.wav",
+      "bytes": 82598,
+      "sha256": "91b7f3edc9127b4638a9eeb85ef9ec81985505d43c8d17ab2882e84a6bdbe5f1"
+    },
+    {
+      "id": "phrase-a-very-big-tree",
+      "text": "a very big tree",
+      "synthesisText": "a very big tree.",
+      "path": "assets/audio/voice/phrase-a-very-big-tree.wav",
+      "bytes": 88950,
+      "sha256": "bad3ee7f743aa0c3f6ec39e57a214afa1b5d16208212be2a7fb68e2d70f588e2"
+    },
+    {
+      "id": "phrase-too-hot-to-drink",
+      "text": "too hot to drink",
+      "synthesisText": "too hot to drink.",
+      "path": "assets/audio/voice/phrase-too-hot-to-drink.wav",
+      "bytes": 82598,
+      "sha256": "975f8484779e8c59255797a67c43ad43ef22c70173be34117a5bea1ef492ac5c"
+    },
+    {
+      "id": "phrase-go-to-school",
+      "text": "go to school",
+      "synthesisText": "go to school.",
+      "path": "assets/audio/voice/phrase-go-to-school.wav",
+      "bytes": 82598,
+      "sha256": "ec7d9eac70ddf519439dfa0ec9186b79f0a6128785990474f0658bba94224606"
+    },
+    {
+      "id": "phrase-a-cup-of-water",
+      "text": "a cup of water",
+      "synthesisText": "a cup of water.",
+      "path": "assets/audio/voice/phrase-a-cup-of-water.wav",
+      "bytes": 82598,
+      "sha256": "b22861fbca8fd042aad1479f53c1b760b9ba10ef5bc4186e2c0d074cd240b454"
+    },
+    {
+      "id": "phrase-a-present-for-you",
+      "text": "a present for you",
+      "synthesisText": "a present for you.",
+      "path": "assets/audio/voice/phrase-a-present-for-you.wav",
+      "bytes": 82598,
+      "sha256": "954d2d2b2aa6c7b9fbbf40c6565dde19d7b12bff2e618f1e72ba63ec7d9fa3cc"
+    },
+    {
+      "id": "phrase-play-with-me",
+      "text": "play with me",
+      "synthesisText": "play with me.",
+      "path": "assets/audio/voice/phrase-play-with-me.wav",
+      "bytes": 82598,
+      "sha256": "439a1fb61c8f5c2e36c09329fdd4b202ac4c3635bcd9b0e444d1f3fe095394a1"
+    },
+    {
+      "id": "phrase-a-letter-from-my-friend",
+      "text": "a letter from my friend",
+      "synthesisText": "a letter from my friend.",
+      "path": "assets/audio/voice/phrase-a-letter-from-my-friend.wav",
+      "bytes": 97418,
+      "sha256": "d1496cfbe85615d9f58d15370d4b8666d8ae160ba9a86ab73b650efa4f17325a"
+    },
+    {
+      "id": "phrase-at-the-school",
+      "text": "at the school",
+      "synthesisText": "at the school.",
+      "path": "assets/audio/voice/phrase-at-the-school.wav",
+      "bytes": 82598,
+      "sha256": "8059c1e8340f459a754c4bc4d0ab9b042f7bf035ef4f34d622190c04722ba8cd"
+    },
+    {
+      "id": "phrase-wait-until-morning",
+      "text": "wait until morning",
+      "synthesisText": "wait until morning.",
+      "path": "assets/audio/voice/phrase-wait-until-morning.wav",
+      "bytes": 84716,
+      "sha256": "f61df0f8a6f897856a39ba8c45d0b7f28244f43f67da172db3651d67e52de920"
+    },
+    {
+      "id": "phrase-during-the-summer",
+      "text": "during the summer",
+      "synthesisText": "during the summer.",
+      "path": "assets/audio/voice/phrase-during-the-summer.wav",
+      "bytes": 82598,
+      "sha256": "88a0d34a868cab11ad743a06abb72faac90609f76962e21de2f922a44e72a91c"
+    },
+    {
+      "id": "phrase-sing-while-you-cook",
+      "text": "sing while you cook",
+      "synthesisText": "sing while you cook.",
+      "path": "assets/audio/voice/phrase-sing-while-you-cook.wav",
+      "bytes": 82598,
+      "sha256": "c25e8eb770aa16857745c30ca598ddb99976416dcfaa36605f77e4b62f33d83c"
+    },
+    {
+      "id": "phrase-i-also-like-music",
+      "text": "i also like music",
+      "synthesisText": "i also like music.",
+      "path": "assets/audio/voice/phrase-i-also-like-music.wav",
+      "bytes": 96360,
+      "sha256": "8288552ba1f13738a255852b259ae6164a2005396a78ff5b29c86a5a21910973"
+    },
+    {
+      "id": "phrase-wash-then-eat",
+      "text": "wash then eat",
+      "synthesisText": "wash then eat.",
+      "path": "assets/audio/voice/phrase-wash-then-eat.wav",
+      "bytes": 82598,
+      "sha256": "fcfa38b7d021c12ae005ba449908c616e5709ad51ef32267e8189fbd36a7849b"
+    },
+    {
+      "id": "phrase-the-cat-is-still-here",
+      "text": "the cat is still here",
+      "synthesisText": "the cat is still here.",
+      "path": "assets/audio/voice/phrase-the-cat-is-still-here.wav",
+      "bytes": 90008,
+      "sha256": "cf9fcea3e8e4e07be76d1872ed0c5b8a6656c5687fea577d69a80c177ca31c26"
+    },
+    {
+      "id": "phrase-almost-ready",
+      "text": "almost ready",
+      "synthesisText": "almost ready.",
+      "path": "assets/audio/voice/phrase-almost-ready.wav",
+      "bytes": 82598,
+      "sha256": "f2ebac5b59f3b332f5de2323b265c4cb35b27ef7cf86c291ed8296b57ae81d88"
+    },
+    {
+      "id": "phrase-always-wash-your-face",
+      "text": "always wash your face",
+      "synthesisText": "always wash your face.",
+      "path": "assets/audio/voice/phrase-always-wash-your-face.wav",
+      "bytes": 90008,
+      "sha256": "49afd82bf30a82f4707dfd423821e158f18a1df1ff937096a1fc5fe5dad4989f"
+    },
+    {
+      "id": "phrase-sometimes-we-eat-outside",
+      "text": "sometimes we eat outside",
+      "synthesisText": "sometimes we eat outside.",
+      "path": "assets/audio/voice/phrase-sometimes-we-eat-outside.wav",
+      "bytes": 101652,
+      "sha256": "b6b3c63589f58414e4d0216a3f191846d61ce25baadf537901bac133d2340942"
+    },
+    {
+      "id": "phrase-never-give-up",
+      "text": "never give up",
+      "synthesisText": "never give up.",
+      "path": "assets/audio/voice/phrase-never-give-up.wav",
+      "bytes": 82598,
+      "sha256": "ac46c03bd9e37bb97624e31ce2d111d8226c16eff537ab6e7a49a1b61351fe25"
+    },
+    {
+      "id": "phrase-try-again",
+      "text": "try again",
+      "synthesisText": "try again.",
+      "path": "assets/audio/voice/phrase-try-again.wav",
+      "bytes": 82598,
+      "sha256": "5815bdb80e0aeab7029de97b26b0055ec5c1c3b6cd67074862807dc2cf60350e"
+    },
+    {
+      "id": "phrase-see-you-soon",
+      "text": "see you soon",
+      "synthesisText": "see you soon.",
+      "path": "assets/audio/voice/phrase-see-you-soon.wav",
+      "bytes": 82598,
+      "sha256": "02b05b56318ab800c4864162a1e6286d20c62230dd600bfdc778b9ef0ee4fbda"
+    },
+    {
+      "id": "phrase-see-you-later",
+      "text": "see you later",
+      "synthesisText": "see you later.",
+      "path": "assets/audio/voice/phrase-see-you-later.wav",
+      "bytes": 82598,
+      "sha256": "a443f90f940a7800dc76c3cc5936a8ddd0bcae7d2ce18b1b138315a056fdd6ae"
+    },
+    {
+      "id": "phrase-come-here-please",
+      "text": "come here please",
+      "synthesisText": "come here please.",
+      "path": "assets/audio/voice/phrase-come-here-please.wav",
+      "bytes": 82598,
+      "sha256": "7162b70f5630a1edf36b5d98c9ae9cf6474c8e39ab765285c51869bb9290a5ca"
+    },
+    {
+      "id": "phrase-put-it-there",
+      "text": "put it there",
+      "synthesisText": "put it there.",
+      "path": "assets/audio/voice/phrase-put-it-there.wav",
+      "bytes": 82598,
+      "sha256": "9cda42ede8cb43a96ca413fffa008e503a13ea5200ac0d8ba3db75eaf9a3e7c6"
+    },
+    {
+      "id": "phrase-goodbye-my-friend",
+      "text": "goodbye my friend",
+      "synthesisText": "goodbye my friend.",
+      "path": "assets/audio/voice/phrase-goodbye-my-friend.wav",
+      "bytes": 82598,
+      "sha256": "476f5bc1182adba04c47d00eb98b946c2b506409159eec2bfcca362ee71dc7f1"
+    },
+    {
+      "id": "phrase-yes-thanks",
+      "text": "yes thanks",
+      "synthesisText": "yes thanks.",
+      "path": "assets/audio/voice/phrase-yes-thanks.wav",
+      "bytes": 82598,
+      "sha256": "f0e2b9fd6eb2b14d8d1e65d02d6e618085cbaf9085fb7a7bddb692ea5011ea19"
+    },
+    {
+      "id": "phrase-i-am-sorry",
+      "text": "i am sorry",
+      "synthesisText": "i am sorry.",
+      "path": "assets/audio/voice/phrase-i-am-sorry.wav",
+      "bytes": 82598,
+      "sha256": "87daf25b52f41b32abf0e92cb1d11f50d93c03314dab8c56525b81a64f2041ed"
+    },
+    {
+      "id": "phrase-welcome-to-our-school",
+      "text": "welcome to our school",
+      "synthesisText": "welcome to our school.",
+      "path": "assets/audio/voice/phrase-welcome-to-our-school.wav",
+      "bytes": 92126,
+      "sha256": "688df748e51f96b8a04ac12546b13028ee678016b9ebee5b0a8d74ffcb32358d"
+    },
+    {
+      "id": "phrase-i-want-water",
+      "text": "i want water",
+      "synthesisText": "i want water.",
+      "path": "assets/audio/voice/phrase-i-want-water.wav",
+      "bytes": 82598,
+      "sha256": "6da1f3ee005800c4ba06e3a4e0d6ed2acbf34d9831deafce6d820b6685732737"
+    },
+    {
+      "id": "phrase-i-like-milk",
+      "text": "i like milk",
+      "synthesisText": "i like milk.",
+      "path": "assets/audio/voice/phrase-i-like-milk.wav",
+      "bytes": 82598,
+      "sha256": "9de4d619086e87a9c170fb33cb12123fabce0bf6056d030adf16bf0052d3c8bc"
+    },
+    {
+      "id": "phrase-i-love-my-family",
+      "text": "i love my family",
+      "synthesisText": "i love my family.",
+      "path": "assets/audio/voice/phrase-i-love-my-family.wav",
+      "bytes": 92126,
+      "sha256": "087bbeb187830a11111cc8f59be3a883d8fc58d15eb9776894deb78dadf51c46"
+    },
+    {
+      "id": "phrase-we-need-help",
+      "text": "we need help",
+      "synthesisText": "we need help.",
+      "path": "assets/audio/voice/phrase-we-need-help.wav",
+      "bytes": 82598,
+      "sha256": "7324179be94f64b9c7f67c8b46daa1df05fe48ee5c66d96b969a64e5f2362702"
+    },
+    {
+      "id": "phrase-i-can-see-you",
+      "text": "i can see you",
+      "synthesisText": "i can see you.",
+      "path": "assets/audio/voice/phrase-i-can-see-you.wav",
+      "bytes": 82598,
+      "sha256": "d24377bae26c88091b1a8da6141b0e61efcbe8e3f9da1d4de499847cc1d1bf3f"
+    },
+    {
+      "id": "phrase-i-feel-happy",
+      "text": "i feel happy",
+      "synthesisText": "i feel happy.",
+      "path": "assets/audio/voice/phrase-i-feel-happy.wav",
+      "bytes": 82598,
+      "sha256": "84e8952c4595bcf8062dd2a94b3c900f05b6332de66a9740ef04f455100ec9da"
+    },
+    {
+      "id": "phrase-i-know-your-name",
+      "text": "i know your name",
+      "synthesisText": "i know your name.",
+      "path": "assets/audio/voice/phrase-i-know-your-name.wav",
+      "bytes": 82598,
+      "sha256": "91650de024d36c41fa16ae3c3db90e6243ce84231627a98dc5e3959518b0a0d8"
+    },
+    {
+      "id": "phrase-i-understand-the-question",
+      "text": "i understand the question",
+      "synthesisText": "i understand the question.",
+      "path": "assets/audio/voice/phrase-i-understand-the-question.wav",
+      "bytes": 99534,
+      "sha256": "6fe656593938720424db5367b2f60a9b406b6d23c026458d59eb4505d843ca04"
+    },
+    {
+      "id": "phrase-remember-your-book",
+      "text": "remember your book",
+      "synthesisText": "remember your book.",
+      "path": "assets/audio/voice/phrase-remember-your-book.wav",
+      "bytes": 82598,
+      "sha256": "d7bc19d95a1949c7a9272f18c9ee7e9d654ac257fda2ab826a4287e51c2e4517"
+    },
+    {
+      "id": "phrase-do-not-forget",
+      "text": "do not forget",
+      "synthesisText": "do not forget.",
+      "path": "assets/audio/voice/phrase-do-not-forget.wav",
+      "bytes": 82598,
+      "sha256": "f04938ff26494bc8b3c2584747e386460ec9c05fd3beb817b31265007890533b"
+    },
+    {
+      "id": "phrase-learn-a-new-word",
+      "text": "learn a new word",
+      "synthesisText": "learn a new word.",
+      "path": "assets/audio/voice/phrase-learn-a-new-word.wav",
+      "bytes": 82598,
+      "sha256": "00d0268800db0d98e9adbbb84261f340f69a8c55c01780ce0bfff75695f550cd"
+    },
+    {
+      "id": "phrase-listen-please",
+      "text": "listen please",
+      "synthesisText": "listen please.",
+      "path": "assets/audio/voice/phrase-listen-please.wav",
+      "bytes": 82598,
+      "sha256": "9de7ee5dd1d410b95a048f8a9a177acf6916907d9b6d232b3509cfc1d547911d"
+    },
+    {
+      "id": "phrase-say-hello",
+      "text": "say hello",
+      "synthesisText": "say hello.",
+      "path": "assets/audio/voice/phrase-say-hello.wav",
+      "bytes": 82598,
+      "sha256": "7952b96ed9ac0b19f55238e0c7f300c96073c3c517f3716fbfd6a14899b7479e"
+    },
+    {
+      "id": "phrase-tell-me-a-story",
+      "text": "tell me a story",
+      "synthesisText": "tell me a story.",
+      "path": "assets/audio/voice/phrase-tell-me-a-story.wav",
+      "bytes": 82598,
+      "sha256": "ff392179542fc8ed642a77194ebadc5481e51e6265d0b71f7529c81a0bbadf49"
+    },
+    {
+      "id": "phrase-use-a-pencil",
+      "text": "use a pencil",
+      "synthesisText": "use a pencil.",
+      "path": "assets/audio/voice/phrase-use-a-pencil.wav",
+      "bytes": 82598,
+      "sha256": "986c5b5842699777358411aa505167596d0d14f5bcd50eff119b5e13c752be35"
+    },
+    {
+      "id": "phrase-make-a-cake",
+      "text": "make a cake",
+      "synthesisText": "make a cake.",
+      "path": "assets/audio/voice/phrase-make-a-cake.wav",
+      "bytes": 82598,
+      "sha256": "d34bab47160e5d4e693e1cf32017680c206dbf2692c11c2e81cf1264bc0dbf52"
+    },
+    {
+      "id": "phrase-put-it-here",
+      "text": "put it here",
+      "synthesisText": "put it here.",
+      "path": "assets/audio/voice/phrase-put-it-here.wav",
+      "bytes": 82598,
+      "sha256": "f9d0f2501dbf7112b81334e92daa9870469a04fd23cd6027e1663ddf97325d2d"
+    },
+    {
+      "id": "phrase-choose-a-book",
+      "text": "choose a book",
+      "synthesisText": "choose a book.",
+      "path": "assets/audio/voice/phrase-choose-a-book.wav",
+      "bytes": 82598,
+      "sha256": "ca34c2b7e9a51f957e8aba5c9ec34f4ac6de02b61200907f0a472364c02f5682"
+    },
+    {
+      "id": "phrase-enjoy-your-lunch",
+      "text": "enjoy your lunch",
+      "synthesisText": "enjoy your lunch.",
+      "path": "assets/audio/voice/phrase-enjoy-your-lunch.wav",
+      "bytes": 82598,
+      "sha256": "85620a5dc2021db24d9a507a8fdc20c1c24c1c7cd31bdf4305e55551ad544bb5"
+    },
+    {
+      "id": "phrase-hope-for-a-warm-day",
+      "text": "hope for a warm day",
+      "synthesisText": "hope for a warm day.",
+      "path": "assets/audio/voice/phrase-hope-for-a-warm-day.wav",
+      "bytes": 93182,
+      "sha256": "57acfd33ec52c0039983fdbca5d8ff8ad9494f5d2e6dc621477d4b700bb8d307"
+    },
+    {
+      "id": "phrase-i-believe-you",
+      "text": "i believe you",
+      "synthesisText": "i believe you.",
+      "path": "assets/audio/voice/phrase-i-believe-you.wav",
+      "bytes": 82598,
+      "sha256": "0c370e97a9d47af1da9cecb147b626a46cf4771ddbff1629ff232ab0cda78598"
+    },
+    {
+      "id": "phrase-i-agree-with-you",
+      "text": "i agree with you",
+      "synthesisText": "i agree with you.",
+      "path": "assets/audio/voice/phrase-i-agree-with-you.wav",
+      "bytes": 82598,
+      "sha256": "8d4f3b0c056179f8b9f080dbfa36f1cae2fe84b3483786463076476caeaaf2e6"
+    },
+    {
+      "id": "phrase-decide-what-to-cook",
+      "text": "decide what to cook",
+      "synthesisText": "decide what to cook.",
+      "path": "assets/audio/voice/phrase-decide-what-to-cook.wav",
+      "bytes": 86834,
+      "sha256": "b1f522206134d1aa68c00407bc3c98c1f2c682478ea3368ecb438708e91d98b6"
+    },
+    {
+      "id": "phrase-imagine-a-purple-cat",
+      "text": "imagine a purple cat",
+      "synthesisText": "imagine a purple cat.",
+      "path": "assets/audio/voice/phrase-imagine-a-purple-cat.wav",
+      "bytes": 97418,
+      "sha256": "9240500aeaaec6226754b274f93fdaeb9942faa63770e57c0278adf2000b1e9d"
+    },
+    {
+      "id": "phrase-notice-the-little-bird",
+      "text": "notice the little bird",
+      "synthesisText": "notice the little bird.",
+      "path": "assets/audio/voice/phrase-notice-the-little-bird.wav",
+      "bytes": 98474,
+      "sha256": "03c449961378f03e5b0e883a31398d4c2d43f0f57048c2e675b3788a15d42d69"
+    },
+    {
+      "id": "phrase-explain-your-answer",
+      "text": "explain your answer",
+      "synthesisText": "explain your answer.",
+      "path": "assets/audio/voice/phrase-explain-your-answer.wav",
+      "bytes": 82598,
+      "sha256": "3bb022b4fb8b868a1d89795d0098b5d1052fe22f109d0822eaf3b46d113c6c58"
+    },
+    {
+      "id": "phrase-describe-your-picture",
+      "text": "describe your picture",
+      "synthesisText": "describe your picture.",
+      "path": "assets/audio/voice/phrase-describe-your-picture.wav",
+      "bytes": 82598,
+      "sha256": "1a4dc660757d286e48a8c8bc179f968412a11a087d99e247458b3f1cd58ee58e"
+    },
+    {
+      "id": "phrase-compare-the-two-fish",
+      "text": "compare the two fish",
+      "synthesisText": "compare the two fish.",
+      "path": "assets/audio/voice/phrase-compare-the-two-fish.wav",
+      "bytes": 90008,
+      "sha256": "66997e2e14a2352cf457be53ffd0f2f34c9a333e04ec19cc8af52892d783aefb"
+    },
+    {
+      "id": "phrase-predict-the-weather",
+      "text": "predict the weather",
+      "synthesisText": "predict the weather.",
+      "path": "assets/audio/voice/phrase-predict-the-weather.wav",
+      "bytes": 82598,
+      "sha256": "1bf172b77d0fdc1d4eeef0e9760b820f6d9ad2b6d74af9151851ded74d77b560"
+    },
+    {
+      "id": "phrase-observe-a-green-leaf",
+      "text": "observe a green leaf",
+      "synthesisText": "observe a green leaf.",
+      "path": "assets/audio/voice/phrase-observe-a-green-leaf.wav",
+      "bytes": 96360,
+      "sha256": "f0ec9958707a7024e20f47867630af99ca229651ed3d8ce2444fe0f944c9dee9"
+    },
+    {
+      "id": "phrase-investigate-the-problem",
+      "text": "investigate the problem",
+      "synthesisText": "investigate the problem.",
+      "path": "assets/audio/voice/phrase-investigate-the-problem.wav",
+      "bytes": 96360,
+      "sha256": "420c0b2fc7c905ea52e33c83d8820ab427054394e08272c8b9d6c72c600e6f9e"
+    },
+    {
+      "id": "phrase-discover-a-new-planet",
+      "text": "discover a new planet",
+      "synthesisText": "discover a new planet.",
+      "path": "assets/audio/voice/phrase-discover-a-new-planet.wav",
+      "bytes": 103766,
+      "sha256": "2a09883ef5ee15f1c50fdec280540d870932b4ffc8c2950f54e2e2653edc8cfe"
+    },
+    {
+      "id": "phrase-explore-the-forest",
+      "text": "explore the forest",
+      "synthesisText": "explore the forest.",
+      "path": "assets/audio/voice/phrase-explore-the-forest.wav",
+      "bytes": 98474,
+      "sha256": "b1891c741dc45b24c74b9ee9649febb102575c207020fdbeb88b8a2db464ba75"
+    },
+    {
+      "id": "phrase-create-a-new-pattern",
+      "text": "create a new pattern",
+      "synthesisText": "create a new pattern.",
+      "path": "assets/audio/voice/phrase-create-a-new-pattern.wav",
+      "bytes": 84716,
+      "sha256": "10d20b6851cbf71031d61063477bfb295f6da3602936cd9ff63f3823b1b95ed1"
+    },
+    {
+      "id": "phrase-design-a-safe-house",
+      "text": "design a safe house",
+      "synthesisText": "design a safe house.",
+      "path": "assets/audio/voice/phrase-design-a-safe-house.wav",
+      "bytes": 96360,
+      "sha256": "7a10741bc1c49201c17fb63d78258bb5e1bc8b674082db36337cde3aec8d56e8"
+    },
+    {
+      "id": "phrase-improve-your-work",
+      "text": "improve your work",
+      "synthesisText": "improve your work.",
+      "path": "assets/audio/voice/phrase-improve-your-work.wav",
+      "bytes": 84716,
+      "sha256": "521faac94bcafba5e3baec0e61f2b3110e3ea14093ec2dadc7843b94924cf03f"
+    },
+    {
+      "id": "phrase-practice-every-day",
+      "text": "practice every day",
+      "synthesisText": "practice every day.",
+      "path": "assets/audio/voice/phrase-practice-every-day.wav",
+      "bytes": 88950,
+      "sha256": "36bba81982753250d19e92a291c4df67d1a95611de8b1351ba8fb1dbdcf37d20"
+    },
+    {
+      "id": "phrase-solve-the-puzzle",
+      "text": "solve the puzzle",
+      "synthesisText": "solve the puzzle.",
+      "path": "assets/audio/voice/phrase-solve-the-puzzle.wav",
+      "bytes": 82598,
+      "sha256": "0d7856a23a5f39ce79d0283509e3ba668228655c23e591287b677b18501385cf"
+    },
+    {
+      "id": "phrase-check-your-answer",
+      "text": "check your answer",
+      "synthesisText": "check your answer.",
+      "path": "assets/audio/voice/phrase-check-your-answer.wav",
+      "bytes": 82598,
+      "sha256": "a315c98370261e9a4e3b3cbd72e28e56826bda4ba11d0178e8a1cee7548e6f94"
+    },
+    {
+      "id": "phrase-measure-the-long-leaf",
+      "text": "measure the long leaf",
+      "synthesisText": "measure the long leaf.",
+      "path": "assets/audio/voice/phrase-measure-the-long-leaf.wav",
+      "bytes": 87890,
+      "sha256": "315efd69b271c9dcd71c8a5b4064477bd2a66ab2da4f903baba0990f7ec9c43b"
+    },
+    {
+      "id": "phrase-estimate-the-number",
+      "text": "estimate the number",
+      "synthesisText": "estimate the number.",
+      "path": "assets/audio/voice/phrase-estimate-the-number.wav",
+      "bytes": 82598,
+      "sha256": "b4181ece7840bcb7b03559eba9b7618d4d1b2e7e590f2f95142a0d9011d70f08"
+    },
+    {
+      "id": "phrase-identify-the-bird",
+      "text": "identify the bird",
+      "synthesisText": "identify the bird.",
+      "path": "assets/audio/voice/phrase-identify-the-bird.wav",
+      "bytes": 93182,
+      "sha256": "87486598c9bb2f682dc98faafc56a2e857c54aff32779e61a3de12b0c5f1044a"
+    },
+    {
+      "id": "phrase-classify-different-food",
+      "text": "classify different food",
+      "synthesisText": "classify different food.",
+      "path": "assets/audio/voice/phrase-classify-different-food.wav",
+      "bytes": 92126,
+      "sha256": "da935db69d0b05d3e0004d3b9179200d88baa0e442a5de76956ae2210c861c98"
+    },
+    {
+      "id": "phrase-connect-with-your-friend",
+      "text": "connect with your friend",
+      "synthesisText": "connect with your friend.",
+      "path": "assets/audio/voice/phrase-connect-with-your-friend.wav",
+      "bytes": 86834,
+      "sha256": "c604669e0109670108f7408f39a7c83cf908e58e31cc1c3c45560b117cb857d2"
+    },
+    {
+      "id": "phrase-include-your-name",
+      "text": "include your name",
+      "synthesisText": "include your name.",
+      "path": "assets/audio/voice/phrase-include-your-name.wav",
+      "bytes": 82598,
+      "sha256": "7da05b49b6b27b54d2e81f1b0bf689254f3a0152dcf89f589f2550e937a0fb9f"
+    },
+    {
+      "id": "phrase-support-your-idea",
+      "text": "support your idea",
+      "synthesisText": "support your idea.",
+      "path": "assets/audio/voice/phrase-support-your-idea.wav",
+      "bytes": 82598,
+      "sha256": "516efc6df0c765f5098d645e3a62e191bc65fab024fbee5b1e6b010b008417c0"
+    },
+    {
+      "id": "phrase-suggest-a-new-plan",
+      "text": "suggest a new plan",
+      "synthesisText": "suggest a new plan.",
+      "path": "assets/audio/voice/phrase-suggest-a-new-plan.wav",
+      "bytes": 93182,
+      "sha256": "fd21581bad9eed06a7250be21a5c0393f78c4e85c5a7b220568b26694ccd9517"
+    },
+    {
+      "id": "phrase-i-prefer-warm-milk",
+      "text": "i prefer warm milk",
+      "synthesisText": "i prefer warm milk.",
+      "path": "assets/audio/voice/phrase-i-prefer-warm-milk.wav",
+      "bytes": 93182,
+      "sha256": "73cbd17941afc58cd548b197eb614c57320597c6dde72dbad996db978c8be7c0"
+    },
+    {
+      "id": "phrase-expect-a-different-result",
+      "text": "expect a different result",
+      "synthesisText": "expect a different result.",
+      "path": "assets/audio/voice/phrase-expect-a-different-result.wav",
+      "bytes": 101652,
+      "sha256": "083c2cfddfb08ad2c78f71d307bcf2f4352f5d892fece2e7f1d157f86e8b5d60"
+    },
+    {
+      "id": "phrase-achieve-your-goal",
+      "text": "achieve your goal",
+      "synthesisText": "achieve your goal.",
+      "path": "assets/audio/voice/phrase-achieve-your-goal.wav",
+      "bytes": 82598,
+      "sha256": "048893ec56fc1d3eba5fa716a69c3edb0dad7ba2c26bc542920727aba65e9704"
+    },
+    {
+      "id": "phrase-reduce-plastic",
+      "text": "reduce plastic",
+      "synthesisText": "reduce plastic.",
+      "path": "assets/audio/voice/phrase-reduce-plastic.wav",
+      "bytes": 83658,
+      "sha256": "5e7d4cc0b5f2fd18a69db8d5aee5ad2280aead8520dbbe159ef12a254a277317"
+    },
+    {
+      "id": "phrase-increase-the-temperature",
+      "text": "increase the temperature",
+      "synthesisText": "increase the temperature.",
+      "path": "assets/audio/voice/phrase-increase-the-temperature.wav",
+      "bytes": 90008,
+      "sha256": "126c297826ecfc6b70f0809e50086aeaefa1dfd446093db8619eb3c16208dd7f"
+    },
+    {
+      "id": "phrase-reuse-a-paper-bag",
+      "text": "reuse a paper bag",
+      "synthesisText": "reuse a paper bag.",
+      "path": "assets/audio/voice/phrase-reuse-a-paper-bag.wav",
+      "bytes": 87890,
+      "sha256": "3923a4715d8c11c86e0b4bc053bb313b987fa38f4c2b170e6ce8232c0c673e49"
+    },
+    {
+      "id": "phrase-adapt-to-a-new-school",
+      "text": "adapt to a new school",
+      "synthesisText": "adapt to a new school.",
+      "path": "assets/audio/voice/phrase-adapt-to-a-new-school.wav",
+      "bytes": 102710,
+      "sha256": "84a2bc82ff96a0c20de88899a67255792b9f7d0926859e1b279dc3cb59cf9f88"
+    },
+    {
+      "id": "phrase-reflect-on-your-work",
+      "text": "reflect on your work",
+      "synthesisText": "reflect on your work.",
+      "path": "assets/audio/voice/phrase-reflect-on-your-work.wav",
+      "bytes": 87890,
+      "sha256": "3fb3c4bb85c89ffde7e757e358405c1694b0067bddf1f0b530d695526ec1110e"
+    },
+    {
+      "id": "phrase-evaluate-the-evidence",
+      "text": "evaluate the evidence",
+      "synthesisText": "evaluate the evidence.",
+      "path": "assets/audio/voice/phrase-evaluate-the-evidence.wav",
+      "bytes": 96360,
+      "sha256": "689d9acbc53b517e824fe1272cd5a975fbd7a0548a472a0bf4782b82749270b4"
+    },
+    {
+      "id": "phrase-justify-your-opinion",
+      "text": "justify your opinion",
+      "synthesisText": "justify your opinion.",
+      "path": "assets/audio/voice/phrase-justify-your-opinion.wav",
+      "bytes": 94242,
+      "sha256": "57b6762cb8ce955f5af96141c1522b4d244535fced9527d4956287102f34ca76"
+    },
+    {
+      "id": "phrase-summarize-the-story",
+      "text": "summarize the story",
+      "synthesisText": "summarize the story.",
+      "path": "assets/audio/voice/phrase-summarize-the-story.wav",
+      "bytes": 91068,
+      "sha256": "34f02cb417019bfc83588d6d1d0d163081a954a60488b0c6c04e8cae898d3761"
+    },
+    {
+      "id": "phrase-analyze-the-result",
+      "text": "analyze the result",
+      "synthesisText": "analyze the result.",
+      "path": "assets/audio/voice/phrase-analyze-the-result.wav",
+      "bytes": 88950,
+      "sha256": "5678df85ab92204a3ae48c7285c63b704ac58bee32966338821bd8130dd40995"
+    },
+    {
+      "id": "phrase-a-kind-friend",
+      "text": "a kind friend",
+      "synthesisText": "a kind friend.",
+      "path": "assets/audio/voice/phrase-a-kind-friend.wav",
+      "bytes": 82598,
+      "sha256": "618b3149f6984d039ce0554cb0fe4702097638a30cf280506f01837a49212ec0"
+    },
+    {
+      "id": "phrase-a-little-bird",
+      "text": "a little bird",
+      "synthesisText": "a little bird.",
+      "path": "assets/audio/voice/phrase-a-little-bird.wav",
+      "bytes": 82598,
+      "sha256": "fd157cb15884c7c1910fa7fd96b2c3fe420efae203a2d9f30297a5e10935322d"
+    },
+    {
+      "id": "phrase-a-new-toy",
+      "text": "a new toy",
+      "synthesisText": "a new toy.",
+      "path": "assets/audio/voice/phrase-a-new-toy.wav",
+      "bytes": 82598,
+      "sha256": "800ac6dd6960303d70e7b8a380674058422d1577211baacef7a213d2920ba7c5"
+    },
+    {
+      "id": "phrase-a-nice-day",
+      "text": "a nice day",
+      "synthesisText": "a nice day.",
+      "path": "assets/audio/voice/phrase-a-nice-day.wav",
+      "bytes": 82598,
+      "sha256": "0c16a939831904ace97b650937c89a3f6b27de296acd9c8459045522dcdb92b9"
+    },
+    {
+      "id": "phrase-a-brave-child",
+      "text": "a brave child",
+      "synthesisText": "a brave child.",
+      "path": "assets/audio/voice/phrase-a-brave-child.wav",
+      "bytes": 87890,
+      "sha256": "d7a48799e17c0d34b0805e172b704a8f65b43278431751e3d473e427460a9708"
+    },
+    {
+      "id": "phrase-be-careful",
+      "text": "be careful",
+      "synthesisText": "be careful.",
+      "path": "assets/audio/voice/phrase-be-careful.wav",
+      "bytes": 82598,
+      "sha256": "5d41e879e6f3290450dae3053797dbae3d5c18f91e44d6e5e2f2a034ee346fc0"
+    },
+    {
+      "id": "phrase-a-safe-school",
+      "text": "a safe school",
+      "synthesisText": "a safe school.",
+      "path": "assets/audio/voice/phrase-a-safe-school.wav",
+      "bytes": 82598,
+      "sha256": "109664131104b212678f7ef89e410af946014613ddc178ba6db2fb6323d9741c"
+    },
+    {
+      "id": "phrase-an-easy-puzzle",
+      "text": "an easy puzzle",
+      "synthesisText": "an easy puzzle.",
+      "path": "assets/audio/voice/phrase-an-easy-puzzle.wav",
+      "bytes": 82598,
+      "sha256": "408eefd79ee6952a5cd17c160d88c454927f91fca74b68b80d15029cbb34d568"
+    },
+    {
+      "id": "phrase-a-difficult-question",
+      "text": "a difficult question",
+      "synthesisText": "a difficult question.",
+      "path": "assets/audio/voice/phrase-a-difficult-question.wav",
+      "bytes": 87890,
+      "sha256": "a07549d3e601b1c9ebdb7e66ff6dde3488643d86ac99c80cfff27ccd9ef84c4c"
+    },
+    {
+      "id": "phrase-two-different-sheep",
+      "text": "two different sheep",
+      "synthesisText": "two different sheep.",
+      "path": "assets/audio/voice/phrase-two-different-sheep.wav",
+      "bytes": 82598,
+      "sha256": "25d62d4bb57e4ff724acf8a24fe76c8487c6526673b455bec1c3d9125865806b"
+    },
+    {
+      "id": "phrase-an-important-word",
+      "text": "an important word",
+      "synthesisText": "an important word.",
+      "path": "assets/audio/voice/phrase-an-important-word.wav",
+      "bytes": 82598,
+      "sha256": "763f3874730346faf5daacdf0b4c21e7601441f4d1ab9b3fa0993bcca7cf8387"
+    },
+    {
+      "id": "phrase-a-possible-solution",
+      "text": "a possible solution",
+      "synthesisText": "a possible solution.",
+      "path": "assets/audio/voice/phrase-a-possible-solution.wav",
+      "bytes": 96360,
+      "sha256": "047dbc9fb4bb2146f356412f6a263c7741d7d1ca238094a6ba71e00736d4f79c"
+    },
+    {
+      "id": "phrase-a-useful-book",
+      "text": "a useful book",
+      "synthesisText": "a useful book.",
+      "path": "assets/audio/voice/phrase-a-useful-book.wav",
+      "bytes": 82598,
+      "sha256": "4ef26904b7671681bdc30daf8090d238e43a24e4b4e63359863359782e41b1dd"
+    },
+    {
+      "id": "phrase-a-special-present",
+      "text": "a special present",
+      "synthesisText": "a special present.",
+      "path": "assets/audio/voice/phrase-a-special-present.wav",
+      "bytes": 88950,
+      "sha256": "6f3af89881870e0c4504658a6234182481fce07650ce02cf0c95120918391782"
+    },
+    {
+      "id": "phrase-fair-to-you",
+      "text": "fair to you",
+      "synthesisText": "fair to you.",
+      "path": "assets/audio/voice/phrase-fair-to-you.wav",
+      "bytes": 82598,
+      "sha256": "bc4e2833b557f26239569f1f2699498e3108dd7e412e6962daf4c3d0af130039"
+    },
+    {
+      "id": "phrase-an-honest-answer",
+      "text": "an honest answer",
+      "synthesisText": "an honest answer.",
+      "path": "assets/audio/voice/phrase-an-honest-answer.wav",
+      "bytes": 82598,
+      "sha256": "a0532ee26d74536f9e212db673e765e67e4da31544ad8f365398e55c4e917412"
+    },
+    {
+      "id": "phrase-be-patient",
+      "text": "be patient",
+      "synthesisText": "be patient.",
+      "path": "assets/audio/voice/phrase-be-patient.wav",
+      "bytes": 82598,
+      "sha256": "dbc64259990291bc0806cb1d17a1e40664eca916a84e21c0297586d41a7f9030"
+    },
+    {
+      "id": "phrase-proud-of-your-work",
+      "text": "proud of your work",
+      "synthesisText": "proud of your work.",
+      "path": "assets/audio/voice/phrase-proud-of-your-work.wav",
+      "bytes": 82598,
+      "sha256": "0d90e2108cbfec2adacd328556493513658fe38e4cc1f5ace38f2fa7d176f352"
+    },
+    {
+      "id": "phrase-a-curious-child",
+      "text": "a curious child",
+      "synthesisText": "a curious child.",
+      "path": "assets/audio/voice/phrase-a-curious-child.wav",
+      "bytes": 98474,
+      "sha256": "99a0daf277e4e787f4bc008e748b018930bbe4588d7cd82f0c1ed733facb52fa"
+    },
+    {
+      "id": "phrase-a-friendly-dog",
+      "text": "a friendly dog",
+      "synthesisText": "a friendly dog.",
+      "path": "assets/audio/voice/phrase-a-friendly-dog.wav",
+      "bytes": 82598,
+      "sha256": "610035950c32fd4cfedfb2cc70161ca71cb323540eb8d92332f7f753a84c32d3"
+    },
+    {
+      "id": "phrase-be-gentle",
+      "text": "be gentle",
+      "synthesisText": "be gentle.",
+      "path": "assets/audio/voice/phrase-be-gentle.wav",
+      "bytes": 82598,
+      "sha256": "82f9c62207c2ae643ff7a760072b8c9c5a5b856c775e36daf0809627dc31f09d"
+    },
+    {
+      "id": "phrase-a-calm-cat",
+      "text": "a calm cat",
+      "synthesisText": "a calm cat.",
+      "path": "assets/audio/voice/phrase-a-calm-cat.wav",
+      "bytes": 82598,
+      "sha256": "d45e0aeb66945d9237c95ad1059b71921853366bdb2f5005459c31149517c9a2"
+    },
+    {
+      "id": "phrase-a-lonely-child",
+      "text": "a lonely child",
+      "synthesisText": "a lonely child.",
+      "path": "assets/audio/voice/phrase-a-lonely-child.wav",
+      "bytes": 86834,
+      "sha256": "de72d2c244a0af8a7e31bba14a2af711a36c22ca874ddb653c1d00f54a998e06"
+    },
+    {
+      "id": "phrase-disappointed-with-the-result",
+      "text": "disappointed with the result",
+      "synthesisText": "disappointed with the result.",
+      "path": "assets/audio/voice/phrase-disappointed-with-the-result.wav",
+      "bytes": 102710,
+      "sha256": "407bf9bc754bf91467a85c828300b90aaa3ea47495327ad235fbf6064ec9b7b3"
+    },
+    {
+      "id": "phrase-confident-in-your-work",
+      "text": "confident in your work",
+      "synthesisText": "confident in your work.",
+      "path": "assets/audio/voice/phrase-confident-in-your-work.wav",
+      "bytes": 91068,
+      "sha256": "fa933a1dc10fa196cb37680b113490acd0471fc06ab78c75f8b688430a882701"
+    },
+    {
+      "id": "phrase-a-responsible-choice",
+      "text": "a responsible choice",
+      "synthesisText": "a responsible choice.",
+      "path": "assets/audio/voice/phrase-a-responsible-choice.wav",
+      "bytes": 103766,
+      "sha256": "b35c38c3ddb3b48ba245fe41f2a98035de229765d63481f7d4d085c9a635ecc5"
+    },
+    {
+      "id": "phrase-independent-work",
+      "text": "independent work",
+      "synthesisText": "independent work.",
+      "path": "assets/audio/voice/phrase-independent-work.wav",
+      "bytes": 82598,
+      "sha256": "365b65860a335bcaf91e10c3fc1cdae2a1e803498d0f99473a85cf533f4aa12d"
+    },
+    {
+      "id": "phrase-a-creative-idea",
+      "text": "a creative idea",
+      "synthesisText": "a creative idea.",
+      "path": "assets/audio/voice/phrase-a-creative-idea.wav",
+      "bytes": 82598,
+      "sha256": "f623ff0b2f9245fb76b7e77acffbeb963542b6cbc7e6e0dad411f7220a25d1af"
+    },
+    {
+      "id": "phrase-a-reliable-source",
+      "text": "a reliable source",
+      "synthesisText": "a reliable source.",
+      "path": "assets/audio/voice/phrase-a-reliable-source.wav",
+      "bytes": 96360,
+      "sha256": "e9773609a8d93d855143c002c50c17d2ac12e3b67b501264d62811396311caa9"
+    },
+    {
+      "id": "phrase-an-accurate-answer",
+      "text": "an accurate answer",
+      "synthesisText": "an accurate answer.",
+      "path": "assets/audio/voice/phrase-an-accurate-answer.wav",
+      "bytes": 82598,
+      "sha256": "b523120bce00227838ee5572b702dfb106b69038f7f35dae7fa7bebb75971354"
+    },
+    {
+      "id": "phrase-two-similar-fish",
+      "text": "two similar fish",
+      "synthesisText": "two similar fish.",
+      "path": "assets/audio/voice/phrase-two-similar-fish.wav",
+      "bytes": 84716,
+      "sha256": "2078bee3f5c74f3a0d74369cbbf4a9dc3029d1db81dc55ed91e7b75d206e5ba9"
+    },
+    {
+      "id": "phrase-equal-to-one",
+      "text": "equal to one",
+      "synthesisText": "equal to one.",
+      "path": "assets/audio/voice/phrase-equal-to-one.wav",
+      "bytes": 82598,
+      "sha256": "1703068019c94fa7adc2912e410a13cd9c2624b2395355baca2f1a66866ab408"
+    },
+    {
+      "id": "phrase-a-common-bird",
+      "text": "a common bird",
+      "synthesisText": "a common bird.",
+      "path": "assets/audio/voice/phrase-a-common-bird.wav",
+      "bytes": 82598,
+      "sha256": "25e30062a01281725df96607af827d08066f5b0ee1de5060f4a81f4445685845"
+    },
+    {
+      "id": "phrase-a-rare-bird",
+      "text": "a rare bird",
+      "synthesisText": "a rare bird.",
+      "path": "assets/audio/voice/phrase-a-rare-bird.wav",
+      "bytes": 82598,
+      "sha256": "396f32b9cd9027a092a20f5a81e58f639269f02bdbd92ecd5c21358dee0cbfe9"
+    },
+    {
+      "id": "phrase-a-natural-material",
+      "text": "a natural material",
+      "synthesisText": "a natural material.",
+      "path": "assets/audio/voice/phrase-a-natural-material.wav",
+      "bytes": 90008,
+      "sha256": "68acc8f64f714c4de4bbf449f54e0b5795b46e2b35e40f72cacb49b5041bba57"
+    },
+    {
+      "id": "phrase-our-local-school",
+      "text": "our local school",
+      "synthesisText": "our local school.",
+      "path": "assets/audio/voice/phrase-our-local-school.wav",
+      "bytes": 82598,
+      "sha256": "c60631e7415320b320cdb4507a9f18c54a05db79d96e49aedd106bfb6b5e34cb"
+    },
+    {
+      "id": "phrase-a-global-problem",
+      "text": "a global problem",
+      "synthesisText": "a global problem.",
+      "path": "assets/audio/voice/phrase-a-global-problem.wav",
+      "bytes": 87890,
+      "sha256": "06d152c3d915eb2c304ac092b6d816f18ee7999df3c00b7781d884504e1f04e9"
+    },
+    {
+      "id": "phrase-a-sustainable-future",
+      "text": "a sustainable future",
+      "synthesisText": "a sustainable future.",
+      "path": "assets/audio/voice/phrase-a-sustainable-future.wav",
+      "bytes": 95300,
+      "sha256": "bfe7f49d586eee3e18baf8b8380e95d468c741f434d21e2f9d8d7b01d9743446"
+    },
+    {
+      "id": "phrase-look-for-evidence",
+      "text": "look for evidence",
+      "synthesisText": "look for evidence.",
+      "path": "assets/audio/voice/phrase-look-for-evidence.wav",
+      "bytes": 82598,
+      "sha256": "963d31fd06813e23cf22b7a9bdd5085d6e99b1b8a5915cb8eff58df7a8ff43a9"
+    },
+    {
+      "id": "phrase-give-a-reason",
+      "text": "give a reason",
+      "synthesisText": "give a reason.",
+      "path": "assets/audio/voice/phrase-give-a-reason.wav",
+      "bytes": 82598,
+      "sha256": "187be589f0dc44775399b088a97f0e99a85ca992ebd2dcf738623dd1f5bb7c3b"
+    },
+    {
+      "id": "phrase-find-a-solution",
+      "text": "find a solution",
+      "synthesisText": "find a solution.",
+      "path": "assets/audio/voice/phrase-find-a-solution.wav",
+      "bytes": 82598,
+      "sha256": "912683fd10b473e8a900c2931df9e0a23e3f76bffa4e5b5baa3d5663bf0134cc"
+    },
+    {
+      "id": "phrase-a-different-result",
+      "text": "a different result",
+      "synthesisText": "a different result.",
+      "path": "assets/audio/voice/phrase-a-different-result.wav",
+      "bytes": 82598,
+      "sha256": "0363f958f1be54ecf59b99fd3c4057050e3557cf26250863e14f9d5f476c3e26"
+    },
+    {
+      "id": "phrase-share-your-opinion",
+      "text": "share your opinion",
+      "synthesisText": "share your opinion.",
+      "path": "assets/audio/voice/phrase-share-your-opinion.wav",
+      "bytes": 82598,
+      "sha256": "c69aa14bb73c7f82cd8bd40ef73936a5539b89bfe794d70bedb824bc5db02eb0"
+    },
+    {
+      "id": "phrase-a-fact-from-science",
+      "text": "a fact from science",
+      "synthesisText": "a fact from science.",
+      "path": "assets/audio/voice/phrase-a-fact-from-science.wav",
+      "bytes": 101652,
+      "sha256": "1c8c05daa81b6cdd7923aa8a87104215d604b58af5b342397d3957df8b460037"
+    },
+    {
+      "id": "phrase-cause-and-effect",
+      "text": "cause and effect",
+      "synthesisText": "cause and effect.",
+      "path": "assets/audio/voice/phrase-cause-and-effect.wav",
+      "bytes": 82598,
+      "sha256": "0a443f14df712ca4cbcc6b9ab631aebf5f70fb90725b565936a4152383cb8ba0"
+    },
+    {
+      "id": "phrase-research-a-topic",
+      "text": "research a topic",
+      "synthesisText": "research a topic.",
+      "path": "assets/audio/voice/phrase-research-a-topic.wav",
+      "bytes": 83658,
+      "sha256": "3a5bb58a01844d9c97a88e4e4e99c5514a74f45e9942cb6f1cf97071ac0a9a4a"
+    },
+    {
+      "id": "phrase-protect-the-environment",
+      "text": "protect the environment",
+      "synthesisText": "protect the environment.",
+      "path": "assets/audio/voice/phrase-protect-the-environment.wav",
+      "bytes": 93182,
+      "sha256": "f35d34c1d85eee12790cf010664418e6c451e3067b09bfbd9739afb84f147898"
+    },
+    {
+      "id": "phrase-help-our-community",
+      "text": "help our community",
+      "synthesisText": "help our community.",
+      "path": "assets/audio/voice/phrase-help-our-community.wav",
+      "bytes": 82598,
+      "sha256": "0f24d618a5c52c3d5c00d3b17a2a3cf3d7dcf31630e2a78b7c1890738fbc8c56"
+    },
+    {
+      "id": "phrase-learn-from-a-different-culture",
+      "text": "learn from a different culture",
+      "synthesisText": "learn from a different culture.",
+      "path": "assets/audio/voice/phrase-learn-from-a-different-culture.wav",
+      "bytes": 102710,
+      "sha256": "e5b0a4e331dbef08b7eec8acdb8fb564d4542d4b9e83b80967bfc1e6cd6c6319"
+    },
+    {
+      "id": "phrase-a-family-tradition",
+      "text": "a family tradition",
+      "synthesisText": "a family tradition.",
+      "path": "assets/audio/voice/phrase-a-family-tradition.wav",
+      "bytes": 90008,
+      "sha256": "9b6c64a987e48d8d0fecaff1b41e638304083d9eab63d4969ab33d5cdcbadfe0"
+    },
+    {
+      "id": "phrase-a-good-idea",
+      "text": "a good idea",
+      "synthesisText": "a good idea.",
+      "path": "assets/audio/voice/phrase-a-good-idea.wav",
+      "bytes": 82598,
+      "sha256": "c19ba76a2eb87e75559542eaf63e906d7a86f7ab24566d674b41d82f20cc4614"
+    },
+    {
+      "id": "phrase-a-difficult-problem",
+      "text": "a difficult problem",
+      "synthesisText": "a difficult problem.",
+      "path": "assets/audio/voice/phrase-a-difficult-problem.wav",
+      "bytes": 90008,
+      "sha256": "828e67da13e2c7f14dcfb5b1769e640c0287b09f4bee56f5a3ba83444ec8591a"
+    },
+    {
+      "id": "phrase-make-a-plan",
+      "text": "make a plan",
+      "synthesisText": "make a plan.",
+      "path": "assets/audio/voice/phrase-make-a-plan.wav",
+      "bytes": 82598,
+      "sha256": "c07366fddc1c43857a5c725534e565323f6b744af56a2773340aac8b649cff38"
+    },
+    {
+      "id": "phrase-ask-a-question",
+      "text": "ask a question",
+      "synthesisText": "ask a question.",
+      "path": "assets/audio/voice/phrase-ask-a-question.wav",
+      "bytes": 82598,
+      "sha256": "250fb998770cdad1668f97068ded5bdccc8d11650a162e3705b78528a521b213"
+    },
+    {
+      "id": "phrase-tell-a-story",
+      "text": "tell a story",
+      "synthesisText": "tell a story.",
+      "path": "assets/audio/voice/phrase-tell-a-story.wav",
+      "bytes": 82598,
+      "sha256": "a5d3d3259c548950b57a595e1ac0b251242f1fc0383cb1a18b162f8225445ff1"
+    },
+    {
+      "id": "phrase-tell-me-your-name",
+      "text": "tell me your name",
+      "synthesisText": "tell me your name.",
+      "path": "assets/audio/voice/phrase-tell-me-your-name.wav",
+      "bytes": 82598,
+      "sha256": "f6da26b65cfe4cf4bcf3a1427cb79bb5bbb8c62b087356942b417ad134bba87d"
+    },
+    {
+      "id": "phrase-my-good-friend",
+      "text": "my good friend",
+      "synthesisText": "my good friend.",
+      "path": "assets/audio/voice/phrase-my-good-friend.wav",
+      "bytes": 82598,
+      "sha256": "efe2a87ab9002ce0209800744dee89b6d248924b92a22f6502671014b43a32d0"
+    },
+    {
+      "id": "phrase-a-happy-child",
+      "text": "a happy child",
+      "synthesisText": "a happy child.",
+      "path": "assets/audio/voice/phrase-a-happy-child.wav",
+      "bytes": 82598,
+      "sha256": "7742804c7bfe53e75cb9840ea294a2bb72da5d54d4b67e5ad61a53b8b9247c60"
+    },
+    {
+      "id": "phrase-help-your-team",
+      "text": "help your team",
+      "synthesisText": "help your team.",
+      "path": "assets/audio/voice/phrase-help-your-team.wav",
+      "bytes": 82598,
+      "sha256": "6235d9c4de1cebd46588ddeed9bf55c4639d5c65e7c687b3ef3698c85a4d1613"
+    },
+    {
+      "id": "phrase-a-careful-choice",
+      "text": "a careful choice",
+      "synthesisText": "a careful choice.",
+      "path": "assets/audio/voice/phrase-a-careful-choice.wav",
+      "bytes": 82598,
+      "sha256": "4af7465f29915ee268a88eb6c8ba3fc35e2e90de4a7f75473c2f2628e4d63044"
+    },
+    {
+      "id": "phrase-reach-your-goal",
+      "text": "reach your goal",
+      "synthesisText": "reach your goal.",
+      "path": "assets/audio/voice/phrase-reach-your-goal.wav",
+      "bytes": 82598,
+      "sha256": "9af3273cf3304216c51e0d2a78a4395e07e11614f15d26614f5b7ec919bd6756"
+    },
+    {
+      "id": "phrase-make-a-pattern",
+      "text": "make a pattern",
+      "synthesisText": "make a pattern.",
+      "path": "assets/audio/voice/phrase-make-a-pattern.wav",
+      "bytes": 82598,
+      "sha256": "68fa6b7b2db346970be89132eb8308a3c52ada463ab21a0f9c5afcff3e312d8a"
+    },
+    {
+      "id": "phrase-choose-a-topic",
+      "text": "choose a topic",
+      "synthesisText": "choose a topic.",
+      "path": "assets/audio/voice/phrase-choose-a-topic.wav",
+      "bytes": 82598,
+      "sha256": "e92100e99532093731959ca2516521400f1732d2268cf33250b2c7cef2b2969c"
+    },
+    {
+      "id": "phrase-notice-every-detail",
+      "text": "notice every detail",
+      "synthesisText": "notice every detail.",
+      "path": "assets/audio/voice/phrase-notice-every-detail.wav",
+      "bytes": 102710,
+      "sha256": "49f1c3660a244141651528b46ae41ee1ac2017640393f8a08c718ae8a6fd77e2"
+    },
+    {
+      "id": "phrase-an-example-from-history",
+      "text": "an example from history",
+      "synthesisText": "an example from history.",
+      "path": "assets/audio/voice/phrase-an-example-from-history.wav",
+      "bytes": 102710,
+      "sha256": "d72972bd7ede2ee5afd698cc872511692a54df9fa0dd3982b354d80274fe1153"
+    },
+    {
+      "id": "phrase-find-useful-information",
+      "text": "find useful information",
+      "synthesisText": "find useful information.",
+      "path": "assets/audio/voice/phrase-find-useful-information.wav",
+      "bytes": 106944,
+      "sha256": "99e8e65dc87146816bf354d6308eb69bf32868d53a69283778f9c14459098279"
+    },
+    {
+      "id": "phrase-share-your-knowledge",
+      "text": "share your knowledge",
+      "synthesisText": "share your knowledge.",
+      "path": "assets/audio/voice/phrase-share-your-knowledge.wav",
+      "bytes": 82598,
+      "sha256": "b61b75e7d2a9a523fd727a51ca009e55b016f02ce444eb4334229c030f1475f0"
+    },
+    {
+      "id": "phrase-energy-from-the-sun",
+      "text": "energy from the sun",
+      "synthesisText": "energy from the sun.",
+      "path": "assets/audio/voice/phrase-energy-from-the-sun.wav",
+      "bytes": 91068,
+      "sha256": "292adb59a36dd36da83956df22bdb055d4195cc9d6771fd844e78b3b5050a9ed"
+    },
+    {
+      "id": "phrase-a-soft-material",
+      "text": "a soft material",
+      "synthesisText": "a soft material.",
+      "path": "assets/audio/voice/phrase-a-soft-material.wav",
+      "bytes": 87890,
+      "sha256": "1ce0b38ecd30629aaeadaf58c04b44393fd60c0f230e3741659b3c66cdcde4a9"
+    },
+    {
+      "id": "phrase-a-natural-resource",
+      "text": "a natural resource",
+      "synthesisText": "a natural resource.",
+      "path": "assets/audio/voice/phrase-a-natural-resource.wav",
+      "bytes": 92126,
+      "sha256": "d5ed8aa48a6c018961ab836a23db220817d13ce73473205312983bb7e68f36f8"
+    },
+    {
+      "id": "phrase-protect-the-forest-habitat",
+      "text": "protect the forest habitat",
+      "synthesisText": "protect the forest habitat.",
+      "path": "assets/audio/voice/phrase-protect-the-forest-habitat.wav",
+      "bytes": 116468,
+      "sha256": "60e22924711c3e6af0d1987100b4d1d273f4b9dab0ec4655c96dff4380ffbddc"
+    },
+    {
+      "id": "phrase-a-warm-climate",
+      "text": "a warm climate",
+      "synthesisText": "a warm climate.",
+      "path": "assets/audio/voice/phrase-a-warm-climate.wav",
+      "bytes": 93182,
+      "sha256": "389d3f9af2a21f12000a37fc1e0acf2bbf8d2da46505e52d23c9879983b596d6"
+    },
+    {
+      "id": "phrase-cold-winter-weather",
+      "text": "cold winter weather",
+      "synthesisText": "cold winter weather.",
+      "path": "assets/audio/voice/phrase-cold-winter-weather.wav",
+      "bytes": 83658,
+      "sha256": "8d72de03755f6a679c8e43082679d288f113f36eb089f372a69ccaff757837f5"
+    },
+    {
+      "id": "phrase-measure-the-temperature",
+      "text": "measure the temperature",
+      "synthesisText": "measure the temperature.",
+      "path": "assets/audio/voice/phrase-measure-the-temperature.wav",
+      "bytes": 82598,
+      "sha256": "14d21cda82db42b2f6b07c45f3d6ced79f3eb90b2c658d440e32dbfcc4ea9adc"
+    },
+    {
+      "id": "phrase-a-science-experiment",
+      "text": "a science experiment",
+      "synthesisText": "a science experiment.",
+      "path": "assets/audio/voice/phrase-a-science-experiment.wav",
+      "bytes": 102710,
+      "sha256": "7d7c833aa4739dd121d1a3a73d81f336dc0365542caaacd88adf797c3e21a160"
+    },
+    {
+      "id": "phrase-try-a-different-method",
+      "text": "try a different method",
+      "synthesisText": "try a different method.",
+      "path": "assets/audio/voice/phrase-try-a-different-method.wav",
+      "bytes": 86834,
+      "sha256": "33cd2d0215691be5497c767a41bd98dfb6471f8a8e59b9abb8f3889ddd6989d4"
+    },
+    {
+      "id": "phrase-explain-the-process",
+      "text": "explain the process",
+      "synthesisText": "explain the process.",
+      "path": "assets/audio/voice/phrase-explain-the-process.wav",
+      "bytes": 87890,
+      "sha256": "a18341443d0988da5dff3e517d9dbad9c3c5b220838b7767560ff2e63b7971bd"
+    },
+    {
+      "id": "phrase-collect-the-data",
+      "text": "collect the data",
+      "synthesisText": "collect the data.",
+      "path": "assets/audio/voice/phrase-collect-the-data.wav",
+      "bytes": 82598,
+      "sha256": "0554ddb26124f5d726c67ba9794bd62ca01193af509dd9b9b0c046c4cd7ca9e0"
+    },
+    {
+      "id": "phrase-explain-your-conclusion",
+      "text": "explain your conclusion",
+      "synthesisText": "explain your conclusion.",
+      "path": "assets/audio/voice/phrase-explain-your-conclusion.wav",
+      "bytes": 97418,
+      "sha256": "d8564cbb7974ac096601673136a947f21c176712b13e9cfe17809604c2ab8b7f"
+    },
+    {
+      "id": "phrase-a-new-challenge",
+      "text": "a new challenge",
+      "synthesisText": "a new challenge.",
+      "path": "assets/audio/voice/phrase-a-new-challenge.wav",
+      "bytes": 82598,
+      "sha256": "03ba75094b78f671a0ed3c704dcfdb52edc128f5b4799f98a3f99f55f0ef047a"
+    },
+    {
+      "id": "phrase-choose-a-useful-strategy",
+      "text": "choose a useful strategy",
+      "synthesisText": "choose a useful strategy.",
+      "path": "assets/audio/voice/phrase-choose-a-useful-strategy.wav",
+      "bytes": 109058,
+      "sha256": "cc8a80c54693858aaa2238cfd02813ea2b6f89bc1030519823401fd1edc0991a"
+    },
+    {
+      "id": "phrase-make-good-progress",
+      "text": "make good progress",
+      "synthesisText": "make good progress.",
+      "path": "assets/audio/voice/phrase-make-good-progress.wav",
+      "bytes": 82598,
+      "sha256": "6d5d71ee63550b015567ddece90540c8d5082ef49e85a6449b06a8736dde1428"
+    },
+    {
+      "id": "phrase-a-good-effort",
+      "text": "a good effort",
+      "synthesisText": "a good effort.",
+      "path": "assets/audio/voice/phrase-a-good-effort.wav",
+      "bytes": 82598,
+      "sha256": "b9b028f1e055abb3e34418554e7e778af10b930951fa5b1934fde6197f7d619a"
+    },
+    {
+      "id": "phrase-respect-your-friend",
+      "text": "respect your friend",
+      "synthesisText": "respect your friend.",
+      "path": "assets/audio/voice/phrase-respect-your-friend.wav",
+      "bytes": 84716,
+      "sha256": "0f3f358e51ed1613aed78db511b628672f6930e1ec13ff59ecfb834bf7a79ed7"
+    },
+    {
+      "id": "phrase-empathy-for-a-sad-friend",
+      "text": "empathy for a sad friend",
+      "synthesisText": "empathy for a sad friend.",
+      "path": "assets/audio/voice/phrase-empathy-for-a-sad-friend.wav",
+      "bytes": 111176,
+      "sha256": "1ab806c9886c51b40b288321a57f9704db1d30f672acb5d14df68c6829f69f82"
+    },
+    {
+      "id": "phrase-share-responsibility",
+      "text": "share responsibility",
+      "synthesisText": "share responsibility.",
+      "path": "assets/audio/voice/phrase-share-responsibility.wav",
+      "bytes": 90008,
+      "sha256": "5fdab8ac902484d5b2b21a300c30de72e4ebf7e156a46004a17acd91cf0e642c"
+    },
+    {
+      "id": "phrase-curiosity-and-imagination",
+      "text": "curiosity and imagination",
+      "synthesisText": "curiosity and imagination.",
+      "path": "assets/audio/voice/phrase-curiosity-and-imagination.wav",
+      "bytes": 132344,
+      "sha256": "821c36a823038fa907cfa1dd02996557a9791f4af91dfa2f23ec6d6ad3dcc0cf"
+    },
+    {
+      "id": "phrase-use-your-imagination",
+      "text": "use your imagination",
+      "synthesisText": "use your imagination.",
+      "path": "assets/audio/voice/phrase-use-your-imagination.wav",
+      "bytes": 93182,
+      "sha256": "4e5e9084a98c3891443b043224830aa5b8c7d2e6dadb72018c6bc21d0eda8aad"
+    },
+    {
+      "id": "phrase-good-communication",
+      "text": "good communication",
+      "synthesisText": "good communication.",
+      "path": "assets/audio/voice/phrase-good-communication.wav",
+      "bytes": 83658,
+      "sha256": "e55a7ca62c7786f1801deaac30ff71508ff9dcf4e755c8a39be0a6b75d6cc851"
+    },
+    {
+      "id": "phrase-a-happy-celebration",
+      "text": "a happy celebration",
+      "synthesisText": "a happy celebration.",
+      "path": "assets/audio/voice/phrase-a-happy-celebration.wav",
+      "bytes": 90008,
+      "sha256": "6e55389ce38ed7c0e474a28b6119f05f64cdc58719191d97aa92bdb79e8a44a8"
+    },
+    {
+      "id": "phrase-this-afternoon",
+      "text": "this afternoon",
+      "synthesisText": "this afternoon.",
+      "path": "assets/audio/voice/phrase-this-afternoon.wav",
+      "bytes": 82598,
+      "sha256": "050fcc56a75f1c681dff7dcf4c09bf0f9a1e8f9f6931fe81096275bca76279ca"
+    },
+    {
+      "id": "phrase-a-quiet-evening",
+      "text": "a quiet evening",
+      "synthesisText": "a quiet evening.",
+      "path": "assets/audio/voice/phrase-a-quiet-evening.wav",
+      "bytes": 86834,
+      "sha256": "bd436465fbd2234bca2053a9fce478ce501dc4eeab95e19cbb486c39f7803c29"
+    },
+    {
+      "id": "phrase-a-new-year",
+      "text": "a new year",
+      "synthesisText": "a new year.",
+      "path": "assets/audio/voice/phrase-a-new-year.wav",
+      "bytes": 82598,
+      "sha256": "795fcc42a740fc8f5def6d6138dd6c00ad10ccdb90d6a5ceed4ac8fa8193dedb"
+    },
+    {
+      "id": "phrase-see-you-on-monday",
+      "text": "see you on monday",
+      "synthesisText": "see you on monday.",
+      "path": "assets/audio/voice/phrase-see-you-on-monday.wav",
+      "bytes": 82598,
+      "sha256": "dd5d4999c835014d86d45ed094070a770cd06be0a866e44bce68ffe56b2f6434"
+    },
+    {
+      "id": "phrase-see-you-on-tuesday",
+      "text": "see you on tuesday",
+      "synthesisText": "see you on tuesday.",
+      "path": "assets/audio/voice/phrase-see-you-on-tuesday.wav",
+      "bytes": 83658,
+      "sha256": "d9619f447089d07e710ec750f05b5c5007debecd6598a24c46480ac26c0da96a"
+    },
+    {
+      "id": "phrase-see-you-on-wednesday",
+      "text": "see you on wednesday",
+      "synthesisText": "see you on wednesday.",
+      "path": "assets/audio/voice/phrase-see-you-on-wednesday.wav",
+      "bytes": 82598,
+      "sha256": "ab7b4a555991b266736da6db1eb1161af6299dac7a8ffa4352a3778ed32d9a80"
+    },
+    {
+      "id": "phrase-see-you-on-thursday",
+      "text": "see you on thursday",
+      "synthesisText": "see you on thursday.",
+      "path": "assets/audio/voice/phrase-see-you-on-thursday.wav",
+      "bytes": 84716,
+      "sha256": "180fdda7cc98232fe3f7e835228d8b946a5be101168e91f83a420c6281413eb3"
+    },
+    {
+      "id": "phrase-see-you-on-friday",
+      "text": "see you on friday",
+      "synthesisText": "see you on friday.",
+      "path": "assets/audio/voice/phrase-see-you-on-friday.wav",
+      "bytes": 82598,
+      "sha256": "94f1d25723c983e586525b5c711d244d555107aaf8940a14ade4f98ab66999af"
+    },
+    {
+      "id": "phrase-see-you-on-saturday",
+      "text": "see you on saturday",
+      "synthesisText": "see you on saturday.",
+      "path": "assets/audio/voice/phrase-see-you-on-saturday.wav",
+      "bytes": 82598,
+      "sha256": "b17ee9fae8507dcaf5153fee2a0e476990dbbe55d736464c6cb4ae30a945760b"
+    },
+    {
+      "id": "phrase-see-you-on-sunday",
+      "text": "see you on sunday",
+      "synthesisText": "see you on sunday.",
+      "path": "assets/audio/voice/phrase-see-you-on-sunday.wav",
+      "bytes": 82598,
+      "sha256": "0bc9b3c77a4965215b31504e14f8c1492022e0ed9197d02a06ae7f18314a3854"
+    },
+    {
+      "id": "phrase-a-cold-january-day",
+      "text": "a cold january day",
+      "synthesisText": "a cold january day.",
+      "path": "assets/audio/voice/phrase-a-cold-january-day.wav",
+      "bytes": 103766,
+      "sha256": "e1685e9c3cad249c1c3de89f0e8a3b2b79a1945223dd4c309652bc5132ed6c21"
+    },
+    {
+      "id": "phrase-a-february-morning",
+      "text": "a february morning",
+      "synthesisText": "a february morning.",
+      "path": "assets/audio/voice/phrase-a-february-morning.wav",
+      "bytes": 90008,
+      "sha256": "c0b5a871f1376da7ae1567bf1bd4d2dd3724e589d211c20215068fbb3c3edcae"
+    },
+    {
+      "id": "phrase-a-wet-march-day",
+      "text": "a wet march day",
+      "synthesisText": "a wet march day.",
+      "path": "assets/audio/voice/phrase-a-wet-march-day.wav",
+      "bytes": 82598,
+      "sha256": "e2de91ffa9be0b93baf086d825279bea372278f00f7f6cc78c24dc7321c12aa0"
+    },
+    {
+      "id": "phrase-an-april-shower",
+      "text": "an april shower",
+      "synthesisText": "an april shower.",
+      "path": "assets/audio/voice/phrase-an-april-shower.wav",
+      "bytes": 85776,
+      "sha256": "d17456a3e3686397fc43bb3f713f2b780c619ac562ed4e6512d2da443b35c0a9"
+    },
+    {
+      "id": "phrase-a-warm-may-day",
+      "text": "a warm may day",
+      "synthesisText": "a warm may day.",
+      "path": "assets/audio/voice/phrase-a-warm-may-day.wav",
+      "bytes": 87890,
+      "sha256": "69130e6430def77cfece1441d5e2dfbf984098c12ce88e8cd34909734f6f8f0c"
+    },
+    {
+      "id": "phrase-a-warm-june-day",
+      "text": "a warm june day",
+      "synthesisText": "a warm june day.",
+      "path": "assets/audio/voice/phrase-a-warm-june-day.wav",
+      "bytes": 91068,
+      "sha256": "de85e00d0565858cb1a4aa26b4d3ea55f10e982cacac01ffd87537436114e302"
+    },
+    {
+      "id": "phrase-a-hot-july-afternoon",
+      "text": "a hot july afternoon",
+      "synthesisText": "a hot july afternoon.",
+      "path": "assets/audio/voice/phrase-a-hot-july-afternoon.wav",
+      "bytes": 98474,
+      "sha256": "a5fba7e6606ad0bfcd66996f11f15a9df356ab368b7895d95a4036eaec0912c5"
+    },
+    {
+      "id": "phrase-an-august-evening",
+      "text": "an august evening",
+      "synthesisText": "an august evening.",
+      "path": "assets/audio/voice/phrase-an-august-evening.wav",
+      "bytes": 86834,
+      "sha256": "b93c092fffa6694bb0b2b9266207ed0a7d3d47b4e4c7c45f3ae5032f0512dbee"
+    },
+    {
+      "id": "phrase-a-september-morning",
+      "text": "a september morning",
+      "synthesisText": "a september morning.",
+      "path": "assets/audio/voice/phrase-a-september-morning.wav",
+      "bytes": 84716,
+      "sha256": "635e4acd3380cddda0bbe22e953acb455905a2a71ad16d00259b119640bfbf5f"
+    },
+    {
+      "id": "phrase-an-october-afternoon",
+      "text": "an october afternoon",
+      "synthesisText": "an october afternoon.",
+      "path": "assets/audio/voice/phrase-an-october-afternoon.wav",
+      "bytes": 96360,
+      "sha256": "f29ca42f7dfde39ba0a0a42aaf7a5737bc09b0dd3f9016e46fe7e8f7dacfacdf"
+    },
+    {
+      "id": "phrase-a-november-evening",
+      "text": "a november evening",
+      "synthesisText": "a november evening.",
+      "path": "assets/audio/voice/phrase-a-november-evening.wav",
+      "bytes": 84716,
+      "sha256": "491ecd9f09690a01cd5f1ebae9ea6ab5c90ccdd7d6ee100d5c0bc2eda84cf884"
+    },
+    {
+      "id": "phrase-a-december-night",
+      "text": "a december night",
+      "synthesisText": "a december night.",
+      "path": "assets/audio/voice/phrase-a-december-night.wav",
+      "bytes": 82598,
+      "sha256": "8bf4d0af1b8eed77a9cbf83d1c26992ed1e9b2a49e861b63c4885134e099e6e7"
+    },
+    {
+      "id": "phrase-number-eleven",
+      "text": "number eleven",
+      "synthesisText": "number eleven.",
+      "path": "assets/audio/voice/phrase-number-eleven.wav",
+      "bytes": 82598,
+      "sha256": "85cea1e4766188c87c4b19903f59ae34e69af4b60a7a45fc325c628d5ebe7bc3"
+    },
+    {
+      "id": "phrase-number-twelve",
+      "text": "number twelve",
+      "synthesisText": "number twelve.",
+      "path": "assets/audio/voice/phrase-number-twelve.wav",
+      "bytes": 82598,
+      "sha256": "b79b0e6c1bfb27efc03876c7c7c0f671b4ae4bf5637d94bc3341084779a78394"
+    },
+    {
+      "id": "phrase-number-thirteen",
+      "text": "number thirteen",
+      "synthesisText": "number thirteen.",
+      "path": "assets/audio/voice/phrase-number-thirteen.wav",
+      "bytes": 82598,
+      "sha256": "221b6c24352c8adf132375b5e356b474c998c275f92baf5fa56e8815657c17a3"
+    },
+    {
+      "id": "phrase-number-fourteen",
+      "text": "number fourteen",
+      "synthesisText": "number fourteen.",
+      "path": "assets/audio/voice/phrase-number-fourteen.wav",
+      "bytes": 82598,
+      "sha256": "77e6fc37ef4c2a96384042fd00ff01f6eabf460193fb4021832a482207388199"
+    },
+    {
+      "id": "phrase-number-fifteen",
+      "text": "number fifteen",
+      "synthesisText": "number fifteen.",
+      "path": "assets/audio/voice/phrase-number-fifteen.wav",
+      "bytes": 82598,
+      "sha256": "d778c1762b2f60079601f3decf0f4965dd64afbf62081f10d7f1db53ef10f3ff"
+    },
+    {
+      "id": "phrase-number-sixteen",
+      "text": "number sixteen",
+      "synthesisText": "number sixteen.",
+      "path": "assets/audio/voice/phrase-number-sixteen.wav",
+      "bytes": 82598,
+      "sha256": "459570c5a979bb1a5aab7ebccea4051408419a23827cc563ea4b1a33011ddc4a"
+    },
+    {
+      "id": "phrase-number-seventeen",
+      "text": "number seventeen",
+      "synthesisText": "number seventeen.",
+      "path": "assets/audio/voice/phrase-number-seventeen.wav",
+      "bytes": 82598,
+      "sha256": "47e66e7146d6dd8c0f70e18f4ba1be2eb262d4da8db812ed1ed730ccc3d0a2c6"
+    },
+    {
+      "id": "phrase-number-eighteen",
+      "text": "number eighteen",
+      "synthesisText": "number eighteen.",
+      "path": "assets/audio/voice/phrase-number-eighteen.wav",
+      "bytes": 82598,
+      "sha256": "655f815e97c413034ba250a0ab5926dadc47d54d21a806e9f4a4b26df1541f1e"
+    },
+    {
+      "id": "phrase-number-nineteen",
+      "text": "number nineteen",
+      "synthesisText": "number nineteen.",
+      "path": "assets/audio/voice/phrase-number-nineteen.wav",
+      "bytes": 82598,
+      "sha256": "bf704169195033f33eef060e254d03c76236c4823728f67ebf56efe7f45ca0bc"
+    },
+    {
+      "id": "phrase-number-twenty",
+      "text": "number twenty",
+      "synthesisText": "number twenty.",
+      "path": "assets/audio/voice/phrase-number-twenty.wav",
+      "bytes": 82598,
+      "sha256": "42c7ef086126d2f9d772540ca4535fc28512595c1390d57241862d9f136736e7"
+    },
+    {
+      "id": "phrase-one-hundred",
+      "text": "one hundred",
+      "synthesisText": "one hundred.",
+      "path": "assets/audio/voice/phrase-one-hundred.wav",
+      "bytes": 82598,
+      "sha256": "bcba304f9133ee00364f8f7b300c4e9fe2866e7305522933dc82f91035ec7a5e"
+    },
+    {
+      "id": "phrase-one-thousand",
+      "text": "one thousand",
+      "synthesisText": "one thousand.",
+      "path": "assets/audio/voice/phrase-one-thousand.wav",
+      "bytes": 82598,
+      "sha256": "2b424a9eee363c5d2b70b842f2f57bb1a328caede8a328890468e0f8c97ac83d"
+    },
+    {
+      "id": "phrase-more-warm-milk",
+      "text": "more warm milk",
+      "synthesisText": "more warm milk.",
+      "path": "assets/audio/voice/phrase-more-warm-milk.wav",
+      "bytes": 82598,
+      "sha256": "4349012eb4f377f408dacf95060917e7880baa8ff7a064cbb6ac7b0d11b537b6"
+    },
+    {
+      "id": "phrase-some-cold-water",
+      "text": "some cold water",
+      "synthesisText": "some cold water.",
+      "path": "assets/audio/voice/phrase-some-cold-water.wav",
+      "bytes": 82598,
+      "sha256": "d662bd8a645a31e4a464c9e6bb6df7cdb7437829641f72dc03877d4f933c4ea3"
+    },
+    {
+      "id": "phrase-both-are-blue",
+      "text": "both are blue",
+      "synthesisText": "both are blue.",
+      "path": "assets/audio/voice/phrase-both-are-blue.wav",
+      "bytes": 82598,
+      "sha256": "33445764b1991c12e6e0dc46eabe82daa8c8ce2efeaec12be3852841c15c4bbf"
+    },
+    {
+      "id": "phrase-enough-food-for-us",
+      "text": "enough food for us",
+      "synthesisText": "enough food for us.",
+      "path": "assets/audio/voice/phrase-enough-food-for-us.wav",
+      "bytes": 86834,
+      "sha256": "fc6a01594dc3c02a17fce287b273ee0962300ecd43dbccbcf59d9f484b075800"
+    },
+    {
+      "id": "phrase-eat-now",
+      "text": "eat now",
+      "synthesisText": "eat now.",
+      "path": "assets/audio/voice/phrase-eat-now.wav",
+      "bytes": 82598,
+      "sha256": "a145832a9838a9eb8708cee5252df7e12dd9b7301eb6f766a9b0b88299662537"
+    },
+    {
+      "id": "phrase-off-the-table",
+      "text": "off the table",
+      "synthesisText": "off the table.",
+      "path": "assets/audio/voice/phrase-off-the-table.wav",
+      "bytes": 82598,
+      "sha256": "7ab57dfaef4ec116a572ec2924d7f10e1d581e8424537afac0a86e92444f53b0"
+    },
+    {
+      "id": "phrase-go-out-and-play",
+      "text": "go out and play",
+      "synthesisText": "go out and play.",
+      "path": "assets/audio/voice/phrase-go-out-and-play.wav",
+      "bytes": 82598,
+      "sha256": "03bd4a61038a398461ca67e40fa4f8a5718ee290dbe8ea8f9317abcf008b78df"
+    },
+    {
+      "id": "phrase-turn-left",
+      "text": "turn left",
+      "synthesisText": "turn left.",
+      "path": "assets/audio/voice/phrase-turn-left.wav",
+      "bytes": 82598,
+      "sha256": "236aea106ada68a621ae5d0368a301c854c4959ea93918af22d8a937f2e7b4bb"
+    },
+    {
+      "id": "phrase-turn-right",
+      "text": "turn right",
+      "synthesisText": "turn right.",
+      "path": "assets/audio/voice/phrase-turn-right.wav",
+      "bytes": 82598,
+      "sha256": "eb96e5ea3fb8eb7a685fa7a8396d983c8ec7a5bf5d9daecda78b590eb521452e"
+    },
+    {
+      "id": "phrase-at-the-front",
+      "text": "at the front",
+      "synthesisText": "at the front.",
+      "path": "assets/audio/voice/phrase-at-the-front.wav",
+      "bytes": 82598,
+      "sha256": "dd87d0f9ddfca52ed86fb56a8d0596c544b02ba3e3011404a95196968da5cab1"
+    },
+    {
+      "id": "phrase-at-the-back",
+      "text": "at the back",
+      "synthesisText": "at the back.",
+      "path": "assets/audio/voice/phrase-at-the-back.wav",
+      "bytes": 82598,
+      "sha256": "e5f622200960190f2090f61799cf6ce020b105ff3eb8077d25fdeacec5076e82"
+    },
+    {
+      "id": "phrase-at-the-top",
+      "text": "at the top",
+      "synthesisText": "at the top.",
+      "path": "assets/audio/voice/phrase-at-the-top.wav",
+      "bytes": 82598,
+      "sha256": "4c8ec240959d63755a530ccd7c3d1fad1b30ba3b29ec45b7726bf92d60dc65b0"
+    },
+    {
+      "id": "phrase-at-the-bottom",
+      "text": "at the bottom",
+      "synthesisText": "at the bottom.",
+      "path": "assets/audio/voice/phrase-at-the-bottom.wav",
+      "bytes": 82598,
+      "sha256": "1b4dec048c8ad28fc7f5a544b8dc691f62f455ee515c7a5ed1fbdc17c6933527"
+    },
+    {
+      "id": "phrase-a-closed-door",
+      "text": "a closed door",
+      "synthesisText": "a closed door.",
+      "path": "assets/audio/voice/phrase-a-closed-door.wav",
+      "bytes": 82598,
+      "sha256": "8d30e539ce69fa844cf4e1cc00cedc401fd660556df86f846eb03461030629c8"
+    },
+    {
+      "id": "phrase-a-cloudy-day",
+      "text": "a cloudy day",
+      "synthesisText": "a cloudy day.",
+      "path": "assets/audio/voice/phrase-a-cloudy-day.wav",
+      "bytes": 82598,
+      "sha256": "4306357912e7ceb69eeaab3bc4bfa6e7d24a49b93ac25b70c995a7cec9e696cd"
+    },
+    {
+      "id": "phrase-a-sharp-pencil",
+      "text": "a sharp pencil",
+      "synthesisText": "a sharp pencil.",
+      "path": "assets/audio/voice/phrase-a-sharp-pencil.wav",
+      "bytes": 84716,
+      "sha256": "3f2174cdc83da90590a7316c596a95acc34a91d248123674f355e0cc77caa722"
+    },
+    {
+      "id": "phrase-a-strong-bone",
+      "text": "a strong bone",
+      "synthesisText": "a strong bone.",
+      "path": "assets/audio/voice/phrase-a-strong-bone.wav",
+      "bytes": 82598,
+      "sha256": "f86f60571665f14c129d746d0092cd9257e793f867dcfe96f4f2dc58a15b8aaa"
+    },
+    {
+      "id": "phrase-my-stomach-is-full",
+      "text": "my stomach is full",
+      "synthesisText": "my stomach is full.",
+      "path": "assets/audio/voice/phrase-my-stomach-is-full.wav",
+      "bytes": 86834,
+      "sha256": "31363a60a63c2312d0b44d691175e11312cb043619c203484b6fd28b5220f0f4"
+    },
+    {
+      "id": "phrase-a-big-dinosaur",
+      "text": "a big dinosaur",
+      "synthesisText": "a big dinosaur.",
+      "path": "assets/audio/voice/phrase-a-big-dinosaur.wav",
+      "bytes": 84716,
+      "sha256": "6bd444aee6389c27194b21fbfcba6ddf65ff0f76e83c1d6040a58c30828ecfeb"
+    },
+    {
+      "id": "phrase-rice-and-chicken",
+      "text": "rice and chicken",
+      "synthesisText": "rice and chicken.",
+      "path": "assets/audio/voice/phrase-rice-and-chicken.wav",
+      "bytes": 83658,
+      "sha256": "06cfbbbd23b67da7391feb296c9f5b24d9cfe750e0fa979e8aa9679b794882be"
+    },
+    {
+      "id": "phrase-cook-the-meat",
+      "text": "cook the meat",
+      "synthesisText": "cook the meat.",
+      "path": "assets/audio/voice/phrase-cook-the-meat.wav",
+      "bytes": 82598,
+      "sha256": "72b2be4f5acb74811ee788caca3a489a489778f3a7e753b2395077a2023677ff"
+    },
+    {
+      "id": "phrase-a-pink-lollipop",
+      "text": "a pink lollipop",
+      "synthesisText": "a pink lollipop.",
+      "path": "assets/audio/voice/phrase-a-pink-lollipop.wav",
+      "bytes": 91068,
+      "sha256": "53e8857fff1f464997c750925f1ed6fc129aa9a6c8cd42e48e6e32fc5465c39d"
+    },
+    {
+      "id": "phrase-warm-tea",
+      "text": "warm tea",
+      "synthesisText": "warm tea.",
+      "path": "assets/audio/voice/phrase-warm-tea.wav",
+      "bytes": 82598,
+      "sha256": "b8a7e759fcb6870f4d20054d1263e32b03c3a9269b62aa6a82f3b0b68e4a8dbe"
+    },
+    {
+      "id": "phrase-read-the-menu",
+      "text": "read the menu",
+      "synthesisText": "read the menu.",
+      "path": "assets/audio/voice/phrase-read-the-menu.wav",
+      "bytes": 82598,
+      "sha256": "fb75f8c59fec4bc103b178c8759697e9192c2be289dea8c7a1108b7207b82de2"
+    },
+    {
+      "id": "phrase-use-your-money",
+      "text": "use your money",
+      "synthesisText": "use your money.",
+      "path": "assets/audio/voice/phrase-use-your-money.wav",
+      "bytes": 82598,
+      "sha256": "a7fa8e9131ec4d45a02215142a375e39da5dc277f63055cd7dca8122c3e7dbcc"
+    },
+    {
+      "id": "phrase-soft-clay",
+      "text": "soft clay",
+      "synthesisText": "soft clay.",
+      "path": "assets/audio/voice/phrase-soft-clay.wav",
+      "bytes": 82598,
+      "sha256": "b1fe2c9c03624e9abbcf947fdc85d2f88d2737ac9e71d7456485238ee5fb744b"
+    },
+    {
+      "id": "phrase-a-birthday-card",
+      "text": "a birthday card",
+      "synthesisText": "a birthday card.",
+      "path": "assets/audio/voice/phrase-a-birthday-card.wav",
+      "bytes": 82598,
+      "sha256": "70b38b25e0d5ac9eb1a0e7f5e12743fce7509e61ac43351097020dc357eefac3"
+    },
+    {
+      "id": "phrase-draw-a-picture",
+      "text": "draw a picture",
+      "synthesisText": "draw a picture.",
+      "path": "assets/audio/voice/phrase-draw-a-picture.wav",
+      "bytes": 82598,
+      "sha256": "20e1b0ee6095fd9b8782935da752f0c426ff94eddd07cf2200eb9f00891e1598"
+    },
+    {
+      "id": "phrase-write-a-letter",
+      "text": "write a letter",
+      "synthesisText": "write a letter.",
+      "path": "assets/audio/voice/phrase-write-a-letter.wav",
+      "bytes": 82598,
+      "sha256": "a41c6f45f75deb8716efae6fc1c34187309e88ecdc5ca5fb462df60af4a65f86"
+    },
+    {
+      "id": "phrase-read-the-newspaper",
+      "text": "read the newspaper",
+      "synthesisText": "read the newspaper.",
+      "path": "assets/audio/voice/phrase-read-the-newspaper.wav",
+      "bytes": 82598,
+      "sha256": "b691c35f5508232fe638345074c17f581c4d447bd05e7bbf0eb18bdc780391fc"
+    },
+    {
+      "id": "phrase-recycle-plastic",
+      "text": "recycle plastic",
+      "synthesisText": "recycle plastic.",
+      "path": "assets/audio/voice/phrase-recycle-plastic.wav",
+      "bytes": 92126,
+      "sha256": "f80d4c2595fefd67f6e1a61717e202aa885ca5b41a8fc09fe94b4960ebff0c5e"
+    },
+    {
+      "id": "phrase-explore-the-world",
+      "text": "explore the world",
+      "synthesisText": "explore the world.",
+      "path": "assets/audio/voice/phrase-explore-the-world.wav",
+      "bytes": 95300,
+      "sha256": "1e5cd17a82411ad74ad48cdfae3a8019fc6bb431cdab882d038d3b26727efc5e"
+    },
+    {
+      "id": "phrase-a-happy-winner",
+      "text": "a happy winner",
+      "synthesisText": "a happy winner.",
+      "path": "assets/audio/voice/phrase-a-happy-winner.wav",
+      "bytes": 82598,
+      "sha256": "6d4600111475904921ec78b93c2999e0bf747c5f5cd5e4f35715fac3fb56d158"
+    },
+    {
+      "id": "phrase-finish-your-lunch",
+      "text": "finish your lunch",
+      "synthesisText": "finish your lunch.",
+      "path": "assets/audio/voice/phrase-finish-your-lunch.wav",
+      "bytes": 82598,
+      "sha256": "52c2522537cfe642c095e8a6a7c151ce4de8b6263ba2075c1cb42964ed1be24d"
+    },
+    {
+      "id": "phrase-change-your-shirt",
+      "text": "change your shirt",
+      "synthesisText": "change your shirt.",
+      "path": "assets/audio/voice/phrase-change-your-shirt.wav",
+      "bytes": 82598,
+      "sha256": "74be76c30aef349954330475e33f5e2aab13001c8bfd0c5d54dd62395caeae34"
+    },
+    {
+      "id": "phrase-a-small-number",
+      "text": "a small number",
+      "synthesisText": "a small number.",
+      "path": "assets/audio/voice/phrase-a-small-number.wav",
+      "bytes": 82598,
+      "sha256": "47c81ded5cf00b3174e2082cba080a889b2a7f52627d452f16281ae946835de6"
     }
   ]
 }

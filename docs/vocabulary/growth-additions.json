@@ -1,0 +1,4687 @@
+[
+  {
+    "id": "i",
+    "text": "i",
+    "min_age": 3,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "The person who is speaking",
+    "phrase": "i can jump",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-i.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "I"
+  },
+  {
+    "id": "you",
+    "text": "you",
+    "min_age": 3,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "The person being spoken to",
+    "phrase": "you can clap",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-you.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "my",
+    "text": "my",
+    "min_age": 3,
+    "part_of_speech": "determiner",
+    "topic": "feelings-and-people",
+    "meaning": "Belonging to the person speaking",
+    "phrase": "my red ball",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-my.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "a",
+    "text": "a",
+    "min_age": 3,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "One of something, before a consonant sound",
+    "phrase": "a big dog",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-a.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "is",
+    "text": "is",
+    "min_age": 3,
+    "part_of_speech": "verb",
+    "topic": "describe-and-compare",
+    "meaning": "Tells what one person or thing is",
+    "phrase": "a cat is happy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-is.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "can",
+    "text": "can",
+    "min_age": 3,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Be able to do something",
+    "phrase": "i can run",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-can.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "yes",
+    "text": "yes",
+    "min_age": 3,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A word used to agree",
+    "phrase": "yes please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-yes.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "no",
+    "text": "no",
+    "min_age": 3,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A word used to refuse",
+    "phrase": "no milk",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-no.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "please",
+    "text": "please",
+    "min_age": 3,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A polite word when asking",
+    "phrase": "help me please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-please.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "hello",
+    "text": "hello",
+    "min_age": 3,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A greeting when meeting someone",
+    "source": "hello.svg",
+    "phrase": "hello my friend",
+    "level": "basic",
+    "image": "assets/images/words/hello.png",
+    "audio": "assets/audio/voice/word-hello.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "me",
+    "text": "me",
+    "min_age": 3,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "The speaker as the person receiving something",
+    "phrase": "help me please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-me.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "we",
+    "text": "we",
+    "min_age": 4,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "The speaker and other people together",
+    "phrase": "we can play",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-we.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "he",
+    "text": "he",
+    "min_age": 4,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "A male person already mentioned",
+    "phrase": "he can run",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-he.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "she",
+    "text": "she",
+    "min_age": 4,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "A female person already mentioned",
+    "phrase": "she can sing",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-she.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "it",
+    "text": "it",
+    "min_age": 4,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "An animal, object, or idea already mentioned",
+    "phrase": "it is hot",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-it.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "they",
+    "text": "they",
+    "min_age": 5,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "People or things already mentioned",
+    "phrase": "they can dance",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-they.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "us",
+    "text": "us",
+    "min_age": 5,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "The speaker and others receiving something",
+    "phrase": "help us please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-us.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "them",
+    "text": "them",
+    "min_age": 6,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "People or things receiving an action",
+    "phrase": "give them water",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-them.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "him",
+    "text": "him",
+    "min_age": 5,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "A male person receiving an action",
+    "phrase": "give him milk",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-him.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "her",
+    "text": "her",
+    "min_age": 5,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "A female person receiving an action",
+    "phrase": "give her water",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-her.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "your",
+    "text": "your",
+    "min_age": 4,
+    "part_of_speech": "determiner",
+    "topic": "feelings-and-people",
+    "meaning": "Belonging to the person spoken to",
+    "phrase": "your blue hat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-your.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "his",
+    "text": "his",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "feelings-and-people",
+    "meaning": "Belonging to a male person",
+    "phrase": "his green coat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-his.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "our",
+    "text": "our",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "feelings-and-people",
+    "meaning": "Belonging to the speaker and others",
+    "phrase": "our little house",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-our.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "their",
+    "text": "their",
+    "min_age": 6,
+    "part_of_speech": "determiner",
+    "topic": "feelings-and-people",
+    "meaning": "Belonging to people or things already mentioned",
+    "phrase": "their school is near",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-their.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "an",
+    "text": "an",
+    "min_age": 4,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "One of something, before a vowel sound",
+    "phrase": "an orange",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-an.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "the",
+    "text": "the",
+    "min_age": 4,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Points to a particular person or thing",
+    "phrase": "the little cat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-the.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "and",
+    "text": "and",
+    "min_age": 4,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Joins words or ideas together",
+    "phrase": "milk and bread",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-and.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "or",
+    "text": "or",
+    "min_age": 5,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Shows a choice between possibilities",
+    "phrase": "water or milk",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-or.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "but",
+    "text": "but",
+    "min_age": 6,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Joins ideas that are different",
+    "phrase": "small but heavy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-but.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "because",
+    "text": "because",
+    "min_age": 7,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Introduces a reason for something",
+    "phrase": "happy because we can play",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-because.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "if",
+    "text": "if",
+    "min_age": 7,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Introduces something that might happen",
+    "phrase": "come if you can",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-if.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "so",
+    "text": "so",
+    "min_age": 7,
+    "part_of_speech": "conjunction",
+    "topic": "describe-and-compare",
+    "meaning": "Shows a result or consequence",
+    "phrase": "it is cold so rest",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-so.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "this",
+    "text": "this",
+    "min_age": 4,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Points to something near the speaker",
+    "phrase": "this red apple",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-this.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "that",
+    "text": "that",
+    "min_age": 4,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Points to something farther away",
+    "phrase": "that big tree",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-that.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "these",
+    "text": "these",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Points to things near the speaker",
+    "phrase": "these are my sheep",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-these.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "those",
+    "text": "those",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Points to things farther away",
+    "phrase": "those are your fish",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-those.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "who",
+    "text": "who",
+    "min_age": 5,
+    "part_of_speech": "pronoun",
+    "topic": "feelings-and-people",
+    "meaning": "Asks about a person",
+    "phrase": "who can help",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-who.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "what",
+    "text": "what",
+    "min_age": 4,
+    "part_of_speech": "pronoun",
+    "topic": "describe-and-compare",
+    "meaning": "Asks which thing or kind",
+    "phrase": "what is this",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-what.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "where",
+    "text": "where",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "Asks about a place",
+    "phrase": "where is my hat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-where.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "when",
+    "text": "when",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "Asks about a time",
+    "phrase": "when can we play",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-when.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "why",
+    "text": "why",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "Asks for a reason",
+    "phrase": "why is it wet",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-why.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "how",
+    "text": "how",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "Asks about a way or condition",
+    "phrase": "how are you",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-how.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "am",
+    "text": "am",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "describe-and-compare",
+    "meaning": "The form of be used with I",
+    "phrase": "i am happy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-am.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "are",
+    "text": "are",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "describe-and-compare",
+    "meaning": "The form of be used with you or we",
+    "phrase": "we are happy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-are.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "be",
+    "text": "be",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Exist or have a particular state",
+    "phrase": "be kind",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-be.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "do",
+    "text": "do",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Carry out an action or activity",
+    "phrase": "do it again",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-do.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "have",
+    "text": "have",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Own or hold something",
+    "phrase": "i have a ball",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-have.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "has",
+    "text": "has",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "The form of have for one person",
+    "phrase": "she has a book",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-has.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "not",
+    "text": "not",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "Makes a statement negative",
+    "phrase": "it is not cold",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-not.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "very",
+    "text": "very",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "Adds strength to a description",
+    "phrase": "a very big tree",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-very.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "too",
+    "text": "too",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "More than is wanted or needed",
+    "phrase": "too hot to drink",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-too.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "to",
+    "text": "to",
+    "min_age": 5,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Shows a direction or introduces an action",
+    "phrase": "go to school",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-to.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "of",
+    "text": "of",
+    "min_age": 6,
+    "part_of_speech": "preposition",
+    "topic": "describe-and-compare",
+    "meaning": "Shows a connection or part",
+    "phrase": "a cup of water",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-of.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "for",
+    "text": "for",
+    "min_age": 6,
+    "part_of_speech": "preposition",
+    "topic": "feelings-and-people",
+    "meaning": "Intended to help or belong to someone",
+    "phrase": "a present for you",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-for.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "with",
+    "text": "with",
+    "min_age": 5,
+    "part_of_speech": "preposition",
+    "topic": "feelings-and-people",
+    "meaning": "Together with someone or something",
+    "phrase": "play with me",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-with.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "from",
+    "text": "from",
+    "min_age": 6,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Shows where something starts",
+    "phrase": "a letter from my friend",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-from.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "at",
+    "text": "at",
+    "min_age": 5,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Shows a particular place or time",
+    "phrase": "at the school",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-at.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "until",
+    "text": "until",
+    "min_age": 8,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Continuing up to a particular time",
+    "phrase": "wait until morning",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-until.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "during",
+    "text": "during",
+    "min_age": 8,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Within the time of an event",
+    "phrase": "during the summer",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-during.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "while",
+    "text": "while",
+    "min_age": 8,
+    "part_of_speech": "conjunction",
+    "topic": "places-and-time",
+    "meaning": "At the same time as something",
+    "phrase": "sing while you cook",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-while.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "also",
+    "text": "also",
+    "min_age": 7,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "In addition to something else",
+    "phrase": "i also like music",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-also.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "then",
+    "text": "then",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "After that point in time",
+    "phrase": "wash then eat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-then.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "still",
+    "text": "still",
+    "min_age": 8,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "Continuing at the present time",
+    "phrase": "the cat is still here",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-still.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "almost",
+    "text": "almost",
+    "min_age": 8,
+    "part_of_speech": "adverb",
+    "topic": "describe-and-compare",
+    "meaning": "Nearly, but not completely",
+    "phrase": "almost ready",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-almost.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "always",
+    "text": "always",
+    "min_age": 7,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "Every time something happens",
+    "phrase": "always wash your face",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-always.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "sometimes",
+    "text": "sometimes",
+    "min_age": 7,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "On some occasions, but not all",
+    "phrase": "sometimes we eat outside",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-sometimes.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "never",
+    "text": "never",
+    "min_age": 7,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "At no time or occasion",
+    "phrase": "never give up",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-never.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "again",
+    "text": "again",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "One more time",
+    "phrase": "try again",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-again.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "soon",
+    "text": "soon",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "After a short amount of time",
+    "phrase": "see you soon",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-soon.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "later",
+    "text": "later",
+    "min_age": 6,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "At a time after now",
+    "phrase": "see you later",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-later.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "here",
+    "text": "here",
+    "min_age": 4,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "In or at this place",
+    "phrase": "come here please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-here.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "there",
+    "text": "there",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "In or at that place",
+    "phrase": "put it there",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-there.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "goodbye",
+    "text": "goodbye",
+    "min_age": 4,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A word used when leaving",
+    "phrase": "goodbye my friend",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-goodbye.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "thanks",
+    "text": "thanks",
+    "min_age": 4,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A short way to express gratitude",
+    "phrase": "yes thanks",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-thanks.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "sorry",
+    "text": "sorry",
+    "min_age": 4,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A word used to apologize",
+    "phrase": "i am sorry",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-sorry.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "welcome",
+    "text": "welcome",
+    "min_age": 5,
+    "part_of_speech": "interjection",
+    "topic": "feelings-and-people",
+    "meaning": "A friendly greeting to someone arriving",
+    "phrase": "welcome to our school",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-welcome.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "want",
+    "text": "want",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Wish to have or do something",
+    "phrase": "i want water",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-want.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "like",
+    "text": "like",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Enjoy or feel pleased about something",
+    "phrase": "i like milk",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-like.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "love",
+    "text": "love",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Feel strong affection or enjoyment",
+    "phrase": "i love my family",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-love.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "need",
+    "text": "need",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Require something important",
+    "phrase": "we need help",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-need.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "see",
+    "text": "see",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Notice something with your eyes",
+    "phrase": "i can see you",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-see.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "feel",
+    "text": "feel",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Experience an emotion or sensation",
+    "phrase": "i feel happy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-feel.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "know",
+    "text": "know",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Have information or understanding",
+    "phrase": "i know your name",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-know.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "understand",
+    "text": "understand",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Know what something means",
+    "phrase": "i understand the question",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-understand.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "remember",
+    "text": "remember",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Keep something in your mind",
+    "phrase": "remember your book",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-remember.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "forget",
+    "text": "forget",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Fail to remember something",
+    "phrase": "do not forget",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-forget.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "learn",
+    "text": "learn",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Gain new knowledge or skills",
+    "phrase": "learn a new word",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-learn.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "listen",
+    "text": "listen",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Pay attention to a sound",
+    "phrase": "listen please",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-listen.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "say",
+    "text": "say",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Speak a word or words",
+    "phrase": "say hello",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-say.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "tell",
+    "text": "tell",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Give someone information in words",
+    "phrase": "tell me a story",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-tell.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "use",
+    "text": "use",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Do something with an object or tool",
+    "phrase": "use a pencil",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-use.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "make",
+    "text": "make",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Create or prepare something",
+    "phrase": "make a cake",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-make.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "put",
+    "text": "put",
+    "min_age": 4,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Move something to a particular place",
+    "phrase": "put it here",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-put.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "try",
+    "text": "try",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Make an effort to do something",
+    "phrase": "try again",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-try.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "choose",
+    "text": "choose",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Select from different possibilities",
+    "phrase": "choose a book",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-choose.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "enjoy",
+    "text": "enjoy",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Get pleasure from an activity",
+    "phrase": "enjoy your lunch",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-enjoy.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "hope",
+    "text": "hope",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Want something good to happen",
+    "phrase": "hope for a warm day",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-hope.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "believe",
+    "text": "believe",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Think that something is true",
+    "phrase": "i believe you",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-believe.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "agree",
+    "text": "agree",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Have the same opinion",
+    "phrase": "i agree with you",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-agree.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "decide",
+    "text": "decide",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Choose after thinking about something",
+    "phrase": "decide what to cook",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-decide.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "imagine",
+    "text": "imagine",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Create a picture in your mind",
+    "phrase": "imagine a purple cat",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-imagine.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "notice",
+    "text": "notice",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Become aware of something",
+    "phrase": "notice the little bird",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-notice.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explain",
+    "text": "explain",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Make an idea clear to someone",
+    "phrase": "explain your answer",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-explain.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "describe",
+    "text": "describe",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Say what something is like",
+    "phrase": "describe your picture",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-describe.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "compare",
+    "text": "compare",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Look for similarities and differences",
+    "phrase": "compare the two fish",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-compare.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "predict",
+    "text": "predict",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Say what you think will happen",
+    "phrase": "predict the weather",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-predict.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "observe",
+    "text": "observe",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Watch carefully to learn something",
+    "phrase": "observe a green leaf",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-observe.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "investigate",
+    "text": "investigate",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Examine something to find out more",
+    "phrase": "investigate the problem",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-investigate.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "discover",
+    "text": "discover",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Find something previously unknown",
+    "phrase": "discover a new planet",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-discover.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "explore",
+    "text": "explore",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Look around to learn about something",
+    "phrase": "explore the forest",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-explore.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "create",
+    "text": "create",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Make something new",
+    "phrase": "create a new pattern",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-create.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "design",
+    "text": "design",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Plan how something will look or work",
+    "phrase": "design a safe house",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-design.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "improve",
+    "text": "improve",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Make something better",
+    "phrase": "improve your work",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-improve.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "practice",
+    "text": "practice",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Repeat an activity to build skill",
+    "phrase": "practice every day",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-practice.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "solve",
+    "text": "solve",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Find an answer to a problem",
+    "phrase": "solve the puzzle",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-solve.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "check",
+    "text": "check",
+    "min_age": 7,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Look carefully to make sure",
+    "phrase": "check your answer",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-check.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "measure",
+    "text": "measure",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Find the size or amount",
+    "phrase": "measure the long leaf",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-measure.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "estimate",
+    "text": "estimate",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Make a careful approximate calculation",
+    "phrase": "estimate the number",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-estimate.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "identify",
+    "text": "identify",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Recognize and name something",
+    "phrase": "identify the bird",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-identify.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "classify",
+    "text": "classify",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Arrange things in groups by features",
+    "phrase": "classify different food",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-classify.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "connect",
+    "text": "connect",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Join things or ideas together",
+    "phrase": "connect with your friend",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-connect.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "include",
+    "text": "include",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Have something as one part",
+    "phrase": "include your name",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-include.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "support",
+    "text": "support",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Give help or provide evidence",
+    "phrase": "support your idea",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-support.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "suggest",
+    "text": "suggest",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Put forward an idea to consider",
+    "phrase": "suggest a new plan",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-suggest.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "prefer",
+    "text": "prefer",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Like one thing more than another",
+    "phrase": "i prefer warm milk",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-prefer.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "expect",
+    "text": "expect",
+    "min_age": 9,
+    "part_of_speech": "verb",
+    "topic": "feelings-and-people",
+    "meaning": "Think something will probably happen",
+    "phrase": "expect a different result",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-expect.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "achieve",
+    "text": "achieve",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Succeed in reaching a goal",
+    "phrase": "achieve your goal",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-achieve.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reduce",
+    "text": "reduce",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Make an amount smaller",
+    "phrase": "reduce plastic",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-reduce.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "increase",
+    "text": "increase",
+    "min_age": 10,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Make an amount larger",
+    "phrase": "increase the temperature",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-increase.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reuse",
+    "text": "reuse",
+    "min_age": 8,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Use something again",
+    "phrase": "reuse a paper bag",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-reuse.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "adapt",
+    "text": "adapt",
+    "min_age": 11,
+    "part_of_speech": "verb",
+    "topic": "nature-and-science",
+    "meaning": "Change to suit new conditions",
+    "phrase": "adapt to a new school",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-adapt.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reflect",
+    "text": "reflect",
+    "min_age": 11,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Think carefully about an experience",
+    "phrase": "reflect on your work",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-reflect.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "evaluate",
+    "text": "evaluate",
+    "min_age": 12,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Judge using evidence and clear criteria",
+    "phrase": "evaluate the evidence",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-evaluate.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "justify",
+    "text": "justify",
+    "min_age": 12,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Give reasons to support an answer",
+    "phrase": "justify your opinion",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-justify.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "summarize",
+    "text": "summarize",
+    "min_age": 11,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Give the main points briefly",
+    "phrase": "summarize the story",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-summarize.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "analyze",
+    "text": "analyze",
+    "min_age": 12,
+    "part_of_speech": "verb",
+    "topic": "school-and-play",
+    "meaning": "Study parts carefully to understand them",
+    "phrase": "analyze the result",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-analyze.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "kind",
+    "text": "kind",
+    "min_age": 4,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Caring and helpful toward others",
+    "phrase": "a kind friend",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-kind.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "little",
+    "text": "little",
+    "min_age": 4,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Small in size or amount",
+    "phrase": "a little bird",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-little.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "new",
+    "text": "new",
+    "min_age": 5,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Made or discovered recently",
+    "phrase": "a new toy",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-new.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "nice",
+    "text": "nice",
+    "min_age": 5,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Pleasant or enjoyable",
+    "phrase": "a nice day",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-nice.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "brave",
+    "text": "brave",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Facing difficulty even when afraid",
+    "phrase": "a brave child",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-brave.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "careful",
+    "text": "careful",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Giving attention to avoid mistakes",
+    "phrase": "be careful",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-careful.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "safe",
+    "text": "safe",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Protected from danger or harm",
+    "phrase": "a safe school",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-safe.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "easy",
+    "text": "easy",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Not difficult to do",
+    "phrase": "an easy puzzle",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-easy.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "difficult",
+    "text": "difficult",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Needing effort or skill",
+    "phrase": "a difficult question",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-difficult.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "different",
+    "text": "different",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Not the same as another",
+    "phrase": "two different sheep",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-different.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "important",
+    "text": "important",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Having great value or meaning",
+    "phrase": "an important word",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-important.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "possible",
+    "text": "possible",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Able to happen or be done",
+    "phrase": "a possible solution",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-possible.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "useful",
+    "text": "useful",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Helping someone do or understand something",
+    "phrase": "a useful book",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-useful.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "special",
+    "text": "special",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Different in a valued way",
+    "phrase": "a special present",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-special.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "fair",
+    "text": "fair",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Treating people without unfair advantage",
+    "phrase": "fair to you",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-fair.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "honest",
+    "text": "honest",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Truthful and not trying to deceive",
+    "phrase": "an honest answer",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-honest.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "patient",
+    "text": "patient",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Able to wait calmly",
+    "phrase": "be patient",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-patient.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "proud",
+    "text": "proud",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Pleased about something achieved",
+    "phrase": "proud of your work",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-proud.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "curious",
+    "text": "curious",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Wanting to find out more",
+    "phrase": "a curious child",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-curious.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "friendly",
+    "text": "friendly",
+    "min_age": 5,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Kind and pleasant toward others",
+    "phrase": "a friendly dog",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-friendly.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "gentle",
+    "text": "gentle",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Careful and soft in manner",
+    "phrase": "be gentle",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-gentle.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "calm",
+    "text": "calm",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Relaxed and not upset",
+    "phrase": "a calm cat",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-calm.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "lonely",
+    "text": "lonely",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Sad because of feeling alone",
+    "phrase": "a lonely child",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-lonely.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "disappointed",
+    "text": "disappointed",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Sad when hopes are not met",
+    "phrase": "disappointed with the result",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-disappointed.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "confident",
+    "text": "confident",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Trusting your own abilities",
+    "phrase": "confident in your work",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-confident.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "responsible",
+    "text": "responsible",
+    "min_age": 10,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Trusted to take care of duties",
+    "phrase": "a responsible choice",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-responsible.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "independent",
+    "text": "independent",
+    "min_age": 10,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Able to act without help",
+    "phrase": "independent work",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-independent.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "creative",
+    "text": "creative",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "feelings-and-people",
+    "meaning": "Able to produce new ideas",
+    "phrase": "a creative idea",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-creative.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reliable",
+    "text": "reliable",
+    "min_age": 11,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Able to be trusted consistently",
+    "phrase": "a reliable source",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-reliable.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "accurate",
+    "text": "accurate",
+    "min_age": 11,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Correct and free from mistakes",
+    "phrase": "an accurate answer",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-accurate.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "similar",
+    "text": "similar",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Alike in some ways",
+    "phrase": "two similar fish",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-similar.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "equal",
+    "text": "equal",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "The same in amount or value",
+    "phrase": "equal to one",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-equal.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "common",
+    "text": "common",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Seen or happening often",
+    "phrase": "a common bird",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-common.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "rare",
+    "text": "rare",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Not often seen or found",
+    "phrase": "a rare bird",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-rare.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "natural",
+    "text": "natural",
+    "min_age": 8,
+    "part_of_speech": "adjective",
+    "topic": "nature-and-science",
+    "meaning": "Existing in nature without being made",
+    "phrase": "a natural material",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-natural.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "local",
+    "text": "local",
+    "min_age": 9,
+    "part_of_speech": "adjective",
+    "topic": "places-and-time",
+    "meaning": "Relating to a nearby area",
+    "phrase": "our local school",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-local.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "global",
+    "text": "global",
+    "min_age": 11,
+    "part_of_speech": "adjective",
+    "topic": "nature-and-science",
+    "meaning": "Relating to the whole world",
+    "phrase": "a global problem",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-global.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "sustainable",
+    "text": "sustainable",
+    "min_age": 12,
+    "part_of_speech": "adjective",
+    "topic": "nature-and-science",
+    "meaning": "Able to continue without exhausting resources",
+    "phrase": "a sustainable future",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-sustainable.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "evidence",
+    "text": "evidence",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Information that helps show what is true",
+    "phrase": "look for evidence",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-evidence.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "reason",
+    "text": "reason",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An explanation for why something happens",
+    "phrase": "give a reason",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-reason.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "solution",
+    "text": "solution",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An answer that solves a problem",
+    "phrase": "find a solution",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-solution.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "result",
+    "text": "result",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "What happens because of an action",
+    "phrase": "a different result",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-result.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "opinion",
+    "text": "opinion",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "What someone thinks or believes",
+    "phrase": "share your opinion",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-opinion.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "fact",
+    "text": "fact",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Something that is known to be true",
+    "phrase": "a fact from science",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-fact.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "cause",
+    "text": "cause",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Something that makes an event happen",
+    "phrase": "cause and effect",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-cause.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "effect",
+    "text": "effect",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A change produced by something",
+    "phrase": "cause and effect",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-effect.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "research",
+    "text": "research",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Careful study to learn new information",
+    "phrase": "research a topic",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-research.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "source",
+    "text": "source",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Where information or something comes from",
+    "phrase": "a reliable source",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-source.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "environment",
+    "text": "environment",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The surroundings where living things exist",
+    "phrase": "protect the environment",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-environment.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "community",
+    "text": "community",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "People connected by a place or interest",
+    "phrase": "help our community",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-community.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "culture",
+    "text": "culture",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "Shared ways of living and creating",
+    "phrase": "learn from a different culture",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-culture.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "tradition",
+    "text": "tradition",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "A custom passed between generations",
+    "phrase": "a family tradition",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-tradition.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "idea",
+    "text": "idea",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A thought or suggestion",
+    "phrase": "a good idea",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-idea.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "problem",
+    "text": "problem",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Something that needs an answer or solution",
+    "phrase": "a difficult problem",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-problem.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "plan",
+    "text": "plan",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An intended way of doing something",
+    "phrase": "make a plan",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-plan.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "question",
+    "text": "question",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Words used to ask for information",
+    "phrase": "ask a question",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-question.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "story",
+    "text": "story",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An account of events, real or imagined",
+    "phrase": "tell a story",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-story.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "word",
+    "text": "word",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A unit of language with meaning",
+    "phrase": "learn a new word",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-word.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "name",
+    "text": "name",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "What a person or thing is called",
+    "phrase": "tell me your name",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-name.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "friend",
+    "text": "friend",
+    "min_age": 3,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "Someone you like and enjoy being with",
+    "phrase": "my good friend",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-friend.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "child",
+    "text": "child",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "A young person",
+    "phrase": "a happy child",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-child.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "team",
+    "text": "team",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "People working or playing together",
+    "phrase": "help your team",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-team.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "choice",
+    "text": "choice",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An option someone selects",
+    "phrase": "a careful choice",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-choice.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "goal",
+    "text": "goal",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Something you are trying to achieve",
+    "phrase": "reach your goal",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-goal.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "pattern",
+    "text": "pattern",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A repeated or regular arrangement",
+    "phrase": "make a pattern",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-pattern.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "topic",
+    "text": "topic",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "The subject being discussed",
+    "phrase": "choose a topic",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-topic.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "detail",
+    "text": "detail",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "One small part of something",
+    "phrase": "notice every detail",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-detail.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "example",
+    "text": "example",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Something that shows what is meant",
+    "phrase": "an example from history",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-example.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "information",
+    "text": "information",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Facts or knowledge about something",
+    "phrase": "find useful information",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-information.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "knowledge",
+    "text": "knowledge",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "What someone has learned and understands",
+    "phrase": "share your knowledge",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-knowledge.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "energy",
+    "text": "energy",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The ability to cause movement or change",
+    "phrase": "energy from the sun",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-energy.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "material",
+    "text": "material",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "A substance used to make something",
+    "phrase": "a soft material",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-material.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "resource",
+    "text": "resource",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "Something useful that people can draw on",
+    "phrase": "a natural resource",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-resource.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "habitat",
+    "text": "habitat",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The natural home of a living thing",
+    "phrase": "protect the forest habitat",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-habitat.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "climate",
+    "text": "climate",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The usual weather of a place",
+    "phrase": "a warm climate",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-climate.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "weather",
+    "text": "weather",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "Outdoor conditions at a particular time",
+    "phrase": "cold winter weather",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-weather.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "temperature",
+    "text": "temperature",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "A measure of how hot something is",
+    "phrase": "measure the temperature",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-temperature.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "experiment",
+    "text": "experiment",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "A planned test to find something out",
+    "phrase": "a science experiment",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-experiment.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "method",
+    "text": "method",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A particular way of doing something",
+    "phrase": "try a different method",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-method.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "process",
+    "text": "process",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A series of actions or changes",
+    "phrase": "explain the process",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-process.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "data",
+    "text": "data",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Facts or measurements collected for study",
+    "phrase": "collect the data",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-data.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "conclusion",
+    "text": "conclusion",
+    "min_age": 12,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A judgment reached after considering evidence",
+    "phrase": "explain your conclusion",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-conclusion.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "challenge",
+    "text": "challenge",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A task needing effort or skill",
+    "phrase": "a new challenge",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-challenge.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "strategy",
+    "text": "strategy",
+    "min_age": 12,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A planned way to reach a goal",
+    "phrase": "choose a useful strategy",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-strategy.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "progress",
+    "text": "progress",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Movement toward a goal",
+    "phrase": "make good progress",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-progress.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "effort",
+    "text": "effort",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "The energy used to do something",
+    "phrase": "a good effort",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-effort.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "respect",
+    "text": "respect",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "Care for others and their rights",
+    "phrase": "respect your friend",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-respect.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "empathy",
+    "text": "empathy",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "Understanding how another person feels",
+    "phrase": "empathy for a sad friend",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-empathy.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "responsibility",
+    "text": "responsibility",
+    "min_age": 11,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "A duty to take care of something",
+    "phrase": "share responsibility",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-responsibility.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "curiosity",
+    "text": "curiosity",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "A wish to learn or understand",
+    "phrase": "curiosity and imagination",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-curiosity.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "imagination",
+    "text": "imagination",
+    "min_age": 9,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "The ability to form new mental pictures",
+    "phrase": "use your imagination",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-imagination.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "communication",
+    "text": "communication",
+    "min_age": 10,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "The sharing of ideas or information",
+    "phrase": "good communication",
+    "level": "advanced",
+    "image": "",
+    "audio": "assets/audio/voice/word-communication.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "celebration",
+    "text": "celebration",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "An event marking something happy",
+    "source": "celebration.svg",
+    "phrase": "a happy celebration",
+    "level": "basic",
+    "image": "assets/images/words/celebration.png",
+    "audio": "assets/audio/voice/word-celebration.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "afternoon",
+    "text": "afternoon",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The time between noon and evening",
+    "phrase": "this afternoon",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-afternoon.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "evening",
+    "text": "evening",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The time between afternoon and night",
+    "phrase": "a quiet evening",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-evening.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "year",
+    "text": "year",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "A period of twelve months",
+    "phrase": "a new year",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-year.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "monday",
+    "text": "monday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Sunday and Tuesday",
+    "phrase": "see you on monday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-monday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Monday"
+  },
+  {
+    "id": "tuesday",
+    "text": "tuesday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Monday and Wednesday",
+    "phrase": "see you on tuesday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-tuesday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Tuesday"
+  },
+  {
+    "id": "wednesday",
+    "text": "wednesday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Tuesday and Thursday",
+    "phrase": "see you on wednesday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-wednesday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Wednesday"
+  },
+  {
+    "id": "thursday",
+    "text": "thursday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Wednesday and Friday",
+    "phrase": "see you on thursday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-thursday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Thursday"
+  },
+  {
+    "id": "friday",
+    "text": "friday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Thursday and Saturday",
+    "phrase": "see you on friday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-friday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Friday"
+  },
+  {
+    "id": "saturday",
+    "text": "saturday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Friday and Sunday",
+    "phrase": "see you on saturday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-saturday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Saturday"
+  },
+  {
+    "id": "sunday",
+    "text": "sunday",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The day between Saturday and Monday",
+    "phrase": "see you on sunday",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-sunday.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "Sunday"
+  },
+  {
+    "id": "january",
+    "text": "january",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The first month of the year",
+    "phrase": "a cold january day",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-january.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "January"
+  },
+  {
+    "id": "february",
+    "text": "february",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The second month of the year",
+    "phrase": "a february morning",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-february.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "February"
+  },
+  {
+    "id": "march",
+    "text": "march",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The third month of the year",
+    "phrase": "a wet march day",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-march.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "March"
+  },
+  {
+    "id": "april",
+    "text": "april",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The fourth month of the year",
+    "phrase": "an april shower",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-april.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "April"
+  },
+  {
+    "id": "may",
+    "text": "may",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The fifth month of the year",
+    "phrase": "a warm may day",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-may.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "May"
+  },
+  {
+    "id": "june",
+    "text": "june",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The sixth month of the year",
+    "phrase": "a warm june day",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-june.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "June"
+  },
+  {
+    "id": "july",
+    "text": "july",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The seventh month of the year",
+    "phrase": "a hot july afternoon",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-july.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "July"
+  },
+  {
+    "id": "august",
+    "text": "august",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The eighth month of the year",
+    "phrase": "an august evening",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-august.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "August"
+  },
+  {
+    "id": "september",
+    "text": "september",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The ninth month of the year",
+    "phrase": "a september morning",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-september.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "September"
+  },
+  {
+    "id": "october",
+    "text": "october",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The tenth month of the year",
+    "phrase": "an october afternoon",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-october.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "October"
+  },
+  {
+    "id": "november",
+    "text": "november",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The eleventh month of the year",
+    "phrase": "a november evening",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-november.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "November"
+  },
+  {
+    "id": "december",
+    "text": "december",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The twelfth month of the year",
+    "phrase": "a december night",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-december.wav",
+    "practice_modes": [
+      "phrase"
+    ],
+    "display_text": "December"
+  },
+  {
+    "id": "eleven",
+    "text": "eleven",
+    "min_age": 5,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than ten",
+    "source": "eleven.svg",
+    "phrase": "number eleven",
+    "level": "basic",
+    "image": "assets/images/words/eleven.png",
+    "audio": "assets/audio/voice/word-eleven.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "twelve",
+    "text": "twelve",
+    "min_age": 5,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than eleven",
+    "source": "twelve.svg",
+    "phrase": "number twelve",
+    "level": "basic",
+    "image": "assets/images/words/twelve.png",
+    "audio": "assets/audio/voice/word-twelve.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "thirteen",
+    "text": "thirteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than twelve",
+    "source": "thirteen.svg",
+    "phrase": "number thirteen",
+    "level": "basic",
+    "image": "assets/images/words/thirteen.png",
+    "audio": "assets/audio/voice/word-thirteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "fourteen",
+    "text": "fourteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than thirteen",
+    "source": "fourteen.svg",
+    "phrase": "number fourteen",
+    "level": "basic",
+    "image": "assets/images/words/fourteen.png",
+    "audio": "assets/audio/voice/word-fourteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "fifteen",
+    "text": "fifteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than fourteen",
+    "source": "fifteen.svg",
+    "phrase": "number fifteen",
+    "level": "basic",
+    "image": "assets/images/words/fifteen.png",
+    "audio": "assets/audio/voice/word-fifteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "sixteen",
+    "text": "sixteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than fifteen",
+    "source": "sixteen.svg",
+    "phrase": "number sixteen",
+    "level": "basic",
+    "image": "assets/images/words/sixteen.png",
+    "audio": "assets/audio/voice/word-sixteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "seventeen",
+    "text": "seventeen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than sixteen",
+    "source": "seventeen.svg",
+    "phrase": "number seventeen",
+    "level": "basic",
+    "image": "assets/images/words/seventeen.png",
+    "audio": "assets/audio/voice/word-seventeen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "eighteen",
+    "text": "eighteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than seventeen",
+    "source": "eighteen.svg",
+    "phrase": "number eighteen",
+    "level": "basic",
+    "image": "assets/images/words/eighteen.png",
+    "audio": "assets/audio/voice/word-eighteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "nineteen",
+    "text": "nineteen",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "One more than eighteen",
+    "source": "nineteen.svg",
+    "phrase": "number nineteen",
+    "level": "basic",
+    "image": "assets/images/words/nineteen.png",
+    "audio": "assets/audio/voice/word-nineteen.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "twenty",
+    "text": "twenty",
+    "min_age": 6,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "Two groups of ten",
+    "source": "twenty.svg",
+    "phrase": "number twenty",
+    "level": "basic",
+    "image": "assets/images/words/twenty.png",
+    "audio": "assets/audio/voice/word-twenty.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "hundred",
+    "text": "hundred",
+    "min_age": 7,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "Ten groups of ten",
+    "source": "hundred.svg",
+    "phrase": "one hundred",
+    "level": "growing",
+    "image": "assets/images/words/hundred.png",
+    "audio": "assets/audio/voice/word-hundred.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "thousand",
+    "text": "thousand",
+    "min_age": 9,
+    "part_of_speech": "number",
+    "topic": "school-and-play",
+    "meaning": "Ten groups of one hundred",
+    "source": "thousand.svg",
+    "phrase": "one thousand",
+    "level": "growing",
+    "image": "assets/images/words/thousand.png",
+    "audio": "assets/audio/voice/word-thousand.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "more",
+    "text": "more",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "A greater amount or number",
+    "phrase": "more warm milk",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-more.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "some",
+    "text": "some",
+    "min_age": 5,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "An amount that is not specified",
+    "phrase": "some cold water",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-some.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "both",
+    "text": "both",
+    "min_age": 6,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "The two together",
+    "phrase": "both are blue",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-both.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "every",
+    "text": "every",
+    "min_age": 6,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "Each one in a group",
+    "phrase": "practice every day",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-every.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "enough",
+    "text": "enough",
+    "min_age": 7,
+    "part_of_speech": "determiner",
+    "topic": "describe-and-compare",
+    "meaning": "As much as is needed",
+    "phrase": "enough food for us",
+    "level": "growing",
+    "image": "",
+    "audio": "assets/audio/voice/word-enough.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "now",
+    "text": "now",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "At the present time",
+    "phrase": "eat now",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-now.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "off",
+    "text": "off",
+    "min_age": 5,
+    "part_of_speech": "preposition",
+    "topic": "places-and-time",
+    "meaning": "Away from a surface or position",
+    "phrase": "off the table",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-off.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "out",
+    "text": "out",
+    "min_age": 5,
+    "part_of_speech": "adverb",
+    "topic": "places-and-time",
+    "meaning": "Away from the inside",
+    "phrase": "go out and play",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-out.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "left",
+    "text": "left",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "places-and-time",
+    "meaning": "The direction opposite to right",
+    "source": "left.svg",
+    "phrase": "turn left",
+    "level": "basic",
+    "image": "assets/images/words/left.png",
+    "audio": "assets/audio/voice/word-left.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "right",
+    "text": "right",
+    "min_age": 6,
+    "part_of_speech": "adjective",
+    "topic": "places-and-time",
+    "meaning": "The direction opposite to left",
+    "source": "right.svg",
+    "phrase": "turn right",
+    "level": "basic",
+    "image": "assets/images/words/right.png",
+    "audio": "assets/audio/voice/word-right.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "front",
+    "text": "front",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The forward part of something",
+    "phrase": "at the front",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-front.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "back",
+    "text": "back",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The rear part of something",
+    "phrase": "at the back",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-back.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "top",
+    "text": "top",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The highest part of something",
+    "phrase": "at the top",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-top.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "bottom",
+    "text": "bottom",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "places-and-time",
+    "meaning": "The lowest part of something",
+    "phrase": "at the bottom",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-bottom.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "closed",
+    "text": "closed",
+    "min_age": 5,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Not open",
+    "phrase": "a closed door",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-closed.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "cloudy",
+    "text": "cloudy",
+    "min_age": 5,
+    "part_of_speech": "adjective",
+    "topic": "nature-and-science",
+    "meaning": "With many clouds in the sky",
+    "source": "cloudy.svg",
+    "phrase": "a cloudy day",
+    "level": "basic",
+    "image": "assets/images/words/cloudy.png",
+    "audio": "assets/audio/voice/word-cloudy.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "cloud"
+    ]
+  },
+  {
+    "id": "sharp",
+    "text": "sharp",
+    "min_age": 7,
+    "part_of_speech": "adjective",
+    "topic": "describe-and-compare",
+    "meaning": "Having a thin cutting edge or point",
+    "source": "sharp.svg",
+    "phrase": "a sharp pencil",
+    "level": "growing",
+    "image": "assets/images/words/sharp.png",
+    "audio": "assets/audio/voice/word-sharp.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "bone",
+    "text": "bone",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "A hard part inside a body",
+    "source": "bone.svg",
+    "phrase": "a strong bone",
+    "level": "basic",
+    "image": "assets/images/words/bone.png",
+    "audio": "assets/audio/voice/word-bone.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": []
+  },
+  {
+    "id": "stomach",
+    "text": "stomach",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The body part that helps digest food",
+    "source": "stomach.svg",
+    "phrase": "my stomach is full",
+    "level": "basic",
+    "image": "assets/images/words/stomach.png",
+    "audio": "assets/audio/voice/word-stomach.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "dinosaur",
+    "text": "dinosaur",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "An animal from a long time ago",
+    "source": "dinosaur.svg",
+    "phrase": "a big dinosaur",
+    "level": "basic",
+    "image": "assets/images/words/dinosaur.png",
+    "audio": "assets/audio/voice/word-dinosaur.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "chicken",
+    "text": "chicken",
+    "min_age": 4,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "Meat from a farm bird",
+    "source": "chicken.svg",
+    "phrase": "rice and chicken",
+    "level": "basic",
+    "image": "assets/images/words/chicken.png",
+    "audio": "assets/audio/voice/word-chicken.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "hen"
+    ]
+  },
+  {
+    "id": "meat",
+    "text": "meat",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "Animal flesh eaten as food",
+    "source": "meat.svg",
+    "phrase": "cook the meat",
+    "level": "basic",
+    "image": "assets/images/words/meat.png",
+    "audio": "assets/audio/voice/word-meat.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "lollipop",
+    "text": "lollipop",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "A hard sweet on a stick",
+    "source": "lollipop.svg",
+    "phrase": "a pink lollipop",
+    "level": "basic",
+    "image": "assets/images/words/lollipop.png",
+    "audio": "assets/audio/voice/word-lollipop.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "tea",
+    "text": "tea",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "A drink made with leaves and water",
+    "source": "tea.svg",
+    "phrase": "warm tea",
+    "level": "basic",
+    "image": "assets/images/words/tea.png",
+    "audio": "assets/audio/voice/word-tea.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "menu",
+    "text": "menu",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "A list of food available to order",
+    "source": "menu.svg",
+    "phrase": "read the menu",
+    "level": "growing",
+    "image": "assets/images/words/menu.png",
+    "audio": "assets/audio/voice/word-menu.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "money",
+    "text": "money",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "food-and-home",
+    "meaning": "Coins or notes used to buy things",
+    "source": "money.svg",
+    "phrase": "use your money",
+    "level": "growing",
+    "image": "assets/images/words/money.png",
+    "audio": "assets/audio/voice/word-money.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "clay",
+    "text": "clay",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Soft earth that can be shaped",
+    "source": "clay.svg",
+    "phrase": "soft clay",
+    "level": "basic",
+    "image": "assets/images/words/clay.png",
+    "audio": "assets/audio/voice/word-clay.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "card",
+    "text": "card",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A small stiff piece of paper",
+    "source": "card.svg",
+    "phrase": "a birthday card",
+    "level": "basic",
+    "image": "assets/images/words/card.png",
+    "audio": "assets/audio/voice/word-card.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "book",
+      "paper"
+    ]
+  },
+  {
+    "id": "picture",
+    "text": "picture",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "An image of someone or something",
+    "source": "picture.svg",
+    "phrase": "draw a picture",
+    "level": "basic",
+    "image": "assets/images/words/picture.png",
+    "audio": "assets/audio/voice/word-picture.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "art"
+    ]
+  },
+  {
+    "id": "letter",
+    "text": "letter",
+    "min_age": 6,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A written message sent to someone",
+    "source": "letter.svg",
+    "phrase": "write a letter",
+    "level": "basic",
+    "image": "assets/images/words/letter.png",
+    "audio": "assets/audio/voice/word-letter.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "envelope"
+    ]
+  },
+  {
+    "id": "newspaper",
+    "text": "newspaper",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "Pages containing news and information",
+    "source": "newspaper.svg",
+    "phrase": "read the newspaper",
+    "level": "growing",
+    "image": "assets/images/words/newspaper.png",
+    "audio": "assets/audio/voice/word-newspaper.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "plastic",
+    "text": "plastic",
+    "min_age": 8,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "A manufactured material used in many objects",
+    "source": "plastic.svg",
+    "phrase": "recycle plastic",
+    "level": "growing",
+    "image": "assets/images/words/plastic.png",
+    "audio": "assets/audio/voice/word-plastic.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "bottle",
+      "bag"
+    ]
+  },
+  {
+    "id": "world",
+    "text": "world",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "nature-and-science",
+    "meaning": "The earth and all its people",
+    "source": "world.svg",
+    "phrase": "explore the world",
+    "level": "growing",
+    "image": "assets/images/words/world.png",
+    "audio": "assets/audio/voice/word-world.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ],
+    "confusable": [
+      "earth",
+      "planet"
+    ]
+  },
+  {
+    "id": "winner",
+    "text": "winner",
+    "min_age": 7,
+    "part_of_speech": "noun",
+    "topic": "feelings-and-people",
+    "meaning": "The person or team that wins",
+    "source": "winner.svg",
+    "phrase": "a happy winner",
+    "level": "growing",
+    "image": "assets/images/words/winner.png",
+    "audio": "assets/audio/voice/word-winner.wav",
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "phrase"
+    ]
+  },
+  {
+    "id": "finish",
+    "text": "finish",
+    "min_age": 5,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Bring an activity to its end",
+    "phrase": "finish your lunch",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-finish.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "change",
+    "text": "change",
+    "min_age": 6,
+    "part_of_speech": "verb",
+    "topic": "actions-and-routines",
+    "meaning": "Become different or make something different",
+    "phrase": "change your shirt",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-change.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  },
+  {
+    "id": "number",
+    "text": "number",
+    "min_age": 5,
+    "part_of_speech": "noun",
+    "topic": "school-and-play",
+    "meaning": "A value used for counting or measuring",
+    "phrase": "a small number",
+    "level": "basic",
+    "image": "",
+    "audio": "assets/audio/voice/word-number.wav",
+    "practice_modes": [
+      "phrase"
+    ]
+  }
+]

@@ -1,0 +1,304 @@
+{
+  "provider": "Mulberry Symbols",
+  "creator": "Steve Lee; original symbol design project by Garry Paxton",
+  "source": "https://github.com/mulberrysymbols/mulberry-symbols",
+  "revision": "9cbab9f400c5de44e2bc58839cca07294aadb086",
+  "license": "CC-BY-SA-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "status": "Downloaded, visually reviewed, and integrated",
+  "animations": "None; static educational illustrations",
+  "modifications": "Original source SVGs rasterized to transparent 192 by 192 PNGs with preserved geometry, colors, CSS and text. No replacement artwork drawn.",
+  "review": "Source contact sheets reviewed before integration. Ambiguous pictograms and unrelated senses were omitted; context-only words have no picture.",
+  "renderer": {
+    "name": "sharp",
+    "version": "0.35.5",
+    "svg": "2.63.2",
+    "width": 192,
+    "height": 192,
+    "density": 96,
+    "fit": "contain",
+    "background": "transparent"
+  },
+  "files": [
+    {
+      "id": "hello",
+      "source": "hello.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/hello.svg",
+      "sourceSha256": "1049be96c9c4d030688bccea2e8ac7c305d4c2a43a5e117ec5c6233a49291827",
+      "path": "assets/images/words/hello.png",
+      "sha256": "adb0315dbd6f3d7c9d04d0df6c79cf5e3173a283242dffc677a1f5af436b9148"
+    },
+    {
+      "id": "celebration",
+      "source": "celebration.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/celebration.svg",
+      "sourceSha256": "56014009c748fc3bc88136fc0b5cea67f175f4be6bad99cec0e95effba9b6550",
+      "path": "assets/images/words/celebration.png",
+      "sha256": "b2304193b115b6ec2d7e1e4a2ea7afb6059c9033269b80d23c4b4ba27c65cfa4"
+    },
+    {
+      "id": "eleven",
+      "source": "eleven.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/eleven.svg",
+      "sourceSha256": "7b4faf08eacca9e52471e8f97609e1146861e132f109caff0788f36892453c1a",
+      "path": "assets/images/words/eleven.png",
+      "sha256": "37040c508a105816ba35500bb6cdb680ef580f816ecbfa2985d51ec1609d7e0b"
+    },
+    {
+      "id": "twelve",
+      "source": "twelve.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/twelve.svg",
+      "sourceSha256": "5133d32243d07defddf7563e6f2fa403c14c72d3fb5f6d104680a9b102d1a1c9",
+      "path": "assets/images/words/twelve.png",
+      "sha256": "2869b7372f9e11ee164a5bbd01e63990d296087692369ea23e9561f42c3fc40d"
+    },
+    {
+      "id": "thirteen",
+      "source": "thirteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/thirteen.svg",
+      "sourceSha256": "f0dce045bda1be69da88ef3e43bc3b7248b71b64fc9702206bc169182c7a8c5b",
+      "path": "assets/images/words/thirteen.png",
+      "sha256": "276cac0e83846a116839a8e61033ad466018bb960d8a99546279b99f12d8bc5b"
+    },
+    {
+      "id": "fourteen",
+      "source": "fourteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/fourteen.svg",
+      "sourceSha256": "62518f608aea2f3300eb32ca00033f2925bbf42d83f53274ae7a21a9d2f21821",
+      "path": "assets/images/words/fourteen.png",
+      "sha256": "3fa1c8f84cb4a1db8a49c57615b845c88c6376e766f5ddd7ca09dc49f0a76684"
+    },
+    {
+      "id": "fifteen",
+      "source": "fifteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/fifteen.svg",
+      "sourceSha256": "4e3977d522dcf1392df953991627cc4aaf383bca48c047677eb301b55bf69629",
+      "path": "assets/images/words/fifteen.png",
+      "sha256": "e3b6c6c758da144d9bbd724a1f4d761c7ff5875bd1f7d2937aa614ea57b1cad4"
+    },
+    {
+      "id": "sixteen",
+      "source": "sixteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/sixteen.svg",
+      "sourceSha256": "a9a170accde2052265b89eff0c0279534ac063009cf937d7ddd569a8204a8c7c",
+      "path": "assets/images/words/sixteen.png",
+      "sha256": "b3e7594e16329c46c8d5cb394faaf6d74c199f329a1a0bfa9cc3b68720954430"
+    },
+    {
+      "id": "seventeen",
+      "source": "seventeen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/seventeen.svg",
+      "sourceSha256": "e6d4441814101539a7d3b49f8d8d0c135bcd933fcaea5c2695a2699c9d3dfe06",
+      "path": "assets/images/words/seventeen.png",
+      "sha256": "45b8dcac9cf511247578a6e7d16de7af0a9042f583d345a7790f768c5e8ff2ad"
+    },
+    {
+      "id": "eighteen",
+      "source": "eighteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/eighteen.svg",
+      "sourceSha256": "38a257aac176911f12423ba7052df6ea55f9336dbf363afccdc475218760a681",
+      "path": "assets/images/words/eighteen.png",
+      "sha256": "fe29bf1e7914843d919ce32b6df9320d7b5d80a925947e806b235b8f06bd3b75"
+    },
+    {
+      "id": "nineteen",
+      "source": "nineteen.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/nineteen.svg",
+      "sourceSha256": "629b23f87474fae526c278f01c4a7810e3ab53cbcba93d472bcc7e6ae31e370d",
+      "path": "assets/images/words/nineteen.png",
+      "sha256": "d9cc04320f39ade0218c8423d201988b7d07faf84ebdf41ba62fb4cdb6250497"
+    },
+    {
+      "id": "twenty",
+      "source": "twenty.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/twenty.svg",
+      "sourceSha256": "4146041c2403d2305a3288637c8cb85a1a388c156005bb4f8d7aab99abf19170",
+      "path": "assets/images/words/twenty.png",
+      "sha256": "fafbb7d8b1f9cb3004fa2319412ae1e7a21b7dcc769b8ce4d3a47b9c99490fa0"
+    },
+    {
+      "id": "hundred",
+      "source": "hundred.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/hundred.svg",
+      "sourceSha256": "f9c1caf6d2a21cf4aa319fb2d7cd85cc6cf7ba327609403a232ad3afb83a1d49",
+      "path": "assets/images/words/hundred.png",
+      "sha256": "471baaa9d5cb765d4b6506af0536b14ef3f1c4cd370057c95148e4328719c3f5"
+    },
+    {
+      "id": "thousand",
+      "source": "thousand.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/thousand.svg",
+      "sourceSha256": "5453e2a9bcd93a64d3a8ed8b2e250dfd5278d6b8a818a995b4e829923fe2d64e",
+      "path": "assets/images/words/thousand.png",
+      "sha256": "76a067b574d09f60b4a8f16e2d93fec0ab0dcbb1657cdfe6e7e80a18911e6cfc"
+    },
+    {
+      "id": "left",
+      "source": "left.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/left.svg",
+      "sourceSha256": "2195fba63b2d0c75cb31ceb94a184c86e12632b37c13c248fab9e4fe2efaf581",
+      "path": "assets/images/words/left.png",
+      "sha256": "f6b5f6da0ff25b9ee7a92f04d84a7123e0fac860ba3d837840f05801d11db771"
+    },
+    {
+      "id": "right",
+      "source": "right.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/right.svg",
+      "sourceSha256": "f4cdd477621818e70c63988522a856f957cb66687fc0f8028eccbea3a2411fd7",
+      "path": "assets/images/words/right.png",
+      "sha256": "1b02905c8e4219575502b10ca674a744137cf00c6966ee34f6c33d4c793e734f"
+    },
+    {
+      "id": "cloudy",
+      "source": "cloudy.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/cloudy.svg",
+      "sourceSha256": "ca0fc4bd6755bbc922cb85b7e4c4ddc05c65fb0dfefb4a6b357d4b9948f6d36e",
+      "path": "assets/images/words/cloudy.png",
+      "sha256": "e20520217b04d006c3aa2c6593ec5b2cfb352464b9bb3ea490a65a2c3544cf1b"
+    },
+    {
+      "id": "sharp",
+      "source": "sharp.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/sharp.svg",
+      "sourceSha256": "e5bb615a4c427cccb65ae7de6d756dbf1a4d88ea0f7988b8dd99a4965cfd0f0d",
+      "path": "assets/images/words/sharp.png",
+      "sha256": "84062a03ec905dea7ef5733d3c0dc144305a98cc0d3bcb90d910d48557893890"
+    },
+    {
+      "id": "bone",
+      "source": "bone.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/bone.svg",
+      "sourceSha256": "2b4d18e781ab0a69dbf198a3bf9d7a41aab3d8d589f619075daf00a0485334ff",
+      "path": "assets/images/words/bone.png",
+      "sha256": "2c0aeddaae9bf8c1f59f29ef53c022c1a546de6dda7ce0c3e15a890ee0423ffe"
+    },
+    {
+      "id": "stomach",
+      "source": "stomach.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/stomach.svg",
+      "sourceSha256": "084ebbaadd0ce383d35011c60bfd2b96cb958b9730e37edbdd8b62dca82463ab",
+      "path": "assets/images/words/stomach.png",
+      "sha256": "1965c0befaf1bdee8733d33b41dcee505cd9d6ca3dd1acc8c3bf219da49d8131"
+    },
+    {
+      "id": "dinosaur",
+      "source": "dinosaur.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/dinosaur.svg",
+      "sourceSha256": "b3e9e93eef6412253848efe952bec76f2e86af2dc7c07e91bc501d130eac7658",
+      "path": "assets/images/words/dinosaur.png",
+      "sha256": "e4d9ba68293338bfc0673f90ebb656bc1ae2e01bd047667c08265e32b829f37b"
+    },
+    {
+      "id": "chicken",
+      "source": "chicken.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/chicken.svg",
+      "sourceSha256": "42f9519f3356db30b8ad2aa9fa8090b11c95b2f7535b67bdbc1820cd607247ba",
+      "path": "assets/images/words/chicken.png",
+      "sha256": "5d438bcaee72632c676633080cb1c6e7879333b6ce2e064f000e2c43e02ff39c"
+    },
+    {
+      "id": "meat",
+      "source": "meat.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/meat.svg",
+      "sourceSha256": "6225a4b04c8fd6a7471b1d1dd09b92f7e077e3f053fd30db1e934e60a9e5181c",
+      "path": "assets/images/words/meat.png",
+      "sha256": "7ba8f5df57949def195b6ce113e9bc0fe864ac09889bd61eda4243fe7d198375"
+    },
+    {
+      "id": "lollipop",
+      "source": "lollipop.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/lollipop.svg",
+      "sourceSha256": "2298a5c0798ae96303178d6f0a42391690b16d51759d8844179a728103df8196",
+      "path": "assets/images/words/lollipop.png",
+      "sha256": "09aa9250416e53710c77b07f375dea2d7a6f4e98f3cf912ffceb80ef64b9865a"
+    },
+    {
+      "id": "tea",
+      "source": "tea.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/tea.svg",
+      "sourceSha256": "dc593c9baeac5eecf22a4c59b5a3a40f76a12dee9989c83ec1d1544d72bdf461",
+      "path": "assets/images/words/tea.png",
+      "sha256": "c786f6fed58a76a740b3ab06e5c33ee705df9b5fbc6ee6243b7023c38efb7250"
+    },
+    {
+      "id": "menu",
+      "source": "menu.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/menu.svg",
+      "sourceSha256": "38581713cee5f3bf9d73716038e9ddef5496fd9f066a78391ef0ade308b00280",
+      "path": "assets/images/words/menu.png",
+      "sha256": "b5de1c9434c6e1ed857870ede187f7c71be8d1337f6df25b5f4d2e71d0672c65"
+    },
+    {
+      "id": "money",
+      "source": "money.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/money.svg",
+      "sourceSha256": "f2c95f1f62e71ea159f3ddc2ae39074e4d88babb60732455fef0dd2a090c7447",
+      "path": "assets/images/words/money.png",
+      "sha256": "d382a6b9fefb60485ae54b9b945b9d5666fc52bf77d8439a82b372031f94bc71"
+    },
+    {
+      "id": "clay",
+      "source": "clay.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/clay.svg",
+      "sourceSha256": "99f46187e8adfdeab730550cbcd0c16a0306106a618d4dec29b42c0987adcbdb",
+      "path": "assets/images/words/clay.png",
+      "sha256": "2039c132af25ad0cff95271b85410df61fbe1305dc9aa866f15bebaf65316079"
+    },
+    {
+      "id": "card",
+      "source": "card.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/card.svg",
+      "sourceSha256": "a9c4efd646758679e2ad30abde39191a6d4a0191a1650220a2414b9650531908",
+      "path": "assets/images/words/card.png",
+      "sha256": "79d8524ff72a274e89dc10ea69248e523d9052a5ddda3d8ab4f2379665d069b9"
+    },
+    {
+      "id": "picture",
+      "source": "picture.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/picture.svg",
+      "sourceSha256": "cb9829286b0a6963ecd99ed76a9ff2fc6368f7a39cdedb52830fbe368589de02",
+      "path": "assets/images/words/picture.png",
+      "sha256": "a38ac98daa9dc696d7785002e7181e513677d1415d7df4029f42439dd14963c8"
+    },
+    {
+      "id": "letter",
+      "source": "letter.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/letter.svg",
+      "sourceSha256": "eb3f0bd0621f62f094e6ea11a551870b6766fa6d9f4a53319e15a218a2b68ee0",
+      "path": "assets/images/words/letter.png",
+      "sha256": "3b78c42d23f9388b51643b78148156bf1c95e1f484178bd93a407bb5fe984dc6"
+    },
+    {
+      "id": "newspaper",
+      "source": "newspaper.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/newspaper.svg",
+      "sourceSha256": "dda506cba0d32ec221f37ae01772a26b0c6c8b182b0cffe1946b3381ef6c37ed",
+      "path": "assets/images/words/newspaper.png",
+      "sha256": "a4ebef79e61fc90f2d86489b9961a886e3a9418e5a2f5c502557117b5e8a86f7"
+    },
+    {
+      "id": "plastic",
+      "source": "plastic.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/plastic.svg",
+      "sourceSha256": "d5fe8f816451d697628a535f11865a08572bf8798f4a6700ee6031f217f4549c",
+      "path": "assets/images/words/plastic.png",
+      "sha256": "7bea1e2dde38705d61dff79de11afdcae6ffb42c228105d510696979f505fb0e"
+    },
+    {
+      "id": "world",
+      "source": "world.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/world.svg",
+      "sourceSha256": "b736893933f8f4c5924f6db9903b7585f9153f92e4b72041aab2206900058212",
+      "path": "assets/images/words/world.png",
+      "sha256": "03a5485bb2295ed45fe803c40351c0ede5839a3b296d1ee660778aa8868a8c62"
+    },
+    {
+      "id": "winner",
+      "source": "winner.svg",
+      "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/winner.svg",
+      "sourceSha256": "f9d68a686e252436df2f7bc211c4c8b94bf6a2991d924de9bb5f9d7f07bb23cc",
+      "path": "assets/images/words/winner.png",
+      "sha256": "b788b0683c3677911aa23d3cf596aba0da31ee0eacd6724fe764fc19a600a753"
+    }
+  ]
+}

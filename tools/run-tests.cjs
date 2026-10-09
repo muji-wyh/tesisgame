@@ -4,30 +4,26 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
-  leaderboards: {
-    godot: ['leaderboard_state_tests', 'leaderboard_scene_tests', 'player_management_tests'],
-    node: ['leaderboard-host', 'virtual-keyboard-host']
-  },
+  growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
-      'expansion_scene_tests', 'lesson_scene_tests', 'playroom_state_tests', 'playroom_view_tests', 'room_render_cache_tests',
-      'pip_playground_tests', 'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
+      'expansion_scene_tests', 'lesson_scene_tests',
+      'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
       'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests',
-      'collection_navigation_tests', 'gift_adventure_tests', 'phrase_model_tests', 'phrase_scene_tests'
+      'phrase_model_tests', 'phrase_scene_tests'
     ],
     node: [
-      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'playroom-host', 'memory-input-host',
+      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
       'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark', 'ui-click-assets', 'interface-click-host'
     ]
   },
-  'legacy-saves': { godot: ['legacy_playroom_scene_tests'] },
   flow: {
     godot: [
       'steady_match_tests', 'layout_tests', 'three_mode_tests', 'layout_finish_tests',
-      'collection_polish_tests', 'navigation_removal_tests', 'room_scroll_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
-      'presentation_tests', 'inline_goal_tests', 'goal_text_layout_tests', 'medals_removal_tests', 'playful_words_tests'
+      'collection_polish_tests', 'navigation_removal_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
+      'presentation_tests', 'playful_words_tests'
     ]
   },
   ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests', 'age_word_catalog_tests'] },
@@ -37,7 +33,7 @@ const groups = {
   'playful-ui': {
     godot: [
       'memory_back_design_tests', 'playful_affordance_tests', 'proactive_pip_tests',
-      'pip_engagement_scene_tests', 'home_pip_moves_tests'
+      'pip_engagement_scene_tests'
     ]
   },
   'voice-pop': {
@@ -75,7 +71,7 @@ function createPlan(names = ['all']) {
 function runTests(plan) {
   for (const [index, suite] of plan.godot.entries()) {
     console.log(`\n[Godot ${index + 1}/${plan.godot.length}] ${suite.file}`);
-    // The vocabulary layout suite checks all 1,250 labels and representative scenes at six sizes.
+    // The vocabulary layout suite checks all 1,550 labels and representative scenes at six sizes.
     const timeout = suite.file.endsWith('/vocabulary_layout_tests.gd') ? 600000 : 180000;
     const result = runGodot(['--headless', ...suite.options, '--path', '.', '--script', `res://${suite.file}`], { timeout });
     process.stdout.write(result.stdout || '');
